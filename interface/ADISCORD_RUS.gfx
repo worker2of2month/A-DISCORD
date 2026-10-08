@@ -32,6 +32,14 @@ spriteTypes = {
 		tilingCenter = yes
 	}
 	corneredTileSpriteType = {
+		name = "GFX_RUS_world_ended_screen"
+		size = { x = 1672 y = 941 }
+		textureFile = "gfx/interface/ADISCORD_RUS/world_ended_screen.png"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	corneredTileSpriteType = {
 		name = "GFX_RUS_epilogue_backdrop"
 		size = { x = 16 y = 16 }
 		textureFile = "gfx/interface/factions/ui/opacity_layer_dark.dds"

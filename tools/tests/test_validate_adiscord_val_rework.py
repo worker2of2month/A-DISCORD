@@ -9494,7 +9494,7 @@ class ValFocusRewardBalanceTests(unittest.TestCase):
                 self.assertIn("100%", values[0])
                 self.assertIn("§Y2", values[0])
                 self.assertNotIn(";", values[0])
-                self.assertNotIn("—", values[0])
+                self.assertNotIn("\u2014", values[0])
 
 
 if __name__ == "__main__":

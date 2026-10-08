@@ -2700,7 +2700,9 @@ RUS_last_empire_crisis = {
 			}
 		}
 		cancel_effect = { RUS = { RUS_crisis_disable_laser = yes } }
-		timeout_effect = { RUS = { RUS_crisis_launch = yes } }
+		timeout_effect = {
+			hidden_effect = { RUS = { RUS_crisis_launch = yes } }
+		}
 	}
 
 	RUS_crisis_defence_countdown = {
@@ -2755,6 +2757,10 @@ RUS_last_empire_crisis = {
 			}
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_special_zone_permitted_tt
+				VAL_nw_special_zone_permitted = yes
+			}
 			is_subject = no
 			has_capitulated = no
 			has_war = no
@@ -2770,6 +2776,7 @@ RUS_last_empire_crisis = {
 			if = {
 				limit = {
 					hidden_trigger = {
+						VAL_nw_special_zone_permitted = yes
 						has_country_flag = RUS_crisis_settlement_rights
 						is_subject = no
 						has_capitulated = no
@@ -2793,7 +2800,13 @@ RUS_last_empire_crisis = {
 				}
 			}
 		}
-		ai_will_do = { base = 100 }
+		ai_will_do = {
+			base = 100
+			modifier = {
+				factor = 0
+				VAL_nw_special_zone_permitted = no
+			}
+		}
 	}
 }
 
@@ -3116,6 +3129,10 @@ RUS_reactor_belt_category = {
 		visible = { has_completed_focus = RUS_reactor_sorties }
 		available = {
 			custom_trigger_tooltip = {
+				tooltip = RUS_reactor_sortie_slot_free_tt
+				NOT = { has_variable = RUS_reactor_sortie_receipt }
+			}
+			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
 				RUS_khan_governing = yes
 			}
@@ -3181,10 +3198,6 @@ RUS_experimental_labs_category = {
 				tooltip = RUS_lab_slot_free_tt
 				RUS_lab_slot_free = yes
 			}
-			custom_trigger_tooltip = {
-				tooltip = RUS_lab_not_under_black_army_tt
-				RUS_lab_not_under_black_army = yes
-			}
 		}
 		cost = 0
 		custom_cost_text = RUS_lab_reactor_alloys_cost
@@ -3214,6 +3227,17 @@ RUS_experimental_labs_category = {
 					bonus = 1
 					uses = 1
 					category = industry
+				}
+			}
+			if = {
+				limit = { RUS_bunker_laboratory_active = yes }
+				effect_tooltip = {
+					add_tech_bonus = {
+						name = RUS_bunker_protection_research
+						bonus = 0.5
+						uses = 1
+						category = support_tech
+					}
 				}
 			}
 			custom_effect_tooltip = RUS_lab_reactor_alloys_support_tt
@@ -3248,10 +3272,6 @@ RUS_experimental_labs_category = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_lab_slot_free_tt
 				RUS_lab_slot_free = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = RUS_lab_not_under_black_army_tt
-				RUS_lab_not_under_black_army = yes
 			}
 		}
 		cost = 0
@@ -4305,7 +4325,12 @@ RUS_bunker_construction = {
 	RUS_engineering_order = {
 		icon = generic_industry
 		allowed = { tag = RUS }
-		visible = { has_completed_focus = RUS_salvage_inventory }
+		visible = {
+			OR = {
+				has_completed_focus = RUS_salvage_inventory
+				RUS_bunker_workshop_active = yes
+			}
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -4320,13 +4345,22 @@ RUS_bunker_construction = {
 			if = {
 				limit = {
 					RUS_khan_governing = yes
-					has_completed_focus = RUS_salvage_inventory
+					OR = {
+						has_completed_focus = RUS_salvage_inventory
+						RUS_bunker_workshop_active = yes
+					}
 					RUS_engineering_order_affordable = yes
 				}
 				add_political_power = -25
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 180 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 180 }
-				add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = RUS }
+				if = {
+					limit = { RUS_bunker_workshop_active = yes }
+					add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = RUS }
+				}
+				else = {
+					add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = RUS }
+				}
 				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
 		}
@@ -5096,7 +5130,10 @@ RUS_development_programmes = {
 		icon = generic_industry
 		allowed = { tag = RUS }
 		visible = {
-		has_completed_focus = RUS_roadside_clinics
+			OR = {
+				has_completed_focus = RUS_roadside_clinics
+				RUS_bunker_clinic_active = yes
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -5124,6 +5161,10 @@ RUS_development_programmes = {
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 					add_to_variable = { var = ADISCORD_social_system_development_progress value = 25 }
+					if = {
+						limit = { RUS_bunker_clinic_active = yes }
+						add_to_variable = { var = ADISCORD_social_system_development_progress value = 15 }
+					}
 					ADISCORD_economy_mark_dirty = yes
 				}
 			}
@@ -5145,7 +5186,10 @@ RUS_development_programmes = {
 		icon = generic_industry
 		allowed = { tag = RUS }
 		visible = {
-		has_completed_focus = RUS_machine_school
+			OR = {
+				has_completed_focus = RUS_machine_school
+				RUS_bunker_workshop_active = yes
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -5173,6 +5217,10 @@ RUS_development_programmes = {
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 					add_to_variable = { var = ADISCORD_economic_development_progress value = 25 }
+					if = {
+						limit = { RUS_bunker_workshop_active = yes }
+						add_to_variable = { var = ADISCORD_economic_development_progress value = 15 }
+					}
 					ADISCORD_economy_mark_dirty = yes
 				}
 			}

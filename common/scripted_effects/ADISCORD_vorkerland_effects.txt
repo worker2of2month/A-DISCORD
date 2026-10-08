@@ -10253,16 +10253,22 @@ RUS_crisis_launch = {
 RUS_crisis_start_intervention = {
 	RUS_crisis_refresh_war_anchor = yes
 	if = {
-		limit = { RUS_crisis_can_enter_common_war = yes }
+		limit = {
+			RUS_crisis_can_enter_common_war = yes
+			NOT = { has_country_flag = RUS_crisis_defender }
+		}
+		RUS_crisis_register_defender = yes
+		set_country_flag = RUS_crisis_entry_pending
 		if = {
 			limit = { NOT = { has_event_target = RUS_crisis_war_anchor } }
 			save_global_event_target_as = RUS_crisis_war_anchor
-			RUS_crisis_register_defender = yes
 			declare_war_on = { target = RUS type = annex_everything }
 		}
 		else_if = {
-			limit = { NOT = { has_war_with = RUS } }
-			RUS_crisis_register_defender = yes
+			limit = {
+				NOT = { has_war_with = RUS }
+				event_target:RUS_crisis_war_anchor = { has_war_with = RUS }
+			}
 			add_to_war = {
 				targeted_alliance = event_target:RUS_crisis_war_anchor
 				enemy = RUS
@@ -10272,18 +10278,10 @@ RUS_crisis_start_intervention = {
 		}
 		if = {
 			limit = { has_war_with = RUS }
-			every_allied_country = {
-				limit = { NOT = { tag = PREV } }
-				RUS_crisis_join_intervention = yes
-			}
-			RUS_crisis_join_subjects = yes
+			RUS_crisis_confirm_intervention_entry = yes
 		}
 		else = {
-			RUS_crisis_remove_defender = yes
-			if = {
-				limit = { tag = event_target:RUS_crisis_war_anchor }
-				clear_global_event_target = RUS_crisis_war_anchor
-			}
+			country_event = { id = ADISCORD_rus_crisis.9 hours = 1 }
 		}
 	}
 }
@@ -10294,6 +10292,7 @@ RUS_crisis_join_intervention = {
 		limit = {
 			exists = yes
 			has_capitulated = no
+			NOT = { has_country_flag = RUS_crisis_defender }
 			NOT = { tag = RUS }
 			NOT = { is_subject_of = RUS }
 			NOT = { is_in_faction_with = RUS }
@@ -10302,6 +10301,7 @@ RUS_crisis_join_intervention = {
 			PREV = { has_war_with = RUS }
 		}
 		RUS_crisis_register_defender = yes
+		set_country_flag = RUS_crisis_entry_pending
 		if = {
 			limit = { NOT = { has_war_with = RUS } }
 			add_to_war = {
@@ -10313,10 +10313,83 @@ RUS_crisis_join_intervention = {
 		}
 		if = {
 			limit = { has_war_with = RUS }
-			RUS_crisis_join_subjects = yes
+			RUS_crisis_confirm_intervention_entry = yes
+		}
+		else = {
+			country_event = { id = ADISCORD_rus_crisis.9 hours = 1 }
+		}
+	}
+}
+
+# A declaration and its invitations may settle on separate native ticks.
+# Each candidate gets one delayed invitation attempt and one final check.
+RUS_crisis_retry_intervention_entry = {
+	if = {
+		limit = { has_country_flag = RUS_crisis_entry_pending }
+		if = {
+			limit = { RUS_crisis_entry_still_valid = yes }
+			RUS_crisis_refresh_war_anchor = yes
+			if = {
+				limit = { has_war_with = RUS }
+				RUS_crisis_confirm_intervention_entry = yes
+			}
+			else = {
+				if = {
+					limit = { has_event_target = RUS_crisis_war_anchor }
+					if = {
+						limit = { event_target:RUS_crisis_war_anchor = { has_war_with = RUS } }
+						add_to_war = {
+							targeted_alliance = event_target:RUS_crisis_war_anchor
+							enemy = RUS
+							hostility_reason = asked_to_join
+							single_target_only = yes
+						}
+					}
+				}
+				country_event = { id = ADISCORD_rus_crisis.11 hours = 1 }
+			}
 		}
 		else = { RUS_crisis_remove_defender = yes }
 	}
+}
+
+RUS_crisis_settle_intervention_entry = {
+	if = {
+		limit = { has_country_flag = RUS_crisis_entry_pending }
+		if = {
+			limit = {
+				RUS_crisis_entry_still_valid = yes
+				has_war_with = RUS
+			}
+			RUS_crisis_confirm_intervention_entry = yes
+		}
+		else = { RUS_crisis_remove_defender = yes }
+		RUS = { RUS_crisis_check_external_end = yes }
+	}
+}
+
+# A native ally entry can precede its leader's scripted invitations.
+# Register and clear pending before expansion to terminate allied cycles.
+RUS_crisis_accept_native_entry = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_country_flag = RUS_crisis_defender }
+				has_country_flag = RUS_crisis_entry_pending
+			}
+		}
+		RUS_crisis_register_defender = yes
+		RUS_crisis_confirm_intervention_entry = yes
+	}
+}
+
+RUS_crisis_confirm_intervention_entry = {
+	clr_country_flag = RUS_crisis_entry_pending
+	every_allied_country = {
+		limit = { NOT = { tag = PREV } }
+		RUS_crisis_join_intervention = yes
+	}
+	RUS_crisis_join_subjects = yes
 }
 
 # Dependencies are acyclic. Each subject follows its own overlord's war side.
@@ -10356,17 +10429,28 @@ RUS_crisis_remove_defender = {
 # The native war can outlive its first declarer. Rebind only within its roster.
 RUS_crisis_refresh_war_anchor = {
 	if = {
-		limit = {
-			NOT = {
-				event_target:RUS_crisis_war_anchor = {
-					exists = yes
-					has_country_flag = RUS_crisis_defender
-					has_war_with = RUS
-					has_capitulated = no
+		limit = { has_event_target = RUS_crisis_war_anchor }
+		if = {
+			limit = {
+				NOT = {
+					event_target:RUS_crisis_war_anchor = {
+						exists = yes
+						has_country_flag = RUS_crisis_defender
+						OR = {
+							has_war_with = RUS
+							AND = {
+								has_capitulated = no
+								has_country_flag = RUS_crisis_entry_pending
+							}
+						}
+					}
 				}
 			}
+			clear_global_event_target = RUS_crisis_war_anchor
 		}
-		clear_global_event_target = RUS_crisis_war_anchor
+	}
+	if = {
+		limit = { NOT = { has_event_target = RUS_crisis_war_anchor } }
 		for_each_scope_loop = {
 			array = global.RUS_crisis_defenders
 			if = {
@@ -10375,7 +10459,6 @@ RUS_crisis_refresh_war_anchor = {
 					exists = yes
 					has_country_flag = RUS_crisis_defender
 					has_war_with = RUS
-					has_capitulated = no
 				}
 				save_global_event_target_as = RUS_crisis_war_anchor
 			}
@@ -10384,7 +10467,17 @@ RUS_crisis_refresh_war_anchor = {
 }
 
 RUS_crisis_clear_defender = {
+	if = {
+		limit = {
+			has_country_flag = RUS_crisis_entry_pending
+			RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = greater_than } }
+		}
+		# The native request may still enter after its campaign receipt is cleared.
+		set_country_flag = { flag = RUS_crisis_entry_cancelled days = 2 }
+		country_event = { id = ADISCORD_rus_crisis.13 hours = 1 }
+	}
 	clr_country_flag = RUS_crisis_defender
+	clr_country_flag = RUS_crisis_entry_pending
 	if = {
 		limit = { has_country_flag = RUS_crisis_added_major }
 		if = {
@@ -10392,6 +10485,21 @@ RUS_crisis_clear_defender = {
 			set_major = no
 		}
 		clr_country_flag = RUS_crisis_added_major
+	}
+}
+
+# COUNTRY. This receipt can only come from this campaign's pending entry.
+RUS_crisis_cancel_pending_intervention = {
+	if = {
+		limit = { has_country_flag = RUS_crisis_entry_cancelled }
+		if = {
+			limit = {
+				has_war_with = RUS
+				RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = greater_than } }
+			}
+			white_peace = RUS
+		}
+		clr_country_flag = RUS_crisis_entry_cancelled
 	}
 }
 
@@ -10447,7 +10555,15 @@ RUS_crisis_check_external_end = {
 			for_each_scope_loop = {
 				array = global.RUS_crisis_defenders
 				if = {
-					limit = { OR = { exists = no NOT = { has_war_with = RUS } } }
+					limit = {
+						OR = {
+							exists = no
+							AND = {
+								NOT = { has_country_flag = RUS_crisis_entry_pending }
+								NOT = { has_war_with = RUS }
+							}
+						}
+					}
 					RUS_crisis_clear_defender = yes
 					add_to_temp_array = { array = RUS_crisis_departures value = THIS }
 				}
@@ -10870,8 +10986,8 @@ RUS_crisis_end_world = {
 		RUS_crisis_play_strike = yes
 		RUS_campaign_shutdown = yes
 		RUS_crisis_clear_roster = yes
+		RUS_crisis_reduce_world_to_ruins = yes
 		every_country = {
-			every_enemy_country = { white_peace = PREV }
 			if = {
 				limit = { is_ai = no }
 				country_event = { id = ADISCORD_rus_crisis.8 }
@@ -10880,9 +10996,228 @@ RUS_crisis_end_world = {
 	}
 }
 
+# The empty authority tag carries ruined land, not a surviving government.
+# Capture each queue once. Player handoff precedes all losses of territory;
+# reading the ending never owns or cancels the scheduled destruction waves.
+RUS_crisis_reduce_world_to_ruins = {
+	125 = { RUS_crisis_ruin_state = yes }
+	66 = {
+		set_state_owner_to = RUS
+		set_state_controller_to = RUS
+		# The protected underground complex does not preserve a surface airfield.
+		if = {
+			limit = { air_base > 0 }
+			set_building_level = { type = air_base level = 0 instant_build = yes }
+		}
+	}
+	clear_array = global.RUS_world_country_queue
+	clear_array = global.RUS_world_state_queue
+	clear_array = global.RUS_world_cleanup_queue
+	every_country = {
+		add_to_array = { array = global.RUS_world_country_queue value = THIS }
+		if = {
+			limit = {
+				NOT = { tag = RUS }
+				NOT = { tag = EXZ }
+			}
+			add_to_array = { array = global.RUS_world_cleanup_queue value = THIS }
+			if = {
+				limit = { is_ai = no }
+				EXZ = { change_tag_from = PREV }
+			}
+		}
+	}
+	every_state = {
+		limit = {
+			NOT = { state = 66 }
+			NOT = { state = 125 }
+		}
+		add_to_array = { array = global.RUS_world_state_queue value = THIS }
+	}
+	EXZ = {
+		set_cosmetic_tag = RUS_world_anarchy
+		set_capital = { state = 125 }
+		every_enemy_country = { white_peace = PREV }
+		set_stability = 0
+		set_war_support = 0
+		set_political_power = 0
+		add_ideas = RUS_world_ended_isolation
+	}
+	RUS = {
+		set_cosmetic_tag = RUS_last_bunker
+		set_capital = { state = 66 }
+		every_enemy_country = { white_peace = PREV }
+	}
+}
+
+# RUS. Each daily callback drains fixed-size portions of persistent queues.
+# The last queue removes countries only after all state transfers are complete,
+# so annexing one large country cannot bypass the territorial wave budget.
+RUS_crisis_ruin_next_wave = {
+	if = {
+		limit = {
+			has_global_flag = RUS_crisis_world_ended
+			NOT = { has_global_flag = RUS_crisis_world_ruins_complete }
+		}
+		if = {
+			limit = { check_variable = { var = global.RUS_world_country_queue^num value = 0 compare = greater_than } }
+			set_temp_variable = { var = RUS_world_next_country value = global.RUS_world_country_queue^0 }
+			remove_from_array = { array = global.RUS_world_country_queue index = 0 }
+			var:RUS_world_next_country = { RUS_crisis_destroy_country_assets = yes }
+		}
+		RUS_crisis_ruin_next_state = yes
+		RUS_crisis_ruin_next_state = yes
+		RUS_crisis_ruin_next_state = yes
+		RUS_crisis_ruin_next_state = yes
+		RUS_crisis_ruin_next_state = yes
+		RUS_crisis_ruin_next_state = yes
+		RUS_crisis_ruin_next_state = yes
+		RUS_crisis_ruin_next_state = yes
+		if = {
+			limit = {
+				check_variable = { var = global.RUS_world_state_queue^num value = 0 compare = equals }
+				check_variable = { var = global.RUS_world_country_queue^num value = 0 compare = equals }
+				check_variable = { var = global.RUS_world_cleanup_queue^num value = 0 compare = greater_than }
+			}
+			set_temp_variable = { var = RUS_world_next_country value = global.RUS_world_cleanup_queue^0 }
+			remove_from_array = { array = global.RUS_world_cleanup_queue index = 0 }
+			var:RUS_world_next_country = {
+				if = {
+					limit = { exists = yes }
+					EXZ = { annex_country = { target = PREV transfer_troops = no } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				check_variable = { var = global.RUS_world_country_queue^num value = 0 compare = equals }
+				check_variable = { var = global.RUS_world_state_queue^num value = 0 compare = equals }
+				check_variable = { var = global.RUS_world_cleanup_queue^num value = 0 compare = equals }
+			}
+			set_global_flag = RUS_crisis_world_ruins_complete
+			clear_array = global.RUS_world_country_queue
+			clear_array = global.RUS_world_state_queue
+			clear_array = global.RUS_world_cleanup_queue
+		}
+	}
+}
+
+# Extract before transferring, since native callbacks can change country existence.
+RUS_crisis_ruin_next_state = {
+	if = {
+		limit = { check_variable = { var = global.RUS_world_state_queue^num value = 0 compare = greater_than } }
+		set_temp_variable = { var = RUS_world_next_state value = global.RUS_world_state_queue^0 }
+		remove_from_array = { array = global.RUS_world_state_queue index = 0 }
+		var:RUS_world_next_state = { RUS_crisis_ruin_state = yes }
+	}
+}
+
+RUS_crisis_destroy_country_assets = {
+	every_enemy_country = { white_peace = PREV }
+	if = {
+		limit = { is_subject = yes }
+		overlord = { end_puppet = PREV }
+	}
+	if = {
+		limit = { is_faction_leader = yes }
+		dismantle_faction = yes
+	}
+	delete_unit = { disband = no }
+	destroy_ships = { type = ADISCORD_cruiser_archetype count = all }
+	destroy_ships = { type = ADISCORD_submarine_archetype count = all }
+	destroy_ships = { type = ADISCORD_coastal_patrol_ship count = all }
+	destroy_ships = { type = ADISCORD_light_cruiser_archetype count = all }
+	destroy_ships = { type = ADISCORD_battleship_archetype count = all }
+	destroy_ships = { type = ADISCORD_carrier_archetype count = all }
+	set_equipment_fraction = 0
+	load_focus_tree = { tree = generic_focus keep_completed = no }
+	set_research_slots = 0
+	country_lock_all_division_template = yes
+	add_ideas = RUS_world_ended_isolation
+	ADISCORD_economy_mark_dirty = yes
+}
+
+RUS_crisis_ruin_state = {
+	set_state_owner_to = EXZ
+	set_state_controller_to = EXZ
+	set_demilitarized_zone = yes
+	set_state_category = wasteland
+	if = {
+		limit = { arms_factory > 0 }
+		set_building_level = { type = arms_factory level = 0 instant_build = yes }
+	}
+	if = {
+		limit = { industrial_complex > 0 }
+		set_building_level = { type = industrial_complex level = 0 instant_build = yes }
+	}
+	if = {
+		limit = { dockyard > 0 }
+		set_building_level = { type = dockyard level = 0 instant_build = yes }
+	}
+	if = {
+		limit = { air_base > 0 }
+		set_building_level = { type = air_base level = 0 instant_build = yes }
+	}
+	if = {
+		limit = { anti_air_building > 0 }
+		set_building_level = { type = anti_air_building level = 0 instant_build = yes }
+	}
+	if = {
+		limit = { synthetic_refinery > 0 }
+		set_building_level = { type = synthetic_refinery level = 0 instant_build = yes }
+	}
+	if = {
+		limit = { fuel_silo > 0 }
+		set_building_level = { type = fuel_silo level = 0 instant_build = yes }
+	}
+	if = {
+		limit = { radar_station > 0 }
+		set_building_level = { type = radar_station level = 0 instant_build = yes }
+	}
+	if = {
+		limit = { rocket_site > 0 }
+		set_building_level = { type = rocket_site level = 0 instant_build = yes }
+	}
+	if = {
+		limit = { nuclear_reactor > 0 }
+		set_building_level = { type = nuclear_reactor level = 0 instant_build = yes }
+	}
+	if = {
+		limit = { nuclear_reactor_heavy_water > 0 }
+		set_building_level = { type = nuclear_reactor_heavy_water level = 0 instant_build = yes }
+	}
+	if = {
+		limit = { commercial_nuclear_reactor > 0 }
+		set_building_level = { type = commercial_nuclear_reactor level = 0 instant_build = yes }
+	}
+	if = {
+		limit = { energy_infrastructure > 0 }
+		set_building_level = { type = energy_infrastructure level = 0 instant_build = yes }
+	}
+	if = {
+		limit = { industrial_infrastructure > 0 }
+		set_building_level = { type = industrial_infrastructure level = 0 instant_build = yes }
+	}
+	if = {
+		limit = { infrastructure > 0 }
+		set_building_level = { type = infrastructure level = 0 instant_build = yes }
+	}
+	# Province selection reaches every existing port in this state.
+	set_building_level = {
+		type = naval_base
+		level = 0
+		instant_build = yes
+		province = {
+			all_provinces = yes
+			level > 0
+		}
+	}
+	add_core_of = EXZ
+}
+
 # Coordinates match the central reactor landmark, in province 5228 of state 125.
-# The single strike actor is separate from the aftermath, so a persistent crater
-# cannot replay the beam. Visibility belongs to each player's current scene.
+# The single strike actor is separate from the aftermath, so persistent fire
+# cannot replay the beam. Only the strike follows each player's reading page.
 RUS_crisis_play_strike = {
 	125 = {
 		create_entity = {
@@ -10893,7 +11228,7 @@ RUS_crisis_play_strike = {
 			z = 14.21
 			rotation = 0
 			scale = 1
-			min_zoom = 2000
+			min_zoom = 10000
 			visible = RUS_crisis_strike_visible
 		}
 		set_entity_animation = { id = 610792 animation = "strike" }
@@ -10905,10 +11240,8 @@ RUS_crisis_play_strike = {
 			z = 14.21
 			rotation = 0
 			scale = 1
-			min_zoom = 2000
-			visible = RUS_crisis_strike_visible
+			min_zoom = 10000
 		}
-		set_entity_animation = { id = 610793 animation = "burn" }
 	}
 }
 
@@ -12658,6 +12991,7 @@ RUS_campaign_initialize = {
 		set_variable = { var = RUS_army_speed value = 0 }
 		set_variable = { var = RUS_army_planning value = 0 }
 		set_variable = { var = RUS_army_training value = 0 }
+		set_variable = { var = RUS_army_special_forces_min value = 0 }
 		RUS_black_army_refresh = yes
 		RUS_faction_support_refresh = yes
 		RUS_bunker_refresh = yes
@@ -12703,6 +13037,37 @@ RUS_campaign_shutdown = {
 		remove_dynamic_modifier = { modifier = RUS_faction_support }
 	}
 	ADISCORD_economy_mark_dirty = yes
+}
+
+# Fixed formations share a locked template; ordinary recruitment stays available.
+RUS_prepare_hazard_template = {
+	if = {
+		limit = { NOT = { has_template = "Khanate CBRN Brigade" } }
+		division_template = {
+			name = "Khanate CBRN Brigade"
+			is_locked = yes
+			template_counter = 3
+			division_names_group = ADISCORD_INF_01
+			regiments = {
+				ADISCORD_hazard_infantry = {
+					x = 0
+					y = 0
+				}
+				ADISCORD_hazard_infantry = {
+					x = 0
+					y = 1
+				}
+				ADISCORD_hazard_infantry = {
+					x = 0
+					y = 2
+				}
+			}
+		}
+	}
+	set_division_force_allow_recruiting = {
+		division_template = "Khanate CBRN Brigade"
+		force_allow_recruiting = yes
+	}
 }
 
 # --- rus_reactor_belt ---
@@ -12909,23 +13274,32 @@ RUS_reactor_foundry_expand = {
 	}
 }
 
-# The crew is lost to radiation when the sortie departs; the receipt only
-# guards the loot.
+# Supplies are consumed on departure. The receipt records the quoted haul;
+# later training cannot change the package of an expedition already underway.
 RUS_reactor_sortie_begin = {
 	if = {
 		limit = {
 			RUS_khan_governing = yes
 			RUS_lab_reactor_access = yes
+			has_completed_focus = RUS_reactor_sorties
+			NOT = { has_variable = RUS_reactor_sortie_receipt }
 			RUS_reactor_sortie_affordable = yes
 		}
-		set_variable = { var = RUS_reactor_sortie_receipt value = 1 }
 		add_political_power = -25
 		if = {
 			limit = { has_completed_focus = RUS_reactor_decontamination }
-			add_manpower = -500
+			set_variable = { var = RUS_reactor_sortie_receipt value = 250 }
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = -20
+			}
 		}
 		else = {
-			add_manpower = -1000
+			set_variable = { var = RUS_reactor_sortie_receipt value = 150 }
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = -40
+			}
 		}
 	}
 }
@@ -12933,20 +13307,20 @@ RUS_reactor_sortie_begin = {
 RUS_reactor_sortie_finish = {
 	if = {
 		limit = { has_variable = RUS_reactor_sortie_receipt }
+		set_temp_variable = { var = RUS_reactor_sortie_haul value = RUS_reactor_sortie_receipt }
 		clear_variable = RUS_reactor_sortie_receipt
 		if = {
-			limit = { has_completed_focus = RUS_reactor_decontamination }
-			add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
+			limit = {
+				RUS_khan_governing = yes
+				RUS_lab_reactor_access = yes
+			}
+			add_to_variable = { var = ADISCORD_economy_treasury value = RUS_reactor_sortie_haul }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = RUS_reactor_sortie_haul }
+			set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
+			set_temp_variable = { var = RUS_scientists_support_delta value = 0.05 }
+			RUS_faction_support_change = yes
+			ADISCORD_economy_mark_dirty = yes
 		}
-		else = {
-			add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
-		}
-		set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
-		set_temp_variable = { var = RUS_scientists_support_delta value = 0.05 }
-		RUS_faction_support_change = yes
-		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
@@ -12992,7 +13366,6 @@ RUS_lab_reactor_alloys_start = {
 		limit = {
 			RUS_lab_operational = yes
 			RUS_lab_slot_free = yes
-			RUS_lab_not_under_black_army = yes
 			NOT = { has_country_flag = RUS_lab_reactor_alloys_completed }
 			RUS_lab_reactor_alloys_affordable = yes
 		}
@@ -13019,6 +13392,15 @@ RUS_lab_reactor_alloys_finish = {
 				uses = 1
 				category = industry
 			}
+			if = {
+				limit = { RUS_bunker_laboratory_active = yes }
+				add_tech_bonus = {
+					name = RUS_bunker_protection_research
+					bonus = 0.5
+					uses = 1
+					category = support_tech
+				}
+			}
 			set_temp_variable = { var = RUS_black_army_support_delta value = -0.05 }
 			set_temp_variable = { var = RUS_scientists_support_delta value = 0.10 }
 			RUS_faction_support_change = yes
@@ -13032,7 +13414,6 @@ RUS_lab_zeppelin_start = {
 		limit = {
 			RUS_lab_operational = yes
 			RUS_lab_slot_free = yes
-			RUS_lab_not_under_black_army = yes
 			has_country_flag = RUS_lab_reactor_alloys_completed
 			NOT = { has_country_flag = RUS_lab_zeppelin_delivered }
 			RUS_lab_zeppelin_affordable = yes
@@ -13068,9 +13449,9 @@ RUS_lab_zeppelin_finish = {
 # The crew was taken from the recruit pool when the project was paid.
 RUS_lab_spawn_zeppelin = {
 	if = {
-		limit = { NOT = { has_template = "Rusnian Airship" } }
+		limit = { NOT = { has_template = "Khanate Airship" } }
 		division_template = {
-			name = "Rusnian Airship"
+			name = "Khanate Airship"
 			override_model = ADISCORD_zeppelin_entity
 			is_locked = yes
 			regiments = {
@@ -13080,7 +13461,7 @@ RUS_lab_spawn_zeppelin = {
 	}
 	capital_scope = {
 		create_unit = {
-			division = "name = \"Воздушный линкор «Цепелин»\" division_template = \"Rusnian Airship\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			division = "name = \"Воздушный линкор «Цепелин»\" division_template = \"Khanate Airship\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 			owner = RUS
 			allow_spawning_on_enemy_provs = no
 		}

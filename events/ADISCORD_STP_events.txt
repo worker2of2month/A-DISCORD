@@ -636,7 +636,11 @@ country_event = {
 					limit = { has_war_with = SRP }
 					set_country_flag = VAL_cw_entered
 					SRP = { add_ideas = STP_cw_republics_battle_spirit STP_cw_republics_war_command = yes }
-					news_event = { id = ADISCORD_STP_cw.73 hours = 1 }
+					if = {
+						limit = { NOT = { has_global_flag = ADISCORD_news_kefreyt_intervention_published } }
+						set_global_flag = ADISCORD_news_kefreyt_intervention_published
+						news_event = { id = ADISCORD_STP_cw.73 hours = 1 }
+					}
 					log = "[STP_CW] VAL ultimatum expired: real war against SRP"
 				}
 				else = {
@@ -1243,16 +1247,61 @@ country_event = {
 	is_triggered_only = yes
 	option = {
 		name = ADISCORD_STP_pc.7.a
+		hidden_effect = {
+			if = {
+				limit = {
+					check_variable = {
+						var = STP_pc_course
+						value = 4
+						compare = equals
+					}
+				}
+				country_event = {
+					id = ADISCORD_STP_pc.62
+					hours = 1
+				}
+			}
+		}
 		ai_chance = { base = 90 }
 	}
 	option = {
 		name = ADISCORD_STP_pc.7.b
+		hidden_effect = {
+			if = {
+				limit = {
+					check_variable = {
+						var = STP_pc_course
+						value = 4
+						compare = equals
+					}
+				}
+				country_event = {
+					id = ADISCORD_STP_pc.62
+					hours = 1
+				}
+			}
+		}
 		trigger = { STP_cw_shabrat_available = yes }
 		ai_chance = { base = 10 }
 		promote_character = STP_maksim_shabrat
 	}
 	option = {
 		name = ADISCORD_STP_pc.7.c
+		hidden_effect = {
+			if = {
+				limit = {
+					check_variable = {
+						var = STP_pc_course
+						value = 4
+						compare = equals
+					}
+				}
+				country_event = {
+					id = ADISCORD_STP_pc.62
+					hours = 1
+				}
+			}
+		}
 		trigger = { OR = { has_country_flag = STP_gornin_introduced has_character = STP_ilya_gornin } }
 		ai_chance = { base = 0 }
 		promote_character = STP_ilya_gornin
@@ -1260,6 +1309,21 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_STP_pc.7.da
+		hidden_effect = {
+			if = {
+				limit = {
+					check_variable = {
+						var = STP_pc_course
+						value = 4
+						compare = equals
+					}
+				}
+				country_event = {
+					id = ADISCORD_STP_pc.62
+					hours = 1
+				}
+			}
+		}
 		trigger = { OR = { has_country_flag = STP_vera_introduced has_character = STP_vera_tikh } }
 		ai_chance = { base = 0 }
 		promote_character = STP_vera_tikh
@@ -4918,6 +4982,12 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_STP_ch.52.a
+		hidden_effect = {
+			country_event = {
+				id = ADISCORD_STP_ch.60
+				hours = 1
+			}
+		}
 	}
 }
 
@@ -5112,6 +5182,12 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_STP_ch.53.a
+		hidden_effect = {
+			country_event = {
+				id = ADISCORD_STP_ch.61
+				hours = 1
+			}
+		}
 	}
 }
 
@@ -5288,6 +5364,12 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_STP_ch.54.a
+		hidden_effect = {
+			country_event = {
+				id = ADISCORD_STP_ch.62
+				hours = 1
+			}
+		}
 	}
 }
 
@@ -5464,6 +5546,12 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_STP_ch.55.a
+		hidden_effect = {
+			country_event = {
+				id = ADISCORD_STP_ch.63
+				hours = 1
+			}
+		}
 	}
 }
 
@@ -5640,6 +5728,12 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_STP_ch.56.a
+		hidden_effect = {
+			country_event = {
+				id = ADISCORD_STP_ch.64
+				hours = 1
+			}
+		}
 	}
 }
 
@@ -5816,6 +5910,12 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_STP_ch.57.a
+		hidden_effect = {
+			country_event = {
+				id = ADISCORD_STP_ch.65
+				hours = 1
+			}
+		}
 	}
 }
 
@@ -5827,4 +5927,383 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	option = { name = ADISCORD_STP_pc.53.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.60
+	title = ADISCORD_STP_ch.60.t
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_houses_ending_a
+		}
+		text = ADISCORD_STP_ch.60.a_desc
+	}
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_houses_ending_b
+		}
+		text = ADISCORD_STP_ch.60.b_desc
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		tag = STP
+	}
+	option = {
+		name = STP_epilogue_continue
+		custom_effect_tooltip = STP_epilogue_thanks_tt
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.61
+	title = ADISCORD_STP_ch.61.t
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_festival_ending_a
+		}
+		text = ADISCORD_STP_ch.61.a_desc
+	}
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_festival_ending_b
+		}
+		text = ADISCORD_STP_ch.61.b_desc
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		tag = STP
+	}
+	option = {
+		name = STP_epilogue_continue
+		custom_effect_tooltip = STP_epilogue_thanks_tt
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.62
+	title = ADISCORD_STP_ch.62.t
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_staff_ending_a
+		}
+		text = ADISCORD_STP_ch.62.a_desc
+	}
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_staff_ending_b
+		}
+		text = ADISCORD_STP_ch.62.b_desc
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		tag = STP
+	}
+	option = {
+		name = STP_epilogue_continue
+		custom_effect_tooltip = STP_epilogue_thanks_tt
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.63
+	title = ADISCORD_STP_ch.63.t
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_trade_ending_a
+		}
+		text = ADISCORD_STP_ch.63.a_desc
+	}
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_trade_ending_b
+		}
+		text = ADISCORD_STP_ch.63.b_desc
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		tag = STP
+	}
+	option = {
+		name = STP_epilogue_continue
+		custom_effect_tooltip = STP_epilogue_thanks_tt
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.64
+	title = ADISCORD_STP_ch.64.t
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_security_ending_a
+		}
+		text = ADISCORD_STP_ch.64.a_desc
+	}
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_security_ending_b
+		}
+		text = ADISCORD_STP_ch.64.b_desc
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		tag = STP
+	}
+	option = {
+		name = STP_epilogue_continue
+		custom_effect_tooltip = STP_epilogue_thanks_tt
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.65
+	title = ADISCORD_STP_ch.65.t
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_regent_ending_a
+		}
+		text = ADISCORD_STP_ch.65.a_desc
+	}
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_regent_ending_b
+		}
+		text = ADISCORD_STP_ch.65.b_desc
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		tag = STP
+	}
+	option = {
+		name = STP_epilogue_continue
+		custom_effect_tooltip = STP_epilogue_thanks_tt
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.60
+	title = ADISCORD_STP_pc.60.t
+	desc = {
+		trigger = {
+			always = yes
+		}
+		text = ADISCORD_STP_pc.60.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		tag = STS
+		NOT = { has_country_flag = STP_epilogue_shown }
+		has_country_flag = STP_heg_administrations_unlocked
+		check_variable = {
+			var = STP_pc_course
+			value = 1
+			compare = equals
+		}
+		NOT = { has_war_with = VAL }
+		NOT = { has_war_with = NOD }
+		NOT = { has_war_with = YPR }
+		NOT = { has_war_with = TFF }
+		OR = {
+			NOT = { VAL = { exists = yes } }
+			VAL = { is_subject_of = STS }
+			AND = {
+				has_completed_focus = STP_pc_heg_final_kefreyt
+				VAL = { is_in_faction_with = STS }
+			}
+		}
+		OR = {
+			NOT = { NOD = { exists = yes } }
+			NOD = { is_subject_of = STS }
+			AND = {
+				has_completed_focus = STP_pc_heg_final_north
+				NOD = { is_in_faction_with = STS }
+			}
+		}
+		OR = {
+			NOT = { YPR = { exists = yes } }
+			YPR = { is_subject_of = STS }
+			AND = {
+				has_completed_focus = STP_pc_heg_final_north
+				YPR = { is_in_faction_with = STS }
+			}
+		}
+		OR = {
+			NOT = { TFF = { exists = yes } }
+			TFF = { is_subject_of = STS }
+			AND = {
+				has_completed_focus = STP_pc_heg_final_north
+				TFF = { is_in_faction_with = STS }
+			}
+		}
+	}
+	immediate = {
+		set_country_flag = STP_epilogue_shown
+	}
+	option = {
+		name = STP_epilogue_continue
+		custom_effect_tooltip = STP_epilogue_thanks_tt
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.61
+	title = ADISCORD_STP_pc.61.t
+	desc = {
+		trigger = {
+			always = yes
+		}
+		text = ADISCORD_STP_pc.61.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		tag = STS
+		NOT = { has_country_flag = STP_epilogue_shown }
+		has_completed_focus = STP_pc_lib_coalition
+	}
+	immediate = {
+		set_country_flag = STP_epilogue_shown
+	}
+	option = {
+		name = STP_epilogue_continue
+		custom_effect_tooltip = STP_epilogue_thanks_tt
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.62
+	title = ADISCORD_STP_pc.62.t
+	desc = {
+		trigger = {
+			check_variable = {
+				var = STP_pc_course
+				value = 3
+				compare = equals
+			}
+		}
+		text = ADISCORD_STP_pc.62.directory
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				var = STP_pc_course
+				value = 4
+				compare = equals
+			}
+			has_country_leader = {
+				character = STP_ilya_gornin
+				ruling_only = yes
+			}
+		}
+		text = ADISCORD_STP_pc.62.gornin
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				var = STP_pc_course
+				value = 4
+				compare = equals
+			}
+			has_country_leader = {
+				character = STP_vera_tikh
+				ruling_only = yes
+			}
+		}
+		text = ADISCORD_STP_pc.62.vera
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				var = STP_pc_course
+				value = 4
+				compare = equals
+			}
+			has_country_leader = {
+				character = STP_maksim_shabrat
+				ruling_only = yes
+			}
+		}
+		text = ADISCORD_STP_pc.62.shabrat
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				var = STP_pc_course
+				value = 4
+				compare = equals
+			}
+			NOT = {
+				OR = {
+					has_country_leader = {
+						character = STP_ilya_gornin
+						ruling_only = yes
+					}
+					has_country_leader = {
+						character = STP_vera_tikh
+						ruling_only = yes
+					}
+					has_country_leader = {
+						character = STP_maksim_shabrat
+						ruling_only = yes
+					}
+				}
+			}
+		}
+		text = ADISCORD_STP_pc.62.retained
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		tag = STS
+		NOT = { has_country_flag = STP_epilogue_shown }
+		OR = {
+			AND = {
+				check_variable = {
+					var = STP_pc_course
+					value = 3
+					compare = equals
+				}
+				has_completed_focus = STP_pc_sot_keep_command
+			}
+			AND = {
+				check_variable = {
+					var = STP_pc_course
+					value = 4
+					compare = equals
+				}
+				has_completed_focus = STP_pc_sot_transfer
+			}
+		}
+	}
+	immediate = {
+		set_country_flag = STP_epilogue_shown
+	}
+	option = {
+		name = STP_epilogue_continue
+		custom_effect_tooltip = STP_epilogue_thanks_tt
+	}
 }

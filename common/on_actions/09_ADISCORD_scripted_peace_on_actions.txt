@@ -2029,6 +2029,7 @@ on_actions = {
 					limit = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } }
 					STP_cw_queue_peace_reconciliation = yes
 				}
+				STS = { STP_pw_queue_hegemony_epilogue = yes }
 				# END stelander:on_peace
 
 
@@ -2115,75 +2116,82 @@ on_actions = {
 	}
 	on_annex = {
 		effect = {
-			# BEGIN vorkerland_collapse:on_annex
-			ADISCORD_vorkerland_pw_close_external = yes
 			if = {
-				limit = { RUS_crisis_callback_relevant = yes }
-				RUS = { RUS_crisis_check_external_end = yes }
+				limit = { NOT = { has_global_flag = RUS_crisis_world_ended } }
+				# BEGIN vorkerland_collapse:on_annex
+				ADISCORD_vorkerland_pw_close_external = yes
+				if = {
+					limit = { RUS_crisis_callback_relevant = yes }
+					RUS = { RUS_crisis_check_external_end = yes }
+				}
+				# END vorkerland_collapse:on_annex
+				# BEGIN nam:on_annex
+				ADISCORD_nam_resource_war_close_external = yes
+				# END nam:on_annex
+				# BEGIN stelander:on_annex
+				# ROOT survives the annexation; FROM may no longer own any state.
+				if = {
+					limit = { OR = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } FROM = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } } }
+					STP_cw_queue_peace_reconciliation = yes
+				}
+				# An annexed NOD no longer receives its country pulse. Close its pending intervention now.
+				if = { limit = { FROM = { tag = NOD } } STP_cw_poll_nod_intervention = yes }
+				STS = { STP_pw_queue_hegemony_epilogue = yes }
+				# END stelander:on_annex
+				# BEGIN kefreyt:on_annex
+				if = {
+					limit = { FROM = { tag = VAL } }
+					FROM = { VAL_nw_refund_orders = yes }
+				}
+				VAL = { VAL_nw_reconcile_partners = yes }
+				FROM = { VAL_clear_final_defeat_receipt = yes }
+				if = { limit = { FROM = { tag = VAL } } VAL = { VAL_close_northern_coalition_campaign = yes } }
+				VAL_queue_frontier_reconciliation = yes
+				if = { limit = { FROM = { tag = NAM } } VAL = { VAL_check_nam_concession = yes } }
+				# END kefreyt:on_annex
+				# BEGIN shahrabad:on_annex
+				SHL = { SHL_close_external_mzr_war = yes }
+				if = {
+					limit = { FROM = { tag = SHL } }
+					FROM = { SHL_abort_annexed_operations = yes }
+				}
+				# END shahrabad:on_annex
+				# BEGIN south_final:on_annex
+				ADISCORD_south_final_close_external = yes
+				ADISCORD_south_note_campaign_annexation = yes
+				# END south_final:on_annex
+				# BEGIN west_final:on_annex
+				ADISCORD_west_final_close_external = yes
+				# END west_final:on_annex
 			}
-			# END vorkerland_collapse:on_annex
-			# BEGIN nam:on_annex
-			ADISCORD_nam_resource_war_close_external = yes
-			# END nam:on_annex
-			# BEGIN stelander:on_annex
-			# ROOT survives the annexation; FROM may no longer own any state.
-			if = {
-				limit = { OR = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } FROM = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } } }
-				STP_cw_queue_peace_reconciliation = yes
-			}
-			# An annexed NOD no longer receives its country pulse. Close its pending intervention now.
-			if = { limit = { FROM = { tag = NOD } } STP_cw_poll_nod_intervention = yes }
-			# END stelander:on_annex
-			# BEGIN kefreyt:on_annex
-			if = {
-				limit = { FROM = { tag = VAL } }
-				FROM = { VAL_nw_refund_orders = yes }
-			}
-			VAL = { VAL_nw_reconcile_partners = yes }
-			FROM = { VAL_clear_final_defeat_receipt = yes }
-			if = { limit = { FROM = { tag = VAL } } VAL = { VAL_close_northern_coalition_campaign = yes } }
-			VAL_queue_frontier_reconciliation = yes
-			if = { limit = { FROM = { tag = NAM } } VAL = { VAL_check_nam_concession = yes } }
-			# END kefreyt:on_annex
-			# BEGIN shahrabad:on_annex
-			SHL = { SHL_close_external_mzr_war = yes }
-			if = {
-				limit = { FROM = { tag = SHL } }
-				FROM = { SHL_abort_annexed_operations = yes }
-			}
-			# END shahrabad:on_annex
-			# BEGIN south_final:on_annex
-			ADISCORD_south_final_close_external = yes
-			ADISCORD_south_note_campaign_annexation = yes
-			# END south_final:on_annex
-			# BEGIN west_final:on_annex
-			ADISCORD_west_final_close_external = yes
-			# END west_final:on_annex
 		}
 	}
 	on_state_control_changed = {
 		effect = {
-			# BEGIN livonn:on_state_control_changed
-			# FROM.FROM is the state; defer until its transfer has completed.
 			if = {
-				limit = { FROM.FROM = { OR = { state = 43 state = 44 state = 45 state = 88 } } }
-				STP_cw_queue_peace_reconciliation = yes
-			}
-			# END livonn:on_state_control_changed
-			# BEGIN frontier:on_state_control_changed
-			# Capitals can relocate within a participant's remaining territory.
-			if = {
-				limit = {
-					FROM.FROM = {
-						OR = {
-							state = 58 state = 59 state = 60 state = 61 state = 62 state = 63 state = 64 state = 65 state = 168
-							owner = { OR = { tag = CIN tag = OSF tag = APH tag = ERT } }
+				limit = { NOT = { has_global_flag = RUS_crisis_world_ended } }
+				# BEGIN livonn:on_state_control_changed
+				# FROM.FROM is the state; defer until its transfer has completed.
+				if = {
+					limit = { FROM.FROM = { OR = { state = 43 state = 44 state = 45 state = 88 } } }
+					STP_cw_queue_peace_reconciliation = yes
+				}
+				# END livonn:on_state_control_changed
+				# BEGIN frontier:on_state_control_changed
+				# Capitals can relocate within a participant's remaining territory.
+				if = {
+					limit = {
+						FROM.FROM = {
+							OR = {
+								state = 58 state = 59 state = 60 state = 61 state = 62 state = 63 state = 64 state = 65 state = 168
+								owner = { OR = { tag = CIN tag = OSF tag = APH tag = ERT } }
+							}
 						}
 					}
+					VAL_queue_frontier_reconciliation = yes
 				}
-				VAL_queue_frontier_reconciliation = yes
+				# END frontier:on_state_control_changed
 			}
-			# END frontier:on_state_control_changed
 		}
 	}
 }

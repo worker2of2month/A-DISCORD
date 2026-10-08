@@ -10,7 +10,7 @@ division_template = {
 }
 
 division_template = {
-	name = "Rusnian Rifle Brigade"
+	name = "Khanate Rifle Brigade"
 	template_counter = 3
 	division_names_group = ADISCORD_INF_01
 	regiments = {
@@ -54,14 +54,14 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 16531
-		division_template = "Rusnian Rifle Brigade"
+		division_template = "Khanate Rifle Brigade"
 		start_experience_factor = 0.17
 		start_equipment_factor = 0.32
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
 		location = 16531
-		division_template = "Rusnian Rifle Brigade"
+		division_template = "Khanate Rifle Brigade"
 		start_experience_factor = 0.17
 		start_equipment_factor = 0.32
 	}

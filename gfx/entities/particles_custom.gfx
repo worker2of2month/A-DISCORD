@@ -37,8 +37,14 @@ objectTypes = {
 	}
 
 	pdxparticle = {
-		name = "ADISCORD_orbital_laser_aftermath_particle"
-		type = "ADISCORD_orbital_laser_aftermath_file"
+		name = "ADISCORD_orbital_laser_impact_particle"
+		type = "ADISCORD_orbital_laser_impact_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_orbital_laser_fire_particle"
+		type = "ADISCORD_orbital_laser_fire_file"
 		scale = 1
 	}
 

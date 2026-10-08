@@ -192,43 +192,82 @@ VAL_nw_emergency_arsenals_begin = {
 	if = {
 		limit = {
 			VAL_nw_operational = yes
+			NOT = { has_country_flag = VAL_nw_emergency_arsenals_complete }
 			VAL_nw_khan_threat = yes
-			NOT = { has_variable = VAL_nw_emergency_arsenals_deposit }
+			NOT = {
+				has_variable = VAL_nw_emergency_arsenals_deposit
+			}
 			NOT = { has_political_power < 25 }
-			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 150
+				compare = greater_than_or_equals
+			}
 		}
-		set_variable = { var = VAL_nw_emergency_arsenals_deposit value = 150 }
+		set_variable = {
+			var = VAL_nw_emergency_arsenals_deposit
+			value = 150
+		}
 		add_political_power = -25
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+		subtract_from_variable = {
+			var = ADISCORD_economy_treasury
+			value = 150
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_costs
+			value = 150
+		}
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
 VAL_nw_emergency_arsenals_refund = {
 	if = {
-		limit = { has_variable = VAL_nw_emergency_arsenals_deposit }
-		clear_variable = VAL_nw_emergency_arsenals_deposit
+		limit = {
+			has_variable = VAL_nw_emergency_arsenals_deposit
+		}
 		add_political_power = 25
-		add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = VAL_nw_emergency_arsenals_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = VAL_nw_emergency_arsenals_deposit
+		}
+		clear_variable = VAL_nw_emergency_arsenals_deposit
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
 VAL_nw_emergency_arsenals_finish = {
 	if = {
-		limit = { has_variable = VAL_nw_emergency_arsenals_deposit }
+		limit = {
+			has_variable = VAL_nw_emergency_arsenals_deposit
+			check_variable = {
+				var = VAL_nw_emergency_arsenals_deposit
+				value = 150
+				compare = equals
+			}
+		}
 		if = {
 			limit = {
 				VAL_nw_operational = yes
+				NOT = { has_country_flag = VAL_nw_emergency_arsenals_complete }
 				VAL_nw_khan_threat = yes
 			}
+			set_country_flag = VAL_nw_emergency_arsenals_complete
 			clear_variable = VAL_nw_emergency_arsenals_deposit
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 600 producer = VAL }
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 600
+				producer = VAL
+			}
 			ADISCORD_economy_mark_dirty = yes
 		}
-		else = { VAL_nw_emergency_arsenals_refund = yes }
+		else = {
+			VAL_nw_emergency_arsenals_refund = yes
+		}
 	}
 }
 
@@ -236,43 +275,78 @@ VAL_nw_emergency_reserve_begin = {
 	if = {
 		limit = {
 			VAL_nw_operational = yes
+			NOT = { has_country_flag = VAL_nw_emergency_reserve_complete }
 			VAL_nw_khan_threat = yes
-			NOT = { has_variable = VAL_nw_emergency_reserve_deposit }
+			NOT = {
+				has_variable = VAL_nw_emergency_reserve_deposit
+			}
 			NOT = { has_political_power < 25 }
-			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 200
+				compare = greater_than_or_equals
+			}
 		}
-		set_variable = { var = VAL_nw_emergency_reserve_deposit value = 200 }
+		set_variable = {
+			var = VAL_nw_emergency_reserve_deposit
+			value = 200
+		}
 		add_political_power = -25
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+		subtract_from_variable = {
+			var = ADISCORD_economy_treasury
+			value = 200
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_costs
+			value = 200
+		}
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
 VAL_nw_emergency_reserve_refund = {
 	if = {
-		limit = { has_variable = VAL_nw_emergency_reserve_deposit }
-		clear_variable = VAL_nw_emergency_reserve_deposit
+		limit = {
+			has_variable = VAL_nw_emergency_reserve_deposit
+		}
 		add_political_power = 25
-		add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = VAL_nw_emergency_reserve_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = VAL_nw_emergency_reserve_deposit
+		}
+		clear_variable = VAL_nw_emergency_reserve_deposit
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
 VAL_nw_emergency_reserve_finish = {
 	if = {
-		limit = { has_variable = VAL_nw_emergency_reserve_deposit }
+		limit = {
+			has_variable = VAL_nw_emergency_reserve_deposit
+			check_variable = {
+				var = VAL_nw_emergency_reserve_deposit
+				value = 200
+				compare = equals
+			}
+		}
 		if = {
 			limit = {
 				VAL_nw_operational = yes
+				NOT = { has_country_flag = VAL_nw_emergency_reserve_complete }
 				VAL_nw_khan_threat = yes
 			}
+			set_country_flag = VAL_nw_emergency_reserve_complete
 			clear_variable = VAL_nw_emergency_reserve_deposit
 			add_manpower = 2000
 			ADISCORD_economy_mark_dirty = yes
 		}
-		else = { VAL_nw_emergency_reserve_refund = yes }
+		else = {
+			VAL_nw_emergency_reserve_refund = yes
+		}
 	}
 }
 
@@ -280,6 +354,7 @@ VAL_nw_survey_begin = {
 	if = {
 		limit = {
 			VAL_nw_operational = yes
+			NOT = { has_country_flag = VAL_nw_survey_complete }
 			NOT = { has_variable = VAL_nw_survey_deposit }
 			NOT = { has_political_power < 25 }
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
@@ -309,9 +384,12 @@ VAL_nw_survey_finish = {
 		if = {
 			limit = {
 				VAL_nw_operational = yes
+				NOT = { has_country_flag = VAL_nw_survey_complete }
 			}
 			clear_variable = VAL_nw_survey_deposit
 			army_experience = 10
+			set_country_flag = VAL_nw_survey_complete
+			country_event = { id = val_rework.135 }
 			ADISCORD_economy_mark_dirty = yes
 		}
 		else = { VAL_nw_survey_refund = yes }
@@ -364,6 +442,7 @@ VAL_nw_salvage_archives_begin = {
 	if = {
 		limit = {
 			VAL_nw_operational = yes
+			NOT = { has_country_flag = VAL_nw_salvage_archives_complete }
 			VAL_nw_has_reactor_access = yes
 			NOT = { has_variable = VAL_nw_salvage_archives_deposit }
 			NOT = { has_political_power < 50 }
@@ -394,8 +473,10 @@ VAL_nw_salvage_archives_finish = {
 		if = {
 			limit = {
 				VAL_nw_operational = yes
+				NOT = { has_country_flag = VAL_nw_salvage_archives_complete }
 				VAL_nw_has_reactor_access = yes
 			}
+			set_country_flag = VAL_nw_salvage_archives_complete
 			clear_variable = VAL_nw_salvage_archives_deposit
 			add_tech_bonus = { name = VAL_nw_archive_expedition bonus = 0.5 uses = 1 category = electronics }
 			ADISCORD_economy_mark_dirty = yes
@@ -426,7 +507,7 @@ VAL_nw_begin_restoration = {
 			check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
 			FROM = {
 				VAL_nw_reactor_access = yes
-				NOT = { has_state_flag = RUS_reactor_works_restored }
+				VAL_nw_works_need_rebuilding = yes
 				NOT = { has_state_flag = RUS_reactor_works_in_progress }
 			}
 		}
@@ -452,8 +533,8 @@ VAL_nw_begin_foundry = {
 			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
 			FROM = {
 				VAL_nw_reactor_access = yes
-				has_state_flag = RUS_reactor_works_restored
-				NOT = { has_state_flag = ADISCORD_reactor_foundry_restored }
+				VAL_nw_restored_site = yes
+				VAL_nw_foundry_need_rebuilding = yes
 			}
 		}
 		set_variable = { var = VAL_nw_project_deposit value = 300 }
@@ -478,8 +559,7 @@ VAL_nw_begin_roads = {
 			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
 			FROM = {
 				VAL_nw_reactor_access = yes
-				NOT = { has_state_flag = VAL_nw_roads_restored }
-				infrastructure < 5
+				VAL_nw_roads_need_rebuilding = yes
 			}
 		}
 		set_variable = { var = VAL_nw_project_deposit value = 200 }
@@ -507,12 +587,15 @@ VAL_nw_finish_project = {
 			if = {
 				limit = {
 					check_variable = { var = VAL_nw_project_kind value = 1 compare = equals }
-					FROM = { NOT = { has_state_flag = RUS_reactor_works_restored } }
+					FROM = { VAL_nw_works_need_rebuilding = yes }
 				}
 				FROM = {
-					set_state_flag = RUS_reactor_works_restored
-					RUS_reactor_works_restore_resources = yes
-					add_extra_state_shared_building_slots = 1
+					if = {
+						limit = { NOT = { has_state_flag = RUS_reactor_works_restored } }
+						set_state_flag = RUS_reactor_works_restored
+						RUS_reactor_works_restore_resources = yes
+						add_extra_state_shared_building_slots = 1
+					}
 					add_building_construction = {
 						type = industrial_complex
 						level = 1
@@ -526,11 +609,23 @@ VAL_nw_finish_project = {
 				limit = {
 					check_variable = { var = VAL_nw_project_kind value = 2 compare = equals }
 					FROM = {
-						has_state_flag = RUS_reactor_works_restored
-						NOT = { has_state_flag = ADISCORD_reactor_foundry_restored }
+						VAL_nw_restored_site = yes
+						VAL_nw_foundry_need_rebuilding = yes
 					}
 				}
-				FROM = { RUS_reactor_foundry_expand = yes }
+				FROM = {
+					if = {
+						limit = { NOT = { has_state_flag = ADISCORD_reactor_foundry_restored } }
+						RUS_reactor_foundry_expand = yes
+					}
+					else = {
+						add_building_construction = {
+							type = arms_factory
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
 				FROM = { owner = { ADISCORD_economy_mark_dirty = yes } }
 				VAL_nw_clear_project = yes
 			}
@@ -538,8 +633,7 @@ VAL_nw_finish_project = {
 				limit = {
 					check_variable = { var = VAL_nw_project_kind value = 3 compare = equals }
 					FROM = {
-						NOT = { has_state_flag = VAL_nw_roads_restored }
-						infrastructure < 5
+						VAL_nw_roads_need_rebuilding = yes
 					}
 				}
 				FROM = {
@@ -650,7 +744,7 @@ VAL_nw_revoke_concession = {
 	}
 }
 
-# COUNTRY partner. These eight calls run in VAL's monthly hook, not a world scan.
+# COUNTRY partner. The fixed roster is reconciled in VAL's monthly hook.
 VAL_nw_reconcile_partner = {
 	if = {
 		limit = { has_country_flag = VAL_nw_concession }
@@ -688,6 +782,7 @@ VAL_nw_reconcile_partners = {
 		ERT = { VAL_nw_reconcile_partner = yes }
 		IRT = { VAL_nw_reconcile_partner = yes }
 		SCA = { VAL_nw_reconcile_partner = yes }
+		TMR = { VAL_nw_reconcile_partner = yes }
 		VEL = { VAL_nw_reconcile_partner = yes }
 		RLY = { VAL_nw_reconcile_partner = yes }
 		VAL_nw_reconcile_rights = yes
@@ -723,23 +818,193 @@ VAL_nw_defend_partner = {
 }
 
 VAL_nw_improve_industry = {
-	add_to_variable = { var = VAL_nw_factory_output value = 0.05 }
+	add_to_variable = {
+		var = VAL_nw_factory_output
+		value = 0.05
+	}
+	VAL_nw_ensure_network_modifier = yes
+}
+
+VAL_nw_improve_trade = {
+	add_to_variable = {
+		var = VAL_nw_trade_income
+		value = 0.05
+	}
+	VAL_nw_ensure_network_modifier = yes
+}
+
+VAL_nw_expanded_arsenals_begin = {
 	if = {
-		limit = { NOT = { has_dynamic_modifier = { modifier = VAL_nw_industrial_network } } }
+		limit = {
+			VAL_nw_operational = yes
+			NOT = { has_country_flag = VAL_nw_expanded_arsenals_complete }
+			VAL_nw_khan_threat = yes
+			NOT = {
+				has_variable = VAL_nw_emergency_arsenals_deposit
+			}
+			NOT = { has_political_power < 25 }
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 250
+				compare = greater_than_or_equals
+			}
+			has_completed_focus = VAL_nw_arsenals
+		}
+		set_variable = {
+			var = VAL_nw_emergency_arsenals_deposit
+			value = 250
+		}
+		add_political_power = -25
+		subtract_from_variable = {
+			var = ADISCORD_economy_treasury
+			value = 250
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_costs
+			value = 250
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_nw_expanded_arsenals_finish = {
+	if = {
+		limit = {
+			has_variable = VAL_nw_emergency_arsenals_deposit
+			check_variable = {
+				var = VAL_nw_emergency_arsenals_deposit
+				value = 250
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				VAL_nw_operational = yes
+				NOT = { has_country_flag = VAL_nw_expanded_arsenals_complete }
+				VAL_nw_khan_threat = yes
+			}
+			set_country_flag = VAL_nw_expanded_arsenals_complete
+			clear_variable = VAL_nw_emergency_arsenals_deposit
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 1200
+				producer = VAL
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = {
+			VAL_nw_emergency_arsenals_refund = yes
+		}
+	}
+}
+
+VAL_nw_expanded_reserve_begin = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			NOT = { has_country_flag = VAL_nw_expanded_reserve_complete }
+			VAL_nw_khan_threat = yes
+			NOT = {
+				has_variable = VAL_nw_emergency_reserve_deposit
+			}
+			NOT = { has_political_power < 25 }
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 300
+				compare = greater_than_or_equals
+			}
+			has_completed_focus = VAL_nw_reserve
+		}
+		set_variable = {
+			var = VAL_nw_emergency_reserve_deposit
+			value = 300
+		}
+		add_political_power = -25
+		subtract_from_variable = {
+			var = ADISCORD_economy_treasury
+			value = 300
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_costs
+			value = 300
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_nw_expanded_reserve_finish = {
+	if = {
+		limit = {
+			has_variable = VAL_nw_emergency_reserve_deposit
+			check_variable = {
+				var = VAL_nw_emergency_reserve_deposit
+				value = 300
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				VAL_nw_operational = yes
+				NOT = { has_country_flag = VAL_nw_expanded_reserve_complete }
+				VAL_nw_khan_threat = yes
+			}
+			set_country_flag = VAL_nw_expanded_reserve_complete
+			clear_variable = VAL_nw_emergency_reserve_deposit
+			add_manpower = 3000
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = {
+			VAL_nw_emergency_reserve_refund = yes
+		}
+	}
+}
+
+VAL_nw_improve_administration = {
+	add_to_variable = {
+		var = VAL_nw_admin_expense
+		value = -0.05
+	}
+	VAL_nw_ensure_network_modifier = yes
+}
+
+VAL_nw_ensure_network_modifier = {
+	if = {
+		limit = {
+			NOT = { has_dynamic_modifier = { modifier = VAL_nw_industrial_network } }
+		}
 		add_dynamic_modifier = { modifier = VAL_nw_industrial_network }
 	}
 	force_update_dynamic_modifier = yes
 	ADISCORD_economy_mark_dirty = yes
 }
 
-VAL_nw_improve_trade = {
-	add_to_variable = { var = VAL_nw_trade_income value = 0.05 }
-	if = {
-		limit = { NOT = { has_dynamic_modifier = { modifier = VAL_nw_industrial_network } } }
-		add_dynamic_modifier = { modifier = VAL_nw_industrial_network }
+VAL_nw_receive_reconstruction_fund = {
+	custom_effect_tooltip = VAL_nw_reconstruction_fund_tt
+	hidden_effect = {
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = 200
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = 200
+		}
+		ADISCORD_economy_mark_dirty = yes
 	}
-	force_update_dynamic_modifier = yes
-	ADISCORD_economy_mark_dirty = yes
+}
+
+VAL_nw_recognize_republic = {
+	if = {
+		limit = {
+			has_completed_focus = VAL_nw_charters
+			VAL_nw_can_recognize_republic = yes
+		}
+		FROM = {
+			set_country_flag = VAL_nw_sovereignty_recognized
+			ADISCORD_release_non_participating_minor_optimization = yes
+			country_event = { id = val_rework.138 }
+		}
+	}
 }
 
 # --- contract_authority_effects ---

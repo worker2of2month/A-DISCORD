@@ -3221,7 +3221,7 @@ VAL_new_world_category = {
 	VAL_nw_supply_partner = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = VAL }
-		targets = { SLA RZA MLR ERT IRT SCA VEL RLY }
+		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
 		visible = {
 			has_completed_focus = VAL_nw_guarantor
 			FROM = { has_country_flag = VAL_nw_concession }
@@ -3274,12 +3274,7 @@ VAL_new_world_category = {
 		allowed = { tag = VAL }
 		state_target = yes
 		targets = { 176 177 187 188 189 192 }
-		visible = {
-			OR = {
-				has_completed_focus = VAL_nw_inventory
-				has_completed_focus = VAL_nw_engineers
-			}
-		}
+		visible = { has_completed_focus = VAL_nw_inventory }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_nw_project_idle_tt
@@ -3292,7 +3287,7 @@ VAL_new_world_category = {
 				}
 				custom_trigger_tooltip = {
 					tooltip = VAL_nw_works_ruined_tt
-					NOT = { has_state_flag = RUS_reactor_works_restored }
+					VAL_nw_works_need_rebuilding = yes
 				}
 				custom_trigger_tooltip = {
 					tooltip = VAL_nw_local_work_idle_tt
@@ -3340,11 +3335,11 @@ VAL_new_world_category = {
 				}
 				custom_trigger_tooltip = {
 					tooltip = VAL_nw_works_restored_tt
-					has_state_flag = RUS_reactor_works_restored
+					VAL_nw_restored_site = yes
 				}
 				custom_trigger_tooltip = {
 					tooltip = VAL_nw_foundry_missing_tt
-					NOT = { has_state_flag = ADISCORD_reactor_foundry_restored }
+					VAL_nw_foundry_need_rebuilding = yes
 				}
 			}
 		}
@@ -3375,7 +3370,7 @@ VAL_new_world_category = {
 		allowed = { tag = VAL }
 		state_target = yes
 		targets = { 176 177 187 188 189 192 }
-		visible = { has_completed_focus = VAL_nw_roads }
+		visible = { has_completed_focus = VAL_nw_dispatch }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_nw_project_idle_tt
@@ -3388,9 +3383,8 @@ VAL_new_world_category = {
 				}
 				custom_trigger_tooltip = {
 					tooltip = VAL_nw_roads_missing_tt
-					NOT = { has_state_flag = VAL_nw_roads_restored }
+					VAL_nw_roads_need_rebuilding = yes
 				}
-				infrastructure < 5
 			}
 		}
 		cost = 0
@@ -3418,7 +3412,10 @@ VAL_new_world_category = {
 	VAL_nw_emergency_arsenals = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = VAL }
-		visible = { VAL_nw_khan_threat = yes }
+		visible = {
+			NOT = { has_country_flag = VAL_nw_emergency_arsenals_complete }
+			VAL_nw_khan_threat = yes
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_nw_khan_threat_tt
@@ -3436,7 +3433,6 @@ VAL_new_world_category = {
 			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
 		}
 		days_remove = 21
-		fire_only_once = yes
 		complete_effect = {
 			custom_effect_tooltip = VAL_nw_paid_order_tt
 			hidden_effect = { VAL_nw_emergency_arsenals_begin = yes }
@@ -3447,7 +3443,20 @@ VAL_new_world_category = {
 				VAL_nw_khan_threat = no
 			}
 		}
-		cancel_effect = { hidden_effect = { VAL_nw_emergency_arsenals_refund = yes } }
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = VAL_nw_emergency_arsenals_deposit
+							value = 150
+							compare = equals
+						}
+					}
+					VAL_nw_emergency_arsenals_refund = yes
+				}
+			}
+		}
 		remove_effect = {
 			custom_effect_tooltip = VAL_nw_emergency_arsenals_result_tt
 			hidden_effect = { VAL_nw_emergency_arsenals_finish = yes }
@@ -3455,10 +3464,69 @@ VAL_new_world_category = {
 		ai_will_do = { base = 100 }
 	}
 
+	VAL_nw_expanded_arsenals = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = {
+			NOT = { has_country_flag = VAL_nw_expanded_arsenals_complete }
+			VAL_nw_khan_threat = yes
+			has_completed_focus = VAL_nw_arsenals
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_khan_threat_tt
+				VAL_nw_khan_threat = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_order_idle_tt
+				NOT = { has_variable = VAL_nw_emergency_arsenals_deposit }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_nw_expanded_arsenals_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+		}
+		days_remove = 21
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_paid_order_tt
+			hidden_effect = { VAL_nw_expanded_arsenals_begin = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				VAL_nw_operational = no
+				VAL_nw_khan_threat = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = VAL_nw_emergency_arsenals_deposit
+							value = 250
+							compare = equals
+						}
+					}
+					VAL_nw_emergency_arsenals_refund = yes
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = VAL_nw_expanded_arsenals_result_tt
+			hidden_effect = { VAL_nw_expanded_arsenals_finish = yes }
+		}
+		ai_will_do = { base = 100 }
+	}
+
 	VAL_nw_emergency_reserve = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = VAL }
-		visible = { VAL_nw_khan_threat = yes }
+		visible = {
+			NOT = { has_country_flag = VAL_nw_emergency_reserve_complete }
+			VAL_nw_khan_threat = yes
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_nw_khan_threat_tt
@@ -3476,7 +3544,6 @@ VAL_new_world_category = {
 			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
 		}
 		days_remove = 30
-		fire_only_once = yes
 		complete_effect = {
 			custom_effect_tooltip = VAL_nw_paid_order_tt
 			hidden_effect = { VAL_nw_emergency_reserve_begin = yes }
@@ -3487,7 +3554,20 @@ VAL_new_world_category = {
 				VAL_nw_khan_threat = no
 			}
 		}
-		cancel_effect = { hidden_effect = { VAL_nw_emergency_reserve_refund = yes } }
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = VAL_nw_emergency_reserve_deposit
+							value = 200
+							compare = equals
+						}
+					}
+					VAL_nw_emergency_reserve_refund = yes
+				}
+			}
+		}
 		remove_effect = {
 			custom_effect_tooltip = VAL_nw_emergency_reserve_result_tt
 			hidden_effect = { VAL_nw_emergency_reserve_finish = yes }
@@ -3495,10 +3575,69 @@ VAL_new_world_category = {
 		ai_will_do = { base = 100 }
 	}
 
+	VAL_nw_expanded_reserve = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = {
+			NOT = { has_country_flag = VAL_nw_expanded_reserve_complete }
+			VAL_nw_khan_threat = yes
+			has_completed_focus = VAL_nw_reserve
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_khan_threat_tt
+				VAL_nw_khan_threat = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_order_idle_tt
+				NOT = { has_variable = VAL_nw_emergency_reserve_deposit }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_nw_expanded_reserve_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		days_remove = 30
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_paid_order_tt
+			hidden_effect = { VAL_nw_expanded_reserve_begin = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				VAL_nw_operational = no
+				VAL_nw_khan_threat = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = VAL_nw_emergency_reserve_deposit
+							value = 300
+							compare = equals
+						}
+					}
+					VAL_nw_emergency_reserve_refund = yes
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = VAL_nw_expanded_reserve_result_tt
+			hidden_effect = { VAL_nw_expanded_reserve_finish = yes }
+		}
+		ai_will_do = { base = 100 }
+	}
+
 	VAL_nw_survey = {
 		icon = generic_construction
 		allowed = { tag = VAL }
-		visible = { has_completed_focus = VAL_nw_perimeter }
+		visible = {
+			NOT = { has_country_flag = VAL_nw_survey_complete }
+			has_completed_focus = VAL_nw_perimeter
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_nw_operational_tt
@@ -3516,7 +3655,6 @@ VAL_new_world_category = {
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 		}
 		days_remove = 30
-		fire_only_once = yes
 		complete_effect = {
 			custom_effect_tooltip = VAL_nw_paid_order_tt
 			hidden_effect = { VAL_nw_survey_begin = yes }
@@ -3535,12 +3673,7 @@ VAL_new_world_category = {
 	VAL_nw_guard_caravans = {
 		icon = generic_construction
 		allowed = { tag = VAL }
-		visible = {
-			OR = {
-				has_completed_focus = VAL_nw_caravans
-				has_completed_focus = VAL_nw_market
-			}
-		}
+		visible = { has_completed_focus = VAL_nw_caravans }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_nw_operational_tt
@@ -3577,7 +3710,10 @@ VAL_new_world_category = {
 	VAL_nw_salvage_archives = {
 		icon = generic_construction
 		allowed = { tag = VAL }
-		visible = { has_completed_focus = VAL_nw_sanitary }
+		visible = {
+			NOT = { has_country_flag = VAL_nw_salvage_archives_complete }
+			has_completed_focus = VAL_nw_archives
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_nw_has_reactor_access_tt
@@ -3595,7 +3731,6 @@ VAL_new_world_category = {
 			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
 		}
 		days_remove = 45
-		fire_only_once = yes
 		complete_effect = {
 			custom_effect_tooltip = VAL_nw_paid_order_tt
 			hidden_effect = { VAL_nw_salvage_archives_begin = yes }
@@ -3617,11 +3752,11 @@ VAL_new_world_category = {
 	VAL_nw_offer_concession = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
-		targets = { SLA RZA MLR ERT IRT SCA VEL RLY }
+		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
 		visible = {
 			OR = {
 				has_completed_focus = VAL_nw_councils
-				has_completed_focus = VAL_nw_zones
+				has_completed_focus = VAL_nw_charters
 			}
 			FROM = {
 				exists = yes
@@ -3673,7 +3808,7 @@ VAL_new_world_category = {
 	VAL_nw_defend_partner = {
 		icon = generic_attack
 		allowed = { tag = VAL }
-		targets = { SLA RZA MLR ERT IRT SCA VEL RLY }
+		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
 		visible = {
 			FROM = {
 				has_country_flag = VAL_nw_concession
@@ -3696,7 +3831,7 @@ VAL_new_world_category = {
 	VAL_nw_abandon_partner = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
-		targets = { SLA RZA MLR ERT IRT SCA VEL RLY }
+		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
 		visible = {
 			FROM = { has_country_flag = VAL_nw_defence_pending }
 			NOT = { has_war_with = RUS }
@@ -3745,5 +3880,43 @@ VAL_new_world_category = {
 			}
 		}
 		ai_will_do = { base = 10 }
+	}
+
+	VAL_nw_recognize_republic = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
+		visible = {
+			has_completed_focus = VAL_nw_charters
+			FROM = {
+				exists = yes
+				is_subject = no
+				NOT = { has_country_flag = VAL_nw_sovereignty_recognized }
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_khan_settled_tt
+				VAL_nw_khan_settled = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_can_recognize_republic_tt
+				VAL_nw_can_recognize_republic = yes
+			}
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_recognize_republic_tt
+			hidden_effect = {
+				VAL_nw_recognize_republic = yes
+			}
+		}
+		ai_will_do = {
+			base = 25
+			modifier = {
+				factor = 4
+				FROM = { VAL_nw_concession_valid = yes }
+			}
+		}
 	}
 }

@@ -476,7 +476,7 @@ Expected staged scope: только четыре перечисленных фа
 ### Task 3: Полная статическая и runtime-проверка
 
 **Files:**
-- Verify only: все файлы Tasks 1–2
+- Verify only: все файлы Tasks 1-2
 - Inspect only: `C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/logs/error.log`
 - Inspect only: `C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/logs/game.log`
 

@@ -18,7 +18,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		x = 19
 		y = 0
-		cost = 5
+		cost = 2
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -27,11 +27,6 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 50
-				producer = RUS
-			}
 			add_political_power = 50
 			add_war_support = 0.05
 			custom_effect_tooltip = RUS_summon_the_aimaqs_tt
@@ -68,7 +63,7 @@ focus_tree = {
 			custom_effect_tooltip = RUS_arm_the_border_hosts_tt
 			capital_scope = {
 				create_unit = {
-					division = "division_template = \"Rusnian Rifle Brigade\" start_experience_factor = 0.12 start_equipment_factor = 0.75"
+					division = "division_template = \"Khanate Rifle Brigade\" start_experience_factor = 0.12 start_equipment_factor = 0.75"
 					owner = RUS
 					count = 3
 				}
@@ -86,7 +81,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
 		x = 20
 		y = 10
-		cost = 5
+		cost = 3
 		prerequisite = { focus = RUS_arm_the_border_hosts }
 		available = {
 			custom_trigger_tooltip = {
@@ -99,6 +94,22 @@ focus_tree = {
 			add_war_support = 0.05
 			add_command_power = 30
 			custom_effect_tooltip = RUS_watch_the_western_scar_tt
+			effect_tooltip = { add_ideas = RUS_hazard_capacity_6_delta }
+			set_technology = { ADISCORD_tech_radiation_patrols = 1 }
+			custom_effect_tooltip = RUS_hazard_brigades_2_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_special_forces_min value = 6 }
+				RUS_black_army_refresh = yes
+				RUS_prepare_hazard_template = yes
+				capital_scope = {
+					create_unit = {
+						division = "division_template = \"Khanate CBRN Brigade\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						owner = RUS
+						count = 2
+						allow_spawning_on_enemy_provs = no
+					}
+				}
+			}
 		}
 		ai_will_do = { base = 13 }
 	}
@@ -358,7 +369,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = ADISCORD_anti_tank_equipment_2163 amount = 260 producer = RUS }
 			capital_scope = {
 				create_unit = {
-					division = "division_template = \"Rusnian Rifle Brigade\" start_experience_factor = 0.16 start_equipment_factor = 0.75"
+					division = "division_template = \"Khanate Rifle Brigade\" start_experience_factor = 0.16 start_equipment_factor = 0.75"
 					owner = RUS
 					count = 5
 				}
@@ -410,7 +421,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = ADISCORD_anti_tank_equipment_2163 amount = 420 producer = RUS }
 			capital_scope = {
 				create_unit = {
-					division = "division_template = \"Rusnian Rifle Brigade\" start_experience_factor = 0.18 start_equipment_factor = 0.75"
+					division = "division_template = \"Khanate Rifle Brigade\" start_experience_factor = 0.18 start_equipment_factor = 0.75"
 					owner = RUS
 					count = 6
 				}
@@ -459,7 +470,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 11
 		y = 1
-		cost = 3
+		cost = 2
 		cancel_if_invalid = yes
 		prerequisite = {
 			focus = RUS_summon_the_aimaqs
@@ -544,7 +555,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 11
 		y = 6
-		cost = 3
+		cost = 2
 		cancel_if_invalid = yes
 		prerequisite = {
 			focus = RUS_aimaq_council
@@ -557,11 +568,6 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 60
-				producer = RUS
-			}
 			add_stability = 0.03
 			add_political_power = 40
 			unlock_decision_tooltip = RUS_campaign_the_khan_keeps_his_word
@@ -599,7 +605,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 9
 		y = 8
-		cost = 3
+		cost = 2
 		cancel_if_invalid = yes
 		prerequisite = {
 			focus = RUS_pay_the_officials
@@ -623,7 +629,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 13
 		y = 8
-		cost = 3
+		cost = 2
 		cancel_if_invalid = yes
 		prerequisite = {
 			focus = RUS_pay_the_officials
@@ -664,6 +670,13 @@ focus_tree = {
 		completion_reward = {
 			add_research_slot = 1
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			if = {
+				limit = {
+					has_idea = ADISCORD_education_informal_instruction
+				}
+				add_ideas = ADISCORD_education_basic_schools
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -835,6 +848,13 @@ focus_tree = {
 				}
 			}
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			if = {
+				limit = {
+					has_idea = ADISCORD_economic_system_agrarian
+				}
+				add_ideas = ADISCORD_economic_system_industrializing
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -926,6 +946,16 @@ focus_tree = {
 				}
 			}
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			if = {
+				limit = {
+					OR = {
+						has_idea = ADISCORD_labor_policy_guild_protections
+						has_idea = ADISCORD_labor_policy_loose_contracts
+					}
+				}
+				add_ideas = ADISCORD_labor_policy_regulated_shifts
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -989,6 +1019,16 @@ focus_tree = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
 				ADISCORD_economy_mark_dirty = yes
+			}
+			if = {
+				limit = {
+					OR = {
+						has_idea = ADISCORD_society_type_traditional
+						has_idea = ADISCORD_society_type_agrarian
+					}
+				}
+				add_ideas = ADISCORD_society_type_industrial
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
 		}
 		ai_will_do = { base = 8 }
@@ -1075,6 +1115,7 @@ focus_tree = {
 		}
 		completion_reward = {
 			unlock_decision_tooltip = RUS_reactor_sortie
+			set_technology = { ADISCORD_tech_radiation_patrols = 1 }
 		}
 		ai_will_do = { base = 6 }
 	}
@@ -1097,6 +1138,22 @@ focus_tree = {
 		}
 		completion_reward = {
 			custom_effect_tooltip = RUS_reactor_decontamination_tt
+			effect_tooltip = { add_ideas = RUS_hazard_capacity_3_delta }
+			set_technology = { ADISCORD_tech_radiation_patrols = 1 }
+			custom_effect_tooltip = RUS_hazard_brigades_1_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_special_forces_min value = 3 }
+				RUS_black_army_refresh = yes
+				RUS_prepare_hazard_template = yes
+				capital_scope = {
+					create_unit = {
+						division = "division_template = \"Khanate CBRN Brigade\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						owner = RUS
+						count = 1
+						allow_spawning_on_enemy_provs = no
+					}
+				}
+			}
 		}
 		ai_will_do = { base = 6 }
 	}
@@ -1396,7 +1453,10 @@ focus_tree = {
 		y = 8
 		cost = 3
 		cancel_if_invalid = yes
-		prerequisite = { focus = RUS_bunker_science_wing }
+		prerequisite = {
+			focus = RUS_bunker_science_wing
+			focus = RUS_engineers_collegium
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -1680,7 +1740,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -4
 		y = 4
-		cost = 3
+		cost = 2
 		cancel_if_invalid = yes
 		prerequisite = {
 			focus = RUS_patient_war
@@ -1782,7 +1842,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = ADISCORD_anti_tank_equipment_2163 amount = 260 producer = RUS }
 			capital_scope = {
 				create_unit = {
-					division = "division_template = \"Rusnian Rifle Brigade\" start_experience_factor = 0.16 start_equipment_factor = 0.75"
+					division = "division_template = \"Khanate Rifle Brigade\" start_experience_factor = 0.16 start_equipment_factor = 0.75"
 					owner = RUS
 					count = 5
 				}
@@ -1914,7 +1974,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 8
 		y = 11
-		cost = 3
+		cost = 2
 		cancel_if_invalid = yes
 		prerequisite = {
 			focus = RUS_a_country_of_names
@@ -1926,16 +1986,18 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 60
-				producer = RUS
-			}
 			add_tech_bonus = {
 				name = RUS_district_ledger
 				bonus = 0.5
 				uses = 1
 				category = industry
+			}
+			if = {
+				limit = {
+					has_idea = ADISCORD_taxation_light_dues
+				}
+				add_ideas = ADISCORD_taxation_balanced_register
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
 		}
 		ai_will_do = { base = 6 }
@@ -2018,10 +2080,12 @@ focus_tree = {
 		}
 		completion_reward = {
 			add_stability = 0.05
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 150
-				producer = RUS
+			if = {
+				limit = {
+					has_idea = ADISCORD_welfare_charity_relief
+				}
+				add_ideas = ADISCORD_welfare_basic_services
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
 		}
 		ai_will_do = { base = 6 }
@@ -2246,7 +2310,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -4
 		y = 10
-		cost = 4
+		cost = 2
 		cancel_if_invalid = yes
 		prerequisite = { focus = RUS_field_evacuation_service }
 		prerequisite = { focus = RUS_rifle_inspection_board }
@@ -3064,8 +3128,7 @@ focus_tree = {
 		ai_will_do = { base = 6 }
 	}
 
-	# Faction branches. Both stay open; each step pushes the balance toward its
-	# own side and raises that faction's support.
+	# Political mandates set the governing course; shared projects stay available.
 
 	focus = {
 		id = RUS_scientists_council
@@ -3076,6 +3139,7 @@ focus_tree = {
 		cost = 3
 		cancel_if_invalid = yes
 		prerequisite = { focus = RUS_count_the_hearths }
+		mutually_exclusive = { focus = RUS_black_army_oath }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -3106,7 +3170,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_scientists_workshops
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_VAL_Reclamation_Workshops
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		x = 8
 		y = 3
@@ -3122,13 +3186,15 @@ focus_tree = {
 			controls_state = 66
 		}
 		completion_reward = {
-			66 = { add_extra_state_shared_building_slots = 1 }
-			custom_effect_tooltip = RUS_treasury_400_tt
-			hidden_effect = {
-				add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 400 }
-				ADISCORD_economy_mark_dirty = yes
+			66 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
 			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -3168,6 +3234,17 @@ focus_tree = {
 				set_temp_variable = { var = RUS_scientists_support_delta value = 0.10 }
 				RUS_faction_support_change = yes
 			}
+			if = {
+				limit = {
+					OR = {
+						has_idea = ADISCORD_education_informal_instruction
+						has_idea = ADISCORD_education_basic_schools
+						has_idea = ADISCORD_education_apprenticeship
+					}
+				}
+				add_ideas = ADISCORD_education_technical_institutes
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -3181,6 +3258,7 @@ focus_tree = {
 		cost = 3
 		cancel_if_invalid = yes
 		prerequisite = { focus = RUS_count_the_hearths }
+		mutually_exclusive = { focus = RUS_scientists_council }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -3219,22 +3297,23 @@ focus_tree = {
 		cancel_if_invalid = yes
 		prerequisite = { focus = RUS_black_army_oath }
 		available = {
+			owns_state = 66
+			controls_state = 66
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
 				RUS_khan_governing = yes
 			}
 		}
 		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 120
-				producer = RUS
+			66 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
 			}
-			add_equipment_to_stockpile = {
-				type = train_equipment_1
-				amount = 8
-				producer = RUS
-			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -3272,6 +3351,17 @@ focus_tree = {
 				set_temp_variable = { var = RUS_black_army_support_delta value = 0.10 }
 				set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
 				RUS_faction_support_change = yes
+			}
+			if = {
+				limit = {
+					OR = {
+						has_idea = ADISCORD_logistics_local_foraging
+						has_idea = ADISCORD_logistics_civilian_contracts
+						has_idea = ADISCORD_logistics_regional_warehouses
+					}
+				}
+				add_ideas = ADISCORD_logistics_centralized_depots
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
 		}
 		ai_will_do = { base = 8 }

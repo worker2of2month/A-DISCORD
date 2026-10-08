@@ -63,7 +63,7 @@ class WorldNewsLayoutTests(unittest.TestCase):
 
     def test_world_news_picture_fills_the_newspaper_width(self) -> None:
         picture = named_block(self.top, "iconType", "event_picture")
-        self.assertEqual(xy(picture), (100, 150))
+        self.assertEqual(xy(picture), (103, 150))
         self.assertIn("scale = 1.26", picture)
         self.assertNotIn('name ="event_picture_overlay"', self.top)
         self.assertNotIn('name = "event_picture_overlay"', self.top)

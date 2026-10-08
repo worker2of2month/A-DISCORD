@@ -228,7 +228,7 @@ objectTypes = {
 		name = "ADISCORD_orbital_laser_mesh"
 		file = "gfx/models/empty.mesh"
 		scale = 1.0
-		cull_distance = 3000.0
+		cull_distance = 10000.0
 
 		meshsettings = {
 			shader = "PdxMeshAdvanced"

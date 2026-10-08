@@ -53,7 +53,7 @@ checkout by explicit user permission. Commit only the three files above with:
 
 ## Validator behavior for later tasks
 
-The validator is the feature gate used by Tasks 2–8. It must be useful before
+The validator is the feature gate used by Tasks 2-8. It must be useful before
 the content exists: absent later feature files are reported as findings, not
 as Python exceptions. Section selection must limit checks to the requested
 section. Avoid overly rigid formatting assumptions that would make normal

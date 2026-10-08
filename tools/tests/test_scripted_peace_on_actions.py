@@ -127,6 +127,26 @@ class ScriptedPeaceOwnershipTests(unittest.TestCase):
         self.assertNotIn('on_daily', names)
         self.assertFalse(SHARED.read_bytes().startswith(b'\xef\xbb\xbf'))
 
+    def test_ending_transfers_cannot_dispatch_annexation_or_control_settlements(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar
+
+        hooks = native_hooks(self.source())
+        for name in ('on_annex', 'on_state_control_changed'):
+            effect = block(block(hooks, name), 'effect')
+            self.assertEqual([row.key for row in effect], ['if'])
+            gate = block(block(effect, 'if'), 'limit')
+            self.assertEqual(scalar(block(gate, 'NOT'), 'has_global_flag'), 'RUS_crisis_world_ended')
+
+    def test_ending_transfers_cannot_refresh_operations_or_vorkerland_story(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar
+
+        for filename in ('01_ADISCORD_vorkerland_collapse_on_actions.txt', '04_ADISCORD_operations_map_on_actions.txt'):
+            hooks = native_hooks((DIRECTORY / filename).read_text(encoding='utf-8'))
+            effect = block(block(hooks, 'on_state_control_changed'), 'effect')
+            self.assertEqual([row.key for row in effect], ['if'])
+            gate = block(block(effect, 'if'), 'limit')
+            self.assertEqual(scalar(block(gate, 'NOT'), 'has_global_flag'), 'RUS_crisis_world_ended')
+
 
 class GenericPeaceFixture:
     """Execute the generic branch against explicit diplomacy/ownership facts.

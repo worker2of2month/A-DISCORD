@@ -3,178 +3,360 @@
 
 focus_tree = {
 	id = VAL_new_world_focus
+
 	country = { factor = 0 }
-	continuous_focus_position = { x = 100 y = 555555 }
+
+	continuous_focus_position = {
+		x = 100
+		y = 555555
+	}
+
 	shared_focus = VAL_Naval_Contract_Office
+
+	# Opening
 
 	focus = {
 		id = VAL_nw_price
 		icon = GFX_focus_VAL_Return_To_World_Market
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 10
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
+		x = 18
 		y = 0
-		cost = 3
+		cost = 1
 		completion_reward = {
 			add_political_power = 50
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_nw_council
+		icon = GFX_focus_VAL_Count_The_Captains
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
+		x = 16
+		y = 1
+		cost = 2
+		prerequisite = {
+			focus = VAL_nw_price
+		}
+		completion_reward = {
+			country_event = { id = val_rework.134 }
+		}
+		ai_will_do = {
+			base = 10
+		}
 	}
 
 	focus = {
 		id = VAL_nw_perimeter
-		icon = GFX_focus_VAL_The_Harvest_Of_Ash
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 2
-		y = 2
-		cost = 3
-		prerequisite = { focus = VAL_nw_price }
+		icon = GFX_focus_VAL_Reclamation_Survey
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
+		x = 20
+		y = 1
+		cost = 2
+		prerequisite = {
+			focus = VAL_nw_price
+		}
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nw_survey
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# Republics
+
+	focus = {
+		id = VAL_nw_councils
+		icon = GFX_focus_VAL_Count_The_Captains
+		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
+		x = 2
+		y = 2
+		cost = 2
+		prerequisite = {
+			focus = VAL_nw_council
+		}
+		completion_reward = {
+			unlock_decision_tooltip = VAL_nw_offer_concession
+		}
+		ai_will_do = {
+			base = 10
+		}
 	}
 
 	focus = {
 		id = VAL_nw_caravans
 		icon = GFX_focus_VAL_Market_Roads_North
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 2
-		y = 4
-		cost = 3
-		prerequisite = { focus = VAL_nw_perimeter }
+		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
+		x = 0
+		y = 3
+		cost = 2
+		prerequisite = {
+			focus = VAL_nw_councils
+		}
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nw_guard_caravans
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = {
+			base = 10
+		}
 	}
 
 	focus = {
-		id = VAL_nw_councils
+		id = VAL_nw_observers
 		icon = GFX_focus_VAL_Count_The_Captains
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 2
-		y = 6
+		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
+		x = 4
+		y = 3
 		cost = 3
-		prerequisite = { focus = VAL_nw_caravans }
-		completion_reward = {
-			unlock_decision_tooltip = VAL_nw_offer_concession
+		prerequisite = {
+			focus = VAL_nw_councils
 		}
-		ai_will_do = { base = 10 }
+		completion_reward = {
+			army_experience = 25
+			add_command_power = 20
+		}
+		ai_will_do = {
+			base = 10
+		}
 	}
 
 	focus = {
 		id = VAL_nw_register
-		icon = GFX_focus_VAL_Reclamation_Survey
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
+		icon = GFX_focus_VAL_Reclamation_Land_Register
+		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
 		x = 2
-		y = 8
-		cost = 4
-		prerequisite = { focus = VAL_nw_councils }
-		completion_reward = {
-			add_tech_bonus = { name = VAL_nw_register bonus = 0.5 uses = 1 category = industry }
+		y = 4
+		cost = 2
+		prerequisite = {
+			focus = VAL_nw_caravans
+			focus = VAL_nw_observers
 		}
-		ai_will_do = { base = 10 }
+		completion_reward = {
+			add_tech_bonus = {
+				name = VAL_nw_register
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
 	}
 
 	focus = {
 		id = VAL_nw_guarantor
 		icon = GFX_focus_VAL_The_Contract_State
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 2
-		y = 10
-		cost = 4
-		prerequisite = { focus = VAL_nw_register }
+		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
+		x = 0
+		y = 5
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_register
+		}
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nw_supply_partner
-			unlock_decision_tooltip = VAL_nw_defend_partner
-			unlock_decision_tooltip = VAL_nw_abandon_partner
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 600
+				producer = VAL
+			}
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = {
+			base = 10
+		}
 	}
+
+	focus = {
+		id = VAL_nw_clearing
+		icon = GFX_focus_VAL_Reclamation_Workshops
+		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
+		x = 4
+		y = 5
+		cost = 1
+		prerequisite = {
+			focus = VAL_nw_register
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_has_commercial_access_tt
+				VAL_nw_has_commercial_access = yes
+			}
+		}
+		completion_reward = {
+			VAL_nw_receive_reconstruction_fund = yes
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# Khan
 
 	focus = {
 		id = VAL_nw_khan
 		icon = GFX_focus_VAL_Contracts_Outlive_Kings
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 8
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 12
 		y = 2
-		cost = 3
-		prerequisite = { focus = VAL_nw_price }
+		cost = 1
+		prerequisite = {
+			focus = VAL_nw_price
+		}
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nw_challenge_khan
 			army_experience = 10
 		}
-		ai_will_do = { base = 30 }
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 4
+				VAL_nw_khan_threat = yes
+			}
+		}
 	}
 
 	focus = {
 		id = VAL_nw_defence
-		icon = GFX_focus_VAL_Count_The_Captains
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 8
-		y = 4
-		cost = 3
-		prerequisite = { focus = VAL_nw_khan }
-		completion_reward = {
-			unlock_decision_tooltip = VAL_nw_defend_partner
-			add_command_power = 40
+		icon = GFX_focus_VAL_Reclamation_Workshops
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 12
+		y = 3
+		cost = 2
+		prerequisite = {
+			focus = VAL_nw_khan
 		}
-		ai_will_do = { base = 30 }
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 200
+				producer = VAL
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 4
+				VAL_nw_khan_threat = yes
+			}
+		}
+	}
+
+	focus = {
+		id = VAL_nw_staff
+		icon = GFX_focus_VAL_Count_The_Captains
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 12
+		y = 4
+		cost = 1
+		prerequisite = {
+			focus = VAL_nw_defence
+		}
+		completion_reward = {
+			army_experience = 25
+			add_command_power = 25
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 4
+				VAL_nw_khan_threat = yes
+			}
+		}
 	}
 
 	focus = {
 		id = VAL_nw_arsenals
 		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 8
-		y = 6
-		cost = 3
-		prerequisite = { focus = VAL_nw_defence }
-		completion_reward = {
-			unlock_decision_tooltip = VAL_nw_emergency_arsenals
-			add_tech_bonus = { name = VAL_nw_arsenals bonus = 0.5 uses = 1 category = infantry_weapons }
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 10
+		y = 5
+		cost = 2
+		prerequisite = {
+			focus = VAL_nw_staff
 		}
-		ai_will_do = { base = 30 }
+		completion_reward = {
+			unlock_decision_tooltip = VAL_nw_expanded_arsenals
+			add_tech_bonus = {
+				name = VAL_nw_arsenals
+				bonus = 0.5
+				uses = 1
+				category = infantry_weapons
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 4
+				VAL_nw_khan_threat = yes
+			}
+		}
 	}
 
 	focus = {
 		id = VAL_nw_reserve
 		icon = GFX_focus_VAL_Market_Roads_North
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 8
-		y = 8
-		cost = 3
-		prerequisite = { focus = VAL_nw_arsenals }
-		completion_reward = {
-			unlock_decision_tooltip = VAL_nw_emergency_reserve
-			army_experience = 40
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 14
+		y = 5
+		cost = 2
+		prerequisite = {
+			focus = VAL_nw_staff
 		}
-		ai_will_do = { base = 30 }
+		completion_reward = {
+			unlock_decision_tooltip = VAL_nw_expanded_reserve
+			add_manpower = 1000
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 4
+				VAL_nw_khan_threat = yes
+			}
+		}
 	}
 
 	focus = {
 		id = VAL_nw_break_ring
-		icon = GFX_focus_VAL_The_Weaponry_Baron
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 8
-		y = 10
-		cost = 4
-		prerequisite = { focus = VAL_nw_reserve }
-		completion_reward = {
-			army_experience = 30
-			add_command_power = 30
+		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 12
+		y = 6
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_arsenals
+			focus = VAL_nw_reserve
 		}
-		ai_will_do = { base = 10 }
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 200
+				producer = VAL
+			}
+			army_experience = 30
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 4
+				VAL_nw_khan_threat = yes
+			}
+		}
 	}
 
 	focus = {
 		id = VAL_nw_last_account
 		icon = GFX_focus_VAL_Contracts_Outlive_Kings
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 8
-		y = 12
-		cost = 4
-		prerequisite = { focus = VAL_nw_break_ring }
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 12
+		y = 8
+		cost = 2
+		prerequisite = {
+			focus = VAL_nw_khan
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_nw_khan_settled_tt
@@ -185,45 +367,102 @@ focus_tree = {
 			add_political_power = 75
 			add_war_support = 0.03
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 4
+				VAL_nw_khan_threat = yes
+			}
+		}
 	}
+
+	# Industry
 
 	focus = {
 		id = VAL_nw_inventory
 		icon = GFX_focus_VAL_Reclamation_Survey
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 14
+		x = 22
 		y = 2
-		cost = 3
-		prerequisite = { focus = VAL_nw_price }
+		cost = 2
+		prerequisite = {
+			focus = VAL_nw_perimeter
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_survey_completed_tt
+				VAL_nw_survey_completed = yes
+			}
+		}
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nw_restore_works
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = {
+			base = 10
+		}
 	}
 
 	focus = {
 		id = VAL_nw_sanitary
 		icon = GFX_focus_VAL_Field_Surgeons
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 14
-		y = 4
-		cost = 3
-		prerequisite = { focus = VAL_nw_inventory }
-		completion_reward = {
-			unlock_decision_tooltip = VAL_nw_salvage_archives
+		x = 20
+		y = 3
+		cost = 2
+		prerequisite = {
+			focus = VAL_nw_inventory
 		}
-		ai_will_do = { base = 10 }
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 200
+				producer = VAL
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_nw_workshops
+		icon = GFX_focus_VAL_Reclamation_Workshops
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 24
+		y = 3
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_inventory
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 150
+				producer = VAL
+			}
+			add_tech_bonus = {
+				name = VAL_nw_workshops
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
 	}
 
 	focus = {
 		id = VAL_nw_restart
 		icon = GFX_focus_VAL_Factories_Like_Cathedrals
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 14
-		y = 6
-		cost = 4
-		prerequisite = { focus = VAL_nw_sanitary }
+		x = 22
+		y = 4
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_sanitary
+			focus = VAL_nw_workshops
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_nw_has_restored_works_tt
@@ -231,74 +470,117 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_tech_bonus = { name = VAL_nw_restart bonus = 0.5 uses = 1 category = industry }
-			add_political_power = 25
+			add_tech_bonus = {
+				name = VAL_nw_restart
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+			hidden_effect = {
+				country_event = { id = val_rework.136 }
+			}
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = {
+			base = 10
+		}
 	}
 
 	focus = {
 		id = VAL_nw_foundries
 		icon = GFX_focus_VAL_Factories_Like_Cathedrals
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 14
-		y = 8
-		cost = 4
-		prerequisite = { focus = VAL_nw_restart }
+		x = 20
+		y = 5
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_restart
+		}
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nw_expand_foundry
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_nw_dispatch
+		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 24
+		y = 5
+		cost = 2
+		prerequisite = {
+			focus = VAL_nw_restart
+		}
+		completion_reward = {
+			unlock_decision_tooltip = VAL_nw_rebuild_roads
+		}
+		ai_will_do = {
+			base = 10
+		}
 	}
 
 	focus = {
 		id = VAL_nw_archives
 		icon = GFX_focus_VAL_Reclamation_Survey
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 14
-		y = 10
-		cost = 4
-		prerequisite = { focus = VAL_nw_foundries }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = VAL_nw_has_reactor_access_tt
-				VAL_nw_has_reactor_access = yes
-			}
+		x = 26
+		y = 4
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_workshops
 		}
 		completion_reward = {
-			add_tech_bonus = { name = VAL_nw_archives bonus = 0.5 uses = 1 category = electronics }
+			unlock_decision_tooltip = VAL_nw_salvage_archives
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = {
+			base = 10
+		}
 	}
 
 	focus = {
 		id = VAL_nw_alloys
-		icon = GFX_focus_VAL_Factories_Like_Cathedrals
+		icon = GFX_focus_VAL_Reclamation_Industrial_Sites
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 14
-		y = 12
-		cost = 5
-		prerequisite = { focus = VAL_nw_archives }
+		x = 22
+		y = 6
+		cost = 4
+		prerequisite = {
+			focus = VAL_nw_foundries
+			focus = VAL_nw_archives
+		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = VAL_nw_has_restored_works_tt
-				VAL_nw_has_restored_works = yes
+				tooltip = VAL_nw_two_restored_works_tt
+				VAL_nw_two_restored_works = yes
 			}
 		}
 		completion_reward = {
-			add_tech_bonus = { name = VAL_nw_alloys bonus = 0.75 uses = 2 category = industry }
+			add_tech_bonus = {
+				name = VAL_nw_alloys
+				bonus = 0.75
+				uses = 2
+				category = industry
+			}
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = {
+			base = 10
+		}
 	}
+
+	# Settlement
 
 	focus = {
 		id = VAL_nw_commission
 		icon = GFX_focus_VAL_Count_The_Captains
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 20
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
+		x = 34
 		y = 2
-		cost = 3
-		prerequisite = { focus = VAL_nw_price }
+		cost = 1
+		prerequisite = {
+			focus = VAL_nw_council
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_nw_khan_settled_tt
@@ -306,145 +588,340 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_political_power = 75
+			add_political_power = 50
+			hidden_effect = {
+				country_event = { id = val_rework.137 }
+			}
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 3
+				VAL_nw_khan_settled = yes
+			}
+		}
 	}
 
 	focus = {
 		id = VAL_nw_zones
 		icon = GFX_focus_VAL_The_Contract_State
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 20
-		y = 4
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
+		x = 32
+		y = 3
 		cost = 3
-		prerequisite = { focus = VAL_nw_commission }
-		completion_reward = {
-			effect_tooltip = { add_ideas = VAL_nw_admin_delta }
-			hidden_effect = {
-				add_to_variable = { var = VAL_nw_admin_expense value = -0.05 }
-				if = {
-					limit = { NOT = { has_dynamic_modifier = { modifier = VAL_nw_industrial_network } } }
-					add_dynamic_modifier = { modifier = VAL_nw_industrial_network }
-				}
-				force_update_dynamic_modifier = yes
-				ADISCORD_economy_mark_dirty = yes
-			}
-			unlock_decision_tooltip = RUS_crisis_establish_special_zone
-			unlock_decision_tooltip = VAL_nw_offer_concession
+		prerequisite = {
+			focus = VAL_nw_commission
 		}
-		ai_will_do = { base = 10 }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_has_settlement_rights_tt
+				VAL_nw_has_settlement_rights = yes
+			}
+		}
+		completion_reward = {
+			unlock_decision_tooltip = RUS_crisis_establish_special_zone
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 3
+				VAL_nw_khan_settled = yes
+			}
+		}
+	}
+
+	focus = {
+		id = VAL_nw_charters
+		icon = GFX_focus_VAL_Reclamation_Land_Register
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
+		x = 36
+		y = 3
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_commission
+		}
+		completion_reward = {
+			unlock_decision_tooltip = VAL_nw_recognize_republic
+			if = {
+				limit = { NOT = { has_completed_focus = VAL_nw_councils } }
+				unlock_decision_tooltip = VAL_nw_offer_concession
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 3
+				VAL_nw_khan_settled = yes
+			}
+		}
+	}
+
+	focus = {
+		id = VAL_nw_restitution
+		icon = GFX_focus_VAL_Reclamation_Land_Register
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
+		x = 32
+		y = 4
+		cost = 2
+		prerequisite = {
+			focus = VAL_nw_zones
+			focus = VAL_nw_charters
+		}
+		completion_reward = {
+			add_political_power = 100
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 3
+				VAL_nw_khan_settled = yes
+			}
+		}
 	}
 
 	focus = {
 		id = VAL_nw_engineers
 		icon = GFX_focus_VAL_Field_Surgeons
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 20
-		y = 6
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
+		x = 36
+		y = 4
 		cost = 3
-		prerequisite = { focus = VAL_nw_zones }
-		completion_reward = {
-			unlock_decision_tooltip = VAL_nw_restore_works
-			add_tech_bonus = { name = VAL_nw_engineers bonus = 0.5 uses = 1 category = industry }
+		prerequisite = {
+			focus = VAL_nw_zones
+			focus = VAL_nw_charters
 		}
-		ai_will_do = { base = 10 }
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 200
+				producer = VAL
+			}
+			add_tech_bonus = {
+				name = VAL_nw_engineers
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 3
+				VAL_nw_khan_settled = yes
+			}
+		}
 	}
 
 	focus = {
 		id = VAL_nw_roads
 		icon = GFX_focus_VAL_Reclamation_Road_Crews
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 20
-		y = 8
-		cost = 4
-		prerequisite = { focus = VAL_nw_engineers }
-		completion_reward = {
-			unlock_decision_tooltip = VAL_nw_rebuild_roads
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
+		x = 32
+		y = 5
+		cost = 2
+		prerequisite = {
+			focus = VAL_nw_restitution
 		}
-		ai_will_do = { base = 10 }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_has_connected_works_tt
+				VAL_nw_has_connected_works = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 200
+				producer = VAL
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 3
+				VAL_nw_khan_settled = yes
+			}
+		}
 	}
 
 	focus = {
 		id = VAL_nw_market
-		icon = GFX_focus_VAL_Return_To_World_Market
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 20
-		y = 10
-		cost = 4
-		prerequisite = { focus = VAL_nw_roads }
-		completion_reward = {
-			add_political_power = 50
-			unlock_decision_tooltip = VAL_nw_guard_caravans
+		icon = GFX_focus_VAL_Reclamation_Workshops
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
+		x = 36
+		y = 5
+		cost = 1
+		prerequisite = {
+			focus = VAL_nw_engineers
 		}
-		ai_will_do = { base = 10 }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_has_commercial_access_tt
+				VAL_nw_has_commercial_access = yes
+			}
+		}
+		completion_reward = {
+			VAL_nw_receive_reconstruction_fund = yes
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 3
+				VAL_nw_khan_settled = yes
+			}
+		}
 	}
+
+	focus = {
+		id = VAL_nw_arbitration
+		icon = GFX_focus_VAL_Count_The_Captains
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
+		x = 34
+		y = 6
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_roads
+			focus = VAL_nw_market
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_has_commercial_access_tt
+				VAL_nw_has_commercial_access = yes
+			}
+		}
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = VAL_nw_admin_delta
+			}
+			hidden_effect = {
+				VAL_nw_improve_administration = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 3
+				VAL_nw_khan_settled = yes
+			}
+		}
+	}
+
+	# Finale
 
 	focus = {
 		id = VAL_nw_chains
 		icon = GFX_focus_VAL_Factories_Like_Cathedrals
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 10
-		y = 14
-		cost = 5
-		prerequisite = { focus = VAL_nw_guarantor }
-		prerequisite = { focus = VAL_nw_last_account }
-		prerequisite = { focus = VAL_nw_alloys }
-		prerequisite = { focus = VAL_nw_market }
+		x = 22
+		y = 8
+		cost = 4
+		prerequisite = {
+			focus = VAL_nw_alloys
+			focus = VAL_nw_market
+		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = VAL_nw_has_restored_works_tt
-				VAL_nw_has_restored_works = yes
+				tooltip = VAL_nw_two_restored_works_tt
+				VAL_nw_two_restored_works = yes
 			}
 		}
 		completion_reward = {
-			effect_tooltip = { add_ideas = VAL_nw_industry_delta }
-			hidden_effect = { VAL_nw_improve_industry = yes }
+			effect_tooltip = {
+				add_ideas = VAL_nw_industry_delta
+			}
+			hidden_effect = {
+				VAL_nw_improve_industry = yes
+			}
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = {
+			base = 10
+		}
 	}
 
 	focus = {
 		id = VAL_nw_standard
 		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 10
-		y = 16
-		cost = 4
-		prerequisite = { focus = VAL_nw_chains }
-		completion_reward = {
-			add_tech_bonus = { name = VAL_nw_standard bonus = 0.75 uses = 2 category = infantry_weapons }
+		x = 22
+		y = 9
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_chains
 		}
-		ai_will_do = { base = 10 }
+		completion_reward = {
+			add_tech_bonus = {
+				name = VAL_nw_standard
+				bonus = 0.75
+				uses = 2
+				category = infantry_weapons
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
 	}
 
 	focus = {
 		id = VAL_nw_generation
 		icon = GFX_focus_VAL_The_Contract_State
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 10
-		y = 18
-		cost = 4
-		prerequisite = { focus = VAL_nw_standard }
-		completion_reward = {
-			effect_tooltip = { add_ideas = VAL_nw_trade_delta }
-			hidden_effect = { VAL_nw_improve_trade = yes }
+		x = 22
+		y = 10
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_standard
 		}
-		ai_will_do = { base = 10 }
+		prerequisite = {
+			focus = VAL_nw_clearing
+			focus = VAL_nw_arbitration
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_has_commercial_access_tt
+				VAL_nw_has_commercial_access = yes
+			}
+		}
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = VAL_nw_trade_delta
+			}
+			hidden_effect = {
+				VAL_nw_improve_trade = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
 	}
 
 	focus = {
 		id = VAL_nw_steel_peace
 		icon = GFX_focus_VAL_Return_To_World_Market
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 10
-		y = 20
+		x = 22
+		y = 11
 		cost = 5
-		prerequisite = { focus = VAL_nw_generation }
+		prerequisite = {
+			focus = VAL_nw_generation
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_khan_settled_tt
+				VAL_nw_khan_settled = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_two_restored_works_tt
+				VAL_nw_two_restored_works = yes
+			}
+		}
 		completion_reward = {
 			add_stability = 0.05
-			hidden_effect = { country_event = { id = val_rework.129 } }
+			hidden_effect = {
+				country_event = { id = val_rework.129 }
+			}
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = {
+			base = 10
+		}
 	}
 }

@@ -1528,7 +1528,10 @@
 			add_political_power = 75
 			unlock_decision_tooltip = STP_pw_nationalise_region
 			custom_effect_tooltip = STP_heg_administration_unlock_tt
-			hidden_effect = { set_country_flag = STP_heg_administrations_unlocked }
+			hidden_effect = {
+				set_country_flag = STP_heg_administrations_unlocked
+				STP_pw_queue_hegemony_epilogue = yes
+			}
 		}
 	}
 
@@ -1564,6 +1567,7 @@
 			hidden_effect = {
 				country_event = { id = ADISCORD_STP_cw.208 hours = 1 }
 				STP_heg_start_northern_final_war = yes
+				STP_pw_queue_hegemony_epilogue = yes
 			}
 		}
 	}
@@ -1600,7 +1604,10 @@
 		ai_will_do = { base = 6 }
 		completion_reward = {
 			custom_effect_tooltip = STP_heg_kefreyt_war_tt
-			hidden_effect = { STP_heg_start_kefreyt_final_war = yes }
+			hidden_effect = {
+				STP_heg_start_kefreyt_final_war = yes
+				STP_pw_queue_hegemony_epilogue = yes
+			}
 		}
 	}
 
@@ -2006,6 +2013,12 @@
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			STP_pc_form_liberation_coalition = yes
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_pc.61
+					days = 1
+				}
+			}
 		}
 	}
 
@@ -2195,7 +2208,13 @@
 		mutually_exclusive = { focus = STP_pc_sot_transfer }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			hidden_effect = { STP_pc_lock_directory = yes }
+			hidden_effect = {
+				STP_pc_lock_directory = yes
+				country_event = {
+					id = ADISCORD_STP_pc.62
+					days = 1
+				}
+			}
 		}
 	}
 

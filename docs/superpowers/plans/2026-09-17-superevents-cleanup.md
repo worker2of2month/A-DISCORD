@@ -521,7 +521,7 @@ git commit -m "refactor: normalize superevent presentation layers"
 
 **Files:**
 - Modify only if a regression exposes a direct super-event cleanup defect; do not expand scope.
-- Verify: all files changed in Tasks 1–3.
+- Verify: all files changed in Tasks 1-3.
 
 **Interfaces:**
 - Consumes: dedicated event ownership and normalized presentation contract.

@@ -37,8 +37,15 @@ sound = {
 }
 
 sound = {
-	name = "ADISCORD_rus_reactor_strike_sample"
-	file = "RUS/ADISCORD_rus_reactor_strike.wav"
+	name = "ADISCORD_rus_reactor_charge_sample"
+	file = "RUS/ADISCORD_rus_reactor_charge.wav"
+	always_load = yes
+}
+
+sound = {
+	name = "ADISCORD_rus_reactor_impact_sample"
+	file = "RUS/ADISCORD_rus_reactor_impact.wav"
+	always_load = yes
 }
 
 sound = {

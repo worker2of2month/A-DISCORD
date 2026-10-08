@@ -163,7 +163,7 @@ country_event = {
 				z = 13.0
 				rotation = 0
 				scale = 1
-				min_zoom = 2000
+				min_zoom = 10000
 			}
 			set_entity_animation = { id = 610790 animation = "strike" }
 			create_entity = {
@@ -174,23 +174,11 @@ country_event = {
 				z = 13.0
 				rotation = 0
 				scale = 1
-				min_zoom = 2000
+				min_zoom = 10000
 			}
-			set_entity_animation = { id = 610791 animation = "burn" }
 		}
 		goto_province = 16428
-		country_event = { id = ADISCORD_orbital_laser_test.2 hours = 1 }
 	}
 }
 
-# Removes the one-shot strike actor; the crater stays until cleared.
-country_event = {
-	id = ADISCORD_orbital_laser_test.2
-	hidden = yes
-	is_triggered_only = yes
-
-	immediate = {
-		40 = { destroy_entity = 610790 }
-	}
-}
 # END ADISCORD orbital laser test

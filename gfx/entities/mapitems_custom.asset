@@ -276,31 +276,89 @@ entity = {
 # END ADISCORD portal test
 
 # BEGIN ADISCORD orbital laser test
-# One-shot strike (lock, beam, detonation). Separate actor: particles restart
-# when the camera re-shows an actor, so the strike must not live on the
-# persistent crater. ADISCORD_orbital_laser_test.2 removes it after an hour.
+# The empty mesh has no particle bounds. This radius covers the beam, blast
+# and smoke while their emitters remain at the ground-level impact locator.
+# A newly visible actor starts inert; only the scripted strike command fires it.
 entity = {
 	name = "ADISCORD_orbital_laser_strike_entity"
 	pdxmesh = "ADISCORD_orbital_laser_mesh"
+	cull_radius = 1000
 	locator = { name = "impact" position = { 0.0 0.0 0.0 } }
-	default_state = "strike"
+	default_state = "spent"
 	state = { name = "strike"
-		state_time = 9.0
+		state_time = 26.0
 		looping = no
 		next_state = "spent"
-		event = { time = 0 node = "impact" particle = "ADISCORD_orbital_laser_strike_particle" keep_particle = yes }
+		event = {
+			time = 0
+			node = "impact"
+			particle = "ADISCORD_orbital_laser_strike_particle"
+			keep_particle = yes
+			trigger_once = yes
+			sound = { soundeffect = "ADISCORD_rus_reactor_charge" }
+		}
+		event = {
+			time = 10
+			node = "impact"
+			particle = "ADISCORD_orbital_laser_impact_particle"
+			keep_particle = yes
+			trigger_once = yes
+			sound = { soundeffect = "ADISCORD_rus_reactor_impact" }
+		}
 	}
 	state = { name = "spent" }
 }
 
-# Persistent aftermath: burning crater and smoke column.
+# Persistent fire, embers and smoke across the reactor site.
 entity = {
 	name = "ADISCORD_orbital_laser_aftermath_entity"
 	pdxmesh = "ADISCORD_orbital_laser_mesh"
+	cull_radius = 1000
 	locator = { name = "impact" position = { 0.0 0.0 0.0 } }
+	locator = { name = "fire_west" position = { -8.0 0.0 -3.0 } }
+	locator = { name = "fire_east" position = { 10.0 0.0 -3.0 } }
+	locator = { name = "fire_north" position = { -3.0 -1.0 7.0 } }
+	locator = { name = "fire_south" position = { 4.0 -1.0 -9.0 } }
+	# Эмиттеры создаются сразу; задержка до удара задана в самих частицах.
+	# Горение остаётся основным состоянием при повторном появлении объекта в кадре.
 	default_state = "burn"
-	state = { name = "burn"
-		event = { time = 0 node = "impact" particle = "ADISCORD_orbital_laser_aftermath_particle" keep_particle = yes }
+	state = {
+		name = "burn"
+		event = {
+			time = 0
+			node = "impact"
+			particle = "ADISCORD_orbital_laser_fire_particle"
+			keep_particle = yes
+			trigger_once = yes
+		}
+		event = {
+			time = 0
+			node = "fire_west"
+			particle = "ADISCORD_orbital_laser_fire_particle"
+			keep_particle = yes
+			trigger_once = yes
+		}
+		event = {
+			time = 0
+			node = "fire_east"
+			particle = "ADISCORD_orbital_laser_fire_particle"
+			keep_particle = yes
+			trigger_once = yes
+		}
+		event = {
+			time = 0
+			node = "fire_north"
+			particle = "ADISCORD_orbital_laser_fire_particle"
+			keep_particle = yes
+			trigger_once = yes
+		}
+		event = {
+			time = 0
+			node = "fire_south"
+			particle = "ADISCORD_orbital_laser_fire_particle"
+			keep_particle = yes
+			trigger_once = yes
+		}
 	}
 }
 # END ADISCORD orbital laser test

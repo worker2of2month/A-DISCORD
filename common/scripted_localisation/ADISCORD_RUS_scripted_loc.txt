@@ -1694,12 +1694,12 @@ defined_text = {
 }
 
 defined_text = {
-	name = GetRUSReactorSortieCrew
+	name = GetRUSReactorSortieEquipment
 	text = {
 		trigger = { has_completed_focus = RUS_reactor_decontamination }
-		localization_key = RUS_reactor_sortie_crew_decontaminated
+		localization_key = RUS_reactor_sortie_equipment_decontaminated
 	}
-	text = { localization_key = RUS_reactor_sortie_crew_full }
+	text = { localization_key = RUS_reactor_sortie_equipment_full }
 }
 
 defined_text = {

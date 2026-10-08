@@ -1,3 +1,13 @@
+RUS_world_anarchy = {
+	color = rgb { 38 42 41 }
+	color_ui = rgb { 38 42 41 }
+}
+
+RUS_last_bunker = {
+	color = rgb { 117 101 67 }
+	color_ui = rgb { 117 101 67 }
+}
+
 STP_empire = {
 	color = rgb { 54 0 74 }
 	color_ui = rgb { 115 115 115 }

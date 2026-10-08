@@ -32,7 +32,7 @@
 
 **Files:** SHL scripted effects, triggers, decisions, categories, dynamic modifier, events, on_actions; existing startup, minor allowlist and development country list; tools/tests/test_adiscord_shl_furnaces.py.
 
-**Interfaces:** SHL_initialize_furnaces, SHL_run_cycle, SHL_refresh_furnaces, SHL_finish_supply/repair/training/restart and SHL_cancel_operation use boolean calls. State operation receipts retain exact cost and currency source; furnace source values stay in states 287–295.
+**Interfaces:** SHL_initialize_furnaces, SHL_run_cycle, SHL_refresh_furnaces, SHL_finish_supply/repair/training/restart and SHL_cancel_operation use boolean calls. State operation receipts retain exact cost and currency source; furnace source values stay in states 287-295.
 
 - [x] Write interpreter tests exercising real parsed script at stock and cost boundaries, duplicate settlement, interruption, ownership and furnace stop/restart.
 - [x] Run them and verify failure because the SHL implementation is absent.

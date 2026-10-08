@@ -1869,7 +1869,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             tooltip = tooltip_match.group(1)
             self.assertIn(f'?{mode_var}|0', tooltip)
             self.assertIn(f'[{effect_loc}]', tooltip)
-            self.assertNotIn('Сравнение 1–5', tooltip)
+            self.assertNotIn('Сравнение 1\u20135', tooltip)
             self.assertIn(f'name = {effect_loc}', self.scripted_loc)
 
     def test_budget_scales_are_centered_between_visible_arrows(self):

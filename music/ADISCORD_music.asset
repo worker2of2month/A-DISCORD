@@ -12,6 +12,14 @@ music = {
 	volume = 0.0
 }
 
+# Owner: tools/assets/source/build_rus_crisis_audio.py. The music channel stays
+# silent through the 26-second strike and for 300 seconds after its completion.
+music = {
+	name = "ADISCORD_rus_aftermath_silence"
+	file = "ADISCORD_rus_aftermath_silence.ogg"
+	volume = 0.0
+}
+
 music = {
 	name = "ADISCORD_stp_shabrat"
 	file = "ADISCORD_stp_shabrat.ogg"

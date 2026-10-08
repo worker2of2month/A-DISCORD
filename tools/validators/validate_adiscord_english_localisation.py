@@ -21,7 +21,7 @@ EXCLUDED_KEYS = {'EXZ_pragmatism_party', 'EXZ_No_Authority', 'EXZ_No_Authority_d
 
 
 def comparable(value: str) -> str:
-    return value.translate(str.maketrans({'—': '-', '–': '-', '−': '-'}))
+    return value.translate(str.maketrans({'\u2014': '-', '\u2013': '-', '−': '-'}))
 
 
 def read_entries(root: Path, language: str) -> tuple[dict, list[str]]:
@@ -81,7 +81,7 @@ def audit(root: Path, game_root: Path) -> dict:
             issues.append(
                 f'{translated["file"]}:{translated["line"]}: {key}: Cyrillic in English'
             )
-        if re.search('[—–−]', translated['value']):
+        if re.search('[\u2014\u2013−]', translated['value']):
             issues.append(
                 f'{translated["file"]}:{translated["line"]}: {key}: non-ASCII dash in English'
             )

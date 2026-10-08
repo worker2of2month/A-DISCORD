@@ -5372,7 +5372,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 ECONOMY_LOC, f"ADISCORD_economy_debt_effect_{tier_name}"
             )
             self.assertIn("ступень", tier_effect.casefold(), tier_name)
-            for retired_threshold in ("40–69%", "70–99%", "100–139%", "140%"):
+            for retired_threshold in ("40\u201369%", "70\u201399%", "100\u2013139%", "140%"):
                 self.assertNotIn(retired_threshold, tier_effect, tier_name)
         no_tier_effect = localisation_value(
             ECONOMY_LOC, "ADISCORD_economy_debt_effect_none"

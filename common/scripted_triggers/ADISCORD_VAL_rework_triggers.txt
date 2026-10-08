@@ -1812,6 +1812,7 @@ VAL_nw_partner_eligible = {
 			tag = ERT
 			tag = IRT
 			tag = SCA
+			tag = TMR
 			tag = VEL
 			tag = RLY
 		}
@@ -1885,30 +1886,12 @@ VAL_nw_has_reactor_access = {
 
 VAL_nw_has_restored_works = {
 	OR = {
-		176 = {
-			VAL_nw_reactor_access = yes
-			has_state_flag = RUS_reactor_works_restored
-		}
-		177 = {
-			VAL_nw_reactor_access = yes
-			has_state_flag = RUS_reactor_works_restored
-		}
-		187 = {
-			VAL_nw_reactor_access = yes
-			has_state_flag = RUS_reactor_works_restored
-		}
-		188 = {
-			VAL_nw_reactor_access = yes
-			has_state_flag = RUS_reactor_works_restored
-		}
-		189 = {
-			VAL_nw_reactor_access = yes
-			has_state_flag = RUS_reactor_works_restored
-		}
-		192 = {
-			VAL_nw_reactor_access = yes
-			has_state_flag = RUS_reactor_works_restored
-		}
+		176 = { VAL_nw_restored_site = yes }
+		177 = { VAL_nw_restored_site = yes }
+		187 = { VAL_nw_restored_site = yes }
+		188 = { VAL_nw_restored_site = yes }
+		189 = { VAL_nw_restored_site = yes }
+		192 = { VAL_nw_restored_site = yes }
 	}
 }
 
@@ -1922,6 +1905,200 @@ VAL_nw_project_current = {
 	VAL_nw_reactor_access = yes
 	owner = { tag = event_target:VAL_nw_project_owner }
 	VAL = { has_variable = VAL_nw_project_deposit }
+}
+
+VAL_nw_survey_completed = {
+	has_country_flag = VAL_nw_survey_complete
+}
+
+VAL_nw_has_settlement_rights = {
+	has_country_flag = RUS_crisis_settlement_rights
+}
+
+VAL_nw_has_commercial_access = {
+	OR = {
+		VAL_nw_has_reactor_access = yes
+		SLA = { VAL_nw_concession_valid = yes }
+		RZA = { VAL_nw_concession_valid = yes }
+		MLR = { VAL_nw_concession_valid = yes }
+		ERT = { VAL_nw_concession_valid = yes }
+		IRT = { VAL_nw_concession_valid = yes }
+		SCA = { VAL_nw_concession_valid = yes }
+		TMR = { VAL_nw_concession_valid = yes }
+		VEL = { VAL_nw_concession_valid = yes }
+		RLY = { VAL_nw_concession_valid = yes }
+	}
+}
+
+VAL_nw_restored_site = {
+	VAL_nw_reactor_access = yes
+	has_state_flag = RUS_reactor_works_restored
+	industrial_complex > 0
+}
+
+VAL_nw_works_need_rebuilding = {
+	OR = {
+		NOT = { has_state_flag = RUS_reactor_works_restored }
+		industrial_complex < 1
+	}
+}
+
+VAL_nw_foundry_need_rebuilding = {
+	OR = {
+		NOT = { has_state_flag = ADISCORD_reactor_foundry_restored }
+		arms_factory < 1
+	}
+}
+
+VAL_nw_roads_need_rebuilding = {
+	OR = {
+		NOT = { has_state_flag = VAL_nw_roads_restored }
+		infrastructure < 3
+	}
+	infrastructure < 5
+}
+
+VAL_nw_two_restored_works = {
+	count_triggers = {
+		amount = 2
+		176 = { VAL_nw_restored_site = yes }
+		177 = { VAL_nw_restored_site = yes }
+		187 = { VAL_nw_restored_site = yes }
+		188 = { VAL_nw_restored_site = yes }
+		189 = { VAL_nw_restored_site = yes }
+		192 = { VAL_nw_restored_site = yes }
+	}
+}
+
+VAL_nw_connected_site = {
+	VAL_nw_restored_site = yes
+	infrastructure > 2
+}
+
+VAL_nw_has_connected_works = {
+	OR = {
+		176 = { VAL_nw_connected_site = yes }
+		177 = { VAL_nw_connected_site = yes }
+		187 = { VAL_nw_connected_site = yes }
+		188 = { VAL_nw_connected_site = yes }
+		189 = { VAL_nw_connected_site = yes }
+		192 = { VAL_nw_connected_site = yes }
+	}
+}
+
+VAL_nw_can_recognize_republic = {
+	VAL_nw_operational = yes
+	VAL_nw_khan_settled = yes
+	has_war = no
+	FROM = {
+		VAL_nw_partner_eligible = yes
+		is_subject = no
+		has_war = no
+		NOT = { has_country_flag = VAL_nw_sovereignty_recognized }
+	}
+}
+
+VAL_nw_special_zone_permitted = {
+	OR = {
+		NOT = { tag = VAL }
+		AND = {
+			has_completed_focus = VAL_nw_zones
+			FROM = {
+				NOT = { has_country_flag = VAL_nw_sovereignty_recognized }
+			}
+		}
+	}
+}
+
+VAL_nw_has_independent_partner = {
+	OR = {
+		SLA = {
+			VAL_nw_concession_valid = yes
+			is_subject = no
+		}
+		RZA = {
+			VAL_nw_concession_valid = yes
+			is_subject = no
+		}
+		MLR = {
+			VAL_nw_concession_valid = yes
+			is_subject = no
+		}
+		ERT = {
+			VAL_nw_concession_valid = yes
+			is_subject = no
+		}
+		IRT = {
+			VAL_nw_concession_valid = yes
+			is_subject = no
+		}
+		SCA = {
+			VAL_nw_concession_valid = yes
+			is_subject = no
+		}
+		TMR = {
+			VAL_nw_concession_valid = yes
+			is_subject = no
+		}
+		VEL = {
+			VAL_nw_concession_valid = yes
+			is_subject = no
+		}
+		RLY = {
+			VAL_nw_concession_valid = yes
+			is_subject = no
+		}
+	}
+}
+
+VAL_nw_has_contract_administration = {
+	OR = {
+		SLA = {
+			exists = yes
+			is_subject_of = VAL
+			has_capitulated = no
+		}
+		RZA = {
+			exists = yes
+			is_subject_of = VAL
+			has_capitulated = no
+		}
+		MLR = {
+			exists = yes
+			is_subject_of = VAL
+			has_capitulated = no
+		}
+		ERT = {
+			exists = yes
+			is_subject_of = VAL
+			has_capitulated = no
+		}
+		IRT = {
+			exists = yes
+			is_subject_of = VAL
+			has_capitulated = no
+		}
+		SCA = {
+			exists = yes
+			is_subject_of = VAL
+			has_capitulated = no
+		}
+		TMR = {
+			exists = yes
+			is_subject_of = VAL
+			has_capitulated = no
+		}
+		VEL = {
+			exists = yes
+			is_subject_of = VAL
+			has_capitulated = no
+		}
+		RLY = {
+			exists = yes
+			is_subject_of = VAL
+			has_capitulated = no
+		}
+	}
 }
 
 # COUNTRY VAL: the first defeat stays recorded so inherited campaigns stay closed.

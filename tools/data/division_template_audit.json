@@ -6447,8 +6447,8 @@
         "path": "history/units/RUS.txt",
         "owner": "RUS"
       },
-      "technical_name": "Rusnian Rifle Brigade",
-      "display_name": "Rusnian Rifle Brigade",
+      "technical_name": "Khanate Rifle Brigade",
+      "display_name": "Khanate Rifle Brigade",
       "legacy_names": [],
       "regiments": [
         {
@@ -12941,8 +12941,8 @@
         "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
         "owner": "script"
       },
-      "technical_name": "Rusnian Airship",
-      "display_name": "Rusnian Airship",
+      "technical_name": "Khanate Airship",
+      "display_name": "Khanate Airship",
       "legacy_names": [],
       "regiments": [
         {
@@ -12967,6 +12967,58 @@
       "replacement_path": {
         "kind": "retain",
         "target": "rus_lab_airship"
+      },
+      "definition_metadata": {
+        "is_locked": true
+      }
+    },
+    {
+      "key": "rus_hazard_brigade",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Khanate CBRN Brigade",
+      "display_name": "Khanate CBRN Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 58.75,
+        "manpower": 3000.0,
+        "equipment": {
+          "infantry_equipment": 2700.0,
+          "ADISCORD_squad_weapons_equipment": 108.0,
+          "support_equipment": 60.0
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "infantry_equipment": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "rus_hazard_brigade"
       },
       "definition_metadata": {
         "is_locked": true
@@ -14388,7 +14440,7 @@
       "key": "rus_oob_rusnian_rifle_brigade_xp_0_17_eq_0_32",
       "path": "history/units/RUS.txt",
       "kind": "oob",
-      "technical_name": "Rusnian Rifle Brigade",
+      "technical_name": "Khanate Rifle Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.17,
       "start_equipment_factor": 0.32,
@@ -15472,10 +15524,18 @@
       "key": "rus_lab_airship_spawn",
       "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
       "kind": "create_unit",
-      "technical_name": "Rusnian Airship",
+      "technical_name": "Khanate Airship",
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "rus_hazard_brigade_recruitment",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Khanate CBRN Brigade",
+      "legacy_names": [],
       "count": 1
     }
   ]

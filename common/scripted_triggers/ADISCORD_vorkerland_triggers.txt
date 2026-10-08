@@ -2063,6 +2063,20 @@ RUS_crisis_can_enter_common_war = {
 	}
 }
 
+# COUNTRY. Only an in-flight native entry keeps its temporary roster receipt.
+RUS_crisis_entry_still_valid = {
+	exists = yes
+	OR = {
+		has_war_with = RUS
+		has_capitulated = no
+	}
+	has_country_flag = RUS_crisis_defender
+	NOT = { is_subject_of = RUS }
+	RUS_crisis_side_compatible = yes
+	NOT = { has_global_flag = RUS_crisis_world_ended }
+	RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } }
+}
+
 # COUNTRY. The epilogue is terminal; earlier regional wars remain independent.
 RUS_crisis_regional_wars_available = {
 	NOT = { has_global_flag = RUS_crisis_world_ended }
@@ -2087,6 +2101,12 @@ RUS_crisis_programme_focus_available = {
 RUS_crisis_all_defenders_defeated = {
 	check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
 	any_of_scopes = { array = global.RUS_crisis_defenders always = yes }
+	NOT = {
+		any_of_scopes = {
+			array = global.RUS_crisis_defenders
+			has_country_flag = RUS_crisis_entry_pending
+		}
+	}
 	NOT = {
 		any_of_scopes = {
 			array = global.RUS_crisis_defenders
@@ -2564,6 +2584,7 @@ ADISCORD_vorkerland_rus_target_defeated = {
 # --- rus_campaign_triggers ---
 RUS_khan_governing = {
 	tag = RUS
+	NOT = { has_global_flag = RUS_crisis_world_ended }
 	has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes }
 	NOT = { check_variable = { var = RUS_crisis_phase value = 4 compare = equals } }
 	has_capitulated = no
@@ -3062,9 +3083,9 @@ RUS_reactor_sortie_affordable = {
 	OR = {
 		AND = {
 			has_completed_focus = RUS_reactor_decontamination
-			NOT = { has_manpower < 500 }
+			NOT = { has_equipment = { support_equipment < 20 } }
 		}
-		NOT = { has_manpower < 1000 }
+		NOT = { has_equipment = { support_equipment < 40 } }
 	}
 }
 
@@ -3092,8 +3113,19 @@ RUS_lab_slot_free = {
 	NOT = { has_variable = RUS_lab_project }
 }
 
-RUS_lab_not_under_black_army = {
-	NOT = { power_balance_value = { id = RUS_state_balance value > 0.60 } }
+RUS_bunker_workshop_active = {
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_bunker_layer_3 value = 1 compare = equals }
+}
+
+RUS_bunker_clinic_active = {
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_bunker_layer_4 value = 1 compare = equals }
+}
+
+RUS_bunker_laboratory_active = {
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_bunker_layer_4 value = 2 compare = equals }
 }
 
 RUS_lab_reactor_alloys_affordable = {
@@ -3125,14 +3157,20 @@ RUS_civil_service_training_ready = {
 
 RUS_district_health_programme_ready = {
 	RUS_khan_governing = yes
-	has_completed_focus = RUS_roadside_clinics
+	OR = {
+		has_completed_focus = RUS_roadside_clinics
+		RUS_bunker_clinic_active = yes
+	}
 	NOT = { ADISCORD_social_system_development_at_least_5 = yes }
 	check_variable = { var = ADISCORD_social_system_development_progress value = 100 compare = less_than }
 }
 
 RUS_workshop_training_ready = {
 	RUS_khan_governing = yes
-	has_completed_focus = RUS_machine_school
+	OR = {
+		has_completed_focus = RUS_machine_school
+		RUS_bunker_workshop_active = yes
+	}
 	NOT = { ADISCORD_economic_development_at_least_5 = yes }
 	check_variable = { var = ADISCORD_economic_development_progress value = 100 compare = less_than }
 	ADISCORD_economy_can_upgrade_economic_development = yes

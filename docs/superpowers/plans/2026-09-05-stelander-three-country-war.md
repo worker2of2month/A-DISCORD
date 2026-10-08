@@ -21,7 +21,7 @@
 - [x] Load the 12-focus `STP_cw_focus` tree for all three tags. Each tag sees six shared plus two tag-specific focuses, eight visible focuses total.
 - [x] Add normal war controls and paid mobilisation for all three countries.
 - [x] Add the 21-day NOD warning and limited join on STP's side against STS after the northern war ends.
-- [x] Add VAL's accept/refuse offer, shared-operation reservation, SRP's 21-day ultimatum and real VAL–SRP declaration.
+- [x] Add VAL's accept/refuse offer, shared-operation reservation, SRP's 21-day ultimatum and real VAL-SRP declaration.
 - [x] Add feature-specific capitulation routing with `skip_default_capitulation`, including exact VAL settlement of SRP-owned 43/44/88 and exclusion of state 45.
 - [x] Add Russian localisation with UTF-8 BOM and reuse existing focus/decision icons. STS/SRP flags remain provisional and the final portrait is unknown.
 

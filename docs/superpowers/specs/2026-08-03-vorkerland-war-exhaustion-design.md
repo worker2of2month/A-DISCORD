@@ -19,9 +19,9 @@ Each country stores its own values under the same keys:
 - `ADISCORD_vorkerland_civil_war_exhaustion`: score from 0 to 100.
 - `ADISCORD_vorkerland_civil_war_casualties_snapshot_k`: previous cumulative `casualties_k`.
 - `ADISCORD_vorkerland_civil_war_casualties_delta_k`: non-negative monthly delta.
-- Derived modifier variables and a 0–4 display level.
+- Derived modifier variables and a 0-4 display level.
 
-During a direct WRK–VAD war, the score gains 2 per month plus 1/3/6 when that country's new monthly casualties reach 5/25/100 thousand. Outside that direct war, the score falls by 8 per month. The casualty snapshot is refreshed in both states so old losses cannot be charged in a later war. All score and delta values are clamped.
+During a direct WRK-VAD war, the score gains 2 per month plus 1/3/6 when that country's new monthly casualties reach 5/25/100 thousand. Outside that direct war, the score falls by 8 per month. The casualty snapshot is refreshed in both states so old losses cannot be charged in a later war. All score and delta values are clamped.
 
 ## Gameplay effect
 
@@ -41,4 +41,4 @@ Russian localisation names the modifier "Истощение гражданско
 
 ## Verification
 
-The Vorkerland validator receives an `exhaustion` section. Focused tests must prove country-scoped monthly routing, casualty snapshots and thresholds, peace recovery, 0–100 clamps, absence of global/daily loops and attack/organisation penalties, debug isolation, and UTF-8 BOM localisation. The broader Vorkerland validator and total-conversion validator remain required final gates.
+The Vorkerland validator receives an `exhaustion` section. Focused tests must prove country-scoped monthly routing, casualty snapshots and thresholds, peace recovery, 0-100 clamps, absence of global/daily loops and attack/organisation penalties, debug isolation, and UTF-8 BOM localisation. The broader Vorkerland validator and total-conversion validator remain required final gates.

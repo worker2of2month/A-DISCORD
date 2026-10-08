@@ -2247,9 +2247,8 @@ ADISCORD_vorkerland_rus_last_empire_plan = {
 		RUS_arm_the_border_hosts
 		RUS_count_the_hearths
 		RUS_scientists_council
-		RUS_black_army_oath
-		RUS_black_army_staff
-		RUS_black_army_banner
+		RUS_scientists_workshops
+		RUS_scientists_power_compact
 		RUS_khan_broadcast_service
 		RUS_aimaq_council
 		RUS_local_service_committees

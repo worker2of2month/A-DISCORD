@@ -34,9 +34,9 @@ permission. Commit only files in scope with:
 
 1. Extend the focused test with `StatePartitionTests`.
 2. Assert exact one-to-one conservation of every original province using
-   `STATE_PARTITIONS`, existence of state IDs 194–199, and inclusion of the
+   `STATE_PARTITIONS`, existence of state IDs 194-199, and inclusion of the
    six capital provinces in their new states.
-3. Run the named test and record RED because states 194–199 are absent.
+3. Run the named test and record RED because states 194-199 are absent.
 4. Apply the exact province partitions from the manifest, with no omissions,
    duplication, or province reordering outside those lists.
 5. Run the named test and record GREEN.

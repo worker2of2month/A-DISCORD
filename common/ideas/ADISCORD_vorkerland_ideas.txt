@@ -2905,6 +2905,20 @@ ideas = {
 			}
 		}
 
+		RUS_hazard_capacity_6_delta = {
+			name = RUS_black_army
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			modifier = { special_forces_min = 6 }
+		}
+
+		RUS_hazard_capacity_3_delta = {
+			name = RUS_black_army
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			modifier = { special_forces_min = 3 }
+		}
+
 		RUS_army_organization_delta = {
 			picture = ADISCORD_military_organization_cadre_army
 			allowed = { always = no }
@@ -3079,6 +3093,19 @@ ideas = {
 	}
 
 	hidden_ideas = {
+		RUS_world_ended_isolation = {
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			modifier = {
+				production_speed_buildings_factor = -9999
+				industrial_capacity_factory = -9999
+				industrial_capacity_dockyard = -9999
+				conscription = -1
+				min_export = -1
+			}
+		}
+
 		EXZ_trade_isolation = {
 			allowed = { original_tag = EXZ }
 			allowed_civil_war = { always = no }

@@ -102,30 +102,39 @@ VAL_new_world_plan = {
 		VAL_nw_price
 		VAL_nw_khan
 		VAL_nw_defence
-		VAL_nw_arsenals
+		VAL_nw_staff
 		VAL_nw_reserve
+		VAL_nw_arsenals
+		VAL_nw_council
 		VAL_nw_perimeter
-		VAL_nw_caravans
 		VAL_nw_councils
+		VAL_nw_caravans
 		VAL_nw_register
 		VAL_nw_guarantor
-		VAL_nw_break_ring
-		VAL_nw_last_account
+		VAL_nw_clearing
 		VAL_nw_inventory
 		VAL_nw_sanitary
+		VAL_nw_workshops
 		VAL_nw_restart
 		VAL_nw_foundries
+		VAL_nw_dispatch
 		VAL_nw_archives
 		VAL_nw_alloys
+		VAL_nw_last_account
 		VAL_nw_commission
+		VAL_nw_charters
 		VAL_nw_zones
 		VAL_nw_engineers
-		VAL_nw_roads
 		VAL_nw_market
+		VAL_nw_restitution
+		VAL_nw_roads
+		VAL_nw_arbitration
 		VAL_nw_chains
 		VAL_nw_standard
 		VAL_nw_generation
 		VAL_nw_steel_peace
+		VAL_nw_observers
+		VAL_nw_break_ring
 	}
 	weight = { factor = 100 }
 }

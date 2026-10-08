@@ -3314,7 +3314,7 @@ class CivilWarContracts(unittest.TestCase):
         )
         news = events["ADISCORD_STP_cw.73"]
         self.assertEqual(scalar(news, "major"), "yes")
-        self.assertEqual(scalar(news, "fire_only_once"), "yes")
+        self.assertEqual(scalar(news, "fire_only_once"), "no")
         self.assertFalse(
             any(
                 e.key in ("declare_war_on", "add_to_war", "transfer_state")
@@ -3349,6 +3349,25 @@ class CivilWarContracts(unittest.TestCase):
                     if owner and eligible and actual_war:
                         self.assertEqual(
                             [scalar(call, "hours") for call in news_calls], ["1"]
+                        )
+                        published_facts = {
+                            **facts,
+                            (
+                                "VAL",
+                                "has_global_flag",
+                                "ADISCORD_news_kefreyt_intervention_published",
+                            ): True,
+                        }
+                        after_war_hook = list(
+                            selected_effects(
+                                ast_block(events["ADISCORD_STP_cw.21"], "immediate"),
+                                published_facts,
+                                "VAL",
+                            )
+                        )
+                        self.assertFalse(
+                            any(e.key == "news_event" for _, e in after_war_hook),
+                            "the ultimatum must not repeat the war-relation report",
                         )
                     self.assertEqual(
                         [

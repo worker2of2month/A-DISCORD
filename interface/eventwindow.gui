@@ -470,13 +470,12 @@ guiTypes = {
 			size = { width = 581 height =121 }
 			Orientation = UPPER_LEFT
 
-			# NEWS art is natively 396x153. Scale it uniformly to fill the old
-			# 499px newspaper artwork slot instead of centering it inside a frame.
+			# Native 396x153 NEWS art shares the paper's horizontal centre at x=353.
 			iconType =
 			{
 				name ="event_picture"
 				spriteType = "GFX_news_event_001"
-				position = { x = 100 y = 150 }
+				position = { x = 103 y = 150 }
 				scale = 1.26
 				Orientation = "UPPER_LEFT"
 				alwaystransparent = yes

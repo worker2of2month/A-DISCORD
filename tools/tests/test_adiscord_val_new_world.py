@@ -32,7 +32,8 @@ class ContractWorld:
             "buildings": defaultdict(int), "resources": defaultdict(int),
             "slots": 0, "exists": True, "owner": "VAL", "controller": "VAL",
             "subject": None, "capitulated": False, "focuses": set(),
-            "manpower": 0,
+            "manpower": 0, "army_experience": 0, "modifiers": set(),
+            "research_bonuses": [],
         })
         self.data["VAL"]["vars"]["ADISCORD_economy_treasury"] = 2000
         self.target = "176"
@@ -55,6 +56,17 @@ class ContractWorld:
         except ValueError:
             return self.data[scope]["vars"].get(value, 0)
 
+    @staticmethod
+    def condition_groups(rows):
+        index = 0
+        while index < len(rows):
+            width = 1 if rows[index].key else 3
+            group = rows[index:index + width]
+            if len(group) != width:
+                raise AssertionError(("incomplete comparison", group))
+            yield group
+            index += width
+
     def matches(self, rows, scope="VAL"):
         result = []
         index = 0
@@ -75,7 +87,11 @@ class ContractWorld:
             elif key == "custom_trigger_tooltip":
                 result.append(self.matches([child for child in value if child.key != "tooltip"], scope))
             elif key == "OR":
-                result.append(any(self.matches([child], scope) for child in value))
+                result.append(any(self.matches(group, scope) for group in self.condition_groups(value)))
+            elif key == "count_triggers":
+                amount = int(scalar(value, "amount"))
+                conditions = [child for child in value if child.key != "amount"]
+                result.append(sum(self.matches([child], scope) for child in conditions) >= amount)
             elif key == "NOT":
                 result.append(not self.matches(value, scope))
             elif key == "check_variable":
@@ -104,6 +120,8 @@ class ContractWorld:
                 result.append(country["subject"] == value)
             elif key == "has_capitulated":
                 result.append(country["capitulated"] == (value == "yes"))
+            elif key == "has_dynamic_modifier":
+                result.append(scalar(value, "modifier") in country["modifiers"])
             elif key == "exists":
                 result.append(country["exists"] == (value == "yes"))
             elif key == "has_war_with":
@@ -114,7 +132,7 @@ class ContractWorld:
                 result.append(False)
             elif key == "is_in_faction":
                 result.append(value == "no")
-            elif isinstance(value, list) and (key.isdigit() or key in ("VAL", "RUS", "FROM", "owner", "controller")):
+            elif isinstance(value, list) and (key.isdigit() or key in ("VAL", "RUS", "FROM", "owner", "controller", "SLA", "RZA", "MLR", "ERT", "IRT", "SCA", "TMR", "VEL", "RLY")):
                 result.append(self.matches(value, self.scope(key, scope)))
             else:
                 raise AssertionError(("unsupported condition", scope, key, value))
@@ -150,6 +168,11 @@ class ContractWorld:
                 country["vars"][name] = amount if key == "set_variable" else previous + amount * (-1 if key == "subtract_from_variable" else 1)
             elif key == "clear_variable":
                 country["vars"].pop(value, None)
+            elif key == "clamp_variable":
+                name = scalar(value, "var")
+                lower = float(scalar(value, "min"))
+                upper = float(scalar(value, "max"))
+                country["vars"][name] = max(lower, min(upper, country["vars"].get(name, 0)))
             elif key in ("set_country_flag", "set_state_flag"):
                 flag = value if isinstance(value, str) else scalar(value, "flag")
                 country["flags"].add(flag)
@@ -160,6 +183,14 @@ class ContractWorld:
                 country["pp"] += float(value)
             elif key == "add_manpower":
                 country["manpower"] += float(value)
+            elif key == "army_experience":
+                country["army_experience"] += float(value)
+            elif key == "add_tech_bonus":
+                country["research_bonuses"].append(scalar(value, "name"))
+            elif key == "add_dynamic_modifier":
+                country["modifiers"].add(scalar(value, "modifier"))
+            elif key == "force_update_dynamic_modifier":
+                pass
             elif key == "add_equipment_to_stockpile":
                 self.assert_rifle(value)
                 amount = float(scalar(value, "amount"))
@@ -202,6 +233,242 @@ class ContractWorld:
 
 
 class NewWorldAccountingTests(unittest.TestCase):
+    def warning(self, kind):
+        world = ContractWorld()
+        world.data["VAL"]["flags"].add("RUS_crisis_warned")
+        world.data["RUS"]["vars"]["RUS_crisis_phase"] = 1
+        world.data["VAL"]["focuses"].add("VAL_nw_" + kind)
+        return world
+
+    def test_expanded_orders_preserve_quotes_and_reject_other_tier_callbacks(self):
+        for kind, base_price, expanded_price, expected_rifles, expected_manpower in (
+            ("arsenals", 150, 250, 6800, 0),
+            ("reserve", 200, 300, 5000, 5000),
+        ):
+            with self.subTest(kind=kind):
+                world = self.warning(kind)
+                country = world.data["VAL"]
+                country["focuses"].clear()
+                base = "VAL_nw_emergency_" + kind
+                expanded = "VAL_nw_expanded_" + kind
+                world.run(base + "_begin")
+                country["focuses"].add("VAL_nw_" + kind)
+                world.run(expanded + "_begin")
+                self.assertEqual(country["vars"][base + "_deposit"], base_price)
+                world.run(expanded + "_finish")
+                self.assertIn(base + "_deposit", country["vars"])
+                world.run(base + "_finish")
+                world.run(expanded + "_begin")
+                world.run(base + "_finish")
+                category = block(entries(DECISIONS), "VAL_new_world_category")
+                world.execute(block(block(category, base), "cancel_effect"))
+                self.assertEqual(country["vars"][base + "_deposit"], expanded_price)
+                world.run(expanded + "_finish")
+                world.run(expanded + "_finish")
+                self.assertEqual(sum(country["rifles"].values()), expected_rifles)
+                self.assertEqual(country["manpower"], expected_manpower)
+                self.assertEqual(country["vars"]["ADISCORD_economy_treasury"], 2000 - base_price - expanded_price)
+                self.assertEqual(country["pp"], 950)
+
+    def test_expanded_order_exact_affordability_and_one_time_refund(self):
+        for kind, price in (("arsenals", 250), ("reserve", 300)):
+            for treasury, political_power, paid in ((price - 0.01, 25, False), (price, 24.99, False), (price, 25, True)):
+                with self.subTest(kind=kind, treasury=treasury, pp=political_power):
+                    world = self.warning(kind)
+                    country = world.data["VAL"]
+                    country["vars"]["ADISCORD_economy_treasury"] = treasury
+                    country["pp"] = political_power
+                    name = "VAL_nw_expanded_" + kind
+                    world.run(name + "_begin")
+                    self.assertEqual("VAL_nw_emergency_" + kind + "_deposit" in country["vars"], paid)
+                    world.data["RUS"]["vars"]["RUS_crisis_phase"] = 5
+                    world.run(name + "_finish")
+                    world.run("VAL_nw_refund_orders")
+                    self.assertEqual(country["vars"]["ADISCORD_economy_treasury"], treasury)
+                    self.assertEqual(country["pp"], political_power)
+                    self.assertEqual(sum(country["rifles"].values()), 5000)
+                    self.assertEqual(country["manpower"], 0)
+
+    def test_survey_delivery_is_required_for_the_first_restoration_unlock(self):
+        world = ContractWorld()
+        self.assertFalse(world.matches(world.triggers["VAL_nw_survey_completed"]))
+        world.run("VAL_nw_survey_begin")
+        self.assertFalse(world.matches(world.triggers["VAL_nw_survey_completed"]))
+        world.run("VAL_nw_survey_finish")
+        world.run("VAL_nw_survey_finish")
+        self.assertTrue(world.matches(world.triggers["VAL_nw_survey_completed"]))
+        self.assertEqual(world.data["VAL"]["army_experience"], 10)
+        self.assertEqual(world.events, [("VAL", "val_rework.135")])
+
+    def test_two_distinct_working_plants_need_current_access_and_control(self):
+        world = ContractWorld()
+        world.data["176"]["flags"].add("RUS_reactor_works_restored")
+        world.data["176"]["buildings"]["industrial_complex"] = 1
+        self.assertFalse(world.matches(world.triggers["VAL_nw_two_restored_works"]))
+        world.data["177"]["flags"].add("RUS_reactor_works_restored")
+        world.data["177"]["buildings"]["industrial_complex"] = 1
+        self.assertTrue(world.matches(world.triggers["VAL_nw_two_restored_works"]))
+        world.data["177"].update(owner="SLA", controller="SLA")
+        self.assertFalse(world.matches(world.triggers["VAL_nw_two_restored_works"]))
+        world.data["SLA"]["flags"].add("VAL_nw_concession")
+        self.assertTrue(world.matches(world.triggers["VAL_nw_two_restored_works"]))
+        world.data["177"]["controller"] = "RUS"
+        self.assertFalse(world.matches(world.triggers["VAL_nw_two_restored_works"]))
+        world.data["176"]["buildings"]["infrastructure"] = 3
+        self.assertTrue(world.matches(world.triggers["VAL_nw_has_connected_works"]))
+        world.data["176"]["flags"].clear()
+        self.assertFalse(world.matches(world.triggers["VAL_nw_has_connected_works"]))
+
+    def test_independence_recognition_is_targeted_and_blocks_later_subjugation(self):
+        world = ContractWorld()
+        world.target = "SLA"
+        world.data["RUS"]["vars"]["RUS_crisis_phase"] = 5
+        world.data["VAL"]["focuses"].update({"VAL_nw_charters", "VAL_nw_zones"})
+        self.assertTrue(world.matches(world.triggers["VAL_nw_special_zone_permitted"]))
+        world.run("VAL_nw_recognize_republic")
+        world.run("VAL_nw_recognize_republic")
+        self.assertIn("VAL_nw_sovereignty_recognized", world.data["SLA"]["flags"])
+        self.assertIsNone(world.data["SLA"]["subject"])
+        self.assertNotIn("VAL_nw_concession", world.data["SLA"]["flags"])
+        self.assertFalse(world.matches(world.triggers["VAL_nw_special_zone_permitted"]))
+        self.assertEqual(world.events, [("SLA", "val_rework.138")])
+        self.assertEqual(world.data["VAL"]["vars"]["ADISCORD_economy_treasury"], 2000)
+        world.target = "RZA"
+        self.assertTrue(world.matches(world.triggers["VAL_nw_special_zone_permitted"]))
+        self.assertTrue(world.matches(world.triggers["VAL_nw_special_zone_permitted"], "STP"))
+
+    def test_ending_uses_current_partners_and_administrations(self):
+        world = ContractWorld()
+        independent = world.triggers["VAL_nw_has_independent_partner"]
+        administration = world.triggers["VAL_nw_has_contract_administration"]
+        self.assertFalse(world.matches(independent))
+        self.assertFalse(world.matches(administration))
+        world.data["SLA"]["flags"].add("VAL_nw_concession")
+        self.assertTrue(world.matches(independent))
+        world.data["SLA"]["subject"] = "VAL"
+        self.assertFalse(world.matches(independent))
+        self.assertTrue(world.matches(administration))
+        world.data["SLA"]["subject"] = "RUS"
+        self.assertFalse(world.matches(independent))
+        self.assertFalse(world.matches(administration))
+
+    def test_network_caps_follow_single_nonrepeatable_focus_rewards(self):
+        world = ContractWorld()
+        for effect in ("VAL_nw_improve_industry", "VAL_nw_improve_trade", "VAL_nw_improve_administration"):
+            owners = [entry.value for entry in block(entries(TREE), "focus_tree")
+                      if entry.key == "focus"
+                      and any(row.key == effect for row in walk(block(entry.value, "completion_reward")))]
+            self.assertEqual(len(owners), 1, effect)
+            self.assertFalse(any(row.key == "repeatable" and row.value == "yes" for row in owners[0]))
+            calls = []
+            for directory in ("common", "events"):
+                for path in (ROOT / directory).rglob("*.txt"):
+                    if re.search(rf"\b{effect}\s*=\s*yes\b", path.read_text(encoding="utf-8-sig")):
+                        calls.append(path.relative_to(ROOT).as_posix())
+            self.assertEqual(calls, ["common/national_focus/ADISCORD_VAL_new_world.txt"], effect)
+            world.run(effect)
+        variables = world.data["VAL"]["vars"]
+        self.assertEqual(variables["VAL_nw_factory_output"], 0.05)
+        self.assertEqual(variables["VAL_nw_trade_income"], 0.05)
+        self.assertEqual(variables["VAL_nw_admin_expense"], -0.05)
+        self.assertEqual(world.data["VAL"]["modifiers"], {"VAL_nw_industrial_network"})
+        self.assertEqual(world.dirty, {"VAL"})
+
+    def test_cancelled_one_time_orders_can_retry_after_liberation(self):
+        decisions = block(entries(DECISIONS), "VAL_new_world_category")
+        names = ("survey", "salvage_archives", "emergency_arsenals", "emergency_reserve",
+                 "expanded_arsenals", "expanded_reserve")
+        for name in names:
+            for interruption in ("subject", "capitulated"):
+                with self.subTest(order=name, interruption=interruption):
+                    world = self.warning("arsenals")
+                    country = world.data["VAL"]
+                    country["focuses"].update({"VAL_nw_reserve", "VAL_nw_perimeter", "VAL_nw_archives"})
+                    key = "VAL_nw_" + name
+                    decision = block(decisions, key)
+                    self.assertFalse(any(row.key == "fire_only_once" and row.value == "yes" for row in decision))
+                    self.assertTrue(world.matches(block(decision, "visible")))
+                    self.assertTrue(world.matches(block(decision, "available")))
+                    world.run(key + "_begin")
+                    country[interruption] = "RUS" if interruption == "subject" else True
+                    self.assertTrue(world.matches(block(decision, "cancel_trigger")))
+                    world.execute(block(decision, "cancel_effect"))
+                    self.assertEqual(country["vars"]["ADISCORD_economy_treasury"], 2000)
+                    self.assertEqual(country["pp"], 1000)
+                    country[interruption] = None if interruption == "subject" else False
+                    self.assertTrue(world.matches(block(decision, "visible")))
+                    self.assertTrue(world.matches(block(decision, "available")))
+                    world.run(key + "_begin")
+                    world.run(key + "_finish")
+                    self.assertIn(key + "_complete", country["flags"])
+                    self.assertFalse(world.matches(block(decision, "visible")))
+                    settled = (dict(country["vars"]), country["pp"], dict(country["rifles"]),
+                               country["manpower"], country["army_experience"],
+                               list(country["research_bonuses"]), list(world.events))
+                    world.run(key + "_finish")
+                    world.run(key + "_begin")
+                    self.assertEqual(settled, (dict(country["vars"]), country["pp"], dict(country["rifles"]),
+                                              country["manpower"], country["army_experience"],
+                                              list(country["research_bonuses"]), list(world.events)))
+                    if name == "survey":
+                        self.assertEqual(country["army_experience"], 10)
+                        self.assertEqual(world.events, [("VAL", "val_rework.135")])
+
+    def test_lost_assets_rebuild_at_full_price_without_duplicate_resources_or_slots(self):
+        world = ContractWorld()
+        state = world.data["176"]
+        for effect, building, price in (("restoration", "industrial_complex", 400),
+                                         ("foundry", "arms_factory", 300)):
+            world.run("VAL_nw_begin_" + effect)
+            world.run("VAL_nw_finish_project")
+            slots, resources = state["slots"], dict(state["resources"])
+            state["buildings"][building] = 0
+            before = world.data["VAL"]["vars"]["ADISCORD_economy_treasury"]
+            world.run("VAL_nw_begin_" + effect)
+            world.run("VAL_nw_finish_project")
+            world.run("VAL_nw_finish_project")
+            self.assertEqual(world.data["VAL"]["vars"]["ADISCORD_economy_treasury"], before - price)
+            self.assertEqual(state["buildings"][building], 1)
+            self.assertEqual((state["slots"], dict(state["resources"])), (slots, resources))
+        state["flags"].add("VAL_nw_roads_restored")
+        state["buildings"]["infrastructure"] = 1
+        for level in (2, 3):
+            self.assertFalse(world.matches(world.triggers["VAL_nw_connected_site"], "176"))
+            world.run("VAL_nw_begin_roads")
+            world.run("VAL_nw_finish_project")
+            self.assertEqual(state["buildings"]["infrastructure"], level)
+        self.assertTrue(world.matches(world.triggers["VAL_nw_connected_site"], "176"))
+        world.run("VAL_nw_begin_roads")
+        self.assertNotIn("VAL_nw_project_deposit", world.data["VAL"]["vars"])
+
+    def test_recognition_updates_open_offer_but_keeps_player_refusal_and_cooldown(self):
+        world = ContractWorld()
+        world.target = "SLA"
+        world.data["RUS"]["vars"]["RUS_crisis_phase"] = 5
+        world.data["VAL"]["focuses"].add("VAL_nw_charters")
+        partner = world.data["SLA"]
+        partner["flags"].update({"VAL_nw_offer_pending", "VAL_nw_offer_cooldown"})
+        offer = next(row.value for row in entries("events/ADISCORD_VAL_contract_events.txt")
+                     if row.key == "country_event" and scalar(row.value, "id") == "val_rework.125")
+        refusal, acceptance = [row.value for row in offer if row.key == "option"]
+        ai_guard = [row for row in block(block(refusal, "ai_chance"), "modifier") if row.key != "factor"]
+        self.assertFalse(world.matches(ai_guard, "SLA"))
+        world.run("VAL_nw_recognize_republic")
+        self.assertTrue(world.matches(ai_guard, "SLA"))
+        self.assertTrue(world.matches(block(acceptance, "trigger"), "SLA"))
+        self.assertFalse(any(row.key == "trigger" for row in refusal))
+        world.execute(block(refusal, "hidden_effect"), "SLA")
+        self.assertNotIn("VAL_nw_offer_pending", partner["flags"])
+        self.assertIn("VAL_nw_offer_cooldown", partner["flags"])
+        decision = block(block(entries(DECISIONS), "VAL_new_world_category"), "VAL_nw_offer_concession")
+        self.assertFalse(world.matches(block(decision, "available")))
+        partner["flags"].discard("VAL_nw_offer_cooldown")
+        self.assertTrue(world.matches(block(decision, "available")))
+        partner["flags"].add("VAL_nw_offer_pending")
+        world.execute(block(acceptance, "hidden_effect"), "SLA")
+        self.assertEqual(world.data["VAL"]["vars"]["ADISCORD_economy_treasury"], 1800)
+        self.assertIn("VAL_nw_concession", partner["flags"])
+
     def test_project_and_resource_rights_invalidate_the_actual_owners_budget(self):
         world = ContractWorld()
         world.data["176"].update(owner="SLA", controller="SLA")
@@ -382,11 +649,59 @@ class NewWorldAccountingTests(unittest.TestCase):
             self.assertNotIn("VAL_nw_project_deposit", world.data["VAL"]["vars"])
         world = ContractWorld()
         world.data["176"]["flags"].add("RUS_reactor_works_restored")
+        world.data["176"]["buildings"]["industrial_complex"] = 1
         world.run("VAL_nw_begin_restoration")
         self.assertEqual(world.data["VAL"]["vars"]["ADISCORD_economy_treasury"], 2000)
 
 
 class NewWorldRouteTests(unittest.TestCase):
+    def test_both_expanded_orders_can_finish_within_a_fresh_warning(self):
+        focuses = {scalar(e.value, "id"): e.value for e in block(entries(TREE), "focus_tree") if e.key == "focus"}
+        plan = block(entries("common/ai_strategy_plans/ADISCORD_VAL_plans.txt"), "VAL_new_world_plan")
+        order = [e.value for e in block(plan, "ai_national_focuses")]
+        days = 0
+        finishes = {}
+        completed = set()
+        for name in order:
+            focus = focuses[name]
+            prerequisites = [e.value for e in focus if e.key == "prerequisite"]
+            self.assertTrue(all(any(p.value in completed for p in group) for group in prerequisites), name)
+            days += int(scalar(focus, "cost")) * 7
+            completed.add(name)
+            if name == "VAL_nw_reserve":
+                finishes["reserve"] = days + 30
+            if name == "VAL_nw_arsenals":
+                finishes["arsenals"] = days + 21
+                break
+        self.assertEqual(finishes, {"reserve": 79, "arsenals": 84})
+
+    def test_finale_does_not_require_finishing_the_military_or_all_side_programmes(self):
+        focuses = {scalar(e.value, "id"): e.value for e in block(entries(TREE), "focus_tree") if e.key == "focus"}
+        skipped = {"VAL_nw_" + name for name in ("khan", "defence", "staff", "arsenals", "reserve", "break_ring", "last_account", "zones", "roads", "restitution", "guarantor", "observers")}
+        reachable = set()
+        for _ in range(len(focuses)):
+            for name, focus in focuses.items():
+                if name in skipped:
+                    continue
+                prerequisites = [e.value for e in focus if e.key == "prerequisite"]
+                if all(any(p.value in reachable for p in group) for group in prerequisites):
+                    reachable.add(name)
+        self.assertIn("VAL_nw_steel_peace", reachable)
+        final_conditions = block(focuses["VAL_nw_steel_peace"], "available")
+        world = ContractWorld()
+        world.data["RUS"]["vars"]["RUS_crisis_phase"] = 5
+        for state in ("176", "177"):
+            world.data[state]["flags"].add("RUS_reactor_works_restored")
+            world.data[state]["buildings"]["industrial_complex"] = 1
+        self.assertTrue(world.matches(final_conditions))
+
+    def test_recognition_is_rechecked_in_the_shared_settlement_effect(self):
+        roots = entries("common/decisions/ADISCORD_vorkerland_decisions.txt")
+        candidates = [e.value for e in walk(roots) if e.key == "RUS_crisis_establish_special_zone"]
+        self.assertEqual(len(candidates), 1)
+        for field in ("available", "complete_effect"):
+            self.assertIn("VAL_nw_special_zone_permitted", {e.key for e in walk(block(candidates[0], field))})
+
     def test_dynamic_delta_previews_are_never_installed(self):
         tree = block(entries(TREE), "focus_tree")
         for name in ("VAL_nw_industry_delta", "VAL_nw_trade_delta", "VAL_nw_admin_delta"):
@@ -405,11 +720,15 @@ class NewWorldRouteTests(unittest.TestCase):
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             rows = {}
             for line in path.read_text(encoding="utf-8-sig").splitlines():
-                if re.match(r"\s+(?:VAL_nw_|val_rework\.(?:12[5-9]|13[01]))", line):
+                if re.match(r"\s+(?:VAL_nw_|val_rework\.(?:12[4-9]|13[014-8]))", line):
                     match = re.fullmatch(r' ([\w.]+):\d+ "([^"\\]*(?:\\.[^"\\]*)*)"', line)
                     self.assertIsNotNone(match, line)
                     self.assertNotIn(match[1], rows)
                     rows[match[1]] = match[2]
+                    if re.match(r"val_rework\.(?:124|129|13[4-8])\.d", match[1]):
+                        rendered = match[2].replace(r"\n", "\n")
+                        self.assertLessEqual(len(rendered), 3000, match[1])
+                        self.assertLessEqual(len(rendered.encode("utf-8")), 5500, match[1])
             languages[language] = rows
         self.assertEqual(languages["russian"].keys(), languages["english"].keys())
         for decision in block(entries(DECISIONS), "VAL_new_world_category"):
@@ -451,9 +770,9 @@ class NewWorldRouteTests(unittest.TestCase):
         self.assertEqual(SOURCES.get("VAL/new_world/focuses.txt"), "ADISCORD_VAL_new_world.txt")
         tree = block(entries(TREE), "focus_tree")
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
-        self.assertEqual(len(focuses), 27)
+        self.assertEqual(len(focuses), 36)
         reachable = set()
-        for _ in range(27):
+        for _ in range(len(focuses)):
             for name, focus in focuses.items():
                 prerequisites = [e.value for e in focus if e.key == "prerequisite"]
                 if all(any(p.value in reachable for p in group) for group in prerequisites):
@@ -462,7 +781,7 @@ class NewWorldRouteTests(unittest.TestCase):
                     self.assertTrue(all(p.value in focuses for p in group), name)
                 self.assertNotIn("allow_branch", {e.key for e in focus}, name)
         self.assertEqual(reachable, set(focuses))
-        self.assertEqual(len({(scalar(f, "x"), scalar(f, "y")) for f in focuses.values()}), 27)
+        self.assertEqual(len({(scalar(f, "x"), scalar(f, "y")) for f in focuses.values()}), 36)
 
     def test_emergency_preparation_does_not_require_late_tree(self):
         decisions = block(entries(DECISIONS), "VAL_new_world_category")

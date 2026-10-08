@@ -13,10 +13,10 @@
 - Работать прямо на `main` по явному разрешению пользователя.
 - Не включать в коммиты чужие незавершённые изменения.
 - Не изменять уже dirty-файлы `common/on_actions/00_ADISCORD_on_actions.txt`, `common/ai_strategy/default.txt`, `common/ai_strategy/VAL.txt` и `tools/validate_tc.py`; использовать отдельные файлы и отдельный валидатор.
-- Не использовать `start_civil_war` и dynamic tags `D01`–`D50`.
+- Не использовать `start_civil_war` и dynamic tags `D01`-`D50`.
 - Использовать fixed tags: `TVA EYR EGC WPA WPS PSD EBA DVA SRA ZTA SLA RZA MLR ERT IRT SCA`.
 - Каноническая Башня Единства: state `32`, province `6713`; state `40` остаётся вместе с метрополией.
-- Взрыв запускается через 120–180 дней от старта кампании; Грязная зона открывается ещё через 60–90 дней.
+- Взрыв запускается через 120-180 дней от старта кампании; Грязная зона открывается ещё через 60-90 дней.
 - State `23` получает загрязнённый modifier, но никогда не передаётся новой стране.
 - States `24/57` остаются VAL, states `59/60` остаются CIN.
 - `ADISCORD_vorkerland_dirty_state` не получает `remove_trigger`, а код не вызывает `remove_dynamic_modifier`.
@@ -163,7 +163,7 @@ Commit only the three new `tools/` files:
 
 **Interfaces:**
 - Consumes: `STATE_PARTITIONS`.
-- Produces: connected states 194–199 and capital provinces used by OOB/events.
+- Produces: connected states 194-199 and capital provinces used by OOB/events.
 
 - [ ] **Step 1: Add a failing partition test**
 
@@ -176,7 +176,7 @@ new states.
 
 Run: `python -m unittest tools.test_validate_adiscord_vorkerland_collapse.StatePartitionTests -v`
 
-Expected: FAIL because states 194–199 do not exist.
+Expected: FAIL because states 194-199 do not exist.
 
 - [ ] **Step 3: Apply the exact `STATE_PARTITIONS` lists**
 
@@ -361,9 +361,9 @@ ADISCORD_vorkerland_dirty_state = {
 The apply effect enumerates exactly `CONTAMINATED_STATES`, checks
 `has_dynamic_modifier`, and never removes it.
 
-For states 165–193 without category/history use `rural`,
+For states 165-193 without category/history use `rural`,
 `local_supplies = 0.25`, and manpower `1500 × province count`. Preserve
-existing non-zero manpower in states 152–160. Keep state 125 impassable.
+existing non-zero manpower in states 152-160. Keep state 125 impassable.
 
 Capital bootstrap:
 
@@ -521,9 +521,9 @@ Expected: FAIL because the AI strategy file is absent.
 
 - [ ] **Step 3: Implement phases**
 
-- Days 0–60: `put_unit_buffers` around each capital and defensive
+- Days 0-60: `put_unit_buffers` around each capital and defensive
   `front_control`.
-- Days 61–540: `consider_weak`, `conquer`, `prepare_for_war` and
+- Days 61-540: `consider_weak`, `conquer`, `prepare_for_war` and
   target-specific `front_control` only against neighbors/current enemies.
 - After day 540: rush state objectives `32,36,39,75,102,195,196,71,194`.
 - VAD gets stronger front ratio and production; TVA gets industrial
@@ -565,7 +565,7 @@ Expected: PASS.
 
 - [ ] **Step 1: Add failing spawn-wave tests**
 
-Assert 60–90-day opening window, corrected connected state groups, no state
+Assert 60-90-day opening window, corrected connected state groups, no state
 23 transfer, no modifier removal, setup-before-OOB, and one spawn per tag.
 
 - [ ] **Step 2: Run RED**
@@ -576,7 +576,7 @@ Expected: FAIL because dirty events are absent.
 
 - [ ] **Step 3: Implement three waves**
 
-- Opening after 60–90 days from collapse.
+- Opening after 60-90 days from collapse.
 - Wave 1 immediately: `SLA`, `MLR`.
 - Wave 2 after 45 days: `RZA`, `SCA`.
 - Wave 3 after another 45 days: `ERT`, `IRT`.
@@ -716,7 +716,7 @@ Check:
 2. three central claimants and all regional splits appear;
 3. OOBs spawn inside owned capitals;
 4. local wars start after the one-day settle window;
-5. dirty opening occurs 60–90 days later;
+5. dirty opening occurs 60-90 days later;
 6. six dirty countries spawn in three waves;
 7. modifier remains on every transferred dirty state;
 8. AI changes phase and does not open global wars;

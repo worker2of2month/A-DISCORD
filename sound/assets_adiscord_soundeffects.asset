@@ -4,7 +4,8 @@ category = {
 	soundeffects = {
 		ADISCORD_pol_menu_open_sound
 		ADISCORD_pol_menu_close_sound
-		ADISCORD_rus_reactor_strike
+		ADISCORD_rus_reactor_charge
+		ADISCORD_rus_reactor_impact
 		ADISCORD_rus_ruined_world
 	}
 }
@@ -28,9 +29,21 @@ soundeffect = {
 }
 
 soundeffect = {
-	name = ADISCORD_rus_reactor_strike
+	name = ADISCORD_rus_reactor_charge
 	sounds = {
-		sound = ADISCORD_rus_reactor_strike_sample
+		sound = ADISCORD_rus_reactor_charge_sample
+	}
+	volume = 1.0
+	is3d = no
+	loop = no
+	max_audible = 1
+	max_audible_behaviour = fail
+}
+
+soundeffect = {
+	name = ADISCORD_rus_reactor_impact
+	sounds = {
+		sound = ADISCORD_rus_reactor_impact_sample
 	}
 	volume = 1.0
 	is3d = no

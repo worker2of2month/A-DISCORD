@@ -100,7 +100,6 @@ class WorldNewsContracts(unittest.TestCase):
         war = named_block(self.on_actions, "on_war_relation_added")
         for flag in (
             "ADISCORD_news_vorkerland_fighting_published",
-            "ADISCORD_news_nodrul_northern_war_published",
             "ADISCORD_news_stelander_civil_war_published",
             "ADISCORD_news_kefreyt_intervention_published",
             "ADISCORD_news_itora_intervention_published",
@@ -108,7 +107,7 @@ class WorldNewsContracts(unittest.TestCase):
             self.assertIn(f"NOT = {{ has_global_flag = {flag} }}", war)
             self.assertIn(f"set_global_flag = {flag}", war)
 
-        for event_id in (1, 2, 4, 5):
+        for event_id in (1, 5):
             self.assertIn(
                 f"news_event = {{ id = ADISCORD_world_news.{event_id} hours = 1 }}",
                 war,
@@ -116,24 +115,98 @@ class WorldNewsContracts(unittest.TestCase):
 
         # STP already owns a richer public outbreak report. Publish that report
         # from the reliable war-relation hook instead of showing a second generic
-        # headline. Delay the window past declare_war_on; fire_only_once still
-        # suppresses a second same-hour fallback call.
+        # headline. Publication guards cover both the hook and its fallback.
         self.assertIn("news_event = { id = ADISCORD_STP_cw.70 hours = 1 }", war)
         self.assertNotIn("news_event = { id = ADISCORD_world_news.3 }", war)
         stp_outbreak = event_block(self.stp_events, "ADISCORD_STP_cw.70")
         self.assertTrue(stp_outbreak)
         self.assertIn("major = yes", stp_outbreak)
         self.assertIn("is_triggered_only = yes", stp_outbreak)
-        self.assertIn("fire_only_once = yes", stp_outbreak)
+        self.assertIn("fire_only_once = no", stp_outbreak)
 
         for tag in ("WKR", "VAD", "TVA"):
-            self.assertIn(f"tag = {tag}", war)
-        for tag in ("NOD", "YPR", "COF", "TFF"):
             self.assertIn(f"tag = {tag}", war)
         for tag in ("STP", "STS", "SRP", "VAL"):
             self.assertIn(f"tag = {tag}", war)
         for tag in ("IVN", "ZAO", "WPA", "WPS", "PWR", "PSD"):
             self.assertIn(f"tag = {tag}", war)
+
+    def test_occidia_invasion_uses_one_report_and_shared_publication_guard(self):
+        war = named_block(self.on_actions, "on_war_relation_added")
+        flag = "ADISCORD_news_kefreyt_intervention_published"
+        call = "news_event = { id = ADISCORD_STP_cw.73 hours = 1 }"
+        self.assertIn(call, war)
+        self.assertIn(call, self.stp_events)
+        for source in (war, self.stp_events):
+            self.assertIn(f"NOT = {{ has_global_flag = {flag} }}", source)
+            self.assertIn(f"set_global_flag = {flag}", source)
+        event = event_block(self.stp_events, "ADISCORD_STP_cw.73")
+        self.assertIn("major = yes", event)
+        self.assertIn("fire_only_once = no", event)
+        generic_news_occurrences = []
+        for directory in ("common", "events"):
+            for path in (ROOT / directory).rglob("*.txt"):
+                for _ in re.finditer(
+                    r"\bid\s*=\s*ADISCORD_world_news\.4\b",
+                    path.read_text(encoding="utf-8-sig"),
+                ):
+                    generic_news_occurrences.append(path.relative_to(ROOT).as_posix())
+        self.assertEqual(generic_news_occurrences, ["events/ADISCORD_world_news.txt"])
+
+    def test_northern_invasion_has_one_report_after_successful_entry(self):
+        from tools.tests.test_adiscord_stp_preparation import (
+            block,
+            entries,
+            scalar,
+            selected_effects,
+        )
+
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        start = block(effects, "STP_cw_start_northern_war")
+        # Exercise the entry-result branch after the campaign eligibility gate.
+        success = next(
+            entry for entry in block(start, "if")
+            if entry.key == "if" and any(
+                item.key == "STP_cw_northern_entry_complete"
+                for item in block(entry.value, "limit")
+            )
+        )
+        publication_flag = "ADISCORD_news_nodrul_northern_war_published"
+        for complete in (False, True):
+            for published in (False, True):
+                facts = {
+                    ("NOD", "STP_cw_northern_entry_complete", "yes"): complete,
+                    ("NOD", "has_global_flag", publication_flag): published,
+                }
+                chosen = list(selected_effects([success], facts, "NOD"))
+                calls = [entry.value for _, entry in chosen if entry.key == "news_event"]
+                self.assertEqual(
+                    [scalar(call, "id") for call in calls],
+                    ["ADISCORD_STP_cw.82"] if complete and not published else [],
+                )
+                if calls:
+                    self.assertEqual(scalar(calls[0], "hours"), "1")
+                    publication = next(
+                        index for index, (_, entry) in enumerate(chosen)
+                        if entry.key == "set_global_flag" and entry.value == publication_flag
+                    )
+                    delivery = next(
+                        index for index, (_, entry) in enumerate(chosen)
+                        if entry.key == "news_event"
+                    )
+                    self.assertLess(publication, delivery)
+        occurrences = []
+        for directory in ("common", "events"):
+            for path in (ROOT / directory).rglob("*.txt"):
+                occurrences.extend(
+                    path.relative_to(ROOT).as_posix()
+                    for _ in re.finditer(
+                        r"\bid\s*=\s*ADISCORD_world_news\.2\b",
+                        path.read_text(encoding="utf-8-sig"),
+                    )
+                )
+        self.assertEqual(occurrences, ["events/ADISCORD_world_news.txt"])
+        self.assertNotIn("ADISCORD_STP_cw.82", self.on_actions)
 
     def test_world_news_has_bilingual_localisation(self):
         for number in range(1, 6):

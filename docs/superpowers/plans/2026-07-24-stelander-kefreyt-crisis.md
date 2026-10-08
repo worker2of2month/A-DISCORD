@@ -1,4 +1,4 @@
-# Stelander–Kefreyt Crisis Implementation Plan
+# Stelander-Kefreyt Crisis Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -12,13 +12,13 @@
 
 - Preserve all existing focus IDs named in the design; add new IDs only under `STP_`, `VAL_`, `NOD_`, or `ADISCORD_STP_VAL_`.
 - Ivanov dies on campaign day 267; the four pre-death mission durations are 70, 70, 63, and 63 days, with the engine's inclusive start day verified in-game against `DEATH_CAMPAIGN_DAY = 267`.
-- Standard crisis focuses cost 5 focus points (35 days), are `cancelable = no`, and survive stages 1–4 only through their own sticky flag.
+- Standard crisis focuses cost 5 focus points (35 days), are `cancelable = no`, and survive stages 1-4 only through their own sticky flag.
 - No `on_daily`, unrestricted `every_country`, global daily simulation, or GUI-side state mutation.
-- Readiness and suspicion remain clamped to 0–100; node levels remain clamped to 0–3 or 0–2 exactly as specified.
+- Readiness and suspicion remain clamped to 0-100; node levels remain clamped to 0-3 or 0-2 exactly as specified.
 - The player receives no guaranteed-success operation: posture, exposure, resources, target state, and cooldowns must all be checked at resolution.
 - All equipment support is removed from a real sender stockpile before it is escrowed or transferred.
 - `start_civil_war.army_ratio` splits the current army; arbitrary player-created divisions are never deleted or recreated.
-- VAL cannot receive a scripted early STP war goal before the crisis window; the final VAL–STP war is unavoidable after 120/180/300/450 days.
+- VAL cannot receive a scripted early STP war goal before the crisis window; the final VAL-STP war is unavoidable after 120/180/300/450 days.
 - Temporary intervention uses `add_to_war`, not permanent faction membership.
 - State 45/88 resource rights, military access, NAPs, truce, event targets, factory locks, participant flags, and delayed-event tokens have explicit cleanup paths.
 - Full northern peace is allowed only for a clean campaign against eligible independent CIN and OSF; unexpected participants permanently contaminate that campaign.
@@ -77,7 +77,7 @@
 | `common/decisions/ADISCORD_test_wars_decisions.txt` | Remove only the two VAL test-war decisions |
 | `common/focus_inlay_windows/ADISCORD_STP_state_face_inlay_window.txt` | Gate to the main prewar role and canonical health variable |
 | `common/scripted_localisation/ADISCORD_STP_leader_health_scripted_loc.txt` | Read canonical health and postwar role safely |
-| `common/scripted_localisation/ADISCORD_STP_state_face_scripted_loc.txt` | Read canonical health stage and 0–100 suspicion/readiness safely |
+| `common/scripted_localisation/ADISCORD_STP_state_face_scripted_loc.txt` | Read canonical health stage and 0-100 suspicion/readiness safely |
 | `localisation/russian/ADISCORD_national_focuses_l_russian.yml` | Correct existing STP/VAL focus descriptions |
 | `localisation/russian/ADISCORD_stp_state_face_l_russian.yml` | Correct stage-face and percent-format localisation |
 
@@ -469,7 +469,7 @@ Expected: missing core files and unchanged mercenary idea assertions fail.
 
 - [ ] **Step 3: Implement defaults and clamped mutation effects**
 
-`ADISCORD_STP_VAL_initialize_schema` must migrate before it defaults: when schema version is absent, multiply an existing 0–1 `STP_party_suspicion` by 100, clamp it, copy an existing `STP_state_face_stage` into an absent `STP_leader_health_stage`, then set only absent defaults. Mirror the final health stage back to `STP_state_face_stage` for save compatibility and assign `ADISCORD_STP_VAL_crisis_schema_version = 1` last. A second call must change nothing. New-game defaults are:
+`ADISCORD_STP_VAL_initialize_schema` must migrate before it defaults: when schema version is absent, multiply an existing 0-1 `STP_party_suspicion` by 100, clamp it, copy an existing `STP_state_face_stage` into an absent `STP_leader_health_stage`, then set only absent defaults. Mirror the final health stage back to `STP_state_face_stage` for save compatibility and assign `ADISCORD_STP_VAL_crisis_schema_version = 1` last. A second call must change nothing. New-game defaults are:
 
 ```text
 ADISCORD_STP_VAL_crisis_schema_version = 1
@@ -504,9 +504,9 @@ VAL_OSF_contract_posture = 0
 VAL_APH_contract_posture = 0
 ```
 
-`STP_set_crisis_phase` consumes an exact value 0–4, changes `STP_crisis_phase` only when different, and calls `mark_focus_tree_layout_dirty` in the current STP/postwar scope and literal VAL when it exists. Startup sets phase 1, Ivanov’s death sets 2 before outcome evaluation, `STP_finalize_internal_outcome` sets 3, and `STP_VAL_begin_final_war` sets 4.
+`STP_set_crisis_phase` consumes an exact value 0-4, changes `STP_crisis_phase` only when different, and calls `mark_focus_tree_layout_dirty` in the current STP/postwar scope and literal VAL when it exists. Startup sets phase 1, Ivanov’s death sets 2 before outcome evaluation, `STP_finalize_internal_outcome` sets 3, and `STP_VAL_begin_final_war` sets 4.
 
-`STP_change_readiness`, `STP_change_suspicion`, `STP_change_node_palace`, `STP_change_node_officers`, `STP_change_node_mountains`, `STP_change_node_market`, `STP_change_node_street`, and `STP_change_node_val_channel` each consume `value`, add it to their named variable, clamp with explicit below-zero and above-maximum branches, then call `STP_refresh_crisis_modifier`. `VAL_change_contract_authority` and `VAL_change_stp_leverage` follow the same contract and clamp to 0–100.
+`STP_change_readiness`, `STP_change_suspicion`, `STP_change_node_palace`, `STP_change_node_officers`, `STP_change_node_mountains`, `STP_change_node_market`, `STP_change_node_street`, and `STP_change_node_val_channel` each consume `value`, add it to their named variable, clamp with explicit below-zero and above-maximum branches, then call `STP_refresh_crisis_modifier`. `VAL_change_contract_authority` and `VAL_change_stp_leverage` follow the same contract and clamp to 0-100.
 
 - [ ] **Step 4: Define variable-backed dynamic modifiers**
 
@@ -550,7 +550,7 @@ VAL_contract_state = {
 }
 ```
 
-`STP_refresh_crisis_modifier` sets the fading-father table by health stage, the underground-network thresholds at readiness 25/50/75/90, and the security-pressure thresholds at suspicion 25/50/75/90, then ensures the three distinct modifiers are active only during their documented lifecycles. `VAL_refresh_contract_modifier` sets every backing variable for the five authority bands 0–24, 25–49, 50–74, 75–89, and 90–100, then ensures only `VAL_contract_state` is active.
+`STP_refresh_crisis_modifier` sets the fading-father table by health stage, the underground-network thresholds at readiness 25/50/75/90, and the security-pressure thresholds at suspicion 25/50/75/90, then ensures the three distinct modifiers are active only during their documented lifecycles. `VAL_refresh_contract_modifier` sets every backing variable for the five authority bands 0-24, 25-49, 50-74, 75-89, and 90-100, then ensures only `VAL_contract_state` is active.
 
 The core tests assert these exact STP backing-variable tables:
 
@@ -560,17 +560,17 @@ fading stage 2: PP -0.05, stability -0.02, command -0.05, planning 0, org 0
 fading stage 3: PP -0.10, stability -0.05, command -0.10, planning -0.05, org 0
 fading stage 4: PP -0.20, stability -0.10, command -0.20, planning -0.10, org -0.05
 
-network 0–24: stability 0, consumer goods 0
-network 25–49: stability -0.02, consumer goods +0.01
-network 50–74: stability -0.04, consumer goods +0.02
-network 75–89: stability -0.07, consumer goods +0.03
-network 90–100: stability -0.10, consumer goods +0.04
+network 0-24: stability 0, consumer goods 0
+network 25-49: stability -0.02, consumer goods +0.01
+network 50-74: stability -0.04, consumer goods +0.02
+network 75-89: stability -0.07, consumer goods +0.03
+network 90-100: stability -0.10, consumer goods +0.04
 
-pressure 0–24: stability 0, PP 0, factory output 0
-pressure 25–49: stability -0.02, PP -0.05, factory output 0
-pressure 50–74: stability -0.05, PP -0.10, factory output -0.03
-pressure 75–89: stability -0.10, PP -0.15, factory output -0.05
-pressure 90–100: stability -0.15, PP -0.20, factory output -0.10
+pressure 0-24: stability 0, PP 0, factory output 0
+pressure 25-49: stability -0.02, PP -0.05, factory output 0
+pressure 50-74: stability -0.05, PP -0.10, factory output -0.03
+pressure 75-89: stability -0.10, PP -0.15, factory output -0.05
+pressure 90-100: stability -0.15, PP -0.20, factory output -0.10
 ```
 
 Register exact 68×68 aliases in `interface/ADISCORD_STP_VAL_crisis.gfx`:
@@ -622,7 +622,7 @@ Do not alter the other 13 starting divisions. Later civil-war code will test the
 
 STP history receives `set_country_flag = STP_main_campaign_side` and `set_country_flag = STP_shabrat_available`; absence of the two loyalty flags means Capital Guard and state-88 garrison begin loyal to the party. VAL history and bookmark lose `VAL_mercenary_state`. The idea definition remains with its picture, `allowed = { always = no }`, `removal_cost = -1`, and an empty `modifier = { }`.
 
-The new on-startup hook calls `ADISCORD_STP_VAL_initialize_schema` only for literal tags STP/VAL/NOD, removes the old STP power balance, removes the mercenary stub from VAL, and schedules no country-wide loop. During legacy migration, literal tag STP receives `STP_main_campaign_side` only while no internal-war/postwar role or finalized outcome exists; this restores old saves without granting the main role to a splinter. If STP is still pre-outcome, neither `STP_shabrat_available` nor `STP_shabrat_lost` exists, and `STP_maksim_shabrat` is an active recruited character, set `STP_shabrat_available`. For literal VAL on a pre-schema legacy save, reconstruct `VAL_contract_authority` idempotently from the manifest's completed-focus reward table: start at the historical base of 35, add the authority reward of every already completed central or specialization focus exactly once, clamp to 0–100, and assign the schema version only after reconstruction. A second load must leave the value unchanged. Unit tests cover both STP old-save paths and VAL saves with no completed focus, central focuses only, and mixed central/specialization completion. Legacy state-face setters become wrappers over `STP_set_health_stage`; legacy suspicion setters call `STP_change_suspicion` with 0–100 deltas. Keep old BOP and dynamic-modifier IDs as inert save stubs, but remove all active callbacks and the history grant.
+The new on-startup hook calls `ADISCORD_STP_VAL_initialize_schema` only for literal tags STP/VAL/NOD, removes the old STP power balance, removes the mercenary stub from VAL, and schedules no country-wide loop. During legacy migration, literal tag STP receives `STP_main_campaign_side` only while no internal-war/postwar role or finalized outcome exists; this restores old saves without granting the main role to a splinter. If STP is still pre-outcome, neither `STP_shabrat_available` nor `STP_shabrat_lost` exists, and `STP_maksim_shabrat` is an active recruited character, set `STP_shabrat_available`. For literal VAL on a pre-schema legacy save, reconstruct `VAL_contract_authority` idempotently from the manifest's completed-focus reward table: start at the historical base of 35, add the authority reward of every already completed central or specialization focus exactly once, clamp to 0-100, and assign the schema version only after reconstruction. A second load must leave the value unchanged. Unit tests cover both STP old-save paths and VAL saves with no completed focus, central focuses only, and mixed central/specialization completion. Legacy state-face setters become wrappers over `STP_set_health_stage`; legacy suspicion setters call `STP_change_suspicion` with 0-100 deltas. Keep old BOP and dynamic-modifier IDs as inert save stubs, but remove all active callbacks and the history grant.
 
 - [ ] **Step 8: Run validators**
 
@@ -839,7 +839,7 @@ At the stage-3 transition, if commitment is still 0, fire a mandatory event. It 
 
 - [ ] **Step 6: Gate the inlay and scripted localisation**
 
-Replace `original_tag = STP` visibility with `tag = STP` plus `has_country_flag = STP_main_campaign_side`; read only `STP_leader_health_stage`. The old `STP_state_face_stage` remains a migration mirror but no longer controls gameplay or UI. Format readiness and suspicion as whole 0–100 values rather than engine percentages of a 0–1 value.
+Replace `original_tag = STP` visibility with `tag = STP` plus `has_country_flag = STP_main_campaign_side`; read only `STP_leader_health_stage`. The old `STP_state_face_stage` remains a migration mirror but no longer controls gameplay or UI. Format readiness and suspicion as whole 0-100 values rather than engine percentages of a 0-1 value.
 
 - [ ] **Step 7: Run validators**
 
@@ -942,7 +942,7 @@ Nodrul disinformation exposes two mutually exclusive start decisions, one paying
 Families are palace, officers, mountains, market, street, and foreign. Each resolver:
 
 1. reads the saved `STP_security_posture`;
-2. reads the matching adaptation 0–3;
+2. reads the matching adaptation 0-3;
 3. checks whether the relevant focus revealed the current countermeasure;
 4. resolves as improved success, normal success, compromised success, or failure;
 5. increments only that family’s adaptation through `STP_change_security_adaptation`;
@@ -960,7 +960,7 @@ Exact posture vulnerabilities:
 5 false tolerance: counters market, vulnerable to officers, observed as suspiciously free intermediaries
 ```
 
-No branch gives a node solely from readiness. Successful results call exactly one of `STP_change_node_palace`, `STP_change_node_officers`, `STP_change_node_mountains`, `STP_change_node_market`, `STP_change_node_street`, or `STP_change_node_val_channel`; compromised results give the node only with +10 suspicion; failures add 8–15 suspicion or reduce readiness.
+No branch gives a node solely from readiness. Successful results call exactly one of `STP_change_node_palace`, `STP_change_node_officers`, `STP_change_node_mountains`, `STP_change_node_market`, `STP_change_node_street`, or `STP_change_node_val_channel`; compromised results give the node only with +10 suspicion; failures add 8-15 suspicion or reduce readiness.
 
 A successful `STP_operation_targeted_raid` against a discovered cache applies the exact escrow conservation split separately to infantry and support equipment: 50% is removed from escrow and returned to the party state’s real stockpile, 25% is removed and explicitly recorded as destroyed, and 25% remains in resistance escrow. The resolver snapshots the pre-raid amount, performs the 50/25/25 arithmetic once, and sets a one-shot raid token so save/reload cannot repeat the transfer.
 
@@ -1178,7 +1178,7 @@ Expected: missing posture, escalation, participant, and cleanup contracts.
 
 - [ ] **Step 3: Select and lock an event-driven posture**
 
-At initialization and each health-stage event call `NOD_select_crisis_posture`. It clears all five posture flags, calculates weights from current wars, army strength, stockpile, STP mandate, discovered Shabrat activity, and `STP_nodrul_disinformation_bias`, then sets one flag for at least the current 63–70 day stage.
+At initialization and each health-stage event call `NOD_select_crisis_posture`. It clears all five posture flags, calculates weights from current wars, army strength, stockpile, STP mandate, discovered Shabrat activity, and `STP_nodrul_disinformation_bias`, then sets one flag for at least the current 63-70 day stage.
 
 Re-evaluate only on health stage, start/end of war, faction break, Ivanov death, capitulation, or disappearance of a target. Attacks against NOD, NOD capitulation, and missing targets may invalidate the lock immediately.
 
@@ -1250,7 +1250,7 @@ VAL_One_Ledger_One_Banner + VAL_Dead_Villages_Still_Count
 VAL_One_Ledger_One_Banner + VAL_Different_Views_On_Freedom
 ```
 
-Require the five authority bands 0–24, 25–49, 50–74, 75–89, 90–100 and forbid volunteer modifiers.
+Require the five authority bands 0-24, 25-49, 50-74, 75-89, 90-100 and forbid volunteer modifiers.
 
 - [ ] **Step 2: Run the VAL validator and verify RED**
 
@@ -1300,11 +1300,11 @@ VAL_Different_Views_On_Freedom: unlock northern operations and authority +5
 Set backing variables to the design table:
 
 ```text
-0–24: org +3%, org regain +2%, daily PP -0.10
-25–49: attack/defence +3%, org +5%, regain +3%, capture +2%, planning -5%, daily PP -0.10
-50–74: attack +6%, defence +5%, org +8%, regain/capture +5%, supply -3%, planning -5%, state-overload +3%
-75–89: attack +10%, defence +8%, org +10%, regain/capture +8%, supply -5%, planning -10%, daily PP -0.20, state-overload +5%
-90–100: attack +12%, defence +10%, org +12%, regain/capture +10%, supply -7%, planning -15%, daily PP -0.25, stability -5%, state-overload +8%
+0-24: org +3%, org regain +2%, daily PP -0.10
+25-49: attack/defence +3%, org +5%, regain +3%, capture +2%, planning -5%, daily PP -0.10
+50-74: attack +6%, defence +5%, org +8%, regain/capture +5%, supply -3%, planning -5%, state-overload +3%
+75-89: attack +10%, defence +8%, org +10%, regain/capture +8%, supply -5%, planning -10%, daily PP -0.20, state-overload +5%
+90-100: attack +12%, defence +10%, org +12%, regain/capture +10%, supply -7%, planning -15%, daily PP -0.25, stability -5%, state-overload +8%
 ```
 
 At 50/75/90 also set trade and military-industry income factors plus army-expense reductions to 3/5/7%. Call `force_update_dynamic_modifier = yes` only after a real authority-band change.
@@ -1381,7 +1381,7 @@ VAL_STP_buy_border_officers: 45 PP, 20 CP, 100 paid support equipment, 35d, leve
 VAL_STP_test_nodrul_red_line: 30 PP, 28d, intelligence only
 ```
 
-Use `VAL_STP_exposure_intel`, `VAL_STP_exposure_supply`, `VAL_STP_exposure_concession`, `VAL_STP_exposure_garrison`, and `VAL_STP_exposure_nodrul`, each clamped 0–3. The first repeat adds 10 PP, the second enables a target counter-operation, and the third sets that family’s 90-day block and informs NOD. Successful map/red-line operations never add leverage.
+Use `VAL_STP_exposure_intel`, `VAL_STP_exposure_supply`, `VAL_STP_exposure_concession`, `VAL_STP_exposure_garrison`, and `VAL_STP_exposure_nodrul`, each clamped 0-3. The first repeat adds 10 PP, the second enables a target counter-operation, and the third sets that family’s 90-day block and informs NOD. Successful map/red-line operations never add leverage.
 
 Every final STP-operation result-success, compromise, refusal, or failure-sets `VAL_STP_target_cooldown` for exactly 42 days before calling `VAL_clear_foreign_operation`. All five STP operation starts require the cooldown to be absent. A negotiation chain sets the same cooldown only when the chain accepts, refuses, times out, loses viability, or loses its target, not between its internal offer steps.
 
@@ -1454,7 +1454,7 @@ git add -- common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt common/
 git commit -m "feat: add Kefreyt influence and mountain contracts"
 ```
 
-### Task 9: Make the final VAL–STP war unavoidable with one canonical timer
+### Task 9: Make the final VAL-STP war unavoidable with one canonical timer
 
 **Files:**
 - Modify: `common/decisions/ADISCORD_VAL_contract_decisions.txt`
@@ -1750,7 +1750,7 @@ VALGetForeignOperationStatus
 VALGetWarConcept
 ```
 
-Each uses descending thresholds and an `always = yes` fallback. Readiness, suspicion, and authority are rendered as whole 0–100 values with a literal percent sign, not the 0–1 `|%` formatter.
+Each uses descending thresholds and an `always = yes` fallback. Readiness, suspicion, and authority are rendered as whole 0-100 values with a literal percent sign, not the 0-1 `|%` formatter.
 
 - [ ] **Step 6: Localize every gameplay surface**
 
@@ -1865,7 +1865,7 @@ Run at least 24 hands-off seeds through the internal outcome and final VAL chain
 - VAL never uses a meaningless early scripted war;
 - identical-looking offers are not universally accepted;
 - no-deal warning is D-14 and war day is 120 ±3, while deal missions are exactly 180/300/450;
-- the final STP–VAL war always starts when its mission expires;
+- the final STP-VAL war always starts when its mission expires;
 - equipment escrow, faction, autonomy, and temporary access match the recorded outcome;
 - special northern peace never fires outside its campaign;
 - negotiation and northern operation never overlap, and exposure/leverage do not rise monotonically in every run;

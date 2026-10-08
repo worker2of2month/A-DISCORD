@@ -4,6 +4,7 @@ scripted_gui = {
 		window_name = "ADISCORD_RUS_bunker_window"
 		visible = {
 			tag = RUS
+			NOT = { has_global_flag = RUS_crisis_world_ended }
 			has_country_flag = RUS_bunker_initialized
 		}
 		ai_enabled = { always = no }

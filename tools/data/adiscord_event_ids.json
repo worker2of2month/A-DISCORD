@@ -4909,9 +4909,33 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_rus_crisis.9",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 9,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_rus_crisis.10",
       "namespace": "ADISCORD_rus_crisis",
       "number": 10,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_crisis.11",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 11,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_crisis.13",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 13,
       "owner": "events/ADISCORD_vorkerland_events.txt",
       "subsystem": "rus_last_empire_crisis",
       "status": "active"
@@ -5194,6 +5218,134 @@
       "number": 131,
       "owner": "events/ADISCORD_VAL_contract_events.txt",
       "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.134",
+      "namespace": "val_rework",
+      "number": 134,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.135",
+      "namespace": "val_rework",
+      "number": 135,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.136",
+      "namespace": "val_rework",
+      "number": 136,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.137",
+      "namespace": "val_rework",
+      "number": 137,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.138",
+      "namespace": "val_rework",
+      "number": 138,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.60",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 60,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_epilogue",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.61",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 61,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_epilogue",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.62",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 62,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_epilogue",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.63",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 63,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_epilogue",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.64",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 64,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_epilogue",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.65",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 65,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_epilogue",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.60",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 60,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_epilogue",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.61",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 61,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_epilogue",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.139",
+      "namespace": "val_rework",
+      "number": 139,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_epilogue",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.62",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 62,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_epilogue",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_orbital_laser_test.1",
+      "namespace": "ADISCORD_orbital_laser_test",
+      "number": 1,
+      "owner": "events/ADISCORD_scenario_debug_events.txt",
+      "subsystem": "orbital_laser_test",
       "status": "active"
     }
   ]

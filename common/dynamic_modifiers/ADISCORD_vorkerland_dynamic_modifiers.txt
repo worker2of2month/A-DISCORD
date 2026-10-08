@@ -195,6 +195,7 @@ RUS_black_army = {
 	army_speed_factor = RUS_army_speed
 	planning_speed = RUS_army_planning
 	training_time_army_factor = RUS_army_training
+	special_forces_min = RUS_army_special_forces_min
 }
 
 # Inputs are refreshed only when faction support changes.

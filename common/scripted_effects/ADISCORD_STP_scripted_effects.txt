@@ -1151,7 +1151,12 @@ STP_cw_start_northern_war = {
 			# Northern deployment can permit an uprising before the election deadline.
 			country_event = { id = ADISCORD_STP_cw.42 days = 7 }
 			country_event = { id = ADISCORD_STP_preparation.12 days = 1 }
-			news_event = { id = ADISCORD_STP_cw.82 }
+			# Publish only after coalition entry succeeds, outside the war setup stack.
+			if = {
+				limit = { NOT = { has_global_flag = ADISCORD_news_nodrul_northern_war_published } }
+				set_global_flag = ADISCORD_news_nodrul_northern_war_published
+				news_event = { id = ADISCORD_STP_cw.82 hours = 1 }
+			}
 			log = "[STP_NORTH] Northern alliance opened the NOD war; TFF entry follows the Kefreyt gate"
 		}
 		else = {
@@ -8992,6 +8997,28 @@ STP_pc_finalize_nod_client_subject = {
 	}
 }
 
+# Peace and annexation callbacks may precede the final ownership updates.
+# The delayed event checks the settled regional order, including skipped wars.
+STP_pw_queue_hegemony_epilogue = {
+	if = {
+		limit = {
+			tag = STS
+			is_ai = no
+			has_country_flag = STP_heg_administrations_unlocked
+			NOT = { has_country_flag = STP_epilogue_shown }
+			check_variable = {
+				var = STP_pc_course
+				value = 1
+				compare = equals
+			}
+		}
+		country_event = {
+			id = ADISCORD_STP_pc.60
+			days = 1
+		}
+	}
+}
+
 # STS: the final war imposes a provisional administration after the technical
 # peace. The defeated government remains a separate dependent administration.
 STP_heg_settle_kefreyt_final = {
@@ -9015,6 +9042,7 @@ STP_heg_settle_kefreyt_final = {
 		STP_heg_prepare_val_administration = yes
 		clr_country_flag = STP_heg_kefreyt_final_started
 		set_country_flag = STP_heg_kefreyt_final_won
+		STP_pw_queue_hegemony_epilogue = yes
 		ADISCORD_economy_update_postwar_demobilization = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
@@ -13996,4 +14024,3 @@ STP_cw_divide_navy = {
 
 # Country-agnostic. A common external threat closes the eastern wars without a
 # civil-war winner, military rewards or territorial settlement events.
-

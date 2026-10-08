@@ -207,7 +207,7 @@
  achievement_EGY_free: "Получена независимость"
  ROM_lost_starting_state: "Румыния утратила один из своих первоначальных регионов"
  YUG_delcared_war_on_axis_allies: "Государство объявило войну кому-то из Союзников или стран Оси, находясь в рядах Союзников или Оси"
- achievement_carol_II_is_leader: "§YКароль II§! – текущий глава государства"
+ achievement_carol_II_is_leader: "§YКароль II§! - текущий глава государства"
  CHAT_ERROR_MUTE_MISSINGARGS: "Неправильный синтаксис, нужно использовать: /mute <имя_пользователя>"
  CHAT_ERROR_UNMUTE_MISSINGARGS: "Неправильный синтаксис, нужно использовать: /unmute <имя_пользователя>"
  CHAT_ERROR_MUTEUNMUTE_SELF: "Нельзя заглушить себя или отменить такое заглушение!"

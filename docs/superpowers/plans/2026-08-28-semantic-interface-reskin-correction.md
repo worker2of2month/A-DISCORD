@@ -637,7 +637,7 @@ git commit -m "fix: add semantic technology state surfaces"
 - Do not modify: logistics paths or unrelated dirty files.
 
 **Interfaces:**
-- Consumes: final `expected_outputs()` dictionaries from Tasks 2–5.
+- Consumes: final `expected_outputs()` dictionaries from Tasks 2-5.
 - Produces: no unowned runtime UI files, clean builders, clean focused/static gates, and a runtime review checklist.
 
 - [ ] **Step 1: Add a failing ownership test for obsolete generic assets**

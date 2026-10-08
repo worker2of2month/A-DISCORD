@@ -150,7 +150,7 @@ Militia prolongs a losing front; it must not create an infinite unit stream or b
 
 The dirty zone remains closed for exactly 1095 days after the Vorkerland collapse. A persistent one-shot schedule then fires the opening superevent and materialises SLA, MLR, RZA, SCA, ERT, and IRT one at a time over the following 11 days so ownership, supply, and front caches can settle between countries.
 
-The legacy 60–90-day reveal event remains defined only as a no-op so serialized old timers cannot open the zone early. An unopened old save receives one new 1095-day schedule on startup; an already opened save is never rolled back. There is no monthly world poll.
+The legacy 60-90-day reveal event remains defined only as a no-op so serialized old timers cannot open the zone early. An unopened old save receives one new 1095-day schedule on startup; an already opened save is never rolled back. There is no monthly world poll.
 
 ## 9. Coring and integration
 

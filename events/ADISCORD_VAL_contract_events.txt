@@ -2567,7 +2567,20 @@ country_event = {
 	timeout_days = 14
 	option = {
 		name = val_rework.125.a
-		ai_chance = { factor = 20 }
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 0
+				has_country_flag = VAL_nw_sovereignty_recognized
+				has_country_flag = VAL_nw_offer_pending
+				NOT = { has_country_flag = VAL_nw_concession }
+				VAL_nw_partner_eligible = yes
+				VAL = {
+					VAL_nw_operational = yes
+					VAL_nw_offer_affordable = yes
+				}
+			}
+		}
 		hidden_effect = { clr_country_flag = VAL_nw_offer_pending }
 	}
 	option = {
@@ -2668,10 +2681,37 @@ country_event = {
 country_event = {
 	id = val_rework.129
 	title = val_rework.129.t
-	desc = val_rework.129.d
+	desc = {
+		trigger = {
+			VAL_nw_has_independent_partner = yes
+		}
+		text = val_rework.129.republics
+	}
+	desc = {
+		trigger = {
+			VAL_nw_has_independent_partner = no
+			VAL_nw_has_contract_administration = yes
+		}
+		text = val_rework.129.administrations
+	}
+	desc = {
+		trigger = {
+			VAL_nw_has_independent_partner = no
+			VAL_nw_has_contract_administration = no
+		}
+		text = val_rework.129.d
+	}
 	picture = GFX_report_event_generic_factory
 	is_triggered_only = yes
-	option = { name = val_rework.129.a }
+	option = {
+		name = val_rework.129.a
+		hidden_effect = {
+			country_event = {
+				id = val_rework.139
+				hours = 1
+			}
+		}
+	}
 }
 
 country_event = {
@@ -2705,5 +2745,106 @@ country_event = {
 			VAL = { country_event = { id = val_rework.127 } }
 			country_event = { id = val_rework.130 days = 14 }
 		}
+	}
+}
+
+country_event = {
+	id = val_rework.134
+	title = val_rework.134.t
+	desc = val_rework.134.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 14
+	option = {
+		name = val_rework.134.a
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 3
+				VAL_nw_khan_threat = yes
+			}
+		}
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 600
+			producer = VAL
+		}
+	}
+	option = {
+		name = val_rework.134.b
+		ai_chance = { factor = 50 }
+		VAL_nw_receive_reconstruction_fund = yes
+	}
+}
+
+country_event = {
+	id = val_rework.135
+	title = val_rework.135.t
+	desc = val_rework.135.d
+	picture = GFX_report_event_generic_factory
+	is_triggered_only = yes
+	option = { name = val_rework.135.a }
+}
+
+country_event = {
+	id = val_rework.136
+	title = val_rework.136.t
+	desc = val_rework.136.d
+	picture = GFX_report_event_generic_factory
+	is_triggered_only = yes
+	option = { name = val_rework.136.a }
+}
+
+country_event = {
+	id = val_rework.137
+	title = val_rework.137.t
+	desc = val_rework.137.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.137.a }
+}
+
+country_event = {
+	id = val_rework.138
+	title = val_rework.138.t
+	desc = val_rework.138.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.138.a }
+}
+
+country_event = {
+	id = val_rework.139
+	title = val_rework.139.t
+	desc = {
+		trigger = {
+			VAL_nw_has_independent_partner = yes
+		}
+		text = val_rework.139.republics
+	}
+	desc = {
+		trigger = {
+			VAL_nw_has_independent_partner = no
+			VAL_nw_has_contract_administration = yes
+		}
+		text = val_rework.139.administrations
+	}
+	desc = {
+		trigger = {
+			VAL_nw_has_independent_partner = no
+			VAL_nw_has_contract_administration = no
+		}
+		text = val_rework.139.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		tag = VAL
+	}
+	option = {
+		name = VAL_epilogue_continue
+		custom_effect_tooltip = VAL_epilogue_thanks_tt
 	}
 }

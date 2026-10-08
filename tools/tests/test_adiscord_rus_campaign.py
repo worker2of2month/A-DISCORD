@@ -40,6 +40,7 @@ class BunkerWorld:
         self.pp = 0.0 if fresh else 1000.0
         self.equipment = {"support_equipment": 0.0 if fresh else 2000.0, "infantry_equipment": 10000.0}
         self.flags = {"RUS_campaign_start_pending"}
+        self.global_flags = set()
         self.focuses = set() if fresh else set(campaign.focuses)
         self.ideas = set()
         self.modifiers = set()
@@ -49,6 +50,10 @@ class BunkerWorld:
         self.characters = {self.ruler, "RUS_Varlam_Oskol"}
         self.held_states = set()
         self.templates = set()
+        self.recruitable_templates = set()
+        self.created_units = []
+        self.technologies = set()
+        self.law_groups = getattr(campaign, "law_groups", [])
         self.tech_bonuses = []
         self.cores = set()
         self.claims = set()
@@ -59,6 +64,10 @@ class BunkerWorld:
         self.command_power = 0.0
         self.manpower = 0.0
         self.stability = 0.0
+        self.war_support = 0.0
+        self.research_slots = 0
+        self.war_support = 0.0
+        self.research_slots = 0
         self.subject = False
         self.capitulated = False
         self.war = True
@@ -139,6 +148,8 @@ class BunkerWorld:
                 result = value in self.variables
             elif key == "has_country_flag":
                 result = value in self.flags
+            elif key == "has_global_flag":
+                result = value in self.global_flags
             elif key == "has_completed_focus":
                 result = value in self.focuses
             elif key == "has_dynamic_modifier":
@@ -191,8 +202,17 @@ class BunkerWorld:
             elif key == "create_unit":
                 count = [row.value for row in value if row.key == "count"]
                 self.divisions += int(count[0]) if count else 1
+                self.created_units.append((scalar(value, "division"), int(count[0]) if count else 1))
             elif key == "division_template":
                 self.templates.add(scalar(value, "name"))
+            elif key == "set_division_force_allow_recruiting":
+                name = scalar(value, "division_template")
+                if scalar(value, "force_allow_recruiting") == "yes":
+                    self.recruitable_templates.add(name)
+                else:
+                    self.recruitable_templates.discard(name)
+            elif key == "set_technology":
+                self.technologies.update(row.key for row in value if row.value == "1")
             elif key == "add_tech_bonus":
                 self.tech_bonuses.append(scalar(value, "name"))
             elif key == "add_extra_state_shared_building_slots":
@@ -246,6 +266,14 @@ class BunkerWorld:
                 self.manpower += self.value(value)
             elif key == "add_stability":
                 self.stability = max(0, min(1, self.stability + self.value(value)))
+            elif key == "add_war_support":
+                self.war_support = max(0, min(1, self.war_support + self.value(value)))
+            elif key == "add_research_slot":
+                self.research_slots += int(value)
+            elif key == "add_war_support":
+                self.war_support = max(0, min(1, self.war_support + self.value(value)))
+            elif key == "add_research_slot":
+                self.research_slots += int(value)
             elif key == "recruit_character":
                 self.characters.add(value)
             elif key == "set_politics":
@@ -287,6 +315,10 @@ class BunkerWorld:
             elif key in ("add_ideas", "remove_ideas"):
                 names = [row.value for row in value] if isinstance(value, list) else [value]
                 if key.startswith("add"):
+                    for name in names:
+                        for group in self.law_groups:
+                            if name in group:
+                                self.ideas.difference_update(group)
                     self.ideas.update(names)
                 else:
                     self.ideas.difference_update(names)
@@ -345,6 +377,11 @@ class RusCampaignTests(unittest.TestCase):
         tree = block(parse("focus_trees/RUS/main/focuses.txt"), "focus_tree")
         cls.focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
         cls.ideas = {e.key: e.value for e in block(block(parse(f"common/ideas/{BASE}_ideas.txt"), "ideas"), "country")}
+        cls.law_groups = []
+        for source in ("_economic", "ADISCORD_laws"):
+            for group in block(parse(f"common/ideas/{source}.txt"), "ideas"):
+                if isinstance(group.value, list):
+                    cls.law_groups.append({row.key for row in group.value if isinstance(row.value, list)})
         cls.projects = [name for name, rows in cls.decisions.items() if any(e.key == "days_remove" for e in rows)]
         cls.loc = dict(re.findall(r'^\s+([A-Za-z0-9_.]+):(?:\d+)?\s+"(.*)"\s*$', read(f"localisation/russian/{BASE}_l_russian.yml"), re.M))
 
@@ -835,7 +872,7 @@ class RusCampaignTests(unittest.TestCase):
                 self.assertGreater(max(refreshes), max(material), name)
 
     def test_all_policy_routes_reach_all_common_capstones(self):
-        pairs = (("reaffirm_khan", "army_mandate", "reconstruction_cabinet"), ("aimaq_council", "seal_chancery"), ("patient_war", "swift_columns"), ("bunker_open_city", "bunker_sealed_throne"), ("surface_contracts", "underground_fund"))
+        pairs = (("scientists_council", "black_army_oath"), ("patient_war", "swift_columns"), ("bunker_open_city", "bunker_sealed_throne"), ("surface_contracts", "underground_fund"))
         for choices in product(*pairs):
             blocked = {"RUS_" + other for pair, chosen in zip(pairs, choices) for other in pair if other != chosen}
             while True:
@@ -850,6 +887,8 @@ class RusCampaignTests(unittest.TestCase):
                     break
                 done |= ready
             self.assertEqual(done, set(self.focuses) - blocked)
+            common = {"RUS_power_grid", "RUS_industrial_belt", "RUS_school_of_scribes", "RUS_covenant_of_service", "RUS_experimental_laboratories", "RUS_watch_the_western_scar", "RUS_reactor_decontamination"}
+            self.assertTrue(common <= done, (choices, common - done))
 
     def test_absolute_coordinates_do_not_overlap(self):
         positions = {}
@@ -870,8 +909,8 @@ class RusCampaignTests(unittest.TestCase):
     def test_parallel_programmes_allow_reordering_but_require_all_work(self):
         cases = (
             (("school_of_scribes", "roadside_clinics"), "a_country_of_names", 2, 77),
-            (("district_ledger", "courier_stations", "district_paramedics"), "covenant_of_service", 3, 91),
-            (("field_evacuation_service", "rifle_inspection_board", "artillery_observers"), "staff_field_exercise", 6, 91),
+            (("district_ledger", "courier_stations", "district_paramedics"), "covenant_of_service", 3, 84),
+            (("field_evacuation_service", "rifle_inspection_board", "artillery_observers"), "staff_field_exercise", 6, 77),
             (("recovery_depots", "interchangeable_parts", "second_arsenal_shift"), "strategic_freight_reserve", 3, 105),
             (("register_conquered_lands", "empire_without_rivals", "postwar_roads", "imperial_academy"), "tomorrow_above_ground", 6, 98),
         )
@@ -905,7 +944,7 @@ class RusCampaignTests(unittest.TestCase):
     def test_opening_is_reachable_without_world_crisis(self):
         for name in ("RUS_bunker_survey", "RUS_surface_workshops", "RUS_count_the_hearths", "RUS_muster_books"):
             self.assertEqual(scalar(block(self.focuses[name], "prerequisite"), "focus"), "RUS_summon_the_aimaqs")
-        self.assertEqual(int(scalar(self.focuses["RUS_summon_the_aimaqs"], "cost")) * 7 + int(scalar(self.focuses["RUS_bunker_survey"], "cost")) * 7, 42)
+        self.assertEqual(int(scalar(self.focuses["RUS_summon_the_aimaqs"], "cost")) * 7 + int(scalar(self.focuses["RUS_bunker_survey"], "cost")) * 7, 21)
         world = BunkerWorld(self, fresh=True)
         category = block(parse(f"common/decisions/categories/{BASE}_categories.txt"), "RUS_bunker_construction")
         self.assertTrue(world.matches(block(category, "visible")))
@@ -1844,6 +1883,7 @@ class RusCampaignTests(unittest.TestCase):
             "army_attack_factor": "RUS_army_attack",
             "conscription_factor": "RUS_army_recruitment",
             "ADISCORD_country_development_army_growth_factor": "RUS_army_growth",
+            "special_forces_min": "RUS_army_special_forces_min",
             "army_defence_factor": "RUS_army_defence",
             "supply_consumption_factor": "RUS_army_supply",
             "army_speed_factor": "RUS_army_speed",
@@ -1930,7 +1970,10 @@ class RusCampaignTests(unittest.TestCase):
             "RUS_patient_war": "RUS_patient_doctrine_delta",
             "RUS_swift_columns": "RUS_swift_doctrine_delta",
             "RUS_black_army_banner": "RUS_black_army_banner_delta",
+            "RUS_watch_the_western_scar": "RUS_hazard_capacity_6_delta",
+            "RUS_reactor_decontamination": "RUS_hazard_capacity_3_delta",
         }
+        mapping["special_forces_min"] = "RUS_army_special_forces_min"
         for focus, idea in cases.items():
             world = self.world()
             before = {variable: world.value(variable) for variable in mapping.values()}
@@ -2221,8 +2264,8 @@ class RusCampaignTests(unittest.TestCase):
         self.assertEqual(scalar(block(self.focuses["RUS_black_army_oath"], "prerequisite"), "focus"), "RUS_count_the_hearths")
         self.assertEqual(scalar(block(self.focuses["RUS_aimaq_council"], "prerequisite"), "focus"), "RUS_scientists_council")
         self.assertEqual(scalar(block(self.focuses["RUS_seal_chancery"], "prerequisite"), "focus"), "RUS_black_army_oath")
-        for focus in ("RUS_scientists_council", "RUS_black_army_oath"):
-            self.assertFalse(any(entry.key == "mutually_exclusive" for entry in self.focuses[focus]), focus)
+        for focus, other in (("RUS_scientists_council", "RUS_black_army_oath"), ("RUS_black_army_oath", "RUS_scientists_council")):
+            self.assertEqual(scalar(block(self.focuses[focus], "mutually_exclusive"), "focus"), other)
         removed = {"RUS_reaffirm_khan", "RUS_army_mandate", "RUS_reconstruction_cabinet", "RUS_political_course_chosen", "RUS_political_choice_open"}
         self.assertFalse(removed & self.focuses.keys())
         self.assertFalse(removed & self.triggers.keys())
@@ -2355,20 +2398,25 @@ class RusCampaignTests(unittest.TestCase):
         self.assertTrue(any(entry.key == "RUS_reactor_works_refund" for entry in shutdown))
         self.assertEqual(before, (50, 400))
 
-    def test_reactor_sortie_charges_losses_once_and_pays_its_haul_once(self):
-        for decontaminated, losses, haul in ((False, 1000, 150), (True, 500, 250)):
+    def test_reactor_sortie_charges_supplies_once_and_preserves_its_quoted_haul(self):
+        for decontaminated, supplies, haul in ((False, 40, 150), (True, 20, 250)):
             world = self.world()
             world.decisions = {**world.decisions, **self.belt}
             world.held_states = {"188"}
-            world.manpower = losses
+            world.manpower = 1000
+            world.equipment["support_equipment"] = supplies
             if not decontaminated:
                 world.focuses.discard("RUS_reactor_decontamination")
             short = deepcopy(world)
-            short.manpower = losses - 0.01
+            short.equipment["support_equipment"] = supplies - 0.01
             self.assertFalse(short.matches(block(self.belt["RUS_reactor_sortie"], "custom_cost_trigger")))
             pp, cash = world.pp, world.value("ADISCORD_economy_treasury")
             world.begin("RUS_reactor_sortie")
-            self.assertEqual((world.pp, world.manpower), (pp - 25, 0))
+            self.assertEqual((world.pp, world.manpower, world.equipment["support_equipment"]), (pp - 25, 1000, 0))
+            self.assertFalse(world.matches(block(self.belt["RUS_reactor_sortie"], "available")))
+            world.run("RUS_reactor_sortie_begin")
+            self.assertEqual(world.pp, pp - 25)
+            world.focuses.add("RUS_reactor_decontamination")
             world.finish("RUS_reactor_sortie")
             self.assertEqual(world.value("ADISCORD_economy_treasury"), cash + haul)
             self.assertAlmostEqual(world.value("RUS_scientists_support"), 0.55)
@@ -2387,9 +2435,16 @@ class RusCampaignTests(unittest.TestCase):
         world.manpower = 400
         return world
 
-    def test_lab_projects_require_any_reactor_zone_one_slot_and_no_black_army_rule(self):
+    def test_destroyed_world_closes_khan_government_and_laboratory_work(self):
+        world = self.lab_world()
+        self.assertTrue(world.matches(world.triggers["RUS_khan_governing"]))
+        world.global_flags.add("RUS_crisis_world_ended")
+        self.assertFalse(world.matches(world.triggers["RUS_khan_governing"]))
+        self.assertFalse(world.matches(block(self.labs["RUS_lab_reactor_alloys"], "available")))
+
+    def test_lab_projects_require_a_reactor_zone_and_one_slot_on_both_courses(self):
         focus = self.focuses["RUS_experimental_laboratories"]
-        self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), "RUS_bunker_science_wing")
+        self.assertEqual({row.value for row in block(focus, "prerequisite")}, {"RUS_bunker_science_wing", "RUS_engineers_collegium"})
         self.assertTrue(any(entry.key == "RUS_lab_reactor_access" for entry in walk(block(focus, "available"))))
         self.assertEqual([entry.value for entry in walk(block(focus, "completion_reward")) if entry.key == "unlock_decision_tooltip"], ["RUS_lab_reactor_alloys"])
         alloys = self.labs["RUS_lab_reactor_alloys"]
@@ -2401,10 +2456,9 @@ class RusCampaignTests(unittest.TestCase):
             world.held_states = {state}
             self.assertTrue(world.matches(block(alloys, "available")), state)
             self.assertTrue(world.matches(block(focus, "available")), state)
-        world.bop = 0.6001
-        self.assertFalse(world.matches(block(alloys, "available")))
-        world.bop = 0.60
-        self.assertTrue(world.matches(block(alloys, "available")))
+        for position in (-1, -0.60, 0, 0.6001, 1):
+            world.bop = position
+            self.assertTrue(world.matches(block(alloys, "available")), position)
         world.begin("RUS_lab_reactor_alloys")
         self.assertFalse(world.matches(block(alloys, "available")))
         self.assertFalse(world.matches(block(self.labs["RUS_lab_zeppelin"], "visible")))
@@ -2440,7 +2494,7 @@ class RusCampaignTests(unittest.TestCase):
         self.assertEqual((world.pp, world.value("ADISCORD_economy_treasury"), world.manpower), (pp - 100, cash - 1000, 0))
         world.finish("RUS_lab_zeppelin")
         self.assertEqual(world.divisions, divisions + 1)
-        self.assertEqual(world.templates, {"Rusnian Airship"})
+        self.assertEqual(world.templates, {"Khanate Airship"})
         self.assertIn("RUS_lab_zeppelin_delivered", world.flags)
         self.assertFalse(world.matches(block(zeppelin, "visible")))
         self.assertAlmostEqual(world.value("RUS_scientists_support"), 0.70)
@@ -2496,6 +2550,132 @@ class RusCampaignTests(unittest.TestCase):
             keys |= {entry.value for entry in walk(rows) if entry.key in ("tooltip", "custom_effect_tooltip")}
             self.assertTrue(keys <= self.loc.keys(), keys - self.loc.keys())
             self.assertTrue(keys <= english.keys(), keys - english.keys())
+
+    def test_modernization_replaces_only_the_starting_laws(self):
+        cases = (
+            ("RUS_power_grid", "ADISCORD_economic_system_agrarian", "ADISCORD_economic_system_industrializing", "ADISCORD_economic_system_mixed"),
+            ("RUS_industrial_belt", "ADISCORD_society_type_traditional", "ADISCORD_society_type_industrial", "ADISCORD_society_type_information"),
+            ("RUS_school_of_scribes", "ADISCORD_education_informal_instruction", "ADISCORD_education_basic_schools", "ADISCORD_education_technical_institutes"),
+            ("RUS_civilian_shift", "ADISCORD_labor_policy_guild_protections", "ADISCORD_labor_policy_regulated_shifts", "ADISCORD_labor_policy_collective_bargaining"),
+            ("RUS_district_ledger", "ADISCORD_taxation_light_dues", "ADISCORD_taxation_balanced_register", "ADISCORD_taxation_progressive_brackets"),
+            ("RUS_covenant_of_service", "ADISCORD_welfare_charity_relief", "ADISCORD_welfare_basic_services", "ADISCORD_welfare_universal_provision"),
+            ("RUS_scientists_power_compact", "ADISCORD_education_basic_schools", "ADISCORD_education_technical_institutes", "ADISCORD_education_elite_academies"),
+            ("RUS_black_army_banner", "ADISCORD_logistics_local_foraging", "ADISCORD_logistics_centralized_depots", "ADISCORD_logistics_motorized_supply"),
+        )
+        for focus, starting, target, advanced in cases:
+            for current in (starting, advanced):
+                with self.subTest(focus=focus, current=current):
+                    world = self.world()
+                    world.ideas.add(current)
+                    dirty = world.dirty
+                    world.execute(block(self.focuses[focus], "completion_reward"))
+                    if current == starting:
+                        self.assertIn(target, world.ideas)
+                        self.assertNotIn(starting, world.ideas)
+                        self.assertGreater(world.dirty, dirty)
+                    else:
+                        self.assertIn(advanced, world.ideas)
+                        self.assertNotIn(target, world.ideas)
+        for route, kind in (("RUS_scientists_workshops", "industrial_complex"), ("RUS_black_army_staff", "arms_factory")):
+            world = self.world()
+            before = world.buildings.copy()
+            world.execute(block(self.focuses[route], "completion_reward"))
+            self.assertEqual(world.buildings[kind], before[kind] + 1)
+
+    def test_hazard_rewards_deliver_fixed_recruitable_formations_on_both_focuses(self):
+        world = self.world()
+        template = block(block(self.effects["RUS_prepare_hazard_template"], "if"), "division_template")
+        regiments = block(template, "regiments")
+        self.assertEqual([row.key for row in regiments], ["ADISCORD_hazard_infantry"] * 3)
+        self.assertEqual(scalar(template, "is_locked"), "yes")
+        subunit = block(block(parse("common/units/ADISCORD_land_units.txt"), "sub_units"), "ADISCORD_hazard_infantry")
+        need = {row.key: float(row.value) for row in block(subunit, "need")}
+        self.assertEqual({key: value * 3 for key, value in need.items()}, {
+            "infantry_equipment": 2700, "ADISCORD_squad_weapons_equipment": 108, "support_equipment": 60,
+        })
+        self.assertEqual(float(scalar(subunit, "manpower")) * 3, 3000)
+        stock = world.equipment.copy()
+        for focus, count in (("RUS_watch_the_western_scar", 2), ("RUS_reactor_decontamination", 1)):
+            before = world.divisions
+            world.execute(block(self.focuses[focus], "completion_reward"))
+            self.assertEqual(world.divisions, before + count)
+            division, actual_count = world.created_units[-1]
+            self.assertEqual(actual_count, count)
+            self.assertIn('division_template = "Khanate CBRN Brigade"', division)
+            self.assertIn("start_manpower_factor = 1.0", division)
+            self.assertIn("start_equipment_factor = 1.0", division)
+            self.assertIn("ADISCORD_tech_radiation_patrols", world.technologies)
+            self.assertIn("Khanate CBRN Brigade", world.recruitable_templates)
+        self.assertEqual(world.equipment, stock)
+        self.assertEqual(world.templates, {"Khanate CBRN Brigade"})
+        self.assertEqual(sum(count for _, count in world.created_units) * len(regiments), 9)
+        self.assertEqual(world.value("RUS_army_special_forces_min"), 9)
+        self.assertFalse(any(name.startswith("RUS_hazard_capacity_") for name in world.ideas))
+
+    def test_completed_bunker_rooms_open_national_programmes_and_improve_delivery(self):
+        category = block(parse(f"common/decisions/categories/{BASE}_categories.txt"), "RUS_development_programmes")
+        for room, programme, direction in (("RUS_bunker_layer_3", "RUS_workshop_training", "economic"), ("RUS_bunker_layer_4", "RUS_district_health_programme", "social_system")):
+            world = self.world()
+            world.focuses = set()
+            world.variables[room] = 1
+            world.decisions.update(self.programmes)
+            self.assertTrue(world.matches(block(category, "visible")))
+            self.assertTrue(world.matches(block(world.decisions[programme], "visible")))
+            before = world.pp, world.value("ADISCORD_economy_treasury")
+            world.begin(programme)
+            self.assertEqual((world.pp, world.value("ADISCORD_economy_treasury")), (before[0] - 25, before[1] - 100))
+            self.assertEqual(world.value(f"ADISCORD_{direction}_development_progress"), 40)
+            world.owner = False
+            world.run("RUS_bunker_refresh")
+            self.assertEqual(world.value(f"ADISCORD_{direction}_development_progress"), 40)
+            self.assertFalse(world.matches(block(world.decisions[programme], "available")))
+        world = self.world()
+        world.focuses = set()
+        world.variables["RUS_bunker_layer_3"] = 1
+        stock = world.equipment["support_equipment"]
+        world.begin("RUS_engineering_order")
+        self.assertEqual(world.equipment["support_equipment"], stock + 150)
+        for installed, active, expected in ((2, True, 2), (0, True, 1), (2, False, 0)):
+            world = self.lab_world()
+            world.variables["RUS_bunker_layer_4"] = installed
+            world.begin("RUS_lab_reactor_alloys")
+            world.owner = active
+            world.finish("RUS_lab_reactor_alloys")
+            self.assertEqual(len(world.tech_bonuses), expected)
+
+    def test_sortie_cancellation_and_late_callbacks_never_pay_or_charge_twice(self):
+        for ending in ("cancel", "late_finish", "shutdown"):
+            world = self.world()
+            world.decisions.update(self.belt)
+            world.held_states = {"176"}
+            before = world.balances()
+            world.begin("RUS_reactor_sortie")
+            world.held_states = set()
+            if ending == "cancel":
+                world.execute(block(self.belt["RUS_reactor_sortie"], "cancel_effect"))
+            elif ending == "shutdown":
+                world.run("RUS_campaign_shutdown")
+            world.finish("RUS_reactor_sortie")
+            world.finish("RUS_reactor_sortie")
+            self.assertEqual(world.balances(), (before[0] - 25, before[1], before[2] - 20))
+            self.assertNotIn("RUS_reactor_sortie_receipt", world.variables)
+
+    def test_both_courses_finish_the_airship_even_at_extreme_balance(self):
+        for route, opposite, position in (("RUS_scientists_council", "RUS_black_army_oath", -1), ("RUS_black_army_oath", "RUS_scientists_council", 1)):
+            world = self.lab_world()
+            world.focuses = {route, "RUS_experimental_laboratories"}
+            world.bop = position
+            world.begin("RUS_lab_reactor_alloys")
+            world.finish("RUS_lab_reactor_alloys")
+            self.assertTrue(world.matches(block(self.labs["RUS_lab_zeppelin"], "visible")))
+            before = world.divisions
+            world.begin("RUS_lab_zeppelin")
+            world.bop = -position
+            self.assertFalse(world.matches(block(self.labs["RUS_lab_zeppelin"], "cancel_trigger")))
+            world.finish("RUS_lab_zeppelin")
+            self.assertEqual(world.divisions, before + 1)
+            self.assertNotIn(opposite, world.focuses)
+            self.assertIn("RUS_lab_zeppelin_delivered", world.flags)
 
     def test_ai_order_has_no_duplicates_and_keeps_crisis_preparations_together(self):
         plan = block(parse(f"common/ai_strategy_plans/{BASE}_plans.txt"), "ADISCORD_vorkerland_rus_last_empire_plan")

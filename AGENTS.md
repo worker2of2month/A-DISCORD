@@ -23,6 +23,12 @@ idempotent when the builder changes data.
 Debug decisions and their required events, categories, and localisation may be
 included in the public release. Do not exclude them solely because they are debug content.
 
+## Text punctuation
+
+Use ASCII '-' instead of typographic dashes (U+2013, U+2014) in all authored
+user-facing text, localisation, documentation and comments. Preserve mathematical
+operators, unchanged third-party source material and Unicode validation semantics.
+
 ## Localisation encoding
 
 Russian localisation files use UTF-8 with a BOM. Preserve that BOM and verify

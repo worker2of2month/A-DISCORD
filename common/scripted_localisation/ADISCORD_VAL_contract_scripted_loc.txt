@@ -1093,3 +1093,98 @@ defined_text = {
 	}
 	text = { localization_key = VAL_cost_value_500 }
 }
+
+defined_text = {
+	name = VALGetNewWorldThreat
+	text = {
+		trigger = {
+			has_war_with = RUS
+		}
+		localization_key = VAL_nw_status_war
+	}
+	text = {
+		trigger = {
+			VAL_nw_khan_threat = yes
+		}
+		localization_key = VAL_nw_status_warning
+	}
+	text = {
+		trigger = {
+			VAL_nw_khan_settled = yes
+		}
+		localization_key = VAL_nw_status_settled
+	}
+	text = {
+		localization_key = VAL_nw_status_quiet
+	}
+}
+
+defined_text = {
+	name = VALGetNewWorldSurvey
+	text = {
+		trigger = {
+			VAL_nw_survey_completed = yes
+		}
+		localization_key = VAL_nw_status_survey_done
+	}
+	text = {
+		trigger = {
+			has_variable = VAL_nw_survey_deposit
+		}
+		localization_key = VAL_nw_status_survey_active
+	}
+	text = {
+		localization_key = VAL_nw_status_survey_missing
+	}
+}
+
+defined_text = {
+	name = VALGetNewWorldWorks
+	text = {
+		trigger = {
+			VAL_nw_two_restored_works = yes
+		}
+		localization_key = VAL_nw_status_works_two
+	}
+	text = {
+		trigger = {
+			VAL_nw_has_restored_works = yes
+		}
+		localization_key = VAL_nw_status_works_one
+	}
+	text = {
+		localization_key = VAL_nw_status_works_none
+	}
+}
+
+defined_text = {
+	name = VALGetNewWorldProject
+	text = {
+		trigger = {
+			has_variable = VAL_nw_project_deposit
+		}
+		localization_key = VAL_nw_status_project_active
+	}
+	text = {
+		localization_key = VAL_nw_status_project_free
+	}
+}
+
+defined_text = {
+	name = VALGetNewWorldDiplomacy
+	text = {
+		trigger = {
+			VAL_nw_has_independent_partner = yes
+		}
+		localization_key = VAL_nw_status_partners
+	}
+	text = {
+		trigger = {
+			VAL_nw_has_contract_administration = yes
+		}
+		localization_key = VAL_nw_status_administrations
+	}
+	text = {
+		localization_key = VAL_nw_status_no_partners
+	}
+}

@@ -66,7 +66,7 @@
 **Files:** новые GUI/scripted GUI и существующий тестовый файл из списка выше.
 
 **Consumes:** существующие политическое окно, шрифты и спрайты.
-**Produces:** окно, launcher и обработчики `ADISCORD_startup_<action>_click` для действий `open`, `close`, `play`, `country`, `guide`, `paths`, `page_0`–`page_3`, `spoilers`.
+**Produces:** окно, launcher и обработчики `ADISCORD_startup_<action>_click` для действий `open`, `close`, `play`, `country`, `guide`, `paths`, `page_0`-`page_3`, `spoilers`.
 
 - [x] Прочитать `git diff` общих GUI и тестового файла; зафиксировать исходный результат профильных тестов до добавления проверок.
 - [x] Создать собственную рамку и кнопки через tools/builders/build_adiscord_startup_ui_assets.py. Проверить --check до --apply и идемпотентность после; новые рисунки сохранить как *_generated.png, а подключённые stp.png/val.png оставить серыми 220 x 440 по указанию пользователя.
@@ -90,7 +90,7 @@ class StartupGuideContractTests(unittest.TestCase):
 - [x] Создать окно 1000 x 620, центрированное через нативные поля ориентации; нижние вкладки на y=570, иллюстрация 220 x 440 в позиции (746,108), текст введения слева шириной 675 px. Проверить принятые в репозитории поля центрирования до записи.
 - [x] Создать launcher с `parent_window_name = "countrypoliticsview"`; использовать свободную строку (454,516), размер 98 x 26, выше законов и ниже панели развития. Главное окно не должно быть дочерним политическому: закрытие политики не должно скрывать автопоказ.
 - [x] Использовать в обоих scripted GUI `context_type = player_context`, `ai_enabled = { always = no }` и `visible = { is_ai = no OR = { tag = STP tag = VAL } }`; главное окно дополнительно требует `ADISCORD_startup_open = 1` через `check_variable`.
-- [x] Реализовать открытие следующим payload, а закрытие и «К игре» — только `clear_variable = ADISCORD_startup_open`:
+- [x] Реализовать открытие следующим payload, а закрытие и «К игре» - только `clear_variable = ADISCORD_startup_open`:
 
 ```text
 ADISCORD_startup_open_click = {
@@ -111,9 +111,9 @@ ADISCORD_startup_open_click = {
 **Consumes:** tab/page/spoilers из Task 1.
 **Produces:** полные RU/EN тексты, маршрутизатор тела и два названия путей.
 
-- [x] Прочитать существующие `STP_BOOKMARK_DESC`, `VAL_BOOKMARK_DESC`, национальные фокусы и условия в effects/triggers/events. Для VAL обязательно проверить `VAL_Trading_Partners` и `VAL_October_Of_2160`; для STP — фактические условия мандата, соглашения, районов и вмешательства.
+- [x] Прочитать существующие `STP_BOOKMARK_DESC`, `VAL_BOOKMARK_DESC`, национальные фокусы и условия в effects/triggers/events. Для VAL обязательно проверить `VAL_Trading_Partners` и `VAL_October_Of_2160`; для STP - фактические условия мандата, соглашения, районов и вмешательства.
 - [x] Написать общий набор ключей `ADISCORD_startup_title`, `country`, `guide`, `paths`, `play`, `open`, `spoilers`, `budget`, `army`, `diplomacy`, `national`, `unsupported`, `guide_budget`, `guide_army`, `guide_diplomacy` с единым префиксом `ADISCORD_startup_`.
-- [x] В национальные файлы добавить по восемь ключей с префиксом `STP_startup_`/`VAL_startup_`: `country`, `guide`, `path_0_title`, `path_1_title`, `path_0`, `path_1`, `path_0_details`, `path_1_details`. Тексты соответствуют разделу «Содержание» спецификации; до 1200 символов на страницу, точные сроки/числа — только из проверенного скрипта.
+- [x] В национальные файлы добавить по восемь ключей с префиксом `STP_startup_`/`VAL_startup_`: `country`, `guide`, `path_0_title`, `path_1_title`, `path_0`, `path_1`, `path_0_details`, `path_1_details`. Тексты соответствуют разделу «Содержание» спецификации; до 1200 символов на страницу, точные сроки/числа - только из проверенного скрипта.
 - [x] Связать поле тела GUI с `[ADISCORDGetStartupBody]`. Маршрутизатор проверяет подробный путь раньше краткого и заканчивается безопасной общей заглушкой. Пример ветки:
 
 ```text
@@ -125,7 +125,7 @@ defined_text = {
 }
 ```
 
-- [x] Для tab 0 выбрать национальное введение; tab 1/page 0–2 общие темы, page 3 национальную; tab 2/page 0–1 национальный путь, подробный только при spoilers 1. Название второй карточки маршрутизируется тем же порядком тегов с ключами `path_1_title`.
+- [x] Для tab 0 выбрать национальное введение; tab 1/page 0-2 общие темы, page 3 национальную; tab 2/page 0-1 национальный путь, подробный только при spoilers 1. Название второй карточки маршрутизируется тем же порядком тегов с ключами `path_1_title`.
 - [x] Добавить проверки каждого `localization_key` в RU/EN, однострочного quoted value, совпадения новых ключей языков, BOM и длины страниц. Для каждого тега проверить введение, четыре темы гайда, два кратких и два подробных пути; не создавать тестовый расширитель неподдерживаемого синтаксиса.
 - [x] Повторить профильные тесты и вручную прочитать тексты на обещания несуществующих путей, обычной дипломатии и бесплатных ресурсов.
 

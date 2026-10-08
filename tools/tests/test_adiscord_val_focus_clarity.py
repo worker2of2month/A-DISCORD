@@ -282,7 +282,7 @@ class KefreytFocusClarityTests(unittest.TestCase):
                 line = next(
                     row for row in source.splitlines() if row.startswith(f" {key}:")
                 )
-                self.assertNotIn("—", line, key)
+                self.assertNotIn("\u2014", line, key)
                 self.assertNotIn(";", line, key)
 
 

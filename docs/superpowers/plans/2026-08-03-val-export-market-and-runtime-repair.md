@@ -202,7 +202,7 @@ For administration, industry, and army apply effects, assert:
 - tier 1 and 2 effects contain an authoritative-level guard, preventing a lower call from replacing tier 2 or 3;
 - administration and industry keep `ADISCORD_economy_mark_dirty = yes` inside the successful transition.
 
-For reputation 0–3, assert every effect removes all four reputation ideas, adds only its target inside `hidden_effect`, contains neither `has_idea` nor `swap_ideas`, and remains selected by `VAL_refresh_contract_reputation`.
+For reputation 0-3, assert every effect removes all four reputation ideas, adds only its target inside `hidden_effect`, contains neither `has_idea` nor `swap_ideas`, and remains selected by `VAL_refresh_contract_reputation`.
 
 - [ ] **Step 3: Lock complete old-save migration coverage**
 
@@ -309,7 +309,7 @@ git commit -m "fix: make VAL tier transitions runtime-safe"
 ### Task 5: Static regression and clean-scope verification
 
 **Files:**
-- Verify all files from Tasks 1–4.
+- Verify all files from Tasks 1-4.
 
 - [ ] **Step 1: Run the focused suites**
 

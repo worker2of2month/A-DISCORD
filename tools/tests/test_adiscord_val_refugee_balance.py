@@ -507,7 +507,7 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
                 line = next(
                     row for row in loc.splitlines() if row.startswith(f" {key}:")
                 )
-                self.assertNotIn("—", line)
+                self.assertNotIn("\u2014", line)
                 self.assertNotIn(";", line)
             self.assertIn("VAL_refugee_training_cost:", loc)
             self.assertIn("VAL_refugee_training_cost_tooltip:", loc)

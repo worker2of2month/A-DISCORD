@@ -1,0 +1,28 @@
+Khan finale sound sources
+
+All imported sources below use CC0 1.0 Universal:
+https://creativecommons.org/publicdomain/zero/1.0/
+The source files are unmodified. SHA-256 checks are in build_rus_crisis_audio.py.
+The generated game mix trims/fades, changes pitch, filters and layers these
+sounds with original synthesized charge, beam, rumble and wind textures.
+Charge and impact are consecutive parts of one normalized mix. The entity
+starts the charge at 0 seconds and the impact at 10 seconds with the detonation.
+
+unfa - Huge Explosion
+Source: https://freesound.org/people/unfa/sounds/259300/
+File: unfa_huge_explosion_hq.mp3
+Download: https://cdn.freesound.org/previews/259/259300_1038806-hq.mp3
+This is Freesound's public HQ MP3 preview, not the original FLAC.
+Used for the main reactor detonation in ADISCORD_rus_reactor_impact.
+
+Kenney - Sci-fi Sounds 1.0
+Source: https://kenney.nl/assets/sci-fi-sounds
+Download: https://kenney.nl/media/pages/assets/sci-fi-sounds/6b296f9ecf-1677589334/kenney_sci-fi-sounds.zip
+Files: explosionCrunch_004.ogg, computerNoise_000.ogg
+Used for the close debris crack and dead receiver.
+
+NenadSimic - Muffled Distant Explosion
+Source: https://opengameart.org/content/muffled-distant-explosion
+File: NenadSimic_Muffled_Distant_Explosion.wav
+Download: https://opengameart.org/sites/default/files/NenadSimic%20-%20Muffled%20Distant%20Explosion.wav
+Used for the filtered reverse charge, strike echoes and receding collapses.

@@ -125,7 +125,10 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = { RUS_crisis_strike_visible = yes }
-	immediate = { goto_province = 5228 }
+	immediate = {
+		play_song = "ADISCORD_rus_aftermath_silence"
+		goto_province = 5228
+	}
 }
 
 country_event = {
@@ -137,6 +140,27 @@ country_event = {
 	fire_only_once = yes
 	trigger = { NOT = { has_global_flag = RUS_crisis_world_ended } }
 	option = { name = ADISCORD_rus_crisis.10.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.9
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { RUS_crisis_retry_intervention_entry = yes }
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.11
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { RUS_crisis_settle_intervention_entry = yes }
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.13
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { RUS_crisis_cancel_pending_intervention = yes }
 }
 
 # --- dirty_zone_events ---

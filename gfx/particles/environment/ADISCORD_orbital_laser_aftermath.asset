@@ -1,90 +1,17 @@
 particle={
-	# Тест: последствия орбитального удара (постоянные): раскалённый кратер,
-	# огонь, искры и столб дыма. Появляется после детонации.
-	name="ADISCORD_orbital_laser_aftermath_file"
+	# Локальный очаг: пять экземпляров размещаются по площадке реактора.
+	name="ADISCORD_orbital_laser_fire_file"
 	subsystem={
-		name="crater_glow"
-		max_amount=8
+		name="reactor_flames"
+		max_amount=28
 		slave_particles=0
-		emitter_type="point"
+		emitter_type="box"
+		box_emitter_x={ 0.000 2.500 }
+		box_emitter_y={ 0.000 0.500 }
+		box_emitter_z={ 0.000 2.500 }
 		invert=no
 		trail=no
-		local_space=yes
-		billboard=no
-		hide=no
-		texture={
-			file="gfx/particles/glow.dds"
-			x=1
-			y=1
-			shader="ParticleAdditive"
-		}
-		color={
-			x=255.000
-			y=110.000
-			z=30.000
-			alpha=190.000,slow_pulse
-		}
-		position={
-			x=0.000
-			y=0.800
-			z=0.000
-		}
-		start=4.200
-		duration=-1.000
-		velocity=0.000
-		life={ 3.000 0.500 }
-		emission=1.500
-		size={ 95.000 10.000 }
-		particle_pitch=90.000
-		rotation={ 0.000 180.000 }
-		rotation_speed={ 0.000 5.000 }
-	}
-	subsystem={
-		name="crater_core"
-		max_amount=8
-		slave_particles=0
-		emitter_type="point"
-		invert=no
-		trail=no
-		local_space=yes
-		billboard=yes
-		hide=no
-		texture={
-			file="gfx/particles/glow.dds"
-			x=1
-			y=1
-			shader="ParticleAdditive"
-		}
-		color={
-			x=255.000
-			y=190.000
-			z=90.000
-			alpha=170.000,slow_pulse
-		}
-		position={
-			x=0.000
-			y=3.000
-			z=0.000
-		}
-		start=4.200
-		duration=-1.000
-		velocity=0.000
-		life={ 2.000 0.400 }
-		emission=2.000
-		size={ 40.000 6.000 }
-		rotation={ 0.000 180.000 }
-	}
-	subsystem={
-		name="crater_flames"
-		max_amount=70
-		slave_particles=0
-		emitter_type="sphere"
-		sphere_emitter_radius={ 22.000 12.000 }
-		sphere_emitter_yaw={ 0.000 180.000 }
-		sphere_emitter_pitch={ 0.000 2.000 }
-		invert=no
-		trail=no
-		local_space=yes
+		local_space=no
 		billboard=yes
 		hide=no
 		texture={
@@ -97,28 +24,31 @@ particle={
 			x=255.000
 			y=150.000
 			z=40.000
-			alpha=150.000,loop_fade
+			alpha=255.000
 		}
 		position={
 			x=0.000
-			y=1.000
+			y=3.000
 			z=0.000
 		}
-		start=4.200
+		start=10.500
 		duration=-1.000
+		emitter_yaw={ 25.000 0.000 }
+		emitter_pitch={ 0.000 0.000 }
 		velocity_pitch={ 90.000 8.000 }
-		velocity={ 10.000 4.000 }
-		life={ 1.800 0.500 }
-		emission=30.000
-		size={ 12.000 4.000 }
+		velocity_yaw={ 0.000 5.000 }
+		velocity={ 0.800 0.300 }
+		life={ 4.000 1.000 }
+		emission=7.000
+		size={ 12.000,fire_size 2.000 }
 		rotation={ 0.000 180.000 }
 	}
 	subsystem={
 		name="embers"
-		max_amount=50
+		max_amount=10
 		slave_particles=0
 		emitter_type="sphere"
-		sphere_emitter_radius={ 0.000 30.000 }
+		sphere_emitter_radius={ 0.000 4.000 }
 		sphere_emitter_yaw={ 0.000 180.000 }
 		sphere_emitter_pitch={ 0.000 2.000 }
 		invert=no
@@ -143,22 +73,22 @@ particle={
 			y=2.000
 			z=0.000
 		}
-		start=4.400
+		start=10.700
 		duration=-1.000
 		velocity_pitch={ 90.000 15.000 }
 		velocity={ 25.000 8.000 }
 		life={ 2.500 0.800 }
-		emission=14.000
+		emission=3.000
 		size={ 1.800 0.600 }
 		rotation={ 0.000 180.000 }
 		force=chaos
 	}
 	subsystem={
 		name="smoke_column"
-		max_amount=60
+		max_amount=10
 		slave_particles=0
 		emitter_type="sphere"
-		sphere_emitter_radius={ 0.000 12.000 }
+		sphere_emitter_radius={ 0.000 4.000 }
 		sphere_emitter_yaw={ 0.000 180.000 }
 		sphere_emitter_pitch={ 0.000 5.000 }
 		invert=no
@@ -183,26 +113,27 @@ particle={
 			y=6.000
 			z=0.000
 		}
-		start=5.000
+		start=11.300
 		duration=-1.000
 		velocity_pitch={ 90.000 6.000 }
-		velocity={ 28.000 6.000 }
+		velocity={ 15.000 4.000 }
 		life={ 9.000 1.500 }
-		emission=4.500
-		size={ 55.000,smoke_grow 12.000 }
+		emission=0.800
+		size={ 12.000,smoke_grow 3.000 }
 		rotation={ 0.000 180.000 }
 		rotation_speed={ 0.000 8.000 }
 		force=wind
 	}
+	# Пламя исчезает через размер частицы, сохраняя яркость над геометрией.
 	animation={
-		name="slow_pulse"
+		name="fire_size"
 		start=0.000
 		duration=1.000
 		repeat=no
 		minValue=0.000
 		maxValue=1.000
 		curve={
-			0.000 0.000 0.250 1.000 0.500 0.800 0.750 1.000 1.000 0.000
+			0.000 0.000 0.150 1.000 0.650 0.900 1.000 0.000
 		}
 		op="MUL"
 		time="life"

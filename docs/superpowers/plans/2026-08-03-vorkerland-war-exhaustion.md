@@ -58,7 +58,7 @@ Route only country scopes with `tag = WRK` or `tag = VAD`; call the update effec
 
 - [ ] **Step 2: Implement snapshot, delta, gain, decay, and clamps**
 
-Initialize the snapshot before computing delta; while WRK and VAD directly fight, add 2 plus 1/3/6 at 5/25/100 casualty delta; otherwise subtract 8. Clamp score 0–100 and delta 0–10000.
+Initialize the snapshot before computing delta; while WRK and VAD directly fight, add 2 plus 1/3/6 at 5/25/100 casualty delta; otherwise subtract 8. Clamp score 0-100 and delta 0-10000.
 
 - [ ] **Step 3: Derive modifier values and manage its lifecycle**
 
@@ -95,7 +95,7 @@ Use the existing red `§RDEBUG:§!` naming style and add a short WRK/VAD test in
 ### Task 4: Verification
 
 **Files:**
-- Verify all files from Tasks 1–3.
+- Verify all files from Tasks 1-3.
 
 - [ ] **Step 1: Run focused red/green suite and validator**
 

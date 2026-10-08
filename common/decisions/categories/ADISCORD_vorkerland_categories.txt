@@ -201,6 +201,8 @@ RUS_development_programmes = {
 	allowed = { tag = RUS }
 	visible = {
 		OR = {
+			RUS_bunker_workshop_active = yes
+			RUS_bunker_clinic_active = yes
 			has_completed_focus = RUS_machine_school
 			has_completed_focus = RUS_roadside_clinics
 			has_completed_focus = RUS_aimaq_service_charter
