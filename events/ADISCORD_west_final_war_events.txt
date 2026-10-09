@@ -84,7 +84,9 @@ news_event = {
 }
 
 # A western state without a champion's subject or faction tie chooses its side.
-# There is no neutral answer: the corridor is the only land route.
+# There is no neutral answer: the corridor is the only land route. AI weights
+# mirror each other: every Vorkerland route has its own constituency, and the
+# clearly stronger champion draws hesitant neighbours.
 country_event = {
 	id = ADISCORD_west.10
 	title = ADISCORD_west.10.t
@@ -105,6 +107,8 @@ country_event = {
 		}
 		ai_chance = {
 			base = 40
+			# The restored central command and the reconstruction directorate
+			# both reattach the former administrative districts.
 			modifier = {
 				add = 40
 				OR = {
@@ -112,7 +116,12 @@ country_event = {
 					tag = ZAO
 					tag = PSD
 				}
-				WRK = { has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+				WRK = {
+					OR = {
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+						has_country_flag = ADISCORD_vorkerland_route_joint
+					}
+				}
 			}
 			modifier = {
 				add = 30
@@ -123,8 +132,25 @@ country_event = {
 				WRK = { has_country_flag = ADISCORD_vorkerland_route_worker }
 			}
 			modifier = {
+				add = 40
+				OR = {
+					tag = ROM
+					tag = TRU
+				}
+				WRK = { has_country_flag = ADISCORD_vorkerland_free_republics_recognized }
+			}
+			modifier = {
 				add = 20
 				is_neighbor_of = WRK
+			}
+			modifier = {
+				add = 30
+				WRK = {
+					strength_ratio = {
+						tag = IVN
+						ratio > 1.25
+					}
+				}
 			}
 			modifier = {
 				factor = 0.5
@@ -162,13 +188,29 @@ country_event = {
 					tag = IBL
 				}
 			}
+			# Only the republics fear the military government more than the war.
 			modifier = {
 				add = 30
+				OR = {
+					tag = ROM
+					tag = TRU
+					tag = WPA
+					tag = WPS
+				}
 				WRK = { has_country_flag = ADISCORD_vorkerland_route_joint }
 			}
 			modifier = {
 				add = 20
 				is_neighbor_of = IVN
+			}
+			modifier = {
+				add = 30
+				IVN = {
+					strength_ratio = {
+						tag = WRK
+						ratio > 1.25
+					}
+				}
 			}
 		}
 	}
@@ -361,6 +403,27 @@ country_event = {
 		}
 		ai_chance = {
 			base = 20
+			modifier = {
+				add = 60
+				OR = {
+					tag = ROM
+					tag = TRU
+				}
+				WRK = {
+					exists = yes
+					has_country_flag = ADISCORD_vorkerland_free_republics_recognized
+				}
+			}
+			modifier = {
+				add = 30
+				WRK = {
+					exists = yes
+					strength_ratio = {
+						tag = IVN
+						ratio > 1.25
+					}
+				}
+			}
 		}
 	}
 }

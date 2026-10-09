@@ -2056,11 +2056,13 @@ ADISCORD_vorkerland_wrk_postwar_joint_plan = {
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 		has_country_flag = ADISCORD_vorkerland_route_joint
+		ADISCORD_vorkerland_world_empire_active = no
 	}
 	abort = {
 		OR = {
 			NOT = { tag = WRK }
 			NOT = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+			ADISCORD_vorkerland_world_empire_active = yes
 		}
 	}
 	ai_national_focuses = {
@@ -2376,4 +2378,38 @@ ADISCORD_rus_last_sky_plan = {
 		RUS_tomorrow_above_ground
 	}
 	weight = { factor = 1000 }
+}
+
+ADISCORD_vorkerland_world_empire_plan = {
+	name = "WRK world empire"
+	desc = ""
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		ADISCORD_vorkerland_world_empire_active = yes
+	}
+	abort = { ADISCORD_vorkerland_world_empire_active = no }
+	ai_national_focuses = {
+		WRK_empire_state_above_all
+		WRK_empire_imperial_arsenals
+		WRK_empire_steel_directorate
+		WRK_empire_war_industry
+		WRK_empire_reconstruction_trusts
+		WRK_empire_mobilized_economy
+		WRK_empire_first_levy
+		WRK_empire_state_legions
+		WRK_empire_rifles_for_the_march
+		WRK_empire_artillery_mass
+		WRK_empire_imperial_general_staff
+		WRK_empire_motor_columns
+		WRK_empire_railway_command
+		WRK_empire_fighter_command
+		WRK_empire_close_air_support
+		WRK_empire_combined_exercises
+		WRK_empire_total_mobilization
+		WRK_empire_itora_operational_plan
+		WRK_empire_supreme_command_order
+		WRK_empire_itora_must_fall
+	}
+	weight = { factor = 100 }
 }

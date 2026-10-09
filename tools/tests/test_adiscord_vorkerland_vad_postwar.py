@@ -708,5 +708,204 @@ class PostwarExpansionTests(unittest.TestCase):
                 self.assertIn(f' {key}_desc: "', section)
 
 
+
+class WorldEmpireTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.source = read("focus_trees/Vorkerland/world_empire/focuses.txt")
+        cls.tree = block(parse_clausewitz(cls.source), "focus_tree")
+        cls.focuses = {
+            scalar(entry.value, "id"): entry.value
+            for entry in cls.tree if entry.key == "focus"
+        }
+        cls.effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+
+    @staticmethod
+    def executable_entries(entries):
+        for entry in entries:
+            if entry.key == "effect_tooltip":
+                continue
+            yield entry
+            if isinstance(entry.value, list):
+                yield from WorldEmpireTests.executable_entries(entry.value)
+
+    def test_guard_requires_joint_council_and_rejects_second_transition(self):
+        triggers = parse_clausewitz(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"))
+        guard = block(triggers, "ADISCORD_vorkerland_world_empire_can_form")
+        facts = {
+            ("WRK", "is_subject", "no"): True,
+            ("WRK", "has_capitulated", "no"): True,
+            ("WRK", "has_global_flag", "ADISCORD_vorkerland_reunification_verified"): True,
+            ("WRK", "has_global_flag", "ADISCORD_vorkerland_collapse_finished"): True,
+            ("WRK", "has_global_flag", "ADISCORD_vorkerland_joint_government_formed"): True,
+            ("WRK", "has_country_flag", "ADISCORD_vorkerland_route_joint"): True,
+            ("WRK", "has_cosmetic_tag", "WRK_vorkerland_joint_government"): True,
+            ("WRK", "has_character", "WRK_Nikita_Worcker"): True,
+            ("WRK", "ruling_leader"): "WRK_VAD_Joint_Council",
+        }
+        self.assertTrue(matches_conditions(guard, facts, "WRK"))
+        for key in facts:
+            with self.subTest(missing=key):
+                invalid = dict(facts)
+                invalid.pop(key)
+                self.assertFalse(matches_conditions(guard, invalid, "WRK"))
+        ordinary_vlad = dict(facts)
+        ordinary_vlad[("WRK", "ruling_leader")] = "WRK_Vlad_Petrichev"
+        self.assertFalse(matches_conditions(guard, ordinary_vlad, "WRK"))
+        after = dict(facts)
+        after.pop(("WRK", "has_cosmetic_tag", "WRK_vorkerland_joint_government"))
+        after[("WRK", "has_cosmetic_tag", "WRK_vorkerland_world_empire")] = True
+        after[("WRK", "ruling_leader")] = "WRK_Nikita_Worcker"
+        self.assertFalse(matches_conditions(guard, after, "WRK"))
+        self.assertFalse(matches_conditions(guard, facts, "VAD"))
+
+    def test_hidden_transition_installs_etatist_role_portrait_and_news(self):
+        change = named_block(self.effects, "ADISCORD_vorkerland_establish_world_empire")
+        payload = block(block(parse_clausewitz(change), "ADISCORD_vorkerland_establish_world_empire"), "if")
+        self.assertEqual(scalar(block(payload, "limit"), "ADISCORD_vorkerland_world_empire_can_form"), "yes")
+        self.assertEqual(scalar(payload, "set_cosmetic_tag"), "WRK_vorkerland_world_empire")
+        self.assertEqual(scalar(block(payload, "set_politics"), "ruling_party"), "etatism")
+        role = block(payload, "add_country_leader_role")
+        self.assertEqual(scalar(role, "character"), "WRK_Nikita_Worcker")
+        self.assertEqual(scalar(block(role, "country_leader"), "ideology"), "etatism_ideology")
+        self.assertEqual(scalar(role, "promote_leader"), "yes")
+        self.assertLess(change.index("add_country_leader_role"), change.index("set_politics"))
+        portrait = block(block(payload, "set_portraits"), "civilian")
+        self.assertEqual(scalar(portrait, "large"), "GFX_portrait_WRK_Nikita_Worcker_victory")
+        self.assertIn("retire_character = WRK_VAD_Joint_Council", change)
+        self.assertEqual(change.count("retire_character = WRK_Vlad_Petrichev"), 2)
+        self.assertEqual(scalar(block(payload, "load_focus_tree"), "tree"), "ADISCORD_vorkerland_world_empire_focus")
+        events = parse_clausewitz(read("events/ADISCORD_vorkerland_events.txt"))
+        callback = next(e.value for e in events if isinstance(e.value, list) and scalar(e.value, "id") == "ADISCORD_vorkerland_postwar.4")
+        self.assertEqual(scalar(callback, "hidden"), "yes")
+        self.assertEqual(scalar(block(callback, "immediate"), "ADISCORD_vorkerland_establish_world_empire"), "yes")
+        self.assertNotIn("option", [e.key for e in callback])
+        self.assertEqual(scalar(block(payload, "news_event"), "id"), "ADISCORD_vorkerland_postwar.5")
+
+    def test_approved_resource_package_and_exact_delta_previews(self):
+        from decimal import Decimal
+        totals = Counter()
+        variables = Counter()
+        equipment = Counter()
+        buildings = Counter()
+        ideas = block(block(parse_clausewitz(read("common/ideas/ADISCORD_vorkerland_ideas.txt")), "ideas"), "country")
+        variable_modifiers = {
+            "WRK_empire_attack": "army_attack_factor",
+            "WRK_empire_defence": "army_defence_factor",
+            "WRK_empire_org": "army_org_factor",
+            "WRK_empire_supply": "supply_consumption_factor",
+            "WRK_empire_output": "industrial_capacity_factory",
+        }
+        for focus_id, focus in self.focuses.items():
+            reward = block(focus, "completion_reward")
+            applied = Counter()
+            for entry in self.executable_entries(reward):
+                if entry.key == "add_manpower":
+                    totals[entry.key] += int(entry.value)
+                elif entry.key == "add_to_variable":
+                    variable = scalar(entry.value, "var")
+                    amount = Decimal(scalar(entry.value, "value"))
+                    variables[variable] += amount
+                    applied[variable_modifiers[variable]] += amount
+                elif entry.key == "add_equipment_to_stockpile":
+                    equipment[scalar(entry.value, "type")] += int(scalar(entry.value, "amount"))
+                elif entry.key == "add_building_construction":
+                    buildings[scalar(entry.value, "type")] += int(scalar(entry.value, "level"))
+                elif entry.key == "add_ideas":
+                    self.fail(f"Delta preview is installed by {focus_id}")
+            preview = Counter()
+            for item in reward:
+                if item.key == "effect_tooltip":
+                    for idea in item.value:
+                        for modifier in block(block(ideas, idea.value), "modifier"):
+                            preview[modifier.key] += Decimal(modifier.value)
+            self.assertEqual(dict(applied), dict(preview), focus_id)
+        self.assertEqual(totals["add_manpower"], 150000)
+        self.assertEqual(dict(buildings), {"arms_factory": 12, "industrial_complex": 6})
+        self.assertEqual(dict(equipment), {
+            "infantry_equipment": 40000,
+            "artillery_equipment": 2000,
+            "support_equipment": 3000,
+            "motorized_equipment_1": 2500,
+            "train_equipment_1": 200,
+            "ADISCORD_fighter_airframe_2163": 400,
+            "ADISCORD_cas_airframe_2170": 200,
+        })
+        self.assertEqual(dict(variables), {
+            "WRK_empire_output": Decimal("0.35"),
+            "WRK_empire_org": Decimal("0.20"),
+            "WRK_empire_defence": Decimal("0.30"),
+            "WRK_empire_attack": Decimal("0.30"),
+            "WRK_empire_supply": Decimal("-0.20"),
+        })
+
+    def test_every_preparation_precedes_war_and_remains_available_during_war(self):
+        self.assertEqual(len(self.focuses), 20)
+        requirements = {
+            key: {scalar(item.value, "focus") for item in focus if item.key == "prerequisite"}
+            for key, focus in self.focuses.items()
+        }
+        visited = set()
+        def visit(key, stack):
+            self.assertNotIn(key, stack, "Focus dependency cycle")
+            self.assertIn(key, self.focuses)
+            if key in visited:
+                return
+            for parent in requirements[key]:
+                visit(parent, stack | {key})
+            visited.add(key)
+        visit("WRK_empire_itora_must_fall", set())
+        self.assertEqual(visited, set(self.focuses))
+        positions = [(scalar(f, "x"), scalar(f, "y")) for f in self.focuses.values()]
+        self.assertEqual(len(positions), len(set(positions)))
+        self.assertTrue(all(2 <= int(scalar(f, "cost")) <= 5 for f in self.focuses.values()))
+        self.assertEqual(sum(int(scalar(f, "cost")) for f in self.focuses.values()) * 7, 413)
+        for key, focus in self.focuses.items():
+            if key != "WRK_empire_itora_must_fall":
+                text = str(block(focus, "available"))
+                self.assertNotIn("has_war", text, key)
+                self.assertNotIn("ADISCORD_west_final_active", text, key)
+        war = self.focuses["WRK_empire_itora_must_fall"]
+        hidden = block(block(war, "completion_reward"), "hidden_effect")
+        self.assertEqual(scalar(hidden, "ADISCORD_west_final_war_start"), "yes")
+        self.assertNotIn("declare_war_on", [e.key for e in hidden])
+        self.assertTrue(block(war, "bypass"))
+
+    def test_factories_check_same_site_and_capacity_at_delivery(self):
+        for key, focus in self.focuses.items():
+            reward = block(focus, "completion_reward")
+            targets = [e.value for e in reward if e.key == "random_owned_controlled_state"]
+            for target in targets:
+                available = block(block(block(focus, "available"), "custom_trigger_tooltip"), "any_owned_state")
+                self.assertEqual(scalar(available, "is_controlled_by"), "ROOT")
+                required_slots = block(available, "free_building_slots")
+                delivered_slots = block(block(target, "limit"), "free_building_slots")
+                self.assertEqual(
+                    [(entry.key, entry.value) for entry in required_slots],
+                    [(entry.key, entry.value) for entry in delivered_slots],
+                    key,
+                )
+                self.assertEqual(scalar(available, "is_core_of"), scalar(block(target, "limit"), "is_core_of"))
+                self.assertEqual(scalar(target, "add_extra_state_shared_building_slots"), scalar(block(target, "add_building_construction"), "level"))
+
+    def test_news_localisation_and_flag_outputs(self):
+        from tools.builders.build_adiscord_vorkerland_original_flags import expected_outputs, validate_outputs
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            text = path.read_text(encoding="utf-8-sig")
+            for key in self.focuses:
+                for loc_key in (key, key + "_desc"):
+                    self.assertEqual(len(re.findall(rf'^ {loc_key}:0 "[^"\r\n]*"$', text, re.M)), 1)
+            news = re.findall(r'^ ADISCORD_vorkerland_postwar\.5\.d:0 "([^"\r\n]*)"$', text, re.M)
+            self.assertEqual(len(news), 1)
+            expanded = news[0].replace(r"\n", "\n")
+            self.assertLessEqual(len(expanded), 3000)
+            self.assertLessEqual(len(expanded.encode("utf-8")), 5500)
+        outputs = expected_outputs({"WRK_vorkerland_world_empire"})
+        self.assertEqual(len(outputs), 4)
+        self.assertEqual(validate_outputs(outputs), [])
+
+
 if __name__ == "__main__":
     unittest.main()

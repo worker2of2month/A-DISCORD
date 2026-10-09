@@ -1,0 +1,608 @@
+# The joint-victory succession loads this separate imperial campaign tree.
+focus_tree = {
+	id = ADISCORD_vorkerland_world_empire_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 1000
+			ADISCORD_vorkerland_world_empire_active = yes
+		}
+	}
+	default = no
+	continuous_focus_position = { x = 850 y = 1800 }
+
+	focus = {
+		id = WRK_empire_state_above_all
+		icon = GFX_focus_WRK_joint_west_imperial_settlement
+		x = 6
+		y = 0
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 150
+			add_stability = 0.05
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_empire_imperial_arsenals
+		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
+		x = 0
+		y = 2
+		cost = 3
+		prerequisite = { focus = WRK_empire_state_above_all }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			is_subject = no
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_empire_arsenal_site_tt
+				any_owned_state = {
+					is_core_of = ROOT
+					is_controlled_by = ROOT
+					free_building_slots = {
+						building = arms_factory
+						size > 3
+						include_locked = yes
+					}
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = arms_factory
+						size > 3
+						include_locked = yes
+					}
+				}
+				add_extra_state_shared_building_slots = 4
+				add_building_construction = {
+					type = arms_factory
+					level = 4
+					instant_build = yes
+				}
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	focus = {
+		id = WRK_empire_steel_directorate
+		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
+		x = 0
+		y = 3
+		cost = 3
+		prerequisite = { focus = WRK_empire_imperial_arsenals }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			is_subject = no
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_empire_arsenal_site_tt
+				any_owned_state = {
+					is_core_of = ROOT
+					is_controlled_by = ROOT
+					free_building_slots = {
+						building = arms_factory
+						size > 3
+						include_locked = yes
+					}
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = arms_factory
+						size > 3
+						include_locked = yes
+					}
+				}
+				add_extra_state_shared_building_slots = 4
+				add_building_construction = {
+					type = arms_factory
+					level = 4
+					instant_build = yes
+				}
+			}
+			effect_tooltip = { add_ideas = WRK_empire_delta_steel_directorate }
+			hidden_effect = {
+				add_to_variable = { var = WRK_empire_output value = 0.10 }
+				ADISCORD_vorkerland_empire_refresh_industry = yes
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	focus = {
+		id = WRK_empire_war_industry
+		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
+		x = 0
+		y = 4
+		cost = 3
+		prerequisite = { focus = WRK_empire_steel_directorate }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			is_subject = no
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_empire_arsenal_site_tt
+				any_owned_state = {
+					is_core_of = ROOT
+					is_controlled_by = ROOT
+					free_building_slots = {
+						building = arms_factory
+						size > 3
+						include_locked = yes
+					}
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = arms_factory
+						size > 3
+						include_locked = yes
+					}
+				}
+				add_extra_state_shared_building_slots = 4
+				add_building_construction = {
+					type = arms_factory
+					level = 4
+					instant_build = yes
+				}
+			}
+			effect_tooltip = { add_ideas = WRK_empire_delta_war_industry }
+			hidden_effect = {
+				add_to_variable = { var = WRK_empire_output value = 0.15 }
+				ADISCORD_vorkerland_empire_refresh_industry = yes
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	focus = {
+		id = WRK_empire_reconstruction_trusts
+		icon = GFX_focus_WRK_utilitarian_west_corridor_survey
+		x = 0
+		y = 5
+		cost = 3
+		prerequisite = { focus = WRK_empire_war_industry }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			is_subject = no
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_empire_civil_site_tt
+				any_owned_state = {
+					is_core_of = ROOT
+					is_controlled_by = ROOT
+					free_building_slots = {
+						building = industrial_complex
+						size > 2
+						include_locked = yes
+					}
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = industrial_complex
+						size > 2
+						include_locked = yes
+					}
+				}
+				add_extra_state_shared_building_slots = 3
+				add_building_construction = {
+					type = industrial_complex
+					level = 3
+					instant_build = yes
+				}
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_empire_mobilized_economy
+		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
+		x = 0
+		y = 6
+		cost = 3
+		prerequisite = { focus = WRK_empire_reconstruction_trusts }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			is_subject = no
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_empire_civil_site_tt
+				any_owned_state = {
+					is_core_of = ROOT
+					is_controlled_by = ROOT
+					free_building_slots = {
+						building = industrial_complex
+						size > 2
+						include_locked = yes
+					}
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = industrial_complex
+						size > 2
+						include_locked = yes
+					}
+				}
+				add_extra_state_shared_building_slots = 3
+				add_building_construction = {
+					type = industrial_complex
+					level = 3
+					instant_build = yes
+				}
+			}
+			effect_tooltip = { add_ideas = WRK_empire_delta_steel_directorate }
+			hidden_effect = {
+				add_to_variable = { var = WRK_empire_output value = 0.10 }
+				ADISCORD_vorkerland_empire_refresh_industry = yes
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	focus = {
+		id = WRK_empire_first_levy
+		icon = GFX_focus_WRK_joint_west_frontier_commands
+		x = 6
+		y = 2
+		cost = 3
+		prerequisite = { focus = WRK_empire_state_above_all }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 75000
+			effect_tooltip = { add_ideas = WRK_empire_delta_first_levy }
+			hidden_effect = {
+				add_to_variable = { var = WRK_empire_org value = 0.10 }
+				ADISCORD_vorkerland_empire_refresh_army = yes
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	focus = {
+		id = WRK_empire_state_legions
+		icon = GFX_focus_WRK_joint_west_frontier_commands
+		x = 6
+		y = 3
+		cost = 3
+		prerequisite = { focus = WRK_empire_first_levy }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 75000
+			effect_tooltip = { add_ideas = WRK_empire_delta_state_legions }
+			hidden_effect = {
+				add_to_variable = { var = WRK_empire_defence value = 0.10 }
+				ADISCORD_vorkerland_empire_refresh_army = yes
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	focus = {
+		id = WRK_empire_rifles_for_the_march
+		icon = GFX_focus_WRK_joint_west_frontier_commands
+		x = 6
+		y = 4
+		cost = 3
+		prerequisite = { focus = WRK_empire_state_legions }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 40000 producer = WRK }
+			effect_tooltip = { add_ideas = WRK_empire_delta_rifles_for_the_march }
+			hidden_effect = {
+				add_to_variable = { var = WRK_empire_attack value = 0.10 }
+				ADISCORD_vorkerland_empire_refresh_army = yes
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	focus = {
+		id = WRK_empire_artillery_mass
+		icon = GFX_goal_generic_army_artillery
+		x = 6
+		y = 5
+		cost = 3
+		prerequisite = { focus = WRK_empire_rifles_for_the_march }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 2000 producer = WRK }
+			add_equipment_to_stockpile = { type = support_equipment amount = 3000 producer = WRK }
+			effect_tooltip = { add_ideas = WRK_empire_delta_artillery_mass }
+			hidden_effect = {
+				add_to_variable = { var = WRK_empire_attack value = 0.10 }
+				add_to_variable = { var = WRK_empire_defence value = 0.10 }
+				ADISCORD_vorkerland_empire_refresh_army = yes
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	focus = {
+		id = WRK_empire_imperial_general_staff
+		icon = GFX_focus_WRK_joint_west_imperial_columns
+		x = 6
+		y = 6
+		cost = 3
+		prerequisite = { focus = WRK_empire_artillery_mass }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 100
+			effect_tooltip = { add_ideas = WRK_empire_delta_imperial_general_staff }
+			hidden_effect = {
+				add_to_variable = { var = WRK_empire_attack value = 0.10 }
+				add_to_variable = { var = WRK_empire_defence value = 0.10 }
+				add_to_variable = { var = WRK_empire_org value = 0.10 }
+				ADISCORD_vorkerland_empire_refresh_army = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_empire_motor_columns
+		icon = GFX_goal_generic_army_motorized
+		x = 12
+		y = 2
+		cost = 3
+		prerequisite = { focus = WRK_empire_state_above_all }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = { type = motorized_equipment_1 amount = 2500 producer = WRK }
+			effect_tooltip = { add_ideas = WRK_empire_delta_motor_columns }
+			hidden_effect = {
+				add_to_variable = { var = WRK_empire_supply value = -0.10 }
+				ADISCORD_vorkerland_empire_refresh_army = yes
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	focus = {
+		id = WRK_empire_railway_command
+		icon = GFX_focus_WRK_utilitarian_west_corridor_survey
+		x = 12
+		y = 3
+		cost = 3
+		prerequisite = { focus = WRK_empire_motor_columns }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = { type = train_equipment_1 amount = 200 producer = WRK }
+			effect_tooltip = { add_ideas = WRK_empire_delta_motor_columns }
+			hidden_effect = {
+				add_to_variable = { var = WRK_empire_supply value = -0.10 }
+				ADISCORD_vorkerland_empire_refresh_army = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_empire_fighter_command
+		icon = GFX_goal_generic_air_fighter
+		x = 12
+		y = 4
+		cost = 3
+		prerequisite = { focus = WRK_empire_railway_command }
+		search_filters = { FOCUS_FILTER_AIR_XP }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 400 producer = WRK }
+			air_experience = 50
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_empire_close_air_support
+		icon = GFX_goal_generic_CAS
+		x = 12
+		y = 5
+		cost = 3
+		prerequisite = { focus = WRK_empire_fighter_command }
+		search_filters = { FOCUS_FILTER_AIR_XP }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 200 producer = WRK }
+			air_experience = 50
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_empire_combined_exercises
+		icon = GFX_focus_WRK_joint_west_imperial_columns
+		x = 12
+		y = 6
+		cost = 3
+		prerequisite = { focus = WRK_empire_close_air_support }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 75
+			air_experience = 75
+			add_command_power = 25
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_empire_total_mobilization
+		icon = GFX_focus_WRK_joint_west_imperial_settlement
+		x = 6
+		y = 8
+		cost = 3
+		prerequisite = { focus = WRK_empire_mobilized_economy }
+		prerequisite = { focus = WRK_empire_imperial_general_staff }
+		prerequisite = { focus = WRK_empire_combined_exercises }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 75
+			add_war_support = 0.15
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_empire_itora_operational_plan
+		icon = GFX_focus_WRK_joint_west_return_of_the_marches
+		x = 6
+		y = 9
+		cost = 2
+		prerequisite = { focus = WRK_empire_total_mobilization }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 50
+			add_command_power = 50
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_empire_supreme_command_order
+		icon = GFX_focus_WRK_joint_west_imperial_settlement
+		x = 6
+		y = 10
+		cost = 2
+		prerequisite = { focus = WRK_empire_itora_operational_plan }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_war_support = 0.10
+			add_political_power = 75
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_empire_itora_must_fall
+		icon = GFX_goal_generic_major_war
+		x = 6
+		y = 11
+		cost = 5
+		prerequisite = { focus = WRK_empire_supreme_command_order }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			is_subject = no
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_west_reconstruction_ready_tt
+				ADISCORD_west_reconstruction_grace_elapsed = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = WRK_west_final_ready_tt
+				ADISCORD_west_final_can_start = yes
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = {
+			OR = {
+				has_global_flag = ADISCORD_west_final_started
+				has_global_flag = ADISCORD_west_final_resolved
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = WRK_empire_war_tt
+			hidden_effect = { ADISCORD_west_final_war_start = yes }
+		}
+		ai_will_do = { base = 10 }
+	}
+}

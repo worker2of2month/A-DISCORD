@@ -199,8 +199,11 @@ annexation or subjugation outside it resolves the campaign by control of the
 key districts, and the Restitution Alliance only repels it.
 The western final war follows the same contract for reunified WRK and IVN. Its
 `west_final` sections run after `south_final`; a champion's capitulation
-settles every participant, and an external end resolves it by control of the
-Old March, the Itoran frontier, the northern corridor and the WRK capital.
+settles every participant, and an external end resolves it by points: each
+side scores the northern corridor districts it controls and the opposing
+champion's home ground it occupies (the Old March and the Itoran frontier, or
+the WRK federal capital, state 32). Own home ground scores nothing; the
+defending side keeps a tie.
 
 Also test both NOD/Stelander defeat orders, a surviving northern cobelligerent,
 TFF joining NOD's northern war after YPR has capitulated, and failed TFF entry.

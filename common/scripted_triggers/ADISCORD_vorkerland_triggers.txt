@@ -3352,3 +3352,25 @@ RUS_crisis_other_major_required = {
 		has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
 	}
 }
+
+# --- world_empire_triggers ---
+ADISCORD_vorkerland_world_empire_can_form = {
+	tag = WRK
+	is_subject = no
+	has_capitulated = no
+	has_global_flag = ADISCORD_vorkerland_reunification_verified
+	has_global_flag = ADISCORD_vorkerland_collapse_finished
+	has_global_flag = ADISCORD_vorkerland_joint_government_formed
+	has_country_flag = ADISCORD_vorkerland_route_joint
+	has_cosmetic_tag = WRK_vorkerland_joint_government
+	has_character = WRK_Nikita_Worcker
+	has_country_leader = {
+		character = WRK_VAD_Joint_Council
+		ruling_only = yes
+	}
+}
+
+ADISCORD_vorkerland_world_empire_active = {
+	tag = WRK
+	has_cosmetic_tag = WRK_vorkerland_world_empire
+}

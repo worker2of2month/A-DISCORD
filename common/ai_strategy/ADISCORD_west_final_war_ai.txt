@@ -1,4 +1,6 @@
-# War for the West: champions commit their armies against each other.
+# War for the West: champions commit their armies against the whole opposing
+# side. The corridor separates the champions, so most fronts face the other
+# side's regional members rather than the rival champion itself.
 
 ADISCORD_west_wrk_front_ivn = {
 	allowed = { tag = WRK }
@@ -15,18 +17,24 @@ ADISCORD_west_wrk_front_ivn = {
 	abort_when_not_enabled = yes
 	ai_strategy = {
 		type = front_unit_request
-		tag = IVN
+		country_trigger = {
+			ADISCORD_west_on_ivn_side = yes
+			has_war_with = FROM
+		}
 		value = 100
 	}
 	ai_strategy = {
 		type = front_control
-		tag = IVN
+		country_trigger = {
+			ADISCORD_west_on_ivn_side = yes
+			has_war_with = FROM
+		}
 		ratio = 0.01
 		priority = 1500
 		ordertype = front
 		execution_type = balanced
 		execute_order = yes
-		manual_attack = no
+		manual_attack = yes
 	}
 }
 
@@ -44,12 +52,18 @@ ADISCORD_west_wrk_hold_ivn = {
 	abort_when_not_enabled = yes
 	ai_strategy = {
 		type = front_unit_request
-		tag = IVN
+		country_trigger = {
+			ADISCORD_west_on_ivn_side = yes
+			has_war_with = FROM
+		}
 		value = 100
 	}
 	ai_strategy = {
 		type = front_control
-		tag = IVN
+		country_trigger = {
+			ADISCORD_west_on_ivn_side = yes
+			has_war_with = FROM
+		}
 		ratio = 0.01
 		priority = 1500
 		ordertype = front
@@ -122,6 +136,25 @@ ADISCORD_west_ivn_front_wrk = {
 		has_war_with = WRK
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = WRK value = 100 }
-	ai_strategy = { type = front_control tag = WRK ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = yes }
+	ai_strategy = {
+		type = front_unit_request
+		country_trigger = {
+			ADISCORD_west_on_wrk_side = yes
+			has_war_with = FROM
+		}
+		value = 100
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			ADISCORD_west_on_wrk_side = yes
+			has_war_with = FROM
+		}
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = yes
+	}
 }

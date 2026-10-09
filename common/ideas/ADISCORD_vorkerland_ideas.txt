@@ -3207,6 +3207,72 @@ ideas = {
 				supply_consumption_factor = -0.05
 			}
 		}
+		WRK_empire_delta_steel_directorate = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.10
+			}
+		}
+
+		WRK_empire_delta_war_industry = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.15
+			}
+		}
+
+		WRK_empire_delta_first_levy = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.10
+			}
+		}
+
+		WRK_empire_delta_state_legions = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.10
+			}
+		}
+
+		WRK_empire_delta_rifles_for_the_march = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.10
+			}
+		}
+
+		WRK_empire_delta_artillery_mass = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.10
+				army_defence_factor = 0.10
+			}
+		}
+
+		WRK_empire_delta_imperial_general_staff = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.10
+				army_defence_factor = 0.10
+				army_org_factor = 0.10
+			}
+		}
+
+		WRK_empire_delta_motor_columns = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.10
+			}
+		}
 # --- end_postwar_expansion_ideas ---
 	}
 

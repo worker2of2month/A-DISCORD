@@ -321,6 +321,7 @@ BUILDERS = {
 }
 
 SUPPLIED_FLAGS = {
+    "WRK_vorkerland_world_empire": SOURCE_ROOT / "WRK_vorkerland_world_empire.png",
     "ROM": SOURCE_ROOT / "ROM.png",
     "TRU": SOURCE_ROOT / "TRU.png",
     "IBA": SOURCE_ROOT / "IBA.png",
@@ -374,12 +375,25 @@ def add_runtime_triplet(
         outputs[FLAG_ROOT / directory / f"{flag_id}.tga"] = rendered
 
 
-def expected_outputs() -> dict[Path, Image.Image]:
+def expected_outputs(tags: set[str] | None = None) -> dict[Path, Image.Image]:
+    # A scoped build must not open unrelated optional source artwork.
+    known = (
+        set(BUILDERS)
+        | set(SUPPLIED_FLAGS)
+        | set(SUPPLIED_RUNTIME_FLAGS)
+        | set(COPIED_FLAG_TRIPLETS)
+    )
+    if tags is not None and tags - known:
+        raise ValueError(f"Unknown flag IDs: {sorted(tags - known)}")
     outputs: dict[Path, Image.Image] = {}
     for flag_id, builder in BUILDERS.items():
+        if tags is not None and flag_id not in tags:
+            continue
         add_triplet(outputs, flag_id, builder())
 
     for flag_id, supplied in SUPPLIED_FLAGS.items():
+        if tags is not None and flag_id not in tags:
+            continue
         with Image.open(supplied) as source:
             prepared = ImageOps.fit(
                 source.convert("RGB"), CANVAS, method=Image.Resampling.LANCZOS
@@ -387,10 +401,14 @@ def expected_outputs() -> dict[Path, Image.Image]:
         add_triplet(outputs, flag_id, prepared)
 
     for flag_id, supplied in SUPPLIED_RUNTIME_FLAGS.items():
+        if tags is not None and flag_id not in tags:
+            continue
         with Image.open(supplied) as source:
             add_runtime_triplet(outputs, flag_id, source)
 
     for target_flag_id, source_flag_id in COPIED_FLAG_TRIPLETS.items():
+        if tags is not None and target_flag_id not in tags:
+            continue
         for directory in (FLAG_ROOT, FLAG_ROOT / "medium", FLAG_ROOT / "small"):
             with Image.open(directory / f"{source_flag_id}.tga") as source:
                 outputs[directory / f"{target_flag_id}.tga"] = source.convert("RGBA")
@@ -460,11 +478,7 @@ def main() -> int:
         "--tags", nargs="+", help="limit checks and writes to these flag IDs"
     )
     args = parser.parse_args()
-    outputs = expected_outputs()
-    if args.tags:
-        outputs = {
-            path: image for path, image in outputs.items() if path.stem in args.tags
-        }
+    outputs = expected_outputs(set(args.tags) if args.tags else None)
     if args.apply:
         apply_outputs(outputs)
         print(

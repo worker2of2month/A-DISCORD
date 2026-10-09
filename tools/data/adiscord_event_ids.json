@@ -5379,6 +5379,22 @@
       "owner": "events/ADISCORD_superevents.txt",
       "subsystem": "superevents",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_postwar.4",
+      "namespace": "ADISCORD_vorkerland_postwar",
+      "number": 4,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_postwar.5",
+      "namespace": "ADISCORD_vorkerland_postwar",
+      "number": 5,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_postwar",
+      "status": "active"
     }
   ]
 }

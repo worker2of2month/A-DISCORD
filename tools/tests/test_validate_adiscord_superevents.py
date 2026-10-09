@@ -562,6 +562,9 @@ class SupereventContractTests(unittest.TestCase):
                         execute(entry.value, flags, shown)
                 elif entry.key == "set_global_flag":
                     flags.add(entry.value)
+                elif entry.key == "country_event":
+                    event = {child.key: child.value for child in entry.value}
+                    scheduled.append((event["id"], event["days"]))
                 elif entry.key.startswith("ADISCORD_vorkerland_show_"):
                     shown.append(entry.key)
                     show = blocks(source, rf"^{entry.key}\s*=\s*\{{")[0]
@@ -579,6 +582,7 @@ class SupereventContractTests(unittest.TestCase):
                     if announced:
                         flags.add("ADISCORD_vorkerland_central_victory_announced")
                     shown = []
+                    scheduled = []
                     payload = [entry for entry in route if entry.key != "limit"]
                     execute(payload, flags, shown)
                     expected = "joint" if joint else "vlad"
@@ -586,8 +590,13 @@ class SupereventContractTests(unittest.TestCase):
                         f"ADISCORD_vorkerland_show_{expected}_victory_superevent"
                     ])
                     first_shown = list(shown)
+                    self.assertEqual(scheduled, [
+                        ("ADISCORD_vorkerland_postwar.4", "7")
+                    ] if joint and not announced else [])
+                    first_scheduled = list(scheduled)
                     execute(payload, flags, shown)
                     self.assertEqual(shown, first_shown)
+                    self.assertEqual(scheduled, first_scheduled)
 
     def test_joint_localisation_precedes_fallback_and_has_its_own_flag(self) -> None:
         from tools.validators.validate_adiscord_superevents import blocks

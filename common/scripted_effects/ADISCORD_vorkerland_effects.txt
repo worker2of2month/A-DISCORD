@@ -9220,6 +9220,7 @@ ADISCORD_vorkerland_finalize_reunified_wrk = {
 				if = {
 					limit = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
 					ADISCORD_vorkerland_show_joint_victory_superevent = yes
+					country_event = { id = ADISCORD_vorkerland_postwar.4 days = 7 }
 				}
 				else = {
 					ADISCORD_vorkerland_show_vlad_victory_superevent = yes
@@ -14129,6 +14130,85 @@ RUS_public_campaigns_shutdown = {
 }
 
 # --- postwar_expansion_effects ---
+# The verified joint victory schedules this once. Political settlement is
+# independent of the local super-event window and its close button.
+ADISCORD_vorkerland_establish_world_empire = {
+	if = {
+		limit = { ADISCORD_vorkerland_world_empire_can_form = yes }
+		set_cosmetic_tag = WRK_vorkerland_world_empire
+		retire_character = WRK_VAD_Joint_Council
+		if = {
+			limit = { has_character = WRK_Vlad_Petrichev }
+			retire_character = WRK_Vlad_Petrichev
+		}
+		VAD = {
+			if = {
+				limit = { has_character = WRK_Vlad_Petrichev }
+				retire_character = WRK_Vlad_Petrichev
+			}
+		}
+		# The transferred pragmatist needs an explicit role in the new ideology.
+		add_country_leader_role = {
+			character = WRK_Nikita_Worcker
+			promote_leader = yes
+			country_leader = {
+				ideology = etatism_ideology
+				expire = "2200.1.1.1"
+				traits = { Emergency_Powers }
+			}
+		}
+		set_politics = {
+			ruling_party = etatism
+			elections_allowed = no
+		}
+		set_popularities = { etatism = 100 }
+		set_party_name = {
+			ideology = etatism
+			name = WRK_world_empire_party
+			long_name = WRK_world_empire_party_long
+		}
+		set_portraits = {
+			character = WRK_Nikita_Worcker
+			civilian = { large = GFX_portrait_WRK_Nikita_Worcker_victory }
+		}
+		set_country_leader_portrait = {
+			ideology = etatism
+			portrait = GFX_portrait_WRK_Nikita_Worcker_victory
+		}
+		set_variable = { var = WRK_empire_attack value = 0 }
+		set_variable = { var = WRK_empire_defence value = 0 }
+		set_variable = { var = WRK_empire_org value = 0 }
+		set_variable = { var = WRK_empire_supply value = 0 }
+		set_variable = { var = WRK_empire_output value = 0 }
+		load_focus_tree = {
+			tree = ADISCORD_vorkerland_world_empire_focus
+			keep_completed = no
+		}
+		mark_focus_tree_layout_dirty = yes
+		ADISCORD_economy_mark_dirty = yes
+		news_event = { id = ADISCORD_vorkerland_postwar.5 hours = 1 }
+	}
+}
+
+ADISCORD_vorkerland_empire_refresh_industry = {
+	if = {
+		limit = {
+			NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_empire_industry } }
+		}
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_empire_industry }
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+ADISCORD_vorkerland_empire_refresh_army = {
+	if = {
+		limit = {
+			NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_empire_army } }
+		}
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_empire_army }
+	}
+}
+
 # Postwar institutions begin with the first funded programme. Reopening a
 # branch never resets accumulated reform, including after ordinary save/load.
 ADISCORD_vorkerland_pw_ensure_institutions = {

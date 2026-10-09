@@ -26,7 +26,8 @@ WRK_TREE = ROOT / "focus_trees/Vorkerland/civil_war/focuses.txt"
 REGIONAL = ("WIT", "IIA", "IBA", "IBL", "PWR", "PSD", "ZAO", "WPA", "WPS", "ROM", "TRU")
 CHAMPIONS = ("WRK", "IVN")
 ROUTES = ("worker", "joint", "utilitarian")
-KEY_STATES = {"25", "92", "95", "96", "90", "91", "93", "94"}
+CORRIDOR_STATES = {"90", "91", "93", "94"}
+HOME_STATES = {"25", "92", "95", "96", "32"}
 
 
 class WestFinalWarContractTests(unittest.TestCase):
@@ -195,9 +196,15 @@ class WestFinalWarContractTests(unittest.TestCase):
 
     def test_deadline_counts_the_documented_districts(self):
         source = body(EFFECTS, "ADISCORD_west_final_resolve_by_control")
-        counted = set(re.findall(r"\b(\d+) = \{ ADISCORD_west_count_key_state = yes \}", source))
-        self.assertEqual(counted, KEY_STATES)
-        self.assertIn("capital_scope = { ADISCORD_west_count_key_state = yes }", source)
+        corridor = set(re.findall(r"\b(\d+) = \{ ADISCORD_west_count_key_state = yes \}", source))
+        home = set(re.findall(r"\b(\d+) = \{ ADISCORD_west_count_occupied_home_state = yes \}", source))
+        self.assertEqual(corridor, CORRIDOR_STATES)
+        self.assertEqual(home, HOME_STATES)
+        # A lost capital moves, so the federal capital is counted as a fixed state.
+        self.assertNotIn("capital_scope", source)
+        occupied = body(EFFECTS, "ADISCORD_west_count_occupied_home_state")
+        self.assertIn("owner = { ADISCORD_west_on_ivn_side = yes }", occupied)
+        self.assertIn("owner = { ADISCORD_west_on_wrk_side = yes }", occupied)
         events = EVENTS.read_text(encoding="utf-8")
         self.assertIn("country_event = { id = ADISCORD_west.20 days = 720 }", body(EFFECTS, "ADISCORD_west_final_war_start"))
         self.assertIn("days > 718", events)
@@ -328,8 +335,32 @@ class WestFinalWarContractTests(unittest.TestCase):
         source = (ROOT / "common/ai_strategy/ADISCORD_west_final_war_ai.txt").read_text(encoding="utf-8")
         self.assertIn("ADISCORD_west_wrk_front_ivn = {", source)
         self.assertIn("ADISCORD_west_ivn_front_wrk = {", source)
-        for name in ("ADISCORD_west_wrk_front_ivn", "ADISCORD_west_wrk_hold_ivn", "ADISCORD_west_ivn_front_wrk"):
-            self.assertIn("abort_when_not_enabled = yes", body(ROOT / "common/ai_strategy/ADISCORD_west_final_war_ai.txt", name))
+        profiles = (
+            ("ADISCORD_west_wrk_front_ivn", "ivn"),
+            ("ADISCORD_west_wrk_hold_ivn", "ivn"),
+            ("ADISCORD_west_ivn_front_wrk", "wrk"),
+        )
+        for name, enemy_side in profiles:
+            profile = body(ROOT / "common/ai_strategy/ADISCORD_west_final_war_ai.txt", name)
+            self.assertIn("abort_when_not_enabled = yes", profile)
+            # The corridor separates the champions; requests cover the whole opposing side.
+            self.assertEqual(profile.count(f"ADISCORD_west_on_{enemy_side}_side = yes"), 2, name)
+        offensives = ("ADISCORD_west_wrk_front_ivn", "ADISCORD_west_ivn_front_wrk")
+        manual = {
+            re.search(r"manual_attack = (\w+)", body(ROOT / "common/ai_strategy/ADISCORD_west_final_war_ai.txt", name))[1]
+            for name in offensives
+        }
+        self.assertEqual(manual, {"yes"})
+
+    def test_side_choice_weights_give_every_wrk_route_a_constituency(self):
+        events = EVENTS.read_text(encoding="utf-8")
+        choice = events[events.index("id = ADISCORD_west.10"):events.index("id = ADISCORD_west.11")]
+        wrk_option = choice[choice.index("name = ADISCORD_west.10.a"):choice.index("name = ADISCORD_west.10.b")]
+        ivn_option = choice[choice.index("name = ADISCORD_west.10.b"):]
+        for route in ROUTES:
+            self.assertIn(f"has_country_flag = ADISCORD_vorkerland_route_{route}", wrk_option, route)
+        self.assertIn("has_country_flag = ADISCORD_vorkerland_free_republics_recognized", wrk_option)
+        self.assertEqual(wrk_option.count("strength_ratio"), ivn_option.count("strength_ratio"))
 
     def test_gameplay_files_have_no_bom(self):
         for path in (EFFECTS, TRIGGERS, EVENTS, IVN_TREE):

@@ -9,7 +9,7 @@
  ADISCORD_west_final_war_category: "War for the West"
  ADISCORD_west_final_war_category_desc: "Western reckoning: §Y[?global.ADISCORD_west_crisis|0]§! / 100.\n\n[ADISCORDWestStatus]"
  ADISCORD_west_status_crisis: "After the 180-day reconstruction period, monthly pressure resumes. Each month of reunified Vorkerland adds §Y5§!; western focuses of both powers and each entry into the League of Free Republics add §Y10§!. At §Y100§! Vorkerland starts the war for the West. Either claimant's final focus may start it earlier.\n\nNo one will stay out of the war: Rimat, Norvane, Krait, the corridor districts and the free republics will take a side."
- ADISCORD_west_status_war: "The war for the West is under way. Peace without a victor is impossible. The war ends with a claimant's capitulation, or after §Y720§! days by control of the Old March, the Itoran frontier, the northern corridor and the Vorkerland capital."
+ ADISCORD_west_status_war: "The war for the West is under way. Peace without a victor is impossible. The war ends with a claimant's capitulation, or after §Y720§! days by points. A side scores one point for each northern corridor district it holds and for each piece of enemy home ground it occupies: the Old March and the Itoran frontier, or Vorkerland's Central District. Holding one's own land scores nothing; the defending side wins a tie."
  ADISCORD_west_status_no_rival: "Vorkerland has no western rival left. At the start of next month it will be recognised as suzerain of the West."
  ADISCORD_west_status_resolved: "The war for the West is over. The region has one suzerain."
  ADISCORD_west_status_closed: "The western question opens once a claimant reunifies Vorkerland."

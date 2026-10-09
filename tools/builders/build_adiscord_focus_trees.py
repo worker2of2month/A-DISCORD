@@ -29,6 +29,7 @@ SOURCES = {
     "VAL/defeated/focuses.txt": "ADISCORD_VAL_defeated.txt",
     "VAL/administration/focuses.txt": "ADISCORD_VAL_administration.txt",
     "Vorkerland/civil_war/focuses.txt": "ADISCORD_Vorkerland_civil_war.txt",
+    "Vorkerland/world_empire/focuses.txt": "ADISCORD_Vorkerland_world_empire.txt",
     "Vorkerland/iba_norvane/focuses.txt": "ADISCORD_Vorkerland_iba_norvane.txt",
     "Vorkerland/zao/focuses.txt": "ADISCORD_Vorkerland_zao.txt",
 }

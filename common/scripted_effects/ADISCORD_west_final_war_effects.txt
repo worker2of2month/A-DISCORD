@@ -449,9 +449,11 @@ ADISCORD_west_final_resolve_without_hegemon = {
 	ADISCORD_west_clear_participants = yes
 }
 
-# GLOBAL. Deadline or external end: control of the Old March, the Itoran
-# frontier, the northern corridor and the Vorkerland capital decides. The
-# defending side keeps a tie.
+# GLOBAL. Deadline or external end. Each side scores the corridor districts it
+# controls and the home ground of the opposing champion it occupies: the Old
+# March, the Itoran frontier or the Vorkerland federal capital. Holding one's
+# own home ground scores nothing, so an unbroken front is a tie that the
+# defending side keeps.
 ADISCORD_west_final_resolve_by_control = {
 	if = {
 		limit = {
@@ -471,17 +473,16 @@ ADISCORD_west_final_resolve_by_control = {
 	else = {
 		set_temp_variable = { var = ADISCORD_west_wrk_hold value = 0 }
 		set_temp_variable = { var = ADISCORD_west_ivn_hold value = 0 }
-		25 = { ADISCORD_west_count_key_state = yes }
-		92 = { ADISCORD_west_count_key_state = yes }
-		95 = { ADISCORD_west_count_key_state = yes }
-		96 = { ADISCORD_west_count_key_state = yes }
 		90 = { ADISCORD_west_count_key_state = yes }
 		91 = { ADISCORD_west_count_key_state = yes }
 		93 = { ADISCORD_west_count_key_state = yes }
 		94 = { ADISCORD_west_count_key_state = yes }
-		WRK = {
-			capital_scope = { ADISCORD_west_count_key_state = yes }
-		}
+		25 = { ADISCORD_west_count_occupied_home_state = yes }
+		92 = { ADISCORD_west_count_occupied_home_state = yes }
+		95 = { ADISCORD_west_count_occupied_home_state = yes }
+		96 = { ADISCORD_west_count_occupied_home_state = yes }
+		# The engine moves a lost capital, so the federal capital is a fixed state.
+		32 = { ADISCORD_west_count_occupied_home_state = yes }
 		if = {
 			limit = { check_variable = { var = ADISCORD_west_wrk_hold value = ADISCORD_west_ivn_hold compare = greater_than } }
 			ADISCORD_west_final_resolve_wrk_victory = yes
@@ -508,6 +509,24 @@ ADISCORD_west_count_key_state = {
 	}
 	else_if = {
 		limit = { ADISCORD_west_state_held_by_ivn_side = yes }
+		add_to_temp_variable = { var = ADISCORD_west_ivn_hold value = 1 }
+	}
+}
+
+# STATE. Home ground scores only for the side occupying it from the other side.
+ADISCORD_west_count_occupied_home_state = {
+	if = {
+		limit = {
+			owner = { ADISCORD_west_on_ivn_side = yes }
+			ADISCORD_west_state_held_by_wrk_side = yes
+		}
+		add_to_temp_variable = { var = ADISCORD_west_wrk_hold value = 1 }
+	}
+	else_if = {
+		limit = {
+			owner = { ADISCORD_west_on_wrk_side = yes }
+			ADISCORD_west_state_held_by_ivn_side = yes
+		}
 		add_to_temp_variable = { var = ADISCORD_west_ivn_hold value = 1 }
 	}
 }
