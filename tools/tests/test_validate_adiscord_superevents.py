@@ -501,7 +501,7 @@ class SupereventContractTests(unittest.TestCase):
                 values.append(matches[0])
             self.assertEqual(len(set(values)), 4)
 
-    def test_joint_victory_is_separate_from_vlad_and_uses_worker_art(self) -> None:
+    def test_joint_victory_is_separate_from_vlad_and_uses_supplied_art(self) -> None:
         from tools.validators.validate_adiscord_superevents import blocks, _event_block
 
         name = "superevent_vorkerland_joint_victory"
@@ -515,7 +515,7 @@ class SupereventContractTests(unittest.TestCase):
         sprite = next(block for block in blocks(gfx, r"^\s*spriteType\s*=\s*\{")
                       if f'name = "GFX_{name}"' in block)
         self.assertIn('textureFile = "gfx/interface/superevents/WRK/'
-                      'superevent_vorkerland_worker_victory.png"', sprite)
+                      'superevent_vorkerland_joint_victory.png"', sprite)
         source = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
         timeout = blocks(source, r"^ADISCORD_superevent_observer_tick\s*=\s*\{")[0]
         self.assertIn(f"flag = {name} days > 6", timeout)
