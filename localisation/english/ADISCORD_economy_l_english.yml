@@ -518,8 +518,8 @@
  ADISCORD_development_program_cost_500:0 "§Y500§! £ADISCORD_economy_treasury_texticon"
  ADISCORD_development_program_cost_500_blocked:0 "§R500§! £ADISCORD_economy_treasury_texticon"
  ADISCORD_development_program_cost_500_tooltip:0 "§Y500§! £ADISCORD_economy_treasury_texticon"
- ADISCORD_development_program_result_25:0 "Selected development direction: §G+25§! progress."
- ADISCORD_development_program_result_35:0 "Selected development direction: §G+35§! progress."
+ ADISCORD_development_program_result_25:0 "Selected development direction: §G+25§! £ADISCORD_country_development_texticon."
+ ADISCORD_development_program_result_35:0 "Selected development direction: §G+35§! £ADISCORD_country_development_texticon."
 
  ADISCORD_economy_demobilization: "Return to Peacetime"
  ADISCORD_economy_demobilization_desc: "After the war, lift emergency measures through decisions or the normal law and budget controls. You have 120 days. Each remaining emergency measure then imposes its own penalty, removed by lowering the corresponding policy.\n\nStatus: [GetADISCORDDemobilizationStatusLoc]\n\nMeeting all requirements starts six months of recovery. A new war closes the requirements. Active scripted preparations defer the transition; an unfinished grace period restarts when the threat ends. Restoring emergency policies after settlement brings back penalties without a new grace period and ends recovery."

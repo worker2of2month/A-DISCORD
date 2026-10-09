@@ -12294,6 +12294,16 @@
         },
         {
           "type": "ADISCORD_urban_breacher",
+          "x": 0,
+          "y": 3
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 0,
+          "y": 4
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
           "x": 1,
           "y": 0
         },
@@ -12306,6 +12316,16 @@
           "type": "ADISCORD_urban_breacher",
           "x": 1,
           "y": 2
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 1,
+          "y": 3
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 1,
+          "y": 4
         }
       ],
       "support": [
@@ -12313,22 +12333,29 @@
           "type": "engineer",
           "x": 0,
           "y": 0
+        },
+        {
+          "type": "artillery",
+          "x": 0,
+          "y": 1
         }
       ],
       "computed": {
-        "organization": 59.214285714285715,
-        "manpower": 6300.0,
+        "organization": 56.458333333333336,
+        "manpower": 10600.0,
         "equipment": {
-          "ADISCORD_power_shield_equipment": 120.0,
-          "ADISCORD_squad_weapons_equipment": 360.0,
-          "infantry_equipment": 5670.0,
-          "support_equipment": 210.0
+          "ADISCORD_power_shield_equipment": 200.0,
+          "ADISCORD_squad_weapons_equipment": 600.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 9540.0,
+          "support_equipment": 330.0
         },
-        "supply": 0.9800000000000001
+        "supply": 1.7799999999999998
       },
       "equipment_availability": {
         "ADISCORD_power_shield_equipment": true,
         "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
       },
@@ -12336,6 +12363,108 @@
       "replacement_path": {
         "kind": "retain",
         "target": "stp_postwar_shield_brigade"
+      },
+      "definition_metadata": {
+        "is_locked": false
+      }
+    },
+    {
+      "key": "power_shields_project_assault_division",
+      "source": {
+        "kind": "script",
+        "path": "common/special_projects/projects/land_projects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Shield Assault Division",
+      "display_name": "Shield Assault Division",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 0,
+          "y": 3
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 0,
+          "y": 4
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 1,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 1,
+          "y": 3
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 1,
+          "y": 4
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "artillery",
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "computed": {
+        "organization": 56.458333333333336,
+        "manpower": 10600.0,
+        "equipment": {
+          "ADISCORD_power_shield_equipment": 200.0,
+          "ADISCORD_squad_weapons_equipment": 600.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 9540.0,
+          "support_equipment": 330.0
+        },
+        "supply": 1.7799999999999998
+      },
+      "equipment_availability": {
+        "ADISCORD_power_shield_equipment": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "power_shields_project_assault_division"
       },
       "definition_metadata": {
         "is_locked": false

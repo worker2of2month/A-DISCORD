@@ -1498,6 +1498,9 @@ ADISCORD_vorkerland_wrk_complete_protectorate_enforcement = {
 
 ADISCORD_vorkerland_prepare_initial_combatants = {
 	WKR = {
+		WRK = {
+			PREV = { ADISCORD_copy_development_from_prev = yes }
+		}
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_ideas = ADISCORD_vorkerland_erased_nations
 		add_ideas = ADISCORD_vorkerland_last_stand
@@ -1544,6 +1547,9 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 		set_country_flag = ADISCORD_vorkerland_wkr_air_sustainment_v1_applied
 	}
 	VAD = {
+		WRK = {
+			PREV = { ADISCORD_copy_development_from_prev = yes }
+		}
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_land = yes
@@ -1576,6 +1582,9 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 		}
 	}
 	TVA = {
+		WRK = {
+			PREV = { ADISCORD_copy_development_from_prev = yes }
+		}
 		ADISCORD_vorkerland_initialize_civil_war_exhaustion = yes
 		add_ideas = ADISCORD_vorkerland_last_stand
 	}
@@ -8727,6 +8736,9 @@ ADISCORD_vorkerland_form_wrk_from_wkr = {
 	32 = { set_state_controller_to = WRK }
 	set_capital = { state = 32 }
 	inherit_technology = WKR
+	WKR = {
+		PREV = { ADISCORD_copy_development_from_prev = yes }
+	}
 	load_focus_tree = {
 		tree = ADISCORD_vorkerland_civil_war_focus
 		keep_completed = yes
@@ -8851,6 +8863,9 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 	32 = { set_state_controller_to = WRK }
 	set_capital = { state = 32 }
 	inherit_technology = VAD
+	VAD = {
+		PREV = { ADISCORD_copy_development_from_prev = yes }
+	}
 	load_focus_tree = {
 		tree = ADISCORD_vorkerland_civil_war_focus
 		keep_completed = yes
@@ -8969,6 +8984,9 @@ ADISCORD_vorkerland_form_wrk_from_tva = {
 	32 = { set_state_controller_to = WRK }
 	set_capital = { state = 32 }
 	inherit_technology = TVA
+	TVA = {
+		PREV = { ADISCORD_copy_development_from_prev = yes }
+	}
 	load_focus_tree = {
 		tree = ADISCORD_vorkerland_civil_war_focus
 		keep_completed = yes
@@ -12757,7 +12775,7 @@ RUS_bunker_refresh = {
 	multiply_temp_variable = { var = RUS_bunker_power_add value = 4 }
 	add_to_variable = { var = RUS_bunker_power value = RUS_bunker_power_add }
 	add_to_variable = { var = RUS_bunker_power value = RUS_bunker_power_bonus }
-	set_variable = { var = RUS_bunker_used_power value = 0 }
+	set_variable = { var = RUS_bunker_used_power value = RUS_bunker_energy_export_power }
 	set_variable = { var = RUS_bunker_fitted value = 0 }
 	set_variable = { var = RUS_bunker_attrition value = 0 }
 	set_variable = { var = RUS_bunker_army_defence_factor value = 0 }
@@ -13212,6 +13230,8 @@ RUS_campaign_initialize = {
 }
 
 RUS_campaign_shutdown = {
+	RUS_bunker_energy_sale_cancel = yes
+	remove_decision = RUS_bunker_energy_sale
 	RUS_crisis_clear_preparation = yes
 	if = {
 		limit = { has_power_balance = { id = RUS_state_balance } }
@@ -14691,5 +14711,38 @@ RUS_crisis_fortify_reactor_state = {
 		limit = { is_owned_by = RUS is_controlled_by = RUS }
 		add_building_construction = { type = bunker level = 2 instant_build = yes }
 		add_building_construction = { type = anti_air_building level = 2 instant_build = yes }
+	}
+}
+
+# The reservation is cleared before either callback can be repeated.
+RUS_bunker_energy_sale_start = {
+	if = {
+		limit = { RUS_bunker_energy_sale_available = yes }
+		set_variable = { var = RUS_bunker_energy_export_power value = 1 }
+		add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+		RUS_bunker_refresh = yes
+	}
+}
+
+RUS_bunker_energy_sale_finish = {
+	if = {
+		limit = { has_variable = RUS_bunker_energy_export_power }
+		if = {
+			limit = { RUS_bunker_operational = yes }
+			clear_variable = RUS_bunker_energy_export_power
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_energy_sale_cancel = yes }
+	}
+}
+
+RUS_bunker_energy_sale_cancel = {
+	if = {
+		limit = { has_variable = RUS_bunker_energy_export_power }
+		clear_variable = RUS_bunker_energy_export_power
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+		RUS_bunker_refresh = yes
 	}
 }

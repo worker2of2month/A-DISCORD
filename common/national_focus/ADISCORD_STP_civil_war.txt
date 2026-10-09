@@ -1887,6 +1887,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			ADISCORD_reform_social_system_development = yes
 			unlock_decision_tooltip = STP_pw_restart_workshops
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_homes_for_returnees_delta } }
 			hidden_effect = {
@@ -2039,6 +2040,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			ADISCORD_reform_army_development = yes
 			add_ideas = ADISCORD_staff_STS_Mikhail_Rakitin
 			add_tech_bonus = { name = STP_pw_infantry_lessons_bonus bonus = 0.5 uses = 1 category = infantry_weapons }
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_officer_school_delta } }
@@ -2222,6 +2224,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			ADISCORD_reform_state_development = yes
 			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_conservatives_program_1_tt }
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 1 } }
 
@@ -2317,6 +2320,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			ADISCORD_reform_society_development = yes
 			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_conservatives_program_2_tt }
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 2 } }
 
@@ -2366,6 +2370,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			ADISCORD_reform_social_system_development = yes
 			unlock_decision_tooltip = STP_pw_party_reopen_port
 			custom_effect_tooltip = STP_pw_party_reopen_port_unlock_summary_tt
 			add_stability = 0.03
@@ -2487,6 +2492,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			ADISCORD_reform_economic_development = yes
 			custom_effect_tooltip = STP_qol_industry_company_tt
 
 			custom_effect_tooltip = STP_qol_elite_industry_tt
@@ -2539,6 +2545,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			ADISCORD_reform_army_development = yes
 			add_ideas = ADISCORD_staff_STP_Erhard_Kleist
 			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_army_program_1_tt }
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 7 } }
@@ -2994,6 +3001,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			ADISCORD_reform_cultural_development = yes
 			add_tech_bonus = { name = STP_party_research_council bonus = 0.5 uses = 2 category = industry }
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_party_research_council_post_delta } }
 			hidden_effect = {
@@ -13079,6 +13087,7 @@ focus_tree = {
 		prerequisite = { focus = STP_pc_development_engineers_on_radio }
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			ADISCORD_reform_cultural_development = yes
 			add_research_slot = 1
 			custom_effect_tooltip = STP_pc_development_reopen_universities_tt
 			hidden_effect = {

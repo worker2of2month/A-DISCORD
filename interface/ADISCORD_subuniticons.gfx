@@ -68,10 +68,9 @@ spriteTypes = {
 		noOfFrames = 2
 	}
 
-	spriteType = {
+	SpriteType = {
 		name = "GFX_ADISCORD_power_shield_equipment_medium"
-		texturefile = "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds"
-		noOfFrames = 2
+		textureFile = "gfx/interface/technologies/ADISCORD_power_shield_equipment.dds"
 	}
 
 	spriteType = {

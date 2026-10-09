@@ -2790,6 +2790,12 @@ STP_cw_materialize_region_assets = {
 }
 
 STP_cw_prepare_successor = {
+	if = {
+		limit = { NOT = { has_country_flag = STP_cw_templates_loaded } }
+		STP = {
+			PREV = { ADISCORD_copy_development_from_prev = yes }
+		}
+	}
 	set_country_flag = STP_cw_participant
 	set_rule = { can_join_factions = no can_create_factions = no }
 	# inherit_technology copies later union research when the engine applies it.
@@ -13910,9 +13916,9 @@ STP_pw_open_shield_corps = {
 				NOT = { has_idea = STP_pw_shield_corps }
 			}
 		}
-		set_technology = {
-			ADISCORD_tech_kefreyt_shield_special_forces = 1
-			popup = no
+		if = {
+			limit = { NOT = { is_special_project_completed = sp:ADISCORD_sp_power_shields } }
+			complete_special_project = sp:ADISCORD_sp_power_shields
 		}
 		custom_effect_tooltip = STP_pw_shield_corps_template_tt
 		hidden_effect = {
@@ -13926,12 +13932,17 @@ STP_pw_open_shield_corps = {
 						ADISCORD_urban_breacher = { x = 0 y = 0 }
 						ADISCORD_urban_breacher = { x = 0 y = 1 }
 						ADISCORD_urban_breacher = { x = 0 y = 2 }
+						ADISCORD_urban_breacher = { x = 0 y = 3 }
+						ADISCORD_urban_breacher = { x = 0 y = 4 }
 						ADISCORD_urban_breacher = { x = 1 y = 0 }
 						ADISCORD_urban_breacher = { x = 1 y = 1 }
 						ADISCORD_urban_breacher = { x = 1 y = 2 }
+						ADISCORD_urban_breacher = { x = 1 y = 3 }
+						ADISCORD_urban_breacher = { x = 1 y = 4 }
 					}
 					support = {
 						engineer = { x = 0 y = 0 }
+						artillery = { x = 0 y = 1 }
 					}
 				}
 			}
@@ -13939,22 +13950,27 @@ STP_pw_open_shield_corps = {
 		add_ideas = STP_pw_shield_corps
 		add_equipment_to_stockpile = {
 			type = ADISCORD_power_shield_equipment_1
-			amount = 120
+			amount = 200
 			producer = ROOT
 		}
 		add_equipment_to_stockpile = {
 			type = infantry_equipment_0
-			amount = 5670
+			amount = 9540
 			producer = ROOT
 		}
 		add_equipment_to_stockpile = {
 			type = ADISCORD_squad_weapons_equipment_0
-			amount = 360
+			amount = 600
 			producer = ROOT
 		}
 		add_equipment_to_stockpile = {
 			type = support_equipment_1
-			amount = 210
+			amount = 330
+			producer = ROOT
+		}
+		add_equipment_to_stockpile = {
+			type = artillery_equipment_1
+			amount = 12
 			producer = ROOT
 		}
 	}

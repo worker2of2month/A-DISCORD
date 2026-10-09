@@ -3418,3 +3418,32 @@ ADISCORD_vorkerland_world_empire_active = {
 	tag = WRK
 	has_cosmetic_tag = WRK_vorkerland_world_empire
 }
+
+RUS_community_assemblies_ready = {
+	RUS_khan_governing = yes
+	has_completed_focus = RUS_count_the_hearths
+	NOT = { ADISCORD_society_development_at_least_5 = yes }
+	check_variable = { var = ADISCORD_society_development_progress value = 100 compare = less_than }
+}
+
+RUS_public_reading_rooms_ready = {
+	RUS_khan_governing = yes
+	has_completed_focus = RUS_school_of_scribes
+	NOT = { ADISCORD_cultural_development_at_least_5 = yes }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 100 compare = less_than }
+}
+
+RUS_regimental_training_ready = {
+	RUS_khan_governing = yes
+	has_completed_focus = RUS_officer_courses
+	NOT = { ADISCORD_army_development_at_least_5 = yes }
+	check_variable = { var = ADISCORD_army_development_progress value = 100 compare = less_than }
+}
+
+RUS_bunker_energy_sale_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	has_completed_focus = RUS_bunker_power_school
+	NOT = { has_variable = RUS_bunker_energy_export_power }
+	check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+}

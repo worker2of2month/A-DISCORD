@@ -30,6 +30,12 @@ focus_tree = {
 			add_political_power = 50
 			add_war_support = 0.05
 			custom_effect_tooltip = RUS_summon_the_aimaqs_tt
+			hidden_effect = {
+				if = {
+					limit = { is_ai = no }
+					scoped_play_song = "ADISCORD_khan_theme"
+				}
+			}
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -483,6 +489,14 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			custom_effect_tooltip = RUS_society_development_reform_tt
+			hidden_effect = {
+				ADISCORD_initialize_society_development_variables = yes
+				add_to_variable = { var = ADISCORD_society_development_progress value = 25 }
+				add_to_variable = { var = ADISCORD_society_development_monthly_growth value = 2 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			unlock_decision_tooltip = RUS_community_assemblies
 			add_manpower = 1000
 			add_stability = 0.03
 			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.2 } }
@@ -670,6 +684,14 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			custom_effect_tooltip = RUS_cultural_development_reform_tt
+			hidden_effect = {
+				ADISCORD_initialize_society_development_variables = yes
+				add_to_variable = { var = ADISCORD_cultural_development_progress value = 25 }
+				add_to_variable = { var = ADISCORD_cultural_development_monthly_growth value = 2 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			unlock_decision_tooltip = RUS_public_reading_rooms
 			add_research_slot = 1
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			if = {
@@ -700,6 +722,13 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			custom_effect_tooltip = RUS_social_system_development_reform_tt
+			hidden_effect = {
+				ADISCORD_initialize_society_development_variables = yes
+				add_to_variable = { var = ADISCORD_social_system_development_progress value = 25 }
+				add_to_variable = { var = ADISCORD_social_system_development_monthly_growth value = 2 }
+				ADISCORD_economy_mark_dirty = yes
+			}
 			unlock_decision_tooltip = RUS_district_health_programme
 			add_manpower = 2000
 			add_stability = 0.03
@@ -815,6 +844,13 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			custom_effect_tooltip = RUS_economic_development_reform_tt
+			hidden_effect = {
+				ADISCORD_initialize_society_development_variables = yes
+				add_to_variable = { var = ADISCORD_economic_development_progress value = 25 }
+				add_to_variable = { var = ADISCORD_economic_development_monthly_growth value = 2 }
+				ADISCORD_economy_mark_dirty = yes
+			}
 			unlock_decision_tooltip = RUS_workshop_training
 			add_tech_bonus = { name = RUS_machine_school bonus = 0.5 uses = 1 category = industry }
 			add_equipment_to_stockpile = { type = support_equipment amount = 80 producer = RUS }
@@ -1757,6 +1793,14 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			custom_effect_tooltip = RUS_army_development_reform_tt
+			hidden_effect = {
+				ADISCORD_initialize_society_development_variables = yes
+				add_to_variable = { var = ADISCORD_army_development_progress value = 25 }
+				add_to_variable = { var = ADISCORD_army_development_monthly_growth value = 2 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			unlock_decision_tooltip = RUS_regimental_training
 			army_experience = 25
 			add_command_power = 15
 		}
@@ -3387,9 +3431,11 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			custom_effect_tooltip = RUS_civil_service_growth_tt
+			custom_effect_tooltip = RUS_state_development_reform_tt
 			hidden_effect = {
-				ADISCORD_increase_state_development_monthly_growth = yes
+				ADISCORD_initialize_society_development_variables = yes
+				add_to_variable = { var = ADISCORD_state_development_progress value = 25 }
+				add_to_variable = { var = ADISCORD_state_development_monthly_growth value = 2 }
 				ADISCORD_economy_mark_dirty = yes
 			}
 			unlock_decision_tooltip = RUS_civil_service_training
@@ -3413,9 +3459,11 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			custom_effect_tooltip = RUS_civil_service_growth_tt
+			custom_effect_tooltip = RUS_state_development_reform_tt
 			hidden_effect = {
-				ADISCORD_increase_state_development_monthly_growth = yes
+				ADISCORD_initialize_society_development_variables = yes
+				add_to_variable = { var = ADISCORD_state_development_progress value = 25 }
+				add_to_variable = { var = ADISCORD_state_development_monthly_growth value = 2 }
 				ADISCORD_economy_mark_dirty = yes
 			}
 			unlock_decision_tooltip = RUS_civil_service_training

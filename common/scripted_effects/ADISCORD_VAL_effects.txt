@@ -3576,18 +3576,15 @@ VAL_raise_shield_special_forces = {
 				}
 			}
 
-			# Unlock the battalion if it is not unlocked yet.
+			# The national programme also completes the shared research project.
 			if = {
 				limit = {
 					NOT = {
-						has_tech = ADISCORD_tech_kefreyt_shield_special_forces
+						is_special_project_completed = sp:ADISCORD_sp_power_shields
 					}
 				}
 
-				set_technology = {
-					ADISCORD_tech_kefreyt_shield_special_forces = 1
-					popup = no
-				}
+				complete_special_project = sp:ADISCORD_sp_power_shields
 			}
 
 

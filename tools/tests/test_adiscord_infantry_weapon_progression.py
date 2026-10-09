@@ -50,7 +50,7 @@ def custom_entity_name(prefix: str, level: int) -> str:
 
 
 class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
-    def test_bezhaysk_and_starting_vassals_keep_models_and_weapons_at_every_tier(self) -> None:
+    def test_bezhaysk_retinues_and_montar_guard_keep_models_and_weapons_at_every_tier(self) -> None:
         history = (ROOT / "history/countries/BJK - Besjaysk.txt").read_text(
             encoding="utf-8"
         )
@@ -61,7 +61,7 @@ class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
         gfx = (ROOT / "gfx/entities/ADISCORD_country_infantry.gfx").read_text(
             encoding="utf-8"
         )
-        for tag in sorted(tags):
+        for tag in sorted(tags | {"MON"}):
             for pose in ("rifle", "mg"):
                 name = f"ADISCORD_{tag}_field_{pose}_mesh"
                 candidates = []

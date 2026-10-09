@@ -518,8 +518,8 @@
  ADISCORD_development_program_cost_500:0 "§Y500§! £ADISCORD_economy_treasury_texticon"
  ADISCORD_development_program_cost_500_blocked:0 "§R500§! £ADISCORD_economy_treasury_texticon"
  ADISCORD_development_program_cost_500_tooltip:0 "§Y500§! £ADISCORD_economy_treasury_texticon"
- ADISCORD_development_program_result_25:0 "Развитие выбранного направления: §G+25§! прогресса."
- ADISCORD_development_program_result_35:0 "Развитие выбранного направления: §G+35§! прогресса."
+ ADISCORD_development_program_result_25:0 "Развитие выбранного направления: §G+25§! £ADISCORD_country_development_texticon."
+ ADISCORD_development_program_result_35:0 "Развитие выбранного направления: §G+35§! £ADISCORD_country_development_texticon."
 
  ADISCORD_economy_demobilization: "Возвращение к мирной жизни"
  ADISCORD_economy_demobilization_desc: "[GetADISCORDDemobilizationStatusLoc]\n\nПосле войны чрезвычайные меры снимаются решениями или обычной сменой законов и бюджета. На переход отводится 120 дней. Каждый сохранённый военный режим после срока даёт свой штраф; снижение соответствующего закона снимает его.\n\nПосле выполнения всех требований начинается шестимесячное восстановление. Новая война закрывает требования. Активная сюжетная подготовка откладывает переход: после окончания угрозы незавершённый срок начинается заново. Повторное введение военных мер после завершения перехода возвращает штрафы без нового льготного срока и прекращает восстановление."

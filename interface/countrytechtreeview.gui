@@ -51,7 +51,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 7160 height = 2970 min = { width = 100%% height = 100%% } }
+				size = { width = 7160 height = 2800 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_stripes" }
 				iconType = {
@@ -504,25 +504,8 @@ guiTypes = {
 				format = "LEFT"
 			}
 			instantTextBoxType = {
-				name = "ADISCORD_branch_power_shields"
-				position = { x = 150 y = 2240 }
-				font = "hoi_18b"
-				text = "ADISCORD_TECH_BRANCH_POWER_SHIELDS"
-				maxWidth = 900
-				maxHeight = 24
-				format = left
-				Orientation = "UPPER_LEFT"
-			}
-			gridboxtype = {
-				name = "ADISCORD_tech_kefreyt_shield_special_forces_tree"
-				position = { x = 150 y = 2270 }
-				size = { width = 6930 height = 140 }
-				slotsize = { width = 70 height = 70 }
-				format = "LEFT"
-			}
-			instantTextBoxType = {
 				name = "ADISCORD_branch_special_forces"
-				position = { x = 150 y = 2410 }
+				position = { x = 150 y = 2240 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_SPECIAL_FORCES"
 				maxWidth = 900
@@ -532,7 +515,7 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_fieldcraft_manuals_tree"
-				position = { x = 150 y = 2440 }
+				position = { x = 150 y = 2270 }
 				size = { width = 6930 height = 420 }
 				slotsize = { width = 70 height = 70 }
 				format = "LEFT"
@@ -5488,6 +5471,107 @@ guiTypes = {
 		}
 
 		containerWindowType = {
+			name = "ADISCORD_special_technologies_folder"
+			position = { x = 0 y = 47 }
+			size = { width = 100%% height = 100%% }
+			margin = { top = 13 left = 13 bottom = 24 right = 25 }
+			drag_scroll = { left middle }
+			verticalScrollbar = "right_vertical_slider"
+			horizontalScrollbar = "bottom_horizontal_slider"
+			scroll_wheel_factor = 40
+			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_window_tile" }
+			containerWindowType = {
+				name = "techtree_stripes"
+				position = { x = 0 y = 0 }
+				size = { width = 1180 height = 930 min = { width = 100%% height = 100%% } }
+				clipping = no
+				background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_stripes" }
+				iconType = {
+					name = "ADISCORD_tech_background"
+					spriteType = "GFX_ADISCORD_technology_transparent_tile"
+					position = { x = 0 y = 0 }
+					alwaystransparent = yes
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_ADISCORD_special_technologies_folder_year_power_shields_2163"
+					position = { x = 88 y = 154 }
+					font = "hoi_18b"
+					text = "2163"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_ADISCORD_special_technologies_folder_year_power_shields_2166"
+					position = { x = 88 y = 294 }
+					font = "hoi_18b"
+					text = "2166"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_ADISCORD_special_technologies_folder_year_power_shields_2169"
+					position = { x = 88 y = 434 }
+					font = "hoi_18b"
+					text = "2169"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_ADISCORD_special_technologies_folder_year_power_shields_2172"
+					position = { x = 88 y = 574 }
+					font = "hoi_18b"
+					text = "2172"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_ADISCORD_special_technologies_folder_year_power_shields_2175"
+					position = { x = 88 y = 714 }
+					font = "hoi_18b"
+					text = "2175"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_special_technology_access_note"
+				position = { x = 88 y = 15 }
+				font = "hoi_16mbs"
+				text = "ADISCORD_special_technologies_folder_desc"
+				maxWidth = 900
+				maxHeight = 48
+				format = left
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_power_shields"
+				position = { x = 150 y = 76 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_POWER_SHIELDS"
+				maxWidth = 210
+				maxHeight = 24
+				format = center
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_kefreyt_shield_special_forces_tree"
+				position = { x = 150 y = 130 }
+				size = { width = 210 height = 700 }
+				slotsize = { width = 70 height = 70 }
+				format = "UP"
+			}
+		}
+
+		containerWindowType = {
 			name = "folder_tabs"
 			position = { x=0 y=7 }
 			size = { width = 100%% height = 30 }
@@ -5604,6 +5688,14 @@ guiTypes = {
 				position = { x=734 y=0}
 				hide = yes
 				alwaystransparent = yes
+			}
+
+			buttonType = {
+				name = "ADISCORD_special_technologies_folder_tab"
+				position = { x = 823 y = 0 }
+				quadTextureSprite = "GFX_ADISCORD_technology_folder_special"
+				frame = 1
+				clicksound = ui_research_tab_engineering
 			}
 		}
 
@@ -8463,4 +8555,154 @@ guiTypes = {
 		position = { x=0 y=0 }
 		size = { width=1 height=1 }
 	}
+	containerWindowType = {
+		name = "techtree_ADISCORD_special_technologies_folder_item"
+		position = { x=-56 y=-7 }
+		size = { width = 183 height = 84 }
+		clipping = no
+
+		background = {
+			name = "Background"
+			quadTextureSprite ="GFX_technology_unavailable_item_bg"
+		}
+
+		gridboxtype = {
+			# contains special_project_specialization
+			name = "special_project_specialization_list"
+		}
+
+		iconType = {
+			name = "Icon"
+			position = { x=91 y=50 }
+			spriteType = "GFX_technology_medium"
+			centerposition = yes
+			alwaystransparent = yes
+		}
+
+
+		instantTextBoxType = {
+			name = "Name"
+			position = { x = 3 y = -3 }
+			textureFile = ""
+			font = "hoi_20bs"
+			borderSize = {x = 4 y = 4}
+			text = "Happy-Go-Lucky-Tank"
+			maxWidth = 160
+			maxHeight = 20
+			fixedsize = yes
+			format = left
+		}
+
+		iconType = {
+			name = "bonus_icon"
+			position = { x=111 y=-22 }
+			spriteType = "GFX_tech_bonus"
+		}
+
+		instantTextBoxType = {
+			name = "bonus"
+			position = { x = 111 y = -22 }
+			textureFile = ""
+			font = "hoi_16mbs"
+			borderSize = {x = 4 y = 4}
+			text = "lol boat"
+			maxWidth = 80
+			maxHeight = 20
+			format = center
+		}
+
+
+		containerWindowType = {
+			name = "sub_technology_slot_0"
+			position = { x=141 y=1 }
+			size = { width = 35 height = 26 }
+			clipping = no
+
+			background = {
+				name = "Background"
+				spriteType ="GFX_subtechnology_unavailable_item_bg"
+			}
+
+			iconType = {
+				name = "picture"
+				position = { x=2 y=2 }
+				spriteType = "GFX_subtech_rocket"
+				alwaystransparent = yes
+			}
+		}
+		containerWindowType = {
+			name = "sub_technology_slot_1"
+			position = { x=141 y=1 }
+			size = { width = 35 height = 26 }
+			clipping = no
+
+			background = {
+				name = "Background"
+				spriteType ="GFX_subtechnology_unavailable_item_bg"
+			}
+
+			iconType = {
+				name = "picture"
+				position = { x=2 y=2 }
+				spriteType = "GFX_subtech_td"
+				alwaystransparent = yes
+			}
+		}
+
+		iconType = {
+			name = "can_assign_design_team_icon"
+			position = { x=5 y=55 }
+			spriteType = "GFX_design_team_icon"
+		}
+
+	}
+
+	containerWindowType = {
+		name = "techtree_ADISCORD_special_technologies_folder_small_item"
+		position = { x=0 y=0 }
+		size = { width = 72 height = 72 }
+		clipping = no
+
+		background = {
+			name = "bg"
+			quadTextureSprite ="GFX_technology_unavailable_item_bg"
+		}
+
+		gridboxtype = {
+			# contains special_project_specialization
+			name = "special_project_specialization_list"
+		}
+
+		iconType = {
+			name = "Icon"
+			position = { x=3 y=3 }
+			spriteType = "GFX_technology_medium"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "bonus_icon"
+			position = { x=-1 y=-22 }
+			spriteType = "GFX_tech_bonus"
+		}
+
+		instantTextBoxType = {
+			name = "bonus"
+			position = { x = -1 y = -21 }
+			textureFile = ""
+			font = "hoi_16mbs"
+			borderSize = {x = 4 y = 4}
+			text = "lol boat"
+			maxWidth = 80
+			maxHeight = 20
+			format = center
+		}
+
+		iconType = {
+			name = "can_assign_design_team_icon"
+			position = { x=0 y=42 }
+			spriteType = "GFX_design_team_icon"
+		}
+	}
+
 }

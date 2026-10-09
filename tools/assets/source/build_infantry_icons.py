@@ -22,9 +22,11 @@ SIZES = (
 )
 
 
-def outputs():
+def outputs(units=None):
     result = {}
     for unit, native in UNITS.items():
+        if units is not None and unit not in units:
+            continue
         with Image.open(SOURCE / f"ADISCORD_{unit}.png") as source:
             badge = source.convert("RGBA")
         # Ignore near-transparent extraction fringe only when measuring margins.
@@ -52,11 +54,12 @@ def outputs():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--units', nargs='+', choices=tuple(UNITS))
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true")
     actions.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    generated = outputs()
+    generated = outputs(args.units)
     changed = [
         path for path, data in generated.items()
         if not path.exists() or path.read_bytes() != data

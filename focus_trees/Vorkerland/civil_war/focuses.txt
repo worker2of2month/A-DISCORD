@@ -7230,6 +7230,7 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_cultural_development = yes
 			add_stability = 0.01
 			add_political_power = 10
 			add_command_power = 5
@@ -7902,6 +7903,7 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_cultural_development = yes
 			add_stability = 0.01
 			add_political_power = 10
 			add_command_power = 5
@@ -8598,6 +8600,7 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_cultural_development = yes
 			add_stability = 0.01
 			add_political_power = 10
 			add_command_power = 5
@@ -8983,6 +8986,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_society_development = yes
 			unlock_decision_tooltip = ADISCORD_vorkerland_pw_rebuild_district
 			custom_effect_tooltip = WRK_pw_reconstruction_unlock_tt
 			add_political_power = 50
@@ -9143,6 +9147,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_social_system_development = yes
 			custom_effect_tooltip = WRK_pw_reconstruction_slot_tt
 			add_stability = 0.05
 			add_political_power = 75
@@ -9288,6 +9293,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_army_development = yes
 			army_experience = 50
 			add_command_power = 20
 			effect_tooltip = {
@@ -9857,6 +9863,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_economic_development = yes
 			add_research_slot = 1
 			effect_tooltip = {
 				add_ideas = ADISCORD_vorkerland_pw_delta_output
@@ -9926,6 +9933,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_state_development = yes
 			custom_effect_tooltip = WRK_pw_treaty_charter_tt
 			add_political_power = 50
 			add_war_support = 0.03
@@ -10256,6 +10264,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_society_development = yes
 			unlock_decision_tooltip = ADISCORD_vorkerland_pw_rebuild_district
 			custom_effect_tooltip = WRK_pw_reconstruction_unlock_tt
 			add_political_power = 50
@@ -10415,6 +10424,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_social_system_development = yes
 			custom_effect_tooltip = WRK_pw_reconstruction_slot_tt
 			add_stability = 0.05
 			add_command_power = 20
@@ -10562,6 +10572,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_army_development = yes
 			army_experience = 75
 			add_command_power = 20
 			effect_tooltip = {
@@ -11131,6 +11142,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_economic_development = yes
 			add_research_slot = 1
 			effect_tooltip = {
 				add_ideas = ADISCORD_vorkerland_pw_delta_output
@@ -11200,6 +11212,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_state_development = yes
 			custom_effect_tooltip = WRK_pw_treaty_charter_tt
 			add_political_power = 50
 			add_war_support = 0.03
@@ -11530,6 +11543,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_society_development = yes
 			unlock_decision_tooltip = ADISCORD_vorkerland_pw_rebuild_district
 			custom_effect_tooltip = WRK_pw_reconstruction_unlock_tt
 			add_political_power = 100
@@ -11693,6 +11707,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_social_system_development = yes
 			custom_effect_tooltip = WRK_pw_reconstruction_slot_tt
 			add_stability = 0.05
 			effect_tooltip = {
@@ -11858,6 +11873,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_army_development = yes
 			army_experience = 50
 			add_command_power = 20
 			effect_tooltip = {
@@ -12432,6 +12448,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_economic_development = yes
 			add_research_slot = 1
 			effect_tooltip = {
 				add_ideas = ADISCORD_vorkerland_pw_delta_output
@@ -12500,6 +12517,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_state_development = yes
 			custom_effect_tooltip = WRK_pw_treaty_charter_tt
 			add_political_power = 50
 			add_war_support = 0.03

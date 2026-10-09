@@ -65,6 +65,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			ADISCORD_reform_state_development = yes
 			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_conservatives_program_1_tt }
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 1 } }
 
@@ -160,6 +161,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			ADISCORD_reform_society_development = yes
 			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_conservatives_program_2_tt }
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 2 } }
 
@@ -209,6 +211,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			ADISCORD_reform_social_system_development = yes
 			unlock_decision_tooltip = STP_pw_party_reopen_port
 			custom_effect_tooltip = STP_pw_party_reopen_port_unlock_summary_tt
 			add_stability = 0.03
@@ -330,6 +333,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			ADISCORD_reform_economic_development = yes
 			custom_effect_tooltip = STP_qol_industry_company_tt
 
 			custom_effect_tooltip = STP_qol_elite_industry_tt
@@ -382,6 +386,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			ADISCORD_reform_army_development = yes
 			add_ideas = ADISCORD_staff_STP_Erhard_Kleist
 			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_army_program_1_tt }
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 7 } }
@@ -837,6 +842,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			ADISCORD_reform_cultural_development = yes
 			add_tech_bonus = { name = STP_party_research_council bonus = 0.5 uses = 2 category = industry }
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_party_research_council_post_delta } }
 			hidden_effect = {

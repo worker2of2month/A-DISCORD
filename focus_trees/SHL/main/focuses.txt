@@ -41,6 +41,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_society_development = yes
 			custom_effect_tooltip = SHL_census_tt
 			hidden_effect = {
 				add_to_variable = { var = SHL_reserve_stock value = 2 }
@@ -87,6 +88,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_state_development = yes
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea
@@ -117,6 +119,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_economic_development = yes
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea
@@ -168,6 +171,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_cultural_development = yes
 			unlock_decision_tooltip = SHL_training_furnace
 			hidden_effect = { clr_country_flag = SHL_master_dispute }
 		}
@@ -351,6 +355,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_social_system_development = yes
 			remove_ideas = SHL_unregistered_quarters
 			add_stability = 0.03
 			custom_effect_tooltip = SHL_workers_charter_tt
@@ -873,6 +878,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			ADISCORD_reform_army_development = yes
 			army_experience = 10
 			unlock_decision_tooltip = SHL_raise_furnace_guard
 		}

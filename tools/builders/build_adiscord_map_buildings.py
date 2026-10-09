@@ -165,6 +165,7 @@ EXCLUSION_BOUNDARY_SPAWN_STATES = {
     461,
     472,
     25,
+    127,
     128,
     693,
     694,
@@ -172,6 +173,11 @@ EXCLUSION_BOUNDARY_SPAWN_STATES = {
     696,
     697,
     698,
+    713,
+    714,
+    715,
+    716,
+    717,
 }
 
 

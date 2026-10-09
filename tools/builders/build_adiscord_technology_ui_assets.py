@@ -70,6 +70,7 @@ FOLDER_TABS = (
     ("air", "GFX_air_techs_folder_tab", 2),
     ("electronics", "GFX_techtree_engineering_tab", 1),
     ("industry", "GFX_industry_folder_tab", 1),
+    ("special", "GFX_secret_weapons_folder_tab", 1),
 )
 FOLDER_TAB_CONTRACTS = tuple(
     SpriteContract(
@@ -345,6 +346,8 @@ TREE_SPRITE_REPLACEMENTS = {
     "GFX_tech_info_top_win": ("GFX_ADISCORD_technology_info_top", 2),
 }
 
+SPECIAL_TECHNOLOGY_FOLDER = "ADISCORD_special_technologies_folder"
+
 LEGACY_OUTPUTS = tuple(
     OUTPUT_DIR / f"ADISCORD_technology_{role}.dds"
     for role in (
@@ -414,6 +417,8 @@ def apply_tree_skin(text: str) -> str:
     if count != 2:
         raise ValueError(f"technology detail background: expected 2, found {count}")
     for old, (new, expected) in TREE_SPRITE_REPLACEMENTS.items():
+        if old in {"GFX_tiled_window_2b_border", "GFX_techtree_stripes"}:
+            expected += int(f'name = "{SPECIAL_TECHNOLOGY_FOLDER}"' in text)
         text = text.replace(f'"{new}"', f'"{old}"')
         text = replace_counted(text, old, new, expected)
     text = replace_gui_block(
@@ -690,14 +695,41 @@ def _technology_node(
     return output
 
 
-def _folder_tab(source: Image.Image, key: str) -> Image.Image:
-    row = next(index for index, (name, _, _) in enumerate(FOLDER_TABS) if name == key)
+def _folder_tab(key: str) -> Image.Image:
+    index = next(index for index, (name, _, _) in enumerate(FOLDER_TABS) if name == key)
     with Image.open(SOURCE_DIR / "folder_tabs.png") as atlas:
-        if atlas.mode != "RGBA" or atlas.size != (182, 61 * len(FOLDER_TABS)):
-            raise ValueError(
-                "folder tabs: expected a 182px RGBA atlas with two frames per row"
-            )
-        return atlas.crop((0, row * 61, 182, (row + 1) * 61))
+        if atlas.mode != "RGBA" or atlas.size != (182, 55 * len(FOLDER_TABS)):
+            raise ValueError("folder tabs: expected one 182x55 RGBA strip per category")
+        strip = atlas.crop((0, index * 55, 182, (index + 1) * 55))
+    # Preserve the authored pixels; native tab hit areas extend six pixels below.
+    output = Image.new("RGBA", (182, 61))
+    output.paste(strip, (0, 0))
+    return output
+
+
+def folder_tab_outputs() -> dict[Path, bytes]:
+    """Build category art independently of the overview's surface source."""
+    assets = []
+    for contract, (key, _, _) in zip(FOLDER_TAB_CONTRACTS, FOLDER_TABS):
+        image = _folder_tab(key)
+        validate_contract_image(contract, image)
+        assets.append((contract, image))
+    outputs = {
+        OUTPUT_DIR / contract.filename: dds_bytes(image)
+        for contract, image in assets
+    }
+    outputs[GFX_OUTPUT] = render_gfx().encode("utf-8")
+    state_assets = []
+    for contract in TECHNOLOGY_STATE_CONTRACTS:
+        with Image.open(OUTPUT_DIR / contract.filename) as image:
+            state_assets.append((contract, image.convert("RGBA")))
+    outputs[TREE_PREVIEW] = _png_bytes(
+        contact_sheet(
+            [(contract.target_name, image) for contract, image in assets + state_assets],
+            580,
+        )
+    )
+    return outputs
 
 
 def _researching_strip(source: Image.Image) -> Image.Image:
@@ -827,7 +859,7 @@ def expected_outputs() -> dict[Path, bytes]:
         state_assets.append((contract, image))
     tab_assets = []
     for contract, (key, _, _) in zip(FOLDER_TAB_CONTRACTS, FOLDER_TABS):
-        image = _folder_tab(source, key)
+        image = _folder_tab(key)
         validate_contract_image(contract, image)
         tab_assets.append((contract, image))
     preview_targets = {
@@ -902,7 +934,16 @@ def main() -> int:
         action="store_true",
         help="check or write state sprite declarations using existing DDS assets",
     )
+    parser.add_argument(
+        "--folder-tabs-only",
+        action="store_true",
+        help="build category buttons and their sprite declarations only",
+    )
     args = parser.parse_args()
+    if args.folder_tabs_only:
+        if args.state_definitions_only:
+            parser.error("select only one partial output mode")
+        return apply_or_check(folder_tab_outputs(), args.apply, "Technology folder tabs")
     if args.state_definitions_only:
         for contract in TECHNOLOGY_STATE_CONTRACTS:
             with Image.open(OUTPUT_DIR / contract.filename) as asset:

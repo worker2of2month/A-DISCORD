@@ -3,17 +3,16 @@ state={
 	id=695
 	name="STATE_695"
 	resources = {
-		steel = 4
+		steel = 2
 	}
 	provinces={
-		157 217 482 1105 1763 2736 3038 3181 3304 3541 3579 4572
-		5016 6146 6345 8068 8505 8615 9608 10158 10668 10769 10810 10879
-		11487 12017 12054
+		157 217 1763 3038 3304 3541 3579 4572 5016 6345 9608 10769
+		10879 11487 12017
 	}
-	manpower = 750000
+	manpower = 450000
 	buildings_max_level_factor = 1.000
 	state_category = town
-	local_supplies = 1.5
+	local_supplies = 1.0
 	history = {
 		owner = IVN
 		add_core_of = IVN
@@ -21,7 +20,6 @@ state={
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1
-			arms_factory = 1
 		}
 	}
 }

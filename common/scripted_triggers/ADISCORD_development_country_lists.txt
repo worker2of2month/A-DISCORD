@@ -4,7 +4,11 @@ ADISCORD_is_playable_development_country = {
 	OR = {
 		original_tag = VAL
 		original_tag = STP
+		original_tag = STS
+		original_tag = SRP
 		original_tag = WRK
+		original_tag = WKR
+		original_tag = TVA
 		original_tag = SHL
 	}
 }

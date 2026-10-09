@@ -210,7 +210,7 @@ class ShabratUniformIconTests(unittest.TestCase):
     def test_every_service_unlock_has_one_shabrat_uniform_card(self):
         text = generator.country_uniform_gfx_entries()
         sprites = dict(re.findall(
-            r'name = "([^"]+)"\s+textureFile = "([^"]+)"', text
+            r'name = "(GFX_STS_[^"]+)"\s+textureFile = "([^"]+)"', text
         ))
         unlocks = [
             tech for tech, icon in generator.EQUIPMENT_UNLOCK_ICONS.items()
@@ -239,6 +239,39 @@ class ShabratUniformIconTests(unittest.TestCase):
             re.sub(pattern, "", current, flags=re.DOTALL),
             re.sub(pattern, "", updated, flags=re.DOTALL),
         )
+
+    def test_khan_cards_cover_research_and_production_with_three_stages(self):
+        sprites = dict(re.findall(
+            r'name = "(GFX_RUS_[^"]+)"\s+textureFile = "([^"]+)"',
+            generator.country_uniform_gfx_entries(),
+        ))
+        self.assertEqual(len(sprites), 18)
+        textures = set()
+        for tech, icon in generator.EQUIPMENT_UNLOCK_ICONS.items():
+            if not icon.startswith("ADISCORD_weapon_"):
+                continue
+            texture = sprites[f"GFX_RUS_{tech}_medium"]
+            for equipment in generator.ENABLE_EQUIPMENT[tech]:
+                self.assertEqual(sprites[f"GFX_RUS_{equipment}_medium"], texture)
+            textures.add(texture)
+        self.assertEqual(len(textures), 3)
+
+    def test_supplied_infantry_cards_preserve_pixels_and_have_no_frame_split(self):
+        from io import BytesIO
+        from PIL import Image
+
+        for path, content in generator.infantry_card_outputs().items():
+            self.assertEqual(path.read_bytes(), content, str(path))
+            if path.suffix == ".dds":
+                source = ROOT / "tools/assets/source/country_uniforms" / (path.stem + ".png")
+                with Image.open(source) as original, Image.open(BytesIO(content)) as decoded:
+                    self.assertEqual(decoded.size, (176, 72))
+                    self.assertEqual(original.tobytes(), decoded.convert("RGBA").tobytes())
+            else:
+                text = content.decode("utf-8")
+                for block in re.findall(r'[Ss]priteType\s*=\s*\{[^{}]*\}', text):
+                    if 'technologies/ADISCORD_power_shield_equipment.dds' in block:
+                        self.assertNotIn("noOfFrames", block)
 
 
 class AircraftTechnologyIconTests(unittest.TestCase):
@@ -2485,12 +2518,22 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
         for unit in ("ADISCORD_assault_infantry", "mountaineers", "ADISCORD_marine_infantry", "ADISCORD_mechanized_infantry"):
             self.assertEqual(totals[unit], totals["infantry"])
 
-    def test_shields_have_an_independent_research_and_production_route_from_2163(self):
+    def test_shield_upgrades_follow_the_project_granted_base_technology(self):
         branch = generator.BRANCH_BY_KEY["power_shields"]
         self.assertEqual(branch.years, (2163, 2166, 2169, 2172, 2175))
-        self.assertIn("power_shields", generator.MAIN_BRANCH_KEYS_BY_FOLDER["infantry_folder"])
+        self.assertEqual(branch.folders, (generator.SPECIAL_TECHNOLOGY_FOLDER,))
+        self.assertIn("power_shields", generator.MAIN_BRANCH_KEYS_BY_FOLDER[generator.SPECIAL_TECHNOLOGY_FOLDER])
+        self.assertNotIn("power_shields", generator.MAIN_BRANCH_KEYS_BY_FOLDER["infantry_folder"])
         for index, tech in enumerate(branch.techs):
-            self.assertNotIn(tech.id, generator.ALLOW)
+            if index == 0:
+                self.assertEqual(generator.ALLOW[tech.id], (
+                    "is_special_project_completed = sp:ADISCORD_sp_power_shields",
+                ))
+            else:
+                self.assertNotIn(tech.id, generator.ALLOW)
+                self.assertEqual(generator.research_allow_for(branch, index), (
+                    "has_tech = ADISCORD_tech_kefreyt_shield_special_forces",
+                ))
             self.assertEqual(generator.xor_siblings(branch, index), ())
             for profile in generator.STARTING_TECH_PROFILES.values():
                 self.assertNotIn(tech.id, profile)
@@ -2502,6 +2545,85 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
         self.assertIn("enable_subunits = { ADISCORD_urban_breacher }", root)
         self.assertIn("ADISCORD_power_shield_equipment_1", root)
         self.assertNotIn("kefreyt_shield_special_forces", self.read("common/technologies/ADISCORD_VAL_marines.txt"))
+
+    def test_shield_project_unlocks_its_technology_without_circular_prerequisites(self):
+        from tools.tests.test_adiscord_combat_robots import read_script, value
+
+        project = value(read_script("common/special_projects/projects/land_projects.txt"),
+                        "ADISCORD_sp_power_shields")
+        available = value(value(project, "available"), "FROM")
+        required = [entry.value for entry in available if entry.key == "has_tech"]
+        base = "ADISCORD_tech_kefreyt_shield_special_forces"
+        closure = generator.technology_prerequisite_closure(required)
+        self.assertNotIn(base, closure)
+        self.assertTrue(set(required) <= generator.TECH_POSITION_BY_ID.keys())
+        source = self.block(self.read("common/special_projects/projects/land_projects.txt"),
+                            "ADISCORD_sp_power_shields")
+        self.assertRegex(source, r"date\s*>\s*2162\.12\.31")
+        self.assertEqual(value(available, "has_capitulated"), "no")
+        self.assertEqual(value(project, "specialization"), "specialization_land")
+        self.assertEqual(value(value(project, "breakthrough_cost"), "specialization_land"), "1")
+        self.assertEqual(value(project, "prototype_time"), "sp_time.prototype.medium")
+        output = value(value(project, "project_output"), "country_effects")
+        self.assertEqual(value(value(output, "set_technology"), base), "1")
+        for forbidden in ("create_unit", "add_equipment_to_stockpile", "complete_special_project"):
+            self.assertNotIn(forbidden, repr(output))
+        root = generator.render_technology(generator.BRANCH_BY_KEY["power_shields"], 0)
+        self.assertIn("is_special_project_completed = sp:ADISCORD_sp_power_shields", root)
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_special_projects_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            text = path.read_text(encoding="utf-8-sig")
+            for key in ("ADISCORD_sp_power_shields", "ADISCORD_sp_power_shields_desc",
+                        "ADISCORD_power_shields_template_tt"):
+                self.assertEqual(len(re.findall(r"^ " + key + ":0 ", text, re.M)), 1)
+
+    def test_national_focus_rewards_complete_the_project_before_equipment_delivery(self):
+        from tools.tests.test_adiscord_combat_robots import read_script, value
+
+        project_id = "sp:ADISCORD_sp_power_shields"
+        for path, name, delivery in (
+            ("common/scripted_effects/ADISCORD_VAL_effects.txt", "VAL_raise_shield_special_forces", "create_unit"),
+            ("common/scripted_effects/ADISCORD_STP_scripted_effects.txt", "STP_pw_open_shield_corps", "add_equipment_to_stockpile"),
+        ):
+            effect = self.block(self.read(path), name)
+            self.assertIn("NOT = {", effect)
+            self.assertIn("is_special_project_completed = " + project_id, effect)
+            self.assertIn("complete_special_project = " + project_id, effect)
+            self.assertNotIn("set_technology", effect)
+            self.assertLess(effect.index("complete_special_project"), effect.index(delivery))
+        project = value(read_script("common/special_projects/projects/land_projects.txt"),
+                        "ADISCORD_sp_power_shields")
+        output = value(value(project, "project_output"), "country_effects")
+        generic = value(output, "if")
+        excluded = value(value(value(generic, "limit"), "NOT"), "OR")
+        self.assertEqual({entry.value for entry in excluded if entry.key == "tag"}, {"VAL", "STP", "STS"})
+
+    def test_project_and_national_templates_are_complete_recruitable_city_formations(self):
+        from tools.validators import validate_adiscord_division_templates as templates
+
+        actual, _, _ = templates.collect_templates_and_references(ROOT)
+        units, issues = templates._collect_subunits(ROOT)
+        self.assertEqual(issues, [])
+        archetypes, issues = templates._collect_equipment_archetypes(ROOT)
+        self.assertEqual(issues, [])
+        for name in ("Shield Assault Division", "Stelander Shield Brigade", "Kefreyt Shield Special Forces"):
+            matches = [item for item in actual if item.name == name]
+            self.assertEqual(len(matches), 1, name)
+            template = matches[0]
+            self.assertFalse(template.is_locked, name)
+            shields = [slot for slot in template.slots if slot.kind == "regiments"]
+            self.assertEqual(len(shields), 10, name)
+            self.assertEqual({slot.unit for slot in shields}, {"ADISCORD_urban_breacher"})
+            support = {slot.unit for slot in template.slots if slot.kind == "support"}
+            self.assertTrue({"engineer", "artillery"} <= support, name)
+            self.assertLessEqual(len(support), 5, name)
+            computed, issues = templates._compute_template(template, units, archetypes, {})
+            self.assertEqual(issues, [], name)
+            self.assertEqual(computed.equipment["ADISCORD_power_shield_equipment"], 200, name)
+            self.assertGreater(computed.organization, 45, name)
+            if name != "Kefreyt Shield Special Forces":
+                self.assertEqual(computed.manpower, 10600, name)
 
     def test_balance_validator_counts_distributed_training_without_hiding_bad_payloads(self):
         branch = generator.BRANCH_BY_KEY["squad_weapons"]
@@ -2586,8 +2708,9 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
         source = self.read("common/units/ADISCORD_land_units.txt")
         units = parse_clausewitz(source)[0].value
         expected = {
-            "ADISCORD_urban_breacher": {"attack": 0.35, "defence": 0.30},
+            "ADISCORD_urban_breacher": {"attack": 0.65, "defence": 0.60},
             "ADISCORD_assault_infantry": {"attack": 0.10},
+            "STP_taran": {"attack": 0.20, "movement": -0.20},
             "ADISCORD_mechanized_infantry": {"attack": -0.10},
             "ADISCORD_combat_platform": {"attack": -0.15},
             "ADISCORD_heavy_platform": {
@@ -2687,7 +2810,7 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
         archetypes, _ = templates._collect_equipment_archetypes(ROOT)
         computed, issues = templates._compute_template(template, units, archetypes, {})
         self.assertEqual(issues, [])
-        self.assertEqual(computed.manpower, 6300)
+        self.assertEqual(computed.manpower, 10600)
         equipment = validator.collect_equipment_blocks()
         deliveries = {}
         for block in re.findall(r"add_equipment_to_stockpile = \{([^{}]+)\}", effect):
@@ -2696,6 +2819,10 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
             archetype = re.search(r"archetype = (\w+)", equipment[model])[1]
             deliveries[archetype] = deliveries.get(archetype, 0) + amount
         self.assertEqual(deliveries, computed.equipment)
+        idea = self.block(self.read("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "STP_pw_shield_corps")
+        capacity = int(re.search(r"special_forces_min = (\d+)", idea)[1])
+        shield_count = sum(slot.unit == "ADISCORD_urban_breacher" for slot in template.slots)
+        self.assertEqual(capacity, shield_count)
         focus = self.read("common/national_focus/ADISCORD_STP_civil_war.txt")
         from tools.tests.test_adiscord_val_focus_layout import focus_block
         for faction, tag in (("party", "STP"), ("republic", "STS")):
@@ -2749,6 +2876,59 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
         self.assertIn("archetype = ADISCORD_power_shield_equipment", policy)
         self.assertIn("abort_when_not_enabled = yes", policy)
         self.assertNotIn("equipment_production_min_factories", policy)
+
+class SpecialTechnologyFolderTests(unittest.TestCase):
+    def test_existing_tabs_keep_their_native_positions_and_hit_areas(self):
+        gui = (ROOT / "interface/countrytechtreeview.gui").read_text(encoding="utf-8")
+        native = (generator.BASE_GAME / "interface/countrytechtreeview.gui").read_text(encoding="utf-8-sig")
+        actual = validator.extract_named_container(gui, "folder_tabs")
+        expected = validator.extract_named_container(native, "folder_tabs")
+        for contract in ui_builder.FOLDER_TAB_CONTRACTS:
+            actual = actual.replace(f'"{contract.target_name}"', f'"{contract.source_name}"')
+        actual = actual.replace("\n\n" + generator.render_special_technology_tab(), "")
+        self.assertEqual(actual, expected)
+
+    def test_unconfigured_special_research_is_locked_by_default(self):
+        branch = replace(
+            generator.BRANCH_BY_KEY["field_support"],
+            folders=(generator.SPECIAL_TECHNOLOGY_FOLDER,),
+        )
+        for index in range(len(branch.techs)):
+            rendered = generator.render_technology(branch, index)
+            self.assertIn("always = no", rendered)
+            self.assertIn("tooltip = ADISCORD_special_technology_locked_tt", rendered)
+
+    def test_special_research_is_absent_from_all_starting_profiles(self):
+        for branch in generator.BRANCHES:
+            if generator.SPECIAL_TECHNOLOGY_FOLDER not in branch.folders:
+                continue
+            for profile in generator.STARTING_TECH_PROFILES.values():
+                self.assertTrue(set(profile).isdisjoint(tech.id for tech in branch.techs))
+            for index in range(len(branch.techs)):
+                self.assertTrue(generator.research_allow_for(branch, index))
+
+    def test_visible_tab_has_registered_folder_and_both_native_item_templates(self):
+        folder = generator.SPECIAL_TECHNOLOGY_FOLDER
+        tags = (ROOT / "common/technology_tags/ADISCORD_technology.txt").read_text(encoding="utf-8")
+        self.assertEqual(tags, generator.technology_folder_tags())
+        self.assertNotIn("available", tags)
+        gui = (ROOT / "interface/countrytechtreeview.gui").read_text(encoding="utf-8")
+        for name in (folder, f"{folder}_tab", f"techtree_{folder}_item", f"techtree_{folder}_small_item"):
+            self.assertEqual(gui.count(f'name = "{name}"'), 1, name)
+        special_tab = generator.render_special_technology_tab().replace(
+            '"GFX_secret_weapons_folder_tab"',
+            '"GFX_ADISCORD_technology_folder_special"',
+        )
+        self.assertIn(special_tab, gui)
+        infantry = validator.extract_named_container(gui, "infantry_folder")
+        special = validator.extract_named_container(gui, folder)
+        self.assertNotIn("shield", infantry)
+        self.assertIn('name = "ADISCORD_tech_kefreyt_shield_special_forces_tree"', special)
+        for language in ("russian", "english"):
+            source = (ROOT / f"localisation/{language}/ADISCORD_technology_doctrine_l_{language}.yml").read_bytes()
+            self.assertTrue(source.startswith(b"\xef\xbb\xbf"))
+            self.assertIn(f" {folder}:0", source.decode("utf-8-sig"))
+
 
 class HazardInfantryTests(unittest.TestCase):
     TAGS = ("SLA", "RZA", "MLR", "ERT", "IRT", "SCA")

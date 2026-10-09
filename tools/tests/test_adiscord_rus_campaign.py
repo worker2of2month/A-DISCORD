@@ -242,7 +242,7 @@ class BunkerWorld:
                 self.ideas.add("limited_conscription")
             elif key in ("effect_tooltip", "custom_effect_tooltip", "unlock_decision_tooltip"):
                 continue
-            elif key in ("set_variable", "add_to_variable", "subtract_from_variable", "multiply_variable", "set_temp_variable", "multiply_temp_variable"):
+            elif key in ("set_variable", "add_to_variable", "subtract_from_variable", "multiply_variable", "divide_variable", "set_temp_variable", "add_to_temp_variable", "multiply_temp_variable"):
                 target = self.temporary if "temp" in key else self.variables
                 name = scalar(value, "var")
                 amount = self.value(scalar(value, "value"))
@@ -252,6 +252,8 @@ class BunkerWorld:
                     target[name] = target.get(name, 0) + amount
                 elif key.startswith("subtract_"):
                     target[name] = target.get(name, 0) - amount
+                elif key.startswith("divide_"):
+                    target[name] = target.get(name, 0) / amount
                 else:
                     target[name] = target.get(name, 0) * amount
             elif key == "clear_variable":
@@ -370,6 +372,14 @@ class RusCampaignTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.effects = {e.key: e.value for e in parse(f"common/scripted_effects/{BASE}_effects.txt")}
+        cls.effects.update({e.key: e.value for e in parse("common/scripted_effects/ADISCORD_society_development_effects.txt")})
+        development_effects = {
+            "ADISCORD_economy_calculate_other_development_gains",
+            "ADISCORD_economy_calculate_social_development_gain",
+            "ADISCORD_economy_check_economic_development_upgrade",
+            "ADISCORD_economy_refresh_existing_economic_development_idea",
+        }
+        cls.effects.update({e.key: e.value for e in parse("common/scripted_effects/ADISCORD_economy_effects.txt") if e.key in development_effects})
         cls.triggers = {e.key: e.value for e in parse(f"common/scripted_triggers/{BASE}_triggers.txt")}
         for source in ("ADISCORD_society_development_triggers", "ADISCORD_economy_triggers"):
             cls.triggers.update({e.key: e.value for e in parse(f"common/scripted_triggers/{source}.txt")})
@@ -389,11 +399,175 @@ class RusCampaignTests(unittest.TestCase):
             for group in block(parse(f"common/ideas/{source}.txt"), "ideas"):
                 if isinstance(group.value, list):
                     cls.law_groups.append({row.key for row in group.value if isinstance(row.value, list)})
-        cls.projects = [name for name, rows in cls.decisions.items() if any(e.key == "days_remove" for e in rows)]
+        cls.projects = [name for name, rows in cls.decisions.items() if name != "RUS_bunker_energy_sale" and any(e.key == "days_remove" for e in rows)]
         cls.loc = dict(re.findall(r'^\s+([A-Za-z0-9_.]+):(?:\d+)?\s+"(.*)"\s*$', read(f"localisation/russian/{BASE}_l_russian.yml"), re.M))
 
     def world(self):
         return BunkerWorld(self)
+
+    def test_development_reforms_cover_six_axes_and_reveal_their_programmes(self):
+        specs = {
+            "RUS_count_the_hearths": ("society", "RUS_community_assemblies"),
+            "RUS_school_of_scribes": ("cultural", "RUS_public_reading_rooms"),
+            "RUS_officer_courses": ("army", "RUS_regimental_training"),
+            "RUS_roadside_clinics": ("social_system", "RUS_district_health_programme"),
+            "RUS_machine_school": ("economic", "RUS_workshop_training"),
+            "RUS_aimaq_service_charter": ("state", "RUS_civil_service_training"),
+            "RUS_civil_service_examinations": ("state", "RUS_civil_service_training"),
+        }
+        category = block(parse(f"common/decisions/categories/{BASE}_categories.txt"), "RUS_development_programmes")
+        for focus, (axis, programme) in specs.items():
+            with self.subTest(focus=focus):
+                world = self.world()
+                world.focuses = {focus}
+                world.execute(block(self.focuses[focus], "completion_reward"))
+                self.assertEqual(world.value(f"ADISCORD_{axis}_development_progress"), 25)
+                self.assertEqual(world.value(f"ADISCORD_{axis}_development_monthly_growth"), 2)
+                self.assertTrue(world.matches(block(category, "visible")))
+                self.assertTrue(world.matches(block(self.programmes[programme], "visible")))
+                self.assertTrue(world.matches(block(self.programmes[programme], "available")))
+
+    def test_monthly_development_preserves_fractional_and_large_remainders(self):
+        for axis in ("society", "social_system", "army", "cultural", "state", "economic"):
+            for initial in (99.5, 130.25, 250):
+                with self.subTest(axis=axis, initial=initial):
+                    world = self.world()
+                    world.run("ADISCORD_initialize_society_development_variables")
+                    level = f"ADISCORD_{axis}_development_level"
+                    progress = f"ADISCORD_{axis}_development_progress"
+                    world.variables.update({
+                        level: 2, progress: initial,
+                        f"ADISCORD_{axis}_development_monthly_growth": 2,
+                        "ADISCORD_economy_monthly_development_gain": 2,
+                        "ADISCORD_country_development_final_global_growth_factor_bp": 100,
+                        f"ADISCORD_country_development_final_{axis}_growth_factor_bp": 100,
+                    })
+                    world.run(f"ADISCORD_tick_{axis}_development_monthly")
+                    self.assertEqual(world.value(level), 3)
+                    self.assertAlmostEqual(world.value(progress), initial + 2 - 100)
+                    world.run(f"ADISCORD_tick_{axis}_development_monthly")
+                    earned = initial + 4
+                    self.assertAlmostEqual((world.value(level) - 2) * 100 + world.value(progress), earned)
+
+    def test_development_display_and_tick_use_the_same_modified_gain(self):
+        for axis in ("society", "army", "cultural", "state"):
+            world = self.world()
+            world.run("ADISCORD_initialize_society_development_variables")
+            world.variables.update({
+                f"ADISCORD_{axis}_development_monthly_growth": 2,
+                "ADISCORD_country_development_final_global_growth_factor_bp": 120,
+                f"ADISCORD_country_development_final_{axis}_growth_factor_bp": 150,
+            })
+            world.run("ADISCORD_economy_calculate_other_development_gains")
+            gain = world.value(f"ADISCORD_{axis}_development_monthly_gain")
+            world.run(f"ADISCORD_tick_{axis}_development_monthly")
+            self.assertAlmostEqual(gain, 3.6)
+            self.assertAlmostEqual(world.value(f"ADISCORD_{axis}_development_progress"), gain)
+            for language in ("russian", "english"):
+                source = read(f"localisation/{language}/ADISCORD_society_development_l_{language}.yml")
+                self.assertIn(f"[?ADISCORD_{axis}_development_monthly_gain|=+1]", source)
+                self.assertNotIn(f"[?ADISCORD_{axis}_development_monthly_growth|", source)
+
+    def test_development_caps_discard_only_progress_beyond_the_terminal_level(self):
+        for axis in ("society", "social_system", "army", "cultural", "state", "economic"):
+            for level, progress, expected_level, expected_progress in (
+                (4, 130, 5, 0), (5, 30, 5, 0),
+                (3, -130, 2, -30), (2, -130, 1, 0), (1, -30, 1, 0),
+            ):
+                with self.subTest(axis=axis, level=level, progress=progress):
+                    world = self.world()
+                    world.run("ADISCORD_initialize_society_development_variables")
+                    world.variables.update({
+                        "ADISCORD_state_development_level": 4,
+                        f"ADISCORD_{axis}_development_level": level,
+                        f"ADISCORD_{axis}_development_progress": progress,
+                        "ADISCORD_economy_monthly_development_gain": 0,
+                    })
+                    world.run(f"ADISCORD_tick_{axis}_development_monthly")
+                    self.assertEqual(world.value(f"ADISCORD_{axis}_development_level"), expected_level)
+                    self.assertEqual(world.value(f"ADISCORD_{axis}_development_progress"), expected_progress)
+
+    def test_economic_readiness_holds_earned_progress_until_recovery(self):
+        world = self.world()
+        world.run("ADISCORD_initialize_society_development_variables")
+        world.variables.update({
+            "ADISCORD_economic_development_progress": 127.5,
+            "ADISCORD_economy_monthly_development_gain": 0,
+            "ADISCORD_economy_treasury": 24.99,
+        })
+        world.run("ADISCORD_tick_economic_development_monthly")
+        self.assertEqual(world.value("ADISCORD_economic_development_level"), 1)
+        self.assertEqual(world.value("ADISCORD_economic_development_progress"), 127.5)
+        world.variables["ADISCORD_economy_treasury"] = 25
+        world.run("ADISCORD_tick_economic_development_monthly")
+        self.assertEqual(world.value("ADISCORD_economic_development_level"), 2)
+        self.assertEqual(world.value("ADISCORD_economic_development_progress"), 27.5)
+
+    def test_energy_sale_reserves_capacity_until_completion_without_double_payment(self):
+        name = "RUS_bunker_energy_sale"
+        rows = self.decisions[name]
+        self.assertEqual(scalar(rows, "days_remove"), "90")
+        for capacity, permitted in ((0.999, False), (1, True)):
+            world = self.world()
+            world.variables["RUS_bunker_free_power"] = capacity
+            before = world.balances()
+            self.assertEqual(world.matches(block(rows, "custom_cost_trigger")), permitted)
+            world.run("RUS_bunker_energy_sale_start")
+            self.assertEqual(world.value("ADISCORD_economy_treasury") - before[1], 300 if permitted else 0)
+        world = self.world()
+        before = world.balances()
+        capacity = world.value("RUS_bunker_free_power")
+        world.begin(name)
+        paid = world.balances()
+        self.assertEqual(paid[1] - before[1], 300)
+        self.assertEqual(world.value("RUS_bunker_free_power"), capacity - 1)
+        self.assertEqual(world.value("RUS_bunker_used_power"), 1)
+        for _ in range(3):
+            world.run("RUS_bunker_refresh")
+            world.run("RUS_bunker_energy_sale_start")
+            self.assertEqual(world.balances(), paid)
+            self.assertEqual(world.value("RUS_bunker_free_power"), capacity - 1)
+        self.assertFalse(world.matches(block(rows, "available")))
+        loaded = deepcopy(world)
+        loaded.finish(name)
+        loaded.finish(name)
+        loaded.run("RUS_bunker_energy_sale_cancel")
+        self.assertEqual(loaded.balances(), paid)
+        self.assertEqual(loaded.value("RUS_bunker_free_power"), capacity)
+        self.assertNotIn("RUS_bunker_energy_export_power", loaded.variables)
+
+    def test_energy_reservation_limits_construction_and_cannot_interrupt_a_paid_order(self):
+        world = self.world()
+        world.variables["RUS_bunker_depth"] = 5
+        world.run("RUS_bunker_refresh")
+        world.begin("RUS_bunker_guard")
+        before = world.balances()
+        world.run("RUS_bunker_energy_sale_start")
+        self.assertEqual(world.balances(), before)
+        world.finish("RUS_bunker_guard")
+        self.assertEqual(world.value("RUS_bunker_free_power"), 2)
+        world.begin("RUS_bunker_energy_sale")
+        self.assertEqual(world.value("RUS_bunker_free_power"), 1)
+        self.assertFalse(world.matches(self.triggers["RUS_bunker_signals_requirements"]))
+        world.finish("RUS_bunker_energy_sale")
+        self.assertTrue(world.matches(self.triggers["RUS_bunker_signals_requirements"]))
+
+    def test_energy_contract_failure_returns_advance_once_and_shutdown_releases_power(self):
+        name = "RUS_bunker_energy_sale"
+        for field, value in (("owner", False), ("controller", False), ("ruler", None), ("subject", True), ("capitulated", True)):
+            for callback in ("RUS_bunker_energy_sale_cancel", "RUS_bunker_energy_sale_finish", "RUS_campaign_shutdown"):
+                with self.subTest(field=field, callback=callback):
+                    world = self.world()
+                    before = world.balances()
+                    world.begin(name)
+                    setattr(world, field, value)
+                    self.assertTrue(world.matches(block(self.decisions[name], "cancel_trigger")))
+                    world.run(callback)
+                    world.run(callback)
+                    world.finish(name)
+                    self.assertEqual(world.balances(), before)
+                    self.assertNotIn("RUS_bunker_energy_export_power", world.variables)
+                    self.assertEqual(world.value("RUS_bunker_used_power"), 0)
 
     def test_generation_and_political_development_focuses(self):
         self.assertEqual(len(self.focuses), 137)
@@ -762,6 +936,9 @@ class RusCampaignTests(unittest.TestCase):
             "RUS_civil_service_training": "state",
             "RUS_district_health_programme": "social_system",
             "RUS_workshop_training": "economic",
+            "RUS_community_assemblies": "society",
+            "RUS_public_reading_rooms": "cultural",
+            "RUS_regimental_training": "army",
         }
         for name, direction in specs.items():
             rows = self.programmes[name]
@@ -786,7 +963,7 @@ class RusCampaignTests(unittest.TestCase):
                 world.execute(block(rows, "complete_effect"))
                 self.assertEqual((world.balances(), world.variables), before)
             self.assertEqual(scalar(rows, "cost"), "0")
-            self.assertEqual(scalar(rows, "days_re_enable"), "180")
+            self.assertEqual(scalar(rows, "days_re_enable"), "90")
             for suffix in ("", "_blocked", "_tooltip"):
                 self.assertIn("RUS_development_programme_cost" + suffix, self.loc)
 
@@ -799,7 +976,9 @@ class RusCampaignTests(unittest.TestCase):
             self.assertTrue(world.matches(block(rows, "available")))
             reward = block(self.focuses[focus], "completion_reward")
             self.assertIn("RUS_civil_service_training", [e.value for e in reward if e.key == "unlock_decision_tooltip"])
-            self.assertTrue(any(e.key == "ADISCORD_increase_state_development_monthly_growth" for e in walk(reward)))
+            world.execute(reward)
+            self.assertEqual(world.value("ADISCORD_state_development_monthly_growth"), 2)
+            self.assertEqual(world.value("ADISCORD_state_development_progress"), 25)
 
     def test_programmes_charge_exact_prices_and_deliver_material_results(self):
         prices = {
@@ -850,7 +1029,8 @@ class RusCampaignTests(unittest.TestCase):
     def test_programmes_recheck_current_ownership_unlocks_and_capacity(self):
         for name, rows in self.programmes.items():
             national_training = name in {
-                "RUS_civil_service_training", "RUS_district_health_programme", "RUS_workshop_training"
+                "RUS_civil_service_training", "RUS_district_health_programme", "RUS_workshop_training",
+                "RUS_community_assemblies", "RUS_public_reading_rooms", "RUS_regimental_training"
             }
             changes = ("subject", "ruler", "focus") if national_training else ("owner", "controller", "subject", "ruler", "focus")
             for changed in changes:

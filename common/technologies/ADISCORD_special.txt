@@ -1,0 +1,110 @@
+technologies = {
+	ADISCORD_tech_kefreyt_shield_special_forces = {
+		allow = {
+			is_special_project_completed = sp:ADISCORD_sp_power_shields
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_shield_assault_drills
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_power_shield_equipment_1 }
+		enable_subunits = { ADISCORD_urban_breacher }
+		research_cost = 2.05
+		start_year = 2163
+		folder = {
+			name = ADISCORD_special_technologies_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 18.9
+		}
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_shield_assault_drills = {
+		allow = {
+			has_tech = ADISCORD_tech_kefreyt_shield_special_forces
+		}
+		ADISCORD_urban_breacher = {
+			defense = 0.04
+			breakthrough = 0.04
+			max_organisation = 1
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_compact_shield_generators
+			research_cost_coeff = 1
+		}
+		research_cost = 1.415
+		start_year = 2166
+		folder = {
+			name = ADISCORD_special_technologies_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = {
+			factor = 14
+		}
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_compact_shield_generators = {
+		allow = {
+			has_tech = ADISCORD_tech_kefreyt_shield_special_forces
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_shield_field_maintenance
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_power_shield_equipment_2 }
+		research_cost = 2.05
+		start_year = 2169
+		folder = {
+			name = ADISCORD_special_technologies_folder
+			position = { x = 0 y = 4 }
+		}
+		ai_will_do = {
+			factor = 18.9
+		}
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_shield_field_maintenance = {
+		allow = {
+			has_tech = ADISCORD_tech_kefreyt_shield_special_forces
+		}
+		ADISCORD_urban_breacher = {
+			supply_consumption = -0.04
+			default_morale = 0.03
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_adaptive_power_shields
+			research_cost_coeff = 1
+		}
+		research_cost = 1.58
+		start_year = 2172
+		folder = {
+			name = ADISCORD_special_technologies_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 14
+		}
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_adaptive_power_shields = {
+		allow = {
+			has_tech = ADISCORD_tech_kefreyt_shield_special_forces
+		}
+		enable_equipments = { ADISCORD_power_shield_equipment_3 }
+		research_cost = 2.05
+		start_year = 2175
+		folder = {
+			name = ADISCORD_special_technologies_folder
+			position = { x = 0 y = 8 }
+		}
+		ai_will_do = {
+			factor = 18.9
+		}
+		categories = { infantry_weapons support_tech }
+	}
+}

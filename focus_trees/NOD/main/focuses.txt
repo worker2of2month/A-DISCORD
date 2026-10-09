@@ -32,6 +32,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			ADISCORD_reform_army_development = yes
 			navy_experience = 20
 			add_tech_bonus = {
 				name = ADISCORD_naval_program_bonus

@@ -201,6 +201,9 @@ RUS_development_programmes = {
 	allowed = { tag = RUS }
 	visible = {
 		OR = {
+			has_completed_focus = RUS_count_the_hearths
+			has_completed_focus = RUS_school_of_scribes
+			has_completed_focus = RUS_officer_courses
 			RUS_bunker_workshop_active = yes
 			RUS_bunker_clinic_active = yes
 			has_completed_focus = RUS_machine_school

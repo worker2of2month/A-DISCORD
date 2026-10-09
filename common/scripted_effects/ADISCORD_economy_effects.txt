@@ -2547,7 +2547,31 @@ ADISCORD_economy_calculate_social_development_gain = {
 	divide_variable = { var = ADISCORD_social_system_development_monthly_gain value = 100 }
 }
 
+ADISCORD_economy_calculate_other_development_gains = {
+	set_variable = { var = ADISCORD_society_development_monthly_gain value = ADISCORD_society_development_monthly_growth }
+	multiply_variable = { var = ADISCORD_society_development_monthly_gain value = ADISCORD_country_development_final_global_growth_factor_bp }
+	divide_variable = { var = ADISCORD_society_development_monthly_gain value = 100 }
+	multiply_variable = { var = ADISCORD_society_development_monthly_gain value = ADISCORD_country_development_final_society_growth_factor_bp }
+	divide_variable = { var = ADISCORD_society_development_monthly_gain value = 100 }
+	set_variable = { var = ADISCORD_army_development_monthly_gain value = ADISCORD_army_development_monthly_growth }
+	multiply_variable = { var = ADISCORD_army_development_monthly_gain value = ADISCORD_country_development_final_global_growth_factor_bp }
+	divide_variable = { var = ADISCORD_army_development_monthly_gain value = 100 }
+	multiply_variable = { var = ADISCORD_army_development_monthly_gain value = ADISCORD_country_development_final_army_growth_factor_bp }
+	divide_variable = { var = ADISCORD_army_development_monthly_gain value = 100 }
+	set_variable = { var = ADISCORD_cultural_development_monthly_gain value = ADISCORD_cultural_development_monthly_growth }
+	multiply_variable = { var = ADISCORD_cultural_development_monthly_gain value = ADISCORD_country_development_final_global_growth_factor_bp }
+	divide_variable = { var = ADISCORD_cultural_development_monthly_gain value = 100 }
+	multiply_variable = { var = ADISCORD_cultural_development_monthly_gain value = ADISCORD_country_development_final_cultural_growth_factor_bp }
+	divide_variable = { var = ADISCORD_cultural_development_monthly_gain value = 100 }
+	set_variable = { var = ADISCORD_state_development_monthly_gain value = ADISCORD_state_development_monthly_growth }
+	multiply_variable = { var = ADISCORD_state_development_monthly_gain value = ADISCORD_country_development_final_global_growth_factor_bp }
+	divide_variable = { var = ADISCORD_state_development_monthly_gain value = 100 }
+	multiply_variable = { var = ADISCORD_state_development_monthly_gain value = ADISCORD_country_development_final_state_growth_factor_bp }
+	divide_variable = { var = ADISCORD_state_development_monthly_gain value = 100 }
+}
+
 ADISCORD_economy_calculate_development_multiplier = {
+	ADISCORD_economy_calculate_other_development_gains = yes
 	ADISCORD_economy_calculate_social_development_gain = yes
 	# Every functioning economy has slow organic development. Content may add
 	# positive or negative monthly growth, but it must not erase the base point.
@@ -2676,11 +2700,14 @@ ADISCORD_economy_check_economic_development_upgrade = {
 		limit = { check_variable = { var = ADISCORD_economic_development_progress value = 100 compare = greater_than_or_equals } }
 		if = {
 			limit = { ADISCORD_economy_can_upgrade_economic_development = yes }
-			set_variable = { var = ADISCORD_economic_development_progress value = 0 }
+			set_temp_variable = { var = ADISCORD_development_remainder value = ADISCORD_economic_development_progress }
+			add_to_temp_variable = { var = ADISCORD_development_remainder value = -100 }
 			ADISCORD_increase_economic_development = yes
+			set_variable = { var = ADISCORD_economic_development_progress value = ADISCORD_development_remainder }
 		}
-		else = {
-			set_variable = { var = ADISCORD_economic_development_progress value = 99 }
+		else_if = {
+			limit = { ADISCORD_economic_development_at_least_5 = yes }
+			set_variable = { var = ADISCORD_economic_development_progress value = 0 }
 		}
 	}
 	ADISCORD_economy_refresh_existing_economic_development_idea = yes

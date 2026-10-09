@@ -1,3 +1,74 @@
+ADISCORD_sp_power_shields = {
+	specialization = specialization_land
+	icon = GFX_ADISCORD_tech_kefreyt_shield_special_forces_medium
+	blueprint_image = GFX_generic_tank_blueprint_background
+	available = {
+		FROM = {
+			date > 2162.12.31
+			has_capitulated = no
+			has_tech = ADISCORD_tech_hardened_computers
+			has_tech = ADISCORD_tech_automated_assembly
+		}
+	}
+	breakthrough_cost = { specialization_land = 1 }
+	prototype_time = sp_time.prototype.medium
+	complexity = sp_complexity.small
+	resource_cost = {
+		resources = {
+			steel = 4
+			rare_components = 2
+			rare_alloys = 1
+		}
+	}
+	project_output = {
+		country_effects = {
+			set_technology = {
+				ADISCORD_tech_kefreyt_shield_special_forces = 1
+				popup = no
+			}
+			if = {
+				limit = {
+					NOT = {
+						OR = {
+							tag = VAL
+							tag = STP
+							tag = STS
+						}
+					}
+				}
+				custom_effect_tooltip = ADISCORD_power_shields_template_tt
+				hidden_effect = {
+					if = {
+						limit = { NOT = { has_template = "Shield Assault Division" } }
+						division_template = {
+							name = "Shield Assault Division"
+							template_counter = 3
+							is_locked = no
+							regiments = {
+								ADISCORD_urban_breacher = { x = 0 y = 0 }
+								ADISCORD_urban_breacher = { x = 0 y = 1 }
+								ADISCORD_urban_breacher = { x = 0 y = 2 }
+								ADISCORD_urban_breacher = { x = 0 y = 3 }
+								ADISCORD_urban_breacher = { x = 0 y = 4 }
+								ADISCORD_urban_breacher = { x = 1 y = 0 }
+								ADISCORD_urban_breacher = { x = 1 y = 1 }
+								ADISCORD_urban_breacher = { x = 1 y = 2 }
+								ADISCORD_urban_breacher = { x = 1 y = 3 }
+								ADISCORD_urban_breacher = { x = 1 y = 4 }
+							}
+							support = {
+								engineer = { x = 0 y = 0 }
+								artillery = { x = 0 y = 1 }
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	ai_will_do = { base = 2 }
+}
+
 ADISCORD_sp_combat_robots = {
 	specialization = specialization_land
 	icon = GFX_ADISCORD_tech_neural_command_cores_medium

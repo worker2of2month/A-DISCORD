@@ -233,6 +233,7 @@ shared_focus = {
 		prerequisite = { focus = VAL_Count_The_Captains }
 		ai_will_do = { base = 10 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 		completion_reward = {
+			ADISCORD_reform_state_development = yes
 			custom_effect_tooltip = VAL_focus_progression_VAL_One_Ledger_One_Banner_tt
 			add_war_support = 0.05
 			custom_effect_tooltip = VAL_focus_authority_10_tt
@@ -258,6 +259,7 @@ shared_focus = {
 		prerequisite = { focus = VAL_The_Contract_State }
 		ai_will_do = { base = 18 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 		completion_reward = {
+			ADISCORD_reform_economic_development = yes
 			custom_effect_tooltip = VAL_focus_progression_VAL_Factories_Like_Cathedrals_tt
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 20000 producer = VAL }
 			custom_effect_tooltip = VAL_hot_production_lines_tt
@@ -607,6 +609,7 @@ shared_focus = {
 			modifier = { factor = 2 has_equipment = { infantry_equipment < 14990 } }
 		}
 		completion_reward = {
+			ADISCORD_reform_social_system_development = yes
 			unlock_decision_tooltip = VAL_recovery_field_medicine_program
 			add_manpower = 8000
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_ash_manpower_delta } }
@@ -631,6 +634,7 @@ shared_focus = {
 			modifier = { factor = 2 NOT = { has_equipment = { infantry_equipment < 20000 } } }
 		}
 		completion_reward = {
+			ADISCORD_reform_social_system_development = yes
 			VAL_invest_civilian_industry = yes
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_ash_rear_delta } }
 			hidden_effect = {
@@ -654,6 +658,7 @@ shared_focus = {
 		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			ADISCORD_reform_society_development = yes
 			add_war_support = 0.05
 			custom_effect_tooltip = VAL_focus_authority_5_tt
 			if = {
@@ -799,6 +804,7 @@ shared_focus = {
 		cost = 3
 		prerequisite = { focus = VAL_The_Contract_State }
 		completion_reward = {
+			ADISCORD_reform_cultural_development = yes
 			custom_effect_tooltip = VAL_focus_progression_VAL_Ministry_Of_Contract_Memory_tt
 			add_political_power = 50
 			custom_effect_tooltip = VAL_campaign_slot_granted_tt
@@ -1189,6 +1195,7 @@ shared_focus = {
 		cost = 4
 		prerequisite = { focus = VAL_Border_Survey_Corps }
 		completion_reward = {
+			ADISCORD_reform_army_development = yes
 			add_corps_commander_role = {
 				character = VAL_Aleksei_Veyr
 				traits = { trickster }

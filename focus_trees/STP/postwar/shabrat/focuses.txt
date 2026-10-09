@@ -162,6 +162,7 @@
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			ADISCORD_reform_social_system_development = yes
 			unlock_decision_tooltip = STP_pw_restart_workshops
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_homes_for_returnees_delta } }
 			hidden_effect = {
@@ -314,6 +315,7 @@
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			ADISCORD_reform_army_development = yes
 			add_ideas = ADISCORD_staff_STS_Mikhail_Rakitin
 			add_tech_bonus = { name = STP_pw_infantry_lessons_bonus bonus = 0.5 uses = 1 category = infantry_weapons }
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_officer_school_delta } }
@@ -2705,6 +2707,7 @@
 		prerequisite = { focus = STP_pc_development_engineers_on_radio }
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			ADISCORD_reform_cultural_development = yes
 			add_research_slot = 1
 			custom_effect_tooltip = STP_pc_development_reopen_universities_tt
 			hidden_effect = {

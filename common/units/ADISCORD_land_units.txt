@@ -80,12 +80,12 @@ sub_units = {
 			ADISCORD_power_shield_equipment = 20
 		}
 		urban = {
-			attack = 0.35
-			defence = 0.30
+			attack = 0.65
+			defence = 0.60
 		}
 		vorkernsberg = {
-			attack = 0.35
-			defence = 0.30
+			attack = 0.65
+			defence = 0.60
 		}
 		fort = {
 			attack = 0.30

@@ -114,4 +114,9 @@ spriteTypes = {
         textureFile = "gfx/interface/technology/ui/ADISCORD_technology_folder_industry.dds"
         noOfFrames = 2
     }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_folder_special"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_folder_special.dds"
+        noOfFrames = 2
+    }
 }

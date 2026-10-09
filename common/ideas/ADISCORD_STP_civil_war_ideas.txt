@@ -549,7 +549,7 @@ ideas = {
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = {
-				special_forces_min = 6
+				special_forces_min = 10
 			}
 		}
 

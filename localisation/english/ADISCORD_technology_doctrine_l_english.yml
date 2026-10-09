@@ -330,6 +330,9 @@
  NOD_ADISCORD_attack_airframe_2175_desc:0 "Next-generation strike aircraft NA-75 \"Phantom\"."
  # END Country aircraft names
 
+ ADISCORD_special_technologies_folder:0 "Special Technologies"
+ ADISCORD_special_technologies_folder_desc:0 "Restricted research programmes. Access is granted by special projects, national focuses or events."
+ ADISCORD_special_technology_locked_tt:0 "Access to this special technology has not been unlocked"
  ADISCORD_forbidden_legacy_access:0 "Forbidden legacy access"
  ADISCORD_legacy_research_authorized:0 "Legacy research authorized"
  ADISCORD_legacy_site_secured:0 "Secured old-world site"
@@ -1145,7 +1148,7 @@
  ADISCORD_tech_assault_coordinated_attack:0 "Coordinated Assault"
  ADISCORD_tech_assault_coordinated_attack_desc:0 "Weapon crews and forward groups follow a shared target sequence, combining infantry suppression with a continuous advance. Technology level: 2172."
  ADISCORD_tech_kefreyt_shield_special_forces:0 "Power Shields"
- ADISCORD_tech_kefreyt_shield_special_forces_desc:0 "Unlocks shield battalions and first-generation power shield production. Technology level: 2163. Shield battalions require 20 power shields; production consumes rare components and rare alloys."
+ ADISCORD_tech_kefreyt_shield_special_forces_desc:0 "Unlocks shield battalions and first-generation power shield production. Technology level: 2163. The Power Shields special project grants this base technology. Kefreyt, the Party and Shabrat can also complete the project through their national focuses. Shield battalions require 20 power shields; production consumes rare components and rare alloys."
  ADISCORD_tech_shield_assault_drills:0 "Shield Team Drills"
  ADISCORD_tech_shield_assault_drills_desc:0 "Coordinated shield teams improve shield infantry defense, breakthrough and organization. Technology level: 2166. Shield battalions require 20 power shields; production consumes rare components and rare alloys."
  ADISCORD_tech_compact_shield_generators:0 "Compact Shield Generators"

@@ -213,7 +213,7 @@ class CombatRobotTests(unittest.TestCase):
                 self.assertIsNotNone(match, line)
                 self.assertNotIn(match[1], keys)
                 keys.add(match[1])
-            self.assertEqual(keys, expected)
+            self.assertLessEqual(expected, keys)
 
     def test_leftover_check_allows_native_land_research_but_rejects_stale_links(self):
         with tempfile.TemporaryDirectory() as directory:

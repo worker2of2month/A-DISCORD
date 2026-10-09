@@ -4890,6 +4890,51 @@ RUS_bunker_construction = {
 			}
 		}
 	}
+
+	RUS_bunker_energy_sale = {
+		icon = generic_trade
+		allowed = { tag = RUS }
+		visible = { has_completed_focus = RUS_bunker_power_school }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_operational_tt
+				RUS_bunker_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_slot_free_tt
+				RUS_bunker_slot_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_energy_contract_free_tt
+				NOT = { has_variable = RUS_bunker_energy_export_power }
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_bunker_energy_sale_cost
+		custom_cost_trigger = {
+			check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+		}
+		days_remove = 90
+		complete_effect = {
+			custom_effect_tooltip = RUS_bunker_energy_sale_result_tt
+			hidden_effect = { RUS_bunker_energy_sale_start = yes }
+		}
+		remove_effect = {
+			custom_effect_tooltip = RUS_bunker_energy_sale_finish_tt
+			hidden_effect = { RUS_bunker_energy_sale_finish = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				RUS_bunker_operational = no
+				NOT = { has_variable = RUS_bunker_energy_export_power }
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = RUS_bunker_energy_sale_cancel_tt
+			hidden_effect = { RUS_bunker_energy_sale_cancel = yes }
+		}
+		ai_will_do = { base = 0 }
+	}
 }
 
 RUS_development_programmes = {
@@ -5161,7 +5206,7 @@ RUS_development_programmes = {
 		cost = 0
 		custom_cost_text = RUS_development_programme_cost
 		custom_cost_trigger = { RUS_development_programme_affordable = yes }
-		days_re_enable = 180
+		days_re_enable = 90
 		complete_effect = {
 			if = {
 				limit = {
@@ -5229,7 +5274,7 @@ RUS_development_programmes = {
 		cost = 0
 		custom_cost_text = RUS_development_programme_cost
 		custom_cost_trigger = { RUS_development_programme_affordable = yes }
-		days_re_enable = 180
+		days_re_enable = 90
 		complete_effect = {
 			if = {
 				limit = {
@@ -5285,7 +5330,7 @@ RUS_development_programmes = {
 		cost = 0
 		custom_cost_text = RUS_development_programme_cost
 		custom_cost_trigger = { RUS_development_programme_affordable = yes }
-		days_re_enable = 180
+		days_re_enable = 90
 		complete_effect = {
 			if = {
 				limit = {
@@ -5302,6 +5347,147 @@ RUS_development_programmes = {
 						limit = { RUS_bunker_workshop_active = yes }
 						add_to_variable = { var = ADISCORD_economic_development_progress value = 15 }
 					}
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+			}
+		}
+	}
+
+	RUS_community_assemblies = {
+		icon = generic_industry
+		allowed = { tag = RUS }
+		visible = { has_completed_focus = RUS_count_the_hearths }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_community_assemblies_ready_tt
+				RUS_community_assemblies_ready = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_development_programme_cost
+		custom_cost_trigger = { RUS_development_programme_affordable = yes }
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = {
+					RUS_community_assemblies_ready = yes
+					RUS_development_programme_affordable = yes
+				}
+				custom_effect_tooltip = RUS_community_assemblies_result_tt
+				hidden_effect = {
+					add_political_power = -25
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					add_to_variable = { var = ADISCORD_society_development_progress value = 25 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+			}
+		}
+	}
+
+	RUS_public_reading_rooms = {
+		icon = generic_industry
+		allowed = { tag = RUS }
+		visible = { has_completed_focus = RUS_school_of_scribes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_public_reading_rooms_ready_tt
+				RUS_public_reading_rooms_ready = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_development_programme_cost
+		custom_cost_trigger = { RUS_development_programme_affordable = yes }
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = {
+					RUS_public_reading_rooms_ready = yes
+					RUS_development_programme_affordable = yes
+				}
+				custom_effect_tooltip = RUS_public_reading_rooms_result_tt
+				hidden_effect = {
+					add_political_power = -25
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					add_to_variable = { var = ADISCORD_cultural_development_progress value = 25 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+			}
+		}
+	}
+
+	RUS_regimental_training = {
+		icon = generic_industry
+		allowed = { tag = RUS }
+		visible = { has_completed_focus = RUS_officer_courses }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_regimental_training_ready_tt
+				RUS_regimental_training_ready = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_development_programme_cost
+		custom_cost_trigger = { RUS_development_programme_affordable = yes }
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = {
+					RUS_regimental_training_ready = yes
+					RUS_development_programme_affordable = yes
+				}
+				custom_effect_tooltip = RUS_regimental_training_result_tt
+				hidden_effect = {
+					add_political_power = -25
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					add_to_variable = { var = ADISCORD_army_development_progress value = 25 }
 					ADISCORD_economy_mark_dirty = yes
 				}
 			}

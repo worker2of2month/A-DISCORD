@@ -80,6 +80,7 @@ def starting_template_counter(name: str) -> int:
 SCRIPT_GLOBS = (
     "common/on_actions/*.txt",
     "common/scripted_effects/*.txt",
+    "common/special_projects/projects/*.txt",
     "common/decisions/**/*.txt",
     "common/operations/*.txt",
     "events/*.txt",

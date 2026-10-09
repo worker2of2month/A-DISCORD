@@ -620,7 +620,8 @@
         "gfx/interface/technology/ui/ADISCORD_technology_folder_naval_support.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_folder_air.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_folder_electronics.dds",
-        "gfx/interface/technology/ui/ADISCORD_technology_folder_industry.dds"
+        "gfx/interface/technology/ui/ADISCORD_technology_folder_industry.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_folder_special.dds"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_technology_ui_assets.py",

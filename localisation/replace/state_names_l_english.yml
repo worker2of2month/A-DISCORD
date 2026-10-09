@@ -715,4 +715,9 @@
  STATE_710: "Northern Waste"
  STATE_711: "Western Waste"
  STATE_712: "Southern Waste"
+ STATE_713: "Old March Forest"
+ STATE_714: "Southern Seaboard"
+ STATE_715: "Northern Shore"
+ STATE_716: "Middle March"
+ STATE_717: "Rinval Fens"
  # END GENERATED: tools.builders.build_adiscord_new_states

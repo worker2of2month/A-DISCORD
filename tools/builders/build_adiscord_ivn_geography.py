@@ -1,4 +1,4 @@
-"""Synchronize Ivanland/IIA declared terrain with the painted terrain map."""
+"""Generate Ivanland/IIA relief, terrain, trees and rivers; sync declared terrain."""
 
 from __future__ import annotations
 
@@ -17,6 +17,7 @@ from typing import Sequence
 
 import numpy as np
 from PIL import Image
+from scipy.ndimage import distance_transform_edt
 
 from tools.builders.build_adiscord_terrain_snow import (
     CITIES_PATH,
@@ -63,12 +64,19 @@ IVN_STATE_IDS = frozenset(
         696,
         697,
         698,
+        713,
+        714,
+        715,
+        716,
+        717,
     }
 )
 IIA_STATE_IDS = frozenset({128, 693, 694})
 SCOPED_STATE_IDS = IVN_STATE_IDS | IIA_STATE_IDS
 ISLAND_HEIGHT_STATE_IDS = frozenset({128, 693, 694})
-NORTHERN_LANDSCAPE_STATE_IDS = frozenset({127, 128, 129, 130, 131, 132, 164, 693, 694})
+NORTHERN_LANDSCAPE_STATE_IDS = frozenset(
+    {127, 128, 129, 130, 131, 132, 164, 693, 694, 715}
+)
 MAINLAND_FOREST_STATE_IDS = (
     NORTHERN_LANDSCAPE_STATE_IDS - ISLAND_HEIGHT_STATE_IDS - {164}
 )
@@ -96,8 +104,66 @@ SETTLEMENT_PROVINCES = frozenset(
         5573,
         9160,
         12076,
+        932,
+        11124,
+        5203,
+        12054,
+        6350,
     }
 )
+# Mainland relief of the Itoran civil-war theatre. Heights are a pure function
+# of position, coast and the unchanged foreign border, so repeated passes
+# converge. The detached western islands keep their authored relief.
+RELIEF_STATE_IDS = IVN_STATE_IDS
+MARCH_RELIEF_STATE_IDS = IVN_STATE_IDS - NORTHERN_LANDSCAPE_STATE_IDS
+RELIEF_EXCLUDED_PROVINCES = frozenset({8885, 9037, 10675, 11000})
+# The March Ridge separates the northern lobe from the marches; its spur and
+# the Longar heights continue along the eastern march.
+RIDGE_SPINE = (
+    (2833, 1009),
+    (2846, 1004),
+    (2860, 1002),
+    (2874, 999),
+    (2887, 999),
+    (2899, 1006),
+    (2908, 1014),
+)
+RIDGE_SPUR = ((2896, 1004), (2890, 1022), (2886, 1036), (2884, 1050), (2880, 1058))
+# (x, y, x radius, y radius, amplitude): Longar heights, the Olsia upland and
+# its summit, and the Lakora hills.
+RELIEF_DOMES = (
+    (2919, 1050, 10.0, 9.0, 34.0),
+    (2826, 1230, 30.0, 16.0, 50.0),
+    (2830, 1232, 13.0, 10.0, 74.0),
+    (2872, 1203, 8.0, 7.0, 32.0),
+)
+# The Rinval fens lie between the western march and the Old March capital.
+FEN_LINE = ((2786, 1099), (2800, 1095), (2815, 1093), (2830, 1093), (2843, 1097))
+FEN_HALF_WIDTH = 5.0
+# The Old March forest screens the capital from the eastern marches.
+FOREST_ZONES = ((2850, 1112, 17.0, 12.0),)
+RIVERS_PATH = ROOT / "map/rivers.bmp"
+# Provinces that already carried authored rivers. Their river pixels, and
+# every pixel touching them, stay outside this builder's river layer.
+AUTHORED_RIVER_PROVINCES = frozenset(
+    {
+        1304, 1421, 1697, 2058, 2752, 3131, 3447, 3462, 3598, 3847, 4103, 4217,
+        4553, 4576, 5573, 5586, 6020, 6507, 7603, 7713, 7911, 8536, 9100, 9183,
+        9685, 9894, 11115, 11132, 11382, 11480, 11613, 12160, 12317, 12342, 12463,
+    }
+)
+# Waypoints from the source to the mouth. Rivers run only on province-border
+# pixels, so they separate provinces instead of crossing them.
+RIVER_COURSES = (
+    ((2853, 1016), (2849, 1045), (2846, 1075), (2836, 1090), (2815, 1094), (2795, 1099), (2782, 1101)),
+    ((2858, 996), (2853, 980), (2850, 962), (2855, 948)),
+    ((2860, 1066), (2863, 1086), (2858, 1110), (2845, 1128), (2828, 1136), (2806, 1122)),
+    ((2827, 1228), (2840, 1232), (2850, 1236), (2858, 1244)),
+)
+RIVER_MOUTH_RADIUS = 14
+RIVER_SOURCE_PALETTE = 0
+RIVER_SEA_PALETTE = 254
+RIVER_LAND_PALETTE = 255
 TERRAIN_PRIORITY = (
     "urban",
     "mountain",
@@ -161,6 +227,8 @@ class GeographyOutputs:
     heightmap: Image.Image
     world_normal: Image.Image
     trees: Image.Image
+    rivers: Image.Image
+    river_issues: list[str]
     desired: dict[int, str]
     counts: dict[int, Counter[str]]
     footprints: dict[int, set[int]]
@@ -958,6 +1026,362 @@ def render_trees(
     return _render_trees_with_metrics(source, terrain, state_by_pixel, palette, blocked)[0]
 
 
+def packed_rgb(province_rgb: np.ndarray) -> np.ndarray:
+    return (
+        (province_rgb[..., 0].astype(np.uint32) << 16)
+        | (province_rgb[..., 1].astype(np.uint32) << 8)
+        | province_rgb[..., 2].astype(np.uint32)
+    )
+
+
+def province_mask(
+    packed: np.ndarray,
+    province_colors: dict[int, tuple[int, int, int]],
+    province_ids: frozenset[int],
+) -> np.ndarray:
+    keys = [
+        (red << 16) | (green << 8) | blue
+        for province_id, (red, green, blue) in province_colors.items()
+        if province_id in province_ids
+    ]
+    return np.isin(packed, np.array(keys, dtype=np.uint32))
+
+
+def relief_province_ids(state_ids: frozenset[int]) -> frozenset[int]:
+    return province_ids_for_states(state_ids) - RELIEF_EXCLUDED_PROVINCES
+
+
+def polyline_distance(
+    xs: np.ndarray, ys: np.ndarray, points: Sequence[tuple[int, int]]
+) -> tuple[np.ndarray, np.ndarray]:
+    """Distance to a polyline and the normalised position along it."""
+    lengths = [
+        float(np.hypot(bx - ax, by - ay))
+        for (ax, ay), (bx, by) in zip(points, points[1:])
+    ]
+    total = sum(lengths)
+    best = np.full(xs.shape, np.inf)
+    along = np.zeros(xs.shape)
+    offset = 0.0
+    for (ax, ay), (bx, by), length in zip(points, points[1:], lengths):
+        dx = bx - ax
+        dy = by - ay
+        t = np.clip(((xs - ax) * dx + (ys - ay) * dy) / (length * length), 0.0, 1.0)
+        distance = np.hypot(xs - (ax + t * dx), ys - (ay + t * dy))
+        closer = distance < best
+        best = np.where(closer, distance, best)
+        along = np.where(closer, (offset + t * length) / total, along)
+        offset += length
+    return best, along
+
+
+def relief_target(
+    xs: np.ndarray, ys: np.ndarray, coast_distance: np.ndarray
+) -> tuple[np.ndarray, np.ndarray]:
+    """Return mainland heights and the fen mask for absolute map coordinates."""
+    base = (
+        106.0
+        + 5.0 * np.sin(xs / 19.0 + ys / 27.0)
+        + 4.0 * np.cos(xs / 13.0 - ys / 23.0)
+        + 3.0 * np.sin((xs + ys) / 41.0)
+    )
+    spine, along = polyline_distance(xs, ys, RIDGE_SPINE)
+    ridge = (34.0 + 44.0 * np.sin(pi * along)) * np.exp(-((spine / 12.0) ** 2))
+    spur_distance, spur_along = polyline_distance(xs, ys, RIDGE_SPUR)
+    spur = (
+        42.0
+        * (0.6 + 0.4 * np.sin(pi * spur_along))
+        * np.exp(-((spur_distance / 10.0) ** 2))
+    )
+    raised = np.maximum(ridge, spur)
+    for cx, cy, sx, sy, amplitude in RELIEF_DOMES:
+        raised = np.maximum(
+            raised,
+            amplitude * np.exp(-(((xs - cx) / sx) ** 2 + ((ys - cy) / sy) ** 2)),
+        )
+    fen, _ = polyline_distance(xs, ys, FEN_LINE)
+    # Lowland undulation fades over nine pixels; uplands meet the sea in
+    # three, so the narrow Olsia peninsula keeps its relief.
+    lowland = np.minimum(1.0, coast_distance / 9.0)
+    upland = np.minimum(1.0, coast_distance / 3.0)
+    height = (
+        HEIGHT_MIN
+        + lowland * (base - HEIGHT_MIN)
+        + upland * raised
+        - lowland * 9.0 * np.exp(-((fen / 6.0) ** 2))
+    )
+    return height, fen <= FEN_HALF_WIDTH
+
+
+def render_relief_heights(
+    heights: np.ndarray, relief: np.ndarray, water: np.ndarray
+) -> tuple[np.ndarray, np.ndarray]:
+    """Rebuild relief heights, blending into unchanged foreign land."""
+    ys, xs = np.nonzero(relief)
+    y0 = max(0, int(ys.min()) - 24)
+    y1 = min(heights.shape[0], int(ys.max()) + 25)
+    x0 = max(0, int(xs.min()) - 24)
+    x1 = min(heights.shape[1], int(xs.max()) + 25)
+    crop = (slice(y0, y1), slice(x0, x1))
+    foreign = ~water[crop] & ~relief[crop]
+    coast_distance = distance_transform_edt(~water[crop])
+    foreign_distance, (fy, fx) = distance_transform_edt(~foreign, return_indices=True)
+    gy, gx = np.mgrid[y0:y1, x0:x1].astype(float)
+    target, fen = relief_target(gx, gy, coast_distance)
+    weight = np.minimum(1.0, foreign_distance / 8.0)
+    blended = weight * target + (1.0 - weight) * heights[crop][fy, fx].astype(float)
+    values = np.clip(np.rint(blended), HEIGHT_MIN, HEIGHT_MAX).astype(np.uint8)
+    result = heights.copy()
+    result[crop] = np.where(relief[crop], values, heights[crop])
+    fen_mask = np.zeros(heights.shape, bool)
+    fen_mask[crop] = fen & relief[crop]
+    return result, fen_mask
+
+
+def neighbours_of(mask: np.ndarray) -> np.ndarray:
+    result = np.zeros(mask.shape, bool)
+    for axis, shift in ((0, 1), (0, -1), (1, 1), (1, -1)):
+        result |= np.roll(mask, shift, axis)
+    return result
+
+
+def masked_slopes(heights: np.ndarray, mask: np.ndarray) -> np.ndarray:
+    values = heights.astype(np.int16)
+    slope = np.zeros(values.shape, np.int16)
+    for axis, shift in ((0, 1), (0, -1), (1, 1), (1, -1)):
+        neighbour = np.roll(values, shift, axis)
+        inside = np.roll(mask, shift, axis)
+        slope = np.maximum(slope, np.where(inside, np.abs(values - neighbour), 0))
+    return np.where(mask, slope, 0)
+
+
+def ellipse_mask(
+    shape: tuple[int, int], zones: Sequence[tuple[int, int, float, float]]
+) -> np.ndarray:
+    result = np.zeros(shape, bool)
+    for cx, cy, rx, ry in zones:
+        y0 = int(cy - ry - 1)
+        x0 = int(cx - rx - 1)
+        gy, gx = np.mgrid[y0 : int(cy + ry + 2), x0 : int(cx + rx + 2)]
+        inside = ((gx - cx) / rx) ** 2 + ((gy - cy) / ry) ** 2 <= 1.0
+        result[y0 : y0 + inside.shape[0], x0 : x0 + inside.shape[1]] |= inside
+    return result
+
+
+def palette_indices(palette: dict[int, str], *terrain_types: str) -> list[int]:
+    return [index for index, value in palette.items() if value in terrain_types]
+
+
+def classify_march_terrain(
+    pixels: np.ndarray,
+    heights: np.ndarray,
+    march: np.ndarray,
+    relief: np.ndarray,
+    fen: np.ndarray,
+    forest_zone: np.ndarray,
+    palette: dict[int, str],
+) -> np.ndarray:
+    """Derive march and southern terrain from relief and the authored zones.
+
+    The northern thresholds apply, so the ridge stays continuous across the
+    northern landscape border. Existing forest and lowland textures survive
+    on flat ground; painted relief without matching height becomes plains.
+    """
+    land = march & ~np.isin(pixels, palette_indices(palette, "ocean", "lakes"))
+    urban = land & (pixels == URBAN_PALETTE)
+    marsh = land & ~urban & (fen | (pixels == MARSH_PALETTE))
+    classifiable = land & ~urban & ~marsh
+    slope = masked_slopes(heights, relief)
+    mountains = classifiable & ((heights >= 158) | (slope >= 12))
+    first = classifiable & ~mountains & neighbours_of(mountains)
+    second = (
+        classifiable
+        & ~mountains
+        & ~first
+        & neighbours_of(first)
+        & ((heights >= 125) | (slope >= 4))
+    )
+    hills = classifiable & ~mountains & (first | second | (heights >= 132) | (slope >= 6))
+    flat = classifiable & ~mountains & ~hills
+    old_forest = np.isin(pixels, palette_indices(palette, "forest"))
+    old_relief = np.isin(pixels, palette_indices(palette, "hills", "mountain"))
+    result = pixels.copy()
+    result[marsh] = MARSH_PALETTE
+    result[mountains] = MOUNTAIN_PALETTE
+    result[hills] = HILLS_PALETTE
+    result[flat & forest_zone & ~old_forest] = FOREST_PALETTE
+    result[flat & ~forest_zone & old_relief] = PLAINS_PALETTE
+    return result
+
+
+def _snap_river_point(point: tuple[int, int], allowed: np.ndarray) -> tuple[int, int]:
+    x, y = point
+    for radius in range(12):
+        window = allowed[y - radius : y + radius + 1, x - radius : x + radius + 1]
+        ys, xs = np.nonzero(window)
+        if len(xs):
+            order = np.argsort((xs - radius) ** 2 + (ys - radius) ** 2, kind="stable")
+            return (x - radius + int(xs[order[0]]), y - radius + int(ys[order[0]]))
+    raise RuntimeError(f"river waypoint {point} has no province-border pixel nearby")
+
+
+def _route_river(
+    start: tuple[int, int],
+    goals: list[tuple[int, int]],
+    allowed: np.ndarray,
+    heights: np.ndarray,
+) -> list[tuple[int, int]]:
+    """Cheapest 4-connected path; climbing costs extra so rivers run downhill."""
+    goal_set = set(goals)
+    gx = sum(x for x, _ in goals) / len(goals)
+    gy = sum(y for _, y in goals) / len(goals)
+    frontier = [(0.0, 0.0, start)]
+    previous: dict[tuple[int, int], tuple[int, int] | None] = {start: None}
+    best = {start: 0.0}
+    while frontier:
+        _estimate, spent, current = heapq.heappop(frontier)
+        if current in goal_set:
+            path = []
+            step: tuple[int, int] | None = current
+            while step is not None:
+                path.append(step)
+                step = previous[step]
+            return path[::-1]
+        if spent > best[current]:
+            continue
+        x, y = current
+        for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+            if not allowed[ny, nx]:
+                continue
+            climb = max(0, int(heights[ny, nx]) - int(heights[y, x]))
+            value = spent + 1.0 + 0.8 * climb
+            if value < best.get((nx, ny), float("inf")):
+                best[(nx, ny)] = value
+                previous[(nx, ny)] = current
+                heapq.heappush(
+                    frontier, (value + abs(nx - gx) + abs(ny - gy), value, (nx, ny))
+                )
+    raise RuntimeError(f"river from {start} cannot reach its next waypoint along borders")
+
+
+def _prune_river_loops(path: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    """Cut joined segments where the river would touch its own earlier course."""
+    result: list[tuple[int, int]] = []
+    position: dict[tuple[int, int], int] = {}
+    for point in path:
+        x, y = point
+        touching = [
+            position[neighbour]
+            for neighbour in ((x, y), (x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1))
+            if neighbour in position and position[neighbour] < len(result) - 1
+        ]
+        if touching:
+            del result[min(touching) + 1 :]
+            position = {value: index for index, value in enumerate(result)}
+            if point in position:
+                continue
+        position[point] = len(result)
+        result.append(point)
+    return result
+
+
+def river_width_palette(fraction: float, length: int) -> int:
+    if fraction < 0.35:
+        return 3
+    if fraction < 0.7:
+        return 4
+    if length >= 150 and fraction >= 0.8:
+        return 7
+    return 6
+
+
+def province_borders(packed: np.ndarray) -> np.ndarray:
+    border = np.zeros(packed.shape, bool)
+    for axis, shift in ((0, 1), (0, -1), (1, 1), (1, -1)):
+        border |= np.roll(packed, shift, axis) != packed
+    return border
+
+
+def route_rivers(
+    rivers: np.ndarray,
+    packed: np.ndarray,
+    relief: np.ndarray,
+    authored: np.ndarray,
+    water: np.ndarray,
+    heights: np.ndarray,
+) -> tuple[np.ndarray, list[list[tuple[int, int]]]]:
+    """Redraw this builder's rivers on province borders inside the relief."""
+    owned = relief & ~authored
+    result = rivers.copy()
+    result[owned & (result < RIVER_SEA_PALETTE)] = RIVER_LAND_PALETTE
+    foreign_river = (result < RIVER_SEA_PALETTE) & ~owned
+    blocked = foreign_river.copy()
+    for dy in (-1, 0, 1):
+        for dx in (-1, 0, 1):
+            blocked |= np.roll(np.roll(foreign_river, dy, 0), dx, 1)
+    coast = owned & neighbours_of(water)
+    border = province_borders(packed)
+    paths: list[list[tuple[int, int]]] = []
+    for course in RIVER_COURSES:
+        allowed = owned & border & ~blocked & ~coast
+        mouth = owned & ~blocked & coast
+        path = [_snap_river_point(course[0], allowed)]
+        for waypoint in course[1:-1]:
+            target = _snap_river_point(waypoint, allowed)
+            path.extend(_route_river(path[-1], [target], allowed, heights)[1:])
+        mx, my = course[-1]
+        reach = RIVER_MOUTH_RADIUS
+        window = mouth[my - reach : my + reach + 1, mx - reach : mx + reach + 1]
+        goals = [
+            (mx - reach + int(x), my - reach + int(y)) for y, x in zip(*np.nonzero(window))
+        ]
+        if not goals:
+            raise RuntimeError(f"river mouth {course[-1]} has no coastal border pixel")
+        path.extend(_route_river(path[-1], goals, allowed | mouth, heights)[1:])
+        path = _prune_river_loops(path)
+        for index, (x, y) in enumerate(path):
+            result[y, x] = (
+                RIVER_SOURCE_PALETTE
+                if index == 0
+                else river_width_palette(index / len(path), len(path))
+            )
+            blocked[y - 1 : y + 2, x - 1 : x + 2] = True
+        paths.append(path)
+    return result, paths
+
+
+def river_issues(
+    rivers: np.ndarray,
+    paths: list[list[tuple[int, int]]],
+    packed: np.ndarray,
+    water: np.ndarray,
+) -> list[str]:
+    border = province_borders(packed)
+    issues = []
+    for number, path in enumerate(paths, start=1):
+        cells = set(path)
+        if rivers[path[0][1], path[0][0]] != RIVER_SOURCE_PALETTE:
+            issues.append(f"river {number}: source pixel is not palette 0")
+        off_border = sum(not border[y, x] for x, y in path)
+        if off_border:
+            issues.append(f"river {number}: {off_border} pixels cross province interiors")
+        for (ax, ay), (bx, by) in zip(path, path[1:]):
+            if abs(ax - bx) + abs(ay - by) != 1:
+                issues.append(f"river {number}: course is not 4-connected at {(ax, ay)}")
+                break
+        branching = [
+            (x, y)
+            for x, y in path
+            if sum((n in cells) for n in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1))) > 2
+        ]
+        if branching:
+            issues.append(f"river {number}: branches at {branching[:3]}")
+        mx, my = path[-1]
+        if not water[my - 1 : my + 2, mx - 1 : mx + 2].any():
+            issues.append(f"river {number}: mouth {(mx, my)} does not reach the sea")
+    return issues
+
+
 def _build_expected() -> GeographyOutputs:
     lines, newline, bom, province_colors, declared = definition_contract()
     palette = palette_types()
@@ -986,6 +1410,14 @@ def _build_expected() -> GeographyOutputs:
         masks = landscape_masks(provinces_source, province_colors)
     water = water_mask(province_rgb, water_colours(DEFINITION_PATH))
     shore_blocked = urban_blocked(water, province_rgb, DEFINITION_PATH).reshape(-1)
+    packed = packed_rgb(province_rgb)
+    relief = province_mask(
+        packed, province_colors, relief_province_ids(RELIEF_STATE_IDS)
+    )
+    march = province_mask(
+        packed, province_colors, relief_province_ids(MARCH_RELIEF_STATE_IDS)
+    )
+    authored_rivers = province_mask(packed, province_colors, AUTHORED_RIVER_PROVINCES)
 
     with Image.open(BytesIO(HEIGHTMAP_PATH.read_bytes())) as height_source:
         if height_source.mode != "L" or height_source.size != terrain_original.size:
@@ -993,10 +1425,20 @@ def _build_expected() -> GeographyOutputs:
                 "heightmap.bmp must use mode L and match provinces.bmp dimensions"
             )
         heightmap = render_heightmap(height_source, masks.island, masks.island_bbox)
+    relief_heights, fen = render_relief_heights(np.asarray(heightmap), relief, water)
+    heightmap = Image.fromarray(relief_heights, mode="L")
+    normal_scope = bytearray(
+        (
+            np.frombuffer(bytes(masks.island), dtype=np.uint8).reshape(relief.shape).astype(bool)
+            | relief
+        )
+        .astype(np.uint8)
+        .tobytes()
+    )
     with Image.open(BytesIO(WORLD_NORMAL_PATH.read_bytes())) as normal_source:
         if normal_source.mode != "RGB":
             raise RuntimeError("world_normal.bmp must use mode RGB")
-        world_normal = normal_from_height(heightmap, normal_source, masks.island)
+        world_normal = normal_from_height(heightmap, normal_source, normal_scope)
 
     province_by_pixel = array("H", [0]) * len(terrain_pixels)
     settlement_indices = {province_id: [] for province_id in SETTLEMENT_PROVINCES}
@@ -1078,6 +1520,16 @@ def _build_expected() -> GeographyOutputs:
         masks.state_by_pixel,
         footprints,
     )
+    march_pixels = classify_march_terrain(
+        np.asarray(terrain),
+        relief_heights,
+        march,
+        relief,
+        fen,
+        ellipse_mask(relief.shape, FOREST_ZONES) & march,
+        palette,
+    )
+    terrain.putdata(march_pixels.tobytes())
     generated_pixels = bytearray(terrain.get_flattened_data())
     shore_cleared: set[int] = set()
     for index, province_id in enumerate(province_by_pixel):
@@ -1131,11 +1583,17 @@ def _build_expected() -> GeographyOutputs:
         if tree_source.mode != "P" or tree_source.size != (1650, 600):
             raise RuntimeError("trees.bmp must remain paletted at 1650x600")
         tree_palette = tree_source.getpalette()
+        tree_states = np.frombuffer(bytes(masks.state_by_pixel), dtype=np.uint16).copy()
+        for state_id in sorted(MARCH_RELIEF_STATE_IDS):
+            state_pixels = province_mask(
+                packed, province_colors, relief_province_ids(frozenset({state_id}))
+            )
+            tree_states[state_pixels.reshape(-1)] = state_id
         trees, tree_counts, forbidden_trees, outside_tree_changes = (
             _render_trees_with_metrics(
                 tree_source,
                 terrain,
-                masks.state_by_pixel,
+                array("H", tree_states.tobytes()),
                 palette,
                 tree_cells_blocked(water, tree_source.width, tree_source.height),
             )
@@ -1219,9 +1677,10 @@ def _build_expected() -> GeographyOutputs:
         ):
             components_without_shoulders += 1
 
+    relief_pixels = relief.reshape(-1)
     outside_terrain_changes = 0
     for index, (before, after) in enumerate(zip(terrain_pixels, generated_pixels)):
-        if before == after or masks.north[index]:
+        if before == after or masks.north[index] or relief_pixels[index]:
             continue
         if index in shore_cleared and before == URBAN_PALETTE:
             continue
@@ -1244,6 +1703,20 @@ def _build_expected() -> GeographyOutputs:
         mountain_components_without_shoulders=components_without_shoulders,
     )
 
+    with Image.open(BytesIO(RIVERS_PATH.read_bytes())) as river_source:
+        if river_source.mode != "P" or river_source.size != terrain.size:
+            raise RuntimeError("rivers.bmp must be paletted and match terrain.bmp dimensions")
+        river_pixels, river_paths = route_rivers(
+            np.asarray(river_source),
+            packed,
+            relief,
+            authored_rivers,
+            water,
+            relief_heights,
+        )
+        rivers = river_source.copy()
+    rivers.putdata(river_pixels.tobytes())
+
     updated_lines = []
     for line in lines:
         fields = line.split(";")
@@ -1260,6 +1733,8 @@ def _build_expected() -> GeographyOutputs:
         heightmap=heightmap,
         world_normal=world_normal,
         trees=trees,
+        rivers=rivers,
+        river_issues=river_issues(river_pixels, river_paths, packed, water),
         desired=desired,
         counts=counts,
         footprints=footprints,
@@ -1280,6 +1755,7 @@ def expected() -> GeographyOutputs:
         DEFINITION_PATH,
         HEIGHTMAP_PATH,
         WORLD_NORMAL_PATH,
+        RIVERS_PATH,
         TERRAIN_CONFIG_PATH,
         *(state_path(state_id) for state_id in sorted(SCOPED_STATE_IDS)),
     )
@@ -1389,6 +1865,18 @@ def validate(outputs: GeographyOutputs | None = None) -> list[str]:
         )
     if differences:
         issues.append(f"map/trees.bmp: {differences} northern tree cells drifted")
+    with Image.open(BytesIO(RIVERS_PATH.read_bytes())) as current:
+        if current.getpalette() != outputs.rivers.getpalette():
+            issues.append("map/rivers.bmp: palette bytes drifted")
+        differences = sum(
+            before != after
+            for before, after in zip(
+                current.get_flattened_data(), outputs.rivers.get_flattened_data()
+            )
+        )
+    if differences:
+        issues.append(f"map/rivers.bmp: {differences} IVN river pixels drifted")
+    issues.extend(f"map/rivers.bmp: {issue}" for issue in outputs.river_issues)
     current_definition = DEFINITION_PATH.read_bytes().decode("utf-8-sig").splitlines()
     expected_definition = outputs.definition.decode("utf-8-sig").splitlines()
     definition_differences = sum(
@@ -1437,6 +1925,7 @@ def apply() -> None:
     outputs = expected()
     atomic_save_bmp(outputs.terrain, TERRAIN_PATH)
     atomic_save_bmp(outputs.trees, TREES_PATH)
+    atomic_save_bmp(outputs.rivers, RIVERS_PATH)
     atomic_save_bmp(outputs.heightmap, HEIGHTMAP_PATH)
     atomic_save_bmp(outputs.world_normal, WORLD_NORMAL_PATH)
     DEFINITION_PATH.write_bytes(outputs.definition)

@@ -227,12 +227,14 @@ VORKERLAND_STATE_RESOURCES = {
 }
 
 IVANLAND_STATE_RESOURCES = {
-    25: {"steel": 8},
+    25: {"steel": 6},
     99: {"steel": 16},
-    695: {"steel": 4},
+    695: {"steel": 2},
     696: {"steel": 4},
     697: {"steel": 4},
     698: {"steel": 4},
+    714: {"steel": 2},
+    716: {"steel": 2},
 }
 
 AFRELA_STATE_RESOURCES = {
@@ -497,8 +499,10 @@ NAM_COALITION_FRONT_PROFILES = {
 # demographic/logistics baseline.  The existing hub in state 25 and its rail
 # spur through states 100 and 99 remain authoritative, so the frontier relies
 # on infrastructure plus local supply rather than a redundant second hub.
+# The civil-war partition keeps each parent's population and factories:
+# 25 -> 25/713/714, 127 -> 127/715, 695 -> 695/716 and 697 -> 697/717.
 IVANLAND_STATE_PROFILES = {
-    25: {"population": 1_300_000, "category": "large_city", "infrastructure": 5, "civilian": 2, "military": 2, "air_base": 2, "supplies": 2.0},
+    25: {"population": 780_000, "category": "large_city", "infrastructure": 5, "civilian": 2, "military": 1, "air_base": 2, "supplies": 2.0},
     92: {"population": 480_000, "category": "rural", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 4.0},
     95: {"population": 780_000, "category": "town", "infrastructure": 4, "civilian": 2, "military": 2, "air_base": 1, "supplies": 5.0},
     96: {"population": 720_000, "category": "town", "infrastructure": 4, "civilian": 2, "military": 2, "supplies": 5.0},
@@ -507,7 +511,7 @@ IVANLAND_STATE_PROFILES = {
     99: {"population": 1_650_000, "category": "large_city", "infrastructure": 4, "civilian": 4, "military": 3, "air_base": 2, "supplies": 5.0},
     100: {"population": 1_200_000, "category": "large_town", "infrastructure": 4, "civilian": 3, "military": 2, "supplies": 4.0},
     101: {"population": 600_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.0},
-    127: {"population": 750_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.0},
+    127: {"population": 480_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 2.0},
     128: {"population": 90_000, "category": "rural", "infrastructure": 2, "supplies": 1.0},
     129: {"population": 550_000, "category": "rural", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
     130: {"population": 650_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
@@ -516,25 +520,44 @@ IVANLAND_STATE_PROFILES = {
     164: {"population": 400_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
     693: {"population": 190_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 1.5},
     694: {"population": 80_000, "category": "rural", "infrastructure": 2, "supplies": 1.5},
-    695: {"population": 750_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 1.5},
+    695: {"population": 450_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 1.0},
     696: {"population": 700_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 1.5},
-    697: {"population": 600_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 1.5},
+    697: {"population": 380_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 1.0},
     698: {"population": 650_000, "category": "town", "infrastructure": 3, "civilian": 1, "air_base": 1, "supplies": 1.5},
+    713: {"population": 200_000, "category": "rural", "infrastructure": 3, "military": 1, "supplies": 0.5},
+    714: {"population": 320_000, "category": "town", "infrastructure": 4, "supplies": 1.0},
+    715: {"population": 270_000, "category": "rural", "infrastructure": 3, "civilian": 1, "supplies": 1.0},
+    716: {"population": 300_000, "category": "rural", "infrastructure": 2, "military": 1, "supplies": 0.5},
+    717: {"population": 220_000, "category": "rural", "infrastructure": 2, "supplies": 0.5},
 }
 
 IVANLAND_OVERHAUL_PROVINCES = {
     128: (579, 7125, 8423, 9072, 16685),
     693: (1191, 1744, 2219, 2991, 4334, 6905, 6928, 7678, 8048, 10730, 16679, 16680, 16688, 16692, 16695, 16700),
     694: (2553, 5448, 11841, 12189, 16659, 16660, 16661, 16662, 16663, 16664, 16681, 16683, 16686),
-    695: (157, 217, 482, 1105, 1763, 2736, 3038, 3181, 3304, 3541, 3579, 4572, 5016, 6146, 6345, 8068, 8505, 8615, 9608, 10158, 10668, 10769, 10810, 10879, 11487, 12017, 12054),
+    695: (157, 217, 1763, 3038, 3304, 3541, 3579, 4572, 5016, 6345, 9608, 10769, 10879, 11487, 12017),
     696: (722, 1304, 2025, 2157, 2211, 3847, 4037, 5521, 5540, 5573, 5729, 6622, 7911, 8515, 9133, 9344, 11115, 11132, 12317, 12880, 12914),
-    697: (401, 1385, 1429, 3273, 4277, 4646, 5055, 5273, 6350, 6827, 6979, 6991, 7263, 8885, 9037, 9132, 9150, 9160, 9418, 9778, 11000, 12383, 16706),
-    25: (694, 932, 1634, 1861, 1862, 3017, 3302, 3503, 3648, 3714, 4503, 4534, 4909, 5611, 6580, 7508, 7654, 8717, 9066, 9236, 9598, 9614, 10539, 10675, 10835, 10885, 11124, 11612, 11653, 12313, 12410, 12790, 12899, 16568),
+    697: (1429, 4277, 4646, 5055, 5273, 6827, 6991, 8885, 9037, 9132, 9160, 9778, 11000, 16706),
+    25: (694, 1861, 4909, 7654, 9066, 9614, 10539, 10885, 11612, 12313, 12790, 16568),
     698: (1768, 1890, 2380, 3828, 3919, 5798, 6971, 8328, 8371, 9611, 10313, 10357, 10403, 10548, 12076, 12122),
+    127: (595, 1697, 2097, 2752, 3245, 4553, 6694, 6896, 7148, 7603, 8345, 9053, 9336, 12463, 12614),
+    713: (932, 1862, 3017, 3302, 3648, 3714, 7508, 8717, 9598, 10835),
+    714: (1634, 3503, 4503, 4534, 5611, 6580, 9236, 10675, 11124, 11653, 12410, 12899),
+    715: (1659, 1681, 3829, 3896, 5203, 6608, 7774, 11578),
+    716: (482, 1105, 2736, 3181, 6146, 8068, 8505, 8615, 10158, 10668, 10810, 12054),
+    717: (401, 1385, 3273, 6350, 6979, 7263, 9150, 9418, 12383),
+}
+
+# Provinces of each original state; the split may only redistribute them.
+IVANLAND_SPLIT_FAMILIES = {
+    25: (25, 695, 696, 697, 698, 713, 714, 716, 717),
+    127: (127, 715),
+    128: (128, 693, 694),
 }
 
 IVANLAND_OVERHAUL_FILENAMES = {
     25: "25-PLACEHOLDER.txt",
+    127: "127-127.txt",
     128: "128-128.txt",
     693: "693-Raidal.txt",
     694: "694-Kair-Coast.txt",
@@ -542,6 +565,11 @@ IVANLAND_OVERHAUL_FILENAMES = {
     696: "696-Eastern-March.txt",
     697: "697-Western-March.txt",
     698: "698-Southern-March.txt",
+    713: "713-Old-March-Forest.txt",
+    714: "714-Southern-Seaboard.txt",
+    715: "715-Northern-Shore.txt",
+    716: "716-Middle-March.txt",
+    717: "717-Rinval-Fens.txt",
 }
 
 IVANLAND_OVERHAUL_VICTORY_POINTS = {
@@ -567,6 +595,11 @@ IVANLAND_OVERHAUL_VICTORY_POINTS = {
     696: ((5573, 3),),
     697: ((9160, 3),),
     698: ((12076, 3),),
+    713: ((932, 2),),
+    714: ((11124, 3),),
+    715: ((5203, 2),),
+    716: ((12054, 2),),
+    717: ((6350, 2),),
 }
 
 IVANLAND_OVERHAUL_PROVINCE_BUILDINGS = {
@@ -920,6 +953,11 @@ IVANLAND_VICTORY_POINT_NAMES = {
     5573: "Лонгар",
     9160: "Ринваль",
     12076: "Салемар",
+    932: "Дубравск",
+    11124: "Сольгаван",
+    5203: "Нордмарск",
+    12054: "Срединск",
+    6350: "Гатьев",
 }
 
 GENERATED_VICTORY_POINT_NAMES = {
@@ -963,6 +1001,11 @@ GENERATED_STATE_NAMES = {
     696: "Восточная Марка",
     697: "Западная Марка",
     698: "Южная Марка",
+    713: "Старомарская пуща",
+    714: "Южное взморье",
+    715: "Северный берег",
+    716: "Срединная Марка",
+    717: "Ринвальские топи",
     699: "Хазар",
     700: "Южная гавань",
     701: "Средний Лорен - город",
@@ -1608,25 +1651,22 @@ def split_svetlogorsk_from_nam() -> None:
 
 def validate_ivanland_split_inputs() -> None:
     """Reject unreviewed province drift before writing any Ivanland state."""
-    original_groups = {
-        25: frozenset().union(
-            *(frozenset(IVANLAND_OVERHAUL_PROVINCES[state_id]) for state_id in (25, 695, 696, 697, 698))
-        ),
-        128: frozenset().union(
-            *(frozenset(IVANLAND_OVERHAUL_PROVINCES[state_id]) for state_id in (128, 693, 694))
-        ),
-    }
-    for state_id in (25, 128):
-        source = state_path(state_id).read_text(encoding="utf-8-sig", errors="strict")
-        match = re.search(r"provinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
-        if not match:
-            raise RuntimeError(f"state {state_id}: missing provinces block")
-        current = frozenset(map(int, re.findall(r"\d+", match.group(1))))
-        if current not in {
-            original_groups[state_id],
-            frozenset(IVANLAND_OVERHAUL_PROVINCES[state_id]),
-        }:
-            raise RuntimeError(f"state {state_id}: Ivanland split manifest drifted")
+    for parent, members in IVANLAND_SPLIT_FAMILIES.items():
+        expected = frozenset().union(
+            *(frozenset(IVANLAND_OVERHAUL_PROVINCES[state_id]) for state_id in members)
+        )
+        current: set[int] = set()
+        for state_id in members:
+            matches = tuple(STATE_DIR.glob(f"{state_id}-*.txt"))
+            if not matches:
+                continue
+            source = state_path(state_id).read_text(encoding="utf-8-sig", errors="strict")
+            match = re.search(r"provinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
+            if not match:
+                raise RuntimeError(f"state {state_id}: missing provinces block")
+            current.update(map(int, re.findall(r"\d+", match.group(1))))
+        if frozenset(current) != expected:
+            raise RuntimeError(f"state {parent}: Ivanland split manifest drifted")
     for state_id, filename in IVANLAND_OVERHAUL_FILENAMES.items():
         target = STATE_DIR / filename
         matches = sorted(STATE_DIR.glob(f"{state_id}-*.txt"))

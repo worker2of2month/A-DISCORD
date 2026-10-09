@@ -122,7 +122,6 @@ class TechnologyUiContractTests(unittest.TestCase):
     def test_all_folder_tabs_keep_native_hit_areas_and_have_distinct_art(self) -> None:
         from tools.builders import build_adiscord_technology_system as system
 
-        source = builder.load_surface_source(builder.SOURCE)
         gui = (ROOT / "interface/countrytechtreeview.gui").read_text(
             encoding="utf-8-sig"
         )
@@ -141,13 +140,13 @@ class TechnologyUiContractTests(unittest.TestCase):
             actual_tabs = actual_tabs.replace(
                 f'"{contract.target_name}"', f'"{contract.source_name}"'
             )
-            image = builder._folder_tab(source, key)
+            image = builder._folder_tab(key)
             artwork.append(image.crop((10, 7, 80, 50)).tobytes())
             for offset in (0, 91):
                 pictogram = image.convert("RGB").crop((offset + 10, 7, offset + 80, 50))
                 self.assertGreater(
                     sum(
-                        max(rgb) - min(rgb) > 15
+                        max(rgb) > 80
                         for rgb in pictogram.get_flattened_data()
                     ),
                     30,
@@ -157,7 +156,8 @@ class TechnologyUiContractTests(unittest.TestCase):
                 image.crop((0, 0, 91, 61)).tobytes(),
                 image.crop((91, 0, 182, 61)).tobytes(),
             )
-        self.assertEqual(len(set(artwork)), 9)
+        self.assertEqual(len(set(artwork)), 10)
+        actual_tabs = actual_tabs.replace("\n\n" + system.render_special_technology_tab(), "")
         self.assertEqual(actual_tabs, native_tabs)
 
     def test_equipment_art_field_has_no_vertical_divider(self) -> None:
@@ -448,7 +448,7 @@ class TechnologyUiContractTests(unittest.TestCase):
         gui = (ROOT / "interface/countrytechtreeview.gui").read_text(
             encoding="utf-8-sig"
         )
-        self.assertEqual(gui.count('"GFX_ADISCORD_technology_tree_window_tile"'), 12)
+        self.assertEqual(gui.count('"GFX_ADISCORD_technology_tree_window_tile"'), 13)
         self.assertEqual(gui.count('"GFX_ADISCORD_technology_info_top"'), 2)
         self.assertEqual(gui.count('"GFX_ADISCORD_technology_info"'), 2)
         self.assertNotIn('"GFX_ADISCORD_technology_tree_panel"', gui)

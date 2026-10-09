@@ -4,8 +4,10 @@ Blender: --background --python this_file -- --build --output PATH
 Python: this_file --output PATH (stages the preview package)
 Blender: --background --python this_file -- --verify --output PATH
 Python: this_file --output PATH --apply, then --check
-Uses the existing militia body, rig and locators. Only the marked northern
-bindings and named model package belong to this builder.
+Uses the existing militia rig and locators. HAZ replaces the body with the
+packed HAZ_sentinel_source.blend and fits its weights to the native rig.
+Use --assets-only with --tags HAZ to retain its existing entity bindings.
+Only the marked northern bindings and named model package belong to this builder.
 """
 
 from pathlib import Path
@@ -39,6 +41,7 @@ CONFIG = {
     'ARB': ROOT / 'gfx/models/units/APH_irregular_infantry.mesh',
     'NAM': ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh',
     'HAZ': ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh',
+    'MON': ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh',
     **{
         tag: ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh'
         for tag in RETINUE_STYLES
@@ -53,6 +56,7 @@ NORMALS = {
     'ARB': ROOT / 'gfx/models/units/APH_irregular_infantry_normal.dds',
     'NAM': ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds',
     'HAZ': ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds',
+    'MON': ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds',
     **{
         tag: ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds'
         for tag in RETINUE_STYLES
@@ -195,7 +199,8 @@ def bindings():
     output_tags = tuple(CONFIG) + ARAB_TAGS
     for tag in output_tags:
         source_tag = 'ARB' if tag in ARAB_TAGS else tag
-        country_entities = retinue_entities if tag in RETINUE_STYLES else entities
+        armoured_guard = tag in RETINUE_STYLES or tag == 'MON'
+        country_entities = retinue_entities if armoured_guard else entities
         for pose in ('rifle', 'mg'):
             source = templates[
                 'STP_shabrat_' + ('mg_' if pose == 'mg' else '') + 'infantry_mesh'
@@ -212,7 +217,7 @@ def bindings():
                 source,
                 count=1,
             )
-            if tag in RETINUE_STYLES:
+            if armoured_guard:
                 retinue_meshes.append('\t' + source)
             else:
                 meshes.append(source)
@@ -224,7 +229,7 @@ def bindings():
                 fields = [f'clone = "{parent}"', f'name = "{name}"']
                 if pdxmesh:
                     fields.append(f'pdxmesh = "{pdxmesh}"')
-                if tag in ('RUS', 'SHL', 'HAZ') or tag in RETINUE_STYLES:
+                if tag in ('RUS', 'SHL', 'HAZ', 'MON') or tag in RETINUE_STYLES:
                     return 'entity = {\n\t' + '\n\t'.join(fields) + '\n}'
                 return 'entity = { ' + ' '.join(fields) + ' }'
 
@@ -685,7 +690,7 @@ def build(output):
     )
 
 
-def fitted_panel_factory(body, mesh):
+def fitted_panel_factory(body, mesh, smooth=False):
     """Fit panels to the donor and interpolate weights across torso joints."""
     from mathutils import Vector
     from mathutils.bvhtree import BVHTree
@@ -716,6 +721,13 @@ def fitted_panel_factory(body, mesh):
                 factors = poly_3d_calc(
                     [body.data.vertices[i].co for i in face.vertices], point
                 )
+                if smooth:
+                    normal = sum(
+                        (body.data.vertices[i].normal * factor
+                         for i, factor in zip(face.vertices, factors)),
+                        Vector(),
+                    ).normalized()
+                    vertices[-1] = tuple(point + normal * offset)
                 influence = {}
                 for i, factor in zip(face.vertices, factors):
                     for group in body.data.vertices[i].groups:
@@ -850,6 +862,150 @@ def retinue_kit(tag, body, mesh, cloth, canvas, trim):
             [(x + 0.68, y + 0.37, z + 4.22) for x, y, z in vertices], faces,
             canvas if kind == 'canvas' else leather, 'Hip',
         )
+
+
+def montar_guard_kit(body, mesh, cloth, canvas):
+    """Articulated plates inherit body weights, leaving elbows and grips free."""
+    from mathutils import Vector
+    from mathutils.interpolate import poly_3d_calc
+    from infantry_polish import cloth_bag, helmet_shell
+
+    panel = fitted_panel_factory(body, mesh, smooth=True)
+    steel = cloth('Montar blued steel', (0.12, 0.16, 0.17))
+    brass = cloth('Montar aged brass', (0.52, 0.32, 0.10))
+    leather = cloth('Montar black leather', (0.028, 0.025, 0.020))
+    green = cloth('Montar enamel', (0.025, 0.12, 0.048))
+    for material, surface in (
+        (steel, (0.52, 0.80, 0.48)),
+        (brass, (0.60, 0.90, 0.55)),
+        (green, (0.42, 0.25, 0.55)),
+        (leather, (0.22, 0.0, 0.18)),
+        (canvas, (0.12, 0.0, 0.08)),
+    ):
+        material['mon_surface'] = surface
+
+    def shoulder_plate(side, low, high, material, offset, name):
+        vertices = []
+        rows, columns = 8, 16
+        for row in range(rows + 1):
+            x = low + (high - low) * row / rows
+            for column in range(columns + 1):
+                angle = math.pi * column / columns
+                vertices.append((
+                    side * x,
+                    0.02 - (0.44 + offset) * math.cos(angle),
+                    5.59 - 0.60 * (x - 0.65) + (0.40 + offset) * math.sin(angle),
+                ))
+        stride = columns + 1
+        plate = mesh(
+            name, vertices,
+            [(r * stride + c, r * stride + c + 1,
+              (r + 1) * stride + c + 1, (r + 1) * stride + c)
+             for r in range(rows) for c in range(columns)], material,
+        )
+        plate.vertex_groups.clear()
+        for index, vertex in enumerate(vertices):
+            angle = math.pi * (index % stride) / columns
+            x = abs(vertex[0])
+            center = Vector((side * x, 0.02, 5.59 - 0.60 * (x - 0.65)))
+            radial = Vector((0, -math.cos(angle), math.sin(angle)))
+            found, point, normal, face_index = body.ray_cast(center + radial * 3, -radial)
+            assert found
+            face = body.data.polygons[face_index]
+            factors = poly_3d_calc([body.data.vertices[i].co for i in face.vertices], point)
+            normal = sum(
+                (body.data.vertices[i].normal * factor
+                 for i, factor in zip(face.vertices, factors)), Vector(),
+            ).normalized()
+            plate.data.vertices[index].co = point + normal * offset
+            weights = {}
+            for source, factor in zip(face.vertices, factors):
+                for influence in body.data.vertices[source].groups:
+                    bone = body.vertex_groups[influence.group].name
+                    weights[bone] = weights.get(bone, 0) + max(0, factor) * influence.weight
+            strongest = sorted(weights.items(), key=lambda item: item[1], reverse=True)[:4]
+            total = sum(weight for _, weight in strongest)
+            for bone, weight in strongest:
+                group = plate.vertex_groups.get(bone) or plate.vertex_groups.new(name=bone)
+                group.add([index], weight / total, 'REPLACE')
+
+    helmet_shell(mesh, steel, brass, 'MON')
+    # A low longitudinal comb keeps the silhouette distinct without a tall plume.
+    vertices = []
+    for x in (-0.035, 0.035):
+        for i in range(13):
+            angle = -1.12 + 2.24 * i / 12
+            vertices.append((x, -0.065 + 0.53 * math.sin(angle), 6.88 + 0.49 * math.cos(angle)))
+    mesh('Imperial helmet comb', vertices, [(i, i + 1, i + 14, i + 13) for i in range(12)], brass, 'head')
+    for side in (-1, 1):
+        shoulder_plate(side, 0.53, 1.38, steel, 0.09, 'Guard shoulder shell')
+        shoulder_plate(side, 1.30, 1.38, brass, 0.105, 'Guard shoulder rim')
+        cheek_vertices = []
+        for row in range(5):
+            t = row / 4
+            for column in range(17):
+                angle = -0.85 + 1.50 * column / 16
+                front = max(0, -math.sin(angle))
+                rear = max(0, math.sin(angle))
+                lower = 6.83 + 0.16 * front**3 - 0.055 * rear + 0.09 * abs(math.cos(angle))**8
+                cheek_vertices.append((
+                    side * 0.428 * (1 - 0.04 * t) * math.cos(angle),
+                    -0.065 + 0.530 * (1 - 0.02 * t) * math.sin(angle),
+                    lower + 0.025 - t * (0.40 + 0.05 * front),
+                ))
+        mesh(
+            'Helmet cheek guard',
+            cheek_vertices,
+            [(r * 17 + c, r * 17 + c + 1, (r + 1) * 17 + c + 1, (r + 1) * 17 + c)
+             for r in range(4) for c in range(16)], steel, 'head',
+        )
+    for back in (False, True):
+        side = 'Rear' if back else 'Front'
+        panel(side + ' guard cuirass', 0, 5.24, 1.12, 1.06, steel, back, 0.12)
+        panel(side + ' cuirass rim', 0, 4.74, 1.13, 0.07, brass, back, 0.15)
+        for z, width in ((4.61, 1.04), (4.43, 0.99)):
+            panel(side + ' articulated waist', 0, z, width, 0.14, steel, back, 0.12)
+        for x in (-0.36, 0.36):
+            panel(side + ' short hip plate', x, 4.16, 0.30, 0.29, steel, back, 0.10)
+    panel('Emerald breast shield', 0, 5.39, 0.30, 0.46, green, offset=0.16)
+    panel('Imperial crown base', 0, 5.27, 0.22, 0.055, brass, offset=0.18)
+    for x, height in ((-0.082, 0.13), (0, 0.19), (0.082, 0.13)):
+        panel('Imperial crown point', x, 5.32 + height / 2, 0.05, height, brass, offset=0.18)
+    for x in (-0.65, 0.65):
+        for part, kind, vertices, faces in cloth_bag(0.31, 0.25, 0.40):
+            mesh(
+                'Guard ammunition pouch ' + part,
+                [(vx + x, vy + 0.31, vz + 4.14) for vx, vy, vz in vertices],
+                faces, canvas if kind == 'canvas' else leather, 'Hip',
+            )
+
+
+def bake_montar_surface(obj, output):
+    """Bake specular strength, metalness and gloss separately from lit colour."""
+    import bpy
+
+    original = list(obj.data.materials)
+    image = bpy.data.images.new('MON_surface', 1024, 1024, alpha=False)
+    image.colorspace_settings.name = 'Non-Color'
+    for index, source in enumerate(original):
+        material = bpy.data.materials.new(source.name + ' surface bake')
+        material.use_nodes = True
+        nodes = material.node_tree.nodes
+        nodes.clear()
+        emission = nodes.new('ShaderNodeEmission')
+        emission.inputs['Color'].default_value = (*source['mon_surface'], 1)
+        target = nodes.new('ShaderNodeOutputMaterial')
+        material.node_tree.links.new(emission.outputs[0], target.inputs['Surface'])
+        texture = nodes.new('ShaderNodeTexImage')
+        texture.image = image
+        nodes.active = texture
+        obj.data.materials[index] = material
+    bpy.ops.object.bake(type='EMIT')
+    image.filepath_raw = str(output / 'MON_surface.png')
+    image.file_format = 'PNG'
+    image.save()
+    for index, material in enumerate(original):
+        obj.data.materials[index] = material
 
 
 def hazard_kit(body, mesh, cloth, suit, canvas, rubber):
@@ -1046,6 +1202,158 @@ def hazard_kit(body, mesh, cloth, suit, canvas, rubber):
              [(i, i + 1, i + 10, i + 9) for i in range(8)], rubber)
 
 
+def build_hazard_sentinel(output, pdx):
+    """Fit the supplied A-pose to the native rig and retain its UV textures."""
+    import bpy
+    import bmesh
+    from mathutils import Vector
+    from mathutils.kdtree import KDTree
+    from mathutils.bvhtree import BVHTree
+    from types import SimpleNamespace
+    from infantry_polish import bake_diffuse
+
+    source = Path(__file__).with_name('HAZ_sentinel_source.blend')
+    bpy.ops.wm.open_mainfile(filepath=str(source), use_scripts=False)
+    body = next(obj for obj in bpy.context.scene.objects if obj.type == 'MESH')
+    body.name = 'HAZ_body'
+    material = body.data.materials[0]
+    shader = material.node_tree.nodes.get('Principled BSDF')
+    texture = shader.inputs['Base Color'].links[0].from_node.image
+    texture.filepath_raw = str(output / 'HAZ_body.png')
+    texture.file_format = 'PNG'
+    texture.save()
+    normal = shader.inputs['Normal'].links[0].from_node.inputs['Color'].links[0].from_node.image
+    normal.filepath_raw = str(output / 'HAZ_body_normal.png')
+    normal.file_format = 'PNG'
+    normal.save()
+    low = min(vertex.co.z for vertex in body.data.vertices)
+    height = max(vertex.co.z for vertex in body.data.vertices) - low
+    scale = 7.5 / height
+    for vertex in body.data.vertices:
+        vertex.co = Vector((vertex.co.x * scale, vertex.co.y * scale + 0.35,
+                            (vertex.co.z - low) * scale))
+        # Raise the outer sleeve to the native grip without moving the torso.
+        vertex.co.z += 0.38 * min(1.0, max(0.0, (abs(vertex.co.x) - 1.0) / 1.5))
+    body.data.update()
+    pdx.import_meshfile(str(CONFIG['HAZ']), imp_locs=False)
+    donor = max((obj for obj in bpy.context.scene.objects
+                 if obj.type == 'MESH' and obj != body), key=lambda obj: len(obj.data.polygons))
+    rig = next(modifier.object for modifier in donor.modifiers if modifier.type == 'ARMATURE')
+    tree = KDTree(len(donor.data.vertices))
+    for vertex in donor.data.vertices:
+        tree.insert(vertex.co, vertex.index)
+    tree.balance()
+    for bone in rig.data.bones:
+        body.vertex_groups.new(name=bone.name)
+    for vertex in body.data.vertices:
+        weights = {}
+        if vertex.co.y > 0.62 and vertex.co.z > 4.15 and abs(vertex.co.x) < 1.0:
+            # The breathing apparatus is rigid; arm weights must not bend its tank.
+            weights['back_mid'] = 1.0
+        elif vertex.co.z > 6.30:
+            weights['head'] = 1.0
+        else:
+            for _, index, distance in tree.find_n(vertex.co, 4):
+                influence = 1.0 / max(distance, 0.025) ** 2
+                for group in donor.data.vertices[index].groups:
+                    name = donor.vertex_groups[group.group].name
+                    weights[name] = weights.get(name, 0.0) + influence * group.weight
+        weights = dict(sorted(weights.items(), key=lambda item: item[1], reverse=True)[:4])
+        total = sum(weights.values())
+        assert total > 0
+        for name, weight in weights.items():
+            body.vertex_groups[name].add([vertex.index], weight / total, 'REPLACE')
+    body.modifiers.new('Native infantry rig', 'ARMATURE').object = rig
+    for obj in list(bpy.context.scene.objects):
+        if obj not in (body, rig):
+            bpy.data.objects.remove(obj, do_unlink=True)
+
+    def face_material(name, color, roughness):
+        mat = bpy.data.materials.new(name)
+        mat.use_nodes = True
+        node = mat.node_tree.nodes.get('Principled BSDF')
+        node.inputs['Base Color'].default_value = (*color, 1)
+        node.inputs['Roughness'].default_value = roughness
+        return mat
+
+    rubber = face_material('Respirator charcoal seals', (0.025, 0.030, 0.027), 0.8)
+    glass = face_material('Respirator dark optical glass', (0.014, 0.036, 0.042), 0.28)
+    bm = bmesh.new()
+    bm.from_mesh(body.data)
+    surface = BVHTree.FromBMesh(bm)
+    parts = []
+    for side in (-1, 1):
+        x, z = side * 0.215, 6.78
+        hit, _, _, _ = surface.ray_cast(Vector((x, -4, z)), Vector((0, 1, 0)))
+        assert hit is not None
+        for name, radius, depth, mat in (
+            ('Eyepiece seal', 0.172, 0.045, rubber),
+            ('Eyepiece glass', 0.139, 0.062, glass),
+        ):
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12,
+                                                location=(x, hit.y - 0.015, z))
+            obj = bpy.context.object
+            obj.name = name
+            obj.scale = (radius, depth, radius * 1.08)
+            bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+            obj.data.materials.append(mat)
+            obj.vertex_groups.new(name='head').add(list(range(len(obj.data.vertices))), 1, 'REPLACE')
+            obj.modifiers.new('Native infantry rig', 'ARMATURE').object = rig
+            parts.append(obj)
+    bm.free()
+    bpy.ops.object.select_all(action='DESELECT')
+    for obj in parts:
+        obj.select_set(True)
+    bpy.context.view_layer.objects.active = parts[0]
+    bpy.ops.object.join()
+    equipment = bpy.context.object
+    equipment.name = 'HAZ_gear'
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_all(action='SELECT')
+    bpy.ops.uv.smart_project(island_margin=0.025)
+    bpy.ops.object.mode_set(mode='OBJECT')
+    bake_diffuse(equipment, output / 'HAZ_gear.png', 'HAZ_gear', size=512)
+    source_materials = {obj: list(obj.data.materials) for obj in (body, equipment)}
+    source_indices = {}
+    for obj, part in ((body, 'body'), (equipment, 'gear')):
+        for face in obj.data.polygons:
+            face.use_smooth = True
+        bm = bmesh.new()
+        bm.from_mesh(obj.data)
+        bmesh.ops.triangulate(bm, faces=list(bm.faces))
+        bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
+        bm.to_mesh(obj.data)
+        bm.free()
+        source_indices[obj] = [face.material_index for face in obj.data.polygons]
+        (output / f'HAZ_field_{part}_diffuse.dds').write_bytes((output / f'HAZ_{part}.png').read_bytes())
+        for kind in ('normal', 'specular'):
+            (output / f'HAZ_field_{part}_{kind}.dds').write_bytes(NORMALS['HAZ'].read_bytes())
+        spec = SimpleNamespace(shader=['PdxMeshAdvanced'], diff=[f'HAZ_field_{part}_diffuse.dds'],
+                               n=[f'HAZ_field_{part}_normal.dds'], spec=[f'HAZ_field_{part}_specular.dds'])
+        obj.data.materials.clear()
+        obj.data.materials.append(pdx.create_shader(spec, 'HAZ_' + part, str(output)))
+        for face in obj.data.polygons:
+            face.material_index = 0
+    bpy.ops.object.select_all(action='DESELECT')
+    body.select_set(True)
+    equipment.select_set(True)
+    path = output / 'HAZ_field.mesh'
+    pdx.export_meshfile(str(path), exp_selected=True, exp_locs=False)
+    data, donor_data = path.read_bytes(), CONFIG['HAZ'].read_bytes()
+    marker = b'[locator\0'
+    assert data.count(marker) == donor_data.count(marker) == 1
+    path.write_bytes(data[:data.index(marker)] + donor_data[donor_data.index(marker):])
+    finalize_mesh(path)
+    for obj in (body, equipment):
+        obj.data.materials.clear()
+        for mat in source_materials[obj]:
+            obj.data.materials.append(mat)
+        for face, index in zip(obj.data.polygons, source_indices[obj], strict=True):
+            face.material_index = index
+    bpy.ops.file.pack_all()
+    bpy.ops.wm.save_as_mainfile(filepath=str(output / 'HAZ.blend'))
+
+
 def build_field(tag, output):
     """Keep the donor garment topology and skin while replacing its field kit."""
     import bpy
@@ -1076,6 +1384,9 @@ def build_field(tag, output):
         source = source.replace(line, '')
     exec(compile(source, '<Blender material compatibility>', 'exec'), pdx.__dict__)
     output.mkdir(parents=True, exist_ok=True)
+    if tag == 'HAZ':
+        build_hazard_sentinel(output, pdx)
+        return
     bpy.ops.wm.read_factory_settings(use_empty=True)
     donor = CONFIG[tag]
     pdx.import_meshfile(str(donor), imp_locs=False)
@@ -1091,7 +1402,8 @@ def build_field(tag, output):
     body.name = tag + '_body'
     # Whole islands keep native leather pouches separate from cloth tinting.
     small_kit = set()
-    if tag in ('TFF', 'YPR', 'RUS', 'NAM', 'HAZ') or tag in RETINUE_STYLES:
+    native_head = set()
+    if tag in ('TFF', 'YPR', 'RUS', 'NAM', 'HAZ', 'MON') or tag in RETINUE_STYLES:
         keys = [tuple(round(x, 4) for x in v.co) for v in body.data.vertices]
         adjacent = {k: set() for k in keys}
         for face in body.data.polygons:
@@ -1110,13 +1422,15 @@ def build_field(tag, output):
                         stack.append(k)
             if min(k[2] for k in component) > 6.9:
                 cap.update(component)
+            if tag == 'MON' and min(k[2] for k in component) > 5.8 and max(abs(k[0]) for k in component) < 0.5:
+                native_head.update(component)
             if (
                 min(k[2] for k in component) > 3.8
                 and max(k[2] for k in component) < 5
                 and len(component) < 100
             ):
                 small_kit.update(component)
-        if tag in ('TFF', 'RUS', 'NAM', 'HAZ') or tag in RETINUE_STYLES:
+        if tag in ('TFF', 'RUS', 'NAM', 'HAZ', 'MON') or tag in RETINUE_STYLES:
             assert cap
             bm = bmesh.new()
             bm.from_mesh(body.data)
@@ -1210,6 +1524,12 @@ def build_field(tag, output):
         canvas_color = (0.48, 0.33, 0.16)
         wool_color = (0.08, 0.055, 0.035)
         scarf_color = (0.68, 0.53, 0.30)
+    elif tag == 'MON':
+        jacket_color = (0.040, 0.115, 0.053)
+        trouser_color = (0.024, 0.042, 0.030)
+        canvas_color = (0.11, 0.075, 0.035)
+        wool_color = (0.025, 0.027, 0.024)
+        scarf_color = (0.52, 0.32, 0.10)
     elif tag == 'RUS':
         jacket_color = (0.046, 0.062, 0.072)
         trouser_color = (0.035, 0.040, 0.048)
@@ -1247,6 +1567,13 @@ def build_field(tag, output):
         x, y, z = face.center
         # Bare head, hands and original boot leather keep their authored atlas.
         skin = (z > 6.13 and abs(x) < 0.44) or (abs(x) > 2.30 and 3.9 < z < 4.85)
+        if tag == 'MON':
+            uv = sum(
+                (body.data.uv_layers.active.data[i].uv for i in face.loop_indices),
+                Vector((0, 0)),
+            ) / len(face.loop_indices)
+            vertex_key = tuple(round(v, 4) for v in body.data.vertices[face.vertices[0]].co)
+            skin = vertex_key in native_head or (abs(x) > 2.30 and uv.x > 0.58 and uv.y > 0.70)
         if tag == 'HAZ' and skin:
             face.material_index = 4
         elif tag == 'YPR' and z > 6.80:
@@ -1267,7 +1594,7 @@ def build_field(tag, output):
             ) / len(face.loop_indices)
             pants = (
                 uv.x < 0.44 and uv.y < 0.45
-                if tag in ('TFF', 'RUS', 'NAM', 'HAZ') or tag in RETINUE_STYLES
+                if tag in ('TFF', 'RUS', 'NAM', 'HAZ', 'MON') or tag in RETINUE_STYLES
                 else z < 3.55
             )
             face.material_index = 2 if pants else 1
@@ -1286,7 +1613,9 @@ def build_field(tag, output):
         gear.append(obj)
         return obj
 
-    if tag == 'HAZ':
+    if tag == 'MON':
+        montar_guard_kit(body, mesh, cloth, canvas)
+    elif tag == 'HAZ':
         hazard_kit(body, mesh, cloth, jacket, canvas, wool)
     elif tag in RETINUE_STYLES:
         retinue_kit(tag, body, mesh, cloth, canvas, scarf)
@@ -1455,6 +1784,8 @@ def build_field(tag, output):
     bpy.ops.uv.smart_project(island_margin=0.015)
     bpy.ops.object.mode_set(mode='OBJECT')
     bake_diffuse(equipment, output / f'{tag}_gear.png', tag + '_gear')
+    if tag == 'MON':
+        bake_montar_surface(equipment, output)
     for obj, part in ((body, 'body'), (equipment, 'gear')):
         (output / f'{tag}_field_{part}_diffuse.dds').write_bytes(
             (output / f'{tag}_{part}.png').read_bytes()
@@ -1497,7 +1828,7 @@ def build_field(tag, output):
         data[: data.index(marker)] + donor_data[donor_data.index(marker) :]
     )
     finalize_mesh(path)
-    if tag == 'HAZ':
+    if tag in ('HAZ', 'MON'):
         bpy.ops.file.pack_all()
     bpy.ops.wm.save_as_mainfile(filepath=str(output / f'{tag}.blend'))
 
@@ -1506,8 +1837,9 @@ def verify(output, tags, walk=False):
     """Re-import packaged meshes, inspect skin contracts and sample native poses."""
     import bpy
     import inspect
-    from mathutils import Vector
+    from mathutils import Matrix, Vector
 
+    sys.path.insert(0, str(Path(__file__).parent))
     sys.path.insert(
         0,
         str(
@@ -1596,6 +1928,11 @@ def verify(output, tags, walk=False):
         bpy.ops.wm.read_factory_settings(use_empty=True)
         pdx.import_meshfile(str(path), imp_locs=False)
         scene = bpy.context.scene
+        if tag == 'MON':
+            # The importer supplies native custom normals but leaves faces flat.
+            for obj in (o for o in scene.objects if o.type == 'MESH'):
+                for face in obj.data.polygons:
+                    face.use_smooth = True
         scene.render.engine = 'CYCLES'
         scene.cycles.samples = 24
         scene.render.resolution_x, scene.render.resolution_y = 650, 800
@@ -1608,7 +1945,7 @@ def verify(output, tags, walk=False):
             0.23,
             1,
         )
-        for mat in bpy.data.materials:
+        for mat in bpy.data.materials if tag != 'MON' else ():
             if mat.use_nodes:
                 shader = mat.node_tree.nodes.get('Principled BSDF')
                 if shader:
@@ -1616,6 +1953,12 @@ def verify(output, tags, walk=False):
                     if roughness.is_linked:
                         mat.node_tree.links.remove(roughness.links[0])
                     roughness.default_value = 0.85
+        if tag == 'MON':
+            from build_crimson_sentinel import configure_preview_materials
+
+            configure_preview_materials()
+            bpy.ops.file.pack_all()
+            bpy.ops.wm.save_as_mainfile(filepath=str(output / 'MON_native.blend'))
         for location, power, size in (
             ((4, -8, 12), 1600, 7),
             ((-6, -1, 8), 950, 6),
@@ -1635,6 +1978,58 @@ def verify(output, tags, walk=False):
         )
         scene.camera = camera
         rigs = [obj for obj in scene.objects if obj.type == 'ARMATURE']
+        weapons = []
+        if tag in ('MON', 'HAZ'):
+            for level in (0, 1):
+                before = set(scene.objects)
+                pdx.import_meshfile(
+                    str(ROOT / f'gfx/models/units/ADISCORD_weapons/infantry_{level}.mesh'),
+                    imp_mesh=True, imp_skel=False, imp_locs=False,
+                )
+                imported = [obj for obj in set(scene.objects) - before if obj.type == 'MESH']
+                for obj in imported:
+                    if tag == 'MON':
+                        for face in obj.data.polygons:
+                            face.use_smooth = True
+                    left = obj.copy()
+                    scene.collection.objects.link(left)
+                    weapons.extend(((level, obj, 'Right_Hand_node'), (level, left, 'Left_Hand_node')))
+            from build_crimson_sentinel import configure_preview_materials
+
+            configure_preview_materials()
+
+        def place_weapons(pose):
+            level = 0 if pose.endswith('rifle') else 1
+            for tier, obj, bone in weapons:
+                obj.hide_render = tier != level
+                obj.matrix_world = (
+                    rigs[0].matrix_world @ rigs[0].pose.bones[bone].matrix
+                    @ Matrix.Scale(0.9 if tier == 0 else 1.0, 4)
+                )
+
+        def render_guard_details(pose):
+            location = camera.location.copy()
+            rotation = camera.rotation_euler.copy()
+            scale = camera.data.ortho_scale
+            width, height = scene.render.resolution_x, scene.render.resolution_y
+            head = rigs[0].pose.bones['head']
+            target = (
+                rigs[0].matrix_world @ head.matrix @ head.bone.matrix_local.inverted()
+                @ Vector((0, 0, 5.95))
+            )
+            scene.render.resolution_x = scene.render.resolution_y = 850
+            camera.data.ortho_scale = 3.5
+            for name, offset in (('front', (8, -16, 3)), ('side', (16, -3, 3))):
+                camera.location = target + Vector(offset)
+                camera.rotation_euler = (
+                    (target - camera.location).to_track_quat('-Z', 'Y').to_euler()
+                )
+                scene.render.filepath = str(output / f'MON_{pose}_detail_{name}.png')
+                bpy.ops.render.render(write_still=True)
+            camera.location, camera.rotation_euler = location, rotation
+            camera.data.ortho_scale = scale
+            scene.render.resolution_x, scene.render.resolution_y = width, height
+
         poses = {}
         for pose in (
             'idle_rifle',
@@ -1652,6 +2047,7 @@ def verify(output, tags, walk=False):
             frames = (1, (scene.frame_end + 1) // 2, scene.frame_end)
             for frame in frames:
                 scene.frame_set(frame)
+                place_weapons(pose)
                 graph = bpy.context.evaluated_depsgraph_get()
                 for obj in (o for o in scene.objects if o.type == 'MESH'):
                     evaluated = obj.evaluated_get(graph)
@@ -1667,12 +2063,16 @@ def verify(output, tags, walk=False):
                     )
             poses[pose] = frames
             render_pose = pose in ('idle_rifle', 'moving_rifle') or (
-                tag in RETINUE_STYLES and pose in ('idle_mg', 'attack_stand_mg')
+                (tag in RETINUE_STYLES or tag in ('MON', 'HAZ'))
+                and pose in ('idle_mg', 'attack_stand_mg')
             )
             if render_pose:
                 scene.frame_set(frames[1])
+                place_weapons(pose)
                 scene.render.filepath = str(output / f'{tag}_{pose}.png')
                 bpy.ops.render.render(write_still=True)
+                if tag == 'MON' and pose in ('idle_rifle', 'attack_stand_mg'):
+                    render_guard_details(pose)
                 if pose == 'idle_rifle':
                     bpy.ops.wm.save_as_mainfile(
                         filepath=str(output / f'{tag}_preview.blend')
@@ -1718,6 +2118,7 @@ def verify(output, tags, walk=False):
                     scene.render.resolution_percentage = 65
                     for index in range(12):
                         scene.frame_set(1 + round(index * (scene.frame_end - 1) / 12))
+                        place_weapons(pose)
                         scene.render.filepath = str(
                             output / f'{tag}_walk_{index:02d}.png'
                         )
@@ -1745,13 +2146,13 @@ def verify(output, tags, walk=False):
     print(json.dumps(report, indent=2))
 
 
-def package(output, apply=False, check=False, tags=None):
+def package(output, apply=False, check=False, tags=None, assets_only=False):
     import io
     import struct
-    from PIL import Image
+    from PIL import Image, ImageOps
 
     tags = tuple(CONFIG) if tags is None else tuple(tags)
-    files = bindings()
+    files = {} if assets_only else bindings()
     dest = ROOT / 'gfx/models/units/ADISCORD_regulars'
 
     def dds(image, packed=False):
@@ -1782,6 +2183,13 @@ def package(output, apply=False, check=False, tags=None):
         struct.pack_into('<I', header, 108, 0x401008)
         return bytes(header) + b''.join(level[128:] for level in levels)
 
+    if 'MON' in tags:
+        source = output / 'MON_native.blend'
+        if apply:
+            assert source.is_file(), 'MON: run --verify before installing the source'
+        files[ROOT / 'tools/assets/source/MON_imperial_guard.blend'] = (
+            source if source.is_file() else output / 'MON.blend'
+        ).read_bytes()
     if 'HAZ' in tags:
         files[ROOT / 'tools/assets/source/ADISCORD_hazard_infantry.blend'] = (
             output / 'HAZ.blend'
@@ -1802,10 +2210,22 @@ def package(output, apply=False, check=False, tags=None):
                 if part == 'body'
                 else Image.new('RGBA', (512, 512), (255, 128, 0, 128))
             )
+            if tag == 'HAZ' and part == 'body':
+                # UnpackRRxGNormal reads X from green and negates alpha for Y.
+                source_normal = Image.open(output / 'HAZ_body_normal.png').convert('RGB')
+                red, green, _ = source_normal.split()
+                normal = Image.merge('RGBA', (
+                    red, red, Image.new('L', red.size, 0), ImageOps.invert(green),
+                ))
             files[dest / f'{tag}_field_{part}_normal.dds'] = dds(normal, True)
-            files[dest / f'{tag}_field_{part}_specular.dds'] = dds(
-                Image.new('RGBA', (512, 512), (0, 48, 0, 36)), True
-            )
+            specular = Image.new('RGBA', (512, 512), (0, 48, 0, 36))
+            if tag == 'MON' and part == 'gear':
+                surface = Image.open(output / 'MON_surface.png').convert('RGB')
+                strength, metalness, gloss = surface.split()
+                specular = Image.merge('RGBA', (
+                    Image.new('L', surface.size, 0), strength, metalness, gloss,
+                ))
+            files[dest / f'{tag}_field_{part}_specular.dds'] = dds(specular, True)
     changed = [
         str(path.relative_to(ROOT))
         for path, content in files.items()
@@ -1842,6 +2262,8 @@ def package(output, apply=False, check=False, tags=None):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--assets-only', action='store_true',
+                        help='Keep existing entity bindings when replacing an already registered model.')
     parser.add_argument(
         '--tags', nargs='+', choices=tuple(CONFIG), default=tuple(CONFIG)
     )
@@ -1873,4 +2295,4 @@ if __name__ == '__main__':
         for tag in args.tags:
             finalize_mesh(args.output.resolve() / f'{tag}_field.mesh')
     else:
-        package(args.output.resolve(), args.apply, args.check, args.tags)
+        package(args.output.resolve(), args.apply, args.check, args.tags, args.assets_only)
