@@ -1634,6 +1634,7 @@
 				add_to_variable = { var = STP_pw_political_power_gain value = -0.10 }
 				STP_pw_refresh_modifier = yes
 			}
+			country_event = { id = ADISCORD_STP_pc.63 days = 1 }
 		}
 	}
 
@@ -1655,7 +1656,12 @@
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_institutions_delta } }
-			hidden_effect = { add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.08 } add_to_variable = { var = STP_pw_research_speed_factor value = 0.03 } STP_pw_refresh_modifier = yes }
+			hidden_effect = {
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.08 }
+				add_to_variable = { var = STP_pw_research_speed_factor value = 0.03 }
+				STP_pw_refresh_modifier = yes
+			}
+			country_event = { id = ADISCORD_STP_pc.64 days = 1 }
 		}
 	}
 
@@ -1943,7 +1949,8 @@
 		prerequisite = { focus = STP_pc_lib_crisis }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			STP_pc_declare_liberation_war = yes
+			unlock_decision_tooltip = STP_pc_launch_val_liberation
+			unlock_decision_tooltip = STP_pc_launch_nod_liberation
 		}
 	}
 

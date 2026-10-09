@@ -1317,6 +1317,10 @@ STP_pc_ai_preparing_val_war = {
 			NOT = { has_completed_focus = STP_pc_lib_war }
 			has_country_flag = STP_pc_val_crisis
 		}
+		AND = {
+			has_war = no
+			STP_pc_can_launch_val_liberation = yes
+		}
 	}
 }
 
@@ -1339,6 +1343,81 @@ STP_pc_ai_preparing_nod_war = {
 			focus_progress = { focus = STP_pc_lib_war progress > 0 }
 			NOT = { has_completed_focus = STP_pc_lib_war }
 			has_country_flag = STP_pc_nod_crisis
+		}
+		AND = {
+			has_war = no
+			STP_pc_can_launch_nod_liberation = yes
+		}
+	}
+}
+
+# COUNTRY STS: a completed mandate permits each neighbour's operation separately.
+STP_pc_liberation_mandate_current = {
+	tag = STS
+	has_completed_focus = STP_pc_lib_war
+	STP_pc_freedom_continues = yes
+	check_variable = { var = STP_pc_course value = 2 compare = equals }
+}
+
+STP_pc_can_launch_val_liberation = {
+	custom_trigger_tooltip = {
+		tooltip = STP_pc_liberation_mandate_tt
+		STP_pc_liberation_mandate_current = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = STP_pw_reconstruction_available_tt
+		STP_pc_focus_available = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = STP_pc_val_liberation_crisis_tt
+		has_country_flag = STP_pc_val_crisis
+		NOT = { has_country_flag = STP_pc_lib_val_won }
+	}
+	custom_trigger_tooltip = {
+		tooltip = STP_pc_val_liberation_no_treaty_tt
+		NOT = { has_country_flag = STP_pc_val_terms_accepted }
+	}
+	is_subject = no
+	has_capitulated = no
+	NOT = { has_war_with = VAL }
+	NOT = { is_in_faction_with = VAL }
+	VAL = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+	}
+	custom_trigger_tooltip = {
+		tooltip = STP_pc_val_liberation_truce_tt
+		NOT = { has_country_flag = VAL_stelander_truce }
+	}
+}
+
+STP_pc_can_launch_nod_liberation = {
+	custom_trigger_tooltip = {
+		tooltip = STP_pc_liberation_mandate_tt
+		STP_pc_liberation_mandate_current = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = STP_pw_reconstruction_available_tt
+		STP_pc_focus_available = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = STP_pc_nod_liberation_crisis_tt
+		has_country_flag = STP_pc_nod_crisis
+		NOT = { has_country_flag = STP_pc_lib_nod_won }
+	}
+	custom_trigger_tooltip = {
+		tooltip = STP_pc_nod_liberation_no_treaty_tt
+		NOT = { has_country_flag = STP_pc_nod_terms_accepted }
+	}
+	is_subject = no
+	has_capitulated = no
+	NOT = { has_war_with = NOD }
+	NOT = { is_in_faction_with = NOD }
+	NOD = {
+		custom_trigger_tooltip = {
+			tooltip = STP_pc_nod_liberation_government_tt
+			STP_pc_nod_government_exists = yes
 		}
 	}
 }

@@ -1594,14 +1594,247 @@ class PostwarContinuationContracts(unittest.TestCase):
                 for group in regional
             )
         )
-        declare = ast_block(
-            relative_entries(
-                "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
-            ),
-            "STP_pc_declare_liberation_war",
+        mandate = ast_block(focuses["STP_pc_lib_war"], "completion_reward")
+        self.assertEqual(
+            [(entry.key, entry.value) for entry in mandate],
+            [
+                ("unlock_decision_tooltip", "STP_pc_launch_val_liberation"),
+                ("unlock_decision_tooltip", "STP_pc_launch_nod_liberation"),
+            ],
         )
-        self.assertFalse(any(e.key == "else_if" for e in declare))
-        self.assertEqual(sum(1 for e in declare if e.key == "if"), 2)
+
+
+class HumanistRouteContracts(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.triggers = {entry.key: entry.value for entry in entries(TRIGGERS)}
+        cls.effects = {entry.key: entry.value for entry in entries(EFFECTS)}
+        cls.decisions = {
+            entry.key: entry.value
+            for entry in block(
+                relative_entries("common/decisions/ADISCORD_STP_decisions.txt"),
+                "STP_cw_war_council",
+            )
+            if isinstance(entry.value, list)
+        }
+        cls.events = {
+            scalar(entry.value, "id"): entry.value
+            for entry in entries(EVENTS)
+            if entry.key == "country_event"
+        }
+
+    def expand_conditions(self, items):
+        expanded = []
+        for entry in items:
+            if entry.key in self.triggers:
+                self.assertIn(entry.value, ("yes", "no"))
+                children = self.expand_conditions(self.triggers[entry.key])
+                if entry.value == "no":
+                    children = [Entry("AND", children, entry.line)]
+                expanded.append(
+                    Entry("AND" if entry.value == "yes" else "NOT", children, entry.line)
+                )
+            else:
+                value = (
+                    self.expand_conditions(entry.value)
+                    if isinstance(entry.value, list)
+                    else entry.value
+                )
+                expanded.append(Entry(entry.key, value, entry.line, entry.quoted))
+        return expanded
+
+    def eligible(self, target, facts):
+        return matches_conditions(
+            self.expand_conditions(block(self.decisions[f"STP_pc_launch_{target}_liberation"], "available")),
+            facts,
+            "STS",
+        )
+
+    def execute_launch(self, items, facts, declarations):
+        # Only the declaration path is interpreted; unsupported effects fail closed.
+        for entry in items:
+            key, value = entry.key, entry.value
+            if key == "custom_effect_tooltip":
+                continue
+            if key == "hidden_effect":
+                self.execute_launch(value, facts, declarations)
+            elif key == "if":
+                if matches_conditions(self.expand_conditions(block(value, "limit")), facts, "STS"):
+                    self.execute_launch([e for e in value if e.key != "limit"], facts, declarations)
+            elif key in self.effects:
+                self.assertEqual(value, "yes")
+                self.execute_launch(self.effects[key], facts, declarations)
+            elif key == "declare_war_on":
+                target = scalar(value, "target")
+                declarations.append(target)
+                facts[("STS", "has_war_with", target)] = True
+                facts[("STS", "has_war", "yes")] = True
+                facts[("STS", "has_war", "no")] = False
+            elif key == "country_event":
+                self.assertEqual(scalar(value, "id"), "ADISCORD_STP_pc.49")
+            else:
+                self.fail(f"Unsupported declaration effect: {key}")
+
+    def facts(self):
+        facts = package_facts()
+        facts.update({
+            ("STS", "tag", "STS"): True,
+            ("STS", "ruling_leader"): "STP_maksim_shabrat",
+            ("STS", "has_country_flag", "STP_pc_course_locked"): True,
+            ("STS", "has_country_flag", "STP_cw_won_union_battle"): True,
+            ("STS", "has_country_flag", "STP_cw_postwar"): True,
+            ("STS", "has_global_flag", "STP_cw_union_wars_finished"): True,
+            ("STS", "has_completed_focus", "STP_pc_lib_war"): True,
+            ("STS", "has_country_flag", "STP_pc_val_crisis"): True,
+            ("STS", "has_country_flag", "STP_pc_nod_crisis"): True,
+            ("STS", "has_war", "no"): True,
+        })
+        return facts
+
+    def test_each_operation_starts_only_its_target_in_either_order(self):
+        for first, second in (("val", "nod"), ("nod", "val")):
+            with self.subTest(first=first):
+                facts, declarations = self.facts(), []
+                for target in (first, second):
+                    self.assertTrue(self.eligible(target, facts))
+                reward = block(self.decisions[f"STP_pc_launch_{first}_liberation"], "complete_effect")
+                self.execute_launch(reward, facts, declarations)
+                self.assertEqual(declarations, [first.upper()])
+                self.assertFalse(self.eligible(first, facts))
+                self.assertTrue(self.eligible(second, facts))
+                self.execute_launch(reward, facts, declarations)
+                self.assertEqual(declarations, [first.upper()])
+                self.execute_launch(
+                    block(self.decisions[f"STP_pc_launch_{second}_liberation"], "complete_effect"),
+                    facts,
+                    declarations,
+                )
+                self.assertEqual(declarations, [first.upper(), second.upper()])
+
+    def test_stale_or_illegal_mandates_fail_before_declaration(self):
+        for target in ("val", "nod"):
+            country = target.upper()
+            changes = [
+                (("STS", "has_country_flag", f"STP_pc_{target}_crisis"), False),
+                (("STS", "has_country_flag", f"STP_pc_lib_{target}_won"), True),
+                (("STS", "has_country_flag", f"STP_pc_{target}_terms_accepted"), True),
+                (("STS", "is_subject", "no"), False),
+                (("STS", "has_capitulated", "no"), False),
+                (("STS", "has_war_with", country), True),
+                (("STS", "is_in_faction_with", country), True),
+                (("STS", "has_completed_focus", "STP_pc_lib_war"), False),
+                (("STS", "has_global_flag", "STP_cw_union_wars_finished"), False),
+                (("STS", "variable", "STP_pc_course"), 1),
+                ((country, "exists", "yes"), False),
+                ((country, "is_subject", "no"), False),
+                ((country, "has_capitulated", "no"), False),
+            ]
+            if target == "val":
+                changes.append((("STS", "has_country_flag", "VAL_stelander_truce"), True))
+            for key, value in changes:
+                with self.subTest(target=target, blocked=key):
+                    facts = {**self.facts(), key: value}
+                    self.assertFalse(self.eligible(target, facts))
+                    declarations = []
+                    self.execute_launch(
+                        block(self.decisions[f"STP_pc_launch_{target}_liberation"], "complete_effect"),
+                        facts,
+                        declarations,
+                    )
+                    self.assertEqual(declarations, [])
+
+    def test_successors_keep_mandates_and_ai_does_not_choose_second_front(self):
+        for defeat_flag in ("NOD_cw_defeated", "STP_pc_defeated_by_sts"):
+            facts = {
+                **self.facts(),
+                ("NOD", "has_capitulated", "no"): False,
+                ("NOD", "has_country_flag", defeat_flag): True,
+            }
+            self.assertTrue(self.eligible("nod", facts))
+            declarations = []
+            self.execute_launch(
+                block(self.decisions["STP_pc_launch_nod_liberation"], "complete_effect"),
+                facts,
+                declarations,
+            )
+            self.assertEqual(declarations, ["NOD"])
+        for leader in ("STP_ilya_gornin", "STP_vera_tikh"):
+            facts = {**self.facts(), ("STS", "ruling_leader"): leader}
+            for target in ("val", "nod"):
+                self.assertTrue(self.eligible(target, facts))
+        for target in ("val", "nod"):
+            decision = self.decisions[f"STP_pc_launch_{target}_liberation"]
+            self.assertEqual(scalar(decision, "cost"), "0")
+            self.assertEqual(scalar(decision, "fire_only_once"), "yes")
+            modifier = block(block(decision, "ai_will_do"), "modifier")
+            self.assertEqual(scalar(modifier, "factor"), "0")
+            self.assertEqual(scalar(modifier, "has_war"), "yes")
+            preparation = next(
+                entry.value
+                for entry in block(self.triggers[f"STP_pc_ai_preparing_{target}_war"], "OR")
+                if isinstance(entry.value, list)
+                and any(child.key == f"STP_pc_can_launch_{target}_liberation" for child in entry.value)
+            )
+            preparation = self.expand_conditions(preparation)
+            self.assertTrue(matches_conditions(preparation, self.facts(), "STS"))
+            busy = {**self.facts(), ("STS", "has_war", "no"): False}
+            self.assertFalse(matches_conditions(preparation, busy, "STS"))
+
+    def test_native_focus_unlocks_both_decisions_without_declaring_war(self):
+        native = parse_clausewitz((ROOT / "common/national_focus/ADISCORD_STP_civil_war.txt").read_text(encoding="utf-8"))
+        tree = block(native, "focus_tree")
+        focus = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "STP_pc_lib_war")
+        self.assertEqual(
+            [(e.key, e.value) for e in block(focus, "completion_reward")],
+            [("unlock_decision_tooltip", f"STP_pc_launch_{target}_liberation") for target in ("val", "nod")],
+        )
+        self.assertNotIn("STP_pc_declare_liberation_war", self.effects)
+
+    def test_scenes_have_exact_outcomes_and_unconditional_timeout_options(self):
+        focuses = war_focuses()
+        for focus_id, number in (("STP_pc_lib_assembly", 63), ("STP_pc_lib_institutions", 64)):
+            reward = block(focuses[focus_id], "completion_reward")
+            self.assertEqual(scalar(block(reward, "country_event"), "id"), f"ADISCORD_STP_pc.{number}")
+            event = self.events[f"ADISCORD_STP_pc.{number}"]
+            self.assertEqual(scalar(event, "fire_only_once"), "yes")
+            self.assertEqual(scalar(event, "timeout_days"), "14")
+            choices = [e.value for e in event if e.key == "option"]
+            self.assertEqual(len(choices), 2)
+            self.assertTrue(all(not any(e.key == "trigger" for e in option) for option in choices))
+            first, second = choices
+            self.assertEqual(scalar(first, "add_political_power"), "-35" if number == 63 else "-25")
+            self.assertEqual(scalar(first, "add_stability"), "0.02" if number == 63 else "0.03")
+            self.assertFalse(any(e.key == "add_stability" for e in second))
+            if number == 63:
+                self.assertEqual(scalar(second, "add_political_power"), "-15")
+            else:
+                self.assertEqual(scalar(second, "army_experience"), "10")
+                timed = block(first, "add_timed_idea")
+                self.assertEqual(scalar(timed, "days"), "60")
+                ideas = block(block(relative_entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "ideas"), "country")
+                spirit = block(ideas, scalar(timed, "idea"))
+                self.assertEqual(scalar(block(spirit, "modifier"), "army_org_regain"), "-0.05")
+
+    def test_new_scenes_are_registered_and_fit_complete_localisation_lines(self):
+        ledger = json.loads(LEDGER.read_text(encoding="utf-8"))["events"]
+        for language in ("russian", "english"):
+            raw = (ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml").read_bytes()
+            self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
+            for number in (63, 64):
+                event_id = f"ADISCORD_STP_pc.{number}"
+                self.assertEqual(sum(e["id"] == event_id for e in ledger), 1)
+                for suffix in ("t", "d", "a", "b"):
+                    key = f"{event_id}.{suffix}"
+                    values = re.findall(
+                        r'^ ' + re.escape(key) + r':\d* "([^"\r\n]+)"$',
+                        raw.decode("utf-8-sig").replace("\r\n", "\n"),
+                        re.M,
+                    )
+                    self.assertEqual(len(values), 1, key)
+                    value = values[0].replace(r"\n", "\n")
+                    self.assertNotRegex(value, "[\u2013\u2014\ufffd]")
+                    self.assertLessEqual(len(value), 3000)
+                    self.assertLessEqual(len(value.encode("utf-8")), 5500)
 
 
 def recovery_conditions(items, facts, scope="STS"):

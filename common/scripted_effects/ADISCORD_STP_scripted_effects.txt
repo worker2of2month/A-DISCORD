@@ -5056,27 +5056,6 @@ STP_pc_declare_war_nod = {
 	}
 }
 
-STP_pc_declare_liberation_war = {
-	if = {
-		limit = {
-			tag = STS
-			has_country_flag = STP_pc_val_crisis
-			VAL = { exists = yes }
-			NOT = { has_war_with = VAL }
-		}
-		STP_pc_declare_war_val = yes
-	}
-	if = {
-		limit = {
-			tag = STS
-			has_country_flag = STP_pc_nod_crisis
-			NOD = { exists = yes }
-			NOT = { has_war_with = NOD }
-		}
-		STP_pc_declare_war_nod = yes
-	}
-}
-
 STP_pc_form_hegemony_league = {
 	if = {
 		limit = { tag = STS }

@@ -5152,6 +5152,70 @@ STP_cw_war_council = {
 		ai_will_do = { base = 5 }
 	}
 
+	STP_pc_launch_val_liberation = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STS }
+		visible = {
+			has_completed_focus = STP_pc_lib_war
+			STP_pc_freedom_continues = yes
+			has_country_flag = STP_pc_val_crisis
+			NOT = { has_country_flag = STP_pc_lib_val_won }
+			NOT = { has_war_with = VAL }
+			VAL = { exists = yes }
+		}
+		available = { STP_pc_can_launch_val_liberation = yes }
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_launch_val_liberation_tt
+			hidden_effect = {
+				if = {
+					limit = { STP_pc_can_launch_val_liberation = yes }
+					STP_pc_declare_war_val = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 8
+			modifier = {
+				factor = 0
+				has_war = yes
+			}
+		}
+	}
+
+	STP_pc_launch_nod_liberation = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STS }
+		visible = {
+			has_completed_focus = STP_pc_lib_war
+			STP_pc_freedom_continues = yes
+			has_country_flag = STP_pc_nod_crisis
+			NOT = { has_country_flag = STP_pc_lib_nod_won }
+			NOT = { has_war_with = NOD }
+			NOD = { exists = yes }
+		}
+		available = { STP_pc_can_launch_nod_liberation = yes }
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_launch_nod_liberation_tt
+			hidden_effect = {
+				if = {
+					limit = { STP_pc_can_launch_nod_liberation = yes }
+					STP_pc_declare_war_nod = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				has_war = yes
+			}
+		}
+	}
+
 	STP_pw_emergency_reserves = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }

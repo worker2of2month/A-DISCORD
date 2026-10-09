@@ -5357,6 +5357,22 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_STP_pc.63",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 63,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_politics",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.64",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 64,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_politics",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_pc.62",
       "namespace": "ADISCORD_STP_pc",
       "number": 62,

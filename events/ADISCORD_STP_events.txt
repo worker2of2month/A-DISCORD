@@ -1225,6 +1225,62 @@ country_event = {
 }
 
 country_event = {
+	id = ADISCORD_STP_pc.63
+	title = ADISCORD_STP_pc.63.t
+	desc = ADISCORD_STP_pc.63.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		tag = STS
+		STP_pc_focus_available = yes
+		STP_pc_freedom_continues = yes
+	}
+	option = {
+		name = ADISCORD_STP_pc.63.a
+		ai_chance = { base = 65 }
+		add_political_power = -35
+		add_stability = 0.02
+	}
+	option = {
+		name = ADISCORD_STP_pc.63.b
+		ai_chance = { base = 35 }
+		add_political_power = -15
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.64
+	title = ADISCORD_STP_pc.64.t
+	desc = ADISCORD_STP_pc.64.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		tag = STS
+		STP_pc_focus_available = yes
+		STP_pc_freedom_continues = yes
+	}
+	option = {
+		name = ADISCORD_STP_pc.64.a
+		ai_chance = { base = 65 }
+		add_political_power = -25
+		add_stability = 0.03
+		add_timed_idea = {
+			idea = STP_pc_public_trial
+			days = 60
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.64.b
+		ai_chance = { base = 35 }
+		army_experience = 10
+	}
+}
+
+country_event = {
 	id = ADISCORD_STP_pc.6
 	title = ADISCORD_STP_pc.6.t
 	desc = ADISCORD_STP_pc.6.d
