@@ -63,6 +63,7 @@ SUPEREVENT_IDS = (
     "ADISCORD_superevent.13",
     "ADISCORD_superevent.14",
     "ADISCORD_superevent.15",
+    "ADISCORD_superevent.16",
     "ADISCORD_superevent_audio.1",
     "ADISCORD_superevent_audio.2",
     "ADISCORD_superevent_news.1",
@@ -152,6 +153,11 @@ PRESENTATIONS = (
     SupereventPresentation(
         "superevent_rus_khan_defeated",
         "superevent_rus_khan_defeated_sound_e",
+        legacy_music_asset=False,
+    ),
+    SupereventPresentation(
+        "superevent_vorkerland_joint_victory",
+        "superevent_vorkerland_joint_victory_sound_e",
         legacy_music_asset=False,
     ),
 )
@@ -363,21 +369,6 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     ):
         for orphan in sorted(actual - expected_set):
             issues.append(f"orphan {layer} presentation {orphan}")
-
-    for suffix in ("title", "quote", "comment"):
-        joint = f"superevent_vorkerland_joint_victory_{suffix}"
-        count = scripted_loc.count(f"localization_key = {joint}")
-        if count != 1:
-            issues.append(
-                f"joint-government variant must route once to {joint}, found {count}"
-            )
-        for language, loc in (("English", english), ("Russian", russian)):
-            loc_count = _localisation_count(loc, joint)
-            if loc_count != 1:
-                issues.append(
-                    f"missing or duplicate {language} localisation key {joint}: "
-                    f"found {loc_count}"
-                )
 
     _check_order(
         "scripted GUI",

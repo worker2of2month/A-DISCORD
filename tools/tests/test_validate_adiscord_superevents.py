@@ -187,7 +187,7 @@ class SupereventContractTests(unittest.TestCase):
 
         gui = parse_clausewitz((ROOT / SCRIPTED_GUI).read_text(encoding="utf-8"))[0].value
         windows = fields(gui)
-        order = (6, 18, 17, 16, 10, 11, 9, 14, 1, 12, 15, 13, 2, 3, 4, 5, 7, 8)
+        order = (6, 19, 18, 17, 16, 10, 11, 9, 14, 1, 12, 15, 13, 2, 3, 4, 5, 7, 8)
         self.assertEqual(set(order), set(range(1, len(PRESENTATIONS) + 1)))
         for index in order + order:
             request(index)
@@ -200,7 +200,7 @@ class SupereventContractTests(unittest.TestCase):
         self.assertEqual(queue, [])
         self.assertEqual(flags, set())
         # A closed presentation can be replayed; no permanent deduplication lock.
-        request(18)
+        request(19)
         self.assertEqual(len(played), len(order) + 1)
 
     def test_requests_do_not_replace_an_active_presentation(self) -> None:
@@ -501,6 +501,108 @@ class SupereventContractTests(unittest.TestCase):
                 values.append(matches[0])
             self.assertEqual(len(set(values)), 4)
 
+    def test_joint_victory_is_separate_from_vlad_and_uses_worker_art(self) -> None:
+        from tools.validators.validate_adiscord_superevents import blocks, _event_block
+
+        name = "superevent_vorkerland_joint_victory"
+        events = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
+        event = _event_block(events, "ADISCORD_superevent.16")
+        self.assertIn("ADISCORD_superevent_request = 19", event)
+        self.assertIn("ADISCORD_superevent_enqueue = yes", event)
+        for forbidden in ("set_cosmetic_tag", "annex_country", "declare_war_on"):
+            self.assertNotIn(forbidden, event)
+        gfx = (ROOT / GFX).read_text(encoding="utf-8")
+        sprite = next(block for block in blocks(gfx, r"^\s*spriteType\s*=\s*\{")
+                      if f'name = "GFX_{name}"' in block)
+        self.assertIn('textureFile = "gfx/interface/superevents/WRK/'
+                      'superevent_vorkerland_worker_victory.png"', sprite)
+        source = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
+        timeout = blocks(source, r"^ADISCORD_superevent_observer_tick\s*=\s*\{")[0]
+        self.assertIn(f"flag = {name} days > 6", timeout)
+        self.assertIn(f"clr_global_flag = {name}", timeout)
+        self.assertLess(timeout.index(f"clr_global_flag = {name}"),
+                        timeout.index("ADISCORD_superevent_dispatch_next = yes"))
+
+    def test_joint_victory_selection_and_announced_guard_execute_source(self) -> None:
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.validators.validate_adiscord_superevents import blocks
+
+        source = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
+        finalizer = blocks(source, r"^ADISCORD_vorkerland_finalize_reunified_wrk\s*=\s*\{")[0]
+        outer = parse_clausewitz(finalizer)[0].value[0].value
+        route = next(entry.value for entry in outer if entry.key == "else_if"
+                     and any(child.key == "limit" and any(
+                         condition.key == "has_country_flag"
+                         and condition.value == "ADISCORD_vorkerland_route_joint"
+                         for condition in child.value) for child in entry.value))
+        self.assertIn("ADISCORD_vorkerland_reunification_verified = yes", finalizer)
+
+        def matches(body, flags):
+            for entry in body:
+                if entry.key == "has_global_flag":
+                    valid = entry.value in flags
+                elif entry.key == "NOT":
+                    valid = not matches(entry.value, flags)
+                else:
+                    self.fail(f"Unsupported victory condition: {entry.key}")
+                if not valid:
+                    return False
+            return True
+
+        def execute(body, flags, shown):
+            matched = False
+            for entry in body:
+                if entry.key == "if":
+                    limit = next(child.value for child in entry.value if child.key == "limit")
+                    matched = matches(limit, flags)
+                    if matched:
+                        execute([child for child in entry.value if child.key != "limit"], flags, shown)
+                elif entry.key == "else":
+                    if not matched:
+                        execute(entry.value, flags, shown)
+                elif entry.key == "set_global_flag":
+                    flags.add(entry.value)
+                elif entry.key.startswith("ADISCORD_vorkerland_show_"):
+                    shown.append(entry.key)
+                    show = blocks(source, rf"^{entry.key}\s*=\s*\{{")[0]
+                    self.assertIn("set_global_flag = ADISCORD_vorkerland_central_victory_announced", show)
+                    flags.add("ADISCORD_vorkerland_central_victory_announced")
+                else:
+                    self.fail(f"Unsupported victory effect: {entry.key}")
+
+        for joint in (False, True):
+            for announced in (False, True):
+                with self.subTest(joint=joint, announced=announced):
+                    flags = set()
+                    if joint:
+                        flags.add("ADISCORD_vorkerland_joint_government_formed")
+                    if announced:
+                        flags.add("ADISCORD_vorkerland_central_victory_announced")
+                    shown = []
+                    payload = [entry for entry in route if entry.key != "limit"]
+                    execute(payload, flags, shown)
+                    expected = "joint" if joint else "vlad"
+                    self.assertEqual(shown, [] if announced else [
+                        f"ADISCORD_vorkerland_show_{expected}_victory_superevent"
+                    ])
+                    first_shown = list(shown)
+                    execute(payload, flags, shown)
+                    self.assertEqual(shown, first_shown)
+
+    def test_joint_localisation_precedes_fallback_and_has_its_own_flag(self) -> None:
+        from tools.validators.validate_adiscord_superevents import blocks
+
+        source = (ROOT / "common/scripted_localisation/ADISCORD_scripted_loc_superevents.txt").read_text(encoding="utf-8")
+        for suffix in ("title", "quote", "comment"):
+            name = f"superevent_vorkerland_joint_victory_{suffix}"
+            getter = next(block for block in blocks(source, r"^defined_text\s*=\s*\{")
+                          if f"localization_key = {name}" in block)
+            choice = next(block for block in blocks(getter, r"^\s*text\s*=\s*\{")
+                          if f"localization_key = {name}" in block)
+            self.assertIn("has_global_flag = superevent_vorkerland_joint_victory", choice)
+            self.assertNotIn("superevent_vorkerland_vlad_victory", choice)
+            self.assertLess(getter.index(name), getter.index(f"superevent_inactive_{suffix}"))
+
     def test_inventory_order_is_canonical(self) -> None:
         self.assertEqual(
             tuple(item.name for item in PRESENTATIONS),
@@ -523,6 +625,7 @@ class SupereventContractTests(unittest.TestCase):
                 "superevent_itora_vorkerland_war",
                 "superevent_itora_civilwar",
                 "superevent_rus_khan_defeated",
+                "superevent_vorkerland_joint_victory",
             ),
         )
 

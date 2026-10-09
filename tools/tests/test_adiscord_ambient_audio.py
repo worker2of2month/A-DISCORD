@@ -64,6 +64,38 @@ class AmbientPlacementTests(unittest.TestCase):
             self.assertEqual(provinces[1 - int(z), int(x)], 1)
             self.assertEqual(y, 10.0)
 
+    def test_city_clusters_keep_strongest_anchor_and_respect_map_seam(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / "history/states").mkdir(parents=True)
+            (root / "map").mkdir()
+            state = root / "history/states/1.txt"
+            victory_points = [(1, 5), (2, 30), (3, 10), (4, 30), (5, 5), (2, 5)]
+            anchors = {1: 10, 2: 20, 3: 80, 4: 230, 5: 150}
+            (root / "map/unitstacks.txt").write_text(
+                "".join(f"{province};0;{x};0;0;0;0\n" for province, x in anchors.items())
+            )
+            provinces = np.zeros((1, 240), dtype=np.uint16)
+            for province, x in anchors.items():
+                provinces[0, x] = province
+            heights = np.full(provinces.shape, 100)
+            kinds = {province: "land" for province in anchors}
+
+            for entries in (victory_points, list(reversed(victory_points))):
+                state.write_text(
+                    "state = { history = { "
+                    + " ".join(
+                        f"victory_points = {{ {province} {score} }}"
+                        for province, score in entries
+                    )
+                    + " } }"
+                )
+                positions = builder.city_positions(root, provinces, heights, kinds)
+                self.assertEqual(
+                    [position[0] for position in positions],
+                    ["ADISCORD_town_2", "ADISCORD_town_3", "ADISCORD_town_5"],
+                )
+
 
 class AmbientIntegrationTests(unittest.TestCase):
     def test_wind_has_exclusive_category_and_map_actor(self):

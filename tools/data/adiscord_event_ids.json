@@ -5371,6 +5371,14 @@
       "owner": "events/ADISCORD_superevents.txt",
       "subsystem": "superevents",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_superevent.16",
+      "namespace": "ADISCORD_superevent",
+      "number": 16,
+      "owner": "events/ADISCORD_superevents.txt",
+      "subsystem": "superevents",
+      "status": "active"
     }
   ]
 }

@@ -83,3 +83,11 @@ sound = {
 	name = "superevent_rus_khan_defeated_sound"
 	file = "superevents/superevent_rus_khan_defeated_sound.wav"
 }
+
+# "Richat" by Mark Petrie. All rights reserved.
+# Source: https://markpetrie.bandcamp.com/track/richat
+# Excerpt 00:50-01:45, fades and loudness normalization to -18 LUFS / -3 dBTP.
+sound = {
+	name = "superevent_vorkerland_joint_victory_sound"
+	file = "superevents/superevent_vorkerland_joint_victory_sound.wav"
+}

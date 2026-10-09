@@ -18,6 +18,7 @@ category = {
 		superevent_itora_vorkerland_war_sound_e
 		superevent_itora_civilwar_sound_e
 		superevent_rus_khan_defeated_sound_e
+		superevent_vorkerland_joint_victory_sound_e
 	}
 	compressor = {
 		enabled = yes

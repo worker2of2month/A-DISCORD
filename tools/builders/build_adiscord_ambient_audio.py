@@ -17,6 +17,8 @@ ROOT = repository_root()
 BEGIN = "# BEGIN ADISCORD ambient audio"
 END = "# END ADISCORD ambient audio"
 COAST_SPACING = 220
+# The town sound uses falloff_infantry, with a maximum distance of 60.
+CITY_SPACING = 60
 MIN_CITY_VP = 5
 
 
@@ -76,7 +78,7 @@ def spaced_coast_pixels(mask: np.ndarray, spacing: int) -> list[tuple[int, int]]
 def city_positions(
     root: Path, provinces: np.ndarray, heights: np.ndarray, kinds: dict[int, str]
 ) -> list[tuple[str, float, float, float]]:
-    cities = set()
+    cities = {}
     for path in sorted((root / "history/states").glob("*.txt")):
         text = re.sub(r"#[^\n]*", "", path.read_text(encoding="utf-8-sig"))
         if re.search(r"\bimpassable\s*=\s*yes\b", text):
@@ -85,15 +87,17 @@ def city_positions(
             r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", text
         ):
             if int(score) >= MIN_CITY_VP and kinds.get(int(province)) == "land":
-                cities.add(int(province))
+                province_id = int(province)
+                cities[province_id] = max(int(score), cities.get(province_id, 0))
     anchors = {}
     for line in (root / "map/unitstacks.txt").read_text(encoding="utf-8").splitlines():
         fields = line.split(";")
         if len(fields) >= 5 and fields[1] == "0":
             anchors[int(fields[0])] = (float(fields[2]), float(fields[4]))
     height, width = provinces.shape
-    result = []
-    for province in sorted(cities):
+    result = {}
+    # A dense city cluster shares its strongest victory point's ambience.
+    for province in sorted(cities, key=lambda province: (-cities[province], province)):
         anchor = anchors.get(province)
         if anchor:
             x, z = anchor
@@ -108,8 +112,14 @@ def city_positions(
             nearest = int(np.argmin((xs - xs.mean()) ** 2 + (ys - ys.mean()) ** 2))
             px, py = int(xs[nearest]), int(ys[nearest])
             x, z = float(px), float(height - 1 - py)
-        result.append((f"ADISCORD_town_{province}", x, float(heights[py, px]) / 10, z))
-    return result
+        if any(
+            min(abs(x - kept_x), width - abs(x - kept_x)) ** 2 + (z - kept_z) ** 2
+            < CITY_SPACING ** 2
+            for _, kept_x, _, kept_z in result.values()
+        ):
+            continue
+        result[province] = (f"ADISCORD_town_{province}", x, float(heights[py, px]) / 10, z)
+    return [result[province] for province in sorted(result)]
 
 
 def render_type(entity: str, positions: list[tuple[str, float, float, float]]) -> str:

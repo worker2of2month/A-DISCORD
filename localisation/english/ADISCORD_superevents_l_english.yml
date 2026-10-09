@@ -19,10 +19,6 @@
   superevent_vorkerland_vlad_victory_quote: "Where they make a desert they call it peace.\n\n- Tacitus, Agricola"
   superevent_vorkerland_vlad_victory_comment: "Vlad Petrichev imposed an imperial order"
 
-  superevent_vorkerland_joint_victory_title: "The Joint Restoration of Vorkerland"
- superevent_vorkerland_joint_victory_quote: "Ambition must be made to counteract ambition.\n\n- James Madison, Federalist No. 51"
-  superevent_vorkerland_joint_victory_comment: "The emergency council held Vorkerland together"
-
   superevent_vorkerland_dorian_victory_title: "The Technical Reconstruction of Vorkerland"
   superevent_vorkerland_dorian_victory_quote: "The government of persons is replaced by the administration of things, and by the conduct of processes of production.\n\n- Friedrich Engels, Anti-Duhring"
   superevent_vorkerland_dorian_victory_comment: "Dorian Worx entrusted the country to specialist administrations"
@@ -106,3 +102,7 @@
  superevent_rus_khan_defeated_title:0 "The Khan Has Fallen"
  superevent_rus_khan_defeated_quote:0 "Look on my works, ye Mighty, and despair! Nothing beside remains.\n\n- Percy Bysshe Shelley, Ozymandias"
  superevent_rus_khan_defeated_comment:0 "The last empire belongs to the past"
+
+  superevent_vorkerland_joint_victory_title: "The Joint Restoration of Vorkerland"
+ superevent_vorkerland_joint_victory_quote: "Ambition must be made to counteract ambition.\n\n- James Madison, Federalist No. 51"
+  superevent_vorkerland_joint_victory_comment: "The emergency council held Vorkerland together"

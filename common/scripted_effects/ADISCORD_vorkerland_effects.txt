@@ -3876,11 +3876,12 @@ ADISCORD_vorkerland_appoint_joint_council = {
 }
 
 ADISCORD_vorkerland_form_joint_government = {
-	# Rare wartime rescue route: the council belongs to VAD while VAD and WKR
+	# Wartime rescue route: the council belongs to VAD while VAD and WKR
 	# remain separate. Ordinary VAD victory must keep Vlad and never consume WKR.
 	if = {
 		limit = {
 			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
 			country_exists = VAD
 			country_exists = WKR
 		}
@@ -4331,6 +4332,10 @@ ADISCORD_superevent_enqueue = {
 						check_variable = { ADISCORD_superevent_request = 18 }
 						has_global_flag = superevent_rus_khan_defeated
 					}
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 19 }
+						has_global_flag = superevent_vorkerland_joint_victory
+					}
 			} }
 		}
 		add_to_array = { array = global.ADISCORD_superevent_queue value = ADISCORD_superevent_request }
@@ -4346,6 +4351,7 @@ ADISCORD_superevent_dispatch_next = {
 					has_global_flag = superevent_vorkerland_civilwar
 					has_global_flag = superevent_vorkerland_dirty_opening
 					has_global_flag = superevent_vorkerland_worker_victory
+					has_global_flag = superevent_vorkerland_joint_victory
 					has_global_flag = superevent_vorkerland_utilitarian_victory
 					has_global_flag = superevent_vorkerland_vlad_victory
 					has_global_flag = superevent_vorkerland_dorian_victory
@@ -4438,6 +4444,10 @@ ADISCORD_superevent_dispatch_next = {
 			limit = { check_variable = { ADISCORD_superevent_next = 18 } }
 			set_global_flag = superevent_rus_khan_defeated
 		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 19 } }
+			set_global_flag = superevent_vorkerland_joint_victory
+		}
 		ADISCORD_vorkerland_play_superevent_sound = yes
 	}
 }
@@ -4458,6 +4468,7 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 	clr_global_flag = superevent_vorkerland_civilwar
 	clr_global_flag = superevent_vorkerland_dirty_opening
 	clr_global_flag = superevent_vorkerland_worker_victory
+	clr_global_flag = superevent_vorkerland_joint_victory
 	clr_global_flag = superevent_vorkerland_utilitarian_victory
 	clr_global_flag = superevent_vorkerland_vlad_victory
 	clr_global_flag = superevent_vorkerland_dorian_victory
@@ -4553,6 +4564,20 @@ ADISCORD_vorkerland_show_worker_victory_superevent = {
 	}
 	else = {
 		country_event = { id = ADISCORD_superevent.2 }
+	}
+}
+
+ADISCORD_vorkerland_show_joint_victory_superevent = {
+	set_global_flag = ADISCORD_vorkerland_central_victory_announced
+	if = {
+		limit = { any_country = { is_ai = no } }
+		random_country = {
+			limit = { is_ai = no }
+			country_event = { id = ADISCORD_superevent.16 }
+		}
+	}
+	else = {
+		country_event = { id = ADISCORD_superevent.16 }
 	}
 }
 
@@ -8864,8 +8889,8 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 	if = { limit = { country_exists = TVA } annex_country = { target = TVA transfer_troops = yes } }
 	ADISCORD_vorkerland_absorb_wtd_after_reunification = yes
 	ADISCORD_vorkerland_finalize_wrk_formation = yes
-	# route_joint is the postwar focus route for the VAD claimant. Rescue and
-	# this flag do not by themselves mean the rare Worker-Vlad council formed.
+	# route_joint also covers an ordinary VAD victory; the government flag
+	# distinguishes the rescue council from Vlad's imperial restoration.
 	set_country_flag = ADISCORD_vorkerland_route_joint
 	if = {
 		limit = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
@@ -9192,7 +9217,13 @@ ADISCORD_vorkerland_finalize_reunified_wrk = {
 			set_global_flag = ADISCORD_vorkerland_vlad_won
 			if = {
 				limit = { NOT = { has_global_flag = ADISCORD_vorkerland_central_victory_announced } }
-				ADISCORD_vorkerland_show_vlad_victory_superevent = yes
+				if = {
+					limit = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+					ADISCORD_vorkerland_show_joint_victory_superevent = yes
+				}
+				else = {
+					ADISCORD_vorkerland_show_vlad_victory_superevent = yes
+				}
 			}
 		}
 		else_if = {
@@ -11923,6 +11954,7 @@ ADISCORD_superevent_observer_tick = {
 					has_global_flag = { flag = superevent_itora_vorkerland_war days > 6 }
 					has_global_flag = { flag = superevent_itora_civilwar days > 6 }
 					has_global_flag = { flag = superevent_rus_khan_defeated days > 6 }
+					has_global_flag = { flag = superevent_vorkerland_joint_victory days > 6 }
 				}
 				NOT = { any_country = { is_ai = no } }
 			}
@@ -11959,6 +11991,10 @@ ADISCORD_superevent_observer_tick = {
 			if = {
 				limit = { has_global_flag = { flag = superevent_rus_khan_defeated days > 6 } }
 				clr_global_flag = superevent_rus_khan_defeated
+			}
+			if = {
+				limit = { has_global_flag = { flag = superevent_vorkerland_joint_victory days > 6 } }
+				clr_global_flag = superevent_vorkerland_joint_victory
 			}
 			ADISCORD_superevent_dispatch_next = yes
 		}

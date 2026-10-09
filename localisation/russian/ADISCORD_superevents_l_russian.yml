@@ -19,10 +19,6 @@
   superevent_vorkerland_vlad_victory_quote: "Они создают пустыню и называют её миром.\n\n- Тацит, «Агрикола»"
   superevent_vorkerland_vlad_victory_comment: "Влад Петричев вернул единство на штыках"
 
-  superevent_vorkerland_joint_victory_title: "Чрезвычайный совет"
-  superevent_vorkerland_joint_victory_quote: "Одно честолюбие должно сдерживать другое.\n\n- Джеймс Мэдисон, «Федералист № 51»"
-  superevent_vorkerland_joint_victory_comment: "Победители не поделили страну - они поделили власть"
-
   superevent_vorkerland_dorian_victory_title: "Воркеландское поле экспериментов"
   superevent_vorkerland_dorian_victory_quote: "Управление людьми заменяется управлением вещами и руководством процессами производства.\n\n- Фридрих Энгельс, «Анти-Дюринг»"
   superevent_vorkerland_dorian_victory_comment: "Воркерланд передан тем, кто умеет считать, строить и управлять"
@@ -106,3 +102,7 @@
  superevent_rus_khan_defeated_title:0 "Хан повержен"
  superevent_rus_khan_defeated_quote:0 "Взгляните на мои творения, сильные мира, и отчаивайтесь! Больше ничего не осталось.\n\n- Перси Биши Шелли, «Озимандия»"
  superevent_rus_khan_defeated_comment:0 "Последняя империя стала прошлым"
+
+  superevent_vorkerland_joint_victory_title: "Чрезвычайный совет"
+  superevent_vorkerland_joint_victory_quote: "Одно честолюбие должно сдерживать другое.\n\n- Джеймс Мэдисон, «Федералист № 51»"
+  superevent_vorkerland_joint_victory_comment: "Победители не поделили страну - они поделили власть"

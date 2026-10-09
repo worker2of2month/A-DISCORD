@@ -291,4 +291,21 @@ scripted_gui = {
 			}
 		}
 	}
+
+	superevent_vorkerland_joint_victory = {
+		window_name = "superevent_vorkerland_joint_victory"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_vorkerland_joint_victory
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_vorkerland_joint_victory
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
 }

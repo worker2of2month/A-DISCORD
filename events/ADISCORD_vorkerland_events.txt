@@ -828,10 +828,7 @@ country_event = {
 		clr_global_flag = ADISCORD_vorkerland_preference_worker
 		clr_global_flag = ADISCORD_vorkerland_preference_joint
 		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
-		random_list = {
-			7 = { ADISCORD_vorkerland_form_joint_government = yes }
-			93 = { }
-		}
+		ADISCORD_vorkerland_form_joint_government = yes
 		WKR = {
 			inherit_technology = WRK
 			load_focus_tree = {

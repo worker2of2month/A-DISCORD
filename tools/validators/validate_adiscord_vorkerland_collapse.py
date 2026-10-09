@@ -5734,6 +5734,7 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         for name in (
             "dirty_opening",
             "worker_victory",
+            "joint_victory",
             "utilitarian_victory",
             "vlad_victory",
             "dorian_victory",
@@ -5784,6 +5785,7 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
     for name, event_id in (
         ("dirty_opening", "ADISCORD_superevent.4"),
         ("worker_victory", "ADISCORD_superevent.2"),
+        ("joint_victory", "ADISCORD_superevent.16"),
         ("utilitarian_victory", "ADISCORD_superevent.3"),
         ("vlad_victory", "ADISCORD_superevent.5"),
         ("dorian_victory", "ADISCORD_superevent.6"),

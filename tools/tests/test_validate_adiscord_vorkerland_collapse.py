@@ -3159,6 +3159,74 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             self.assertIn(f" {focus_id}_desc: ", russian)
         self.assertTrue(russian_path.read_bytes().startswith(b"\xef\xbb\xbf"))
 
+    def test_rescue_creates_joint_government_without_another_roll(self) -> None:
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        opening = event_block(
+            read("events/ADISCORD_vorkerland_events.txt"),
+            "ADISCORD_vorkerland_collapse.1",
+        )
+        opening_body = parse_clausewitz(opening)[0].value
+        immediate = next(entry.value for entry in opening_body if entry.key == "immediate")
+        keys = [entry.key for entry in immediate]
+        form = "ADISCORD_vorkerland_form_joint_government"
+        self.assertEqual(keys.count(form), 1)
+        self.assertLess(keys.index("ADISCORD_vorkerland_apply_initial_map"), keys.index(form))
+        self.assertLess(keys.index("ADISCORD_vorkerland_prepare_claimant_characters"), keys.index(form))
+        self.assertEqual(keys.count("random_list"), 1)
+
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        definition = parse_clausewitz(named_block(effects, form))[0].value
+        formed = "ADISCORD_vorkerland_joint_government_formed"
+        appointment = "ADISCORD_vorkerland_appoint_joint_council"
+
+        def matches(body, flags, countries):
+            for entry in body:
+                if entry.key == "has_global_flag":
+                    valid = entry.value in flags
+                elif entry.key == "country_exists":
+                    valid = entry.value in countries
+                elif entry.key == "NOT":
+                    valid = not matches(entry.value, flags, countries)
+                else:
+                    self.fail(f"Unsupported formation condition: {entry.key}")
+                if not valid:
+                    return False
+            return True
+
+        def execute(body, flags, countries, actions, scope="WRK"):
+            for entry in body:
+                if entry.key == "if":
+                    limit = next(child.value for child in entry.value if child.key == "limit")
+                    if matches(limit, flags, countries):
+                        execute([child for child in entry.value if child.key != "limit"],
+                                flags, countries, actions, scope)
+                elif entry.key == "VAD":
+                    execute(entry.value, flags, countries, actions, "VAD")
+                elif entry.key == "set_global_flag":
+                    flags.add(entry.value)
+                elif entry.key in ("set_cosmetic_tag", appointment, "country_event"):
+                    actions.append((scope, entry.key))
+                else:
+                    self.fail(f"Unsupported formation effect: {entry.key}")
+
+        for fate in ("safe_with_loyalists", "rescued_by_vlad", "missing", "killed"):
+            for countries in ({"WKR", "VAD"}, {"WKR"}, {"VAD"}):
+                with self.subTest(fate=fate, countries=countries):
+                    flags = {f"ADISCORD_vorkerland_worker_{fate}"}
+                    actions = []
+                    execute(definition, flags, countries, actions)
+                    expected = fate == "rescued_by_vlad" and len(countries) == 2
+                    self.assertEqual(formed in flags, expected)
+                    self.assertEqual(actions, [
+                        ("VAD", "set_cosmetic_tag"),
+                        ("VAD", appointment),
+                        ("VAD", "country_event"),
+                    ] if expected else [])
+                    first_actions = list(actions)
+                    execute(definition, flags, countries, actions)
+                    self.assertEqual(actions, first_actions)
+
     def test_joint_government_starts_with_reduced_frontier(self) -> None:
         effects = source_section(
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),

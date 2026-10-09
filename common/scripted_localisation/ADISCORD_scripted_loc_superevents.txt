@@ -18,13 +18,6 @@ defined_text = {
 		localization_key = superevent_vorkerland_utilitarian_victory_quote
 	}
 	text = {
-		trigger = {
-			has_global_flag = superevent_vorkerland_vlad_victory
-			has_global_flag = ADISCORD_vorkerland_joint_government_formed
-		}
-		localization_key = superevent_vorkerland_joint_victory_quote
-	}
-	text = {
 		trigger = { has_global_flag = superevent_vorkerland_vlad_victory }
 		localization_key = superevent_vorkerland_vlad_victory_quote
 	}
@@ -168,6 +161,10 @@ defined_text = {
 		localization_key = superevent_rus_khan_defeated_quote
 	}
 	text = {
+		trigger = { has_global_flag = superevent_vorkerland_joint_victory }
+		localization_key = superevent_vorkerland_joint_victory_quote
+	}
+	text = {
 		localization_key = superevent_inactive_quote
 	}
 }
@@ -190,13 +187,6 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_vorkerland_utilitarian_victory }
 		localization_key = superevent_vorkerland_utilitarian_victory_title
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_vorkerland_vlad_victory
-			has_global_flag = ADISCORD_vorkerland_joint_government_formed
-		}
-		localization_key = superevent_vorkerland_joint_victory_title
 	}
 	text = {
 		trigger = { has_global_flag = superevent_vorkerland_vlad_victory }
@@ -319,6 +309,10 @@ defined_text = {
 		localization_key = superevent_rus_khan_defeated_title
 	}
 	text = {
+		trigger = { has_global_flag = superevent_vorkerland_joint_victory }
+		localization_key = superevent_vorkerland_joint_victory_title
+	}
+	text = {
 		localization_key = superevent_inactive_title
 	}
 }
@@ -341,13 +335,6 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_vorkerland_utilitarian_victory }
 		localization_key = superevent_vorkerland_utilitarian_victory_comment
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_vorkerland_vlad_victory
-			has_global_flag = ADISCORD_vorkerland_joint_government_formed
-		}
-		localization_key = superevent_vorkerland_joint_victory_comment
 	}
 	text = {
 		trigger = { has_global_flag = superevent_vorkerland_vlad_victory }
@@ -468,6 +455,10 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_rus_khan_defeated }
 		localization_key = superevent_rus_khan_defeated_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_joint_victory }
+		localization_key = superevent_vorkerland_joint_victory_comment
 	}
 	text = {
 		localization_key = superevent_inactive_comment

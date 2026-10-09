@@ -218,7 +218,7 @@ class VadPostwarContractTests(unittest.TestCase):
         self.assertIn("civilian = { large = GFX_portrait_WRK_Vlad_Petrichev }", formation)
         self.assertNotIn("GFX_portrait_WRK_Vlad_Petrichev_civilwar", formation)
 
-    def test_joint_council_gets_specific_victory_text_before_vlad_fallback(
+    def test_joint_council_gets_specific_victory_text_before_inactive_fallback(
         self,
     ) -> None:
         scripted = read(
@@ -226,9 +226,9 @@ class VadPostwarContractTests(unittest.TestCase):
         )
         for suffix in ("title", "quote", "comment"):
             joint_key = f"superevent_vorkerland_joint_victory_{suffix}"
-            vlad_key = f"superevent_vorkerland_vlad_victory_{suffix}"
+            fallback = f"superevent_inactive_{suffix}"
             self.assertEqual(scripted.count(f"localization_key = {joint_key}"), 1)
-            self.assertLess(scripted.index(joint_key), scripted.index(vlad_key))
+            self.assertLess(scripted.index(joint_key), scripted.index(fallback))
 
         for path in (
             "localisation/english/ADISCORD_superevents_l_english.yml",
