@@ -304,6 +304,25 @@ class WestFinalWarContractTests(unittest.TestCase):
         self.assertEqual(event.count("clr_country_flag = ADISCORD_west_league_offer_pending"), 2)
         self.assertIn("NOT = { has_country_flag = ADISCORD_west_league_offer_pending }", body(TRIGGERS, "ADISCORD_west_league_target_valid"))
 
+    def test_vorkerland_treaties_mirror_the_league_and_let_the_target_answer(self):
+        decisions = (ROOT / "common/decisions/ADISCORD_west_final_war_decisions.txt").read_text(encoding="utf-8")
+        start = decisions.index("\tADISCORD_west_wrk_offer_front_treaty = {")
+        decision = decisions[start:decisions.index("\tADISCORD_west_ivn_hold_the_marches = {", start)]
+        self.assertEqual(set(re.search(r"targets = \{ ([^}]*) \}", decision)[1].split()), set(REGIONAL))
+        self.assertIn("ADISCORD_west_wrk_treaties_unlocked = yes", decision)
+        self.assertIn("FROM = { ADISCORD_west_league_target_valid = yes }", decision)
+        self.assertNotIn("add_to_faction", decision)
+        source = EVENTS.read_text(encoding="utf-8")
+        offer = source[source.index("\tid = ADISCORD_west.43\n"):source.index("\tid = ADISCORD_west.44\n")]
+        self.assertEqual(offer.count("clr_country_flag = ADISCORD_west_league_offer_pending"), 2)
+        accept = offer[:offer.index("name = ADISCORD_west.43.b")]
+        for guard in ("is_in_faction = no", "NOT = { has_war_with = FROM }", "NOT = { has_global_flag = ADISCORD_west_final_started }"):
+            self.assertIn(guard, accept)
+        self.assertLess(accept.index("create_faction_from_template"), accept.index("add_to_faction = ROOT"))
+        partners = body(EFFECTS, "ADISCORD_west_wrk_arm_front_partners")
+        self.assertEqual(set(re.findall(r"\b([A-Z]{3}) = \{ ADISCORD_west_wrk_arm_front_partner = yes \}", partners)), set(REGIONAL))
+        self.assertIn("is_in_faction_with = WRK", body(EFFECTS, "ADISCORD_west_wrk_arm_front_partner"))
+
     def test_events_are_registered_and_localised(self):
         source = EVENTS.read_text(encoding="utf-8")
         defined = set(re.findall(r"\bid = (ADISCORD_west\.\d+)", source))

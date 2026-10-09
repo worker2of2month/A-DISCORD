@@ -3338,6 +3338,50 @@ ADISCORD_vorkerland_pw_expedition_won = {
 }
 
 # COUNTRY. Temporary major ownership may overlap independent campaigns.
+# COUNTRY WRK. The census of any postwar route opens district reconstruction.
+ADISCORD_vorkerland_pw_reconstruction_open = {
+	ADISCORD_vorkerland_pw_sovereign = yes
+	OR = {
+		has_completed_focus = WRK_worker_pw_census
+		has_completed_focus = WRK_joint_pw_census
+		has_completed_focus = WRK_utilitarian_pw_census
+		has_completed_focus = WRK_empire_reconstruction_trusts
+	}
+}
+
+# COUNTRY WRK. Each later reconstruction focus adds one concurrent programme.
+ADISCORD_vorkerland_pw_rebuild_slot_free = {
+	OR = {
+		check_variable = { var = ADISCORD_vorkerland_pw_rebuild_active value = 1 compare = less_than }
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_pw_rebuild_active value = 2 compare = less_than }
+			OR = {
+				has_completed_focus = WRK_worker_pw_repair_crews
+				has_completed_focus = WRK_joint_pw_repair_crews
+				has_completed_focus = WRK_utilitarian_pw_repair_crews
+				has_completed_focus = WRK_empire_imperial_building_offices
+			}
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_pw_rebuild_active value = 3 compare = less_than }
+			OR = {
+				has_completed_focus = WRK_worker_pw_municipal_network
+				has_completed_focus = WRK_joint_pw_municipal_network
+				has_completed_focus = WRK_utilitarian_pw_municipal_network
+				has_completed_focus = WRK_empire_imperial_building_offices
+			}
+		}
+	}
+}
+
+# STATE target; ROOT is WRK. One programme per district: the reward is the
+# reconstruction of war damage, not a repeatable construction order.
+ADISCORD_vorkerland_pw_rebuild_site = {
+	is_core_of = ROOT
+	is_owned_and_controlled_by = ROOT
+	NOT = { has_state_flag = ADISCORD_vorkerland_pw_district_rebuilt }
+}
+
 RUS_crisis_other_major_required = {
 	OR = {
 		has_country_flag = ADISCORD_nam_resource_war_added_major

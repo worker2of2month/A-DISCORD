@@ -118,7 +118,8 @@ ADISCORD_west_ivn_emergency_course = {
 	has_completed_focus = IVN_emergency_order
 }
 
-# COUNTRY invited state; ROOT is the inviting Itora.
+# COUNTRY invited state; ROOT is the inviting champion. The pending flag is
+# shared, so one state never weighs offers from both champions at once.
 ADISCORD_west_league_target_valid = {
 	exists = yes
 	is_subject = no
@@ -127,4 +128,33 @@ ADISCORD_west_league_target_valid = {
 	NOT = { has_war_with = ROOT }
 	NOT = { has_country_flag = ADISCORD_west_league_offer_pending }
 	NOT = { has_global_flag = ADISCORD_west_final_started }
+}
+
+# COUNTRY WRK. A postwar political programme opens Vorkerland's own treaty
+# offers, the counterpart of Itora's League invitations.
+ADISCORD_west_wrk_treaties_unlocked = {
+	OR = {
+		has_completed_focus = WRK_worker_pw_territorial_council
+		has_completed_focus = WRK_joint_pw_territorial_council
+		has_completed_focus = WRK_utilitarian_pw_territorial_council
+		has_completed_focus = WRK_empire_military_conventions
+	}
+}
+
+# COUNTRY WRK. Charters that make Vorkerland's offer easier to accept.
+ADISCORD_west_wrk_treaty_charters = {
+	OR = {
+		has_completed_focus = WRK_worker_pw_service_charter
+		has_completed_focus = WRK_joint_pw_service_charter
+		has_completed_focus = WRK_utilitarian_pw_service_charter
+		has_completed_focus = WRK_empire_military_conventions
+	}
+}
+
+ADISCORD_west_wrk_local_charters = {
+	OR = {
+		has_completed_focus = WRK_worker_pw_local_charters
+		has_completed_focus = WRK_joint_pw_local_charters
+		has_completed_focus = WRK_utilitarian_pw_local_charters
+	}
 }

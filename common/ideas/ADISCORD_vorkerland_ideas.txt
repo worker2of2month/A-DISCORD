@@ -3146,6 +3146,14 @@ ideas = {
 			}
 		}
 
+		ADISCORD_vorkerland_pw_delta_attack = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.04
+			}
+		}
+
 		ADISCORD_vorkerland_pw_delta_training = {
 			picture = generic_production_bonus
 			allowed = { always = no }

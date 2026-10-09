@@ -794,3 +794,48 @@ ADISCORD_west_send_league_invitation = {
 		country_event = { id = ADISCORD_west.40 hours = 6 }
 	}
 }
+
+# ----- Confederate front treaties -----
+
+# COUNTRY invited state; ROOT is WRK. The answer belongs to the invited state.
+ADISCORD_west_send_front_treaty = {
+	if = {
+		limit = { ADISCORD_west_league_target_valid = yes }
+		set_country_flag = ADISCORD_west_league_offer_pending
+		country_event = { id = ADISCORD_west.43 hours = 6 }
+	}
+}
+
+# COUNTRY WRK. Rifles and support equipment reach only current treaty partners.
+ADISCORD_west_wrk_arm_front_partners = {
+	WIT = { ADISCORD_west_wrk_arm_front_partner = yes }
+	IIA = { ADISCORD_west_wrk_arm_front_partner = yes }
+	IBA = { ADISCORD_west_wrk_arm_front_partner = yes }
+	IBL = { ADISCORD_west_wrk_arm_front_partner = yes }
+	PWR = { ADISCORD_west_wrk_arm_front_partner = yes }
+	PSD = { ADISCORD_west_wrk_arm_front_partner = yes }
+	ZAO = { ADISCORD_west_wrk_arm_front_partner = yes }
+	WPA = { ADISCORD_west_wrk_arm_front_partner = yes }
+	WPS = { ADISCORD_west_wrk_arm_front_partner = yes }
+	ROM = { ADISCORD_west_wrk_arm_front_partner = yes }
+	TRU = { ADISCORD_west_wrk_arm_front_partner = yes }
+}
+
+ADISCORD_west_wrk_arm_front_partner = {
+	if = {
+		limit = {
+			exists = yes
+			is_in_faction_with = WRK
+		}
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 3000
+			producer = WRK
+		}
+		add_equipment_to_stockpile = {
+			type = support_equipment
+			amount = 300
+			producer = WRK
+		}
+	}
+}

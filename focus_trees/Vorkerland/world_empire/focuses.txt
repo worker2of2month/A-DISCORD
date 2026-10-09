@@ -221,9 +221,31 @@ focus_tree = {
 					instant_build = yes
 				}
 			}
+			unlock_decision_tooltip = ADISCORD_vorkerland_pw_rebuild_district
+			custom_effect_tooltip = WRK_pw_reconstruction_unlock_tt
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
 		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_empire_imperial_building_offices
+		icon = GFX_focus_WRK_pw_municipal_network
+		x = 2
+		y = 6
+		cost = 3
+		prerequisite = { focus = WRK_empire_reconstruction_trusts }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = WRK_empire_building_offices_tt
+			add_political_power = 50
+		}
+		ai_will_do = { base = 20 }
 	}
 
 	focus = {
@@ -510,6 +532,49 @@ focus_tree = {
 		ai_will_do = { base = 10 }
 	}
 
+	# Imperial diplomacy offers the West treaties of protection before the war.
+	focus = {
+		id = WRK_empire_military_conventions
+		icon = GFX_focus_WRK_pw_service_charter
+		x = 18
+		y = 2
+		cost = 2
+		prerequisite = { focus = WRK_empire_state_above_all }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_west_wrk_offer_front_treaty
+			custom_effect_tooltip = WRK_pw_treaty_charter_tt
+			add_political_power = 50
+		}
+		ai_will_do = { base = 25 }
+	}
+
+	focus = {
+		id = WRK_empire_garrison_compact
+		icon = GFX_focus_WRK_pw_defence_compact
+		x = 18
+		y = 3
+		cost = 3
+		prerequisite = { focus = WRK_empire_military_conventions }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = WRK_pw_arm_front_partners_tt
+			hidden_effect = { ADISCORD_west_wrk_arm_front_partners = yes }
+			add_war_support = 0.05
+		}
+		ai_will_do = { base = 15 }
+	}
+
 	focus = {
 		id = WRK_empire_total_mobilization
 		icon = GFX_focus_WRK_joint_west_imperial_settlement
@@ -519,6 +584,8 @@ focus_tree = {
 		prerequisite = { focus = WRK_empire_mobilized_economy }
 		prerequisite = { focus = WRK_empire_imperial_general_staff }
 		prerequisite = { focus = WRK_empire_combined_exercises }
+		prerequisite = { focus = WRK_empire_imperial_building_offices }
+		prerequisite = { focus = WRK_empire_garrison_compact }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		available = {
 			is_subject = no

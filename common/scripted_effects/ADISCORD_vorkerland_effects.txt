@@ -14592,6 +14592,100 @@ ADISCORD_vorkerland_pw_apply_subject_government = {
 }
 
 # RUS. Only held perimeter states receive fortifications and anti-air batteries.
+# STATE target; ROOT is WRK. The slot stays reserved until the programme ends.
+ADISCORD_vorkerland_pw_begin_rebuild = {
+	set_state_flag = ADISCORD_vorkerland_pw_rebuild_in_progress
+	ROOT = {
+		add_to_variable = {
+			var = ADISCORD_vorkerland_pw_rebuild_active
+			value = 1
+		}
+	}
+}
+
+# STATE target; ROOT is WRK. Completion and cancellation both release the slot.
+ADISCORD_vorkerland_pw_release_rebuild = {
+	if = {
+		limit = { has_state_flag = ADISCORD_vorkerland_pw_rebuild_in_progress }
+		clr_state_flag = ADISCORD_vorkerland_pw_rebuild_in_progress
+		ROOT = {
+			add_to_variable = {
+				var = ADISCORD_vorkerland_pw_rebuild_active
+				value = -1
+			}
+			clamp_variable = {
+				var = ADISCORD_vorkerland_pw_rebuild_active
+				min = 0
+			}
+		}
+	}
+}
+
+# STATE target; ROOT is WRK. The route decides what a rebuilt district becomes:
+# cooperative workshops, a garrison arsenal or a measured utility network.
+ADISCORD_vorkerland_pw_rebuild_reward = {
+	if = {
+		limit = {
+			free_building_slots = {
+				building = infrastructure
+				size > 0
+			}
+		}
+		add_building_construction = {
+			type = infrastructure
+			level = 1
+			instant_build = yes
+		}
+	}
+	if = {
+		limit = { ROOT = { has_country_flag = ADISCORD_vorkerland_route_joint } }
+		add_extra_state_shared_building_slots = 1
+		add_building_construction = {
+			type = arms_factory
+			level = 1
+			instant_build = yes
+		}
+	}
+	else = {
+		add_extra_state_shared_building_slots = 1
+		add_building_construction = {
+			type = industrial_complex
+			level = 1
+			instant_build = yes
+		}
+	}
+	if = {
+		limit = { ROOT = { has_country_flag = ADISCORD_vorkerland_route_worker } }
+		ROOT = { add_manpower = 4000 }
+	}
+	else_if = {
+		limit = {
+			ROOT = { has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+			free_building_slots = {
+				building = infrastructure
+				size > 0
+			}
+		}
+		add_building_construction = {
+			type = infrastructure
+			level = 1
+			instant_build = yes
+		}
+	}
+}
+
+# STATE target; ROOT is WRK. A district lost during the programme keeps its
+# right to a later programme; only a delivered reward closes it.
+ADISCORD_vorkerland_pw_finish_rebuild = {
+	ADISCORD_vorkerland_pw_release_rebuild = yes
+	if = {
+		limit = { ADISCORD_vorkerland_pw_rebuild_site = yes }
+		ADISCORD_vorkerland_pw_rebuild_reward = yes
+		set_state_flag = ADISCORD_vorkerland_pw_district_rebuilt
+		ROOT = { ADISCORD_economy_mark_dirty = yes }
+	}
+}
+
 RUS_crisis_fortify_reactor_state = {
 	if = {
 		limit = { is_owned_by = RUS is_controlled_by = RUS }

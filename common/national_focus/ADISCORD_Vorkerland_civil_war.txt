@@ -8967,7 +8967,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_census
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
+		icon = GFX_focus_WRK_pw_census
 		search_filters = { FOCUS_FILTER_STABILITY }
 		x = 8
 		y = 1
@@ -8986,8 +8986,10 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_vorkerland_pw_rebuild_district
+			custom_effect_tooltip = WRK_pw_reconstruction_unlock_tt
 			add_political_power = 50
-			add_stability = 0.03
+			add_stability = 0.05
 		}
 		ai_will_do = {
 			base = 22
@@ -8996,7 +8998,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_repair_crews
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
+		icon = GFX_focus_WRK_pw_repair_crews
 		search_filters = { FOCUS_FILTER_STABILITY }
 		x = 0
 		y = 1
@@ -9015,11 +9017,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 150
-				producer = WRK
-			}
+			custom_effect_tooltip = WRK_pw_reconstruction_slot_tt
 			effect_tooltip = {
 				add_ideas = ADISCORD_vorkerland_pw_delta_repair
 			}
@@ -9039,13 +9037,15 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_food_reserve
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
-		search_filters = { FOCUS_FILTER_STABILITY }
-		x = 0
+		icon = GFX_focus_WRK_pw_food_reserve
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		x = -1
 		y = 1
 		relative_position_id = WRK_worker_pw_repair_crews
 		cost = 2
 		prerequisite = { focus = WRK_worker_pw_repair_crews }
+		mutually_exclusive = { focus = WRK_worker_pw_veteran_housing }
+		mutually_exclusive = { focus = WRK_worker_pw_veteran_housing }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -9058,8 +9058,8 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_stability = 0.03
-			add_war_support = 0.03
+			add_manpower = 40000
+			add_stability = 0.05
 		}
 		ai_will_do = {
 			base = 22
@@ -9068,13 +9068,15 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_veteran_housing
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
-		search_filters = { FOCUS_FILTER_STABILITY }
-		x = 0
+		icon = GFX_focus_WRK_pw_veteran_housing
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 1
 		y = 1
-		relative_position_id = WRK_worker_pw_food_reserve
+		relative_position_id = WRK_worker_pw_repair_crews
 		cost = 3
-		prerequisite = { focus = WRK_worker_pw_food_reserve }
+		prerequisite = { focus = WRK_worker_pw_repair_crews }
+		mutually_exclusive = { focus = WRK_worker_pw_food_reserve }
+		mutually_exclusive = { focus = WRK_worker_pw_food_reserve }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -9088,7 +9090,7 @@ focus_tree = {
 					is_controlled_by = ROOT
 					free_building_slots = {
 						building = industrial_complex
-						size > 0
+						size > 2
 						include_locked = yes
 					}
 				}
@@ -9104,18 +9106,19 @@ focus_tree = {
 					is_core_of = ROOT
 					free_building_slots = {
 						building = industrial_complex
-						size > 0
+						size > 2
 						include_locked = yes
 					}
 				}
-				add_extra_state_shared_building_slots = 1
+				add_extra_state_shared_building_slots = 3
 				add_building_construction = {
 					type = industrial_complex
-					level = 1
+					level = 3
 					instant_build = yes
 				}
 			}
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			add_manpower = 10000
 		}
 		ai_will_do = {
 			base = 22
@@ -9124,13 +9127,13 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_municipal_network
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
+		icon = GFX_focus_WRK_pw_municipal_network
 		search_filters = { FOCUS_FILTER_STABILITY }
-		x = 0
+		x = 1
 		y = 1
-		relative_position_id = WRK_worker_pw_veteran_housing
+		relative_position_id = WRK_worker_pw_food_reserve
 		cost = 3
-		prerequisite = { focus = WRK_worker_pw_veteran_housing }
+		prerequisite = { focus = WRK_worker_pw_food_reserve focus = WRK_worker_pw_veteran_housing }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -9143,8 +9146,9 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = WRK_pw_reconstruction_slot_tt
+			add_stability = 0.05
 			add_political_power = 75
-			add_stability = 0.04
 		}
 		ai_will_do = {
 			base = 22
@@ -9153,7 +9157,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_recovery_complete
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
+		icon = GFX_focus_WRK_pw_recovery_complete
 		search_filters = { FOCUS_FILTER_STABILITY }
 		x = 0
 		y = 1
@@ -9183,7 +9187,7 @@ focus_tree = {
 				}
 				ADISCORD_economy_mark_dirty = yes
 			}
-			add_stability = 0.03
+			add_political_power = 100
 		}
 		ai_will_do = {
 			base = 22
@@ -9192,7 +9196,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_veteran_cadres
-		icon = GFX_focus_WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_pw_veteran_cadres
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = 12
 		y = 1
@@ -9211,7 +9215,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_manpower = 12000
+			add_manpower = 40000
 			effect_tooltip = {
 				add_ideas = ADISCORD_vorkerland_pw_delta_cadres
 			}
@@ -9231,7 +9235,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_rearmament
-		icon = GFX_focus_WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_pw_rearmament
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = 0
 		y = 1
@@ -9252,12 +9256,12 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 9000
+				amount = 20000
 				producer = WRK
 			}
 			add_equipment_to_stockpile = {
 				type = support_equipment
-				amount = 250
+				amount = 800
 				producer = WRK
 			}
 		}
@@ -9268,7 +9272,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_officer_school
-		icon = GFX_focus_WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_pw_officer_school
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = 0
 		y = 1
@@ -9287,7 +9291,8 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			army_experience = 35
+			army_experience = 50
+			add_command_power = 20
 			effect_tooltip = {
 				add_ideas = ADISCORD_vorkerland_pw_delta_officers
 			}
@@ -9307,7 +9312,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_field_exercises
-		icon = GFX_focus_WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_pw_field_exercises
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = 0
 		y = 1
@@ -9326,7 +9331,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			army_experience = 25
+			army_experience = 40
 			effect_tooltip = {
 				add_ideas = ADISCORD_vorkerland_pw_delta_exercises
 			}
@@ -9346,13 +9351,15 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_motor_pool
-		icon = GFX_focus_WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_pw_motor_pool
 		search_filters = { FOCUS_FILTER_ARMY_XP }
-		x = 0
+		x = -1
 		y = 1
 		relative_position_id = WRK_worker_pw_field_exercises
 		cost = 3
 		prerequisite = { focus = WRK_worker_pw_field_exercises }
+		mutually_exclusive = { focus = WRK_worker_pw_artillery }
+		mutually_exclusive = { focus = WRK_worker_pw_artillery }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -9367,12 +9374,12 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = motorized_equipment
-				amount = 400
+				amount = 1500
 				producer = WRK
 			}
 			add_equipment_to_stockpile = {
 				type = support_equipment
-				amount = 250
+				amount = 500
 				producer = WRK
 			}
 			effect_tooltip = {
@@ -9394,13 +9401,15 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_artillery
-		icon = GFX_focus_WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_pw_artillery
 		search_filters = { FOCUS_FILTER_ARMY_XP }
-		x = 0
+		x = 1
 		y = 1
-		relative_position_id = WRK_worker_pw_motor_pool
+		relative_position_id = WRK_worker_pw_field_exercises
 		cost = 3
-		prerequisite = { focus = WRK_worker_pw_motor_pool }
+		prerequisite = { focus = WRK_worker_pw_field_exercises }
+		mutually_exclusive = { focus = WRK_worker_pw_motor_pool }
+		mutually_exclusive = { focus = WRK_worker_pw_motor_pool }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -9415,13 +9424,24 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = artillery_equipment
-				amount = 300
+				amount = 1500
 				producer = WRK
 			}
 			add_tech_bonus = {
 				bonus = 0.5
 				uses = 1
 				category = artillery
+			}
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_exercises
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_defence
+					value = 0.04
+				}
+				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		ai_will_do = {
@@ -9431,13 +9451,13 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_reserve
-		icon = GFX_focus_WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_pw_reserve
 		search_filters = { FOCUS_FILTER_ARMY_XP }
-		x = 0
+		x = 1
 		y = 1
-		relative_position_id = WRK_worker_pw_artillery
+		relative_position_id = WRK_worker_pw_motor_pool
 		cost = 3
-		prerequisite = { focus = WRK_worker_pw_artillery }
+		prerequisite = { focus = WRK_worker_pw_motor_pool focus = WRK_worker_pw_artillery }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -9450,10 +9470,10 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_manpower = 12000
+			add_manpower = 50000
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 3000
+				amount = 10000
 				producer = WRK
 			}
 			effect_tooltip = {
@@ -9475,7 +9495,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_army_reform
-		icon = GFX_focus_WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_pw_army_reform
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = 0
 		y = 1
@@ -9495,6 +9515,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			army_experience = 50
 			effect_tooltip = {
 				add_ideas = ADISCORD_vorkerland_pw_delta_worker_army
 			}
@@ -9522,7 +9543,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_arsenals
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
+		icon = GFX_focus_WRK_pw_arsenals
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 16
 		y = 1
@@ -9542,7 +9563,7 @@ focus_tree = {
 					is_controlled_by = ROOT
 					free_building_slots = {
 						building = arms_factory
-						size > 0
+						size > 1
 						include_locked = yes
 					}
 				}
@@ -9558,14 +9579,14 @@ focus_tree = {
 					is_core_of = ROOT
 					free_building_slots = {
 						building = arms_factory
-						size > 0
+						size > 1
 						include_locked = yes
 					}
 				}
-				add_extra_state_shared_building_slots = 1
+				add_extra_state_shared_building_slots = 2
 				add_building_construction = {
 					type = arms_factory
-					level = 1
+					level = 2
 					instant_build = yes
 				}
 			}
@@ -9578,7 +9599,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_standards
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
+		icon = GFX_focus_WRK_pw_standards
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 0
 		y = 1
@@ -9621,7 +9642,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_worker_pw_defence_cluster
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
+		icon = GFX_focus_WRK_pw_defence_cluster
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 0
 		y = 1
@@ -9632,6 +9653,1181 @@ focus_tree = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_worker
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_reconstruction_factory_site_tt
+				any_owned_state = {
+					is_core_of = ROOT
+					is_controlled_by = ROOT
+					free_building_slots = {
+						building = arms_factory
+						size > 2
+						include_locked = yes
+					}
+				}
+			}
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = arms_factory
+						size > 2
+						include_locked = yes
+					}
+				}
+				add_extra_state_shared_building_slots = 3
+				add_building_construction = {
+					type = arms_factory
+					level = 3
+					instant_build = yes
+				}
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = {
+			base = 65
+		}
+	}
+
+	focus = {
+		id = WRK_worker_pw_machine_tools
+		icon = GFX_focus_WRK_pw_machine_tools
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = -1
+		y = 1
+		relative_position_id = WRK_worker_pw_defence_cluster
+		cost = 3
+		prerequisite = { focus = WRK_worker_pw_defence_cluster }
+		mutually_exclusive = { focus = WRK_worker_pw_transport_works }
+		mutually_exclusive = { focus = WRK_worker_pw_transport_works }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_reconstruction_factory_site_tt
+				any_owned_state = {
+					is_core_of = ROOT
+					is_controlled_by = ROOT
+					free_building_slots = {
+						building = industrial_complex
+						size > 2
+						include_locked = yes
+					}
+				}
+			}
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = industrial_complex
+						size > 2
+						include_locked = yes
+					}
+				}
+				add_extra_state_shared_building_slots = 3
+				add_building_construction = {
+					type = industrial_complex
+					level = 3
+					instant_build = yes
+				}
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_tools
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_efficiency
+					value = 0.05
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 65
+		}
+	}
+
+	focus = {
+		id = WRK_worker_pw_transport_works
+		icon = GFX_focus_WRK_pw_transport_works
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 1
+		y = 1
+		relative_position_id = WRK_worker_pw_defence_cluster
+		cost = 3
+		prerequisite = { focus = WRK_worker_pw_defence_cluster }
+		mutually_exclusive = { focus = WRK_worker_pw_machine_tools }
+		mutually_exclusive = { focus = WRK_worker_pw_machine_tools }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_reconstruction_factory_site_tt
+				any_owned_state = {
+					is_core_of = ROOT
+					is_controlled_by = ROOT
+					free_building_slots = {
+						building = arms_factory
+						size > 1
+						include_locked = yes
+					}
+				}
+			}
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = arms_factory
+						size > 1
+						include_locked = yes
+					}
+				}
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {
+					type = arms_factory
+					level = 2
+					instant_build = yes
+				}
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 800
+				producer = WRK
+			}
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_logistics
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_supply
+					value = -0.05
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 65
+		}
+	}
+
+	focus = {
+		id = WRK_worker_pw_production_board
+		icon = GFX_focus_WRK_pw_production_board
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = 1
+		y = 1
+		relative_position_id = WRK_worker_pw_machine_tools
+		cost = 3
+		prerequisite = { focus = WRK_worker_pw_machine_tools focus = WRK_worker_pw_transport_works }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_research_slot = 1
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_output
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_output
+					value = 0.08
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 65
+		}
+	}
+
+	focus = {
+		id = WRK_worker_pw_territorial_council
+		icon = GFX_focus_WRK_pw_territorial_council
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 20
+		y = 1
+		relative_position_id = WRK_worker_write_constitutional_guarantees
+		cost = 2
+		prerequisite = { focus = WRK_worker_write_constitutional_guarantees }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_west_wrk_offer_front_treaty
+			add_political_power = 75
+			add_stability = 0.03
+		}
+		ai_will_do = {
+			base = 22
+		}
+	}
+
+	focus = {
+		id = WRK_worker_pw_service_charter
+		icon = GFX_focus_WRK_pw_service_charter
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 0
+		y = 1
+		relative_position_id = WRK_worker_pw_territorial_council
+		cost = 2
+		prerequisite = { focus = WRK_worker_pw_territorial_council }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = WRK_pw_treaty_charter_tt
+			add_political_power = 50
+			add_war_support = 0.03
+		}
+		ai_will_do = {
+			base = 22
+		}
+	}
+
+	focus = {
+		id = WRK_worker_pw_local_charters
+		icon = GFX_focus_WRK_pw_local_charters
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = -1
+		y = 1
+		relative_position_id = WRK_worker_pw_service_charter
+		cost = 2
+		prerequisite = { focus = WRK_worker_pw_service_charter }
+		mutually_exclusive = { focus = WRK_worker_pw_procurement_audit }
+		mutually_exclusive = { focus = WRK_worker_pw_procurement_audit }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = WRK_pw_local_charters_tt
+			add_political_power = 50
+			add_stability = 0.05
+		}
+		ai_will_do = {
+			base = 22
+		}
+	}
+
+	focus = {
+		id = WRK_worker_pw_procurement_audit
+		icon = GFX_focus_WRK_pw_procurement_audit
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 1
+		y = 1
+		relative_position_id = WRK_worker_pw_service_charter
+		cost = 3
+		prerequisite = { focus = WRK_worker_pw_service_charter }
+		mutually_exclusive = { focus = WRK_worker_pw_local_charters }
+		mutually_exclusive = { focus = WRK_worker_pw_local_charters }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 100
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 8000
+				producer = WRK
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 600
+				producer = WRK
+			}
+		}
+		ai_will_do = {
+			base = 22
+		}
+	}
+
+	focus = {
+		id = WRK_worker_pw_treasury
+		icon = GFX_focus_WRK_pw_treasury
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 1
+		y = 1
+		relative_position_id = WRK_worker_pw_local_charters
+		cost = 3
+		prerequisite = { focus = WRK_worker_pw_local_charters focus = WRK_worker_pw_procurement_audit }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 100
+			add_stability = 0.05
+		}
+		ai_will_do = {
+			base = 22
+		}
+	}
+
+	focus = {
+		id = WRK_worker_pw_defence_compact
+		icon = GFX_focus_WRK_pw_defence_compact
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 0
+		y = 1
+		relative_position_id = WRK_worker_pw_treasury
+		cost = 3
+		prerequisite = { focus = WRK_worker_pw_treasury }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = WRK_pw_arm_front_partners_tt
+			hidden_effect = { ADISCORD_west_wrk_arm_front_partners = yes }
+			army_experience = 30
+			add_war_support = 0.04
+		}
+		ai_will_do = {
+			base = 22
+		}
+	}
+
+	focus = {
+		id = WRK_worker_pw_subject_charter
+		icon = GFX_focus_WRK_pw_subject_charter
+		search_filters = { FOCUS_FILTER_ANNEXATION }
+		x = 4
+		y = 1
+		relative_position_id = WRK_worker_pw_defence_compact
+		cost = 3
+		prerequisite = { focus = WRK_worker_pw_defence_compact }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 75
+			add_stability = 0.03
+			custom_effect_tooltip = WRK_pw_subject_charter_tt
+		}
+		ai_will_do = {
+			base = 22
+		}
+	}
+
+	focus = {
+		id = WRK_worker_pw_ebern_campaign
+		icon = GFX_focus_WRK_pw_ebern_campaign
+		search_filters = { FOCUS_FILTER_ANNEXATION }
+		x = 0
+		y = 1
+		relative_position_id = WRK_worker_pw_subject_charter
+		cost = 4
+		prerequisite = { focus = WRK_worker_pw_subject_charter }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+			custom_trigger_tooltip = {
+				tooltip = WRK_pw_no_other_war_tt
+				has_war = no
+			}
+			ADISCORD_vorkerland_pw_can_attack_ebern = yes
+		}
+		cancel_if_invalid = yes
+		bypass = { ADISCORD_vorkerland_pw_ebern_settled = yes }
+		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_vorkerland_pw_ebern_campaign
+		}
+		ai_will_do = {
+			base = 22
+			modifier = {
+				factor = 0
+				NOT = { has_global_flag = ADISCORD_west_hegemon_WRK }
+			}
+		}
+	}
+
+	focus = {
+		id = WRK_worker_pw_afrela_campaign
+		icon = GFX_focus_WRK_pw_afrela_campaign
+		search_filters = { FOCUS_FILTER_ANNEXATION }
+		x = 0
+		y = 1
+		relative_position_id = WRK_worker_pw_ebern_campaign
+		cost = 4
+		prerequisite = { focus = WRK_worker_pw_ebern_campaign }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+			custom_trigger_tooltip = {
+				tooltip = WRK_pw_no_other_war_tt
+				has_war = no
+			}
+			ADISCORD_vorkerland_pw_can_attack_afrela = yes
+		}
+		cancel_if_invalid = yes
+		bypass = { ADISCORD_vorkerland_pw_afrela_settled = yes }
+		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_vorkerland_pw_afrela_campaign
+		}
+		ai_will_do = {
+			base = 22
+			modifier = {
+				factor = 0
+				NOT = { has_global_flag = ADISCORD_west_hegemon_WRK }
+			}
+		}
+	}
+
+	focus = {
+		id = WRK_worker_pw_regional_settlement
+		icon = GFX_focus_WRK_pw_regional_settlement
+		search_filters = { FOCUS_FILTER_ANNEXATION }
+		x = 0
+		y = 1
+		relative_position_id = WRK_worker_pw_afrela_campaign
+		cost = 3
+		prerequisite = { focus = WRK_worker_pw_afrela_campaign }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_reconstruction_factory_site_tt
+				any_owned_state = {
+					is_core_of = ROOT
+					is_controlled_by = ROOT
+					free_building_slots = {
+						building = industrial_complex
+						size > 1
+						include_locked = yes
+					}
+				}
+			}
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+			ADISCORD_vorkerland_pw_ebern_settled = yes
+			ADISCORD_vorkerland_pw_afrela_settled = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 100
+			add_stability = 0.05
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = industrial_complex
+						size > 1
+						include_locked = yes
+					}
+				}
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {
+					type = industrial_complex
+					level = 2
+					instant_build = yes
+				}
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = {
+			base = 22
+		}
+	}
+
+	# Postwar joint: parallel recovery, army, industry and territorial policy.
+
+	focus = {
+		id = WRK_joint_pw_census
+		icon = GFX_focus_WRK_pw_census
+		search_filters = { FOCUS_FILTER_STABILITY }
+		x = 8
+		y = 1
+		relative_position_id = WRK_joint_convene_restoration_council
+		cost = 2
+		prerequisite = { focus = WRK_joint_convene_restoration_council }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_vorkerland_pw_rebuild_district
+			custom_effect_tooltip = WRK_pw_reconstruction_unlock_tt
+			add_political_power = 50
+			add_war_support = 0.05
+		}
+		ai_will_do = {
+			base = 22
+		}
+	}
+
+	focus = {
+		id = WRK_joint_pw_repair_crews
+		icon = GFX_focus_WRK_pw_repair_crews
+		search_filters = { FOCUS_FILTER_STABILITY }
+		x = 0
+		y = 1
+		relative_position_id = WRK_joint_pw_census
+		cost = 2
+		prerequisite = { focus = WRK_joint_pw_census }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = WRK_pw_reconstruction_slot_tt
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_repair
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_repair
+					value = 0.15
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 22
+		}
+	}
+
+	focus = {
+		id = WRK_joint_pw_food_reserve
+		icon = GFX_focus_WRK_pw_food_reserve
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		x = -1
+		y = 1
+		relative_position_id = WRK_joint_pw_repair_crews
+		cost = 2
+		prerequisite = { focus = WRK_joint_pw_repair_crews }
+		mutually_exclusive = { focus = WRK_joint_pw_veteran_housing }
+		mutually_exclusive = { focus = WRK_joint_pw_veteran_housing }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 40000
+			add_war_support = 0.05
+		}
+		ai_will_do = {
+			base = 22
+		}
+	}
+
+	focus = {
+		id = WRK_joint_pw_veteran_housing
+		icon = GFX_focus_WRK_pw_veteran_housing
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 1
+		y = 1
+		relative_position_id = WRK_joint_pw_repair_crews
+		cost = 3
+		prerequisite = { focus = WRK_joint_pw_repair_crews }
+		mutually_exclusive = { focus = WRK_joint_pw_food_reserve }
+		mutually_exclusive = { focus = WRK_joint_pw_food_reserve }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_reconstruction_factory_site_tt
+				any_owned_state = {
+					is_core_of = ROOT
+					is_controlled_by = ROOT
+					free_building_slots = {
+						building = industrial_complex
+						size > 2
+						include_locked = yes
+					}
+				}
+			}
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = industrial_complex
+						size > 2
+						include_locked = yes
+					}
+				}
+				add_extra_state_shared_building_slots = 3
+				add_building_construction = {
+					type = industrial_complex
+					level = 3
+					instant_build = yes
+				}
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = {
+			base = 22
+		}
+	}
+
+	focus = {
+		id = WRK_joint_pw_municipal_network
+		icon = GFX_focus_WRK_pw_municipal_network
+		search_filters = { FOCUS_FILTER_STABILITY }
+		x = 1
+		y = 1
+		relative_position_id = WRK_joint_pw_food_reserve
+		cost = 3
+		prerequisite = { focus = WRK_joint_pw_food_reserve focus = WRK_joint_pw_veteran_housing }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = WRK_pw_reconstruction_slot_tt
+			add_stability = 0.05
+			add_command_power = 20
+		}
+		ai_will_do = {
+			base = 22
+		}
+	}
+
+	focus = {
+		id = WRK_joint_pw_recovery_complete
+		icon = GFX_focus_WRK_pw_recovery_complete
+		search_filters = { FOCUS_FILTER_STABILITY }
+		x = 0
+		y = 1
+		relative_position_id = WRK_joint_pw_municipal_network
+		cost = 3
+		prerequisite = { focus = WRK_joint_pw_municipal_network }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_civil_building
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_construction
+					value = 0.05
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+			add_political_power = 50
+			add_command_power = 20
+		}
+		ai_will_do = {
+			base = 22
+		}
+	}
+
+	focus = {
+		id = WRK_joint_pw_veteran_cadres
+		icon = GFX_focus_WRK_pw_veteran_cadres
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 12
+		y = 1
+		relative_position_id = WRK_joint_convene_restoration_council
+		cost = 2
+		prerequisite = { focus = WRK_joint_convene_restoration_council }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 30000
+			army_experience = 25
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_cadres
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_recovery
+					value = 0.05
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 65
+		}
+	}
+
+	focus = {
+		id = WRK_joint_pw_rearmament
+		icon = GFX_focus_WRK_pw_rearmament
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 0
+		y = 1
+		relative_position_id = WRK_joint_pw_veteran_cadres
+		cost = 3
+		prerequisite = { focus = WRK_joint_pw_veteran_cadres }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 25000
+				producer = WRK
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 1000
+				producer = WRK
+			}
+		}
+		ai_will_do = {
+			base = 65
+		}
+	}
+
+	focus = {
+		id = WRK_joint_pw_officer_school
+		icon = GFX_focus_WRK_pw_officer_school
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 0
+		y = 1
+		relative_position_id = WRK_joint_pw_rearmament
+		cost = 2
+		prerequisite = { focus = WRK_joint_pw_rearmament }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 75
+			add_command_power = 20
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_officers
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_org
+					value = 0.04
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 65
+		}
+	}
+
+	focus = {
+		id = WRK_joint_pw_field_exercises
+		icon = GFX_focus_WRK_pw_field_exercises
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 0
+		y = 1
+		relative_position_id = WRK_joint_pw_officer_school
+		cost = 2
+		prerequisite = { focus = WRK_joint_pw_officer_school }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 50
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_attack
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_attack
+					value = 0.04
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 65
+		}
+	}
+
+	focus = {
+		id = WRK_joint_pw_motor_pool
+		icon = GFX_focus_WRK_pw_motor_pool
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = -1
+		y = 1
+		relative_position_id = WRK_joint_pw_field_exercises
+		cost = 3
+		prerequisite = { focus = WRK_joint_pw_field_exercises }
+		mutually_exclusive = { focus = WRK_joint_pw_artillery }
+		mutually_exclusive = { focus = WRK_joint_pw_artillery }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 1500
+				producer = WRK
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 500
+				producer = WRK
+			}
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_logistics
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_supply
+					value = -0.05
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 65
+		}
+	}
+
+	focus = {
+		id = WRK_joint_pw_artillery
+		icon = GFX_focus_WRK_pw_artillery
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 1
+		y = 1
+		relative_position_id = WRK_joint_pw_field_exercises
+		cost = 3
+		prerequisite = { focus = WRK_joint_pw_field_exercises }
+		mutually_exclusive = { focus = WRK_joint_pw_motor_pool }
+		mutually_exclusive = { focus = WRK_joint_pw_motor_pool }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 1500
+				producer = WRK
+			}
+			add_tech_bonus = {
+				bonus = 0.5
+				uses = 1
+				category = artillery
+			}
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_attack
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_attack
+					value = 0.04
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 65
+		}
+	}
+
+	focus = {
+		id = WRK_joint_pw_reserve
+		icon = GFX_focus_WRK_pw_reserve
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 1
+		y = 1
+		relative_position_id = WRK_joint_pw_motor_pool
+		cost = 3
+		prerequisite = { focus = WRK_joint_pw_motor_pool focus = WRK_joint_pw_artillery }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 40000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 10000
+				producer = WRK
+			}
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_training
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_training
+					value = -0.05
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 65
+		}
+	}
+
+	focus = {
+		id = WRK_joint_pw_army_reform
+		icon = GFX_focus_WRK_pw_army_reform
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 0
+		y = 1
+		relative_position_id = WRK_joint_pw_reserve
+		cost = 4
+		prerequisite = { focus = WRK_joint_pw_reserve }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+		available = {
+			has_completed_focus = WRK_joint_pw_production_board
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 75
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_joint_army
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_org
+					value = 0.03
+				}
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_attack
+					value = 0.05
+				}
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_defence
+					value = 0.02
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 65
+		}
+	}
+
+	focus = {
+		id = WRK_joint_pw_arsenals
+		icon = GFX_focus_WRK_pw_arsenals
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 16
+		y = 1
+		relative_position_id = WRK_joint_convene_restoration_council
+		cost = 3
+		prerequisite = { focus = WRK_joint_convene_restoration_council }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -9676,1131 +10872,8 @@ focus_tree = {
 	}
 
 	focus = {
-		id = WRK_worker_pw_machine_tools
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		x = 0
-		y = 1
-		relative_position_id = WRK_worker_pw_defence_cluster
-		cost = 3
-		prerequisite = { focus = WRK_worker_pw_defence_cluster }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_worker
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = WRK_reconstruction_factory_site_tt
-				any_owned_state = {
-					is_core_of = ROOT
-					is_controlled_by = ROOT
-					free_building_slots = {
-						building = industrial_complex
-						size > 0
-						include_locked = yes
-					}
-				}
-			}
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			random_owned_controlled_state = {
-				limit = {
-					is_core_of = ROOT
-					free_building_slots = {
-						building = industrial_complex
-						size > 0
-						include_locked = yes
-					}
-				}
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = industrial_complex
-					level = 1
-					instant_build = yes
-				}
-			}
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
-			effect_tooltip = {
-				add_ideas = ADISCORD_vorkerland_pw_delta_tools
-			}
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = {
-					var = ADISCORD_vorkerland_pw_efficiency
-					value = 0.05
-				}
-				ADISCORD_economy_mark_dirty = yes
-			}
-		}
-		ai_will_do = {
-			base = 65
-		}
-	}
-
-	focus = {
-		id = WRK_worker_pw_transport_works
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		x = 0
-		y = 1
-		relative_position_id = WRK_worker_pw_machine_tools
-		cost = 3
-		prerequisite = { focus = WRK_worker_pw_machine_tools }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_worker
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = WRK_reconstruction_factory_site_tt
-				any_owned_state = {
-					is_core_of = ROOT
-					is_controlled_by = ROOT
-					free_building_slots = {
-						building = arms_factory
-						size > 0
-						include_locked = yes
-					}
-				}
-			}
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			random_owned_controlled_state = {
-				limit = {
-					is_core_of = ROOT
-					free_building_slots = {
-						building = arms_factory
-						size > 0
-						include_locked = yes
-					}
-				}
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = arms_factory
-					level = 1
-					instant_build = yes
-				}
-			}
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
-			add_equipment_to_stockpile = {
-				type = motorized_equipment
-				amount = 200
-				producer = WRK
-			}
-		}
-		ai_will_do = {
-			base = 65
-		}
-	}
-
-	focus = {
-		id = WRK_worker_pw_production_board
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		x = 0
-		y = 1
-		relative_position_id = WRK_worker_pw_transport_works
-		cost = 3
-		prerequisite = { focus = WRK_worker_pw_transport_works }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_worker
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = ADISCORD_vorkerland_pw_delta_output
-			}
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = {
-					var = ADISCORD_vorkerland_pw_output
-					value = 0.08
-				}
-				ADISCORD_economy_mark_dirty = yes
-			}
-		}
-		ai_will_do = {
-			base = 65
-		}
-	}
-
-	focus = {
-		id = WRK_worker_pw_territorial_council
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		x = 20
-		y = 1
-		relative_position_id = WRK_worker_write_constitutional_guarantees
-		cost = 2
-		prerequisite = { focus = WRK_worker_write_constitutional_guarantees }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_worker
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_political_power = 75
-			add_stability = 0.03
-		}
-		ai_will_do = {
-			base = 22
-		}
-	}
-
-	focus = {
-		id = WRK_worker_pw_service_charter
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		x = 0
-		y = 1
-		relative_position_id = WRK_worker_pw_territorial_council
-		cost = 2
-		prerequisite = { focus = WRK_worker_pw_territorial_council }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_worker
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_political_power = 50
-			add_war_support = 0.04
-		}
-		ai_will_do = {
-			base = 22
-		}
-	}
-
-	focus = {
-		id = WRK_worker_pw_local_charters
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		x = 0
-		y = 1
-		relative_position_id = WRK_worker_pw_service_charter
-		cost = 2
-		prerequisite = { focus = WRK_worker_pw_service_charter }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_worker
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_stability = 0.04
-			add_political_power = 50
-		}
-		ai_will_do = {
-			base = 22
-		}
-	}
-
-	focus = {
-		id = WRK_worker_pw_procurement_audit
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		x = 0
-		y = 1
-		relative_position_id = WRK_worker_pw_local_charters
-		cost = 3
-		prerequisite = { focus = WRK_worker_pw_local_charters }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_worker
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_political_power = 75
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 150
-				producer = WRK
-			}
-		}
-		ai_will_do = {
-			base = 22
-		}
-	}
-
-	focus = {
-		id = WRK_worker_pw_treasury
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		x = 0
-		y = 1
-		relative_position_id = WRK_worker_pw_procurement_audit
-		cost = 3
-		prerequisite = { focus = WRK_worker_pw_procurement_audit }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_worker
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_political_power = 75
-			add_stability = 0.03
-		}
-		ai_will_do = {
-			base = 22
-		}
-	}
-
-	focus = {
-		id = WRK_worker_pw_defence_compact
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		x = 0
-		y = 1
-		relative_position_id = WRK_worker_pw_treasury
-		cost = 3
-		prerequisite = { focus = WRK_worker_pw_treasury }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_worker
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_stability = 0.03
-			add_war_support = 0.04
-			army_experience = 30
-		}
-		ai_will_do = {
-			base = 22
-		}
-	}
-
-	focus = {
-		id = WRK_worker_pw_subject_charter
-		icon = GFX_focus_WRK_worker_secure_social_guarantees
-		search_filters = { FOCUS_FILTER_ANNEXATION }
-		x = 4
-		y = 1
-		relative_position_id = WRK_worker_pw_defence_compact
-		cost = 3
-		prerequisite = { focus = WRK_worker_pw_defence_compact }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_worker
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_political_power = 75
-			custom_effect_tooltip = WRK_pw_subject_charter_tt
-		}
-		ai_will_do = {
-			base = 22
-		}
-	}
-
-	focus = {
-		id = WRK_worker_pw_ebern_campaign
-		icon = GFX_focus_WRK_worker_secure_social_guarantees
-		search_filters = { FOCUS_FILTER_ANNEXATION }
-		x = 0
-		y = 1
-		relative_position_id = WRK_worker_pw_subject_charter
-		cost = 4
-		prerequisite = { focus = WRK_worker_pw_subject_charter }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_worker
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-			custom_trigger_tooltip = {
-				tooltip = WRK_pw_no_other_war_tt
-				has_war = no
-			}
-			ADISCORD_vorkerland_pw_can_attack_ebern = yes
-		}
-		cancel_if_invalid = yes
-		bypass = { ADISCORD_vorkerland_pw_ebern_settled = yes }
-		completion_reward = {
-			unlock_decision_tooltip = ADISCORD_vorkerland_pw_ebern_campaign
-		}
-		ai_will_do = {
-			base = 22
-			modifier = {
-				factor = 0
-				NOT = { has_global_flag = ADISCORD_west_hegemon_WRK }
-			}
-		}
-	}
-
-	focus = {
-		id = WRK_worker_pw_afrela_campaign
-		icon = GFX_focus_WRK_worker_secure_social_guarantees
-		search_filters = { FOCUS_FILTER_ANNEXATION }
-		x = 0
-		y = 1
-		relative_position_id = WRK_worker_pw_ebern_campaign
-		cost = 4
-		prerequisite = { focus = WRK_worker_pw_ebern_campaign }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_worker
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-			custom_trigger_tooltip = {
-				tooltip = WRK_pw_no_other_war_tt
-				has_war = no
-			}
-			ADISCORD_vorkerland_pw_can_attack_afrela = yes
-		}
-		cancel_if_invalid = yes
-		bypass = { ADISCORD_vorkerland_pw_afrela_settled = yes }
-		completion_reward = {
-			unlock_decision_tooltip = ADISCORD_vorkerland_pw_afrela_campaign
-		}
-		ai_will_do = {
-			base = 22
-			modifier = {
-				factor = 0
-				NOT = { has_global_flag = ADISCORD_west_hegemon_WRK }
-			}
-		}
-	}
-
-	focus = {
-		id = WRK_worker_pw_regional_settlement
-		icon = GFX_focus_WRK_worker_secure_social_guarantees
-		search_filters = { FOCUS_FILTER_ANNEXATION }
-		x = 0
-		y = 1
-		relative_position_id = WRK_worker_pw_afrela_campaign
-		cost = 3
-		prerequisite = { focus = WRK_worker_pw_afrela_campaign }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_worker
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = WRK_reconstruction_factory_site_tt
-				any_owned_state = {
-					is_core_of = ROOT
-					is_controlled_by = ROOT
-					free_building_slots = {
-						building = industrial_complex
-						size > 0
-						include_locked = yes
-					}
-				}
-			}
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-			ADISCORD_vorkerland_pw_ebern_settled = yes
-			ADISCORD_vorkerland_pw_afrela_settled = yes
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_political_power = 100
-			add_stability = 0.04
-			random_owned_controlled_state = {
-				limit = {
-					is_core_of = ROOT
-					free_building_slots = {
-						building = industrial_complex
-						size > 0
-						include_locked = yes
-					}
-				}
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = industrial_complex
-					level = 1
-					instant_build = yes
-				}
-			}
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
-		}
-		ai_will_do = {
-			base = 22
-		}
-	}
-
-	# Postwar joint: parallel recovery, army, industry and territorial policy.
-
-	focus = {
-		id = WRK_joint_pw_census
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
-		search_filters = { FOCUS_FILTER_STABILITY }
-		x = 8
-		y = 1
-		relative_position_id = WRK_joint_convene_restoration_council
-		cost = 2
-		prerequisite = { focus = WRK_joint_convene_restoration_council }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_political_power = 50
-			add_stability = 0.03
-		}
-		ai_will_do = {
-			base = 22
-		}
-	}
-
-	focus = {
-		id = WRK_joint_pw_repair_crews
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
-		search_filters = { FOCUS_FILTER_STABILITY }
-		x = 0
-		y = 1
-		relative_position_id = WRK_joint_pw_census
-		cost = 2
-		prerequisite = { focus = WRK_joint_pw_census }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 150
-				producer = WRK
-			}
-			effect_tooltip = {
-				add_ideas = ADISCORD_vorkerland_pw_delta_repair
-			}
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = {
-					var = ADISCORD_vorkerland_pw_repair
-					value = 0.15
-				}
-				ADISCORD_economy_mark_dirty = yes
-			}
-		}
-		ai_will_do = {
-			base = 22
-		}
-	}
-
-	focus = {
-		id = WRK_joint_pw_food_reserve
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
-		search_filters = { FOCUS_FILTER_STABILITY }
-		x = 0
-		y = 1
-		relative_position_id = WRK_joint_pw_repair_crews
-		cost = 2
-		prerequisite = { focus = WRK_joint_pw_repair_crews }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_stability = 0.03
-			add_war_support = 0.03
-		}
-		ai_will_do = {
-			base = 22
-		}
-	}
-
-	focus = {
-		id = WRK_joint_pw_veteran_housing
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
-		search_filters = { FOCUS_FILTER_STABILITY }
-		x = 0
-		y = 1
-		relative_position_id = WRK_joint_pw_food_reserve
-		cost = 3
-		prerequisite = { focus = WRK_joint_pw_food_reserve }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = WRK_reconstruction_factory_site_tt
-				any_owned_state = {
-					is_core_of = ROOT
-					is_controlled_by = ROOT
-					free_building_slots = {
-						building = industrial_complex
-						size > 0
-						include_locked = yes
-					}
-				}
-			}
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			random_owned_controlled_state = {
-				limit = {
-					is_core_of = ROOT
-					free_building_slots = {
-						building = industrial_complex
-						size > 0
-						include_locked = yes
-					}
-				}
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = industrial_complex
-					level = 1
-					instant_build = yes
-				}
-			}
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
-		}
-		ai_will_do = {
-			base = 22
-		}
-	}
-
-	focus = {
-		id = WRK_joint_pw_municipal_network
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
-		search_filters = { FOCUS_FILTER_STABILITY }
-		x = 0
-		y = 1
-		relative_position_id = WRK_joint_pw_veteran_housing
-		cost = 3
-		prerequisite = { focus = WRK_joint_pw_veteran_housing }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_political_power = 75
-			add_stability = 0.04
-		}
-		ai_will_do = {
-			base = 22
-		}
-	}
-
-	focus = {
-		id = WRK_joint_pw_recovery_complete
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
-		search_filters = { FOCUS_FILTER_STABILITY }
-		x = 0
-		y = 1
-		relative_position_id = WRK_joint_pw_municipal_network
-		cost = 3
-		prerequisite = { focus = WRK_joint_pw_municipal_network }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = ADISCORD_vorkerland_pw_delta_civil_building
-			}
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = {
-					var = ADISCORD_vorkerland_pw_construction
-					value = 0.05
-				}
-				ADISCORD_economy_mark_dirty = yes
-			}
-			add_stability = 0.03
-		}
-		ai_will_do = {
-			base = 22
-		}
-	}
-
-	focus = {
-		id = WRK_joint_pw_veteran_cadres
-		icon = GFX_focus_WRK_joint_west_frontier_commands
-		search_filters = { FOCUS_FILTER_ARMY_XP }
-		x = 12
-		y = 1
-		relative_position_id = WRK_joint_convene_restoration_council
-		cost = 2
-		prerequisite = { focus = WRK_joint_convene_restoration_council }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_manpower = 16000
-			effect_tooltip = {
-				add_ideas = ADISCORD_vorkerland_pw_delta_cadres
-			}
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = {
-					var = ADISCORD_vorkerland_pw_recovery
-					value = 0.05
-				}
-				ADISCORD_economy_mark_dirty = yes
-			}
-		}
-		ai_will_do = {
-			base = 65
-		}
-	}
-
-	focus = {
-		id = WRK_joint_pw_rearmament
-		icon = GFX_focus_WRK_joint_west_frontier_commands
-		search_filters = { FOCUS_FILTER_ARMY_XP }
-		x = 0
-		y = 1
-		relative_position_id = WRK_joint_pw_veteran_cadres
-		cost = 3
-		prerequisite = { focus = WRK_joint_pw_veteran_cadres }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = 12000
-				producer = WRK
-			}
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 200
-				producer = WRK
-			}
-		}
-		ai_will_do = {
-			base = 65
-		}
-	}
-
-	focus = {
-		id = WRK_joint_pw_officer_school
-		icon = GFX_focus_WRK_joint_west_frontier_commands
-		search_filters = { FOCUS_FILTER_ARMY_XP }
-		x = 0
-		y = 1
-		relative_position_id = WRK_joint_pw_rearmament
-		cost = 2
-		prerequisite = { focus = WRK_joint_pw_rearmament }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			army_experience = 35
-			effect_tooltip = {
-				add_ideas = ADISCORD_vorkerland_pw_delta_officers
-			}
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = {
-					var = ADISCORD_vorkerland_pw_org
-					value = 0.04
-				}
-				ADISCORD_economy_mark_dirty = yes
-			}
-		}
-		ai_will_do = {
-			base = 65
-		}
-	}
-
-	focus = {
-		id = WRK_joint_pw_field_exercises
-		icon = GFX_focus_WRK_joint_west_frontier_commands
-		search_filters = { FOCUS_FILTER_ARMY_XP }
-		x = 0
-		y = 1
-		relative_position_id = WRK_joint_pw_officer_school
-		cost = 2
-		prerequisite = { focus = WRK_joint_pw_officer_school }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			army_experience = 25
-			effect_tooltip = {
-				add_ideas = ADISCORD_vorkerland_pw_delta_exercises
-			}
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = {
-					var = ADISCORD_vorkerland_pw_defence
-					value = 0.04
-				}
-				ADISCORD_economy_mark_dirty = yes
-			}
-		}
-		ai_will_do = {
-			base = 65
-		}
-	}
-
-	focus = {
-		id = WRK_joint_pw_motor_pool
-		icon = GFX_focus_WRK_joint_west_frontier_commands
-		search_filters = { FOCUS_FILTER_ARMY_XP }
-		x = 0
-		y = 1
-		relative_position_id = WRK_joint_pw_field_exercises
-		cost = 3
-		prerequisite = { focus = WRK_joint_pw_field_exercises }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = motorized_equipment
-				amount = 500
-				producer = WRK
-			}
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 250
-				producer = WRK
-			}
-			effect_tooltip = {
-				add_ideas = ADISCORD_vorkerland_pw_delta_logistics
-			}
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = {
-					var = ADISCORD_vorkerland_pw_supply
-					value = -0.05
-				}
-				ADISCORD_economy_mark_dirty = yes
-			}
-		}
-		ai_will_do = {
-			base = 65
-		}
-	}
-
-	focus = {
-		id = WRK_joint_pw_artillery
-		icon = GFX_focus_WRK_joint_west_frontier_commands
-		search_filters = { FOCUS_FILTER_ARMY_XP }
-		x = 0
-		y = 1
-		relative_position_id = WRK_joint_pw_motor_pool
-		cost = 3
-		prerequisite = { focus = WRK_joint_pw_motor_pool }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = artillery_equipment
-				amount = 600
-				producer = WRK
-			}
-			add_tech_bonus = {
-				bonus = 0.5
-				uses = 1
-				category = artillery
-			}
-		}
-		ai_will_do = {
-			base = 65
-		}
-	}
-
-	focus = {
-		id = WRK_joint_pw_reserve
-		icon = GFX_focus_WRK_joint_west_frontier_commands
-		search_filters = { FOCUS_FILTER_ARMY_XP }
-		x = 0
-		y = 1
-		relative_position_id = WRK_joint_pw_artillery
-		cost = 3
-		prerequisite = { focus = WRK_joint_pw_artillery }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_manpower = 14000
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = 3000
-				producer = WRK
-			}
-			effect_tooltip = {
-				add_ideas = ADISCORD_vorkerland_pw_delta_training
-			}
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = {
-					var = ADISCORD_vorkerland_pw_training
-					value = -0.05
-				}
-				ADISCORD_economy_mark_dirty = yes
-			}
-		}
-		ai_will_do = {
-			base = 65
-		}
-	}
-
-	focus = {
-		id = WRK_joint_pw_army_reform
-		icon = GFX_focus_WRK_joint_west_frontier_commands
-		search_filters = { FOCUS_FILTER_ARMY_XP }
-		x = 0
-		y = 1
-		relative_position_id = WRK_joint_pw_reserve
-		cost = 4
-		prerequisite = { focus = WRK_joint_pw_reserve }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			has_completed_focus = WRK_joint_pw_production_board
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = ADISCORD_vorkerland_pw_delta_joint_army
-			}
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = {
-					var = ADISCORD_vorkerland_pw_org
-					value = 0.03
-				}
-				add_to_variable = {
-					var = ADISCORD_vorkerland_pw_attack
-					value = 0.05
-				}
-				add_to_variable = {
-					var = ADISCORD_vorkerland_pw_defence
-					value = 0.02
-				}
-				ADISCORD_economy_mark_dirty = yes
-			}
-		}
-		ai_will_do = {
-			base = 65
-		}
-	}
-
-	focus = {
-		id = WRK_joint_pw_arsenals
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		x = 16
-		y = 1
-		relative_position_id = WRK_joint_convene_restoration_council
-		cost = 3
-		prerequisite = { focus = WRK_joint_convene_restoration_council }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = WRK_reconstruction_factory_site_tt
-				any_owned_state = {
-					is_core_of = ROOT
-					is_controlled_by = ROOT
-					free_building_slots = {
-						building = arms_factory
-						size > 0
-						include_locked = yes
-					}
-				}
-			}
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			random_owned_controlled_state = {
-				limit = {
-					is_core_of = ROOT
-					free_building_slots = {
-						building = arms_factory
-						size > 0
-						include_locked = yes
-					}
-				}
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = arms_factory
-					level = 1
-					instant_build = yes
-				}
-			}
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
-		}
-		ai_will_do = {
-			base = 65
-		}
-	}
-
-	focus = {
 		id = WRK_joint_pw_standards
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
+		icon = GFX_focus_WRK_pw_standards
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 0
 		y = 1
@@ -10843,13 +10916,140 @@ focus_tree = {
 
 	focus = {
 		id = WRK_joint_pw_defence_cluster
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
+		icon = GFX_focus_WRK_pw_defence_cluster
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 0
 		y = 1
 		relative_position_id = WRK_joint_pw_standards
 		cost = 3
 		prerequisite = { focus = WRK_joint_pw_standards }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_reconstruction_factory_site_tt
+				any_owned_state = {
+					is_core_of = ROOT
+					is_controlled_by = ROOT
+					free_building_slots = {
+						building = arms_factory
+						size > 2
+						include_locked = yes
+					}
+				}
+			}
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = arms_factory
+						size > 2
+						include_locked = yes
+					}
+				}
+				add_extra_state_shared_building_slots = 3
+				add_building_construction = {
+					type = arms_factory
+					level = 3
+					instant_build = yes
+				}
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = {
+			base = 65
+		}
+	}
+
+	focus = {
+		id = WRK_joint_pw_machine_tools
+		icon = GFX_focus_WRK_pw_machine_tools
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = -1
+		y = 1
+		relative_position_id = WRK_joint_pw_defence_cluster
+		cost = 3
+		prerequisite = { focus = WRK_joint_pw_defence_cluster }
+		mutually_exclusive = { focus = WRK_joint_pw_transport_works }
+		mutually_exclusive = { focus = WRK_joint_pw_transport_works }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_reconstruction_factory_site_tt
+				any_owned_state = {
+					is_core_of = ROOT
+					is_controlled_by = ROOT
+					free_building_slots = {
+						building = industrial_complex
+						size > 2
+						include_locked = yes
+					}
+				}
+			}
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = industrial_complex
+						size > 2
+						include_locked = yes
+					}
+				}
+				add_extra_state_shared_building_slots = 3
+				add_building_construction = {
+					type = industrial_complex
+					level = 3
+					instant_build = yes
+				}
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_tools
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_efficiency
+					value = 0.05
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 65
+		}
+	}
+
+	focus = {
+		id = WRK_joint_pw_transport_works
+		icon = GFX_focus_WRK_pw_transport_works
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 1
+		y = 1
+		relative_position_id = WRK_joint_pw_defence_cluster
+		cost = 3
+		prerequisite = { focus = WRK_joint_pw_defence_cluster }
+		mutually_exclusive = { focus = WRK_joint_pw_machine_tools }
+		mutually_exclusive = { focus = WRK_joint_pw_machine_tools }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -10891,70 +11091,19 @@ focus_tree = {
 				}
 			}
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
-		}
-		ai_will_do = {
-			base = 65
-		}
-	}
-
-	focus = {
-		id = WRK_joint_pw_machine_tools
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		x = 0
-		y = 1
-		relative_position_id = WRK_joint_pw_defence_cluster
-		cost = 3
-		prerequisite = { focus = WRK_joint_pw_defence_cluster }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = WRK_reconstruction_factory_site_tt
-				any_owned_state = {
-					is_core_of = ROOT
-					is_controlled_by = ROOT
-					free_building_slots = {
-						building = industrial_complex
-						size > 0
-						include_locked = yes
-					}
-				}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 800
+				producer = WRK
 			}
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			random_owned_controlled_state = {
-				limit = {
-					is_core_of = ROOT
-					free_building_slots = {
-						building = industrial_complex
-						size > 0
-						include_locked = yes
-					}
-				}
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = industrial_complex
-					level = 1
-					instant_build = yes
-				}
-			}
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			effect_tooltip = {
-				add_ideas = ADISCORD_vorkerland_pw_delta_tools
+				add_ideas = ADISCORD_vorkerland_pw_delta_logistics
 			}
 			hidden_effect = {
 				ADISCORD_vorkerland_pw_ensure_institutions = yes
 				add_to_variable = {
-					var = ADISCORD_vorkerland_pw_efficiency
-					value = 0.05
+					var = ADISCORD_vorkerland_pw_supply
+					value = -0.05
 				}
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -10965,75 +11114,14 @@ focus_tree = {
 	}
 
 	focus = {
-		id = WRK_joint_pw_transport_works
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		x = 0
+		id = WRK_joint_pw_production_board
+		icon = GFX_focus_WRK_pw_production_board
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = 1
 		y = 1
 		relative_position_id = WRK_joint_pw_machine_tools
 		cost = 3
-		prerequisite = { focus = WRK_joint_pw_machine_tools }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_joint
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = WRK_reconstruction_factory_site_tt
-				any_owned_state = {
-					is_core_of = ROOT
-					is_controlled_by = ROOT
-					free_building_slots = {
-						building = arms_factory
-						size > 0
-						include_locked = yes
-					}
-				}
-			}
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			random_owned_controlled_state = {
-				limit = {
-					is_core_of = ROOT
-					free_building_slots = {
-						building = arms_factory
-						size > 0
-						include_locked = yes
-					}
-				}
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = arms_factory
-					level = 1
-					instant_build = yes
-				}
-			}
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
-			add_equipment_to_stockpile = {
-				type = motorized_equipment
-				amount = 200
-				producer = WRK
-			}
-		}
-		ai_will_do = {
-			base = 65
-		}
-	}
-
-	focus = {
-		id = WRK_joint_pw_production_board
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		x = 0
-		y = 1
-		relative_position_id = WRK_joint_pw_transport_works
-		cost = 3
-		prerequisite = { focus = WRK_joint_pw_transport_works }
+		prerequisite = { focus = WRK_joint_pw_machine_tools focus = WRK_joint_pw_transport_works }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -11046,6 +11134,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			add_research_slot = 1
 			effect_tooltip = {
 				add_ideas = ADISCORD_vorkerland_pw_delta_output
 			}
@@ -11065,7 +11154,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_joint_pw_territorial_council
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
+		icon = GFX_focus_WRK_pw_territorial_council
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 20
 		y = 1
@@ -11084,8 +11173,9 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_west_wrk_offer_front_treaty
 			add_political_power = 75
-			add_stability = 0.03
+			add_war_support = 0.03
 		}
 		ai_will_do = {
 			base = 22
@@ -11094,7 +11184,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_joint_pw_service_charter
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
+		icon = GFX_focus_WRK_pw_service_charter
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 0
 		y = 1
@@ -11113,8 +11203,9 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = WRK_pw_treaty_charter_tt
 			add_political_power = 50
-			add_war_support = 0.04
+			add_war_support = 0.03
 		}
 		ai_will_do = {
 			base = 22
@@ -11123,13 +11214,15 @@ focus_tree = {
 
 	focus = {
 		id = WRK_joint_pw_local_charters
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
+		icon = GFX_focus_WRK_pw_local_charters
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		x = 0
+		x = -1
 		y = 1
 		relative_position_id = WRK_joint_pw_service_charter
 		cost = 2
 		prerequisite = { focus = WRK_joint_pw_service_charter }
+		mutually_exclusive = { focus = WRK_joint_pw_procurement_audit }
+		mutually_exclusive = { focus = WRK_joint_pw_procurement_audit }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -11142,8 +11235,9 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_stability = 0.04
+			custom_effect_tooltip = WRK_pw_local_charters_tt
 			add_political_power = 50
+			add_stability = 0.05
 		}
 		ai_will_do = {
 			base = 22
@@ -11152,13 +11246,15 @@ focus_tree = {
 
 	focus = {
 		id = WRK_joint_pw_procurement_audit
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
+		icon = GFX_focus_WRK_pw_procurement_audit
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		x = 0
+		x = 1
 		y = 1
-		relative_position_id = WRK_joint_pw_local_charters
+		relative_position_id = WRK_joint_pw_service_charter
 		cost = 3
-		prerequisite = { focus = WRK_joint_pw_local_charters }
+		prerequisite = { focus = WRK_joint_pw_service_charter }
+		mutually_exclusive = { focus = WRK_joint_pw_local_charters }
+		mutually_exclusive = { focus = WRK_joint_pw_local_charters }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -11171,10 +11267,15 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 75
+			add_political_power = 100
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 8000
+				producer = WRK
+			}
 			add_equipment_to_stockpile = {
 				type = support_equipment
-				amount = 150
+				amount = 600
 				producer = WRK
 			}
 		}
@@ -11185,13 +11286,13 @@ focus_tree = {
 
 	focus = {
 		id = WRK_joint_pw_treasury
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
+		icon = GFX_focus_WRK_pw_treasury
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		x = 0
+		x = 1
 		y = 1
-		relative_position_id = WRK_joint_pw_procurement_audit
+		relative_position_id = WRK_joint_pw_local_charters
 		cost = 3
-		prerequisite = { focus = WRK_joint_pw_procurement_audit }
+		prerequisite = { focus = WRK_joint_pw_local_charters focus = WRK_joint_pw_procurement_audit }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -11204,8 +11305,8 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 75
-			add_stability = 0.03
+			add_political_power = 100
+			add_stability = 0.05
 		}
 		ai_will_do = {
 			base = 22
@@ -11214,7 +11315,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_joint_pw_defence_compact
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
+		icon = GFX_focus_WRK_pw_defence_compact
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 0
 		y = 1
@@ -11233,9 +11334,10 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_stability = 0.03
-			add_war_support = 0.04
+			custom_effect_tooltip = WRK_pw_arm_front_partners_tt
+			hidden_effect = { ADISCORD_west_wrk_arm_front_partners = yes }
 			army_experience = 30
+			add_war_support = 0.04
 		}
 		ai_will_do = {
 			base = 22
@@ -11244,7 +11346,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_joint_pw_subject_charter
-		icon = GFX_focus_WRK_worker_secure_social_guarantees
+		icon = GFX_focus_WRK_pw_subject_charter
 		search_filters = { FOCUS_FILTER_ANNEXATION }
 		x = 4
 		y = 1
@@ -11264,6 +11366,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_political_power = 75
+			add_stability = 0.03
 			custom_effect_tooltip = WRK_pw_subject_charter_tt
 		}
 		ai_will_do = {
@@ -11273,7 +11376,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_joint_pw_ebern_campaign
-		icon = GFX_focus_WRK_worker_secure_social_guarantees
+		icon = GFX_focus_WRK_pw_ebern_campaign
 		search_filters = { FOCUS_FILTER_ANNEXATION }
 		x = 0
 		y = 1
@@ -11311,7 +11414,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_joint_pw_afrela_campaign
-		icon = GFX_focus_WRK_worker_secure_social_guarantees
+		icon = GFX_focus_WRK_pw_afrela_campaign
 		search_filters = { FOCUS_FILTER_ANNEXATION }
 		x = 0
 		y = 1
@@ -11349,7 +11452,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_joint_pw_regional_settlement
-		icon = GFX_focus_WRK_worker_secure_social_guarantees
+		icon = GFX_focus_WRK_pw_regional_settlement
 		search_filters = { FOCUS_FILTER_ANNEXATION }
 		x = 0
 		y = 1
@@ -11369,7 +11472,7 @@ focus_tree = {
 					is_controlled_by = ROOT
 					free_building_slots = {
 						building = industrial_complex
-						size > 0
+						size > 1
 						include_locked = yes
 					}
 				}
@@ -11383,20 +11486,20 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_political_power = 100
-			add_stability = 0.04
+			add_stability = 0.05
 			random_owned_controlled_state = {
 				limit = {
 					is_core_of = ROOT
 					free_building_slots = {
 						building = industrial_complex
-						size > 0
+						size > 1
 						include_locked = yes
 					}
 				}
-				add_extra_state_shared_building_slots = 1
+				add_extra_state_shared_building_slots = 2
 				add_building_construction = {
 					type = industrial_complex
-					level = 1
+					level = 2
 					instant_build = yes
 				}
 			}
@@ -11411,7 +11514,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_census
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
+		icon = GFX_focus_WRK_pw_census
 		search_filters = { FOCUS_FILTER_STABILITY }
 		x = 8
 		y = 1
@@ -11430,8 +11533,9 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 50
-			add_stability = 0.03
+			unlock_decision_tooltip = ADISCORD_vorkerland_pw_rebuild_district
+			custom_effect_tooltip = WRK_pw_reconstruction_unlock_tt
+			add_political_power = 100
 		}
 		ai_will_do = {
 			base = 22
@@ -11440,7 +11544,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_repair_crews
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
+		icon = GFX_focus_WRK_pw_repair_crews
 		search_filters = { FOCUS_FILTER_STABILITY }
 		x = 0
 		y = 1
@@ -11459,19 +11563,20 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 150
-				producer = WRK
-			}
+			custom_effect_tooltip = WRK_pw_reconstruction_slot_tt
 			effect_tooltip = {
 				add_ideas = ADISCORD_vorkerland_pw_delta_repair
+				add_ideas = ADISCORD_vorkerland_pw_delta_civil_building
 			}
 			hidden_effect = {
 				ADISCORD_vorkerland_pw_ensure_institutions = yes
 				add_to_variable = {
 					var = ADISCORD_vorkerland_pw_repair
 					value = 0.15
+				}
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_construction
+					value = 0.05
 				}
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -11483,13 +11588,15 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_food_reserve
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
-		search_filters = { FOCUS_FILTER_STABILITY }
-		x = 0
+		icon = GFX_focus_WRK_pw_food_reserve
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		x = -1
 		y = 1
 		relative_position_id = WRK_utilitarian_pw_repair_crews
 		cost = 2
 		prerequisite = { focus = WRK_utilitarian_pw_repair_crews }
+		mutually_exclusive = { focus = WRK_utilitarian_pw_veteran_housing }
+		mutually_exclusive = { focus = WRK_utilitarian_pw_veteran_housing }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -11502,8 +11609,8 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_stability = 0.03
-			add_war_support = 0.03
+			add_manpower = 25000
+			add_stability = 0.05
 		}
 		ai_will_do = {
 			base = 22
@@ -11512,13 +11619,15 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_veteran_housing
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
-		search_filters = { FOCUS_FILTER_STABILITY }
-		x = 0
+		icon = GFX_focus_WRK_pw_veteran_housing
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 1
 		y = 1
-		relative_position_id = WRK_utilitarian_pw_food_reserve
+		relative_position_id = WRK_utilitarian_pw_repair_crews
 		cost = 3
-		prerequisite = { focus = WRK_utilitarian_pw_food_reserve }
+		prerequisite = { focus = WRK_utilitarian_pw_repair_crews }
+		mutually_exclusive = { focus = WRK_utilitarian_pw_food_reserve }
+		mutually_exclusive = { focus = WRK_utilitarian_pw_food_reserve }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -11532,7 +11641,7 @@ focus_tree = {
 					is_controlled_by = ROOT
 					free_building_slots = {
 						building = industrial_complex
-						size > 0
+						size > 2
 						include_locked = yes
 					}
 				}
@@ -11548,14 +11657,14 @@ focus_tree = {
 					is_core_of = ROOT
 					free_building_slots = {
 						building = industrial_complex
-						size > 0
+						size > 2
 						include_locked = yes
 					}
 				}
-				add_extra_state_shared_building_slots = 1
+				add_extra_state_shared_building_slots = 3
 				add_building_construction = {
 					type = industrial_complex
-					level = 1
+					level = 3
 					instant_build = yes
 				}
 			}
@@ -11568,13 +11677,13 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_municipal_network
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
+		icon = GFX_focus_WRK_pw_municipal_network
 		search_filters = { FOCUS_FILTER_STABILITY }
-		x = 0
+		x = 1
 		y = 1
-		relative_position_id = WRK_utilitarian_pw_veteran_housing
+		relative_position_id = WRK_utilitarian_pw_food_reserve
 		cost = 3
-		prerequisite = { focus = WRK_utilitarian_pw_veteran_housing }
+		prerequisite = { focus = WRK_utilitarian_pw_food_reserve focus = WRK_utilitarian_pw_veteran_housing }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -11587,8 +11696,19 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 75
-			add_stability = 0.04
+			custom_effect_tooltip = WRK_pw_reconstruction_slot_tt
+			add_stability = 0.05
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_civil_building
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_construction
+					value = 0.05
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
 		}
 		ai_will_do = {
 			base = 22
@@ -11597,7 +11717,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_recovery_complete
-		icon = GFX_focus_WRK_worker_reopen_cooperative_workshops
+		icon = GFX_focus_WRK_pw_recovery_complete
 		search_filters = { FOCUS_FILTER_STABILITY }
 		x = 0
 		y = 1
@@ -11618,6 +11738,7 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = {
 				add_ideas = ADISCORD_vorkerland_pw_delta_civil_building
+				add_ideas = ADISCORD_vorkerland_pw_delta_tools
 			}
 			hidden_effect = {
 				ADISCORD_vorkerland_pw_ensure_institutions = yes
@@ -11625,9 +11746,13 @@ focus_tree = {
 					var = ADISCORD_vorkerland_pw_construction
 					value = 0.05
 				}
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_efficiency
+					value = 0.05
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
-			add_stability = 0.03
+			add_political_power = 50
 		}
 		ai_will_do = {
 			base = 22
@@ -11636,7 +11761,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_veteran_cadres
-		icon = GFX_focus_WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_pw_veteran_cadres
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = 12
 		y = 1
@@ -11655,15 +11780,15 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_manpower = 10000
+			add_manpower = 20000
 			effect_tooltip = {
-				add_ideas = ADISCORD_vorkerland_pw_delta_cadres
+				add_ideas = ADISCORD_vorkerland_pw_delta_training
 			}
 			hidden_effect = {
 				ADISCORD_vorkerland_pw_ensure_institutions = yes
 				add_to_variable = {
-					var = ADISCORD_vorkerland_pw_recovery
-					value = 0.05
+					var = ADISCORD_vorkerland_pw_training
+					value = -0.05
 				}
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -11675,7 +11800,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_rearmament
-		icon = GFX_focus_WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_pw_rearmament
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = 0
 		y = 1
@@ -11696,12 +11821,17 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 6000
+				amount = 15000
 				producer = WRK
 			}
 			add_equipment_to_stockpile = {
 				type = support_equipment
-				amount = 400
+				amount = 1000
+				producer = WRK
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 600
 				producer = WRK
 			}
 		}
@@ -11712,7 +11842,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_officer_school
-		icon = GFX_focus_WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_pw_officer_school
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = 0
 		y = 1
@@ -11731,7 +11861,8 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			army_experience = 35
+			army_experience = 50
+			add_command_power = 20
 			effect_tooltip = {
 				add_ideas = ADISCORD_vorkerland_pw_delta_officers
 			}
@@ -11751,7 +11882,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_field_exercises
-		icon = GFX_focus_WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_pw_field_exercises
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = 0
 		y = 1
@@ -11770,7 +11901,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			army_experience = 25
+			army_experience = 40
 			effect_tooltip = {
 				add_ideas = ADISCORD_vorkerland_pw_delta_exercises
 			}
@@ -11790,13 +11921,15 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_motor_pool
-		icon = GFX_focus_WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_pw_motor_pool
 		search_filters = { FOCUS_FILTER_ARMY_XP }
-		x = 0
+		x = -1
 		y = 1
 		relative_position_id = WRK_utilitarian_pw_field_exercises
 		cost = 3
 		prerequisite = { focus = WRK_utilitarian_pw_field_exercises }
+		mutually_exclusive = { focus = WRK_utilitarian_pw_artillery }
+		mutually_exclusive = { focus = WRK_utilitarian_pw_artillery }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -11811,12 +11944,12 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = motorized_equipment
-				amount = 700
+				amount = 1500
 				producer = WRK
 			}
 			add_equipment_to_stockpile = {
 				type = support_equipment
-				amount = 350
+				amount = 500
 				producer = WRK
 			}
 			effect_tooltip = {
@@ -11838,13 +11971,15 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_artillery
-		icon = GFX_focus_WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_pw_artillery
 		search_filters = { FOCUS_FILTER_ARMY_XP }
-		x = 0
+		x = 1
 		y = 1
-		relative_position_id = WRK_utilitarian_pw_motor_pool
+		relative_position_id = WRK_utilitarian_pw_field_exercises
 		cost = 3
-		prerequisite = { focus = WRK_utilitarian_pw_motor_pool }
+		prerequisite = { focus = WRK_utilitarian_pw_field_exercises }
+		mutually_exclusive = { focus = WRK_utilitarian_pw_motor_pool }
+		mutually_exclusive = { focus = WRK_utilitarian_pw_motor_pool }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -11859,13 +11994,24 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = artillery_equipment
-				amount = 450
+				amount = 1500
 				producer = WRK
 			}
 			add_tech_bonus = {
 				bonus = 0.5
 				uses = 1
 				category = artillery
+			}
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_exercises
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_defence
+					value = 0.04
+				}
+				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		ai_will_do = {
@@ -11875,13 +12021,13 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_reserve
-		icon = GFX_focus_WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_pw_reserve
 		search_filters = { FOCUS_FILTER_ARMY_XP }
-		x = 0
+		x = 1
 		y = 1
-		relative_position_id = WRK_utilitarian_pw_artillery
+		relative_position_id = WRK_utilitarian_pw_motor_pool
 		cost = 3
-		prerequisite = { focus = WRK_utilitarian_pw_artillery }
+		prerequisite = { focus = WRK_utilitarian_pw_motor_pool focus = WRK_utilitarian_pw_artillery }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -11894,10 +12040,10 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_manpower = 8000
+			add_manpower = 25000
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 3000
+				amount = 5000
 				producer = WRK
 			}
 			effect_tooltip = {
@@ -11919,7 +12065,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_army_reform
-		icon = GFX_focus_WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_pw_army_reform
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = 0
 		y = 1
@@ -11939,6 +12085,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			army_experience = 50
 			effect_tooltip = {
 				add_ideas = ADISCORD_vorkerland_pw_delta_utilitarian_army
 			}
@@ -11966,112 +12113,13 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_arsenals
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
+		icon = GFX_focus_WRK_pw_arsenals
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 16
 		y = 1
 		relative_position_id = WRK_utilitarian_form_reconstruction_directorate
 		cost = 3
 		prerequisite = { focus = WRK_utilitarian_form_reconstruction_directorate }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_utilitarian
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = WRK_reconstruction_factory_site_tt
-				any_owned_state = {
-					is_core_of = ROOT
-					is_controlled_by = ROOT
-					free_building_slots = {
-						building = arms_factory
-						size > 0
-						include_locked = yes
-					}
-				}
-			}
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			random_owned_controlled_state = {
-				limit = {
-					is_core_of = ROOT
-					free_building_slots = {
-						building = arms_factory
-						size > 0
-						include_locked = yes
-					}
-				}
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = arms_factory
-					level = 1
-					instant_build = yes
-				}
-			}
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
-		}
-		ai_will_do = {
-			base = 65
-		}
-	}
-
-	focus = {
-		id = WRK_utilitarian_pw_standards
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		x = 0
-		y = 1
-		relative_position_id = WRK_utilitarian_pw_arsenals
-		cost = 3
-		prerequisite = { focus = WRK_utilitarian_pw_arsenals }
-		allow_branch = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_country_flag = ADISCORD_vorkerland_route_utilitarian
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = ADISCORD_vorkerland_pw_delta_standards
-			}
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = {
-					var = ADISCORD_vorkerland_pw_efficiency_gain
-					value = 0.1
-				}
-				ADISCORD_economy_mark_dirty = yes
-			}
-			add_tech_bonus = {
-				bonus = 0.5
-				uses = 1
-				category = infantry_weapons
-			}
-		}
-		ai_will_do = {
-			base = 65
-		}
-	}
-
-	focus = {
-		id = WRK_utilitarian_pw_defence_cluster
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		x = 0
-		y = 1
-		relative_position_id = WRK_utilitarian_pw_standards
-		cost = 3
-		prerequisite = { focus = WRK_utilitarian_pw_standards }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -12120,14 +12168,120 @@ focus_tree = {
 	}
 
 	focus = {
-		id = WRK_utilitarian_pw_machine_tools
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
+		id = WRK_utilitarian_pw_standards
+		icon = GFX_focus_WRK_pw_standards
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 0
+		y = 1
+		relative_position_id = WRK_utilitarian_pw_arsenals
+		cost = 3
+		prerequisite = { focus = WRK_utilitarian_pw_arsenals }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_utilitarian
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_standards
+				add_ideas = ADISCORD_vorkerland_pw_delta_tools
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_efficiency_gain
+					value = 0.1
+				}
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_efficiency
+					value = 0.05
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+			add_tech_bonus = {
+				bonus = 0.5
+				uses = 1
+				category = infantry_weapons
+			}
+		}
+		ai_will_do = {
+			base = 65
+		}
+	}
+
+	focus = {
+		id = WRK_utilitarian_pw_defence_cluster
+		icon = GFX_focus_WRK_pw_defence_cluster
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 0
+		y = 1
+		relative_position_id = WRK_utilitarian_pw_standards
+		cost = 3
+		prerequisite = { focus = WRK_utilitarian_pw_standards }
+		allow_branch = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_utilitarian
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_reconstruction_factory_site_tt
+				any_owned_state = {
+					is_core_of = ROOT
+					is_controlled_by = ROOT
+					free_building_slots = {
+						building = arms_factory
+						size > 2
+						include_locked = yes
+					}
+				}
+			}
+			is_subject = no
+			has_capitulated = no
+			hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = arms_factory
+						size > 2
+						include_locked = yes
+					}
+				}
+				add_extra_state_shared_building_slots = 3
+				add_building_construction = {
+					type = arms_factory
+					level = 3
+					instant_build = yes
+				}
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = {
+			base = 65
+		}
+	}
+
+	focus = {
+		id = WRK_utilitarian_pw_machine_tools
+		icon = GFX_focus_WRK_pw_machine_tools
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = -1
 		y = 1
 		relative_position_id = WRK_utilitarian_pw_defence_cluster
 		cost = 3
 		prerequisite = { focus = WRK_utilitarian_pw_defence_cluster }
+		mutually_exclusive = { focus = WRK_utilitarian_pw_transport_works }
+		mutually_exclusive = { focus = WRK_utilitarian_pw_transport_works }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -12141,7 +12295,7 @@ focus_tree = {
 					is_controlled_by = ROOT
 					free_building_slots = {
 						building = industrial_complex
-						size > 0
+						size > 2
 						include_locked = yes
 					}
 				}
@@ -12157,14 +12311,14 @@ focus_tree = {
 					is_core_of = ROOT
 					free_building_slots = {
 						building = industrial_complex
-						size > 0
+						size > 2
 						include_locked = yes
 					}
 				}
-				add_extra_state_shared_building_slots = 1
+				add_extra_state_shared_building_slots = 3
 				add_building_construction = {
 					type = industrial_complex
-					level = 1
+					level = 3
 					instant_build = yes
 				}
 			}
@@ -12188,13 +12342,15 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_transport_works
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
+		icon = GFX_focus_WRK_pw_transport_works
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		x = 0
+		x = 1
 		y = 1
-		relative_position_id = WRK_utilitarian_pw_machine_tools
+		relative_position_id = WRK_utilitarian_pw_defence_cluster
 		cost = 3
-		prerequisite = { focus = WRK_utilitarian_pw_machine_tools }
+		prerequisite = { focus = WRK_utilitarian_pw_defence_cluster }
+		mutually_exclusive = { focus = WRK_utilitarian_pw_machine_tools }
+		mutually_exclusive = { focus = WRK_utilitarian_pw_machine_tools }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -12208,7 +12364,7 @@ focus_tree = {
 					is_controlled_by = ROOT
 					free_building_slots = {
 						building = arms_factory
-						size > 0
+						size > 1
 						include_locked = yes
 					}
 				}
@@ -12224,22 +12380,33 @@ focus_tree = {
 					is_core_of = ROOT
 					free_building_slots = {
 						building = arms_factory
-						size > 0
+						size > 1
 						include_locked = yes
 					}
 				}
-				add_extra_state_shared_building_slots = 1
+				add_extra_state_shared_building_slots = 2
 				add_building_construction = {
 					type = arms_factory
-					level = 1
+					level = 2
 					instant_build = yes
 				}
 			}
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			add_equipment_to_stockpile = {
 				type = motorized_equipment
-				amount = 200
+				amount = 800
 				producer = WRK
+			}
+			effect_tooltip = {
+				add_ideas = ADISCORD_vorkerland_pw_delta_logistics
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_supply
+					value = -0.05
+				}
+				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		ai_will_do = {
@@ -12249,13 +12416,13 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_production_board
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		x = 0
+		icon = GFX_focus_WRK_pw_production_board
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = 1
 		y = 1
-		relative_position_id = WRK_utilitarian_pw_transport_works
+		relative_position_id = WRK_utilitarian_pw_machine_tools
 		cost = 3
-		prerequisite = { focus = WRK_utilitarian_pw_transport_works }
+		prerequisite = { focus = WRK_utilitarian_pw_machine_tools focus = WRK_utilitarian_pw_transport_works }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -12268,6 +12435,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			add_research_slot = 1
 			effect_tooltip = {
 				add_ideas = ADISCORD_vorkerland_pw_delta_output
 			}
@@ -12287,7 +12455,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_territorial_council
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
+		icon = GFX_focus_WRK_pw_territorial_council
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 20
 		y = 1
@@ -12306,8 +12474,8 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 75
-			add_stability = 0.03
+			unlock_decision_tooltip = ADISCORD_west_wrk_offer_front_treaty
+			add_political_power = 100
 		}
 		ai_will_do = {
 			base = 22
@@ -12316,7 +12484,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_service_charter
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
+		icon = GFX_focus_WRK_pw_service_charter
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 0
 		y = 1
@@ -12335,8 +12503,9 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = WRK_pw_treaty_charter_tt
 			add_political_power = 50
-			add_war_support = 0.04
+			add_war_support = 0.03
 		}
 		ai_will_do = {
 			base = 22
@@ -12345,13 +12514,15 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_local_charters
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
+		icon = GFX_focus_WRK_pw_local_charters
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		x = 0
+		x = -1
 		y = 1
 		relative_position_id = WRK_utilitarian_pw_service_charter
 		cost = 2
 		prerequisite = { focus = WRK_utilitarian_pw_service_charter }
+		mutually_exclusive = { focus = WRK_utilitarian_pw_procurement_audit }
+		mutually_exclusive = { focus = WRK_utilitarian_pw_procurement_audit }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -12364,8 +12535,9 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_stability = 0.04
+			custom_effect_tooltip = WRK_pw_local_charters_tt
 			add_political_power = 50
+			add_stability = 0.05
 		}
 		ai_will_do = {
 			base = 22
@@ -12374,13 +12546,15 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_procurement_audit
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
+		icon = GFX_focus_WRK_pw_procurement_audit
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		x = 0
+		x = 1
 		y = 1
-		relative_position_id = WRK_utilitarian_pw_local_charters
+		relative_position_id = WRK_utilitarian_pw_service_charter
 		cost = 3
-		prerequisite = { focus = WRK_utilitarian_pw_local_charters }
+		prerequisite = { focus = WRK_utilitarian_pw_service_charter }
+		mutually_exclusive = { focus = WRK_utilitarian_pw_local_charters }
+		mutually_exclusive = { focus = WRK_utilitarian_pw_local_charters }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -12393,10 +12567,15 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 75
+			add_political_power = 100
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 8000
+				producer = WRK
+			}
 			add_equipment_to_stockpile = {
 				type = support_equipment
-				amount = 150
+				amount = 600
 				producer = WRK
 			}
 		}
@@ -12407,13 +12586,13 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_treasury
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
+		icon = GFX_focus_WRK_pw_treasury
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		x = 0
+		x = 1
 		y = 1
-		relative_position_id = WRK_utilitarian_pw_procurement_audit
+		relative_position_id = WRK_utilitarian_pw_local_charters
 		cost = 3
-		prerequisite = { focus = WRK_utilitarian_pw_procurement_audit }
+		prerequisite = { focus = WRK_utilitarian_pw_local_charters focus = WRK_utilitarian_pw_procurement_audit }
 		allow_branch = {
 			tag = WRK
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -12426,8 +12605,8 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 75
-			add_stability = 0.03
+			add_political_power = 100
+			add_stability = 0.05
 		}
 		ai_will_do = {
 			base = 22
@@ -12436,7 +12615,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_defence_compact
-		icon = GFX_focus_WRK_joint_west_imperial_settlement
+		icon = GFX_focus_WRK_pw_defence_compact
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 0
 		y = 1
@@ -12455,9 +12634,10 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_stability = 0.03
-			add_war_support = 0.04
+			custom_effect_tooltip = WRK_pw_arm_front_partners_tt
+			hidden_effect = { ADISCORD_west_wrk_arm_front_partners = yes }
 			army_experience = 30
+			add_war_support = 0.04
 		}
 		ai_will_do = {
 			base = 22
@@ -12466,7 +12646,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_subject_charter
-		icon = GFX_focus_WRK_worker_secure_social_guarantees
+		icon = GFX_focus_WRK_pw_subject_charter
 		search_filters = { FOCUS_FILTER_ANNEXATION }
 		x = 4
 		y = 1
@@ -12486,6 +12666,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_political_power = 75
+			add_stability = 0.03
 			custom_effect_tooltip = WRK_pw_subject_charter_tt
 		}
 		ai_will_do = {
@@ -12495,7 +12676,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_ebern_campaign
-		icon = GFX_focus_WRK_worker_secure_social_guarantees
+		icon = GFX_focus_WRK_pw_ebern_campaign
 		search_filters = { FOCUS_FILTER_ANNEXATION }
 		x = 0
 		y = 1
@@ -12533,7 +12714,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_afrela_campaign
-		icon = GFX_focus_WRK_worker_secure_social_guarantees
+		icon = GFX_focus_WRK_pw_afrela_campaign
 		search_filters = { FOCUS_FILTER_ANNEXATION }
 		x = 0
 		y = 1
@@ -12571,7 +12752,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_pw_regional_settlement
-		icon = GFX_focus_WRK_worker_secure_social_guarantees
+		icon = GFX_focus_WRK_pw_regional_settlement
 		search_filters = { FOCUS_FILTER_ANNEXATION }
 		x = 0
 		y = 1
@@ -12591,7 +12772,7 @@ focus_tree = {
 					is_controlled_by = ROOT
 					free_building_slots = {
 						building = industrial_complex
-						size > 0
+						size > 1
 						include_locked = yes
 					}
 				}
@@ -12605,20 +12786,20 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_political_power = 100
-			add_stability = 0.04
+			add_stability = 0.05
 			random_owned_controlled_state = {
 				limit = {
 					is_core_of = ROOT
 					free_building_slots = {
 						building = industrial_complex
-						size > 0
+						size > 1
 						include_locked = yes
 					}
 				}
-				add_extra_state_shared_building_slots = 1
+				add_extra_state_shared_building_slots = 2
 				add_building_construction = {
 					type = industrial_complex
-					level = 1
+					level = 2
 					instant_build = yes
 				}
 			}

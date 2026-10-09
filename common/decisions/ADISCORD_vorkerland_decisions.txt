@@ -2496,6 +2496,64 @@ ADISCORD_vorkerland_focus_operations_category = {
 			}
 		}
 	}
+
+	# District reconstruction. The paid programme reserves one concurrent slot
+	# and its district from payment through completion or cancellation.
+	ADISCORD_vorkerland_pw_rebuild_district = {
+		icon = generic_construction
+		allowed = { tag = WRK }
+		state_target = yes
+		on_map_mode = map_and_decisions_view
+		targets = { 27 32 33 34 35 36 37 38 39 40 75 79 81 82 102 104 105 106 107 108 109 110 111 121 122 123 124 198 200 201 202 306 307 308 309 311 315 316 317 318 320 323 324 325 327 }
+		target_root_trigger = { ADISCORD_vorkerland_pw_reconstruction_open = yes }
+		target_trigger = {
+			FROM = { ADISCORD_vorkerland_pw_rebuild_site = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_pw_rebuild_slot_tt
+				ADISCORD_vorkerland_pw_rebuild_slot_free = yes
+			}
+		}
+		cost = 40
+		days_remove = 60
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = WRK_pw_rebuild_start_tt
+			effect_tooltip = {
+				FROM = { ADISCORD_vorkerland_pw_rebuild_reward = yes }
+			}
+			hidden_effect = {
+				FROM = { ADISCORD_vorkerland_pw_begin_rebuild = yes }
+			}
+		}
+		remove_effect = {
+			FROM = { ADISCORD_vorkerland_pw_finish_rebuild = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				NOT = { ADISCORD_vorkerland_pw_sovereign = yes }
+				FROM = { NOT = { is_owned_and_controlled_by = ROOT } }
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				FROM = { ADISCORD_vorkerland_pw_release_rebuild = yes }
+			}
+		}
+		ai_will_do = {
+			base = 30
+			modifier = {
+				factor = 2
+				FROM = {
+					free_building_slots = {
+						building = infrastructure
+						size > 1
+					}
+				}
+			}
+		}
+	}
 }
 
 # --- rom_tru_decisions ---

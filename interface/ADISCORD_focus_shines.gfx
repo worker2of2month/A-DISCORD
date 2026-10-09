@@ -6578,4 +6578,34 @@ spriteTypes = {
 	spriteType = { name = "GFX_focus_WRK_utilitarian_prioritize_municipal_repairs_shine" texturefile = "gfx/interface/goals/focus_generic_electrification.dds" }
 	spriteType = { name = "GFX_focus_WRK_utilitarian_commission_automated_workshops_shine" texturefile = "gfx/interface/goals/goal_generic_construct_civ_factory.dds" }
 	spriteType = { name = "GFX_focus_WRK_utilitarian_complete_reconstruction_programme_shine" texturefile = "gfx/interface/goals/focus_generic_treaty.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_census_shine" texturefile = "gfx/interface/goals/goal_generic_construction.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_repair_crews_shine" texturefile = "gfx/interface/goals/goal_generic_construct_infrastructure.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_food_reserve_shine" texturefile = "gfx/interface/goals/goal_generic_consumer_goods.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_veteran_housing_shine" texturefile = "gfx/interface/goals/goal_generic_construct_civilian.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_municipal_network_shine" texturefile = "gfx/interface/goals/goal_generic_construction2.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_recovery_complete_shine" texturefile = "gfx/interface/goals/goal_generic_national_unity.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_veteran_cadres_shine" texturefile = "gfx/interface/goals/goal_generic_allies_build_infantry.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_rearmament_shine" texturefile = "gfx/interface/goals/goal_generic_small_arms.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_officer_school_shine" texturefile = "gfx/interface/goals/goal_generic_army_doctrines.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_field_exercises_shine" texturefile = "gfx/interface/goals/goal_generic_position_armies.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_motor_pool_shine" texturefile = "gfx/interface/goals/goal_generic_army_motorized.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_artillery_shine" texturefile = "gfx/interface/goals/goal_generic_army_artillery.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_reserve_shine" texturefile = "gfx/interface/goals/goal_generic_axis_build_infantry.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_army_reform_shine" texturefile = "gfx/interface/goals/goal_generic_special_forces.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_arsenals_shine" texturefile = "gfx/interface/goals/goal_generic_construct_mil_factory.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_standards_shine" texturefile = "gfx/interface/goals/goal_generic_production.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_defence_cluster_shine" texturefile = "gfx/interface/goals/goal_generic_construct_military.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_machine_tools_shine" texturefile = "gfx/interface/goals/goal_generic_construct_civ_factory.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_transport_works_shine" texturefile = "gfx/interface/goals/goal_generic_production2.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_production_board_shine" texturefile = "gfx/interface/goals/goal_generic_scientific_exchange.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_territorial_council_shine" texturefile = "gfx/interface/goals/goal_generic_improve_relations.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_service_charter_shine" texturefile = "gfx/interface/goals/goal_generic_military_deal.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_local_charters_shine" texturefile = "gfx/interface/goals/goal_generic_alliance.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_procurement_audit_shine" texturefile = "gfx/interface/goals/goal_generic_trade.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_treasury_shine" texturefile = "gfx/interface/goals/goal_generic_positive_trade_relations.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_defence_compact_shine" texturefile = "gfx/interface/goals/goal_generic_major_alliance.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_subject_charter_shine" texturefile = "gfx/interface/goals/goal_generic_military_sphere.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_ebern_campaign_shine" texturefile = "gfx/interface/goals/goal_generic_occypy_start_war.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_afrela_campaign_shine" texturefile = "gfx/interface/goals/goal_generic_territory_or_war.dds" }
+	spriteType = { name = "GFX_focus_WRK_pw_regional_settlement_shine" texturefile = "gfx/interface/goals/goal_generic_more_territorial_claims.dds" }
 }

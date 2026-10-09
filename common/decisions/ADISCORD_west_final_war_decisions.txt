@@ -23,6 +23,62 @@ ADISCORD_west_final_war_category = {
 		}
 	}
 
+	# Vorkerland's counterpart to the League of Free Republics. The invited
+	# state answers itself; only the political price is paid here.
+	ADISCORD_west_wrk_offer_front_treaty = {
+		icon = generic_diplomatic_treaty
+		allowed = { tag = WRK }
+		targets = { WIT IIA IBA IBL PWR PSD ZAO WPA WPS ROM TRU }
+		target_root_trigger = {
+			ADISCORD_west_crisis_open = yes
+			ADISCORD_west_wrk_treaties_unlocked = yes
+		}
+		target_trigger = {
+			FROM = {
+				exists = yes
+				is_subject = no
+			}
+		}
+		visible = {
+			ADISCORD_west_crisis_open = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_west_wrk_front_command_tt
+				OR = {
+					is_in_faction = no
+					is_faction_leader = yes
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_west_wrk_treaty_target_tt
+				FROM = { ADISCORD_west_league_target_valid = yes }
+			}
+		}
+		cost = 50
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_west_wrk_offer_front_treaty_tt
+			hidden_effect = {
+				FROM = { ADISCORD_west_send_front_treaty = yes }
+			}
+		}
+		ai_will_do = {
+			base = 40
+			modifier = {
+				factor = 2
+				FROM = {
+					OR = {
+						tag = PWR
+						tag = PSD
+						tag = ZAO
+					}
+				}
+			}
+		}
+	}
+
 	# A short defensive measure for the Itoran marches.
 	ADISCORD_west_ivn_hold_the_marches = {
 		icon = generic_army_support

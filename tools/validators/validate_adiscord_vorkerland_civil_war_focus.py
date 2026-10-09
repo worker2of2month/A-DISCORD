@@ -1103,20 +1103,20 @@ POSTWAR_EXPANSION_ROUTES = {
 POSTWAR_EXPANSION_IDS = tuple(
     focus_id for route_ids in POSTWAR_EXPANSION_ROUTES.values() for focus_id in route_ids
 )
-POSTWAR_EXPANSION_ICONS = {}
-for route_ids in POSTWAR_EXPANSION_ROUTES.values():
-    for index, focus_id in enumerate(route_ids):
-        if index < 6:
-            icon = "GFX_focus_WRK_worker_reopen_cooperative_workshops"
-        elif index < 14:
-            icon = "GFX_focus_WRK_joint_west_frontier_commands"
-        elif index < 20:
-            icon = "GFX_focus_WRK_utilitarian_west_engineer_battalions"
-        elif index < 26:
-            icon = "GFX_focus_WRK_joint_west_imperial_settlement"
-        else:
-            icon = "GFX_focus_WRK_worker_secure_social_guarantees"
-        POSTWAR_EXPANSION_ICONS[focus_id] = icon
+# Each programme has its own sprite over the vanilla goal art that shows its
+# action; the same programme keeps one icon on every route.
+POSTWAR_EXPANSION_ICONS = {
+    focus_id: "GFX_focus_WRK_pw_" + focus_id.split("_pw_", 1)[1]
+    for focus_id in POSTWAR_EXPANSION_IDS
+}
+# Paired programmes: each pair is one choice, and the following programme
+# accepts either answer.
+POSTWAR_EXPANSION_CHOICES = (
+    ("food_reserve", "veteran_housing", "municipal_network"),
+    ("motor_pool", "artillery", "reserve"),
+    ("machine_tools", "transport_works", "production_board"),
+    ("local_charters", "procurement_audit", "treasury"),
+)
 
 def lifecycle_order() -> tuple[str, ...]:
     """Reconstruction and the western chain follow each Unity Tower."""
@@ -2859,6 +2859,16 @@ def expected_localisation_keys() -> set[str]:
         "ADISCORD_vorkerland_pw_delta_output",
         "ADISCORD_vorkerland_pw_delta_joint_army",
         "ADISCORD_vorkerland_pw_delta_utilitarian_army",
+        "ADISCORD_vorkerland_pw_delta_attack",
+        "ADISCORD_vorkerland_pw_rebuild_district",
+        "ADISCORD_vorkerland_pw_rebuild_district_desc",
+        "WRK_pw_reconstruction_unlock_tt",
+        "WRK_pw_reconstruction_slot_tt",
+        "WRK_pw_rebuild_slot_tt",
+        "WRK_pw_rebuild_start_tt",
+        "WRK_pw_treaty_charter_tt",
+        "WRK_pw_local_charters_tt",
+        "WRK_pw_arm_front_partners_tt",
         "WRK_pw_subject_charter_tt",
         "WRK_pw_ebern_war_tt",
         "WRK_pw_afrela_war_tt",
@@ -5988,10 +5998,10 @@ def collect_issues() -> list[str]:
     bounded_values_by_source["postwar expansion"] = {
         "add_political_power": 100.0,
         "add_stability": 0.05,
-        "add_manpower": 16000.0,
-        "army_experience": 40.0,
+        "add_manpower": 50000.0,
+        "army_experience": 75.0,
         "add_command_power": 20.0,
-        "add_war_support": 0.04,
+        "add_war_support": 0.05,
     }
     for reward_source_name, reward_source in (
         ("focus", ordinary_rewards),
@@ -6016,7 +6026,7 @@ def collect_issues() -> list[str]:
                 r"\btype\s*=\s*infantry_equipment(?:_0)?\b", shipment
             )
             if reward_source_name == "postwar expansion":
-                maximum = 12000 if is_infantry else 700
+                maximum = 25000 if is_infantry else 1500
             elif reward_source_name == "focus":
                 maximum = 9000 if is_infantry else 300
             else:
@@ -6050,8 +6060,8 @@ def collect_issues() -> list[str]:
 
     for construction in _blocks(postwar_rewards, "add_building_construction"):
         level = re.search(r"\blevel\s*=\s*(\d+)", construction)
-        if not level or int(level.group(1)) not in {1, 2}:
-            issues.append("postwar construction must add one or two factory levels")
+        if not level or int(level.group(1)) not in {1, 2, 3}:
+            issues.append("postwar construction must add one to three factory levels")
 
     for bonus in _blocks(source, "add_tech_bonus"):
         amount = re.search(r"\bbonus\s*=\s*(\d+(?:\.\d+)?)", bonus)

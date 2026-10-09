@@ -5165,6 +5165,30 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_west.43",
+      "namespace": "ADISCORD_west",
+      "number": 43,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_west.44",
+      "namespace": "ADISCORD_west",
+      "number": 44,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_west.45",
+      "namespace": "ADISCORD_west",
+      "number": 45,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
       "id": "val_rework.125",
       "namespace": "val_rework",
       "number": 125,

@@ -9,6 +9,7 @@ from pathlib import Path
 from tools.lib.focus_sources import read_focus_source
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
+    POSTWAR_EXPANSION_CHOICES,
     POSTWAR_EXPANSION_IDS,
     POSTWAR_EXPANSION_ROUTES,
     focus_blocks,
@@ -499,11 +500,19 @@ class PostwarExpansionTests(unittest.TestCase):
             self.assertEqual(len(ids), 30)
             reachable = {key for key in self.focuses if key.startswith(f"WRK_{route}_") and key not in ids}
             pending = set(ids)
+
+            def ready_for(key):
+                source = self.focuses[key]
+                # A prerequisite block is one OR group; an exclusive sibling is not a parent.
+                groups = [
+                    set(re.findall(r"focus = (WRK_\w+)", group))
+                    for group in re.findall(r"prerequisite = \{([^}]*)\}", source)
+                ]
+                completed = set(re.findall(r"has_completed_focus = (WRK_\w+)", source))
+                return all(group & reachable for group in groups) and completed <= reachable
+
             while pending:
-                ready = {
-                    key for key in pending
-                    if set(re.findall(r"\b(?:focus|has_completed_focus) = (WRK_\w+)", self.focuses[key])) <= reachable
-                }
+                ready = {key for key in pending if ready_for(key)}
                 self.assertTrue(ready, pending)
                 pending -= ready
                 reachable |= ready
@@ -527,18 +536,34 @@ class PostwarExpansionTests(unittest.TestCase):
             self.assertIn(f"WRK_{route}_pw_rearmament", prefix)
             self.assertIn(f"WRK_{route}_pw_defence_cluster", prefix)
             factory_levels = re.findall(r"type = arms_factory\s+level = (\d+)", source)
-            self.assertEqual(sum(map(int, factory_levels)), 3)
-            self.assertRegex(source, r"add_manpower = (10000|12000|16000)")
+            self.assertEqual(sum(map(int, factory_levels)), 5)
+            self.assertRegex(source, r"add_manpower = (20000|30000|40000)")
 
     def test_full_routes_have_distinct_manpower_and_weapon_budgets(self):
-        for route, manpower, rifles in (("worker", 24000, 12000), ("joint", 30000, 15000), ("utilitarian", 18000, 9000)):
+        # Totals cover every definition, including both answers of each paired choice.
+        for route, manpower, rifles in (("worker", 140000, 38000), ("joint", 110000, 43000), ("utilitarian", 70000, 28000)):
             source = "\n".join(self.focuses[key] for key in POSTWAR_EXPANSION_IDS if key.startswith(f"WRK_{route}_"))
             self.assertEqual(sum(map(int, re.findall(r"add_manpower = (\d+)", source))), manpower)
             self.assertEqual(sum(map(int, re.findall(r"type = infantry_equipment\s+amount = (\d+)", source))), rifles)
-            self.assertEqual(sum(map(int, re.findall(r"type = arms_factory\s+level = (\d+)", source))), 4)
+            self.assertEqual(sum(map(int, re.findall(r"type = arms_factory\s+level = (\d+)", source))), 7)
+            self.assertEqual(sum(map(int, re.findall(r"type = industrial_complex\s+level = (\d+)", source))), 8)
+            self.assertEqual(source.count("add_research_slot = 1"), 1)
+
+    def test_each_column_offers_one_exclusive_choice_that_rejoins(self):
+        for route in ("worker", "joint", "utilitarian"):
+            for left, right, merge in POSTWAR_EXPANSION_CHOICES:
+                left_id, right_id, merge_id = (f"WRK_{route}_pw_{slug}" for slug in (left, right, merge))
+                self.assertIn(f"mutually_exclusive = {{ focus = {right_id} }}", self.focuses[left_id])
+                self.assertIn(f"mutually_exclusive = {{ focus = {left_id} }}", self.focuses[right_id])
+                self.assertIn(f"prerequisite = {{ focus = {left_id} focus = {right_id} }}", self.focuses[merge_id])
+                parents = {
+                    tuple(re.findall(r"prerequisite = \{ ([^}]*) \}", self.focuses[key]))
+                    for key in (left_id, right_id)
+                }
+                self.assertEqual(len(parents), 1, (route, left))
 
     def test_reform_values_accumulate_once_and_dummy_ideas_are_preview_only(self):
-        for route, defence, supply, attack in (("worker", 0.08, -0.05, 0), ("joint", 0.06, -0.05, 0.05), ("utilitarian", 0.09, -0.10, 0)):
+        for route, defence, supply, attack in (("worker", 0.12, -0.10, 0), ("joint", 0.02, -0.10, 0.13), ("utilitarian", 0.13, -0.15, 0)):
             totals = Counter()
             for key in POSTWAR_EXPANSION_IDS:
                 if not key.startswith(f"WRK_{route}_"):
@@ -673,14 +698,43 @@ class PostwarExpansionTests(unittest.TestCase):
 
     def test_western_front_preserves_readiness_and_production_budget(self):
         source = read("common/ai_strategy/ADISCORD_west_final_war_ai.txt")
-        for name, mode in (("ADISCORD_west_wrk_front_ivn", "balanced"), ("ADISCORD_west_wrk_hold_ivn", "careful")):
+        # The offensive profile mirrors Itora's manual pokes; a depleted army holds.
+        for name, mode, manual in (
+            ("ADISCORD_west_wrk_front_ivn", "balanced", "yes"),
+            ("ADISCORD_west_wrk_hold_ivn", "careful", "no"),
+        ):
             front = named_block(source, name)
             self.assertIn(f"execution_type = {mode}", front)
-            self.assertIn("manual_attack = no", front)
+            self.assertIn(f"manual_attack = {manual}", front)
             self.assertIn("ratio < 0.67", front)
         production = named_block(source, "ADISCORD_wrk_postwar_production")
         self.assertNotIn("production_min_factories", production)
         self.assertIn("equipment_production_factor", production)
+
+    def test_reconstruction_reserves_a_slot_until_completion_or_cancellation(self):
+        decisions = read("common/decisions/ADISCORD_vorkerland_decisions.txt")
+        decision = named_block(decisions, "ADISCORD_vorkerland_pw_rebuild_district")
+        self.assertIn("ADISCORD_vorkerland_pw_rebuild_slot_free = yes", decision)
+        self.assertIn("FROM = { ADISCORD_vorkerland_pw_begin_rebuild = yes }", named_block(decision, "complete_effect"))
+        self.assertIn("FROM = { ADISCORD_vorkerland_pw_finish_rebuild = yes }", named_block(decision, "remove_effect"))
+        self.assertIn("FROM = { ADISCORD_vorkerland_pw_release_rebuild = yes }", named_block(decision, "cancel_effect"))
+        self.assertIn("ADISCORD_vorkerland_pw_rebuild_site = yes", named_block(decision, "target_trigger"))
+        begin = self.effect("begin_rebuild")
+        release = self.effect("release_rebuild")
+        finish = self.effect("finish_rebuild")
+        self.assertIn("value = 1", begin)
+        self.assertIn("value = -1", release)
+        self.assertIn("limit = { has_state_flag = ADISCORD_vorkerland_pw_rebuild_in_progress }", release)
+        # The slot is released before the delivery check, so a lost district never holds it.
+        self.assertLess(finish.index("ADISCORD_vorkerland_pw_release_rebuild = yes"), finish.index("ADISCORD_vorkerland_pw_rebuild_site = yes"))
+        self.assertLess(finish.index("ADISCORD_vorkerland_pw_rebuild_reward = yes"), finish.index("set_state_flag = ADISCORD_vorkerland_pw_district_rebuilt"))
+        triggers = read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")
+        slots = named_block(triggers, "ADISCORD_vorkerland_pw_rebuild_slot_free")
+        self.assertEqual(sorted(map(int, re.findall(r"rebuild_active value = (\d+)", slots))), [1, 2, 3])
+        for route in ("worker", "joint", "utilitarian"):
+            self.assertIn(f"has_completed_focus = WRK_{route}_pw_census", named_block(triggers, "ADISCORD_vorkerland_pw_reconstruction_open"))
+            self.assertIn(f"has_completed_focus = WRK_{route}_pw_repair_crews", slots)
+            self.assertIn(f"has_completed_focus = WRK_{route}_pw_municipal_network", slots)
 
     def test_no_new_periodic_scans_or_legacy_recovery(self):
         source = self.effects[self.effects.index("ADISCORD_vorkerland_pw_ensure_institutions = {"):]
@@ -840,7 +894,7 @@ class WorldEmpireTests(unittest.TestCase):
         })
 
     def test_every_preparation_precedes_war_and_remains_available_during_war(self):
-        self.assertEqual(len(self.focuses), 20)
+        self.assertEqual(len(self.focuses), 23)
         requirements = {
             key: {scalar(item.value, "focus") for item in focus if item.key == "prerequisite"}
             for key, focus in self.focuses.items()
@@ -859,7 +913,7 @@ class WorldEmpireTests(unittest.TestCase):
         positions = [(scalar(f, "x"), scalar(f, "y")) for f in self.focuses.values()]
         self.assertEqual(len(positions), len(set(positions)))
         self.assertTrue(all(2 <= int(scalar(f, "cost")) <= 5 for f in self.focuses.values()))
-        self.assertEqual(sum(int(scalar(f, "cost")) for f in self.focuses.values()) * 7, 413)
+        self.assertEqual(sum(int(scalar(f, "cost")) for f in self.focuses.values()) * 7, 469)
         for key, focus in self.focuses.items():
             if key != "WRK_empire_itora_must_fall":
                 text = str(block(focus, "available"))
