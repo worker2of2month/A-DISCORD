@@ -17,6 +17,7 @@
     "trade_regions",
     "terrain_snow",
     "vorkerland_cities",
+    "ambient_audio",
     "minimap",
     "decision_ui_assets",
     "diplomacy_ui_assets",
@@ -43,6 +44,24 @@
     "focus_trees"
   ],
   "families": [
+    {
+      "id": "ambient_audio",
+      "owner_module": "tools.builders.build_adiscord_ambient_audio",
+      "output_globs": ["map/ambient_object.txt"],
+      "source_inputs": [
+        "tools/builders/build_adiscord_ambient_audio.py",
+        "map/definition.csv",
+        "map/provinces.bmp",
+        "map/heightmap.bmp",
+        "map/unitstacks.txt",
+        "history/states/*.txt"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_ambient_audio"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_ambient_audio", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "Owns only the marked ambient audio section. Authored objects and other builders' landmark sections remain unchanged."
+    },
     {
       "id": "ainholm_mandate",
       "owner_module": "tools.builders.build_adiscord_ainholm_mandate",
@@ -227,7 +246,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_theatre", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "The theatre builder owns its declared OSV, STP/YPR and RUS rail connections and Vorkerland supply hubs, including forward depots across the six Khan campaign countries. Unmanaged Nudge records and equivalent existing record formatting are preserved."
+      "overlap_explanation": "The theatre builder owns its declared OSV, STP/YPR, MON and RUS rail connections and MON/Vorkerland supply hubs, including forward depots across the six Khan campaign countries. Unmanaged Nudge records and equivalent existing record formatting are preserved."
     },
     {
       "id": "state_history",

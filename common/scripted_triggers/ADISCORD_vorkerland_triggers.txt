@@ -2043,7 +2043,9 @@ RUS_crisis_defending_bloc = {
 	NOT = { is_subject_of = RUS }
 	has_war_with = RUS
 	has_event_target = RUS_crisis_war_anchor
-	has_war_together_with = event_target:RUS_crisis_war_anchor
+	event_target:RUS_crisis_war_anchor = {
+		has_war_together_with = PREV
+	}
 	RUS_crisis_side_compatible = yes
 }
 
@@ -3126,6 +3128,11 @@ RUS_bunker_clinic_active = {
 	check_variable = { var = RUS_bunker_layer_4 value = 1 compare = equals }
 }
 
+RUS_bunker_archive_active = {
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_bunker_layer_5 value = 1 compare = equals }
+}
+
 RUS_bunker_laboratory_active = {
 	RUS_bunker_operational = yes
 	check_variable = { var = RUS_bunker_layer_4 value = 2 compare = equals }
@@ -3153,6 +3160,7 @@ RUS_civil_service_training_ready = {
 	OR = {
 		has_completed_focus = RUS_aimaq_service_charter
 		has_completed_focus = RUS_civil_service_examinations
+		has_completed_focus = RUS_trained_administrators
 	}
 	NOT = { ADISCORD_state_development_at_least_5 = yes }
 	check_variable = { var = ADISCORD_state_development_progress value = 100 compare = less_than }

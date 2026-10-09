@@ -1,10 +1,48 @@
+category = {
+	name = "ADISCORD_Wind"
+	soundeffects = {
+		ADISCORD_ambient_wind
+	}
+	compressor = {
+		enabled = yes
+		pregain = 5.0
+		postgain = 6.0
+		ratio = 15.0
+		threshold = -15.0
+		attacktime = 0.03
+		releasetime = 0.0
+	}
+}
+
 soundeffect = {
-	name = "amb_neutral_wind"
-	volume = 0.35
+	name = "ADISCORD_ambient_wind"
+	volume = 1.0
 	sounds = {
 		sound = amb_neutral_wind_01
 	}
 	loop = yes
+}
+
+category = {
+	name = "ADISCORD_LocalAmbience"
+	soundeffects = {
+		ADISCORD_ambient_town
+	}
+}
+
+soundeffect = {
+	name = "ADISCORD_ambient_town"
+	sounds = {
+		sound = ambient_town_entites_01
+	}
+	volume = 0.35
+	falloff = "falloff_infantry"
+	is3d = yes
+	loop = yes
+	max_audible = 1
+	max_audible_behaviour = fail
+	fade_in = 1.0
+	fade_out = 1.0
 }
 
 # V19: keep only supported soundeffect declarations in this asset.

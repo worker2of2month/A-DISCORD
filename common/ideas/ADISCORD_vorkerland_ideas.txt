@@ -2711,6 +2711,123 @@ ideas = {
 			removal_cost = -1
 		}
 
+		RUS_permanent_government_delta = {
+			name = RUS_government_service
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.15
+			}
+		}
+
+		RUS_state_budget_delta = {
+			name = RUS_government_service
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.05
+			}
+		}
+
+		RUS_civil_construction_board_delta = {
+			name = RUS_government_service
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_industrial_complex_factor = 0.05
+			}
+		}
+
+		RUS_military_governors_delta = {
+			name = RUS_government_service
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				mobilization_speed = 0.1
+			}
+		}
+
+		RUS_military_contract_board_delta = {
+			name = RUS_government_service
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+			}
+		}
+
+		RUS_staff_college_delta = {
+			name = RUS_black_army
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+			}
+		}
+
+		RUS_integrated_signals_delta = {
+			name = RUS_black_army
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		RUS_wounded_return_service_delta = {
+			name = RUS_black_army
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				casualty_trickleback = 0.05
+			}
+		}
+
+		RUS_serial_ordnance_orders_delta = {
+			name = RUS_black_army
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.05
+			}
+		}
+
+		RUS_armoured_repair_service_delta = {
+			name = RUS_black_army
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.03
+			}
+		}
+
+		RUS_flight_school_delta = {
+			name = RUS_black_army
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				air_accidents_factor = -0.05
+			}
+		}
+
+		RUS_air_control_network_delta = {
+			name = RUS_black_army
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				air_mission_efficiency = 0.05
+			}
+		}
+
+		RUS_air_ground_coordination_delta = {
+			name = RUS_black_army
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				ground_attack_factor = 0.05
+			}
+		}
+
 		RUS_bunker_guard_delta = {
 			picture = generic_production_bonus
 			allowed = { always = no }
@@ -2724,7 +2841,8 @@ ideas = {
 			picture = generic_production_bonus
 			allowed = { always = no }
 			modifier = {
-				stability_factor = 0.08
+				stability_factor = 0.10
+				political_power_gain = 0.10
 			}
 		}
 
@@ -2740,7 +2858,7 @@ ideas = {
 			picture = generic_production_bonus
 			allowed = { always = no }
 			modifier = {
-				planning_speed = 0.12
+				planning_speed = 0.18
 			}
 		}
 
@@ -2764,7 +2882,7 @@ ideas = {
 			picture = generic_production_bonus
 			allowed = { always = no }
 			modifier = {
-				casualty_trickleback = 0.12
+				casualty_trickleback = 0.16
 			}
 		}
 
@@ -2780,7 +2898,7 @@ ideas = {
 			picture = generic_production_bonus
 			allowed = { always = no }
 			modifier = {
-				political_power_gain = 0.20
+				political_power_gain = 0.35
 			}
 		}
 

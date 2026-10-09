@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Own bounded campaign rail connections and Vorkerland supply hubs."""
+"""Own bounded campaign rail connections and starting supply hubs."""
 
 from __future__ import annotations
 
@@ -27,6 +27,39 @@ OSV_CAPITAL_RAIL = (1, (16642, 1540, 1818))
 STARTING_SUPPLY_RAILS = {
     "STP": (1, (119, 1, 16440), (16547, 16440)),
     "YPR": (1, (33, 73, 11), (16372, 11)),
+}
+# The imperial network joins the northern cities to Montera and the existing
+# southern railway without relying on transit through neighbouring countries.
+MON_CAPITAL_PROVINCE = 2845
+MON_SUPPLY_RAILS = (
+    (2, (2845, 10317, 11261, 11145, 4432, 3934, 9899)),
+    (2, (2845, 7088, 418)),
+    (2, (9899, 6800, 460, 16308, 2210, 12563, 6028)),
+    (2, (6028, 5475, 12975, 8798, 5730, 1702, 2090)),
+    (2, (2090, 11682, 11789, 9420, 1855, 10992, 212)),
+    (2, (212, 768, 5489, 10541, 7210, 12168, 5283, 9322)),
+    (2, (9322, 9807, 9741, 16330, 709, 635, 7404)),
+    (2, (7404, 5509, 12916, 12408, 12689, 300, 8865)),
+    (2, (9899, 4152, 1606, 6284, 7717, 6873, 1228, 8933, 7356, 3859)),
+    (2, (3859, 9729, 4374, 11365, 11224, 5575, 8159, 5183, 10008, 6748)),
+    (2, (8865, 1718, 12389, 9684, 10076, 12706, 1537, 2269, 9254, 10504, 1993, 7072)),
+    # Upgrade the existing capital spur; the southern line retains its level.
+    (2, (2845, 8790, 715, 12285)),
+)
+MON_SUPPLY_HUB_STATES = {
+    2845: 469,  # Montera.
+    9899: 459,  # Arken.
+    6028: 460,  # Vald.
+    6748: 471,  # Valtor.
+    212: 425,
+    2090: 444,
+    9322: 439,
+    7404: 445,
+    8865: 448,
+    3859: 456,
+    8729: 470,
+    10095: 472,
+    418: 467,
 }
 # The western line must join the bunker without crossing a third country.
 # Hubs become available to RUS only after it captures the border objectives.
@@ -220,6 +253,7 @@ def update_source(source: str) -> str:
             render_rail_line(level, provinces)
             for level, provinces in DIRTY_ZONE_FEEDER_RAILS
         ),
+        *(render_rail_line(level, provinces) for level, provinces in MON_SUPPLY_RAILS),
     ]
     managed_routes = {_rail_route(line): line for line in managed}
     seen = set()
@@ -246,8 +280,9 @@ def render_supply_node(province_id: int) -> str:
 
 def update_supply_source(source: str) -> str:
     """Append missing hubs and preserve the formatting of existing records."""
+    hub_states = {**VORKERLAND_SUPPLY_HUB_STATES, **MON_SUPPLY_HUB_STATES}
     managed = {
-        render_supply_node(province_id) for province_id in VORKERLAND_SUPPLY_HUB_STATES
+        render_supply_node(province_id) for province_id in hub_states
     }
     seen = set()
     lines = []
@@ -260,7 +295,7 @@ def update_supply_source(source: str) -> str:
         lines.append(line)
     lines.extend(
         render_supply_node(province_id)
-        for province_id in sorted(VORKERLAND_SUPPLY_HUB_STATES)
+        for province_id in sorted(hub_states)
         if render_supply_node(province_id) not in seen
     )
     return "\n".join(lines) + "\n"
@@ -389,6 +424,49 @@ def validate() -> list[str]:
                     ):
                         rail_graph[first].add(second)
                         rail_graph[second].add(first)
+        for rail_level, route in MON_SUPPLY_RAILS:
+            expected = render_rail_line(rail_level, route)
+            if source.splitlines().count(expected) != 1:
+                issues.append(
+                    f"MON rail {'-'.join(map(str, route))} must occur exactly once at level {rail_level}"
+                )
+            for province in route:
+                if province_types.get(province) != "land":
+                    issues.append(f"MON railway leaves land at {province}")
+                if state_owners.get(state_by_province.get(province)) != "MON":
+                    issues.append(
+                        f"MON railway leaves its starting territory at {province}"
+                    )
+            for first, second in zip(route, route[1:]):
+                if second not in physical.get(first, set()):
+                    issues.append(
+                        f"MON rail segment {first}-{second} is not physically adjacent"
+                    )
+        pending = [MON_CAPITAL_PROVINCE]
+        reached = set(pending)
+        while pending:
+            province = pending.pop()
+            for neighbour in rail_graph[province]:
+                if (
+                    neighbour not in reached
+                    and state_owners.get(state_by_province.get(neighbour)) == "MON"
+                ):
+                    reached.add(neighbour)
+                    pending.append(neighbour)
+        for hub, expected_state in MON_SUPPLY_HUB_STATES.items():
+            if supply_lines.count(render_supply_node(hub)) != 1:
+                issues.append(f"MON supply hub {hub} must occur exactly once")
+            if (
+                state_by_province.get(hub) != expected_state
+                or state_owners.get(expected_state) != "MON"
+            ):
+                issues.append(f"MON supply hub {hub} moved outside its starting state")
+            if province_types.get(hub) != "land":
+                issues.append(f"MON supply hub {hub} is not on land")
+            if hub not in reached:
+                issues.append(
+                    f"MON supply hub {hub} is disconnected from the capital inside its starting territory"
+                )
         for tag, (_, route, hubs) in STARTING_SUPPLY_RAILS.items():
             if source.splitlines().count(render_supply_connection(tag)) != 1:
                 issues.append(f"{tag} supply connection must occur exactly once")
@@ -529,7 +607,7 @@ def main() -> int:
             print(f"- {issue}")
         return 1
     print(
-        "Campaign rail validation passed: OSV spur, STP/YPR connections, RUS campaign spines and managed supply hubs."
+        "Campaign rail validation passed: OSV spur, STP/YPR connections, MON network, RUS campaign spines and managed supply hubs."
     )
     return 0
 

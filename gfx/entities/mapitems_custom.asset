@@ -1,4 +1,31 @@
 
+# Sound-only actors need no mesh; local sources retain normal spatial culling.
+entity = {
+	name = "ADISCORD_ambient_wind_entity"
+	default_state = "idle"
+	state = {
+		name = "idle"
+		state_time = 1
+		event = {
+			trigger_once = yes
+			sound = { soundeffect = "ADISCORD_ambient_wind" }
+		}
+	}
+}
+
+entity = {
+	name = "ADISCORD_ambient_town_entity"
+	default_state = "idle"
+	state = {
+		name = "idle"
+		state_time = 1
+		event = {
+			trigger_once = yes
+			sound = { soundeffect = "ADISCORD_ambient_town" }
+		}
+	}
+}
+
 entity = {
 	name = "ADISCORD_global_entity"
 	pdxmesh = "ADISCORD_global_mesh"

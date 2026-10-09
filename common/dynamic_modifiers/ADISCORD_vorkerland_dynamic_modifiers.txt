@@ -175,6 +175,9 @@ RUS_bunker_complex = {
 	stability_factor = RUS_bunker_stability_factor
 	surrender_limit = RUS_bunker_surrender_limit
 	training_time_army_factor = RUS_bunker_training_time_army_factor
+	air_mission_efficiency = RUS_bunker_air_mission_efficiency
+	air_accidents_factor = RUS_bunker_air_accidents_factor
+	production_factory_efficiency_gain_factor = RUS_bunker_production_factory_efficiency_gain_factor
 }
 
 RUS_black_army = {
@@ -196,6 +199,21 @@ RUS_black_army = {
 	planning_speed = RUS_army_planning
 	training_time_army_factor = RUS_army_training
 	special_forces_min = RUS_army_special_forces_min
+	casualty_trickleback = RUS_army_casualty_return
+	production_factory_max_efficiency_factor = RUS_army_factory_efficiency
+	air_accidents_factor = RUS_air_accidents
+	air_mission_efficiency = RUS_air_mission_efficiency
+	ground_attack_factor = RUS_air_ground_attack
+}
+
+RUS_government_service = {
+	icon = GFX_idea_generic_central_management
+	enable = { RUS_khan_governing = yes }
+	political_power_gain = RUS_government_political_power
+	ADISCORD_economy_admin_expense_factor = RUS_government_admin_expense
+	production_speed_industrial_complex_factor = RUS_government_civilian_speed
+	mobilization_speed = RUS_government_mobilization
+	industrial_capacity_factory = RUS_government_factory_output
 }
 
 # Inputs are refreshed only when faction support changes.

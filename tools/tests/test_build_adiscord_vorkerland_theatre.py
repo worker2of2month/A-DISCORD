@@ -32,7 +32,10 @@ class VorkerlandTheatreBuilderTests(unittest.TestCase):
         second = theatre.update_supply_source(first)
         self.assertEqual(second, first)
         self.assertTrue(first.startswith(unmanaged))
-        for province_id in theatre.VORKERLAND_SUPPLY_HUB_STATES:
+        for province_id in (
+            *theatre.VORKERLAND_SUPPLY_HUB_STATES,
+            *theatre.MON_SUPPLY_HUB_STATES,
+        ):
             self.assertEqual(
                 first.splitlines().count(theatre.render_supply_node(province_id)), 1
             )
@@ -175,6 +178,37 @@ class VorkerlandTheatreBuilderTests(unittest.TestCase):
             with patch.object(theatre, "SUPPLY_NODES_PATH", hubs):
                 issues = theatre.validate()
         self.assertIn("Vorkerland supply hub 12219 must occur exactly once", issues)
+
+    def test_cut_mon_capital_reports_disconnected_frontier_hubs(self) -> None:
+        source = normalized_rail_source()
+        capital = str(theatre.MON_CAPITAL_PROVINCE)
+        broken = "\n".join(
+            line for line in source.splitlines() if capital not in line.split()[2:]
+        ) + "\n"
+        self.assertNotEqual(broken, source)
+        with tempfile.TemporaryDirectory() as directory:
+            rails = Path(directory) / "railways.txt"
+            rails.write_text(broken, encoding="utf-8")
+            with patch.object(theatre, "RAILWAYS_PATH", rails):
+                issues = theatre.validate()
+        for hub in (418, 6028, 2090, 10095):
+            self.assertIn(
+                f"MON supply hub {hub} is disconnected from the capital inside its starting territory",
+                issues,
+            )
+
+    def test_missing_mon_hub_is_reported(self) -> None:
+        source = theatre.SUPPLY_NODES_PATH.read_text(encoding="utf-8")
+        broken = "\n".join(
+            line for line in source.splitlines() if line.strip() != "1 9899"
+        ) + "\n"
+        self.assertNotEqual(broken, source)
+        with tempfile.TemporaryDirectory() as directory:
+            hubs = Path(directory) / "supply_nodes.txt"
+            hubs.write_text(broken, encoding="utf-8")
+            with patch.object(theatre, "SUPPLY_NODES_PATH", hubs):
+                issues = theatre.validate()
+        self.assertIn("MON supply hub 9899 must occur exactly once", issues)
 
 
 if __name__ == "__main__":

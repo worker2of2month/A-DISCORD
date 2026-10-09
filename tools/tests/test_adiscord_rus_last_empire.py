@@ -1487,6 +1487,7 @@ class QueuedRusCrisisFixture(RusCrisisFixture):
         self.hour = 0
         self.delayed_declaration = True
         self.native_delay = 0
+        self.unbound_war_entries = []
         self.queued_relations = []
         self.entry_events = []
         self.rejected = set()
@@ -1494,6 +1495,8 @@ class QueuedRusCrisisFixture(RusCrisisFixture):
 
     def matches(self, rows, stack):
         for entry in rows:
+            if entry.key == "has_war_together_with" and entry.value.startswith("event_target:"):
+                return False
             if entry.key.startswith("event_target:") and isinstance(entry.value, list):
                 if entry.key not in self.targets:
                     raise AssertionError("Unresolved native event target: " + entry.key)
@@ -1517,6 +1520,11 @@ class QueuedRusCrisisFixture(RusCrisisFixture):
                 self.declarations.append((stack[-1], enemy))
                 self.queued_relations.append((stack[-1], enemy, None, self.hour + self.native_delay))
             elif key == "add_to_war":
+                # Model a native argument binding failure instead of letting
+                # Python resolve an arbitrary saved target on the engine's behalf.
+                if scalar(value, "targeted_alliance").startswith("event_target:"):
+                    self.unbound_war_entries.append(stack[-1])
+                    continue
                 host = self.resolve(scalar(value, "targeted_alliance"), stack)
                 enemy = self.resolve(scalar(value, "enemy"), stack)
                 if frozenset((host, enemy)) not in self.wars:
@@ -1654,6 +1662,63 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertEqual(world.declarations, [("MON", "RUS")])
         self.assertFalse(world.entry_events)
         self.assertTrue(all("RUS_crisis_entry_pending" not in world.flags[tag] for tag in expected))
+
+    def test_timer_joins_montar_when_saved_targets_are_not_native_war_arguments(self):
+        for delayed in (False, True):
+            with self.subTest(delayed=delayed):
+                world = self.peaceful_empire(QueuedRusCrisisFixture)
+                world.delayed_declaration = delayed
+                world.owners.pop("VLD_capital")
+                world.controllers.pop("VLD_capital")
+                world.run("RUS_crisis_begin")
+                world.run("RUS_crisis_launch")
+                # The delayed country event has its own ROOT, unlike the
+                # initial launch from RUS. Entry must preserve the joining country.
+                world.root = "TMR"
+                for _ in range(3):
+                    world.tick()
+                self.assertEqual(world.declarations, [("MON", "RUS")])
+                self.assertEqual(world.war_sides, [{"MON", "TMR"}])
+                self.assertEqual(world.joins, [("TMR", "MON", "RUS")])
+                self.assertFalse(world.unbound_war_entries)
+                self.assertEqual(
+                    set(world.arrays["global.RUS_crisis_defenders"]),
+                    {"MON", "TMR"},
+                )
+                world.capitulated.add("MON")
+                world.controllers["MON_capital"] = "RUS"
+                world.run("RUS_crisis_resolve_capitulation")
+                self.assertFalse(world.annexed)
+                self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 2)
+
+    def test_native_montar_subject_entry_is_registered_and_blocks_early_victory(self):
+        hooks = self.block(
+            self.entries("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+            "on_actions",
+        )
+        registration = self.block(self.block(hooks, "on_war_relation_added"), "effect")[1:2]
+        for reverse in (False, True):
+            with self.subTest(reverse=reverse):
+                world = self.peaceful_empire(QueuedRusCrisisFixture)
+                world.countries.add("D01")
+                world.flags["D01"] = set()
+                world.owners["147"] = world.controllers["147"] = "D01"
+                world.subjects["D01"] = "MON"
+                world.variables["RUS", "RUS_crisis_phase"] = 2
+                world.targets["event_target:RUS_crisis_war_anchor"] = "MON"
+                world.war_sides = [{"MON", "D01"}]
+                world.wars.update((frozenset(("MON", "RUS")), frozenset(("D01", "RUS"))))
+                world.run("RUS_crisis_register_defender", "MON")
+                world.root, world.from_country = ("RUS", "D01") if reverse else ("D01", "RUS")
+                for _ in range(2):
+                    world.execute(registration, [world.root])
+                self.assertEqual(world.arrays["global.RUS_crisis_defenders"], ["MON", "D01"])
+                self.assertIn("D01", world.majors)
+                world.capitulated.add("MON")
+                world.controllers["MON_capital"] = "RUS"
+                world.run("RUS_crisis_resolve_capitulation")
+                self.assertFalse(world.annexed)
+                self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 2)
 
     def test_first_defeat_cannot_settle_before_delayed_invitations(self):
         world = self.peaceful_empire(QueuedRusCrisisFixture)

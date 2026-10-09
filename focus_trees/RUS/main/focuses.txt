@@ -3422,4 +3422,682 @@ focus_tree = {
 		}
 		ai_will_do = { base = 8 }
 	}
+
+	# Government institutions, field services and prewar aviation.
+
+	focus = {
+		id = RUS_permanent_government
+		icon = GFX_goal_generic_political_pressure
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 11
+		y = 2
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_count_the_hearths }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			effect_tooltip = { add_ideas = RUS_permanent_government_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_political_power value = 0.15 }
+				RUS_government_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_state_budget
+		icon = GFX_goal_generic_production
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		x = 11
+		y = 3
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_permanent_government }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			effect_tooltip = { add_ideas = RUS_state_budget_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_admin_expense value = -0.05 }
+				RUS_government_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_district_representation
+		icon = GFX_goal_generic_political_pressure
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		x = 2
+		y = 6
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_aimaq_council }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_stability = 0.05
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_civil_construction_board
+		icon = GFX_goal_generic_production
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 2
+		y = 7
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_district_representation }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			effect_tooltip = { add_ideas = RUS_civil_construction_board_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_civilian_speed value = 0.05 }
+				RUS_government_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_trained_administrators
+		icon = GFX_goal_generic_political_pressure
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 2
+		y = 8
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_civil_construction_board }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			unlock_decision_tooltip = RUS_civil_service_training
+			custom_effect_tooltip = RUS_trained_administrators_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_civil_service_progress_bonus value = 10 }
+				country_event = { id = ADISCORD_rus_campaign.12 }
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_military_governors
+		icon = GFX_goal_generic_political_pressure
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
+		x = 20
+		y = 6
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_seal_chancery }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			effect_tooltip = { add_ideas = RUS_military_governors_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_mobilization value = 0.1 }
+				RUS_government_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_military_contract_board
+		icon = GFX_goal_generic_production
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 20
+		y = 7
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_military_governors }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			effect_tooltip = { add_ideas = RUS_military_contract_board_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_factory_output value = 0.05 }
+				RUS_government_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_command_accountability
+		icon = GFX_goal_generic_political_pressure
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
+		x = 20
+		y = 8
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_military_contract_board }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_war_support = 0.05
+			custom_effect_tooltip = RUS_command_accountability_synergy_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_bunker_command_planning_bonus value = 0.03 }
+				RUS_bunker_refresh = yes
+			}
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.13 } }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_staff_college
+		icon = GFX_goal_generic_army_doctrines
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = -12
+		y = 2
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_muster_books }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			effect_tooltip = { add_ideas = RUS_staff_college_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_org value = 0.03 }
+				RUS_black_army_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_integrated_signals
+		icon = GFX_goal_generic_army_doctrines
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = -12
+		y = 3
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_staff_college }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			effect_tooltip = { add_ideas = RUS_integrated_signals_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_planning value = 0.05 }
+				RUS_black_army_refresh = yes
+			}
+			custom_effect_tooltip = RUS_integrated_signals_synergy_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_bunker_signals_reinforce_bonus value = 0.01 }
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_field_hospitals
+		icon = GFX_goal_generic_production
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = -16
+		y = 4
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_quartermaster_service }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = RUS }
+			add_tech_bonus = {
+				name = RUS_field_hospitals
+				bonus = 0.5
+				uses = 1
+				category = support_tech
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_wounded_return_service
+		icon = GFX_goal_generic_production
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		x = -16
+		y = 5
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_field_hospitals }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			effect_tooltip = { add_ideas = RUS_wounded_return_service_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_casualty_return value = 0.05 }
+				RUS_black_army_refresh = yes
+			}
+			custom_effect_tooltip = RUS_wounded_return_service_synergy_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_bunker_clinic_return_bonus value = 0.05 }
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_battery_training
+		icon = GFX_goal_generic_army_artillery
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = -12
+		y = 6
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_artillery_tables }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_tech_bonus = {
+				name = RUS_battery_training
+				bonus = 0.5
+				uses = 2
+				category = artillery
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_serial_ordnance_orders
+		icon = GFX_goal_generic_production
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = -12
+		y = 7
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_battery_training }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			effect_tooltip = { add_ideas = RUS_serial_ordnance_orders_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_factory_efficiency value = 0.05 }
+				RUS_black_army_refresh = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+			custom_effect_tooltip = RUS_serial_ordnance_orders_synergy_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_bunker_arsenal_output_bonus value = 0.03 }
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_armoured_trial_company
+		icon = GFX_goal_generic_army_tanks
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = -12
+		y = 4
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_quartermaster_service }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_tech_bonus = {
+				name = RUS_armoured_trial_company
+				bonus = 0.5
+				uses = 2
+				category = armor
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_armoured_repair_service
+		icon = GFX_goal_generic_army_motorized
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = -12
+		y = 5
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_armoured_trial_company }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = { type = motorized_equipment amount = 150 producer = RUS }
+			effect_tooltip = { add_ideas = RUS_armoured_repair_service_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_supply value = -0.03 }
+				RUS_black_army_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_flight_school
+		icon = GFX_goal_generic_air_doctrine
+		search_filters = { FOCUS_FILTER_AIR_XP }
+		x = -24
+		y = 1
+		cost = 2
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_summon_the_aimaqs }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			air_experience = 30
+			effect_tooltip = { add_ideas = RUS_flight_school_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_air_accidents value = -0.05 }
+				RUS_black_army_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_capital_airfields
+		icon = GFX_focus_generic_air_bases
+		search_filters = { FOCUS_FILTER_AIR_XP }
+		x = -24
+		y = 2
+		cost = 2
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_flight_school }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+			custom_trigger_tooltip = {
+				tooltip = RUS_airfield_capacity_tt
+				66 = { air_base < 9 }
+			}
+		}
+		completion_reward = {
+			66 = {
+				add_building_construction = { type = air_base level = 2 instant_build = yes }
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_fighter_cover
+		icon = GFX_goal_generic_air_fighter
+		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_RESEARCH }
+		x = -27
+		y = 3
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_capital_airfields }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 40 producer = RUS }
+			add_tech_bonus = {
+				name = RUS_fighter_cover
+				bonus = 0.5
+				uses = 2
+				technology = ADISCORD_tech_standardized_airframes
+				technology = ADISCORD_tech_pulse_doppler_radar
+				technology = ADISCORD_tech_composite_wing_spars
+				technology = ADISCORD_tech_high_altitude_interceptors
+				technology = ADISCORD_tech_electronically_scanned_fighter_radar
+				technology = ADISCORD_tech_thrust_vectoring
+				technology = ADISCORD_tech_low_observable_inlet_geometry
+				technology = ADISCORD_tech_loyal_wingmen
+				technology = ADISCORD_tech_autonomous_dogfight_controller
+				technology = ADISCORD_tech_distributed_interceptor_swarms
+				technology = ADISCORD_tech_aerospace_interceptors
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_assault_squadrons
+		icon = GFX_focus_generic_cas_aircraft
+		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_RESEARCH }
+		x = -21
+		y = 3
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_capital_airfields }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 40 producer = RUS }
+			add_tech_bonus = {
+				name = RUS_assault_squadrons
+				bonus = 0.5
+				uses = 1
+				technology = ADISCORD_tech_guided_munitions
+				technology = ADISCORD_tech_armored_cockpits
+				technology = ADISCORD_tech_vtol_assault_frames
+				technology = ADISCORD_tech_precision_glide_bomb_kits
+				technology = ADISCORD_tech_drone_air_wings
+				technology = ADISCORD_tech_loitering_strike_drones
+				technology = ADISCORD_tech_cooperative_close_air_control_links
+				technology = ADISCORD_tech_autonomous_strike_wings
+				technology = ADISCORD_tech_persistent_sensor_strike_loops
+				technology = ADISCORD_tech_persistent_air_support
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_aviation_fuel_reserve
+		icon = GFX_goal_generic_air_production
+		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
+		x = -30
+		y = 3
+		cost = 2
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_capital_airfields }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			66 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = { type = fuel_silo level = 1 instant_build = yes }
+			}
+			add_fuel = 3000
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_aircraft_workshops
+		icon = GFX_focus_generic_aircraft_production
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = -24
+		y = 4
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_fighter_cover
+			focus = RUS_assault_squadrons
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			66 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			custom_effect_tooltip = RUS_aircraft_workshops_synergy_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_bunker_air_production_bonus value = 0.03 }
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_air_control_network
+		icon = GFX_goal_generic_air_doctrine
+		search_filters = { FOCUS_FILTER_AIR_XP }
+		x = -27
+		y = 4
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_fighter_cover
+			focus = RUS_assault_squadrons
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			effect_tooltip = { add_ideas = RUS_air_control_network_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_air_mission_efficiency value = 0.05 }
+				RUS_black_army_refresh = yes
+			}
+			custom_effect_tooltip = RUS_air_control_network_synergy_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_bunker_air_control_bonus value = 0.03 }
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_air_ground_coordination
+		icon = GFX_focus_generic_tank_air_support
+		search_filters = { FOCUS_FILTER_AIR_XP }
+		x = -24
+		y = 5
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_air_control_network }
+		prerequisite = { focus = RUS_assault_squadrons }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			effect_tooltip = { add_ideas = RUS_air_ground_coordination_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_air_ground_attack value = 0.05 }
+				RUS_black_army_refresh = yes
+			}
+			custom_effect_tooltip = RUS_air_ground_coordination_synergy_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_bunker_air_safety_bonus value = -0.05 }
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
 }

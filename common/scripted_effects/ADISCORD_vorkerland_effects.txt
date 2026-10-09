@@ -10354,12 +10354,7 @@ RUS_crisis_start_intervention = {
 				NOT = { has_war_with = RUS }
 				event_target:RUS_crisis_war_anchor = { has_war_with = RUS }
 			}
-			add_to_war = {
-				targeted_alliance = event_target:RUS_crisis_war_anchor
-				enemy = RUS
-				hostility_reason = asked_to_join
-				single_target_only = yes
-			}
+			RUS_crisis_request_intervention_entry = yes
 		}
 		if = {
 			limit = { has_war_with = RUS }
@@ -10367,6 +10362,32 @@ RUS_crisis_start_intervention = {
 		}
 		else = {
 			country_event = { id = ADISCORD_rus_crisis.9 days = 1 }
+		}
+	}
+}
+
+# COUNTRY entrant. Resolve the saved anchor as a scope before the native war
+# effect. Returning through PREV puts the entrant in THIS and the anchor in
+# PREV, independently of the launch or delayed event's ROOT and FROM.
+RUS_crisis_request_intervention_entry = {
+	if = {
+		limit = {
+			has_event_target = RUS_crisis_war_anchor
+			NOT = { has_war_with = RUS }
+		}
+		event_target:RUS_crisis_war_anchor = {
+			if = {
+				limit = { has_war_with = RUS }
+				PREV = {
+					add_to_war = {
+						targeted_alliance = PREV
+						enemy = RUS
+						hostility_reason = asked_to_join
+						single_target_only = yes
+					}
+					log = "[RUS_CRISIS] [This.GetTag]: coalition entry requested."
+				}
+			}
 		}
 	}
 }
@@ -10419,18 +10440,7 @@ RUS_crisis_retry_intervention_entry = {
 				RUS_crisis_confirm_intervention_entry = yes
 			}
 			else = {
-				if = {
-					limit = { has_event_target = RUS_crisis_war_anchor }
-					if = {
-						limit = { event_target:RUS_crisis_war_anchor = { has_war_with = RUS } }
-						add_to_war = {
-							targeted_alliance = event_target:RUS_crisis_war_anchor
-							enemy = RUS
-							hostility_reason = asked_to_join
-							single_target_only = yes
-						}
-					}
-				}
+				RUS_crisis_request_intervention_entry = yes
 				country_event = { id = ADISCORD_rus_crisis.11 days = 1 }
 			}
 		}
@@ -10448,7 +10458,10 @@ RUS_crisis_settle_intervention_entry = {
 			}
 			RUS_crisis_confirm_intervention_entry = yes
 		}
-		else = { RUS_crisis_remove_defender = yes }
+		else = {
+			log = "[RUS_CRISIS] [This.GetTag]: coalition entry not confirmed; pending membership withdrawn."
+			RUS_crisis_remove_defender = yes
+		}
 		RUS = { RUS_crisis_check_external_end = yes }
 	}
 }
@@ -10469,6 +10482,10 @@ RUS_crisis_accept_native_entry = {
 }
 
 RUS_crisis_confirm_intervention_entry = {
+	if = {
+		limit = { has_country_flag = RUS_crisis_entry_pending }
+		log = "[RUS_CRISIS] [This.GetTag]: coalition entry confirmed."
+	}
 	clr_country_flag = RUS_crisis_entry_pending
 	every_allied_country = {
 		limit = { NOT = { tag = PREV } }
@@ -12696,6 +12713,7 @@ RUS_bunker_refund = {
 	}
 }
 
+# Programme deltas remain country inputs when rooms are dismantled or rebuilt.
 RUS_bunker_refresh = {
 	set_variable = { var = RUS_bunker_power value = 4 }
 	set_temp_variable = { var = RUS_bunker_power_add value = RUS_bunker_generators }
@@ -12718,6 +12736,9 @@ RUS_bunker_refresh = {
 	set_variable = { var = RUS_bunker_surrender_limit value = 0 }
 	set_variable = { var = RUS_bunker_training_time_army_factor value = 0 }
 	set_variable = { var = RUS_bunker_reinforce_rate value = 0 }
+	set_variable = { var = RUS_bunker_air_mission_efficiency value = 0 }
+	set_variable = { var = RUS_bunker_air_accidents_factor value = 0 }
+	set_variable = { var = RUS_bunker_production_factory_efficiency_gain_factor value = 0 }
 	set_variable = { var = RUS_bunker_surrender_limit value = RUS_bunker_depth }
 	multiply_variable = { var = RUS_bunker_surrender_limit value = 0.01 }
 	if = {
@@ -12735,7 +12756,8 @@ RUS_bunker_refresh = {
 		}
 		add_to_variable = { var = RUS_bunker_used_power value = 1 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
-		add_to_variable = { var = RUS_bunker_stability_factor value = 0.08 }
+		add_to_variable = { var = RUS_bunker_stability_factor value = 0.10 }
+		add_to_variable = { var = RUS_bunker_political_power_gain value = 0.10 }
 	}
 	if = {
 		limit = {
@@ -12751,7 +12773,9 @@ RUS_bunker_refresh = {
 		}
 		add_to_variable = { var = RUS_bunker_used_power value = 2 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
-		add_to_variable = { var = RUS_bunker_planning_speed value = 0.12 }
+		add_to_variable = { var = RUS_bunker_planning_speed value = 0.18 }
+		add_to_variable = { var = RUS_bunker_reinforce_rate value = RUS_bunker_signals_reinforce_bonus }
+		add_to_variable = { var = RUS_bunker_air_mission_efficiency value = RUS_bunker_air_control_bonus }
 	}
 	if = {
 		limit = {
@@ -12760,6 +12784,8 @@ RUS_bunker_refresh = {
 		add_to_variable = { var = RUS_bunker_used_power value = 3 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
 		add_to_variable = { var = RUS_bunker_industrial_capacity_factory value = 0.15 }
+		add_to_variable = { var = RUS_bunker_industrial_capacity_factory value = RUS_bunker_arsenal_output_bonus }
+		add_to_variable = { var = RUS_bunker_production_factory_efficiency_gain_factor value = RUS_bunker_air_production_bonus }
 	}
 	if = {
 		limit = {
@@ -12775,7 +12801,8 @@ RUS_bunker_refresh = {
 		}
 		add_to_variable = { var = RUS_bunker_used_power value = 2 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
-		add_to_variable = { var = RUS_bunker_casualty_trickleback value = 0.12 }
+		add_to_variable = { var = RUS_bunker_casualty_trickleback value = 0.16 }
+		add_to_variable = { var = RUS_bunker_casualty_trickleback value = RUS_bunker_clinic_return_bonus }
 	}
 	if = {
 		limit = {
@@ -12784,6 +12811,7 @@ RUS_bunker_refresh = {
 		add_to_variable = { var = RUS_bunker_used_power value = 3 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
 		add_to_variable = { var = RUS_bunker_research_speed_factor value = 0.10 }
+		add_to_variable = { var = RUS_bunker_air_accidents_factor value = RUS_bunker_air_safety_bonus }
 	}
 	if = {
 		limit = {
@@ -12791,7 +12819,7 @@ RUS_bunker_refresh = {
 		}
 		add_to_variable = { var = RUS_bunker_used_power value = 1 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
-		add_to_variable = { var = RUS_bunker_political_power_gain value = 0.20 }
+		add_to_variable = { var = RUS_bunker_political_power_gain value = 0.35 }
 	}
 	if = {
 		limit = {
@@ -12800,6 +12828,7 @@ RUS_bunker_refresh = {
 		add_to_variable = { var = RUS_bunker_used_power value = 2 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
 		add_to_variable = { var = RUS_bunker_max_planning_factor value = 0.08 }
+		add_to_variable = { var = RUS_bunker_planning_speed value = RUS_bunker_command_planning_bonus }
 		add_to_variable = { var = RUS_bunker_army_defence_factor value = 0.08 }
 	}
 	if = {
@@ -12828,7 +12857,7 @@ RUS_bunker_refresh = {
 		}
 		if = {
 			limit = { check_variable = { var = RUS_bunker_layer_2 value = 2 compare = equals } }
-			add_to_variable = { var = RUS_bunker_planning_speed value = 0.08 }
+			add_to_variable = { var = RUS_bunker_planning_speed value = 0.10 }
 		}
 	}
 	if = {
@@ -12854,7 +12883,7 @@ RUS_bunker_refresh = {
 		add_to_variable = { var = RUS_bunker_used_power value = 1 }
 		if = {
 			limit = { check_variable = { var = RUS_bunker_layer_4 value = 1 compare = equals } }
-			add_to_variable = { var = RUS_bunker_casualty_trickleback value = 0.08 }
+			add_to_variable = { var = RUS_bunker_casualty_trickleback value = 0.10 }
 		}
 		if = {
 			limit = { check_variable = { var = RUS_bunker_layer_4 value = 2 compare = equals } }
@@ -12868,7 +12897,7 @@ RUS_bunker_refresh = {
 		}
 		if = {
 			limit = { check_variable = { var = RUS_bunker_layer_5 value = 1 compare = equals } }
-			add_to_variable = { var = RUS_bunker_political_power_gain value = 0.10 }
+			add_to_variable = { var = RUS_bunker_political_power_gain value = 0.15 }
 		}
 		if = {
 			limit = { check_variable = { var = RUS_bunker_layer_5 value = 2 compare = equals } }
@@ -13060,6 +13089,18 @@ RUS_black_army_empire_reform = {
 	RUS_black_army_refresh = yes
 }
 
+RUS_government_refresh = {
+	if = {
+		limit = {
+			RUS_khan_governing = yes
+			NOT = { has_dynamic_modifier = { modifier = RUS_government_service } }
+		}
+		add_dynamic_modifier = { modifier = RUS_government_service }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
 RUS_campaign_initialize = {
 	if = {
 		limit = {
@@ -13108,6 +13149,24 @@ RUS_campaign_initialize = {
 		set_variable = { var = RUS_army_planning value = 0 }
 		set_variable = { var = RUS_army_training value = 0 }
 		set_variable = { var = RUS_army_special_forces_min value = 0 }
+		set_variable = { var = RUS_government_political_power value = 0 }
+		set_variable = { var = RUS_government_admin_expense value = 0 }
+		set_variable = { var = RUS_government_civilian_speed value = 0 }
+		set_variable = { var = RUS_government_mobilization value = 0 }
+		set_variable = { var = RUS_government_factory_output value = 0 }
+		set_variable = { var = RUS_army_casualty_return value = 0 }
+		set_variable = { var = RUS_army_factory_efficiency value = 0 }
+		set_variable = { var = RUS_air_accidents value = 0 }
+		set_variable = { var = RUS_air_mission_efficiency value = 0 }
+		set_variable = { var = RUS_air_ground_attack value = 0 }
+		set_variable = { var = RUS_civil_service_progress_bonus value = 0 }
+		set_variable = { var = RUS_bunker_signals_reinforce_bonus value = 0 }
+		set_variable = { var = RUS_bunker_air_control_bonus value = 0 }
+		set_variable = { var = RUS_bunker_arsenal_output_bonus value = 0 }
+		set_variable = { var = RUS_bunker_air_production_bonus value = 0 }
+		set_variable = { var = RUS_bunker_clinic_return_bonus value = 0 }
+		set_variable = { var = RUS_bunker_air_safety_bonus value = 0 }
+		set_variable = { var = RUS_bunker_command_planning_bonus value = 0 }
 		RUS_black_army_refresh = yes
 		RUS_faction_support_refresh = yes
 		RUS_bunker_refresh = yes
@@ -13131,6 +13190,10 @@ RUS_campaign_shutdown = {
 	}
 	remove_ideas = RUS_council_mandate
 	remove_ideas = RUS_chancery_mandate
+	if = {
+		limit = { has_dynamic_modifier = { modifier = RUS_government_service } }
+		remove_dynamic_modifier = { modifier = RUS_government_service }
+	}
 	remove_ideas = RUS_paid_administration
 	remove_ideas = RUS_repair_depots_spirit
 	remove_ideas = RUS_open_city_policy

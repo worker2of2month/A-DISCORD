@@ -6,6 +6,7 @@ from pathlib import Path
 import json
 import re
 import unittest
+from unittest.mock import patch
 
 from tools.builders.build_adiscord_focus_trees import expected_outputs
 from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
@@ -61,6 +62,8 @@ class BunkerWorld:
         self.bop_id = None
         self.bop = 0.0
         self.army_experience = 0.0
+        self.air_experience = 0.0
+        self.fuel = 0.0
         self.command_power = 0.0
         self.manpower = 0.0
         self.stability = 0.0
@@ -76,7 +79,7 @@ class BunkerWorld:
         self.controller = True
         self.divisions = 2
         self.dirty = 0
-        self.buildings = {"infrastructure": 2, "arms_factory": 5, "industrial_complex": 0}
+        self.buildings = {"infrastructure": 2, "arms_factory": 5, "industrial_complex": 0, "air_base": 2, "fuel_silo": 0}
         self.building_slots = 6
         self.run("RUS_campaign_initialize")
 
@@ -101,7 +104,7 @@ class BunkerWorld:
             key, value = entry.key, entry.value
             index += 1
             if not key:
-                assert value in ("has_political_power", "has_manpower", "infrastructure"), value
+                assert value in ("has_political_power", "has_manpower", "infrastructure", "air_base"), value
                 operator, amount = rows[index:index + 2]
                 index += 2
                 current = {"has_political_power": self.pp, "has_manpower": self.manpower}.get(value)
@@ -164,7 +167,7 @@ class BunkerWorld:
                 state_id = next((child.value for child in value if child.key == "limit" for child in child.value if child.key == "id"), None)
                 result = state_id is not None
             elif key == "free_building_slots":
-                occupied = self.buildings["arms_factory"] + self.buildings["industrial_complex"]
+                occupied = sum(self.buildings[kind] for kind in ("arms_factory", "industrial_complex", "fuel_silo"))
                 result = self.building_slots - occupied >= int(scalar(value, "size"))
             elif key in ("owns_state", "controls_state"):
                 if value == "66":
@@ -260,6 +263,10 @@ class BunkerWorld:
                 self.pp += self.value(value)
             elif key == "army_experience":
                 self.army_experience += self.value(value)
+            elif key == "air_experience":
+                self.air_experience += self.value(value)
+            elif key == "add_fuel":
+                self.fuel += self.value(value)
             elif key == "add_command_power":
                 self.command_power += self.value(value)
             elif key == "add_manpower":
@@ -389,7 +396,7 @@ class RusCampaignTests(unittest.TestCase):
         return BunkerWorld(self)
 
     def test_generation_and_political_development_focuses(self):
-        self.assertEqual(len(self.focuses), 113)
+        self.assertEqual(len(self.focuses), 137)
         path = ROOT / "common/national_focus/ADISCORD_national_focus_RUS.txt"
         self.assertEqual(path.read_bytes(), expected_outputs()[path])
 
@@ -1528,7 +1535,7 @@ class RusCampaignTests(unittest.TestCase):
         world.run("RUS_bunker_refresh")
         self.assertEqual(world.value("RUS_bunker_food_fed_line"), 75)
         self.assertEqual(world.value("RUS_bunker_food_state"), 2)
-        self.assertAlmostEqual(world.value("RUS_bunker_stability_factor"), 0.13)
+        self.assertAlmostEqual(world.value("RUS_bunker_stability_factor"), 0.15)
         self.assertAlmostEqual(world.value("RUS_bunker_reinforce_rate"), 0.05)
         world.variables["RUS_bunker_food"] = 74.99
         world.run("RUS_bunker_refresh")
@@ -1778,7 +1785,7 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_public_story_events_have_no_mandatory_choice_settlement(self):
         events = [e.value for e in parse(f"events/{BASE}_events.txt") if e.key == "country_event" and scalar(e.value, "id").startswith("ADISCORD_rus_campaign.")]
-        self.assertEqual(len(events), 11)
+        self.assertEqual(len(events), 13)
         registry = json.loads(read("tools/data/adiscord_event_ids.json"))["events"]
         for event in events:
             name = scalar(event, "id")
@@ -1922,6 +1929,11 @@ class RusCampaignTests(unittest.TestCase):
             "conscription_factor": "RUS_army_recruitment",
             "ADISCORD_country_development_army_growth_factor": "RUS_army_growth",
             "special_forces_min": "RUS_army_special_forces_min",
+            "casualty_trickleback": "RUS_army_casualty_return",
+            "production_factory_max_efficiency_factor": "RUS_army_factory_efficiency",
+            "air_accidents_factor": "RUS_air_accidents",
+            "air_mission_efficiency": "RUS_air_mission_efficiency",
+            "ground_attack_factor": "RUS_air_ground_attack",
             "army_defence_factor": "RUS_army_defence",
             "supply_consumption_factor": "RUS_army_supply",
             "army_speed_factor": "RUS_army_speed",
@@ -2727,6 +2739,221 @@ class RusCampaignTests(unittest.TestCase):
         self.assertLess(order.index("RUS_bunker_survey"), order.index("RUS_claim_the_opened_zone"))
         start = order.index("RUS_imperial_general_staff")
         self.assertEqual(order[start:start + 4], ["RUS_imperial_general_staff", "RUS_western_supply_lines", "RUS_imperial_arsenals", "RUS_aimaq_reserve"])
+
+    def test_prewar_aviation_finishes_without_war_empire_or_bunker(self):
+        order = (
+            "summon_the_aimaqs", "flight_school", "capital_airfields", "fighter_cover",
+            "assault_squadrons", "aviation_fuel_reserve", "aircraft_workshops",
+            "air_control_network", "air_ground_coordination",
+        )
+        for course, balance in (("scientists_council", -1), ("black_army_oath", 1)):
+            world = BunkerWorld(self, fresh=True)
+            world.war = False
+            world.bop = balance
+            world.focuses = {"RUS_" + course}
+            days = 0
+            for suffix in order:
+                name = "RUS_" + suffix
+                rows = self.focuses[name]
+                for group in (row.value for row in rows if row.key == "prerequisite"):
+                    self.assertTrue(any(child.value in world.focuses for child in group), name)
+                self.assertTrue(world.matches(block(rows, "available")), name)
+                days += float(scalar(rows, "cost")) * 7
+                world.execute(block(rows, "completion_reward"))
+                world.focuses.add(name)
+            self.assertEqual(days, 175)
+            self.assertEqual(world.equipment["ADISCORD_fighter_airframe_2163"], 40)
+            self.assertEqual(world.equipment["ADISCORD_cas_airframe_2170"], 40)
+            self.assertEqual(world.air_experience, 30)
+            self.assertEqual(world.buildings["air_base"], 4)
+            self.assertEqual(world.buildings["fuel_silo"], 1)
+            self.assertEqual(world.buildings["arms_factory"], 6)
+            self.assertEqual(world.fuel, 3000)
+            self.assertAlmostEqual(world.value("RUS_air_accidents"), -0.05)
+            self.assertAlmostEqual(world.value("RUS_air_mission_efficiency"), 0.05)
+            self.assertAlmostEqual(world.value("RUS_air_ground_attack"), 0.05)
+            self.assertEqual(world.value("RUS_bunker_depth"), 0)
+            self.assertNotIn("RUS_claim_the_opened_zone", world.focuses)
+
+    def test_aircraft_rewards_use_unlocked_equipment_and_live_technology_targets(self):
+        baseline = block(parse("common/scripted_effects/ADISCORD_technology_baseline_effects.txt"), "ADISCORD_grant_technology_profile_common")
+        starting_techs = {row.key for row in walk(baseline) if row.value == "1"}
+        technologies = block(parse("common/technologies/ADISCORD_air.txt"), "technologies")
+        air_techs = {row.key: row.value for row in technologies}
+        enabled = {
+            row.value for name in starting_techs & air_techs.keys()
+            for entry in air_techs[name] if entry.key == "enable_equipments"
+            for row in entry.value
+        }
+        for suffix, count in (("fighter_cover", 2), ("assault_squadrons", 1)):
+            reward = block(self.focuses["RUS_" + suffix], "completion_reward")
+            equipment = scalar(block(reward, "add_equipment_to_stockpile"), "type")
+            self.assertIn(equipment, enabled)
+            bonus = block(reward, "add_tech_bonus")
+            self.assertEqual(scalar(bonus, "uses"), str(count))
+            targets = {row.value for row in bonus if row.key == "technology"}
+            self.assertTrue(targets)
+            self.assertTrue(targets <= air_techs.keys())
+            self.assertFalse(targets & starting_techs)
+
+    def test_air_base_and_fuel_rewards_require_space_and_current_control(self):
+        world = self.world()
+        airfield = self.focuses["RUS_capital_airfields"]
+        world.buildings["air_base"] = 8
+        self.assertTrue(world.matches(block(airfield, "available")))
+        world.buildings["air_base"] = 9
+        self.assertFalse(world.matches(block(airfield, "available")))
+        for suffix in ("capital_airfields", "aviation_fuel_reserve"):
+            rows = self.focuses["RUS_" + suffix]
+            world = self.world()
+            world.controller = False
+            self.assertFalse(world.matches(block(rows, "available")))
+        world = self.world()
+        world.buildings["industrial_complex"] = 1
+        occupied = sum(world.buildings[kind] for kind in ("arms_factory", "industrial_complex", "fuel_silo"))
+        self.assertEqual(occupied, world.building_slots)
+        world.execute(block(self.focuses["RUS_aviation_fuel_reserve"], "completion_reward"))
+        self.assertEqual(world.buildings["fuel_silo"], 1)
+        self.assertEqual(world.building_slots, occupied + 1)
+
+    def test_bunker_buff_totals_and_existing_upgrade_prices(self):
+        cases = (
+            (1, 2, "stability_factor", 0.10, 0.15),
+            (2, 2, "planning_speed", 0.18, 0.28),
+            (4, 1, "casualty_trickleback", 0.16, 0.26),
+            (5, 1, "political_power_gain", 0.35, 0.50),
+        )
+        for layer, variant, modifier, basic, upgraded in cases:
+            world = self.world()
+            world.variables["RUS_bunker_depth"] = 5
+            world.variables["RUS_bunker_generators"] = 2
+            world.variables[f"RUS_bunker_layer_{layer}"] = variant
+            world.run("RUS_bunker_refresh")
+            self.assertAlmostEqual(world.value("RUS_bunker_" + modifier), basic)
+            before = world.balances()
+            world.begin(f"RUS_bunker_upgrade_{layer}")
+            self.assertEqual(tuple(a - b for a, b in zip(before, world.balances())), (25, 250, 35))
+            world.finish(f"RUS_bunker_upgrade_{layer}")
+            self.assertAlmostEqual(world.value("RUS_bunker_" + modifier), upgraded)
+            if layer == 1:
+                self.assertAlmostEqual(world.value("RUS_bunker_political_power_gain"), 0.10)
+
+    def test_room_programmes_work_in_either_order_and_survive_rebuilding(self):
+        cases = (
+            ("integrated_signals", 2, 2, "reinforce_rate", 0.01),
+            ("air_control_network", 2, 2, "air_mission_efficiency", 0.03),
+            ("serial_ordnance_orders", 3, 1, "industrial_capacity_factory", 0.18),
+            ("aircraft_workshops", 3, 1, "production_factory_efficiency_gain_factor", 0.03),
+            ("wounded_return_service", 4, 1, "casualty_trickleback", 0.21),
+            ("air_ground_coordination", 4, 2, "air_accidents_factor", -0.05),
+            ("command_accountability", 5, 2, "planning_speed", 0.03),
+        )
+        for suffix, layer, variant, output, expected in cases:
+            for room_first in (False, True):
+                world = self.world()
+                world.focuses.discard("RUS_" + suffix)
+                room = f"RUS_bunker_layer_{layer}"
+                if room_first:
+                    world.variables[room] = variant
+                    world.run("RUS_bunker_refresh")
+                world.execute(block(self.focuses["RUS_" + suffix], "completion_reward"))
+                world.focuses.add("RUS_" + suffix)
+                if not room_first:
+                    world.variables[room] = variant
+                    world.run("RUS_bunker_refresh")
+                self.assertAlmostEqual(world.value("RUS_bunker_" + output), expected, msg=suffix)
+                world.variables[room] = 0
+                world.run("RUS_bunker_refresh")
+                self.assertEqual(world.value("RUS_bunker_" + output), 0, suffix)
+                world.variables[room] = variant
+                world.run("RUS_bunker_refresh")
+                self.assertAlmostEqual(world.value("RUS_bunker_" + output), expected, msg=suffix)
+                world.controller = False
+                world.run("RUS_bunker_refresh")
+                self.assertNotIn("RUS_bunker_complex", world.modifiers)
+                self.assertIn("RUS_black_army", world.modifiers)
+                world.controller = True
+                world.run("RUS_bunker_refresh")
+                self.assertAlmostEqual(world.value("RUS_bunker_" + output), expected, msg=suffix)
+
+    def test_new_institution_and_army_previews_match_accumulated_variables(self):
+        modifiers = parse(f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt")
+        cases = (
+            "permanent_government", "state_budget", "civil_construction_board",
+            "military_governors", "military_contract_board", "staff_college",
+            "integrated_signals", "wounded_return_service", "serial_ordnance_orders",
+            "armoured_repair_service", "flight_school", "air_control_network",
+            "air_ground_coordination",
+        )
+        for suffix in cases:
+            world = self.world()
+            idea = self.ideas[f"RUS_{suffix}_delta"]
+            spirit = scalar(idea, "name")
+            bindings = {entry.key: entry.value for entry in block(modifiers, spirit) if isinstance(entry.value, str)}
+            before = dict(world.variables)
+            dirty = world.dirty
+            world.execute(block(self.focuses["RUS_" + suffix], "completion_reward"))
+            for entry in block(idea, "modifier"):
+                variable = bindings[entry.key]
+                self.assertAlmostEqual(world.value(variable) - before.get(variable, 0), float(entry.value), msg=suffix)
+            self.assertIn(spirit, world.modifiers)
+            self.assertNotIn(f"RUS_{suffix}_delta", world.ideas)
+            if spirit == "RUS_government_service" or suffix == "serial_ordnance_orders":
+                self.assertGreater(world.dirty, dirty)
+            saved = deepcopy(world.variables)
+            world.run("RUS_campaign_initialize")
+            self.assertEqual(world.variables, saved)
+            world.run("RUS_campaign_shutdown")
+            self.assertNotIn(spirit, world.modifiers)
+
+    def test_civil_training_adds_current_archive_bonus_without_changing_payment(self):
+        for trained, archive, controlled, expected in (
+            (False, True, True, 25), (True, False, True, 35),
+            (True, True, True, 50), (True, True, False, 35),
+        ):
+            world = self.world()
+            world.decisions = self.programmes
+            world.focuses = {"RUS_aimaq_service_charter"}
+            if trained:
+                world.execute(block(self.focuses["RUS_trained_administrators"], "completion_reward"))
+                world.focuses = {"RUS_trained_administrators"}
+            world.variables["RUS_bunker_layer_5"] = int(archive)
+            world.controller = controlled
+            before = world.balances()
+            world.begin("RUS_civil_service_training")
+            self.assertEqual(world.value("ADISCORD_state_development_progress"), expected)
+            self.assertEqual(tuple(a - b for a, b in zip(before, world.balances())), (25, 100, 0))
+            world.variables["RUS_bunker_layer_5"] = 0
+            world.run("RUS_bunker_refresh")
+            self.assertEqual(world.value("ADISCORD_state_development_progress"), expected)
+
+    def test_ai_builds_first_air_force_before_territorial_war(self):
+        plan = block(parse(f"common/ai_strategy_plans/{BASE}_plans.txt"), "ADISCORD_vorkerland_rus_last_empire_plan")
+        order = [entry.value for entry in block(plan, "ai_national_focuses")]
+        for suffix in ("flight_school", "capital_airfields", "fighter_cover", "aviation_fuel_reserve", "assault_squadrons"):
+            self.assertLess(order.index("RUS_" + suffix), order.index("RUS_claim_the_opened_zone"))
+
+    def test_rus_modifier_fields_are_valid_and_medical_typos_are_rejected(self):
+        from tools.validators import validate_adiscord_modifier_fields as validator
+
+        failures = validator.validate()
+        self.assertFalse([failure for failure in failures if "RUS_" in failure])
+        original_read = Path.read_text
+        target = ROOT / f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt"
+
+        def read_with_typo(path, *args, **kwargs):
+            text = original_read(path, *args, **kwargs)
+            if path == target:
+                text = text.replace(
+                    "casualty_trickleback = RUS_army_casualty_return",
+                    "casualty_tricklebak = RUS_army_casualty_return",
+                    1,
+                )
+            return text
+
+        with patch.object(Path, "read_text", read_with_typo):
+            failures = validator.validate()
+        self.assertTrue(any("RUS_black_army" in failure and "casualty_tricklebak" in failure for failure in failures))
 
 
 if __name__ == "__main__":

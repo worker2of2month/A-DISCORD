@@ -2245,12 +2245,22 @@ ADISCORD_vorkerland_rus_last_empire_plan = {
 		RUS_bunker_layer_service_school
 		RUS_bunker_power_school
 		RUS_arm_the_border_hosts
+		RUS_flight_school
+		RUS_capital_airfields
+		RUS_fighter_cover
+		RUS_aviation_fuel_reserve
+		RUS_assault_squadrons
 		RUS_count_the_hearths
+		RUS_permanent_government
+		RUS_state_budget
 		RUS_scientists_council
 		RUS_scientists_workshops
 		RUS_scientists_power_compact
 		RUS_khan_broadcast_service
 		RUS_aimaq_council
+		RUS_district_representation
+		RUS_civil_construction_board
+		RUS_trained_administrators
 		RUS_local_service_committees
 		RUS_assembly_budget
 		RUS_written_oaths
@@ -2279,6 +2289,12 @@ ADISCORD_vorkerland_rus_last_empire_plan = {
 		RUS_entrenched_reserves
 		RUS_fortress_engineers
 		RUS_officer_courses
+		RUS_staff_college
+		RUS_integrated_signals
+		RUS_field_hospitals
+		RUS_wounded_return_service
+		RUS_armoured_trial_company
+		RUS_armoured_repair_service
 		RUS_railway_coverage
 		RUS_pay_the_officials
 		RUS_winter_granaries
@@ -2288,6 +2304,9 @@ ADISCORD_vorkerland_rus_last_empire_plan = {
 		RUS_freight_yards
 		RUS_open_freight_exchange
 		RUS_standard_calibres
+		RUS_aircraft_workshops
+		RUS_air_control_network
+		RUS_air_ground_coordination
 		RUS_civilian_shift
 		RUS_precision_lathes
 		RUS_industrial_belt
@@ -2297,6 +2316,8 @@ ADISCORD_vorkerland_rus_last_empire_plan = {
 		RUS_bunker_memory_vault
 		RUS_field_sappers
 		RUS_artillery_tables
+		RUS_battery_training
+		RUS_serial_ordnance_orders
 		RUS_reserve_rotations
 		RUS_anti_air_posts
 		RUS_army_of_the_khanate

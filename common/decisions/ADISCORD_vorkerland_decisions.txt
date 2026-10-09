@@ -5084,10 +5084,11 @@ RUS_development_programmes = {
 		icon = generic_industry
 		allowed = { tag = RUS }
 		visible = {
-		OR = {
-			has_completed_focus = RUS_aimaq_service_charter
-			has_completed_focus = RUS_civil_service_examinations
-		}
+			OR = {
+				has_completed_focus = RUS_aimaq_service_charter
+				has_completed_focus = RUS_civil_service_examinations
+				has_completed_focus = RUS_trained_administrators
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -5110,11 +5111,27 @@ RUS_development_programmes = {
 					RUS_development_programme_affordable = yes
 				}
 				custom_effect_tooltip = RUS_civil_service_training_result_tt
+				if = {
+					limit = { check_variable = { var = RUS_civil_service_progress_bonus value = 0 compare = greater_than } }
+					custom_effect_tooltip = RUS_civil_service_training_bonus_tt
+					if = {
+						limit = { RUS_bunker_archive_active = yes }
+						custom_effect_tooltip = RUS_civil_service_archive_bonus_tt
+					}
+				}
 				hidden_effect = {
 					add_political_power = -25
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 					add_to_variable = { var = ADISCORD_state_development_progress value = 25 }
+					add_to_variable = { var = ADISCORD_state_development_progress value = RUS_civil_service_progress_bonus }
+					if = {
+						limit = {
+							check_variable = { var = RUS_civil_service_progress_bonus value = 0 compare = greater_than }
+							RUS_bunker_archive_active = yes
+						}
+						add_to_variable = { var = ADISCORD_state_development_progress value = 15 }
+					}
 					ADISCORD_economy_mark_dirty = yes
 				}
 			}

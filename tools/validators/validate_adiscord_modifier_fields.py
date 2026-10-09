@@ -87,6 +87,25 @@ COUNTRY = "country"
 STATE = "state"
 
 DYNAMIC_MODIFIER_SCOPES: dict[str, tuple[str, str]] = {
+    "RUS_bunker_complex": (
+        COUNTRY,
+        "applied to RUS by RUS_bunker_refresh; rooms change the country bonus, "
+        "not a modifier on the capital state",
+    ),
+    "RUS_black_army": (
+        COUNTRY,
+        "applied to RUS by RUS_black_army_refresh for permanent army and air reforms",
+    ),
+    "RUS_faction_support": (
+        COUNTRY,
+        "applied to RUS by RUS_faction_support_refresh for political power and "
+        "the country's weekly power-balance movement",
+    ),
+    "RUS_government_service": (
+        COUNTRY,
+        "applied to RUS by RUS_government_refresh when a government focus adds "
+        "a permanent institutional bonus",
+    ),
     "ADISCORD_vorkerland_reactor_industrial_legacy": (
         STATE,
         "applied to the six reactor-perimeter states during new-campaign setup",
@@ -170,6 +189,16 @@ DYNAMIC_MODIFIER_SCOPES: dict[str, tuple[str, str]] = {
 # a harvest of vanilla's files. Each carries the reason it is legitimate; this
 # is deliberately not a bare allowlist, because an undocumented exemption is
 # indistinguishable from the defect it hides.
+DOCUMENTED_COUNTRY_FIELDS = {
+    "casualty_trickleback": (
+        "documentation/modifiers_documentation.md#casualty_trickleback lists "
+        "this as an army modifier. The engine documents the country modifier "
+        "even though vanilla's idea blocks do not use it; hospital unit stats "
+        "alone would not establish its country scope."
+    ),
+}
+
+
 def _ideology_pattern_fields(ideologies: set[str]) -> dict[str, str]:
     """Per-ideology fields the engine generates from ``common/ideologies/``."""
     generated: dict[str, str] = {}
@@ -490,8 +519,8 @@ def _check_structural_shapes(
 
 def validate(root: Path = REPOSITORY_ROOT) -> list[str]:
     snapshot = load_snapshot()
-    existence = snapshot["existence"]
-    country = snapshot["country"]
+    existence = snapshot["existence"] | DOCUMENTED_COUNTRY_FIELDS.keys()
+    country = snapshot["country"] | DOCUMENTED_COUNTRY_FIELDS.keys()
     sprites = snapshot["sprites"] | mod_sprites(root)
 
     patterns = _ideology_pattern_fields(mod_ideologies(root))
