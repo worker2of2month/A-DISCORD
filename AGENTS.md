@@ -74,6 +74,35 @@ When consolidating, preserve script IDs and scope, update tools and docs that
 read the old paths, and remove the superseded files after verifying all
 definitions were retained exactly once.
 
+## Development files and cleanup
+
+Keep editable artwork, PSD/Blender projects and image-generation prompts in
+`tools/assets/source/`, grouped by asset family. Reference material belongs
+in `tools/assets/reference/`. Do not put authoring sources in runtime `gfx/`
+directories alongside exported game assets.
+Generated review images belong in `docs/development/previews/`; native model
+verification reports belong in `docs/development/model-verification/`.
+Reusable browser mockups belong in `docs/mockups/`. Keep focus authoring
+sources in the existing `focus_trees/` structure and tooling in `tools/`.
+
+Do not commit Python bytecode, `__pycache__/`, local `.superpowers/` server
+state, PID/token files, `imgui.ini` or temporary investigation scripts.
+Maintain `.gitignore` for these artifacts and run Python tools with `-B`.
+Preserve useful mockup content separately from disposable session state.
+
+Before moving an asset, identify its owner and all path consumers. Update
+the generator, tests, documentation and `tools/data/generated_output_owners.json`
+together. Generators must write previews and reports to the development paths
+so a rebuild does not recreate them in runtime directories. Preserve relocated
+files byte-for-byte and verify their SHA-256 hashes. For organisation-only
+changes, verify that loaded game files remain unchanged and compare validation
+failures against the pre-change baseline.
+
+Do not infer that an asset is unused from its extension or lack of literal
+references alone. Empty files can intentionally mask vanilla definitions;
+generated outputs, source inputs and vendor dependencies require an ownership
+check before deletion. Keep cleanup limited to verified paths.
+
 ## Code comments
 
 Комментарии объясняют нетривиальное поведение, область действия, порядок вызовов
