@@ -46,8 +46,17 @@ for city in json.loads(
         city["province"],
         *(sector["province"] for sector in city.get("sectors", ())),
     }
-# Provinces carved by the IVN geometry need their own port anchors.
-COASTAL_ADDITION_PROVINCES |= {
+# The IVN geometry reshapes every mainland province, so a former port anchor
+# may now lie in a neighbour. Each coastal IVN province gets its own anchor.
+_IVN_STATE_PROVINCES = {
+    int(value)
+    for path in (ROOT / "history" / "states").glob("*.txt")
+    if re.search(r"\bowner\s*=\s*IVN\b", source := path.read_text(encoding="utf-8-sig"))
+    for value in re.findall(
+        r"\d+", re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", source).group(1)
+    )
+}
+COASTAL_ADDITION_PROVINCES |= _IVN_STATE_PROVINCES | {
     int(entry["province"])
     for entry in json.loads(
         (ROOT / "tools/data/adiscord_ivn_provinces.json").read_text(encoding="utf-8")
