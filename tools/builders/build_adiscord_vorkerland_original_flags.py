@@ -335,6 +335,11 @@ SUPPLIED_RUNTIME_FLAGS = {
     / "SOL_vorkerland_worker_protectorate.png",
 }
 
+ARTWORK_FLAGS = {
+    "RUS_restoration_state": SOURCE_ROOT / "RUS_restoration_state.png",
+    "RUS_black_banner_empire": SOURCE_ROOT / "RUS_black_banner_empire.png",
+}
+
 COPIED_FLAG_TRIPLETS = {
     "EYR": "VAD",
     "WRK_vorkerland_joint_government": "WRK",
@@ -342,9 +347,14 @@ COPIED_FLAG_TRIPLETS = {
 
 
 def add_triplet(
-    outputs: dict[Path, Image.Image], flag_id: str, image: Image.Image
+    outputs: dict[Path, Image.Image],
+    flag_id: str,
+    image: Image.Image,
+    *,
+    write_source: bool = True,
 ) -> None:
-    outputs[SOURCE_ROOT / f"{flag_id}.png"] = image.copy()
+    if write_source:
+        outputs[SOURCE_ROOT / f"{flag_id}.png"] = image.copy()
     for directory, size in (("", (82, 52)), ("medium", (41, 26)), ("small", (10, 7))):
         resized = image.resize(size, Image.Resampling.LANCZOS).convert("RGBA")
         outputs[FLAG_ROOT / directory / f"{flag_id}.tga"] = resized
@@ -381,6 +391,7 @@ def expected_outputs(tags: set[str] | None = None) -> dict[Path, Image.Image]:
         set(BUILDERS)
         | set(SUPPLIED_FLAGS)
         | set(SUPPLIED_RUNTIME_FLAGS)
+        | set(ARTWORK_FLAGS)
         | set(COPIED_FLAG_TRIPLETS)
     )
     if tags is not None and tags - known:
@@ -391,14 +402,14 @@ def expected_outputs(tags: set[str] | None = None) -> dict[Path, Image.Image]:
             continue
         add_triplet(outputs, flag_id, builder())
 
-    for flag_id, supplied in SUPPLIED_FLAGS.items():
+    for flag_id, supplied in (SUPPLIED_FLAGS | ARTWORK_FLAGS).items():
         if tags is not None and flag_id not in tags:
             continue
         with Image.open(supplied) as source:
             prepared = ImageOps.fit(
                 source.convert("RGB"), CANVAS, method=Image.Resampling.LANCZOS
             )
-        add_triplet(outputs, flag_id, prepared)
+        add_triplet(outputs, flag_id, prepared, write_source=flag_id not in ARTWORK_FLAGS)
 
     for flag_id, supplied in SUPPLIED_RUNTIME_FLAGS.items():
         if tags is not None and flag_id not in tags:
