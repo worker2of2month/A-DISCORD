@@ -8,12 +8,19 @@ from PIL import Image
 
 from tools.builders import build_adiscord_ivn_geography as geography_builder
 from tools.builders import build_adiscord_map_buildings as map_buildings
+from tools.builders import build_adiscord_new_states as state_builder
+from tools.builders import build_adiscord_new_states as state_builder
 from tools.validators import validate_adiscord_ivn_overhaul as validator
 
 
 ROOT = Path(__file__).resolve().parents[2]
 
-EXPECTED_PROVINCES = {
+# Province sets before the civil-war repartition and the city carving.
+ORIGINAL_PROVINCES = {
+    127: {
+        595, 1659, 1681, 1697, 2097, 2752, 3245, 3829, 3896, 4553, 5203, 6608,
+        6694, 6896, 7148, 7603, 7774, 8345, 9053, 9336, 11578, 12463, 12614,
+    },
     128: {579, 7125, 8423, 9072, 16685},
     693: {
         1191,
@@ -181,29 +188,36 @@ EXPECTED_PROVINCES = {
     },
 }
 
+REPARTITIONED_STATES = (25, 127, 128, 693, 694, 695, 696, 697, 698, 713, 714, 715, 716, 717)
+
 EXPECTED_VPS = {
     25: {16568: 10},
-    92: {3462: 1},
+    92: {16831: 1},
     95: {3318: 3},
-    96: {888: 3},
+    96: {16821: 3},
     97: {838: 3},
     98: {2448: 5},
     99: {882: 7},
-    100: {702: 5},
+    100: {16819: 5},
     101: {9327: 3},
-    127: {595: 3},
+    127: {16817: 3},
     128: {579: 1},
     129: {1971: 1},
-    130: {3447: 2},
-    131: {2262: 2},
-    132: {423: 2},
-    164: {4217: 1},
+    130: {16829: 2},
+    131: {16827: 2},
+    132: {16815: 2},
+    164: {16833: 1},
     693: {6905: 5, 16692: 1, 16695: 1, 16700: 1},
     694: {11841: 3, 12189: 1},
-    695: {1763: 3},
-    696: {5573: 3},
-    697: {9160: 3},
-    698: {12076: 3},
+    695: {16825: 3},
+    696: {16837: 3},
+    697: {16841: 3},
+    698: {16848: 3},
+    713: {16823: 2},
+    714: {16843: 3},
+    715: {16835: 2},
+    716: {16846: 2},
+    717: {16839: 2},
 }
 
 
@@ -250,12 +264,22 @@ class IvanlandOverhaulContractTests(unittest.TestCase):
 
     def test_state_partitions_are_exact_and_lossless(self) -> None:
         actual = {
-            state_id: provinces(state_text(state_id)) for state_id in EXPECTED_PROVINCES
+            state_id: provinces(state_text(state_id)) for state_id in REPARTITIONED_STATES
         }
-        self.assertEqual(actual, EXPECTED_PROVINCES)
+        for state_id, values in actual.items():
+            with self.subTest(state=state_id):
+                self.assertEqual(
+                    values, set(state_builder.ivanland_state_provinces(state_id))
+                )
         flattened = [province for values in actual.values() for province in values]
         self.assertEqual(len(flattened), len(set(flattened)))
-        self.assertEqual(len(flattened), 155)
+        carved = {
+            int(entry["province"])
+            for entry in geography_builder.PROVINCE_MANIFEST["provinces"]
+            if entry["state"] in REPARTITIONED_STATES
+        }
+        original = set().union(*ORIGINAL_PROVINCES.values())
+        self.assertEqual(set(flattened), original | carved)
 
     def test_exact_ivn_and_iia_victory_points(self) -> None:
         for state_id, expected in EXPECTED_VPS.items():
@@ -264,14 +288,14 @@ class IvanlandOverhaulContractTests(unittest.TestCase):
 
     def test_split_preserves_old_march_and_island_totals(self) -> None:
         expected = {
-            "population": 4_360_000,
-            "industrial_complex": 7,
-            "arms_factory": 4,
+            "population": 5_110_000,
+            "industrial_complex": 9,
+            "arms_factory": 5,
             "air_base": 3,
-            "local_supplies": 12.0,
+            "local_supplies": 15.0,
             "steel": 24,
         }
-        sources = [state_text(state_id) for state_id in EXPECTED_PROVINCES]
+        sources = [state_text(state_id) for state_id in REPARTITIONED_STATES]
         actual = {
             "population": sum(
                 int(re.search(r"\bmanpower\s*=\s*(\d+)", source).group(1))

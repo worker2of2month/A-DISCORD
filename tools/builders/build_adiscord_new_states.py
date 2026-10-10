@@ -502,7 +502,7 @@ NAM_COALITION_FRONT_PROFILES = {
 # The civil-war partition keeps each parent's population and factories:
 # 25 -> 25/713/714, 127 -> 127/715, 695 -> 695/716 and 697 -> 697/717.
 IVANLAND_STATE_PROFILES = {
-    25: {"population": 780_000, "category": "large_city", "infrastructure": 5, "civilian": 2, "military": 1, "air_base": 2, "supplies": 2.0},
+    25: {"population": 780_000, "category": "large_city", "infrastructure": 5, "civilian": 2, "military": 1, "air_base": 2, "supplies": 1.0},
     92: {"population": 480_000, "category": "rural", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 4.0},
     95: {"population": 780_000, "category": "town", "infrastructure": 4, "civilian": 2, "military": 2, "air_base": 1, "supplies": 5.0},
     96: {"population": 720_000, "category": "town", "infrastructure": 4, "civilian": 2, "military": 2, "supplies": 5.0},
@@ -525,7 +525,7 @@ IVANLAND_STATE_PROFILES = {
     697: {"population": 380_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 1.0},
     698: {"population": 650_000, "category": "town", "infrastructure": 3, "civilian": 1, "air_base": 1, "supplies": 1.5},
     713: {"population": 200_000, "category": "rural", "infrastructure": 3, "military": 1, "supplies": 0.5},
-    714: {"population": 320_000, "category": "town", "infrastructure": 4, "supplies": 1.0},
+    714: {"population": 320_000, "category": "town", "infrastructure": 4, "supplies": 0.5},
     715: {"population": 270_000, "category": "rural", "infrastructure": 3, "civilian": 1, "supplies": 1.0},
     716: {"population": 300_000, "category": "rural", "infrastructure": 2, "military": 1, "supplies": 0.5},
     717: {"population": 220_000, "category": "rural", "infrastructure": 2, "supplies": 0.5},
@@ -546,13 +546,58 @@ IVANLAND_OVERHAUL_PROVINCES = {
     715: (1659, 1681, 3829, 3896, 5203, 6608, 7774, 11578),
     716: (482, 1105, 2736, 3181, 6146, 8068, 8505, 8615, 10158, 10668, 10810, 12054),
     717: (401, 1385, 3273, 6350, 6979, 7263, 9150, 9418, 12383),
+    92: (3462, 6507, 11480),
+    95: (3318, 4103, 4260, 4302, 4576, 4913, 6020, 6771, 7917, 8130, 9320, 11985, 12346),
+    96: (888, 1091, 1421, 5187, 5586, 7453, 9183, 12342),
+    97: (838, 957, 2275, 3182, 3951, 7527, 8005, 8287, 8716, 10294, 11739, 12478),
+    98: (2448, 3938, 5892, 6695, 9174, 9606, 11047, 11554, 11918, 12715),
+    99: (882, 5681, 5788, 6010, 6418, 6714, 6866, 10381, 10716, 10882, 11396, 11458),
+    100: (702, 3453, 3846, 4567, 6095, 8839, 9292, 10335, 10891, 11815, 12639),
+    101: (638, 1167, 2942, 3003, 3411, 6214, 8257, 8796, 9167, 9327, 10000, 10032, 10608, 11059, 11135),
+    129: (1971, 2058, 2805, 3131, 9100, 12160),
+    130: (3447, 3598, 8536, 9657, 9790, 9862, 11613, 12284),
+    131: (2262, 3803, 3915, 5927, 5989, 8458, 12858, 12895),
+    132: (423, 1090, 1157, 2537, 3630, 4061, 4739, 5781, 7693, 8272, 8284, 8338, 10752, 12641),
+    164: (4217, 7713, 8532, 9685, 9894, 10130, 11382),
 }
+
+# Cities, rural sectors and split provinces carved by the reviewed IVN map
+# geometry. Each new province joins its parent's state and every
+# victory point moves to its city province.
+IVANLAND_GEOMETRY_MANIFEST = json.loads(
+    (ROOT / "tools/data/adiscord_ivn_provinces.json").read_text(encoding="utf-8")
+)
+IVANLAND_GEOMETRY_PROVINCES = {
+    state_id: tuple(
+        int(entry["province"])
+        for entry in IVANLAND_GEOMETRY_MANIFEST["provinces"]
+        if entry["state"] == state_id
+    )
+    for state_id in IVANLAND_OVERHAUL_PROVINCES
+}
+IVANLAND_CITY_PROVINCES = {
+    int(parent): int(city)
+    for parent, city in IVANLAND_GEOMETRY_MANIFEST["cities"].items()
+}
+
+
+def ivanland_state_provinces(state_id: int) -> tuple[int, ...]:
+    return tuple(
+        sorted(
+            (*IVANLAND_OVERHAUL_PROVINCES[state_id], *IVANLAND_GEOMETRY_PROVINCES[state_id])
+        )
+    )
+
 
 # Provinces of each original state; the split may only redistribute them.
 IVANLAND_SPLIT_FAMILIES = {
     25: (25, 695, 696, 697, 698, 713, 714, 716, 717),
     127: (127, 715),
     128: (128, 693, 694),
+    **{
+        state_id: (state_id,)
+        for state_id in (92, 95, 96, 97, 98, 99, 100, 101, 129, 130, 131, 132, 164)
+    },
 }
 
 IVANLAND_OVERHAUL_FILENAMES = {
@@ -570,9 +615,14 @@ IVANLAND_OVERHAUL_FILENAMES = {
     715: "715-Northern-Shore.txt",
     716: "716-Middle-March.txt",
     717: "717-Rinval-Fens.txt",
+    **{
+        state_id: f"{state_id}-{state_id}.txt"
+        for state_id in (92, 95, 96, 97, 98, 99, 100, 101, 129, 130, 131, 132, 164)
+    },
 }
 
-IVANLAND_OVERHAUL_VICTORY_POINTS = {
+# Victory points of the original settlement provinces; the map uses their cities.
+IVANLAND_SETTLEMENT_VICTORY_POINTS = {
     25: ((16568, 10),),
     92: ((3462, 1),),
     95: ((3318, 3),),
@@ -600,6 +650,14 @@ IVANLAND_OVERHAUL_VICTORY_POINTS = {
     715: ((5203, 2),),
     716: ((12054, 2),),
     717: ((6350, 2),),
+}
+
+IVANLAND_OVERHAUL_VICTORY_POINTS = {
+    state_id: tuple(
+        (IVANLAND_CITY_PROVINCES.get(province, province), value)
+        for province, value in points
+    )
+    for state_id, points in IVANLAND_SETTLEMENT_VICTORY_POINTS.items()
 }
 
 IVANLAND_OVERHAUL_PROVINCE_BUILDINGS = {
@@ -926,7 +984,7 @@ GENERATED_LEGACY_VICTORY_POINTS = {
     **DIRTY_ZONE_VICTORY_POINTS,
 }
 
-IVANLAND_VICTORY_POINT_NAMES = {
+IVANLAND_SETTLEMENT_NAMES = {
     12189: "Малый Кайрхольм",
     16692: "Южный Рейдаль",
     16695: "Восточный Рейдаль",
@@ -958,6 +1016,11 @@ IVANLAND_VICTORY_POINT_NAMES = {
     5203: "Нордмарск",
     12054: "Срединск",
     6350: "Гатьев",
+}
+
+IVANLAND_VICTORY_POINT_NAMES = {
+    IVANLAND_CITY_PROVINCES.get(province, province): name
+    for province, name in IVANLAND_SETTLEMENT_NAMES.items()
 }
 
 GENERATED_VICTORY_POINT_NAMES = {
@@ -1652,8 +1715,11 @@ def split_svetlogorsk_from_nam() -> None:
 def validate_ivanland_split_inputs() -> None:
     """Reject unreviewed province drift before writing any Ivanland state."""
     for parent, members in IVANLAND_SPLIT_FAMILIES.items():
-        expected = frozenset().union(
+        original = frozenset().union(
             *(frozenset(IVANLAND_OVERHAUL_PROVINCES[state_id]) for state_id in members)
+        )
+        carved = frozenset().union(
+            *(frozenset(IVANLAND_GEOMETRY_PROVINCES[state_id]) for state_id in members)
         )
         current: set[int] = set()
         for state_id in members:
@@ -1665,7 +1731,7 @@ def validate_ivanland_split_inputs() -> None:
             if not match:
                 raise RuntimeError(f"state {state_id}: missing provinces block")
             current.update(map(int, re.findall(r"\d+", match.group(1))))
-        if frozenset(current) != expected:
+        if frozenset(current) not in {original, original | carved}:
             raise RuntimeError(f"state {parent}: Ivanland split manifest drifted")
     for state_id, filename in IVANLAND_OVERHAUL_FILENAMES.items():
         target = STATE_DIR / filename
@@ -1678,12 +1744,12 @@ def split_ivanland_overhaul_states() -> None:
     """Split Ivanland's island and Old March using the reviewed province manifest."""
     validate_ivanland_split_inputs()
 
-    for state_id, province_ids in IVANLAND_OVERHAUL_PROVINCES.items():
+    for state_id in IVANLAND_OVERHAUL_PROVINCES:
         owner = "IIA" if state_id in {128, 693, 694} else "IVN"
         write_resource_war_state(
             state_id,
             IVANLAND_OVERHAUL_FILENAMES[state_id],
-            tuple(province_ids),
+            ivanland_state_provinces(state_id),
             owner,
             IVANLAND_STATE_PROFILES[state_id],
             IVANLAND_STATE_RESOURCES.get(state_id),

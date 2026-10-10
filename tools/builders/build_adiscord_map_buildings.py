@@ -46,6 +46,13 @@ for city in json.loads(
         city["province"],
         *(sector["province"] for sector in city.get("sectors", ())),
     }
+# Provinces carved by the IVN geometry need their own port anchors.
+COASTAL_ADDITION_PROVINCES |= {
+    int(entry["province"])
+    for entry in json.loads(
+        (ROOT / "tools/data/adiscord_ivn_provinces.json").read_text(encoding="utf-8")
+    )["provinces"]
+}
 REQUIRED_STATE_SPAWN_COUNTS = {
     "air_base": 1,
     "anti_air_building": 3,
@@ -277,7 +284,13 @@ def mountain_building_heights(
     root: Path, lines: list[str]
 ) -> tuple[list[str], list[int]]:
     from tools.builders.build_adiscord_coastal_geography import RELIEF_PROVINCES
+    from tools.builders.build_adiscord_ivn_geography import (
+        RELIEF_STATE_IDS,
+        relief_province_ids,
+    )
 
+    # Both generated reliefs rewrite heights, so their models follow the surface.
+    surface_provinces = RELIEF_PROVINCES | relief_province_ids(RELIEF_STATE_IDS)
     province_by_color = load_province_by_color(root)
     result = list(lines)
     changed = []
@@ -293,7 +306,7 @@ def mountain_building_heights(
             y = provinces.height - 1 - _pixel_coordinate(fields[4], provinces.height)
             if (
                 province_by_color.get(provinces.getpixel((x, y)))
-                not in RELIEF_PROVINCES
+                not in surface_provinces
             ):
                 continue
             expected = heights.getpixel((x, y)) / 10

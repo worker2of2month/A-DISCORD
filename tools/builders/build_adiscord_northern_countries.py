@@ -18,6 +18,7 @@ import argparse
 import math
 import re
 from collections import Counter
+from io import BytesIO
 from pathlib import Path
 
 from PIL import Image, ImageDraw
@@ -830,6 +831,9 @@ def render_oob(
 def render_flag(
     tag: str, colors: tuple[tuple[int, int, int], ...], style: int
 ) -> Image.Image:
+    if tag == "MON":
+        with Image.open(ROOT / "tools/assets/source/MON_flag.png") as source:
+            return source.convert("RGBA")
     width, height = 82, 52
     primary, secondary, accent = colors
     image = Image.new("RGBA", (width, height), primary + (255,))
@@ -838,18 +842,6 @@ def render_flag(
         draw.rectangle((0, 17, width, 34), fill=accent + (255,))
         for x in (16, 39, 62):
             draw.rectangle((x, 21, x + 5, 30), fill=secondary + (255,))
-        return image
-    if tag == "MON":
-        draw.rectangle(
-            (0, 0, width - 1, height - 1), outline=secondary + (255,), width=4
-        )
-        draw.rectangle((35, 0, 46, height), fill=secondary + (255,))
-        draw.polygon(
-            ((25, 31), (31, 18), (37, 28), (41, 12), (46, 28), (52, 18), (58, 31)),
-            fill=secondary + (255,),
-        )
-        draw.rectangle((25, 31, 58, 36), fill=secondary + (255,))
-        draw.ellipse((38, 27, 44, 33), fill=accent + (255,))
         return image
     if tag == "HON":
         draw.rectangle((0, 17, width, 34), fill=secondary + (255,))
@@ -882,22 +874,34 @@ def render_flag(
     return image
 
 
-def write_flags() -> None:
+def write_flags(
+    tags: tuple[str, ...] | None = None, *, apply: bool = True
+) -> list[Path]:
     sizes = (
         (FLAG_DIR, (82, 52)),
         (FLAG_DIR / "medium", (41, 26)),
         (FLAG_DIR / "small", (10, 7)),
     )
-    for tag, country in COUNTRIES.items():
+    changed = []
+    for tag in COUNTRIES if tags is None else tags:
+        country = COUNTRIES[tag]
         base = render_flag(tag, country["colors"], FLAG_STYLES[tag])
         for directory, size in sizes:
-            directory.mkdir(parents=True, exist_ok=True)
             image = (
                 base
                 if size == base.size
                 else base.resize(size, Image.Resampling.LANCZOS)
             )
-            image.save(directory / f"{tag}.tga")
+            buffer = BytesIO()
+            image.save(buffer, format="TGA")
+            path = directory / f"{tag}.tga"
+            data = buffer.getvalue()
+            if not path.exists() or path.read_bytes() != data:
+                changed.append(path)
+                if apply:
+                    directory.mkdir(parents=True, exist_ok=True)
+                    path.write_bytes(data)
+    return changed
 
 
 def apply() -> None:
@@ -963,11 +967,27 @@ def main() -> int:
         help="write states, OOBs, victory-point localisation and flags",
     )
     parser.add_argument(
+        "--flags-only",
+        nargs="+",
+        choices=tuple(COUNTRIES),
+        metavar="TAG",
+        help="check or apply only the named countries' flag textures",
+    )
+    parser.add_argument(
         "--english-localisation",
         action="store_true",
         help="check or apply only reviewed English names",
     )
     args = parser.parse_args()
+    if args.flags_only:
+        if args.english_localisation:
+            parser.error("--flags-only cannot be combined with --english-localisation")
+        changed = write_flags(tuple(args.flags_only), apply=args.apply)
+        for path in changed:
+            print(("Updated: " if args.apply else "Drift: ") + str(path.relative_to(ROOT)))
+        if not changed:
+            print("Selected northern flags are current.")
+        return int(bool(changed) and not args.apply)
     if args.english_localisation:
         from tools.lib.localisation import sync_builder_english_localisation
 

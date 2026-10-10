@@ -15,7 +15,7 @@ from tools.lib.paths import repository_root
 
 ROOT = repository_root()
 EXPECTED_PROVINCE_SHA256 = (
-    "2BFD65BB2ADAC8808F54712749CDF53D3D2268072669D2C31008621AFB64C603"
+    "F2759E77EE0A0B04474319E26F84AC96FEDC31940DB565B19AF727A65CC92E0D"
 )
 
 
@@ -24,7 +24,7 @@ def province_geometry_issue() -> str | None:
         hashlib.sha256((ROOT / "map/provinces.bmp").read_bytes()).hexdigest().upper()
     )
     if province_hash != EXPECTED_PROVINCE_SHA256:
-        return "map/provinces.bmp: reviewed IVN city-split geometry drifted"
+        return "map/provinces.bmp: reviewed IVN province geometry drifted"
     return None
 
 
@@ -53,9 +53,9 @@ def _state_vps(state_id: int) -> tuple[tuple[int, int], ...]:
 def collect_issues() -> list[str]:
     issues: list[str] = []
     try:
-        for state_id, expected in state_builder.IVANLAND_OVERHAUL_PROVINCES.items():
+        for state_id in state_builder.IVANLAND_OVERHAUL_PROVINCES:
             actual = _state_provinces(state_id)
-            if actual != set(expected):
+            if actual != set(state_builder.ivanland_state_provinces(state_id)):
                 issues.append(f"state {state_id}: Ivanland province partition drifted")
         for (
             state_id,
@@ -142,12 +142,16 @@ def collect_issues() -> list[str]:
             )
 
         issues.extend(f"island asset: {item}" for item in icon_builder.drift())
+        issues.extend(
+            f"IVN geography: {item}"
+            for item in geography_builder.province_geometry_issues()
+        )
         geography_outputs = geography_builder.expected()
         issues.extend(
             f"IVN geography: {item}"
             for item in geography_builder.validate(geography_outputs)
         )
-        affected_states = {25, 128, 693, 694, 695, 696, 697, 698}
+        affected_states = set(geography_builder.SCOPED_STATE_IDS)
         issues.extend(
             item
             for item in map_buildings.validate(ROOT)

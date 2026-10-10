@@ -1,0 +1,750 @@
+{
+  "schema": 1,
+  "origin": [
+    2453,
+    801
+  ],
+  "provinces": [
+    {
+      "province": 16815,
+      "parent": 423,
+      "state": 132,
+      "kind": "city",
+      "rgb": [
+        144,
+        118,
+        83
+      ]
+    },
+    {
+      "province": 16816,
+      "parent": 423,
+      "state": 132,
+      "kind": "sector",
+      "rgb": [
+        17,
+        119,
+        242
+      ]
+    },
+    {
+      "province": 16817,
+      "parent": 595,
+      "state": 127,
+      "kind": "city",
+      "rgb": [
+        151,
+        23,
+        185
+      ]
+    },
+    {
+      "province": 16818,
+      "parent": 595,
+      "state": 127,
+      "kind": "sector",
+      "rgb": [
+        246,
+        117,
+        251
+      ]
+    },
+    {
+      "province": 16819,
+      "parent": 702,
+      "state": 100,
+      "kind": "city",
+      "rgb": [
+        149,
+        186,
+        241
+      ]
+    },
+    {
+      "province": 16820,
+      "parent": 702,
+      "state": 100,
+      "kind": "sector",
+      "rgb": [
+        222,
+        16,
+        182
+      ]
+    },
+    {
+      "province": 16821,
+      "parent": 888,
+      "state": 96,
+      "kind": "city",
+      "rgb": [
+        144,
+        219,
+        190
+      ]
+    },
+    {
+      "province": 16822,
+      "parent": 888,
+      "state": 96,
+      "kind": "sector",
+      "rgb": [
+        151,
+        185,
+        50
+      ]
+    },
+    {
+      "province": 16823,
+      "parent": 932,
+      "state": 713,
+      "kind": "city",
+      "rgb": [
+        121,
+        28,
+        54
+      ]
+    },
+    {
+      "province": 16824,
+      "parent": 932,
+      "state": 713,
+      "kind": "sector",
+      "rgb": [
+        253,
+        56,
+        126
+      ]
+    },
+    {
+      "province": 16825,
+      "parent": 1763,
+      "state": 695,
+      "kind": "city",
+      "rgb": [
+        212,
+        82,
+        213
+      ]
+    },
+    {
+      "province": 16826,
+      "parent": 1763,
+      "state": 695,
+      "kind": "sector",
+      "rgb": [
+        245,
+        29,
+        25
+      ]
+    },
+    {
+      "province": 16827,
+      "parent": 2262,
+      "state": 131,
+      "kind": "city",
+      "rgb": [
+        60,
+        30,
+        152
+      ]
+    },
+    {
+      "province": 16828,
+      "parent": 2262,
+      "state": 131,
+      "kind": "sector",
+      "rgb": [
+        186,
+        123,
+        48
+      ]
+    },
+    {
+      "province": 16829,
+      "parent": 3447,
+      "state": 130,
+      "kind": "city",
+      "rgb": [
+        53,
+        58,
+        31
+      ]
+    },
+    {
+      "province": 16830,
+      "parent": 3447,
+      "state": 130,
+      "kind": "sector",
+      "rgb": [
+        60,
+        178,
+        242
+      ]
+    },
+    {
+      "province": 16831,
+      "parent": 3462,
+      "state": 92,
+      "kind": "city",
+      "rgb": [
+        210,
+        123,
+        243
+      ]
+    },
+    {
+      "province": 16832,
+      "parent": 3462,
+      "state": 92,
+      "kind": "sector",
+      "rgb": [
+        222,
+        158,
+        181
+      ]
+    },
+    {
+      "province": 16833,
+      "parent": 4217,
+      "state": 164,
+      "kind": "city",
+      "rgb": [
+        191,
+        243,
+        176
+      ]
+    },
+    {
+      "province": 16834,
+      "parent": 4217,
+      "state": 164,
+      "kind": "sector",
+      "rgb": [
+        177,
+        254,
+        94
+      ]
+    },
+    {
+      "province": 16835,
+      "parent": 5203,
+      "state": 715,
+      "kind": "city",
+      "rgb": [
+        87,
+        179,
+        95
+      ]
+    },
+    {
+      "province": 16836,
+      "parent": 5203,
+      "state": 715,
+      "kind": "sector",
+      "rgb": [
+        48,
+        51,
+        80
+      ]
+    },
+    {
+      "province": 16837,
+      "parent": 5573,
+      "state": 696,
+      "kind": "city",
+      "rgb": [
+        146,
+        121,
+        124
+      ]
+    },
+    {
+      "province": 16838,
+      "parent": 5573,
+      "state": 696,
+      "kind": "sector",
+      "rgb": [
+        58,
+        113,
+        223
+      ]
+    },
+    {
+      "province": 16839,
+      "parent": 6350,
+      "state": 717,
+      "kind": "city",
+      "rgb": [
+        29,
+        251,
+        219
+      ]
+    },
+    {
+      "province": 16840,
+      "parent": 6350,
+      "state": 717,
+      "kind": "sector",
+      "rgb": [
+        51,
+        54,
+        184
+      ]
+    },
+    {
+      "province": 16841,
+      "parent": 9160,
+      "state": 697,
+      "kind": "city",
+      "rgb": [
+        88,
+        23,
+        118
+      ]
+    },
+    {
+      "province": 16842,
+      "parent": 9160,
+      "state": 697,
+      "kind": "sector",
+      "rgb": [
+        50,
+        186,
+        16
+      ]
+    },
+    {
+      "province": 16843,
+      "parent": 11124,
+      "state": 714,
+      "kind": "city",
+      "rgb": [
+        185,
+        178,
+        148
+      ]
+    },
+    {
+      "province": 16844,
+      "parent": 11124,
+      "state": 714,
+      "kind": "sector",
+      "rgb": [
+        118,
+        28,
+        157
+      ]
+    },
+    {
+      "province": 16845,
+      "parent": 11124,
+      "state": 714,
+      "kind": "sector",
+      "rgb": [
+        27,
+        223,
+        181
+      ]
+    },
+    {
+      "province": 16846,
+      "parent": 12054,
+      "state": 716,
+      "kind": "city",
+      "rgb": [
+        125,
+        25,
+        147
+      ]
+    },
+    {
+      "province": 16847,
+      "parent": 12054,
+      "state": 716,
+      "kind": "sector",
+      "rgb": [
+        21,
+        58,
+        210
+      ]
+    },
+    {
+      "province": 16848,
+      "parent": 12076,
+      "state": 698,
+      "kind": "city",
+      "rgb": [
+        189,
+        211,
+        214
+      ]
+    },
+    {
+      "province": 16849,
+      "parent": 12076,
+      "state": 698,
+      "kind": "sector",
+      "rgb": [
+        147,
+        150,
+        248
+      ]
+    },
+    {
+      "province": 16850,
+      "parent": 2097,
+      "state": 127,
+      "kind": "split",
+      "rgb": [
+        20,
+        48,
+        191
+      ]
+    },
+    {
+      "province": 16851,
+      "parent": 2097,
+      "state": 127,
+      "kind": "split",
+      "rgb": [
+        188,
+        90,
+        152
+      ]
+    },
+    {
+      "province": 16852,
+      "parent": 2942,
+      "state": 101,
+      "kind": "split",
+      "rgb": [
+        90,
+        252,
+        16
+      ]
+    },
+    {
+      "province": 16853,
+      "parent": 3829,
+      "state": 715,
+      "kind": "split",
+      "rgb": [
+        83,
+        48,
+        92
+      ]
+    },
+    {
+      "province": 16854,
+      "parent": 4503,
+      "state": 714,
+      "kind": "split",
+      "rgb": [
+        29,
+        87,
+        58
+      ]
+    },
+    {
+      "province": 16855,
+      "parent": 4503,
+      "state": 714,
+      "kind": "split",
+      "rgb": [
+        57,
+        214,
+        127
+      ]
+    },
+    {
+      "province": 16856,
+      "parent": 4503,
+      "state": 714,
+      "kind": "split",
+      "rgb": [
+        147,
+        59,
+        254
+      ]
+    },
+    {
+      "province": 16857,
+      "parent": 5055,
+      "state": 697,
+      "kind": "split",
+      "rgb": [
+        114,
+        209,
+        244
+      ]
+    },
+    {
+      "province": 16858,
+      "parent": 6608,
+      "state": 715,
+      "kind": "split",
+      "rgb": [
+        186,
+        114,
+        86
+      ]
+    },
+    {
+      "province": 16859,
+      "parent": 6608,
+      "state": 715,
+      "kind": "split",
+      "rgb": [
+        127,
+        177,
+        183
+      ]
+    },
+    {
+      "province": 16860,
+      "parent": 8272,
+      "state": 132,
+      "kind": "split",
+      "rgb": [
+        184,
+        60,
+        29
+      ]
+    },
+    {
+      "province": 16861,
+      "parent": 9132,
+      "state": 697,
+      "kind": "split",
+      "rgb": [
+        94,
+        254,
+        209
+      ]
+    },
+    {
+      "province": 16862,
+      "parent": 9132,
+      "state": 697,
+      "kind": "split",
+      "rgb": [
+        17,
+        250,
+        222
+      ]
+    },
+    {
+      "province": 16863,
+      "parent": 9167,
+      "state": 101,
+      "kind": "split",
+      "rgb": [
+        60,
+        119,
+        84
+      ]
+    },
+    {
+      "province": 16864,
+      "parent": 9167,
+      "state": 101,
+      "kind": "split",
+      "rgb": [
+        88,
+        95,
+        82
+      ]
+    },
+    {
+      "province": 16865,
+      "parent": 9236,
+      "state": 714,
+      "kind": "split",
+      "rgb": [
+        157,
+        88,
+        20
+      ]
+    },
+    {
+      "province": 16866,
+      "parent": 10675,
+      "state": 714,
+      "kind": "split",
+      "rgb": [
+        254,
+        30,
+        87
+      ]
+    },
+    {
+      "province": 16867,
+      "parent": 10675,
+      "state": 714,
+      "kind": "split",
+      "rgb": [
+        26,
+        114,
+        211
+      ]
+    },
+    {
+      "province": 16868,
+      "parent": 10675,
+      "state": 714,
+      "kind": "split",
+      "rgb": [
+        241,
+        114,
+        52
+      ]
+    },
+    {
+      "province": 16869,
+      "parent": 10769,
+      "state": 695,
+      "kind": "split",
+      "rgb": [
+        243,
+        61,
+        25
+      ]
+    },
+    {
+      "province": 16870,
+      "parent": 11059,
+      "state": 101,
+      "kind": "split",
+      "rgb": [
+        211,
+        125,
+        246
+      ]
+    },
+    {
+      "province": 16871,
+      "parent": 11613,
+      "state": 130,
+      "kind": "split",
+      "rgb": [
+        191,
+        253,
+        50
+      ]
+    },
+    {
+      "province": 16872,
+      "parent": 11613,
+      "state": 130,
+      "kind": "split",
+      "rgb": [
+        16,
+        179,
+        83
+      ]
+    },
+    {
+      "province": 16873,
+      "parent": 12284,
+      "state": 130,
+      "kind": "split",
+      "rgb": [
+        29,
+        86,
+        183
+      ]
+    },
+    {
+      "province": 16874,
+      "parent": 12284,
+      "state": 130,
+      "kind": "split",
+      "rgb": [
+        117,
+        61,
+        62
+      ]
+    },
+    {
+      "province": 16875,
+      "parent": 12284,
+      "state": 130,
+      "kind": "split",
+      "rgb": [
+        58,
+        182,
+        28
+      ]
+    },
+    {
+      "province": 16876,
+      "parent": 12641,
+      "state": 132,
+      "kind": "split",
+      "rgb": [
+        17,
+        90,
+        119
+      ]
+    },
+    {
+      "province": 16877,
+      "parent": 12641,
+      "state": 132,
+      "kind": "split",
+      "rgb": [
+        181,
+        55,
+        118
+      ]
+    },
+    {
+      "province": 16878,
+      "parent": 12790,
+      "state": 25,
+      "kind": "split",
+      "rgb": [
+        246,
+        155,
+        91
+      ]
+    },
+    {
+      "province": 16879,
+      "parent": 16706,
+      "state": 697,
+      "kind": "split",
+      "rgb": [
+        19,
+        158,
+        116
+      ]
+    }
+  ],
+  "cities": {
+    "423": 16815,
+    "595": 16817,
+    "702": 16819,
+    "838": 838,
+    "882": 882,
+    "888": 16821,
+    "932": 16823,
+    "1763": 16825,
+    "1971": 1971,
+    "2262": 16827,
+    "2448": 2448,
+    "3318": 3318,
+    "3447": 16829,
+    "3462": 16831,
+    "4217": 16833,
+    "5203": 16835,
+    "5573": 16837,
+    "6350": 16839,
+    "9160": 16841,
+    "9327": 9327,
+    "11124": 16843,
+    "12054": 16846,
+    "12076": 16848,
+    "16568": 16568
+  }
+}

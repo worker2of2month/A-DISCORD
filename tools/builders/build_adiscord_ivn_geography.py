@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import heapq
+import json
 import os
 import re
 from array import array
@@ -80,37 +81,12 @@ NORTHERN_LANDSCAPE_STATE_IDS = frozenset(
 MAINLAND_FOREST_STATE_IDS = (
     NORTHERN_LANDSCAPE_STATE_IDS - ISLAND_HEIGHT_STATE_IDS - {164}
 )
-SETTLEMENT_PROVINCES = frozenset(
-    {
-        16568,
-        3462,
-        3318,
-        888,
-        838,
-        2448,
-        882,
-        702,
-        9327,
-        595,
-        579,
-        1971,
-        3447,
-        2262,
-        423,
-        4217,
-        6905,
-        11841,
-        1763,
-        5573,
-        9160,
-        12076,
-        932,
-        11124,
-        5203,
-        12054,
-        6350,
-    }
-)
+PROVINCE_MANIFEST_PATH = ROOT / "tools/data/adiscord_ivn_provinces.json"
+PROVINCE_MANIFEST = json.loads(PROVINCE_MANIFEST_PATH.read_text(encoding="utf-8"))
+# Every IVN victory point is a whole urban province; the island
+# administration keeps compact urban footprints inside rural provinces.
+CITY_PROVINCES = frozenset(int(city) for city in PROVINCE_MANIFEST["cities"].values())
+SETTLEMENT_PROVINCES = frozenset({579, 6905, 11841}) | CITY_PROVINCES
 # Mainland relief of the Itoran civil-war theatre. Heights are a pure function
 # of position, coast and the unchanged foreign border, so repeated passes
 # converge. The detached western islands keep their authored relief.
@@ -143,14 +119,30 @@ FEN_HALF_WIDTH = 5.0
 # The Old March forest screens the capital from the eastern marches.
 FOREST_ZONES = ((2850, 1112, 17.0, 12.0),)
 RIVERS_PATH = ROOT / "map/rivers.bmp"
+UNITSTACKS_PATH = ROOT / "map/unitstacks.txt"
+# Reviewed province geometry of the IVN mainland: an RGBA crop whose opaque
+# pixels are stamped into provinces.bmp. PROVINCE_MANIFEST lists new provinces.
+PROVINCE_GEOMETRY_PATH = ROOT / "tools/data/adiscord_ivn_province_geometry.png"
+# A victory-point province up to this size becomes the city itself; a larger
+# one yields a compact city of CITY_PIXELS and rural sectors around it.
+CITY_WHOLE_PROVINCE_PIXELS = 115
+CITY_PIXELS = 45
+SECTOR_PIXELS = 150
+SPLIT_PIXELS = 300
+LOCKED_PROVINCE_PIXELS = 60
 # Provinces that already carried authored rivers. Their river pixels, and
 # every pixel touching them, stay outside this builder's river layer.
-AUTHORED_RIVER_PROVINCES = frozenset(
+_AUTHORED_RIVER_PARENTS = frozenset(
     {
         1304, 1421, 1697, 2058, 2752, 3131, 3447, 3462, 3598, 3847, 4103, 4217,
         4553, 4576, 5573, 5586, 6020, 6507, 7603, 7713, 7911, 8536, 9100, 9183,
         9685, 9894, 11115, 11132, 11382, 11480, 11613, 12160, 12317, 12342, 12463,
     }
+)
+AUTHORED_RIVER_PROVINCES = _AUTHORED_RIVER_PARENTS | frozenset(
+    int(entry["province"])
+    for entry in PROVINCE_MANIFEST["provinces"]
+    if entry["parent"] in _AUTHORED_RIVER_PARENTS
 )
 # Waypoints from the source to the mouth. Rivers run only on province-border
 # pixels, so they separate provinces instead of crossing them.
@@ -161,6 +153,7 @@ RIVER_COURSES = (
     ((2827, 1228), (2840, 1232), (2850, 1236), (2858, 1244)),
 )
 RIVER_MOUTH_RADIUS = 14
+RIVER_SIDE_SWITCH_COST = 30.0
 RIVER_SOURCE_PALETTE = 0
 RIVER_SEA_PALETTE = 254
 RIVER_LAND_PALETTE = 255
@@ -228,6 +221,7 @@ class GeographyOutputs:
     world_normal: Image.Image
     trees: Image.Image
     rivers: Image.Image
+    unitstacks: bytes
     river_issues: list[str]
     desired: dict[int, str]
     counts: dict[int, Counter[str]]
@@ -1230,8 +1224,14 @@ def _route_river(
     goals: list[tuple[int, int]],
     allowed: np.ndarray,
     heights: np.ndarray,
+    packed: np.ndarray,
 ) -> list[tuple[int, int]]:
-    """Cheapest 4-connected path; climbing costs extra so rivers run downhill."""
+    """Cheapest 4-connected path along one side of each border.
+
+    Climbing costs extra so rivers run downhill. Stepping onto the pixels of
+    another province is expensive, so the course does not weave across the
+    border line it follows.
+    """
     goal_set = set(goals)
     gx = sum(x for x, _ in goals) / len(goals)
     gy = sum(y for _, y in goals) / len(goals)
@@ -1254,7 +1254,8 @@ def _route_river(
             if not allowed[ny, nx]:
                 continue
             climb = max(0, int(heights[ny, nx]) - int(heights[y, x]))
-            value = spent + 1.0 + 0.8 * climb
+            switch = RIVER_SIDE_SWITCH_COST if packed[ny, nx] != packed[y, x] else 0.0
+            value = spent + 1.0 + 0.8 * climb + switch
             if value < best.get((nx, ny), float("inf")):
                 best[(nx, ny)] = value
                 previous[(nx, ny)] = current
@@ -1328,7 +1329,7 @@ def route_rivers(
         path = [_snap_river_point(course[0], allowed)]
         for waypoint in course[1:-1]:
             target = _snap_river_point(waypoint, allowed)
-            path.extend(_route_river(path[-1], [target], allowed, heights)[1:])
+            path.extend(_route_river(path[-1], [target], allowed, heights, packed)[1:])
         mx, my = course[-1]
         reach = RIVER_MOUTH_RADIUS
         window = mouth[my - reach : my + reach + 1, mx - reach : mx + reach + 1]
@@ -1337,7 +1338,7 @@ def route_rivers(
         ]
         if not goals:
             raise RuntimeError(f"river mouth {course[-1]} has no coastal border pixel")
-        path.extend(_route_river(path[-1], goals, allowed | mouth, heights)[1:])
+        path.extend(_route_river(path[-1], goals, allowed | mouth, heights, packed)[1:])
         path = _prune_river_loops(path)
         for index, (x, y) in enumerate(path):
             result[y, x] = (
@@ -1348,6 +1349,612 @@ def route_rivers(
             blocked[y - 1 : y + 2, x - 1 : x + 2] = True
         paths.append(path)
     return result, paths
+
+
+def relief_unit_anchors(
+    original: bytes, provinces: frozenset[int], heights: np.ndarray
+) -> bytes:
+    """Rest every unit anchor of a relief province on the generated surface."""
+    text = original.decode("utf-8")
+    newline = "\r\n" if "\r\n" in text else "\n"
+    map_height = heights.shape[0]
+    result = []
+    for line in text.splitlines():
+        row = line.split(";")
+        if len(row) >= 5 and row[0].isdigit() and int(row[0]) in provinces:
+            x = round(float(row[2]))
+            y = map_height - 1 - round(float(row[4]))
+            row[3] = f"{heights[y, x] / 10:.2f}"
+            line = ";".join(row)
+        result.append(line)
+    return (newline.join(result) + newline).encode("utf-8")
+
+
+def _grow_compact_region(
+    candidates: np.ndarray, anchor: tuple[int, int], size: int
+) -> np.ndarray:
+    """Take the ``size`` connected pixels nearest to ``anchor`` (y, x)."""
+    selected = np.zeros(candidates.shape, bool)
+    ay, ax = anchor
+    frontier = [(0.0, ay, ax)]
+    seen = {(ay, ax)}
+    count = 0
+    while frontier and count < size:
+        _distance, y, x = heapq.heappop(frontier)
+        selected[y, x] = True
+        count += 1
+        for ny, nx in ((y + 1, x), (y - 1, x), (y, x + 1), (y, x - 1)):
+            if (ny, nx) in seen or not candidates[ny, nx]:
+                continue
+            seen.add((ny, nx))
+            heapq.heappush(frontier, ((ny - ay) ** 2 + (nx - ax) ** 2, ny, nx))
+    return selected
+
+
+def _geodesic_partition(region: np.ndarray, seeds: list[tuple[int, int]]) -> np.ndarray:
+    """Assign region pixels to the nearest seed along 4-connected paths."""
+    owner = np.full(region.shape, -1, np.int32)
+    queue: deque[tuple[int, int]] = deque()
+    for index, (y, x) in enumerate(seeds):
+        owner[y, x] = index
+        queue.append((y, x))
+    while queue:
+        y, x = queue.popleft()
+        for ny, nx in ((y + 1, x), (y - 1, x), (y, x + 1), (y, x - 1)):
+            if region[ny, nx] and owner[ny, nx] < 0:
+                owner[ny, nx] = owner[y, x]
+                queue.append((ny, nx))
+    return owner
+
+
+def _nearest_member(region: np.ndarray, y: float, x: float) -> tuple[int, int]:
+    ys, xs = np.nonzero(region)
+    index = int(np.argmin((ys - y) ** 2 + (xs - x) ** 2))
+    return int(ys[index]), int(xs[index])
+
+
+def compact_partition(region: np.ndarray, parts: int) -> np.ndarray:
+    """Split a region into compact connected parts (geodesic k-means).
+
+    Detached pieces outside the largest component stay unassigned (-1).
+    """
+    from scipy.ndimage import label as connected_components
+
+    pieces, count = connected_components(region)
+    if count > 1:
+        sizes = np.bincount(pieces.ravel())
+        sizes[0] = 0
+        region = pieces == int(np.argmax(sizes))
+    ys, xs = np.nonzero(region)
+    cy, cx = ys.mean(), xs.mean()
+    first = int(np.argmax((ys - cy) ** 2 + (xs - cx) ** 2))
+    seeds = [(int(ys[first]), int(xs[first]))]
+    while len(seeds) < parts:
+        distance = np.min(
+            [(ys - sy) ** 2 + (xs - sx) ** 2 for sy, sx in seeds], axis=0
+        )
+        index = int(np.argmax(distance))
+        seeds.append((int(ys[index]), int(xs[index])))
+    owner = _geodesic_partition(region, seeds)
+    for _iteration in range(8):
+        moved = []
+        for index in range(parts):
+            part = owner == index
+            py, px = np.nonzero(part)
+            moved.append(_nearest_member(part, py.mean(), px.mean()))
+        if moved == seeds:
+            break
+        seeds = moved
+        owner = _geodesic_partition(region, seeds)
+    return owner
+
+
+def _relabel_fragments(labels: np.ndarray, editable: np.ndarray) -> None:
+    """Merge detached pieces of every province into their main neighbour."""
+    from scipy.ndimage import label as connected_components
+
+    for value in np.unique(labels[editable]):
+        mask = labels == value
+        pieces, count = connected_components(mask)
+        if count <= 1:
+            continue
+        sizes = np.bincount(pieces.ravel())
+        sizes[0] = 0
+        keep = int(np.argmax(sizes))
+        for piece in range(1, count + 1):
+            if piece == keep:
+                continue
+            fragment = pieces == piece
+            ring = neighbours_of(fragment) & ~fragment & editable & ~mask
+            choices = labels[ring]
+            if len(choices):
+                labels[fragment] = int(np.bincount(choices).argmax())
+
+
+def smooth_province_labels(
+    labels: np.ndarray, editable: np.ndarray, locked: np.ndarray, sigma: float = 1.6
+) -> np.ndarray:
+    """Round province borders by an iterated Gaussian majority vote.
+
+    Only editable pixels change and they only take editable province IDs, so
+    coastlines and foreign borders stay exact. Locked provinces keep their
+    pixels; the vote repeats until it is stable.
+    """
+    from scipy.ndimage import gaussian_filter
+
+    result = labels.copy()
+    values = [int(value) for value in np.unique(result[editable])]
+    original_area = {value: int((result == value).sum()) for value in values}
+    for _iteration in range(24):
+        best = np.full(result.shape, -1.0)
+        choice = result.copy()
+        for value in values:
+            mask = result == value
+            ys, xs = np.nonzero(mask)
+            y0 = max(0, ys.min() - 6)
+            y1 = min(result.shape[0], ys.max() + 7)
+            x0 = max(0, xs.min() - 6)
+            x1 = min(result.shape[1], xs.max() + 7)
+            score = gaussian_filter(mask[y0:y1, x0:x1].astype(float), sigma)
+            # Ties keep the current owner.
+            score += 1e-6 * mask[y0:y1, x0:x1]
+            window = best[y0:y1, x0:x1]
+            better = score > window
+            window[better] = score[better]
+            choice[y0:y1, x0:x1][better] = value
+        changed = editable & ~locked & ~np.isin(choice, list(np.unique(result[locked])))
+        changed &= choice != result
+        if not changed.any():
+            break
+        previous = result.copy()
+        result[changed] = choice[changed]
+        _relabel_fragments(result, editable)
+        # A province squeezed below 70% of its area is restored and frozen.
+        for value in values:
+            if (result == value).sum() < 0.7 * original_area[value]:
+                restored = previous == value
+                result[restored] = value
+                locked = locked | restored
+        _relabel_fragments(result, editable)
+    return result
+
+
+def remove_four_province_corners(labels: np.ndarray, editable: np.ndarray) -> None:
+    """Give one pixel of every four-province corner to a neighbour's province.
+
+    HOI4 rejects a point where four provinces meet diagonally.
+    """
+    while True:
+        a = labels[:-1, :-1]
+        b = labels[:-1, 1:]
+        c = labels[1:, :-1]
+        d = labels[1:, 1:]
+        corners = (a != b) & (a != c) & (a != d) & (b != c) & (b != d) & (c != d)
+        found = np.argwhere(corners)
+        if not len(found):
+            return
+        for y, x in found:
+            for dy, dx, ny, nx in (
+                (0, 0, 0, 1),
+                (0, 1, 0, 0),
+                (1, 0, 1, 1),
+                (1, 1, 1, 0),
+                (0, 0, 1, 0),
+                (1, 0, 0, 0),
+                (0, 1, 1, 1),
+                (1, 1, 0, 1),
+            ):
+                if editable[y + dy, x + dx] and editable[y + ny, x + nx]:
+                    labels[y + dy, x + dx] = labels[y + ny, x + nx]
+                    break
+            else:
+                raise RuntimeError(f"four-province corner at {(x, y)} has no editable pixel")
+        _relabel_fragments(labels, editable)
+
+
+def province_colour(province_id: int, used: set[tuple[int, int, int]]) -> tuple[int, int, int]:
+    salt = 0
+    while True:
+        value = stable_unit_hash(province_id, 7919, salt)
+        packed = int(value * 0xFFFFFF) | 0x101010
+        colour = ((packed >> 16) & 255, (packed >> 8) & 255, packed & 255)
+        if colour not in used:
+            used.add(colour)
+            return colour
+        salt += 1
+
+
+def plan_province_geometry() -> None:
+    """Write the reviewed IVN mainland province geometry and its manifest.
+
+    Victory-point cities become whole urban provinces: small city provinces
+    are kept whole, larger ones yield a compact city and rural sectors. Giant
+    or ragged provinces are split, then every internal border is smoothed.
+    The result is stored as data so the map pass only stamps it.
+    """
+    from tools.builders import build_adiscord_new_states as states
+
+    rows = [
+        line.split(";")
+        for line in DEFINITION_PATH.read_text(encoding="utf-8-sig").splitlines()
+        if line[:1].isdigit()
+    ]
+    colours = {int(row[0]): (int(row[1]), int(row[2]), int(row[3])) for row in rows}
+    used = set(colours.values())
+    next_id = max(colours) + 1
+    sea = {int(row[0]) for row in rows if row[4] != "land"}
+
+    state_by_province = {
+        province: state_id
+        for state_id in IVN_STATE_IDS
+        for province in states.IVANLAND_OVERHAUL_PROVINCES[state_id]
+    }
+    scoped = frozenset(state_by_province)
+    with Image.open(PROVINCES_PATH) as source:
+        province_rgb = np.asarray(source.convert("RGB"))
+    with Image.open(TERRAIN_PATH) as source:
+        terrain = np.asarray(source)
+    packed = packed_rgb(province_rgb)
+    lookup = {
+        (red << 16) | (green << 8) | blue: province
+        for province, (red, green, blue) in colours.items()
+    }
+    scope = province_mask(packed, colours, scoped)
+    ys, xs = np.nonzero(scope)
+    y0, y1 = int(ys.min()) - 8, int(ys.max()) + 9
+    x0, x1 = int(xs.min()) - 8, int(xs.max()) + 9
+    crop = (slice(y0, y1), slice(x0, x1))
+    keys = packed[crop]
+    labels = np.zeros(keys.shape, np.int32)
+    for key in np.unique(keys):
+        labels[keys == key] = lookup.get(int(key), 0)
+    editable = np.isin(labels, list(scoped))
+    water = np.isin(labels, list(sea))
+
+    victory_points = {
+        province: value
+        for state_id, points in states.IVANLAND_SETTLEMENT_VICTORY_POINTS.items()
+        if state_id in IVN_STATE_IDS
+        for province, value in points
+    }
+    entries: list[dict[str, object]] = []
+    cities: dict[int, int] = {}
+
+    def new_province(parent: int, kind: str) -> int:
+        nonlocal next_id
+        province = next_id
+        next_id += 1
+        state_by_province[province] = state_by_province[parent]
+        entries.append(
+            {
+                "province": province,
+                "parent": parent,
+                "state": state_by_province[parent],
+                "kind": kind,
+                "rgb": list(province_colour(province, used)),
+            }
+        )
+        return province
+
+    for parent in sorted(victory_points):
+        region = labels == parent
+        area = int(region.sum())
+        if area <= CITY_WHOLE_PROVINCE_PIXELS:
+            cities[parent] = parent
+            continue
+        urban = region & (terrain[crop] == URBAN_PALETTE)
+        anchor_source = urban if urban.sum() >= 6 else region
+        py, px = np.nonzero(anchor_source)
+        anchor = _nearest_member(region & ~neighbours_of(~region), py.mean(), px.mean())
+        city_pixels = _grow_compact_region(region & ~water, anchor, CITY_PIXELS)
+        city = new_province(parent, "city")
+        labels[city_pixels] = city
+        cities[parent] = city
+        ring = labels == parent
+        sectors = max(2, round(int(ring.sum()) / SECTOR_PIXELS))
+        owner = compact_partition(ring, sectors)
+        keep = int(np.bincount(owner[owner >= 0]).argmax())
+        for index in range(sectors):
+            if index != keep:
+                labels[owner == index] = new_province(parent, "sector")
+
+    for parent in sorted(int(value) for value in np.unique(labels[editable])):
+        if parent in cities.values():
+            continue
+        region = labels == parent
+        area = int(region.sum())
+        ry, rx = np.nonzero(region)
+        sub = region[ry.min() - 1 : ry.max() + 2, rx.min() - 1 : rx.max() + 2]
+        perimeter = int((sub[:, 1:] != sub[:, :-1]).sum() + (sub[1:, :] != sub[:-1, :]).sum())
+        compactness = 4 * pi * area / perimeter**2
+        if area <= SPLIT_PIXELS and not (compactness < 0.3 and area > 200):
+            continue
+        parts = max(2, round(area / SECTOR_PIXELS))
+        owner = compact_partition(region, parts)
+        keep = int(np.bincount(owner[owner >= 0]).argmax())
+        for index in range(parts):
+            if index != keep:
+                labels[owner == index] = new_province(parent, "split")
+
+    editable = labels > 0
+    editable &= ~water & np.isin(
+        labels, list(scoped | {int(entry["province"]) for entry in entries})
+    )
+    # Cities and very small provinces keep their exact outline.
+    small = [
+        int(value)
+        for value in np.unique(labels[editable])
+        if (labels == value).sum() < LOCKED_PROVINCE_PIXELS
+    ]
+    locked = np.isin(labels, list(set(cities.values()) | set(small)))
+    labels = smooth_province_labels(labels, editable, locked)
+    remove_four_province_corners(labels, editable & ~locked)
+
+    palette = {province: colour for province, colour in colours.items()}
+    palette.update({int(entry["province"]): tuple(entry["rgb"]) for entry in entries})
+    image = np.zeros((*labels.shape, 4), np.uint8)
+    for value in np.unique(labels[editable]):
+        mask = editable & (labels == value)
+        image[mask, :3] = palette[int(value)]
+        image[mask, 3] = 255
+    Image.fromarray(image).save(PROVINCE_GEOMETRY_PATH, optimize=True)
+    manifest = {
+        "schema": 1,
+        "origin": [x0, y0],
+        "provinces": entries,
+        "cities": {str(parent): city for parent, city in sorted(cities.items())},
+    }
+    PROVINCE_MANIFEST_PATH.write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+
+
+RAILWAYS_PATH = ROOT / "map/railways.txt"
+
+
+@dataclass(frozen=True)
+class ProvinceGeometry:
+    provinces: bytes
+    definition: bytes
+    unitstacks: bytes
+    railways: bytes
+    issues: tuple[str, ...]
+
+
+def province_adjacency(labels: np.ndarray) -> dict[int, set[int]]:
+    adjacency: dict[int, set[int]] = {}
+    for first, second in ((labels[:, 1:], labels[:, :-1]), (labels[1:, :], labels[:-1, :])):
+        differs = first != second
+        for a, b in zip(first[differs].tolist(), second[differs].tolist()):
+            adjacency.setdefault(a, set()).add(b)
+            adjacency.setdefault(b, set()).add(a)
+    return adjacency
+
+
+def _shortest_province_path(
+    start: int, goal: int, adjacency: dict[int, set[int]], allowed: frozenset[int]
+) -> list[int]:
+    previous = {start: start}
+    queue = deque([start])
+    while queue:
+        current = queue.popleft()
+        if current == goal:
+            break
+        # Cities first, so repaired lines pass through them.
+        for neighbour in sorted(
+            adjacency.get(current, ()), key=lambda value: (value not in CITY_PROVINCES, value)
+        ):
+            if neighbour in allowed and neighbour not in previous:
+                previous[neighbour] = current
+                queue.append(neighbour)
+    if goal not in previous:
+        raise RuntimeError(f"railway {start}-{goal}: no IVN province path")
+    path = [goal]
+    while path[-1] != start:
+        path.append(previous[path[-1]])
+    return path[::-1]
+
+
+def repair_railways(
+    original: bytes, adjacency: dict[int, set[int]], scoped: frozenset[int]
+) -> bytes:
+    """Route IVN railway segments through the city provinces and close gaps."""
+    text = original.decode("utf-8-sig")
+    newline = "\r\n" if "\r\n" in text else "\n"
+    cities = {
+        int(parent): int(city)
+        for parent, city in PROVINCE_MANIFEST["cities"].items()
+        if int(parent) != int(city)
+    }
+    lines = []
+    for line in text.splitlines():
+        fields = line.split()
+        if len(fields) < 3:
+            lines.append(line)
+            continue
+        chain = [cities.get(int(value), int(value)) for value in fields[2:]]
+        repaired = chain[:1]
+        for province in chain[1:]:
+            previous = repaired[-1]
+            if province in adjacency.get(previous, ()) or not (
+                previous in scoped and province in scoped
+            ):
+                repaired.append(province)
+            else:
+                repaired.extend(
+                    _shortest_province_path(previous, province, adjacency, scoped)[1:]
+                )
+        updated = f"{fields[0]} {len(repaired)} " + " ".join(map(str, repaired)) + " "
+        lines.append(updated if repaired != [int(value) for value in fields[2:]] else line)
+    return (newline.join(lines) + newline).encode("utf-8")
+
+
+def _definition_rows() -> tuple[list[list[str]], str, bytes]:
+    raw = DEFINITION_PATH.read_bytes()
+    text = raw.decode("utf-8-sig")
+    newline = "\r\n" if "\r\n" in text else "\n"
+    bom = b"\xef\xbb\xbf" if raw.startswith(b"\xef\xbb\xbf") else b""
+    return [line.split(";") for line in text.splitlines()], newline, bom
+
+
+def _snap_anchor(mask: np.ndarray, x: float, y: float) -> tuple[int, int]:
+    row = int(round(y))
+    column = int(round(x))
+    if 0 <= row < mask.shape[0] and 0 <= column < mask.shape[1] and mask[row, column]:
+        return column, row
+    sy, sx = _nearest_member(mask, y, x)
+    return sx, sy
+
+
+def expected_province_geometry() -> ProvinceGeometry:
+    """Stamp the reviewed IVN province geometry and register its provinces."""
+    rows, newline, bom = _definition_rows()
+    by_id = {int(row[0]): row for row in rows if row[0].isdigit()}
+    entries = sorted(PROVINCE_MANIFEST["provinces"], key=lambda entry: entry["province"])
+    issues: list[str] = []
+    for entry in entries:
+        province = int(entry["province"])
+        row = by_id.get(province)
+        if row is None:
+            if province != max(by_id) + 1:
+                raise RuntimeError(f"province {province}: non-contiguous IVN province ID")
+            parent = by_id[int(entry["parent"])]
+            row = [str(province), *map(str, entry["rgb"]), "land", "false", parent[6], parent[7]]
+            rows.append(row)
+            by_id[province] = row
+        elif list(map(int, row[1:4])) != list(entry["rgb"]):
+            raise RuntimeError(f"province {province}: ID is occupied by another colour")
+
+    colours = {province: tuple(map(int, row[1:4])) for province, row in by_id.items()}
+    scoped = province_ids_for_states(IVN_STATE_IDS) | {
+        int(entry["province"]) for entry in entries
+    }
+    with Image.open(PROVINCES_PATH) as source:
+        province_rgb = np.array(source.convert("RGB"))
+    with Image.open(PROVINCE_GEOMETRY_PATH) as source:
+        geometry = np.asarray(source.convert("RGBA"))
+    x0, y0 = PROVINCE_MANIFEST["origin"]
+    height, width = geometry.shape[:2]
+    region = province_rgb[y0 : y0 + height, x0 : x0 + width]
+    stamped = geometry[..., 3] > 0
+    allowed = province_mask(packed_rgb(region), colours, frozenset(scoped))
+    if (stamped & ~allowed).any():
+        raise RuntimeError("IVN province geometry would overwrite land outside its scope")
+    region[stamped] = geometry[..., :3][stamped]
+    lookup = {
+        (red << 16) | (green << 8) | blue: province
+        for province, (red, green, blue) in colours.items()
+    }
+    keys = packed_rgb(region)
+    labels = np.zeros(keys.shape, np.int32)
+    for key in np.unique(keys):
+        labels[keys == key] = lookup.get(int(key), 0)
+    sea_ids = [province for province, row in by_id.items() if row[4] == "sea"]
+    coast = neighbours_of(np.isin(labels, sea_ids))
+    masks = {province: labels == province for province in scoped}
+    for province in sorted(scoped):
+        if not masks[province].any():
+            raise RuntimeError(f"province {province}: empty IVN geometry")
+        by_id[province][5] = "true" if (masks[province] & coast).any() else "false"
+
+    stack_text = UNITSTACKS_PATH.read_bytes().decode("utf-8")
+    stack_newline = "\r\n" if "\r\n" in stack_text else "\n"
+    stacks = [line.split(";") for line in stack_text.splitlines()]
+    parents = {int(entry["province"]): int(entry["parent"]) for entry in entries}
+    templates = {parent: [row for row in stacks if int(row[0]) == parent] for parent in set(parents.values())}
+    existing = {int(row[0]) for row in stacks}
+    with Image.open(HEIGHTMAP_PATH) as source:
+        heights = np.asarray(source)
+    map_height = province_rgb.shape[0]
+
+    def place(row: list[str], province: int, x: float, y: float) -> None:
+        sx, sy = _snap_anchor(masks[province], x - x0, y - y0)
+        row[2] = f"{sx + x0:.2f}"
+        row[3] = f"{heights[sy + y0, sx + x0] / 10:.2f}"
+        row[4] = f"{map_height - 1 - (sy + y0):.2f}"
+
+    for row in stacks:
+        province = int(row[0])
+        if province in masks:
+            x = float(row[2])
+            y = map_height - 1 - float(row[4])
+            inside = masks[province]
+            column = int(round(x)) - x0
+            line = int(round(y)) - y0
+            if not (0 <= line < inside.shape[0] and 0 <= column < inside.shape[1] and inside[line, column]):
+                place(row, province, x, y)
+    for province, parent in sorted(parents.items()):
+        if province in existing:
+            continue
+        template = templates[parent]
+        if not template:
+            raise RuntimeError(f"province {parent}: no unit anchors to copy")
+        ys, xs = np.nonzero(masks[province])
+        cx, cy = xs.mean() + x0, ys.mean() + y0
+        origin_x = float(template[0][2])
+        origin_y = map_height - 1 - float(template[0][4])
+        for source_row in template:
+            row = source_row.copy()
+            row[0] = str(province)
+            place(
+                row,
+                province,
+                cx + float(source_row[2]) - origin_x,
+                cy + (map_height - 1 - float(source_row[4])) - origin_y,
+            )
+            stacks.append(row)
+
+    railways = repair_railways(
+        RAILWAYS_PATH.read_bytes(), province_adjacency(labels), frozenset(scoped)
+    )
+    encoded = BytesIO()
+    Image.fromarray(province_rgb).save(encoded, format="BMP")
+    definition = newline.join(";".join(row) for row in rows) + newline
+    unitstacks = stack_newline.join(";".join(row) for row in stacks) + stack_newline
+    return ProvinceGeometry(
+        encoded.getvalue(),
+        bom + definition.encode("utf-8"),
+        unitstacks.encode("utf-8"),
+        railways,
+        tuple(issues),
+    )
+
+
+def province_geometry_issues() -> list[str]:
+    expected_geometry = expected_province_geometry()
+    issues = list(expected_geometry.issues)
+    with Image.open(PROVINCES_PATH) as current, Image.open(
+        BytesIO(expected_geometry.provinces)
+    ) as planned:
+        if not np.array_equal(
+            np.asarray(current.convert("RGB")), np.asarray(planned.convert("RGB"))
+        ):
+            issues.append("map/provinces.bmp: IVN province geometry drifted")
+    current_rows = DEFINITION_PATH.read_bytes().decode("utf-8-sig").splitlines()
+    planned_rows = expected_geometry.definition.decode("utf-8-sig").splitlines()
+    for before, after in zip_longest(current_rows, planned_rows):
+        if before is None or after is None or before.split(";")[:6] != after.split(";")[:6]:
+            issues.append("map/definition.csv: IVN province rows drifted")
+            break
+    stacks = UNITSTACKS_PATH.read_bytes().decode("utf-8").splitlines()
+    planned_stacks = expected_geometry.unitstacks.decode("utf-8").splitlines()
+    if len(stacks) != len(planned_stacks) or any(
+        before.split(";")[:3] + before.split(";")[4:]
+        != after.split(";")[:3] + after.split(";")[4:]
+        for before, after in zip(stacks, planned_stacks)
+    ):
+        issues.append("map/unitstacks.txt: IVN unit anchors drifted")
+    if RAILWAYS_PATH.read_bytes() != expected_geometry.railways:
+        issues.append("map/railways.txt: IVN railway segments are not adjacent")
+    return issues
+
+
+def apply_province_geometry() -> None:
+    expected_geometry = expected_province_geometry()
+    PROVINCES_PATH.write_bytes(expected_geometry.provinces)
+    DEFINITION_PATH.write_bytes(expected_geometry.definition)
+    UNITSTACKS_PATH.write_bytes(expected_geometry.unitstacks)
+    RAILWAYS_PATH.write_bytes(expected_geometry.railways)
 
 
 def river_issues(
@@ -1426,7 +2033,7 @@ def _build_expected() -> GeographyOutputs:
             )
         heightmap = render_heightmap(height_source, masks.island, masks.island_bbox)
     relief_heights, fen = render_relief_heights(np.asarray(heightmap), relief, water)
-    heightmap = Image.fromarray(relief_heights, mode="L")
+    heightmap = Image.fromarray(relief_heights)
     normal_scope = bytearray(
         (
             np.frombuffer(bytes(masks.island), dtype=np.uint8).reshape(relief.shape).astype(bool)
@@ -1464,10 +2071,14 @@ def _build_expected() -> GeographyOutputs:
     # City meshes must not spill into the sea: settlements grow only from
     # pixels outside the shared shoreline clearance band.
     footprints = {
-        province_id: compact_footprint(
-            [index for index in indices if not shore_blocked[index]],
-            terrain_original.width,
-            province_id,
+        province_id: (
+            set(indices)
+            if province_id in CITY_PROVINCES
+            else compact_footprint(
+                [index for index in indices if not shore_blocked[index]],
+                terrain_original.width,
+                province_id,
+            )
         )
         for province_id, indices in settlement_indices.items()
     }
@@ -1501,6 +2112,23 @@ def _build_expected() -> GeographyOutputs:
             working_pixels[index] = base
         for index in footprints[province_id]:
             working_pixels[index] = URBAN_PALETTE
+    # On the IVN mainland only city provinces are urban. Former settlement
+    # footprints left in rural provinces return to the province's own biome.
+    working_array = np.frombuffer(working_pixels, dtype=np.uint8).reshape(relief.shape)
+    rural_urban = (
+        relief
+        & (working_array == URBAN_PALETTE)
+        & ~province_mask(packed, province_colors, SETTLEMENT_PROVINCES)
+    )
+    if rural_urban.any():
+        stale_ids = np.frombuffer(province_by_pixel, dtype=np.uint16).reshape(relief.shape)
+        for province_id in np.unique(stale_ids[rural_urban]):
+            inside = stale_ids == province_id
+            biome = working_array[inside & (working_array != URBAN_PALETTE)]
+            biome = biome[~np.isin(biome, list(WATER_PALETTES))]
+            base = int(np.bincount(biome).argmax()) if len(biome) else PLAINS_PALETTE
+            for index in np.flatnonzero(inside & rural_urban):
+                working_pixels[index] = base
     # Clear the shoreline band before rendering as well, so neighbourhood-aware
     # rendering sees identical input on every pass.
     for index, province_id in enumerate(province_by_pixel):
@@ -1734,6 +2362,11 @@ def _build_expected() -> GeographyOutputs:
         world_normal=world_normal,
         trees=trees,
         rivers=rivers,
+        unitstacks=relief_unit_anchors(
+            UNITSTACKS_PATH.read_bytes(),
+            relief_province_ids(RELIEF_STATE_IDS),
+            relief_heights,
+        ),
         river_issues=river_issues(river_pixels, river_paths, packed, water),
         desired=desired,
         counts=counts,
@@ -1756,6 +2389,7 @@ def expected() -> GeographyOutputs:
         HEIGHTMAP_PATH,
         WORLD_NORMAL_PATH,
         RIVERS_PATH,
+        UNITSTACKS_PATH,
         TERRAIN_CONFIG_PATH,
         *(state_path(state_id) for state_id in sorted(SCOPED_STATE_IDS)),
     )
@@ -1877,6 +2511,8 @@ def validate(outputs: GeographyOutputs | None = None) -> list[str]:
     if differences:
         issues.append(f"map/rivers.bmp: {differences} IVN river pixels drifted")
     issues.extend(f"map/rivers.bmp: {issue}" for issue in outputs.river_issues)
+    if UNITSTACKS_PATH.read_bytes() != outputs.unitstacks:
+        issues.append("map/unitstacks.txt: IVN relief unit heights drifted")
     current_definition = DEFINITION_PATH.read_bytes().decode("utf-8-sig").splitlines()
     expected_definition = outputs.definition.decode("utf-8-sig").splitlines()
     definition_differences = sum(
@@ -1888,6 +2524,10 @@ def validate(outputs: GeographyOutputs | None = None) -> list[str]:
             f"map/definition.csv: {definition_differences} IVN/IIA declared terrain rows drifted"
         )
     for province_id, footprint in outputs.footprints.items():
+        if province_id in CITY_PROVINCES:
+            if outputs.desired[province_id] != "urban":
+                issues.append(f"city province {province_id} is not declared urban")
+            continue
         if len(footprint) < MIN_URBAN_PIXELS:
             issues.append(
                 f"province {province_id}: urban footprint has only {len(footprint)} pixels"
@@ -1922,10 +2562,12 @@ def atomic_save_bmp(image: Image.Image, path: Path) -> None:
 
 
 def apply() -> None:
+    apply_province_geometry()
     outputs = expected()
     atomic_save_bmp(outputs.terrain, TERRAIN_PATH)
     atomic_save_bmp(outputs.trees, TREES_PATH)
     atomic_save_bmp(outputs.rivers, RIVERS_PATH)
+    UNITSTACKS_PATH.write_bytes(outputs.unitstacks)
     atomic_save_bmp(outputs.heightmap, HEIGHTMAP_PATH)
     atomic_save_bmp(outputs.world_normal, WORLD_NORMAL_PATH)
     DEFINITION_PATH.write_bytes(outputs.definition)
@@ -1942,10 +2584,21 @@ def main() -> int:
     actions.add_argument(
         "--apply", action="store_true", help="write synchronized terrain outputs"
     )
+    actions.add_argument(
+        "--plan-provinces",
+        action="store_true",
+        help="replan the reviewed IVN province geometry data from the current map",
+    )
     args = parser.parse_args()
+    if args.plan_provinces:
+        plan_province_geometry()
+        print(f"Wrote {PROVINCE_GEOMETRY_PATH.name} and {PROVINCE_MANIFEST_PATH.name}.")
+        return 0
     if args.apply:
         apply()
-    issues = validate()
+    issues = province_geometry_issues()
+    if not issues:
+        issues = validate()
     if issues:
         for issue in issues:
             print(f"ERROR: {issue}")

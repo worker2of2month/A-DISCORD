@@ -3288,25 +3288,73 @@
           "russian": "Коридорный",
           "english": "Koridorny"
         },
-        "VICTORY_POINTS_932": {
+        "VICTORY_POINTS_16815": {
+          "russian": "Западная Серенга",
+          "english": "Western Serenga"
+        },
+        "VICTORY_POINTS_16817": {
+          "russian": "Северная Марка",
+          "english": "Northern March"
+        },
+        "VICTORY_POINTS_16819": {
+          "russian": "Ильван",
+          "english": "Ilvan"
+        },
+        "VICTORY_POINTS_16821": {
+          "russian": "Талара",
+          "english": "Talara"
+        },
+        "VICTORY_POINTS_16823": {
           "russian": "Дубравск",
           "english": "Dubravsk"
         },
-        "VICTORY_POINTS_11124": {
-          "russian": "Сольгаван",
-          "english": "Solgavan"
+        "VICTORY_POINTS_16825": {
+          "russian": "Верхнемарск",
+          "english": "Verkhnemarsk"
         },
-        "VICTORY_POINTS_5203": {
+        "VICTORY_POINTS_16827": {
+          "russian": "Пыльный Тракт",
+          "english": "Pylnyy Road"
+        },
+        "VICTORY_POINTS_16829": {
+          "russian": "Дальняя Застава",
+          "english": "Far Zastava"
+        },
+        "VICTORY_POINTS_16831": {
+          "russian": "Серенга",
+          "english": "Serenga"
+        },
+        "VICTORY_POINTS_16833": {
+          "russian": "Восточная Итора",
+          "english": "Eastern Itora"
+        },
+        "VICTORY_POINTS_16835": {
           "russian": "Нордмарск",
           "english": "Nordmarsk"
         },
-        "VICTORY_POINTS_12054": {
+        "VICTORY_POINTS_16837": {
+          "russian": "Лонгар",
+          "english": "Longar"
+        },
+        "VICTORY_POINTS_16839": {
+          "russian": "Гатьев",
+          "english": "Gatyev"
+        },
+        "VICTORY_POINTS_16841": {
+          "russian": "Ринваль",
+          "english": "Rinval"
+        },
+        "VICTORY_POINTS_16843": {
+          "russian": "Сольгаван",
+          "english": "Solgavan"
+        },
+        "VICTORY_POINTS_16846": {
           "russian": "Срединск",
           "english": "Sredinsk"
         },
-        "VICTORY_POINTS_6350": {
-          "russian": "Гатьев",
-          "english": "Gatyev"
+        "VICTORY_POINTS_16848": {
+          "russian": "Салемар",
+          "english": "Salemar"
         }
       }
     }

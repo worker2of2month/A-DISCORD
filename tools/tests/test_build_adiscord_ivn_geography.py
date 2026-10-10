@@ -19,10 +19,10 @@ from tools.lib import coastal_clearance as clearance
 
 
 HEIGHT_OUTSIDE_ISLAND_SHA256 = (
-    "98EA41C210763E0512AE8F6851BC7F89FE84A2891201C9FBEF7C6F95834CB12F"
+    "0B36D76A2475E8607FD8B6071B7231AD2A71ABADBB2E07439ED6D3EB31B02219"
 )
 NORMAL_OUTSIDE_FEATHER_SHA256 = (
-    "5B542E782DCFDD03B6A208B36677EB84375892E885F1DBD768D64280BA43DFF5"
+    "E2EF138D2047B2C35D14D76B8F1CDDC0F97B9F270CDCDF84C2C564707EB56804"
 )
 
 
@@ -96,13 +96,13 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
                     province_id: (index + 1, index + 1, index + 1)
                     for index, province_id in enumerate(province_by_state.values())
                 }
-                provinces = Image.new("L", (3, 3), 0)
+                provinces = Image.new("L", (5, 2), 0)
             else:
                 definition_colors = {
                     province_id: (index + 1, 0, 0)
                     for index, province_id in enumerate(province_by_state.values())
                 }
-                provinces = Image.new("RGB", (3, 3), (0, 0, 0))
+                provinces = Image.new("RGB", (5, 2), (0, 0, 0))
             pixels = list(provinces.get_flattened_data())
             for index, state_id in enumerate(state_ids):
                 if state_id not in absent_from_bitmap:
@@ -127,20 +127,20 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
             masks = builder.landscape_masks(
                 fixture.provinces, fixture.definition_colors
             )
-        self.assertEqual(masks.north, bytearray([1] * 9))
+        self.assertEqual(masks.north, bytearray([1] * 10))
         self.assertEqual(
             [index for index, value in enumerate(masks.island) if value],
             [1, 7, 8],
         )
-        self.assertEqual(masks.island_bbox, (1, 0, 2, 2))
+        self.assertEqual(masks.island_bbox, (1, 0, 3, 1))
 
     def test_landscape_masks_accepts_grayscale_fixture(self) -> None:
         with self.landscape_fixture(grayscale=True) as fixture:
             masks = builder.landscape_masks(
                 fixture.provinces, fixture.definition_colors
             )
-        self.assertEqual(masks.north, bytearray([1] * 9))
-        self.assertEqual(masks.island_bbox, (1, 0, 2, 2))
+        self.assertEqual(masks.north, bytearray([1] * 10))
+        self.assertEqual(masks.island_bbox, (1, 0, 3, 1))
 
     def test_landscape_masks_rejects_definition_missing_state_province(self) -> None:
         with self.landscape_fixture() as fixture:
@@ -174,7 +174,7 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         self.assertEqual(builder.ISLAND_HEIGHT_STATE_IDS, frozenset({128, 693, 694}))
         self.assertEqual(
             builder.NORTHERN_LANDSCAPE_STATE_IDS,
-            frozenset({127, 128, 129, 130, 131, 132, 164, 693, 694}),
+            frozenset({127, 128, 129, 130, 131, 132, 164, 693, 694, 715}),
         )
 
     def test_distance_from_edge_increases_inward(self) -> None:
@@ -669,12 +669,21 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         )
         with Image.open(builder.PROVINCES_PATH) as provinces_source:
             masks = builder.landscape_masks(provinces_source, definition_colors)
+            relief = builder.province_mask(
+                builder.packed_rgb(np.asarray(provinces_source.convert("RGB"))),
+                definition_colors,
+                builder.relief_province_ids(builder.RELIEF_STATE_IDS),
+            ).reshape(-1)
+        # The generated surface covers the IIA islands and the IVN mainland.
+        scope = bytes(
+            np.frombuffer(bytes(masks.island), dtype=np.uint8).astype(bool) | relief
+        )
         with Image.open(builder.HEIGHTMAP_PATH) as height_source:
             height_bytes = height_source.tobytes()
             height_width = height_source.width
             height_height = height_source.height
         height_outside = bytes(
-            value for index, value in enumerate(height_bytes) if not masks.island[index]
+            value for index, value in enumerate(height_bytes) if not scope[index]
         )
         self.assertEqual(
             hashlib.sha256(height_outside).hexdigest().upper(),
@@ -690,7 +699,7 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
             for nx in range(normal_width):
                 left = nx * 2
                 coarse_island[ny * normal_width + nx] = any(
-                    masks.island[index]
+                    scope[index]
                     for index in (
                         top + left,
                         top + left + 1,
@@ -739,6 +748,13 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         self.assertEqual(set(outputs.footprints), set(builder.SETTLEMENT_PROVINCES))
         for province_id, footprint in outputs.footprints.items():
             with self.subTest(province=province_id):
+                self.assertEqual(outputs.desired[province_id], "urban")
+                if province_id in builder.CITY_PROVINCES:
+                    # A city province is urban in its entirety.
+                    self.assertEqual(
+                        len(footprint), sum(outputs.counts[province_id].values())
+                    )
+                    continue
                 self.assertGreaterEqual(len(footprint), builder.MIN_URBAN_PIXELS)
                 self.assertLessEqual(
                     len(footprint),
@@ -780,7 +796,7 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
     def test_province_geometry_is_unchanged(self) -> None:
         digest = hashlib.sha256(builder.PROVINCES_PATH.read_bytes()).hexdigest().upper()
         self.assertEqual(
-            digest, "85D8B27EE82AC123C5FC09AF2F802946BE26617497B384AE7453609C2D2EA39E"
+            digest, "F2759E77EE0A0B04474319E26F84AC96FEDC31940DB565B19AF727A65CC92E0D"
         )
 
 

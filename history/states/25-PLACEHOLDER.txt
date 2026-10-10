@@ -7,11 +7,12 @@ state={
 	}
 	provinces={
 		694 1861 4909 7654 9066 9614 10539 10885 11612 12313 12790 16568
+		16878
 	}
 	manpower = 780000
 	buildings_max_level_factor = 1.000
 	state_category = large_city
-	local_supplies = 2.0
+	local_supplies = 1.0
 	history = {
 		owner = IVN
 		add_core_of = IVN
