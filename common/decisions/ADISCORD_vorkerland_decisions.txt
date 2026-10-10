@@ -2701,6 +2701,25 @@ ADISCORD_vorkerland_rom_tru_category = {
 # --- rus_crisis_decisions ---
 RUS_last_empire_crisis = {
 
+	RUS_crisis_player_attack = {
+		icon = generic_attack
+		allowed = {
+			OR = {
+				tag = VAL
+				tag = STP
+				tag = STS
+			}
+		}
+		visible = { RUS_crisis_player_attack_visible = yes }
+		available = { RUS_crisis_player_attack_available = yes }
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = RUS_crisis_player_attack_tt
+			hidden_effect = { RUS_crisis_player_attack = yes }
+		}
+		ai_will_do = { base = 0 }
+	}
+
 	RUS_imperial_frontier_campaign = {
 		icon = generic_attack
 		allowed = { tag = RUS }

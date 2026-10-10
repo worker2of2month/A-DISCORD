@@ -140,6 +140,7 @@ RUS_last_empire_crisis = {
 	visible = {
 		NOT = { has_global_flag = RUS_crisis_world_ended }
 		OR = {
+			RUS_crisis_player_attack_visible = yes
 			AND = {
 				tag = RUS
 				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed

@@ -1935,6 +1935,44 @@ RUS_crisis_eastern_hegemony = {
 	}
 }
 
+# COUNTRY. This voluntary offensive is restricted to human opponents.
+RUS_crisis_player_challenger = {
+	is_ai = no
+	OR = {
+		tag = VAL
+		tag = STP
+		tag = STS
+	}
+	RUS = { is_ai = no }
+}
+
+RUS_crisis_player_attack_visible = {
+	RUS_crisis_player_challenger = yes
+	RUS_crisis_eastern_hegemony = yes
+	RUS = {
+		exists = yes
+		RUS_khan_governing = yes
+	}
+	NOT = { has_war_with = RUS }
+	NOT = { has_global_flag = RUS_crisis_world_ended }
+}
+
+RUS_crisis_player_attack_available = {
+	hidden_trigger = { RUS_crisis_player_attack_visible = yes }
+	is_subject = no
+	has_capitulated = no
+	has_war = no
+	NOT = { is_in_faction_with = RUS }
+	RUS = {
+		is_subject = no
+		has_capitulated = no
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_crisis_player_attack_side_tt
+		RUS_crisis_side_compatible = yes
+	}
+}
+
 # COUNTRY regional rival. A northern expedition alone does not establish hegemony.
 RUS_crisis_northern_order_member = {
 	OR = {

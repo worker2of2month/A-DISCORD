@@ -1992,6 +1992,123 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertEqual(world.missions, clocks)
         self.assertEqual(world.declarations, [("MON", "RUS")])
 
+    def player_offensive_world(self, tag="VAL"):
+        world = self.peaceful_empire()
+        world.ai_countries.difference_update(("RUS", tag))
+        self.complete_hegemon_victory(world, tag)
+        return world
+
+    def test_player_offensive_precedes_proclamation_without_starting_the_programme(self):
+        decision = self.crisis_decision("RUS_crisis_player_attack")
+        category = self.block(self.entries(str(CATEGORY_FILE)), "RUS_last_empire_crisis")
+        for tag in ("VAL", "STP", "STS"):
+            with self.subTest(tag=tag):
+                world = self.player_offensive_world(tag)
+                world.flags["RUS"].discard("ADISCORD_vorkerland_rus_last_empire_proclaimed")
+                for body in (category, decision):
+                    self.assertTrue(world.matches(self.block(body, "visible"), [tag]))
+                self.assertTrue(world.matches(self.block(decision, "available"), [tag]))
+                world.execute(self.block(decision, "complete_effect"), [tag])
+                world.execute(self.block(decision, "complete_effect"), [tag])
+                self.assertEqual(world.declarations, [(tag, "RUS")])
+                self.assertNotIn(("RUS", "RUS_crisis_phase"), world.variables)
+                self.assertFalse(world.missions)
+                self.assertNotIn("RUS_crisis_laser_disabled", world.flags["RUS"])
+
+    def test_player_offensive_requires_two_players_and_a_regional_victory(self):
+        for tag in ("VAL", "STP", "STS"):
+            for blocker in ("attacker_ai", "khan_ai", "unfinished", "other_tag", "no_khan", "epilogue"):
+                with self.subTest(tag=tag, blocker=blocker):
+                    world = self.player_offensive_world(tag)
+                    actor = tag
+                    if blocker == "attacker_ai":
+                        world.ai_countries.add(tag)
+                    elif blocker == "khan_ai":
+                        world.ai_countries.add("RUS")
+                    elif blocker == "unfinished":
+                        world.completed_focuses.clear()
+                    elif blocker == "other_tag":
+                        actor = "NOD"
+                        world.ai_countries.discard(actor)
+                        self.complete_hegemon_victory(world, actor)
+                    elif blocker == "no_khan":
+                        world.outside_predicates["RUS", "RUS_khan_governing"] = False
+                    else:
+                        world.global_flags.add("RUS_crisis_world_ended")
+                    gate = world.triggers["RUS_crisis_player_attack_visible"]
+                    self.assertFalse(world.matches(gate, [actor]))
+                    world.run("RUS_crisis_player_attack", actor)
+                    self.assertFalse(world.declarations)
+
+    def test_player_offensive_keeps_temporary_blockers_visible_and_rechecks_execution(self):
+        for blocker in ("war", "subject", "capitulated", "same_faction", "khan_subject", "khan_capitulated"):
+            with self.subTest(blocker=blocker):
+                world = self.player_offensive_world()
+                if blocker == "war":
+                    world.wars.add(frozenset(("VAL", "WKR")))
+                elif blocker == "subject":
+                    world.subjects["VAL"] = "WKR"
+                elif blocker == "capitulated":
+                    world.capitulated.add("VAL")
+                elif blocker == "same_faction":
+                    world.factions = {"VAL": "bloc", "RUS": "bloc"}
+                elif blocker == "khan_subject":
+                    world.subjects["RUS"] = "WKR"
+                else:
+                    world.capitulated.add("RUS")
+                self.assertTrue(world.matches(world.triggers["RUS_crisis_player_attack_visible"], ["VAL"]))
+                self.assertFalse(world.matches(world.triggers["RUS_crisis_player_attack_available"], ["VAL"]))
+                world.run("RUS_crisis_player_attack", "VAL")
+                self.assertFalse(world.declarations)
+
+    def test_intervention_adopts_player_war_and_existing_allies_without_new_declaration(self):
+        for tag in ("VAL", "STP", "STS"):
+            with self.subTest(tag=tag):
+                world = self.player_offensive_world(tag)
+                world.run("RUS_crisis_player_attack", tag)
+                world.factions = {tag: "player_bloc", "WKR": "player_bloc"}
+                world.subjects["NOD"] = "WKR"
+                world.wars.add(frozenset(("WKR", "RUS")))
+                world.war_sides[0].add("WKR")
+                world.run("RUS_crisis_begin")
+                self.assertIn((tag, "RUS_crisis_defence_countdown"), world.missions)
+                clocks = list(world.missions)
+                world.run("RUS_crisis_launch")
+                self.assertEqual(world.declarations, [(tag, "RUS")])
+                self.assertEqual(world.targets["event_target:RUS_crisis_war_anchor"], tag)
+                self.assertEqual(set(world.arrays["global.RUS_crisis_defenders"]), {tag, "WKR", "NOD", "MON", "VLD", "TMR"})
+                self.assertEqual(len(world.war_sides), 1)
+                self.assertEqual(world.missions, clocks)
+                world.run("RUS_crisis_clear_roster")
+                for member in ("WKR", "NOD", "MON", "VLD", "TMR"):
+                    self.assertNotIn(member, world.majors)
+                    self.assertNotIn("RUS_crisis_defender", world.flags[member])
+
+    def test_player_offensive_during_mobilization_keeps_both_deadlines(self):
+        world = self.player_offensive_world()
+        world.run("RUS_crisis_begin")
+        clocks = list(world.missions)
+        world.run("RUS_crisis_player_attack", "VAL")
+        self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 1)
+        world.run("RUS_crisis_launch")
+        self.assertEqual(world.declarations, [("VAL", "RUS")])
+        self.assertEqual(world.missions, clocks)
+
+    def test_player_offensive_joins_active_intervention_with_allies(self):
+        world = self.player_offensive_world()
+        world.wars.add(frozenset(("VAL", "WKR")))
+        world.run("RUS_crisis_begin")
+        world.run("RUS_crisis_launch")
+        world.wars.discard(frozenset(("VAL", "WKR")))
+        world.factions = {"VAL": "player_bloc", "WKR": "player_bloc"}
+        clocks = list(world.missions)
+        world.run("RUS_crisis_player_attack", "VAL")
+        self.assertEqual(world.declarations, [("MON", "RUS")])
+        self.assertIn("VAL", world.arrays["global.RUS_crisis_defenders"])
+        self.assertIn("WKR", world.arrays["global.RUS_crisis_defenders"])
+        self.assertEqual(world.missions, clocks)
+        self.assertEqual(len(world.war_sides), 1)
+
     def test_late_join_uses_surviving_war_side_after_original_host_is_annexed(self):
         world = self.peaceful_empire()
         world.run("RUS_crisis_begin")

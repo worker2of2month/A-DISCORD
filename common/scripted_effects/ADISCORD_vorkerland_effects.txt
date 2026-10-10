@@ -10311,7 +10311,15 @@ RUS_crisis_begin = {
 		activate_mission = RUS_crisis_laser_countdown
 		country_event = { id = ADISCORD_rus_crisis.2 }
 		every_country = {
-			limit = { RUS_crisis_coalition_candidate = yes }
+			limit = {
+				OR = {
+					RUS_crisis_coalition_candidate = yes
+					AND = {
+						RUS_crisis_player_challenger = yes
+						has_war_with = RUS
+					}
+				}
+			}
 			ADISCORD_release_non_participating_minor_optimization = yes
 			set_country_flag = RUS_crisis_warned
 			activate_mission = RUS_crisis_defence_countdown
@@ -10362,6 +10370,25 @@ RUS_crisis_launch = {
 			limit = { RUS_crisis_project_active = yes RUS_lab_reactor_access = yes }
 			set_variable = { var = RUS_crisis_phase value = 2 }
 			clear_global_event_target = RUS_crisis_war_anchor
+			# An existing player offensive supplies the native war for intervention.
+			every_enemy_country = {
+				limit = {
+					RUS_crisis_player_challenger = yes
+					is_subject = no
+					has_capitulated = no
+					RUS_crisis_side_compatible = yes
+					NOT = { has_event_target = RUS_crisis_war_anchor }
+				}
+				RUS_crisis_register_defender = yes
+				save_global_event_target_as = RUS_crisis_war_anchor
+				RUS = {
+					every_enemy_country = {
+						limit = { RUS_crisis_defending_bloc = yes }
+						RUS_crisis_accept_native_entry = yes
+					}
+				}
+				RUS_crisis_confirm_intervention_entry = yes
+			}
 			MON = {
 				if = {
 					limit = { RUS_crisis_coalition_candidate = yes }
@@ -10380,6 +10407,24 @@ RUS_crisis_launch = {
 			country_event = { id = ADISCORD_rus_crisis.7 days = 1 }
 		}
 		else = { RUS_crisis_close = yes }
+	}
+}
+
+# COUNTRY challenger. An active intervention already owns the war and settlement.
+RUS_crisis_player_attack = {
+	if = {
+		limit = { RUS_crisis_player_attack_available = yes }
+		if = {
+			limit = { RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } } }
+			RUS_crisis_start_intervention = yes
+		}
+		else = {
+			# A pre-emptive war does not start or reset the Khan's orbital programme.
+			declare_war_on = {
+				target = RUS
+				type = annex_everything
+			}
+		}
 	}
 }
 
