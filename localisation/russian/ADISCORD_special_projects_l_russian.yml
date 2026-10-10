@@ -12,3 +12,6 @@
  ADISCORD_sp_power_shields:0 "Силовые щиты"
  ADISCORD_sp_power_shields_desc:0 "Переносной силовой щит защищает штурмовую группу при переходе между укрытиями и входе в занятые здания. Проект открывает производство щитов, набор щитового спецназа и дальнейшие улучшения в дереве технологий. Кефрейт, Партия и Шабрат также могут завершить проект своими национальными фокусами."
  ADISCORD_power_shields_template_tt:0 "Создаёт редактируемый шаблон §Yщитовой штурмовой дивизии§!: §Y10§! щитовых батальонов, сапёры и артиллерийская поддержка. Ширина фронта: §Y20§!; штат: §Y10600§! £manpower_texticon. Набор расходует национальные запасы, включая §Y200§! силовых щитов."
+ ADISCORD_sp_requires_hardened_computers_tt:0 "Исследована технология §Y$ADISCORD_tech_hardened_computers$§! (вкладка §Y$electronics_folder$§!, ветка §Y$ADISCORD_TECH_BRANCH_COMPUTING$§!, 2160 г.)"
+ ADISCORD_sp_requires_automated_assembly_tt:0 "Исследована технология §Y$ADISCORD_tech_automated_assembly$§! (вкладка §Y$industry_folder$§!, ветка §Y$ADISCORD_TECH_BRANCH_PRODUCTION$§!, 2161 г.)"
+ ADISCORD_sp_requires_heavy_composite_cores_tt:0 "Исследована технология §Y$ADISCORD_tech_heavy_composite_cores$§! (вкладка §Y$armour_folder$§!, ветка §Y$ADISCORD_TECH_BRANCH_HEAVY_ARMOR$§!, 2158 г.)"

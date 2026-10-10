@@ -342,6 +342,21 @@ spriteTypes = {
 		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_contracts_outlive_kings.png"
 	}
 
+	###RUS BOOKMARK
+
+	spriteType = {
+		name = "GFX_focus_RUS_bookmark_underground_capital"
+		texturefile = "gfx/interface/goals/RUS/bookmark/GFX_focus_RUS_bookmark_underground_capital.png"
+	}
+	spriteType = {
+		name = "GFX_focus_RUS_bookmark_last_empire"
+		texturefile = "gfx/interface/goals/RUS/bookmark/GFX_focus_RUS_bookmark_last_empire.png"
+	}
+	spriteType = {
+		name = "GFX_focus_RUS_bookmark_heart_of_the_continent"
+		texturefile = "gfx/interface/goals/RUS/bookmark/GFX_focus_RUS_bookmark_heart_of_the_continent.png"
+	}
+
 	###VAL
 	spriteType = {
 		name = "GFX_FOCUS_FILTER_VAL_DECISIONS"

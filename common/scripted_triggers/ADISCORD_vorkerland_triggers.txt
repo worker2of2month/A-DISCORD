@@ -1994,6 +1994,7 @@ RUS_crisis_coalition_candidate = {
 		tag = MON
 		tag = VLD
 		tag = TMR
+		tag = BTL
 		AND = {
 			has_war = no
 			has_global_flag = ADISCORD_south_final_resolved

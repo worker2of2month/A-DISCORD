@@ -1965,7 +1965,7 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_public_story_events_have_no_mandatory_choice_settlement(self):
         events = [e.value for e in parse(f"events/{BASE}_events.txt") if e.key == "country_event" and scalar(e.value, "id").startswith("ADISCORD_rus_campaign.")]
-        self.assertEqual(len(events), 13)
+        self.assertEqual(len(events), 25)
         registry = json.loads(read("tools/data/adiscord_event_ids.json"))["events"]
         for event in events:
             name = scalar(event, "id")
@@ -1976,6 +1976,59 @@ class RusCampaignTests(unittest.TestCase):
             self.assertTrue(options)
             for option in options:
                 self.assertEqual([row.key for row in option if row.key != "trigger"], ["name"])
+
+    def test_perimeter_stories_are_guarded_discoveries_with_complete_translations(self):
+        events = {
+            scalar(entry.value, "id"): entry.value
+            for entry in parse(f"events/{BASE}_events.txt")
+            if entry.key == "country_event"
+        }
+        translations = {}
+        for language in ("russian", "english"):
+            raw = (ROOT / f"localisation/{language}/{BASE}_l_{language}.yml").read_bytes()
+            self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
+            translations[language] = dict(re.findall(
+                r'^\s+([A-Za-z0-9_.]+):(?:\d+)?\s+"([^"\r\n]*)"\s*$',
+                raw.decode("utf-8-sig"), re.M,
+            ))
+        for number in range(14, 26):
+            name = f"ADISCORD_rus_campaign.{number}"
+            event = events[name]
+            self.assertEqual(scalar(event, "is_triggered_only"), "yes")
+            self.assertEqual(scalar(event, "fire_only_once"), "yes")
+            self.assertEqual(scalar(block(event, "trigger"), "RUS_khan_governing"), "yes")
+            self.assertFalse(any(entry.key == "immediate" for entry in event))
+            callers = []
+            for focus, rows in self.focuses.items():
+                reward = block(rows, "completion_reward")
+                for entry in reward:
+                    if entry.key == "hidden_effect":
+                        callers.extend(
+                            focus for child in walk(entry.value)
+                            if child.key == "country_event" and scalar(child.value, "id") == name
+                        )
+            self.assertEqual(len(callers), 1, name)
+            # Optional discoveries must remain reachable from either political course.
+            pending = list(callers)
+            visited = set()
+            while pending:
+                focus = pending.pop()
+                if focus in visited:
+                    continue
+                visited.add(focus)
+                self.assertNotIn(focus, {"RUS_scientists_council", "RUS_black_army_oath"})
+                for entry in self.focuses[focus]:
+                    if entry.key == "prerequisite":
+                        pending.extend(child.value for child in entry.value if child.key == "focus")
+            for language, loc in translations.items():
+                for suffix in ("t", "d", "a"):
+                    key = f"{name}.{suffix}"
+                    self.assertIn(key, loc, language)
+                    expanded = loc[key].replace("\\n", "\n")
+                    self.assertLessEqual(len(expanded), 3000, key)
+                    self.assertLessEqual(len(expanded.encode("utf-8")), 5500, key)
+                    for forbidden in ("§Y", "\u2013", "\u2014"):
+                        self.assertNotIn(forbidden, expanded, key)
 
     def test_lifecycle_hooks_and_independent_crisis_timer(self):
         on = block(parse("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), "on_actions")

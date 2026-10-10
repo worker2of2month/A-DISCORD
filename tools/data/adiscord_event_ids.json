@@ -5050,7 +5050,95 @@
       "number": 14,
       "owner": "events/ADISCORD_vorkerland_events.txt",
       "subsystem": "rus_campaign",
-      "status": "reserved"
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.15",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 15,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.16",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 16,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.17",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 17,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.18",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 18,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.19",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 19,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.20",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 20,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.21",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 21,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.22",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 22,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.23",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 23,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.24",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 24,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.25",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 25,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
     },
     {
       "id": "ADISCORD_superevent.11",

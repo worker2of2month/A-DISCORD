@@ -2764,7 +2764,19 @@ defined_text = {
 		trigger = { check_variable = { var = RUS_crisis_epilogue_page value = 4 compare = equals } }
 		localization_key = RUS_crisis_epilogue_4_title
 	}
-	text = { localization_key = RUS_crisis_epilogue_5_title }
+	text = {
+		trigger = { check_variable = { var = RUS_crisis_epilogue_page value = 5 compare = equals } }
+		localization_key = RUS_crisis_epilogue_5_title
+	}
+	text = {
+		trigger = { check_variable = { var = RUS_crisis_epilogue_page value = 6 compare = equals } }
+		localization_key = RUS_crisis_epilogue_6_title
+	}
+	text = {
+		trigger = { check_variable = { var = RUS_crisis_epilogue_page value = 7 compare = equals } }
+		localization_key = RUS_crisis_epilogue_7_title
+	}
+	text = { localization_key = RUS_crisis_epilogue_8_title }
 }
 
 defined_text = {
@@ -2781,5 +2793,17 @@ defined_text = {
 		trigger = { check_variable = { var = RUS_crisis_epilogue_page value = 4 compare = equals } }
 		localization_key = RUS_crisis_epilogue_4_body
 	}
-	text = { localization_key = RUS_crisis_epilogue_5_body }
+	text = {
+		trigger = { check_variable = { var = RUS_crisis_epilogue_page value = 5 compare = equals } }
+		localization_key = RUS_crisis_epilogue_5_body
+	}
+	text = {
+		trigger = { check_variable = { var = RUS_crisis_epilogue_page value = 6 compare = equals } }
+		localization_key = RUS_crisis_epilogue_6_body
+	}
+	text = {
+		trigger = { check_variable = { var = RUS_crisis_epilogue_page value = 7 compare = equals } }
+		localization_key = RUS_crisis_epilogue_7_body
+	}
+	text = { localization_key = RUS_crisis_epilogue_8_body }
 }

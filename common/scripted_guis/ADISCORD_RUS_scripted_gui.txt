@@ -244,10 +244,10 @@ scripted_gui = {
 		}
 		triggers = {
 			epilogue_next_visible = {
-				check_variable = { var = RUS_crisis_epilogue_page value = 5 compare = less_than }
+				check_variable = { var = RUS_crisis_epilogue_page value = 8 compare = less_than }
 			}
 			epilogue_finish_visible = {
-				check_variable = { var = RUS_crisis_epilogue_page value = 5 compare = less_than }
+				check_variable = { var = RUS_crisis_epilogue_page value = 8 compare = less_than }
 			}
 		}
 	}

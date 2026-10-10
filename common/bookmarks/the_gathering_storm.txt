@@ -74,7 +74,6 @@ bookmarks = {
 		}
 
 		"RUS" = {
-			minor = yes
 			history = "RUS_BOOKMARK_DESC"
 			ideology = etatism
 			ideas = {

@@ -581,6 +581,63 @@ spriteTypes = {
 	}
 
 	SpriteType = {
+		name = "GFX_focus_RUS_bookmark_underground_capital_shine"
+		texturefile = "gfx/interface/goals/RUS/bookmark/GFX_focus_RUS_bookmark_underground_capital.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/RUS/bookmark/GFX_focus_RUS_bookmark_underground_capital.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_RUS_bookmark_last_empire_shine"
+		texturefile = "gfx/interface/goals/RUS/bookmark/GFX_focus_RUS_bookmark_last_empire.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/RUS/bookmark/GFX_focus_RUS_bookmark_last_empire.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_RUS_bookmark_heart_of_the_continent_shine"
+		texturefile = "gfx/interface/goals/RUS/bookmark/GFX_focus_RUS_bookmark_heart_of_the_continent.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/RUS/bookmark/GFX_focus_RUS_bookmark_heart_of_the_continent.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
 		name = "GFX_focus_STP_cw_buy_silence_shine"
 		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_buy_silence.png"
 		effectFile = "gfx/FX/buttonstate.lua"

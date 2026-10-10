@@ -100,6 +100,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.14 } }
 			add_war_support = 0.05
 			add_command_power = 30
 			custom_effect_tooltip = RUS_watch_the_western_scar_tt
@@ -818,6 +819,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.15 } }
 			custom_effect_tooltip = RUS_treasury_400_tt
 			hidden_effect = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
@@ -1098,6 +1100,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.16 } }
 			unlock_decision_tooltip = RUS_restore_reactor_works
 			custom_effect_tooltip = RUS_treasury_200_tt
 			hidden_effect = {
@@ -1125,6 +1128,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.24 } }
 			custom_effect_tooltip = RUS_reactor_foundries_tt
 			hidden_effect = {
 				every_owned_state = {
@@ -1156,6 +1160,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.19 } }
 			unlock_decision_tooltip = RUS_reactor_sortie
 			set_technology = { ADISCORD_tech_radiation_patrols = 1 }
 		}
@@ -1179,6 +1184,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.20 } }
 			custom_effect_tooltip = RUS_reactor_decontamination_tt
 			effect_tooltip = { add_ideas = RUS_hazard_capacity_3_delta }
 			set_technology = { ADISCORD_tech_radiation_patrols = 1 }
@@ -1368,6 +1374,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.17 } }
 			custom_effect_tooltip = RUS_bunker_depth_3_tt
 			hidden_effect = { set_variable = { var = RUS_bunker_depth_limit value = 3 } }
 		}
@@ -1392,6 +1399,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.21 } }
 			unlock_decision_tooltip = RUS_bunker_water
 			unlock_decision_tooltip = RUS_bunker_signals
 			add_equipment_to_stockpile = { type = support_equipment amount = 30 producer = RUS }
@@ -1510,6 +1518,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.22 } }
 			unlock_decision_tooltip = RUS_lab_reactor_alloys
 			custom_effect_tooltip = RUS_experimental_laboratories_tt
 			custom_effect_tooltip = RUS_support_scientists_10_tt
@@ -1540,6 +1549,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.18 } }
 			unlock_decision_tooltip = RUS_bunker_archive
 			unlock_decision_tooltip = RUS_bunker_command
 			add_command_power = 15
@@ -2564,6 +2574,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.25 } }
 			add_tech_bonus = {
 				name = RUS_bunker_systems_college
 				bonus = 0.5
@@ -3716,6 +3727,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.23 } }
 			effect_tooltip = { add_ideas = RUS_integrated_signals_delta }
 			hidden_effect = {
 				add_to_variable = { var = RUS_army_planning value = 0.05 }

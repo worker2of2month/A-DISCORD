@@ -6,8 +6,14 @@ ADISCORD_sp_power_shields = {
 		FROM = {
 			date > 2162.12.31
 			has_capitulated = no
-			has_tech = ADISCORD_tech_hardened_computers
-			has_tech = ADISCORD_tech_automated_assembly
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_sp_requires_hardened_computers_tt
+				has_tech = ADISCORD_tech_hardened_computers
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_sp_requires_automated_assembly_tt
+				has_tech = ADISCORD_tech_automated_assembly
+			}
 		}
 	}
 	breakthrough_cost = { specialization_land = 1 }
@@ -75,8 +81,14 @@ ADISCORD_sp_combat_robots = {
 	blueprint_image = GFX_generic_tank_blueprint_background
 	available = {
 		FROM = {
-			has_tech = ADISCORD_tech_hardened_computers
-			has_tech = ADISCORD_tech_automated_assembly
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_sp_requires_hardened_computers_tt
+				has_tech = ADISCORD_tech_hardened_computers
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_sp_requires_automated_assembly_tt
+				has_tech = ADISCORD_tech_automated_assembly
+			}
 		}
 	}
 	breakthrough_cost = {
@@ -109,9 +121,18 @@ STP_sp_taran = {
 	available = {
 		FROM = {
 			has_capitulated = no
-			has_tech = ADISCORD_tech_hardened_computers
-			has_tech = ADISCORD_tech_automated_assembly
-			has_tech = ADISCORD_tech_heavy_composite_cores
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_sp_requires_hardened_computers_tt
+				has_tech = ADISCORD_tech_hardened_computers
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_sp_requires_automated_assembly_tt
+				has_tech = ADISCORD_tech_automated_assembly
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_sp_requires_heavy_composite_cores_tt
+				has_tech = ADISCORD_tech_heavy_composite_cores
+			}
 		}
 	}
 	breakthrough_cost = { specialization_land = 2 }

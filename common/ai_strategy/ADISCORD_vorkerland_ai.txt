@@ -3008,3 +3008,37 @@ RUS_crisis_conquer_TMR = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = conquer id = TMR value = 200 }
 }
+
+RUS_crisis_prepare_BTL = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		BTL = { RUS_crisis_coalition_candidate = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = BTL value = 200 }
+}
+
+BTL_crisis_prepare_RUS = {
+	allowed = { tag = BTL }
+	enable = {
+		is_ai = yes
+		RUS_crisis_coalition_candidate = yes
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
+RUS_crisis_conquer_BTL = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		BTL = { has_country_flag = RUS_crisis_defender }
+		has_war_with = BTL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = BTL value = 200 }
+}

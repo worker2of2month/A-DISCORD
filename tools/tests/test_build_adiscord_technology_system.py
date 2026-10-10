@@ -2552,7 +2552,8 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
         project = value(read_script("common/special_projects/projects/land_projects.txt"),
                         "ADISCORD_sp_power_shields")
         available = value(value(project, "available"), "FROM")
-        required = [entry.value for entry in available if entry.key == "has_tech"]
+        required = [value(entry.value, "has_tech") for entry in available
+                    if entry.key == "custom_trigger_tooltip"]
         base = "ADISCORD_tech_kefreyt_shield_special_forces"
         closure = generator.technology_prerequisite_closure(required)
         self.assertNotIn(base, closure)

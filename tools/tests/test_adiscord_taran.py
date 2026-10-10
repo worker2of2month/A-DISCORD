@@ -28,7 +28,8 @@ class TaranTests(unittest.TestCase):
         self.assertEqual(value(visible, "has_completed_focus"), FOCUS)
         available = value(value(project, "available"), "FROM")
         self.assertEqual(value(available, "has_capitulated"), "no")
-        required = [entry.value for entry in available if entry.key == "has_tech"]
+        required = [value(entry.value, "has_tech") for entry in available
+                    if entry.key == "custom_trigger_tooltip"]
         self.assertEqual(set(required), {
             "ADISCORD_tech_hardened_computers", "ADISCORD_tech_automated_assembly",
             "ADISCORD_tech_heavy_composite_cores",

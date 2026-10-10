@@ -108,6 +108,8 @@ class BezhayskUnificationFixture(GenericPeaceFixture):
                         self.controllers[state] = current
             elif key == "set_cosmetic_tag":
                 self.cosmetics[current] = value
+            elif key == "set_country_flag":
+                self.flags[current].add(value)
             elif key == "ADISCORD_economy_mark_dirty":
                 self.dirty.add(current)
             elif key == "remove_country_leader_role":
@@ -204,6 +206,78 @@ class BezhayskUnificationTests(unittest.TestCase):
         model.run()
         self.assertEqual(model.gornin_home, "STS")
         self.assertEqual(model.leaders, {})
+
+
+class BezhayskStelanderFixture(BezhayskUnificationFixture):
+    """Run direct annexation with a subject absent from the victor's war."""
+
+    def __init__(self, winner="STS"):
+        super().__init__()
+        self.winner = winner
+        self.root = "BJK"
+        self.overlords = {tag: "BJK" for tag in REALM if tag != "BJK"}
+        self.factions = {tag: "bezhaysk" for tag in REALM}
+        self.wars = {frozenset((winner, tag)) for tag in REALM if tag != "BGT"}
+        self.wars.add(frozenset((winner, "NOD")))
+        self.owners = dict(zip((31, 5, 4, 7, 9, 41), REALM))
+        self.owners[10] = "NOD"
+        self.controllers = dict(self.owners)
+        self.flags[winner].add("ADISCORD_bezhaysk_campaign_active")
+
+    def run(self):
+        self.execute(
+            self.effects[f"ADISCORD_bezhaysk_settle_{self.winner.lower()}_victory"],
+            [self.winner],
+        )
+
+
+class BezhayskStelanderTests(unittest.TestCase):
+    def test_unjoined_subject_is_annexed_while_nodrul_war_continues(self):
+        for winner in ("STS", "STP"):
+            with self.subTest(winner=winner):
+                model = BezhayskStelanderFixture(winner)
+                model.run()
+                self.assertEqual(model.owners[4], winner)
+                self.assertEqual(model.controllers[4], winner)
+                self.assertEqual(set(model.annexed), set(REALM))
+                self.assertIn(frozenset((winner, "NOD")), model.wars)
+                self.assertEqual(model.owners[10], "NOD")
+                self.assertNotIn("ADISCORD_bezhaysk_campaign_active", model.flags[winner])
+
+    def test_unjoined_faction_member_is_not_treated_as_a_subject(self):
+        for winner in ("STS", "STP"):
+            with self.subTest(winner=winner):
+                model = BezhayskStelanderFixture(winner)
+                del model.overlords["BGT"]
+                model.run()
+                self.assertEqual(model.owners[4], "BGT")
+                self.assertNotIn("BGT", model.annexed)
+
+    def test_nodrul_fighting_bezhaysk_does_not_leave_an_unjoined_vassal(self):
+        model = BezhayskStelanderFixture()
+        model.wars.discard(frozenset(("STS", "NOD")))
+        model.wars.update(frozenset(("NOD", tag)) for tag in REALM)
+        model.run()
+        self.assertEqual(model.owners[4], "STS")
+        self.assertEqual(model.controllers[4], "STS")
+        self.assertEqual(model.owners[10], "NOD")
+        self.assertEqual(set(model.annexed), set(REALM))
+
+    def test_fighting_faction_member_is_included_without_subject_status(self):
+        model = BezhayskStelanderFixture()
+        del model.overlords["BGT"]
+        model.wars.add(frozenset(("STS", "BGT")))
+        model.run()
+        self.assertEqual(model.owners[4], "STS")
+
+    def test_nodrul_war_does_not_make_a_detached_country_part_of_the_settlement(self):
+        model = BezhayskStelanderFixture()
+        model.overlords["BGT"] = "NOD"
+        del model.factions["BGT"]
+        model.wars.add(frozenset(("STS", "BGT")))
+        model.run()
+        self.assertEqual(model.owners[4], "BGT")
+        self.assertIn(frozenset(("STS", "BGT")), model.wars)
 
 
 class BezhayskPeaceTests(unittest.TestCase):

@@ -1184,16 +1184,26 @@ ADISCORD_vorkerland_collapse_category = {
 		}
 		available = {
 			NOT = { has_war_with = WKR }
+			IIA = {
+				exists = yes
+				is_subject_of = IVN
+				has_capitulated = no
+			}
 			200 = { is_owned_by = WKR is_controlled_by = WKR }
 			201 = { is_owned_by = WKR is_controlled_by = WKR }
 		}
 		cost = 50
 		fire_only_once = yes
 		complete_effect = {
-			transfer_state = 200
-			transfer_state = 201
-			200 = { set_state_controller_to = IVN }
-			201 = { set_state_controller_to = IVN }
+			IIA = {
+				transfer_state = 200
+				transfer_state = 201
+				ADISCORD_economy_mark_dirty = yes
+			}
+			200 = { set_state_controller_to = IIA }
+			201 = { set_state_controller_to = IIA }
+			WKR = { ADISCORD_economy_mark_dirty = yes }
+			ADISCORD_economy_mark_dirty = yes
 			set_global_flag = ADISCORD_vorkerland_ivanland_wrk_islands_occupied
 		}
 		ai_will_do = { factor = 200 }

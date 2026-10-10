@@ -71,7 +71,7 @@ autonomy_state = {
 	default = no
 	is_puppet = yes
 	min_freedom_level = 0.30
-	use_overlord_color = no
+	use_overlord_color = yes
 
 	rule = {
 		can_not_declare_war = yes

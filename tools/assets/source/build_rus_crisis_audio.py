@@ -30,7 +30,7 @@ BEAM_START = 6.0
 IMPACT_START = 10.0
 STRIKE_DURATION = 26
 AFTERMATH_SILENCE = 300
-RUINED_WORLD_DURATION = 48
+RUINED_WORLD_DURATION = 180
 HASHES = {
     "explosionCrunch_004.ogg": "9c3a1c73cadf0de5d5a578b31a264f20b1ac7cb6ec9bbd34a203f58402ea5390",
     "computerNoise_000.ogg": "1527944e16eb14b48ee03fe3e7ce6aae94262833a4e1f83928d451a7414fe4e1",
@@ -172,27 +172,51 @@ def last_sky_theme():
     result = np.zeros((RUINED_WORLD_DURATION * RATE, 2))
     # Sustained voices leave room for the existing detonation tail when the
     # player opens the epilogue before the map animation has finished.
-    progression = (
-        (0.8, (38, 50, 57, 65), 0.19),
-        (8.0, (34, 50, 58, 65), 0.22),
-        (15.2, (31, 50, 58, 62), 0.25),
-        (22.4, (33, 49, 55, 64), 0.28),
-        (29.6, (38, 50, 57, 65), 0.23),
-        (36.8, (38, 50, 57, 64), 0.16),
+    # Four phrases share the opening pulse; changing harmony and register
+    # carries the lament forward without restarting the cue at page changes.
+    sections = (
+        (
+            ((38, 50, 57, 65), (34, 50, 58, 65), (31, 50, 58, 62),
+             (33, 49, 55, 64), (38, 50, 57, 65), (38, 50, 57, 64)),
+            (74, 72, 69, 70, 69, 67, 73, 74, 69),
+            1.0,
+        ),
+        (
+            ((34, 46, 53, 62), (41, 48, 57, 65), (36, 48, 55, 64),
+             (31, 46, 55, 62), (33, 45, 52, 61), (38, 50, 57, 62)),
+            (70, 69, 65, 67, 64, 62, 61, 65, 62),
+            0.78,
+        ),
+        (
+            ((31, 50, 58, 67), (34, 53, 58, 65), (38, 50, 57, 65),
+             (36, 52, 55, 64), (33, 49, 57, 64), (33, 49, 55, 61)),
+            (67, 69, 70, 74, 72, 70, 69, 73, 69),
+            0.92,
+        ),
+        (
+            ((38, 50, 57, 65), (34, 50, 58, 65), (31, 50, 58, 62),
+             (33, 49, 55, 64), (38, 50, 57, 62), (38, 45, 50, 62)),
+            (74, 72, 69, 70, 67, 64, 61, 62, 62),
+            0.62,
+        ),
     )
-    for start, chord, gain in progression:
-        for voice, midi in enumerate(chord):
-            pan = (-0.15, -0.55, 0.55, 0.2)[voice]
-            add_layer(result, organ_note(midi, 9), start, gain, pan)
-    melody = (
-        (3.2, 74, 3.6), (6.0, 72, 3.2), (8.8, 69, 5.6),
-        (15.8, 70, 4.2), (19.0, 69, 4.2), (23.0, 67, 4.2),
-        (26.2, 73, 4.4), (30.4, 74, 6.2), (36.8, 69, 7.6),
+    melody_timing = (
+        (3.2, 3.6), (6.0, 3.2), (8.8, 5.6),
+        (15.8, 4.2), (19.0, 4.2), (23.0, 4.2),
+        (26.2, 4.4), (30.4, 6.2), (36.8, 7.6),
     )
-    for start, midi, duration in melody:
-        add_layer(result, organ_note(midi, duration), start, 0.12, 0.15)
-    for start, midi, gain, pan in ((0.8, 50, 0.2, -0.25), (15.2, 46, 0.18, 0.3), (29.6, 50, 0.17, -0.2)):
-        add_layer(result, funeral_bell(midi, 12), start, gain, pan)
+    for section, (chords, melody, expression) in enumerate(sections):
+        offset = section * 43.2
+        for index, (chord, gain) in enumerate(zip(chords, (0.19, 0.22, 0.25, 0.28, 0.23, 0.16))):
+            start = offset + 0.8 + index * 7.2
+            for voice, midi in enumerate(chord):
+                pan = (-0.15, -0.55, 0.55, 0.2)[voice]
+                add_layer(result, organ_note(midi, 9), start, gain * expression, pan)
+        for (start, duration), midi in zip(melody_timing, melody):
+            add_layer(result, organ_note(midi, duration), offset + start, 0.12 * expression, 0.15)
+        for index, pan in ((0, -0.25), (2, 0.3), (4, -0.2)):
+            start = offset + 0.8 + index * 7.2
+            add_layer(result, funeral_bell(chords[index][1], 12), start, 0.18 * expression, pan)
     # Separate deterministic room responses widen the sustained instruments.
     room_time = timeline(3.8)
     for channel in range(2):
@@ -202,7 +226,7 @@ def last_sky_theme():
         room /= np.sqrt(np.sum(room ** 2))
         wet = fftconvolve(result[:, channel], room)[:len(result)]
         result[:, channel] += wet * 0.3
-    return fade(result, 1.8, 9)
+    return fade(result, 1.8, 18)
 
 
 def ruined_world(source):

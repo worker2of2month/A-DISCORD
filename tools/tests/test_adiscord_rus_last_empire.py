@@ -989,7 +989,7 @@ class RusCrisisFixture:
             for e in entries("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
             if e.key == "VAL_nw_special_zone_permitted"
         })
-        self.countries = {"RUS", "VAL", "STP", "STS", "NOD", "SLA", "RZA", "MLR", "ERT", "IRT", "SCA", "WKR", "TMR", "VEL", "RLY", "SHL", "NAM", "WRK", "IVN", "MON", "VLD", "EXZ"}
+        self.countries = {"RUS", "VAL", "STP", "STS", "NOD", "SLA", "RZA", "MLR", "ERT", "IRT", "SCA", "WKR", "TMR", "VEL", "RLY", "SHL", "NAM", "WRK", "IVN", "MON", "VLD", "BTL", "EXZ"}
         self.owners = {
             "66": "RUS", "49": "RUS", "51": "RUS", "177": "RUS",
             "152": "RUS", "169": "RUS", "181": "RUS", "173": "RUS",
@@ -1646,6 +1646,97 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertFalse(world.entry_events)
         self.assertTrue(all("RUS_crisis_entry_pending" not in world.flags[tag] for tag in expected))
         self.assertTrue(expected <= world.majors)
+
+    def bayrinzh_empire(self, fixture=RusCrisisFixture):
+        world = self.peaceful_empire(fixture)
+        world.owners["BTL_capital"] = "BTL"
+        world.controllers["BTL_capital"] = "BTL"
+        return world
+
+    def test_bayrinzh_forms_a_formal_alliance_after_native_entry(self):
+        for delayed in (False, True):
+            with self.subTest(delayed=delayed):
+                world = self.bayrinzh_empire(QueuedRusCrisisFixture)
+                world.delayed_declaration = delayed
+                world.run("RUS_crisis_begin")
+                self.assertIn("RUS_crisis_warned", world.flags["BTL"])
+                self.assertIn("BTL", world.released_minors)
+                self.assertFalse(world.factions)
+                world.run("RUS_crisis_launch")
+                for _ in range(5):
+                    world.tick()
+                expected = {"MON", "VLD", "TMR", "BTL"}
+                self.assertEqual(world.war_sides, [expected])
+                self.assertEqual(set(world.arrays["global.RUS_crisis_defenders"]), expected)
+                self.assertEqual(world.factions, {
+                    tag: "RUS_crisis_reactor_alliance" for tag in ("MON", "BTL", "TMR")
+                })
+                self.assertEqual(world.faction_leaders, {"MON"})
+                before = dict(world.factions), list(world.declarations), list(world.joins)
+                world.run("RUS_crisis_form_reactor_alliance", "BTL")
+                self.assertEqual((world.factions, world.declarations, world.joins), before)
+                world.run("RUS_crisis_close")
+                self.assertEqual(world.factions, before[0])
+                self.assertNotIn("BTL", world.majors)
+                self.assertNotIn("RUS_crisis_defender", world.flags["BTL"])
+
+    def test_rejected_bayrinzh_entry_cannot_create_an_alliance(self):
+        world = self.bayrinzh_empire(QueuedRusCrisisFixture)
+        world.rejected.add("BTL")
+        world.run("RUS_crisis_begin")
+        world.run("RUS_crisis_launch")
+        for _ in range(5):
+            world.tick()
+        self.assertFalse(world.factions)
+        self.assertNotIn("BTL", world.arrays["global.RUS_crisis_defenders"])
+        self.assertNotIn("BTL", world.majors)
+
+    def test_bayrinzh_existing_alliance_and_incompatible_war_are_preserved(self):
+        for incompatible in (False, True):
+            with self.subTest(incompatible=incompatible):
+                world = self.bayrinzh_empire()
+                world.factions = {"BTL": "bayrinzh", "WKR": "bayrinzh"}
+                world.faction_leaders = {"BTL"}
+                if incompatible:
+                    world.wars.add(frozenset(("BTL", "MON")))
+                factions = dict(world.factions)
+                world.run("RUS_crisis_begin")
+                world.run("RUS_crisis_launch")
+                self.assertEqual(world.factions, factions)
+                self.assertEqual("BTL" in world.arrays["global.RUS_crisis_defenders"], not incompatible)
+                self.assertEqual(frozenset(("BTL", "RUS")) in world.wars, not incompatible)
+
+    def test_bayrinzh_must_be_defeated_before_coalition_settlement(self):
+        world = self.bayrinzh_empire()
+        world.run("RUS_crisis_begin")
+        world.run("RUS_crisis_launch")
+        for tag in ("MON", "VLD", "TMR"):
+            world.capitulated.add(tag)
+            world.controllers[tag + "_capital"] = "RUS"
+        world.run("RUS_crisis_resolve_capitulation")
+        self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 2)
+        self.assertFalse(world.annexed)
+        world.capitulated.add("BTL")
+        world.controllers["BTL_capital"] = "RUS"
+        world.run("RUS_crisis_resolve_capitulation")
+        self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 3)
+        self.assertIn(("RUS", "BTL"), world.annexed)
+        self.assertNotIn("BTL", world.majors)
+
+    def test_bayrinzh_ai_preparation_and_war_orders_follow_crisis_phase(self):
+        world = self.bayrinzh_empire()
+        strategies = {
+            row.key: row.value for row in self.entries("common/ai_strategy/ADISCORD_vorkerland_ai.txt")
+        }
+        world.run("RUS_crisis_begin")
+        for name, country in (("BTL_crisis_prepare_RUS", "BTL"), ("RUS_crisis_prepare_BTL", "RUS")):
+            gate = self.block(strategies[name], "enable")
+            self.assertTrue(world.matches(gate, [country]))
+        world.run("RUS_crisis_launch")
+        conquer = self.block(strategies["RUS_crisis_conquer_BTL"], "enable")
+        self.assertTrue(world.matches(conquer, ["RUS"]))
+        world.run("RUS_crisis_close")
+        self.assertFalse(world.matches(conquer, ["RUS"]))
 
     def test_slow_native_entries_survive_hourly_checks_and_join_one_war(self):
         world = self.peaceful_empire(QueuedRusCrisisFixture)
@@ -2354,7 +2445,7 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertFalse([row for row in world.visuals if row[1] == "destroy_entity"])
         world.run("RUS_crisis_epilogue_finish", "EXZ")
         world.run("RUS_crisis_epilogue_next", "EXZ")
-        self.assertEqual(world.variables["EXZ", "RUS_crisis_epilogue_page"], 5)
+        self.assertEqual(world.variables["EXZ", "RUS_crisis_epilogue_page"], 8)
 
     def test_destruction_waves_are_bounded_survive_loading_and_outlive_reading(self):
         from copy import deepcopy
@@ -2399,7 +2490,7 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertEqual(set(world.owners.values()), {"RUS", "EXZ"})
         self.assertEqual(world.demilitarized, set(world.owners) - {"66"})
         self.assertTrue(all(level == 0 for (state, _), level in world.buildings.items() if state != "66"))
-        self.assertEqual(world.variables["RUS", "RUS_crisis_epilogue_page"], 5)
+        self.assertEqual(world.variables["RUS", "RUS_crisis_epilogue_page"], 8)
         scheduled = list(world.events)
         world.run("RUS_crisis_ruin_next_wave")
         self.assertEqual(world.events, scheduled)
@@ -2524,11 +2615,48 @@ class RusCrisisContracts(unittest.TestCase):
         loaded = deepcopy(world)
         loaded.run("RUS_crisis_epilogue_next", "RUS")
         self.assertEqual(loaded.variables["RUS", "RUS_crisis_epilogue_page"], 2)
-        self.assertEqual(loaded.variables["EXZ", "RUS_crisis_epilogue_page"], 5)
-        for page in (3, 4, 5):
+        self.assertEqual(loaded.variables["EXZ", "RUS_crisis_epilogue_page"], 8)
+        for page in range(3, 9):
             loaded.run("RUS_crisis_epilogue_next", "RUS")
             self.assertEqual(loaded.variables["RUS", "RUS_crisis_epilogue_page"], page)
         self.assertFalse([row for row in loaded.visuals if row[1] == "destroy_entity"])
+
+    def test_epilogue_selects_every_scene_and_can_finish_from_each_page(self):
+        from copy import deepcopy
+
+        world = self.peaceful_empire()
+        world.global_flags.add("RUS_crisis_world_ended")
+        selectors = self.entries("common/scripted_localisation/ADISCORD_RUS_scripted_loc.txt")
+        panel = self.block(
+            self.block(self.entries("common/scripted_guis/ADISCORD_RUS_scripted_gui.txt"), "scripted_gui"),
+            "RUS_crisis_epilogue_panel",
+        )
+        controls = self.block(panel, "triggers")
+        for page in range(2, 9):
+            with self.subTest(page=page):
+                world.variables["RUS", "RUS_crisis_epilogue_page"] = page
+                for part in ("title", "body"):
+                    selector = next(
+                        row.value for row in selectors
+                        if row.key == "defined_text"
+                        and self.scalar(row.value, "name") == "GetRUSCrisisEpilogue" + part.title()
+                    )
+                    selected = next(
+                        self.scalar(row.value, "localization_key") for row in selector
+                        if row.key == "text" and world.matches(
+                            next((child.value for child in row.value if child.key == "trigger"), []),
+                            ["RUS"],
+                        )
+                    )
+                    self.assertEqual(selected, f"RUS_crisis_epilogue_{page}_{part}")
+                for button in ("epilogue_next_visible", "epilogue_finish_visible"):
+                    self.assertEqual(world.matches(self.block(controls, button), ["RUS"]), page < 8)
+                closed = deepcopy(world)
+                before = list(closed.events), list(closed.visuals), dict(closed.owners)
+                closed.run("RUS_crisis_epilogue_finish", "RUS")
+                closed.run("RUS_crisis_epilogue_next", "RUS")
+                self.assertEqual(closed.variables["RUS", "RUS_crisis_epilogue_page"], 8)
+                self.assertEqual((closed.events, closed.visuals, closed.owners), before)
 
     def test_camera_and_particle_use_the_real_reactor_and_existing_entity(self):
         source = read(EFFECT_FILE)
@@ -2560,7 +2688,7 @@ class RusCrisisContracts(unittest.TestCase):
     def test_every_epilogue_page_is_localised_bounded_and_has_no_author_credits(self):
         for language in ("russian", "english"):
             source = read(ROOT / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
-            for page in (2, 3, 4, 5):
+            for page in range(2, 9):
                 for part in ("title", "body"):
                     key = f"RUS_crisis_epilogue_{page}_{part}"
                     matches = re.findall(r'(?m)^ ' + key + r': "((?:[^"\\]|\\.)*)"$', source)
@@ -3385,9 +3513,9 @@ class RusWorldEndingPresentationContracts(unittest.TestCase):
             path = ROOT / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml"
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             entries = localisation_entries(read(path))
-            for key in ("RUS_world_anarchy", "RUS_last_bunker", "RUS_crisis_epilogue_5_body"):
+            for key in ("RUS_world_anarchy", "RUS_last_bunker", "RUS_crisis_epilogue_8_body"):
                 self.assertTrue(entries.get(key))
-        self.assertIn("Хан жив", localisation_entries(read(RUSSIAN_LOC))["RUS_crisis_epilogue_5_body"])
+        self.assertIn("Хан жив", localisation_entries(read(RUSSIAN_LOC))["RUS_crisis_epilogue_8_body"])
 
 
 if __name__ == "__main__":

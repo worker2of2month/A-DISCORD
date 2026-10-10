@@ -197,6 +197,22 @@ class VorkerlandTheatreBuilderTests(unittest.TestCase):
                 issues,
             )
 
+    def test_cut_kalten_connection_disconnects_captured_corridor_hubs(self) -> None:
+        source = normalized_rail_source()
+        line = theatre.render_rail_line(*theatre.MON_KALTEN_RAIL)
+        broken = source.replace(line + "\n", "")
+        self.assertNotEqual(broken, source)
+        with tempfile.TemporaryDirectory() as directory:
+            rails = Path(directory) / "railways.txt"
+            rails.write_text(broken, encoding="utf-8")
+            with patch.object(theatre, "RAILWAYS_PATH", rails):
+                issues = theatre.validate()
+        for hub in (3783, 12219):
+            self.assertIn(
+                f"MON corridor supply hub {hub} is disconnected from the capital without Starolesye",
+                issues,
+            )
+
     def test_missing_mon_hub_is_reported(self) -> None:
         source = theatre.SUPPLY_NODES_PATH.read_text(encoding="utf-8")
         broken = "\n".join(

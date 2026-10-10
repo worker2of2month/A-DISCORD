@@ -10576,12 +10576,78 @@ RUS_crisis_accept_native_entry = {
 	}
 }
 
+# Form the alliance only after native war entry is confirmed. Existing blocs
+# remain intact; their members still participate through the common war.
+RUS_crisis_form_reactor_alliance = {
+	if = {
+		limit = {
+			RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } }
+			MON = {
+				exists = yes
+				is_subject = no
+				has_capitulated = no
+				has_country_flag = RUS_crisis_defender
+				NOT = { has_country_flag = RUS_crisis_entry_pending }
+				has_war_with = RUS
+				OR = {
+					is_in_faction = no
+					is_faction_leader = yes
+				}
+			}
+			BTL = {
+				exists = yes
+				is_subject = no
+				has_capitulated = no
+				has_country_flag = RUS_crisis_defender
+				NOT = { has_country_flag = RUS_crisis_entry_pending }
+				has_war_with = RUS
+				has_war_together_with = MON
+				RUS_crisis_side_compatible = yes
+				OR = {
+					is_in_faction = no
+					is_in_faction_with = MON
+				}
+			}
+		}
+		MON = {
+			if = {
+				limit = { is_in_faction = no }
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = RUS_crisis_reactor_alliance
+				}
+			}
+			if = {
+				limit = { BTL = { is_in_faction = no } }
+				add_to_faction = BTL
+			}
+			if = {
+				limit = {
+					TMR = {
+						exists = yes
+						is_subject = no
+						has_capitulated = no
+						is_in_faction = no
+						has_country_flag = RUS_crisis_defender
+						NOT = { has_country_flag = RUS_crisis_entry_pending }
+						has_war_with = RUS
+						has_war_together_with = MON
+						RUS_crisis_side_compatible = yes
+					}
+				}
+				add_to_faction = TMR
+			}
+		}
+	}
+}
+
 RUS_crisis_confirm_intervention_entry = {
 	if = {
 		limit = { has_country_flag = RUS_crisis_entry_pending }
 		log = "[RUS_CRISIS] [This.GetTag]: coalition entry confirmed."
 	}
 	clr_country_flag = RUS_crisis_entry_pending
+	RUS_crisis_form_reactor_alliance = yes
 	every_allied_country = {
 		limit = { NOT = { tag = PREV } }
 		RUS_crisis_join_intervention = yes
@@ -11463,7 +11529,7 @@ RUS_crisis_epilogue_next = {
 	if = {
 		limit = {
 			has_global_flag = RUS_crisis_world_ended
-			check_variable = { var = RUS_crisis_epilogue_page value = 5 compare = less_than }
+			check_variable = { var = RUS_crisis_epilogue_page value = 8 compare = less_than }
 		}
 		if = {
 			limit = { check_variable = { var = RUS_crisis_epilogue_page value = 2 compare = less_than } }
@@ -11476,7 +11542,7 @@ RUS_crisis_epilogue_next = {
 RUS_crisis_epilogue_finish = {
 	if = {
 		limit = { has_global_flag = RUS_crisis_world_ended }
-		set_variable = { var = RUS_crisis_epilogue_page value = 5 }
+		set_variable = { var = RUS_crisis_epilogue_page value = 8 }
 	}
 }
 

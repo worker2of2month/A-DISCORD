@@ -61,6 +61,11 @@ MON_SUPPLY_HUB_STATES = {
     10095: 472,
     418: 467,
 }
+# Capturing Kalten and the Pustograd corridor opens a western supply route
+# without requiring control of Starolesye or the bunker.
+MON_KALTEN_RAIL = (1, (8798, 6168, 1472, 10282, 3783))
+MON_KALTEN_CORRIDOR_STATES = frozenset({710, 461, 51})
+MON_KALTEN_CORRIDOR_HUBS = (3783, 12219)
 # The western line must join the bunker without crossing a third country.
 # Hubs become available to RUS only after it captures the border objectives.
 KHAN_SUPPLY_RAIL = (2, (16546, 16544, 2298, 4486, 10563))
@@ -254,6 +259,7 @@ def update_source(source: str) -> str:
             for level, provinces in DIRTY_ZONE_FEEDER_RAILS
         ),
         *(render_rail_line(level, provinces) for level, provinces in MON_SUPPLY_RAILS),
+        render_rail_line(*MON_KALTEN_RAIL),
     ]
     managed_routes = {_rail_route(line): line for line in managed}
     seen = set()
@@ -466,6 +472,37 @@ def validate() -> list[str]:
             if hub not in reached:
                 issues.append(
                     f"MON supply hub {hub} is disconnected from the capital inside its starting territory"
+                )
+        kalten_level, kalten_route = MON_KALTEN_RAIL
+        if source.splitlines().count(render_rail_line(kalten_level, kalten_route)) != 1:
+            issues.append("MON Kalten connection must occur exactly once at level 1")
+        for province, expected_state in zip(kalten_route, (460, 460, 460, 460, 710)):
+            if (
+                province_types.get(province) != "land"
+                or state_by_province.get(province) != expected_state
+            ):
+                issues.append(f"MON Kalten connection leaves its border corridor at {province}")
+        for first, second in zip(kalten_route, kalten_route[1:]):
+            if second not in physical.get(first, set()):
+                issues.append(f"MON Kalten rail segment {first}-{second} is not physically adjacent")
+        corridor_states = MON_KALTEN_CORRIDOR_STATES | {
+            state for state, owner in state_owners.items() if owner == "MON"
+        }
+        pending = [MON_CAPITAL_PROVINCE]
+        reached = set(pending)
+        while pending:
+            province = pending.pop()
+            for neighbour in rail_graph[province]:
+                if (
+                    neighbour not in reached
+                    and state_by_province.get(neighbour) in corridor_states
+                ):
+                    reached.add(neighbour)
+                    pending.append(neighbour)
+        for hub in MON_KALTEN_CORRIDOR_HUBS:
+            if hub not in reached:
+                issues.append(
+                    f"MON corridor supply hub {hub} is disconnected from the capital without Starolesye"
                 )
         for tag, (_, route, hubs) in STARTING_SUPPLY_RAILS.items():
             if source.splitlines().count(render_supply_connection(tag)) != 1:

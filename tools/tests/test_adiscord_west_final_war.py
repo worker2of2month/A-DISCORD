@@ -31,6 +31,17 @@ HOME_STATES = {"25", "92", "95", "96", "32"}
 
 
 class WestFinalWarContractTests(unittest.TestCase):
+    def test_every_itoran_settlement_subject_uses_its_overlords_color(self):
+        source = parse_clausewitz(
+            (ROOT / "common/autonomous_states/ADISCORD_west_final_war_subjects.txt").read_text(encoding="utf-8")
+        )
+        autonomies = {scalar(entry.value, "id"): entry.value for entry in source}
+        for name in ("autonomy_IVN_guaranteed_confederation", "autonomy_IVN_emergency_trusteeship"):
+            with self.subTest(autonomy=name):
+                self.assertEqual(scalar(autonomies[name], "use_overlord_color"), "yes")
+        ordinary = parse_clausewitz((ROOT / "common/autonomous_states/puppet.txt").read_text(encoding="utf-8"))
+        self.assertEqual(scalar(block(ordinary, "autonomy_state"), "use_overlord_color"), "yes")
+
     def test_every_regional_state_is_bound_offered_and_settled(self):
         for name in (
             "ADISCORD_west_assign_bound_sides",

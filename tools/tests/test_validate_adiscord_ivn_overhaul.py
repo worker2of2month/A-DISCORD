@@ -11,6 +11,8 @@ from tools.builders import build_adiscord_map_buildings as map_buildings
 from tools.builders import build_adiscord_new_states as state_builder
 from tools.builders import build_adiscord_new_states as state_builder
 from tools.validators import validate_adiscord_ivn_overhaul as validator
+from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+from tools.tests.test_adiscord_stp_preparation import block, scalar, matches_conditions
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -247,6 +249,40 @@ def victory_points(source: str) -> dict[int, int]:
 
 
 class IvanlandOverhaulContractTests(unittest.TestCase):
+    def test_island_occupation_belongs_to_the_existing_itoran_subject(self) -> None:
+        decisions = parse_clausewitz(
+            (ROOT / "common/decisions/ADISCORD_vorkerland_decisions.txt").read_text(encoding="utf-8")
+        )
+        decision = block(
+            block(decisions, "ADISCORD_vorkerland_collapse_category"),
+            "ADISCORD_ivanland_occupy_wrk_islands",
+        )
+        available = block(decision, "available")
+        facts = {
+            ("IIA", "exists", "yes"): True,
+            ("IIA", "is_subject_of", "IVN"): True,
+            ("IIA", "has_capitulated", "no"): True,
+            ("200", "is_owned_by", "WKR"): True,
+            ("200", "is_controlled_by", "WKR"): True,
+            ("201", "is_owned_by", "WKR"): True,
+            ("201", "is_controlled_by", "WKR"): True,
+        }
+        self.assertTrue(matches_conditions(available, facts, "IVN"))
+        for condition in facts:
+            with self.subTest(condition=condition):
+                self.assertFalse(matches_conditions(available, {**facts, condition: False}, "IVN"))
+        self.assertFalse(matches_conditions(
+            available, {**facts, ("IVN", "has_war_with", "WKR"): True}, "IVN"
+        ))
+        complete = block(decision, "complete_effect")
+        self.assertNotIn("transfer_state", {entry.key for entry in complete})
+        self.assertEqual(
+            [entry.value for entry in block(complete, "IIA") if entry.key == "transfer_state"],
+            ["200", "201"],
+        )
+        for state in ("200", "201"):
+            self.assertEqual(scalar(block(complete, state), "set_state_controller_to"), "IIA")
+
     def test_integrated_validator_accepts_reviewed_city_split_hash(self) -> None:
         self.assertTrue(hasattr(validator, "province_geometry_issue"))
         self.assertIsNone(validator.province_geometry_issue())

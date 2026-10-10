@@ -64,8 +64,8 @@ class CombatRobotTests(unittest.TestCase):
         project = value(read_script("common/special_projects/projects/land_projects.txt"), PROJECT)
         self.assertFalse({entry.key for entry in project} & {"allowed", "visible", "special_project_parent"})
         prerequisites = value(value(project, "available"), "FROM")
-        self.assertEqual({entry.key for entry in prerequisites}, {"has_tech"})
-        required = [entry.value for entry in prerequisites]
+        self.assertEqual({entry.key for entry in prerequisites}, {"custom_trigger_tooltip"})
+        required = [value(entry.value, "has_tech") for entry in prerequisites]
         self.assertEqual(len(required), 2)
         for tech in technologies.technology_prerequisite_closure(required):
             self.assertIn(tech, technologies.TECH_POSITION_BY_ID)

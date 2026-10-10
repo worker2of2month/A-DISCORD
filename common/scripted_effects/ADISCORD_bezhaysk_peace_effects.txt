@@ -123,26 +123,82 @@ ADISCORD_bezhaysk_unify_val_administration = {
 }
 
 ADISCORD_bezhaysk_settle_sts_victory = {
+	# Vassal holdings follow the defeated crown even without a separate war entry.
 	# Snapshot every recipient before faction changes or white peace alter the coalition.
 	clear_temp_array = ADISCORD_bezhaysk_settlement_members
 	if = {
-		limit = { BLD = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = {
+			BLD = {
+				exists = yes
+				OR = {
+					is_subject_of = BJK
+					AND = {
+						has_war_with = STS
+						is_in_faction_with = BJK
+					}
+				}
+			}
+		}
 		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BLD }
 	}
 	if = {
-		limit = { BHG = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = {
+			BHG = {
+				exists = yes
+				OR = {
+					is_subject_of = BJK
+					AND = {
+						has_war_with = STS
+						is_in_faction_with = BJK
+					}
+				}
+			}
+		}
 		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BHG }
 	}
 	if = {
-		limit = { BGT = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = {
+			BGT = {
+				exists = yes
+				OR = {
+					is_subject_of = BJK
+					AND = {
+						has_war_with = STS
+						is_in_faction_with = BJK
+					}
+				}
+			}
+		}
 		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BGT }
 	}
 	if = {
-		limit = { BBV = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = {
+			BBV = {
+				exists = yes
+				OR = {
+					is_subject_of = BJK
+					AND = {
+						has_war_with = STS
+						is_in_faction_with = BJK
+					}
+				}
+			}
+		}
 		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BBV }
 	}
 	if = {
-		limit = { BCM = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = {
+			BCM = {
+				exists = yes
+				OR = {
+					is_subject_of = BJK
+					AND = {
+						has_war_with = STS
+						is_in_faction_with = BJK
+					}
+				}
+			}
+		}
 		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BCM }
 	}
 	if = {
@@ -185,26 +241,82 @@ ADISCORD_bezhaysk_settle_sts_victory = {
 }
 
 ADISCORD_bezhaysk_settle_stp_victory = {
+	# Vassal holdings follow the defeated crown even without a separate war entry.
 	# Snapshot every recipient before faction changes or white peace alter the coalition.
 	clear_temp_array = ADISCORD_bezhaysk_settlement_members
 	if = {
-		limit = { BLD = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = {
+			BLD = {
+				exists = yes
+				OR = {
+					is_subject_of = BJK
+					AND = {
+						has_war_with = STP
+						is_in_faction_with = BJK
+					}
+				}
+			}
+		}
 		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BLD }
 	}
 	if = {
-		limit = { BHG = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = {
+			BHG = {
+				exists = yes
+				OR = {
+					is_subject_of = BJK
+					AND = {
+						has_war_with = STP
+						is_in_faction_with = BJK
+					}
+				}
+			}
+		}
 		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BHG }
 	}
 	if = {
-		limit = { BGT = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = {
+			BGT = {
+				exists = yes
+				OR = {
+					is_subject_of = BJK
+					AND = {
+						has_war_with = STP
+						is_in_faction_with = BJK
+					}
+				}
+			}
+		}
 		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BGT }
 	}
 	if = {
-		limit = { BBV = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = {
+			BBV = {
+				exists = yes
+				OR = {
+					is_subject_of = BJK
+					AND = {
+						has_war_with = STP
+						is_in_faction_with = BJK
+					}
+				}
+			}
+		}
 		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BBV }
 	}
 	if = {
-		limit = { BCM = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = {
+			BCM = {
+				exists = yes
+				OR = {
+					is_subject_of = BJK
+					AND = {
+						has_war_with = STP
+						is_in_faction_with = BJK
+					}
+				}
+			}
+		}
 		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BCM }
 	}
 	if = {

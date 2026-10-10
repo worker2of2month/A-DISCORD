@@ -12,3 +12,6 @@
  ADISCORD_sp_power_shields:0 "Power Shields"
  ADISCORD_sp_power_shields_desc:0 "A portable power shield protects an assault team moving between cover and entering defended buildings. The project unlocks shield production, shield infantry recruitment and further upgrades in the technology tree. Kefreyt, the Party and Shabrat can also complete it through their national focuses."
  ADISCORD_power_shields_template_tt:0 "Creates an editable §YShield Assault Division§! template: §Y10§! shield battalions, engineers and support artillery. Combat width: §Y20§!; establishment: §Y10600§! £manpower_texticon. Recruitment consumes national stockpiles, including §Y200§! power shields."
+ ADISCORD_sp_requires_hardened_computers_tt:0 "Has researched §Y$ADISCORD_tech_hardened_computers$§! (§Y$electronics_folder$§! tab, §Y$ADISCORD_TECH_BRANCH_COMPUTING$§! branch, 2160)"
+ ADISCORD_sp_requires_automated_assembly_tt:0 "Has researched §Y$ADISCORD_tech_automated_assembly$§! (§Y$industry_folder$§! tab, §Y$ADISCORD_TECH_BRANCH_PRODUCTION$§! branch, 2161)"
+ ADISCORD_sp_requires_heavy_composite_cores_tt:0 "Has researched §Y$ADISCORD_tech_heavy_composite_cores$§! (§Y$armour_folder$§! tab, §Y$ADISCORD_TECH_BRANCH_HEAVY_ARMOR$§! branch, 2158)"
