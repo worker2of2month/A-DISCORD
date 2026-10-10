@@ -69,7 +69,7 @@ units = {
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 3 }
-		location = 16831
+		location = 16823
 		division_template = "Line Infantry Brigade"
 		start_experience_factor = 0.22
 		start_equipment_factor = 0.82
@@ -83,7 +83,7 @@ units = {
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 5 }
-		location = 16821
+		location = 16818
 		division_template = "Line Infantry Brigade"
 		start_experience_factor = 0.22
 		start_equipment_factor = 0.80
@@ -111,14 +111,14 @@ units = {
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 9 }
-		location = 16819
+		location = 16817
 		division_template = "Line Infantry Brigade"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.78
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 10 }
-		location = 16817
+		location = 16816
 		division_template = "Line Infantry Brigade"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.78
@@ -132,21 +132,21 @@ units = {
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 12 }
-		location = 16829
+		location = 16822
 		division_template = "Line Infantry Brigade"
 		start_experience_factor = 0.18
 		start_equipment_factor = 0.78
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 13 }
-		location = 16817
+		location = 16816
 		division_template = "Local Security Detachment"
 		start_experience_factor = 0.12
 		start_equipment_factor = 0.72
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 14 }
-		location = 16827
+		location = 16821
 		division_template = "Local Security Detachment"
 		start_experience_factor = 0.12
 		start_equipment_factor = 0.72
@@ -160,7 +160,7 @@ units = {
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 16 }
-		location = 16833
+		location = 16824
 		division_template = "Local Security Detachment"
 		start_experience_factor = 0.12
 		start_equipment_factor = 0.70

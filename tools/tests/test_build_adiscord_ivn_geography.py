@@ -506,14 +506,7 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         metrics = builder.expected().metrics
         self.assertGreaterEqual(metrics.island_forest_share, 0.25)
         self.assertLessEqual(metrics.island_forest_share, 0.30)
-        self.assertEqual(
-            set(metrics.mainland_forest_shares),
-            set(builder.MAINLAND_FOREST_STATE_IDS),
-        )
-        for state_id, share in metrics.mainland_forest_shares.items():
-            with self.subTest(state=state_id):
-                self.assertGreaterEqual(share, 0.20)
-                self.assertLessEqual(share, 0.25)
+        self.assertEqual(metrics.mountain_provinces_without_foothills, ())
         occupancy = metrics.tree_occupancy
         self.assertGreaterEqual(occupancy["forest"], 0.50)
         self.assertLessEqual(occupancy["forest"], 0.72)
@@ -762,6 +755,29 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
                 )
                 self.assertEqual(outputs.desired[province_id], "urban")
 
+    def test_mainland_provinces_are_painted_in_one_terrain(self) -> None:
+        outputs = builder.expected()
+        _lines, _newline, _bom, colours, _declared = builder.definition_contract()
+        with Image.open(builder.PROVINCES_PATH) as provinces:
+            packed = builder.packed_rgb(np.asarray(provinces.convert("RGB")))
+        terrain = np.asarray(outputs.terrain)
+        types = builder.palette_types()
+        # City-model mask pixels belong to the shared cities layer.
+        with Image.open(terrain_builder.CITIES_PATH) as cities:
+            city_mask = np.isin(
+                np.asarray(cities), list(terrain_builder.CITY_PALETTE_INDICES)
+            )
+        for province_id in sorted(
+            builder.relief_province_ids(builder.RELIEF_STATE_IDS)
+            - builder.SETTLEMENT_PROVINCES
+        ):
+            with self.subTest(province=province_id):
+                mask = builder.province_mask(packed, colours, frozenset({province_id}))
+                mask &= ~city_mask
+                painted = [types[int(value)] for value in terrain[mask]]
+                matching = painted.count(outputs.desired[province_id])
+                self.assertGreaterEqual(matching / len(painted), 0.9)
+
     def test_city_mask_pixels_remain_urban_inside_ivn_scope(self) -> None:
         outputs = builder.expected()
         _lines, _newline, _bom, scoped_colours, _declared = (
@@ -796,7 +812,7 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
     def test_province_geometry_is_unchanged(self) -> None:
         digest = hashlib.sha256(builder.PROVINCES_PATH.read_bytes()).hexdigest().upper()
         self.assertEqual(
-            digest, "F2759E77EE0A0B04474319E26F84AC96FEDC31940DB565B19AF727A65CC92E0D"
+            digest, "17F6141550A9322BE17426BD999B83980B51ED0AB30E4D798CB4E14E3B578BB8"
         )
 
 

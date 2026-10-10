@@ -78,9 +78,6 @@ ISLAND_HEIGHT_STATE_IDS = frozenset({128, 693, 694})
 NORTHERN_LANDSCAPE_STATE_IDS = frozenset(
     {127, 128, 129, 130, 131, 132, 164, 693, 694, 715}
 )
-MAINLAND_FOREST_STATE_IDS = (
-    NORTHERN_LANDSCAPE_STATE_IDS - ISLAND_HEIGHT_STATE_IDS - {164}
-)
 PROVINCE_MANIFEST_PATH = ROOT / "tools/data/adiscord_ivn_provinces.json"
 PROVINCE_MANIFEST = json.loads(PROVINCE_MANIFEST_PATH.read_text(encoding="utf-8"))
 # Every IVN victory point is a whole urban province; the island
@@ -124,10 +121,17 @@ UNITSTACKS_PATH = ROOT / "map/unitstacks.txt"
 # pixels are stamped into provinces.bmp. PROVINCE_MANIFEST lists new provinces.
 PROVINCE_GEOMETRY_PATH = ROOT / "tools/data/adiscord_ivn_province_geometry.png"
 # A victory-point province up to this size becomes the city itself; a larger
-# one yields a compact city of CITY_PIXELS and rural sectors around it.
+# one yields a compact city of CITY_PIXELS at a nearby province junction.
 CITY_WHOLE_PROVINCE_PIXELS = 115
 CITY_PIXELS = 45
-SECTOR_PIXELS = 150
+# A city stands where at least this many provinces meet, within
+# CITY_SITE_DISTANCE pixels of its historical urban area.
+CITY_MIN_NEIGHBOURS = 3
+CITY_JUNCTION_RADIUS = 4
+CITY_SITE_DISTANCE = 14
+# No donor province gives a city more than this share of its pixels.
+CITY_DONOR_SHARE = 0.35
+SPLIT_PART_PIXELS = 150
 SPLIT_PIXELS = 300
 LOCKED_PROVINCE_PIXELS = 60
 # Provinces that already carried authored rivers. Their river pixels, and
@@ -154,9 +158,17 @@ RIVER_COURSES = (
 )
 RIVER_MOUTH_RADIUS = 14
 RIVER_SIDE_SWITCH_COST = 30.0
+RIVER_SHORE_CLEARANCE = 3.0
 RIVER_SOURCE_PALETTE = 0
 RIVER_SEA_PALETTE = 254
 RIVER_LAND_PALETTE = 255
+UNIFORM_TERRAIN_PALETTES = {
+    "plains": 0,
+    "forest": 4,
+    "hills": 17,
+    "mountain": 20,
+    "marsh": 9,
+}
 TERRAIN_PRIORITY = (
     "urban",
     "mountain",
@@ -202,7 +214,6 @@ class TreeCellSample:
 @dataclass(frozen=True)
 class CoverageMetrics:
     island_forest_share: float
-    mainland_forest_shares: dict[int, float]
     tree_occupancy: dict[str, float]
     forbidden_tree_cells: int
     terrain_changes_outside_scope: int
@@ -211,6 +222,7 @@ class CoverageMetrics:
     hill_pixels: int
     mountain_transition_violations: int
     mountain_components_without_shoulders: int
+    mountain_provinces_without_foothills: tuple[int, ...]
 
 
 @dataclass
@@ -1162,6 +1174,26 @@ def ellipse_mask(
     return result
 
 
+def province_terrain_type(counts: Counter[str]) -> str:
+    """Choose the single terrain of a mainland province from its relief."""
+    total = sum(counts.values())
+    shares = {terrain_type: counts.get(terrain_type, 0) / total for terrain_type in TERRAIN_PRIORITY}
+    if shares["marsh"] >= 0.35:
+        return "marsh"
+    if shares["mountain"] >= 0.4:
+        return "mountain"
+    if shares["mountain"] + shares["hills"] >= 0.4:
+        return "hills"
+    if shares["forest"] >= 0.4:
+        return "forest"
+    landscape = {
+        terrain_type: count
+        for terrain_type, count in counts.items()
+        if terrain_type in UNIFORM_TERRAIN_PALETTES
+    }
+    return max(landscape, key=lambda terrain_type: landscape[terrain_type], default="plains")
+
+
 def palette_indices(palette: dict[int, str], *terrain_types: str) -> list[int]:
     return [index for index, value in palette.items() if value in terrain_types]
 
@@ -1321,10 +1353,12 @@ def route_rivers(
         for dx in (-1, 0, 1):
             blocked |= np.roll(np.roll(foreign_river, dy, 0), dx, 1)
     coast = owned & neighbours_of(water)
+    # Rivers keep away from the shoreline and meet the sea only at their mouth.
+    shore = distance_transform_edt(~water) <= RIVER_SHORE_CLEARANCE
     border = province_borders(packed)
     paths: list[list[tuple[int, int]]] = []
     for course in RIVER_COURSES:
-        allowed = owned & border & ~blocked & ~coast
+        allowed = owned & border & ~blocked & ~shore
         mouth = owned & ~blocked & coast
         path = [_snap_river_point(course[0], allowed)]
         for waypoint in course[1:-1]:
@@ -1332,13 +1366,15 @@ def route_rivers(
             path.extend(_route_river(path[-1], [target], allowed, heights, packed)[1:])
         mx, my = course[-1]
         reach = RIVER_MOUTH_RADIUS
-        window = mouth[my - reach : my + reach + 1, mx - reach : mx + reach + 1]
+        estuary = np.zeros(mouth.shape, bool)
+        estuary[my - reach : my + reach + 1, mx - reach : mx + reach + 1] = True
         goals = [
-            (mx - reach + int(x), my - reach + int(y)) for y, x in zip(*np.nonzero(window))
+            (int(x), int(y)) for y, x in zip(*np.nonzero(mouth & estuary))
         ]
         if not goals:
             raise RuntimeError(f"river mouth {course[-1]} has no coastal border pixel")
-        path.extend(_route_river(path[-1], goals, allowed | mouth, heights, packed)[1:])
+        final = allowed | (owned & border & ~blocked & estuary & ~coast) | (mouth & estuary)
+        path.extend(_route_river(path[-1], goals, final, heights, packed)[1:])
         path = _prune_river_loops(path)
         for index, (x, y) in enumerate(path):
             result[y, x] = (
@@ -1564,6 +1600,83 @@ def province_colour(province_id: int, used: set[tuple[int, int, int]]) -> tuple[
         salt += 1
 
 
+def _assign_to_neighbours(
+    labels: np.ndarray, area: np.ndarray, excluded: set[int]
+) -> None:
+    """Give each connected piece of ``area`` to its most common neighbour."""
+    from scipy.ndimage import label as connected_components
+
+    pieces, count = connected_components(area)
+    for piece in range(1, count + 1):
+        fragment = pieces == piece
+        ring = labels[neighbours_of(fragment) & ~fragment]
+        ring = ring[(ring > 0) & ~np.isin(ring, list(excluded))]
+        if len(ring):
+            labels[fragment] = int(np.bincount(ring).argmax())
+
+
+def carve_junction_city(
+    labels: np.ndarray,
+    donors: np.ndarray,
+    region: np.ndarray,
+    hint: tuple[float, float],
+    relocate: bool = False,
+) -> np.ndarray:
+    """Place a city where several provinces meet, close to its old site.
+
+    A relocated city may stand outside ``region``; otherwise the junction is
+    chosen inside it.
+
+    The city takes pixels from every province it touches, so it borders at
+    least CITY_MIN_NEIGHBOURS provinces instead of sitting inside one.
+    Donors keep most of their area.
+    """
+    from scipy.ndimage import binary_dilation
+
+    radius = CITY_JUNCTION_RADIUS
+    disk = np.hypot(*np.mgrid[-radius : radius + 1, -radius : radius + 1]) <= radius
+    margin = max(3 * radius, CITY_SITE_DISTANCE + radius)
+    ys, xs = np.nonzero(region)
+    y0 = max(0, ys.min() - margin)
+    y1 = min(labels.shape[0], ys.max() + margin + 1)
+    x0 = max(0, xs.min() - margin)
+    x1 = min(labels.shape[1], xs.max() + margin + 1)
+    window = labels[y0:y1, x0:x1]
+    window_donors = donors[y0:y1, x0:x1]
+    # A relocated city's former province dissolves, so it is no neighbour.
+    former = set(np.unique(labels[region]).tolist()) if relocate else set()
+    reach = np.zeros(window.shape, np.int32)
+    for value in np.unique(window[window_donors]):
+        if int(value) not in former:
+            reach += binary_dilation(window_donors & (window == value), structure=disk)
+    gy, gx = np.mgrid[y0:y1, x0:x1]
+    distance = np.hypot(gy - hint[0], gx - hint[1])
+    site = window_donors if relocate else region[y0:y1, x0:x1] & window_donors
+    candidates = site & (distance <= CITY_SITE_DISTANCE)
+    if not candidates.any():
+        candidates = site
+    score = np.where(
+        candidates,
+        np.minimum(reach, CITY_MIN_NEIGHBOURS + 1) * 10.0 - distance / 3.0,
+        -np.inf,
+    )
+    ay, ax = np.unravel_index(int(np.argmax(score)), score.shape)
+    anchor = (int(ay) + y0, int(ax) + x0)
+    allowed = donors.copy()
+    for _attempt in range(8):
+        city = _grow_compact_region(allowed, anchor, CITY_PIXELS)
+        shrunk = [
+            int(value)
+            for value in np.unique(labels[city])
+            if (labels[city] == value).sum()
+            > (1.0 - CITY_DONOR_SHARE) * (labels == value).sum()
+        ]
+        if not shrunk:
+            return city
+        allowed &= ~np.isin(labels, shrunk) | region
+    return city
+
+
 def plan_province_geometry() -> None:
     """Write the reviewed IVN mainland province geometry and its manifest.
 
@@ -1639,24 +1752,35 @@ def plan_province_geometry() -> None:
     for parent in sorted(victory_points):
         region = labels == parent
         area = int(region.sum())
+        urban = region & (terrain[crop] == URBAN_PALETTE)
+        hint_source = urban if urban.sum() >= 6 else region
+        hy, hx = np.nonzero(hint_source)
+        donors = (
+            np.isin(labels, list(scoped))
+            & ~water
+            & ~np.isin(labels, [*cities.values(), *victory_points])
+        )
+        donors |= region & ~water
         if area <= CITY_WHOLE_PROVINCE_PIXELS:
+            touching = labels[neighbours_of(region) & ~region & ~water]
+            touching = touching[(touching > 0) & ~np.isin(touching, list(sea))]
+            if len(set(touching.tolist())) >= CITY_MIN_NEIGHBOURS:
+                cities[parent] = parent
+                continue
+            # A small city with too few neighbours moves onto the nearest
+            # junction; its former outskirts join the adjacent provinces.
+            city_pixels = carve_junction_city(
+                labels, donors, region, (hy.mean(), hx.mean()), relocate=True
+            )
+            outskirts = region & ~city_pixels
+            labels[city_pixels] = parent
+            _assign_to_neighbours(labels, outskirts, {parent} | sea)
             cities[parent] = parent
             continue
-        urban = region & (terrain[crop] == URBAN_PALETTE)
-        anchor_source = urban if urban.sum() >= 6 else region
-        py, px = np.nonzero(anchor_source)
-        anchor = _nearest_member(region & ~neighbours_of(~region), py.mean(), px.mean())
-        city_pixels = _grow_compact_region(region & ~water, anchor, CITY_PIXELS)
+        city_pixels = carve_junction_city(labels, donors, region, (hy.mean(), hx.mean()))
         city = new_province(parent, "city")
         labels[city_pixels] = city
         cities[parent] = city
-        ring = labels == parent
-        sectors = max(2, round(int(ring.sum()) / SECTOR_PIXELS))
-        owner = compact_partition(ring, sectors)
-        keep = int(np.bincount(owner[owner >= 0]).argmax())
-        for index in range(sectors):
-            if index != keep:
-                labels[owner == index] = new_province(parent, "sector")
 
     for parent in sorted(int(value) for value in np.unique(labels[editable])):
         if parent in cities.values():
@@ -1669,7 +1793,7 @@ def plan_province_geometry() -> None:
         compactness = 4 * pi * area / perimeter**2
         if area <= SPLIT_PIXELS and not (compactness < 0.3 and area > 200):
             continue
-        parts = max(2, round(area / SECTOR_PIXELS))
+        parts = max(2, round(area / SPLIT_PART_PIXELS))
         owner = compact_partition(region, parts)
         keep = int(np.bincount(owner[owner >= 0]).argmax())
         for index in range(parts):
@@ -1904,9 +2028,15 @@ def expected_province_geometry() -> ProvinceGeometry:
             )
             stacks.append(row)
 
-    railways = repair_railways(
-        RAILWAYS_PATH.read_bytes(), province_adjacency(labels), frozenset(scoped)
-    )
+    adjacency = province_adjacency(labels)
+    land = {province for province, row in by_id.items() if row[4] == "land"}
+    for city in sorted(CITY_PROVINCES):
+        neighbours = adjacency.get(city, set()) & land
+        if len(neighbours) < CITY_MIN_NEIGHBOURS:
+            issues.append(
+                f"city province {city} borders only {len(neighbours)} land provinces"
+            )
+    railways = repair_railways(RAILWAYS_PATH.read_bytes(), adjacency, frozenset(scoped))
     encoded = BytesIO()
     Image.fromarray(province_rgb).save(encoded, format="BMP")
     definition = newline.join(";".join(row) for row in rows) + newline
@@ -2207,6 +2337,28 @@ def _build_expected() -> GeographyOutputs:
     for province_id in SETTLEMENT_PROVINCES:
         desired[province_id] = "urban"
 
+    # Every IVN mainland province is painted in its one terrain type, so the
+    # map reads province by province and matches the declared terrain.
+    relief_ids = relief_province_ids(RELIEF_STATE_IDS) - SETTLEMENT_PROVINCES
+    ys, xs = np.nonzero(relief)
+    window = (
+        slice(int(ys.min()), int(ys.max()) + 1),
+        slice(int(xs.min()), int(xs.max()) + 1),
+    )
+    painted = np.frombuffer(bytes(generated_pixels), dtype=np.uint8).reshape(relief.shape).copy()
+    province_ids = np.frombuffer(province_by_pixel, dtype=np.uint16).reshape(relief.shape)[window]
+    city_mask = np.isin(
+        np.frombuffer(city_pixels, dtype=np.uint8).reshape(relief.shape)[window],
+        list(CITY_PALETTE_INDICES),
+    )
+    paintable = relief[window] & ~np.isin(painted[window], list(WATER_PALETTES)) & ~city_mask
+    for province_id in sorted(relief_ids):
+        desired[province_id] = province_terrain_type(counts[province_id])
+        target = paintable & (province_ids == province_id)
+        painted[window][target] = UNIFORM_TERRAIN_PALETTES[desired[province_id]]
+    generated_pixels = bytearray(painted.tobytes())
+    terrain.putdata(generated_pixels)
+
     with Image.open(BytesIO(TREES_PATH.read_bytes())) as tree_source:
         if tree_source.mode != "P" or tree_source.size != (1650, 600):
             raise RuntimeError("trees.bmp must remain paletted at 1650x600")
@@ -2254,10 +2406,6 @@ def _build_expected() -> GeographyOutputs:
         state_forest_counts[state_id][1] for state_id in ISLAND_HEIGHT_STATE_IDS
     )
     island_forest_share = island_forest / island_land
-    mainland_forest_shares = {
-        state_id: state_forest_counts[state_id][0] / state_forest_counts[state_id][1]
-        for state_id in sorted(MAINLAND_FOREST_STATE_IDS)
-    }
     tree_occupancy = {
         terrain_type: (
             tree_counts.get(terrain_type, (0, 0))[1]
@@ -2268,14 +2416,17 @@ def _build_expected() -> GeographyOutputs:
 
     coast_distances = distance_from_edge(masks.north, terrain.width, terrain.height)
     transition_violations = 0
+    relief_pixels = relief.reshape(-1)
     mountains = {
         index
         for index, included in enumerate(masks.north)
-        if included and generated_pixels[index] == MOUNTAIN_PALETTE
+        if included
+        and not relief_pixels[index]
+        and generated_pixels[index] == MOUNTAIN_PALETTE
     }
     for index in mountains:
         for neighbour in pixel_neighbours(index, terrain.width, len(generated_pixels)):
-            if not masks.north[neighbour]:
+            if not masks.north[neighbour] or relief_pixels[neighbour]:
                 continue
             neighbour_value = generated_pixels[neighbour]
             if neighbour_value == URBAN_PALETTE or 0 <= coast_distances[neighbour] < 2:
@@ -2304,8 +2455,17 @@ def _build_expected() -> GeographyOutputs:
             )
         ):
             components_without_shoulders += 1
+    adjacency = province_adjacency(province_ids)
+    bare_mountains = sorted(
+        province_id
+        for province_id in relief_ids
+        if desired[province_id] == "mountain"
+        and not any(
+            desired.get(neighbour) in ("hills", "mountain")
+            for neighbour in adjacency.get(province_id, ())
+        )
+    )
 
-    relief_pixels = relief.reshape(-1)
     outside_terrain_changes = 0
     for index, (before, after) in enumerate(zip(terrain_pixels, generated_pixels)):
         if before == after or masks.north[index] or relief_pixels[index]:
@@ -2320,7 +2480,6 @@ def _build_expected() -> GeographyOutputs:
             outside_terrain_changes += 1
     metrics = CoverageMetrics(
         island_forest_share=island_forest_share,
-        mainland_forest_shares=mainland_forest_shares,
         tree_occupancy=tree_occupancy,
         forbidden_tree_cells=forbidden_trees,
         terrain_changes_outside_scope=outside_terrain_changes,
@@ -2329,6 +2488,7 @@ def _build_expected() -> GeographyOutputs:
         hill_pixels=hill_pixels,
         mountain_transition_violations=transition_violations,
         mountain_components_without_shoulders=components_without_shoulders,
+        mountain_provinces_without_foothills=tuple(bare_mountains),
     )
 
     with Image.open(BytesIO(RIVERS_PATH.read_bytes())) as river_source:
@@ -2409,11 +2569,8 @@ def coverage_issues(outputs: GeographyOutputs) -> list[str]:
         issues.append(
             f"island forest share {metrics.island_forest_share:.4f} is outside 0.25..0.30"
         )
-    for state_id, share in metrics.mainland_forest_shares.items():
-        if not 0.20 <= share <= 0.25:
-            issues.append(
-                f"state {state_id}: forest share {share:.4f} is outside 0.20..0.25"
-            )
+    for province_id in metrics.mountain_provinces_without_foothills:
+        issues.append(f"mountain province {province_id} has no hills or mountain neighbour")
     occupancy = metrics.tree_occupancy
     for terrain_type, minimum, maximum in (
         ("forest", 0.50, 0.72),
