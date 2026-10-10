@@ -6,7 +6,7 @@ Assign `gfx/flags/interesting flag 3.png` to IBA without allowing the existing f
 
 ## Design
 
-- Preserve the supplied artwork as the canonical generator input at `gfx/flags/source/IBA.png`.
+- Preserve the supplied artwork as the canonical generator input at `tools/assets/source/vorkerland_flags/IBA.png`.
 - Remove IBA from the procedural `BUILDERS` map and register `source/IBA.png` as IBA's supplied source.
 - Generate the standard HOI4 flag triplet: `gfx/flags/IBA.tga`, `gfx/flags/medium/IBA.tga`, and `gfx/flags/small/IBA.tga`.
 - Delete the temporary `gfx/flags/interesting flag 3.png` after the canonical source and triplet have been produced.

@@ -14,7 +14,7 @@ GUI = ROOT / "interface/countrytechnologyview.gui"
 GFX = ROOT / "interface/ADISCORD_technology_ui.gfx"
 ASSET_DIR = ROOT / "gfx/interface/technology/ui"
 PREVIEW = (
-    ROOT / "gfx/interface/technology/preview/ADISCORD_technology_overview_preview.png"
+    ROOT / "docs/development/previews/ADISCORD_technology_overview_preview.png"
 )
 STATE_GFX = ROOT / "interface/zz_ADISCORD_technology_states.gfx"
 EXPECTED_STATES = {

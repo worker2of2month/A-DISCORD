@@ -127,7 +127,8 @@ class TaranTests(unittest.TestCase):
 
     def test_native_skeleton_fits_the_engine_limit_and_matches_its_animations(self):
         folder = ROOT / "gfx/models/units/ADISCORD_country_vehicles"
-        report = json.loads((folder / "STS_taran_verification.json").read_text())
+        report_path = ROOT / "docs/development/model-verification/STS_taran_verification.json"
+        report = json.loads(report_path.read_text())
         self.assertLessEqual(report["bones"], 50)
         self.assertTrue(report["native_reimport"])
         self.assertEqual(set(report["animations"]), {"idle", "move", "attack"})

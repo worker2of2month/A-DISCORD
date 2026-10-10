@@ -35,7 +35,7 @@ VANILLA_DIR = BASE_GAME / "interface/international_market"
 SOURCE = ROOT / "gfx/interface/production/source/production_surface_source.png"
 OUTPUT_DIR = ROOT / "gfx/interface/international_market/adiscord"
 GFX_OUTPUT = ROOT / "interface/ADISCORD_market_ui.gfx"
-PREVIEW = OUTPUT_DIR / "preview.png"
+PREVIEW = ROOT / "docs/development/previews/ADISCORD_market_preview.png"
 GUI_FILES = (
     "countryinternationalmarketview.gui",
     "marketaccessoverviewwindow.gui",

@@ -14,7 +14,7 @@ from tools.lib.paths import repository_root
 
 ROOT = repository_root()
 FLAG_ROOT = ROOT / "gfx" / "flags"
-SOURCE_ROOT = FLAG_ROOT / "source"
+SOURCE_ROOT = ROOT / "tools/assets/source/vorkerland_flags"
 CANVAS = (656, 416)
 
 

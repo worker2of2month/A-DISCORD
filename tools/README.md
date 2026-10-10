@@ -74,6 +74,15 @@ and fresh-log review for runtime-visible changes.
 
 ## Vendor and reference assets
 
+Editable art belongs in `tools/assets/source/`; generated review images belong
+in `docs/development/previews/`, and native model verification reports belong
+in `docs/development/model-verification/`. These are development inputs and
+evidence, separate from the assets loaded by HOI4. Keep builder paths, tests
+and `tools/data/generated_output_owners.json` aligned when moving them.
+
+Reusable browser mockups live in `docs/mockups/`. Local preview-server state,
+Python bytecode and `imgui.ini` are ignored and must not be committed.
+
 Event artwork uses `tools.builders.build_adiscord_event_pictures` for separate
 COUNTRY and NEWS crops. See [event illustration sources and prompts](../gfx/event_pictures/source/README.md)
 for dimensions, provenance, preview, and regeneration commands. Assign its named

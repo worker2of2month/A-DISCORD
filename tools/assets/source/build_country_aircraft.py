@@ -208,7 +208,8 @@ def package(output, apply=False):
             if hashlib.sha256(data).hexdigest() != expected:
                 raise ValueError(f"Unverified export: {filename}")
             files[registry.DEST / filename] = data
-    files[registry.DEST / "aircraft_verification.json"] = (json.dumps(report, indent=2) + "\n").encode()
+    report_path = ROOT / "docs/development/model-verification/aircraft_verification.json"
+    files[report_path] = (json.dumps(report, indent=2) + "\n").encode()
     changed = [str(path.relative_to(ROOT)) for path, data in files.items()
                if not path.is_file() or path.read_bytes() != data]
     registry_changes = registry.package(False)

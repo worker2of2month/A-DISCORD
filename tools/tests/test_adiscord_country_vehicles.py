@@ -333,7 +333,7 @@ class SharedAircraftTests(unittest.TestCase):
                                      f"ADISCORD_{family}_{prefix}{role}_entity")
 
     def test_shared_native_exports_match_the_installed_verification(self):
-        path = DEST / "aircraft_verification.json"
+        path = ROOT / "docs/development/model-verification/aircraft_verification.json"
         self.assertTrue(path.is_file(), "Shared aircraft package has not been built")
         report = json.loads(path.read_text())
         hashes = set()

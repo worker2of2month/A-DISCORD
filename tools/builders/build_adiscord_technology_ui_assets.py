@@ -36,14 +36,14 @@ from tools.lib.paths import repository_root
 ROOT = repository_root()
 BASE_GAME = Path(r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV")
 VANILLA_GUI = BASE_GAME / "interface/countrytechnologyview.gui"
-SOURCE_DIR = ROOT / "gfx/interface/technology/source"
+SOURCE_DIR = ROOT / "tools/assets/source/technology"
 SOURCE = SOURCE_DIR / "technology_surface.png"
 OUTPUT_DIR = ROOT / "gfx/interface/technology/ui"
 PREVIEW = (
-    ROOT / "gfx/interface/technology/preview/ADISCORD_technology_overview_preview.png"
+    ROOT / "docs/development/previews/ADISCORD_technology_overview_preview.png"
 )
 TREE_PREVIEW = (
-    ROOT / "gfx/interface/technology/preview/ADISCORD_technology_tree_preview.png"
+    ROOT / "docs/development/previews/ADISCORD_technology_tree_preview.png"
 )
 GUI_OUTPUT = ROOT / "interface/countrytechnologyview.gui"
 GFX_OUTPUT = ROOT / "interface/ADISCORD_technology_ui.gfx"

@@ -333,7 +333,7 @@ git commit -m "fix: rebuild division deployment interface"
 - Regenerate: `interface/operativeleader.gui`
 - Regenerate: `interface/ADISCORD_intelligence_ui.gfx`
 - Create/replace: `gfx/interface/intelligence/ui/*.dds`
-- Create: `gfx/interface/intelligence/preview/ADISCORD_intelligence_preview.png`
+- Create: `docs/development/previews/ADISCORD_intelligence_preview.png`
 
 **Interfaces:**
 - Consumes: Task 1 contracts/primitives and the original generated header source.
@@ -462,7 +462,7 @@ git commit -m "fix: rebuild intelligence agency interface"
 - Regenerate: `interface/countrytechnologyview.gui`
 - Regenerate: `interface/ADISCORD_technology_ui.gfx`
 - Create/replace: `gfx/interface/technology/ui/*.dds`
-- Create: `gfx/interface/technology/preview/ADISCORD_technology_overview_preview.png`
+- Create: `docs/development/previews/ADISCORD_technology_overview_preview.png`
 
 **Interfaces:**
 - Consumes: Task 1 contracts/primitives.
@@ -553,7 +553,7 @@ git commit -m "fix: rebuild technology overview interface"
 - Regenerate: `interface/ADISCORD_technologies.gfx`
 - Create: `interface/zz_ADISCORD_technology_states.gfx`
 - Create/replace: `gfx/interface/technology/ui/ADISCORD_technology_node_*.dds`
-- Create: `gfx/interface/technology/preview/ADISCORD_technology_tree_preview.png`
+- Create: `docs/development/previews/ADISCORD_technology_tree_preview.png`
 
 **Interfaces:**
 - Consumes: Task 4 technology drawing/build outputs and the existing technology-system generator.

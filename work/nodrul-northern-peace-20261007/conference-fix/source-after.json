@@ -1,8 +1,0 @@
-{
-  "common/scripted_effects/ADISCORD_VAL_effects.txt": "df81185cb2a441b56c9bc5ae987ca12c9ea2ea00fd9ee92b996a35424142bbd3",
-  "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt": "cf8f05d856626965945d46d239a0fa4bedac774630e52000d7c728484ddef5c7",
-  "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt": "353cc9bc69f1e5234252ada74b0f19a418dc7f9ff663aa9782df1f9170c8d0d7",
-  "tools/tests/test_adiscord_peace_coalition_lifecycle.py": "c51e2cfb2a22b231d39b73d2a63211ea11ee613cc2703eaa323a9ab3b679bd07",
-  "docs/development/scripted-peace-testing.md": "ddd7e2c79a34859e9c24a25305394914238ab57d3e87722d0473336d08c55f46",
-  "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt": "552a5212a925c165cf20382334fda9dbc8ba6992d9a0d51f230a52fdb24ebb30"
-}

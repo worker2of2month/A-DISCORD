@@ -24,6 +24,7 @@ APPROVAL_SOURCE = (
 )
 OUTPUT_DIR = ROOT / "gfx/interface/decisions/ui"
 RUS_BUNKER_DIR = ROOT / "gfx/interface/ADISCORD_RUS"
+RUS_BUNKER_SOURCE = ROOT / "tools/assets/source/rus_bunker"
 
 WINDOW_TILE = OUTPUT_DIR / "ADISCORD_decisions_window_tile.dds"
 TITLE_BG = OUTPUT_DIR / "ADISCORD_decisions_title_bg.dds"
@@ -321,7 +322,7 @@ def _rus_bunker_outputs() -> dict[Path, bytes]:
     """Package the five room illustrations at a shared native GUI resolution."""
     outputs = {}
     for layer in range(1, 6):
-        source_path = RUS_BUNKER_DIR / "source" / f"bunker_layer_{layer}.png"
+        source_path = RUS_BUNKER_SOURCE / f"bunker_layer_{layer}.png"
         with Image.open(source_path) as source:
             image = source.convert("RGBA").resize(
                 (464, 256), Image.Resampling.LANCZOS

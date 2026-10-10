@@ -122,7 +122,7 @@ git commit -m "feat: add shared interface surface builder"
 **Files:**
 - Create: `tools/builders/build_adiscord_technology_ui_assets.py`
 - Create: `tools/tests/test_adiscord_technology_ui.py`
-- Create: `gfx/interface/technology/source/technology_surface_source.png`
+- Create: `tools/assets/source/technology/technology_surface_source.png`
 - Create: generated files under `gfx/interface/technology/ui/`
 - Create: `interface/countrytechnologyview.gui`
 - Create: `interface/countrytechnologyview.gfx`

@@ -1,6 +1,0 @@
-{
-  "common/scripted_effects/ADISCORD_VAL_effects.txt": "21bc05c17b1bb19c9b5c44e1f1478ef2226d0b7e1e11b3c0ab2a3d58974fe818",
-  "tools/tests/test_adiscord_peace_coalition_lifecycle.py": "dbed194e2ff1706082917143119560ae4fe3b4421de631ddd10fa1bdabd29799",
-  "tools/tests/test_adiscord_val_nodrul_peace_recovery.py": "c1541f4f7b674c8e36c53ad8a4ac4df5e00430788e4a6c3d8ebb2585a8736bde",
-  "docs/development/scripted-peace-testing.md": "adcc3a2f99e66228ef90aa75f31ff7f38be3616cc00dc8a3c03e07b3e6b7eb6a"
-}

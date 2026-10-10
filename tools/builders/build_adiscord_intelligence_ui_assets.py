@@ -43,7 +43,7 @@ HEADER_SOURCE = (
     ROOT / "gfx/interface/intelligence/source/ADISCORD_intelligence_header_source.png"
 )
 OUTPUT_DIR = ROOT / "gfx/interface/intelligence/ui"
-PREVIEW = ROOT / "gfx/interface/intelligence/preview/ADISCORD_intelligence_preview.png"
+PREVIEW = ROOT / "docs/development/previews/ADISCORD_intelligence_preview.png"
 GFX_OUTPUT = ROOT / "interface/ADISCORD_intelligence_ui.gfx"
 
 EFFECT = "gfx/FX/buttonstate_nodowneffect.lua"

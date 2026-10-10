@@ -231,8 +231,8 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
                 "tools/builders/build_adiscord_technology_ui_assets.py",
                 "tools/lib/adiscord_ui_contracts.py",
                 "tools/lib/adiscord_ui_surfaces.py",
-                "gfx/interface/technology/source/technology_surface.png",
-                "gfx/interface/technology/source/folder_tabs.png",
+                "tools/assets/source/technology/technology_surface.png",
+                "tools/assets/source/technology/folder_tabs.png",
             },
         )
         self.assertTrue(entry["may_delete_outputs"])
@@ -257,7 +257,7 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             "gfx/interface/technology/ui/ADISCORD_technology_node_researched.dds",
             "gfx/interface/technology/ui/ADISCORD_technology_node_branch.dds",
             "gfx/interface/technology/ui/ADISCORD_technology_node_researching.dds",
-            "gfx/interface/technology/preview/ADISCORD_technology_tree_preview.png",
+            "docs/development/previews/ADISCORD_technology_tree_preview.png",
         }
         self.assertTrue(
             state_outputs
