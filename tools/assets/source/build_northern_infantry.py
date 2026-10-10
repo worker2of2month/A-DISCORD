@@ -2077,28 +2077,6 @@ def verify(output, tags, walk=False):
                     bpy.ops.wm.save_as_mainfile(
                         filepath=str(output / f'{tag}_preview.blend')
                     )
-                    if tag == 'HAZ':
-                        scene.render.resolution_x = 512
-                        scene.render.resolution_y = 512
-                        scene.render.film_transparent = True
-                        head = rigs[0].pose.bones['head']
-                        head_transform = (
-                            rigs[0].matrix_world @ head.matrix
-                            @ head.bone.matrix_local.inverted()
-                        )
-                        camera.location = head_transform @ Vector((0, -20, 6.68))
-                        target = head_transform @ Vector((0, -0.05, 6.60))
-                        camera.rotation_euler = (
-                            (target - camera.location)
-                            .to_track_quat('-Z', 'Y').to_euler()
-                        )
-                        camera.data.ortho_scale = 1.55
-                        scene.render.filepath = str(output / 'HAZ_badge.png')
-                        bpy.ops.render.render(write_still=True)
-                        scene.render.resolution_x = 650
-                        scene.render.resolution_y = 800
-                        scene.render.film_transparent = False
-                        camera.data.ortho_scale = 8.7
                     camera.location = (-9, 20, 9)
                     camera.rotation_euler = (
                         (Vector((0, 0, 3.7)) - camera.location)
@@ -2194,11 +2172,6 @@ def package(output, apply=False, check=False, tags=None, assets_only=False):
         files[ROOT / 'tools/assets/source/ADISCORD_hazard_infantry.blend'] = (
             output / 'HAZ.blend'
         ).read_bytes()
-        badge = output / 'HAZ_badge.png'
-        if apply:
-            assert badge.is_file(), 'HAZ: run --verify to render the unit badge'
-        if badge.is_file():
-            files[ROOT / 'tools/assets/source/ADISCORD_hazard_infantry.png'] = badge.read_bytes()
     for tag in tags:
         files[dest / f'{tag}_field.mesh'] = (output / f'{tag}_field.mesh').read_bytes()
         for part in ('body', 'gear'):
