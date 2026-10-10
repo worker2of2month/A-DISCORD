@@ -1,0 +1,49 @@
+{
+  "HAZ": {
+    "sha256": "04aa4974446af849836e159c6700b4ef0aa980896d98ff226fb2387f74c7a0b8",
+    "textures": {
+      "HAZ_field_body_diffuse.dds": "388b24f63ec6648b62eeeef8d2213503770f8bff49bd8d085dcb8bdfe1289f5a",
+      "HAZ_field_body_normal.dds": "739fe8324f508f626e268a7fc4f888497924fbf81cca50361b93f4ccce441461",
+      "HAZ_field_body_specular.dds": "21cd30f78432e957606769d64a92ebd87e822c907abb38bcab7d42a5ebb7e22a"
+    },
+    "shapes": [
+      {
+        "vertices": 4736,
+        "triangles": 4850,
+        "bones": 33
+      }
+    ],
+    "poses": {
+      "idle_rifle": [
+        1,
+        91,
+        181
+      ],
+      "moving_rifle": [
+        1,
+        21,
+        41
+      ],
+      "attack_stand_rifle": [
+        1,
+        40,
+        79
+      ],
+      "idle_mg": [
+        1,
+        90,
+        180
+      ],
+      "moving_mg": [
+        1,
+        21,
+        41
+      ],
+      "attack_stand_mg": [
+        1,
+        49,
+        97
+      ]
+    }
+  }
+}

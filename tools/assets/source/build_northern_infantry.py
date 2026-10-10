@@ -1208,9 +1208,7 @@ def build_hazard_sentinel(output, pdx):
     import bmesh
     from mathutils import Vector
     from mathutils.kdtree import KDTree
-    from mathutils.bvhtree import BVHTree
     from types import SimpleNamespace
-    from infantry_polish import bake_diffuse
 
     source = Path(__file__).with_name('HAZ_sentinel_source.blend')
     bpy.ops.wm.open_mainfile(filepath=str(source), use_scripts=False)
@@ -1268,75 +1266,29 @@ def build_hazard_sentinel(output, pdx):
         if obj not in (body, rig):
             bpy.data.objects.remove(obj, do_unlink=True)
 
-    def face_material(name, color, roughness):
-        mat = bpy.data.materials.new(name)
-        mat.use_nodes = True
-        node = mat.node_tree.nodes.get('Principled BSDF')
-        node.inputs['Base Color'].default_value = (*color, 1)
-        node.inputs['Roughness'].default_value = roughness
-        return mat
-
-    rubber = face_material('Respirator charcoal seals', (0.025, 0.030, 0.027), 0.8)
-    glass = face_material('Respirator dark optical glass', (0.014, 0.036, 0.042), 0.28)
+    source_materials = list(body.data.materials)
+    for face in body.data.polygons:
+        face.use_smooth = True
     bm = bmesh.new()
     bm.from_mesh(body.data)
-    surface = BVHTree.FromBMesh(bm)
-    parts = []
-    for side in (-1, 1):
-        x, z = side * 0.215, 6.78
-        hit, _, _, _ = surface.ray_cast(Vector((x, -4, z)), Vector((0, 1, 0)))
-        assert hit is not None
-        for name, radius, depth, mat in (
-            ('Eyepiece seal', 0.172, 0.045, rubber),
-            ('Eyepiece glass', 0.139, 0.062, glass),
-        ):
-            bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12,
-                                                location=(x, hit.y - 0.015, z))
-            obj = bpy.context.object
-            obj.name = name
-            obj.scale = (radius, depth, radius * 1.08)
-            bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
-            obj.data.materials.append(mat)
-            obj.vertex_groups.new(name='head').add(list(range(len(obj.data.vertices))), 1, 'REPLACE')
-            obj.modifiers.new('Native infantry rig', 'ARMATURE').object = rig
-            parts.append(obj)
+    bmesh.ops.triangulate(bm, faces=list(bm.faces))
+    bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
+    bm.to_mesh(body.data)
     bm.free()
-    bpy.ops.object.select_all(action='DESELECT')
-    for obj in parts:
-        obj.select_set(True)
-    bpy.context.view_layer.objects.active = parts[0]
-    bpy.ops.object.join()
-    equipment = bpy.context.object
-    equipment.name = 'HAZ_gear'
-    bpy.ops.object.mode_set(mode='EDIT')
-    bpy.ops.mesh.select_all(action='SELECT')
-    bpy.ops.uv.smart_project(island_margin=0.025)
-    bpy.ops.object.mode_set(mode='OBJECT')
-    bake_diffuse(equipment, output / 'HAZ_gear.png', 'HAZ_gear', size=512)
-    source_materials = {obj: list(obj.data.materials) for obj in (body, equipment)}
-    source_indices = {}
-    for obj, part in ((body, 'body'), (equipment, 'gear')):
-        for face in obj.data.polygons:
-            face.use_smooth = True
-        bm = bmesh.new()
-        bm.from_mesh(obj.data)
-        bmesh.ops.triangulate(bm, faces=list(bm.faces))
-        bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
-        bm.to_mesh(obj.data)
-        bm.free()
-        source_indices[obj] = [face.material_index for face in obj.data.polygons]
-        (output / f'HAZ_field_{part}_diffuse.dds').write_bytes((output / f'HAZ_{part}.png').read_bytes())
-        for kind in ('normal', 'specular'):
-            (output / f'HAZ_field_{part}_{kind}.dds').write_bytes(NORMALS['HAZ'].read_bytes())
-        spec = SimpleNamespace(shader=['PdxMeshAdvanced'], diff=[f'HAZ_field_{part}_diffuse.dds'],
-                               n=[f'HAZ_field_{part}_normal.dds'], spec=[f'HAZ_field_{part}_specular.dds'])
-        obj.data.materials.clear()
-        obj.data.materials.append(pdx.create_shader(spec, 'HAZ_' + part, str(output)))
-        for face in obj.data.polygons:
-            face.material_index = 0
+    source_indices = [face.material_index for face in body.data.polygons]
+    (output / 'HAZ_field_body_diffuse.dds').write_bytes((output / 'HAZ_body.png').read_bytes())
+    for kind in ('normal', 'specular'):
+        (output / f'HAZ_field_body_{kind}.dds').write_bytes(NORMALS['HAZ'].read_bytes())
+    spec = SimpleNamespace(
+        shader=['PdxMeshAdvanced'], diff=['HAZ_field_body_diffuse.dds'],
+        n=['HAZ_field_body_normal.dds'], spec=['HAZ_field_body_specular.dds'],
+    )
+    body.data.materials.clear()
+    body.data.materials.append(pdx.create_shader(spec, 'HAZ_body', str(output)))
+    for face in body.data.polygons:
+        face.material_index = 0
     bpy.ops.object.select_all(action='DESELECT')
     body.select_set(True)
-    equipment.select_set(True)
     path = output / 'HAZ_field.mesh'
     pdx.export_meshfile(str(path), exp_selected=True, exp_locs=False)
     data, donor_data = path.read_bytes(), CONFIG['HAZ'].read_bytes()
@@ -1344,12 +1296,11 @@ def build_hazard_sentinel(output, pdx):
     assert data.count(marker) == donor_data.count(marker) == 1
     path.write_bytes(data[:data.index(marker)] + donor_data[donor_data.index(marker):])
     finalize_mesh(path)
-    for obj in (body, equipment):
-        obj.data.materials.clear()
-        for mat in source_materials[obj]:
-            obj.data.materials.append(mat)
-        for face, index in zip(obj.data.polygons, source_indices[obj], strict=True):
-            face.material_index = index
+    body.data.materials.clear()
+    for mat in source_materials:
+        body.data.materials.append(mat)
+    for face, index in zip(body.data.polygons, source_indices, strict=True):
+        face.material_index = index
     bpy.ops.file.pack_all()
     bpy.ops.wm.save_as_mainfile(filepath=str(output / 'HAZ.blend'))
 
@@ -1870,7 +1821,11 @@ def verify(output, tags, walk=False):
         path = (
             output / 'package/gfx/models/units/ADISCORD_regulars' / f'{tag}_field.mesh'
         )
-        inputs = [path, *sorted(path.parent.glob(f'{tag}_field_*.dds'))]
+        inputs = [path, *sorted(
+            path.parent / f'{tag}_field_{part}_{kind}.dds'
+            for part in model_parts(tag)
+            for kind in ('diffuse', 'normal', 'specular')
+        )]
         input_hashes = {
             source: hashlib.sha256(source.read_bytes()).hexdigest()
             for source in inputs
@@ -2124,6 +2079,10 @@ def verify(output, tags, walk=False):
     print(json.dumps(report, indent=2))
 
 
+def model_parts(tag):
+    return ('body',) if tag == 'HAZ' else ('body', 'gear')
+
+
 def package(output, apply=False, check=False, tags=None, assets_only=False):
     import io
     import struct
@@ -2174,7 +2133,7 @@ def package(output, apply=False, check=False, tags=None, assets_only=False):
         ).read_bytes()
     for tag in tags:
         files[dest / f'{tag}_field.mesh'] = (output / f'{tag}_field.mesh').read_bytes()
-        for part in ('body', 'gear'):
+        for part in model_parts(tag):
             files[dest / f'{tag}_field_{part}_diffuse.dds'] = dds(
                 Image.open(output / f'{tag}_{part}.png')
             )
@@ -2211,7 +2170,7 @@ def package(output, apply=False, check=False, tags=None, assets_only=False):
                 verified[tag]['sha256']
                 == hashlib.sha256(files[dest / f'{tag}_field.mesh']).hexdigest()
             ), (tag + ': re-run --verify')
-            assert len(verified[tag]['textures']) == 6
+            assert len(verified[tag]['textures']) == 3 * len(model_parts(tag))
             for name, digest in verified[tag]['textures'].items():
                 assert digest == hashlib.sha256(files[dest / name]).hexdigest(), (
                     name + ': re-run --verify'
