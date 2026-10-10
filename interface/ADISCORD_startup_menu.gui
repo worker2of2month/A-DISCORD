@@ -157,57 +157,204 @@ guiTypes = {
 			format = left
 			alwaystransparent = yes
 		}
-		# Long pages scroll as a container: an expanding textbox reports its
-		# rendered height, while a textbox slider can clip text without moving.
-		# The transparent background is the wheel hit area between lines.
-		# Hide the outer panel so the viewport's native scrollbar hides with it.
-		containerWindowType = {
-			name = "ADISCORD_startup_country_panel"
+		# Static page keys let the text scrollbar measure the complete localised text.
+		# Each page owns its visibility so hidden tabs cannot draw another copy.
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_STP_startup_country"
 			position = { x = 34 y = 138 }
-			size = { width = 695 height = 407 }
-			containerWindowType = {
-				name = "ADISCORD_startup_country_scroll"
-				position = { x = 0 y = 0 }
-				size = { width = 695 height = 407 }
-				clipping = yes
-				verticalScrollbar = "right_vertical_slider"
-				scroll_wheel_factor = 40
-				smooth_scrolling = yes
-				background = { name = "Background" quadTextureSprite = "GFX_tiled_window_transparent" }
-				instantTextboxType = {
-					name = "ADISCORD_startup_country_body"
-					position = { x = 0 y = 0 }
-					font = "hoi_18mbs"
-					text = "[ADISCORDGetStartupBody]"
-					maxWidth = 675
-					maxHeight = 2400
-					format = left
-				}
-			}
+			font = "hoi_18mbs"
+			text = "STP_startup_country"
+			maxWidth = 675
+			maxHeight = 407
+			format = left
+			scrollbarType = standardtext_slider
 		}
-		containerWindowType = {
-			name = "ADISCORD_startup_body_panel"
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_STP_startup_guide_history"
 			position = { x = 460 y = 152 }
-			size = { width = 520 height = 388 }
-			containerWindowType = {
-				name = "ADISCORD_startup_body_scroll"
-				position = { x = 0 y = 0 }
-				size = { width = 520 height = 388 }
-				clipping = yes
-				verticalScrollbar = "right_vertical_slider"
-				scroll_wheel_factor = 40
-				smooth_scrolling = yes
-				background = { name = "Background" quadTextureSprite = "GFX_tiled_window_transparent" }
-				instantTextboxType = {
-					name = "ADISCORD_startup_body"
-					position = { x = 0 y = 0 }
-					font = "hoi_18mbs"
-					text = "[ADISCORDGetStartupBody]"
-					maxWidth = 500
-					maxHeight = 2400
-					format = left
-				}
-			}
+			font = "hoi_18mbs"
+			text = "STP_startup_guide_history"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_STP_startup_guide_nodrul"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "STP_startup_guide_nodrul"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_STP_startup_guide_party"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "STP_startup_guide_party"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_STP_startup_guide"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "STP_startup_guide"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_STP_startup_path_0"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "STP_startup_path_0"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_STP_startup_path_0_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "STP_startup_path_0_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_STP_startup_path_1"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "STP_startup_path_1"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_STP_startup_path_1_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "STP_startup_path_1_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_VAL_startup_country"
+			position = { x = 34 y = 138 }
+			font = "hoi_18mbs"
+			text = "VAL_startup_country"
+			maxWidth = 675
+			maxHeight = 407
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_VAL_startup_guide_budget"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "VAL_startup_guide_budget"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_VAL_startup_guide_army"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "VAL_startup_guide_army"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_VAL_startup_guide_diplomacy"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "VAL_startup_guide_diplomacy"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_VAL_startup_guide"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "VAL_startup_guide"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_VAL_startup_path_0"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "VAL_startup_path_0"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_VAL_startup_path_0_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "VAL_startup_path_0_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_VAL_startup_path_1"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "VAL_startup_path_1"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_VAL_startup_path_1_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "VAL_startup_path_1_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
 		}
 		buttonType = {
 			name = "ADISCORD_startup_spoilers"

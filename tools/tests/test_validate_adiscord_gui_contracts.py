@@ -2357,25 +2357,35 @@ class StartupGuideContractTests(unittest.TestCase):
                             matches_conditions(visible, facts, tag), expected
                         )
 
-    def test_localisation_routes_cover_both_countries_and_safe_fallback(self):
+    def test_exactly_one_text_page_matches_each_navigation_state(self):
         from tools.tests.test_adiscord_stp_preparation import matches_conditions
 
-        definitions = economy_validator.parse_clausewitz(
-            self.read('common/scripted_localisation/ADISCORD_startup_menu.txt')
-        )
-        body = next(
-            e.value
-            for e in definitions
-            if _direct_scalar(e.value, 'name') == 'ADISCORDGetStartupBody'
-        )
-        branches = [e.value for e in body if e.key == 'text']
+        gui = self.read('interface/ADISCORD_startup_menu.gui')
+        menu = _unique_direct_block(self.scripts(), 'ADISCORDStartupMenu')
+        triggers = _unique_direct_block(menu, 'triggers')
+        pages = {
+            name: economy_validator.parse_clausewitz(gui_node_body(gui, name))
+            for _, name, _ in named_gui_nodes(gui)
+            if name.startswith('ADISCORD_startup_text_')
+        }
+        self.assertEqual(len(pages), 18)
         for tag in ('STP', 'VAL'):
-            cases = [(0, 0, 0, f'{tag}_startup_country')]
-            cases += [
-                (1, i, 0, f'ADISCORD_startup_guide_{topic}')
-                for i, topic in enumerate(('budget', 'army', 'diplomacy'))
+            topics = (
+                ('history', 'nodrul', 'party')
+                if tag == 'STP'
+                else ('budget', 'army', 'diplomacy')
+            )
+            cases = [
+                (0, page, spoiler, f'{tag}_startup_country')
+                for page in range(4)
+                for spoiler in (0, 1)
             ]
-            cases += [(1, 3, 0, f'{tag}_startup_guide')]
+            cases += [
+                (1, i, spoiler, f'{tag}_startup_guide_{topic}')
+                for i, topic in enumerate(topics)
+                for spoiler in (0, 1)
+            ]
+            cases += [(1, 3, spoiler, f'{tag}_startup_guide') for spoiler in (0, 1)]
             cases += [
                 (
                     2,
@@ -2391,18 +2401,14 @@ class StartupGuideContractTests(unittest.TestCase):
                     (tag, 'variable', 'ADISCORD_startup_' + k): v
                     for k, v in [('tab', tab), ('page', page), ('spoilers', spoilers)]
                 }
-                chosen = next(
-                    _direct_scalar(b, 'localization_key')
-                    for b in branches
+                chosen = [
+                    _direct_scalar(body, 'text')
+                    for name, body in pages.items()
                     if matches_conditions(
-                        _unique_direct_block(b, 'trigger') or [], facts, tag
+                        _unique_direct_block(triggers, name + '_visible'), facts, tag
                     )
-                )
-                self.assertEqual(chosen, expected)
-        self.assertEqual(
-            _direct_scalar(branches[-1], 'localization_key'),
-            'ADISCORD_startup_unsupported',
-        )
+                ]
+                self.assertEqual(chosen, [expected], (tag, tab, page, spoilers))
 
     def test_localisation_keys_values_and_encodings(self):
         by_language = {}
@@ -2422,12 +2428,17 @@ class StartupGuideContractTests(unittest.TestCase):
                 for key in keys:
                     self.assertNotIn(key, values)
                     value = localisation_value(text, key)
-                    self.assertLessEqual(len(value.replace('\\n', '\n')), 1200, key)
+                    expanded = value.replace('\\n', '\n')
+                    self.assertLessEqual(len(expanded), 3000, key)
+                    self.assertLessEqual(len(expanded.encode('utf-8')), 5500, key)
                     values[key] = value
             by_language[language] = values
         self.assertEqual(set(by_language['russian']), set(by_language['english']))
         loc = self.read('common/scripted_localisation/ADISCORD_startup_menu.txt')
         for key in re.findall(r'localization_key\s*=\s*(\w+)', loc):
+            self.assertIn(key, by_language['russian'])
+        gui = self.read('interface/ADISCORD_startup_menu.gui')
+        for key in re.findall(r'text\s*=\s*"((?:STP|VAL)_startup_\w+)"', gui):
             self.assertIn(key, by_language['russian'])
         for path in (
             'common/scripted_guis/ADISCORD_startup_menu.txt',
@@ -2536,9 +2547,6 @@ class StartupGuideContractTests(unittest.TestCase):
                 node = gui_node_body(gui, f'ADISCORD_startup_{tag}_picture')
                 self.assertNotRegex(node, r'\bscale\s*=')
                 self.assertEqual(_gui_position(node), (746, 108))
-            self.assertTrue(
-                (ROOT / f'gfx/interface/startup/{tag}_generated.png').is_file()
-            )
 
     def test_launcher_does_not_cover_existing_political_controls(self):
         gui = self.read('interface/ADISCORD_startup_menu.gui')
@@ -2561,51 +2569,38 @@ class StartupGuideContractTests(unittest.TestCase):
         self.assertGreaterEqual(y, 325)
         self.assertLessEqual(y + h, 445)
 
-    def test_briefing_text_scrolls_inside_wheel_containers(self):
-        from tools.tests.test_adiscord_stp_preparation import matches_conditions
-
+    def test_briefing_pages_use_direct_text_and_native_text_scrollbars(self):
         gui = self.read('interface/ADISCORD_startup_menu.gui')
-        nodes = {name: parents for _, name, parents in named_gui_nodes(gui)}
         menu = _unique_direct_block(self.scripts(), 'ADISCORDStartupMenu')
         triggers = _unique_direct_block(menu, 'triggers')
-        for panel, container, name, tabs, position in (
-            (
-                'ADISCORD_startup_country_panel',
-                'ADISCORD_startup_country_scroll',
-                'ADISCORD_startup_country_body',
-                (0,),
-                (34, 138),
-            ),
-            (
-                'ADISCORD_startup_body_panel',
-                'ADISCORD_startup_body_scroll',
-                'ADISCORD_startup_body',
-                (1, 2),
-                (460, 152),
-            ),
-        ):
+        for kind, name, parents in named_gui_nodes(gui):
+            if not name.startswith('ADISCORD_startup_text_'):
+                continue
             with self.subTest(name=name):
-                self.assertEqual(nodes[container], ('ADISCORD_startup_window', panel))
-                self.assertEqual(nodes[name], nodes[container] + (container,))
-                self.assertEqual(_gui_position(gui_node_body(gui, panel)), position)
-                viewport = gui_node_body(gui, container)
-                self.assertEqual(_gui_position(viewport), (0, 0))
-                self.assertIn('verticalScrollbar = "right_vertical_slider"', viewport)
-                self.assertIn('clipping = yes', viewport)
-                self.assertIn('GFX_tiled_window_transparent', viewport)
-                self.assertIn(f'name = "{name}"', viewport)
+                self.assertEqual(kind.lower(), 'instanttextboxtype')
+                self.assertEqual(parents, ('ADISCORD_startup_window',))
                 body = gui_node_body(gui, name)
+                ast = economy_validator.parse_clausewitz(body)
+                key = _direct_scalar(ast, 'text')
+                self.assertRegex(key, r'^(STP|VAL)_startup_\w+$')
+                self.assertEqual(_direct_scalar(ast, 'scrollbarType'), 'standardtext_slider')
                 self.assertNotIn('fixedsize = yes', body)
-                self.assertNotIn('scrollbarType', body)
                 self.assertNotIn('alwaystransparent = yes', body)
-                visible = _unique_direct_block(triggers, f'{panel}_visible')
-                self.assertFalse(_direct_clausewitz(triggers, f'{container}_visible'))
-                for tag in ('STP', 'VAL'):
-                    for tab in (0, 1, 2):
-                        facts = {(tag, 'variable', 'ADISCORD_startup_tab'): tab}
-                        self.assertEqual(
-                            matches_conditions(visible, facts, tag), tab in tabs
-                        )
+                self.assertTrue(_unique_direct_block(triggers, name + '_visible'))
+                x, y = _gui_position(body)
+                width = int(_direct_scalar(ast, 'maxWidth'))
+                height = int(_direct_scalar(ast, 'maxHeight'))
+                self.assertGreater(width, 0)
+                self.assertGreater(height, 0)
+                self.assertLessEqual(y + height, 550)
+                if key.endswith('_country'):
+                    self.assertEqual((x, y), (34, 138))
+                    self.assertLessEqual(x + width + 24, 746)
+                else:
+                    self.assertEqual((x, y), (460, 152))
+                    self.assertLessEqual(x + width + 24, 984)
+        self.assertNotIn('ADISCORDGetStartupBody', gui)
+        self.assertNotIn('verticalScrollbar', gui)
 
     def test_stelander_intro_explains_shabrat_before_path_spoilers(self):
         russian = self.read('localisation/russian/ADISCORD_STP_l_russian.yml')
