@@ -141,3 +141,28 @@ RUS_restoration_state = {
 	color = rgb { 122 40 58 }
 	color_ui = rgb { 122 40 58 }
 }
+
+NOD_STS_administration = {
+	color = rgb { 63 56 96 }
+	color_ui = rgb { 63 56 96 }
+}
+
+VAL_STS_administration = {
+	color = rgb { 127 15 2 }
+	color_ui = rgb { 127 15 2 }
+}
+
+YPR_STS_administration = {
+	color = rgb { 0 71 171 }
+	color_ui = rgb { 0 71 171 }
+}
+
+TFF_STS_administration = {
+	color = rgb { 205 87 0 }
+	color_ui = rgb { 205 87 0 }
+}
+
+NKA_STS_administration = {
+	color = rgb { 88 99 72 }
+	color_ui = rgb { 88 99 72 }
+}

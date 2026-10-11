@@ -5,6 +5,34 @@ guiTypes = {
 		position = { x = 34 y = 315 }
 		size = { width = 333 height = 333 }
 		clipping = yes
+
+		iconType = {
+			name = "ideology_icon_dorian_technocracy"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_dorian_technocracy_countryview"
+			pdx_tooltip = "dorian_technocracy_desc"
+		}
+
+		iconType = {
+			name = "ideology_icon_steland_liberationism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_steland_liberationism_countryview"
+			pdx_tooltip = "steland_liberationism_desc"
+		}
+
+		iconType = {
+			name = "ideology_icon_steland_military_directory"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_steland_military_directory_countryview"
+			pdx_tooltip = "steland_military_directory_desc"
+		}
+
+		iconType = {
+			name = "ideology_icon_tff_emergency_war_coordinator"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_tff_emergency_war_coordinator_countryview"
+			pdx_tooltip = "tff_emergency_war_coordinator_desc"
+		}
 		
 		iconType = {
 			name = "ideology_icon_hedonism"
@@ -22,7 +50,42 @@ guiTypes = {
 			name = "ideology_icon_aristocratic_hedonism"
 			position = { x = 0 y = 0 }
 			spriteType = "GFX_ideology_aristocratic_hedonism_countryview"
-			pdx_tooltip = "hedonism_ideology_desc"
+			pdx_tooltip = "aristocratic_hedonism_desc"
+		}
+
+		iconType = {
+			name = "ideology_icon_radical_hedonism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_radical_hedonism_countryview"
+			pdx_tooltip = "radical_hedonism_desc"
+		}
+
+		iconType = {
+			name = "ideology_icon_commercial_hedonism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_commercial_hedonism_countryview"
+			pdx_tooltip = "commercial_hedonism_desc"
+		}
+
+		iconType = {
+			name = "ideology_icon_patronal_hedonism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_patronal_hedonism_countryview"
+			pdx_tooltip = "patronal_hedonism_desc"
+		}
+
+		iconType = {
+			name = "ideology_icon_steland_military_etatism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_steland_military_etatism_countryview"
+			pdx_tooltip = "steland_military_etatism_desc"
+		}
+
+		iconType = {
+			name = "ideology_icon_steland_security_etatism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_steland_security_etatism_countryview"
+			pdx_tooltip = "steland_security_etatism_desc"
 		}
 		iconType = {
 			name = "ideology_icon_humanism"

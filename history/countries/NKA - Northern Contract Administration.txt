@@ -6,6 +6,7 @@ set_stability = 0.45
 set_war_support = 0.35
 set_research_slots = 2
 recruit_character = NKA_Contract_Council
+recruit_character = NKA_STS_administrator
 
 add_ideas = {
 	ADISCORD_society_type_traditional

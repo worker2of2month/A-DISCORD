@@ -192,6 +192,40 @@ class PostwarNationalisationTests(unittest.TestCase):
             'any_neighbor_state', {e.key for e in walk(block(d, 'target_trigger'))}
         )
 
+    def test_each_unlock_opens_category_decision_and_delivery(self):
+        category = block(entries(
+            'common/decisions/categories/ADISCORD_decision_categories_STP.txt'
+        ), 'STP_postwar_administration')
+        for citizenship, administrations in product((False, True), repeat=2):
+            with self.subTest(citizenship=citizenship, administrations=administrations):
+                facts = self.facts()
+                facts['STS', 'has_completed_focus', 'STP_pw_regional_citizenship'] = citizenship
+                facts['STS', 'has_completed_focus', 'STP_pc_heg_administrations'] = administrations
+                expected = citizenship or administrations
+                for source in (category, self.decision()):
+                    self.assertEqual(matches_conditions(
+                        self.expand(block(source, 'visible')), facts, 'STS'
+                    ), expected)
+                self.assertEqual(self.eligible(facts), expected)
+                if expected:
+                    self.apply('complete_effect', facts)
+                    self.assertEqual(self.apply('remove_effect', facts), {'power': 0, 'cores': 1})
+
+    def test_hegemony_only_project_refunds_lost_region_and_releases_slot(self):
+        facts = self.facts()
+        facts['STS', 'has_completed_focus', 'STP_pw_regional_citizenship'] = False
+        facts['STS', 'has_completed_focus', 'STP_pc_heg_administrations'] = True
+        self.assertTrue(self.eligible(facts))
+        self.apply('complete_effect', facts)
+        facts['2', 'is_controlled_by', 'STS'] = False
+        self.assertTrue(matches_conditions(
+            self.expand(block(self.decision(), 'cancel_trigger')), facts, 'STS'
+        ))
+        self.assertEqual(self.apply('cancel_effect', facts), {'power': 50, 'cores': 0})
+        self.assertEqual(self.apply('remove_effect', facts), {'power': 0, 'cores': 0})
+        facts['2', 'is_controlled_by', 'STS'] = True
+        self.assertTrue(self.eligible(facts))
+
     def test_only_the_winning_independent_stelander_can_integrate(self):
         for country, won, peace, independent, alive in product(
             ('STP', 'STS', 'SRP'),

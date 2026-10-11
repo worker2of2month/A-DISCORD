@@ -32,7 +32,16 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/general_vacant.png"
 	}
 
+	spriteType = {
+		name = "GFX_idea_ADISCORD_isolated_country"
+		texturefile = "gfx/interface/ideas/idea_ADISCORD_isolated_country.png"
+	}
+
 	###STP
+	spriteType = {
+		name = "GFX_idea_STP_apolitical_population"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_apolitical_population.dds"
+	}
 	#ideas
 	spriteType = {
 		name = "GFX_idea_STP_fading_father"
@@ -146,6 +155,11 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/NOD/idea_NOD_home_of_hedonist_revolution.png"
 	}
 	###Country unique ideas
+	spriteType = {
+		name = "GFX_idea_RUS_council_mandate"
+		texturefile = "gfx/interface/ideas/RUS/idea_RUS_council_mandate.png"
+	}
+
 	spriteType = {
 		name = "GFX_idea_RUS_national_spirit"
 		texturefile = "gfx/interface/ideas/idea_generic_agrarian_society.dds"

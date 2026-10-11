@@ -1063,7 +1063,7 @@ allowed_to_remove = {
 
 ## Размещение страновых данных
 
-Национальные духи и dummy ideas одной страны хранятся вместе: STP - в `common/ideas/ADISCORD_STP_civil_war_ideas.txt`, VAL - в `common/ideas/ADISCORD_VAL_rework_ideas.txt`, Воркерленд - в `common/ideas/ADISCORD_vorkerland_ideas.txt`. Стартовые духи находятся в разделе `starting_ideas`. Категории движка сохраняются: советник Стеландера относится к `political_advisor_head_of_state`, скрытые идеи VAL - к `hidden_ideas`; их нельзя переносить внутрь `country`.
+Национальные духи и dummy ideas одной страны хранятся вместе: STP - в `common/ideas/ADISCORD_STP_civil_war_ideas.txt`, VAL - в `common/ideas/ADISCORD_VAL_rework_ideas.txt`, RUS - в `common/ideas/ADISCORD_RUS_ideas.txt`, Воркерленд - в `common/ideas/ADISCORD_vorkerland_ideas.txt`. Стартовые духи находятся в разделе `starting_ideas`. Категории движка сохраняются: советник Стеландера относится к `political_advisor_head_of_state`, скрытые идеи VAL - к `hidden_ideas`; их нельзя переносить внутрь `country`.
 
 Ливоннское урегулирование занимает разделы `livonn_settlement_*` в основных файлах VAL: `ADISCORD_VAL_effects.txt`, `ADISCORD_VAL_decisions.txt`, `ADISCORD_VAL_rework_categories.txt` и `ADISCORD_VAL_decisions_l_russian.yml`. Его раздел `livonn` находится в `09_ADISCORD_scripted_peace_on_actions.txt` после военного урегулирования STP/SRP. Ограниченная недельная проверка завершения договора сохраняется.
 

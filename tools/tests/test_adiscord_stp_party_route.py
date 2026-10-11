@@ -3743,6 +3743,227 @@ if __name__ == "__main__":
     unittest.main()
 
 
+class PartyIdeologyContracts(unittest.TestCase):
+    """Follow authored appointment dispatch without simulating native leader roles."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
+        cls.triggers = {
+            e.key: e.value for e in parse_clausewitz(
+                read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+            )
+        }
+        cls.expected = {
+            1: ("hedonism", "aristocratic_hedonism"),
+            2: ("hedonism", "radical_hedonism"),
+            3: ("etatism", "steland_military_etatism"),
+            4: ("hedonism", "commercial_hedonism"),
+            5: ("etatism", "steland_security_etatism"),
+            6: ("hedonism", "patronal_hedonism"),
+        }
+
+    def appointment_trace(self, name, facts):
+        trace = []
+        for _, entry in selected_effects(self.effects[name], facts):
+            if entry.key == "set_politics":
+                trace.append(("government", one(entry.value, "ruling_party")))
+            elif re.fullmatch(r"STP_ch_leader_[1-6]", entry.key):
+                candidate = int(entry.key[-1])
+                leader = self.effects[entry.key]
+                parties = children(leader, "set_politics")
+                if parties:
+                    trace.append(("government", one(parties[-1], "ruling_party")))
+                roles = [
+                    one(e.value, "ideology") for e in walk(leader)
+                    if e.key == "country_leader"
+                ]
+                trace.append(("leader", candidate, set(roles)))
+            elif entry.key in (
+                "STP_ch_restore_independent_leader",
+                "STP_ch_install_protectorate_leader",
+                "STP_pv_install_victor",
+            ):
+                trace.extend(self.appointment_trace(entry.key, facts))
+        return trace
+
+    def test_appointments_keep_leader_and_ruling_group_together(self):
+        for candidate, (party, subtype) in self.expected.items():
+            facts = {
+                **elected_leader_facts(candidate),
+                ("STP", "variable", "STP_pv_outcome"): candidate,
+                ("STP", "variable", "STP_debug_party_choice"): candidate,
+                ("STP", "STP_debug_party_current", "yes"): True,
+                ("STP", "STP_ch_current", "yes"): True,
+                ("STP", "is_subject", "no"): True,
+                ("STP", "has_country_flag", "STP_ch_protectorate_leader"): True,
+                ("STP", f"STP_ch_candidate_{candidate}_wins", "yes"): True,
+            }
+            routes = ["STP_pv_install_victor"]
+            if candidate <= 5:
+                routes += [
+                    f"STP_ch_elect_{candidate}",
+                    "STP_ch_open_congress",
+                    "STP_debug_party_select_leader",
+                ]
+            else:
+                routes += ["STP_ch_enter_protectorate"]
+            for route in routes:
+                with self.subTest(candidate=candidate, route=route):
+                    trace = self.appointment_trace(route, facts)
+                    self.assertIn(("leader", candidate, {subtype}), trace)
+                    governments = [e[1] for e in trace if e[0] == "government"]
+                    self.assertTrue(governments, trace)
+                    self.assertEqual(governments[-1], party, trace)
+
+    def test_elected_government_takes_priority_over_wartime_victor(self):
+        for candidate, (party, subtype) in self.expected.items():
+            if candidate == 6:
+                continue
+            facts = {
+                **elected_leader_facts(candidate),
+                ("STP", "has_variable", "STP_pv_outcome"): True,
+                ("STP", "variable", "STP_pv_outcome"): 5 if candidate == 3 else 3,
+            }
+            trace = self.appointment_trace("STP_ch_restore_independent_leader", facts)
+            self.assertIn(("leader", candidate, {subtype}), trace)
+            self.assertEqual([e[1] for e in trace if e[0] == "government"][-1], party)
+
+    def test_liberation_before_first_congress_restores_wartime_victor(self):
+        for candidate, (party, subtype) in self.expected.items():
+            with self.subTest(candidate=candidate):
+                facts = {
+                    ("STP", "STP_ch_current", "yes"): True,
+                    ("STP", "is_subject", "no"): True,
+                    ("STP", "has_country_flag", "STP_ch_protectorate_leader"): True,
+                    ("STP", "has_variable", "STP_pv_outcome"): True,
+                    ("STP", "variable", "STP_pv_outcome"): candidate,
+                }
+                trace = self.appointment_trace("STP_ch_open_congress", facts)
+                self.assertIn(("leader", candidate, {subtype}), trace)
+                self.assertEqual([e[1] for e in trace if e[0] == "government"][-1], party)
+
+    def test_roles_promotions_and_portraits_use_the_same_group(self):
+        for candidate in range(1, 7):
+            leader = self.effects[f"STP_ch_leader_{candidate}"]
+            party, subtype = self.expected[candidate]
+            for entry in walk(leader):
+                if entry.key in ("country_leader", "promote_character"):
+                    self.assertEqual(one(entry.value, "ideology"), subtype)
+                elif entry.key in ("set_country_leader_portrait", "set_party_name"):
+                    self.assertEqual(one(entry.value, "ideology"), party)
+            self.assertIn("ADISCORD_economy_mark_dirty", [e.key for e in leader])
+
+    def test_new_subtypes_are_registered_and_localised(self):
+        ideologies = one(parse_clausewitz(read("common/ideologies/00_ideologies.txt")), "ideologies")
+        for candidate in range(1, 7):
+            party, subtype = self.expected[candidate]
+            types = one(one(ideologies, party), "types")
+            self.assertEqual(one(one(types, subtype), "can_be_randomly_selected"), "no")
+            for language in ("russian", "english"):
+                path = ROOT / f"localisation/{language}/parties_l_{language}.yml"
+                raw = path.read_bytes()
+                self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
+                for key in (subtype, subtype + "_desc"):
+                    self.assertEqual(len(re.findall(
+                        rf'^\s*{key}:(?:\d+)?\s*"[^"\r\n]+"\s*$',
+                        raw.decode("utf-8-sig"), re.M,
+                    )), 1, key)
+
+    def test_hedersett_initial_role_and_exile_cleanup_agree(self):
+        characters = one(parse_clausewitz(read("common/characters/STP.txt")), "characters")
+        hedersett = one(characters, "STP_rufus_hedersett")
+        self.assertEqual(
+            one(one(hedersett, "country_leader"), "ideology"), "radical_hedonism"
+        )
+        exile = self.effects["STP_ps_accept_exile"]
+        removed = [
+            one(e.value, "ideology") for e in walk(exile)
+            if e.key == "remove_country_leader_role"
+        ]
+        self.assertEqual(removed, ["radical_hedonism"])
+        returned = self.effects["STP_ps_settle_return"]
+        self.assertIn("STP_ch_leader_2", [e.key for e in walk(returned)])
+        fallback = [
+            one(e.value, "ideology") for e in walk(returned)
+            if e.key == "create_country_leader"
+        ]
+        self.assertEqual(fallback, ["aristocratic_hedonism"])
+
+    def test_political_window_selects_exactly_one_icon_for_each_subtype(self):
+        scripts = one(parse_clausewitz(read(
+            "common/scripted_guis/CountryView_ScriptedGui.txt"
+        )), "scripted_gui")
+        panel = one(scripts, "ideology_icon_countrypoliticsview_gui")
+        self.assertEqual(one(panel, "context_type"), "player_context")
+        triggers = one(panel, "triggers")
+        cases = [(party, subtype, subtype) for party, subtype in self.expected.values()]
+        cases += [
+            ("hedonism", "hedonism_ideology", "hedonism"),
+            ("etatism", "etatism_ideology", "etatism"),
+            ("etatism", "steland_military_directory", "steland_military_directory"),
+            ("etatism", "contractual_etatism", "contractual_etatism"),
+            ("etatism", "appanage_revanchism", "appanage_revanchism"),
+        ]
+        for party, subtype, icon in cases:
+            with self.subTest(subtype=subtype):
+                facts = {
+                    ("STP", "has_government", party): True,
+                    ("STP", "has_country_leader_ideology", subtype): True,
+                }
+                visible = [e.key for e in triggers if matches_conditions(e.value, facts)]
+                self.assertEqual(visible, [f"ideology_icon_{icon}_visible"])
+
+    def test_party_icon_name_and_tooltip_follow_the_same_subtype(self):
+        gui = parse_clausewitz(read("interface/countrypoliticsview.gui"))
+        gfx = one(parse_clausewitz(read("interface/ADISCORD_ideology.gfx")), "spriteTypes")
+        loc = parse_clausewitz(read("common/scripted_localisation/ADISCORD_ideologies.txt"))
+        for party, subtype in self.expected.values():
+            with self.subTest(subtype=subtype):
+                icons = [e.value for e in walk(gui) if e.key == "iconType"
+                         and one(e.value, "name") == f"ideology_icon_{subtype}"]
+                self.assertEqual(len(icons), 1)
+                self.assertEqual(one(icons[0], "pdx_tooltip"), subtype + "_desc")
+                self.assertEqual(one(icons[0], "spriteType"), f"GFX_ideology_{subtype}_countryview")
+                for suffix, size in (("", "70"), ("_countryview", "125")):
+                    sprites = [e.value for e in gfx
+                               if one(e.value, "name") == f"GFX_ideology_{subtype}{suffix}"]
+                    self.assertEqual(len(sprites), 1)
+                    self.assertTrue((ROOT / one(sprites[0], "texturefile")).is_file())
+                    self.assertEqual(one(one(sprites[0], "size"), "x"), size)
+                    self.assertEqual(one(one(sprites[0], "size"), "y"), size)
+                resolver = next(e.value for e in loc
+                                if one(e.value, "name") == "GetSubIdeology" + party.title())
+                facts = {("STP", "has_country_leader_ideology", subtype): True}
+                selected = next(e for e in children(resolver, "text")
+                                if not children(e, "trigger")
+                                or matches_conditions(one(e, "trigger"), facts))
+                self.assertEqual(one(selected, "localization_key"), subtype)
+
+    def test_party_laws_follow_both_etatist_routes_only(self):
+        gate = expand_leader_conditions(self.triggers["STP_pw_party_laws_available"], self.triggers)
+        for government in ("hedonism", "etatism", "humanism", "chauvinism"):
+            for candidate in range(1, 7):
+                for elected in (False, True):
+                    facts = {
+                        **elected_leader_facts(candidate),
+                        ("STP", "has_government", government): True,
+                        ("STP", "STP_pw_can_reconstruct", "yes"): True,
+                        ("STP", "has_completed_focus", "STP_pw_party_new_republic"): True,
+                        ("STP", "has_variable", "STP_ch_government"): elected,
+                        ("STP", "variable", "STP_pv_outcome"): candidate,
+                    }
+                    with self.subTest(government=government, candidate=candidate, elected=elected):
+                        expected = government == "hedonism" or (government == "etatism" and candidate in (3, 5))
+                        self.assertEqual(matches_conditions(gate, facts), expected)
+                        for missing in ("STP_pw_can_reconstruct", "has_completed_focus"):
+                            blocked = dict(facts)
+                            for key in blocked:
+                                if key[1] == missing:
+                                    blocked[key] = False
+                            self.assertFalse(matches_conditions(gate, blocked))
+
+
 class PartyPresentationAndDebugContracts(unittest.TestCase):
     def test_debug_party_victory_repairs_the_side_after_a_shabrat_split(self):
         effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}

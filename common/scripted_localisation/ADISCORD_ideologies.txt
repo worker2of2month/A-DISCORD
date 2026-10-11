@@ -99,11 +99,23 @@ defined_text = {
 
 defined_text = {
 	name = GetSubIdeologyTechnocracy
+	text = {
+		trigger = { has_country_leader_ideology = dorian_technocracy }
+		localization_key = dorian_technocracy
+	}
 	text = { localization_key = technocracy_ideology }
 }
 
 defined_text = {
 	name = GetSubIdeologyEtatism
+	text = {
+		trigger = { has_country_leader_ideology = steland_military_etatism }
+		localization_key = steland_military_etatism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = steland_security_etatism }
+		localization_key = steland_security_etatism
+	}
 	text = {
 		trigger = { has_country_leader_ideology = appanage_revanchism }
 		localization_key = appanage_revanchism
@@ -121,6 +133,18 @@ defined_text = {
 
 defined_text = {
 	name = GetSubIdeologyHedonism
+	text = {
+		trigger = { has_country_leader_ideology = radical_hedonism }
+		localization_key = radical_hedonism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = commercial_hedonism }
+		localization_key = commercial_hedonism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = patronal_hedonism }
+		localization_key = patronal_hedonism
+	}
 	text = {
 		trigger = { has_country_leader_ideology = aristocratic_hedonism }  ### сюда добавляй другие сабтипы гедонизма
 		localization_key = aristocratic_hedonism

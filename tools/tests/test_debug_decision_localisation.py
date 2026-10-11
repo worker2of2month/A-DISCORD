@@ -4,6 +4,8 @@ import re
 import unittest
 from pathlib import Path
 
+from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
 
 ROOT = Path(__file__).resolve().parents[2]
 DEBUG_BLOCK = re.compile(r"(?mi)^\s*([A-Za-z0-9_]*debug[A-Za-z0-9_]*)\s*=\s*\{")
@@ -11,6 +13,15 @@ LOCALISATION = re.compile(r'^\s*([A-Za-z0-9_.-]+):(?:\d+)?\s*"([^"]*)"', re.MULT
 
 
 class DebugDecisionLocalisationTests(unittest.TestCase):
+    def test_debug_decisions_use_dedicated_categories(self) -> None:
+        for path in (ROOT / "common" / "decisions").glob("*.txt"):
+            for category in parse_clausewitz(path.read_text(encoding="utf-8-sig")):
+                if not isinstance(category.value, list):
+                    continue
+                for decision in category.value:
+                    if isinstance(decision.value, list) and "debug" in decision.key.lower():
+                        self.assertIn("debug", category.key.lower(), f"{path.name}: {decision.key}")
+
     def test_every_debug_decision_and_category_has_red_prefix(self) -> None:
         keys: set[str] = set()
         for directory in (

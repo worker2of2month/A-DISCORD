@@ -2411,7 +2411,10 @@ ADISCORD_vorkerland_setup_tva = {
 	324 = { add_core_of = TVA set_state_controller_to = TVA }
 	TVA = {
 		set_politics = { ruling_party = technocracy elections_allowed = no }
-		promote_character = { character = TVA_Dorian_Worx ideology = technocracy_ideology }
+		promote_character = {
+			character = TVA_Dorian_Worx
+			ideology = dorian_technocracy
+		}
 		set_country_leader_portrait = {
 			ideology = technocracy
 			portrait = GFX_portrait_WRK_Dorian_Worx
@@ -7746,7 +7749,7 @@ ADISCORD_vorkerland_repair_claimant_identities = {
 			set_politics = { ruling_party = technocracy elections_allowed = no }
 			promote_character = {
 				character = TVA_Dorian_Worx
-				ideology = technocracy_ideology
+				ideology = dorian_technocracy
 			}
 			set_country_leader_portrait = {
 				ideology = technocracy
@@ -9017,7 +9020,7 @@ ADISCORD_vorkerland_form_wrk_from_tva = {
 	set_politics = { ruling_party = technocracy elections_allowed = no }
 	promote_character = {
 		character = TVA_Dorian_Worx
-		ideology = technocracy_ideology
+		ideology = dorian_technocracy
 	}
 	# Level three is the reward for Doctor Worx's verified central victory; the
 	# wartime capstone itself remains bounded at level two.

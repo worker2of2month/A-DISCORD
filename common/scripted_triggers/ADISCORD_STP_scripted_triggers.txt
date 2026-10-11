@@ -1022,6 +1022,7 @@ STP_kc_preparation_current = {
 			tag = STS
 			OR = {
 				has_completed_focus = STP_pc_heg_val_force
+				has_completed_focus = STP_pc_sdir_val_war
 				has_completed_focus = STP_pc_heg_final_north
 				AND = {
 					has_completed_focus = STP_pc_lib_crisis
@@ -1087,6 +1088,56 @@ STP_pc_founder_rules = {
 	has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
 }
 
+# The conversation chooses a focus; the later constitutional lock keeps its own timing.
+STP_pc_founder_choice_pending = {
+	tag = STS
+	STP_pc_founder_rules = yes
+	has_completed_focus = STP_pc_shabrat_politics
+	NOT = { has_variable = STP_pc_founder_choice }
+	NOT = { has_country_flag = STP_pc_course_locked }
+	NOT = {
+		OR = {
+			has_completed_focus = STP_pc_hegemony_open
+			has_completed_focus = STP_pc_freedom_open
+		}
+	}
+}
+
+# Cabinet selection follows the completed opening focus, before institutional work.
+STP_pc_charter_choice_pending = {
+	tag = STS
+	has_country_flag = STP_cw_postwar
+	STP_pc_founder_rules = yes
+	has_completed_focus = STP_pc_freedom_open
+	NOT = { has_variable = STP_pc_charter_cabinet }
+}
+
+STP_pc_charter_sotnikov_current = {
+	tag = STS
+	check_variable = { var = STP_pc_charter_cabinet value = 1 compare = equals }
+	has_country_leader = { character = STP_grigory_sotnikov ruling_only = yes }
+}
+
+STP_pc_charter_shabrat_current = {
+	tag = STS
+	check_variable = { var = STP_pc_charter_cabinet value = 2 compare = equals }
+	has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+}
+
+STP_pc_charter_tikhoreva_current = {
+	tag = STS
+	check_variable = { var = STP_pc_charter_cabinet value = 3 compare = equals }
+	has_country_leader = { character = STP_vera_tikh ruling_only = yes }
+}
+
+STP_pc_charter_government_current = {
+	OR = {
+		STP_pc_charter_sotnikov_current = yes
+		STP_pc_charter_shabrat_current = yes
+		STP_pc_charter_tikhoreva_current = yes
+	}
+}
+
 # COUNTRY: Gornin or Tikh speaking for the already locked course.
 STP_pc_named_successor_rules = {
 	OR = {
@@ -1098,6 +1149,7 @@ STP_pc_named_successor_rules = {
 # COUNTRY: institutions stay open after the seal moves to a named successor.
 STP_pc_course_continues = {
 	OR = {
+		STP_pc_charter_government_current = yes
 		STP_pc_founder_rules = yes
 		AND = {
 			STP_pc_named_successor_rules = yes
@@ -1125,6 +1177,7 @@ STP_pc_hegemony_continues = {
 
 STP_pc_freedom_continues = {
 	OR = {
+		STP_pc_charter_government_current = yes
 		AND = {
 			STP_pc_founder_rules = yes
 			OR = {
@@ -1288,6 +1341,7 @@ STP_imperial_union_required_states_controlled = {
 
 STP_imperial_union_requirements_met = {
 	tag = STS
+	NOT = { has_variable = STP_pc_charter_cabinet }
 	has_country_leader = {
 		character = STP_maksim_shabrat
 		ruling_only = yes
@@ -1311,6 +1365,10 @@ STP_pc_ai_preparing_val_war = {
 		AND = {
 			focus_progress = { focus = STP_pc_heg_val_force progress > 0 }
 			NOT = { has_completed_focus = STP_pc_heg_val_force }
+		}
+		AND = {
+			focus_progress = { focus = STP_pc_sdir_val_war progress > 0 }
+			NOT = { has_completed_focus = STP_pc_sdir_val_war }
 		}
 		AND = {
 			focus_progress = { focus = STP_pc_lib_war progress > 0 }
@@ -1340,6 +1398,10 @@ STP_pc_ai_preparing_nod_war = {
 			NOT = { has_completed_focus = STP_pc_heg_nod_force }
 		}
 		AND = {
+			focus_progress = { focus = STP_pc_sdir_nod_war progress > 0 }
+			NOT = { has_completed_focus = STP_pc_sdir_nod_war }
+		}
+		AND = {
 			focus_progress = { focus = STP_pc_lib_war progress > 0 }
 			NOT = { has_completed_focus = STP_pc_lib_war }
 			has_country_flag = STP_pc_nod_crisis
@@ -1351,12 +1413,95 @@ STP_pc_ai_preparing_nod_war = {
 	}
 }
 
+# COUNTRY STS: a limited northern border treaty does not settle the later
+# political liberation programme. Completed political settlements do.
+STP_pc_val_liberation_resolved = {
+	OR = {
+		has_country_flag = STP_pc_lib_val_won
+		has_country_flag = STP_pc_val_terms_accepted
+		NOT = { VAL = { exists = yes } }
+		VAL = {
+			OR = {
+				is_subject_of = STS
+				has_idea = VAL_liberated_settlement
+				has_country_flag = VAL_stelander_defeated
+			}
+		}
+	}
+}
+
+STP_pc_nod_liberation_resolved = {
+	OR = {
+		has_country_flag = STP_pc_lib_nod_won
+		has_country_flag = STP_pc_nod_terms_accepted
+		NOT = { NOD = { exists = yes } }
+		NOD = {
+			OR = {
+				is_subject_of = STS
+				has_idea = NOD_mandate_broken
+			}
+		}
+	}
+}
+
+STP_pc_val_liberation_target_current = {
+	tag = STS
+	STP_pc_freedom_continues = yes
+	check_variable = { var = STP_pc_course value = 2 compare = equals }
+	STP_pc_val_liberation_resolved = no
+	VAL = {
+		exists = yes
+		is_subject = no
+	}
+}
+
+STP_pc_nod_liberation_target_current = {
+	tag = STS
+	STP_pc_freedom_continues = yes
+	check_variable = { var = STP_pc_course value = 2 compare = equals }
+	STP_pc_nod_liberation_resolved = no
+	NOD = {
+		exists = yes
+		is_subject = no
+	}
+}
+
 # COUNTRY STS: a completed mandate permits each neighbour's operation separately.
 STP_pc_liberation_mandate_current = {
 	tag = STS
 	has_completed_focus = STP_pc_lib_war
 	STP_pc_freedom_continues = yes
 	check_variable = { var = STP_pc_course value = 2 compare = equals }
+}
+
+STP_pc_val_campaign_route_current = {
+	OR = {
+		has_completed_focus = STP_pc_heg_val_force
+		AND = {
+			has_completed_focus = STP_pc_sdir_val_war
+			STP_pc_sword_directory_current = yes
+		}
+		AND = {
+			STP_pc_liberation_mandate_current = yes
+			STP_pc_val_liberation_target_current = yes
+			has_country_flag = STP_pc_val_crisis
+		}
+	}
+}
+
+STP_pc_nod_campaign_route_current = {
+	OR = {
+		has_completed_focus = STP_pc_heg_nod_force
+		AND = {
+			has_completed_focus = STP_pc_sdir_nod_war
+			STP_pc_sword_directory_current = yes
+		}
+		AND = {
+			STP_pc_liberation_mandate_current = yes
+			STP_pc_nod_liberation_target_current = yes
+			has_country_flag = STP_pc_nod_crisis
+		}
+	}
 }
 
 STP_pc_can_launch_val_liberation = {
@@ -1371,7 +1516,11 @@ STP_pc_can_launch_val_liberation = {
 	custom_trigger_tooltip = {
 		tooltip = STP_pc_val_liberation_crisis_tt
 		has_country_flag = STP_pc_val_crisis
-		NOT = { has_country_flag = STP_pc_lib_val_won }
+		STP_pc_val_liberation_resolved = no
+	}
+	custom_trigger_tooltip = {
+		tooltip = STP_pc_liberation_prepared_tt
+		has_idea = STP_pc_val_campaign_ready
 	}
 	custom_trigger_tooltip = {
 		tooltip = STP_pc_val_liberation_no_treaty_tt
@@ -1404,7 +1553,11 @@ STP_pc_can_launch_nod_liberation = {
 	custom_trigger_tooltip = {
 		tooltip = STP_pc_nod_liberation_crisis_tt
 		has_country_flag = STP_pc_nod_crisis
-		NOT = { has_country_flag = STP_pc_lib_nod_won }
+		STP_pc_nod_liberation_resolved = no
+	}
+	custom_trigger_tooltip = {
+		tooltip = STP_pc_liberation_prepared_tt
+		has_idea = STP_pc_nod_campaign_ready
 	}
 	custom_trigger_tooltip = {
 		tooltip = STP_pc_nod_liberation_no_treaty_tt
@@ -1461,6 +1614,7 @@ STP_nod_border_war_active = {
 		exists = yes
 		is_subject = no
 		has_capitulated = no
+		NOT = { has_country_flag = STP_pc_nod_liberation_war }
 		NOT = { has_country_flag = STP_heg_northern_final_started }
 		NOT = { STP_pc_nod_subjugation_war = yes }
 	}
@@ -1491,19 +1645,67 @@ STP_nod_border_treaty_ready = {
 # treaty imposes dependency. Liberation keeps its separate political outcome.
 STP_pc_nod_subjugation_war = {
 	tag = STS
-	check_variable = { var = STP_pc_course value = 1 compare = equals }
 	OR = {
-		has_completed_focus = STP_pc_heg_nod_force
-		NOD = { has_country_flag = STP_pc_defeated_by_sts }
+		AND = {
+			check_variable = { var = STP_pc_course value = 1 compare = equals }
+			OR = {
+				has_completed_focus = STP_pc_heg_nod_force
+				NOD = { has_country_flag = STP_pc_defeated_by_sts }
+			}
+		}
+		AND = {
+			check_variable = { var = STP_pc_course value = 3 compare = equals }
+			has_completed_focus = STP_pc_sdir_nod_war
+		}
 	}
 }
 
 STP_pc_val_subjugation_war = {
 	tag = STS
-	check_variable = { var = STP_pc_course value = 1 compare = equals }
 	OR = {
-		has_completed_focus = STP_pc_heg_val_force
-		VAL = { has_country_flag = VAL_stelander_defeated }
+		AND = {
+			check_variable = { var = STP_pc_course value = 1 compare = equals }
+			OR = {
+				has_completed_focus = STP_pc_heg_val_force
+				VAL = { has_country_flag = VAL_stelander_defeated }
+			}
+		}
+		AND = {
+			check_variable = { var = STP_pc_course value = 3 compare = equals }
+			has_completed_focus = STP_pc_sdir_val_war
+		}
+	}
+}
+
+# COUNTRY STS: Sotnikov's own military route replaces the ordinary directory
+# branch only when the founder was arrested before the election.
+STP_pc_sword_directory_branch = {
+	tag = STS
+	has_country_flag = STP_cw_postwar
+	has_country_flag = STP_shabrat_was_arrested
+	NOT = { has_variable = STP_pc_charter_cabinet }
+	has_country_leader = { character = STP_grigory_sotnikov ruling_only = yes }
+}
+
+# COUNTRY STS: the sworn directory owns its VAL/NOD campaign decisions.
+STP_pc_sword_directory_current = {
+	STP_pc_sword_directory_branch = yes
+	has_completed_focus = STP_pc_sdir_oath
+	check_variable = { var = STP_pc_course value = 3 compare = equals }
+}
+
+# COUNTRY STS: a neighbour no longer blocks the directory once it is gone or administered.
+STP_pc_sdir_val_resolved = {
+	OR = {
+		NOT = { VAL = { exists = yes } }
+		VAL = { is_subject_of = STS }
+	}
+}
+
+STP_pc_sdir_nod_resolved = {
+	OR = {
+		NOT = { NOD = { exists = yes } }
+		NOD = { is_subject_of = STS }
 	}
 }
 
@@ -1544,7 +1746,17 @@ STP_imperial_union_client_settlement = {
 
 STP_pc_liberation_recipient_available = {
 	exists = yes
-	has_capitulated = no
+	OR = {
+		has_capitulated = no
+		AND = {
+			tag = NOD
+			STP_pc_nod_government_exists = yes
+		}
+		AND = {
+			tag = VAL
+			has_country_flag = VAL_stelander_defeated
+		}
+	}
 	is_subject = no
 	NOT = { has_war_with = STS }
 	STS = {
@@ -1558,6 +1770,30 @@ STP_pc_liberation_recipient_available = {
 STP_pc_liberation_reply_is_current = {
 	STP_pc_liberation_reply_matches_receipt = yes
 	STP_pc_liberation_recipient_available = yes
+}
+
+STP_pc_liberation_package_available = {
+	OR = {
+		AND = {
+			OR = {
+				has_country_flag = STP_pc_lib_val_won
+				VAL = { has_country_flag = VAL_stelander_defeated }
+			}
+			VAL = {
+				STP_pc_liberation_recipient_available = yes
+				NOT = { has_idea = VAL_liberated_settlement }
+				NOT = { has_country_flag = STP_pc_val_refused_package }
+			}
+		}
+		AND = {
+			has_country_flag = STP_pc_lib_nod_won
+			NOD = {
+				STP_pc_liberation_recipient_available = yes
+				NOT = { has_idea = NOD_mandate_broken }
+				NOT = { has_country_flag = STP_pc_nod_refused_package }
+			}
+		}
+	}
 }
 
 STP_pc_can_offer_kefreyt_terms = {
@@ -1904,6 +2140,8 @@ STP_shabrat_ai_bezhaysk_resolved = {
 
 STP_shabrat_ai_nodrul_resolved = {
 	OR = {
+		has_country_flag = STP_pc_lib_nod_won
+		NOD = { has_idea = NOD_mandate_broken }
 		NOT = { NOD = { exists = yes } }
 		NOD = { has_capitulated = yes }
 		NOD = { is_subject = yes }
@@ -2085,7 +2323,10 @@ STP_pw_regional_integration_target_valid = {
 	STP_pw_can_reconstruct = yes
 	is_subject = no
 	has_war = no
-	has_completed_focus = STP_pw_regional_citizenship
+	OR = {
+		has_completed_focus = STP_pw_regional_citizenship
+		has_completed_focus = STP_pc_heg_administrations
+	}
 	FROM = {
 		is_owned_by = ROOT
 		is_controlled_by = ROOT
@@ -2142,6 +2383,114 @@ STP_heg_northern_final_resolved = {
 	NOT = { has_war_with = YPR }
 	NOT = { has_war_with = TFF }
 	NOT = { has_war_with = VAL }
+}
+
+STP_heg_can_start_kefreyt_final_war = {
+	RUS_crisis_regional_wars_available = yes
+	custom_trigger_tooltip = {
+		tooltip = STP_pw_reconstruction_available_tt
+		STP_pc_focus_available = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = STP_heg_northern_resolved_tt
+		STP_heg_northern_final_resolved = yes
+	}
+	hidden_trigger = {
+		tag = STS
+		STP_pc_hegemony_continues = yes
+		check_variable = { var = STP_pc_course value = 1 compare = equals }
+		NOT = { has_country_flag = STP_heg_kefreyt_final_started }
+	}
+	is_subject = no
+	has_capitulated = no
+	custom_trigger_tooltip = {
+		tooltip = STP_heg_kefreyt_exists_tt
+		VAL = { exists = yes }
+	}
+	VAL = {
+		is_subject = no
+		has_capitulated = no
+		NOT = { is_in_faction_with = STS }
+	}
+}
+
+# STS: expansion belongs to a surviving Frontier subject.
+STP_heg_frontier_expansion_available = {
+	hidden_trigger = {
+		tag = STS
+		STP_pc_hegemony_continues = yes
+		check_variable = { var = STP_pc_course value = 1 compare = equals }
+	}
+	RUS_crisis_regional_wars_available = yes
+	custom_trigger_tooltip = {
+		tooltip = STP_pw_reconstruction_available_tt
+		STP_pc_focus_available = yes
+	}
+	has_completed_focus = STP_pc_heg_administrations
+	is_subject = no
+	has_capitulated = no
+	TFF = {
+		exists = yes
+		is_subject_of = STS
+		has_capitulated = no
+	}
+}
+
+STP_heg_can_start_frontier_ain = {
+	STP_heg_frontier_expansion_available = yes
+	NOT = { has_war_with = AIN }
+	TFF = { NOT = { has_war_with = AIN } }
+	AIN = {
+		exists = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { is_in_faction_with = STS }
+		NOT = { is_in_faction_with = TFF }
+	}
+}
+
+STP_heg_can_start_frontier_cof = {
+	STP_heg_frontier_expansion_available = yes
+	NOT = { has_war_with = COF }
+	TFF = { NOT = { has_war_with = COF } }
+	COF = {
+		exists = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { is_in_faction_with = STS }
+		NOT = { is_in_faction_with = TFF }
+	}
+}
+
+# Native ROOT is the defeated target, FROM is its actual military victor.
+STP_heg_frontier_capitulation_managed = {
+	ROOT = {
+		OR = {
+			tag = AIN
+			tag = COF
+		}
+		has_country_flag = STP_heg_frontier_campaign_active
+		is_subject = no
+		has_war_with = STS
+	}
+	FROM = {
+		OR = {
+			tag = STS
+			is_subject_of = STS
+		}
+		has_war_with = ROOT
+	}
+	STS = {
+		exists = yes
+		is_subject = no
+		has_capitulated = no
+	}
+	TFF = {
+		exists = yes
+		has_war_with = ROOT
+		is_subject_of = STS
+		has_capitulated = no
+	}
 }
 
 STP_heg_nod_administration_available = {
@@ -2289,7 +2638,16 @@ STP_pw_party_revolution_current = {
 STP_pw_party_laws_available = {
 	tag = STP
 	STP_pw_can_reconstruct = yes
-	has_government = hedonism
+	OR = {
+		has_government = hedonism
+		AND = {
+			has_government = etatism
+			OR = {
+				STP_party_leader_3 = yes
+				STP_party_leader_5 = yes
+			}
+		}
+	}
 	has_completed_focus = STP_pw_party_new_republic
 }
 
@@ -3081,4 +3439,189 @@ STP_cw_northern_entry_complete = {
 	has_war_with = YPR
 	has_war_with = COF
 	OR = { has_war_with = TFF STP_cw_tff_entry_deferred = yes }
+}
+
+# State scope. The northern mandate cannot seize a third party's occupied land.
+STP_heg_northern_state_transferable = {
+	OR = {
+		is_owned_by = STS
+		owner = {
+			is_subject_of = STS
+			has_war = no
+			OR = {
+				tag = VAL
+				tag = NKA
+				tag = CIN
+				tag = OSF
+				tag = APH
+			}
+		}
+	}
+	OR = {
+		is_controlled_by = STS
+		controller = { is_subject_of = STS }
+	}
+}
+
+STP_heg_can_form_northern_administration = {
+	tag = STS
+	STP_pc_hegemony_continues = yes
+	has_completed_focus = STP_pc_heg_administrations
+	is_subject = no
+	has_war = no
+	has_capitulated = no
+	NKA = {
+		OR = {
+			exists = no
+			AND = {
+				is_subject_of = STS
+				has_war = no
+				has_capitulated = no
+			}
+		}
+	}
+	24 = { STP_heg_northern_state_transferable = yes }
+	55 = { STP_heg_northern_state_transferable = yes }
+	# A territorial division must leave the Kefreyt government a home province.
+	OR = {
+		VAL = { exists = no }
+		VAL = {
+			any_owned_state = {
+				NOT = { state = 24 }
+				NOT = { state = 55 }
+				NOT = { state = 58 }
+				NOT = { state = 59 }
+				NOT = { state = 60 }
+				NOT = { state = 61 }
+				NOT = { state = 62 }
+				NOT = { state = 63 }
+				NOT = { state = 64 }
+				NOT = { state = 65 }
+			}
+		}
+	}
+}
+
+# Country scope. Already incorporated subjects and absent tribes need no war.
+STP_heg_cannibal_target_resolved = {
+	OR = {
+		exists = no
+		is_subject_of = STS
+	}
+}
+
+STP_heg_cannibal_target_available = {
+	exists = yes
+	is_subject = no
+	has_war = no
+	has_capitulated = no
+	NOT = { is_in_faction_with = STS }
+	NOT = { is_in_faction_with = NKA }
+}
+
+STP_heg_cannibals_resolved = {
+	CIN = { STP_heg_cannibal_target_resolved = yes }
+	OSF = { STP_heg_cannibal_target_resolved = yes }
+	APH = { STP_heg_cannibal_target_resolved = yes }
+}
+
+STP_heg_can_start_cannibal_campaign = {
+	tag = STS
+	STP_pc_hegemony_continues = yes
+	RUS_crisis_regional_wars_available = yes
+	has_completed_focus = STP_pc_heg_northern_administration
+	is_subject = no
+	has_capitulated = no
+	has_war = no
+	NKA = {
+		exists = yes
+		is_subject_of = STS
+		has_capitulated = no
+		has_war = no
+	}
+	STP_heg_cannibals_resolved = no
+	CIN = {
+		OR = {
+			STP_heg_cannibal_target_resolved = yes
+			STP_heg_cannibal_target_available = yes
+		}
+	}
+	OSF = {
+		OR = {
+			STP_heg_cannibal_target_resolved = yes
+			STP_heg_cannibal_target_available = yes
+		}
+	}
+	APH = {
+		OR = {
+			STP_heg_cannibal_target_resolved = yes
+			STP_heg_cannibal_target_available = yes
+		}
+	}
+}
+
+STP_heg_cannibal_capitulation_managed = {
+	ROOT = {
+		OR = {
+			tag = CIN
+			tag = OSF
+			tag = APH
+		}
+		has_country_flag = STP_heg_cannibal_campaign_active
+		is_subject = no
+		has_war_with = STS
+	}
+	FROM = {
+		OR = {
+			tag = STS
+			is_subject_of = STS
+		}
+		has_war_with = ROOT
+	}
+	STS = {
+		exists = yes
+		is_subject = no
+		has_capitulated = no
+	}
+	NKA = {
+		exists = yes
+		is_subject_of = STS
+		has_capitulated = no
+	}
+}
+
+# Every enrolled member must fall; a native liberation clears its defeat receipt.
+STP_heg_cannibal_campaign_won = {
+	NOT = { has_country_flag = STP_heg_cannibal_settlement_in_progress }
+	tag = STS
+	is_subject = no
+	has_capitulated = no
+	NKA = {
+		exists = yes
+		is_subject_of = STS
+		has_capitulated = no
+	}
+	OR = {
+		CIN = { has_country_flag = STP_heg_cannibal_campaign_active }
+		OSF = { has_country_flag = STP_heg_cannibal_campaign_active }
+		APH = { has_country_flag = STP_heg_cannibal_campaign_active }
+	}
+	CIN = {
+		OR = {
+			NOT = { has_country_flag = STP_heg_cannibal_campaign_active }
+			has_country_flag = STP_heg_cannibal_defeated
+		}
+	}
+	OSF = {
+		OR = {
+			NOT = { has_country_flag = STP_heg_cannibal_campaign_active }
+			has_country_flag = STP_heg_cannibal_defeated
+		}
+	}
+	APH = {
+		OR = {
+			NOT = { has_country_flag = STP_heg_cannibal_campaign_active }
+			has_country_flag = STP_heg_cannibal_defeated
+		}
+	}
 }

@@ -14,6 +14,9 @@ on_actions = {
 
 	on_puppet = {
 		effect = {
+			STP_heg_clear_foreign_administration_flag = yes
+			STP_heg_reconcile_frontier_expansion = yes
+			STP_heg_reconcile_cannibal_campaign = yes
 			STS = { STP_pw_queue_hegemony_epilogue = yes }
 			if = {
 				limit = { tag = STP }
@@ -35,6 +38,9 @@ on_actions = {
 
 	on_release_as_puppet = {
 		effect = {
+			STP_heg_clear_foreign_administration_flag = yes
+			STP_heg_reconcile_frontier_expansion = yes
+			STP_heg_reconcile_cannibal_campaign = yes
 			STS = { STP_pw_queue_hegemony_epilogue = yes }
 			if = {
 				limit = { tag = STP }
@@ -49,6 +55,9 @@ on_actions = {
 
 	on_subject_free = {
 		effect = {
+			STP_heg_clear_foreign_administration_flag = yes
+			STP_heg_reconcile_frontier_expansion = yes
+			STP_heg_reconcile_cannibal_campaign = yes
 			if = {
 				limit = { tag = STP }
 				STP_pw_party_sync_revolution_identity = yes

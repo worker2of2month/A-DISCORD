@@ -1,159 +1,5 @@
 STP_elections_in_the_party = {
 	# ============================================================
-	# Development controls
-	# ============================================================
-
-	STP_debug_increase_suspicion = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = STP }
-		visible = { is_debug = yes is_ai = no NOT = { has_country_flag = STP_sided_with_the_party_flag } }
-		available = { always = yes }
-		cost = 0
-		days_remove = 1
-		days_re_enable = 0
-		complete_effect = {
-			set_temp_variable = {
-				var = STP_party_suspicion_change
-				value = 10
-			}
-			STP_change_party_suspicion = yes
-		}
-		ai_will_do = { base = 0 }
-	}
-
-	STP_debug_decrease_suspicion = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = STP }
-		visible = { is_debug = yes is_ai = no NOT = { has_country_flag = STP_sided_with_the_party_flag } }
-		available = { always = yes }
-		cost = 0
-		days_remove = 1
-		days_re_enable = 0
-		complete_effect = {
-			set_temp_variable = {
-				var = STP_party_suspicion_change
-				value = -10
-			}
-			STP_change_party_suspicion = yes
-		}
-		ai_will_do = { base = 0 }
-	}
-
-	STP_debug_increase_loyalty = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = STP }
-		visible = { is_debug = yes is_ai = no has_country_flag = STP_sided_with_the_party_flag }
-		available = { always = yes }
-		cost = 0
-		days_remove = 1
-		days_re_enable = 0
-		complete_effect = {
-			set_temp_variable = {
-				var = STP_apparatus_loyalty_change
-				value = 10
-			}
-			STP_change_apparatus_loyalty = yes
-		}
-		ai_will_do = { base = 0 }
-	}
-
-	STP_debug_decrease_loyalty = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = STP }
-		visible = { is_debug = yes is_ai = no has_country_flag = STP_sided_with_the_party_flag }
-		available = { always = yes }
-		cost = 0
-		days_remove = 1
-		days_re_enable = 0
-		complete_effect = {
-			set_temp_variable = {
-				var = STP_apparatus_loyalty_change
-				value = -10
-			}
-			STP_change_apparatus_loyalty = yes
-		}
-		ai_will_do = { base = 0 }
-	}
-
-	STP_debug_worsen_ivanov = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = STP }
-		visible = { is_debug = yes is_ai = no }
-		available = { always = yes }
-		cost = 0
-		days_remove = 1
-		days_re_enable = 0
-		complete_effect = {
-			set_temp_variable = {
-				var = STP_requested_health_stage
-				value = STP_leader_health_stage
-			}
-			add_to_temp_variable = {
-				var = STP_requested_health_stage
-				value = 1
-			}
-			STP_set_leader_health_stage = yes
-		}
-		ai_will_do = { base = 0 }
-	}
-
-	STP_debug_improve_ivanov = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = STP }
-		visible = { is_debug = yes is_ai = no }
-		available = { always = yes }
-		cost = 0
-		days_remove = 1
-		days_re_enable = 0
-		complete_effect = {
-			set_temp_variable = {
-				var = STP_requested_health_stage
-				value = STP_leader_health_stage
-			}
-			add_to_temp_variable = {
-				var = STP_requested_health_stage
-				value = -1
-			}
-			STP_set_leader_health_stage = yes
-		}
-		ai_will_do = { base = 0 }
-	}
-
-	STP_debug_set_bop = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = STP }
-		visible = { is_debug = yes is_ai = no NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } NOT = { has_power_balance = { id = STP_shabrat_election_legitimacy } } }
-		available = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } NOT = { has_power_balance = { id = STP_shabrat_election_legitimacy } } }
-		cost = 0
-		days_remove = 1
-		days_re_enable = 0
-
-		complete_effect = {
-			if = {
-				limit = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } NOT = { has_power_balance = { id = STP_shabrat_election_legitimacy } } }
-				set_power_balance = {
-					id = STP_shabrat_election_legitimacy
-					set_value = 0
-				}
-			}
-		}
-		ai_will_do = { base = 0 }
-	}
-
-	STP_debug_start_battle_for_stelander = {
-		icon = GFX_decision_ADISCORD_covert_operation
-		allowed = { tag = STP }
-		visible = { is_debug = yes is_ai = no NOT = { has_country_flag = STP_battle_for_stelander_active } }
-		available = { always = yes }
-		cost = 0
-		fire_only_once = no
-		complete_effect = {
-			country_event = { id = ADISCORD_STP_regions.1 }
-		}
-		ai_will_do = { base = 0 }
-	}
-
-	# ============================================================
 	# Ivanov health progression
 	# ============================================================
 
@@ -635,51 +481,6 @@ STP_shabrat_election_bop_category = {
 		ai_will_do = { base = 6 }
 	}
 
-	# ============================================================
-	# Development controls
-	# ============================================================
-
-	STP_debug_increase_party_bop = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = STP }
-		visible = { is_debug = yes is_ai = no NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
-		available = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
-		cost = 0
-		days_remove = 1
-		days_re_enable = 0
-
-		complete_effect = {
-			if = {
-				limit = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
-				add_power_balance_value = {
-					id = STP_shabrat_election_legitimacy
-					value = -0.25
-				}
-			}
-		}
-		ai_will_do = { base = 0 }
-	}
-
-	STP_debug_increase_shabrat_bop = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = STP }
-		visible = { is_debug = yes is_ai = no NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
-		available = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
-		cost = 0
-		days_remove = 1
-		days_re_enable = 0
-
-		complete_effect = {
-			if = {
-				limit = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
-				add_power_balance_value = {
-					id = STP_shabrat_election_legitimacy
-					value = 0.25
-				}
-			}
-		}
-		ai_will_do = { base = 0 }
-	}
 }
 
 STP_battle_for_stelander = {
@@ -2325,31 +2126,6 @@ STP_battle_for_stelander = {
 		}
 	}
 
-	STP_debug_reset_battle_for_stelander = {
-		icon = GFX_decision_ADISCORD_state_directive
-		allowed = { tag = STP }
-		visible = { is_debug = yes is_ai = no has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active }
-		available = { always = yes }
-		cost = 0
-		fire_only_once = no
-		complete_effect = {
-			STP_end_battle_for_stelander = yes
-			STP_initialize_battle_for_stelander = yes
-		}
-		ai_will_do = { base = 0 }
-	}
-
-	STP_debug_end_battle_for_stelander = {
-		icon = GFX_decision_ADISCORD_state_directive
-		allowed = { tag = STP }
-		visible = { is_debug = yes is_ai = no has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active }
-		available = { always = yes }
-		cost = 0
-		fire_only_once = no
-		complete_effect = { STP_end_battle_for_stelander = yes }
-		ai_will_do = { base = 0 }
-	}
-
 	STP_cw_agree_with_commander = {
 		icon = GFX_decision_ADISCORD_state_directive
 		allowed = { tag = STP }
@@ -3972,20 +3748,21 @@ STP_cw_war_council = {
 	STP_pw_prepare_val_campaign = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }
-		visible = { has_completed_focus = STP_pc_heg_val_force NOT = { has_country_flag = STP_pc_val_terms_accepted } VAL = { exists = yes } }
-		available = { STP_pc_can_confront_val = yes NOT = { has_war_with = VAL has_idea = STP_pc_val_campaign_ready has_variable = STP_pc_val_campaign_deposit } }
+		visible = { STP_pc_val_campaign_route_current = yes NOT = { has_country_flag = STP_pc_val_terms_accepted } VAL = { exists = yes } }
+		available = { STP_pc_val_campaign_route_current = yes STP_pc_can_confront_val = yes NOT = { has_war_with = VAL has_idea = STP_pc_val_campaign_ready has_variable = STP_pc_val_campaign_deposit } }
 		cost = 0
 		custom_cost_text = STP_pw_price_900
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
 		days_remove = 35
 		days_re_enable = 90
 		fire_only_once = no
-		cancel_trigger = { OR = { STP_pc_can_confront_val = no has_war_with = VAL } }
+		cancel_trigger = { OR = { STP_pc_val_campaign_route_current = no STP_pc_can_confront_val = no has_war_with = VAL } }
 		complete_effect = {
 			custom_effect_tooltip = STP_pc_campaign_paid_tt
 			hidden_effect = {
 				if = {
 					limit = {
+						STP_pc_val_campaign_route_current = yes
 						STP_pc_can_confront_val = yes
 						NOT = { has_war_with = VAL has_idea = STP_pc_val_campaign_ready has_variable = STP_pc_val_campaign_deposit }
 						check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
@@ -4013,6 +3790,7 @@ STP_cw_war_council = {
 							compare = equals
 						}
 					}
+					STP_pc_val_campaign_route_current = yes
 					STP_pc_can_confront_val = yes
 					NOT = {
 						has_war_with = VAL
@@ -4040,7 +3818,13 @@ STP_cw_war_council = {
 	STP_pw_begin_val_campaign = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }
-		visible = { has_completed_focus = STP_pc_heg_val_force has_idea = STP_pc_val_campaign_ready }
+		visible = {
+			OR = {
+				has_completed_focus = STP_pc_heg_val_force
+				has_completed_focus = STP_pc_sdir_val_war
+			}
+			has_idea = STP_pc_val_campaign_ready
+		}
 		available = { STP_pc_can_confront_val = yes NOT = { has_war_with = VAL } }
 		cost = 0
 		fire_only_once = yes
@@ -4067,20 +3851,21 @@ STP_cw_war_council = {
 	STP_pw_prepare_nod_campaign = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }
-		visible = { has_completed_focus = STP_pc_heg_nod_force NOT = { has_country_flag = STP_pc_nod_terms_accepted } NOD = { exists = yes } }
-		available = { STP_pc_can_confront_nod = yes NOT = { has_war_with = NOD has_idea = STP_pc_nod_campaign_ready has_variable = STP_pc_nod_campaign_deposit } }
+		visible = { STP_pc_nod_campaign_route_current = yes NOT = { has_country_flag = STP_pc_nod_terms_accepted } NOD = { exists = yes } }
+		available = { STP_pc_nod_campaign_route_current = yes STP_pc_can_confront_nod = yes NOT = { has_war_with = NOD has_idea = STP_pc_nod_campaign_ready has_variable = STP_pc_nod_campaign_deposit } }
 		cost = 0
 		custom_cost_text = STP_pw_price_900
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
 		days_remove = 35
 		days_re_enable = 90
 		fire_only_once = no
-		cancel_trigger = { OR = { STP_pc_can_confront_nod = no has_war_with = NOD } }
+		cancel_trigger = { OR = { STP_pc_nod_campaign_route_current = no STP_pc_can_confront_nod = no has_war_with = NOD } }
 		complete_effect = {
 			custom_effect_tooltip = STP_pc_campaign_paid_tt
 			hidden_effect = {
 				if = {
 					limit = {
+						STP_pc_nod_campaign_route_current = yes
 						STP_pc_can_confront_nod = yes
 						NOT = { has_war_with = NOD has_idea = STP_pc_nod_campaign_ready has_variable = STP_pc_nod_campaign_deposit }
 						check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
@@ -4108,6 +3893,7 @@ STP_cw_war_council = {
 							compare = equals
 						}
 					}
+					STP_pc_nod_campaign_route_current = yes
 					STP_pc_can_confront_nod = yes
 					NOT = {
 						has_war_with = NOD
@@ -4134,7 +3920,13 @@ STP_cw_war_council = {
 	STP_pw_begin_nod_campaign = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }
-		visible = { has_completed_focus = STP_pc_heg_nod_force has_idea = STP_pc_nod_campaign_ready }
+		visible = {
+			OR = {
+				has_completed_focus = STP_pc_heg_nod_force
+				has_completed_focus = STP_pc_sdir_nod_war
+			}
+			has_idea = STP_pc_nod_campaign_ready
+		}
 		available = { STP_pc_can_confront_nod = yes NOT = { has_war_with = NOD } }
 		cost = 0
 		fire_only_once = yes
@@ -5159,7 +4951,7 @@ STP_cw_war_council = {
 			has_completed_focus = STP_pc_lib_war
 			STP_pc_freedom_continues = yes
 			has_country_flag = STP_pc_val_crisis
-			NOT = { has_country_flag = STP_pc_lib_val_won }
+			STP_pc_val_liberation_resolved = no
 			NOT = { has_war_with = VAL }
 			VAL = { exists = yes }
 		}
@@ -5172,6 +4964,11 @@ STP_cw_war_council = {
 				if = {
 					limit = { STP_pc_can_launch_val_liberation = yes }
 					STP_pc_declare_war_val = yes
+					if = {
+						limit = { has_war_with = VAL }
+						remove_ideas = STP_pc_val_campaign_ready
+						add_timed_idea = { idea = STP_cw_deliberate_offensive days = 35 }
+					}
 				}
 			}
 		}
@@ -5191,7 +4988,7 @@ STP_cw_war_council = {
 			has_completed_focus = STP_pc_lib_war
 			STP_pc_freedom_continues = yes
 			has_country_flag = STP_pc_nod_crisis
-			NOT = { has_country_flag = STP_pc_lib_nod_won }
+			STP_pc_nod_liberation_resolved = no
 			NOT = { has_war_with = NOD }
 			NOD = { exists = yes }
 		}
@@ -5204,6 +5001,11 @@ STP_cw_war_council = {
 				if = {
 					limit = { STP_pc_can_launch_nod_liberation = yes }
 					STP_pc_declare_war_nod = yes
+					if = {
+						limit = { has_war_with = NOD }
+						remove_ideas = STP_pc_nod_campaign_ready
+						add_timed_idea = { idea = STP_cw_deliberate_offensive days = 35 }
+					}
 				}
 			}
 		}
@@ -8039,6 +7841,7 @@ STP_imperial_union_category = {
 		icon = generic_political_pressure
 		allowed = { tag = STS }
 		visible = {
+			NOT = { has_variable = STP_pc_charter_cabinet }
 			tag = STS
 			has_country_leader = {
 				character = STP_maksim_shabrat
@@ -8061,6 +7864,223 @@ STP_imperial_union_category = {
 }
 
 STP_scenario_debug = {
+	STP_debug_increase_suspicion = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } is_debug = yes is_ai = no NOT = { has_country_flag = STP_sided_with_the_party_flag } }
+		available = { always = yes }
+		cost = 0
+		days_remove = 1
+		days_re_enable = 0
+		complete_effect = {
+			set_temp_variable = {
+				var = STP_party_suspicion_change
+				value = 10
+			}
+			STP_change_party_suspicion = yes
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	STP_debug_decrease_suspicion = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } is_debug = yes is_ai = no NOT = { has_country_flag = STP_sided_with_the_party_flag } }
+		available = { always = yes }
+		cost = 0
+		days_remove = 1
+		days_re_enable = 0
+		complete_effect = {
+			set_temp_variable = {
+				var = STP_party_suspicion_change
+				value = -10
+			}
+			STP_change_party_suspicion = yes
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	STP_debug_increase_loyalty = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } is_debug = yes is_ai = no has_country_flag = STP_sided_with_the_party_flag }
+		available = { always = yes }
+		cost = 0
+		days_remove = 1
+		days_re_enable = 0
+		complete_effect = {
+			set_temp_variable = {
+				var = STP_apparatus_loyalty_change
+				value = 10
+			}
+			STP_change_apparatus_loyalty = yes
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	STP_debug_decrease_loyalty = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } is_debug = yes is_ai = no has_country_flag = STP_sided_with_the_party_flag }
+		available = { always = yes }
+		cost = 0
+		days_remove = 1
+		days_re_enable = 0
+		complete_effect = {
+			set_temp_variable = {
+				var = STP_apparatus_loyalty_change
+				value = -10
+			}
+			STP_change_apparatus_loyalty = yes
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	STP_debug_worsen_ivanov = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		days_remove = 1
+		days_re_enable = 0
+		complete_effect = {
+			set_temp_variable = {
+				var = STP_requested_health_stage
+				value = STP_leader_health_stage
+			}
+			add_to_temp_variable = {
+				var = STP_requested_health_stage
+				value = 1
+			}
+			STP_set_leader_health_stage = yes
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	STP_debug_improve_ivanov = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		days_remove = 1
+		days_re_enable = 0
+		complete_effect = {
+			set_temp_variable = {
+				var = STP_requested_health_stage
+				value = STP_leader_health_stage
+			}
+			add_to_temp_variable = {
+				var = STP_requested_health_stage
+				value = -1
+			}
+			STP_set_leader_health_stage = yes
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	STP_debug_set_bop = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { is_debug = yes is_ai = no NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } NOT = { has_power_balance = { id = STP_shabrat_election_legitimacy } } }
+		available = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } NOT = { has_power_balance = { id = STP_shabrat_election_legitimacy } } }
+		cost = 0
+		days_remove = 1
+		days_re_enable = 0
+
+		complete_effect = {
+			if = {
+				limit = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } NOT = { has_power_balance = { id = STP_shabrat_election_legitimacy } } }
+				set_power_balance = {
+					id = STP_shabrat_election_legitimacy
+					set_value = 0
+				}
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	STP_debug_start_battle_for_stelander = {
+		icon = GFX_decision_ADISCORD_covert_operation
+		allowed = { tag = STP }
+		visible = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } is_debug = yes is_ai = no NOT = { has_country_flag = STP_battle_for_stelander_active } }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			country_event = { id = ADISCORD_STP_regions.1 }
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	STP_debug_increase_party_bop = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { is_debug = yes is_ai = no NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
+		available = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
+		cost = 0
+		days_remove = 1
+		days_re_enable = 0
+
+		complete_effect = {
+			if = {
+				limit = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
+				add_power_balance_value = {
+					id = STP_shabrat_election_legitimacy
+					value = -0.25
+				}
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	STP_debug_increase_shabrat_bop = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { is_debug = yes is_ai = no NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
+		available = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
+		cost = 0
+		days_remove = 1
+		days_re_enable = 0
+
+		complete_effect = {
+			if = {
+				limit = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
+				add_power_balance_value = {
+					id = STP_shabrat_election_legitimacy
+					value = 0.25
+				}
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	STP_debug_reset_battle_for_stelander = {
+		icon = GFX_decision_ADISCORD_state_directive
+		allowed = { tag = STP }
+		visible = { is_debug = yes is_ai = no has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			STP_end_battle_for_stelander = yes
+			STP_initialize_battle_for_stelander = yes
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	STP_debug_end_battle_for_stelander = {
+		icon = GFX_decision_ADISCORD_state_directive
+		allowed = { tag = STP }
+		visible = { is_debug = yes is_ai = no has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = { STP_end_battle_for_stelander = yes }
+		ai_will_do = { base = 0 }
+	}
+
 	STP_debug_party_leader_1 = {
 		icon = generic_political_pressure
 		allowed = { tag = STP }
@@ -8509,6 +8529,34 @@ STP_scenario_debug = {
 		complete_effect = {
 			custom_effect_tooltip = STP_debug_resolve_shabrat_victory_desc
 			hidden_effect = { STP_debug_resolve_shabrat_victory = yes }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	STP_debug_resolve_sotnikov_victory = {
+		icon = generic_prepare_civil_war
+		allowed = {
+			OR = {
+				tag = STP
+				tag = STS
+			}
+		}
+		visible = {
+			is_debug = yes
+			is_ai = no
+			NOT = { has_global_flag = STP_cw_union_wars_finished }
+		}
+		available = {
+			OR = {
+				STP = { has_character = STP_grigory_sotnikov }
+				STS = { has_character = STP_grigory_sotnikov }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_debug_resolve_sotnikov_victory_desc
+			hidden_effect = { STP_debug_resolve_sotnikov_victory = yes }
 		}
 		ai_will_do = { factor = 0 }
 	}
@@ -9592,6 +9640,97 @@ STP_postwar_administration = {
 			}
 		}
 		ai_will_do = { base = 8 }
+	}
+
+	STP_pc_charter_sotnikov_reintegration = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_sotnikov_current = yes
+			has_completed_focus = STP_pc_charter_sotnikov_civil_return
+		}
+		available = {
+			STP_pc_charter_sotnikov_current = yes
+			STP_pc_focus_available = yes
+		}
+		cost = 60
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = {
+					STP_pc_charter_sotnikov_current = yes
+					STP_pc_focus_available = yes
+					has_completed_focus = STP_pc_charter_sotnikov_civil_return
+				}
+				add_manpower = 2000
+				add_stability = 0.02
+			}
+			else = { add_political_power = 60 }
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	STP_pc_charter_shabrat_civic_grants = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_shabrat_current = yes
+			has_completed_focus = STP_pc_charter_shabrat_district_grants
+		}
+		available = {
+			STP_pc_charter_shabrat_current = yes
+			STP_pc_focus_available = yes
+		}
+		cost = 75
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = {
+					STP_pc_charter_shabrat_current = yes
+					STP_pc_focus_available = yes
+					has_completed_focus = STP_pc_charter_shabrat_district_grants
+				}
+				custom_effect_tooltip = STP_pc_charter_civic_grants_reward_tt
+				hidden_effect = {
+					add_to_variable = { var = ADISCORD_economy_treasury value = 600 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 600 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			else = { add_political_power = 75 }
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	STP_pc_charter_tikhoreva_procurement = {
+		icon = generic_industry
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_tikhoreva_current = yes
+			has_completed_focus = STP_pc_charter_tikhoreva_open_tenders
+		}
+		available = {
+			STP_pc_charter_tikhoreva_current = yes
+			STP_pc_focus_available = yes
+		}
+		cost = 75
+		fire_only_once = no
+		days_re_enable = 120
+		complete_effect = {
+			if = {
+				limit = {
+					STP_pc_charter_tikhoreva_current = yes
+					STP_pc_focus_available = yes
+					has_completed_focus = STP_pc_charter_tikhoreva_open_tenders
+				}
+				add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = ROOT }
+				add_equipment_to_stockpile = { type = train_equipment amount = 2 producer = ROOT }
+			}
+			else = { add_political_power = 75 }
+		}
+		ai_will_do = { base = 2 }
 	}
 }
 

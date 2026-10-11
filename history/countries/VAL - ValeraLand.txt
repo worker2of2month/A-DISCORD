@@ -14,6 +14,7 @@ recruit_character = VAL_Maksim_Korvin
 recruit_character = VAL_Leonid_Vargan
 recruit_character = VAL_Sergei_Volkov
 recruit_character = VAL_Artem_Rask
+recruit_character = VAL_STS_administrator
 
 ####### Basic shit
 

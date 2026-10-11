@@ -9,6 +9,7 @@ import unittest
 from unittest.mock import patch
 
 from tools.builders.build_adiscord_focus_trees import expected_outputs
+from tools.lib.paths import source_section
 from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
@@ -393,7 +394,11 @@ class RusCampaignTests(unittest.TestCase):
         cls.labs = {e.key: e.value for e in block(parse(f"common/decisions/{BASE}_decisions.txt"), "RUS_experimental_labs_category")}
         tree = block(parse("focus_trees/RUS/main/focuses.txt"), "focus_tree")
         cls.focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
-        cls.ideas = {e.key: e.value for e in block(block(parse(f"common/ideas/{BASE}_ideas.txt"), "ideas"), "country")}
+        cls.ideas = {}
+        for section in ("rus_crisis_ideas", "rus_campaign_ideas"):
+            source = source_section(read("common/ideas/ADISCORD_RUS_ideas.txt"), section)
+            country_ideas = block(block(parse_clausewitz(source), "ideas"), "country")
+            cls.ideas.update({row.key: row.value for row in country_ideas})
         cls.law_groups = []
         for source in ("_economic", "ADISCORD_laws"):
             for group in block(parse(f"common/ideas/{source}.txt"), "ideas"):
@@ -1405,14 +1410,21 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_procurement_cannot_arbitrage_money(self):
         world = self.world()
+        world.variables["ADISCORD_economy_treasury"] = 1000
+        world.pp = 100
         cash = world.value("ADISCORD_economy_treasury")
         rifles = world.equipment["infantry_equipment"]
-        pp = world.pp
         world.execute(block(self.decisions["RUS_rifle_order"], "complete_effect"))
+        bought = world.equipment["infantry_equipment"] - rifles
+        price = cash - world.value("ADISCORD_economy_treasury")
+        self.assertEqual((bought, price, world.pp), (25000, 600, 50))
+        stock = world.equipment["infantry_equipment"]
+        cash = world.value("ADISCORD_economy_treasury")
         world.execute(block(self.decisions["RUS_market_surplus"], "complete_effect"))
-        self.assertEqual(world.equipment["infantry_equipment"], rifles)
-        self.assertEqual(world.value("ADISCORD_economy_treasury"), cash - 30)
-        self.assertEqual(world.pp, pp - 45)
+        sold = stock - world.equipment["infantry_equipment"]
+        income = world.value("ADISCORD_economy_treasury") - cash
+        self.assertEqual((sold, income, world.pp), (10000, 220, 35))
+        self.assertLess(income * bought, price * sold)
 
     def test_only_deficient_currencies_render_red(self):
         functions = {scalar(e.value, "name"): e.value for e in parse("common/scripted_localisation/ADISCORD_RUS_scripted_loc.txt")}
@@ -2180,7 +2192,7 @@ class RusCampaignTests(unittest.TestCase):
         for variable in mapping.values():
             self.assertAlmostEqual(world.value(variable), expected.get(variable, 0), msg=variable)
         self.assertIn("RUS_black_army", world.modifiers)
-        static = block(block(parse("common/ideas/ADISCORD_country_unique_ideas.txt"), "ideas"), "country")
+        static = block(block(parse("common/ideas/ADISCORD_RUS_ideas.txt"), "ideas"), "country")
         for name in ("RUS_national_spirit", "RUS_last_empire_spirit"):
             values = {entry.key for entry in block(block(static, name), "modifier")}
             self.assertFalse(values & mapping.keys(), name)
@@ -2199,7 +2211,7 @@ class RusCampaignTests(unittest.TestCase):
         for name in previews:
             self.assertEqual(scalar(block(self.ideas[name], "allowed"), "always"), "no")
             self.assertNotIn(name, world.ideas)
-        definitions = {f"common/ideas/{BASE}_ideas.txt", "common/bookmarks/the_gathering_storm.txt"}
+        definitions = {"common/ideas/ADISCORD_RUS_ideas.txt", "common/bookmarks/the_gathering_storm.txt"}
         for folder in ("common", "history", "events", "focus_trees"):
             for path in (ROOT / folder).rglob("*.txt"):
                 if path.relative_to(ROOT).as_posix() not in definitions:

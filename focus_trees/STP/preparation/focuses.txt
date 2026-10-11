@@ -1221,7 +1221,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_PARTY_DISCIPLINE
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_party_personnel_commissions
 		relative_position_id = STP_Govern_In_His_Name
 		x = 4
 		y = 2
@@ -1251,7 +1251,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_defense_budget
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_pw_party_defence_combine
 		relative_position_id = STP_Govern_In_His_Name
 		x = -6
 		y = 2
@@ -1282,7 +1282,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ROTATE_DISTRICT_COMMAND
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_ROTATE_DISTRICT_COMMAND
 		relative_position_id = STP_Govern_In_His_Name
 		x = 6
 		y = 3
@@ -1319,7 +1319,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_DISTRICT_GOVERNMENT
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
 		relative_position_id = STP_Govern_In_His_Name
 		x = -3
 		y = 2
@@ -1338,7 +1338,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_capital_reserve
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_pw_party_veteran_reserve
 		relative_position_id = STP_Govern_In_His_Name
 		x = 0
 		y = 2
@@ -1381,7 +1381,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_EMERGENCY_PRESIDIUM
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		relative_position_id = STP_Govern_In_His_Name
 		x = 4
 		y = 4
@@ -1462,7 +1462,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_security_collegium
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_cw_security_collegium
 		relative_position_id = STP_Govern_In_His_Name
 		x = 4
 		y = 1
@@ -1513,7 +1513,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_protocol_office
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_cw_protocol_office
 		relative_position_id = STP_Govern_In_His_Name
 		x = 9
 		y = 2
@@ -1536,7 +1536,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_public_lists
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_party_personnel_commissions
 		relative_position_id = STP_Govern_In_His_Name
 		x = 8
 		y = 3
@@ -1565,7 +1565,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_quiet_registers
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_cw_quiet_registers
 		relative_position_id = STP_Govern_In_His_Name
 		x = 10
 		y = 3
@@ -1591,7 +1591,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_press_office
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_cw_press_office
 		relative_position_id = STP_Govern_In_His_Name
 		x = -3
 		y = 4
@@ -1649,7 +1649,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_party_mandate
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS
 		relative_position_id = STP_Govern_In_His_Name
 		x = 4
 		y = 6
@@ -1723,7 +1723,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_budget_reserve
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_ps_northern_credit
 		relative_position_id = STP_Govern_In_His_Name
 		x = -8
 		y = 3
@@ -1750,7 +1750,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_guard_workshops
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_pw_party_defence_combine
 		relative_position_id = STP_Govern_In_His_Name
 		x = -6
 		y = 3
@@ -1772,7 +1772,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_supply_directorate
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_party_war_transport
 		relative_position_id = STP_Govern_In_His_Name
 		x = 0
 		y = 5
@@ -1795,7 +1795,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_civil_register
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
 		relative_position_id = STP_Govern_In_His_Name
 		x = -3
 		y = 3
@@ -1837,7 +1837,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_succession_protocol
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_cw_protocol_office
 		relative_position_id = STP_Govern_In_His_Name
 		x = 4
 		y = 7
@@ -2361,7 +2361,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_asylum_protocol
-		icon = GFX_focus_STP_pw_party_veteran_reserve
+		icon = GFX_focus_STP_ps_asylum_protocol
 		x = 20
 		y = 4
 		relative_position_id = STP_Govern_In_His_Name
@@ -2393,7 +2393,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_foreign_supply_desk
-		icon = GFX_focus_STP_cw_capital_reserve
+		icon = GFX_focus_STP_party_port_contracts
 		x = 22
 		y = 1
 		relative_position_id = STP_Govern_In_His_Name

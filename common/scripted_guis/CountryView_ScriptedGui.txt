@@ -18,12 +18,37 @@ scripted_gui = {
 		triggers = {
 			ideology_icon_humanism_visible = {
 				has_government = humanism
+				NOT = { has_country_leader_ideology = steland_liberationism }
+			}
+			ideology_icon_steland_liberationism_visible = {
+				has_country_leader_ideology = steland_liberationism
+			}
+			ideology_icon_steland_military_directory_visible = {
+				has_country_leader_ideology = steland_military_directory
+			}
+			ideology_icon_tff_emergency_war_coordinator_visible = {
+				has_country_leader_ideology = tff_emergency_war_coordinator
 			}
 			ideology_icon_aristocratic_hedonism_visible = {
 				has_country_leader_ideology = aristocratic_hedonism
 			}
 			ideology_icon_hedonism_visible = {
 				has_country_leader_ideology = hedonism_ideology
+			}
+			ideology_icon_radical_hedonism_visible = {
+				has_country_leader_ideology = radical_hedonism
+			}
+			ideology_icon_commercial_hedonism_visible = {
+				has_country_leader_ideology = commercial_hedonism
+			}
+			ideology_icon_patronal_hedonism_visible = {
+				has_country_leader_ideology = patronal_hedonism
+			}
+			ideology_icon_steland_military_etatism_visible = {
+				has_country_leader_ideology = steland_military_etatism
+			}
+			ideology_icon_steland_security_etatism_visible = {
+				has_country_leader_ideology = steland_security_etatism
 			}
 			ideology_icon_utilitarism_visible = {
 				AND = {
@@ -36,6 +61,10 @@ scripted_gui = {
 			}
 			ideology_icon_technocracy_visible = {
 				has_government = technocracy
+				NOT = { has_country_leader_ideology = dorian_technocracy }
+			}
+			ideology_icon_dorian_technocracy_visible = {
+				has_country_leader_ideology = dorian_technocracy
 			}
 			ideology_icon_national_legitimism_visible = {
 				has_country_leader_ideology = national_legitimism
@@ -55,6 +84,9 @@ scripted_gui = {
 					has_government = etatism
 					NOT = { has_country_leader_ideology = contractual_etatism }
 					NOT = { has_country_leader_ideology = appanage_revanchism }
+					NOT = { has_country_leader_ideology = steland_military_etatism }
+					NOT = { has_country_leader_ideology = steland_security_etatism }
+					NOT = { has_country_leader_ideology = steland_military_directory }
 				}
 			}
 			ideology_icon_vorkerism_visible = {
@@ -76,6 +108,7 @@ scripted_gui = {
 			}
 			ideology_icon_anarchism_visible = {
 				has_government = anarchism
+				NOT = { has_country_leader_ideology = tff_emergency_war_coordinator }
 			}
 		}
 	}

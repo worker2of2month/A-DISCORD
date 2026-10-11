@@ -4990,29 +4990,130 @@ STP_pc_lock_hegemony = {
 	}
 }
 
+# Appointment records the cabinet without paying any of its focus rewards.
+STP_pc_charter_confirm_government = {
+	set_variable = { var = STP_pc_course value = 2 }
+	set_country_flag = STP_pc_course_locked
+	STP_pw_refresh_modifier = yes
+	mark_focus_tree_layout_dirty = yes
+}
+
+STP_pc_charter_install_sotnikov = {
+	if = {
+		limit = {
+			STP_pc_charter_choice_pending = yes
+			STP_cw_sotnikov_available = yes
+		}
+		STP_grigory_sotnikov = {
+			if = {
+				limit = { NOT = { has_ideology = steland_liberationism } }
+				add_country_leader_role = {
+					country_leader = {
+						ideology = steland_liberationism
+						expire = "2300.1.1"
+					}
+				}
+			}
+		}
+		set_politics = {
+			ruling_party = humanism
+			elections_allowed = no
+		}
+		promote_character = {
+			character = STP_grigory_sotnikov
+			ideology = steland_liberationism
+		}
+		set_variable = { var = STP_pc_charter_cabinet value = 1 }
+		STP_pc_charter_confirm_government = yes
+	}
+}
+
+STP_pc_charter_install_shabrat = {
+	if = {
+		limit = {
+			STP_pc_charter_choice_pending = yes
+		}
+		STP_maksim_shabrat = {
+			if = {
+				limit = { NOT = { has_ideology = national_legitimism } }
+				add_country_leader_role = {
+					country_leader = {
+						ideology = national_legitimism
+						expire = "2300.1.1"
+					}
+				}
+			}
+		}
+		set_politics = {
+			ruling_party = chauvinism
+			elections_allowed = no
+		}
+		promote_character = {
+			character = STP_maksim_shabrat
+			ideology = national_legitimism
+		}
+		set_variable = { var = STP_pc_charter_cabinet value = 2 }
+		STP_pc_charter_confirm_government = yes
+	}
+}
+
+STP_pc_charter_install_tikhoreva = {
+	if = {
+		limit = {
+			STP_pc_charter_choice_pending = yes
+			has_character = STP_vera_tikh
+			STP_vera_tikh = { NOT = { has_character_flag = STP_cw_arrested } }
+		}
+		STP_vera_tikh = {
+			if = {
+				limit = { NOT = { has_ideology = utilitarism_ideology } }
+				add_country_leader_role = {
+					country_leader = {
+						ideology = utilitarism_ideology
+						expire = "2300.1.1"
+					}
+				}
+			}
+		}
+		set_politics = {
+			ruling_party = utilitarism
+			elections_allowed = no
+		}
+		promote_character = {
+			character = STP_vera_tikh
+			ideology = utilitarism_ideology
+		}
+		set_variable = { var = STP_pc_charter_cabinet value = 3 }
+		STP_pc_charter_confirm_government = yes
+	}
+}
+
 # STS: lock course 2. Hegemony is closed. Vanilla elections stay off.
 STP_pc_lock_freedom = {
 	set_variable = { var = STP_pc_course value = 2 }
 	set_country_flag = STP_pc_course_locked
-	STP_maksim_shabrat = {
-		add_country_leader_role = {
-			promote_leader = yes
-			country_leader = { ideology = steland_liberationism expire = "2200.1.1.1" }
+	if = {
+		limit = { NOT = { has_variable = STP_pc_charter_cabinet } }
+		STP_maksim_shabrat = {
+			add_country_leader_role = {
+				promote_leader = yes
+				country_leader = { ideology = steland_liberationism expire = "2200.1.1.1" }
+			}
 		}
-	}
-	set_politics = { ruling_party = humanism elections_allowed = no }
-	set_portraits = {
-		character = STP_maksim_shabrat
-		civilian = {
-			large = GFX_portrait_STP_Maksim_Shabrat_freedom
-			small = GFX_portrait_STP_Maksim_Shabrat_freedom_small
+		set_politics = { ruling_party = humanism elections_allowed = no }
+		set_portraits = {
+			character = STP_maksim_shabrat
+			civilian = {
+				large = GFX_portrait_STP_Maksim_Shabrat_freedom
+				small = GFX_portrait_STP_Maksim_Shabrat_freedom_small
+			}
 		}
+		set_country_leader_portrait = {
+			ideology = humanism
+			portrait = GFX_portrait_STP_Maksim_Shabrat_freedom
+		}
+		add_popularity = { ideology = humanism popularity = 0.15 }
 	}
-	set_country_leader_portrait = {
-		ideology = humanism
-		portrait = GFX_portrait_STP_Maksim_Shabrat_freedom
-	}
-	add_popularity = { ideology = humanism popularity = 0.15 }
 }
 
 # STS: lock course 3 for Sotnikov or Barchel.
@@ -5042,23 +5143,76 @@ STP_pc_lock_directory = {
 	set_politics = { ruling_party = etatism elections_allowed = no }
 }
 
+# STS: contacts open the current unresolved neighbour's existing crisis.
+STP_pc_open_liberation_contacts = {
+	if = {
+		limit = {
+			STP_pc_focus_available = yes
+			STP_pc_val_liberation_target_current = yes
+			NOT = { has_country_flag = STP_pc_val_crisis }
+		}
+		country_event = { id = ADISCORD_STP_pc.9 hours = 1 }
+	}
+	if = {
+		limit = {
+			STP_pc_focus_available = yes
+			STP_pc_nod_liberation_target_current = yes
+			NOT = { has_country_flag = STP_pc_nod_crisis }
+		}
+		set_country_flag = STP_pc_nod_crisis
+		country_event = { id = ADISCORD_STP_pc.15 hours = 1 }
+	}
+}
+
 # STS: scripted war. Diplomatic UI stays closed; the native war relation is
 # the single source of truth for the later capitulation settlement.
 STP_pc_declare_war_val = {
 	if = {
-		limit = { tag = STS STP_pc_can_confront_val = yes NOT = { has_war_with = VAL } }
+		limit = {
+			tag = STS
+			STP_pc_can_confront_val = yes
+			NOT = { has_war_with = VAL }
+			OR = {
+				NOT = { check_variable = { var = STP_pc_course value = 2 compare = equals } }
+				STP_pc_val_liberation_resolved = no
+			}
+		}
 		declare_war_on = { target = VAL type = annex_everything }
 	}
 }
 
 STP_pc_declare_war_nod = {
 	if = {
-		limit = { tag = STS STP_pc_can_confront_nod = yes NOT = { has_war_with = NOD } }
+		limit = {
+			tag = STS
+			STP_pc_can_confront_nod = yes
+			NOT = { has_war_with = NOD }
+			OR = {
+				NOT = { check_variable = { var = STP_pc_course value = 2 compare = equals } }
+				STP_pc_nod_liberation_resolved = no
+			}
+		}
+		if = {
+			limit = { STP_pc_liberation_mandate_current = yes }
+			set_country_flag = STP_pc_nod_liberation_war
+		}
 		declare_war_on = { target = NOD type = annex_everything }
 		if = {
 			limit = { has_war_with = NOD }
 			country_event = { id = ADISCORD_STP_pc.49 hours = 1 }
 		}
+		else = { clr_country_flag = STP_pc_nod_liberation_war }
+	}
+}
+
+STP_pc_close_liberation_war_receipt = {
+	if = {
+		limit = {
+			tag = STS
+			has_country_flag = STP_pc_nod_liberation_war
+			NOT = { has_war_with = NOD }
+		}
+		clr_country_flag = STP_pc_nod_liberation_war
 	}
 }
 
@@ -5144,7 +5298,10 @@ STP_pc_offer_liberation_package = {
 	}
 	else_if = {
 		limit = {
-			has_country_flag = STP_pc_lib_val_won
+			OR = {
+				has_country_flag = STP_pc_lib_val_won
+				VAL = { has_country_flag = VAL_stelander_defeated }
+			}
 			VAL = {
 				STP_pc_liberation_recipient_available = yes
 				NOT = { has_idea = VAL_liberated_settlement }
@@ -5521,6 +5678,12 @@ STP_nod_settle_border_treaty = {
 STP_pc_begin_settlement = {
 	if = {
 		limit = { tag = STS }
+		# White peace can call on_peace before this settlement returns.
+		set_temp_variable = { var = STP_pc_nod_liberation_result value = 0 }
+		if = {
+			limit = { has_country_flag = STP_pc_nod_liberation_war }
+			set_temp_variable = { var = STP_pc_nod_liberation_result value = 1 }
+		}
 		set_variable = { var = STP_pc_this_opponent value = 0 }
 		set_variable = { var = STP_pc_this_result value = 0 }
 		if = {
@@ -5594,9 +5757,20 @@ STP_pc_begin_settlement = {
 			limit = {
 				check_variable = { var = STP_pc_course value = 2 compare = equals }
 				check_variable = { var = STP_pc_cap_side value = 2 compare = equals }
+				check_variable = { var = STP_pc_nod_liberation_result value = 1 compare = equals }
 			}
 			set_country_flag = STP_pc_lib_nod_won
 		}
+		if = {
+			limit = {
+				OR = {
+					check_variable = { var = STP_pc_cap_side value = 2 compare = equals }
+					check_variable = { var = STP_pc_cap_side value = 3 compare = equals }
+				}
+			}
+			clr_country_flag = STP_pc_nod_liberation_war
+		}
+		clear_variable = STP_pc_nod_liberation_result
 		clear_variable = STP_pc_this_opponent
 		clear_variable = STP_pc_this_result
 		clear_variable = STP_pc_cap_side
@@ -6098,10 +6272,6 @@ STP_debug_party_select_leader = {
 			var = STP_ch_government
 			value = STP_debug_party_choice
 		}
-		set_politics = {
-			ruling_party = hedonism
-			elections_allowed = no
-		}
 		clr_country_flag = STP_ch_protectorate_leader
 		remove_ideas = {
 			STP_pw_party_high_houses_government
@@ -6174,6 +6344,49 @@ STP_debug_resolve_shabrat_victory = {
 		limit = { has_global_flag = STP_cw_started NOT = { has_global_flag = STP_cw_union_wars_finished } STP = { exists = yes } STS = { exists = yes } }
 		if = { limit = { is_ai = no tag = STP } STS = { change_tag_from = STP } }
 		STP = { country_event = { id = ADISCORD_STP_cw.93 hours = 1 } }
+	}
+}
+
+STP_debug_resolve_sotnikov_victory = {
+	if = {
+		limit = {
+			is_debug = yes
+			is_ai = no
+			NOT = { has_global_flag = STP_cw_union_wars_finished }
+			OR = {
+				tag = STP
+				tag = STS
+			}
+			OR = {
+				STP = { has_character = STP_grigory_sotnikov }
+				STS = { has_character = STP_grigory_sotnikov }
+			}
+		}
+		if = {
+			limit = { NOT = { has_global_flag = STP_cw_started } }
+			STP = {
+				STP_maksim_shabrat = { set_character_flag = STP_cw_arrested }
+				STP_grigory_sotnikov = { clr_character_flag = STP_cw_arrested }
+				set_country_flag = STP_shabrat_was_arrested
+			}
+		}
+		STP_debug_resolve_shabrat_victory = yes
+		STS = {
+			if = {
+				limit = {
+					exists = yes
+					has_character = STP_grigory_sotnikov
+				}
+				STP_grigory_sotnikov = { clr_character_flag = STP_cw_arrested }
+				if = {
+					limit = { has_character = STP_maksim_shabrat }
+					STP_maksim_shabrat = { set_character_flag = STP_cw_arrested }
+				}
+				set_country_flag = STP_shabrat_was_arrested
+				STP_pc_install_resistance_successor = yes
+				mark_focus_tree_layout_dirty = yes
+			}
+		}
 	}
 }
 
@@ -7651,7 +7864,7 @@ STP_ps_accept_exile = {
 		ADISCORD_economy_mark_dirty = yes
 		# Only an existing character can move; no recruitment of dead officeholders.
 		STP = { if = { limit = { STP_ps_hedersett_available = yes }
-				STP_rufus_hedersett = { remove_country_leader_role = { ideology = aristocratic_hedonism } }
+				STP_rufus_hedersett = { remove_country_leader_role = { ideology = radical_hedonism } }
 				set_nationality = { character = STP_rufus_hedersett target_country = NOD }
 		} }
 		mark_focus_tree_layout_dirty = yes
@@ -7772,7 +7985,7 @@ STP_ps_settle_return = {
 			set_autonomy = { target = STP autonomy_state = autonomy_puppet }
 			if = { limit = { STP_ps_hedersett_available = yes }
 				set_nationality = { character = STP_rufus_hedersett target_country = STP }
-				STP = { STP_rufus_hedersett = { add_country_leader_role = { country_leader = { ideology = aristocratic_hedonism expire = "2300.1.1" } } } promote_character = STP_rufus_hedersett }
+				STP = { STP_ch_leader_2 = yes }
 			}
 			else = { STP = { create_country_leader = { name = STP_ps_return_council_name desc = STP_ps_return_council_desc ideology = aristocratic_hedonism expire = "2300.1.1" } } }
 			if = { limit = { is_ai = no } country_event = { id = ADISCORD_STP_cw.203 } }
@@ -8858,21 +9071,291 @@ STP_heg_start_northern_final_war = {
 
 STP_heg_start_kefreyt_final_war = {
 	if = {
-		limit = {
-			RUS_crisis_regional_wars_available = yes
-			tag = STS
-			check_variable = { var = STP_pc_course value = 1 compare = equals }
-			STP_heg_northern_final_resolved = yes
-			NOT = { has_country_flag = STP_heg_kefreyt_final_started }
+		limit = { STP_heg_can_start_kefreyt_final_war = yes }
+		declare_war_on = { target = VAL type = annex_everything }
+		if = {
+			limit = { has_war_with = VAL }
+			set_country_flag = STP_heg_kefreyt_final_started
+			# Initial war-relation hooks can precede the campaign receipt.
+			# Later entrants are registered by on_war_relation_added.
+			every_enemy_country = {
+				limit = {
+					OR = {
+						tag = VAL
+						is_in_faction_with = VAL
+					}
+				}
+				set_country_flag = STP_heg_kefreyt_final_member
+			}
 		}
-		set_country_flag = STP_heg_kefreyt_final_started
-		VAL = { if = { limit = { exists = yes } set_country_flag = STP_heg_kefreyt_final_member } }
+	}
+}
+
+STP_heg_start_frontier_ain = {
+	if = {
+		limit = { STP_heg_can_start_frontier_ain = yes }
+		AIN = { ADISCORD_release_non_participating_minor_optimization = yes }
+		TFF = { ADISCORD_release_non_participating_minor_optimization = yes }
+		declare_war_on = {
+			target = AIN
+			type = annex_everything
+		}
+		if = {
+			limit = { has_war_with = AIN }
+			TFF = {
+				add_to_war = {
+					targeted_alliance = STS
+					enemy = AIN
+					hostility_reason = asked_to_join
+					single_target_only = yes
+				}
+			}
+			if = {
+				limit = { TFF = { has_war_with = AIN } }
+				AIN = { set_country_flag = STP_heg_frontier_campaign_active }
+			}
+		}
+	}
+}
+
+STP_heg_start_frontier_cof = {
+	if = {
+		limit = { STP_heg_can_start_frontier_cof = yes }
+		COF = { ADISCORD_release_non_participating_minor_optimization = yes }
+		TFF = { ADISCORD_release_non_participating_minor_optimization = yes }
+		declare_war_on = {
+			target = COF
+			type = annex_everything
+		}
+		if = {
+			limit = { has_war_with = COF }
+			TFF = {
+				add_to_war = {
+					targeted_alliance = STS
+					enemy = COF
+					hostility_reason = asked_to_join
+					single_target_only = yes
+				}
+			}
+			if = {
+				limit = { TFF = { has_war_with = COF } }
+				COF = { set_country_flag = STP_heg_frontier_campaign_active }
+			}
+		}
+	}
+}
+
+# Native capitulation scopes. Snapshot owned land before peace changes occupation.
+STP_heg_settle_frontier_expansion = {
+	if = {
+		limit = { STP_heg_frontier_capitulation_managed = yes }
+		clear_temp_array = STP_heg_frontier_awarded_states
+		ROOT = {
+			every_owned_state = {
+				add_to_temp_array = {
+					array = STP_heg_frontier_awarded_states
+					value = THIS
+				}
+			}
+			clr_country_flag = STP_heg_frontier_campaign_active
+			white_peace = STS
+			if = { limit = { has_war_with = TFF } white_peace = TFF }
+		}
+		TFF = {
+			annex_country = {
+				target = ROOT
+				transfer_troops = no
+			}
+		}
+		for_each_scope_loop = {
+			array = STP_heg_frontier_awarded_states
+			TFF = { transfer_state = PREV }
+			set_state_controller_to = TFF
+		}
+		clear_temp_array = STP_heg_frontier_awarded_states
+		TFF = { ADISCORD_economy_mark_dirty = yes }
+		STS = { ADISCORD_economy_mark_dirty = yes }
+	}
+}
+
+# Called by diplomacy callbacks, never a recurring world scan.
+STP_heg_reconcile_frontier_expansion = {
+	AIN = {
 		if = {
 			limit = {
-				VAL = { exists = yes has_capitulated = no is_subject = no NOT = { is_in_faction_with = STS } }
-				NOT = { has_war_with = VAL }
+				has_country_flag = STP_heg_frontier_campaign_active
+				OR = {
+					exists = no
+					is_subject = yes
+					NOT = { has_war_with = STS }
+					NOT = { has_war_with = TFF }
+					STS = {
+						OR = {
+							exists = no
+							is_subject = yes
+							has_capitulated = yes
+						}
+					}
+					TFF = {
+						OR = {
+							exists = no
+							has_capitulated = yes
+							NOT = { is_subject_of = STS }
+						}
+					}
+				}
 			}
-			declare_war_on = { target = VAL type = annex_everything }
+			clr_country_flag = STP_heg_frontier_campaign_active
+		}
+	}
+	COF = {
+		if = {
+			limit = {
+				has_country_flag = STP_heg_frontier_campaign_active
+				OR = {
+					exists = no
+					is_subject = yes
+					NOT = { has_war_with = STS }
+					NOT = { has_war_with = TFF }
+					STS = {
+						OR = {
+							exists = no
+							is_subject = yes
+							has_capitulated = yes
+						}
+					}
+					TFF = {
+						OR = {
+							exists = no
+							has_capitulated = yes
+							NOT = { is_subject_of = STS }
+						}
+					}
+				}
+			}
+			clr_country_flag = STP_heg_frontier_campaign_active
+		}
+	}
+}
+
+# Subject scope. Only remove this route's banner; later political identities own theirs.
+STP_heg_clear_foreign_administration_flag = {
+	if = {
+		limit = {
+			NOT = { is_subject_of = STS }
+			OR = {
+				has_cosmetic_tag = NOD_STS_administration
+				has_cosmetic_tag = VAL_STS_administration
+				has_cosmetic_tag = YPR_STS_administration
+				has_cosmetic_tag = TFF_STS_administration
+				has_cosmetic_tag = NKA_STS_administration
+			}
+		}
+		drop_cosmetic_tag = yes
+	}
+}
+
+# Subject scope. The history character gains a leader role only after subjugation.
+STP_heg_install_nod_administrator = {
+	if = {
+		limit = {
+			tag = NOD
+			is_subject_of = STS
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_country_leader = {
+						character = NOD_STS_administrator
+						ruling_only = no
+					}
+				}
+			}
+			add_country_leader_role = {
+				character = NOD_STS_administrator
+				country_leader = {
+					ideology = steland_military_directory
+					expire = "2300.1.1"
+				}
+			}
+		}
+		set_politics = {
+			ruling_party = etatism
+			elections_allowed = no
+		}
+		promote_character = {
+			character = NOD_STS_administrator
+			ideology = steland_military_directory
+		}
+	}
+}
+
+# Subject scope. The history character gains a leader role only after subjugation.
+STP_heg_install_val_administrator = {
+	if = {
+		limit = {
+			tag = VAL
+			is_subject_of = STS
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_country_leader = {
+						character = VAL_STS_administrator
+						ruling_only = no
+					}
+				}
+			}
+			add_country_leader_role = {
+				character = VAL_STS_administrator
+				country_leader = {
+					ideology = steland_military_directory
+					expire = "2300.1.1"
+				}
+			}
+		}
+		set_politics = {
+			ruling_party = etatism
+			elections_allowed = no
+		}
+		promote_character = {
+			character = VAL_STS_administrator
+			ideology = steland_military_directory
+		}
+	}
+}
+
+# Subject scope. The history character gains a leader role only after subjugation.
+STP_heg_install_nka_administrator = {
+	if = {
+		limit = {
+			tag = NKA
+			is_subject_of = STS
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_country_leader = {
+						character = NKA_STS_administrator
+						ruling_only = no
+					}
+				}
+			}
+			add_country_leader_role = {
+				character = NKA_STS_administrator
+				country_leader = {
+					ideology = steland_military_directory
+					expire = "2300.1.1"
+				}
+			}
+		}
+		set_politics = {
+			ruling_party = etatism
+			elections_allowed = no
+		}
+		promote_character = {
+			character = NKA_STS_administrator
+			ideology = steland_military_directory
 		}
 	}
 }
@@ -8888,12 +9371,26 @@ STP_heg_prepare_nod_administration = {
 			if = { limit = { is_in_faction = yes NOT = { is_in_faction_with = STS } } leave_faction = yes }
 		}
 		set_autonomy = { target = NOD autonomy_state = autonomy_STP_provisional_administration freedom_level = 0.05 end_wars = no end_civil_wars = no }
-		NOD = { set_country_flag = STP_heg_provisional_administration }
+		NOD = {
+			set_country_flag = STP_heg_provisional_administration
+			if = {
+				limit = { is_subject_of = STS }
+				set_cosmetic_tag = NOD_STS_administration
+				STP_heg_install_nod_administrator = yes
+			}
+		}
 	}
 	else_if = {
 		limit = { NOT = { NOD = { exists = yes } } any_owned_state = { is_core_of = NOD } }
 		release_autonomy = { target = NOD autonomy_state = autonomy_STP_provisional_administration freedom_level = 0.05 }
-		NOD = { set_country_flag = STP_heg_provisional_administration }
+		NOD = {
+			set_country_flag = STP_heg_provisional_administration
+			if = {
+				limit = { is_subject_of = STS }
+				set_cosmetic_tag = NOD_STS_administration
+				STP_heg_install_nod_administrator = yes
+			}
+		}
 	}
 	ADISCORD_economy_mark_dirty = yes
 }
@@ -8909,12 +9406,24 @@ STP_heg_prepare_ypr_administration = {
 			if = { limit = { is_in_faction = yes NOT = { is_in_faction_with = STS } } leave_faction = yes }
 		}
 		set_autonomy = { target = YPR autonomy_state = autonomy_STP_provisional_administration freedom_level = 0.05 end_wars = no end_civil_wars = no }
-		YPR = { set_country_flag = STP_heg_provisional_administration }
+		YPR = {
+			set_country_flag = STP_heg_provisional_administration
+			if = {
+				limit = { is_subject_of = STS }
+				set_cosmetic_tag = YPR_STS_administration
+			}
+		}
 	}
 	else_if = {
 		limit = { NOT = { YPR = { exists = yes } } any_owned_state = { is_core_of = YPR } }
 		release_autonomy = { target = YPR autonomy_state = autonomy_STP_provisional_administration freedom_level = 0.05 }
-		YPR = { set_country_flag = STP_heg_provisional_administration }
+		YPR = {
+			set_country_flag = STP_heg_provisional_administration
+			if = {
+				limit = { is_subject_of = STS }
+				set_cosmetic_tag = YPR_STS_administration
+			}
+		}
 	}
 	ADISCORD_economy_mark_dirty = yes
 }
@@ -8930,12 +9439,24 @@ STP_heg_prepare_tff_administration = {
 			if = { limit = { is_in_faction = yes NOT = { is_in_faction_with = STS } } leave_faction = yes }
 		}
 		set_autonomy = { target = TFF autonomy_state = autonomy_STP_provisional_administration freedom_level = 0.05 end_wars = no end_civil_wars = no }
-		TFF = { set_country_flag = STP_heg_provisional_administration }
+		TFF = {
+			set_country_flag = STP_heg_provisional_administration
+			if = {
+				limit = { is_subject_of = STS }
+				set_cosmetic_tag = TFF_STS_administration
+			}
+		}
 	}
 	else_if = {
 		limit = { NOT = { TFF = { exists = yes } } any_owned_state = { is_core_of = TFF } }
 		release_autonomy = { target = TFF autonomy_state = autonomy_STP_provisional_administration freedom_level = 0.05 }
-		TFF = { set_country_flag = STP_heg_provisional_administration }
+		TFF = {
+			set_country_flag = STP_heg_provisional_administration
+			if = {
+				limit = { is_subject_of = STS }
+				set_cosmetic_tag = TFF_STS_administration
+			}
+		}
 	}
 	ADISCORD_economy_mark_dirty = yes
 }
@@ -8951,12 +9472,26 @@ STP_heg_prepare_val_administration = {
 			if = { limit = { is_in_faction = yes NOT = { is_in_faction_with = STS } } leave_faction = yes }
 		}
 		set_autonomy = { target = VAL autonomy_state = autonomy_STP_provisional_administration freedom_level = 0.05 end_wars = no end_civil_wars = no }
-		VAL = { set_country_flag = STP_heg_provisional_administration }
+		VAL = {
+			set_country_flag = STP_heg_provisional_administration
+			if = {
+				limit = { is_subject_of = STS }
+				set_cosmetic_tag = VAL_STS_administration
+				STP_heg_install_val_administrator = yes
+			}
+		}
 	}
 	else_if = {
 		limit = { NOT = { VAL = { exists = yes } } any_owned_state = { is_core_of = VAL } }
 		release_autonomy = { target = VAL autonomy_state = autonomy_STP_provisional_administration freedom_level = 0.05 }
-		VAL = { set_country_flag = STP_heg_provisional_administration }
+		VAL = {
+			set_country_flag = STP_heg_provisional_administration
+			if = {
+				limit = { is_subject_of = STS }
+				set_cosmetic_tag = VAL_STS_administration
+				STP_heg_install_val_administrator = yes
+			}
+		}
 	}
 	ADISCORD_economy_mark_dirty = yes
 }
@@ -11128,10 +11663,6 @@ STP_ch_elect_1 = {
 			value = 1
 		}
 		remove_ideas = { STP_pw_party_high_houses_government STP_pw_party_unbound_government }
-		set_politics = {
-			ruling_party = hedonism
-			elections_allowed = no
-		}
 		STP_ch_leader_1 = yes
 		set_variable = {
 			var = STP_ch_phase
@@ -11155,10 +11686,6 @@ STP_ch_elect_2 = {
 			value = 2
 		}
 		remove_ideas = { STP_pw_party_high_houses_government STP_pw_party_unbound_government }
-		set_politics = {
-			ruling_party = hedonism
-			elections_allowed = no
-		}
 		STP_ch_leader_2 = yes
 		set_variable = {
 			var = STP_ch_phase
@@ -11182,10 +11709,6 @@ STP_ch_elect_3 = {
 			value = 3
 		}
 		remove_ideas = { STP_pw_party_high_houses_government STP_pw_party_unbound_government }
-		set_politics = {
-			ruling_party = hedonism
-			elections_allowed = no
-		}
 		STP_ch_leader_3 = yes
 		set_variable = {
 			var = STP_ch_phase
@@ -11993,6 +12516,10 @@ STP_ch_select_ai_nominee = {
 }
 
 STP_ch_leader_1 = {
+	set_politics = {
+		ruling_party = hedonism
+		elections_allowed = no
+	}
 	# The High Houses' civil-war victory gives their presidium a named chairman.
 	if = {
 		limit = { check_variable = { var = STP_pv_outcome value = 1 compare = equals } }
@@ -12023,29 +12550,41 @@ STP_ch_leader_1 = {
 			portrait = GFX_portrait_STP_Conservative_Presidium
 		}
 	}
+	ADISCORD_economy_mark_dirty = yes
 }
 
 STP_ch_leader_2 = {
+	set_politics = {
+		ruling_party = hedonism
+		elections_allowed = no
+	}
 	if = {
 		limit = { has_character = STP_rufus_hedersett }
-		add_country_leader_role = {
-			character = STP_rufus_hedersett
-			promote_leader = yes
-			country_leader = {
-				ideology = hedonism_ideology
-				expire = "2300.1.1"
+		if = {
+			limit = {
+				STP_rufus_hedersett = {
+					NOT = { has_ideology = radical_hedonism }
+				}
+			}
+			add_country_leader_role = {
+				character = STP_rufus_hedersett
+				promote_leader = yes
+				country_leader = {
+					ideology = radical_hedonism
+					expire = "2300.1.1"
+				}
 			}
 		}
 		promote_character = {
 			character = STP_rufus_hedersett
-			ideology = hedonism_ideology
+			ideology = radical_hedonism
 		}
 	}
 	else = {
 		create_country_leader = {
 			name = STP_ch_leader_2
 			desc = STP_ch_leader_2_desc
-			ideology = hedonism_ideology
+			ideology = radical_hedonism
 			expire = "2300.1.1"
 		}
 	}
@@ -12076,6 +12615,7 @@ STP_ch_leader_2 = {
 			portrait = GFX_portrait_STP_Rufus_Hedersett
 		}
 	}
+	ADISCORD_economy_mark_dirty = yes
 }
 
 # Veil as head of state: leader portrait, and he leaves the generals list.
@@ -12102,21 +12642,37 @@ STP_ch_apply_veil_leader = {
 }
 
 STP_ch_leader_3 = {
+	set_politics = {
+		ruling_party = etatism
+		elections_allowed = no
+	}
+	set_party_name = {
+		ideology = etatism
+		name = STP_ch_leader_3
+		long_name = STP_ch_leader_3
+	}
 	if = {
 		limit = {
 			has_character = STP_August_Veil
 		}
-		add_country_leader_role = {
-			character = STP_August_Veil
-			promote_leader = yes
-			country_leader = {
-				ideology = hedonism_ideology
-				expire = "2300.1.1"
+		if = {
+			limit = {
+				STP_August_Veil = {
+					NOT = { has_ideology = steland_military_etatism }
+				}
+			}
+			add_country_leader_role = {
+				character = STP_August_Veil
+				promote_leader = yes
+				country_leader = {
+					ideology = steland_military_etatism
+					expire = "2300.1.1"
+				}
 			}
 		}
 		promote_character = {
 			character = STP_August_Veil
-			ideology = hedonism_ideology
+			ideology = steland_military_etatism
 		}
 		STP_ch_apply_veil_leader = yes
 	}
@@ -12124,31 +12680,37 @@ STP_ch_leader_3 = {
 		create_country_leader = {
 			name = STP_ch_leader_3
 			desc = STP_ch_leader_3_desc
-			ideology = hedonism_ideology
+			ideology = steland_military_etatism
 			expire = "2300.1.1"
 		}
 		set_country_leader_portrait = {
-			ideology = hedonism
+			ideology = etatism
 			portrait = GFX_portrait_STP_Military_Collegium
 		}
 	}
+	ADISCORD_economy_mark_dirty = yes
 }
 
 STP_ch_leader_4 = {
+	set_politics = {
+		ruling_party = hedonism
+		elections_allowed = no
+	}
 	if = {
 		limit = { NOT = { has_country_leader = { character = STP_Pavel_Lanskoy } } }
 		add_country_leader_role = {
 			character = STP_Pavel_Lanskoy
 			country_leader = {
-				ideology = hedonism_ideology
+				ideology = commercial_hedonism
 				expire = "2300.1.1"
 			}
 		}
 	}
 	promote_character = {
 		character = STP_Pavel_Lanskoy
-		ideology = hedonism_ideology
+		ideology = commercial_hedonism
 	}
+	ADISCORD_economy_mark_dirty = yes
 }
 
 STP_ch_elect_4 = {
@@ -12164,10 +12726,6 @@ STP_ch_elect_4 = {
 			STP_pw_party_high_houses_government
 			STP_pw_party_unbound_government
 		}
-		set_politics = {
-			ruling_party = hedonism
-			elections_allowed = no
-		}
 		STP_ch_leader_4 = yes
 		set_variable = {
 			var = STP_ch_phase
@@ -12182,20 +12740,30 @@ STP_ch_elect_4 = {
 }
 
 STP_ch_leader_5 = {
+	set_politics = {
+		ruling_party = etatism
+		elections_allowed = no
+	}
+	set_party_name = {
+		ideology = etatism
+		name = STP_pf_security_name
+		long_name = STP_pf_security_name
+	}
 	if = {
 		limit = { NOT = { has_country_leader = { character = STP_Vera_Korvina } } }
 		add_country_leader_role = {
 			character = STP_Vera_Korvina
 			country_leader = {
-				ideology = hedonism_ideology
+				ideology = steland_security_etatism
 				expire = "2300.1.1"
 			}
 		}
 	}
 	promote_character = {
 		character = STP_Vera_Korvina
-		ideology = hedonism_ideology
+		ideology = steland_security_etatism
 	}
+	ADISCORD_economy_mark_dirty = yes
 }
 
 STP_ch_elect_5 = {
@@ -12211,10 +12779,6 @@ STP_ch_elect_5 = {
 			STP_pw_party_high_houses_government
 			STP_pw_party_unbound_government
 		}
-		set_politics = {
-			ruling_party = hedonism
-			elections_allowed = no
-		}
 		STP_ch_leader_5 = yes
 		set_variable = {
 			var = STP_ch_phase
@@ -12229,24 +12793,37 @@ STP_ch_elect_5 = {
 }
 
 STP_ch_leader_6 = {
+	set_politics = {
+		ruling_party = hedonism
+		elections_allowed = no
+	}
 	if = {
 		limit = { NOT = { has_country_leader = { character = STP_Edgar_Renner } } }
 		add_country_leader_role = {
 			character = STP_Edgar_Renner
 			country_leader = {
-				ideology = hedonism_ideology
+				ideology = patronal_hedonism
 				expire = "2300.1.1"
 			}
 		}
 	}
 	promote_character = {
 		character = STP_Edgar_Renner
-		ideology = hedonism_ideology
+		ideology = patronal_hedonism
 	}
+	ADISCORD_economy_mark_dirty = yes
 }
 
 STP_ch_restore_independent_leader = {
+	# Before the first congress, the wartime victor remains the incumbent.
 	if = {
+		limit = {
+			NOT = { has_variable = STP_ch_government }
+			has_variable = STP_pv_outcome
+		}
+		STP_pv_install_victor = yes
+	}
+	else_if = {
 		limit = {
 			check_variable = {
 				var = STP_ch_government
@@ -12264,18 +12841,7 @@ STP_ch_restore_independent_leader = {
 				compare = equals
 			}
 		}
-		if = {
-			limit = {
-				has_character = STP_rufus_hedersett
-			}
-			promote_character = {
-				character = STP_rufus_hedersett
-				ideology = hedonism_ideology
-			}
-		}
-		else = {
-			STP_ch_leader_2 = yes
-		}
+		STP_ch_leader_2 = yes
 	}
 	else_if = {
 		limit = {
@@ -12285,19 +12851,7 @@ STP_ch_restore_independent_leader = {
 				compare = equals
 			}
 		}
-		if = {
-			limit = {
-				has_character = STP_August_Veil
-			}
-			promote_character = {
-				character = STP_August_Veil
-				ideology = hedonism_ideology
-			}
-			STP_ch_apply_veil_leader = yes
-		}
-		else = {
-			STP_ch_leader_3 = yes
-		}
+		STP_ch_leader_3 = yes
 	}
 	else_if = {
 		limit = {
@@ -12325,10 +12879,6 @@ STP_ch_restore_independent_leader = {
 }
 
 STP_ch_install_protectorate_leader = {
-	set_politics = {
-		ruling_party = hedonism
-		elections_allowed = no
-	}
 	STP_ch_leader_6 = yes
 	set_country_flag = STP_ch_protectorate_leader
 }
@@ -12975,10 +13525,6 @@ STP_pv_resolve_victory = {
 }
 
 STP_pv_install_victor = {
-	set_politics = {
-		ruling_party = hedonism
-		elections_allowed = no
-	}
 	if = {
 		limit = { check_variable = { var = STP_pv_outcome value = 1 compare = equals } }
 		STP_ch_leader_1 = yes
@@ -14046,3 +14592,490 @@ STP_cw_divide_navy = {
 
 # Country-agnostic. A common external threat closes the eastern wars without a
 # civil-war winner, military rewards or territorial settlement events.
+
+# STS scope. Seed NKA from the agreed border partition before merging subjects,
+# so annexation can preserve their armies and any current human player.
+STP_heg_form_northern_administration = {
+	if = {
+		limit = { STP_heg_can_form_northern_administration = yes }
+		if = {
+			limit = { NKA = { exists = no } }
+			NKA = {
+				transfer_state = 55
+				inherit_technology = STS
+			}
+		}
+		set_autonomy = {
+			target = NKA
+			autonomy_state = autonomy_STP_provisional_administration
+			freedom_level = 0.05
+			end_wars = no
+			end_civil_wars = no
+		}
+		NKA = {
+			ADISCORD_release_non_participating_minor_optimization = yes
+			set_cosmetic_tag = NKA_STS_administration
+			set_country_flag = STP_heg_provisional_administration
+		}
+		if = {
+			limit = {
+				CIN = {
+					exists = yes
+					is_subject_of = STS
+					has_war = no
+					VAL_frontier_has_only_claimed_states = yes
+					NOT = { any_owned_state = { STP_heg_northern_state_transferable = no } }
+				}
+			}
+			if = {
+				limit = { CIN = { is_ai = no } }
+				NKA = { change_tag_from = CIN }
+			}
+			NKA = { annex_country = { target = CIN transfer_troops = yes } }
+		}
+		if = {
+			limit = {
+				OSF = {
+					exists = yes
+					is_subject_of = STS
+					has_war = no
+					VAL_frontier_has_only_claimed_states = yes
+					NOT = { any_owned_state = { STP_heg_northern_state_transferable = no } }
+				}
+			}
+			if = {
+				limit = { OSF = { is_ai = no } }
+				NKA = { change_tag_from = OSF }
+			}
+			NKA = { annex_country = { target = OSF transfer_troops = yes } }
+		}
+		if = {
+			limit = {
+				APH = {
+					exists = yes
+					is_subject_of = STS
+					has_war = no
+					VAL_frontier_has_only_claimed_states = yes
+					NOT = { any_owned_state = { STP_heg_northern_state_transferable = no } }
+				}
+			}
+			if = {
+				limit = { APH = { is_ai = no } }
+				NKA = { change_tag_from = APH }
+			}
+			NKA = { annex_country = { target = APH transfer_troops = yes } }
+		}
+		24 = {
+			if = {
+				limit = { STP_heg_northern_state_transferable = yes }
+				NKA = { transfer_state = 24 }
+				add_core_of = NKA
+				set_state_controller_to = NKA
+			}
+		}
+		55 = {
+			if = {
+				limit = { STP_heg_northern_state_transferable = yes }
+				NKA = { transfer_state = 55 }
+				add_core_of = NKA
+				set_state_controller_to = NKA
+			}
+		}
+		58 = {
+			if = {
+				limit = { STP_heg_northern_state_transferable = yes }
+				NKA = { transfer_state = 58 }
+				add_core_of = NKA
+				set_state_controller_to = NKA
+			}
+		}
+		59 = {
+			if = {
+				limit = { STP_heg_northern_state_transferable = yes }
+				NKA = { transfer_state = 59 }
+				add_core_of = NKA
+				set_state_controller_to = NKA
+			}
+		}
+		60 = {
+			if = {
+				limit = { STP_heg_northern_state_transferable = yes }
+				NKA = { transfer_state = 60 }
+				add_core_of = NKA
+				set_state_controller_to = NKA
+			}
+		}
+		61 = {
+			if = {
+				limit = { STP_heg_northern_state_transferable = yes }
+				NKA = { transfer_state = 61 }
+				add_core_of = NKA
+				set_state_controller_to = NKA
+			}
+		}
+		62 = {
+			if = {
+				limit = { STP_heg_northern_state_transferable = yes }
+				NKA = { transfer_state = 62 }
+				add_core_of = NKA
+				set_state_controller_to = NKA
+			}
+		}
+		63 = {
+			if = {
+				limit = { STP_heg_northern_state_transferable = yes }
+				NKA = { transfer_state = 63 }
+				add_core_of = NKA
+				set_state_controller_to = NKA
+			}
+		}
+		64 = {
+			if = {
+				limit = { STP_heg_northern_state_transferable = yes }
+				NKA = { transfer_state = 64 }
+				add_core_of = NKA
+				set_state_controller_to = NKA
+			}
+		}
+		65 = {
+			if = {
+				limit = { STP_heg_northern_state_transferable = yes }
+				NKA = { transfer_state = 65 }
+				add_core_of = NKA
+				set_state_controller_to = NKA
+			}
+		}
+		NKA = {
+			if = {
+				limit = { owns_state = 64 }
+				set_capital = { state = 64 remember_old_capital = no }
+			}
+			else = { set_capital = { state = 55 remember_old_capital = no } }
+			STP_heg_install_nka_administrator = yes
+			ADISCORD_economy_initialize_country = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+		VAL = { ADISCORD_economy_mark_dirty = yes }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# Country scope. Only release mandatory-major status owned by this campaign.
+STP_heg_clear_cannibal_campaign = {
+	clr_country_flag = STP_heg_cannibal_defeated
+	clr_country_flag = STP_heg_cannibal_campaign_active
+	if = {
+		limit = { has_country_flag = STP_heg_cannibal_added_major }
+		clr_country_flag = STP_heg_cannibal_added_major
+		RUS_crisis_release_other_major = yes
+	}
+}
+
+STP_heg_start_cannibal_campaign = {
+	if = {
+		limit = { STP_heg_can_start_cannibal_campaign = yes }
+		CIN = {
+			if = {
+				limit = { STP_heg_cannibal_target_available = yes }
+				ADISCORD_release_non_participating_minor_optimization = yes
+				set_country_flag = STP_heg_cannibal_campaign_active
+				if = {
+					limit = {
+						OR = {
+							is_major = no
+							has_country_flag = RUS_crisis_added_major
+							RUS_crisis_other_major_required = yes
+						}
+					}
+					set_country_flag = STP_heg_cannibal_added_major
+					set_major = yes
+				}
+			}
+		}
+		OSF = {
+			if = {
+				limit = { STP_heg_cannibal_target_available = yes }
+				ADISCORD_release_non_participating_minor_optimization = yes
+				set_country_flag = STP_heg_cannibal_campaign_active
+				if = {
+					limit = {
+						OR = {
+							is_major = no
+							has_country_flag = RUS_crisis_added_major
+							RUS_crisis_other_major_required = yes
+						}
+					}
+					set_country_flag = STP_heg_cannibal_added_major
+					set_major = yes
+				}
+			}
+		}
+		APH = {
+			if = {
+				limit = { STP_heg_cannibal_target_available = yes }
+				ADISCORD_release_non_participating_minor_optimization = yes
+				set_country_flag = STP_heg_cannibal_campaign_active
+				if = {
+					limit = {
+						OR = {
+							is_major = no
+							has_country_flag = RUS_crisis_added_major
+							RUS_crisis_other_major_required = yes
+						}
+					}
+					set_country_flag = STP_heg_cannibal_added_major
+					set_major = yes
+				}
+			}
+		}
+		if = {
+			limit = { CIN = { has_country_flag = STP_heg_cannibal_campaign_active } }
+			CIN = { save_event_target_as = STP_heg_cannibal_war_anchor }
+			declare_war_on = { target = CIN type = annex_everything }
+		}
+		else_if = {
+			limit = { OSF = { has_country_flag = STP_heg_cannibal_campaign_active } }
+			OSF = { save_event_target_as = STP_heg_cannibal_war_anchor }
+			declare_war_on = { target = OSF type = annex_everything }
+		}
+		else_if = {
+			limit = { APH = { has_country_flag = STP_heg_cannibal_campaign_active } }
+			APH = { save_event_target_as = STP_heg_cannibal_war_anchor }
+			declare_war_on = { target = APH type = annex_everything }
+		}
+		CIN = {
+			if = {
+				limit = {
+					has_country_flag = STP_heg_cannibal_campaign_active
+					NOT = { has_war_with = STS }
+					event_target:STP_heg_cannibal_war_anchor = { has_war_with = STS }
+				}
+				add_to_war = {
+					targeted_alliance = event_target:STP_heg_cannibal_war_anchor
+					enemy = STS
+					hostility_reason = asked_to_join
+					single_target_only = yes
+				}
+			}
+		}
+		OSF = {
+			if = {
+				limit = {
+					has_country_flag = STP_heg_cannibal_campaign_active
+					NOT = { has_war_with = STS }
+					event_target:STP_heg_cannibal_war_anchor = { has_war_with = STS }
+				}
+				add_to_war = {
+					targeted_alliance = event_target:STP_heg_cannibal_war_anchor
+					enemy = STS
+					hostility_reason = asked_to_join
+					single_target_only = yes
+				}
+			}
+		}
+		APH = {
+			if = {
+				limit = {
+					has_country_flag = STP_heg_cannibal_campaign_active
+					NOT = { has_war_with = STS }
+					event_target:STP_heg_cannibal_war_anchor = { has_war_with = STS }
+				}
+				add_to_war = {
+					targeted_alliance = event_target:STP_heg_cannibal_war_anchor
+					enemy = STS
+					hostility_reason = asked_to_join
+					single_target_only = yes
+				}
+			}
+		}
+		if = {
+			limit = { event_target:STP_heg_cannibal_war_anchor = { has_war_with = STS } }
+			NKA = {
+				add_to_war = {
+					targeted_alliance = STS
+					enemy = event_target:STP_heg_cannibal_war_anchor
+					hostility_reason = asked_to_join
+				}
+			}
+		}
+		STP_heg_reconcile_cannibal_campaign = yes
+	}
+}
+
+# Native capitulation scope. Territorial delivery uses the pre-peace ownership
+# snapshot, as the default surrender handler can otherwise restore controllers.
+STP_heg_settle_cannibal_campaign = {
+	if = {
+		limit = { STP_heg_cannibal_capitulation_managed = yes }
+		ROOT = { set_country_flag = STP_heg_cannibal_defeated }
+		STS = { STP_heg_finish_cannibal_campaign = yes }
+	}
+}
+
+# STS scope. Freeze every participant and its land before a native white peace
+# can close the shared war and invoke reconciliation for the other members.
+STP_heg_finish_cannibal_campaign = {
+	if = {
+		limit = { STP_heg_cannibal_campaign_won = yes }
+		set_country_flag = STP_heg_cannibal_settlement_in_progress
+		clear_temp_array = STP_heg_cannibal_defeated_countries
+		clear_temp_array = STP_heg_cannibal_awarded_states
+		CIN = {
+			if = {
+				limit = { has_country_flag = STP_heg_cannibal_campaign_active }
+				STS = {
+					add_to_temp_array = { array = STP_heg_cannibal_defeated_countries value = PREV }
+				}
+				every_owned_state = {
+					STS = { add_to_temp_array = { array = STP_heg_cannibal_awarded_states value = PREV } }
+				}
+			}
+		}
+		OSF = {
+			if = {
+				limit = { has_country_flag = STP_heg_cannibal_campaign_active }
+				STS = {
+					add_to_temp_array = { array = STP_heg_cannibal_defeated_countries value = PREV }
+				}
+				every_owned_state = {
+					STS = { add_to_temp_array = { array = STP_heg_cannibal_awarded_states value = PREV } }
+				}
+			}
+		}
+		APH = {
+			if = {
+				limit = { has_country_flag = STP_heg_cannibal_campaign_active }
+				STS = {
+					add_to_temp_array = { array = STP_heg_cannibal_defeated_countries value = PREV }
+				}
+				every_owned_state = {
+					STS = { add_to_temp_array = { array = STP_heg_cannibal_awarded_states value = PREV } }
+				}
+			}
+		}
+		for_each_scope_loop = {
+			array = STP_heg_cannibal_defeated_countries
+			STP_heg_clear_cannibal_campaign = yes
+			if = { limit = { has_war_with = STS } white_peace = STS }
+			if = { limit = { has_war_with = NKA } white_peace = NKA }
+			if = {
+				limit = { is_ai = no }
+				NKA = { change_tag_from = PREV }
+			}
+			NKA = { annex_country = { target = PREV transfer_troops = no } }
+		}
+		for_each_scope_loop = {
+			array = STP_heg_cannibal_awarded_states
+			NKA = { transfer_state = PREV }
+			set_state_controller_to = NKA
+			if = {
+				limit = {
+					OR = {
+						is_core_of = CIN
+						is_core_of = OSF
+						is_core_of = APH
+					}
+				}
+				add_core_of = NKA
+			}
+		}
+		clear_temp_array = STP_heg_cannibal_defeated_countries
+		clear_temp_array = STP_heg_cannibal_awarded_states
+		NKA = {
+			if = {
+				limit = { owns_state = 64 }
+				set_capital = { state = 64 remember_old_capital = no }
+			}
+			STP_heg_install_nka_administrator = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+		clr_country_flag = STP_heg_cannibal_settlement_in_progress
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# Event-driven reconciliation; a different overlord or a peace ends the mandate.
+STP_heg_reconcile_cannibal_campaign = {
+	CIN = {
+		if = {
+			limit = {
+				has_country_flag = STP_heg_cannibal_campaign_active
+				OR = {
+					exists = no
+					is_subject = yes
+					NOT = { has_war_with = STS }
+					STS = {
+						OR = {
+							exists = no
+							is_subject = yes
+							has_capitulated = yes
+						}
+					}
+					NKA = {
+						OR = {
+							exists = no
+							has_capitulated = yes
+							NOT = { is_subject_of = STS }
+						}
+					}
+				}
+			}
+			STP_heg_clear_cannibal_campaign = yes
+		}
+	}
+	OSF = {
+		if = {
+			limit = {
+				has_country_flag = STP_heg_cannibal_campaign_active
+				OR = {
+					exists = no
+					is_subject = yes
+					NOT = { has_war_with = STS }
+					STS = {
+						OR = {
+							exists = no
+							is_subject = yes
+							has_capitulated = yes
+						}
+					}
+					NKA = {
+						OR = {
+							exists = no
+							has_capitulated = yes
+							NOT = { is_subject_of = STS }
+						}
+					}
+				}
+			}
+			STP_heg_clear_cannibal_campaign = yes
+		}
+	}
+	APH = {
+		if = {
+			limit = {
+				has_country_flag = STP_heg_cannibal_campaign_active
+				OR = {
+					exists = no
+					is_subject = yes
+					NOT = { has_war_with = STS }
+					STS = {
+						OR = {
+							exists = no
+							is_subject = yes
+							has_capitulated = yes
+						}
+					}
+					NKA = {
+						OR = {
+							exists = no
+							has_capitulated = yes
+							NOT = { is_subject_of = STS }
+						}
+					}
+				}
+			}
+			STP_heg_clear_cannibal_campaign = yes
+		}
+	}
+	STS = { STP_heg_finish_cannibal_campaign = yes }
+}

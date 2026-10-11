@@ -1217,17 +1217,66 @@ country_event = {
 country_event = {
 	id = ADISCORD_STP_pc.5
 	title = ADISCORD_STP_pc.5.t
-	desc = ADISCORD_STP_pc.5.d
+	desc = {
+		trigger = { STP_cw_sotnikov_available = yes }
+		text = ADISCORD_STP_pc.5.d
+	}
+	desc = {
+		trigger = { STP_cw_sotnikov_available = no }
+		text = ADISCORD_STP_pc.5.absent
+	}
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = yes
-	option = { name = ADISCORD_STP_pc.5.a }
+	timeout_days = 14
+	trigger = { STP_pc_charter_choice_pending = yes }
+	option = {
+		name = ADISCORD_STP_pc.5.a
+		trigger = {
+			STP_pc_charter_choice_pending = yes
+		}
+		ai_chance = { base = 50 }
+		custom_effect_tooltip = ADISCORD_STP_pc.5.a_tt
+		hidden_effect = { STP_pc_charter_install_shabrat = yes }
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.b
+		trigger = {
+			STP_pc_charter_choice_pending = yes
+			STP_cw_sotnikov_available = yes
+		}
+		ai_chance = { base = 30 }
+		custom_effect_tooltip = ADISCORD_STP_pc.5.b_tt
+		hidden_effect = { STP_pc_charter_install_sotnikov = yes }
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.c
+		trigger = {
+			STP_pc_charter_choice_pending = yes
+			has_character = STP_vera_tikh
+			STP_vera_tikh = { NOT = { has_character_flag = STP_cw_arrested } }
+		}
+		ai_chance = { base = 20 }
+		custom_effect_tooltip = ADISCORD_STP_pc.5.c_tt
+		hidden_effect = { STP_pc_charter_install_tikhoreva = yes }
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.closed
+		trigger = { STP_pc_charter_choice_pending = no }
+	}
 }
 
 country_event = {
 	id = ADISCORD_STP_pc.63
 	title = ADISCORD_STP_pc.63.t
-	desc = ADISCORD_STP_pc.63.d
+	desc = {
+		trigger = { STP_pc_founder_rules = yes }
+		text = ADISCORD_STP_pc.63.d
+	}
+	desc = {
+		trigger = { STP_pc_founder_rules = no }
+		text = ADISCORD_STP_pc.63.cabinet
+	}
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = yes
@@ -1253,7 +1302,14 @@ country_event = {
 country_event = {
 	id = ADISCORD_STP_pc.64
 	title = ADISCORD_STP_pc.64.t
-	desc = ADISCORD_STP_pc.64.d
+	desc = {
+		trigger = { STP_pc_founder_rules = yes }
+		text = ADISCORD_STP_pc.64.d
+	}
+	desc = {
+		trigger = { STP_pc_founder_rules = no }
+		text = ADISCORD_STP_pc.64.cabinet
+	}
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	fire_only_once = yes
@@ -1301,89 +1357,90 @@ country_event = {
 	desc = ADISCORD_STP_pc.7.d
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
+	trigger = { NOT = { has_variable = STP_pc_charter_cabinet } }
 	option = {
 		name = ADISCORD_STP_pc.7.a
+		trigger = {
+			NOT = { has_variable = STP_pc_charter_cabinet }
+		}
+		ai_chance = { base = 90 }
 		hidden_effect = {
 			if = {
-				limit = {
-					check_variable = {
-						var = STP_pc_course
-						value = 4
-						compare = equals
+				limit = { NOT = { has_variable = STP_pc_charter_cabinet } }
+				if = {
+					limit = {
+						check_variable = { var = STP_pc_course value = 4 compare = equals }
 					}
-				}
-				country_event = {
-					id = ADISCORD_STP_pc.62
-					hours = 1
+					country_event = { id = ADISCORD_STP_pc.62 hours = 1 }
 				}
 			}
 		}
-		ai_chance = { base = 90 }
 	}
 	option = {
 		name = ADISCORD_STP_pc.7.b
+		trigger = {
+			NOT = { has_variable = STP_pc_charter_cabinet }
+			STP_cw_shabrat_available = yes
+		}
+		ai_chance = { base = 10 }
 		hidden_effect = {
 			if = {
-				limit = {
-					check_variable = {
-						var = STP_pc_course
-						value = 4
-						compare = equals
+				limit = { NOT = { has_variable = STP_pc_charter_cabinet } }
+				promote_character = STP_maksim_shabrat
+				if = {
+					limit = {
+						check_variable = { var = STP_pc_course value = 4 compare = equals }
 					}
-				}
-				country_event = {
-					id = ADISCORD_STP_pc.62
-					hours = 1
+					country_event = { id = ADISCORD_STP_pc.62 hours = 1 }
 				}
 			}
 		}
-		trigger = { STP_cw_shabrat_available = yes }
-		ai_chance = { base = 10 }
-		promote_character = STP_maksim_shabrat
 	}
 	option = {
 		name = ADISCORD_STP_pc.7.c
+		trigger = {
+			NOT = { has_variable = STP_pc_charter_cabinet }
+			OR = { has_country_flag = STP_gornin_introduced has_character = STP_ilya_gornin }
+		}
+		ai_chance = { base = 0 }
 		hidden_effect = {
 			if = {
-				limit = {
-					check_variable = {
-						var = STP_pc_course
-						value = 4
-						compare = equals
+				limit = { NOT = { has_variable = STP_pc_charter_cabinet } }
+				promote_character = STP_ilya_gornin
+				set_politics = { ruling_party = humanism elections_allowed = no }
+				if = {
+					limit = {
+						check_variable = { var = STP_pc_course value = 4 compare = equals }
 					}
-				}
-				country_event = {
-					id = ADISCORD_STP_pc.62
-					hours = 1
+					country_event = { id = ADISCORD_STP_pc.62 hours = 1 }
 				}
 			}
 		}
-		trigger = { OR = { has_country_flag = STP_gornin_introduced has_character = STP_ilya_gornin } }
-		ai_chance = { base = 0 }
-		promote_character = STP_ilya_gornin
-		set_politics = { ruling_party = humanism elections_allowed = no }
 	}
 	option = {
 		name = ADISCORD_STP_pc.7.da
+		trigger = {
+			NOT = { has_variable = STP_pc_charter_cabinet }
+			OR = { has_country_flag = STP_vera_introduced has_character = STP_vera_tikh }
+		}
+		ai_chance = { base = 0 }
 		hidden_effect = {
 			if = {
-				limit = {
-					check_variable = {
-						var = STP_pc_course
-						value = 4
-						compare = equals
+				limit = { NOT = { has_variable = STP_pc_charter_cabinet } }
+				promote_character = STP_vera_tikh
+				set_politics = { ruling_party = utilitarism elections_allowed = no }
+				if = {
+					limit = {
+						check_variable = { var = STP_pc_course value = 4 compare = equals }
 					}
-				}
-				country_event = {
-					id = ADISCORD_STP_pc.62
-					hours = 1
+					country_event = { id = ADISCORD_STP_pc.62 hours = 1 }
 				}
 			}
 		}
-		trigger = { OR = { has_country_flag = STP_vera_introduced has_character = STP_vera_tikh } }
-		ai_chance = { base = 0 }
-		promote_character = STP_vera_tikh
-		set_politics = { ruling_party = utilitarism elections_allowed = no }
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.closed
+		trigger = { has_variable = STP_pc_charter_cabinet }
 	}
 }
 
@@ -1453,9 +1510,7 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		tag = NOD
-		exists = yes
-		has_capitulated = no
+		STP_pc_nod_government_exists = yes
 		STS = {
 			exists = yes
 			STP_pw_can_reconstruct = yes
@@ -1535,11 +1590,47 @@ country_event = {
 country_event = {
 	id = ADISCORD_STP_pc.12
 	title = ADISCORD_STP_pc.12.t
-	desc = ADISCORD_STP_pc.12.d
+	desc = {
+		trigger = { STP_cw_sotnikov_available = yes }
+		text = ADISCORD_STP_pc.12.d
+	}
+	desc = {
+		trigger = { STP_cw_sotnikov_available = no }
+		text = ADISCORD_STP_pc.12.absent
+	}
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = yes
-	option = { name = ADISCORD_STP_pc.12.a }
+	timeout_days = 14
+	trigger = { STP_pc_founder_choice_pending = yes }
+	option = {
+		name = ADISCORD_STP_pc.12.a
+		trigger = { STP_pc_founder_choice_pending = yes }
+		ai_chance = { base = 12 }
+		custom_effect_tooltip = ADISCORD_STP_pc.12.a_tt
+		hidden_effect = {
+			if = {
+				limit = { STP_pc_founder_choice_pending = yes }
+				set_variable = { var = STP_pc_founder_choice value = 1 }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.12.b
+		trigger = { STP_pc_founder_choice_pending = yes }
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = ADISCORD_STP_pc.12.b_tt
+		hidden_effect = {
+			if = {
+				limit = { STP_pc_founder_choice_pending = yes }
+				set_variable = { var = STP_pc_founder_choice value = 2 }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.12.c
+		trigger = { STP_pc_founder_choice_pending = no }
+	}
 }
 
 country_event = {
@@ -6183,7 +6274,10 @@ country_event = {
 			NOT = { VAL = { exists = yes } }
 			VAL = { is_subject_of = STS }
 			AND = {
-				has_completed_focus = STP_pc_heg_final_kefreyt
+				OR = {
+					has_completed_focus = STP_pc_heg_final_north
+					has_completed_focus = STP_pc_heg_final_kefreyt
+				}
 				VAL = { is_in_faction_with = STS }
 			}
 		}
@@ -6362,4 +6456,166 @@ country_event = {
 		name = STP_epilogue_continue
 		custom_effect_tooltip = STP_epilogue_thanks_tt
 	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.65
+	title = ADISCORD_STP_pc.65.t
+	desc = ADISCORD_STP_pc.65.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = { STP_pc_charter_sotnikov_current = yes }
+	option = {
+		name = ADISCORD_STP_pc.65.a
+		trigger = { STP_pc_charter_sotnikov_current = yes }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pc_charter_sotnikov_current = yes }
+			add_stability = 0.03
+			add_war_support = -0.02
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.65.b
+		trigger = { STP_pc_charter_sotnikov_current = yes }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pc_charter_sotnikov_current = yes }
+			add_command_power = 15
+			add_stability = 0.01
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.closed
+		trigger = { STP_pc_charter_sotnikov_current = no }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.66
+	title = ADISCORD_STP_pc.66.t
+	desc = ADISCORD_STP_pc.66.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = { STP_pc_charter_shabrat_current = yes }
+	option = {
+		name = ADISCORD_STP_pc.66.a
+		trigger = { STP_pc_charter_shabrat_current = yes }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pc_charter_shabrat_current = yes }
+			add_war_support = 0.04
+			add_stability = -0.01
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.66.b
+		trigger = { STP_pc_charter_shabrat_current = yes }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pc_charter_shabrat_current = yes }
+			add_stability = 0.03
+			army_experience = 10
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.closed
+		trigger = { STP_pc_charter_shabrat_current = no }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.67
+	title = ADISCORD_STP_pc.67.t
+	desc = ADISCORD_STP_pc.67.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = { STP_pc_charter_tikhoreva_current = yes }
+	option = {
+		name = ADISCORD_STP_pc.67.a
+		trigger = { STP_pc_charter_tikhoreva_current = yes }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pc_charter_tikhoreva_current = yes }
+			add_political_power = -25
+			add_stability = 0.04
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.67.b
+		trigger = { STP_pc_charter_tikhoreva_current = yes }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pc_charter_tikhoreva_current = yes }
+			add_political_power = 35
+			add_stability = 0.01
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.closed
+		trigger = { STP_pc_charter_tikhoreva_current = no }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.68
+	title = ADISCORD_STP_pc.68.t
+	desc = ADISCORD_STP_pc.68.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = { STP_pc_charter_sotnikov_current = yes }
+	option = { name = ADISCORD_STP_pc.68.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.69
+	title = ADISCORD_STP_pc.69.t
+	desc = ADISCORD_STP_pc.69.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = { STP_pc_charter_shabrat_current = yes }
+	option = { name = ADISCORD_STP_pc.69.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.70
+	title = ADISCORD_STP_pc.70.t
+	desc = ADISCORD_STP_pc.70.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = { STP_pc_charter_tikhoreva_current = yes }
+	option = { name = ADISCORD_STP_pc.70.a }
+}
+
+# Sotnikov's sword directory after the founder's arrest.
+country_event = {
+	id = ADISCORD_STP_pc.71
+	title = ADISCORD_STP_pc.71.t
+	desc = ADISCORD_STP_pc.71.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_pc.71.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.72
+	title = ADISCORD_STP_pc.72.t
+	desc = ADISCORD_STP_pc.72.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_pc.72.a }
 }

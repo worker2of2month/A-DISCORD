@@ -91,6 +91,12 @@ guiTypes = {
 			spriteType = "GFX_ADISCORD_startup_val"
 			alwaystransparent = yes
 		}
+		iconType = {
+			name = "ADISCORD_startup_rus_picture"
+			position = { x = 746 y = 108 }
+			spriteType = "GFX_ADISCORD_startup_rus"
+			alwaystransparent = yes
+		}
 		instantTextboxType = {
 			name = "ADISCORD_startup_intro_note"
 			position = { x = 34 y = 100 }
@@ -351,6 +357,105 @@ guiTypes = {
 			position = { x = 460 y = 152 }
 			font = "hoi_18mbs"
 			text = "VAL_startup_path_1_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_RUS_startup_country"
+			position = { x = 34 y = 138 }
+			font = "hoi_18mbs"
+			text = "RUS_startup_country"
+			maxWidth = 675
+			maxHeight = 407
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_RUS_startup_guide_state"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "RUS_startup_guide_state"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_RUS_startup_guide_bunker"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "RUS_startup_guide_bunker"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_RUS_startup_guide_campaign"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "RUS_startup_guide_campaign"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_RUS_startup_guide"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "RUS_startup_guide"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_RUS_startup_path_0"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "RUS_startup_path_0"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_RUS_startup_path_0_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "RUS_startup_path_0_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_RUS_startup_path_1"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "RUS_startup_path_1"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_RUS_startup_path_1_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "RUS_startup_path_1_details"
 			maxWidth = 500
 			maxHeight = 388
 			format = left

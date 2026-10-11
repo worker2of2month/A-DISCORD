@@ -11,6 +11,7 @@ oob = "NOD"
 
 recruit_character = NOD_Tobis_Bentlix
 recruit_character = NOD_Edgar_Renner
+recruit_character = NOD_STS_administrator
 
 ####### Faction
 

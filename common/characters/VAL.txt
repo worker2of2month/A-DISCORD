@@ -1,4 +1,24 @@
 characters = {
+	NKA_STS_administrator = {
+		name = NKA_STS_administrator
+		portraits = {
+			civilian = {
+				large = GFX_portrait_NKA_STS_administrator
+				small = GFX_portrait_NKA_STS_administrator_small
+			}
+		}
+	}
+
+	VAL_STS_administrator = {
+		name = VAL_STS_administrator
+		portraits = {
+			civilian = {
+				large = GFX_portrait_VAL_STS_administrator
+				small = GFX_portrait_VAL_STS_administrator_small
+			}
+		}
+	}
+
 
 
 	######   #######  ##     ## ##    ## ######## ########  ##    ##    ##       ########    ###    ########  ######## ########   ######

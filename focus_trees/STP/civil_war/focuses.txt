@@ -1379,7 +1379,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_regimental_organizers
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_STP_ch_service_act
 		x = 1
 		y = 3
 		cost = 2
@@ -1419,7 +1419,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_district_supply
-		icon = GFX_focus_STP_cw_capital_reserve
+		icon = GFX_focus_STP_party_war_transport
 		x = 1
 		y = 4
 		cost = 2
@@ -1796,7 +1796,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_temporary_presidium
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 15
 		y = 0
 		cost = 1
@@ -1973,6 +1973,7 @@ focus_tree = {
 	# --- Advanced-material economic development ---
 
 # @include STP/postwar/shabrat/focuses.txt#investment
+# @include STP/postwar/shabrat/focuses.txt#charter_programmes
 	focus = {
 		id = STP_pw_regional_citizenship
 		icon = GFX_focus_STP_pw_party_open_settlement

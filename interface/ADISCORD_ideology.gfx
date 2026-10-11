@@ -1,6 +1,168 @@
 spriteTypes = {
 
 	corneredTileSpriteType = {
+		name = "GFX_ideology_dorian_technocracy"
+		texturefile = "gfx/interface/ideologies/dorian_technocracy_group.png"
+		size = {
+			x = 70
+			y = 70
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_dorian_technocracy_countryview"
+		texturefile = "gfx/interface/ideologies/dorian_technocracy_group.png"
+		size = {
+			x = 125
+			y = 125
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_steland_liberationism"
+		texturefile = "gfx/interface/ideologies/steland_liberationism_group.png"
+		size = {
+			x = 70
+			y = 70
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_steland_liberationism_countryview"
+		texturefile = "gfx/interface/ideologies/steland_liberationism_group.png"
+		size = {
+			x = 125
+			y = 125
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_steland_military_directory"
+		texturefile = "gfx/interface/ideologies/steland_military_directory_group.png"
+		size = {
+			x = 70
+			y = 70
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_steland_military_directory_countryview"
+		texturefile = "gfx/interface/ideologies/steland_military_directory_group.png"
+		size = {
+			x = 125
+			y = 125
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_tff_emergency_war_coordinator"
+		texturefile = "gfx/interface/ideologies/tff_emergency_war_coordinator_group.png"
+		size = {
+			x = 70
+			y = 70
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_tff_emergency_war_coordinator_countryview"
+		texturefile = "gfx/interface/ideologies/tff_emergency_war_coordinator_group.png"
+		size = {
+			x = 125
+			y = 125
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_radical_hedonism"
+		texturefile = "gfx/interface/ideologies/radical_hedonism_group.png"
+		size = {
+			x = 70
+			y = 70
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_radical_hedonism_countryview"
+		texturefile = "gfx/interface/ideologies/radical_hedonism_group.png"
+		size = {
+			x = 125
+			y = 125
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_commercial_hedonism"
+		texturefile = "gfx/interface/ideologies/commercial_hedonism_group.png"
+		size = {
+			x = 70
+			y = 70
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_commercial_hedonism_countryview"
+		texturefile = "gfx/interface/ideologies/commercial_hedonism_group.png"
+		size = {
+			x = 125
+			y = 125
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_patronal_hedonism"
+		texturefile = "gfx/interface/ideologies/patronal_hedonism_group.png"
+		size = {
+			x = 70
+			y = 70
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_patronal_hedonism_countryview"
+		texturefile = "gfx/interface/ideologies/patronal_hedonism_group.png"
+		size = {
+			x = 125
+			y = 125
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_steland_military_etatism"
+		texturefile = "gfx/interface/ideologies/steland_military_etatism_group.png"
+		size = {
+			x = 70
+			y = 70
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_steland_military_etatism_countryview"
+		texturefile = "gfx/interface/ideologies/steland_military_etatism_group.png"
+		size = {
+			x = 125
+			y = 125
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_steland_security_etatism"
+		texturefile = "gfx/interface/ideologies/steland_security_etatism_group.png"
+		size = {
+			x = 70
+			y = 70
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_steland_security_etatism_countryview"
+		texturefile = "gfx/interface/ideologies/steland_security_etatism_group.png"
+		size = {
+			x = 125
+			y = 125
+		}
+	}
+
+	corneredTileSpriteType = {
 		name = "GFX_ideology_humanism_group"
 		texturefile = "gfx/interface/ideologies/humanism_group.dds"
 		size = {

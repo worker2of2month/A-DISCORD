@@ -533,7 +533,7 @@ def validate_countries(root: Path, issues: list[str]) -> None:
     anton = named_block(characters, "WRK_Anton_Bagley")
     for token in (
         "GFX_portrait_WRK_Dorian_Worx",
-        "ideology = technocracy_ideology",
+        "ideology = dorian_technocracy",
     ):
         if token not in dorian:
             issues.append(f"Dorian Worx identity is missing {token}")
@@ -708,7 +708,7 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         "drop_cosmetic_tag = yes",
         "ruling_party = technocracy",
         "character = TVA_Dorian_Worx",
-        "ideology = technocracy_ideology",
+        "ideology = dorian_technocracy",
     ):
         if token not in tva_formation:
             issues.append(f"save-compatible Worx formation is missing {token}")
@@ -730,7 +730,7 @@ def validate_countries(root: Path, issues: list[str]) -> None:
     for token in (
         "ruling_party = technocracy",
         "character = TVA_Dorian_Worx",
-        "ideology = technocracy_ideology",
+        "ideology = dorian_technocracy",
         "portrait = GFX_portrait_WRK_Dorian_Worx",
     ):
         if token not in tva_setup:

@@ -12,11 +12,24 @@ ROOT = Path(__file__).resolve().parents[2]
 SIZES = {"": (82, 52), "medium": (41, 26), "small": (10, 7)}
 SUBJECTS = ("NOD", "VAL", "BJK")
 SOURCE_FLAGS = ("SLI", "SLI_mandate", "STS_hegemony")
+ADMINISTRATION_FLAGS = ("NOD", "VAL", "YPR", "TFF")
 # Great Stelander keeps the revolutionary banner until it receives its own source.
 STP_IDENTITIES = ("STP_revolution_capital", "STP_great_stelander")
 
 
 def outputs():
+    for tag in ADMINISTRATION_FLAGS:
+        cosmetic = f"{tag}_STS_administration"
+        source_path = ROOT / "tools/assets/source/stp_administration_flags" / f"{cosmetic}.png"
+        with Image.open(source_path) as source:
+            for folder, size in SIZES.items():
+                buffer = BytesIO()
+                source.convert("RGBA").resize(size, Image.Resampling.LANCZOS).save(
+                    buffer, format="TGA"
+                )
+                yield ROOT / "gfx/flags" / folder / f"{cosmetic}.tga", buffer.getvalue()
+                if tag == "NOD":
+                    yield ROOT / "gfx/flags" / folder / "NKA_STS_administration.tga", buffer.getvalue()
     for tag in SOURCE_FLAGS:
         with Image.open(ROOT / "tools/assets/source" / f"{tag}_flag.png") as source:
             for folder, size in SIZES.items():
@@ -47,7 +60,9 @@ def main():
     mode.add_argument("--check", action="store_true")
     args = parser.parse_args()
     changed = []
+    texture_count = 0
     for path, data in outputs():
+        texture_count += 1
         if not path.exists() or path.read_bytes() != data:
             changed.append(path)
             if args.apply:
@@ -55,7 +70,7 @@ def main():
     for path in changed:
         print(("Updated: " if args.apply else "Drift: ") + str(path.relative_to(ROOT)))
     if not changed:
-        print("Stelander flags are current (24 textures).")
+        print(f"Stelander flags are current ({texture_count} textures).")
     return int(bool(changed) and not args.apply)
 
 

@@ -329,6 +329,28 @@ class STPCoreContractTests(unittest.TestCase):
         ):
             self.assertRegex(localisation, rf"(?m)^\s*{key}:\s+\"§RDEBUG:§!")
 
+    def test_sotnikov_debug_victory_uses_resistance_settlement(self) -> None:
+        debug = named_block(read(DECISIONS), "STP_scenario_debug")
+        decision = named_block(debug, "STP_debug_resolve_sotnikov_victory")
+        self.assertIn("is_debug = yes", named_block(decision, "visible"))
+        self.assertIn("is_ai = no", named_block(decision, "visible"))
+        self.assertIn("cost = 0", decision)
+        self.assertIn("hidden_effect", named_block(decision, "complete_effect"))
+        self.assertIn("STP_debug_resolve_sotnikov_victory = yes", decision)
+        effect = named_block(read(EFFECTS), "STP_debug_resolve_sotnikov_victory")
+        self.assertIn("NOT = { has_global_flag = STP_cw_union_wars_finished }", effect)
+        self.assertIn("STP_debug_resolve_shabrat_victory = yes", effect)
+        successor = named_block(
+            effect.split("STP_debug_resolve_shabrat_victory = yes", 1)[1], "STS"
+        )
+        self.assertIn("STP_grigory_sotnikov = { clr_character_flag = STP_cw_arrested }", successor)
+        self.assertIn("STP_maksim_shabrat = { set_character_flag = STP_cw_arrested }", successor)
+        self.assertIn("STP_pc_install_resistance_successor = yes", successor)
+        self.assertIn("set_country_flag = STP_shabrat_was_arrested", successor)
+        before_split = effect.split("STP_debug_resolve_shabrat_victory = yes", 1)[0]
+        self.assertIn("set_country_flag = STP_shabrat_was_arrested", before_split)
+        self.assertNotIn("STP_pc_lock_directory = yes", effect)
+
     def test_debug_controls_cannot_bypass_the_normal_election_campaign(self) -> None:
         decisions = read(DECISIONS)
         names = re.findall(r"^\s*(STP_debug_\w+)\s*=\s*\{", decisions, re.MULTILINE)
@@ -340,7 +362,7 @@ class STPCoreContractTests(unittest.TestCase):
                 name,
             )
 
-    def test_bop_debug_decisions_shift_election_legitimacy_in_hidden_bop_category(
+    def test_bop_debug_decisions_shift_election_legitimacy_in_debug_category(
         self,
     ) -> None:
         bop = named_block(read(BOP), "STP_shabrat_election_legitimacy")
@@ -357,7 +379,7 @@ class STPCoreContractTests(unittest.TestCase):
         ):
             self.assertNotIn(ordinary_category_field, category)
 
-        decisions = named_block(read(DECISIONS), "STP_shabrat_election_bop_category")
+        decisions = named_block(read(DECISIONS), "STP_scenario_debug")
         expected_values = {
             "STP_debug_increase_party_bop": "-0.25",
             "STP_debug_increase_shabrat_bop": "0.25",
@@ -484,6 +506,100 @@ class STPCoreContractTests(unittest.TestCase):
             "name = STPGetLeaderHealthTooltip",
         ):
             self.assertNotIn(removed, scripted_loc)
+
+
+class STPAdministratorStartupTests(unittest.TestCase):
+    def test_administrators_are_recruited_only_in_their_country_history(self):
+        history_files = {
+            "NOD": "NOD - Nodral.txt",
+            "VAL": "VAL - ValeraLand.txt",
+            "NKA": "NKA - Northern Contract Administration.txt",
+        }
+        effects = read(EFFECTS)
+        for tag, filename in history_files.items():
+            character = f"{tag}_STS_administrator"
+            recruitment = rf"\brecruit_character\s*=\s*{character}\b"
+            with self.subTest(tag=tag):
+                history = read(ROOT / "history/countries" / filename)
+                self.assertEqual(len(re.findall(recruitment, history)), 1)
+                self.assertNotRegex(effects, recruitment)
+                characters = ROOT / "common/characters" / (
+                    "NOD.txt" if tag == "NOD" else "VAL.txt"
+                )
+                definition = block(
+                    block(parse_clausewitz(read(characters)), "characters"), character
+                )
+                self.assertFalse(any(e.key == "country_leader" for e in definition))
+
+    def test_leader_roles_activate_only_under_shabrat_and_are_not_added_twice(self):
+        effects = parse_clausewitz(read(EFFECTS))
+        for tag in ("NOD", "VAL", "NKA"):
+            character = f"{tag}_STS_administrator"
+            with self.subTest(tag=tag):
+                installer = block(effects, f"STP_heg_install_{tag.lower()}_administrator")
+                activation = block(installer, "if")
+                limit = block(activation, "limit")
+                self.assertEqual(scalar(limit, "tag"), tag)
+                self.assertEqual(scalar(limit, "is_subject_of"), "STS")
+                role_setup = block(activation, "if")
+                guard = block(block(block(role_setup, "limit"), "NOT"), "has_country_leader")
+                self.assertEqual(scalar(guard, "character"), character)
+                self.assertEqual(scalar(guard, "ruling_only"), "no")
+                role = block(role_setup, "add_country_leader_role")
+                self.assertEqual(scalar(role, "character"), character)
+                self.assertEqual(
+                    scalar(block(role, "country_leader"), "ideology"),
+                    "steland_military_directory",
+                )
+                self.assertEqual(
+                    scalar(block(activation, "promote_character"), "character"), character
+                )
+
+    def test_northern_focus_references_exist_in_the_native_generated_tree(self):
+        tree = read(ROOT / "common/national_focus/ADISCORD_STP_civil_war.txt")
+        triggers = read(ROOT / "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+        focus = "STP_pc_heg_northern_administration"
+        self.assertIn(f"has_completed_focus = {focus}", triggers)
+        self.assertEqual(len(re.findall(rf"\bid\s*=\s*{focus}\b", tree)), 1)
+
+
+class IvanovPortraitAssetTests(unittest.TestCase):
+    def test_new_portrait_and_atlas_share_exact_clean_frames_and_alpha(self):
+        from PIL import Image
+        from tools.builders.build_adiscord_stp_portraits import (
+            ATLAS, FRAMES, PORTRAITS, SOURCE, animation_frames,
+        )
+
+        source = ROOT / SOURCE / PORTRAITS["STP"]
+        self.assertEqual(source.read_bytes(), (ROOT / "gfx/leaders/STP" / source.name).read_bytes())
+        with Image.open(source) as image:
+            base = image.convert("RGBA")
+        frames = animation_frames(base)
+        with Image.open(ROOT / ATLAS) as image:
+            atlas = image.convert("RGBA")
+        self.assertEqual(atlas.size, (156 * FRAMES, 210))
+        self.assertEqual(frames[0].tobytes(), base.tobytes())
+        self.assertEqual(frames[-1].tobytes(), base.tobytes())
+        self.assertGreater(len({frame.tobytes() for frame in frames}), 5)
+        for index, frame in enumerate(frames):
+            self.assertEqual(frame.getchannel("A").tobytes(), base.getchannel("A").tobytes())
+            self.assertEqual(atlas.crop((156 * index, 0, 156 * (index + 1), 210)).tobytes(), frame.tobytes())
+
+    def test_all_supplied_administrator_portraits_have_large_and_compact_bindings(self):
+        from tools.builders.build_adiscord_stp_portraits import PORTRAITS, SOURCE
+        sprites = block(parse_clausewitz(read(ROOT / "interface/ADISCORD_leader_portraits.gfx")), "spriteTypes")
+        for tag in ("NOD", "VAL", "NKA"):
+            character = tag + "_STS_administrator"
+            path = ROOT / "common/characters" / ("NOD.txt" if tag == "NOD" else "VAL.txt")
+            definition = block(block(parse_clausewitz(read(path)), "characters"), character)
+            civilian = block(block(definition, "portraits"), "civilian")
+            for size in ("large", "small"):
+                sprite = next(e.value for e in sprites if scalar(e.value, "name") == scalar(civilian, size))
+                texture = ROOT / scalar(sprite, "texturefile")
+                self.assertEqual(texture.read_bytes(), (ROOT / SOURCE / PORTRAITS[tag]).read_bytes())
+                if size == "small":
+                    self.assertEqual(scalar(block(sprite, "size"), "x"), "50")
+                    self.assertEqual(scalar(block(sprite, "size"), "y"), "67")
 
 
 if __name__ == "__main__":

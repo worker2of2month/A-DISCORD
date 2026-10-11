@@ -1,4 +1,14 @@
 characters = {
+	NOD_STS_administrator = {
+		name = NOD_STS_administrator
+		portraits = {
+			civilian = {
+				large = GFX_portrait_NOD_STS_administrator
+				small = GFX_portrait_NOD_STS_administrator_small
+			}
+		}
+	}
+
 
 
 	######   #######  ##     ## ##    ## ######## ########  ##    ##    ##       ########    ###    ########  ######## ########   ######

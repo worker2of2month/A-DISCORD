@@ -1,5 +1,523 @@
 ideas = {
 	country = {
+
+		# Charter cabinet programme deltas are previews only.
+		STP_pc_charter_sotnikov_mandate_delta = {
+			name = STP_pc_charter_sotnikov_mandate_delta
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		STP_pc_charter_sotnikov_independent_bench_delta = {
+			name = STP_pc_charter_sotnikov_independent_bench_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.02
+			}
+		}
+
+		STP_pc_charter_sotnikov_open_hearings_delta = {
+			name = STP_pc_charter_sotnikov_open_hearings_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_creditworthiness_factor = 0.02
+			}
+		}
+
+		STP_pc_charter_sotnikov_district_petitions_delta = {
+			name = STP_pc_charter_sotnikov_district_petitions_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_country_development_society_growth_factor = 0.02
+			}
+		}
+
+		STP_pc_charter_sotnikov_civilian_inspectorate_delta = {
+			name = STP_pc_charter_sotnikov_civilian_inspectorate_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.02
+			}
+		}
+
+		STP_pc_charter_sotnikov_local_self_rule_delta = {
+			name = STP_pc_charter_sotnikov_local_self_rule_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_country_development_state_growth_factor = 0.02
+			}
+		}
+
+		STP_pc_charter_sotnikov_rights_curriculum_delta = {
+			name = STP_pc_charter_sotnikov_rights_curriculum_delta
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.015
+			}
+		}
+
+		STP_pc_charter_sotnikov_public_guarantees_delta = {
+			name = STP_pc_charter_sotnikov_public_guarantees_delta
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		STP_pc_charter_sotnikov_family_records_delta = {
+			name = STP_pc_charter_sotnikov_family_records_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.02
+			}
+		}
+
+		STP_pc_charter_sotnikov_community_clinics_delta = {
+			name = STP_pc_charter_sotnikov_community_clinics_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_country_development_society_growth_factor = 0.03
+			}
+		}
+
+		STP_pc_charter_sotnikov_homes_for_families_delta = {
+			name = STP_pc_charter_sotnikov_homes_for_families_delta
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_sotnikov_workers_voice_delta = {
+			name = STP_pc_charter_sotnikov_workers_voice_delta
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.025
+			}
+		}
+
+		STP_pc_charter_sotnikov_workplace_safety_delta = {
+			name = STP_pc_charter_sotnikov_workplace_safety_delta
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_sotnikov_social_compact_delta = {
+			name = STP_pc_charter_sotnikov_social_compact_delta
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.025
+				production_speed_buildings_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_sotnikov_army_under_law_delta = {
+			name = STP_pc_charter_sotnikov_army_under_law_delta
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_sotnikov_medical_services_delta = {
+			name = STP_pc_charter_sotnikov_medical_services_delta
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.04
+			}
+		}
+
+		STP_pc_charter_sotnikov_field_supply_delta = {
+			name = STP_pc_charter_sotnikov_field_supply_delta
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.025
+			}
+		}
+
+		STP_pc_charter_sotnikov_officer_responsibility_delta = {
+			name = STP_pc_charter_sotnikov_officer_responsibility_delta
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.025
+				planning_speed = 0.025
+			}
+		}
+
+		STP_pc_charter_sotnikov_peaceful_readiness_delta = {
+			name = STP_pc_charter_sotnikov_peaceful_readiness_delta
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.025
+				training_time_factor = -0.025
+			}
+		}
+
+		STP_pc_charter_sotnikov_cabinet_review_delta = {
+			name = STP_pc_charter_sotnikov_cabinet_review_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.02
+				research_speed_factor = 0.015
+			}
+		}
+
+		STP_pc_charter_sotnikov_charter_fulfilled_delta = {
+			name = STP_pc_charter_sotnikov_charter_fulfilled_delta
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		STP_pc_charter_shabrat_mandate_delta = {
+			name = STP_pc_charter_shabrat_mandate_delta
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		STP_pc_charter_shabrat_common_citizenship_delta = {
+			name = STP_pc_charter_shabrat_common_citizenship_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.02
+			}
+		}
+
+		STP_pc_charter_shabrat_national_service_delta = {
+			name = STP_pc_charter_shabrat_national_service_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.02
+			}
+		}
+
+		STP_pc_charter_shabrat_district_registers_delta = {
+			name = STP_pc_charter_shabrat_district_registers_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_country_development_state_growth_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_shabrat_citizens_protection_delta = {
+			name = STP_pc_charter_shabrat_citizens_protection_delta
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		STP_pc_charter_shabrat_national_schools_delta = {
+			name = STP_pc_charter_shabrat_national_schools_delta
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+			}
+		}
+
+		STP_pc_charter_shabrat_national_compact_delta = {
+			name = STP_pc_charter_shabrat_national_compact_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_country_development_society_growth_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_shabrat_domestic_suppliers_delta = {
+			name = STP_pc_charter_shabrat_domestic_suppliers_delta
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.025
+			}
+		}
+
+		STP_pc_charter_shabrat_common_standards_delta = {
+			name = STP_pc_charter_shabrat_common_standards_delta
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_shabrat_construction_crews_delta = {
+			name = STP_pc_charter_shabrat_construction_crews_delta
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_shabrat_district_exchange_delta = {
+			name = STP_pc_charter_shabrat_district_exchange_delta
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.025
+				production_speed_buildings_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_shabrat_economic_sovereignty_delta = {
+			name = STP_pc_charter_shabrat_economic_sovereignty_delta
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.025
+				ADISCORD_economy_overall_income_factor = 0.02
+			}
+		}
+
+		STP_pc_charter_shabrat_national_defence_delta = {
+			name = STP_pc_charter_shabrat_national_defence_delta
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_shabrat_district_reserves_delta = {
+			name = STP_pc_charter_shabrat_district_reserves_delta
+			allowed = { always = no }
+			modifier = {
+				training_time_factor = -0.025
+			}
+		}
+
+		STP_pc_charter_shabrat_reliable_supply_delta = {
+			name = STP_pc_charter_shabrat_reliable_supply_delta
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.025
+			}
+		}
+
+		STP_pc_charter_shabrat_staff_coordination_delta = {
+			name = STP_pc_charter_shabrat_staff_coordination_delta
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.04
+			}
+		}
+
+		STP_pc_charter_shabrat_protected_communities_delta = {
+			name = STP_pc_charter_shabrat_protected_communities_delta
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.025
+			}
+		}
+
+		STP_pc_charter_shabrat_defence_of_citizens_delta = {
+			name = STP_pc_charter_shabrat_defence_of_citizens_delta
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.025
+				army_org_regain = 0.025
+			}
+		}
+
+		STP_pc_charter_shabrat_cabinet_review_delta = {
+			name = STP_pc_charter_shabrat_cabinet_review_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.02
+				research_speed_factor = 0.02
+			}
+		}
+
+		STP_pc_charter_shabrat_charter_fulfilled_delta = {
+			name = STP_pc_charter_shabrat_charter_fulfilled_delta
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		STP_pc_charter_tikhoreva_mandate_delta = {
+			name = STP_pc_charter_tikhoreva_mandate_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.02
+			}
+		}
+
+		STP_pc_charter_tikhoreva_public_registers_delta = {
+			name = STP_pc_charter_tikhoreva_public_registers_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_creditworthiness_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_tikhoreva_appointments_by_work_delta = {
+			name = STP_pc_charter_tikhoreva_appointments_by_work_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.02
+			}
+		}
+
+		STP_pc_charter_tikhoreva_service_baselines_delta = {
+			name = STP_pc_charter_tikhoreva_service_baselines_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_country_development_society_growth_factor = 0.02
+			}
+		}
+
+		STP_pc_charter_tikhoreva_published_accounts_delta = {
+			name = STP_pc_charter_tikhoreva_published_accounts_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.02
+			}
+		}
+
+		STP_pc_charter_tikhoreva_independent_audit_delta = {
+			name = STP_pc_charter_tikhoreva_independent_audit_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_creditworthiness_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_tikhoreva_appeals_by_evidence_delta = {
+			name = STP_pc_charter_tikhoreva_appeals_by_evidence_delta
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		STP_pc_charter_tikhoreva_public_results_delta = {
+			name = STP_pc_charter_tikhoreva_public_results_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.02
+			}
+		}
+
+		STP_pc_charter_tikhoreva_accountable_service_delta = {
+			name = STP_pc_charter_tikhoreva_accountable_service_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_country_development_state_growth_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_tikhoreva_damage_survey_delta = {
+			name = STP_pc_charter_tikhoreva_damage_survey_delta
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_tikhoreva_repair_sequence_delta = {
+			name = STP_pc_charter_tikhoreva_repair_sequence_delta
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_tikhoreva_delivery_checks_delta = {
+			name = STP_pc_charter_tikhoreva_delivery_checks_delta
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_tikhoreva_maintenance_schedule_delta = {
+			name = STP_pc_charter_tikhoreva_maintenance_schedule_delta
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.025
+			}
+		}
+
+		STP_pc_charter_tikhoreva_district_logistics_delta = {
+			name = STP_pc_charter_tikhoreva_district_logistics_delta
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.025
+			}
+		}
+
+		STP_pc_charter_tikhoreva_reconstruction_balance_delta = {
+			name = STP_pc_charter_tikhoreva_reconstruction_balance_delta
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.025
+				ADISCORD_economy_overall_income_factor = 0.02
+			}
+		}
+
+		STP_pc_charter_tikhoreva_applied_research_delta = {
+			name = STP_pc_charter_tikhoreva_applied_research_delta
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_tikhoreva_technical_instructors_delta = {
+			name = STP_pc_charter_tikhoreva_technical_instructors_delta
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_tikhoreva_measured_training_delta = {
+			name = STP_pc_charter_tikhoreva_measured_training_delta
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.025
+				training_time_factor = -0.025
+			}
+		}
+
+		STP_pc_charter_tikhoreva_staff_feedback_delta = {
+			name = STP_pc_charter_tikhoreva_staff_feedback_delta
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.025
+				planning_speed = 0.025
+			}
+		}
+
+		STP_pc_charter_tikhoreva_research_in_service_delta = {
+			name = STP_pc_charter_tikhoreva_research_in_service_delta
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_tikhoreva_cabinet_review_delta = {
+			name = STP_pc_charter_tikhoreva_cabinet_review_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.02
+				production_factory_max_efficiency_factor = 0.025
+			}
+		}
+
+		STP_pc_charter_tikhoreva_charter_fulfilled_delta = {
+			name = STP_pc_charter_tikhoreva_charter_fulfilled_delta
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
 		STP_party_houses_privileges_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
@@ -757,6 +1275,18 @@ ideas = {
 		}
 
 
+		STP_pc_materials_program = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			modifier = {
+				local_resources_factor = 0.10
+				production_speed_ADISCORD_rare_components_plant_factor = 0.20
+				production_speed_ADISCORD_rare_alloy_foundry_factor = 0.20
+			}
+		}
+
 		STP_pc_val_compact = {
 			picture = ADISCORD_law_civic_emergency_committees
 			allowed = { always = no }
@@ -1403,6 +1933,12 @@ ideas = {
 		STP_pc_lib_assembly_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { stability_factor = 0.05 political_power_gain = -0.10 } }
 		STP_pc_sot_field_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { planning_speed = 0.05 } }
 		STP_pc_sot_state_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { ADISCORD_economy_admin_expense_factor = -0.04 } }
+		STP_pc_sdir_field_army_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { planning_speed = 0.05 army_org_factor = 0.03 } }
+		STP_pc_sdir_district_levies_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { training_time_factor = -0.10 } }
+		STP_pc_sdir_war_orders_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { industrial_capacity_factory = 0.05 } }
+		STP_pc_sdir_staff_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { stability_factor = 0.05 ADISCORD_economy_admin_expense_factor = -0.04 } }
+		STP_pc_sdir_governors_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { political_power_gain = 0.10 ADISCORD_economy_admin_expense_factor = -0.04 } }
+		STP_pc_sdir_sword_directory_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { army_org_factor = 0.05 industrial_capacity_factory = 0.05 stability_factor = 0.05 } }
 		STP_pc_gornin_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { ADISCORD_economy_admin_expense_factor = -0.04 } }
 		STP_pc_vera_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { political_power_gain = 0.05 industrial_capacity_factory = -0.03 } }
 		STP_pc_mountain_defence = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_core_defence_factor = 0.08 } }

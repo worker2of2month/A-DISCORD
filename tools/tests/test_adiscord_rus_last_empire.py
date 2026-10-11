@@ -21,7 +21,7 @@ ORBITAL_ACTOR_POSITIONS = {
 }
 AI_FILE = ROOT / "common/ai_strategy/ADISCORD_vorkerland_ai.txt"
 ON_ACTIONS = ROOT / "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
-IDEA_FILE = ROOT / "common/ideas/ADISCORD_country_unique_ideas.txt"
+IDEA_FILE = ROOT / "common/ideas/ADISCORD_RUS_ideas.txt"
 RUSSIAN_LOC = ROOT / "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
 IDEA_LOC = ROOT / "localisation/russian/ADISCORD_ideas_l_russian.yml"
 COUNTRY_LOC = ROOT / "localisation/russian/countries_l_russian.yml"

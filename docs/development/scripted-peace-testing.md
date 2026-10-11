@@ -87,6 +87,25 @@ insufficient. Full integration remains the existing paid 90-day decision.
 Verify both first/second-war sequences, refused-demand campaigns, the islands,
 separate tribes and NKA, unrelated wars, and the distinct liberation outcome.
 
+The final Kefreyt focus and its war dispatcher share the same eligibility
+trigger. An absent country or an STS subject permits bypass; a limited defeat
+alone does not. A foreign subject, faction partner or capitulated target blocks
+the war, and a running focus cancels when eligibility is lost. The campaign
+receipt is set only after the native war relation exists. Initial enemy faction
+members are recorded then; subsequent entrants use the war-relation hook.
+An allied Kefreyt permits the peaceful hegemony epilogue after the northern
+stage without completing an ineligible war focus.
+
+Regional nationalisation opens through either Common Citizenship or
+Administrations of the Hegemony. Category visibility, decision visibility and
+delivery eligibility accept either focus. Each directly owned, controlled
+non-core region bordering a held core costs 50 political power and takes 120
+days at peace. Test each unlock separately, successful delivery, loss of the
+target, one refund and slot release; another project's receipt must survive.
+For the war focus, change alliance, subject status and capitulation during
+progress and inspect cancellation before testing the fresh declaration and
+subsequent settlement. Record source hashes before a cold-load campaign check.
+
 ## In-game controls
 
 Launch with `-debug`. Decisions → **DEBUG: A-Discord Scenarios**. The added war
@@ -238,3 +257,57 @@ production code against those facts; it is not the HOI4 engine. Structural tests
 cover queued entry, native registration, target-bound confirmation and debug
 localisation. In-game callback timing, UI rendering and map colours still require
 the runtime matrix above.
+
+## Frontier administration expansion
+
+The two optional STS focuses after `STP_pc_heg_administrations` each take 28 days.
+They target independent AIN and COF respectively, require a surviving TFF subject,
+and add TFF to STS's declared war. Their campaign receipt is written only after
+both countries have entered. Existing wars, allied targets and foreign subjects
+are unavailable; an absent target bypasses its focus without awarding territory.
+
+An accepted native defeat by STS or its subjects transfers only the target's
+owned land to TFF, including impassable remnants. Neighbouring cores are not
+claims to land owned by a third country. The immediate settlement reserves the
+late callback so the generic annexation cannot award the same country again.
+Peace, annexation and subject changes clear cancelled campaigns. Defeat of STS
+or TFF cancels the territorial promise before the native capitulation flag updates.
+
+Cold-test each focus with independent and dependent AIN, a surviving COF, a
+target already at war, and TFF freed or defeated during the campaign. Confirm
+that STS and TFF appear on the same war side, that a victory credited to either
+awards ownership and control to TFF, and that a third-party victory does not.
+Also check the two focus positions and RU/EN reward text after a full restart.
+`FrontierExpansionTests` in `test_adiscord_stp_hegemony_expansion` checks the
+script contract; it does not establish native callback timing or UI acceptance.
+
+## Shabrat's northern administration
+
+After Kefreyt's final subjugation, `STP_pc_heg_northern_administration` takes
+21 days and creates or reuses NKA under STS. Irim (24) and Erstantpeo (55)
+form its southern base; already subordinated territory in states 58-65 joins
+it. A third party's ownership or occupation is excluded. Kefreyt must retain
+land outside that partition. Peaceful tribal subjects without outside land
+merge with troops and a human player transferred to NKA. NKA uses a dedicated
+administrator and the existing northern military banner.
+
+The following 28-day `STP_pc_heg_cannibal_campaign` is bypassed if CIN, OSF and
+APH are absent or already STS subjects. Otherwise all eligible independent
+tribes join one war against STS and NKA. An existing war, foreign subject,
+allied target or lost NKA blocks entry. The campaign temporarily owns mandatory
+major status and releases it through the shared major-ownership contract.
+
+Native capitulation records a defeat without ending the shared war. Every
+active member must be defeated; liberation clears that country's receipt.
+Final settlement snapshots all participants and their owned states before
+white peace. Defeated territory goes to NKA and foreign land is not inferred
+from cores. Settlement is guarded against synchronous peace callbacks.
+Peace, annexation, subject changes, or the defeat of STS/NKA cancel remaining
+campaign receipts and release only this campaign's major requirement.
+
+Cold-test: independent tribes; Kefreyt's complete and partial conquests; an
+existing NKA; a foreign occupation; a human tribal subject; each order of
+capitulation; liberation before the last defeat; third-party annexation; lost
+NKA; and the delayed native capitulation callback after scripted peace. Check
+both the owner and controller, the surviving Kefreyt capital, and all three
+administrator portraits. Record loaded hashes before starting a fresh campaign.

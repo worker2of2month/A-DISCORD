@@ -786,7 +786,7 @@ defined_text = {
 defined_text = {
 	name = GetRUSOrderrifle_orderpp
 	text = {
-		trigger = { NOT = { has_political_power < 30 } }
+		trigger = { NOT = { has_political_power < 50 } }
 		localization_key = RUS_rifle_order_cost_pp_ok
 	}
 	text = { localization_key = RUS_rifle_order_cost_pp_low }
@@ -795,7 +795,7 @@ defined_text = {
 defined_text = {
 	name = GetRUSOrderrifle_ordercash
 	text = {
-		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals } }
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals } }
 		localization_key = RUS_rifle_order_cost_cash_ok
 	}
 	text = { localization_key = RUS_rifle_order_cost_cash_low }
@@ -813,7 +813,7 @@ defined_text = {
 defined_text = {
 	name = GetRUSOrdermarket_surplusrifles
 	text = {
-		trigger = { NOT = { has_equipment = { infantry_equipment < 2500 } } }
+		trigger = { NOT = { has_equipment = { infantry_equipment < 10000 } } }
 		localization_key = RUS_market_surplus_cost_rifles_ok
 	}
 	text = { localization_key = RUS_market_surplus_cost_rifles_low }

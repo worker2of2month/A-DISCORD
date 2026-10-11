@@ -2017,7 +2017,7 @@ focus = {
         definitions = _blocks(read(CHARACTER_FILE), "TVA_Dorian_Worx")
         self.assertEqual(len(definitions), 1)
         worx = definitions[0]
-        self.assertIn("ideology = technocracy_ideology", worx)
+        self.assertIn("ideology = dorian_technocracy", worx)
         self.assertIn("large = GFX_portrait_WRK_Dorian_Worx", worx)
 
         english = localisation_entries(

@@ -25,4 +25,64 @@ spriteTypes = {
 		texturefile = "gfx/texticons/adiscord/banners/WRK_birthplace_of_the_first_revolution_banner.png"
 		legacy_lazy_load = no
 	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_automation_banner"
+		texturefile = "gfx/texticons/adiscord/banners/ADISCORD_automation_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_trade_banner"
+		texturefile = "gfx/texticons/adiscord/banners/ADISCORD_trade_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_anthropophagorum_banner"
+		texturefile = "gfx/texticons/adiscord/banners/ADISCORD_anthropophagorum_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_decline_banner"
+		texturefile = "gfx/texticons/adiscord/banners/ADISCORD_decline_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_urban_decay_banner"
+		texturefile = "gfx/texticons/adiscord/banners/ADISCORD_urban_decay_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_industry_banner"
+		texturefile = "gfx/texticons/adiscord/banners/ADISCORD_industry_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_STP_fading_father_banner"
+		texturefile = "gfx/texticons/adiscord/banners/STP_fading_father_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_STP_hedonism_with_no_bondaries_banner"
+		texturefile = "gfx/texticons/adiscord/banners/STP_hedonism_with_no_bondaries_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_STP_hidden_slaves_trade_banner"
+		texturefile = "gfx/texticons/adiscord/banners/STP_hidden_slaves_trade_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_STP_worldwide_famous_tourist_destination_banner"
+		texturefile = "gfx/texticons/adiscord/banners/STP_worldwide_famous_tourist_destination_banner.png"
+		legacy_lazy_load = no
+	}
 }

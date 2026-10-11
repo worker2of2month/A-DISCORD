@@ -5523,6 +5523,70 @@
       "owner": "events/ADISCORD_vorkerland_events.txt",
       "subsystem": "vorkerland_postwar",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.65",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 65,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.66",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 66,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.67",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 67,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.68",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 68,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.69",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 69,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.70",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 70,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.71",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 71,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.72",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 72,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_epilogue",
+      "status": "active"
     }
   ]
 }

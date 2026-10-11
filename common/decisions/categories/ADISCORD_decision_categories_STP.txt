@@ -147,7 +147,18 @@ STP_postwar_administration = {
 	allowed = { OR = { tag = STP tag = STS } }
 	visible = {
 		has_country_flag = STP_cw_postwar
-		has_completed_focus = STP_pw_regional_citizenship
+		OR = {
+			has_completed_focus = STP_pw_regional_citizenship
+			has_completed_focus = STP_pc_heg_administrations
+			AND = {
+				STP_pc_charter_government_current = yes
+				OR = {
+					has_completed_focus = STP_pc_charter_sotnikov_civil_return
+					has_completed_focus = STP_pc_charter_shabrat_district_grants
+					has_completed_focus = STP_pc_charter_tikhoreva_open_tenders
+				}
+			}
+		}
 	}
 	visible_when_empty = yes
 	priority = 19

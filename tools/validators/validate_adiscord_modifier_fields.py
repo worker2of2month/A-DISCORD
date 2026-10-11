@@ -62,6 +62,7 @@ ICON_PREFIXES = ("GFX_idea_", "GFX_modifiers_", "GFX_goal_", "GFX_decision_")
 COVERED_GLOBS = (
     "common/dynamic_modifiers/ADISCORD_vorkerland_*.txt",
     "common/ideas/ADISCORD_vorkerland_ideas.txt",
+    "common/ideas/ADISCORD_RUS_ideas.txt",
     "common/ideas/ADISCORD_vorkerland_ideas.txt",
 )
 

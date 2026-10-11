@@ -55,7 +55,7 @@
 
 	focus = {
 		id = STP_pw_party_civil_records
-		icon = GFX_focus_STP_cw_protocol_office
+		icon = GFX_focus_STP_pw_party_veteran_reserve
 		x = -16
 		y = 4
 		cost = 4
@@ -314,7 +314,7 @@
 
 	focus = {
 		id = STP_pw_party_industrial_settlement
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_STP_party_industrial_board
 		x = -10
 		y = 9
 		cost = 5
@@ -403,7 +403,7 @@
 
 	focus = {
 		id = STP_pw_party_supply_service
-		icon = GFX_focus_VAL_Bread_From_Barracks
+		icon = GFX_focus_STP_party_war_transport
 		x = 8
 		y = 5
 		cost = 4
@@ -884,7 +884,7 @@
 
 	focus = {
 		id = STP_party_factory_laboratories
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_STP_party_industrial_board
 		x = -24
 		y = 5
 		cost = 5
@@ -910,7 +910,7 @@
 	# Any won external campaign counts; the conquest flags are never cleared.
 	focus = {
 		id = STP_party_captured_archives
-		icon = GFX_focus_research
+		icon = GFX_focus_STP_cw_protocol_office
 		x = -26
 		y = 6
 		cost = 5
@@ -1211,7 +1211,7 @@
 
 	focus = {
 		id = STP_pw_party_foreign_settlement
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_cw_quiet_registers
 		x = 16
 		y = 11
 		cost = 3
@@ -1247,7 +1247,7 @@
 
 	focus = {
 		id = STP_pw_party_veterans_congress
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_ch_service_act
 		x = -22
 		y = 6
 		cost = 3
@@ -1449,7 +1449,7 @@
 
 	focus = {
 		id = STP_pw_party_shield_corps
-		icon = GFX_goal_generic_special_forces
+		icon = GFX_focus_STP_ch_service_act
 		x = 14
 		y = 5
 		cost = 5
@@ -1657,7 +1657,7 @@
 	}
 	focus = {
 		id = STP_pw_party_nod_congress
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 18
 		y = 7
 		cost = 3
@@ -1730,7 +1730,7 @@
 	}
 	focus = {
 		id = STP_pw_party_border_staff
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_STP_ROTATE_DISTRICT_COMMAND
 		x = 10
 		y = 7
 		cost = 4
@@ -2527,7 +2527,7 @@
 
 	focus = {
 		id = STP_party_houses_hearings
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
 		x = -1
 		y = 7
 		cost = 2
@@ -2585,7 +2585,7 @@
 
 	focus = {
 		id = STP_party_houses_clients
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_ROTATE_DISTRICT_COMMAND
 		x = -5
 		y = 8
 		cost = 1
@@ -3084,7 +3084,7 @@
 
 	focus = {
 		id = STP_ch_free_labour
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_pw_party_civilian_retraining
 		x = -1
 		y = 6
 		cost = 2
@@ -3550,7 +3550,7 @@
 
 	focus = {
 		id = STP_party_staff_districts
-		icon = GFX_focus_VAL_Army_Of_The_Ledger
+		icon = GFX_focus_STP_party_war_transport
 		x = -1
 		y = 5
 		cost = 2
@@ -3602,7 +3602,7 @@
 
 	focus = {
 		id = STP_ch_regular_service
-		icon = GFX_focus_STP_cw_protocol_office
+		icon = GFX_focus_STP_ps_joint_staff
 		x = -3
 		y = 6
 		cost = 2
@@ -3736,7 +3736,7 @@
 
 	focus = {
 		id = STP_party_staff_public_budget
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_STP_party_industrial_board
 		x = -5
 		y = 8
 		cost = 1
@@ -3779,7 +3779,7 @@
 
 	focus = {
 		id = STP_party_staff_priority_orders
-		icon = GFX_focus_STP_pw_party_defence_combine
+		icon = GFX_focus_STP_ps_northern_arms
 		x = -1
 		y = 8
 		cost = 1
@@ -3868,7 +3868,7 @@
 
 	focus = {
 		id = STP_party_service_constitution
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_ch_service_act
 		x = -3
 		y = 10
 		cost = 2
@@ -4145,7 +4145,7 @@
 
 	focus = {
 		id = STP_ch_market_charter
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_party_port_contracts
 		x = -3
 		y = 6
 		cost = 2
@@ -4187,7 +4187,7 @@
 
 	focus = {
 		id = STP_party_trade_imports
-		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
+		icon = GFX_focus_STP_cw_capital_reserve
 		x = -5
 		y = 7
 		cost = 2
@@ -4608,7 +4608,7 @@
 
 	focus = {
 		id = STP_party_security_courts
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_cw_security_collegium
 		x = -5
 		y = 5
 		cost = 2
@@ -5165,7 +5165,7 @@
 
 	focus = {
 		id = STP_party_regent_joint_offices
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
 		x = -5
 		y = 5
 		cost = 2
@@ -6664,7 +6664,7 @@
 
 	focus = {
 		id = STP_pe_staff_work_a
-		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		icon = GFX_focus_STP_party_war_transport
 		x = 1
 		y = 5
 		cost = 3
@@ -6884,7 +6884,7 @@
 
 	focus = {
 		id = STP_pe_staff_course_a
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_ch_service_act
 		x = 1
 		y = 9
 		cost = 2
@@ -7153,7 +7153,7 @@
 
 	focus = {
 		id = STP_pe_trade_work_a
-		icon = GFX_focus_VAL_Factories_Like_Cathedrals
+		icon = GFX_focus_STP_party_industrial_board
 		x = 1
 		y = 5
 		cost = 3
@@ -7337,7 +7337,7 @@
 
 	focus = {
 		id = STP_pe_trade_commission
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_STP_cw_capital_reserve
 		x = 3
 		y = 8
 		cost = 2
@@ -7574,7 +7574,7 @@
 
 	focus = {
 		id = STP_pe_security_policy_a
-		icon = GFX_focus_STP_cw_press_office
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
 		x = 1
 		y = 4
 		cost = 2
@@ -7831,7 +7831,7 @@
 
 	focus = {
 		id = STP_pe_security_course_a
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_ROTATE_DISTRICT_COMMAND
 		x = 1
 		y = 9
 		cost = 2
@@ -8100,7 +8100,7 @@
 
 	focus = {
 		id = STP_pe_regent_work_a
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
 		x = 1
 		y = 5
 		cost = 3
@@ -8360,7 +8360,7 @@
 
 	focus = {
 		id = STP_pe_regent_course_b
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 5
 		y = 9
 		cost = 2

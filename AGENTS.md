@@ -22,6 +22,8 @@ idempotent when the builder changes data.
 
 Debug decisions and their required events, categories, and localisation may be
 included in the public release. Do not exclude them solely because they are debug content.
+Keep all debug decisions in dedicated debug categories, separate from ordinary
+gameplay and balance-of-power categories.
 
 ## Text punctuation
 

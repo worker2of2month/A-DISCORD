@@ -571,5 +571,55 @@ class ResourceProjectSourceContracts(unittest.TestCase):
             self.assertIn(P + 'has_completed_capital_project', src)
 
 
+class ShabratInvestmentRewards(unittest.TestCase):
+    def setUp(self):
+        trees = parse_clausewitz(read(FOCUS_FILES['STP']))
+        self.focuses = {
+            direct(focus.value, 'id'): focus.value
+            for tree in trees if tree.key == 'focus_tree'
+            for focus in tree.value if focus.key == 'focus'
+            if str(direct(focus.value, 'id')).startswith('STP_pc_investment_')
+        }
+
+    def test_fund_pays_seed_capital_and_records_monthly_income(self):
+        fixture = ProjectFixture(treasury=125)
+        fixture.stubs.add(P + 'initialize_country')
+        fixture.scopes['A'][P + 'current_month_action_income'] = 40
+        reward = direct(self.focuses['STP_pc_investment_development_fund'], 'completion_reward')
+        fixture.execute(reward, 'A', None, 'A')
+        self.assertEqual(fixture.scopes['A'][P + 'treasury'], 625)
+        self.assertEqual(fixture.scopes['A'][P + 'current_month_action_income'], 540)
+        self.assertTrue(fixture.scopes['A']['idea@' + P + 'investment_fund'])
+        self.assertEqual(fixture.calls.count(P + 'mark_dirty'), 1)
+        self.assertEqual(fixture.reserved, (0, 0))
+
+    def test_materials_bonus_is_shabrat_specific(self):
+        reward = direct(self.focuses['STP_pc_investment_special_metallurgy'], 'completion_reward')
+        self.assertEqual(direct(reward, 'add_ideas'), 'STP_pc_materials_program')
+        ideas = direct(direct(parse_clausewitz(read('common/ideas/ADISCORD_STP_civil_war_ideas.txt')), 'ideas'), 'country')
+        modifiers = direct(direct(ideas, 'STP_pc_materials_program'), 'modifier')
+        self.assertEqual({node.key: float(node.value) for node in modifiers}, {
+            'local_resources_factor': 0.1,
+            'production_speed_ADISCORD_rare_components_plant_factor': 0.2,
+            'production_speed_ADISCORD_rare_alloy_foundry_factor': 0.2,
+        })
+        shared = direct(direct(parse_clausewitz(read('common/ideas/ADISCORD_economy_ideas.txt')), 'ideas'), 'country')
+        shared_modifiers = direct(direct(shared, P + 'materials_program'), 'modifier')
+        self.assertEqual({node.key: float(node.value) for node in shared_modifiers}, {'local_resources_factor': 0.1})
+        self.assertIn('add_ideas = ' + P + 'materials_program', read(FOCUS_FILES['VAL']))
+        self.assertNotIn('STP_pc_materials_program', read(FOCUS_FILES['VAL']))
+
+    def test_branch_cost_reduced_by_fifty_six_days(self):
+        short = {'development_fund', 'automation', 'logistics', 'computing', 'export_finance'}
+        self.assertEqual(len(self.focuses), 9)
+        costs = {}
+        for name, focus in self.focuses.items():
+            cost = float(direct(focus, 'cost'))
+            costs[name] = cost
+            self.assertEqual(cost, 3 if name.removeprefix('STP_pc_investment_') in short else 5)
+        self.assertEqual(sum(costs.values()) * 7, 245)
+        self.assertEqual(301 - sum(costs.values()) * 7, 56)
+
+
 if __name__ == '__main__':
     unittest.main()

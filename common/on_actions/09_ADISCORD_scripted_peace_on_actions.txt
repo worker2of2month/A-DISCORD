@@ -18,6 +18,8 @@ on_actions = {
 					clr_country_flag = ADISCORD_nam_capitulation_reserved
 					clr_country_flag = STP_cw_northern_capitulation_reserved
 					clr_country_flag = STP_nod_border_capitulation_reserved
+					clr_country_flag = STP_heg_frontier_capitulation_reserved
+					clr_country_flag = STP_heg_cannibal_capitulation_reserved
 					clr_country_flag = STP_pw_party_kefreyt_capitulation_reserved
 					clr_country_flag = STP_pw_party_northern_march_capitulation_reserved
 					clr_country_flag = TFF_nod_capitulation_reserved
@@ -151,6 +153,57 @@ on_actions = {
 				}
 
 				# BEGIN stelander:on_capitulation_immediate
+				if = {
+					limit = {
+						ROOT = {
+							OR = {
+								tag = STS
+								tag = NKA
+							}
+						}
+					}
+					CIN = { STP_heg_clear_cannibal_campaign = yes }
+					OSF = { STP_heg_clear_cannibal_campaign = yes }
+					APH = { STP_heg_clear_cannibal_campaign = yes }
+				}
+				if = {
+					limit = { STP_heg_cannibal_capitulation_managed = yes }
+					ROOT = {
+						set_country_flag = {
+							flag = STP_heg_cannibal_capitulation_reserved
+							value = 1
+							days = 2
+						}
+					}
+					set_global_flag = skip_default_capitulation
+					STP_heg_settle_cannibal_campaign = yes
+					clr_global_flag = skip_default_capitulation
+				}
+				if = {
+					limit = {
+						ROOT = {
+							OR = {
+								tag = STS
+								tag = TFF
+							}
+						}
+					}
+					AIN = { clr_country_flag = STP_heg_frontier_campaign_active }
+					COF = { clr_country_flag = STP_heg_frontier_campaign_active }
+				}
+				if = {
+					limit = { STP_heg_frontier_capitulation_managed = yes }
+					ROOT = {
+						set_country_flag = {
+							flag = STP_heg_frontier_capitulation_reserved
+							value = 1
+							days = 2
+						}
+					}
+					set_global_flag = skip_default_capitulation
+					STP_heg_settle_frontier_expansion = yes
+					clr_global_flag = skip_default_capitulation
+				}
 				# Clear an unconsumed handoff so it cannot suppress another defeat.
 				ROOT = { clr_country_flag = STP_cw_northern_capitulation_pending }
 				if = {
@@ -1182,6 +1235,16 @@ on_actions = {
 				# END vorkerland_collapse:on_capitulation
 				# BEGIN stelander:on_capitulation
 				if = {
+					limit = { ROOT = { has_country_flag = STP_heg_cannibal_capitulation_reserved } }
+					ROOT = { clr_country_flag = STP_heg_cannibal_capitulation_reserved }
+					set_global_flag = skip_default_capitulation
+				}
+				if = {
+					limit = { ROOT = { has_country_flag = STP_heg_frontier_capitulation_reserved } }
+					ROOT = { clr_country_flag = STP_heg_frontier_capitulation_reserved }
+					set_global_flag = skip_default_capitulation
+				}
+				if = {
 					limit = { ROOT = { has_country_flag = STP_nod_border_capitulation_reserved } }
 					ROOT = { clr_country_flag = STP_nod_border_capitulation_reserved }
 					set_global_flag = skip_default_capitulation
@@ -1866,6 +1929,8 @@ on_actions = {
 					clr_country_flag = ADISCORD_nam_capitulation_reserved
 					clr_country_flag = STP_cw_northern_capitulation_reserved
 					clr_country_flag = STP_nod_border_capitulation_reserved
+					clr_country_flag = STP_heg_frontier_capitulation_reserved
+					clr_country_flag = STP_heg_cannibal_capitulation_reserved
 					clr_country_flag = STP_pw_party_kefreyt_capitulation_reserved
 					clr_country_flag = STP_pw_party_northern_march_capitulation_reserved
 					clr_country_flag = TFF_nod_capitulation_reserved
@@ -1882,6 +1947,8 @@ on_actions = {
 	}
 	on_uncapitulation = {
 		effect = {
+			clr_country_flag = STP_heg_cannibal_defeated
+			clr_country_flag = STP_heg_cannibal_capitulation_reserved
 			clr_country_flag = ADISCORD_vorkerland_pw_capitulation_reserved
 			# BEGIN kefreyt:on_uncapitulation
 			clr_country_flag = VAL_northern_coalition_capitulation_reserved
@@ -2009,6 +2076,9 @@ on_actions = {
 				VAL_queue_frontier_reconciliation = yes
 				# END kefreyt:on_peace
 				# BEGIN stelander:on_peace
+				STS = { STP_pc_close_liberation_war_receipt = yes }
+				STP_heg_reconcile_frontier_expansion = yes
+				STP_heg_reconcile_cannibal_campaign = yes
 				if = {
 					limit = {
 						OR = { ROOT = { OR = { tag = STP tag = NOD } } FROM = { OR = { tag = STP tag = NOD } } }
@@ -2129,6 +2199,9 @@ on_actions = {
 				ADISCORD_nam_resource_war_close_external = yes
 				# END nam:on_annex
 				# BEGIN stelander:on_annex
+				STS = { STP_pc_close_liberation_war_receipt = yes }
+				STP_heg_reconcile_frontier_expansion = yes
+				STP_heg_reconcile_cannibal_campaign = yes
 				# ROOT survives the annexation; FROM may no longer own any state.
 				if = {
 					limit = { OR = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } FROM = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } } }

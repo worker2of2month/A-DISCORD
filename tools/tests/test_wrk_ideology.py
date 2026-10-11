@@ -9,6 +9,9 @@ from PIL import Image
 
 
 from tools.lib.paths import source_section
+from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+from tools.tests.test_adiscord_stp_preparation import matches_conditions
+from tools.tests.test_adiscord_stp_party_route import children, one, walk
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -380,6 +383,120 @@ class VadlAndBagleyIdeologyContractTests(unittest.TestCase):
         self.assertIn("поставк", acceleration.group(1).lower())
         path = ROOT / "localisation/russian/parties_l_russian.yml"
         self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+
+
+class DorianIdeologyContracts(unittest.TestCase):
+    def test_initial_role_and_all_appointments_use_the_same_technocratic_subtype(self):
+        characters = one(parse_clausewitz(read(
+            "common/characters/ADISCORD_vorkerland_collapse_characters.txt"
+        )), "characters")
+        worx = one(characters, "TVA_Dorian_Worx")
+        self.assertEqual(one(one(worx, "country_leader"), "ideology"), "dorian_technocracy")
+        history = parse_clausewitz(read("history/countries/TVA - Vorkerland Technical Administration.txt"))
+        self.assertEqual(one(history, "recruit_character"), "TVA_Dorian_Worx")
+        self.assertEqual(one(one(history, "set_politics"), "ruling_party"), "technocracy")
+        effects = parse_clausewitz(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"))
+        appointments = []
+        for effect in effects:
+            for entry in walk(effect.value):
+                if entry.key != "promote_character" or not isinstance(entry.value, list):
+                    continue
+                if one(entry.value, "character") != "TVA_Dorian_Worx":
+                    continue
+                appointments.append(effect.key)
+                self.assertEqual(one(entry.value, "ideology"), "dorian_technocracy", effect.key)
+        self.assertCountEqual(appointments, [
+            "ADISCORD_vorkerland_setup_tva",
+            "ADISCORD_vorkerland_repair_claimant_identities",
+            "ADISCORD_vorkerland_form_wrk_from_tva",
+        ])
+        formation = one(effects, "ADISCORD_vorkerland_form_wrk_from_tva")
+        transfer = [
+            e.value for e in walk(formation) if e.key == "set_nationality"
+            and one(e.value, "character") == "TVA_Dorian_Worx"
+        ]
+        self.assertEqual(len(transfer), 1)
+        self.assertEqual(one(transfer[0], "target_country"), "WRK")
+        self.assertEqual(one(one(formation, "set_politics"), "ruling_party"), "technocracy")
+
+    def test_subtype_has_its_own_colour_and_complete_localisation(self):
+        ideologies = one(parse_clausewitz(read("common/ideologies/00_ideologies.txt")), "ideologies")
+        subtype = one(one(one(ideologies, "technocracy"), "types"), "dorian_technocracy")
+        self.assertEqual(one(subtype, "can_be_randomly_selected"), "no")
+        self.assertEqual([e.value for e in one(subtype, "color")], ["73", "110", "156"])
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/parties_l_{language}.yml"
+            raw = path.read_bytes()
+            self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
+            for key in ("dorian_technocracy", "dorian_technocracy_desc"):
+                self.assertEqual(len(re.findall(
+                    rf'^\s*{key}:(?:\d+)?\s*"[^"\r\n]+"\s*$',
+                    raw.decode("utf-8-sig"), re.M,
+                )), 1)
+
+
+class AllIdeologyPresentationContracts(unittest.TestCase):
+    def test_worx_emblem_follows_the_subideology_through_country_handoff(self):
+        scripts = one(parse_clausewitz(read("common/scripted_guis/CountryView_ScriptedGui.txt")), "scripted_gui")
+        panel = one(scripts, "ideology_icon_countrypoliticsview_gui")
+        visibility = one(panel, "triggers")
+        for country in ("TVA", "WRK"):
+            for subtype in ("dorian_technocracy", "technocracy_ideology"):
+                facts = {
+                    (country, "has_government", "technocracy"): True,
+                    (country, "has_country_leader_ideology", subtype): True,
+                }
+                with self.subTest(country=country, subtype=subtype):
+                    visible = [e.key for e in visibility if matches_conditions(e.value, facts, country)]
+                    expected = "dorian_technocracy" if subtype == "dorian_technocracy" else "technocracy"
+                    self.assertEqual(visible, [f"ideology_icon_{expected}_visible"])
+        gui = parse_clausewitz(read("interface/countrypoliticsview.gui"))
+        icon = next(e.value for e in walk(gui) if e.key == "iconType"
+                    and one(e.value, "name") == "ideology_icon_dorian_technocracy")
+        self.assertEqual(one(icon, "pdx_tooltip"), "dorian_technocracy_desc")
+        gfx = one(parse_clausewitz(read("interface/ADISCORD_ideology.gfx")), "spriteTypes")
+        sprite = next(e.value for e in gfx if one(e.value, "name") == one(icon, "spriteType"))
+        with Image.open(ROOT / one(sprite, "texturefile")) as asset:
+            asset.verify()
+
+    def test_every_registered_subtype_has_one_distinct_icon_and_matching_text(self):
+        ideologies = one(parse_clausewitz(read("common/ideologies/00_ideologies.txt")), "ideologies")
+        scripts = one(parse_clausewitz(read("common/scripted_guis/CountryView_ScriptedGui.txt")), "scripted_gui")
+        panel = one(scripts, "ideology_icon_countrypoliticsview_gui")
+        visibility = one(panel, "triggers")
+        gui = parse_clausewitz(read("interface/countrypoliticsview.gui"))
+        container = next(e.value for e in walk(gui) if e.key == "containerWindowType"
+                         and one(e.value, "name") == "ideology_icon_countrypoliticsview_container")
+        icons = {one(e, "name"): e for e in children(container, "iconType")}
+        gfx = one(parse_clausewitz(read("interface/ADISCORD_ideology.gfx")), "spriteTypes")
+        sprites = {one(e.value, "name"): e.value for e in gfx}
+        resolvers = {
+            one(e.value, "name"): e.value
+            for e in parse_clausewitz(read("common/scripted_localisation/ADISCORD_ideologies.txt"))
+        }
+        textures = set()
+        for group in ideologies:
+            resolver = resolvers["GetSubIdeology" + group.key.title()]
+            for subtype in one(group.value, "types"):
+                with self.subTest(subtype=subtype.key):
+                    facts = {
+                        ("STP", "has_government", group.key): True,
+                        ("STP", "has_country_leader_ideology", subtype.key): True,
+                    }
+                    expected = group.key if subtype.key == group.key + "_ideology" else subtype.key
+                    visible = [e.key for e in visibility if matches_conditions(e.value, facts)]
+                    self.assertEqual(visible, [f"ideology_icon_{expected}_visible"])
+                    icon = icons[f"ideology_icon_{expected}"]
+                    self.assertEqual(one(icon, "pdx_tooltip"), subtype.key + "_desc")
+                    texture = one(sprites[one(icon, "spriteType")], "texturefile")
+                    self.assertNotIn(texture, textures)
+                    textures.add(texture)
+                    with Image.open(ROOT / texture) as asset:
+                        asset.verify()
+                    text = next(e for e in children(resolver, "text")
+                                if not children(e, "trigger")
+                                or matches_conditions(one(e, "trigger"), facts))
+                    self.assertEqual(one(text, "localization_key"), subtype.key)
 
 
 if __name__ == "__main__":

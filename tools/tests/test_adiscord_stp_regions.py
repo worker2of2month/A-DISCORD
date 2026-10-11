@@ -395,16 +395,15 @@ class STPRegionalMechanicsTests(unittest.TestCase):
             "regional decisions must not be split into a second STP decisions file",
         )
         decisions = read(DECISIONS)
-        elections = named_block(decisions, "STP_elections_in_the_party")
-        entry_debug = named_block(elections, "STP_debug_start_battle_for_stelander")
+        debug = named_block(decisions, "STP_scenario_debug")
+        entry_debug = named_block(debug, "STP_debug_start_battle_for_stelander")
         self.assertIn("country_event = { id = ADISCORD_STP_regions.1 }", entry_debug)
 
-        battle = named_block(decisions, "STP_battle_for_stelander")
         for decision_id in (
             "STP_debug_reset_battle_for_stelander",
             "STP_debug_end_battle_for_stelander",
         ):
-            self.assertIn(f"{decision_id} = {{", battle)
+            self.assertIn(f"{decision_id} = {{", debug)
 
         categories = read(CATEGORIES)
         self.assertNotIn("STP_region_debug = {", categories)

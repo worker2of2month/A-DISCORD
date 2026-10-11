@@ -2871,7 +2871,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             'collapse_effects',
         )
         expected = {
-            "tva": ("TVA_Dorian_Worx", "technocracy_ideology"),
+            "tva": ("TVA_Dorian_Worx", "dorian_technocracy"),
             "eyr": ("EYR_Irina_Koval", "humanism_ideology"),
             "egc": ("EGC_Ruslan_Pike", "etatism_ideology"),
             "riv": ("RIV_Mikhail_Arsenyev", "pragmatism_ideology"),
@@ -3318,7 +3318,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
 
         dorian = named_block(characters, "TVA_Dorian_Worx")
         self.assertIn("GFX_portrait_WRK_Dorian_Worx", dorian)
-        self.assertIn("ideology = technocracy_ideology", dorian)
+        self.assertIn("ideology = dorian_technocracy", dorian)
         self.assertRegex(
             portraits,
             r'(?s)name\s*=\s*"GFX_portrait_WRK_Dorian_Worx"'
@@ -3329,7 +3329,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         for token in (
             "ruling_party = technocracy",
             "character = TVA_Dorian_Worx",
-            "ideology = technocracy_ideology",
+            "ideology = dorian_technocracy",
             "portrait = GFX_portrait_WRK_Dorian_Worx",
         ):
             self.assertIn(token, tva_setup)
@@ -3342,7 +3342,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             "drop_cosmetic_tag = yes",
             "ruling_party = technocracy",
             "character = TVA_Dorian_Worx",
-            "ideology = technocracy_ideology",
+            "ideology = dorian_technocracy",
         ):
             self.assertIn(token, formation)
         self.assertNotIn("ruling_party = utilitarism", formation)

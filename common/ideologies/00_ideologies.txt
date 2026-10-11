@@ -332,6 +332,10 @@ ideologies = {
 		types = {
 			technocracy_ideology = {
 			}
+			dorian_technocracy = {
+				can_be_randomly_selected = no
+				color = { 73 110 156 }
+			}
 		}
 
 		dynamic_faction_names = {
@@ -400,6 +404,14 @@ ideologies = {
 				can_be_randomly_selected = no
 				color = { 143 50 29 }
 			}
+			steland_military_etatism = {
+				can_be_randomly_selected = no
+				color = { 119 123 107 }
+			}
+			steland_security_etatism = {
+				can_be_randomly_selected = no
+				color = { 72 85 99 }
+			}
 			steland_military_directory = {
 				can_be_randomly_selected = no
 				color = { 78 86 74 }
@@ -455,6 +467,18 @@ ideologies = {
 
 		types = {
 			hedonism_ideology = {
+			}
+			radical_hedonism = {
+				can_be_randomly_selected = no
+				color = { 170 62 135 }
+			}
+			commercial_hedonism = {
+				can_be_randomly_selected = no
+				color = { 120 87 149 }
+			}
+			patronal_hedonism = {
+				can_be_randomly_selected = no
+				color = { 80 65 111 }
 			}
 			aristocratic_hedonism = {
 				can_be_randomly_selected = no

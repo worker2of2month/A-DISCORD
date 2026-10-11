@@ -71,7 +71,10 @@ def expected_outputs() -> dict[Path, bytes]:
         if role != 'background':
             definitions.append('\t\teffectFile = "gfx/FX/buttonstate.lua"')
         definitions.append('\t}')
-    for tag in ('stp', 'val'):
+    outputs[OUTPUT / 'rus.png'] = (
+        ROOT / 'tools/assets/source/startup/rus.png'
+    ).read_bytes()
+    for tag in ('stp', 'val', 'rus'):
         definitions.extend(
             [
                 '\tspriteType = {',

@@ -50,7 +50,7 @@ STP_cw_military_staff_dynamic = {
 }
 
 STP_cw_election_mandate_dynamic = {
-	icon = GFX_idea_ADISCORD_law_civic_local_councils
+	icon = GFX_idea_STP_apolitical_population
 	enable = { tag = STS has_war = yes }
 	army_org_regain = STP_cw_mandate_org_regain
 	army_core_defence_factor = STP_cw_mandate_core_defence

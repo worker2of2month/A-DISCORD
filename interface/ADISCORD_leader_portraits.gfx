@@ -1,4 +1,37 @@
 spriteTypes = {
+	spriteType = {
+		name = "GFX_portrait_NKA_STS_administrator"
+		texturefile = "gfx/leaders/NKA/portrait_STP_northern_administrator.png"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NKA_STS_administrator_small"
+		texturefile = "gfx/leaders/NKA/portrait_STP_northern_administrator.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+	spriteType = {
+		name = "GFX_portrait_VAL_STS_administrator"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_STS_administrator.png"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_VAL_STS_administrator_small"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_STS_administrator.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+	spriteType = {
+		name = "GFX_portrait_NOD_STS_administrator"
+		texturefile = "gfx/leaders/NOD/portrait_NOD_STS_administrator.png"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NOD_STS_administrator_small"
+		texturefile = "gfx/leaders/NOD/portrait_NOD_STS_administrator.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
 	spriteType = { name = "GFX_portrait_NKA_Viktor_Karst" texturefile = "gfx/leaders/VAL/portrait_NKA_Viktor_Karst.png" }
 
 

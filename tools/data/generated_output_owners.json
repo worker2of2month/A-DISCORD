@@ -19,6 +19,7 @@
     "vorkerland_cities",
     "ambient_audio",
     "minimap",
+    "startup_ui_assets",
     "decision_ui_assets",
     "diplomacy_ui_assets",
     "western_diplomacy_assets",
@@ -41,9 +42,139 @@
     "party_texticons",
     "vorkerland_flags",
     "stp_flags",
+    "stp_portraits",
+    "stp_party_ideologies",
+    "ideology_icons",
     "focus_trees"
   ],
   "families": [
+    {
+      "id": "ideology_icons",
+      "owner_module": "tools.builders.build_adiscord_ideology_icons",
+      "source_inputs": [
+        "tools/builders/build_adiscord_ideology_icons.py",
+        "tools/assets/source/ideology_icons/*.png",
+        "tools/assets/source/ideology_icons/prompts.md"
+      ],
+      "output_globs": [
+        "gfx/interface/ideologies/steland_liberationism_group.png",
+        "gfx/interface/ideologies/steland_military_directory_group.png",
+        "gfx/interface/ideologies/tff_emergency_war_coordinator_group.png",
+        "gfx/interface/ideologies/dorian_technocracy_group.png",
+        "docs/development/previews/additional-ideology-icons.png"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_ideology_icons"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_ideology_icons",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "stp_party_ideologies",
+      "owner_module": "tools.builders.build_adiscord_stp_party_ideologies",
+      "source_inputs": [
+        "tools/builders/build_adiscord_stp_party_ideologies.py",
+        "tools/assets/source/stp_party_ideologies/*.png",
+        "tools/assets/source/stp_party_ideologies/prompts.md",
+        "gfx/interface/ideologies/aristocratic_hedonism_group.png"
+      ],
+      "output_globs": [
+        "gfx/interface/ideologies/radical_hedonism_group.png",
+        "gfx/interface/ideologies/commercial_hedonism_group.png",
+        "gfx/interface/ideologies/patronal_hedonism_group.png",
+        "gfx/interface/ideologies/steland_military_etatism_group.png",
+        "gfx/interface/ideologies/steland_security_etatism_group.png",
+        "docs/development/previews/stp-party-ideology-icons.png"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_stp_party_ideologies"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_stp_party_ideologies",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "startup_ui_assets",
+      "owner_module": "tools.builders.build_adiscord_startup_ui_assets",
+      "source_inputs": [
+        "tools/builders/build_adiscord_startup_ui_assets.py",
+        "tools/assets/source/startup/rus.png"
+      ],
+      "output_globs": [
+        "interface/ADISCORD_startup_menu.gfx",
+        "gfx/interface/startup/background.png",
+        "gfx/interface/startup/tab.png",
+        "gfx/interface/startup/page.png",
+        "gfx/interface/startup/launcher.png",
+        "gfx/interface/startup/close.png",
+        "gfx/interface/startup/rus.png"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_startup_ui_assets"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_startup_ui_assets",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "stp_portraits",
+      "owner_module": "tools.builders.build_adiscord_stp_portraits",
+      "source_inputs": [
+        "tools/builders/build_adiscord_stp_portraits.py",
+        "tools/assets/source/stp_portraits/*.png"
+      ],
+      "output_globs": [
+        "gfx/leaders/STP/portrait_STP_Petr_Ivanov.png",
+        "gfx/leaders/STP/ivanov_glitch_animation.dds",
+        "gfx/leaders/NOD/portrait_NOD_STS_administrator.png",
+        "gfx/leaders/VAL/portrait_VAL_STS_administrator.png",
+        "gfx/leaders/NKA/portrait_STP_northern_administrator.png",
+        "docs/development/previews/ivanov-glitch.gif"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_stp_portraits"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_stp_portraits",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
     {
       "id": "ambient_audio",
       "owner_module": "tools.builders.build_adiscord_ambient_audio",
@@ -1398,12 +1529,24 @@
         "tools/assets/source/STP_revolution_capital_flag.png",
         "tools/assets/source/SLI_flag.png",
         "tools/assets/source/SLI_mandate_flag.png",
+        "tools/assets/source/STS_hegemony_flag.png",
+        "tools/assets/source/stp_administration_flags/NOD_STS_administration.png",
+        "tools/assets/source/stp_administration_flags/VAL_STS_administration.png",
+        "tools/assets/source/stp_administration_flags/YPR_STS_administration.png",
+        "tools/assets/source/stp_administration_flags/TFF_STS_administration.png",
         "gfx/flags/STP.tga",
         "gfx/flags/medium/STP.tga",
         "gfx/flags/small/STP.tga"
       ],
       "output_globs": [
         "gfx/flags/**/STP_revolution_capital.tga",
+        "gfx/flags/**/STP_great_stelander.tga",
+        "gfx/flags/**/STS_hegemony.tga",
+        "gfx/flags/**/NOD_STS_administration.tga",
+        "gfx/flags/**/NKA_STS_administration.tga",
+        "gfx/flags/**/VAL_STS_administration.tga",
+        "gfx/flags/**/YPR_STS_administration.tga",
+        "gfx/flags/**/TFF_STS_administration.tga",
         "gfx/flags/**/NOD_STP_revolution.tga",
         "gfx/flags/**/VAL_STP_revolution.tga",
         "gfx/flags/**/BJK_STP_revolution.tga",

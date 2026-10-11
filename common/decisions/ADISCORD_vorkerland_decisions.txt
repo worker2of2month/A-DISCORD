@@ -4487,11 +4487,13 @@ RUS_bunker_construction = {
 					has_completed_focus = RUS_standard_calibres
 					RUS_rifle_order_affordable = yes
 				}
-				add_political_power = -30
-				subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
-				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2500 producer = RUS }
-				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+				add_political_power = -50
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 25000 producer = RUS }
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 600 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 600 }
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 		ai_will_do = {
@@ -4499,6 +4501,10 @@ RUS_bunker_construction = {
 			modifier = {
 				factor = 0
 				RUS_ai_proclamation_pending = yes
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 900 compare = less_than }
 			}
 		}
 	}
@@ -4525,16 +4531,13 @@ RUS_bunker_construction = {
 					RUS_market_surplus_affordable = yes
 				}
 				add_political_power = -15
-				subtract_from_variable = { var = ADISCORD_economy_treasury value = 0 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 0 }
-				add_equipment_to_stockpile = { type = infantry_equipment amount = -2500 }
+				add_equipment_to_stockpile = { type = infantry_equipment amount = -10000 }
 				custom_effect_tooltip = RUS_treasury_220_tt
 				hidden_effect = {
 					add_to_variable = { var = ADISCORD_economy_treasury value = 220 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 220 }
 					ADISCORD_economy_mark_dirty = yes
 				}
-				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
 		}
 		ai_will_do = {

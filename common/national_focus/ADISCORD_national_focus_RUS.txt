@@ -883,6 +883,7 @@ focus_tree = {
 			controls_state = 66
 		}
 		completion_reward = {
+			add_political_power = 30
 			66 = {
 				add_extra_state_shared_building_slots = 1
 				add_building_construction = {
@@ -923,6 +924,19 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = { type = train_equipment_1 amount = 15 producer = RUS }
 			add_equipment_to_stockpile = { type = motorized_equipment amount = 80 producer = RUS }
+			if = {
+				limit = {
+					owns_state = 66
+					controls_state = 66
+				}
+				66 = {
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -981,6 +995,7 @@ focus_tree = {
 			controls_state = 66
 		}
 		completion_reward = {
+			add_political_power = 30
 			66 = {
 				add_extra_state_shared_building_slots = 1
 				add_building_construction = {
@@ -1050,6 +1065,7 @@ focus_tree = {
 			controls_state = 66
 		}
 		completion_reward = {
+			add_political_power = 50
 			66 = {
 				add_extra_state_shared_building_slots = 1
 				add_building_construction = {
@@ -2202,6 +2218,11 @@ focus_tree = {
 				uses = 2
 				category = industry
 			}
+			effect_tooltip = { add_ideas = RUS_military_contract_board_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_factory_output value = 0.05 }
+				RUS_government_refresh = yes
+			}
 		}
 		ai_will_do = { base = 6 }
 	}
@@ -2226,6 +2247,7 @@ focus_tree = {
 			controls_state = 66
 		}
 		completion_reward = {
+			add_political_power = 25
 			66 = {
 				add_extra_state_shared_building_slots = 1
 				add_building_construction = {
@@ -2256,6 +2278,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			add_political_power = 40
 			add_equipment_to_stockpile = {
 				type = train_equipment_1
 				amount = 12
@@ -2926,6 +2949,7 @@ focus_tree = {
 			controls_state = 66
 		}
 		completion_reward = {
+			add_political_power = 35
 			66 = { add_extra_state_shared_building_slots = 1 }
 			unlock_decision_tooltip = RUS_surface_industrial_contract
 		}
@@ -2958,6 +2982,18 @@ focus_tree = {
 				amount = 80
 				producer = RUS
 			}
+			effect_tooltip = { add_ideas = RUS_civil_construction_board_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_civilian_speed value = 0.05 }
+				RUS_government_refresh = yes
+			}
+			if = {
+				limit = {
+					owns_state = 66
+					controls_state = 66
+				}
+				66 = { add_extra_state_shared_building_slots = 1 }
+			}
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -2980,6 +3016,12 @@ focus_tree = {
 		}
 		completion_reward = {
 			unlock_decision_tooltip = RUS_subterranean_supply_contract
+			custom_effect_tooltip = RUS_treasury_300_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+				ADISCORD_economy_mark_dirty = yes
+			}
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -3002,6 +3044,7 @@ focus_tree = {
 			controls_state = 66
 		}
 		completion_reward = {
+			add_political_power = 35
 			custom_effect_tooltip = RUS_autonomous_workshops_tt
 			hidden_effect = {
 				add_to_variable = {

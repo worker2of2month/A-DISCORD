@@ -374,8 +374,15 @@ class PostwarContinuationContracts(unittest.TestCase):
         for number in range(1, 16):
             event_id = f"ADISCORD_STP_pc.{number}"
             event = parsed_event(event_id)
-            description = scalar(event, "desc")
-            self.assertNotIn(description, option_names(event_id), event_id)
+            descriptions = [
+                scalar(node.value, "text") if isinstance(node.value, list) else node.value
+                for node in event if node.key == "desc"
+            ]
+            self.assertTrue(descriptions, event_id)
+            answers = option_names(event_id)
+            for description in descriptions:
+                with self.subTest(event=event_id, description=description):
+                    self.assertNotIn(description, answers, event_id)
 
     def test_canonical_stp_localisation_has_no_duplicate_keys(self) -> None:
         counts = Counter(re.findall(r"(?m)^\s*([\w.]+):", read(LOC)))
@@ -1596,8 +1603,10 @@ class PostwarContinuationContracts(unittest.TestCase):
         )
         mandate = ast_block(focuses["STP_pc_lib_war"], "completion_reward")
         self.assertEqual(
-            [(entry.key, entry.value) for entry in mandate],
+            [(entry.key, entry.value) for entry in mandate if entry.key == "unlock_decision_tooltip"],
             [
+                ("unlock_decision_tooltip", "STP_pw_prepare_val_campaign"),
+                ("unlock_decision_tooltip", "STP_pw_prepare_nod_campaign"),
                 ("unlock_decision_tooltip", "STP_pc_launch_val_liberation"),
                 ("unlock_decision_tooltip", "STP_pc_launch_nod_liberation"),
             ],
@@ -1652,15 +1661,23 @@ class HumanistRouteContracts(unittest.TestCase):
 
     def execute_launch(self, items, facts, declarations):
         # Only the declaration path is interpreted; unsupported effects fail closed.
+        branch_taken = False
         for entry in items:
             key, value = entry.key, entry.value
             if key == "custom_effect_tooltip":
                 continue
             if key == "hidden_effect":
                 self.execute_launch(value, facts, declarations)
-            elif key == "if":
-                if matches_conditions(self.expand_conditions(block(value, "limit")), facts, "STS"):
+            elif key in ("if", "else_if"):
+                if key == "if":
+                    branch_taken = False
+                if not branch_taken and matches_conditions(self.expand_conditions(block(value, "limit")), facts, "STS"):
+                    branch_taken = True
                     self.execute_launch([e for e in value if e.key != "limit"], facts, declarations)
+            elif key == "else":
+                if not branch_taken:
+                    self.execute_launch(value, facts, declarations)
+                branch_taken = True
             elif key in self.effects:
                 self.assertEqual(value, "yes")
                 self.execute_launch(self.effects[key], facts, declarations)
@@ -1672,6 +1689,17 @@ class HumanistRouteContracts(unittest.TestCase):
                 facts[("STS", "has_war", "no")] = False
             elif key == "country_event":
                 self.assertEqual(scalar(value, "id"), "ADISCORD_STP_pc.49")
+            elif key in ("set_country_flag", "clr_country_flag"):
+                facts[("STS", "has_country_flag", value)] = key == "set_country_flag"
+            elif key == "remove_ideas":
+                facts[("STS", "has_idea", value)] = False
+            elif key == "add_timed_idea":
+                self.assertEqual(scalar(value, "idea"), "STP_cw_deliberate_offensive")
+                self.assertEqual(scalar(value, "days"), "35")
+            elif key in ("set_temp_variable", "set_variable"):
+                facts[("STS", "variable", scalar(value, "var"))] = float(scalar(value, "value"))
+            elif key == "clear_variable":
+                facts.pop(("STS", "variable", value), None)
             else:
                 self.fail(f"Unsupported declaration effect: {key}")
 
@@ -1687,6 +1715,8 @@ class HumanistRouteContracts(unittest.TestCase):
             ("STS", "has_completed_focus", "STP_pc_lib_war"): True,
             ("STS", "has_country_flag", "STP_pc_val_crisis"): True,
             ("STS", "has_country_flag", "STP_pc_nod_crisis"): True,
+            ("STS", "has_idea", "STP_pc_val_campaign_ready"): True,
+            ("STS", "has_idea", "STP_pc_nod_campaign_ready"): True,
             ("STS", "has_war", "no"): True,
         })
         return facts
@@ -1723,6 +1753,7 @@ class HumanistRouteContracts(unittest.TestCase):
                 (("STS", "has_war_with", country), True),
                 (("STS", "is_in_faction_with", country), True),
                 (("STS", "has_completed_focus", "STP_pc_lib_war"), False),
+                (("STS", "has_idea", f"STP_pc_{target}_campaign_ready"), False),
                 (("STS", "has_global_flag", "STP_cw_union_wars_finished"), False),
                 (("STS", "variable", "STP_pc_course"), 1),
                 ((country, "exists", "yes"), False),
@@ -1785,10 +1816,110 @@ class HumanistRouteContracts(unittest.TestCase):
         tree = block(native, "focus_tree")
         focus = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "STP_pc_lib_war")
         self.assertEqual(
-            [(e.key, e.value) for e in block(focus, "completion_reward")],
-            [("unlock_decision_tooltip", f"STP_pc_launch_{target}_liberation") for target in ("val", "nod")],
+            [(e.key, e.value) for e in block(focus, "completion_reward") if e.key == "unlock_decision_tooltip"],
+            [("unlock_decision_tooltip", f"STP_pw_prepare_{target}_campaign") for target in ("val", "nod")]
+            + [("unlock_decision_tooltip", f"STP_pc_launch_{target}_liberation") for target in ("val", "nod")],
         )
         self.assertNotIn("STP_pc_declare_liberation_war", self.effects)
+
+    def test_all_three_cabinets_share_paid_preparation_and_targeted_launch(self):
+        for cabinet, leader in (
+            (1, "STP_grigory_sotnikov"),
+            (2, "STP_maksim_shabrat"),
+            (3, "STP_vera_tikh"),
+        ):
+            for target in ("val", "nod"):
+                with self.subTest(cabinet=cabinet, target=target):
+                    facts = {
+                        **self.facts(),
+                        ("STS", "variable", "STP_pc_charter_cabinet"): cabinet,
+                        ("STS", "ruling_leader"): leader,
+                    }
+                    preparation = self.decisions[f"STP_pw_prepare_{target}_campaign"]
+                    self.assertTrue(matches_conditions(
+                        self.expand_conditions(block(preparation, "visible")), facts, "STS"
+                    ))
+                    self.assertEqual(scalar(preparation, "days_remove"), "35")
+                    self.assertEqual(scalar(preparation, "custom_cost_text"), "STP_pw_price_900")
+                    cost = block(block(preparation, "custom_cost_trigger"), "check_variable")
+                    self.assertEqual(scalar(cost, "value"), "900")
+                    self.assertTrue(self.eligible(target, facts))
+                    declarations = []
+                    self.execute_launch(block(self.decisions[f"STP_pc_launch_{target}_liberation"], "complete_effect"), facts, declarations)
+                    self.assertEqual(declarations, [target.upper()])
+                    self.assertFalse(facts[("STS", "has_idea", f"STP_pc_{target}_campaign_ready")])
+                    self.assertFalse(self.eligible(target, facts))
+
+    def test_truce_preserves_political_contacts_but_blocks_payment_and_launch(self):
+        facts = {
+            **self.facts(),
+            ("STS", "has_country_flag", "VAL_stelander_truce"): True,
+            ("STS", "has_country_flag", "STP_pc_val_crisis"): False,
+            ("STS", "has_idea", "STP_pc_val_campaign_ready"): False,
+        }
+        contact = self.effects["STP_pc_open_liberation_contacts"][0]
+        self.assertTrue(matches_conditions(
+            self.expand_conditions(block(contact.value, "limit")), facts, "STS"
+        ))
+        notice = block(self.events["ADISCORD_STP_pc.9"], "immediate")
+        self.assertTrue(any(e.key == "set_country_flag" and e.value == "STP_pc_val_crisis" for e in walk(notice)))
+        facts[("STS", "has_country_flag", "STP_pc_val_crisis")] = True
+        preparation = self.decisions["STP_pw_prepare_val_campaign"]
+        self.assertFalse(matches_conditions(
+            self.expand_conditions(block(preparation, "available")), facts, "STS"
+        ))
+        self.assertFalse(self.eligible("val", facts))
+        facts[("STS", "has_country_flag", "VAL_stelander_truce")] = False
+        self.assertTrue(matches_conditions(
+            self.expand_conditions(block(preparation, "available")), facts, "STS"
+        ))
+
+    def test_resolved_neighbors_bypass_war_without_repeating_declaration(self):
+        focuses = war_focuses()
+        for result in ("absent", "subjects", "political_settlements"):
+            facts = self.facts()
+            if result == "absent":
+                facts.update({(country, "exists", "yes"): False for country in ("VAL", "NOD")})
+            elif result == "subjects":
+                facts.update({(country, "is_subject_of", "STS"): True for country in ("VAL", "NOD")})
+            else:
+                facts[("VAL", "has_country_flag", "VAL_stelander_defeated")] = True
+                facts[("NOD", "has_idea", "NOD_mandate_broken")] = True
+            for focus_id in ("STP_pc_lib_crisis", "STP_pc_lib_war"):
+                self.assertTrue(matches_conditions(
+                    self.expand_conditions(block(focuses[focus_id], "bypass")), facts, "STS"
+                ), (result, focus_id))
+            for target in ("val", "nod"):
+                self.assertFalse(self.eligible(target, facts))
+                declarations = []
+                self.execute_launch(block(self.decisions[f"STP_pc_launch_{target}_liberation"], "complete_effect"), facts, declarations)
+                self.assertEqual(declarations, [])
+        facts = self.facts()
+        facts[("STS", "has_country_flag", "STP_pc_lib_nod_won")] = True
+        self.assertTrue(matches_conditions(
+            self.expand_conditions(self.triggers["STP_shabrat_ai_nodrul_resolved"]), facts, "STS"
+        ))
+
+    def test_nod_result_receipt_survives_peace_callback_and_excludes_border_war(self):
+        settlement = block(self.effects["STP_pc_begin_settlement"], "if")
+        snapshot = [e for e in settlement if e.key != "limit"][:2]
+        result = [e for e in settlement if isinstance(e.value, list) and any(
+            child.key == "set_country_flag" and child.value in ("STP_pc_lib_val_won", "STP_pc_lib_nod_won")
+            for child in e.value
+        )]
+        self.assertEqual(len(result), 2)
+        for full_campaign in (False, True):
+            facts = {
+                **self.facts(),
+                ("STS", "variable", "STP_pc_cap_side"): 2,
+                ("STS", "has_country_flag", "STP_pc_nod_liberation_war"): full_campaign,
+                ("STS", "has_war_with", "NOD"): False,
+            }
+            self.execute_launch(snapshot, facts, [])
+            self.execute_launch(self.effects["STP_pc_close_liberation_war_receipt"], facts, [])
+            self.assertFalse(facts[("STS", "has_country_flag", "STP_pc_nod_liberation_war")])
+            self.execute_launch(result, facts, [])
+            self.assertEqual(facts.get(("STS", "has_country_flag", "STP_pc_lib_nod_won"), False), full_campaign)
 
     def test_scenes_have_exact_outcomes_and_unconditional_timeout_options(self):
         focuses = war_focuses()

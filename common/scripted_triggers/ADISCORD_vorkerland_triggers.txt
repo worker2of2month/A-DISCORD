@@ -2800,14 +2800,13 @@ RUS_engineering_order_affordable = {
 }
 
 RUS_rifle_order_affordable = {
-	NOT = { has_political_power < 30 }
-	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+	NOT = { has_political_power < 50 }
+	check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
 }
 
 RUS_market_surplus_affordable = {
 	NOT = { has_political_power < 15 }
-	check_variable = { var = ADISCORD_economy_treasury value = 0 compare = greater_than_or_equals }
-	NOT = { has_equipment = { infantry_equipment < 2500 } }
+	NOT = { has_equipment = { infantry_equipment < 10000 } }
 }
 
 RUS_bunker_upgrade_1_requirements = {
@@ -3428,6 +3427,7 @@ RUS_crisis_other_major_required = {
 		has_country_flag = ADISCORD_south_added_major
 		has_country_flag = ADISCORD_west_added_major
 		has_country_flag = STP_cw_northern_added_major
+		has_country_flag = STP_heg_cannibal_added_major
 		has_country_flag = VAL_frontier_added_major
 		has_country_flag = VAL_northern_coalition_added_major
 		has_country_flag = VAL_final_war_added_major

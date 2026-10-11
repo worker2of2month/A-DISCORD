@@ -22,6 +22,17 @@ defined_text = {
 		trigger = { tag = VAL }
 		localization_key = VAL_startup_path_0_title
 	}
+	text = {
+		trigger = {
+			tag = RUS
+			check_variable = { var = ADISCORD_startup_tab value = 1 compare = equals }
+		}
+		localization_key = RUS_startup_guide_state_title
+	}
+	text = {
+		trigger = { tag = RUS }
+		localization_key = RUS_startup_path_0_title
+	}
 	text = { localization_key = ADISCORD_startup_unsupported }
 }
 
@@ -49,6 +60,17 @@ defined_text = {
 		trigger = { tag = VAL }
 		localization_key = VAL_startup_path_1_title
 	}
+	text = {
+		trigger = {
+			tag = RUS
+			check_variable = { var = ADISCORD_startup_tab value = 1 compare = equals }
+		}
+		localization_key = RUS_startup_guide_bunker_title
+	}
+	text = {
+		trigger = { tag = RUS }
+		localization_key = RUS_startup_path_1_title
+	}
 	text = { localization_key = ADISCORD_startup_unsupported }
 }
 
@@ -62,6 +84,10 @@ defined_text = {
 		trigger = { tag = VAL }
 		localization_key = VAL_startup_guide_diplomacy_title
 	}
+	text = {
+		trigger = { tag = RUS }
+		localization_key = RUS_startup_guide_campaign_title
+	}
 	text = { localization_key = ADISCORD_startup_unsupported }
 }
 
@@ -74,6 +100,10 @@ defined_text = {
 	text = {
 		trigger = { tag = VAL }
 		localization_key = VAL_startup_guide_plan_title
+	}
+	text = {
+		trigger = { tag = RUS }
+		localization_key = RUS_startup_guide_plan_title
 	}
 	text = { localization_key = ADISCORD_startup_unsupported }
 }

@@ -6182,7 +6182,7 @@ def collect_issues() -> list[str]:
     else:
         worx = character_definitions[0]
         for token in (
-            "ideology = technocracy_ideology",
+            "ideology = dorian_technocracy",
             "large = GFX_portrait_WRK_Dorian_Worx",
         ):
             if token not in worx:
