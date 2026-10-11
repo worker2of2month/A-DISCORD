@@ -10,23 +10,23 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 
 FOCUS_FILE = ROOT / "common/national_focus/ADISCORD_national_focus_RUS.txt"
-DECISION_FILE = ROOT / "common/decisions/ADISCORD_vorkerland_decisions.txt"
-CATEGORY_FILE = ROOT / "common/decisions/categories/ADISCORD_vorkerland_categories.txt"
+DECISION_FILE = ROOT / "common/decisions/ADISCORD_RUS_decisions.txt"
+CATEGORY_FILE = ROOT / "common/decisions/categories/ADISCORD_decision_categories_RUS.txt"
 EFFECT_FILE = ROOT / "common/scripted_effects/ADISCORD_RUS_scripted_effects.txt"
 VORKERLAND_EFFECT_FILE = ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-TRIGGER_FILE = ROOT / "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"
-PLAN_FILE = ROOT / "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"
+TRIGGER_FILE = ROOT / "common/scripted_triggers/ADISCORD_RUS_scripted_triggers.txt"
+PLAN_FILE = ROOT / "common/ai_strategy_plans/ADISCORD_RUS_plans.txt"
 # The strike actor stands on the reactor landmark.
 ORBITAL_ACTOR_POSITIONS = {
     "ADISCORD_orbital_laser_strike_entity": ("3536.24", "906.55"),
 }
-AI_FILE = ROOT / "common/ai_strategy/ADISCORD_vorkerland_ai.txt"
+AI_FILE = ROOT / "common/ai_strategy/ADISCORD_RUS_ai.txt"
 ON_ACTIONS = ROOT / "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
 IDEA_FILE = ROOT / "common/ideas/ADISCORD_RUS_ideas.txt"
-RUSSIAN_LOC = ROOT / "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
-IDEA_LOC = ROOT / "localisation/russian/ADISCORD_ideas_l_russian.yml"
+RUSSIAN_LOC = ROOT / "localisation/russian/ADISCORD_RUS_l_russian.yml"
+IDEA_LOC = ROOT / "localisation/russian/ADISCORD_RUS_l_russian.yml"
 COUNTRY_LOC = ROOT / "localisation/russian/countries_l_russian.yml"
-ENGLISH_LOC = ROOT / "localisation/english/ADISCORD_vorkerland_l_english.yml"
+ENGLISH_LOC = ROOT / "localisation/english/ADISCORD_RUS_l_english.yml"
 
 RUS_FOCUS_IDS = (
     "RUS_summon_the_aimaqs",
@@ -398,7 +398,7 @@ class RusLastEmpireTests(unittest.TestCase):
             "ADISCORD_vorkerland_wkr_war_economy_strip",
             read(ROOT / "common/ideas/ADISCORD_vorkerland_ideas.txt"),
         )
-        plans = read(PLAN_FILE)
+        plans = read(ROOT / "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt")
         self.assertIn("ADISCORD_vorkerland_wrk_prewar_compact_plan", plans)
         self.assertIn("ADISCORD_vorkerland_zao_plan", plans)
         self.assertIn("ADISCORD_vorkerland_iba_plan", plans)
@@ -424,8 +424,9 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
         self.effects = entries("common/scripted_effects/ADISCORD_RUS_scripted_effects.txt")
         self.effects += entries("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
         self.triggers = entries(
-            "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"
+            "common/scripted_triggers/ADISCORD_RUS_scripted_triggers.txt"
         )
+        self.triggers += entries("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")
         definitions = {e.key: e.value for e in self.triggers}
 
         def expand(items, parameters=None):
@@ -831,7 +832,7 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
 
         gate = self.expand(self.block(self.triggers, "RUS_ai_proclamation_pending"))
         category = self.block(
-            self.entries("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            self.entries("common/decisions/ADISCORD_RUS_decisions.txt"),
             "ADISCORD_vorkerland_rus_dirty_campaign_category",
         )
         decision = self.block(category, "RUS_proclaim_the_last_empire")
@@ -892,7 +893,7 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
             ("RUS", "has_country_flag", "ADISCORD_vorkerland_rus_last_empire_proclaimed"): True,
         }
         guarded = set()
-        for category in self.entries("common/decisions/ADISCORD_vorkerland_decisions.txt"):
+        for category in self.entries("common/decisions/ADISCORD_RUS_decisions.txt"):
             for decision in category.value:
                 name, rows = decision.key, decision.value
                 if not name.startswith("RUS_") or name.startswith("RUS_crisis_"):
@@ -987,7 +988,7 @@ class RusCrisisFixture:
         })
         self.triggers = {
             e.key: e.value
-            for e in entries("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")
+            for e in entries("common/scripted_triggers/ADISCORD_RUS_scripted_triggers.txt")
             if e.key.startswith(("RUS_crisis_", "RUS_imperial_frontier_")) or e.key == "RUS_lab_reactor_access"
         }
         self.triggers.update({
@@ -1616,7 +1617,7 @@ class RusCrisisContracts(unittest.TestCase):
 
     def crisis_decision(self, name):
         category = self.block(
-            self.entries("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            self.entries("common/decisions/ADISCORD_RUS_decisions.txt"),
             "RUS_last_empire_crisis",
         )
         return self.block(category, name)
@@ -1732,7 +1733,7 @@ class RusCrisisContracts(unittest.TestCase):
     def test_bayrinzh_ai_preparation_and_war_orders_follow_crisis_phase(self):
         world = self.bayrinzh_empire()
         strategies = {
-            row.key: row.value for row in self.entries("common/ai_strategy/ADISCORD_vorkerland_ai.txt")
+            row.key: row.value for row in self.entries("common/ai_strategy/ADISCORD_RUS_ai.txt")
         }
         world.run("RUS_crisis_begin")
         for name, country in (("BTL_crisis_prepare_RUS", "BTL"), ("RUS_crisis_prepare_BTL", "RUS")):
@@ -2355,7 +2356,7 @@ class RusCrisisContracts(unittest.TestCase):
                     owners = dict(world.owners)
                     events = list(world.events)
                     category = self.block(
-                        self.entries("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+                        self.entries("common/decisions/ADISCORD_RUS_decisions.txt"),
                         "RUS_last_empire_crisis",
                     )
                     for mission, country in (
@@ -2514,7 +2515,7 @@ class RusCrisisContracts(unittest.TestCase):
             self.assertFalse([row for row in walk(world.effects[effect]) if row.key in ("country_event", "for_loop_effect")])
             if effect != "RUS_crisis_reduce_world_to_ruins":
                 self.assertFalse([row for row in walk(world.effects[effect]) if row.key in ("every_state", "every_country")])
-        events = self.entries("events/ADISCORD_vorkerland_events.txt")
+        events = self.entries("events/ADISCORD_RUS_events.txt")
         self.assertFalse([row for row in walk(events) if row.key == "RUS_crisis_ruin_next_wave"])
         world.execute(daily, ["RUS"])
         self.assertFalse(world.events)
@@ -2673,13 +2674,13 @@ class RusCrisisContracts(unittest.TestCase):
             self.assertEqual(ORBITAL_ACTOR_POSITIONS[self.scalar(actor, "entity")], (self.scalar(actor, "x"), self.scalar(actor, "y")))
             self.assertEqual(self.scalar(actor, "z"), "0")
             self.assertFalse([row for row in actor if row.key == "visible"])
-        event = next(row.value for row in self.entries("events/ADISCORD_vorkerland_events.txt") if row.key == "country_event" and self.scalar(row.value, "id") == "ADISCORD_rus_crisis.8")
+        event = next(row.value for row in self.entries("events/ADISCORD_RUS_events.txt") if row.key == "country_event" and self.scalar(row.value, "id") == "ADISCORD_rus_crisis.8")
         self.assertEqual(self.scalar(self.block(event, "immediate"), "goto_province"), "5228")
         self.assertNotIn("goto_province", source[source.index("RUS_crisis_end_world = {"):source.index("RUS_crisis_play_strike = {")])
         self.assertIn("5228", read(ROOT / "history/states/125-Reactor.txt"))
 
     def test_military_victory_story_distinguishes_live_and_disabled_laser(self):
-        event = next(row.value for row in self.entries("events/ADISCORD_vorkerland_events.txt") if row.key == "country_event" and self.scalar(row.value, "id") == "ADISCORD_rus_campaign.11")
+        event = next(row.value for row in self.entries("events/ADISCORD_RUS_events.txt") if row.key == "country_event" and self.scalar(row.value, "id") == "ADISCORD_rus_campaign.11")
         world = self.peaceful_empire()
         world.variables["RUS", "RUS_crisis_phase"] = 3
         descriptions = [row.value for row in event if row.key == "desc"]
@@ -2693,7 +2694,7 @@ class RusCrisisContracts(unittest.TestCase):
 
     def test_every_epilogue_page_is_localised_bounded_and_has_no_author_credits(self):
         for language in ("russian", "english"):
-            source = read(ROOT / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            source = read(ROOT / f"localisation/{language}/ADISCORD_RUS_l_{language}.yml")
             for page in range(2, 9):
                 for part in ("title", "body"):
                     key = f"RUS_crisis_epilogue_{page}_{part}"
@@ -2731,8 +2732,8 @@ class RusCrisisContracts(unittest.TestCase):
                 self.assertIn("RUS_crisis_capitulation_reserved", world.flags["RUS"])
 
     def test_new_regional_winners_have_defence_ui_and_a_single_defeat_description(self):
-        category = self.block(self.entries("common/decisions/categories/ADISCORD_vorkerland_categories.txt"), "RUS_last_empire_crisis")
-        events = self.entries("events/ADISCORD_vorkerland_events.txt")
+        category = self.block(self.entries("common/decisions/categories/ADISCORD_decision_categories_RUS.txt"), "RUS_last_empire_crisis")
+        events = self.entries("events/ADISCORD_RUS_events.txt")
         event = next(row.value for row in events if row.key == "country_event" and self.scalar(row.value, "id") == "ADISCORD_rus_crisis.4")
         for target in ("SHL", "NAM", "WRK", "IVN"):
             world = self.peaceful_empire()
@@ -2843,7 +2844,7 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertNotIn("RUS_crisis_challenge_hegemon", str(reward))
 
     def test_ai_prepares_for_each_selected_hegemon_and_stops_at_campaign_end(self):
-        strategies = [row.value for row in self.entries("common/ai_strategy/ADISCORD_vorkerland_ai.txt") if "_crisis_" in row.key]
+        strategies = [row.value for row in self.entries("common/ai_strategy/ADISCORD_RUS_ai.txt") if "_crisis_" in row.key]
 
         def enabled(world, country, kind):
             targets = []
@@ -2981,7 +2982,7 @@ class RusCrisisContracts(unittest.TestCase):
         world.factions = {"VAL": "league", "NOD": "league"}
         self.complete_hegemon_victory(world, "VAL")
         world.outside_predicates["RUS", "RUS_khan_governing"] = True
-        category = self.block(self.entries("common/decisions/ADISCORD_vorkerland_decisions.txt"), "RUS_last_empire_crisis")
+        category = self.block(self.entries("common/decisions/ADISCORD_RUS_decisions.txt"), "RUS_last_empire_crisis")
         mission = self.block(category, "RUS_crisis_invasion_countdown")
         world.execute(self.block(mission, "timeout_effect"), ["RUS"])
         self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 2)
@@ -3142,7 +3143,7 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertEqual(world.subjects["SCA"], "WKR")
 
     def test_each_winner_can_select_one_existing_special_zone_only_once(self):
-        category = self.block(self.entries("common/decisions/ADISCORD_vorkerland_decisions.txt"), "RUS_last_empire_crisis")
+        category = self.block(self.entries("common/decisions/ADISCORD_RUS_decisions.txt"), "RUS_last_empire_crisis")
         decision = self.block(category, "RUS_crisis_establish_special_zone")
         transaction = self.block(self.block(decision, "complete_effect"), "if")
         self.assertEqual([e.key for e in self.block(transaction, "limit")], ["hidden_trigger"])
@@ -3166,7 +3167,7 @@ class RusCrisisContracts(unittest.TestCase):
             self.assertFalse(world.subjects)
 
     def test_missions_and_preparations_share_a_realistic_deadline(self):
-        category = self.block(self.entries("common/decisions/ADISCORD_vorkerland_decisions.txt"), "RUS_last_empire_crisis")
+        category = self.block(self.entries("common/decisions/ADISCORD_RUS_decisions.txt"), "RUS_last_empire_crisis")
         tree = self.block(self.entries("common/national_focus/ADISCORD_national_focus_RUS.txt"), "focus_tree")
         focuses = {self.scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
         preparation = ("RUS_imperial_general_staff", "RUS_western_supply_lines", "RUS_imperial_arsenals", "RUS_aimaq_reserve")
@@ -3182,7 +3183,7 @@ class RusCrisisContracts(unittest.TestCase):
 
     def test_new_localisation_is_single_line_bom_and_complete(self):
         for language in ("russian", "english"):
-            path = ROOT / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml"
+            path = ROOT / f"localisation/{language}/ADISCORD_RUS_l_{language}.yml"
             from tools.lib.paths import source_section
             source = source_section(read(path), "rus_crisis_l_" + language)
             source = source.split("\n", 1)[1]
@@ -3319,7 +3320,7 @@ class RusWorldEndingPresentationContracts(unittest.TestCase):
             labels = [row.value for row in self.walk(window) if row.key == "text"]
             self.assertFalse([label for label in labels if any(word in label.lower() for word in ("progress", "remaining", "wave_status"))])
         for language in ("russian", "english"):
-            source = read(ROOT / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            source = read(ROOT / f"localisation/{language}/ADISCORD_RUS_l_{language}.yml")
             ending = {key: value for key, value in localisation_entries(source).items() if key.startswith(("RUS_crisis_strike_", "RUS_crisis_epilogue_"))}
             self.assertFalse([text for text in ending.values() if any(token in text.lower() for token in ("снять паузу", "на паузе", "space to", "game time", "world_state_queue"))])
 
@@ -3358,8 +3359,8 @@ class RusWorldEndingPresentationContracts(unittest.TestCase):
             "interface/ADISCORD_RUS.gui",
             "common/scripted_guis/ADISCORD_RUS_scripted_gui.txt",
             "common/scripted_localisation/ADISCORD_RUS_scripted_loc.txt",
-            "localisation/russian/ADISCORD_vorkerland_l_russian.yml",
-            "localisation/english/ADISCORD_vorkerland_l_english.yml",
+            "localisation/russian/ADISCORD_RUS_l_russian.yml",
+            "localisation/english/ADISCORD_RUS_l_english.yml",
         ):
             source = read(ROOT / relative)
             for token in (
@@ -3516,7 +3517,7 @@ class RusWorldEndingPresentationContracts(unittest.TestCase):
             self.assertGreaterEqual(screen.height, 900)
             self.assertEqual(screen.mode, "RGB")
         for language in ("russian", "english"):
-            path = ROOT / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml"
+            path = ROOT / f"localisation/{language}/ADISCORD_RUS_l_{language}.yml"
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             entries = localisation_entries(read(path))
             for key in ("RUS_world_anarchy", "RUS_last_bunker", "RUS_crisis_epilogue_8_body"):

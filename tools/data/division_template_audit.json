@@ -13067,7 +13067,7 @@
       "key": "rus_lab_airship",
       "source": {
         "kind": "script",
-        "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+        "path": "common/scripted_effects/ADISCORD_RUS_scripted_effects.txt",
         "owner": "script"
       },
       "technical_name": "Khanate Airship",
@@ -13105,7 +13105,7 @@
       "key": "rus_hazard_brigade",
       "source": {
         "kind": "script",
-        "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+        "path": "common/scripted_effects/ADISCORD_RUS_scripted_effects.txt",
         "owner": "script"
       },
       "technical_name": "Khanate CBRN Brigade",
@@ -15641,7 +15641,7 @@
     },
     {
       "key": "rus_lab_airship_spawn",
-      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+      "path": "common/scripted_effects/ADISCORD_RUS_scripted_effects.txt",
       "kind": "create_unit",
       "technical_name": "Khanate Airship",
       "legacy_names": [],
@@ -15651,7 +15651,7 @@
     },
     {
       "key": "rus_hazard_brigade_recruitment",
-      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+      "path": "common/scripted_effects/ADISCORD_RUS_scripted_effects.txt",
       "kind": "technical_reference",
       "technical_name": "Khanate CBRN Brigade",
       "legacy_names": [],

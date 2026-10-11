@@ -696,7 +696,7 @@ class NewWorldRouteTests(unittest.TestCase):
         self.assertTrue(world.matches(final_conditions))
 
     def test_recognition_is_rechecked_in_the_shared_settlement_effect(self):
-        roots = entries("common/decisions/ADISCORD_vorkerland_decisions.txt")
+        roots = entries("common/decisions/ADISCORD_RUS_decisions.txt")
         candidates = [e.value for e in walk(roots) if e.key == "RUS_crisis_establish_special_zone"]
         self.assertEqual(len(candidates), 1)
         for field in ("available", "complete_effect"):

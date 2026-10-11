@@ -4542,29 +4542,6 @@ ADISCORD_vorkerland_show_itora_war_superevent = {
 	}
 }
 
-# The defeated RUS country disappears during settlement; deliver the delayed
-# presentation to a surviving human country or the credited victor.
-ADISCORD_vorkerland_show_khan_defeated_superevent = {
-	if = {
-		limit = {
-			any_country = {
-				is_ai = no
-				NOT = { tag = RUS }
-			}
-		}
-		random_country = {
-			limit = {
-				is_ai = no
-				NOT = { tag = RUS }
-			}
-			country_event = { id = ADISCORD_superevent.15 hours = 1 }
-		}
-	}
-	else = {
-		country_event = { id = ADISCORD_superevent.15 hours = 1 }
-	}
-}
-
 ADISCORD_vorkerland_show_worker_victory_superevent = {
 	set_global_flag = ADISCORD_vorkerland_central_victory_announced
 	if = {
@@ -10933,4 +10910,3 @@ ADISCORD_vorkerland_pw_finish_rebuild = {
 		ROOT = { ADISCORD_economy_mark_dirty = yes }
 	}
 }
-

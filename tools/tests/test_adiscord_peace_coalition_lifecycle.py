@@ -24,7 +24,7 @@ def shared_major_ownership_scripts():
             "RUS_crisis_release_other_major",
         ),
         (
-            "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt",
+            "common/scripted_triggers/ADISCORD_RUS_scripted_triggers.txt",
             "RUS_crisis_other_major_required",
         ),
     ):
@@ -924,7 +924,7 @@ class CoalitionLifecycleTests(unittest.TestCase):
         for index, tag in enumerate(("SLA", "RZA", "MLR", "ERT", "IRT", "SCA"), 1):
             f = TreatyFixture()
             f.root = tag
-            f.load("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt", True)
+            f.load("common/scripted_triggers/ADISCORD_RUS_scripted_triggers.txt", True)
             f.variables["RUS", "ADISCORD_vorkerland_rus_campaign_target"] = index
             f.wars = {frozenset(("RUS", tag)), frozenset(("SUB", tag))}
             f.subjects["SUB"] = "RUS"

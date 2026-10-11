@@ -31,43 +31,70 @@ than duplicating wars, peace settlements, research trees or territorial claims.
 ## Focus programmes
 
 IDs use `STP_pc_charter_sotnikov_*`, `STP_pc_charter_shabrat_*`, and
-`STP_pc_charter_tikhoreva_*`. Programmes occupy the original Charter area,
-immediately below `STP_pc_lib_lock`, beside the shared liberation and coalition
-route. Their absolute bounds are x = 9..19, y = 10..19. The three policy families
-use short forks and joins with distinct graph shapes; each join requires all of
-its contributing focuses. The programme review requires all six terminal leaves.
-Only the selected cabinet's programme is visible. Shared Charter ancestors stay
-visible after appointment, and the founder's personal hegemony focus remains
-within the hegemony route.
+`STP_pc_charter_tikhoreva_*`. Each programme has 25 focuses; three
+mutually exclusive forks leave 22 completed focuses on any route. Programmes
+occupy the original Charter area, immediately below `STP_pc_lib_lock`, beside the
+shared liberation and coalition route. Their absolute bounds are x = 9..21,
+y = 10..19. Only the selected cabinet's programme is visible. Shared Charter
+ancestors stay visible after appointment, and the founder's personal hegemony
+focus remains within the hegemony route.
 
-Most focuses last 21 days; substantive construction or capstones may last 28
-days. Layout and ordering do not change their total costs or rewards. Existing
-textures illustrate records, courts, public services, logistics and defence.
+Each cabinet has its own graph shape:
 
-- Sotnikov: independent courts, civilian oversight, veterans' reintegration,
-  social recovery, defensive readiness and voluntary external cooperation.
-- Shabrat: equal national citizenship, resistance memory, district integration,
-  domestic industry, national defence and protection of citizens under the Charter.
-- Tikhoreva: public records, accountable appointments, measured reconstruction,
-  applied research, procurement oversight and transparent public expenditure.
+- Sotnikov, a shield: justice, civilian return and army-under-law pillars. Each
+  pillar has one fork (open hearings or prison review, clinics or housing,
+  citizens' reserve or professional service). Two cross-links join neighbouring
+  pillars before the review.
+- Shabrat, a chain of diamonds: citizenship and suppliers join at the registers;
+  memory or national service sits beside two mandatory district works; the
+  protection focus opens a six-way fan with arsenal or civil economy and district
+  reserves or border drills forks.
+- Tikhoreva, a ladder: records and reconstruction rails share rungs (published
+  accounts, accountable service, reconstruction balance) beside a research rail.
+  Forks choose service baselines or the limits of measurement, open tenders or
+  standard designs, technical institutes or field trials.
 
-Use the existing postwar dynamic modifier and exact dummy deltas. Limit each
-programme's permanent output/research/organisation/construction improvements to
-modest totals, normally 5-10 percent per field, and administration savings to
-at most 10 percent. Mix capabilities, factories, research bonuses, equipment and
-paid repeatable follow-ups; never install preview-only ideas. Every economic
-change invalidates the existing cache. Treasury rewards/debits update the monthly
-action ledger. Construction is in owned controlled states with enough slots.
+Every fork keeps identical parents, and every child that follows a fork accepts
+either branch in one `prerequisite` block. The review joins the final focus of
+each pillar or wing. Most focuses last 21 days; construction, the review and the
+capstone last 28 days.
+
+Rewards combine:
+
+- A leader trait added by the mandate and replaced by a stronger trait at the
+  capstone (`common/country_leader/ADISCORD_traits_STP.txt`).
+- Free adoption of the programme's laws. A law that is already active gives its
+  stated political power instead, so a reward never reapplies the same tier.
+- Exact `STP_pw_*` increments through the postwar dynamic modifier with dummy
+  delta previews. Each field stays within 10 percent per programme, and
+  administration savings within -10 percent.
+- Factories in owned controlled states with free slots, research bonuses,
+  equipment, manpower, army experience and command power.
+- A hireable advisor role for Ravel (Sotnikov) or Barchel (Shabrat) when the
+  character serves STS and is not arrested; otherwise command power.
 
 Three repeatable programmes, one per candidate, give a meaningful focus unlock:
 `STP_pc_charter_sotnikov_reintegration`, `STP_pc_charter_shabrat_civic_grants`,
 `STP_pc_charter_tikhoreva_procurement`. Each has an explicit full price, cooldown,
-government and completed-focus predicates; no delayed escrow is needed.
+government and completed-focus predicates; no delayed escrow is needed. Open
+tenders is exclusive with standard designs, so Tikhoreva's procurement is a
+deliberate choice.
 
-Mid-programme narrative dilemmas use events `.65`, `.66`, `.67` respectively;
-programme conclusions use `.68`, `.69`, `.70`. They stay in the existing STP
-event file and event registry. Both languages preserve canon and visible effects.
-Every event remains within 3000 characters and 5500 UTF-8 bytes per description.
+Each cabinet has four events in the existing STP event file and registry:
+
+- Sotnikov: `.65` prison review, `.80` the commandant's trial, `.81` the first
+  strike under the Charter, `.68` conclusion.
+- Shabrat: `.83` a settlement off the register, `.66` the common voice, `.82` the
+  citizen's oath, `.69` conclusion.
+- Tikhoreva: `.67` an error in a correct table, `.84` an unsigned expense line,
+  `.85` a target against the person, `.70` conclusion.
+
+Mid-programme events offer immediate trade-offs or timed spirits (labour
+arbitration, trusted accounts, hard norms). Each conclusion chooses one of two
+permanent legacy spirits. Every option rechecks the current cabinet, and a closed
+answer remains when the cabinet has changed. Both languages preserve canon and
+visible effects. Every event remains within 3000 characters and 5500 UTF-8 bytes
+per description.
 
 ## Files and verification
 
@@ -111,31 +138,26 @@ Static verification must not be reported as native-game proof.
 |---|---|---|---|
 | 1 | Мандат человеческого достоинства | Национальный мандат Хартии | Мандат измеримого результата |
 | 2 | Суд вне приказа | Одно гражданство | Открытые государственные реестры |
-| 3 | Право на защиту | Память сопротивления | Назначения по делу |
-| 4 | Открытое разбирательство | Служба общей стране | Исходная мера услуг |
-| 5 | Районные приёмные | Свести районные реестры | Публиковать счета |
-| 6 | Пересмотр заключений | Предел национального требования | За пределами показателя |
-| 7 | Гражданский надзор | Национальные районные гранты | Проверка вне ведомства |
-| 8 | Самоуправление по Хартии | Защита граждан | Обжалование по существу |
-| 9 | Учить свободе | Школа общей страны | Публичный разбор результатов |
-| 10 | Гарантии без исключений | Обязательство перед страной | Ответственная государственная служба |
-| 11 | Возвращение к мирной жизни | Опора на своих поставщиков | Обследовать разрушения |
-| 12 | Восстановить семейные записи | Учёт рабочего инструмента | Очередность ремонта |
-| 13 | Районные лечебницы | Мастерская для района | Открытые закупки |
-| 14 | Дома для семей | Единый промышленный стандарт | Проверенные типовые решения |
-| 15 | Голос работников | Общие строительные бригады | Опытная мастерская |
-| 16 | Мастерские мирного труда | Национальный арсенал | Приёмка по результату |
-| 17 | Освоить мирное ремесло | Испытать свои материалы | График обслуживания |
-| 18 | Безопасный рабочий день | Связать районные хозяйства | Расчёт районной логистики |
-| 19 | Общественный договор труда | Хозяйственная самостоятельность | Баланс восстановления |
-| 20 | Армия в рамках закона | Защита национального дома | Исследования для практики |
-| 21 | Опыт без культа войны | Присяга государству | Открытый лабораторный журнал |
-| 22 | Служба спасения раненых | Проверить пограничную готовность | Технические наставники |
-| 23 | Учения ради защиты | Районный резерв | Полевые испытания |
-| 24 | Снабжение без реквизиций | Отечественное снабжение | Арсенал проверенного образца |
-| 25 | Запасы для спасения | Имущество для обороны | Подготовка с обратной связью |
-| 26 | Сотрудничество по доброй воле | Единая работа штабов | Единый каталог запчастей |
-| 27 | Ответственность командира | Устойчивый тыл граждан | Обратная связь штабов |
-| 28 | Готовность беречь мир | Армия своих граждан | Знание на службе общества |
-| 29 | Проверка обещаний | Собрать результаты районов | Сводная проверка программы |
-| 30 | Свобода становится привычкой | Сильная страна под Хартией | Полезное государство по Хартии |
+| 3 | Открытое разбирательство | Опора на своих поставщиков | Назначения по делу |
+| 4 | Пересмотр заключений | Свести районные реестры | Исходная мера услуг |
+| 5 | Районные приёмные | Память сопротивления | За пределами показателя |
+| 6 | Гражданский надзор | Национальные районные гранты | Обследовать разрушения |
+| 7 | Гарантии без исключений | Учёт рабочего инструмента | Публиковать счета |
+| 8 | Возвращение к мирной жизни | Служба общей стране | Проверка вне ведомства |
+| 9 | Восстановить семейные записи | Защита граждан | Публичный разбор результатов |
+| 10 | Районные лечебницы | Школа общей страны | Очередность ремонта |
+| 11 | Дома для семей | Обязательство перед страной | Открытые закупки |
+| 12 | Голос работников | Мастерская для района | Проверенные типовые решения |
+| 13 | Мастерские мирного труда | Единый промышленный стандарт | Опытная мастерская |
+| 14 | Освоить мирное ремесло | Защита национального дома | Ответственная государственная служба |
+| 15 | Армия в рамках закона | Присяга государству | График обслуживания |
+| 16 | Резерв граждан | Предел национального требования | Баланс восстановления |
+| 17 | Профессиональная служба | Национальный арсенал | Исследования для практики |
+| 18 | Служба спасения раненых | Хозяйственная самостоятельность | Открытый лабораторный журнал |
+| 19 | Учения ради защиты | Районный резерв | Технические наставники |
+| 20 | Снабжение без реквизиций | Проверить пограничную готовность | Полевые испытания |
+| 21 | Запасы для спасения | Устойчивый тыл граждан | Арсенал проверенного образца |
+| 22 | Ответственность командира | Связать районные хозяйства | Подготовка с обратной связью |
+| 23 | Готовность беречь мир | Имущество для обороны | Знание на службе общества |
+| 24 | Проверка обещаний | Собрать результаты районов | Сводная проверка программы |
+| 25 | Свобода становится привычкой | Сильная страна под Хартией | Полезное государство по Хартии |

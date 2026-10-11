@@ -1,0 +1,462 @@
+# --- rus_country_content ---
+# Preserve the separate Khan-border intervention, which is not part of the
+# claimant decision chain but still needs an executable battle plan.
+ADISCORD_vorkerland_khan_border_offensive = {
+	allowed = { tag = RUS }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_khan_border_war_started
+		country_exists = SLA
+		has_war_with = SLA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = SLA
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = { type = consider_weak id = SLA value = 100 }
+	ai_strategy = { type = conquer id = SLA value = 150 }
+}
+
+ADISCORD_vorkerland_rus_dirty_sla_offensive = {
+	allowed = { tag = RUS }
+	enable = {
+		has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+		check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
+		country_exists = SLA
+		has_war_with = SLA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = SLA ratio = 0.01 priority = 1600 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = { type = consider_weak id = SLA value = 120 }
+	ai_strategy = { type = conquer id = SLA value = 200 }
+}
+
+ADISCORD_vorkerland_rus_dirty_rza_offensive = {
+	allowed = { tag = RUS }
+	enable = {
+		has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+		check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
+		country_exists = RZA
+		has_war_with = RZA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = RZA ratio = 0.01 priority = 1600 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = { type = consider_weak id = RZA value = 120 }
+	ai_strategy = { type = conquer id = RZA value = 200 }
+}
+
+ADISCORD_vorkerland_rus_dirty_mlr_offensive = {
+	allowed = { tag = RUS }
+	enable = {
+		has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+		check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
+		country_exists = MLR
+		has_war_with = MLR
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = MLR ratio = 0.01 priority = 1600 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = { type = consider_weak id = MLR value = 120 }
+	ai_strategy = { type = conquer id = MLR value = 200 }
+}
+
+ADISCORD_vorkerland_rus_dirty_ert_offensive = {
+	allowed = { tag = RUS }
+	enable = {
+		has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+		check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
+		country_exists = ERT
+		has_war_with = ERT
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = ERT ratio = 0.01 priority = 1600 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = { type = consider_weak id = ERT value = 120 }
+	ai_strategy = { type = conquer id = ERT value = 200 }
+}
+
+ADISCORD_vorkerland_rus_dirty_irt_offensive = {
+	allowed = { tag = RUS }
+	enable = {
+		has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+		check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
+		country_exists = IRT
+		has_war_with = IRT
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = IRT ratio = 0.01 priority = 1600 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = { type = consider_weak id = IRT value = 120 }
+	ai_strategy = { type = conquer id = IRT value = 200 }
+}
+
+ADISCORD_vorkerland_rus_dirty_sca_offensive = {
+	allowed = { tag = RUS }
+	enable = {
+		has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+		check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
+		country_exists = SCA
+		has_war_with = SCA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = SCA ratio = 0.01 priority = 1600 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = { type = consider_weak id = SCA value = 120 }
+	ai_strategy = { type = conquer id = SCA value = 200 }
+}
+
+RUS_crisis_prepare_NOD = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		NOD = { RUS_crisis_coalition_candidate = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = NOD value = 200 }
+}
+
+RUS_crisis_conquer_NOD = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		NOD = { has_country_flag = RUS_crisis_defender }
+		has_war_with = NOD
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = NOD value = 200 }
+}
+
+RUS_crisis_prepare_VAL = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		VAL = { RUS_crisis_coalition_candidate = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = VAL value = 200 }
+}
+
+RUS_crisis_conquer_VAL = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		VAL = { has_country_flag = RUS_crisis_defender }
+		has_war_with = VAL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = VAL value = 200 }
+}
+
+RUS_crisis_prepare_STS = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		STS = { RUS_crisis_coalition_candidate = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = STS value = 200 }
+}
+
+RUS_crisis_conquer_STS = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		STS = { has_country_flag = RUS_crisis_defender }
+		has_war_with = STS
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = STS value = 200 }
+}
+
+RUS_crisis_prepare_STP = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		STP = { RUS_crisis_coalition_candidate = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = STP value = 200 }
+}
+
+RUS_crisis_conquer_STP = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		STP = { has_country_flag = RUS_crisis_defender }
+		has_war_with = STP
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = STP value = 200 }
+}
+
+RUS_crisis_prepare_SHL = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		SHL = { RUS_crisis_coalition_candidate = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = SHL value = 200 }
+}
+
+RUS_crisis_conquer_SHL = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		SHL = { has_country_flag = RUS_crisis_defender }
+		has_war_with = SHL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = SHL value = 200 }
+}
+
+RUS_crisis_prepare_NAM = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		NAM = { RUS_crisis_coalition_candidate = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = NAM value = 200 }
+}
+
+RUS_crisis_conquer_NAM = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		NAM = { has_country_flag = RUS_crisis_defender }
+		has_war_with = NAM
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = NAM value = 200 }
+}
+
+RUS_crisis_coalition_war = {
+	allowed = { NOT = { tag = RUS } }
+	enable = {
+		is_ai = yes
+		has_country_flag = RUS_crisis_defender
+		has_war_with = RUS
+		RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = RUS value = 200 }
+}
+
+RUS_crisis_prepare_MON = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		MON = { RUS_crisis_coalition_candidate = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = MON value = 200 }
+}
+
+RUS_crisis_conquer_MON = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		MON = { has_country_flag = RUS_crisis_defender }
+		has_war_with = MON
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = MON value = 200 }
+}
+
+RUS_crisis_prepare_VLD = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		VLD = { RUS_crisis_coalition_candidate = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = VLD value = 200 }
+}
+
+RUS_crisis_conquer_VLD = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		VLD = { has_country_flag = RUS_crisis_defender }
+		has_war_with = VLD
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = VLD value = 200 }
+}
+
+RUS_crisis_prepare_TMR = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		TMR = { RUS_crisis_coalition_candidate = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = TMR value = 200 }
+}
+
+RUS_crisis_conquer_TMR = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		TMR = { has_country_flag = RUS_crisis_defender }
+		has_war_with = TMR
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = TMR value = 200 }
+}
+
+RUS_crisis_prepare_BTL = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		BTL = { RUS_crisis_coalition_candidate = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = BTL value = 200 }
+}
+
+RUS_crisis_conquer_BTL = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		BTL = { has_country_flag = RUS_crisis_defender }
+		has_war_with = BTL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = BTL value = 200 }
+}
+
+# --- rus_coalition_preparation ---
+# Coalition membership determines preparation; scripted entry owns the war declaration.
+NOD_crisis_prepare_RUS = {
+	allowed = { tag = NOD }
+	enable = {
+		is_ai = yes
+		RUS_crisis_coalition_candidate = yes
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
+VAL_crisis_prepare_RUS = {
+	allowed = { tag = VAL }
+	enable = {
+		is_ai = yes
+		RUS_crisis_coalition_candidate = yes
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
+STS_crisis_prepare_RUS = {
+	allowed = { tag = STS }
+	enable = {
+		is_ai = yes
+		RUS_crisis_coalition_candidate = yes
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
+STP_crisis_prepare_RUS = {
+	allowed = { tag = STP }
+	enable = {
+		is_ai = yes
+		RUS_crisis_coalition_candidate = yes
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
+SHL_crisis_prepare_RUS = {
+	allowed = { tag = SHL }
+	enable = {
+		is_ai = yes
+		RUS_crisis_coalition_candidate = yes
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
+NAM_crisis_prepare_RUS = {
+	allowed = { tag = NAM }
+	enable = {
+		is_ai = yes
+		RUS_crisis_coalition_candidate = yes
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
+MON_crisis_prepare_RUS = {
+	allowed = { tag = MON }
+	enable = {
+		is_ai = yes
+		RUS_crisis_coalition_candidate = yes
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
+VLD_crisis_prepare_RUS = {
+	allowed = { tag = VLD }
+	enable = {
+		is_ai = yes
+		RUS_crisis_coalition_candidate = yes
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
+TMR_crisis_prepare_RUS = {
+	allowed = { tag = TMR }
+	enable = {
+		is_ai = yes
+		RUS_crisis_coalition_candidate = yes
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
+BTL_crisis_prepare_RUS = {
+	allowed = { tag = BTL }
+	enable = {
+		is_ai = yes
+		RUS_crisis_coalition_candidate = yes
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}

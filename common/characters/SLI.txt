@@ -5,7 +5,7 @@ characters = {
 			civilian = { large = GFX_Portrait_Forul_Generic_4 }
 		}
 		country_leader = {
-			ideology = contractual_etatism
+			ideology = etatism_ideology
 			expire = "2200.1.1.1"
 			id = -1
 		}

@@ -1,0 +1,1363 @@
+# --- rus_last_empire_triggers ---
+# RUS. The project starts once through the new-campaign imperial lifecycle.
+RUS_crisis_can_begin = {
+	tag = RUS
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	RUS_khan_governing = yes
+	has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+	NOT = { has_variable = RUS_crisis_phase }
+	RUS_lab_reactor_access = yes
+	NOT = { has_global_flag = RUS_crisis_world_ended }
+}
+
+# COUNTRY. Regional winners retain their own alliances and settlements.
+RUS_crisis_eastern_hegemony = {
+	OR = {
+		AND = {
+			tag = VAL
+			OR = {
+				has_completed_focus = VAL_Campaign_Secured
+				has_completed_focus = VAL_nw_price
+			}
+			VAL_campaign_objectives_met = yes
+		}
+		AND = {
+			tag = STS
+			has_completed_focus = STP_pc_heg_final_kefreyt
+			STP_heg_northern_final_resolved = yes
+			OR = {
+				has_country_flag = STP_heg_kefreyt_final_won
+				VAL = { is_subject_of = STS }
+				NOT = { VAL = { exists = yes } }
+			}
+		}
+		AND = {
+			tag = STP
+			has_completed_focus = STP_pw_party_great_stelander
+			STP_pw_party_external_order_resolved = yes
+			STP_pw_party_northern_march_resolved = yes
+		}
+		AND = {
+			tag = NOD
+			check_variable = { var = STP_cw_northern_campaign_status value = 2 compare = equals }
+			VAL = {
+				OR = {
+					exists = no
+					is_subject_of = NOD
+				}
+			}
+			STP = { RUS_crisis_northern_order_member = yes }
+			STS = { RUS_crisis_northern_order_member = yes }
+		}
+	}
+}
+
+# COUNTRY. This voluntary offensive is restricted to human opponents.
+RUS_crisis_player_challenger = {
+	is_ai = no
+	OR = {
+		tag = VAL
+		tag = STP
+		tag = STS
+	}
+	RUS = { is_ai = no }
+}
+
+RUS_crisis_player_attack_visible = {
+	RUS_crisis_player_challenger = yes
+	RUS_crisis_eastern_hegemony = yes
+	RUS = {
+		exists = yes
+		RUS_khan_governing = yes
+	}
+	NOT = { has_war_with = RUS }
+	NOT = { has_global_flag = RUS_crisis_world_ended }
+}
+
+RUS_crisis_player_attack_available = {
+	hidden_trigger = { RUS_crisis_player_attack_visible = yes }
+	is_subject = no
+	has_capitulated = no
+	has_war = no
+	NOT = { is_in_faction_with = RUS }
+	RUS = {
+		is_subject = no
+		has_capitulated = no
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_crisis_player_attack_side_tt
+		RUS_crisis_side_compatible = yes
+	}
+}
+
+# COUNTRY regional rival. A northern expedition alone does not establish hegemony.
+RUS_crisis_northern_order_member = {
+	OR = {
+		exists = no
+		is_subject_of = NOD
+		AND = {
+			is_in_faction_with = NOD
+			NOD = { is_faction_leader = yes }
+		}
+	}
+}
+
+RUS_crisis_coalition_candidate = {
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	NOT = { is_in_faction_with = RUS }
+	OR = {
+		tag = MON
+		tag = VLD
+		tag = TMR
+		tag = BTL
+		AND = {
+			has_war = no
+			has_global_flag = ADISCORD_south_final_resolved
+			OR = {
+				AND = {
+					tag = SHL
+					has_global_flag = ADISCORD_south_hegemon_SHL
+				}
+				AND = {
+					tag = NAM
+					has_global_flag = ADISCORD_south_hegemon_NAM
+				}
+			}
+		}
+		AND = {
+			has_war = no
+			RUS_crisis_eastern_hegemony = yes
+		}
+	}
+}
+
+RUS_crisis_project_active = {
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	RUS_khan_governing = yes
+	NOT = { has_country_flag = RUS_crisis_laser_disabled }
+	OR = {
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
+	}
+}
+
+RUS_imperial_frontier_can_begin = {
+	hidden_trigger = { tag = RUS }
+	custom_trigger_tooltip = {
+		tooltip = RUS_khan_governing_tt
+		RUS_khan_governing = yes
+	}
+	is_subject = no
+	has_capitulated = no
+	has_war = no
+	custom_trigger_tooltip = {
+		tooltip = RUS_empire_proclaimed_tt
+		has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_imperial_frontier_not_crisis_tt
+		OR = {
+			NOT = { has_variable = RUS_crisis_phase }
+			check_variable = { var = RUS_crisis_phase value = 5 compare = equals }
+			AND = {
+				check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
+				has_country_flag = RUS_crisis_laser_disabled
+			}
+		}
+	}
+}
+
+# COUNTRY FROM. The eastern and northeastern neighbours share this war route.
+RUS_imperial_frontier_target = {
+	hidden_trigger = {
+		OR = {
+			tag = TMR
+			tag = VEL
+			tag = RLY
+			tag = IRT
+			tag = ERT
+			tag = SCA
+		}
+	}
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	is_in_faction = no
+	is_neighbor_of = RUS
+	NOT = { has_war_with = RUS }
+}
+
+# COUNTRY. Native late entry must share the intervention's actual war side.
+RUS_crisis_defending_bloc = {
+	exists = yes
+	NOT = { tag = RUS }
+	NOT = { is_subject_of = RUS }
+	has_war_with = RUS
+	has_event_target = RUS_crisis_war_anchor
+	event_target:RUS_crisis_war_anchor = {
+		has_war_together_with = PREV
+	}
+	RUS_crisis_side_compatible = yes
+}
+
+# COUNTRY. Joining this war must not settle a conflict against its current side.
+RUS_crisis_side_compatible = {
+	NOT = { is_in_faction_with = RUS }
+	NOT = {
+		any_enemy_country = {
+			has_country_flag = RUS_crisis_defender
+		}
+	}
+}
+
+# COUNTRY. A prior independent war retains its own scripted settlement.
+RUS_crisis_can_enter_common_war = {
+	RUS_crisis_side_compatible = yes
+	OR = {
+		NOT = { has_war_with = RUS }
+		has_country_flag = RUS_crisis_defender
+	}
+}
+
+# COUNTRY. Only an in-flight native entry keeps its temporary roster receipt.
+RUS_crisis_entry_still_valid = {
+	exists = yes
+	OR = {
+		has_war_with = RUS
+		has_capitulated = no
+	}
+	has_country_flag = RUS_crisis_defender
+	NOT = { is_subject_of = RUS }
+	RUS_crisis_side_compatible = yes
+	NOT = { has_global_flag = RUS_crisis_world_ended }
+	RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } }
+}
+
+# COUNTRY. The epilogue is terminal; earlier regional wars remain independent.
+RUS_crisis_regional_wars_available = {
+	NOT = { has_global_flag = RUS_crisis_world_ended }
+}
+
+RUS_crisis_strike_visible = {
+	has_global_flag = RUS_crisis_world_ended
+	NOT = { check_variable = { var = RUS_crisis_epilogue_page value = 1 compare = greater_than } }
+}
+
+RUS_crisis_programme_focus_available = {
+	custom_trigger_tooltip = {
+		tooltip = RUS_crisis_programme_focus_available_tt
+		RUS_crisis_project_active = yes
+		RUS_lab_reactor_access = yes
+		NOT = { has_global_flag = RUS_crisis_world_ended }
+	}
+}
+
+RUS_crisis_all_defenders_defeated = {
+	check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+	any_of_scopes = { array = global.RUS_crisis_defenders always = yes }
+	NOT = {
+		any_of_scopes = {
+			array = global.RUS_crisis_defenders
+			has_country_flag = RUS_crisis_entry_pending
+		}
+	}
+	NOT = {
+		any_of_scopes = {
+			array = global.RUS_crisis_defenders
+			exists = yes
+			NOT = { is_subject_of = RUS }
+			NOT = { has_country_flag = RUS_crisis_capitulation_current }
+			OR = {
+				has_capitulated = no
+				capital_scope = {
+					NOT = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS } } }
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY FROM of the victor's decision. Only newly restored fragments carry
+# this right; an unrelated surviving republic cannot be subordinated here.
+RUS_crisis_fragment_available = {
+	exists = yes
+	has_country_flag = RUS_crisis_fragment
+	is_subject = no
+	is_in_faction = no
+	has_capitulated = no
+	has_war = no
+}
+
+# Native diplomacy callbacks keep ROOT and FROM; ignore other countries' wars.
+RUS_crisis_callback_relevant = {
+	OR = {
+		ROOT = { OR = { tag = RUS has_country_flag = RUS_crisis_defender } }
+		FROM = { OR = { tag = RUS has_country_flag = RUS_crisis_defender } }
+	}
+}
+
+ADISCORD_vorkerland_rus_dirty_campaign_idle = {
+	tag = RUS
+	is_subject = no
+	NOT = { has_capitulated = yes }
+	NOT = { has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active }
+	NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+}
+
+ADISCORD_vorkerland_rus_can_open_free_front = {
+	ADISCORD_vorkerland_rus_dirty_campaign_idle = yes
+	has_war = no
+}
+
+ADISCORD_vorkerland_rus_can_open_sla_front = {
+	ADISCORD_vorkerland_rus_dirty_campaign_idle = yes
+	OR = {
+		has_war = no
+		AND = {
+			has_war_with = SLA
+			has_global_flag = ADISCORD_vorkerland_khan_border_war_started
+		}
+	}
+}
+
+ADISCORD_vorkerland_rus_holds_current_target = {
+	OR = {
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+	}
+}
+
+# Capitulation can fire before every playable state is occupied. The campaign
+# still absorbs that neighbour instead of waiting on leftover pockets.
+ADISCORD_vorkerland_rus_current_target_capitulated = {
+	OR = {
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
+			country_exists = SLA
+			has_war_with = SLA
+			SLA = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = SLA } } } }
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
+			country_exists = RZA
+			has_war_with = RZA
+			RZA = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = RZA } } } }
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
+			country_exists = MLR
+			has_war_with = MLR
+			MLR = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = MLR } } } }
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
+			country_exists = ERT
+			has_war_with = ERT
+			ERT = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = ERT } } } }
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
+			country_exists = IRT
+			has_war_with = IRT
+			IRT = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = IRT } } } }
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
+			country_exists = SCA
+			has_war_with = SCA
+			SCA = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = SCA } } } }
+		}
+	}
+}
+
+ADISCORD_vorkerland_rus_current_target_ready = {
+	OR = {
+		ADISCORD_vorkerland_rus_holds_current_target = yes
+		ADISCORD_vorkerland_rus_current_target_capitulated = yes
+	}
+}
+
+# No territory and no live war: abort. An invalid target also cannot wait.
+ADISCORD_vorkerland_rus_campaign_target_still_open = {
+	OR = {
+		check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = less_than }
+		check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = greater_than }
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
+			NOT = { ADISCORD_vorkerland_rus_holds_sla_playable = yes }
+			NOT = { has_war_with = SLA }
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
+			NOT = { ADISCORD_vorkerland_rus_holds_rza_playable = yes }
+			NOT = { has_war_with = RZA }
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
+			NOT = { ADISCORD_vorkerland_rus_holds_mlr_playable = yes }
+			NOT = { has_war_with = MLR }
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
+			NOT = { ADISCORD_vorkerland_rus_holds_ert_playable = yes }
+			NOT = { has_war_with = ERT }
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
+			NOT = { ADISCORD_vorkerland_rus_holds_irt_playable = yes }
+			NOT = { has_war_with = IRT }
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
+			NOT = { ADISCORD_vorkerland_rus_holds_sca_playable = yes }
+			NOT = { has_war_with = SCA }
+		}
+	}
+}
+
+# The proclamation follows the player-facing contract: three belts held is enough.
+# A vanished or puppeted belt does not count as held; the separate fallback only
+# applies when no independent Dirty Zone republic remains at all.
+ADISCORD_vorkerland_rus_has_three_empire_belts = {
+	OR = {
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+	}
+}
+
+ADISCORD_vorkerland_rus_has_no_independent_dirty_republics = {
+	OR = {
+		NOT = { country_exists = SLA }
+		SLA = { is_subject = yes }
+	}
+	OR = {
+		NOT = { country_exists = RZA }
+		RZA = { is_subject = yes }
+	}
+	OR = {
+		NOT = { country_exists = MLR }
+		MLR = { is_subject = yes }
+	}
+	OR = {
+		NOT = { country_exists = ERT }
+		ERT = { is_subject = yes }
+	}
+	OR = {
+		NOT = { country_exists = IRT }
+		IRT = { is_subject = yes }
+	}
+	OR = {
+		NOT = { country_exists = SCA }
+		SCA = { is_subject = yes }
+	}
+}
+
+ADISCORD_vorkerland_rus_has_empire_territory = {
+	OR = {
+		ADISCORD_vorkerland_rus_has_three_empire_belts = yes
+		ADISCORD_vorkerland_rus_has_no_independent_dirty_republics = yes
+	}
+}
+
+ADISCORD_vorkerland_rus_can_proclaim_last_empire = {
+	tag = RUS
+	RUS_khan_governing = yes
+	has_completed_focus = RUS_seat_the_khan_chancery
+	NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+	ADISCORD_vorkerland_rus_has_empire_territory = yes
+}
+
+# Custom-cost projects debit political power outside the native decision budget.
+# Keep their AI weights at zero until the ready proclamation has been paid.
+RUS_ai_proclamation_pending = {
+	is_ai = yes
+	has_war = no
+	NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+	has_completed_focus = RUS_aimaq_reserve
+	has_completed_focus = RUS_arm_the_border_hosts
+	ADISCORD_vorkerland_rus_can_proclaim_last_empire = yes
+}
+
+ADISCORD_vorkerland_rus_borders_dirty_sla = {
+	SLA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+	any_owned_state = { any_neighbor_state = { is_owned_by = SLA } }
+}
+
+ADISCORD_vorkerland_rus_borders_dirty_rza = {
+	RZA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+	any_owned_state = { any_neighbor_state = { is_owned_by = RZA } }
+}
+
+ADISCORD_vorkerland_rus_borders_dirty_mlr = {
+	MLR = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+	any_owned_state = { any_neighbor_state = { is_owned_by = MLR } }
+}
+
+ADISCORD_vorkerland_rus_borders_dirty_ert = {
+	ERT = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+	any_owned_state = { any_neighbor_state = { is_owned_by = ERT } }
+}
+
+ADISCORD_vorkerland_rus_borders_dirty_irt = {
+	IRT = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+	any_owned_state = { any_neighbor_state = { is_owned_by = IRT } }
+}
+
+ADISCORD_vorkerland_rus_borders_dirty_sca = {
+	SCA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+	any_owned_state = { any_neighbor_state = { is_owned_by = SCA } }
+}
+
+ADISCORD_vorkerland_rus_holds_sla_playable = {
+	controls_state = 49
+	controls_state = 51
+	controls_state = 155
+	controls_state = 176
+	controls_state = 187
+	controls_state = 191
+	controls_state = 710
+	controls_state = 711
+	controls_state = 712
+}
+
+ADISCORD_vorkerland_rus_holds_rza_playable = {
+	# State 125 is the impassable reactor waste. Occupation cannot take it,
+	# so absorption transfers it after the walkable RZA belt is held.
+	controls_state = 177
+	controls_state = 188
+	controls_state = 192
+	controls_state = 208
+	controls_state = 213
+	controls_state = 214
+	controls_state = 215
+	controls_state = 216
+	controls_state = 217
+	controls_state = 220
+}
+
+ADISCORD_vorkerland_rus_holds_mlr_playable = {
+	controls_state = 152
+	controls_state = 153
+	controls_state = 154
+	controls_state = 189
+	controls_state = 190
+	controls_state = 219
+	controls_state = 221
+	controls_state = 222
+	controls_state = 224
+}
+
+ADISCORD_vorkerland_rus_holds_ert_playable = {
+	controls_state = 167
+	controls_state = 169
+	controls_state = 171
+	controls_state = 184
+	controls_state = 185
+	controls_state = 203
+}
+
+ADISCORD_vorkerland_rus_holds_irt_playable = {
+	controls_state = 178
+	controls_state = 180
+	controls_state = 181
+	controls_state = 182
+	controls_state = 183
+	controls_state = 193
+	controls_state = 206
+	controls_state = 207
+}
+
+ADISCORD_vorkerland_rus_holds_sca_playable = {
+	controls_state = 165
+	controls_state = 166
+	controls_state = 172
+	controls_state = 173
+	controls_state = 204
+	controls_state = 205
+	controls_state = 209
+	controls_state = 210
+	controls_state = 211
+	controls_state = 212
+}
+
+# COUNTRY target: only the accepted native loser can precede engine capitulation state.
+# The capitulated country's allies can continue the same war and liberate it.
+ADISCORD_vorkerland_rus_target_defeated = {
+	OR = {
+		has_capitulated = yes
+		AND = { tag = ROOT has_country_flag = ADISCORD_vorkerland_rus_capitulation_current }
+	}
+}
+
+# --- rus_campaign_triggers ---
+RUS_khan_governing = {
+	tag = RUS
+	NOT = { has_global_flag = RUS_crisis_world_ended }
+	has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes }
+	NOT = { check_variable = { var = RUS_crisis_phase value = 4 compare = equals } }
+	has_capitulated = no
+	is_subject = no
+}
+
+RUS_bunker_operational = {
+	RUS_khan_governing = yes
+	owns_state = 66
+	controls_state = 66
+	has_country_flag = RUS_bunker_initialized
+}
+
+RUS_bunker_slot_free = {
+	NOT = { has_variable = RUS_bunker_project }
+}
+
+RUS_bunker_excavate_requirements = {
+	check_variable = { var = RUS_bunker_integrity value = 40 compare = greater_than_or_equals }
+}
+
+RUS_bunker_excavate_affordable = {
+	NOT = { has_political_power < 20 }
+	check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 20 } }
+}
+
+RUS_bunker_rush_requirements = {
+	check_variable = { var = RUS_bunker_integrity value = 55 compare = greater_than_or_equals }
+}
+
+RUS_bunker_rush_affordable = {
+	NOT = { has_political_power < 30 }
+	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 30 } }
+}
+
+RUS_bunker_guard_requirements = {
+	check_variable = { var = RUS_bunker_free_power value = 2 compare = greater_than_or_equals }
+}
+
+RUS_bunker_guard_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 25 } }
+}
+
+RUS_bunker_shelter_requirements = {
+	check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+}
+
+RUS_bunker_shelter_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 25 } }
+}
+
+RUS_bunker_water_requirements = {
+	has_completed_focus = RUS_bunker_utilities
+	check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+}
+
+RUS_bunker_water_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 30 } }
+}
+
+RUS_bunker_signals_requirements = {
+	has_completed_focus = RUS_bunker_utilities
+	check_variable = { var = RUS_bunker_free_power value = 2 compare = greater_than_or_equals }
+}
+
+RUS_bunker_signals_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 30 } }
+}
+
+RUS_bunker_workshop_requirements = {
+	has_completed_focus = RUS_bunker_working_heart
+	check_variable = { var = RUS_bunker_free_power value = 3 compare = greater_than_or_equals }
+}
+
+RUS_bunker_workshop_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 35 } }
+}
+
+RUS_bunker_granary_requirements = {
+	has_completed_focus = RUS_bunker_working_heart
+	check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+}
+
+RUS_bunker_granary_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 35 } }
+}
+
+RUS_bunker_clinic_requirements = {
+	has_completed_focus = RUS_bunker_science_wing
+	check_variable = { var = RUS_bunker_free_power value = 2 compare = greater_than_or_equals }
+}
+
+RUS_bunker_clinic_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 350 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 40 } }
+}
+
+RUS_bunker_laboratory_requirements = {
+	has_completed_focus = RUS_bunker_science_wing
+	check_variable = { var = RUS_bunker_free_power value = 3 compare = greater_than_or_equals }
+}
+
+RUS_bunker_laboratory_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 350 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 40 } }
+}
+
+RUS_bunker_archive_requirements = {
+	has_completed_focus = RUS_bunker_memory_vault
+	check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+}
+
+RUS_bunker_archive_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 45 } }
+}
+
+RUS_bunker_command_requirements = {
+	has_completed_focus = RUS_bunker_memory_vault
+	check_variable = { var = RUS_bunker_free_power value = 2 compare = greater_than_or_equals }
+}
+
+RUS_bunker_command_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 45 } }
+}
+
+RUS_bunker_generator_requirements = {
+	always = yes
+}
+
+RUS_bunker_generator_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 35 } }
+}
+
+RUS_bunker_reinforce_requirements = {
+	check_variable = { var = RUS_bunker_integrity value = 60 compare = less_than_or_equals }
+}
+
+RUS_bunker_reinforce_affordable = {
+	NOT = { has_political_power < 15 }
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 15 } }
+}
+
+RUS_engineering_order_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 180 compare = greater_than_or_equals }
+}
+
+RUS_rifle_order_affordable = {
+	NOT = { has_political_power < 50 }
+	check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
+}
+
+RUS_market_surplus_affordable = {
+	NOT = { has_political_power < 15 }
+	NOT = { has_equipment = { infantry_equipment < 10000 } }
+}
+
+RUS_bunker_upgrade_1_requirements = {
+	has_completed_focus = RUS_bunker_airlocks
+	check_variable = { var = RUS_bunker_depth value = 1 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_1 value = 0 compare = greater_than }
+	check_variable = { var = RUS_bunker_upgrade_1 value = 0 compare = equals }
+	check_variable = { var = RUS_bunker_free_power value = 0 compare = greater_than_or_equals }
+}
+
+RUS_bunker_upgrade_1_affordable = {
+	RUS_bunker_generator_affordable = yes
+}
+
+RUS_bunker_upgrade_2_requirements = {
+	has_completed_focus = RUS_bunker_utilities
+	check_variable = { var = RUS_bunker_depth value = 2 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_2 value = 0 compare = greater_than }
+	check_variable = { var = RUS_bunker_upgrade_2 value = 0 compare = equals }
+	check_variable = { var = RUS_bunker_free_power value = 0 compare = greater_than_or_equals }
+}
+
+RUS_bunker_upgrade_2_affordable = {
+	RUS_bunker_generator_affordable = yes
+}
+
+RUS_bunker_upgrade_3_requirements = {
+	has_completed_focus = RUS_bunker_working_heart
+	check_variable = { var = RUS_bunker_depth value = 3 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_3 value = 0 compare = greater_than }
+	check_variable = { var = RUS_bunker_upgrade_3 value = 0 compare = equals }
+	check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+}
+
+RUS_bunker_upgrade_3_affordable = {
+	RUS_bunker_generator_affordable = yes
+}
+
+RUS_bunker_upgrade_4_requirements = {
+	has_completed_focus = RUS_bunker_science_wing
+	check_variable = { var = RUS_bunker_depth value = 4 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_4 value = 0 compare = greater_than }
+	check_variable = { var = RUS_bunker_upgrade_4 value = 0 compare = equals }
+	check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+}
+
+RUS_bunker_upgrade_4_affordable = {
+	RUS_bunker_generator_affordable = yes
+}
+
+RUS_bunker_upgrade_5_requirements = {
+	has_completed_focus = RUS_bunker_memory_vault
+	check_variable = { var = RUS_bunker_depth value = 5 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_5 value = 0 compare = greater_than }
+	check_variable = { var = RUS_bunker_upgrade_5 value = 0 compare = equals }
+	check_variable = { var = RUS_bunker_free_power value = 0 compare = greater_than_or_equals }
+}
+
+RUS_bunker_upgrade_5_affordable = {
+	RUS_bunker_generator_affordable = yes
+}
+
+RUS_bunker_resupply_affordable = {
+	NOT = { has_political_power < 15 }
+	check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+}
+
+RUS_bunker_resupply_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_convoy_fits = yes
+	RUS_bunker_resupply_affordable = yes
+}
+
+# The freight reserve enlarges the convoy; storage must hold the whole delivery.
+RUS_bunker_convoy_fits = {
+	OR = {
+		AND = {
+			NOT = { has_completed_focus = RUS_strategic_freight_reserve }
+			check_variable = { var = RUS_bunker_food_space value = 40 compare = greater_than_or_equals }
+		}
+		check_variable = { var = RUS_bunker_food_space value = 60 compare = greater_than_or_equals }
+	}
+}
+
+RUS_bunker_food_sale_available = {
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_bunker_food value = 40 compare = greater_than_or_equals }
+}
+
+RUS_bunker_guard_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 1 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_1 value = 0 compare = equals }
+	RUS_bunker_guard_requirements = yes
+	RUS_bunker_guard_affordable = yes
+}
+
+RUS_bunker_shelter_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 1 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_1 value = 0 compare = equals }
+	RUS_bunker_shelter_requirements = yes
+	RUS_bunker_shelter_affordable = yes
+}
+
+RUS_bunker_upgrade_1_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	RUS_bunker_upgrade_1_requirements = yes
+	RUS_bunker_upgrade_1_affordable = yes
+}
+
+RUS_bunker_water_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 2 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_2 value = 0 compare = equals }
+	RUS_bunker_water_requirements = yes
+	RUS_bunker_water_affordable = yes
+}
+
+RUS_bunker_signals_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 2 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_2 value = 0 compare = equals }
+	RUS_bunker_signals_requirements = yes
+	RUS_bunker_signals_affordable = yes
+}
+
+RUS_bunker_upgrade_2_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	RUS_bunker_upgrade_2_requirements = yes
+	RUS_bunker_upgrade_2_affordable = yes
+}
+
+RUS_bunker_workshop_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 3 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_3 value = 0 compare = equals }
+	RUS_bunker_workshop_requirements = yes
+	RUS_bunker_workshop_affordable = yes
+}
+
+RUS_bunker_granary_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 3 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_3 value = 0 compare = equals }
+	RUS_bunker_granary_requirements = yes
+	RUS_bunker_granary_affordable = yes
+}
+
+RUS_bunker_upgrade_3_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	RUS_bunker_upgrade_3_requirements = yes
+	RUS_bunker_upgrade_3_affordable = yes
+}
+
+RUS_bunker_clinic_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 4 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_4 value = 0 compare = equals }
+	RUS_bunker_clinic_requirements = yes
+	RUS_bunker_clinic_affordable = yes
+}
+
+RUS_bunker_laboratory_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 4 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_4 value = 0 compare = equals }
+	RUS_bunker_laboratory_requirements = yes
+	RUS_bunker_laboratory_affordable = yes
+}
+
+RUS_bunker_upgrade_4_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	RUS_bunker_upgrade_4_requirements = yes
+	RUS_bunker_upgrade_4_affordable = yes
+}
+
+RUS_bunker_archive_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 5 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_5 value = 0 compare = equals }
+	RUS_bunker_archive_requirements = yes
+	RUS_bunker_archive_affordable = yes
+}
+
+RUS_bunker_command_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 5 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_5 value = 0 compare = equals }
+	RUS_bunker_command_requirements = yes
+	RUS_bunker_command_affordable = yes
+}
+
+RUS_bunker_upgrade_5_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	RUS_bunker_upgrade_5_requirements = yes
+	RUS_bunker_upgrade_5_affordable = yes
+}
+
+RUS_defensive_preparation_available = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_entrenched_reserves
+	NOT = { has_idea = RUS_defensive_preparation_spirit }
+}
+
+RUS_mobile_preparation_available = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_mobile_supply_columns
+	NOT = { has_idea = RUS_mobile_preparation_spirit }
+}
+
+RUS_aimaq_public_works_available = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_local_service_committees
+	NOT = { has_idea = RUS_public_works_spirit }
+}
+
+RUS_chancery_reconstruction_available = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_inspection_chamber
+	66 = { free_building_slots = { building = arms_factory size = 1 include_locked = no } }
+}
+
+RUS_surface_industrial_contract_available = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_surface_contracts
+	66 = { free_building_slots = { building = industrial_complex size = 1 include_locked = no } }
+}
+
+RUS_subterranean_supply_contract_available = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_underground_fund
+	check_variable = { var = RUS_bunker_autonomy_contracts value = 2 compare = less_than }
+}
+
+# --- rus_public_campaigns ---
+RUS_public_campaigns_operational = {
+	RUS_khan_governing = yes
+	has_completed_focus = RUS_khan_broadcast_service
+}
+
+# --- rus_balance_of_power ---
+RUS_state_balance_operational = {
+	RUS_khan_governing = yes
+	has_power_balance = { id = RUS_state_balance }
+}
+
+RUS_bop_relief_available = {
+	RUS_state_balance_operational = yes
+	RUS_bunker_operational = yes
+	power_balance_value = { id = RUS_state_balance value > -0.85 }
+}
+
+RUS_bop_relief_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = RUS_bunker_food value = 20 compare = greater_than_or_equals }
+}
+
+RUS_bop_reserve_available = {
+	RUS_state_balance_operational = yes
+	RUS_bunker_operational = yes
+	power_balance_value = { id = RUS_state_balance value < 0.85 }
+}
+
+RUS_bop_reserve_affordable = {
+	NOT = { has_political_power < 30 }
+	check_variable = { var = RUS_bunker_food value = 30 compare = greater_than_or_equals }
+}
+
+RUS_bop_mediation_available = {
+	RUS_state_balance_operational = yes
+	OR = {
+		power_balance_value = { id = RUS_state_balance value < -0.10 }
+		power_balance_value = { id = RUS_state_balance value > 0.10 }
+	}
+}
+
+RUS_bop_mediation_affordable = {
+	NOT = { has_political_power < 40 }
+	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+}
+
+# --- rus_reactor_belt ---
+# STATE scope.
+RUS_reactor_works_target_valid = {
+	is_owned_by = RUS
+	is_controlled_by = RUS
+	NOT = { has_state_flag = RUS_reactor_works_restored }
+}
+
+RUS_reactor_works_idle = {
+	NOT = { has_variable = RUS_reactor_works_deposit }
+}
+
+RUS_reactor_works_affordable = {
+	NOT = { has_political_power < 50 }
+	check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+}
+
+RUS_reactor_sortie_affordable = {
+	NOT = { has_political_power < 25 }
+	OR = {
+		AND = {
+			has_completed_focus = RUS_reactor_decontamination
+			NOT = { has_equipment = { support_equipment < 20 } }
+		}
+		NOT = { has_equipment = { support_equipment < 40 } }
+	}
+}
+
+# --- rus_experimental_laboratories ---
+# State 125 is the impassable reactor core; the four walkable reactor zones
+# around it supply the samples. Any one of them keeps the laboratories open.
+RUS_lab_reactor_access = {
+	OR = {
+		controls_state = 176
+		controls_state = 177
+		controls_state = 188
+		controls_state = 192
+	}
+}
+
+# Running projects are cancelled and refunded when this stops holding.
+RUS_lab_operational = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_experimental_laboratories
+	RUS_lab_reactor_access = yes
+}
+
+# The paid receipt, not the native timer, occupies the laboratory slot.
+RUS_lab_slot_free = {
+	NOT = { has_variable = RUS_lab_project }
+}
+
+RUS_bunker_workshop_active = {
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_bunker_layer_3 value = 1 compare = equals }
+}
+
+RUS_bunker_clinic_active = {
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_bunker_layer_4 value = 1 compare = equals }
+}
+
+RUS_bunker_archive_active = {
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_bunker_layer_5 value = 1 compare = equals }
+}
+
+RUS_bunker_laboratory_active = {
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_bunker_layer_4 value = 2 compare = equals }
+}
+
+RUS_lab_reactor_alloys_affordable = {
+	NOT = { has_political_power < 50 }
+	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+}
+
+RUS_lab_zeppelin_affordable = {
+	NOT = { has_political_power < 100 }
+	check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+	NOT = { has_manpower < 400 }
+}
+
+# Civil development programmes settle payment and progress together.
+RUS_development_programme_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+}
+
+RUS_civil_service_training_ready = {
+	RUS_khan_governing = yes
+	OR = {
+		has_completed_focus = RUS_aimaq_service_charter
+		has_completed_focus = RUS_civil_service_examinations
+		has_completed_focus = RUS_trained_administrators
+	}
+	NOT = { ADISCORD_state_development_at_least_5 = yes }
+	check_variable = { var = ADISCORD_state_development_progress value = 100 compare = less_than }
+}
+
+RUS_district_health_programme_ready = {
+	RUS_khan_governing = yes
+	OR = {
+		has_completed_focus = RUS_roadside_clinics
+		RUS_bunker_clinic_active = yes
+	}
+	NOT = { ADISCORD_social_system_development_at_least_5 = yes }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 100 compare = less_than }
+}
+
+RUS_workshop_training_ready = {
+	RUS_khan_governing = yes
+	OR = {
+		has_completed_focus = RUS_machine_school
+		RUS_bunker_workshop_active = yes
+	}
+	NOT = { ADISCORD_economic_development_at_least_5 = yes }
+	check_variable = { var = ADISCORD_economic_development_progress value = 100 compare = less_than }
+	ADISCORD_economy_can_upgrade_economic_development = yes
+}
+
+# --- rus_country_content ---
+RUS_crisis_other_major_required = {
+	OR = {
+		has_country_flag = ADISCORD_nam_resource_war_added_major
+		has_country_flag = SHL_mzr_added_major
+		has_country_flag = ADISCORD_south_added_major
+		has_country_flag = ADISCORD_west_added_major
+		has_country_flag = STP_cw_northern_added_major
+		has_country_flag = STP_heg_cannibal_added_major
+		has_country_flag = VAL_frontier_added_major
+		has_country_flag = VAL_northern_coalition_added_major
+		has_country_flag = VAL_final_war_added_major
+		has_country_flag = ADISCORD_vorkerland_pw_added_major
+		has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+	}
+}
+
+RUS_community_assemblies_ready = {
+	RUS_khan_governing = yes
+	has_completed_focus = RUS_count_the_hearths
+	NOT = { ADISCORD_society_development_at_least_5 = yes }
+	check_variable = { var = ADISCORD_society_development_progress value = 100 compare = less_than }
+}
+
+RUS_public_reading_rooms_ready = {
+	RUS_khan_governing = yes
+	has_completed_focus = RUS_school_of_scribes
+	NOT = { ADISCORD_cultural_development_at_least_5 = yes }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 100 compare = less_than }
+}
+
+RUS_regimental_training_ready = {
+	RUS_khan_governing = yes
+	has_completed_focus = RUS_officer_courses
+	NOT = { ADISCORD_army_development_at_least_5 = yes }
+	check_variable = { var = ADISCORD_army_development_progress value = 100 compare = less_than }
+}
+
+RUS_bunker_energy_sale_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	has_completed_focus = RUS_bunker_power_school
+	NOT = { has_variable = RUS_bunker_energy_export_power }
+	check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+}

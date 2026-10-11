@@ -85,4 +85,16 @@ spriteTypes = {
 		texturefile = "gfx/texticons/adiscord/banners/STP_worldwide_famous_tourist_destination_banner.png"
 		legacy_lazy_load = no
 	}
+
+	spriteType = {
+		name = "GFX_RUS_chancery_mandate_banner"
+		texturefile = "gfx/texticons/adiscord/banners/RUS_chancery_mandate_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_vorkerland_tva_field_laboratories_banner"
+		texturefile = "gfx/texticons/adiscord/banners/ADISCORD_vorkerland_tva_field_laboratories_banner.png"
+		legacy_lazy_load = no
+	}
 }

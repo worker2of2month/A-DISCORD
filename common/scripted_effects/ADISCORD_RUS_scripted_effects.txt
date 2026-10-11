@@ -1251,6 +1251,29 @@ RUS_crisis_epilogue_finish = {
 	}
 }
 
+# The defeated RUS country disappears during settlement; deliver the delayed
+# presentation to a surviving human country or the credited victor.
+ADISCORD_vorkerland_show_khan_defeated_superevent = {
+	if = {
+		limit = {
+			any_country = {
+				is_ai = no
+				NOT = { tag = RUS }
+			}
+		}
+		random_country = {
+			limit = {
+				is_ai = no
+				NOT = { tag = RUS }
+			}
+			country_event = { id = ADISCORD_superevent.15 hours = 1 }
+		}
+	}
+	else = {
+		country_event = { id = ADISCORD_superevent.15 hours = 1 }
+	}
+}
+
 # --- rus_last_empire_effects ---
 ADISCORD_vorkerland_rus_core_dirty_sla = {
 	49 = { add_core_of = RUS add_claim_by = RUS }

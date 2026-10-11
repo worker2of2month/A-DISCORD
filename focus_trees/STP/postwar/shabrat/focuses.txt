@@ -4464,7 +4464,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_mandate
 		icon = GFX_focus_STP_pc_shabrat_politics
-		x = 0
+		x = -4
 		y = 1
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -4503,7 +4503,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_common_citizenship
 		icon = GFX_focus_STP_cw_protocol_office
-		x = -2
+		x = -7
 		y = 2
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -4542,7 +4542,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_domestic_suppliers
 		icon = GFX_focus_STP_party_industrial_board
-		x = 2
+		x = -1
 		y = 2
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -4580,7 +4580,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_district_registers
 		icon = GFX_focus_STP_cw_quiet_registers
-		x = 0
+		x = -4
 		y = 3
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -4623,7 +4623,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_resistance_memory
 		icon = GFX_focus_STP_cw_press_office
-		x = -4
+		x = -6
 		y = 4
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -4662,7 +4662,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_district_grants
 		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
-		x = -1
+		x = -11
 		y = 4
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -4697,7 +4697,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_tools_inventory
 		icon = GFX_goal_generic_production
-		x = 1
+		x = 3
 		y = 4
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -4726,7 +4726,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_national_service
 		icon = GFX_focus_STP_pw_party_veteran_reserve
-		x = 4
+		x = -2
 		y = 4
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -4765,7 +4765,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_citizens_protection
 		icon = GFX_focus_STP_ps_asylum_protocol
-		x = 0
+		x = -4
 		y = 5
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -4809,7 +4809,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_national_schools
 		icon = GFX_focus_STP_pw_party_civilian_retraining
-		x = -5
+		x = -14
 		y = 6
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -4846,7 +4846,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_national_compact
 		icon = GFX_focus_STP_pw_party_open_settlement
-		x = -3
+		x = -11
 		y = 6
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -4884,7 +4884,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_district_workshops
 		icon = GFX_focus_STP_party_industrial_board
-		x = -1
+		x = -6
 		y = 6
 		relative_position_id = STP_pc_lib_lock
 		cost = 4
@@ -4937,7 +4937,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_common_standards
 		icon = GFX_focus_STP_pw_party_domestic_pattern
-		x = 1
+		x = -3
 		y = 6
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -4975,7 +4975,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_national_defence
 		icon = GFX_focus_STP_defense_budget
-		x = 3
+		x = 1
 		y = 6
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -5013,7 +5013,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_officer_oath
 		icon = GFX_focus_STP_Turn_The_Young_Officers
-		x = 5
+		x = 4
 		y = 6
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -5061,7 +5061,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_citizenship_duty
 		icon = GFX_focus_STP_party_personnel_commissions
-		x = -4
+		x = -12
 		y = 7
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -5104,7 +5104,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_national_arsenal
 		icon = GFX_focus_STP_defense_budget_tank
-		x = -1
+		x = -6
 		y = 7
 		relative_position_id = STP_pc_lib_lock
 		cost = 4
@@ -5168,7 +5168,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_economic_sovereignty
 		icon = GFX_focus_STP_2160_budget
-		x = 1
+		x = -2
 		y = 7
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -5217,7 +5217,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_district_reserves
 		icon = GFX_goal_generic_allies_build_infantry
-		x = 3
+		x = 1
 		y = 7
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -5290,7 +5290,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_protected_communities
 		icon = GFX_focus_STP_pw_party_family_pensions
-		x = -4
+		x = -12
 		y = 8
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -5328,7 +5328,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_district_exchange
 		icon = GFX_focus_STP_party_war_transport
-		x = 0
+		x = -4
 		y = 8
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -5366,7 +5366,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_defence_stores
 		icon = GFX_focus_STP_ps_northern_arms
-		x = 4
+		x = 3
 		y = 8
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -5388,15 +5388,16 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 2000 producer = ROOT }
-			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = ROOT }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = ROOT }
+			add_equipment_to_stockpile = { type = support_equipment amount = 200 producer = ROOT }
+			army_experience = 15
 		}
 	}
 
 	focus = {
 		id = STP_pc_charter_shabrat_cabinet_review
 		icon = GFX_focus_generic_treaty
-		x = 0
+		x = -4
 		y = 9
 		relative_position_id = STP_pc_lib_lock
 		cost = 4
@@ -5440,7 +5441,7 @@
 	focus = {
 		id = STP_pc_charter_shabrat_charter_fulfilled
 		icon = GFX_goal_generic_national_unity
-		x = 0
+		x = -4
 		y = 10
 		relative_position_id = STP_pc_lib_lock
 		cost = 4

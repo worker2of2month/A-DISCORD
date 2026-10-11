@@ -22,7 +22,7 @@ class RusCrisisPreparationTests(unittest.TestCase):
         tree = block(entries("focus_trees/RUS/main/focuses.txt"), "focus_tree")
         cls.focuses = {scalar(row.value, "id"): row.value for row in tree if row.key == "focus"}
         cls.decisions = dict((row.key, row.value) for row in block(
-            entries("common/decisions/ADISCORD_vorkerland_decisions.txt"), "RUS_last_empire_crisis",
+            entries("common/decisions/ADISCORD_RUS_decisions.txt"), "RUS_last_empire_crisis",
         ))
 
     def programme(self, phase=1):
@@ -110,7 +110,7 @@ class RusCrisisPreparationTests(unittest.TestCase):
         self.assertNotIn(("RUS", "RUS_crisis_reactor_guard"), world.ideas)
 
     def test_ai_plan_uses_compact_route_and_old_branches_are_removed(self):
-        plans = dict((row.key, row.value) for row in entries("common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"))
+        plans = dict((row.key, row.value) for row in entries("common/ai_strategy_plans/ADISCORD_RUS_plans.txt"))
         plan = plans["ADISCORD_rus_last_sky_plan"]
         self.assertEqual([row.value for row in block(plan, "ai_national_focuses")], list(MOBILIZATION + PROGRAMME))
         for phase in (1, 2, 3, 4, 5, 6):

@@ -15,7 +15,7 @@ from tools.validators.validate_adiscord_division_templates import parse_clausewi
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE = "ADISCORD_vorkerland"
+BASE = "ADISCORD_RUS"
 
 
 def read(path):
@@ -383,7 +383,8 @@ class RusCampaignTests(unittest.TestCase):
             "ADISCORD_economy_refresh_existing_economic_development_idea",
         }
         cls.effects.update({e.key: e.value for e in parse("common/scripted_effects/ADISCORD_economy_effects.txt") if e.key in development_effects})
-        cls.triggers = {e.key: e.value for e in parse(f"common/scripted_triggers/{BASE}_triggers.txt")}
+        cls.triggers = {e.key: e.value for e in parse(f"common/scripted_triggers/ADISCORD_RUS_scripted_triggers.txt")}
+        cls.triggers.update({e.key: e.value for e in parse("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")})
         for source in ("ADISCORD_society_development_triggers", "ADISCORD_economy_triggers"):
             cls.triggers.update({e.key: e.value for e in parse(f"common/scripted_triggers/{source}.txt")})
         cls.effects.update({e.key: e.value for e in parse("common/scripted_effects/ADISCORD_shared_action_effects.txt") if e.key.startswith("ADISCORD_campaign_slot_")})
@@ -422,7 +423,7 @@ class RusCampaignTests(unittest.TestCase):
             "RUS_aimaq_service_charter": ("state", "RUS_civil_service_training"),
             "RUS_civil_service_examinations": ("state", "RUS_civil_service_training"),
         }
-        category = block(parse(f"common/decisions/categories/{BASE}_categories.txt"), "RUS_development_programmes")
+        category = block(parse(f"common/decisions/categories/ADISCORD_decision_categories_RUS.txt"), "RUS_development_programmes")
         for focus, (axis, programme) in specs.items():
             with self.subTest(focus=focus):
                 world = self.world()
@@ -836,7 +837,7 @@ class RusCampaignTests(unittest.TestCase):
             )
 
     def test_every_public_campaign_unlock_reveals_its_category(self):
-        category = block(parse(f"common/decisions/categories/{BASE}_categories.txt"), "RUS_public_campaigns")
+        category = block(parse(f"common/decisions/categories/ADISCORD_decision_categories_RUS.txt"), "RUS_public_campaigns")
         for campaign, rows in self.campaigns.items():
             world = self.world()
             world.focuses = {
@@ -1178,7 +1179,7 @@ class RusCampaignTests(unittest.TestCase):
             self.assertEqual(scalar(block(self.focuses[name], "prerequisite"), "focus"), "RUS_summon_the_aimaqs")
         self.assertEqual(int(scalar(self.focuses["RUS_summon_the_aimaqs"], "cost")) * 7 + int(scalar(self.focuses["RUS_bunker_survey"], "cost")) * 7, 21)
         world = BunkerWorld(self, fresh=True)
-        category = block(parse(f"common/decisions/categories/{BASE}_categories.txt"), "RUS_bunker_construction")
+        category = block(parse(f"common/decisions/categories/ADISCORD_decision_categories_RUS.txt"), "RUS_bunker_construction")
         self.assertTrue(world.matches(block(category, "visible")))
         self.assertFalse(world.focuses)
         self.assertEqual(world.balances(), (20, 250, 20))
@@ -1750,7 +1751,7 @@ class RusCampaignTests(unittest.TestCase):
         world.run("RUS_bunker_refresh")
         self.assertEqual(world.value("RUS_bunker_food_state"), 1, "An unfitted bunker has nobody to feed")
         bunker_modifier = block(
-            parse(f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt"),
+            parse(f"common/dynamic_modifiers/ADISCORD_dynamic_modifiers_RUS.txt"),
             "RUS_bunker_complex",
         )
         self.assertEqual(
@@ -2187,7 +2188,7 @@ class RusCampaignTests(unittest.TestCase):
             "planning_speed": "RUS_army_planning",
             "training_time_army_factor": "RUS_army_training",
         }
-        modifier = block(parse(f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt"), "RUS_black_army")
+        modifier = block(parse(f"common/dynamic_modifiers/ADISCORD_dynamic_modifiers_RUS.txt"), "RUS_black_army")
         actual = {entry.key: entry.value for entry in modifier if entry.key not in ("icon", "enable", "custom_modifier_tooltip")}
         self.assertEqual(actual, mapping)
         expected = {"RUS_army_org": 0.08, "RUS_army_attack": 0.05, "RUS_army_recruitment": 0.06, "RUS_army_growth": 0.05}
@@ -2205,7 +2206,7 @@ class RusCampaignTests(unittest.TestCase):
         displayed = {entry.value for entry in block(block(bookmark, "RUS"), "ideas")}
         previews = {"RUS_black_army_bookmark", "RUS_bunker_complex_bookmark"}
         self.assertEqual(displayed, previews | {"RUS_aimaq_compact"})
-        dynamic = block(parse(f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt"), "RUS_black_army")
+        dynamic = block(parse(f"common/dynamic_modifiers/ADISCORD_dynamic_modifiers_RUS.txt"), "RUS_black_army")
         initial = {row.key: world.value(row.value) for row in dynamic if isinstance(row.value, str) and row.value.startswith("RUS_army_") and world.value(row.value)}
         preview = {row.key: float(row.value) for row in block(self.ideas["RUS_black_army_bookmark"], "modifier")}
         self.assertEqual(preview, initial)
@@ -2314,7 +2315,7 @@ class RusCampaignTests(unittest.TestCase):
                 self.assertEqual(world.value(variable), value, variable)
 
     def test_black_army_survives_bunker_loss_and_country_subordination(self):
-        army = block(parse(f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt"), "RUS_black_army")
+        army = block(parse(f"common/dynamic_modifiers/ADISCORD_dynamic_modifiers_RUS.txt"), "RUS_black_army")
         for changed in ("owner", "controller", "subject", "capitulated"):
             world = self.world()
             before = {key: value for key, value in world.variables.items() if key.startswith("RUS_army_")}
@@ -2326,7 +2327,7 @@ class RusCampaignTests(unittest.TestCase):
             self.assertEqual({key: world.value(key) for key in before}, before, changed)
 
     def test_black_army_legal_rulers_and_terminal_cleanup_are_independent(self):
-        dynamic = parse(f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt")
+        dynamic = parse(f"common/dynamic_modifiers/ADISCORD_dynamic_modifiers_RUS.txt")
         army = block(block(dynamic, "RUS_black_army"), "enable")
         bunker = block(block(dynamic, "RUS_bunker_complex"), "enable")
         world = self.world()
@@ -2567,9 +2568,9 @@ class RusCampaignTests(unittest.TestCase):
         self.assertFalse(removed & self.focuses.keys())
         self.assertFalse(removed & self.triggers.keys())
         sources = [read(f"common/{path}") for path in (
-            f"decisions/{BASE}_decisions.txt", f"scripted_effects/{BASE}_effects.txt",
+            f"decisions/{BASE}_decisions.txt", f"scripted_effects/ADISCORD_vorkerland_effects.txt",
             "scripted_effects/ADISCORD_RUS_scripted_effects.txt",
-            f"scripted_triggers/{BASE}_triggers.txt", f"dynamic_modifiers/{BASE}_dynamic_modifiers.txt",
+            f"scripted_triggers/ADISCORD_RUS_scripted_triggers.txt", f"dynamic_modifiers/ADISCORD_dynamic_modifiers_RUS.txt",
             f"ai_strategy_plans/{BASE}_plans.txt")] + [read("focus_trees/RUS/main/focuses.txt"), read(f"events/{BASE}_events.txt")]
         for source in sources:
             for name in removed | {"RUS_Pavel_Niva", "character = RUS_Varlam_Oskol"}:
@@ -2608,7 +2609,7 @@ class RusCampaignTests(unittest.TestCase):
         world.temporary.update({"RUS_black_army_support_delta": 0.9, "RUS_scientists_support_delta": -0.9})
         world.run("RUS_faction_support_change")
         self.assertEqual((world.value("RUS_black_army_support"), world.value("RUS_scientists_support")), (1, 0))
-        modifier = block(parse(f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt"), "RUS_faction_support")
+        modifier = block(parse(f"common/dynamic_modifiers/ADISCORD_dynamic_modifiers_RUS.txt"), "RUS_faction_support")
         self.assertEqual(scalar(modifier, "political_power_gain"), "RUS_faction_political_power_gain")
         self.assertEqual(scalar(modifier, "power_balance_weekly"), "RUS_faction_power_balance_weekly")
         self.assertEqual(scalar(block(modifier, "enable"), "RUS_state_balance_operational"), "yes")
@@ -2915,7 +2916,7 @@ class RusCampaignTests(unittest.TestCase):
         self.assertFalse(any(name.startswith("RUS_hazard_capacity_") for name in world.ideas))
 
     def test_completed_bunker_rooms_open_national_programmes_and_improve_delivery(self):
-        category = block(parse(f"common/decisions/categories/{BASE}_categories.txt"), "RUS_development_programmes")
+        category = block(parse(f"common/decisions/categories/ADISCORD_decision_categories_RUS.txt"), "RUS_development_programmes")
         for room, programme, direction in (("RUS_bunker_layer_3", "RUS_workshop_training", "economic"), ("RUS_bunker_layer_4", "RUS_district_health_programme", "social_system")):
             world = self.world()
             world.focuses = set()
@@ -3125,7 +3126,7 @@ class RusCampaignTests(unittest.TestCase):
                 self.assertAlmostEqual(world.value("RUS_bunker_" + output), expected, msg=suffix)
 
     def test_new_institution_and_army_previews_match_accumulated_variables(self):
-        modifiers = parse(f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt")
+        modifiers = parse(f"common/dynamic_modifiers/ADISCORD_dynamic_modifiers_RUS.txt")
         cases = (
             "permanent_government", "state_budget", "civil_construction_board",
             "military_governors", "military_contract_board", "staff_college",
@@ -3187,7 +3188,7 @@ class RusCampaignTests(unittest.TestCase):
         failures = validator.validate()
         self.assertFalse([failure for failure in failures if "RUS_" in failure])
         original_read = Path.read_text
-        target = ROOT / f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt"
+        target = ROOT / f"common/dynamic_modifiers/ADISCORD_dynamic_modifiers_RUS.txt"
 
         def read_with_typo(path, *args, **kwargs):
             text = original_read(path, *args, **kwargs)
