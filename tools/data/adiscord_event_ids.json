@@ -5587,6 +5587,54 @@
       "owner": "events/ADISCORD_STP_events.txt",
       "subsystem": "stp_epilogue",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.80",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 80,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.81",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 81,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.82",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 82,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.83",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 83,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.84",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 84,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.85",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 85,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
+      "status": "active"
     }
   ]
 }

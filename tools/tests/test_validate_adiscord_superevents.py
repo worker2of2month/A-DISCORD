@@ -95,7 +95,7 @@ class SupereventContractTests(unittest.TestCase):
         from tools.validators.validate_adiscord_superevents import blocks, _event_block
 
         nam = (ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt").read_text(encoding="utf-8")
-        effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
+        effects = (ROOT / "common/scripted_effects/ADISCORD_RUS_scripted_effects.txt").read_text(encoding="utf-8")
         war = blocks(nam, r"^ADISCORD_nam_resource_war_begin_hostilities\s*=\s*\{")[0]
         peace = blocks(nam, r"^ADISCORD_nam_resource_war_resolve_peaceful_withdrawal\s*=\s*\{")[0]
         self.assertLess(war.index("declare_war_on"), war.index("ADISCORD_nam_show_resource_war_superevent"))

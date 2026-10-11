@@ -1,0 +1,49 @@
+leader_traits = {
+
+	# Charter cabinet heads: the mandate trait is replaced at the programme's conclusion.
+	STP_charter_sotnikov_oath = {
+		random = no
+		sprite = 1
+		stability_factor = 0.03
+		army_org_factor = 0.03
+	}
+
+	STP_charter_sotnikov_guarantor = {
+		random = no
+		sprite = 1
+		stability_factor = 0.08
+		army_org_factor = 0.05
+		drift_defence_factor = 0.15
+	}
+
+	STP_charter_shabrat_founder = {
+		random = no
+		sprite = 1
+		war_support_factor = 0.05
+		political_power_gain = 0.05
+	}
+
+	STP_charter_shabrat_first_citizen = {
+		random = no
+		sprite = 1
+		war_support_factor = 0.08
+		political_power_gain = 0.10
+		stability_factor = 0.03
+	}
+
+	STP_charter_tikhoreva_auditor = {
+		random = no
+		sprite = 1
+		research_speed_factor = 0.03
+		political_power_gain = 0.05
+	}
+
+	STP_charter_tikhoreva_steward = {
+		random = no
+		sprite = 1
+		research_speed_factor = 0.05
+		production_factory_efficiency_gain_factor = 0.05
+		stability_factor = 0.03
+	}
+
+}

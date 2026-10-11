@@ -3705,7 +3705,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         )
     for unrelated in (
         "IVN_national_spirit",
-        "RUS_national_spirit",
+        "RUS_aimaq_compact",
         "PIV_national_spirit",
         "NAM_national_spirit",
         "NOD_home_of_hedonist_revolution",

@@ -14082,6 +14082,7 @@ focus_tree = {
 		}
 	}
 
+	# Sotnikov: justice, civilian return and army pillars converge on two cross-links.
 	focus = {
 		id = STP_pc_charter_sotnikov_mandate
 		icon = GFX_focus_STP_pc_shabrat_politics
@@ -14107,6 +14108,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
+			add_country_leader_trait = STP_charter_sotnikov_oath
 			effect_tooltip = {
 				add_ideas = STP_pc_charter_sotnikov_mandate_delta
 			}
@@ -14145,6 +14147,15 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_justice_military_prosecution }
+				}
+				add_ideas = ADISCORD_justice_military_prosecution
+			}
+			else = {
+				add_political_power = 50
+			}
 			effect_tooltip = {
 				add_ideas = STP_pc_charter_sotnikov_independent_bench_delta
 			}
@@ -14159,8 +14170,8 @@ focus_tree = {
 	}
 
 	focus = {
-		id = STP_pc_charter_sotnikov_defence_counsel
-		icon = GFX_focus_STP_cw_quiet_registers
+		id = STP_pc_charter_sotnikov_open_hearings
+		icon = GFX_focus_STP_party_personnel_commissions
 		x = -5
 		y = 3
 		relative_position_id = STP_pc_lib_lock
@@ -14180,16 +14191,31 @@ focus_tree = {
 			}
 		}
 		prerequisite = { focus = STP_pc_charter_sotnikov_independent_bench }
+		mutually_exclusive = { focus = STP_pc_charter_sotnikov_prison_review }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			add_stability = .05
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_information_open_press }
+				}
+				add_ideas = ADISCORD_information_open_press
+			}
+			else = {
+				add_political_power = 40
+			}
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_pc.80
+					hours = 1
+				}
+			}
 		}
 	}
 
 	focus = {
-		id = STP_pc_charter_sotnikov_open_hearings
-		icon = GFX_focus_STP_party_personnel_commissions
+		id = STP_pc_charter_sotnikov_prison_review
+		icon = GFX_focus_STP_cw_quiet_registers
 		x = -3
 		y = 3
 		relative_position_id = STP_pc_lib_lock
@@ -14209,18 +14235,16 @@ focus_tree = {
 			}
 		}
 		prerequisite = { focus = STP_pc_charter_sotnikov_independent_bench }
+		mutually_exclusive = { focus = STP_pc_charter_sotnikov_open_hearings }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_sotnikov_open_hearings_delta
-			}
+			add_manpower = 3000
 			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_ADISCORD_economy_creditworthiness_factor
-					value = 0.02
+				country_event = {
+					id = ADISCORD_STP_pc.65
+					hours = 1
 				}
-				STP_pw_refresh_modifier = yes
 			}
 		}
 	}
@@ -14246,8 +14270,7 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_sotnikov_defence_counsel }
-		prerequisite = { focus = STP_pc_charter_sotnikov_open_hearings }
+		prerequisite = { focus = STP_pc_charter_sotnikov_open_hearings focus = STP_pc_charter_sotnikov_prison_review }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
@@ -14257,44 +14280,9 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_ADISCORD_country_development_society_growth_factor
-					value = 0.02
+					value = 0.03
 				}
 				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_sotnikov_prison_review
-		icon = GFX_focus_STP_cw_protocol_office
-		x = -5
-		y = 5
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_sotnikov_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_sotnikov_available_tt
-				STP_pc_charter_sotnikov_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_sotnikov_district_petitions }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			add_stability = .03
-			hidden_effect = {
-				country_event = {
-					id = ADISCORD_STP_pc.65
-					hours = 1
-				}
 			}
 		}
 	}
@@ -14302,7 +14290,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_charter_sotnikov_civilian_inspectorate
 		icon = GFX_focus_STP_cw_press_office
-		x = -3
+		x = -4
 		y = 5
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -14324,22 +14312,21 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_sotnikov_civilian_inspectorate_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_ADISCORD_economy_admin_expense_factor
-					value = -0.02
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_internal_security_civilian_oversight }
 				}
-				STP_pw_refresh_modifier = yes
+				add_ideas = ADISCORD_internal_security_civilian_oversight
+			}
+			else = {
+				add_political_power = 75
 			}
 		}
 	}
 
 	focus = {
-		id = STP_pc_charter_sotnikov_local_self_rule
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
+		id = STP_pc_charter_sotnikov_public_guarantees
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = -4
 		y = 6
 		relative_position_id = STP_pc_lib_lock
@@ -14358,84 +14345,7 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_sotnikov_prison_review }
 		prerequisite = { focus = STP_pc_charter_sotnikov_civilian_inspectorate }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_sotnikov_local_self_rule_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_ADISCORD_country_development_state_growth_factor
-					value = 0.02
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_sotnikov_rights_curriculum
-		icon = GFX_focus_STP_pw_party_civilian_retraining
-		x = -5
-		y = 7
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_sotnikov_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_sotnikov_available_tt
-				STP_pc_charter_sotnikov_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_sotnikov_local_self_rule }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_sotnikov_rights_curriculum_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_research_speed_factor
-					value = 0.015
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_sotnikov_public_guarantees
-		icon = GFX_focus_STP_pw_party_open_settlement
-		x = -3
-		y = 7
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_sotnikov_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_sotnikov_available_tt
-				STP_pc_charter_sotnikov_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_sotnikov_local_self_rule }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
@@ -14445,7 +14355,7 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_stability_factor
-					value = 0.02
+					value = 0.03
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -14478,6 +14388,7 @@ focus_tree = {
 		ai_will_do = { base = 8 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_pc_charter_sotnikov_reintegration
+			add_manpower = 1500
 		}
 	}
 
@@ -14541,18 +14452,18 @@ focus_tree = {
 			}
 		}
 		prerequisite = { focus = STP_pc_charter_sotnikov_family_records }
+		mutually_exclusive = { focus = STP_pc_charter_sotnikov_homes_for_families }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_sotnikov_community_clinics_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_ADISCORD_country_development_society_growth_factor
-					value = 0.03
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_healthcare_public_hospitals }
 				}
-				STP_pw_refresh_modifier = yes
+				add_ideas = ADISCORD_healthcare_public_hospitals
+			}
+			else = {
+				add_political_power = 40
 			}
 		}
 	}
@@ -14579,6 +14490,7 @@ focus_tree = {
 			}
 		}
 		prerequisite = { focus = STP_pc_charter_sotnikov_family_records }
+		mutually_exclusive = { focus = STP_pc_charter_sotnikov_community_clinics }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
@@ -14588,7 +14500,7 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_production_speed_buildings_factor
-					value = 0.025
+					value = 0.05
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -14597,7 +14509,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_sotnikov_workers_voice
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_goal_generic_consumer_goods
 		x = 0
 		y = 5
 		relative_position_id = STP_pc_lib_lock
@@ -14616,20 +14528,24 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_sotnikov_community_clinics }
-		prerequisite = { focus = STP_pc_charter_sotnikov_homes_for_families }
+		prerequisite = { focus = STP_pc_charter_sotnikov_community_clinics focus = STP_pc_charter_sotnikov_homes_for_families }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_sotnikov_workers_voice_delta
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_labor_policy_collective_bargaining }
+				}
+				add_ideas = ADISCORD_labor_policy_collective_bargaining
+			}
+			else = {
+				add_political_power = 75
 			}
 			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_industrial_capacity_factory
-					value = 0.025
+				country_event = {
+					id = ADISCORD_STP_pc.81
+					hours = 1
 				}
-				STP_pw_refresh_modifier = yes
 			}
 		}
 	}
@@ -14712,89 +14628,14 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			add_tech_bonus = {
-				name = STP_pc_charter_sotnikov_vocational_retraining
-				bonus = 0.5
-				uses = 1
-				category = industry
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_sotnikov_workplace_safety
-		icon = GFX_focus_STP_ps_evacuation_plan
-		x = -1
-		y = 7
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_sotnikov_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_sotnikov_available_tt
-				STP_pc_charter_sotnikov_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_sotnikov_civil_workshops }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
+			add_tech_bonus = { name = STP_pc_charter_sotnikov_vocational_retraining bonus = 0.5 uses = 2 category = industry }
 			effect_tooltip = {
-				add_ideas = STP_pc_charter_sotnikov_workplace_safety_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_production_factory_max_efficiency_factor
-					value = 0.025
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_sotnikov_social_compact
-		icon = GFX_focus_STP_cw_protocol_office
-		x = 1
-		y = 7
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_sotnikov_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_sotnikov_available_tt
-				STP_pc_charter_sotnikov_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_sotnikov_vocational_retraining }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_sotnikov_social_compact_delta
+				add_ideas = STP_pc_charter_sotnikov_vocational_retraining_delta
 			}
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_industrial_capacity_factory
-					value = 0.025
-				}
-				add_to_variable = {
-					var = STP_pw_production_speed_buildings_factor
-					value = 0.025
+					value = 0.03
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -14826,21 +14667,21 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_sotnikov_army_under_law_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_army_org_factor
-					value = 0.025
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_officer_corps_merit_commissions }
 				}
-				STP_pw_refresh_modifier = yes
+				add_ideas = ADISCORD_officer_corps_merit_commissions
 			}
+			else = {
+				add_political_power = 75
+			}
+			add_command_power = 25
 		}
 	}
 
 	focus = {
-		id = STP_pc_charter_sotnikov_veteran_instructors
+		id = STP_pc_charter_sotnikov_citizen_reserve
 		icon = GFX_focus_STP_pw_party_veteran_reserve
 		x = 3
 		y = 3
@@ -14861,16 +14702,26 @@ focus_tree = {
 			}
 		}
 		prerequisite = { focus = STP_pc_charter_sotnikov_army_under_law }
+		mutually_exclusive = { focus = STP_pc_charter_sotnikov_professional_service }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			army_experience = 40
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_military_organization_territorial_reserves }
+				}
+				add_ideas = ADISCORD_military_organization_territorial_reserves
+			}
+			else = {
+				add_political_power = 75
+			}
+			army_experience = 25
 		}
 	}
 
 	focus = {
-		id = STP_pc_charter_sotnikov_medical_services
-		icon = GFX_focus_STP_ps_evacuation_plan
+		id = STP_pc_charter_sotnikov_professional_service
+		icon = GFX_focus_STP_pw_party_defence_combine
 		x = 5
 		y = 3
 		relative_position_id = STP_pc_lib_lock
@@ -14890,6 +14741,45 @@ focus_tree = {
 			}
 		}
 		prerequisite = { focus = STP_pc_charter_sotnikov_army_under_law }
+		mutually_exclusive = { focus = STP_pc_charter_sotnikov_citizen_reserve }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_military_organization_cadre_army }
+				}
+				add_ideas = ADISCORD_military_organization_cadre_army
+			}
+			else = {
+				add_political_power = 75
+			}
+			army_experience = 25
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_medical_services
+		icon = GFX_goal_generic_army_doctrines
+		x = 4
+		y = 4
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_citizen_reserve focus = STP_pc_charter_sotnikov_professional_service }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
@@ -14908,43 +14798,9 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_sotnikov_defensive_drills
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_goal_generic_defence
 		x = 3
-		y = 4
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_sotnikov_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_sotnikov_available_tt
-				STP_pc_charter_sotnikov_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_sotnikov_veteran_instructors }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			add_tech_bonus = {
-				name = STP_pc_charter_sotnikov_defensive_drills
-				bonus = 0.5
-				uses = 1
-				category = infantry_weapons
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_sotnikov_field_supply
-		icon = GFX_focus_STP_party_war_transport
-		x = 5
-		y = 4
+		y = 5
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
 		allow_branch = {
@@ -14965,13 +14821,51 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
+			add_tech_bonus = { name = STP_pc_charter_sotnikov_defensive_drills bonus = 0.5 uses = 2 category = infantry_weapons }
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_field_supply
+		icon = GFX_focus_STP_party_war_transport
+		x = 5
+		y = 5
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_medical_services }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_logistics_civilian_contracts }
+				}
+				add_ideas = ADISCORD_logistics_civilian_contracts
+			}
+			else = {
+				add_political_power = 75
+			}
 			effect_tooltip = {
 				add_ideas = STP_pc_charter_sotnikov_field_supply_delta
 			}
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_supply_consumption_factor
-					value = -0.025
+					value = -0.03
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -14982,7 +14876,7 @@ focus_tree = {
 		id = STP_pc_charter_sotnikov_rescue_stores
 		icon = GFX_focus_STP_defense_budget
 		x = 4
-		y = 5
+		y = 6
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
 		allow_branch = {
@@ -15004,19 +14898,75 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 150
-			}
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = ROOT }
+			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = ROOT }
 			army_experience = 20
 		}
 	}
 
 	focus = {
-		id = STP_pc_charter_sotnikov_voluntary_cooperation
-		icon = GFX_focus_STP_ps_asylum_protocol
-		x = 4
-		y = 6
+		id = STP_pc_charter_sotnikov_officer_responsibility
+		icon = GFX_focus_STP_cw_protocol_office
+		x = -2
+		y = 7
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_public_guarantees }
+		prerequisite = { focus = STP_pc_charter_sotnikov_civil_workshops }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					has_character = STP_Edmund_Ravel
+					STP_Edmund_Ravel = { NOT = { has_character_flag = STP_cw_arrested } }
+				}
+				add_advisor_role = {
+					character = STP_Edmund_Ravel
+					advisor = {
+						slot = army_chief
+						idea_token = STP_pc_charter_ravel_army_chief
+						ledger = army
+						traits = { army_chief_defensive_2 }
+						cost = 50
+					}
+				}
+			}
+			else = {
+				add_command_power = 50
+			}
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_sotnikov_officer_responsibility_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_planning_speed
+					value = 0.05
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_peaceful_readiness
+		icon = GFX_focus_STP_ps_permanent_security
+		x = 2
+		y = 7
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
 		allow_branch = {
@@ -15034,82 +14984,7 @@ focus_tree = {
 			}
 		}
 		prerequisite = { focus = STP_pc_charter_sotnikov_rescue_stores }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			add_tech_bonus = {
-				name = STP_pc_charter_sotnikov_voluntary_cooperation
-				bonus = 0.5
-				uses = 1
-				category = industry
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_sotnikov_officer_responsibility
-		icon = GFX_focus_STP_cw_protocol_office
-		x = 3
-		y = 7
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_sotnikov_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_sotnikov_available_tt
-				STP_pc_charter_sotnikov_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_sotnikov_voluntary_cooperation }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_sotnikov_officer_responsibility_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_army_org_factor
-					value = 0.025
-				}
-				add_to_variable = {
-					var = STP_pw_planning_speed
-					value = 0.025
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_sotnikov_peaceful_readiness
-		icon = GFX_focus_STP_pw_party_veteran_reserve
-		x = 5
-		y = 7
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_sotnikov_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_sotnikov_available_tt
-				STP_pc_charter_sotnikov_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_sotnikov_voluntary_cooperation }
+		prerequisite = { focus = STP_pc_charter_sotnikov_vocational_retraining }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
@@ -15118,12 +14993,12 @@ focus_tree = {
 			}
 			hidden_effect = {
 				add_to_variable = {
-					var = STP_pw_army_org_regain
-					value = 0.025
+					var = STP_pw_training_time_factor
+					value = -0.05
 				}
 				add_to_variable = {
-					var = STP_pw_training_time_factor
-					value = -0.025
+					var = STP_pw_army_org_regain
+					value = 0.025
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -15132,9 +15007,9 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_sotnikov_cabinet_review
-		icon = GFX_focus_STP_cw_quiet_registers
+		icon = GFX_focus_generic_treaty
 		x = 0
-		y = 9
+		y = 8
 		relative_position_id = STP_pc_lib_lock
 		cost = 4
 		allow_branch = {
@@ -15151,10 +15026,6 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_sotnikov_rights_curriculum }
-		prerequisite = { focus = STP_pc_charter_sotnikov_public_guarantees }
-		prerequisite = { focus = STP_pc_charter_sotnikov_workplace_safety }
-		prerequisite = { focus = STP_pc_charter_sotnikov_social_compact }
 		prerequisite = { focus = STP_pc_charter_sotnikov_officer_responsibility }
 		prerequisite = { focus = STP_pc_charter_sotnikov_peaceful_readiness }
 		cancel_if_invalid = yes
@@ -15170,7 +15041,7 @@ focus_tree = {
 				}
 				add_to_variable = {
 					var = STP_pw_research_speed_factor
-					value = 0.015
+					value = 0.02
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -15179,9 +15050,9 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_sotnikov_charter_fulfilled
-		icon = GFX_focus_STP_pc_shabrat_politics
+		icon = GFX_focus_STP_Triumph_Of_Common_Sense
 		x = 0
-		y = 10
+		y = 9
 		relative_position_id = STP_pc_lib_lock
 		cost = 4
 		allow_branch = {
@@ -15202,23 +15073,18 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_sotnikov_charter_fulfilled_delta
-			}
+			remove_country_leader_trait = STP_charter_sotnikov_oath
+			add_country_leader_trait = STP_charter_sotnikov_guarantor
 			hidden_effect = {
 				country_event = {
 					id = ADISCORD_STP_pc.68
 					hours = 1
 				}
-				add_to_variable = {
-					var = STP_pw_stability_factor
-					value = 0.02
-				}
-				STP_pw_refresh_modifier = yes
 			}
 		}
 	}
 
+	# Shabrat: a chain of national diamonds opens into a six-way programme fan.
 	focus = {
 		id = STP_pc_charter_shabrat_mandate
 		icon = GFX_focus_STP_pc_shabrat_politics
@@ -15244,6 +15110,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
+			add_country_leader_trait = STP_charter_shabrat_founder
 			effect_tooltip = {
 				add_ideas = STP_pc_charter_shabrat_mandate_delta
 			}
@@ -15260,7 +15127,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_charter_shabrat_common_citizenship
 		icon = GFX_focus_STP_cw_protocol_office
-		x = -4
+		x = -2
 		y = 2
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -15282,6 +15149,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
+			add_popularity = { ideology = chauvinism popularity = 0.10 }
 			effect_tooltip = {
 				add_ideas = STP_pc_charter_shabrat_common_citizenship_delta
 			}
@@ -15296,294 +15164,9 @@ focus_tree = {
 	}
 
 	focus = {
-		id = STP_pc_charter_shabrat_resistance_memory
-		icon = GFX_focus_STP_cw_press_office
-		x = -5
-		y = 3
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_common_citizenship }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			add_war_support = .05
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_shabrat_national_service
-		icon = GFX_focus_STP_pw_party_veteran_reserve
-		x = -3
-		y = 3
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_common_citizenship }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_shabrat_national_service_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_ADISCORD_economy_admin_expense_factor
-					value = -0.02
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_shabrat_district_registers
-		icon = GFX_focus_STP_cw_quiet_registers
-		x = -4
-		y = 4
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_resistance_memory }
-		prerequisite = { focus = STP_pc_charter_shabrat_national_service }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_shabrat_district_registers_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_ADISCORD_country_development_state_growth_factor
-					value = 0.025
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_shabrat_citizenship_duty
-		icon = GFX_focus_STP_party_personnel_commissions
-		x = -5
-		y = 5
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_district_registers }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			add_stability = .03
-			hidden_effect = {
-				country_event = {
-					id = ADISCORD_STP_pc.66
-					hours = 1
-				}
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_shabrat_district_grants
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
-		x = -3
-		y = 5
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_district_registers }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			unlock_decision_tooltip = STP_pc_charter_shabrat_civic_grants
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_shabrat_citizens_protection
-		icon = GFX_focus_STP_ps_asylum_protocol
-		x = -4
-		y = 6
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_citizenship_duty }
-		prerequisite = { focus = STP_pc_charter_shabrat_district_grants }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_shabrat_citizens_protection_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_stability_factor
-					value = 0.02
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_shabrat_national_schools
-		icon = GFX_focus_STP_pw_party_civilian_retraining
-		x = -5
-		y = 7
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_citizens_protection }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_shabrat_national_schools_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_research_speed_factor
-					value = 0.02
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_shabrat_national_compact
-		icon = GFX_focus_STP_pw_party_open_settlement
-		x = -3
-		y = 7
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_citizens_protection }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_shabrat_national_compact_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_ADISCORD_country_development_society_growth_factor
-					value = 0.025
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
 		id = STP_pc_charter_shabrat_domestic_suppliers
 		icon = GFX_focus_STP_party_industrial_board
-		x = 0
+		x = 2
 		y = 2
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -15611,7 +15194,7 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_industrial_capacity_factory
-					value = 0.025
+					value = 0.03
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -15619,7 +15202,7 @@ focus_tree = {
 	}
 
 	focus = {
-		id = STP_pc_charter_shabrat_tools_inventory
+		id = STP_pc_charter_shabrat_district_registers
 		icon = GFX_focus_STP_cw_quiet_registers
 		x = 0
 		y = 3
@@ -15639,15 +15222,285 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
+		prerequisite = { focus = STP_pc_charter_shabrat_common_citizenship }
 		prerequisite = { focus = STP_pc_charter_shabrat_domestic_suppliers }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			add_tech_bonus = {
-				name = STP_pc_charter_shabrat_tools_inventory
-				bonus = 0.5
-				uses = 1
-				category = industry
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_district_registers_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_ADISCORD_country_development_state_growth_factor
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
+				country_event = {
+					id = ADISCORD_STP_pc.83
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_resistance_memory
+		icon = GFX_focus_STP_cw_press_office
+		x = -4
+		y = 4
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_district_registers }
+		mutually_exclusive = { focus = STP_pc_charter_shabrat_national_service }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_cultural_policy_national_mythmaking }
+				}
+				add_ideas = ADISCORD_cultural_policy_national_mythmaking
+			}
+			else = {
+				add_political_power = 40
+			}
+			add_war_support = 0.03
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_district_grants
+		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
+		x = -1
+		y = 4
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_district_registers }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			unlock_decision_tooltip = STP_pc_charter_shabrat_civic_grants
+			custom_effect_tooltip = STP_pc_charter_civic_grants_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 600 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 600 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_tools_inventory
+		icon = GFX_goal_generic_production
+		x = 1
+		y = 4
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_district_registers }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_tech_bonus = { name = STP_pc_charter_shabrat_tools_inventory bonus = 0.5 uses = 2 category = industry }
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_national_service
+		icon = GFX_focus_STP_pw_party_veteran_reserve
+		x = 4
+		y = 4
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_district_registers }
+		mutually_exclusive = { focus = STP_pc_charter_shabrat_resistance_memory }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_training_reserve_cycles }
+				}
+				add_ideas = ADISCORD_training_reserve_cycles
+			}
+			else = {
+				add_political_power = 75
+			}
+			add_manpower = 4000
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_citizens_protection
+		icon = GFX_focus_STP_ps_asylum_protocol
+		x = 0
+		y = 5
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_resistance_memory focus = STP_pc_charter_shabrat_national_service }
+		prerequisite = { focus = STP_pc_charter_shabrat_district_grants }
+		prerequisite = { focus = STP_pc_charter_shabrat_tools_inventory }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_citizens_protection_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_stability_factor
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
+				country_event = {
+					id = ADISCORD_STP_pc.66
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_national_schools
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = -5
+		y = 6
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_citizens_protection }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_education_civic_curriculum }
+				}
+				add_ideas = ADISCORD_education_civic_curriculum
+			}
+			else = {
+				add_political_power = 40
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_national_compact
+		icon = GFX_focus_STP_pw_party_open_settlement
+		x = -3
+		y = 6
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_citizens_protection }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_national_compact_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_ADISCORD_country_development_society_growth_factor
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
 			}
 		}
 	}
@@ -15656,7 +15509,7 @@ focus_tree = {
 		id = STP_pc_charter_shabrat_district_workshops
 		icon = GFX_focus_STP_party_industrial_board
 		x = -1
-		y = 4
+		y = 6
 		relative_position_id = STP_pc_lib_lock
 		cost = 4
 		allow_branch = {
@@ -15681,7 +15534,7 @@ focus_tree = {
 				}
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_shabrat_tools_inventory }
+		prerequisite = { focus = STP_pc_charter_shabrat_citizens_protection }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
@@ -15707,9 +15560,9 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_common_standards
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_STP_pw_party_domestic_pattern
 		x = 1
-		y = 4
+		y = 6
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
 		allow_branch = {
@@ -15726,7 +15579,7 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_shabrat_tools_inventory }
+		prerequisite = { focus = STP_pc_charter_shabrat_citizens_protection }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
@@ -15736,7 +15589,7 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_production_factory_max_efficiency_factor
-					value = 0.025
+					value = 0.03
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -15744,10 +15597,10 @@ focus_tree = {
 	}
 
 	focus = {
-		id = STP_pc_charter_shabrat_construction_crews
-		icon = GFX_focus_STP_party_war_transport
-		x = 0
-		y = 5
+		id = STP_pc_charter_shabrat_national_defence
+		icon = GFX_focus_STP_defense_budget
+		x = 3
+		y = 6
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
 		allow_branch = {
@@ -15764,29 +15617,119 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_shabrat_district_workshops }
-		prerequisite = { focus = STP_pc_charter_shabrat_common_standards }
+		prerequisite = { focus = STP_pc_charter_shabrat_citizens_protection }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_officer_corps_general_staff_academy }
+				}
+				add_ideas = ADISCORD_officer_corps_general_staff_academy
+			}
+			else = {
+				add_political_power = 75
+			}
+			add_command_power = 25
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_officer_oath
+		icon = GFX_focus_STP_Turn_The_Young_Officers
+		x = 5
+		y = 6
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_citizens_protection }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			army_experience = 40
+			if = {
+				limit = {
+					has_character = STP_Leonid_Barchel
+					STP_Leonid_Barchel = { NOT = { has_character_flag = STP_cw_arrested } }
+				}
+				add_advisor_role = {
+					character = STP_Leonid_Barchel
+					advisor = {
+						slot = high_command
+						idea_token = STP_pc_charter_barchel_high_command
+						ledger = army
+						traits = { army_commando_2 }
+						cost = 50
+					}
+				}
+			}
+			else = {
+				add_command_power = 40
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_citizenship_duty
+		icon = GFX_focus_STP_party_personnel_commissions
+		x = -4
+		y = 7
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_national_schools }
+		prerequisite = { focus = STP_pc_charter_shabrat_national_compact }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
 			effect_tooltip = {
-				add_ideas = STP_pc_charter_shabrat_construction_crews_delta
+				add_ideas = STP_pc_charter_shabrat_citizenship_duty_delta
 			}
 			hidden_effect = {
 				add_to_variable = {
-					var = STP_pw_production_speed_buildings_factor
-					value = 0.025
+					var = STP_pw_political_power_gain
+					value = 0.05
 				}
 				STP_pw_refresh_modifier = yes
+				country_event = {
+					id = ADISCORD_STP_pc.82
+					hours = 1
+				}
 			}
 		}
 	}
 
 	focus = {
 		id = STP_pc_charter_shabrat_national_arsenal
-		icon = GFX_focus_STP_defense_budget
+		icon = GFX_focus_STP_defense_budget_tank
 		x = -1
-		y = 6
+		y = 7
 		relative_position_id = STP_pc_lib_lock
 		cost = 4
 		allow_branch = {
@@ -15811,10 +15754,21 @@ focus_tree = {
 				}
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_shabrat_construction_crews }
+		prerequisite = { focus = STP_pc_charter_shabrat_district_workshops }
+		prerequisite = { focus = STP_pc_charter_shabrat_common_standards }
+		mutually_exclusive = { focus = STP_pc_charter_shabrat_economic_sovereignty }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_industrial_policy_military_prioritization }
+				}
+				add_ideas = ADISCORD_industrial_policy_military_prioritization
+			}
+			else = {
+				add_political_power = 75
+			}
 			random_owned_controlled_state = {
 				limit = {
 					free_building_slots = {
@@ -15836,84 +15790,8 @@ focus_tree = {
 	}
 
 	focus = {
-		id = STP_pc_charter_shabrat_materials_testing
-		icon = GFX_focus_STP_pw_party_civilian_retraining
-		x = 1
-		y = 6
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_construction_crews }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			add_tech_bonus = {
-				name = STP_pc_charter_shabrat_materials_testing
-				bonus = 0.5
-				uses = 1
-				category = industry
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_shabrat_district_exchange
-		icon = GFX_focus_STP_party_war_transport
-		x = -1
-		y = 7
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_national_arsenal }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_shabrat_district_exchange_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_industrial_capacity_factory
-					value = 0.025
-				}
-				add_to_variable = {
-					var = STP_pw_production_speed_buildings_factor
-					value = 0.025
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
 		id = STP_pc_charter_shabrat_economic_sovereignty
-		icon = GFX_focus_STP_party_industrial_board
+		icon = GFX_focus_STP_2160_budget
 		x = 1
 		y = 7
 		relative_position_id = STP_pc_lib_lock
@@ -15932,279 +15810,37 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_shabrat_materials_testing }
+		prerequisite = { focus = STP_pc_charter_shabrat_district_workshops }
+		prerequisite = { focus = STP_pc_charter_shabrat_common_standards }
+		mutually_exclusive = { focus = STP_pc_charter_shabrat_national_arsenal }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_industrial_policy_civilian_expansion }
+				}
+				add_ideas = ADISCORD_industrial_policy_civilian_expansion
+			}
+			else = {
+				add_political_power = 75
+			}
 			effect_tooltip = {
 				add_ideas = STP_pc_charter_shabrat_economic_sovereignty_delta
 			}
 			hidden_effect = {
 				add_to_variable = {
-					var = STP_pw_production_factory_max_efficiency_factor
-					value = 0.025
-				}
-				add_to_variable = {
 					var = STP_pw_ADISCORD_economy_overall_income_factor
-					value = 0.02
+					value = 0.03
 				}
 				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_shabrat_national_defence
-		icon = GFX_focus_STP_defense_budget
-		x = 4
-		y = 2
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_mandate }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_shabrat_national_defence_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_army_org_factor
-					value = 0.025
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_shabrat_officer_oath
-		icon = GFX_focus_STP_pw_party_veteran_reserve
-		x = 3
-		y = 3
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_national_defence }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			army_experience = 40
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_shabrat_border_drills
-		icon = GFX_focus_STP_ps_joint_staff
-		x = 5
-		y = 3
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_national_defence }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			add_tech_bonus = {
-				name = STP_pc_charter_shabrat_border_drills
-				bonus = 0.5
-				uses = 1
-				category = infantry_weapons
 			}
 		}
 	}
 
 	focus = {
 		id = STP_pc_charter_shabrat_district_reserves
-		icon = GFX_focus_STP_pw_party_veteran_reserve
-		x = 3
-		y = 4
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_officer_oath }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_shabrat_district_reserves_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_training_time_factor
-					value = -0.025
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_shabrat_reliable_supply
-		icon = GFX_focus_STP_party_war_transport
-		x = 5
-		y = 4
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_border_drills }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_shabrat_reliable_supply_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_supply_consumption_factor
-					value = -0.025
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_shabrat_defence_stores
-		icon = GFX_focus_STP_defense_budget
-		x = 4
-		y = 5
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_district_reserves }
-		prerequisite = { focus = STP_pc_charter_shabrat_reliable_supply }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 150
-			}
-			army_experience = 20
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_shabrat_staff_coordination
-		icon = GFX_focus_STP_ps_joint_staff
-		x = 4
-		y = 6
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_shabrat_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_shabrat_available_tt
-				STP_pc_charter_shabrat_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_shabrat_defence_stores }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_shabrat_staff_coordination_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_planning_speed
-					value = 0.04
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_shabrat_protected_communities
-		icon = GFX_focus_STP_pw_party_family_pensions
+		icon = GFX_goal_generic_allies_build_infantry
 		x = 3
 		y = 7
 		relative_position_id = STP_pc_lib_lock
@@ -16223,7 +15859,80 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_shabrat_staff_coordination }
+		prerequisite = { focus = STP_pc_charter_shabrat_national_defence }
+		prerequisite = { focus = STP_pc_charter_shabrat_officer_oath }
+		mutually_exclusive = { focus = STP_pc_charter_shabrat_border_drills }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_manpower = 3000
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_district_reserves_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_training_time_factor
+					value = -0.05
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_border_drills
+		icon = GFX_focus_STP_cw_arm_the_north
+		x = 5
+		y = 7
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_national_defence }
+		prerequisite = { focus = STP_pc_charter_shabrat_officer_oath }
+		mutually_exclusive = { focus = STP_pc_charter_shabrat_district_reserves }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_tech_bonus = { name = STP_pc_charter_shabrat_border_drills bonus = 0.5 uses = 2 category = infantry_weapons }
+			army_experience = 25
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_protected_communities
+		icon = GFX_focus_STP_pw_party_family_pensions
+		x = -4
+		y = 8
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_citizenship_duty }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
@@ -16232,8 +15941,8 @@ focus_tree = {
 			}
 			hidden_effect = {
 				add_to_variable = {
-					var = STP_pw_army_org_regain
-					value = 0.025
+					var = STP_pw_stability_factor
+					value = 0.02
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -16241,10 +15950,10 @@ focus_tree = {
 	}
 
 	focus = {
-		id = STP_pc_charter_shabrat_defence_of_citizens
-		icon = GFX_focus_STP_pw_party_veteran_reserve
-		x = 5
-		y = 7
+		id = STP_pc_charter_shabrat_district_exchange
+		icon = GFX_focus_STP_party_war_transport
+		x = 0
+		y = 8
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
 		allow_branch = {
@@ -16261,21 +15970,17 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_shabrat_staff_coordination }
+		prerequisite = { focus = STP_pc_charter_shabrat_national_arsenal focus = STP_pc_charter_shabrat_economic_sovereignty }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
 			effect_tooltip = {
-				add_ideas = STP_pc_charter_shabrat_defence_of_citizens_delta
+				add_ideas = STP_pc_charter_shabrat_district_exchange_delta
 			}
 			hidden_effect = {
 				add_to_variable = {
-					var = STP_pw_army_org_factor
-					value = 0.025
-				}
-				add_to_variable = {
-					var = STP_pw_army_org_regain
-					value = 0.025
+					var = STP_pw_production_speed_buildings_factor
+					value = 0.05
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -16283,8 +15988,38 @@ focus_tree = {
 	}
 
 	focus = {
+		id = STP_pc_charter_shabrat_defence_stores
+		icon = GFX_focus_STP_ps_northern_arms
+		x = 4
+		y = 8
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_district_reserves focus = STP_pc_charter_shabrat_border_drills }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 2000 producer = ROOT }
+			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = ROOT }
+		}
+	}
+
+	focus = {
 		id = STP_pc_charter_shabrat_cabinet_review
-		icon = GFX_focus_STP_cw_quiet_registers
+		icon = GFX_focus_generic_treaty
 		x = 0
 		y = 9
 		relative_position_id = STP_pc_lib_lock
@@ -16303,12 +16038,9 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_shabrat_national_schools }
-		prerequisite = { focus = STP_pc_charter_shabrat_national_compact }
-		prerequisite = { focus = STP_pc_charter_shabrat_district_exchange }
-		prerequisite = { focus = STP_pc_charter_shabrat_economic_sovereignty }
 		prerequisite = { focus = STP_pc_charter_shabrat_protected_communities }
-		prerequisite = { focus = STP_pc_charter_shabrat_defence_of_citizens }
+		prerequisite = { focus = STP_pc_charter_shabrat_district_exchange }
+		prerequisite = { focus = STP_pc_charter_shabrat_defence_stores }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
@@ -16322,7 +16054,7 @@ focus_tree = {
 				}
 				add_to_variable = {
 					var = STP_pw_research_speed_factor
-					value = 0.02
+					value = 0.03
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -16331,7 +16063,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_charter_fulfilled
-		icon = GFX_focus_STP_pc_shabrat_politics
+		icon = GFX_goal_generic_national_unity
 		x = 0
 		y = 10
 		relative_position_id = STP_pc_lib_lock
@@ -16354,23 +16086,18 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_shabrat_charter_fulfilled_delta
-			}
+			remove_country_leader_trait = STP_charter_shabrat_founder
+			add_country_leader_trait = STP_charter_shabrat_first_citizen
 			hidden_effect = {
 				country_event = {
 					id = ADISCORD_STP_pc.69
 					hours = 1
 				}
-				add_to_variable = {
-					var = STP_pw_stability_factor
-					value = 0.02
-				}
-				STP_pw_refresh_modifier = yes
 			}
 		}
 	}
 
+	# Tikhoreva: records and reconstruction rails share rungs beside a research rail.
 	focus = {
 		id = STP_pc_charter_tikhoreva_mandate
 		icon = GFX_focus_STP_pc_shabrat_politics
@@ -16396,6 +16123,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
+			add_country_leader_trait = STP_charter_tikhoreva_auditor
 			effect_tooltip = {
 				add_ideas = STP_pc_charter_tikhoreva_mandate_delta
 			}
@@ -16412,7 +16140,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_charter_tikhoreva_public_registers
 		icon = GFX_focus_STP_cw_quiet_registers
-		x = -4
+		x = -2
 		y = 2
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -16440,7 +16168,7 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_ADISCORD_economy_creditworthiness_factor
-					value = 0.025
+					value = 0.03
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -16450,7 +16178,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_charter_tikhoreva_appointments_by_work
 		icon = GFX_focus_STP_party_personnel_commissions
-		x = -5
+		x = -2
 		y = 3
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -16478,7 +16206,7 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_ADISCORD_economy_admin_expense_factor
-					value = -0.02
+					value = -0.03
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -16489,44 +16217,6 @@ focus_tree = {
 		id = STP_pc_charter_tikhoreva_service_baselines
 		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
 		x = -3
-		y = 3
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_tikhoreva_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_tikhoreva_available_tt
-				STP_pc_charter_tikhoreva_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_public_registers }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_tikhoreva_service_baselines_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_ADISCORD_country_development_society_growth_factor
-					value = 0.02
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_tikhoreva_published_accounts
-		icon = GFX_focus_STP_cw_protocol_office
-		x = -4
 		y = 4
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -16545,17 +16235,26 @@ focus_tree = {
 			}
 		}
 		prerequisite = { focus = STP_pc_charter_tikhoreva_appointments_by_work }
-		prerequisite = { focus = STP_pc_charter_tikhoreva_service_baselines }
+		mutually_exclusive = { focus = STP_pc_charter_tikhoreva_limits_of_measurement }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_welfare_basic_services }
+				}
+				add_ideas = ADISCORD_welfare_basic_services
+			}
+			else = {
+				add_political_power = 40
+			}
 			effect_tooltip = {
-				add_ideas = STP_pc_charter_tikhoreva_published_accounts_delta
+				add_ideas = STP_pc_charter_tikhoreva_service_baselines_delta
 			}
 			hidden_effect = {
 				add_to_variable = {
-					var = STP_pw_ADISCORD_economy_admin_expense_factor
-					value = -0.02
+					var = STP_pw_ADISCORD_country_development_society_growth_factor
+					value = 0.03
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -16565,8 +16264,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_charter_tikhoreva_limits_of_measurement
 		icon = GFX_focus_STP_cw_press_office
-		x = -5
-		y = 5
+		x = -1
+		y = 4
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
 		allow_branch = {
@@ -16583,11 +16282,12 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_published_accounts }
+		prerequisite = { focus = STP_pc_charter_tikhoreva_appointments_by_work }
+		mutually_exclusive = { focus = STP_pc_charter_tikhoreva_service_baselines }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			add_stability = .03
+			add_stability = 0.03
 			hidden_effect = {
 				country_event = {
 					id = ADISCORD_STP_pc.67
@@ -16598,162 +16298,9 @@ focus_tree = {
 	}
 
 	focus = {
-		id = STP_pc_charter_tikhoreva_independent_audit
-		icon = GFX_focus_STP_party_personnel_commissions
-		x = -3
-		y = 5
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_tikhoreva_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_tikhoreva_available_tt
-				STP_pc_charter_tikhoreva_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_published_accounts }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_tikhoreva_independent_audit_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_ADISCORD_economy_creditworthiness_factor
-					value = 0.025
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_tikhoreva_appeals_by_evidence
-		icon = GFX_focus_STP_cw_protocol_office
-		x = -4
-		y = 6
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_tikhoreva_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_tikhoreva_available_tt
-				STP_pc_charter_tikhoreva_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_limits_of_measurement }
-		prerequisite = { focus = STP_pc_charter_tikhoreva_independent_audit }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_tikhoreva_appeals_by_evidence_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_stability_factor
-					value = 0.02
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_tikhoreva_public_results
-		icon = GFX_focus_STP_cw_press_office
-		x = -5
-		y = 7
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_tikhoreva_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_tikhoreva_available_tt
-				STP_pc_charter_tikhoreva_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_appeals_by_evidence }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_tikhoreva_public_results_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_ADISCORD_economy_admin_expense_factor
-					value = -0.02
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_tikhoreva_accountable_service
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
-		x = -3
-		y = 7
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_tikhoreva_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_tikhoreva_available_tt
-				STP_pc_charter_tikhoreva_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_appeals_by_evidence }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_tikhoreva_accountable_service_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_ADISCORD_country_development_state_growth_factor
-					value = 0.025
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
 		id = STP_pc_charter_tikhoreva_damage_survey
-		icon = GFX_focus_STP_cw_quiet_registers
-		x = 0
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 2
 		y = 2
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -16781,7 +16328,7 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_production_speed_buildings_factor
-					value = 0.025
+					value = 0.03
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -16789,9 +16336,133 @@ focus_tree = {
 	}
 
 	focus = {
+		id = STP_pc_charter_tikhoreva_published_accounts
+		icon = GFX_focus_STP_cw_protocol_office
+		x = 0
+		y = 3
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_tikhoreva_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_available_tt
+				STP_pc_charter_tikhoreva_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_tikhoreva_public_registers }
+		prerequisite = { focus = STP_pc_charter_tikhoreva_damage_survey }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_tikhoreva_published_accounts_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_ADISCORD_economy_overall_income_factor
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
+				country_event = {
+					id = ADISCORD_STP_pc.84
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_tikhoreva_independent_audit
+		icon = GFX_focus_STP_Open_Their_Eyes
+		x = -2
+		y = 5
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_tikhoreva_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_available_tt
+				STP_pc_charter_tikhoreva_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_tikhoreva_service_baselines focus = STP_pc_charter_tikhoreva_limits_of_measurement }
+		prerequisite = { focus = STP_pc_charter_tikhoreva_published_accounts }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_tikhoreva_independent_audit_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_ADISCORD_economy_admin_expense_factor
+					value = -0.03
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_tikhoreva_public_results
+		icon = GFX_focus_STP_party_presidium_broadcast
+		x = -2
+		y = 6
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_tikhoreva_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_available_tt
+				STP_pc_charter_tikhoreva_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_tikhoreva_independent_audit }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_tikhoreva_public_results_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_stability_factor
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
+				country_event = {
+					id = ADISCORD_STP_pc.85
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
 		id = STP_pc_charter_tikhoreva_repair_sequence
 		icon = GFX_focus_STP_party_war_transport
-		x = 0
+		x = 2
 		y = 3
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -16819,7 +16490,7 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_production_speed_buildings_factor
-					value = 0.025
+					value = 0.03
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -16828,36 +16499,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_tikhoreva_open_tenders
-		icon = GFX_focus_STP_cw_protocol_office
-		x = -1
-		y = 4
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_tikhoreva_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_tikhoreva_available_tt
-				STP_pc_charter_tikhoreva_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_repair_sequence }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			unlock_decision_tooltip = STP_pc_charter_tikhoreva_procurement
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_tikhoreva_standard_designs
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_goal_generic_trade
 		x = 1
 		y = 4
 		relative_position_id = STP_pc_lib_lock
@@ -16877,14 +16519,51 @@ focus_tree = {
 			}
 		}
 		prerequisite = { focus = STP_pc_charter_tikhoreva_repair_sequence }
+		mutually_exclusive = { focus = STP_pc_charter_tikhoreva_standard_designs }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			add_tech_bonus = {
-				name = STP_pc_charter_tikhoreva_standard_designs
-				bonus = 0.5
-				uses = 1
-				category = industry
+			unlock_decision_tooltip = STP_pc_charter_tikhoreva_procurement
+			add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = ROOT }
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_tikhoreva_standard_designs
+		icon = GFX_focus_STP_pw_party_domestic_pattern
+		x = 3
+		y = 4
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_tikhoreva_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_available_tt
+				STP_pc_charter_tikhoreva_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_tikhoreva_repair_sequence }
+		mutually_exclusive = { focus = STP_pc_charter_tikhoreva_open_tenders }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_tech_bonus = { name = STP_pc_charter_tikhoreva_standard_designs bonus = 0.5 uses = 2 category = industry }
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_tikhoreva_standard_designs_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_production_factory_max_efficiency_factor
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
 			}
 		}
 	}
@@ -16892,7 +16571,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_charter_tikhoreva_pilot_workshop
 		icon = GFX_focus_STP_party_industrial_board
-		x = 0
+		x = 2
 		y = 5
 		relative_position_id = STP_pc_lib_lock
 		cost = 4
@@ -16918,8 +16597,8 @@ focus_tree = {
 				}
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_open_tenders }
-		prerequisite = { focus = STP_pc_charter_tikhoreva_standard_designs }
+		prerequisite = { focus = STP_pc_charter_tikhoreva_open_tenders focus = STP_pc_charter_tikhoreva_standard_designs }
+		prerequisite = { focus = STP_pc_charter_tikhoreva_published_accounts }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
@@ -16944,9 +16623,9 @@ focus_tree = {
 	}
 
 	focus = {
-		id = STP_pc_charter_tikhoreva_delivery_checks
-		icon = GFX_focus_STP_party_personnel_commissions
-		x = -1
+		id = STP_pc_charter_tikhoreva_accountable_service
+		icon = GFX_focus_STP_ch_service_act
+		x = 0
 		y = 6
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -16964,27 +16643,27 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
+		prerequisite = { focus = STP_pc_charter_tikhoreva_independent_audit }
 		prerequisite = { focus = STP_pc_charter_tikhoreva_pilot_workshop }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_tikhoreva_delivery_checks_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_production_factory_max_efficiency_factor
-					value = 0.025
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_labor_policy_technocratic_work_norms }
 				}
-				STP_pw_refresh_modifier = yes
+				add_ideas = ADISCORD_labor_policy_technocratic_work_norms
+			}
+			else = {
+				add_political_power = 75
 			}
 		}
 	}
 
 	focus = {
 		id = STP_pc_charter_tikhoreva_maintenance_schedule
-		icon = GFX_focus_STP_party_war_transport
-		x = 1
+		icon = GFX_focus_STP_pw_party_defence_combine
+		x = 2
 		y = 6
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -17012,45 +16691,7 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_industrial_capacity_factory
-					value = 0.025
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_tikhoreva_district_logistics
-		icon = GFX_focus_STP_party_war_transport
-		x = -1
-		y = 7
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_tikhoreva_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_tikhoreva_available_tt
-				STP_pc_charter_tikhoreva_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_delivery_checks }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_tikhoreva_district_logistics_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_supply_consumption_factor
-					value = -0.025
+					value = 0.03
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -17059,8 +16700,8 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_tikhoreva_reconstruction_balance
-		icon = GFX_focus_STP_cw_quiet_registers
-		x = 1
+		icon = GFX_focus_STP_2160_budget
+		x = 0
 		y = 7
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -17078,6 +16719,8 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
+		prerequisite = { focus = STP_pc_charter_tikhoreva_public_results }
+		prerequisite = { focus = STP_pc_charter_tikhoreva_accountable_service }
 		prerequisite = { focus = STP_pc_charter_tikhoreva_maintenance_schedule }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
@@ -17087,12 +16730,8 @@ focus_tree = {
 			}
 			hidden_effect = {
 				add_to_variable = {
-					var = STP_pw_industrial_capacity_factory
-					value = 0.025
-				}
-				add_to_variable = {
 					var = STP_pw_ADISCORD_economy_overall_income_factor
-					value = 0.02
+					value = 0.03
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -17101,8 +16740,8 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_tikhoreva_applied_research
-		icon = GFX_focus_STP_pw_party_civilian_retraining
-		x = 4
+		icon = GFX_focus_STP_party_research_council
+		x = 6
 		y = 2
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -17130,7 +16769,7 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_research_speed_factor
-					value = 0.025
+					value = 0.03
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -17139,8 +16778,8 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_tikhoreva_laboratory_records
-		icon = GFX_focus_STP_cw_protocol_office
-		x = 3
+		icon = GFX_focus_research
+		x = 6
 		y = 3
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -17162,57 +16801,14 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			add_tech_bonus = {
-				name = STP_pc_charter_tikhoreva_laboratory_records
-				bonus = 0.5
-				uses = 1
-				category = electronics
-			}
+			add_tech_bonus = { name = STP_pc_charter_tikhoreva_laboratory_records bonus = 0.5 uses = 2 category = electronics }
 		}
 	}
 
 	focus = {
 		id = STP_pc_charter_tikhoreva_technical_instructors
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_STP_party_technical_institutes
 		x = 5
-		y = 3
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_tikhoreva_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_tikhoreva_available_tt
-				STP_pc_charter_tikhoreva_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_applied_research }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_tikhoreva_technical_instructors_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_research_speed_factor
-					value = 0.025
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_tikhoreva_field_trials
-		icon = GFX_focus_STP_ps_joint_staff
-		x = 3
 		y = 4
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
@@ -17231,23 +16827,68 @@ focus_tree = {
 			}
 		}
 		prerequisite = { focus = STP_pc_charter_tikhoreva_laboratory_records }
+		mutually_exclusive = { focus = STP_pc_charter_tikhoreva_field_trials }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			add_tech_bonus = {
-				name = STP_pc_charter_tikhoreva_field_trials
-				bonus = 0.5
-				uses = 1
-				category = infantry_weapons
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_education_technical_institutes }
+				}
+				add_ideas = ADISCORD_education_technical_institutes
 			}
+			else = {
+				add_political_power = 40
+			}
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_tikhoreva_technical_instructors_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_research_speed_factor
+					value = 0.02
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_tikhoreva_field_trials
+		icon = GFX_focus_STP_ps_joint_staff
+		x = 7
+		y = 4
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_tikhoreva_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_available_tt
+				STP_pc_charter_tikhoreva_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_tikhoreva_laboratory_records }
+		mutually_exclusive = { focus = STP_pc_charter_tikhoreva_technical_instructors }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_tech_bonus = { name = STP_pc_charter_tikhoreva_field_trials bonus = 0.5 uses = 2 category = infantry_weapons }
+			army_experience = 25
 		}
 	}
 
 	focus = {
 		id = STP_pc_charter_tikhoreva_tested_arsenal
 		icon = GFX_focus_STP_defense_budget
-		x = 5
-		y = 4
+		x = 6
+		y = 5
 		relative_position_id = STP_pc_lib_lock
 		cost = 4
 		allow_branch = {
@@ -17272,7 +16913,7 @@ focus_tree = {
 				}
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_technical_instructors }
+		prerequisite = { focus = STP_pc_charter_tikhoreva_technical_instructors focus = STP_pc_charter_tikhoreva_field_trials }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
@@ -17299,8 +16940,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_charter_tikhoreva_measured_training
 		icon = GFX_focus_STP_pw_party_veteran_reserve
-		x = 4
-		y = 5
+		x = 6
+		y = 6
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
 		allow_branch = {
@@ -17317,22 +16958,26 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_field_trials }
 		prerequisite = { focus = STP_pc_charter_tikhoreva_tested_arsenal }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_training_standardized_program }
+				}
+				add_ideas = ADISCORD_training_standardized_program
+			}
+			else = {
+				add_political_power = 75
+			}
 			effect_tooltip = {
 				add_ideas = STP_pc_charter_tikhoreva_measured_training_delta
 			}
 			hidden_effect = {
 				add_to_variable = {
-					var = STP_pw_army_org_factor
-					value = 0.025
-				}
-				add_to_variable = {
 					var = STP_pw_training_time_factor
-					value = -0.025
+					value = -0.05
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -17340,10 +16985,10 @@ focus_tree = {
 	}
 
 	focus = {
-		id = STP_pc_charter_tikhoreva_spares_catalogue
-		icon = GFX_focus_STP_party_war_transport
-		x = 4
-		y = 6
+		id = STP_pc_charter_tikhoreva_research_in_service
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = 6
+		y = 7
 		relative_position_id = STP_pc_lib_lock
 		cost = 3
 		allow_branch = {
@@ -17364,88 +17009,13 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 150
-			}
-			army_experience = 20
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_tikhoreva_staff_feedback
-		icon = GFX_focus_STP_ps_joint_staff
-		x = 3
-		y = 7
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_tikhoreva_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_tikhoreva_available_tt
-				STP_pc_charter_tikhoreva_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_spares_catalogue }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_tikhoreva_staff_feedback_delta
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = STP_pw_army_org_factor
-					value = 0.025
-				}
-				add_to_variable = {
-					var = STP_pw_planning_speed
-					value = 0.025
-				}
-				STP_pw_refresh_modifier = yes
-			}
-		}
-	}
-
-	focus = {
-		id = STP_pc_charter_tikhoreva_research_in_service
-		icon = GFX_focus_STP_pw_party_civilian_retraining
-		x = 5
-		y = 7
-		relative_position_id = STP_pc_lib_lock
-		cost = 3
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			STP_pc_charter_tikhoreva_current = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pc_charter_tikhoreva_available_tt
-				STP_pc_charter_tikhoreva_current = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_spares_catalogue }
-		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
-		completion_reward = {
 			effect_tooltip = {
 				add_ideas = STP_pc_charter_tikhoreva_research_in_service_delta
 			}
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_research_speed_factor
-					value = 0.025
+					value = 0.03
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -17454,9 +17024,9 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_tikhoreva_cabinet_review
-		icon = GFX_focus_STP_cw_quiet_registers
+		icon = GFX_focus_generic_treaty
 		x = 0
-		y = 9
+		y = 8
 		relative_position_id = STP_pc_lib_lock
 		cost = 4
 		allow_branch = {
@@ -17473,11 +17043,7 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_public_results }
-		prerequisite = { focus = STP_pc_charter_tikhoreva_accountable_service }
-		prerequisite = { focus = STP_pc_charter_tikhoreva_district_logistics }
 		prerequisite = { focus = STP_pc_charter_tikhoreva_reconstruction_balance }
-		prerequisite = { focus = STP_pc_charter_tikhoreva_staff_feedback }
 		prerequisite = { focus = STP_pc_charter_tikhoreva_research_in_service }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
@@ -17487,12 +17053,12 @@ focus_tree = {
 			}
 			hidden_effect = {
 				add_to_variable = {
-					var = STP_pw_ADISCORD_economy_admin_expense_factor
-					value = -0.02
+					var = STP_pw_production_factory_max_efficiency_factor
+					value = 0.03
 				}
 				add_to_variable = {
-					var = STP_pw_production_factory_max_efficiency_factor
-					value = 0.025
+					var = STP_pw_ADISCORD_economy_admin_expense_factor
+					value = -0.02
 				}
 				STP_pw_refresh_modifier = yes
 			}
@@ -17501,9 +17067,9 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_tikhoreva_charter_fulfilled
-		icon = GFX_focus_STP_pc_shabrat_politics
+		icon = GFX_focus_STP_Prepare_For_The_Upcoming_BOP
 		x = 0
-		y = 10
+		y = 9
 		relative_position_id = STP_pc_lib_lock
 		cost = 4
 		allow_branch = {
@@ -17524,19 +17090,13 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			effect_tooltip = {
-				add_ideas = STP_pc_charter_tikhoreva_charter_fulfilled_delta
-			}
+			remove_country_leader_trait = STP_charter_tikhoreva_auditor
+			add_country_leader_trait = STP_charter_tikhoreva_steward
 			hidden_effect = {
 				country_event = {
 					id = ADISCORD_STP_pc.70
 					hours = 1
 				}
-				add_to_variable = {
-					var = STP_pw_stability_factor
-					value = 0.02
-				}
-				STP_pw_refresh_modifier = yes
 			}
 		}
 	}

@@ -6572,7 +6572,28 @@ country_event = {
 	fire_only_once = yes
 	timeout_days = 14
 	trigger = { STP_pc_charter_sotnikov_current = yes }
-	option = { name = ADISCORD_STP_pc.68.a }
+	option = {
+		name = ADISCORD_STP_pc.68.a
+		trigger = { STP_pc_charter_sotnikov_current = yes }
+		ai_chance = { base = 60 }
+		if = {
+			limit = { STP_pc_charter_sotnikov_current = yes }
+			add_ideas = STP_pc_charter_sotnikov_legacy_law
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.68.b
+		trigger = { STP_pc_charter_sotnikov_current = yes }
+		ai_chance = { base = 40 }
+		if = {
+			limit = { STP_pc_charter_sotnikov_current = yes }
+			add_ideas = STP_pc_charter_sotnikov_legacy_defenders
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.closed
+		trigger = { STP_pc_charter_sotnikov_current = no }
+	}
 }
 
 country_event = {
@@ -6584,7 +6605,28 @@ country_event = {
 	fire_only_once = yes
 	timeout_days = 14
 	trigger = { STP_pc_charter_shabrat_current = yes }
-	option = { name = ADISCORD_STP_pc.69.a }
+	option = {
+		name = ADISCORD_STP_pc.69.a
+		trigger = { STP_pc_charter_shabrat_current = yes }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pc_charter_shabrat_current = yes }
+			add_ideas = STP_pc_charter_shabrat_legacy_districts
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.69.b
+		trigger = { STP_pc_charter_shabrat_current = yes }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pc_charter_shabrat_current = yes }
+			add_ideas = STP_pc_charter_shabrat_legacy_nation
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.closed
+		trigger = { STP_pc_charter_shabrat_current = no }
+	}
 }
 
 country_event = {
@@ -6596,7 +6638,291 @@ country_event = {
 	fire_only_once = yes
 	timeout_days = 14
 	trigger = { STP_pc_charter_tikhoreva_current = yes }
-	option = { name = ADISCORD_STP_pc.70.a }
+	option = {
+		name = ADISCORD_STP_pc.70.a
+		trigger = { STP_pc_charter_tikhoreva_current = yes }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pc_charter_tikhoreva_current = yes }
+			add_ideas = STP_pc_charter_tikhoreva_legacy_ledger
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.70.b
+		trigger = { STP_pc_charter_tikhoreva_current = yes }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pc_charter_tikhoreva_current = yes }
+			add_ideas = STP_pc_charter_tikhoreva_legacy_utility
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.closed
+		trigger = { STP_pc_charter_tikhoreva_current = no }
+	}
+}
+
+# Sotnikov's open hearings: the first public trial of a resistance commander.
+country_event = {
+	id = ADISCORD_STP_pc.80
+	title = ADISCORD_STP_pc.80.t
+	desc = ADISCORD_STP_pc.80.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = { STP_pc_charter_sotnikov_current = yes }
+	option = {
+		name = ADISCORD_STP_pc.80.a
+		trigger = { STP_pc_charter_sotnikov_current = yes }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pc_charter_sotnikov_current = yes }
+			add_stability = 0.04
+			add_war_support = -0.03
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.80.b
+		trigger = { STP_pc_charter_sotnikov_current = yes }
+		ai_chance = { base = 35 }
+		if = {
+			limit = { STP_pc_charter_sotnikov_current = yes }
+			add_stability = 0.02
+			army_experience = 20
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.80.c
+		trigger = { STP_pc_charter_sotnikov_current = yes }
+		ai_chance = { base = 15 }
+		if = {
+			limit = { STP_pc_charter_sotnikov_current = yes }
+			add_political_power = 40
+			add_war_support = 0.04
+			add_stability = -0.03
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.closed
+		trigger = { STP_pc_charter_sotnikov_current = no }
+	}
+}
+
+# Sotnikov's workers' voice: the first strike under the Charter.
+country_event = {
+	id = ADISCORD_STP_pc.81
+	title = ADISCORD_STP_pc.81.t
+	desc = ADISCORD_STP_pc.81.d
+	picture = GFX_report_event_generic_factory
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = { STP_pc_charter_sotnikov_current = yes }
+	option = {
+		name = ADISCORD_STP_pc.81.a
+		trigger = { STP_pc_charter_sotnikov_current = yes }
+		ai_chance = { base = 40 }
+		if = {
+			limit = { STP_pc_charter_sotnikov_current = yes }
+			add_political_power = -40
+			add_stability = 0.04
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.81.b
+		trigger = { STP_pc_charter_sotnikov_current = yes }
+		ai_chance = { base = 45 }
+		if = {
+			limit = { STP_pc_charter_sotnikov_current = yes }
+			add_timed_idea = {
+				idea = STP_pc_charter_labour_arbitration
+				days = 120
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.81.c
+		trigger = { STP_pc_charter_sotnikov_current = yes }
+		ai_chance = { base = 15 }
+		if = {
+			limit = { STP_pc_charter_sotnikov_current = yes }
+			add_political_power = 25
+			add_war_support = 0.02
+			add_stability = -0.03
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.closed
+		trigger = { STP_pc_charter_sotnikov_current = no }
+	}
+}
+
+# Shabrat's citizenship duty: who may swear the common oath.
+country_event = {
+	id = ADISCORD_STP_pc.82
+	title = ADISCORD_STP_pc.82.t
+	desc = ADISCORD_STP_pc.82.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = { STP_pc_charter_shabrat_current = yes }
+	option = {
+		name = ADISCORD_STP_pc.82.a
+		trigger = { STP_pc_charter_shabrat_current = yes }
+		ai_chance = { base = 40 }
+		if = {
+			limit = { STP_pc_charter_shabrat_current = yes }
+			add_stability = 0.03
+			add_manpower = 2000
+			add_war_support = -0.02
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.82.b
+		trigger = { STP_pc_charter_shabrat_current = yes }
+		ai_chance = { base = 40 }
+		if = {
+			limit = { STP_pc_charter_shabrat_current = yes }
+			add_political_power = 40
+			add_war_support = 0.03
+			add_stability = -0.01
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.82.c
+		trigger = { STP_pc_charter_shabrat_current = yes }
+		ai_chance = { base = 20 }
+		if = {
+			limit = { STP_pc_charter_shabrat_current = yes }
+			add_war_support = 0.05
+			add_stability = -0.04
+			add_popularity = {
+				ideology = chauvinism
+				popularity = 0.05
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.closed
+		trigger = { STP_pc_charter_shabrat_current = no }
+	}
+}
+
+# Shabrat's district registers: a settlement missing from the common count.
+country_event = {
+	id = ADISCORD_STP_pc.83
+	title = ADISCORD_STP_pc.83.t
+	desc = ADISCORD_STP_pc.83.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = { STP_pc_charter_shabrat_current = yes }
+	option = {
+		name = ADISCORD_STP_pc.83.a
+		trigger = { STP_pc_charter_shabrat_current = yes }
+		ai_chance = { base = 60 }
+		if = {
+			limit = { STP_pc_charter_shabrat_current = yes }
+			add_political_power = -30
+			add_stability = 0.02
+			add_manpower = 1500
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.83.b
+		trigger = { STP_pc_charter_shabrat_current = yes }
+		ai_chance = { base = 40 }
+		if = {
+			limit = { STP_pc_charter_shabrat_current = yes }
+			add_political_power = 25
+			add_war_support = 0.02
+			add_stability = -0.02
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.closed
+		trigger = { STP_pc_charter_shabrat_current = no }
+	}
+}
+
+# Tikhoreva's published accounts: an unsigned expense line.
+country_event = {
+	id = ADISCORD_STP_pc.84
+	title = ADISCORD_STP_pc.84.t
+	desc = ADISCORD_STP_pc.84.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = { STP_pc_charter_tikhoreva_current = yes }
+	option = {
+		name = ADISCORD_STP_pc.84.a
+		trigger = { STP_pc_charter_tikhoreva_current = yes }
+		ai_chance = { base = 55 }
+		if = {
+			limit = { STP_pc_charter_tikhoreva_current = yes }
+			add_stability = -0.02
+			add_timed_idea = {
+				idea = STP_pc_charter_trusted_accounts
+				days = 180
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.84.b
+		trigger = { STP_pc_charter_tikhoreva_current = yes }
+		ai_chance = { base = 45 }
+		if = {
+			limit = { STP_pc_charter_tikhoreva_current = yes }
+			add_political_power = -30
+			add_stability = 0.01
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.closed
+		trigger = { STP_pc_charter_tikhoreva_current = no }
+	}
+}
+
+# Tikhoreva's public results: a target met at the expense of the service.
+country_event = {
+	id = ADISCORD_STP_pc.85
+	title = ADISCORD_STP_pc.85.t
+	desc = ADISCORD_STP_pc.85.d
+	picture = GFX_report_event_generic_factory
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = { STP_pc_charter_tikhoreva_current = yes }
+	option = {
+		name = ADISCORD_STP_pc.85.a
+		trigger = { STP_pc_charter_tikhoreva_current = yes }
+		ai_chance = { base = 55 }
+		if = {
+			limit = { STP_pc_charter_tikhoreva_current = yes }
+			add_political_power = -40
+			add_stability = 0.04
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.85.b
+		trigger = { STP_pc_charter_tikhoreva_current = yes }
+		ai_chance = { base = 45 }
+		if = {
+			limit = { STP_pc_charter_tikhoreva_current = yes }
+			add_timed_idea = {
+				idea = STP_pc_charter_hard_norms
+				days = 120
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.closed
+		trigger = { STP_pc_charter_tikhoreva_current = no }
+	}
 }
 
 # Sotnikov's sword directory after the founder's arrest.

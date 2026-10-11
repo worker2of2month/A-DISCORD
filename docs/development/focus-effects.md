@@ -1065,6 +1065,8 @@ allowed_to_remove = {
 
 Национальные духи и dummy ideas одной страны хранятся вместе: STP - в `common/ideas/ADISCORD_STP_civil_war_ideas.txt`, VAL - в `common/ideas/ADISCORD_VAL_rework_ideas.txt`, RUS - в `common/ideas/ADISCORD_RUS_ideas.txt`, Воркерленд - в `common/ideas/ADISCORD_vorkerland_ideas.txt`. Стартовые духи находятся в разделе `starting_ideas`. Категории движка сохраняются: советник Стеландера относится к `political_advisor_head_of_state`, скрытые идеи VAL - к `hidden_ideas`; их нельзя переносить внутрь `country`.
 
+Эффекты кампании RUS, бункера, лабораторий и реакторного кризиса находятся в `common/scripted_effects/ADISCORD_RUS_scripted_effects.txt`. Общие воркерлендские урегулирования и обработчик показа суперсобытий остаются в `ADISCORD_vorkerland_effects.txt`.
+
 Ливоннское урегулирование занимает разделы `livonn_settlement_*` в основных файлах VAL: `ADISCORD_VAL_effects.txt`, `ADISCORD_VAL_decisions.txt`, `ADISCORD_VAL_rework_categories.txt` и `ADISCORD_VAL_decisions_l_russian.yml`. Его раздел `livonn` находится в `09_ADISCORD_scripted_peace_on_actions.txt` после военного урегулирования STP/SRP. Ограниченная недельная проверка завершения договора сохраняется.
 
 Открытие Грязной зоны использует разделы `dirty_zone_events`, `dirty_zone_effects` и `dirty_zone_l_russian` в основных файлах Воркерленда. Владелец активного события и резервных ID указан в `tools/data/adiscord_event_ids.json`; перенос событий требует обновления этого реестра и сохранения порядка объявлений пространств имён.

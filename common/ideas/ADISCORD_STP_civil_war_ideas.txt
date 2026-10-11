@@ -18,43 +18,11 @@ ideas = {
 			}
 		}
 
-		STP_pc_charter_sotnikov_open_hearings_delta = {
-			name = STP_pc_charter_sotnikov_open_hearings_delta
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_creditworthiness_factor = 0.02
-			}
-		}
-
 		STP_pc_charter_sotnikov_district_petitions_delta = {
 			name = STP_pc_charter_sotnikov_district_petitions_delta
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_country_development_society_growth_factor = 0.02
-			}
-		}
-
-		STP_pc_charter_sotnikov_civilian_inspectorate_delta = {
-			name = STP_pc_charter_sotnikov_civilian_inspectorate_delta
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.02
-			}
-		}
-
-		STP_pc_charter_sotnikov_local_self_rule_delta = {
-			name = STP_pc_charter_sotnikov_local_self_rule_delta
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_country_development_state_growth_factor = 0.02
-			}
-		}
-
-		STP_pc_charter_sotnikov_rights_curriculum_delta = {
-			name = STP_pc_charter_sotnikov_rights_curriculum_delta
-			allowed = { always = no }
-			modifier = {
-				research_speed_factor = 0.015
+				ADISCORD_country_development_society_growth_factor = 0.03
 			}
 		}
 
@@ -62,7 +30,7 @@ ideas = {
 			name = STP_pc_charter_sotnikov_public_guarantees_delta
 			allowed = { always = no }
 			modifier = {
-				stability_factor = 0.02
+				stability_factor = 0.03
 			}
 		}
 
@@ -74,52 +42,19 @@ ideas = {
 			}
 		}
 
-		STP_pc_charter_sotnikov_community_clinics_delta = {
-			name = STP_pc_charter_sotnikov_community_clinics_delta
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_country_development_society_growth_factor = 0.03
-			}
-		}
-
 		STP_pc_charter_sotnikov_homes_for_families_delta = {
 			name = STP_pc_charter_sotnikov_homes_for_families_delta
 			allowed = { always = no }
 			modifier = {
-				production_speed_buildings_factor = 0.025
+				production_speed_buildings_factor = 0.05
 			}
 		}
 
-		STP_pc_charter_sotnikov_workers_voice_delta = {
-			name = STP_pc_charter_sotnikov_workers_voice_delta
+		STP_pc_charter_sotnikov_vocational_retraining_delta = {
+			name = STP_pc_charter_sotnikov_vocational_retraining_delta
 			allowed = { always = no }
 			modifier = {
-				industrial_capacity_factory = 0.025
-			}
-		}
-
-		STP_pc_charter_sotnikov_workplace_safety_delta = {
-			name = STP_pc_charter_sotnikov_workplace_safety_delta
-			allowed = { always = no }
-			modifier = {
-				production_factory_max_efficiency_factor = 0.025
-			}
-		}
-
-		STP_pc_charter_sotnikov_social_compact_delta = {
-			name = STP_pc_charter_sotnikov_social_compact_delta
-			allowed = { always = no }
-			modifier = {
-				industrial_capacity_factory = 0.025
-				production_speed_buildings_factor = 0.025
-			}
-		}
-
-		STP_pc_charter_sotnikov_army_under_law_delta = {
-			name = STP_pc_charter_sotnikov_army_under_law_delta
-			allowed = { always = no }
-			modifier = {
-				army_org_factor = 0.025
+				industrial_capacity_factory = 0.03
 			}
 		}
 
@@ -135,7 +70,7 @@ ideas = {
 			name = STP_pc_charter_sotnikov_field_supply_delta
 			allowed = { always = no }
 			modifier = {
-				supply_consumption_factor = -0.025
+				supply_consumption_factor = -0.03
 			}
 		}
 
@@ -143,8 +78,7 @@ ideas = {
 			name = STP_pc_charter_sotnikov_officer_responsibility_delta
 			allowed = { always = no }
 			modifier = {
-				army_org_factor = 0.025
-				planning_speed = 0.025
+				planning_speed = 0.05
 			}
 		}
 
@@ -152,8 +86,8 @@ ideas = {
 			name = STP_pc_charter_sotnikov_peaceful_readiness_delta
 			allowed = { always = no }
 			modifier = {
+				training_time_factor = -0.05
 				army_org_regain = 0.025
-				training_time_factor = -0.025
 			}
 		}
 
@@ -162,15 +96,7 @@ ideas = {
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.02
-				research_speed_factor = 0.015
-			}
-		}
-
-		STP_pc_charter_sotnikov_charter_fulfilled_delta = {
-			name = STP_pc_charter_sotnikov_charter_fulfilled_delta
-			allowed = { always = no }
-			modifier = {
-				stability_factor = 0.02
+				research_speed_factor = 0.02
 			}
 		}
 
@@ -190,11 +116,11 @@ ideas = {
 			}
 		}
 
-		STP_pc_charter_shabrat_national_service_delta = {
-			name = STP_pc_charter_shabrat_national_service_delta
+		STP_pc_charter_shabrat_domestic_suppliers_delta = {
+			name = STP_pc_charter_shabrat_domestic_suppliers_delta
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.02
+				industrial_capacity_factory = 0.03
 			}
 		}
 
@@ -202,7 +128,7 @@ ideas = {
 			name = STP_pc_charter_shabrat_district_registers_delta
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_country_development_state_growth_factor = 0.025
+				ADISCORD_country_development_state_growth_factor = 0.03
 			}
 		}
 
@@ -210,15 +136,7 @@ ideas = {
 			name = STP_pc_charter_shabrat_citizens_protection_delta
 			allowed = { always = no }
 			modifier = {
-				stability_factor = 0.02
-			}
-		}
-
-		STP_pc_charter_shabrat_national_schools_delta = {
-			name = STP_pc_charter_shabrat_national_schools_delta
-			allowed = { always = no }
-			modifier = {
-				research_speed_factor = 0.02
+				stability_factor = 0.03
 			}
 		}
 
@@ -226,15 +144,7 @@ ideas = {
 			name = STP_pc_charter_shabrat_national_compact_delta
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_country_development_society_growth_factor = 0.025
-			}
-		}
-
-		STP_pc_charter_shabrat_domestic_suppliers_delta = {
-			name = STP_pc_charter_shabrat_domestic_suppliers_delta
-			allowed = { always = no }
-			modifier = {
-				industrial_capacity_factory = 0.025
+				ADISCORD_country_development_society_growth_factor = 0.03
 			}
 		}
 
@@ -242,24 +152,15 @@ ideas = {
 			name = STP_pc_charter_shabrat_common_standards_delta
 			allowed = { always = no }
 			modifier = {
-				production_factory_max_efficiency_factor = 0.025
+				production_factory_max_efficiency_factor = 0.03
 			}
 		}
 
-		STP_pc_charter_shabrat_construction_crews_delta = {
-			name = STP_pc_charter_shabrat_construction_crews_delta
+		STP_pc_charter_shabrat_citizenship_duty_delta = {
+			name = STP_pc_charter_shabrat_citizenship_duty_delta
 			allowed = { always = no }
 			modifier = {
-				production_speed_buildings_factor = 0.025
-			}
-		}
-
-		STP_pc_charter_shabrat_district_exchange_delta = {
-			name = STP_pc_charter_shabrat_district_exchange_delta
-			allowed = { always = no }
-			modifier = {
-				industrial_capacity_factory = 0.025
-				production_speed_buildings_factor = 0.025
+				political_power_gain = 0.05
 			}
 		}
 
@@ -267,16 +168,7 @@ ideas = {
 			name = STP_pc_charter_shabrat_economic_sovereignty_delta
 			allowed = { always = no }
 			modifier = {
-				production_factory_max_efficiency_factor = 0.025
-				ADISCORD_economy_overall_income_factor = 0.02
-			}
-		}
-
-		STP_pc_charter_shabrat_national_defence_delta = {
-			name = STP_pc_charter_shabrat_national_defence_delta
-			allowed = { always = no }
-			modifier = {
-				army_org_factor = 0.025
+				ADISCORD_economy_overall_income_factor = 0.03
 			}
 		}
 
@@ -284,23 +176,7 @@ ideas = {
 			name = STP_pc_charter_shabrat_district_reserves_delta
 			allowed = { always = no }
 			modifier = {
-				training_time_factor = -0.025
-			}
-		}
-
-		STP_pc_charter_shabrat_reliable_supply_delta = {
-			name = STP_pc_charter_shabrat_reliable_supply_delta
-			allowed = { always = no }
-			modifier = {
-				supply_consumption_factor = -0.025
-			}
-		}
-
-		STP_pc_charter_shabrat_staff_coordination_delta = {
-			name = STP_pc_charter_shabrat_staff_coordination_delta
-			allowed = { always = no }
-			modifier = {
-				planning_speed = 0.04
+				training_time_factor = -0.05
 			}
 		}
 
@@ -308,16 +184,15 @@ ideas = {
 			name = STP_pc_charter_shabrat_protected_communities_delta
 			allowed = { always = no }
 			modifier = {
-				army_org_regain = 0.025
+				stability_factor = 0.02
 			}
 		}
 
-		STP_pc_charter_shabrat_defence_of_citizens_delta = {
-			name = STP_pc_charter_shabrat_defence_of_citizens_delta
+		STP_pc_charter_shabrat_district_exchange_delta = {
+			name = STP_pc_charter_shabrat_district_exchange_delta
 			allowed = { always = no }
 			modifier = {
-				army_org_factor = 0.025
-				army_org_regain = 0.025
+				production_speed_buildings_factor = 0.05
 			}
 		}
 
@@ -326,15 +201,7 @@ ideas = {
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.02
-				research_speed_factor = 0.02
-			}
-		}
-
-		STP_pc_charter_shabrat_charter_fulfilled_delta = {
-			name = STP_pc_charter_shabrat_charter_fulfilled_delta
-			allowed = { always = no }
-			modifier = {
-				stability_factor = 0.02
+				research_speed_factor = 0.03
 			}
 		}
 
@@ -350,7 +217,7 @@ ideas = {
 			name = STP_pc_charter_tikhoreva_public_registers_delta
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_creditworthiness_factor = 0.025
+				ADISCORD_economy_creditworthiness_factor = 0.03
 			}
 		}
 
@@ -358,7 +225,7 @@ ideas = {
 			name = STP_pc_charter_tikhoreva_appointments_by_work_delta
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.02
+				ADISCORD_economy_admin_expense_factor = -0.03
 			}
 		}
 
@@ -366,47 +233,7 @@ ideas = {
 			name = STP_pc_charter_tikhoreva_service_baselines_delta
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_country_development_society_growth_factor = 0.02
-			}
-		}
-
-		STP_pc_charter_tikhoreva_published_accounts_delta = {
-			name = STP_pc_charter_tikhoreva_published_accounts_delta
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.02
-			}
-		}
-
-		STP_pc_charter_tikhoreva_independent_audit_delta = {
-			name = STP_pc_charter_tikhoreva_independent_audit_delta
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_creditworthiness_factor = 0.025
-			}
-		}
-
-		STP_pc_charter_tikhoreva_appeals_by_evidence_delta = {
-			name = STP_pc_charter_tikhoreva_appeals_by_evidence_delta
-			allowed = { always = no }
-			modifier = {
-				stability_factor = 0.02
-			}
-		}
-
-		STP_pc_charter_tikhoreva_public_results_delta = {
-			name = STP_pc_charter_tikhoreva_public_results_delta
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.02
-			}
-		}
-
-		STP_pc_charter_tikhoreva_accountable_service_delta = {
-			name = STP_pc_charter_tikhoreva_accountable_service_delta
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_country_development_state_growth_factor = 0.025
+				ADISCORD_country_development_society_growth_factor = 0.03
 			}
 		}
 
@@ -414,7 +241,31 @@ ideas = {
 			name = STP_pc_charter_tikhoreva_damage_survey_delta
 			allowed = { always = no }
 			modifier = {
-				production_speed_buildings_factor = 0.025
+				production_speed_buildings_factor = 0.03
+			}
+		}
+
+		STP_pc_charter_tikhoreva_published_accounts_delta = {
+			name = STP_pc_charter_tikhoreva_published_accounts_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_overall_income_factor = 0.03
+			}
+		}
+
+		STP_pc_charter_tikhoreva_independent_audit_delta = {
+			name = STP_pc_charter_tikhoreva_independent_audit_delta
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.03
+			}
+		}
+
+		STP_pc_charter_tikhoreva_public_results_delta = {
+			name = STP_pc_charter_tikhoreva_public_results_delta
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
 			}
 		}
 
@@ -422,15 +273,15 @@ ideas = {
 			name = STP_pc_charter_tikhoreva_repair_sequence_delta
 			allowed = { always = no }
 			modifier = {
-				production_speed_buildings_factor = 0.025
+				production_speed_buildings_factor = 0.03
 			}
 		}
 
-		STP_pc_charter_tikhoreva_delivery_checks_delta = {
-			name = STP_pc_charter_tikhoreva_delivery_checks_delta
+		STP_pc_charter_tikhoreva_standard_designs_delta = {
+			name = STP_pc_charter_tikhoreva_standard_designs_delta
 			allowed = { always = no }
 			modifier = {
-				production_factory_max_efficiency_factor = 0.025
+				production_factory_max_efficiency_factor = 0.03
 			}
 		}
 
@@ -438,15 +289,7 @@ ideas = {
 			name = STP_pc_charter_tikhoreva_maintenance_schedule_delta
 			allowed = { always = no }
 			modifier = {
-				industrial_capacity_factory = 0.025
-			}
-		}
-
-		STP_pc_charter_tikhoreva_district_logistics_delta = {
-			name = STP_pc_charter_tikhoreva_district_logistics_delta
-			allowed = { always = no }
-			modifier = {
-				supply_consumption_factor = -0.025
+				industrial_capacity_factory = 0.03
 			}
 		}
 
@@ -454,8 +297,7 @@ ideas = {
 			name = STP_pc_charter_tikhoreva_reconstruction_balance_delta
 			allowed = { always = no }
 			modifier = {
-				industrial_capacity_factory = 0.025
-				ADISCORD_economy_overall_income_factor = 0.02
+				ADISCORD_economy_overall_income_factor = 0.03
 			}
 		}
 
@@ -463,7 +305,7 @@ ideas = {
 			name = STP_pc_charter_tikhoreva_applied_research_delta
 			allowed = { always = no }
 			modifier = {
-				research_speed_factor = 0.025
+				research_speed_factor = 0.03
 			}
 		}
 
@@ -471,7 +313,7 @@ ideas = {
 			name = STP_pc_charter_tikhoreva_technical_instructors_delta
 			allowed = { always = no }
 			modifier = {
-				research_speed_factor = 0.025
+				research_speed_factor = 0.02
 			}
 		}
 
@@ -479,17 +321,7 @@ ideas = {
 			name = STP_pc_charter_tikhoreva_measured_training_delta
 			allowed = { always = no }
 			modifier = {
-				army_org_factor = 0.025
-				training_time_factor = -0.025
-			}
-		}
-
-		STP_pc_charter_tikhoreva_staff_feedback_delta = {
-			name = STP_pc_charter_tikhoreva_staff_feedback_delta
-			allowed = { always = no }
-			modifier = {
-				army_org_factor = 0.025
-				planning_speed = 0.025
+				training_time_factor = -0.05
 			}
 		}
 
@@ -497,7 +329,7 @@ ideas = {
 			name = STP_pc_charter_tikhoreva_research_in_service_delta
 			allowed = { always = no }
 			modifier = {
-				research_speed_factor = 0.025
+				research_speed_factor = 0.03
 			}
 		}
 
@@ -505,16 +337,8 @@ ideas = {
 			name = STP_pc_charter_tikhoreva_cabinet_review_delta
 			allowed = { always = no }
 			modifier = {
+				production_factory_max_efficiency_factor = 0.03
 				ADISCORD_economy_admin_expense_factor = -0.02
-				production_factory_max_efficiency_factor = 0.025
-			}
-		}
-
-		STP_pc_charter_tikhoreva_charter_fulfilled_delta = {
-			name = STP_pc_charter_tikhoreva_charter_fulfilled_delta
-			allowed = { always = no }
-			modifier = {
-				stability_factor = 0.02
 			}
 		}
 
@@ -1957,6 +1781,109 @@ ideas = {
 			removal_cost = -1
 			modifier = {
 				army_org_regain = -0.05
+			}
+		}
+
+		# Charter cabinet dilemmas and the spirit chosen at each programme's conclusion.
+		STP_pc_charter_labour_arbitration = {
+			picture = ADISCORD_law_labor_policy_collective_bargaining
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.05
+				production_factory_efficiency_gain_factor = -0.10
+			}
+		}
+
+		STP_pc_charter_trusted_accounts = {
+			picture = ADISCORD_law_information_open_press
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.04
+				political_power_gain = 0.10
+			}
+		}
+
+		STP_pc_charter_hard_norms = {
+			picture = ADISCORD_law_labor_policy_mobilized_labor
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.10
+				stability_factor = -0.05
+			}
+		}
+
+		STP_pc_charter_sotnikov_legacy_law = {
+			picture = ADISCORD_justice_regular_tribunals
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.08
+				political_power_gain = 0.05
+				drift_defence_factor = 0.15
+			}
+		}
+
+		STP_pc_charter_sotnikov_legacy_defenders = {
+			picture = ADISCORD_law_military_total_defense_grid
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_core_defence_factor = 0.10
+				conscription_factor = 0.03
+				stability_factor = 0.03
+			}
+		}
+
+		STP_pc_charter_shabrat_legacy_districts = {
+			picture = ADISCORD_law_civic_local_councils
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.06
+				political_power_gain = 0.08
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		STP_pc_charter_shabrat_legacy_nation = {
+			picture = ADISCORD_law_cultural_policy_national_mythmaking
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				war_support_factor = 0.08
+				conscription_factor = 0.04
+				stability_factor = 0.03
+			}
+		}
+
+		STP_pc_charter_tikhoreva_legacy_ledger = {
+			picture = ADISCORD_law_civic_central_registers
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.05
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = -0.05
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pc_charter_tikhoreva_legacy_utility = {
+			picture = ADISCORD_law_labor_policy_technocratic_work_norms
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.08
+				research_speed_factor = 0.03
+				industrial_capacity_factory = 0.03
 			}
 		}
 

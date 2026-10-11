@@ -8160,6 +8160,41 @@ class PostwarFocusContracts(unittest.TestCase):
                         ):
                             self.assertGreaterEqual(abs(x - other_x), 2)
 
+    def test_arrested_founder_swaps_sotnikov_to_the_sword_directory(self):
+        for arrested in (True, False):
+            facts = {
+                ("STS", "has_country_flag", "STP_cw_postwar"): True,
+                ("STS", "has_country_flag", "STP_shabrat_was_arrested"): arrested,
+                ("STS", "ruling_leader"): "STP_grigory_sotnikov",
+                ("STS", "STP_pc_sword_directory_branch", "yes"): arrested,
+            }
+            visible = {
+                name: self.focus_position(name, facts, "STS")
+                for name, focus in self.focuses.items()
+                if matches_conditions(ast_block(focus, "allow_branch"), facts, "STS")
+            }
+            directory = {name for name in visible if name.startswith("STP_pc_sdir_")}
+            ordinary = {name for name in visible if name.startswith("STP_pc_sot_")}
+            with self.subTest(arrested=arrested):
+                self.assertEqual((len(directory), len(ordinary)), (10, 0) if arrested else (0, 10))
+                positions = [visible[name] for name in directory | ordinary]
+                self.assertEqual(len(positions), len(set(positions)))
+        triggers = {
+            e.key: e.value
+            for e in entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+        }
+        for trigger, focus in (
+            ("STP_pc_val_campaign_route_current", "STP_pc_sdir_val_war"),
+            ("STP_pc_nod_campaign_route_current", "STP_pc_sdir_nod_war"),
+            ("STP_pc_val_subjugation_war", "STP_pc_sdir_val_war"),
+            ("STP_pc_nod_subjugation_war", "STP_pc_sdir_nod_war"),
+        ):
+            with self.subTest(trigger=trigger):
+                self.assertIn(
+                    focus,
+                    {e.value for e in walk(triggers[trigger]) if e.key == "has_completed_focus"},
+                )
+
     def test_war_and_postwar_focus_names_and_descriptions_are_localised(self):
         for language in ("russian", "english"):
             keys = set()

@@ -58,7 +58,7 @@ add_ideas = {
 	STP_law_drug_prohibition
 	ADISCORD_justice_regular_tribunals
 
-	RUS_national_spirit
+	RUS_aimaq_compact
 	minister_RUS_Arkady_Sever
 	minister_RUS_Varlam_Oskol
 	minister_RUS_Pelageya_Niva

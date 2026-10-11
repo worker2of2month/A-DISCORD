@@ -77,7 +77,7 @@ bookmarks = {
 			history = "RUS_BOOKMARK_DESC"
 			ideology = etatism
 			ideas = {
-				RUS_national_spirit
+				RUS_aimaq_compact
 				RUS_black_army_bookmark
 				RUS_bunker_complex_bookmark
 			}

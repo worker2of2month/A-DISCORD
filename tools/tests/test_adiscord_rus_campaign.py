@@ -372,7 +372,9 @@ class BunkerWorld:
 class RusCampaignTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.effects = {e.key: e.value for e in parse(f"common/scripted_effects/{BASE}_effects.txt")}
+        cls.effects = {}
+        for source in ("ADISCORD_vorkerland_effects", "ADISCORD_RUS_scripted_effects"):
+            cls.effects.update({e.key: e.value for e in parse(f"common/scripted_effects/{source}.txt")})
         cls.effects.update({e.key: e.value for e in parse("common/scripted_effects/ADISCORD_society_development_effects.txt")})
         development_effects = {
             "ADISCORD_economy_calculate_other_development_gains",
@@ -2193,7 +2195,7 @@ class RusCampaignTests(unittest.TestCase):
             self.assertAlmostEqual(world.value(variable), expected.get(variable, 0), msg=variable)
         self.assertIn("RUS_black_army", world.modifiers)
         static = block(block(parse("common/ideas/ADISCORD_RUS_ideas.txt"), "ideas"), "country")
-        for name in ("RUS_national_spirit", "RUS_last_empire_spirit"):
+        for name in ("RUS_aimaq_compact", "RUS_last_empire_spirit"):
             values = {entry.key for entry in block(block(static, name), "modifier")}
             self.assertFalse(values & mapping.keys(), name)
 
@@ -2202,7 +2204,7 @@ class RusCampaignTests(unittest.TestCase):
         bookmark = block(block(parse("common/bookmarks/the_gathering_storm.txt"), "bookmarks"), "bookmark")
         displayed = {entry.value for entry in block(block(bookmark, "RUS"), "ideas")}
         previews = {"RUS_black_army_bookmark", "RUS_bunker_complex_bookmark"}
-        self.assertEqual(displayed, previews | {"RUS_national_spirit"})
+        self.assertEqual(displayed, previews | {"RUS_aimaq_compact"})
         dynamic = block(parse(f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt"), "RUS_black_army")
         initial = {row.key: world.value(row.value) for row in dynamic if isinstance(row.value, str) and row.value.startswith("RUS_army_") and world.value(row.value)}
         preview = {row.key: float(row.value) for row in block(self.ideas["RUS_black_army_bookmark"], "modifier")}
@@ -2566,6 +2568,7 @@ class RusCampaignTests(unittest.TestCase):
         self.assertFalse(removed & self.triggers.keys())
         sources = [read(f"common/{path}") for path in (
             f"decisions/{BASE}_decisions.txt", f"scripted_effects/{BASE}_effects.txt",
+            "scripted_effects/ADISCORD_RUS_scripted_effects.txt",
             f"scripted_triggers/{BASE}_triggers.txt", f"dynamic_modifiers/{BASE}_dynamic_modifiers.txt",
             f"ai_strategy_plans/{BASE}_plans.txt")] + [read("focus_trees/RUS/main/focuses.txt"), read(f"events/{BASE}_events.txt")]
         for source in sources:

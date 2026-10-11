@@ -5794,7 +5794,7 @@ class ValFrontierCampaignTests(unittest.TestCase):
         }
         rus = parse_clausewitz(
             (
-                ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
+                ROOT / "common/scripted_effects/ADISCORD_RUS_scripted_effects.txt"
             ).read_text(encoding="utf-8")
         )
         effects["ADISCORD_vorkerland_rus_annex_dirty_target"] = block(

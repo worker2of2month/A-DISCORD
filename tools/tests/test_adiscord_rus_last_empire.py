@@ -12,7 +12,8 @@ ROOT = Path(__file__).resolve().parents[2]
 FOCUS_FILE = ROOT / "common/national_focus/ADISCORD_national_focus_RUS.txt"
 DECISION_FILE = ROOT / "common/decisions/ADISCORD_vorkerland_decisions.txt"
 CATEGORY_FILE = ROOT / "common/decisions/categories/ADISCORD_vorkerland_categories.txt"
-EFFECT_FILE = ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
+EFFECT_FILE = ROOT / "common/scripted_effects/ADISCORD_RUS_scripted_effects.txt"
+VORKERLAND_EFFECT_FILE = ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 TRIGGER_FILE = ROOT / "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"
 PLAN_FILE = ROOT / "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"
 # The strike actor stands on the reactor landmark.
@@ -91,6 +92,10 @@ def read(path: Path) -> str:
     return read_focus_source(path)
 
 
+def read_campaign_effects() -> str:
+    return read(EFFECT_FILE) + "\n" + read(VORKERLAND_EFFECT_FILE)
+
+
 def localisation_entries(text: str) -> dict[str, str]:
     return {
         match.group(1): match.group(2)
@@ -103,7 +108,7 @@ class RusLastEmpireTests(unittest.TestCase):
         from tools.tests.test_adiscord_stp_preparation import block, entries, scalar
 
         effect = block(
-            entries("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            entries("common/scripted_effects/ADISCORD_RUS_scripted_effects.txt"),
             "ADISCORD_vorkerland_rus_proclaim_last_empire",
         )
         payload = block(effect, "if")
@@ -142,7 +147,7 @@ class RusLastEmpireTests(unittest.TestCase):
         from tools.validators.validate_adiscord_vorkerland_collapse import named_block
 
         effect = named_block(
-            read(EFFECT_FILE), "ADISCORD_vorkerland_resolve_khan_border_war"
+            read_campaign_effects(), "ADISCORD_vorkerland_resolve_khan_border_war"
         )
         sweep = named_block(effect, "every_controlled_state")
         self.assertIn("is_owned_by = SLA", sweep)
@@ -158,7 +163,7 @@ class RusLastEmpireTests(unittest.TestCase):
         )
         from tools.validators.validate_adiscord_vorkerland_collapse import named_block
 
-        effects = read(EFFECT_FILE)
+        effects = read_campaign_effects()
         assigned = []
         for tag, states in DIRTY_GROUPS.items():
             expected = set(states) | set(EXZ_REMAINDER_GROUPS.get(tag, ()))
@@ -191,7 +196,7 @@ class RusLastEmpireTests(unittest.TestCase):
     def test_dirty_republics_build_internal_rail_corridors(self) -> None:
         from tools.validators.validate_adiscord_vorkerland_collapse import named_block
 
-        effects = read(EFFECT_FILE)
+        effects = read_campaign_effects()
         corridors = {
             "sla": (49, 191),
             "rza": (177, 220),
@@ -213,7 +218,7 @@ class RusLastEmpireTests(unittest.TestCase):
     ) -> None:
         from tools.validators.validate_adiscord_vorkerland_collapse import named_block
 
-        effects = read(EFFECT_FILE)
+        effects = read_campaign_effects()
         repair = named_block(
             effects, "ADISCORD_vorkerland_reconcile_dirty_zone_remainder"
         )
@@ -246,7 +251,7 @@ class RusLastEmpireTests(unittest.TestCase):
         self.assertIn("has_country_flag = ADISCORD_vorkerland_rus_sla_absorbed", source)
         self.assertNotIn("ADISCORD_vorkerland_rus_aimaqs_summoned", source)
         self.assertIn(
-            "swap_ideas = { remove_idea = RUS_national_spirit add_idea = RUS_last_empire_spirit }",
+            "swap_ideas = { remove_idea = RUS_aimaq_compact add_idea = RUS_last_empire_spirit }",
             source,
         )
 
@@ -277,7 +282,7 @@ class RusLastEmpireTests(unittest.TestCase):
                 decisions.index("ADISCORD_vorkerland_rus_dirty_campaign_category") :
             ],
         )
-        effects = read(EFFECT_FILE)
+        effects = read_campaign_effects()
         self.assertIn(
             "declare_war_on = { target = SLA type = annex_everything }", effects
         )
@@ -416,9 +421,8 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
         self.entries = entries
         self.matches = matches_conditions
         self.selected = selected_effects
-        self.effects = entries(
-            "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-        )
+        self.effects = entries("common/scripted_effects/ADISCORD_RUS_scripted_effects.txt")
+        self.effects += entries("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
         self.triggers = entries(
             "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"
         )
@@ -973,7 +977,9 @@ class RusCrisisFixture:
     def __init__(self, hegemon="VAL", ruler="RUS_Mark_Rustan", cosmetic="RUS_last_empire"):
         from tools.tests.test_adiscord_stp_preparation import entries
 
-        self.effects = {e.key: e.value for e in entries("common/scripted_effects/ADISCORD_vorkerland_effects.txt")}
+        self.effects = {}
+        for source in ("common/scripted_effects/ADISCORD_RUS_scripted_effects.txt", "common/scripted_effects/ADISCORD_vorkerland_effects.txt"):
+            self.effects.update({e.key: e.value for e in entries(source)})
         self.effects.update({
             e.key: e.value
             for e in entries("common/scripted_effects/ADISCORD_shared_action_effects.txt")
@@ -2659,7 +2665,7 @@ class RusCrisisContracts(unittest.TestCase):
                 self.assertEqual((closed.events, closed.visuals, closed.owners), before)
 
     def test_camera_and_particle_use_the_real_reactor_and_existing_entity(self):
-        source = read(EFFECT_FILE)
+        source = read_campaign_effects()
         scene = self.block(self.entries(str(EFFECT_FILE.relative_to(ROOT))), "RUS_crisis_play_strike")
         actors = [row.value for row in self.block(scene, "125") if row.key == "create_entity"]
         self.assertEqual([self.scalar(row, "id") for row in actors], ["610792"])
@@ -3292,7 +3298,7 @@ class RusWorldEndingPresentationContracts(unittest.TestCase):
         self.assertEqual(self.scalar(cues[1], "particle"), "ADISCORD_orbital_laser_impact_particle")
 
     def test_ending_uses_registered_ship_archetypes_and_cosmetic_colours(self):
-        effects = self.entries("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        effects = self.entries("common/scripted_effects/ADISCORD_RUS_scripted_effects.txt")
         cleanup = self.block(effects, "RUS_crisis_destroy_country_assets")
         ship_types = {self.scalar(row.value, "type") for row in cleanup if row.key == "destroy_ships"}
         equipment = self.block(self.entries("common/units/equipment/ADISCORD_convoy_equipment.txt"), "equipments")
@@ -3484,7 +3490,7 @@ class RusWorldEndingPresentationContracts(unittest.TestCase):
         self.assertEqual(self.scalar(strike_state, "looping"), "no")
         self.assertEqual(self.scalar(strike_state, "next_state"), "burn")
         self.assertTrue(all(self.scalar(row.value, "trigger_once") == "yes" for row in strike_state if row.key == "event"))
-        scene = self.block(self.entries("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), "RUS_crisis_play_strike")
+        scene = self.block(self.entries("common/scripted_effects/ADISCORD_RUS_scripted_effects.txt"), "RUS_crisis_play_strike")
         actors = [row.value for row in self.block(scene, "125") if row.key == "create_entity"]
         defines = read(ROOT / "common/defines/ADISCORD_defines_changes.lua")
         camera_height = float(re.search(r"CAMERA_MAX_HEIGHT\s*=\s*([0-9.]+)", defines).group(1))

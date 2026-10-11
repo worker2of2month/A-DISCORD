@@ -443,6 +443,18 @@ class CharterCabinetTests(unittest.TestCase):
         "shabrat": ("civic_grants", "district_grants"),
         "tikhoreva": ("procurement", "open_tenders"),
     }
+    REVIEW_JOINS = {"sotnikov": 2, "shabrat": 3, "tikhoreva": 2}
+    TRAITS = {
+        "sotnikov": ("STP_charter_sotnikov_oath", "STP_charter_sotnikov_guarantor"),
+        "shabrat": ("STP_charter_shabrat_founder", "STP_charter_shabrat_first_citizen"),
+        "tikhoreva": ("STP_charter_tikhoreva_auditor", "STP_charter_tikhoreva_steward"),
+    }
+    STORY_EVENTS = {
+        "sotnikov": (65, 68, 80, 81),
+        "shabrat": (66, 69, 82, 83),
+        "tikhoreva": (67, 70, 84, 85),
+    }
+    CAPSTONE_EVENTS = {"sotnikov": 68, "shabrat": 69, "tikhoreva": 70}
 
     @classmethod
     def setUpClass(cls):
@@ -649,12 +661,12 @@ class CharterCabinetTests(unittest.TestCase):
             self.assertFalse(matches_conditions(block(directory, "allow_branch"), facts, "STS"))
             self.assertFalse(matches_conditions(block(directory, "available"), facts, "STS"))
 
-    def test_each_programme_has_thirty_exclusive_connected_acyclic_focuses(self):
+    def test_each_programme_has_twenty_five_exclusive_connected_acyclic_focuses(self):
         all_ids = []
         for candidate in self.CANDIDATES:
             prefix = f"STP_pc_charter_{candidate}_"
             route = {key: value for key, value in self.focuses.items() if key.startswith(prefix)}
-            self.assertEqual(len(route), 30, candidate)
+            self.assertEqual(len(route), 25, candidate)
             root = prefix + "mandate"
             capstone = prefix + "charter_fulfilled"
             children = {key: set() for key in route}
@@ -691,12 +703,83 @@ class CharterCabinetTests(unittest.TestCase):
             self.assertEqual(visited, set(route))
             merge = route[prefix + "cabinet_review"]
             prerequisites = [node.value for node in merge if node.key == "prerequisite"]
-            self.assertEqual(len(prerequisites), 6)
+            self.assertEqual(len(prerequisites), self.REVIEW_JOINS[candidate])
             self.assertTrue(all(len(group) == 1 for group in prerequisites))
         native = block(parse_clausewitz(read(ROOT / "common/national_focus/ADISCORD_STP_civil_war.txt")), "focus_tree")
         native_ids = [scalar(node.value, "id") for node in native if node.key == "focus"]
         for focus_id in all_ids:
             self.assertEqual(native_ids.count(focus_id), 1, focus_id)
+
+    def test_exclusive_forks_share_parents_and_rejoin_through_either_branch(self):
+        for candidate in self.CANDIDATES:
+            prefix = f"STP_pc_charter_{candidate}_"
+            route = {key: value for key, value in self.focuses.items() if key.startswith(prefix)}
+
+            def parents(focus):
+                return [
+                    sorted(node.value for node in entry.value if node.key == "focus")
+                    for entry in focus if entry.key == "prerequisite"
+                ]
+
+            pairs = set()
+            for focus_id, focus in route.items():
+                rivals = [node.value for entry in focus if entry.key == "mutually_exclusive" for node in entry.value]
+                for rival in rivals:
+                    self.assertIn(focus_id, [node.value for entry in route[rival] if entry.key == "mutually_exclusive" for node in entry.value])
+                    self.assertEqual(parents(focus), parents(route[rival]), (focus_id, rival))
+                    pairs.add(frozenset((focus_id, rival)))
+            self.assertEqual(len(pairs), 3, candidate)
+            for pair in pairs:
+                children = [focus for focus in route.values() if any(set(group) & pair for group in parents(focus))]
+                self.assertTrue(children, pair)
+                for child in children:
+                    groups = [set(group) for group in parents(child) if set(group) & pair]
+                    self.assertTrue(all(pair <= group for group in groups), (pair, scalar(child, "id")))
+
+    def test_mandate_and_capstone_replace_a_defined_leader_trait(self):
+        traits = block(parse_clausewitz(read(ROOT / "common/country_leader/ADISCORD_traits_STP.txt")), "leader_traits")
+        defined = {node.key for node in traits}
+        for candidate, (first, final) in self.TRAITS.items():
+            self.assertTrue({first, final} <= defined)
+            mandate = block(self.focuses[f"STP_pc_charter_{candidate}_mandate"], "completion_reward")
+            self.assertEqual(scalar(mandate, "add_country_leader_trait"), first)
+            capstone = block(self.focuses[f"STP_pc_charter_{candidate}_charter_fulfilled"], "completion_reward")
+            self.assertEqual(scalar(capstone, "remove_country_leader_trait"), first)
+            self.assertEqual(scalar(capstone, "add_country_leader_trait"), final)
+
+    def test_capstone_event_chooses_one_of_two_defined_legacy_spirits(self):
+        for candidate, number in self.CAPSTONE_EVENTS.items():
+            event = self.events[f"ADISCORD_STP_pc.{number}"]
+            self.assertEqual(scalar(event, "fire_only_once"), "yes")
+            legacies = []
+            for option in (node.value for node in event if node.key == "option"):
+                facts = self.facts(candidate)
+                if not matches_conditions(block(option, "trigger"), facts, "STS"):
+                    continue
+                selected = [node for _, node in selected_effects(option, facts, "STS")]
+                legacies.extend(node.value for node in selected if node.key == "add_ideas")
+            self.assertEqual(len(set(legacies)), 2, candidate)
+            for idea in legacies:
+                self.assertTrue(idea.startswith(f"STP_pc_charter_{candidate}_legacy_"))
+                self.assertIn("modifier", {node.key for node in block(self.ideas, idea)})
+
+    def test_law_rewards_keep_a_real_delta_when_the_law_is_already_active(self):
+        laws = 0
+        for focus_id, focus in self.focuses.items():
+            if not focus_id.startswith("STP_pc_charter_"):
+                continue
+            reward = block(focus, "completion_reward")
+            for index, node in enumerate(reward):
+                if node.key != "if" or "add_ideas" not in {child.key for child in node.value}:
+                    continue
+                law = scalar(node.value, "add_ideas")
+                self.assertTrue(law.startswith("ADISCORD_"), focus_id)
+                self.assertEqual(scalar(block(block(node.value, "limit"), "NOT"), "has_idea"), law)
+                fallback = reward[index + 1]
+                self.assertEqual(fallback.key, "else", focus_id)
+                self.assertGreater(float(scalar(fallback.value, "add_political_power")), 0)
+                laws += 1
+        self.assertGreaterEqual(laws, 15)
 
     def test_programmes_share_the_charter_area_without_visible_node_collisions(self):
         def position(focus_id):
@@ -854,16 +937,28 @@ class CharterCabinetTests(unittest.TestCase):
         ledger_ids = {entry["id"] for entry in json.loads(read(LEDGER))["events"]}
         keys = set()
         descriptions = set()
-        for event_id in ("ADISCORD_STP_pc.5", *(f"ADISCORD_STP_pc.{number}" for number in range(65, 71))):
+        owners = {f"ADISCORD_STP_pc.{number}": candidate for candidate, numbers in self.STORY_EVENTS.items() for number in numbers}
+        for event_id in ("ADISCORD_STP_pc.5", *owners):
             event = self.events[event_id]
             self.assertIn(event_id, ledger_ids)
             keys.add(scalar(event, "title"))
             self.assertEqual(scalar(event, "is_triggered_only"), "yes")
             if event_id != "ADISCORD_STP_pc.5":
-                number = int(event_id.rsplit(".", 1)[1])
-                candidate = tuple(self.CANDIDATES)[(number - 65) % 3]
+                candidate = owners[event_id]
                 self.assertIn(f"STP_pc_charter_{candidate}_current", {node.key for node in walk(block(event, "trigger"))})
                 self.assertEqual(scalar(event, "fire_only_once"), "yes")
+                dispatchers = [
+                    focus_id for focus_id, focus in self.focuses.items()
+                    if focus_id.startswith(f"STP_pc_charter_{candidate}_")
+                    and event_id in {scalar(node.value, "id") for node in walk(focus) if node.key == "country_event"}
+                ]
+                self.assertEqual(len(dispatchers), 1, event_id)
+                for node in walk(event):
+                    if node.key in {"add_ideas", "add_timed_idea"}:
+                        idea = node.value if isinstance(node.value, str) else scalar(node.value, "idea")
+                        keys.update((idea, idea + "_desc"))
+        for first, final in self.TRAITS.values():
+            keys.update((first, final))
             for node in event:
                 if node.key == "desc":
                     key = scalar(node.value, "text") if isinstance(node.value, list) else node.value

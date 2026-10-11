@@ -20,7 +20,7 @@ def shared_major_ownership_scripts():
     definitions = []
     for path, name in (
         (
-            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "common/scripted_effects/ADISCORD_RUS_scripted_effects.txt",
             "RUS_crisis_release_other_major",
         ),
         (

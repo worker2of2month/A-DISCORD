@@ -1,8 +1,8 @@
 ideas = {
 	country = {
 # --- starting_ideas ---
-		RUS_national_spirit = {
-			picture = GFX_idea_RUS_council_mandate
+		RUS_aimaq_compact = {
+			picture = RUS_council_mandate
 
 			allowed = {
 				always = no
