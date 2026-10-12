@@ -1642,8 +1642,12 @@ class CivilWarContracts(unittest.TestCase):
                 elif entry.key == "transfer_units_fraction":
                     target = scalar(entry.value, "target")
                     transfers.append(target)
-                    for field in ("size", "army_ratio", "navy_ratio"):
+                    for field in ("size", "army_ratio"):
                         self.assertEqual(scalar(entry.value, field), "0", field)
+                    self.assertEqual(
+                        scalar(entry.value, "navy_ratio"),
+                        "var:STP_cw_navy_share" if target == "STS" else "0",
+                    )
                     amount = stock[scope] * number(
                         scalar(entry.value, "stockpile_ratio")
                     )

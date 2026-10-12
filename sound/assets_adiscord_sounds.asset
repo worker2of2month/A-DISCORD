@@ -51,4 +51,11 @@ sound = {
 sound = {
 	name = "ADISCORD_rus_ruined_world_sample"
 	file = "RUS/ADISCORD_rus_ruined_world.wav"
+	always_load = yes
+}
+
+sound = {
+	name = "ADISCORD_rus_world_ends_sample"
+	file = "RUS/ADISCORD_rus_world_ends.wav"
+	always_load = yes
 }

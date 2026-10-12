@@ -840,16 +840,30 @@ guiTypes = {
 	containerWindowType = {
 		name = "RUS_crisis_strike_window"
 		position = { x = 0 y = 0 }
-		size = { width = 1001 height = 639 }
+		size = { width = 1000 height = 500 }
 		orientation = center
 		origo = center
-		moveable = no
-		fade_time = 800
-		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = ADISCORD_rus_world_ends
+
 		iconType = {
 			name = "world_ended_picture"
 			quadTextureSprite = "GFX_RUS_world_ended_superevent"
 			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
 			alwaystransparent = yes
 		}
 		iconType = {
@@ -858,48 +872,79 @@ guiTypes = {
 			position = { x = 0 y = 0 }
 			alwaystransparent = yes
 		}
-		instantTextBoxType = {
-			name = "world_ended_title"
+		instantTextboxType = {
+			name = "superevents_title"
 			position = { x = 0 y = 20 }
 			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
 			text = "RUS_crisis_world_ended_title"
-			format = center
 			maxWidth = 1000
-			maxHeight = 60
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "RUS_crisis_strike_caption"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "RUS_crisis_close_superevent"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "RUS_crisis_epilogue_launcher_window"
+		position = { x = 0 y = 246 }
+		size = { width = 889 height = 127 }
+		orientation = center
+		origo = center
+		moveable = no
+		iconType = {
+			name = "epilogue_backdrop"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = -57 y = -453 }
 			alwaystransparent = yes
 		}
 		instantTextBoxType = {
-			name = "strike_caption"
-			position = { x = 100 y = 480 }
+			name = "epilogue_caption"
+			position = { x = 44 y = 12 }
 			font = "hoi_20bs"
-			text = "RUS_crisis_strike_caption"
+			text = "RUS_crisis_epilogue_caption"
 			format = center
 			maxWidth = 800
 			maxHeight = 44
 			alwaystransparent = yes
 		}
-		containerWindowType = {
-			name = "epilogue_button_viewport"
-			position = { x = 400 y = 550 }
-			size = { width = 200 height = 32 }
-			clipping = yes
-			# GUI time advances on pause. The button enters the viewport at 11.8s, after the 10s impact.
-			containerWindowType = {
-				name = "epilogue_button_reveal"
-				position = { x = 0 y = 1920 }
-				show_position = { x = 0 y = 0 }
-				show_animation_type = linear
-				animation_time = 12000
-				size = { width = 200 height = 32 }
-				buttonType = {
-					name = "epilogue_next"
-					position = { x = 0 y = 0 }
-					size = { x = 200 y = 32 }
-					quadTextureSprite = "GFX_RUS_bunker_button"
-					buttonText = "RUS_crisis_watch_epilogue"
-					buttonFont = "hoi_16mbs"
-				}
-			}
+		buttonType = {
+			name = "epilogue_next"
+			position = { x = 344 y = 82 }
+			size = { x = 200 y = 32 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			buttonText = "RUS_crisis_watch_epilogue"
+			buttonFont = "hoi_16mbs"
 		}
 	}
 
@@ -909,6 +954,7 @@ guiTypes = {
 		size = { width = 100% height = 100% }
 		moveable = no
 		fade_time = 1200
+		show_sound = ADISCORD_rus_ruined_world
 		background = { name = "background" quadTextureSprite = "GFX_RUS_world_ended_screen" }
 		containerWindowType = {
 			name = "epilogue_text"

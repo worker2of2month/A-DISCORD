@@ -1591,7 +1591,7 @@ class RusCrisisFixture:
                 self.faction_leaders.add(current)
             elif key == "add_to_faction":
                 self.factions[self.resolve(value, stack)] = self.factions[current]
-            elif key in ("create_entity", "destroy_entity", "set_entity_animation", "goto_province", "goto_state"):
+            elif key in ("create_entity", "destroy_entity", "set_entity_animation", "goto_province", "goto_state", "play_song"):
                 self.visuals.append((current, key, value))
             elif key.isdigit() and isinstance(value, list):
                 self.execute(value, stack + [key])
@@ -3645,10 +3645,10 @@ class RusWorldEndingPresentationContracts(unittest.TestCase):
         immediate = block(event, "immediate")
         self.assertEqual({row.key for row in immediate}, {"set_country_flag", "play_song"})
         self.assertEqual(scalar(immediate, "set_country_flag"), "RUS_world_end_preview")
-        self.assertEqual(scalar(immediate, "play_song"), "ADISCORD_rus_world_ends")
+        self.assertEqual(scalar(immediate, "play_song"), "one_minute_of_silence")
         gui = block(entries("common/scripted_guis/ADISCORD_RUS_scripted_gui.txt"), "scripted_gui")
         panel = block(gui, "RUS_crisis_strike_panel")
-        click = block(block(panel, "effects"), "epilogue_next_click")
+        click = block(block(panel, "effects"), "superevents_button_click")
         self.assertEqual(scalar(click, "clr_country_flag"), "RUS_world_end_preview")
 
     def setUp(self):
@@ -3682,41 +3682,43 @@ class RusWorldEndingPresentationContracts(unittest.TestCase):
             buttons = [row.value for row in self.walk(windows[name]) if row.key == "buttonType"]
             self.assertTrue(buttons)
             for button in buttons:
-                self.assertEqual({row.key for row in self.block(button, "size")}, {"x", "y"})
-                self.assertEqual(self.scalar(button, "quadTextureSprite"), "GFX_RUS_bunker_button")
+                if name == "RUS_crisis_strike_window":
+                    self.assertEqual(self.scalar(button, "spriteType"), "GFX_supereventbutton")
+                else:
+                    self.assertEqual({row.key for row in self.block(button, "size")}, {"x", "y"})
+                    self.assertEqual(self.scalar(button, "quadTextureSprite"), "GFX_RUS_bunker_button")
             containers = [windows[name]] + [
                 row.value for row in self.walk(windows[name]) if row.key == "containerWindowType"
             ]
             self.assertTrue(all("alwaystransparent" not in {row.key for row in container} for container in containers))
 
-    def test_epilogue_button_enters_its_viewport_only_after_impact(self):
-        from tools.assets.source.build_rus_crisis_audio import IMPACT_START, STRIKE_DURATION
+    def test_closing_strike_preserves_pending_epilogue_and_other_players(self):
+        from tools.tests.test_adiscord_stp_preparation import block, entries
 
-        gui = self.block(self.entries("interface/ADISCORD_RUS.gui"), "guiTypes")
-        strike = self.named_block(gui, "containerWindowType", "RUS_crisis_strike_window")
-        viewport = self.named_block(strike, "containerWindowType", "epilogue_button_viewport")
-        reveal = self.named_block(viewport, "containerWindowType", "epilogue_button_reveal")
-        button = self.named_block(reveal, "buttonType", "epilogue_next")
-        self.assertEqual(self.scalar(viewport, "clipping"), "yes")
-        self.assertEqual(self.scalar(reveal, "show_animation_type"), "linear")
-        self.assertFalse([row for row in self.walk(button) if row.key == "shortcut"])
-
-        duration = float(self.scalar(reveal, "animation_time")) / 1000
-        start_y = float(self.scalar(self.block(reveal, "position"), "y"))
-        end_y = float(self.scalar(self.block(reveal, "show_position"), "y"))
-        button_y = float(self.scalar(self.block(button, "position"), "y"))
-        height = float(self.scalar(self.block(viewport, "size"), "height"))
-        self.assertGreater(start_y + button_y, height)
-        self.assertGreater(start_y, end_y)
-        first_visible = duration * (start_y + button_y - height) / (start_y - end_y)
-        self.assertGreater(first_visible, IMPACT_START + 1)
-        self.assertLess(first_visible, duration)
-        self.assertLess(duration, STRIKE_DURATION)
-        self.assertGreaterEqual(end_y + button_y, 0)
-        self.assertLessEqual(
-            end_y + button_y + float(self.scalar(self.block(button, "size"), "y")),
-            height,
-        )
+        world = RusCrisisFixture()
+        world.global_flags.add("RUS_crisis_world_ended")
+        gui = block(entries("common/scripted_guis/ADISCORD_RUS_scripted_gui.txt"), "scripted_gui")
+        strike = block(gui, "RUS_crisis_strike_panel")
+        launcher = block(gui, "RUS_crisis_epilogue_launcher_panel")
+        self.assertTrue(world.matches(block(strike, "visible"), ["RUS"]))
+        self.assertFalse(world.matches(block(launcher, "visible"), ["RUS"]))
+        close = block(block(strike, "effects"), "superevents_button_click")
+        world.execute(close, ["RUS"])
+        self.assertEqual(world.variables["RUS", "RUS_crisis_epilogue_page"], 1)
+        self.assertFalse(world.visuals)
+        self.assertFalse(world.matches(block(strike, "visible"), ["RUS"]))
+        self.assertTrue(world.matches(block(launcher, "visible"), ["RUS"]))
+        self.assertTrue(world.matches(block(strike, "visible"), ["EXZ"]))
+        world.execute(block(block(launcher, "effects"), "epilogue_next_click"), ["RUS"])
+        self.assertEqual(world.variables["RUS", "RUS_crisis_epilogue_page"], 2)
+        self.assertEqual(world.visuals, [("RUS", "play_song", "ADISCORD_rus_aftermath_silence")])
+        self.assertFalse(world.matches(block(launcher, "visible"), ["RUS"]))
+        preview = RusCrisisFixture()
+        preview.flags["RUS"].add("RUS_world_end_preview")
+        preview.execute(close, ["RUS"])
+        self.assertFalse(world.events)
+        self.assertNotIn("RUS_world_end_preview", preview.flags["RUS"])
+        self.assertFalse(preview.matches(block(launcher, "visible"), ["RUS"]))
 
     def test_ending_audio_runs_once_per_scene_not_per_story_page(self):
         gui = self.block(self.entries("interface/ADISCORD_RUS.gui"), "guiTypes")
@@ -3725,23 +3727,23 @@ class RusWorldEndingPresentationContracts(unittest.TestCase):
             for row in gui
             if row.key == "containerWindowType"
         }
-        self.assertFalse([row for row in self.walk(windows["RUS_crisis_strike_window"]) if row.key == "show_sound"])
+        self.assertEqual(self.scalar(windows["RUS_crisis_strike_window"], "show_sound"), "ADISCORD_rus_world_ends")
         sounds = [row.value for row in self.walk(windows["RUS_crisis_epilogue_window"]) if row.key == "show_sound"]
-        self.assertEqual(sounds, [])
+        self.assertEqual(sounds, ["ADISCORD_rus_ruined_world"])
 
         events = self.entries("events/ADISCORD_RUS_events.txt")
         event = next(row.value for row in events if row.key == "country_event"
                      and self.scalar(row.value, "id") == "ADISCORD_rus_crisis.8")
         self.assertEqual(self.scalar(self.block(event, "immediate"), "play_song"),
-                         "ADISCORD_rus_world_ends")
+                         "one_minute_of_silence")
         scripted_gui = self.block(self.entries("common/scripted_guis/ADISCORD_RUS_scripted_gui.txt"), "scripted_gui")
         strike = self.block(scripted_gui, "RUS_crisis_strike_panel")
-        click = self.block(self.block(strike, "effects"), "epilogue_next_click")
+        close = self.block(self.block(strike, "effects"), "superevents_button_click")
+        self.assertFalse([row for row in self.walk(close) if row.key in ("play_song", "RUS_crisis_epilogue_next")])
+        launcher = self.block(scripted_gui, "RUS_crisis_epilogue_launcher_panel")
+        click = self.block(self.block(launcher, "effects"), "epilogue_next_click")
+        self.assertEqual(self.scalar(click, "RUS_crisis_epilogue_next"), "yes")
         self.assertEqual(self.scalar(click, "play_song"), "ADISCORD_rus_aftermath_silence")
-        advance = self.block(click, "if")
-        self.assertEqual(self.scalar(advance, "RUS_crisis_epilogue_next"), "yes")
-        guard = self.block(self.block(advance, "limit"), "NOT")
-        self.assertEqual(self.scalar(guard, "has_country_flag"), "RUS_world_end_preview")
         reading = self.block(scripted_gui, "RUS_crisis_epilogue_panel")
         self.assertFalse([row for row in self.walk(reading) if row.key == "play_song"])
 

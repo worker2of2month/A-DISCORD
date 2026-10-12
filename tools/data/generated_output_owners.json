@@ -1930,6 +1930,7 @@
       "id": "superevent_music",
       "owner_module": "tools.builders.build_adiscord_superevent_music",
       "output_globs": [
+        "sound/RUS/ADISCORD_rus_world_ends.wav",
         "music/ADISCORD_rus_world_ends.ogg",
         "music/superevent_vorkerland_civilwar.ogg",
         "music/superevent_vorkerland_dirty_opening.ogg",
@@ -1954,7 +1955,7 @@
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_superevent_music.py",
-        "tools/assets/source/rus_crisis_audio/this_is_where_the_world_ends.mp4",
+        "tools/assets/source/rus_crisis_audio/world_ends_excerpt.ogg",
         "sound/superevents_sound.asset",
         "sound/superevents/superevent_vorkerland_civilwar_sound.wav",
         "sound/superevents/superevent_vorkerland_dirty_opening_sound.wav",

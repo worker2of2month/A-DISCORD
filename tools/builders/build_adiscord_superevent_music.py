@@ -1,4 +1,4 @@
-"""Build presentation OGG mirrors, the Khan finale and silent music carriers."""
+"""Build presentation OGG mirrors, the Khan finale WAV and silent carriers."""
 
 from __future__ import annotations
 
@@ -22,10 +22,11 @@ def build(root: Path, output: Path, *, silence_only: bool = False, track: str | 
         raise ValueError(f"Unknown presentation track: {track}")
     results = []
 
-    def encode(name: str, inputs: list[str], filters: list[str]) -> None:
+    def encode(name: str, inputs: list[str], filters: list[str], *, wav: bool = False) -> None:
         if track is not None and name != track:
             return
-        target = output / f"{name}.ogg"
+        target = output / f"{name}.{'wav' if wav else 'ogg'}"
+        codec = ["-c:a", "pcm_s16le", "-ac", "2"] if wav else ["-c:a", "libvorbis", "-q:a", "6"]
         subprocess.run(
             [
                 "ffmpeg",
@@ -42,10 +43,7 @@ def build(root: Path, output: Path, *, silence_only: bool = False, track: str | 
                 "+bitexact",
                 "-ar",
                 "44100",
-                "-c:a",
-                "libvorbis",
-                "-q:a",
-                "6",
+                *codec,
                 str(target),
             ],
             check=True,
@@ -56,16 +54,13 @@ def build(root: Path, output: Path, *, silence_only: bool = False, track: str | 
         for name, relative in tracks:
             encode(name, ["-i", str(root / "sound" / relative)], [])
 
-        # The finale uses the music channel so entering the epilogue can stop it.
-        encode(
-            "ADISCORD_rus_world_ends",
-            ["-i", str(root / "tools/assets/source/rus_crisis_audio/this_is_where_the_world_ends.mp4")],
-            [
-                "-map", "0:a:0", "-vn", "-af",
-                "asetpts=N/SR/TB,atrim=end_sample=2646000,"
-                "afade=t=in:d=0.02,afade=t=out:st=58:d=2",
-            ],
-        )
+        # Preserve the mastered excerpt byte-for-byte; GUI playback uses PCM.
+        if track is None or track == "ADISCORD_rus_world_ends":
+            source = root / "tools/assets/source/rus_crisis_audio/world_ends_excerpt.ogg"
+            mirror = output / "ADISCORD_rus_world_ends.ogg"
+            mirror.write_bytes(source.read_bytes())
+            results.append(mirror)
+            encode("ADISCORD_rus_world_ends", ["-i", str(source)], [], wav=True)
 
     for name, seconds in (("one_minute_of_silence", 60), ("two_minutes_of_silence", 120)):
         encode(
@@ -89,7 +84,8 @@ def main() -> int:
     changed = []
     with tempfile.TemporaryDirectory(prefix="adiscord-superevent-") as directory:
         for generated in build(ROOT, Path(directory), silence_only=args.silence_only, track=args.track):
-            target = ROOT / "music" / generated.name
+            target_directory = "sound/RUS" if generated.suffix == ".wav" else "music"
+            target = ROOT / target_directory / generated.name
             content = generated.read_bytes()
             if not target.exists() or target.read_bytes() != content:
                 changed.append(target.name)

@@ -3730,15 +3730,23 @@ STP_cw_start = {
 			}
 		}
 		transfer_units_fraction = { target = SRP size = 0 stockpile_ratio = var:STP_cw_republics_stockpile_ratio army_ratio = 0 navy_ratio = 0 air_ratio = 0 keep_unit_leaders_trigger = { always = yes } }
+		# Stockpile, fleet and aircraft go to STS in one native transfer. A second
+		# transfer_units_fraction to STS, even with stockpile_ratio = 0, leaves it
+		# without the equipment delivered by the first one. The government keeps
+		# the fleet during a limited party revolt; a full split divides survivors.
+		set_temp_variable = { var = STP_cw_navy_share value = 0.5 }
+		if = {
+			limit = { has_country_flag = STP_cw_limited_party_revolt }
+			set_temp_variable = { var = STP_cw_navy_share value = 1 }
+		}
 		if = {
 			limit = { has_completed_focus = STP_ps_loyal_aircrews }
-			transfer_units_fraction = { target = STS size = 0 stockpile_ratio = var:STP_cw_resistance_stockpile_ratio army_ratio = 0 navy_ratio = 0 air_ratio = 0.8 keep_unit_leaders_trigger = { always = yes } }
+			transfer_units_fraction = { target = STS size = 0 stockpile_ratio = var:STP_cw_resistance_stockpile_ratio army_ratio = 0 navy_ratio = var:STP_cw_navy_share air_ratio = 0.8 keep_unit_leaders_trigger = { always = yes } }
 		}
 		else = {
-			transfer_units_fraction = { target = STS size = 0 stockpile_ratio = var:STP_cw_resistance_stockpile_ratio army_ratio = 0 navy_ratio = 0 air_ratio = 1 keep_unit_leaders_trigger = { always = yes } }
+			transfer_units_fraction = { target = STS size = 0 stockpile_ratio = var:STP_cw_resistance_stockpile_ratio army_ratio = 0 navy_ratio = var:STP_cw_navy_share air_ratio = 1 keep_unit_leaders_trigger = { always = yes } }
 		}
 		STP_cw_divide_air_reserves = yes
-		STP_cw_divide_navy = yes
 		log = "[STP_CW] STP proportional allocation: manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]"
 		STS = { log = "[STP_CW] STS proportional allocation: manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]" }
 		SRP = { log = "[STP_CW] SRP proportional allocation: manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]" }
@@ -14667,25 +14675,6 @@ STP_taran_complete_project = {
 				}
 			}
 		}
-	}
-}
-
-# Fleet transfer has no stockpile, fuel, army or aircraft share. The government
-# keeps the fleet during a limited party revolt; a full split divides survivors.
-STP_cw_divide_navy = {
-	set_temp_variable = { var = STP_cw_navy_share value = 0.5 }
-	if = {
-		limit = { has_country_flag = STP_cw_limited_party_revolt }
-		set_temp_variable = { var = STP_cw_navy_share value = 1 }
-	}
-	transfer_units_fraction = {
-		target = STS
-		size = 0
-		stockpile_ratio = 0
-		army_ratio = 0
-		navy_ratio = var:STP_cw_navy_share
-		air_ratio = 0
-		keep_unit_leaders_trigger = { always = yes }
 	}
 }
 

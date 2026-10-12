@@ -9,7 +9,7 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		set_country_flag = RUS_world_end_preview
-		play_song = "ADISCORD_rus_world_ends"
+		play_song = "one_minute_of_silence"
 	}
 }
 
@@ -160,7 +160,7 @@ country_event = {
 	is_triggered_only = yes
 	trigger = { RUS_crisis_strike_visible = yes }
 	immediate = {
-		play_song = "ADISCORD_rus_world_ends"
+		play_song = "one_minute_of_silence"
 		goto_province = 5228
 	}
 }

@@ -131,25 +131,45 @@ class NavalProgrammeTests(unittest.TestCase):
                 self.assertEqual(extra_slots, 2)
                 self.assertLessEqual(occupied, base_slots + extra_slots)
 
-    def test_fleet_split_does_not_recreate_ships_or_move_other_resources(self):
+    def test_fleet_split_shares_the_single_resistance_transfer(self):
+        # A second transfer to STS leaves it without the stockpile delivered by
+        # the first one, so the fleet share must travel in that same transfer.
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
-        split = block(effects, "STP_cw_divide_navy")
-        transfer = block(split, "transfer_units_fraction")
-        self.assertEqual(scalar(transfer, "target"), "STS")
-        for field in ("size", "army_ratio", "air_ratio", "stockpile_ratio"):
-            self.assertEqual(scalar(transfer, field), "0")
-        self.assertEqual(scalar(transfer, "navy_ratio"), "var:STP_cw_navy_share")
-        self.assertEqual(scalar(block(split, "set_temp_variable"), "value"), "0.5")
-        limited = block(split, "if")
+        self.assertNotIn("STP_cw_divide_navy", [row.key for row in effects])
+        start = block(effects, "STP_cw_start")
+        body = block(start, "if")
+        self.assertIn("STP_cw_can_start", [row.key for row in walk(block(body, "limit"))])
+        shares = [
+            row.value
+            for row in walk(body)
+            if row.key == "set_temp_variable" and scalar(row.value, "var") == "STP_cw_navy_share"
+        ]
+        self.assertEqual([scalar(share, "value") for share in shares], ["0.5", "1"])
+        limited = [
+            row.value
+            for row in body
+            if row.key == "if"
+            and any(
+                child.key == "set_temp_variable"
+                and scalar(child.value, "var") == "STP_cw_navy_share"
+                for child in row.value
+            )
+        ]
+        self.assertEqual(len(limited), 1)
         self.assertEqual(
-            scalar(block(limited, "limit"), "has_country_flag"),
+            scalar(block(limited[0], "limit"), "has_country_flag"),
             "STP_cw_limited_party_revolt",
         )
-        self.assertEqual(scalar(block(limited, "set_temp_variable"), "value"), "1")
-        self.assertFalse(any(row.key in ("create_ship", "load_oob") for row in walk(split)))
-        start = block(effects, "STP_cw_start")
-        self.assertEqual(sum(row.key == "STP_cw_divide_navy" for row in walk(start)), 1)
-        self.assertIn("STP_cw_can_start", [row.key for row in walk(block(block(start, "if"), "limit"))])
+        transfers = [row.value for row in walk(body) if row.key == "transfer_units_fraction"]
+        resistance = [t for t in transfers if scalar(t, "target") == "STS"]
+        self.assertEqual(len(resistance), 2)
+        for transfer in resistance:
+            self.assertEqual(scalar(transfer, "navy_ratio"), "var:STP_cw_navy_share")
+            self.assertEqual(scalar(transfer, "stockpile_ratio"), "var:STP_cw_resistance_stockpile_ratio")
+            self.assertEqual(scalar(transfer, "army_ratio"), "0")
+        republics = [t for t in transfers if scalar(t, "target") == "SRP"]
+        self.assertEqual([scalar(t, "navy_ratio") for t in republics], ["0"])
+        self.assertFalse(any(row.key in ("create_ship",) for row in walk(body)))
 
     def test_four_programmes_have_exact_base_escorts_convoys_and_dockyards(self):
         stp = focus_map("STP/civil_war/focuses.txt")

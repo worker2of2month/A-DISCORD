@@ -231,13 +231,32 @@ scripted_gui = {
 		}
 		ai_enabled = { always = no }
 		effects = {
-			epilogue_next_click = {
-				play_song = "ADISCORD_rus_aftermath_silence"
+			superevents_button_click = {
 				if = {
-					limit = { NOT = { has_country_flag = RUS_world_end_preview } }
-					RUS_crisis_epilogue_next = yes
+					limit = {
+						RUS_crisis_strike_visible = yes
+						NOT = { has_country_flag = RUS_world_end_preview }
+					}
+					set_variable = { var = RUS_crisis_epilogue_page value = 1 }
 				}
 				clr_country_flag = RUS_world_end_preview
+			}
+		}
+	}
+
+	RUS_crisis_epilogue_launcher_panel = {
+		context_type = player_context
+		window_name = "RUS_crisis_epilogue_launcher_window"
+		visible = {
+			has_global_flag = RUS_crisis_world_ended
+			NOT = { has_country_flag = RUS_world_end_preview }
+			check_variable = { var = RUS_crisis_epilogue_page value = 1 compare = equals }
+		}
+		ai_enabled = { always = no }
+		effects = {
+			epilogue_next_click = {
+				play_song = "ADISCORD_rus_aftermath_silence"
+				RUS_crisis_epilogue_next = yes
 			}
 		}
 	}

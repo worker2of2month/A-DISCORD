@@ -295,7 +295,7 @@ RUS_crisis_regional_wars_available = {
 
 RUS_crisis_strike_visible = {
 	has_global_flag = RUS_crisis_world_ended
-	NOT = { check_variable = { var = RUS_crisis_epilogue_page value = 1 compare = greater_than } }
+	check_variable = { var = RUS_crisis_epilogue_page value = 1 compare = less_than }
 }
 
 RUS_crisis_programme_focus_available = {
