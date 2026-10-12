@@ -3918,6 +3918,66 @@ class CivilWarContracts(unittest.TestCase):
             [e.value for _, e in selected if e.key == "clr_country_flag"],
         )
 
+    def test_nod_defeat_during_civil_war_shocks_the_party_once(self):
+        support = ast_block(
+            entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+            "STP_cw_party_loses_nodrul_support",
+        )
+        stp = ast_block(support, "STP")
+        war = {
+            ("STP", "STP_ps_war_active", "yes"): True,
+            ("STP", "is_in_faction_with", "NOD"): True,
+            ("STP", "is_faction_leader", "no"): True,
+            ("STP", "faction_leader"): "NOD",
+            ("NOD", "has_war_with", "STS"): False,
+        }
+        selected = [e for _, e in selected_effects(stp, war, "STP")]
+        self.assertIn(
+            "STP_cw_nodrul_collapse",
+            [e.value for e in selected if e.key == "add_ideas"],
+        )
+        self.assertIn("remove_from_faction", [e.key for e in selected])
+        self.assertIn("ADISCORD_STP_cw.44", block(self.effects, "STP_cw_party_loses_nodrul_support"))
+
+        # NOD still fighting STS keeps the alliance; an eased shock is not renewed.
+        fighting = dict(war)
+        fighting[("NOD", "has_war_with", "STS")] = True
+        self.assertNotIn(
+            "remove_from_faction",
+            [e.key for _, e in selected_effects(stp, fighting, "STP")],
+        )
+        eased = dict(war)
+        eased[("STP", "has_idea", "STP_cw_nodrul_collapse_eased")] = True
+        self.assertNotIn(
+            "add_ideas", [e.key for _, e in selected_effects(stp, eased, "STP")]
+        )
+        peace = dict(war)
+        peace[("STP", "STP_ps_war_active", "yes")] = False
+        self.assertFalse(
+            [e for _, e in selected_effects(stp, peace, "STP") if e.key == "add_ideas"]
+        )
+
+        for path, owner in (
+            ("common/scripted_effects/ADISCORD_STP_scripted_effects.txt", "STP_nod_settle_border_treaty"),
+            ("common/scripted_effects/ADISCORD_STP_scripted_effects.txt", "STP_cw_settle_northern_defeat"),
+            ("common/scripted_effects/ADISCORD_VAL_effects.txt", "VAL_settle_nod_overlord_sts_victory"),
+        ):
+            self.assertIn("STP_cw_party_loses_nodrul_support = yes", block(read(path), owner), owner)
+        router = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
+        defeat = router[router.index("set_country_flag = NOD_cw_defeated"):]
+        defeat = defeat[: defeat.index("unrelated wars retained")]
+        self.assertIn("STP_cw_party_loses_nodrul_support = yes", defeat)
+
+        tree = read("common/national_focus/ADISCORD_STP_civil_war.txt")
+        lesson = tree[tree.index("id = STP_party_northern_lesson"):]
+        lesson = lesson[: lesson.index("id = STP_party_without_patrons")]
+        self.assertIn("remove_idea = STP_cw_nodrul_collapse", lesson)
+        self.assertIn("add_idea = STP_cw_nodrul_collapse_eased", lesson)
+        patrons = tree[tree.index("id = STP_party_without_patrons"):]
+        patrons = patrons[: patrons.index("\tfocus = {")]
+        self.assertIn("prerequisite = {\n\t\t\tfocus = STP_party_northern_lesson", patrons)
+        self.assertIn("remove_ideas = STP_cw_nodrul_collapse_eased", patrons)
+
     def test_nod_checks_north_and_safe_war_participants(self):
         gate = block(self.triggers, "STP_cw_nod_can_intervene")
         for token in (

@@ -657,6 +657,8 @@ STP_cw_clear_wartime_modifiers = {
 			STP_cw_resistance_battle_spirit
 			STP_cw_mountain_training
 			STP_cw_mountain_assault_training
+			STP_cw_nodrul_collapse
+			STP_cw_nodrul_collapse_eased
 		}
 		force_update_dynamic_modifier = yes
 	}
@@ -4278,6 +4280,37 @@ STP_cw_end_nod_intervention = {
 	}
 }
 
+# COUNTRY-AGNOSTIC. NOD lost its northern war or its war against Shabrat while
+# the party still fights STS. Callers commit NOD's own peace first.
+STP_cw_party_loses_nodrul_support = {
+	STP = {
+		# The alliance existed only for NOD's intervention; a defeated guarantor
+		# leaves the party alone in its remaining war.
+		if = {
+			limit = {
+				STP_ps_war_active = yes
+				is_in_faction_with = NOD
+				is_faction_leader = no
+				NOD = { NOT = { has_war_with = STS } }
+			}
+			faction_leader = { remove_from_faction = STP }
+		}
+		# One shock per civil war: an eased or already overcome loss is not renewed.
+		if = {
+			limit = {
+				STP_ps_war_active = yes
+				NOT = { has_idea = STP_cw_nodrul_collapse }
+				NOT = { has_idea = STP_cw_nodrul_collapse_eased }
+				NOT = { has_completed_focus = STP_party_northern_lesson }
+			}
+			add_ideas = STP_cw_nodrul_collapse
+			mark_focus_tree_layout_dirty = yes
+			country_event = { id = ADISCORD_STP_cw.44 }
+			log = "[STP_CW] Party lost Nodrul support during the civil war"
+		}
+	}
+}
+
 # Each recipient owns its deferred event so ROOT remains the country whose
 # war is being checked. An annexed NOD can only close its abandoned campaign.
 STP_cw_queue_peace_reconciliation = {
@@ -4620,6 +4653,7 @@ STP_cw_settle_northern_defeat = {
 		news_event = { id = ADISCORD_STP_cw.81 }
 		VAL = { if = { limit = { exists = yes } VAL_northern_aid_daily = yes } }
 		STS = { if = { limit = { exists = yes } STP_cw_poll_nod_intervention = yes } }
+		STP_cw_party_loses_nodrul_support = yes
 		log = "[STP_NORTH] NOD defeated by the north: separate peace, owned 17/18 ceded to YPR"
 	}
 }
@@ -5774,6 +5808,7 @@ STP_nod_settle_border_treaty = {
 			ADISCORD_economy_mark_dirty = yes
 			country_event = { id = ADISCORD_STP_pc.48 hours = 1 }
 		}
+		STP_cw_party_loses_nodrul_support = yes
 		log = "[STP_NOD] Border treaty concluded with Shabrat"
 	}
 }

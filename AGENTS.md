@@ -82,8 +82,11 @@ Keep editable artwork, PSD/Blender projects and image-generation prompts in
 `tools/assets/source/`, grouped by asset family. Reference material belongs
 in `tools/assets/reference/`. Do not put authoring sources in runtime `gfx/`
 directories alongside exported game assets.
-Generated review images belong in `docs/development/previews/`; native model
-verification reports belong in `docs/development/model-verification/`.
+Generated review images belong in `docs/development/previews/` only while work
+is in progress. After completing development, delete the previews created for
+that work and remove their empty directories. Do not retain or commit temporary
+previews as project artifacts. Preserve previews belonging to other active work.
+Native model verification reports belong in `docs/development/model-verification/`.
 Reusable browser mockups belong in `docs/mockups/`. Keep focus authoring
 sources in the existing `focus_trees/` structure and tooling in `tools/`.
 

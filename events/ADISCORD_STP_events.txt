@@ -750,6 +750,44 @@ country_event = {
 	option = { name = ADISCORD_STP_cw.43.a }
 }
 
+# The idea is already installed by the caller; the option only previews it.
+country_event = {
+	id = ADISCORD_STP_cw.44
+	title = ADISCORD_STP_cw.44.t
+	desc = {
+		trigger = {
+			NOD = {
+				check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals }
+				NOT = { has_country_flag = NOD_cw_defeated }
+				NOT = { has_country_flag = STP_pc_defeated_by_sts }
+				NOT = { is_subject_of = VAL }
+			}
+		}
+		text = ADISCORD_STP_cw.44.north
+	}
+	desc = {
+		trigger = {
+			NOD = {
+				OR = {
+					NOT = { check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals } }
+					has_country_flag = NOD_cw_defeated
+					has_country_flag = STP_pc_defeated_by_sts
+					is_subject_of = VAL
+				}
+			}
+		}
+		text = ADISCORD_STP_cw.44.sts
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = STP }
+	option = {
+		name = ADISCORD_STP_cw.44.a
+		effect_tooltip = { add_ideas = STP_cw_nodrul_collapse }
+		custom_effect_tooltip = STP_cw_nodrul_collapse_focus_tt
+	}
+}
+
 # State and resource setup is complete; each choice begins combat before handoff.
 country_event = {
 	id = ADISCORD_STP_cw.30
@@ -3935,8 +3973,11 @@ country_event = {
 country_event = {
 	id = ADISCORD_STP_pc.48
 	title = ADISCORD_STP_pc.48.t
-	desc = { trigger = { tag = STS } text = ADISCORD_STP_pc.48.sts }
-	desc = { trigger = { tag = NOD } text = ADISCORD_STP_pc.48.nod }
+	# During the civil war the treaty ends only NOD's intervention; no exiles exist yet.
+	desc = { trigger = { tag = STS STP = { exists = yes has_war_with = STS } } text = ADISCORD_STP_pc.48.sts_cw }
+	desc = { trigger = { tag = NOD STP = { exists = yes has_war_with = STS } } text = ADISCORD_STP_pc.48.nod_cw }
+	desc = { trigger = { tag = STS NOT = { STP = { exists = yes has_war_with = STS } } } text = ADISCORD_STP_pc.48.sts }
+	desc = { trigger = { tag = NOD NOT = { STP = { exists = yes has_war_with = STS } } } text = ADISCORD_STP_pc.48.nod }
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	trigger = { OR = { tag = STS tag = NOD } }

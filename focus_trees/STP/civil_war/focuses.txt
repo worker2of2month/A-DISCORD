@@ -1459,6 +1459,75 @@ focus_tree = {
 		}
 	}
 
+	# Party recovery after Nodrul's defeat. The branch appears with the shock and
+	# keeps completed steps visible until the postwar layout replaces it.
+
+	focus = {
+		id = STP_party_northern_lesson
+		icon = GFX_focus_STP_cw_northern_desk
+		x = -12
+		y = 0
+		cost = 2
+		allow_branch = {
+			tag = STP
+			NOT = { has_country_flag = STP_cw_postwar }
+			OR = {
+				has_idea = STP_cw_nodrul_collapse
+				has_idea = STP_cw_nodrul_collapse_eased
+				has_completed_focus = STP_party_northern_lesson
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_war_available_tt
+				STP_ps_war_active = yes
+			}
+			has_idea = STP_cw_nodrul_collapse
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_STP_NODRUL FOCUS_FILTER_STABILITY }
+		ai_will_do = { base = 50 }
+		completion_reward = {
+			swap_ideas = {
+				remove_idea = STP_cw_nodrul_collapse
+				add_idea = STP_cw_nodrul_collapse_eased
+			}
+		}
+	}
+
+	focus = {
+		id = STP_party_without_patrons
+		icon = GFX_focus_STP_PARTY_DISCIPLINE
+		x = -12
+		y = 1
+		cost = 3
+		allow_branch = {
+			tag = STP
+			NOT = { has_country_flag = STP_cw_postwar }
+			OR = {
+				has_idea = STP_cw_nodrul_collapse
+				has_idea = STP_cw_nodrul_collapse_eased
+				has_completed_focus = STP_party_northern_lesson
+			}
+		}
+		prerequisite = {
+			focus = STP_party_northern_lesson
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_war_available_tt
+				STP_ps_war_active = yes
+			}
+			has_idea = STP_cw_nodrul_collapse_eased
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_STP_NODRUL FOCUS_FILTER_STABILITY }
+		ai_will_do = { base = 50 }
+		completion_reward = {
+			remove_ideas = STP_cw_nodrul_collapse_eased
+		}
+	}
+
 	# Party war economy, loyalty and the claim on victory.
 
 	focus = {

@@ -1377,6 +1377,31 @@ ideas = {
 				army_org_regain = 0.03
 			}
 		}
+		# Nodrul's defeat during the civil war. Party focuses first ease and then
+		# remove it; the STP-STS war still owns its lifetime.
+		STP_cw_nodrul_collapse = {
+			picture = ADISCORD_isolated_country
+			allowed = { tag = STP }
+			removal_cost = -1
+			cancel = { NOT = { has_war_with = STS } }
+			modifier = {
+				stability_factor = -0.10
+				war_support_factor = -0.15
+				political_power_gain = -0.15
+				army_morale_factor = -0.10
+			}
+		}
+		STP_cw_nodrul_collapse_eased = {
+			picture = ADISCORD_isolated_country
+			allowed = { tag = STP }
+			removal_cost = -1
+			cancel = { NOT = { has_war_with = STS } }
+			modifier = {
+				stability_factor = -0.05
+				war_support_factor = -0.05
+				army_morale_factor = -0.05
+			}
+		}
 		STP_cw_republics_battle_spirit = {
 			picture = ADISCORD_law_civic_local_councils
 			allowed = { tag = SRP }

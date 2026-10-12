@@ -1,4 +1,4 @@
-"""Export only the lower scarf drape, preserving all other native vertex data.
+"""Synchronize the optional scarf drape, preserving all other native vertex data.
 
 Run with Blender --background --python this_file -- --check or --apply.
 With no action, --output writes a preview mesh without installing it.
@@ -44,7 +44,9 @@ def tail_indices(mesh):
                 and max(abs(v[0]) for v in component) < 0.4
                 and max(v[2] for v in component) < -0.35):
             matches.append(component)
-    assert len(matches) == 1, 'Expected one isolated lower scarf drape'
+    assert len(matches) <= 1, 'Expected at most one isolated lower scarf drape'
+    if not matches:
+        return set()
     return {i for i, key in enumerate(keys) if key in matches[0]}
 
 
@@ -57,7 +59,7 @@ def merge_tail(original, tail):
     for key, stride in (('p', 3), ('n', 3), ('ta', 4), ('u0', 2)):
         result.attrib[key] = [
             v for i in keep for v in original.attrib[key][i * stride:(i + 1) * stride]
-        ] + tail.attrib[key]
+        ] + (tail.attrib[key] if tail is not None else [])
     triangles = original.attrib['tri']
     result.attrib['tri'] = []
     for offset in range(0, len(triangles), 3):
@@ -65,15 +67,16 @@ def merge_tail(original, tail):
         assert all(i in removed for i in face) or all(i not in removed for i in face)
         if face[0] not in removed:
             result.attrib['tri'].extend(mapping[i] for i in face)
-    result.attrib['tri'].extend(i + len(keep) for i in tail.attrib['tri'])
+    if tail is not None:
+        result.attrib['tri'].extend(i + len(keep) for i in tail.attrib['tri'])
     old_skin = original.find('skin').attrib
-    new_skin = tail.find('skin').attrib
+    new_skin = tail.find('skin').attrib if tail is not None else None
     stride = old_skin['bones'][0]
-    assert new_skin['bones'][0] == stride
+    assert new_skin is None or new_skin['bones'][0] == stride
     for key in ('ix', 'w'):
         result.find('skin').attrib[key] = [
             v for i in keep for v in old_skin[key][i * stride:(i + 1) * stride]
-        ] + new_skin[key]
+        ] + (new_skin[key] if new_skin is not None else [])
     return result
 
 
@@ -88,10 +91,11 @@ def export_bytes():
     from io_pdx_mesh.pdx_blender import blender_import_export as pdx
 
     bpy.ops.wm.open_mainfile(filepath=str(SOURCE))
-    gear = bpy.data.objects['Shabrat_scarf_tail']
+    gear = bpy.data.objects.get('Shabrat_scarf_tail')
     bpy.ops.object.select_all(action='DESELECT')
-    gear.select_set(True)
-    bpy.context.view_layer.objects.active = gear
+    if gear is not None:
+        gear.select_set(True)
+        bpy.context.view_layer.objects.active = gear
     original = pdx_data.read_meshfile(str(TARGET))
     result = copy.deepcopy(original)
     target_shape = next(
@@ -99,17 +103,19 @@ def export_bytes():
     )
     with tempfile.TemporaryDirectory(prefix='adiscord-scarf-') as directory:
         exported = Path(directory) / 'equipment.mesh'
-        pdx.export_meshfile(str(exported), exp_selected=True, exp_locs=False)
-        tree = pdx_data.read_meshfile(str(exported))
-        source_shape = next(iter(tree.find('object')))
-        replacement = source_shape.find('mesh')
+        replacement = None
+        if gear is not None:
+            pdx.export_meshfile(str(exported), exp_selected=True, exp_locs=False)
+            tree = pdx_data.read_meshfile(str(exported))
+            source_shape = next(iter(tree.find('object')))
+            replacement = source_shape.find('mesh')
+            bone_ids = {
+                bone.tag: index for index, bone in enumerate(target_shape.find('skeleton'))
+            }
+            remap = [bone_ids[bone.tag] for bone in source_shape.find('skeleton')]
+            skin = replacement.find('skin').attrib
+            skin['ix'] = [remap[index] for index in skin['ix']]
         old_mesh = target_shape.find('mesh')
-        bone_ids = {
-            bone.tag: index for index, bone in enumerate(target_shape.find('skeleton'))
-        }
-        remap = [bone_ids[bone.tag] for bone in source_shape.find('skeleton')]
-        skin = replacement.find('skin').attrib
-        skin['ix'] = [remap[index] for index in skin['ix']]
         replacement = merge_tail(old_mesh, replacement)
         target_shape.remove(old_mesh)
         target_shape.insert(0, replacement)
