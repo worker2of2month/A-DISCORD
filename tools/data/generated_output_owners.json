@@ -45,7 +45,9 @@
     "stp_portraits",
     "stp_party_ideologies",
     "ideology_icons",
-    "focus_trees"
+    "focus_trees",
+    "val_flags",
+    "superevent_music"
   ],
   "families": [
     {
@@ -1317,7 +1319,8 @@
       "output_globs": [
         "gfx/interface/diplomacy/ADISCORD_diplomacy_leader_overlay.dds",
         "gfx/interface/diplomacy/ADISCORD_diplomacy_parties_overlay.dds",
-        "gfx/interface/diplomacy/ADISCORD_diplomacy_flag_overlay.dds"
+        "gfx/interface/diplomacy/ADISCORD_diplomacy_flag_overlay.dds",
+        "gfx/interface/diplomacy/ADISCORD_diplomacy_tab_button.dds"
       ],
       "source_inputs": [
         "tools/assets/source/diplomacy_gui/ADISCORD_diplomacy_leader_overlay_master.png",
@@ -1496,6 +1499,7 @@
         "gfx/texticons/adiscord/parties/ROM/ROM_independent_party.png",
         "gfx/texticons/adiscord/parties/SOL/SOL_independent_party.png",
         "gfx/texticons/adiscord/parties/TRU/TRU_independent_party.png",
+        "gfx/texticons/adiscord/parties/STS/STS_steland_union_party.png",
         "gfx/texticons/adiscord/parties/BBV/BBV_primary_party.png",
         "gfx/texticons/adiscord/parties/BCM/BCM_primary_party.png",
         "gfx/texticons/adiscord/parties/BGT/BGT_primary_party.png",
@@ -1554,6 +1558,7 @@
         "tools/assets/source/party_texticons/ROM_independent_party_source.png",
         "tools/assets/source/party_texticons/SOL_independent_party_source.png",
         "tools/assets/source/party_texticons/TRU_independent_party_source.png",
+        "tools/assets/source/party_texticons/STS_steland_union_source.png",
         "tools/assets/source/party_texticons/countries/BBV_primary_party_source.png",
         "tools/assets/source/party_texticons/countries/BCM_primary_party_source.png",
         "tools/assets/source/party_texticons/countries/BGT_primary_party_source.png",
@@ -1855,6 +1860,119 @@
       ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
+    },
+    {
+      "id": "val_flags",
+      "owner_module": "tools.builders.build_adiscord_val_flags",
+      "output_globs": [
+        "gfx/flags/OCA.tga",
+        "gfx/flags/medium/OCA.tga",
+        "gfx/flags/small/OCA.tga",
+        "gfx/flags/OSF_VAL_commissariat.tga",
+        "gfx/flags/medium/OSF_VAL_commissariat.tga",
+        "gfx/flags/small/OSF_VAL_commissariat.tga",
+        "gfx/flags/BJK_VAL_administration.tga",
+        "gfx/flags/medium/BJK_VAL_administration.tga",
+        "gfx/flags/small/BJK_VAL_administration.tga",
+        "gfx/flags/ECA.tga",
+        "gfx/flags/medium/ECA.tga",
+        "gfx/flags/small/ECA.tga",
+        "gfx/flags/DCA.tga",
+        "gfx/flags/medium/DCA.tga",
+        "gfx/flags/small/DCA.tga",
+        "gfx/flags/YPR_VAL_administration.tga",
+        "gfx/flags/medium/YPR_VAL_administration.tga",
+        "gfx/flags/small/YPR_VAL_administration.tga"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_val_flags.py",
+        "tools/assets/source/OCA_flag.png",
+        "tools/assets/source/OSF_VAL_commissariat_flag.png",
+        "tools/assets/source/BJK_VAL_administration_flag.png",
+        "gfx/flags/NOD_VAL_administration.tga",
+        "gfx/flags/medium/NOD_VAL_administration.tga",
+        "gfx/flags/small/NOD_VAL_administration.tga",
+        "gfx/flags/YPR.tga",
+        "gfx/flags/medium/YPR.tga",
+        "gfx/flags/small/YPR.tga"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive",
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_val_flags"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_val_flags",
+        "--apply"
+      ]
+    },
+    {
+      "id": "superevent_music",
+      "owner_module": "tools.builders.build_adiscord_superevent_music",
+      "output_globs": [
+        "music/superevent_vorkerland_civilwar.ogg",
+        "music/superevent_vorkerland_dirty_opening.ogg",
+        "music/superevent_vorkerland_worker_victory.ogg",
+        "music/superevent_vorkerland_utilitarian_victory.ogg",
+        "music/superevent_vorkerland_vlad_victory.ogg",
+        "music/superevent_vorkerland_dorian_victory.ogg",
+        "music/superevent_stelander_empire.ogg",
+        "music/superevent_stelander_party_victory.ogg",
+        "music/superevent_stelander_shabrat_victory.ogg",
+        "music/superevent_nam_resource_war.ogg",
+        "music/superevent_rus_last_empire.ogg",
+        "music/superevent_val_commonwealth.ogg",
+        "music/superevent_stelander_great.ogg",
+        "music/superevent_itora_vorkerland_war.ogg",
+        "music/superevent_itora_civilwar.ogg",
+        "music/superevent_rus_khan_defeated.ogg",
+        "music/superevent_vorkerland_joint_victory.ogg",
+        "music/one_minute_of_silence.ogg",
+        "music/two_minutes_of_silence.ogg",
+        "music/ADISCORD_stp_civil_war_end_after_superevent.ogg"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_superevent_music.py",
+        "sound/superevents_sound.asset",
+        "sound/superevents/superevent_vorkerland_civilwar_sound.wav",
+        "sound/superevents/superevent_vorkerland_dirty_opening_sound.wav",
+        "sound/superevents/superevent_vorkerland_worker_victory_sound.wav",
+        "sound/superevents/superevent_vorkerland_utilitarian_victory_sound.wav",
+        "sound/superevents/superevent_vorkerland_vlad_victory_sound.wav",
+        "sound/superevents/superevent_vorkerland_civilwar_doctor_won.wav",
+        "sound/superevents/superevent_stelander_empire_sound.wav",
+        "sound/superevents/superevent_stelander_party_victory_sound.wav",
+        "sound/superevents/superevent_stelander_shabrat_victory_sound.wav",
+        "sound/superevents/superevent_nam_resource_war_sound.wav",
+        "sound/superevents/superevent_rus_last_empire_sound.wav",
+        "sound/superevents/superevent_val_commonwealth.wav",
+        "sound/superevents/superevent_stelander_great_sound.wav",
+        "sound/superevents/superevent_itora_vorkerland_war_sound.wav",
+        "sound/superevents/superevent_itora_civilwar_sound.wav",
+        "sound/superevents/superevent_rus_khan_defeated_sound.wav",
+        "sound/superevents/superevent_vorkerland_joint_victory_sound.wav"
+      ],
+      "may_delete_outputs": true,
+      "ownership_mode": "exclusive",
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_superevent_music"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_superevent_music",
+        "--apply"
+      ]
     }
   ]
 }
