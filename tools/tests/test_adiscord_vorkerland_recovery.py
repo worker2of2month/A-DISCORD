@@ -616,9 +616,7 @@ class ReunificationFormationTests(unittest.TestCase):
                 self.assertRegex(
                     phase_six,
                     rf"(?s)\b{winner}\s*=\s*\{{.*?"
-                    rf"ADISCORD_vorkerland_form_wrk_from_{winner.lower()}\s*=\s*yes"
-                    r".*?country_event\s*=\s*\{\s*id\s*=\s*"
-                    r"ADISCORD_vorkerland_phase\.7\s+days\s*=\s*1\s*\}",
+                    rf"ADISCORD_vorkerland_form_wrk_from_{winner.lower()}\s*=\s*yes",
                 )
 
 

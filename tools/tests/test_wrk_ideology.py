@@ -286,7 +286,7 @@ class VadlAndBagleyIdeologyContractTests(unittest.TestCase):
         )
         self.assertIn(
             "ideology = imperial_restorationism",
-            named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_vad"),
+            named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_vad"),
         )
 
     def test_icons_have_semantic_names_and_keep_source_quality(self) -> None:
@@ -408,9 +408,10 @@ class DorianIdeologyContracts(unittest.TestCase):
         self.assertCountEqual(appointments, [
             "ADISCORD_vorkerland_setup_tva",
             "ADISCORD_vorkerland_repair_claimant_identities",
-            "ADISCORD_vorkerland_form_wrk_from_tva",
+            "ADISCORD_vorkerland_complete_wrk_from_tva",
         ])
         formation = one(effects, "ADISCORD_vorkerland_form_wrk_from_tva")
+        formation = formation + one(effects, "ADISCORD_vorkerland_complete_wrk_from_tva")
         transfer = [
             e.value for e in walk(formation) if e.key == "set_nationality"
             and one(e.value, "character") == "TVA_Dorian_Worx"

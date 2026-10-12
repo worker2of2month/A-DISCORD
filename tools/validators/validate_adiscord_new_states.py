@@ -1185,6 +1185,7 @@ def validate_vorkerland_expansion() -> None:
             f"{map_name}: missing central-unifier marker for wartime {winner_tag}",
         )
         formation = block(phase_effects, formation_effect)
+        formation += block(phase_effects, f"ADISCORD_vorkerland_complete_wrk_from_{winner_tag.lower()}")
         for required in (
             f"change_tag_from = {winner_tag}",
             "ADISCORD_vorkerland_finalize_wrk_formation = yes",
@@ -1236,13 +1237,17 @@ def validate_vorkerland_expansion() -> None:
         check(
             bool(
                 re.search(
-                    rf"\b{winner_tag}\s*=\s*\{{.*?{re.escape(formation_effect)}\s*=\s*yes"
-                    r".*?country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_phase\.7\s+days\s*=\s*1\s*\}",
+                    rf"\bWRK\s*=\s*\{{\s*{re.escape(formation_effect)}\s*=\s*yes\s*\}}",
                     phase_six,
                     re.DOTALL,
                 )
             ),
-            f"phase.6 does not form and verify final WRK from surviving {winner_tag}",
+            f"phase.6 does not form final WRK from surviving {winner_tag}",
+        )
+        check(
+            "country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }"
+            in block(phase_effects, formation_effect),
+            f"{formation_effect} must queue WRK settlement before handing off control",
         )
 
 

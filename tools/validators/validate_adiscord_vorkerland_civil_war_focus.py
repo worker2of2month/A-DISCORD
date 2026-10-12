@@ -1640,6 +1640,10 @@ WRK_FORMATION_EFFECTS = {
     "VAD": "ADISCORD_vorkerland_form_wrk_from_vad",
     "TVA": "ADISCORD_vorkerland_form_wrk_from_tva",
 }
+WRK_COMPLETION_EFFECTS = {
+    tag: f"ADISCORD_vorkerland_complete_wrk_from_{tag.lower()}"
+    for tag in WRK_FORMATION_EFFECTS
+}
 
 POSTWAR_SETTLEMENT_IDEAS = {
     "WRK_worker_write_constitutional_guarantees": (
@@ -3380,6 +3384,7 @@ def collect_issues() -> list[str]:
         WORKER_REFORM_INHERIT_EFFECT,
         "ADISCORD_vorkerland_verify_collapse_materialized",
         *WRK_FORMATION_EFFECTS.values(),
+        *WRK_COMPLETION_EFFECTS.values(),
     )
     lifecycle_effects: dict[str, str] = {}
     try:
@@ -3468,7 +3473,7 @@ def collect_issues() -> list[str]:
                     f"worker reform inheritance must read {idea_id} from WKR exactly once"
                 )
 
-    for winner_tag, formation_name in WRK_FORMATION_EFFECTS.items():
+    for winner_tag, formation_name in WRK_COMPLETION_EFFECTS.items():
         formation = lifecycle_effects.get(formation_name, "")
         if not formation:
             continue
@@ -5445,7 +5450,7 @@ def collect_issues() -> list[str]:
         issues.append(
             "TVA emergency administration must reward an already upgraded directorate"
         )
-    tva_formation = _blocks(phase_effects, "ADISCORD_vorkerland_form_wrk_from_tva")
+    tva_formation = _blocks(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_tva")
     if (
         len(tva_formation) != 1
         or tva_formation[0].count(

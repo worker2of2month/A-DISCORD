@@ -362,6 +362,7 @@ class CountryDevelopmentReformTests(unittest.TestCase):
         for tag in ("WKR", "VAD", "TVA"):
             self.assertIn("ADISCORD_copy_development_from_prev = yes", named_block(opening, tag))
             formation = named_block(vorkerland, "ADISCORD_vorkerland_form_wrk_from_" + tag.lower())
+            formation += named_block(vorkerland, "ADISCORD_vorkerland_complete_wrk_from_" + tag.lower())
             self.assertEqual(formation.count("ADISCORD_copy_development_from_prev = yes"), 1)
             self.assertLess(formation.index("ADISCORD_copy_development_from_prev"), formation.index(f"annex_country = {{ target = {tag}"))
 

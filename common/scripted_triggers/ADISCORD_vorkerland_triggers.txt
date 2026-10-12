@@ -13,8 +13,8 @@ ADISCORD_vorkerland_collapse_wars_not_started = {
 
 ADISCORD_vorkerland_wrk_defeated = {
 	OR = {
-		NOT = { country_exists = WRK }
-		WRK = { has_capitulated = yes }
+		NOT = { country_exists = WKR }
+		WKR = { has_capitulated = yes }
 	}
 }
 

@@ -2495,10 +2495,19 @@ country_event = {
 	id = ADISCORD_vorkerland_phase.6
 	hidden = yes
 	is_triggered_only = yes
-	trigger = { has_global_flag = ADISCORD_vorkerland_phase_reunification ADISCORD_vorkerland_coalition_victory_ready = yes }
+	trigger = { has_global_flag = ADISCORD_vorkerland_phase_reunification }
 
 	immediate = {
+		# Liberation or renewed hostilities during the delay must reopen the
+		# live campaign instead of discarding its only queued handoff.
 		if = {
+			limit = { NOT = { ADISCORD_vorkerland_coalition_victory_ready = yes } }
+			WKR = { clr_country_flag = ADISCORD_vorkerland_central_unifier }
+			VAD = { clr_country_flag = ADISCORD_vorkerland_central_unifier }
+			TVA = { clr_country_flag = ADISCORD_vorkerland_central_unifier }
+			ADISCORD_vorkerland_set_phase_central_showdown = yes
+		}
+		else_if = {
 			limit = {
 				WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
 				OR = {
@@ -2508,7 +2517,6 @@ country_event = {
 			}
 			WRK = {
 				ADISCORD_vorkerland_form_wrk_from_wkr = yes
-				country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
 			}
 		}
 		else_if = {
@@ -2521,7 +2529,6 @@ country_event = {
 			}
 			WRK = {
 				ADISCORD_vorkerland_form_wrk_from_vad = yes
-				country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
 			}
 		}
 		else_if = {
@@ -2534,7 +2541,6 @@ country_event = {
 			}
 			WRK = {
 				ADISCORD_vorkerland_form_wrk_from_tva = yes
-				country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
 			}
 		}
 	}
@@ -2545,22 +2551,42 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 
+	trigger = {
+		tag = WRK
+		has_global_flag = ADISCORD_vorkerland_phase_reunification
+	}
+
 	immediate = {
-		ADISCORD_vorkerland_finish_delayed_wrk_handoff = yes
-		ADISCORD_vorkerland_verify_reunified_wrk = yes
-		ADISCORD_vorkerland_story_offer_post_reunification = yes
+		# A human Oitfort administration follows the united state only when
+		# WRK has no human controller. Queue settlement before changing control.
 		if = {
 			limit = {
-				NOT = { ADISCORD_vorkerland_reunification_verified = yes }
-				NOT = { has_global_flag = ADISCORD_vorkerland_reunification_retry }
+				is_ai = yes
+				WTD = {
+					exists = yes
+					is_ai = no
+				}
 			}
-			set_global_flag = ADISCORD_vorkerland_reunification_retry
-			country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
+			country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }
+			change_tag_from = WTD
 		}
-		else_if = {
-			limit = { NOT = { ADISCORD_vorkerland_reunification_verified = yes } }
-			set_global_flag = ADISCORD_vorkerland_reunification_failed
-			log = "[ADISCORD][VORKERLAND][RECOVERY] Reunified WRK failed formation postconditions after one retry."
+		else = {
+			ADISCORD_vorkerland_finish_delayed_wrk_handoff = yes
+			ADISCORD_vorkerland_verify_reunified_wrk = yes
+			ADISCORD_vorkerland_story_offer_post_reunification = yes
+			if = {
+				limit = {
+					NOT = { ADISCORD_vorkerland_reunification_verified = yes }
+					NOT = { has_global_flag = ADISCORD_vorkerland_reunification_retry }
+				}
+				set_global_flag = ADISCORD_vorkerland_reunification_retry
+				country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
+			}
+			else_if = {
+				limit = { NOT = { ADISCORD_vorkerland_reunification_verified = yes } }
+				set_global_flag = ADISCORD_vorkerland_reunification_failed
+				log = "[ADISCORD][VORKERLAND][RECOVERY] Reunified WRK failed formation postconditions after one retry."
+			}
 		}
 	}
 }

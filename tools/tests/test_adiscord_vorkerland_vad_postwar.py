@@ -54,6 +54,7 @@ class VadPostwarContractTests(unittest.TestCase):
             'phase_effects',
         )
         formation = named_block(source, "ADISCORD_vorkerland_form_wrk_from_vad")
+        formation += named_block(source, "ADISCORD_vorkerland_complete_wrk_from_vad")
         self.assertTrue(formation)
 
         restored = re.search(
@@ -192,6 +193,7 @@ class VadPostwarContractTests(unittest.TestCase):
             "phase_effects",
         )
         formation = named_block(source, "ADISCORD_vorkerland_form_wrk_from_vad")
+        formation += named_block(source, "ADISCORD_vorkerland_complete_wrk_from_vad")
         identity = re.search(
             r"(?s)if\s*=\s*\{\s*limit\s*=\s*\{(?P<limit>[^{}]*)\}\s*"
             r"set_cosmetic_tag\s*=\s*WRK_vorkerland_joint_government\s*"

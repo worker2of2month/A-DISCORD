@@ -8590,8 +8590,8 @@ ADISCORD_vorkerland_prepare_claimants_for_formation = {
 }
 
 # COUNTRY WRK: Oitfort is a wartime technical administration, not a postwar state.
-# Preserve a human WTD player by handing control to WRK when possible, consume
-# the committee and its units, and leave coring to the existing integration decision.
+# Phase.7 handles a human WTD player before this effect. Consume the committee
+# and its units, leaving coring to the existing integration decision.
 ADISCORD_vorkerland_absorb_wtd_after_reunification = {
 	if = {
 		limit = { country_exists = WTD }
@@ -8611,10 +8611,6 @@ ADISCORD_vorkerland_absorb_wtd_after_reunification = {
 			clr_country_flag = ADISCORD_vorkerland_wtd_join_retry
 			clr_country_flag = ADISCORD_vorkerland_wtd_join_failed
 			clr_country_flag = ADISCORD_vorkerland_wtd_fighting_for_worx
-		}
-		if = {
-			limit = { is_ai = yes WTD = { is_ai = no } }
-			change_tag_from = WTD
 		}
 		34 = { remove_core_of = WTD }
 		annex_country = { target = WTD transfer_troops = yes }
@@ -8815,13 +8811,24 @@ ADISCORD_vorkerland_form_wrk_from_wkr = {
 			set_nationality = { target_country = WRK character = WRK_Necro_Filopo }
 		}
 	}
+	clr_country_flag = ADISCORD_vorkerland_route_worker
+	clr_country_flag = ADISCORD_vorkerland_route_joint
+	clr_country_flag = ADISCORD_vorkerland_route_utilitarian
+	set_country_flag = ADISCORD_vorkerland_route_worker
+	country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }
 	if = {
 		limit = { WKR = { is_ai = no } }
 		change_tag_from = WKR
 	}
+}
+
+ADISCORD_vorkerland_complete_wrk_from_wkr = {
 	ADISCORD_vorkerland_inherit_worker_reform_spirits = yes
 	WKR = { ADISCORD_vorkerland_refund_integrations_to_successor = yes }
-	annex_country = { target = WKR transfer_troops = yes }
+	if = {
+		limit = { country_exists = WKR }
+		annex_country = { target = WKR transfer_troops = yes }
+	}
 	if = { limit = { country_exists = VAD } annex_country = { target = VAD transfer_troops = yes } }
 	if = { limit = { country_exists = TVA } annex_country = { target = TVA transfer_troops = yes } }
 	ADISCORD_vorkerland_absorb_wtd_after_reunification = yes
@@ -8934,13 +8941,24 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 			}
 		}
 	}
+	clr_country_flag = ADISCORD_vorkerland_route_worker
+	clr_country_flag = ADISCORD_vorkerland_route_joint
+	clr_country_flag = ADISCORD_vorkerland_route_utilitarian
+	set_country_flag = ADISCORD_vorkerland_route_joint
+	country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }
 	if = {
 		limit = { VAD = { is_ai = no } }
 		change_tag_from = VAD
 	}
+}
+
+ADISCORD_vorkerland_complete_wrk_from_vad = {
 	ADISCORD_vorkerland_scrub_dormant_wrk_crisis = yes
 	VAD = { ADISCORD_vorkerland_refund_integrations_to_successor = yes }
-	annex_country = { target = VAD transfer_troops = yes }
+	if = {
+		limit = { country_exists = VAD }
+		annex_country = { target = VAD transfer_troops = yes }
+	}
 	if = { limit = { country_exists = WKR } annex_country = { target = WKR transfer_troops = yes } }
 	if = { limit = { country_exists = TVA } annex_country = { target = TVA transfer_troops = yes } }
 	ADISCORD_vorkerland_absorb_wtd_after_reunification = yes
@@ -9039,13 +9057,24 @@ ADISCORD_vorkerland_form_wrk_from_tva = {
 			character = TVA_Dorian_Worx
 		}
 	}
+	clr_country_flag = ADISCORD_vorkerland_route_worker
+	clr_country_flag = ADISCORD_vorkerland_route_joint
+	clr_country_flag = ADISCORD_vorkerland_route_utilitarian
+	set_country_flag = ADISCORD_vorkerland_route_utilitarian
+	country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }
 	if = {
 		limit = { TVA = { is_ai = no } }
 		change_tag_from = TVA
 	}
+}
+
+ADISCORD_vorkerland_complete_wrk_from_tva = {
 	ADISCORD_vorkerland_scrub_dormant_wrk_crisis = yes
 	TVA = { ADISCORD_vorkerland_refund_integrations_to_successor = yes }
-	annex_country = { target = TVA transfer_troops = yes }
+	if = {
+		limit = { country_exists = TVA }
+		annex_country = { target = TVA transfer_troops = yes }
+	}
 	if = { limit = { country_exists = WKR } annex_country = { target = WKR transfer_troops = yes } }
 	if = { limit = { country_exists = VAD } annex_country = { target = VAD transfer_troops = yes } }
 	ADISCORD_vorkerland_absorb_wtd_after_reunification = yes
@@ -9203,24 +9232,27 @@ ADISCORD_vorkerland_wrk_elect_filopo = {
 	}
 }
 
-# change_tag_from hands the human player to the restored WRK object, but the
-# following annex can be deferred by one engine tick. Complete the same
-# terminal cleanup before verification so a claimant shell cannot survive next
-# to the reunited country with its old army.
+# change_tag_from invalidates the executing country scope. Each formation
+# queues phase.7 on WRK before its final handoff. The callback settles the
+# selected route in a fresh WRK scope, then verifies territorial integration.
 ADISCORD_vorkerland_finish_delayed_wrk_handoff = {
 	if = {
 		limit = {
 			tag = WRK
-			OR = {
-				has_country_flag = ADISCORD_vorkerland_route_worker
-				has_country_flag = ADISCORD_vorkerland_route_joint
-				has_country_flag = ADISCORD_vorkerland_route_utilitarian
-			}
+			NOT = { has_global_flag = ADISCORD_vorkerland_reunification_verified }
 		}
-		if = { limit = { country_exists = WKR } annex_country = { target = WKR transfer_troops = yes } }
-		if = { limit = { country_exists = VAD } annex_country = { target = VAD transfer_troops = yes } }
-		if = { limit = { country_exists = TVA } annex_country = { target = TVA transfer_troops = yes } }
-		if = { limit = { country_exists = WTD } annex_country = { target = WTD transfer_troops = yes } }
+		if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_route_worker }
+			ADISCORD_vorkerland_complete_wrk_from_wkr = yes
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_route_joint }
+			ADISCORD_vorkerland_complete_wrk_from_vad = yes
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+			ADISCORD_vorkerland_complete_wrk_from_tva = yes
+		}
 	}
 }
 
@@ -9234,7 +9266,7 @@ ADISCORD_vorkerland_verify_reunified_wrk = {
 }
 
 # Run only after the restored WRK and its mutually-exclusive route have passed
-# their next-day postcondition. This is the sole new-controller terminal commit:
+# their delayed postcondition. This is the sole new-controller terminal commit:
 # it records the winner, shuts down wartime producers and leaves legacy outcome
 # effects safe to call before this point.
 ADISCORD_vorkerland_finalize_reunified_wrk = {

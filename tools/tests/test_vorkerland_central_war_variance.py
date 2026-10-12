@@ -190,6 +190,9 @@ class VorkerlandCentralWarVarianceTests(unittest.TestCase):
             formation = named_block(
                 self.effects, "ADISCORD_vorkerland_form_wrk_from_" + tag
             )
+            formation += named_block(
+                self.effects, "ADISCORD_vorkerland_complete_wrk_from_" + tag
+            )
             self.assertLess(
                 formation.index("ADISCORD_vorkerland_refund_integrations_to_successor"),
                 formation.index(f"annex_country = {{ target = {tag.upper()}"),

@@ -33,8 +33,6 @@ class OitfortTerminalCleanupTests(unittest.TestCase):
         )
         for token in (
             "country_exists = WTD",
-            "WTD = { is_ai = no }",
-            "change_tag_from = WTD",
             "annex_country = { target = WTD transfer_troops = yes }",
             "34 = { remove_core_of = WTD",
             "set_state_controller_to = WRK",
@@ -43,7 +41,7 @@ class OitfortTerminalCleanupTests(unittest.TestCase):
 
         for suffix in ("wkr", "vad", "tva"):
             formation = named_block(
-                effects, f"ADISCORD_vorkerland_form_wrk_from_{suffix}"
+                effects, f"ADISCORD_vorkerland_complete_wrk_from_{suffix}"
             )
             self.assertIn(
                 "ADISCORD_vorkerland_absorb_wtd_after_reunification = yes", formation
@@ -57,7 +55,7 @@ class OitfortTerminalCleanupTests(unittest.TestCase):
 
     def test_tva_no_longer_recreates_oitfort_puppet(self):
         effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
-        formation = named_block(effects, "ADISCORD_vorkerland_form_wrk_from_tva")
+        formation = named_block(effects, "ADISCORD_vorkerland_complete_wrk_from_tva")
         self.assertNotIn("puppet = WTD", formation)
         self.assertNotIn("target = WTD autonomy_state = autonomy_puppet", formation)
 

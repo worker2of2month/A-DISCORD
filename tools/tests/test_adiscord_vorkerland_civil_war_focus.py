@@ -133,7 +133,7 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     WORX_WARTIME_TIMED_IDEAS,
     WORKER_REFORM_INHERIT_EFFECT,
     WORKER_REFORM_STAGE_IDEAS,
-    WRK_FORMATION_EFFECTS,
+    WRK_COMPLETION_EFFECTS,
     _blocks,
     _allow_branch,
     _check_focus_reference_order,
@@ -1648,7 +1648,7 @@ focus = {
             worker_inheritance.count(f"{DORMANT_WRK_SCRUB_EFFECT} = yes"), 1
         )
 
-        for winner_tag, formation_name in WRK_FORMATION_EFFECTS.items():
+        for winner_tag, formation_name in WRK_COMPLETION_EFFECTS.items():
             with self.subTest(winner_tag=winner_tag):
                 formation = _blocks(self.phase_effects, formation_name)[0]
                 route_bridge = (
@@ -1682,7 +1682,7 @@ focus = {
                     inheritance.count(f"WKR = {{ has_idea = {idea_id} }}"), 1
                 )
 
-        formation = _blocks(self.phase_effects, WRK_FORMATION_EFFECTS["WKR"])[0]
+        formation = _blocks(self.phase_effects, WRK_COMPLETION_EFFECTS["WKR"])[0]
         self.assertLess(
             formation.index(f"{WORKER_REFORM_INHERIT_EFFECT} = yes"),
             formation.index("annex_country = { target = WKR transfer_troops = yes }"),
@@ -1783,7 +1783,7 @@ focus = {
         standardize = self.blocks["TVA_standardize_emergency_administration"]
         self.assertEqual(standardize.count("else = { add_war_support = 0.01 }"), 1)
 
-        formation = _blocks(self.phase_effects, "ADISCORD_vorkerland_form_wrk_from_tva")
+        formation = _blocks(self.phase_effects, "ADISCORD_vorkerland_complete_wrk_from_tva")
         self.assertEqual(len(formation), 1)
         self.assertEqual(
             formation[0].count(

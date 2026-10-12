@@ -1957,6 +1957,7 @@ def validate_wkr_solyarino_intervention() -> list[str]:
             "reunification queue and phase.6 must both wait for WKR Solarino resolution"
         )
     formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr")
+    formation += named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_wkr")
     for token in (
         "has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verified",
         "autonomy_state = autonomy_free",

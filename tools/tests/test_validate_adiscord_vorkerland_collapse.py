@@ -3337,6 +3337,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertNotIn("GFX_portrait_WRK_Anton_Bagley", tva_setup)
 
         formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_tva")
+        formation += named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_tva")
         for token in (
             "set_country_flag = ADISCORD_vorkerland_route_utilitarian",
             "drop_cosmetic_tag = yes",
@@ -3387,6 +3388,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         worker_formation = named_block(
             phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr"
         )
+        worker_formation += named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_wkr")
         recovery_en = source_section(
             read("localisation/english/ADISCORD_vorkerland_l_english.yml"),
             'recovery_l_english',
@@ -3514,6 +3516,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             'phase_effects',
         )
         formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_vad")
+        formation += named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_vad")
         characters = read(
             "common/characters/ADISCORD_vorkerland_collapse_characters.txt"
         )
@@ -5033,6 +5036,10 @@ class InterventionAndVisualTests(unittest.TestCase):
         formation = named_block(
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
             "ADISCORD_vorkerland_form_wrk_from_wkr",
+        )
+        formation += named_block(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "ADISCORD_vorkerland_complete_wrk_from_wkr",
         )
         effects = source_section(
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),

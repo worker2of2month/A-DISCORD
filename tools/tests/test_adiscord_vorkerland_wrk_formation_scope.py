@@ -2,10 +2,18 @@ from __future__ import annotations
 
 import re
 import unittest
+from dataclasses import replace
 from pathlib import Path
 
 
 from tools.lib.paths import source_section
+from tools.tests.test_adiscord_stp_preparation import (
+    matches_conditions,
+    block as parsed_block,
+    scalar,
+    selected_effects,
+)
+from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -53,6 +61,140 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
         cls.events = source_section(read(PHASE_EVENTS), 'phase_events')
         cls.triggers = read(PHASE_TRIGGERS)
 
+    def test_republic_defeat_follows_the_wartime_country(self) -> None:
+        defeated = parse_clausewitz(
+            named_block(self.triggers, "ADISCORD_vorkerland_wrk_defeated")
+        )
+        for exists, capitulated, expected in (
+            (True, False, False),
+            (True, True, True),
+            (False, False, True),
+        ):
+            with self.subTest(exists=exists, capitulated=capitulated):
+                facts = {
+                    ("VAD", "country_exists", "WKR"): exists,
+                    ("VAD", "country_exists", "WRK"): False,
+                    ("WKR", "has_capitulated", "yes"): capitulated,
+                }
+                self.assertEqual(matches_conditions(defeated, facts, "VAD"), expected)
+
+    def test_human_handoff_queues_continuation_before_invalidating_scope(self) -> None:
+        for winner in ("WKR", "VAD", "TVA"):
+            with self.subTest(winner=winner):
+                formation = parse_clausewitz(named_block(
+                    self.effects, f"ADISCORD_vorkerland_form_wrk_from_{winner.lower()}"
+                ))
+                facts = {(winner, "is_ai", "no"): True}
+                actions = list(selected_effects(formation, facts, "WRK"))
+                handoff = next(i for i, (_, e) in enumerate(actions) if e.key == "change_tag_from")
+                queued = [
+                    (scope, scalar(e.value, "id"))
+                    for scope, e in actions[:handoff]
+                    if e.key == "country_event"
+                ]
+                self.assertIn(("WRK", "ADISCORD_vorkerland_phase.7"), queued)
+                self.assertEqual(actions[handoff + 1:], [])
+
+    def test_a_live_or_liberated_rival_blocks_every_victory_route(self) -> None:
+        triggers = {e.key: e.value for e in parse_clausewitz(self.triggers)}
+
+        def expand(items):
+            result = []
+            for entry in items:
+                if entry.key in triggers:
+                    self.assertIn(entry.value, ("yes", "no"))
+                    result.append(replace(
+                        entry,
+                        key="AND" if entry.value == "yes" else "NOT",
+                        value=expand(triggers[entry.key]),
+                    ))
+                elif isinstance(entry.value, list):
+                    result.append(replace(entry, value=expand(entry.value)))
+                else:
+                    result.append(entry)
+            return result
+
+        routes = {
+            "WKR": ("worker", (27, 32, 33, 34, 35, 40, 79, 82)),
+            "VAD": ("vlad", (32, 40, 75, 81)),
+            "TVA": ("dorian", (32, 40, 36, 37, 38, 39)),
+        }
+        for winner, (route, states) in routes.items():
+            candidate = expand(triggers[f"ADISCORD_vorkerland_{route}_victory_candidate"])
+            facts = {(winner, "controls_state", str(state)): True for state in states}
+            self.assertTrue(matches_conditions(candidate, facts, winner))
+            for rival in routes.keys() - {winner}:
+                with self.subTest(winner=winner, rival=rival):
+                    facts[(winner, "country_exists", rival)] = True
+                    facts[(rival, "has_capitulated", "yes")] = False
+                    self.assertFalse(matches_conditions(candidate, facts, winner))
+                    facts[(rival, "has_capitulated", "yes")] = True
+                    self.assertTrue(matches_conditions(candidate, facts, winner))
+                    facts[(rival, "has_capitulated", "yes")] = False
+                    self.assertFalse(matches_conditions(candidate, facts, winner))
+                    facts[(winner, "country_exists", rival)] = False
+
+    def test_oitfort_handoff_cannot_invalidate_settlement(self) -> None:
+        event = parse_clausewitz(event_block(self.events, "ADISCORD_vorkerland_phase.7"))
+        immediate = parsed_block(event, "immediate")
+        facts = {
+            ("WRK", "is_ai", "yes"): True,
+            ("WTD", "exists", "yes"): True,
+            ("WTD", "is_ai", "no"): True,
+        }
+        actions = list(selected_effects(immediate, facts, "WRK"))
+        self.assertEqual([e.key for _, e in actions], ["country_event", "change_tag_from"])
+        self.assertEqual(scalar(actions[0][1].value, "id"), "ADISCORD_vorkerland_phase.7")
+        self.assertEqual(actions[1][1].value, "WTD")
+        facts[("WRK", "is_ai", "yes")] = False
+        actions = list(selected_effects(immediate, facts, "WRK"))
+        self.assertFalse(any(e.key == "change_tag_from" for _, e in actions))
+        self.assertEqual(actions[0][1].key, "ADISCORD_vorkerland_finish_delayed_wrk_handoff")
+
+    def test_lost_victory_before_handoff_reopens_the_war_phase(self) -> None:
+        event = parse_clausewitz(event_block(self.events, "ADISCORD_vorkerland_phase.6"))
+        facts = {
+            ("VAD", "has_global_flag", "ADISCORD_vorkerland_phase_reunification"): True,
+            ("VAD", "ADISCORD_vorkerland_coalition_victory_ready", "yes"): False,
+        }
+        self.assertTrue(matches_conditions(parsed_block(event, "trigger"), facts, "VAD"))
+        actions = list(selected_effects(parsed_block(event, "immediate"), facts, "VAD"))
+        self.assertIn(("VAD", "ADISCORD_vorkerland_set_phase_central_showdown"), [
+            (scope, e.key) for scope, e in actions
+        ])
+        self.assertFalse(any(e.key in ("transfer_state", "change_tag_from", "annex_country") for _, e in actions))
+
+    def test_all_routes_annex_only_claimants_and_oitfort_with_troop_transfer(self) -> None:
+        effects = {e.key: e.value for e in parse_clausewitz(self.effects)}
+        for winner, route in (("WKR", "worker"), ("VAD", "joint"), ("TVA", "utilitarian")):
+            with self.subTest(winner=winner):
+                facts = {
+                    ("WRK", "has_country_flag", f"ADISCORD_vorkerland_route_{route}"): True,
+                }
+                for tag in ("WKR", "VAD", "TVA", "WTD"):
+                    facts[("WRK", "country_exists", tag)] = True
+                dispatch = list(selected_effects(
+                    effects["ADISCORD_vorkerland_finish_delayed_wrk_handoff"], facts, "WRK"
+                ))
+                self.assertEqual([e.key for _, e in dispatch], [
+                    f"ADISCORD_vorkerland_complete_wrk_from_{winner.lower()}"
+                ])
+                actions = list(selected_effects(effects[dispatch[0][1].key], facts, "WRK"))
+                expanded = []
+                for scope, entry in actions:
+                    if entry.key == "ADISCORD_vorkerland_absorb_wtd_after_reunification":
+                        expanded.extend(selected_effects(effects[entry.key], facts, scope))
+                    else:
+                        expanded.append((scope, entry))
+                annexations = []
+                for scope, entry in expanded:
+                    self.assertNotEqual(entry.key, "change_tag_from")
+                    if entry.key == "annex_country":
+                        self.assertEqual(scope, "WRK")
+                        self.assertEqual(scalar(entry.value, "transfer_troops"), "yes")
+                        annexations.append(scalar(entry.value, "target"))
+                self.assertCountEqual(annexations, ["WKR", "VAD", "TVA", "WTD"])
+
     def test_worker_victory_is_checked_on_the_living_claimant(self) -> None:
         candidate = named_block(
             self.triggers, "ADISCORD_vorkerland_worker_victory_candidate"
@@ -94,6 +236,11 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
                     self.effects,
                     f"ADISCORD_vorkerland_form_wrk_from_{suffix}",
                 )
+                completion = named_block(
+                    self.effects,
+                    f"ADISCORD_vorkerland_complete_wrk_from_{suffix}",
+                )
+                block += completion
                 normalized = " ".join(block.split())
                 human_guard = (
                     f"if = {{ limit = {{ {winner} = {{ is_ai = no }} }} "
@@ -164,10 +311,11 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
                     self.effects,
                     f"ADISCORD_vorkerland_form_wrk_from_{tag.lower()}",
                 )
-                source_scope = named_block(formation, tag)
+                actions = list(selected_effects(parse_clausewitz(formation), {}, "WRK"))
+                removals = [(scope, e.value) for scope, e in actions if e.key == "remove_ideas"]
                 for idea in ideas:
                     token = f"remove_ideas = {idea}"
-                    self.assertIn(token, source_scope)
+                    self.assertIn((tag, idea), removals)
                     self.assertLess(
                         formation.index(token),
                         formation.index(f"change_tag_from = {tag}"),
@@ -179,7 +327,7 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
             phase_six.count(
                 "country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }"
             ),
-            3,
+            0,
         )
         for suffix, old_scope in (("wkr", "WKR"), ("vad", "VAD"), ("tva", "TVA")):
             effect = f"ADISCORD_vorkerland_form_wrk_from_{suffix} = yes"
@@ -217,7 +365,7 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
         }
         for effect_name, (winner, losers) in contracts.items():
             with self.subTest(effect=effect_name):
-                effect = named_block(self.effects, effect_name)
+                effect = named_block(read(PHASE_EFFECTS), effect_name)
                 self.assertRegex(
                     effect,
                     rf"{winner}\s*=\s*\{{[\s\S]*?set_country_flag\s*=\s*ADISCORD_vorkerland_central_unifier",
@@ -230,7 +378,7 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
                     )
 
     def test_tva_formation_rebinds_tgd_but_absorbs_oitfort(self) -> None:
-        tva = named_block(self.effects, "ADISCORD_vorkerland_form_wrk_from_tva")
+        tva = named_block(self.effects, "ADISCORD_vorkerland_complete_wrk_from_tva")
         self.assertIn("country_exists = TGD", tva)
         self.assertIn("ADISCORD_vorkerland_joined_worx_directorate", tva)
         self.assertIn("puppet = TGD", tva)
@@ -240,7 +388,7 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
         self.assertNotIn("freedom_level = 0.15", tva)
 
     def test_worx_formation_preserves_claimant_colour(self) -> None:
-        tva = named_block(self.effects, "ADISCORD_vorkerland_form_wrk_from_tva")
+        tva = named_block(self.effects, "ADISCORD_vorkerland_complete_wrk_from_tva")
         cosmetic = "WRK_vorkerland_technocracy"
         self.assertGreater(
             tva.index(f"set_cosmetic_tag = {cosmetic}"),

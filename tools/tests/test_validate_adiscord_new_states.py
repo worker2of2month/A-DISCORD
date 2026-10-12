@@ -446,7 +446,8 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
             phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr"
         )
         self.assertIn("change_tag_from = WKR", formation)
-        self.assertIn("ADISCORD_vorkerland_finalize_wrk_formation = yes", formation)
+        completion = validator.block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_wkr")
+        self.assertIn("ADISCORD_vorkerland_finalize_wrk_formation = yes", completion)
 
     def test_phase_six_immediately_forms_wrk_from_every_winner(self) -> None:
         phase_events = validator.text(
@@ -461,8 +462,7 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
             with self.subTest(tag=tag):
                 self.assertRegex(
                     phase_six,
-                    rf"(?s)\b{tag}\s*=\s*\{{.*?{re.escape(effect)}\s*=\s*yes"
-                    r".*?ADISCORD_vorkerland_phase\.7",
+                    rf"(?s)\b{tag}\s*=\s*\{{.*?{re.escape(effect)}\s*=\s*yes",
                 )
 
 

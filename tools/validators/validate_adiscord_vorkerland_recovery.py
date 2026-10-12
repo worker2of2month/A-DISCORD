@@ -2224,14 +2224,25 @@ def validate_reunification_formation() -> list[str]:
     for winner, losers, route, cosmetic_effect, leader_effect in formations:
         name = f"ADISCORD_vorkerland_form_wrk_from_{winner.lower()}"
         block = named_block(effects, name)
-        # The formation event runs this effect in the dormant WRK destination.
-        # change_tag_from must still name the verified live winner so a human
-        # controller follows the transfer without relying on a same-tick lookup.
+        completion_name = f"ADISCORD_vorkerland_complete_wrk_from_{winner.lower()}"
+        completion = named_block(effects, completion_name)
+        # The handoff invalidates its native scope. Only the queued callback
+        # may consume countries and finalize their political route.
         change = f"change_tag_from = {winner}"
         change_position = block.find(change)
         if change_position < 0:
             issues.append(f"{name} must change the verified winner {winner} into WRK")
             continue
+        queue = "country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }"
+        if queue not in block or block.find(queue) > change_position:
+            issues.append(f"{name} must queue settlement on WRK before handing off control")
+        if block[change_position + len(change):].strip().strip("}").strip():
+            issues.append(f"{name} must end immediately after the human handoff")
+        if "annex_country" in block or "change_tag_from" in completion:
+            issues.append(f"{name} must separate player handoff from country annexation")
+        dispatcher = named_block(effects, "ADISCORD_vorkerland_finish_delayed_wrk_handoff")
+        if f"{completion_name} = yes" not in dispatcher:
+            issues.append(f"WRK settlement does not dispatch {completion_name}")
         if f"WRK = {{ change_tag_from = {winner} }}" in block:
             issues.append(
                 f"{name} must change tag through the live winner scope, not a same-tick WRK lookup"
@@ -2244,20 +2255,22 @@ def validate_reunification_formation() -> list[str]:
                     f"{name} must release {loser} subjects before the winner changes tag"
                 )
             annex = f"annex_country = {{ target = {loser} transfer_troops = yes }}"
-            annex_position = block.find(annex)
-            if annex_position < 0 or annex_position < change_position:
+            if annex not in completion:
                 issues.append(
-                    f"{name} must annex {loser} with troop transfer only after change_tag_from"
+                    f"{completion_name} must annex {loser} with troop transfer"
                 )
+        if f"annex_country = {{ target = {winner} transfer_troops = yes }}" not in completion:
+            issues.append(f"{completion_name} must absorb the winning country's army")
+        sequence = block + completion
         for token in (
             "ADISCORD_vorkerland_prepare_claimants_for_formation = yes",
             "ADISCORD_vorkerland_finalize_wrk_formation = yes",
             f"set_country_flag = {route}",
             cosmetic_effect,
         ):
-            if token not in block:
+            if token not in sequence:
                 issues.append(f"{name} is missing formation contract {token}")
-        if leader_effect and leader_effect not in block:
+        if leader_effect and leader_effect not in completion:
             issues.append(f"{name} is missing route leader effect {leader_effect}")
 
     finalize = named_block(effects, "ADISCORD_vorkerland_finalize_wrk_formation")
@@ -2317,13 +2330,9 @@ def validate_reunification_formation() -> list[str]:
             )
             continue
         destination = destination_scopes[0]
-        if (
-            "country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }"
-            not in destination
-        ):
+        if "country_event" in destination:
             issues.append(
-                "formation event must schedule the next-day assertion from WRK "
-                f"after {winner} formation"
+                f"phase.6 must not schedule effects after the {winner} human handoff"
             )
     return issues
 

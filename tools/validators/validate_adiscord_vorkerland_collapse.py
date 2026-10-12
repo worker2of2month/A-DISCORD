@@ -703,6 +703,7 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         'phase_effects',
     )
     tva_formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_tva")
+    tva_formation += named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_tva")
     for token in (
         "set_country_flag = ADISCORD_vorkerland_route_utilitarian",
         "drop_cosmetic_tag = yes",
@@ -774,6 +775,7 @@ def validate_countries(root: Path, issues: list[str]) -> None:
     worker_formation = named_block(
         phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr"
     )
+    worker_formation += named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_wkr")
     for token in (
         "set_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome",
         "set_cosmetic_tag = WRK_vorkerland_utilitarian_republic",
@@ -845,6 +847,7 @@ def validate_countries(root: Path, issues: list[str]) -> None:
             )
 
     vad_formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_vad")
+    vad_formation += named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_vad")
     joint_identity = re.search(
         r"(?s)if\s*=\s*\{\s*limit\s*=\s*\{(?P<limit>[^{}]*)\}\s*"
         r"set_cosmetic_tag\s*=\s*WRK_vorkerland_joint_government\s*"
@@ -5312,6 +5315,7 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
     elect_necro = named_block(phase_effects, "ADISCORD_vorkerland_wrk_elect_filopo")
     finalizer = named_block(phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk")
     formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr")
+    formation += named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_wkr")
     choice = event_block(events, "ADISCORD_vorkerland_collapse.100")
     result = event_block(events, "ADISCORD_vorkerland_collapse.101")
 

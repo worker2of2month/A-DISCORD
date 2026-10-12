@@ -2348,14 +2348,14 @@ class StartupGuideContractTests(unittest.TestCase):
                 'no',
             )
             visible = _unique_direct_block(script.value, 'visible')
-            for tag in ('STP', 'VAL', 'RUS', 'STS', 'SRP', '---'):
+            for tag in ('STP', 'VAL', 'RUS', 'SHL', 'NAM', 'STS', 'SRP', '---'):
                 for is_human in (True, False):
                     for opened in (0, 1):
                         facts = {
                             (tag, 'is_ai', 'no'): is_human,
                             (tag, 'variable', 'ADISCORD_startup_open'): opened,
                         }
-                        expected = tag in ('STP', 'VAL', 'RUS') and is_human
+                        expected = tag in ('STP', 'VAL', 'RUS', 'SHL', 'NAM') and is_human
                         if script.key == 'ADISCORDStartupMenu':
                             expected = expected and bool(opened)
                         self.assertEqual(
@@ -2373,12 +2373,14 @@ class StartupGuideContractTests(unittest.TestCase):
             for _, name, _ in named_gui_nodes(gui)
             if name.startswith('ADISCORD_startup_text_')
         }
-        self.assertEqual(len(pages), 27)
-        for tag in ('STP', 'VAL', 'RUS'):
+        self.assertEqual(len(pages), 45)
+        for tag in ('STP', 'VAL', 'RUS', 'SHL', 'NAM'):
             topics = {
                 'STP': ('history', 'nodrul', 'party'),
                 'VAL': ('budget', 'army', 'diplomacy'),
                 'RUS': ('state', 'bunker', 'campaign'),
+                'SHL': ('furnaces', 'fire', 'wars'),
+                'NAM': ('groups', 'oil', 'war'),
             }[tag]
             cases = [
                 (0, page, spoiler, f'{tag}_startup_country')
@@ -2424,13 +2426,16 @@ class StartupGuideContractTests(unittest.TestCase):
                 'ADISCORD_STP',
                 'ADISCORD_VAL_decisions',
                 'ADISCORD_vorkerland',
+                'ADISCORD_RUS',
+                'ADISCORD_SHL',
+                'ADISCORD_nam_resource_war',
             ):
                 path = ROOT / f'localisation/{language}/{stem}_l_{language}.yml'
                 raw = path.read_bytes()
                 if language == 'russian':
                     self.assertTrue(raw.startswith(b'\xef\xbb\xbf'), path)
                 text = raw.decode('utf-8-sig')
-                keys = re.findall(r'(?m)^\s*((?:ADISCORD|STP|VAL|RUS)_startup_\w+):', text)
+                keys = re.findall(r'(?m)^\s*((?:ADISCORD|STP|VAL|RUS|SHL|NAM)_startup_\w+):', text)
                 for key in keys:
                     self.assertNotIn(key, values)
                     value = localisation_value(text, key)
@@ -2444,7 +2449,7 @@ class StartupGuideContractTests(unittest.TestCase):
         for key in re.findall(r'localization_key\s*=\s*(\w+)', loc):
             self.assertIn(key, by_language['russian'])
         gui = self.read('interface/ADISCORD_startup_menu.gui')
-        for key in re.findall(r'text\s*=\s*"((?:STP|VAL|RUS)_startup_\w+)"', gui):
+        for key in re.findall(r'text\s*=\s*"((?:STP|VAL|RUS|SHL|NAM)_startup_\w+)"', gui):
             self.assertIn(key, by_language['russian'])
         for path in (
             'common/scripted_guis/ADISCORD_startup_menu.txt',
@@ -2476,7 +2481,7 @@ class StartupGuideContractTests(unittest.TestCase):
             'ADISCORD_fresh_campaign_contract_v1',
             [e.value for e in _walk_clausewitz(_unique_direct_block(guard, 'limit'))],
         )
-        for tag in ('STP', 'VAL', 'RUS'):
+        for tag in ('STP', 'VAL', 'RUS', 'SHL', 'NAM'):
             writes = [
                 e
                 for scope in guard
@@ -2503,7 +2508,7 @@ class StartupGuideContractTests(unittest.TestCase):
                 if e.key == 'set_variable'
                 and _direct_scalar(e.value, 'var') == 'ADISCORD_startup_open'
             ),
-            3,
+            5,
         )
 
     def test_custom_skin_has_exact_frame_geometry_and_local_assets(self):
@@ -2542,7 +2547,7 @@ class StartupGuideContractTests(unittest.TestCase):
             r'(?:quadTextureSprite|spriteType)\s*=\s*"([^"]+)"', gui
         ):
             self.assertIn(name, names)
-        for tag in ('stp', 'val', 'rus'):
+        for tag in ('stp', 'val', 'rus', 'shl', 'nam'):
             sprite = next(
                 e.value
                 for e in sprites
@@ -2592,7 +2597,7 @@ class StartupGuideContractTests(unittest.TestCase):
                 body = gui_node_body(gui, name)
                 ast = economy_validator.parse_clausewitz(body)
                 key = _direct_scalar(ast, 'text')
-                self.assertRegex(key, r'^(STP|VAL|RUS)_startup_\w+$')
+                self.assertRegex(key, r'^(STP|VAL|RUS|SHL|NAM)_startup_\w+$')
                 self.assertEqual(_direct_scalar(ast, 'scrollbarType'), 'standardtext_slider')
                 self.assertNotIn('fixedsize = yes', body)
                 self.assertNotIn('alwaystransparent = yes', body)
