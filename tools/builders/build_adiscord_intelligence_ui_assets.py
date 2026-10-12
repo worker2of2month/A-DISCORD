@@ -38,9 +38,9 @@ from tools.lib.paths import repository_root
 ROOT = repository_root()
 BASE_GAME = Path(r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV")
 BASE_INTERFACE = BASE_GAME / "interface"
-METAL_SOURCE = ROOT / "gfx/interface/production/source/production_surface_source.png"
+METAL_SOURCE = ROOT / "tools/assets/source/production_gui/production_surface_source.png"
 HEADER_SOURCE = (
-    ROOT / "gfx/interface/intelligence/source/ADISCORD_intelligence_header_source.png"
+    ROOT / "tools/assets/source/intelligence_gui/ADISCORD_intelligence_header_source.png"
 )
 OUTPUT_DIR = ROOT / "gfx/interface/intelligence/ui"
 PREVIEW = ROOT / "docs/development/previews/ADISCORD_intelligence_preview.png"

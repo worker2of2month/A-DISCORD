@@ -135,6 +135,44 @@ class RusCrisisPreparationTests(unittest.TestCase):
         self.assertEqual(scalar(archetype, "is_buildable"), "no")
         self.assertEqual(scalar(block(model, "can_be_produced"), "is_debug"), "yes")
 
+    def test_montar_offensive_is_limited_to_its_active_crisis_war(self):
+        profiles = dict((row.key, row.value) for row in entries("common/ai_strategy/ADISCORD_RUS_ai.txt"))
+        self.assertIn("MON_crisis_offensive_RUS", profiles)
+        profile = profiles["MON_crisis_offensive_RUS"]
+        for phase in range(1, 7):
+            for tag in ("MON", "VLD", "RUS"):
+                with self.subTest(phase=phase, tag=tag):
+                    world = self.programme(phase)
+                    world.flags[tag].add("RUS_crisis_defender")
+                    world.wars.add(frozenset((tag, "RUS")))
+                    enabled = world.matches(block(profile, "allowed"), [tag]) and world.matches(block(profile, "enable"), [tag])
+                    self.assertEqual(enabled, tag == "MON" and phase == 2)
+        for invalidation in ("human", "peace", "roster", "capitulation"):
+            with self.subTest(invalidation=invalidation):
+                world = self.programme(2)
+                world.flags["MON"].add("RUS_crisis_defender")
+                world.wars.add(frozenset(("MON", "RUS")))
+                if invalidation == "human":
+                    world.ai_countries.remove("MON")
+                elif invalidation == "peace":
+                    world.wars.clear()
+                elif invalidation == "roster":
+                    world.flags["MON"].clear()
+                else:
+                    world.capitulated.add("MON")
+                self.assertFalse(world.matches(block(profile, "enable"), ["MON"]))
+        self.assertEqual(scalar(profile, "abort_when_not_enabled"), "yes")
+        front = block(profile, "ai_strategy")
+        self.assertEqual(scalar(front, "type"), "front_control")
+        self.assertEqual(scalar(front, "tag"), "RUS")
+        self.assertEqual(scalar(front, "execution_type"), "balanced")
+        self.assertEqual(scalar(front, "execute_order"), "yes")
+        self.assertEqual(scalar(front, "manual_attack"), "yes")
+        defaults = entries("common/ai_strategy/default.txt")
+        for name in ("ADISCORD_active_enemy_front_control", "ADISCORD_hold_against_stronger_enemy"):
+            generic = block(block(defaults, name), "ai_strategy")
+            self.assertGreater(int(scalar(front, "priority")), int(scalar(generic, "priority")))
+
 
 if __name__ == "__main__":
     unittest.main()

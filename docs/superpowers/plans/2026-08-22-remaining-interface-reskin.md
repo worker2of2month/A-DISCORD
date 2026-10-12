@@ -368,7 +368,7 @@ git commit -m "feat: reskin division deployment interface"
 **Files:**
 - Create: `tools/builders/build_adiscord_intelligence_ui_assets.py`
 - Create: `tools/tests/test_adiscord_intelligence_ui.py`
-- Create: `gfx/interface/intelligence/source/intelligence_surface_source.png`
+- Create: `tools/assets/source/intelligence_gui/intelligence_surface_source.png`
 - Create: generated files under `gfx/interface/intelligence/ui/`
 - Create: `interface/countryintelligenceagencyview.gui`
 - Create: `interface/countryintelligenceagencyview.gfx`

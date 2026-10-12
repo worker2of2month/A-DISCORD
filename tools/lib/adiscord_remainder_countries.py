@@ -142,6 +142,7 @@ def country_oob(tag: str, row: dict) -> str:
     template = f"{tag} Territorial Brigade"
     lines = [
         HEADER.rstrip(), "division_template = {", f'\tname = "{template}"',
+        "\ttemplate_counter = 12",
         "\tregiments = {", "\t\tinfantry = { x = 0 y = 0 }",
         "\t\tinfantry = { x = 1 y = 0 }", "\t\tinfantry = { x = 2 y = 0 }",
         "\t}", "}", "", "units = {",

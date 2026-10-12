@@ -22,8 +22,8 @@ OUTPUT_DIR = ROOT / "gfx" / "interface" / "technologies"
 CONTACT_SHEET = (
     ROOT
     / "docs"
-    / "superpowers"
-    / "reports"
+    / "development"
+    / "previews"
     / "2026-08-15-adiscord-technology-icon-contact-sheet.png"
 )
 

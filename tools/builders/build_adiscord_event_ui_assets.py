@@ -25,9 +25,9 @@ from tools.lib.paths import repository_root
 
 
 ROOT = repository_root()
-METAL_SOURCE = ROOT / "gfx/interface/production/source/production_surface_source.png"
+METAL_SOURCE = ROOT / "tools/assets/source/production_gui/production_surface_source.png"
 TEST_PICTURE_SOURCE = (
-    ROOT / "gfx/event_pictures/source/event_adiscord_ui_test_source.png"
+    ROOT / "tools/assets/source/event_pictures/event_adiscord_ui_test_source.png"
 )
 
 POPUP_BG = ROOT / "gfx/interface/event_popup_bg.png"
@@ -35,7 +35,7 @@ POPUP_TOP = ROOT / "gfx/interface/event_popup_top.png"
 POPUP_MIDDLE = ROOT / "gfx/interface/event_popup_middle.png"
 POPUP_BOTTOM = ROOT / "gfx/interface/event_popup_bottom.png"
 OPTION_ENTRY = ROOT / "gfx/interface/event_option_entry_adiscord.png"
-PREVIEW = ROOT / "gfx/interface/events/preview/ADISCORD_event_window_preview.png"
+PREVIEW = ROOT / "docs/development/previews/ADISCORD_event_window_preview.png"
 TEST_PICTURE = ROOT / "gfx/event_pictures/event_adiscord_ui_test.png"
 
 WINDOW_SIZE = (615, 650)

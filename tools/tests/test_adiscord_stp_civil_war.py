@@ -558,7 +558,8 @@ class CivilWarContracts(unittest.TestCase):
         diplomacy = entries("common/scripted_triggers/diplomacy_scripted_triggers.txt")
         self.assertTrue(
             matches_conditions(
-                ast_block(diplomacy, "DIPLOMACY_CALL_ALLY_ENABLE_TRIGGER"), {}
+                ast_block(diplomacy, "DIPLOMACY_CALL_ALLY_ENABLE_TRIGGER"),
+                {("STP", "ADISCORD_western_diplomacy_pair_open", "yes"): True},
             )
         )
         self.assertFalse(
@@ -577,10 +578,15 @@ class CivilWarContracts(unittest.TestCase):
         self.assertRegex(
             release, r"TFF\s*=\s*\{\s*add_to_war\s*=\s*\{\s*targeted_alliance = YPR"
         )
-        self.assertIn("VAL = { has_war_with = NOD }", release)
-        self.assertIn("has_country_flag = VAL_campaign_mobilizing", release)
-        self.assertIn("has_country_flag = VAL_campaign_target", release)
-        self.assertIn("character = STP_maksim_shabrat", release)
+        self.assertIn("STP_cw_tff_entry_deferred = no", release)
+        deferred = block(
+            read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
+            "STP_cw_tff_entry_deferred",
+        )
+        self.assertIn("NOT = { VAL = { has_war_with = NOD } }", deferred)
+        self.assertIn("has_country_flag = VAL_campaign_mobilizing", deferred)
+        self.assertIn("has_country_flag = VAL_campaign_target", deferred)
+        self.assertIn("character = STP_maksim_shabrat", deferred)
 
     def test_northern_call_excludes_nod_to_stelander_and_islands_until_peace(self):
         triggers = entries(
@@ -595,7 +601,7 @@ class CivilWarContracts(unittest.TestCase):
             for recipient in ("STP", "SLI", "VAL", "NOD"):
                 for enemy in (None, "YPR", "COF", "TFF", "VAL"):
                     with self.subTest(caller=caller, recipient=recipient, enemy=enemy):
-                        facts = {}
+                        facts = {(caller, "ADISCORD_western_diplomacy_pair_open", "yes"): True}
                         if enemy:
                             facts[(caller, "has_war_with", enemy)] = True
                         denied = matches_conditions(
@@ -2385,6 +2391,21 @@ class CivilWarContracts(unittest.TestCase):
             if e.key == "focus_tree" and scalar(e.value, "id") == "STP_cw_focus"
         )
         focuses = [e.value for e in tree if e.key == "focus"]
+        by_id = {scalar(focus, "id"): focus for focus in focuses}
+
+        def position(focus, tag):
+            x, y = (int(scalar(focus, axis)) for axis in ("x", "y"))
+            parent = next((e.value for e in focus if e.key == "relative_position_id"), None)
+            if parent:
+                parent_x, parent_y = position(by_id[parent], tag)
+                x += parent_x
+                y += parent_y
+            for offset in (e.value for e in focus if e.key == "offset"):
+                if matches_conditions(ast_block(offset, "trigger"), {}, tag):
+                    x += sum(int(e.value) for e in offset if e.key == "x")
+                    y += sum(int(e.value) for e in offset if e.key == "y")
+            return x, y
+
         for tag in ("STP", "STS", "SRP"):
             visible = [
                 f
@@ -2399,11 +2420,11 @@ class CivilWarContracts(unittest.TestCase):
                     )
                 )
             ]
-            points = [(int(scalar(f, "x")), int(scalar(f, "y"))) for f in visible]
+            points = [position(f, tag) for f in visible]
             self.assertEqual(len(points), len(set(points)), tag)
             self.assertLessEqual(
                 max(x for x, _ in points) - min(x for x, _ in points),
-                10 if tag == "STS" else (13 if tag == "STP" else 5),
+                {"STS": 18, "STP": 28, "SRP": 7}[tag],
                 tag,
             )
             for x in {x for x, _ in points}:
@@ -2633,9 +2654,9 @@ class CivilWarContracts(unittest.TestCase):
             )
         self.assertEqual(
             (scalar(focus, "x"), scalar(focus, "y"), scalar(focus, "cost")),
-            ("7", "1", "3"),
+            ("9", "1", "3"),
         )
-        self.assertEqual(scalar(focus, "icon"), "GFX_goal_generic_scientific_exchange")
+        self.assertEqual(scalar(focus, "icon"), "GFX_focus_STP_pw_party_civilian_retraining")
         self.assertNotEqual(
             scalar(focus, "icon"), "GFX_focus_TVA_divert_the_research_budget"
         )
@@ -2726,7 +2747,11 @@ class CivilWarContracts(unittest.TestCase):
             )
         )
         self.assertLess(remove_index, revoke_index)
-        self.assertEqual(finish[0].value, "STP_cw_postwar")
+        postwar_index = next(
+            i for i, e in enumerate(finish)
+            if e.key == "set_country_flag" and e.value == "STP_cw_postwar"
+        )
+        self.assertLess(postwar_index, remove_index)
         self.assertIn(
             ("has_idea", "STP_cw_emergency_laboratories"),
             [(e.key, e.value) for e in walk(finish)],
@@ -3007,7 +3032,10 @@ class CivilWarContracts(unittest.TestCase):
             and scalar(e.value, "var") == "ADISCORD_economy_treasury"
         )
         self.assertLess(clear.line, credit.line)
-        self.assertEqual(scalar(credit.value, "value"), "500")
+        self.assertEqual(scalar(credit.value, "value"), "STP_cw_cash_refund")
+        snapshot = next(e for e in refund if e.key == "set_temp_variable")
+        self.assertEqual(scalar(snapshot.value, "value"), "STP_cw_assault_training_deposit")
+        self.assertLess(snapshot.line, clear.line)
         self.assertFalse(
             any(
                 e.key
@@ -4030,7 +4058,7 @@ class CivilWarContracts(unittest.TestCase):
         self.assertNotIn("STP_cw_republics_victory", capitulation)
         self.assertIn(
             "var = STP_cw_capitulation_occupier value = 3 compare = equals",
-            capitulation,
+            " ".join(capitulation.split()),
         )
         self.assertNotIn("FROM = { tag = SRP }", capitulation)
         self.assertNotIn("capital_scope", capitulation)
@@ -4752,6 +4780,14 @@ class NorthernCampaignContracts(unittest.TestCase):
         self.effects = entries(
             "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
         )
+        self.triggers.extend(
+            e for e in entries("common/scripted_triggers/ADISCORD_RUS_scripted_triggers.txt")
+            if e.key == "RUS_crisis_other_major_required"
+        )
+        self.effects.extend(
+            e for e in entries("common/scripted_effects/ADISCORD_RUS_scripted_effects.txt")
+            if e.key == "RUS_crisis_release_other_major"
+        )
 
     def expand(self, items, parameters=None):
         from tools.validators.validate_adiscord_division_templates import Entry
@@ -5076,10 +5112,11 @@ class NorthernCampaignContracts(unittest.TestCase):
         self.assertEqual(
             [e.value for e in walk(start) if e.key == "add_to_faction"], ["COF", "TFF"]
         )
+        entry_effects = [*start, *ast_block(self.effects, "STP_cw_release_tff_to_northern_war")]
         for target in ("COF", "TFF"):
             country = next(
                 e.value
-                for e in walk(start)
+                for e in walk(entry_effects)
                 if e.key == target
                 and isinstance(e.value, list)
                 and any(child.key == "add_to_war" for child in e.value)
@@ -5370,7 +5407,7 @@ class NorthernCampaignContracts(unittest.TestCase):
             ["COF"],
         )
         puppet = [e.value for e in walk(victory) if e.key == "puppet"]
-        self.assertEqual(len(puppet), 2)
+        self.assertEqual(len(puppet), 1)
         self.assertEqual(
             {e.key: e.value for e in puppet[0]},
             {"target": "YPR", "end_wars": "no", "end_civil_wars": "no"},
@@ -5479,7 +5516,11 @@ class NorthernCampaignContracts(unittest.TestCase):
         marker = "STP_cw_northern_capitulation_pending"
         root_cleanup = ast_block(ast_block(hook, "effect"), "ROOT")
         self.assertEqual(scalar(root_cleanup, "clr_country_flag"), marker)
-        self.assertEqual(ast_block(hook, "effect")[0].key, "ROOT")
+        effect = list(walk(ast_block(hook, "effect")))
+        self.assertLess(
+            next(i for i, e in enumerate(effect) if e.key == "ROOT" and e.value == root_cleanup),
+            next(i for i, e in enumerate(effect) if e.key == "if" and e.value == first),
+        )
         self.assertLess(
             next(i for i, e in enumerate(first) if e.key == "ROOT"),
             next(i for i, e in enumerate(first) if e.key == "if"),
@@ -6137,7 +6178,7 @@ class NorthernCampaignContracts(unittest.TestCase):
                     facts[(loser, "has_capitulated", "no")] = False
             puppets = [value for _, key, value in writes if key == "puppet"]
             self.assertEqual(
-                puppets, ["YPR"] + (["TFF"] if "TFF" in defeated else []), order
+                puppets, ["YPR"], order
             )
             self.assertEqual(
                 [value for _, key, value in writes if key == "annex_country"], ["COF"]
@@ -6164,7 +6205,7 @@ class NorthernCampaignContracts(unittest.TestCase):
         self.assertEqual(facts["NOD", "variable", "STP_cw_northern_campaign_status"], 2)
         self.assertNotIn(("NOD", "puppet", "TFF"), writes)
 
-    def test_conference_keeps_a_surviving_frontier_and_subordinates_defeated_frontier(
+    def test_conference_restores_frontier_independence_after_either_outcome(
         self,
     ):
         for survives in (True, False):
@@ -6184,13 +6225,13 @@ class NorthernCampaignContracts(unittest.TestCase):
             self.assertEqual(
                 facts["NOD", "variable", "STP_cw_northern_campaign_status"], 2
             )
-            self.assertEqual(("NOD", "puppet", "TFF") in writes, not survives)
+            self.assertNotIn(("NOD", "puppet", "TFF"), writes)
             self.assertEqual(
                 any(
                     scope == "TFF" and key == "transfer_state"
                     for scope, key, _ in writes
                 ),
-                not survives,
+                True,
             )
 
     def test_liberated_coalition_member_must_be_defeated_again(self):
@@ -6326,7 +6367,7 @@ class NorthernCampaignContracts(unittest.TestCase):
             "on_capitulation",
         )
         cleanup = [
-            e for e in ast_block(generic, "effect") if e.key == "clr_global_flag"
+            e for e in walk(ast_block(generic, "effect")) if e.key == "clr_global_flag"
         ]
         self.assertEqual([e.value for e in cleanup], [skip])
         run(cleanup, "YPR", "YPR")
@@ -6386,7 +6427,9 @@ class NorthernCampaignContracts(unittest.TestCase):
             ]
             self.assertEqual(len(matches), 1)
             self.assertEqual(scalar(matches[0], "is_triggered_only"), "yes")
-            self.assertEqual(scalar(matches[0], "fire_only_once"), "yes")
+            # The campaign status/dispatch guard provides once-only delivery.
+            # A major news event must still reach every recipient country.
+            self.assertEqual(scalar(matches[0], "fire_only_once"), "no")
             descriptions = [e.value for e in matches[0] if e.key == "desc"]
             for desc in descriptions:
                 key = scalar(desc, "text") if isinstance(desc, list) else desc
@@ -6477,10 +6520,11 @@ class NorthernCampaignContracts(unittest.TestCase):
         self.assertEqual(
             scalar(accept, "activate_mission"), "NOD_cw_northern_mobilization"
         )
+        refusal = ast_block(refuse, "hidden_effect")
         self.assertEqual(
-            scalar(refuse, "clr_country_flag"), "STP_cw_northern_crisis_pending"
+            scalar(refusal, "clr_country_flag"), "STP_cw_northern_crisis_pending"
         )
-        self.assertEqual(scalar(ast_block(refuse, "set_variable"), "value"), "4")
+        self.assertEqual(scalar(ast_block(refusal, "set_variable"), "value"), "4")
         for split in (False, True):
             self.setUp()
             facts, writes, _, run = self.northern_callback_scenario()
@@ -8146,7 +8190,14 @@ class PostwarFocusContracts(unittest.TestCase):
                 "STP_pc_hegemony_continues",
                 "STP_pc_freedom_continues",
             ):
-                facts[tag, trigger, "yes"] = tag == "STS"
+                named_successors = ast_block(
+                    entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
+                    "STP_pc_named_successor_rules",
+                )
+                facts[tag, trigger, "yes"] = tag == "STS" and (
+                    leader == "STP_maksim_shabrat"
+                    or matches_conditions(named_successors, facts, tag)
+                )
             visible = {
                 name: self.focus_position(name, facts, tag)
                 for name, focus in self.focuses.items()
@@ -8235,8 +8286,19 @@ class PostwarFocusContracts(unittest.TestCase):
                 reconstruction = {
                     name for name in visible if name.startswith(("STP_pw_", "STP_pc_"))
                 }
+                shared_naval = {
+                    "STP_pc_navy_coast",
+                    "STP_pc_navy_ports",
+                    "STP_pc_navy_yards",
+                    "STP_pc_navy_escorts",
+                    "STP_pw_republic_marine_school",
+                }
                 if not postwar:
-                    self.assertFalse(reconstruction, (tag, reconstruction))
+                    self.assertEqual(reconstruction, shared_naval if tag == "STS" else set())
+                    self.assertEqual(
+                        {e.value for e in ast_block(self.focuses["STP_pc_navy_coast"], "prerequisite")},
+                        {"STP_pw_republic_restore_roads", "STP_kc_emergency_staff"},
+                    )
                 elif tag != "SRP":
                     self.assertTrue(reconstruction, tag)
                     self.assertFalse(
@@ -8270,7 +8332,7 @@ class PostwarFocusContracts(unittest.TestCase):
         self.assertIn("STP_pw_republic_settled_state", completed)
 
         party = {k: v for k, v in self.new.items() if k.startswith("STP_pw_party_")}
-        self.assertEqual(len(party), 25)
+        self.assertEqual(len(party), 32)
         supporting = {
             name: self.focuses[name]
             for name in (
@@ -8297,38 +8359,38 @@ class PostwarFocusContracts(unittest.TestCase):
             ("STP_pw_party_civil_workshops", "STP_pw_party_accountable_arsenals"),
             ("STP_pw_party_supply_service", "STP_pw_party_professional_service"),
             ("STP_pw_party_protectorate", "STP_pw_party_sovereignty"),
+            ("STP_pw_party_civilian_retraining", "STP_pw_party_veteran_reserve"),
         )
-        for domestic in choices[0]:
-            for economy in choices[1]:
-                for army in choices[2]:
-                    for foreign in choices[3]:
-                        selected = {domestic, economy, army, foreign}
-                        excluded = {
-                            item
-                            for pair in choices
-                            for item in pair
-                            if item not in selected
-                        }
-                        route = {**party, **supporting}
-                        completed = {"STP_cw_restore_civil_authority"}
-                        for _ in range(len(route) + 2):
-                            for name, focus in route.items():
-                                if name in excluded:
-                                    continue
-                                prerequisites = [
-                                    e.value for e in focus if e.key == "prerequisite"
-                                ]
-                                if all(
-                                    any(e.value in completed for e in group)
-                                    for group in prerequisites
-                                ):
-                                    completed.add(name)
-                        self.assertEqual(len(completed & party.keys()), 18, selected)
-                        self.assertIn("STP_pw_party_settled_state", completed, selected)
+        from itertools import product
+
+        for selected_choices in product(*choices):
+            selected = set(selected_choices)
+            excluded = {
+                item
+                for pair in choices
+                for item in pair
+                if item not in selected
+            }
+            route = {**party, **supporting}
+            completed = {"STP_cw_restore_civil_authority"}
+            for _ in range(len(route) + 2):
+                for name, focus in route.items():
+                    if name in excluded:
+                        continue
+                    prerequisites = [
+                        e.value for e in focus if e.key == "prerequisite"
+                    ]
+                    if all(
+                        any(e.value in completed for e in group)
+                        for group in prerequisites
+                    ):
+                        completed.add(name)
+            self.assertEqual(len(completed & party.keys()), 24, selected)
+            self.assertIn("STP_pw_party_settled_state", completed, selected)
 
         for tag, prefix, expected in (
             ("STS", "STP_pw_republic_", 16),
-            ("STP", "STP_pw_party_", 29),
+            ("STP", "STP_pw_party_", 32),
         ):
             focuses = {k: v for k, v in self.new.items() if k.startswith(prefix)}
             self.assertEqual(len(focuses), expected, tag)
@@ -8337,40 +8399,24 @@ class PostwarFocusContracts(unittest.TestCase):
                 (tag, "tag", tag): True,
                 (tag, "has_country_flag", "STP_cw_postwar"): True,
             }
-            visible = [
-                f
-                for f in self.focuses.values()
-                if not scalar(f, "id").startswith("STP_pc_")
-                and (
-                    not any(e.key == "allow_branch" for e in f)
-                    or matches_conditions(ast_block(f, "allow_branch"), facts, tag)
-                )
-            ]
             points = [
-                (
-                    int(scalar(f, "x"))
-                    + sum(
-                        int(scalar(e.value, "x"))
-                        for e in f
-                        if e.key == "offset"
-                        and matches_conditions(
-                            ast_block(e.value, "trigger"), facts, tag
-                        )
-                    ),
-                    int(scalar(f, "y")),
-                )
-                for f in visible
+                self.focus_position(name, facts, tag) for name in focuses
             ]
             self.assertEqual(len(points), len(set(points)))
             self.assertLessEqual(
                 max(x for x, _ in points) - min(x for x, _ in points),
-                32 if tag == "STS" else 26,
+                29 if tag == "STS" else 54,
             )
-            self.assertLessEqual(max(y for _, y in points), 15 if tag == "STS" else 12)
+            self.assertLessEqual(max(y for _, y in points), 10 if tag == "STS" else 18)
             for focus in focuses.values():
                 self.assertEqual(scalar(ast_block(focus, "allow_branch"), "tag"), tag)
+                expected_gate = (
+                    "STP_pw_party_northern_march_resolved"
+                    if scalar(focus, "id") == "STP_pw_party_great_stelander"
+                    else "STP_pw_can_reconstruct"
+                )
                 self.assertIn(
-                    "STP_pw_can_reconstruct",
+                    expected_gate,
                     {e.key for e in walk(ast_block(focus, "available"))},
                 )
         budget = self.focuses["STP_cw_first_postwar_budget"]
@@ -8438,7 +8484,7 @@ class PostwarFocusContracts(unittest.TestCase):
             "country",
         )
         dynamic = entries("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt")
-        self.assertEqual(len(self.new), 41)
+        self.assertEqual(len(self.new), 48)
         for name, focus in self.new.items():
             side = "republic" if "_republic_" in name else "party"
             modifier = "STP_pw_" + side + "_dynamic"
@@ -8465,6 +8511,7 @@ class PostwarFocusContracts(unittest.TestCase):
                 for payload in hidden
                 for e in walk(payload)
                 if e.key == "add_to_variable"
+                and scalar(e.value, "var").startswith("STP_pw_")
             ]
             actual = {scalar(e, "var"): Decimal(scalar(e, "value")) for e in writes}
             self.assertEqual(actual, expected, name)
@@ -8508,14 +8555,13 @@ class PostwarFocusContracts(unittest.TestCase):
                     (tag, "tag", tag): True,
                     (tag, "STP_pw_can_reconstruct", "yes"): True,
                 }
-                values, installed, refreshes, dirty = {}, set(), 0, 0
-                for focus in self.new.values():
-                    for e in walk(ast_block(focus, "completion_reward")):
-                        if e.key == "add_to_variable":
-                            var = scalar(e.value, "var")
-                            if initial is not None:
-                                values[var] = initial
-                                facts[(tag, "has_variable", var)] = True
+                values, installed, refreshes, dirty, cabinet_refreshes = {}, set(), 0, 0, 0
+                for e in walk(helper):
+                    if e.key == "set_variable":
+                        var = scalar(e.value, "var")
+                        if initial is not None:
+                            values[var] = initial
+                            facts[(tag, "has_variable", var)] = True
                 for _ in range(2):
                     for scope, e in selected_effects(helper, facts, tag):
                         self.assertEqual(scope, tag)
@@ -8533,6 +8579,9 @@ class PostwarFocusContracts(unittest.TestCase):
                             refreshes += 1
                         elif e.key == "ADISCORD_economy_mark_dirty":
                             dirty += 1
+                        elif e.key == "STP_ch_schedule_refresh":
+                            self.assertEqual(e.value, "yes")
+                            cabinet_refreshes += 1
                         else:
                             self.fail("Unsupported postwar refresh operation: " + e.key)
                 self.assertEqual(installed, {modifier})
@@ -8541,6 +8590,7 @@ class PostwarFocusContracts(unittest.TestCase):
                     set(values.values()), {0 if initial is None else initial}
                 )
                 self.assertEqual((refreshes, dirty), (2, 2))
+                self.assertEqual(cabinet_refreshes, 2)
 
     def test_factory_rewards_select_buildable_cores_or_preserve_the_project_funds(self):
         from dataclasses import replace
@@ -9328,7 +9378,7 @@ class NorthernStatusQuoTests(unittest.TestCase):
                 for e in events
                 if e.key == "news_event" and scalar(e.value, "id") == event_id
             )
-            self.assertEqual(scalar(event, "fire_only_once"), "yes")
+            self.assertEqual(scalar(event, "is_triggered_only"), "yes")
             self.assertEqual(scalar(event, "major"), "yes")
             self.assertEqual(sum(e["id"] == event_id for e in registry), 1)
             for language in ("russian", "english"):

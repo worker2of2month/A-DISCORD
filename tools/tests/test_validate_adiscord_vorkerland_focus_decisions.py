@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import unittest
+from unittest.mock import patch
 
 from tools.lib.paths import source_section
 from tools.validators.validate_adiscord_vorkerland_focus_decisions import (
@@ -52,6 +53,28 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
 
     def test_integrated_contract(self) -> None:
         self.assertEqual(collect_issues(), [])
+
+    def test_multiline_target_checks_still_reject_missing_subject_guards(self) -> None:
+        cases = (
+            (DECISION_FILE[0], CENTRAL_WAVE_DECISION, "central minor wave decision lacks EYR"),
+            (
+                PHASE_TRIGGER_FILE,
+                "ADISCORD_vorkerland_has_retryable_recorded_central_minor_front",
+                "central minor retryable trigger must define recorded target EYR",
+            ),
+        )
+        for path, block_id, diagnostic in cases:
+            original = read(path)
+            block = named_block(original, block_id)
+            target = named_block(block, "EYR")
+            changed = target.replace("is_subject = no", "is_subject = yes", 1)
+            mutated = original.replace(block, block.replace(target, changed, 1), 1)
+            self.assertNotEqual(original, mutated)
+            with self.subTest(block=block_id), patch(
+                "tools.validators.validate_adiscord_vorkerland_focus_decisions.read",
+                side_effect=lambda requested: mutated if requested == path else read(requested),
+            ):
+                self.assertTrue(any(diagnostic in issue for issue in collect_issues()))
 
     def test_central_showdown_stays_visible_while_command_readiness_is_explained(
         self,
@@ -250,7 +273,7 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
                 "NOT = { OR = { has_war_with = WKR has_war_with = VAD "
                 "has_war_with = TVA } } } }"
             )
-            self.assertEqual(retryable.count(retryable_branch), 1)
+            self.assertEqual(" ".join(retryable.split()).count(retryable_branch), 1)
 
         controller_sources = decisions + effects + phase_triggers + phase_events
         for mission_id in LEGACY_CONTROLLER_MISSIONS:
@@ -459,7 +482,7 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
         decisions = read(DECISION_FILE)
         effects = source_section(read(EFFECT_FILE), 'focus_decision_effects')
         self.assertEqual(len(SUPPORT_DECISIONS), 4)
-        for decision_id, (_, ally) in SUPPORT_DECISIONS.items():
+        for decision_id, (donor, ally) in SUPPORT_DECISIONS.items():
             block = named_block(decisions, decision_id)
             self.assertIn("fire_only_once = no", block)
             effect = named_block(effects, decision_id)
@@ -471,8 +494,13 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
             ):
                 self.assertNotIn(forbidden, effect)
             self.assertIn(
-                "add_equipment_to_stockpile = { type = infantry_equipment amount = -300 }",
+                "add_equipment_to_stockpile = { type = infantry_equipment amount = -3000 }",
                 effect,
+            )
+            delivery = named_blocks(effect, ally)[-1]
+            self.assertIn(
+                f"add_equipment_to_stockpile = {{ type = infantry_equipment amount = 3000 producer = {donor} }}",
+                delivery,
             )
             self.assertIn(
                 "add_equipment_to_stockpile = { type = support_equipment amount = -30 }",

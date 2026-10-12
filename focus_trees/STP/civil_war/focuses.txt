@@ -172,7 +172,7 @@ focus_tree = {
 		completion_reward = {
 			STP_pw_open_mountain_school = yes
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 11340 }
-			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = 72 }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = 432 }
 			add_equipment_to_stockpile = { type = support_equipment amount = 60 }
 			add_ideas = STP_cw_mountain_training
 		}
@@ -730,7 +730,7 @@ focus_tree = {
 		ai_will_do = { base = 5 }
 		completion_reward = {
 			effect_tooltip = {
-				swap_ideas = { remove_idea = STP_cw_army_dummy_idea add_idea = STP_cw_unified_staff_idea }
+				swap_ideas = { remove_idea = STP_cw_army_dummy_idea add_idea = STP_hw_district_command_delta }
 			}
 			hidden_effect = {
 				add_to_variable = { var = STP_cw_army_org_factor value = 0.03 }

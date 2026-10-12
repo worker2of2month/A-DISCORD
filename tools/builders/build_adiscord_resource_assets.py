@@ -24,36 +24,36 @@ TOPBAR_BUTTON = ROOT / "gfx/interface/ADISCORD_economy_gui/economy_topbar_button
 TREASURY_ICON = ROOT / "gfx/interface/ADISCORD_economy_gui/treasury_icon.dds"
 TRADE_ENTRY = ROOT / "gfx/interface/ADISCORD_trade_gui/country_trade_entry_bg.dds"
 RESOURCE_SOURCE = (
-    ROOT / "gfx/interface/ADISCORD_trade_gui/source/strategic_resources_source.png"
+    ROOT / "tools/assets/source/trade_gui/strategic_resources_source.png"
 )
 TRADE_ENTRY_SOURCE = (
-    ROOT / "gfx/interface/ADISCORD_trade_gui/source/country_trade_entry_source.png"
+    ROOT / "tools/assets/source/trade_gui/country_trade_entry_source.png"
 )
 TOPBAR_SOURCE = (
-    ROOT / "gfx/interface/ADISCORD_trade_gui/source/topbar_glyphs_source.png"
+    ROOT / "tools/assets/source/trade_gui/topbar_glyphs_source.png"
 )
 INDICATOR_SOURCE = (
-    ROOT / "gfx/interface/ADISCORD_trade_gui/source/topbar_indicators_source.png"
+    ROOT / "tools/assets/source/trade_gui/topbar_indicators_source.png"
 )
 MARKET_SOURCE = (
-    ROOT / "gfx/interface/ADISCORD_trade_gui/source/international_market_source.png"
+    ROOT / "tools/assets/source/trade_gui/international_market_source.png"
 )
 COMMAND_POWER_SOURCE = (
-    ROOT / "gfx/interface/ADISCORD_trade_gui/source/command_power_phone_source.png"
+    ROOT / "tools/assets/source/trade_gui/command_power_phone_source.png"
 )
 TOPBAR_BACKGROUND_SOURCE = (
     ROOT
-    / "gfx/interface/ADISCORD_trade_gui/source/topbar_background_extended_source.png"
+    / "tools/assets/source/trade_gui/topbar_background_extended_source.png"
 )
 TREASURY_SOURCE = (
-    ROOT / "gfx/interface/ADISCORD_economy_gui/source/treasury_topbar_source.png"
+    ROOT / "tools/assets/source/economy_gui/treasury_topbar_source.png"
 )
 INTERNATIONAL_MARKET_BUTTON = (
     ROOT / "gfx/interface/topbar/toolbar/international_market_button.dds"
 )
 WORLD_TENSION_ICON = ROOT / "gfx/interface/world_tension_icon_big_strip.dds"
 WORLD_TENSION_SOURCE = (
-    ROOT / "gfx/interface/ADISCORD_trade_gui/source/world_tension_defcon_tfr.dds"
+    ROOT / "tools/assets/source/trade_gui/world_tension_defcon_tfr.dds"
 )
 COMMAND_POWER_ICON = ROOT / "gfx/interface/command_power_icon.dds"
 COMMAND_POWER_TEXTICON = ROOT / "gfx/texticons/command_power.dds"

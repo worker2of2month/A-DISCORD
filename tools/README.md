@@ -84,7 +84,7 @@ Reusable browser mockups live in `docs/mockups/`. Local preview-server state,
 Python bytecode and `imgui.ini` are ignored and must not be committed.
 
 Event artwork uses `tools.builders.build_adiscord_event_pictures` for separate
-COUNTRY and NEWS crops. See [event illustration sources and prompts](../gfx/event_pictures/source/README.md)
+COUNTRY and NEWS crops. See [event illustration sources and prompts](../tools/assets/source/event_pictures/README.md)
 for dimensions, provenance, preview, and regeneration commands. Assign its named
 scene sprites in events; do not edit the generated textures or GFX extension.
 

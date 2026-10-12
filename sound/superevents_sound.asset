@@ -39,11 +39,6 @@ sound = {
 }
 
 sound = {
-	name = "superevent_stelander_great_sound"
-	file = "superevents/superevent_stelander_great_sound.wav"
-}
-
-sound = {
 	name = "superevent_stelander_shabrat_victory_sound"
 	file = "superevents/superevent_stelander_shabrat_victory_sound.wav"
 }
@@ -61,6 +56,11 @@ sound = {
 sound = {
 	name = "superevent_val_commonwealth_sound"
 	file = "superevents/superevent_val_commonwealth.wav"
+}
+
+sound = {
+	name = "superevent_stelander_great_sound"
+	file = "superevents/superevent_stelander_great_sound.wav"
 }
 
 # Gustav Holst, Mars, The Bringer of War; US Air Force Band, Frontiers (1998).

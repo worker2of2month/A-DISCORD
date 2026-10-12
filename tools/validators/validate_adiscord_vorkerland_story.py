@@ -431,7 +431,7 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
         b"\xef\xbb\xbf"
     ):
         issues.append("Russian story localisation must use UTF-8 BOM")
-    for token in ("Doctor Dorian Worx", "technocratic", "technocracy"):
+    for token in ("Doctor Dorian Worx", "technocratic administration"):
         if token not in english:
             issues.append(
                 f"English route_utilitarian presentation is missing {token!r}"

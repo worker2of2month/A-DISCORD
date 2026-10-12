@@ -16,7 +16,7 @@ from pathlib import Path
 from PIL import Image, ImageChops, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE_DIR = ROOT / "gfx/interface/diplomacy/source"
+SOURCE_DIR = ROOT / "tools/assets/source/diplomacy_gui"
 OUTPUT_DIR = ROOT / "gfx/interface/diplomacy"
 
 LEADER_SOURCE = SOURCE_DIR / "ADISCORD_diplomacy_leader_overlay_master.png"

@@ -333,7 +333,7 @@ class EventWindowUiTests(unittest.TestCase):
             "gfx/interface/event_popup_middle.png": (615, 64),
             "gfx/interface/event_popup_bottom.png": (615, 372),
             "gfx/interface/event_option_entry_adiscord.png": (300, 35),
-            "gfx/interface/events/preview/ADISCORD_event_window_preview.png": (
+            "docs/development/previews/ADISCORD_event_window_preview.png": (
                 1600,
                 900,
             ),
@@ -495,7 +495,7 @@ class EventWindowUiTests(unittest.TestCase):
             with self.subTest(scene=scene):
                 name = NEWS_SCENES.get(scene, scene)
                 with Image.open(
-                    ROOT / "gfx/event_pictures/source/news" / (name + ".png")
+                    ROOT / "tools/assets/source/event_pictures/news" / (name + ".png")
                 ) as source:
                     expected = ImageOps.fit(
                         source.convert("RGB"),

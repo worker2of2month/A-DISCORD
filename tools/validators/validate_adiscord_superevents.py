@@ -127,7 +127,7 @@ PRESENTATIONS = (
         legacy_music_asset=False,
     ),
     SupereventPresentation(
-        "superevent_stelander_great", "superevent_stelander_party_victory_sound_e"
+        "superevent_stelander_great", "superevent_stelander_great_sound_e"
     ),
     SupereventPresentation(
         "superevent_rus_black_banner",

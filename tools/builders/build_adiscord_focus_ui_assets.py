@@ -30,7 +30,7 @@ from tools.lib.paths import repository_root
 ROOT = repository_root()
 BASE_GAME = Path("Z:/SteamLibrary/steamapps/common/Hearts of Iron IV")
 VANILLA_GUI = BASE_GAME / "interface/nationalfocusview.gui"
-SOURCE = ROOT / "gfx/interface/production/source/production_surface_source.png"
+SOURCE = ROOT / "tools/assets/source/production_gui/production_surface_source.png"
 OUTPUT_DIR = ROOT / "gfx/interface/focusview"
 GUI_OUTPUT = ROOT / "interface/nationalfocusview.gui"
 GFX_OUTPUT = ROOT / "interface/ADISCORD_focus_ui.gfx"

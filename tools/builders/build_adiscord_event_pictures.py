@@ -19,8 +19,9 @@ from tools.lib.paths import repository_root
 
 ROOT = repository_root()
 ART_ROOT = ROOT / "gfx/event_pictures"
+SOURCE_ROOT = ROOT / "tools/assets/source/event_pictures"
 GFX = ROOT / "interface/ADISCORD_event_art.gfx"
-PREVIEW = ROOT / "gfx/interface/events/preview/ADISCORD_event_art_contact_sheet.png"
+PREVIEW = ROOT / "docs/development/previews/ADISCORD_event_art_contact_sheet.png"
 SIZES = {"country": (507, 184), "news": (396, 153)}
 # Country and news formats can have independently authored sources.
 ART = {
@@ -73,7 +74,12 @@ def formatted_art(scene: str, kind: str) -> Image.Image:
         raise ValueError(f"unsupported event artwork format: {scene}/{kind}")
     if kind == "news":
         source = "source/news/" + NEWS_SCENES.get(scene, scene) + ".png"
-    with Image.open(ART_ROOT / source) as image:
+    source_path = (
+        SOURCE_ROOT / source.removeprefix("source/")
+        if source.startswith("source/")
+        else ART_ROOT / source
+    )
+    with Image.open(source_path) as image:
         artwork = image.convert("RGB")
         # No stretching, added frames, tint, blur bars, or artificial sharpening.
         return ImageOps.fit(artwork, SIZES[kind], method=Image.Resampling.LANCZOS)

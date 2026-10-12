@@ -136,7 +136,7 @@ class ProductionUiContractTests(unittest.TestCase):
             self.assertEqual(image.getchannel("A").getextrema(), (0, 255))
 
     def test_production_source_material_is_kept_with_project_assets(self) -> None:
-        source = ROOT / "gfx/interface/production/source/production_surface_source.png"
+        source = ROOT / "tools/assets/source/production_gui/production_surface_source.png"
         self.assertTrue(source.is_file())
         with Image.open(source) as image:
             self.assertGreaterEqual(image.width, 1024)

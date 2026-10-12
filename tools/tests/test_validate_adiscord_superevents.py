@@ -77,11 +77,20 @@ class SupereventContractTests(unittest.TestCase):
                     localisation,
                     rf'(?m)^\s*{re.escape(song)}:\d*\s*"[^"\r\n]+"\s*$',
                 )
-        self.assertNotIn('replace_path="music"', (ROOT / "descriptor.mod").read_text())
+        self.assertIn('replace_path="music"', (ROOT / "descriptor.mod").read_text())
         self.assertFalse((ROOT / "music/_songs.txt").exists())
         self.assertFalse((ROOT / "music/music.asset").exists())
         assets = (ROOT / "music/ADISCORD_music.asset").read_text()
-        self.assertNotIn('name = "maintheme"', assets)
+        from tools.validators.validate_adiscord_superevents import blocks
+
+        main_theme = [
+            block for block in blocks(assets, r"^music\s*=\s*\{")
+            if 'name = "maintheme"' in block
+        ]
+        self.assertEqual(len(main_theme), 1)
+        main_theme_file = re.search(r'file\s*=\s*"([^"]+)"', main_theme[0])
+        self.assertIsNotNone(main_theme_file)
+        self.assertTrue((ROOT / "music" / main_theme_file.group(1)).is_file())
         for item in PRESENTATIONS:
             if item.legacy_music_asset:
                 song = item.dedicated_sound_effect.removesuffix("_sound_e")
@@ -90,6 +99,14 @@ class SupereventContractTests(unittest.TestCase):
     def test_nam_war_and_last_empire_are_registered_presentations(self):
         self.assertIn("superevent_nam_resource_war", {item.name for item in PRESENTATIONS})
         self.assertIn("superevent_rus_last_empire", {item.name for item in PRESENTATIONS})
+
+    def test_great_stelander_uses_its_dedicated_audio(self) -> None:
+        presentation = next(
+            item for item in PRESENTATIONS if item.name == "superevent_stelander_great"
+        )
+        self.assertEqual(
+            presentation.dedicated_sound_effect, "superevent_stelander_great_sound_e"
+        )
 
     def test_new_presentations_follow_hostilities_and_guarded_proclamation(self):
         from tools.validators.validate_adiscord_superevents import blocks, _event_block
@@ -639,17 +656,39 @@ class SupereventContractTests(unittest.TestCase):
         )
 
     def test_stelander_victory_news_starts_presentation_before_choice(self) -> None:
-        from tools.validators.validate_adiscord_superevents import _event_block
+        from tools.validators.validate_adiscord_superevents import _event_block, blocks
 
         source = (ROOT / "events/ADISCORD_STP_events.txt").read_text(encoding="utf-8-sig")
         for event_id, side in ((71, "party"), (72, "shabrat")):
             event = _event_block(source, f"ADISCORD_STP_cw.{event_id}")
             immediate = event.split("option =", 1)[0]
-            self.assertIn("fire_only_once = yes", event)
+            self.assertIn("fire_only_once = no", event)
             self.assertIn("immediate =", immediate)
             self.assertIn(f"ADISCORD_superevent_request = {8 if side == 'party' else 9}", immediate)
             self.assertNotIn("ADISCORD_vorkerland_clear_superevent_flags = yes", immediate)
             self.assertIn("ADISCORD_superevent_enqueue = yes", immediate)
+
+        effects = (ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt").read_text(
+            encoding="utf-8"
+        )
+        flag = "ADISCORD_news_stelander_civil_war_result_published"
+        for effect, event_ids in (
+            ("STP_cw_settle_union_victory", (71, 72)),
+            ("STP_cw_settle_nod_victory", (71,)),
+        ):
+            settlement = blocks(effects, rf"^{effect}\s*=\s*\{{")[0]
+            guarded = blocks(
+                settlement,
+                rf"\bif\s*=\s*\{{\s*limit\s*=\s*\{{\s*NOT\s*=\s*\{{\s*has_global_flag\s*=\s*{flag}\b",
+            )
+            self.assertEqual(len(guarded), 1, effect)
+            publication = guarded[0]
+            self.assertLess(
+                publication.index(f"set_global_flag = {flag}"),
+                publication.index("news_event ="),
+            )
+            for event_id in event_ids:
+                self.assertIn(f"id = ADISCORD_STP_cw.{event_id}", publication)
 
     def test_postwar_music_plays_from_each_sides_opening_focus(self) -> None:
         from tools.validators.validate_adiscord_superevents import blocks

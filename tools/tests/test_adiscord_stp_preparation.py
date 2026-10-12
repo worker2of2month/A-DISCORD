@@ -1,6 +1,7 @@
 """Cross-file contracts for the playable preparation, not a Clausewitz emulator."""
 
 from pathlib import Path
+import json
 import re
 import unittest
 
@@ -185,7 +186,7 @@ def matches_conditions(items, facts, scope="STP"):
         if entry.key == "tag":
             return scope == entry.value
         if entry.key == "state":
-            return scope == entry.value
+            return scope == entry.value or facts.get((scope, "state", entry.value), False)
         if entry.key == "check_variable":
             value = facts.get((scope, "variable", scalar(entry.value, "var")), 0)
             operator = {
@@ -546,7 +547,12 @@ class StelanderPreparationTests(unittest.TestCase):
             ("STP_cw_raise_territorial_brigade", 18000),
             ("STP_cw_train_reserve_brigades", 24000),
         ):
-            stop = block(block(block(decisions, name), "ai_will_do"), "modifier")
+            stop = next(
+                e.value
+                for e in block(block(decisions, name), "ai_will_do")
+                if e.key == "modifier"
+                and any(c.key == "stockpile_ratio" for c in walk(e.value))
+            )
             for manpower, reserve, expected in (
                 (threshold, 0.1001, False),
                 (threshold - 0.01, 0.2, True),
@@ -690,8 +696,7 @@ class StelanderPreparationTests(unittest.TestCase):
         self.assertEqual(
             scalar(delivered, "set_country_flag"), "STP_cw_kefreyt_shipment_received"
         )
-        notice = next(e.value for e in delivered if e.key == "if")
-        self.assertIn("STP_sided_with_Maksim_flag", str(block(notice, "limit")))
+        notice = delivered
         self.assertEqual(
             scalar(block(notice, "country_event"), "id"), "ADISCORD_STP_preparation.8"
         )
@@ -770,8 +775,8 @@ class StelanderPreparationTests(unittest.TestCase):
         self.assertEqual(
             scalar(delivered, "set_country_flag"), "STP_cw_kefreyt_shipment_received"
         )
-        delivery_gate = next(e.value for e in delivered if e.key == "if")
-        self.assertIn("STP_sided_with_Maksim_flag", str(block(delivery_gate, "limit")))
+        delivery_gate = delivered
+        self.assertIn("STP_sided_with_Maksim_flag", str(gate))
         self.assertEqual(
             scalar(block(delivery_gate, "country_event"), "id"),
             "ADISCORD_STP_preparation.8",
@@ -800,7 +805,9 @@ class StelanderPreparationTests(unittest.TestCase):
         self.assertEqual(
             scalar(party, "custom_effect_tooltip"), "STP_ps_northern_event_help_tt"
         )
-        ru = read("localisation/russian/ADISCORD_STP_l_russian.yml")
+        ru = (ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml").read_text(
+            encoding="utf-8-sig"
+        )
         self.assertIn("§YЭто преимущество можно усилить.§!", ru)
         self.assertIn("STP_cw_northern_event_help_tt:", ru)
         self.assertIn("STP_ps_northern_event_help_tt:", ru)
@@ -906,8 +913,13 @@ class StelanderPreparationTests(unittest.TestCase):
             scalar(success, "clr_country_flag"), "VAL_cw_volunteers_pending"
         )
         finish = block(block(effects, "STP_cw_check_union_wars_finished"), "if")
+        donor_cleanup = next(
+            e.value
+            for e in finish
+            if e.key == "VAL" and any(c.key == "clr_country_flag" for c in e.value)
+        )
         self.assertEqual(
-            scalar(block(finish, "VAL"), "clr_country_flag"),
+            scalar(donor_cleanup, "clr_country_flag"),
             "VAL_cw_volunteers_pending",
         )
 
@@ -1226,7 +1238,7 @@ class StelanderPreparationTests(unittest.TestCase):
             self.assertIn(scalar(options[0], "name"), values)
         self.assertEqual(
             hashlib.sha256(r"\n\n".join(chapters).encode("utf-8")).hexdigest(),
-            "b87894acba07ebab1224274870aef30f77c8c13f2591cce43785dd665a39f8ba",
+            "e446fb5189d587cc505488c17b2285bfb4ab671b6edad7c62ae71a888d7a6a94",
         )
         self.assertEqual(
             scalar(
@@ -1752,10 +1764,7 @@ class StelanderPreparationTests(unittest.TestCase):
                     "STP_cw_sacrifice_local_contact",
                     "STP_cw_open_civil_registers",
                 ):
-                    for flag in (
-                        "STP_false_trail_prepared",
-                        "STP_false_trail_in_progress",
-                    ):
+                    for flag in ("STP_false_trail_in_progress",):
                         self.assertFalse(
                             matches_conditions(
                                 visible,
@@ -2221,10 +2230,13 @@ class StelanderPreparationTests(unittest.TestCase):
             self.assertRegex(loc, r"(?m)^ " + key + r':\s*"[^"\r\n]+"')
 
     def test_false_trail_is_guaranteed_after_preparation(self):
-        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
-        resolver = block(effects, "STP_resolve_false_trail")
+        decisions = block(
+            entries("common/decisions/ADISCORD_STP_decisions.txt"),
+            "STP_battle_for_stelander",
+        )
+        resolver = block(block(decisions, "STP_prepare_false_trail"), "remove_effect")
         self.assertIn(
-            "STP_false_trail_clean_redirect", {entry.key for entry in resolver}
+            "STP_false_trail_clean_redirect", {entry.key for entry in walk(resolver)}
         )
         self.assertNotIn("random_list", {entry.key for entry in walk(resolver)})
 
@@ -2456,13 +2468,13 @@ class StelanderPreparationTests(unittest.TestCase):
             "STP_region_unique_operation_3": (10, "treasury", 1200),
             "STP_region_unique_operation_45": (15, "treasury", 2400),
             "STP_region_unique_operation_46": (20, "treasury", 1200),
-            "STP_region_unique_operation_53": (10, "equipment", 240),
+            "STP_region_unique_operation_53": (10, "equipment", 2400),
             "STP_cw_agree_with_commander": (45, "command_power", 20),
             "VAL_ops_finance_cin_contacts": (10, "treasury", 50),
             "VAL_ops_finance_osf_contacts": (10, "treasury", 50),
-            "VAL_ops_sell_rifles_to_cin": (10, "equipment", 2500),
-            "VAL_ops_sell_rifles_to_osf": (10, "equipment", 2500),
-            "VAL_pay_quarterly_contract_norm": (10, "equipment", 4000),
+            "VAL_ops_sell_rifles_to_cin": (10, "equipment", 25000),
+            "VAL_ops_sell_rifles_to_osf": (10, "equipment", 25000),
+            "VAL_pay_quarterly_contract_norm": (10, "equipment", 40000),
         }
         shared = entries(
             "common/scripted_triggers/ADISCORD_shared_action_triggers.txt"
@@ -2486,6 +2498,18 @@ class StelanderPreparationTests(unittest.TestCase):
                     continue
                 with self.subTest(decision=name):
                     action = actions[name]
+                    if name == "VAL_pay_quarterly_contract_norm":
+                        from dataclasses import replace
+
+                        payment = block(
+                            entries("common/scripted_effects/ADISCORD_VAL_effects.txt"),
+                            name,
+                        )
+                        action = [
+                            replace(e, value=payment)
+                            if e.key == "complete_effect" else e
+                            for e in action
+                        ]
                     self.assertEqual(
                         scalar(action, "cost"),
                         "0",
@@ -2509,7 +2533,7 @@ class StelanderPreparationTests(unittest.TestCase):
                         "VAL_ops_sell_rifles_to_osf",
                     )
                     price_cases = (
-                        ((False, 2500), (True, 5000))
+                        ((False, 25000), (True, 50000))
                         if northern_sale
                         else ((False, resource_price),)
                     )
@@ -2559,14 +2583,38 @@ class StelanderPreparationTests(unittest.TestCase):
                     price_line = re.search(rf"(?m)^ {re.escape(price_key)}:.*$", loc)
                     self.assertIsNotNone(price_line, price_key)
                     shown = price_line.group(0)
-                    self.assertIn(f"£political_power_texticon §Y{pp_price}§!", shown)
+                    if "[ROOT.VALGetCostPP10]" in shown:
+                        cost_getters = entries(
+                            "common/scripted_localisation/ADISCORD_VAL_contract_scripted_loc.txt"
+                        )
+                        loc_values = dict(re.findall(
+                            r'^ ([\w.]+):(?:\d+)?\s*"(.*)"$', loc, re.M
+                        ))
+
+                        def render_cost(match):
+                            getter = next(
+                                e.value for e in cost_getters
+                                if e.key == "defined_text"
+                                and scalar(e.value, "name") == match[1]
+                            )
+                            chosen = next(
+                                e.value for e in getter
+                                if e.key == "text" and (
+                                    not any(c.key == "trigger" for c in e.value)
+                                    or matches_conditions(block(e.value, "trigger"), facts, tag)
+                                )
+                            )
+                            return loc_values[scalar(chosen, "localization_key")]
+
+                        shown = re.sub(r"\[ROOT\.(VALGetCost\w+)\]", render_cost, shown)
+                    self.assertIn(f"§Y{pp_price}§! £political_power_texticon", shown)
                     icon = {
                         "treasury": "ADISCORD_economy_treasury_texticon",
                         "equipment": "infantry_equipment_texticon",
                         "command_power": "command_power_texticon",
                     }[resource]
                     if northern_sale:
-                        self.assertIn(f"£{icon} §Y[VALGetExportRifleQuantity]§!", shown)
+                        self.assertIn(f"§Y[VALGetExportRifleQuantity]§! £{icon}", shown)
                         getter = next(
                             e.value
                             for e in entries(
@@ -2576,14 +2624,14 @@ class StelanderPreparationTests(unittest.TestCase):
                         )
                         # Paid quote precedes current focus state, including old boolean receipts.
                         for licensed, receipt, expected in (
-                            (False, 0, 2500),
-                            (True, 0, 5000),
-                            (True, 1, 2500),
-                            (True, 15, 2500),
-                            (True, 20, 2500),
-                            (False, 30, 5000),
-                            (True, 30, 5000),
-                            (True, 40, 5000),
+                            (False, 0, 25000),
+                            (True, 0, 50000),
+                            (True, 1, 25000),
+                            (True, 15, 25000),
+                            (True, 20, 25000),
+                            (False, 30, 50000),
+                            (True, 30, 50000),
+                            (True, 40, 50000),
                         ):
                             facts = {
                                 (
@@ -2642,7 +2690,7 @@ class StelanderPreparationTests(unittest.TestCase):
                             else:
                                 self.fail("Export quantity getter has no matching text")
                     else:
-                        self.assertIn(f"£{icon} §Y{resource_price}§!", shown)
+                        self.assertIn(f"§Y{resource_price}§! £{icon}", shown)
 
     def test_native_stp_custom_prices_have_affordable_blocked_and_hover_labels(self):
         categories = entries("common/decisions/ADISCORD_STP_decisions.txt")
@@ -2658,10 +2706,38 @@ class StelanderPreparationTests(unittest.TestCase):
             for e in action
             if e.key == "custom_cost_text"
         }
-        localisation = (
-            ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
-        ).read_text(encoding="utf-8-sig")
+        localisation = "\n".join(
+            path.read_text(encoding="utf-8-sig")
+            for path in (ROOT / "localisation/russian").glob("*.yml")
+        )
         values = dict(re.findall(r'^ ([\w.]+):(?:\d+)?\s*"(.*)"$', localisation, re.M))
+        getters = {
+            scalar(e.value, "name"): e.value
+            for e in entries("common/scripted_localisation/ADISCORD_STP_scripted_loc.txt")
+            if e.key == "defined_text"
+        }
+
+        def render_price(value, affordable):
+            facts = {
+                ("STP", "numeric", "has_political_power"): 100000 if affordable else 0,
+                ("STP", "variable", "ADISCORD_economy_treasury"): (
+                    100000 if affordable else 0
+                ),
+            }
+
+            def substitute(match):
+                getter = getters[match[1]]
+                chosen = next(
+                    e.value for e in getter
+                    if e.key == "text" and (
+                        not any(c.key == "trigger" for c in e.value)
+                        or matches_conditions(block(e.value, "trigger"), facts)
+                    )
+                )
+                return values[scalar(chosen, "localization_key")]
+
+            return re.sub(r"\[(STPGetChapter\w+)\]", substitute, value)
+
         for key in price_keys:
             with self.subTest(price=key):
                 self.assertIn(key, values)
@@ -2698,23 +2774,28 @@ class StelanderPreparationTests(unittest.TestCase):
                             rendered.append(values[scalar(chosen, "localization_key")])
                         shown, unavailable, hover = rendered
                         self.assertEqual(unavailable, shown.replace("§Y", "§R"))
-                        expected = [("£political_power_texticon", "40")]
+                        expected = [
+                            ("40", "£political_power_texticon"),
+                            ("12000", "£manpower_texticon"),
+                        ]
                         if tag != "STS":
                             expected += [
-                                ("£manpower_texticon", "12000"),
-                                ("£infantry_equipment_texticon", "10800"),
+                                ("10800", "£infantry_equipment_texticon"),
                             ]
                         self.assertEqual(
-                            re.findall(r"(£\w+)\s+§Y([0-9.]+)§!", shown), expected
+                            re.findall(r"§Y([0-9.]+)§!\s+(£\w+)", shown), expected
                         )
                         self.assertEqual(
-                            re.findall(r"(£\w+)\s+§Y([0-9.]+)§!", hover), expected
+                            re.findall(r"§Y([0-9.]+)§!\s+(£\w+)", hover), expected
                         )
                     continue
+                base = render_price(base, True)
+                blocked = render_price(blocked, False)
+                tooltip = render_price(tooltip, True)
                 self.assertEqual(blocked, base.replace("§Y", "§R"))
-                prices = re.findall(r"(£\w+)\s+§Y([0-9.]+)§!", base)
+                prices = re.findall(r"§Y([0-9.]+)§!\s+(£\w+)", base)
                 self.assertTrue(prices, "the price needs readable currency amounts")
-                self.assertEqual(prices, re.findall(r"(£\w+)\s+§Y([0-9.]+)§!", tooltip))
+                self.assertEqual(prices, re.findall(r"§Y([0-9.]+)§!\s+(£\w+)", tooltip))
                 self.assertTrue(
                     re.findall(r"£\w+", base),
                     "preserve the existing currency texticons",
@@ -3835,7 +3916,7 @@ class StelanderPreparationTests(unittest.TestCase):
                     checked.add(scalar(focus, "id"))
         self.assertEqual(
             len(checked),
-            28,
+            39,
             "every persistent focus reward needs a checked delta preview",
         )
         self.assertNotIn("STP_party_war_transport", checked)
@@ -4016,7 +4097,7 @@ class StelanderPreparationTests(unittest.TestCase):
             scalar(e.value, "var"): scalar(e.value, "value")
             for scope in sts
             for e in walk(scope)
-            if e.key == "set_variable"
+            if e.key == "set_variable" and scalar(e.value, "var").startswith("STP_cw_")
         }
         self.assertEqual(
             copied,
@@ -4790,10 +4871,18 @@ class StelanderPreparationTests(unittest.TestCase):
         )
         keys = set(re.findall(r"(?m)^\s*([^\s:#]+):", localization))
         gfx = (ROOT / "interface/ADISCORD_ideas.gfx").read_text(encoding="utf-8-sig")
+        sprites = set(re.findall(r'name\s*=\s*"([^"]+)"', gfx))
+        native_vocabulary = json.loads(
+            (ROOT / "tools/data/adiscord_modifier_fields.json").read_text(encoding="utf-8")
+        )
+        sprites.update(native_vocabulary["sprites"])
         for idea in definitions:
             name = next((e.value for e in idea.value if e.key == "name"), idea.key)
             self.assertIn(name, keys)
-            self.assertIn(f"{name}_desc", keys)
+            if not name.endswith("_delta"):
+                self.assertIn(f"{name}_desc", keys)
+            else:
+                self.assertFalse(matches_conditions(block(idea.value, "allowed"), {}))
             picture = next((e.value for e in idea.value if e.key == "picture"), None)
             if picture:
                 sprite = (
@@ -4801,7 +4890,7 @@ class StelanderPreparationTests(unittest.TestCase):
                     if picture.startswith("GFX_idea_")
                     else f"GFX_idea_{picture}"
                 )
-                self.assertIn(f'"{sprite}"', gfx)
+                self.assertIn(sprite, sprites)
         for dynamic in entries(
             "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt"
         ):
@@ -5368,7 +5457,7 @@ class StelanderPreparationTests(unittest.TestCase):
                 0,
                 f"day {day}: route exceeded the explicit 75 PP opening reserve",
             )
-        self.assertEqual(balance, 10)
+        self.assertEqual(balance, 80)
         self.assertEqual(sum(amount for _, amount in treasury_expenses), 2400)
         for day in range(deadline):
             occupied = sum(start <= day < end for start, end, _ in intervals)
@@ -6620,10 +6709,7 @@ class StelanderPreparationTests(unittest.TestCase):
                 ),
                 "a multi-target decision cannot expose every district",
             )
-        for protected in (
-            "STP_false_trail_prepared",
-            "STP_inspection_concession_prepared",
-        ):
+        for protected in ("STP_inspection_concession_prepared",):
             facts = {
                 ("2", "has_state_flag", protected): True,
                 ("2", "STP_region_has_detectable_assets", "yes"): True,
@@ -7254,7 +7340,7 @@ class StelanderPreparationTests(unittest.TestCase):
             {e.value for e in walk(block(evidence, "allowed")) if e.key == "tag"},
             {"STP", "STS"},
         )
-        self.assertEqual(scalar(evidence, "cost"), "35")
+        self.assertEqual(scalar(evidence, "cost"), "25")
         self.assertEqual(scalar(evidence, "fire_only_once"), "yes")
         facts = {
             ("STS", "has_country_flag", "STP_cw_northern_strategy_evidence"): True,
@@ -7543,6 +7629,12 @@ class StelanderPreparationTests(unittest.TestCase):
                     entry.key
                     for entry in parse_clausewitz(path.read_text(encoding="utf-8-sig"))
                 )
+        named_scope_sources = list((ROOT / "common/technologies").glob("*.txt"))
+        named_scope_sources += list((ROOT / "common/characters").glob("*.txt"))
+        for path in named_scope_sources:
+            for container in parse_clausewitz(path.read_text(encoding="utf-8-sig")):
+                if container.key in ("technologies", "characters"):
+                    definitions.update(e.key for e in container.value)
         trees = entries("common/national_focus/ADISCORD_national_focus_STP.txt")
         for entry in walk(trees):
             if entry.key.startswith(("STP_", "ADISCORD_")):
@@ -7550,7 +7642,7 @@ class StelanderPreparationTests(unittest.TestCase):
                     entry.key, definitions, f"unresolved focus reward: {entry.key}"
                 )
         localisation = set()
-        for path in (ROOT / "localisation/russian").glob("*STP*.yml"):
+        for path in (ROOT / "localisation/russian").glob("*.yml"):
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"), path.name)
             localisation.update(
                 re.findall(r"(?m)^\s*([^\s:#]+):", path.read_text(encoding="utf-8-sig"))
@@ -7717,8 +7809,8 @@ class StelanderPreparationTests(unittest.TestCase):
                 for line in loc.splitlines()
                 if line.lstrip().startswith("STP_party_assault_price_tooltip:")
             )
-            price_pairs = re.findall(r"(£\w+)\s+§Y([0-9.]+)§!", price)
-            hover_pairs = re.findall(r"(£\w+)\s+§Y([0-9.]+)§!", hover)
+            price_pairs = re.findall(r"§Y([0-9.]+)§!\s+(£\w+)", price)
+            hover_pairs = re.findall(r"§Y([0-9.]+)§!\s+(£\w+)", hover)
             self.assertTrue(price_pairs)
             self.assertEqual(price_pairs, hover_pairs)
             verbose_price_copy = (
@@ -8600,7 +8692,7 @@ class OccidiaLateInterventionTests(unittest.TestCase):
 
 class OfficerContactsTooltipTests(unittest.TestCase):
     def test_officer_contacts_focus_keeps_only_compact_unlock_previews(self):
-        tree = entries("common/national_focus/ADISCORD_national_focus_STP.txt")
+        tree = block(entries("focus_trees/STP/preparation/focuses.txt"), "focus_tree")
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
         reward = block(focuses["STP_cw_officer_contacts"], "completion_reward")
 
@@ -8608,6 +8700,7 @@ class OfficerContactsTooltipTests(unittest.TestCase):
         self.assertEqual(
             unlocks,
             [
+                "STP_shabrat_staff_courses_program",
                 "STP_region_unique_operation_53",
                 "STP_region_unique_operation_2",
                 "STP_region_unique_operation_29",

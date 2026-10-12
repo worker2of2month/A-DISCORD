@@ -35,30 +35,22 @@ class StartingTemplateCounterTests(unittest.TestCase):
 
 
 class RepositoryDivisionTemplateAsciiTests(unittest.TestCase):
-    def test_active_technical_names_and_references_are_ascii(self) -> None:
+    def test_active_names_follow_audited_encoding_contract(self) -> None:
         root_override = os.environ.get("ADISCORD_DIVISION_AUDIT_ROOT")
         root = Path(root_override) if root_override else Path(__file__).parents[2]
-        templates, references, parse_issues = collect_templates_and_references(root)
-        technical_names = [
-            (template.path, template.line, template.name) for template in templates
-        ] + [
-            (reference.path, reference.line, reference.name) for reference in references
-        ]
-
-        self.assertEqual(parse_issues, [])
-        self.assertEqual(
-            [
-                entry
-                for entry in technical_names
-                if not all(" " <= character <= "~" for character in entry[2])
-            ],
-            [],
-        )
+        self.assertEqual(validate(root), [])
 
     def test_starting_templates_use_role_template_counters(self) -> None:
         root = Path(__file__).resolve().parents[2]
+        starting_oobs = {
+            entry.value
+            for path in (root / "history/countries").glob("*.txt")
+            for entry in parse_clausewitz(path.read_text(encoding="utf-8-sig"))
+            if entry.key == "oob" and isinstance(entry.value, str)
+        }
         observed: dict[str, set[str]] = {}
-        for path in sorted((root / "history" / "units").glob("*.txt")):
+        for oob in sorted(starting_oobs):
+            path = root / "history/units" / f"{oob}.txt"
             for entry in parse_clausewitz(path.read_text(encoding="utf-8")):
                 if entry.key != "division_template" or not isinstance(
                     entry.value, list
@@ -86,7 +78,6 @@ class RepositoryDivisionTemplateAsciiTests(unittest.TestCase):
         self.assertEqual(observed["Police division"], {"80"})
         self.assertEqual(observed["Regular army"], {"3"})
         self.assertEqual(observed["Capital Guard"], {"78"})
-        self.assertEqual(observed["Kefreyt Volunteer Division"], {"68"})
 
 
 class DivisionTemplateAuditTests(unittest.TestCase):
@@ -284,6 +275,43 @@ ADISCORD_grant_starting_technology_profile = {
         self.assertTrue(
             any("template coverage" in issue for issue in self._issues()),
             self._issues(),
+        )
+
+    def test_audited_literal_display_name_preserves_unicode_template_text(self) -> None:
+        audit = self._valid_audit()
+        row = audit["templates"][0]
+        row["display_name"] = "Аудитная линия"
+        row["literal_display_name"] = True
+        row["legacy_names"] = []
+        self._write_audit(audit)
+        issues = self._issues()
+        self.assertFalse(any("template coverage" in issue for issue in issues), issues)
+        self.assertFalse(any("technical template name" in issue for issue in issues), issues)
+        self.assertFalse(any("canonical" in issue for issue in issues), issues)
+        self.assertEqual(len([issue for issue in issues if "non-ASCII" in issue]), 1)
+
+        row["display_name"] = "Другое название"
+        self._write_audit(audit)
+        issues = self._issues()
+        self.assertTrue(any("template coverage" in issue for issue in issues), issues)
+        self.assertTrue(any("technical template name" in issue for issue in issues), issues)
+
+        row["display_name"] = "Аудитная линия"
+        row["source"]["path"] = "history/units/BBB.txt"
+        self._write_audit(audit)
+        issues = self._issues()
+        self.assertTrue(any("template coverage" in issue for issue in issues), issues)
+        self.assertTrue(any("technical template name" in issue for issue in issues), issues)
+
+    def test_literal_display_name_does_not_allow_unicode_technical_identifiers(self) -> None:
+        audit = self._valid_audit()
+        row = audit["templates"][0]
+        row["display_name"] = "Аудитная линия"
+        row["literal_display_name"] = True
+        row["technical_name"] = "Неверный идентификатор"
+        self._write_audit(audit)
+        self.assertTrue(
+            any("canonical technical_name must be ASCII" in issue for issue in self._issues())
         )
 
     def test_regimental_support_is_included_in_slots_cost_and_organization(

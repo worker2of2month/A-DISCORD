@@ -44,14 +44,14 @@
 
 **Files:**
 - Create: `tools/builders/build_adiscord_event_ui_assets.py`
-- Create: `gfx/event_pictures/source/event_adiscord_ui_test_source.png`
+- Create: `tools/assets/source/event_pictures/event_adiscord_ui_test_source.png`
 - Modify: `tools/data/generated_output_owners.json`
 - Generate: `gfx/interface/event_popup_bg.png`
 - Generate: `gfx/interface/event_popup_top.png`
 - Generate: `gfx/interface/event_popup_middle.png`
 - Generate: `gfx/interface/event_popup_bottom.png`
 - Generate: `gfx/interface/event_option_entry_adiscord.png`
-- Generate: `gfx/interface/events/preview/ADISCORD_event_window_preview.png`
+- Generate: `docs/development/previews/ADISCORD_event_window_preview.png`
 - Generate: `gfx/event_pictures/event_adiscord_ui_test.png`
 
 **Interfaces:**

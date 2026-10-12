@@ -14,7 +14,7 @@ OPERATIVE_GUI = ROOT / "interface/operative.gui"
 LEADER_GUI = ROOT / "interface/operativeleader.gui"
 GFX = ROOT / "interface/ADISCORD_intelligence_ui.gfx"
 HEADER_SOURCE = (
-    ROOT / "gfx/interface/intelligence/source/ADISCORD_intelligence_header_source.png"
+    ROOT / "tools/assets/source/intelligence_gui/ADISCORD_intelligence_header_source.png"
 )
 OUTPUT_DIR = ROOT / "gfx/interface/intelligence/ui"
 

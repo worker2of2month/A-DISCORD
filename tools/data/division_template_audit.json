@@ -16,7 +16,8 @@
     "equipment_availability": "A required archetype is available only when defined as an archetype or referenced by a concrete equipment variant in the replaced equipment database.",
     "supply": "Sum of subunit supply_consumption for every occupied slot.",
     "starting_factors": "Each semantic OOB/create_unit occurrence records explicit start factors; omitted factors use the Clausewitz default 1.0.",
-    "duplicate_scope": "Divergent same-name definitions fail within an OOB/script source namespace; cross-owner ambiguity is recorded separately."
+    "duplicate_scope": "Divergent same-name definitions fail within an OOB/script source namespace; cross-owner ambiguity is recorded separately.",
+    "template_names": "technical_name is the ASCII audit identifier. Explicit literal_display_name rows match the exact player-visible display_name at their audited source; other templates and technical references retain the ASCII contract."
   },
   "role_floors": {
     "line": 30,
@@ -115,6 +116,306 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_stp_underground_cell"
+      }
+    },
+    {
+      "key": "script_stp_postwar_mountain_brigade",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Stelander Mountain Brigade",
+      "display_name": "Горнострелковая бригада Стеландера",
+      "literal_display_name": true,
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "mountaineers",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "mountaineers",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "mountaineers",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "mountaineers",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "mountaineers",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "mountaineers",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 59.214285714285715,
+        "manpower": 6300.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 216.0,
+          "infantry_equipment": 5670.0,
+          "support_equipment": 30.0
+        },
+        "supply": 0.32
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "definition_metadata": {
+        "is_locked": false,
+        "force_allow_recruiting": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_stp_postwar_mountain_brigade"
+      }
+    },
+    {
+      "key": "script_sts_postwar_mountain_brigade",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Stelander Mountain Brigade",
+      "display_name": "Горнострелковая бригада Стеландера",
+      "literal_display_name": true,
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "mountaineers",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "mountaineers",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "mountaineers",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "mountaineers",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "mountaineers",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "mountaineers",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 59.214285714285715,
+        "manpower": 6300.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 216.0,
+          "infantry_equipment": 5670.0,
+          "support_equipment": 30.0
+        },
+        "supply": 0.32
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "definition_metadata": {
+        "is_locked": false,
+        "force_allow_recruiting": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_sts_postwar_mountain_brigade"
+      }
+    },
+    {
+      "key": "script_stp_postwar_marine_brigade",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Stelander Marine Brigade",
+      "display_name": "Бригада морской пехоты Стеландера",
+      "literal_display_name": true,
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 59.214285714285715,
+        "manpower": 6300.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 288.0,
+          "infantry_equipment": 5670.0,
+          "support_equipment": 30.0
+        },
+        "supply": 0.38
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "definition_metadata": {
+        "is_locked": false,
+        "force_allow_recruiting": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_stp_postwar_marine_brigade"
+      }
+    },
+    {
+      "key": "script_sts_postwar_marine_brigade",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Stelander Marine Brigade",
+      "display_name": "Бригада морской пехоты Стеландера",
+      "literal_display_name": true,
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 59.214285714285715,
+        "manpower": 6300.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 288.0,
+          "infantry_equipment": 5670.0,
+          "support_equipment": 30.0
+        },
+        "supply": 0.38
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "definition_metadata": {
+        "is_locked": false,
+        "force_allow_recruiting": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_sts_postwar_marine_brigade"
       }
     },
     {
@@ -13584,24 +13885,24 @@
       "count": 1
     },
     {
-      "key": "bjk_oob_feudal_retinue_xp_0_21_eq_0_28",
+      "key": "bjk_oob_feudal_retinue_xp_0_25_eq_0_55",
       "path": "history/units/BJK.txt",
       "kind": "oob",
       "technical_name": "Feudal Retinue",
       "legacy_names": [],
-      "start_experience_factor": 0.21,
-      "start_equipment_factor": 0.28,
+      "start_experience_factor": 0.25,
+      "start_equipment_factor": 0.55,
       "count": 1
     },
     {
-      "key": "bld_oob_feudal_retinue_xp_0_21_eq_0_28",
+      "key": "bld_oob_feudal_retinue_xp_0_3_eq_0_65",
       "path": "history/units/BLD.txt",
       "kind": "oob",
       "technical_name": "Feudal Retinue",
       "legacy_names": [],
-      "start_experience_factor": 0.21,
-      "start_equipment_factor": 0.28,
-      "count": 1
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 0.65,
+      "count": 2
     },
     {
       "key": "bor_oob_frontier_brigade_xp_0_15_eq_0_72",
@@ -14874,13 +15175,13 @@
       "count": 1
     },
     {
-      "key": "tva_vorkerland_collapse_oob_tva_mobile_test_group_xp_0_4_eq_0_9",
+      "key": "tva_vorkerland_collapse_oob_tva_collapse_militia_xp_0_2_eq_0_85",
       "path": "history/units/TVA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "TVA Mobile Test Group",
+      "technical_name": "TVA Collapse Militia",
       "legacy_names": [],
-      "start_experience_factor": 0.4,
-      "start_equipment_factor": 0.9,
+      "start_experience_factor": 0.2,
+      "start_equipment_factor": 0.85,
       "count": 1
     },
     {
@@ -15656,6 +15957,36 @@
       "technical_name": "Khanate CBRN Brigade",
       "legacy_names": [],
       "count": 1
+    },
+    {
+      "key": "bjk_oob_noble_guard_xp_0_25_eq_0_55",
+      "path": "history/units/BJK.txt",
+      "kind": "oob",
+      "technical_name": "Noble Guard",
+      "legacy_names": [],
+      "start_experience_factor": 0.25,
+      "start_equipment_factor": 0.55,
+      "count": 1
+    },
+    {
+      "key": "bld_oob_noble_guard_xp_0_3_eq_0_65",
+      "path": "history/units/BLD.txt",
+      "kind": "oob",
+      "technical_name": "Noble Guard",
+      "legacy_names": [],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 0.65,
+      "count": 1
+    },
+    {
+      "key": "vad_oob_armi_security_detachment_xp_0_2_eq_0_8",
+      "path": "history/units/VAD.txt",
+      "kind": "oob",
+      "technical_name": "Armi Security Detachment",
+      "legacy_names": [],
+      "start_experience_factor": 0.2,
+      "start_equipment_factor": 0.8,
+      "count": 4
     }
   ]
 }

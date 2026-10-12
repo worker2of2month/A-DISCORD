@@ -46,8 +46,10 @@ REQUIRED_FAMILIES = {
     "decision_ui_assets",
     "deployment_ui_assets",
     "diplomacy_ui_assets",
+    "western_diplomacy_assets",
     "event_ui_assets",
     "focus_ui_assets",
+    "focus_trees",
     "event_pictures",
     "production_ui_assets",
     "doctrine_system",
@@ -68,6 +70,8 @@ REQUIRED_FAMILIES = {
     "resource_assets",
     "strategic_regions",
     "stp_regions_map",
+    "stp_flags",
+    "stp_portraits",
     "stp_party_ideologies",
     "ideology_icons",
     "startup_ui_assets",
@@ -129,6 +133,26 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             declared_owners,
             {"map_buildings", "outer_states", "remainder_states", "state_history"},
         )
+
+    def test_focus_registry_covers_every_current_authored_output(self) -> None:
+        from tools.builders.build_adiscord_focus_trees import SOURCES
+
+        self.assertEqual(
+            set(self.entries["focus_trees"]["output_globs"]),
+            {f"common/national_focus/{name}" for name in SOURCES.values()},
+        )
+
+    def test_weapon_icon_registry_does_not_claim_other_technology_art(self) -> None:
+        from tools.builders.build_adiscord_technology_icons import load_manifest
+
+        declared = {
+            path for path in self.entries["technology_ui_assets"]["output_globs"]
+            if path.startswith("gfx/interface/technologies/")
+        }
+        self.assertEqual(
+            declared,
+            {f"gfx/interface/technologies/{spec.output}" for spec in load_manifest()},
+        )
         self.assertTrue(
             {"map/buildings.txt", "history/states/*.txt"}
             <= set(self.entries["state_history"]["source_inputs"]),
@@ -145,14 +169,14 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
         self.assertTrue(all("*" not in path for path in entry["output_globs"]))
         self.assertTrue(
             {
-                "gfx/interface/ADISCORD_trade_gui/source/strategic_resources_source.png",
-                "gfx/interface/ADISCORD_trade_gui/source/country_trade_entry_source.png",
-                "gfx/interface/ADISCORD_trade_gui/source/topbar_glyphs_source.png",
-                "gfx/interface/ADISCORD_trade_gui/source/topbar_indicators_source.png",
-                "gfx/interface/ADISCORD_trade_gui/source/international_market_source.png",
-                "gfx/interface/ADISCORD_trade_gui/source/command_power_phone_source.png",
-                "gfx/interface/ADISCORD_trade_gui/source/topbar_background_extended_source.png",
-                "gfx/interface/ADISCORD_economy_gui/source/treasury_topbar_source.png",
+                "tools/assets/source/trade_gui/strategic_resources_source.png",
+                "tools/assets/source/trade_gui/country_trade_entry_source.png",
+                "tools/assets/source/trade_gui/topbar_glyphs_source.png",
+                "tools/assets/source/trade_gui/topbar_indicators_source.png",
+                "tools/assets/source/trade_gui/international_market_source.png",
+                "tools/assets/source/trade_gui/command_power_phone_source.png",
+                "tools/assets/source/trade_gui/topbar_background_extended_source.png",
+                "tools/assets/source/economy_gui/treasury_topbar_source.png",
             }
             <= set(entry["source_inputs"])
         )
@@ -169,9 +193,9 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
         self.assertEqual(
             set(entry["source_inputs"]),
             {
-                "gfx/interface/diplomacy/source/ADISCORD_diplomacy_leader_overlay_master.png",
-                "gfx/interface/diplomacy/source/ADISCORD_diplomacy_parties_overlay_master.png",
-                "gfx/interface/diplomacy/source/ADISCORD_diplomacy_flag_overlay_master.png",
+                "tools/assets/source/diplomacy_gui/ADISCORD_diplomacy_leader_overlay_master.png",
+                "tools/assets/source/diplomacy_gui/ADISCORD_diplomacy_parties_overlay_master.png",
+                "tools/assets/source/diplomacy_gui/ADISCORD_diplomacy_flag_overlay_master.png",
             },
         )
 
@@ -191,8 +215,8 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
                 "tools/builders/build_adiscord_intelligence_ui_assets.py",
                 "tools/lib/adiscord_ui_contracts.py",
                 "tools/lib/adiscord_ui_surfaces.py",
-                "gfx/interface/production/source/production_surface_source.png",
-                "gfx/interface/intelligence/source/ADISCORD_intelligence_header_source.png",
+                "tools/assets/source/production_gui/production_surface_source.png",
+                "tools/assets/source/intelligence_gui/ADISCORD_intelligence_header_source.png",
             },
         )
         self.assertTrue(entry["may_delete_outputs"])
@@ -213,7 +237,7 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
                 "tools/builders/build_adiscord_deployment_ui_assets.py",
                 "tools/lib/adiscord_ui_contracts.py",
                 "tools/lib/adiscord_ui_surfaces.py",
-                "gfx/interface/production/source/production_surface_source.png",
+                "tools/assets/source/production_gui/production_surface_source.png",
             },
         )
         self.assertTrue(entry["may_delete_outputs"])

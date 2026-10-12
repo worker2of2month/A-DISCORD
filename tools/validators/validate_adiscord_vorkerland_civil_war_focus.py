@@ -5939,14 +5939,20 @@ def collect_issues() -> list[str]:
         issues.append(
             "claimant.14 intervention caller is not backed by one bounded retry"
         )
-    news_references = re.findall(
-        r"\bnews_event\s*=\s*\{\s*id\s*=\s*([A-Za-z0-9_.]+)", claimant_events
-    )
-    expected_news_references = Counter(
-        event_id for event_id in CLAIMANT_NEWS_EVENT_IDS for _ in range(2)
-    )
-    if Counter(news_references) != expected_news_references:
-        issues.append("claimant capstones must fire each owned news event exactly once")
+    for number, report_id in zip((30, 31, 32), CLAIMANT_NEWS_EVENT_IDS):
+        capstone = event_blocks_by_id.get(f"ADISCORD_vorkerland_claimant.{number}", "")
+        report_call = f"country_event = {{ id = {report_id} hours = 1 }}"
+        if capstone.count(report_call) != 1:
+            issues.append(f"claimant capstone {number} must dispatch its country report once")
+        report_definitions = [
+            block
+            for block in _blocks(claimant_events, "country_event")
+            if re.search(rf"(?m)^\s*id\s*=\s*{re.escape(report_id)}\s*$", block)
+        ]
+        if len(report_definitions) != 1 or "fire_only_once = yes" not in report_definitions[0]:
+            issues.append(f"claimant report {report_id} must be a one-shot country event")
+        if len(re.findall(rf"\bid\s*=\s*{re.escape(report_id)}\b", claimant_events)) != 2:
+            issues.append(f"claimant report {report_id} must have exactly one caller")
 
     event_forbidden_effects = (
         "declare_war_on",

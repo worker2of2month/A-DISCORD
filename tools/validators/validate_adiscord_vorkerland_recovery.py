@@ -393,7 +393,7 @@ def validate_wkr_semantics() -> list[str]:
     claimant_choice_localisation = (
         (
             ENGLISH_LOCALISATION,
-            ("country controlled by the player", "Worker's fate", "Vlad and Armi"),
+            ("country controlled by the player", "Worcker's fate", "Vlad and Armi"),
             "joint government",
         ),
         (
@@ -2359,12 +2359,15 @@ def validate_premature_wrk_recovery() -> list[str]:
     for token in (
         "original_tag = WRK",
         "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
-        "NOT = { has_global_flag = ADISCORD_vorkerland_phase_reunification }",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }",
         "NOT = { has_global_flag = ADISCORD_vorkerland_reunification_verified }",
         "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }",
     ):
         if token not in forbidden:
             issues.append(f"WRK release-forbidden gate is missing {token}")
+    if "has_global_flag = ADISCORD_vorkerland_phase_reunification" in forbidden:
+        issues.append("WRK release must stay forbidden until the reunification result is verified")
 
     release_guard = named_block(
         triggers, "ADISCORD_vorkerland_release_requires_interception"

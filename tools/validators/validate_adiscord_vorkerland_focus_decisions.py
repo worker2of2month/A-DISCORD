@@ -158,6 +158,7 @@ LOCALISED_IDS = (
     *LEVY_DECISIONS,
     *CORE_PACKAGES,
     "ADISCORD_vorkerland_recognize_free_republics",
+    "ADISCORD_vorkerland_vad_continue_imperial_reunification",
     *SUPPORT_DECISIONS,
     "ADISCORD_vorkerland_allied_supply_advisers",
 )
@@ -363,7 +364,7 @@ def collect_issues() -> list[str]:
             f"set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_{target.lower()}",
             f"{target} = {{ ADISCORD_vorkerland_leave_inherited_faction = yes }}",
         ):
-            if token not in wave:
+            if token not in " ".join(wave.split()):
                 issues.append(
                     f"central minor wave decision lacks {target} token {token}"
                 )
@@ -616,7 +617,7 @@ def collect_issues() -> list[str]:
             "NOT = { OR = { has_war_with = WKR has_war_with = VAD "
             "has_war_with = TVA } } } }"
         )
-        if retryable_trigger.count(retryable_branch) != 1:
+        if " ".join(retryable_trigger.split()).count(retryable_branch) != 1:
             issues.append(
                 f"central minor retryable trigger must define recorded target {target} exactly once"
             )

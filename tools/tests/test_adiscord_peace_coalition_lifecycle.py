@@ -15,6 +15,20 @@ from tools.validators.validate_adiscord_division_templates import parse_clausewi
 ROOT = Path(__file__).resolve().parents[2]
 
 
+def receipt_cleanup(rows):
+    from tools.tests.test_adiscord_stp_preparation import walk
+
+    return next(
+        entry for entry in walk(rows)
+        if entry.key == "ROOT" and isinstance(entry.value, list)
+        and any(
+            child.key == "clr_country_flag"
+            and child.value == "STP_val_nod_partition_capitulation_reserved"
+            for child in entry.value
+        )
+    )
+
+
 @lru_cache(maxsize=1)
 def shared_major_ownership_scripts():
     definitions = []
@@ -408,15 +422,18 @@ class StelanderPartitionTests(unittest.TestCase):
         receipt = "STP_val_nod_partition_capitulation_reserved"
         f = StelanderPartitionFixture()
         f.flags["STS"].add(receipt)
-        f.execute(immediate[:1])
+        f.execute([receipt_cleanup(immediate)])
         self.assertNotIn(receipt, f.flags["STS"])
-        route = next(e for e in immediate if any(x.key == "STP_settle_val_nod_partition" for x in walk([e])))
+        route = next(
+            e for e in walk(immediate) if e.key == "if"
+            and any(x.key == "STP_val_nod_partition_available" for x in walk(block(e.value, "limit")))
+        )
         f.execute([route])
         self.assertIn(receipt, f.flags["STS"])
-        reserve = next(e for e in late if e.key == "if" and receipt in repr(e))
+        reserve = next(e for e in walk(late) if e.key == "if" and receipt in repr(block(e.value, "limit")))
         f.execute([reserve])
         self.assertIn("skip_default_capitulation", f.global_flags)
-        f.execute(late[-1:])
+        f.execute([receipt_cleanup(late)])
         self.assertNotIn(receipt, f.flags["STS"])
         self.assertLess(source.index("STP_settle_val_nod_partition = yes"), source.index("NOD = { STP_ps_settle_return = yes }"))
 
@@ -911,7 +928,7 @@ class CoalitionLifecycleTests(unittest.TestCase):
         immediate = block(block(hooks, "on_capitulation_immediate"), "effect")
         late = block(block(hooks, "on_capitulation"), "effect")
         self.assertGreaterEqual(len(transient), 12)
-        for prefix in (immediate[:1], late[-1:]):
+        for prefix in ([receipt_cleanup(immediate)], [receipt_cleanup(late)]):
             f = TreatyFixture()
             f.root = "NOD"
             f.flags["NOD"] = transient | {"VAL_final_defeat_pending"}
@@ -1000,6 +1017,9 @@ class CoalitionLifecycleTests(unittest.TestCase):
             f.wars.discard(frozenset((winner, neutral)))
         f.controllers = dict(zip(["31", "5", "4", "7", "9", "41"], ["VAL", "NOD"] * 3))
         f.load("common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt")
+        # The territorial merge has its own executable UnificationFixture tests.
+        # Here observe the awards before that merge consumes the snapshot.
+        f.stubs.add("ADISCORD_bezhaysk_unify_val_administration")
         return f, tags
 
     def test_all_members_survive_first_peace_mutating_every_war_relation(self):
@@ -1025,6 +1045,7 @@ class CoalitionLifecycleTests(unittest.TestCase):
         f.wars.update(frozenset(("NOD", t)) for t in tags)
         f.execute(f.effects["ADISCORD_bezhaysk_settle_val_nod_joint_victory"])
         self.assertEqual(f.subjects, dict(zip(tags, ["VAL", "NOD"] * 3)))
+        self.assertIn(("ADISCORD_bezhaysk_unify_val_administration", "VAL"), f.calls)
         self.assertFalse(any(f.arrays.values()))
 
     def nam(self):

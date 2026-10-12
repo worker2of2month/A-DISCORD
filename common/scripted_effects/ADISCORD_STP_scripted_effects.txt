@@ -873,6 +873,61 @@ STP_cw_prepare_opposition = {
 
 }
 
+# STATE: the timed state flag owns the restriction; this mission only displays it.
+# A repeated police action restarts both deadlines in the same effect.
+STP_show_counterintelligence_mission = {
+	if = {
+		limit = {
+			STP = {
+				has_country_flag = STP_sided_with_Maksim_flag
+				has_country_flag = STP_battle_for_stelander_active
+			}
+		}
+		if = {
+			limit = { state = 2 }
+			STP = {
+				remove_mission = STP_counterintelligence_state_2
+				activate_mission = STP_counterintelligence_state_2
+			}
+		}
+		else_if = {
+			limit = { state = 3 }
+			STP = {
+				remove_mission = STP_counterintelligence_state_3
+				activate_mission = STP_counterintelligence_state_3
+			}
+		}
+		else_if = {
+			limit = { state = 29 }
+			STP = {
+				remove_mission = STP_counterintelligence_state_29
+				activate_mission = STP_counterintelligence_state_29
+			}
+		}
+		else_if = {
+			limit = { state = 45 }
+			STP = {
+				remove_mission = STP_counterintelligence_state_45
+				activate_mission = STP_counterintelligence_state_45
+			}
+		}
+		else_if = {
+			limit = { state = 46 }
+			STP = {
+				remove_mission = STP_counterintelligence_state_46
+				activate_mission = STP_counterintelligence_state_46
+			}
+		}
+		else_if = {
+			limit = { state = 53 }
+			STP = {
+				remove_mission = STP_counterintelligence_state_53
+				activate_mission = STP_counterintelligence_state_53
+			}
+		}
+	}
+}
+
 # STATE scope. Focus and decision consumers use the same visible police action.
 STP_cw_secure_party_district = {
 	STP_cw_assess_search_evidence = yes
@@ -886,6 +941,7 @@ STP_cw_secure_party_district = {
 	clr_state_flag = STP_resistance_sabotage_asset
 	clr_state_flag = STP_local_deal_asset
 	set_state_flag = { flag = STP_party_counterintelligence_asset value = 1 days = 56 }
+	STP_show_counterintelligence_mission = yes
 	if = { limit = { OR = { state = 2 state = 29 } } set_state_flag = STP_party_reinforced_garrison_asset }
 	set_temp_variable = { var = STP_region_influence_change value = 15 }
 	STP_add_party_influence = yes
@@ -1789,6 +1845,7 @@ STP_false_trail_counterintelligence_breakthrough = {
 	set_temp_variable = { var = STP_region_influence_change value = 10 }
 	STP_add_party_influence = yes
 	set_state_flag = { flag = STP_party_counterintelligence_asset value = 1 days = 56 }
+	STP_show_counterintelligence_mission = yes
 	clr_state_flag = STP_niansas_transfer_secured
 	clr_state_flag = STP_resistance_administration_asset
 	clr_state_flag = STP_resistance_garrison_asset
@@ -1799,23 +1856,18 @@ STP_false_trail_counterintelligence_breakthrough = {
 	}
 }
 
-STP_resolve_false_trail = {
-	# Save-compatibility fallback for trails prepared before immediate diversion.
-	STP_false_trail_clean_redirect = yes
-	set_state_flag = { flag = STP_false_trail_redirected days = 28 }
-}
-
 STP_resolve_party_inspection = {
 	ROOT = { set_country_flag = STP_cw_inspection_resolving }
 	set_temp_variable = { var = STP_cw_inspection_found_assets value = 0 }
 	clr_state_flag = STP_cw_garrison_evacuation_in_progress
 	if = {
-		limit = { NOT = { has_state_flag = STP_false_trail_prepared } NOT = { has_state_flag = STP_inspection_concession_prepared } }
+		limit = { NOT = { has_state_flag = STP_inspection_concession_prepared } }
 		STP_cw_assess_search_evidence = yes
 		if = {
 			limit = { STP_region_has_detectable_assets = yes }
 			set_temp_variable = { var = STP_cw_inspection_found_assets value = 1 }
 			set_state_flag = { flag = STP_party_counterintelligence_asset value = 1 days = 56 }
+			STP_show_counterintelligence_mission = yes
 		}
 		STP_cw_return_preparation_reserves = yes
 		clr_state_flag = STP_resistance_sabotage_asset
@@ -1830,10 +1882,6 @@ STP_resolve_party_inspection = {
 			ROOT = { set_variable = { var = STP_last_party_response value = 12 } }
 		}
 		else = { ROOT = { set_variable = { var = STP_last_party_response value = 9 } } }
-	}
-	else_if = {
-		limit = { has_state_flag = STP_false_trail_prepared }
-		STP_resolve_false_trail = yes
 	}
 	else_if = {
 		limit = { OR = { has_state_flag = STP_resistance_administration_asset has_state_flag = STP_niansas_transfer_secured } }
@@ -1882,7 +1930,6 @@ STP_resolve_party_inspection = {
 			STP_change_party_suspicion = yes
 		}
 	}
-	clr_state_flag = STP_false_trail_prepared
 	clr_state_flag = STP_inspection_concession_prepared
 	clr_state_flag = STP_party_inspection_active
 	ROOT = { clr_country_flag = STP_cw_inspection_resolving }
@@ -1999,7 +2046,6 @@ STP_clear_region_runtime = {
 	clr_state_flag = STP_region_recent_player_action
 	clr_state_flag = STP_party_inspection_active
 	clr_state_flag = STP_cw_inspection_delay_escrow
-	clr_state_flag = STP_false_trail_prepared
 	clr_state_flag = STP_niansas_transfer_secured
 	clr_state_flag = STP_resistance_administration_asset
 	clr_state_flag = STP_resistance_garrison_asset
@@ -2048,6 +2094,12 @@ STP_end_battle_for_stelander = {
 	remove_mission = STP_party_inspection_state_45
 	remove_mission = STP_party_inspection_state_46
 	remove_mission = STP_party_inspection_state_53
+	remove_mission = STP_counterintelligence_state_2
+	remove_mission = STP_counterintelligence_state_3
+	remove_mission = STP_counterintelligence_state_29
+	remove_mission = STP_counterintelligence_state_45
+	remove_mission = STP_counterintelligence_state_46
+	remove_mission = STP_counterintelligence_state_53
 	1 = { STP_clear_region_runtime = yes }
 	2 = { STP_clear_region_runtime = yes }
 	3 = { STP_clear_region_runtime = yes }
@@ -2418,8 +2470,7 @@ STP_cw_pay_assault_division = {
 STP_cw_cancel_assault_training = {
 	if = {
 		limit = { has_country_flag = STP_cw_assault_training_reserved }
-		set_temp_variable = { var = STP_cw_cash_refund value = 500 }
-		if = { limit = { has_variable = STP_cw_assault_training_deposit } set_temp_variable = { var = STP_cw_cash_refund value = STP_cw_assault_training_deposit } }
+		set_temp_variable = { var = STP_cw_cash_refund value = STP_cw_assault_training_deposit }
 		clear_variable = STP_cw_assault_training_deposit
 		clr_country_flag = STP_cw_assault_training_reserved
 		add_to_variable = { var = ADISCORD_economy_treasury value = STP_cw_cash_refund }
@@ -3384,6 +3435,21 @@ STP_cw_send_air_reserves_to_resistance = {
 		limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
 		send_equipment = { type = ADISCORD_naval_aircraft_archetype amount = STP_cw_air_transfer target = STS }
 	}
+	set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_cv_fighter_archetype }
+	if = {
+		limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+		send_equipment = { type = ADISCORD_cv_fighter_archetype amount = STP_cw_air_transfer target = STS }
+	}
+	set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_cv_bomber_archetype }
+	if = {
+		limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+		send_equipment = { type = ADISCORD_cv_bomber_archetype amount = STP_cw_air_transfer target = STS }
+	}
+	set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_zeppelin_equipment }
+	if = {
+		limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+		send_equipment = { type = ADISCORD_zeppelin_equipment amount = STP_cw_air_transfer target = STS }
+	}
 }
 
 # COUNTRY STP: read the completed focus before replacing the preparation tree.
@@ -3427,6 +3493,27 @@ STP_cw_divide_air_reserves = {
 			if = {
 				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
 				send_equipment = { type = ADISCORD_naval_aircraft_archetype amount = STP_cw_air_transfer target = STP }
+			}
+			set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_cv_fighter_archetype }
+			multiply_temp_variable = { var = STP_cw_air_transfer value = 0.2 }
+			round_temp_variable = STP_cw_air_transfer
+			if = {
+				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+				send_equipment = { type = ADISCORD_cv_fighter_archetype amount = STP_cw_air_transfer target = STP }
+			}
+			set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_cv_bomber_archetype }
+			multiply_temp_variable = { var = STP_cw_air_transfer value = 0.2 }
+			round_temp_variable = STP_cw_air_transfer
+			if = {
+				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+				send_equipment = { type = ADISCORD_cv_bomber_archetype amount = STP_cw_air_transfer target = STP }
+			}
+			set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_zeppelin_equipment }
+			multiply_temp_variable = { var = STP_cw_air_transfer value = 0.2 }
+			round_temp_variable = STP_cw_air_transfer
+			if = {
+				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+				send_equipment = { type = ADISCORD_zeppelin_equipment amount = STP_cw_air_transfer target = STP }
 			}
 		}
 	}
@@ -5374,7 +5461,7 @@ STP_close_competing_ultimatum_wars_after_defeat = {
 			limit = { has_war_with = VAL }
 			white_peace = VAL
 			# Prevent Kefreyt from immediately reopening the same refused ultimatum.
-			set_country_flag = { flag = VAL_stelander_truce days = 180 }
+			set_country_flag = { flag = VAL_stelander_truce value = 1 days = 180 }
 			country_event = { id = ADISCORD_STP_cw.208 hours = 1 }
 			country_event = { id = ADISCORD_STP_cw.208 days = 180 hours = 1 }
 			clr_country_flag = VAL_stelander_refused
@@ -9842,6 +9929,7 @@ STP_pw_party_settle_northern_march_defeat = {
 		clr_country_flag = STP_pw_party_northern_march_active
 		set_country_flag = {
 			flag = STP_pw_party_northern_march_regrouping
+			value = 1
 			days = 365
 		}
 		every_enemy_country = {

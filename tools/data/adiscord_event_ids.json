@@ -5635,6 +5635,22 @@
       "owner": "events/ADISCORD_STP_events.txt",
       "subsystem": "stp_postwar_continuation",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_portal_test.1",
+      "namespace": "ADISCORD_portal_test",
+      "number": 1,
+      "owner": "events/ADISCORD_scenario_debug_events.txt",
+      "subsystem": "portal_test",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_portal_test.2",
+      "namespace": "ADISCORD_portal_test",
+      "number": 2,
+      "owner": "events/ADISCORD_scenario_debug_events.txt",
+      "subsystem": "portal_test",
+      "status": "active"
     }
   ]
 }

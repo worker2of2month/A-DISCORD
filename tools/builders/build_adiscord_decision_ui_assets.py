@@ -18,9 +18,9 @@ from tools.lib.paths import repository_root
 
 
 ROOT = repository_root()
-SOURCE = ROOT / "gfx/interface/decisions/source/decisions_surface_source.png"
+SOURCE = ROOT / "tools/assets/source/decisions_gui/decisions_surface_source.png"
 APPROVAL_SOURCE = (
-    ROOT / "gfx/interface/decisions/source/decision_approval_seal_source.png"
+    ROOT / "tools/assets/source/decisions_gui/decision_approval_seal_source.png"
 )
 OUTPUT_DIR = ROOT / "gfx/interface/decisions/ui"
 RUS_BUNKER_DIR = ROOT / "gfx/interface/ADISCORD_RUS"

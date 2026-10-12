@@ -697,11 +697,94 @@
       "id": "technology_ui_assets",
       "owner_module": "tools.builders.build_adiscord_technology_icons",
       "output_globs": [
-        "gfx/interface/technologies/ADISCORD_*.dds",
+        "gfx/interface/technologies/ADISCORD_STP_weapon_01_reclaimed_arsenal.dds",
+        "gfx/interface/technologies/ADISCORD_STP_weapon_02_recovered_service_rifle.dds",
+        "gfx/interface/technologies/ADISCORD_STP_weapon_03_standardized_battle_rifle.dds",
+        "gfx/interface/technologies/ADISCORD_STP_weapon_04_transitional_modular_weapon.dds",
+        "gfx/interface/technologies/ADISCORD_STP_weapon_05_suppressed_assault_system.dds",
+        "gfx/interface/technologies/ADISCORD_STP_weapon_06_networked_smart_rifle.dds",
+        "gfx/interface/technologies/ADISCORD_STP_weapon_07_programmable_munition_weapon.dds",
+        "gfx/interface/technologies/ADISCORD_STP_weapon_08_advanced_impulse_weapon.dds",
+        "gfx/interface/technologies/ADISCORD_STP_weapon_09_resilient_combat_network_weapon.dds",
+        "gfx/interface/technologies/ADISCORD_STS_weapon_01_reclaimed_arsenal.dds",
+        "gfx/interface/technologies/ADISCORD_STS_weapon_02_recovered_service_rifle.dds",
+        "gfx/interface/technologies/ADISCORD_STS_weapon_03_standardized_battle_rifle.dds",
+        "gfx/interface/technologies/ADISCORD_VAL_weapon_01_reclaimed_arsenal.dds",
+        "gfx/interface/technologies/ADISCORD_VAL_weapon_02_recovered_service_rifle.dds",
+        "gfx/interface/technologies/ADISCORD_VAL_weapon_03_standardized_battle_rifle.dds",
+        "gfx/interface/technologies/ADISCORD_VAL_weapon_04_transitional_modular_weapon.dds",
+        "gfx/interface/technologies/ADISCORD_VAL_weapon_05_suppressed_assault_system.dds",
+        "gfx/interface/technologies/ADISCORD_VAL_weapon_06_networked_smart_rifle.dds",
+        "gfx/interface/technologies/ADISCORD_VAL_weapon_07_programmable_munition_weapon.dds",
+        "gfx/interface/technologies/ADISCORD_VAL_weapon_08_advanced_impulse_weapon.dds",
+        "gfx/interface/technologies/ADISCORD_VAL_weapon_09_resilient_combat_network_weapon.dds",
+        "gfx/interface/technologies/ADISCORD_antitank_01_incendiary_bottle.dds",
+        "gfx/interface/technologies/ADISCORD_antitank_02_satchel_charge.dds",
+        "gfx/interface/technologies/ADISCORD_antitank_03_shaped_charge_grenade.dds",
+        "gfx/interface/technologies/ADISCORD_antitank_04_antitank_rifle.dds",
+        "gfx/interface/technologies/ADISCORD_antitank_05_wire_guidance.dds",
+        "gfx/interface/technologies/ADISCORD_antitank_06_recoilless_launcher.dds",
+        "gfx/interface/technologies/ADISCORD_antitank_07_saclos_guidance.dds",
+        "gfx/interface/technologies/ADISCORD_antitank_08_rocket_launcher.dds",
+        "gfx/interface/technologies/ADISCORD_antitank_09_top_attack_seeker.dds",
+        "gfx/interface/technologies/ADISCORD_antitank_10_tandem_warhead.dds",
+        "gfx/interface/technologies/ADISCORD_antitank_11_loitering_munition.dds",
+        "gfx/interface/technologies/ADISCORD_antitank_12_multispectral_targeting.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_ammunition.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_ammunition_carrier.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_armour.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_ballistic_sight.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_breaching.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_camouflage.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_casualty_monitor.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_climbing.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_drone.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_drone_jammer.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_exoskeleton.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_hearing_protection.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_insertion_pod.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_life_support.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_mechanism.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_medical.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_medical_drone.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_mortar.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_protection_body_armour.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_protection_camouflage.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_protection_ceramic_plates.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_protection_exoskeleton.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_protection_hearing.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_protection_respirator.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_protection_trauma_pads.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_radio.dds",
+        "gfx/interface/technologies/ADISCORD_equipment_respirator.dds",
+        "gfx/interface/technologies/ADISCORD_night_01_passive_intensifier.dds",
+        "gfx/interface/technologies/ADISCORD_night_02_thermal_channel.dds",
+        "gfx/interface/technologies/ADISCORD_night_03_fused_sight.dds",
+        "gfx/interface/technologies/ADISCORD_night_04_squad_target_sharing.dds",
+        "gfx/interface/technologies/ADISCORD_night_05_counter_illumination.dds",
+        "gfx/interface/technologies/ADISCORD_night_06_distributed_engagement.dds",
+        "gfx/interface/technologies/ADISCORD_squad_01_recovered_fire_support.dds",
+        "gfx/interface/technologies/ADISCORD_squad_02_belt_fed_sections.dds",
+        "gfx/interface/technologies/ADISCORD_squad_03_standardized_heavy_weapons.dds",
+        "gfx/interface/technologies/ADISCORD_squad_04_modular_support_weapons.dds",
+        "gfx/interface/technologies/ADISCORD_squad_05_sensor_linked_fireteams.dds",
+        "gfx/interface/technologies/ADISCORD_squad_06_programmable_support_systems.dds",
+        "gfx/interface/technologies/ADISCORD_squad_07_networked_precision_support.dds",
+        "gfx/interface/technologies/ADISCORD_squad_08_autonomous_fire_control.dds",
+        "gfx/interface/technologies/ADISCORD_squad_09_swarm_coordinated_support.dds",
+        "gfx/interface/technologies/ADISCORD_weapon_01_reclaimed_arsenal.dds",
+        "gfx/interface/technologies/ADISCORD_weapon_02_recovered_service_rifle.dds",
+        "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds",
+        "gfx/interface/technologies/ADISCORD_weapon_04_transitional_modular_weapon.dds",
+        "gfx/interface/technologies/ADISCORD_weapon_05_suppressed_assault_system.dds",
+        "gfx/interface/technologies/ADISCORD_weapon_06_networked_smart_rifle.dds",
+        "gfx/interface/technologies/ADISCORD_weapon_07_programmable_munition_weapon.dds",
+        "gfx/interface/technologies/ADISCORD_weapon_08_advanced_impulse_weapon.dds",
+        "gfx/interface/technologies/ADISCORD_weapon_09_resilient_combat_network_weapon.dds",
         "gfx/interface/techtree/techtree_line_vertical.dds",
         "gfx/interface/techtree/techtree_line_horisontal.dds",
         "gfx/interface/techtree/techline_center_*_researched.dds",
-        "docs/superpowers/reports/2026-08-15-adiscord-technology-icon-contact-sheet.png"
+        "docs/development/previews/2026-08-15-adiscord-technology-icon-contact-sheet.png"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_technology_icons.py",
@@ -839,8 +922,8 @@
         "tools/builders/build_adiscord_resource_assets.py",
         "tools/lib/adiscord_ui_contracts.py",
         "tools/lib/adiscord_ui_surfaces.py",
-        "gfx/interface/production/source/production_surface_source.png",
-        "gfx/interface/ADISCORD_trade_gui/source/international_market_source.png"
+        "tools/assets/source/production_gui/production_surface_source.png",
+        "tools/assets/source/trade_gui/international_market_source.png"
       ],
       "check_command": [
         "{python}",
@@ -876,7 +959,7 @@
         "tools/builders/build_adiscord_focus_ui_assets.py",
         "tools/lib/adiscord_ui_contracts.py",
         "tools/lib/adiscord_ui_surfaces.py",
-        "gfx/interface/production/source/production_surface_source.png"
+        "tools/assets/source/production_gui/production_surface_source.png"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_focus_ui_assets"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_focus_ui_assets", "--apply"],
@@ -906,7 +989,7 @@
         "tools/builders/build_adiscord_logistics_ui_assets.py",
         "tools/lib/adiscord_ui_contracts.py",
         "tools/lib/adiscord_ui_surfaces.py",
-        "gfx/interface/production/source/production_surface_source.png"
+        "tools/assets/source/production_gui/production_surface_source.png"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_logistics_ui_assets"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_logistics_ui_assets", "--apply"],
@@ -919,7 +1002,7 @@
       "output_globs": [
         "interface/countrydeploymentview.gui",
         "interface/ADISCORD_deployment_ui.gfx",
-        "gfx/interface/deployment/preview/ADISCORD_deployment_preview.png",
+        "docs/development/previews/ADISCORD_deployment_preview.png",
         "gfx/interface/deployment/ui/ADISCORD_deployment_window.dds",
         "gfx/interface/deployment/ui/ADISCORD_deployment_shell.dds",
         "gfx/interface/deployment/ui/ADISCORD_deployment_thin_shell.dds",
@@ -957,7 +1040,7 @@
         "tools/builders/build_adiscord_deployment_ui_assets.py",
         "tools/lib/adiscord_ui_contracts.py",
         "tools/lib/adiscord_ui_surfaces.py",
-        "gfx/interface/production/source/production_surface_source.png"
+        "tools/assets/source/production_gui/production_surface_source.png"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_deployment_ui_assets"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_deployment_ui_assets", "--apply"],
@@ -1000,8 +1083,8 @@
         "tools/builders/build_adiscord_intelligence_ui_assets.py",
         "tools/lib/adiscord_ui_contracts.py",
         "tools/lib/adiscord_ui_surfaces.py",
-        "gfx/interface/production/source/production_surface_source.png",
-        "gfx/interface/intelligence/source/ADISCORD_intelligence_header_source.png"
+        "tools/assets/source/production_gui/production_surface_source.png",
+        "tools/assets/source/intelligence_gui/ADISCORD_intelligence_header_source.png"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_intelligence_ui_assets"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_intelligence_ui_assets", "--apply"],
@@ -1017,14 +1100,14 @@
         "gfx/interface/event_popup_middle.png",
         "gfx/interface/event_popup_bottom.png",
         "gfx/interface/event_option_entry_adiscord.png",
-        "gfx/interface/events/preview/ADISCORD_event_window_preview.png",
+        "docs/development/previews/ADISCORD_event_window_preview.png",
         "gfx/event_pictures/event_adiscord_ui_test.png"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_event_ui_assets.py",
         "tools/lib/adiscord_ui_surfaces.py",
-        "gfx/interface/production/source/production_surface_source.png",
-        "gfx/event_pictures/source/event_adiscord_ui_test_source.png"
+        "tools/assets/source/production_gui/production_surface_source.png",
+        "tools/assets/source/event_pictures/event_adiscord_ui_test_source.png"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_event_ui_assets"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_event_ui_assets", "--apply"],
@@ -1037,17 +1120,15 @@
       "output_globs": [
         "gfx/event_pictures/standard/*/*.png",
         "interface/ADISCORD_event_art.gfx",
-        "gfx/interface/events/preview/ADISCORD_event_art_contact_sheet.png"
+        "docs/development/previews/ADISCORD_event_art_contact_sheet.png"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_event_pictures.py",
         "tools/lib/adiscord_ui_surfaces.py",
-        "gfx/event_pictures/source/*.png",
-        "gfx/event_pictures/source/news/*.dds",
-        "gfx/event_pictures/source/news/*.png",
-        "gfx/event_pictures/event_adiscord_ui_test.png",
-        "gfx/event_pictures/event_vorkerland_explosion.png",
-        "gfx/event_pictures/event_vorkerland_civilwar_is_over.png"
+        "tools/assets/source/event_pictures/*.png",
+        "tools/assets/source/event_pictures/news/*.dds",
+        "tools/assets/source/event_pictures/news/*.png",
+        "gfx/event_pictures/event_adiscord_ui_test.png"
       ],
         "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_event_pictures"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_event_pictures", "--apply"],
@@ -1129,7 +1210,8 @@
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_cities"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_cities", "--apply"],
       "may_delete_outputs": false,
-      "ownership_mode": "exclusive"
+      "ownership_mode": "layered",
+      "overlap_explanation": "Paints palette index 15 only in TARGET_PROVINCES and preserves every byte outside those province pixels. Coastal geography owns its separately enumerated city masks on the same bitmap."
     },
     {
       "id": "decision_ui_assets",
@@ -1150,8 +1232,8 @@
         "gfx/interface/ADISCORD_RUS/bunker_layer_*.dds"
       ],
       "source_inputs": [
-        "gfx/interface/decisions/source/decisions_surface_source.png",
-        "gfx/interface/decisions/source/decision_approval_seal_source.png",
+        "tools/assets/source/decisions_gui/decisions_surface_source.png",
+        "tools/assets/source/decisions_gui/decision_approval_seal_source.png",
         "tools/assets/source/rus_bunker/bunker_layer_*.png"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_decision_ui_assets"],
@@ -1182,13 +1264,13 @@
         "gfx/interface/production/ui/ADISCORD_production_naval_repair_button.dds"
       ],
       "source_inputs": [
-        "gfx/interface/production/source/production_surface_source.png",
-        "gfx/interface/production/source/factory_glyph_source.png",
-        "gfx/interface/production/source/infantry_artillery_glyph_source.png",
-        "gfx/interface/production/source/armour_glyph_source.png",
-        "gfx/interface/production/source/aircraft_glyph_source.png",
-        "gfx/interface/production/source/naval_glyph_source.png",
-        "gfx/interface/production/source/repair_glyph_source.png"
+        "tools/assets/source/production_gui/production_surface_source.png",
+        "tools/assets/source/production_gui/factory_glyph_source.png",
+        "tools/assets/source/production_gui/infantry_artillery_glyph_source.png",
+        "tools/assets/source/production_gui/armour_glyph_source.png",
+        "tools/assets/source/production_gui/aircraft_glyph_source.png",
+        "tools/assets/source/production_gui/naval_glyph_source.png",
+        "tools/assets/source/production_gui/repair_glyph_source.png"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_production_ui_assets"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_production_ui_assets", "--apply"],
@@ -1238,9 +1320,9 @@
         "gfx/interface/diplomacy/ADISCORD_diplomacy_flag_overlay.dds"
       ],
       "source_inputs": [
-        "gfx/interface/diplomacy/source/ADISCORD_diplomacy_leader_overlay_master.png",
-        "gfx/interface/diplomacy/source/ADISCORD_diplomacy_parties_overlay_master.png",
-        "gfx/interface/diplomacy/source/ADISCORD_diplomacy_flag_overlay_master.png"
+        "tools/assets/source/diplomacy_gui/ADISCORD_diplomacy_leader_overlay_master.png",
+        "tools/assets/source/diplomacy_gui/ADISCORD_diplomacy_parties_overlay_master.png",
+        "tools/assets/source/diplomacy_gui/ADISCORD_diplomacy_flag_overlay_master.png"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_diplomacy_ui_assets"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_diplomacy_ui_assets", "--apply"],
@@ -1315,15 +1397,15 @@
       "source_inputs": [
         "tools/build_adiscord_resource_assets.py",
         "tools/builders/build_adiscord_resource_assets.py",
-        "gfx/interface/ADISCORD_trade_gui/source/strategic_resources_source.png",
-        "gfx/interface/ADISCORD_trade_gui/source/country_trade_entry_source.png",
-        "gfx/interface/ADISCORD_trade_gui/source/topbar_glyphs_source.png",
-        "gfx/interface/ADISCORD_trade_gui/source/topbar_indicators_source.png",
-        "gfx/interface/ADISCORD_trade_gui/source/international_market_source.png",
-        "gfx/interface/ADISCORD_trade_gui/source/command_power_phone_source.png",
-        "gfx/interface/ADISCORD_trade_gui/source/topbar_background_extended_source.png",
-        "gfx/interface/ADISCORD_trade_gui/source/world_tension_defcon_tfr.dds",
-        "gfx/interface/ADISCORD_economy_gui/source/treasury_topbar_source.png"
+        "tools/assets/source/trade_gui/strategic_resources_source.png",
+        "tools/assets/source/trade_gui/country_trade_entry_source.png",
+        "tools/assets/source/trade_gui/topbar_glyphs_source.png",
+        "tools/assets/source/trade_gui/topbar_indicators_source.png",
+        "tools/assets/source/trade_gui/international_market_source.png",
+        "tools/assets/source/trade_gui/command_power_phone_source.png",
+        "tools/assets/source/trade_gui/topbar_background_extended_source.png",
+        "tools/assets/source/trade_gui/world_tension_defcon_tfr.dds",
+        "tools/assets/source/economy_gui/treasury_topbar_source.png"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_resource_assets"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_resource_assets", "--apply"],
@@ -1735,11 +1817,13 @@
       "id": "focus_trees",
       "owner_module": "tools.builders.build_adiscord_focus_trees",
       "output_globs": [
+        "common/national_focus/ADISCORD_NOD_focus.txt",
         "common/national_focus/ADISCORD_NAM_focus.txt",
         "common/national_focus/ADISCORD_SHL_focus.txt",
         "common/national_focus/ADISCORD_IVN_focus.txt",
         "common/national_focus/ADISCORD_national_focus_RUS.txt",
         "common/national_focus/ADISCORD_national_focus_VAL.txt",
+        "common/national_focus/ADISCORD_VAL_new_world.txt",
         "common/national_focus/ADISCORD_national_focus_bookmark.txt",
         "common/national_focus/generic.txt",
         "common/national_focus/ADISCORD_STP_preparation.txt",
@@ -1748,6 +1832,7 @@
         "common/national_focus/ADISCORD_VAL_defeated.txt",
         "common/national_focus/ADISCORD_VAL_administration.txt",
         "common/national_focus/ADISCORD_Vorkerland_civil_war.txt",
+        "common/national_focus/ADISCORD_Vorkerland_world_empire.txt",
         "common/national_focus/ADISCORD_Vorkerland_iba_norvane.txt",
         "common/national_focus/ADISCORD_Vorkerland_zao.txt"
       ],
@@ -1759,8 +1844,7 @@
         "{python}",
         "-B",
         "-m",
-        "tools.builders.build_adiscord_focus_trees",
-        "--check"
+        "tools.builders.build_adiscord_focus_trees"
       ],
       "apply_command": [
         "{python}",

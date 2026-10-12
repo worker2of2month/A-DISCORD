@@ -33,7 +33,7 @@
 - `tools/tests/test_adiscord_deployment_ui.py`: deployment dimensions, one-to-one roles, GUI/HQ invariants, and current outputs.
 - `tools/builders/build_adiscord_intelligence_ui_assets.py`: agency/operative manifests, dark-surface font substitutions, semantic drawings, source-art crop, GFX, DDS, and preview outputs.
 - `tools/tests/test_adiscord_intelligence_ui.py`: agency dimensions, frame counts, fonts, nested-window invariants, and current outputs.
-- `gfx/interface/intelligence/source/ADISCORD_intelligence_header_source.png`: original generated monochrome espionage header source.
+- `tools/assets/source/intelligence_gui/ADISCORD_intelligence_header_source.png`: original generated monochrome espionage header source.
 - `tools/builders/build_adiscord_technology_ui_assets.py`: research overview, detail surfaces, state-node drawings, GFX, and preview outputs.
 - `tools/builders/build_adiscord_technology_system.py`: generated tree skin integration and late state-sprite override output.
 - `tools/tests/test_adiscord_technology_ui.py`: overview/tree dimensions, state semantics, additive load order, and current outputs.
@@ -212,7 +212,7 @@ git commit -m "refactor: add semantic interface asset contracts"
 - Regenerate: `interface/countrydeploymentview.gui`
 - Regenerate: `interface/ADISCORD_deployment_ui.gfx`
 - Create/replace: `gfx/interface/deployment/ui/*.dds`
-- Create: `gfx/interface/deployment/preview/ADISCORD_deployment_preview.png`
+- Create: `docs/development/previews/ADISCORD_deployment_preview.png`
 
 **Interfaces:**
 - Consumes: `SpriteContract`, `render_gfx_entry()`, `validate_contract_image()`, `contact_sheet()`, and shared drawing primitives from Task 1.
@@ -310,7 +310,7 @@ Expected: second builder run reports current outputs; semantic dimensions and Ar
 
 - [ ] **Step 6: Inspect the generated deployment preview**
 
-Open `gfx/interface/deployment/preview/ADISCORD_deployment_preview.png`. Reject the task if icon, label, progress, or action zones are not visually distinct, if any row has a full nested outer frame, or if text/control wells do not align across rows.
+Open `docs/development/previews/ADISCORD_deployment_preview.png`. Reject the task if icon, label, progress, or action zones are not visually distinct, if any row has a full nested outer frame, or if text/control wells do not align across rows.
 
 - [ ] **Step 7: Commit deployment correction**
 
@@ -327,7 +327,7 @@ git commit -m "fix: rebuild division deployment interface"
 **Files:**
 - Modify: `tools/builders/build_adiscord_intelligence_ui_assets.py`
 - Modify: `tools/tests/test_adiscord_intelligence_ui.py`
-- Create: `gfx/interface/intelligence/source/ADISCORD_intelligence_header_source.png`
+- Create: `tools/assets/source/intelligence_gui/ADISCORD_intelligence_header_source.png`
 - Regenerate: `interface/countryintelligenceagencyview.gui`
 - Regenerate: `interface/operative.gui`
 - Regenerate: `interface/operativeleader.gui`
@@ -401,7 +401,7 @@ Constraints: no text, no letters, no logos, no flags, no insignia, no watermark,
 Avoid: TFR imagery, Hearts of Iron artwork, recognizable real people, pulp-noir fedora cliché
 ```
 
-Inspect the generated output. Copy the selected project-bound image to `gfx/interface/intelligence/source/ADISCORD_intelligence_header_source.png`; do not leave the consuming builder pointed at the default generated-images directory.
+Inspect the generated output. Copy the selected project-bound image to `tools/assets/source/intelligence_gui/ADISCORD_intelligence_header_source.png`; do not leave the consuming builder pointed at the default generated-images directory.
 
 - [ ] **Step 4: Define one-to-one intelligence contracts and safe font substitutions**
 

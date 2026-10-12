@@ -111,14 +111,14 @@ class DecisionsUiContractTests(unittest.TestCase):
             self.assertEqual(image.getchannel("A").getextrema(), (0, 0))
 
     def test_decisions_source_material_is_kept_with_project_assets(self):
-        source = ROOT / "gfx/interface/decisions/source/decisions_surface_source.png"
+        source = ROOT / "tools/assets/source/decisions_gui/decisions_surface_source.png"
         self.assertTrue(source.is_file())
         with Image.open(source) as image:
             self.assertGreaterEqual(image.width, 1024)
             self.assertGreaterEqual(image.height, 1024)
 
         approval = (
-            ROOT / "gfx/interface/decisions/source/decision_approval_seal_source.png"
+            ROOT / "tools/assets/source/decisions_gui/decision_approval_seal_source.png"
         )
         self.assertTrue(approval.is_file())
         with Image.open(approval) as image:

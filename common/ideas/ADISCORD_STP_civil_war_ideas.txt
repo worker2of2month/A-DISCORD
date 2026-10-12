@@ -1183,7 +1183,7 @@ ideas = {
 			modifier = { army_org_factor = 0.08 planning_speed = 0.10 army_org_regain = 0.10 }
 		}
 		SRP_council_supply = {
-			picture = ADISCORD_law_industrial_policy_military_prioritization
+			picture = ADISCORD_industrial_policy_military_prioritization
 			allowed = { tag = SRP }
 			removal_cost = -1
 			cancel = { OR = { NOT = { has_war_with = VAL } is_subject = yes } }
@@ -1296,6 +1296,12 @@ ideas = {
 			allowed = { always = no }
 			modifier = { army_org_factor = 0.03 planning_speed = 0.05 }
 		}
+		STP_hw_district_command_delta = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.03 }
+		}
+
 		STP_cw_supply_service_idea = {
 			name = STP_cw_military_staff_dynamic
 			allowed = { always = no }
@@ -1384,7 +1390,7 @@ ideas = {
 		}
 
 		STP_cw_private_payments = {
-			picture = ADISCORD_law_taxation_light_dues
+			picture = ADISCORD_taxation_light_dues
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = { ADISCORD_economy_admin_expense_factor = 0.10 }
@@ -1392,7 +1398,7 @@ ideas = {
 			on_remove = { ADISCORD_economy_mark_dirty = yes }
 		}
 		STP_cw_arsenal_shifts = {
-			picture = ADISCORD_law_industrial_policy_military_prioritization
+			picture = ADISCORD_industrial_policy_military_prioritization
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = { industrial_capacity_factory = 0.25 production_factory_efficiency_gain_factor = 0.25 }
@@ -2466,7 +2472,7 @@ ideas = {
 		STP_cw_assault_air_cover_idea = { picture = generic_war_preparation allowed = { always = no } removal_cost = -1 modifier = { air_cas_efficiency = 0.10 air_cas_present_factor = 0.08 } }
 
 		# Resistance war: patron, levy and coalition spirits (timed; removed when the war closes).
-		STP_hw_kefreyt_quartermasters_idea = { picture = ADISCORD_law_industrial_policy_military_prioritization allowed = { always = no } removal_cost = -1 modifier = { supply_consumption_factor = -0.10 army_org_regain = 0.05 } }
+		STP_hw_kefreyt_quartermasters_idea = { picture = ADISCORD_industrial_policy_military_prioritization allowed = { always = no } removal_cost = -1 modifier = { supply_consumption_factor = -0.10 army_org_regain = 0.05 } }
 
 		STP_hw_mountain_levies_idea = { picture = ADISCORD_law_civic_local_councils allowed = { always = no } removal_cost = -1 modifier = { conscription_factor = 0.10 army_core_defence_factor = 0.05 } }
 

@@ -521,6 +521,8 @@ def collect_templates_and_references(
 
 
 def _accepted_name(expected: dict[str, object], actual: str) -> bool:
+    if expected.get("literal_display_name") is True:
+        return actual == expected.get("display_name")
     names = [expected.get("technical_name"), *expected.get("legacy_names", [])]
     return actual in names
 
@@ -910,12 +912,22 @@ def _validate_schema(audit: dict[str, object]) -> list[str]:
                 else ("technical_name",)
             ):
                 value = row.get(field)
+                if field == "display_name" and row.get("literal_display_name") is True:
+                    if not isinstance(value, str) or not value or not value.isprintable():
+                        issues.append(
+                            f"{key}: literal display_name must be non-empty printable text"
+                        )
+                    continue
                 if not isinstance(value, str) or not value.isascii():
                     issues.append(f"{key}: canonical {field} must be ASCII")
         if collection == "templates":
             keys = seen
     for row in audit.get("templates", []):
         key = row.get("key")
+        if "literal_display_name" in row and not isinstance(
+            row["literal_display_name"], bool
+        ):
+            issues.append(f"{key}: literal_display_name must be boolean")
         definition_metadata = row.get("definition_metadata")
         if definition_metadata is not None:
             if not isinstance(definition_metadata, dict):
@@ -1145,8 +1157,15 @@ def validate(root: Path = ROOT, audit_path: Path | None = None) -> list[str]:
         root, audit, templates, references
     )
     issues.extend(coverage_issues)
-    for template in templates:
-        if not template.name.isascii():
+    for index, template in enumerate(templates):
+        row = row_by_actual.get(index, {})
+        # Explicitly audited literal names are player-facing text. The audit's
+        # technical identifier remains ASCII; source/name coverage stays exact.
+        literal_display = (
+            row.get("literal_display_name") is True
+            and template.name == row.get("display_name")
+        )
+        if not template.name.isascii() and not literal_display:
             issues.append(
                 f"{template.path}:{template.line}: non-ASCII technical template name {template.name}"
             )

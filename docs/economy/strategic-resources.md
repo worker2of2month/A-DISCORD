@@ -47,6 +47,16 @@ removes 2%. All equipment consumers have later research dates than the 2158
 plant unlocks. Research dates indicate availability, not guaranteed construction
 or a sufficient national supply; countries may also trade these resources.
 
+## Interface asset sources
+
+`tools.builders.build_adiscord_resource_assets` owns the resource strips, trade
+entry, topbar and state-view skins. Editable input sheets live in
+`tools/assets/source/trade_gui/`; the treasury sheet lives in
+`tools/assets/source/economy_gui/`. Runtime textures remain under `gfx/`.
+Run `python -B -m tools.builders.build_adiscord_resource_assets --check` before
+`--apply`, then check again. Keep the source paths in the ownership registry
+and strategic-resource UI tests synchronized with the builder.
+
 ## Budget research
 
 The eight-node Economy and Administration line uses existing country economy

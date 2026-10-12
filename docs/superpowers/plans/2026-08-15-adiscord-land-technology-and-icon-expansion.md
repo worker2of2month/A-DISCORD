@@ -29,7 +29,7 @@
 - `tools/builders/build_adiscord_technology_icons.py`: deterministic alpha fitting, resizing, DDS emission, manifest validation, and contact-sheet rendering.
 - `tools/build_adiscord_technology_icons.py`: thin command-line facade.
 - `gfx/interface/technologies/ADISCORD_*.dds`: generated runtime technology art.
-- `docs/superpowers/reports/2026-08-15-adiscord-technology-icon-contact-sheet.png`: generated visual review sheet.
+- `docs/development/previews/2026-08-15-adiscord-technology-icon-contact-sheet.png`: generated visual review sheet.
 - `tools/builders/build_adiscord_technology_system.py`: land branch definitions, graphs, icons, effects, AI dependencies, starting access, GFX, and generated localisation.
 - `common/units/equipment/ADISCORD_infantry_equipment.txt`: additional infantry-equipment generations and their bounded stat progression.
 - `tools/data/adiscord_technology_id_migrations.json`: explicit aliases only if an existing technology ID is retired.
@@ -103,7 +103,7 @@ Expected: PASS for manifest uniqueness, hashes, dimensions, alpha, and tier sequ
 - Create: `tools/build_adiscord_technology_icons.py`
 - Modify: `tools/tests/test_build_adiscord_technology_icons.py`
 - Create: `gfx/interface/technologies/ADISCORD_*.dds`
-- Create: `docs/superpowers/reports/2026-08-15-adiscord-technology-icon-contact-sheet.png`
+- Create: `docs/development/previews/2026-08-15-adiscord-technology-icon-contact-sheet.png`
 
 **Interfaces:**
 - Consumes: `load_manifest(path: Path) -> tuple[IconSpec, ...]`.

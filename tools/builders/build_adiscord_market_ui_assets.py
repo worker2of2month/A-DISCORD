@@ -32,7 +32,7 @@ from tools.lib.paths import repository_root
 ROOT = repository_root()
 BASE_GAME = Path(r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV")
 VANILLA_DIR = BASE_GAME / "interface/international_market"
-SOURCE = ROOT / "gfx/interface/production/source/production_surface_source.png"
+SOURCE = ROOT / "tools/assets/source/production_gui/production_surface_source.png"
 OUTPUT_DIR = ROOT / "gfx/interface/international_market/adiscord"
 GFX_OUTPUT = ROOT / "interface/ADISCORD_market_ui.gfx"
 PREVIEW = ROOT / "docs/development/previews/ADISCORD_market_preview.png"

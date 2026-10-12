@@ -34,29 +34,29 @@ EN_TRADE_REGIONS = ROOT / "localisation/replace/ADISCORD_trade_regions_l_english
 RESOURCE_DOC = ROOT / "docs/economy/strategic-resources.md"
 
 RESOURCE_SOURCE = (
-    ROOT / "gfx/interface/ADISCORD_trade_gui/source/strategic_resources_source.png"
+    ROOT / "tools/assets/source/trade_gui/strategic_resources_source.png"
 )
 TRADE_ENTRY_SOURCE = (
-    ROOT / "gfx/interface/ADISCORD_trade_gui/source/country_trade_entry_source.png"
+    ROOT / "tools/assets/source/trade_gui/country_trade_entry_source.png"
 )
 TOPBAR_SOURCE = (
-    ROOT / "gfx/interface/ADISCORD_trade_gui/source/topbar_glyphs_source.png"
+    ROOT / "tools/assets/source/trade_gui/topbar_glyphs_source.png"
 )
 INDICATOR_SOURCE = (
-    ROOT / "gfx/interface/ADISCORD_trade_gui/source/topbar_indicators_source.png"
+    ROOT / "tools/assets/source/trade_gui/topbar_indicators_source.png"
 )
 MARKET_SOURCE = (
-    ROOT / "gfx/interface/ADISCORD_trade_gui/source/international_market_source.png"
+    ROOT / "tools/assets/source/trade_gui/international_market_source.png"
 )
 COMMAND_POWER_SOURCE = (
-    ROOT / "gfx/interface/ADISCORD_trade_gui/source/command_power_phone_source.png"
+    ROOT / "tools/assets/source/trade_gui/command_power_phone_source.png"
 )
 TOPBAR_BACKGROUND_SOURCE = (
     ROOT
-    / "gfx/interface/ADISCORD_trade_gui/source/topbar_background_extended_source.png"
+    / "tools/assets/source/trade_gui/topbar_background_extended_source.png"
 )
 TREASURY_SOURCE = (
-    ROOT / "gfx/interface/ADISCORD_economy_gui/source/treasury_topbar_source.png"
+    ROOT / "tools/assets/source/economy_gui/treasury_topbar_source.png"
 )
 TOPBAR_GFX = ROOT / "interface/ADISCORD_topbar.gfx"
 TRADE_ENTRY_TEXTURE = (
@@ -64,7 +64,7 @@ TRADE_ENTRY_TEXTURE = (
 )
 WORLD_TENSION_TEXTURE = ROOT / "gfx/interface/world_tension_icon_big_strip.dds"
 WORLD_TENSION_SOURCE = (
-    ROOT / "gfx/interface/ADISCORD_trade_gui/source/world_tension_defcon_tfr.dds"
+    ROOT / "tools/assets/source/trade_gui/world_tension_defcon_tfr.dds"
 )
 
 RIGHT_TOPBAR_ASSETS = {
@@ -626,7 +626,6 @@ class StrategicResourcesUIContracts(unittest.TestCase):
             "ADISCORD_economy_initialize_country",
             "ADISCORD_economy_full_refresh",
             "ADISCORD_economy_update_model_and_cycle",
-            "ADISCORD_economy_recalculate_policy_modifiers",
             "ADISCORD_economy_light_update",
             "ADISCORD_economy_refresh_policy_previews",
             "ADISCORD_economy_calculate_development_multiplier",
@@ -635,6 +634,14 @@ class StrategicResourcesUIContracts(unittest.TestCase):
                 direct_scalar(refresh_owner[0].value, mutation), "yes", mutation
             )
             self.assertIsNone(direct_scalar(open_effect, mutation), mutation)
+        policy_refresh = "ADISCORD_economy_recalculate_policy_modifiers"
+        full_refresh = named_clausewitz_block(
+            read(ECONOMY_EFFECTS), "ADISCORD_economy_full_refresh"
+        )
+        self.assertEqual(len(direct(full_refresh, policy_refresh)), 1)
+        self.assertEqual(direct_scalar(full_refresh, policy_refresh), "yes")
+        self.assertIsNone(direct_scalar(refresh_owner[0].value, policy_refresh))
+        self.assertIsNone(direct_scalar(open_effect, policy_refresh))
 
     def test_alert_strip_and_defcon_topbar_contract(self) -> None:
         alerts = read(ALERTS)

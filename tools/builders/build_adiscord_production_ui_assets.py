@@ -19,8 +19,8 @@ from tools.lib.paths import repository_root
 
 
 ROOT = repository_root()
-SOURCE = ROOT / "gfx/interface/production/source/production_surface_source.png"
-SOURCE_DIR = ROOT / "gfx/interface/production/source"
+SOURCE = ROOT / "tools/assets/source/production_gui/production_surface_source.png"
+SOURCE_DIR = ROOT / "tools/assets/source/production_gui"
 FACTORY_GLYPH_SOURCE = SOURCE_DIR / "factory_glyph_source.png"
 BUTTON_GLYPH_SOURCES = {
     "infantry_artillery": SOURCE_DIR / "infantry_artillery_glyph_source.png",

@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections import Counter
 import re
 import unittest
+from unittest.mock import patch
 
 from tools.lib.paths import source_section
 from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
@@ -182,6 +183,21 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
     def test_integrated_focus_contract(self) -> None:
         self.assertEqual(collect_issues(), [])
 
+    def test_capstone_report_validation_rejects_missing_and_duplicate_dispatch(self) -> None:
+        original = read(CLAIMANT_EVENTS_FILE)
+        call = "country_event = { id = ADISCORD_vorkerland_claimant.100 hours = 1 }"
+        for replacement in ("", f"{call} {call}", call.replace("country_event", "news_event")):
+            mutated = original.replace(call, replacement, 1)
+            self.assertNotEqual(original, mutated)
+            with self.subTest(replacement=replacement), patch(
+                "tools.validators.validate_adiscord_vorkerland_civil_war_focus.read",
+                side_effect=lambda path: mutated if path == CLAIMANT_EVENTS_FILE else read(path),
+            ):
+                self.assertIn(
+                    "claimant capstone 30 must dispatch its country report once",
+                    collect_issues(),
+                )
+
     def test_one_tree_follows_all_four_lifecycle_tags(self) -> None:
         selector = self.source.split("default = no", maxsplit=1)[0]
         for tag in ("WRK", "WKR", "VAD", "TVA"):
@@ -214,7 +230,7 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
             {"WKR": 7, "VAD": 5, "TVA": 5},
         )
         self.assertTrue(
-            all(len(route) == 10 for route in POSTWAR_ROUTE_FOCUSES.values())
+            all(len(route) == 11 for route in POSTWAR_ROUTE_FOCUSES.values())
         )
 
     def test_each_claimant_has_a_compact_wartime_route(self) -> None:
@@ -1909,21 +1925,26 @@ focus = {
                     self.assertIn("tag = WRK", block)
                     self.assertIn(f"has_country_flag = {route_flag}", block)
 
-    def test_postwar_routes_have_two_reachable_189_day_policy_paths(self) -> None:
+    def test_postwar_routes_have_two_reachable_policy_paths(self) -> None:
+        expected_costs = {
+            "ADISCORD_vorkerland_route_worker": 31,
+            "ADISCORD_vorkerland_route_joint": 29,
+            "ADISCORD_vorkerland_route_utilitarian": 31,
+        }
         for route_flag, focus_ids in POSTWAR_ROUTE_FOCUSES.items():
             terminal_id = POSTWAR_ROUTE_TERMINALS[route_flag]
             paths = _postwar_completion_paths(self.blocks, focus_ids, terminal_id)
             with self.subTest(route_flag=route_flag):
-                self.assertEqual(len(focus_ids), 10)
-                self.assertEqual(_focus_cost(self.blocks[terminal_id]), 5)
+                self.assertEqual(len(focus_ids), 11)
+                self.assertEqual(_focus_cost(self.blocks[terminal_id]), 4)
                 self.assertEqual(len(paths), 2)
-                self.assertEqual({len(path) for path in paths}, {9})
+                self.assertEqual({len(path) for path in paths}, {10})
                 self.assertEqual(
                     {
                         sum(_focus_cost(self.blocks[focus_id]) for focus_id in path)
                         for path in paths
                     },
-                    {27},
+                    {expected_costs[route_flag]},
                 )
                 self.assertEqual(set().union(*paths), set(focus_ids))
 
