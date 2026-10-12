@@ -1,6 +1,42 @@
 spriteTypes = {
 
 	corneredTileSpriteType = {
+		name = "GFX_ideology_service_etatism"
+		texturefile = "gfx/interface/ideologies/service_etatism_group.png"
+		size = {
+			x = 70
+			y = 70
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_service_etatism_countryview"
+		texturefile = "gfx/interface/ideologies/service_etatism_group.png"
+		size = {
+			x = 125
+			y = 125
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_industrial_aristocratism"
+		texturefile = "gfx/interface/ideologies/industrial_aristocratism_group.png"
+		size = {
+			x = 70
+			y = 70
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_industrial_aristocratism_countryview"
+		texturefile = "gfx/interface/ideologies/industrial_aristocratism_group.png"
+		size = {
+			x = 125
+			y = 125
+		}
+	}
+
+	corneredTileSpriteType = {
 		name = "GFX_ideology_dorian_technocracy"
 		texturefile = "gfx/interface/ideologies/dorian_technocracy_group.png"
 		size = {

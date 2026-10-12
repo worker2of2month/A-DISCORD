@@ -376,21 +376,15 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         residual = state_source(NAM_RESIDUAL_CITY_STATE_ID)
         harbour = state_source(700)
         dryriver = state_source(NAM_DRYRIVER_STATE_ID)
-        self.assertEqual(int(scalar(mainland, "manpower")), 480_000)
-        self.assertEqual(int(scalar(svetlogorsk, "manpower")), 90_000)
-        self.assertEqual(
-            int(scalar(residual, "manpower")) + int(scalar(harbour, "manpower")),
-            120_000,
-        )
-        self.assertEqual(int(scalar(dryriver, "manpower")), 270_000)
-        self.assertEqual(
-            int(scalar(mainland, "manpower"))
-            + int(scalar(svetlogorsk, "manpower"))
-            + int(scalar(residual, "manpower"))
-            + int(scalar(harbour, "manpower"))
-            + int(scalar(dryriver, "manpower")),
-            960_000,
-        )
+        population = builder.NAM_POPULATION
+        for source, state_id in (
+            (mainland, 67),
+            (svetlogorsk, NAM_SVETLOGORSK_STATE_ID),
+            (residual, NAM_RESIDUAL_CITY_STATE_ID),
+            (harbour, 700),
+            (dryriver, NAM_DRYRIVER_STATE_ID),
+        ):
+            self.assertEqual(int(scalar(source, "manpower")), population[state_id], state_id)
         for building, expected in {
             "industrial_complex": 5,
             "arms_factory": 3,

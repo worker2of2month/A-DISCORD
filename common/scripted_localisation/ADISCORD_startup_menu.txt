@@ -33,6 +33,28 @@ defined_text = {
 		trigger = { tag = RUS }
 		localization_key = RUS_startup_path_0_title
 	}
+	text = {
+		trigger = {
+			tag = SHL
+			check_variable = { var = ADISCORD_startup_tab value = 1 compare = equals }
+		}
+		localization_key = SHL_startup_guide_furnaces_title
+	}
+	text = {
+		trigger = { tag = SHL }
+		localization_key = SHL_startup_path_0_title
+	}
+	text = {
+		trigger = {
+			tag = NAM
+			check_variable = { var = ADISCORD_startup_tab value = 1 compare = equals }
+		}
+		localization_key = NAM_startup_guide_groups_title
+	}
+	text = {
+		trigger = { tag = NAM }
+		localization_key = NAM_startup_path_0_title
+	}
 	text = { localization_key = ADISCORD_startup_unsupported }
 }
 
@@ -71,6 +93,28 @@ defined_text = {
 		trigger = { tag = RUS }
 		localization_key = RUS_startup_path_1_title
 	}
+	text = {
+		trigger = {
+			tag = SHL
+			check_variable = { var = ADISCORD_startup_tab value = 1 compare = equals }
+		}
+		localization_key = SHL_startup_guide_fire_title
+	}
+	text = {
+		trigger = { tag = SHL }
+		localization_key = SHL_startup_path_1_title
+	}
+	text = {
+		trigger = {
+			tag = NAM
+			check_variable = { var = ADISCORD_startup_tab value = 1 compare = equals }
+		}
+		localization_key = NAM_startup_guide_oil_title
+	}
+	text = {
+		trigger = { tag = NAM }
+		localization_key = NAM_startup_path_1_title
+	}
 	text = { localization_key = ADISCORD_startup_unsupported }
 }
 
@@ -88,6 +132,14 @@ defined_text = {
 		trigger = { tag = RUS }
 		localization_key = RUS_startup_guide_campaign_title
 	}
+	text = {
+		trigger = { tag = SHL }
+		localization_key = SHL_startup_guide_wars_title
+	}
+	text = {
+		trigger = { tag = NAM }
+		localization_key = NAM_startup_guide_war_title
+	}
 	text = { localization_key = ADISCORD_startup_unsupported }
 }
 
@@ -104,6 +156,14 @@ defined_text = {
 	text = {
 		trigger = { tag = RUS }
 		localization_key = RUS_startup_guide_plan_title
+	}
+	text = {
+		trigger = { tag = SHL }
+		localization_key = SHL_startup_guide_plan_title
+	}
+	text = {
+		trigger = { tag = NAM }
+		localization_key = NAM_startup_guide_plan_title
 	}
 	text = { localization_key = ADISCORD_startup_unsupported }
 }

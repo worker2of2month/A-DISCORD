@@ -364,7 +364,7 @@ class ScriptMachine:
                 "mark_focus_tree_layout_dirty", "add_war_support",
                 "ADISCORD_release_non_participating_minor_optimization",
                 "ADISCORD_south_crisis_add_campaign", "ADISCORD_south_crisis_cycle",
-                "SHL_fire_cycle", "SHL_crisis_draw", "SHL_fire_refresh", "SHL_fire_transfer", "SHL_fire_align", "SHL_fire_settle",
+                "SHL_fire_cycle", "SHL_crisis_draw", "SHL_fire_refresh", "SHL_fire_transfer", "SHL_fire_course_targets", "SHL_fire_settle",
                 "add_claim_by",
             ):
                 self.calls.append((e.key, scope))
@@ -698,8 +698,8 @@ class FurnaceAccountingTests(unittest.TestCase):
         tree = block(parse_clausewitz(path.read_text(encoding="utf-8")), "focus_tree")
         focuses = [e.value for e in tree if e.key == "focus"]
         ids = [scalar(f, "id") for f in focuses]
-        self.assertEqual(len(ids), 168)
-        self.assertEqual(len(set(ids)), 168)
+        self.assertEqual(len(ids), 115)
+        self.assertEqual(len(set(ids)), 115)
         cells = [(scalar(f, "x"), scalar(f, "y")) for f in focuses]
         self.assertEqual(len(cells), len(set(cells)))
         for focus in focuses:
@@ -2334,7 +2334,7 @@ def walk_entries(items):
 
 
 class FireDivisionTests(unittest.TestCase):
-    """Division of the fire: four revenue shares and the course programmes."""
+    """Division of the fire: four revenue shares and the course endings."""
 
     SHARES = ("crest", "quart", "state", "front")
     COURSES = ("houses", "cities", "directorate", "regency", "commune")
@@ -2348,7 +2348,7 @@ class FireDivisionTests(unittest.TestCase):
     def test_start_and_every_course_target_divide_exactly_one_hundred(self):
         start = {scalar(e.value, "var"): float(scalar(e.value, "value")) for e in walk_entries(self.effects["SHL_fire_initialize"]) if e.key == "set_variable"}
         self.assertEqual(sum(start.values()), 100)
-        values = [float(scalar(e.value, "value")) for e in walk_entries(self.effects["SHL_programme_start"]) if e.key == "set_variable" and scalar(e.value, "var").startswith("SHL_fire_target_")]
+        values = [float(scalar(e.value, "value")) for e in walk_entries(self.effects["SHL_fire_course_targets"]) if e.key == "set_variable" and scalar(e.value, "var").startswith("SHL_fire_target_")]
         self.assertEqual(len(values), 20)
         for index in range(0, 20, 4):
             self.assertEqual(sum(values[index:index + 4]), 100)
@@ -2365,18 +2365,36 @@ class FireDivisionTests(unittest.TestCase):
         self.assertNotIn("var = SHL_share_", tree)
         self.assertEqual(tree.count("SHL_fire_transfer = yes"), tree.count("set_temp_variable = { var = SHL_fire_amount"))
 
-    def test_each_course_programme_route_reaches_exactly_one_hundred(self):
-        for course in self.COURSES:
-            prefix = f"SHL_{course}_prog_"
-            for side in ("a", "b"):
-                route = [prefix + step for step in (f"policy_{side}", f"work_{side}", "code", "commission", f"course_{side}")]
-                for name in route:
-                    text = repr(self.focuses[name])
-                    self.assertIn("SHL_programme_add_20", text, name)
-                    self.assertIn("SHL_fire_align", text, name)
-                ending = self.focuses[prefix + f"ending_{side}"]
-                self.assertIn("SHL_programme_finished", repr(block(ending, "available")))
-                self.assertIn("SHL_fire_settle", repr(block(ending, "completion_reward")))
+    def test_each_course_final_offers_two_exclusive_endings_that_settle_the_fire(self):
+        finals = {
+            "houses": "SHL_conclave_of_ten",
+            "cities": "SHL_southern_compact",
+            "directorate": "SHL_iron_shahrabad",
+            "regency": "SHL_hereditary_republic",
+            "commune": "SHL_commune_of_fire",
+        }
+        ideas = (ROOT / "common/ideas/ADISCORD_southern_desert_ideas.txt").read_text(encoding="utf-8")
+        for course, final in finals.items():
+            for side, other in (("a", "b"), ("b", "a")):
+                name = f"SHL_{course}_prog_ending_{side}"
+                ending = self.focuses[name]
+                self.assertEqual(scalar(block(ending, "prerequisite"), "focus"), final, name)
+                self.assertEqual(scalar(block(ending, "mutually_exclusive"), "focus"), f"SHL_{course}_prog_ending_{other}")
+                reward = repr(block(ending, "completion_reward"))
+                self.assertLess(reward.index("SHL_fire_course_targets"), reward.rindex("SHL_fire_settle"), name)
+                self.assertIn("SHL_prog_ending", reward)
+                self.assertIn(f"SHL_pow_{course}_prog_ending_{side}_idea = {{", ideas)
+        tree = (ROOT / "focus_trees/SHL/main/focuses.txt").read_text(encoding="utf-8")
+        self.assertNotIn("SHL_programme", tree)
+        self.assertNotIn("SHL_fire_align", tree)
+
+    def test_every_conclave_preview_idea_is_defined_once_and_used(self):
+        tree = (ROOT / "focus_trees/SHL/main/focuses.txt").read_text(encoding="utf-8")
+        ideas = (ROOT / "common/ideas/ADISCORD_southern_desert_ideas.txt").read_text(encoding="utf-8")
+        used = set(re.findall(r"add_idea = (SHL_pow_\w+_idea)", tree))
+        defined = re.findall(r"(?m)^\t\t(SHL_pow_\w+_idea) = \{", ideas)
+        self.assertEqual(len(defined), len(set(defined)))
+        self.assertEqual(used, set(defined))
 
     def test_division_runs_on_the_furnace_cycle_without_new_hooks(self):
         self.assertIn("SHL_fire_cycle", repr(self.effects["SHL_run_cycle"]))

@@ -42,6 +42,7 @@ from tools.builders.build_adiscord_new_states import (
     SECONDARY_CENTRES,
     SETTLEMENT_CLUSTER_CENTRES,
     SETTLEMENT_CLUSTER_VICTORY_POINTS,
+    SHL_RESOURCES,
     STATE_PROFILES,
     STATE_RESOURCES,
     STARTING_OWNERS,
@@ -363,6 +364,11 @@ def validate_states() -> None:
         )
         resource_totals["AZH"] += sum(resources.values())
     for tag, amount in resource_totals.items():
+        if tag == "SHL":
+            # The Nine Furnaces are the south's metallurgical core, not a minor.
+            expected = sum(sum(deposit.values()) for deposit in SHL_RESOURCES.values())
+            check(amount == expected, f"SHL: expected {expected} furnace deposits, found {amount}")
+            continue
         check(
             4 <= amount <= 6,
             f"{tag}: expected a modest 4-6 starting resources, found {amount}",

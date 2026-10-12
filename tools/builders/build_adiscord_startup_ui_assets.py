@@ -21,6 +21,13 @@ SIZES = {
     'launcher': (98, 26),
     'close': (36, 36),
 }
+PORTRAIT = (220, 440)
+# Country portraits cut from existing campaign art at the briefing's 1:2 ratio:
+# the desert city of the southern superevent and the oil towers of a loading screen.
+PORTRAIT_CROPS = {
+    'shl': ('gfx/interface/superevents/NAM/namestnik lost.png', (290, 86, 542, 590)),
+    'nam': ('gfx/loadingscreens/load_3.dds', (1180, 0, 1900, 1440)),
+}
 
 
 def frame(size: tuple[int, int], button: bool = False) -> Image.Image:
@@ -74,7 +81,13 @@ def expected_outputs() -> dict[Path, bytes]:
     outputs[OUTPUT / 'rus.png'] = (
         ROOT / 'tools/assets/source/startup/rus.png'
     ).read_bytes()
-    for tag in ('stp', 'val', 'rus'):
+    for tag, (source, box) in PORTRAIT_CROPS.items():
+        with Image.open(ROOT / source) as image:
+            portrait = image.convert('RGB').crop(box).resize(PORTRAIT, Image.LANCZOS)
+        stream = BytesIO()
+        portrait.save(stream, 'PNG')
+        outputs[OUTPUT / f'{tag}.png'] = stream.getvalue()
+    for tag in ('stp', 'val', 'rus', *PORTRAIT_CROPS):
         definitions.extend(
             [
                 '\tspriteType = {',

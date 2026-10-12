@@ -47,6 +47,13 @@ guiTypes = {
 			pdx_tooltip = "national_legitimism_desc"
 		}
 		iconType = {
+			name = "ideology_icon_industrial_aristocratism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_industrial_aristocratism_countryview"
+			pdx_tooltip = "industrial_aristocratism_desc"
+		}
+
+		iconType = {
 			name = "ideology_icon_aristocratic_hedonism"
 			position = { x = 0 y = 0 }
 			spriteType = "GFX_ideology_aristocratic_hedonism_countryview"
@@ -117,6 +124,13 @@ guiTypes = {
 			spriteType = "GFX_ideology_chauvinism_countryview_group"
 			pdx_tooltip = "chauvinism_ideology_desc"
 		}
+		iconType = {
+			name = "ideology_icon_service_etatism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_service_etatism_countryview"
+			pdx_tooltip = "service_etatism_desc"
+		}
+
 		iconType = {
 			name = "ideology_icon_contractual_etatism"
 			position = { x = 0 y = 0 }

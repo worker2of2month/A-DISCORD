@@ -3,6 +3,9 @@ state = {
 	name = "STATE_292"
 	manpower = 800000
 	state_category = wasteland
+	resources = {
+		steel = 2
+	}
 	history = {
 		owner = SHL
 		add_core_of = SHL

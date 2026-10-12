@@ -97,6 +97,18 @@ guiTypes = {
 			spriteType = "GFX_ADISCORD_startup_rus"
 			alwaystransparent = yes
 		}
+		iconType = {
+			name = "ADISCORD_startup_shl_picture"
+			position = { x = 746 y = 108 }
+			spriteType = "GFX_ADISCORD_startup_shl"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "ADISCORD_startup_nam_picture"
+			position = { x = 746 y = 108 }
+			spriteType = "GFX_ADISCORD_startup_nam"
+			alwaystransparent = yes
+		}
 		instantTextboxType = {
 			name = "ADISCORD_startup_intro_note"
 			position = { x = 34 y = 100 }
@@ -456,6 +468,203 @@ guiTypes = {
 			position = { x = 460 y = 152 }
 			font = "hoi_18mbs"
 			text = "RUS_startup_path_1_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_country"
+			position = { x = 34 y = 138 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_country"
+			maxWidth = 675
+			maxHeight = 407
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_guide_furnaces"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_guide_furnaces"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_guide_fire"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_guide_fire"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_guide_wars"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_guide_wars"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_guide"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_guide"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_path_0"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_path_0"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_path_0_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_path_0_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_path_1"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_path_1"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_path_1_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_path_1_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_country"
+			position = { x = 34 y = 138 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_country"
+			maxWidth = 675
+			maxHeight = 407
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_guide_groups"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_guide_groups"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_guide_oil"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_guide_oil"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_guide_war"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_guide_war"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_guide"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_guide"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_path_0"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_path_0"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_path_0_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_path_0_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_path_1"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_path_1"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_path_1_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_path_1_details"
 			maxWidth = 500
 			maxHeight = 388
 			format = left

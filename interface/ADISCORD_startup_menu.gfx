@@ -41,4 +41,12 @@ spriteTypes = {
 		name = "GFX_ADISCORD_startup_rus"
 		texturefile = "gfx/interface/startup/rus.png"
 	}
+	spriteType = {
+		name = "GFX_ADISCORD_startup_shl"
+		texturefile = "gfx/interface/startup/shl.png"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_startup_nam"
+		texturefile = "gfx/interface/startup/nam.png"
+	}
 }

@@ -63,6 +63,8 @@
         "gfx/interface/ideologies/steland_military_directory_group.png",
         "gfx/interface/ideologies/tff_emergency_war_coordinator_group.png",
         "gfx/interface/ideologies/dorian_technocracy_group.png",
+        "gfx/interface/ideologies/industrial_aristocratism_group.png",
+        "gfx/interface/ideologies/service_etatism_group.png",
         "docs/development/previews/additional-ideology-icons.png"
       ],
       "check_command": [
@@ -119,7 +121,9 @@
       "owner_module": "tools.builders.build_adiscord_startup_ui_assets",
       "source_inputs": [
         "tools/builders/build_adiscord_startup_ui_assets.py",
-        "tools/assets/source/startup/rus.png"
+        "tools/assets/source/startup/rus.png",
+        "gfx/interface/superevents/NAM/namestnik lost.png",
+        "gfx/loadingscreens/load_3.dds"
       ],
       "output_globs": [
         "interface/ADISCORD_startup_menu.gfx",
@@ -128,7 +132,9 @@
         "gfx/interface/startup/page.png",
         "gfx/interface/startup/launcher.png",
         "gfx/interface/startup/close.png",
-        "gfx/interface/startup/rus.png"
+        "gfx/interface/startup/rus.png",
+        "gfx/interface/startup/shl.png",
+        "gfx/interface/startup/nam.png"
       ],
       "check_command": [
         "{python}",

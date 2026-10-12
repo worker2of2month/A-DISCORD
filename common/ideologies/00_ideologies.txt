@@ -400,6 +400,10 @@ ideologies = {
 				can_be_randomly_selected = no
 				color = { 112 58 38 }
 			}
+			service_etatism = {
+				can_be_randomly_selected = no
+				color = { 154 137 85 }
+			}
 			contractual_etatism = {
 				can_be_randomly_selected = no
 				color = { 143 50 29 }
@@ -479,6 +483,10 @@ ideologies = {
 			patronal_hedonism = {
 				can_be_randomly_selected = no
 				color = { 80 65 111 }
+			}
+			industrial_aristocratism = {
+				can_be_randomly_selected = no
+				color = { 179 122 49 }
 			}
 			aristocratic_hedonism = {
 				can_be_randomly_selected = no

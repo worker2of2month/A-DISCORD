@@ -342,7 +342,7 @@ class CoastalSeaRegionTests(unittest.TestCase):
     def test_large_city_splits_preserve_population_and_industry(self) -> None:
         for parent, city, population in (
             (290, 699, 29510),
-            (689, 700, 120000),
+            (689, 700, states.NAM_POPULATION[689] + states.NAM_POPULATION[700]),
             (691, 701, 280000),
         ):
             sources = [states.state_path(state).read_text() for state in (parent, city)]

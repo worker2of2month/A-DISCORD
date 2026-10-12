@@ -39,6 +39,29 @@ def formation_requirements(composition):
 
 
 class NavalProgrammeTests(unittest.TestCase):
+    def test_ship_rewards_create_matching_variants_before_delivery(self):
+        deliveries = 0
+        for source in (
+            "NOD/main/focuses.txt",
+            "VAL/main/focuses.txt",
+            "STP/civil_war/focuses.txt",
+        ):
+            for focus_id, focus in focus_map(source).items():
+                variants = {}
+                for row in walk(block(focus, "completion_reward")):
+                    if row.key == "create_equipment_variant":
+                        self.assertEqual(scalar(row.value, "allow_without_tech"), "yes")
+                        variants[scalar(row.value, "name")] = scalar(row.value, "type")
+                    if row.key != "create_ship":
+                        continue
+                    deliveries += 1
+                    with self.subTest(focus=focus_id):
+                        name = scalar(row.value, "equipment_variant")
+                        self.assertTrue(name, "create_ship requires an equipment variant")
+                        self.assertEqual(variants.get(name), scalar(row.value, "type"))
+                        self.assertNotIn("creator", [field.key for field in row.value])
+        self.assertEqual(deliveries, 13)
+
     def test_starting_fleet_composition_and_technology_before_oob(self):
         grants = entries("common/scripted_effects/ADISCORD_technology_baseline_effects.txt")
         techs = {}

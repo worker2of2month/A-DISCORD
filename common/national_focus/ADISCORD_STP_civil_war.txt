@@ -310,7 +310,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_wartime_arsenals
-		icon = GFX_focus_STP_pw_party_defence_combine
+		icon = GFX_focus_RUS_industrial_belt
 		x = 5
 		y = 2
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } }
@@ -4010,7 +4010,18 @@ focus_tree = {
 				ADISCORD_tech_coastal_patrols = 1
 				popup = no
 			}
-			create_ship = { type = ADISCORD_escort_ship_2155 amount = 2 }
+			hidden_effect = {
+				create_equipment_variant = {
+					name = "ADISCORD_escort_ship_2155"
+					type = ADISCORD_escort_ship_2155
+					allow_without_tech = yes
+				}
+			}
+			create_ship = {
+				type = ADISCORD_escort_ship_2155
+				equipment_variant = "ADISCORD_escort_ship_2155"
+				amount = 2
+			}
 			add_equipment_to_stockpile = { type = convoy_1 amount = 20 }
 			add_fuel = 10000
 		}
@@ -4107,8 +4118,30 @@ focus_tree = {
 				ADISCORD_tech_light_cruiser_hull_2155 = 1
 				popup = no
 			}
-			create_ship = { type = ADISCORD_light_cruiser_2155 amount = 2 }
-			create_ship = { type = ADISCORD_escort_ship_2155 amount = 2 }
+			hidden_effect = {
+				create_equipment_variant = {
+					name = "ADISCORD_light_cruiser_2155"
+					type = ADISCORD_light_cruiser_2155
+					allow_without_tech = yes
+				}
+			}
+			create_ship = {
+				type = ADISCORD_light_cruiser_2155
+				equipment_variant = "ADISCORD_light_cruiser_2155"
+				amount = 2
+			}
+			hidden_effect = {
+				create_equipment_variant = {
+					name = "ADISCORD_escort_ship_2155"
+					type = ADISCORD_escort_ship_2155
+					allow_without_tech = yes
+				}
+			}
+			create_ship = {
+				type = ADISCORD_escort_ship_2155
+				equipment_variant = "ADISCORD_escort_ship_2155"
+				amount = 2
+			}
 			add_equipment_to_stockpile = { type = convoy_1 amount = 20 }
 			add_fuel = 10000
 		}
@@ -10043,7 +10076,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_regent_industry
-		icon = GFX_focus_VAL_Factories_Like_Cathedrals
+		icon = GFX_focus_RUS_industrial_belt
 		x = -1
 		y = 7
 		cost = 2
@@ -13276,7 +13309,18 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			create_ship = { type = ADISCORD_escort_ship_2155 amount = 4 }
+			hidden_effect = {
+				create_equipment_variant = {
+					name = "ADISCORD_escort_ship_2155"
+					type = ADISCORD_escort_ship_2155
+					allow_without_tech = yes
+				}
+			}
+			create_ship = {
+				type = ADISCORD_escort_ship_2155
+				equipment_variant = "ADISCORD_escort_ship_2155"
+				amount = 4
+			}
 			add_equipment_to_stockpile = { type = convoy_1 amount = 40 }
 			add_fuel = 10000
 		}
@@ -13309,7 +13353,18 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			create_ship = { type = ADISCORD_cruiser_2155 amount = 2 }
+			hidden_effect = {
+				create_equipment_variant = {
+					name = "ADISCORD_cruiser_2155"
+					type = ADISCORD_cruiser_2155
+					allow_without_tech = yes
+				}
+			}
+			create_ship = {
+				type = ADISCORD_cruiser_2155
+				equipment_variant = "ADISCORD_cruiser_2155"
+				amount = 2
+			}
 			navy_experience = 20
 		}
 	}
@@ -13341,7 +13396,18 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			create_ship = { type = ADISCORD_light_cruiser_2155 amount = 2 }
+			hidden_effect = {
+				create_equipment_variant = {
+					name = "ADISCORD_light_cruiser_2155"
+					type = ADISCORD_light_cruiser_2155
+					allow_without_tech = yes
+				}
+			}
+			create_ship = {
+				type = ADISCORD_light_cruiser_2155
+				equipment_variant = "ADISCORD_light_cruiser_2155"
+				amount = 2
+			}
 			set_technology = {
 				ADISCORD_tech_amphibious_formation_organization = 1
 				ADISCORD_tech_amphibious_staff_sections = 1
@@ -14146,7 +14212,18 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			create_ship = { type = ADISCORD_cruiser_2155 amount = 1 }
+			hidden_effect = {
+				create_equipment_variant = {
+					name = "ADISCORD_cruiser_2155"
+					type = ADISCORD_cruiser_2155
+					allow_without_tech = yes
+				}
+			}
+			create_ship = {
+				type = ADISCORD_cruiser_2155
+				equipment_variant = "ADISCORD_cruiser_2155"
+				amount = 1
+			}
 			navy_experience = 30
 		}
 	}

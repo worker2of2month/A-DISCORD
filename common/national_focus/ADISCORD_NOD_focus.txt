@@ -100,7 +100,18 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			create_ship = { type = ADISCORD_escort_ship_2155 amount = 4 }
+			hidden_effect = {
+				create_equipment_variant = {
+					name = "ADISCORD_escort_ship_2155"
+					type = ADISCORD_escort_ship_2155
+					allow_without_tech = yes
+				}
+			}
+			create_ship = {
+				type = ADISCORD_escort_ship_2155
+				equipment_variant = "ADISCORD_escort_ship_2155"
+				amount = 4
+			}
 			add_equipment_to_stockpile = { type = convoy_1 amount = 40 }
 			add_fuel = 10000
 		}
@@ -129,7 +140,18 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			create_ship = { type = ADISCORD_submarine_2155 amount = 4 }
+			hidden_effect = {
+				create_equipment_variant = {
+					name = "ADISCORD_submarine_2155"
+					type = ADISCORD_submarine_2155
+					allow_without_tech = yes
+				}
+			}
+			create_ship = {
+				type = ADISCORD_submarine_2155
+				equipment_variant = "ADISCORD_submarine_2155"
+				amount = 4
+			}
 			navy_experience = 20
 		}
 	}
@@ -205,7 +227,18 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			create_ship = { type = ADISCORD_cruiser_2155 amount = 2 }
+			hidden_effect = {
+				create_equipment_variant = {
+					name = "ADISCORD_cruiser_2155"
+					type = ADISCORD_cruiser_2155
+					allow_without_tech = yes
+				}
+			}
+			create_ship = {
+				type = ADISCORD_cruiser_2155
+				equipment_variant = "ADISCORD_cruiser_2155"
+				amount = 2
+			}
 		}
 	}
 }

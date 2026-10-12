@@ -3,11 +3,15 @@ state = {
 	name = "STATE_293"
 	manpower = 1000000
 	state_category = rural
+	resources = {
+		aluminium = 3
+	}
 	history = {
 		owner = SHL
 		add_core_of = SHL
 		buildings = {
 			infrastructure = 2
+			industrial_complex = 1
 		}
 	}
 	provinces = {

@@ -706,7 +706,7 @@ focus_tree = {
 
 	focus = {
 		id = IVN_war_industry_plan
-		icon = GFX_goal_generic_construct_mil_factory
+		icon = GFX_focus_RUS_industrial_belt
 		x = 12
 		y = 3
 		cost = 4

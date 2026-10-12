@@ -1450,7 +1450,7 @@
       "number": 3,
       "owner": "events/ADISCORD_nam_resource_war_events.txt",
       "subsystem": "nam_pillars_of_power",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_nam_groups.4",
@@ -1458,7 +1458,7 @@
       "number": 4,
       "owner": "events/ADISCORD_nam_resource_war_events.txt",
       "subsystem": "nam_pillars_of_power",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_nam_groups.10",
@@ -1466,7 +1466,7 @@
       "number": 10,
       "owner": "events/ADISCORD_nam_resource_war_events.txt",
       "subsystem": "nam_pillars_of_power",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_nam_groups.11",
@@ -4674,7 +4674,7 @@
       "number": 3,
       "owner": "events/ADISCORD_SHL_events.txt",
       "subsystem": "shahrabad_fire_division",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_shl_fire.4",
@@ -4682,7 +4682,7 @@
       "number": 4,
       "owner": "events/ADISCORD_SHL_events.txt",
       "subsystem": "shahrabad_fire_division",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_shl_fire.10",
@@ -4690,7 +4690,7 @@
       "number": 10,
       "owner": "events/ADISCORD_SHL_events.txt",
       "subsystem": "shahrabad_fire_division",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_shl_fire.11",

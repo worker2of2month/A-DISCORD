@@ -14,6 +14,8 @@ SOURCE = Path("tools/assets/source/ideology_icons")
 TEXTURES = Path("gfx/interface/ideologies")
 PREVIEW = Path("docs/development/previews/additional-ideology-icons.png")
 LABELS = {
+    "service_etatism": "Service etatism",
+    "industrial_aristocratism": "Industrial aristocracy",
     "steland_liberationism": "Liberationism",
     "steland_military_directory": "Military directory",
     "tff_emergency_war_coordinator": "Frontier coordinator",

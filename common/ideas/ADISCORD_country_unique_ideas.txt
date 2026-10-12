@@ -74,6 +74,25 @@ ideas = {
 			}
 		}
 
+		DAN_outlawed_group = {
+			picture = GFX_idea_DAN_national_spirit
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			modifier = {
+				political_power_factor = -0.10
+				stability_factor = -0.05
+			}
+		}
+
 		PIV_national_spirit = {
 			picture = GFX_idea_PIV_national_spirit
 

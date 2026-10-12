@@ -1761,6 +1761,7 @@ ADISCORD_vorkerland_teardown_confederation = {
 	NAM = {
 		if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = NAM autonomy_state = autonomy_free } } }
 		if = { limit = { is_in_faction = yes } leave_faction = yes }
+		NAM_adopt_service_etatism = yes
 	}
 	DAN = {
 		if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = DAN autonomy_state = autonomy_free } } }

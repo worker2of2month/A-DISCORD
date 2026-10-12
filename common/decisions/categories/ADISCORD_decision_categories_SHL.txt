@@ -45,7 +45,7 @@ SHL_treasury = {
 	allowed = { tag = SHL }
 	visible = {
 		OR = {
-			has_completed_focus = SHL_conclave_treasury
+			has_completed_focus = SHL_common_industrial_account
 			has_completed_focus = SHL_incident_office
 		}
 	}

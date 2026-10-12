@@ -959,7 +959,7 @@ SHL_quarters_and_borders = {
 			}
 			modifier = {
 				add = 10
-				num_divisions < 6
+				num_divisions < 9
 			}
 		}
 	}
@@ -1106,7 +1106,7 @@ SHL_quarters_and_borders = {
 			modifier = {
 				add = 15
 				check_variable = { var = SHL_political_course value = 3 compare = equals }
-				num_divisions > 7
+				num_divisions > 10
 			}
 		}
 	}
@@ -1186,7 +1186,7 @@ SHL_quarters_and_borders = {
 			modifier = {
 				add = 15
 				check_variable = { var = SHL_political_course value = 3 compare = equals }
-				num_divisions > 7
+				num_divisions > 10
 			}
 		}
 	}
@@ -1261,7 +1261,7 @@ SHL_quarters_and_borders = {
 			base = 0
 			modifier = {
 				add = 30
-				num_divisions < 6
+				num_divisions < 9
 			}
 		}
 	}
@@ -1779,7 +1779,7 @@ SHL_quarters_and_borders = {
 			base = 0
 			modifier = {
 				add = 20
-				num_divisions > 6
+				num_divisions > 9
 				has_variable = SHL_campaign_reserve
 			}
 		}
@@ -2508,11 +2508,11 @@ SHL_public_campaigns = {
 	}
 }
 
-# Division of the fire and course programmes.
+# Division of the fire.
 SHL_fire_shares = {
 	SHL_fire_give_crest = {
 		icon = generic_industry
-		visible = { has_completed_focus = SHL_supports_council }
+		visible = { has_completed_focus = SHL_conclave_rules }
 		available = {
 			SHL_country_operable = yes
 			check_variable = { var = SHL_share_crest value = 70 compare = less_than }
@@ -2534,7 +2534,7 @@ SHL_fire_shares = {
 
 	SHL_fire_give_quart = {
 		icon = generic_industry
-		visible = { has_completed_focus = SHL_supports_council }
+		visible = { has_completed_focus = SHL_conclave_rules }
 		available = {
 			SHL_country_operable = yes
 			check_variable = { var = SHL_share_quart value = 70 compare = less_than }
@@ -2556,7 +2556,7 @@ SHL_fire_shares = {
 
 	SHL_fire_give_state = {
 		icon = generic_industry
-		visible = { has_completed_focus = SHL_supports_council }
+		visible = { has_completed_focus = SHL_conclave_rules }
 		available = {
 			SHL_country_operable = yes
 			check_variable = { var = SHL_share_state value = 70 compare = less_than }
@@ -2578,7 +2578,7 @@ SHL_fire_shares = {
 
 	SHL_fire_give_front = {
 		icon = generic_industry
-		visible = { has_completed_focus = SHL_supports_council }
+		visible = { has_completed_focus = SHL_conclave_rules }
 		available = {
 			SHL_country_operable = yes
 			check_variable = { var = SHL_share_front value = 70 compare = less_than }
@@ -2597,29 +2597,13 @@ SHL_fire_shares = {
 			}
 		}
 	}
-
-	SHL_programme_push = {
-		icon = generic_construction
-		visible = { has_country_flag = SHL_programme_active }
-		available = {
-			SHL_country_operable = yes
-			check_variable = { var = SHL_prog_progress value = 100 compare = less_than }
-		}
-		cost = 40
-		days_re_enable = 45
-		complete_effect = {
-			custom_effect_tooltip = SHL_programme_push_tt
-			hidden_effect = { SHL_programme_add_15 = yes }
-		}
-		ai_will_do = { base = 10 }
-	}
 }
 
 # Treasury of the Conclave: money for power, power for money and crisis reserves.
 SHL_treasury = {
 	SHL_furnace_bonds = {
 		icon = generic_industry
-		visible = { has_completed_focus = SHL_conclave_treasury }
+		visible = { has_completed_focus = SHL_common_industrial_account }
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_idea = SHL_bond_payments }
@@ -2646,7 +2630,7 @@ SHL_treasury = {
 	SHL_decree_levy = {
 		icon = generic_political_pressure
 		visible = {
-			has_completed_focus = SHL_conclave_treasury
+			has_completed_focus = SHL_common_industrial_account
 		}
 		available = {
 			SHL_country_operable = yes
@@ -2725,7 +2709,7 @@ SHL_treasury = {
 	SHL_crisis_fund = {
 		icon = generic_construction
 		visible = {
-			has_completed_focus = SHL_emergency_treasury
+			has_completed_focus = SHL_incident_office
 		}
 		available = {
 			SHL_country_operable = yes

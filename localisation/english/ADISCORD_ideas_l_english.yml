@@ -42,6 +42,8 @@
  NAM_national_spirit: "The Governor System"
  DAN_national_spirit: "Communal Discipline"
  DAN_national_spirit_desc: "Expeditionary Group #42 is not a civilian state but a military formation that has accumulated its own rear area far from its continent of origin. Headquarters, camps, workshops, militias and factory committees operate under one expeditionary routine, where supply, repair and defence take priority over ordinary civilian politics. For many of its members, service in the Group is the last remaining link to the continent from which the expedition came and where its first orders were issued.\n\nThis discipline keeps the Group resilient and ready for war, but prolonged life under field-command conditions exhausts its people and steadily erases the boundary between front and rear."
+ DAN_outlawed_group: "Outside the Law"
+ DAN_outlawed_group_desc: "Expeditionary Group #42 operates without a lawful mandate. Its command has claimed the right to govern Karven, but control over territory alone does not make an armed group a legitimate authority."
  PIV_national_spirit: "Festival of Malt"
  PIV_national_spirit_desc: "Afrela has made craft, trade and feasting into a philosophy of state. Here they know how to sell joy, reconcile after an argument and build an economy around a mug that is always half full.\n\nWhile the music plays, the country is stable and content. Trouble begins when festivities must give way to mobilisation, and a toast to an order."
  IVN_national_spirit: "Humanist Shield"

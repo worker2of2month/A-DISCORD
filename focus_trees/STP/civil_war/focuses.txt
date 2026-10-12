@@ -307,7 +307,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_wartime_arsenals
-		icon = GFX_focus_STP_pw_party_defence_combine
+		icon = GFX_focus_RUS_industrial_belt
 		x = 5
 		y = 2
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } }

@@ -58,7 +58,7 @@ characters = {
 		name = SHL_Jalil_Nur
 		portraits = { civilian = { large = GFX_portrait_SHL_Jalil_Nur } }
 		country_leader = {
-			ideology = aristocratic_hedonism
+			ideology = industrial_aristocratism
 			expire = "2200.1.1.1"
 			id = -1
 			desc = SHL_Jalil_Nur_desc
@@ -70,7 +70,7 @@ characters = {
 		name = SHL_Darius_Safir
 		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_5 } }
 		country_leader = {
-			ideology = aristocratic_hedonism
+			ideology = industrial_aristocratism
 			expire = "2200.1.1.1"
 			id = -1
 			desc = SHL_Darius_Safir_desc

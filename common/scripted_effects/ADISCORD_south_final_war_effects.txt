@@ -30,6 +30,7 @@ ADISCORD_south_crisis_cycle = {
 		set_global_flag = ADISCORD_south_hegemon_SHL
 		set_global_flag = ADISCORD_south_unopposed
 		set_variable = { var = global.ADISCORD_south_winner_side value = 1 }
+		SHL = { mark_focus_tree_layout_dirty = yes }
 		news_event = { id = ADISCORD_south.31 hours = 1 }
 	}
 	else_if = {
@@ -90,11 +91,14 @@ ADISCORD_south_final_war_start = {
 			set_variable = { var = global.ADISCORD_south_declarer_side value = 2 }
 		}
 		ADISCORD_south_wake_regional_countries = yes
+		NAM = { mark_focus_tree_layout_dirty = yes }
 
 		SHL = {
 			ADISCORD_south_prepare_champion = yes
 			set_variable = { var = ADISCORD_south_side value = 1 }
 			SHL_use_campaign_reserve = yes
+			# Reveals the wartime Front of the South branch.
+			mark_focus_tree_layout_dirty = yes
 		}
 		NAM = {
 			if = {
@@ -499,6 +503,7 @@ ADISCORD_south_final_resolve_shl_victory = {
 		set_global_flag = ADISCORD_south_hegemon_SHL
 		set_variable = { var = global.ADISCORD_south_winner_side value = 1 }
 		set_variable = { var = global.ADISCORD_south_terms value = 1 }
+		SHL = { mark_focus_tree_layout_dirty = yes }
 		set_variable = { var = global.ADISCORD_south_subject_type value = 0 }
 		if = {
 			limit = { SHL = { check_variable = { var = SHL_political_course value = 1 compare = equals } } }
@@ -530,6 +535,7 @@ ADISCORD_south_final_resolve_north_victory = {
 		}
 		set_global_flag = ADISCORD_south_final_resolved
 		set_global_flag = ADISCORD_south_hegemon_NAM
+		NAM = { mark_focus_tree_layout_dirty = yes }
 		set_variable = { var = global.ADISCORD_south_winner_side value = 2 }
 		set_variable = { var = global.ADISCORD_south_terms value = 2 }
 		set_variable = { var = global.ADISCORD_south_subject_type value = 0 }

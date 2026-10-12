@@ -30,6 +30,38 @@ def parsed(path):
 
 
 class NamCampaignTests(unittest.TestCase):
+    def test_rom_changes_ideology_only_once_when_confederation_is_dismantled(self):
+        characters = block(parsed("common/characters/NAM.txt"), "characters")
+        initial = block(block(characters, "NAM_Egor_Rom"), "country_leader")
+        self.assertEqual(scalar(initial, "ideology"), "etatism_ideology")
+        teardown = block(parsed("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+                         "ADISCORD_vorkerland_teardown_confederation")
+        self.assertEqual(scalar(block(teardown, "NAM"), "NAM_adopt_service_etatism"), "yes")
+        transition = self.effects["NAM_adopt_service_etatism"]
+        for leader, ideology, expected in (
+            ("NAM_Egor_Rom", "etatism_ideology", True),
+            ("NAM_Egor_Rom", "service_etatism", False),
+            ("another_leader", "etatism_ideology", False),
+            ("NAM_Egor_Rom", "humanism_ideology", False),
+        ):
+            with self.subTest(leader=leader, ideology=ideology):
+                facts = {
+                    ("NAM", "ruling_leader"): leader,
+                    ("NAM", "has_country_leader_ideology", ideology): True,
+                }
+                selected = [entry for _, entry in selected_effects(transition, facts, "NAM")]
+                roles = [entry.value for entry in selected if entry.key == "add_country_leader_role"]
+                self.assertEqual(bool(roles), expected)
+                if expected:
+                    self.assertEqual(len(roles), 1)
+                    self.assertEqual(scalar(roles[0], "character"), "NAM_Egor_Rom")
+                    self.assertEqual(scalar(roles[0], "promote_leader"), "yes")
+                    self.assertEqual(scalar(block(roles[0], "country_leader"), "ideology"), "service_etatism")
+                    old_role = block(block(selected, "NAM_Egor_Rom"), "remove_country_leader_role")
+                    self.assertEqual(scalar(old_role, "ideology"), "etatism_ideology")
+                else:
+                    self.assertEqual(selected, [])
+
     def test_settlement_fragment_accepts_multiline_script(self):
         fragment = "688 = { remove_core_of = SLF add_core_of = NAM }"
         source = (
@@ -128,7 +160,7 @@ class NamCampaignTests(unittest.TestCase):
 
     def test_unique_layout_and_real_rewards(self):
         coordinates = set()
-        self.assertEqual(len(self.focuses), 99)
+        self.assertEqual(len(self.focuses), 70)
         filters = set()
         for name, focus in self.focuses.items():
             coordinate = (scalar(focus, "x"), scalar(focus, "y"))
@@ -387,27 +419,20 @@ class NamPillarsTests(unittest.TestCase):
             for group, value in shift.items():
                 self.assertGreaterEqual(initial[f"NAM_grp_{group}_influence"] + value, 0, name)
 
-    def test_each_programme_route_reaches_exactly_one_hundred(self):
-        for path in ("ladder", "charter"):
-            prefix = f"NAM_{path}_"
-            names = [n for n in self.focuses if n.startswith(prefix) and n != "NAM_ladder_of_seals"]
-            for first in (True, False):
-                completed, blocked = {f"{prefix}programme"}, set()
-                changed = True
-                while changed:
-                    changed = False
-                    for name in sorted(names, reverse=not first):
-                        if name in completed or name in blocked:
-                            continue
-                        groups = [e.value for e in self.focuses[name] if e.key == "prerequisite"]
-                        inside = [g for g in groups if all(child.value.startswith(prefix) for child in g)]
-                        if inside and all(any(child.value in completed for child in g) for g in inside):
-                            completed.add(name)
-                            for exclusive in (e.value for e in self.focuses[name] if e.key == "mutually_exclusive"):
-                                blocked |= {child.value for child in exclusive}
-                            changed = True
-                progress = sum(20 for n in completed if "NAM_programme_add_20" in repr(self.focuses[n]))
-                self.assertEqual(progress, 100, (path, first, sorted(completed)))
+    def test_each_path_final_offers_two_exclusive_endings(self):
+        finals = {
+            "NAM_ladder_of_seals": ("NAM_ladder_ending_iron", "NAM_ladder_ending_service"),
+            "NAM_common_fuel_market": ("NAM_charter_ending_federation", "NAM_charter_ending_oil_union"),
+        }
+        for final, pair in finals.items():
+            for name in pair:
+                focus = self.focuses[name]
+                self.assertEqual([e.value for e in block(focus, "prerequisite")], [final], name)
+                other = next(n for n in pair if n != name)
+                self.assertEqual([e.value for e in block(focus, "mutually_exclusive")], [other], name)
+                self.assertIn("NAM_prog_ending", repr(block(focus, "completion_reward")), name)
+        tree = read("focus_trees/NAM/main/focuses.txt")
+        self.assertNotIn("NAM_programme", tree)
 
     def test_every_support_shift_refreshes_and_is_localised(self):
         texts = {language: read(f"localisation/{language}/{BASE}_l_{language}.yml") for language in ("russian", "english")}
@@ -422,7 +447,7 @@ class NamPillarsTests(unittest.TestCase):
             self.assertIn("NAM_groups_refresh", [e.key for e in walk(reward)], name)
             for language, text in texts.items():
                 self.assertIn(f" NAM_grp_{name[4:]}_tt:", text, (language, name))
-        self.assertGreaterEqual(shifted, 50)
+        self.assertGreaterEqual(shifted, 30)
 
     def test_refresh_covers_every_group_without_world_scans(self):
         source = read(f"common/scripted_effects/{BASE}_effects.txt")

@@ -14,7 +14,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_admin_reopen_workshops
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_RUS_industrial_belt
 		x = 4
 		y = 1
 		cost = 5

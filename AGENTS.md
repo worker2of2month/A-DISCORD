@@ -295,8 +295,14 @@ The installed TFR source maximum found on 2026-09-07 was `atom.22.desc`:
 Merge adjacent story pages when the result remains readable and meets both
 ceilings; do not split solely to match an arbitrary page count. Shorten the
 author's prose only when requested. See the focus-effects guide for evidence.
-Group related sentences into paragraphs; do not insert a blank line after every
-short sentence. Every page of a multi-event reading sequence must offer a full
+Group related narrative sentences and short actions into compact semantic
+paragraphs. Reserve blank lines (literal `\n\n` in localisation) for a change
+of scene, topic or narrative beat; never separate every short sentence with
+a blank line. Use a single literal `\n` for dialogue within the same exchange.
+When reducing an event window's height, regroup paragraphs without shortening
+the prose or changing its meaning. Check the whole related event chain,
+including reading pages and translations. Every page of a multi-event reading
+sequence must offer a full
 exit that clears navigation state and does not dispatch another page. Keep
 required gameplay settlement independent of optional reading navigation.
 Keep required GUI children in the containers the engine looks up, even when

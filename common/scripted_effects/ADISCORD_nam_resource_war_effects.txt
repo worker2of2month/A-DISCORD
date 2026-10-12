@@ -1,3 +1,27 @@
+# COUNTRY scope. Repeated confederation teardown must preserve the current leader.
+NAM_adopt_service_etatism = {
+	if = {
+		limit = {
+			has_country_leader = {
+				character = NAM_Egor_Rom
+				ruling_only = yes
+			}
+			has_country_leader_ideology = etatism_ideology
+		}
+		NAM_Egor_Rom = {
+			remove_country_leader_role = { ideology = etatism_ideology }
+		}
+		add_country_leader_role = {
+			character = NAM_Egor_Rom
+			promote_leader = yes
+			country_leader = {
+				ideology = service_etatism
+				expire = "2200.1.1.1"
+			}
+		}
+	}
+}
+
 ADISCORD_nam_resource_war_schedule = {
 	if = {
 		limit = {
@@ -44,6 +68,8 @@ ADISCORD_nam_resource_war_start = {
 
 ADISCORD_nam_resource_war_begin_hostilities = {
 	set_global_flag = ADISCORD_nam_resource_war_started
+	# Reveals the wartime branch of the Svetlogorye tree.
+	NAM = { mark_focus_tree_layout_dirty = yes }
 	VAL = {
 		if = {
 			limit = {
@@ -166,6 +192,7 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 
 ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = {
 	set_global_flag = ADISCORD_nam_resource_war_resolved
+	NAM = { mark_focus_tree_layout_dirty = yes }
 	VAL = {
 		if = {
 			limit = {
@@ -406,6 +433,7 @@ ADISCORD_nam_resource_war_resolve_coalition_victory = {
 	if = {
 		limit = { ADISCORD_nam_resource_war_active = yes }
 		set_global_flag = ADISCORD_nam_resource_war_resolved
+		NAM = { mark_focus_tree_layout_dirty = yes }
 		VAL = {
 			if = {
 				limit = {
@@ -516,6 +544,7 @@ ADISCORD_nam_resource_war_resolve_nam_victory = {
 	if = {
 		limit = { ADISCORD_nam_resource_war_active = yes }
 		set_global_flag = ADISCORD_nam_resource_war_resolved
+		NAM = { mark_focus_tree_layout_dirty = yes }
 		VAL = {
 			if = {
 				limit = {
@@ -786,6 +815,7 @@ ADISCORD_nam_resource_war_close_external = {
 			}
 		}
 		set_global_flag = ADISCORD_nam_resource_war_resolved
+		NAM = { mark_focus_tree_layout_dirty = yes }
 		clr_global_flag = ADISCORD_nam_resource_war_started
 		ADISCORD_nam_resource_war_end_all_wars = yes
 		ADISCORD_nam_resource_war_clear_temporary_support = yes
@@ -1297,78 +1327,6 @@ NAM_groups_close_event = {
 	NAM_groups_refresh = yes
 }
 
-# ----- Postwar programme -----
-# One programme per campaign: the ladder (patron: namestniks) or the charter
-# (patron: districts). Progress comes from its focuses and paid acceleration.
-
-NAM_programme_start = {
-	if = {
-		limit = {
-			NOT = { has_country_flag = NAM_programme_active }
-			NOT = { has_country_flag = NAM_programme_finished }
-		}
-		set_country_flag = NAM_programme_active
-		set_variable = { var = NAM_prog_progress value = 0 }
-		country_event = { id = ADISCORD_nam_groups.3 hours = 1 }
-		country_event = { id = ADISCORD_nam_groups.10 days = 240 }
-	}
-}
-
-NAM_programme_add_20 = {
-	if = {
-		limit = { has_country_flag = NAM_programme_active }
-		add_to_variable = { var = NAM_prog_progress value = 20 }
-		clamp_variable = { var = NAM_prog_progress min = 0 max = 100 }
-	}
-}
-
-NAM_programme_add_15 = {
-	if = {
-		limit = { has_country_flag = NAM_programme_active }
-		add_to_variable = { var = NAM_prog_progress value = 15 }
-		clamp_variable = { var = NAM_prog_progress min = 0 max = 100 }
-	}
-}
-
-# COUNTRY NAM. Deadline settlement; the patron is 1 (namestniks) or 3 (districts).
-NAM_programme_resolve = {
-	if = {
-		limit = { has_country_flag = NAM_programme_active }
-		clr_country_flag = NAM_programme_active
-		set_country_flag = NAM_programme_finished
-		if = {
-			limit = { check_variable = { var = NAM_prog_progress value = 100 compare = greater_than_or_equals } }
-			set_country_flag = NAM_programme_succeeded
-			add_to_variable = { var = NAM_adm_stability_factor value = 0.03 }
-			add_to_variable = { var = NAM_adm_political_power_gain value = 0.05 }
-			NAM_refresh_administration = yes
-			add_to_variable = { var = NAM_grp_oil_support value = 3 }
-			add_to_variable = { var = NAM_grp_garr_support value = 3 }
-			add_to_variable = { var = NAM_grp_trade_support value = 3 }
-			if = {
-				limit = { check_variable = { var = NAM_prog_patron value = 1 compare = equals } }
-				add_to_variable = { var = NAM_grp_nam_support value = 10 }
-				add_to_variable = { var = NAM_grp_dist_support value = 3 }
-			}
-			else = {
-				add_to_variable = { var = NAM_grp_dist_support value = 10 }
-				add_to_variable = { var = NAM_grp_nam_support value = 3 }
-			}
-		}
-		else = {
-			add_stability = -0.03
-			if = {
-				limit = { check_variable = { var = NAM_prog_patron value = 1 compare = equals } }
-				add_to_variable = { var = NAM_grp_nam_support value = -15 }
-			}
-			else = {
-				add_to_variable = { var = NAM_grp_dist_support value = -15 }
-			}
-		}
-		NAM_groups_refresh = yes
-	}
-}
-
 # COUNTRY NAM. A random incident at most once per draw; the cooldown and the
 # open-crisis flag keep incidents from piling up.
 NAM_crisis_draw = {
@@ -1383,7 +1341,7 @@ NAM_crisis_draw = {
 			8 = {
 				modifier = {
 					factor = 0.5
-					has_completed_focus = NAM_crisis_doctrine
+					has_completed_focus = NAM_crisis_office
 				}
 				set_country_flag = NAM_crisis_open
 				set_country_flag = { flag = NAM_crisis_cooldown value = 1 days = 120 }

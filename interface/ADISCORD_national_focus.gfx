@@ -348,6 +348,41 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_RUS_claim_the_opened_zone"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_claim_the_opened_zone.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_drive_starolesye_back"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_drive_starolesye_back.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_black_army_oath"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_black_army_oath.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_scientists_council"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_scientists_council.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_khan_broadcast_service"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_khan_broadcast_service.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_reactor_sorties"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_reactor_sorties.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_industrial_belt"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_industrial_belt.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_RUS_imperial_general_staff"
 		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_imperial_general_staff.png"
 	}

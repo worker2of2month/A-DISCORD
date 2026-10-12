@@ -5,6 +5,7 @@ state={
 	resources = {
 		oil = 1
 		chromium = 1
+		tungsten = 1
 	}
 	provinces={
 		493 601 1360 2264 2362 2802 2804 3464 4089 4678 5039 5527

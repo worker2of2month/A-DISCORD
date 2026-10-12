@@ -110,7 +110,29 @@ SHL_POPULATION = {
     699: 4_000_000,
     707: 1_500_000,
 }
-GLP_STATES = (297, 298, 299, 300, 301, 302, 304, 305)
+# The Nine Furnaces are the south's industrial core: the capital and the
+# furnace towns carry the factories, the rural districts keep free slots for
+# focus construction. Values are exact state-level counts.
+SHL_INDUSTRY = {
+    287: {"industrial_complex": 0, "arms_factory": 1},
+    288: {"industrial_complex": 2, "arms_factory": 0},
+    291: {"industrial_complex": 1, "arms_factory": 1},
+    293: {"industrial_complex": 1, "arms_factory": 0},
+    294: {"industrial_complex": 2, "arms_factory": 1},
+    699: {"industrial_complex": 2, "arms_factory": 1},
+}
+# Metallurgical deposits feed the furnaces; oil remains the northern resource
+# that drives the war for the South.
+SHL_RESOURCES = {
+    287: {"steel": 4},
+    289: {"tungsten": 3},
+    291: {"steel": 8, "chromium": 3},
+    292: {"steel": 2},
+    293: {"aluminium": 3},
+    295: {"chromium": 2},
+    296: {"tungsten": 2},
+}
+GLP_STATES =(297, 298, 299, 300, 301, 302, 304, 305)
 
 STARTING_OWNERS = {
     69: "AZH",
@@ -198,12 +220,12 @@ STATE_RESOURCES = {
     263: {"tungsten": 2, "steel": 2},
     269: {"oil": 3, "chromium": 1},
     285: {"tungsten": 2, "aluminium": 2},
-    291: {"steel": 3, "chromium": 1},
     299: {"aluminium": 3, "chromium": 1},
+    **SHL_RESOURCES,
 }
 NAM_COALITION_FRONT_RESOURCES = {
     69: STATE_RESOURCES[69],
-    AZH_BLACK_COAST_STATE_ID: {"oil": 1, "chromium": 1},
+    AZH_BLACK_COAST_STATE_ID: {"oil": 1, "chromium": 1, "tungsten": 1},
 }
 
 # The central Vorkerland theatre used to have only one steel-bearing state,
@@ -266,6 +288,21 @@ STELANDER_REGIONAL_RESOURCES = {
     for state_id in (43, 44, 45, 88)
 }
 
+# Small deposits beside the oil basin: the Svetlogorye interior and the
+# Eflorian states that face it in the resource war.
+SVETLOGORYE_RESOURCES = {
+    225: {"aluminium": 3},
+    226: {"rubber": 2},
+    227: {"tungsten": 3},
+    228: {"steel": 4},
+    229: {"chromium": 2},
+}
+NAM_NEIGHBOUR_RESOURCES = {
+    68: {"steel": 3},
+    70: {"aluminium": 2},
+    691: {"tungsten": 2},
+}
+
 REGIONAL_STATE_RESOURCES = {
     230: {"steel": 16},
     231: {"steel": 16},
@@ -275,6 +312,8 @@ REGIONAL_STATE_RESOURCES = {
     **DIRTY_STATE_RESOURCES,
     **REACTOR_STATE_RESOURCES,
     **STELANDER_REGIONAL_RESOURCES,
+    **SVETLOGORYE_RESOURCES,
+    **NAM_NEIGHBOUR_RESOURCES,
 }
 
 ALL_STATE_RESOURCES = {
@@ -471,18 +510,34 @@ PWR_PRE_COLLAPSE_DMZ_STATES = frozenset()
 # NAM begins with one mainland split into the Svetlogorsk uprising district,
 # the broad resource basin, and a compact southern port which survives the SLF
 # victory settlement. Totals stay unchanged across the three states.
+# Svetlogorye is the populous oil state of the South. Every NAM state profile,
+# the South Harbour capital and the coastal residual read these values.
+NAM_POPULATION = {
+    67: 2_400_000,
+    225: 1_200_000,
+    226: 700_000,
+    227: 900_000,
+    228: 1_600_000,
+    229: 600_000,
+    230: 500_000,
+    231: 800_000,
+    NAM_SVETLOGORSK_STATE_ID: 1_200_000,
+    NAM_RESIDUAL_CITY_STATE_ID: 300_000,
+    NAM_DRYRIVER_STATE_ID: 1_000_000,
+    700: 1_000_000,
+}
 NAM_STATE_PROFILES = {
-    67: {"population": 480_000, "category": "large_city", "infrastructure": 4, "civilian": 2, "military": 1, "air_base": 1, "supplies": 5.0},
-    225: {"population": 220_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
-    226: {"population": 140_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
-    227: {"population": 180_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
-    228: {"population": 300_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
-    229: {"population": 120_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
-    230: {"population": 100_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
-    231: {"population": 160_000, "category": "rural", "infrastructure": 2, "civilian": 1, "military": 1, "supplies": 2.5},
-    NAM_SVETLOGORSK_STATE_ID: {"population": 90_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "air_base": 1, "supplies": 3.0, "custom_buildings": {"dockyard": 1}},
-    NAM_RESIDUAL_CITY_STATE_ID: {"population": 40_000, "category": "rural", "infrastructure": 3, "civilian": 0, "military": 0, "supplies": 1.0},
-    NAM_DRYRIVER_STATE_ID: {"population": 270_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 3.5},
+    67: {"population": NAM_POPULATION[67], "category": "large_city", "infrastructure": 4, "civilian": 2, "military": 1, "air_base": 1, "supplies": 5.0},
+    225: {"population": NAM_POPULATION[225], "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
+    226: {"population": NAM_POPULATION[226], "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
+    227: {"population": NAM_POPULATION[227], "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
+    228: {"population": NAM_POPULATION[228], "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
+    229: {"population": NAM_POPULATION[229], "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
+    230: {"population": NAM_POPULATION[230], "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
+    231: {"population": NAM_POPULATION[231], "category": "rural", "infrastructure": 2, "civilian": 1, "military": 1, "supplies": 2.5},
+    NAM_SVETLOGORSK_STATE_ID: {"population": NAM_POPULATION[NAM_SVETLOGORSK_STATE_ID], "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "air_base": 1, "supplies": 3.0, "custom_buildings": {"dockyard": 1}},
+    NAM_RESIDUAL_CITY_STATE_ID: {"population": NAM_POPULATION[NAM_RESIDUAL_CITY_STATE_ID], "category": "rural", "infrastructure": 3, "civilian": 0, "military": 0, "supplies": 1.0},
+    NAM_DRYRIVER_STATE_ID: {"population": NAM_POPULATION[NAM_DRYRIVER_STATE_ID], "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 3.5},
 }
 
 # The three states facing NAM's resource basin need enough population and
@@ -1236,6 +1291,14 @@ def buildings(state_id: int, owner: str) -> list[str]:
             f"{building} = {int(level)}"
             for building, level in profile.get("custom_buildings", {}).items()
         )
+    elif state_id in SHL_INDUSTRY:
+        lines.extend(
+            f"{building} = {level}"
+            for building, level in SHL_INDUSTRY[state_id].items()
+            if level
+        )
+        if state_id in CAPITALS:
+            lines.append("air_base = 1")
     elif state_id in CAPITALS:
         lines += ["industrial_complex = 2", "arms_factory = 1", "air_base = 1"]
     elif state_id in SECONDARY_CENTRES:
@@ -2095,14 +2158,19 @@ def update_southern_settlements(apply: bool) -> int:
 
 
 def shahrabad_population_plan() -> dict[Path, bytes]:
-    """Own SHL demographic values without rewriting settlements or buildings."""
+    """Own SHL population, factories and deposits without rewriting settlements."""
     outputs = {}
     for state_id, residents in SHL_POPULATION.items():
         path = state_path(state_id)
         source = path.read_text(encoding="utf-8-sig")
         if not re.search(r"\bowner\s*=\s*SHL\b", source):
             raise RuntimeError(f"state {state_id}: expected SHL homeland")
-        outputs[path] = set_scalar(source, "manpower", str(residents)).encode("utf-8")
+        source = set_scalar(source, "manpower", str(residents))
+        for building, level in SHL_INDUSTRY.get(state_id, {}).items():
+            source = set_history_building_level(source, building, level)
+        if state_id in SHL_RESOURCES:
+            source = ensure_state_resources(source, SHL_RESOURCES[state_id])
+        outputs[path] = source.encode("utf-8")
     return outputs
 
 
@@ -2120,10 +2188,45 @@ def update_shahrabad_population(apply: bool) -> int:
     return int(bool(changed))
 
 
+def svetlogorye_homeland_plan() -> dict[Path, bytes]:
+    """Own NAM population and the small deposits around the oil basin."""
+    outputs = {}
+    deposits = {
+        **SVETLOGORYE_RESOURCES,
+        **NAM_NEIGHBOUR_RESOURCES,
+        AZH_BLACK_COAST_STATE_ID: NAM_COALITION_FRONT_RESOURCES[AZH_BLACK_COAST_STATE_ID],
+    }
+    for state_id in sorted(set(NAM_POPULATION) | set(deposits)):
+        path = state_path(state_id)
+        source = path.read_text(encoding="utf-8-sig")
+        if state_id in NAM_POPULATION:
+            if not re.search(r"\bowner\s*=\s*NAM\b", source):
+                raise RuntimeError(f"state {state_id}: expected NAM homeland")
+            source = set_scalar(source, "manpower", str(NAM_POPULATION[state_id]))
+        if state_id in deposits:
+            source = ensure_state_resources(source, deposits[state_id])
+        outputs[path] = source.encode("utf-8")
+    return outputs
+
+
+def update_svetlogorye_homeland(apply: bool) -> int:
+    outputs = svetlogorye_homeland_plan()
+    changed = [path for path, data in outputs.items() if path.read_bytes() != data]
+    for path in changed:
+        print(f"{'WRITE' if apply else 'STALE'} {path.relative_to(ROOT)}")
+        if apply:
+            path.write_bytes(outputs[path])
+    if apply:
+        if any(path.read_bytes() != data for path, data in svetlogorye_homeland_plan().items()):
+            raise RuntimeError("Svetlogorye homeland is not idempotent")
+        return 0
+    return int(bool(changed))
+
+
 def coastal_city_state_plan() -> dict[Path, bytes]:
     """Split painted urban centres without adding population or factories."""
     outputs = {}
-    residuals = {290: (29_510, SHL_POPULATION[290], 0.5), 689: (120_000, 40_000, 1.0), 691: (280_000, 190_000, 1.5)}
+    residuals = {290: (29_510, SHL_POPULATION[290], 0.5), 689: (120_000, NAM_POPULATION[NAM_RESIDUAL_CITY_STATE_ID], 1.0), 691: (280_000, 190_000, 1.5)}
     for state_id in (284, 290, 688, 689, 691):
         path = state_path(state_id)
         source = path.read_text(encoding="utf-8-sig")
@@ -2148,8 +2251,11 @@ def coastal_city_state_plan() -> dict[Path, bytes]:
                 source = re.sub(r"(?m)^\s*2038\s*=\s*\{\s*naval_base\s*=\s*1\s*\}\s*\n", "", source)
         outputs[path] = source.encode("utf-8")
     profiles = {
-        699: ("699-Khazar.txt", "SHL", SHL_POPULATION[699], 2, 1.0, 0, 0),
-        700: ("700-South-Harbour.txt", "NAM", 80_000, 3, 2.5, 1, 2),
+        699: (
+            "699-Khazar.txt", "SHL", SHL_POPULATION[699], 2, 1.0,
+            SHL_INDUSTRY[699]["industrial_complex"], SHL_INDUSTRY[699]["arms_factory"],
+        ),
+        700: ("700-South-Harbour.txt", "NAM", NAM_POPULATION[700], 3, 2.5, 1, 2),
         701: ("701-Middle-Loren-City.txt", "EFL", 90_000, 3, 2.0, 1, 0),
     }
     for state_id, (filename, owner, population, infrastructure, supplies, civilian, military) in profiles.items():
@@ -2439,6 +2545,8 @@ def main() -> int:
     actions.add_argument("--check-coastal-cities", action="store_true")
     actions.add_argument("--check-shahrabad-population", action="store_true")
     actions.add_argument("--apply-shahrabad-population", action="store_true")
+    actions.add_argument("--check-svetlogorye-homeland", action="store_true")
+    actions.add_argument("--apply-svetlogorye-homeland", action="store_true")
     actions.add_argument("--apply-coastal-cities", action="store_true")
     actions.add_argument("--check-southern-settlements", action="store_true")
     actions.add_argument("--apply-southern-settlements", action="store_true")
@@ -2464,6 +2572,8 @@ def main() -> int:
         )
     if args.check_shahrabad_population or args.apply_shahrabad_population:
         return update_shahrabad_population(args.apply_shahrabad_population)
+    if args.check_svetlogorye_homeland or args.apply_svetlogorye_homeland:
+        return update_svetlogorye_homeland(args.apply_svetlogorye_homeland)
     if args.check_regional_settlements or args.apply_regional_settlements:
         return update_regional_settlements(args.apply_regional_settlements)
     if args.check_stelander_islands or args.apply_stelander_islands:
@@ -2528,7 +2638,8 @@ def main() -> int:
     island_drift = update_stelander_islands(False)
     regional_drift = update_regional_settlements(False)
     shahrabad_drift = update_shahrabad_population(False)
-    return max(island_drift, regional_drift, shahrabad_drift, validate_main())
+    svetlogorye_drift = update_svetlogorye_homeland(False)
+    return max(island_drift, regional_drift, shahrabad_drift, svetlogorye_drift, validate_main())
 
 
 if __name__ == "__main__":

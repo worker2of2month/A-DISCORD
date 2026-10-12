@@ -1159,27 +1159,6 @@ NAM_supports = {
 			}
 		}
 	}
-
-	NAM_programme_push = {
-		icon = generic_construction
-		visible = {
-			has_country_flag = NAM_programme_active
-		}
-		available = {
-			NAM_country_operable = yes
-			check_variable = { var = NAM_prog_progress value = 100 compare = less_than }
-		}
-		cost = 40
-		fire_only_once = no
-		days_re_enable = 45
-		complete_effect = {
-			custom_effect_tooltip = NAM_programme_push_tt
-			hidden_effect = { NAM_programme_add_15 = yes }
-		}
-		ai_will_do = {
-			base = 10
-		}
-	}
 }
 
 # Treasury of Svetlogorye: money for power, power for money and crisis reserves.
@@ -1187,7 +1166,7 @@ NAM_treasury = {
 	NAM_oil_bonds = {
 		icon = generic_industry
 		visible = {
-			has_completed_focus = NAM_treasury_chancellery
+			has_completed_focus = NAM_one_budget
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1216,7 +1195,7 @@ NAM_treasury = {
 	NAM_emergency_decrees = {
 		icon = generic_political_pressure
 		visible = {
-			has_completed_focus = NAM_treasury_chancellery
+			has_completed_focus = NAM_one_budget
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1236,7 +1215,7 @@ NAM_treasury = {
 	NAM_buy_machine_tools = {
 		icon = generic_construction
 		visible = {
-			has_completed_focus = NAM_machine_imports
+			has_completed_focus = NAM_machine_shops
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1278,7 +1257,7 @@ NAM_treasury = {
 	NAM_fuel_audit = {
 		icon = generic_industry
 		visible = {
-			has_completed_focus = NAM_fuel_inspectorate
+			has_completed_focus = NAM_well_register
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1297,7 +1276,7 @@ NAM_treasury = {
 	NAM_bribe_nam = {
 		icon = generic_political_discourse
 		visible = {
-			has_completed_focus = NAM_patronage_fund
+			has_completed_focus = NAM_supports_council
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1336,7 +1315,7 @@ NAM_treasury = {
 	NAM_bribe_oil = {
 		icon = generic_political_discourse
 		visible = {
-			has_completed_focus = NAM_patronage_fund
+			has_completed_focus = NAM_supports_council
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1375,7 +1354,7 @@ NAM_treasury = {
 	NAM_bribe_dist = {
 		icon = generic_political_discourse
 		visible = {
-			has_completed_focus = NAM_patronage_fund
+			has_completed_focus = NAM_supports_council
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1414,7 +1393,7 @@ NAM_treasury = {
 	NAM_bribe_garr = {
 		icon = generic_political_discourse
 		visible = {
-			has_completed_focus = NAM_patronage_fund
+			has_completed_focus = NAM_supports_council
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1453,7 +1432,7 @@ NAM_treasury = {
 	NAM_bribe_trade = {
 		icon = generic_political_discourse
 		visible = {
-			has_completed_focus = NAM_patronage_fund
+			has_completed_focus = NAM_supports_council
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1492,7 +1471,7 @@ NAM_treasury = {
 	NAM_crisis_fund = {
 		icon = generic_construction
 		visible = {
-			has_completed_focus = NAM_emergency_fund
+			has_completed_focus = NAM_crisis_office
 		}
 		available = {
 			NAM_country_operable = yes

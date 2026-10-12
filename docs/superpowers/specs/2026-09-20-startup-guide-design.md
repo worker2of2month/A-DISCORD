@@ -139,6 +139,9 @@ UI-переменные принадлежат выбранной стране; 
   подписи оболочки и общая справка.
 - Национальные разделы STP расширяют существующие `ADISCORD_STP_l_*.yml`;
   тексты VAL группируются в существующих `ADISCORD_VAL_decisions_l_*.yml`.
+  Тексты Шахрабада (SHL) и Светлогорья (NAM) лежат в `ADISCORD_SHL_l_*.yml`
+  и `ADISCORD_nam_resource_war_l_*.yml`; их портреты вырезает генератор
+  стартового экрана из суперсобытия NAM и загрузочного экрана `load_3`.
 - Существующий `common/on_actions/00_ADISCORD_on_actions.txt`: только защищённый
   автопоказ. Порядок STP и экономики сохраняется.
 - Существующий `tools/tests/test_validate_adiscord_gui_contracts.py` расширяется

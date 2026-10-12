@@ -4,14 +4,16 @@ state = {
 	manpower = 1600000
 	state_category = rural
 	resources = {
-		steel = 3
-		chromium = 1
+		steel = 8
+		chromium = 3
 	}
 	history = {
 		owner = SHL
 		add_core_of = SHL
 		buildings = {
 			infrastructure = 2
+			industrial_complex = 1
+			arms_factory = 1
 		}
 		victory_points = { 7825 1 }
 	}

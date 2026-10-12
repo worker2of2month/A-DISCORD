@@ -4,10 +4,13 @@ state={
 	provinces={
 		180 947 1559 3024 3243 3351 3884 6145 6231 6649 6816 6893 8682 10993 11043 11422
 	}
-	manpower = 300000
+	manpower = 1600000
 	buildings_max_level_factor = 1.000
 	state_category = town
 	local_supplies = 3.5
+	resources = {
+		steel = 4
+	}
 	history = {
 		owner = NAM
 		# adiscord_nam_overseas_colony = yes

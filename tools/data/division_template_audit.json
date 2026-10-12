@@ -7213,6 +7213,168 @@
       }
     },
     {
+      "key": "oob_shl_conclave_line_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/SHL.txt",
+        "owner": "SHL"
+      },
+      "technical_name": "Conclave Line Brigade",
+      "display_name": "Conclave Line Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 50.642857,
+        "manpower": 6300,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48,
+          "infantry_equipment": 5670,
+          "support_equipment": 30
+        },
+        "supply": 0.38
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_shl_conclave_line_brigade"
+      }
+    },
+    {
+      "key": "oob_shl_khazar_guard",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/SHL.txt",
+        "owner": "SHL"
+      },
+      "technical_name": "Khazar Guard",
+      "display_name": "Khazar Guard",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "artillery",
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "computed": {
+        "organization": 47.431818,
+        "manpower": 9600,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
+          "infantry_equipment": 8640,
+          "support_equipment": 30
+        },
+        "supply": 0.72
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_shl_khazar_guard"
+      }
+    },
+    {
       "key": "oob_skn_northern_line_brigade",
       "source": {
         "kind": "oob",
@@ -14925,6 +15087,36 @@
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.55,
       "count": 1
+    },
+    {
+      "key": "shl_oob_khazar_guard_xp_0_25_eq_0_7",
+      "path": "history/units/SHL.txt",
+      "kind": "oob",
+      "technical_name": "Khazar Guard",
+      "legacy_names": [],
+      "start_experience_factor": 0.25,
+      "start_equipment_factor": 0.7,
+      "count": 1
+    },
+    {
+      "key": "shl_oob_conclave_line_brigade_xp_0_15_eq_0_6",
+      "path": "history/units/SHL.txt",
+      "kind": "oob",
+      "technical_name": "Conclave Line Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.6,
+      "count": 1
+    },
+    {
+      "key": "shl_oob_conclave_line_brigade_xp_0_1_eq_0_55",
+      "path": "history/units/SHL.txt",
+      "kind": "oob",
+      "technical_name": "Conclave Line Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.55,
+      "count": 2
     },
     {
       "key": "skn_oob_northern_line_brigade_xp_0_15_eq_0_72",

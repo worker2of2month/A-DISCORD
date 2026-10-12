@@ -151,6 +151,24 @@ on_actions = {
 						clear_variable = ADISCORD_startup_spoilers
 					}
 				}
+				SHL = {
+					if = {
+						limit = { is_ai = no date < 2160.1.2 }
+						set_variable = { var = ADISCORD_startup_open value = 1 }
+						clear_variable = ADISCORD_startup_tab
+						clear_variable = ADISCORD_startup_page
+						clear_variable = ADISCORD_startup_spoilers
+					}
+				}
+				NAM = {
+					if = {
+						limit = { is_ai = no date < 2160.1.2 }
+						set_variable = { var = ADISCORD_startup_open value = 1 }
+						clear_variable = ADISCORD_startup_tab
+						clear_variable = ADISCORD_startup_page
+						clear_variable = ADISCORD_startup_spoilers
+					}
+				}
 				set_global_flag = ADISCORD_starting_technology_profiles_applied
 			}
 		}

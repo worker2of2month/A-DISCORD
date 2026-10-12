@@ -20,6 +20,7 @@ set_stability = -0.64
 
 add_ideas = {
 	DAN_national_spirit
+	DAN_outlawed_group
 	minister_DAN_Yan_Krass
 	minister_DAN_Vera_Toch
 	minister_DAN_Makar_Holm

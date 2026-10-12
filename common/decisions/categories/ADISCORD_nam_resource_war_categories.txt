@@ -45,7 +45,7 @@ NAM_treasury = {
 	allowed = { tag = NAM }
 	visible = {
 		OR = {
-			has_completed_focus = NAM_treasury_chancellery
+			has_completed_focus = NAM_one_budget
 			has_completed_focus = NAM_crisis_office
 		}
 	}

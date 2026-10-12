@@ -25,6 +25,9 @@ SHL_furnaces_plan = {
 		SHL_careful_smelting
 		SHL_repair_without_extinction
 		SHL_mobilise_furnaces
+		SHL_baryat_mines
+		SHL_ore_prospecting
+		SHL_smelter_quarters
 		SHL_common_industrial_account
 		SHL_engineer_society
 		SHL_right_to_land
@@ -48,6 +51,14 @@ SHL_furnaces_plan = {
 		SHL_southern_horizon
 		SHL_factory_air_defence
 		SHL_industrial_evacuation
+		SHL_furnace_arsenals
+		SHL_desert_guard_contracts
+		SHL_conclave_army
+		SHL_cannon_foundries
+		SHL_metal_market
+		SHL_incident_office
+		SHL_counting_chamber
+		SHL_cities_prog_ending_b
 	}
 	weight = { factor = 20 }
 }
