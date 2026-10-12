@@ -106,3 +106,33 @@
   superevent_vorkerland_joint_victory_title: "The Joint Restoration of Vorkerland"
  superevent_vorkerland_joint_victory_quote: "Ambition must be made to counteract ambition.\n\n- James Madison, Federalist No. 51"
   superevent_vorkerland_joint_victory_comment: "The emergency council held Vorkerland together"
+
+ superevent_stelander_sotnikov_civilwar_title:0 "SOTNIKOV'S VICTORY"
+ # Source: Second Inaugural Address, 4 March 1865 (excerpt). https://www.nps.gov/linc/learn/historyculture/lincoln-second-inaugural.htm
+ superevent_stelander_sotnikov_civilwar_quote:0 "Let us strive on to finish the work we are in to bind up the nation's wounds.\n\n- Abraham Lincoln"
+ superevent_stelander_sotnikov_civilwar_comment:0 "The resistance has prevailed"
+
+ superevent_stelander_sotnikov_directory_title:0 "DIRECTORY OF THE SWORD"
+ # Source: Leviathan, chapter XVII, 1651. https://www.gutenberg.org/files/73957/73957-h/73957-h.htm
+ superevent_stelander_sotnikov_directory_quote:0 "And covenants, without the sword, are but words, and of no strength to secure a man at all.\n\n- Thomas Hobbes"
+ superevent_stelander_sotnikov_directory_comment:0 "The order stands beyond victory"
+
+ superevent_stelander_sotnikov_charter_title:0 "A GENERAL UNDER THE CHARTER"
+ # Source: First Inaugural Address, 4 March 1801 (excerpt). https://avalon.law.yale.edu/19th_century/jefinau1.asp
+ superevent_stelander_sotnikov_charter_quote:0 "The supremacy of the civil over the military authority.\n\n- Thomas Jefferson"
+ superevent_stelander_sotnikov_charter_comment:0 "The state answers to the living"
+
+ superevent_stelander_shabrat_republic_title:0 "SHABRAT'S REPUBLIC"
+ # Source: The Social Contract, book I, chapter VIII, 1762; English translation by G. D. H. Cole (excerpt). https://www.gutenberg.org/cache/epub/46333/pg46333-images.html
+ superevent_stelander_shabrat_republic_quote:0 "Obedience to a law which we prescribe to ourselves is liberty.\n\n- Jean-Jacques Rousseau"
+ superevent_stelander_shabrat_republic_comment:0 "First citizen among equals"
+
+ superevent_stelander_tikhoreva_title:0 "THE MEASURE OF COMMON GOOD"
+ # Source: Utilitarianism, chapter II, 1861 (excerpt). https://www.gutenberg.org/files/11224/old/11224-h/11224-h.htm
+ superevent_stelander_tikhoreva_quote:0 "The multiplication of happiness is, according to the utilitarian ethics, the object of virtue.\n\n- John Stuart Mill"
+ superevent_stelander_tikhoreva_comment:0 "No life is lost below the final total"
+
+ superevent_rus_khan_died_title:0 "The Khan Is Dead"
+ # Source: Alexander Pushkin, Boris Godunov, 1825. English translation for this localisation.
+ superevent_rus_khan_died_quote:0 "How heavy you are, crown of Monomakh!\n\n- Alexander Pushkin, Boris Godunov"
+ superevent_rus_khan_died_comment:0 "The empire did not long outlive its Khan"

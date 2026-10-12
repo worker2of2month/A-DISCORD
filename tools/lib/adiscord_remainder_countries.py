@@ -159,6 +159,19 @@ def country_oob(tag: str, row: dict) -> str:
     return "\n".join([*lines, "}", ""])
 
 
+def flag_outputs(tags: tuple[str, ...] | None = None) -> dict[Path, bytes]:
+    outputs = {}
+    for tag in COUNTRIES if tags is None else tags:
+        row = COUNTRIES[tag]
+        colors = tuple(tuple(color) for color in row["flag_colors"])
+        flag = render_flag(tag, colors, row["flag_style"])
+        for directory, size in (("", (82, 52)), ("medium/", (41, 26)), ("small/", (10, 7))):
+            stream = io.BytesIO()
+            flag.resize(size, Image.Resampling.LANCZOS).save(stream, format="TGA")
+            outputs[ROOT / f"gfx/flags/{directory}{tag}.tga"] = stream.getvalue()
+    return outputs
+
+
 def country_outputs() -> dict[Path, bytes]:
     outputs = {}
     tags = [HEADER.rstrip()]
@@ -196,12 +209,7 @@ def country_outputs() -> dict[Path, bytes]:
                 entries[f"{tag}_{ideology}"] = row["name"][language]
                 entries[f"{tag}_{ideology}_DEF"] = row["name"][language]
                 entries[f"{tag}_{ideology}_ADJ"] = row["adjective"][language]
-        colors = tuple(tuple(c) for c in row["flag_colors"])
-        flag = render_flag(tag, colors, row["flag_style"])
-        for directory, size in (("", (82, 52)), ("medium/", (41, 26)), ("small/", (10, 7))):
-            stream = io.BytesIO()
-            flag.resize(size, Image.Resampling.LANCZOS).save(stream, format="TGA")
-            outputs[ROOT / f"gfx/flags/{directory}{tag}.tga"] = stream.getvalue()
+    outputs.update(flag_outputs())
     outputs[ROOT / "common/country_tags/08_ADISCORD_remainder_countries.txt"] = ("\n".join(tags) + "\n").encode("utf-8")
     outputs[ROOT / "common/characters/ADISCORD_remainder_characters.txt"] = ("\n".join([*characters, "}", ""])).encode("utf-8")
     for language, entries in localisation.items():
@@ -221,9 +229,12 @@ def expected_outputs() -> dict[Path, bytes]:
     return outputs
 
 
-def synchronize(*, apply: bool = False) -> list[str]:
+def synchronize(
+    *, apply: bool = False, flags_only: tuple[str, ...] | None = None
+) -> list[str]:
     changed = []
-    for path, content in expected_outputs().items():
+    outputs = expected_outputs() if flags_only is None else flag_outputs(flags_only)
+    for path, content in outputs.items():
         if not path.exists() or path.read_bytes() != content:
             changed.append(path.relative_to(ROOT).as_posix())
             if apply:

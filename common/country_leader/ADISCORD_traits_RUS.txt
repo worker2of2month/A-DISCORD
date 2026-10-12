@@ -1,0 +1,6 @@
+leader_traits = {
+	RUS_khan = {
+		random = no
+		sprite = 1
+	}
+}

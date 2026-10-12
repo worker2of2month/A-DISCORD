@@ -281,3 +281,69 @@ country_event = {
 		ADISCORD_superevent_enqueue = yes
 	}
 }
+
+country_event = {
+	id = ADISCORD_superevent.17
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 20 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_superevent.18
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 21 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_superevent.19
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 22 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_superevent.20
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 23 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_superevent.21
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 24 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_superevent.22
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 25 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}

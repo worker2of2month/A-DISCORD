@@ -15,6 +15,8 @@ RUS_crisis_begin = {
 		activate_mission = RUS_crisis_invasion_countdown
 		activate_mission = RUS_crisis_laser_countdown
 		country_event = { id = ADISCORD_rus_crisis.2 }
+		# 90 days before the 455-day strike deadline.
+		country_event = { id = ADISCORD_rus_crisis.14 days = 365 }
 		every_country = {
 			limit = {
 				OR = {
@@ -163,6 +165,97 @@ RUS_crisis_start_intervention = {
 		else = {
 			country_event = { id = ADISCORD_rus_crisis.9 days = 1 }
 		}
+	}
+}
+
+# RUS. Regional winners that were not free at launch receive one offer; the
+# answer revalidates entry because the event may stay open.
+RUS_crisis_call_second_wave = {
+	if = {
+		limit = {
+			RUS_crisis_project_active = yes
+			OR = {
+				check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+				check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
+			}
+		}
+		every_country = {
+			limit = { RUS_crisis_second_wave_candidate = yes }
+			country_event = { id = ADISCORD_rus_crisis.15 }
+		}
+	}
+}
+
+# COUNTRY regional winner. After a defeated first wave the same programme
+# reopens the common war; its deadline is never restarted.
+RUS_crisis_enter_second_wave = {
+	if = {
+		limit = {
+			RUS_crisis_second_wave_candidate = yes
+			RUS_crisis_can_enter_common_war = yes
+			RUS = {
+				RUS_crisis_project_active = yes
+				OR = {
+					check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+					check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
+				}
+			}
+		}
+		RUS_crisis_remove_volunteer_mandate = yes
+		RUS = {
+			if = {
+				limit = { check_variable = { var = RUS_crisis_phase value = 3 compare = equals } }
+				set_variable = { var = RUS_crisis_phase value = 2 }
+			}
+		}
+		RUS_crisis_start_intervention = yes
+		RUS = { country_event = { id = ADISCORD_rus_crisis.16 } }
+	}
+}
+
+# RUS monthly. Only the fixed regional winners can hold the mandate.
+RUS_crisis_update_volunteers = {
+	if = {
+		limit = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } }
+		VAL = { RUS_crisis_update_volunteer_mandate = yes }
+		STS = { RUS_crisis_update_volunteer_mandate = yes }
+		STP = { RUS_crisis_update_volunteer_mandate = yes }
+		NOD = { RUS_crisis_update_volunteer_mandate = yes }
+		SHL = { RUS_crisis_update_volunteer_mandate = yes }
+		NAM = { RUS_crisis_update_volunteer_mandate = yes }
+		WRK = { RUS_crisis_update_volunteer_mandate = yes }
+		IVN = { RUS_crisis_update_volunteer_mandate = yes }
+	}
+}
+
+# COUNTRY. The idea only relaxes native volunteer limits; sending stays a
+# native diplomatic action, so a human government decides for itself.
+RUS_crisis_update_volunteer_mandate = {
+	if = {
+		limit = { RUS_crisis_volunteer_sender = yes }
+		if = {
+			limit = { NOT = { has_idea = RUS_crisis_volunteer_mandate } }
+			add_ideas = RUS_crisis_volunteer_mandate
+		}
+	}
+	else = { RUS_crisis_remove_volunteer_mandate = yes }
+}
+
+RUS_crisis_clear_volunteers = {
+	VAL = { RUS_crisis_remove_volunteer_mandate = yes }
+	STS = { RUS_crisis_remove_volunteer_mandate = yes }
+	STP = { RUS_crisis_remove_volunteer_mandate = yes }
+	NOD = { RUS_crisis_remove_volunteer_mandate = yes }
+	SHL = { RUS_crisis_remove_volunteer_mandate = yes }
+	NAM = { RUS_crisis_remove_volunteer_mandate = yes }
+	WRK = { RUS_crisis_remove_volunteer_mandate = yes }
+	IVN = { RUS_crisis_remove_volunteer_mandate = yes }
+}
+
+RUS_crisis_remove_volunteer_mandate = {
+	if = {
+		limit = { has_idea = RUS_crisis_volunteer_mandate }
+		remove_ideas = RUS_crisis_volunteer_mandate
 	}
 }
 
@@ -380,6 +473,7 @@ RUS_crisis_clear_roster = {
 	}
 	clear_array = global.RUS_crisis_defenders
 	clear_global_event_target = RUS_crisis_war_anchor
+	RUS_crisis_clear_volunteers = yes
 	every_country = {
 		limit = { has_country_flag = RUS_crisis_warned }
 		clr_country_flag = RUS_crisis_warned
@@ -847,7 +941,13 @@ RUS_crisis_dissolve_empire = {
 			set_variable = { var = RUS_crisis_defeated_course value = 3 }
 		}
 		country_event = { id = ADISCORD_rus_crisis.4 }
-		ADISCORD_vorkerland_show_khan_defeated_superevent = yes
+		if = {
+			limit = { has_global_flag = RUS_khan_died }
+			RUS_show_khan_died_superevent = yes
+		}
+		else = {
+			ADISCORD_vorkerland_show_khan_defeated_superevent = yes
+		}
 	}
 	for_each_scope_loop = {
 		array = global.RUS_crisis_defenders
@@ -1274,6 +1374,300 @@ ADISCORD_vorkerland_show_khan_defeated_superevent = {
 	}
 }
 
+# --- rus_suspicion_effects ---
+# RUS. The chancery reward opens the gauge once; a proclaimed empire is public.
+RUS_suspicion_begin = {
+	if = {
+		limit = {
+			NOT = { has_variable = RUS_suspicion }
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		}
+		set_variable = { var = RUS_suspicion value = 10 }
+	}
+}
+
+# RUS. Input: temp RUS_suspicion_delta. Actions before the chancery are not counted.
+RUS_suspicion_add = {
+	if = {
+		limit = { RUS_suspicion_active = yes }
+		add_to_variable = { var = RUS_suspicion value = RUS_suspicion_delta }
+		clamp_variable = { var = RUS_suspicion min = 0 max = 100 }
+		RUS_suspicion_check = yes
+	}
+}
+
+# RUS monthly. Keep these terms in sync with GetRUSSuspicionStatus.
+RUS_suspicion_monthly = {
+	if = {
+		limit = { RUS_suspicion_active = yes }
+		set_temp_variable = { var = RUS_suspicion_delta value = 3 }
+		if = {
+			limit = { power_balance_value = { id = RUS_state_balance value > 0.60 } }
+			add_to_temp_variable = { var = RUS_suspicion_delta value = 4 }
+		}
+		else_if = {
+			limit = { power_balance_value = { id = RUS_state_balance value > 0.10 } }
+			add_to_temp_variable = { var = RUS_suspicion_delta value = 2 }
+		}
+		if = {
+			limit = { has_completed_focus = RUS_parallel_public_addresses }
+			subtract_from_temp_variable = { var = RUS_suspicion_delta value = 1 }
+		}
+		if = {
+			limit = { has_completed_focus = RUS_bunker_sealed_throne }
+			subtract_from_temp_variable = { var = RUS_suspicion_delta value = 1 }
+		}
+		RUS_suspicion_add = yes
+	}
+}
+
+# RUS. Each warning tier fires once. A full gauge waits for peace and the
+# imperial territory, then replaces the 90-day mobilisation with an immediate war.
+RUS_suspicion_check = {
+	if = {
+		limit = { RUS_suspicion_exposure_ready = yes }
+		RUS_suspicion_expose = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = RUS_suspicion value = 75 compare = greater_than_or_equals }
+			NOT = { check_variable = { var = RUS_suspicion_warning value = 2 compare = greater_than_or_equals } }
+		}
+		set_variable = { var = RUS_suspicion_warning value = 2 }
+		country_event = { id = ADISCORD_rus_crisis.17 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = RUS_suspicion value = 50 compare = greater_than_or_equals }
+			NOT = { check_variable = { var = RUS_suspicion_warning value = 1 compare = greater_than_or_equals } }
+		}
+		set_variable = { var = RUS_suspicion_warning value = 1 }
+		country_event = { id = ADISCORD_rus_crisis.17 }
+	}
+}
+
+# RUS. The forced proclamation opens the crisis through its ordinary entry;
+# the coalition launch follows at once and the strike deadline is unchanged.
+RUS_suspicion_expose = {
+	if = {
+		limit = { RUS_suspicion_exposure_ready = yes }
+		set_country_flag = RUS_suspicion_exposed
+		ADISCORD_vorkerland_rus_proclaim_last_empire = yes
+		if = {
+			limit = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+			remove_mission = RUS_crisis_invasion_countdown
+			RUS_crisis_launch = yes
+		}
+	}
+}
+
+# --- rus_army_morale_effects ---
+# RUS. The proclamation opens morale at full strength and snapshots casualties
+# so that wars before the empire are not counted.
+RUS_morale_begin = {
+	if = {
+		limit = { NOT = { has_variable = RUS_army_morale } }
+		set_variable = { var = RUS_army_morale value = 100 }
+		set_variable = { var = RUS_morale_casualties_seen_k value = casualties_k }
+	}
+}
+
+# RUS. Input: temp RUS_morale_delta.
+RUS_morale_add = {
+	if = {
+		limit = { RUS_morale_active = yes }
+		add_to_variable = { var = RUS_army_morale value = RUS_morale_delta }
+		clamp_variable = { var = RUS_army_morale min = 0 max = 100 }
+		RUS_morale_check = yes
+	}
+}
+
+# RUS monthly. Keep these terms in sync with GetRUSMoraleStatus. The economy
+# casualty delta is not reused: AI countries may refresh it only yearly.
+RUS_morale_monthly = {
+	if = {
+		limit = { RUS_morale_active = yes }
+		# Native casualties count only current wars; a smaller value after peace is no gain.
+		set_temp_variable = { var = RUS_morale_losses_k value = casualties_k }
+		subtract_from_temp_variable = { var = RUS_morale_losses_k value = RUS_morale_casualties_seen_k }
+		set_variable = { var = RUS_morale_casualties_seen_k value = casualties_k }
+		clamp_temp_variable = { var = RUS_morale_losses_k min = 0 max = 50 }
+		set_temp_variable = { var = RUS_morale_delta value = RUS_morale_losses_k }
+		if = {
+			limit = { has_completed_focus = RUS_black_army_tribunals }
+			divide_temp_variable = { var = RUS_morale_delta value = -10 }
+		}
+		else = {
+			divide_temp_variable = { var = RUS_morale_delta value = -5 }
+		}
+		if = {
+			limit = { has_war = no }
+			add_to_temp_variable = { var = RUS_morale_delta value = 3 }
+		}
+		if = {
+			limit = { has_completed_focus = RUS_imperial_field_kitchens }
+			add_to_temp_variable = { var = RUS_morale_delta value = 1 }
+		}
+		if = {
+			limit = { power_balance_value = { id = RUS_state_balance value > 0.60 } }
+			add_to_temp_variable = { var = RUS_morale_delta value = 2 }
+		}
+		else_if = {
+			limit = { power_balance_value = { id = RUS_state_balance value > 0.10 } }
+			add_to_temp_variable = { var = RUS_morale_delta value = 1 }
+		}
+		RUS_morale_add = yes
+	}
+}
+
+# STATE owned by RUS. Sets the magnitude of its loss in temp RUS_morale_delta.
+RUS_morale_state_weight = {
+	set_temp_variable = { var = RUS_morale_delta value = 1 }
+	if = {
+		limit = { state = 66 }
+		set_temp_variable = { var = RUS_morale_delta value = 15 }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				state = 176
+				state = 177
+				state = 188
+				state = 192
+			}
+		}
+		set_temp_variable = { var = RUS_morale_delta value = 8 }
+	}
+	else_if = {
+		limit = { is_core_of = RUS }
+		set_temp_variable = { var = RUS_morale_delta value = 3 }
+	}
+}
+
+# RUS. A worse band announces its crisis once; recovery re-arms it silently.
+# Death is settled by a delayed event outside the calling native callback.
+RUS_morale_check = {
+	set_temp_variable = { var = RUS_morale_band value = 0 }
+	if = {
+		limit = { check_variable = { var = RUS_army_morale value = 15 compare = less_than } }
+		set_temp_variable = { var = RUS_morale_band value = 3 }
+	}
+	else_if = {
+		limit = { check_variable = { var = RUS_army_morale value = 35 compare = less_than } }
+		set_temp_variable = { var = RUS_morale_band value = 2 }
+	}
+	else_if = {
+		limit = { check_variable = { var = RUS_army_morale value = 60 compare = less_than } }
+		set_temp_variable = { var = RUS_morale_band value = 1 }
+	}
+	if = {
+		limit = {
+			check_variable = { var = RUS_army_morale value = 0 compare = less_than_or_equals }
+			has_war = yes
+		}
+		country_event = { id = ADISCORD_rus_crisis.19 hours = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { var = RUS_morale_band value = RUS_morale_stage compare = greater_than } }
+		set_variable = { var = RUS_morale_stage value = RUS_morale_band }
+		country_event = { id = ADISCORD_rus_crisis.18 }
+	}
+	else = {
+		set_variable = { var = RUS_morale_stage value = RUS_morale_band }
+	}
+}
+
+# RUS. Credit the independent enemy holding the most imperial land, including
+# its subjects' occupations; otherwise the Montar Empire or any enemy.
+RUS_morale_select_victor = {
+	clear_global_event_target = RUS_crisis_hegemon
+	set_temp_variable = { var = RUS_morale_best_states value = 0 }
+	every_enemy_country = {
+		limit = {
+			is_subject = no
+			has_capitulated = no
+		}
+		set_temp_variable = { var = RUS_morale_held_states value = 0 }
+		every_controlled_state = {
+			limit = { is_owned_by = RUS }
+			add_to_temp_variable = { var = RUS_morale_held_states value = 1 }
+		}
+		every_subject_country = {
+			every_controlled_state = {
+				limit = { is_owned_by = RUS }
+				add_to_temp_variable = { var = RUS_morale_held_states value = 1 }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = RUS_morale_held_states value = RUS_morale_best_states compare = greater_than } }
+			set_temp_variable = { var = RUS_morale_best_states value = RUS_morale_held_states }
+			save_global_event_target_as = RUS_crisis_hegemon
+		}
+	}
+	if = {
+		limit = { NOT = { has_event_target = RUS_crisis_hegemon } }
+		if = {
+			limit = {
+				MON = {
+					has_war_with = RUS
+					is_subject = no
+					has_capitulated = no
+				}
+			}
+			MON = { save_global_event_target_as = RUS_crisis_hegemon }
+		}
+		else = {
+			random_enemy_country = {
+				limit = {
+					is_subject = no
+					has_capitulated = no
+				}
+				save_global_event_target_as = RUS_crisis_hegemon
+			}
+		}
+	}
+}
+
+# RUS. The Khan's death dissolves the empire exactly as a military defeat does.
+RUS_khan_death = {
+	if = {
+		limit = {
+			RUS_morale_active = yes
+			check_variable = { var = RUS_army_morale value = 0 compare = less_than_or_equals }
+			has_war = yes
+		}
+		RUS_morale_select_victor = yes
+		if = {
+			limit = { has_event_target = RUS_crisis_hegemon }
+			set_global_flag = RUS_khan_died
+			every_enemy_country = { country_event = { id = ADISCORD_rus_crisis.20 } }
+			RUS_crisis_dissolve_empire = yes
+		}
+	}
+}
+
+# Same human-first presentation route as the military defeat.
+RUS_show_khan_died_superevent = {
+	if = {
+		limit = {
+			any_country = {
+				is_ai = no
+				NOT = { tag = RUS }
+			}
+		}
+		random_country = {
+			limit = {
+				is_ai = no
+				NOT = { tag = RUS }
+			}
+			country_event = { id = ADISCORD_superevent.22 hours = 1 }
+		}
+	}
+	else = {
+		country_event = { id = ADISCORD_superevent.22 hours = 1 }
+	}
+}
+
 # --- rus_last_empire_effects ---
 ADISCORD_vorkerland_rus_core_dirty_sla = {
 	49 = { add_core_of = RUS add_claim_by = RUS }
@@ -1490,6 +1884,11 @@ ADISCORD_vorkerland_rus_start_dirty_campaign = {
 		}
 		else = {
 			clear_variable = ADISCORD_vorkerland_rus_campaign_target
+		}
+		if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active }
+			set_temp_variable = { var = RUS_suspicion_delta value = 10 }
+			RUS_suspicion_add = yes
 		}
 	}
 }
@@ -1730,6 +2129,9 @@ ADISCORD_vorkerland_rus_proclaim_last_empire = {
 		RLY = { ADISCORD_release_non_participating_minor_optimization = yes }
 		ADISCORD_economy_mark_dirty = yes
 		ADISCORD_vorkerland_show_last_empire_superevent = yes
+		# Imperial focus branches use allow_branch on the proclamation flag.
+		mark_focus_tree_layout_dirty = yes
+		RUS_morale_begin = yes
 		RUS_crisis_check_start = yes
 	}
 }
@@ -2985,6 +3387,7 @@ RUS_campaign_initialize = {
 		RUS_faction_support_refresh = yes
 		RUS_bunker_refresh = yes
 		country_event = { id = ADISCORD_rus_campaign.1 days = 2 }
+		country_event = { id = ADISCORD_rus_campaign.26 days = 4 }
 	}
 }
 
@@ -3083,6 +3486,8 @@ RUS_reactor_works_begin = {
 		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 400 }
 		FROM = { set_state_flag = RUS_reactor_works_in_progress }
 		ADISCORD_economy_mark_dirty = yes
+		set_temp_variable = { var = RUS_suspicion_delta value = 6 }
+		RUS_suspicion_add = yes
 	}
 }
 
@@ -3294,6 +3699,8 @@ RUS_reactor_sortie_begin = {
 				amount = -40
 			}
 		}
+		set_temp_variable = { var = RUS_suspicion_delta value = 4 }
+		RUS_suspicion_add = yes
 	}
 }
 
@@ -3369,6 +3776,8 @@ RUS_lab_reactor_alloys_start = {
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
 		ADISCORD_economy_mark_dirty = yes
+		set_temp_variable = { var = RUS_suspicion_delta value = 8 }
+		RUS_suspicion_add = yes
 	}
 }
 
@@ -3419,6 +3828,8 @@ RUS_lab_zeppelin_start = {
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 1000 }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1000 }
 		ADISCORD_economy_mark_dirty = yes
+		set_temp_variable = { var = RUS_suspicion_delta value = 12 }
+		RUS_suspicion_add = yes
 	}
 }
 

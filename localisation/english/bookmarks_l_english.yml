@@ -1,6 +1,6 @@
 ﻿l_english:
  GATHERING_STORM_NAME: "The Wounded Lion"
- GATHERING_STORM_DESC: "The Vorkerland Empire was long regarded as the continent's dominant power, but its time has passed. Vorkerland burns amid internal conflicts, collapsed institutions and old debts that no one can hide any longer.\n\nNew states are rising from the ruins of the old order, each with its own fears, resources and political ambitions. The continent is entering an age in which old borders no longer guarantee a future, and power will belong to those who can turn chaos into a functioning system."
+ GATHERING_STORM_DESC: "The Veyran Empire was long regarded as the continent's dominant power, until the First Revolution overthrew the monarchy. After the revolution, this land became known as Vorkerland. Vorkerland burns amid internal conflicts, collapsed institutions and old debts that no one can hide any longer.\n\nNew states are rising from the ruins of the old order, each with its own fears, resources and political ambitions. The continent is entering an age in which old borders no longer guarantee a future, and power will belong to those who can turn chaos into a functioning system."
  OTHER_GATHERING_STORM_DESC: "New centres of power are emerging across the continent. Some struggle to survive among the ruins of the empire; others are already preparing their own advance."
  BLITZKRIEG_NAME: "After the Blow"
  BLITZKRIEG_DESC: "By 2183, the first upheavals had ceased to be news and become the order of the day. The states that survived the collapse of the old system have secured their borders, reassessed their allies and grown accustomed to the thought that the next war may begin without warning."
@@ -39,3 +39,5 @@
  RUS_bookmark_last_empire_desc: "The Khan will proclaim a common state. Whether the Black Army or the scientists prevail decides its name and order, but not the price of unification."
  RUS_bookmark_heart_of_the_continent: "Heart of the Continent"
  RUS_bookmark_heart_of_the_continent_desc: "The centre of the continent will belong to the Khan's state - or to no one. Holding it means breaking the hegemon."
+ RUS_bookmark_operation_last_sunset: "Operation Last Sunset"
+ RUS_bookmark_operation_last_sunset_desc: "The Khan aims an orbital weapon at the reactor in the heart of the continent. Neighbouring powers prepare to invade while the Black Army holds the perimeter and the scientists finish their calculations. If the order to strike is carried out, the war will end along with the world it was fought over."

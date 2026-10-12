@@ -245,6 +245,52 @@ RUS_crisis_conquer_NAM = {
 	ai_strategy = { type = conquer id = NAM value = 200 }
 }
 
+RUS_crisis_prepare_WRK = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		WRK = { RUS_crisis_coalition_candidate = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = WRK value = 200 }
+}
+
+RUS_crisis_conquer_WRK = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		WRK = { has_country_flag = RUS_crisis_defender }
+		has_war_with = WRK
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = WRK value = 200 }
+}
+
+RUS_crisis_prepare_IVN = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		IVN = { RUS_crisis_coalition_candidate = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = IVN value = 200 }
+}
+
+RUS_crisis_conquer_IVN = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		IVN = { has_country_flag = RUS_crisis_defender }
+		has_war_with = IVN
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = IVN value = 200 }
+}
+
 RUS_crisis_coalition_war = {
 	allowed = { NOT = { tag = RUS } }
 	enable = {
@@ -440,6 +486,28 @@ NAM_crisis_prepare_RUS = {
 	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
 }
 
+WRK_crisis_prepare_RUS = {
+	allowed = { tag = WRK }
+	enable = {
+		is_ai = yes
+		RUS_crisis_coalition_candidate = yes
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
+IVN_crisis_prepare_RUS = {
+	allowed = { tag = IVN }
+	enable = {
+		is_ai = yes
+		RUS_crisis_coalition_candidate = yes
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
 MON_crisis_prepare_RUS = {
 	allowed = { tag = MON }
 	enable = {
@@ -482,4 +550,92 @@ BTL_crisis_prepare_RUS = {
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
+# --- rus_coalition_volunteers ---
+# Regional winners outside the coalition war. Native volunteers can only reach
+# a recipient at war, so desire towards a member outside that war has no effect.
+
+RUS_crisis_volunteers_MON = {
+	allowed = {
+		OR = {
+			tag = VAL
+			tag = STS
+			tag = STP
+			tag = NOD
+			tag = SHL
+			tag = NAM
+			tag = WRK
+			tag = IVN
+		}
+	}
+	enable = {
+		is_ai = yes
+		has_idea = RUS_crisis_volunteer_mandate
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = send_volunteers_desire id = MON value = 1000 }
+}
+
+RUS_crisis_volunteers_VLD = {
+	allowed = {
+		OR = {
+			tag = VAL
+			tag = STS
+			tag = STP
+			tag = NOD
+			tag = SHL
+			tag = NAM
+			tag = WRK
+			tag = IVN
+		}
+	}
+	enable = {
+		is_ai = yes
+		has_idea = RUS_crisis_volunteer_mandate
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = send_volunteers_desire id = VLD value = 600 }
+}
+
+RUS_crisis_volunteers_TMR = {
+	allowed = {
+		OR = {
+			tag = VAL
+			tag = STS
+			tag = STP
+			tag = NOD
+			tag = SHL
+			tag = NAM
+			tag = WRK
+			tag = IVN
+		}
+	}
+	enable = {
+		is_ai = yes
+		has_idea = RUS_crisis_volunteer_mandate
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = send_volunteers_desire id = TMR value = 600 }
+}
+
+RUS_crisis_volunteers_BTL = {
+	allowed = {
+		OR = {
+			tag = VAL
+			tag = STS
+			tag = STP
+			tag = NOD
+			tag = SHL
+			tag = NAM
+			tag = WRK
+			tag = IVN
+		}
+	}
+	enable = {
+		is_ai = yes
+		has_idea = RUS_crisis_volunteer_mandate
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = send_volunteers_desire id = BTL value = 400 }
 }

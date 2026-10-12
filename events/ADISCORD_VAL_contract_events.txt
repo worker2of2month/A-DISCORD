@@ -2562,7 +2562,7 @@ country_event = {
 	id = val_rework.125
 	title = val_rework.125.t
 	desc = val_rework.125.d
-	picture = GFX_report_event_generic_factory
+	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	timeout_days = 14
 	option = {
@@ -2604,7 +2604,7 @@ country_event = {
 	id = val_rework.126
 	title = val_rework.126.t
 	desc = val_rework.126.d
-	picture = GFX_report_event_generic_factory
+	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	option = { name = val_rework.126.a }
 }
@@ -2613,7 +2613,7 @@ country_event = {
 	id = val_rework.127
 	title = val_rework.127.t
 	desc = val_rework.127.d
-	picture = GFX_report_event_generic_factory
+	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
 	timeout_days = 13
 	# An obsolete notice may close after a new war has started; only event 130 owns expiry.
@@ -2673,7 +2673,7 @@ country_event = {
 	id = val_rework.128
 	title = val_rework.128.t
 	desc = val_rework.128.d
-	picture = GFX_report_event_generic_factory
+	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	option = { name = val_rework.128.a }
 }
@@ -2701,7 +2701,7 @@ country_event = {
 		}
 		text = val_rework.129.d
 	}
-	picture = GFX_report_event_generic_factory
+	picture = GFX_event_adiscord_factory_workshop
 	is_triggered_only = yes
 	option = {
 		name = val_rework.129.a
@@ -2781,7 +2781,7 @@ country_event = {
 	id = val_rework.135
 	title = val_rework.135.t
 	desc = val_rework.135.d
-	picture = GFX_report_event_generic_factory
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	option = { name = val_rework.135.a }
 }
@@ -2790,7 +2790,7 @@ country_event = {
 	id = val_rework.136
 	title = val_rework.136.t
 	desc = val_rework.136.d
-	picture = GFX_report_event_generic_factory
+	picture = GFX_event_adiscord_factory_workshop
 	is_triggered_only = yes
 	option = { name = val_rework.136.a }
 }

@@ -31,6 +31,43 @@ def copy_contract_tree(destination: Path) -> None:
 
 
 class SupereventContractTests(unittest.TestCase):
+    def test_stelander_personal_victories_select_the_winner_and_keep_previews_safe(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, selected_effects
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.validators.validate_adiscord_superevents import _event_block
+
+        source = (ROOT / "events/ADISCORD_STP_events.txt").read_text(encoding="utf-8")
+        event = parse_clausewitz(_event_block(source, "ADISCORD_STP_cw.72"))[0].value
+        for receiver in ("STS", "STP", "VAL"):
+            for leader, expected in (("STP_grigory_sotnikov", "20"), ("STP_maksim_shabrat", "9")):
+                facts = {("STS", "ruling_leader"): leader}
+                effects = list(selected_effects(block(event, "immediate"), facts, receiver))
+                requests = [scalar(row.value, "ADISCORD_superevent_request")
+                            for _, row in effects if row.key == "set_temp_variable"]
+                self.assertEqual(requests, [expected], (receiver, leader))
+                self.assertEqual(sum(row.key == "ADISCORD_superevent_enqueue" for _, row in effects), 1)
+
+        for story, request, predicate in (
+            (72, "21", "STP_pc_sword_directory_current"),
+            (68, "22", "STP_pc_charter_sotnikov_current"),
+            (69, "23", "STP_pc_charter_shabrat_current"),
+            (70, "24", "STP_pc_charter_tikhoreva_current"),
+        ):
+            event = parse_clausewitz(_event_block(source, f"ADISCORD_STP_pc.{story}"))[0].value
+            self.assertEqual(scalar(block(event, "trigger"), predicate), "yes")
+            self.assertEqual(scalar(event, "fire_only_once"), "yes")
+            effects = list(selected_effects(block(event, "immediate"), {}, "STS"))
+            requests = [scalar(row.value, "ADISCORD_superevent_request")
+                        for _, row in effects if row.key == "set_temp_variable"]
+            self.assertEqual(requests, [request])
+
+        source = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
+        for number in range(17, 22):
+            event = parse_clausewitz(_event_block(source, f"ADISCORD_superevent.{number}"))[0].value
+            effects = block(event, "immediate")
+            self.assertEqual([row.key for row in effects], ["set_temp_variable", "ADISCORD_superevent_enqueue"])
+            self.assertEqual(scalar(block(effects, "set_temp_variable"), "ADISCORD_superevent_request"), str(number + 3))
+
     def test_radio_excludes_superevents_and_preserves_mod_music(self):
         playlists = list((ROOT / "music").glob("*.txt"))
         songs = "\n".join(path.read_text(encoding="utf-8-sig") for path in playlists)
@@ -204,7 +241,7 @@ class SupereventContractTests(unittest.TestCase):
 
         gui = parse_clausewitz((ROOT / SCRIPTED_GUI).read_text(encoding="utf-8"))[0].value
         windows = fields(gui)
-        order = (6, 19, 18, 17, 16, 10, 11, 9, 14, 1, 12, 15, 13, 2, 3, 4, 5, 7, 8)
+        order = (6, 24, 20, 23, 21, 22, 19, 18, 25, 17, 16, 10, 11, 9, 14, 1, 12, 15, 13, 2, 3, 4, 5, 7, 8)
         self.assertEqual(set(order), set(range(1, len(PRESENTATIONS) + 1)))
         for index in order + order:
             request(index)
@@ -378,7 +415,7 @@ class SupereventContractTests(unittest.TestCase):
             if 'name = "GFX_superevent_itora_vorkerland_war"' in block
         )
         texture = re.search(r'textureFile = "([^"]+)"', sprite)[1]
-        self.assertEqual(texture, "gfx/interface/superevents/NAM/namestnik lost.png")
+        self.assertEqual(texture, "gfx/interface/superevents/WRK/superevent_itora_vorkerland_war.png")
         self.assertTrue((ROOT / texture).is_file())
 
         effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
@@ -652,6 +689,12 @@ class SupereventContractTests(unittest.TestCase):
                 "superevent_itora_civilwar",
                 "superevent_rus_khan_defeated",
                 "superevent_vorkerland_joint_victory",
+                "superevent_stelander_sotnikov_civilwar",
+                "superevent_stelander_sotnikov_directory",
+                "superevent_stelander_sotnikov_charter",
+                "superevent_stelander_shabrat_republic",
+                "superevent_stelander_tikhoreva",
+                "superevent_rus_khan_died",
             ),
         )
 

@@ -308,4 +308,100 @@ scripted_gui = {
 		}
 	}
 
+	superevent_stelander_sotnikov_civilwar = {
+		window_name = "superevent_stelander_sotnikov_civilwar"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_sotnikov_civilwar
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_sotnikov_civilwar
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_stelander_sotnikov_directory = {
+		window_name = "superevent_stelander_sotnikov_directory"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_sotnikov_directory
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_sotnikov_directory
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_stelander_sotnikov_charter = {
+		window_name = "superevent_stelander_sotnikov_charter"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_sotnikov_charter
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_sotnikov_charter
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_stelander_shabrat_republic = {
+		window_name = "superevent_stelander_shabrat_republic"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_shabrat_republic
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_shabrat_republic
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_stelander_tikhoreva = {
+		window_name = "superevent_stelander_tikhoreva"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_tikhoreva
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_tikhoreva
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_rus_khan_died = {
+		window_name = "superevent_rus_khan_died"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_rus_khan_died
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_rus_khan_died
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
 }

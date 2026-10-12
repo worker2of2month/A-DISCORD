@@ -94,6 +94,9 @@ on_actions = {
 	on_monthly_RUS = {
 		effect = {
 			RUS_crisis_check_start = yes
+			RUS_suspicion_monthly = yes
+			RUS_morale_monthly = yes
+			RUS_crisis_update_volunteers = yes
 			ADISCORD_vorkerland_check_khan_border_war = yes
 			ADISCORD_vorkerland_check_rus_dirty_campaign = yes
 		}
@@ -286,6 +289,30 @@ on_actions = {
 						RUS = { has_country_flag = RUS_bunker_initialized }
 					}
 					RUS = { RUS_bunker_refresh = yes }
+				}
+				# Army morale follows imperial land lost to or recovered from the enemy.
+				if = {
+					limit = {
+						FROM = { tag = RUS }
+						RUS = { RUS_morale_active = yes }
+						FROM.FROM = { is_owned_by = RUS }
+					}
+					FROM.FROM = { RUS_morale_state_weight = yes }
+					multiply_temp_variable = { var = RUS_morale_delta value = -1 }
+					RUS = { RUS_morale_add = yes }
+				}
+				else_if = {
+					limit = {
+						ROOT = { tag = RUS }
+						RUS = { RUS_morale_active = yes }
+						FROM.FROM = { is_owned_by = RUS }
+					}
+					FROM.FROM = { RUS_morale_state_weight = yes }
+					if = {
+						limit = { RUS = { NOT = { has_completed_focus = RUS_scientists_at_headquarters } } }
+						divide_temp_variable = { var = RUS_morale_delta value = 2 }
+					}
+					RUS = { RUS_morale_add = yes }
 				}
 				# Iconic objectives. Each fires once per campaign; the global array is
 				# the guard, so the literal id in the limit must match the id passed to

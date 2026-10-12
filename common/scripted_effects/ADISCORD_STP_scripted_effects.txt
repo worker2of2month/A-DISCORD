@@ -5110,6 +5110,17 @@ STP_pc_charter_install_sotnikov = {
 			character = STP_grigory_sotnikov
 			ideology = steland_liberationism
 		}
+		set_portraits = {
+			character = STP_grigory_sotnikov
+			civilian = {
+				large = GFX_portrait_STP_Grigory_Sotnikov_2
+				small = GFX_portrait_STP_Grigory_Sotnikov_2_small
+			}
+		}
+		set_country_leader_portrait = {
+			ideology = humanism
+			portrait = GFX_portrait_STP_Grigory_Sotnikov_2
+		}
 		set_variable = { var = STP_pc_charter_cabinet value = 1 }
 		STP_pc_charter_confirm_government = yes
 	}

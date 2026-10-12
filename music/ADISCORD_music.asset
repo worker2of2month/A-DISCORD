@@ -19,12 +19,19 @@ music = {
 	volume = 0.0
 }
 
-# Owner: tools/assets/source/build_rus_crisis_audio.py. The music channel stays
-# silent through the 26-second strike and for 300 seconds after its completion.
+# Owner: tools/assets/source/build_rus_crisis_audio.py. Entering the epilogue
+# replaces the finale music with this silent carrier.
 music = {
 	name = "ADISCORD_rus_aftermath_silence"
 	file = "ADISCORD_rus_aftermath_silence.ogg"
 	volume = 0.0
+}
+
+# Owner: tools/builders/build_adiscord_superevent_music.py.
+music = {
+	name = "ADISCORD_rus_world_ends"
+	file = "ADISCORD_rus_world_ends.ogg"
+	volume = 0.65
 }
 
 music = {

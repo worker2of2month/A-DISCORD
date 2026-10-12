@@ -1,6 +1,18 @@
 spriteTypes = {
 
 	spriteType = {
+		name = "GFX_bop_RUS_scientists"
+		texturefile = "gfx/interface/bop/RUS_bop_scientists.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_bop_RUS_black_army"
+		texturefile = "gfx/interface/bop/RUS_bop_black_army.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
 		name = "GFX_bop_STP_party_election_legitimacy"
 		texturefile = "gfx/interface/bop/STP_bop_shabrat_bad.png"
 		legacy_lazy_load = no

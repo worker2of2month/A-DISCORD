@@ -85,7 +85,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_itora_vorkerland_war"
-		textureFile = "gfx/interface/superevents/NAM/namestnik lost.png"
+		textureFile = "gfx/interface/superevents/WRK/superevent_itora_vorkerland_war.png"
 	}
 
 	spriteType = {
@@ -101,6 +101,36 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_superevent_vorkerland_joint_victory"
 		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_joint_victory.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_stelander_sotnikov_civilwar"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_shabrat_victory.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_stelander_sotnikov_directory"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_shabrat_victory.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_stelander_sotnikov_charter"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_shabrat_victory.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_stelander_shabrat_republic"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_shabrat_victory.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_stelander_tikhoreva"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_shabrat_victory.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_rus_khan_died"
+		textureFile = "gfx/interface/superevents/RUS/last empire.png"
 	}
 
 }

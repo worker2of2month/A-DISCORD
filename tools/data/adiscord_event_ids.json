@@ -4941,6 +4941,62 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_rus_crisis.14",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 14,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_crisis.15",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 15,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_crisis.16",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 16,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_crisis.17",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 17,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_crisis.18",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 18,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_crisis.19",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 19,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_crisis.20",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 20,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_rus_campaign.1",
       "namespace": "ADISCORD_rus_campaign",
       "number": 1,
@@ -5136,6 +5192,86 @@
       "id": "ADISCORD_rus_campaign.25",
       "namespace": "ADISCORD_rus_campaign",
       "number": 25,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.26",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 26,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.27",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 27,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.28",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 28,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.29",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 29,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.30",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 30,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.31",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 31,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.32",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 32,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.33",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 33,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.34",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 34,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.35",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 35,
       "owner": "events/ADISCORD_RUS_events.txt",
       "subsystem": "rus_campaign",
       "status": "active"
@@ -5650,6 +5786,62 @@
       "number": 2,
       "owner": "events/ADISCORD_scenario_debug_events.txt",
       "subsystem": "portal_test",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_superevent.17",
+      "namespace": "ADISCORD_superevent",
+      "number": 17,
+      "owner": "events/ADISCORD_superevents.txt",
+      "subsystem": "superevents",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_superevent.18",
+      "namespace": "ADISCORD_superevent",
+      "number": 18,
+      "owner": "events/ADISCORD_superevents.txt",
+      "subsystem": "superevents",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_superevent.19",
+      "namespace": "ADISCORD_superevent",
+      "number": 19,
+      "owner": "events/ADISCORD_superevents.txt",
+      "subsystem": "superevents",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_superevent.20",
+      "namespace": "ADISCORD_superevent",
+      "number": 20,
+      "owner": "events/ADISCORD_superevents.txt",
+      "subsystem": "superevents",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_superevent.21",
+      "namespace": "ADISCORD_superevent",
+      "number": 21,
+      "owner": "events/ADISCORD_superevents.txt",
+      "subsystem": "superevents",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_superevent.22",
+      "namespace": "ADISCORD_superevent",
+      "number": 22,
+      "owner": "events/ADISCORD_superevents.txt",
+      "subsystem": "superevents",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_preview.1",
+      "namespace": "ADISCORD_rus_preview",
+      "number": 1,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_crisis",
       "status": "active"
     }
   ]

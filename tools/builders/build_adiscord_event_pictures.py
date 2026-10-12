@@ -13,6 +13,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageOps
 
+from tools.builders.build_adiscord_event_ui_assets import _test_picture as military_headquarters_art
 from tools.lib.adiscord_ui_surfaces import apply_or_check
 from tools.lib.paths import repository_root
 
@@ -27,7 +28,7 @@ SIZES = {"country": (507, 184), "news": (396, 153)}
 ART = {
     "parliament_chamber": ("source/parliament_chamber.png", ("country", "news")),
     "negotiation_table": ("source/negotiation_table.png", ("country", "news")),
-    "military_headquarters": ("event_adiscord_ui_test.png", ("country",)),
+    "military_headquarters": ("source/event_adiscord_ui_test_source.png", ("country",)),
     "nectar_of_the_gods": ("source/nectar_of_the_gods.png", ("country",)),
     "city_in_civil_war": ("source/news/urban_patrol.png", ("news",)),
     "vorkerland_explosion": (
@@ -38,12 +39,17 @@ ART = {
     "army_formation": ("source/news/military_formation.png", ("news",)),
     "treaty_signing": ("source/news/constituent_assembly.png", ("news",)),
     "peace_negotiations": ("source/news/peace_signing.png", ("news",)),
-    "military_planning": ("source/news/military_planning.dds", ("country", "news")),
+    "military_planning": ("source/military_planning_color.png", ("country", "news")),
     "urban_resistance": ("source/news/resistance_fighters.png", ("news",)),
     "armed_uprising": ("source/news/urban_combat.png", ("news",)),
     "kefreyt_address": ("source/news/kefreyt_address.png", ("news",)),
     "imperial_proclamation": ("source/news/imperial_proclamation.png", ("news",)),
     "stelander_empire": ("source/news/stelander_empire.png", ("news",)),
+    "perimeter_checkpoint": ("source/perimeter_checkpoint.png", ("country",)),
+    "expedition_camp": ("source/expedition_camp.png", ("country",)),
+    "administrative_office": ("source/administrative_office.png", ("country",)),
+    "school_classroom": ("source/school_classroom.png", ("country",)),
+    "factory_workshop": ("source/factory_workshop_color.png", ("country",)),
 }
 
 # Preserve public sprite IDs while naming the textures after their visible scene.
@@ -72,6 +78,9 @@ def formatted_art(scene: str, kind: str) -> Image.Image:
     source, formats = ART[scene]
     if kind not in formats:
         raise ValueError(f"unsupported event artwork format: {scene}/{kind}")
+    if scene == "military_headquarters":
+        # The UI asset owner supplies the shared rendering without a runtime-file dependency.
+        return military_headquarters_art()
     if kind == "news":
         source = "source/news/" + NEWS_SCENES.get(scene, scene) + ".png"
     source_path = (

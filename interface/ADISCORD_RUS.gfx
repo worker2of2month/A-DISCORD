@@ -1,5 +1,10 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_RUS_world_ended_superevent"
+		textureFile = "gfx/interface/superevents/RUS/world_ended.png"
+	}
+
+	spriteType = {
 		name = "GFX_RUS_bunker_layer_1"
 		texturefile = "gfx/interface/ADISCORD_RUS/bunker_layer_1.dds"
 	}

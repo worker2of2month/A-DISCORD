@@ -2807,3 +2807,103 @@ defined_text = {
 	}
 	text = { localization_key = RUS_crisis_epilogue_8_body }
 }
+
+# Suspicion summary. Growth terms mirror RUS_suspicion_monthly.
+defined_text = {
+	name = GetRUSSuspicionStatus
+	text = {
+		trigger = { RUS_suspicion_active = yes }
+		localization_key = RUS_suspicion_status
+	}
+	text = { localization_key = RUS_suspicion_status_closed }
+}
+
+defined_text = {
+	name = GetRUSSuspicionArmyGrowth
+	text = {
+		trigger = { power_balance_value = { id = RUS_state_balance value > 0.60 } }
+		localization_key = RUS_suspicion_growth_army_dominance
+	}
+	text = {
+		trigger = { power_balance_value = { id = RUS_state_balance value > 0.10 } }
+		localization_key = RUS_suspicion_growth_army_influence
+	}
+	text = { localization_key = RUS_suspicion_growth_none }
+}
+
+defined_text = {
+	name = GetRUSSuspicionBroadcastRelief
+	text = {
+		trigger = { has_completed_focus = RUS_parallel_public_addresses }
+		localization_key = RUS_suspicion_growth_broadcast
+	}
+	text = { localization_key = RUS_suspicion_growth_none }
+}
+
+defined_text = {
+	name = GetRUSSuspicionThroneRelief
+	text = {
+		trigger = { has_completed_focus = RUS_bunker_sealed_throne }
+		localization_key = RUS_suspicion_growth_sealed_throne
+	}
+	text = { localization_key = RUS_suspicion_growth_none }
+}
+
+# Army morale summary. Growth terms mirror RUS_morale_monthly.
+defined_text = {
+	name = GetRUSMoraleStatus
+	text = {
+		trigger = { RUS_morale_active = yes }
+		localization_key = RUS_morale_status
+	}
+	text = { localization_key = RUS_morale_growth_none }
+}
+
+defined_text = {
+	name = GetRUSMoraleCasualtyStep
+	text = {
+		trigger = { has_completed_focus = RUS_black_army_tribunals }
+		localization_key = RUS_morale_casualty_step_tribunals
+	}
+	text = { localization_key = RUS_morale_casualty_step }
+}
+
+defined_text = {
+	name = GetRUSMoraleRecovery
+	text = {
+		trigger = { has_completed_focus = RUS_scientists_at_headquarters }
+		localization_key = RUS_morale_recovery_full
+	}
+	text = { localization_key = RUS_morale_recovery_half }
+}
+
+defined_text = {
+	name = GetRUSMoraleKitchens
+	text = {
+		trigger = { has_completed_focus = RUS_imperial_field_kitchens }
+		localization_key = RUS_morale_growth_kitchens
+	}
+	text = { localization_key = RUS_morale_growth_none }
+}
+
+defined_text = {
+	name = GetRUSMoralePeaceGrowth
+	text = {
+		trigger = { has_war = no }
+		localization_key = RUS_morale_growth_peace
+	}
+	text = { localization_key = RUS_morale_growth_none }
+}
+
+defined_text = {
+	name = GetRUSMoraleArmyGrowth
+	text = {
+		trigger = { power_balance_value = { id = RUS_state_balance value > 0.60 } }
+		localization_key = RUS_morale_growth_army_dominance
+	}
+	text = {
+		trigger = { power_balance_value = { id = RUS_state_balance value > 0.10 } }
+		localization_key = RUS_morale_growth_army_influence
+	}
+	text = { localization_key = RUS_morale_growth_none }
+}

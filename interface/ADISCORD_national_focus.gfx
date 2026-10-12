@@ -342,6 +342,21 @@ spriteTypes = {
 		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_contracts_outlive_kings.png"
 	}
 
+	spriteType = {
+		name = "GFX_focus_RUS_operation_last_sunset"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_operation_last_sunset.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_imperial_general_staff"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_imperial_general_staff.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_press_the_closed_zone"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_press_the_closed_zone.png"
+	}
+
 	###RUS BOOKMARK
 
 	spriteType = {
@@ -355,6 +370,11 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_focus_RUS_bookmark_heart_of_the_continent"
 		texturefile = "gfx/interface/goals/RUS/bookmark/GFX_focus_RUS_bookmark_heart_of_the_continent.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_bookmark_operation_last_sunset"
+		texturefile = "gfx/interface/goals/RUS/bookmark/GFX_focus_RUS_bookmark_operation_last_sunset.png"
 	}
 
 	###VAL

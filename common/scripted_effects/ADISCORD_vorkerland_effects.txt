@@ -4348,6 +4348,30 @@ ADISCORD_superevent_enqueue = {
 						check_variable = { ADISCORD_superevent_request = 19 }
 						has_global_flag = superevent_vorkerland_joint_victory
 					}
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 20 }
+						has_global_flag = superevent_stelander_sotnikov_civilwar
+					}
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 21 }
+						has_global_flag = superevent_stelander_sotnikov_directory
+					}
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 22 }
+						has_global_flag = superevent_stelander_sotnikov_charter
+					}
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 23 }
+						has_global_flag = superevent_stelander_shabrat_republic
+					}
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 24 }
+						has_global_flag = superevent_stelander_tikhoreva
+					}
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 25 }
+						has_global_flag = superevent_rus_khan_died
+					}
 			} }
 		}
 		add_to_array = { array = global.ADISCORD_superevent_queue value = ADISCORD_superevent_request }
@@ -4364,6 +4388,11 @@ ADISCORD_superevent_dispatch_next = {
 					has_global_flag = superevent_vorkerland_dirty_opening
 					has_global_flag = superevent_vorkerland_worker_victory
 					has_global_flag = superevent_vorkerland_joint_victory
+					has_global_flag = superevent_stelander_sotnikov_civilwar
+					has_global_flag = superevent_stelander_sotnikov_directory
+					has_global_flag = superevent_stelander_sotnikov_charter
+					has_global_flag = superevent_stelander_shabrat_republic
+					has_global_flag = superevent_stelander_tikhoreva
 					has_global_flag = superevent_vorkerland_utilitarian_victory
 					has_global_flag = superevent_vorkerland_vlad_victory
 					has_global_flag = superevent_vorkerland_dorian_victory
@@ -4379,6 +4408,7 @@ ADISCORD_superevent_dispatch_next = {
 					has_global_flag = superevent_itora_vorkerland_war
 					has_global_flag = superevent_itora_civilwar
 					has_global_flag = superevent_rus_khan_defeated
+					has_global_flag = superevent_rus_khan_died
 			} }
 		}
 		set_temp_variable = { ADISCORD_superevent_next = global.ADISCORD_superevent_queue^0 }
@@ -4460,6 +4490,30 @@ ADISCORD_superevent_dispatch_next = {
 			limit = { check_variable = { ADISCORD_superevent_next = 19 } }
 			set_global_flag = superevent_vorkerland_joint_victory
 		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 20 } }
+			set_global_flag = superevent_stelander_sotnikov_civilwar
+		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 21 } }
+			set_global_flag = superevent_stelander_sotnikov_directory
+		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 22 } }
+			set_global_flag = superevent_stelander_sotnikov_charter
+		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 23 } }
+			set_global_flag = superevent_stelander_shabrat_republic
+		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 24 } }
+			set_global_flag = superevent_stelander_tikhoreva
+		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 25 } }
+			set_global_flag = superevent_rus_khan_died
+		}
 		ADISCORD_vorkerland_play_superevent_sound = yes
 	}
 }
@@ -4468,6 +4522,7 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 	clr_global_flag = superevent_itora_vorkerland_war
 	clr_global_flag = superevent_itora_civilwar
 	clr_global_flag = superevent_rus_khan_defeated
+	clr_global_flag = superevent_rus_khan_died
 	clr_global_flag = superevent_stelander_empire
 	clr_global_flag = superevent_stelander_party_victory
 	clr_global_flag = superevent_stelander_shabrat_victory
@@ -4484,6 +4539,11 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 	clr_global_flag = superevent_vorkerland_utilitarian_victory
 	clr_global_flag = superevent_vorkerland_vlad_victory
 	clr_global_flag = superevent_vorkerland_dorian_victory
+	clr_global_flag = superevent_stelander_sotnikov_civilwar
+	clr_global_flag = superevent_stelander_sotnikov_directory
+	clr_global_flag = superevent_stelander_sotnikov_charter
+	clr_global_flag = superevent_stelander_shabrat_republic
+	clr_global_flag = superevent_stelander_tikhoreva
 }
 
 # Unscoped playback. Observer/spectator has no human country, so a
@@ -10308,6 +10368,12 @@ ADISCORD_superevent_observer_tick = {
 					has_global_flag = { flag = superevent_itora_civilwar days > 6 }
 					has_global_flag = { flag = superevent_rus_khan_defeated days > 6 }
 					has_global_flag = { flag = superevent_vorkerland_joint_victory days > 6 }
+					has_global_flag = { flag = superevent_stelander_sotnikov_civilwar days > 6 }
+					has_global_flag = { flag = superevent_stelander_sotnikov_directory days > 6 }
+					has_global_flag = { flag = superevent_stelander_sotnikov_charter days > 6 }
+					has_global_flag = { flag = superevent_stelander_shabrat_republic days > 6 }
+					has_global_flag = { flag = superevent_stelander_tikhoreva days > 6 }
+					has_global_flag = { flag = superevent_rus_khan_died days > 6 }
 				}
 				NOT = { any_country = { is_ai = no } }
 			}
@@ -10348,6 +10414,30 @@ ADISCORD_superevent_observer_tick = {
 			if = {
 				limit = { has_global_flag = { flag = superevent_vorkerland_joint_victory days > 6 } }
 				clr_global_flag = superevent_vorkerland_joint_victory
+			}
+			if = {
+				limit = { has_global_flag = { flag = superevent_stelander_sotnikov_civilwar days > 6 } }
+				clr_global_flag = superevent_stelander_sotnikov_civilwar
+			}
+			if = {
+				limit = { has_global_flag = { flag = superevent_stelander_sotnikov_directory days > 6 } }
+				clr_global_flag = superevent_stelander_sotnikov_directory
+			}
+			if = {
+				limit = { has_global_flag = { flag = superevent_stelander_sotnikov_charter days > 6 } }
+				clr_global_flag = superevent_stelander_sotnikov_charter
+			}
+			if = {
+				limit = { has_global_flag = { flag = superevent_stelander_shabrat_republic days > 6 } }
+				clr_global_flag = superevent_stelander_shabrat_republic
+			}
+			if = {
+				limit = { has_global_flag = { flag = superevent_stelander_tikhoreva days > 6 } }
+				clr_global_flag = superevent_stelander_tikhoreva
+			}
+			if = {
+				limit = { has_global_flag = { flag = superevent_rus_khan_died days > 6 } }
+				clr_global_flag = superevent_rus_khan_died
 			}
 			ADISCORD_superevent_dispatch_next = yes
 		}

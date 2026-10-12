@@ -104,18 +104,11 @@ RUS_crisis_northern_order_member = {
 	}
 }
 
-RUS_crisis_coalition_candidate = {
-	exists = yes
-	is_subject = no
-	has_capitulated = no
-	NOT = { is_in_faction_with = RUS }
+# COUNTRY. Winners of the southern, western and eastern final wars. Current
+# wars and sovereignty belong to the caller's entry rule.
+RUS_crisis_regional_hegemony = {
 	OR = {
-		tag = MON
-		tag = VLD
-		tag = TMR
-		tag = BTL
 		AND = {
-			has_war = no
 			has_global_flag = ADISCORD_south_final_resolved
 			OR = {
 				AND = {
@@ -129,9 +122,64 @@ RUS_crisis_coalition_candidate = {
 			}
 		}
 		AND = {
-			has_war = no
-			RUS_crisis_eastern_hegemony = yes
+			has_global_flag = ADISCORD_west_final_resolved
+			OR = {
+				AND = {
+					tag = WRK
+					has_global_flag = ADISCORD_west_hegemon_WRK
+				}
+				AND = {
+					tag = IVN
+					has_global_flag = ADISCORD_west_hegemon_IVN
+				}
+			}
 		}
+		RUS_crisis_eastern_hegemony = yes
+	}
+}
+
+RUS_crisis_coalition_candidate = {
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	NOT = { is_in_faction_with = RUS }
+	OR = {
+		tag = MON
+		tag = VLD
+		tag = TMR
+		tag = BTL
+		AND = {
+			has_war = no
+			RUS_crisis_regional_hegemony = yes
+		}
+	}
+}
+
+# COUNTRY. A regional winner that was not free to enter at launch is called
+# once, 90 days before the strike. Peace is required for the same reason as at launch.
+RUS_crisis_second_wave_candidate = {
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	has_war = no
+	NOT = { is_in_faction_with = RUS }
+	NOT = { has_country_flag = RUS_crisis_defender }
+	RUS_crisis_regional_hegemony = yes
+}
+
+# COUNTRY. Native volunteers require the sender to be at peace and an active
+# coalition war to receive them. Full entry remains limited to the two waves.
+RUS_crisis_volunteer_sender = {
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	has_war = no
+	NOT = { is_in_faction_with = RUS }
+	NOT = { has_country_flag = RUS_crisis_defender }
+	RUS_crisis_regional_hegemony = yes
+	RUS = {
+		RUS_crisis_project_active = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
 	}
 }
 
@@ -444,145 +492,268 @@ ADISCORD_vorkerland_rus_campaign_target_still_open = {
 	}
 }
 
-# The proclamation follows the player-facing contract: three belts held is enough.
-# A vanished or puppeted belt does not count as held; the separate fallback only
-# applies when no independent Dirty Zone republic remains at all.
-ADISCORD_vorkerland_rus_has_three_empire_belts = {
-	OR = {
-		AND = {
-			ADISCORD_vorkerland_rus_holds_sla_playable = yes
-			ADISCORD_vorkerland_rus_holds_rza_playable = yes
-			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_sla_playable = yes
-			ADISCORD_vorkerland_rus_holds_rza_playable = yes
-			ADISCORD_vorkerland_rus_holds_ert_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_sla_playable = yes
-			ADISCORD_vorkerland_rus_holds_rza_playable = yes
-			ADISCORD_vorkerland_rus_holds_irt_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_sla_playable = yes
-			ADISCORD_vorkerland_rus_holds_rza_playable = yes
-			ADISCORD_vorkerland_rus_holds_sca_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_sla_playable = yes
-			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
-			ADISCORD_vorkerland_rus_holds_ert_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_sla_playable = yes
-			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
-			ADISCORD_vorkerland_rus_holds_irt_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_sla_playable = yes
-			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
-			ADISCORD_vorkerland_rus_holds_sca_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_sla_playable = yes
-			ADISCORD_vorkerland_rus_holds_ert_playable = yes
-			ADISCORD_vorkerland_rus_holds_irt_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_sla_playable = yes
-			ADISCORD_vorkerland_rus_holds_ert_playable = yes
-			ADISCORD_vorkerland_rus_holds_sca_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_sla_playable = yes
-			ADISCORD_vorkerland_rus_holds_irt_playable = yes
-			ADISCORD_vorkerland_rus_holds_sca_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_rza_playable = yes
-			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
-			ADISCORD_vorkerland_rus_holds_ert_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_rza_playable = yes
-			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
-			ADISCORD_vorkerland_rus_holds_irt_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_rza_playable = yes
-			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
-			ADISCORD_vorkerland_rus_holds_sca_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_rza_playable = yes
-			ADISCORD_vorkerland_rus_holds_ert_playable = yes
-			ADISCORD_vorkerland_rus_holds_irt_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_rza_playable = yes
-			ADISCORD_vorkerland_rus_holds_ert_playable = yes
-			ADISCORD_vorkerland_rus_holds_sca_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_rza_playable = yes
-			ADISCORD_vorkerland_rus_holds_irt_playable = yes
-			ADISCORD_vorkerland_rus_holds_sca_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
-			ADISCORD_vorkerland_rus_holds_ert_playable = yes
-			ADISCORD_vorkerland_rus_holds_irt_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
-			ADISCORD_vorkerland_rus_holds_ert_playable = yes
-			ADISCORD_vorkerland_rus_holds_sca_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
-			ADISCORD_vorkerland_rus_holds_irt_playable = yes
-			ADISCORD_vorkerland_rus_holds_sca_playable = yes
-		}
-		AND = {
-			ADISCORD_vorkerland_rus_holds_ert_playable = yes
-			ADISCORD_vorkerland_rus_holds_irt_playable = yes
-			ADISCORD_vorkerland_rus_holds_sca_playable = yes
-		}
-	}
-}
-
-ADISCORD_vorkerland_rus_has_no_independent_dirty_republics = {
-	OR = {
-		NOT = { country_exists = SLA }
-		SLA = { is_subject = yes }
-	}
-	OR = {
-		NOT = { country_exists = RZA }
-		RZA = { is_subject = yes }
-	}
-	OR = {
-		NOT = { country_exists = MLR }
-		MLR = { is_subject = yes }
-	}
-	OR = {
-		NOT = { country_exists = ERT }
-		ERT = { is_subject = yes }
-	}
-	OR = {
-		NOT = { country_exists = IRT }
-		IRT = { is_subject = yes }
-	}
-	OR = {
-		NOT = { country_exists = SCA }
-		SCA = { is_subject = yes }
-	}
-}
-
+# Kefreyt and its subjects can occupy part of a belt. This exception is
+# limited to proclamation; campaign settlement still requires RUS occupation.
 ADISCORD_vorkerland_rus_has_empire_territory = {
 	OR = {
-		ADISCORD_vorkerland_rus_has_three_empire_belts = yes
-		ADISCORD_vorkerland_rus_has_no_independent_dirty_republics = yes
+		controls_state = 49
+		VAL = { controls_state = 49 }
+		49 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 51
+		VAL = { controls_state = 51 }
+		51 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 155
+		VAL = { controls_state = 155 }
+		155 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 176
+		VAL = { controls_state = 176 }
+		176 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 187
+		VAL = { controls_state = 187 }
+		187 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 191
+		VAL = { controls_state = 191 }
+		191 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 710
+		VAL = { controls_state = 710 }
+		710 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 711
+		VAL = { controls_state = 711 }
+		711 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 712
+		VAL = { controls_state = 712 }
+		712 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 177
+		VAL = { controls_state = 177 }
+		177 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 188
+		VAL = { controls_state = 188 }
+		188 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 192
+		VAL = { controls_state = 192 }
+		192 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 208
+		VAL = { controls_state = 208 }
+		208 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 213
+		VAL = { controls_state = 213 }
+		213 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 214
+		VAL = { controls_state = 214 }
+		214 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 215
+		VAL = { controls_state = 215 }
+		215 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 216
+		VAL = { controls_state = 216 }
+		216 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 217
+		VAL = { controls_state = 217 }
+		217 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 220
+		VAL = { controls_state = 220 }
+		220 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 152
+		VAL = { controls_state = 152 }
+		152 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 153
+		VAL = { controls_state = 153 }
+		153 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 154
+		VAL = { controls_state = 154 }
+		154 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 189
+		VAL = { controls_state = 189 }
+		189 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 190
+		VAL = { controls_state = 190 }
+		190 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 219
+		VAL = { controls_state = 219 }
+		219 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 221
+		VAL = { controls_state = 221 }
+		221 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 222
+		VAL = { controls_state = 222 }
+		222 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 224
+		VAL = { controls_state = 224 }
+		224 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 167
+		VAL = { controls_state = 167 }
+		167 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 169
+		VAL = { controls_state = 169 }
+		169 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 171
+		VAL = { controls_state = 171 }
+		171 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 184
+		VAL = { controls_state = 184 }
+		184 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 185
+		VAL = { controls_state = 185 }
+		185 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 203
+		VAL = { controls_state = 203 }
+		203 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 178
+		VAL = { controls_state = 178 }
+		178 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 180
+		VAL = { controls_state = 180 }
+		180 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 181
+		VAL = { controls_state = 181 }
+		181 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 182
+		VAL = { controls_state = 182 }
+		182 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 183
+		VAL = { controls_state = 183 }
+		183 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 193
+		VAL = { controls_state = 193 }
+		193 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 206
+		VAL = { controls_state = 206 }
+		206 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 207
+		VAL = { controls_state = 207 }
+		207 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 165
+		VAL = { controls_state = 165 }
+		165 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 166
+		VAL = { controls_state = 166 }
+		166 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 172
+		VAL = { controls_state = 172 }
+		172 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 173
+		VAL = { controls_state = 173 }
+		173 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 204
+		VAL = { controls_state = 204 }
+		204 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 205
+		VAL = { controls_state = 205 }
+		205 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 209
+		VAL = { controls_state = 209 }
+		209 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 210
+		VAL = { controls_state = 210 }
+		210 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 211
+		VAL = { controls_state = 211 }
+		211 = { controller = { is_subject_of = VAL } }
+	}
+	OR = {
+		controls_state = 212
+		VAL = { controls_state = 212 }
+		212 = { controller = { is_subject_of = VAL } }
 	}
 }
 
@@ -1193,6 +1364,56 @@ RUS_bop_mediation_available = {
 RUS_bop_mediation_affordable = {
 	NOT = { has_political_power < 40 }
 	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+}
+
+# --- rus_suspicion ---
+# RUS. Opens with the chancery and closes at proclamation, the ordinary public
+# start of the orbital programme.
+RUS_suspicion_active = {
+	has_variable = RUS_suspicion
+	RUS_khan_governing = yes
+	NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+}
+
+# RUS. Exposure needs the same preconditions as a public start: the forced
+# proclamation must open the crisis, and a running war is never rewritten.
+RUS_suspicion_exposure_ready = {
+	RUS_suspicion_active = yes
+	check_variable = { var = RUS_suspicion value = 100 compare = greater_than_or_equals }
+	has_war = no
+	ADISCORD_vorkerland_rus_has_empire_territory = yes
+	RUS_lab_reactor_access = yes
+	NOT = { has_variable = RUS_crisis_phase }
+	NOT = { has_global_flag = RUS_crisis_world_ended }
+}
+
+RUS_suspicion_relief_available = {
+	RUS_state_balance_operational = yes
+	RUS_suspicion_active = yes
+	check_variable = { var = RUS_suspicion value = 0 compare = greater_than }
+}
+
+RUS_suspicion_energy_cover_affordable = {
+	NOT = { has_political_power < 40 }
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+}
+
+RUS_suspicion_disperse_musters_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { has_manpower < 1000 }
+}
+
+RUS_suspicion_envoys_affordable = {
+	NOT = { has_political_power < 60 }
+	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+}
+
+# --- rus_army_morale ---
+# RUS. The proclaimed empire tracks its army until the Khan's government ends.
+RUS_morale_active = {
+	has_variable = RUS_army_morale
+	RUS_khan_governing = yes
+	has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
 }
 
 # --- rus_reactor_belt ---

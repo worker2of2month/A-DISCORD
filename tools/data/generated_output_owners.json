@@ -329,6 +329,9 @@
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_inner_frontier_countries.py",
+        "tools/builders/build_adiscord_northern_countries.py",
+        "tools/assets/source/country_flags/LMN.png",
+        "tools/assets/source/country_flags/RLY.png",
         "tools/lib/localisation.py",
         "map/definition.csv",
         "map/provinces.bmp",
@@ -503,6 +506,9 @@
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_northern_countries.py",
+        "tools/assets/source/country_flags/AUR.png",
+        "tools/assets/source/country_flags/LYS.png",
+        "tools/assets/source/MON_flag.png",
         "tools/lib/localisation.py",
         "map/definition.csv",
         "map/provinces.bmp",
@@ -634,6 +640,9 @@
         "map/adjacencies.csv",
         "tools/data/adiscord_remainder_countries.json",
         "tools/lib/adiscord_remainder_countries.py",
+        "tools/assets/source/country_flags/SFR.png",
+        "tools/assets/source/country_flags/PRR.png",
+        "tools/assets/source/country_flags/FLR.png",
         "history/states/47-*.txt",
         "tools/builders/build_adiscord_northern_countries.py"
       ],
@@ -1126,11 +1135,12 @@
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_event_pictures.py",
+        "tools/builders/build_adiscord_event_ui_assets.py",
         "tools/lib/adiscord_ui_surfaces.py",
         "tools/assets/source/event_pictures/*.png",
+        "tools/assets/source/event_pictures/*.dds",
         "tools/assets/source/event_pictures/news/*.dds",
-        "tools/assets/source/event_pictures/news/*.png",
-        "gfx/event_pictures/event_adiscord_ui_test.png"
+        "tools/assets/source/event_pictures/news/*.png"
       ],
         "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_event_pictures"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_event_pictures", "--apply"],
@@ -1649,6 +1659,7 @@
       "id": "vorkerland_flags",
       "owner_module": "tools.builders.build_adiscord_vorkerland_original_flags",
       "output_globs": [
+        "gfx/flags/**/MZR.tga",
         "gfx/flags/**/EYR.tga",
         "gfx/flags/**/EGC.tga",
         "gfx/flags/**/RIV.tga",
@@ -1689,6 +1700,7 @@
         "gfx/flags/**/TRU_zolotorevsk_republic.tga",
         "gfx/flags/**/VLA_volnograd_republic.tga",
         "gfx/flags/**/WRK_vorkerland_joint_government.tga",
+        "gfx/flags/**/WRK_technocracy.tga",
         "gfx/flags/**/WRK_vorkerland_utilitarian_republic.tga",
         "gfx/flags/**/WTD.tga",
         "gfx/flags/**/ZAO_zaozersk_republic.tga"
@@ -1698,6 +1710,8 @@
         "gfx/flags/medium/VAD.tga",
         "gfx/flags/small/VAD.tga",
         "tools/builders/build_adiscord_vorkerland_original_flags.py",
+        "tools/assets/source/country_flags/MZR.png",
+        "tools/assets/source/vorkerland_flags/WRK_technocracy.png",
         "tools/assets/source/vorkerland_flags/ROM.png",
         "tools/assets/source/vorkerland_flags/RUS_restoration_state.png",
         "tools/assets/source/vorkerland_flags/RUS_black_banner_empire.png",
@@ -1916,6 +1930,7 @@
       "id": "superevent_music",
       "owner_module": "tools.builders.build_adiscord_superevent_music",
       "output_globs": [
+        "music/ADISCORD_rus_world_ends.ogg",
         "music/superevent_vorkerland_civilwar.ogg",
         "music/superevent_vorkerland_dirty_opening.ogg",
         "music/superevent_vorkerland_worker_victory.ogg",
@@ -1939,6 +1954,7 @@
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_superevent_music.py",
+        "tools/assets/source/rus_crisis_audio/this_is_where_the_world_ends.mp4",
         "sound/superevents_sound.asset",
         "sound/superevents/superevent_vorkerland_civilwar_sound.wav",
         "sound/superevents/superevent_vorkerland_dirty_opening_sound.wav",

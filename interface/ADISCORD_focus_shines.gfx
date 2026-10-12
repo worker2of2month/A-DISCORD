@@ -581,6 +581,82 @@ spriteTypes = {
 	}
 
 	SpriteType = {
+		name = "GFX_focus_RUS_imperial_general_staff_shine"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_imperial_general_staff.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/RUS/GFX_focus_RUS_imperial_general_staff.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_RUS_press_the_closed_zone_shine"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_press_the_closed_zone.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/RUS/GFX_focus_RUS_press_the_closed_zone.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_RUS_operation_last_sunset_shine"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_operation_last_sunset.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/RUS/GFX_focus_RUS_operation_last_sunset.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_RUS_bookmark_operation_last_sunset_shine"
+		texturefile = "gfx/interface/goals/RUS/bookmark/GFX_focus_RUS_bookmark_operation_last_sunset.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/RUS/bookmark/GFX_focus_RUS_bookmark_operation_last_sunset.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
 		name = "GFX_focus_RUS_bookmark_underground_capital_shine"
 		texturefile = "gfx/interface/goals/RUS/bookmark/GFX_focus_RUS_bookmark_underground_capital.png"
 		effectFile = "gfx/FX/buttonstate.lua"

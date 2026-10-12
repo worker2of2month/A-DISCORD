@@ -25,6 +25,14 @@ music = {
 	}
 }
 
+# Scripted finale only; play_song permits interruption at the epilogue button.
+music = {
+	song = "ADISCORD_rus_world_ends"
+	chance = {
+		modifier = { factor = 0 }
+	}
+}
+
 music = {
 	song = "ADISCORD_val_theme"
 	chance = {

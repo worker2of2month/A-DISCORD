@@ -834,6 +834,9 @@ def render_flag(
     if tag == "MON":
         with Image.open(ROOT / "tools/assets/source/MON_flag.png") as source:
             return source.convert("RGBA")
+    if tag in {"AUR", "LYS", "LMN", "RLY", "SFR", "PRR", "FLR"}:
+        with Image.open(ROOT / "tools/assets/source/country_flags" / f"{tag}.png") as source:
+            return source.convert("RGBA")
     width, height = 82, 52
     primary, secondary, accent = colors
     image = Image.new("RGBA", (width, height), primary + (255,))

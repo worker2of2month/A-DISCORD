@@ -34,6 +34,7 @@ photos; names below identify provenance, not new historical claims about the mod
 
 | Local source | Original |
 | --- | --- |
+| `factory_workshop.dds` | HOI4 `news_event_generic_factory.dds`, formatted for COUNTRY events |
 | `news/city_in_civil_war.png` | Mod `country/default/china_civil_war_1.png`, preserved before source consolidation |
 | `news/army_formation.dds` | HOI4 `news_event_generic_army.dds` |
 | `news/treaty_signing.dds` | HOI4 `news_event_generic_sign_treaty1.dds` |
@@ -43,10 +44,24 @@ photos; names below identify provenance, not new historical claims about the mod
 | `news/troops_marching.dds` | HOI4 `news_event_soldiers_marching.dds` |
 | `news/armed_uprising.dds` | HOI4 `news_event_spr_spanish_civil_war2.dds` |
 
-The builder also reads the existing mod sources `event_vorkerland_explosion.png`,
-`event_vorkerland_civilwar_is_over.png`, and `event_adiscord_ui_test.png` one level
-up. The last remains owned by the event-UI builder for compatibility; production
-events use the descriptive `military_headquarters` sprite, not the QA name.
+The military-headquarters scene uses the event-UI builder's rendering of
+`event_adiscord_ui_test_source.png` directly. Production events use the
+descriptive `military_headquarters` sprite.
+
+`military_planning_color.png` and `factory_workshop_color.png` are colorized
+COUNTRY sources produced with the built-in image tool. The monochrome originals
+remain in `news/military_planning.dds` and `factory_workshop.dds`. Exact editing
+prompts are stored in `colorization_prompts.json`. The independently authored
+NEWS military-planning picture keeps its own source.
+
+The supplied COUNTRY illustrations retain their original 507 x 184 pixels:
+
+| Source | Event |
+| --- | --- |
+| `perimeter_checkpoint.png` | `ADISCORD_rus_campaign.14` |
+| `expedition_camp.png` | `ADISCORD_rus_campaign.19` |
+| `administrative_office.png` | `ADISCORD_rus_campaign.15` |
+| `school_classroom.png` | `ADISCORD_rus_campaign.26`, `ADISCORD_rus_campaign.27` |
 
 ## Generated photographs: exact prompts
 

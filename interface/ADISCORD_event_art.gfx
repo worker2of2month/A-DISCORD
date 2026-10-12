@@ -80,4 +80,24 @@ spriteTypes = {
 		name = "GFX_news_event_adiscord_stelander_empire"
 		texturefile = "gfx/event_pictures/standard/news/stelander_empire.png"
 	}
+	spriteType = {
+		name = "GFX_event_adiscord_perimeter_checkpoint"
+		texturefile = "gfx/event_pictures/standard/country/perimeter_checkpoint.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_expedition_camp"
+		texturefile = "gfx/event_pictures/standard/country/expedition_camp.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_administrative_office"
+		texturefile = "gfx/event_pictures/standard/country/administrative_office.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_school_classroom"
+		texturefile = "gfx/event_pictures/standard/country/school_classroom.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_factory_workshop"
+		texturefile = "gfx/event_pictures/standard/country/factory_workshop.png"
+	}
 }

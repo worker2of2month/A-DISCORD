@@ -336,6 +336,8 @@ SUPPLIED_RUNTIME_FLAGS = {
 }
 
 ARTWORK_FLAGS = {
+    "MZR": SOURCE_ROOT.parent / "country_flags/MZR.png",
+    "WRK_technocracy": SOURCE_ROOT / "WRK_technocracy.png",
     "RUS_restoration_state": SOURCE_ROOT / "RUS_restoration_state.png",
     "RUS_black_banner_empire": SOURCE_ROOT / "RUS_black_banner_empire.png",
 }

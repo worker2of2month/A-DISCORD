@@ -84,7 +84,7 @@ bookmarks = {
 			focuses = {
 				RUS_bookmark_underground_capital
 				RUS_bookmark_last_empire
-				RUS_bookmark_heart_of_the_continent
+				RUS_bookmark_operation_last_sunset
 			}
 		}
 

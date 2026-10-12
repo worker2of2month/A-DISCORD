@@ -13,7 +13,7 @@ RUS_state_balance = {
 	}
 	side = {
 		id = RUS_scientists_side
-		icon = GFX_idea_ADISCORD_law_education_technical_institutes
+		icon = GFX_bop_RUS_scientists
 		range = {
 			id = RUS_scientists_influence
 			min = -0.60
@@ -43,7 +43,7 @@ RUS_state_balance = {
 	}
 	side = {
 		id = RUS_black_army_side
-		icon = GFX_idea_ADISCORD_military_organization_cadre_army
+		icon = GFX_bop_RUS_black_army
 		range = {
 			id = RUS_black_army_influence
 			min = 0.10

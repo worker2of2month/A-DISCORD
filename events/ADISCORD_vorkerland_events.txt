@@ -967,6 +967,8 @@ country_event = {
 	}
 	immediate = {
 		set_global_flag = ADISCORD_vorkerland_dirty_opened
+		# The Khan's zone focus is hidden by allow_branch until this flag.
+		mark_focus_tree_layout_dirty = yes
 		if = { limit = { VAL = { exists = yes } } VAL = { VAL_open_refugee_waves = yes } }
 		ADISCORD_vorkerland_show_dirty_opening_superevent = yes
 		# One successor per date gives the engine time to rebuild ownership,

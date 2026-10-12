@@ -41,6 +41,12 @@ HEADER = (
 
 def render_gui() -> str:
     text = VANILLA_GUI.read_text(encoding="utf-8-sig")
+    text = replace_gui_block(
+        text,
+        "positionType",
+        "focus_spacing",
+        ((r"\bx = 96\b", "x = 108"),),
+    )
     for old, new, count in (
         ("GFX_tiled_plain_bg2", "window", 1),
         ("GFX_tiled_bg", "panel", 1),

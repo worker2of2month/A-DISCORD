@@ -170,4 +170,14 @@ focus_tree = {
 		available = { is_completed_by_event = yes }
 		completion_reward = { }
 	}
+
+	focus = {
+		id = RUS_bookmark_operation_last_sunset
+		icon = GFX_focus_RUS_bookmark_operation_last_sunset
+		x = -5
+		y = 1
+		cost = 5
+		available = { is_completed_by_event = yes }
+		completion_reward = { }
+	}
 }

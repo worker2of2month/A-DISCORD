@@ -14,6 +14,7 @@ import argparse
 import math
 import re
 from collections import Counter
+from io import BytesIO
 from pathlib import Path
 
 from PIL import Image
@@ -593,28 +594,39 @@ def protectorate_profile() -> dict[str, object]:
     }
 
 
-def write_flags() -> None:
+def write_flags(
+    tags: tuple[str, ...] | None = None, *, apply: bool = True
+) -> list[Path]:
     sizes = (
         (FLAG_DIR, (82, 52)),
         (FLAG_DIR / "medium", (41, 26)),
         (FLAG_DIR / "small", (10, 7)),
     )
-    for style, (tag, country) in enumerate(COUNTRIES.items()):
-        base = render_flag(tag, country["colors"], style)
+    profiles = {
+        tag: (country["colors"], style)
+        for style, (tag, country) in enumerate(COUNTRIES.items())
+    }
+    profiles[PROTECTORATE_TAG] = (PROTECTORATE_COLORS, 5)
+    changed = []
+    for tag in profiles if tags is None else tags:
+        colors, style = profiles[tag]
+        base = render_flag(tag, colors, style)
         for directory, size in sizes:
-            directory.mkdir(parents=True, exist_ok=True)
             image = (
                 base
                 if size == base.size
                 else base.resize(size, Image.Resampling.LANCZOS)
             )
-            image.save(directory / f"{tag}.tga")
-    gate = render_flag(PROTECTORATE_TAG, PROTECTORATE_COLORS, 5)
-    for directory, size in sizes:
-        image = (
-            gate if size == gate.size else gate.resize(size, Image.Resampling.LANCZOS)
-        )
-        image.save(directory / f"{PROTECTORATE_TAG}.tga")
+            stream = BytesIO()
+            image.save(stream, format="TGA")
+            path = directory / f"{tag}.tga"
+            data = stream.getvalue()
+            if not path.exists() or path.read_bytes() != data:
+                changed.append(path)
+                if apply:
+                    directory.mkdir(parents=True, exist_ok=True)
+                    path.write_bytes(data)
+    return changed
 
 
 def write_country_sources() -> None:
@@ -724,7 +736,28 @@ def main() -> int:
         action="store_true",
         help="check or apply only reviewed English names",
     )
+    parser.add_argument(
+        "--flags-only",
+        nargs="+",
+        choices=(*COUNTRIES, PROTECTORATE_TAG),
+        metavar="TAG",
+        help="check or apply only the named countries' flag textures",
+    )
     args = parser.parse_args()
+    if args.flags_only:
+        if (
+            args.english_localisation
+            or args.apply_states
+            or args.apply_country_sources
+            or args.apply_exz_localisation
+        ):
+            parser.error("--flags-only cannot be combined with other scoped actions")
+        changed = write_flags(tuple(args.flags_only), apply=args.apply)
+        for path in changed:
+            print(("Updated: " if args.apply else "Drift: ") + str(path.relative_to(ROOT)))
+        if not changed:
+            print("Selected inner-frontier flags are current.")
+        return int(bool(changed) and not args.apply)
     if args.english_localisation:
         from tools.lib.localisation import sync_builder_english_localisation
 

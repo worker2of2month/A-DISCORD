@@ -45,7 +45,7 @@ focus_tree = {
 		icon = GFX_focus_VAL_Army_Of_The_Ledger
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
 		x = 20
-		y = 9
+		y = 8
 		cost = 5
 		prerequisite = { focus = RUS_summon_the_aimaqs }
 		available = {
@@ -86,7 +86,7 @@ focus_tree = {
 		icon = GFX_focus_STP_cw_northern_dossier
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
 		x = 20
-		y = 10
+		y = 9
 		cost = 3
 		prerequisite = { focus = RUS_arm_the_border_hosts }
 		available = {
@@ -126,9 +126,16 @@ focus_tree = {
 		icon = GFX_focus_VAL_Dead_Villages_Still_Count
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
 		x = 20
-		y = 11
+		y = 10
 		cost = 5
 		prerequisite = { focus = RUS_watch_the_western_scar }
+		# The zone and every later spine focus appear with the opening.
+		allow_branch = {
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_dirty_opened
+				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			}
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -159,7 +166,7 @@ focus_tree = {
 		icon = GFX_focus_STP_ps_joint_staff
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
 		x = 20
-		y = 12
+		y = 11
 		cost = 5
 		prerequisite = { focus = RUS_claim_the_opened_zone }
 		available = {
@@ -197,10 +204,10 @@ focus_tree = {
 
 	focus = {
 		id = RUS_press_the_closed_zone
-		icon = GFX_focus_STP_ps_permanent_security
+		icon = GFX_focus_RUS_press_the_closed_zone
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
 		x = 20
-		y = 13
+		y = 12
 		cost = 5
 		prerequisite = { focus = RUS_drive_starolesye_back }
 		available = {
@@ -233,7 +240,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_seat_the_khan_chancery
-		icon = GFX_focus_STP_cw_protocol_office
+		icon = GFX_focus_RUS_operation_last_sunset
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		x = 20
 		y = 14
@@ -258,6 +265,14 @@ focus_tree = {
 				swap_ideas = { remove_idea = RUS_aimaq_compact add_idea = RUS_last_empire_spirit }
 			}
 			unlock_decision_tooltip = RUS_proclaim_the_last_empire
+			custom_effect_tooltip = RUS_suspicion_opens_tt
+			hidden_effect = {
+				RUS_suspicion_begin = yes
+				if = {
+					limit = { is_ai = no }
+					scoped_play_song = "ADISCORD_3teeth_pit_of_fire"
+				}
+			}
 		}
 		ai_will_do = { base = 120 }
 	}
@@ -266,9 +281,9 @@ focus_tree = {
 
 	focus = {
 		id = RUS_imperial_general_staff
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_RUS_imperial_general_staff
 		x = 20
-		y = 15
+		y = 16
 		cost = 2
 		prerequisite = { focus = RUS_seat_the_khan_chancery }
 		available = {
@@ -294,7 +309,7 @@ focus_tree = {
 		id = RUS_western_supply_lines
 		icon = GFX_focus_STP_party_war_transport
 		x = 16
-		y = 16
+		y = 17
 		cost = 3
 		prerequisite = { focus = RUS_imperial_general_staff }
 		available = {
@@ -326,7 +341,7 @@ focus_tree = {
 		id = RUS_imperial_arsenals
 		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
 		x = 20
-		y = 16
+		y = 17
 		cost = 3
 		prerequisite = { focus = RUS_imperial_general_staff }
 		available = {
@@ -356,7 +371,7 @@ focus_tree = {
 		id = RUS_aimaq_reserve
 		icon = GFX_focus_STP_pw_party_veteran_reserve
 		x = 24
-		y = 16
+		y = 17
 		cost = 3
 		prerequisite = { focus = RUS_imperial_general_staff }
 		available = {
@@ -390,11 +405,12 @@ focus_tree = {
 		id = RUS_break_the_hegemon
 		icon = GFX_focus_STP_Turn_The_Young_Officers
 		x = 20
-		y = 17
+		y = 18
 		cost = 1
 		prerequisite = { focus = RUS_imperial_arsenals }
 		prerequisite = { focus = RUS_western_supply_lines }
 		prerequisite = { focus = RUS_aimaq_reserve }
+		allow_branch = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -442,7 +458,7 @@ focus_tree = {
 		id = RUS_register_conquered_lands
 		icon = GFX_focus_VAL_Army_Of_The_Ledger
 		x = 18
-		y = 18
+		y = 19
 		cost = 3
 		cancel_if_invalid = yes
 		prerequisite = { focus = RUS_break_the_hegemon }
@@ -458,7 +474,7 @@ focus_tree = {
 		id = RUS_empire_without_rivals
 		icon = GFX_focus_STP_pw_party_civilian_retraining
 		x = 22
-		y = 18
+		y = 19
 		cost = 4
 		cancel_if_invalid = yes
 		prerequisite = { focus = RUS_break_the_hegemon }
@@ -468,6 +484,306 @@ focus_tree = {
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
 		ai_will_do = { base = 120 }
+	}
+
+	# Imperial branches stay hidden until the proclamation and remain usable
+	# after the orbital programme is closed.
+
+	focus = {
+		id = RUS_oath_of_the_empire
+		icon = GFX_focus_VAL_Count_The_Captains
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
+		x = 14
+		y = 18
+		cost = 3
+		prerequisite = { focus = RUS_imperial_general_staff }
+		allow_branch = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_empire_proclaimed_tt
+				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_war_support = 0.05
+			army_experience = 15
+			custom_effect_tooltip = RUS_morale_gain_10_tt
+			hidden_effect = {
+				set_temp_variable = { var = RUS_morale_delta value = 10 }
+				RUS_morale_add = yes
+			}
+		}
+		ai_will_do = { base = 110 }
+	}
+
+	focus = {
+		id = RUS_imperial_field_kitchens
+		icon = GFX_focus_VAL_Bread_From_Barracks
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 14
+		y = 19
+		cost = 3
+		prerequisite = { focus = RUS_oath_of_the_empire }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_empire_proclaimed_tt
+				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = RUS_morale_kitchens_tt
+			custom_effect_tooltip = RUS_morale_gain_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = RUS_morale_delta value = 5 }
+				RUS_morale_add = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = RUS_black_army_tribunals
+		icon = GFX_focus_STP_ps_permanent_security
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_POLITICAL }
+		x = 12
+		y = 20
+		cost = 3
+		prerequisite = { focus = RUS_imperial_field_kitchens }
+		mutually_exclusive = { focus = RUS_scientists_at_headquarters }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_empire_proclaimed_tt
+				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_power_balance_value = { id = RUS_state_balance value = 0.10 }
+			custom_effect_tooltip = RUS_morale_tribunals_tt
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = RUS_scientists_at_headquarters
+		icon = GFX_focus_STP_party_technical_institutes
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_RESEARCH }
+		x = 16
+		y = 20
+		cost = 3
+		prerequisite = { focus = RUS_imperial_field_kitchens }
+		mutually_exclusive = { focus = RUS_black_army_tribunals }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_empire_proclaimed_tt
+				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_power_balance_value = { id = RUS_state_balance value = -0.10 }
+			custom_effect_tooltip = RUS_morale_recovery_tt
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = RUS_reserve_of_the_aimaqs
+		icon = GFX_focus_STP_pw_party_veteran_reserve
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		x = 14
+		y = 21
+		cost = 4
+		prerequisite = { focus = RUS_black_army_tribunals focus = RUS_scientists_at_headquarters }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_empire_proclaimed_tt
+				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 15000
+			capital_scope = {
+				create_unit = {
+					division = "division_template = \"Khanate Rifle Brigade\" start_experience_factor = 0.15 start_equipment_factor = 0.75"
+					owner = RUS
+					count = 4
+				}
+			}
+			custom_effect_tooltip = RUS_morale_gain_10_tt
+			hidden_effect = {
+				set_temp_variable = { var = RUS_morale_delta value = 10 }
+				RUS_morale_add = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = RUS_imperial_treasury
+		icon = GFX_focus_STP_2160_budget
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 26
+		y = 18
+		cost = 3
+		prerequisite = { focus = RUS_imperial_general_staff }
+		allow_branch = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_empire_proclaimed_tt
+				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 40
+			custom_effect_tooltip = RUS_imperial_treasury_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = { base = 110 }
+	}
+
+	focus = {
+		id = RUS_levy_of_the_new_aimaqs
+		icon = GFX_focus_STP_party_personnel_commissions
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		x = 24
+		y = 19
+		cost = 3
+		prerequisite = { focus = RUS_imperial_treasury }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_empire_proclaimed_tt
+				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 25000
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = RUS_reactor_current_for_arsenals
+		icon = GFX_focus_VAL_Factories_Like_Cathedrals
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 28
+		y = 19
+		cost = 4
+		prerequisite = { focus = RUS_imperial_treasury }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_empire_proclaimed_tt
+				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_lab_reactor_access_tt
+				RUS_lab_reactor_access = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			capital_scope = {
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {
+					type = arms_factory
+					level = 2
+					instant_build = yes
+				}
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = RUS_imperial_railways
+		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 26
+		y = 20
+		cost = 3
+		prerequisite = { focus = RUS_levy_of_the_new_aimaqs }
+		prerequisite = { focus = RUS_reactor_current_for_arsenals }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_empire_proclaimed_tt
+				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			if = {
+				limit = {
+					owns_state = 66
+					controls_state = 66
+					owns_state = 177
+					controls_state = 177
+				}
+				build_railway = { level = 3 fallback = yes start_state = 66 target_state = 177 }
+			}
+			every_owned_state = {
+				limit = {
+					is_controlled_by = ROOT
+					OR = {
+						state = 176
+						state = 177
+						state = 188
+						state = 192
+					}
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+		ai_will_do = { base = 100 }
 	}
 
 	# Civil government, surface economy, underground capital and army reform.
@@ -1678,6 +1994,7 @@ focus_tree = {
 					value = 0.1
 				}
 			}
+			custom_effect_tooltip = RUS_suspicion_focus_relief_tt
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -1994,7 +2311,7 @@ focus_tree = {
 		id = RUS_postwar_roads
 		icon = GFX_focus_VAL_Reclamation_Road_Crews
 		x = 18
-		y = 19
+		y = 20
 		cost = 3
 		cancel_if_invalid = yes
 		prerequisite = { focus = RUS_register_conquered_lands }
@@ -2013,7 +2330,7 @@ focus_tree = {
 		id = RUS_imperial_academy
 		icon = GFX_focus_STP_pw_party_civilian_retraining
 		x = 22
-		y = 19
+		y = 20
 		cost = 3
 		cancel_if_invalid = yes
 		prerequisite = { focus = RUS_empire_without_rivals }
@@ -2029,7 +2346,7 @@ focus_tree = {
 		id = RUS_tomorrow_above_ground
 		icon = GFX_focus_STP_ps_permanent_security
 		x = 20
-		y = 20
+		y = 21
 		cost = 1
 		cancel_if_invalid = yes
 		prerequisite = { focus = RUS_postwar_roads }
@@ -3226,6 +3543,7 @@ focus_tree = {
 		completion_reward = {
 			custom_effect_tooltip = RUS_public_campaign_second_slot_tt
 			hidden_effect = { ADISCORD_campaign_slot_grant = yes }
+			custom_effect_tooltip = RUS_suspicion_focus_relief_tt
 		}
 		ai_will_do = { base = 6 }
 	}

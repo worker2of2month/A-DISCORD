@@ -64,6 +64,12 @@ SUPEREVENT_IDS = (
     "ADISCORD_superevent.14",
     "ADISCORD_superevent.15",
     "ADISCORD_superevent.16",
+    "ADISCORD_superevent.17",
+    "ADISCORD_superevent.18",
+    "ADISCORD_superevent.19",
+    "ADISCORD_superevent.20",
+    "ADISCORD_superevent.21",
+    "ADISCORD_superevent.22",
     "ADISCORD_superevent_audio.1",
     "ADISCORD_superevent_audio.2",
     "ADISCORD_superevent_news.1",
@@ -160,6 +166,37 @@ PRESENTATIONS = (
         "superevent_vorkerland_joint_victory_sound_e",
         legacy_music_asset=False,
     ),
+    SupereventPresentation(
+        "superevent_stelander_sotnikov_civilwar",
+        "superevent_stelander_shabrat_victory_sound_e",
+        legacy_music_asset=False,
+    ),
+    SupereventPresentation(
+        "superevent_stelander_sotnikov_directory",
+        "superevent_stelander_shabrat_victory_sound_e",
+        legacy_music_asset=False,
+    ),
+    SupereventPresentation(
+        "superevent_stelander_sotnikov_charter",
+        "superevent_stelander_shabrat_victory_sound_e",
+        legacy_music_asset=False,
+    ),
+    SupereventPresentation(
+        "superevent_stelander_shabrat_republic",
+        "superevent_stelander_shabrat_victory_sound_e",
+        legacy_music_asset=False,
+    ),
+    SupereventPresentation(
+        "superevent_stelander_tikhoreva",
+        "superevent_stelander_shabrat_victory_sound_e",
+        legacy_music_asset=False,
+    ),
+    SupereventPresentation(
+        "superevent_rus_khan_died",
+        "superevent_rus_khan_defeated_sound_e",
+        legacy_music_asset=False,
+    ),
+
 )
 
 

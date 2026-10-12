@@ -1,16 +1,39 @@
 # --- rus_crisis_events ---
 add_namespace = ADISCORD_rus_crisis
+add_namespace = ADISCORD_rus_preview
+
+# Presentation only. Closing the preview does not enter or advance the epilogue.
+country_event = {
+	id = ADISCORD_rus_preview.1
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		set_country_flag = RUS_world_end_preview
+		play_song = "ADISCORD_rus_world_ends"
+	}
+}
 
 country_event = {
 	id = ADISCORD_rus_crisis.1
 	trigger = { NOT = { has_global_flag = RUS_crisis_world_ended } }
 	title = ADISCORD_rus_crisis.1.t
-	desc = ADISCORD_rus_crisis.1.d
+	desc = {
+		trigger = { RUS = { NOT = { has_country_flag = RUS_suspicion_exposed } } }
+		text = ADISCORD_rus_crisis.1.d
+	}
+	desc = {
+		trigger = { RUS = { has_country_flag = RUS_suspicion_exposed } }
+		text = ADISCORD_rus_crisis.1.exposed.d
+	}
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	option = {
 		name = ADISCORD_rus_crisis.1.a
-		custom_effect_tooltip = RUS_crisis_warning_tt
+		if = {
+			limit = { RUS = { has_country_flag = RUS_suspicion_exposed } }
+			custom_effect_tooltip = RUS_crisis_exposed_warning_tt
+		}
+		else = { custom_effect_tooltip = RUS_crisis_warning_tt }
 	}
 }
 
@@ -18,12 +41,23 @@ country_event = {
 	id = ADISCORD_rus_crisis.2
 	trigger = { NOT = { has_global_flag = RUS_crisis_world_ended } }
 	title = ADISCORD_rus_crisis.2.t
-	desc = ADISCORD_rus_crisis.2.d
+	desc = {
+		trigger = { RUS = { NOT = { has_country_flag = RUS_suspicion_exposed } } }
+		text = ADISCORD_rus_crisis.2.d
+	}
+	desc = {
+		trigger = { RUS = { has_country_flag = RUS_suspicion_exposed } }
+		text = ADISCORD_rus_crisis.2.exposed.d
+	}
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	option = {
 		name = ADISCORD_rus_crisis.2.a
-		custom_effect_tooltip = RUS_crisis_warning_tt
+		if = {
+			limit = { RUS = { has_country_flag = RUS_suspicion_exposed } }
+			custom_effect_tooltip = RUS_crisis_exposed_warning_tt
+		}
+		else = { custom_effect_tooltip = RUS_crisis_warning_tt }
 	}
 }
 
@@ -126,7 +160,7 @@ country_event = {
 	is_triggered_only = yes
 	trigger = { RUS_crisis_strike_visible = yes }
 	immediate = {
-		play_song = "ADISCORD_rus_aftermath_silence"
+		play_song = "ADISCORD_rus_world_ends"
 		goto_province = 5228
 	}
 }
@@ -161,6 +195,183 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	immediate = { RUS_crisis_cancel_pending_intervention = yes }
+}
+
+# RUS. Scheduled once at exposure; the dispatcher rechecks the programme.
+country_event = {
+	id = ADISCORD_rus_crisis.14
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { RUS_crisis_call_second_wave = yes }
+}
+
+# Regional winner. AI governments enter; the safe answer leaves volunteers available.
+country_event = {
+	id = ADISCORD_rus_crisis.15
+	title = ADISCORD_rus_crisis.15.t
+	desc = ADISCORD_rus_crisis.15.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = {
+		NOT = { has_global_flag = RUS_crisis_world_ended }
+		RUS_crisis_second_wave_candidate = yes
+	}
+	option = {
+		name = ADISCORD_rus_crisis.15.a
+		custom_effect_tooltip = RUS_crisis_second_wave_join_tt
+		hidden_effect = { RUS_crisis_enter_second_wave = yes }
+		ai_chance = { base = 100 }
+	}
+	option = {
+		name = ADISCORD_rus_crisis.15.b
+		custom_effect_tooltip = RUS_crisis_second_wave_stay_tt
+		ai_chance = { base = 0 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.16
+	title = ADISCORD_rus_crisis.16.t
+	desc = ADISCORD_rus_crisis.16.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { NOT = { has_global_flag = RUS_crisis_world_ended } }
+	option = { name = ADISCORD_rus_crisis.16.a }
+}
+
+# RUS. Each suspicion tier is announced once by RUS_suspicion_check.
+country_event = {
+	id = ADISCORD_rus_crisis.17
+	title = ADISCORD_rus_crisis.17.t
+	desc = {
+		trigger = { check_variable = { var = RUS_suspicion_warning value = 2 compare = less_than } }
+		text = ADISCORD_rus_crisis.17.rumours.d
+	}
+	desc = {
+		trigger = { check_variable = { var = RUS_suspicion_warning value = 2 compare = greater_than_or_equals } }
+		text = ADISCORD_rus_crisis.17.observers.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { RUS_suspicion_active = yes }
+	option = {
+		name = ADISCORD_rus_crisis.17.a
+		custom_effect_tooltip = RUS_suspicion_warning_tt
+	}
+}
+
+# RUS. Announces the worst morale band reached; RUS_morale_check stores it.
+country_event = {
+	id = ADISCORD_rus_crisis.18
+	title = {
+		trigger = { check_variable = { var = RUS_morale_stage value = 2 compare = less_than } }
+		text = ADISCORD_rus_crisis.18.murmur.t
+	}
+	title = {
+		trigger = { check_variable = { var = RUS_morale_stage value = 2 compare = equals } }
+		text = ADISCORD_rus_crisis.18.desertion.t
+	}
+	title = {
+		trigger = { check_variable = { var = RUS_morale_stage value = 3 compare = equals } }
+		text = ADISCORD_rus_crisis.18.conspiracy.t
+	}
+	desc = {
+		trigger = { check_variable = { var = RUS_morale_stage value = 2 compare = less_than } }
+		text = ADISCORD_rus_crisis.18.murmur.d
+	}
+	desc = {
+		trigger = { check_variable = { var = RUS_morale_stage value = 2 compare = equals } }
+		text = ADISCORD_rus_crisis.18.desertion.d
+	}
+	desc = {
+		trigger = { check_variable = { var = RUS_morale_stage value = 3 compare = equals } }
+		text = ADISCORD_rus_crisis.18.conspiracy.d
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { RUS_morale_active = yes }
+	option = {
+		name = ADISCORD_rus_crisis.18.rations
+		trigger = { check_variable = { var = RUS_morale_stage value = 1 compare = equals } }
+		add_political_power = -50
+		custom_effect_tooltip = RUS_morale_gain_10_tt
+		hidden_effect = {
+			set_temp_variable = { var = RUS_morale_delta value = 10 }
+			RUS_morale_add = yes
+		}
+		ai_chance = { base = 70 }
+	}
+	option = {
+		name = ADISCORD_rus_crisis.18.endure
+		# Also the safe close when morale recovered while the event stayed open.
+		trigger = { check_variable = { var = RUS_morale_stage value = 2 compare = less_than } }
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_rus_crisis.18.barriers
+		trigger = { check_variable = { var = RUS_morale_stage value = 2 compare = equals } }
+		add_stability = -0.05
+		add_power_balance_value = { id = RUS_state_balance value = 0.10 }
+		custom_effect_tooltip = RUS_morale_gain_12_tt
+		hidden_effect = {
+			set_temp_variable = { var = RUS_morale_delta value = 12 }
+			RUS_morale_add = yes
+		}
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_rus_crisis.18.release
+		trigger = { check_variable = { var = RUS_morale_stage value = 2 compare = equals } }
+		add_manpower = -3000
+		add_war_support = -0.05
+		custom_effect_tooltip = RUS_morale_gain_15_tt
+		hidden_effect = {
+			set_temp_variable = { var = RUS_morale_delta value = 15 }
+			RUS_morale_add = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_rus_crisis.18.purge
+		trigger = { check_variable = { var = RUS_morale_stage value = 3 compare = equals } }
+		add_stability = -0.10
+		add_command_power = -30
+		custom_effect_tooltip = RUS_morale_gain_15_tt
+		hidden_effect = {
+			set_temp_variable = { var = RUS_morale_delta value = 15 }
+			RUS_morale_add = yes
+		}
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_rus_crisis.18.yield
+		trigger = { check_variable = { var = RUS_morale_stage value = 3 compare = equals } }
+		add_power_balance_value = { id = RUS_state_balance value = 0.25 }
+		custom_effect_tooltip = RUS_morale_gain_20_tt
+		hidden_effect = {
+			set_temp_variable = { var = RUS_morale_delta value = 20 }
+			RUS_morale_add = yes
+		}
+		ai_chance = { base = 50 }
+	}
+}
+
+# RUS. Runs after the native callback that emptied morale has settled.
+country_event = {
+	id = ADISCORD_rus_crisis.19
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { RUS_khan_death = yes }
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.20
+	title = ADISCORD_rus_crisis.20.t
+	desc = ADISCORD_rus_crisis.20.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = { NOT = { has_global_flag = RUS_crisis_world_ended } }
+	option = { name = ADISCORD_rus_crisis.20.a }
 }
 
 # --- rus_campaign_events ---
@@ -342,7 +553,7 @@ country_event = {
 	id = ADISCORD_rus_campaign.14
 	title = ADISCORD_rus_campaign.14.t
 	desc = ADISCORD_rus_campaign.14.d
-	picture = GFX_event_adiscord_military_headquarters
+	picture = GFX_event_adiscord_perimeter_checkpoint
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -355,7 +566,7 @@ country_event = {
 	id = ADISCORD_rus_campaign.15
 	title = ADISCORD_rus_campaign.15.t
 	desc = ADISCORD_rus_campaign.15.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -407,7 +618,7 @@ country_event = {
 	id = ADISCORD_rus_campaign.19
 	title = ADISCORD_rus_campaign.19.t
 	desc = ADISCORD_rus_campaign.19.d
-	picture = GFX_event_adiscord_military_headquarters
+	picture = GFX_event_adiscord_expedition_camp
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -492,4 +703,228 @@ country_event = {
 		RUS_khan_governing = yes
 	}
 	option = { name = ADISCORD_rus_campaign.25.a }
+}
+
+# Separate IDs keep the optional continuation within the country-event text limits.
+country_event = {
+	id = ADISCORD_rus_campaign.26
+	title = ADISCORD_rus_campaign.26.t
+	desc = ADISCORD_rus_campaign.26.d
+	picture = GFX_event_adiscord_school_classroom
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		RUS_khan_governing = yes
+	}
+	# The next dream is scheduled on arrival, independently of optional reading.
+	immediate = {
+		hidden_effect = {
+			country_event = { id = ADISCORD_rus_campaign.28 days = 90 }
+		}
+	}
+	option = {
+		name = ADISCORD_rus_campaign.26.a
+		effect_tooltip = {
+			country_event = { id = ADISCORD_rus_campaign.28 days = 90 }
+		}
+	}
+	option = {
+		name = ADISCORD_rus_campaign.26.continue
+		effect_tooltip = {
+			country_event = { id = ADISCORD_rus_campaign.28 days = 90 }
+		}
+		hidden_effect = {
+			country_event = { id = ADISCORD_rus_campaign.27 }
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.27
+	title = ADISCORD_rus_campaign.26.t
+	desc = ADISCORD_rus_campaign.27.d
+	picture = GFX_event_adiscord_school_classroom
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		RUS_khan_governing = yes
+	}
+	option = { name = ADISCORD_rus_campaign.27.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.28
+	title = ADISCORD_rus_campaign.28.t
+	desc = ADISCORD_rus_campaign.28.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		RUS_khan_governing = yes
+	}
+	immediate = {
+		hidden_effect = {
+			country_event = { id = ADISCORD_rus_campaign.30 days = 90 }
+		}
+	}
+	option = {
+		name = ADISCORD_rus_campaign.28.a
+		effect_tooltip = {
+			country_event = { id = ADISCORD_rus_campaign.30 days = 90 }
+		}
+	}
+	option = {
+		name = ADISCORD_rus_campaign.28.continue
+		effect_tooltip = {
+			country_event = { id = ADISCORD_rus_campaign.30 days = 90 }
+		}
+		hidden_effect = {
+			country_event = { id = ADISCORD_rus_campaign.29 }
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.29
+	title = ADISCORD_rus_campaign.28.t
+	desc = ADISCORD_rus_campaign.29.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		RUS_khan_governing = yes
+	}
+	option = { name = ADISCORD_rus_campaign.29.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.30
+	title = ADISCORD_rus_campaign.30.t
+	desc = ADISCORD_rus_campaign.30.d
+	picture = GFX_event_adiscord_school_classroom
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		RUS_khan_governing = yes
+	}
+	immediate = {
+		hidden_effect = {
+			country_event = { id = ADISCORD_rus_campaign.32 days = 90 }
+		}
+	}
+	option = {
+		name = ADISCORD_rus_campaign.30.a
+		effect_tooltip = {
+			country_event = { id = ADISCORD_rus_campaign.32 days = 90 }
+		}
+	}
+	option = {
+		name = ADISCORD_rus_campaign.30.continue
+		effect_tooltip = {
+			country_event = { id = ADISCORD_rus_campaign.32 days = 90 }
+		}
+		hidden_effect = {
+			country_event = { id = ADISCORD_rus_campaign.31 }
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.31
+	title = ADISCORD_rus_campaign.30.t
+	desc = ADISCORD_rus_campaign.31.d
+	picture = GFX_event_adiscord_school_classroom
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		RUS_khan_governing = yes
+	}
+	option = { name = ADISCORD_rus_campaign.31.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.32
+	title = ADISCORD_rus_campaign.32.t
+	desc = ADISCORD_rus_campaign.32.d
+	picture = GFX_event_adiscord_school_classroom
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		RUS_khan_governing = yes
+	}
+	immediate = {
+		hidden_effect = {
+			country_event = { id = ADISCORD_rus_campaign.34 days = 90 }
+		}
+	}
+	option = {
+		name = ADISCORD_rus_campaign.32.a
+		effect_tooltip = {
+			country_event = { id = ADISCORD_rus_campaign.34 days = 90 }
+		}
+	}
+	option = {
+		name = ADISCORD_rus_campaign.32.continue
+		effect_tooltip = {
+			country_event = { id = ADISCORD_rus_campaign.34 days = 90 }
+		}
+		hidden_effect = {
+			country_event = { id = ADISCORD_rus_campaign.33 }
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.33
+	title = ADISCORD_rus_campaign.32.t
+	desc = ADISCORD_rus_campaign.33.d
+	picture = GFX_event_adiscord_school_classroom
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		RUS_khan_governing = yes
+	}
+	option = { name = ADISCORD_rus_campaign.33.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.34
+	title = ADISCORD_rus_campaign.34.t
+	desc = ADISCORD_rus_campaign.34.d
+	picture = GFX_event_adiscord_school_classroom
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		RUS_khan_governing = yes
+	}
+	option = { name = ADISCORD_rus_campaign.34.a }
+	option = {
+		name = ADISCORD_rus_campaign.34.continue
+		hidden_effect = {
+			country_event = { id = ADISCORD_rus_campaign.35 }
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.35
+	title = ADISCORD_rus_campaign.34.t
+	desc = ADISCORD_rus_campaign.35.d
+	picture = GFX_event_adiscord_school_classroom
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		RUS_khan_governing = yes
+	}
+	option = { name = ADISCORD_rus_campaign.35.a }
 }

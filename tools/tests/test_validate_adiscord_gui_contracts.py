@@ -1045,7 +1045,7 @@ class NationalFocusGuiContractTests(unittest.TestCase):
                 self.assertIn('scrollbarType = standardtext_slider', node)
                 self.assertLessEqual(x + w + 20, width)
 
-    def test_focus_symbols_and_tree_geometry_are_unchanged(self):
+    def test_focus_symbols_and_tree_geometry_only_widen_horizontal_spacing(self):
         local = (ROOT / 'interface/nationalfocusview.gui').read_text(
             encoding='utf-8-sig'
         )
@@ -1057,7 +1057,6 @@ class NationalFocusGuiContractTests(unittest.TestCase):
             'continuous_national_focus_item',
             'national_focus_link',
             'national_focus_exclusive_item',
-            'focus_spacing',
             'national_focus_center',
             'link_spacing',
             'link_offsets',
@@ -1074,6 +1073,12 @@ class NationalFocusGuiContractTests(unittest.TestCase):
                 re.sub(r'\s+', '', gui_node_body(native, name)),
                 name,
             )
+        self.assertEqual(
+            re.sub(r'\s+', '', gui_node_body(local, 'focus_spacing')),
+            re.sub(
+                r'\s+', '', gui_node_body(native, 'focus_spacing')
+            ).replace('x=96', 'x=108'),
+        )
         tree = gui_node_body(local, 'tree')
         self.assertIn('drag_scroll = { left middle }', tree)
         for axis in ('vertical', 'horizontal'):

@@ -37,7 +37,7 @@ from tools.builders.build_adiscord_strategic_regions import (
 )
 from tools.lib.paths import repository_root
 from tools.lib.localisation import replace_generated_localisation_block
-from tools.lib.adiscord_remainder_countries import synchronize
+from tools.lib.adiscord_remainder_countries import COUNTRIES, synchronize
 
 
 ROOT = repository_root()
@@ -469,7 +469,23 @@ def main() -> int:
         action="store_true",
         help="check or apply only reviewed English names",
     )
+    parser.add_argument(
+        "--flags-only",
+        nargs="+",
+        choices=tuple(COUNTRIES),
+        metavar="TAG",
+        help="check or apply only the named countries' flag textures",
+    )
     args = parser.parse_args()
+    if args.flags_only:
+        if args.countries_only or args.english_localisation:
+            parser.error("--flags-only cannot be combined with other scoped actions")
+        changed = synchronize(apply=args.apply, flags_only=tuple(args.flags_only))
+        for path in changed:
+            print(("Updated: " if args.apply else "Drift: ") + path)
+        if not changed:
+            print("Selected remainder-country flags are current.")
+        return int(bool(changed) and not args.apply)
     if args.countries_only:
         changed = synchronize(apply=args.apply)
         print(f"Remainder-country outputs {'updated' if args.apply else 'different'}: {len(changed)}")

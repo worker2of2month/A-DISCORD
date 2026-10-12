@@ -58,6 +58,18 @@ ideas = {
 			}
 		}
 
+		# Regional winners outside the coalition war; the Khan's monthly hook owns it.
+		RUS_crisis_volunteer_mandate = {
+			picture = generic_volunteer_expedition_bonus
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				send_volunteers_tension = -1.00
+				send_volunteer_divisions_required = -0.90
+				send_volunteer_factor = 0.50
+			}
+		}
+
 # --- rus_campaign_ideas ---
 		# Bookmark previews use the initial values before country variables exist.
 		# These ideas are never installed; campaign modifiers own all live bonuses.

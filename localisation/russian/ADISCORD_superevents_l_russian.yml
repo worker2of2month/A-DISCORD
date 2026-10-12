@@ -106,3 +106,33 @@
   superevent_vorkerland_joint_victory_title: "Чрезвычайный совет"
   superevent_vorkerland_joint_victory_quote: "Одно честолюбие должно сдерживать другое.\n\n- Джеймс Мэдисон, «Федералист № 51»"
   superevent_vorkerland_joint_victory_comment: "Победители не поделили страну - они поделили власть"
+
+ superevent_stelander_sotnikov_civilwar_title:0 "ПОБЕДА СОТНИКОВА"
+ # Source: Second Inaugural Address, 4 March 1865 (excerpt). https://www.nps.gov/linc/learn/historyculture/lincoln-second-inaugural.htm Russian translation for this localisation.
+ superevent_stelander_sotnikov_civilwar_quote:0 "Давайте стремиться завершить начатое нами дело, залечить раны нации.\n\n- Авраам Линкольн"
+ superevent_stelander_sotnikov_civilwar_comment:0 "Сопротивление победило"
+
+ superevent_stelander_sotnikov_directory_title:0 "ДИРЕКТОРИЯ МЕЧА"
+ # Source: Leviathan, chapter XVII, 1651. https://www.gutenberg.org/files/73957/73957-h/73957-h.htm Russian translation for this localisation.
+ superevent_stelander_sotnikov_directory_quote:0 "Договоры без меча - лишь слова, не способные обеспечить человеку безопасность.\n\n- Томас Гоббс"
+ superevent_stelander_sotnikov_directory_comment:0 "Приказ действует и после победы"
+
+ superevent_stelander_sotnikov_charter_title:0 "ГЕНЕРАЛ ПОД ХАРТИЕЙ"
+ # Source: First Inaugural Address, 4 March 1801 (excerpt). https://avalon.law.yale.edu/19th_century/jefinau1.asp Russian translation for this localisation.
+ superevent_stelander_sotnikov_charter_quote:0 "Верховенство гражданской власти над военной.\n\n- Томас Джефферсон"
+ superevent_stelander_sotnikov_charter_comment:0 "Государство отвечает перед живыми"
+
+ superevent_stelander_shabrat_republic_title:0 "РЕСПУБЛИКА ШАБРАТА"
+ # Source: The Social Contract, book I, chapter VIII, 1762; English translation by G. D. H. Cole (excerpt). https://www.gutenberg.org/cache/epub/46333/pg46333-images.html Russian translation for this localisation.
+ superevent_stelander_shabrat_republic_quote:0 "Подчинение закону, который мы сами себе предписываем, есть свобода.\n\n- Жан-Жак Руссо"
+ superevent_stelander_shabrat_republic_comment:0 "Первый гражданин среди равных"
+
+ superevent_stelander_tikhoreva_title:0 "МЕРА ОБЩЕГО БЛАГА"
+ # Source: Utilitarianism, chapter II, 1861 (excerpt). https://www.gutenberg.org/files/11224/old/11224-h/11224-h.htm Russian translation for this localisation.
+ superevent_stelander_tikhoreva_quote:0 "Приумножение счастья, согласно утилитарной этике, составляет цель добродетели.\n\n- Джон Стюарт Милль"
+ superevent_stelander_tikhoreva_comment:0 "Ни одна жизнь не останется за итоговой строкой"
+
+ superevent_rus_khan_died_title:0 "Смерть Хана"
+ # Source: Alexander Pushkin, Boris Godunov, 1825. Public domain.
+ superevent_rus_khan_died_quote:0 "Тяжела ты, шапка Мономаха!\n\n- Александр Пушкин, «Борис Годунов»"
+ superevent_rus_khan_died_comment:0 "Империя пережила своего Хана ненадолго"

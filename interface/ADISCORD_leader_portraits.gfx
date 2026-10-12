@@ -158,6 +158,20 @@ spriteTypes = {
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = no
 	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_Grigory_Sotnikov_2"
+		texturefile = "gfx/leaders/STP/portrait_STP_Grigory_Sotnikov_2.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_STP_Grigory_Sotnikov_2_small"
+		texturefile = "gfx/leaders/STP/portrait_STP_Grigory_Sotnikov_2.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
 	spriteType = {
 		name = "GFX_portrait_STP_Rufus_Hedersett"
 		texturefile = "gfx/leaders/STP/portrait_STP_Rufus_Hedersett.png"
