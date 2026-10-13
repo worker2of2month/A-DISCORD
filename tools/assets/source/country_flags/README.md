@@ -11,6 +11,7 @@ python -B -m tools.builders.build_adiscord_northern_countries --flags-only AUR L
 python -B -m tools.builders.build_adiscord_inner_frontier_countries --flags-only LMN RLY
 python -B -m tools.builders.build_adiscord_remainder_states --flags-only SFR PRR FLR
 python -B -m tools.builders.build_adiscord_vorkerland_original_flags --tags MZR
+python -B -m tools.builders.build_adiscord_island_administration_icon --check
 ```
 
 Native sizes are 82x52, 41x26 and 10x7, opaque RGBA TGA. Runtime generators only resize and encode the authored artwork.
@@ -18,6 +19,16 @@ Native sizes are 82x52, 41x26 and 10x7, opaque RGBA TGA. Runtime generators only
 ## Shared generation prompt
 
 Use case: precise-object-edit / logo-brand. Redesign the supplied existing national flag for a fictional Hearts of Iron IV country. Input image is the edit target. Deliver ONE polished full-bleed rectangular flat flag artwork, landscape aspect ratio 82:52. Preserve its recognizable palette and primary field geometry, refine proportions and add the distinctive emblem described below. Crisp flat vector-like shapes, bold enough for 82x52 and 41x26 game textures. Maximum four flat colors. No cloth, no folds, no gradients, no lighting, no texture, no perspective, no borders or empty margins, no lettering, no slogans, no numerals, no watermark, no mockup. Restrained professional vexillology, not an ornate coat of arms. Important emblem should occupy roughly 60 percent of flag height with clean negative space.
+
+## IVN and IVN_etatism
+
+Itora's ordinary flag uses a silver lion breaking a gold chain. The emergency cabinet uses a gold eagle and ivory sword on a charcoal shield. Both retain the emerald field and two inset gold vertical bands. Symbolism references are `../party_texticons/IVN_roar_of_freedom_source.png` and `../party_texticons/IVN_emergency_committee_source.png`; those reference assets are not modified by flag export.
+
+The native `IVN_etatism` filename selects the cabinet flag while the country has the `etatism` government. Other governments use `IVN`. The island administration's `IIA` triplet remains a byte-identical copy of ordinary `IVN`, independent of the overlord's government. The existing island-administration builder owns all three triplets and only resizes and encodes the source artwork.
+
+Regular flag prompt: Create ONE final national flag artwork for fictional Itora, for a Hearts of Iron IV mod. Landscape aspect ratio 82:52. Full bleed perfectly flat flag; no cloth, folds, lighting, gradients, shadows, texture, perspective, lettering, watermark, borders or exterior margins. Refined heraldic vector-like flat shapes. Large confident emblem, readable at 82x52. Retain the current flag's deep emerald field and two narrow antique gold vertical stripes at x=12% and x=88%, with green outer edges. Between them one bold ivory rampant lion facing left, holding a broken gold chain with a few thick readable links; raised forepaws, curved tail, stylized angular mane. Emblem about 68% of flag height, no circle, wreath, shield, rifles or sunburst. Simplify the republican party symbol into clean heraldry. Use only deep emerald green, antique gold and ivory silver, strong negative space. Elegant restrained republican flag.
+
+Emergency flag prompt: Create ONE final national flag artwork for fictional Itora under its emergency cabinet, for a Hearts of Iron IV mod. Landscape aspect ratio 82:52. Full bleed perfectly flat flag; no cloth, folds, lighting, gradients, shadows, texture, perspective, lettering, watermark, frame or exterior margins. Refined heraldic vector-like flat shapes, readable at 82x52. Retain deep emerald green field with narrow antique gold vertical stripes at x=12% and x=88%, green outer edges. Simplify the emergency cabinet's official emblem radically. In the center put one large angular charcoal shield outlined in gold, bearing a bold gold heraldic eagle with spread wings facing left. One simple ivory vertical sword lies along eagle's axis, point DOWN, hilt above eagle head. Eagle dominates, three broad feather shapes per wing, no tiny feather lines. Shield emblem about 72% flag height. Restrained stern state heraldry, distinct from a republican lion flag while sharing its gold-striped green field. Use only emerald, antique gold, ivory and charcoal. No gears, towers, wreaths, coins, stars, crossed rifles, extra emblems. The flag must be usable directly as game source artwork.
 
 ## SFR
 

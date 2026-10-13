@@ -5109,6 +5109,426 @@ ideas = {
 			ai_will_do = { factor = 1 }
 		}
 
+		minister_SLI_Henrik_Varden = {
+			name = minister_SLI_Henrik_Varden
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SLI }
+			visible = { tag = SLI }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_RSV_Pavel_Rogin = {
+			name = minister_RSV_Pavel_Rogin
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = RSV }
+			visible = { tag = RSV }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_VEL_Oskar_Linden = {
+			name = minister_VEL_Oskar_Linden
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = VEL }
+			visible = { tag = VEL }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_CHD_Samir_Nadir = {
+			name = minister_CHD_Samir_Nadir
+			picture = generic_political_advisor_arab_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = CHD }
+			visible = { tag = CHD }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_EVR_Leif_Arven = {
+			name = minister_EVR_Leif_Arven
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = EVR }
+			visible = { tag = EVR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_FLR_Daren_Veld = {
+			name = minister_FLR_Daren_Veld
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = FLR }
+			visible = { tag = FLR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_LUR_Ivar_Nerlin = {
+			name = minister_LUR_Ivar_Nerlin
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = LUR }
+			visible = { tag = LUR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_MRV_Henrik_Saren = {
+			name = minister_MRV_Henrik_Saren
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = MRV }
+			visible = { tag = MRV }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_OLR_Elian_Voss = {
+			name = minister_OLR_Elian_Voss
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = OLR }
+			visible = { tag = OLR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_PIO_Gunnar_Holm = {
+			name = minister_PIO_Gunnar_Holm
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = PIO }
+			visible = { tag = PIO }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_PRR_Marek_Veyr = {
+			name = minister_PRR_Marek_Veyr
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = PRR }
+			visible = { tag = PRR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_RVN_Viktor_Nerov = {
+			name = minister_RVN_Viktor_Nerov
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = RVN }
+			visible = { tag = RVN }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SFR_Anton_Velmar = {
+			name = minister_SFR_Anton_Velmar
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SFR }
+			visible = { tag = SFR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_ULV_Emil_Torven = {
+			name = minister_ULV_Emil_Torven
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = ULV }
+			visible = { tag = ULV }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
 		ADISCORD_foreign_career_diplomat = {
 			traits = { minister_trait_foreign_minister }
 			picture = generic_political_advisor_europe_4

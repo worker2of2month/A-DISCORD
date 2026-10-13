@@ -1744,6 +1744,12 @@
       "owner_module": "tools.builders.build_adiscord_island_administration_icon",
       "output_globs": [
         "gfx/interface/autonomy/autonomy_island_administration_icon.png",
+        "gfx/flags/IVN.tga",
+        "gfx/flags/medium/IVN.tga",
+        "gfx/flags/small/IVN.tga",
+        "gfx/flags/IVN_etatism.tga",
+        "gfx/flags/medium/IVN_etatism.tga",
+        "gfx/flags/small/IVN_etatism.tga",
         "gfx/flags/IIA.tga",
         "gfx/flags/medium/IIA.tga",
         "gfx/flags/small/IIA.tga"
@@ -1751,9 +1757,8 @@
       "source_inputs": [
         "tools/builders/build_adiscord_island_administration_icon.py",
         "tools/assets/source/autonomy_island_administration_source.png",
-        "gfx/flags/IVN.tga",
-        "gfx/flags/medium/IVN.tga",
-        "gfx/flags/small/IVN.tga"
+        "tools/assets/source/country_flags/IVN.png",
+        "tools/assets/source/country_flags/IVN_etatism.png"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_island_administration_icon"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_island_administration_icon", "--apply"],

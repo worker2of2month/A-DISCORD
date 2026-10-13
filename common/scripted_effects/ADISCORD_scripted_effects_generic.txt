@@ -1,3 +1,499 @@
+# COUNTRY: fill the vacant office during fresh-campaign setup, before the economy baseline.
+# Existing appointments remain authoritative; this effect is not a recurring cabinet policy.
+ADISCORD_initialize_foreign_minister = {
+	if = {
+		limit = { has_idea = political_advisor_minister_of_foreign_affairs_vacant }
+		if = {
+			limit = { tag = AIN }
+			add_ideas = minister_AIN_Edmund_Hauser
+		}
+		else_if = {
+			limit = { tag = APH }
+			add_ideas = minister_APH_Marek_Rauk
+		}
+		else_if = {
+			limit = { tag = ARS }
+			add_ideas = minister_ARS_Arsen_Melik
+		}
+		else_if = {
+			limit = { tag = AUR }
+			add_ideas = minister_AUR_Leif_Sander
+		}
+		else_if = {
+			limit = { tag = AZH }
+			add_ideas = minister_AZH_Salim_Rafiq
+		}
+		else_if = {
+			limit = { tag = BBV }
+			add_ideas = minister_BBV_Ulrich_Kessler
+		}
+		else_if = {
+			limit = { tag = BCM }
+			add_ideas = minister_BCM_Bernhard_Mertens
+		}
+		else_if = {
+			limit = { tag = BGT }
+			add_ideas = minister_BGT_Heinrich_Roten
+		}
+		else_if = {
+			limit = { tag = BHG }
+			add_ideas = minister_BHG_Georg_Winter
+		}
+		else_if = {
+			limit = { tag = BJK }
+			add_ideas = minister_BJK_Oskar_Revent
+		}
+		else_if = {
+			limit = { tag = BLD }
+			add_ideas = minister_BLD_Ludwig_Falken
+		}
+		else_if = {
+			limit = { tag = BOR }
+			add_ideas = minister_BOR_Torsten_Vik
+		}
+		else_if = {
+			limit = { tag = BRN }
+			add_ideas = minister_BRN_Hugo_Brandt
+		}
+		else_if = {
+			limit = { tag = BTL }
+			add_ideas = minister_BTL_Emil_Hartmann
+		}
+		else_if = {
+			limit = { tag = CHD }
+			add_ideas = minister_CHD_Samir_Nadir
+		}
+		else_if = {
+			limit = { tag = CIN }
+			add_ideas = minister_CIN_Orven_Sarr
+		}
+		else_if = {
+			limit = { tag = COF }
+			add_ideas = minister_COF_Aren_Veld
+		}
+		else_if = {
+			limit = { tag = CSL }
+			add_ideas = minister_CSL_Fedor_Mironov
+		}
+		else_if = {
+			limit = { tag = DAN }
+			add_ideas = minister_DAN_Denis_Rudnev
+		}
+		else_if = {
+			limit = { tag = DCA }
+			add_ideas = minister_DCA_Adam_Karsen
+		}
+		else_if = {
+			limit = { tag = DOL }
+			add_ideas = minister_DOL_Daniil_Dolsky
+		}
+		else_if = {
+			limit = { tag = DRV }
+			add_ideas = minister_DRV_Milan_Dragov
+		}
+		else_if = {
+			limit = { tag = DVA }
+			add_ideas = minister_DVA_Kirill_Ozerov
+		}
+		else_if = {
+			limit = { tag = EBA }
+			add_ideas = minister_EBA_Otmar_Seidel
+		}
+		else_if = {
+			limit = { tag = ECA }
+			add_ideas = minister_ECA_Leonid_Askold
+		}
+		else_if = {
+			limit = { tag = EFL }
+			add_ideas = minister_EFL_Edgar_Lind
+		}
+		else_if = {
+			limit = { tag = EGC }
+			add_ideas = minister_EGC_Vasily_Rakitsky
+		}
+		else_if = {
+			limit = { tag = ELN }
+			add_ideas = minister_ELN_Elmar_Rosen
+		}
+		else_if = {
+			limit = { tag = ERT }
+			add_ideas = minister_ERT_Ivan_Drozdov
+		}
+		else_if = {
+			limit = { tag = EVR }
+			add_ideas = minister_EVR_Leif_Arven
+		}
+		else_if = {
+			limit = { tag = EXZ }
+			add_ideas = minister_EXZ_Valentin_Sedov
+		}
+		else_if = {
+			limit = { tag = EYR }
+			add_ideas = minister_EYR_Petr_Belov
+		}
+		else_if = {
+			limit = { tag = FLR }
+			add_ideas = minister_FLR_Daren_Veld
+		}
+		else_if = {
+			limit = { tag = FRS }
+			add_ideas = minister_FRS_Nils_Falk
+		}
+		else_if = {
+			limit = { tag = GLP }
+			add_ideas = minister_GLP_Nadir_Hakim
+		}
+		else_if = {
+			limit = { tag = HON }
+			add_ideas = minister_HON_Konrad_Adler
+		}
+		else_if = {
+			limit = { tag = IBA }
+			add_ideas = minister_IBA_Einar_Lund
+		}
+		else_if = {
+			limit = { tag = IBL }
+			add_ideas = minister_IBL_Rudolf_Kern
+		}
+		else_if = {
+			limit = { tag = IIA }
+			add_ideas = minister_IIA_Gennady_Orlov
+		}
+		else_if = {
+			limit = { tag = IRT }
+			add_ideas = minister_IRT_Semyon_Anisimov
+		}
+		else_if = {
+			limit = { tag = IVN }
+			add_ideas = minister_IVN_Konstantin_Arden
+		}
+		else_if = {
+			limit = { tag = KDL }
+			add_ideas = minister_KDL_Viktor_Kaden
+		}
+		else_if = {
+			limit = { tag = KDR }
+			add_ideas = minister_KDR_Yusuf_Haddad
+		}
+		else_if = {
+			limit = { tag = KHV }
+			add_ideas = minister_KHV_Johan_Krohn
+		}
+		else_if = {
+			limit = { tag = KRL }
+			add_ideas = minister_KRL_Karl_Eriksen
+		}
+		else_if = {
+			limit = { tag = KRM }
+			add_ideas = minister_KRM_Saveliy_Korenev
+		}
+		else_if = {
+			limit = { tag = KYZ }
+			add_ideas = minister_KYZ_Tahir_Usman
+		}
+		else_if = {
+			limit = { tag = LMN }
+			add_ideas = minister_LMN_Lars_Meyer
+		}
+		else_if = {
+			limit = { tag = LUR }
+			add_ideas = minister_LUR_Ivar_Nerlin
+		}
+		else_if = {
+			limit = { tag = LYS }
+			add_ideas = minister_LYS_Lorenz_Mahl
+		}
+		else_if = {
+			limit = { tag = MLR }
+			add_ideas = minister_MLR_Artem_Klimov
+		}
+		else_if = {
+			limit = { tag = MON }
+			add_ideas = minister_MON_Marco_Bellini
+		}
+		else_if = {
+			limit = { tag = MRV }
+			add_ideas = minister_MRV_Henrik_Saren
+		}
+		else_if = {
+			limit = { tag = MZR }
+			add_ideas = minister_MZR_Karim_Saleh
+		}
+		else_if = {
+			limit = { tag = NAM }
+			add_ideas = minister_NAM_Pavel_Ordyntsev
+		}
+		else_if = {
+			limit = { tag = NDN }
+			add_ideas = minister_NDN_Henrik_Dahl
+		}
+		else_if = {
+			limit = { tag = NKA }
+			add_ideas = minister_NKA_Otto_Berner
+		}
+		else_if = {
+			limit = { tag = NOD }
+			add_ideas = minister_NOD_Lucian_Ervelt
+		}
+		else_if = {
+			limit = { tag = NVR }
+			add_ideas = minister_NVR_Harald_Nord
+		}
+		else_if = {
+			limit = { tag = OCA }
+			add_ideas = minister_OCA_Viktor_Remizov
+		}
+		else_if = {
+			limit = { tag = OLR }
+			add_ideas = minister_OLR_Elian_Voss
+		}
+		else_if = {
+			limit = { tag = ORV }
+			add_ideas = minister_ORV_Oleg_Varin
+		}
+		else_if = {
+			limit = { tag = OSF }
+			add_ideas = minister_OSF_Sever_Karn
+		}
+		else_if = {
+			limit = { tag = OSV }
+			add_ideas = minister_OSV_Ernst_Keller
+		}
+		else_if = {
+			limit = { tag = PIO }
+			add_ideas = minister_PIO_Gunnar_Holm
+		}
+		else_if = {
+			limit = { tag = PIV }
+			add_ideas = minister_PIV_Roman_Veletsky
+		}
+		else_if = {
+			limit = { tag = PRR }
+			add_ideas = minister_PRR_Marek_Veyr
+		}
+		else_if = {
+			limit = { tag = PSD }
+			add_ideas = minister_PSD_Felix_Gruber
+		}
+		else_if = {
+			limit = { tag = PWR }
+			add_ideas = minister_PWR_Erik_Holst
+		}
+		else_if = {
+			limit = { tag = REV }
+			add_ideas = minister_REV_Mikhail_Vorontsov
+		}
+		else_if = {
+			limit = { tag = RHM }
+			add_ideas = minister_RHM_Samir_Nasser
+		}
+		else_if = {
+			limit = { tag = RIN }
+			add_ideas = minister_RIN_Renat_Ilyin
+		}
+		else_if = {
+			limit = { tag = RIV }
+			add_ideas = minister_RIV_Robert_Heller
+		}
+		else_if = {
+			limit = { tag = RLY }
+			add_ideas = minister_RLY_Rainer_Lenz
+		}
+		else_if = {
+			limit = { tag = ROM }
+			add_ideas = minister_ROM_Friedrich_Alten
+		}
+		else_if = {
+			limit = { tag = RSV }
+			add_ideas = minister_RSV_Pavel_Rogin
+		}
+		else_if = {
+			limit = { tag = RUS }
+			add_ideas = minister_RUS_Timur_Arslan
+		}
+		else_if = {
+			limit = { tag = RVN }
+			add_ideas = minister_RVN_Viktor_Nerov
+		}
+		else_if = {
+			limit = { tag = RZA }
+			add_ideas = minister_RZA_Benedikt_Kroll
+		}
+		else_if = {
+			limit = { tag = SCA }
+			add_ideas = minister_SCA_Maksim_Barsov
+		}
+		else_if = {
+			limit = { tag = SDR }
+			add_ideas = minister_SDR_Farid_Mansur
+		}
+		else_if = {
+			limit = { tag = SFR }
+			add_ideas = minister_SFR_Anton_Velmar
+		}
+		else_if = {
+			limit = { tag = SHL }
+			add_ideas = minister_SHL_Ramin_Farzan
+		}
+		else_if = {
+			limit = { tag = SKN }
+			add_ideas = minister_SKN_Klaus_Dorn
+		}
+		else_if = {
+			limit = { tag = SLA }
+			add_ideas = minister_SLA_Aleksei_Leskov
+		}
+		else_if = {
+			limit = { tag = SLF }
+			add_ideas = minister_SLF_Yegor_Svetlov
+		}
+		else_if = {
+			limit = { tag = SLI }
+			add_ideas = minister_SLI_Henrik_Varden
+		}
+		else_if = {
+			limit = { tag = SOL }
+			add_ideas = minister_SOL_Matteo_Rossani
+		}
+		else_if = {
+			limit = { tag = SRA }
+			add_ideas = minister_SRA_Sven_Holm
+		}
+		else_if = {
+			limit = { tag = SRP }
+			add_ideas = minister_SRP_Vsevolod_Belyaev
+		}
+		else_if = {
+			limit = { tag = SRV }
+			add_ideas = minister_SRV_Arvid_Strom
+		}
+		else_if = {
+			limit = { tag = STP }
+			add_ideas = minister_STP_Adrian_Vels
+		}
+		else_if = {
+			limit = { tag = STS }
+			add_ideas = minister_STS_Andrei_Vershinin
+		}
+		else_if = {
+			limit = { tag = SVL }
+			add_ideas = minister_SVL_Soren_Brekke
+		}
+		else_if = {
+			limit = { tag = SWB }
+			add_ideas = minister_SWB_Leon_Bruckner
+		}
+		else_if = {
+			limit = { tag = TFF }
+			add_ideas = minister_TFF_Martin_Hale
+		}
+		else_if = {
+			limit = { tag = TGD }
+			add_ideas = minister_TGD_Walter_Stein
+		}
+		else_if = {
+			limit = { tag = TMR }
+			add_ideas = minister_TMR_Anton_Timofeev
+		}
+		else_if = {
+			limit = { tag = TRU }
+			add_ideas = minister_TRU_Andrei_Zorin
+		}
+		else_if = {
+			limit = { tag = TVA }
+			add_ideas = minister_TVA_Alfred_Neumann
+		}
+		else_if = {
+			limit = { tag = ULV }
+			add_ideas = minister_ULV_Emil_Torven
+		}
+		else_if = {
+			limit = { tag = VAD }
+			add_ideas = minister_VAD_Sergei_Lobanov
+		}
+		else_if = {
+			limit = { tag = VAL }
+			add_ideas = minister_VAL_Leonhard_Kest
+		}
+		else_if = {
+			limit = { tag = VEL }
+			add_ideas = minister_VEL_Oskar_Linden
+		}
+		else_if = {
+			limit = { tag = VES }
+			add_ideas = minister_VES_Werner_Bach
+		}
+		else_if = {
+			limit = { tag = VHV }
+			add_ideas = minister_VHV_Stepan_Golovin
+		}
+		else_if = {
+			limit = { tag = VLA }
+			add_ideas = minister_VLA_Boris_Talanov
+		}
+		else_if = {
+			limit = { tag = VLD }
+			add_ideas = minister_VLD_Volker_Reim
+		}
+		else_if = {
+			limit = { tag = VRA }
+			add_ideas = minister_VRA_Vladimir_Radich
+		}
+		else_if = {
+			limit = { tag = WCA }
+			add_ideas = minister_WCA_Markus_Hecht
+		}
+		else_if = {
+			limit = { tag = WCG }
+			add_ideas = minister_WCG_Gustav_Ried
+		}
+		else_if = {
+			limit = { tag = WEF }
+			add_ideas = minister_WEF_Adil_Kassem
+		}
+		else_if = {
+			limit = { tag = WIT }
+			add_ideas = minister_WIT_Anton_Riedel
+		}
+		else_if = {
+			limit = { tag = WKR }
+			add_ideas = minister_WKR_Nikolai_Krestov
+		}
+		else_if = {
+			limit = { tag = WPA }
+			add_ideas = minister_WPA_Axel_Berg
+		}
+		else_if = {
+			limit = { tag = WPS }
+			add_ideas = minister_WPS_Armin_Vogt
+		}
+		else_if = {
+			limit = { tag = WRK }
+			add_ideas = minister_WRK_Viktor_Lansky
+		}
+		else_if = {
+			limit = { tag = WTD }
+			add_ideas = minister_WTD_Wilhelm_Dietz
+		}
+		else_if = {
+			limit = { tag = YOR }
+			add_ideas = minister_YOR_Dmitri_Seregin
+		}
+		else_if = {
+			limit = { tag = YPR }
+			add_ideas = minister_YPR_Ilya_Dobrin
+		}
+		else_if = {
+			limit = { tag = ZAO }
+			add_ideas = minister_ZAO_Rashid_Karim
+		}
+		else_if = {
+			limit = { tag = ZTA }
+			add_ideas = minister_ZTA_Grigory_Lazarev
+		}
+	}
+}
+
 # COUNTRY candidate, PREV is its subject/overlord already fighting.
 # ROOT/FROM retain the opponents supplied by on_war_relation_added.
 ADISCORD_join_subject_war = {
