@@ -30,6 +30,14 @@ Regular flag prompt: Create ONE final national flag artwork for fictional Itora,
 
 Emergency flag prompt: Create ONE final national flag artwork for fictional Itora under its emergency cabinet, for a Hearts of Iron IV mod. Landscape aspect ratio 82:52. Full bleed perfectly flat flag; no cloth, folds, lighting, gradients, shadows, texture, perspective, lettering, watermark, frame or exterior margins. Refined heraldic vector-like flat shapes, readable at 82x52. Retain deep emerald green field with narrow antique gold vertical stripes at x=12% and x=88%, green outer edges. Simplify the emergency cabinet's official emblem radically. In the center put one large angular charcoal shield outlined in gold, bearing a bold gold heraldic eagle with spread wings facing left. One simple ivory vertical sword lies along eagle's axis, point DOWN, hilt above eagle head. Eagle dominates, three broad feather shapes per wing, no tiny feather lines. Shield emblem about 72% flag height. Restrained stern state heraldry, distinct from a republican lion flag while sharing its gold-striped green field. Use only emerald, antique gold, ivory and charcoal. No gears, towers, wreaths, coins, stars, crossed rifles, extra emblems. The flag must be usable directly as game source artwork.
 
+## IVC and IVN_chauvinism
+
+Placeholder artwork until dedicated flags exist: the emergency cabinet flag with
+its emerald field recoloured to deep crimson. `IVC` is the Marches Legion during
+Itora's revolt; the native `IVN_chauvinism` filename shows the same flag while
+Itora has the `chauvinism` government after the legion wins. Both are exported by
+the island-administration builder with the other Itoran flags.
+
 ## SFR
 
 Country: South Falor Directorate, disciplined coastal ports and supply service.

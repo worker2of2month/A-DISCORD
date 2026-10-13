@@ -1,0 +1,5 @@
+# The Marches Legion exists only during Itora's chauvinist revolt; its
+# states, army and leader arrive through IVN_start_marches_revolt.
+set_politics = { ruling_party = chauvinism elections_allowed = no }
+set_popularities = { chauvinism = 70 etatism = 15 humanism = 5 pragmatism = 10 }
+set_research_slots = 2

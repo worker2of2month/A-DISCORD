@@ -15,3 +15,26 @@ IVN_march_workshop_site_exists = {
 		IVN_march_workshop_site = yes
 	}
 }
+
+# COUNTRY IVN. The northern expedition is over or can no longer happen, so the
+# committee knows which course the marches will accept.
+IVN_northern_question_settled = {
+	NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
+	OR = {
+		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
+		has_global_flag = ADISCORD_vorkerland_collapse_finished
+	}
+}
+
+# COUNTRY IVN. The legion can rise only in a sovereign Itora at peace that still
+# holds Vedrina, the legion's capital.
+IVN_marches_revolt_ready = {
+	exists = yes
+	is_subject = no
+	has_war = no
+	owns_state = 95
+	controls_state = 95
+	NOT = { has_global_flag = IVN_marches_revolt_active }
+	NOT = { has_global_flag = IVN_marches_revolt_resolved }
+	NOT = { country_exists = IVC }
+}

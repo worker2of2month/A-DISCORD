@@ -323,6 +323,48 @@ automatic success. Verify the active countdown and the next scheduled mission.
 Details and TFR examples belong in the existing
 [focus-effects guide](docs/development/focus-effects.md).
 
+## Focus tree design
+
+A focus tree is a set of decisions for the player, not a list of bonuses.
+These rules apply to every author and agent; a tree that breaks them is
+unfinished, whatever its validators report.
+
+- Give every tree real choices. Each major branch needs at least one
+  mutually exclusive pair whose alternatives lead to different play (arms now
+  or reconstruction, breakthrough or manoeuvre, one political course or
+  another), and both alternatives must rejoin or end meaningfully.
+- Do not build linear chains of the same reward. Three focuses that each give
+  "+4 military factories" or "+10% attack" are one focus padded to three.
+  Vary the kind of result: buildings, equipment, a programme, a political
+  change, a diplomatic action, a modifier.
+- Never clone a branch across routes, countries or successors by renaming
+  focus IDs. Each route gets content that follows its own politics; shared
+  mechanics belong in shared effects, not in copied focus bodies.
+- Prefer focuses that open programmes: decisions with a price, a duration,
+  a chosen moment and a material result, as in the TFR patterns of the
+  focus-effects guide. A permanent modifier belongs in the country's
+  aggregate with an exact dummy preview, not in a pile of near-identical ideas.
+- Tie the tree to the country's actual situation. Read its campaign, its
+  wars, neighbours and existing mechanics first, then give the player tools
+  for them (influence over the western states, the corridor, the coming war).
+  A tree that ignores the war it leads into is not acceptable.
+- Plan the timeline. Count the days from the tree's start to its war or
+  deadline, keep one playthrough within it, and make sure preparation focuses
+  remain useful or are skipped through `bypass` once their moment has passed.
+- Give each political course its own final, spirit and settlement terms
+  where the story supports it, and keep the AI plan to one alternative of
+  each exclusive pair.
+- Do not reward a custom tooltip alone. A tooltip must describe a real
+  consumer: a lean push, an unlocked slot, a decision, a variable read by a
+  modifier. AI-only weights are not a player reward.
+- War outcomes must be symmetric. Before shipping a scripted war, check that
+  neither side wins by default (tie-breaks, who declares, who owns neutral
+  ground) and confirm the result in recent text saves.
+- Verify the tree as a whole: unique positions, exclusive pairs and their
+  merges, delta previews equal to applied values, factory sites rechecked at
+  delivery, localisation for every focus, tooltip and preview, and an AI plan
+  naming only existing focuses.
+
 ## Performance
 
 Before changing runtime performance, read the source-backed

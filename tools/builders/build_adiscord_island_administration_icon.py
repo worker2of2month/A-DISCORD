@@ -1,4 +1,4 @@
-"""Build Itora's political flags and its island-administration assets."""
+"""Build Itora's political flags, the Marches Legion flag and the island-administration assets."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / "tools/assets/source/autonomy_island_administration_source.png"
 ICON = ROOT / "gfx/interface/autonomy/autonomy_island_administration_icon.png"
 FLAG_SOURCE = ROOT / "tools/assets/source/country_flags"
-FLAG_IDS = ("IVN", "IVN_etatism")
+FLAG_IDS = ("IVN", "IVN_etatism", "IVN_chauvinism", "IVC")
 FLAG_SIZES = {"": (82, 52), "medium": (41, 26), "small": (10, 7)}
 FLAG_PAIRS = tuple(
     (ROOT / directory / "IVN.tga", ROOT / directory / "IIA.tga")

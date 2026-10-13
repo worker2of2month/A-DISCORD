@@ -50,6 +50,8 @@ ADISCORD_west_final_can_start = {
 		NOT = { has_war_with = WRK }
 	}
 	NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
+	# Itora's revolt of the marches pauses the western question for both sides.
+	NOT = { has_global_flag = IVN_marches_revolt_active }
 }
 
 # COUNTRY.
@@ -118,8 +120,8 @@ ADISCORD_west_ivn_emergency_course = {
 	has_completed_focus = IVN_emergency_order
 }
 
-ADISCORD_west_ivn_trade_course = {
-	has_completed_focus = IVN_trade_republic
+ADISCORD_west_ivn_revanche_course = {
+	has_completed_focus = IVN_revanche_of_the_marches
 }
 
 # COUNTRY invited state; ROOT is the inviting champion. The pending flag is
@@ -228,6 +230,6 @@ ADISCORD_west_ivn_league_unlocked = {
 	OR = {
 		has_completed_focus = IVN_shield_league_of_republics
 		has_completed_focus = IVN_emergency_protectorates
-		has_completed_focus = IVN_trade_compacts
+		has_completed_focus = IVN_revanche_iron_protectorate
 	}
 }

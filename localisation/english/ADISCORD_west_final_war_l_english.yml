@@ -146,19 +146,15 @@
  ADISCORD_west_free_republics_lean_tt:0 "The lean of [ROM.GetName] and [TRU.GetName] shifts toward Vorkerland by §Y30§!."
 
 # Itoran courses
- ADISCORD_west_ivn_merchant_league:0 "Merchant League"
- ADISCORD_west_ivn_merchant_league_desc:0 "The trading houses of the marches pay for the war: the warehouses are full, caravans move to the front and the factories work three shifts."
- ADISCORD_west.1.d_ivn_trade:0 "The merchant councils sought a bargain to the last, but Vorkerland closed the roads to the harbours of the marches. Now the warehouses open to the army and the trading columns move to the front.\n\nItora fights so that the West trades again instead of submitting."
- ADISCORD_west.31.d_ivn_trade:0 "The merchant republic has won the war it did not want to start. The northern corridor has passed to Itora, and Vorkerland has become its satellite and opened its markets to the trading houses of the marches.\n\nThe West trades again, and Itora now sets the prices."
  ADISCORD_west_ivn_humanitarian_convoys:0 "Humanitarian Convoys"
  ADISCORD_west_ivn_humanitarian_convoys_desc:0 "The hospital columns of the marches carry medicine and food to the neighbours. The gratitude of people is stronger than envoys' speeches."
  ADISCORD_west_ivn_humanitarian_convoys_tt:0 "[From.GetName]'s lean shifts toward Itora by §Y[?ROOT.ADISCORD_west_influence_power|0]§! plus §Y10§!."
  ADISCORD_west_ivn_ultimatum:0 "Ultimatum to a Neighbour"
  ADISCORD_west_ivn_ultimatum_desc:0 "The emergency committee demands that a neighbour recognise the protectorate of the marches. The threat works quickly but brings the great war closer."
  ADISCORD_west_ivn_ultimatum_tt:0 "[From.GetName]'s lean shifts toward Itora by §Y25§!. Before the war begins, western pressure grows by §Y10§!."
- ADISCORD_west_ivn_trade_agreement:0 "Trade Agreement"
- ADISCORD_west_ivn_trade_agreement_desc:0 "The merchant councils offer a neighbour reduced tariffs and a place in the markets of the marches. The bargain is expensive but reliable."
- ADISCORD_west_ivn_trade_agreement_tt:0 "[From.GetName]'s lean shifts toward Itora by §Y[?ROOT.ADISCORD_west_influence_power|0]§! plus §Y10§!."
- ADISCORD_west_cost_treasury_100:0 "§Y100§! £ADISCORD_economy_treasury_texticon"
- ADISCORD_west_cost_treasury_100_blocked:0 "§R100§! £ADISCORD_economy_treasury_texticon"
- ADISCORD_west_cost_treasury_100_tooltip:0 "§Y100§! £ADISCORD_economy_treasury_texticon"
+
+# Revanche course
+ ADISCORD_west_ivn_revanche_legion:0 "Marches Legion"
+ ADISCORD_west_ivn_revanche_legion_desc:0 "The veterans of the revolt march ahead of the army. They fight for revanche, not for order, and do not count losses."
+ ADISCORD_west.1.d_ivn_revanche:0 "General Karn promised the march regiments revanche, and the legion follows him. The northern expedition retreated before Vorkerland; now Itora returns, without the humanists and without the cabinet.\n\nVictory must make Vorkerland part of the marches."
+ ADISCORD_west.31.d_ivn_revanche:0 "The Marches Legion has completed its revanche. Vorkerland and its allies are annexed to Itora, and the northern corridor has become an inner road of the marches.\n\nThe West is one country."

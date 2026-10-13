@@ -179,7 +179,7 @@ focus_tree = {
 	}
 
 	# ----- Three courses of the western question -----
-	# The committee chooses one of three courses for the West.
+	# The outcome of the northern expedition decides which course is open.
 	focus = {
 		id = IVN_humanist_shield
 		icon = GFX_goal_generic_defence
@@ -189,12 +189,20 @@ focus_tree = {
 		prerequisite = { focus = IVN_committee_mandate }
 		mutually_exclusive = {
 			focus = IVN_emergency_order
-			focus = IVN_trade_republic
+			focus = IVN_revanche_of_the_marches
 		}
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		available = {
 			has_capitulated = no
 			has_government = humanism
+			custom_trigger_tooltip = {
+				tooltip = IVN_northern_question_settled_tt
+				IVN_northern_question_settled = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = IVN_expedition_not_failed_tt
+				NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_failed }
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -226,11 +234,27 @@ focus_tree = {
 		prerequisite = { focus = IVN_committee_mandate }
 		mutually_exclusive = {
 			focus = IVN_humanist_shield
-			focus = IVN_trade_republic
+			focus = IVN_revanche_of_the_marches
 		}
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
 		available = {
 			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = IVN_northern_question_settled_tt
+				IVN_northern_question_settled = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = IVN_expedition_not_won_tt
+				NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded }
+			}
+			NOT = { has_government = chauvinism }
+			custom_trigger_tooltip = {
+				tooltip = IVN_cabinet_survived_tt
+				OR = {
+					NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_failed }
+					has_global_flag = IVN_marches_revolt_resolved
+				}
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -257,8 +281,8 @@ focus_tree = {
 	}
 
 	focus = {
-		id = IVN_trade_republic
-		icon = GFX_goal_generic_positive_trade_relations
+		id = IVN_revanche_of_the_marches
+		icon = GFX_goal_generic_occupy_start_war
 		x = 19
 		y = 4
 		cost = 4
@@ -267,29 +291,35 @@ focus_tree = {
 			focus = IVN_humanist_shield
 			focus = IVN_emergency_order
 		}
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
 		available = {
 			has_capitulated = no
+			has_government = chauvinism
+			custom_trigger_tooltip = {
+				tooltip = IVN_revolt_over_tt
+				NOT = { has_global_flag = IVN_marches_revolt_active }
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			IVN_adopt_trade_republic = yes
-			custom_effect_tooltip = IVN_trade_republic_tt
+			custom_effect_tooltip = IVN_revanche_of_the_marches_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = IVN_order_dummy_idea
-					add_idea = IVN_ord_trade_republic_idea
+					add_idea = IVN_ord_revanche_of_the_marches_idea
 				}
 			}
 			hidden_effect = {
-				add_to_variable = { var = IVN_ord_political_power value = 0.05 }
-				add_to_variable = { var = IVN_ord_factory_output value = 0.03 }
+				add_to_variable = { var = IVN_ord_attack value = 0.05 }
+				add_to_variable = { var = IVN_ord_war_support value = 0.05 }
+				add_to_variable = { var = IVN_ord_conscription value = 0.01 }
+				add_to_variable = { var = IVN_ord_stability value = -0.02 }
 				IVN_refresh_order = yes
 			}
 		}
 		ai_will_do = {
-			base = 15
+			base = 50
 		}
 	}
 
@@ -645,15 +675,37 @@ focus_tree = {
 		}
 	}
 
-	# ----- Trade republic of the marches -----
+	# ----- Revanche of the marches -----
 	focus = {
-		id = IVN_trade_compacts
-		icon = GFX_focus_generic_diplomatic_treaty
+		id = IVN_revanche_legion_veterans
+		icon = GFX_goal_generic_allies_build_infantry
 		x = 18
 		y = 5
 		cost = 3
-		prerequisite = { focus = IVN_trade_republic }
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INTERNATIONAL_TRADE }
+		prerequisite = { focus = IVN_revanche_of_the_marches }
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 25000
+			army_experience = 50
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = IVN_revanche_iron_protectorate
+		icon = GFX_goal_generic_military_sphere
+		x = 20
+		y = 5
+		cost = 3
+		prerequisite = { focus = IVN_revanche_of_the_marches }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ANNEXATION }
 		available = {
 			has_capitulated = no
 		}
@@ -661,7 +713,7 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			unlock_decision_tooltip = ADISCORD_west_ivn_offer_league
-			unlock_decision_tooltip = ADISCORD_west_ivn_trade_agreement
+			unlock_decision_tooltip = ADISCORD_west_ivn_ultimatum
 			custom_effect_tooltip = IVN_influence_power_5_tt
 			hidden_effect = { add_to_variable = { var = ADISCORD_west_influence_power value = 5 } }
 		}
@@ -671,12 +723,12 @@ focus_tree = {
 	}
 
 	focus = {
-		id = IVN_trade_free_ports
-		icon = GFX_goal_generic_construct_naval_dockyard
-		x = 20
-		y = 5
+		id = IVN_revanche_arsenals
+		icon = GFX_goal_generic_construct_mil_factory
+		x = 18
+		y = 6
 		cost = 3
-		prerequisite = { focus = IVN_trade_republic }
+		prerequisite = { focus = IVN_revanche_legion_veterans }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		available = {
 			has_capitulated = no
@@ -684,36 +736,26 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			25 = {
+			695 = {
 				if = {
 					limit = { is_owned_and_controlled_by = ROOT }
-					add_extra_state_shared_building_slots = 1
+					add_extra_state_shared_building_slots = 2
 					add_building_construction = {
-						type = industrial_complex
-						level = 1
+						type = arms_factory
+						level = 2
 						instant_build = yes
 					}
 				}
 			}
-			25 = {
-				if = {
-					limit = { is_owned_and_controlled_by = ROOT }
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = {
-						type = dockyard
-						level = 1
-						instant_build = yes
-					}
-				}
-			}
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = IVN }
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = IVN_order_dummy_idea
-					add_idea = IVN_ord_trade_free_ports_idea
+					add_idea = IVN_ord_revanche_arsenals_idea
 				}
 			}
 			hidden_effect = {
-				add_to_variable = { var = IVN_ord_construction value = 0.05 }
+				add_to_variable = { var = IVN_ord_factory_output value = 0.03 }
 				IVN_refresh_order = yes
 			}
 		}
@@ -723,81 +765,25 @@ focus_tree = {
 	}
 
 	focus = {
-		id = IVN_trade_merchant_banks
-		icon = GFX_goal_generic_trade
-		x = 18
-		y = 6
-		cost = 3
-		prerequisite = { focus = IVN_trade_compacts }
-		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
-		available = {
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_political_power = 50
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = IVN_order_dummy_idea
-					add_idea = IVN_ord_trade_merchant_banks_idea
-				}
-			}
-			hidden_effect = {
-				add_to_variable = { var = IVN_ord_factory_output value = 0.05 }
-				add_to_variable = { var = IVN_ord_political_power value = 0.05 }
-				IVN_refresh_order = yes
-			}
-		}
-		ai_will_do = {
-			base = 25
-		}
-	}
-
-	focus = {
-		id = IVN_trade_hired_columns
-		icon = GFX_goal_generic_allies_build_infantry
+		id = IVN_revanche_corridor_by_force
+		icon = GFX_goal_generic_more_territorial_claims
 		x = 20
 		y = 6
 		cost = 3
-		prerequisite = { focus = IVN_trade_free_ports }
-		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = IVN_revanche_iron_protectorate }
+		search_filters = { FOCUS_FILTER_ANNEXATION }
 		available = {
 			has_capitulated = no
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_manpower = 10000
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = IVN }
-			add_equipment_to_stockpile = { type = support_equipment amount = 300 producer = IVN }
-		}
-		ai_will_do = {
-			base = 25
-		}
-	}
-
-	focus = {
-		id = IVN_trade_market_of_the_west
-		icon = GFX_goal_generic_positive_trade_relations
-		x = 18
-		y = 7
-		cost = 3
-		prerequisite = { focus = IVN_trade_merchant_banks }
-		search_filters = { FOCUS_FILTER_INTERNATIONAL_TRADE FOCUS_FILTER_POLITICAL }
-		available = {
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			custom_effect_tooltip = IVN_influence_power_10_tt
-			hidden_effect = { add_to_variable = { var = ADISCORD_west_influence_power value = 10 } }
-			custom_effect_tooltip = IVN_trade_market_of_the_west_tt
-			hidden_effect = {
-				set_temp_variable = { var = ADISCORD_west_push value = 5 }
-				ADISCORD_west_push_all_leans = yes
-			}
+			90 = { add_claim_by = IVN }
+			91 = { add_claim_by = IVN }
+			93 = { add_claim_by = IVN }
+			94 = { add_claim_by = IVN }
+			hidden_effect = { ADISCORD_west_crisis_add = yes }
+			custom_effect_tooltip = IVN_west_crisis_add_tt
 		}
 		ai_will_do = {
 			base = 30
@@ -805,13 +791,13 @@ focus_tree = {
 	}
 
 	focus = {
-		id = IVN_trade_war_for_the_ports
+		id = IVN_revanche_march_on_vorkerland
 		icon = GFX_goal_generic_major_war
 		x = 19
-		y = 8
+		y = 7
 		cost = 5
-		prerequisite = { focus = IVN_trade_market_of_the_west }
-		prerequisite = { focus = IVN_trade_hired_columns }
+		prerequisite = { focus = IVN_revanche_arsenals }
+		prerequisite = { focus = IVN_revanche_corridor_by_force }
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
 		available = {
 			has_capitulated = no
@@ -828,8 +814,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			effect_tooltip = { add_ideas = ADISCORD_west_ivn_merchant_league }
-			custom_effect_tooltip = IVN_trade_war_for_the_ports_tt
+			effect_tooltip = { add_ideas = ADISCORD_west_ivn_revanche_legion }
+			custom_effect_tooltip = IVN_revanche_march_on_vorkerland_tt
 			hidden_effect = { ADISCORD_west_final_war_start = yes }
 		}
 		ai_will_do = {
@@ -847,7 +833,7 @@ focus_tree = {
 		prerequisite = {
 			focus = IVN_humanist_shield
 			focus = IVN_emergency_order
-			focus = IVN_trade_republic
+			focus = IVN_revanche_of_the_marches
 		}
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		available = {

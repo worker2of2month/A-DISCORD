@@ -32,26 +32,114 @@ IVN_adopt_emergency_order = {
 	}
 }
 
-# COUNTRY IVN. The committee hands the marches to the merchant councils; the
-# same leader takes the pragmatist role, and elections remain.
-IVN_adopt_trade_republic = {
+# ----- Chauvinist revolt of the marches -----
+# A failed northern expedition hands power to the emergency cabinet, and the
+# frontier army that came back from the north rises as the Marches Legion
+# (IVC). Both outcomes end with IVN annexing IVC, so the Itoran tag, its focus
+# progress and western influence survive whichever side wins.
+
+# COUNTRY IVN. The four frontier marches the legion holds at the start.
+IVN_marches_revolt_states = {
+	92 = { IVN_marches_revolt_take_state = yes }
+	95 = { IVN_marches_revolt_take_state = yes }
+	96 = { IVN_marches_revolt_take_state = yes }
+	97 = { IVN_marches_revolt_take_state = yes }
+}
+
+# STATE. Only land Itora still owns and controls passes to the legion.
+IVN_marches_revolt_take_state = {
 	if = {
-		limit = { NOT = { has_government = pragmatism } }
-		set_politics = {
-			ruling_party = pragmatism
-			elections_allowed = yes
+		limit = {
+			is_owned_by = IVN
+			is_controlled_by = IVN
+		}
+		IVC = { transfer_state = PREV }
+		set_state_controller_to = IVC
+	}
+}
+
+# COUNTRY IVN. The emergency cabinet takes power and the legion goes to war.
+IVN_start_marches_revolt = {
+	set_global_flag = IVN_marches_revolt_active
+	IVN_adopt_emergency_order = yes
+	IVN_marches_revolt_states = yes
+	IVC = {
+		set_capital = { state = 95 }
+		inherit_technology = IVN
+		ADISCORD_economy_initialize_country = yes
+		recruit_character = IVN_Rostislav_Karn
+		promote_character = {
+			character = IVN_Rostislav_Karn
+			ideology = chauvinism_ideology
+		}
+		set_stability = 0.45
+		set_war_support = 0.70
+		add_manpower = 20000
+	}
+	transfer_units_fraction = {
+		target = IVC
+		size = 0.4
+		stockpile_ratio = 0.3
+		navy_ratio = 0
+		air_ratio = 0.3
+	}
+	IVC = {
+		declare_war_on = {
+			target = IVN
+			type = annex_everything
 		}
 	}
+	ADISCORD_economy_mark_dirty = yes
+	news_event = { id = ADISCORD_ivn.3 hours = 1 }
+}
+
+# COUNTRY IVN after its own capitulation. The legion's government, leader and
+# player move into IVN before the annexation removes IVC.
+IVN_hand_power_to_legion = {
 	if = {
-		limit = { NOT = { has_country_flag = IVN_vadim_pragmatist_role_added } }
-		add_country_leader_role = {
-			character = IVN_Vadim_Ivanchik
-			promote_leader = yes
-			country_leader = {
-				ideology = pragmatism_ideology
-				expire = "2200.1.1.1"
+		limit = { IVC = { is_ai = no } }
+		change_tag_from = IVC
+	}
+	IVC = {
+		if = {
+			limit = { has_character = IVN_Rostislav_Karn }
+			set_nationality = {
+				character = IVN_Rostislav_Karn
+				target_country = IVN
 			}
 		}
-		set_country_flag = IVN_vadim_pragmatist_role_added
+	}
+	set_politics = {
+		ruling_party = chauvinism
+		elections_allowed = no
+	}
+	promote_character = {
+		character = IVN_Rostislav_Karn
+		ideology = chauvinism_ideology
+	}
+}
+
+# COUNTRY IVN. Every terminal path reunites the marches under IVN.
+IVN_resolve_marches_revolt = {
+	if = {
+		limit = { has_war_with = IVC }
+		white_peace = IVC
+	}
+	if = {
+		limit = { country_exists = IVC }
+		annex_country = {
+			target = IVC
+			transfer_troops = yes
+		}
+	}
+	clr_global_flag = IVN_marches_revolt_active
+	set_global_flag = IVN_marches_revolt_resolved
+	ADISCORD_economy_mark_dirty = yes
+	if = {
+		limit = { has_government = chauvinism }
+		news_event = { id = ADISCORD_ivn.5 hours = 2 }
+	}
+	else = {
+		news_event = { id = ADISCORD_ivn.4 hours = 2 }
 	}
 }

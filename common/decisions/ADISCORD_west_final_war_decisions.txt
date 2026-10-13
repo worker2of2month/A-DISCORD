@@ -295,7 +295,10 @@ ADISCORD_west_influence_category = {
 		target_root_trigger = {
 			ADISCORD_west_influence_open = yes
 			ADISCORD_west_champion_viable = yes
-			has_completed_focus = IVN_emergency_protectorates
+			OR = {
+				has_completed_focus = IVN_emergency_protectorates
+				has_completed_focus = IVN_revanche_iron_protectorate
+			}
 		}
 		target_trigger = {
 			FROM = {
@@ -323,49 +326,6 @@ ADISCORD_west_influence_category = {
 			modifier = {
 				factor = 0
 				FROM = { ADISCORD_west_leans_to_root_ally = yes }
-			}
-		}
-	}
-
-	ADISCORD_west_ivn_trade_agreement = {
-		icon = generic_industry
-		allowed = { tag = IVN }
-		targets = { WIT IIA IBA IBL PWR PSD ZAO WPA WPS ROM TRU }
-		target_root_trigger = {
-			ADISCORD_west_influence_open = yes
-			ADISCORD_west_champion_viable = yes
-			has_completed_focus = IVN_trade_compacts
-		}
-		target_trigger = {
-			FROM = { ADISCORD_west_influence_target_valid = yes }
-		}
-		available = {
-			ADISCORD_economy_can_spend_100 = yes
-		}
-		cost = 0
-		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
-		custom_cost_text = ADISCORD_west_cost_treasury_100
-		fire_only_once = no
-		days_re_enable = 45
-		complete_effect = {
-			ADISCORD_economy_spend_100 = yes
-			custom_effect_tooltip = ADISCORD_west_ivn_trade_agreement_tt
-			hidden_effect = {
-				set_temp_variable = { var = ADISCORD_west_push value = ROOT.ADISCORD_west_influence_power }
-				add_to_temp_variable = { var = ADISCORD_west_push value = 10 }
-				FROM = { ADISCORD_west_push_lean = yes }
-			}
-		}
-		ai_will_do = {
-			base = 10
-			modifier = {
-				add = 15
-				FROM = { ADISCORD_west_corridor_owner = yes }
-			}
-			modifier = {
-				factor = 0
-				FROM = { ADISCORD_west_leans_to_root_ally = yes }
-				ADISCORD_west_final_active = no
 			}
 		}
 	}

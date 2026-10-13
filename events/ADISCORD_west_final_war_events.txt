@@ -41,10 +41,10 @@ country_event = {
 		}
 	}
 	desc = {
-		text = ADISCORD_west.1.d_ivn_trade
+		text = ADISCORD_west.1.d_ivn_revanche
 		trigger = {
 			tag = IVN
-			ADISCORD_west_ivn_trade_course = yes
+			ADISCORD_west_ivn_revanche_course = yes
 		}
 	}
 	desc = {
@@ -53,7 +53,7 @@ country_event = {
 			tag = IVN
 			NOT = { ADISCORD_west_ivn_shield_course = yes }
 			NOT = { ADISCORD_west_ivn_emergency_course = yes }
-			NOT = { ADISCORD_west_ivn_trade_course = yes }
+			NOT = { ADISCORD_west_ivn_revanche_course = yes }
 		}
 	}
 	picture = GFX_event_adiscord_military_headquarters
@@ -302,11 +302,10 @@ news_event = {
 		}
 	}
 	desc = {
-		text = ADISCORD_west.31.d_ivn_trade
+		text = ADISCORD_west.31.d_ivn_revanche
 		trigger = {
 			has_global_flag = ADISCORD_west_hegemon_IVN
-			check_variable = { var = global.ADISCORD_west_subject_type value = 0 compare = equals }
-			IVN = { ADISCORD_west_ivn_trade_course = yes }
+			check_variable = { var = global.ADISCORD_west_terms value = 1 compare = equals }
 		}
 	}
 	desc = {
@@ -314,7 +313,7 @@ news_event = {
 		trigger = {
 			has_global_flag = ADISCORD_west_hegemon_IVN
 			check_variable = { var = global.ADISCORD_west_subject_type value = 0 compare = equals }
-			NOT = { IVN = { ADISCORD_west_ivn_trade_course = yes } }
+			check_variable = { var = global.ADISCORD_west_terms value = 2 compare = equals }
 		}
 	}
 	picture = GFX_news_event_adiscord_imperial_proclamation

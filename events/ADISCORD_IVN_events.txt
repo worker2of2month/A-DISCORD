@@ -1,0 +1,99 @@
+add_namespace = ADISCORD_ivn
+
+# Revolt dispatcher. A busy Itora delays the revolt instead of discarding it;
+# the retry stops once Itora is a subject or no longer exists.
+country_event = {
+	id = ADISCORD_ivn.1
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = IVN
+		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_failed
+	}
+
+	immediate = {
+		if = {
+			limit = { IVN_marches_revolt_ready = yes }
+			country_event = { id = ADISCORD_ivn.2 hours = 1 }
+		}
+		else_if = {
+			limit = {
+				exists = yes
+				is_subject = no
+				NOT = { has_global_flag = IVN_marches_revolt_active }
+				NOT = { has_global_flag = IVN_marches_revolt_resolved }
+			}
+			country_event = { id = ADISCORD_ivn.1 days = 14 }
+		}
+	}
+}
+
+# The revolt begins before the answer; a human Itora may lead the legion.
+country_event = {
+	id = ADISCORD_ivn.2
+	title = ADISCORD_ivn.2.t
+	desc = ADISCORD_ivn.2.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = {
+		tag = IVN
+		IVN_marches_revolt_ready = yes
+	}
+
+	immediate = {
+		hidden_effect = { IVN_start_marches_revolt = yes }
+	}
+
+	option = {
+		name = ADISCORD_ivn.2.a
+		custom_effect_tooltip = ADISCORD_ivn.2.a_tt
+		ai_chance = { base = 100 }
+	}
+
+	option = {
+		name = ADISCORD_ivn.2.b
+		trigger = { is_ai = no }
+		custom_effect_tooltip = ADISCORD_ivn.2.b_tt
+		hidden_effect = { IVC = { change_tag_from = IVN } }
+		ai_chance = { base = 0 }
+	}
+}
+
+news_event = {
+	id = ADISCORD_ivn.3
+	title = ADISCORD_ivn.3.t
+	desc = ADISCORD_ivn.3.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_ivn.3.a
+	}
+}
+
+news_event = {
+	id = ADISCORD_ivn.4
+	title = ADISCORD_ivn.4.t
+	desc = ADISCORD_ivn.4.d
+	picture = GFX_news_event_adiscord_military_planning
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_ivn.4.a
+	}
+}
+
+news_event = {
+	id = ADISCORD_ivn.5
+	title = ADISCORD_ivn.5.t
+	desc = ADISCORD_ivn.5.d
+	picture = GFX_news_event_adiscord_army_formation
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_ivn.5.a
+	}
+}

@@ -263,7 +263,7 @@ class WestFinalWarContractTests(unittest.TestCase):
         finals = {
             "IVN_shield_over_the_west": ivn,
             "IVN_emergency_march_west": ivn,
-            "IVN_trade_war_for_the_ports": ivn,
+            "IVN_revanche_march_on_vorkerland": ivn,
             "WRK_worker_west_mandate_for_itora": worker,
             "WRK_joint_west_return_of_the_marches": wrk,
             "WRK_utilitarian_west_engineering_border": technical,
@@ -307,10 +307,13 @@ class WestFinalWarContractTests(unittest.TestCase):
             for entry in flatten(victory)
             if entry.key == "set_variable"
         ]
+        # Subjects by default; only the revanche annexes the defeated.
         self.assertEqual(
             [e["value"] for e in terms if e["var"] == "global.ADISCORD_west_terms"],
-            ["2"],
+            ["2", "1"],
         )
+        revanche = body(EFFECTS, "ADISCORD_west_final_resolve_ivn_victory")
+        self.assertLess(revanche.index("ADISCORD_west_ivn_revanche_course = yes"), revanche.index("var = global.ADISCORD_west_terms value = 1"))
         settlement = parse_clausewitz(body(EFFECTS, "ADISCORD_west_apply_settlement"))
         corridor = block(settlement, "if")
         self.assertEqual({e.key for e in corridor if e.key.isdigit()}, {"90", "91", "93", "94"})
@@ -349,7 +352,7 @@ class WestFinalWarContractTests(unittest.TestCase):
             self.assertIn(f"FROM = {{ {lean} = yes }}", decision)
             self.assertNotIn("add_to_faction", decision)
         league = body(TRIGGERS, "ADISCORD_west_ivn_league_unlocked")
-        for course in ("IVN_shield_league_of_republics", "IVN_emergency_protectorates", "IVN_trade_compacts"):
+        for course in ("IVN_shield_league_of_republics", "IVN_emergency_protectorates", "IVN_revanche_iron_protectorate"):
             self.assertIn(f"has_completed_focus = {course}", league)
         source = EVENTS.read_text(encoding="utf-8")
         offer = source[source.index("\tid = ADISCORD_west.43\n"):source.index("\tid = ADISCORD_west.44\n")]
@@ -438,7 +441,6 @@ class WesternInfluenceTests(unittest.TestCase):
         "ADISCORD_west_ivn_offer_league",
         "ADISCORD_west_ivn_humanitarian_convoys",
         "ADISCORD_west_ivn_ultimatum",
-        "ADISCORD_west_ivn_trade_agreement",
         "ADISCORD_west_call_to_arms",
     )
 
@@ -526,15 +528,6 @@ class WesternInfluenceTests(unittest.TestCase):
         shipment = body(EFFECTS, "ADISCORD_west_ship_arms")
         self.assertIn("amount = -1000", shipment)
         self.assertIn("amount = 1000", shipment)
-        trade = self.decision("ADISCORD_west_ivn_trade_agreement")
-        self.assertIn("cost = 0", trade)
-        self.assertIn("custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }", trade)
-        self.assertEqual(trade.count("ADISCORD_economy_spend_100 = yes"), 1)
-        for language in ("russian", "english"):
-            text = (ROOT / f"localisation/{language}/ADISCORD_west_final_war_l_{language}.yml").read_text(encoding="utf-8-sig")
-            for suffix in ("", "_blocked", "_tooltip"):
-                line = re.search(rf'^ ADISCORD_west_cost_treasury_100{suffix}:0 "([^"]*)"$', text, re.M)[1]
-                self.assertLess(line.index("100"), line.index("£"), (language, suffix))
         call = self.decision("ADISCORD_west_call_to_arms")
         self.assertIn("has_country_flag = ADISCORD_west_neutral", call)
         self.assertIn("FROM = { ADISCORD_west_leans_to_root_ally = yes }", call)
@@ -552,7 +545,7 @@ class WesternInfluenceTests(unittest.TestCase):
 class ItoranCourseTests(unittest.TestCase):
     """The three Itoran courses exclude each other and each leads to the war."""
 
-    COURSES = ("IVN_humanist_shield", "IVN_emergency_order", "IVN_trade_republic")
+    COURSES = ("IVN_humanist_shield", "IVN_emergency_order", "IVN_revanche_of_the_marches")
 
     @classmethod
     def setUpClass(cls):
@@ -565,8 +558,8 @@ class ItoranCourseTests(unittest.TestCase):
         heritage = {e.value for item in self.focuses["IVN_west_heritage"] if item.key == "prerequisite" for e in item.value}
         self.assertEqual(heritage, set(self.COURSES))
         spirit = body(EFFECTS, "ADISCORD_west_add_path_spirit")
-        self.assertIn("ADISCORD_west_ivn_trade_course = yes", spirit)
-        self.assertIn("has_completed_focus = IVN_trade_republic", body(TRIGGERS, "ADISCORD_west_ivn_trade_course"))
+        self.assertIn("ADISCORD_west_ivn_revanche_course = yes", spirit)
+        self.assertIn("has_completed_focus = IVN_revanche_of_the_marches", body(TRIGGERS, "ADISCORD_west_ivn_revanche_course"))
 
     def test_programmes_are_gated_by_their_focus_and_refund_a_lost_site(self):
         decisions = (ROOT / "common/decisions/ADISCORD_IVN_decisions.txt").read_text(encoding="utf-8")
@@ -584,12 +577,90 @@ class ItoranCourseTests(unittest.TestCase):
         hold = hold[hold.index("\tADISCORD_west_ivn_hold_the_marches = {"):]
         self.assertIn("has_completed_focus = IVN_west_war_council", hold[:hold.index("\n\t}\n")])
 
-    def test_trade_republic_keeps_the_leader_and_elections(self):
-        adopt = body(ROOT / "common/scripted_effects/ADISCORD_IVN_scripted_effects.txt", "IVN_adopt_trade_republic")
-        self.assertIn("ruling_party = pragmatism", adopt)
-        self.assertIn("elections_allowed = yes", adopt)
-        self.assertIn("character = IVN_Vadim_Ivanchik", adopt)
-        self.assertIn("ideology = pragmatism_ideology", adopt)
+    def available(self, name):
+        return repr(next(e.value for e in self.focuses[name] if e.key == "available"))
+
+    def test_the_expedition_decides_which_course_is_open(self):
+        shield = self.available("IVN_humanist_shield")
+        self.assertIn("ADISCORD_vorkerland_ivanland_intervention_failed", shield)
+        self.assertIn("IVN_northern_question_settled", shield)
+        emergency = self.available("IVN_emergency_order")
+        self.assertIn("ADISCORD_vorkerland_ivanland_intervention_succeeded", emergency)
+        self.assertIn("IVN_marches_revolt_resolved", emergency)
+        self.assertIn("value='chauvinism'", emergency)
+        revanche = self.available("IVN_revanche_of_the_marches")
+        self.assertIn("key='has_government', value='chauvinism'", revanche)
+        self.assertIn("IVN_marches_revolt_active", revanche)
+        settled = body(ROOT / "common/scripted_triggers/ADISCORD_IVN_scripted_triggers.txt", "IVN_northern_question_settled")
+        self.assertIn("NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }", settled)
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved", settled)
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_collapse_finished", settled)
+
+
+class MarchesRevoltTests(unittest.TestCase):
+    """The chauvinist revolt that follows a failed northern expedition."""
+
+    IVN_EFFECTS = ROOT / "common/scripted_effects/ADISCORD_IVN_scripted_effects.txt"
+    IVN_EVENTS = ROOT / "events/ADISCORD_IVN_events.txt"
+
+    def test_a_failed_expedition_schedules_the_revolt_and_a_busy_itora_delays_it(self):
+        failure = body(ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt", "ADISCORD_vorkerland_ivanland_intervention_failure")
+        self.assertIn("IVN = { country_event = { id = ADISCORD_ivn.1 days = 30 } }", failure)
+        events = self.IVN_EVENTS.read_text(encoding="utf-8")
+        dispatcher = events[events.index("\tid = ADISCORD_ivn.1\n"):events.index("\tid = ADISCORD_ivn.2\n")]
+        self.assertIn("IVN_marches_revolt_ready = yes", dispatcher)
+        self.assertIn("country_event = { id = ADISCORD_ivn.1 days = 14 }", dispatcher)
+        ready = body(ROOT / "common/scripted_triggers/ADISCORD_IVN_scripted_triggers.txt", "IVN_marches_revolt_ready")
+        for condition in ("has_war = no", "is_subject = no", "owns_state = 95", "NOT = { country_exists = IVC }"):
+            self.assertIn(condition, ready)
+
+    def test_the_legion_takes_the_frontier_army_and_declares_the_war(self):
+        start = body(self.IVN_EFFECTS, "IVN_start_marches_revolt")
+        self.assertLess(start.index("set_global_flag = IVN_marches_revolt_active"), start.index("declare_war_on"))
+        self.assertIn("IVN_adopt_emergency_order = yes", start)
+        self.assertIn("transfer_units_fraction = {", start)
+        self.assertIn("target = IVN", start)
+        states = body(self.IVN_EFFECTS, "IVN_marches_revolt_states")
+        self.assertEqual(set(re.findall(r"\b(\d+) = \{ IVN_marches_revolt_take_state = yes \}", states)), {"92", "95", "96", "97"})
+        self.assertIn("is_controlled_by = IVN", body(self.IVN_EFFECTS, "IVN_marches_revolt_take_state"))
+
+    def test_both_outcomes_keep_the_itoran_tag(self):
+        resolve = body(self.IVN_EFFECTS, "IVN_resolve_marches_revolt")
+        self.assertIn("target = IVC", resolve)
+        self.assertIn("clr_global_flag = IVN_marches_revolt_active", resolve)
+        self.assertIn("set_global_flag = IVN_marches_revolt_resolved", resolve)
+        handover = body(self.IVN_EFFECTS, "IVN_hand_power_to_legion")
+        self.assertIn("change_tag_from = IVC", handover)
+        self.assertIn("ruling_party = chauvinism", handover)
+        self.assertIn("target_country = IVN", handover)
+        text = PEACE.read_text(encoding="utf-8")
+        section = text[text.index("# BEGIN itora_revolt:on_capitulation"):text.index("# END itora_revolt:on_capitulation")]
+        self.assertEqual(section.count("set_global_flag = skip_default_capitulation"), 2)
+        self.assertEqual(section.count("IVN_resolve_marches_revolt = yes"), 2)
+        self.assertLess(section.index("IVN_hand_power_to_legion = yes"), section.rindex("IVN_resolve_marches_revolt = yes"))
+        peace = text[text.index("# BEGIN itora_revolt:on_peace"):text.index("# END itora_revolt:on_peace")]
+        self.assertIn("IVN_resolve_marches_revolt = yes", peace)
+
+    def test_the_revolt_pauses_the_western_question(self):
+        self.assertIn("NOT = { has_global_flag = IVN_marches_revolt_active }", body(TRIGGERS, "ADISCORD_west_final_can_start"))
+        month = body(EFFECTS, "ADISCORD_west_crisis_month")
+        self.assertEqual(month.count("NOT = { has_global_flag = IVN_marches_revolt_active }"), 2)
+
+    def test_revolt_events_are_registered_and_localised(self):
+        source = self.IVN_EVENTS.read_text(encoding="utf-8")
+        defined = set(re.findall(r"\bid = (ADISCORD_ivn\.\d+)", source))
+        registry = json.loads((ROOT / "tools/data/adiscord_event_ids.json").read_text(encoding="utf-8"))
+        self.assertEqual(defined, {e["id"] for e in registry["events"] if e["namespace"] == "ADISCORD_ivn"})
+        keys = set(re.findall(r"(?:title|desc|name) = (ADISCORD_ivn\.[\w.]+)", source))
+        keys |= set(re.findall(r"custom_effect_tooltip = (\S+)", source))
+        keys |= {"IVC", "IVC_DEF", "IVC_ADJ"}
+        for language in ("russian", "english"):
+            text = (ROOT / f"localisation/{language}/ADISCORD_IVN_l_{language}.yml").read_text(encoding="utf-8-sig")
+            present = set(re.findall(r"(?m)^ ([\w.]+):", text))
+            self.assertEqual(sorted(keys - present), [], language)
+        for path in ("common/countries/IVC.txt", "gfx/flags/IVC.tga", "gfx/flags/IVN_chauvinism.tga"):
+            self.assertTrue((ROOT / path).is_file(), path)
+        self.assertIn('IVC = "countries/IVC.txt"', (ROOT / "common/country_tags/02_ADISCORD_ivn_tags.txt").read_text(encoding="utf-8"))
 
 
 class SubjectIntegrationRemovalTests(unittest.TestCase):
@@ -682,7 +753,7 @@ class ItoranAggregateTests(unittest.TestCase):
             self.assertEqual(applied, self.display[swap["add_idea"]], identifier)
             self.assertIn(("IVN_refresh_order", "yes"), [(e.key, e.value) for e in hidden], identifier)
             checked += 1
-        self.assertEqual(checked, 28)
+        self.assertEqual(checked, 27)
 
     def test_display_ideas_are_never_installed(self):
         text = IVN_TREE.read_text(encoding="utf-8")

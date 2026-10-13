@@ -22,4 +22,20 @@ characters = {
 			id = -1
 		}
 	}
+
+	# Commander of the Marches Legion; the portrait is a placeholder until
+	# dedicated art exists.
+	IVN_Rostislav_Karn = {
+		name = IVN_Rostislav_Karn
+		portraits = {
+			civilian = {
+				large = GFX_portrait_europe_generic_land_13
+			}
+		}
+		country_leader = {
+			ideology = chauvinism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
 }

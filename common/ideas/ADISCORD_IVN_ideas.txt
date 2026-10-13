@@ -77,13 +77,15 @@ ideas = {
 			}
 		}
 
-		IVN_ord_trade_republic_idea = {
+		IVN_ord_revanche_of_the_marches_idea = {
 			name = IVN_order_dynamic
 			picture = GFX_idea_IVN_national_spirit
 			allowed = { always = no }
 			modifier = {
-				political_power_gain = 0.05
-				industrial_capacity_factory = 0.03
+				army_attack_factor = 0.05
+				war_support_factor = 0.05
+				conscription = 0.01
+				stability_factor = -0.02
 			}
 		}
 
@@ -134,22 +136,12 @@ ideas = {
 			}
 		}
 
-		IVN_ord_trade_free_ports_idea = {
+		IVN_ord_revanche_arsenals_idea = {
 			name = IVN_order_dynamic
 			picture = GFX_idea_IVN_national_spirit
 			allowed = { always = no }
 			modifier = {
-				production_speed_buildings_factor = 0.05
-			}
-		}
-
-		IVN_ord_trade_merchant_banks_idea = {
-			name = IVN_order_dynamic
-			picture = GFX_idea_IVN_national_spirit
-			allowed = { always = no }
-			modifier = {
-				industrial_capacity_factory = 0.05
-				political_power_gain = 0.05
+				industrial_capacity_factory = 0.03
 			}
 		}
 

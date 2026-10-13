@@ -1750,6 +1750,12 @@
         "gfx/flags/IVN_etatism.tga",
         "gfx/flags/medium/IVN_etatism.tga",
         "gfx/flags/small/IVN_etatism.tga",
+        "gfx/flags/IVN_chauvinism.tga",
+        "gfx/flags/medium/IVN_chauvinism.tga",
+        "gfx/flags/small/IVN_chauvinism.tga",
+        "gfx/flags/IVC.tga",
+        "gfx/flags/medium/IVC.tga",
+        "gfx/flags/small/IVC.tga",
         "gfx/flags/IIA.tga",
         "gfx/flags/medium/IIA.tga",
         "gfx/flags/small/IIA.tga"
@@ -1758,7 +1764,9 @@
         "tools/builders/build_adiscord_island_administration_icon.py",
         "tools/assets/source/autonomy_island_administration_source.png",
         "tools/assets/source/country_flags/IVN.png",
-        "tools/assets/source/country_flags/IVN_etatism.png"
+        "tools/assets/source/country_flags/IVN_etatism.png",
+        "tools/assets/source/country_flags/IVN_chauvinism.png",
+        "tools/assets/source/country_flags/IVC.png"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_island_administration_icon"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_island_administration_icon", "--apply"],

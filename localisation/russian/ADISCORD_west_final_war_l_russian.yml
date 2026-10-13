@@ -146,19 +146,15 @@
  ADISCORD_west_free_republics_lean_tt:0 "Склонность [ROM.GetName] и [TRU.GetName] сдвигается к Воркерланду на §Y30§!."
 
 # Itoran courses
- ADISCORD_west_ivn_merchant_league:0 "Купеческая лига"
- ADISCORD_west_ivn_merchant_league_desc:0 "Торговые дома марок платят за войну: склады полны, караваны идут к фронту, а заводы работают в три смены."
- ADISCORD_west.1.d_ivn_trade:0 "Купеческие советы до последнего искали сделку, но Воркерланд перекрыл дороги к гаваням марок. Теперь склады открываются для армии, а торговые колонны идут к фронту.\n\nИтора воюет, чтобы Запад снова торговал, а не подчинялся."
- ADISCORD_west.31.d_ivn_trade:0 "Купеческая республика выиграла войну, которую не хотела начинать. Северный коридор перешёл к Иторе, а Воркерланд стал её сателлитом и открыл свои рынки торговым домам марок.\n\nЗапад снова торгует, и цены теперь назначает Итора."
  ADISCORD_west_ivn_humanitarian_convoys:0 "Гуманитарные конвои"
  ADISCORD_west_ivn_humanitarian_convoys_desc:0 "Колонны госпиталей марок везут лекарства и продовольствие соседям. Благодарность людей сильнее речей посланников."
  ADISCORD_west_ivn_humanitarian_convoys_tt:0 "Склонность [From.GetName] сдвигается к Иторе на §Y[?ROOT.ADISCORD_west_influence_power|0]§! и ещё на §Y10§!."
  ADISCORD_west_ivn_ultimatum:0 "Ультиматум соседу"
  ADISCORD_west_ivn_ultimatum_desc:0 "Чрезвычайный комитет требует от соседа признать протекторат марок. Угроза действует быстро, но приближает большую войну."
  ADISCORD_west_ivn_ultimatum_tt:0 "Склонность [From.GetName] сдвигается к Иторе на §Y25§!. До начала войны западный счёт растёт на §Y10§!."
- ADISCORD_west_ivn_trade_agreement:0 "Торговое соглашение"
- ADISCORD_west_ivn_trade_agreement_desc:0 "Купеческие советы предлагают соседу льготные пошлины и место на рынках марок. Сделка дорога, но надёжна."
- ADISCORD_west_ivn_trade_agreement_tt:0 "Склонность [From.GetName] сдвигается к Иторе на §Y[?ROOT.ADISCORD_west_influence_power|0]§! и ещё на §Y10§!."
- ADISCORD_west_cost_treasury_100:0 "§Y100§! £ADISCORD_economy_treasury_texticon"
- ADISCORD_west_cost_treasury_100_blocked:0 "§R100§! £ADISCORD_economy_treasury_texticon"
- ADISCORD_west_cost_treasury_100_tooltip:0 "§Y100§! £ADISCORD_economy_treasury_texticon"
+
+# Revanche course
+ ADISCORD_west_ivn_revanche_legion:0 "Легион марок"
+ ADISCORD_west_ivn_revanche_legion_desc:0 "Ветераны мятежа идут впереди армии. Они воюют за реванш, а не за порядок, и не считают потерь."
+ ADISCORD_west.1.d_ivn_revanche:0 "Генерал Карн обещал марочным полкам реванш, и легион идёт за ним. Северная экспедиция отступила перед Воркерландом - теперь Итора возвращается туда же, но уже без гуманистов и без кабинета.\n\nПобеда должна сделать Воркерланд частью марок."
+ ADISCORD_west.31.d_ivn_revanche:0 "Легион марок завершил реванш. Воркерланд и его союзники присоединены к Иторе, а северный коридор стал внутренней дорогой марок.\n\nНа Западе одна страна."

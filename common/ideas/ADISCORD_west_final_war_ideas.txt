@@ -63,15 +63,15 @@ ideas = {
 			}
 		}
 
-		ADISCORD_west_ivn_merchant_league = {
-			picture = generic_production_bonus
+		ADISCORD_west_ivn_revanche_legion = {
+			picture = generic_war_preparation
 			allowed = { original_tag = IVN }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
-				industrial_capacity_factory = 0.08
-				supply_consumption_factor = -0.10
-				war_support_factor = 0.05
+				army_attack_factor = 0.10
+				conscription = 0.02
+				stability_factor = -0.05
 			}
 		}
 

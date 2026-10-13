@@ -1606,6 +1606,32 @@ on_actions = {
 
 				# END rin:on_capitulation
 
+				# BEGIN itora_revolt:on_capitulation
+				# The capital that falls loses the revolt; IVN always annexes the legion,
+				# taking its government when the legion wins.
+				if = {
+					limit = {
+						has_global_flag = IVN_marches_revolt_active
+						ROOT = { tag = IVC }
+						FROM = { tag = IVN }
+					}
+					set_global_flag = skip_default_capitulation
+					IVN = { IVN_resolve_marches_revolt = yes }
+				}
+				else_if = {
+					limit = {
+						has_global_flag = IVN_marches_revolt_active
+						ROOT = { tag = IVN }
+						FROM = { tag = IVC }
+					}
+					set_global_flag = skip_default_capitulation
+					IVN = {
+						IVN_hand_power_to_legion = yes
+						IVN_resolve_marches_revolt = yes
+					}
+				}
+				# END itora_revolt:on_capitulation
+
 				# BEGIN nam:on_capitulation
 				# Recheck this native defeat before the generic annexation fallback.
 				ROOT = { ADISCORD_nam_resource_war_record_capitulation = yes }
@@ -2039,6 +2065,20 @@ on_actions = {
 				}
 
 				# END rin:on_peace
+
+				# BEGIN itora_revolt:on_peace
+				# An external peace leaves the cabinet in power and reunites the marches.
+				if = {
+					limit = {
+						has_global_flag = IVN_marches_revolt_active
+						IVN = {
+							exists = yes
+							NOT = { has_war_with = IVC }
+						}
+					}
+					IVN = { IVN_resolve_marches_revolt = yes }
+				}
+				# END itora_revolt:on_peace
 
 				# BEGIN vorkerland_diplomacy:on_peace
 				ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes

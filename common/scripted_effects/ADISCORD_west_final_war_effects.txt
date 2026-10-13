@@ -26,6 +26,7 @@ ADISCORD_west_crisis_month = {
 			ADISCORD_west_crisis_open = yes
 			ADISCORD_west_champion_viable = yes
 			NOT = { IVN = { ADISCORD_west_champion_viable = yes } }
+			NOT = { has_global_flag = IVN_marches_revolt_active }
 		}
 		set_global_flag = ADISCORD_west_final_resolved
 		set_global_flag = ADISCORD_west_hegemon_WRK
@@ -37,6 +38,7 @@ ADISCORD_west_crisis_month = {
 		limit = {
 			ADISCORD_west_crisis_open = yes
 			ADISCORD_west_reconstruction_grace_elapsed = yes
+			NOT = { has_global_flag = IVN_marches_revolt_active }
 		}
 		add_to_variable = { var = global.ADISCORD_west_crisis value = 5 }
 		clamp_variable = { var = global.ADISCORD_west_crisis min = 0 max = 100 }
@@ -363,8 +365,8 @@ ADISCORD_west_add_path_spirit = {
 		add_ideas = ADISCORD_west_ivn_emergency_order
 	}
 	else_if = {
-		limit = { ADISCORD_west_ivn_trade_course = yes }
-		add_ideas = ADISCORD_west_ivn_merchant_league
+		limit = { ADISCORD_west_ivn_revanche_course = yes }
+		add_ideas = ADISCORD_west_ivn_revanche_legion
 	}
 	else = {
 		add_ideas = ADISCORD_west_ivn_committee_line
@@ -380,7 +382,7 @@ ADISCORD_west_remove_path_spirit = {
 	remove_ideas = ADISCORD_west_ivn_humanist_shield
 	remove_ideas = ADISCORD_west_ivn_emergency_order
 	remove_ideas = ADISCORD_west_ivn_committee_line
-	remove_ideas = ADISCORD_west_ivn_merchant_league
+	remove_ideas = ADISCORD_west_ivn_revanche_legion
 	ADISCORD_economy_mark_dirty = yes
 }
 
@@ -436,6 +438,11 @@ ADISCORD_west_final_resolve_ivn_victory = {
 		else_if = {
 			limit = { IVN = { ADISCORD_west_ivn_emergency_course = yes } }
 			set_variable = { var = global.ADISCORD_west_subject_type value = 4 }
+		}
+		# The revanche annexes the defeated instead of keeping subjects.
+		if = {
+			limit = { IVN = { ADISCORD_west_ivn_revanche_course = yes } }
+			set_variable = { var = global.ADISCORD_west_terms value = 1 }
 		}
 		ADISCORD_west_end_final_wars = yes
 		ADISCORD_west_mark_losers = yes
