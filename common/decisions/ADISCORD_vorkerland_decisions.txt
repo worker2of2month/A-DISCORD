@@ -1310,6 +1310,74 @@ ADISCORD_vorkerland_collapse_category = {
 	}
 }
 
+ADISCORD_vorkerland_prewar_category = {
+	ADISCORD_vorkerland_prewar_hide_reserves = {
+		icon = generic_prepare_civil_war
+		allowed = {
+			OR = {
+				tag = WRK
+				tag = EYR
+				tag = EGC
+				tag = RIV
+				tag = YOR
+			}
+		}
+		state_target = yes
+		targets = { 32 33 200 201 36 37 38 39 324 75 106 107 121 102 109 111 325 81 110 124 79 306 308 309 327 108 122 123 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				NOT = { has_state_flag = ADISCORD_vorkerland_reserve_cache }
+			}
+		}
+		visible = {
+			has_global_flag = ADISCORD_vorkerland_phase_prewar
+			OR = {
+				has_completed_focus = WRK_measure_confederation_fault_lines
+				has_completed_focus = VAD_review_district_obligations
+			}
+		}
+		available = {
+			FROM = { is_controlled_by = ROOT }
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_reserve_cache_slot_tt
+				ADISCORD_vorkerland_reserve_cache_slot_free = yes
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		cost = 0
+		custom_cost_text = ADISCORD_vorkerland_reserve_cache_cost
+		custom_cost_trigger = { ADISCORD_vorkerland_reserve_cache_affordable = yes }
+		days_remove = 30
+		fire_only_once = no
+		complete_effect = {
+			FROM = { ADISCORD_vorkerland_reserve_cache_recipient_tt = yes }
+			custom_effect_tooltip = ADISCORD_vorkerland_reserve_cache_begin_tt
+			hidden_effect = { ADISCORD_vorkerland_begin_reserve_cache = yes }
+		}
+		# The partition cannot cancel a cache: its state changes owner by design.
+		remove_effect = {
+			custom_effect_tooltip = ADISCORD_vorkerland_reserve_cache_ready_tt
+			hidden_effect = {
+				FROM = {
+					if = {
+						limit = { has_state_flag = ADISCORD_vorkerland_reserve_cache }
+						set_state_flag = ADISCORD_vorkerland_reserve_cache_ready
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				FROM = { ADISCORD_vorkerland_reserve_cache_kept_by_ROOT = yes }
+			}
+		}
+	}
+}
+
 # --- diplomacy_decisions ---
 ADISCORD_vorkerland_regional_diplomacy_category = {
 	ADISCORD_vorkerland_vad_invite_victorious_sol = {

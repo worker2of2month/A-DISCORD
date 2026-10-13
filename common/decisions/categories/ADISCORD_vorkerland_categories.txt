@@ -47,6 +47,19 @@ ADISCORD_vorkerland_collapse_category = {
 	}
 }
 
+ADISCORD_vorkerland_prewar_category = {
+	allowed = {
+		OR = {
+			tag = WRK
+			tag = EYR
+			tag = EGC
+			tag = RIV
+			tag = YOR
+		}
+	}
+	visible = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
+}
+
 # --- diplomacy_categories ---
 ADISCORD_vorkerland_regional_diplomacy_category = {
 	icon = ADISCORD_deal

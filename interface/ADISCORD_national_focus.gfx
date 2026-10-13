@@ -378,6 +378,41 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_RUS_imperial_arsenals"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_imperial_arsenals.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_imperial_railways"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_imperial_railways.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_levy_of_the_new_aimaqs"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_levy_of_the_new_aimaqs.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_empire_without_rivals"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_empire_without_rivals.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_imperial_academy"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_imperial_academy.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_break_the_hegemon"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_break_the_hegemon.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_tomorrow_above_ground"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_tomorrow_above_ground.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_RUS_industrial_belt"
 		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_industrial_belt.png"
 	}

@@ -802,6 +802,7 @@ country_event = {
 		set_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		if = { limit = { VAL = { exists = yes } } VAL = { VAL_open_refugee_waves = yes } }
 		ADISCORD_vorkerland_apply_central_attrition = yes
+		ADISCORD_vorkerland_settle_reserve_caches = yes
 		WKR = { ADISCORD_vorkerland_initialize_legitimacy = yes }
 		VAD = { ADISCORD_vorkerland_initialize_legitimacy = yes }
 		TVA = { ADISCORD_vorkerland_initialize_legitimacy = yes }

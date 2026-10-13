@@ -1359,9 +1359,37 @@ RUS_bop_mediation_affordable = {
 	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
 }
 
+# --- rus_land_reclamation ---
+# STATE. Only authored, passable reclamation sites can change category.
+RUS_reclamation_region = {
+	OR = {
+		state = 329
+		state = 330
+		state = 292
+		state = 296
+	}
+	is_owned_by = RUS
+	has_state_category = wasteland
+}
+
+# RUS, FROM is the decision's state. The deposit is the shared project slot.
+RUS_reclamation_available = {
+	RUS_khan_governing = yes
+	NOT = { has_variable = RUS_reclamation_deposit }
+	FROM = {
+		RUS_reclamation_region = yes
+		is_controlled_by = RUS
+	}
+}
+
+RUS_reclamation_affordable = {
+	NOT = { has_political_power < 75 }
+	check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 200 } }
+}
+
 # --- rus_suspicion ---
-# RUS. Opens with the chancery and closes at proclamation, the ordinary public
-# start of the orbital programme.
+# RUS. The first territorial gain opens the gauge; proclamation closes it.
 RUS_suspicion_active = {
 	has_variable = RUS_suspicion
 	RUS_khan_governing = yes
@@ -1574,4 +1602,101 @@ RUS_bunker_energy_sale_available = {
 	has_completed_focus = RUS_bunker_power_school
 	NOT = { has_variable = RUS_bunker_energy_export_power }
 	check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+}
+
+# National commissions reserve one shared receipt until delivery or refund.
+RUS_work_order_idle = {
+	NOT = { has_variable = RUS_work_order }
+}
+
+RUS_civil_factory_order_site = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_civil_construction_board
+	66 = { free_building_slots = { building = industrial_complex size = 1 include_locked = no } }
+}
+
+RUS_artillery_order_site = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_battery_training
+}
+
+RUS_civil_factory_order_available = {
+	RUS_civil_factory_order_site = yes
+	RUS_work_order_idle = yes
+}
+
+RUS_artillery_order_available = {
+	RUS_artillery_order_site = yes
+	RUS_work_order_idle = yes
+}
+
+RUS_civil_factory_order_affordable = {
+	NOT = { has_political_power < 40 }
+	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 60 } }
+}
+
+RUS_artillery_order_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 50 } }
+}
+
+RUS_district_relief_available = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_district_representation
+}
+
+RUS_district_relief_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_food value = 20 compare = greater_than_or_equals }
+}
+
+RUS_machine_reserve_available = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_bunker_machine_depot
+	check_variable = { var = RUS_machine_reserve value = 1 compare = equals }
+}
+
+RUS_machine_reserve_repair_available = {
+	RUS_machine_reserve_available = yes
+	check_variable = { var = RUS_bunker_integrity value = 40 compare = less_than_or_equals }
+}
+
+RUS_last_sky_open = {
+	RUS_crisis_project_active = yes
+	RUS_lab_reactor_access = yes
+}
+
+RUS_last_sky_science_ready = {
+	RUS_last_sky_open = yes
+	check_variable = { var = RUS_last_sky_science value = 1 compare = equals }
+}
+
+RUS_last_sky_science_affordable = {
+	check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 50 } }
+}
+
+RUS_last_sky_army_ready = {
+	RUS_last_sky_open = yes
+	check_variable = { var = RUS_last_sky_army value = 1 compare = equals }
+}
+
+RUS_last_sky_army_affordable = {
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_bunker_food value = 30 compare = greater_than_or_equals }
+}
+
+RUS_last_sky_districts_ready = {
+	RUS_last_sky_open = yes
+	check_variable = { var = RUS_last_sky_districts value = 1 compare = equals }
+}
+
+RUS_last_sky_districts_affordable = {
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_bunker_food value = 40 compare = greater_than_or_equals }
 }

@@ -272,6 +272,24 @@ on_actions = {
 				limit = { NOT = { has_global_flag = RUS_crisis_world_ended } }
 				if = {
 					limit = {
+						ROOT = { tag = RUS }
+						FROM.FROM = { NOT = { state = 66 } }
+						RUS = { NOT = { has_variable = RUS_suspicion } }
+					}
+					RUS = { RUS_suspicion_begin = yes }
+				}
+				# A brief loss also settles the paid project before a possible recapture.
+				if = {
+					limit = {
+						FROM.FROM = {
+							has_state_flag = RUS_reclamation_paid
+							NOT = { is_controlled_by = RUS }
+						}
+					}
+					RUS = { RUS_reclamation_refund = yes }
+				}
+				if = {
+					limit = {
 						FROM.FROM = {
 							OR = {
 								state = 176

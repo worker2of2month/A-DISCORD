@@ -2290,6 +2290,15 @@ class RusCrisisContracts(unittest.TestCase):
         world = self.peaceful_empire()
         world.run("RUS_crisis_begin")
         self.assertIn(("RUS", "ADISCORD_rus_crisis.14"), world.events)
+        for event_id, days_left in (("ADISCORD_rus_crisis.21", 90), ("ADISCORD_rus_crisis.22", 60), ("ADISCORD_rus_crisis.23", 30)):
+            scene = next(event for event in scheduled if self.scalar(event, "id") == event_id)
+            self.assertEqual(int(self.scalar(laser, "days_mission_timeout")) - int(self.scalar(scene, "days")), days_left)
+            self.assertEqual(world.events.count(("RUS", event_id)), 1)
+        events_before = list(world.events)
+        missions_before = list(world.missions)
+        world.run("RUS_crisis_begin")
+        self.assertEqual(world.events, events_before)
+        self.assertEqual(world.missions, missions_before)
 
     def test_late_regional_winner_is_offered_entry_into_the_running_war(self):
         for tag in ("VAL", "STS", "STP", "NOD", "SHL", "NAM", "WRK", "IVN"):

@@ -17,6 +17,9 @@ RUS_crisis_begin = {
 		country_event = { id = ADISCORD_rus_crisis.2 }
 		# 90 days before the 455-day strike deadline.
 		country_event = { id = ADISCORD_rus_crisis.14 days = 365 }
+		country_event = { id = ADISCORD_rus_crisis.21 days = 365 }
+		country_event = { id = ADISCORD_rus_crisis.22 days = 395 }
+		country_event = { id = ADISCORD_rus_crisis.23 days = 425 }
 		every_country = {
 			limit = {
 				OR = {
@@ -584,6 +587,7 @@ RUS_crisis_close = {
 			check_variable = { var = RUS_crisis_phase value = 3 compare = less_than }
 		}
 		set_country_flag = RUS_crisis_laser_disabled
+		RUS_last_sky_clear_offers = yes
 		set_variable = { var = RUS_crisis_phase value = 5 }
 		every_country = {
 			limit = {
@@ -1030,6 +1034,7 @@ RUS_crisis_disable_laser = {
 			}
 		}
 		set_country_flag = RUS_crisis_laser_disabled
+		RUS_last_sky_clear_offers = yes
 		RUS_crisis_clear_preparation = yes
 		country_event = { id = ADISCORD_rus_crisis.10 }
 		for_each_scope_loop = {
@@ -1375,19 +1380,96 @@ ADISCORD_vorkerland_show_khan_defeated_superevent = {
 	}
 }
 
+# --- rus_land_reclamation ---
+# RUS. Clear both the country receipt and the bounded set of possible targets.
+RUS_reclamation_clear = {
+	clear_variable = RUS_reclamation_deposit
+	329 = { clr_state_flag = RUS_reclamation_paid }
+	330 = { clr_state_flag = RUS_reclamation_paid }
+	292 = { clr_state_flag = RUS_reclamation_paid }
+	296 = { clr_state_flag = RUS_reclamation_paid }
+}
+
+RUS_reclamation_refund = {
+	if = {
+		limit = { has_variable = RUS_reclamation_deposit }
+		set_temp_variable = { var = RUS_reclamation_refund_cash value = RUS_reclamation_deposit }
+		RUS_reclamation_clear = yes
+		add_political_power = 75
+		add_to_variable = { var = ADISCORD_economy_treasury value = RUS_reclamation_refund_cash }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = RUS_reclamation_refund_cash }
+		add_equipment_to_stockpile = { type = support_equipment amount = 200 producer = RUS }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# RUS, FROM is the paid state's scope throughout the native decision callbacks.
+RUS_reclamation_start = {
+	if = {
+		limit = {
+			RUS_reclamation_available = yes
+			RUS_reclamation_affordable = yes
+		}
+		set_variable = { var = RUS_reclamation_deposit value = 1000 }
+		FROM = { set_state_flag = RUS_reclamation_paid }
+		add_political_power = -75
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 1000 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1000 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -200 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_reclamation_cancel = {
+	if = {
+		limit = { FROM = { has_state_flag = RUS_reclamation_paid } }
+		RUS_reclamation_refund = yes
+	}
+}
+
+RUS_reclamation_finish = {
+	if = {
+		limit = {
+			has_variable = RUS_reclamation_deposit
+			FROM = { has_state_flag = RUS_reclamation_paid }
+		}
+		if = {
+			limit = {
+				RUS_khan_governing = yes
+				FROM = {
+					RUS_reclamation_region = yes
+					is_controlled_by = RUS
+				}
+			}
+			RUS_reclamation_clear = yes
+			FROM = {
+				set_state_category = rural
+				if = {
+					limit = { infrastructure < 5 }
+					add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+				}
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { RUS_reclamation_refund = yes }
+	}
+}
+
 # --- rus_suspicion_effects ---
-# RUS. The chancery reward opens the gauge once; a proclaimed empire is public.
+# RUS. Called on the first gain of state control outside the starting bunker.
 RUS_suspicion_begin = {
 	if = {
 		limit = {
+			RUS_khan_governing = yes
 			NOT = { has_variable = RUS_suspicion }
 			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 		}
 		set_variable = { var = RUS_suspicion value = 10 }
+		country_event = { id = ADISCORD_rus_crisis.24 }
 	}
 }
 
-# RUS. Input: temp RUS_suspicion_delta. Actions before the chancery are not counted.
+# RUS. Input: temp RUS_suspicion_delta. Activity before expansion is not counted.
 RUS_suspicion_add = {
 	if = {
 		limit = { RUS_suspicion_active = yes }
@@ -1507,7 +1589,7 @@ RUS_morale_monthly = {
 		}
 		if = {
 			limit = { has_completed_focus = RUS_imperial_field_kitchens }
-			add_to_temp_variable = { var = RUS_morale_delta value = 1 }
+			add_to_temp_variable = { var = RUS_morale_delta value = 2 }
 		}
 		if = {
 			limit = { power_balance_value = { id = RUS_state_balance value > 0.60 } }
@@ -3183,6 +3265,7 @@ RUS_bunker_refresh = {
 		}
 	}
 	else = {
+		RUS_work_order_refund = yes
 		RUS_bunker_refund = yes
 		if = {
 			limit = {
@@ -3433,6 +3516,10 @@ RUS_campaign_initialize = {
 }
 
 RUS_campaign_shutdown = {
+	RUS_reclamation_refund = yes
+	RUS_work_order_refund = yes
+	clear_variable = RUS_machine_reserve
+	RUS_last_sky_clear_offers = yes
 	RUS_bunker_energy_sale_cancel = yes
 	remove_decision = RUS_bunker_energy_sale
 	RUS_crisis_clear_preparation = yes
@@ -4400,4 +4487,248 @@ RUS_bunker_energy_sale_cancel = {
 		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
 		RUS_bunker_refresh = yes
 	}
+}
+
+# Clear the receipt before delivery, cancellation, or repeated native callbacks.
+RUS_work_order_clear = {
+	clear_variable = RUS_work_order
+	clear_variable = RUS_work_order_pp
+	clear_variable = RUS_work_order_cash
+	clear_variable = RUS_work_order_equipment
+}
+
+RUS_work_order_refund = {
+	if = {
+		limit = { has_variable = RUS_work_order }
+		set_temp_variable = { var = RUS_order_refund_pp value = RUS_work_order_pp }
+		set_temp_variable = { var = RUS_order_refund_cash value = RUS_work_order_cash }
+		set_temp_variable = { var = RUS_order_refund_equipment value = RUS_work_order_equipment }
+		RUS_work_order_clear = yes
+		remove_decision = RUS_civil_factory_order
+		remove_decision = RUS_artillery_order
+		add_political_power = RUS_order_refund_pp
+		add_to_variable = { var = ADISCORD_economy_treasury value = RUS_order_refund_cash }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = RUS_order_refund_cash }
+		add_equipment_to_stockpile = { type = support_equipment amount = RUS_order_refund_equipment producer = RUS }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_civil_factory_order_start = {
+	if = {
+		limit = {
+			RUS_civil_factory_order_available = yes
+			RUS_civil_factory_order_affordable = yes
+		}
+		set_variable = { var = RUS_work_order value = 1 }
+		set_variable = { var = RUS_work_order_pp value = 40 }
+		set_variable = { var = RUS_work_order_cash value = 300 }
+		set_variable = { var = RUS_work_order_equipment value = 60 }
+		add_political_power = -40
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -60 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_civil_factory_order_finish = {
+	if = {
+		limit = { check_variable = { var = RUS_work_order value = 1 compare = equals } }
+		if = {
+			limit = { RUS_civil_factory_order_site = yes }
+			RUS_work_order_clear = yes
+			66 = { add_building_construction = { type = industrial_complex level = 1 instant_build = yes } }
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { RUS_work_order_refund = yes }
+	}
+}
+
+RUS_artillery_order_start = {
+	if = {
+		limit = {
+			RUS_artillery_order_available = yes
+			RUS_artillery_order_affordable = yes
+		}
+		set_variable = { var = RUS_work_order value = 2 }
+		set_variable = { var = RUS_work_order_pp value = 25 }
+		set_variable = { var = RUS_work_order_cash value = 200 }
+		set_variable = { var = RUS_work_order_equipment value = 50 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -50 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_artillery_order_finish = {
+	if = {
+		limit = { check_variable = { var = RUS_work_order value = 2 compare = equals } }
+		if = {
+			limit = { RUS_artillery_order_site = yes }
+			RUS_work_order_clear = yes
+			add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 120 producer = RUS }
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { RUS_work_order_refund = yes }
+	}
+}
+
+RUS_district_relief = {
+	if = {
+		limit = {
+			RUS_district_relief_available = yes
+			RUS_district_relief_affordable = yes
+		}
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+		subtract_from_variable = { var = RUS_bunker_food value = 20 }
+		add_stability = 0.02
+		set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
+		set_temp_variable = { var = RUS_scientists_support_delta value = 0.05 }
+		RUS_faction_support_change = yes
+		if = {
+			limit = { RUS_morale_active = yes }
+			set_temp_variable = { var = RUS_morale_delta value = 5 }
+			RUS_morale_add = yes
+		}
+		RUS_bunker_refresh = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_machine_reserve_release = {
+	if = {
+		limit = { RUS_machine_reserve_available = yes }
+		clear_variable = RUS_machine_reserve
+		add_equipment_to_stockpile = { type = support_equipment amount = 300 producer = RUS }
+		add_to_variable = { var = ADISCORD_economy_treasury value = 600 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 600 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_machine_reserve_repair = {
+	if = {
+		limit = { RUS_machine_reserve_repair_available = yes }
+		clear_variable = RUS_machine_reserve
+		add_to_variable = { var = RUS_bunker_integrity value = 60 }
+		clamp_variable = { var = RUS_bunker_integrity min = 0 max = 100 }
+		add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = RUS }
+		add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+		RUS_bunker_refresh = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_last_sky_science_accept = {
+	if = {
+		limit = {
+			RUS_last_sky_science_ready = yes
+			RUS_last_sky_science_affordable = yes
+		}
+		set_variable = { var = RUS_last_sky_science value = 2 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -50 }
+		set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
+		set_temp_variable = { var = RUS_scientists_support_delta value = 0.1 }
+		RUS_faction_support_change = yes
+		set_temp_variable = { var = RUS_morale_delta value = 5 }
+		RUS_morale_add = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_last_sky_science_decline = {
+	if = {
+		limit = {
+			RUS_last_sky_science_ready = yes
+		}
+		set_variable = { var = RUS_last_sky_science value = 2 }
+		set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
+		set_temp_variable = { var = RUS_scientists_support_delta value = -0.1 }
+		RUS_faction_support_change = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_last_sky_army_accept = {
+	if = {
+		limit = {
+			RUS_last_sky_army_ready = yes
+			RUS_last_sky_army_affordable = yes
+		}
+		set_variable = { var = RUS_last_sky_army value = 2 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+		subtract_from_variable = { var = RUS_bunker_food value = 30 }
+		RUS_bunker_refresh = yes
+		set_temp_variable = { var = RUS_black_army_support_delta value = 0.1 }
+		set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
+		RUS_faction_support_change = yes
+		set_temp_variable = { var = RUS_morale_delta value = 8 }
+		RUS_morale_add = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_last_sky_army_decline = {
+	if = {
+		limit = {
+			RUS_last_sky_army_ready = yes
+		}
+		set_variable = { var = RUS_last_sky_army value = 2 }
+		set_temp_variable = { var = RUS_black_army_support_delta value = -0.1 }
+		set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
+		RUS_faction_support_change = yes
+		set_temp_variable = { var = RUS_morale_delta value = -5 }
+		RUS_morale_add = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_last_sky_districts_accept = {
+	if = {
+		limit = {
+			RUS_last_sky_districts_ready = yes
+			RUS_last_sky_districts_affordable = yes
+		}
+		set_variable = { var = RUS_last_sky_districts value = 2 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+		subtract_from_variable = { var = RUS_bunker_food value = 40 }
+		RUS_bunker_refresh = yes
+		set_temp_variable = { var = RUS_black_army_support_delta value = 0.05 }
+		set_temp_variable = { var = RUS_scientists_support_delta value = 0.05 }
+		RUS_faction_support_change = yes
+		set_temp_variable = { var = RUS_morale_delta value = 5 }
+		RUS_morale_add = yes
+		add_stability = 0.03
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_last_sky_districts_decline = {
+	if = {
+		limit = {
+			RUS_last_sky_districts_ready = yes
+		}
+		set_variable = { var = RUS_last_sky_districts value = 2 }
+		set_temp_variable = { var = RUS_black_army_support_delta value = -0.05 }
+		set_temp_variable = { var = RUS_scientists_support_delta value = -0.05 }
+		RUS_faction_support_change = yes
+		add_stability = -0.03
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_last_sky_clear_offers = {
+	clear_variable = RUS_last_sky_science
+	clear_variable = RUS_last_sky_army
+	clear_variable = RUS_last_sky_districts
 }

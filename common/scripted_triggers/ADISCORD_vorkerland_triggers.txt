@@ -1818,6 +1818,48 @@ ADISCORD_vorkerland_has_live_claimant_leader = {
 	faction_leader = { ADISCORD_vorkerland_is_main_claimant = yes exists = yes is_subject = no NOT = { has_capitulated = yes } }
 }
 
+# Prewar reserve caches: two per country, two more after the depot focus of
+# its own preparation tree.
+ADISCORD_vorkerland_reserve_cache_slot_free = {
+	OR = {
+		check_variable = { var = ADISCORD_vorkerland_reserve_caches_placed value = 2 compare = less_than }
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_reserve_caches_placed value = 4 compare = less_than }
+			OR = {
+				has_completed_focus = WRK_disperse_railway_reserves
+				has_completed_focus = VAD_disperse_eastern_depots
+			}
+		}
+	}
+}
+
+ADISCORD_vorkerland_reserve_cache_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { has_equipment = { infantry_equipment < 1500 } }
+}
+
+# STATE scope for AI weights: the state stays with ROOT or with its own claimant.
+ADISCORD_vorkerland_reserve_cache_kept_by_ROOT = {
+	OR = {
+		AND = {
+			ROOT = { tag = WRK }
+			OR = { state = 32 state = 33 state = 200 state = 201 }
+		}
+		AND = {
+			ROOT = { tag = EGC }
+			OR = { state = 81 state = 110 state = 124 }
+		}
+		AND = {
+			ROOT = { tag = RIV }
+			OR = { state = 79 state = 306 state = 308 state = 309 state = 327 }
+		}
+		AND = {
+			ROOT = { tag = YOR }
+			OR = { state = 108 state = 122 state = 123 }
+		}
+	}
+}
+
 # --- stalemate_triggers ---
 # A fresh-campaign anti-stalemate window is valid only during the claimant
 # preparation phase. It never follows the campaign into the showdown or the

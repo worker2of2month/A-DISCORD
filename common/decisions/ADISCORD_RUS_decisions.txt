@@ -2305,6 +2305,68 @@ RUS_bunker_construction = {
 }
 
 RUS_development_programmes = {
+	RUS_restore_wasteland = {
+		icon = generic_industry
+		allowed = { tag = RUS }
+		state_target = yes
+		targets = { 329 330 292 296 }
+		visible = {
+			RUS_khan_governing = yes
+			FROM = { RUS_reclamation_region = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			FROM = { is_controlled_by = RUS }
+			custom_trigger_tooltip = {
+				tooltip = RUS_reclamation_slot_free_tt
+				NOT = { has_variable = RUS_reclamation_deposit }
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_restore_wasteland_cost
+		custom_cost_trigger = { RUS_reclamation_affordable = yes }
+		days_remove = 120
+		fire_only_once = no
+		cancel_trigger = {
+			hidden_trigger = {
+				OR = {
+					RUS_khan_governing = no
+					NOT = { has_variable = RUS_reclamation_deposit }
+					FROM = {
+						OR = {
+							RUS_reclamation_region = no
+							NOT = { is_controlled_by = RUS }
+							NOT = { has_state_flag = RUS_reclamation_paid }
+						}
+					}
+				}
+			}
+		}
+		complete_effect = { hidden_effect = { RUS_reclamation_start = yes } }
+		remove_effect = {
+			custom_effect_tooltip = RUS_restore_wasteland_result_tt
+			hidden_effect = { RUS_reclamation_finish = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = RUS_restore_wasteland_refund_tt
+			hidden_effect = { RUS_reclamation_cancel = yes }
+		}
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+			}
+		}
+	}
+
 	RUS_defensive_preparation = {
 		icon = generic_army_support
 		allowed = { tag = RUS }
@@ -2871,6 +2933,165 @@ RUS_development_programmes = {
 			}
 		}
 	}
+	RUS_civil_factory_order = {
+		icon = generic_industry
+		allowed = { tag = RUS }
+		visible = { has_completed_focus = RUS_civil_construction_board }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_civil_factory_order_site_tt
+				RUS_civil_factory_order_site = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_work_order_idle_tt
+				RUS_work_order_idle = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_civil_factory_order_cost
+		custom_cost_trigger = { RUS_civil_factory_order_affordable = yes }
+		days_remove = 45
+		days_re_enable = 180
+		cancel_trigger = { RUS_civil_factory_order_site = no }
+		complete_effect = {
+			custom_effect_tooltip = RUS_civil_factory_order_result_tt
+			custom_effect_tooltip = RUS_work_order_refund_tt
+			hidden_effect = { RUS_civil_factory_order_start = yes }
+		}
+		remove_effect = { hidden_effect = { RUS_civil_factory_order_finish = yes } }
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = RUS_work_order value = 1 compare = equals } }
+					RUS_work_order_refund = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	RUS_artillery_order = {
+		icon = generic_industry
+		allowed = { tag = RUS }
+		visible = { has_completed_focus = RUS_battery_training }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_artillery_order_site_tt
+				RUS_artillery_order_site = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_work_order_idle_tt
+				RUS_work_order_idle = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_artillery_order_cost
+		custom_cost_trigger = { RUS_artillery_order_affordable = yes }
+		days_remove = 30
+		days_re_enable = 90
+		cancel_trigger = { RUS_artillery_order_site = no }
+		complete_effect = {
+			custom_effect_tooltip = RUS_artillery_order_result_tt
+			custom_effect_tooltip = RUS_work_order_refund_tt
+			hidden_effect = { RUS_artillery_order_start = yes }
+		}
+		remove_effect = { hidden_effect = { RUS_artillery_order_finish = yes } }
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = RUS_work_order value = 2 compare = equals } }
+					RUS_work_order_refund = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	RUS_district_relief = {
+		icon = generic_industry
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_district_representation
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_district_relief_available_tt
+				RUS_district_relief_available = yes
+			}
+		}
+		cost = 0
+		days_re_enable = 90
+		custom_cost_text = RUS_district_relief_cost
+		custom_cost_trigger = { RUS_district_relief_affordable = yes }
+		complete_effect = {
+			custom_effect_tooltip = RUS_district_relief_result_tt
+			hidden_effect = { RUS_district_relief = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	RUS_machine_reserve_release = {
+		icon = generic_industry
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_bunker_machine_depot
+			has_variable = RUS_machine_reserve
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_machine_reserve_release_available_tt
+				RUS_machine_reserve_available = yes
+			}
+		}
+		cost = 0
+		days_re_enable = 1
+		complete_effect = {
+			custom_effect_tooltip = RUS_machine_reserve_release_result_tt
+			hidden_effect = { RUS_machine_reserve_release = yes }
+		}
+		ai_will_do = { base = 1 }
+	}
+
+	RUS_machine_reserve_repair = {
+		icon = generic_industry
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_bunker_machine_depot
+			has_variable = RUS_machine_reserve
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_machine_reserve_repair_available_tt
+				RUS_machine_reserve_repair_available = yes
+			}
+		}
+		cost = 0
+		days_re_enable = 1
+		complete_effect = {
+			custom_effect_tooltip = RUS_machine_reserve_repair_result_tt
+			hidden_effect = { RUS_machine_reserve_repair = yes }
+		}
+		ai_will_do = { base = 1 }
+	}
+
 }
 
 # --- rus_public_campaigns ---

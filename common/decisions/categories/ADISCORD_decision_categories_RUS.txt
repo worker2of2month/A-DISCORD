@@ -68,7 +68,15 @@ RUS_development_programmes = {
 	allowed = { tag = RUS }
 	visible = {
 		OR = {
+			329 = { RUS_reclamation_region = yes }
+			330 = { RUS_reclamation_region = yes }
+			292 = { RUS_reclamation_region = yes }
+			296 = { RUS_reclamation_region = yes }
 			has_completed_focus = RUS_count_the_hearths
+			has_completed_focus = RUS_district_representation
+			has_completed_focus = RUS_civil_construction_board
+			has_completed_focus = RUS_battery_training
+			has_completed_focus = RUS_bunker_machine_depot
 			has_completed_focus = RUS_school_of_scribes
 			has_completed_focus = RUS_officer_courses
 			RUS_bunker_workshop_active = yes

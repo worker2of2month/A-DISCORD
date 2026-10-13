@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from pathlib import Path
 import re
 import unittest
 from unittest.mock import patch
@@ -1586,8 +1587,6 @@ focus = {
             "add_manpower = 1000",
             "type = infantry_equipment_0 amount = 5400 producer = WKR",
             "idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70",
-            "set_country_flag = ADISCORD_vorkerland_wrk_hardline_committed",
-            "set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_under_worker",
         ):
             with self.subTest(hardline_token=token):
                 self.assertEqual(re.sub(r"\s+", " ", hardline).count(token), 1)
@@ -2517,6 +2516,118 @@ class WarEconomyDynamicModifiers(unittest.TestCase):
         ):
             with self.subTest(scan=scan):
                 self.assertNotIn(scan, self.refresh)
+
+
+class PrewarPreparationTests(unittest.TestCase):
+    """Prewar reserve caches and the opening mandate they hand to claimants."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        from tools.validators import validate_adiscord_vorkerland_civil_war_focus as validator
+
+        cls.validator = validator
+        cls.blocks = focus_blocks(source_section(read(FOCUS_FILE), "civil_war_focus"))
+        cls.effects = read(PHASE_EFFECTS_FILE)
+        cls.triggers = read(Path("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"))
+        cls.decisions = read(Path("common/decisions/ADISCORD_vorkerland_decisions.txt"))
+        cls.events = read(CLAIMANT_EVENTS_FILE)
+
+    def effect(self, name: str) -> str:
+        definitions = _blocks(self.effects, name)
+        self.assertEqual(len(definitions), 1, name)
+        return definitions[0]
+
+    def test_prewar_focuses_set_no_consumerless_markers(self) -> None:
+        for focus_id in (*self.validator.PREWAR_WRK_FOCUSES, *self.validator.PREWAR_VAD_FOCUSES):
+            with self.subTest(focus_id=focus_id):
+                self.assertNotIn("ADISCORD_vorkerland_focus_", self.blocks[focus_id])
+                self.assertNotIn("_hardline_committed", self.blocks[focus_id])
+
+    def test_cache_recipients_follow_the_partition(self) -> None:
+        tags = {
+            "wkr": "WKR", "tva": "TVA", "vad": "VAD", "eyr": "EYR",
+            "egc": "EGC", "riv": "RIV", "yor": "YOR",
+        }
+        initial_map = self.effect("ADISCORD_vorkerland_apply_initial_map")
+        transfers: dict[str, set[str]] = {}
+        for tag in tags.values():
+            setup = _blocks(self.effects, f"ADISCORD_vorkerland_setup_{tag.lower()}")
+            source = setup[0] if setup else ""
+            scopes = _blocks(initial_map, tag)
+            source += "".join(scopes)
+            transfers[tag] = set(re.findall(r"transfer_state = (\d+)", source)) - {"40"}
+        recipients = self.effect("ADISCORD_vorkerland_reserve_cache_recipient_tt")
+        listed: set[str] = set()
+        for key, tag in tags.items():
+            branch = next(
+                scope for scope in re.split(r"\b(?:else_)?if = \{", recipients)
+                if f"reserve_cache_to_{key}_tt" in scope
+            )
+            states = set(re.findall(r"state = (\d+)", branch))
+            with self.subTest(recipient=tag):
+                self.assertEqual(states, transfers[tag])
+            listed |= states
+        decision = _blocks(self.decisions, "ADISCORD_vorkerland_prewar_hide_reserves")[0]
+        targets = re.search(r"targets = \{([^}]*)\}", decision)[1].split()
+        self.assertEqual(set(targets), listed)
+        self.assertEqual(len(targets), len(set(targets)))
+
+    def test_cache_is_paid_once_and_settled_at_war_outbreak(self) -> None:
+        decision = _blocks(self.decisions, "ADISCORD_vorkerland_prewar_hide_reserves")[0]
+        self.assertIn("cost = 0", decision)
+        self.assertIn("custom_cost_trigger = { ADISCORD_vorkerland_reserve_cache_affordable = yes }", decision)
+        begin = self.effect("ADISCORD_vorkerland_begin_reserve_cache")
+        self.assertEqual(begin.count("add_political_power = -25"), 1)
+        self.assertEqual(begin.count("type = infantry_equipment amount = -1500"), 1)
+        affordable = _blocks(self.triggers, "ADISCORD_vorkerland_reserve_cache_affordable")[0]
+        self.assertIn("NOT = { has_political_power < 25 }", affordable)
+        self.assertIn("NOT = { has_equipment = { infantry_equipment < 1500 } }", affordable)
+        settle = self.effect("ADISCORD_vorkerland_settle_reserve_caches")
+        self.assertIn("owner = {", settle)
+        self.assertIn("clear_array = global.ADISCORD_vorkerland_reserve_caches", settle)
+        outbreak = self.events[self.events.index("id = ADISCORD_vorkerland_collapse.2"):]
+        self.assertEqual(self.events.count("ADISCORD_vorkerland_settle_reserve_caches = yes"), 1)
+        self.assertLess(
+            outbreak.index("ADISCORD_vorkerland_settle_reserve_caches = yes"),
+            outbreak.index("WKR = { ADISCORD_vorkerland_initialize_legitimacy = yes }"),
+        )
+
+    def test_extra_cache_slots_belong_to_the_depot_focuses(self) -> None:
+        slots = _blocks(self.triggers, "ADISCORD_vorkerland_reserve_cache_slot_free")[0]
+        for focus_id in ("WRK_disperse_railway_reserves", "VAD_disperse_eastern_depots"):
+            with self.subTest(focus_id=focus_id):
+                self.assertIn(f"has_completed_focus = {focus_id}", slots)
+                self.assertIn("ADISCORD_vorkerland_reserve_cache_extra_slots_tt", self.blocks[focus_id])
+
+    def test_prewar_mandate_seeds_the_opening_legitimacy(self) -> None:
+        initialize = self.effect("ADISCORD_vorkerland_initialize_legitimacy")
+        for focus_id, value in (
+            ("WRK_convene_council_of_republics", "0.10"),
+            ("WRK_bind_districts_to_charter", "0.05"),
+        ):
+            with self.subTest(focus_id=focus_id):
+                self.assertIn(f"has_completed_focus = {focus_id}", initialize)
+                self.assertIn(f"value = {value} }}", initialize)
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified", initialize)
+        self.assertLess(
+            initialize.index("ADISCORD_vorkerland_refresh_legitimacy_derived = yes"),
+            initialize.index("add_dynamic_modifier"),
+        )
+
+    def test_archives_endorse_only_the_first_coalition(self) -> None:
+        join = self.effect("ADISCORD_vorkerland_join_coalition_of_FROM")
+        self.assertIn("has_completed_focus = VAD_secure_administrative_archives", join)
+        self.assertIn("NOT = { has_country_flag = ADISCORD_vorkerland_district_archives_endorsed }", join)
+        self.assertEqual(join.count("set_country_flag = ADISCORD_vorkerland_district_archives_endorsed"), 1)
+
+    def test_compact_payout_reaches_the_worker_claimant(self) -> None:
+        carryover = self.effect(PREWAR_CARRYOVER_EFFECT)
+        scope = next(
+            block for block in _blocks(carryover, "if")
+            if "has_completed_focus = WRK_offer_emergency_compact" in block
+        )
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified", scope)
+        self.assertIn("amount = 5000 producer = WKR", scope)
 
 
 if __name__ == "__main__":

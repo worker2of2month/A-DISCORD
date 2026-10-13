@@ -2889,6 +2889,27 @@ def expected_localisation_keys() -> set[str]:
         "ADISCORD_vorkerland_prewar_wrk_hardline_course_tt",
         "ADISCORD_vorkerland_prewar_district_compact_course_tt",
         "ADISCORD_vorkerland_prewar_district_hardline_course_tt",
+        "ADISCORD_vorkerland_prewar_category",
+        "ADISCORD_vorkerland_prewar_category_desc",
+        "ADISCORD_vorkerland_prewar_hide_reserves",
+        "ADISCORD_vorkerland_prewar_hide_reserves_desc",
+        "ADISCORD_vorkerland_reserve_cache_cost",
+        "ADISCORD_vorkerland_reserve_cache_cost_blocked",
+        "ADISCORD_vorkerland_reserve_cache_cost_tooltip",
+        "ADISCORD_vorkerland_reserve_cache_slot_tt",
+        "ADISCORD_vorkerland_reserve_cache_begin_tt",
+        "ADISCORD_vorkerland_reserve_cache_ready_tt",
+        "ADISCORD_vorkerland_reserve_cache_extra_slots_tt",
+        "ADISCORD_vorkerland_reserve_cache_to_wkr_tt",
+        "ADISCORD_vorkerland_reserve_cache_to_tva_tt",
+        "ADISCORD_vorkerland_reserve_cache_to_vad_tt",
+        "ADISCORD_vorkerland_reserve_cache_to_eyr_tt",
+        "ADISCORD_vorkerland_reserve_cache_to_egc_tt",
+        "ADISCORD_vorkerland_reserve_cache_to_riv_tt",
+        "ADISCORD_vorkerland_reserve_cache_to_yor_tt",
+        "ADISCORD_vorkerland_wrk_council_mandate_tt",
+        "ADISCORD_vorkerland_wrk_charter_mandate_tt",
+        "ADISCORD_vorkerland_district_archives_endorsement_tt",
         "ADISCORD_vorkerland_tva_iteration_prerequisite_tt",
         "ADISCORD_vorkerland_showdown_focus_live_war_tt",
         *FOCUS_EXPANSION_IDEAS,
@@ -3018,6 +3039,11 @@ def _postwar_reward_categories(block: str) -> set[str]:
         "manpower": ("add_manpower",),
         "material": ("add_equipment_to_stockpile", "add_building_construction"),
         "research": ("add_tech_bonus",),
+        "preparation": (
+            "unlock_decision_tooltip = ADISCORD_vorkerland_prewar_hide_reserves",
+            "ADISCORD_vorkerland_reserve_cache_extra_slots_tt",
+            "ADISCORD_vorkerland_district_archives_endorsement_tt",
+        ),
         "public_unlock": (
             "ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked",
             "unlock_decision_tooltip = ADISCORD_vorkerland_recognize_free_republics",
@@ -3771,13 +3797,11 @@ def collect_issues() -> list[str]:
             "add_manpower = 1000",
             "type = infantry_equipment_0 amount = 5400 producer = WRK",
             "idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70",
-            "set_country_flag = ADISCORD_vorkerland_wrk_hardline_committed",
         ),
         "VAD_seal_district_arsenals": (
             "add_manpower = 1000",
             "type = infantry_equipment_0 amount = 5400 producer = ROOT",
             "idea = ADISCORD_vorkerland_vad_eastern_mandate days = 140",
-            "set_country_flag = ADISCORD_vorkerland_district_hardline_committed",
         ),
     }
     for focus_id, tokens in hardline_rewards.items():
@@ -3805,8 +3829,6 @@ def collect_issues() -> list[str]:
                 "add_manpower = 1000",
                 "type = infantry_equipment_0 amount = 5400 producer = WKR",
                 "idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70",
-                "set_country_flag = ADISCORD_vorkerland_wrk_hardline_committed",
-                "set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_under_worker",
             ):
                 if re.sub(r"\s+", " ", hardline_scopes[0]).count(token) != 1:
                     issues.append(

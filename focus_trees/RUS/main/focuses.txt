@@ -42,7 +42,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_arm_the_border_hosts
-		icon = GFX_focus_VAL_Army_Of_The_Ledger
+		icon = GFX_focus_RUS_levy_of_the_new_aimaqs
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
 		x = 20
 		y = 8
@@ -265,9 +265,7 @@ focus_tree = {
 				swap_ideas = { remove_idea = RUS_aimaq_compact add_idea = RUS_last_empire_spirit }
 			}
 			unlock_decision_tooltip = RUS_proclaim_the_last_empire
-			custom_effect_tooltip = RUS_suspicion_opens_tt
 			hidden_effect = {
-				RUS_suspicion_begin = yes
 				if = {
 					limit = { is_ai = no }
 					scoped_play_song = "ADISCORD_3teeth_pit_of_fire"
@@ -307,7 +305,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_western_supply_lines
-		icon = GFX_focus_RUS_press_the_closed_zone
+		icon = GFX_focus_RUS_imperial_railways
 		x = 16
 		y = 17
 		cost = 3
@@ -339,7 +337,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_imperial_arsenals
-		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
+		icon = GFX_focus_RUS_imperial_arsenals
 		x = 20
 		y = 17
 		cost = 3
@@ -355,10 +353,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			capital_scope = {
-				add_extra_state_shared_building_slots = 1
+				add_extra_state_shared_building_slots = 2
 				add_building_construction = {
 					type = arms_factory
-					level = 1
+					level = 2
 					instant_build = yes
 				}
 			}
@@ -369,7 +367,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_aimaq_reserve
-		icon = GFX_focus_RUS_khan_broadcast_service
+		icon = GFX_focus_RUS_levy_of_the_new_aimaqs
 		x = 24
 		y = 17
 		cost = 3
@@ -403,7 +401,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_break_the_hegemon
-		icon = GFX_focus_STP_Turn_The_Young_Officers
+		icon = GFX_focus_RUS_break_the_hegemon
 		x = 20
 		y = 18
 		cost = 1
@@ -456,7 +454,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_register_conquered_lands
-		icon = GFX_focus_VAL_Army_Of_The_Ledger
+		icon = GFX_focus_RUS_empire_without_rivals
 		x = 18
 		y = 19
 		cost = 3
@@ -472,7 +470,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_empire_without_rivals
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_RUS_empire_without_rivals
 		x = 22
 		y = 19
 		cost = 4
@@ -542,9 +540,9 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = RUS_morale_kitchens_tt
-			custom_effect_tooltip = RUS_morale_gain_5_tt
+			custom_effect_tooltip = RUS_morale_gain_10_tt
 			hidden_effect = {
-				set_temp_variable = { var = RUS_morale_delta value = 5 }
+				set_temp_variable = { var = RUS_morale_delta value = 10 }
 				RUS_morale_add = yes
 			}
 		}
@@ -607,7 +605,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_reserve_of_the_aimaqs
-		icon = GFX_focus_STP_pw_party_veteran_reserve
+		icon = GFX_focus_RUS_levy_of_the_new_aimaqs
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		x = 14
 		y = 21
@@ -666,8 +664,8 @@ focus_tree = {
 			add_political_power = 40
 			custom_effect_tooltip = RUS_imperial_treasury_tt
 			hidden_effect = {
-				add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
+				add_to_variable = { var = ADISCORD_economy_treasury value = 1000 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1000 }
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
@@ -676,7 +674,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_levy_of_the_new_aimaqs
-		icon = GFX_focus_STP_party_personnel_commissions
+		icon = GFX_focus_RUS_levy_of_the_new_aimaqs
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		x = 24
 		y = 19
@@ -701,7 +699,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_reactor_current_for_arsenals
-		icon = GFX_focus_VAL_Factories_Like_Cathedrals
+		icon = GFX_focus_RUS_imperial_arsenals
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 28
 		y = 19
@@ -738,7 +736,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_imperial_railways
-		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		icon = GFX_focus_RUS_imperial_railways
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 26
 		y = 20
@@ -757,6 +755,17 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = train_equipment_1
+				amount = 40
+				producer = RUS
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 200
+				producer = RUS
+			}
+			custom_effect_tooltip = RUS_imperial_railways_regions_tt
 			if = {
 				limit = {
 					owns_state = 66
@@ -764,7 +773,12 @@ focus_tree = {
 					owns_state = 177
 					controls_state = 177
 				}
-				build_railway = { level = 3 fallback = yes start_state = 66 target_state = 177 }
+				build_railway = {
+					level = 4
+					fallback = yes
+					start_state = 66
+					target_state = 177
+				}
 			}
 			every_owned_state = {
 				limit = {
@@ -776,12 +790,24 @@ focus_tree = {
 						state = 192
 					}
 				}
-				add_building_construction = {
-					type = infrastructure
-					level = 1
-					instant_build = yes
+				if = {
+					limit = { infrastructure < 4 }
+					add_building_construction = {
+						type = infrastructure
+						level = 2
+						instant_build = yes
+					}
+				}
+				else_if = {
+					limit = { infrastructure < 5 }
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
 				}
 			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
 		ai_will_do = { base = 100 }
 	}
@@ -1219,7 +1245,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_freight_yards
-		icon = GFX_focus_STP_party_war_transport
+		icon = GFX_focus_RUS_imperial_railways
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 26
 		y = 6
@@ -1256,7 +1282,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_standard_calibres
-		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
+		icon = GFX_focus_RUS_imperial_arsenals
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 30
 		y = 6
@@ -1334,7 +1360,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_precision_lathes
-		icon = GFX_focus_STP_pw_party_defence_combine
+		icon = GFX_focus_RUS_imperial_arsenals
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 30
 		y = 7
@@ -1826,7 +1852,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_experimental_laboratories
-		icon = GFX_focus_STP_party_technical_institutes
+		icon = GFX_focus_RUS_empire_without_rivals
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 38
 		y = 9
@@ -2059,7 +2085,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_patient_war
-		icon = GFX_focus_STP_ps_permanent_security
+		icon = GFX_focus_RUS_break_the_hegemon
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -8
 		y = 3
@@ -2206,7 +2232,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_reserve_rotations
-		icon = GFX_focus_STP_pw_party_veteran_reserve
+		icon = GFX_focus_RUS_levy_of_the_new_aimaqs
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		x = -4
 		y = 6
@@ -2249,7 +2275,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_anti_air_posts
-		icon = GFX_focus_STP_ps_permanent_security
+		icon = GFX_focus_RUS_imperial_academy
 		search_filters = { FOCUS_FILTER_AIR_XP }
 		x = -4
 		y = 7
@@ -2328,7 +2354,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_imperial_academy
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_RUS_imperial_academy
 		x = 22
 		y = 20
 		cost = 3
@@ -2344,7 +2370,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_tomorrow_above_ground
-		icon = GFX_focus_STP_ps_permanent_security
+		icon = GFX_focus_RUS_tomorrow_above_ground
 		x = 20
 		y = 21
 		cost = 1
@@ -2543,7 +2569,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_second_arsenal_shift
-		icon = GFX_focus_STP_pw_party_defence_combine
+		icon = GFX_focus_RUS_imperial_arsenals
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 30
 		y = 11
@@ -2577,7 +2603,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_strategic_freight_reserve
-		icon = GFX_focus_STP_party_war_transport
+		icon = GFX_focus_RUS_imperial_railways
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 28
 		y = 12
@@ -2647,7 +2673,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_rifle_inspection_board
-		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
+		icon = GFX_focus_RUS_imperial_arsenals
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = -4
 		y = 9
@@ -2842,17 +2868,10 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 300
-				producer = RUS
-			}
-			custom_effect_tooltip = RUS_treasury_600_tt
-			hidden_effect = {
-				add_to_variable = { var = ADISCORD_economy_treasury value = 600 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 600 }
-				ADISCORD_economy_mark_dirty = yes
-			}
+			unlock_decision_tooltip = RUS_machine_reserve_release
+			unlock_decision_tooltip = RUS_machine_reserve_repair
+			custom_effect_tooltip = RUS_machine_reserve_granted_tt
+			hidden_effect = { set_variable = { var = RUS_machine_reserve value = 1 } }
 		}
 		ai_will_do = { base = 6 }
 	}
@@ -2895,7 +2914,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_systems_college
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_RUS_empire_without_rivals
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 44
 		y = 12
@@ -2924,7 +2943,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_entrenched_reserves
-		icon = GFX_focus_STP_ps_permanent_security
+		icon = GFX_focus_RUS_break_the_hegemon
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -8
 		y = 4
@@ -2945,7 +2964,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_fortress_engineers
-		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		icon = GFX_focus_RUS_break_the_hegemon
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = -8
 		y = 5
@@ -2976,7 +2995,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_railway_coverage
-		icon = GFX_focus_STP_party_war_transport
+		icon = GFX_focus_RUS_imperial_railways
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = -8
 		y = 6
@@ -3272,7 +3291,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_open_freight_exchange
-		icon = GFX_focus_VAL_Market_Roads_North
+		icon = GFX_focus_RUS_imperial_railways
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 24
 		y = 4
@@ -3911,6 +3930,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			unlock_decision_tooltip = RUS_district_relief
 			add_stability = 0.05
 		}
 		ai_will_do = { base = 8 }
@@ -3932,6 +3952,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			unlock_decision_tooltip = RUS_civil_factory_order
 			effect_tooltip = { add_ideas = RUS_civil_construction_board_delta }
 			hidden_effect = {
 				add_to_variable = { var = RUS_government_civilian_speed value = 0.05 }
@@ -3994,7 +4015,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_military_contract_board
-		icon = GFX_goal_generic_production
+		icon = GFX_focus_RUS_imperial_arsenals
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 23
 		y = 7
@@ -4159,7 +4180,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_battery_training
-		icon = GFX_goal_generic_army_artillery
+		icon = GFX_focus_RUS_imperial_academy
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = -12
 		y = 6
@@ -4173,6 +4194,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			unlock_decision_tooltip = RUS_artillery_order
 			add_tech_bonus = {
 				name = RUS_battery_training
 				bonus = 0.5
@@ -4185,7 +4207,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_serial_ordnance_orders
-		icon = GFX_goal_generic_production
+		icon = GFX_focus_RUS_imperial_arsenals
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = -12
 		y = 7

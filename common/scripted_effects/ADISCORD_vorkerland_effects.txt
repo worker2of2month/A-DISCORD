@@ -289,6 +289,38 @@ ADISCORD_vorkerland_initialize_legitimacy = {
 	set_variable = { var = ADISCORD_vorkerland_legitimacy value = 0 }
 	set_variable = { var = ADISCORD_vorkerland_legitimacy_mod value = 0 }
 	set_variable = { var = ADISCORD_vorkerland_legitimacy_level value = 2 }
+	# Prewar preparation sets the opening mandate. WKR reads the WRK focuses
+	# through copy_completed_from; the compact is a public agreement of both sides.
+	if = {
+		limit = {
+			tag = WKR
+			has_completed_focus = WRK_convene_council_of_republics
+		}
+		add_to_variable = { var = ADISCORD_vorkerland_legitimacy value = 0.10 }
+	}
+	if = {
+		limit = {
+			tag = WKR
+			has_completed_focus = WRK_bind_districts_to_charter
+		}
+		add_to_variable = { var = ADISCORD_vorkerland_legitimacy value = 0.05 }
+	}
+	if = {
+		limit = {
+			OR = {
+				tag = WKR
+				tag = VAD
+			}
+			has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified
+		}
+		add_to_variable = { var = ADISCORD_vorkerland_legitimacy value = 0.05 }
+	}
+	if = {
+		limit = {
+			check_variable = { var = ADISCORD_vorkerland_legitimacy value = 0 compare = greater_than }
+		}
+		ADISCORD_vorkerland_refresh_legitimacy_derived = yes
+	}
 	set_variable = { var = ADISCORD_vorkerland_central_control_score value = 0 }
 	add_dynamic_modifier = { modifier = ADISCORD_vorkerland_legitimacy_dynamic }
 }
@@ -2212,6 +2244,20 @@ ADISCORD_vorkerland_join_coalition_of_FROM = {
 	set_country_flag = ADISCORD_vorkerland_regional_auxiliary
 	clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_retry_used
 	clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_failed
+	# Secured district archives endorse only the first coalition the district
+	# joins; the flag survives leaving and rejoining.
+	if = {
+		limit = {
+			has_completed_focus = VAD_secure_administrative_archives
+			NOT = { has_country_flag = ADISCORD_vorkerland_district_archives_endorsed }
+			FROM = { ADISCORD_vorkerland_is_main_claimant = yes }
+		}
+		set_country_flag = ADISCORD_vorkerland_district_archives_endorsed
+		FROM = {
+			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.05 }
+			ADISCORD_vorkerland_add_legitimacy = yes
+		}
+	}
 	country_event = { id = ADISCORD_vorkerland_collapse.93 days = 1 }
 }
 
@@ -7665,6 +7711,70 @@ ADISCORD_vorkerland_resolve_prewar_compact = {
 	}
 }
 
+# Prewar reserve caches. COUNTRY WRK or a district; FROM is the target state.
+# A cache belongs to the state, not to the country that stocked it: at the
+# war outbreak it is delivered to the state's owner after the partition.
+ADISCORD_vorkerland_begin_reserve_cache = {
+	add_political_power = -25
+	add_equipment_to_stockpile = { type = infantry_equipment amount = -1500 }
+	add_to_variable = { var = ADISCORD_vorkerland_reserve_caches_placed value = 1 }
+	FROM = {
+		set_state_flag = ADISCORD_vorkerland_reserve_cache
+		add_to_array = { array = global.ADISCORD_vorkerland_reserve_caches value = THIS }
+	}
+}
+
+# STATE scope. Mirrors the deterministic partition in apply_initial_map and its
+# setup effects; the settlement itself reads the actual owner.
+ADISCORD_vorkerland_reserve_cache_recipient_tt = {
+	if = {
+		limit = { OR = { state = 32 state = 33 state = 200 state = 201 } }
+		custom_effect_tooltip = ADISCORD_vorkerland_reserve_cache_to_wkr_tt
+	}
+	else_if = {
+		limit = { OR = { state = 36 state = 37 state = 38 state = 39 state = 324 } }
+		custom_effect_tooltip = ADISCORD_vorkerland_reserve_cache_to_tva_tt
+	}
+	else_if = {
+		limit = { OR = { state = 75 state = 106 state = 107 state = 121 } }
+		custom_effect_tooltip = ADISCORD_vorkerland_reserve_cache_to_vad_tt
+	}
+	else_if = {
+		limit = { OR = { state = 102 state = 109 state = 111 state = 325 } }
+		custom_effect_tooltip = ADISCORD_vorkerland_reserve_cache_to_eyr_tt
+	}
+	else_if = {
+		limit = { OR = { state = 81 state = 110 state = 124 } }
+		custom_effect_tooltip = ADISCORD_vorkerland_reserve_cache_to_egc_tt
+	}
+	else_if = {
+		limit = { OR = { state = 79 state = 306 state = 308 state = 309 state = 327 } }
+		custom_effect_tooltip = ADISCORD_vorkerland_reserve_cache_to_riv_tt
+	}
+	else_if = {
+		limit = { OR = { state = 108 state = 122 state = 123 } }
+		custom_effect_tooltip = ADISCORD_vorkerland_reserve_cache_to_yor_tt
+	}
+}
+
+# Called once from the war-outbreak event. A cache still being stocked yields
+# its rifles but not the reservists, who were never registered.
+ADISCORD_vorkerland_settle_reserve_caches = {
+	for_each_scope_loop = {
+		array = global.ADISCORD_vorkerland_reserve_caches
+		owner = {
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 }
+			if = {
+				limit = { PREV = { has_state_flag = ADISCORD_vorkerland_reserve_cache_ready } }
+				add_manpower = 1500
+			}
+		}
+		clr_state_flag = ADISCORD_vorkerland_reserve_cache
+		clr_state_flag = ADISCORD_vorkerland_reserve_cache_ready
+	}
+	clear_array = global.ADISCORD_vorkerland_reserve_caches
+}
+
 # WRK is annexed after the split, so completed prewar focuses alone cannot
 # carry its country-scoped rewards into the wartime claimant. Regrant the
 # bounded preparation package once from completed-focus truth; the country
@@ -7678,44 +7788,43 @@ ADISCORD_vorkerland_inherit_wrk_prewar_preparations = {
 		if = {
 			limit = { has_completed_focus = WRK_measure_confederation_fault_lines }
 			add_political_power = 40
-			add_stability = 0.03
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_fault_lines_measured
 		}
 		if = {
 			limit = { has_completed_focus = WRK_convene_council_of_republics }
-			add_political_power = 75
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_republics_consulted
+			add_political_power = 50
 		}
 		if = {
 			limit = { has_completed_focus = WRK_inventory_emergency_stores }
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 9000 producer = WKR }
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_emergency_stores_counted
 		}
 		if = {
 			limit = { has_completed_focus = WRK_bind_districts_to_charter }
 			add_stability = 0.04
 			add_command_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_charter_reaffirmed
 		}
 		if = {
 			limit = { has_completed_focus = WRK_disperse_railway_reserves }
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5400 producer = WKR }
+			add_equipment_to_stockpile = { type = train_equipment_1 amount = 10 producer = WKR }
 			army_experience = 20
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_distributed
 		}
 		if = {
 			limit = { has_completed_focus = WRK_issue_continuity_orders }
 			add_command_power = 20
 			army_experience = 15
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_continuity_orders
 		}
 		if = {
 			limit = { has_completed_focus = WRK_place_reserves_under_worker }
 			add_manpower = 1000
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5400 producer = WKR }
 			add_timed_idea = { idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70 }
-			set_country_flag = ADISCORD_vorkerland_wrk_hardline_committed
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_under_worker
+		}
+		if = {
+			limit = {
+				has_completed_focus = WRK_offer_emergency_compact
+				has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified
+			}
+			add_stability = 0.03
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5000 producer = WKR }
 		}
 		set_country_flag = ADISCORD_vorkerland_wrk_prewar_preparations_inherited_v1
 	}

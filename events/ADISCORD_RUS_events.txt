@@ -242,7 +242,14 @@ country_event = {
 # RUS. Each suspicion tier is announced once by RUS_suspicion_check.
 country_event = {
 	id = ADISCORD_rus_crisis.17
-	title = ADISCORD_rus_crisis.17.t
+	title = {
+		trigger = { check_variable = { var = RUS_suspicion_warning value = 2 compare = less_than } }
+		text = ADISCORD_rus_crisis.17.rumours.t
+	}
+	title = {
+		trigger = { check_variable = { var = RUS_suspicion_warning value = 2 compare = greater_than_or_equals } }
+		text = ADISCORD_rus_crisis.17.observers.t
+	}
 	desc = {
 		trigger = { check_variable = { var = RUS_suspicion_warning value = 2 compare = less_than } }
 		text = ADISCORD_rus_crisis.17.rumours.d
@@ -257,6 +264,23 @@ country_event = {
 	option = {
 		name = ADISCORD_rus_crisis.17.a
 		custom_effect_tooltip = RUS_suspicion_warning_tt
+		unlock_decision_tooltip = RUS_suspicion_envoys
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.24
+	title = ADISCORD_rus_crisis.24.t
+	desc = ADISCORD_rus_crisis.24.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { RUS_suspicion_active = yes }
+	option = {
+		name = ADISCORD_rus_crisis.24.a
+		custom_effect_tooltip = RUS_suspicion_opens_tt
+		unlock_decision_tooltip = RUS_suspicion_energy_cover
+		unlock_decision_tooltip = RUS_suspicion_disperse_musters
+		unlock_decision_tooltip = RUS_suspicion_envoys
 	}
 }
 
@@ -372,6 +396,144 @@ country_event = {
 	is_triggered_only = yes
 	trigger = { NOT = { has_global_flag = RUS_crisis_world_ended } }
 	option = { name = ADISCORD_rus_crisis.20.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.21
+	title = ADISCORD_rus_crisis.21.t
+	desc = {
+		trigger = { has_completed_focus = RUS_scientists_council }
+		text = ADISCORD_rus_crisis.21.course.d
+	}
+	desc = {
+		trigger = { NOT = { has_completed_focus = RUS_scientists_council } }
+		text = ADISCORD_rus_crisis.21.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		RUS_last_sky_open = yes
+		NOT = { has_variable = RUS_last_sky_science }
+		OR = {
+			has_completed_focus = RUS_scientists_council
+			has_completed_focus = RUS_school_of_scribes
+			has_completed_focus = RUS_experimental_laboratories
+		}
+	}
+	immediate = { set_variable = { var = RUS_last_sky_science value = 1 } }
+	# The first answer also settles an unattended event without spending stocks.
+	option = {
+		name = ADISCORD_rus_crisis.21.decline
+		if = {
+			limit = { RUS_last_sky_science_ready = yes }
+			custom_effect_tooltip = RUS_last_sky_science_decline_tt
+		}
+		else = { custom_effect_tooltip = RUS_last_sky_closed_tt }
+		hidden_effect = { RUS_last_sky_science_decline = yes }
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_rus_crisis.21.accept
+		trigger = {
+			RUS_last_sky_science_ready = yes
+			RUS_last_sky_science_affordable = yes
+		}
+		custom_effect_tooltip = RUS_last_sky_science_accept_tt
+		hidden_effect = { RUS_last_sky_science_accept = yes }
+		ai_chance = { base = 70 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.22
+	title = ADISCORD_rus_crisis.22.t
+	desc = {
+		trigger = { has_completed_focus = RUS_black_army_oath }
+		text = ADISCORD_rus_crisis.22.course.d
+	}
+	desc = {
+		trigger = { NOT = { has_completed_focus = RUS_black_army_oath } }
+		text = ADISCORD_rus_crisis.22.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		RUS_last_sky_open = yes
+		NOT = { has_variable = RUS_last_sky_army }
+		OR = {
+			has_completed_focus = RUS_black_army_oath
+			has_completed_focus = RUS_officer_courses
+			has_completed_focus = RUS_arm_the_border_hosts
+		}
+	}
+	immediate = { set_variable = { var = RUS_last_sky_army value = 1 } }
+	# The first answer also settles an unattended event without spending stocks.
+	option = {
+		name = ADISCORD_rus_crisis.22.decline
+		if = {
+			limit = { RUS_last_sky_army_ready = yes }
+			custom_effect_tooltip = RUS_last_sky_army_decline_tt
+		}
+		else = { custom_effect_tooltip = RUS_last_sky_closed_tt }
+		hidden_effect = { RUS_last_sky_army_decline = yes }
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_rus_crisis.22.accept
+		trigger = {
+			RUS_last_sky_army_ready = yes
+			RUS_last_sky_army_affordable = yes
+		}
+		custom_effect_tooltip = RUS_last_sky_army_accept_tt
+		hidden_effect = { RUS_last_sky_army_accept = yes }
+		ai_chance = { base = 70 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.23
+	title = ADISCORD_rus_crisis.23.t
+	desc = {
+		trigger = { has_completed_focus = RUS_district_representation }
+		text = ADISCORD_rus_crisis.23.course.d
+	}
+	desc = {
+		trigger = { NOT = { has_completed_focus = RUS_district_representation } }
+		text = ADISCORD_rus_crisis.23.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		RUS_last_sky_open = yes
+		NOT = { has_variable = RUS_last_sky_districts }
+		OR = {
+			has_completed_focus = RUS_district_representation
+			has_completed_focus = RUS_written_oaths
+			has_completed_focus = RUS_bunker_open_city
+		}
+	}
+	immediate = { set_variable = { var = RUS_last_sky_districts value = 1 } }
+	# The first answer also settles an unattended event without spending stocks.
+	option = {
+		name = ADISCORD_rus_crisis.23.decline
+		if = {
+			limit = { RUS_last_sky_districts_ready = yes }
+			custom_effect_tooltip = RUS_last_sky_districts_decline_tt
+		}
+		else = { custom_effect_tooltip = RUS_last_sky_closed_tt }
+		hidden_effect = { RUS_last_sky_districts_decline = yes }
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_rus_crisis.23.accept
+		trigger = {
+			RUS_last_sky_districts_ready = yes
+			RUS_last_sky_districts_affordable = yes
+		}
+		custom_effect_tooltip = RUS_last_sky_districts_accept_tt
+		hidden_effect = { RUS_last_sky_districts_accept = yes }
+		ai_chance = { base = 70 }
+	}
 }
 
 # --- rus_campaign_events ---
