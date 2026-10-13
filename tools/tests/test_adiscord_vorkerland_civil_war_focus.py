@@ -2825,5 +2825,54 @@ class FieldTrialTests(unittest.TestCase):
         )
 
 
+class WarLegacyTests(unittest.TestCase):
+    """The winning claimant's war systems carry into the reunified settlement."""
+
+    ROUTES = {
+        "ADISCORD_vorkerland_complete_wrk_from_wkr": ("WKR", "ADISCORD_vorkerland_pw_record_worker_councils"),
+        "ADISCORD_vorkerland_complete_wrk_from_vad": ("VAD", "ADISCORD_vorkerland_pw_record_district_oaths"),
+        "ADISCORD_vorkerland_complete_wrk_from_tva": ("TVA", "ADISCORD_vorkerland_pw_record_trial_iterations"),
+    }
+    CONSUMERS = {
+        "WRK_worker_convene_reunification_congress": "ADISCORD_vorkerland_pw_council_output",
+        "WRK_worker_authorize_homecoming_commissions": "ADISCORD_vorkerland_pw_council_veterans",
+        "WRK_joint_pw_local_charters": "ADISCORD_vorkerland_pw_charter_construction",
+        "WRK_joint_publish_amnesty_registers": "ADISCORD_vorkerland_pw_amnesty_manpower",
+        "WRK_utilitarian_expand_national_laboratories": "ADISCORD_vorkerland_pw_iteration_efficiency",
+    }
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.blocks = focus_blocks(source_section(read(FOCUS_FILE), "civil_war_focus"))
+        cls.effects = read(PHASE_EFFECTS_FILE)
+
+    def test_legacy_is_recorded_before_the_winner_is_annexed(self) -> None:
+        for completion, (tag, record) in self.ROUTES.items():
+            with self.subTest(completion=completion):
+                body = _blocks(self.effects, completion)[0]
+                self.assertLess(
+                    body.index(f"{record} = yes"),
+                    body.index(f"annex_country = {{ target = {tag}"),
+                )
+
+    def test_each_recorded_delta_has_one_settlement_consumer(self) -> None:
+        recorded = "".join(
+            _blocks(self.effects, record)[0] for _, record in self.ROUTES.values()
+        )
+        for focus_id, variable in self.CONSUMERS.items():
+            with self.subTest(focus_id=focus_id):
+                self.assertIn(f"var = {variable} value =", recorded)
+                reward = _blocks(self.blocks[focus_id], "completion_reward")[0]
+                applied = reward.count(f"value = {variable} }}") + reward.count(f"var:{variable} ")
+                self.assertEqual(applied, 1)
+                self.assertIn(f"custom_effect_tooltip = {variable}_tt", reward)
+
+    def test_commandant_rule_is_counted_for_the_amnesty(self) -> None:
+        seal = _blocks(self.effects, "ADISCORD_vorkerland_vad_seal_commandant_rule")[0]
+        self.assertIn("add_to_variable = { var = ADISCORD_vorkerland_vad_commandants value = 1 }", seal)
+        iterations = _blocks(self.effects, "ADISCORD_vorkerland_pw_record_trial_iterations")[0]
+        self.assertIn("max = 8", iterations)
+
+
 if __name__ == "__main__":
     unittest.main()

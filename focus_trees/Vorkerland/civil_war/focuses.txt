@@ -6848,6 +6848,12 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = ADISCORD_vorkerland_pw_council_output_tt
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = { var = ADISCORD_vorkerland_pw_output value = ADISCORD_vorkerland_pw_council_output }
+				ADISCORD_economy_mark_dirty = yes
+			}
 			add_political_power = 15
 			add_stability = 0.01
 			add_ideas = ADISCORD_vorkerland_worker_reconstruction_compact_1
@@ -6991,6 +6997,8 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = ADISCORD_vorkerland_pw_council_veterans_tt
+			hidden_effect = { add_manpower = var:ADISCORD_vorkerland_pw_council_veterans }
 			add_political_power = 15
 			add_stability = 0.01
 			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_claimant_homes
@@ -7245,6 +7253,8 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = ADISCORD_vorkerland_pw_amnesty_manpower_tt
+			hidden_effect = { add_manpower = var:ADISCORD_vorkerland_pw_amnesty_manpower }
 			add_political_power = 40
 			add_stability = 0.02
 			hidden_effect = {
@@ -8010,6 +8020,12 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = ADISCORD_vorkerland_pw_iteration_efficiency_tt
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = { var = ADISCORD_vorkerland_pw_efficiency value = ADISCORD_vorkerland_pw_iteration_efficiency }
+				ADISCORD_economy_mark_dirty = yes
+			}
 			add_ideas = ADISCORD_vorkerland_public_engineering_service
 			add_tech_bonus = {
 				name = ADISCORD_vorkerland_public_engineering_bonus
@@ -9291,6 +9307,12 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = ADISCORD_vorkerland_pw_charter_construction_tt
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = { var = ADISCORD_vorkerland_pw_construction value = ADISCORD_vorkerland_pw_charter_construction }
+				ADISCORD_economy_mark_dirty = yes
+			}
 			custom_effect_tooltip = WRK_pw_local_charters_tt
 			hidden_effect = {
 				set_temp_variable = { var = ADISCORD_west_push value = 10 }

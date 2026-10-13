@@ -8966,6 +8966,10 @@ ADISCORD_vorkerland_form_wrk_from_wkr = {
 
 ADISCORD_vorkerland_complete_wrk_from_wkr = {
 	ADISCORD_vorkerland_inherit_worker_reform_spirits = yes
+	if = {
+		limit = { country_exists = WKR }
+		ADISCORD_vorkerland_pw_record_worker_councils = yes
+	}
 	WKR = { ADISCORD_vorkerland_refund_integrations_to_successor = yes }
 	if = {
 		limit = { country_exists = WKR }
@@ -9096,6 +9100,10 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 
 ADISCORD_vorkerland_complete_wrk_from_vad = {
 	ADISCORD_vorkerland_scrub_dormant_wrk_crisis = yes
+	if = {
+		limit = { country_exists = VAD }
+		ADISCORD_vorkerland_pw_record_district_oaths = yes
+	}
 	VAD = { ADISCORD_vorkerland_refund_integrations_to_successor = yes }
 	if = {
 		limit = { country_exists = VAD }
@@ -9212,6 +9220,10 @@ ADISCORD_vorkerland_form_wrk_from_tva = {
 
 ADISCORD_vorkerland_complete_wrk_from_tva = {
 	ADISCORD_vorkerland_scrub_dormant_wrk_crisis = yes
+	if = {
+		limit = { country_exists = TVA }
+		ADISCORD_vorkerland_pw_record_trial_iterations = yes
+	}
 	TVA = { ADISCORD_vorkerland_refund_integrations_to_successor = yes }
 	if = {
 		limit = { country_exists = TVA }
@@ -10640,6 +10652,7 @@ ADISCORD_vorkerland_vad_seal_district_charter = {
 }
 
 ADISCORD_vorkerland_vad_seal_commandant_rule = {
+	add_to_variable = { var = ADISCORD_vorkerland_vad_commandants value = 1 }
 	add_manpower = 1500
 	add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = ROOT }
 	set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.02 }
@@ -10897,6 +10910,31 @@ ADISCORD_vorkerland_empire_refresh_army = {
 
 # Postwar institutions begin with the first funded programme. Reopening a
 # branch never resets accumulated reform, including after ordinary save/load.
+# WRK scope at formation, before the winning claimant is annexed: the
+# claimant's war systems become fixed postwar deltas that the settlement
+# focuses apply and preview exactly.
+ADISCORD_vorkerland_pw_record_worker_councils = {
+	set_variable = { var = ADISCORD_vorkerland_pw_council_output value = WKR.ADISCORD_vorkerland_wkr_councils }
+	subtract_from_variable = { var = ADISCORD_vorkerland_pw_council_output value = WKR.ADISCORD_vorkerland_wkr_councils_mobilized }
+	multiply_variable = { var = ADISCORD_vorkerland_pw_council_output value = 0.02 }
+	set_variable = { var = ADISCORD_vorkerland_pw_council_veterans value = WKR.ADISCORD_vorkerland_wkr_councils_mobilized }
+	multiply_variable = { var = ADISCORD_vorkerland_pw_council_veterans value = 5000 }
+}
+
+ADISCORD_vorkerland_pw_record_district_oaths = {
+	set_variable = { var = ADISCORD_vorkerland_pw_charter_construction value = VAD.ADISCORD_vorkerland_vad_charters }
+	multiply_variable = { var = ADISCORD_vorkerland_pw_charter_construction value = 0.03 }
+	set_variable = { var = ADISCORD_vorkerland_pw_amnesty_manpower value = VAD.ADISCORD_vorkerland_vad_commandants }
+	multiply_variable = { var = ADISCORD_vorkerland_pw_amnesty_manpower value = 3000 }
+}
+
+# Eight iterations is the ceiling of the transferred laboratory practice.
+ADISCORD_vorkerland_pw_record_trial_iterations = {
+	set_variable = { var = ADISCORD_vorkerland_pw_iteration_efficiency value = TVA.ADISCORD_vorkerland_tva_iterations }
+	clamp_variable = { var = ADISCORD_vorkerland_pw_iteration_efficiency min = 0 max = 8 }
+	multiply_variable = { var = ADISCORD_vorkerland_pw_iteration_efficiency value = 0.01 }
+}
+
 ADISCORD_vorkerland_pw_ensure_institutions = {
 	if = {
 		limit = {
