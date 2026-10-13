@@ -1429,6 +1429,28 @@ RUS_suspicion_envoys_affordable = {
 	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
 }
 
+RUS_suspicion_ration_aid_affordable = {
+	check_variable = { var = RUS_bunker_food value = 30 compare = greater_than_or_equals }
+}
+
+RUS_suspicion_border_bribes_affordable = {
+	check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
+}
+
+RUS_suspicion_press_tour_affordable = {
+	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+}
+
+RUS_suspicion_reactor_camouflage_affordable = {
+	check_variable = { var = RUS_bunker_food value = 40 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+}
+
+RUS_suspicion_border_commission_affordable = {
+	check_variable = { var = RUS_bunker_food value = 20 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+}
+
 # --- rus_army_morale ---
 # RUS. The proclaimed empire tracks its army until the Khan's government ends.
 RUS_morale_active = {

@@ -1409,7 +1409,7 @@
  ADISCORD_vorkerland_collapse.80.d: "During preparation, Itora lost the strength or internal stability required for the northern operation. Headquarters is disbanding the expeditionary corps; there will be no second hidden deadline or automatic retry."
  ADISCORD_vorkerland_collapse.80.a: "Abandon the plan."
  ADISCORD_ivanland_second_intervention: "Intervene in the Northern Deadlock"
- ADISCORD_ivanland_second_intervention_desc: "If the Workers' Republic and Vlad's directorate continue fighting at §R100% exhaustion§!, and a surviving Vorkensberg has also reached §R100%§!, Itora will begin separate wars against Grain and the Rimat Engineering Directorate. A destroyed Vorkensberg is not counted."
+ ADISCORD_ivanland_second_intervention_desc: "If the Workers' Republic and Vlad's directorate continue fighting at §R100% exhaustion§!, and a surviving Vorkensberg has also reached §R100%§!, Itora will begin separate wars against Grain and the Rimat Engineering Directorate. A destroyed Vorkensberg is not counted.\n\nAfter victory, Norvane will receive the lands we conquer from Grain and the Rimat Engineering Directorate, provided it remains our client and has not capitulated."
  ADISCORD_ivanland_occupy_wrk_islands: "Occupy Remmel and Kairholm"
  ADISCORD_ivanland_occupy_wrk_islands_desc: "While the Workers' Republic's leadership is occupied with the civil war, land garrisons on the two isolated islands and transfer them to the Itoran Island Administration without declaring war. Cost: §Y50§! £political_power_texticon."
  ADISCORD_ivanland_guarantee_free_republics: "Guarantee the Free Republics"

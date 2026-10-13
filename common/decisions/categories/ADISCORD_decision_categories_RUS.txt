@@ -104,6 +104,14 @@ RUS_state_balance_category = {
 	visible_when_empty = yes
 }
 
+# Linked to the native BOP panel, which lists these measures. Without
+# visible_when_empty it stays out of the decisions tab, where the category
+# above shows the faction summary and the suspicion measures.
+RUS_state_balance_measures_category = {
+	allowed = { tag = RUS }
+	visible = { has_power_balance = { id = RUS_state_balance } }
+}
+
 # --- rus_reactor_belt ---
 RUS_reactor_belt_category = {
 	icon = generic_industry

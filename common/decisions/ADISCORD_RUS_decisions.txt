@@ -3355,7 +3355,7 @@ RUS_public_campaigns = {
 }
 
 # --- rus_balance_of_power ---
-RUS_state_balance_category = {
+RUS_state_balance_measures_category = {
 	RUS_bop_relief = {
 		icon = generic_industry
 		visible = { has_power_balance = { id = RUS_state_balance } }
@@ -3545,6 +3545,12 @@ RUS_state_balance_category = {
 			}
 		}
 	}
+}
+
+# --- rus_balance_suspicion ---
+# Previews stay outside the price gate so the native tooltip shows the result
+# even while the price is unaffordable.
+RUS_state_balance_category = {
 	RUS_suspicion_energy_cover = {
 		icon = generic_research
 		visible = { RUS_suspicion_active = yes }
@@ -3564,27 +3570,24 @@ RUS_state_balance_category = {
 		fire_only_once = no
 		days_re_enable = 60
 		complete_effect = {
-			if = {
-				limit = {
-					hidden_trigger = {
+			custom_effect_tooltip = RUS_suspicion_relief_15_tt
+			effect_tooltip = {
+				add_power_balance_value = { id = RUS_state_balance value = -0.05 }
+			}
+			custom_effect_tooltip = RUS_suspicion_energy_cover_support_tt
+			hidden_effect = {
+				if = {
+					limit = {
 						RUS_suspicion_relief_available = yes
 						RUS_suspicion_energy_cover_affordable = yes
 					}
-				}
-				hidden_effect = {
 					add_political_power = -40
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 					ADISCORD_economy_mark_dirty = yes
-				}
-				custom_effect_tooltip = RUS_suspicion_relief_15_tt
-				hidden_effect = {
 					set_temp_variable = { var = RUS_suspicion_delta value = -15 }
 					RUS_suspicion_add = yes
-				}
-				add_power_balance_value = { id = RUS_state_balance value = -0.05 }
-				custom_effect_tooltip = RUS_suspicion_energy_cover_support_tt
-				hidden_effect = {
+					add_power_balance_value = { id = RUS_state_balance value = -0.05 }
 					set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
 					set_temp_variable = { var = RUS_scientists_support_delta value = 0.05 }
 					RUS_faction_support_change = yes
@@ -3623,25 +3626,22 @@ RUS_state_balance_category = {
 		fire_only_once = no
 		days_re_enable = 60
 		complete_effect = {
-			if = {
-				limit = {
-					hidden_trigger = {
+			custom_effect_tooltip = RUS_suspicion_relief_15_tt
+			effect_tooltip = {
+				add_power_balance_value = { id = RUS_state_balance value = 0.05 }
+			}
+			custom_effect_tooltip = RUS_suspicion_disperse_musters_support_tt
+			hidden_effect = {
+				if = {
+					limit = {
 						RUS_suspicion_relief_available = yes
 						RUS_suspicion_disperse_musters_affordable = yes
 					}
-				}
-				hidden_effect = {
 					add_political_power = -30
 					add_manpower = -1000
-				}
-				custom_effect_tooltip = RUS_suspicion_relief_15_tt
-				hidden_effect = {
 					set_temp_variable = { var = RUS_suspicion_delta value = -15 }
 					RUS_suspicion_add = yes
-				}
-				add_power_balance_value = { id = RUS_state_balance value = 0.05 }
-				custom_effect_tooltip = RUS_suspicion_disperse_musters_support_tt
-				hidden_effect = {
+					add_power_balance_value = { id = RUS_state_balance value = 0.05 }
 					set_temp_variable = { var = RUS_black_army_support_delta value = 0.05 }
 					set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
 					RUS_faction_support_change = yes
@@ -3680,21 +3680,17 @@ RUS_state_balance_category = {
 		fire_only_once = no
 		days_re_enable = 120
 		complete_effect = {
-			if = {
-				limit = {
-					hidden_trigger = {
+			custom_effect_tooltip = RUS_suspicion_relief_25_tt
+			hidden_effect = {
+				if = {
+					limit = {
 						RUS_suspicion_relief_available = yes
 						RUS_suspicion_envoys_affordable = yes
 					}
-				}
-				hidden_effect = {
 					add_political_power = -60
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
 					ADISCORD_economy_mark_dirty = yes
-				}
-				custom_effect_tooltip = RUS_suspicion_relief_25_tt
-				hidden_effect = {
 					set_temp_variable = { var = RUS_suspicion_delta value = -25 }
 					RUS_suspicion_add = yes
 				}
@@ -3705,6 +3701,287 @@ RUS_state_balance_category = {
 			modifier = {
 				add = 3
 				check_variable = { var = RUS_suspicion value = 60 compare = greater_than_or_equals }
+			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	RUS_suspicion_ration_aid = {
+		icon = generic_consumer_goods
+		visible = { RUS_suspicion_active = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_operational_tt
+				RUS_bunker_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_suspicion_positive_tt
+				check_variable = { var = RUS_suspicion value = 0 compare = greater_than }
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_suspicion_ration_aid_cost
+		custom_cost_trigger = { RUS_suspicion_ration_aid_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			custom_effect_tooltip = RUS_suspicion_relief_10_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						RUS_suspicion_relief_available = yes
+						RUS_bunker_operational = yes
+						RUS_suspicion_ration_aid_affordable = yes
+					}
+					subtract_from_variable = { var = RUS_bunker_food value = 30 }
+					RUS_bunker_refresh = yes
+					set_temp_variable = { var = RUS_suspicion_delta value = -10 }
+					RUS_suspicion_add = yes
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 2
+				check_variable = { var = RUS_suspicion value = 40 compare = greater_than_or_equals }
+				check_variable = { var = RUS_bunker_food value = 70 compare = greater_than_or_equals }
+			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	RUS_suspicion_border_bribes = {
+		icon = generic_trade
+		visible = { RUS_suspicion_active = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_suspicion_positive_tt
+				check_variable = { var = RUS_suspicion value = 0 compare = greater_than }
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_suspicion_border_bribes_cost
+		custom_cost_trigger = { RUS_suspicion_border_bribes_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = RUS_suspicion_relief_20_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						RUS_suspicion_relief_available = yes
+						RUS_suspicion_border_bribes_affordable = yes
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 600 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 600 }
+					ADISCORD_economy_mark_dirty = yes
+					set_temp_variable = { var = RUS_suspicion_delta value = -20 }
+					RUS_suspicion_add = yes
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 2
+				check_variable = { var = RUS_suspicion value = 70 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals }
+			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	RUS_suspicion_press_tour = {
+		icon = generic_political_discourse
+		visible = {
+			has_completed_focus = RUS_foreign_press_bureau
+			RUS_suspicion_active = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_suspicion_positive_tt
+				check_variable = { var = RUS_suspicion value = 0 compare = greater_than }
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_suspicion_press_tour_cost
+		custom_cost_trigger = { RUS_suspicion_press_tour_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			custom_effect_tooltip = RUS_suspicion_relief_15_tt
+			effect_tooltip = {
+				add_power_balance_value = { id = RUS_state_balance value = -0.05 }
+			}
+			custom_effect_tooltip = RUS_suspicion_energy_cover_support_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						RUS_suspicion_relief_available = yes
+						RUS_suspicion_press_tour_affordable = yes
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+					ADISCORD_economy_mark_dirty = yes
+					set_temp_variable = { var = RUS_suspicion_delta value = -15 }
+					RUS_suspicion_add = yes
+					add_power_balance_value = { id = RUS_state_balance value = -0.05 }
+					set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
+					set_temp_variable = { var = RUS_scientists_support_delta value = 0.05 }
+					RUS_faction_support_change = yes
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 3
+				check_variable = { var = RUS_suspicion value = 40 compare = greater_than_or_equals }
+			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	RUS_suspicion_reactor_camouflage = {
+		icon = generic_fortify_the_borders
+		visible = {
+			has_completed_focus = RUS_quiet_perimeter
+			RUS_suspicion_active = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_operational_tt
+				RUS_bunker_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_suspicion_positive_tt
+				check_variable = { var = RUS_suspicion value = 0 compare = greater_than }
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_suspicion_reactor_camouflage_cost
+		custom_cost_trigger = { RUS_suspicion_reactor_camouflage_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = RUS_suspicion_relief_20_tt
+			effect_tooltip = {
+				add_power_balance_value = { id = RUS_state_balance value = 0.05 }
+			}
+			custom_effect_tooltip = RUS_suspicion_disperse_musters_support_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						RUS_suspicion_relief_available = yes
+						RUS_bunker_operational = yes
+						RUS_suspicion_reactor_camouflage_affordable = yes
+					}
+					subtract_from_variable = { var = RUS_bunker_food value = 40 }
+					RUS_bunker_refresh = yes
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+					ADISCORD_economy_mark_dirty = yes
+					set_temp_variable = { var = RUS_suspicion_delta value = -20 }
+					RUS_suspicion_add = yes
+					add_power_balance_value = { id = RUS_state_balance value = 0.05 }
+					set_temp_variable = { var = RUS_black_army_support_delta value = 0.05 }
+					set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
+					RUS_faction_support_change = yes
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 3
+				check_variable = { var = RUS_suspicion value = 40 compare = greater_than_or_equals }
+				check_variable = { var = RUS_bunker_food value = 70 compare = greater_than_or_equals }
+			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	RUS_suspicion_border_commission = {
+		icon = generic_diplomatic_treaty
+		visible = {
+			has_completed_focus = RUS_good_neighbour_charter
+			RUS_suspicion_active = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_operational_tt
+				RUS_bunker_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_suspicion_positive_tt
+				check_variable = { var = RUS_suspicion value = 0 compare = greater_than }
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_suspicion_border_commission_cost
+		custom_cost_trigger = { RUS_suspicion_border_commission_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 120
+		complete_effect = {
+			custom_effect_tooltip = RUS_suspicion_relief_20_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						RUS_suspicion_relief_available = yes
+						RUS_bunker_operational = yes
+						RUS_suspicion_border_commission_affordable = yes
+					}
+					subtract_from_variable = { var = RUS_bunker_food value = 20 }
+					RUS_bunker_refresh = yes
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+					ADISCORD_economy_mark_dirty = yes
+					set_temp_variable = { var = RUS_suspicion_delta value = -20 }
+					RUS_suspicion_add = yes
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 3
+				check_variable = { var = RUS_suspicion value = 50 compare = greater_than_or_equals }
 			}
 			modifier = {
 				factor = 0

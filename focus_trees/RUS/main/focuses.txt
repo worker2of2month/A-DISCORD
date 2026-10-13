@@ -3567,6 +3567,93 @@ focus_tree = {
 		ai_will_do = { base = 6 }
 	}
 
+	# Suspicion cover: open press work or a closed reactor perimeter, then a
+	# shared border commission. Their decisions stay hidden until the gauge opens.
+
+	focus = {
+		id = RUS_foreign_press_bureau
+		icon = GFX_goal_generic_propaganda
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 21
+		y = 4
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_parallel_public_addresses }
+		mutually_exclusive = { focus = RUS_quiet_perimeter }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_suspicion_focus_relief_tt
+			unlock_decision_tooltip = RUS_suspicion_press_tour
+			custom_effect_tooltip = RUS_course_scientists_10_tt
+			hidden_effect = {
+				add_power_balance_value = {
+					id = RUS_state_balance
+					value = -0.1
+				}
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_quiet_perimeter
+		icon = GFX_focus_generic_secret_service_agency
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 23
+		y = 4
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_parallel_public_addresses }
+		mutually_exclusive = { focus = RUS_foreign_press_bureau }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			unlock_decision_tooltip = RUS_suspicion_reactor_camouflage
+			custom_effect_tooltip = RUS_course_black_army_10_tt
+			hidden_effect = {
+				add_power_balance_value = {
+					id = RUS_state_balance
+					value = 0.1
+				}
+			}
+		}
+		ai_will_do = { base = 3 }
+	}
+
+	focus = {
+		id = RUS_good_neighbour_charter
+		icon = GFX_focus_generic_diplomatic_treaty
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		x = 22
+		y = 5
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_foreign_press_bureau
+			focus = RUS_quiet_perimeter
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_stability = 0.03
+			unlock_decision_tooltip = RUS_suspicion_border_commission
+		}
+		ai_will_do = { base = 5 }
+	}
+
 	# Political mandates set the governing course; shared projects stay available.
 
 	focus = {

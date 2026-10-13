@@ -250,6 +250,9 @@ class StelanderPartitionFixture(TreatyFixture):
     def __init__(self, winner="NOD", loser="STS", exile=True, livonn="VAL"):
         super().__init__()
         self.root, self.winner = loser, winner
+        self.countries.append("OCA")
+        self.flags["OCA"] = set()
+        self.load("common/scripted_effects/ADISCORD_VAL_effects.txt")
         self.load("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         self.load("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt", True)
         self.load("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt", True)
@@ -436,6 +439,160 @@ class StelanderPartitionTests(unittest.TestCase):
         f.execute([receipt_cleanup(late)])
         self.assertNotIn(receipt, f.flags["STS"])
         self.assertLess(source.index("STP_settle_val_nod_partition = yes"), source.index("NOD = { STP_ps_settle_return = yes }"))
+
+
+class OccidianBorderFixture(StelanderPartitionFixture):
+    """Run territorial awards and integration with explicit owner/controller facts."""
+
+    def __init__(self, loser="STS", winner="VAL"):
+        super().__init__(winner=winner, loser=loser, exile=False)
+        self.existing.add("OCA")
+        self.subjects["OCA"] = "VAL"
+        self.subjects[loser] = "VAL"
+        self.cosmetics = {loser: "STL_VAL_administration"}
+        self.rights = {}
+        self.wars.clear()
+
+    def matches(self, rows, stack):
+        current = stack[-1]
+        for entry in rows:
+            key, value = entry.key, entry.value
+            if key in ("is_owned_by", "is_controlled_by"):
+                values = self.owners if key == "is_owned_by" else self.controllers
+                matched = values.get(current) == self.resolve(value, stack)
+            elif key in ("owns_state", "controls_state"):
+                values = self.owners if key == "owns_state" else self.controllers
+                matched = values.get(value) == current
+            elif key == "has_cosmetic_tag":
+                matched = self.cosmetics.get(current) == value
+            elif key == "has_war":
+                matched = bool(self.enemies(current)) == (value == "yes")
+            else:
+                matched = super().matches([entry], stack)
+            if not matched:
+                return False
+        return True
+
+    def execute(self, rows, stack=None):
+        stack = stack or [self.root]
+        taken = False
+        for entry in rows:
+            if entry.key in ("if", "else_if", "else"):
+                if entry.key == "if":
+                    taken = False
+                limit = next((e.value for e in entry.value if e.key == "limit"), [])
+                if not taken and self.matches(limit, stack):
+                    taken = True
+                    self.execute([e for e in entry.value if e.key != "limit"], stack)
+            elif entry.key == "give_resource_rights":
+                self.rights[scalar(entry.value, "state")] = scalar(entry.value, "receiver")
+            elif entry.key == "remove_resource_rights":
+                self.rights.pop(entry.value, None)
+            else:
+                super().execute([entry], stack)
+
+
+class OccidianBorderTests(unittest.TestCase):
+    def test_stelander_cession_uses_existing_client_or_direct_val_fallback(self):
+        for loser in ("STP", "STS"):
+            for status, recipient in (
+                ("subject", "OCA"), ("capitulated", "OCA"),
+                ("absent", "VAL"), ("independent", "VAL"),
+                ("foreign_subject", "VAL"),
+            ):
+                with self.subTest(loser=loser, status=status):
+                    f = OccidianBorderFixture(loser)
+                    if status == "absent":
+                        f.existing.remove("OCA")
+                    elif status == "independent":
+                        f.subjects.pop("OCA")
+                    elif status == "foreign_subject":
+                        f.subjects["OCA"] = "NOD"
+                    elif status == "capitulated":
+                        f.capitulated.add("OCA")
+                    for _ in range(2):
+                        f.execute(f.effects["VAL_cede_stelander_border"])
+                        for state in ("29", "46"):
+                            self.assertEqual(f.owners[state], recipient)
+                            self.assertEqual(f.controllers[state], recipient)
+                    self.assertEqual("OCA" in f.existing, status != "absent")
+                    if recipient == "OCA":
+                        self.assertEqual(f.rights, {"29": "VAL", "46": "VAL"})
+
+    def test_cession_preserves_third_party_land_and_requires_stelander_settlement(self):
+        for state in ("29", "46"):
+            for case in ("foreign_owner", "foreign_control", "no_settlement"):
+                with self.subTest(state=state, case=case):
+                    f = OccidianBorderFixture()
+                    if case == "foreign_owner":
+                        f.owners[state] = "ZZZ"
+                    elif case == "foreign_control":
+                        f.controllers[state] = "ZZZ"
+                    else:
+                        f.cosmetics.clear()
+                    before = f.owners[state], f.controllers[state]
+                    f.execute(f.effects["VAL_cede_stelander_border"])
+                    self.assertEqual((f.owners[state], f.controllers[state]), before)
+
+    def test_joint_partition_awards_only_hosheit_and_kreyden_to_oca(self):
+        for loser in ("STP", "STS"):
+            for winner in ("VAL", "NOD"):
+                with self.subTest(loser=loser, winner=winner):
+                    f = OccidianBorderFixture(loser, winner)
+                    f.subjects.pop(loser)
+                    f.wars = {frozenset((loser, tag)) for tag in ("VAL", "NOD")}
+                    f.owners["45"] = loser
+                    self.assertTrue(f.matches(f.triggers["STP_val_nod_partition_available"], [loser]))
+                    f.execute(f.effects["STP_settle_val_nod_partition"])
+                    for state in ("29", "46"):
+                        self.assertEqual((f.owners[state], f.controllers[state]), ("OCA", "OCA"))
+                    self.assertEqual(f.owners["45"], "VAL")
+                    self.assertEqual(f.subjects[loser], "NOD")
+                    self.assertTrue(f.matches(f.triggers["VAL_nod_campaign_stelander_ready"], ["VAL"]))
+
+    def test_integration_includes_awarded_kreyden_and_preserves_unrelated_land(self):
+        for extra_state in (False, True):
+            with self.subTest(extra_state=extra_state):
+                f = OccidianBorderFixture()
+                f.execute(f.effects["VAL_cede_stelander_border"])
+                for state in ("43", "44", "45", "88"):
+                    f.owners[state] = f.controllers[state] = "OCA"
+                if extra_state:
+                    f.owners["777"] = f.controllers["777"] = "OCA"
+                f.execute(f.effects["VAL_reconcile_occidian_resource_rights"], ["VAL"])
+                f.controllers["29"] = "ZZZ"
+                self.assertFalse(f.matches(f.triggers["VAL_occidian_administration_secured"], ["VAL"]))
+                f.controllers["29"] = "OCA"
+                f.execute(f.effects["VAL_integrate_occidia"], ["VAL"])
+                for state in ("29", "43", "44", "45", "46", "88"):
+                    self.assertEqual((f.owners[state], f.controllers[state]), ("VAL", "VAL"))
+                    self.assertNotIn("OCA", f.cores.get(state, set()))
+                self.assertFalse(f.rights)
+                self.assertEqual(f.annexed, [] if extra_state else ["OCA"])
+                if extra_state:
+                    self.assertEqual(f.owners["777"], "OCA")
+
+    def test_kreyden_does_not_expand_the_initial_republic_annexation(self):
+        f = OccidianBorderFixture()
+        for state in ("29", "43", "44", "88"):
+            f.owners[state] = "SRP"
+        self.assertFalse(f.matches(f.triggers["VAL_only_occidian_states"], ["SRP"]))
+        f.owners["29"] = "STS"
+        self.assertTrue(f.matches(f.triggers["VAL_only_occidian_states"], ["SRP"]))
+
+    def test_kreyden_resource_rights_end_on_land_loss_or_independence(self):
+        for loss in ("land", "independence"):
+            with self.subTest(loss=loss):
+                f = OccidianBorderFixture()
+                f.execute(f.effects["VAL_cede_stelander_border"])
+                self.assertEqual(f.rights["29"], "VAL")
+                if loss == "land":
+                    f.owners["29"] = "ZZZ"
+                else:
+                    f.subjects.pop("OCA")
+                f.execute(f.effects["VAL_reconcile_occidian_resource_rights"], ["VAL"])
+                self.assertNotIn("29", f.rights)
+                self.assertNotIn("VAL_occidian_resource_rights_29", f.flags["VAL"])
 
 
 class NorthernWarEntryFixture(TreatyFixture):

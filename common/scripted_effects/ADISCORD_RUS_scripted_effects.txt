@@ -1500,6 +1500,10 @@ RUS_suspicion_monthly = {
 			limit = { has_completed_focus = RUS_bunker_sealed_throne }
 			subtract_from_temp_variable = { var = RUS_suspicion_delta value = 1 }
 		}
+		if = {
+			limit = { has_completed_focus = RUS_foreign_press_bureau }
+			subtract_from_temp_variable = { var = RUS_suspicion_delta value = 1 }
+		}
 		RUS_suspicion_add = yes
 	}
 }

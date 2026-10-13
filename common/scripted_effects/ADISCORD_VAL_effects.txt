@@ -6311,6 +6311,23 @@ VAL_reconcile_occidian_resource_rights = {
 
 		if = {
 			limit = {
+				OCA = { owns_state = 29 }
+				NOT = { has_country_flag = VAL_occidian_resource_rights_29 }
+			}
+			OCA = { give_resource_rights = { receiver = VAL state = 29 } }
+			set_country_flag = VAL_occidian_resource_rights_29
+		}
+		else_if = {
+			limit = {
+				has_country_flag = VAL_occidian_resource_rights_29
+				OCA = { NOT = { owns_state = 29 } }
+			}
+			remove_resource_rights = 29
+			clr_country_flag = VAL_occidian_resource_rights_29
+		}
+
+		if = {
+			limit = {
 				OCA = { owns_state = 43 }
 				NOT = { has_country_flag = VAL_occidian_resource_rights_43 }
 			}
@@ -6381,6 +6398,11 @@ VAL_reconcile_occidian_resource_rights = {
 	}
 	else = {
 		if = {
+			limit = { has_country_flag = VAL_occidian_resource_rights_29 }
+			remove_resource_rights = 29
+			clr_country_flag = VAL_occidian_resource_rights_29
+		}
+		if = {
 			limit = { has_country_flag = VAL_occidian_resource_rights_43 }
 			remove_resource_rights = 43
 			clr_country_flag = VAL_occidian_resource_rights_43
@@ -6421,6 +6443,10 @@ VAL_integrate_occidia = {
 			annex_country = { target = OCA transfer_troops = yes }
 		}
 		else = {
+			if = {
+				limit = { 29 = { is_owned_by = OCA } }
+				transfer_state = 29
+			}
 			transfer_state = 43
 			transfer_state = 44
 			if = {
@@ -6433,6 +6459,13 @@ VAL_integrate_occidia = {
 			}
 			transfer_state = 88
 			OCA = { ADISCORD_economy_mark_dirty = yes }
+		}
+		if = {
+			limit = { 29 = { is_owned_by = VAL } }
+			29 = {
+				remove_core_of = OCA
+				set_state_controller_to = VAL
+			}
 		}
 		43 = { remove_core_of = OCA set_state_controller_to = VAL }
 		44 = { remove_core_of = OCA set_state_controller_to = VAL }
@@ -6979,38 +7012,49 @@ VAL_restore_stelander_conquered_administrations = {
 	}
 }
 
+# STATE: callers select land awarded by the Stelander treaty before this transfer.
+VAL_award_stelander_border_state = {
+	if = {
+		limit = {
+			OCA = {
+				exists = yes
+				is_subject_of = VAL
+			}
+		}
+		OCA = { transfer_state = PREV }
+		add_core_of = OCA
+		set_state_controller_to = OCA
+		OCA = { ADISCORD_economy_mark_dirty = yes }
+		VAL = { VAL_reconcile_occidian_resource_rights = yes }
+	}
+	else = {
+		VAL = { transfer_state = PREV }
+		set_state_controller_to = VAL
+	}
+	VAL = { ADISCORD_economy_mark_dirty = yes }
+}
+
 # Retry at peace or through the existing frontier decisions if a third party
 # controlled a border state during the settlement. Never take neutral land.
 VAL_cede_stelander_border = {
 	if = {
 		limit = { is_subject_of = VAL has_cosmetic_tag = STL_VAL_administration }
-		# Hosheit becomes an additional Occidian district when OCA already
-		# exists under Kefreyt. Otherwise keep the old direct-VAL fallback.
 		46 = {
 			if = {
 				limit = {
 					OR = { is_owned_by = PREV is_owned_by = VAL }
 					OR = { is_controlled_by = PREV is_controlled_by = VAL }
 				}
-				if = {
-					limit = { OCA = { exists = yes is_subject_of = VAL has_capitulated = no } }
-					OCA = { transfer_state = 46 }
-					add_core_of = OCA
-					set_state_controller_to = OCA
-					VAL = { VAL_reconcile_occidian_resource_rights = yes }
-				}
-				else = {
-					VAL = { transfer_state = 46 }
-					set_state_controller_to = VAL
-				}
+				VAL_award_stelander_border_state = yes
 			}
 		}
-		# Kreyden remains the direct Kefreyt border concession.
 		29 = {
 			if = {
-				limit = { is_owned_by = PREV OR = { is_controlled_by = PREV is_controlled_by = VAL } }
-				VAL = { transfer_state = 29 }
-				set_state_controller_to = VAL
+				limit = {
+					OR = { is_owned_by = PREV is_owned_by = VAL }
+					OR = { is_controlled_by = PREV is_controlled_by = VAL }
+				}
+				VAL_award_stelander_border_state = yes
 			}
 		}
 		ADISCORD_economy_mark_dirty = yes

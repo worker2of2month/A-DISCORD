@@ -2223,6 +2223,21 @@ on_actions = {
 				limit = { NOT = { has_global_flag = RUS_crisis_world_ended } }
 				# BEGIN vorkerland_collapse:on_annex
 				ADISCORD_vorkerland_pw_close_external = yes
+				# The generic capitulation handler awards its state snapshot after annex.
+				# Defer the client handoff until that final ownership write has finished.
+				if = {
+					limit = {
+						has_global_flag = ADISCORD_vorkerland_ivanland_second_intervention_started
+						ROOT = { tag = IVN }
+						FROM = {
+							OR = {
+								tag = PWR
+								tag = PSD
+							}
+						}
+					}
+					ROOT = { country_event = { id = ADISCORD_vorkerland_collapse.103 hours = 1 } }
+				}
 				if = {
 					limit = { RUS_crisis_callback_relevant = yes }
 					RUS = { RUS_crisis_check_external_end = yes }

@@ -8042,8 +8042,14 @@ STP_settle_val_nod_partition = {
 	VAL = {
 		for_each_scope_loop = {
 			array = STP_partition_border_states
-			VAL = { transfer_state = PREV }
-			set_state_controller_to = VAL
+			if = {
+				limit = { OR = { state = 29 state = 46 } }
+				VAL_award_stelander_border_state = yes
+			}
+			else = {
+				VAL = { transfer_state = PREV }
+				set_state_controller_to = VAL
+			}
 		}
 		clear_temp_array = STP_partition_border_states
 	}

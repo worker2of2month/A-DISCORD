@@ -1858,6 +1858,15 @@ country_event = {
 	option = { name = ADISCORD_vorkerland_collapse.80.a }
 }
 
+# Each annexed intervention target schedules its own bounded land delivery.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.103
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { tag = IVN }
+	immediate = { ADISCORD_vorkerland_settle_second_intervention = yes }
+}
+
 # Two years after the regional graph launches, select exactly one still-live
 # canonical northern edge and attach the existing operational-initiative idea
 # to its attacker. No retry is armed when the theatre has already resolved.

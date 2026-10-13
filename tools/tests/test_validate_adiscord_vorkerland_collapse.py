@@ -4071,6 +4071,164 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertNotIn("ZTA_Vera_Holt", characters + loc)
 
 
+class SecondInterventionSettlementTests(unittest.TestCase):
+    effect = "ADISCORD_vorkerland_settle_second_intervention"
+    event = "ADISCORD_vorkerland_collapse.103"
+
+    def fixture(self):
+        from tools.tests.test_adiscord_peace_coalition_lifecycle import TreatyFixture
+        from tools.tests.test_adiscord_stp_preparation import block
+
+        class SettlementFixture(TreatyFixture):
+            def matches(self, rows, stack):
+                for row in rows:
+                    if row.key == "OR":
+                        result = any(self.matches([child], stack) for child in row.value)
+                    elif row.key == "NOT":
+                        result = not any(self.matches([child], stack) for child in row.value)
+                    elif row.key == "state":
+                        result = stack[-1] == row.value
+                    else:
+                        result = super().matches([row], stack)
+                    if not result:
+                        return False
+                return True
+
+            def execute(self, rows, stack=None):
+                stack = stack or [self.root]
+                for row in rows:
+                    if row.key == "every_owned_state":
+                        for state, owner in list(self.owners.items()):
+                            if owner == stack[-1] and self.matches(
+                                block(row.value, "limit"), stack + [state]
+                            ):
+                                self.execute(
+                                    [e for e in row.value if e.key != "limit"],
+                                    stack + [state],
+                                )
+                    else:
+                        super().execute([row], stack)
+
+        model = SettlementFixture()
+        model.root = "IVN"
+        model.countries.extend(("IVN", "IBA", "IBL", "PWR", "PSD", "ZAO"))
+        model.existing.update(("IVN", "IBA", "IBL", "ZAO"))
+        model.subjects = {"IBA": "IVN", "IBL": "IVN"}
+        model.owners = {
+            "25": "IVN", "71": "IVN", "202": "IVN",
+            "194": "IVN", "328": "IVN", "90": "IBA", "91": "IBA",
+            "93": "IBL", "94": "IBL", "72": "ZAO",
+        }
+        model.controllers = dict(model.owners)
+        model.wars = {frozenset(("VAL", "NOD"))}
+        model.global_flags.add("ADISCORD_vorkerland_ivanland_second_intervention_started")
+        model.load("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        return model
+
+    def settle(self, model):
+        model.execute(model.effects.get(self.effect, []))
+
+    def test_both_conquests_reach_norvane_without_changing_other_land_or_wars(self):
+        model = self.fixture()
+        before = dict(model.owners)
+        wars = set(model.wars)
+        self.settle(model)
+        for state in ("71", "202", "194", "328"):
+            self.assertEqual(model.owners[state], "IBA")
+            self.assertEqual(model.controllers[state], "IBA")
+            before[state] = "IBA"
+        self.assertEqual(model.owners, before)
+        self.assertEqual(model.wars, wars)
+        self.assertIn(("ADISCORD_economy_mark_dirty", "IBA"), model.calls)
+        self.assertIn(("ADISCORD_economy_mark_dirty", "IVN"), model.calls)
+
+    def test_each_target_can_settle_first_and_repeated_delivery_is_idempotent(self):
+        for first, second in ((("71", "202"), ("194", "328")),
+                              (("194", "328"), ("71", "202"))):
+            with self.subTest(first=first):
+                model = self.fixture()
+                for state in second:
+                    model.owners[state] = model.controllers[state] = "PSD"
+                self.settle(model)
+                self.assertTrue(all(model.owners[s] == "IBA" for s in first))
+                self.assertTrue(all(model.owners[s] == "PSD" for s in second))
+                for state in second:
+                    model.owners[state] = model.controllers[state] = "IVN"
+                self.settle(model)
+                before = dict(model.owners), dict(model.controllers)
+                self.settle(model)
+                self.assertEqual((model.owners, model.controllers), before)
+                self.assertTrue(all(model.owners[s] == "IBA" for s in first + second))
+
+    def test_foreign_ownership_and_occupation_are_preserved(self):
+        model = self.fixture()
+        model.owners["194"] = model.controllers["194"] = "ZAO"
+        model.controllers["328"] = "ZAO"
+        self.settle(model)
+        self.assertEqual(model.owners["194"], "ZAO")
+        self.assertEqual(model.owners["328"], "IVN")
+        self.assertEqual(model.controllers["328"], "ZAO")
+
+    def test_norvane_control_does_not_block_its_ownership_award(self):
+        model = self.fixture()
+        model.controllers["194"] = "IBA"
+        self.settle(model)
+        self.assertEqual(model.owners["194"], "IBA")
+        self.assertEqual(model.controllers["194"], "IBA")
+
+    def test_delivery_rechecks_the_intervention_and_the_living_client(self):
+        for invalid in ("no_intervention", "missing_client", "foreign_client",
+                        "independent_client", "capitulated_client", "world_ended"):
+            with self.subTest(invalid=invalid):
+                model = self.fixture()
+                if invalid == "no_intervention":
+                    model.global_flags.clear()
+                elif invalid == "missing_client":
+                    model.existing.remove("IBA")
+                elif invalid == "foreign_client":
+                    model.subjects["IBA"] = "VAL"
+                elif invalid == "independent_client":
+                    model.subjects.pop("IBA")
+                elif invalid == "capitulated_client":
+                    model.capitulated.add("IBA")
+                else:
+                    model.global_flags.add("RUS_crisis_world_ended")
+                before = dict(model.owners), dict(model.controllers)
+                self.settle(model)
+                self.assertEqual((model.owners, model.controllers), before)
+
+    def test_annexation_queues_delivery_after_the_generic_final_award(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
+        from tools.tests.test_scripted_peace_on_actions import native_hooks
+        source = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
+        annex = block(native_hooks(source), "on_annex")
+        dispatches = [
+            e for e in walk(annex) if e.key == "if"
+            and any(x.key == "country_event" and any(
+                child.key == "id" and child.value == self.event for child in x.value
+            ) for x in walk(e.value))
+        ]
+        self.assertTrue(dispatches, "The actual annexation must schedule the land award")
+        dispatch = dispatches[-1]
+        scheduled = next(e for e in walk(dispatch.value) if e.key == "country_event")
+        self.assertEqual(scalar(scheduled.value, "hours"), "1")
+        model = self.fixture()
+        for winner, loser, expected in (("IVN", "PSD", True), ("IVN", "PWR", True),
+                                         ("IVN", "ZAO", False), ("VAL", "PSD", False)):
+            model.root, model.winner = winner, loser
+            self.assertEqual(model.matches(block(dispatch.value, "limit"), [winner]), expected)
+        event = event_block(read("events/ADISCORD_vorkerland_events.txt"), self.event)
+        self.assertIn("hidden = yes", event)
+        self.assertIn(self.effect + " = yes", event)
+        self.assertNotIn("fire_only_once", event)
+        self.assertNotIn("country_event =", named_block(event, "immediate"))
+        registry = json.loads(read("tools/data/adiscord_event_ids.json"))
+        registered = [entry for entry in registry["events"] if entry["id"] == self.event]
+        self.assertEqual(len(registered), 1)
+        self.assertEqual(registered[0]["owner"], "events/ADISCORD_vorkerland_events.txt")
+        self.assertEqual(registered[0]["status"], "active")
+
+
 class InterventionAndVisualTests(unittest.TestCase):
     def test_krait_is_led_by_selevyostrov_before_and_after_puppeting(self) -> None:
         effects = source_section(

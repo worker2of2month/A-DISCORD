@@ -2849,6 +2849,15 @@ defined_text = {
 	text = { localization_key = RUS_suspicion_growth_none }
 }
 
+defined_text = {
+	name = GetRUSSuspicionBureauRelief
+	text = {
+		trigger = { has_completed_focus = RUS_foreign_press_bureau }
+		localization_key = RUS_suspicion_growth_press_bureau
+	}
+	text = { localization_key = RUS_suspicion_growth_none }
+}
+
 # Army morale summary. Growth terms mirror RUS_morale_monthly.
 defined_text = {
 	name = GetRUSMoraleStatus

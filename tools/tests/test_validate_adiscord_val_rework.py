@@ -7952,34 +7952,12 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertIn("clr_country_flag = VAL_final_capitulation_immediate", late)
         self.assertIn("set_global_flag = skip_default_capitulation", late)
 
-    def test_stelander_border_cession_routes_hosheit_to_oca_and_kreyden_to_val(self):
+    def test_stelander_administration_preserves_the_country_and_player(self):
         from tools.tests.test_adiscord_stp_preparation import (
             block,
             parse_clausewitz,
             walk,
         )
-
-        effect = block(
-            parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8")),
-            "VAL_cede_stelander_border",
-        )
-        regions = {e.key: e.value for e in walk(effect) if e.key.isdigit()}
-        self.assertEqual(set(regions), {"46", "29"})
-
-        hosheit = block(regions["46"], "if")
-        hosheit_text = str([(e.key, e.value) for e in walk(hosheit)])
-        self.assertIn("is_subject_of', 'VAL", hosheit_text)
-        self.assertIn("add_core_of', 'OCA", hosheit_text)
-        self.assertEqual(
-            [e.value for e in walk(hosheit) if e.key == "transfer_state"].count("46"), 2
-        )
-        self.assertIn("OCA", [e.key for e in walk(hosheit)])
-        self.assertIn("VAL", [e.key for e in walk(hosheit)])
-
-        kreyden = block(regions["29"], "if")
-        kreyden_text = str([(e.key, e.value) for e in walk(kreyden)])
-        self.assertIn("transfer_state', '29", kreyden_text)
-        self.assertIn("set_state_controller_to', 'VAL", kreyden_text)
 
         install = block(
             parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8")),
@@ -8723,11 +8701,11 @@ class ValExpandedCampaignTests(unittest.TestCase):
         ]
         self.assertEqual(
             {state for receiver, state in grants if receiver == "VAL"},
-            {"43", "44", "45", "46", "88"},
+            {"29", "43", "44", "45", "46", "88"},
         )
         self.assertEqual(
             {e.value for e in walk(rights) if e.key == "remove_resource_rights"},
-            {"43", "44", "45", "46", "88"},
+            {"29", "43", "44", "45", "46", "88"},
         )
         formation = self.getblock(effects, "VAL_form_occidian_administration")
         integration = self.getblock(effects, "VAL_integrate_occidia")
@@ -8740,7 +8718,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         on_actions = read_country_on_actions(ON_ACTIONS_PATH, "kefreyt")
         self.assertIn("VAL_reconcile_occidian_resource_rights = yes", on_actions)
         self.assertIn(
-            "OR = { state = 43 state = 44 state = 45 state = 46 state = 88 }",
+            "OR = { state = 29 state = 43 state = 44 state = 45 state = 46 state = 88 }",
             on_actions,
         )
 
@@ -8751,7 +8729,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
             e.value for e in walk(integration) if e.key == "transfer_state"
         }
         self.assertEqual(formation_transfers, {"43", "44", "45", "88"})
-        self.assertEqual(integration_transfers, {"43", "44", "45", "46", "88"})
+        self.assertEqual(integration_transfers, {"29", "43", "44", "45", "46", "88"})
 
         for name, target in (
             ("VAL_form_occidian_administration", "SRP"),

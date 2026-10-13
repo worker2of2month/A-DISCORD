@@ -3330,6 +3330,44 @@ ADISCORD_vorkerland_setup_ivanland_mandate = {
 	set_global_flag = ADISCORD_vorkerland_ivanland_client_order_v2
 }
 
+# Country scope: IVN, after the annexation callback and the generic state award.
+# Only the second intervention's two regional packages belong to Norvane;
+# foreign ownership or occupation must survive the delayed handoff.
+ADISCORD_vorkerland_settle_second_intervention = {
+	if = {
+		limit = {
+			tag = IVN
+			exists = yes
+			has_capitulated = no
+			has_global_flag = ADISCORD_vorkerland_ivanland_second_intervention_started
+			NOT = { has_global_flag = RUS_crisis_world_ended }
+			IBA = {
+				exists = yes
+				is_subject_of = IVN
+				has_capitulated = no
+			}
+		}
+		every_owned_state = {
+			limit = {
+				OR = {
+					state = 71
+					state = 202
+					state = 194
+					state = 328
+				}
+				OR = {
+					is_controlled_by = IVN
+					is_controlled_by = IBA
+				}
+			}
+			IBA = { transfer_state = PREV }
+			set_state_controller_to = IBA
+		}
+		ADISCORD_economy_mark_dirty = yes
+		IBA = { ADISCORD_economy_mark_dirty = yes }
+	}
+}
+
 # The visible 120-day preparation is the sole fresh producer of the 240-day
 # intervention mission. The mission is non-selectable and activated here so its
 # UI deadline and the actual war share one authority.

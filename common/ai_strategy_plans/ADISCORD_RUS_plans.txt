@@ -48,6 +48,8 @@ ADISCORD_vorkerland_rus_last_empire_plan = {
 		RUS_assembly_budget
 		RUS_written_oaths
 		RUS_parallel_public_addresses
+		RUS_foreign_press_bureau
+		RUS_good_neighbour_charter
 		RUS_machine_school
 		RUS_power_grid
 		RUS_watch_the_western_scar
