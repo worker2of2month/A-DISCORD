@@ -2278,6 +2278,17 @@ class RusCampaignTests(unittest.TestCase):
         calm.run("RUS_morale_add")
         self.assertNotIn("ADISCORD_rus_crisis.19", calm.events)
 
+    def test_morale_swinging_across_a_threshold_announces_once(self):
+        world = self.morale_world(61)
+        for delta in (-2, 3, -3, 4, -4, 5, -5):
+            world.temporary["RUS_morale_delta"] = delta
+            world.run("RUS_morale_add")
+        self.assertEqual(world.events, ["ADISCORD_rus_crisis.18"])
+        self.assertEqual(world.value("RUS_morale_stage"), 1)
+        world.temporary["RUS_morale_delta"] = 15
+        world.run("RUS_morale_add")
+        self.assertEqual(world.value("RUS_morale_stage"), 0)
+
     def test_morale_crisis_options_pay_their_costs_and_always_leave_a_choice(self):
         events = parse("events/ADISCORD_RUS_events.txt")
         event = next(row.value for row in events if row.key == "country_event" and scalar(row.value, "id") == "ADISCORD_rus_crisis.18")

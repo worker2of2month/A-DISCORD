@@ -445,6 +445,104 @@ ADISCORD_vorkerland_collapse_category = {
 		}
 	}
 
+	# District oaths: a state of the central districts swears once, to a
+	# charter or to commandant rule. The choice trades legitimacy for men.
+	ADISCORD_vorkerland_vad_grant_district_charter = {
+		icon = generic_political_pressure
+		allowed = { tag = VAD }
+		state_target = yes
+		targets = { 75 106 107 121 102 109 111 325 81 110 124 79 306 308 309 327 82 323 108 122 123 27 35 315 316 317 318 320 }
+		target_trigger = {
+			FROM = {
+				is_owned_and_controlled_by = ROOT
+				NOT = { has_state_flag = ADISCORD_vorkerland_vad_district_oath }
+			}
+		}
+		visible = {
+			has_completed_focus = VAD_open_imperial_registers
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_vad_charter_slot_tt
+				ADISCORD_vorkerland_vad_charter_slot_free = yes
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		cost = 40
+		days_remove = 30
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = { ADISCORD_vorkerland_vad_begin_district_oath = yes }
+		}
+		cancel_trigger = {
+			FROM = { NOT = { is_owned_and_controlled_by = ROOT } }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = ADISCORD_vorkerland_vad_oath_lost_tt
+			hidden_effect = { ADISCORD_vorkerland_vad_release_district_oath = yes }
+		}
+		remove_effect = {
+			custom_effect_tooltip = ADISCORD_vorkerland_vad_charter_result_tt
+			hidden_effect = { ADISCORD_vorkerland_vad_seal_district_charter = yes }
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 15
+				has_political_power > 100
+			}
+		}
+	}
+
+	ADISCORD_vorkerland_vad_impose_commandant_rule = {
+		icon = generic_territory_or_war
+		allowed = { tag = VAD }
+		state_target = yes
+		targets = { 75 106 107 121 102 109 111 325 81 110 124 79 306 308 309 327 82 323 108 122 123 27 35 315 316 317 318 320 }
+		target_trigger = {
+			FROM = {
+				is_owned_and_controlled_by = ROOT
+				NOT = { has_state_flag = ADISCORD_vorkerland_vad_district_oath }
+			}
+		}
+		visible = {
+			has_completed_focus = VAD_form_field_commandantures
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = { has_war = yes }
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		cost = 10
+		days_remove = 14
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = { ADISCORD_vorkerland_vad_begin_district_oath = yes }
+		}
+		cancel_trigger = {
+			FROM = { NOT = { is_owned_and_controlled_by = ROOT } }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = ADISCORD_vorkerland_vad_oath_lost_tt
+			hidden_effect = { ADISCORD_vorkerland_vad_release_district_oath = yes }
+		}
+		remove_effect = {
+			custom_effect_tooltip = ADISCORD_vorkerland_vad_commandant_result_tt
+			hidden_effect = { ADISCORD_vorkerland_vad_seal_commandant_rule = yes }
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				has_manpower < 3000
+				surrender_progress > 0.1
+			}
+		}
+	}
+
 	ADISCORD_vorkerland_vad_open_imperial_registers = {
 		icon = generic_political_pressure
 		allowed = { tag = VAD }
@@ -523,6 +621,37 @@ ADISCORD_vorkerland_collapse_category = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_field_laboratories days = 30 }
 		}
 		ai_will_do = { factor = 350 }
+	}
+
+	# A field trial consumes prototypes whatever the result. Its chance grows
+	# with the directorate's iterations, so failures still buy the next attempt.
+	ADISCORD_vorkerland_tva_run_field_trial = {
+		icon = ADISCORD_science
+		allowed = { tag = TVA }
+		visible = {
+			has_completed_focus = TVA_select_trial_protocol
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = { has_war = yes }
+		cost = 0
+		custom_cost_text = ADISCORD_vorkerland_tva_trial_cost
+		custom_cost_trigger = { ADISCORD_vorkerland_tva_trial_affordable = yes }
+		days_remove = 30
+		days_re_enable = 10
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_vorkerland_tva_trial_chance_tt
+			hidden_effect = { ADISCORD_vorkerland_tva_begin_field_trial = yes }
+		}
+		remove_effect = { ADISCORD_vorkerland_tva_resolve_field_trial = yes }
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 15
+				has_political_power > 80
+			}
+		}
 	}
 
 	ADISCORD_vorkerland_tva_raise_technical_battalions = {

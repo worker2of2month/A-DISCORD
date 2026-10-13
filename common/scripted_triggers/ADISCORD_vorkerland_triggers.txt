@@ -1868,6 +1868,22 @@ ADISCORD_vorkerland_wkr_has_working_council = {
 	}
 }
 
+# Three charters, three more after the crown commissions are restored.
+ADISCORD_vorkerland_vad_charter_slot_free = {
+	OR = {
+		check_variable = { var = ADISCORD_vorkerland_vad_charters value = 3 compare = less_than }
+		AND = {
+			has_completed_focus = VAD_restore_crown_commissions
+			check_variable = { var = ADISCORD_vorkerland_vad_charters value = 6 compare = less_than }
+		}
+	}
+}
+
+ADISCORD_vorkerland_tva_trial_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { has_equipment = { infantry_equipment < 1000 } }
+}
+
 # --- stalemate_triggers ---
 # A fresh-campaign anti-stalemate window is valid only during the claimant
 # preparation phase. It never follows the campaign into the showdown or the

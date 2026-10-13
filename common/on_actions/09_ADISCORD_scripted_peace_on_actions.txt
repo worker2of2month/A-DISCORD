@@ -1222,6 +1222,7 @@ on_actions = {
 					ROOT = { clr_country_flag = ADISCORD_vorkerland_rus_capitulation_current }
 				}
 				ADISCORD_vorkerland_check_central_outcome = yes
+				ADISCORD_vorkerland_schedule_outcome_recheck = yes
 
 				# END vorkerland_collapse:on_capitulation
 				# BEGIN stelander:on_capitulation

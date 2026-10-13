@@ -230,7 +230,6 @@ class WorldNewsContracts(unittest.TestCase):
             ("ADISCORD_rin_crisis.10", rin, "rin_active"),
             ("ADISCORD_rin_crisis.11", rin, "rin_southern_victory"),
             ("ADISCORD_rin_crisis.12", rin, "rin_northern_victory"),
-            ("ADISCORD_rin_crisis.13", rin, "rin_partition"),
             ("ADISCORD_rin_crisis.14", rin, "rin_loyalty"),
             ("ADISCORD_TFF.10", frontier, "frontier_command"),
         ]:

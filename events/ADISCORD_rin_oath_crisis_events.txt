@@ -77,12 +77,6 @@ country_event = {
 	immediate = {
 		if = {
 			limit = { ADISCORD_rin_partition_armistice_is_valid = yes }
-			if = {
-				limit = { NOT = { has_global_flag = ADISCORD_news_rin_partition_published } }
-				set_global_flag = ADISCORD_news_rin_partition_published
-				news_event = { id = ADISCORD_rin_crisis.13 hours = 1 }
-			}
-
 			clr_country_flag = ADISCORD_rin_partition_verification_pending
 			clr_country_flag = ADISCORD_rin_partition_verification_retry
 		}
@@ -112,14 +106,6 @@ country_event = {
 			limit = { NOT = { ADISCORD_rin_partition_armistice_is_valid = yes } }
 			set_global_flag = ADISCORD_rin_oath_crisis_terminal_failure
 			log = "[ADISCORD][RIN] Partition verification failed after the single bounded repair."
-		}
-		if = {
-			limit = { ADISCORD_rin_partition_armistice_is_valid = yes }
-			if = {
-				limit = { NOT = { has_global_flag = ADISCORD_news_rin_partition_published } }
-				set_global_flag = ADISCORD_news_rin_partition_published
-				news_event = { id = ADISCORD_rin_crisis.13 hours = 1 }
-			}
 		}
 
 		clr_country_flag = ADISCORD_rin_partition_verification_pending
@@ -158,17 +144,6 @@ news_event = {
 	fire_only_once = no
 	is_triggered_only = yes
 	option = { name = ADISCORD_rin_crisis.12.a }
-}
-
-news_event = {
-	id = ADISCORD_rin_crisis.13
-	title = ADISCORD_rin_crisis.13.t
-	desc = ADISCORD_rin_crisis.13.d
-	picture = GFX_news_event_adiscord_peace_negotiations
-	major = yes
-	fire_only_once = no
-	is_triggered_only = yes
-	option = { name = ADISCORD_rin_crisis.13.a }
 }
 
 news_event = {

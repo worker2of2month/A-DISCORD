@@ -113,7 +113,6 @@ def collect_issues() -> list[str]:
         "ADISCORD_rin_crisis.10",
         "ADISCORD_rin_crisis.11",
         "ADISCORD_rin_crisis.12",
-        "ADISCORD_rin_crisis.13",
         "ADISCORD_rin_crisis.14",
     ]:
         issues.append(

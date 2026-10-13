@@ -108,7 +108,7 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_objective_value", resolve)
         self.assertIn("ADISCORD_vorkerland_objectives_taken", resolve)
         self.assertEqual(len(CAPITULATION_DISPATCH), 3)
-        self.assertEqual(len(VARIANT_DISPATCH), 6)
+        self.assertEqual(len(VARIANT_DISPATCH), 5)
 
     def test_worker_fate_dispatch_rejects_a_swapped_event_id(self) -> None:
         swapped = source_section(read(STORY_EFFECTS), 'story_effects').replace(
@@ -124,7 +124,7 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
     def test_variant_dispatch_rejects_a_swapped_event_id(self) -> None:
         swapped = source_section(read(STORY_EFFECTS), 'story_effects').replace(
             "news_event = { id = ADISCORD_vorkerland_story.35 }",
-            "news_event = { id = ADISCORD_vorkerland_story.36 }",
+            "news_event = { id = ADISCORD_vorkerland_story.34 }",
         )
         issues = dispatch_issues(swapped)
         self.assertTrue(

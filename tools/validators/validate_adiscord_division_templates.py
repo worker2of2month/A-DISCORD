@@ -31,11 +31,17 @@ STARTING_TEMPLATE_COUNTERS = {
     "mountain": 110,
     "mobile": 5,
     "infiltration": 17,
+    "bunker": 6,
+    "cbrn": 2,
 }
 
 
 def starting_template_role(name: str) -> str:
     lowered = name.lower()
+    if "bunker" in lowered:
+        return "bunker"
+    if "cbrn" in lowered:
+        return "cbrn"
     if "volunteer" in lowered:
         return "volunteer"
     if "assault" in lowered:

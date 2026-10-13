@@ -2677,6 +2677,7 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_registers_opened }
 		completion_reward = {
 			add_command_power = 10
+			unlock_decision_tooltip = ADISCORD_vorkerland_vad_grant_district_charter
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_imperial_registers days = 70 }
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_vad_registers_opened
@@ -2728,6 +2729,7 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_field_commandantures days = 70 }
 			army_experience = 5
+			unlock_decision_tooltip = ADISCORD_vorkerland_vad_impose_commandant_rule
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_vad_commandantures_formed
 			}
@@ -3122,7 +3124,8 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_political_power = 50
+			add_political_power = 25
+			custom_effect_tooltip = ADISCORD_vorkerland_vad_charter_slots_tt
 			add_stability = 0.03
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_vad_crown_commissions
@@ -4916,6 +4919,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_vorkerland_tva_run_field_trial
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_tva_trial_protocol
 				country_event = { id = ADISCORD_vorkerland_claimant.23 days = 1 }
@@ -5325,7 +5329,9 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_political_power = 50
+			add_political_power = 25
+			custom_effect_tooltip = ADISCORD_vorkerland_tva_iteration_tt
+			hidden_effect = { ADISCORD_vorkerland_tva_add_iteration = yes }
 			add_command_power = 10
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_tva_algorithmic_board
@@ -5493,8 +5499,9 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_war_support = 0.03
 			army_experience = 25
+			custom_effect_tooltip = ADISCORD_vorkerland_tva_iteration_tt
+			hidden_effect = { ADISCORD_vorkerland_tva_add_iteration = yes }
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_tva_field_results
 			}
@@ -6082,7 +6089,8 @@ focus_tree = {
 				category = electronics
 			}
 			army_experience = 5
-			add_political_power = 5
+			custom_effect_tooltip = ADISCORD_vorkerland_tva_iteration_tt
+			hidden_effect = { ADISCORD_vorkerland_tva_add_iteration = yes }
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_tva_trial_logs_cross_validated
 				country_event = { id = ADISCORD_vorkerland_claimant.24 hours = 1 }

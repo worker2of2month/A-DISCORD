@@ -2,11 +2,11 @@
  autonomy_STP_provisional_administration:0 "Stelander Provisional Administration"
 
  STP_pc_heg_administrations:0 "Administrations of the Hegemony"
- STP_pc_heg_administrations_desc:0 "The Hegemony needs more than occupied maps. Defeated governments can be reorganised into temporary administrations that retain their own territories. A separate programme opens for integrating neighbouring regions directly owned by Steland. If Common Citizenship has already opened it, its conditions and cost remain the same."
+ STP_pc_heg_administrations_desc:0 "The Hegemony needs more than occupied maps. Defeated governments can be reorganised into temporary administrations that retain their own territories. A separate programme will integrate neighbouring regions directly owned by Steland."
  STP_pc_heg_final_north:0 "Break the Northern Ring"
  STP_pc_heg_final_north_desc:0 "Independent power in the north has become incompatible with Steland's claim to regional primacy. Nodrul, Yubor and the Frontier will be forced into the new order if they have not already submitted."
  STP_pc_heg_final_kefreyt:0 "The Last Contract"
- STP_pc_heg_final_kefreyt_desc:0 "After the northern campaign, an independent Kefreyt may still contest the regional order. The Last Contract means war to impose its submission if an earlier campaign has not settled the issue. A Kefreyt already under our rule will not be attacked again; a limited peace preserving its independence does not end the struggle for hegemony."
+ STP_pc_heg_final_kefreyt_desc:0 "After the northern campaign, an independent Kefreyt may still contest the regional order. The Last Contract means war to impose its submission if an earlier campaign has not settled the issue. A limited peace preserving its independence does not end the struggle for hegemony."
 
  STP_heg_nationalisation_unlock_tt:0 "The Hegemony route can use the existing repeatable regional nationalisation programme."
  STP_heg_administration_unlock_tt:0 "Unlocks provisional administrations for defeated §YNodrul§!, §YYubor§!, §Ythe Frontier§! and §YKefreyt§!."
@@ -42,5 +42,5 @@
  STP_pc_heg_northern_administration_desc:0 "With Kefreyt subordinated, the northern border needs its own administration. Irim and Erstantpeo will provide its rear base, with roads leading to Antolla, Farein and Himber and onward into cannibal territory. A single military administration will replace the separate dependent governments. Subordinated cannibal territories will join it without another campaign; independent states will remain beyond its borders until defeated."
  STP_heg_northern_administration_tt:0 "Creates a dependent §YNorthern Military Administration§! with its own leader. Transfers §YIrim§!, §YErstantpeo§! and already subordinated cannibal territories to it. Independent countries and foreign occupations are excluded. Cannibal subjects without outside holdings merge while retaining their troops."
  STP_pc_heg_cannibal_campaign:0 "Close the Cannibal Frontier"
- STP_pc_heg_cannibal_campaign_desc:0 "Unified administration cannot stop raids while independent cannibal states remain across the border. The northern administration will support a common campaign and receive the defeated territories, giving border garrisons a single supply network. If Kefreyt has already conquered these states and their lands have entered our sphere, another war is unnecessary."
+ STP_pc_heg_cannibal_campaign_desc:0 "Unified administration cannot stop raids while independent cannibal states remain across the border. The northern administration will support a common campaign and receive the defeated territories, giving border garrisons a single supply network."
  STP_heg_cannibal_campaign_tt:0 "Starts a shared war against the remaining independent states of §Y$CIN$§!, §Y$OSF$§! and §Y$APH$§!. Defeated countries join the §YNorthern Military Administration§!. Existing subjects and absent countries are skipped. The focus is bypassed when no independent targets remain."

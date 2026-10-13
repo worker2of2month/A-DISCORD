@@ -93,6 +93,23 @@ ADISCORD_vorkerland_wkr_councils = {
 	conscription = ADISCORD_vorkerland_wkr_council_conscription
 }
 
+# District oaths (VAD), state scope. Applied when a charter or commandant rule
+# is sealed and retired with the civil-war modifiers.
+ADISCORD_vorkerland_vad_chartered_district = {
+	icon = GFX_modifiers_generic_military_plans
+	enable = { always = yes }
+
+	local_manpower = 0.20
+}
+
+ADISCORD_vorkerland_vad_commandant_district = {
+	icon = GFX_modifiers_generic_military_plans
+	enable = { always = yes }
+
+	local_manpower = -0.20
+	local_factories = -0.15
+}
+
 ADISCORD_vorkerland_vad_war_economy = {
 	icon = GFX_idea_generic_manpower_bonus
 	enable = { always = yes }

@@ -4297,6 +4297,35 @@ ADISCORD_vorkerland_check_central_outcome = {
 	}
 }
 
+# The capitulating claimant's states pass to the victor after on_capitulation
+# has run, and that transfer raises no on_state_control_changed. One recheck on
+# the next day keeps a victory from waiting for an unrelated war to move a front.
+ADISCORD_vorkerland_schedule_outcome_recheck = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+			NOT = { has_global_flag = ADISCORD_vorkerland_outcome_recheck_pending }
+		}
+		if = {
+			limit = { WKR = { exists = yes NOT = { has_capitulated = yes } } }
+			set_global_flag = ADISCORD_vorkerland_outcome_recheck_pending
+			WKR = { country_event = { id = ADISCORD_vorkerland_collapse.102 days = 1 } }
+		}
+		else_if = {
+			limit = { VAD = { exists = yes NOT = { has_capitulated = yes } } }
+			set_global_flag = ADISCORD_vorkerland_outcome_recheck_pending
+			VAD = { country_event = { id = ADISCORD_vorkerland_collapse.102 days = 1 } }
+		}
+		else_if = {
+			limit = { TVA = { exists = yes NOT = { has_capitulated = yes } } }
+			set_global_flag = ADISCORD_vorkerland_outcome_recheck_pending
+			TVA = { country_event = { id = ADISCORD_vorkerland_collapse.102 days = 1 } }
+		}
+	}
+}
+
 # --- collapse_map_effects ---
 ADISCORD_vorkerland_end_internal_wars = {
 	# Central claimant wars.
@@ -7403,6 +7432,7 @@ ADISCORD_vorkerland_retire_civil_war_modifiers = {
 	if = { limit = { country_exists = VAD } VAD = { ADISCORD_vorkerland_clear_claimant_war_modifiers = yes } }
 	if = { limit = { country_exists = TVA } TVA = { ADISCORD_vorkerland_clear_claimant_war_modifiers = yes } }
 	ADISCORD_vorkerland_clear_claimant_war_modifiers = yes
+	ADISCORD_vorkerland_vad_retire_district_oaths = yes
 }
 
 ADISCORD_vorkerland_clear_claimant_war_modifiers = {
@@ -10008,14 +10038,6 @@ ADISCORD_vorkerland_story_report_variant_declaration = {
 		set_global_flag = ADISCORD_vorkerland_story_variant_tva_throughput_reported
 		news_event = { id = ADISCORD_vorkerland_story.35 }
 	}
-	else_if = {
-		limit = {
-			has_country_flag = ADISCORD_vorkerland_tva_variant_preservation
-			NOT = { has_global_flag = ADISCORD_vorkerland_story_variant_tva_preservation_reported }
-		}
-		set_global_flag = ADISCORD_vorkerland_story_variant_tva_preservation_reported
-		news_event = { id = ADISCORD_vorkerland_story.36 }
-	}
 }
 
 # A main claimant leaving the central war is a world event, not only a prompt for
@@ -10521,6 +10543,129 @@ ADISCORD_vorkerland_wkr_withdraw_council = {
 ADISCORD_vorkerland_wkr_council_battalion = {
 	add_manpower = 2500
 	add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = ROOT }
+}
+
+# Field trials, TVA only. Every resolved trial, successful or not, is one more
+# iteration; each earlier iteration adds 15 points to the next success chance,
+# from 40 up to 85. Focuses can contribute iterations before the first trial.
+ADISCORD_vorkerland_tva_add_iteration = {
+	add_to_variable = { var = ADISCORD_vorkerland_tva_iterations value = 1 }
+}
+
+ADISCORD_vorkerland_tva_begin_field_trial = {
+	add_political_power = -30
+	add_equipment_to_stockpile = { type = infantry_equipment amount = -1000 }
+}
+
+# The bonus follows the trial protocol the directorate committed to.
+ADISCORD_vorkerland_tva_field_trial_success = {
+	if = {
+		limit = { has_completed_focus = TVA_raise_technical_battalions }
+		add_tech_bonus = { name = ADISCORD_vorkerland_tva_trial_bonus bonus = 0.5 uses = 1 category = infantry_weapons }
+	}
+	else_if = {
+		limit = { has_completed_focus = TVA_test_remote_fire_control }
+		add_tech_bonus = { name = ADISCORD_vorkerland_tva_trial_bonus bonus = 0.5 uses = 1 category = electronics }
+	}
+	else_if = {
+		limit = { has_completed_focus = TVA_test_adaptive_logistics }
+		add_tech_bonus = { name = ADISCORD_vorkerland_tva_trial_bonus bonus = 0.5 uses = 1 category = support_tech }
+	}
+	else = {
+		add_tech_bonus = { name = ADISCORD_vorkerland_tva_trial_bonus bonus = 0.5 uses = 1 category = industry }
+	}
+	custom_effect_tooltip = ADISCORD_vorkerland_tva_trial_legitimacy_tt
+	hidden_effect = {
+		set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.02 }
+		ADISCORD_vorkerland_add_legitimacy = yes
+	}
+}
+
+ADISCORD_vorkerland_tva_field_trial_failure = {
+	custom_effect_tooltip = ADISCORD_vorkerland_tva_trial_failed_tt
+	army_experience = 10
+}
+
+ADISCORD_vorkerland_tva_resolve_field_trial = {
+	if = {
+		limit = { check_variable = { var = ADISCORD_vorkerland_tva_iterations value = 3 compare = greater_than_or_equals } }
+		random_list = {
+			85 = { ADISCORD_vorkerland_tva_field_trial_success = yes }
+			15 = { ADISCORD_vorkerland_tva_field_trial_failure = yes }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_vorkerland_tva_iterations value = 2 compare = greater_than_or_equals } }
+		random_list = {
+			70 = { ADISCORD_vorkerland_tva_field_trial_success = yes }
+			30 = { ADISCORD_vorkerland_tva_field_trial_failure = yes }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_vorkerland_tva_iterations value = 1 compare = greater_than_or_equals } }
+		random_list = {
+			55 = { ADISCORD_vorkerland_tva_field_trial_success = yes }
+			45 = { ADISCORD_vorkerland_tva_field_trial_failure = yes }
+		}
+	}
+	else = {
+		random_list = {
+			40 = { ADISCORD_vorkerland_tva_field_trial_success = yes }
+			60 = { ADISCORD_vorkerland_tva_field_trial_failure = yes }
+		}
+	}
+	custom_effect_tooltip = ADISCORD_vorkerland_tva_iteration_tt
+	hidden_effect = { ADISCORD_vorkerland_tva_add_iteration = yes }
+}
+
+# District oaths, VAD only. FROM is the target state. Each state swears once,
+# to a charter or to commandant rule; the flag is held from the start of the
+# programme so both cannot run, and a cancelled programme releases it.
+ADISCORD_vorkerland_vad_begin_district_oath = {
+	FROM = { set_state_flag = ADISCORD_vorkerland_vad_district_oath }
+}
+
+ADISCORD_vorkerland_vad_release_district_oath = {
+	FROM = { clr_state_flag = ADISCORD_vorkerland_vad_district_oath }
+}
+
+ADISCORD_vorkerland_vad_seal_district_charter = {
+	add_to_variable = { var = ADISCORD_vorkerland_vad_charters value = 1 }
+	set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.03 }
+	ADISCORD_vorkerland_add_legitimacy = yes
+	FROM = {
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district }
+		add_to_array = { array = global.ADISCORD_vorkerland_vad_oath_states value = THIS }
+	}
+}
+
+ADISCORD_vorkerland_vad_seal_commandant_rule = {
+	add_manpower = 1500
+	add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = ROOT }
+	set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.02 }
+	ADISCORD_vorkerland_add_legitimacy = yes
+	FROM = {
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+		add_to_array = { array = global.ADISCORD_vorkerland_vad_oath_states value = THIS }
+	}
+}
+
+# The oaths belong to the civil war: the local modifiers end with it, whoever
+# holds the district by then.
+ADISCORD_vorkerland_vad_retire_district_oaths = {
+	for_each_scope_loop = {
+		array = global.ADISCORD_vorkerland_vad_oath_states
+		if = {
+			limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district } }
+			remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district }
+		}
+		if = {
+			limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district } }
+			remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+		}
+		clr_state_flag = ADISCORD_vorkerland_vad_district_oath
+	}
+	clear_array = global.ADISCORD_vorkerland_vad_oath_states
 }
 
 # Either leader's route can seat at most five councils.

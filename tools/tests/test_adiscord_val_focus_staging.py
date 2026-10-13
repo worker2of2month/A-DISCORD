@@ -133,7 +133,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
                         f"${target}$", localisation[localisation.index(key) :]
                     )
 
-    def test_world_event_reveals_are_explained_in_root_descriptions(self) -> None:
+    def test_world_event_root_descriptions_omit_reveal_instructions(self) -> None:
         for localisation in (self.en_loc, self.ru_loc):
             stelander = re.search(
                 r'(?m)^\s*VAL_Stelander_Crisis_Opens_desc:\d*\s+"([^"]+)"', localisation
@@ -143,9 +143,9 @@ class KefreytFocusStagingTests(unittest.TestCase):
             )
             self.assertIsNotNone(stelander)
             self.assertIsNotNone(resource)
-            self.assertIn("§Y", stelander.group(1))
-            self.assertIn("§Y", resource.group(1))
-            self.assertIn("$VAL_Operational_Directorate$", resource.group(1))
+            self.assertNotIn("§Y", stelander.group(1))
+            self.assertNotIn("§Y", resource.group(1))
+            self.assertNotIn("$VAL_Operational_Directorate$", resource.group(1))
 
     def test_progression_tooltips_match_current_dependencies(self) -> None:
         from tools.tests.test_adiscord_stp_preparation import scalar, walk
@@ -292,7 +292,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
             )
             self.assertIn("prerequisite", block, focus_id)
 
-    def test_frontier_reveal_does_not_claim_the_focus_is_ready(self) -> None:
+    def test_frontier_requirements_stay_out_of_story_description(self) -> None:
         body = focus_block(self.focuses, "VAL_frontier_conference")
         groups = re.findall(r"prerequisite\s*=\s*\{([^}]+)\}", body)
         self.assertEqual(groups[0].strip(), "focus = VAL_Contracts_Outlive_Kings")
@@ -302,7 +302,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
                 r'(?m)^\s*VAL_frontier_conference_desc:\d*\s+"([^\"]+)"', source
             ).group(1)
             for dependency in dependencies:
-                self.assertIn(f"${dependency}$", description)
+                self.assertNotIn(f"${dependency}$", description)
             guide = re.search(
                 r'(?m)^\s*VAL_startup_guide:\d*\s+"([^\"]+)"', source
             ).group(1)

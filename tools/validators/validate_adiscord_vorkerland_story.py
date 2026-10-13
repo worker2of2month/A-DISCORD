@@ -46,7 +46,6 @@ STORY_NUMBERS = (
     33,
     34,
     35,
-    36,
     41,
     42,
     43,
@@ -71,7 +70,6 @@ VARIANT_DISPATCH = (
     ("ADISCORD_vorkerland_vad_variant_imperial", "ADISCORD_vorkerland_story.33"),
     ("ADISCORD_vorkerland_vad_variant_joint", "ADISCORD_vorkerland_story.34"),
     ("ADISCORD_vorkerland_tva_variant_throughput", "ADISCORD_vorkerland_story.35"),
-    ("ADISCORD_vorkerland_tva_variant_preservation", "ADISCORD_vorkerland_story.36"),
 )
 
 CAPITULATION_DISPATCH = (

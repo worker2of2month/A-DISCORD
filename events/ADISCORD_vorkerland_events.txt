@@ -1168,6 +1168,19 @@ country_event = {
 	immediate = { ADISCORD_vorkerland_apply_dorian_map = yes }
 }
 
+# Deferred central-outcome check after a capitulation; see
+# ADISCORD_vorkerland_schedule_outcome_recheck.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.102
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		clr_global_flag = ADISCORD_vorkerland_outcome_recheck_pending
+		ADISCORD_vorkerland_check_central_outcome = yes
+	}
+}
+
 # A freshly puppeted country finishes rebuilding its political cache after the
 # creating effect. This single deferred assertion avoids a permanent monthly
 # poll and prevents the generated John Smith from surviving that rebuild.
@@ -2949,8 +2962,9 @@ news_event = {
 # scope that draws a major news item does not resolve var = global.X.
 # Each centre is fire_only_once; the objectives_taken array and the story
 # reported-array still own the once-per-campaign guard.
-# Six doctrine declarations, six events. A single major news event with
-# check_variable title/desc blocks silently falls through to the generic
+# Doctrine declarations are regional news: only Vorkerland's claimants and
+# combatants see them. Five declarations, five events. A single major news
+# event with check_variable title/desc blocks silently falls through to the generic
 # fallback in this engine: the GUI scope that paints a major news item does
 # not resolve var = global.X. Worker's fate already uses one event per
 # outcome for the same reason. Each of these is fire_only_once; the
@@ -2962,6 +2976,12 @@ news_event = {
 	desc = ADISCORD_vorkerland_story.31.d
 	picture = GFX_news_event_adiscord_parliament_chamber
 	major = yes
+	show_major = {
+		OR = {
+			ADISCORD_vorkerland_is_main_claimant = yes
+			ADISCORD_vorkerland_is_minor_combatant = yes
+		}
+	}
 	is_triggered_only = yes
 	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.31.a }
@@ -2973,6 +2993,12 @@ news_event = {
 	desc = ADISCORD_vorkerland_story.32.d
 	picture = GFX_news_event_adiscord_parliament_chamber
 	major = yes
+	show_major = {
+		OR = {
+			ADISCORD_vorkerland_is_main_claimant = yes
+			ADISCORD_vorkerland_is_minor_combatant = yes
+		}
+	}
 	is_triggered_only = yes
 	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.32.a }
@@ -2984,6 +3010,12 @@ news_event = {
 	desc = ADISCORD_vorkerland_story.33.d
 	picture = GFX_news_event_adiscord_imperial_proclamation
 	major = yes
+	show_major = {
+		OR = {
+			ADISCORD_vorkerland_is_main_claimant = yes
+			ADISCORD_vorkerland_is_minor_combatant = yes
+		}
+	}
 	is_triggered_only = yes
 	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.33.a }
@@ -2995,6 +3027,12 @@ news_event = {
 	desc = ADISCORD_vorkerland_story.34.d
 	picture = GFX_news_event_adiscord_parliament_chamber
 	major = yes
+	show_major = {
+		OR = {
+			ADISCORD_vorkerland_is_main_claimant = yes
+			ADISCORD_vorkerland_is_minor_combatant = yes
+		}
+	}
 	is_triggered_only = yes
 	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.34.a }
@@ -3006,20 +3044,15 @@ news_event = {
 	desc = ADISCORD_vorkerland_story.35.d
 	picture = GFX_news_event_adiscord_parliament_chamber
 	major = yes
+	show_major = {
+		OR = {
+			ADISCORD_vorkerland_is_main_claimant = yes
+			ADISCORD_vorkerland_is_minor_combatant = yes
+		}
+	}
 	is_triggered_only = yes
 	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.35.a }
-}
-
-news_event = {
-	id = ADISCORD_vorkerland_story.36
-	title = ADISCORD_vorkerland_story.36.t
-	desc = ADISCORD_vorkerland_story.36.d
-	picture = GFX_news_event_adiscord_parliament_chamber
-	major = yes
-	is_triggered_only = yes
-	fire_only_once = no
-	option = { name = ADISCORD_vorkerland_story.36.a }
 }
 
 # A main claimant drops out of the central war. Fired in the capitulating

@@ -1586,7 +1586,7 @@
       "number": 13,
       "owner": "events/ADISCORD_rin_oath_crisis_events.txt",
       "subsystem": "rin_oath_crisis",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_rin_crisis.14",
@@ -2794,7 +2794,7 @@
       "number": 36,
       "owner": "events/ADISCORD_vorkerland_events.txt",
       "subsystem": "vorkerland_story",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_vorkerland_story.40",
@@ -3528,6 +3528,14 @@
       "id": "ADISCORD_vorkerland_collapse.101",
       "namespace": "ADISCORD_vorkerland_collapse",
       "number": 101,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_collapse",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_collapse.102",
+      "namespace": "ADISCORD_vorkerland_collapse",
+      "number": 102,
       "owner": "events/ADISCORD_vorkerland_events.txt",
       "subsystem": "vorkerland_collapse",
       "status": "active"

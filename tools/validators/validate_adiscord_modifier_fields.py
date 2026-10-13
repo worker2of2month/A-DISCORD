@@ -158,6 +158,18 @@ DYNAMIC_MODIFIER_SCOPES: dict[str, tuple[str, str]] = {
         COUNTRY,
         "applied to WKR by the war-economy branch head focus",
     ),
+    "ADISCORD_vorkerland_wkr_councils": (
+        COUNTRY,
+        "applied to WKR when its first worker council is seated",
+    ),
+    "ADISCORD_vorkerland_vad_chartered_district": (
+        STATE,
+        "applied to a central-district state when VAD seals its charter",
+    ),
+    "ADISCORD_vorkerland_vad_commandant_district": (
+        STATE,
+        "applied to a central-district state when VAD seals commandant rule",
+    ),
     "ADISCORD_vorkerland_vad_war_economy": (
         COUNTRY,
         "applied to VAD by the war-economy branch head focus",

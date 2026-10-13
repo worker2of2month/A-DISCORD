@@ -1656,7 +1656,25 @@ RUS_morale_check = {
 		country_event = { id = ADISCORD_rus_crisis.18 }
 	}
 	else = {
-		set_variable = { var = RUS_morale_stage value = RUS_morale_band }
+		# A band re-arms only once morale clears its threshold by ten points,
+		# so a front swinging across one threshold does not repeat the crisis.
+		set_temp_variable = { var = RUS_morale_rearm value = 0 }
+		if = {
+			limit = { check_variable = { var = RUS_army_morale value = 25 compare = less_than } }
+			set_temp_variable = { var = RUS_morale_rearm value = 3 }
+		}
+		else_if = {
+			limit = { check_variable = { var = RUS_army_morale value = 45 compare = less_than } }
+			set_temp_variable = { var = RUS_morale_rearm value = 2 }
+		}
+		else_if = {
+			limit = { check_variable = { var = RUS_army_morale value = 70 compare = less_than } }
+			set_temp_variable = { var = RUS_morale_rearm value = 1 }
+		}
+		if = {
+			limit = { check_variable = { var = RUS_morale_rearm value = RUS_morale_stage compare = less_than } }
+			set_variable = { var = RUS_morale_stage value = RUS_morale_rearm }
+		}
 	}
 }
 
@@ -3572,7 +3590,7 @@ RUS_prepare_hazard_template = {
 		division_template = {
 			name = "Khanate CBRN Brigade"
 			is_locked = yes
-			template_counter = 3
+			template_counter = 2
 			division_names_group = ADISCORD_INF_01
 			regiments = {
 				ADISCORD_hazard_infantry = {

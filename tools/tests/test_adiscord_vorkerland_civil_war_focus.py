@@ -2693,5 +2693,137 @@ class WorkerCouncilTests(unittest.TestCase):
         )
 
 
+class DistrictOathTests(unittest.TestCase):
+    """VAD trades legitimacy and men through one oath per central district."""
+
+    DECISIONS = (
+        "ADISCORD_vorkerland_vad_grant_district_charter",
+        "ADISCORD_vorkerland_vad_impose_commandant_rule",
+    )
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.blocks = focus_blocks(source_section(read(FOCUS_FILE), "civil_war_focus"))
+        cls.effects = read(PHASE_EFFECTS_FILE)
+        cls.decisions = read(Path("common/decisions/ADISCORD_vorkerland_decisions.txt"))
+
+    def test_both_oaths_share_one_state_lock_and_target_list(self) -> None:
+        targets = set()
+        for decision_id in self.DECISIONS:
+            decision = _blocks(self.decisions, decision_id)[0]
+            with self.subTest(decision=decision_id):
+                self.assertIn("NOT = { has_state_flag = ADISCORD_vorkerland_vad_district_oath }", decision)
+                self.assertIn("ADISCORD_vorkerland_vad_begin_district_oath = yes", _blocks(decision, "complete_effect")[0])
+                self.assertIn("ADISCORD_vorkerland_vad_release_district_oath = yes", _blocks(decision, "cancel_effect")[0])
+                targets.add(re.search(r"targets = \{([^}]*)\}", decision)[1].strip())
+        self.assertEqual(len(targets), 1)
+
+    def test_oaths_move_legitimacy_in_opposite_directions(self) -> None:
+        charter = _blocks(self.effects, "ADISCORD_vorkerland_vad_seal_district_charter")[0]
+        commandant = _blocks(self.effects, "ADISCORD_vorkerland_vad_seal_commandant_rule")[0]
+        self.assertIn("ADISCORD_vorkerland_legitimacy_delta = 0.03", charter)
+        self.assertIn("ADISCORD_vorkerland_legitimacy_delta = -0.02", commandant)
+        self.assertIn("add_manpower = 1500", commandant)
+
+    def test_oath_modifiers_end_with_the_civil_war(self) -> None:
+        retire = _blocks(self.effects, "ADISCORD_vorkerland_retire_civil_war_modifiers")[0]
+        self.assertEqual(retire.count("ADISCORD_vorkerland_vad_retire_district_oaths = yes"), 1)
+        oaths = _blocks(self.effects, "ADISCORD_vorkerland_vad_retire_district_oaths")[0]
+        for modifier in ("ADISCORD_vorkerland_vad_chartered_district", "ADISCORD_vorkerland_vad_commandant_district"):
+            self.assertIn(f"limit = {{ has_dynamic_modifier = {{ modifier = {modifier} }} }}", oaths)
+        self.assertIn("clear_array = global.ADISCORD_vorkerland_vad_oath_states", oaths)
+
+    def test_focuses_unlock_the_matching_oath(self) -> None:
+        for focus_id, decision_id in (
+            ("VAD_open_imperial_registers", "ADISCORD_vorkerland_vad_grant_district_charter"),
+            ("VAD_form_field_commandantures", "ADISCORD_vorkerland_vad_impose_commandant_rule"),
+        ):
+            with self.subTest(focus_id=focus_id):
+                self.assertIn(f"unlock_decision_tooltip = {decision_id}", self.blocks[focus_id])
+                self.assertIn(f"has_completed_focus = {focus_id}", _blocks(self.decisions, decision_id)[0])
+
+
+class CentralOutcomeRecheckTests(unittest.TestCase):
+    """A capitulation must not leave the central victory waiting for a new war."""
+
+    def test_capitulation_queues_one_deferred_outcome_check(self) -> None:
+        peace = read(Path("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"))
+        section = peace[peace.index("# BEGIN vorkerland_collapse:on_capitulation\n"):peace.index("# END vorkerland_collapse:on_capitulation\n")]
+        self.assertLess(
+            section.index("ADISCORD_vorkerland_check_central_outcome = yes"),
+            section.index("ADISCORD_vorkerland_schedule_outcome_recheck = yes"),
+        )
+        schedule = _blocks(read(PHASE_EFFECTS_FILE), "ADISCORD_vorkerland_schedule_outcome_recheck")[0]
+        self.assertIn("NOT = { has_global_flag = ADISCORD_vorkerland_outcome_recheck_pending }", schedule)
+        self.assertEqual(schedule.count("id = ADISCORD_vorkerland_collapse.102 days = 1"), 3)
+        events = read(CLAIMANT_EVENTS_FILE)
+        recheck = events[events.index("id = ADISCORD_vorkerland_collapse.102"):]
+        recheck = recheck[:recheck.index("\n}\n")]
+        self.assertIn("clr_global_flag = ADISCORD_vorkerland_outcome_recheck_pending", recheck)
+        self.assertIn("ADISCORD_vorkerland_check_central_outcome = yes", recheck)
+
+
+class FieldTrialTests(unittest.TestCase):
+    """TVA field trials: a paid risk whose odds improve with every iteration."""
+
+    ITERATION_FOCUSES = (
+        "TVA_integrate_field_results",
+        "TVA_cross_validate_trial_logs",
+        "TVA_delegate_to_algorithmic_board",
+    )
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.blocks = focus_blocks(source_section(read(FOCUS_FILE), "civil_war_focus"))
+        cls.effects = read(PHASE_EFFECTS_FILE)
+        cls.decisions = read(Path("common/decisions/ADISCORD_vorkerland_decisions.txt"))
+        cls.triggers = read(Path("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"))
+
+    def test_success_chance_climbs_by_fifteen_per_iteration(self) -> None:
+        resolve = _blocks(self.effects, "ADISCORD_vorkerland_tva_resolve_field_trial")[0]
+        weights = [
+            (int(success), int(failure))
+            for success, failure in re.findall(
+                r"(\d+) = \{ ADISCORD_vorkerland_tva_field_trial_success = yes \}\s*"
+                r"(\d+) = \{ ADISCORD_vorkerland_tva_field_trial_failure = yes \}",
+                resolve,
+            )
+        ]
+        self.assertEqual(weights, [(85, 15), (70, 30), (55, 45), (40, 60)])
+        self.assertEqual(resolve.count("ADISCORD_vorkerland_tva_add_iteration = yes"), 1)
+
+    def test_price_is_checked_and_debited_once(self) -> None:
+        decision = _blocks(self.decisions, "ADISCORD_vorkerland_tva_run_field_trial")[0]
+        self.assertIn("cost = 0", decision)
+        self.assertIn("ADISCORD_vorkerland_tva_trial_affordable = yes", decision)
+        begin = _blocks(self.effects, "ADISCORD_vorkerland_tva_begin_field_trial")[0]
+        self.assertEqual(begin.count("add_political_power = -30"), 1)
+        self.assertEqual(begin.count("type = infantry_equipment amount = -1000"), 1)
+        affordable = _blocks(self.triggers, "ADISCORD_vorkerland_tva_trial_affordable")[0]
+        self.assertIn("NOT = { has_political_power < 30 }", affordable)
+        self.assertIn("NOT = { has_equipment = { infantry_equipment < 1000 } }", affordable)
+
+    def test_bonus_follows_the_committed_protocol(self) -> None:
+        success = _blocks(self.effects, "ADISCORD_vorkerland_tva_field_trial_success")[0]
+        for focus_id, category in (
+            ("TVA_raise_technical_battalions", "infantry_weapons"),
+            ("TVA_test_remote_fire_control", "electronics"),
+            ("TVA_test_adaptive_logistics", "support_tech"),
+        ):
+            with self.subTest(focus_id=focus_id):
+                branch = success[success.index(f"has_completed_focus = {focus_id}"):]
+                self.assertIn(f"category = {category}", branch[:branch.index("}\n\t}")])
+
+    def test_focuses_contribute_iterations(self) -> None:
+        for focus_id in self.ITERATION_FOCUSES:
+            with self.subTest(focus_id=focus_id):
+                reward = _blocks(self.blocks[focus_id], "completion_reward")[0]
+                self.assertEqual(reward.count("ADISCORD_vorkerland_tva_add_iteration = yes"), 1)
+        self.assertIn(
+            "unlock_decision_tooltip = ADISCORD_vorkerland_tva_run_field_trial",
+            self.blocks["TVA_select_trial_protocol"],
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
