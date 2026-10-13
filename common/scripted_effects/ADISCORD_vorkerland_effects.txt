@@ -7415,6 +7415,7 @@ ADISCORD_vorkerland_clear_claimant_war_modifiers = {
 	if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_doctrine } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_doctrine } }
 	if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_doctrine } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_doctrine } }
 	if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_war_economy } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_war_economy } }
+	if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_councils } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_councils } }
 	if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_war_economy } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_war_economy } }
 	if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_war_economy } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_war_economy } }
 	if = { limit = { has_idea = ADISCORD_vorkerland_theatre_priority } remove_ideas = ADISCORD_vorkerland_theatre_priority }
@@ -10480,6 +10481,76 @@ ADISCORD_vorkerland_refresh_war_economy_dynamic_state = {
 	}
 	multiply_variable = { ADISCORD_vorkerland_war_economy_scale_display = 100 }
 	ADISCORD_economy_mark_dirty = yes
+}
+
+# Worker councils, WKR only. Seated councils run the factories; a mobilised
+# council has left them for the front for the rest of the civil war. Only focus
+# rewards and the mobilisation decision write the counts, so the aggregate is
+# refreshed on those writes instead of on a pulse.
+ADISCORD_vorkerland_wkr_refresh_councils = {
+	set_variable = { var = ADISCORD_vorkerland_wkr_council_output value = ADISCORD_vorkerland_wkr_councils }
+	subtract_from_variable = { var = ADISCORD_vorkerland_wkr_council_output value = ADISCORD_vorkerland_wkr_councils_mobilized }
+	multiply_variable = { var = ADISCORD_vorkerland_wkr_council_output value = 0.03 }
+	set_variable = { var = ADISCORD_vorkerland_wkr_council_stability value = ADISCORD_vorkerland_wkr_councils }
+	multiply_variable = { var = ADISCORD_vorkerland_wkr_council_stability value = 0.01 }
+	set_variable = { var = ADISCORD_vorkerland_wkr_council_conscription value = ADISCORD_vorkerland_wkr_councils_mobilized }
+	multiply_variable = { var = ADISCORD_vorkerland_wkr_council_conscription value = 0.004 }
+	if = {
+		limit = {
+			NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_councils } }
+		}
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_councils }
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+ADISCORD_vorkerland_wkr_seat_council = {
+	effect_tooltip = { add_ideas = ADISCORD_vorkerland_wkr_council_seated_dummy }
+	hidden_effect = {
+		add_to_variable = { var = ADISCORD_vorkerland_wkr_councils value = 1 }
+		ADISCORD_vorkerland_wkr_refresh_councils = yes
+	}
+}
+
+# Reserves one working council at the start of its mobilisation so it cannot be
+# sent twice. The caller refreshes the aggregate.
+ADISCORD_vorkerland_wkr_withdraw_council = {
+	add_to_variable = { var = ADISCORD_vorkerland_wkr_councils_mobilized value = 1 }
+}
+
+ADISCORD_vorkerland_wkr_council_battalion = {
+	add_manpower = 2500
+	add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = ROOT }
+}
+
+# Either leader's route can seat at most five councils.
+ADISCORD_vorkerland_wkr_mobilize_all_councils = {
+	if = {
+		limit = { ADISCORD_vorkerland_wkr_has_working_council = yes }
+		ADISCORD_vorkerland_wkr_withdraw_council = yes
+		ADISCORD_vorkerland_wkr_council_battalion = yes
+	}
+	if = {
+		limit = { ADISCORD_vorkerland_wkr_has_working_council = yes }
+		ADISCORD_vorkerland_wkr_withdraw_council = yes
+		ADISCORD_vorkerland_wkr_council_battalion = yes
+	}
+	if = {
+		limit = { ADISCORD_vorkerland_wkr_has_working_council = yes }
+		ADISCORD_vorkerland_wkr_withdraw_council = yes
+		ADISCORD_vorkerland_wkr_council_battalion = yes
+	}
+	if = {
+		limit = { ADISCORD_vorkerland_wkr_has_working_council = yes }
+		ADISCORD_vorkerland_wkr_withdraw_council = yes
+		ADISCORD_vorkerland_wkr_council_battalion = yes
+	}
+	if = {
+		limit = { ADISCORD_vorkerland_wkr_has_working_council = yes }
+		ADISCORD_vorkerland_wkr_withdraw_council = yes
+		ADISCORD_vorkerland_wkr_council_battalion = yes
+	}
+	ADISCORD_vorkerland_wkr_refresh_councils = yes
 }
 
 # --- superevent_observer ---

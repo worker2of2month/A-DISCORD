@@ -1860,6 +1860,14 @@ ADISCORD_vorkerland_reserve_cache_kept_by_ROOT = {
 	}
 }
 
+ADISCORD_vorkerland_wkr_has_working_council = {
+	check_variable = {
+		var = ADISCORD_vorkerland_wkr_councils
+		value = ADISCORD_vorkerland_wkr_councils_mobilized
+		compare = greater_than
+	}
+}
+
 # --- stalemate_triggers ---
 # A fresh-campaign anti-stalemate window is valid only during the claimant
 # preparation phase. It never follows the campaign into the showdown or the

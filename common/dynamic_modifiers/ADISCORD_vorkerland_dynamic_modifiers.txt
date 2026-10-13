@@ -81,6 +81,18 @@ ADISCORD_vorkerland_wkr_war_economy = {
 	political_power_gain = ADISCORD_vorkerland_war_economy_authority
 }
 
+# Worker councils (WKR). ADISCORD_vorkerland_wkr_refresh_councils supplies the
+# values whenever a council is seated or mobilised.
+ADISCORD_vorkerland_wkr_councils = {
+	icon = GFX_idea_generic_production_bonus
+	enable = { always = yes }
+	custom_modifier_tooltip = ADISCORD_vorkerland_wkr_councils_tt
+
+	industrial_capacity_factory = ADISCORD_vorkerland_wkr_council_output
+	stability_factor = ADISCORD_vorkerland_wkr_council_stability
+	conscription = ADISCORD_vorkerland_wkr_council_conscription
+}
+
 ADISCORD_vorkerland_vad_war_economy = {
 	icon = GFX_idea_generic_manpower_bonus
 	enable = { always = yes }

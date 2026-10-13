@@ -2409,6 +2409,22 @@ ideas = {
 				political_power_gain = 0.10
 			}
 		}
+		ADISCORD_vorkerland_wkr_council_seated_dummy = {
+			name = ADISCORD_vorkerland_wkr_councils
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				stability_factor = 0.01
+			}
+		}
+		ADISCORD_vorkerland_wkr_council_mobilized_dummy = {
+			name = ADISCORD_vorkerland_wkr_councils
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = -0.03
+				conscription = 0.004
+			}
+		}
 		ADISCORD_vorkerland_vad_war_economy_dummy = {
 			name = ADISCORD_vorkerland_vad_war_economy
 			allowed = { always = no }

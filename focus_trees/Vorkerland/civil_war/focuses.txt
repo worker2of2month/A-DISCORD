@@ -746,7 +746,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_front_soviets }
 		completion_reward = {
-			add_political_power = 50
+			add_political_power = 25
+			ADISCORD_vorkerland_wkr_seat_council = yes
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_front_soviets
 			}
@@ -790,10 +791,9 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_factory_battalions }
 		completion_reward = {
-			add_manpower = 600
+			ADISCORD_vorkerland_wkr_seat_council = yes
 			army_experience = 5
-			add_stability = -0.01
-			add_timed_idea = { idea = ADISCORD_vorkerland_wrk_front_committees days = 35 }
+			unlock_decision_tooltip = ADISCORD_vorkerland_wkr_mobilize_council
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_factory_battalions
 			}
@@ -836,7 +836,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_railways_under_councils }
 		completion_reward = {
-			add_timed_idea = { idea = ADISCORD_vorkerland_wrk_rail_requisition days = 35 }
+			ADISCORD_vorkerland_wkr_seat_council = yes
 			add_command_power = 5
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_railways_under_councils
@@ -1286,10 +1286,10 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = infantry_equipment_0
-				amount = 9000
+				amount = 4500
 				producer = WKR
 			}
-			add_stability = -0.005
+			ADISCORD_vorkerland_wkr_seat_council = yes
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_directed_workshops
 			}
@@ -9605,7 +9605,7 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { add_ideas = ADISCORD_vorkerland_wkr_war_economy_dummy }
 			add_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_war_economy }
-			add_political_power = 20
+			ADISCORD_vorkerland_wkr_seat_council = yes
 			add_tech_bonus = { name = ADISCORD_vorkerland_wkr_production_soviet bonus = 0.5 uses = 1 category = industry }
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_convene_the_production_soviet
@@ -10075,7 +10075,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_seat_the_factory_councils }
 		completion_reward = {
-			add_political_power = 15
+			ADISCORD_vorkerland_wkr_seat_council = yes
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.06 }
 			ADISCORD_vorkerland_add_legitimacy = yes
 			hidden_effect = {
@@ -10169,8 +10169,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_requisition_in_the_republics_name }
 		completion_reward = {
-			add_manpower = 600
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = WKR }
+			custom_effect_tooltip = ADISCORD_vorkerland_wkr_requisition_councils_tt
+			hidden_effect = { ADISCORD_vorkerland_wkr_mobilize_all_councils = yes }
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.05 }
 			ADISCORD_vorkerland_add_legitimacy = yes
 			hidden_effect = {
