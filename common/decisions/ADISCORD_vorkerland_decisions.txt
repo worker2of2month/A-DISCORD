@@ -2440,6 +2440,12 @@ ADISCORD_vorkerland_focus_operations_category = {
 				diplomatic_relation = { country = TRU relation = non_aggression_pact active = yes }
 			}
 			set_country_flag = ADISCORD_vorkerland_free_republics_recognized
+			custom_effect_tooltip = ADISCORD_west_free_republics_lean_tt
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_west_push value = 30 }
+				ROM = { ADISCORD_west_push_lean = yes }
+				TRU = { ADISCORD_west_push_lean = yes }
+			}
 		}
 		ai_will_do = { factor = 300 }
 	}
@@ -2449,9 +2455,9 @@ ADISCORD_vorkerland_focus_operations_category = {
 		allowed = { tag = WRK }
 		visible = {
 			OR = {
-				has_completed_focus = WRK_worker_pw_ebern_campaign
+				has_completed_focus = WRK_conf_southern_solidarity
 				has_completed_focus = WRK_joint_pw_ebern_campaign
-				has_completed_focus = WRK_utilitarian_pw_ebern_campaign
+				has_completed_focus = WRK_tech_southern_programme
 			}
 			NOT = { ADISCORD_vorkerland_pw_ebern_settled = yes }
 		}
@@ -2480,9 +2486,9 @@ ADISCORD_vorkerland_focus_operations_category = {
 		allowed = { tag = WRK }
 		visible = {
 			OR = {
-				has_completed_focus = WRK_worker_pw_afrela_campaign
+				has_completed_focus = WRK_conf_southern_solidarity
 				has_completed_focus = WRK_joint_pw_afrela_campaign
-				has_completed_focus = WRK_utilitarian_pw_afrela_campaign
+				has_completed_focus = WRK_tech_southern_programme
 			}
 			NOT = { ADISCORD_vorkerland_pw_afrela_settled = yes }
 		}

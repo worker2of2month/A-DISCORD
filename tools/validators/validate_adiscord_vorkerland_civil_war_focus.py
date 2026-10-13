@@ -773,28 +773,17 @@ POSTWAR_ROUTE_FOCUSES = {
     ),
 }
 
-# The War for the West follows each route's reconstruction in a separate band.
-# Its drop-in sprites resolve to existing native goal art rather than the
+# The War for the West follows the joint route's reconstruction in a separate
+# band. Its drop-in sprites resolve to existing native goal art rather than the
 # shared fallback, so they stay outside the drop-in texture manifest; the
-# lifecycle order inserts them after reconstruction.
+# lifecycle order inserts them after reconstruction. The worker and
+# technocratic routes continue in their own trees after the Unity Tower.
 WEST_ROUTE_FOCUSES = {
-    "ADISCORD_vorkerland_route_worker": (
-        "WRK_worker_west_mandate_offices",
-        "WRK_worker_west_solidarity_committees",
-        "WRK_worker_west_mandate_for_itora",
-        "WRK_worker_west_confederate_charter",
-    ),
     "ADISCORD_vorkerland_route_joint": (
         "WRK_joint_west_frontier_commands",
         "WRK_joint_west_imperial_columns",
         "WRK_joint_west_return_of_the_marches",
         "WRK_joint_west_imperial_settlement",
-    ),
-    "ADISCORD_vorkerland_route_utilitarian": (
-        "WRK_utilitarian_west_corridor_survey",
-        "WRK_utilitarian_west_engineer_battalions",
-        "WRK_utilitarian_west_engineering_border",
-        "WRK_utilitarian_west_technical_trusteeship",
     ),
 }
 WEST_FOCUS_IDS = tuple(
@@ -806,25 +795,13 @@ WEST_TOOLTIP_KEYS = (
     "WRK_west_reconstruction_ready_tt",
     "WRK_west_crisis_add_tt",
     "WRK_west_final_ready_tt",
-    "WRK_worker_west_war_tt",
     "WRK_joint_west_war_tt",
-    "WRK_utilitarian_west_war_tt",
 )
 WEST_BAND_BY_ROUTE = {
-    "ADISCORD_vorkerland_route_worker": "west_worker",
     "ADISCORD_vorkerland_route_joint": "west_joint",
-    "ADISCORD_vorkerland_route_utilitarian": "west_utilitarian",
 }
 
 RECONSTRUCTION_ROUTE_FOCUSES = {
-    "ADISCORD_vorkerland_route_worker": (
-        "WRK_worker_resettle_veteran_families",
-        "WRK_worker_reopen_cooperative_workshops",
-        "WRK_worker_coordinate_republic_supply",
-        "WRK_worker_complete_workers_housing",
-        "WRK_worker_empower_municipal_councils",
-        "WRK_worker_secure_social_guarantees",
-    ),
     "ADISCORD_vorkerland_route_joint": (
         "WRK_joint_restore_civil_service",
         "WRK_joint_audit_district_arsenals",
@@ -832,14 +809,6 @@ RECONSTRUCTION_ROUTE_FOCUSES = {
         "WRK_joint_transfer_garrisons_to_civil_order",
         "WRK_joint_inspect_remaining_arsenals",
         "WRK_joint_ratify_common_state_budget",
-    ),
-    "ADISCORD_vorkerland_route_utilitarian": (
-        "WRK_utilitarian_equip_grid_repair_crews",
-        "WRK_utilitarian_standardize_civilian_production",
-        "WRK_utilitarian_school_technical_specialists",
-        "WRK_utilitarian_prioritize_municipal_repairs",
-        "WRK_utilitarian_commission_automated_workshops",
-        "WRK_utilitarian_complete_reconstruction_programme",
     ),
 }
 RECONSTRUCTION_FOCUS_IDS = tuple(
@@ -1098,7 +1067,7 @@ POSTWAR_EXPANSION_ROUTES = {
     f"ADISCORD_vorkerland_route_{route}": tuple(
         f"WRK_{route}_pw_{slug}" for slug in POSTWAR_EXPANSION_SLUGS
     )
-    for route in ("worker", "joint", "utilitarian")
+    for route in ("joint",)
 }
 POSTWAR_EXPANSION_IDS = tuple(
     focus_id for route_ids in POSTWAR_EXPANSION_ROUTES.values() for focus_id in route_ids
@@ -2854,19 +2823,18 @@ def expected_localisation_keys() -> set[str]:
         "ADISCORD_vorkerland_pw_delta_civil_building",
         "ADISCORD_vorkerland_pw_delta_cadres",
         "ADISCORD_vorkerland_pw_delta_officers",
-        "ADISCORD_vorkerland_pw_delta_exercises",
         "ADISCORD_vorkerland_pw_delta_logistics",
         "ADISCORD_vorkerland_pw_delta_training",
-        "ADISCORD_vorkerland_pw_delta_worker_army",
         "ADISCORD_vorkerland_pw_delta_standards",
         "ADISCORD_vorkerland_pw_delta_tools",
         "ADISCORD_vorkerland_pw_delta_output",
         "ADISCORD_vorkerland_pw_delta_joint_army",
-        "ADISCORD_vorkerland_pw_delta_utilitarian_army",
         "ADISCORD_vorkerland_pw_delta_attack",
         "ADISCORD_vorkerland_pw_rebuild_district",
         "ADISCORD_vorkerland_pw_rebuild_district_desc",
         "WRK_pw_reconstruction_unlock_tt",
+        "WRK_worker_confederation_tree_tt",
+        "WRK_technical_directorate_tree_tt",
         "WRK_pw_reconstruction_slot_tt",
         "WRK_pw_rebuild_slot_tt",
         "WRK_pw_rebuild_start_tt",

@@ -335,17 +335,28 @@ class CountryDevelopmentReformTests(unittest.TestCase):
             self.assertIn(f"mutually_exclusive = {{ focus = {alternative} }}", body)
             self.assertIn("ADISCORD_reform_social_system_development = yes", body)
         text = (ROOT / "focus_trees/Vorkerland/civil_war/focuses.txt").read_text(encoding="utf-8")
-        for route in ("worker", "joint", "utilitarian"):
-            pairs = {
-                "pw_census": "society", "pw_municipal_network": "social_system",
-                "pw_officer_school": "army", "restore_unity_tower": "cultural",
-                "pw_service_charter": "state", "pw_production_board": "economic",
-            }
-            for suffix, axis in pairs.items():
-                body = focus_block(text, f"WRK_{route}_{suffix}")
-                self.assertIn(f"has_country_flag = ADISCORD_vorkerland_route_{route}", body)
-                self.assertNotIn("bypass =", body)
-                self.assertIn(f"ADISCORD_reform_{axis}_development = yes", body)
+        pairs = {
+            "pw_census": "society", "pw_municipal_network": "social_system",
+            "pw_officer_school": "army", "restore_unity_tower": "cultural",
+            "pw_service_charter": "state", "pw_production_board": "economic",
+        }
+        for suffix, axis in pairs.items():
+            body = focus_block(text, f"WRK_joint_{suffix}")
+            self.assertIn("has_country_flag = ADISCORD_vorkerland_route_joint", body)
+            self.assertNotIn("bypass =", body)
+            self.assertIn(f"ADISCORD_reform_{axis}_development = yes", body)
+        # The worker and technocratic routes take culture from their Unity Tower
+        # and the other five axes, once each, from their own postwar tree.
+        for route, folder in (("worker", "worker_confederation"), ("utilitarian", "technical_directorate")):
+            tower = focus_block(text, f"WRK_{route}_restore_unity_tower")
+            self.assertIn("ADISCORD_reform_cultural_development = yes", tower)
+            tree = (ROOT / f"focus_trees/Vorkerland/{folder}/focuses.txt").read_text(encoding="utf-8")
+            axes = re.findall(pattern, tree)
+            self.assertCountEqual(axes, ("society", "social_system", "army", "state", "economic"), route)
+            self.assertNotIn("mutually_exclusive", "".join(
+                focus_block(tree, key) for key in re.findall(r"(?m)^\t\tid = (\w+)", tree)
+                if re.search(pattern, focus_block(tree, key))
+            ), route)
         shabrat = (ROOT / "focus_trees/STP/postwar/shabrat/focuses.txt").read_text(encoding="utf-8")
         self.assertCountEqual(re.findall(pattern, shabrat), ("social_system", "army", "cultural"))
         for axis in ("society", "state", "economic"):

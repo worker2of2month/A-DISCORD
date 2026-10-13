@@ -2725,14 +2725,6 @@ ideas = {
 			}
 		}
 
-		ADISCORD_vorkerland_pw_delta_exercises = {
-			picture = generic_production_bonus
-			allowed = { always = no }
-			modifier = {
-				army_defence_factor = 0.04
-			}
-		}
-
 		ADISCORD_vorkerland_pw_delta_logistics = {
 			picture = generic_production_bonus
 			allowed = { always = no }
@@ -2754,16 +2746,6 @@ ideas = {
 			allowed = { always = no }
 			modifier = {
 				training_time_army_factor = -0.05
-			}
-		}
-
-		ADISCORD_vorkerland_pw_delta_worker_army = {
-			picture = generic_production_bonus
-			allowed = { always = no }
-			modifier = {
-				army_org_factor = 0.03
-				army_morale_factor = 0.05
-				army_defence_factor = 0.04
 			}
 		}
 
@@ -2801,15 +2783,14 @@ ideas = {
 			}
 		}
 
-		ADISCORD_vorkerland_pw_delta_utilitarian_army = {
+		WRK_empire_delta_army_oath = {
 			picture = generic_production_bonus
 			allowed = { always = no }
 			modifier = {
-				army_org_factor = 0.03
-				army_defence_factor = 0.05
-				supply_consumption_factor = -0.05
+				army_org_factor = 0.05
 			}
 		}
+
 		WRK_empire_delta_steel_directorate = {
 			picture = generic_production_bonus
 			allowed = { always = no }
@@ -2822,7 +2803,15 @@ ideas = {
 			picture = generic_production_bonus
 			allowed = { always = no }
 			modifier = {
-				industrial_capacity_factory = 0.15
+				industrial_capacity_factory = 0.10
+			}
+		}
+
+		WRK_empire_delta_mobilized_economy = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.10
 			}
 		}
 
@@ -2830,15 +2819,7 @@ ideas = {
 			picture = generic_production_bonus
 			allowed = { always = no }
 			modifier = {
-				army_org_factor = 0.10
-			}
-		}
-
-		WRK_empire_delta_state_legions = {
-			picture = generic_production_bonus
-			allowed = { always = no }
-			modifier = {
-				army_defence_factor = 0.10
+				army_org_factor = 0.05
 			}
 		}
 
@@ -2846,7 +2827,7 @@ ideas = {
 			picture = generic_production_bonus
 			allowed = { always = no }
 			modifier = {
-				army_attack_factor = 0.10
+				army_attack_factor = 0.05
 			}
 		}
 
@@ -2854,8 +2835,26 @@ ideas = {
 			picture = generic_production_bonus
 			allowed = { always = no }
 			modifier = {
-				army_attack_factor = 0.10
-				army_defence_factor = 0.10
+				army_attack_factor = 0.15
+				army_defence_factor = 0.05
+			}
+		}
+
+		WRK_empire_delta_motor_columns = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+				army_org_factor = 0.10
+				supply_consumption_factor = -0.20
+			}
+		}
+
+		WRK_empire_delta_state_legions = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.15
 			}
 		}
 
@@ -2869,11 +2868,170 @@ ideas = {
 			}
 		}
 
-		WRK_empire_delta_motor_columns = {
+		# Worker confederation and technical directorate trees.
+		ADISCORD_vorkerland_pw_delta_conf_workers_housing = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				industry_repair_factor = 0.15
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_conf_municipal_councils = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.10
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_conf_social_guarantees = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_conf_production_councils = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.10
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_conf_shared_standards = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.05
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_conf_elected_officers = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.05
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_conf_people_in_arms = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.10
+				training_time_army_factor = -0.10
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_conf_red_engineers = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.10
+				supply_consumption_factor = -0.10
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_conf_army_of_the_republics = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+				army_defence_factor = 0.05
+				army_org_factor = 0.05
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_tech_directorate_plan = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.05
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_tech_grid_repair_crews = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				industry_repair_factor = 0.15
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_tech_district_metrics = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.10
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_tech_automated_workshops = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_tech_municipal_utilities = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_tech_measured_economy = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.10
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_tech_machine_tool_pool = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.05
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_tech_engineering_corps = {
 			picture = generic_production_bonus
 			allowed = { always = no }
 			modifier = {
 				supply_consumption_factor = -0.10
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_tech_measured_front = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.15
+				army_org_factor = 0.05
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_tech_fire_superiority = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.15
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_tech_command_calculus = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.05
+				army_attack_factor = 0.05
 			}
 		}
 # --- end_postwar_expansion_ideas ---

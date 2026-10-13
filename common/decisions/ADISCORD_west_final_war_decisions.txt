@@ -23,6 +23,125 @@ ADISCORD_west_final_war_category = {
 		}
 	}
 
+	# A short defensive measure for the Itoran marches.
+	ADISCORD_west_ivn_hold_the_marches = {
+		icon = generic_army_support
+		allowed = { tag = IVN }
+		visible = {
+			ADISCORD_west_final_active = yes
+			ADISCORD_west_on_ivn_side = yes
+			has_completed_focus = IVN_west_war_council
+		}
+		available = {
+			has_war_with = WRK
+		}
+		cost = 75
+		days_re_enable = 120
+		complete_effect = {
+			add_timed_idea = {
+				idea = ADISCORD_west_ivn_march_defence
+				days = 60
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+}
+
+# Both champions court the eleven western states. ROOT is the champion, FROM
+# the courted state. The lean scale and its thresholds are described in the
+# west influence section of the scripted effects.
+ADISCORD_west_influence_category = {
+	ADISCORD_west_send_envoys = {
+		icon = generic_diplomatic_treaty
+		allowed = {
+			OR = {
+				tag = WRK
+				tag = IVN
+			}
+		}
+		targets = { WIT IIA IBA IBL PWR PSD ZAO WPA WPS ROM TRU }
+		target_root_trigger = {
+			ADISCORD_west_influence_open = yes
+			ADISCORD_west_champion_viable = yes
+		}
+		target_trigger = {
+			FROM = { ADISCORD_west_influence_target_valid = yes }
+		}
+		cost = 25
+		fire_only_once = no
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_west_send_envoys_tt
+			hidden_effect = {
+				FROM = { ADISCORD_west_send_envoys = yes }
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				add = 15
+				FROM = { ADISCORD_west_corridor_owner = yes }
+			}
+			modifier = {
+				add = 10
+				FROM = { ADISCORD_west_lean_contested_by_root = yes }
+			}
+			modifier = {
+				factor = 0
+				FROM = { ADISCORD_west_leans_to_root_ally = yes }
+				ADISCORD_west_final_active = no
+			}
+		}
+	}
+
+	ADISCORD_west_ship_arms = {
+		icon = generic_army_support
+		allowed = {
+			OR = {
+				tag = WRK
+				tag = IVN
+			}
+		}
+		targets = { WIT IIA IBA IBL PWR PSD ZAO WPA WPS ROM TRU }
+		target_root_trigger = {
+			ADISCORD_west_influence_open = yes
+			ADISCORD_west_champion_viable = yes
+		}
+		target_trigger = {
+			FROM = { ADISCORD_west_influence_target_valid = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_west_ship_arms_stock_tt
+				NOT = { has_equipment = { infantry_equipment < 1000 } }
+			}
+		}
+		cost = 10
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_west_ship_arms_tt
+			hidden_effect = {
+				FROM = { ADISCORD_west_ship_arms = yes }
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 15
+				FROM = { ADISCORD_west_corridor_owner = yes }
+				NOT = { has_equipment = { infantry_equipment < 5000 } }
+			}
+			modifier = {
+				factor = 0
+				FROM = { ADISCORD_west_leans_to_root_ally = yes }
+				ADISCORD_west_final_active = no
+			}
+		}
+	}
+
 	# Vorkerland's counterpart to the League of Free Republics. The invited
 	# state answers itself; only the political price is paid here.
 	ADISCORD_west_wrk_offer_front_treaty = {
@@ -54,6 +173,10 @@ ADISCORD_west_final_war_category = {
 				tooltip = ADISCORD_west_wrk_treaty_target_tt
 				FROM = { ADISCORD_west_league_target_valid = yes }
 			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_west_ally_lean_tt
+				FROM = { ADISCORD_west_leans_to_wrk_ally = yes }
+			}
 		}
 		cost = 50
 		fire_only_once = no
@@ -68,38 +191,223 @@ ADISCORD_west_final_war_category = {
 			base = 40
 			modifier = {
 				factor = 2
-				FROM = {
-					OR = {
-						tag = PWR
-						tag = PSD
-						tag = ZAO
-					}
-				}
+				FROM = { ADISCORD_west_corridor_owner = yes }
 			}
 		}
 	}
 
-	# A short defensive measure for the Itoran marches.
-	ADISCORD_west_ivn_hold_the_marches = {
-		icon = generic_army_support
+	ADISCORD_west_ivn_offer_league = {
+		icon = generic_diplomatic_treaty
 		allowed = { tag = IVN }
+		targets = { WIT IIA IBA IBL PWR PSD ZAO WPA WPS ROM TRU }
+		target_root_trigger = {
+			ADISCORD_west_crisis_open = yes
+			ADISCORD_west_ivn_league_unlocked = yes
+		}
+		target_trigger = {
+			FROM = {
+				exists = yes
+				is_subject = no
+			}
+		}
 		visible = {
-			ADISCORD_west_final_active = yes
-			ADISCORD_west_on_ivn_side = yes
+			ADISCORD_west_crisis_open = yes
 		}
 		available = {
-			has_war_with = WRK
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_west_ivn_league_command_tt
+				OR = {
+					is_in_faction = no
+					is_faction_leader = yes
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_west_wrk_treaty_target_tt
+				FROM = { ADISCORD_west_league_target_valid = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_west_ally_lean_tt
+				FROM = { ADISCORD_west_leans_to_ivn_ally = yes }
+			}
 		}
-		cost = 75
-		days_re_enable = 120
+		cost = 50
+		fire_only_once = no
+		days_re_enable = 60
 		complete_effect = {
-			add_timed_idea = {
-				idea = ADISCORD_west_ivn_march_defence
-				days = 60
+			custom_effect_tooltip = ADISCORD_west_ivn_offer_league_tt
+			hidden_effect = {
+				FROM = { ADISCORD_west_send_league_invitation = yes }
 			}
 		}
 		ai_will_do = {
-			base = 20
+			base = 40
+			modifier = {
+				factor = 2
+				FROM = { ADISCORD_west_corridor_owner = yes }
+			}
+		}
+	}
+
+	# Itoran courses court the West in their own way.
+	ADISCORD_west_ivn_humanitarian_convoys = {
+		icon = generic_political_discourse
+		allowed = { tag = IVN }
+		targets = { WIT IIA IBA IBL PWR PSD ZAO WPA WPS ROM TRU }
+		target_root_trigger = {
+			ADISCORD_west_influence_open = yes
+			ADISCORD_west_champion_viable = yes
+			has_completed_focus = IVN_shield_red_cross_corridors
+		}
+		target_trigger = {
+			FROM = { ADISCORD_west_influence_target_valid = yes }
+		}
+		cost = 35
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_west_ivn_humanitarian_convoys_tt
+			FROM = { add_stability = 0.03 }
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_west_push value = ROOT.ADISCORD_west_influence_power }
+				add_to_temp_variable = { var = ADISCORD_west_push value = 10 }
+				FROM = { ADISCORD_west_push_lean = yes }
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				add = 15
+				FROM = { ADISCORD_west_corridor_owner = yes }
+			}
+			modifier = {
+				factor = 0
+				FROM = { ADISCORD_west_leans_to_root_ally = yes }
+				ADISCORD_west_final_active = no
+			}
+		}
+	}
+
+	# Pressure works fast but brings the war closer.
+	ADISCORD_west_ivn_ultimatum = {
+		icon = generic_political_pressure
+		allowed = { tag = IVN }
+		targets = { WIT IIA IBA IBL PWR PSD ZAO WPA WPS ROM TRU }
+		target_root_trigger = {
+			ADISCORD_west_influence_open = yes
+			ADISCORD_west_champion_viable = yes
+			has_completed_focus = IVN_emergency_protectorates
+		}
+		target_trigger = {
+			FROM = {
+				ADISCORD_west_influence_target_valid = yes
+				is_neighbor_of = ROOT
+			}
+		}
+		cost = 50
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_west_ivn_ultimatum_tt
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_west_push value = 25 }
+				FROM = { ADISCORD_west_push_lean = yes }
+				ADISCORD_west_crisis_add = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				add = 20
+				FROM = { ADISCORD_west_corridor_owner = yes }
+			}
+			modifier = {
+				factor = 0
+				FROM = { ADISCORD_west_leans_to_root_ally = yes }
+			}
+		}
+	}
+
+	ADISCORD_west_ivn_trade_agreement = {
+		icon = generic_industry
+		allowed = { tag = IVN }
+		targets = { WIT IIA IBA IBL PWR PSD ZAO WPA WPS ROM TRU }
+		target_root_trigger = {
+			ADISCORD_west_influence_open = yes
+			ADISCORD_west_champion_viable = yes
+			has_completed_focus = IVN_trade_compacts
+		}
+		target_trigger = {
+			FROM = { ADISCORD_west_influence_target_valid = yes }
+		}
+		available = {
+			ADISCORD_economy_can_spend_100 = yes
+		}
+		cost = 0
+		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
+		custom_cost_text = ADISCORD_west_cost_treasury_100
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			ADISCORD_economy_spend_100 = yes
+			custom_effect_tooltip = ADISCORD_west_ivn_trade_agreement_tt
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_west_push value = ROOT.ADISCORD_west_influence_power }
+				add_to_temp_variable = { var = ADISCORD_west_push value = 10 }
+				FROM = { ADISCORD_west_push_lean = yes }
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				add = 15
+				FROM = { ADISCORD_west_corridor_owner = yes }
+			}
+			modifier = {
+				factor = 0
+				FROM = { ADISCORD_west_leans_to_root_ally = yes }
+				ADISCORD_west_final_active = no
+			}
+		}
+	}
+
+	# During the war a neutral state that has come to lean far enough toward a
+	# champion may be asked to enter on its side. The state answers itself.
+	ADISCORD_west_call_to_arms = {
+		icon = generic_prepare_civil_war
+		allowed = {
+			OR = {
+				tag = WRK
+				tag = IVN
+			}
+		}
+		targets = { WIT IIA IBA IBL PWR PSD ZAO WPA WPS ROM TRU }
+		target_root_trigger = {
+			ADISCORD_west_final_active = yes
+			has_variable = ADISCORD_west_side
+		}
+		target_trigger = {
+			FROM = {
+				exists = yes
+				has_country_flag = ADISCORD_west_neutral
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_west_ally_lean_tt
+				FROM = { ADISCORD_west_leans_to_root_ally = yes }
+			}
+		}
+		cost = 50
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_west_call_to_arms_tt
+			hidden_effect = {
+				FROM = { country_event = { id = ADISCORD_west.46 hours = 6 } }
+			}
+		}
+		ai_will_do = {
+			base = 50
 		}
 	}
 }

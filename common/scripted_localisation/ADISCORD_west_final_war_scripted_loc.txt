@@ -30,3 +30,48 @@ defined_text = {
 		localization_key = ADISCORD_west_status_closed
 	}
 }
+
+# Called in a regional state's scope from the influence category, for example
+# [PWR.ADISCORDWestLean]. The value scale is +100 Vorkerland, -100 Itora.
+defined_text = {
+	name = ADISCORDWestLean
+	text = {
+		trigger = { exists = no }
+		localization_key = ADISCORD_west_lean_absent
+	}
+	text = {
+		trigger = { ADISCORD_west_on_wrk_side = yes }
+		localization_key = ADISCORD_west_lean_side_wrk
+	}
+	text = {
+		trigger = { ADISCORD_west_on_ivn_side = yes }
+		localization_key = ADISCORD_west_lean_side_ivn
+	}
+	text = {
+		trigger = { has_country_flag = ADISCORD_west_neutral }
+		localization_key = ADISCORD_west_lean_neutral
+	}
+	text = {
+		trigger = { is_subject = yes }
+		localization_key = ADISCORD_west_lean_subject
+	}
+	text = {
+		trigger = { ADISCORD_west_leans_to_wrk_ally = yes }
+		localization_key = ADISCORD_west_lean_wrk_ally
+	}
+	text = {
+		trigger = { ADISCORD_west_leans_to_ivn_ally = yes }
+		localization_key = ADISCORD_west_lean_ivn_ally
+	}
+	text = {
+		trigger = { ADISCORD_west_grants_wrk_transit = yes }
+		localization_key = ADISCORD_west_lean_wrk_tilt
+	}
+	text = {
+		trigger = { ADISCORD_west_grants_ivn_transit = yes }
+		localization_key = ADISCORD_west_lean_ivn_tilt
+	}
+	text = {
+		localization_key = ADISCORD_west_lean_undecided
+	}
+}

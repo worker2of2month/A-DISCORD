@@ -206,7 +206,8 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
 
     def test_manifest_has_all_bounded_lifecycle_definitions(self) -> None:
         self.assertEqual(tuple(self.blocks), lifecycle_order())
-        self.assertEqual(len(self.blocks), 358)
+        # The worker and technocratic routes continue in their own trees after the Unity Tower.
+        self.assertEqual(len(self.blocks), 278)
         self.assertEqual(len(DEPTH_FOCUSES), 63)
         self.assertEqual(len(WKR_VARIANT_FOCUSES), 6)
         self.assertEqual(len(VAD_VARIANT_FOCUSES), 6)

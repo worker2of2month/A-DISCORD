@@ -2055,13 +2055,13 @@ ADISCORD_vorkerland_pw_expedition_won = {
 }
 
 # COUNTRY. Temporary major ownership may overlap independent campaigns.
-# COUNTRY WRK. The census of any postwar route opens district reconstruction.
+# COUNTRY WRK. The first reconstruction focus of any postwar tree opens district reconstruction.
 ADISCORD_vorkerland_pw_reconstruction_open = {
 	ADISCORD_vorkerland_pw_sovereign = yes
 	OR = {
-		has_completed_focus = WRK_worker_pw_census
+		has_completed_focus = WRK_conf_cooperative_workshops
 		has_completed_focus = WRK_joint_pw_census
-		has_completed_focus = WRK_utilitarian_pw_census
+		has_completed_focus = WRK_tech_district_metrics
 		has_completed_focus = WRK_empire_reconstruction_trusts
 	}
 }
@@ -2073,18 +2073,18 @@ ADISCORD_vorkerland_pw_rebuild_slot_free = {
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_pw_rebuild_active value = 2 compare = less_than }
 			OR = {
-				has_completed_focus = WRK_worker_pw_repair_crews
+				has_completed_focus = WRK_conf_municipal_councils
 				has_completed_focus = WRK_joint_pw_repair_crews
-				has_completed_focus = WRK_utilitarian_pw_repair_crews
+				has_completed_focus = WRK_tech_municipal_utilities
 				has_completed_focus = WRK_empire_imperial_building_offices
 			}
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_pw_rebuild_active value = 3 compare = less_than }
 			OR = {
-				has_completed_focus = WRK_worker_pw_municipal_network
+				has_completed_focus = WRK_conf_social_guarantees
 				has_completed_focus = WRK_joint_pw_municipal_network
-				has_completed_focus = WRK_utilitarian_pw_municipal_network
+				has_completed_focus = WRK_tech_measured_economy
 				has_completed_focus = WRK_empire_imperial_building_offices
 			}
 		}

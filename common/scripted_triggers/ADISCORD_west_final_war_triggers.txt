@@ -109,13 +109,17 @@ ADISCORD_west_state_held_by_ivn_side = {
 	controller = { ADISCORD_west_on_ivn_side = yes }
 }
 
-# COUNTRY IVN. The two Itoran courses of the western question.
+# COUNTRY IVN. The three Itoran courses of the western question.
 ADISCORD_west_ivn_shield_course = {
 	has_completed_focus = IVN_humanist_shield
 }
 
 ADISCORD_west_ivn_emergency_course = {
 	has_completed_focus = IVN_emergency_order
+}
+
+ADISCORD_west_ivn_trade_course = {
+	has_completed_focus = IVN_trade_republic
 }
 
 # COUNTRY invited state; ROOT is the inviting champion. The pending flag is
@@ -134,27 +138,96 @@ ADISCORD_west_league_target_valid = {
 # offers, the counterpart of Itora's League invitations.
 ADISCORD_west_wrk_treaties_unlocked = {
 	OR = {
-		has_completed_focus = WRK_worker_pw_territorial_council
+		has_completed_focus = WRK_worker_west_mandate_offices
 		has_completed_focus = WRK_joint_pw_territorial_council
-		has_completed_focus = WRK_utilitarian_pw_territorial_council
+		has_completed_focus = WRK_utilitarian_west_corridor_survey
 		has_completed_focus = WRK_empire_military_conventions
 	}
 }
 
-# COUNTRY WRK. Charters that make Vorkerland's offer easier to accept.
-ADISCORD_west_wrk_treaty_charters = {
+# ----- Influence over the western states -----
+# ADISCORD_west_lean: +100 Vorkerland, -100 Itora.
+
+# GLOBAL. Champions court the West from reunification until the settlement.
+ADISCORD_west_influence_open = {
 	OR = {
-		has_completed_focus = WRK_worker_pw_service_charter
-		has_completed_focus = WRK_joint_pw_service_charter
-		has_completed_focus = WRK_utilitarian_pw_service_charter
-		has_completed_focus = WRK_empire_military_conventions
+		ADISCORD_west_crisis_open = yes
+		ADISCORD_west_final_active = yes
 	}
 }
 
-ADISCORD_west_wrk_local_charters = {
+# COUNTRY regional state; ROOT is the acting champion. A state already on a
+# side of the war no longer weighs offers.
+ADISCORD_west_influence_target_valid = {
+	exists = yes
+	is_subject = no
+	NOT = { has_variable = ADISCORD_west_side }
+	NOT = { has_war_with = ROOT }
+}
+
+# COUNTRY regional state.
+ADISCORD_west_leans_to_wrk_ally = {
+	check_variable = { var = ADISCORD_west_lean value = 50 compare = greater_than_or_equals }
+}
+
+ADISCORD_west_leans_to_ivn_ally = {
+	check_variable = { var = ADISCORD_west_lean value = -50 compare = less_than_or_equals }
+}
+
+# COUNTRY regional state; ROOT is a champion.
+ADISCORD_west_leans_to_root_ally = {
 	OR = {
-		has_completed_focus = WRK_worker_pw_local_charters
-		has_completed_focus = WRK_joint_pw_local_charters
-		has_completed_focus = WRK_utilitarian_pw_local_charters
+		AND = {
+			ROOT = { tag = WRK }
+			ADISCORD_west_leans_to_wrk_ally = yes
+		}
+		AND = {
+			ROOT = { tag = IVN }
+			ADISCORD_west_leans_to_ivn_ally = yes
+		}
+	}
+}
+
+ADISCORD_west_grants_wrk_transit = {
+	check_variable = { var = ADISCORD_west_lean value = 20 compare = greater_than_or_equals }
+}
+
+ADISCORD_west_grants_ivn_transit = {
+	check_variable = { var = ADISCORD_west_lean value = -20 compare = less_than_or_equals }
+}
+
+# COUNTRY regional state; ROOT is a champion. The state can still be won over:
+# it is not yet an ally of ROOT and leans no further than 40 toward the rival.
+ADISCORD_west_lean_contested_by_root = {
+	OR = {
+		AND = {
+			ROOT = { tag = WRK }
+			check_variable = { var = ADISCORD_west_lean value = -40 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_west_lean value = 50 compare = less_than }
+		}
+		AND = {
+			ROOT = { tag = IVN }
+			check_variable = { var = ADISCORD_west_lean value = 40 compare = less_than_or_equals }
+			check_variable = { var = ADISCORD_west_lean value = -50 compare = greater_than }
+		}
+	}
+}
+
+# COUNTRY. Owns part of the corridor, the only land route between the champions.
+ADISCORD_west_corridor_owner = {
+	OR = {
+		owns_state = 90
+		owns_state = 91
+		owns_state = 93
+		owns_state = 94
+	}
+}
+
+# COUNTRY IVN. Each Itoran course opens League invitations in its own branch.
+ADISCORD_west_ivn_league_unlocked = {
+	OR = {
+		has_completed_focus = IVN_shield_league_of_republics
+		has_completed_focus = IVN_emergency_protectorates
+		has_completed_focus = IVN_trade_compacts
 	}
 }

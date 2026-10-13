@@ -3123,3 +3123,32 @@ news_event = {
 	fire_only_once = yes
 	option = { name = ADISCORD_vorkerland_postwar.5.a }
 }
+
+# The worker and technocratic settlements end at the Unity Tower; the route's
+# own postwar tree replaces the civil-war graph in a fresh event scope.
+country_event = {
+	id = ADISCORD_vorkerland_postwar.6
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = WRK
+		has_country_flag = ADISCORD_vorkerland_central_unifier
+	}
+	immediate = {
+		if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_route_worker }
+			load_focus_tree = {
+				tree = ADISCORD_vorkerland_worker_confederation_focus
+				keep_completed = no
+			}
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+			load_focus_tree = {
+				tree = ADISCORD_vorkerland_technical_directorate_focus
+				keep_completed = no
+			}
+		}
+		mark_focus_tree_layout_dirty = yes
+	}
+}

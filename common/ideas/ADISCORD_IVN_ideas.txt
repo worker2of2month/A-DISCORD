@@ -77,6 +77,16 @@ ideas = {
 			}
 		}
 
+		IVN_ord_trade_republic_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				industrial_capacity_factory = 0.03
+			}
+		}
+
 		IVN_ord_shield_territorial_defence_idea = {
 			name = IVN_order_dynamic
 			picture = GFX_idea_IVN_national_spirit
@@ -124,6 +134,25 @@ ideas = {
 			}
 		}
 
+		IVN_ord_trade_free_ports_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		IVN_ord_trade_merchant_banks_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+				political_power_gain = 0.05
+			}
+		}
+
 		IVN_ord_march_reconstruction_idea = {
 			name = IVN_order_dynamic
 			picture = GFX_idea_IVN_national_spirit
@@ -166,6 +195,16 @@ ideas = {
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.03
+			}
+		}
+
+		IVN_ord_marches_planning_board_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+				research_speed_factor = 0.02
 			}
 		}
 

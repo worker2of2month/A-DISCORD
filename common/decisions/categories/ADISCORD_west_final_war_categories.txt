@@ -26,3 +26,17 @@ ADISCORD_west_final_war_category = {
 	visible_when_empty = yes
 	priority = 26
 }
+
+ADISCORD_west_influence_category = {
+	icon = generic_political_discourse
+	allowed = {
+		OR = {
+			tag = WRK
+			tag = IVN
+		}
+	}
+	visible = {
+		ADISCORD_west_influence_open = yes
+	}
+	priority = 27
+}

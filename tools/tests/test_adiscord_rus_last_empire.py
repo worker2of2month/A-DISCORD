@@ -297,7 +297,7 @@ class RusLastEmpireTests(unittest.TestCase):
             "ADISCORD_vorkerland_rus_can_open_sla_front = {", read(TRIGGER_FILE)
         )
         self.assertIn(
-            "ADISCORD_vorkerland_rus_campaign_target_still_open = {", read(TRIGGER_FILE)
+            "ADISCORD_vorkerland_rus_selected_campaign_available = {", read(TRIGGER_FILE)
         )
         self.assertNotIn(
             "fire_only_once = yes",
@@ -465,7 +465,7 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
             (
                 "RUS",
                 "has_country_flag",
-                "ADISCORD_vorkerland_rus_dirty_campaign_active",
+                "ADISCORD_vorkerland_rus_sla_campaign_active",
             ): True,
             ("RUS", "variable", "ADISCORD_vorkerland_rus_campaign_target"): target,
             ("RUS", "has_capitulated", "yes"): False,
@@ -481,17 +481,98 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
         return facts
 
     def _run(self, name, facts):
-        return list(
-            self.selected(self.expand(self.block(self.effects, name)), facts, "RUS")
-        )
+        from tools.tests.test_adiscord_stp_preparation import scalar
+
+        facts = dict(facts)
+        selected = []
+        for scope, entry in self.selected(self.expand(self.block(self.effects, name)), facts, "RUS"):
+            selected.append((scope, entry))
+            if entry.key == "set_variable":
+                facts[(scope, "variable", scalar(entry.value, "var"))] = float(scalar(entry.value, "value"))
+            elif entry.key == "clear_variable":
+                facts.pop((scope, "variable", entry.value), None)
+        return selected
 
     def _calls(self, chosen):
         return [e.key for _, e in chosen]
 
+    def test_other_wars_do_not_block_a_new_dirty_campaign(self):
+        ready = self.expand(self.block(self.triggers, "ADISCORD_vorkerland_rus_can_open_free_front"))
+        facts = self._active(4, {
+            ("RUS", "is_subject", "no"): True,
+            ("RUS", "has_war", "no"): False,
+            ("RUS", "has_war_with", "ERT"): True,
+        })
+        self.assertTrue(self.matches(ready, facts, "RUS"))
+
+    def test_parallel_fronts_dispatch_independently_of_the_last_selected_target(self):
+        from tools.tests.test_adiscord_stp_preparation import scalar
+        for last_target in (0, 4, 6):
+            facts = self._active(last_target, {
+                ("RUS", "has_war_with", "ERT"): True,
+                ("RUS", "has_war_with", "SCA"): True,
+            })
+            rows = self.expand(self.block(self.effects, "ADISCORD_vorkerland_check_rus_dirty_campaign"))
+            dispatched = []
+            for scope, entry in self.selected(rows, facts, "RUS"):
+                if entry.key == "set_variable":
+                    variable = scalar(entry.value, "var")
+                    value = int(scalar(entry.value, "value"))
+                    facts[(scope, "variable", variable)] = value
+                    if variable == "ADISCORD_vorkerland_rus_campaign_target":
+                        dispatched.append(value)
+                elif entry.key == "clear_variable":
+                    facts.pop((scope, "variable", entry.value), None)
+            self.assertEqual([4, 6], dispatched)
+            self.assertNotIn(("RUS", "variable", "ADISCORD_vorkerland_rus_campaign_target"), facts)
+
+    def test_parallel_victories_settle_in_either_order(self):
+        from tools.tests.test_adiscord_stp_preparation import scalar
+
+        target_ids = {"ERT": 4, "SCA": 6}
+        for order in (("ERT", "SCA"), ("SCA", "ERT")):
+            facts = self._active(0)
+            for tag, capital in (("ERT", "170"), ("SCA", "173")):
+                facts[("RUS", "has_war_with", tag)] = True
+                facts[("RUS", "country_exists", tag)] = True
+                facts[(tag, "capital")] = capital
+                facts[(capital, "is_controlled_by", "RUS")] = True
+            for tag in order:
+                facts[(tag, "has_capitulated", "yes")] = True
+                settled = []
+                rows = self.expand(self.block(self.effects, "ADISCORD_vorkerland_check_rus_dirty_campaign"))
+                for scope, entry in self.selected(rows, facts, "RUS"):
+                    if entry.key == "set_variable":
+                        facts[(scope, "variable", scalar(entry.value, "var"))] = int(scalar(entry.value, "value"))
+                    elif entry.key == "clear_variable":
+                        facts.pop((scope, "variable", entry.value), None)
+                    elif entry.key == "ADISCORD_vorkerland_rus_settle_dirty_target":
+                        settled.append(facts[(scope, "variable", "ADISCORD_vorkerland_rus_campaign_target")])
+                        annex = self._run("ADISCORD_vorkerland_rus_annex_dirty_target", facts)
+                        self.assertEqual([tag], [scalar(e.value, "target") for _, e in annex if e.key == "annex_country"])
+                self.assertEqual([target_ids[tag]], settled, order)
+                self.assertNotIn(("RUS", "variable", "ADISCORD_vorkerland_rus_campaign_target"), facts)
+                # Native annexation ends only the defeated country's war relation.
+                facts[("RUS", "has_war_with", tag)] = False
+                facts[("RUS", "country_exists", tag)] = False
+
+    def test_decisions_block_only_their_own_existing_war(self):
+        decisions = self.block(self.entries(DECISION_FILE), "ADISCORD_vorkerland_rus_dirty_campaign_category")
+        for tag in ("RZA", "MLR", "ERT", "IRT", "SCA"):
+            available = self.block(self.block(decisions, "RUS_campaign_" + tag.lower()), "available")
+            facts = {
+                ("RUS", "ADISCORD_vorkerland_rus_can_open_free_front", "yes"): True,
+                ("RUS", "ADISCORD_vorkerland_rus_borders_dirty_" + tag.lower(), "yes"): True,
+                ("RUS", "has_war_with", "SLA"): True,
+            }
+            self.assertTrue(self.matches(available, facts, "RUS"), tag)
+            facts[("RUS", "has_war_with", tag)] = True
+            self.assertFalse(self.matches(available, facts, "RUS"), tag)
+
     def test_normal_victory_requires_territory_and_counts_the_neighbor_once(
         self,
     ) -> None:
-        held = self._active(extra=self._hold_sla(True))
+        held = self._active(extra={**self._hold_sla(True), ("RUS", "has_war_with", "SLA"): True})
         check = self._run("ADISCORD_vorkerland_check_rus_dirty_campaign", held)
         self.assertIn("ADISCORD_vorkerland_rus_settle_dirty_target", self._calls(check))
         self.assertNotIn(
@@ -546,17 +627,9 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
         )
 
     def test_third_party_or_vanished_target_aborts_without_credit(self) -> None:
-        still_open = self.expand(
-            self.block(
-                self.triggers, "ADISCORD_vorkerland_rus_campaign_target_still_open"
-            )
-        )
         vanished = self._active()
-        self.assertTrue(self.matches(still_open, vanished, "RUS"))
         check = self._run("ADISCORD_vorkerland_check_rus_dirty_campaign", vanished)
-        self.assertIn(
-            "ADISCORD_vorkerland_rus_abort_dirty_campaign", self._calls(check)
-        )
+        self.assertIn("clear_variable", self._calls(check))
         self.assertNotIn(
             "ADISCORD_vorkerland_rus_settle_dirty_target", self._calls(check)
         )
@@ -569,18 +642,12 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
         self,
     ) -> None:
         waiting = self._active(extra={("RUS", "has_war_with", "SLA"): True})
-        still_open = self.expand(
-            self.block(
-                self.triggers, "ADISCORD_vorkerland_rus_campaign_target_still_open"
-            )
-        )
         holds = self.expand(
             self.block(self.triggers, "ADISCORD_vorkerland_rus_holds_current_target")
         )
         ready = self.expand(
             self.block(self.triggers, "ADISCORD_vorkerland_rus_current_target_ready")
         )
-        self.assertFalse(self.matches(still_open, waiting, "RUS"))
         self.assertFalse(self.matches(holds, waiting, "RUS"))
         self.assertFalse(self.matches(ready, waiting, "RUS"))
         check = self._run("ADISCORD_vorkerland_check_rus_dirty_campaign", waiting)
@@ -655,7 +722,7 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
             (
                 "RUS",
                 "has_country_flag",
-                "ADISCORD_vorkerland_rus_dirty_campaign_active",
+                "ADISCORD_vorkerland_rus_sla_campaign_active",
             ): False,
             ("RUS", "country_exists", "SLA"): True,
             ("RUS", "has_war_with", "SLA"): True,
@@ -678,10 +745,11 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
             (
                 "RUS",
                 "has_country_flag",
-                "ADISCORD_vorkerland_rus_dirty_campaign_active",
+                "ADISCORD_vorkerland_rus_sla_campaign_active",
             ): False,
             ("RUS", "country_exists", "SLA"): True,
             ("RUS", "has_war_with", "SLA"): True,
+            ("RUS", "has_war_with", "ERT"): True,
             ("RUS", "controls_state", "49"): True,
             ("RUS", "controls_state", "176"): True,
             **self._hold_sla(False),
@@ -693,6 +761,12 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
         self.assertNotIn(
             "ADISCORD_vorkerland_rus_settle_dirty_target", self._calls(check)
         )
+        full_campaign = {
+            **belt,
+            ("RUS", "has_country_flag", "ADISCORD_vorkerland_rus_sla_campaign_active"): True,
+        }
+        full_check = self._run("ADISCORD_vorkerland_check_khan_border_war", full_campaign)
+        self.assertNotIn("ADISCORD_vorkerland_resolve_khan_border_war", self._calls(full_check))
         resolve = self._run("ADISCORD_vorkerland_resolve_khan_border_war", belt)
         self.assertTrue(any(e.key == "white_peace" for _, e in resolve))
         self.assertTrue(
@@ -735,24 +809,9 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
 
     def test_invalid_target_or_own_capitulation_clears_the_operation(self) -> None:
         invalid = self._active(target=0)
-        self.assertTrue(
-            self.matches(
-                self.expand(
-                    self.block(
-                        self.triggers,
-                        "ADISCORD_vorkerland_rus_campaign_target_still_open",
-                    )
-                ),
-                invalid,
-                "RUS",
-            )
-        )
-        self.assertIn(
-            "ADISCORD_vorkerland_rus_abort_dirty_campaign",
-            self._calls(
-                self._run("ADISCORD_vorkerland_check_rus_dirty_campaign", invalid)
-            ),
-        )
+        invalid_result = self._run("ADISCORD_vorkerland_check_rus_dirty_campaign", invalid)
+        self.assertIn("clear_variable", self._calls(invalid_result))
+        self.assertNotIn("ADISCORD_vorkerland_rus_settle_dirty_target", self._calls(invalid_result))
         own_loss = self._active(
             extra={
                 ("RUS", "has_capitulated", "yes"): True,
@@ -760,7 +819,8 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
             }
         )
         lost = self._run("ADISCORD_vorkerland_check_rus_dirty_campaign", own_loss)
-        self.assertIn("ADISCORD_vorkerland_rus_abort_dirty_campaign", self._calls(lost))
+        self.assertIn("clear_variable", self._calls(lost))
+        self.assertIn(("RUS", "ADISCORD_vorkerland_rus_sla_campaign_active"), [(scope, entry.value) for scope, entry in lost if entry.key == "clr_country_flag"])
         self.assertNotIn(
             "ADISCORD_vorkerland_rus_settle_dirty_target", self._calls(lost)
         )

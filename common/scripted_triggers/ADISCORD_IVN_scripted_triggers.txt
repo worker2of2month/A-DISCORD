@@ -1,0 +1,17 @@
+# STATE. A controlled Itoran core state with room for one more civilian factory.
+IVN_march_workshop_site = {
+	is_core_of = ROOT
+	is_controlled_by = ROOT
+	free_building_slots = {
+		building = industrial_complex
+		size > 0
+		include_locked = yes
+	}
+}
+
+# COUNTRY IVN.
+IVN_march_workshop_site_exists = {
+	any_owned_state = {
+		IVN_march_workshop_site = yes
+	}
+}

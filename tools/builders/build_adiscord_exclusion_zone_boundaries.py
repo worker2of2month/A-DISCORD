@@ -21,6 +21,10 @@ from tools.builders.build_adiscord_northern_countries import (
     format_provinces,
     load_definition,
 )
+from tools.builders.build_adiscord_new_states import (
+    DIRTY_ZONE_VICTORY_POINTS,
+    replace_history_victory_points,
+)
 from tools.builders.build_adiscord_strategic_regions import (
     connected_components,
     load_province_adjacency,
@@ -88,6 +92,13 @@ CONTAMINATED_FRINGE_STATES = {160, 454, 455, 460, 461, 472}
 FRINGE_COMPONENT_MOVES = {
     (455, 11249): 461,
     (461, 1472): 460,
+}
+
+# The perimeter widens into its northwestern shoulder; its southern districts
+# belong to the adjacent city state. Province identities and terrain stay fixed.
+PERIMETER_PROVINCE_MOVES = {
+    (185, 169): {5344, 10824},
+    (169, 170): {2306, 10693, 16464, 16476},
 }
 
 # Explicit owners for surviving boundary carriers and fringe states. Reusing
@@ -386,6 +397,12 @@ def plan_boundaries() -> tuple[dict[int, set[int]], set[int], dict[int, str]]:
         partition_abandoned_territories(planned[51], adjacency)
     )
 
+    for (source_state, target_state), provinces in PERIMETER_PROVINCE_MOVES.items():
+        if not provinces <= planned[source_state]:
+            raise RuntimeError(f"state {source_state}: perimeter provinces missing from source")
+        planned[source_state].difference_update(provinces)
+        planned[target_state].update(provinces)
+
     final_owners = {state_id: "EXZ" for state_id in original_exz}
     final_owners.update(NEW_OWNERS)
     final_owners.update({state_id: "EXZ" for state_id in ABANDONED_TERRITORY_FILENAMES})
@@ -459,19 +476,20 @@ def replace_owner_and_cores(source: str, state_id: int, owner: str) -> str:
 def render_state(state_id: int, provinces: set[int], owner: str) -> str:
     path = state_path(state_id)
     source = path.read_text(encoding="utf-8-sig", errors="strict")
-    source, count = re.subn(
-        r"(?s)(\bprovinces\s*=\s*\{)[^}]*(\})",
-        lambda match: f"{match.group(1)}\n{format_provinces(provinces)}\n\t{match.group(2)}",
-        source,
-        count=1,
-    )
-    if count != 1:
+    province_block = re.search(r"(?s)(\bprovinces\s*=\s*\{)([^}]*)(\})", source)
+    if not province_block:
         raise RuntimeError(f"state {state_id}: expected one province block")
+    current_provinces = set(map(int, re.findall(r"\d+", province_block.group(2))))
+    if current_provinces != provinces:
+        replacement = f"{province_block.group(1)}\n{format_provinces(provinces)}\n\t{province_block.group(3)}"
+        source = source[:province_block.start()] + replacement + source[province_block.end():]
     current_owner = re.search(r"(?m)^\s*owner\s*=\s*([A-Z0-9]{3})", source)
     if not current_owner:
         raise RuntimeError(f"state {state_id}: missing starting owner")
     if current_owner.group(1) != owner or state_id in SUCCESSOR_CORES:
         source = replace_owner_and_cores(source, state_id, owner)
+    if state_id in {169, 170}:
+        source = replace_history_victory_points(source, DIRTY_ZONE_VICTORY_POINTS[state_id])
     return source if source.endswith("\n") else source + "\n"
 
 

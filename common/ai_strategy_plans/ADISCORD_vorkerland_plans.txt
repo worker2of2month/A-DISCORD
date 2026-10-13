@@ -1999,14 +1999,6 @@ ADISCORD_vorkerland_wrk_postwar_worker_plan = {
 	}
 	ai_national_focuses = {
 		WRK_worker_convene_reunification_congress
-		WRK_worker_pw_veteran_cadres
-		WRK_worker_pw_rearmament
-		WRK_worker_pw_arsenals
-		WRK_worker_pw_officer_school
-		WRK_worker_pw_standards
-		WRK_worker_pw_defence_cluster
-		WRK_worker_pw_field_exercises
-		WRK_worker_pw_motor_pool
 		WRK_worker_open_erased_nations_archives
 		WRK_worker_recognize_free_republics
 		WRK_worker_fund_cooperative_reconstruction
@@ -2015,35 +2007,28 @@ ADISCORD_vorkerland_wrk_postwar_worker_plan = {
 		WRK_worker_ratify_republican_compact
 		WRK_worker_write_constitutional_guarantees
 		WRK_worker_restore_unity_tower
-		WRK_worker_resettle_veteran_families
-		WRK_worker_reopen_cooperative_workshops
-		WRK_worker_coordinate_republic_supply
-		WRK_worker_complete_workers_housing
-		WRK_worker_empower_municipal_councils
-		WRK_worker_secure_social_guarantees
-		WRK_worker_pw_census
-		WRK_worker_pw_repair_crews
-		WRK_worker_pw_food_reserve
-		WRK_worker_pw_veteran_housing
-		WRK_worker_pw_municipal_network
-		WRK_worker_pw_recovery_complete
-		WRK_worker_pw_artillery
-		WRK_worker_pw_reserve
-		WRK_worker_pw_army_reform
-		WRK_worker_pw_machine_tools
-		WRK_worker_pw_transport_works
-		WRK_worker_pw_production_board
-		WRK_worker_pw_territorial_council
-		WRK_worker_pw_service_charter
-		WRK_worker_pw_local_charters
-		WRK_worker_pw_procurement_audit
-		WRK_worker_pw_treasury
-		WRK_worker_pw_defence_compact
-		WRK_worker_pw_subject_charter
-		WRK_worker_pw_ebern_campaign
-		WRK_worker_pw_afrela_campaign
-		WRK_worker_pw_regional_settlement
+		WRK_conf_council_of_republics
+		WRK_worker_west_mandate_offices
+		WRK_conf_republican_militias
+		WRK_conf_charter_for_the_west
+		WRK_conf_production_councils
+		WRK_conf_solidarity_abroad
+		WRK_conf_elected_officers
+		WRK_conf_republican_arsenals
+		WRK_conf_veteran_resettlement
+		WRK_conf_cooperative_workshops
+		WRK_conf_people_in_arms
+		WRK_worker_west_solidarity_committees
+		WRK_conf_army_of_the_republics
+		WRK_worker_west_mandate_for_itora
+		WRK_conf_shared_standards
+		WRK_conf_municipal_councils
+		WRK_conf_social_guarantees
+		WRK_conf_research_soviets
+		WRK_conf_southern_solidarity
+		WRK_worker_west_confederate_charter
 	}
+
 	weight = { factor = 4 }
 }
 
@@ -2133,49 +2118,36 @@ ADISCORD_vorkerland_wrk_postwar_utilitarian_plan = {
 	}
 	ai_national_focuses = {
 		WRK_utilitarian_form_reconstruction_directorate
-		WRK_utilitarian_pw_veteran_cadres
-		WRK_utilitarian_pw_rearmament
-		WRK_utilitarian_pw_arsenals
-		WRK_utilitarian_pw_officer_school
-		WRK_utilitarian_pw_standards
-		WRK_utilitarian_pw_defence_cluster
-		WRK_utilitarian_pw_field_exercises
-		WRK_utilitarian_pw_motor_pool
 		WRK_utilitarian_standardize_power_grid
 		WRK_utilitarian_rebuild_machine_tool_pool
 		WRK_utilitarian_expand_national_laboratories
 		WRK_utilitarian_publish_integration_metrics
+		WRK_utilitarian_rationalize_districts
+		WRK_utilitarian_publish_reconstruction_ledger
 		WRK_utilitarian_build_measurable_republic
 		WRK_utilitarian_restore_unity_tower
-		WRK_utilitarian_equip_grid_repair_crews
-		WRK_utilitarian_standardize_civilian_production
-		WRK_utilitarian_school_technical_specialists
-		WRK_utilitarian_prioritize_municipal_repairs
-		WRK_utilitarian_commission_automated_workshops
-		WRK_utilitarian_complete_reconstruction_programme
-		WRK_utilitarian_pw_census
-		WRK_utilitarian_pw_repair_crews
-		WRK_utilitarian_pw_food_reserve
-		WRK_utilitarian_pw_veteran_housing
-		WRK_utilitarian_pw_municipal_network
-		WRK_utilitarian_pw_recovery_complete
-		WRK_utilitarian_pw_artillery
-		WRK_utilitarian_pw_reserve
-		WRK_utilitarian_pw_army_reform
-		WRK_utilitarian_pw_machine_tools
-		WRK_utilitarian_pw_transport_works
-		WRK_utilitarian_pw_production_board
-		WRK_utilitarian_pw_territorial_council
-		WRK_utilitarian_pw_service_charter
-		WRK_utilitarian_pw_local_charters
-		WRK_utilitarian_pw_procurement_audit
-		WRK_utilitarian_pw_treasury
-		WRK_utilitarian_pw_defence_compact
-		WRK_utilitarian_pw_subject_charter
-		WRK_utilitarian_pw_ebern_campaign
-		WRK_utilitarian_pw_afrela_campaign
-		WRK_utilitarian_pw_regional_settlement
+		WRK_tech_directorate_plan
+		WRK_utilitarian_west_corridor_survey
+		WRK_tech_engineering_corps
+		WRK_tech_supply_contracts
+		WRK_tech_machine_tool_pool
+		WRK_tech_technical_assistance
+		WRK_tech_mechanized_staff
+		WRK_tech_standardized_arsenals
+		WRK_tech_grid_repair_crews
+		WRK_tech_district_metrics
+		WRK_tech_fire_superiority
+		WRK_utilitarian_west_engineer_battalions
+		WRK_tech_command_calculus
+		WRK_utilitarian_west_engineering_border
+		WRK_tech_national_laboratories
+		WRK_tech_automated_workshops
+		WRK_tech_measured_economy
+		WRK_tech_specialist_schools
+		WRK_tech_southern_programme
+		WRK_utilitarian_west_technical_trusteeship
 	}
+
 	weight = { factor = 4 }
 }
 
@@ -2225,26 +2197,28 @@ ADISCORD_vorkerland_world_empire_plan = {
 		ADISCORD_vorkerland_world_empire_active = yes
 	}
 	abort = { ADISCORD_vorkerland_world_empire_active = no }
+	# One alternative of each exclusive pair: the AI takes the most direct war course
+	# and secures the former districts before the West chooses sides.
 	ai_national_focuses = {
 		WRK_empire_state_above_all
+		WRK_empire_military_conventions
+		WRK_empire_district_guarantees
+		WRK_empire_army_oath
 		WRK_empire_imperial_arsenals
-		WRK_empire_steel_directorate
-		WRK_empire_war_industry
-		WRK_empire_reconstruction_trusts
-		WRK_empire_mobilized_economy
 		WRK_empire_first_levy
-		WRK_empire_state_legions
+		WRK_empire_steel_directorate
 		WRK_empire_rifles_for_the_march
+		WRK_empire_war_industry
 		WRK_empire_artillery_mass
+		WRK_empire_garrison_compact
+		WRK_empire_mobilized_economy
+		WRK_empire_state_legions
 		WRK_empire_imperial_general_staff
-		WRK_empire_motor_columns
-		WRK_empire_railway_command
 		WRK_empire_fighter_command
 		WRK_empire_close_air_support
 		WRK_empire_combined_exercises
 		WRK_empire_total_mobilization
 		WRK_empire_itora_operational_plan
-		WRK_empire_supreme_command_order
 		WRK_empire_itora_must_fall
 	}
 	weight = { factor = 100 }

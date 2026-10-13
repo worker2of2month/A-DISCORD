@@ -10,7 +10,7 @@ ADISCORD_west_wrk_front_ivn = {
 		NOT = {
 			fighting_army_strength_ratio = {
 				tag = IVN
-				ratio < 0.67
+				ratio < 0.5
 			}
 		}
 	}
@@ -46,7 +46,7 @@ ADISCORD_west_wrk_hold_ivn = {
 		has_war_with = IVN
 		fighting_army_strength_ratio = {
 			tag = IVN
-			ratio < 0.67
+			ratio < 0.5
 		}
 	}
 	abort_when_not_enabled = yes

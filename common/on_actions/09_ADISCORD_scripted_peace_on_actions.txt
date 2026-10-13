@@ -1200,27 +1200,18 @@ on_actions = {
 					limit = {
 						RUS = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
 						ROOT = { capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = ROOT } } } }
-						OR = {
-							AND = {
-								RUS = { has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active }
-								OR = {
-									AND = { ROOT = { tag = SLA } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals } } }
-									AND = { ROOT = { tag = RZA } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals } } }
-									AND = { ROOT = { tag = MLR } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals } } }
-									AND = { ROOT = { tag = ERT } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals } } }
-									AND = { ROOT = { tag = IRT } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals } } }
-									AND = { ROOT = { tag = SCA } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals } } }
-								}
-							}
-							AND = {
-								ROOT = { tag = SLA }
-								has_global_flag = ADISCORD_vorkerland_khan_border_war_started
-								RUS = {
-									has_war_with = SLA
-									NOT = { has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active }
-								}
+						ROOT = {
+							has_war_with = RUS
+							OR = {
+								tag = SLA
+								tag = RZA
+								tag = MLR
+								tag = ERT
+								tag = IRT
+								tag = SCA
 							}
 						}
+						RUS = { NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed } }
 					}
 					set_global_flag = skip_default_capitulation
 					ROOT = { set_country_flag = ADISCORD_vorkerland_rus_capitulation_current }

@@ -31,3 +31,27 @@ IVN_adopt_emergency_order = {
 		set_country_flag = ADISCORD_vorkerland_vadim_etatist_role_added
 	}
 }
+
+# COUNTRY IVN. The committee hands the marches to the merchant councils; the
+# same leader takes the pragmatist role, and elections remain.
+IVN_adopt_trade_republic = {
+	if = {
+		limit = { NOT = { has_government = pragmatism } }
+		set_politics = {
+			ruling_party = pragmatism
+			elections_allowed = yes
+		}
+	}
+	if = {
+		limit = { NOT = { has_country_flag = IVN_vadim_pragmatist_role_added } }
+		add_country_leader_role = {
+			character = IVN_Vadim_Ivanchik
+			promote_leader = yes
+			country_leader = {
+				ideology = pragmatism_ideology
+				expire = "2200.1.1.1"
+			}
+		}
+		set_country_flag = IVN_vadim_pragmatist_role_added
+	}
+}

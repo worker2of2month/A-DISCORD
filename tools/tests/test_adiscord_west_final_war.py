@@ -23,6 +23,10 @@ EVENTS = ROOT / "events/ADISCORD_west_final_war_events.txt"
 PEACE = ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"
 IVN_TREE = ROOT / "focus_trees/IVN/main/focuses.txt"
 WRK_TREE = ROOT / "focus_trees/Vorkerland/civil_war/focuses.txt"
+WORKER_TREE = ROOT / "focus_trees/Vorkerland/worker_confederation/focuses.txt"
+TECHNICAL_TREE = ROOT / "focus_trees/Vorkerland/technical_directorate/focuses.txt"
+EMPIRE_TREE = ROOT / "focus_trees/Vorkerland/world_empire/focuses.txt"
+DECISIONS = ROOT / "common/decisions/ADISCORD_west_final_war_decisions.txt"
 REGIONAL = ("WIT", "IIA", "IBA", "IBL", "PWR", "PSD", "ZAO", "WPA", "WPS", "ROM", "TRU")
 CHAMPIONS = ("WRK", "IVN")
 ROUTES = ("worker", "joint", "utilitarian")
@@ -182,7 +186,7 @@ class WestFinalWarContractTests(unittest.TestCase):
         )
         spirits = set(re.findall(r"add_ideas = (ADISCORD_west_\w+)", body(EFFECTS, "ADISCORD_west_add_path_spirit")))
         removed = set(re.findall(r"remove_ideas = (ADISCORD_west_\w+)", body(EFFECTS, "ADISCORD_west_remove_path_spirit")))
-        self.assertEqual(len(spirits), 6)
+        self.assertEqual(len(spirits), 7)
         self.assertEqual(spirits, removed)
 
     def test_every_winner_path_has_terms(self):
@@ -205,18 +209,28 @@ class WestFinalWarContractTests(unittest.TestCase):
         transfer = body(EFFECTS, "ADISCORD_west_transfer_to_root")
         self.assertIn("has_country_flag = ADISCORD_west_settlement_pending", transfer)
 
-    def test_deadline_counts_the_documented_districts(self):
+    def test_deadline_scores_only_occupied_enemy_land_and_a_tie_is_a_truce(self):
         source = body(EFFECTS, "ADISCORD_west_final_resolve_by_control")
-        corridor = set(re.findall(r"\b(\d+) = \{ ADISCORD_west_count_key_state = yes \}", source))
-        home = set(re.findall(r"\b(\d+) = \{ ADISCORD_west_count_occupied_home_state = yes \}", source))
-        self.assertEqual(corridor, CORRIDOR_STATES)
-        self.assertEqual(home, HOME_STATES)
+        counted = set(re.findall(r"\b(\d+) = \{ ADISCORD_west_count_occupied_state = yes \}", source))
+        self.assertEqual(counted, CORRIDOR_STATES | HOME_STATES)
         # A lost capital moves, so the federal capital is counted as a fixed state.
         self.assertNotIn("capital_scope", source)
-        occupied = body(EFFECTS, "ADISCORD_west_count_occupied_home_state")
+        occupied = body(EFFECTS, "ADISCORD_west_count_occupied_state")
         self.assertIn("owner = { ADISCORD_west_on_ivn_side = yes }", occupied)
         self.assertIn("owner = { ADISCORD_west_on_wrk_side = yes }", occupied)
+        effects = EFFECTS.read_text(encoding="utf-8")
+        # Holding one's own corridor or declaring the war never decides the result.
+        self.assertNotIn("ADISCORD_west_count_key_state", effects)
+        self.assertNotIn("declarer_side", effects)
+        tie = source[source.rindex("else = {"):]
+        self.assertIn("ADISCORD_west_final_resolve_without_hegemon = yes", tie)
+        self.assertIn("news_event = { id = ADISCORD_west.31 hours = 2 }", tie)
+        self.assertNotIn("_victory", tie)
         events = EVENTS.read_text(encoding="utf-8")
+        news = events[events.index("\tid = ADISCORD_west.31\n"):events.index("\tid = ADISCORD_west.40\n")]
+        self.assertIn("ADISCORD_west.31.t_truce", news)
+        self.assertIn("ADISCORD_west.31.d_truce", news)
+        self.assertIn("ADISCORD_west.31.b", news)
         self.assertIn("country_event = { id = ADISCORD_west.20 days = 720 }", body(EFFECTS, "ADISCORD_west_final_war_start"))
         self.assertIn("days > 718", events)
 
@@ -243,15 +257,20 @@ class WestFinalWarContractTests(unittest.TestCase):
     def test_each_path_has_one_final_focus(self):
         ivn = focus_blocks(IVN_TREE)
         wrk = focus_blocks(WRK_TREE)
+        worker = focus_blocks(WORKER_TREE)
+        technical = focus_blocks(TECHNICAL_TREE)
+        empire = focus_blocks(EMPIRE_TREE)
         finals = {
             "IVN_shield_over_the_west": ivn,
             "IVN_emergency_march_west": ivn,
-            "WRK_worker_west_mandate_for_itora": wrk,
+            "IVN_trade_war_for_the_ports": ivn,
+            "WRK_worker_west_mandate_for_itora": worker,
             "WRK_joint_west_return_of_the_marches": wrk,
-            "WRK_utilitarian_west_engineering_border": wrk,
+            "WRK_utilitarian_west_engineering_border": technical,
+            "WRK_empire_itora_must_fall": empire,
         }
         starters = set()
-        for tree in (ivn, wrk):
+        for tree in (ivn, wrk, worker, technical, empire):
             for identifier, focus in tree.items():
                 if "ADISCORD_west_final_war_start" in repr(focus):
                     starters.add(identifier)
@@ -259,18 +278,19 @@ class WestFinalWarContractTests(unittest.TestCase):
         for identifier, tree in finals.items():
             available = repr(next(e.value for e in tree[identifier] if e.key == "available"))
             self.assertIn("ADISCORD_west_final_can_start", available, identifier)
-        for route in ROUTES:
-            chain = [identifier for identifier in wrk if identifier.startswith(f"WRK_{route}_west_")]
-            self.assertEqual(len(chain), 4, route)
-            for identifier in chain:
-                allow = repr(next(e.value for e in wrk[identifier] if e.key == "allow_branch"))
-                self.assertIn(f"ADISCORD_vorkerland_route_{route}", allow, identifier)
+        # The joint chain stays in the civil-war tree; the other routes own their trees.
+        chain = [identifier for identifier in wrk if identifier.startswith("WRK_joint_west_")]
+        self.assertEqual(len(chain), 4)
+        for identifier in chain:
+            allow = repr(next(e.value for e in wrk[identifier] if e.key == "allow_branch"))
+            self.assertIn("ADISCORD_vorkerland_route_joint", allow, identifier)
+        self.assertFalse([key for key in wrk if key.startswith(("WRK_worker_west_", "WRK_utilitarian_west_"))])
 
     def test_heritage_focuses_reward_the_western_settlement(self):
         heritage = {
-            "WRK_worker_west_confederate_charter": (WRK_TREE, "ADISCORD_west_hegemon_WRK"),
+            "WRK_worker_west_confederate_charter": (WORKER_TREE, "ADISCORD_west_hegemon_WRK"),
             "WRK_joint_west_imperial_settlement": (WRK_TREE, "ADISCORD_west_hegemon_WRK"),
-            "WRK_utilitarian_west_technical_trusteeship": (WRK_TREE, "ADISCORD_west_hegemon_WRK"),
+            "WRK_utilitarian_west_technical_trusteeship": (TECHNICAL_TREE, "ADISCORD_west_hegemon_WRK"),
         }
         for identifier, (path, flag) in heritage.items():
             focus = focus_blocks(path)[identifier]
@@ -316,13 +336,21 @@ class WestFinalWarContractTests(unittest.TestCase):
         self.assertIn("NOT = { has_country_flag = ADISCORD_west_league_offer_pending }", body(TRIGGERS, "ADISCORD_west_league_target_valid"))
 
     def test_vorkerland_treaties_mirror_the_league_and_let_the_target_answer(self):
-        decisions = (ROOT / "common/decisions/ADISCORD_west_final_war_decisions.txt").read_text(encoding="utf-8")
-        start = decisions.index("\tADISCORD_west_wrk_offer_front_treaty = {")
-        decision = decisions[start:decisions.index("\tADISCORD_west_ivn_hold_the_marches = {", start)]
-        self.assertEqual(set(re.search(r"targets = \{ ([^}]*) \}", decision)[1].split()), set(REGIONAL))
-        self.assertIn("ADISCORD_west_wrk_treaties_unlocked = yes", decision)
-        self.assertIn("FROM = { ADISCORD_west_league_target_valid = yes }", decision)
-        self.assertNotIn("add_to_faction", decision)
+        decisions = DECISIONS.read_text(encoding="utf-8")
+        for name, unlock, lean in (
+            ("ADISCORD_west_wrk_offer_front_treaty", "ADISCORD_west_wrk_treaties_unlocked", "ADISCORD_west_leans_to_wrk_ally"),
+            ("ADISCORD_west_ivn_offer_league", "ADISCORD_west_ivn_league_unlocked", "ADISCORD_west_leans_to_ivn_ally"),
+        ):
+            start = decisions.index(f"\t{name} = {{")
+            decision = decisions[start:decisions.index("\n\t}\n", start)]
+            self.assertEqual(set(re.search(r"targets = \{ ([^}]*) \}", decision)[1].split()), set(REGIONAL))
+            self.assertIn(f"{unlock} = yes", decision)
+            self.assertIn("FROM = { ADISCORD_west_league_target_valid = yes }", decision)
+            self.assertIn(f"FROM = {{ {lean} = yes }}", decision)
+            self.assertNotIn("add_to_faction", decision)
+        league = body(TRIGGERS, "ADISCORD_west_ivn_league_unlocked")
+        for course in ("IVN_shield_league_of_republics", "IVN_emergency_protectorates", "IVN_trade_compacts"):
+            self.assertIn(f"has_completed_focus = {course}", league)
         source = EVENTS.read_text(encoding="utf-8")
         offer = source[source.index("\tid = ADISCORD_west.43\n"):source.index("\tid = ADISCORD_west.44\n")]
         self.assertEqual(offer.count("clr_country_flag = ADISCORD_west_league_offer_pending"), 2)
@@ -382,19 +410,186 @@ class WestFinalWarContractTests(unittest.TestCase):
         }
         self.assertEqual(manual, {"yes"})
 
-    def test_side_choice_weights_give_every_wrk_route_a_constituency(self):
-        events = EVENTS.read_text(encoding="utf-8")
-        choice = events[events.index("id = ADISCORD_west.10"):events.index("id = ADISCORD_west.11")]
-        wrk_option = choice[choice.index("name = ADISCORD_west.10.a"):choice.index("name = ADISCORD_west.10.b")]
-        ivn_option = choice[choice.index("name = ADISCORD_west.10.b"):]
-        for route in ROUTES:
-            self.assertIn(f"has_country_flag = ADISCORD_vorkerland_route_{route}", wrk_option, route)
-        self.assertIn("has_country_flag = ADISCORD_vorkerland_free_republics_recognized", wrk_option)
-        self.assertEqual(wrk_option.count("strength_ratio"), ivn_option.count("strength_ratio"))
+    def test_every_wrk_route_seeds_its_own_constituency(self):
+        seed = body(EFFECTS, "ADISCORD_west_seed_leans")
+        for route in ROUTES[:2]:
+            self.assertIn(f"has_country_flag = ADISCORD_vorkerland_route_{route}", seed, route)
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_free_republics_guaranteed_by_ivn", seed)
+        self.assertNotIn("set_variable = { var = ADISCORD_west_lean", seed)
+        self.assertEqual(set(re.findall(r"\b([A-Z]{3}) = \{ add_to_variable = \{ var = ADISCORD_west_lean", seed)) - {"WRK", "IVN"}, set(REGIONAL))
+        recognition = (ROOT / "common/decisions/ADISCORD_vorkerland_decisions.txt").read_text(encoding="utf-8")
+        recognition = recognition[recognition.index("ADISCORD_vorkerland_recognize_free_republics = {"):]
+        recognition = recognition[:recognition.index("ai_will_do")]
+        self.assertIn("ROM = { ADISCORD_west_push_lean = yes }", recognition)
+        self.assertIn("TRU = { ADISCORD_west_push_lean = yes }", recognition)
 
     def test_gameplay_files_have_no_bom(self):
         for path in (EFFECTS, TRIGGERS, EVENTS, IVN_TREE):
             self.assertFalse(path.read_bytes().startswith(b"\xef\xbb\xbf"), path.name)
+
+
+class WesternInfluenceTests(unittest.TestCase):
+    """Static contracts of the lean scale, neutrality and transit."""
+
+    INFLUENCE_DECISIONS = (
+        "ADISCORD_west_send_envoys",
+        "ADISCORD_west_ship_arms",
+        "ADISCORD_west_wrk_offer_front_treaty",
+        "ADISCORD_west_ivn_offer_league",
+        "ADISCORD_west_ivn_humanitarian_convoys",
+        "ADISCORD_west_ivn_ultimatum",
+        "ADISCORD_west_ivn_trade_agreement",
+        "ADISCORD_west_call_to_arms",
+    )
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = EFFECTS.read_text(encoding="utf-8")
+        cls.events = EVENTS.read_text(encoding="utf-8")
+        cls.decisions = DECISIONS.read_text(encoding="utf-8")
+
+    def decision(self, name):
+        start = self.decisions.index(f"\t{name} = {{")
+        return self.decisions[start:self.decisions.index("\n\t}\n", start)]
+
+    def test_seeding_runs_once_at_the_verified_reunification(self):
+        finalize = body(ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt", "ADISCORD_vorkerland_finalize_reunified_wrk")
+        call = finalize.index("ADISCORD_west_seed_leans = yes")
+        guard = finalize.rindex("NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }", 0, call)
+        self.assertLess(guard, call)
+        self.assertLess(call, finalize.index("set_global_flag = ADISCORD_vorkerland_collapse_finished"))
+        seed = body(EFFECTS, "ADISCORD_west_seed_leans")
+        self.assertIn("ADISCORD_west_clamp_all_leans = yes", seed)
+        for tag in CHAMPIONS:
+            self.assertIn(f"{tag} = {{ add_to_variable = {{ var = ADISCORD_west_influence_power value = 10 }} }}", seed)
+
+    def test_push_follows_the_acting_champion_and_stays_bounded(self):
+        push = body(EFFECTS, "ADISCORD_west_push_lean")
+        self.assertIn("limit = { ROOT = { tag = WRK } }", push)
+        self.assertIn("add_to_variable = { var = ADISCORD_west_lean value = ADISCORD_west_push }", push)
+        self.assertIn("subtract_from_variable = { var = ADISCORD_west_lean value = ADISCORD_west_push }", push)
+        self.assertIn("clamp_variable = { var = ADISCORD_west_lean min = -100 max = 100 }", push)
+        self.assertIn("ADISCORD_west_refresh_transit = yes", push)
+        everyone = body(EFFECTS, "ADISCORD_west_push_all_leans")
+        self.assertEqual(set(re.findall(r"\b([A-Z]{3}) = \{ ADISCORD_west_push_lean = yes \}", everyone)), set(REGIONAL))
+
+    def test_ai_side_choice_follows_the_lean_exactly(self):
+        choice = self.events[self.events.index("\tid = ADISCORD_west.10\n"):self.events.index("\tid = ADISCORD_west.13\n")]
+        options = choice.split("\toption = {")[1:]
+        self.assertEqual(len(options), 3)
+        expected = (
+            ("ADISCORD_west_join_wrk_side = yes", "ADISCORD_west_leans_to_wrk_ally = yes"),
+            ("ADISCORD_west_join_ivn_side = yes", "ADISCORD_west_leans_to_ivn_ally = yes"),
+            ("ADISCORD_west_declare_neutrality = yes", "NOT = { ADISCORD_west_leans_to_wrk_ally = yes }"),
+        )
+        for option, (effect, condition) in zip(options, expected):
+            self.assertIn(effect, option)
+            self.assertIn("base = 0", option)
+            self.assertIn(condition, option)
+        self.assertIn("NOT = { ADISCORD_west_leans_to_ivn_ally = yes }", options[2])
+        triggers = TRIGGERS.read_text(encoding="utf-8")
+        self.assertIn("value = 50 compare = greater_than_or_equals", body(TRIGGERS, "ADISCORD_west_leans_to_wrk_ally"))
+        self.assertIn("value = -50 compare = less_than_or_equals", body(TRIGGERS, "ADISCORD_west_leans_to_ivn_ally"))
+        self.assertIn("value = 20 compare = greater_than_or_equals", body(TRIGGERS, "ADISCORD_west_grants_wrk_transit"))
+        self.assertIn("value = -20 compare = less_than_or_equals", body(TRIGGERS, "ADISCORD_west_grants_ivn_transit"))
+        self.assertIn("ADISCORD_west_leans_to_root_ally", triggers)
+
+    def test_neutral_states_stay_out_of_the_settlement_and_lose_transit_on_every_end(self):
+        loser = body(EFFECTS, "ADISCORD_west_mark_loser")
+        self.assertIn("has_variable = ADISCORD_west_side", loser)
+        declare = body(EFFECTS, "ADISCORD_west_declare_neutrality")
+        self.assertNotIn("ADISCORD_west_side", declare)
+        self.assertIn("country_event = { id = ADISCORD_west.13 days = 1 }", declare)
+        settle = body(EFFECTS, "ADISCORD_west_settle_neutrality")
+        self.assertIn("limit = { has_variable = ADISCORD_west_side }", settle)
+        self.assertIn("white_peace = PREV", settle)
+        clear = body(EFFECTS, "ADISCORD_west_clear_participant")
+        self.assertIn("clr_country_flag = ADISCORD_west_neutral", clear)
+        self.assertIn("ADISCORD_west_revoke_transit = yes", clear)
+        for terminal in ("ADISCORD_west_apply_settlement", "ADISCORD_west_final_resolve_without_hegemon"):
+            self.assertIn("ADISCORD_west_clear_participants = yes", body(EFFECTS, terminal), terminal)
+        transit = body(EFFECTS, "ADISCORD_west_refresh_transit")
+        self.assertLess(transit.index("ADISCORD_west_revoke_transit = yes"), transit.index("give_military_access = WRK"))
+        self.assertIn("ADISCORD_west_final_active = yes", transit)
+        revoke = body(EFFECTS, "ADISCORD_west_revoke_transit")
+        for tag in CHAMPIONS:
+            self.assertIn(f"limit = {{ {tag} = {{ has_military_access_to = PREV }} }}", revoke)
+        follow = body(EFFECTS, "ADISCORD_west_follow_root")
+        self.assertIn("ROOT = { has_country_flag = ADISCORD_west_neutral }", follow)
+
+    def test_influence_decisions_target_the_western_states_and_price_exactly(self):
+        for name in self.INFLUENCE_DECISIONS:
+            decision = self.decision(name)
+            self.assertEqual(set(re.search(r"targets = \{ ([^}]*) \}", decision)[1].split()), set(REGIONAL), name)
+        arms = self.decision("ADISCORD_west_ship_arms")
+        self.assertIn("NOT = { has_equipment = { infantry_equipment < 1000 } }", arms)
+        shipment = body(EFFECTS, "ADISCORD_west_ship_arms")
+        self.assertIn("amount = -1000", shipment)
+        self.assertIn("amount = 1000", shipment)
+        trade = self.decision("ADISCORD_west_ivn_trade_agreement")
+        self.assertIn("cost = 0", trade)
+        self.assertIn("custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }", trade)
+        self.assertEqual(trade.count("ADISCORD_economy_spend_100 = yes"), 1)
+        for language in ("russian", "english"):
+            text = (ROOT / f"localisation/{language}/ADISCORD_west_final_war_l_{language}.yml").read_text(encoding="utf-8-sig")
+            for suffix in ("", "_blocked", "_tooltip"):
+                line = re.search(rf'^ ADISCORD_west_cost_treasury_100{suffix}:0 "([^"]*)"$', text, re.M)[1]
+                self.assertLess(line.index("100"), line.index("£"), (language, suffix))
+        call = self.decision("ADISCORD_west_call_to_arms")
+        self.assertIn("has_country_flag = ADISCORD_west_neutral", call)
+        self.assertIn("FROM = { ADISCORD_west_leans_to_root_ally = yes }", call)
+        ultimatum = self.decision("ADISCORD_west_ivn_ultimatum")
+        self.assertIn("is_neighbor_of = ROOT", ultimatum)
+        self.assertIn("ADISCORD_west_crisis_add = yes", ultimatum)
+
+    def test_category_lists_every_western_state(self):
+        for language in ("russian", "english"):
+            text = (ROOT / f"localisation/{language}/ADISCORD_west_final_war_l_{language}.yml").read_text(encoding="utf-8-sig")
+            desc = re.search(r'^ ADISCORD_west_influence_category_desc:0 "([^"]*)"$', text, re.M)[1]
+            self.assertEqual(set(re.findall(r"\[([A-Z]{3})\.ADISCORDWestLean\]", desc)), set(REGIONAL), language)
+
+
+class ItoranCourseTests(unittest.TestCase):
+    """The three Itoran courses exclude each other and each leads to the war."""
+
+    COURSES = ("IVN_humanist_shield", "IVN_emergency_order", "IVN_trade_republic")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.focuses = focus_blocks(IVN_TREE)
+
+    def test_courses_exclude_each_other_and_rejoin_for_the_heritage(self):
+        for course in self.COURSES:
+            exclusive = {e.value for item in self.focuses[course] if item.key == "mutually_exclusive" for e in item.value}
+            self.assertEqual(exclusive, set(self.COURSES) - {course}, course)
+        heritage = {e.value for item in self.focuses["IVN_west_heritage"] if item.key == "prerequisite" for e in item.value}
+        self.assertEqual(heritage, set(self.COURSES))
+        spirit = body(EFFECTS, "ADISCORD_west_add_path_spirit")
+        self.assertIn("ADISCORD_west_ivn_trade_course = yes", spirit)
+        self.assertIn("has_completed_focus = IVN_trade_republic", body(TRIGGERS, "ADISCORD_west_ivn_trade_course"))
+
+    def test_programmes_are_gated_by_their_focus_and_refund_a_lost_site(self):
+        decisions = (ROOT / "common/decisions/ADISCORD_IVN_decisions.txt").read_text(encoding="utf-8")
+        workshops = decisions[decisions.index("\tIVN_march_workshops = {"):decisions.index("\tIVN_reserve_call_up = {")]
+        self.assertIn("visible = { has_completed_focus = IVN_march_reconstruction }", workshops)
+        self.assertIn(("unlock_decision_tooltip", "IVN_march_workshops"), [(e.key, e.value) for e in flatten(self.focuses["IVN_march_reconstruction"])])
+        remove = workshops[workshops.index("remove_effect"):]
+        self.assertIn("IVN_march_workshop_site_exists = yes", remove)
+        self.assertIn("add_political_power = 50", remove.split("else = {")[1])
+        self.assertIn("cost = 50", workshops)
+        self.assertIn("value = 3 compare = less_than", workshops)
+        reserve = decisions[decisions.index("\tIVN_reserve_call_up = {"):]
+        self.assertIn("visible = { has_completed_focus = IVN_citizen_reserve }", reserve)
+        hold = (ROOT / "common/decisions/ADISCORD_west_final_war_decisions.txt").read_text(encoding="utf-8")
+        hold = hold[hold.index("\tADISCORD_west_ivn_hold_the_marches = {"):]
+        self.assertIn("has_completed_focus = IVN_west_war_council", hold[:hold.index("\n\t}\n")])
+
+    def test_trade_republic_keeps_the_leader_and_elections(self):
+        adopt = body(ROOT / "common/scripted_effects/ADISCORD_IVN_scripted_effects.txt", "IVN_adopt_trade_republic")
+        self.assertIn("ruling_party = pragmatism", adopt)
+        self.assertIn("elections_allowed = yes", adopt)
+        self.assertIn("character = IVN_Vadim_Ivanchik", adopt)
+        self.assertIn("ideology = pragmatism_ideology", adopt)
 
 
 class SubjectIntegrationRemovalTests(unittest.TestCase):
@@ -487,7 +682,7 @@ class ItoranAggregateTests(unittest.TestCase):
             self.assertEqual(applied, self.display[swap["add_idea"]], identifier)
             self.assertIn(("IVN_refresh_order", "yes"), [(e.key, e.value) for e in hidden], identifier)
             checked += 1
-        self.assertEqual(checked, 24)
+        self.assertEqual(checked, 28)
 
     def test_display_ideas_are_never_installed(self):
         text = IVN_TREE.read_text(encoding="utf-8")
@@ -613,28 +808,30 @@ class WestReconstructionScenarios(unittest.TestCase):
             facts[(tag, "is_subject", "no")] = False
             self.assertFalse(matches_conditions(guard, facts, "WRK"), tag)
 
-    def test_all_five_final_focuses_show_and_enforce_the_pause(self):
+    def test_every_final_focus_shows_and_enforces_the_pause(self):
         count = 0
-        for path, tag in ((WRK_TREE, "WRK"), (IVN_TREE, "IVN")):
+        for path, tag in ((WRK_TREE, "WRK"), (WORKER_TREE, "WRK"), (TECHNICAL_TREE, "WRK"), (EMPIRE_TREE, "WRK"), (IVN_TREE, "IVN")):
             for name, focus in focus_blocks(path).items():
                 if "ADISCORD_west_final_war_start" not in repr(focus):
                     continue
                 count += 1
                 available = block(focus, "available")
                 self.assertIn(f"{tag}_west_reconstruction_ready_tt", repr(available))
+                # Only the joint route gates its war on a programme focus; the
+                # other trees reach their final through prerequisites.
+                drilled = name.startswith("WRK_joint_")
                 for age, expected in ((179, False), (180, True)):
                     facts = self.crisis_facts(age)
-                    if tag == "WRK":
-                        route = name.split("_")[1]
-                        facts[("WRK", "has_completed_focus", f"WRK_{route}_pw_field_exercises")] = True
+                    if drilled:
+                        facts[("WRK", "has_completed_focus", "WRK_joint_pw_field_exercises")] = True
                     self.assertEqual(
                         matches_conditions(self.expand(available), facts, tag),
                         expected, (name, age),
                     )
-                    if tag == "WRK":
-                        facts[("WRK", "has_completed_focus", f"WRK_{route}_pw_field_exercises")] = False
+                    if drilled:
+                        facts[("WRK", "has_completed_focus", "WRK_joint_pw_field_exercises")] = False
                         self.assertFalse(matches_conditions(self.expand(available), facts, tag))
-        self.assertEqual(count, 5)
+        self.assertEqual(count, 7)
 
     def route_paths(self, names, completed):
         if names[-1] in completed:
@@ -693,9 +890,7 @@ class WestReconstructionScenarios(unittest.TestCase):
 
     def test_both_choices_pay_the_exact_agreed_totals_without_double_awards(self):
         expected = {
-            "worker": Counter(industrial_complex=1, add_stability=0.03, add_political_power=50),
             "joint": Counter(industrial_complex=1, army_experience=20, infantry_equipment=1000),
-            "utilitarian": Counter(industrial_complex=1, industry_bonus_50=1, support_equipment=100),
         }
         for route, names in self.routes.items():
             short = route.removeprefix("ADISCORD_vorkerland_route_")
@@ -721,21 +916,6 @@ class WestReconstructionScenarios(unittest.TestCase):
                     available = block(focus, "available")
                     self.assertIn("WRK_reconstruction_factory_site_tt", repr(available))
                     self.assertIn("is_controlled_by", repr(available))
-
-    def test_technical_finish_needs_a_site_only_when_factory_is_still_owed(self):
-        names = self.routes["ADISCORD_vorkerland_route_utilitarian"]
-        finish = self.focuses[names[-1]]
-        alternatives = block(block(finish, "available"), "OR")
-        self.assertEqual(scalar(alternatives, "has_completed_focus"), names[4])
-        factory_condition = block(alternatives, "custom_trigger_tooltip")
-        self.assertEqual(scalar(factory_condition, "tooltip"), "WRK_reconstruction_factory_site_tt")
-        for selected in (names[3], names[4]):
-            effects = list(selected_effects(
-                block(finish, "completion_reward"),
-                {("WRK", "has_completed_focus", selected): True}, "WRK",
-            ))
-            factories = [entry for _, entry in effects if entry.key == "random_owned_controlled_state"]
-            self.assertEqual(len(factories), 1 if selected == names[3] else 0)
 
     def test_reconstruction_is_route_scoped_and_ai_can_finish_either_choice(self):
         plans = (ROOT / "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt").read_text(encoding="utf-8")

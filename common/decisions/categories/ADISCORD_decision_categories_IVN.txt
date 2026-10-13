@@ -1,0 +1,11 @@
+IVN_marches_category = {
+	icon = generic_construction
+	allowed = { tag = IVN }
+	visible = {
+		OR = {
+			has_completed_focus = IVN_march_reconstruction
+			has_completed_focus = IVN_citizen_reserve
+		}
+	}
+	priority = 24
+}

@@ -5349,6 +5349,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_west.13",
+      "namespace": "ADISCORD_west",
+      "number": 13,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_west.20",
       "namespace": "ADISCORD_west",
       "number": 20,
@@ -5416,6 +5424,30 @@
       "id": "ADISCORD_west.45",
       "namespace": "ADISCORD_west",
       "number": 45,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_west.46",
+      "namespace": "ADISCORD_west",
+      "number": 46,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_west.47",
+      "namespace": "ADISCORD_west",
+      "number": 47,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_west.48",
+      "namespace": "ADISCORD_west",
+      "number": 48,
       "owner": "events/ADISCORD_west_final_war_events.txt",
       "subsystem": "west_final_war",
       "status": "active"
@@ -5664,6 +5696,14 @@
       "id": "ADISCORD_vorkerland_postwar.5",
       "namespace": "ADISCORD_vorkerland_postwar",
       "number": 5,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_postwar.6",
+      "namespace": "ADISCORD_vorkerland_postwar",
+      "number": 6,
       "owner": "events/ADISCORD_vorkerland_events.txt",
       "subsystem": "vorkerland_postwar",
       "status": "active"

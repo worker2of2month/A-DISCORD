@@ -238,6 +238,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 		}
 		available = {
+			NOT = { has_war_with = RZA }
 			ADISCORD_vorkerland_rus_can_open_free_front = yes
 			custom_trigger_tooltip = {
 				tooltip = RUS_campaign_rza_border_tt
@@ -277,6 +278,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 		}
 		available = {
+			NOT = { has_war_with = MLR }
 			ADISCORD_vorkerland_rus_can_open_free_front = yes
 			custom_trigger_tooltip = {
 				tooltip = RUS_campaign_mlr_border_tt
@@ -316,6 +318,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 		}
 		available = {
+			NOT = { has_war_with = ERT }
 			ADISCORD_vorkerland_rus_can_open_free_front = yes
 			custom_trigger_tooltip = {
 				tooltip = RUS_campaign_ert_border_tt
@@ -355,6 +358,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 		}
 		available = {
+			NOT = { has_war_with = IRT }
 			ADISCORD_vorkerland_rus_can_open_free_front = yes
 			custom_trigger_tooltip = {
 				tooltip = RUS_campaign_irt_border_tt
@@ -394,6 +398,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 		}
 		available = {
+			NOT = { has_war_with = SCA }
 			ADISCORD_vorkerland_rus_can_open_free_front = yes
 			custom_trigger_tooltip = {
 				tooltip = RUS_campaign_sca_border_tt

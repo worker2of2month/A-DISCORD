@@ -26,8 +26,6 @@ ADISCORD_vorkerland_khan_border_offensive = {
 ADISCORD_vorkerland_rus_dirty_sla_offensive = {
 	allowed = { tag = RUS }
 	enable = {
-		has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
-		check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
 		country_exists = SLA
 		has_war_with = SLA
 	}
@@ -40,8 +38,6 @@ ADISCORD_vorkerland_rus_dirty_sla_offensive = {
 ADISCORD_vorkerland_rus_dirty_rza_offensive = {
 	allowed = { tag = RUS }
 	enable = {
-		has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
-		check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
 		country_exists = RZA
 		has_war_with = RZA
 	}
@@ -54,8 +50,6 @@ ADISCORD_vorkerland_rus_dirty_rza_offensive = {
 ADISCORD_vorkerland_rus_dirty_mlr_offensive = {
 	allowed = { tag = RUS }
 	enable = {
-		has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
-		check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
 		country_exists = MLR
 		has_war_with = MLR
 	}
@@ -68,8 +62,6 @@ ADISCORD_vorkerland_rus_dirty_mlr_offensive = {
 ADISCORD_vorkerland_rus_dirty_ert_offensive = {
 	allowed = { tag = RUS }
 	enable = {
-		has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
-		check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
 		country_exists = ERT
 		has_war_with = ERT
 	}
@@ -82,8 +74,6 @@ ADISCORD_vorkerland_rus_dirty_ert_offensive = {
 ADISCORD_vorkerland_rus_dirty_irt_offensive = {
 	allowed = { tag = RUS }
 	enable = {
-		has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
-		check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
 		country_exists = IRT
 		has_war_with = IRT
 	}
@@ -96,8 +86,6 @@ ADISCORD_vorkerland_rus_dirty_irt_offensive = {
 ADISCORD_vorkerland_rus_dirty_sca_offensive = {
 	allowed = { tag = RUS }
 	enable = {
-		has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
-		check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
 		country_exists = SCA
 		has_war_with = SCA
 	}

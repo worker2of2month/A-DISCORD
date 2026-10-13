@@ -892,7 +892,7 @@ ADISCORD_vorkerland_check_khan_border_war = {
 	if = {
 		limit = {
 			has_global_flag = ADISCORD_vorkerland_khan_border_war_started
-			NOT = { has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active }
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_sla_campaign_active }
 			country_exists = SLA
 			has_war_with = SLA
 		}
@@ -9326,6 +9326,11 @@ ADISCORD_vorkerland_finalize_reunified_wrk = {
 				ADISCORD_vorkerland_show_dorian_victory_superevent = yes
 			}
 		}
+		# The western states form their sympathies once, at the first verified reunification.
+		if = {
+			limit = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished } }
+			ADISCORD_west_seed_leans = yes
+		}
 		set_global_flag = ADISCORD_vorkerland_central_war_finished
 		set_global_flag = ADISCORD_vorkerland_collapse_finished
 		ADISCORD_vorkerland_reconcile_campaign_state = yes
@@ -10536,6 +10541,12 @@ ADISCORD_vorkerland_establish_world_empire = {
 		ADISCORD_economy_mark_dirty = yes
 		news_event = { id = ADISCORD_vorkerland_postwar.5 hours = 1 }
 	}
+}
+
+# COUNTRY WRK at its route's Unity Tower. The worker and technocratic routes
+# continue in their own postwar trees; the event loads them in a fresh scope.
+ADISCORD_vorkerland_schedule_route_tree = {
+	country_event = { id = ADISCORD_vorkerland_postwar.6 days = 1 }
 }
 
 ADISCORD_vorkerland_empire_refresh_industry = {

@@ -2,7 +2,7 @@ state={
 	id=169
 	name="STATE_169"
 	provinces={
-		973 2306 4707 5849 10693 11913 16464 16476
+		973 4707 5344 5849 10824 11913
 	}
 	manpower = 650000
 	buildings_max_level_factor = 1.000
@@ -19,6 +19,5 @@ state={
 			infrastructure = 3
 			arms_factory = 1
 		}
-		victory_points = { 10693 10 }
 	}
 }

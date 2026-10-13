@@ -493,10 +493,12 @@ class PostwarExpansionTests(unittest.TestCase):
         baseline["VAL"]["faction"] = "outside_pact"
         self.assertFalse(self.expedition_entry_matches("can_attack_afrela", baseline))
 
-    def test_ninety_definitions_are_reachable_without_other_winner_focuses(self):
+    def test_joint_definitions_are_reachable_without_other_winner_focuses(self):
+        # Only the joint route keeps the programme columns in the civil-war tree;
+        # the worker and technocratic routes load their own trees.
         actual = {key for key in self.focuses if re.fullmatch(r"WRK_\w+_pw_\w+", key)}
         self.assertEqual(actual, set(POSTWAR_EXPANSION_IDS))
-        self.assertEqual(len(actual), 90)
+        self.assertEqual(len(actual), 30)
         for flag, ids in POSTWAR_EXPANSION_ROUTES.items():
             route = flag.removeprefix("ADISCORD_vorkerland_route_")
             self.assertEqual(len(ids), 30)
@@ -526,7 +528,7 @@ class PostwarExpansionTests(unittest.TestCase):
             self.assertEqual(len(points), len(set(points)), route)
 
     def test_ai_equips_and_drills_army_before_the_western_grace_expires(self):
-        for route in ("worker", "joint", "utilitarian"):
+        for route in ("joint",):
             plan = named_block(self.plans, f"ADISCORD_vorkerland_wrk_postwar_{route}_plan")
             order = re.findall(r"WRK_\w+", named_block(plan, "ai_national_focuses"))
             terminal = f"WRK_{route}_pw_field_exercises"
@@ -543,7 +545,7 @@ class PostwarExpansionTests(unittest.TestCase):
 
     def test_full_routes_have_distinct_manpower_and_weapon_budgets(self):
         # Totals cover every definition, including both answers of each paired choice.
-        for route, manpower, rifles in (("worker", 140000, 38000), ("joint", 110000, 43000), ("utilitarian", 70000, 28000)):
+        for route, manpower, rifles in (("joint", 110000, 43000),):
             source = "\n".join(self.focuses[key] for key in POSTWAR_EXPANSION_IDS if key.startswith(f"WRK_{route}_"))
             self.assertEqual(sum(map(int, re.findall(r"add_manpower = (\d+)", source))), manpower)
             self.assertEqual(sum(map(int, re.findall(r"type = infantry_equipment\s+amount = (\d+)", source))), rifles)
@@ -552,7 +554,7 @@ class PostwarExpansionTests(unittest.TestCase):
             self.assertEqual(source.count("add_research_slot = 1"), 1)
 
     def test_each_column_offers_one_exclusive_choice_that_rejoins(self):
-        for route in ("worker", "joint", "utilitarian"):
+        for route in ("joint",):
             for left, right, merge in POSTWAR_EXPANSION_CHOICES:
                 left_id, right_id, merge_id = (f"WRK_{route}_pw_{slug}" for slug in (left, right, merge))
                 self.assertIn(f"mutually_exclusive = {{ focus = {right_id} }}", self.focuses[left_id])
@@ -565,7 +567,7 @@ class PostwarExpansionTests(unittest.TestCase):
                 self.assertEqual(len(parents), 1, (route, left))
 
     def test_reform_values_accumulate_once_and_dummy_ideas_are_preview_only(self):
-        for route, defence, supply, attack in (("worker", 0.12, -0.10, 0), ("joint", 0.02, -0.10, 0.13), ("utilitarian", 0.13, -0.15, 0)):
+        for route, defence, supply, attack in (("joint", 0.02, -0.10, 0.13),):
             totals = Counter()
             for key in POSTWAR_EXPANSION_IDS:
                 if not key.startswith(f"WRK_{route}_"):
@@ -665,10 +667,14 @@ class PostwarExpansionTests(unittest.TestCase):
             self.assertIn("has_war = no", decision)
             self.assertIn("cost = 50", decision)
             self.assertNotIn("add_political_power", decision)
-            for route in ("worker", "joint", "utilitarian"):
-                focus = self.focuses[f"WRK_{route}_pw_{target}_campaign"]
+            focus = self.focuses[f"WRK_joint_pw_{target}_campaign"]
+            self.assertIn(f"unlock_decision_tooltip = ADISCORD_vorkerland_pw_{target}_campaign", focus)
+            self.assertNotIn("pw_start_", focus)
+            for tree, unlock in (("worker_confederation", "WRK_conf_southern_solidarity"), ("technical_directorate", "WRK_tech_southern_programme")):
+                focus = focus_blocks(read(f"focus_trees/Vorkerland/{tree}/focuses.txt"))[unlock]
                 self.assertIn(f"unlock_decision_tooltip = ADISCORD_vorkerland_pw_{target}_campaign", focus)
                 self.assertNotIn("pw_start_", focus)
+                self.assertIn(f"has_completed_focus = {unlock}", decision)
 
     def test_losing_wrk_keeps_the_war_for_the_final_capitulation_router(self):
         handler = self.effect("handle_capitulation")
@@ -700,7 +706,7 @@ class PostwarExpansionTests(unittest.TestCase):
 
     def test_western_front_preserves_readiness_and_production_budget(self):
         source = read("common/ai_strategy/ADISCORD_west_final_war_ai.txt")
-        # The offensive profile mirrors Itora's manual pokes; a depleted army holds.
+        # The offensive profile mirrors Itora's manual pokes; only a badly depleted army holds.
         for name, mode, manual in (
             ("ADISCORD_west_wrk_front_ivn", "balanced", "yes"),
             ("ADISCORD_west_wrk_hold_ivn", "careful", "no"),
@@ -708,7 +714,7 @@ class PostwarExpansionTests(unittest.TestCase):
             front = named_block(source, name)
             self.assertIn(f"execution_type = {mode}", front)
             self.assertIn(f"manual_attack = {manual}", front)
-            self.assertIn("ratio < 0.67", front)
+            self.assertIn("ratio < 0.5", front)
         production = named_block(source, "ADISCORD_wrk_postwar_production")
         self.assertNotIn("production_min_factories", production)
         self.assertIn("equipment_production_factor", production)
@@ -733,10 +739,15 @@ class PostwarExpansionTests(unittest.TestCase):
         triggers = read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")
         slots = named_block(triggers, "ADISCORD_vorkerland_pw_rebuild_slot_free")
         self.assertEqual(sorted(map(int, re.findall(r"rebuild_active value = (\d+)", slots))), [1, 2, 3])
-        for route in ("worker", "joint", "utilitarian"):
-            self.assertIn(f"has_completed_focus = WRK_{route}_pw_census", named_block(triggers, "ADISCORD_vorkerland_pw_reconstruction_open"))
-            self.assertIn(f"has_completed_focus = WRK_{route}_pw_repair_crews", slots)
-            self.assertIn(f"has_completed_focus = WRK_{route}_pw_municipal_network", slots)
+        opening = named_block(triggers, "ADISCORD_vorkerland_pw_reconstruction_open")
+        for first, second, third in (
+            ("WRK_joint_pw_census", "WRK_joint_pw_repair_crews", "WRK_joint_pw_municipal_network"),
+            ("WRK_conf_cooperative_workshops", "WRK_conf_municipal_councils", "WRK_conf_social_guarantees"),
+            ("WRK_tech_district_metrics", "WRK_tech_municipal_utilities", "WRK_tech_measured_economy"),
+        ):
+            self.assertIn(f"has_completed_focus = {first}", opening)
+            self.assertIn(f"has_completed_focus = {second}", slots)
+            self.assertIn(f"has_completed_focus = {third}", slots)
 
     def test_no_new_periodic_scans_or_legacy_recovery(self):
         source = self.effects[self.effects.index("ADISCORD_vorkerland_pw_ensure_institutions = {"):]
@@ -856,6 +867,9 @@ class WorldEmpireTests(unittest.TestCase):
             reward = block(focus, "completion_reward")
             applied = Counter()
             for entry in self.executable_entries(reward):
+                if entry.key == "add_to_variable" and scalar(entry.value, "var") == "ADISCORD_west_influence_power":
+                    # Western influence is a mechanic input, not a dynamic modifier field.
+                    continue
                 if entry.key == "add_manpower":
                     totals[entry.key] += int(entry.value)
                 elif entry.key == "add_to_variable":
@@ -876,8 +890,9 @@ class WorldEmpireTests(unittest.TestCase):
                         for modifier in block(block(ideas, idea.value), "modifier"):
                             preview[modifier.key] += Decimal(modifier.value)
             self.assertEqual(dict(applied), dict(preview), focus_id)
+        # Totals cover both alternatives of every exclusive pair.
         self.assertEqual(totals["add_manpower"], 150000)
-        self.assertEqual(dict(buildings), {"arms_factory": 12, "industrial_complex": 6})
+        self.assertEqual(dict(buildings), {"arms_factory": 8, "industrial_complex": 6})
         self.assertEqual(dict(equipment), {
             "infantry_equipment": 40000,
             "artillery_equipment": 2000,
@@ -888,17 +903,64 @@ class WorldEmpireTests(unittest.TestCase):
             "ADISCORD_cas_airframe_2170": 200,
         })
         self.assertEqual(dict(variables), {
-            "WRK_empire_output": Decimal("0.35"),
-            "WRK_empire_org": Decimal("0.20"),
+            "WRK_empire_output": Decimal("0.30"),
+            "WRK_empire_org": Decimal("0.30"),
             "WRK_empire_defence": Decimal("0.30"),
-            "WRK_empire_attack": Decimal("0.30"),
+            "WRK_empire_attack": Decimal("0.35"),
             "WRK_empire_supply": Decimal("-0.20"),
         })
 
+    def exclusive_pairs(self):
+        pairs = set()
+        for key, focus in self.focuses.items():
+            for item in focus:
+                if item.key == "mutually_exclusive":
+                    pairs.add(frozenset({key, scalar(item.value, "focus")}))
+        return pairs
+
+    def test_each_exclusive_choice_is_a_real_alternative(self):
+        pairs = self.exclusive_pairs()
+        self.assertEqual(pairs, {
+            frozenset({"WRK_empire_army_oath", "WRK_empire_imperial_chancery"}),
+            frozenset({"WRK_empire_war_industry", "WRK_empire_reconstruction_trusts"}),
+            frozenset({"WRK_empire_artillery_mass", "WRK_empire_motor_columns"}),
+        })
+        for pair in pairs:
+            for key in pair:
+                with self.subTest(focus=key):
+                    other = next(iter(pair - {key}))
+                    exclusive = [scalar(item.value, "focus") for item in self.focuses[key] if item.key == "mutually_exclusive"]
+                    self.assertEqual(exclusive, [other])
+                    reward = [entry.key for entry in block(self.focuses[key], "completion_reward")]
+                    self.assertTrue(set(reward) - {"effect_tooltip", "custom_effect_tooltip", "hidden_effect"}, key)
+        # Each branch rejoins through one prerequisite block that accepts either route.
+        merges = {
+            "WRK_empire_total_mobilization": {"WRK_empire_army_oath", "WRK_empire_imperial_chancery"},
+            "WRK_empire_mobilized_economy": {"WRK_empire_war_industry", "WRK_empire_imperial_building_offices"},
+            "WRK_empire_state_legions": {"WRK_empire_artillery_mass", "WRK_empire_motor_columns"},
+        }
+        for key, alternatives in merges.items():
+            blocks = [
+                {entry.value for entry in item.value if entry.key == "focus"}
+                for item in self.focuses[key] if item.key == "prerequisite"
+            ]
+            self.assertIn(alternatives, blocks, key)
+
+    def test_one_campaign_through_the_tree_is_not_longer_than_before(self):
+        pairs = [sorted(pair) for pair in self.exclusive_pairs()]
+        only_after = {"WRK_empire_imperial_building_offices": "WRK_empire_reconstruction_trusts"}
+        longest = 0
+        for mask in range(1 << len(pairs)):
+            skipped = {pair[(mask >> index) & 1] for index, pair in enumerate(pairs)}
+            skipped |= {key for key, parent in only_after.items() if parent in skipped}
+            weeks = sum(int(scalar(f, "cost")) for key, f in self.focuses.items() if key not in skipped)
+            longest = max(longest, weeks * 7)
+        self.assertEqual(longest, 434)
+
     def test_every_preparation_precedes_war_and_remains_available_during_war(self):
-        self.assertEqual(len(self.focuses), 23)
+        self.assertEqual(len(self.focuses), 24)
         requirements = {
-            key: {scalar(item.value, "focus") for item in focus if item.key == "prerequisite"}
+            key: {entry.value for item in focus if item.key == "prerequisite" for entry in item.value if entry.key == "focus"}
             for key, focus in self.focuses.items()
         }
         visited = set()
@@ -915,7 +977,6 @@ class WorldEmpireTests(unittest.TestCase):
         positions = [(scalar(f, "x"), scalar(f, "y")) for f in self.focuses.values()]
         self.assertEqual(len(positions), len(set(positions)))
         self.assertTrue(all(2 <= int(scalar(f, "cost")) <= 5 for f in self.focuses.values()))
-        self.assertEqual(sum(int(scalar(f, "cost")) for f in self.focuses.values()) * 7, 469)
         for key, focus in self.focuses.items():
             if key != "WRK_empire_itora_must_fall":
                 text = str(block(focus, "available"))
@@ -961,6 +1022,140 @@ class WorldEmpireTests(unittest.TestCase):
         outputs = expected_outputs({"WRK_vorkerland_world_empire"})
         self.assertEqual(len(outputs), 4)
         self.assertEqual(validate_outputs(outputs), [])
+
+
+class RouteTreeTests(unittest.TestCase):
+    """The worker and technocratic routes continue in their own trees after the Unity Tower."""
+
+    TREES = {
+        "ADISCORD_vorkerland_route_worker": (
+            "worker_confederation",
+            "ADISCORD_vorkerland_worker_confederation_focus",
+            "WRK_worker_west_mandate_for_itora",
+            "WRK_worker_west_confederate_charter",
+        ),
+        "ADISCORD_vorkerland_route_utilitarian": (
+            "technical_directorate",
+            "ADISCORD_vorkerland_technical_directorate_focus",
+            "WRK_utilitarian_west_engineering_border",
+            "WRK_utilitarian_west_technical_trusteeship",
+        ),
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        cls.trees = {}
+        for route, (folder, tree_id, final, heritage) in cls.TREES.items():
+            source = read(f"focus_trees/Vorkerland/{folder}/focuses.txt")
+            cls.trees[route] = (source, focus_blocks(source))
+        cls.civil_war = focus_blocks(read("focus_trees/Vorkerland/civil_war/focuses.txt"))
+        ideas = block(block(parse_clausewitz(read("common/ideas/ADISCORD_vorkerland_ideas.txt")), "ideas"), "country")
+        cls.ideas = {entry.key: entry.value for entry in ideas}
+        dynamic = parse_clausewitz(read("common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt"))
+        institutions = block(dynamic, "ADISCORD_vorkerland_postwar_institutions")
+        cls.fields = {entry.value: entry.key for entry in institutions if entry.key not in ("icon", "enable")}
+
+    def test_unity_tower_schedules_the_route_tree_and_the_event_loads_it(self):
+        events = read("events/ADISCORD_vorkerland_events.txt")
+        loader = named_block(events[events.index("id = ADISCORD_vorkerland_postwar.6") - 40:], "country_event")
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        self.assertIn("country_event = { id = ADISCORD_vorkerland_postwar.6 days = 1 }", named_block(effects, "ADISCORD_vorkerland_schedule_route_tree"))
+        for route, (folder, tree_id, final, heritage) in self.TREES.items():
+            short = route.removeprefix("ADISCORD_vorkerland_route_")
+            tower = self.civil_war[f"WRK_{short}_restore_unity_tower"]
+            self.assertIn("ADISCORD_vorkerland_schedule_route_tree = yes", tower)
+            self.assertIn(f"has_country_flag = {route}", loader)
+            self.assertIn(f"tree = {tree_id}", loader)
+            self.assertFalse([key for key in self.civil_war if key.startswith(f"WRK_{short}_pw_")])
+        self.assertIn("keep_completed = no", loader)
+        self.assertNotIn("ADISCORD_vorkerland_schedule_route_tree", self.civil_war["WRK_joint_restore_unity_tower"])
+
+    def test_deltas_match_applied_institution_changes_and_are_never_installed(self):
+        for route, (source, focuses) in self.trees.items():
+            for key, focus in focuses.items():
+                applied = Counter()
+                for variable, value in re.findall(r"add_to_variable = \{ var = (ADISCORD_vorkerland_pw_\w+) value = (-?[\d.]+) \}", focus):
+                    applied[self.fields[variable]] += float(value)
+                previews = re.findall(r"effect_tooltip = \{ add_ideas = (ADISCORD_vorkerland_pw_delta_\w+) \}", focus)
+                shown = Counter()
+                for idea in previews:
+                    self.assertEqual(scalar(block(self.ideas[idea], "allowed"), "always"), "no")
+                    for modifier in block(self.ideas[idea], "modifier"):
+                        shown[modifier.key] += float(modifier.value)
+                self.assertEqual(dict(applied), dict(shown), key)
+                if applied:
+                    self.assertIn("ADISCORD_vorkerland_pw_ensure_institutions = yes", focus)
+                self.assertNotRegex(named_block(focus, "hidden_effect"), r"add_ideas = ADISCORD_vorkerland_pw_delta_")
+
+    def test_exclusive_choices_rejoin_and_finals_follow_the_route(self):
+        for route, (folder, tree_id, final, heritage) in self.TREES.items():
+            source, focuses = self.trees[route]
+            positions = [(scalar(parse_clausewitz(f)[0].value, "x"), scalar(parse_clausewitz(f)[0].value, "y")) for f in focuses.values()]
+            self.assertEqual(len(positions), len(set(positions)), route)
+            pairs = set()
+            for key, focus in focuses.items():
+                for other in re.findall(r"mutually_exclusive = \{ focus = (\w+) \}", focus):
+                    self.assertIn(f"mutually_exclusive = {{ focus = {key} }}", focuses[other])
+                    pairs.add(frozenset({key, other}))
+            # One reconstruction choice and one army doctrine per route.
+            self.assertEqual(len(pairs), 2, route)
+            merges = [
+                set(re.findall(r"focus = (\w+)", group))
+                for focus in focuses.values()
+                for group in re.findall(r"prerequisite = \{([^}]*)\}", focus)
+            ]
+            for pair in pairs:
+                self.assertIn(set(pair), merges, pair)
+            self.assertIn("ADISCORD_west_final_war_start = yes", focuses[final])
+            self.assertIn("ADISCORD_west_final_can_start = yes", focuses[final])
+            self.assertIn("WRK_west_reconstruction_ready_tt", focuses[final])
+            self.assertIn("has_global_flag = ADISCORD_west_hegemon_WRK", focuses[heritage])
+            self.assertEqual(source.count("ADISCORD_west_final_war_start"), 1)
+
+    def test_factories_check_the_same_site_at_delivery(self):
+        for route, (source, focuses) in self.trees.items():
+            for key, focus in focuses.items():
+                if "add_building_construction" not in focus or "capital_scope" in focus:
+                    continue
+                available = named_block(focus, "available")
+                limit = named_block(named_block(focus, "random_owned_controlled_state"), "limit")
+                self.assertIn("is_controlled_by = ROOT", available, key)
+                required = re.search(r"building = (\w+)\s+size > (\d+)", available).groups()
+                delivered = re.search(r"building = (\w+)\s+size > (\d+)", limit).groups()
+                self.assertEqual(required, delivered, key)
+
+    def test_influence_rewards_move_the_west_toward_vorkerland(self):
+        effects = read("common/scripted_effects/ADISCORD_west_final_war_effects.txt")
+        self.assertIn("ADISCORD_west_push_all_leans = {", effects)
+        for route, (source, focuses) in self.trees.items():
+            pushes = re.findall(r"set_temp_variable = \{ var = ADISCORD_west_push value = (\d+) \}", source)
+            self.assertTrue(pushes, route)
+            self.assertTrue(all(int(value) > 0 for value in pushes))
+            self.assertIn("var = ADISCORD_west_influence_power value = 5", source)
+            self.assertIn("unlock_decision_tooltip = ADISCORD_west_wrk_offer_front_treaty", source)
+
+    def test_ai_plans_name_only_existing_focuses(self):
+        plans = read("common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt")
+        for route, (source, focuses) in self.trees.items():
+            short = route.removeprefix("ADISCORD_vorkerland_route_")
+            plan = named_block(named_block(plans, f"ADISCORD_vorkerland_wrk_postwar_{short}_plan"), "ai_national_focuses")
+            names = re.findall(r"\b(WRK_\w+)", plan)
+            for name in names:
+                self.assertTrue(name in focuses or name in self.civil_war, name)
+            self.assertIn(self.TREES[route][2], names)
+
+    def test_route_trees_are_localised(self):
+        for language in ("russian", "english"):
+            raw = (ROOT / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml").read_bytes()
+            self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
+            text = raw.decode("utf-8-sig")
+            for route, (source, focuses) in self.trees.items():
+                keys = set(focuses) | {key + "_desc" for key in focuses}
+                keys |= set(re.findall(r"custom_effect_tooltip = (\w+)", source))
+                keys |= set(re.findall(r"add_ideas = (ADISCORD_vorkerland_pw_delta_\w+)", source))
+                keys.add(self.TREES[route][1])
+                for key in keys:
+                    self.assertEqual(len(re.findall(rf'^ {key}:0? ?"[^"\r\n]*"$', text, re.M)), 1, (language, key))
 
 
 if __name__ == "__main__":
