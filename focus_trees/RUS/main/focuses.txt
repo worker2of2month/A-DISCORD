@@ -1993,7 +1993,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_sealed_throne
-		icon = GFX_focus_VAL_Reclamation_Return_Home
+		icon = GFX_focus_RUS_bunker_sealed_throne
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 44
 		y = 9

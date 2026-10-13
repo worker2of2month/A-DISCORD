@@ -378,6 +378,11 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_RUS_bunker_sealed_throne"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_bunker_sealed_throne.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_RUS_imperial_arsenals"
 		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_imperial_arsenals.png"
 	}
