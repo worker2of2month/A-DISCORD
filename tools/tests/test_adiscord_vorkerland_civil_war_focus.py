@@ -2630,5 +2630,68 @@ class PrewarPreparationTests(unittest.TestCase):
         self.assertIn("amount = 5000 producer = WKR", scope)
 
 
+class WorkerCouncilTests(unittest.TestCase):
+    """WKR seats worker councils and trades their output for battalions."""
+
+    SEATS = (
+        "WKR_convene_front_soviets",
+        "WKR_organize_factory_battalions",
+        "WKR_put_railways_under_councils",
+        "WKR_bind_workshops_to_directive",
+        "WKR_seat_the_factory_councils",
+        "WKR_convene_the_production_soviet",
+    )
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.blocks = focus_blocks(source_section(read(FOCUS_FILE), "civil_war_focus"))
+        cls.effects = read(PHASE_EFFECTS_FILE)
+        cls.decisions = read(Path("common/decisions/ADISCORD_vorkerland_decisions.txt"))
+        cls.modifiers = read(Path("common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt"))
+        cls.ideas = read(Path("common/ideas/ADISCORD_vorkerland_ideas.txt"))
+
+    def test_each_leader_route_seats_at_most_five_councils(self) -> None:
+        for focus_id in self.SEATS:
+            with self.subTest(focus_id=focus_id):
+                reward = _blocks(self.blocks[focus_id], "completion_reward")[0]
+                self.assertEqual(reward.count("ADISCORD_vorkerland_wkr_seat_council = yes"), 1)
+        nikita = set(self.SEATS) - {"WKR_bind_workshops_to_directive"}
+        anton = set(self.SEATS) - {"WKR_convene_front_soviets"}
+        mobilize_all = _blocks(self.effects, "ADISCORD_vorkerland_wkr_mobilize_all_councils")[0]
+        self.assertEqual(mobilize_all.count("ADISCORD_vorkerland_wkr_withdraw_council = yes"), max(len(nikita), len(anton)))
+
+    def test_dummy_previews_match_the_refreshed_aggregate(self) -> None:
+        refresh = _blocks(self.effects, "ADISCORD_vorkerland_wkr_refresh_councils")[0]
+        seated = _blocks(self.ideas, "ADISCORD_vorkerland_wkr_council_seated_dummy")[0]
+        mobilized = _blocks(self.ideas, "ADISCORD_vorkerland_wkr_council_mobilized_dummy")[0]
+        self.assertIn("var = ADISCORD_vorkerland_wkr_council_output value = 0.03", refresh)
+        self.assertIn("var = ADISCORD_vorkerland_wkr_council_stability value = 0.01", refresh)
+        self.assertIn("var = ADISCORD_vorkerland_wkr_council_conscription value = 0.004", refresh)
+        self.assertIn("industrial_capacity_factory = 0.03", seated)
+        self.assertIn("stability_factor = 0.01", seated)
+        self.assertIn("industrial_capacity_factory = -0.03", mobilized)
+        self.assertIn("conscription = 0.004", mobilized)
+        self.assertIn("ADISCORD_economy_mark_dirty = yes", refresh)
+        aggregate = _blocks(self.modifiers, "ADISCORD_vorkerland_wkr_councils")[0]
+        for field in ("industrial_capacity_factory", "stability_factor", "conscription"):
+            self.assertIn(field, aggregate)
+
+    def test_mobilisation_reserves_the_council_before_delivery(self) -> None:
+        decision = _blocks(self.decisions, "ADISCORD_vorkerland_wkr_mobilize_council")[0]
+        complete = _blocks(decision, "complete_effect")[0]
+        self.assertIn("ADISCORD_vorkerland_wkr_withdraw_council = yes", complete)
+        self.assertIn("ADISCORD_vorkerland_wkr_has_working_council = yes", _blocks(decision, "available")[0])
+        self.assertIn("ADISCORD_vorkerland_wkr_council_battalion = yes", _blocks(decision, "remove_effect")[0])
+        self.assertIn("has_completed_focus = WKR_organize_factory_battalions", decision)
+
+    def test_council_aggregate_is_cleared_with_the_war(self) -> None:
+        clear = _blocks(self.effects, "ADISCORD_vorkerland_clear_claimant_war_modifiers")[0]
+        self.assertIn(
+            "if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_councils } } "
+            "remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_councils } }",
+            clear,
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
