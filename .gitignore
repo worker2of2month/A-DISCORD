@@ -2,4 +2,4 @@ __pycache__/
 *.py[cod]
 /.superpowers/
 /imgui.ini
-_tmp_*.py
+_tmp_*
