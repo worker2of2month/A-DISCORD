@@ -143,7 +143,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bookmark_underground_capital
-		icon = GFX_focus_RUS_bunker_sealed_throne
+		icon = GFX_focus_RUS_bookmark_underground_capital
 		x = -5
 		y = 1
 		cost = 5
@@ -153,7 +153,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bookmark_last_empire
-		icon = GFX_focus_RUS_state_budget
+		icon = GFX_focus_RUS_bookmark_last_empire
 		x = -5
 		y = 1
 		cost = 5
@@ -173,7 +173,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bookmark_operation_last_sunset
-		icon = GFX_focus_RUS_tomorrow_above_ground
+		icon = GFX_focus_RUS_bookmark_operation_last_sunset
 		x = -5
 		y = 1
 		cost = 5
