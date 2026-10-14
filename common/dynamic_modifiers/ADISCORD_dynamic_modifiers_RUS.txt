@@ -37,6 +37,7 @@ RUS_black_army = {
 	ADISCORD_country_development_army_growth_factor = RUS_army_growth
 	army_defence_factor = RUS_army_defence
 	supply_consumption_factor = RUS_army_supply
+	land_reinforce_rate = RUS_army_reinforce_rate
 	army_speed_factor = RUS_army_speed
 	planning_speed = RUS_army_planning
 	training_time_army_factor = RUS_army_training
@@ -65,4 +66,31 @@ RUS_faction_support = {
 	custom_modifier_tooltip = RUS_faction_support_state_tt
 	political_power_gain = RUS_faction_political_power_gain
 	power_balance_weekly = RUS_faction_power_balance_weekly
+}
+
+# --- rus_faction_favours ---
+# RUS for 120 days after the matching favour is paid with faction support.
+RUS_favour_shock_fist = {
+	icon = GFX_idea_ADISCORD_law_military_general_staff
+	army_attack_factor = 0.15
+	breakthrough_factor = 0.10
+}
+
+RUS_favour_night_shifts = {
+	icon = GFX_idea_ADISCORD_law_education_technical_institutes
+	research_speed_factor = 0.15
+}
+
+RUS_favour_reactor_current = {
+	icon = GFX_idea_ADISCORD_industrial_policy_military_prioritization
+	industrial_capacity_factory = 0.10
+	production_speed_buildings_factor = 0.10
+}
+
+# Customer scope for 90 days after a war with RUS cuts the energy contract.
+RUS_power_cut = {
+	icon = GFX_idea_ADISCORD_law_military_total_defense_grid
+	industrial_capacity_factory = -0.15
+	production_speed_buildings_factor = -0.20
+	army_org_factor = -0.05
 }

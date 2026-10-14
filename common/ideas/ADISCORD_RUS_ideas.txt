@@ -100,6 +100,24 @@ ideas = {
 			}
 		}
 
+		RUS_single_supply_register_delta = {
+			name = RUS_black_army
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.03
+			}
+		}
+
+		RUS_railway_coverage_delta = {
+			name = RUS_black_army
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = 0.02
+			}
+		}
+
 		RUS_state_budget_delta = {
 			name = RUS_government_service
 			picture = generic_production_bonus
@@ -133,6 +151,15 @@ ideas = {
 			allowed = { always = no }
 			modifier = {
 				industrial_capacity_factory = 0.05
+			}
+		}
+
+		RUS_bunker_systems_college_delta = {
+			name = RUS_bunker_complex
+			picture = ADISCORD_logistics_centralized_depots
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.05
 			}
 		}
 

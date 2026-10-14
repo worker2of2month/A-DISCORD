@@ -94,6 +94,8 @@ on_actions = {
 	on_monthly_RUS = {
 		effect = {
 			RUS_crisis_check_start = yes
+			RUS_energy_contracts_monthly = yes
+			RUS_levies_monthly = yes
 			RUS_suspicion_monthly = yes
 			RUS_morale_monthly = yes
 			RUS_crisis_update_volunteers = yes
@@ -124,6 +126,21 @@ on_actions = {
 					}
 					ROOT = { RUS_crisis_accept_native_entry = yes }
 				}
+			}
+			# A war with RUS cuts an energy customer's supply at once.
+			if = {
+				limit = {
+					ROOT = { tag = RUS }
+					FROM = { has_country_flag = RUS_energy_customer }
+				}
+				FROM = { RUS_energy_contract_cut = yes }
+			}
+			else_if = {
+				limit = {
+					FROM = { tag = RUS }
+					ROOT = { has_country_flag = RUS_energy_customer }
+				}
+				ROOT = { RUS_energy_contract_cut = yes }
 			}
 			# New fronts need a scripted ally join even while the claimant is already at war.
 			ROOT = {

@@ -59,7 +59,7 @@ defined_text = {
 	name = GetRUSBunker1cash
 	text = {
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 50 compare = greater_than_or_equals }
 		}
 		localization_key = RUS_bunker_excavate_cost_cash_ok
 	}
@@ -98,7 +98,7 @@ defined_text = {
 	name = GetRUSBunker2cash
 	text = {
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 65 compare = greater_than_or_equals }
 		}
 		localization_key = RUS_bunker_rush_cost_cash_ok
 	}
@@ -137,7 +137,7 @@ defined_text = {
 	name = GetRUSBunker11cash
 	text = {
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 65 compare = greater_than_or_equals }
 		}
 		localization_key = RUS_bunker_guard_cost_cash_ok
 	}
@@ -176,7 +176,7 @@ defined_text = {
 	name = GetRUSBunker12cash
 	text = {
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 65 compare = greater_than_or_equals }
 		}
 		localization_key = RUS_bunker_shelter_cost_cash_ok
 	}
@@ -215,7 +215,7 @@ defined_text = {
 	name = GetRUSBunker13cash
 	text = {
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 85 compare = greater_than_or_equals }
 		}
 		localization_key = RUS_bunker_water_cost_cash_ok
 	}
@@ -254,7 +254,7 @@ defined_text = {
 	name = GetRUSBunker14cash
 	text = {
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 85 compare = greater_than_or_equals }
 		}
 		localization_key = RUS_bunker_signals_cost_cash_ok
 	}
@@ -277,6 +277,28 @@ defined_text = {
 }
 
 defined_text = {
+	name = GetRUSAimaqPublicWorksPP
+	text = {
+		trigger = {
+			has_completed_focus = RUS_assembly_budget
+			NOT = { has_political_power < 15 }
+		}
+		localization_key = RUS_bunker_reinforce_cost_pp_ok
+	}
+	text = {
+		trigger = { has_completed_focus = RUS_assembly_budget }
+		localization_key = RUS_bunker_reinforce_cost_pp_low
+	}
+	text = {
+		trigger = { NOT = { has_political_power < 25 } }
+		localization_key = RUS_bunker_workshop_cost_pp_ok
+	}
+	text = {
+		localization_key = RUS_bunker_workshop_cost_pp_low
+	}
+}
+
+defined_text = {
 	name = GetRUSBunker15pp
 	text = {
 		trigger = {
@@ -293,7 +315,7 @@ defined_text = {
 	name = GetRUSBunker15cash
 	text = {
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 		}
 		localization_key = RUS_bunker_workshop_cost_cash_ok
 	}
@@ -332,7 +354,7 @@ defined_text = {
 	name = GetRUSBunker16cash
 	text = {
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 		}
 		localization_key = RUS_bunker_granary_cost_cash_ok
 	}
@@ -371,7 +393,7 @@ defined_text = {
 	name = GetRUSBunker17cash
 	text = {
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 350 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 115 compare = greater_than_or_equals }
 		}
 		localization_key = RUS_bunker_clinic_cost_cash_ok
 	}
@@ -410,7 +432,7 @@ defined_text = {
 	name = GetRUSBunker18cash
 	text = {
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 350 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 115 compare = greater_than_or_equals }
 		}
 		localization_key = RUS_bunker_laboratory_cost_cash_ok
 	}
@@ -449,7 +471,7 @@ defined_text = {
 	name = GetRUSBunker19cash
 	text = {
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 135 compare = greater_than_or_equals }
 		}
 		localization_key = RUS_bunker_archive_cost_cash_ok
 	}
@@ -488,7 +510,7 @@ defined_text = {
 	name = GetRUSBunker20cash
 	text = {
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 135 compare = greater_than_or_equals }
 		}
 		localization_key = RUS_bunker_command_cost_cash_ok
 	}
@@ -527,7 +549,7 @@ defined_text = {
 	name = GetRUSBunker30cash
 	text = {
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 85 compare = greater_than_or_equals }
 		}
 		localization_key = RUS_bunker_generator_cost_cash_ok
 	}
@@ -566,7 +588,7 @@ defined_text = {
 	name = GetRUSBunker31cash
 	text = {
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 35 compare = greater_than_or_equals }
 		}
 		localization_key = RUS_bunker_reinforce_cost_cash_ok
 	}
@@ -579,7 +601,7 @@ defined_text = {
 	name = GetRUSBunkerFoodCash
 	text = {
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 165 compare = greater_than_or_equals }
 		}
 		localization_key = RUS_bunker_food_cost_cash_ok
 	}
@@ -777,7 +799,7 @@ defined_text = {
 defined_text = {
 	name = GetRUSOrderengineering_ordercash
 	text = {
-		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 180 compare = greater_than_or_equals } }
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals } }
 		localization_key = RUS_engineering_order_cost_cash_ok
 	}
 	text = { localization_key = RUS_engineering_order_cost_cash_low }
@@ -795,7 +817,7 @@ defined_text = {
 defined_text = {
 	name = GetRUSOrderrifle_ordercash
 	text = {
-		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals } }
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } }
 		localization_key = RUS_rifle_order_cost_cash_ok
 	}
 	text = { localization_key = RUS_rifle_order_cost_cash_low }
@@ -850,6 +872,12 @@ defined_text = {
 	name = GetRUSBunkerRoomguard
 	text = {
 		trigger = {
+			check_variable = { var = RUS_bunker_project value = 11 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
+	text = {
+		trigger = {
 			check_variable = { var = RUS_bunker_layer_1 value = 1 compare = equals }
 		}
 		localization_key = RUS_bunker_installed
@@ -897,6 +925,12 @@ defined_text = {
 	name = GetRUSBunkerRoomshelter
 	text = {
 		trigger = {
+			check_variable = { var = RUS_bunker_project value = 12 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
+	text = {
+		trigger = {
 			check_variable = { var = RUS_bunker_layer_1 value = 2 compare = equals }
 		}
 		localization_key = RUS_bunker_installed
@@ -942,6 +976,12 @@ defined_text = {
 
 defined_text = {
 	name = GetRUSBunkerUpgrade1
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 40 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
 	text = {
 		trigger = {
 			check_variable = { var = RUS_bunker_upgrade_1 value = 1 compare = equals }
@@ -1015,6 +1055,12 @@ defined_text = {
 	name = GetRUSBunkerRoomwater
 	text = {
 		trigger = {
+			check_variable = { var = RUS_bunker_project value = 13 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
+	text = {
+		trigger = {
 			check_variable = { var = RUS_bunker_layer_2 value = 1 compare = equals }
 		}
 		localization_key = RUS_bunker_installed
@@ -1068,6 +1114,12 @@ defined_text = {
 	name = GetRUSBunkerRoomsignals
 	text = {
 		trigger = {
+			check_variable = { var = RUS_bunker_project value = 14 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
+	text = {
+		trigger = {
 			check_variable = { var = RUS_bunker_layer_2 value = 2 compare = equals }
 		}
 		localization_key = RUS_bunker_installed
@@ -1119,6 +1171,12 @@ defined_text = {
 
 defined_text = {
 	name = GetRUSBunkerUpgrade2
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 41 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
 	text = {
 		trigger = {
 			check_variable = { var = RUS_bunker_upgrade_2 value = 1 compare = equals }
@@ -1192,6 +1250,12 @@ defined_text = {
 	name = GetRUSBunkerRoomworkshop
 	text = {
 		trigger = {
+			check_variable = { var = RUS_bunker_project value = 15 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
+	text = {
+		trigger = {
 			check_variable = { var = RUS_bunker_layer_3 value = 1 compare = equals }
 		}
 		localization_key = RUS_bunker_installed
@@ -1245,6 +1309,12 @@ defined_text = {
 	name = GetRUSBunkerRoomgranary
 	text = {
 		trigger = {
+			check_variable = { var = RUS_bunker_project value = 16 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
+	text = {
+		trigger = {
 			check_variable = { var = RUS_bunker_layer_3 value = 2 compare = equals }
 		}
 		localization_key = RUS_bunker_installed
@@ -1296,6 +1366,12 @@ defined_text = {
 
 defined_text = {
 	name = GetRUSBunkerUpgrade3
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 42 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
 	text = {
 		trigger = {
 			check_variable = { var = RUS_bunker_upgrade_3 value = 1 compare = equals }
@@ -1369,6 +1445,12 @@ defined_text = {
 	name = GetRUSBunkerRoomclinic
 	text = {
 		trigger = {
+			check_variable = { var = RUS_bunker_project value = 17 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
+	text = {
+		trigger = {
 			check_variable = { var = RUS_bunker_layer_4 value = 1 compare = equals }
 		}
 		localization_key = RUS_bunker_installed
@@ -1422,6 +1504,12 @@ defined_text = {
 	name = GetRUSBunkerRoomlaboratory
 	text = {
 		trigger = {
+			check_variable = { var = RUS_bunker_project value = 18 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
+	text = {
+		trigger = {
 			check_variable = { var = RUS_bunker_layer_4 value = 2 compare = equals }
 		}
 		localization_key = RUS_bunker_installed
@@ -1473,6 +1561,12 @@ defined_text = {
 
 defined_text = {
 	name = GetRUSBunkerUpgrade4
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 43 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
 	text = {
 		trigger = {
 			check_variable = { var = RUS_bunker_upgrade_4 value = 1 compare = equals }
@@ -1546,6 +1640,12 @@ defined_text = {
 	name = GetRUSBunkerRoomarchive
 	text = {
 		trigger = {
+			check_variable = { var = RUS_bunker_project value = 19 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
+	text = {
+		trigger = {
 			check_variable = { var = RUS_bunker_layer_5 value = 1 compare = equals }
 		}
 		localization_key = RUS_bunker_installed
@@ -1599,6 +1699,12 @@ defined_text = {
 	name = GetRUSBunkerRoomcommand
 	text = {
 		trigger = {
+			check_variable = { var = RUS_bunker_project value = 20 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
+	text = {
+		trigger = {
 			check_variable = { var = RUS_bunker_layer_5 value = 2 compare = equals }
 		}
 		localization_key = RUS_bunker_installed
@@ -1650,6 +1756,12 @@ defined_text = {
 
 defined_text = {
 	name = GetRUSBunkerUpgrade5
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 44 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
 	text = {
 		trigger = {
 			check_variable = { var = RUS_bunker_upgrade_5 value = 1 compare = equals }
@@ -2858,6 +2970,15 @@ defined_text = {
 	text = { localization_key = RUS_suspicion_growth_none }
 }
 
+defined_text = {
+	name = GetRUSSuspicionEnergyRelief
+	text = {
+		trigger = { check_variable = { var = RUS_energy_contracts value = 0 compare = greater_than } }
+		localization_key = RUS_suspicion_growth_energy
+	}
+	text = { localization_key = RUS_suspicion_growth_none }
+}
+
 # Army morale summary. Growth terms mirror RUS_morale_monthly.
 defined_text = {
 	name = GetRUSMoraleStatus
@@ -2915,4 +3036,1152 @@ defined_text = {
 		localization_key = RUS_morale_growth_army_influence
 	}
 	text = { localization_key = RUS_morale_growth_none }
+}
+
+defined_text = {
+	name = GetRUSBunkerFloorsTab
+	text = {
+		trigger = {
+			NOT = { has_country_flag = RUS_bunker_service_tab }
+		}
+		localization_key = RUS_bunker_tab_active
+	}
+	text = {
+		localization_key = RUS_bunker_tab_inactive
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerServiceTab
+	text = {
+		trigger = {
+			has_country_flag = RUS_bunker_service_tab
+		}
+		localization_key = RUS_bunker_tab_active
+	}
+	text = {
+		localization_key = RUS_bunker_tab_inactive
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerProjectTime
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_excavate_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_rush_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 11 compare = equals }
+		}
+		localization_key = RUS_bunker_guard_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 12 compare = equals }
+		}
+		localization_key = RUS_bunker_shelter_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 13 compare = equals }
+		}
+		localization_key = RUS_bunker_water_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 14 compare = equals }
+		}
+		localization_key = RUS_bunker_signals_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 15 compare = equals }
+		}
+		localization_key = RUS_bunker_workshop_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 16 compare = equals }
+		}
+		localization_key = RUS_bunker_granary_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 17 compare = equals }
+		}
+		localization_key = RUS_bunker_clinic_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 18 compare = equals }
+		}
+		localization_key = RUS_bunker_laboratory_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 19 compare = equals }
+		}
+		localization_key = RUS_bunker_archive_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 20 compare = equals }
+		}
+		localization_key = RUS_bunker_command_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 30 compare = equals }
+		}
+		localization_key = RUS_bunker_generator_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 31 compare = equals }
+		}
+		localization_key = RUS_bunker_reinforce_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 40 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_1_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 41 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_2_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 42 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_3_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 43 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_4_clock
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 44 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_5_clock
+	}
+	text = {
+		localization_key = RUS_bunker_clock_idle
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerExportTime
+	text = {
+		trigger = {
+			has_variable = RUS_bunker_energy_export_power
+		}
+		localization_key = RUS_bunker_export_active
+	}
+	text = {
+		localization_key = RUS_bunker_export_idle
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerInstalledBenefit1
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_1 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_guard_installed_benefit
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_1 value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_shelter_installed_benefit
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_hidden
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerInstalledBenefit2
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_2 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_water_installed_benefit
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_2 value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_signals_installed_benefit
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_hidden
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerInstalledBenefit3
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_3 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_workshop_installed_benefit
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_3 value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_granary_installed_benefit
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_hidden
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerInstalledBenefit4
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_4 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_clinic_installed_benefit
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_4 value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_laboratory_installed_benefit
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_hidden
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerInstalledBenefit5
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_5 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_archive_installed_benefit
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_5 value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_command_installed_benefit
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_hidden
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerServicegenerator
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 30 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
+	text = {
+		trigger = {
+			RUS_bunker_generator_ui_available = yes
+		}
+		localization_key = RUS_bunker_service_ready
+	}
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_need_operational
+	}
+	text = {
+		trigger = {
+			NOT = { has_completed_focus = RUS_bunker_power_school }
+		}
+		localization_key = RUS_bunker_service_need_power_school
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_generators value = 2 compare = greater_than_or_equals }
+		}
+		localization_key = RUS_bunker_service_generators_full
+	}
+	text = {
+		trigger = {
+			RUS_bunker_slot_free = no
+		}
+		localization_key = RUS_bunker_service_busy
+	}
+	text = {
+		trigger = {
+			RUS_bunker_generator_affordable = no
+		}
+		localization_key = RUS_bunker_need_funds
+	}
+	text = {
+		localization_key = RUS_bunker_service_blocked
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerServicereinforce
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 31 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
+	text = {
+		trigger = {
+			RUS_bunker_reinforce_ui_available = yes
+		}
+		localization_key = RUS_bunker_service_ready
+	}
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_need_operational
+	}
+	text = {
+		trigger = {
+			RUS_bunker_reinforce_requirements = no
+		}
+		localization_key = RUS_bunker_service_structure_sound
+	}
+	text = {
+		trigger = {
+			RUS_bunker_slot_free = no
+		}
+		localization_key = RUS_bunker_service_busy
+	}
+	text = {
+		trigger = {
+			RUS_bunker_reinforce_affordable = no
+		}
+		localization_key = RUS_bunker_need_funds
+	}
+	text = {
+		localization_key = RUS_bunker_service_blocked
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerServiceresupply
+	text = {
+		trigger = {
+			RUS_bunker_resupply_ui_available = yes
+		}
+		localization_key = RUS_bunker_service_ready
+	}
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_need_operational
+	}
+	text = {
+		trigger = {
+			RUS_bunker_convoy_fits = no
+		}
+		localization_key = RUS_bunker_service_storage_full
+	}
+	text = {
+		trigger = {
+			RUS_bunker_resupply_affordable = no
+		}
+		localization_key = RUS_bunker_need_funds
+	}
+	text = {
+		localization_key = RUS_bunker_service_blocked
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerServiceenergy_sale
+	text = {
+		trigger = {
+			RUS_bunker_energy_sale_ui_available = yes
+		}
+		localization_key = RUS_bunker_service_ready
+	}
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_need_operational
+	}
+	text = {
+		trigger = {
+			NOT = { has_completed_focus = RUS_bunker_power_school }
+		}
+		localization_key = RUS_bunker_service_need_power_school
+	}
+	text = {
+		trigger = {
+			has_variable = RUS_bunker_energy_export_power
+		}
+		localization_key = RUS_bunker_service_contract_active
+	}
+	text = {
+		trigger = {
+			RUS_bunker_slot_free = no
+		}
+		localization_key = RUS_bunker_service_busy
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_free_power value = 1 compare = less_than }
+		}
+		localization_key = RUS_bunker_need_power
+	}
+	text = {
+		localization_key = RUS_bunker_service_blocked
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerFloorStatus1
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = RUS_bunker_project value = 1 compare = equals }
+				check_variable = { var = RUS_bunker_project value = 2 compare = equals }
+			}
+			check_variable = { var = RUS_bunker_project_depth value = 0 compare = equals }
+		}
+		localization_key = RUS_bunker_floor_excavating
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = RUS_bunker_project value = 11 compare = equals }
+				check_variable = { var = RUS_bunker_project value = 12 compare = equals }
+			}
+		}
+		localization_key = RUS_bunker_floor_fitting
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 40 compare = equals }
+		}
+		localization_key = RUS_bunker_floor_upgrading
+	}
+	text = {
+		localization_key = RUS_bunker_floor_state_1
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerFloorStatus2
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = RUS_bunker_project value = 1 compare = equals }
+				check_variable = { var = RUS_bunker_project value = 2 compare = equals }
+			}
+			check_variable = { var = RUS_bunker_project_depth value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_floor_excavating
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = RUS_bunker_project value = 13 compare = equals }
+				check_variable = { var = RUS_bunker_project value = 14 compare = equals }
+			}
+		}
+		localization_key = RUS_bunker_floor_fitting
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 41 compare = equals }
+		}
+		localization_key = RUS_bunker_floor_upgrading
+	}
+	text = {
+		localization_key = RUS_bunker_floor_state_2
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerFloorStatus3
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = RUS_bunker_project value = 1 compare = equals }
+				check_variable = { var = RUS_bunker_project value = 2 compare = equals }
+			}
+			check_variable = { var = RUS_bunker_project_depth value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_floor_excavating
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = RUS_bunker_project value = 15 compare = equals }
+				check_variable = { var = RUS_bunker_project value = 16 compare = equals }
+			}
+		}
+		localization_key = RUS_bunker_floor_fitting
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 42 compare = equals }
+		}
+		localization_key = RUS_bunker_floor_upgrading
+	}
+	text = {
+		localization_key = RUS_bunker_floor_state_3
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerFloorStatus4
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = RUS_bunker_project value = 1 compare = equals }
+				check_variable = { var = RUS_bunker_project value = 2 compare = equals }
+			}
+			check_variable = { var = RUS_bunker_project_depth value = 3 compare = equals }
+		}
+		localization_key = RUS_bunker_floor_excavating
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = RUS_bunker_project value = 17 compare = equals }
+				check_variable = { var = RUS_bunker_project value = 18 compare = equals }
+			}
+		}
+		localization_key = RUS_bunker_floor_fitting
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 43 compare = equals }
+		}
+		localization_key = RUS_bunker_floor_upgrading
+	}
+	text = {
+		localization_key = RUS_bunker_floor_state_4
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerFloorStatus5
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = RUS_bunker_project value = 1 compare = equals }
+				check_variable = { var = RUS_bunker_project value = 2 compare = equals }
+			}
+			check_variable = { var = RUS_bunker_project_depth value = 4 compare = equals }
+		}
+		localization_key = RUS_bunker_floor_excavating
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = RUS_bunker_project value = 19 compare = equals }
+				check_variable = { var = RUS_bunker_project value = 20 compare = equals }
+			}
+		}
+		localization_key = RUS_bunker_floor_fitting
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 44 compare = equals }
+		}
+		localization_key = RUS_bunker_floor_upgrading
+	}
+	text = {
+		localization_key = RUS_bunker_floor_state_5
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerNextFloor
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = 0 compare = equals }
+		}
+		localization_key = RUS_bunker_next_floor_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_next_floor_2
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_next_floor_3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = 3 compare = equals }
+		}
+		localization_key = RUS_bunker_next_floor_4
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = 4 compare = equals }
+		}
+		localization_key = RUS_bunker_next_floor_5
+	}
+	text = {
+		localization_key = RUS_bunker_depth_complete
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerExcavateStatus
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_in_progress
+	}
+	text = {
+		trigger = {
+			RUS_bunker_excavate_ui_available = yes
+		}
+		localization_key = RUS_bunker_service_ready
+	}
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_need_operational
+	}
+	text = {
+		trigger = {
+			RUS_bunker_slot_free = no
+		}
+		localization_key = RUS_bunker_service_busy
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = RUS_bunker_depth_limit compare = greater_than_or_equals }
+		}
+		localization_key = RUS_bunker_depth_focus_needed
+	}
+	text = {
+		trigger = {
+			RUS_bunker_excavate_requirements = no
+		}
+		localization_key = RUS_bunker_excavate_integrity_needed
+	}
+	text = {
+		trigger = {
+			RUS_bunker_excavate_affordable = no
+		}
+		localization_key = RUS_bunker_need_funds
+	}
+	text = {
+		localization_key = RUS_bunker_service_blocked
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder1
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		localization_key = RUS_bunker_excavate_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder11
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 11 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		localization_key = RUS_bunker_guard_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder12
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 12 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		localization_key = RUS_bunker_shelter_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder13
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 13 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		localization_key = RUS_bunker_water_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder14
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 14 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		localization_key = RUS_bunker_signals_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder15
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 15 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		localization_key = RUS_bunker_workshop_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder16
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 16 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		localization_key = RUS_bunker_granary_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder17
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 17 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		localization_key = RUS_bunker_clinic_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder18
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 18 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		localization_key = RUS_bunker_laboratory_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder19
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 19 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		localization_key = RUS_bunker_archive_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder20
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 20 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		localization_key = RUS_bunker_command_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder40
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 40 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_upgrade_1 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_order_completed
+	}
+	text = {
+		localization_key = RUS_bunker_upgrade_1_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder41
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 41 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_upgrade_2 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_order_completed
+	}
+	text = {
+		localization_key = RUS_bunker_upgrade_2_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder42
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 42 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_upgrade_3 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_order_completed
+	}
+	text = {
+		localization_key = RUS_bunker_upgrade_3_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder43
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 43 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_upgrade_4 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_order_completed
+	}
+	text = {
+		localization_key = RUS_bunker_upgrade_4_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder44
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 44 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_upgrade_5 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_order_completed
+	}
+	text = {
+		localization_key = RUS_bunker_upgrade_5_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder30
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 30 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		localization_key = RUS_bunker_generator_order_price
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerOrder31
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_project value = 31 compare = equals }
+		}
+		localization_key = RUS_bunker_order_paid
+	}
+	text = {
+		localization_key = RUS_bunker_reinforce_order_price
+	}
+}
+
+# --- rus_faction_favours ---
+defined_text = {
+	name = GetRUSFavourArmy15Cost
+	text = {
+		trigger = {
+			RUS_favour_army_15_affordable = yes
+		}
+		localization_key = RUS_favour_army_15_cost
+	}
+	text = { localization_key = RUS_favour_army_15_cost_blocked }
+}
+
+defined_text = {
+	name = GetRUSFavourArmy20Cost
+	text = {
+		trigger = {
+			RUS_favour_army_20_affordable = yes
+		}
+		localization_key = RUS_favour_army_20_cost
+	}
+	text = { localization_key = RUS_favour_army_20_cost_blocked }
+}
+
+defined_text = {
+	name = GetRUSFavourScience15Cost
+	text = {
+		trigger = {
+			RUS_favour_science_15_affordable = yes
+		}
+		localization_key = RUS_favour_science_15_cost
+	}
+	text = { localization_key = RUS_favour_science_15_cost_blocked }
+}
+
+defined_text = {
+	name = GetRUSFavourScience20Cost
+	text = {
+		trigger = {
+			RUS_favour_science_20_affordable = yes
+		}
+		localization_key = RUS_favour_science_20_cost
+	}
+	text = { localization_key = RUS_favour_science_20_cost_blocked }
+}
+
+defined_text = {
+	name = GetRUSFavourNightShiftsStatus
+	text = {
+		trigger = {
+			has_country_flag = RUS_favour_night_shifts_ui_cooldown
+		}
+		localization_key = RUS_favours_status_cooldown
+	}
+	text = {
+		trigger = {
+			RUS_state_balance_operational = no
+		}
+		localization_key = RUS_favours_status_unavailable
+	}
+	text = {
+		trigger = {
+			RUS_favour_science_20_affordable = no
+		}
+		localization_key = RUS_favours_status_shortage
+	}
+	text = { localization_key = RUS_favours_status_ready }
+}
+
+defined_text = {
+	name = GetRUSFavourPrototypesStatus
+	text = {
+		trigger = {
+			has_country_flag = RUS_favour_prototypes_ui_cooldown
+		}
+		localization_key = RUS_favours_status_cooldown
+	}
+	text = {
+		trigger = {
+			RUS_state_balance_operational = no
+		}
+		localization_key = RUS_favours_status_unavailable
+	}
+	text = {
+		trigger = {
+			RUS_favour_science_15_affordable = no
+		}
+		localization_key = RUS_favours_status_shortage
+	}
+	text = { localization_key = RUS_favours_status_ready }
+}
+
+defined_text = {
+	name = GetRUSFavourReactorCurrentStatus
+	text = {
+		trigger = {
+			has_country_flag = RUS_favour_reactor_current_ui_cooldown
+		}
+		localization_key = RUS_favours_status_cooldown
+	}
+	text = {
+		trigger = {
+			RUS_state_balance_operational = no
+		}
+		localization_key = RUS_favours_status_unavailable
+	}
+	text = {
+		trigger = {
+			RUS_favour_science_15_affordable = no
+		}
+		localization_key = RUS_favours_status_shortage
+	}
+	text = { localization_key = RUS_favours_status_ready }
+}
+
+defined_text = {
+	name = GetRUSFavourShockFistStatus
+	text = {
+		trigger = {
+			has_country_flag = RUS_favour_shock_fist_ui_cooldown
+		}
+		localization_key = RUS_favours_status_cooldown
+	}
+	text = {
+		trigger = {
+			RUS_state_balance_operational = no
+		}
+		localization_key = RUS_favours_status_unavailable
+	}
+	text = {
+		trigger = {
+			RUS_favour_army_20_affordable = no
+		}
+		localization_key = RUS_favours_status_shortage
+	}
+	text = { localization_key = RUS_favours_status_ready }
+}
+
+defined_text = {
+	name = GetRUSFavourBlackArmyMustersStatus
+	text = {
+		trigger = {
+			has_country_flag = RUS_favour_black_army_musters_ui_cooldown
+		}
+		localization_key = RUS_favours_status_cooldown
+	}
+	text = {
+		trigger = {
+			RUS_state_balance_operational = no
+		}
+		localization_key = RUS_favours_status_unavailable
+	}
+	text = {
+		trigger = {
+			RUS_favour_army_15_affordable = no
+		}
+		localization_key = RUS_favours_status_shortage
+	}
+	text = { localization_key = RUS_favours_status_ready }
+}
+
+defined_text = {
+	name = GetRUSFavourGuardInstructorsStatus
+	text = {
+		trigger = {
+			has_country_flag = RUS_favour_guard_instructors_ui_cooldown
+		}
+		localization_key = RUS_favours_status_cooldown
+	}
+	text = {
+		trigger = {
+			RUS_state_balance_operational = no
+		}
+		localization_key = RUS_favours_status_unavailable
+	}
+	text = {
+		trigger = {
+			RUS_favour_army_15_affordable = no
+		}
+		localization_key = RUS_favours_status_shortage
+	}
+	text = { localization_key = RUS_favours_status_ready }
+}
+
+defined_text = {
+	name = GetRUSFavourScientistsSupport
+	text = {
+		trigger = {
+			check_variable = { var = RUS_scientists_support value = 0.5 compare = greater_than }
+		}
+		localization_key = RUS_favours_support_positive
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_scientists_support value = 0.5 compare = less_than }
+		}
+		localization_key = RUS_favours_support_negative
+	}
+	text = { localization_key = RUS_favours_support_neutral }
+}
+
+defined_text = {
+	name = GetRUSFavourBlackArmySupport
+	text = {
+		trigger = {
+			check_variable = { var = RUS_black_army_support value = 0.5 compare = greater_than }
+		}
+		localization_key = RUS_favours_support_positive
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_black_army_support value = 0.5 compare = less_than }
+		}
+		localization_key = RUS_favours_support_negative
+	}
+	text = { localization_key = RUS_favours_support_neutral }
 }

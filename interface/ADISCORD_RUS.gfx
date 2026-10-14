@@ -1,4 +1,19 @@
 spriteTypes = {
+	progressbartype = {
+		name = "GFX_RUS_favour_support"
+		textureFile1 = "gfx/interface/ADISCORD_RUS/favour_support_fill.dds"
+		textureFile2 = "gfx/interface/ADISCORD_RUS/bunker_panel.dds"
+		size = { x = 204 y = 12 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = yes
+		steps = 1
+	}
+
+	spriteType = {
+		name = "GFX_RUS_favour_support_midpoint"
+		textureFile = "gfx/interface/ADISCORD_RUS/favour_support_midpoint.dds"
+	}
+
 	spriteType = {
 		name = "GFX_RUS_world_ended_superevent"
 		textureFile = "gfx/interface/superevents/RUS/world_ended.png"
@@ -30,6 +45,33 @@ spriteTypes = {
 	}
 
 	corneredTileSpriteType = {
+		name = "GFX_RUS_bunker_card"
+		size = { x = 64 y = 64 }
+		textureFile = "gfx/interface/ADISCORD_RUS/bunker_card.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_RUS_bunker_panel"
+		size = { x = 16 y = 16 }
+		textureFile = "gfx/interface/ADISCORD_RUS/bunker_panel.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+
+	spriteType = {
+		name = "GFX_RUS_bunker_floor_selected"
+		textureFile = "gfx/interface/ADISCORD_RUS/bunker_floor_selected.dds"
+	}
+
+	spriteType = {
+		name = "GFX_RUS_bunker_floor_shade"
+		textureFile = "gfx/interface/ADISCORD_RUS/bunker_floor_shade.dds"
+	}
+
+	corneredTileSpriteType = {
 		name = "GFX_RUS_bunker_button"
 		size = { x = 60 y = 23 }
 		textureFile = "gfx/interface/tiles/tiling_sort_button.dds"
@@ -50,5 +92,57 @@ spriteTypes = {
 		textureFile = "gfx/interface/factions/ui/opacity_layer_dark.dds"
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = yes
+	}
+}
+
+bitmapfonts = {
+	bitmapfont = {
+		name = "ADISCORD_bunker_16"
+		fontfiles = {
+			"gfx/fonts/hoi_16mbs"
+			"gfx/fonts/hoi_16mbs_cryllic"
+		}
+		color = 0xffd0c7be
+		textcolors = {
+			G = { 205 181 140 }
+			Y = { 225 183 121 }
+			H = { 225 183 121 }
+			R = { 232 145 130 }
+			T = { 240 229 216 }
+		}
+	}
+
+	bitmapfont = {
+		name = "ADISCORD_bunker_title"
+		fontfiles = {
+			"gfx/fonts/hoi_18"
+			"gfx/fonts/hoi_18_cryllic"
+		}
+		color = 0xfff0e5d8
+		textcolors = {
+			G = { 205 181 140 }
+			Y = { 225 183 121 }
+			H = { 225 183 121 }
+			R = { 232 145 130 }
+			T = { 240 229 216 }
+			g = { 180 170 180 }
+		}
+	}
+
+	bitmapfont = {
+		name = "ADISCORD_bunker_hint"
+		fontfiles = {
+			"gfx/fonts/hoi_16mbs"
+			"gfx/fonts/hoi_16mbs_cryllic"
+		}
+		color = 0xffb4aab4
+		textcolors = {
+			G = { 205 181 140 }
+			Y = { 225 183 121 }
+			H = { 225 183 121 }
+			R = { 232 145 130 }
+			T = { 240 229 216 }
+			g = { 180 170 180 }
+		}
 	}
 }

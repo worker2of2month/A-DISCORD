@@ -981,7 +981,7 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
                     self.assertFalse(self.matches(conditions, proclaimed, "RUS"))
                     guarded.add(name)
         self.assertTrue({
-            "RUS_engineering_order", "RUS_market_surplus", "RUS_bop_relief",
+            "RUS_engineering_order", "RUS_market_surplus", "RUS_suspicion_envoys",
             "RUS_bop_mediation", "RUS_campaign_sca", "RUS_restore_reactor_works",
         }.issubset(guarded))
 

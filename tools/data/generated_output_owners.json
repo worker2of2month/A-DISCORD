@@ -1248,7 +1248,13 @@
         "gfx/interface/decisions/ui/ADISCORD_decisions_progress_good.dds",
         "gfx/interface/decisions/ui/ADISCORD_decisions_progress_bad.dds",
         "gfx/interface/decisions/ui/ADISCORD_decisions_select_icon_strip.dds",
-        "gfx/interface/ADISCORD_RUS/bunker_layer_*.dds"
+        "gfx/interface/ADISCORD_RUS/bunker_layer_*.dds",
+          "gfx/interface/ADISCORD_RUS/bunker_card.dds",
+          "gfx/interface/ADISCORD_RUS/bunker_panel.dds",
+          "gfx/interface/ADISCORD_RUS/bunker_floor_selected.dds",
+          "gfx/interface/ADISCORD_RUS/bunker_floor_shade.dds",
+          "gfx/interface/ADISCORD_RUS/favour_support_fill.dds",
+          "gfx/interface/ADISCORD_RUS/favour_support_midpoint.dds"
       ],
       "source_inputs": [
         "tools/assets/source/decisions_gui/decisions_surface_source.png",
@@ -1337,12 +1343,15 @@
         "gfx/interface/diplomacy/ADISCORD_diplomacy_leader_overlay.dds",
         "gfx/interface/diplomacy/ADISCORD_diplomacy_parties_overlay.dds",
         "gfx/interface/diplomacy/ADISCORD_diplomacy_flag_overlay.dds",
-        "gfx/interface/diplomacy/ADISCORD_diplomacy_tab_button.dds"
+        "gfx/interface/diplomacy/ADISCORD_diplomacy_tab_button.dds",
+        "gfx/interface/diplomacy/ADISCORD_diplomacy_action_button.dds"
       ],
       "source_inputs": [
         "tools/assets/source/diplomacy_gui/ADISCORD_diplomacy_leader_overlay_master.png",
         "tools/assets/source/diplomacy_gui/ADISCORD_diplomacy_parties_overlay_master.png",
-        "tools/assets/source/diplomacy_gui/ADISCORD_diplomacy_flag_overlay_master.png"
+        "tools/assets/source/diplomacy_gui/ADISCORD_diplomacy_flag_overlay_master.png",
+        "gfx/interface/diplomacy/ADISCORD_diplomacy_focus_button.dds",
+        "gfx/interface/decisions/ui/ADISCORD_decisions_item_bg.dds"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_diplomacy_ui_assets"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_diplomacy_ui_assets", "--apply"],

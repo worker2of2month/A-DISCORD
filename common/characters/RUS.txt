@@ -100,6 +100,44 @@ characters = {
 		}
 	}
 
+	RUS_Konstantin_Vyazemsky = {
+		name = RUS_Konstantin_Vyazemsky
+		portraits = {
+			army = {
+				large = GFX_portrait_RUS_Konstantin_Vyazemsky
+				small = GFX_portrait_RUS_Konstantin_Vyazemsky_small
+			}
+		}
+		corps_commander = {
+			traits = { organizer }
+			skill = 3
+			attack_skill = 2
+			defense_skill = 2
+			planning_skill = 4
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
+	RUS_Nikolai_Gorin = {
+		name = RUS_Nikolai_Gorin
+		portraits = {
+			army = {
+				large = GFX_portrait_RUS_Nikolai_Gorin
+				small = GFX_portrait_RUS_Nikolai_Gorin_small
+			}
+		}
+		corps_commander = {
+			traits = { infantry_leader }
+			skill = 3
+			attack_skill = 4
+			defense_skill = 2
+			planning_skill = 2
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
 	RUS_Varlam_Oskol = {
 		name = RUS_Varlam_Oskol
 		portraits = {

@@ -7,6 +7,7 @@ from pathlib import Path
 from PIL import Image
 
 from tools.builders.build_adiscord_diplomacy_ui_assets import (
+    ACTION_BUTTON,
     FLAG_OVERLAY,
     LEADER_OVERLAY,
     PARTIES_OVERLAY,
@@ -320,12 +321,17 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
         )
         self.assertRegex(
             self.diplomacy_gfx,
-            r'(?s)corneredTileSpriteType\s*=\s*\{.{0,160}?'
+            r'(?s)spriteType\s*=\s*\{.{0,160}?'
             r'name\s*=\s*"GFX_ADISCORD_diplomacy_item_bg".{0,120}?'
-            r'size\s*=\s*\{\s*x\s*=\s*512\s+y\s*=\s*40\s*\}.{0,220}?'
-            r'borderSize\s*=\s*\{\s*x\s*=\s*64\s+y\s*=\s*12\s*\}.{0,120}?'
+            r'textureFile\s*=\s*"gfx/interface/diplomacy/'
+            r'ADISCORD_diplomacy_action_button\.dds".{0,120}?'
             r'noOfFrames\s*=\s*3',
         )
+        start, end = named_block_span(self.gui, "diplo_actions_entry_bg")
+        self.assertIn("size = { x = 391 y = 33 }", self.gui[start : end + 1])
+        self.assertEqual(ACTION_BUTTON.read_bytes(), expected_outputs()[ACTION_BUTTON])
+        with Image.open(ACTION_BUTTON) as atlas:
+            self.assertEqual(atlas.size, (3 * 391, 33))
         self.assertRegex(
             self.gui,
             r'(?s)name\s*=\s*"show_national_goal_button".{0,180}?'

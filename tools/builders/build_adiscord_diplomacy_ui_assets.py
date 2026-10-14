@@ -3,7 +3,7 @@
 
 The source PNGs are the approved ImageGen masters with their chroma-key
 backgrounds removed. This builder owns the three exact-size DDS overlays and
-the diplomacy tab atlas derived from the existing focus button.
+the diplomacy tab and action atlases derived from existing button textures.
 Use ``--check`` before ``--apply``.
 """
 
@@ -27,6 +27,20 @@ LEADER_OVERLAY = OUTPUT_DIR / "ADISCORD_diplomacy_leader_overlay.dds"
 PARTIES_OVERLAY = OUTPUT_DIR / "ADISCORD_diplomacy_parties_overlay.dds"
 FLAG_OVERLAY = OUTPUT_DIR / "ADISCORD_diplomacy_flag_overlay.dds"
 TAB_BUTTON = OUTPUT_DIR / "ADISCORD_diplomacy_tab_button.dds"
+ACTION_BUTTON = OUTPUT_DIR / "ADISCORD_diplomacy_action_button.dds"
+
+
+def _action_button() -> Image.Image:
+    # Crop before resampling to keep each native button state independent.
+    source_path = ROOT / "gfx/interface/decisions/ui/ADISCORD_decisions_item_bg.dds"
+    with Image.open(source_path) as source:
+        atlas = Image.new("RGBA", (3 * 391, 33))
+        for state in range(3):
+            frame = source.crop((state * 512, 0, (state + 1) * 512, 40))
+            atlas.paste(
+                frame.resize((391, 33), Image.Resampling.LANCZOS), (state * 391, 0)
+            )
+    return atlas
 
 
 def _tab_button() -> Image.Image:
@@ -97,6 +111,7 @@ def expected_outputs() -> dict[Path, bytes]:
         PARTIES_OVERLAY: _dds_bytes(_parties_overlay()),
         FLAG_OVERLAY: _dds_bytes(_flag_overlay()),
         TAB_BUTTON: _dds_bytes(_tab_button()),
+        ACTION_BUTTON: _dds_bytes(_action_button()),
     }
 
 

@@ -108,6 +108,23 @@ DYNAMIC_MODIFIER_SCOPES: dict[str, tuple[str, str]] = {
         "applied to RUS by RUS_government_refresh when a government focus adds "
         "a permanent institutional bonus",
     ),
+    "RUS_favour_shock_fist": (
+        COUNTRY,
+        "applied to RUS for 120 days by the Black Army favour paid with faction support",
+    ),
+    "RUS_favour_night_shifts": (
+        COUNTRY,
+        "applied to RUS for 120 days by the scientists' laboratory favour",
+    ),
+    "RUS_favour_reactor_current": (
+        COUNTRY,
+        "applied to RUS for 120 days by the scientists' factory current favour",
+    ),
+    "RUS_power_cut": (
+        COUNTRY,
+        "applied for 90 days to a former energy customer by RUS_energy_contract_cut "
+        "when its war with RUS begins",
+    ),
     "ADISCORD_vorkerland_reactor_industrial_legacy": (
         STATE,
         "applied to the six reactor-perimeter states during new-campaign setup",

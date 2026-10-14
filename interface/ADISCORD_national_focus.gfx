@@ -378,6 +378,71 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_RUS_swift_columns"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_swift_columns.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_air_ground_coordination"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_air_ground_coordination.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_capital_airfields"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_capital_airfields.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_fighter_cover"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_fighter_cover.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_assault_squadrons"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_assault_squadrons.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_state_budget"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_state_budget.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_aircraft_workshops"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_aircraft_workshops.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_aviation_fuel_reserve"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_aviation_fuel_reserve.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_air_control_network"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_air_control_network.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_flight_school"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_flight_school.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_field_hospitals"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_field_hospitals.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_armoured_trial_company"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_armoured_trial_company.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_anti_air_posts"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_anti_air_posts.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_RUS_bunker_sealed_throne"
 		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_bunker_sealed_throne.png"
 	}

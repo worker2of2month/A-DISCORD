@@ -261,10 +261,82 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	trigger = { RUS_suspicion_active = yes }
+	# The free answer comes first so an unattended event settles without a debit.
 	option = {
-		name = ADISCORD_rus_crisis.17.a
+		name = ADISCORD_rus_crisis.17.truth
+		ai_chance = { base = 2 }
 		custom_effect_tooltip = RUS_suspicion_warning_tt
-		unlock_decision_tooltip = RUS_suspicion_envoys
+		custom_effect_tooltip = RUS_suspicion_relief_8_tt
+		if = {
+			limit = { RUS_state_balance_operational = yes }
+			add_power_balance_value = { id = RUS_state_balance value = -0.10 }
+			custom_effect_tooltip = RUS_suspicion_energy_cover_support_tt
+		}
+		hidden_effect = {
+			set_temp_variable = { var = RUS_suspicion_delta value = -8 }
+			RUS_suspicion_add = yes
+			if = {
+				limit = { RUS_state_balance_operational = yes }
+				set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
+				set_temp_variable = { var = RUS_scientists_support_delta value = 0.05 }
+				RUS_faction_support_change = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.17.hide
+		trigger = { RUS_inspection_hide_affordable = yes }
+		ai_chance = { base = 1 }
+		custom_effect_tooltip = RUS_inspection_hide_cost_tt
+		custom_effect_tooltip = RUS_suspicion_relief_12_tt
+		hidden_effect = {
+			if = {
+				limit = { RUS_inspection_hide_affordable = yes }
+				subtract_from_variable = { var = RUS_bunker_food value = 20 }
+				RUS_bunker_refresh = yes
+				add_manpower = -500
+				set_temp_variable = { var = RUS_suspicion_delta value = -12 }
+				RUS_suspicion_add = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.17.bribe
+		trigger = { RUS_inspection_bribe_affordable = yes }
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = RUS_inspection_bribe_cost_tt
+		custom_effect_tooltip = RUS_suspicion_relief_15_tt
+		hidden_effect = {
+			if = {
+				limit = { RUS_inspection_bribe_affordable = yes }
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 65 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 65 }
+				ADISCORD_economy_mark_dirty = yes
+				set_temp_variable = { var = RUS_suspicion_delta value = -15 }
+				RUS_suspicion_add = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.17.expel
+		ai_chance = { base = 1 }
+		custom_effect_tooltip = RUS_suspicion_gain_10_tt
+		add_war_support = 0.05
+		if = {
+			limit = { RUS_state_balance_operational = yes }
+			add_power_balance_value = { id = RUS_state_balance value = 0.10 }
+			custom_effect_tooltip = RUS_suspicion_disperse_musters_support_tt
+		}
+		hidden_effect = {
+			set_temp_variable = { var = RUS_suspicion_delta value = 10 }
+			RUS_suspicion_add = yes
+			if = {
+				limit = { RUS_state_balance_operational = yes }
+				set_temp_variable = { var = RUS_black_army_support_delta value = 0.05 }
+				set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
+				RUS_faction_support_change = yes
+			}
+		}
 	}
 }
 
@@ -1089,4 +1161,151 @@ country_event = {
 		RUS_khan_governing = yes
 	}
 	option = { name = ADISCORD_rus_campaign.35.a }
+}
+
+# Fired once for each neighbour counted as taken by a dirty campaign.
+country_event = {
+	id = ADISCORD_rus_crisis.30
+	title = ADISCORD_rus_crisis.30.t
+	desc = ADISCORD_rus_crisis.30.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	option = {
+		name = ADISCORD_rus_crisis.30.a
+		ai_chance = { base = 3 }
+		custom_effect_tooltip = RUS_war_spoils_full_tt
+		if = {
+			limit = { RUS_suspicion_active = yes }
+			custom_effect_tooltip = RUS_suspicion_gain_4_tt
+		}
+		hidden_effect = {
+			set_temp_variable = { var = RUS_war_spoils_share value = 1 }
+			RUS_war_spoils_deliver = yes
+			set_temp_variable = { var = RUS_suspicion_delta value = 4 }
+			RUS_suspicion_add = yes
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.30.b
+		ai_chance = { base = 1 }
+		custom_effect_tooltip = RUS_war_spoils_half_tt
+		add_stability = 0.03
+		hidden_effect = {
+			set_temp_variable = { var = RUS_war_spoils_share value = 0.5 }
+			RUS_war_spoils_deliver = yes
+		}
+	}
+}
+
+# Fired 14 days after each counted neighbour. The first answer has no cash price.
+country_event = {
+	id = ADISCORD_rus_crisis.31
+	title = ADISCORD_rus_crisis.31.t
+	desc = ADISCORD_rus_crisis.31.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	option = {
+		name = ADISCORD_rus_crisis.31.a
+		ai_chance = { base = 2 }
+		add_manpower = 3000
+		custom_effect_tooltip = RUS_refugees_food_tt
+		hidden_effect = {
+			if = {
+				limit = { has_country_flag = RUS_bunker_initialized }
+				subtract_from_variable = { var = RUS_bunker_food value = 30 }
+				clamp_variable = { var = RUS_bunker_food min = 0 max = 100000 }
+				RUS_bunker_refresh = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.31.b
+		trigger = { RUS_refugees_settle_affordable = yes }
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = RUS_refugees_settle_cost_tt
+		add_manpower = 1500
+		add_stability = 0.02
+		custom_effect_tooltip = RUS_refugees_settle_result_tt
+		hidden_effect = {
+			if = {
+				limit = { RUS_refugees_settle_affordable = yes }
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 35 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 35 }
+				add_to_variable = { var = ADISCORD_society_development_progress value = 15 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.31.c
+		ai_chance = { base = 1 }
+		add_stability = -0.03
+	}
+}
+
+# Winter repeats every 365 days from the first campaign winter.
+country_event = {
+	id = ADISCORD_rus_crisis.32
+	title = ADISCORD_rus_crisis.32.t
+	desc = ADISCORD_rus_crisis.32.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	immediate = {
+		hidden_effect = { RUS_winter_begin = yes }
+	}
+	option = {
+		name = ADISCORD_rus_crisis.32.a
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = RUS_winter_tt
+	}
+	option = {
+		name = ADISCORD_rus_crisis.32.b
+		trigger = { RUS_winter_expedition_affordable = yes }
+		ai_chance = { base = 1 }
+		custom_effect_tooltip = RUS_winter_tt
+		add_manpower = -500
+		custom_effect_tooltip = RUS_winter_food_tt
+		if = {
+			limit = { RUS_suspicion_active = yes }
+			custom_effect_tooltip = RUS_suspicion_gain_4_tt
+		}
+		hidden_effect = {
+			if = {
+				limit = { RUS_bunker_operational = yes }
+				add_to_variable = { var = RUS_bunker_food value = 30 }
+				RUS_bunker_refresh = yes
+			}
+			set_temp_variable = { var = RUS_suspicion_delta value = 4 }
+			RUS_suspicion_add = yes
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.32.c
+		trigger = { RUS_winter_grain_affordable = yes }
+		ai_chance = { base = 1 }
+		custom_effect_tooltip = RUS_winter_tt
+		custom_effect_tooltip = RUS_winter_grain_cost_tt
+		custom_effect_tooltip = RUS_winter_food_tt
+		hidden_effect = {
+			if = {
+				limit = { RUS_winter_grain_affordable = yes }
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 50 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 50 }
+				ADISCORD_economy_mark_dirty = yes
+				add_to_variable = { var = RUS_bunker_food value = 30 }
+				RUS_bunker_refresh = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.33
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { RUS_winter_end = yes }
+	option = { name = ADISCORD_rus_crisis.33.a }
 }

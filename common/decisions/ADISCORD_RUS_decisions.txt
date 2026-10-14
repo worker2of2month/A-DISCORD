@@ -744,6 +744,11 @@ RUS_bunker_construction = {
 		allowed = { tag = RUS }
 		visible = {
 			check_variable = { var = RUS_bunker_depth value = RUS_bunker_depth_limit compare = less_than }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_excavate
+				NOT = { has_country_flag = RUS_bunker_service_tab }
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -803,6 +808,11 @@ RUS_bunker_construction = {
 		visible = {
 			has_completed_focus = RUS_bunker_shift_work
 			check_variable = { var = RUS_bunker_depth value = RUS_bunker_depth_limit compare = less_than }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_rush
+				NOT = { has_country_flag = RUS_bunker_service_tab }
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -856,6 +866,14 @@ RUS_bunker_construction = {
 		visible = {
 			check_variable = { var = RUS_bunker_depth value = 1 compare = greater_than_or_equals }
 			check_variable = { var = RUS_bunker_layer_1 value = 0 compare = equals }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_guard
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -916,6 +934,14 @@ RUS_bunker_construction = {
 		visible = {
 			check_variable = { var = RUS_bunker_depth value = 1 compare = greater_than_or_equals }
 			check_variable = { var = RUS_bunker_layer_1 value = 0 compare = equals }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_shelter
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -977,6 +1003,14 @@ RUS_bunker_construction = {
 			has_completed_focus = RUS_bunker_utilities
 			check_variable = { var = RUS_bunker_depth value = 2 compare = greater_than_or_equals }
 			check_variable = { var = RUS_bunker_layer_2 value = 0 compare = equals }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_water
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1038,6 +1072,14 @@ RUS_bunker_construction = {
 			has_completed_focus = RUS_bunker_utilities
 			check_variable = { var = RUS_bunker_depth value = 2 compare = greater_than_or_equals }
 			check_variable = { var = RUS_bunker_layer_2 value = 0 compare = equals }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_signals
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1099,6 +1141,14 @@ RUS_bunker_construction = {
 			has_completed_focus = RUS_bunker_working_heart
 			check_variable = { var = RUS_bunker_depth value = 3 compare = greater_than_or_equals }
 			check_variable = { var = RUS_bunker_layer_3 value = 0 compare = equals }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_workshop
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1160,6 +1210,14 @@ RUS_bunker_construction = {
 			has_completed_focus = RUS_bunker_working_heart
 			check_variable = { var = RUS_bunker_depth value = 3 compare = greater_than_or_equals }
 			check_variable = { var = RUS_bunker_layer_3 value = 0 compare = equals }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_granary
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1221,6 +1279,14 @@ RUS_bunker_construction = {
 			has_completed_focus = RUS_bunker_science_wing
 			check_variable = { var = RUS_bunker_depth value = 4 compare = greater_than_or_equals }
 			check_variable = { var = RUS_bunker_layer_4 value = 0 compare = equals }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_clinic
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1282,6 +1348,14 @@ RUS_bunker_construction = {
 			has_completed_focus = RUS_bunker_science_wing
 			check_variable = { var = RUS_bunker_depth value = 4 compare = greater_than_or_equals }
 			check_variable = { var = RUS_bunker_layer_4 value = 0 compare = equals }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_laboratory
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1343,6 +1417,14 @@ RUS_bunker_construction = {
 			has_completed_focus = RUS_bunker_memory_vault
 			check_variable = { var = RUS_bunker_depth value = 5 compare = greater_than_or_equals }
 			check_variable = { var = RUS_bunker_layer_5 value = 0 compare = equals }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_archive
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1404,6 +1486,14 @@ RUS_bunker_construction = {
 			has_completed_focus = RUS_bunker_memory_vault
 			check_variable = { var = RUS_bunker_depth value = 5 compare = greater_than_or_equals }
 			check_variable = { var = RUS_bunker_layer_5 value = 0 compare = equals }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_command
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1464,6 +1554,11 @@ RUS_bunker_construction = {
 		visible = {
 			has_completed_focus = RUS_bunker_power_school
 			check_variable = { var = RUS_bunker_generators value = 2 compare = less_than }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_generator
+				has_country_flag = RUS_bunker_service_tab
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1522,6 +1617,11 @@ RUS_bunker_construction = {
 		allowed = { tag = RUS }
 		visible = {
 			always = yes
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_reinforce
+				has_country_flag = RUS_bunker_service_tab
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1580,6 +1680,14 @@ RUS_bunker_construction = {
 		allowed = { tag = RUS }
 		visible = {
 			check_variable = { var = RUS_bunker_layer_1 value = 0 compare = greater_than }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_strip_1
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1615,6 +1723,14 @@ RUS_bunker_construction = {
 		allowed = { tag = RUS }
 		visible = {
 			check_variable = { var = RUS_bunker_layer_2 value = 0 compare = greater_than }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_strip_2
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1650,6 +1766,14 @@ RUS_bunker_construction = {
 		allowed = { tag = RUS }
 		visible = {
 			check_variable = { var = RUS_bunker_layer_3 value = 0 compare = greater_than }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_strip_3
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1685,6 +1809,14 @@ RUS_bunker_construction = {
 		allowed = { tag = RUS }
 		visible = {
 			check_variable = { var = RUS_bunker_layer_4 value = 0 compare = greater_than }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_strip_4
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1720,6 +1852,14 @@ RUS_bunker_construction = {
 		allowed = { tag = RUS }
 		visible = {
 			check_variable = { var = RUS_bunker_layer_5 value = 0 compare = greater_than }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_strip_5
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1758,6 +1898,11 @@ RUS_bunker_construction = {
 				has_completed_focus = RUS_salvage_inventory
 				RUS_bunker_workshop_active = yes
 			}
+			OR = {
+				is_ai = yes
+				has_decision = RUS_engineering_order
+				has_country_flag = RUS_bunker_service_tab
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1780,8 +1925,8 @@ RUS_bunker_construction = {
 					RUS_engineering_order_affordable = yes
 				}
 				add_political_power = -25
-				subtract_from_variable = { var = ADISCORD_economy_treasury value = 180 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 180 }
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 60 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 60 }
 				if = {
 					limit = { RUS_bunker_workshop_active = yes }
 					add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = RUS }
@@ -1804,7 +1949,14 @@ RUS_bunker_construction = {
 	RUS_rifle_order = {
 		icon = generic_industry
 		allowed = { tag = RUS }
-		visible = { has_completed_focus = RUS_standard_calibres }
+		visible = {
+			has_completed_focus = RUS_standard_calibres
+			OR = {
+				is_ai = yes
+				has_decision = RUS_rifle_order
+				has_country_flag = RUS_bunker_service_tab
+			}
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -1825,8 +1977,8 @@ RUS_bunker_construction = {
 				add_political_power = -50
 				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 25000 producer = RUS }
 				hidden_effect = {
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 600 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 600 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
 					ADISCORD_economy_mark_dirty = yes
 				}
 			}
@@ -1839,7 +1991,7 @@ RUS_bunker_construction = {
 			}
 			modifier = {
 				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 900 compare = less_than }
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
 			}
 		}
 	}
@@ -1847,7 +1999,14 @@ RUS_bunker_construction = {
 	RUS_market_surplus = {
 		icon = generic_industry
 		allowed = { tag = RUS }
-		visible = { has_completed_focus = RUS_winter_granaries }
+		visible = {
+			has_completed_focus = RUS_winter_granaries
+			OR = {
+				is_ai = yes
+				has_decision = RUS_market_surplus
+				has_country_flag = RUS_bunker_service_tab
+			}
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -1867,10 +2026,10 @@ RUS_bunker_construction = {
 				}
 				add_political_power = -15
 				add_equipment_to_stockpile = { type = infantry_equipment amount = -10000 }
-				custom_effect_tooltip = RUS_treasury_220_tt
+				custom_effect_tooltip = 75
 				hidden_effect = {
-					add_to_variable = { var = ADISCORD_economy_treasury value = 220 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 220 }
+					add_to_variable = { var = ADISCORD_economy_treasury value = 75 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 75 }
 					ADISCORD_economy_mark_dirty = yes
 				}
 			}
@@ -1891,6 +2050,14 @@ RUS_bunker_construction = {
 			has_completed_focus = RUS_bunker_airlocks
 			check_variable = { var = RUS_bunker_layer_1 value = 0 compare = greater_than }
 			check_variable = { var = RUS_bunker_upgrade_1 value = 0 compare = equals }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_upgrade_1
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1951,6 +2118,14 @@ RUS_bunker_construction = {
 			has_completed_focus = RUS_bunker_utilities
 			check_variable = { var = RUS_bunker_layer_2 value = 0 compare = greater_than }
 			check_variable = { var = RUS_bunker_upgrade_2 value = 0 compare = equals }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_upgrade_2
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -2011,6 +2186,14 @@ RUS_bunker_construction = {
 			has_completed_focus = RUS_bunker_working_heart
 			check_variable = { var = RUS_bunker_layer_3 value = 0 compare = greater_than }
 			check_variable = { var = RUS_bunker_upgrade_3 value = 0 compare = equals }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_upgrade_3
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -2076,6 +2259,14 @@ RUS_bunker_construction = {
 			has_completed_focus = RUS_bunker_science_wing
 			check_variable = { var = RUS_bunker_layer_4 value = 0 compare = greater_than }
 			check_variable = { var = RUS_bunker_upgrade_4 value = 0 compare = equals }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_upgrade_4
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -2141,6 +2332,14 @@ RUS_bunker_construction = {
 			has_completed_focus = RUS_bunker_memory_vault
 			check_variable = { var = RUS_bunker_layer_5 value = 0 compare = greater_than }
 			check_variable = { var = RUS_bunker_upgrade_5 value = 0 compare = equals }
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_upgrade_5
+				AND = {
+					NOT = { has_country_flag = RUS_bunker_service_tab }
+					check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -2197,7 +2396,14 @@ RUS_bunker_construction = {
 	RUS_bunker_food_convoy = {
 		icon = generic_industry
 		allowed = { tag = RUS }
-		visible = { has_country_flag = RUS_bunker_initialized }
+		visible = {
+			has_country_flag = RUS_bunker_initialized
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_food_convoy
+				has_country_flag = RUS_bunker_service_tab
+			}
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_bunker_food_convoy_available_tt
@@ -2234,7 +2440,14 @@ RUS_bunker_construction = {
 	RUS_bunker_food_sale = {
 		icon = generic_trade
 		allowed = { tag = RUS }
-		visible = { has_country_flag = RUS_bunker_initialized }
+		visible = {
+			has_country_flag = RUS_bunker_initialized
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_food_sale
+				has_country_flag = RUS_bunker_service_tab
+			}
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_bunker_food_sale_available_tt
@@ -2261,7 +2474,14 @@ RUS_bunker_construction = {
 	RUS_bunker_energy_sale = {
 		icon = generic_trade
 		allowed = { tag = RUS }
-		visible = { has_completed_focus = RUS_bunker_power_school }
+		visible = {
+			has_completed_focus = RUS_bunker_power_school
+			OR = {
+				is_ai = yes
+				has_decision = RUS_bunker_energy_sale
+				has_country_flag = RUS_bunker_service_tab
+			}
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_bunker_operational_tt
@@ -2305,6 +2525,41 @@ RUS_bunker_construction = {
 }
 
 RUS_development_programmes = {
+	RUS_aimaq_levy = {
+		icon = generic_manpower
+		allowed = { tag = RUS }
+		visible = {
+			has_war = yes
+			RUS_khan_governing = yes
+			has_completed_focus = RUS_summon_the_aimaqs
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_operational_tt
+				RUS_bunker_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_aimaq_levy_room_tt
+				RUS_levy_room = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_aimaq_levy_cost
+		custom_cost_trigger = { RUS_levy_affordable = yes }
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = RUS_aimaq_levy_result_tt
+			hidden_effect = { RUS_levy_raise = yes }
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 2
+				check_variable = { var = RUS_bunker_food value = 60 compare = greater_than_or_equals }
+			}
+		}
+	}
+
 	RUS_restore_wasteland = {
 		icon = generic_industry
 		allowed = { tag = RUS }
@@ -2389,8 +2644,8 @@ RUS_development_programmes = {
 				}
 				hidden_effect = {
 					add_political_power = -25
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 85 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 85 }
 					add_equipment_to_stockpile = { type = support_equipment amount = -35 }
 				}
 				add_timed_idea = { idea = RUS_defensive_preparation_spirit days = 120 }
@@ -2428,8 +2683,8 @@ RUS_development_programmes = {
 				}
 				hidden_effect = {
 					add_political_power = -30
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 65 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 65 }
 					add_equipment_to_stockpile = { type = support_equipment amount = -30 }
 				}
 				add_timed_idea = { idea = RUS_mobile_preparation_spirit days = 120 }
@@ -2456,19 +2711,25 @@ RUS_development_programmes = {
 			}
 		}
 		cost = 0
-		custom_cost_text = RUS_bunker_workshop_cost
-		custom_cost_trigger = { RUS_bunker_workshop_affordable = yes }
+		custom_cost_text = RUS_aimaq_public_works_cost
+		custom_cost_trigger = { RUS_aimaq_public_works_affordable = yes }
 		days_re_enable = 180
 		complete_effect = {
 			if = {
 				limit = {
 					RUS_aimaq_public_works_available = yes
-					RUS_bunker_workshop_affordable = yes
+					RUS_aimaq_public_works_affordable = yes
 				}
 				hidden_effect = {
-					add_political_power = -25
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+					if = {
+						limit = { has_completed_focus = RUS_assembly_budget }
+						add_political_power = -15
+					}
+					else = {
+						add_political_power = -25
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 					add_equipment_to_stockpile = { type = support_equipment amount = -35 }
 				}
 				add_timed_idea = { idea = RUS_public_works_spirit days = 180 }
@@ -2512,8 +2773,8 @@ RUS_development_programmes = {
 				}
 				hidden_effect = {
 					add_political_power = -25
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 400 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 135 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 135 }
 					add_equipment_to_stockpile = { type = support_equipment amount = -45 }
 				}
 				66 = { add_building_construction = { type = arms_factory level = 1 instant_build = yes } }
@@ -2551,8 +2812,8 @@ RUS_development_programmes = {
 				}
 				hidden_effect = {
 					add_political_power = -25
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 400 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 135 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 135 }
 					add_equipment_to_stockpile = { type = support_equipment amount = -45 }
 				}
 				66 = { add_building_construction = { type = industrial_complex level = 1 instant_build = yes } }
@@ -2590,8 +2851,8 @@ RUS_development_programmes = {
 				}
 				hidden_effect = {
 					add_political_power = -25
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 350 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 350 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 115 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 115 }
 					add_equipment_to_stockpile = { type = support_equipment amount = -40 }
 				}
 				custom_effect_tooltip = RUS_subterranean_supply_reward_tt
@@ -2644,6 +2905,20 @@ RUS_development_programmes = {
 				}
 				custom_effect_tooltip = RUS_civil_service_training_result_tt
 				if = {
+					limit = { has_completed_focus = RUS_aimaq_service_charter }
+					custom_effect_tooltip = RUS_civil_service_society_bonus_tt
+					hidden_effect = {
+						add_to_variable = { var = ADISCORD_society_development_progress value = 15 }
+					}
+				}
+				if = {
+					limit = { has_completed_focus = RUS_civil_service_examinations }
+					custom_effect_tooltip = RUS_civil_service_state_bonus_tt
+					hidden_effect = {
+						add_to_variable = { var = ADISCORD_state_development_progress value = 15 }
+					}
+				}
+				if = {
 					limit = { check_variable = { var = RUS_civil_service_progress_bonus value = 0 compare = greater_than } }
 					custom_effect_tooltip = RUS_civil_service_training_bonus_tt
 					if = {
@@ -2653,8 +2928,8 @@ RUS_development_programmes = {
 				}
 				hidden_effect = {
 					add_political_power = -25
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 35 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 35 }
 					add_to_variable = { var = ADISCORD_state_development_progress value = 25 }
 					add_to_variable = { var = ADISCORD_state_development_progress value = RUS_civil_service_progress_bonus }
 					if = {
@@ -2676,7 +2951,7 @@ RUS_development_programmes = {
 			}
 			modifier = {
 				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = less_than }
 			}
 		}
 	}
@@ -2713,8 +2988,8 @@ RUS_development_programmes = {
 				custom_effect_tooltip = RUS_district_health_programme_result_tt
 				hidden_effect = {
 					add_political_power = -25
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 35 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 35 }
 					add_to_variable = { var = ADISCORD_social_system_development_progress value = 25 }
 					if = {
 						limit = { RUS_bunker_clinic_active = yes }
@@ -2732,7 +3007,7 @@ RUS_development_programmes = {
 			}
 			modifier = {
 				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = less_than }
 			}
 		}
 	}
@@ -2769,8 +3044,8 @@ RUS_development_programmes = {
 				custom_effect_tooltip = RUS_workshop_training_result_tt
 				hidden_effect = {
 					add_political_power = -25
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 35 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 35 }
 					add_to_variable = { var = ADISCORD_economic_development_progress value = 25 }
 					if = {
 						limit = { RUS_bunker_workshop_active = yes }
@@ -2788,7 +3063,7 @@ RUS_development_programmes = {
 			}
 			modifier = {
 				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = less_than }
 			}
 		}
 	}
@@ -2820,8 +3095,8 @@ RUS_development_programmes = {
 				custom_effect_tooltip = RUS_community_assemblies_result_tt
 				hidden_effect = {
 					add_political_power = -25
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 35 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 35 }
 					add_to_variable = { var = ADISCORD_society_development_progress value = 25 }
 					ADISCORD_economy_mark_dirty = yes
 				}
@@ -2835,7 +3110,7 @@ RUS_development_programmes = {
 			}
 			modifier = {
 				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = less_than }
 			}
 		}
 	}
@@ -2867,8 +3142,8 @@ RUS_development_programmes = {
 				custom_effect_tooltip = RUS_public_reading_rooms_result_tt
 				hidden_effect = {
 					add_political_power = -25
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 35 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 35 }
 					add_to_variable = { var = ADISCORD_cultural_development_progress value = 25 }
 					ADISCORD_economy_mark_dirty = yes
 				}
@@ -2882,7 +3157,7 @@ RUS_development_programmes = {
 			}
 			modifier = {
 				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = less_than }
 			}
 		}
 	}
@@ -2914,8 +3189,8 @@ RUS_development_programmes = {
 				custom_effect_tooltip = RUS_regimental_training_result_tt
 				hidden_effect = {
 					add_political_power = -25
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 35 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 35 }
 					add_to_variable = { var = ADISCORD_army_development_progress value = 25 }
 					ADISCORD_economy_mark_dirty = yes
 				}
@@ -2929,7 +3204,7 @@ RUS_development_programmes = {
 			}
 			modifier = {
 				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = less_than }
 			}
 		}
 	}
@@ -3111,7 +3386,7 @@ RUS_public_campaigns = {
 			}
 			hidden_trigger = { NOT = { has_country_flag = RUS_campaign_voice_of_the_aimaqs_slot_held } }
 		}
-		cost = 35
+		cost = 10
 		days_remove = 45
 		days_re_enable = 75
 		modifier = {
@@ -3154,7 +3429,7 @@ RUS_public_campaigns = {
 			}
 			hidden_trigger = { NOT = { has_country_flag = RUS_campaign_bread_and_shelter_slot_held } }
 		}
-		cost = 50
+		cost = 10
 		days_remove = 60
 		days_re_enable = 80
 		modifier = {
@@ -3197,7 +3472,7 @@ RUS_public_campaigns = {
 			}
 			hidden_trigger = { NOT = { has_country_flag = RUS_campaign_rifles_protect_home_slot_held } }
 		}
-		cost = 50
+		cost = 10
 		days_remove = 50
 		days_re_enable = 70
 		modifier = {
@@ -3241,7 +3516,7 @@ RUS_public_campaigns = {
 			}
 			hidden_trigger = { NOT = { has_country_flag = RUS_campaign_the_khan_keeps_his_word_slot_held } }
 		}
-		cost = 50
+		cost = 10
 		days_remove = 60
 		days_re_enable = 90
 		modifier = {
@@ -3284,7 +3559,7 @@ RUS_public_campaigns = {
 			}
 			hidden_trigger = { NOT = { has_country_flag = RUS_campaign_surface_trade_slot_held } }
 		}
-		cost = 35
+		cost = 10
 		days_remove = 45
 		days_re_enable = 70
 		modifier = {
@@ -3324,7 +3599,7 @@ RUS_public_campaigns = {
 			hidden_trigger = { NOT = { has_country_flag = RUS_campaign_last_order_slot_held } }
 			has_war = yes
 		}
-		cost = 35
+		cost = 10
 		days_remove = 35
 		days_re_enable = 70
 		modifier = {
@@ -3387,8 +3662,7 @@ RUS_state_balance_measures_category = {
 					}
 				}
 				hidden_effect = {
-					add_political_power = -25
-					subtract_from_variable = { var = RUS_bunker_food value = 20 }
+					subtract_from_variable = { var = RUS_bunker_food value = 30 }
 					RUS_bunker_refresh = yes
 				}
 				add_stability = 0.02
@@ -3447,8 +3721,7 @@ RUS_state_balance_measures_category = {
 					}
 				}
 				hidden_effect = {
-					add_political_power = -30
-					subtract_from_variable = { var = RUS_bunker_food value = 30 }
+					subtract_from_variable = { var = RUS_bunker_food value = 40 }
 					RUS_bunker_refresh = yes
 				}
 				add_manpower = 1000
@@ -3514,9 +3787,9 @@ RUS_state_balance_measures_category = {
 					}
 				}
 				hidden_effect = {
-					add_political_power = -40
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+					add_political_power = -20
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 65 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 65 }
 					if = {
 						limit = { power_balance_value = { id = RUS_state_balance value < 0 } }
 						add_power_balance_value = { id = RUS_state_balance value = 0.15 }
@@ -3542,6 +3815,276 @@ RUS_state_balance_measures_category = {
 			modifier = {
 				factor = 0
 				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	# Timed flags expose native decision cooldowns to the faction panel.
+	# They are written only after payment succeeds and expire with days_re_enable.
+	RUS_favour_shock_fist = {
+		icon = generic_attack
+		visible = { RUS_state_balance_operational = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_favour_army_20_cost
+		custom_cost_trigger = { RUS_favour_army_20_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 120
+		complete_effect = {
+			custom_effect_tooltip = RUS_favour_army_20_tt
+			effect_tooltip = {
+				add_dynamic_modifier = { modifier = RUS_favour_shock_fist days = 120 }
+			}
+			hidden_effect = {
+				if = {
+					limit = { RUS_favour_army_20_affordable = yes }
+					set_country_flag = {
+						flag = RUS_favour_shock_fist_ui_cooldown
+						days = 120
+					}
+					set_temp_variable = { var = RUS_black_army_support_delta value = -0.2 }
+					set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
+					RUS_faction_support_change = yes
+					add_dynamic_modifier = { modifier = RUS_favour_shock_fist days = 120 }
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1
+				check_variable = { var = RUS_black_army_support value = 0.70 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	RUS_favour_black_army_musters = {
+		icon = generic_manpower
+		visible = { RUS_state_balance_operational = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_favour_army_15_cost
+		custom_cost_trigger = { RUS_favour_army_15_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 120
+		complete_effect = {
+			custom_effect_tooltip = RUS_favour_army_15_tt
+			effect_tooltip = {
+				add_manpower = 5000
+				add_war_support = 0.05
+			}
+			hidden_effect = {
+				if = {
+					limit = { RUS_favour_army_15_affordable = yes }
+					set_country_flag = {
+						flag = RUS_favour_black_army_musters_ui_cooldown
+						days = 120
+					}
+					set_temp_variable = { var = RUS_black_army_support_delta value = -0.15 }
+					set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
+					RUS_faction_support_change = yes
+					add_manpower = 5000
+					add_war_support = 0.05
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1
+				check_variable = { var = RUS_black_army_support value = 0.70 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	RUS_favour_guard_instructors = {
+		icon = generic_army_support
+		visible = { RUS_state_balance_operational = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_favour_army_15_cost
+		custom_cost_trigger = { RUS_favour_army_15_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 120
+		complete_effect = {
+			custom_effect_tooltip = RUS_favour_army_15_tt
+			effect_tooltip = {
+				army_experience = 40
+				add_command_power = 25
+			}
+			hidden_effect = {
+				if = {
+					limit = { RUS_favour_army_15_affordable = yes }
+					set_country_flag = {
+						flag = RUS_favour_guard_instructors_ui_cooldown
+						days = 120
+					}
+					set_temp_variable = { var = RUS_black_army_support_delta value = -0.15 }
+					set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
+					RUS_faction_support_change = yes
+					army_experience = 40
+					add_command_power = 25
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1
+				check_variable = { var = RUS_black_army_support value = 0.70 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	RUS_favour_night_shifts = {
+		icon = generic_research
+		visible = { RUS_state_balance_operational = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_favour_science_20_cost
+		custom_cost_trigger = { RUS_favour_science_20_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 120
+		complete_effect = {
+			custom_effect_tooltip = RUS_favour_science_20_tt
+			effect_tooltip = {
+				add_dynamic_modifier = { modifier = RUS_favour_night_shifts days = 120 }
+			}
+			hidden_effect = {
+				if = {
+					limit = { RUS_favour_science_20_affordable = yes }
+					set_country_flag = {
+						flag = RUS_favour_night_shifts_ui_cooldown
+						days = 120
+					}
+					set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
+					set_temp_variable = { var = RUS_scientists_support_delta value = -0.2 }
+					RUS_faction_support_change = yes
+					add_dynamic_modifier = { modifier = RUS_favour_night_shifts days = 120 }
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1
+				check_variable = { var = RUS_scientists_support value = 0.70 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	RUS_favour_prototypes = {
+		icon = generic_production
+		visible = { RUS_state_balance_operational = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_favour_science_15_cost
+		custom_cost_trigger = { RUS_favour_science_15_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 120
+		complete_effect = {
+			custom_effect_tooltip = RUS_favour_science_15_tt
+			effect_tooltip = {
+				add_tech_bonus = {
+					name = RUS_favour_prototypes
+					bonus = 1.0
+					uses = 1
+					category = industry
+					category = electronics
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = { RUS_favour_science_15_affordable = yes }
+					set_country_flag = {
+						flag = RUS_favour_prototypes_ui_cooldown
+						days = 120
+					}
+					set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
+					set_temp_variable = { var = RUS_scientists_support_delta value = -0.15 }
+					RUS_faction_support_change = yes
+					add_tech_bonus = {
+						name = RUS_favour_prototypes
+						bonus = 1.0
+						uses = 1
+						category = industry
+						category = electronics
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1
+				check_variable = { var = RUS_scientists_support value = 0.70 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	RUS_favour_reactor_current = {
+		icon = generic_industry
+		visible = { RUS_state_balance_operational = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_favour_science_15_cost
+		custom_cost_trigger = { RUS_favour_science_15_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 120
+		complete_effect = {
+			custom_effect_tooltip = RUS_favour_science_15_tt
+			effect_tooltip = {
+				add_dynamic_modifier = { modifier = RUS_favour_reactor_current days = 120 }
+			}
+			hidden_effect = {
+				if = {
+					limit = { RUS_favour_science_15_affordable = yes }
+					set_country_flag = {
+						flag = RUS_favour_reactor_current_ui_cooldown
+						days = 120
+					}
+					set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
+					set_temp_variable = { var = RUS_scientists_support_delta value = -0.15 }
+					RUS_faction_support_change = yes
+					add_dynamic_modifier = { modifier = RUS_favour_reactor_current days = 120 }
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1
+				check_variable = { var = RUS_scientists_support value = 0.70 compare = greater_than_or_equals }
 			}
 		}
 	}
@@ -3581,9 +4124,8 @@ RUS_state_balance_category = {
 						RUS_suspicion_relief_available = yes
 						RUS_suspicion_energy_cover_affordable = yes
 					}
-					add_political_power = -40
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 60 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 60 }
 					ADISCORD_economy_mark_dirty = yes
 					set_temp_variable = { var = RUS_suspicion_delta value = -15 }
 					RUS_suspicion_add = yes
@@ -3616,6 +4158,10 @@ RUS_state_balance_category = {
 				RUS_state_balance_operational = yes
 			}
 			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_operational_tt
+				RUS_bunker_operational = yes
+			}
+			custom_trigger_tooltip = {
 				tooltip = RUS_suspicion_positive_tt
 				check_variable = { var = RUS_suspicion value = 0 compare = greater_than }
 			}
@@ -3635,10 +4181,12 @@ RUS_state_balance_category = {
 				if = {
 					limit = {
 						RUS_suspicion_relief_available = yes
+						RUS_bunker_operational = yes
 						RUS_suspicion_disperse_musters_affordable = yes
 					}
-					add_political_power = -30
-					add_manpower = -1000
+					subtract_from_variable = { var = RUS_bunker_food value = 15 }
+					RUS_bunker_refresh = yes
+					add_manpower = -500
 					set_temp_variable = { var = RUS_suspicion_delta value = -15 }
 					RUS_suspicion_add = yes
 					add_power_balance_value = { id = RUS_state_balance value = 0.05 }
@@ -3687,9 +4235,9 @@ RUS_state_balance_category = {
 						RUS_suspicion_relief_available = yes
 						RUS_suspicion_envoys_affordable = yes
 					}
-					add_political_power = -60
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
+					add_political_power = -30
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 85 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 85 }
 					ADISCORD_economy_mark_dirty = yes
 					set_temp_variable = { var = RUS_suspicion_delta value = -25 }
 					RUS_suspicion_add = yes
@@ -3787,8 +4335,8 @@ RUS_state_balance_category = {
 						RUS_suspicion_relief_available = yes
 						RUS_suspicion_border_bribes_affordable = yes
 					}
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 600 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 600 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
 					ADISCORD_economy_mark_dirty = yes
 					set_temp_variable = { var = RUS_suspicion_delta value = -20 }
 					RUS_suspicion_add = yes
@@ -3800,7 +4348,7 @@ RUS_state_balance_category = {
 			modifier = {
 				add = 2
 				check_variable = { var = RUS_suspicion value = 70 compare = greater_than_or_equals }
-				check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
 			}
 			modifier = {
 				factor = 0
@@ -3842,8 +4390,8 @@ RUS_state_balance_category = {
 						RUS_suspicion_relief_available = yes
 						RUS_suspicion_press_tour_affordable = yes
 					}
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 50 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 50 }
 					ADISCORD_economy_mark_dirty = yes
 					set_temp_variable = { var = RUS_suspicion_delta value = -15 }
 					RUS_suspicion_add = yes
@@ -3907,8 +4455,8 @@ RUS_state_balance_category = {
 					}
 					subtract_from_variable = { var = RUS_bunker_food value = 40 }
 					RUS_bunker_refresh = yes
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 50 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 50 }
 					ADISCORD_economy_mark_dirty = yes
 					set_temp_variable = { var = RUS_suspicion_delta value = -20 }
 					RUS_suspicion_add = yes
@@ -3969,8 +4517,8 @@ RUS_state_balance_category = {
 					}
 					subtract_from_variable = { var = RUS_bunker_food value = 20 }
 					RUS_bunker_refresh = yes
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 65 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 65 }
 					ADISCORD_economy_mark_dirty = yes
 					set_temp_variable = { var = RUS_suspicion_delta value = -20 }
 					RUS_suspicion_add = yes
@@ -3988,5 +4536,259 @@ RUS_state_balance_category = {
 				RUS_ai_proclamation_pending = yes
 			}
 		}
+	}
+
+	RUS_shadow_rifles = {
+		icon = generic_allies_build_infantry
+		visible = { RUS_suspicion_active = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_shadow_rifles_room_tt
+				RUS_shadow_rifles_room = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_shadow_rifles_cost
+		custom_cost_trigger = { RUS_shadow_rifles_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = RUS_suspicion_gain_8_tt
+			effect_tooltip = {
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = RUS }
+				add_equipment_to_stockpile = { type = support_equipment amount = 40 producer = RUS }
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						RUS_suspicion_active = yes
+						RUS_state_balance_operational = yes
+						RUS_shadow_rifles_room = yes
+						RUS_shadow_rifles_affordable = yes
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 35 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 35 }
+					ADISCORD_economy_mark_dirty = yes
+					add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = RUS }
+					add_equipment_to_stockpile = { type = support_equipment amount = 40 producer = RUS }
+					set_temp_variable = { var = RUS_suspicion_delta value = 8 }
+					RUS_suspicion_add = yes
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1
+				has_war = yes
+				check_variable = { var = RUS_suspicion value = 40 compare = less_than }
+			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	RUS_shadow_designs = {
+		icon = generic_research
+		visible = { RUS_suspicion_active = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_shadow_designs_room_tt
+				RUS_shadow_designs_room = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_shadow_designs_cost
+		custom_cost_trigger = { RUS_shadow_designs_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 120
+		complete_effect = {
+			custom_effect_tooltip = RUS_suspicion_gain_12_tt
+			effect_tooltip = {
+				add_tech_bonus = {
+					name = RUS_stolen_designs
+					bonus = 0.5
+					uses = 1
+					category = infantry_weapons
+					category = artillery
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						RUS_suspicion_active = yes
+						RUS_state_balance_operational = yes
+						RUS_shadow_designs_room = yes
+						RUS_shadow_designs_affordable = yes
+					}
+					add_political_power = -15
+					add_tech_bonus = {
+						name = RUS_stolen_designs
+						bonus = 0.5
+						uses = 1
+						category = infantry_weapons
+						category = artillery
+					}
+					set_temp_variable = { var = RUS_suspicion_delta value = 12 }
+					RUS_suspicion_add = yes
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1
+				check_variable = { var = RUS_suspicion value = 30 compare = less_than }
+			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	RUS_shadow_engineers = {
+		icon = generic_construction
+		visible = { RUS_suspicion_active = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_operational_tt
+				RUS_bunker_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_shadow_engineers_ready_tt
+				RUS_shadow_engineers_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_shadow_engineers_room_tt
+				RUS_shadow_engineers_room = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_shadow_engineers_cost
+		custom_cost_trigger = { RUS_shadow_engineers_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 120
+		complete_effect = {
+			custom_effect_tooltip = RUS_suspicion_gain_10_tt
+			custom_effect_tooltip = RUS_shadow_engineers_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						RUS_suspicion_active = yes
+						RUS_state_balance_operational = yes
+						RUS_bunker_operational = yes
+						RUS_shadow_engineers_ready = yes
+						RUS_shadow_engineers_room = yes
+						RUS_shadow_engineers_affordable = yes
+					}
+					subtract_from_variable = { var = RUS_bunker_food value = 25 }
+					RUS_bunker_refresh = yes
+					add_to_variable = { var = ADISCORD_economic_development_progress value = 20 }
+					set_temp_variable = { var = RUS_suspicion_delta value = 10 }
+					RUS_suspicion_add = yes
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1
+				check_variable = { var = RUS_suspicion value = 30 compare = less_than }
+				check_variable = { var = RUS_bunker_food value = 70 compare = greater_than_or_equals }
+			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	RUS_energy_contract = {
+		icon = generic_trade
+		allowed = { tag = RUS }
+		targets = { SLA RZA MLR ERT IRT SCA }
+		target_root_trigger = {
+			has_completed_focus = RUS_bunker_power_school
+			RUS_energy_contract_room = yes
+		}
+		visible = {
+			FROM = {
+				RUS_energy_customer_valid = yes
+				NOT = { has_country_flag = RUS_energy_customer }
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_operational_tt
+				RUS_bunker_operational = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_energy_contract_cost
+		custom_cost_trigger = {
+			check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = RUS_energy_contract_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						RUS_energy_contract_room = yes
+						check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+						FROM = {
+							RUS_energy_customer_valid = yes
+							NOT = { has_country_flag = RUS_energy_customer }
+						}
+					}
+					FROM = { set_country_flag = RUS_energy_customer }
+					RUS_energy_contracts_recount = yes
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1
+				check_variable = { var = RUS_bunker_free_power value = 2 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	RUS_energy_contract_end = {
+		icon = generic_trade
+		allowed = { tag = RUS }
+		targets = { SLA RZA MLR ERT IRT SCA }
+		target_root_trigger = {
+			check_variable = { var = RUS_energy_contracts value = 0 compare = greater_than }
+		}
+		visible = {
+			FROM = { has_country_flag = RUS_energy_customer }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = RUS_energy_contract_end_tt
+			hidden_effect = {
+				FROM = { clr_country_flag = RUS_energy_customer }
+				RUS_energy_contracts_recount = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
 	}
 }

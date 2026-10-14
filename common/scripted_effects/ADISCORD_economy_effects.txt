@@ -1219,6 +1219,8 @@ ADISCORD_economy_calculate_building_income = {
 	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_industrial_cluster_count }
 	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.16 }
 	add_to_variable = { var = ADISCORD_economy_building_income value = ADISCORD_economy_building_income_temp }
+	# RUS bunker markets; RUS_bunker_refresh recomputes the amount and marks the budget dirty.
+	if = { limit = { tag = RUS } add_to_variable = { var = ADISCORD_economy_building_income value = RUS_bunker_income } }
 	if = { limit = { ADISCORD_economy_model_is_fragmented = yes } multiply_variable = { var = ADISCORD_economy_building_income value = 0.70 } }
 	clamp_variable = { var = ADISCORD_economy_building_income min = 0 max = 50 }
 }

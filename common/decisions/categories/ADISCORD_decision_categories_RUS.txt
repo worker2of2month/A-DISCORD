@@ -91,6 +91,7 @@ RUS_development_programmes = {
 			has_completed_focus = RUS_inspection_chamber
 			has_completed_focus = RUS_surface_contracts
 			has_completed_focus = RUS_underground_fund
+			has_war = yes
 		}
 	}
 	priority = 25
@@ -99,6 +100,7 @@ RUS_development_programmes = {
 # --- rus_balance_of_power ---
 RUS_state_balance_category = {
 	icon = generic_political_pressure
+	scripted_gui = ADISCORD_RUS_favours_panel
 	allowed = { tag = RUS }
 	visible = { has_power_balance = { id = RUS_state_balance } }
 	visible_when_empty = yes

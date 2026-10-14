@@ -129,10 +129,7 @@ ADISCORD_vorkerland_rus_last_empire_plan = {
 		RUS_artillery_observers
 		RUS_staff_field_exercise
 		RUS_bunker_closed_cycle
-		RUS_bunker_reserve_turbine
 		RUS_bunker_cold_stores
-		RUS_bunker_machine_depot
-		RUS_bunker_emergency_rations
 		RUS_bunker_systems_college
 	}
 

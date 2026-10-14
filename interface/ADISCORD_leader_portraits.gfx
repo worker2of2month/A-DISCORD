@@ -558,6 +558,32 @@ spriteTypes = {
 		name = "GFX_portrait_RUS_Mark_Rustan_dictator"
 		texturefile = "gfx/leaders/RUS/portrait_RUS_Mark_Rustan_dictator.png"
 	}
+	spriteType = {
+		name = "GFX_portrait_RUS_Konstantin_Vyazemsky"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Konstantin_Vyazemsky.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_RUS_Konstantin_Vyazemsky_small"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Konstantin_Vyazemsky.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_RUS_Nikolai_Gorin"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Nikolai_Gorin.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_RUS_Nikolai_Gorin_small"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Nikolai_Gorin.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
 	###NAM
 	spriteType = {
 		name = "GFX_portrait_NAM_Egor_Rom"

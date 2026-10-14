@@ -907,7 +907,7 @@ RUS_bunker_excavate_requirements = {
 
 RUS_bunker_excavate_affordable = {
 	NOT = { has_political_power < 20 }
-	check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 50 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 20 } }
 }
 
@@ -917,7 +917,7 @@ RUS_bunker_rush_requirements = {
 
 RUS_bunker_rush_affordable = {
 	NOT = { has_political_power < 30 }
-	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 65 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 30 } }
 }
 
@@ -927,7 +927,7 @@ RUS_bunker_guard_requirements = {
 
 RUS_bunker_guard_affordable = {
 	NOT = { has_political_power < 25 }
-	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 65 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 25 } }
 }
 
@@ -937,7 +937,7 @@ RUS_bunker_shelter_requirements = {
 
 RUS_bunker_shelter_affordable = {
 	NOT = { has_political_power < 25 }
-	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 65 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 25 } }
 }
 
@@ -948,7 +948,7 @@ RUS_bunker_water_requirements = {
 
 RUS_bunker_water_affordable = {
 	NOT = { has_political_power < 25 }
-	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 85 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 30 } }
 }
 
@@ -959,7 +959,7 @@ RUS_bunker_signals_requirements = {
 
 RUS_bunker_signals_affordable = {
 	NOT = { has_political_power < 25 }
-	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 85 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 30 } }
 }
 
@@ -970,7 +970,7 @@ RUS_bunker_workshop_requirements = {
 
 RUS_bunker_workshop_affordable = {
 	NOT = { has_political_power < 25 }
-	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 35 } }
 }
 
@@ -981,7 +981,7 @@ RUS_bunker_granary_requirements = {
 
 RUS_bunker_granary_affordable = {
 	NOT = { has_political_power < 25 }
-	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 35 } }
 }
 
@@ -992,7 +992,7 @@ RUS_bunker_clinic_requirements = {
 
 RUS_bunker_clinic_affordable = {
 	NOT = { has_political_power < 25 }
-	check_variable = { var = ADISCORD_economy_treasury value = 350 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 115 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 40 } }
 }
 
@@ -1003,7 +1003,7 @@ RUS_bunker_laboratory_requirements = {
 
 RUS_bunker_laboratory_affordable = {
 	NOT = { has_political_power < 25 }
-	check_variable = { var = ADISCORD_economy_treasury value = 350 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 115 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 40 } }
 }
 
@@ -1014,7 +1014,7 @@ RUS_bunker_archive_requirements = {
 
 RUS_bunker_archive_affordable = {
 	NOT = { has_political_power < 25 }
-	check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 135 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 45 } }
 }
 
@@ -1025,7 +1025,7 @@ RUS_bunker_command_requirements = {
 
 RUS_bunker_command_affordable = {
 	NOT = { has_political_power < 25 }
-	check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 135 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 45 } }
 }
 
@@ -1035,7 +1035,7 @@ RUS_bunker_generator_requirements = {
 
 RUS_bunker_generator_affordable = {
 	NOT = { has_political_power < 25 }
-	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 85 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 35 } }
 }
 
@@ -1045,18 +1045,18 @@ RUS_bunker_reinforce_requirements = {
 
 RUS_bunker_reinforce_affordable = {
 	NOT = { has_political_power < 15 }
-	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 35 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 15 } }
 }
 
 RUS_engineering_order_affordable = {
 	NOT = { has_political_power < 25 }
-	check_variable = { var = ADISCORD_economy_treasury value = 180 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals }
 }
 
 RUS_rifle_order_affordable = {
 	NOT = { has_political_power < 50 }
-	check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
 }
 
 RUS_market_surplus_affordable = {
@@ -1126,7 +1126,7 @@ RUS_bunker_upgrade_5_affordable = {
 
 RUS_bunker_resupply_affordable = {
 	NOT = { has_political_power < 15 }
-	check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 165 compare = greater_than_or_equals }
 }
 
 RUS_bunker_resupply_available = {
@@ -1288,6 +1288,21 @@ RUS_mobile_preparation_available = {
 	NOT = { has_idea = RUS_mobile_preparation_spirit }
 }
 
+RUS_aimaq_public_works_affordable = {
+	OR = {
+		AND = {
+			has_completed_focus = RUS_assembly_budget
+			NOT = { has_political_power < 15 }
+		}
+		AND = {
+			NOT = { has_completed_focus = RUS_assembly_budget }
+			NOT = { has_political_power < 25 }
+		}
+	}
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 35 } }
+}
+
 RUS_aimaq_public_works_available = {
 	RUS_bunker_operational = yes
 	has_completed_focus = RUS_local_service_committees
@@ -1331,8 +1346,7 @@ RUS_bop_relief_available = {
 }
 
 RUS_bop_relief_affordable = {
-	NOT = { has_political_power < 25 }
-	check_variable = { var = RUS_bunker_food value = 20 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_food value = 30 compare = greater_than_or_equals }
 }
 
 RUS_bop_reserve_available = {
@@ -1342,8 +1356,7 @@ RUS_bop_reserve_available = {
 }
 
 RUS_bop_reserve_affordable = {
-	NOT = { has_political_power < 30 }
-	check_variable = { var = RUS_bunker_food value = 30 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_food value = 40 compare = greater_than_or_equals }
 }
 
 RUS_bop_mediation_available = {
@@ -1355,8 +1368,8 @@ RUS_bop_mediation_available = {
 }
 
 RUS_bop_mediation_affordable = {
-	NOT = { has_political_power < 40 }
-	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	NOT = { has_political_power < 20 }
+	check_variable = { var = ADISCORD_economy_treasury value = 65 compare = greater_than_or_equals }
 }
 
 # --- rus_land_reclamation ---
@@ -1384,7 +1397,7 @@ RUS_reclamation_available = {
 
 RUS_reclamation_affordable = {
 	NOT = { has_political_power < 75 }
-	check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 335 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 200 } }
 }
 
@@ -1415,18 +1428,17 @@ RUS_suspicion_relief_available = {
 }
 
 RUS_suspicion_energy_cover_affordable = {
-	NOT = { has_political_power < 40 }
-	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals }
 }
 
 RUS_suspicion_disperse_musters_affordable = {
-	NOT = { has_political_power < 30 }
-	NOT = { has_manpower < 1000 }
+	check_variable = { var = RUS_bunker_food value = 15 compare = greater_than_or_equals }
+	NOT = { has_manpower < 500 }
 }
 
 RUS_suspicion_envoys_affordable = {
-	NOT = { has_political_power < 60 }
-	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+	NOT = { has_political_power < 30 }
+	check_variable = { var = ADISCORD_economy_treasury value = 85 compare = greater_than_or_equals }
 }
 
 RUS_suspicion_ration_aid_affordable = {
@@ -1434,21 +1446,129 @@ RUS_suspicion_ration_aid_affordable = {
 }
 
 RUS_suspicion_border_bribes_affordable = {
-	check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
 }
 
 RUS_suspicion_press_tour_affordable = {
-	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 50 compare = greater_than_or_equals }
 }
 
 RUS_suspicion_reactor_camouflage_affordable = {
 	check_variable = { var = RUS_bunker_food value = 40 compare = greater_than_or_equals }
-	check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 50 compare = greater_than_or_equals }
 }
 
 RUS_suspicion_border_commission_affordable = {
 	check_variable = { var = RUS_bunker_food value = 20 compare = greater_than_or_equals }
-	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 65 compare = greater_than_or_equals }
+}
+
+# RUS. Paid answers to the coalition inspection in ADISCORD_rus_crisis.17.
+RUS_inspection_hide_affordable = {
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_bunker_food value = 20 compare = greater_than_or_equals }
+	NOT = { has_manpower < 500 }
+}
+
+RUS_inspection_bribe_affordable = {
+	check_variable = { var = ADISCORD_economy_treasury value = 65 compare = greater_than_or_equals }
+}
+
+# --- rus_shadow_deals ---
+# RUS. Each deal is paid with suspicion and must leave the gauge below exposure.
+RUS_shadow_rifles_room = {
+	check_variable = { var = RUS_suspicion value = 92 compare = less_than }
+}
+
+RUS_shadow_rifles_affordable = {
+	check_variable = { var = ADISCORD_economy_treasury value = 35 compare = greater_than_or_equals }
+}
+
+RUS_shadow_designs_room = {
+	check_variable = { var = RUS_suspicion value = 88 compare = less_than }
+}
+
+RUS_shadow_designs_affordable = {
+	NOT = { has_political_power < 15 }
+}
+
+RUS_shadow_engineers_room = {
+	check_variable = { var = RUS_suspicion value = 90 compare = less_than }
+}
+
+RUS_shadow_engineers_ready = {
+	NOT = { ADISCORD_economic_development_at_least_5 = yes }
+	check_variable = { var = ADISCORD_economic_development_progress value = 100 compare = less_than }
+	ADISCORD_economy_can_upgrade_economic_development = yes
+}
+
+RUS_shadow_engineers_affordable = {
+	check_variable = { var = RUS_bunker_food value = 25 compare = greater_than_or_equals }
+}
+
+# --- rus_energy_contracts ---
+# COUNTRY scope of a possible customer; ROOT is RUS.
+RUS_energy_customer_valid = {
+	exists = yes
+	NOT = { has_war_with = RUS }
+	NOT = { is_subject_of = RUS }
+}
+
+RUS_energy_contract_room = {
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_energy_contracts value = 2 compare = less_than }
+}
+
+# --- rus_faction_favours ---
+# RUS. Favours are paid with faction support instead of political power.
+RUS_favour_army_20_affordable = {
+	RUS_state_balance_operational = yes
+	check_variable = { var = RUS_black_army_support value = 0.20 compare = greater_than_or_equals }
+}
+
+RUS_favour_army_15_affordable = {
+	RUS_state_balance_operational = yes
+	check_variable = { var = RUS_black_army_support value = 0.15 compare = greater_than_or_equals }
+}
+
+RUS_favour_science_20_affordable = {
+	RUS_state_balance_operational = yes
+	check_variable = { var = RUS_scientists_support value = 0.20 compare = greater_than_or_equals }
+}
+
+RUS_favour_science_15_affordable = {
+	RUS_state_balance_operational = yes
+	check_variable = { var = RUS_scientists_support value = 0.15 compare = greater_than_or_equals }
+}
+
+# --- rus_aimaq_levies ---
+# RUS. Three calls per war; RUS_levies_monthly resets the count at peace.
+RUS_levy_room = {
+	RUS_khan_governing = yes
+	has_completed_focus = RUS_summon_the_aimaqs
+	has_war = yes
+	check_variable = { var = RUS_levy_raised value = 3 compare = less_than }
+}
+
+RUS_levy_affordable = {
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_bunker_food value = 30 compare = greater_than_or_equals }
+	NOT = { has_equipment = { infantry_equipment < 2700 } }
+}
+
+# --- rus_winter_and_refugees ---
+RUS_refugees_settle_affordable = {
+	check_variable = { var = ADISCORD_economy_treasury value = 35 compare = greater_than_or_equals }
+}
+
+RUS_winter_expedition_affordable = {
+	RUS_bunker_operational = yes
+	NOT = { has_manpower < 500 }
+}
+
+RUS_winter_grain_affordable = {
+	RUS_bunker_operational = yes
+	check_variable = { var = ADISCORD_economy_treasury value = 50 compare = greater_than_or_equals }
 }
 
 # --- rus_army_morale ---
@@ -1473,7 +1593,7 @@ RUS_reactor_works_idle = {
 
 RUS_reactor_works_affordable = {
 	NOT = { has_political_power < 50 }
-	check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 135 compare = greater_than_or_equals }
 }
 
 RUS_reactor_sortie_affordable = {
@@ -1533,19 +1653,19 @@ RUS_bunker_laboratory_active = {
 
 RUS_lab_reactor_alloys_affordable = {
 	NOT = { has_political_power < 50 }
-	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 }
 
 RUS_lab_zeppelin_affordable = {
 	NOT = { has_political_power < 100 }
-	check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 335 compare = greater_than_or_equals }
 	NOT = { has_manpower < 400 }
 }
 
 # Civil development programmes settle payment and progress together.
 RUS_development_programme_affordable = {
 	NOT = { has_political_power < 25 }
-	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 35 compare = greater_than_or_equals }
 }
 
 RUS_civil_service_training_ready = {
@@ -1654,13 +1774,13 @@ RUS_artillery_order_available = {
 
 RUS_civil_factory_order_affordable = {
 	NOT = { has_political_power < 40 }
-	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 60 } }
 }
 
 RUS_artillery_order_affordable = {
 	NOT = { has_political_power < 25 }
-	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 65 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 50 } }
 }
 
@@ -1671,7 +1791,7 @@ RUS_district_relief_available = {
 
 RUS_district_relief_affordable = {
 	NOT = { has_political_power < 25 }
-	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 35 compare = greater_than_or_equals }
 	check_variable = { var = RUS_bunker_food value = 20 compare = greater_than_or_equals }
 }
 
@@ -1697,7 +1817,7 @@ RUS_last_sky_science_ready = {
 }
 
 RUS_last_sky_science_affordable = {
-	check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 50 compare = greater_than_or_equals }
 	NOT = { has_equipment = { support_equipment < 50 } }
 }
 
@@ -1707,7 +1827,7 @@ RUS_last_sky_army_ready = {
 }
 
 RUS_last_sky_army_affordable = {
-	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 35 compare = greater_than_or_equals }
 	RUS_bunker_operational = yes
 	check_variable = { var = RUS_bunker_food value = 30 compare = greater_than_or_equals }
 }
@@ -1718,7 +1838,100 @@ RUS_last_sky_districts_ready = {
 }
 
 RUS_last_sky_districts_affordable = {
-	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 35 compare = greater_than_or_equals }
 	RUS_bunker_operational = yes
 	check_variable = { var = RUS_bunker_food value = 40 compare = greater_than_or_equals }
+}
+
+RUS_bunker_excavate_ui_available = {
+	check_variable = {
+		var = RUS_bunker_depth
+		value = RUS_bunker_depth_limit
+		compare = less_than
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_bunker_operational_tt
+		RUS_bunker_operational = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_bunker_slot_free_tt
+		RUS_bunker_slot_free = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_bunker_excavate_requirements_tt
+		RUS_bunker_excavate_requirements = yes
+	}
+	RUS_bunker_excavate_affordable = yes
+}
+
+RUS_bunker_generator_ui_available = {
+	has_completed_focus = RUS_bunker_power_school
+	check_variable = {
+		var = RUS_bunker_generators
+		value = 2
+		compare = less_than
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_bunker_operational_tt
+		RUS_bunker_operational = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_bunker_slot_free_tt
+		RUS_bunker_slot_free = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_bunker_generator_requirements_tt
+		RUS_bunker_generator_requirements = yes
+	}
+	RUS_bunker_generator_affordable = yes
+}
+
+RUS_bunker_reinforce_ui_available = {
+	always = yes
+	custom_trigger_tooltip = {
+		tooltip = RUS_bunker_operational_tt
+		RUS_bunker_operational = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_bunker_slot_free_tt
+		RUS_bunker_slot_free = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_bunker_reinforce_requirements_tt
+		RUS_bunker_reinforce_requirements = yes
+	}
+	RUS_bunker_reinforce_affordable = yes
+}
+
+RUS_bunker_resupply_ui_available = {
+	has_country_flag = RUS_bunker_initialized
+	custom_trigger_tooltip = {
+		tooltip = RUS_bunker_food_convoy_available_tt
+		RUS_bunker_operational = yes
+		RUS_bunker_convoy_fits = yes
+	}
+	RUS_bunker_resupply_affordable = yes
+}
+
+RUS_bunker_energy_sale_ui_available = {
+	has_completed_focus = RUS_bunker_power_school
+	custom_trigger_tooltip = {
+		tooltip = RUS_bunker_operational_tt
+		RUS_bunker_operational = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_bunker_slot_free_tt
+		RUS_bunker_slot_free = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_bunker_energy_contract_free_tt
+		NOT = {
+			has_variable = RUS_bunker_energy_export_power
+		}
+	}
+	check_variable = {
+		var = RUS_bunker_free_power
+		value = 1
+		compare = greater_than_or_equals
+	}
 }
