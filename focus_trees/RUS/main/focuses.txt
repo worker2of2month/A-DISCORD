@@ -14,7 +14,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_summon_the_aimaqs
-		icon = GFX_focus_VAL_Count_The_Captains
+		icon = GFX_focus_RUS_summon_the_aimaqs
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		x = 19
 		y = 0
@@ -849,7 +849,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_aimaq_council
-		icon = GFX_focus_VAL_Count_The_Captains
+		icon = GFX_focus_RUS_aimaq_council
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 5
 		y = 5
@@ -879,7 +879,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_seal_chancery
-		icon = GFX_focus_RUS_district_ledger
+		icon = GFX_focus_RUS_seal_chancery
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 17
 		y = 5
@@ -909,7 +909,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_written_oaths
-		icon = GFX_focus_RUS_district_ledger
+		icon = GFX_focus_RUS_seal_chancery
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 11
 		y = 6
@@ -4110,7 +4110,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_trained_administrators
-		icon = GFX_focus_RUS_district_ledger
+		icon = GFX_focus_RUS_trained_administrators
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 2
 		y = 8
@@ -4136,7 +4136,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_military_governors
-		icon = GFX_focus_RUS_levy_of_the_new_aimaqs
+		icon = GFX_focus_RUS_military_governors
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
 		x = 23
 		y = 6
@@ -4161,7 +4161,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_military_contract_board
-		icon = GFX_focus_RUS_imperial_arsenals
+		icon = GFX_focus_RUS_military_contract_board
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 23
 		y = 7

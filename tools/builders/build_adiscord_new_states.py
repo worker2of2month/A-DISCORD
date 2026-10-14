@@ -926,7 +926,7 @@ NAM_VICTORY_POINT_NAMES = {
 # VPs keep their values. These contaminated-terrain settlements are approved
 # VP provinces even though their terrain is not urban.
 DIRTY_ZONE_VICTORY_POINTS = {
-    49: ((16639, 10), (16546, 5)),
+    49: ((16546, 5),),
     51: ((12219, 2),),
     155: ((9785, 2),),
     176: ((774, 2),),
@@ -2457,6 +2457,11 @@ def state_metadata_plan(state_ids: set[int]) -> dict[Path, bytes]:
         provinces = tuple(map(int, re.findall(r"\d+", source[opening:closing])))
         if state_id in STARTING_OWNERS:
             result = render_state(state_id, STARTING_OWNERS[state_id]).encode("utf-8")
+        elif state_id == 49:
+            result = render_resource_war_state(
+                state_id, path.name, provinces, "EXZ", LEGACY_STATE_PROFILES[state_id],
+                {"steel": 4}, DIRTY_ZONE_VICTORY_POINTS[state_id],
+            ).encode("utf-8")
         elif state_id in districts:
             result = southern_settlement_plan()[path]
         elif state_id in NAM_MAINLAND_STATE_RESOURCES:

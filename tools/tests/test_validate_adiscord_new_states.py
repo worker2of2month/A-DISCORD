@@ -533,6 +533,25 @@ class NorthernStartingStateContracts(unittest.TestCase):
 
 
 class NudgeMetadataTests(unittest.TestCase):
+    def test_grey_belt_shell_recovery_keeps_new_khan_border(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "49-PLACEHOLDER.txt"
+            target.write_text(
+                'state={\n\tid=49\n\tname="STATE_49"\n\tprovinces={ 16546 }\n}\n',
+                encoding="utf-8",
+            )
+            with patch.object(builder, "STATE_DIR", Path(directory)):
+                planned = builder.state_metadata_plan({49})[target]
+                text = planned.decode("utf-8")
+                self.assertIn("owner = EXZ", text)
+                self.assertIn("industrial_complex = 2", text)
+                self.assertIn("arms_factory = 1", text)
+                self.assertIn("steel = 4", text)
+                self.assertIn("victory_points = { 16546 5 }", text)
+                self.assertNotIn("16639", text)
+                target.write_bytes(planned)
+                self.assertEqual(builder.state_metadata_plan({49})[target], planned)
+
     def test_shell_recovery_preserves_membership_and_economy(self):
         for state_id in (241, 282, 290, 688, 689, 690):
             with self.subTest(state=state_id), tempfile.TemporaryDirectory() as directory:

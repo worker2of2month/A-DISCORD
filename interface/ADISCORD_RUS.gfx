@@ -1,19 +1,4 @@
 spriteTypes = {
-	progressbartype = {
-		name = "GFX_RUS_favour_support"
-		textureFile1 = "gfx/interface/ADISCORD_RUS/favour_support_fill.dds"
-		textureFile2 = "gfx/interface/ADISCORD_RUS/bunker_panel.dds"
-		size = { x = 204 y = 12 }
-		effectFile = "gfx/FX/progress.lua"
-		horizontal = yes
-		steps = 1
-	}
-
-	spriteType = {
-		name = "GFX_RUS_favour_support_midpoint"
-		textureFile = "gfx/interface/ADISCORD_RUS/favour_support_midpoint.dds"
-	}
-
 	spriteType = {
 		name = "GFX_RUS_world_ended_superevent"
 		textureFile = "gfx/interface/superevents/RUS/world_ended.png"

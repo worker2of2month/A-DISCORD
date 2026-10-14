@@ -21,7 +21,7 @@ division_template = {
 units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
-		location = 16639
+		location = 16546
 		division_template = "SLA Collapse Militia"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.70

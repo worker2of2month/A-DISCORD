@@ -27,6 +27,12 @@ and the focused checks that compare displayed rewards with real variable writes.
   discovery never opts into that write test in the live checkout.
 - Generated output belongs to the generator that emits its marker or documents
   the path. Change that generator rather than patching its output by hand.
+- After a Nudge border edit, restore supported state metadata with
+  `python -B -m tools.builders.build_adiscord_new_states --check-state-metadata 49`
+  and its `--apply-state-metadata 49` counterpart. Province membership is preserved.
+  Keep the boundary source manifest and province-specific victory points in sync.
+  The map-building pass also repairs out-of-province unit anchors in the compact
+  Khan bunker districts; it preserves all unrelated unit-stack rows.
 
 ## Generated-output registry
 

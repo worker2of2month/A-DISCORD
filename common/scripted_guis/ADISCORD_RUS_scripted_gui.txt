@@ -1122,14 +1122,6 @@ scripted_gui = {
 			has_power_balance = { id = RUS_state_balance }
 		}
 		ai_enabled = { always = no }
-		properties = {
-			RUS_favours_scientists_bar = {
-				frame = RUS_scientists_support
-			}
-			RUS_favours_black_army_bar = {
-				frame = RUS_black_army_support
-			}
-		}
 		effects = {
 			RUS_favour_night_shifts_button_click = {
 				activate_decision = RUS_favour_night_shifts

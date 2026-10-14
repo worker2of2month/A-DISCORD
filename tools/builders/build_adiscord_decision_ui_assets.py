@@ -350,13 +350,6 @@ def _rus_bunker_outputs() -> dict[Path, bytes]:
     return outputs
 
 
-def _rus_favour_outputs() -> dict[Path, bytes]:
-    return {
-        RUS_BUNKER_DIR / "favour_support_fill.dds": _dds_bytes(Image.new("RGBA", (204, 12), (200, 159, 102, 255))),
-        RUS_BUNKER_DIR / "favour_support_midpoint.dds": _dds_bytes(Image.new("RGBA", (2, 20), (240, 229, 216, 255))),
-    }
-
-
 def expected_outputs() -> dict[Path, bytes]:
     return {
         WINDOW_TILE: _dds_bytes(_window_tile()),
@@ -372,7 +365,6 @@ def expected_outputs() -> dict[Path, bytes]:
         PROGRESS_BAD: _dds_bytes(_segmented_progress((132, 52, 45, 255))),
         SELECT_ICON: _dds_bytes(_approval_strip()),
         **_rus_bunker_outputs(),
-        **_rus_favour_outputs(),
     }
 
 
@@ -405,24 +397,16 @@ def main() -> int:
     actions.add_argument(
         "--apply", action="store_true", help="write generated DDS outputs"
     )
-    selection = parser.add_mutually_exclusive_group()
-    selection.add_argument(
+    parser.add_argument(
         "--rus-bunker-only",
         action="store_true",
         help="check or build only RUS room illustrations",
-    )
-    selection.add_argument(
-        "--rus-favours-only",
-        action="store_true",
-        help="check or build only RUS faction support bars",
     )
     args = parser.parse_args()
 
     try:
         if args.rus_bunker_only:
             outputs = _rus_bunker_outputs()
-        elif args.rus_favours_only:
-            outputs = _rus_favour_outputs()
         else:
             outputs = expected_outputs()
     except (OSError, RuntimeError) as exc:
@@ -435,9 +419,7 @@ def main() -> int:
         for issue in issues:
             print(f"ERROR: {issue}")
         return 1
-    if args.rus_favours_only:
-        print("A-Discord RUS faction support assets are current.")
-    elif args.rus_bunker_only:
+    if args.rus_bunker_only:
         print("A-Discord RUS bunker assets are current (five floors and card surface).")
     else:
         print(

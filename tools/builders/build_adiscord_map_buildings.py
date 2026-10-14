@@ -679,6 +679,11 @@ def validate(root: Path = ROOT) -> list[str]:
         for item in mismatches
     ]
     issues.extend(required_spawn_issues(lines, state_ids))
+    _stacks, stack_changes = khan_unitstack_plan(root)
+    issues.extend(
+        f"map/unitstacks.txt:{line}: Khan unit anchor lies outside its province"
+        for line in stack_changes
+    )
     if interior_dam_anchor(lines) != lines:
         issues.append("state 53 dam_spawn must use its interior integer anchor")
     if bezhaysk_castle_clearance(lines) != lines:
@@ -703,6 +708,49 @@ def validate(root: Path = ROOT) -> list[str]:
     return issues
 
 
+def khan_unitstack_plan(root: Path = ROOT) -> tuple[bytes, list[int]]:
+    """Keep compact bunker-district anchors inside their own province pixels."""
+    path = root / "map/unitstacks.txt"
+    rows = path.read_bytes().decode("utf-8").splitlines(keepends=True)
+    colors = load_province_by_color(root)
+    changed = []
+    with (
+        Image.open(root / "map/provinces.bmp") as provinces,
+        Image.open(root / "map/heightmap.bmp") as heights,
+    ):
+        for index, row in enumerate(rows):
+            fields = row.rstrip("\r\n").split(";")
+            if fields[0] not in {"16512", "16523", "16531", "16639"}:
+                continue
+            province_id = int(fields[0])
+            x, z = float(fields[2]), float(fields[4])
+            if all(
+                colors.get(provinces.getpixel(
+                    (convert(x), provinces.height - 1 - convert(z))
+                )) == province_id
+                for convert in (int, round)
+            ):
+                continue
+            candidates = [
+                (px, pz)
+                for px in range(max(0, int(x) - 8), min(provinces.width, int(x) + 9))
+                for pz in range(max(0, int(z) - 8), min(provinces.height, int(z) + 9))
+                if colors.get(provinces.getpixel((px, provinces.height - 1 - pz))) == province_id
+            ]
+            if not candidates:
+                raise RuntimeError(f"province {province_id}: no nearby unit anchor")
+            px, pz = min(
+                candidates,
+                key=lambda point: ((point[0] - x) ** 2 + (point[1] - z) ** 2, point),
+            )
+            fields[2] = f"{px:.2f}"
+            fields[3] = f"{heights.getpixel((px, provinces.height - 1 - pz)) / 10:.2f}"
+            fields[4] = f"{pz:.2f}"
+            rows[index] = ";".join(fields) + row[len(row.rstrip("\r\n")):]
+            changed.append(index + 1)
+    return "".join(rows).encode("utf-8"), changed
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group()
@@ -717,6 +765,10 @@ def main() -> int:
     args = parser.parse_args()
 
     if args.apply:
+        stacks, stack_changes = khan_unitstack_plan(ROOT)
+        if stack_changes:
+            (ROOT / "map/unitstacks.txt").write_bytes(stacks)
+        print(f"Corrected {len(stack_changes)} Khan unit anchors.")
         mismatches = synchronize_buildings(ROOT, apply=True)
         added = ensure_exclusion_boundary_spawn_positions(ROOT)
         western_manifest = json.loads(

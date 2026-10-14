@@ -1826,7 +1826,7 @@ guiTypes = {
 	containerWindowType = {
 		name = "ADISCORD_RUS_favours_window"
 		position = { x = 0 y = 0 }
-		size = { width = 460 height = 692 }
+		size = { width = 460 height = 648 }
 		background = {
 			name = "RUS_favours_background"
 			quadTextureSprite = "GFX_RUS_bunker_panel"
@@ -1882,53 +1882,9 @@ guiTypes = {
 			pdx_tooltip = "RUS_favours_scientists_support_tt"
 		}
 
-		iconType = {
-			name = "RUS_favours_scientists_bar"
-			spriteType = "GFX_RUS_favour_support"
-			position = { x = 14 y = 216 }
-			pdx_tooltip = "RUS_favours_scientists_support_tt"
-		}
-
-		iconType = {
-			name = "RUS_favours_scientists_midpoint"
-			spriteType = "GFX_RUS_favour_support_midpoint"
-			position = { x = 115 y = 212 }
-			pdx_tooltip = "RUS_favours_scientists_support_tt"
-		}
-
-		instantTextBoxType = {
-			name = "RUS_favours_scientists_zero"
-			position = { x = 14 y = 236 }
-			text = "RUS_favours_scale_zero"
-			font = "ADISCORD_bunker_hint"
-			maxWidth = 40
-			maxHeight = 16
-			fixedsize = yes
-		}
-
-		instantTextBoxType = {
-			name = "RUS_favours_scientists_half"
-			position = { x = 92 y = 236 }
-			text = "RUS_favours_scale_half"
-			font = "ADISCORD_bunker_hint"
-			maxWidth = 48
-			maxHeight = 16
-			fixedsize = yes
-		}
-
-		instantTextBoxType = {
-			name = "RUS_favours_scientists_full"
-			position = { x = 172 y = 236 }
-			text = "RUS_favours_scale_full"
-			font = "ADISCORD_bunker_hint"
-			maxWidth = 46
-			maxHeight = 16
-			fixedsize = yes
-		}
-
 		instantTextBoxType = {
 			name = "RUS_favours_scientists_support_status"
-			position = { x = 14 y = 258 }
+			position = { x = 14 y = 214 }
 			text = "RUS_favours_scientists_support_status"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 204
@@ -1968,53 +1924,9 @@ guiTypes = {
 			pdx_tooltip = "RUS_favours_black_army_support_tt"
 		}
 
-		iconType = {
-			name = "RUS_favours_black_army_bar"
-			spriteType = "GFX_RUS_favour_support"
-			position = { x = 240 y = 216 }
-			pdx_tooltip = "RUS_favours_black_army_support_tt"
-		}
-
-		iconType = {
-			name = "RUS_favours_black_army_midpoint"
-			spriteType = "GFX_RUS_favour_support_midpoint"
-			position = { x = 341 y = 212 }
-			pdx_tooltip = "RUS_favours_black_army_support_tt"
-		}
-
-		instantTextBoxType = {
-			name = "RUS_favours_black_army_zero"
-			position = { x = 240 y = 236 }
-			text = "RUS_favours_scale_zero"
-			font = "ADISCORD_bunker_hint"
-			maxWidth = 40
-			maxHeight = 16
-			fixedsize = yes
-		}
-
-		instantTextBoxType = {
-			name = "RUS_favours_black_army_half"
-			position = { x = 318 y = 236 }
-			text = "RUS_favours_scale_half"
-			font = "ADISCORD_bunker_hint"
-			maxWidth = 48
-			maxHeight = 16
-			fixedsize = yes
-		}
-
-		instantTextBoxType = {
-			name = "RUS_favours_black_army_full"
-			position = { x = 398 y = 236 }
-			text = "RUS_favours_scale_full"
-			font = "ADISCORD_bunker_hint"
-			maxWidth = 46
-			maxHeight = 16
-			fixedsize = yes
-		}
-
 		instantTextBoxType = {
 			name = "RUS_favours_black_army_support_status"
-			position = { x = 240 y = 258 }
+			position = { x = 240 y = 214 }
 			text = "RUS_favours_black_army_support_status"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 204
@@ -2026,7 +1938,7 @@ guiTypes = {
 
 		buttonType = {
 			name = "RUS_favour_night_shifts_button"
-			position = { x = 8 y = 294 }
+			position = { x = 8 y = 250 }
 			size = { x = 218 y = 112 }
 			quadTextureSprite = "GFX_RUS_bunker_card"
 			pdx_tooltip = "RUS_favour_night_shifts_gui_tt"
@@ -2035,7 +1947,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_night_shifts_label"
-			position = { x = 16 y = 300 }
+			position = { x = 16 y = 256 }
 			text = "RUS_favour_night_shifts"
 			font = "ADISCORD_bunker_16"
 			maxWidth = 202
@@ -2046,7 +1958,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_night_shifts_reward"
-			position = { x = 16 y = 334 }
+			position = { x = 16 y = 290 }
 			text = "RUS_favour_night_shifts_gui_reward"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2057,7 +1969,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_night_shifts_price"
-			position = { x = 16 y = 370 }
+			position = { x = 16 y = 326 }
 			text = "RUS_favours_price_20"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2068,7 +1980,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_night_shifts_status"
-			position = { x = 16 y = 388 }
+			position = { x = 16 y = 344 }
 			text = "RUS_favour_night_shifts_gui_status"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2079,7 +1991,7 @@ guiTypes = {
 
 		buttonType = {
 			name = "RUS_favour_prototypes_button"
-			position = { x = 8 y = 414 }
+			position = { x = 8 y = 370 }
 			size = { x = 218 y = 112 }
 			quadTextureSprite = "GFX_RUS_bunker_card"
 			pdx_tooltip = "RUS_favour_prototypes_gui_tt"
@@ -2088,7 +2000,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_prototypes_label"
-			position = { x = 16 y = 420 }
+			position = { x = 16 y = 376 }
 			text = "RUS_favour_prototypes"
 			font = "ADISCORD_bunker_16"
 			maxWidth = 202
@@ -2099,7 +2011,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_prototypes_reward"
-			position = { x = 16 y = 454 }
+			position = { x = 16 y = 410 }
 			text = "RUS_favour_prototypes_gui_reward"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2110,7 +2022,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_prototypes_price"
-			position = { x = 16 y = 490 }
+			position = { x = 16 y = 446 }
 			text = "RUS_favours_price_15"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2121,7 +2033,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_prototypes_status"
-			position = { x = 16 y = 508 }
+			position = { x = 16 y = 464 }
 			text = "RUS_favour_prototypes_gui_status"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2132,7 +2044,7 @@ guiTypes = {
 
 		buttonType = {
 			name = "RUS_favour_reactor_current_button"
-			position = { x = 8 y = 534 }
+			position = { x = 8 y = 490 }
 			size = { x = 218 y = 112 }
 			quadTextureSprite = "GFX_RUS_bunker_card"
 			pdx_tooltip = "RUS_favour_reactor_current_gui_tt"
@@ -2141,7 +2053,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_reactor_current_label"
-			position = { x = 16 y = 540 }
+			position = { x = 16 y = 496 }
 			text = "RUS_favour_reactor_current"
 			font = "ADISCORD_bunker_16"
 			maxWidth = 202
@@ -2152,7 +2064,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_reactor_current_reward"
-			position = { x = 16 y = 574 }
+			position = { x = 16 y = 530 }
 			text = "RUS_favour_reactor_current_gui_reward"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2163,7 +2075,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_reactor_current_price"
-			position = { x = 16 y = 610 }
+			position = { x = 16 y = 566 }
 			text = "RUS_favours_price_15"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2174,7 +2086,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_reactor_current_status"
-			position = { x = 16 y = 628 }
+			position = { x = 16 y = 584 }
 			text = "RUS_favour_reactor_current_gui_status"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2185,7 +2097,7 @@ guiTypes = {
 
 		buttonType = {
 			name = "RUS_favour_shock_fist_button"
-			position = { x = 234 y = 294 }
+			position = { x = 234 y = 250 }
 			size = { x = 218 y = 112 }
 			quadTextureSprite = "GFX_RUS_bunker_card"
 			pdx_tooltip = "RUS_favour_shock_fist_gui_tt"
@@ -2194,7 +2106,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_shock_fist_label"
-			position = { x = 242 y = 300 }
+			position = { x = 242 y = 256 }
 			text = "RUS_favour_shock_fist"
 			font = "ADISCORD_bunker_16"
 			maxWidth = 202
@@ -2205,7 +2117,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_shock_fist_reward"
-			position = { x = 242 y = 334 }
+			position = { x = 242 y = 290 }
 			text = "RUS_favour_shock_fist_gui_reward"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2216,7 +2128,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_shock_fist_price"
-			position = { x = 242 y = 370 }
+			position = { x = 242 y = 326 }
 			text = "RUS_favours_price_20"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2227,7 +2139,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_shock_fist_status"
-			position = { x = 242 y = 388 }
+			position = { x = 242 y = 344 }
 			text = "RUS_favour_shock_fist_gui_status"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2238,7 +2150,7 @@ guiTypes = {
 
 		buttonType = {
 			name = "RUS_favour_black_army_musters_button"
-			position = { x = 234 y = 414 }
+			position = { x = 234 y = 370 }
 			size = { x = 218 y = 112 }
 			quadTextureSprite = "GFX_RUS_bunker_card"
 			pdx_tooltip = "RUS_favour_black_army_musters_gui_tt"
@@ -2247,7 +2159,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_black_army_musters_label"
-			position = { x = 242 y = 420 }
+			position = { x = 242 y = 376 }
 			text = "RUS_favour_black_army_musters"
 			font = "ADISCORD_bunker_16"
 			maxWidth = 202
@@ -2258,7 +2170,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_black_army_musters_reward"
-			position = { x = 242 y = 454 }
+			position = { x = 242 y = 410 }
 			text = "RUS_favour_black_army_musters_gui_reward"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2269,7 +2181,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_black_army_musters_price"
-			position = { x = 242 y = 490 }
+			position = { x = 242 y = 446 }
 			text = "RUS_favours_price_15"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2280,7 +2192,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_black_army_musters_status"
-			position = { x = 242 y = 508 }
+			position = { x = 242 y = 464 }
 			text = "RUS_favour_black_army_musters_gui_status"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2291,7 +2203,7 @@ guiTypes = {
 
 		buttonType = {
 			name = "RUS_favour_guard_instructors_button"
-			position = { x = 234 y = 534 }
+			position = { x = 234 y = 490 }
 			size = { x = 218 y = 112 }
 			quadTextureSprite = "GFX_RUS_bunker_card"
 			pdx_tooltip = "RUS_favour_guard_instructors_gui_tt"
@@ -2300,7 +2212,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_guard_instructors_label"
-			position = { x = 242 y = 540 }
+			position = { x = 242 y = 496 }
 			text = "RUS_favour_guard_instructors"
 			font = "ADISCORD_bunker_16"
 			maxWidth = 202
@@ -2311,7 +2223,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_guard_instructors_reward"
-			position = { x = 242 y = 574 }
+			position = { x = 242 y = 530 }
 			text = "RUS_favour_guard_instructors_gui_reward"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2322,7 +2234,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_guard_instructors_price"
-			position = { x = 242 y = 610 }
+			position = { x = 242 y = 566 }
 			text = "RUS_favours_price_15"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2333,7 +2245,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favour_guard_instructors_status"
-			position = { x = 242 y = 628 }
+			position = { x = 242 y = 584 }
 			text = "RUS_favour_guard_instructors_gui_status"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 202
@@ -2344,7 +2256,7 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "RUS_favours_footer"
-			position = { x = 8 y = 658 }
+			position = { x = 8 y = 614 }
 			text = "RUS_favours_footer"
 			font = "ADISCORD_bunker_hint"
 			maxWidth = 444

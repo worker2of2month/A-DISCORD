@@ -78,6 +78,13 @@ definitions were retained exactly once.
 
 ## Development files and cleanup
 
+The user saves original artwork and editable source files personally. Do not
+automatically copy or archive supplied image originals in `tools/assets/source/`
+or elsewhere. When integrating artwork, ask the user to save the original
+themselves; this reminder does not block the requested game-asset integration.
+Create only the runtime copies/exports needed by the game unless the user
+explicitly asks to save source copies. Preserve existing source files.
+
 Keep editable artwork, PSD/Blender projects and image-generation prompts in
 `tools/assets/source/`, grouped by asset family. Reference material belongs
 in `tools/assets/reference/`. Do not put authoring sources in runtime `gfx/`

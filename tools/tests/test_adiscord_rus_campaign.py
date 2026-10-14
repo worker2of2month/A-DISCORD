@@ -2809,15 +2809,15 @@ class RusCampaignTests(unittest.TestCase):
         for name in decisions:
             action = block(actions, name + "_button_click")
             self.assertEqual([(row.key, row.value) for row in action], [("activate_decision", name)])
-        properties = block(panel, "properties")
-        for faction in ("scientists", "black_army"):
-            self.assertEqual(scalar(block(properties, f"RUS_favours_{faction}_bar"), "frame"), f"RUS_{faction}_support")
+        self.assertFalse(any(row.key == "properties" for row in panel))
         functions = {scalar(row.value, "name"): row.value for row in parse("common/scripted_localisation/ADISCORD_RUS_scripted_loc.txt") if row.key == "defined_text"}
         keys = {row.value for row in walk(window) if row.key in ("text", "buttonText", "pdx_tooltip") and isinstance(row.value, str) and row.value}
         for language in ("russian", "english"):
             raw = (ROOT / f"localisation/{language}/ADISCORD_RUS_l_{language}.yml").read_bytes()
             self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
             loc = dict(re.findall(r'^\s+(\w+):\d*\s+"(.*)"\s*$', raw.decode("utf-8-sig"), re.M))
+            for faction in ("scientists", "black_army"):
+                self.assertIn(f"[?RUS_{faction}_support|%1]", loc[f"RUS_favours_{faction}_value"])
             pending = list(keys)
             seen = set()
             while pending:
@@ -2900,9 +2900,17 @@ class RusCampaignTests(unittest.TestCase):
         for faction, x in (("scientists", 8), ("black_army", 234)):
             emblem = widgets[f"RUS_favours_{faction}_emblem"].value
             self.assertEqual(scalar(emblem, "spriteType"), f"GFX_bop_RUS_{faction}")
-            bar_x = int(scalar(block(widgets[f"RUS_favours_{faction}_bar"].value, "position"), "x"))
-            marker_x = int(scalar(block(widgets[f"RUS_favours_{faction}_midpoint"].value, "position"), "x"))
-            self.assertEqual(marker_x + 1, bar_x + 102)
+            for suffix in ("bar", "midpoint", "zero", "half", "full"):
+                self.assertNotIn(f"RUS_favours_{faction}_{suffix}", widgets)
+            value = widgets[f"RUS_favours_{faction}_value"].value
+            status = widgets[f"RUS_favours_{faction}_support_status"].value
+            value_bottom = int(scalar(block(value, "position"), "y")) + int(scalar(value, "maxHeight"))
+            status_y = int(scalar(block(status, "position"), "y"))
+            self.assertGreaterEqual(status_y, value_bottom)
+            status_bottom = status_y + int(scalar(status, "maxHeight"))
+            for widget in widgets.values():
+                if widget.key == "buttonType" and int(scalar(block(widget.value, "position"), "x")) == x:
+                    self.assertGreaterEqual(int(scalar(block(widget.value, "position"), "y")), status_bottom)
         for name, widget in widgets.items():
             row = widget.value
             x, y = (int(scalar(block(row, "position"), axis)) for axis in ("x", "y"))
@@ -2916,13 +2924,9 @@ class RusCampaignTests(unittest.TestCase):
                 self.assertEqual(x, expected_x, name)
             else:
                 sprite = sprites[scalar(row, "spriteType")]
-                if sprite.key.lower() == "progressbartype":
-                    w, h = (int(scalar(block(sprite.value, "size"), axis)) for axis in ("x", "y"))
-                    self.assertEqual(scalar(sprite.value, "steps"), "1")
-                else:
-                    path = next(item.value for item in sprite.value if item.key.lower() == "texturefile")
-                    with Image.open(ROOT / path) as image:
-                        w, h = image.size
+                path = next(item.value for item in sprite.value if item.key.lower() == "texturefile")
+                with Image.open(ROOT / path) as image:
+                    w, h = image.size
             self.assertGreaterEqual(x, 0, name)
             self.assertGreaterEqual(y, 0, name)
             self.assertLessEqual(x + w, width, name)

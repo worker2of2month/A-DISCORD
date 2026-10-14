@@ -378,6 +378,36 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_RUS_trained_administrators"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_trained_administrators.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_military_contract_board"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_military_contract_board.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_military_governors"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_military_governors.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_summon_the_aimaqs"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_summon_the_aimaqs.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_seal_chancery"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_seal_chancery.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_aimaq_council"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_aimaq_council.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_RUS_bunker_power_school"
 		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_bunker_power_school.png"
 	}
