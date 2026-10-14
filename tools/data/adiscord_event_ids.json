@@ -5333,6 +5333,30 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_rus_campaign.36",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 36,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.37",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 37,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.38",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 38,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_rus_crisis.30",
       "namespace": "ADISCORD_rus_crisis",
       "number": 30,

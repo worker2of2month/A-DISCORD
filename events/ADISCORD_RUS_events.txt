@@ -632,6 +632,11 @@ country_event = {
 	trigger = {
 		RUS_khan_governing = yes
 	}
+	immediate = {
+		hidden_effect = {
+			country_event = { id = ADISCORD_rus_campaign.36 days = 5 }
+		}
+	}
 	option = { name = ADISCORD_rus_campaign.2.a }
 }
 
@@ -680,6 +685,11 @@ country_event = {
 	trigger = {
 		RUS_khan_governing = yes
 	}
+	immediate = {
+		hidden_effect = {
+			country_event = { id = ADISCORD_rus_campaign.37 days = 5 }
+		}
+	}
 	option = { name = ADISCORD_rus_campaign.6.a }
 }
 
@@ -703,6 +713,11 @@ country_event = {
 	is_triggered_only = yes
 	trigger = {
 		RUS_khan_governing = yes
+	}
+	immediate = {
+		hidden_effect = {
+			country_event = { id = ADISCORD_rus_campaign.38 days = 5 }
+		}
 	}
 	option = { name = ADISCORD_rus_campaign.8.a }
 }
@@ -780,6 +795,45 @@ country_event = {
 		trigger = { RUS_crisis_project_active = no }
 		name = ADISCORD_rus_campaign.11.a
 	}
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.36
+	title = ADISCORD_rus_campaign.36.t
+	desc = ADISCORD_rus_campaign.36.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		RUS_khan_governing = yes
+	}
+	option = { name = ADISCORD_rus_campaign.36.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.37
+	title = ADISCORD_rus_campaign.37.t
+	desc = ADISCORD_rus_campaign.37.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		RUS_bunker_operational = yes
+	}
+	option = { name = ADISCORD_rus_campaign.37.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.38
+	title = ADISCORD_rus_campaign.38.t
+	desc = ADISCORD_rus_campaign.38.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		RUS_bunker_operational = yes
+	}
+	option = { name = ADISCORD_rus_campaign.38.a }
 }
 
 # The perimeter archives are independent discoveries; their reading order is optional.
