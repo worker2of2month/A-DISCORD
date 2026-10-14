@@ -635,6 +635,7 @@ ADISCORD_vorkerland_setup_sla = {
 	191 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	233 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	329 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
+	330 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	461 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	710 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	711 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
@@ -784,7 +785,6 @@ ADISCORD_vorkerland_setup_irt = {
 	193 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
 	206 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
 	207 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
-	330 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
 	log = "[ADISCORD Vorkerland] IRT state ownership assigned"
 	IRT = {
 		add_ideas = ADISCORD_vorkerland_zone_fragile_administration
@@ -905,13 +905,29 @@ ADISCORD_vorkerland_close_khan_border_war_flags = {
 
 ADISCORD_vorkerland_resolve_khan_border_war = {
 	ADISCORD_vorkerland_close_khan_border_war_flags = yes
-	# Ownership must move before white_peace returns occupation.
-	if = { limit = { controls_state = 49 } 49 = { set_state_owner_to = RUS set_state_controller_to = RUS } }
-	if = { limit = { controls_state = 176 } 176 = { set_state_owner_to = RUS set_state_controller_to = RUS } }
-	every_controlled_state = {
-		limit = { is_owned_by = SLA }
-		set_state_owner_to = RUS
-		set_state_controller_to = RUS
+	# Extend the award through occupied SLA land before peace returns occupation.
+	# Each pass consumes at least one state; disconnected captures stay with SLA.
+	while_loop_effect = {
+		limit = {
+			any_controlled_state = {
+				is_owned_by = SLA
+				any_neighbor_state = {
+					is_owned_by = RUS
+					is_controlled_by = RUS
+				}
+			}
+		}
+		every_controlled_state = {
+			limit = {
+				is_owned_by = SLA
+				any_neighbor_state = {
+					is_owned_by = RUS
+					is_controlled_by = RUS
+				}
+			}
+			set_state_owner_to = RUS
+			set_state_controller_to = RUS
+		}
 	}
 	if = {
 		limit = { has_war_with = SLA }

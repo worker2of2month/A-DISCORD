@@ -1950,6 +1950,7 @@ ADISCORD_vorkerland_rus_core_dirty_sla = {
 	191 = { add_core_of = RUS add_claim_by = RUS }
 	233 = { add_core_of = RUS }
 	329 = { add_core_of = RUS }
+	330 = { add_core_of = RUS }
 	461 = { add_core_of = RUS }
 	710 = { add_core_of = RUS add_claim_by = RUS }
 	711 = { add_core_of = RUS add_claim_by = RUS }
@@ -2002,7 +2003,6 @@ ADISCORD_vorkerland_rus_core_dirty_irt = {
 	193 = { add_core_of = RUS add_claim_by = RUS }
 	206 = { add_core_of = RUS add_claim_by = RUS }
 	207 = { add_core_of = RUS add_claim_by = RUS }
-	330 = { add_core_of = RUS }
 }
 
 ADISCORD_vorkerland_rus_core_dirty_sca = {

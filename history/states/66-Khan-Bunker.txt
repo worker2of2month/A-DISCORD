@@ -19,7 +19,7 @@ state={
 			}
 		}
 		add_core_of = RUS
-		victory_points = { 16531 5 }
+		victory_points = { 16531 45 }
 		victory_points = { 16639 10 }
 	}
 }

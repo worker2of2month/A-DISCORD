@@ -33,6 +33,7 @@ try:
         CAPITALS,
         CONTAMINATED_STATES,
         DIRTY_GROUPS,
+        DIRTY_INITIAL_OWNER_OVERRIDES,
         EXZ_REMAINDER_GROUPS,
         STATE_PARTITIONS,
         TAGS,
@@ -50,6 +51,7 @@ except (ModuleNotFoundError, ImportError):
         CAPITALS,
         CONTAMINATED_STATES,
         DIRTY_GROUPS,
+        DIRTY_INITIAL_OWNER_OVERRIDES,
         EXZ_REMAINDER_GROUPS,
         STATE_PARTITIONS,
         TAGS,
@@ -2402,8 +2404,12 @@ def validate_events(root: Path, issues: list[str]) -> None:
             )
         )
         assigned = {tag: initial_tag_states(effects, tag) for tag in collapse_tags}
+        for tag, dirty_states in DIRTY_GROUPS.items():
+            assigned[tag] = (
+                set(dirty_states) | set(EXZ_REMAINDER_GROUPS.get(tag, ()))
+            ) - set(DIRTY_INITIAL_OWNER_OVERRIDES)
 
-        for tag in ("RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"):
+        for tag in ("RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", *DIRTY_GROUPS):
             remaining = set(assigned[tag])
             reached: set[int] = set()
             frontier = [min(remaining)] if remaining else []
@@ -2416,7 +2422,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
                     (physical_states.get(state_id, set()) & remaining) - reached
                 )
             if reached != remaining:
-                issues.append(f"{tag}: central state belt is not physically connected")
+                issues.append(f"{tag}: starting state belt is not physically connected")
 
         def physical_borders(pair: frozenset[str]) -> set[frozenset[int]]:
             first, second_tag = sorted(pair)

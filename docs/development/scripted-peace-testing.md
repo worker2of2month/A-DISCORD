@@ -70,6 +70,20 @@ This is an authored bounded treaty, not a reason to annex all ERT for VAL or to
 repaint the exclusion zone. STP/STS versus VAL, the Occidian package (including
 45), the northern 17/18 settlement and NAM's partition keep their existing rules.
 
+Khan's limited Starolesye peace retains occupied SLA states connected through
+other awarded states to land RUS already owns and controls. Ownership transfers
+before white peace, expanding until no connected occupied SLA state remains.
+An isolated capture, including 155 while 712 remains with SLA, is returned by
+the peace. Foreign-owned or foreign-controlled corridors cannot join the award.
+Test both state iteration orders, an isolated objective 176, no gains at timeout,
+and an unrelated parallel war. Full Starolesye defeat keeps its separate annexation.
+
+The six zone republics each start with one connected state belt. The northern
+peripheral state 330 belongs to SLA, which borders it through 51/191/461/710;
+it has no physical border with IRT. Its opening core, Khan campaign core and
+imperial dissolution recipient follow the same SLA assignment. Check every
+republic's full owned-state award, including its peripheral regions.
+
 Shabrat's hegemony imposes provisional administrations after a repeated victory
 over NOD or VAL, or victory in the campaign unlocked by a refused dependency
 demand. The first limited peace leaves the defeated government independent.

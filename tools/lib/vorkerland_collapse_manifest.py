@@ -107,10 +107,9 @@ DIRTY_GROUPS = {
 # campaign objectives. Their population and terrain profiles remain independent
 # of the playable dirty-state checks.
 EXZ_REMAINDER_GROUPS = {
-    "SLA": (50, 233, 329, 461),
+    "SLA": (50, 233, 329, 330, 461),
     "RZA": (186,),
     "ERT": (170,),
-    "IRT": (330,),
 }
 
 CAPITALS = {

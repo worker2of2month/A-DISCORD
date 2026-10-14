@@ -143,7 +143,7 @@ class RusLastEmpireTests(unittest.TestCase):
             read(ROOT / "interface/ADISCORD_leader_portraits.gfx"),
         )
 
-    def test_border_peace_preserves_other_occupied_sla_states(self):
+    def test_border_peace_transfers_connected_occupation_before_white_peace(self):
         from tools.validators.validate_adiscord_vorkerland_collapse import named_block
 
         effect = named_block(
@@ -152,6 +152,10 @@ class RusLastEmpireTests(unittest.TestCase):
         sweep = named_block(effect, "every_controlled_state")
         self.assertIn("is_owned_by = SLA", sweep)
         self.assertIn("set_state_owner_to = RUS", sweep)
+        self.assertIn("any_neighbor_state", sweep)
+        self.assertIn("is_owned_by = RUS", sweep)
+        self.assertIn("is_controlled_by = RUS", sweep)
+        self.assertIn("while_loop_effect", effect)
         self.assertLess(
             effect.index("every_controlled_state"), effect.index("white_peace =")
         )
@@ -767,25 +771,6 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
         }
         full_check = self._run("ADISCORD_vorkerland_check_khan_border_war", full_campaign)
         self.assertNotIn("ADISCORD_vorkerland_resolve_khan_border_war", self._calls(full_check))
-        resolve = self._run("ADISCORD_vorkerland_resolve_khan_border_war", belt)
-        self.assertTrue(any(e.key == "white_peace" for _, e in resolve))
-        self.assertTrue(
-            any(scope == "49" and e.key == "set_state_owner_to" for scope, e in resolve)
-        )
-        self.assertTrue(
-            any(
-                scope == "176" and e.key == "set_state_owner_to" for scope, e in resolve
-            )
-        )
-        white_peace_pos = next(
-            i for i, (_, e) in enumerate(resolve) if e.key == "white_peace"
-        )
-        first_transfer = next(
-            i
-            for i, (scope, e) in enumerate(resolve)
-            if scope in {"49", "176"} and e.key == "set_state_owner_to"
-        )
-        self.assertLess(first_transfer, white_peace_pos)
 
     def test_border_capitulation_annexes_before_partial_peace(self):
         facts = {
@@ -1164,7 +1149,7 @@ class RusCrisisFixture:
             "66": {"RUS"}, "49": {"RUS", "SLA"}, "51": {"RUS", "SLA"},
             "177": {"RUS", "RZA"}, "152": {"RUS", "MLR"},
             "169": {"RUS", "ERT"}, "181": {"RUS", "IRT"},
-            "173": {"RUS", "SCA"}, "330": {"RUS", "IRT"}, "168": {"VAL", "ERT"},
+            "173": {"RUS", "SCA"}, "330": {"RUS", "SLA"}, "168": {"VAL", "ERT"},
         }
         self.flags = {tag: set() for tag in self.countries}
         self.global_flags = set()
@@ -1282,6 +1267,10 @@ class RusCrisisFixture:
                 )
             if key == "any_owned_state":
                 return any(owner == current and self.matches(value, stack + [state]) for state, owner in self.owners.items())
+            if key == "any_controlled_state":
+                return any(controller == current and self.matches(value, stack + [state]) for state, controller in self.controllers.items())
+            if key == "any_neighbor_state":
+                return any(self.matches(value, stack + [state]) for state in self.state_neighbours.get(current, []))
             if key == "any_of_scopes":
                 name = self.array_key(scalar(value, "array"), current)
                 gate = [e for e in value if e.key != "array"]
@@ -1332,6 +1321,10 @@ class RusCrisisFixture:
                 return self.cosmetic_tags.get(current) == value
             if key == "controls_state":
                 return self.controllers.get(value) == current
+            if key == "owns_state":
+                return self.owners.get(value) == current
+            if key == "country_exists":
+                return self.exists(self.resolve(value, stack))
             if key == "has_country_flag":
                 return value in self.flags[current]
             if key == "has_idea":
@@ -1427,6 +1420,15 @@ class RusCrisisFixture:
                     self.execute([e for e in value if e.key != "limit"], stack)
             elif key in ("hidden_effect",):
                 self.execute(value, stack)
+            elif key == "while_loop_effect":
+                gate = next(e.value for e in value if e.key == "limit")
+                payload = [e for e in value if e.key != "limit"]
+                iterations = 0
+                while self.matches(gate, stack):
+                    iterations += 1
+                    if iterations > len(self.owners):
+                        raise AssertionError("Territorial settlement did not converge")
+                    self.execute(payload, stack)
             elif key == "effect_tooltip":
                 continue
             elif key in ("ADISCORD_economy_mark_dirty", "ADISCORD_vorkerland_rus_abort_dirty_campaign"):
@@ -1665,6 +1667,128 @@ class RusCrisisFixture:
                 continue
             else:
                 raise AssertionError(f"Unsupported crisis effect {key} in {current}")
+
+
+class RusBorderPeaceContracts(unittest.TestCase):
+    def world(self, occupied, reverse=False):
+        world = RusCrisisFixture()
+        states = ("66", "49", "51", "155", "176", "187", "710", "711", "712", "461")
+        if reverse:
+            states = tuple(reversed(states))
+        world.owners = {state: "RUS" if state == "66" else "SLA" for state in states}
+        world.controllers = dict(world.owners)
+        for state in occupied:
+            world.controllers[state] = "RUS"
+        world.state_neighbours = {state: [] for state in states}
+        for left, right in (
+            ("66", "49"), ("49", "51"), ("49", "176"), ("49", "187"),
+            ("176", "187"), ("51", "710"), ("51", "711"), ("51", "712"),
+            ("51", "461"), ("710", "461"), ("710", "711"), ("711", "712"),
+            ("712", "155"),
+        ):
+            world.state_neighbours[left].append(right)
+            world.state_neighbours[right].append(left)
+        world.wars = {frozenset(("RUS", "SLA")), frozenset(("RUS", "ERT"))}
+        world.peace_mode = "pair"
+        world.global_flags.add("ADISCORD_vorkerland_khan_border_war_started")
+        return world
+
+    def test_isolated_southwestern_capture_stays_with_starolesye(self):
+        world = self.world(("49", "51", "155", "176", "187"))
+        world.run("ADISCORD_vorkerland_resolve_khan_border_war")
+        self.assertEqual(world.owners["155"], "SLA")
+        self.assertEqual(world.owners["712"], "SLA")
+        for state in ("49", "51", "176", "187"):
+            self.assertEqual(world.owners[state], "RUS")
+        self.assertNotIn(frozenset(("RUS", "SLA")), world.wars)
+        self.assertIn(frozenset(("RUS", "ERT")), world.wars)
+        self.assertNotIn("ADISCORD_vorkerland_khan_border_war_started", world.global_flags)
+        self.assertIn("ADISCORD_vorkerland_khan_border_war_resolved", world.global_flags)
+
+    def test_connected_captures_are_kept_in_either_iteration_order(self):
+        occupied = ("49", "51", "155", "176", "187", "710", "712", "461")
+        for reverse in (False, True):
+            with self.subTest(reverse=reverse):
+                world = self.world(occupied, reverse=reverse)
+                world.run("ADISCORD_vorkerland_resolve_khan_border_war")
+                for state in occupied:
+                    self.assertEqual(world.owners[state], "RUS", state)
+                    self.assertEqual(world.controllers[state], "RUS", state)
+                self.assertEqual(world.owners["711"], "SLA")
+
+    def test_isolated_border_objective_is_not_an_unconditional_award(self):
+        world = self.world(("176",))
+        before = dict(world.owners)
+        world.run("ADISCORD_vorkerland_resolve_khan_border_war")
+        self.assertEqual(world.owners, before)
+
+    def test_foreign_land_cannot_be_taken_or_used_as_a_corridor(self):
+        world = self.world(("49", "176", "187"))
+        world.owners["49"] = "VAL"
+        before = dict(world.owners)
+        world.run("ADISCORD_vorkerland_resolve_khan_border_war")
+        self.assertEqual(world.owners, before)
+
+    def test_occupied_homeland_cannot_connect_a_new_award(self):
+        world = self.world(("49", "176"))
+        world.controllers["66"] = "SLA"
+        before = dict(world.owners)
+        world.run("ADISCORD_vorkerland_resolve_khan_border_war")
+        self.assertEqual(world.owners, before)
+
+    def test_timeout_without_a_connected_capture_awards_nothing(self):
+        world = self.world(())
+        before = dict(world.owners)
+        world.run("ADISCORD_vorkerland_resolve_khan_border_war")
+        self.assertEqual(world.owners, before)
+        self.assertNotIn(frozenset(("RUS", "SLA")), world.wars)
+
+    def test_full_khan_conquest_includes_each_republics_peripheral_regions(self):
+        from tools.lib.vorkerland_collapse_manifest import DIRTY_GROUPS, EXZ_REMAINDER_GROUPS
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        for target, tag in enumerate(("SLA", "RZA", "MLR", "ERT", "IRT", "SCA"), 1):
+            with self.subTest(tag=tag):
+                world = RusCrisisFixture()
+                states = {str(s) for s in (*DIRTY_GROUPS[tag], *EXZ_REMAINDER_GROUPS.get(tag, ()))}
+                world.owners = {state: tag for state in states}
+                world.owners.update({"66": "RUS", "999": "RLY"})
+                world.controllers = dict(world.owners)
+                world.variables["RUS", "ADISCORD_vorkerland_rus_campaign_target"] = target
+                world.triggers["VAL_frontier_eastern_claim_ready"] = parse_clausewitz("always = no")
+                world.run("ADISCORD_vorkerland_rus_annex_dirty_target")
+                self.assertEqual({world.owners[s] for s in states}, {"RUS"})
+                self.assertEqual(world.owners["999"], "RLY")
+                self.assertEqual(world.annexed, [("RUS", tag)])
+
+    def test_generic_zone_peace_includes_all_owned_regions_of_each_loser(self):
+        from tools.lib.vorkerland_collapse_manifest import DIRTY_GROUPS, EXZ_REMAINDER_GROUPS
+        from tools.tests.test_scripted_peace_on_actions import GenericPeaceFixture
+
+        tags = tuple(DIRTY_GROUPS)
+        for index, loser in enumerate(tags):
+            with self.subTest(loser=loser):
+                winner = tags[(index + 1) % len(tags)]
+                unrelated = tags[(index + 2) % len(tags)]
+                world = GenericPeaceFixture(root=loser)
+                world.countries = list(tags)
+                world.winner = winner
+                world.factions = {}
+                world.flags = {tag: set() for tag in tags}
+                world.capitulated = {loser}
+                world.wars = {frozenset((winner, loser)), frozenset((winner, unrelated))}
+                world.owners = {
+                    state: tag
+                    for tag in tags
+                    for state in (*DIRTY_GROUPS[tag], *EXZ_REMAINDER_GROUPS.get(tag, ()))
+                }
+                world.owners[999] = loser
+                before = dict(world.owners)
+                world.run()
+                self.assertEqual(world.annexed, [loser])
+                for state, owner in before.items():
+                    self.assertEqual(world.owners[state], winner if owner == loser else owner)
+                self.assertIn(frozenset((winner, unrelated)), world.wars)
 
 
 class QueuedRusCrisisFixture(RusCrisisFixture):
@@ -3566,7 +3690,7 @@ class RusCrisisContracts(unittest.TestCase):
                     self.assertNotIn("RUS", world.power_balances)
                     self.assertFalse(world.dynamic_modifiers)
                     self.assertEqual(world.owners["66"], "SLA")
-                    self.assertEqual(world.owners["330"], "IRT")
+                    self.assertEqual(world.owners["330"], "SLA")
                     self.assertEqual(world.owners["168"], "VAL")
                     self.assertEqual(world.owners["40"], "WKR")
                     self.assertIn("RUS_crisis_settlement_rights", world.flags[hegemon])
