@@ -232,3 +232,18 @@ music = {
 	song = "ADISCORD_expedition_44_theme"
 	chance = { base = 10 }
 }
+
+music = {
+	song = "ADISCORD_3teeth_merchant_of_the_void"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_3teeth_chasm"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_3teeth_eradicate"
+	chance = { base = 10 }
+}

@@ -5741,6 +5741,46 @@
       "status": "active"
     },
     {
+      "id": "val_rework.140",
+      "namespace": "val_rework",
+      "number": 140,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_story",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.141",
+      "namespace": "val_rework",
+      "number": 141,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_story",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.142",
+      "namespace": "val_rework",
+      "number": 142,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_story",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.143",
+      "namespace": "val_rework",
+      "number": 143,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_story",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.144",
+      "namespace": "val_rework",
+      "number": 144,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_story",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_pc.63",
       "namespace": "ADISCORD_STP_pc",
       "number": 63,
@@ -6010,6 +6050,38 @@
       "number": 1,
       "owner": "events/ADISCORD_RUS_events.txt",
       "subsystem": "rus_crisis",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.145",
+      "namespace": "val_rework",
+      "number": 145,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_story",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.146",
+      "namespace": "val_rework",
+      "number": 146,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_story",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.147",
+      "namespace": "val_rework",
+      "number": 147,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_story",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.148",
+      "namespace": "val_rework",
+      "number": 148,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_story",
       "status": "active"
     }
   ]

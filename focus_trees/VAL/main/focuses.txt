@@ -68,6 +68,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_The_Contract_State }
 		ai_will_do = { base = 15 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 		completion_reward = {
+			country_event = { id = val_rework.140 }
 			VAL_Valera_Solgalov = { add_country_leader_trait = { ideology = contractual_etatism trait = The_Weaponry_Baron } }
 			add_power_balance_value = { id = VAL_command_balance value = 0.15 }
 			VAL_apply_contract_administration_1 = yes
@@ -557,6 +558,7 @@ focus_tree = {
 			modifier = { factor = 2 NOT = { has_equipment = { infantry_equipment < 20000 } } }
 		}
 		completion_reward = {
+			country_event = { id = val_rework.141 }
 			ADISCORD_reform_social_system_development = yes
 			VAL_invest_civilian_industry = yes
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_ash_rear_delta } }
@@ -1370,6 +1372,7 @@ focus_tree = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Inventory_The_Empty_Yards_tt
 			VAL_advance_economic_recovery = yes
 			add_tech_bonus = { name = VAL_frontier_industry_bonus bonus = 0.5 uses = 1 category = industry }
+			country_event = { id = val_rework.142 }
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 50 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
@@ -2099,6 +2102,7 @@ focus_tree = {
 				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
 				VAL_change_contract_authority = yes
 			}
+			country_event = { id = val_rework.145 }
 		}
 		ai_will_do = { base = 10 }
 	}
@@ -2134,6 +2138,7 @@ focus_tree = {
 			hidden_effect = {
 				set_country_flag = VAL_cw_trade_course
 			}
+			country_event = { id = val_rework.146 }
 		}
 		ai_will_do = { base = 2 }
 	}
@@ -2163,6 +2168,7 @@ focus_tree = {
 			if = { limit = { VAL_cw_external_course_available = yes } unlock_decision_tooltip = VAL_cw_begin_mobilization }
 			custom_effect_tooltip = VAL_stelander_focus_current_status_tt
 			hidden_effect = { set_country_flag = VAL_cw_military_course }
+			country_event = { id = val_rework.147 }
 		}
 		ai_will_do = { base = 20 }
 	}
@@ -2197,6 +2203,7 @@ focus_tree = {
 				set_country_flag = VAL_cw_refused
 				if = { limit = { SRP = { exists = yes has_war = no } } SRP = { STP_cw_finish_mobilization = yes } }
 			}
+			country_event = { id = val_rework.148 }
 		}
 		ai_will_do = { base = 1 }
 	}
@@ -3108,7 +3115,11 @@ focus_tree = {
 		prerequisite = { focus = VAL_Inventory_The_Empty_Yards }
 		available = { has_country_flag = VAL_vorkerland_contracts_disrupted }
 		cancel_if_invalid = yes
-		completion_reward = { VAL_restore_arsenal_reputation = yes add_political_power = 50 }
+		completion_reward = {
+			VAL_restore_arsenal_reputation = yes
+			add_political_power = 50
+			country_event = { id = val_rework.143 }
+		}
 		ai_will_do = { base = 30 }
 	}
 

@@ -336,12 +336,54 @@ country_event = {
 }
 
 country_event = {
+	id = val_rework.140
+	title = val_rework.140.t
+	desc = val_rework.140.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = val_rework.140.a
+	}
+}
+
+country_event = {
+	id = val_rework.141
+	title = val_rework.141.t
+	desc = val_rework.141.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = val_rework.141.a
+	}
+}
+
+country_event = {
 	id = val_rework.3
 	title = val_rework.3.t
 	desc = val_rework.3.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_expedition_camp
 	is_triggered_only = yes
 	option = { name = val_rework.3.a }
+	option = {
+		name = val_rework.3.more
+		hidden_effect = {
+			country_event = { id = val_rework.144 }
+		}
+	}
+}
+
+country_event = {
+	id = val_rework.144
+	title = val_rework.144.t
+	desc = val_rework.144.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = val_rework.144.a
+	}
 }
 
 country_event = {
@@ -377,7 +419,7 @@ country_event = {
 	id = val_rework.6
 	title = val_rework.6.t
 	desc = val_rework.6.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_factory_workshop
 	is_triggered_only = yes
 	option = { name = val_rework.6.a }
 }
@@ -414,12 +456,160 @@ country_event = {
 }
 
 country_event = {
+	id = val_rework.145
+	title = val_rework.145.t
+	desc = {
+		text = val_rework.145.collapse
+		trigger = {
+			has_dynamic_modifier = VAL_economic_collapse
+		}
+	}
+	desc = {
+		text = val_rework.145.recovered
+		trigger = {
+			NOT = { has_dynamic_modifier = VAL_economic_collapse }
+			has_country_flag = VAL_vorkerland_contracts_disrupted
+		}
+	}
+	desc = {
+		text = val_rework.145.early
+		trigger = {
+			NOT = { has_dynamic_modifier = VAL_economic_collapse }
+			NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted }
+		}
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = val_rework.145.a
+	}
+}
+
+country_event = {
+	id = val_rework.146
+	title = val_rework.146.t
+	desc = {
+		text = val_rework.146.delivered
+		trigger = {
+			has_country_flag = VAL_cw_arms_contract_fulfilled
+		}
+	}
+	desc = {
+		text = val_rework.146.war
+		trigger = {
+			NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled }
+			VAL_stelander_civil_war_active = yes
+		}
+	}
+	desc = {
+		text = val_rework.146.aftermath
+		trigger = {
+			NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled }
+			VAL_stelander_civil_war_active = no
+		}
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = val_rework.146.a
+	}
+}
+
+country_event = {
+	id = val_rework.147
+	title = val_rework.147.t
+	desc = {
+		text = val_rework.147.secured
+		trigger = {
+			VAL_occidia_secured = yes
+		}
+	}
+	desc = {
+		text = val_rework.147.settled
+		trigger = {
+			VAL_occidia_secured = no
+			has_country_flag = VAL_cw_settled
+		}
+	}
+	desc = {
+		text = val_rework.147.war
+		trigger = {
+			VAL_occidia_secured = no
+			NOT = { has_country_flag = VAL_cw_settled }
+			has_war_with = SRP
+		}
+	}
+	desc = {
+		text = val_rework.147.mobilizing
+		trigger = {
+			VAL_occidia_secured = no
+			NOT = { has_country_flag = VAL_cw_settled }
+			NOT = { has_war_with = SRP }
+			has_country_flag = VAL_cw_mobilizing
+		}
+	}
+	desc = {
+		text = val_rework.147.prepare
+		trigger = {
+			VAL_occidia_secured = no
+			NOT = { has_country_flag = VAL_cw_settled }
+			NOT = { has_war_with = SRP }
+			NOT = { has_country_flag = VAL_cw_mobilizing }
+		}
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = val_rework.147.a
+	}
+}
+
+country_event = {
+	id = val_rework.148
+	title = val_rework.148.t
+	desc = val_rework.148.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = val_rework.148.a
+	}
+}
+
+country_event = {
 	id = val_rework.10
 	title = val_rework.10.t
 	desc = val_rework.10.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	option = { name = val_rework.10.a }
+}
+
+country_event = {
+	id = val_rework.142
+	title = val_rework.142.t
+	desc = val_rework.142.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = val_rework.142.a
+	}
+}
+
+country_event = {
+	id = val_rework.143
+	title = val_rework.143.t
+	desc = val_rework.143.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = val_rework.143.a
+	}
 }
 
 country_event = {
