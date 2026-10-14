@@ -489,7 +489,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_oath_of_the_empire
-		icon = GFX_focus_VAL_Count_The_Captains
+		icon = GFX_focus_RUS_black_army_oath
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
 		x = 14
 		y = 18
@@ -521,7 +521,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_imperial_field_kitchens
-		icon = GFX_focus_VAL_Bread_From_Barracks
+		icon = GFX_focus_RUS_imperial_field_kitchens
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = 14
 		y = 19
@@ -551,7 +551,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_black_army_tribunals
-		icon = GFX_focus_STP_ps_permanent_security
+		icon = GFX_focus_RUS_black_army_tribunals
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_POLITICAL }
 		x = 12
 		y = 20
@@ -578,7 +578,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_scientists_at_headquarters
-		icon = GFX_focus_STP_party_technical_institutes
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_RESEARCH }
 		x = 16
 		y = 20
@@ -642,7 +642,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_imperial_treasury
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_RUS_state_budget
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 26
 		y = 18
@@ -879,7 +879,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_seal_chancery
-		icon = GFX_focus_STP_cw_protocol_office
+		icon = GFX_focus_RUS_district_ledger
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 17
 		y = 5
@@ -909,7 +909,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_written_oaths
-		icon = GFX_focus_STP_cw_quiet_registers
+		icon = GFX_focus_RUS_district_ledger
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 11
 		y = 6
@@ -936,7 +936,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_pay_the_officials
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_RUS_state_budget
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 11
 		y = 7
@@ -984,7 +984,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_district_courts
-		icon = GFX_focus_STP_cw_protocol_office
+		icon = GFX_focus_RUS_black_army_tribunals
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 13
 		y = 8
@@ -1008,7 +1008,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_school_of_scribes
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 9
 		y = 9
@@ -1050,7 +1050,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_roadside_clinics
-		icon = GFX_focus_VAL_Field_Surgeons
+		icon = GFX_focus_RUS_field_hospitals
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 13
 		y = 9
@@ -1096,9 +1096,14 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_manpower = 1500
+			add_manpower = 3000
 			add_stability = 0.03
-			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.4 } }
+			effect_tooltip = { add_ideas = RUS_a_country_of_names_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_political_power value = 0.10 }
+				RUS_government_refresh = yes
+				country_event = { id = ADISCORD_rus_campaign.4 }
+			}
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -1172,7 +1177,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_machine_school
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 28
 		y = 4
@@ -1204,7 +1209,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_power_grid
-		icon = GFX_focus_VAL_Reclamation_Clean_Water
+		icon = GFX_focus_RUS_postwar_roads
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 28
 		y = 5
@@ -1316,7 +1321,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_civilian_shift
-		icon = GFX_focus_VAL_Factories_Like_Cathedrals
+		icon = GFX_focus_RUS_industrial_belt
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 26
 		y = 7
@@ -1360,7 +1365,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_precision_lathes
-		icon = GFX_focus_RUS_imperial_arsenals
+		icon = GFX_focus_RUS_precision_lathes
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 30
 		y = 7
@@ -1524,7 +1529,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_reactor_decontamination
-		icon = GFX_focus_RUS_reactor_sorties
+		icon = GFX_focus_RUS_reactor_decontamination
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 28
 		y = 15
@@ -1563,7 +1568,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_engineers_collegium
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_RUS_engineers_collegium
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 28
 		y = 9
@@ -1620,7 +1625,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_airlocks
-		icon = GFX_focus_VAL_Reclamation_Return_Home
+		icon = GFX_focus_RUS_bunker_airlocks
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 40
 		y = 2
@@ -1656,7 +1661,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_power_school
-		icon = GFX_focus_VAL_Reclamation_Clean_Water
+		icon = GFX_focus_RUS_bunker_power_school
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 44
 		y = 2
@@ -1680,7 +1685,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_shift_work
-		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		icon = GFX_focus_RUS_industrial_belt
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 40
 		y = 3
@@ -1764,7 +1769,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_working_heart
-		icon = GFX_focus_STP_pw_party_defence_combine
+		icon = GFX_focus_RUS_industrial_belt
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 44
 		y = 5
@@ -1827,7 +1832,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_science_wing
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_RUS_empire_without_rivals
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 40
 		y = 7
@@ -2027,7 +2032,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_muster_books
-		icon = GFX_focus_VAL_Army_Of_The_Ledger
+		icon = GFX_focus_RUS_reserve_rotations
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -4
 		y = 1
@@ -2061,7 +2066,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_quartermaster_service
-		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
+		icon = GFX_focus_RUS_swift_columns
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = -4
 		y = 2
@@ -2085,7 +2090,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_patient_war
-		icon = GFX_focus_RUS_break_the_hegemon
+		icon = GFX_focus_RUS_patient_war
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -8
 		y = 3
@@ -2145,7 +2150,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_officer_courses
-		icon = GFX_focus_STP_Turn_The_Young_Officers
+		icon = GFX_focus_RUS_officer_courses
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -4
 		y = 4
@@ -2178,7 +2183,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_field_sappers
-		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		icon = GFX_focus_RUS_field_sappers
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -6
 		y = 5
@@ -2208,7 +2213,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_artillery_tables
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_RUS_artillery_tables
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -2
 		y = 5
@@ -2232,7 +2237,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_reserve_rotations
-		icon = GFX_focus_RUS_levy_of_the_new_aimaqs
+		icon = GFX_focus_RUS_reserve_rotations
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		x = -4
 		y = 6
@@ -2307,7 +2312,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_army_of_the_khanate
-		icon = GFX_focus_VAL_Army_Of_The_Ledger
+		icon = GFX_focus_RUS_reserve_rotations
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -4
 		y = 8
@@ -2335,7 +2340,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_postwar_roads
-		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		icon = GFX_focus_RUS_postwar_roads
 		x = 18
 		y = 20
 		cost = 3
@@ -2387,7 +2392,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_district_ledger
-		icon = GFX_focus_STP_cw_quiet_registers
+		icon = GFX_focus_RUS_district_ledger
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 8
 		y = 11
@@ -2406,7 +2411,7 @@ focus_tree = {
 			add_tech_bonus = {
 				name = RUS_district_ledger
 				bonus = 0.5
-				uses = 1
+				uses = 2
 				category = industry
 			}
 			if = {
@@ -2416,13 +2421,18 @@ focus_tree = {
 				add_ideas = ADISCORD_taxation_balanced_register
 				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
+			effect_tooltip = { add_ideas = RUS_district_ledger_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_admin_expense value = -0.10 }
+				RUS_government_refresh = yes
+			}
 		}
 		ai_will_do = { base = 6 }
 	}
 
 	focus = {
 		id = RUS_courier_stations
-		icon = GFX_focus_VAL_Market_Roads_North
+		icon = GFX_focus_RUS_courier_stations
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 8
 		y = 12
@@ -2443,14 +2453,19 @@ focus_tree = {
 				amount = 240
 				producer = RUS
 			}
-			add_command_power = 10
+			add_command_power = 25
+			effect_tooltip = { add_ideas = RUS_courier_stations_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_mobilization value = 0.10 }
+				RUS_government_refresh = yes
+			}
 		}
 		ai_will_do = { base = 6 }
 	}
 
 	focus = {
 		id = RUS_district_paramedics
-		icon = GFX_focus_VAL_Field_Surgeons
+		icon = GFX_focus_RUS_district_paramedics
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 14
 		y = 11
@@ -2475,13 +2490,19 @@ focus_tree = {
 				uses = 1
 				category = support_tech
 			}
+			add_stability = 0.02
+			custom_effect_tooltip = RUS_district_paramedics_progress_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_social_system_development_progress value = 20 }
+				ADISCORD_economy_mark_dirty = yes
+			}
 		}
 		ai_will_do = { base = 6 }
 	}
 
 	focus = {
 		id = RUS_covenant_of_service
-		icon = GFX_focus_STP_pw_party_family_pensions
+		icon = GFX_focus_RUS_district_ledger
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 11
 		y = 13
@@ -2497,12 +2518,19 @@ focus_tree = {
 		}
 		completion_reward = {
 			add_stability = 0.05
+			add_political_power = 50
 			if = {
 				limit = {
 					has_idea = ADISCORD_welfare_charity_relief
 				}
 				add_ideas = ADISCORD_welfare_basic_services
 				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			effect_tooltip = { add_ideas = RUS_covenant_of_service_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_political_power value = 0.15 }
+				add_to_variable = { var = RUS_government_civilian_speed value = 0.10 }
+				RUS_government_refresh = yes
 			}
 		}
 		ai_will_do = { base = 6 }
@@ -2538,7 +2566,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_interchangeable_parts
-		icon = GFX_focus_STP_pw_party_defence_combine
+		icon = GFX_focus_RUS_armoured_trial_company
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 30
 		y = 10
@@ -2641,7 +2669,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_field_evacuation_service
-		icon = GFX_focus_VAL_Field_Surgeons
+		icon = GFX_focus_RUS_field_hospitals
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -8
 		y = 9
@@ -2704,7 +2732,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_artillery_observers
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_RUS_artillery_tables
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = 0
 		y = 9
@@ -2730,7 +2758,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_staff_field_exercise
-		icon = GFX_focus_STP_Turn_The_Young_Officers
+		icon = GFX_focus_RUS_officer_courses
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -4
 		y = 10
@@ -2786,7 +2814,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_reserve_turbine
-		icon = GFX_focus_VAL_Reclamation_Clean_Water
+		icon = GFX_focus_RUS_postwar_roads
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 44
 		y = 10
@@ -2857,7 +2885,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_machine_depot
-		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		icon = GFX_focus_RUS_armoured_trial_company
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 44
 		y = 11
@@ -2885,7 +2913,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_emergency_rations
-		icon = GFX_focus_VAL_Bread_From_Barracks
+		icon = GFX_focus_RUS_imperial_field_kitchens
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 44
 		y = 12
@@ -2959,7 +2987,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_entrenched_reserves
-		icon = GFX_focus_RUS_break_the_hegemon
+		icon = GFX_focus_RUS_patient_war
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -8
 		y = 4
@@ -2980,7 +3008,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_fortress_engineers
-		icon = GFX_focus_RUS_break_the_hegemon
+		icon = GFX_focus_RUS_field_sappers
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = -8
 		y = 5
@@ -3046,7 +3074,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_mobile_supply_columns
-		icon = GFX_focus_STP_party_war_transport
+		icon = GFX_focus_RUS_swift_columns
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = 0
 		y = 4
@@ -3067,7 +3095,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_motor_pool_dispatch
-		icon = GFX_focus_VAL_Reclamation_Survey
+		icon = GFX_focus_RUS_swift_columns
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 0
 		y = 5
@@ -3097,7 +3125,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_combined_arms_trials
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_RUS_armoured_trial_company
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 0
 		y = 6
@@ -3144,7 +3172,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_assembly_budget
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_RUS_state_budget
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 5
 		y = 7
@@ -3170,7 +3198,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_regional_self_help
-		icon = GFX_focus_VAL_Field_Surgeons
+		icon = GFX_focus_RUS_district_paramedics
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 5
 		y = 8
@@ -3201,7 +3229,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_inspection_chamber
-		icon = GFX_focus_STP_party_personnel_commissions
+		icon = GFX_focus_RUS_district_ledger
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 17
 		y = 6
@@ -3225,7 +3253,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_single_supply_register
-		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
+		icon = GFX_focus_RUS_district_ledger
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 17
 		y = 7
@@ -3259,7 +3287,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_provincial_commissioners
-		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		icon = GFX_focus_RUS_field_sappers
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 17
 		y = 8
@@ -3289,7 +3317,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_surface_contracts
-		icon = GFX_focus_VAL_Factories_Like_Cathedrals
+		icon = GFX_focus_RUS_industrial_belt
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 25
 		y = 3
@@ -3357,7 +3385,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_underground_fund
-		icon = GFX_focus_VAL_Reclamation_Return_Home
+		icon = GFX_focus_RUS_state_budget
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 32
 		y = 3
@@ -3385,7 +3413,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_autonomous_workshops
-		icon = GFX_focus_VAL_Reclamation_Clean_Water
+		icon = GFX_focus_RUS_industrial_belt
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 32
 		y = 4
@@ -3425,7 +3453,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_layer_service_school
-		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		icon = GFX_focus_RUS_field_sappers
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 38
 		y = 3
@@ -3456,7 +3484,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_reserve_shaft
-		icon = GFX_focus_VAL_Reclamation_Clean_Water
+		icon = GFX_focus_RUS_postwar_roads
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 38
 		y = 4
@@ -3575,7 +3603,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_parallel_public_addresses
-		icon = GFX_focus_STP_cw_press_office
+		icon = GFX_focus_RUS_khan_broadcast_service
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 22
 		y = 3
@@ -3601,7 +3629,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_foreign_press_bureau
-		icon = GFX_goal_generic_propaganda
+		icon = GFX_focus_RUS_khan_broadcast_service
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 21
 		y = 4
@@ -3631,7 +3659,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_quiet_perimeter
-		icon = GFX_focus_generic_secret_service_agency
+		icon = GFX_focus_RUS_break_the_hegemon
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 23
 		y = 4
@@ -3660,7 +3688,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_good_neighbour_charter
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_focus_RUS_district_ledger
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		x = 22
 		y = 5
@@ -3725,7 +3753,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_scientists_workshops
-		icon = GFX_focus_VAL_Reclamation_Workshops
+		icon = GFX_focus_RUS_industrial_belt
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		x = 8
 		y = 3
@@ -3756,7 +3784,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_scientists_power_compact
-		icon = GFX_focus_VAL_Reclamation_Clean_Water
+		icon = GFX_focus_RUS_postwar_roads
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		x = 8
 		y = 4
@@ -3844,7 +3872,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_black_army_staff
-		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
+		icon = GFX_focus_RUS_officer_courses
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		x = 14
 		y = 3
@@ -3875,7 +3903,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_black_army_banner
-		icon = GFX_focus_STP_ps_permanent_security
+		icon = GFX_focus_RUS_black_army_tribunals
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
 		x = 14
 		y = 4
@@ -3924,7 +3952,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_aimaq_service_charter
-		icon = GFX_focus_STP_party_personnel_commissions
+		icon = GFX_focus_RUS_district_ledger
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 5
 		y = 9
@@ -3953,7 +3981,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_civil_service_examinations
-		icon = GFX_focus_STP_party_personnel_commissions
+		icon = GFX_focus_RUS_district_ledger
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 17
 		y = 9
@@ -3984,7 +4012,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_permanent_government
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_RUS_state_budget
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 11
 		y = 3
@@ -4034,7 +4062,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_district_representation
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_RUS_district_ledger
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		x = 2
 		y = 6
@@ -4056,7 +4084,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_civil_construction_board
-		icon = GFX_goal_generic_production
+		icon = GFX_focus_RUS_industrial_belt
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 2
 		y = 7
@@ -4082,7 +4110,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_trained_administrators
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_RUS_district_ledger
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 2
 		y = 8
@@ -4108,7 +4136,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_military_governors
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_RUS_levy_of_the_new_aimaqs
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
 		x = 23
 		y = 6
@@ -4158,7 +4186,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_command_accountability
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_RUS_black_army_tribunals
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
 		x = 23
 		y = 8
@@ -4185,7 +4213,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_staff_college
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_focus_RUS_officer_courses
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -18
 		y = 2
@@ -4210,7 +4238,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_integrated_signals
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_focus_RUS_air_control_network
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -18
 		y = 3
@@ -4268,7 +4296,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_wounded_return_service
-		icon = GFX_goal_generic_production
+		icon = GFX_focus_RUS_field_hospitals
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		x = -16
 		y = 5
@@ -4298,7 +4326,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_battery_training
-		icon = GFX_focus_RUS_imperial_academy
+		icon = GFX_focus_RUS_artillery_tables
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = -12
 		y = 6
@@ -4382,7 +4410,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_armoured_repair_service
-		icon = GFX_goal_generic_army_motorized
+		icon = GFX_focus_RUS_armoured_trial_company
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -12
 		y = 5

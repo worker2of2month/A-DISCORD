@@ -613,6 +613,7 @@
  RUS_courier_stations_desc:0 "An order that arrives after winter is no longer an order. We will link district offices with regular motor mail and assign working vehicles to the dispatchers. Army couriers will be able to change crews and relay urgent reports at the same stations."
  RUS_district_paramedics:0 "A Medical Assistant for Every District"
  RUS_district_paramedics_desc:0 "Roadside clinics must keep working even when the capital forgets to send a doctor. District schools will train medical assistants familiar with local illnesses and military evacuation. Medical convoys will receive equipment from the centre, and new techniques will be shared throughout the service."
+ RUS_district_paramedics_progress_tt:0 "Social system development progress: §G+20§!."
  RUS_covenant_of_service:0 "The Charter of Service"
  RUS_covenant_of_service_desc:0 "Loyalty to the Khan must outlast a change of commander. Pay, terms of service, and aid to families will be enshrined in a common charter; the aimaq courts will gain the right to demand its enforcement. We are buying not our subjects' silence, but their confidence that the state's word means something."
  RUS_recovery_depots:0 "Bring the Machines Back into Service"

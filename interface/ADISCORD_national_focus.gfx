@@ -378,6 +378,91 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_RUS_bunker_power_school"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_bunker_power_school.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_bunker_airlocks"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_bunker_airlocks.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_engineers_collegium"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_engineers_collegium.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_precision_lathes"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_precision_lathes.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_reactor_decontamination"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_reactor_decontamination.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_postwar_roads"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_postwar_roads.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_scientists_at_headquarters"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_scientists_at_headquarters.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_district_paramedics"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_district_paramedics.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_black_army_tribunals"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_black_army_tribunals.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_imperial_field_kitchens"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_imperial_field_kitchens.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_courier_stations"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_courier_stations.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_reserve_rotations"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_reserve_rotations.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_artillery_tables"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_artillery_tables.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_district_ledger"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_district_ledger.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_field_sappers"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_field_sappers.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_officer_courses"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_officer_courses.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_patient_war"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_patient_war.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_RUS_swift_columns"
 		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_swift_columns.png"
 	}

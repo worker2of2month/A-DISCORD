@@ -154,6 +154,43 @@ ideas = {
 			}
 		}
 
+		RUS_a_country_of_names_delta = {
+			name = RUS_government_service
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
+			}
+		}
+
+		RUS_district_ledger_delta = {
+			name = RUS_government_service
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.10
+			}
+		}
+
+		RUS_courier_stations_delta = {
+			name = RUS_government_service
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				mobilization_speed = 0.10
+			}
+		}
+
+		RUS_covenant_of_service_delta = {
+			name = RUS_government_service
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.15
+				production_speed_industrial_complex_factor = 0.10
+			}
+		}
+
 		RUS_bunker_systems_college_delta = {
 			name = RUS_bunker_complex
 			picture = ADISCORD_logistics_centralized_depots
