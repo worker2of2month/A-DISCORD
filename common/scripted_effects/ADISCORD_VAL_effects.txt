@@ -7218,6 +7218,13 @@ VAL_settle_nod_overlord_sts_victory = {
 				}
 			}
 		}
+		NOD = {
+			if = {
+				limit = { has_country_flag = NOD_cw_entered }
+				set_country_flag = NOD_cw_defeated
+			}
+		}
+		STP_cw_party_loses_nodrul_support = yes
 		STP_cw_abort_northern_campaign_external_defeat = yes
 		STP_cw_end_nod_intervention = yes
 		NOD = {
@@ -7225,7 +7232,6 @@ VAL_settle_nod_overlord_sts_victory = {
 			if = { limit = { has_war_with = STS } white_peace = STS }
 			VAL_install_nodrul_administration = yes
 		}
-		STP_cw_party_loses_nodrul_support = yes
 		set_country_flag = { flag = VAL_nod_overlord_sts_peace_handled value = 1 days = 2 }
 		NOD = {
 			clr_country_flag = VAL_nod_overlord_sts_war_active

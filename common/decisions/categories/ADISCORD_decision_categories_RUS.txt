@@ -92,6 +92,10 @@ RUS_development_programmes = {
 			has_completed_focus = RUS_surface_contracts
 			has_completed_focus = RUS_underground_fund
 			has_war = yes
+			has_country_flag = RUS_bunker_silence_trial_active
+			has_country_flag = RUS_vorkerland_airlift_active
+			has_completed_focus = RUS_summon_the_aimaqs
+			has_completed_focus = RUS_bunker_deep_gallery
 		}
 	}
 	priority = 25

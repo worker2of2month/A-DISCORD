@@ -909,7 +909,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_written_oaths
-		icon = GFX_focus_RUS_seal_chancery
+		icon = GFX_focus_RUS_written_oaths
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 11
 		y = 6
@@ -926,8 +926,13 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_stability = 0.03
 			add_political_power = 40
+			custom_effect_tooltip = RUS_written_oaths_support_tt
+			hidden_effect = {
+				set_temp_variable = { var = RUS_black_army_support_delta value = 0.05 }
+				set_temp_variable = { var = RUS_scientists_support_delta value = 0.05 }
+				RUS_faction_support_change = yes
+			}
 			unlock_decision_tooltip = RUS_campaign_the_khan_keeps_his_word
 			custom_effect_tooltip = RUS_campaign_broadcast_required_tt
 		}
@@ -936,7 +941,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_pay_the_officials
-		icon = GFX_focus_RUS_state_budget
+		icon = GFX_focus_RUS_pay_the_officials
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 11
 		y = 7
@@ -952,15 +957,19 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_ideas = RUS_paid_administration
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			add_stability = 0.03
+			effect_tooltip = { add_ideas = RUS_pay_the_officials_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_admin_expense value = -0.10 }
+				RUS_government_refresh = yes
+			}
 		}
 		ai_will_do = { base = 8 }
 	}
 
 	focus = {
 		id = RUS_winter_granaries
-		icon = GFX_focus_VAL_Bread_From_Barracks
+		icon = GFX_focus_RUS_winter_granaries
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 9
 		y = 8
@@ -969,6 +978,7 @@ focus_tree = {
 		prerequisite = {
 			focus = RUS_pay_the_officials
 		}
+		mutually_exclusive = { focus = RUS_district_courts }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -976,7 +986,12 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_stability = 0.03
+			custom_effect_tooltip = RUS_winter_granaries_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_bunker_food_capacity_bonus value = 40 }
+				add_to_variable = { var = RUS_bunker_food_output_bonus value = 2 }
+				RUS_bunker_refresh = yes
+			}
 			unlock_decision_tooltip = RUS_market_surplus
 		}
 		ai_will_do = { base = 8 }
@@ -984,7 +999,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_district_courts
-		icon = GFX_focus_RUS_black_army_tribunals
+		icon = GFX_focus_RUS_district_courts
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 13
 		y = 8
@@ -993,6 +1008,7 @@ focus_tree = {
 		prerequisite = {
 			focus = RUS_pay_the_officials
 		}
+		mutually_exclusive = { focus = RUS_winter_granaries }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -1002,13 +1018,14 @@ focus_tree = {
 		completion_reward = {
 			add_manpower = 2000
 			add_stability = 0.03
+			custom_effect_tooltip = RUS_district_courts_levy_tt
 		}
 		ai_will_do = { base = 8 }
 	}
 
 	focus = {
 		id = RUS_school_of_scribes
-		icon = GFX_focus_RUS_scientists_at_headquarters
+		icon = GFX_focus_RUS_trained_administrators
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 9
 		y = 9
@@ -1016,8 +1033,6 @@ focus_tree = {
 		cancel_if_invalid = yes
 		prerequisite = {
 			focus = RUS_winter_granaries
-		}
-		prerequisite = {
 			focus = RUS_district_courts
 		}
 		available = {
@@ -1050,14 +1065,16 @@ focus_tree = {
 
 	focus = {
 		id = RUS_roadside_clinics
-		icon = GFX_focus_RUS_field_hospitals
+		icon = GFX_focus_RUS_roadside_clinics
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 13
 		y = 9
 		cost = 3
 		cancel_if_invalid = yes
-		prerequisite = { focus = RUS_winter_granaries }
-		prerequisite = { focus = RUS_district_courts }
+		prerequisite = {
+			focus = RUS_winter_granaries
+			focus = RUS_district_courts
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -1073,8 +1090,12 @@ focus_tree = {
 				ADISCORD_economy_mark_dirty = yes
 			}
 			unlock_decision_tooltip = RUS_district_health_programme
-			add_manpower = 2000
 			add_stability = 0.03
+			effect_tooltip = { add_ideas = RUS_roadside_clinics_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_trickleback value = 0.10 }
+				RUS_government_refresh = yes
+			}
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -1110,7 +1131,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_surface_workshops
-		icon = GFX_focus_RUS_industrial_belt
+		icon = GFX_focus_RUS_autonomous_workshops
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 28
 		y = 1
@@ -1147,7 +1168,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_salvage_inventory
-		icon = GFX_focus_VAL_Reclamation_Survey
+		icon = GFX_focus_RUS_precision_lathes
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 28
 		y = 2
@@ -1164,7 +1185,7 @@ focus_tree = {
 		}
 		completion_reward = {
 			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.15 } }
-			custom_effect_tooltip = 135
+			custom_effect_tooltip = RUS_treasury_135_tt
 			hidden_effect = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 135 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 135 }
@@ -1177,7 +1198,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_machine_school
-		icon = GFX_focus_RUS_scientists_at_headquarters
+		icon = GFX_focus_RUS_precision_lathes
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 28
 		y = 4
@@ -1287,7 +1308,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_standard_calibres
-		icon = GFX_focus_RUS_imperial_arsenals
+		icon = GFX_focus_RUS_military_contract_board
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 30
 		y = 6
@@ -1418,7 +1439,7 @@ focus_tree = {
 					instant_build = yes
 				}
 			}
-			custom_effect_tooltip = 100
+			custom_effect_tooltip = RUS_treasury_100_tt
 			hidden_effect = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 100 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 100 }
@@ -1462,7 +1483,7 @@ focus_tree = {
 		completion_reward = {
 			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.16 } }
 			unlock_decision_tooltip = RUS_restore_reactor_works
-			custom_effect_tooltip = 65
+			custom_effect_tooltip = RUS_treasury_65_tt
 			hidden_effect = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 65 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 65 }
@@ -1593,7 +1614,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_survey
-		icon = GFX_focus_VAL_Reclamation_Survey
+		icon = GFX_focus_RUS_engineers_collegium
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 42
 		y = 1
@@ -1611,7 +1632,7 @@ focus_tree = {
 			controls_state = 66
 		}
 		completion_reward = {
-			custom_effect_tooltip = 165
+			custom_effect_tooltip = RUS_treasury_165_tt
 			hidden_effect = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 165 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 165 }
@@ -1643,16 +1664,10 @@ focus_tree = {
 			controls_state = 66
 		}
 		completion_reward = {
-			custom_effect_tooltip = RUS_bunker_airlocks_capacity_tt
+			custom_effect_tooltip = RUS_bunker_airlocks_tt
 			hidden_effect = {
-				add_to_variable = {
-					var = RUS_bunker_food_capacity_bonus
-					value = 20
-				}
-				add_to_variable = {
-					var = RUS_bunker_food
-					value = 20
-				}
+				add_to_variable = { var = RUS_bunker_integrity value = 20 }
+				clamp_variable = { var = RUS_bunker_integrity min = 0 max = 100 }
 				RUS_bunker_refresh = yes
 			}
 		}
@@ -1715,7 +1730,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_deep_gallery
-		icon = GFX_focus_VAL_Reclamation_Return_Home
+		icon = GFX_focus_RUS_bunker_airlocks
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 42
 		y = 4
@@ -1743,7 +1758,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_utilities
-		icon = GFX_focus_VAL_Reclamation_Clean_Water
+		icon = GFX_focus_RUS_bunker_utilities
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 40
 		y = 5
@@ -1762,7 +1777,8 @@ focus_tree = {
 			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.21 } }
 			unlock_decision_tooltip = RUS_bunker_water
 			unlock_decision_tooltip = RUS_bunker_signals
-			add_equipment_to_stockpile = { type = support_equipment amount = 30 producer = RUS }
+			custom_effect_tooltip = RUS_bunker_utilities_rooms_tt
+			hidden_effect = { RUS_bunker_refresh = yes }
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -1787,12 +1803,8 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = RUS_bunker_workshop
 			unlock_decision_tooltip = RUS_bunker_granary
-			custom_effect_tooltip = 65
-			hidden_effect = {
-				add_to_variable = { var = ADISCORD_economy_treasury value = 65 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 65 }
-				ADISCORD_economy_mark_dirty = yes
-			}
+			custom_effect_tooltip = RUS_bunker_working_heart_rooms_tt
+			hidden_effect = { RUS_bunker_refresh = yes }
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -1802,7 +1814,7 @@ focus_tree = {
 		icon = GFX_focus_VAL_Reclamation_Return_Home
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 42
-		y = 6
+		y = 7
 		cost = 3
 		cancel_if_invalid = yes
 		prerequisite = {
@@ -1835,7 +1847,7 @@ focus_tree = {
 		icon = GFX_focus_RUS_empire_without_rivals
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 40
-		y = 7
+		y = 8
 		cost = 2
 		cancel_if_invalid = yes
 		prerequisite = {
@@ -1850,7 +1862,8 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = RUS_bunker_clinic
 			unlock_decision_tooltip = RUS_bunker_laboratory
-			add_equipment_to_stockpile = { type = support_equipment amount = 40 producer = RUS }
+			custom_effect_tooltip = RUS_bunker_science_wing_rooms_tt
+			hidden_effect = { RUS_bunker_refresh = yes }
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -1860,7 +1873,7 @@ focus_tree = {
 		icon = GFX_focus_RUS_empire_without_rivals
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 38
-		y = 9
+		y = 10
 		cost = 3
 		cancel_if_invalid = yes
 		prerequisite = {
@@ -1896,7 +1909,7 @@ focus_tree = {
 		icon = GFX_focus_ADISCORD_Wall_Of_Screens
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 44
-		y = 7
+		y = 8
 		cost = 2
 		cancel_if_invalid = yes
 		prerequisite = {
@@ -1912,7 +1925,8 @@ focus_tree = {
 			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.18 } }
 			unlock_decision_tooltip = RUS_bunker_archive
 			unlock_decision_tooltip = RUS_bunker_command
-			add_command_power = 15
+			custom_effect_tooltip = RUS_bunker_memory_vault_rooms_tt
+			hidden_effect = { RUS_bunker_refresh = yes }
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -1922,7 +1936,7 @@ focus_tree = {
 		icon = GFX_focus_VAL_Count_The_Captains
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 42
-		y = 8
+		y = 9
 		cost = 3
 		cancel_if_invalid = yes
 		prerequisite = {
@@ -1945,18 +1959,10 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_stability = 0.05
-			custom_effect_tooltip = RUS_bunker_commission_reserve_tt
+			custom_effect_tooltip = RUS_bunker_silence_trial_start_tt
 			hidden_effect = {
-				add_to_variable = {
-					var = RUS_bunker_food_capacity_bonus
-					value = 20
-				}
-				add_to_variable = {
-					var = RUS_bunker_food
-					value = 20
-				}
-				RUS_bunker_refresh = yes
+				set_country_flag = RUS_bunker_silence_trial_active
+				activate_mission = RUS_bunker_silence_trial
 			}
 			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.8 } }
 		}
@@ -1968,7 +1974,7 @@ focus_tree = {
 		icon = GFX_focus_VAL_Dead_Villages_Still_Count
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 40
-		y = 9
+		y = 10
 		cost = 3
 		cancel_if_invalid = yes
 		prerequisite = {
@@ -2001,7 +2007,7 @@ focus_tree = {
 		icon = GFX_focus_RUS_bunker_sealed_throne
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 44
-		y = 9
+		y = 10
 		cost = 3
 		cancel_if_invalid = yes
 		prerequisite = {
@@ -2502,7 +2508,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_covenant_of_service
-		icon = GFX_focus_RUS_district_ledger
+		icon = GFX_focus_RUS_written_oaths
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 11
 		y = 13
@@ -2538,7 +2544,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_recovery_depots
-		icon = GFX_focus_RUS_industrial_belt
+		icon = GFX_focus_RUS_autonomous_workshops
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 26
 		y = 10
@@ -2566,7 +2572,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_interchangeable_parts
-		icon = GFX_focus_RUS_armoured_trial_company
+		icon = GFX_focus_RUS_precision_lathes
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 30
 		y = 10
@@ -2701,7 +2707,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_rifle_inspection_board
-		icon = GFX_focus_RUS_imperial_arsenals
+		icon = GFX_focus_RUS_military_contract_board
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = -4
 		y = 9
@@ -2785,7 +2791,7 @@ focus_tree = {
 		icon = GFX_focus_VAL_Bread_From_Barracks
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 40
-		y = 10
+		y = 11
 		cost = 4
 		cancel_if_invalid = yes
 		prerequisite = {
@@ -2814,10 +2820,10 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_reserve_turbine
-		icon = GFX_focus_RUS_postwar_roads
+		icon = GFX_focus_RUS_bunker_power_school
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 44
-		y = 10
+		y = 11
 		cost = 4
 		cancel_if_invalid = yes
 		prerequisite = {
@@ -2846,10 +2852,10 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_cold_stores
-		icon = GFX_focus_VAL_Reclamation_Workshops
+		icon = GFX_focus_RUS_autonomous_workshops
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 40
-		y = 11
+		y = 12
 		cost = 3
 		cancel_if_invalid = yes
 		prerequisite = {
@@ -2885,10 +2891,10 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_machine_depot
-		icon = GFX_focus_RUS_armoured_trial_company
+		icon = GFX_focus_RUS_autonomous_workshops
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 44
-		y = 11
+		y = 12
 		cost = 3
 		cancel_if_invalid = yes
 		prerequisite = {
@@ -2913,10 +2919,10 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_emergency_rations
-		icon = GFX_focus_RUS_imperial_field_kitchens
+		icon = GFX_focus_RUS_winter_granaries
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 44
-		y = 12
+		y = 13
 		cost = 4
 		cancel_if_invalid = yes
 		prerequisite = {
@@ -2932,6 +2938,7 @@ focus_tree = {
 		}
 		completion_reward = {
 			custom_effect_tooltip = RUS_bunker_food_reserve_focus_tt
+			custom_effect_tooltip = RUS_bunker_spoil_focus_tt
 			hidden_effect = {
 				add_to_variable = {
 					var = RUS_bunker_food_capacity_bonus
@@ -2953,7 +2960,7 @@ focus_tree = {
 		icon = GFX_focus_RUS_empire_without_rivals
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 40
-		y = 12
+		y = 13
 		cost = 4
 		cancel_if_invalid = yes
 		prerequisite = {
@@ -2981,6 +2988,178 @@ focus_tree = {
 				uses = 2
 				category = industry
 			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	# Course branches: the open city trades with the surface and shelters refugees;
+	# the sealed throne fortifies the mountain. Each course ends in its own charter.
+
+	focus = {
+		id = RUS_bunker_surface_market
+		icon = GFX_focus_RUS_winter_granaries
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 38
+		y = 11
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_bunker_open_city }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_bunker_surface_market_tt
+			unlock_decision_tooltip = RUS_energy_contract
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 65 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 65 }
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_bunker_refugee_quarters
+		icon = GFX_focus_VAL_Dead_Villages_Still_Count
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		x = 38
+		y = 12
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_bunker_surface_market }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			add_manpower = 2000
+			custom_effect_tooltip = RUS_bunker_refugee_quarters_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_society_development_progress value = 15 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_bunker_city_charter
+		icon = GFX_focus_RUS_written_oaths
+		search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_STABILITY }
+		x = 39
+		y = 14
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_bunker_systems_college }
+		prerequisite = { focus = RUS_bunker_refugee_quarters }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			add_research_slot = 1
+			add_stability = 0.05
+			custom_effect_tooltip = RUS_support_scientists_10_tt
+			hidden_effect = {
+				set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
+				set_temp_variable = { var = RUS_scientists_support_delta value = 0.10 }
+				RUS_faction_support_change = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_bunker_deep_casemates
+		icon = GFX_focus_RUS_patient_war
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 46
+		y = 11
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_bunker_sealed_throne }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			effect_tooltip = { add_ideas = RUS_bunker_deep_casemates_delta }
+			hidden_effect = { RUS_bunker_refresh = yes }
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_bunker_mountain_garrison
+		icon = GFX_focus_RUS_reserve_rotations
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		x = 46
+		y = 12
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_bunker_deep_casemates }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_bunker_mountain_garrison_tt
+			custom_effect_tooltip = RUS_support_black_army_10_tt
+			hidden_effect = {
+				set_temp_variable = { var = RUS_black_army_support_delta value = 0.10 }
+				set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
+				RUS_faction_support_change = yes
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_bunker_eternal_headquarters
+		icon = GFX_focus_RUS_bunker_sealed_throne
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 45
+		y = 14
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_bunker_emergency_rations }
+		prerequisite = { focus = RUS_bunker_mountain_garrison }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			add_command_power = 50
+			army_experience = 50
+			custom_effect_tooltip = RUS_bunker_eternal_headquarters_tt
+			hidden_effect = { RUS_bunker_refresh = yes }
 		}
 		ai_will_do = { base = 6 }
 	}
@@ -3125,7 +3304,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_combined_arms_trials
-		icon = GFX_focus_RUS_armoured_trial_company
+		icon = GFX_focus_RUS_autonomous_workshops
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 0
 		y = 6
@@ -3151,7 +3330,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_local_service_committees
-		icon = GFX_focus_VAL_Count_The_Captains
+		icon = GFX_focus_RUS_aimaq_council
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 5
 		y = 6
@@ -3229,7 +3408,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_inspection_chamber
-		icon = GFX_focus_RUS_district_ledger
+		icon = GFX_focus_RUS_engineers_collegium
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 17
 		y = 6
@@ -3385,7 +3564,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_underground_fund
-		icon = GFX_focus_RUS_state_budget
+		icon = GFX_focus_RUS_underground_fund
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 32
 		y = 3
@@ -3401,7 +3580,7 @@ focus_tree = {
 		}
 		completion_reward = {
 			unlock_decision_tooltip = RUS_subterranean_supply_contract
-			custom_effect_tooltip = 100
+			custom_effect_tooltip = RUS_treasury_100_tt
 			hidden_effect = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 100 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 100 }
@@ -3413,7 +3592,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_autonomous_workshops
-		icon = GFX_focus_RUS_industrial_belt
+		icon = GFX_focus_RUS_autonomous_workshops
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 32
 		y = 4
@@ -3453,13 +3632,14 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_layer_service_school
-		icon = GFX_focus_RUS_field_sappers
+		icon = GFX_focus_RUS_bunker_layer_service_school
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 38
 		y = 3
 		cost = 3
 		cancel_if_invalid = yes
 		prerequisite = { focus = RUS_bunker_airlocks }
+		mutually_exclusive = { focus = RUS_bunker_reserve_shaft }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -3467,6 +3647,8 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			custom_effect_tooltip = RUS_bunker_layer_service_school_tt
+			hidden_effect = { RUS_bunker_refresh = yes }
 			add_equipment_to_stockpile = {
 				type = support_equipment
 				amount = 300
@@ -3484,13 +3666,14 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_reserve_shaft
-		icon = GFX_focus_RUS_postwar_roads
+		icon = GFX_focus_RUS_bunker_power_school
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		x = 38
-		y = 4
+		x = 36
+		y = 3
 		cost = 2
 		cancel_if_invalid = yes
-		prerequisite = { focus = RUS_bunker_shift_work }
+		prerequisite = { focus = RUS_bunker_airlocks }
+		mutually_exclusive = { focus = RUS_bunker_layer_service_school }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -3504,7 +3687,7 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = {
 					var = RUS_bunker_power_bonus
-					value = 1
+					value = 2
 				}
 				RUS_bunker_refresh = yes
 			}
@@ -3514,13 +3697,14 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_water_recycling
-		icon = GFX_focus_VAL_Reclamation_Clean_Water
+		icon = GFX_focus_RUS_bunker_utilities
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		x = 38
+		x = 41
 		y = 6
 		cost = 3
 		cancel_if_invalid = yes
 		prerequisite = { focus = RUS_bunker_utilities }
+		mutually_exclusive = { focus = RUS_bunker_contingency_reservoir }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -3534,7 +3718,7 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = {
 					var = RUS_bunker_food_output_bonus
-					value = 1
+					value = 2
 				}
 				RUS_bunker_refresh = yes
 			}
@@ -3544,13 +3728,14 @@ focus_tree = {
 
 	focus = {
 		id = RUS_bunker_contingency_reservoir
-		icon = GFX_focus_VAL_Bread_From_Barracks
+		icon = GFX_focus_RUS_winter_granaries
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		x = 46
+		x = 43
 		y = 6
 		cost = 3
 		cancel_if_invalid = yes
 		prerequisite = { focus = RUS_bunker_working_heart }
+		mutually_exclusive = { focus = RUS_bunker_water_recycling }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -3564,11 +3749,11 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = {
 					var = RUS_bunker_food_capacity_bonus
-					value = 20
+					value = 60
 				}
 				add_to_variable = {
 					var = RUS_bunker_food
-					value = 20
+					value = 60
 				}
 				RUS_bunker_refresh = yes
 			}
@@ -3603,7 +3788,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_parallel_public_addresses
-		icon = GFX_focus_RUS_khan_broadcast_service
+		icon = GFX_focus_RUS_parallel_public_addresses
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 22
 		y = 3
@@ -3625,11 +3810,12 @@ focus_tree = {
 	}
 
 	# Suspicion cover: open press work or a closed reactor perimeter, then a
-	# shared border commission. Their decisions stay hidden until the gauge opens.
+	# shared border commission. They wait for the suspicion gauge and are
+	# bypassed once the proclamation closes it.
 
 	focus = {
 		id = RUS_foreign_press_bureau
-		icon = GFX_focus_RUS_khan_broadcast_service
+		icon = GFX_focus_RUS_foreign_press_bureau
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 21
 		y = 4
@@ -3642,7 +3828,12 @@ focus_tree = {
 				tooltip = RUS_khan_governing_tt
 				RUS_khan_governing = yes
 			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_suspicion_open_tt
+				RUS_suspicion_active = yes
+			}
 		}
+		bypass = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 		completion_reward = {
 			custom_effect_tooltip = RUS_suspicion_focus_relief_tt
 			unlock_decision_tooltip = RUS_suspicion_press_tour
@@ -3659,7 +3850,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_quiet_perimeter
-		icon = GFX_focus_RUS_break_the_hegemon
+		icon = GFX_focus_RUS_quiet_perimeter
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 23
 		y = 4
@@ -3672,7 +3863,12 @@ focus_tree = {
 				tooltip = RUS_khan_governing_tt
 				RUS_khan_governing = yes
 			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_suspicion_open_tt
+				RUS_suspicion_active = yes
+			}
 		}
+		bypass = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 		completion_reward = {
 			unlock_decision_tooltip = RUS_suspicion_reactor_camouflage
 			custom_effect_tooltip = RUS_course_black_army_10_tt
@@ -3688,7 +3884,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_good_neighbour_charter
-		icon = GFX_focus_RUS_district_ledger
+		icon = GFX_focus_RUS_good_neighbour_charter
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		x = 22
 		y = 5
@@ -3703,7 +3899,12 @@ focus_tree = {
 				tooltip = RUS_khan_governing_tt
 				RUS_khan_governing = yes
 			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_suspicion_open_tt
+				RUS_suspicion_active = yes
+			}
 		}
+		bypass = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 		completion_reward = {
 			add_stability = 0.03
 			unlock_decision_tooltip = RUS_suspicion_border_commission
@@ -3753,7 +3954,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_scientists_workshops
-		icon = GFX_focus_RUS_industrial_belt
+		icon = GFX_focus_RUS_autonomous_workshops
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		x = 8
 		y = 3
@@ -3784,7 +3985,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_scientists_power_compact
-		icon = GFX_focus_RUS_postwar_roads
+		icon = GFX_focus_RUS_scientists_power_compact
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		x = 8
 		y = 4
@@ -3952,7 +4153,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_aimaq_service_charter
-		icon = GFX_focus_RUS_district_ledger
+		icon = GFX_focus_RUS_written_oaths
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 5
 		y = 9
@@ -3981,7 +4182,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_civil_service_examinations
-		icon = GFX_focus_RUS_district_ledger
+		icon = GFX_focus_RUS_trained_administrators
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 17
 		y = 9
@@ -4062,7 +4263,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_district_representation
-		icon = GFX_focus_RUS_district_ledger
+		icon = GFX_focus_RUS_aimaq_council
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		x = 2
 		y = 6
@@ -4084,7 +4285,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_civil_construction_board
-		icon = GFX_focus_RUS_industrial_belt
+		icon = GFX_focus_RUS_engineers_collegium
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 2
 		y = 7
@@ -4353,7 +4554,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_serial_ordnance_orders
-		icon = GFX_focus_RUS_imperial_arsenals
+		icon = GFX_focus_RUS_military_contract_board
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = -12
 		y = 7
@@ -4410,7 +4611,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_armoured_repair_service
-		icon = GFX_focus_RUS_armoured_trial_company
+		icon = GFX_focus_RUS_autonomous_workshops
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		x = -12
 		y = 5

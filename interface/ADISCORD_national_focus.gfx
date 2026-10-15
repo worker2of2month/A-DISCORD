@@ -378,6 +378,76 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_RUS_bunker_utilities"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_bunker_utilities.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_bunker_layer_service_school"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_bunker_layer_service_school.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_autonomous_workshops"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_autonomous_workshops.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_underground_fund"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_underground_fund.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_good_neighbour_charter"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_good_neighbour_charter.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_quiet_perimeter"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_quiet_perimeter.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_parallel_public_addresses"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_parallel_public_addresses.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_scientists_power_compact"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_scientists_power_compact.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_foreign_press_bureau"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_foreign_press_bureau.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_winter_granaries"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_winter_granaries.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_district_courts"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_district_courts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_pay_the_officials"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_pay_the_officials.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_roadside_clinics"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_roadside_clinics.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_RUS_written_oaths"
+		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_written_oaths.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_RUS_trained_administrators"
 		texturefile = "gfx/interface/goals/RUS/GFX_focus_RUS_trained_administrators.png"
 	}

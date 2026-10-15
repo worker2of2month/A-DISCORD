@@ -911,8 +911,15 @@ RUS_bunker_excavate_affordable = {
 	NOT = { has_equipment = { support_equipment < 20 } }
 }
 
+# The layer brigade halves the rushed excavation's damage, so it may start lower.
 RUS_bunker_rush_requirements = {
-	check_variable = { var = RUS_bunker_integrity value = 55 compare = greater_than_or_equals }
+	OR = {
+		check_variable = { var = RUS_bunker_integrity value = 55 compare = greater_than_or_equals }
+		AND = {
+			has_completed_focus = RUS_bunker_layer_service_school
+			check_variable = { var = RUS_bunker_integrity value = 40 compare = greater_than_or_equals }
+		}
+	}
 }
 
 RUS_bunker_rush_affordable = {
@@ -1516,7 +1523,21 @@ RUS_energy_customer_valid = {
 
 RUS_energy_contract_room = {
 	RUS_bunker_operational = yes
-	check_variable = { var = RUS_energy_contracts value = 2 compare = less_than }
+	OR = {
+		check_variable = { var = RUS_energy_contracts value = 2 compare = less_than }
+		AND = {
+			OR = {
+				has_completed_focus = RUS_bunker_surface_market
+				has_completed_focus = RUS_bunker_reserve_shaft
+			}
+			check_variable = { var = RUS_energy_contracts value = 3 compare = less_than }
+		}
+		AND = {
+			has_completed_focus = RUS_bunker_surface_market
+			has_completed_focus = RUS_bunker_reserve_shaft
+			check_variable = { var = RUS_energy_contracts value = 4 compare = less_than }
+		}
+	}
 }
 
 # --- rus_faction_favours ---
@@ -1542,12 +1563,28 @@ RUS_favour_science_15_affordable = {
 }
 
 # --- rus_aimaq_levies ---
-# RUS. Three calls per war; RUS_levies_monthly resets the count at peace.
+# RUS. Three calls per war, two more after the district courts and one more
+# after the mountain garrison; RUS_levies_monthly resets the count at peace.
 RUS_levy_room = {
 	RUS_khan_governing = yes
 	has_completed_focus = RUS_summon_the_aimaqs
 	has_war = yes
-	check_variable = { var = RUS_levy_raised value = 3 compare = less_than }
+	OR = {
+		check_variable = { var = RUS_levy_raised value = 3 compare = less_than }
+		AND = {
+			has_completed_focus = RUS_district_courts
+			check_variable = { var = RUS_levy_raised value = 5 compare = less_than }
+		}
+		AND = {
+			has_completed_focus = RUS_bunker_mountain_garrison
+			check_variable = { var = RUS_levy_raised value = 4 compare = less_than }
+		}
+		AND = {
+			has_completed_focus = RUS_district_courts
+			has_completed_focus = RUS_bunker_mountain_garrison
+			check_variable = { var = RUS_levy_raised value = 6 compare = less_than }
+		}
+	}
 }
 
 RUS_levy_affordable = {
@@ -1564,6 +1601,27 @@ RUS_refugees_settle_affordable = {
 RUS_winter_expedition_affordable = {
 	RUS_bunker_operational = yes
 	NOT = { has_manpower < 500 }
+}
+
+RUS_bunker_farm_ready = {
+	RUS_khan_governing = yes
+	has_completed_focus = RUS_bunker_deep_gallery
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_bunker_depth value = 2 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_farms value = 3 compare = less_than }
+	NOT = { check_variable = { var = RUS_bunker_farm_project value = 1 compare = equals } }
+}
+
+RUS_bunker_farm_affordable = {
+	check_variable = { var = ADISCORD_economy_treasury value = 65 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+}
+
+RUS_food_requisition_ready = {
+	RUS_khan_governing = yes
+	has_completed_focus = RUS_summon_the_aimaqs
+	RUS_bunker_operational = yes
+	num_of_controlled_states > 3
 }
 
 RUS_winter_grain_affordable = {

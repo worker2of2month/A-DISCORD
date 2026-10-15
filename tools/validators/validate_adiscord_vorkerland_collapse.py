@@ -5288,10 +5288,11 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
 
 
 def validate_worker_mandate(root: Path, issues: list[str]) -> None:
-    phase_effects = source_section(
-        read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
-        "phase_effects",
+    effects = read(
+        root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues
     )
+    phase_effects = source_section(effects, "phase_effects")
+    map_effects = source_section(effects, "collapse_map_effects")
     events = source_section(
         read(root, "events/ADISCORD_vorkerland_events.txt", issues), "collapse_events"
     )

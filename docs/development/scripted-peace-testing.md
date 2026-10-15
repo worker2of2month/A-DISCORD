@@ -84,6 +84,13 @@ it has no physical border with IRT. Its opening core, Khan campaign core and
 imperial dissolution recipient follow the same SLA assignment. Check every
 republic's full owned-state award, including its peripheral regions.
 
+Nodrul's intervention defeat detaches the Party (STP) from its faction and applies
+the existing loss-of-support spirit before technical peace. The Party's ongoing
+war with Shabrat (STS) must survive that peace without another declaration.
+Check the border treaty, late capitulation and the Kefreyt-overlord route with
+both pairwise and faction peace; other Nodrul wars and faction members remain.
+Repeated settlement must not renew the shock or its notification.
+
 Shabrat's hegemony imposes provisional administrations after a repeated victory
 over NOD or VAL, or victory in the campaign unlocked by a refused dependency
 demand. The first limited peace leaves the defeated government independent.

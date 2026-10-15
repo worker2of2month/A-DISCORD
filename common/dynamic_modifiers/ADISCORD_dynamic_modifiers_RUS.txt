@@ -57,6 +57,7 @@ RUS_government_service = {
 	production_speed_industrial_complex_factor = RUS_government_civilian_speed
 	mobilization_speed = RUS_government_mobilization
 	industrial_capacity_factory = RUS_government_factory_output
+	casualty_trickleback = RUS_government_trickleback
 }
 
 # Inputs are refreshed only when faction support changes.
@@ -66,6 +67,20 @@ RUS_faction_support = {
 	custom_modifier_tooltip = RUS_faction_support_state_tt
 	political_power_gain = RUS_faction_political_power_gain
 	power_balance_weekly = RUS_faction_power_balance_weekly
+}
+
+# Inputs are refreshed by RUS_bunker_layer_mastery_refresh with the bunker.
+RUS_bunker_layer_mastery = {
+	icon = GFX_idea_ADISCORD_logistics_centralized_depots
+	enable = { RUS_bunker_operational = yes }
+	attrition = RUS_layer_mastery_attrition
+	planning_speed = RUS_layer_mastery_planning_speed
+	industrial_capacity_factory = RUS_layer_mastery_factory
+	consumer_goods_factor = RUS_layer_mastery_consumer_goods
+	casualty_trickleback = RUS_layer_mastery_trickleback
+	research_speed_factor = RUS_layer_mastery_research
+	political_power_gain = RUS_layer_mastery_political_power
+	max_planning_factor = RUS_layer_mastery_max_planning
 }
 
 # --- rus_faction_favours ---

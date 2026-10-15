@@ -356,6 +356,114 @@ class StelanderPartitionFixture(TreatyFixture):
                 super().execute([e], stack)
 
 
+class NodrulInterventionDefeatFixture(StelanderPartitionFixture):
+    """A faction peace may close the Party's war unless it leaves first."""
+
+    def __init__(self, faction_peace=True):
+        super().__init__(winner="STS", loser="NOD", exile=False)
+        self.faction_peace = faction_peace
+        self.existing.update({"STP", "STS", "NOD"})
+        self.global_flags = {"STP_cw_started"}
+        self.flags["NOD"].update({"NOD_cw_entered", "NOD_cw_intervention_approved"})
+        self.factions = {"NOD": "north", "STP": "north", "YPR": "north"}
+        self.wars = {
+            frozenset(("STP", "STS")),
+            frozenset(("NOD", "STS")),
+            frozenset(("NOD", "RUS")),
+        }
+        self.capitulated = set()
+        self.owners = {"10": "NOD", "11": "NOD"}
+        self.controllers = {"10": "STS", "11": "NOD"}
+        self.stubs.update({
+            "ADISCORD_economy_update_postwar_demobilization",
+            "STP_cw_abort_northern_campaign_external_defeat",
+        })
+        self.peaces = []
+
+    def matches(self, rows, stack):
+        for entry in rows:
+            if entry.key == "has_idea":
+                matched = entry.value in self.ideas[stack[-1]]
+            else:
+                matched = super().matches([entry], stack)
+            if not matched:
+                return False
+        return True
+
+    def execute(self, rows, stack=None):
+        stack = stack or [self.root]
+        taken = False
+        for entry in rows:
+            if entry.key in ("if", "else_if", "else"):
+                if entry.key == "if":
+                    taken = False
+                limit = next((e.value for e in entry.value if e.key == "limit"), [])
+                if not taken and self.matches(limit, stack):
+                    taken = True
+                    self.execute([e for e in entry.value if e.key != "limit"], stack)
+            elif entry.key == "faction_leader":
+                faction = self.factions[stack[-1]]
+                leader = next(tag for tag, side in self.factions.items() if side == faction)
+                self.execute(entry.value, stack + [leader])
+            elif entry.key == "remove_from_faction":
+                self.factions.pop(self.resolve(entry.value, stack), None)
+            elif entry.key == "white_peace":
+                current = stack[-1]
+                target = self.resolve(entry.value, stack)
+                self.peaces.append((current, target, self.allied("STP", "NOD")))
+                first, second = {current}, {target}
+                if self.faction_peace:
+                    first.update(t for t in self.countries if self.allied(t, current))
+                    second.update(t for t in self.countries if self.allied(t, target))
+                self.wars = {
+                    pair for pair in self.wars if not (pair & first and pair & second)
+                }
+                self.controllers = dict(self.owners)
+            elif entry.key == "add_war_support":
+                pass
+            else:
+                super().execute([entry], stack)
+
+
+class NodrulInterventionDefeatTests(unittest.TestCase):
+    def defeat_effect(self, fixture, route):
+        from tools.tests.test_adiscord_stp_preparation import walk
+
+        if route == "border":
+            return fixture.effects["STP_nod_settle_border_treaty"]
+        if route == "overlord":
+            fixture.root = "VAL"
+            fixture.subjects["STS"] = "VAL"
+            fixture.wars.add(frozenset(("VAL", "NOD")))
+            return fixture.effects["VAL_settle_nod_overlord_sts_victory"]
+        fixture.variables["NOD", "STP_cw_capitulation_occupier"] = 2
+        path = ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"
+        hooks = parse_clausewitz(path.read_text(encoding="utf-8"))
+        return [next(
+            entry for entry in walk(hooks)
+            if entry.key == "else_if" and any(
+                child.key == "set_country_flag" and child.value == "NOD_cw_defeated"
+                for child in walk(entry.value)
+            )
+        )]
+
+    def test_each_defeat_detaches_party_before_peace_and_keeps_its_war(self):
+        for route in ("border", "capitulation", "overlord"):
+            for faction_peace in (False, True):
+                with self.subTest(route=route, faction_peace=faction_peace):
+                    fixture = NodrulInterventionDefeatFixture(faction_peace)
+                    fixture.execute(self.defeat_effect(fixture, route))
+                    self.assertTrue(fixture.peaces)
+                    self.assertTrue(all(not allied for _, _, allied in fixture.peaces))
+                    self.assertIn(frozenset(("STP", "STS")), fixture.wars)
+                    self.assertNotIn(frozenset(("NOD", "STS")), fixture.wars)
+                    self.assertIn(frozenset(("NOD", "RUS")), fixture.wars)
+                    self.assertTrue(fixture.allied("NOD", "YPR"))
+                    self.assertIn("STP_cw_nodrul_collapse", fixture.ideas["STP"])
+                    fixture.execute(fixture.effects["STP_cw_party_loses_nodrul_support"])
+                    self.assertEqual(fixture.events.count(("STP", "ADISCORD_STP_cw.44")), 1)
+
+
 class StelanderPartitionTests(unittest.TestCase):
     def test_either_victor_awards_border_before_restoring_nod_puppet(self):
         for winner in ("VAL", "NOD"):

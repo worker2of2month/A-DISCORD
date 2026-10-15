@@ -5389,6 +5389,62 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_rus_crisis.34",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 34,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_crisis.35",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 35,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_crisis.36",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 36,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_crisis.37",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 37,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_crisis.38",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 38,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_crisis.39",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 39,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_crisis.40",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 40,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_superevent.11",
       "namespace": "ADISCORD_superevent",
       "number": 11,

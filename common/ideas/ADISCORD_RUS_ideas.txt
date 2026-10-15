@@ -191,12 +191,40 @@ ideas = {
 			}
 		}
 
+		RUS_pay_the_officials_delta = {
+			name = RUS_government_service
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.10
+			}
+		}
+
+		RUS_roadside_clinics_delta = {
+			name = RUS_government_service
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				casualty_trickleback = 0.10
+			}
+		}
+
 		RUS_bunker_systems_college_delta = {
 			name = RUS_bunker_complex
 			picture = ADISCORD_logistics_centralized_depots
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.05
+			}
+		}
+
+		RUS_bunker_deep_casemates_delta = {
+			name = RUS_bunker_complex
+			picture = ADISCORD_logistics_centralized_depots
+			allowed = { always = no }
+			modifier = {
+				surrender_limit = 0.10
+				army_defence_factor = 0.05
 			}
 		}
 
@@ -377,12 +405,34 @@ ideas = {
 			}
 		}
 
-		RUS_paid_administration = {
-			picture = generic_central_management
+		# Installed and removed by RUS_bunker_refresh while the operational bunker
+		# has fitted rooms and an empty food store.
+		RUS_bunker_hunger = {
+			picture = ADISCORD_law_welfare_rationed_support
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.05
+				stability_factor = -0.20
+				war_support_factor = -0.10
+				army_org_factor = -0.15
+				industrial_capacity_factory = -0.15
+				research_speed_factor = -0.10
+				political_power_gain = -0.25
+			}
+		}
+
+		# The sealed ration of the eternal headquarters replaces RUS_bunker_hunger.
+		RUS_bunker_hunger_rationed = {
+			picture = ADISCORD_law_welfare_rationed_support
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				stability_factor = -0.10
+				war_support_factor = -0.05
+				army_org_factor = -0.05
+				industrial_capacity_factory = -0.05
+				research_speed_factor = -0.05
+				political_power_gain = -0.10
 			}
 		}
 

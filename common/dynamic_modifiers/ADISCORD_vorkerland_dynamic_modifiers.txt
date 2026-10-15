@@ -49,6 +49,7 @@ ADISCORD_vorkerland_macri_volunteer_corps = {
 ADISCORD_vorkerland_civil_war_attrition = {
 	icon = GFX_modifiers_generic_military_plans
 	attacker_modifier = yes
+	remove_trigger = { always = no }
 
 	air_cas_present_factor = -0.20
 	ground_attack_factor = -0.15

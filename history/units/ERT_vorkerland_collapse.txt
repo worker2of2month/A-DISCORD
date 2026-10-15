@@ -24,41 +24,69 @@ units = {
 		location = 10693
 		division_template = "ERT Collapse Militia"
 		start_experience_factor = 0.10
-		start_equipment_factor = 0.70
+		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
 		location = 3481
 		division_template = "ERT Collapse Militia"
 		start_experience_factor = 0.10
-		start_equipment_factor = 0.70
+		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 3 }
 		location = 16522
 		division_template = "ERT Collapse Militia"
 		start_experience_factor = 0.10
-		start_equipment_factor = 0.70
+		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 4 }
 		location = 16509
 		division_template = "ERT Collapse Militia"
 		start_experience_factor = 0.10
-		start_equipment_factor = 0.70
+		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 5 }
 		location = 16536
 		division_template = "ERT Collapse Militia"
 		start_experience_factor = 0.10
-		start_equipment_factor = 0.70
+		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 6 }
 		location = 10693
 		division_template = "ERT Collapse Militia"
 		start_experience_factor = 0.10
-		start_equipment_factor = 0.70
+		start_equipment_factor = 0.85
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 7 }
+		location = 3481
+		division_template = "ERT Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.85
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 8 }
+		location = 16522
+		division_template = "ERT Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.85
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 9 }
+		location = 16509
+		division_template = "ERT Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.85
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 10 }
+		location = 16536
+		division_template = "ERT Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.85
 	}
 }

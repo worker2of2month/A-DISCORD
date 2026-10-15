@@ -1690,6 +1690,242 @@ RUS_levies_monthly = {
 	}
 }
 
+# --- rus_bunker_silence_trial ---
+# RUS. Settles the 30-day trial opened by RUS_bunker_commission; hunger during
+# the trial marks it failed in RUS_bunker_refresh.
+RUS_bunker_silence_trial_settle = {
+	if = {
+		limit = { has_country_flag = RUS_bunker_silence_trial_active }
+		if = {
+			limit = {
+				NOT = { has_country_flag = RUS_bunker_silence_trial_failed }
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_integrity value = 60 compare = greater_than_or_equals }
+			}
+			add_stability = 0.05
+			add_political_power = 50
+			add_to_variable = { var = RUS_bunker_food_capacity_bonus value = 20 }
+			add_to_variable = { var = RUS_bunker_food value = 20 }
+			RUS_bunker_refresh = yes
+		}
+		else = { add_stability = -0.05 }
+		clr_country_flag = RUS_bunker_silence_trial_active
+		clr_country_flag = RUS_bunker_silence_trial_failed
+	}
+}
+
+# --- rus_food_pressure ---
+# RUS. Mouths fed by the bunker besides its rooms: refugee waves taken
+# underground, levies under arms, the cattle plague and every three controlled
+# states beyond the bunker region (at most six).
+RUS_bunker_count_mouths = {
+	set_variable = { var = RUS_bunker_mouths value = RUS_bunker_refugee_mouths }
+	add_to_variable = { var = RUS_bunker_mouths value = RUS_levy_raised }
+	set_temp_variable = { var = RUS_bunker_states_temp value = num_controlled_states }
+	if = {
+		limit = { check_variable = { var = RUS_bunker_states_temp value = 4 compare = greater_than_or_equals } }
+		add_to_variable = { var = RUS_bunker_mouths value = 1 }
+	}
+	if = {
+		limit = { check_variable = { var = RUS_bunker_states_temp value = 7 compare = greater_than_or_equals } }
+		add_to_variable = { var = RUS_bunker_mouths value = 1 }
+	}
+	if = {
+		limit = { check_variable = { var = RUS_bunker_states_temp value = 10 compare = greater_than_or_equals } }
+		add_to_variable = { var = RUS_bunker_mouths value = 1 }
+	}
+	if = {
+		limit = { check_variable = { var = RUS_bunker_states_temp value = 13 compare = greater_than_or_equals } }
+		add_to_variable = { var = RUS_bunker_mouths value = 1 }
+	}
+	if = {
+		limit = { check_variable = { var = RUS_bunker_states_temp value = 16 compare = greater_than_or_equals } }
+		add_to_variable = { var = RUS_bunker_mouths value = 1 }
+	}
+	if = {
+		limit = { check_variable = { var = RUS_bunker_states_temp value = 19 compare = greater_than_or_equals } }
+		add_to_variable = { var = RUS_bunker_mouths value = 1 }
+	}
+	if = {
+		limit = { has_country_flag = RUS_bunker_cattle_plague }
+		add_to_variable = { var = RUS_bunker_mouths value = 3 }
+	}
+}
+
+# RUS weekly. These inputs change without a bunker action; the complex is
+# refreshed only when the count of mouths actually changes.
+RUS_bunker_food_pressure = {
+	set_temp_variable = { var = RUS_bunker_mouths_before value = RUS_bunker_mouths }
+	RUS_bunker_count_mouths = yes
+	if = {
+		limit = { check_variable = { var = RUS_bunker_mouths value = RUS_bunker_mouths_before compare = not_equals } }
+		RUS_bunker_refresh = yes
+	}
+}
+
+# RUS monthly; every second month stock above three quarters of the store
+# spoils. The emergency ration chambers halve the loss. RUS_bunker_food_spoiled
+# is shown in the food panel until the next spoilage.
+RUS_bunker_spoil_food = {
+	add_to_variable = { var = RUS_bunker_spoil_months value = 1 }
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			check_variable = { var = RUS_bunker_spoil_months value = 2 compare = greater_than_or_equals }
+		}
+		set_variable = { var = RUS_bunker_spoil_months value = 0 }
+		RUS_bunker_spoil_now = yes
+	}
+}
+
+RUS_bunker_spoil_now = {
+	set_variable = { var = RUS_bunker_food_spoiled value = 0 }
+	set_temp_variable = { var = RUS_bunker_spoil_line value = RUS_bunker_food_capacity }
+	multiply_temp_variable = { var = RUS_bunker_spoil_line value = 0.75 }
+	if = {
+		limit = { check_variable = { var = RUS_bunker_food value = RUS_bunker_spoil_line compare = greater_than } }
+		set_variable = { var = RUS_bunker_food_spoiled value = RUS_bunker_food }
+		subtract_from_variable = { var = RUS_bunker_food_spoiled value = RUS_bunker_spoil_line }
+		if = {
+			limit = { has_completed_focus = RUS_bunker_emergency_rations }
+			multiply_variable = { var = RUS_bunker_food_spoiled value = 0.05 }
+		}
+		else = { multiply_variable = { var = RUS_bunker_food_spoiled value = 0.10 } }
+		subtract_from_variable = { var = RUS_bunker_food value = RUS_bunker_food_spoiled }
+	}
+}
+
+# --- rus_food_farms ---
+# RUS. One farm is built at a time; its power is reserved from payment to
+# completion and the price is returned once if the bunker is lost.
+RUS_bunker_farm_start = {
+	if = {
+		limit = {
+			RUS_bunker_farm_ready = yes
+			RUS_bunker_farm_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_farm_project value = 1 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 65 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 65 }
+		RUS_bunker_refresh = yes
+	}
+}
+
+RUS_bunker_farm_finish = {
+	if = {
+		limit = { check_variable = { var = RUS_bunker_farm_project value = 1 compare = equals } }
+		if = {
+			limit = { RUS_bunker_operational = yes }
+			set_variable = { var = RUS_bunker_farm_project value = 0 }
+			add_to_variable = { var = RUS_bunker_farms value = 1 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_farm_cancel = yes }
+	}
+}
+
+RUS_bunker_farm_cancel = {
+	if = {
+		limit = { check_variable = { var = RUS_bunker_farm_project value = 1 compare = equals } }
+		set_variable = { var = RUS_bunker_farm_project value = 0 }
+		add_to_variable = { var = ADISCORD_economy_treasury value = 65 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 65 }
+		RUS_bunker_refresh = yes
+	}
+}
+
+# --- rus_vorkerland_airlift ---
+# RUS. Three drops before the Vorkerland collapse, one mission period apart.
+# A collapse that starts first replaces the next drop with the cut-off event.
+RUS_vorkerland_airlift_arrive = {
+	if = {
+		limit = { has_global_flag = ADISCORD_vorkerland_collapse_started }
+		country_event = { id = ADISCORD_rus_crisis.37 }
+	}
+	else_if = {
+		limit = { check_variable = { var = RUS_vorkerland_airlift_stage value = 1 compare = equals } }
+		country_event = { id = ADISCORD_rus_crisis.34 }
+	}
+	else_if = {
+		limit = { check_variable = { var = RUS_vorkerland_airlift_stage value = 2 compare = equals } }
+		country_event = { id = ADISCORD_rus_crisis.35 }
+	}
+	else = { country_event = { id = ADISCORD_rus_crisis.36 } }
+}
+
+# Called from each drop event; the third drop ends the airlift.
+RUS_vorkerland_airlift_continue = {
+	add_to_variable = { var = RUS_vorkerland_airlift_stage value = 1 }
+	if = {
+		limit = {
+			check_variable = { var = RUS_vorkerland_airlift_stage value = 3 compare = less_than_or_equals }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started }
+		}
+		activate_mission = RUS_vorkerland_airlift
+	}
+	else = { RUS_vorkerland_airlift_end = yes }
+}
+
+RUS_vorkerland_airlift_end = {
+	clr_country_flag = RUS_vorkerland_airlift_active
+	clear_variable = RUS_vorkerland_airlift_stage
+}
+
+# RUS. Input: temp RUS_airlift_food. Food beyond the store is lost.
+RUS_vorkerland_airlift_store = {
+	if = {
+		limit = { has_country_flag = RUS_bunker_initialized }
+		add_to_variable = { var = RUS_bunker_food value = RUS_airlift_food }
+		RUS_bunker_refresh = yes
+	}
+}
+
+# --- rus_food_disasters ---
+# RUS monthly. At most one disaster in 240 days; each needs its exposed asset.
+RUS_bunker_disasters_monthly = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			NOT = { has_country_flag = RUS_bunker_disaster_recent }
+		}
+		random_list = {
+			3 = {
+				modifier = {
+					factor = 0
+					NOT = { check_variable = { var = RUS_bunker_layer_2 value = 1 compare = equals } }
+				}
+				set_country_flag = { flag = RUS_bunker_disaster_recent days = 240 }
+				country_event = { id = ADISCORD_rus_crisis.38 }
+			}
+			3 = {
+				modifier = {
+					factor = 0
+					NOT = { check_variable = { var = RUS_bunker_layer_3 value = 2 compare = equals } }
+				}
+				set_country_flag = { flag = RUS_bunker_disaster_recent days = 240 }
+				country_event = { id = ADISCORD_rus_crisis.39 }
+			}
+			3 = {
+				modifier = {
+					factor = 0
+					num_of_controlled_states < 4
+				}
+				set_country_flag = { flag = RUS_bunker_disaster_recent days = 240 }
+				country_event = { id = ADISCORD_rus_crisis.40 }
+			}
+			91 = { }
+		}
+	}
+}
+
+# RUS. Input: temp RUS_granary_loss_share; the collapse buries part of the stock.
+RUS_bunker_granary_collapse = {
+	set_temp_variable = { var = RUS_granary_loss value = RUS_bunker_food }
+	multiply_temp_variable = { var = RUS_granary_loss value = RUS_granary_loss_share }
+	subtract_from_variable = { var = RUS_bunker_food value = RUS_granary_loss }
+	RUS_bunker_refresh = yes
+}
+
 # --- rus_winter ---
 # RUS. Starts the 90-day winter and schedules the next one; the chain lives
 # for the whole campaign, so a missing bunker only skips this year's ration cost.
@@ -2595,7 +2831,8 @@ RUS_bunker_rush_finish = {
 			}
 			RUS_bunker_clear_receipt = yes
 			add_to_variable = { var = RUS_bunker_depth value = 1 }
-			subtract_from_variable = { var = RUS_bunker_integrity value = 35 }
+			RUS_bunker_refresh_previews = yes
+			subtract_from_variable = { var = RUS_bunker_integrity value = RUS_bunker_rush_damage }
 			country_event = { id = ADISCORD_rus_campaign.3 }
 			RUS_bunker_refresh = yes
 		}
@@ -3122,7 +3359,8 @@ RUS_bunker_reinforce_finish = {
 				RUS_bunker_reinforce_requirements = yes
 			}
 			RUS_bunker_clear_receipt = yes
-			add_to_variable = { var = RUS_bunker_integrity value = 40 }
+			RUS_bunker_refresh_previews = yes
+			add_to_variable = { var = RUS_bunker_integrity value = RUS_bunker_reinforce_amount }
 			clamp_variable = { var = RUS_bunker_integrity min = 0 max = 100 }
 			RUS_bunker_refresh = yes
 		}
@@ -3261,6 +3499,8 @@ RUS_bunker_refresh = {
 	add_to_variable = { var = RUS_bunker_power value = RUS_bunker_power_bonus }
 	set_variable = { var = RUS_bunker_used_power value = RUS_bunker_energy_export_power }
 	add_to_variable = { var = RUS_bunker_used_power value = RUS_energy_contracts }
+	add_to_variable = { var = RUS_bunker_used_power value = RUS_bunker_farms }
+	add_to_variable = { var = RUS_bunker_used_power value = RUS_bunker_farm_project }
 	set_variable = { var = RUS_bunker_fitted value = 0 }
 	set_variable = { var = RUS_bunker_attrition value = 0 }
 	set_variable = { var = RUS_bunker_army_defence_factor value = 0 }
@@ -3281,6 +3521,11 @@ RUS_bunker_refresh = {
 	set_variable = { var = RUS_bunker_production_factory_efficiency_gain_factor value = 0 }
 	set_variable = { var = RUS_bunker_surrender_limit value = RUS_bunker_depth }
 	multiply_variable = { var = RUS_bunker_surrender_limit value = 0.01 }
+	if = {
+		limit = { has_completed_focus = RUS_bunker_deep_casemates }
+		add_to_variable = { var = RUS_bunker_surrender_limit value = 0.10 }
+		add_to_variable = { var = RUS_bunker_army_defence_factor value = 0.05 }
+	}
 	if = {
 		limit = {
 			check_variable = { var = RUS_bunker_layer_1 value = 1 compare = equals }
@@ -3445,6 +3690,7 @@ RUS_bunker_refresh = {
 			add_to_variable = { var = RUS_bunker_army_defence_factor value = 0.07 }
 		}
 	}
+	RUS_bunker_layer_mastery_refresh = yes
 	set_variable = { var = RUS_bunker_free_power value = RUS_bunker_power }
 	subtract_from_variable = { var = RUS_bunker_free_power value = RUS_bunker_used_power }
 	if = {
@@ -3495,13 +3741,27 @@ RUS_bunker_refresh = {
 		set_temp_variable = { var = RUS_bunker_contract_income value = RUS_energy_contracts }
 		multiply_temp_variable = { var = RUS_bunker_contract_income value = 8 }
 		add_to_variable = { var = RUS_bunker_income value = RUS_bunker_contract_income }
+		if = {
+			limit = { has_completed_focus = RUS_bunker_surface_market }
+			add_to_variable = { var = RUS_bunker_income value = 8 }
+		}
 		set_variable = { var = RUS_bunker_food_output value = 2 }
 		add_to_variable = { var = RUS_bunker_food_output value = RUS_bunker_food_output_bonus }
 		set_variable = { var = RUS_bunker_food_use value = RUS_bunker_fitted }
+		# Winter ledgers keep only one extra weekly ration of the winter cost.
 		if = {
 			limit = { has_country_flag = RUS_winter }
-			add_to_variable = { var = RUS_bunker_food_use value = 3 }
+			if = {
+				limit = { has_completed_focus = RUS_winter_granaries }
+				add_to_variable = { var = RUS_bunker_food_use value = 1 }
+			}
+			else = { add_to_variable = { var = RUS_bunker_food_use value = 3 } }
 		}
+		RUS_bunker_count_mouths = yes
+		add_to_variable = { var = RUS_bunker_food_use value = RUS_bunker_mouths }
+		set_temp_variable = { var = RUS_bunker_farm_output value = RUS_bunker_farms }
+		multiply_temp_variable = { var = RUS_bunker_farm_output value = 2 }
+		add_to_variable = { var = RUS_bunker_food_output value = RUS_bunker_farm_output }
 		if = {
 			limit = { check_variable = { var = RUS_bunker_layer_2 value = 1 compare = equals } }
 			add_to_variable = { var = RUS_bunker_food_output value = 2 }
@@ -3520,15 +3780,50 @@ RUS_bunker_refresh = {
 	set_variable = { var = RUS_bunker_food_space value = RUS_bunker_food_capacity }
 	subtract_from_variable = { var = RUS_bunker_food_space value = RUS_bunker_food }
 	set_variable = { var = RUS_bunker_food_fed_line value = RUS_bunker_food_capacity }
-	multiply_variable = { var = RUS_bunker_food_fed_line value = 0.75 }
+	if = {
+		limit = { has_completed_focus = RUS_bunker_contingency_reservoir }
+		multiply_variable = { var = RUS_bunker_food_fed_line value = 0.60 }
+	}
+	else = { multiply_variable = { var = RUS_bunker_food_fed_line value = 0.75 } }
 	RUS_bunker_classify_food = yes
 	set_variable = { var = RUS_bunker_food_state value = RUS_bunker_food_state_now }
+	# The eternal headquarters keeps a sealed ration: hunger installs the milder spirit.
 	if = {
-		limit = { check_variable = { var = RUS_bunker_food_state value = 0 compare = equals } }
-		add_to_variable = { var = RUS_bunker_army_org_factor value = -0.05 }
-		add_to_variable = { var = RUS_bunker_stability_factor value = -0.05 }
+		limit = {
+			RUS_bunker_operational = yes
+			check_variable = { var = RUS_bunker_food_state value = 0 compare = equals }
+		}
+		if = {
+			limit = { has_country_flag = RUS_bunker_silence_trial_active }
+			set_country_flag = RUS_bunker_silence_trial_failed
+		}
+		if = {
+			limit = { has_completed_focus = RUS_bunker_eternal_headquarters }
+			if = {
+				limit = { has_idea = RUS_bunker_hunger }
+				remove_ideas = RUS_bunker_hunger
+			}
+			if = {
+				limit = { NOT = { has_idea = RUS_bunker_hunger_rationed } }
+				add_ideas = RUS_bunker_hunger_rationed
+			}
+		}
+		else_if = {
+			limit = { NOT = { has_idea = RUS_bunker_hunger } }
+			add_ideas = RUS_bunker_hunger
+		}
 	}
-	else_if = {
+	else = {
+		if = {
+			limit = { has_idea = RUS_bunker_hunger }
+			remove_ideas = RUS_bunker_hunger
+		}
+		if = {
+			limit = { has_idea = RUS_bunker_hunger_rationed }
+			remove_ideas = RUS_bunker_hunger_rationed
+		}
+	}
+	if = {
 		limit = { check_variable = { var = RUS_bunker_food_state value = 2 compare = equals } }
 		add_to_variable = { var = RUS_bunker_stability_factor value = 0.05 }
 		add_to_variable = { var = RUS_bunker_reinforce_rate value = 0.05 }
@@ -3536,6 +3831,89 @@ RUS_bunker_refresh = {
 	RUS_bunker_refresh_previews = yes
 	force_update_dynamic_modifier = yes
 	ADISCORD_economy_mark_dirty = yes
+}
+
+# RUS. Layer focuses strengthen whichever room was fitted on their layer. The
+# bonus lives in RUS_bunker_layer_mastery, apart from the room previews of the
+# bunker complex, and follows the complex's operational state.
+RUS_bunker_layer_mastery_refresh = {
+	set_variable = { var = RUS_layer_mastery_attrition value = 0 }
+	set_variable = { var = RUS_layer_mastery_planning_speed value = 0 }
+	set_variable = { var = RUS_layer_mastery_factory value = 0 }
+	set_variable = { var = RUS_layer_mastery_consumer_goods value = 0 }
+	set_variable = { var = RUS_layer_mastery_trickleback value = 0 }
+	set_variable = { var = RUS_layer_mastery_research value = 0 }
+	set_variable = { var = RUS_layer_mastery_political_power value = 0 }
+	set_variable = { var = RUS_layer_mastery_max_planning value = 0 }
+	if = {
+		limit = {
+			has_completed_focus = RUS_bunker_utilities
+			check_variable = { var = RUS_bunker_layer_2 value = 1 compare = equals }
+		}
+		set_variable = { var = RUS_layer_mastery_attrition value = -0.05 }
+	}
+	if = {
+		limit = {
+			has_completed_focus = RUS_bunker_utilities
+			check_variable = { var = RUS_bunker_layer_2 value = 2 compare = equals }
+		}
+		set_variable = { var = RUS_layer_mastery_planning_speed value = 0.05 }
+	}
+	if = {
+		limit = {
+			has_completed_focus = RUS_bunker_working_heart
+			check_variable = { var = RUS_bunker_layer_3 value = 1 compare = equals }
+		}
+		set_variable = { var = RUS_layer_mastery_factory value = 0.05 }
+	}
+	if = {
+		limit = {
+			has_completed_focus = RUS_bunker_working_heart
+			check_variable = { var = RUS_bunker_layer_3 value = 2 compare = equals }
+		}
+		set_variable = { var = RUS_layer_mastery_consumer_goods value = -0.03 }
+	}
+	if = {
+		limit = {
+			has_completed_focus = RUS_bunker_science_wing
+			check_variable = { var = RUS_bunker_layer_4 value = 1 compare = equals }
+		}
+		set_variable = { var = RUS_layer_mastery_trickleback value = 0.05 }
+	}
+	if = {
+		limit = {
+			has_completed_focus = RUS_bunker_science_wing
+			check_variable = { var = RUS_bunker_layer_4 value = 2 compare = equals }
+		}
+		set_variable = { var = RUS_layer_mastery_research value = 0.05 }
+	}
+	if = {
+		limit = {
+			has_completed_focus = RUS_bunker_memory_vault
+			check_variable = { var = RUS_bunker_layer_5 value = 1 compare = equals }
+		}
+		set_variable = { var = RUS_layer_mastery_political_power value = 0.1 }
+	}
+	if = {
+		limit = {
+			has_completed_focus = RUS_bunker_memory_vault
+			check_variable = { var = RUS_bunker_layer_5 value = 2 compare = equals }
+		}
+		set_variable = { var = RUS_layer_mastery_max_planning value = 0.05 }
+	}
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			OR = {
+				has_completed_focus = RUS_bunker_utilities
+				has_completed_focus = RUS_bunker_working_heart
+				has_completed_focus = RUS_bunker_science_wing
+				has_completed_focus = RUS_bunker_memory_vault
+			}
+			NOT = { has_dynamic_modifier = { modifier = RUS_bunker_layer_mastery } }
+		}
+		add_dynamic_modifier = { modifier = RUS_bunker_layer_mastery }
+	}
 }
 
 # Прогнозы используют текущую планировку и недельный баланс, а не запас пищи.
@@ -3557,10 +3935,21 @@ RUS_bunker_refresh_previews = {
 	add_to_variable = { var = RUS_bunker_preview_food_upgrade_granary value = 2 }
 	set_variable = { var = RUS_bunker_preview_excavate value = RUS_bunker_integrity }
 	subtract_from_variable = { var = RUS_bunker_preview_excavate value = 20 }
+	# Focus-dependent work results shared by the previews, labels and completion.
+	set_variable = { var = RUS_bunker_rush_damage value = 35 }
+	if = {
+		limit = { has_completed_focus = RUS_bunker_layer_service_school }
+		set_variable = { var = RUS_bunker_rush_damage value = 20 }
+	}
+	set_variable = { var = RUS_bunker_reinforce_amount value = 40 }
+	if = {
+		limit = { has_completed_focus = RUS_bunker_airlocks }
+		set_variable = { var = RUS_bunker_reinforce_amount value = 60 }
+	}
 	set_variable = { var = RUS_bunker_preview_rush value = RUS_bunker_integrity }
-	subtract_from_variable = { var = RUS_bunker_preview_rush value = 35 }
+	subtract_from_variable = { var = RUS_bunker_preview_rush value = RUS_bunker_rush_damage }
 	set_variable = { var = RUS_bunker_preview_reinforce value = RUS_bunker_integrity }
-	add_to_variable = { var = RUS_bunker_preview_reinforce value = 40 }
+	add_to_variable = { var = RUS_bunker_preview_reinforce value = RUS_bunker_reinforce_amount }
 	clamp_variable = { var = RUS_bunker_preview_reinforce min = 0 max = 100 }
 }
 
@@ -3664,6 +4053,9 @@ RUS_campaign_initialize = {
 		set_country_flag = RUS_bunker_initialized
 		# The campaign opens on 1 January; the first winter begins on 1 December.
 		country_event = { id = ADISCORD_rus_crisis.32 days = 334 }
+		set_country_flag = RUS_vorkerland_airlift_active
+		set_variable = { var = RUS_vorkerland_airlift_stage value = 1 }
+		activate_mission = RUS_vorkerland_airlift
 		ADISCORD_vorkerland_ensure_limited_conscription = yes
 		ADISCORD_vorkerland_rus_core_dirty_sla = yes
 		ADISCORD_vorkerland_rus_core_dirty_rza = yes
@@ -3710,6 +4102,7 @@ RUS_campaign_initialize = {
 		set_variable = { var = RUS_government_civilian_speed value = 0 }
 		set_variable = { var = RUS_government_mobilization value = 0 }
 		set_variable = { var = RUS_government_factory_output value = 0 }
+	set_variable = { var = RUS_government_trickleback value = 0 }
 		set_variable = { var = RUS_army_casualty_return value = 0 }
 		set_variable = { var = RUS_army_factory_efficiency value = 0 }
 		set_variable = { var = RUS_air_accidents value = 0 }
@@ -3758,7 +4151,14 @@ RUS_campaign_shutdown = {
 		limit = { has_dynamic_modifier = { modifier = RUS_government_service } }
 		remove_dynamic_modifier = { modifier = RUS_government_service }
 	}
-	remove_ideas = RUS_paid_administration
+	if = {
+		limit = { has_dynamic_modifier = { modifier = RUS_bunker_layer_mastery } }
+		remove_dynamic_modifier = { modifier = RUS_bunker_layer_mastery }
+	}
+	remove_ideas = RUS_bunker_hunger
+	clr_country_flag = RUS_bunker_silence_trial_active
+	clr_country_flag = RUS_bunker_silence_trial_failed
+	remove_ideas = RUS_bunker_hunger_rationed
 	remove_ideas = RUS_repair_depots_spirit
 	remove_ideas = RUS_open_city_policy
 	remove_ideas = RUS_sealed_throne_policy
@@ -4429,6 +4829,7 @@ RUS_bunker_weekly_supply = {
 				limit = { NOT = { has_dynamic_modifier = { modifier = RUS_bunker_complex } } }
 				RUS_bunker_refresh = yes
 			}
+			RUS_bunker_food_pressure = yes
 			add_to_variable = { var = RUS_bunker_food value = RUS_bunker_food_balance }
 			clamp_variable = { var = RUS_bunker_food min = 0 max = 100000 }
 			if = {

@@ -54,12 +54,10 @@ ADISCORD_vorkerland_rus_last_empire_plan = {
 		RUS_power_grid
 		RUS_watch_the_western_scar
 		RUS_bunker_shift_work
-		RUS_bunker_reserve_shaft
 		RUS_bunker_deep_gallery
 		RUS_bunker_utilities
 		RUS_bunker_water_recycling
 		RUS_bunker_working_heart
-		RUS_bunker_contingency_reservoir
 		RUS_claim_the_opened_zone
 		RUS_drive_starolesye_back
 		RUS_press_the_closed_zone
@@ -83,7 +81,6 @@ ADISCORD_vorkerland_rus_last_empire_plan = {
 		RUS_railway_coverage
 		RUS_pay_the_officials
 		RUS_winter_granaries
-		RUS_district_courts
 		RUS_regional_self_help
 		RUS_school_of_scribes
 		RUS_freight_yards
@@ -131,6 +128,9 @@ ADISCORD_vorkerland_rus_last_empire_plan = {
 		RUS_bunker_closed_cycle
 		RUS_bunker_cold_stores
 		RUS_bunker_systems_college
+		RUS_bunker_surface_market
+		RUS_bunker_refugee_quarters
+		RUS_bunker_city_charter
 	}
 
 	weight = { factor = 5 }

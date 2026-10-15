@@ -108,6 +108,11 @@ DYNAMIC_MODIFIER_SCOPES: dict[str, tuple[str, str]] = {
         "applied to RUS by RUS_government_refresh when a government focus adds "
         "a permanent institutional bonus",
     ),
+    "RUS_bunker_layer_mastery": (
+        COUNTRY,
+        "applied to RUS by RUS_bunker_layer_mastery_refresh for the room fitted on "
+        "each layer whose focus is complete",
+    ),
     "RUS_favour_shock_fist": (
         COUNTRY,
         "applied to RUS for 120 days by the Black Army favour paid with faction support",

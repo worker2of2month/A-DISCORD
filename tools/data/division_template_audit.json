@@ -14345,14 +14345,14 @@
       "count": 4
     },
     {
-      "key": "ert_vorkerland_collapse_oob_ert_collapse_militia_xp_0_1_eq_0_7",
+      "key": "ert_vorkerland_collapse_oob_ert_collapse_militia_xp_0_1_eq_0_85",
       "path": "history/units/ERT_vorkerland_collapse.txt",
       "kind": "oob",
       "technical_name": "ERT Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
-      "start_equipment_factor": 0.7,
-      "count": 6
+      "start_equipment_factor": 0.85,
+      "count": 10
     },
     {
       "key": "eyr_vorkerland_collapse_oob_eyr_collapse_militia_xp_0_1_eq_0_7",
@@ -14449,14 +14449,14 @@
       "count": 2
     },
     {
-      "key": "irt_vorkerland_collapse_oob_irt_collapse_militia_xp_0_1_eq_0_7",
+      "key": "irt_vorkerland_collapse_oob_irt_collapse_militia_xp_0_1_eq_0_85",
       "path": "history/units/IRT_vorkerland_collapse.txt",
       "kind": "oob",
       "technical_name": "IRT Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
-      "start_equipment_factor": 0.7,
-      "count": 7
+      "start_equipment_factor": 0.85,
+      "count": 11
     },
     {
       "key": "iia_oob_island_garrison_xp_0_12_eq_0_72",
@@ -14649,14 +14649,14 @@
       "count": 3
     },
     {
-      "key": "mlr_vorkerland_collapse_oob_mlr_collapse_militia_xp_0_1_eq_0_7",
+      "key": "mlr_vorkerland_collapse_oob_mlr_collapse_militia_xp_0_1_eq_0_85",
       "path": "history/units/MLR_vorkerland_collapse.txt",
       "kind": "oob",
       "technical_name": "MLR Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
-      "start_equipment_factor": 0.7,
-      "count": 7
+      "start_equipment_factor": 0.85,
+      "count": 11
     },
     {
       "key": "mon_oob_imperial_frontier_brigade_xp_0_2_eq_1",
@@ -15087,24 +15087,24 @@
       "count": 2
     },
     {
-      "key": "rza_vorkerland_collapse_oob_rza_collapse_militia_xp_0_1_eq_0_7",
+      "key": "rza_vorkerland_collapse_oob_rza_collapse_militia_xp_0_1_eq_0_85",
       "path": "history/units/RZA_vorkerland_collapse.txt",
       "kind": "oob",
       "technical_name": "RZA Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
-      "start_equipment_factor": 0.7,
-      "count": 8
+      "start_equipment_factor": 0.85,
+      "count": 12
     },
     {
-      "key": "sca_vorkerland_collapse_oob_sca_collapse_militia_xp_0_1_eq_0_7",
+      "key": "sca_vorkerland_collapse_oob_sca_collapse_militia_xp_0_1_eq_0_85",
       "path": "history/units/SCA_vorkerland_collapse.txt",
       "kind": "oob",
       "technical_name": "SCA Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
-      "start_equipment_factor": 0.7,
-      "count": 7
+      "start_equipment_factor": 0.85,
+      "count": 11
     },
     {
       "key": "sdr_oob_dry_river_patrol_xp_0_2_eq_0_5",
@@ -15179,13 +15179,13 @@
       "count": 5
     },
     {
-      "key": "sla_vorkerland_collapse_oob_sla_collapse_militia_xp_0_1_eq_0_7",
+      "key": "sla_vorkerland_collapse_oob_sla_collapse_militia_xp_0_1_eq_0_85",
       "path": "history/units/SLA_vorkerland_collapse.txt",
       "kind": "oob",
       "technical_name": "SLA Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
-      "start_equipment_factor": 0.7,
+      "start_equipment_factor": 0.85,
       "count": 7
     },
     {

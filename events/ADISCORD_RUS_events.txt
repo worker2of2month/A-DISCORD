@@ -1263,12 +1263,26 @@ country_event = {
 	option = {
 		name = ADISCORD_rus_crisis.31.a
 		ai_chance = { base = 2 }
-		add_manpower = 3000
-		custom_effect_tooltip = RUS_refugees_food_tt
+		if = {
+			limit = { has_completed_focus = RUS_bunker_refugee_quarters }
+			add_manpower = 4500
+			custom_effect_tooltip = RUS_refugees_food_quarters_tt
+		}
+		else = {
+			add_manpower = 3000
+			custom_effect_tooltip = RUS_refugees_food_tt
+		}
+		custom_effect_tooltip = RUS_refugees_mouths_tt
 		hidden_effect = {
+			add_to_variable = { var = RUS_bunker_refugee_mouths value = 1 }
 			if = {
 				limit = { has_country_flag = RUS_bunker_initialized }
-				subtract_from_variable = { var = RUS_bunker_food value = 30 }
+				set_temp_variable = { var = RUS_refugees_food value = 30 }
+				if = {
+					limit = { has_completed_focus = RUS_bunker_refugee_quarters }
+					set_temp_variable = { var = RUS_refugees_food value = 15 }
+				}
+				subtract_from_variable = { var = RUS_bunker_food value = RUS_refugees_food }
 				clamp_variable = { var = RUS_bunker_food min = 0 max = 100000 }
 				RUS_bunker_refresh = yes
 			}
@@ -1362,4 +1376,240 @@ country_event = {
 	is_triggered_only = yes
 	immediate = { RUS_winter_end = yes }
 	option = { name = ADISCORD_rus_crisis.33.a }
+}
+
+# Vorkerland airlift: three shrinking drops before the collapse.
+country_event = {
+	id = ADISCORD_rus_crisis.34
+	title = ADISCORD_rus_crisis.34.t
+	desc = ADISCORD_rus_crisis.34.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	immediate = {
+		hidden_effect = { RUS_vorkerland_airlift_continue = yes }
+	}
+	option = {
+		name = ADISCORD_rus_crisis.34.a
+		ai_chance = { base = 3 }
+		custom_effect_tooltip = RUS_airlift_food_60_tt
+		hidden_effect = {
+			set_temp_variable = { var = RUS_airlift_food value = 60 }
+			RUS_vorkerland_airlift_store = yes
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.34.b
+		ai_chance = { base = 1 }
+		custom_effect_tooltip = RUS_airlift_cash_75_tt
+		hidden_effect = {
+			add_to_variable = { var = ADISCORD_economy_treasury value = 75 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 75 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.35
+	title = ADISCORD_rus_crisis.35.t
+	desc = ADISCORD_rus_crisis.35.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	immediate = {
+		hidden_effect = { RUS_vorkerland_airlift_continue = yes }
+	}
+	option = {
+		name = ADISCORD_rus_crisis.35.a
+		ai_chance = { base = 3 }
+		custom_effect_tooltip = RUS_airlift_food_35_tt
+		hidden_effect = {
+			set_temp_variable = { var = RUS_airlift_food value = 35 }
+			RUS_vorkerland_airlift_store = yes
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.35.b
+		ai_chance = { base = 1 }
+		custom_effect_tooltip = RUS_airlift_cash_45_tt
+		hidden_effect = {
+			add_to_variable = { var = ADISCORD_economy_treasury value = 45 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 45 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.36
+	title = ADISCORD_rus_crisis.36.t
+	desc = ADISCORD_rus_crisis.36.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	immediate = {
+		hidden_effect = { RUS_vorkerland_airlift_continue = yes }
+	}
+	option = {
+		name = ADISCORD_rus_crisis.36.a
+		ai_chance = { base = 3 }
+		custom_effect_tooltip = RUS_airlift_food_15_tt
+		hidden_effect = {
+			set_temp_variable = { var = RUS_airlift_food value = 15 }
+			RUS_vorkerland_airlift_store = yes
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.36.b
+		ai_chance = { base = 1 }
+		custom_effect_tooltip = RUS_airlift_cash_20_tt
+		hidden_effect = {
+			add_to_variable = { var = ADISCORD_economy_treasury value = 20 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 20 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.37
+	title = ADISCORD_rus_crisis.37.t
+	desc = ADISCORD_rus_crisis.37.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	immediate = {
+		hidden_effect = { RUS_vorkerland_airlift_end = yes }
+	}
+	option = { name = ADISCORD_rus_crisis.37.a }
+}
+
+# Food disasters from RUS_bunker_disasters_monthly. The first answer is free.
+country_event = {
+	id = ADISCORD_rus_crisis.38
+	title = ADISCORD_rus_crisis.38.t
+	desc = ADISCORD_rus_crisis.38.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	option = {
+		name = ADISCORD_rus_crisis.38.a
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = RUS_disaster_food_25_tt
+		hidden_effect = {
+			subtract_from_variable = { var = RUS_bunker_food value = 25 }
+			clamp_variable = { var = RUS_bunker_food min = 0 max = 100000 }
+			RUS_bunker_refresh = yes
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.38.b
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 65 compare = greater_than_or_equals } }
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = RUS_disaster_cash_65_tt
+		hidden_effect = {
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 65 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 65 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.38.c
+		ai_chance = { base = 1 }
+		add_manpower = -1000
+		add_stability = -0.03
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.39
+	title = ADISCORD_rus_crisis.39.t
+	desc = ADISCORD_rus_crisis.39.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	option = {
+		name = ADISCORD_rus_crisis.39.a
+		ai_chance = { base = 1 }
+		custom_effect_tooltip = RUS_disaster_granary_40_tt
+		hidden_effect = {
+			set_temp_variable = { var = RUS_granary_loss_share value = 0.40 }
+			RUS_bunker_granary_collapse = yes
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.39.b
+		trigger = {
+			NOT = { has_political_power < 25 }
+			check_variable = { var = ADISCORD_economy_treasury value = 35 compare = greater_than_or_equals }
+		}
+		ai_chance = { base = 2 }
+		add_political_power = -25
+		custom_effect_tooltip = RUS_disaster_cash_35_tt
+		custom_effect_tooltip = RUS_disaster_granary_10_tt
+		hidden_effect = {
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 35 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 35 }
+			ADISCORD_economy_mark_dirty = yes
+			set_temp_variable = { var = RUS_granary_loss_share value = 0.10 }
+			RUS_bunker_granary_collapse = yes
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.39.c
+		ai_chance = { base = 2 }
+		add_manpower = -1000
+		custom_effect_tooltip = RUS_disaster_granary_15_tt
+		custom_effect_tooltip = RUS_suspicion_disperse_musters_support_tt
+		hidden_effect = {
+			set_temp_variable = { var = RUS_granary_loss_share value = 0.15 }
+			RUS_bunker_granary_collapse = yes
+			set_temp_variable = { var = RUS_black_army_support_delta value = 0.05 }
+			set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
+			RUS_faction_support_change = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.40
+	title = ADISCORD_rus_crisis.40.t
+	desc = ADISCORD_rus_crisis.40.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	option = {
+		name = ADISCORD_rus_crisis.40.a
+		ai_chance = { base = 1 }
+		custom_effect_tooltip = RUS_disaster_cattle_tt
+		hidden_effect = {
+			set_country_flag = { flag = RUS_bunker_cattle_plague days = 60 }
+			RUS_bunker_refresh = yes
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.40.b
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 65 compare = greater_than_or_equals } }
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = RUS_disaster_cash_65_tt
+		hidden_effect = {
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 65 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 65 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.40.c
+		ai_chance = { base = 1 }
+		add_stability = -0.04
+		if = {
+			limit = { RUS_suspicion_active = yes }
+			custom_effect_tooltip = RUS_suspicion_gain_4_tt
+		}
+		hidden_effect = {
+			set_temp_variable = { var = RUS_suspicion_delta value = 4 }
+			RUS_suspicion_add = yes
+		}
+	}
 }

@@ -4281,7 +4281,8 @@ STP_cw_end_nod_intervention = {
 }
 
 # COUNTRY-AGNOSTIC. NOD lost its northern war or its war against Shabrat while
-# the party still fights STS. Callers commit NOD's own peace first.
+# the party still fights STS. Accepted intervention defeats detach STP before
+# native peace can remove the faction's remaining war relations.
 STP_cw_party_loses_nodrul_support = {
 	STP = {
 		# The alliance existed only for NOD's intervention; a defeated guarantor
@@ -4291,7 +4292,12 @@ STP_cw_party_loses_nodrul_support = {
 				STP_ps_war_active = yes
 				is_in_faction_with = NOD
 				is_faction_leader = no
-				NOD = { NOT = { has_war_with = STS } }
+				NOD = {
+					OR = {
+						has_country_flag = NOD_cw_defeated
+						NOT = { has_war_with = STS }
+					}
+				}
 			}
 			faction_leader = { remove_from_faction = STP }
 		}
@@ -5794,6 +5800,7 @@ STP_nod_settle_border_treaty = {
 			clr_country_flag = STP_cw_nod_warning_active
 			clr_country_flag = STP_cw_nod_entered
 		}
+		STP_cw_party_loses_nodrul_support = yes
 		STS = { white_peace = NOD }
 		for_each_scope_loop = {
 			array = STP_nod_treaty_states
@@ -5808,7 +5815,6 @@ STP_nod_settle_border_treaty = {
 			ADISCORD_economy_mark_dirty = yes
 			country_event = { id = ADISCORD_STP_pc.48 hours = 1 }
 		}
-		STP_cw_party_loses_nodrul_support = yes
 		log = "[STP_NOD] Border treaty concluded with Shabrat"
 	}
 }

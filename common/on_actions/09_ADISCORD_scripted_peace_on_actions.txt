@@ -1418,12 +1418,13 @@ on_actions = {
 					}
 					set_global_flag = skip_default_capitulation
 					NOD = {
+						set_country_flag = NOD_cw_defeated
+						STP_cw_party_loses_nodrul_support = yes
 						if = { limit = { has_war_with = STS } white_peace = STS }
 						clr_country_flag = NOD_cw_entered
 						clr_country_flag = NOD_cw_intervention_approved
 						ADISCORD_economy_update_postwar_demobilization = yes
 						ADISCORD_economy_mark_dirty = yes
-						set_country_flag = NOD_cw_defeated
 						remove_mission = NOD_cw_intervention_preparation
 						remove_mission = NOD_cw_northern_redeployment
 						clr_country_flag = NOD_cw_intervention_ready
@@ -1431,7 +1432,6 @@ on_actions = {
 						country_event = { id = ADISCORD_STP_cw.43 }
 					}
 					STS = { clr_country_flag = STP_cw_nod_entered clr_country_flag = STP_cw_nod_warning_active remove_mission = STP_cw_nod_warning }
-					STP_cw_party_loses_nodrul_support = yes
 					log = "[STP_CW] STS defeated the NOD intervention; unrelated wars retained"
 				}
 				else_if = {

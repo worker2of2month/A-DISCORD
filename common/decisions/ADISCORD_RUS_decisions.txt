@@ -767,7 +767,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_excavate_cost
 		custom_cost_trigger = { RUS_bunker_excavate_affordable = yes }
-		days_remove = 42
+		days_remove = 70
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_excavate_result_tt
 			hidden_effect = { RUS_bunker_excavate_start = yes }
@@ -831,7 +831,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_rush_cost
 		custom_cost_trigger = { RUS_bunker_rush_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_rush_result_tt
 			hidden_effect = { RUS_bunker_rush_start = yes }
@@ -892,7 +892,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_guard_cost
 		custom_cost_trigger = { RUS_bunker_guard_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_guard_delta }
@@ -960,7 +960,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_shelter_cost
 		custom_cost_trigger = { RUS_bunker_shelter_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_shelter_delta }
@@ -1029,7 +1029,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_water_cost
 		custom_cost_trigger = { RUS_bunker_water_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_water_delta }
@@ -1098,7 +1098,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_signals_cost
 		custom_cost_trigger = { RUS_bunker_signals_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_signals_delta }
@@ -1167,7 +1167,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_workshop_cost
 		custom_cost_trigger = { RUS_bunker_workshop_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_workshop_delta }
@@ -1236,7 +1236,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_granary_cost
 		custom_cost_trigger = { RUS_bunker_granary_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_granary_delta }
@@ -1305,7 +1305,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_clinic_cost
 		custom_cost_trigger = { RUS_bunker_clinic_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_clinic_delta }
@@ -1374,7 +1374,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_laboratory_cost
 		custom_cost_trigger = { RUS_bunker_laboratory_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_laboratory_delta }
@@ -1443,7 +1443,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_archive_cost
 		custom_cost_trigger = { RUS_bunker_archive_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_archive_delta }
@@ -1512,7 +1512,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_command_cost
 		custom_cost_trigger = { RUS_bunker_command_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_command_delta }
@@ -1577,7 +1577,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_generator_cost
 		custom_cost_trigger = { RUS_bunker_generator_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_generator_result_tt
 			hidden_effect = { RUS_bunker_generator_start = yes }
@@ -2026,7 +2026,7 @@ RUS_bunker_construction = {
 				}
 				add_political_power = -15
 				add_equipment_to_stockpile = { type = infantry_equipment amount = -10000 }
-				custom_effect_tooltip = 75
+				custom_effect_tooltip = RUS_treasury_75_tt
 				hidden_effect = {
 					add_to_variable = { var = ADISCORD_economy_treasury value = 75 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 75 }
@@ -2076,7 +2076,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_generator_cost
 		custom_cost_trigger = { RUS_bunker_upgrade_1_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_upgrade_1_result_tt
 			hidden_effect = { RUS_bunker_upgrade_1_start = yes }
@@ -2144,7 +2144,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_generator_cost
 		custom_cost_trigger = { RUS_bunker_upgrade_2_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_upgrade_2_result_tt
 			hidden_effect = { RUS_bunker_upgrade_2_start = yes }
@@ -2212,7 +2212,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_generator_cost
 		custom_cost_trigger = { RUS_bunker_upgrade_3_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_upgrade_3_result_tt
 			hidden_effect = { RUS_bunker_upgrade_3_start = yes }
@@ -2285,7 +2285,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_generator_cost
 		custom_cost_trigger = { RUS_bunker_upgrade_4_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_upgrade_4_result_tt
 			hidden_effect = { RUS_bunker_upgrade_4_start = yes }
@@ -2358,7 +2358,7 @@ RUS_bunker_construction = {
 		cost = 0
 		custom_cost_text = RUS_bunker_generator_cost
 		custom_cost_trigger = { RUS_bunker_upgrade_5_affordable = yes }
-		days_remove = 21
+		days_remove = 28
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_upgrade_5_result_tt
 			hidden_effect = { RUS_bunker_upgrade_5_start = yes }
@@ -2525,6 +2525,122 @@ RUS_bunker_construction = {
 }
 
 RUS_development_programmes = {
+	# Timeout-only trial: the result is read once at the deadline.
+	RUS_bunker_silence_trial = {
+		icon = generic_fortify_the_borders
+		allowed = { tag = RUS }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_country_flag = RUS_bunker_silence_trial_active }
+		selectable_mission = no
+		fire_only_once = no
+		days_mission_timeout = 30
+		is_good = yes
+		timeout_effect = {
+			custom_effect_tooltip = RUS_bunker_silence_trial_outcome_tt
+			hidden_effect = { RUS_bunker_silence_trial_settle = yes }
+		}
+	}
+
+	# Timeout-only drop clock; each drop event reopens it until the third drop.
+	RUS_vorkerland_airlift = {
+		icon = generic_air
+		allowed = { tag = RUS }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_country_flag = RUS_vorkerland_airlift_active }
+		selectable_mission = no
+		fire_only_once = no
+		days_mission_timeout = 50
+		is_good = yes
+		timeout_effect = {
+			custom_effect_tooltip = RUS_vorkerland_airlift_next_tt
+			hidden_effect = { RUS_vorkerland_airlift_arrive = yes }
+		}
+	}
+
+	RUS_bunker_mushroom_farm = {
+		icon = generic_construction
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_bunker_deep_gallery
+			check_variable = { var = RUS_bunker_farms value = 3 compare = less_than }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_farm_ready_tt
+				RUS_bunker_farm_ready = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_bunker_mushroom_farm_cost
+		custom_cost_trigger = { RUS_bunker_farm_affordable = yes }
+		days_remove = 45
+		days_re_enable = 7
+		complete_effect = {
+			custom_effect_tooltip = RUS_bunker_mushroom_farm_tt
+			hidden_effect = { RUS_bunker_farm_start = yes }
+		}
+		remove_effect = {
+			custom_effect_tooltip = RUS_bunker_mushroom_farm_done_tt
+			hidden_effect = { RUS_bunker_farm_finish = yes }
+		}
+		cancel_trigger = { RUS_bunker_operational = no }
+		cancel_effect = {
+			custom_effect_tooltip = RUS_bunker_mushroom_farm_cancel_tt
+			hidden_effect = { RUS_bunker_farm_cancel = yes }
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 2
+				check_variable = { var = RUS_bunker_food_balance value = 3 compare = less_than }
+			}
+		}
+	}
+
+	RUS_aimaq_food_requisition = {
+		icon = generic_resources
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_summon_the_aimaqs
+			RUS_khan_governing = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_food_requisition_ready_tt
+				RUS_food_requisition_ready = yes
+			}
+		}
+		cost = 0
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = RUS_food_requisition_tt
+			effect_tooltip = { add_stability = -0.04 }
+			if = {
+				limit = { RUS_suspicion_active = yes }
+				custom_effect_tooltip = RUS_suspicion_gain_4_tt
+			}
+			hidden_effect = {
+				if = {
+					limit = { RUS_food_requisition_ready = yes }
+					add_stability = -0.04
+					add_to_variable = { var = RUS_bunker_food value = 40 }
+					RUS_bunker_refresh = yes
+					set_temp_variable = { var = RUS_suspicion_delta value = 4 }
+					RUS_suspicion_add = yes
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 3
+				check_variable = { var = RUS_bunker_food value = 10 compare = less_than }
+			}
+		}
+	}
+
 	RUS_aimaq_levy = {
 		icon = generic_manpower
 		allowed = { tag = RUS }
@@ -3880,7 +3996,7 @@ RUS_state_balance_measures_category = {
 		complete_effect = {
 			custom_effect_tooltip = RUS_favour_army_15_tt
 			effect_tooltip = {
-				add_manpower = 5000
+				add_manpower = 12000
 				add_war_support = 0.05
 			}
 			hidden_effect = {
@@ -3893,7 +4009,7 @@ RUS_state_balance_measures_category = {
 					set_temp_variable = { var = RUS_black_army_support_delta value = -0.15 }
 					set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
 					RUS_faction_support_change = yes
-					add_manpower = 5000
+					add_manpower = 12000
 					add_war_support = 0.05
 				}
 			}

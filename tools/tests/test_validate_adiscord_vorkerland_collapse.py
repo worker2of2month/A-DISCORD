@@ -3385,6 +3385,10 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
             'phase_effects',
         )
+        map_effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "collapse_map_effects",
+        )
         worker_formation = named_block(
             phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr"
         )
@@ -3461,7 +3465,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             finalizer,
         )
         utilitarian_show = named_block(
-            phase_effects, "ADISCORD_vorkerland_show_utilitarian_victory_superevent"
+            map_effects, "ADISCORD_vorkerland_show_utilitarian_victory_superevent"
         )
         self.assertIn(
             "NOT = { has_country_flag = ADISCORD_vorkerland_utilitarian_victory_presented }",

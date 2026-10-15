@@ -89,6 +89,17 @@ Keep editable artwork, PSD/Blender projects and image-generation prompts in
 `tools/assets/source/`, grouped by asset family. Reference material belongs
 in `tools/assets/reference/`. Do not put authoring sources in runtime `gfx/`
 directories alongside exported game assets.
+For RUS/Khan focus artwork, save requested individual transparent PNG assets
+directly in `tools/assets/source/focus_icons/RUS/` with descriptive snake_case
+names and no per-focus subdirectories. Keep the shared style templates and all
+focus-specific prompts in that directory's single `focus_art_prompts.json`;
+append to it instead of creating separate prompt files for focuses or variants.
+Preserve existing prompt records and variant details when consolidating files,
+and verify their transfer before removing redundant prompt files.
+Show assembled focus compositions in chat only. Leave generated composition
+files outside the mod; do not save them in source, runtime or preview folders
+unless the user explicitly requests saving or integrating a composition.
+This does not authorize deleting existing artwork or changing runtime bindings.
 Generated review images belong in `docs/development/previews/` only while work
 is in progress. After completing development, delete the previews created for
 that work and remove their empty directories. Do not retain or commit temporary
