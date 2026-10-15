@@ -3579,9 +3579,13 @@ class RusCampaignTests(unittest.TestCase):
     def test_terminal_shutdown_refunds_and_clears_policies(self):
         world = self.world()
         # Regional winners hold the volunteer mandate; the crisis roster clears it.
+        government_previews = {"RUS_council_mandate", "RUS_chancery_mandate", "RUS_repair_depots_spirit"}
         world.ideas = {
             name for name in self.ideas
-            if name.startswith("RUS_") and not name.endswith(("_delta", "_bookmark")) and name != "RUS_crisis_volunteer_mandate"
+            if name.startswith("RUS_")
+            and not name.endswith(("_delta", "_bookmark"))
+            and name != "RUS_crisis_volunteer_mandate"
+            and name not in government_previews
         }
         before = world.balances()
         world.begin("RUS_bunker_excavate")
