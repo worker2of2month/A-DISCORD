@@ -3308,7 +3308,12 @@ VAL_new_world_category = {
 			custom_effect_tooltip = VAL_nw_project_cancel_tt
 			hidden_effect = { VAL_nw_begin_restoration = yes }
 		}
-		cancel_trigger = { FROM = { VAL_nw_project_current = no } }
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_local_project_cancel_conditions_tt
+				FROM = { VAL_nw_project_current = no }
+			}
+		}
 		cancel_effect = { hidden_effect = { VAL_nw_cancel_project = yes } }
 		remove_effect = {
 			custom_effect_tooltip = VAL_nw_restore_works_result_tt
@@ -3356,7 +3361,12 @@ VAL_new_world_category = {
 			custom_effect_tooltip = VAL_nw_project_cancel_tt
 			hidden_effect = { VAL_nw_begin_foundry = yes }
 		}
-		cancel_trigger = { FROM = { VAL_nw_project_current = no } }
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_local_project_cancel_conditions_tt
+				FROM = { VAL_nw_project_current = no }
+			}
+		}
 		cancel_effect = { hidden_effect = { VAL_nw_cancel_project = yes } }
 		remove_effect = {
 			custom_effect_tooltip = VAL_nw_expand_foundry_result_tt
@@ -3400,7 +3410,12 @@ VAL_new_world_category = {
 			custom_effect_tooltip = VAL_nw_project_cancel_tt
 			hidden_effect = { VAL_nw_begin_roads = yes }
 		}
-		cancel_trigger = { FROM = { VAL_nw_project_current = no } }
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_local_project_cancel_conditions_tt
+				FROM = { VAL_nw_project_current = no }
+			}
+		}
 		cancel_effect = { hidden_effect = { VAL_nw_cancel_project = yes } }
 		remove_effect = {
 			custom_effect_tooltip = VAL_nw_rebuild_roads_result_tt
@@ -3737,8 +3752,14 @@ VAL_new_world_category = {
 		}
 		cancel_trigger = {
 			OR = {
-				VAL_nw_operational = no
-				VAL_nw_has_reactor_access = no
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_government_unavailable_tt
+					VAL_nw_operational = no
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_reactor_access_lost_tt
+					VAL_nw_has_reactor_access = no
+				}
 			}
 		}
 		cancel_effect = { hidden_effect = { VAL_nw_salvage_archives_refund = yes } }

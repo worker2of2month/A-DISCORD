@@ -1335,6 +1335,11 @@
  ADISCORD_vorkerland_focus_central_minor_front_deadline:0 "Затянувшаяся волна кампании"
  ADISCORD_vorkerland_focus_central_minor_front_deadline_desc:0 "Командование учитывает каждую войну, открытую этой волной. Через 240 дней оперативная запись будет закрыта, но каждый действующий фронт продолжится до настоящей капитуляции или мира."
 
+ ADISCORD_vorkerland_launch_central_minor_wave_target_tt:0 "Есть соседняя независимая страна центральной кампании вне альянса и войн с претендентами, открытая нашему направлению наступления"
+ ADISCORD_vorkerland_launch_central_minor_wave_recovery_tt:0 "Перерыв на восстановление после предыдущей волны завершён"
+ ADISCORD_vorkerland_launch_central_minor_wave_pending_tt:0 "Нет уже назначенного запуска следующей волны"
+ ADISCORD_vorkerland_launch_central_minor_wave_deadline_tt:0 "Предыдущая волна кампании закрыта"
+ ADISCORD_vorkerland_launch_central_minor_wave_peace_tt:0 "Нет войны со странами центральной кампании"
  ADISCORD_vorkerland_launch_central_minor_wave:0 "Открыть центральную волну кампании"
  ADISCORD_vorkerland_launch_central_minor_wave_desc:0 "После однодневной оперативной паузы одновременно объявить войну всем жизнеспособным центральным правительствам на нашей нынешней границе. Следующая волна начнётся лишь после завершения всех записанных фронтов и перегруппировки армии."
  ADISCORD_vorkerland_integrate_eyr_district:0 "Учредить гражданскую администрацию Эйрми"

@@ -1730,11 +1730,38 @@ ADISCORD_vorkerland_focus_operations_category = {
 			ADISCORD_vorkerland_has_adjacent_viable_central_minor = yes
 		}
 		available = {
-			ADISCORD_vorkerland_has_adjacent_viable_central_minor = yes
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_recovery_cooldown }
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active }
-			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_launch_central_minor_wave_target_tt
+				ADISCORD_vorkerland_has_adjacent_viable_central_minor = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_launch_central_minor_wave_recovery_tt
+				NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_recovery_cooldown }
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_launch_central_minor_wave_pending_tt
+				NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_launch_central_minor_wave_deadline_tt
+				NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active }
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_launch_central_minor_wave_peace_tt
+				NOT = {
+					OR = {
+						has_war_with = EYR
+						has_war_with = EGC
+						has_war_with = RIV
+						has_war_with = REV
+						has_war_with = YOR
+						has_war_with = NDN
+						has_war_with = SWB
+						has_war_with = VHV
+						has_war_with = OSV
+					}
+				}
+			}
 			is_subject = no
 			NOT = { has_capitulated = yes }
 		}

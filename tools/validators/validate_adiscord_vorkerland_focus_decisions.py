@@ -164,6 +164,11 @@ LOCALISED_IDS = (
 )
 
 TOOLTIP_IDS = (
+    "ADISCORD_vorkerland_launch_central_minor_wave_target_tt",
+    "ADISCORD_vorkerland_launch_central_minor_wave_recovery_tt",
+    "ADISCORD_vorkerland_launch_central_minor_wave_pending_tt",
+    "ADISCORD_vorkerland_launch_central_minor_wave_deadline_tt",
+    "ADISCORD_vorkerland_launch_central_minor_wave_peace_tt",
     "ADISCORD_vorkerland_integrate_central_district_tt",
     "ADISCORD_vorkerland_central_showdown_command_ready_tt",
     "ADISCORD_vorkerland_central_showdown_campaigns_closed_tt",

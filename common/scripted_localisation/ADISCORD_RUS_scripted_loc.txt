@@ -35,6 +35,23 @@ defined_text = {
 }
 
 defined_text = {
+	name = GetRUSCrisisPhase
+	text = {
+		trigger = { RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } } }
+		localization_key = RUS_crisis_phase_preparing
+	}
+	text = {
+		trigger = { RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } } }
+		localization_key = RUS_crisis_phase_war
+	}
+	text = {
+		trigger = { RUS = { check_variable = { var = RUS_crisis_phase value = 3 compare = equals } } }
+		localization_key = RUS_crisis_phase_victory
+	}
+	text = { localization_key = RUS_crisis_phase_inactive }
+}
+
+defined_text = {
 	name = GetRUSArmyDoctrine
 	text = {
 		trigger = { has_completed_focus = RUS_patient_war }
@@ -2108,6 +2125,33 @@ defined_text = {
 }
 
 defined_text = {
+	name = GetRUSBunkerRushMinimum
+	text = {
+		trigger = { has_completed_focus = RUS_bunker_layer_service_school }
+		localization_key = RUS_bunker_rush_minimum_trained
+	}
+	text = { localization_key = RUS_bunker_rush_minimum_standard }
+}
+
+defined_text = {
+	name = GetRUSBunkerHungerPenalty
+	text = {
+		trigger = { has_completed_focus = RUS_bunker_eternal_headquarters }
+		localization_key = RUS_bunker_hunger_penalty_rationed
+	}
+	text = { localization_key = RUS_bunker_hunger_penalty_standard }
+}
+
+defined_text = {
+	name = GetRUSBunkerSpoilageRate
+	text = {
+		trigger = { has_completed_focus = RUS_bunker_emergency_rations }
+		localization_key = RUS_bunker_spoilage_reduced
+	}
+	text = { localization_key = RUS_bunker_spoilage_standard }
+}
+
+defined_text = {
 	name = GetRUSBunkerFoodState
 	text = {
 		trigger = {
@@ -2990,6 +3034,27 @@ defined_text = {
 		localization_key = RUS_suspicion_growth_press_bureau
 	}
 	text = { localization_key = RUS_suspicion_growth_none }
+}
+
+defined_text = {
+	name = GetRUSEnergyContractLimit
+	text = {
+		trigger = {
+			has_completed_focus = RUS_bunker_surface_market
+			has_completed_focus = RUS_bunker_reserve_shaft
+		}
+		localization_key = RUS_energy_contract_limit_4
+	}
+	text = {
+		trigger = {
+			OR = {
+				has_completed_focus = RUS_bunker_surface_market
+				has_completed_focus = RUS_bunker_reserve_shaft
+			}
+		}
+		localization_key = RUS_energy_contract_limit_3
+	}
+	text = { localization_key = RUS_energy_contract_limit_2 }
 }
 
 defined_text = {

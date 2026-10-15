@@ -3741,14 +3741,40 @@ STP_cw_war_council = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }
 		visible = { STP_pc_val_campaign_route_current = yes NOT = { has_country_flag = STP_pc_val_terms_accepted } VAL = { exists = yes } }
-		available = { STP_pc_val_campaign_route_current = yes STP_pc_can_confront_val = yes NOT = { has_war_with = VAL has_idea = STP_pc_val_campaign_ready has_variable = STP_pc_val_campaign_deposit } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_val_campaign_route_tt
+				STP_pc_val_campaign_route_current = yes
+			}
+			STP_pc_can_confront_val = yes
+			NOT = {
+				has_war_with = VAL
+				has_idea = STP_pc_val_campaign_ready
+				custom_trigger_tooltip = {
+					tooltip = STP_pc_val_campaign_deposit_tt
+					has_variable = STP_pc_val_campaign_deposit
+				}
+			}
+		}
 		cost = 0
 		custom_cost_text = STP_pw_price_900
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
 		days_remove = 35
 		days_re_enable = 90
 		fire_only_once = no
-		cancel_trigger = { OR = { STP_pc_val_campaign_route_current = no STP_pc_can_confront_val = no has_war_with = VAL } }
+		cancel_trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = STP_pc_val_campaign_route_ended_tt
+					STP_pc_val_campaign_route_current = no
+				}
+				custom_trigger_tooltip = {
+					tooltip = STP_pc_val_confrontation_closed_tt
+					STP_pc_can_confront_val = no
+				}
+				has_war_with = VAL
+			}
+		}
 		complete_effect = {
 			custom_effect_tooltip = STP_pc_campaign_paid_tt
 			hidden_effect = {
@@ -3770,22 +3796,24 @@ STP_cw_war_council = {
 		remove_effect = {
 			if = {
 				limit = {
-					OR = {
-						check_variable = {
-							var = STP_pc_val_campaign_deposit
-							value = 100
-							compare = equals
+					hidden_trigger = {
+						OR = {
+							check_variable = {
+								var = STP_pc_val_campaign_deposit
+								value = 100
+								compare = equals
+							}
+							check_variable = {
+								var = STP_pc_val_campaign_deposit
+								value = 900
+								compare = equals
+							}
 						}
-						check_variable = {
-							var = STP_pc_val_campaign_deposit
-							value = 900
-							compare = equals
+						STP_pc_val_campaign_route_current = yes
+						STP_pc_can_confront_val = yes
+						NOT = {
+							has_war_with = VAL
 						}
-					}
-					STP_pc_val_campaign_route_current = yes
-					STP_pc_can_confront_val = yes
-					NOT = {
-						has_war_with = VAL
 					}
 				}
 				hidden_effect = { clear_variable = STP_pc_val_campaign_deposit }
@@ -3844,14 +3872,40 @@ STP_cw_war_council = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }
 		visible = { STP_pc_nod_campaign_route_current = yes NOT = { has_country_flag = STP_pc_nod_terms_accepted } NOD = { exists = yes } }
-		available = { STP_pc_nod_campaign_route_current = yes STP_pc_can_confront_nod = yes NOT = { has_war_with = NOD has_idea = STP_pc_nod_campaign_ready has_variable = STP_pc_nod_campaign_deposit } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_nod_campaign_route_tt
+				STP_pc_nod_campaign_route_current = yes
+			}
+			STP_pc_can_confront_nod = yes
+			NOT = {
+				has_war_with = NOD
+				has_idea = STP_pc_nod_campaign_ready
+				custom_trigger_tooltip = {
+					tooltip = STP_pc_nod_campaign_deposit_tt
+					has_variable = STP_pc_nod_campaign_deposit
+				}
+			}
+		}
 		cost = 0
 		custom_cost_text = STP_pw_price_900
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
 		days_remove = 35
 		days_re_enable = 90
 		fire_only_once = no
-		cancel_trigger = { OR = { STP_pc_nod_campaign_route_current = no STP_pc_can_confront_nod = no has_war_with = NOD } }
+		cancel_trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = STP_pc_nod_campaign_route_ended_tt
+					STP_pc_nod_campaign_route_current = no
+				}
+				custom_trigger_tooltip = {
+					tooltip = STP_pc_nod_confrontation_closed_tt
+					STP_pc_can_confront_nod = no
+				}
+				has_war_with = NOD
+			}
+		}
 		complete_effect = {
 			custom_effect_tooltip = STP_pc_campaign_paid_tt
 			hidden_effect = {
@@ -3873,22 +3927,24 @@ STP_cw_war_council = {
 		remove_effect = {
 			if = {
 				limit = {
-					OR = {
-						check_variable = {
-							var = STP_pc_nod_campaign_deposit
-							value = 100
-							compare = equals
+					hidden_trigger = {
+						OR = {
+							check_variable = {
+								var = STP_pc_nod_campaign_deposit
+								value = 100
+								compare = equals
+							}
+							check_variable = {
+								var = STP_pc_nod_campaign_deposit
+								value = 900
+								compare = equals
+							}
 						}
-						check_variable = {
-							var = STP_pc_nod_campaign_deposit
-							value = 900
-							compare = equals
+						STP_pc_nod_campaign_route_current = yes
+						STP_pc_can_confront_nod = yes
+						NOT = {
+							has_war_with = NOD
 						}
-					}
-					STP_pc_nod_campaign_route_current = yes
-					STP_pc_can_confront_nod = yes
-					NOT = {
-						has_war_with = NOD
 					}
 				}
 				hidden_effect = { clear_variable = STP_pc_nod_campaign_deposit }

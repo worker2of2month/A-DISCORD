@@ -1270,24 +1270,32 @@ country_event = {
 	}
 }
 
-# Fired 14 days after each counted neighbour. The first answer has no cash price.
+# Arrivals during the 90-day cooldown are discarded, not rescheduled.
 country_event = {
 	id = ADISCORD_rus_crisis.31
 	title = ADISCORD_rus_crisis.31.t
 	desc = ADISCORD_rus_crisis.31.d
 	picture = GFX_event_adiscord_perimeter_checkpoint
 	is_triggered_only = yes
-	trigger = { tag = RUS }
+	trigger = {
+		tag = RUS
+		NOT = { has_country_flag = RUS_refugees_cooldown }
+	}
+	immediate = {
+		hidden_effect = {
+			set_country_flag = { flag = RUS_refugees_cooldown days = 90 }
+		}
+	}
 	option = {
 		name = ADISCORD_rus_crisis.31.a
 		ai_chance = { base = 2 }
 		if = {
 			limit = { has_completed_focus = RUS_bunker_refugee_quarters }
-			add_manpower = 4500
+			add_manpower = 6000
 			custom_effect_tooltip = RUS_refugees_food_quarters_tt
 		}
 		else = {
-			add_manpower = 3000
+			add_manpower = 4000
 			custom_effect_tooltip = RUS_refugees_food_tt
 		}
 		custom_effect_tooltip = RUS_refugees_mouths_tt
@@ -1311,7 +1319,7 @@ country_event = {
 		trigger = { RUS_refugees_settle_affordable = yes }
 		ai_chance = { base = 2 }
 		custom_effect_tooltip = RUS_refugees_settle_cost_tt
-		add_manpower = 1500
+		add_manpower = 2000
 		add_stability = 0.02
 		custom_effect_tooltip = RUS_refugees_settle_result_tt
 		hidden_effect = {

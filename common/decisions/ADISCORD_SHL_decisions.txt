@@ -1492,43 +1492,49 @@ SHL_quarters_and_borders = {
 			check_variable = { var = SHL_obligation_kind value = 4 compare = equals }
 		}
 		available = {
-			SHL_country_operable = yes
-			OR = {
-				AND = {
-					check_variable = { var = SHL_obligation_site value = 287 compare = equals }
-					287 = { SHL_furnace_site_controlled = yes }
-				}
-				AND = {
-					check_variable = { var = SHL_obligation_site value = 288 compare = equals }
-					288 = { SHL_furnace_site_controlled = yes }
-				}
-				AND = {
-					check_variable = { var = SHL_obligation_site value = 289 compare = equals }
-					289 = { SHL_furnace_site_controlled = yes }
-				}
-				AND = {
-					check_variable = { var = SHL_obligation_site value = 290 compare = equals }
-					290 = { SHL_furnace_site_controlled = yes }
-				}
-				AND = {
-					check_variable = { var = SHL_obligation_site value = 291 compare = equals }
-					291 = { SHL_furnace_site_controlled = yes }
-				}
-				AND = {
-					check_variable = { var = SHL_obligation_site value = 292 compare = equals }
-					292 = { SHL_furnace_site_controlled = yes }
-				}
-				AND = {
-					check_variable = { var = SHL_obligation_site value = 293 compare = equals }
-					293 = { SHL_furnace_site_controlled = yes }
-				}
-				AND = {
-					check_variable = { var = SHL_obligation_site value = 294 compare = equals }
-					294 = { SHL_furnace_site_controlled = yes }
-				}
-				AND = {
-					check_variable = { var = SHL_obligation_site value = 295 compare = equals }
-					295 = { SHL_furnace_site_controlled = yes }
+			custom_trigger_tooltip = {
+				tooltip = SHL_foreclose_government_tt
+				SHL_country_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = SHL_pledged_furnace_controlled_tt
+				OR = {
+					AND = {
+						check_variable = { var = SHL_obligation_site value = 287 compare = equals }
+						287 = { SHL_furnace_site_controlled = yes }
+					}
+					AND = {
+						check_variable = { var = SHL_obligation_site value = 288 compare = equals }
+						288 = { SHL_furnace_site_controlled = yes }
+					}
+					AND = {
+						check_variable = { var = SHL_obligation_site value = 289 compare = equals }
+						289 = { SHL_furnace_site_controlled = yes }
+					}
+					AND = {
+						check_variable = { var = SHL_obligation_site value = 290 compare = equals }
+						290 = { SHL_furnace_site_controlled = yes }
+					}
+					AND = {
+						check_variable = { var = SHL_obligation_site value = 291 compare = equals }
+						291 = { SHL_furnace_site_controlled = yes }
+					}
+					AND = {
+						check_variable = { var = SHL_obligation_site value = 292 compare = equals }
+						292 = { SHL_furnace_site_controlled = yes }
+					}
+					AND = {
+						check_variable = { var = SHL_obligation_site value = 293 compare = equals }
+						293 = { SHL_furnace_site_controlled = yes }
+					}
+					AND = {
+						check_variable = { var = SHL_obligation_site value = 294 compare = equals }
+						294 = { SHL_furnace_site_controlled = yes }
+					}
+					AND = {
+						check_variable = { var = SHL_obligation_site value = 295 compare = equals }
+						295 = { SHL_furnace_site_controlled = yes }
+					}
 				}
 			}
 		}

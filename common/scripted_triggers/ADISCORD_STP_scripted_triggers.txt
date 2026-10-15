@@ -1576,13 +1576,27 @@ STP_pc_can_launch_nod_liberation = {
 }
 
 STP_pc_can_confront_val = {
-	tag = STS
-	NOT = { has_country_flag = STP_pc_val_terms_accepted }
+	hidden_trigger = { tag = STS }
+	custom_trigger_tooltip = {
+		tooltip = STP_pc_val_terms_not_accepted_tt
+		NOT = { has_country_flag = STP_pc_val_terms_accepted }
+	}
 	has_capitulated = no
-	VAL = { exists = yes has_capitulated = no }
+	VAL = {
+		exists = yes
+		has_capitulated = no
+	}
 	OR = {
 		has_war_with = VAL
-		AND = { NOT = { has_country_flag = VAL_stelander_truce } is_subject = no NOT = { is_in_faction_with = VAL } VAL = { is_subject = no } }
+		AND = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_val_liberation_truce_tt
+				NOT = { has_country_flag = VAL_stelander_truce }
+			}
+			is_subject = no
+			NOT = { is_in_faction_with = VAL }
+			VAL = { is_subject = no }
+		}
 	}
 }
 
@@ -1710,13 +1724,25 @@ STP_pc_sdir_nod_resolved = {
 }
 
 STP_pc_can_confront_nod = {
-	tag = STS
-	NOT = { has_country_flag = STP_pc_nod_terms_accepted }
+	hidden_trigger = { tag = STS }
+	custom_trigger_tooltip = {
+		tooltip = STP_pc_nod_terms_not_accepted_tt
+		NOT = { has_country_flag = STP_pc_nod_terms_accepted }
+	}
 	has_capitulated = no
-	NOD = { STP_pc_nod_government_exists = yes }
+	NOD = {
+		custom_trigger_tooltip = {
+			tooltip = STP_pc_nod_confront_government_tt
+			STP_pc_nod_government_exists = yes
+		}
+	}
 	OR = {
 		has_war_with = NOD
-		AND = { is_subject = no NOT = { is_in_faction_with = NOD } NOD = { is_subject = no } }
+		AND = {
+			is_subject = no
+			NOT = { is_in_faction_with = NOD }
+			NOD = { is_subject = no }
+		}
 	}
 }
 

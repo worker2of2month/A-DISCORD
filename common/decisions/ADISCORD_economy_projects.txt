@@ -28,24 +28,36 @@ ADISCORD_economy_projects = {
 		days_re_enable = 90
 		complete_effect = {
 			custom_effect_tooltip = ADISCORD_economy_precision_tooling_delivery_tt
-			effect_tooltip = { add_ideas = ADISCORD_economy_precision_tooling }
 			hidden_effect = { ADISCORD_economy_start_precision_tooling = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				NOT = { check_variable = { var = ADISCORD_economy_project_id value = 1 compare = equals } }
-				ADISCORD_economy_project_can_continue = no
-				ADISCORD_economy_precision_tooling_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_contract_cancel_conditions_tt
+				OR = {
+					NOT = { check_variable = { var = ADISCORD_economy_project_id value = 1 compare = equals } }
+					ADISCORD_economy_project_can_continue = no
+					ADISCORD_economy_precision_tooling_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
 			if = {
-				limit = { check_variable = { var = ADISCORD_economy_project_id value = 1 compare = equals } }
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = ADISCORD_economy_project_id value = 1 compare = equals }
+					}
+				}
 				custom_effect_tooltip = ADISCORD_economy_project_cancelled_tt
 				hidden_effect = { ADISCORD_economy_cancel_project = yes }
 			}
 		}
-		remove_effect = { ADISCORD_economy_finish_precision_tooling = yes }
+		remove_effect = {
+			effect_tooltip = {
+				add_ideas = ADISCORD_economy_precision_tooling
+			}
+			custom_effect_tooltip = ADISCORD_economy_project_settlement_tt
+			hidden_effect = { ADISCORD_economy_finish_precision_tooling = yes }
+		}
 		ai_will_do = {
 			base = 4
 			modifier = { factor = 0 ADISCORD_economy_ai_is_healthy = no }
@@ -72,24 +84,36 @@ ADISCORD_economy_projects = {
 		days_re_enable = 90
 		complete_effect = {
 			custom_effect_tooltip = ADISCORD_economy_automated_industry_delivery_tt
-			effect_tooltip = { add_ideas = ADISCORD_economy_automated_industry }
 			hidden_effect = { ADISCORD_economy_start_automated_industry = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				NOT = { check_variable = { var = ADISCORD_economy_project_id value = 2 compare = equals } }
-				ADISCORD_economy_project_can_continue = no
-				ADISCORD_economy_automated_industry_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_contract_cancel_conditions_tt
+				OR = {
+					NOT = { check_variable = { var = ADISCORD_economy_project_id value = 2 compare = equals } }
+					ADISCORD_economy_project_can_continue = no
+					ADISCORD_economy_automated_industry_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
 			if = {
-				limit = { check_variable = { var = ADISCORD_economy_project_id value = 2 compare = equals } }
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = ADISCORD_economy_project_id value = 2 compare = equals }
+					}
+				}
 				custom_effect_tooltip = ADISCORD_economy_project_cancelled_tt
 				hidden_effect = { ADISCORD_economy_cancel_project = yes }
 			}
 		}
-		remove_effect = { ADISCORD_economy_finish_automated_industry = yes }
+		remove_effect = {
+			effect_tooltip = {
+				add_ideas = ADISCORD_economy_automated_industry
+			}
+			custom_effect_tooltip = ADISCORD_economy_project_settlement_tt
+			hidden_effect = { ADISCORD_economy_finish_automated_industry = yes }
+		}
 		ai_will_do = {
 			base = 4
 			modifier = { factor = 0 ADISCORD_economy_ai_is_healthy = no }
@@ -116,24 +140,36 @@ ADISCORD_economy_projects = {
 		days_re_enable = 90
 		complete_effect = {
 			custom_effect_tooltip = ADISCORD_economy_national_computing_delivery_tt
-			effect_tooltip = { add_ideas = ADISCORD_economy_national_computing }
 			hidden_effect = { ADISCORD_economy_start_national_computing = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				NOT = { check_variable = { var = ADISCORD_economy_project_id value = 3 compare = equals } }
-				ADISCORD_economy_project_can_continue = no
-				ADISCORD_economy_national_computing_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_contract_cancel_conditions_tt
+				OR = {
+					NOT = { check_variable = { var = ADISCORD_economy_project_id value = 3 compare = equals } }
+					ADISCORD_economy_project_can_continue = no
+					ADISCORD_economy_national_computing_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
 			if = {
-				limit = { check_variable = { var = ADISCORD_economy_project_id value = 3 compare = equals } }
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = ADISCORD_economy_project_id value = 3 compare = equals }
+					}
+				}
 				custom_effect_tooltip = ADISCORD_economy_project_cancelled_tt
 				hidden_effect = { ADISCORD_economy_cancel_project = yes }
 			}
 		}
-		remove_effect = { ADISCORD_economy_finish_national_computing = yes }
+		remove_effect = {
+			effect_tooltip = {
+				add_ideas = ADISCORD_economy_national_computing
+			}
+			custom_effect_tooltip = ADISCORD_economy_project_settlement_tt
+			hidden_effect = { ADISCORD_economy_finish_national_computing = yes }
+		}
 		ai_will_do = {
 			base = 4
 			modifier = { factor = 0 ADISCORD_economy_ai_is_healthy = no }
@@ -162,8 +198,6 @@ ADISCORD_economy_projects = {
 		days_re_enable = 60
 		complete_effect = {
 			custom_effect_tooltip = ADISCORD_economy_logistics_contract_delivery_tt
-			effect_tooltip = { add_equipment_to_stockpile = { type = motorized_equipment_1 amount = 900 producer = ROOT }
-				add_equipment_to_stockpile = { type = armored_train_equipment_1 amount = 60 producer = ROOT } }
 			hidden_effect = { ADISCORD_economy_start_logistics_contract = yes }
 		}
 		cancel_trigger = {
@@ -178,12 +212,31 @@ ADISCORD_economy_projects = {
 		}
 		cancel_effect = {
 			if = {
-				limit = { check_variable = { var = ADISCORD_economy_project_id value = 4 compare = equals } }
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = ADISCORD_economy_project_id value = 4 compare = equals }
+					}
+				}
 				custom_effect_tooltip = ADISCORD_economy_project_cancelled_tt
 				hidden_effect = { ADISCORD_economy_cancel_project = yes }
 			}
 		}
-		remove_effect = { ADISCORD_economy_finish_logistics_contract = yes }
+		remove_effect = {
+			effect_tooltip = {
+				add_equipment_to_stockpile = {
+					type = motorized_equipment_1
+					amount = 900
+					producer = ROOT
+				}
+				add_equipment_to_stockpile = {
+					type = armored_train_equipment_1
+					amount = 60
+					producer = ROOT
+				}
+			}
+			custom_effect_tooltip = ADISCORD_economy_project_settlement_tt
+			hidden_effect = { ADISCORD_economy_finish_logistics_contract = yes }
+		}
 		ai_will_do = {
 			base = 1
 			modifier = { factor = 0 ADISCORD_economy_ai_is_healthy = no }
@@ -211,7 +264,6 @@ ADISCORD_economy_projects = {
 		days_re_enable = 60
 		complete_effect = {
 			custom_effect_tooltip = ADISCORD_economy_drone_contract_delivery_tt
-			effect_tooltip = { add_equipment_to_stockpile = { type = ADISCORD_recon_drone_carrier_2170 amount = 600 producer = ROOT } }
 			hidden_effect = { ADISCORD_economy_start_drone_contract = yes }
 		}
 		cancel_trigger = {
@@ -226,12 +278,26 @@ ADISCORD_economy_projects = {
 		}
 		cancel_effect = {
 			if = {
-				limit = { check_variable = { var = ADISCORD_economy_project_id value = 5 compare = equals } }
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = ADISCORD_economy_project_id value = 5 compare = equals }
+					}
+				}
 				custom_effect_tooltip = ADISCORD_economy_project_cancelled_tt
 				hidden_effect = { ADISCORD_economy_cancel_project = yes }
 			}
 		}
-		remove_effect = { ADISCORD_economy_finish_drone_contract = yes }
+		remove_effect = {
+			effect_tooltip = {
+				add_equipment_to_stockpile = {
+					type = ADISCORD_recon_drone_carrier_2170
+					amount = 600
+					producer = ROOT
+				}
+			}
+			custom_effect_tooltip = ADISCORD_economy_project_settlement_tt
+			hidden_effect = { ADISCORD_economy_finish_drone_contract = yes }
+		}
 		ai_will_do = {
 			base = 1
 			modifier = { factor = 0 ADISCORD_economy_ai_is_healthy = no }
@@ -259,7 +325,6 @@ ADISCORD_economy_projects = {
 		days_re_enable = 60
 		complete_effect = {
 			custom_effect_tooltip = ADISCORD_economy_platform_contract_delivery_tt
-			effect_tooltip = { add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 720 producer = ROOT } }
 			hidden_effect = { ADISCORD_economy_start_platform_contract = yes }
 		}
 		cancel_trigger = {
@@ -274,12 +339,26 @@ ADISCORD_economy_projects = {
 		}
 		cancel_effect = {
 			if = {
-				limit = { check_variable = { var = ADISCORD_economy_project_id value = 6 compare = equals } }
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = ADISCORD_economy_project_id value = 6 compare = equals }
+					}
+				}
 				custom_effect_tooltip = ADISCORD_economy_project_cancelled_tt
 				hidden_effect = { ADISCORD_economy_cancel_project = yes }
 			}
 		}
-		remove_effect = { ADISCORD_economy_finish_platform_contract = yes }
+		remove_effect = {
+			effect_tooltip = {
+				add_equipment_to_stockpile = {
+					type = ADISCORD_combat_platform_2170
+					amount = 720
+					producer = ROOT
+				}
+			}
+			custom_effect_tooltip = ADISCORD_economy_project_settlement_tt
+			hidden_effect = { ADISCORD_economy_finish_platform_contract = yes }
+		}
 		ai_will_do = {
 			base = 1
 			modifier = { factor = 0 ADISCORD_economy_ai_is_healthy = no }
@@ -290,9 +369,17 @@ ADISCORD_economy_projects = {
 	ADISCORD_economy_abort_project = {
 		icon = generic_political_pressure
 		visible = { has_variable = ADISCORD_economy_project_id }
-		available = { has_variable = ADISCORD_economy_project_deposit }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_project_paid_tt
+				has_variable = ADISCORD_economy_project_deposit
+			}
+		}
 		cost = 0
-		complete_effect = { custom_effect_tooltip = ADISCORD_economy_project_cancelled_tt hidden_effect = { ADISCORD_economy_cancel_project = yes } }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_economy_project_cancelled_tt
+			hidden_effect = { ADISCORD_economy_cancel_project = yes }
+		}
 		ai_will_do = { base = 0 }
 	}
 }
@@ -305,9 +392,12 @@ ADISCORD_economy_demobilization = {
 		is_good = no
 		days_mission_timeout = 120
 		activation = {
-			ADISCORD_economy_demobilization_can_proceed = yes
-			check_variable = { var = ADISCORD_economy_demobilization_phase value = 1 compare = equals }
-			ADISCORD_economy_demobilization_needed = yes
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_demobilization_start_tt
+				ADISCORD_economy_demobilization_can_proceed = yes
+				check_variable = { var = ADISCORD_economy_demobilization_phase value = 1 compare = equals }
+				ADISCORD_economy_demobilization_needed = yes
+			}
 		}
 		available = {
 			hidden_trigger = { ADISCORD_economy_demobilization_can_proceed = yes }
@@ -333,10 +423,13 @@ ADISCORD_economy_demobilization = {
 			}
 		}
 		cancel_trigger = {
-			OR = {
-				has_war = yes
-				ADISCORD_economy_demobilization_threat = yes
-				check_variable = { var = ADISCORD_economy_demobilization_phase value = 1 compare = less_than }
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_demobilization_cancel_tt
+				OR = {
+					has_war = yes
+					ADISCORD_economy_demobilization_threat = yes
+					check_variable = { var = ADISCORD_economy_demobilization_phase value = 1 compare = less_than }
+				}
 			}
 		}
 		complete_effect = {

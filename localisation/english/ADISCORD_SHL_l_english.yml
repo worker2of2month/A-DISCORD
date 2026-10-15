@@ -665,6 +665,8 @@
  SHL_close_obligation: "Settle the unfinished obligation"
  SHL_close_obligation_desc: "Delivered weapons remain. Unfinished civic work returns its deposit. Export and pledge liabilities must be repaid; any treasury shortfall becomes ordinary public debt. Materials and diverted production are not returned."
  SHL_close_obligation_tt: "Deposit refund: §Y[?SHL_obligation_deposit|0]§! £ADISCORD_economy_treasury_texticon. Payable: §Y[?SHL_obligation_liability|0]§! £ADISCORD_economy_treasury_texticon; shortfall becomes public debt. Clears the ledger."
+ SHL_foreclose_government_tt:0 "Furnace administration is operating; Shahrabad has not capitulated"
+ SHL_pledged_furnace_controlled_tt:0 "The pledged furnace in [SHLGetOrderSite] is owned and controlled by Shahrabad"
  SHL_foreclose_furnace: "Surrender the pledge to the city treasury"
  SHL_foreclose_furnace_desc: "The city accepts the operating furnace against the outstanding debt. The house loses ownership and its hereditary vote while production continues. The regent preserves cash by breaking solidarity among the crests."
  SHL_foreclose_furnace_tt: "Clear the pledge balance and transfer the furnace to its city. The house loses its vote. House pressure: §R+15§!; unrest: §G-8§!."

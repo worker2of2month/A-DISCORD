@@ -1585,6 +1585,68 @@ class RusCampaignTests(unittest.TestCase):
                 return scalar(entry.value, "localization_key")
         self.fail(f"No text selected for {name}")
 
+    def test_bunker_displayed_durations_match_paid_decision_timers(self):
+        rooms = ("guard", "shelter", "water", "signals", "workshop", "granary", "clinic", "laboratory", "archive", "command")
+        names = ["excavate", *rooms, *(f"upgrade_{layer}" for layer in range(1, 6)), "generator", "reinforce"]
+        for language in ("russian", "english"):
+            loc = dict(re.findall(r'^\s+(\w+):\d*\s+"(.*)"\s*$', read(f"localisation/{language}/{BASE}_l_{language}.yml"), re.M))
+            for name in names:
+                decision = "RUS_bunker_" + name
+                days = int(scalar(self.decisions[decision], "days_remove"))
+                suffixes = ("_desc", "_order_price", "_service_tt" if name in ("generator", "reinforce") else "_ui_tt")
+                for suffix in suffixes:
+                    key = decision + suffix
+                    with self.subTest(language=language, key=key):
+                        plain = re.sub(r"§.", "", loc[key])
+                        durations = re.findall(r"\b(\d+)\s+(?:дн\.|дней|день|days\b)", plain)
+                        self.assertEqual(durations, [str(days)])
+
+    def test_bunker_work_and_food_tooltips_follow_actual_focus_upgrades(self):
+        for upgraded in (False, True):
+            world = self.world()
+            focuses = {"RUS_bunker_layer_service_school", "RUS_bunker_eternal_headquarters", "RUS_bunker_emergency_rations"}
+            world.focuses.difference_update(focuses)
+            if upgraded:
+                world.focuses.update(focuses)
+            world.variables.update({"RUS_bunker_depth": 1, "RUS_bunker_layer_1": 1, "RUS_bunker_food": 0})
+            world.run("RUS_bunker_refresh")
+            minimum_key = self.bunker_text(world, "GetRUSBunkerRushMinimum")
+            minimum = int(re.search(r"\d+", self.loc[minimum_key])[0])
+            for integrity, allowed in ((minimum - 0.01, False), (minimum, True)):
+                world.variables["RUS_bunker_integrity"] = integrity
+                self.assertEqual(world.matches(self.triggers["RUS_bunker_rush_requirements"]), allowed)
+            hunger = "RUS_bunker_hunger_rationed" if upgraded else "RUS_bunker_hunger"
+            self.assertIn(hunger, world.ideas)
+            hunger_key = self.bunker_text(world, "GetRUSBunkerHungerPenalty")
+            spoilage_key = self.bunker_text(world, "GetRUSBunkerSpoilageRate")
+            for language in ("russian", "english"):
+                loc = dict(re.findall(r'^\s+(\w+):\d*\s+"(.*)"\s*$', read(f"localisation/{language}/{BASE}_l_{language}.yml"), re.M))
+                for modifier in block(self.ideas[hunger], "modifier"):
+                    value = float(modifier.value)
+                    amount = f"{value:.2f}" if modifier.key == "political_power_gain" else f"{value * 100:g}%"
+                    self.assertIn(f"§R{amount}§!", loc[hunger_key])
+                rate = float(re.search(r"([\d.]+)%", loc[spoilage_key])[1]) / 100
+                world.variables.update({"RUS_bunker_food": 100, "RUS_bunker_food_capacity": 100})
+                world.run("RUS_bunker_spoil_now")
+                self.assertAlmostEqual(world.value("RUS_bunker_food_spoiled"), 25 * rate)
+                self.assertIn("[?RUS_bunker_food_fed_line|0]", loc["RUS_bunker_metric_food_tt"])
+                for variable in ("RUS_bunker_rush_damage", "RUS_bunker_reinforce_amount"):
+                    self.assertIn(f"[?{variable}|0]", loc["RUS_bunker_metric_integrity_tt"])
+
+    def test_displayed_energy_contract_cap_matches_each_focus_combination(self):
+        focuses = ("RUS_bunker_surface_market", "RUS_bunker_reserve_shaft")
+        for completed in product((False, True), repeat=2):
+            world = self.world()
+            world.focuses.difference_update(focuses)
+            world.focuses.update(focus for focus, done in zip(focuses, completed) if done)
+            key = self.bunker_text(world, "GetRUSEnergyContractLimit")
+            for language in ("russian", "english"):
+                loc = dict(re.findall(r'^\s+(\w+):\d*\s+"(.*)"\s*$', read(f"localisation/{language}/{BASE}_l_{language}.yml"), re.M))
+                cap = int(re.search(r"\d+", loc[key])[0])
+                for contracts, allowed in ((cap - 1, True), (cap, False)):
+                    world.variables["RUS_energy_contracts"] = contracts
+                    self.assertEqual(world.matches(self.triggers["RUS_energy_contract_room"]), allowed, completed)
+
     def test_room_forecasts_match_settled_power_and_net_food(self):
         rooms = (
             ("guard", 2, "room"), ("shelter", 1, "room"),
@@ -2647,7 +2709,7 @@ class RusCampaignTests(unittest.TestCase):
                 self.assertEqual(world.value("ADISCORD_economy_treasury"), 100 - cash)
                 self.assertEqual(world.value("RUS_bunker_food"), 80 - food)
                 if name == "RUS_shadow_rifles":
-                    self.assertEqual(world.equipment["infantry_equipment"] - rifles, 3000)
+                    self.assertEqual(world.equipment["infantry_equipment"] - rifles, 10000)
                 elif name == "RUS_shadow_designs":
                     self.assertEqual(world.tech_bonuses, ["RUS_stolen_designs"])
                     self.assertIn("RUS_stolen_designs", self.loc)
@@ -2792,6 +2854,28 @@ class RusCampaignTests(unittest.TestCase):
         hooks = block(parse("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), "on_actions")
         self.assertIn("RUS_levies_monthly", [row.key for row in walk(block(hooks, "on_monthly_RUS"))])
 
+    def test_refugee_arrivals_are_discarded_during_shared_cooldown(self):
+        event = next(
+            row.value for row in parse("events/ADISCORD_RUS_events.txt")
+            if row.key == "country_event" and scalar(row.value, "id") == "ADISCORD_rus_crisis.31"
+        )
+        immediate = block(event, "immediate")
+        cooldown = next(row.value for row in walk(immediate) if row.key == "set_country_flag")
+        self.assertEqual(scalar(cooldown, "flag"), "RUS_refugees_cooldown")
+        self.assertEqual(scalar(cooldown, "days"), "90")
+        world = self.world()
+        world.events.clear()
+        self.assertTrue(world.matches(block(event, "trigger")))
+        world.execute(immediate)
+        for _ in range(6):
+            self.assertFalse(world.matches(block(event, "trigger")))
+        self.assertEqual(world.events, [])
+        self.assertFalse(any(row.key == "country_event" for row in walk(event)))
+        # Model expiry explicitly; native flag clocks require a campaign check.
+        world.flags.remove("RUS_refugees_cooldown")
+        self.assertTrue(world.matches(block(event, "trigger")))
+        self.assertEqual(world.events, [])
+
     def test_refugees_and_winter_offer_priced_alternatives(self):
         events = {
             scalar(row.value, "id"): row.value for row in parse("events/ADISCORD_RUS_events.txt")
@@ -2815,7 +2899,7 @@ class RusCampaignTests(unittest.TestCase):
                 world.value("ADISCORD_society_development_progress") - 10,
                 round(world.stability - stability, 2),
             ))
-        self.assertEqual(results, [(3000, 30, 0, 0, 0), (1500, 0, 35, 15, 0.02), (0, 0, 0, 0, -0.03)])
+        self.assertEqual(results, [(4000, 30, 0, 0, 0), (2000, 0, 35, 15, 0.02), (0, 0, 0, 0, -0.03)])
         settle = self.effects["ADISCORD_vorkerland_rus_settle_dirty_target"]
         delayed = [row.value for row in walk(settle) if row.key == "country_event" and scalar(row.value, "id") == "ADISCORD_rus_crisis.31"]
         self.assertEqual({scalar(row, "days") for row in delayed}, {"14"})
@@ -3399,7 +3483,7 @@ class RusCampaignTests(unittest.TestCase):
             if row.key == "country_event" and scalar(row.value, "id") == "ADISCORD_rus_crisis.31"
         )
         accept = next(row.value for row in event if row.key == "option")
-        for quarters, men, food in ((False, 3000, 30), (True, 4500, 15)):
+        for quarters, men, food in ((False, 4000, 30), (True, 6000, 15)):
             world = refreshed("RUS_bunker_refugee_quarters") if quarters else refreshed()
             world.manpower = 0.0
             world.variables["RUS_bunker_food"] = 50

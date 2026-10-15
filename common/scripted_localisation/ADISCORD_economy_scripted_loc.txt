@@ -444,3 +444,44 @@ defined_text = {
 	}
 	text = { localization_key = ADISCORD_economy_nod_division_capacity_empty }
 }
+
+defined_text = {
+	name = GetADISCORDProjectRefundLoc
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_project_deposit value = 500 compare = equals }
+		}
+		localization_key = ADISCORD_economy_precision_tooling_refund_tt
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_project_deposit value = 700 compare = equals }
+		}
+		localization_key = ADISCORD_economy_automated_industry_refund_tt
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_project_deposit value = 900 compare = equals }
+		}
+		localization_key = ADISCORD_economy_national_computing_refund_tt
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_project_deposit value = 450 compare = equals }
+		}
+		localization_key = ADISCORD_economy_logistics_contract_refund_tt
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_project_deposit value = 600 compare = equals }
+		}
+		localization_key = ADISCORD_economy_drone_contract_refund_tt
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_project_deposit value = 1000 compare = equals }
+		}
+		localization_key = ADISCORD_economy_platform_contract_refund_tt
+	}
+	text = { localization_key = ADISCORD_economy_project_refund_tt }
+}

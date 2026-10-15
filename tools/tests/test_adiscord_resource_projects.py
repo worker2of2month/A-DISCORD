@@ -482,7 +482,7 @@ class ResourceProjectSourceContracts(unittest.TestCase):
                 summary = direct(cancellation, 'custom_trigger_tooltip')
                 key = direct(summary, 'tooltip')
                 self.assertEqual(direct(decision, 'days_re_enable'), '60')
-                preview = direct(direct(decision, 'complete_effect'), 'effect_tooltip')
+                preview = direct(direct(decision, 'remove_effect'), 'effect_tooltip')
                 expected = {
                     direct(node.value, 'type'): float(direct(node.value, 'amount'))
                     for node in preview
@@ -496,8 +496,48 @@ class ResourceProjectSourceContracts(unittest.TestCase):
                     self.assertIn(' ' + key + ':0', loc)
                     delivery = next(line for line in loc.splitlines() if line.startswith(' ' + P + name + '_delivery_tt:'))
                     self.assertNotIn('$ADISCORD_economy_project_terms_tt$', delivery)
-                    self.assertIn('75%', delivery)
+                    settlement = next(line for line in loc.splitlines() if line.startswith(' ' + P + 'project_settlement_tt:'))
+                    self.assertIn('75%', settlement)
+                    self.assertIn('25%', settlement)
                     self.assertIn('60', delivery)
+
+    def test_refund_preview_matches_actual_paid_receipt_and_cancellation(self):
+        definitions = parse_clausewitz(read(
+            'common/scripted_localisation/ADISCORD_economy_scripted_loc.txt'
+        ))
+        selector = next(
+            node.value for node in definitions
+            if node.key == 'defined_text'
+            and direct(node.value, 'name') == 'GetADISCORDProjectRefundLoc'
+        )
+        for name, (_, cost, _, _, _) in PROJECTS.items():
+            with self.subTest(project=name):
+                fixture = ProjectFixture()
+                fixture.run(P + 'start_' + name)
+                paid_balance = fixture.scopes['A'][P + 'treasury']
+                selected = next(
+                    direct(node.value, 'localization_key')
+                    for node in selector if node.key == 'text'
+                    and (
+                        not any(child.key == 'trigger' for child in node.value)
+                        or fixture.condition(direct(node.value, 'trigger'))
+                    )
+                )
+                fixture.run(P + 'cancel_project')
+                refund = fixture.scopes['A'][P + 'treasury'] - paid_balance
+                loss = cost - refund
+                for language in ('russian', 'english'):
+                    loc = read(f'localisation/{language}/ADISCORD_economy_l_{language}.yml')
+                    value = re.search(
+                        r'(?m)^ ' + re.escape(selected) + r':0 "([^"\n]+)"', loc
+                    )[1]
+                    amounts = re.findall(
+                        r'§[GR]([0-9.,]+)§! £ADISCORD_economy_treasury_texticon', value
+                    )
+                    self.assertEqual(
+                        [float(amount.replace(',', '.')) for amount in amounts],
+                        [refund, loss],
+                    )
 
     def test_all_resource_costs_are_country_scoped_native_consumers(self):
         source = read(DYNAMIC)

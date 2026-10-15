@@ -84,7 +84,7 @@ LOC_KEYS = (
     "RUS_campaign_irt_border_tt",
     "RUS_campaign_sca_border_tt",
     "RUS_proclaim_the_last_empire_available_tt",
-    "RUS_last_empire_cosmetic_tt",
+    "RUS_proclaim_programme_tt",
 )
 
 

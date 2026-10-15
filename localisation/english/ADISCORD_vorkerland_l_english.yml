@@ -990,6 +990,11 @@
  ADISCORD_vorkerland_focus_central_minor_front_deadline:0 "A Protracted Campaign Wave"
  ADISCORD_vorkerland_focus_central_minor_front_deadline_desc:0 "The command tracks every war opened by this wave. After 240 days the operational record is retired, but every live front continues until a real capitulation or peace."
 
+ ADISCORD_vorkerland_launch_central_minor_wave_target_tt:0 "An adjacent independent central-campaign country is outside factions and claimant wars, and is open to our advance"
+ ADISCORD_vorkerland_launch_central_minor_wave_recovery_tt:0 "Recovery after the previous wave is complete"
+ ADISCORD_vorkerland_launch_central_minor_wave_pending_tt:0 "No launch of another wave is pending"
+ ADISCORD_vorkerland_launch_central_minor_wave_deadline_tt:0 "The previous campaign wave has been closed"
+ ADISCORD_vorkerland_launch_central_minor_wave_peace_tt:0 "Not at war with the central-campaign countries"
  ADISCORD_vorkerland_launch_central_minor_wave:0 "Open the Central Campaign Wave"
  ADISCORD_vorkerland_launch_central_minor_wave_desc:0 "After a one-day operational pause, declare war simultaneously on every viable central government along our present border. A new wave can begin only after all recorded fronts end and the army regroups."
  ADISCORD_vorkerland_integrate_eyr_district:0 "Establish the Eyrmi Civil Administration"
