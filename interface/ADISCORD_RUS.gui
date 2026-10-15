@@ -1637,13 +1637,61 @@ guiTypes = {
 			fixedsize = yes
 			alwaystransparent = yes
 		}
+		buttonType = {
+			name = "RUS_bunker_food_sale_button"
+			position = { x = 8 y = 668 }
+			size = { x = 444 y = 122 }
+			quadTextureSprite = "GFX_RUS_bunker_card"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_food_sale_service_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_food_sale_button_label"
+			position = { x = 16 y = 675 }
+			text = "RUS_bunker_food_sale_button_label"
+			font = "ADISCORD_bunker_title"
+			maxWidth = 428
+			maxHeight = 18
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_food_sale_button_benefit"
+			position = { x = 16 y = 699 }
+			text = "RUS_bunker_food_sale_button_benefit"
+			font = "ADISCORD_bunker_16"
+			maxWidth = 428
+			maxHeight = 32
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_food_sale_button_cost"
+			position = { x = 16 y = 738 }
+			text = "RUS_bunker_food_sale_button_cost"
+			font = "ADISCORD_bunker_16"
+			maxWidth = 428
+			maxHeight = 18
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_food_sale_button_status"
+			position = { x = 16 y = 763 }
+			text = "RUS_bunker_food_sale_button_status"
+			font = "ADISCORD_bunker_16"
+			maxWidth = 428
+			maxHeight = 18
+			fixedsize = yes
+			alwaystransparent = yes
+		}
 		instantTextBoxType = {
 			name = "RUS_bunker_service_trade"
-			position = { x = 16 y = 691 }
+			position = { x = 16 y = 792 }
 			text = "RUS_bunker_service_trade"
 			font = "ADISCORD_bunker_16"
 			maxWidth = 428
-			maxHeight = 80
+			maxHeight = 32
 			fixedsize = yes
 			alwaystransparent = yes
 		}

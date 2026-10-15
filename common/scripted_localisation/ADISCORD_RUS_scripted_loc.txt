@@ -3439,6 +3439,25 @@ defined_text = {
 }
 
 defined_text = {
+	name = GetRUSBunkerServicefood_sale
+	text = {
+		trigger = { RUS_bunker_operational = no }
+		localization_key = RUS_bunker_need_operational
+	}
+	text = {
+		trigger = { has_country_flag = RUS_bunker_food_sale_ui_cooldown }
+		localization_key = RUS_bunker_food_sale_cooldown
+	}
+	text = {
+		trigger = { RUS_bunker_food_sale_ui_available = yes }
+		localization_key = RUS_bunker_service_ready
+	}
+	text = {
+		localization_key = RUS_bunker_food_sale_need_stock
+	}
+}
+
+defined_text = {
 	name = GetRUSBunkerServiceenergy_sale
 	text = {
 		trigger = {

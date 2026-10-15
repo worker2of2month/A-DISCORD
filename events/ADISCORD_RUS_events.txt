@@ -836,6 +836,24 @@ country_event = {
 	option = { name = ADISCORD_rus_campaign.38.a }
 }
 
+country_event = {
+	id = ADISCORD_rus_campaign.39
+	title = ADISCORD_rus_campaign.39.t
+	desc = ADISCORD_rus_campaign.39.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		RUS_khan_governing = yes
+		has_global_flag = ADISCORD_vorkerland_dirty_opened
+		NOT = { has_global_flag = superevent_vorkerland_dirty_opening }
+	}
+	option = {
+		name = ADISCORD_rus_campaign.39.a
+		custom_effect_tooltip = RUS_dirty_zone_focuses_unlocked_tt
+	}
+}
+
 # The perimeter archives are independent discoveries; their reading order is optional.
 country_event = {
 	id = ADISCORD_rus_campaign.14

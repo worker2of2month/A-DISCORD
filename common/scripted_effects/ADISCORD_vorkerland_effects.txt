@@ -10810,7 +10810,14 @@ ADISCORD_superevent_observer_tick = {
 				NOT = { any_country = { is_ai = no } }
 			}
 			if = { limit = { has_global_flag = { flag = superevent_vorkerland_civilwar days > 6 } } clr_global_flag = superevent_vorkerland_civilwar }
-			if = { limit = { has_global_flag = { flag = superevent_vorkerland_dirty_opening days > 6 } } clr_global_flag = superevent_vorkerland_dirty_opening }
+			if = {
+				limit = { has_global_flag = { flag = superevent_vorkerland_dirty_opening days > 6 } }
+				clr_global_flag = superevent_vorkerland_dirty_opening
+				if = {
+					limit = { has_global_flag = ADISCORD_vorkerland_dirty_opened }
+					RUS = { country_event = { id = ADISCORD_rus_campaign.39 } }
+				}
+			}
 			if = { limit = { has_global_flag = { flag = superevent_vorkerland_worker_victory days > 6 } } clr_global_flag = superevent_vorkerland_worker_victory }
 			if = { limit = { has_global_flag = { flag = superevent_vorkerland_utilitarian_victory days > 6 } } clr_global_flag = superevent_vorkerland_utilitarian_victory }
 			if = { limit = { has_global_flag = { flag = superevent_vorkerland_vlad_victory days > 6 } } clr_global_flag = superevent_vorkerland_vlad_victory }

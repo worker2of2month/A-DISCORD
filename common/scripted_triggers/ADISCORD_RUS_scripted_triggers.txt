@@ -1971,6 +1971,11 @@ RUS_bunker_resupply_ui_available = {
 	RUS_bunker_resupply_affordable = yes
 }
 
+RUS_bunker_food_sale_ui_available = {
+	RUS_bunker_food_sale_available = yes
+	NOT = { has_country_flag = RUS_bunker_food_sale_ui_cooldown }
+}
+
 RUS_bunker_energy_sale_ui_available = {
 	has_completed_focus = RUS_bunker_power_school
 	custom_trigger_tooltip = {

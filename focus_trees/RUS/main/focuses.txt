@@ -3171,6 +3171,7 @@ focus_tree = {
 			add_command_power = 50
 			army_experience = 50
 			custom_effect_tooltip = RUS_bunker_eternal_headquarters_tt
+			unlock_decision_tooltip = RUS_bunker_research_bureau
 			hidden_effect = { RUS_bunker_refresh = yes }
 		}
 		ai_will_do = { base = 6 }

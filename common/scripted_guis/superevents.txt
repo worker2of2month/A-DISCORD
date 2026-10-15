@@ -27,6 +27,10 @@ scripted_gui = {
 		effects = {
 			superevents_button_click = {
 				clr_global_flag = superevent_vorkerland_dirty_opening
+				if = {
+					limit = { has_global_flag = ADISCORD_vorkerland_dirty_opened }
+					RUS = { country_event = { id = ADISCORD_rus_campaign.39 } }
+				}
 				ADISCORD_superevent_dispatch_next = yes
 			}
 		}

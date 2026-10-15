@@ -2460,7 +2460,17 @@ RUS_bunker_construction = {
 		days_re_enable = 30
 		complete_effect = {
 			custom_effect_tooltip = RUS_bunker_food_sale_tt
-			hidden_effect = { RUS_bunker_food_sale = yes }
+			hidden_effect = {
+				if = {
+					limit = { RUS_bunker_food_sale_available = yes }
+					# Expose the native repeat delay to the service card.
+					set_country_flag = {
+						flag = RUS_bunker_food_sale_ui_cooldown
+						days = 30
+					}
+					RUS_bunker_food_sale = yes
+				}
+			}
 		}
 		ai_will_do = {
 			base = 0
@@ -2557,6 +2567,46 @@ RUS_development_programmes = {
 			custom_effect_tooltip = RUS_vorkerland_airlift_next_tt
 			hidden_effect = { RUS_vorkerland_airlift_arrive = yes }
 		}
+	}
+
+	RUS_bunker_research_bureau = {
+		icon = generic_research
+		allowed = { tag = RUS }
+		visible = { has_completed_focus = RUS_bunker_eternal_headquarters }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		cost = 0
+		custom_cost_text = RUS_bunker_research_bureau_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+		}
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = RUS_bunker_eternal_headquarters
+						RUS_khan_governing = yes
+						owns_state = 66
+						controls_state = 66
+						check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+					}
+				}
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 500 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 500 }
+				}
+				add_research_slot = 1
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+		}
+		ai_will_do = { base = 2 }
 	}
 
 	RUS_bunker_mushroom_farm = {

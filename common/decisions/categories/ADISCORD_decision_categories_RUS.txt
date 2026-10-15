@@ -96,6 +96,7 @@ RUS_development_programmes = {
 			has_country_flag = RUS_vorkerland_airlift_active
 			has_completed_focus = RUS_summon_the_aimaqs
 			has_completed_focus = RUS_bunker_deep_gallery
+			has_completed_focus = RUS_bunker_eternal_headquarters
 		}
 	}
 	priority = 25

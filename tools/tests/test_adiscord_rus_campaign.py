@@ -1298,7 +1298,11 @@ class RusCampaignTests(unittest.TestCase):
                 world.execute(block(rows, "complete_effect"))
                 self.assertEqual((world.balances(), world.variables, world.buildings), before, (name, changed))
             if not targeted:
-                self.assertGreater(int(scalar(rows, "days_re_enable")), 0)
+                single_use = any(row.key == "fire_only_once" and row.value == "yes" for row in rows)
+                if single_use:
+                    self.assertNotIn("days_re_enable", [row.key for row in rows], name)
+                else:
+                    self.assertGreater(int(scalar(rows, "days_re_enable")), 0)
         limits = {
             "RUS_chancery_reconstruction": ("arms_factory", 6),
             "RUS_surface_industrial_contract": ("industrial_complex", 5),
@@ -2071,6 +2075,48 @@ class RusCampaignTests(unittest.TestCase):
         world.execute(depot)
         self.assertEqual(world.value("RUS_bunker_food_output"), output + 2)
         self.assertIn("RUS_bunker_food_sale", self.decisions)
+
+    def test_food_sale_card_uses_native_payment_and_blocks_repeat_clicks(self):
+        panel = block(block(parse("common/scripted_guis/ADISCORD_RUS_scripted_gui.txt"), "scripted_gui"), "ADISCORD_RUS_bunker_panel")
+        gates = block(panel, "triggers")
+        name = "RUS_bunker_food_sale"
+        gate = block(gates, name + "_button_click_enabled")
+        action = block(block(panel, "effects"), name + "_button_click")
+        for stock in (39.99, 40, 100):
+            world = self.world()
+            world.variables["RUS_bunker_food"] = stock
+            self.assertEqual(world.matches(gate), stock >= 40)
+            expected = "RUS_bunker_service_ready" if stock >= 40 else "RUS_bunker_food_sale_need_stock"
+            self.assertEqual(self.bunker_text(world, "GetRUSBunkerServicefood_sale"), expected)
+            world.owner = False
+            self.assertFalse(world.matches(gate))
+            self.assertEqual(self.bunker_text(world, "GetRUSBunkerServicefood_sale"), "RUS_bunker_need_operational")
+        for native in (False, True):
+            world = self.world()
+            world.variables["RUS_bunker_food"] = 100
+            before = world.value("ADISCORD_economy_treasury")
+            if native:
+                world.begin(name)
+            else:
+                world.execute(action)
+            self.assertEqual(world.value("RUS_bunker_food"), 60)
+            self.assertEqual(world.value("ADISCORD_economy_treasury"), before + 100)
+            self.assertFalse(world.matches(gate))
+            self.assertEqual(self.bunker_text(world, "GetRUSBunkerServicefood_sale"), "RUS_bunker_food_sale_cooldown")
+            world.execute(action)
+            self.assertEqual(world.value("RUS_bunker_food"), 60)
+            self.assertEqual(world.value("ADISCORD_economy_treasury"), before + 100)
+            world.flags.discard(name + "_ui_cooldown")
+            self.assertTrue(world.matches(gate))
+        decision = self.decisions[name]
+        cooldown = next(row.value for row in walk(block(decision, "complete_effect")) if row.key == "set_country_flag")
+        self.assertEqual(scalar(cooldown, "days"), scalar(decision, "days_re_enable"))
+        world = self.world()
+        for service_tab in (False, True):
+            if service_tab:
+                world.flags.add("RUS_bunker_service_tab")
+            for suffix in ("", "_label", "_benefit", "_cost", "_status"):
+                self.assertEqual(world.matches(block(gates, name + "_button" + suffix + "_visible")), service_tab)
 
     def test_emergency_ration_focus_delivers_full_stock_even_to_full_stores(self):
         for stock, expected in ((0, 80), (60, 140), (140, 220)):
@@ -3228,6 +3274,72 @@ class RusCampaignTests(unittest.TestCase):
                     self.assertAlmostEqual(world.value(variable), base + delta)
                     self.assertIn("RUS_bunker_complex", world.modifiers)
 
+    def test_bunker_finals_offer_free_city_slot_and_paid_headquarters_slot(self):
+        name = "RUS_bunker_research_bureau"
+        decision = self.programmes[name]
+        city = self.world()
+        city.execute(block(self.focuses["RUS_bunker_city_charter"], "completion_reward"))
+        self.assertEqual(city.research_slots, 1)
+        headquarters = self.world()
+        reward = block(self.focuses["RUS_bunker_eternal_headquarters"], "completion_reward")
+        headquarters.execute(reward)
+        self.assertEqual(headquarters.research_slots, 0)
+        self.assertEqual(scalar(reward, "unlock_decision_tooltip"), name)
+        self.assertEqual(scalar(decision, "fire_only_once"), "yes")
+        self.assertEqual(scalar(decision, "cost"), "0")
+        self.assertFalse({"days_remove", "days_re_enable", "remove_effect"} & {row.key for row in decision})
+        headquarters.focuses.discard("RUS_bunker_eternal_headquarters")
+        self.assertFalse(headquarters.matches(block(decision, "visible")))
+        headquarters.focuses.add("RUS_bunker_eternal_headquarters")
+        self.assertTrue(headquarters.matches(block(decision, "visible")))
+        category = block(parse("common/decisions/categories/ADISCORD_decision_categories_RUS.txt"), "RUS_development_programmes")
+        self.assertIn("RUS_bunker_eternal_headquarters", [row.value for row in walk(block(category, "visible")) if row.key == "has_completed_focus"])
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_RUS_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            loc = dict(re.findall(r'^\s+([A-Za-z0-9_.]+):(?:\d+)?\s+"(.*)"\s*$', read(path), re.M))
+            for suffix in ("", "_desc", "_cost", "_cost_blocked", "_cost_tooltip"):
+                self.assertIn(name + suffix, loc)
+            self.assertEqual(loc[name + "_cost"], "§Y500§! £ADISCORD_economy_treasury_texticon")
+            self.assertEqual(loc[name + "_cost_blocked"], "§R500§! £ADISCORD_economy_treasury_texticon")
+
+    def test_headquarters_research_bureau_checks_exact_price_and_records_payment(self):
+        name = "RUS_bunker_research_bureau"
+        decision = self.programmes[name]
+        for treasury in (0, 499.99, 500, 750.5):
+            with self.subTest(treasury=treasury):
+                world = self.world()
+                world.decisions = self.programmes
+                world.pp = 0
+                world.variables["ADISCORD_economy_treasury"] = treasury
+                before_costs = world.value("ADISCORD_economy_current_month_action_costs")
+                before_dirty = world.dirty
+                affordable = treasury >= 500
+                self.assertEqual(world.matches(block(decision, "custom_cost_trigger")), affordable)
+                if affordable:
+                    world.begin(name)
+                else:
+                    world.execute(block(decision, "complete_effect"))
+                self.assertEqual(world.value("ADISCORD_economy_treasury"), treasury - (500 if affordable else 0))
+                self.assertEqual(world.value("ADISCORD_economy_current_month_action_costs") - before_costs, 500 if affordable else 0)
+                self.assertEqual(world.research_slots, int(affordable))
+                self.assertEqual(world.dirty - before_dirty, int(affordable))
+                self.assertEqual(world.pp, 0)
+        for missing in ("focus", "owner", "controller", "ruler"):
+            with self.subTest(missing=missing):
+                world = self.world()
+                if missing == "focus":
+                    world.focuses.discard("RUS_bunker_eternal_headquarters")
+                elif missing == "ruler":
+                    world.ruler = "RUS_Varlam_Oskol"
+                else:
+                    setattr(world, missing, False)
+                self.assertFalse(world.matches(block(decision, "visible" if missing == "focus" else "available")))
+                before = world.balances(), deepcopy(world.variables), world.dirty
+                world.execute(block(decision, "complete_effect"))
+                self.assertEqual((world.balances(), world.variables, world.dirty), before)
+                self.assertEqual(world.research_slots, 0)
+
     def test_bunker_courses_extend_with_their_own_mechanics(self):
         positions = {}
         for focus, rows in self.focuses.items():
@@ -3460,6 +3572,57 @@ class RusCampaignTests(unittest.TestCase):
         keys = [row.key for row in immediate]
         self.assertLess(keys.index("set_global_flag"), keys.index("mark_focus_tree_layout_dirty"))
 
+    def test_perimeter_briefing_follows_superevent_close_and_observer_timeout(self):
+        presentation = "superevent_vorkerland_dirty_opening"
+        opened = "ADISCORD_vorkerland_dirty_opened"
+        event_id = "ADISCORD_rus_campaign.39"
+        event = next(
+            row.value for row in parse("events/ADISCORD_RUS_events.txt")
+            if row.key == "country_event" and scalar(row.value, "id") == event_id
+        )
+        self.assertEqual(scalar(event, "is_triggered_only"), "yes")
+        self.assertEqual(scalar(event, "fire_only_once"), "yes")
+        gui = block(parse("common/scripted_guis/superevents.txt"), "scripted_gui")
+        close = block(block(block(gui, presentation), "effects"), "superevents_button_click")
+        timeout = next(
+            row.value for row in walk(self.effects["ADISCORD_superevent_observer_tick"])
+            if row.key == "if" and any(
+                child.key == "clr_global_flag" and child.value == presentation
+                for child in row.value
+            )
+        )
+        age = block(block(timeout, "limit"), "has_global_flag")
+        self.assertEqual(scalar(age, "flag"), presentation)
+        self.assertEqual([row.value for row in age if not row.key], ["days", ">", "6"])
+        for source, rows in (("click", close), ("observer", timeout)):
+            with self.subTest(source=source):
+                keys = [row.key for row in rows]
+                self.assertLess(keys.index("clr_global_flag"), keys.index("if"))
+                delivery = block(rows, "if")
+                self.assertEqual(scalar(block(delivery, "limit"), "has_global_flag"), opened)
+                call = block(block(delivery, "RUS"), "country_event")
+                self.assertEqual([(row.key, row.value) for row in call], [("id", event_id)])
+                world = self.world()
+                self.assertFalse(world.matches(block(delivery, "limit")))
+                self.assertFalse(world.matches(block(event, "trigger")))
+                world.global_flags.update((opened, presentation))
+                self.assertTrue(world.matches(block(delivery, "limit")))
+                self.assertFalse(world.matches(block(event, "trigger")))
+                world.global_flags.discard(presentation)
+                self.assertTrue(world.matches(block(event, "trigger")))
+                world.ruler = "another_ruler"
+                self.assertFalse(world.matches(block(event, "trigger")))
+        self.assertLess(
+            [row.key for row in close].index("if"),
+            [row.key for row in close].index("ADISCORD_superevent_dispatch_next"),
+        )
+        option = block(event, "option")
+        self.assertEqual([row.key for row in option], ["name", "custom_effect_tooltip"])
+        tooltip = scalar(option, "custom_effect_tooltip")
+        self.assertIn("$RUS_claim_the_opened_zone$", self.loc[tooltip])
+        self.assertIn("$RUS_drive_starolesye_back$", self.loc[tooltip])
+        self.assertIn("$RUS_press_the_closed_zone$", self.loc[tooltip])
+
     def test_imperial_focuses_are_reachable_localised_and_do_not_overlap(self):
         positions = {}
         for name, rows in self.focuses.items():
@@ -3643,7 +3806,7 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_public_story_events_have_no_mandatory_choice_settlement(self):
         events = [e.value for e in parse(f"events/{BASE}_events.txt") if e.key == "country_event" and scalar(e.value, "id").startswith("ADISCORD_rus_campaign.")]
-        self.assertEqual(len(events), 38)
+        self.assertEqual(len(events), 39)
         registry = json.loads(read("tools/data/adiscord_event_ids.json"))["events"]
         for event in events:
             name = scalar(event, "id")
@@ -3666,7 +3829,7 @@ class RusCampaignTests(unittest.TestCase):
                     self.assertEqual([row.key for row in navigation], ["country_event"])
                     self.assertEqual(scalar(block(navigation, "country_event"), "id"), reading_pages[scalar(option, "name")])
                     continue
-                self.assertEqual([row.key for row in option if row.key not in ("trigger", "effect_tooltip")], ["name"])
+                self.assertEqual([row.key for row in option if row.key not in ("trigger", "effect_tooltip", "custom_effect_tooltip")], ["name"])
 
     def test_childhood_dream_starts_once_and_reading_can_end_on_either_page(self):
         first_id = "ADISCORD_rus_campaign.26"

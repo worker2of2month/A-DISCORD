@@ -6,4 +6,11 @@ spriteTypes = {
 		texturefile = "gfx/texticons/adiscord/STP_suspicion.png"
 		legacy_lazy_load = no
 	}
+
+	###RUS
+	spriteType = {
+		name = "GFX_RUS_suspicion_texticon"
+		texturefile = "gfx/texticons/counter_intelligence_texticon.dds"
+		legacy_lazy_load = no
+	}
 }

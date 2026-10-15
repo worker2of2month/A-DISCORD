@@ -212,6 +212,14 @@ scripted_gui = {
 					activate_decision = RUS_bunker_energy_sale
 				}
 			}
+			RUS_bunker_food_sale_button_click = {
+				if = {
+					limit = {
+						RUS_bunker_food_sale_ui_available = yes
+					}
+					activate_decision = RUS_bunker_food_sale
+				}
+			}
 		}
 
 		triggers = {
@@ -1039,6 +1047,24 @@ scripted_gui = {
 				has_country_flag = RUS_bunker_service_tab
 			}
 			RUS_bunker_energy_sale_button_status_visible = {
+				has_country_flag = RUS_bunker_service_tab
+			}
+			RUS_bunker_food_sale_button_visible = {
+				has_country_flag = RUS_bunker_service_tab
+			}
+			RUS_bunker_food_sale_button_click_enabled = {
+				RUS_bunker_food_sale_ui_available = yes
+			}
+			RUS_bunker_food_sale_button_label_visible = {
+				has_country_flag = RUS_bunker_service_tab
+			}
+			RUS_bunker_food_sale_button_benefit_visible = {
+				has_country_flag = RUS_bunker_service_tab
+			}
+			RUS_bunker_food_sale_button_cost_visible = {
+				has_country_flag = RUS_bunker_service_tab
+			}
+			RUS_bunker_food_sale_button_status_visible = {
 				has_country_flag = RUS_bunker_service_tab
 			}
 			RUS_bunker_service_trade_visible = {
