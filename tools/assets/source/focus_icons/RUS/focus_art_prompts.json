@@ -215,5 +215,40 @@
         }
       ]
     }
+  ],
+  "ideas": [
+    {
+      "idea_id": "RUS_bunker_complex",
+      "title": "Система бункеров",
+      "delivery": "chat_preview_only",
+      "target_size": [
+        68,
+        68
+      ],
+      "generated_file": "C:/Users/Admin/.codex/generated_images/01a1308d-ff0f-76d0-9a29-2bcba021f8b4/exec-68dff15d-3b02-45e3-a63b-ffdd5aad7ba3.png",
+      "prompt": "Use case: stylized-concept. Create a finished national spirit IDEA icon for Hearts of Iron IV, title concept Bunker System, but NO actual text. Three supplied small existing game icons are STYLE and visual density references only: dark realistic cutout collage, irregular transparent silhouette, bold simple masses, compact SQUARE final target68x68. Do not copy their people, hourglass, flag or symbols. Subject: a unified squat subterranean bunker complex shown in bold simplified three-quarter cutaway. Upper third: thick reinforced concrete entrance with clearly visible heavy dark steel blast door and large locking wheel, a small short ventilation stack. Beneath it two broad stacked underground floors cut through charcoal rock, visibly connected by one short vertical shaft at right. Each floor has just TWO broad dark room openings with warm amber strip lights, thick concrete slabs separating them. Suggest living/storage and workshop through only one or two chunky shapes, no tiny furniture clutter, no people, no labels. This should read as an underground city system, not a single pillbox or exposed multi-storey building. Layered rock cutaway forms a compact tapered irregular silhouette around sides and base, no sprawling terrain tile. The door is the main focal shape, illuminated rooms second. Realistic worn concrete and steel, dark charcoal grey olive palette, warm amber internal lights, subtle cold silver rim lighting on upper edges, deep shadows. Restrained cinematic HOI4 photomontage shading matching references, no purple neon outlines. Full complete icon centered with modest transparent padding, nearly square compact silhouette, simplified strongly enough to read at68px. TRUE alpha transparent background outside cutaway, no rectangular backdrop, sky, landscape, border, badge, words, numbers, flags, extra floating props, broad halo or floor shadow. Generate at high resolution for later author resizing."
+    },
+    {
+      "idea_id": "RUS_chancery_mandate",
+      "title": "Единая ханская печать",
+      "delivery": "chat_preview_only",
+      "target_size": [
+        68,
+        68
+      ],
+      "generated_file": "C:/Users/Admin/.codex/generated_images/01a1308d-ff0f-76d0-9a29-2bcba021f8b4/exec-19adb2ab-7c34-41dc-bcd9-eb71883bcb12.png",
+      "prompt": "Use case: compositing. Create ONE finished compact HOI4 national spirit IDEA icon for Unified Khan Seal, no title text. Input1 existing Khan handstamp is the PRIMARY object design reference, preserve dark burgundy wooden rounded handle and silver circular die with double-headed eagle inside a downward pointing triangle. Input2 actual Khan flag is only heraldic reference, not a request to include a flag or lettering. Input3 existing council idea icon is ONLY a style and tiny-scale visual-density reference. Subject: massive handstamp dominates, lying diagonally from upper left handle to lower right die, die tilted toward viewer enough to show its broad silver engraved eagle/triangle motif. Beneath and partly behind stamp is ONE small folded ivory official order sheet at low oblique perspective, with only a few faint ink lines, and ONE vivid dark burgundy wax impression near lower-left foreground. Wax has a very simple raised eagle/triangle motif echoing the die. These overlapping elements form a nearly square dense irregular silhouette, not a catalogue row. Make stamp die large, distinct dark handle and paper wedge secondary, wax small but readable. Photorealistic dark HOI4 cutout collage, cold silver highlights on metal, dark wine-red wood, restrained purple charcoal shadows, aged ivory paper, hard light-dark separation, crisp silhouette. Minimal microdetail, intended final display68x68. Whole objects inside clear transparent padding, no clipped handle or circle. True alpha transparent background including gaps. No hands, people, crowns, flags, extra props, frame, badges, readable words, invented extra symbols, floor, scene, glow cloud or broad halo. Generate high resolution for manual resizing."
+    },
+    {
+      "idea_id": "RUS_sealed_throne_policy",
+      "title": "Трон под горой",
+      "delivery": "chat_preview_only",
+      "target_size": [
+        68,
+        68
+      ],
+      "generated_file": "C:/Users/Admin/.codex/generated_images/01a1308d-ff0f-76d0-9a29-2bcba021f8b4/exec-57d4876b-3e3e-4161-b2d6-7342f071cc9c.png",
+      "prompt": "Use case: compositing. ONE finished HOI4 national spirit IDEA icon, concept Throne Beneath the Mountain. Input1 armoured throne is the exact main object design reference: functional dark steel angular frame, tall broad back, burgundy leather padded back and seat, thick armrests with modest brass bolts, small footrest. Input2 existing tiny council national spirit is style and scale reference only. Create compact nearly square cutout emblem intended for68x68 display. Throne dominates front centre, slightly three-quarter facing viewer, deliberately widened and with shortened feet to make a bold compact shape. Behind and above it a low thick arch of jagged dark mountain rock enclosing a reinforced concrete vault, arched top only a little above throne back. A CLOSED steel blast door partly visible behind throne at right, with one simple visible locking wheel, implies a sealed underground command sanctuary. Interlock throne, rock vault and door into one dense irregular silhouette, no separate floating objects. Chair remains fully readable with burgundy leather main visual accent; large simple dark rock masses subordinate. Gritty photoreal HOI4 cutout shading matching supplied idea reference, silver cold edge highlights on steel and rock, deep charcoal and restrained violet shadows, subtle warm amber light from behind throne, no bright neon. Clear foreground/background contrast and robust major forms readable at tiny size. Complete object cluster inside generous transparent margins, full top arch and all throne legs visible. TRUE alpha transparent outside contour and any open gaps. No person, crown, eagle, flag, text, extra furniture, weapons, money, candles, cables, exterior landscape, sprawling floor tile, rectangular room backdrop, frame, badge or broad glow halo. Not fantasy medieval ornate palace, but austere bunker authority. High resolution authoring preview, square."
+    }
   ]
 }

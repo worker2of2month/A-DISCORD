@@ -864,8 +864,13 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_ideas = RUS_council_mandate
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			effect_tooltip = { add_ideas = RUS_council_mandate }
+			hidden_effect = {
+				set_variable = { var = RUS_government_mandate_political_power value = 0.1 }
+				set_variable = { var = RUS_government_mandate_mobilization value = -0.05 }
+				set_variable = { var = RUS_government_mandate_stability value = 0.05 }
+				RUS_government_refresh = yes
+			}
 			custom_effect_tooltip = RUS_course_scientists_10_tt
 			hidden_effect = {
 				add_power_balance_value = {
@@ -894,8 +899,13 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_ideas = RUS_chancery_mandate
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			effect_tooltip = { add_ideas = RUS_chancery_mandate }
+			hidden_effect = {
+				set_variable = { var = RUS_government_mandate_political_power value = 0.2 }
+				set_variable = { var = RUS_government_mandate_mobilization value = 0.1 }
+				set_variable = { var = RUS_government_mandate_stability value = -0.03 }
+				RUS_government_refresh = yes
+			}
 			custom_effect_tooltip = RUS_course_black_army_10_tt
 			hidden_effect = {
 				add_power_balance_value = {
@@ -2560,9 +2570,11 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_ideas = RUS_repair_depots_spirit
+			effect_tooltip = { add_ideas = RUS_repair_depots_spirit }
 			custom_effect_tooltip = RUS_bunker_food_output_focus_tt
 			hidden_effect = {
+				set_variable = { var = RUS_government_depot_efficiency value = 0.05 }
+				RUS_government_refresh = yes
 				add_to_variable = { var = RUS_bunker_food_output_bonus value = 2 }
 				RUS_bunker_refresh = yes
 			}

@@ -3690,7 +3690,7 @@ RUS_bunker_refresh = {
 			add_to_variable = { var = RUS_bunker_army_defence_factor value = 0.07 }
 		}
 	}
-	RUS_bunker_layer_mastery_refresh = yes
+	RUS_bunker_apply_layer_bonuses = yes
 	set_variable = { var = RUS_bunker_free_power value = RUS_bunker_power }
 	subtract_from_variable = { var = RUS_bunker_free_power value = RUS_bunker_used_power }
 	if = {
@@ -3833,86 +3833,63 @@ RUS_bunker_refresh = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
-# RUS. Layer focuses strengthen whichever room was fitted on their layer. The
-# bonus lives in RUS_bunker_layer_mastery, apart from the room previews of the
-# bunker complex, and follows the complex's operational state.
-RUS_bunker_layer_mastery_refresh = {
-	set_variable = { var = RUS_layer_mastery_attrition value = 0 }
-	set_variable = { var = RUS_layer_mastery_planning_speed value = 0 }
-	set_variable = { var = RUS_layer_mastery_factory value = 0 }
-	set_variable = { var = RUS_layer_mastery_consumer_goods value = 0 }
-	set_variable = { var = RUS_layer_mastery_trickleback value = 0 }
-	set_variable = { var = RUS_layer_mastery_research value = 0 }
-	set_variable = { var = RUS_layer_mastery_political_power value = 0 }
-	set_variable = { var = RUS_layer_mastery_max_planning value = 0 }
+# Layer focus bonuses are added after room totals are reset and calculated.
+RUS_bunker_apply_layer_bonuses = {
 	if = {
 		limit = {
 			has_completed_focus = RUS_bunker_utilities
 			check_variable = { var = RUS_bunker_layer_2 value = 1 compare = equals }
 		}
-		set_variable = { var = RUS_layer_mastery_attrition value = -0.05 }
+		add_to_variable = { var = RUS_bunker_attrition value = -0.05 }
 	}
 	if = {
 		limit = {
 			has_completed_focus = RUS_bunker_utilities
 			check_variable = { var = RUS_bunker_layer_2 value = 2 compare = equals }
 		}
-		set_variable = { var = RUS_layer_mastery_planning_speed value = 0.05 }
+		add_to_variable = { var = RUS_bunker_planning_speed value = 0.05 }
 	}
 	if = {
 		limit = {
 			has_completed_focus = RUS_bunker_working_heart
 			check_variable = { var = RUS_bunker_layer_3 value = 1 compare = equals }
 		}
-		set_variable = { var = RUS_layer_mastery_factory value = 0.05 }
+		add_to_variable = { var = RUS_bunker_industrial_capacity_factory value = 0.05 }
 	}
 	if = {
 		limit = {
 			has_completed_focus = RUS_bunker_working_heart
 			check_variable = { var = RUS_bunker_layer_3 value = 2 compare = equals }
 		}
-		set_variable = { var = RUS_layer_mastery_consumer_goods value = -0.03 }
+		add_to_variable = { var = RUS_bunker_consumer_goods_factor value = -0.03 }
 	}
 	if = {
 		limit = {
 			has_completed_focus = RUS_bunker_science_wing
 			check_variable = { var = RUS_bunker_layer_4 value = 1 compare = equals }
 		}
-		set_variable = { var = RUS_layer_mastery_trickleback value = 0.05 }
+		add_to_variable = { var = RUS_bunker_casualty_trickleback value = 0.05 }
 	}
 	if = {
 		limit = {
 			has_completed_focus = RUS_bunker_science_wing
 			check_variable = { var = RUS_bunker_layer_4 value = 2 compare = equals }
 		}
-		set_variable = { var = RUS_layer_mastery_research value = 0.05 }
+		add_to_variable = { var = RUS_bunker_research_speed_factor value = 0.05 }
 	}
 	if = {
 		limit = {
 			has_completed_focus = RUS_bunker_memory_vault
 			check_variable = { var = RUS_bunker_layer_5 value = 1 compare = equals }
 		}
-		set_variable = { var = RUS_layer_mastery_political_power value = 0.1 }
+		add_to_variable = { var = RUS_bunker_political_power_gain value = 0.1 }
 	}
 	if = {
 		limit = {
 			has_completed_focus = RUS_bunker_memory_vault
 			check_variable = { var = RUS_bunker_layer_5 value = 2 compare = equals }
 		}
-		set_variable = { var = RUS_layer_mastery_max_planning value = 0.05 }
-	}
-	if = {
-		limit = {
-			RUS_bunker_operational = yes
-			OR = {
-				has_completed_focus = RUS_bunker_utilities
-				has_completed_focus = RUS_bunker_working_heart
-				has_completed_focus = RUS_bunker_science_wing
-				has_completed_focus = RUS_bunker_memory_vault
-			}
-			NOT = { has_dynamic_modifier = { modifier = RUS_bunker_layer_mastery } }
-		}
-		add_dynamic_modifier = { modifier = RUS_bunker_layer_mastery }
+		add_to_variable = { var = RUS_bunker_max_planning_factor value = 0.05 }
 	}
 }
 
@@ -4032,6 +4009,20 @@ RUS_black_army_empire_reform = {
 }
 
 RUS_government_refresh = {
+	set_variable = { var = RUS_government_total_political_power value = RUS_government_political_power }
+	add_to_variable = { var = RUS_government_total_political_power value = RUS_government_mandate_political_power }
+	set_variable = { var = RUS_government_total_mobilization value = RUS_government_mobilization }
+	add_to_variable = { var = RUS_government_total_mobilization value = RUS_government_mandate_mobilization }
+	if = {
+		limit = {
+			OR = {
+				check_variable = { var = RUS_government_mandate_political_power value = 0 compare = greater_than }
+				check_variable = { var = RUS_government_depot_efficiency value = 0 compare = greater_than }
+			}
+			NOT = { has_dynamic_modifier = { modifier = RUS_government_retained_institutions } }
+		}
+		add_dynamic_modifier = { modifier = RUS_government_retained_institutions }
+	}
 	if = {
 		limit = {
 			RUS_khan_governing = yes
@@ -4102,6 +4093,10 @@ RUS_campaign_initialize = {
 		set_variable = { var = RUS_government_civilian_speed value = 0 }
 		set_variable = { var = RUS_government_mobilization value = 0 }
 		set_variable = { var = RUS_government_factory_output value = 0 }
+		set_variable = { var = RUS_government_mandate_political_power value = 0 }
+		set_variable = { var = RUS_government_mandate_mobilization value = 0 }
+		set_variable = { var = RUS_government_mandate_stability value = 0 }
+		set_variable = { var = RUS_government_depot_efficiency value = 0 }
 	set_variable = { var = RUS_government_trickleback value = 0 }
 		set_variable = { var = RUS_army_casualty_return value = 0 }
 		set_variable = { var = RUS_army_factory_efficiency value = 0 }
@@ -4145,21 +4140,22 @@ RUS_campaign_shutdown = {
 		limit = { has_variable = RUS_reactor_sortie_receipt }
 		clear_variable = RUS_reactor_sortie_receipt
 	}
-	remove_ideas = RUS_council_mandate
-	remove_ideas = RUS_chancery_mandate
 	if = {
 		limit = { has_dynamic_modifier = { modifier = RUS_government_service } }
 		remove_dynamic_modifier = { modifier = RUS_government_service }
 	}
 	if = {
-		limit = { has_dynamic_modifier = { modifier = RUS_bunker_layer_mastery } }
-		remove_dynamic_modifier = { modifier = RUS_bunker_layer_mastery }
+		limit = { has_dynamic_modifier = { modifier = RUS_government_retained_institutions } }
+		remove_dynamic_modifier = { modifier = RUS_government_retained_institutions }
 	}
+	clear_variable = RUS_government_mandate_political_power
+	clear_variable = RUS_government_mandate_mobilization
+	clear_variable = RUS_government_mandate_stability
+	clear_variable = RUS_government_depot_efficiency
 	remove_ideas = RUS_bunker_hunger
 	clr_country_flag = RUS_bunker_silence_trial_active
 	clr_country_flag = RUS_bunker_silence_trial_failed
 	remove_ideas = RUS_bunker_hunger_rationed
-	remove_ideas = RUS_repair_depots_spirit
 	remove_ideas = RUS_open_city_policy
 	remove_ideas = RUS_sealed_throne_policy
 	remove_ideas = RUS_defensive_preparation_spirit

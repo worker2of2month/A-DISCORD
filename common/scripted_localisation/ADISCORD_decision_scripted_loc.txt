@@ -1,0 +1,48 @@
+defined_text = {
+	name = GetADISCORDDecisionCountryName
+	text = {
+		trigger = { tag = WKR }
+		localization_key = ADISCORD_decision_country_WKR
+	}
+	text = {
+		trigger = { tag = WRK }
+		localization_key = ADISCORD_decision_country_WRK
+	}
+	text = {
+		trigger = { tag = VAD }
+		localization_key = ADISCORD_decision_country_VAD
+	}
+	text = {
+		trigger = { tag = TVA }
+		localization_key = ADISCORD_decision_country_TVA
+	}
+	text = {
+		trigger = { tag = IRT }
+		localization_key = ADISCORD_decision_country_IRT
+	}
+	text = {
+		trigger = { tag = MLR }
+		localization_key = ADISCORD_decision_country_MLR
+	}
+	text = {
+		trigger = { tag = SLA }
+		localization_key = ADISCORD_decision_country_SLA
+	}
+	text = {
+		trigger = { tag = YPR }
+		localization_key = ADISCORD_decision_country_YPR
+	}
+	text = {
+		trigger = { tag = BTL }
+		localization_key = ADISCORD_decision_country_BTL
+	}
+	text = {
+		trigger = { tag = VEL }
+		localization_key = ADISCORD_decision_country_VEL
+	}
+	text = {
+		trigger = { tag = SRP }
+		localization_key = ADISCORD_decision_country_SRP
+	}
+	text = { localization_key = ADISCORD_decision_country_name }
+}

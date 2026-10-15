@@ -1079,6 +1079,13 @@ ADISCORD_economy_calculate_income = {
 	ADISCORD_economy_apply_development_income_multipliers = yes
 	ADISCORD_economy_apply_overall_income_modifier_factor = yes
 	clamp_variable = { var = ADISCORD_economy_monthly_income min = 0 max = 10000 }
+	# RUS bunker markets pay a fixed rent outside the budget multipliers;
+	# RUS_bunker_refresh recomputes it and marks the budget dirty.
+	if = {
+		limit = { tag = RUS }
+		set_variable = { var = ADISCORD_economy_direct_income value = RUS_bunker_income }
+		add_to_variable = { var = ADISCORD_economy_monthly_income value = ADISCORD_economy_direct_income }
+	}
 	if = { limit = { tag = VAL } VAL_black_market_reduce_monthly_income = yes }
 }
 ADISCORD_economy_calculate_personal_income = {
@@ -1219,8 +1226,6 @@ ADISCORD_economy_calculate_building_income = {
 	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_industrial_cluster_count }
 	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.16 }
 	add_to_variable = { var = ADISCORD_economy_building_income value = ADISCORD_economy_building_income_temp }
-	# RUS bunker markets; RUS_bunker_refresh recomputes the amount and marks the budget dirty.
-	if = { limit = { tag = RUS } add_to_variable = { var = ADISCORD_economy_building_income value = RUS_bunker_income } }
 	if = { limit = { ADISCORD_economy_model_is_fragmented = yes } multiply_variable = { var = ADISCORD_economy_building_income value = 0.70 } }
 	clamp_variable = { var = ADISCORD_economy_building_income min = 0 max = 50 }
 }
@@ -1338,6 +1343,10 @@ ADISCORD_economy_recalculate_tax_dependent_income = {
 	divide_variable = { var = ADISCORD_economy_monthly_income value = 100 }
 	ADISCORD_economy_apply_overall_income_modifier_factor = yes
 	clamp_variable = { var = ADISCORD_economy_monthly_income min = 0 max = 10000 }
+	if = {
+		limit = { tag = RUS }
+		add_to_variable = { var = ADISCORD_economy_monthly_income value = ADISCORD_economy_direct_income }
+	}
 	if = { limit = { tag = VAL } VAL_black_market_reduce_monthly_income = yes }
 }
 

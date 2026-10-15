@@ -1,6 +1,6 @@
 # --- rus_bunker_modifier ---
 RUS_bunker_complex = {
-	icon = GFX_idea_ADISCORD_logistics_centralized_depots
+	icon = GFX_idea_RUS_bunker_complex
 	enable = { RUS_bunker_operational = yes }
 	custom_modifier_tooltip = RUS_bunker_system_state_tt
 	attrition = RUS_bunker_attrition
@@ -23,7 +23,7 @@ RUS_bunker_complex = {
 }
 
 RUS_black_army = {
-	icon = GFX_idea_ADISCORD_military_organization_cadre_army
+	icon = GFX_idea_RUS_black_army
 	enable = {
 		tag = RUS
 		has_country_flag = RUS_bunker_initialized
@@ -50,37 +50,35 @@ RUS_black_army = {
 }
 
 RUS_government_service = {
-	icon = GFX_idea_generic_central_management
+	icon = GFX_idea_RUS_government_service
 	enable = { RUS_khan_governing = yes }
-	political_power_gain = RUS_government_political_power
+	custom_modifier_tooltip = RUS_government_service_state_tt
+	stability_factor = RUS_government_mandate_stability
+	production_factory_max_efficiency_factor = RUS_government_depot_efficiency
+	political_power_gain = RUS_government_total_political_power
 	ADISCORD_economy_admin_expense_factor = RUS_government_admin_expense
 	production_speed_industrial_complex_factor = RUS_government_civilian_speed
-	mobilization_speed = RUS_government_mobilization
+	mobilization_speed = RUS_government_total_mobilization
 	industrial_capacity_factory = RUS_government_factory_output
 	casualty_trickleback = RUS_government_trickleback
 }
 
+# Mandates and depots remain effective during subordination, capitulation or a ruler change.
+# Their bonuses are counted here only while the main government modifier is disabled.
+RUS_government_retained_institutions = {
+	enable = { RUS_khan_governing = no }
+	political_power_gain = RUS_government_mandate_political_power
+	mobilization_speed = RUS_government_mandate_mobilization
+	stability_factor = RUS_government_mandate_stability
+	production_factory_max_efficiency_factor = RUS_government_depot_efficiency
+}
+
 # Inputs are refreshed only when faction support changes.
 RUS_faction_support = {
-	icon = GFX_idea_ADISCORD_law_education_technical_institutes
 	enable = { RUS_state_balance_operational = yes }
 	custom_modifier_tooltip = RUS_faction_support_state_tt
 	political_power_gain = RUS_faction_political_power_gain
 	power_balance_weekly = RUS_faction_power_balance_weekly
-}
-
-# Inputs are refreshed by RUS_bunker_layer_mastery_refresh with the bunker.
-RUS_bunker_layer_mastery = {
-	icon = GFX_idea_ADISCORD_logistics_centralized_depots
-	enable = { RUS_bunker_operational = yes }
-	attrition = RUS_layer_mastery_attrition
-	planning_speed = RUS_layer_mastery_planning_speed
-	industrial_capacity_factory = RUS_layer_mastery_factory
-	consumer_goods_factor = RUS_layer_mastery_consumer_goods
-	casualty_trickleback = RUS_layer_mastery_trickleback
-	research_speed_factor = RUS_layer_mastery_research
-	political_power_gain = RUS_layer_mastery_political_power
-	max_planning_factor = RUS_layer_mastery_max_planning
 }
 
 # --- rus_faction_favours ---

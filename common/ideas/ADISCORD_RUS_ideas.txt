@@ -24,7 +24,7 @@ ideas = {
 		}
 
 		RUS_last_empire_spirit = {
-			picture = GFX_idea_RUS_national_spirit
+			picture = RUS_last_empire_spirit
 
 			allowed = {
 				always = no
@@ -60,7 +60,7 @@ ideas = {
 
 		# Regional winners outside the coalition war; the Khan's monthly hook owns it.
 		RUS_crisis_volunteer_mandate = {
-			picture = generic_volunteer_expedition_bonus
+			picture = ADISCORD_law_military_general_staff
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
@@ -74,7 +74,7 @@ ideas = {
 		# Bookmark previews use the initial values before country variables exist.
 		# These ideas are never installed; campaign modifiers own all live bonuses.
 		RUS_black_army_bookmark = {
-			picture = ADISCORD_military_organization_cadre_army
+			picture = RUS_black_army
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = {
@@ -86,14 +86,14 @@ ideas = {
 		}
 
 		RUS_bunker_complex_bookmark = {
-			picture = ADISCORD_logistics_centralized_depots
+			picture = RUS_bunker_complex
 			allowed = { always = no }
 			removal_cost = -1
 		}
 
 		RUS_permanent_government_delta = {
 			name = RUS_government_service
-			picture = generic_production_bonus
+			picture = RUS_government_service
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.15
@@ -102,7 +102,7 @@ ideas = {
 
 		RUS_single_supply_register_delta = {
 			name = RUS_black_army
-			picture = ADISCORD_military_organization_cadre_army
+			picture = RUS_black_army
 			allowed = { always = no }
 			modifier = {
 				supply_consumption_factor = -0.03
@@ -111,7 +111,7 @@ ideas = {
 
 		RUS_railway_coverage_delta = {
 			name = RUS_black_army
-			picture = ADISCORD_military_organization_cadre_army
+			picture = RUS_black_army
 			allowed = { always = no }
 			modifier = {
 				land_reinforce_rate = 0.02
@@ -120,7 +120,7 @@ ideas = {
 
 		RUS_state_budget_delta = {
 			name = RUS_government_service
-			picture = generic_production_bonus
+			picture = RUS_government_service
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.05
@@ -129,7 +129,7 @@ ideas = {
 
 		RUS_civil_construction_board_delta = {
 			name = RUS_government_service
-			picture = generic_production_bonus
+			picture = RUS_government_service
 			allowed = { always = no }
 			modifier = {
 				production_speed_industrial_complex_factor = 0.05
@@ -138,7 +138,7 @@ ideas = {
 
 		RUS_military_governors_delta = {
 			name = RUS_government_service
-			picture = generic_production_bonus
+			picture = RUS_government_service
 			allowed = { always = no }
 			modifier = {
 				mobilization_speed = 0.1
@@ -147,7 +147,7 @@ ideas = {
 
 		RUS_military_contract_board_delta = {
 			name = RUS_government_service
-			picture = generic_production_bonus
+			picture = RUS_government_service
 			allowed = { always = no }
 			modifier = {
 				industrial_capacity_factory = 0.05
@@ -156,7 +156,7 @@ ideas = {
 
 		RUS_a_country_of_names_delta = {
 			name = RUS_government_service
-			picture = generic_production_bonus
+			picture = RUS_government_service
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.10
@@ -165,7 +165,7 @@ ideas = {
 
 		RUS_district_ledger_delta = {
 			name = RUS_government_service
-			picture = generic_production_bonus
+			picture = RUS_government_service
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.10
@@ -174,7 +174,7 @@ ideas = {
 
 		RUS_courier_stations_delta = {
 			name = RUS_government_service
-			picture = generic_production_bonus
+			picture = RUS_government_service
 			allowed = { always = no }
 			modifier = {
 				mobilization_speed = 0.10
@@ -183,7 +183,7 @@ ideas = {
 
 		RUS_covenant_of_service_delta = {
 			name = RUS_government_service
-			picture = generic_production_bonus
+			picture = RUS_government_service
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.15
@@ -193,7 +193,7 @@ ideas = {
 
 		RUS_pay_the_officials_delta = {
 			name = RUS_government_service
-			picture = generic_production_bonus
+			picture = RUS_government_service
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.10
@@ -202,7 +202,7 @@ ideas = {
 
 		RUS_roadside_clinics_delta = {
 			name = RUS_government_service
-			picture = generic_production_bonus
+			picture = RUS_government_service
 			allowed = { always = no }
 			modifier = {
 				casualty_trickleback = 0.10
@@ -211,7 +211,7 @@ ideas = {
 
 		RUS_bunker_systems_college_delta = {
 			name = RUS_bunker_complex
-			picture = ADISCORD_logistics_centralized_depots
+			picture = RUS_bunker_complex
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.05
@@ -220,7 +220,7 @@ ideas = {
 
 		RUS_bunker_deep_casemates_delta = {
 			name = RUS_bunker_complex
-			picture = ADISCORD_logistics_centralized_depots
+			picture = RUS_bunker_complex
 			allowed = { always = no }
 			modifier = {
 				surrender_limit = 0.10
@@ -230,7 +230,7 @@ ideas = {
 
 		RUS_staff_college_delta = {
 			name = RUS_black_army
-			picture = generic_production_bonus
+			picture = RUS_black_army
 			allowed = { always = no }
 			modifier = {
 				army_org_factor = 0.03
@@ -239,7 +239,7 @@ ideas = {
 
 		RUS_integrated_signals_delta = {
 			name = RUS_black_army
-			picture = generic_production_bonus
+			picture = RUS_black_army
 			allowed = { always = no }
 			modifier = {
 				planning_speed = 0.05
@@ -248,7 +248,7 @@ ideas = {
 
 		RUS_wounded_return_service_delta = {
 			name = RUS_black_army
-			picture = generic_production_bonus
+			picture = RUS_black_army
 			allowed = { always = no }
 			modifier = {
 				casualty_trickleback = 0.05
@@ -257,7 +257,7 @@ ideas = {
 
 		RUS_serial_ordnance_orders_delta = {
 			name = RUS_black_army
-			picture = generic_production_bonus
+			picture = RUS_black_army
 			allowed = { always = no }
 			modifier = {
 				production_factory_max_efficiency_factor = 0.05
@@ -266,7 +266,7 @@ ideas = {
 
 		RUS_armoured_repair_service_delta = {
 			name = RUS_black_army
-			picture = generic_production_bonus
+			picture = RUS_black_army
 			allowed = { always = no }
 			modifier = {
 				supply_consumption_factor = -0.03
@@ -275,7 +275,7 @@ ideas = {
 
 		RUS_flight_school_delta = {
 			name = RUS_black_army
-			picture = generic_production_bonus
+			picture = RUS_black_army
 			allowed = { always = no }
 			modifier = {
 				air_accidents_factor = -0.05
@@ -284,7 +284,7 @@ ideas = {
 
 		RUS_air_control_network_delta = {
 			name = RUS_black_army
-			picture = generic_production_bonus
+			picture = RUS_black_army
 			allowed = { always = no }
 			modifier = {
 				air_mission_efficiency = 0.05
@@ -293,7 +293,7 @@ ideas = {
 
 		RUS_air_ground_coordination_delta = {
 			name = RUS_black_army
-			picture = generic_production_bonus
+			picture = RUS_black_army
 			allowed = { always = no }
 			modifier = {
 				ground_attack_factor = 0.05
@@ -301,7 +301,7 @@ ideas = {
 		}
 
 		RUS_bunker_guard_delta = {
-			picture = generic_production_bonus
+			picture = RUS_bunker_complex
 			allowed = { always = no }
 			modifier = {
 				army_org_factor = 0.12
@@ -310,7 +310,7 @@ ideas = {
 		}
 
 		RUS_bunker_shelter_delta = {
-			picture = generic_production_bonus
+			picture = RUS_bunker_complex
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.10
@@ -319,7 +319,7 @@ ideas = {
 		}
 
 		RUS_bunker_water_delta = {
-			picture = generic_production_bonus
+			picture = RUS_bunker_complex
 			allowed = { always = no }
 			modifier = {
 				attrition = -0.10
@@ -327,7 +327,7 @@ ideas = {
 		}
 
 		RUS_bunker_signals_delta = {
-			picture = generic_production_bonus
+			picture = RUS_bunker_complex
 			allowed = { always = no }
 			modifier = {
 				planning_speed = 0.18
@@ -335,7 +335,7 @@ ideas = {
 		}
 
 		RUS_bunker_workshop_delta = {
-			picture = generic_production_bonus
+			picture = RUS_bunker_complex
 			allowed = { always = no }
 			modifier = {
 				industrial_capacity_factory = 0.15
@@ -343,7 +343,7 @@ ideas = {
 		}
 
 		RUS_bunker_granary_delta = {
-			picture = generic_production_bonus
+			picture = RUS_bunker_complex
 			allowed = { always = no }
 			modifier = {
 				consumer_goods_factor = -0.05
@@ -351,7 +351,7 @@ ideas = {
 		}
 
 		RUS_bunker_clinic_delta = {
-			picture = generic_production_bonus
+			picture = RUS_bunker_complex
 			allowed = { always = no }
 			modifier = {
 				casualty_trickleback = 0.16
@@ -359,7 +359,7 @@ ideas = {
 		}
 
 		RUS_bunker_laboratory_delta = {
-			picture = generic_production_bonus
+			picture = RUS_bunker_complex
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.10
@@ -367,7 +367,7 @@ ideas = {
 		}
 
 		RUS_bunker_archive_delta = {
-			picture = generic_production_bonus
+			picture = RUS_bunker_complex
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.35
@@ -375,7 +375,7 @@ ideas = {
 		}
 
 		RUS_bunker_command_delta = {
-			picture = generic_production_bonus
+			picture = RUS_bunker_complex
 			allowed = { always = no }
 			modifier = {
 				max_planning_factor = 0.08
@@ -383,7 +383,9 @@ ideas = {
 			}
 		}
 
+		# Preview only; the government modifiers apply the permanent reward.
 		RUS_council_mandate = {
+			name = RUS_government_service
 			picture = RUS_council_mandate
 			allowed = { always = no }
 			removal_cost = -1
@@ -394,8 +396,10 @@ ideas = {
 			}
 		}
 
+		# Preview only; the government modifiers apply the permanent reward.
 		RUS_chancery_mandate = {
-			picture = generic_central_management
+			name = RUS_government_service
+			picture = RUS_chancery_mandate
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = {
@@ -436,8 +440,10 @@ ideas = {
 			}
 		}
 
+		# Preview only; the government modifiers apply the permanent reward.
 		RUS_repair_depots_spirit = {
-			picture = generic_production_bonus
+			name = RUS_government_service
+			picture = RUS_repair_depots_spirit
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = {
@@ -446,7 +452,7 @@ ideas = {
 		}
 
 		RUS_open_city_policy = {
-			picture = generic_central_management
+			picture = RUS_council_mandate
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = {
@@ -457,7 +463,7 @@ ideas = {
 		}
 
 		RUS_sealed_throne_policy = {
-			picture = generic_central_management
+			picture = RUS_sealed_throne_policy
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = {
@@ -508,14 +514,14 @@ ideas = {
 
 		RUS_hazard_capacity_6_delta = {
 			name = RUS_black_army
-			picture = ADISCORD_military_organization_cadre_army
+			picture = RUS_black_army
 			allowed = { always = no }
 			modifier = { special_forces_min = 6 }
 		}
 
 		RUS_hazard_capacity_3_delta = {
 			name = RUS_black_army
-			picture = ADISCORD_military_organization_cadre_army
+			picture = RUS_black_army
 			allowed = { always = no }
 			modifier = { special_forces_min = 3 }
 		}
@@ -550,7 +556,7 @@ ideas = {
 		}
 
 		RUS_defensive_preparation_spirit = {
-			picture = generic_army_war_college
+			picture = RUS_defensive_preparation_spirit
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = {
@@ -560,7 +566,7 @@ ideas = {
 		}
 
 		RUS_public_works_spirit = {
-			picture = generic_central_management
+			picture = RUS_public_works_spirit
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = {
@@ -569,7 +575,7 @@ ideas = {
 		}
 
 		RUS_mobile_preparation_spirit = {
-			picture = generic_army_war_college
+			picture = RUS_mobile_preparation_spirit
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = {

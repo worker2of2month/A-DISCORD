@@ -1,0 +1,13 @@
+﻿l_russian:
+ ADISCORD_decision_country_WKR:0 "Воркерланд"
+ ADISCORD_decision_country_WRK:0 "Воркерланд"
+ ADISCORD_decision_country_VAD:0 "Центральный округ"
+ ADISCORD_decision_country_TVA:0 "Воркенсберг"
+ ADISCORD_decision_country_IRT:0 "Внутренние земли"
+ ADISCORD_decision_country_MLR:0 "Малая низина"
+ ADISCORD_decision_country_SLA:0 "Старолесье"
+ ADISCORD_decision_country_YPR:0 "Юбор"
+ ADISCORD_decision_country_BTL:0 "Байринж"
+ ADISCORD_decision_country_VEL:0 "Вельский союз"
+ ADISCORD_decision_country_SRP:0 "Союз Возрождения"
+ ADISCORD_decision_country_name:0 "[This.GetName]"

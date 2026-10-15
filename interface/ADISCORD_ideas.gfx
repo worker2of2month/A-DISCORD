@@ -161,6 +161,56 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_idea_RUS_bunker_complex"
+		texturefile = "gfx/interface/ideas/RUS/idea_RUS_bunker_complex.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_RUS_black_army"
+		texturefile = "gfx/interface/ideas/RUS/idea_RUS_black_army.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_RUS_government_service"
+		texturefile = "gfx/interface/ideas/RUS/idea_RUS_government_service.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_RUS_last_empire_spirit"
+		texturefile = "gfx/interface/ideas/RUS/idea_RUS_last_empire_spirit.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_RUS_chancery_mandate"
+		texturefile = "gfx/interface/ideas/RUS/idea_RUS_chancery_mandate.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_RUS_repair_depots_spirit"
+		texturefile = "gfx/interface/ideas/RUS/idea_RUS_repair_depots_spirit.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_RUS_sealed_throne_policy"
+		texturefile = "gfx/interface/ideas/RUS/idea_RUS_sealed_throne_policy.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_RUS_defensive_preparation_spirit"
+		texturefile = "gfx/interface/ideas/RUS/idea_RUS_defensive_preparation_spirit.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_RUS_public_works_spirit"
+		texturefile = "gfx/interface/ideas/RUS/idea_RUS_public_works_spirit.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_RUS_mobile_preparation_spirit"
+		texturefile = "gfx/interface/ideas/RUS/idea_RUS_mobile_preparation_spirit.png"
+	}
+
+	spriteType = {
 		name = "GFX_idea_RUS_national_spirit"
 		texturefile = "gfx/interface/ideas/idea_generic_agrarian_society.dds"
 	}

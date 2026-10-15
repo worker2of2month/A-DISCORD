@@ -103,15 +103,15 @@ DYNAMIC_MODIFIER_SCOPES: dict[str, tuple[str, str]] = {
         "applied to RUS by RUS_faction_support_refresh for political power and "
         "the country's weekly power-balance movement",
     ),
+    "RUS_government_retained_institutions": (
+        COUNTRY,
+        "applied by RUS_government_refresh; mandate and depot bonuses remain "
+        "active only when the main government modifier is disabled",
+    ),
     "RUS_government_service": (
         COUNTRY,
         "applied to RUS by RUS_government_refresh when a government focus adds "
         "a permanent institutional bonus",
-    ),
-    "RUS_bunker_layer_mastery": (
-        COUNTRY,
-        "applied to RUS by RUS_bunker_layer_mastery_refresh for the room fitted on "
-        "each layer whose focus is complete",
     ),
     "RUS_favour_shock_fist": (
         COUNTRY,

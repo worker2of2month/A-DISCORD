@@ -67,7 +67,7 @@
 
  ADISCORD_nam_debug_start_resource_war: "§RDEBUG:§! Начать войну за ресурсы Светлогорья"
  ADISCORD_nam_debug_start_resource_war_desc: "Освобождает Светлогорье от старых союзных связей, создаёт постоянный Эфлорско-ажарский союз и запускает его общую войну против Светлогорья."
- ADISCORD_nam_debug_resolve_coalition_victory: "§RDEBUG:§! Разделить Светлогорье между победителями"
+ ADISCORD_nam_debug_resolve_coalition_victory: "§RDEBUG:§! Разделить Светлогорье"
  ADISCORD_nam_debug_resolve_coalition_victory_desc: "Полностью разделяет Светлогорье между Эфлором и Ажаром, ликвидирует Светлогорское восстание и сохраняет союз победителей."
  ADISCORD_nam_debug_resolve_nam_victory: "§RDEBUG:§! Закрепить победу Светлогорья"
  ADISCORD_nam_debug_resolve_nam_victory_desc: "Завершает войну признанием Светлогорья, ограниченной передачей приграничного штата и ликвидацией уцелевшей повстанческой армии; союз соседей сохраняется."
@@ -167,7 +167,7 @@
  NAM_sign_compact_desc: "Оплатить гражданские службы округа. Договор должен проработать §Y60 непрерывных дней до начала ресурсной войны§! под нашим владением и контролем, чтобы предотвратить восстание. Дозревание во время войны не меняет её начальный исход. Потеря округа обрывает действие договора; после возвращения его можно оплатить заново до войны."
  NAM_export_fuel: "Продать партию нефтяного резерва"
  NAM_export_fuel_desc: "Продать §Y5000§! £fuel_texticon за §G250§! £ADISCORD_economy_treasury_texticon. Нужен собственный контролируемый портовый округ. Повторная продажа через §Y30 дней§!."
- NAM_workshop_batch: "Запитать дополнительную смену мастерских"
+ NAM_workshop_batch: "Дополнительная смена мастерских"
  NAM_workshop_batch_desc: "Израсходовать §Y3000§! £fuel_texticon на выпуск §G120§! £support_equipment_texticon. Повторный заказ через §Y30 дней§!."
  NAM_supply_order: "Оплатить полевую поставку"
  NAM_supply_order_desc: "Получить на собственные склады §G1500§! £infantry_equipment_texticon и §G60§! £support_equipment_texticon. Повторный заказ через §Y45 дней§!."

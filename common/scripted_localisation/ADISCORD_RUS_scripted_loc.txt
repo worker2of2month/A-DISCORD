@@ -1,4 +1,26 @@
 defined_text = {
+	name = GetRUSGovernmentMandate
+	text = {
+		trigger = { check_variable = { var = RUS_government_mandate_political_power value = 0.15 compare = greater_than } }
+		localization_key = RUS_chancery_mandate
+	}
+	text = {
+		trigger = { check_variable = { var = RUS_government_mandate_political_power value = 0 compare = greater_than } }
+		localization_key = RUS_council_mandate
+	}
+	text = { localization_key = RUS_government_mandate_unselected }
+}
+
+defined_text = {
+	name = GetRUSGovernmentDepots
+	text = {
+		trigger = { check_variable = { var = RUS_government_depot_efficiency value = 0 compare = greater_than } }
+		localization_key = RUS_government_depots_active
+	}
+	text = { localization_key = RUS_government_depots_empty }
+}
+
+defined_text = {
 	name = GetRUSCrisisLaunchClock
 	text = {
 		trigger = {
@@ -4184,4 +4206,30 @@ defined_text = {
 		localization_key = RUS_favours_support_negative
 	}
 	text = { localization_key = RUS_favours_support_neutral }
+}
+
+# Called from the shared weekly income tooltip; other countries get an empty row.
+defined_text = {
+	name = GetRUSBunkerBudgetRow
+	text = {
+		trigger = {
+			tag = RUS
+			check_variable = { var = ADISCORD_economy_direct_income value = 0 compare = greater_than }
+		}
+		localization_key = RUS_bunker_budget_row
+	}
+	text = { localization_key = RUS_bunker_budget_row_none }
+}
+
+defined_text = {
+	name = GetRUSReclamationTargetName
+	text = {
+		trigger = { FROM = { state = 329 } }
+		localization_key = RUS_reclamation_target_ash_arc
+	}
+	text = {
+		trigger = { FROM = { state = 330 } }
+		localization_key = RUS_reclamation_target_mardar_rift
+	}
+	text = { localization_key = RUS_reclamation_target_name }
 }
