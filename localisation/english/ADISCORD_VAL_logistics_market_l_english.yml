@@ -64,7 +64,7 @@
  VAL_black_market_crisis: "A State of Two Ledgers"
  VAL_black_market_crisis_desc: "Underground trade costs the treasury §Y50%§! of regular income, including corridor payments. Administration costs rise and stability falls. Monetary losses are shown under Trade Routes.\n\n\n\n\n\n £GFX_ADISCORD_urban_decay_banner \n\n\n"
  VAL_refugee_strain: "Overloaded Resettlement System"
- VAL_refugee_strain_desc:0 "Overcrowding raises social expenses by §R7%§!, consumer goods by §R1%§! and reduces stability by §R2%§!."
+ VAL_refugee_strain_desc:0 "Overcrowding raises social expenses by §R7%§!, consumer goods by §R1%§! and reduces stability by §R2%§!.\n\n\n\n\n\n £GFX_ADISCORD_urban_decay_banner \n\n\n"
  VAL_closed_border_regime: "Closed Crossings"
  VAL_closed_border_regime_desc: "The emergency border regime reduces population inflow but delays legitimate deals as well."
  VAL_refugee_contract_labor: "Contracts for the Displaced"

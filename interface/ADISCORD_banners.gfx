@@ -97,4 +97,64 @@ spriteTypes = {
 		texturefile = "gfx/texticons/adiscord/banners/ADISCORD_vorkerland_tva_field_laboratories_banner.png"
 		legacy_lazy_load = no
 	}
+
+	spriteType = {
+		name = "GFX_WRK_fallen_crown_banner"
+		texturefile = "gfx/texticons/adiscord/banners/WRK_fallen_crown_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_RUS_black_army_banner"
+		texturefile = "gfx/texticons/adiscord/banners/RUS_black_army_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_vorkerland_civil_war_exhaustion_banner"
+		texturefile = "gfx/texticons/adiscord/banners/ADISCORD_vorkerland_civil_war_exhaustion_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_appanage_revanchism_banner"
+		texturefile = "gfx/texticons/adiscord/banners/appanage_revanchism_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_contractual_etatism_banner"
+		texturefile = "gfx/texticons/adiscord/banners/contractual_etatism_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_aristocratic_hedonism_banner"
+		texturefile = "gfx/texticons/adiscord/banners/aristocratic_hedonism_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_vorkerism_banner"
+		texturefile = "gfx/texticons/adiscord/banners/vorkerism_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_neo_vorkerism_banner"
+		texturefile = "gfx/texticons/adiscord/banners/neo_vorkerism_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_imperial_restorationism_banner"
+		texturefile = "gfx/texticons/adiscord/banners/imperial_restorationism_banner.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_chauvinism_banner"
+		texturefile = "gfx/texticons/adiscord/banners/chauvinism_banner.png"
+		legacy_lazy_load = no
+	}
 }
