@@ -5,6 +5,7 @@ import re
 import unittest
 from dataclasses import replace
 from pathlib import Path
+from tools.builders.build_adiscord_focus_trees import render_source
 from tools.lib.focus_sources import read_focus_source
 
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -222,7 +223,7 @@ class ShabratPostwarStoryTests(unittest.TestCase):
         self.assertIn("add_namespace = ADISCORD_STP_pw", events)
         ledger_ids = {entry["id"] for entry in ledger["events"]}
         for event_id, focus_id in expected.items():
-            self.assertEqual(events.count(f"id = {event_id}"), 1)
+            self.assertEqual(events.count(f"\tid = {event_id}\n"), 1)
             block = event_block(events, event_id)
             self.assertIn("tag = STS", block)
             self.assertIn(f"has_completed_focus = {focus_id}", block)
@@ -458,11 +459,17 @@ class CharterCabinetTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        focus_sources = (
+            "focus_trees/STP/postwar/shabrat/focuses.txt",
+            "focus_trees/STP/postwar/charter/sotnikov.txt",
+            "focus_trees/STP/postwar/charter/shabrat.txt",
+            "focus_trees/STP/postwar/charter/tikhoreva.txt",
+        )
         cls.focuses = {
             scalar(node.value, "id"): node.value
-            for node in parse_clausewitz(read(
-                ROOT / "focus_trees/STP/postwar/shabrat/focuses.txt"
-            )) if node.key == "focus"
+            for relative in focus_sources
+            for node in parse_clausewitz(read(ROOT / relative))
+            if node.key == "focus"
         }
         cls.events = {
             scalar(node.value, "id"): node.value
@@ -533,6 +540,21 @@ class CharterCabinetTests(unittest.TestCase):
                 yield from selected_effects(block(self.effects, node.key), facts, scope)
             else:
                 yield scope, node
+
+    def programme_nodes(self, entries, candidate, stack=()):
+        """Follow native boolean calls without treating preview output as execution."""
+        prefix = f"STP_pc_charter_{candidate}_"
+        definitions = {
+            node.key: node.value for node in (*self.effects, *self.triggers)
+            if node.key.startswith(prefix) and isinstance(node.value, list)
+        }
+        for node in entries:
+            yield node
+            if isinstance(node.value, list):
+                yield from self.programme_nodes(node.value, candidate, stack)
+            elif node.key in definitions and node.value in {"yes", "no"}:
+                self.assertNotIn(node.key, stack, f"Recursive cabinet call: {node.key}")
+                yield from self.programme_nodes(definitions[node.key], candidate, (*stack, node.key))
 
     def test_choice_dispatches_from_freedom_open_once_before_programmes(self):
         calls = []
@@ -736,7 +758,7 @@ class CharterCabinetTests(unittest.TestCase):
                     groups = [set(group) for group in parents(child) if set(group) & pair]
                     self.assertTrue(all(pair <= group for group in groups), (pair, scalar(child, "id")))
 
-    def test_mandate_and_capstone_replace_a_defined_leader_trait(self):
+    def test_mandate_trait_is_upgraded_only_with_an_earned_legacy(self):
         traits = block(parse_clausewitz(read(ROOT / "common/country_leader/ADISCORD_traits_STP.txt")), "leader_traits")
         defined = {node.key for node in traits}
         for candidate, (first, final) in self.TRAITS.items():
@@ -744,24 +766,37 @@ class CharterCabinetTests(unittest.TestCase):
             mandate = block(self.focuses[f"STP_pc_charter_{candidate}_mandate"], "completion_reward")
             self.assertEqual(scalar(mandate, "add_country_leader_trait"), first)
             capstone = block(self.focuses[f"STP_pc_charter_{candidate}_charter_fulfilled"], "completion_reward")
-            self.assertEqual(scalar(capstone, "remove_country_leader_trait"), first)
-            self.assertEqual(scalar(capstone, "add_country_leader_trait"), final)
+            self.assertFalse(any(node.key in {"remove_country_leader_trait", "add_country_leader_trait"}
+                                 for node in self.programme_nodes(capstone, candidate)))
+            event = self.events[f"ADISCORD_STP_pc.{self.CAPSTONE_EVENTS[candidate]}"]
+            awards = list(self.programme_nodes(event, candidate))
+            self.assertEqual({node.value for node in awards if node.key == "remove_country_leader_trait"}, {first})
+            self.assertEqual({node.value for node in awards if node.key == "add_country_leader_trait"}, {final})
 
-    def test_capstone_event_chooses_one_of_two_defined_legacy_spirits(self):
+    def test_capstone_legacy_options_require_earned_outcomes_and_allow_a_provisional_report(self):
+        requirements = {
+            "sotnikov": ("law_earned", "defenders_earned"),
+            "shabrat": ("districts_ready", "nation_ready"),
+            "tikhoreva": ("ledger_ready", "utility_ready"),
+        }
         for candidate, number in self.CAPSTONE_EVENTS.items():
             event = self.events[f"ADISCORD_STP_pc.{number}"]
-            self.assertEqual(scalar(event, "fire_only_once"), "yes")
-            legacies = []
-            for option in (node.value for node in event if node.key == "option"):
-                facts = self.facts(candidate)
-                if not matches_conditions(block(option, "trigger"), facts, "STS"):
-                    continue
-                selected = [node for _, node in selected_effects(option, facts, "STS")]
-                legacies.extend(node.value for node in selected if node.key == "add_ideas")
-            self.assertEqual(len(set(legacies)), 2, candidate)
+            options = {scalar(node.value, "name"): node.value for node in event if node.key == "option"}
+            legacies = {node.value for node in self.programme_nodes(event, candidate)
+                        if node.key == "add_ideas" and isinstance(node.value, str)
+                        and node.value.startswith(f"STP_pc_charter_{candidate}_legacy_")}
+            self.assertEqual(len(legacies), 2, candidate)
             for idea in legacies:
-                self.assertTrue(idea.startswith(f"STP_pc_charter_{candidate}_legacy_"))
                 self.assertIn("modifier", {node.key for node in block(self.ideas, idea)})
+            for suffix, requirement in zip(("a", "b"), requirements[candidate]):
+                option = options[f"ADISCORD_STP_pc.{number}.{suffix}"]
+                self.assertIn(f"STP_pc_charter_{candidate}_{requirement}",
+                              {node.key for node in walk(block(option, "trigger"))})
+            provisional = [option for name, option in options.items()
+                           if name.endswith((".provisional", ".c"))]
+            self.assertEqual(len(provisional), 1, candidate)
+            self.assertFalse(any(node.key in {"add_ideas", "add_country_leader_trait", "ADISCORD_superevent_enqueue"}
+                                 for node in self.programme_nodes(provisional[0], candidate)))
 
     def test_law_rewards_keep_a_real_delta_when_the_law_is_already_active(self):
         laws = 0
@@ -868,7 +903,23 @@ class CharterCabinetTests(unittest.TestCase):
             self.assertEqual(scalar(construction, "level"), "1")
             self.assertEqual(scalar(construction, "instant_build"), "yes")
             self.assertIn("ADISCORD_economy_mark_dirty", {node.key for node in walk(reward)})
-        self.assertGreaterEqual(constructions, 3)
+        self.assertGreaterEqual(constructions, 2)
+        delayed = {
+            "sotnikov": ("STP_pc_charter_sotnikov_settle_reintegration", {"industrial_complex"}),
+            "shabrat": ("STP_pc_charter_shabrat_finish_compact", {"industrial_complex"}),
+            "tikhoreva": ("STP_pc_charter_tikhoreva_finish_project", {"industrial_complex", "arms_factory"}),
+        }
+        for candidate, (effect, buildings) in delayed.items():
+            payload = list(self.programme_nodes(block(self.effects, effect), candidate))
+            delivered = {scalar(node.value, "type") for node in payload if node.key == "add_building_construction"}
+            self.assertEqual(delivered, buildings, effect)
+            capacities = {scalar(node.value, "building") for node in payload if node.key == "free_building_slots"}
+            self.assertTrue(buildings <= capacities, effect)
+            for node in payload:
+                if node.key == "add_building_construction":
+                    self.assertEqual(scalar(node.value, "level"), "1")
+                    self.assertEqual(scalar(node.value, "instant_build"), "yes")
+            self.assertIn("ADISCORD_economy_mark_dirty", {node.key for node in payload})
 
     def test_charter_shabrat_cannot_proclaim_the_old_imperial_union(self):
         requirements = block(self.triggers, "STP_imperial_union_requirements_met")
@@ -892,6 +943,32 @@ class CharterCabinetTests(unittest.TestCase):
             reward = block(self.focuses[focus_id], "completion_reward")
             self.assertEqual([node.value for node in walk(reward) if node.key == "unlock_decision_tooltip"], [decision_id])
             price, cooldown = prices[candidate]
+            if candidate != "tikhoreva":
+                self.assertEqual(scalar(decision, "cost"), "0")
+                self.assertEqual(scalar(decision, "days_remove"), "35")
+                self.assertEqual(scalar(block(decision, "allowed"), "tag"), "STS")
+                self.assertEqual(scalar(decision, "fire_only_once"), "no")
+                self.assertTrue(scalar(decision, "custom_cost_text"))
+                currencies = block(decision, "custom_cost_trigger")
+                self.assertIn("has_political_power", {node.value for node in walk(currencies) if isinstance(node.value, str)})
+                self.assertIn(str(price), {node.value for node in walk(currencies) if isinstance(node.value, str)})
+                treasury = [node.value for node in walk(currencies) if node.key == "check_variable"
+                            and scalar(node.value, "var") == "ADISCORD_economy_treasury"]
+                self.assertEqual(len(treasury), 1)
+                self.assertEqual(scalar(treasury[0], "value"), "600")
+                self.assertEqual(scalar(treasury[0], "compare"), "greater_than_or_equals")
+                payment = list(self.programme_nodes(block(decision, "complete_effect"), candidate))
+                self.assertIn(str(-price), {node.value for node in payment if node.key == "add_political_power"})
+                self.assertFalse(any(node.key in {"add_manpower", "add_building_construction"} for node in payment))
+                settlement = list(self.programme_nodes(block(decision, "remove_effect"), candidate))
+                self.assertIn("add_building_construction", {node.key for node in settlement})
+                self.assertIn("ADISCORD_economy_mark_dirty", {node.key for node in settlement})
+                cancellation = list(self.programme_nodes(block(decision, "cancel_effect"), candidate))
+                self.assertIn("add_political_power", {node.key for node in cancellation})
+                self.assertTrue(any(node.key == "add_to_variable" and scalar(node.value, "var") == "ADISCORD_economy_treasury"
+                                    for node in cancellation))
+                self.assertFalse(any(node.key == "add_building_construction" for node in cancellation))
+                continue
             self.assertEqual(float(scalar(decision, "cost")), price)
             self.assertEqual(scalar(block(decision, "allowed"), "tag"), "STS")
             self.assertFalse(any(node.key in {"custom_cost_text", "custom_cost_trigger", "days_remove", "cancel_effect"} for node in decision))
@@ -902,7 +979,10 @@ class CharterCabinetTests(unittest.TestCase):
                 self.assertFalse(matches_conditions(block(decision, "visible"), facts, "STS"))
                 facts["STS", "has_completed_focus", focus_id] = True
                 self.assertEqual(matches_conditions(block(decision, "visible"), facts, "STS"), current == candidate)
-                self.assertEqual(matches_conditions(block(decision, "available"), facts, "STS"), current == candidate)
+                selectable = block(decision, "visible") + block(decision, "available")
+                self.assertEqual(matches_conditions(selectable, facts, "STS"), current == candidate)
+                facts["STS", "STP_pc_focus_available", "yes"] = False
+                self.assertFalse(matches_conditions(selectable, facts, "STS"))
             complete = block(decision, "complete_effect")
             self.assertNotIn("subtract_from_variable", {node.key for node in walk(complete)})
             paid = self.facts(candidate)
@@ -933,6 +1013,113 @@ class CharterCabinetTests(unittest.TestCase):
             self.assertEqual([node.key for node in blocked], ["add_political_power"])
             self.assertEqual(float(scalar(blocked, "add_political_power")), price)
 
+    def test_tikhoreva_decision_availability_names_public_conditions(self):
+        def exposed_nodes(entries):
+            for node in entries:
+                if node.key == "custom_trigger_tooltip":
+                    continue
+                yield node
+                if isinstance(node.value, list):
+                    yield from exposed_nodes(node.value)
+
+        prefix = "STP_pc_charter_tikhoreva_"
+        for category in self.decisions:
+            for decision in category.value:
+                if not decision.key.startswith(prefix):
+                    continue
+                available = next((node.value for node in decision.value if node.key == "available"), [])
+                raw = {node.key for node in exposed_nodes(available)}
+                self.assertFalse(raw & {prefix + "work_current", prefix + "current", "has_country_flag", "check_variable"}, decision.key)
+                if available:
+                    self.assertIn("STP_pw_reconstruction_available_tt", {node.value for node in walk(available) if node.key == "tooltip"}, decision.key)
+
+    def test_tikhoreva_independent_inspectors_unlock_faster_costlier_acceptance(self):
+        prefix = "STP_pc_charter_tikhoreva_"
+        reward = block(self.focuses[prefix + "limits_of_measurement"], "completion_reward")
+        self.assertEqual(scalar(reward, "unlock_decision_tooltip"), prefix + "complete_acceptance")
+        CharterTransactions.setUpClass()
+        fixture = CharterTransactions()
+        fixture.setUp()
+        fixture.cabinet("tikhoreva")
+        fixture.set_var(prefix + "project_kind", 10)
+        fixture.mark("has_state_flag", prefix + "pilot_site", "2")
+        fixture.mark("has_country_flag", prefix + "acceptance_open")
+        options = {scalar(node.value, "name"): node.value for node in fixture.events["ADISCORD_STP_pc.67"] if node.key == "option"}
+        self.assertFalse(fixture.conditions(block(options["ADISCORD_STP_pc.67.a"], "trigger")))
+        self.assertTrue(fixture.conditions(block(options["ADISCORD_STP_pc.67.b"], "trigger")))
+        fixture.mark("has_completed_focus", prefix + "limits_of_measurement")
+        self.assertTrue(fixture.conditions(block(options["ADISCORD_STP_pc.67.a"], "trigger")))
+        self.assertTrue(fixture.conditions(block(options["ADISCORD_STP_pc.67.b"], "trigger")))
+        for name, price, days in (("complete_acceptance", 180, "28"), ("staged_acceptance", 120, "42")):
+            decision = fixture.decisions[prefix + name]
+            self.assertEqual(scalar(decision, "days_remove"), days)
+            fixture.set_var("ADISCORD_economy_treasury", price)
+            self.assertTrue(fixture.conditions(block(decision, "custom_cost_trigger")))
+            fixture.set_var("ADISCORD_economy_treasury", price - 0.01)
+            self.assertFalse(fixture.conditions(block(decision, "custom_cost_trigger")))
+
+    def test_tikhoreva_norm_review_handles_either_focus_order_and_reopens_after_asset_loss(self):
+        prefix = "STP_pc_charter_tikhoreva_"
+        CharterTransactions.setUpClass()
+        for focus_first in (True, False):
+            with self.subTest(focus_first=focus_first):
+                fixture = CharterTransactions()
+                fixture.setUp()
+                fixture.cabinet("tikhoreva")
+                if focus_first:
+                    fixture.mark("has_completed_focus", prefix + "public_results")
+                fixture.set_var(prefix + "project_kind", 5)
+                fixture.mark("has_state_flag", prefix + "pilot_site", "2")
+                fixture.execute(fixture.effects[prefix + "finish_project"])
+                if not focus_first:
+                    self.assertFalse(any(key == "country_event" for _, key, _ in fixture.calls))
+                    fixture.mark("has_completed_focus", prefix + "public_results")
+                    decision = fixture.decisions[prefix + "reopen_norm_review"]
+                    self.assertTrue(fixture.conditions(block(decision, "visible")))
+                    self.assertTrue(fixture.conditions(block(decision, "available")))
+                    fixture.decision(prefix + "reopen_norm_review")
+                dispatches = [scalar(value, "id") for _, key, value in fixture.calls if key == "country_event"]
+                self.assertEqual(dispatches, ["ADISCORD_STP_pc.85"])
+                fixture.facts[("2", "controller")] = "VAL"
+                close = next(node.value for node in fixture.events["ADISCORD_STP_pc.85"]
+                             if node.key == "option" and scalar(node.value, "name") == "ADISCORD_STP_pc.5.closed")
+                self.assertTrue(fixture.conditions(block(close, "trigger")))
+                fixture.execute(close)
+                self.assertNotIn(("STS", "has_country_flag", prefix + "norm_review_open"), fixture.facts)
+                fixture.facts[("2", "controller")] = "STS"
+                decision = fixture.decisions[prefix + "reopen_norm_review"]
+                self.assertTrue(fixture.conditions(block(decision, "visible")))
+                self.assertTrue(fixture.conditions(block(decision, "available")))
+                fixture.decision(prefix + "reopen_norm_review")
+                fixture.decision(prefix + "reopen_norm_review")
+                dispatches = [scalar(value, "id") for _, key, value in fixture.calls if key == "country_event"]
+                self.assertEqual(dispatches, ["ADISCORD_STP_pc.85", "ADISCORD_STP_pc.85"])
+
+    def test_tikhoreva_abandon_returns_pending_pilot_after_cabinet_loss_without_touching_other_stages(self):
+        prefix = "STP_pc_charter_tikhoreva_"
+        CharterTransactions.setUpClass()
+        fixture = CharterTransactions()
+        fixture.setUp()
+        fixture.cabinet("sotnikov")
+        fixture.set_var(prefix + "deposit_treasury", 900)
+        fixture.mark("has_country_flag", prefix + "acceptance_open")
+        fixture.mark("has_state_flag", prefix + "pilot_site", "2")
+        for kind in (1, 5, 9):
+            fixture.set_var(prefix + "project_kind", kind)
+            fixture.decision(prefix + "abandon_pilot")
+            self.assertEqual(fixture.number(prefix + "deposit_treasury", "STS"), 900)
+            self.assertEqual(fixture.number(prefix + "project_kind", "STS"), kind)
+            self.assertEqual(fixture.number("ADISCORD_economy_treasury", "STS"), 5000)
+        fixture.set_var(prefix + "project_kind", 10)
+        self.assertTrue(fixture.conditions(block(fixture.decisions[prefix + "abandon_pilot"], "visible")))
+        fixture.decision(prefix + "abandon_pilot")
+        fixture.decision(prefix + "abandon_pilot")
+        self.assertEqual(fixture.number("ADISCORD_economy_treasury", "STS"), 5900)
+        self.assertEqual(fixture.number("ADISCORD_economy_current_month_action_income", "STS"), 900)
+        self.assertNotIn(("STS", "variable", prefix + "project_kind"), fixture.facts)
+        self.assertNotIn(("2", "has_state_flag", prefix + "pilot_site"), fixture.facts)
+        self.assertIn(("STS", "has_country_flag", prefix + "acceptance_open"), fixture.facts)
+
     def test_new_story_events_are_registered_guarded_and_localisation_is_loadable(self):
         ledger_ids = {entry["id"] for entry in json.loads(read(LEDGER))["events"]}
         keys = set()
@@ -943,22 +1130,30 @@ class CharterCabinetTests(unittest.TestCase):
             self.assertIn(event_id, ledger_ids)
             keys.add(scalar(event, "title"))
             self.assertEqual(scalar(event, "is_triggered_only"), "yes")
+            self.assertEqual(scalar(event, "timeout_days"), "14")
             if event_id != "ADISCORD_STP_pc.5":
                 candidate = owners[event_id]
-                self.assertIn(f"STP_pc_charter_{candidate}_current", {node.key for node in walk(block(event, "trigger"))})
-                self.assertEqual(scalar(event, "fire_only_once"), "yes")
+                prefix = f"STP_pc_charter_{candidate}_"
+                expanded = list(self.programme_nodes(event, candidate))
+                self.assertIn(prefix + "current", {node.key for node in expanded})
+                once = [node.value for node in event if node.key == "fire_only_once"]
+                if once != ["yes"]:
+                    guard = block(event, "trigger")
+                    self.assertTrue(any(node.key in {"has_country_flag", "has_variable"} for node in walk(guard)), event_id)
                 dispatchers = [
                     focus_id for focus_id, focus in self.focuses.items()
-                    if focus_id.startswith(f"STP_pc_charter_{candidate}_")
+                    if focus_id.startswith(prefix)
                     and event_id in {scalar(node.value, "id") for node in walk(focus) if node.key == "country_event"}
                 ]
+                dispatchers.extend(
+                    effect.key for effect in self.effects if effect.key.startswith(prefix)
+                    and event_id in {scalar(node.value, "id") for node in walk(effect.value) if node.key == "country_event"}
+                )
                 self.assertEqual(len(dispatchers), 1, event_id)
-                for node in walk(event):
+                for node in expanded:
                     if node.key in {"add_ideas", "add_timed_idea"}:
                         idea = node.value if isinstance(node.value, str) else scalar(node.value, "idea")
                         keys.update((idea, idea + "_desc"))
-        for first, final in self.TRAITS.values():
-            keys.update((first, final))
             for node in event:
                 if node.key == "desc":
                     key = scalar(node.value, "text") if isinstance(node.value, list) else node.value
@@ -967,17 +1162,38 @@ class CharterCabinetTests(unittest.TestCase):
             for node in walk(event):
                 if node.key in {"name", "custom_effect_tooltip"} and isinstance(node.value, str):
                     keys.add(node.value)
+        for first, final in self.TRAITS.values():
+            keys.update((first, final))
         for focus_id in self.focuses:
             if focus_id.startswith("STP_pc_charter_"):
                 keys.update((focus_id, focus_id + "_desc"))
-                keys.update(node.value for node in walk(self.focuses[focus_id]) if node.key in {"tooltip", "custom_effect_tooltip"} and isinstance(node.value, str))
-        for candidate, (suffix, _) in self.PROGRAMMES.items():
-            decision_id = f"STP_pc_charter_{candidate}_{suffix}"
-            keys.update((decision_id, decision_id + "_desc"))
+                keys.update(node.value for node in walk(self.focuses[focus_id])
+                            if node.key in {"tooltip", "custom_effect_tooltip"} and isinstance(node.value, str))
+        for category in self.decisions:
+            if not isinstance(category.value, list):
+                continue
+            for decision in category.value:
+                if not decision.key.startswith("STP_pc_charter_") or not isinstance(decision.value, list):
+                    continue
+                keys.update((decision.key, decision.key + "_desc"))
+                for node in walk(decision.value):
+                    if node.key in {"tooltip", "custom_effect_tooltip"}:
+                        keys.add(node.value)
+                    elif node.key == "custom_cost_text":
+                        keys.update((node.value, node.value + "_blocked", node.value + "_tooltip"))
+        pilot_dispatch = block(self.effects, "STP_pc_charter_tikhoreva_finish_project")
+        self.assertIn("ADISCORD_STP_pc.67", {scalar(node.value, "id") for node in walk(pilot_dispatch) if node.key == "country_event"})
+        norm_dispatch = block(self.effects, "STP_pc_charter_tikhoreva_open_norm_review")
+        self.assertIn("STP_pc_charter_tikhoreva_public_results", {node.value for node in walk(norm_dispatch) if node.key == "has_completed_focus"})
+        self.assertIn("STP_pc_charter_tikhoreva_pilot_operational", {node.key for node in walk(norm_dispatch)})
+        public_results = block(self.focuses["STP_pc_charter_tikhoreva_public_results"], "completion_reward")
+        self.assertIn("STP_pc_charter_tikhoreva_reopen_norm_review",
+                      {node.value for node in walk(public_results) if node.key == "unlock_decision_tooltip"})
+        self.assertNotIn("STP_pc_charter_tikhoreva_open_norm_review", {node.key for node in walk(public_results)})
         for language in ("russian", "english"):
             path = ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml"
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
-            text = read(path)
+            text = read(path) + "\n" + read(ROOT / f"localisation/{language}/ADISCORD_laws_l_{language}.yml")
             values = {}
             for line in text.splitlines():
                 match = re.fullmatch(r'\s*([^\s:]+):\d*\s*"((?:[^"\\]|\\.)*)"', line)
@@ -997,6 +1213,719 @@ class CharterCabinetTests(unittest.TestCase):
                         self.assertLessEqual(len(value), 3000)
                         self.assertLessEqual(len(value.encode("utf-8")), 5500)
                         self.assertNotIn("§Y", value)
+
+
+class PostIvanovNarrativeTests(unittest.TestCase):
+    """Story delivery and current-campaign guards, without native popup simulation."""
+
+    STORIES = {
+        "ADISCORD_STP_cw.100": ("STP_hw_leaflets_over_fada", "STS", "war"),
+        "ADISCORD_STP_cw.101": ("STP_hw_council_of_passes", "STS", "war"),
+        "ADISCORD_STP_cw.102": ("STP_hw_open_black_book", "STS", "war"),
+        "ADISCORD_STP_cw.103": ("STP_hw_kefreyt_contract", "STS", "war"),
+        "ADISCORD_STP_cw.104": ("STP_hw_mountains_pay", "STS", "war"),
+        "ADISCORD_STP_cw.105": ("STP_hw_coalition_congress", "STS", "war"),
+        "ADISCORD_STP_cw.110": ("STP_party_presidium_broadcast", "STP", "war"),
+        "ADISCORD_STP_cw.111": ("STP_party_front_correspondents", "STP", "war"),
+        "ADISCORD_STP_cw.112": ("STP_party_family_commissions", "STP", "war"),
+        "ADISCORD_STP_cw.113": ("STP_party_regimental_organizers", "STP", "war"),
+        "ADISCORD_STP_cw.114": ("STP_party_district_supply", "STP", "war"),
+        "ADISCORD_STP_cw.115": ("STP_party_war_directorate", "STP", "war"),
+        "ADISCORD_STP_pw.10": ("STP_pw_republic_district_authority", "STS", "postwar"),
+        "ADISCORD_STP_pw.11": ("STP_pw_party_district_authority", "STP", "postwar"),
+    }
+    FOUNDER_SCENES = {"ADISCORD_STP_cw.101", "ADISCORD_STP_cw.105"}
+
+    @classmethod
+    def setUpClass(cls):
+        cls.event_nodes = parse_clausewitz(read(EVENTS))
+        cls.events = {
+            scalar(node.value, "id"): node.value
+            for node in cls.event_nodes if node.key == "country_event"
+        }
+        cls.triggers = {
+            node.key: node.value
+            for node in parse_clausewitz(read(
+                ROOT / "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"
+            )) if isinstance(node.value, list)
+        }
+        authored_tree = block(
+            parse_clausewitz(render_source("STP/civil_war/focuses.txt")),
+            "focus_tree",
+        )
+        cls.authored_focuses = [
+            node.value for node in authored_tree
+            if node.key == "focus" and isinstance(node.value, list)
+        ]
+        cls.native_focuses = [
+            node.value for node in walk(parse_clausewitz(read(
+                ROOT / "common/national_focus/ADISCORD_STP_civil_war.txt"
+            ))) if node.key == "focus" and isinstance(node.value, list)
+        ]
+
+    def expanded_conditions(self, entries, stack=()):
+        expanded = []
+        for node in entries:
+            if node.key in self.triggers:
+                self.assertIn(node.value, ("yes", "no"))
+                self.assertNotIn(node.key, stack)
+                expanded.append(replace(
+                    node,
+                    key="AND" if node.value == "yes" else "NOT",
+                    value=self.expanded_conditions(
+                        self.triggers[node.key], stack + (node.key,)
+                    ),
+                ))
+            elif isinstance(node.value, list):
+                expanded.append(replace(
+                    node, value=self.expanded_conditions(node.value, stack)
+                ))
+            else:
+                expanded.append(node)
+        return expanded
+
+    def current_facts(self, event_id):
+        focus_id, tag, phase = self.STORIES[event_id]
+        facts = {
+            (tag, "is_ai", "no"): True,
+            (tag, "is_subject", "no"): True,
+            (tag, "has_completed_focus", focus_id): True,
+            ("STP", "exists", "yes"): True,
+            ("STS", "exists", "yes"): True,
+            ("STP", "has_capitulated", "no"): True,
+            ("STS", "has_capitulated", "no"): True,
+        }
+        if phase == "war":
+            facts["STP", "has_war_with", "STS"] = True
+        else:
+            facts[tag, "has_country_flag", "STP_cw_postwar"] = True
+            facts[tag, "has_country_flag", "STP_cw_won_union_battle"] = True
+            facts[tag, "has_global_flag", "STP_cw_union_wars_finished"] = True
+        return facts
+
+    def test_stories_are_registered_once_and_have_no_gameplay_payload(self):
+        ledger = json.loads(read(LEDGER))["events"]
+        event_fields = {
+            "id", "title", "desc", "picture", "is_triggered_only",
+            "fire_only_once", "trigger", "option",
+        }
+        for event_id in self.STORIES:
+            with self.subTest(event=event_id):
+                definitions = [
+                    node.value for node in self.event_nodes
+                    if node.key == "country_event"
+                    and scalar(node.value, "id") == event_id
+                ]
+                self.assertEqual(len(definitions), 1)
+                event = definitions[0]
+                self.assertEqual(scalar(event, "is_triggered_only"), "yes")
+                self.assertEqual(scalar(event, "fire_only_once"), "yes")
+                self.assertEqual({node.key for node in event}, event_fields)
+                options = [node.value for node in event if node.key == "option"]
+                self.assertEqual(len(options), 1)
+                self.assertEqual({node.key for node in options[0]}, {"name"})
+                self.assertEqual(scalar(options[0], "name"), f"{event_id}.a")
+                entries = [entry for entry in ledger if entry["id"] == event_id]
+                self.assertEqual(len(entries), 1)
+                self.assertEqual(entries[0]["owner"], "events/ADISCORD_STP_events.txt")
+                self.assertEqual(entries[0]["status"], "active")
+
+    def test_each_story_has_one_hidden_deferred_focus_call_in_source_and_output(self):
+        def dispatches(entries, hidden=False):
+            for node in entries:
+                if node.key == "effect_tooltip":
+                    continue
+                if node.key == "country_event":
+                    yield node.value, hidden
+                elif isinstance(node.value, list):
+                    yield from dispatches(
+                        node.value, hidden or node.key == "hidden_effect"
+                    )
+
+        for source, focuses in (
+            ("authored", self.authored_focuses), ("native", self.native_focuses)
+        ):
+            calls = {event_id: [] for event_id in self.STORIES}
+            for focus in focuses:
+                for payload, hidden in dispatches(block(focus, "completion_reward")):
+                    event_id = scalar(payload, "id")
+                    if event_id in calls:
+                        calls[event_id].append((
+                            scalar(focus, "id"),
+                            {node.key: node.value for node in payload},
+                            hidden,
+                        ))
+            for event_id, (focus_id, _, _) in self.STORIES.items():
+                with self.subTest(source=source, event=event_id):
+                    self.assertEqual(calls[event_id], [(
+                        focus_id, {"id": event_id, "days": "1"}, True,
+                    )])
+
+    def test_story_guards_follow_the_current_side_phase_and_human_country(self):
+        for event_id, (focus_id, tag, phase) in self.STORIES.items():
+            trigger = self.expanded_conditions(block(self.events[event_id], "trigger"))
+            facts = self.current_facts(event_id)
+            with self.subTest(event=event_id):
+                self.assertTrue(matches_conditions(trigger, facts, tag))
+                self.assertFalse(matches_conditions(trigger, facts, "VAL"))
+                self.assertFalse(matches_conditions(trigger, facts | {
+                    (tag, "has_completed_focus", focus_id): False,
+                }, tag))
+                self.assertFalse(matches_conditions(trigger, facts | {
+                    (tag, "is_ai", "no"): False,
+                    (tag, "is_ai", "yes"): True,
+                }, tag))
+                self.assertFalse(matches_conditions(trigger, facts | {
+                    (tag, "has_capitulated", "no"): False,
+                    (tag, "has_capitulated", "yes"): True,
+                }, tag))
+                if phase == "war":
+                    self.assertFalse(matches_conditions(trigger, facts | {
+                        ("STP", "has_war_with", "STS"): False,
+                        (tag, "has_war_with", "VAL"): True,
+                    }, tag))
+                    self.assertFalse(matches_conditions(trigger, facts | {
+                        (tag, "has_country_flag", "STP_cw_postwar"): True,
+                    }, tag))
+                    if tag == "STS":
+                        self.assertFalse(matches_conditions(trigger, facts | {
+                            ("STP", "has_capitulated", "no"): False,
+                            ("STP", "has_capitulated", "yes"): True,
+                        }, tag))
+                    else:
+                        self.assertFalse(matches_conditions(trigger, facts | {
+                            (tag, "has_global_flag", "STP_cw_union_wars_finished"): True,
+                        }, tag))
+                else:
+                    for flag, kind in (
+                        ("STP_cw_postwar", "has_country_flag"),
+                        ("STP_cw_union_wars_finished", "has_global_flag"),
+                    ):
+                        self.assertFalse(matches_conditions(trigger, facts | {
+                            (tag, kind, flag): False,
+                        }, tag))
+                    self.assertTrue(matches_conditions(trigger, facts | {
+                        (tag, "has_war_with", "VAL"): True,
+                    }, tag))
+
+    def test_reconstruction_story_allows_the_restored_dependent_party(self):
+        event_id = "ADISCORD_STP_pw.11"
+        trigger = self.expanded_conditions(block(self.events[event_id], "trigger"))
+        facts = self.current_facts(event_id) | {
+            ("STP", "has_country_flag", "STP_cw_won_union_battle"): False,
+            ("STP", "has_country_flag", "STP_ps_restored_dependency"): True,
+            ("STP", "is_subject", "no"): False,
+            ("STP", "is_subject", "yes"): True,
+            ("STP", "is_subject_of", "NOD"): True,
+        }
+        self.assertTrue(matches_conditions(trigger, facts, "STP"))
+        self.assertFalse(matches_conditions(trigger, facts | {
+            ("STP", "has_country_flag", "STP_ps_restored_dependency"): False,
+        }, "STP"))
+
+    def test_founder_scenes_do_not_speak_for_an_absent_shabrat(self):
+        for event_id in self.FOUNDER_SCENES:
+            descriptions = [
+                node.value for node in self.events[event_id] if node.key == "desc"
+            ]
+            self.assertEqual(len(descriptions), 2)
+            for leader, suffix in (
+                ("STP_maksim_shabrat", "d"),
+                ("STP_grigory_sotnikov", "absent"),
+                (None, "absent"),
+            ):
+                with self.subTest(event=event_id, leader=leader):
+                    facts = {("STS", "ruling_leader"): leader}
+                    selected = [
+                        scalar(desc, "text") for desc in descriptions
+                        if matches_conditions(
+                            self.expanded_conditions(block(desc, "trigger")),
+                            facts,
+                            "STS",
+                        )
+                    ]
+                    self.assertEqual(selected, [f"{event_id}.{suffix}"])
+
+    def test_story_localisation_loads_in_both_languages_within_page_limits(self):
+        keys = set()
+        descriptions = set()
+        for event_id in self.STORIES:
+            event = self.events[event_id]
+            keys.add(scalar(event, "title"))
+            keys.add(scalar(block(event, "option"), "name"))
+            if event_id not in self.FOUNDER_SCENES:
+                self.assertEqual(scalar(event, "desc"), f"{event_id}.d")
+            for node in event:
+                if node.key == "desc":
+                    key = scalar(node.value, "text") if isinstance(node.value, list) else node.value
+                    keys.add(key)
+                    descriptions.add(key)
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            source = read(path)
+            values = {}
+            for line in source.splitlines():
+                match = re.fullmatch(r'\s*([^\s:]+):\d*\s*"((?:[^"\\]|\\.)*)"', line)
+                if match:
+                    values[match[1]] = match[2]
+
+            def expand(key, stack=()):
+                self.assertNotIn(key, stack)
+                self.assertIn(key, values, "Missing or malformed quoted localisation")
+                return re.sub(
+                    r"\$([^$]+)\$",
+                    lambda match: expand(match[1], stack + (key,)),
+                    values[key],
+                ).replace(r"\n", "\n")
+
+            for key in keys:
+                with self.subTest(language=language, key=key):
+                    self.assertEqual(source.count(f"\n {key}:"), 1)
+                    value = expand(key)
+                    self.assertTrue(value.strip())
+                    self.assertNotRegex(value, "[\u2013\u2014]")
+                    if key in descriptions:
+                        self.assertLessEqual(len(value), 3000)
+                        self.assertLessEqual(len(value.encode("utf-8")), 5500)
+                        self.assertNotIn("§Y", value)
+
+
+class CharterTransactions(unittest.TestCase):
+    """Execute the bounded charter payment paths; this is not a native engine test."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = {n.key: n.value for n in parse_clausewitz(read(
+            ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
+        ))}
+        cls.triggers = {n.key: n.value for n in parse_clausewitz(read(
+            ROOT / "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"
+        ))}
+        categories = parse_clausewitz(read(ROOT / "common/decisions/ADISCORD_STP_decisions.txt"))
+        cls.decisions = {n.key: n.value for c in categories for n in c.value}
+        cls.events = {scalar(n.value, "id"): n.value for n in parse_clausewitz(read(EVENTS))
+                      if n.key == "country_event"}
+
+    def setUp(self):
+        self.facts = {}
+        self.calls = []
+        self.target = "2"
+        self.states = ("2", "3")
+        self.set_value("has_political_power", 500)
+        self.set_var("ADISCORD_economy_treasury", 5000)
+        for state in self.states:
+            self.facts[(state, "owner")] = "STS"
+            self.facts[(state, "controller")] = "STS"
+            self.facts[(state, "slots", "industrial_complex")] = 3
+            self.facts[(state, "slots", "arms_factory")] = 3
+        self.facts[("STS", "external", "STP_pc_focus_available")] = True
+
+    def set_var(self, name, value, scope="STS"):
+        self.facts[(scope, "variable", name)] = value
+
+    def set_value(self, name, value, scope="STS"):
+        self.facts[(scope, "numeric", name)] = value
+
+    def mark(self, kind, name, scope="STS"):
+        self.facts[(scope, kind, name)] = True
+
+    def number(self, value, scope):
+        try:
+            return float(value)
+        except ValueError:
+            return self.facts.get((scope, "variable", value.removeprefix("var:")), 0)
+
+    def groups(self, nodes):
+        index = 0
+        while index < len(nodes):
+            length = 1 if nodes[index].key else 3
+            yield nodes[index:index + length]
+            index += length
+
+    def compare(self, left, op, right):
+        return {"=": left == right, "<": left < right, ">": left > right,
+                "<=": left <= right, ">=": left >= right}[op]
+
+    def scope(self, name, current):
+        return {"ROOT": "STS", "FROM": self.target, "PREV": "STS"}.get(name, name)
+
+    def conditions(self, nodes, scope="STS"):
+        for group in self.groups(nodes):
+            node = group[0]
+            key, value = node.key, node.value
+            if not key:
+                name, op, threshold = (n.value for n in group)
+                result = self.compare(self.facts.get((scope, "numeric", name), 0),
+                                      op, self.number(threshold, scope))
+            elif (scope, "external", key) in self.facts:
+                result = self.facts[(scope, "external", key)] == (value == "yes")
+            elif key in self.triggers:
+                result = self.conditions(self.triggers[key], scope) == (value == "yes")
+            elif key in ("AND", "hidden_trigger", "custom_trigger_tooltip"):
+                result = self.conditions(value, scope)
+            elif key in ("OR", "NOT"):
+                result = any(self.conditions(g, scope) for g in self.groups(value))
+                if key == "NOT":
+                    result = not result
+            elif key == "any_owned_state":
+                result = any(self.facts[(s, "owner")] == scope and self.conditions(value, s)
+                             for s in self.states)
+            elif key in ("ROOT", "FROM", "PREV", "STS", "VAL", "NOD"):
+                result = self.conditions(value, self.scope(key, scope))
+            elif key == "check_variable":
+                op = {"equals": "=", "greater_than": ">", "less_than": "<",
+                      "greater_than_or_equals": ">=", "less_than_or_equals": "<="}[scalar(value, "compare")]
+                result = self.compare(self.number(scalar(value, "var"), scope), op,
+                                      self.number(scalar(value, "value"), scope))
+            elif key == "has_variable":
+                result = (scope, "variable", value) in self.facts
+            elif key == "has_country_leader":
+                result = self.facts.get((scope, "leader")) == scalar(value, "character")
+            elif key == "tag":
+                result = scope == value
+            elif key in ("is_owned_by", "is_controlled_by"):
+                field = "owner" if key == "is_owned_by" else "controller"
+                result = self.facts.get((scope, field)) == self.scope(value, scope)
+            elif key == "free_building_slots":
+                building = scalar(value, "building")
+                result = self.facts.get((scope, "slots", building), 0) > 0
+            elif key == "has_equipment":
+                equipment, op, amount = (n.value for n in value)
+                result = self.compare(self.facts.get((scope, "equipment", equipment), 0),
+                                      op, self.number(amount, scope))
+            elif key == "always":
+                result = value == "yes"
+            elif key in ("tooltip",):
+                result = True
+            elif isinstance(value, str):
+                result = self.facts.get((scope, key, value), False)
+            else:
+                raise AssertionError(f"Unsupported charter condition: {key}")
+            if not result:
+                return False
+        return True
+
+    def execute(self, nodes, scope="STS"):
+        taken = False
+        for node in nodes:
+            key, value = node.key, node.value
+            if key in ("if", "else_if", "else"):
+                if key == "if":
+                    taken = False
+                if not taken and (key == "else" or self.conditions(block(value, "limit"), scope)):
+                    taken = True
+                    self.execute([n for n in value if n.key != "limit"], scope)
+            elif key == "hidden_effect":
+                self.execute(value, scope)
+            elif key in ("effect_tooltip", "custom_effect_tooltip", "unlock_decision_tooltip",
+                         "name", "trigger", "ai_chance"):
+                continue
+            elif key in ("ROOT", "FROM", "STS", "VAL", "NOD"):
+                self.execute(value, self.scope(key, scope))
+            elif key in ("random_owned_controlled_state", "every_owned_state", "every_state"):
+                for state in self.states:
+                    owned = self.facts[(state, "owner")] == scope
+                    controlled = self.facts[(state, "controller")] == scope
+                    if key != "every_state" and not (owned and controlled):
+                        continue
+                    if self.conditions(block(value, "limit"), state):
+                        self.execute([n for n in value if n.key != "limit"], state)
+                        if key.startswith("random"):
+                            break
+            elif key in ("set_variable", "set_temp_variable", "add_to_variable", "subtract_from_variable",
+                         "multiply_temp_variable"):
+                explicit = any(n.key == "var" for n in value)
+                variable = scalar(value, "var") if explicit else value[0].key
+                amount = self.number(scalar(value, "value") if explicit else value[0].value, scope)
+                old = self.number(variable, scope)
+                if key == "add_to_variable":
+                    amount += old
+                elif key == "subtract_from_variable":
+                    amount = old - amount
+                elif key == "multiply_temp_variable":
+                    amount *= old
+                self.set_var(variable, amount, scope)
+            elif key == "clear_variable":
+                self.facts.pop((scope, "variable", value), None)
+            elif key in ("set_country_flag", "clr_country_flag", "set_state_flag", "clr_state_flag"):
+                kind = "has_state_flag" if "state" in key else "has_country_flag"
+                if key.startswith("set"):
+                    self.mark(kind, value, scope)
+                else:
+                    self.facts.pop((scope, kind, value), None)
+            elif key in ("add_ideas", "remove_ideas", "add_timed_idea"):
+                idea = scalar(value, "idea") if isinstance(value, list) else value
+                if key == "remove_ideas":
+                    self.facts.pop((scope, "has_idea", idea), None)
+                else:
+                    self.mark("has_idea", idea, scope)
+            elif key == "add_equipment_to_stockpile":
+                equipment = scalar(value, "type")
+                old = self.facts.get((scope, "equipment", equipment), 0)
+                self.facts[(scope, "equipment", equipment)] = old + self.number(scalar(value, "amount"), scope)
+            elif key == "add_building_construction":
+                building = scalar(value, "type")
+                amount = self.number(scalar(value, "level"), scope)
+                self.facts[(scope, "slots", building)] -= amount
+                self.set_value(building, self.facts.get((scope, "numeric", building), 0) + amount, scope)
+            elif key in ("add_political_power", "add_stability", "army_experience", "add_command_power"):
+                field = "has_political_power" if key == "add_political_power" else key
+                self.set_value(field, self.facts.get((scope, "numeric", field), 0) + self.number(value, scope), scope)
+            elif key.startswith("STP_pc_") and key in self.effects:
+                self.execute(self.effects[key], scope)
+            elif key in ("ADISCORD_economy_mark_dirty", "ADISCORD_superevent_enqueue", "country_event",
+                         "remove_country_leader_trait", "add_country_leader_trait", "set_cosmetic_tag",
+                         "add_tech_bonus", "ADISCORD_reform_social_system_development"):
+                self.calls.append((scope, key, value))
+            else:
+                raise AssertionError(f"Unsupported charter effect: {key}")
+
+    def cabinet(self, name):
+        value, leader = {"sotnikov": (1, "STP_grigory_sotnikov"),
+                         "shabrat": (2, "STP_maksim_shabrat"),
+                         "tikhoreva": (3, "STP_vera_tikh")}[name]
+        self.set_var("STP_pc_charter_cabinet", value)
+        self.facts[("STS", "leader")] = leader
+
+    def decision(self, name, stage="complete_effect"):
+        self.execute(block(self.decisions[name], stage))
+
+    def test_shabrat_exact_cost_shared_slot_wrong_target_and_single_delivery(self):
+        self.cabinet("shabrat")
+        name = "STP_pc_charter_shabrat_civic_grants"
+        self.mark("has_completed_focus", "STP_pc_charter_shabrat_district_grants")
+        self.set_value("has_political_power", 75)
+        self.set_var("ADISCORD_economy_treasury", 600)
+        self.assertTrue(self.conditions(block(self.decisions[name], "custom_cost_trigger")))
+        self.set_var("ADISCORD_economy_treasury", 599.99)
+        self.decision(name)
+        self.assertFalse(("STS", "variable", "STP_pc_charter_shabrat_project_kind") in self.facts)
+        self.set_var("ADISCORD_economy_treasury", 600)
+        self.decision(name)
+        self.assertEqual(self.number("ADISCORD_economy_treasury", "STS"), 0)
+        self.target = "3"
+        self.assertFalse(self.conditions(block(self.decisions[name], "available")))
+        self.decision(name, "remove_effect")
+        self.assertEqual(self.number("STP_pc_charter_shabrat_deposit", "STS"), 600)
+        self.target = "2"
+        self.decision(name, "remove_effect")
+        self.decision(name, "cancel_effect")
+        self.decision(name, "remove_effect")
+        self.assertEqual(self.facts[("2", "numeric", "industrial_complex")], 1)
+        self.assertEqual(self.number("ADISCORD_economy_treasury", "STS"), 0)
+
+    def test_shabrat_territory_loss_returns_both_currencies_once(self):
+        self.cabinet("shabrat")
+        self.mark("has_completed_focus", "STP_pc_charter_shabrat_district_grants")
+        name = "STP_pc_charter_shabrat_civic_grants"
+        self.decision(name)
+        self.facts[("2", "controller")] = "VAL"
+        self.assertTrue(self.conditions(block(self.decisions[name], "cancel_trigger")))
+        self.decision(name, "cancel_effect")
+        self.decision(name, "remove_effect")
+        self.decision(name, "cancel_effect")
+        self.assertEqual(self.number("ADISCORD_economy_treasury", "STS"), 5000)
+        self.assertEqual(self.facts[("STS", "numeric", "has_political_power")], 500)
+        self.assertEqual(self.number("ADISCORD_economy_current_month_action_income", "STS"), 600)
+
+    def test_sotnikov_factory_loss_refund_and_supply_cabinet_change(self):
+        self.cabinet("sotnikov")
+        self.mark("has_completed_focus", "STP_pc_charter_sotnikov_civil_return")
+        name = "STP_pc_charter_sotnikov_reintegration"
+        self.decision(name)
+        for state in self.states:
+            self.facts[(state, "slots", "industrial_complex")] = 0
+        self.decision(name, "remove_effect")
+        self.decision(name, "cancel_effect")
+        self.assertEqual(self.number("ADISCORD_economy_treasury", "STS"), 5000)
+        self.assertEqual(self.facts[("STS", "numeric", "has_political_power")], 500)
+        self.mark("has_completed_focus", "STP_pc_charter_sotnikov_rescue_stores")
+        self.mark("has_idea", "ADISCORD_logistics_civilian_contracts")
+        name = "STP_pc_charter_sotnikov_supply_contract"
+        self.decision(name)
+        self.cabinet("shabrat")
+        self.decision(name, "remove_effect")
+        self.decision(name, "cancel_effect")
+        self.assertEqual(self.number("ADISCORD_economy_treasury", "STS"), 5000)
+        self.assertFalse(("STS", "equipment", "support_equipment") in self.facts)
+
+    def test_tikhoreva_receipt_covers_construction_and_acceptance(self):
+        self.cabinet("tikhoreva")
+        prefix = "STP_pc_charter_tikhoreva_"
+        self.mark("has_state_flag", prefix + "pilot_site", "2")
+        for kind, cash in ((3, 900), (5, 180)):
+            for field, amount in (("kind", kind), ("treasury", cash), ("pp", 0), ("equipment", 0)):
+                self.set_var(prefix + "input_" + field, amount)
+            self.execute(self.effects[prefix + "pay_project"])
+            if kind == 3:
+                self.execute(self.effects[prefix + "finish_project"])
+                self.assertEqual(self.number(prefix + "project_kind", "STS"), 10)
+                self.assertEqual(self.number(prefix + "deposit_treasury", "STS"), 900)
+                self.assertFalse(self.conditions(self.triggers[prefix + "project_idle"]))
+        self.assertEqual(self.number(prefix + "deposit_treasury", "STS"), 1080)
+        self.facts[("2", "owner")] = "VAL"
+        self.execute(self.effects[prefix + "finish_project"])
+        self.execute(self.effects[prefix + "cancel_project"])
+        self.assertEqual(self.number("ADISCORD_economy_treasury", "STS"), 5000)
+        self.assertFalse(("2", "has_state_flag", prefix + "pilot_site") in self.facts)
+
+    def test_tikhoreva_actual_factory_only_after_acceptance_and_no_replay(self):
+        self.cabinet("tikhoreva")
+        prefix = "STP_pc_charter_tikhoreva_"
+        self.set_var(prefix + "project_kind", 6)
+        self.set_var(prefix + "deposit_treasury", 840)
+        self.mark("has_state_flag", prefix + "pilot_site", "2")
+        self.execute(self.effects[prefix + "finish_project"])
+        self.execute(self.effects[prefix + "finish_project"])
+        self.execute(self.effects[prefix + "cancel_project"])
+        self.assertEqual(self.facts[("2", "numeric", "industrial_complex")], 1)
+        self.assertTrue(self.conditions(self.triggers[prefix + "pilot_operational"]))
+        self.assertEqual(self.number("ADISCORD_economy_treasury", "STS"), 5000)
+
+    def test_shabrat_late_final_requires_all_obligations_and_only_one_award(self):
+        self.cabinet("shabrat")
+        prefix = "STP_pc_charter_shabrat_"
+        self.mark("has_completed_focus", prefix + "charter_fulfilled")
+        self.set_var(prefix + "registers", 1)
+        self.set_var(prefix + "oath", 1)
+        self.set_var(prefix + "voice", 2)
+        self.mark("has_state_flag", prefix + "compact", "2")
+        self.execute(self.effects[prefix + "award_districts"])
+        self.assertFalse(any(c[1] == "ADISCORD_superevent_enqueue" for c in self.calls))
+        self.set_value("industrial_complex", 1, "2")
+        self.execute(self.effects[prefix + "award_districts"])
+        self.execute(self.effects[prefix + "award_districts"])
+        self.mark("has_country_flag", prefix + "defence_delivered")
+        self.execute(self.effects[prefix + "award_nation"])
+        self.assertEqual(sum(c[1] == "ADISCORD_superevent_enqueue" for c in self.calls), 1)
+        self.assertTrue(self.facts[("STS", "has_idea", prefix + "legacy_districts")])
+
+    def test_paid_programmes_reject_fractional_shortages(self):
+        cases = {
+            "sotnikov_reintegration": (60, 600, 0),
+            "sotnikov_complete_social": (50, 300, 0),
+            "sotnikov_settle_labour": (40, 300, 0),
+            "sotnikov_supply_contract": (0, 300, 0),
+            "shabrat_civic_grants": (75, 600, 0),
+            "shabrat_complete_registers": (40, 0, 0),
+            "shabrat_review_citizenship": (50, 0, 0),
+            "shabrat_defence_contract": (35, 300, 0),
+            "tikhoreva_public_audit": (40, 0, 0),
+            "tikhoreva_professional_audit": (0, 300, 0),
+            "tikhoreva_contract_pilot": (0, 900, 0),
+            "tikhoreva_standard_pilot": (0, 720, 0),
+            "tikhoreva_complete_acceptance": (0, 180, 0),
+            "tikhoreva_staged_acceptance": (0, 120, 0),
+            "tikhoreva_revise_norm": (30, 0, 0),
+            "tikhoreva_verify_norm": (0, 300, 0),
+            "tikhoreva_replicate_pilot": (0, 450, 100),
+        }
+        fields = (("STS", "numeric", "has_political_power"),
+                  ("STS", "variable", "ADISCORD_economy_treasury"),
+                  ("STS", "equipment", "support_equipment"))
+        for suffix, prices in cases.items():
+            condition = block(self.decisions["STP_pc_charter_" + suffix], "custom_cost_trigger")
+            for field, price in zip(fields, prices):
+                self.facts[field] = price
+            with self.subTest(programme=suffix, boundary="exact"):
+                self.assertTrue(self.conditions(condition))
+            for field, price in zip(fields, prices):
+                if not price:
+                    continue
+                with self.subTest(programme=suffix, resource=field):
+                    self.facts[field] = price - 0.01
+                    self.assertFalse(self.conditions(condition))
+                    self.facts[field] = price
+
+    def test_tikhoreva_replication_returns_equipment_and_cash_once(self):
+        self.cabinet("tikhoreva")
+        prefix = "STP_pc_charter_tikhoreva_"
+        self.facts[("STS", "equipment", "support_equipment")] = 100
+        self.mark("has_state_flag", prefix + "replication_site", "3")
+        for field, amount in (("kind", 9), ("treasury", 450), ("pp", 0), ("equipment", 100)):
+            self.set_var(prefix + "input_" + field, amount)
+        self.execute(self.effects[prefix + "pay_project"])
+        self.assertEqual(self.facts[("STS", "equipment", "support_equipment")], 0)
+        self.cabinet("shabrat")
+        self.execute(self.effects[prefix + "finish_project"])
+        self.execute(self.effects[prefix + "cancel_project"])
+        self.assertEqual(self.facts[("STS", "equipment", "support_equipment")], 100)
+        self.assertEqual(self.number("ADISCORD_economy_treasury", "STS"), 5000)
+        self.assertEqual(self.number("ADISCORD_economy_current_month_action_income", "STS"), 450)
+
+    def test_sotnikov_each_unfulfilled_promise_blocks_final(self):
+        self.cabinet("sotnikov")
+        prefix = "STP_pc_charter_sotnikov_"
+        for suffix in ("command_ruling", "prison_ruling", "labour_agreement"):
+            self.set_var(prefix + suffix, 1)
+        for suffix in ("reintegration_done", "second_social_done", "supply_delivered"):
+            self.mark("has_country_flag", prefix + suffix)
+        for idea in ("ADISCORD_internal_security_civilian_oversight", "ADISCORD_labor_policy_collective_bargaining",
+                     "ADISCORD_logistics_civilian_contracts", "ADISCORD_military_organization_cadre_army"):
+            self.mark("has_idea", idea)
+        for suffix in ("professional_service", "charter_fulfilled"):
+            self.mark("has_completed_focus", prefix + suffix)
+        required = [("STS", "variable", prefix + n) for n in ("command_ruling", "prison_ruling", "labour_agreement")]
+        required += [("STS", "has_country_flag", prefix + n) for n in ("reintegration_done", "second_social_done", "supply_delivered")]
+        required += [("STS", "has_idea", "ADISCORD_military_organization_cadre_army")]
+        for key in required:
+            with self.subTest(missing=key):
+                original = self.facts.pop(key)
+                self.execute(self.effects[prefix + "confirm_legacy"])
+                self.assertFalse(any(c[1] == "ADISCORD_superevent_enqueue" for c in self.calls))
+                self.facts[key] = original
+        self.execute(self.effects[prefix + "confirm_legacy"])
+        self.execute(self.effects[prefix + "confirm_legacy"])
+        self.assertEqual(sum(c[1] == "ADISCORD_superevent_enqueue" for c in self.calls), 1)
+
+    def test_tikhoreva_final_stale_answer_cannot_award_second_legacy(self):
+        self.cabinet("tikhoreva")
+        prefix = "STP_pc_charter_tikhoreva_"
+        for flag in ("audit_completed", "norms_corrected", "replication_completed", "final_review_open"):
+            self.mark("has_country_flag", prefix + flag)
+        self.mark("has_state_flag", prefix + "pilot_operational", "2")
+        self.set_value("industrial_complex", 1, "2")
+        options = {scalar(n.value, "name"): n.value for n in self.events["ADISCORD_STP_pc.70"] if n.key == "option"}
+        self.execute(options["ADISCORD_STP_pc.70.b"])
+        self.execute(options["ADISCORD_STP_pc.70.a"])
+        self.execute(options["ADISCORD_STP_pc.70.b"])
+        self.assertEqual(sum(c[1] == "ADISCORD_superevent_enqueue" for c in self.calls), 1)
+        self.assertTrue(self.facts[("STS", "has_idea", prefix + "legacy_utility")])
+        self.assertFalse(("STS", "has_idea", prefix + "legacy_ledger") in self.facts)
+
+    def test_partner_acceptance_pays_once_and_delivers_only_to_recipient(self):
+        self.cabinet("shabrat")
+        self.mark("has_country_flag", "STP_pc_lib_package_pending")
+        self.set_var("STP_pc_lib_package_tag", 1)
+        self.set_var("STP_pc_lib_package_cabinet", 2)
+        self.mark("exists", "yes")
+        self.facts[("VAL", "external", "STP_pc_liberation_recipient_available")] = True
+        self.set_var("ADISCORD_economy_treasury", 300)
+        option = next(n.value for n in self.events["ADISCORD_STP_pc.11"]
+                      if n.key == "option" and scalar(n.value, "name") == "ADISCORD_STP_pc.11.a")
+        self.execute(block(option, "hidden_effect"), "VAL")
+        self.execute(block(option, "hidden_effect"), "VAL")
+        self.assertEqual(self.number("ADISCORD_economy_treasury", "STS"), 0)
+        self.assertEqual(self.facts[("VAL", "equipment", "infantry_equipment")], 900)
+        self.assertEqual(self.facts[("VAL", "equipment", "support_equipment")], 150)
+        self.assertFalse(("STS", "equipment", "infantry_equipment") in self.facts)
+        self.assertEqual(self.number("ADISCORD_economy_current_month_action_costs", "STS"), 300)
+
+    def test_partner_acceptance_spent_budget_releases_receipt_without_delivery(self):
+        self.cabinet("shabrat")
+        self.mark("has_country_flag", "STP_pc_lib_package_pending")
+        self.set_var("STP_pc_lib_package_tag", 1)
+        self.set_var("STP_pc_lib_package_cabinet", 2)
+        self.mark("exists", "yes")
+        self.facts[("VAL", "external", "STP_pc_liberation_recipient_available")] = True
+        self.set_var("ADISCORD_economy_treasury", 299)
+        option = next(n.value for n in self.events["ADISCORD_STP_pc.11"]
+                      if n.key == "option" and scalar(n.value, "name") == "ADISCORD_STP_pc.11.a")
+        self.execute(block(option, "hidden_effect"), "VAL")
+        self.assertFalse(("STS", "has_country_flag", "STP_pc_lib_package_pending") in self.facts)
+        self.assertEqual(self.number("ADISCORD_economy_treasury", "STS"), 299)
+        self.assertFalse(("VAL", "equipment", "infantry_equipment") in self.facts)
 
 
 if __name__ == "__main__":

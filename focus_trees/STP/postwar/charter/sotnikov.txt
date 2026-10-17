@@ -1,0 +1,1003 @@
+# @section charter_sotnikov
+	# Sotnikov: justice, civilian return and army pillars converge on two cross-links.
+	focus = {
+		id = STP_pc_charter_sotnikov_mandate
+		icon = GFX_focus_STP_pc_shabrat_politics
+		x = 0
+		y = 1
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_lib_lock }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_country_leader_trait = STP_charter_sotnikov_oath
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_sotnikov_mandate_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_stability_factor
+					value = 0.02
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_independent_bench
+		icon = GFX_focus_STP_cw_protocol_office
+		x = -4
+		y = 2
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_mandate }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_justice_military_prosecution }
+				}
+				add_ideas = ADISCORD_justice_military_prosecution
+			}
+			else = {
+				add_political_power = 50
+			}
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_sotnikov_independent_bench_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_ADISCORD_economy_admin_expense_factor
+					value = -0.02
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_open_hearings
+		icon = GFX_focus_STP_party_personnel_commissions
+		x = -5
+		y = 3
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_independent_bench }
+		mutually_exclusive = { focus = STP_pc_charter_sotnikov_prison_review }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_information_open_press }
+				}
+				add_ideas = ADISCORD_information_open_press
+			}
+			else = {
+				add_political_power = 40
+			}
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_pc.80
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_prison_review
+		icon = GFX_focus_STP_cw_quiet_registers
+		x = -3
+		y = 3
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_independent_bench }
+		mutually_exclusive = { focus = STP_pc_charter_sotnikov_open_hearings }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_pc.65
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_district_petitions
+		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
+		x = -4
+		y = 4
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_open_hearings focus = STP_pc_charter_sotnikov_prison_review }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			unlock_decision_tooltip = STP_pc_charter_sotnikov_complete_justice
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_sotnikov_district_petitions_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_ADISCORD_country_development_society_growth_factor
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_civilian_inspectorate
+		icon = GFX_focus_STP_cw_press_office
+		x = -4
+		y = 5
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_district_petitions }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			unlock_decision_tooltip = STP_pc_charter_sotnikov_review_command
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_internal_security_civilian_oversight }
+				}
+				add_ideas = ADISCORD_internal_security_civilian_oversight
+			}
+			else = {
+				add_political_power = 75
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_public_guarantees
+		icon = GFX_focus_STP_pw_party_open_settlement
+		x = -4
+		y = 6
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_civilian_inspectorate }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_sotnikov_public_guarantees_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_stability_factor
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_civil_return
+		icon = GFX_focus_STP_ps_asylum_protocol
+		x = 0
+		y = 2
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_mandate }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			unlock_decision_tooltip = STP_pc_charter_sotnikov_reintegration
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_family_records
+		icon = GFX_focus_STP_cw_quiet_registers
+		x = 0
+		y = 3
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_civil_return }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_sotnikov_family_records_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_ADISCORD_economy_admin_expense_factor
+					value = -0.02
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_community_clinics
+		icon = GFX_focus_STP_ps_evacuation_plan
+		x = -1
+		y = 4
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_family_records }
+		mutually_exclusive = { focus = STP_pc_charter_sotnikov_homes_for_families }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_healthcare_public_hospitals }
+				}
+				add_ideas = ADISCORD_healthcare_public_hospitals
+			}
+			else = {
+				add_political_power = 40
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_homes_for_families
+		icon = GFX_focus_STP_pw_party_family_pensions
+		x = 1
+		y = 4
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_family_records }
+		mutually_exclusive = { focus = STP_pc_charter_sotnikov_community_clinics }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_sotnikov_homes_for_families_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_production_speed_buildings_factor
+					value = 0.05
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_workers_voice
+		icon = GFX_goal_generic_consumer_goods
+		x = 0
+		y = 5
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_community_clinics focus = STP_pc_charter_sotnikov_homes_for_families }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			unlock_decision_tooltip = STP_pc_charter_sotnikov_complete_social
+			unlock_decision_tooltip = STP_pc_charter_sotnikov_settle_labour
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_labor_policy_collective_bargaining }
+				}
+				add_ideas = ADISCORD_labor_policy_collective_bargaining
+			}
+			else = {
+				add_political_power = 75
+			}
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_pc.81
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_civil_workshops
+		icon = GFX_focus_STP_party_industrial_board
+		x = -1
+		y = 6
+		relative_position_id = STP_pc_lib_lock
+		cost = 4
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			any_owned_state = {
+				is_controlled_by = ROOT
+				free_building_slots = {
+					building = industrial_complex
+					size > 0
+					include_locked = yes
+				}
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_workers_voice }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = {
+						building = industrial_complex
+						size > 0
+						include_locked = yes
+					}
+				}
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			hidden_effect = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_vocational_retraining
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = 1
+		y = 6
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_workers_voice }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_tech_bonus = { name = STP_pc_charter_sotnikov_vocational_retraining bonus = 0.5 uses = 2 category = industry }
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_sotnikov_vocational_retraining_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_industrial_capacity_factory
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_army_under_law
+		icon = GFX_focus_STP_ps_joint_staff
+		x = 4
+		y = 2
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_mandate }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_officer_corps_merit_commissions }
+				}
+				add_ideas = ADISCORD_officer_corps_merit_commissions
+			}
+			else = {
+				add_political_power = 75
+			}
+			add_command_power = 25
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_citizen_reserve
+		icon = GFX_focus_STP_pw_party_veteran_reserve
+		x = 3
+		y = 3
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_army_under_law }
+		mutually_exclusive = { focus = STP_pc_charter_sotnikov_professional_service }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_military_organization_territorial_reserves }
+				}
+				add_ideas = ADISCORD_military_organization_territorial_reserves
+			}
+			else = {
+				add_political_power = 75
+			}
+			army_experience = 25
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_professional_service
+		icon = GFX_focus_STP_pw_party_defence_combine
+		x = 5
+		y = 3
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_army_under_law }
+		mutually_exclusive = { focus = STP_pc_charter_sotnikov_citizen_reserve }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_military_organization_cadre_army }
+				}
+				add_ideas = ADISCORD_military_organization_cadre_army
+			}
+			else = {
+				add_political_power = 75
+			}
+			army_experience = 25
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_medical_services
+		icon = GFX_goal_generic_army_doctrines
+		x = 4
+		y = 4
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_citizen_reserve focus = STP_pc_charter_sotnikov_professional_service }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_sotnikov_medical_services_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_army_org_regain
+					value = 0.04
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_defensive_drills
+		icon = GFX_goal_generic_defence
+		x = 3
+		y = 5
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_medical_services }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_tech_bonus = { name = STP_pc_charter_sotnikov_defensive_drills bonus = 0.5 uses = 2 category = infantry_weapons }
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_field_supply
+		icon = GFX_focus_STP_party_war_transport
+		x = 5
+		y = 5
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_medical_services }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_logistics_civilian_contracts }
+				}
+				add_ideas = ADISCORD_logistics_civilian_contracts
+			}
+			else = {
+				add_political_power = 75
+			}
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_sotnikov_field_supply_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_supply_consumption_factor
+					value = -0.03
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_rescue_stores
+		icon = GFX_focus_STP_defense_budget
+		x = 4
+		y = 6
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_defensive_drills }
+		prerequisite = { focus = STP_pc_charter_sotnikov_field_supply }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			unlock_decision_tooltip = STP_pc_charter_sotnikov_supply_contract
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_officer_responsibility
+		icon = GFX_focus_STP_cw_protocol_office
+		x = -2
+		y = 7
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_public_guarantees }
+		prerequisite = { focus = STP_pc_charter_sotnikov_civil_workshops }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					has_character = STP_Edmund_Ravel
+					STP_Edmund_Ravel = { NOT = { has_character_flag = STP_cw_arrested } }
+				}
+				add_advisor_role = {
+					character = STP_Edmund_Ravel
+					advisor = {
+						slot = army_chief
+						idea_token = STP_pc_charter_ravel_army_chief
+						ledger = army
+						traits = { army_chief_defensive_2 }
+						cost = 50
+					}
+				}
+			}
+			else = {
+				add_command_power = 50
+			}
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_sotnikov_officer_responsibility_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_planning_speed
+					value = 0.05
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_peaceful_readiness
+		icon = GFX_focus_STP_ps_permanent_security
+		x = 2
+		y = 7
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_rescue_stores }
+		prerequisite = { focus = STP_pc_charter_sotnikov_vocational_retraining }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_sotnikov_peaceful_readiness_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_training_time_factor
+					value = -0.05
+				}
+				add_to_variable = {
+					var = STP_pw_army_org_regain
+					value = 0.025
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_cabinet_review
+		icon = GFX_focus_generic_treaty
+		x = 0
+		y = 8
+		relative_position_id = STP_pc_lib_lock
+		cost = 4
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_officer_responsibility }
+		prerequisite = { focus = STP_pc_charter_sotnikov_peaceful_readiness }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			custom_effect_tooltip = STP_pc_charter_sotnikov_legacy_conditions_tt
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_sotnikov_cabinet_review_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_ADISCORD_economy_admin_expense_factor
+					value = -0.02
+				}
+				add_to_variable = {
+					var = STP_pw_research_speed_factor
+					value = 0.02
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_sotnikov_charter_fulfilled
+		icon = GFX_focus_STP_Triumph_Of_Common_Sense
+		x = 0
+		y = 9
+		relative_position_id = STP_pc_lib_lock
+		cost = 4
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_sotnikov_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_available_tt
+				STP_pc_charter_sotnikov_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_sotnikov_cabinet_review }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			unlock_decision_tooltip = STP_pc_charter_sotnikov_confirm_legacy
+			custom_effect_tooltip = STP_pc_charter_sotnikov_legacy_conditions_tt
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_pc.68
+					hours = 1
+				}
+			}
+		}
+	}

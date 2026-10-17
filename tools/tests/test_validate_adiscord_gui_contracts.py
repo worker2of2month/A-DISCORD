@@ -2373,7 +2373,7 @@ class StartupGuideContractTests(unittest.TestCase):
             for _, name, _ in named_gui_nodes(gui)
             if name.startswith('ADISCORD_startup_text_')
         }
-        self.assertEqual(len(pages), 45)
+        self.assertEqual(len(pages), 47)
         for tag in ('STP', 'VAL', 'RUS', 'SHL', 'NAM'):
             topics = {
                 'STP': ('history', 'nodrul', 'party'),
@@ -2400,7 +2400,7 @@ class StartupGuideContractTests(unittest.TestCase):
                     spoiler,
                     f'{tag}_startup_path_{i}' + ('_details' if spoiler else ''),
                 )
-                for i in (0, 1)
+                for i in range(3 if tag == 'VAL' else 2)
                 for spoiler in (0, 1)
             ]
             for tab, page, spoilers, expected in cases:
@@ -2416,6 +2416,17 @@ class StartupGuideContractTests(unittest.TestCase):
                     )
                 ]
                 self.assertEqual(chosen, [expected], (tag, tab, page, spoilers))
+                self.assertEqual(
+                    matches_conditions(
+                        _unique_direct_block(
+                            triggers, 'ADISCORD_startup_page_2_visible'
+                        ),
+                        facts,
+                        tag,
+                    ),
+                    tab == 1 or (tag == 'VAL' and tab == 2),
+                    (tag, tab, page, spoilers),
+                )
 
     def test_localisation_keys_values_and_encodings(self):
         by_language = {}

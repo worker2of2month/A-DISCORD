@@ -154,17 +154,35 @@ on_actions = {
 
 				# BEGIN stelander:on_capitulation_immediate
 				if = {
+					limit = { ROOT = { tag = STS } }
+					STP_sdir_refund_all_district_projects = yes
+				}
+				if = {
 					limit = {
 						ROOT = {
 							OR = {
-								tag = STS
-								tag = NKA
+								AND = {
+									OR = {
+										tag = STS
+										tag = STP
+									}
+									has_country_flag = STP_heg_cannibal_campaign_active
+								}
+								AND = {
+									tag = NKA
+									STS = {
+										has_country_flag = STP_heg_cannibal_campaign_active
+										has_completed_focus = STP_pc_heg_northern_administration
+									}
+								}
 							}
 						}
 					}
 					CIN = { STP_heg_clear_cannibal_campaign = yes }
 					OSF = { STP_heg_clear_cannibal_campaign = yes }
 					APH = { STP_heg_clear_cannibal_campaign = yes }
+					STS = { STP_heg_clear_cannibal_campaign = yes }
+					STP = { STP_heg_clear_cannibal_campaign = yes }
 				}
 				if = {
 					limit = { STP_heg_cannibal_capitulation_managed = yes }
@@ -2112,6 +2130,7 @@ on_actions = {
 				STS = { STP_pc_close_liberation_war_receipt = yes }
 				STP_heg_reconcile_frontier_expansion = yes
 				STP_heg_reconcile_cannibal_campaign = yes
+				STP_sdir_follow_up_cannibal_conquests = yes
 				if = {
 					limit = {
 						OR = { ROOT = { OR = { tag = STP tag = NOD } } FROM = { OR = { tag = STP tag = NOD } } }
@@ -2176,6 +2195,7 @@ on_actions = {
 				}
 
 				# BEGIN stelander:on_peaceconference_ended
+				STP_sdir_follow_up_cannibal_conquests = yes
 				if = {
 					limit = { tag = NOD STP_cw_northern_conference_won = yes }
 					STP_cw_settle_northern_victory = yes
@@ -2247,9 +2267,22 @@ on_actions = {
 				ADISCORD_nam_resource_war_close_external = yes
 				# END nam:on_annex
 				# BEGIN stelander:on_annex
+				if = {
+					limit = { FROM = { tag = STS } }
+					STP_sdir_refund_all_district_projects = yes
+				}
 				STS = { STP_pc_close_liberation_war_receipt = yes }
+				if = {
+					limit = { FROM = { tag = VAL } }
+					STS = { clr_country_flag = STP_sdir_arsenal_offer_pending }
+				}
+				if = {
+					limit = { FROM = { tag = NOD } }
+					STS = { clr_country_flag = STP_sdir_naval_offer_pending }
+				}
 				STP_heg_reconcile_frontier_expansion = yes
 				STP_heg_reconcile_cannibal_campaign = yes
+				STP_sdir_follow_up_cannibal_conquests = yes
 				# ROOT survives the annexation; FROM may no longer own any state.
 				if = {
 					limit = { OR = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } FROM = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } } }

@@ -2,6 +2,7 @@ on_actions = {
 	on_daily_VAL = {
 		effect = {
 			VAL_contract_reconcile = yes
+			VAL_council_daily = yes
 			VAL_resource_aid_daily = yes
 			VAL_northern_aid_daily = yes
 			VAL_reconcile_northern_coalition_campaign = yes
@@ -59,7 +60,10 @@ on_actions = {
 			VAL_queue_frontier_reconciliation = yes
 			if = {
 				limit = { OR = { ROOT = { tag = VAL } FROM = { tag = VAL } } }
-				VAL = { VAL_reconcile_market_contract_lifecycle = yes }
+				VAL = {
+					VAL_reconcile_market_contract_lifecycle = yes
+					VAL_council_register_stelander_war = yes
+				}
 			}
 			if = {
 				limit = {
@@ -184,6 +188,12 @@ on_actions = {
 
 	on_state_control_changed = {
 		effect = {
+			VAL = {
+				if = {
+					limit = { has_variable = VAL_council_mandate_kind }
+					VAL_council_reconcile_mandate = yes
+				}
+			}
 			if = {
 				limit = {
 					VAL = { has_completed_focus = VAL_Return_To_World_Market }
@@ -273,6 +283,7 @@ on_actions = {
 
 	on_weekly_VAL = {
 		effect = {
+			VAL_council_weekly = yes
 			VAL_reclamation_reconcile_project = yes
 			VAL_final_crisis_weekly = yes
 			# Save-safe AI fallback: authorize the named NOD-war volunteer mission

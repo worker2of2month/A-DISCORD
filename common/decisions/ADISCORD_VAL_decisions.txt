@@ -1148,6 +1148,122 @@ VAL_contract_management = {
 }
 
 VAL_rework_debug = {
+	VAL_debug_council_discontent = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { is_debug = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_debug_ready_tt
+				VAL_council_personal_rule = yes
+				has_focus_tree = VAL_focus
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				NOT = { has_country_flag = VAL_stelander_defeated }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = VAL_debug_council_discontent_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						is_debug = yes
+						VAL_council_personal_rule = yes
+						has_focus_tree = VAL_focus
+						exists = yes
+						has_capitulated = no
+						is_subject = no
+						NOT = { has_country_flag = VAL_stelander_defeated }
+					}
+					VAL_initialize_command_balance = yes
+					set_power_balance = { id = VAL_command_balance set_value = -0.9 }
+					VAL_council_check_coup = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+	VAL_debug_council_ultimatum = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { is_debug = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_debug_ready_tt
+				VAL_council_personal_rule = yes
+				has_focus_tree = VAL_focus
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				NOT = { has_country_flag = VAL_stelander_defeated }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = VAL_debug_council_ultimatum_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						is_debug = yes
+						VAL_council_personal_rule = yes
+						has_focus_tree = VAL_focus
+						exists = yes
+						has_capitulated = no
+						is_subject = no
+						NOT = { has_country_flag = VAL_stelander_defeated }
+					}
+					VAL_initialize_command_balance = yes
+					set_power_balance = { id = VAL_command_balance set_value = -0.9 }
+					set_country_flag = VAL_council_stelander_war_started
+					VAL_council_check_coup = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+	VAL_debug_council_take_power = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { is_debug = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_debug_ready_tt
+				VAL_council_personal_rule = yes
+				has_focus_tree = VAL_focus
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				NOT = { has_country_flag = VAL_stelander_defeated }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = VAL_debug_council_take_power_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						is_debug = yes
+						VAL_council_personal_rule = yes
+						has_focus_tree = VAL_focus
+						exists = yes
+						has_capitulated = no
+						is_subject = no
+						NOT = { has_country_flag = VAL_stelander_defeated }
+					}
+					VAL_initialize_command_balance = yes
+					set_power_balance = { id = VAL_command_balance set_value = -0.9 }
+					set_country_flag = VAL_council_stelander_war_started
+					VAL_council_take_power = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
 	VAL_debug_spawn_zeppelin_trial = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = VAL }
@@ -3938,5 +4054,3389 @@ VAL_new_world_category = {
 				FROM = { VAL_nw_concession_valid = yes }
 			}
 		}
+	}
+}
+
+# --- commanders_council ---
+VAL_council_government_category = {
+	VAL_council_ultimatum = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_power_balance = { id = VAL_command_balance }
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 14
+		is_good = no
+		timeout_effect = {
+			VAL_council_take_power = yes
+		}
+		cancel_trigger = {
+			VAL_council_coup_ready = no
+		}
+		cancel_effect = {
+
+		}
+	}
+
+	VAL_council_accept_ultimatum = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_active_mission = VAL_council_ultimatum
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_coup_ready_condition_tt
+				VAL_council_coup_ready = yes
+			}
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_coup_ready = yes
+					}
+					VAL_council_take_power = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	VAL_council_staff_program_timer = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_country_flag = VAL_council_staff_program
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 30
+		is_good = no
+		timeout_effect = {
+			clr_country_flag = VAL_council_staff_program
+
+			VAL_refresh_contract_modifier = yes
+		}
+		cancel_trigger = {
+			VAL_council_operational = no
+		}
+		cancel_effect = {
+			clr_country_flag = VAL_council_staff_program
+			VAL_refresh_contract_modifier = yes
+		}
+	}
+
+	VAL_council_inspection_savings_timer = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_country_flag = VAL_council_inspection_savings
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 90
+		is_good = no
+		timeout_effect = {
+			clr_country_flag = VAL_council_inspection_savings
+
+			VAL_refresh_contract_modifier = yes
+		}
+	}
+
+	VAL_council_inspection_timer = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_country_flag = VAL_council_inspection
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 30
+		is_good = no
+		timeout_effect = {
+			clr_country_flag = VAL_council_inspection
+			VAL_council_start_inspection_savings = yes
+			VAL_refresh_contract_modifier = yes
+		}
+		cancel_trigger = {
+			VAL_council_operational = no
+		}
+		cancel_effect = {
+			clr_country_flag = VAL_council_inspection
+			VAL_refresh_contract_modifier = yes
+		}
+	}
+
+	VAL_council_public_shock_timer = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_country_flag = VAL_council_public_shock
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 60
+		is_good = no
+		timeout_effect = {
+			clr_country_flag = VAL_council_public_shock
+
+			VAL_refresh_contract_modifier = yes
+		}
+	}
+
+	VAL_council_family_support_timer = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_country_flag = VAL_council_family_support
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 90
+		is_good = no
+		timeout_effect = {
+			clr_country_flag = VAL_council_family_support
+
+			VAL_refresh_contract_modifier = yes
+		}
+	}
+
+	VAL_council_acceptance_bonus_timer = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_country_flag = VAL_council_acceptance_bonus
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 90
+		is_good = no
+		timeout_effect = {
+			clr_country_flag = VAL_council_acceptance_bonus
+
+			VAL_refresh_contract_modifier = yes
+		}
+	}
+
+	VAL_council_discipline_timer = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_country_flag = VAL_council_discipline
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 30
+		is_good = no
+		timeout_effect = {
+			clr_country_flag = VAL_council_discipline
+
+			VAL_refresh_contract_modifier = yes
+		}
+	}
+
+	VAL_council_prevention_timer = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_country_flag = VAL_council_prevention
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 90
+		is_good = no
+		timeout_effect = {
+			clr_country_flag = VAL_council_prevention
+
+			VAL_refresh_contract_modifier = yes
+		}
+	}
+
+	VAL_council_emergency_budget_timer = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_country_flag = VAL_council_emergency_budget
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 70
+		is_good = no
+		timeout_effect = {
+			clr_country_flag = VAL_council_emergency_budget
+			set_country_flag = { flag = VAL_council_budget_cooldown value = 1 days = 90 }
+			VAL_refresh_contract_modifier = yes
+		}
+	}
+
+	VAL_council_staff_coordination = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_supreme_command
+			NOT = {
+				has_completed_focus = VAL_council_district_staffs
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_program_slot_free_condition_tt
+				VAL_council_program_slot_free = yes
+			}
+			NOT = {
+				has_completed_focus = VAL_council_district_staffs
+			}
+			NOT = {
+				command_power < 20
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_staff_coordination_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_program_slot_free_condition_tt
+				VAL_council_program_slot_free = yes
+			}
+			NOT = {
+				has_completed_focus = VAL_council_district_staffs
+			}
+			NOT = {
+				command_power < 20
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_program_slot_free = yes
+						NOT = {
+							has_completed_focus = VAL_council_district_staffs
+						}
+						NOT = {
+							command_power < 20
+						}
+					}
+					add_command_power = -20
+					VAL_council_start_staff_program = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	VAL_council_district_coordination = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_district_staffs
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_program_slot_free_condition_tt
+				VAL_council_program_slot_free = yes
+			}
+			NOT = {
+				command_power < 15
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_district_coordination_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_program_slot_free_condition_tt
+				VAL_council_program_slot_free = yes
+			}
+			NOT = {
+				command_power < 15
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_program_slot_free = yes
+						NOT = {
+							command_power < 15
+						}
+					}
+					add_command_power = -15
+					VAL_council_start_staff_program = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	VAL_council_inspect_accounts = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_state_inspectors
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_program_slot_free_condition_tt
+				VAL_council_program_slot_free = yes
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_inspection_savings_condition_tt
+					has_country_flag = VAL_council_inspection_savings
+				}
+			}
+			NOT = {
+				has_political_power < 25
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_inspect_accounts_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_program_slot_free_condition_tt
+				VAL_council_program_slot_free = yes
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_inspection_savings_condition_tt
+					has_country_flag = VAL_council_inspection_savings
+				}
+			}
+			NOT = {
+				has_political_power < 25
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_program_slot_free = yes
+						NOT = {
+							has_country_flag = VAL_council_inspection_savings
+						}
+						NOT = {
+							has_political_power < 25
+						}
+					}
+					add_political_power = -25
+					VAL_council_start_inspection = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	VAL_council_emergency_production = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_emergency_budget
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			has_war = yes
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_emergency_budget_condition_tt
+					has_country_flag = VAL_council_emergency_budget
+				}
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_budget_cooldown_condition_tt
+					has_country_flag = VAL_council_budget_cooldown
+				}
+			}
+			NOT = {
+				has_political_power < 35
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_emergency_production_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			has_war = yes
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_emergency_budget_condition_tt
+					has_country_flag = VAL_council_emergency_budget
+				}
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_budget_cooldown_condition_tt
+					has_country_flag = VAL_council_budget_cooldown
+				}
+			}
+			NOT = {
+				has_political_power < 35
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						has_war = yes
+						NOT = {
+							has_country_flag = VAL_council_emergency_budget
+						}
+						NOT = {
+							has_country_flag = VAL_council_budget_cooldown
+						}
+						NOT = {
+							has_political_power < 35
+						}
+					}
+					add_political_power = -35
+					VAL_council_begin_loss_tracking = yes
+					VAL_council_start_emergency_budget = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	VAL_council_extend_emergency = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_permanent_government
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			has_war = yes
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_emergency_budget_condition_tt
+				has_country_flag = VAL_council_emergency_budget
+			}
+			check_variable = { var = days_mission_timeout@VAL_council_emergency_budget_timer value = 14 compare = less_than_or_equals }
+			NOT = {
+				has_political_power < 35
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_extend_emergency_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			has_war = yes
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_emergency_budget_condition_tt
+				has_country_flag = VAL_council_emergency_budget
+			}
+			check_variable = { var = days_mission_timeout@VAL_council_emergency_budget_timer value = 14 compare = less_than_or_equals }
+			NOT = {
+				has_political_power < 35
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						has_war = yes
+						has_country_flag = VAL_council_emergency_budget
+						check_variable = { var = days_mission_timeout@VAL_council_emergency_budget_timer value = 14 compare = less_than_or_equals }
+						NOT = {
+							has_political_power < 35
+						}
+					}
+					add_political_power = -35
+					add_days_mission_timeout = { mission = VAL_council_emergency_budget_timer days = 70 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	VAL_council_reserve_rifles = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_mandatory_reserve
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_variable_VAL_council_reserve_rifles_condition_tt
+					has_variable = VAL_council_reserve_rifles
+				}
+			}
+			NOT = {
+				has_equipment = { infantry_equipment < 10000 }
+			}
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						NOT = {
+							has_variable = VAL_council_reserve_rifles
+						}
+						NOT = {
+							has_equipment = { infantry_equipment < 10000 }
+						}
+					}
+					VAL_council_reserve_stock = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+		custom_cost_text = VAL_council_reserve_rifles_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_equipment = { infantry_equipment < 10000 }
+			}
+		}
+	}
+
+	VAL_council_release_reserve = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_variable = VAL_council_reserve_rifles
+		}
+		available = {
+			has_capitulated = no
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						has_capitulated = no
+					}
+					VAL_council_release_reserve = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	VAL_council_reserve_quarter = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_variable = VAL_council_reserve_rifles
+			has_country_flag = VAL_quarterly_contract_active
+			NOT = {
+				has_country_flag = VAL_quarterly_contract_paid
+			}
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_quarterly_contract_active_condition_tt
+				has_country_flag = VAL_quarterly_contract_active
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_quarterly_contract_paid_condition_tt
+					has_country_flag = VAL_quarterly_contract_paid
+				}
+			}
+			check_variable = { var = VAL_council_reserve_rifles value = 10000 compare = greater_than_or_equals }
+			NOT = {
+				has_equipment = { infantry_equipment < 30000 }
+			}
+			NOT = {
+				has_political_power < 10
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_reserve_quarter_cost
+		custom_cost_trigger = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_quarterly_contract_active_condition_tt
+				has_country_flag = VAL_quarterly_contract_active
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_quarterly_contract_paid_condition_tt
+					has_country_flag = VAL_quarterly_contract_paid
+				}
+			}
+			check_variable = { var = VAL_council_reserve_rifles value = 10000 compare = greater_than_or_equals }
+			NOT = {
+				has_equipment = { infantry_equipment < 30000 }
+			}
+			NOT = {
+				has_political_power < 10
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						has_capitulated = no
+						has_country_flag = VAL_quarterly_contract_active
+						NOT = {
+							has_country_flag = VAL_quarterly_contract_paid
+						}
+						check_variable = { var = VAL_council_reserve_rifles value = 10000 compare = greater_than_or_equals }
+						NOT = {
+							has_equipment = { infantry_equipment < 30000 }
+						}
+						NOT = {
+							has_political_power < 10
+						}
+					}
+					add_political_power = -10
+					set_temp_variable = { var = VAL_contract_rifle_cost value = 30000 }
+					VAL_pay_contract_rifles = yes
+					if = {
+						limit = {
+							has_country_flag = VAL_contract_rifles_paid
+						}
+						VAL_council_consume_reserve = yes
+						set_country_flag = VAL_quarterly_contract_paid
+						VAL_council_supply_mandate_success = yes
+						VAL_refresh_contract_modifier = yes
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	VAL_council_loan_deadline = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_variable = VAL_council_loan_debt
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 90
+		is_good = no
+		timeout_effect = {
+			if = {
+				limit = {
+					check_variable = { var = ADISCORD_economy_treasury value = VAL_council_loan_debt compare = greater_than_or_equals }
+				}
+				VAL_council_repay_loan = yes
+			}
+			else = {
+				VAL_council_register_loan_default = yes
+			}
+		}
+	}
+
+	VAL_council_borrow_500 = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_common_fund
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_variable_VAL_council_loan_debt_condition_tt
+					has_variable = VAL_council_loan_debt
+				}
+			}
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						NOT = {
+							has_variable = VAL_council_loan_debt
+						}
+					}
+					add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = { var = VAL_council_loan_debt value = 550 }
+					clr_country_flag = VAL_council_loan_default
+					activate_mission = VAL_council_loan_deadline
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+		days_re_enable = 90
+	}
+
+	VAL_council_borrow_1000 = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_charter
+			has_completed_focus = VAL_council_large_companies
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_variable_VAL_council_loan_debt_condition_tt
+					has_variable = VAL_council_loan_debt
+				}
+			}
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						NOT = {
+							has_variable = VAL_council_loan_debt
+						}
+					}
+					add_to_variable = { var = ADISCORD_economy_treasury value = 1000 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1000 }
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = { var = VAL_council_loan_debt value = 1100 }
+					clr_country_flag = VAL_council_loan_default
+					activate_mission = VAL_council_loan_deadline
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+		days_re_enable = 90
+	}
+
+	VAL_council_repay_loan = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_variable = VAL_council_loan_debt
+		}
+		available = {
+			check_variable = { var = ADISCORD_economy_treasury value = VAL_council_loan_debt compare = greater_than_or_equals }
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = ADISCORD_economy_treasury value = VAL_council_loan_debt compare = greater_than_or_equals }
+					}
+					VAL_council_repay_loan = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+		custom_cost_text = VAL_council_repay_loan_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = VAL_council_loan_debt compare = greater_than_or_equals }
+		}
+	}
+
+	VAL_council_order_arrival = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_variable = VAL_council_order_kind
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 45
+		is_good = no
+		timeout_effect = {
+			set_country_flag = VAL_council_order_arrived
+		}
+	}
+
+	VAL_council_buy_broker_rifles = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_brokers
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_order_slot_free_condition_tt
+				VAL_council_order_slot_free = yes
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_order_slot_free = yes
+						check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
+					}
+					set_variable = { var = VAL_council_order_kind value = 1 }
+					set_variable = { var = VAL_council_order_price value = 600 }
+					set_variable = { var = VAL_council_order_unit_price value = 600 }
+					VAL_council_start_order = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+		custom_cost_text = VAL_council_price_600
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
+		}
+	}
+
+	VAL_council_buy_direct_rifles = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_direct_orders
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_order_slot_free_condition_tt
+				VAL_council_order_slot_free = yes
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_order_slot_free = yes
+						check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
+					}
+					set_variable = { var = VAL_council_order_kind value = 1 }
+					set_variable = { var = VAL_council_order_price value = 450 }
+					set_variable = { var = VAL_council_order_unit_price value = 450 }
+					VAL_council_start_order = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+		custom_cost_text = VAL_council_price_450
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
+		}
+	}
+
+	VAL_council_buy_support = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_procurement_commissions
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_order_slot_free_condition_tt
+				VAL_council_order_slot_free = yes
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_order_slot_free = yes
+						check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
+					}
+					set_variable = { var = VAL_council_order_kind value = 2 }
+					set_variable = { var = VAL_council_order_price value = 450 }
+					set_variable = { var = VAL_council_order_unit_price value = 450 }
+					VAL_council_start_order = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+		custom_cost_text = VAL_council_price_450
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
+		}
+	}
+
+	VAL_council_buy_trucks = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_procurement_commissions
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_order_slot_free_condition_tt
+				VAL_council_order_slot_free = yes
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_order_slot_free = yes
+						check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
+					}
+					set_variable = { var = VAL_council_order_kind value = 3 }
+					set_variable = { var = VAL_council_order_price value = 450 }
+					set_variable = { var = VAL_council_order_unit_price value = 450 }
+					VAL_council_start_order = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+		custom_cost_text = VAL_council_price_450
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
+		}
+	}
+
+	VAL_council_merchant_guarantee = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_merchant_guarantees
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_variable_VAL_council_merchant_deposit_condition_tt
+					has_variable = VAL_council_merchant_deposit
+				}
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = VAL_council_merchant_guarantee_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_variable_VAL_council_merchant_deposit_condition_tt
+					has_variable = VAL_council_merchant_deposit
+				}
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						NOT = {
+							has_variable = VAL_council_merchant_deposit
+						}
+						check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = { var = VAL_council_merchant_deposit value = 250 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	VAL_council_withdraw_merchant_guarantee = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_variable = VAL_council_merchant_deposit
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_order_slot_free_condition_tt
+				VAL_council_order_slot_free = yes
+			}
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_order_slot_free = yes
+					}
+					add_to_variable = { var = ADISCORD_economy_treasury value = VAL_council_merchant_deposit }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_council_merchant_deposit }
+					ADISCORD_economy_mark_dirty = yes
+					clear_variable = VAL_council_merchant_deposit
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	VAL_council_buy_installment = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_merchant_guarantees
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_order_slot_free_condition_tt
+				VAL_council_order_slot_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_variable_VAL_council_merchant_deposit_condition_tt
+				has_variable = VAL_council_merchant_deposit
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_order_slot_free = yes
+						has_variable = VAL_council_merchant_deposit
+						check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+					}
+					set_variable = { var = VAL_council_order_kind value = 1 }
+					set_variable = { var = VAL_council_order_price value = 600 }
+					set_variable = { var = VAL_council_order_unit_price value = 600 }
+					set_country_flag = VAL_council_order_installment
+					VAL_council_start_order = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+		custom_cost_text = VAL_council_price_300
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+	}
+
+	VAL_council_schedule_rifles = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_procurement_commissions
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_order_slot_free_condition_tt
+				VAL_council_order_slot_free = yes
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_order_slot_free = yes
+						check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+					}
+					set_variable = { var = VAL_council_order_kind value = 1 }
+					set_variable = { var = VAL_council_order_price value = 900 }
+					set_variable = { var = VAL_council_order_unit_price value = 450 }
+					set_country_flag = VAL_council_order_schedule
+					VAL_council_start_order = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+		custom_cost_text = VAL_council_price_900
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+		}
+	}
+
+	VAL_council_check_shipment = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_staff_acceptance
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_variable_VAL_council_order_kind_condition_tt
+				has_variable = VAL_council_order_kind
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_order_checked_condition_tt
+					has_country_flag = VAL_council_order_checked
+				}
+			}
+			NOT = {
+				command_power < 20
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_check_shipment_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_variable_VAL_council_order_kind_condition_tt
+				has_variable = VAL_council_order_kind
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_order_checked_condition_tt
+					has_country_flag = VAL_council_order_checked
+				}
+			}
+			NOT = {
+				command_power < 20
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						has_variable = VAL_council_order_kind
+						NOT = {
+							has_country_flag = VAL_council_order_checked
+						}
+						NOT = {
+							command_power < 20
+						}
+					}
+					add_command_power = -20
+					set_country_flag = VAL_council_order_checked
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	VAL_council_cancel_purchase = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_variable = VAL_council_order_kind
+		}
+		available = {
+
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+
+				VAL_council_cancel_order = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	VAL_council_consortium_norm = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_supplier_consortium
+			has_country_flag = VAL_quarterly_contract_active
+			NOT = {
+				has_country_flag = VAL_quarterly_contract_paid
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_quarterly_contract_active_condition_tt
+				has_country_flag = VAL_quarterly_contract_active
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_quarterly_contract_paid_condition_tt
+					has_country_flag = VAL_quarterly_contract_paid
+				}
+			}
+			check_variable = { var = days_mission_timeout@VAL_quarterly_contract_deadline value = 14 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = VAL_council_consortium_norm_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_quarterly_contract_active_condition_tt
+				has_country_flag = VAL_quarterly_contract_active
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_quarterly_contract_paid_condition_tt
+					has_country_flag = VAL_quarterly_contract_paid
+				}
+			}
+			check_variable = { var = days_mission_timeout@VAL_quarterly_contract_deadline value = 14 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						has_country_flag = VAL_quarterly_contract_active
+						NOT = {
+							has_country_flag = VAL_quarterly_contract_paid
+						}
+						check_variable = { var = days_mission_timeout@VAL_quarterly_contract_deadline value = 14 compare = greater_than_or_equals }
+						check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
+					ADISCORD_economy_mark_dirty = yes
+					set_country_flag = { flag = VAL_quarterly_contract_paid value = 2 }
+					VAL_council_supply_mandate_success = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	VAL_council_reopen_talks = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_contract_review
+			NOT = {
+				has_country_flag = VAL_council_retry_used
+			}
+			FROM = {
+				has_country_flag = VAL_partner_contact_cooldown
+				has_variable = VAL_partner_failure_reason
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_partner_desk_free_condition_tt
+				VAL_partner_desk_free = yes
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_retry_used_condition_tt
+					has_country_flag = VAL_council_retry_used
+				}
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_partner_trade_conditions_valid_condition_tt
+					VAL_partner_trade_conditions_valid = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_partner_contact_cooldown_condition_tt
+					has_country_flag = VAL_partner_contact_cooldown
+				}
+				custom_trigger_tooltip = {
+					tooltip = has_variable_VAL_partner_failure_reason_condition_tt
+					has_variable = VAL_partner_failure_reason
+				}
+			}
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_partner_desk_free = yes
+						NOT = {
+							has_country_flag = VAL_council_retry_used
+						}
+						FROM = {
+							VAL_partner_trade_conditions_valid = yes
+							has_country_flag = VAL_partner_contact_cooldown
+							has_variable = VAL_partner_failure_reason
+						}
+					}
+					set_country_flag = VAL_council_retry_used
+					set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+					set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
+					FROM = {
+						set_country_flag = { flag = VAL_council_retry_offer value = 1 days = 42 }
+						set_country_flag = { flag = VAL_partner_offer_trade value = 1 days = 42 }
+						set_country_flag = { flag = VAL_partner_contact_cooldown value = 1 days = 365 }
+						VAL_dispatch_partner_trade_offer = yes
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+		targets = { CIN OSF APH COF TFF YPR }
+		target_trigger = {
+			FROM = {
+				exists = yes
+			}
+		}
+	}
+
+	VAL_council_mandate_approval = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_variable = VAL_council_mandate_kind
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 14
+		is_good = no
+		timeout_effect = {
+			VAL_council_activate_mandate = yes
+		}
+	}
+
+	VAL_council_mandate_deadline = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_country_flag = VAL_council_mandate_active
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 60
+		is_good = no
+		timeout_effect = {
+			if = {
+				limit = {
+					has_variable = VAL_council_mandate_kind
+					has_country_flag = VAL_council_mandate_active
+				}
+				set_country_flag = VAL_council_mandate_expired
+				VAL_council_reconcile_mandate = yes
+			}
+		}
+	}
+
+	VAL_council_mandate_defence_ordinary = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_takes_command
+			NOT = {
+				has_completed_focus = VAL_council_equal_votes
+			}
+			NOT = {
+				has_completed_focus = VAL_council_large_companies
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			has_war = yes
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_council_defence_target_condition_tt
+					VAL_council_defence_target = yes
+				}
+			}
+			NOT = {
+				has_political_power < 20
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_mandate_defence_ordinary_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			has_war = yes
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_council_defence_target_condition_tt
+					VAL_council_defence_target = yes
+				}
+			}
+			NOT = {
+				has_political_power < 20
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_mandate_slot_free = yes
+						has_war = yes
+						FROM = {
+							VAL_council_defence_target = yes
+						}
+						NOT = {
+							has_political_power < 20
+						}
+					}
+					add_political_power = -20
+					VAL_council_begin_loss_tracking = yes
+					set_variable = { var = VAL_council_mandate_kind value = 1 }
+					FROM = {
+						save_global_event_target_as = VAL_council_mandate_target
+					}
+					FROM = {
+						random_neighbor_state = {
+							limit = {
+								controller = {
+									has_war_with = VAL
+								}
+							}
+							controller = {
+								save_global_event_target_as = VAL_council_mandate_enemy
+							}
+						}
+					}
+					VAL_council_schedule_approval = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+		state_target = yes
+		target_trigger = {
+			FROM = {
+				VAL_council_defence_target = yes
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+	}
+
+	VAL_council_mandate_defence_priority = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_takes_command
+			has_completed_focus = VAL_council_equal_votes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			has_war = yes
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_council_defence_target_condition_tt
+					VAL_council_defence_target = yes
+				}
+			}
+			NOT = {
+				has_political_power < 10
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_mandate_defence_priority_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			has_war = yes
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_council_defence_target_condition_tt
+					VAL_council_defence_target = yes
+				}
+			}
+			NOT = {
+				has_political_power < 10
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_mandate_slot_free = yes
+						has_war = yes
+						FROM = {
+							VAL_council_defence_target = yes
+						}
+						NOT = {
+							has_political_power < 10
+						}
+					}
+					add_political_power = -10
+					VAL_council_begin_loss_tracking = yes
+					set_variable = { var = VAL_council_mandate_kind value = 1 }
+					FROM = {
+						save_global_event_target_as = VAL_council_mandate_target
+					}
+					FROM = {
+						random_neighbor_state = {
+							limit = {
+								controller = {
+									has_war_with = VAL
+								}
+							}
+							controller = {
+								save_global_event_target_as = VAL_council_mandate_enemy
+							}
+						}
+					}
+					VAL_council_schedule_approval = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+		state_target = yes
+		target_trigger = {
+			FROM = {
+				VAL_council_defence_target = yes
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+	}
+
+	VAL_council_mandate_defence_contested = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_takes_command
+			has_completed_focus = VAL_council_large_companies
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			has_war = yes
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_council_defence_target_condition_tt
+					VAL_council_defence_target = yes
+				}
+			}
+			NOT = {
+				has_political_power < 35
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_mandate_defence_contested_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			has_war = yes
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_council_defence_target_condition_tt
+					VAL_council_defence_target = yes
+				}
+			}
+			NOT = {
+				has_political_power < 35
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_mandate_slot_free = yes
+						has_war = yes
+						FROM = {
+							VAL_council_defence_target = yes
+						}
+						NOT = {
+							has_political_power < 35
+						}
+					}
+					add_political_power = -35
+					VAL_council_begin_loss_tracking = yes
+					set_variable = { var = VAL_council_mandate_kind value = 1 }
+					FROM = {
+						save_global_event_target_as = VAL_council_mandate_target
+					}
+					FROM = {
+						random_neighbor_state = {
+							limit = {
+								controller = {
+									has_war_with = VAL
+								}
+							}
+							controller = {
+								save_global_event_target_as = VAL_council_mandate_enemy
+							}
+						}
+					}
+					VAL_council_schedule_approval = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+		state_target = yes
+		target_trigger = {
+			FROM = {
+				VAL_council_defence_target = yes
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+	}
+
+	VAL_council_mandate_offensive_ordinary = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_takes_command
+			NOT = {
+				has_completed_focus = VAL_council_equal_votes
+			}
+			NOT = {
+				has_completed_focus = VAL_council_large_companies
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			has_war = yes
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_council_offensive_target_condition_tt
+					VAL_council_offensive_target = yes
+				}
+			}
+			NOT = {
+				has_political_power < 20
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_mandate_offensive_ordinary_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			has_war = yes
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_council_offensive_target_condition_tt
+					VAL_council_offensive_target = yes
+				}
+			}
+			NOT = {
+				has_political_power < 20
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_mandate_slot_free = yes
+						has_war = yes
+						FROM = {
+							VAL_council_offensive_target = yes
+						}
+						NOT = {
+							has_political_power < 20
+						}
+					}
+					add_political_power = -20
+					VAL_council_begin_loss_tracking = yes
+					set_variable = { var = VAL_council_mandate_kind value = 2 }
+					FROM = {
+						save_global_event_target_as = VAL_council_mandate_target
+					}
+					FROM = {
+						controller = {
+							save_global_event_target_as = VAL_council_mandate_enemy
+						}
+					}
+					VAL_council_schedule_approval = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+		state_target = yes
+		target_trigger = {
+			FROM = {
+				VAL_council_offensive_target = yes
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+	}
+
+	VAL_council_mandate_offensive_priority = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_takes_command
+			has_completed_focus = VAL_council_large_companies
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			has_war = yes
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_council_offensive_target_condition_tt
+					VAL_council_offensive_target = yes
+				}
+			}
+			NOT = {
+				has_political_power < 10
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_mandate_offensive_priority_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			has_war = yes
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_council_offensive_target_condition_tt
+					VAL_council_offensive_target = yes
+				}
+			}
+			NOT = {
+				has_political_power < 10
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_mandate_slot_free = yes
+						has_war = yes
+						FROM = {
+							VAL_council_offensive_target = yes
+						}
+						NOT = {
+							has_political_power < 10
+						}
+					}
+					add_political_power = -10
+					VAL_council_begin_loss_tracking = yes
+					set_variable = { var = VAL_council_mandate_kind value = 2 }
+					FROM = {
+						save_global_event_target_as = VAL_council_mandate_target
+					}
+					FROM = {
+						controller = {
+							save_global_event_target_as = VAL_council_mandate_enemy
+						}
+					}
+					VAL_council_schedule_approval = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+		state_target = yes
+		target_trigger = {
+			FROM = {
+				VAL_council_offensive_target = yes
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+	}
+
+	VAL_council_mandate_offensive_contested = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_takes_command
+			has_completed_focus = VAL_council_equal_votes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			has_war = yes
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_council_offensive_target_condition_tt
+					VAL_council_offensive_target = yes
+				}
+			}
+			NOT = {
+				has_political_power < 35
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_mandate_offensive_contested_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			has_war = yes
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_council_offensive_target_condition_tt
+					VAL_council_offensive_target = yes
+				}
+			}
+			NOT = {
+				has_political_power < 35
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_mandate_slot_free = yes
+						has_war = yes
+						FROM = {
+							VAL_council_offensive_target = yes
+						}
+						NOT = {
+							has_political_power < 35
+						}
+					}
+					add_political_power = -35
+					VAL_council_begin_loss_tracking = yes
+					set_variable = { var = VAL_council_mandate_kind value = 2 }
+					FROM = {
+						save_global_event_target_as = VAL_council_mandate_target
+					}
+					FROM = {
+						controller = {
+							save_global_event_target_as = VAL_council_mandate_enemy
+						}
+					}
+					VAL_council_schedule_approval = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+		state_target = yes
+		target_trigger = {
+			FROM = {
+				VAL_council_offensive_target = yes
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+	}
+
+	VAL_council_mandate_supply_ordinary = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_takes_command
+			NOT = {
+				has_completed_focus = VAL_council_equal_votes
+			}
+			NOT = {
+				has_completed_focus = VAL_council_large_companies
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_quarterly_contract_active_condition_tt
+				has_country_flag = VAL_quarterly_contract_active
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_quarterly_contract_paid_condition_tt
+					has_country_flag = VAL_quarterly_contract_paid
+				}
+			}
+			check_variable = { var = days_mission_timeout@VAL_quarterly_contract_deadline value = 45 compare = greater_than_or_equals }
+			NOT = {
+				has_political_power < 20
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_mandate_supply_ordinary_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_quarterly_contract_active_condition_tt
+				has_country_flag = VAL_quarterly_contract_active
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_quarterly_contract_paid_condition_tt
+					has_country_flag = VAL_quarterly_contract_paid
+				}
+			}
+			check_variable = { var = days_mission_timeout@VAL_quarterly_contract_deadline value = 45 compare = greater_than_or_equals }
+			NOT = {
+				has_political_power < 20
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_mandate_slot_free = yes
+						has_country_flag = VAL_quarterly_contract_active
+						NOT = {
+							has_country_flag = VAL_quarterly_contract_paid
+						}
+						check_variable = { var = days_mission_timeout@VAL_quarterly_contract_deadline value = 45 compare = greater_than_or_equals }
+						NOT = {
+							has_political_power < 20
+						}
+					}
+					add_political_power = -20
+					VAL_council_begin_loss_tracking = yes
+					set_variable = { var = VAL_council_mandate_kind value = 3 }
+					VAL_council_schedule_approval = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	VAL_council_mandate_supply_priority = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_takes_command
+			has_completed_focus = VAL_council_equal_votes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_quarterly_contract_active_condition_tt
+				has_country_flag = VAL_quarterly_contract_active
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_quarterly_contract_paid_condition_tt
+					has_country_flag = VAL_quarterly_contract_paid
+				}
+			}
+			check_variable = { var = days_mission_timeout@VAL_quarterly_contract_deadline value = 45 compare = greater_than_or_equals }
+			NOT = {
+				has_political_power < 10
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_mandate_supply_priority_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_quarterly_contract_active_condition_tt
+				has_country_flag = VAL_quarterly_contract_active
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_quarterly_contract_paid_condition_tt
+					has_country_flag = VAL_quarterly_contract_paid
+				}
+			}
+			check_variable = { var = days_mission_timeout@VAL_quarterly_contract_deadline value = 45 compare = greater_than_or_equals }
+			NOT = {
+				has_political_power < 10
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_mandate_slot_free = yes
+						has_country_flag = VAL_quarterly_contract_active
+						NOT = {
+							has_country_flag = VAL_quarterly_contract_paid
+						}
+						check_variable = { var = days_mission_timeout@VAL_quarterly_contract_deadline value = 45 compare = greater_than_or_equals }
+						NOT = {
+							has_political_power < 10
+						}
+					}
+					add_political_power = -10
+					VAL_council_begin_loss_tracking = yes
+					set_variable = { var = VAL_council_mandate_kind value = 3 }
+					VAL_council_schedule_approval = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	VAL_council_mandate_supply_contested = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_takes_command
+			has_completed_focus = VAL_council_large_companies
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_quarterly_contract_active_condition_tt
+				has_country_flag = VAL_quarterly_contract_active
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_quarterly_contract_paid_condition_tt
+					has_country_flag = VAL_quarterly_contract_paid
+				}
+			}
+			check_variable = { var = days_mission_timeout@VAL_quarterly_contract_deadline value = 45 compare = greater_than_or_equals }
+			NOT = {
+				has_political_power < 35
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_mandate_supply_contested_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_mandate_slot_free_condition_tt
+				VAL_council_mandate_slot_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_quarterly_contract_active_condition_tt
+				has_country_flag = VAL_quarterly_contract_active
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_quarterly_contract_paid_condition_tt
+					has_country_flag = VAL_quarterly_contract_paid
+				}
+			}
+			check_variable = { var = days_mission_timeout@VAL_quarterly_contract_deadline value = 45 compare = greater_than_or_equals }
+			NOT = {
+				has_political_power < 35
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_mandate_slot_free = yes
+						has_country_flag = VAL_quarterly_contract_active
+						NOT = {
+							has_country_flag = VAL_quarterly_contract_paid
+						}
+						check_variable = { var = days_mission_timeout@VAL_quarterly_contract_deadline value = 45 compare = greater_than_or_equals }
+						NOT = {
+							has_political_power < 35
+						}
+					}
+					add_political_power = -35
+					VAL_council_begin_loss_tracking = yes
+					set_variable = { var = VAL_council_mandate_kind value = 3 }
+					VAL_council_schedule_approval = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	VAL_council_guarantee_mandate = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_mutual_guarantees
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_mandate_active_condition_tt
+				has_country_flag = VAL_council_mandate_active
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_variable_VAL_council_mandate_deposit_condition_tt
+					has_variable = VAL_council_mandate_deposit
+				}
+			}
+			OR = {
+				AND = {
+					has_completed_focus = VAL_council_equal_votes
+					NOT = {
+						check_variable = { var = VAL_council_mandate_kind value = 2 compare = equals }
+					}
+				}
+				AND = {
+					has_completed_focus = VAL_council_large_companies
+					check_variable = { var = VAL_council_mandate_kind value = 2 compare = equals }
+				}
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = VAL_council_guarantee_mandate_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_mandate_active_condition_tt
+				has_country_flag = VAL_council_mandate_active
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_variable_VAL_council_mandate_deposit_condition_tt
+					has_variable = VAL_council_mandate_deposit
+				}
+			}
+			OR = {
+				AND = {
+					has_completed_focus = VAL_council_equal_votes
+					NOT = {
+						check_variable = { var = VAL_council_mandate_kind value = 2 compare = equals }
+					}
+				}
+				AND = {
+					has_completed_focus = VAL_council_large_companies
+					check_variable = { var = VAL_council_mandate_kind value = 2 compare = equals }
+				}
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						has_country_flag = VAL_council_mandate_active
+						NOT = {
+							has_variable = VAL_council_mandate_deposit
+						}
+						OR = {
+							AND = {
+								has_completed_focus = VAL_council_equal_votes
+								NOT = {
+									check_variable = { var = VAL_council_mandate_kind value = 2 compare = equals }
+								}
+							}
+							AND = {
+								has_completed_focus = VAL_council_large_companies
+								check_variable = { var = VAL_council_mandate_kind value = 2 compare = equals }
+							}
+						}
+						check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = { var = VAL_council_mandate_deposit value = 250 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	VAL_council_withdraw_mandate = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_variable = VAL_council_mandate_deposit
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = has_variable_VAL_council_mandate_kind_condition_tt
+				has_variable = VAL_council_mandate_kind
+			}
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						has_variable = VAL_council_mandate_kind
+					}
+					VAL_council_withdraw_mandate = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	VAL_council_extend_mandate = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_arbitration
+			has_completed_focus = VAL_council_large_companies
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_mandate_active_condition_tt
+				has_country_flag = VAL_council_mandate_active
+			}
+			check_variable = { var = VAL_council_mandate_kind value = 2 compare = equals }
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_mandate_extended_condition_tt
+					has_country_flag = VAL_council_mandate_extended
+				}
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = VAL_council_extend_mandate_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_mandate_active_condition_tt
+				has_country_flag = VAL_council_mandate_active
+			}
+			check_variable = { var = VAL_council_mandate_kind value = 2 compare = equals }
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_mandate_extended_condition_tt
+					has_country_flag = VAL_council_mandate_extended
+				}
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						has_country_flag = VAL_council_mandate_active
+						check_variable = { var = VAL_council_mandate_kind value = 2 compare = equals }
+						NOT = {
+							has_country_flag = VAL_council_mandate_extended
+						}
+						check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+					ADISCORD_economy_mark_dirty = yes
+					set_country_flag = VAL_council_mandate_extended
+					add_days_mission_timeout = { mission = VAL_council_mandate_deadline days = 14 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	VAL_council_arbitrate_compensation = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_arbitration
+			has_completed_focus = VAL_council_equal_votes
+			NOT = {
+				has_completed_focus = VAL_council_charter
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_case_open_condition_tt
+				has_country_flag = VAL_council_case_open
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = VAL_council_arbitrate_compensation_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_case_open_condition_tt
+				has_country_flag = VAL_council_case_open
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						has_country_flag = VAL_council_case_open
+						check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+					ADISCORD_economy_mark_dirty = yes
+					VAL_council_close_case = yes
+					add_stability = 0.01
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	VAL_council_charter_compensation = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_arbitration
+			has_completed_focus = VAL_council_equal_votes
+			has_completed_focus = VAL_council_charter
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_case_open_condition_tt
+				has_country_flag = VAL_council_case_open
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = VAL_council_charter_compensation_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_case_open_condition_tt
+				has_country_flag = VAL_council_case_open
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						has_country_flag = VAL_council_case_open
+						check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+					ADISCORD_economy_mark_dirty = yes
+					VAL_council_close_case = yes
+					add_stability = 0.01
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	VAL_council_closed_hearing = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_officer_inquiry
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_program_slot_free_condition_tt
+				VAL_council_program_slot_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_case_open_condition_tt
+				has_country_flag = VAL_council_case_open
+			}
+			NOT = {
+				command_power < 20
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_closed_hearing_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_program_slot_free_condition_tt
+				VAL_council_program_slot_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_case_open_condition_tt
+				has_country_flag = VAL_council_case_open
+			}
+			NOT = {
+				command_power < 20
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_program_slot_free = yes
+						has_country_flag = VAL_council_case_open
+						NOT = {
+							command_power < 20
+						}
+					}
+					add_command_power = -20
+					set_country_flag = VAL_council_hearing
+					activate_mission = VAL_council_hearing_deadline
+					if = {
+						limit = {
+							has_completed_focus = VAL_council_council_inspection
+						}
+						add_days_mission_timeout = { mission = VAL_council_hearing_deadline days = -15 }
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 4
+		}
+	}
+
+	VAL_council_hearing_deadline = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_country_flag = VAL_council_hearing
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 30
+		is_good = no
+		timeout_effect = {
+			clr_country_flag = VAL_council_hearing
+			VAL_council_close_case = yes
+		}
+		cancel_trigger = {
+			VAL_council_operational = no
+		}
+		cancel_effect = {
+			clr_country_flag = VAL_council_hearing
+			VAL_refresh_contract_modifier = yes
+		}
+	}
+
+	VAL_council_discipline_staff = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_disciplinary_hearings
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_program_slot_free_condition_tt
+				VAL_council_program_slot_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_case_open_condition_tt
+				has_country_flag = VAL_council_case_open
+			}
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_program_slot_free = yes
+						has_country_flag = VAL_council_case_open
+					}
+					VAL_council_close_case = yes
+					VAL_council_start_discipline = yes
+					if = {
+						limit = {
+							has_completed_focus = VAL_council_council_inspection
+						}
+						add_days_mission_timeout = { mission = VAL_council_discipline_timer days = -15 }
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	VAL_council_fund_corrections = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_disciplinary_hearings
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_case_open_condition_tt
+				has_country_flag = VAL_council_case_open
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = VAL_council_fund_corrections_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_case_open_condition_tt
+				has_country_flag = VAL_council_case_open
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						has_country_flag = VAL_council_case_open
+						check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+					ADISCORD_economy_mark_dirty = yes
+					VAL_council_close_case = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	VAL_council_public_hearing = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_public_commission
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_case_open_condition_tt
+				has_country_flag = VAL_council_case_open
+			}
+			NOT = {
+				has_political_power < 25
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = VAL_council_public_hearing_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_case_open_condition_tt
+				has_country_flag = VAL_council_case_open
+			}
+			NOT = {
+				has_political_power < 25
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						has_country_flag = VAL_council_case_open
+						NOT = {
+							has_political_power < 25
+						}
+						check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+					}
+					add_political_power = -25
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+					ADISCORD_economy_mark_dirty = yes
+					VAL_council_close_case = yes
+					add_stability = 0.02
+				}
+			}
+		}
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	VAL_council_support_families = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_publish_losses
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_family_support_condition_tt
+					has_country_flag = VAL_council_family_support
+				}
+			}
+			NOT = {
+				has_political_power < 15
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_support_families_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_family_support_condition_tt
+					has_country_flag = VAL_council_family_support
+				}
+			}
+			NOT = {
+				has_political_power < 15
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						NOT = {
+							has_country_flag = VAL_council_family_support
+						}
+						NOT = {
+							has_political_power < 15
+						}
+					}
+					add_political_power = -15
+					VAL_council_start_family_support = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 4
+		}
+	}
+
+	VAL_council_preventive_review = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_council_inspection
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_program_slot_free_condition_tt
+				VAL_council_program_slot_free = yes
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_case_open_condition_tt
+					has_country_flag = VAL_council_case_open
+				}
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_prevention_condition_tt
+					has_country_flag = VAL_council_prevention
+				}
+			}
+			NOT = {
+				has_political_power < 25
+			}
+			NOT = {
+				command_power < 15
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_preventive_review_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_program_slot_free_condition_tt
+				VAL_council_program_slot_free = yes
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_case_open_condition_tt
+					has_country_flag = VAL_council_case_open
+				}
+			}
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = has_country_flag_VAL_council_prevention_condition_tt
+					has_country_flag = VAL_council_prevention
+				}
+			}
+			NOT = {
+				has_political_power < 25
+			}
+			NOT = {
+				command_power < 15
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						VAL_council_program_slot_free = yes
+						NOT = {
+							has_country_flag = VAL_council_case_open
+						}
+						NOT = {
+							has_country_flag = VAL_council_prevention
+						}
+						NOT = {
+							has_political_power < 25
+						}
+						NOT = {
+							command_power < 15
+						}
+					}
+					add_political_power = -25
+					add_command_power = -15
+					set_country_flag = VAL_council_preventive_review
+					activate_mission = VAL_council_preventive_deadline
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	VAL_council_preventive_deadline = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_country_flag = VAL_council_preventive_review
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 14
+		is_good = no
+		timeout_effect = {
+			clr_country_flag = VAL_council_preventive_review
+			VAL_council_start_prevention = yes
+		}
+		cancel_trigger = {
+			VAL_council_operational = no
+		}
+		cancel_effect = {
+			clr_country_flag = VAL_council_preventive_review
+			VAL_refresh_contract_modifier = yes
+		}
+	}
+
+	VAL_council_recall_command = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_completed_focus = VAL_council_recall_right
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_case_open_condition_tt
+				has_country_flag = VAL_council_case_open
+			}
+			NOT = {
+				has_political_power < 25
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_recall_command_cost
+		custom_cost_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = has_country_flag_VAL_council_case_open_condition_tt
+				has_country_flag = VAL_council_case_open
+			}
+			NOT = {
+				has_political_power < 25
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_operational = yes
+						has_country_flag = VAL_council_case_open
+						NOT = {
+							has_political_power < 25
+						}
+					}
+					add_political_power = -25
+					VAL_council_close_case = yes
+					VAL_council_close_emergency = yes
+					VAL_council_withdraw_mandate = yes
+					clr_country_flag = VAL_council_staff_program
+					remove_mission = VAL_council_staff_program_timer
+					VAL_refresh_contract_modifier = yes
+					add_stability = 0.02
+				}
+			}
+		}
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	VAL_council_arbitrate_garrison = {
+		icon = generic_political_discourse
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_council_arbitration }
+		available = {
+			VAL_council_seat_arbitration_ready = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_seat_available_tt
+				check_variable = { var = VAL_council_seats_garrison value = 6 compare = less_than }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_seat_arbitration_cost
+		custom_cost_trigger = {
+			VAL_council_seat_arbitration_ready = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_seat_available_tt
+				check_variable = { var = VAL_council_seats_garrison value = 6 compare = less_than }
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_seat_arbitration_ready = yes
+						check_variable = { var = VAL_council_seats_garrison value = 6 compare = less_than }
+					}
+					add_political_power = -50
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+					ADISCORD_economy_mark_dirty = yes
+					set_temp_variable = { var = VAL_council_seat_side value = 1 }
+					set_temp_variable = { var = VAL_council_seat_delta value = 1 }
+					VAL_council_transfer_seat = yes
+					VAL_council_close_case = yes
+					set_country_flag = { flag = VAL_council_seat_arbitration_cooldown value = 1 days = 90 }
+				}
+			}
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	VAL_council_arbitrate_front = {
+		icon = generic_political_discourse
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_council_arbitration }
+		available = {
+			VAL_council_seat_arbitration_ready = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_seat_available_tt
+				check_variable = { var = VAL_council_seats_front value = 6 compare = less_than }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_seat_arbitration_cost
+		custom_cost_trigger = {
+			VAL_council_seat_arbitration_ready = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_seat_available_tt
+				check_variable = { var = VAL_council_seats_front value = 6 compare = less_than }
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_seat_arbitration_ready = yes
+						check_variable = { var = VAL_council_seats_front value = 6 compare = less_than }
+					}
+					add_political_power = -50
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+					ADISCORD_economy_mark_dirty = yes
+					set_temp_variable = { var = VAL_council_seat_side value = 2 }
+					set_temp_variable = { var = VAL_council_seat_delta value = 1 }
+					VAL_council_transfer_seat = yes
+					VAL_council_close_case = yes
+					set_country_flag = { flag = VAL_council_seat_arbitration_cooldown value = 1 days = 90 }
+				}
+			}
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	VAL_council_arbitrate_supply = {
+		icon = generic_political_discourse
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_council_arbitration }
+		available = {
+			VAL_council_seat_arbitration_ready = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_seat_available_tt
+				check_variable = { var = VAL_council_seats_supply value = 6 compare = less_than }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_council_seat_arbitration_cost
+		custom_cost_trigger = {
+			VAL_council_seat_arbitration_ready = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_seat_available_tt
+				check_variable = { var = VAL_council_seats_supply value = 6 compare = less_than }
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_council_seat_arbitration_ready = yes
+						check_variable = { var = VAL_council_seats_supply value = 6 compare = less_than }
+					}
+					add_political_power = -50
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+					ADISCORD_economy_mark_dirty = yes
+					set_temp_variable = { var = VAL_council_seat_side value = 3 }
+					set_temp_variable = { var = VAL_council_seat_delta value = 1 }
+					VAL_council_transfer_seat = yes
+					VAL_council_close_case = yes
+					set_country_flag = { flag = VAL_council_seat_arbitration_cooldown value = 1 days = 90 }
+				}
+			}
+		}
+		ai_will_do = { base = 2 }
 	}
 }

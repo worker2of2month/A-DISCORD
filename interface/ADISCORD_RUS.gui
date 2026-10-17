@@ -155,7 +155,6 @@ guiTypes = {
 			position = { x = 9 y = 132 }
 			size = { width = 442 height = 80 }
 			clipping = yes
-			alwaystransparent = yes
 			iconType = {
 				name = "RUS_bunker_floor_1_picture"
 				position = { x = 5 y = -31 }
@@ -404,7 +403,6 @@ guiTypes = {
 			position = { x = 9 y = 232 }
 			size = { width = 442 height = 80 }
 			clipping = yes
-			alwaystransparent = yes
 			iconType = {
 				name = "RUS_bunker_floor_2_picture"
 				position = { x = 5 y = -31 }
@@ -653,7 +651,6 @@ guiTypes = {
 			position = { x = 9 y = 332 }
 			size = { width = 442 height = 80 }
 			clipping = yes
-			alwaystransparent = yes
 			iconType = {
 				name = "RUS_bunker_floor_3_picture"
 				position = { x = 5 y = -31 }
@@ -902,7 +899,6 @@ guiTypes = {
 			position = { x = 9 y = 432 }
 			size = { width = 442 height = 80 }
 			clipping = yes
-			alwaystransparent = yes
 			iconType = {
 				name = "RUS_bunker_floor_4_picture"
 				position = { x = 5 y = -31 }
@@ -1151,7 +1147,6 @@ guiTypes = {
 			position = { x = 9 y = 532 }
 			size = { width = 442 height = 80 }
 			clipping = yes
-			alwaystransparent = yes
 			iconType = {
 				name = "RUS_bunker_floor_5_picture"
 				position = { x = 5 y = -31 }

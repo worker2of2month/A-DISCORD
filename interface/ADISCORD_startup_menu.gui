@@ -376,6 +376,28 @@ guiTypes = {
 		}
 
 		instantTextboxType = {
+			name = "ADISCORD_startup_text_VAL_startup_path_2"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "VAL_startup_path_2"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_VAL_startup_path_2_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "VAL_startup_path_2_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
 			name = "ADISCORD_startup_text_RUS_startup_country"
 			position = { x = 34 y = 138 }
 			font = "hoi_18mbs"

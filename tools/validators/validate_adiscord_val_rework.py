@@ -28,6 +28,51 @@ VAL_FRESH_FEATURE_FLAG = "ADISCORD_val_rework_fresh_campaign_v1"
 TIER_MIGRATION_EFFECT = "VAL_migrate_contract_tier_levels"
 
 
+def focus_layout_coordinates(focuses: list[str], council_rule: bool, tree_id: str = "VAL_focus") -> dict[str, tuple[int, int]]:
+    """Keep world-reactive branches present while resolving the two government layouts."""
+    def field(rows, key, default=None):
+        return next((row.value for row in rows if row.key == key), default)
+
+    definitions = {}
+    for source in focuses:
+        body = parse_clausewitz(source)[0].value
+        definitions[field(body, "id")] = body
+
+    def visible(name):
+        body = definitions[name]
+        gate = field(body, "allow_branch")
+        if gate is not None:
+            required = field(gate, "VAL_council_governs")
+            return required is None or (required == "yes") == council_rule
+        parents = [row.value for group in body if group.key == "prerequisite" for row in group.value]
+        return all(visible(parent) for parent in parents)
+
+    resolved = {}
+
+    def resolve(name):
+        if name in resolved:
+            return resolved[name]
+        body = definitions[name]
+        x, y = int(field(body, "x")), int(field(body, "y"))
+        relative = field(body, "relative_position_id")
+        if relative:
+            px, py = resolve(relative)
+            x, y = x + px, y + py
+        for offset in (row.value for row in body if row.key == "offset"):
+            trigger = field(offset, "trigger", [])
+            if not trigger or any(row.key not in {"VAL_council_governs", "has_focus_tree"} for row in trigger):
+                raise ValueError(f"Unmodelled focus offset condition: {name}")
+            required = field(trigger, "VAL_council_governs")
+            required_tree = field(trigger, "has_focus_tree")
+            if (required is None or (required == "yes") == council_rule) and (required_tree is None or required_tree == tree_id):
+                x += int(field(offset, "x", 0))
+                y += int(field(offset, "y", 0))
+        resolved[name] = x, y
+        return x, y
+
+    return {name: resolve(name) for name in definitions if visible(name)}
+
+
 def read(relative: str) -> str:
     path = ROOT / relative
     if not path.exists():
@@ -309,6 +354,13 @@ def validate_supplemental_rewards(
         if e.key == "country_event" and isinstance(e.value, list)
     }
     refresh = effects.get("VAL_refresh_contract_modifier", [])
+    refresh_sources = [refresh]
+    refresh_seen = {"VAL_refresh_contract_modifier"}
+    for source in refresh_sources:
+        for entry in walk_script(source, executable=True):
+            if entry.key in effects and entry.value == "yes" and entry.key not in refresh_seen:
+                refresh_seen.add(entry.key)
+                refresh_sources.append(effects[entry.key])
     consumed_variables = {
         value
         for dynamic in parse_clausewitz(dynamic_text)
@@ -319,7 +371,12 @@ def validate_supplemental_rewards(
     # assignments/conditions instead of treating arbitrary country variables as rewards.
     while True:
         previous = consumed_variables.copy()
-        for branch in (e for e in walk_script(refresh) if e.key in {"if", "else_if"}):
+        for branch in (
+            entry
+            for source in refresh_sources
+            for entry in walk_script(source)
+            if entry.key in {"if", "else_if"}
+        ):
             writes = [
                 script_fields(e.value)
                 for e in walk_script(branch.value, executable=True)
@@ -342,7 +399,8 @@ def validate_supplemental_rewards(
 
     refreshed_variables = {
         script_fields(entry.value).get("var")
-        for entry in walk_script(refresh, executable=True)
+        for source in refresh_sources
+        for entry in walk_script(source, executable=True)
         if entry.key == "set_variable"
     }
 
@@ -807,6 +865,35 @@ def validate_val_preview_ideas(
             if not overwritten:
                 numeric_copies.setdefault(source, []).append(target)
 
+    # Council inputs are copied only while its current government rules. The
+    # corresponding focuses require that same government; receipts survive it.
+    council_calls = [i for i, e in enumerate(refresh) if e.key == "VAL_council_apply_modifiers"]
+    council_helper = effects.get("VAL_council_apply_modifiers", [])
+    if len(council_calls) == 1:
+        before = refresh[:council_calls[0]]
+        for branch in (e for e in council_helper if e.key == "if"):
+            if script_fields(script_children(branch.value, "limit")) != {"VAL_council_governs": "yes"}:
+                continue
+            for entry in branch.value:
+                if entry.key == "add_to_variable":
+                    fields = script_fields(entry.value)
+                    source, target = fields.get("value", ""), fields.get("var", "")
+                    baseline = before + council_helper[:council_helper.index(branch)]
+                    if source.startswith("VAL_council_base_") and resets_output(baseline, target):
+                        numeric_copies.setdefault(source, []).append(target)
+                elif entry.key == "if":
+                    guard = script_fields(script_children(entry.value, "limit"))
+                    flag = guard.get("has_country_flag")
+                    payload = [e for e in entry.value if e.key != "limit"]
+                    if len(guard) == 1 and flag and all(e.key == "add_to_variable" for e in payload):
+                        try:
+                            flag_deltas[flag] = {
+                                script_fields(e.value)["var"]: float(script_fields(e.value)["value"])
+                                for e in payload
+                            }
+                        except (KeyError, ValueError):
+                            pass
+
     def updates_native(native):
         for index, branch in enumerate(refresh[:-1]):
             if branch.key != "if" or refresh[index + 1].key != "else":
@@ -1131,11 +1218,22 @@ def validate_val_preview_ideas(
                             f"preview {after} has no proven native reward consumer"
                         )
             if isinstance(entry.value, list):
+                branch_reward = reward
+                if reward is not None and entry.key in {"if", "else_if", "else"} and entry in reward:
+                    start = reward.index(entry)
+                    end = start + 1
+                    while start > 0 and reward[start].key in {"else_if", "else"}:
+                        start -= 1
+                    while end < len(reward) and reward[end].key in {"else_if", "else"}:
+                        end += 1
+                    # A displayed conditional preview belongs to this branch,
+                    # followed by the common reward tail, never its alternative.
+                    branch_reward = reward[:start] + [e for e in entry.value if e.key != "limit"] + reward[end:]
                 inspect(
                     entry.value,
                     path,
                     inside or entry.key == "effect_tooltip",
-                    reward,
+                    branch_reward,
                     hidden or entry.key == "hidden_effect",
                 )
 
@@ -1194,6 +1292,25 @@ def validate_val_preview_ideas(
     return candidates if not issues else set(), issues
 
 
+def validate_focus_durations(focuses: list[str]) -> list[str]:
+    # Major formations and capital-ship restoration use seventy-day programmes.
+    long_programmes = {
+        "VAL_Shield_Special_Forces",
+        "VAL_Armored_Assault_Corps",
+        "VAL_Expedition_Cruisers",
+    }
+    issues = []
+    for body in focuses:
+        identifier = re.search(r"(?m)^\s*id\s*=\s*(\S+)", body)
+        name = identifier.group(1) if identifier else "unknown focus"
+        cost = re.search(r"(?m)^\s*cost\s*=\s*(\d+(?:\.\d+)?)", body)
+        if not cost:
+            issues.append(f"{name} has no cost")
+        elif float(cost.group(1)) > (10 if name in long_programmes else 5):
+            issues.append(f"{name} exceeds its authored duration ceiling")
+    return issues
+
+
 def main() -> int:
     issues: list[str] = []
     focus_text = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
@@ -1248,21 +1365,7 @@ def main() -> int:
             )
     if len(focuses) < 70:
         issues.append(f"focus tree is still too small ({len(focuses)} focuses)")
-    for block in focuses:
-        focus_id = re.search(r"(?m)^\s*id\s*=\s*(\S+)", block)
-        cost = re.search(r"(?m)^\s*cost\s*=\s*(\d+)", block)
-        if not cost:
-            issues.append(
-                f"{focus_id.group(1) if focus_id else 'unknown focus'} has no cost"
-            )
-        elif int(cost.group(1)) > (
-            10 if focus_id and focus_id.group(1) in {
-                "VAL_Shield_Special_Forces", "VAL_Armored_Assault_Corps"
-            } else 5
-        ):
-            issues.append(
-                f"{focus_id.group(1) if focus_id else 'unknown focus'} exceeds its authored duration ceiling"
-            )
+    issues.extend(validate_focus_durations(focuses))
     issues.extend(
         validate_supplemental_rewards(
             focus_text,
@@ -1355,8 +1458,17 @@ def main() -> int:
             issues.append(f"{focus_id} has no completable prerequisite path")
 
     final_join = focus_blocks.get("VAL_Contracts_Outlive_Kings", "")
+    political_endings = {
+        "VAL_State_Contract", "VAL_council_charter",
+        "VAL_council_permanent_government", "VAL_council_limited_mandate",
+    }
+    final_groups = [
+        set(re.findall(r"\bfocus\s*=\s*(VAL_[A-Za-z0-9_]+)", group))
+        for group in named_blocks(final_join, "prerequisite")
+    ]
+    if political_endings not in final_groups:
+        issues.append("final branch join must accept exactly one of the four political endings")
     for terminal in (
-        "VAL_State_Contract",
         "VAL_Industrial_Mobilization_Plan",
         "VAL_Army_Of_The_Ledger",
     ):
@@ -1390,14 +1502,17 @@ def main() -> int:
         resolved[focus_id] = (x, y)
         return x, y
 
-    occupied: dict[tuple[int, int], list[str]] = {}
     for focus_id in coordinates:
-        occupied.setdefault(resolve(focus_id), []).append(focus_id)
-    for position, focus_ids in occupied.items():
-        if len(focus_ids) > 1:
-            issues.append(
-                f"focus coordinate collision at {position}: {', '.join(focus_ids)}"
-            )
+        resolve(focus_id)
+    for council_rule in (False, True):
+        occupied: dict[tuple[int, int], list[str]] = {}
+        for focus_id, position in focus_layout_coordinates(focuses, council_rule).items():
+            occupied.setdefault(position, []).append(focus_id)
+        for position, focus_ids in occupied.items():
+            if len(focus_ids) > 1:
+                issues.append(
+                    f"focus coordinate collision (council={council_rule}) at {position}: {', '.join(focus_ids)}"
+                )
     if resolved:
         xs = [position[0] for position in resolved.values()]
         if max(xs) - min(xs) < 24:

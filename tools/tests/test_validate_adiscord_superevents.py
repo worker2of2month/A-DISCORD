@@ -47,19 +47,69 @@ class SupereventContractTests(unittest.TestCase):
                 self.assertEqual(requests, [expected], (receiver, leader))
                 self.assertEqual(sum(row.key == "ADISCORD_superevent_enqueue" for _, row in effects), 1)
 
-        for story, request, predicate in (
-            (72, "21", "STP_pc_sword_directory_current"),
-            (68, "22", "STP_pc_charter_sotnikov_current"),
-            (69, "23", "STP_pc_charter_shabrat_current"),
-            (70, "24", "STP_pc_charter_tikhoreva_current"),
-        ):
+        event = parse_clausewitz(_event_block(source, "ADISCORD_STP_pc.72"))[0].value
+        self.assertEqual(scalar(block(event, "trigger"), "STP_pc_sword_directory_current"), "yes")
+        self.assertEqual(scalar(event, "fire_only_once"), "yes")
+        effects = list(selected_effects(block(event, "immediate"), {}, "STS"))
+        requests = [scalar(row.value, "ADISCORD_superevent_request")
+                    for _, row in effects if row.key == "set_temp_variable"]
+        self.assertEqual(requests, ["21"])
+
+        definitions = {
+            node.key: node.value for node in parse_clausewitz(
+                (ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt").read_text(encoding="utf-8")
+            ) if node.key.startswith("STP_pc_charter_")
+        }
+
+        def executable_nodes(entries, stack=()):
+            for node in entries:
+                if node.key in {"effect_tooltip", "custom_effect_tooltip", "trigger", "limit", "ai_chance"}:
+                    continue
+                yield node
+                if isinstance(node.value, list):
+                    yield from executable_nodes(node.value, stack)
+                elif node.key in definitions:
+                    self.assertEqual(node.value, "yes")
+                    self.assertNotIn(node.key, stack)
+                    yield from executable_nodes(definitions[node.key], stack + (node.key,))
+
+        for story, candidate, request in ((68, "sotnikov", "22"), (69, "shabrat", "23"), (70, "tikhoreva", "24")):
             event = parse_clausewitz(_event_block(source, f"ADISCORD_STP_pc.{story}"))[0].value
-            self.assertEqual(scalar(block(event, "trigger"), predicate), "yes")
-            self.assertEqual(scalar(event, "fire_only_once"), "yes")
-            effects = list(selected_effects(block(event, "immediate"), {}, "STS"))
-            requests = [scalar(row.value, "ADISCORD_superevent_request")
-                        for _, row in effects if row.key == "set_temp_variable"]
-            self.assertEqual(requests, [request])
+            immediate = next((node.value for node in event if node.key == "immediate"), [])
+            self.assertNotIn("ADISCORD_superevent_enqueue", {node.key for node in executable_nodes(immediate)})
+            for answer in ("a", "b"):
+                option = next(node.value for node in event if node.key == "option"
+                              and scalar(node.value, "name") == f"ADISCORD_STP_pc.{story}.{answer}")
+                actual = list(executable_nodes(option))
+                requests = []
+                for node in actual:
+                    if node.key != "set_temp_variable":
+                        continue
+                    values = {row.key: row.value for row in node.value}
+                    if "ADISCORD_superevent_request" in values:
+                        requests.append(values["ADISCORD_superevent_request"])
+                    elif values.get("var") == "ADISCORD_superevent_request":
+                        requests.append(values["value"])
+                self.assertEqual(requests, [request], (candidate, answer))
+                self.assertEqual(sum(node.key == "ADISCORD_superevent_enqueue" for node in actual), 1)
+                self.assertTrue(any(node.key == "add_ideas" and node.value.startswith(f"STP_pc_charter_{candidate}_legacy_")
+                                    for node in actual), (candidate, answer))
+            provisional = next(node.value for node in event if node.key == "option"
+                               and scalar(node.value, "name").endswith((".provisional", ".c")))
+            self.assertNotIn("ADISCORD_superevent_enqueue", {node.key for node in executable_nodes(provisional)})
+
+        sotnikov = block(definitions["STP_pc_charter_sotnikov_confirm_legacy"], "if")
+        self.assertEqual(scalar(block(sotnikov, "limit"), "STP_pc_charter_sotnikov_legacy_unclaimed"), "yes")
+        award_checks = [block(node.value, "limit") for node in sotnikov if node.key == "if"]
+        self.assertTrue(any(any(row.key == "STP_pc_charter_sotnikov_legacy_unclaimed" and row.value == "no"
+                                for row in check) for check in award_checks))
+        for ending in ("districts", "nation"):
+            award = block(definitions[f"STP_pc_charter_shabrat_award_{ending}"], "if")
+            self.assertEqual(scalar(block(award, "limit"), f"STP_pc_charter_shabrat_{ending}_ready"), "yes")
+        tikhoreva = block(definitions["STP_pc_charter_tikhoreva_confirm_legacy"], "if")
+        celebration = "STP_pc_charter_tikhoreva_celebrated"
+        self.assertEqual(scalar(block(block(tikhoreva, "limit"), "NOT"), "has_country_flag"), celebration)
+        self.assertEqual(scalar(tikhoreva, "set_country_flag"), celebration)
 
         source = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
         for number in range(17, 22):

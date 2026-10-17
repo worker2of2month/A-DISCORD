@@ -6179,6 +6179,214 @@
       "owner": "events/ADISCORD_VAL_contract_events.txt",
       "subsystem": "val_story",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_cw.100",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 100,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_resistance_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_cw.101",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 101,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_resistance_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_cw.102",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 102,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_resistance_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_cw.103",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 103,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_resistance_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_cw.104",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 104,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_resistance_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_cw.105",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 105,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_resistance_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_cw.110",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 110,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_cw.111",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 111,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_cw.112",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 112,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_cw.113",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 113,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_cw.114",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 114,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_cw.115",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 115,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pw.10",
+      "namespace": "ADISCORD_STP_pw",
+      "number": 10,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pw.11",
+      "namespace": "ADISCORD_STP_pw",
+      "number": 11,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "val_council.1",
+      "namespace": "val_council",
+      "number": 1,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.2",
+      "namespace": "val_council",
+      "number": 2,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.3",
+      "namespace": "val_council",
+      "number": 3,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.4",
+      "namespace": "val_council",
+      "number": 4,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.5",
+      "namespace": "val_council",
+      "number": 5,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.6",
+      "namespace": "val_council",
+      "number": 6,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.7",
+      "namespace": "val_council",
+      "number": 7,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.8",
+      "namespace": "val_council",
+      "number": 8,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.9",
+      "namespace": "val_council",
+      "number": 9,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.10",
+      "namespace": "val_council",
+      "number": 10,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.86",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 86,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "STP_postwar_course",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.87",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 87,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "STP_postwar_course",
+      "status": "active"
     }
   ]
 }

@@ -919,6 +919,10 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
 
     def __init__(self):
         super().__init__()
+        self.leader = "STS"
+        self.course = "hegemony"
+        self.flags["STS"].add("STP_cw_won_union_battle")
+        self.global_flags.add("STP_cw_union_wars_finished")
         self.wars.clear()
         self.owners.update({"24": "VAL", "55": "VAL", "48": "VAL"})
         self.controllers = dict(self.owners)
@@ -947,8 +951,26 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
         current = stack[-1]
         for entry in rows:
             key, value = entry.key, entry.value
-            if key in ("STP_pc_hegemony_continues", "RUS_crisis_regional_wars_available"):
+            if key == "STP_pc_hegemony_continues":
+                result = (current == "STS" and self.course == "hegemony") == (value == "yes")
+            elif key == "STP_pc_sword_directory_branch":
+                result = (current == "STS" and self.course == "directory") == (value == "yes")
+            elif key == "STP_pc_sword_directory_current":
+                result = (
+                    current == "STS"
+                    and self.course == "directory"
+                    and ("STS", "STP_pc_sdir_oath") in self.completed
+                ) == (value == "yes")
+            elif key == "RUS_crisis_regional_wars_available":
                 result = value == "yes"
+            elif key == "tag":
+                result = current == self.resolve(value, stack)
+            elif key == "is_subject_of":
+                result = self.subjects.get(current) == self.resolve(value, stack)
+            elif key == "is_owned_by":
+                result = self.owners.get(current) == self.resolve(value, stack)
+            elif key == "is_controlled_by":
+                result = self.controllers.get(current) == self.resolve(value, stack)
             elif key == "has_war":
                 result = bool(self.enemies(current)) == (value == "yes")
             elif key == "all_owned_state":
@@ -981,6 +1003,14 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
                     self.execute([e for e in value if e.key != "limit"], stack)
             elif key == "save_event_target_as":
                 self.targets["event_target:" + value] = current
+            elif key.startswith("event_target:"):
+                self.execute(value, stack + [self.resolve(key, stack)])
+            elif key == "owner":
+                self.execute(value, stack + [self.owners[current]])
+            elif key == "set_state_controller_to":
+                self.controllers[current] = self.resolve(value, stack)
+            elif key == "add_core_of":
+                self.cores.setdefault(current, set()).add(self.resolve(value, stack))
             elif key == "declare_war_on":
                 target = scalar(value, "target")
                 self.declarations.append(target)
@@ -1004,13 +1034,26 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
                 self.humans.add(current)
                 self.handoffs.append((previous, current))
             elif key == "annex_country":
-                super().execute([entry], stack)
                 target = self.resolve(scalar(value, "target"), stack)
+                national_control = {
+                    state for state, owner in self.owners.items()
+                    if owner == target and self.controllers.get(state) == target
+                }
+                super().execute([entry], stack)
+                for state in national_control:
+                    self.controllers[state] = current
                 self.existing.discard(target)
                 self.subjects.pop(target, None)
             elif key == "white_peace":
                 # Native peace can end the entire merged war, not just this pair.
+                foreign_control = {
+                    state: controller
+                    for state, controller in self.controllers.items()
+                    if controller not in set().union(*self.war_sides)
+                    and controller != self.owners.get(state)
+                }
                 super().execute([entry], stack)
+                self.controllers.update(foreign_control)
                 self.wars.clear()
                 self.execute(self.effects["STP_heg_reconcile_cannibal_campaign"], stack)
             else:
@@ -1026,16 +1069,286 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
         self.existing.update(("CIN", "OSF", "APH"))
         self.controllers = dict(self.owners)
 
+    def use_course(self, course, leader="STS"):
+        self.course = course
+        self.leader = leader
+        self.root = leader
+        self.existing.add(leader)
+        self.flags[leader].update({"STP_cw_postwar", "STP_cw_won_union_battle"})
+        self.completed = {(leader, "STP_pw_common_market")}
+        if course == "directory":
+            self.variables[leader, "STP_pc_course"] = 3
+            self.completed.add((leader, "STP_pc_sdir_oath"))
+
     def launch(self):
-        self.execute(self.effects["STP_heg_start_cannibal_campaign"], ["STS"])
+        self.execute(self.effects["STP_heg_start_cannibal_campaign"], [self.leader])
 
     def defeat(self, tag):
         self.root = tag
-        self.winner = "STS"
+        self.winner = self.leader
         self.execute(self.effects["STP_heg_settle_cannibal_campaign"], [tag])
 
 
 class NorthernAdministrationTests(unittest.TestCase):
+    def test_arsenal_extensions_stay_with_val_and_reorganization_respects_foreign_land(self):
+        for state in ("54", "57"):
+            for owner, controller in (("VAL", "VAL"), ("VAL", "STS"), ("VAL", "ALLY"), ("VAL", "ZZZ"), ("STS", "STS"), ("STS", "ZZZ"), ("ZZZ", "STS")):
+                with self.subTest(state=state, owner=owner, controller=controller):
+                    f = NorthernAdministrationFixture()
+                    f.use_course("directory")
+                    f.stubs.add("STP_sdir_apply_district_government")
+                    f.stubs.add("STP_sdir_consolidate_bezhaysk_administration")
+                    f.subjects["ALLY"] = "STS"
+                    f.owners[state] = owner
+                    f.controllers[state] = controller
+                    f.execute(f.effects["STP_sdir_reorganize_districts"], ["STS"])
+                    f.execute(f.effects["STP_sdir_reorganize_districts"], ["STS"])
+                    expected = "VAL" if owner in ("VAL", "STS") and controller != "ZZZ" else owner
+                    self.assertEqual(f.owners[state], expected)
+                    settled = owner in ("VAL", "STS") and controller != "ZZZ"
+                    self.assertEqual(f.controllers[state], "VAL" if settled else controller)
+
+    def test_directory_northern_plan_opens_shared_campaign_without_common_market(self):
+        from tools.tests.test_adiscord_stp_preparation import walk
+
+        for leader, course in (("STS", "directory"), ("STS", "charter"), ("STP", "party")):
+            with self.subTest(leader=leader, course=course):
+                f = NorthernAdministrationFixture()
+                f.use_course(course, leader)
+                f.independent_tribes()
+                f.completed.discard((leader, "STP_pw_common_market"))
+                f.completed.add((leader, "STP_pc_sdir_northern_plan"))
+                f.launch()
+                self.assertEqual(bool(f.declarations), course == "directory")
+                if course != "directory":
+                    f.completed.add((leader, "STP_pw_common_market"))
+                    f.launch()
+                    self.assertEqual(f.declarations, ["CIN"])
+        focus = next(
+            e.value for e in walk(entries("focus_trees/STP/civil_war/focuses.txt"))
+            if e.key == "focus" and isinstance(e.value, list)
+            and scalar(e.value, "id") == "STP_pc_cannibal_campaign"
+        )
+        self.assertEqual(
+            {e.value for e in block(focus, "prerequisite")},
+            {"STP_pw_common_market", "STP_pc_sdir_northern_plan"},
+        )
+        plan = named_block(read("common/ai_strategy_plans/ADISCORD_STP_plans.txt"), "STS_sword_directory_plan")
+        for name in (
+            "STP_pw_regional_citizenship", "STP_pw_regional_connections",
+            "STP_pw_cadastral_commissions", "STP_pw_local_officer_courses",
+            "STP_pw_workshop_contracts", "STP_pw_common_market",
+        ):
+            self.assertNotIn(name, plan)
+        for name in (
+            "STP_pw_republic_army_register", "STP_pw_republic_officer_school",
+            "STP_pw_republic_supply_service", "STP_pw_republic_professional_service",
+            "STP_pw_take_bezhaysk", "STP_pc_cannibal_campaign",
+        ):
+            self.assertIn(name, plan)
+
+    def test_registers_always_fund_three_integrations_without_repeating_an_unlock(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+
+        focus = next(
+            e.value for e in entries("focus_trees/STP/postwar/shabrat/focuses.txt")
+            if e.key == "focus" and scalar(e.value, "id") == "STP_pc_sdir_annexed_registers"
+        )
+        for citizenship, administrations in ((False, False), (True, False), (False, True), (True, True)):
+            with self.subTest(citizenship=citizenship, administrations=administrations):
+                facts = {
+                    ("STS", "has_completed_focus", "STP_pw_regional_citizenship"): citizenship,
+                    ("STS", "has_completed_focus", "STP_pc_heg_administrations"): administrations,
+                }
+                rewards = [e for _, e in selected_effects(block(focus, "completion_reward"), facts, "STS")]
+                self.assertEqual([e.value for e in rewards if e.key == "add_political_power"], ["150"])
+                self.assertEqual(
+                    any(e.key == "unlock_decision_tooltip" for e in rewards),
+                    not citizenship and not administrations,
+                )
+
+    def test_party_and_charter_share_the_war_but_keep_local_subjects(self):
+        for leader, course in (("STP", "party"), ("STS", "charter")):
+            with self.subTest(leader=leader, course=course):
+                f = NorthernAdministrationFixture()
+                f.use_course(course, leader)
+                f.independent_tribes()
+                before = dict(f.owners)
+                f.launch()
+                self.assertEqual(f.declarations, ["CIN"])
+                self.assertEqual(f.war_sides, [{leader}, {"CIN", "OSF", "APH"}])
+                for tag in ("CIN", "OSF", "APH"):
+                    f.defeat(tag)
+                self.assertFalse(f.annexed)
+                self.assertEqual(f.owners, before)
+                self.assertTrue(all(f.subjects[tag] == leader for tag in ("CIN", "OSF", "APH")))
+                self.assertFalse(f.majors)
+                self.assertNotIn("STP_heg_cannibal_campaign_active", f.flags[leader])
+
+    def test_directory_annexes_defeated_owners_and_preserves_player_handoff(self):
+        f = NorthernAdministrationFixture()
+        f.use_course("directory")
+        f.independent_tribes()
+        f.humans.add("CIN")
+        f.launch()
+        for tag in ("CIN", "OSF", "APH"):
+            f.defeat(tag)
+        self.assertEqual(set(f.annexed), {"CIN", "OSF", "APH"})
+        self.assertIn(("CIN", "STS"), f.handoffs)
+        for state in range(58, 66):
+            self.assertEqual(f.owners[str(state)], "STS")
+            self.assertEqual(f.controllers[str(state)], "STS")
+            self.assertIn("STS", f.cores[str(state)])
+        self.assertFalse(f.majors)
+
+    def test_directory_campaign_cannot_take_foreign_owned_or_occupied_states(self):
+        f = NorthernAdministrationFixture()
+        f.use_course("directory")
+        f.independent_tribes()
+        f.launch()
+        f.owners["60"] = "ZZZ"
+        f.controllers["60"] = "ZZZ"
+        f.controllers["61"] = "ZZZ"
+        for tag in ("CIN", "OSF", "APH"):
+            f.defeat(tag)
+        self.assertEqual(f.owners["60"], "ZZZ")
+        self.assertEqual(f.controllers["60"], "ZZZ")
+        self.assertEqual(f.owners["61"], "OSF")
+        self.assertEqual(f.controllers["61"], "ZZZ")
+        self.assertNotIn("OSF", f.annexed)
+        self.assertEqual(f.subjects["OSF"], "STS")
+        self.assertEqual(f.owners["62"], "STS")
+        self.assertEqual(f.owners["63"], "STS")
+
+    def test_foreign_capitulator_does_not_issue_a_campaign_defeat_receipt(self):
+        f = NorthernAdministrationFixture()
+        f.use_course("directory")
+        f.independent_tribes()
+        f.launch()
+        f.root = "CIN"
+        f.winner = "ZZZ"
+        f.wars.add(frozenset(("CIN", "ZZZ")))
+        f.execute(f.effects["STP_heg_settle_cannibal_campaign"], ["CIN"])
+        self.assertNotIn("STP_heg_cannibal_defeated", f.flags["CIN"])
+        self.assertFalse(f.annexed)
+
+    def test_current_campaign_save_load_needs_only_persistent_receipts(self):
+        f = NorthernAdministrationFixture()
+        f.use_course("directory")
+        f.independent_tribes()
+        f.launch()
+        f.defeat("CIN")
+        f.targets.clear()
+        f.defeat("OSF")
+        f.targets.clear()
+        f.defeat("APH")
+        self.assertEqual(set(f.annexed), {"CIN", "OSF", "APH"})
+        self.assertFalse(f.majors)
+        self.assertTrue(all(not values for values in f.arrays.values()))
+
+    def test_directory_absorbs_only_defeated_dependants_in_the_eight_states(self):
+        f = NorthernAdministrationFixture()
+        f.use_course("directory")
+        f.subjects.clear()
+        before = dict(f.owners)
+        f.execute(f.effects["STP_sdir_absorb_cannibal_conquests"], ["STS"])
+        self.assertEqual(f.owners, before)
+        f.subjects["VAL"] = "STS"
+        f.controllers["60"] = "ZZZ"
+        f.owners["61"] = "ZZZ"
+        f.controllers["61"] = "ZZZ"
+        f.execute(f.effects["STP_sdir_absorb_cannibal_conquests"], ["STS"])
+        self.assertEqual(f.owners["58"], "STS")
+        self.assertEqual(f.owners["60"], "VAL")
+        self.assertEqual(f.controllers["60"], "ZZZ")
+        self.assertEqual(f.owners["61"], "ZZZ")
+        self.assertEqual(f.owners["24"], "VAL")
+        self.assertEqual(f.owners["55"], "VAL")
+        self.assertEqual(f.owners["48"], "VAL")
+        self.assertFalse(f.matches(f.triggers["STP_sdir_cannibal_lands_secured"], ["STS"]))
+        f.owners["61"] = "VAL"
+        f.controllers["60"] = "VAL"
+        f.controllers["61"] = "VAL"
+        f.execute(f.effects["STP_sdir_absorb_cannibal_conquests"], ["STS"])
+        self.assertTrue(f.matches(f.triggers["STP_sdir_cannibal_lands_secured"], ["STS"]))
+
+    def test_kefreyt_conquests_do_not_create_a_new_campaign_against_its_subjects(self):
+        f = NorthernAdministrationFixture()
+        f.use_course("directory")
+        f.independent_tribes()
+        for tag in ("CIN", "OSF", "APH"):
+            f.subjects[tag] = "VAL"
+        before = dict(f.owners)
+        f.launch()
+        self.assertFalse(f.declarations)
+        self.assertEqual(f.owners, before)
+        self.assertTrue(f.matches(f.triggers["STP_heg_cannibals_resolved"], ["STS"]))
+
+    def test_oath_reward_absorbs_preexisting_subjects_before_focus_completion(self):
+        f = NorthernAdministrationFixture()
+        f.use_course("directory")
+        f.completed.remove(("STS", "STP_pc_sdir_oath"))
+        self.assertFalse(f.matches(f.triggers["STP_pc_sword_directory_current"], ["STS"]))
+        f.execute(f.effects["STP_sdir_absorb_cannibal_conquests"], ["STS"])
+        self.assertTrue(f.matches(f.triggers["STP_sdir_cannibal_lands_secured"], ["STS"]))
+
+    def test_late_subject_peace_absorbs_only_after_its_actual_war_ends(self):
+        f = NorthernAdministrationFixture()
+        f.use_course("directory")
+        f.wars.add(frozenset(("VAL", "ZZZ")))
+        f.controllers["60"] = "ZZZ"
+        f.owners["61"] = "ZZZ"
+        f.controllers["61"] = "ZZZ"
+        before = dict(f.owners)
+        f.root = "VAL"
+        f.winner = "ZZZ"
+        f.execute(f.effects["STP_sdir_follow_up_cannibal_conquests"], ["VAL"])
+        self.assertEqual(f.owners, before)
+        f.wars.clear()
+        f.targets.clear()
+        f.execute(f.effects["STP_sdir_follow_up_cannibal_conquests"], ["VAL"])
+        self.assertEqual(f.owners["58"], "STS")
+        self.assertEqual(f.owners["60"], "VAL")
+        self.assertEqual(f.controllers["60"], "ZZZ")
+        self.assertEqual(f.owners["61"], "ZZZ")
+        self.assertEqual(f.owners["48"], "VAL")
+
+    def test_follow_up_callbacks_wait_for_campaign_snapshot_and_ignore_other_wars(self):
+        f = NorthernAdministrationFixture()
+        f.use_course("directory")
+        before = dict(f.owners)
+        for root, winner, settling in (("STS", "ZZZ", False), ("VAL", "ZZZ", True)):
+            f.root = root
+            f.winner = winner
+            if settling:
+                f.flags["STS"].add("STP_heg_cannibal_settlement_in_progress")
+            f.execute(f.effects["STP_sdir_follow_up_cannibal_conquests"], [root])
+            self.assertEqual(f.owners, before)
+        call = "STP_sdir_follow_up_cannibal_conquests = yes"
+        for path, hooks in (
+            ("common/on_actions/02_ADISCORD_STP_on_actions.txt", ("on_puppet", "on_release_as_puppet")),
+            ("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt", ("on_peace", "on_annex", "on_peaceconference_ended")),
+        ):
+            source = read(path)
+            for hook in hooks:
+                self.assertEqual(named_block(source, hook).count(call), 1)
+
+    def test_directory_absorption_hands_over_a_fully_owned_playable_subject(self):
+        f = NorthernAdministrationFixture()
+        f.use_course("directory")
+        f.independent_tribes()
+        f.subjects.update({"CIN": "STS", "OSF": "STS", "APH": "STS"})
+        f.humans.add("CIN")
+        f.controllers["61"] = "ZZZ"
+        f.execute(f.effects["STP_sdir_absorb_cannibal_conquests"], ["STS"])
+        self.assertIn(("CIN", "STS"), f.handoffs)
+        self.assertIn("CIN", f.annexed)
+        self.assertNotIn("OSF", f.annexed)
+        self.assertEqual(f.owners["61"], "OSF")
+        self.assertEqual(f.controllers["61"], "ZZZ")
+        self.assertEqual(f.owners["62"], "STS")
+        self.assertEqual(f.owners["48"], "VAL")
+
     def test_conquered_north_forms_without_reopening_a_war(self):
         f = NorthernAdministrationFixture()
         f.form()
@@ -1192,6 +1505,326 @@ class NorthernAdministrationTests(unittest.TestCase):
                 source = read(f"localisation/{lang}/ADISCORD_STP_hegemony_l_{lang}.yml")
                 for key in (name, name + "_desc"):
                     self.assertEqual(len(re.findall(rf'(?m)^ {key}:\d* "[^"\n]*"$', source)), 1)
+
+
+
+class DistrictProjectFixture(NorthernAdministrationFixture):
+    """Execute state receipts, producer payments, cancellation and construction."""
+
+    project_names = {
+        1: ("STP_sdir_air_defence_project", "STP_pc_sdir_covered_frontier"),
+        2: ("STP_sdir_forward_airfield", "STP_pc_sdir_forward_airfields"),
+        3: ("STP_sdir_civil_workshop", "STP_pc_sdir_return_to_work"),
+    }
+
+    def __init__(self):
+        super().__init__()
+        self.use_course("directory")
+        self.owners.update({str(n): "STS" for n in (10, 11, 24, 42, 43, 44, 55, 58, 59, 60, 61, 62, 63, 64, 65, 88)})
+        self.owners.update({"54": "VAL", "57": "VAL"})
+        self.controllers = dict(self.owners)
+        self.variables["STS", "ADISCORD_economy_treasury"] = 5000
+        self.equipment = {
+            ("STS", "support_equipment", "STS"): 300,
+            ("STS", "support_equipment", "VAL"): 300,
+            ("STS", "motorized_equipment", "STS"): 200,
+            ("STS", "motorized_equipment", "VAL"): 300,
+        }
+        self.buildings = {}
+        self.slots = {state: 2 for state in self.owners}
+        self.decisions = {
+            decision.key: decision.value
+            for category in entries("common/decisions/ADISCORD_STP_decisions.txt")
+            for decision in category.value
+            if isinstance(decision.value, list)
+        }
+
+    def stock(self, kind, country="STS"):
+        return sum(
+            amount for (owner, equipment, _producer), amount in self.equipment.items()
+            if owner == country and equipment == kind
+        )
+
+    def number(self, token, stack):
+        try:
+            return float(token)
+        except ValueError:
+            pass
+        if token.startswith("num_equipment@"):
+            return self.stock(token.split("@", 1)[1], stack[-1])
+        scope = stack[-1]
+        name = token
+        if "." in token:
+            prefix, name = token.split(".", 1)
+            scope = self.resolve(prefix, stack)
+        return self.temporary_variables.get(
+            (scope, name), self.variables.get((scope, name), 0)
+        )
+
+    @staticmethod
+    def compare(left, operator, right):
+        return {
+            "=": left == right,
+            "<": left < right,
+            ">": left > right,
+            "<=": left <= right,
+            ">=": left >= right,
+        }[operator]
+
+    @staticmethod
+    def groups(rows):
+        index = 0
+        while index < len(rows):
+            size = 1 if rows[index].key else 3
+            yield rows[index:index + size]
+            index += size
+
+    def matches(self, rows, stack):
+        current = stack[-1]
+        for group in self.groups(rows):
+            entry = group[0]
+            key, value = entry.key, entry.value
+            if not key:
+                name, operator, threshold = (item.value for item in group)
+                result = self.compare(
+                    self.buildings.get((current, name), 0),
+                    operator,
+                    self.number(threshold, stack),
+                )
+            elif key in ("AND", "hidden_trigger", "custom_trigger_tooltip"):
+                result = self.matches([item for item in value if item.key != "tooltip"], stack)
+            elif key in ("OR", "NOT"):
+                result = any(self.matches(part, stack) for part in self.groups(value))
+                if key == "NOT":
+                    result = not result
+            elif key == "check_variable":
+                operator = {
+                    "equals": "=",
+                    "greater_than": ">",
+                    "greater_than_or_equals": ">=",
+                    "less_than": "<",
+                    "less_than_or_equals": "<=",
+                }[scalar(value, "compare")]
+                result = self.compare(
+                    self.number(scalar(value, "var"), stack),
+                    operator,
+                    self.number(scalar(value, "value"), stack),
+                )
+            elif key == "has_variable":
+                result = (current, value) in self.variables
+            elif key == "has_equipment":
+                kind, operator, threshold = (item.value for item in value)
+                result = self.compare(self.stock(kind, current), operator, float(threshold))
+            elif key == "free_building_slots":
+                result = self.slots.get(current, 0) > 0
+            else:
+                result = super().matches([entry], stack)
+            if not result:
+                return False
+        return True
+
+    def execute(self, rows, stack=None):
+        stack = stack or [self.root]
+        current = stack[-1]
+        taken = False
+        for entry in rows:
+            key, value = entry.key, entry.value
+            if key in ("if", "else_if", "else"):
+                if key == "if":
+                    taken = False
+                gate = next((item.value for item in value if item.key == "limit"), [])
+                if not taken and self.matches(gate, stack):
+                    taken = True
+                    self.execute([item for item in value if item.key != "limit"], stack)
+            elif key == "hidden_effect":
+                self.execute(value, stack)
+            elif key in (
+                "set_variable", "set_temp_variable", "add_to_variable",
+                "subtract_from_variable", "subtract_from_temp_variable",
+                "multiply_temp_variable",
+            ):
+                store = self.temporary_variables if "temp_variable" in key else self.variables
+                name = scalar(value, "var")
+                amount = self.number(scalar(value, "value"), stack)
+                old = store.get((current, name), 0)
+                if key.startswith("set"):
+                    new = amount
+                elif key.startswith("add"):
+                    new = old + amount
+                elif key.startswith("subtract"):
+                    new = old - amount
+                else:
+                    new = old * amount
+                store[current, name] = new
+            elif key == "every_possible_country":
+                gate = next((item.value for item in value if item.key == "limit"), [])
+                body = [item for item in value if item.key != "limit"]
+                for country in self.countries:
+                    if self.matches(gate, stack + [country]):
+                        self.execute(body, stack + [country])
+            elif key == "add_equipment_to_stockpile":
+                kind = scalar(value, "type")
+                amount = self.number(scalar(value, "amount"), stack)
+                producer = next((item.value for item in value if item.key == "producer"), current)
+                producer = self.resolve(producer, stack)
+                receipt = (current, kind, producer)
+                self.equipment[receipt] = max(0, self.equipment.get(receipt, 0) + amount)
+            elif key == "add_building_construction":
+                kind = scalar(value, "type")
+                self.buildings[current, kind] = self.buildings.get((current, kind), 0) + int(scalar(value, "level"))
+                if kind == "industrial_complex":
+                    self.slots[current] -= 1
+            elif key in ("custom_effect_tooltip", "tooltip"):
+                continue
+            else:
+                super().execute([entry], stack)
+
+    def begin(self, kind, state="58"):
+        name, focus = self.project_names[kind]
+        self.completed.add(("STS", focus))
+        self.winner = state
+        self.execute(block(self.decisions[name], "complete_effect"), ["STS"])
+
+    def finish(self, kind, state="58"):
+        name, _focus = self.project_names[kind]
+        self.winner = state
+        self.execute(block(self.decisions[name], "remove_effect"), ["STS"])
+
+    def cancel(self, kind, state="58"):
+        name, _focus = self.project_names[kind]
+        self.winner = state
+        self.execute(block(self.decisions[name], "cancel_effect"), ["STS"])
+
+
+class DistrictProjectTests(unittest.TestCase):
+    def test_arsenal_extensions_are_not_direct_project_targets(self):
+        for state in ("54", "57"):
+            for owner in ("VAL", "STS"):
+                for kind in (1, 2, 3):
+                    with self.subTest(state=state, owner=owner, kind=kind):
+                        f = DistrictProjectFixture()
+                        f.owners[state] = owner
+                        f.controllers[state] = owner
+                        f.begin(kind, state)
+                        self.assertNotIn((state, "STP_sdir_district_project_kind"), f.variables)
+                        targets = block(f.decisions[f.project_names[kind][0]], "targets")
+                        self.assertNotIn(state, {e.value for e in targets})
+        rear = DistrictProjectFixture().decisions["STP_sdir_rebuild_rear"]
+        self.assertEqual({e.value for e in block(rear, "targets")}, {"24", "42", "55"})
+
+    def test_original_stelander_airfield_is_usable_before_foreign_conquests(self):
+        f = DistrictProjectFixture()
+        f.owners = {"1": "STS"}
+        f.controllers = {"1": "STS"}
+        f.slots = {"1": 2}
+        for kind, expected in ((1, False), (2, True), (3, False)):
+            f.begin(kind, "1")
+            self.assertEqual(("1", "STP_sdir_district_project_kind") in f.variables, expected)
+            if expected:
+                f.finish(kind, "1")
+        self.assertEqual(f.buildings["1", "air_base"], 2)
+        f.begin(2, "1")
+        f.execute(f.effects["STP_sdir_refund_all_district_projects"], ["STS"])
+        self.assertNotIn(("1", "STP_sdir_district_project_kind"), f.variables)
+        self.assertEqual(f.variables["STS", "ADISCORD_economy_treasury"], 4400)
+
+    def test_exact_costs_debit_materials_across_producers_and_award_once(self):
+        for kind, price, equipment, amount, building, levels in (
+            (1, 350, "support_equipment", 100, "anti_air_building", 2),
+            (2, 600, "motorized_equipment", 200, "air_base", 2),
+            (3, 900, "support_equipment", 100, "industrial_complex", 1),
+        ):
+            with self.subTest(kind=kind):
+                f = DistrictProjectFixture()
+                f.variables["STS", "ADISCORD_economy_treasury"] = price
+                f.equipment = {
+                    ("STS", equipment, "STS"): amount / 4,
+                    ("STS", equipment, "VAL"): amount * 3 / 4,
+                }
+                f.begin(kind)
+                self.assertAlmostEqual(f.stock(equipment), 0)
+                self.assertEqual(f.variables["STS", "ADISCORD_economy_treasury"], 0)
+                self.assertEqual(f.variables["58", "STP_sdir_district_treasury_deposit"], price)
+                f.finish(kind)
+                f.finish(kind)
+                f.cancel(kind)
+                self.assertEqual(f.buildings["58", building], levels)
+                self.assertEqual(f.variables["STS", "ADISCORD_economy_treasury"], 0)
+                self.assertNotIn(("58", "STP_sdir_district_project_kind"), f.variables)
+
+    def test_fractional_shortage_cannot_start_or_leave_an_unpaid_receipt(self):
+        for kind, price, equipment, amount in (
+            (1, 350, "support_equipment", 100),
+            (2, 600, "motorized_equipment", 200),
+            (3, 900, "support_equipment", 100),
+        ):
+            with self.subTest(kind=kind):
+                f = DistrictProjectFixture()
+                f.equipment = {("STS", equipment, "VAL"): amount - 0.1}
+                f.begin(kind)
+                self.assertEqual(f.variables["STS", "ADISCORD_economy_treasury"], 5000)
+                self.assertAlmostEqual(f.stock(equipment), amount - 0.1)
+                self.assertNotIn(("58", "STP_sdir_district_project_kind"), f.variables)
+
+    def test_distinct_targets_keep_distinct_deposits_and_one_slot_per_state(self):
+        f = DistrictProjectFixture()
+        f.begin(1, "58")
+        f.begin(2, "59")
+        balance = f.variables["STS", "ADISCORD_economy_treasury"]
+        f.begin(2, "58")
+        self.assertEqual(f.variables["STS", "ADISCORD_economy_treasury"], balance)
+        self.assertEqual(f.variables["58", "STP_sdir_district_project_kind"], 1)
+        self.assertEqual(f.variables["59", "STP_sdir_district_project_kind"], 2)
+        f.cancel(1, "58")
+        f.cancel(1, "58")
+        self.assertEqual(f.variables["STS", "ADISCORD_economy_treasury"], 4400)
+        self.assertEqual(f.stock("support_equipment"), 600)
+        f.finish(2, "59")
+        self.assertEqual(f.buildings["59", "air_base"], 2)
+        self.assertEqual(f.stock("motorized_equipment"), 300)
+
+    def test_lost_site_course_or_capacity_refunds_both_currencies(self):
+        for failure in ("owner", "controller", "course", "capitulation", "capacity"):
+            with self.subTest(failure=failure):
+                f = DistrictProjectFixture()
+                f.begin(3)
+                if failure == "owner":
+                    f.owners["58"] = "ZZZ"
+                elif failure == "controller":
+                    f.controllers["58"] = "ZZZ"
+                elif failure == "course":
+                    f.course = "charter"
+                elif failure == "capitulation":
+                    f.capitulated.add("STS")
+                else:
+                    f.slots["58"] = 0
+                f.finish(3)
+                f.cancel(3)
+                self.assertEqual(f.variables["STS", "ADISCORD_economy_treasury"], 5000)
+                self.assertEqual(f.stock("support_equipment"), 600)
+                self.assertFalse(f.buildings)
+
+    def test_caps_clamp_delivery_and_current_save_load_keeps_receipts(self):
+        for kind, building, cap in ((1, "anti_air_building", 5), (2, "air_base", 10)):
+            with self.subTest(kind=kind):
+                f = DistrictProjectFixture()
+                f.buildings["58", building] = cap - 1
+                f.begin(kind)
+                f.temporary_variables.clear()
+                f.targets.clear()
+                f.finish(kind)
+                self.assertEqual(f.buildings["58", building], cap)
+
+    def test_country_loss_refunds_all_bounded_receipts_once(self):
+        f = DistrictProjectFixture()
+        f.begin(1, "58")
+        f.begin(2, "59")
+        f.execute(f.effects["STP_sdir_refund_all_district_projects"], ["STS"])
+        f.execute(f.effects["STP_sdir_refund_all_district_projects"], ["STS"])
+        self.assertEqual(f.variables["STS", "ADISCORD_economy_treasury"], 5000)
+        self.assertEqual(f.stock("support_equipment"), 600)
+        self.assertEqual(f.stock("motorized_equipment"), 500)
+        self.assertFalse(any(name.startswith("STP_sdir_district_") for _scope, name in f.variables))
 
 
 if __name__ == "__main__":

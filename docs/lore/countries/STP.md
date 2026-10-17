@@ -198,6 +198,9 @@
 - `focus_trees/STP/postwar/focuses.txt`
 - `focus_trees/STP/postwar/party/focuses.txt`
 - `focus_trees/STP/postwar/shabrat/focuses.txt`
+- `focus_trees/STP/postwar/charter/sotnikov.txt`
+- `focus_trees/STP/postwar/charter/shabrat.txt`
+- `focus_trees/STP/postwar/charter/tikhoreva.txt`
 - `common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt`
 - `localisation/russian/STP_lore_events_l_russian.yml`
 - `localisation/russian/ADISCORD_national_focuses_l_russian.yml`

@@ -154,3 +154,16 @@ VAL_stelander_war_aid = {
 	visible = { VAL_stelander_civil_war_active = yes }
 	visible_when_empty = yes
 }
+
+# --- commanders_council ---
+VAL_council_government_category = {
+	priority = 960
+	allowed = { tag = VAL }
+	visible = {
+		OR = {
+			has_country_flag = VAL_council_in_power
+			has_active_mission = VAL_council_ultimatum
+		}
+	}
+	visible_when_empty = yes
+}

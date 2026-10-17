@@ -124,7 +124,13 @@ scripted_gui = {
 				}
 			}
 			ADISCORD_startup_page_2_visible = {
-				check_variable = { var = ADISCORD_startup_tab value = 1 compare = equals }
+				OR = {
+					check_variable = { var = ADISCORD_startup_tab value = 1 compare = equals }
+					AND = {
+						tag = VAL
+						check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+					}
+				}
 			}
 			ADISCORD_startup_page_2_click_enabled = {
 				NOT = {
@@ -267,6 +273,20 @@ scripted_gui = {
 				check_variable = { var = ADISCORD_startup_page value = 1 compare = equals }
 				check_variable = { var = ADISCORD_startup_spoilers value = 1 compare = equals }
 			}
+			ADISCORD_startup_text_VAL_startup_path_2_visible = {
+				tag = VAL
+				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+				check_variable = { var = ADISCORD_startup_page value = 2 compare = equals }
+				check_variable = { var = ADISCORD_startup_spoilers value = 0 compare = equals }
+			}
+
+			ADISCORD_startup_text_VAL_startup_path_2_details_visible = {
+				tag = VAL
+				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+				check_variable = { var = ADISCORD_startup_page value = 2 compare = equals }
+				check_variable = { var = ADISCORD_startup_spoilers value = 1 compare = equals }
+			}
+
 			ADISCORD_startup_text_RUS_startup_country_visible = {
 				tag = RUS
 				check_variable = { var = ADISCORD_startup_tab value = 0 compare = equals }

@@ -47,7 +47,7 @@ characters = {
 		name = VAL_Commanders_Council
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_3
+				large = GFX_portrait_VAL_Commanders_Council
 			}
 		}
 		country_leader = {

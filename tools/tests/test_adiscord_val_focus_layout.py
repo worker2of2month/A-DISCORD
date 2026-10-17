@@ -5,9 +5,17 @@ import unittest
 from pathlib import Path
 
 from tools.lib.focus_sources import read_focus_source
+from tools.validators.validate_adiscord_val_rework import focus_layout_coordinates, named_blocks
 
 ROOT = Path(__file__).resolve().parents[2]
 FOCUS_PATH = ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt"
+PERSONAL_FOCUSES = {
+    "VAL_" + name for name in (
+        "The_Weaponry_Baron", "Price_Of_Loyalty", "Count_The_Captains",
+        "Paid_Loyalty", "Provincial_Brokers", "Closed_Ledgers",
+        "State_Above_Captains", "Captains_Cannot_Veto", "State_Contract",
+    )
+}
 
 
 def read(relative: str) -> str:
@@ -67,19 +75,19 @@ class KefreytFocusLayoutTests(unittest.TestCase):
             "VAL_Army_Of_The_Ledger",
         ):
             self.assertLessEqual(self.position(focus_id)[1], 10, focus_id)
-        self.assertEqual(self.position("VAL_Contracts_Outlive_Kings")[1], 12)
+        self.assertEqual(self.position("VAL_Contracts_Outlive_Kings")[1], 9)
 
         # The crisis opens from the middle of the opening act.
-        self.assertEqual(self.position("VAL_Stelander_Crisis_Opens")[1], 7)
+        self.assertEqual(self.position("VAL_Stelander_Crisis_Opens")[1], 6)
         for focus_id in (
             "VAL_Arms_For_The_Burning",
             "VAL_Keep_The_Arsenals",
             "VAL_Seize_The_Northern_Passes",
         ):
-            self.assertEqual(self.position(focus_id)[1], 8, focus_id)
-        self.assertEqual(self.position("VAL_The_Steel_Contract")[1], 9)
-        self.assertEqual(self.position("VAL_frontier_conference")[1], 14)
-        self.assertEqual(self.position("VAL_frontier_security_plan")[1], 17)
+            self.assertEqual(self.position(focus_id)[1], 7, focus_id)
+        self.assertEqual(self.position("VAL_The_Steel_Contract")[1], 8)
+        self.assertEqual(self.position("VAL_frontier_conference")[1], 11)
+        self.assertEqual(self.position("VAL_frontier_security_plan")[1], 13)
 
         # Expansion and settlement continue below the main-war layer.
         for focus_id in (
@@ -87,7 +95,7 @@ class KefreytFocusLayoutTests(unittest.TestCase):
             "VAL_Bezhaysk_Operation",
             "VAL_Occidian_Registries",
         ):
-            self.assertGreaterEqual(self.position(focus_id)[1], 11, focus_id)
+            self.assertGreaterEqual(self.position(focus_id)[1], 10, focus_id)
         for focus_id in (
             "VAL_frontier_treaty_offices",
             "VAL_Northern_Settlement",
@@ -95,7 +103,25 @@ class KefreytFocusLayoutTests(unittest.TestCase):
             "VAL_Southern_Expansion",
             "VAL_Eastern_Expansion",
         ):
-            self.assertGreaterEqual(self.position(focus_id)[1], 19, focus_id)
+            self.assertGreaterEqual(self.position(focus_id)[1], 14, focus_id)
+
+    def test_both_governments_keep_compact_layers_and_a_joined_naval_group(self) -> None:
+        for council in (False, True):
+            positions = focus_layout_coordinates(named_blocks(self.focuses, "focus"), council)
+            self.assertEqual(bool(PERSONAL_FOCUSES & positions.keys()), not council)
+            self.assertLessEqual(max(y for x, y in positions.values()), 18)
+            self.assertLessEqual(max(x for x, y in positions.values()), 90 if council else 64)
+            navy = positions["VAL_Naval_Contract_Office"]
+            marines = positions["VAL_Marine_Contract_Corps"]
+            self.assertEqual(navy[1], marines[1])
+            self.assertLessEqual(abs(navy[0] - marines[0]), 6)
+            for name, (x, y) in positions.items():
+                body = focus_block(self.focuses, name)
+                parents = re.findall(r"\bfocus\s*=\s*(VAL_\w+)", " ".join(named_blocks(body, "prerequisite")))
+                for parent in parents:
+                    if parent in positions:
+                        self.assertGreater(y, positions[parent][1], (council, parent, name))
+                        self.assertLessEqual(y - positions[parent][1], 11, (council, parent, name))
 
     def test_main_campaign_nodes_do_not_share_coordinates(self) -> None:
         focus_ids = (
@@ -120,6 +146,19 @@ class KefreytFocusLayoutTests(unittest.TestCase):
         positions = [self.position(focus_id) for focus_id in focus_ids]
         self.assertEqual(len(positions), len(set(positions)))
 
+    def test_shared_fleet_keeps_a_compact_position_in_the_next_chapter(self) -> None:
+        naval_ids = {
+            "VAL_Naval_Contract_Office", "VAL_Depoitodron_Naval_Yards",
+            "VAL_Expedition_Escorts", "VAL_Expedition_Cruisers", "VAL_Expedition_Landing_Staff",
+        }
+        for council in (False, True):
+            positions = focus_layout_coordinates(named_blocks(self.focuses, "focus"), council, "VAL_new_world_focus")
+            fleet = {name: positions[name] for name in naval_ids}
+            self.assertEqual(fleet["VAL_Naval_Contract_Office"], (40, 0))
+            self.assertEqual(fleet["VAL_Expedition_Escorts"], (40, 2))
+            self.assertEqual(fleet["VAL_Expedition_Cruisers"], (38, 3))
+            self.assertEqual(fleet["VAL_Expedition_Landing_Staff"], (42, 3))
+
     def test_existing_campaign_gates_are_preserved(self) -> None:
         conference = focus_block(self.focuses, "VAL_frontier_conference")
         prerequisites = " ".join(
@@ -135,11 +174,12 @@ class KefreytFocusLayoutTests(unittest.TestCase):
 
         contracts = focus_block(self.focuses, "VAL_Contracts_Outlive_Kings")
         for focus_id in (
-            "VAL_State_Contract",
             "VAL_Industrial_Mobilization_Plan",
             "VAL_Army_Of_The_Ledger",
         ):
             self.assertIn(f"prerequisite = {{ focus = {focus_id} }}", contracts)
+        self.assertIn("focus = VAL_State_Contract", contracts)
+        self.assertIn("focus = VAL_council_charter", contracts)
 
 
 class KefreytWarTooltipTests(unittest.TestCase):

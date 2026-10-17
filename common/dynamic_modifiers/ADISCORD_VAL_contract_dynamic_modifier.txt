@@ -40,6 +40,10 @@ VAL_contract_state = {
 	production_factory_efficiency_gain_factor = VAL_contract_efficiency_gain_factor
 	production_factory_max_efficiency_factor = VAL_contract_max_efficiency_factor
 	production_lack_of_resource_penalty_factor = VAL_contract_resource_penalty_factor
+	max_planning_factor = VAL_council_max_planning
+	production_speed_industrial_complex_factor = VAL_council_civilian_construction
+	ADISCORD_economy_social_expense_factor = VAL_council_social_expense
+	attrition = VAL_council_attrition
 }
 
 VAL_partner_market_income = {

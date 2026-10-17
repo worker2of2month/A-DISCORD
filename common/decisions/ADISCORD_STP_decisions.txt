@@ -6037,7 +6037,22 @@ STP_cw_external_intervention = {
 	STP_occidia_prepare_invasion = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = STP tag = STS } }
-		visible = { has_country_flag = STP_cw_won_union_battle has_global_flag = STP_cw_union_wars_finished SRP = { exists = yes is_subject = no } }
+		visible = {
+			SRP = {
+				exists = yes
+				is_subject = no
+			}
+			OR = {
+				AND = {
+					STP_pc_sword_directory_current = yes
+					has_completed_focus = STP_pc_sdir_occidia_campaign
+				}
+				AND = {
+					has_country_flag = STP_cw_won_union_battle
+					has_global_flag = STP_cw_union_wars_finished
+				}
+			}
+		}
 		available = { custom_trigger_tooltip = { tooltip = STP_occidia_invasion_available_tt STP_occidia_invasion_available = yes } }
 		cost = 50
 		days_remove = 21
@@ -9632,6 +9647,7 @@ STP_postwar_administration = {
 			OR = {
 				has_completed_focus = STP_pw_regional_citizenship
 				has_completed_focus = STP_pc_heg_administrations
+				has_completed_focus = STP_pc_sdir_annexed_registers
 			}
 		}
 		available = {
@@ -9690,66 +9706,2438 @@ STP_postwar_administration = {
 		ai_will_do = { base = 8 }
 	}
 
+	STP_pc_charter_partner_offer = {
+		icon = generic_diplomacy
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_government_current = yes
+			has_completed_focus = STP_pc_lib_transition
+			STP_pc_liberation_package_available = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_partner_offer_ready_tt
+				NOT = { has_country_flag = STP_pc_lib_package_pending }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_partner_funds_tt
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+			}
+		}
+		cost = 0
+		days_re_enable = 1
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_partner_offer_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_government_current = yes
+						has_completed_focus = STP_pc_lib_transition
+						STP_pc_liberation_package_available = yes
+					}
+					STP_pc_offer_liberation_package = yes
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
 	STP_pc_charter_sotnikov_reintegration = {
 		icon = generic_political_discourse
 		allowed = { tag = STS }
 		visible = {
 			STP_pc_charter_sotnikov_current = yes
 			has_completed_focus = STP_pc_charter_sotnikov_civil_return
+			NOT = { has_country_flag = STP_pc_charter_sotnikov_reintegration_done }
 		}
 		available = {
-			STP_pc_charter_sotnikov_current = yes
-			STP_pc_focus_available = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_charter_sotnikov_programme_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_workshop_site_tt
+				STP_pc_charter_sotnikov_workshop_site = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_reintegration_free_tt
+				NOT = { has_country_flag = STP_pc_charter_sotnikov_reintegration_receipt }
+			}
 		}
-		cost = 60
+		cost = 0
+		custom_cost_text = STP_pc_charter_sotnikov_cost_reintegration
+		custom_cost_trigger = {
+			NOT = { has_political_power < 60 }
+			check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
+		}
+		days_remove = 35
+		days_re_enable = 1
 		fire_only_once = no
-		days_re_enable = 90
+		cancel_if_not_visible = yes
+		cancel_trigger = {
+			OR = {
+				STP_pc_charter_sotnikov_programme_current = no
+				STP_pc_charter_sotnikov_workshop_site = no
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_sotnikov_reintegration_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_sotnikov_programme_current = yes
+						STP_pc_charter_sotnikov_workshop_site = yes
+						has_completed_focus = STP_pc_charter_sotnikov_civil_return
+						NOT = { has_country_flag = STP_pc_charter_sotnikov_reintegration_receipt }
+						NOT = { has_country_flag = STP_pc_charter_sotnikov_reintegration_done }
+						NOT = { has_political_power < 60 }
+						check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
+					}
+					add_political_power = -60
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 600 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 600 }
+					set_country_flag = STP_pc_charter_sotnikov_reintegration_receipt
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = { STP_pc_charter_sotnikov_settle_reintegration = yes }
+		}
+		cancel_effect = {
+			hidden_effect = { STP_pc_charter_sotnikov_refund_reintegration = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	STP_pc_charter_sotnikov_complete_justice = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_sotnikov_current = yes
+			has_completed_focus = STP_pc_charter_sotnikov_district_petitions
+			OR = {
+				NOT = { has_variable = STP_pc_charter_sotnikov_command_ruling }
+				NOT = { has_variable = STP_pc_charter_sotnikov_prison_ruling }
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_charter_sotnikov_programme_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_justice_wait_tt
+				NOT = { has_country_flag = STP_pc_charter_sotnikov_justice_receipt }
+				OR = {
+					has_variable = STP_pc_charter_sotnikov_command_ruling
+					has_variable = STP_pc_charter_sotnikov_prison_ruling
+				}
+			}
+		}
+		cost = 50
+		fire_only_once = no
+		days_re_enable = 1
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_sotnikov_second_justice_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_sotnikov_programme_current = yes
+						has_completed_focus = STP_pc_charter_sotnikov_district_petitions
+						NOT = { has_country_flag = STP_pc_charter_sotnikov_justice_receipt }
+						OR = {
+							has_variable = STP_pc_charter_sotnikov_command_ruling
+							has_variable = STP_pc_charter_sotnikov_prison_ruling
+						}
+						OR = {
+							NOT = { has_variable = STP_pc_charter_sotnikov_command_ruling }
+							NOT = { has_variable = STP_pc_charter_sotnikov_prison_ruling }
+						}
+					}
+					set_country_flag = STP_pc_charter_sotnikov_justice_receipt
+					if = {
+						limit = { NOT = { has_variable = STP_pc_charter_sotnikov_command_ruling } }
+						country_event = { id = ADISCORD_STP_pc.80 }
+					}
+					else = { country_event = { id = ADISCORD_STP_pc.65 } }
+				}
+				else = { add_political_power = 50 }
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	STP_sdir_reconcile_districts = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = { STP_sdir_reorganization_available = yes }
+		available = {
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_district_project_government_tt
+				STP_sdir_programmes_current = yes
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		days_re_enable = 1
+		complete_effect = {
+			custom_effect_tooltip = STP_sdir_reconcile_districts_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						has_war = no
+						STP_sdir_programmes_current = yes
+						STP_sdir_reorganization_available = yes
+					}
+					STP_sdir_reorganize_districts = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	STP_sdir_air_defence_project = {
+		icon = ADISCORD_factory
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_sword_directory_current = yes
+			has_completed_focus = STP_pc_sdir_covered_frontier
+			FROM = { is_owned_by = STS }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_district_project_government_tt
+				STP_sdir_programmes_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_air_defence_site_tt
+				FROM = { STP_sdir_air_defence_site_available = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_district_project_idle_tt
+				FROM = { NOT = { has_variable = STP_sdir_district_project_kind } }
+			}
+		}
+		state_target = yes
+		targets = { 10 11 24 42 43 44 55 58 59 60 61 62 63 64 65 88 }
+		target_trigger = { FROM = { is_owned_by = STS } }
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		cost = 0
+		custom_cost_text = STP_sdir_air_defence_project_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 350
+				compare = greater_than_or_equals
+			}
+			NOT = { has_equipment = { support_equipment < 100 } }
+		}
+		days_remove = 28
+		days_re_enable = 1
+		fire_only_once = no
+		cancel_trigger = { FROM = { STP_sdir_district_project_current = no } }
+		complete_effect = {
+			custom_effect_tooltip = STP_sdir_air_defence_result_tt
+			hidden_effect = {
+				set_temp_variable = {
+					var = STP_sdir_district_project_input
+					value = 1
+				}
+				STP_sdir_district_project_begin = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_sdir_air_defence_result_tt
+			hidden_effect = { FROM = { STP_sdir_district_project_finish = yes } }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_sdir_district_project_refund_tt
+			hidden_effect = { FROM = { STP_sdir_district_project_refund = yes } }
+		}
+		ai_will_do = { base = 4 }
+	}
+
+	STP_sdir_forward_airfield = {
+		icon = ADISCORD_factory
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_sword_directory_current = yes
+			has_completed_focus = STP_pc_sdir_forward_airfields
+			FROM = { is_owned_by = STS }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_district_project_government_tt
+				STP_sdir_programmes_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_forward_airfield_site_tt
+				FROM = { STP_sdir_forward_airfield_site_available = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_district_project_idle_tt
+				FROM = { NOT = { has_variable = STP_sdir_district_project_kind } }
+			}
+		}
+		state_target = yes
+		targets = { 1 2 3 10 11 24 28 29 42 43 44 45 46 53 55 58 59 60 61 62 63 64 65 88 }
+		target_trigger = { FROM = { is_owned_by = STS } }
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		cost = 0
+		custom_cost_text = STP_sdir_forward_airfield_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 600
+				compare = greater_than_or_equals
+			}
+			NOT = { has_equipment = { motorized_equipment < 200 } }
+		}
+		days_remove = 35
+		days_re_enable = 1
+		fire_only_once = no
+		cancel_trigger = { FROM = { STP_sdir_district_project_current = no } }
+		complete_effect = {
+			custom_effect_tooltip = STP_sdir_forward_airfield_result_tt
+			hidden_effect = {
+				set_temp_variable = {
+					var = STP_sdir_district_project_input
+					value = 2
+				}
+				STP_sdir_district_project_begin = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_sdir_forward_airfield_result_tt
+			hidden_effect = { FROM = { STP_sdir_district_project_finish = yes } }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_sdir_district_project_refund_tt
+			hidden_effect = { FROM = { STP_sdir_district_project_refund = yes } }
+		}
+		ai_will_do = { base = 4 }
+	}
+
+	STP_sdir_civil_workshop = {
+		icon = ADISCORD_factory
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_sword_directory_current = yes
+			has_completed_focus = STP_pc_sdir_return_to_work
+			FROM = { is_owned_by = STS }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_district_project_government_tt
+				STP_sdir_programmes_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_civil_workshop_site_tt
+				FROM = { STP_sdir_civil_workshop_site_available = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_district_project_idle_tt
+				FROM = { NOT = { has_variable = STP_sdir_district_project_kind } }
+			}
+		}
+		state_target = yes
+		targets = { 10 11 24 42 43 44 55 58 59 60 61 62 63 64 65 88 }
+		target_trigger = { FROM = { is_owned_by = STS } }
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		cost = 0
+		custom_cost_text = STP_sdir_civil_workshop_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 900
+				compare = greater_than_or_equals
+			}
+			NOT = { has_equipment = { support_equipment < 100 } }
+		}
+		days_remove = 42
+		days_re_enable = 1
+		fire_only_once = no
+		cancel_trigger = { FROM = { STP_sdir_district_project_current = no } }
+		complete_effect = {
+			custom_effect_tooltip = STP_sdir_civil_workshop_result_tt
+			hidden_effect = {
+				set_temp_variable = {
+					var = STP_sdir_district_project_input
+					value = 3
+				}
+				STP_sdir_district_project_begin = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_sdir_civil_workshop_result_tt
+			hidden_effect = { FROM = { STP_sdir_district_project_finish = yes } }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_sdir_district_project_refund_tt
+			hidden_effect = { FROM = { STP_sdir_district_project_refund = yes } }
+		}
+		ai_will_do = { base = 4 }
+	}
+
+	STP_sdir_request_arsenal_programme = {
+		icon = ADISCORD_factory
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_sword_directory_current = yes
+			has_completed_focus = STP_pc_sdir_arsenal_programme
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_district_project_government_tt
+				STP_sdir_programmes_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_arsenal_site_tt
+				STP_sdir_arsenal_site_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_programme_idle_tt
+				NOT = { has_country_flag = STP_sdir_arsenal_offer_pending }
+				NOT = { has_variable = STP_sdir_arsenal_deposit }
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_sdir_programme_cost
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } }
+		fire_only_once = no
+		days_re_enable = 35
+		complete_effect = {
+			custom_effect_tooltip = STP_sdir_arsenal_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_sdir_arsenal_can_pay = yes
+						NOT = { has_country_flag = STP_sdir_arsenal_offer_pending }
+					}
+					if = {
+						limit = { 48 = { is_owned_by = STS } }
+						STP_sdir_arsenal_begin = yes
+					}
+					else = {
+						set_country_flag = STP_sdir_arsenal_offer_pending
+						VAL = { country_event = { id = ADISCORD_STP_pc.86 } }
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	STP_sdir_arsenal_work = {
+		allowed = { tag = STS }
+		activation = { always = no }
+		visible = { has_active_mission = STP_sdir_arsenal_work }
+		available = { hidden_trigger = { always = no } }
+		days_mission_timeout = 21
+		selectable_mission = no
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				STP_sdir_programmes_current = no
+				STP_sdir_arsenal_site_available = no
+			}
+		}
+		timeout_effect = {
+			custom_effect_tooltip = STP_sdir_arsenal_result_tt
+			hidden_effect = { STP_sdir_arsenal_finish = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_sdir_refund_tt
+			hidden_effect = { STP_sdir_arsenal_refund = yes }
+		}
+	}
+
+	STP_sdir_request_naval_programme = {
+		icon = ADISCORD_factory
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_sword_directory_current = yes
+			has_completed_focus = STP_pc_sdir_naval_programme
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_district_project_government_tt
+				STP_sdir_programmes_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_naval_site_tt
+				STP_sdir_naval_site_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_programme_idle_tt
+				NOT = { has_country_flag = STP_sdir_naval_offer_pending }
+				NOT = { has_variable = STP_sdir_naval_deposit }
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_sdir_programme_cost
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } }
+		fire_only_once = no
+		days_re_enable = 35
+		complete_effect = {
+			custom_effect_tooltip = STP_sdir_naval_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_sdir_naval_can_pay = yes
+						NOT = { has_country_flag = STP_sdir_naval_offer_pending }
+					}
+					if = {
+						limit = { 30 = { is_owned_by = STS } }
+						STP_sdir_naval_begin = yes
+					}
+					else = {
+						set_country_flag = STP_sdir_naval_offer_pending
+						NOD = { country_event = { id = ADISCORD_STP_pc.87 } }
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	STP_sdir_naval_work = {
+		allowed = { tag = STS }
+		activation = { always = no }
+		visible = { has_active_mission = STP_sdir_naval_work }
+		available = { hidden_trigger = { always = no } }
+		days_mission_timeout = 21
+		selectable_mission = no
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				STP_sdir_programmes_current = no
+				STP_sdir_naval_site_available = no
+			}
+		}
+		timeout_effect = {
+			custom_effect_tooltip = STP_sdir_naval_result_tt
+			hidden_effect = { STP_sdir_naval_finish = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_sdir_refund_tt
+			hidden_effect = { STP_sdir_naval_refund = yes }
+		}
+	}
+
+
+	STP_sdir_rebuild_rear = {
+		icon = ADISCORD_factory
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_sword_directory_current = yes
+			has_completed_focus = STP_pc_sdir_rear_reconstruction
+			FROM = { is_owned_by = ROOT }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_district_project_government_tt
+				STP_sdir_programmes_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_rear_site_tt
+				FROM = {
+					is_owned_by = ROOT
+					is_controlled_by = ROOT
+					infrastructure < 5
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_programme_idle_tt
+				NOT = { has_variable = STP_sdir_rear_deposit }
+			}
+		}
+		state_target = yes
+		targets = { 24 42 55 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		cost = 0
+		custom_cost_text = STP_sdir_programme_cost
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } }
+		days_remove = 21
+		days_re_enable = 35
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				STP_sdir_programmes_current = no
+				FROM = { NOT = { is_owned_by = ROOT } }
+				FROM = { NOT = { is_controlled_by = ROOT } }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_sdir_rear_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_sdir_programmes_current = yes
+						NOT = { has_variable = STP_sdir_rear_deposit }
+						check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+						FROM = {
+							is_owned_by = ROOT
+							is_controlled_by = ROOT
+							infrastructure < 5
+						}
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+					set_variable = { var = STP_sdir_rear_deposit value = 300 }
+					FROM = { set_state_flag = STP_sdir_rear_work }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					STP_sdir_programmes_current = yes
+					has_variable = STP_sdir_rear_deposit
+					FROM = {
+						has_state_flag = STP_sdir_rear_work
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						infrastructure < 5
+					}
+				}
+				hidden_effect = {
+					clear_variable = STP_sdir_rear_deposit
+					FROM = { clr_state_flag = STP_sdir_rear_work }
+				}
+				FROM = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			}
+			else = { hidden_effect = { STP_sdir_rear_refund = yes } }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_sdir_refund_tt
+			hidden_effect = { STP_sdir_rear_refund = yes }
+		}
+		ai_will_do = { base = 4 }
+	}
+
+	STP_pc_charter_sotnikov_review_command = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_sotnikov_current = yes
+			has_completed_focus = STP_pc_charter_sotnikov_civilian_inspectorate
+			OR = {
+				check_variable = { var = STP_pc_charter_sotnikov_command_ruling value = 1 compare = greater_than }
+				check_variable = { var = STP_pc_charter_sotnikov_prison_ruling value = 1 compare = greater_than }
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_charter_sotnikov_programme_current = yes
+			}
+			has_idea = ADISCORD_internal_security_civilian_oversight
+		}
+		cost = 50
+		fire_only_once = no
+		days_re_enable = 1
 		complete_effect = {
 			if = {
 				limit = {
-					STP_pc_charter_sotnikov_current = yes
-					STP_pc_focus_available = yes
-					has_completed_focus = STP_pc_charter_sotnikov_civil_return
+					STP_pc_charter_sotnikov_programme_current = yes
+					has_completed_focus = STP_pc_charter_sotnikov_civilian_inspectorate
+					has_idea = ADISCORD_internal_security_civilian_oversight
+					OR = {
+						check_variable = { var = STP_pc_charter_sotnikov_command_ruling value = 1 compare = greater_than }
+						check_variable = { var = STP_pc_charter_sotnikov_prison_ruling value = 1 compare = greater_than }
+					}
 				}
-				add_manpower = 2000
+				add_ideas = ADISCORD_justice_military_prosecution
 				add_stability = 0.02
+				custom_effect_tooltip = STP_pc_charter_sotnikov_civil_review_tt
+				hidden_effect = {
+					if = {
+						limit = { check_variable = { var = STP_pc_charter_sotnikov_command_ruling value = 1 compare = greater_than } }
+						set_variable = { var = STP_pc_charter_sotnikov_command_ruling value = 1 }
+					}
+					if = {
+						limit = { check_variable = { var = STP_pc_charter_sotnikov_prison_ruling value = 1 compare = greater_than } }
+						set_variable = { var = STP_pc_charter_sotnikov_prison_ruling value = 1 }
+					}
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
-			else = { add_political_power = 60 }
+			else = { add_political_power = 50 }
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 8 }
+	}
+
+	STP_pc_charter_sotnikov_complete_social = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_sotnikov_current = yes
+			has_completed_focus = STP_pc_charter_sotnikov_workers_voice
+			NOT = { has_country_flag = STP_pc_charter_sotnikov_second_social_done }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_charter_sotnikov_programme_current = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pc_charter_sotnikov_cost_social
+		custom_cost_trigger = {
+			NOT = { has_political_power < 50 }
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_re_enable = 1
+		complete_effect = {
+			if = {
+				limit = {
+					STP_pc_charter_sotnikov_programme_current = yes
+					has_completed_focus = STP_pc_charter_sotnikov_workers_voice
+					NOT = { has_country_flag = STP_pc_charter_sotnikov_second_social_done }
+					NOT = { has_political_power < 50 }
+					check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+				}
+				hidden_effect = {
+					add_political_power = -50
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+					set_country_flag = STP_pc_charter_sotnikov_second_social_done
+				}
+				if = {
+					limit = { has_completed_focus = STP_pc_charter_sotnikov_community_clinics }
+					effect_tooltip = { add_ideas = STP_pc_charter_sotnikov_homes_for_families_delta }
+					hidden_effect = {
+						add_to_variable = { var = STP_pw_production_speed_buildings_factor value = 0.05 }
+						STP_pw_refresh_modifier = yes
+					}
+				}
+				else = {
+					if = {
+						limit = { NOT = { has_idea = ADISCORD_healthcare_public_hospitals } }
+						add_ideas = ADISCORD_healthcare_public_hospitals
+					}
+					else = { add_political_power = 40 }
+				}
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	STP_pc_charter_sotnikov_settle_labour = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_sotnikov_current = yes
+			has_completed_focus = STP_pc_charter_sotnikov_workers_voice
+			check_variable = { var = STP_pc_charter_sotnikov_labour_agreement value = 1 compare = greater_than }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_charter_sotnikov_programme_current = yes
+			}
+			has_idea = ADISCORD_labor_policy_collective_bargaining
+		}
+		cost = 0
+		custom_cost_text = STP_pc_charter_sotnikov_cost_labour
+		custom_cost_trigger = {
+			NOT = { has_political_power < 40 }
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_re_enable = 1
+		complete_effect = {
+			if = {
+				limit = {
+					STP_pc_charter_sotnikov_programme_current = yes
+					has_completed_focus = STP_pc_charter_sotnikov_workers_voice
+					has_idea = ADISCORD_labor_policy_collective_bargaining
+					check_variable = { var = STP_pc_charter_sotnikov_labour_agreement value = 1 compare = greater_than }
+					NOT = { has_political_power < 40 }
+					check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+				}
+				add_stability = 0.04
+				if = {
+					limit = { has_idea = STP_pc_charter_labour_arbitration }
+					remove_ideas = STP_pc_charter_labour_arbitration
+				}
+				custom_effect_tooltip = STP_pc_charter_sotnikov_labour_settled_tt
+				hidden_effect = {
+					add_political_power = -40
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+					set_variable = { var = STP_pc_charter_sotnikov_labour_agreement value = 1 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	STP_pc_charter_sotnikov_supply_contract = {
+		icon = generic_production
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_sotnikov_current = yes
+			has_completed_focus = STP_pc_charter_sotnikov_rescue_stores
+			NOT = { has_country_flag = STP_pc_charter_sotnikov_supply_delivered }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_charter_sotnikov_programme_current = yes
+			}
+			has_idea = ADISCORD_logistics_civilian_contracts
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_supply_free_tt
+				NOT = { has_country_flag = STP_pc_charter_sotnikov_supply_receipt }
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pc_charter_sotnikov_cost_supply
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		days_remove = 21
+		days_re_enable = 1
+		fire_only_once = no
+		cancel_if_not_visible = yes
+		cancel_trigger = {
+			OR = {
+				STP_pc_charter_sotnikov_programme_current = no
+				NOT = { has_idea = ADISCORD_logistics_civilian_contracts }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_sotnikov_supply_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_sotnikov_programme_current = yes
+						has_completed_focus = STP_pc_charter_sotnikov_rescue_stores
+						has_idea = ADISCORD_logistics_civilian_contracts
+						NOT = { has_country_flag = STP_pc_charter_sotnikov_supply_receipt }
+						NOT = { has_country_flag = STP_pc_charter_sotnikov_supply_delivered }
+						check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+					set_country_flag = STP_pc_charter_sotnikov_supply_receipt
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = { STP_pc_charter_sotnikov_settle_supply = yes }
+		}
+		cancel_effect = {
+			hidden_effect = { STP_pc_charter_sotnikov_refund_supply = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	STP_pc_charter_sotnikov_confirm_legacy = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_sotnikov_current = yes
+			has_completed_focus = STP_pc_charter_sotnikov_charter_fulfilled
+			STP_pc_charter_sotnikov_legacy_unclaimed = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_charter_sotnikov_programme_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_justice_settled_tt
+				STP_pc_charter_sotnikov_justice_settled = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_labour_kept_tt
+				check_variable = { var = STP_pc_charter_sotnikov_labour_agreement value = 1 compare = equals }
+				has_idea = ADISCORD_labor_policy_collective_bargaining
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_social_kept_tt
+				has_country_flag = STP_pc_charter_sotnikov_reintegration_done
+				has_country_flag = STP_pc_charter_sotnikov_second_social_done
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_supply_kept_tt
+				has_country_flag = STP_pc_charter_sotnikov_supply_delivered
+				has_idea = ADISCORD_logistics_civilian_contracts
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_sotnikov_army_kept_tt
+				OR = {
+					STP_pc_charter_sotnikov_law_earned = yes
+					STP_pc_charter_sotnikov_defenders_earned = yes
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		days_re_enable = 1
+		complete_effect = {
+			effect_tooltip = {
+				if = {
+					limit = { hidden_trigger = { has_completed_focus = STP_pc_charter_sotnikov_professional_service } }
+					add_ideas = STP_pc_charter_sotnikov_legacy_law
+				}
+				else_if = {
+					limit = { hidden_trigger = { has_completed_focus = STP_pc_charter_sotnikov_citizen_reserve } }
+					add_ideas = STP_pc_charter_sotnikov_legacy_defenders
+				}
+				remove_country_leader_trait = STP_charter_sotnikov_oath
+				add_country_leader_trait = STP_charter_sotnikov_guarantor
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						has_completed_focus = STP_pc_charter_sotnikov_charter_fulfilled
+						STP_pc_charter_sotnikov_legacy_unclaimed = yes
+					}
+					STP_pc_charter_sotnikov_confirm_legacy = yes
+				}
+			}
+		}
+		ai_will_do = { base = 8 }
 	}
 
 	STP_pc_charter_shabrat_civic_grants = {
 		icon = generic_political_discourse
-		allowed = { tag = STS }
+		allowed = {
+			tag = STS
+		}
 		visible = {
 			STP_pc_charter_shabrat_current = yes
 			has_completed_focus = STP_pc_charter_shabrat_district_grants
+			FROM = {
+				OR = {
+					NOT = {
+						has_state_flag = STP_pc_charter_shabrat_compact
+					}
+					industrial_complex < 1
+				}
+			}
 		}
 		available = {
-			STP_pc_charter_shabrat_current = yes
-			STP_pc_focus_available = yes
-		}
-		cost = 75
-		fire_only_once = no
-		days_re_enable = 90
-		complete_effect = {
-			if = {
-				limit = {
-					STP_pc_charter_shabrat_current = yes
-					STP_pc_focus_available = yes
-					has_completed_focus = STP_pc_charter_shabrat_district_grants
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_project_idle_tt
+				STP_pc_charter_shabrat_project_idle = yes
+			}
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+				free_building_slots = {
+					building = industrial_complex
+					size > 0
+					include_locked = yes
 				}
-				custom_effect_tooltip = STP_pc_charter_civic_grants_reward_tt
-				hidden_effect = {
-					add_to_variable = { var = ADISCORD_economy_treasury value = 600 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 600 }
+			}
+		}
+		state_target = yes
+		targets = {
+			2
+			3
+			29
+			45
+			46
+			53
+		}
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+			}
+		}
+		highlight_states = {
+			highlight_state_targets = {
+				state = FROM
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		cost = 0
+		custom_cost_text = STP_pc_charter_shabrat_civic_grants_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power < 75
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 600
+				compare = greater_than_or_equals
+			}
+		}
+		days_remove = 35
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				STP_pc_charter_shabrat_current = no
+				STP_pc_focus_available = no
+				FROM = {
+					NOT = {
+						is_owned_by = ROOT
+					}
+				}
+				FROM = {
+					NOT = {
+						is_controlled_by = ROOT
+					}
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_shabrat_civic_grants_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_shabrat_current = yes
+						STP_pc_focus_available = yes
+						STP_pc_charter_shabrat_project_idle = yes
+						has_completed_focus = STP_pc_charter_shabrat_district_grants
+						FROM = {
+							OR = {
+								NOT = {
+									has_state_flag = STP_pc_charter_shabrat_compact
+								}
+								industrial_complex < 1
+							}
+						}
+						NOT = {
+							has_political_power < 75
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 600
+							compare = greater_than_or_equals
+						}
+						FROM = {
+							is_owned_by = ROOT
+							is_controlled_by = ROOT
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+								include_locked = yes
+							}
+						}
+					}
+					add_political_power = -75
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 600
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 600
+					}
+					set_variable = {
+						var = STP_pc_charter_shabrat_pp_deposit
+						value = 75
+					}
+					set_variable = {
+						var = STP_pc_charter_shabrat_deposit
+						value = 600
+					}
+					set_variable = {
+						var = STP_pc_charter_shabrat_project_kind
+						value = 3
+					}
+					FROM = {
+						set_state_flag = STP_pc_charter_shabrat_compact_pending
+					}
 					ADISCORD_economy_mark_dirty = yes
 				}
 			}
-			else = { add_political_power = 75 }
 		}
-		ai_will_do = { base = 2 }
+		remove_effect = {
+			hidden_effect = {
+				STP_pc_charter_shabrat_finish_compact = yes
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pc_charter_shabrat_refund_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = STP_pc_charter_shabrat_project_kind
+							value = 3
+							compare = equals
+						}
+						FROM = {
+							has_state_flag = STP_pc_charter_shabrat_compact_pending
+						}
+					}
+					FROM = {
+						clr_state_flag = STP_pc_charter_shabrat_compact_pending
+					}
+					STP_pc_charter_shabrat_refund = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	STP_pc_charter_shabrat_complete_registers = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STS
+		}
+		visible = {
+			STP_pc_charter_shabrat_current = yes
+			has_completed_focus = STP_pc_charter_shabrat_district_registers
+			check_variable = {
+				var = STP_pc_charter_shabrat_registers
+				value = 2
+				compare = equals
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_project_idle_tt
+				STP_pc_charter_shabrat_project_idle = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pc_charter_shabrat_complete_registers_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power < 40
+			}
+		}
+		days_remove = 21
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				STP_pc_charter_shabrat_current = no
+				STP_pc_focus_available = no
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_shabrat_complete_registers_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_shabrat_current = yes
+						STP_pc_focus_available = yes
+						STP_pc_charter_shabrat_project_idle = yes
+						has_completed_focus = STP_pc_charter_shabrat_district_registers
+						check_variable = {
+							var = STP_pc_charter_shabrat_registers
+							value = 2
+							compare = equals
+						}
+						NOT = {
+							has_political_power < 40
+						}
+					}
+					add_political_power = -40
+					set_variable = {
+						var = STP_pc_charter_shabrat_pp_deposit
+						value = 40
+					}
+					set_variable = {
+						var = STP_pc_charter_shabrat_deposit
+						value = 0
+					}
+					set_variable = {
+						var = STP_pc_charter_shabrat_project_kind
+						value = 1
+					}
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				STP_pc_charter_shabrat_finish_registers = yes
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pc_charter_shabrat_refund_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = STP_pc_charter_shabrat_project_kind
+							value = 1
+							compare = equals
+						}
+					}
+					STP_pc_charter_shabrat_refund = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	STP_pc_charter_shabrat_review_citizenship = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STS
+		}
+		visible = {
+			STP_pc_charter_shabrat_current = yes
+			has_completed_focus = STP_pc_charter_shabrat_citizenship_duty
+			check_variable = {
+				var = STP_pc_charter_shabrat_oath
+				value = 1
+				compare = greater_than
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_project_idle_tt
+				STP_pc_charter_shabrat_project_idle = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pc_charter_shabrat_review_citizenship_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power < 50
+			}
+		}
+		days_remove = 28
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				STP_pc_charter_shabrat_current = no
+				STP_pc_focus_available = no
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_shabrat_review_citizenship_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_shabrat_current = yes
+						STP_pc_focus_available = yes
+						STP_pc_charter_shabrat_project_idle = yes
+						has_completed_focus = STP_pc_charter_shabrat_citizenship_duty
+						check_variable = {
+							var = STP_pc_charter_shabrat_oath
+							value = 1
+							compare = greater_than
+						}
+						NOT = {
+							has_political_power < 50
+						}
+					}
+					add_political_power = -50
+					set_variable = {
+						var = STP_pc_charter_shabrat_pp_deposit
+						value = 50
+					}
+					set_variable = {
+						var = STP_pc_charter_shabrat_deposit
+						value = 0
+					}
+					set_variable = {
+						var = STP_pc_charter_shabrat_project_kind
+						value = 2
+					}
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				STP_pc_charter_shabrat_finish_citizenship = yes
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pc_charter_shabrat_refund_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = STP_pc_charter_shabrat_project_kind
+							value = 2
+							compare = equals
+						}
+					}
+					STP_pc_charter_shabrat_refund = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	STP_pc_charter_shabrat_defence_contract = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STS
+		}
+		visible = {
+			STP_pc_charter_shabrat_current = yes
+			has_completed_focus = STP_pc_charter_shabrat_defence_stores
+			NOT = {
+				has_country_flag = STP_pc_charter_shabrat_defence_delivered
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_project_idle_tt
+				STP_pc_charter_shabrat_project_idle = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_citizenship_settled_tt
+				STP_pc_charter_shabrat_citizenship_settled = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_compact_active_tt
+				any_owned_state = {
+					STP_pc_charter_shabrat_compact_active = yes
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pc_charter_shabrat_defence_contract_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power < 35
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 300
+				compare = greater_than_or_equals
+			}
+		}
+		days_remove = 28
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				STP_pc_charter_shabrat_current = no
+				STP_pc_focus_available = no
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_shabrat_defence_contract_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_shabrat_current = yes
+						STP_pc_focus_available = yes
+						STP_pc_charter_shabrat_project_idle = yes
+						custom_trigger_tooltip = {
+							tooltip = STP_pc_charter_shabrat_citizenship_settled_tt
+							STP_pc_charter_shabrat_citizenship_settled = yes
+						}
+						custom_trigger_tooltip = {
+							tooltip = STP_pc_charter_shabrat_compact_active_tt
+							any_owned_state = {
+								STP_pc_charter_shabrat_compact_active = yes
+							}
+						}
+						has_completed_focus = STP_pc_charter_shabrat_defence_stores
+						NOT = {
+							has_country_flag = STP_pc_charter_shabrat_defence_delivered
+						}
+						NOT = {
+							has_political_power < 35
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 300
+							compare = greater_than_or_equals
+						}
+					}
+					add_political_power = -35
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 300
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 300
+					}
+					set_variable = {
+						var = STP_pc_charter_shabrat_pp_deposit
+						value = 35
+					}
+					set_variable = {
+						var = STP_pc_charter_shabrat_deposit
+						value = 300
+					}
+					set_variable = {
+						var = STP_pc_charter_shabrat_project_kind
+						value = 4
+					}
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				STP_pc_charter_shabrat_finish_defence = yes
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pc_charter_shabrat_refund_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = STP_pc_charter_shabrat_project_kind
+							value = 4
+							compare = equals
+						}
+					}
+					STP_pc_charter_shabrat_refund = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	STP_pc_charter_shabrat_ratify_districts = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STS
+		}
+		visible = {
+			STP_pc_charter_shabrat_legacy_open = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_project_idle_tt
+				STP_pc_charter_shabrat_project_idle = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_registers_full_tt
+				check_variable = { var = STP_pc_charter_shabrat_registers value = 1 compare = equals }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_oath_equal_tt
+				check_variable = { var = STP_pc_charter_shabrat_oath value = 1 compare = equals }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_compact_active_tt
+				any_owned_state = { STP_pc_charter_shabrat_compact_active = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_participation_ready_tt
+				check_variable = { var = STP_pc_charter_shabrat_voice value = 2 compare = equals }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_legacy_districts
+			}
+			hidden_effect = {
+				STP_pc_charter_shabrat_award_districts = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	STP_pc_charter_shabrat_ratify_nation = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STS
+		}
+		visible = {
+			STP_pc_charter_shabrat_legacy_open = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_project_idle_tt
+				STP_pc_charter_shabrat_project_idle = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_registers_full_tt
+				check_variable = { var = STP_pc_charter_shabrat_registers value = 1 compare = equals }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_oath_equal_tt
+				check_variable = { var = STP_pc_charter_shabrat_oath value = 1 compare = equals }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_compact_active_tt
+				any_owned_state = { STP_pc_charter_shabrat_compact_active = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_defence_delivered_tt
+				has_country_flag = STP_pc_charter_shabrat_defence_delivered
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_legacy_nation
+			}
+			hidden_effect = {
+				STP_pc_charter_shabrat_award_nation = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	STP_pc_charter_tikhoreva_public_audit = {
+		icon = generic_industry
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_tikhoreva_current = yes
+			has_completed_focus = STP_pc_charter_tikhoreva_independent_audit
+			check_variable = { var = STP_pc_charter_tikhoreva_audit_method value = 1 compare = equals }
+			NOT = { has_country_flag = STP_pc_charter_tikhoreva_audit_completed }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_project_idle_tt
+				STP_pc_charter_tikhoreva_project_idle = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pc_charter_tikhoreva_public_audit_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 40 }
+		}
+		days_remove = 28
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				STP_pc_charter_tikhoreva_work_current = no
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_public_audit_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_tikhoreva_current = yes
+						has_completed_focus = STP_pc_charter_tikhoreva_independent_audit
+						check_variable = { var = STP_pc_charter_tikhoreva_audit_method value = 1 compare = equals }
+						NOT = { has_country_flag = STP_pc_charter_tikhoreva_audit_completed }
+						STP_pc_charter_tikhoreva_work_current = yes
+						custom_trigger_tooltip = {
+							tooltip = STP_pc_charter_tikhoreva_project_idle_tt
+							STP_pc_charter_tikhoreva_project_idle = yes
+						}
+						NOT = { has_political_power < 40 }
+					}
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_kind value = 1 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_treasury value = 0 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_pp value = 40 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_equipment value = 0 }
+					STP_pc_charter_tikhoreva_pay_project = yes
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 1 compare = equals } }
+					STP_pc_charter_tikhoreva_finish_project = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_refund_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 1 compare = equals } }
+					STP_pc_charter_tikhoreva_cancel_project = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	STP_pc_charter_tikhoreva_professional_audit = {
+		icon = generic_industry
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_tikhoreva_current = yes
+			has_completed_focus = STP_pc_charter_tikhoreva_independent_audit
+			check_variable = { var = STP_pc_charter_tikhoreva_audit_method value = 2 compare = equals }
+			NOT = { has_country_flag = STP_pc_charter_tikhoreva_audit_completed }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_project_idle_tt
+				STP_pc_charter_tikhoreva_project_idle = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pc_charter_tikhoreva_professional_audit_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		days_remove = 42
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				STP_pc_charter_tikhoreva_work_current = no
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_professional_audit_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_tikhoreva_current = yes
+						has_completed_focus = STP_pc_charter_tikhoreva_independent_audit
+						check_variable = { var = STP_pc_charter_tikhoreva_audit_method value = 2 compare = equals }
+						NOT = { has_country_flag = STP_pc_charter_tikhoreva_audit_completed }
+						STP_pc_charter_tikhoreva_work_current = yes
+						custom_trigger_tooltip = {
+							tooltip = STP_pc_charter_tikhoreva_project_idle_tt
+							STP_pc_charter_tikhoreva_project_idle = yes
+						}
+						check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+					}
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_kind value = 2 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_treasury value = 300 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_pp value = 0 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_equipment value = 0 }
+					STP_pc_charter_tikhoreva_pay_project = yes
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 2 compare = equals } }
+					STP_pc_charter_tikhoreva_finish_project = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_refund_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 2 compare = equals } }
+					STP_pc_charter_tikhoreva_cancel_project = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	STP_pc_charter_tikhoreva_contract_pilot = {
+		icon = generic_industry
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_tikhoreva_current = yes
+			has_completed_focus = STP_pc_charter_tikhoreva_pilot_workshop
+			has_completed_focus = STP_pc_charter_tikhoreva_open_tenders
+			STP_pc_charter_tikhoreva_pilot_operational = no
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_project_idle_tt
+				STP_pc_charter_tikhoreva_project_idle = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_audit_completed_tt
+				has_country_flag = STP_pc_charter_tikhoreva_audit_completed
+			}
+			any_owned_state = {
+				is_controlled_by = ROOT
+				free_building_slots = {
+					building = industrial_complex
+					size > 0
+					include_locked = yes
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pc_charter_tikhoreva_contract_pilot_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+		}
+		days_remove = 42
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				STP_pc_charter_tikhoreva_work_current = no
+				STP_pc_charter_tikhoreva_pilot_site_current = no
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_contract_pilot_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_tikhoreva_current = yes
+						has_completed_focus = STP_pc_charter_tikhoreva_pilot_workshop
+						has_completed_focus = STP_pc_charter_tikhoreva_open_tenders
+						STP_pc_charter_tikhoreva_pilot_operational = no
+						STP_pc_charter_tikhoreva_work_current = yes
+						custom_trigger_tooltip = {
+							tooltip = STP_pc_charter_tikhoreva_project_idle_tt
+							STP_pc_charter_tikhoreva_project_idle = yes
+						}
+						custom_trigger_tooltip = {
+							tooltip = STP_pc_charter_tikhoreva_audit_completed_tt
+							has_country_flag = STP_pc_charter_tikhoreva_audit_completed
+						}
+						any_owned_state = {
+							is_controlled_by = ROOT
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+								include_locked = yes
+							}
+						}
+						check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+					}
+					every_state = {
+						limit = { has_state_flag = STP_pc_charter_tikhoreva_pilot_operational }
+						clr_state_flag = STP_pc_charter_tikhoreva_pilot_operational
+					}
+					random_owned_controlled_state = {
+						limit = {
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+								include_locked = yes
+							}
+						}
+						set_state_flag = STP_pc_charter_tikhoreva_pilot_site
+					}
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_kind value = 3 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_treasury value = 900 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_pp value = 0 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_equipment value = 0 }
+					STP_pc_charter_tikhoreva_pay_project = yes
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 3 compare = equals } }
+					STP_pc_charter_tikhoreva_finish_project = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_refund_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 3 compare = equals } }
+					STP_pc_charter_tikhoreva_cancel_project = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	STP_pc_charter_tikhoreva_standard_pilot = {
+		icon = generic_industry
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_tikhoreva_current = yes
+			has_completed_focus = STP_pc_charter_tikhoreva_pilot_workshop
+			has_completed_focus = STP_pc_charter_tikhoreva_standard_designs
+			STP_pc_charter_tikhoreva_pilot_operational = no
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_project_idle_tt
+				STP_pc_charter_tikhoreva_project_idle = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_audit_completed_tt
+				has_country_flag = STP_pc_charter_tikhoreva_audit_completed
+			}
+			any_owned_state = {
+				is_controlled_by = ROOT
+				free_building_slots = {
+					building = industrial_complex
+					size > 0
+					include_locked = yes
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pc_charter_tikhoreva_standard_pilot_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 720 compare = greater_than_or_equals }
+		}
+		days_remove = 56
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				STP_pc_charter_tikhoreva_work_current = no
+				STP_pc_charter_tikhoreva_pilot_site_current = no
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_standard_pilot_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_tikhoreva_current = yes
+						has_completed_focus = STP_pc_charter_tikhoreva_pilot_workshop
+						has_completed_focus = STP_pc_charter_tikhoreva_standard_designs
+						STP_pc_charter_tikhoreva_pilot_operational = no
+						STP_pc_charter_tikhoreva_work_current = yes
+						custom_trigger_tooltip = {
+							tooltip = STP_pc_charter_tikhoreva_project_idle_tt
+							STP_pc_charter_tikhoreva_project_idle = yes
+						}
+						custom_trigger_tooltip = {
+							tooltip = STP_pc_charter_tikhoreva_audit_completed_tt
+							has_country_flag = STP_pc_charter_tikhoreva_audit_completed
+						}
+						any_owned_state = {
+							is_controlled_by = ROOT
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+								include_locked = yes
+							}
+						}
+						check_variable = { var = ADISCORD_economy_treasury value = 720 compare = greater_than_or_equals }
+					}
+					every_state = {
+						limit = { has_state_flag = STP_pc_charter_tikhoreva_pilot_operational }
+						clr_state_flag = STP_pc_charter_tikhoreva_pilot_operational
+					}
+					random_owned_controlled_state = {
+						limit = {
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+								include_locked = yes
+							}
+						}
+						set_state_flag = STP_pc_charter_tikhoreva_pilot_site
+					}
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_kind value = 4 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_treasury value = 720 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_pp value = 0 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_equipment value = 0 }
+					STP_pc_charter_tikhoreva_pay_project = yes
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 4 compare = equals } }
+					STP_pc_charter_tikhoreva_finish_project = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_refund_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 4 compare = equals } }
+					STP_pc_charter_tikhoreva_cancel_project = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	STP_pc_charter_tikhoreva_complete_acceptance = {
+		icon = generic_industry
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_tikhoreva_current = yes
+			has_completed_focus = STP_pc_charter_tikhoreva_pilot_workshop
+			has_completed_focus = STP_pc_charter_tikhoreva_limits_of_measurement
+			check_variable = { var = STP_pc_charter_tikhoreva_acceptance_method value = 1 compare = equals }
+			check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 10 compare = equals }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_acceptance_closed_tt
+				NOT = { has_country_flag = STP_pc_charter_tikhoreva_acceptance_open }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_site_current_tt
+				STP_pc_charter_tikhoreva_pilot_site_current = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pc_charter_tikhoreva_complete_acceptance_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 180 compare = greater_than_or_equals }
+		}
+		days_remove = 28
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				STP_pc_charter_tikhoreva_work_current = no
+				STP_pc_charter_tikhoreva_pilot_site_current = no
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_complete_acceptance_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_tikhoreva_current = yes
+						has_completed_focus = STP_pc_charter_tikhoreva_pilot_workshop
+						has_completed_focus = STP_pc_charter_tikhoreva_limits_of_measurement
+						check_variable = { var = STP_pc_charter_tikhoreva_acceptance_method value = 1 compare = equals }
+						check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 10 compare = equals }
+						STP_pc_charter_tikhoreva_work_current = yes
+						NOT = { has_country_flag = STP_pc_charter_tikhoreva_acceptance_open }
+						STP_pc_charter_tikhoreva_pilot_site_current = yes
+						check_variable = { var = ADISCORD_economy_treasury value = 180 compare = greater_than_or_equals }
+					}
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_kind value = 5 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_treasury value = 180 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_pp value = 0 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_equipment value = 0 }
+					STP_pc_charter_tikhoreva_pay_project = yes
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 5 compare = equals } }
+					STP_pc_charter_tikhoreva_finish_project = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_refund_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 5 compare = equals } }
+					STP_pc_charter_tikhoreva_cancel_project = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	STP_pc_charter_tikhoreva_staged_acceptance = {
+		icon = generic_industry
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_tikhoreva_current = yes
+			has_completed_focus = STP_pc_charter_tikhoreva_pilot_workshop
+			check_variable = { var = STP_pc_charter_tikhoreva_acceptance_method value = 2 compare = equals }
+			check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 10 compare = equals }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_acceptance_closed_tt
+				NOT = { has_country_flag = STP_pc_charter_tikhoreva_acceptance_open }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_site_current_tt
+				STP_pc_charter_tikhoreva_pilot_site_current = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pc_charter_tikhoreva_staged_acceptance_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+		}
+		days_remove = 42
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				STP_pc_charter_tikhoreva_work_current = no
+				STP_pc_charter_tikhoreva_pilot_site_current = no
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_staged_acceptance_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_tikhoreva_current = yes
+						has_completed_focus = STP_pc_charter_tikhoreva_pilot_workshop
+						check_variable = { var = STP_pc_charter_tikhoreva_acceptance_method value = 2 compare = equals }
+						check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 10 compare = equals }
+						STP_pc_charter_tikhoreva_work_current = yes
+						NOT = { has_country_flag = STP_pc_charter_tikhoreva_acceptance_open }
+						STP_pc_charter_tikhoreva_pilot_site_current = yes
+						check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+					}
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_kind value = 6 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_treasury value = 120 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_pp value = 0 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_equipment value = 0 }
+					STP_pc_charter_tikhoreva_pay_project = yes
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 6 compare = equals } }
+					STP_pc_charter_tikhoreva_finish_project = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_refund_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 6 compare = equals } }
+					STP_pc_charter_tikhoreva_cancel_project = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	STP_pc_charter_tikhoreva_reopen_norm_review = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_tikhoreva_current = yes
+			has_completed_focus = STP_pc_charter_tikhoreva_public_results
+			NOT = { has_variable = STP_pc_charter_tikhoreva_norm_method }
+			NOT = { has_country_flag = STP_pc_charter_tikhoreva_norm_review_open }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_pilot_operational_tt
+				STP_pc_charter_tikhoreva_pilot_operational = yes
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = { STP_pc_charter_tikhoreva_open_norm_review = yes }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	STP_pc_charter_tikhoreva_revise_norm = {
+		icon = generic_industry
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_tikhoreva_current = yes
+			has_completed_focus = STP_pc_charter_tikhoreva_public_results
+			check_variable = { var = STP_pc_charter_tikhoreva_norm_method value = 1 compare = equals }
+			NOT = { has_country_flag = STP_pc_charter_tikhoreva_norms_corrected }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_project_idle_tt
+				STP_pc_charter_tikhoreva_project_idle = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_pilot_operational_tt
+				STP_pc_charter_tikhoreva_pilot_operational = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pc_charter_tikhoreva_revise_norm_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 30 }
+		}
+		days_remove = 35
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				STP_pc_charter_tikhoreva_work_current = no
+				STP_pc_charter_tikhoreva_pilot_operational = no
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_revise_norm_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_tikhoreva_current = yes
+						has_completed_focus = STP_pc_charter_tikhoreva_public_results
+						check_variable = { var = STP_pc_charter_tikhoreva_norm_method value = 1 compare = equals }
+						NOT = { has_country_flag = STP_pc_charter_tikhoreva_norms_corrected }
+						STP_pc_charter_tikhoreva_work_current = yes
+						custom_trigger_tooltip = {
+							tooltip = STP_pc_charter_tikhoreva_project_idle_tt
+							STP_pc_charter_tikhoreva_project_idle = yes
+						}
+						custom_trigger_tooltip = {
+							tooltip = STP_pc_charter_tikhoreva_pilot_operational_tt
+							STP_pc_charter_tikhoreva_pilot_operational = yes
+						}
+						NOT = { has_political_power < 30 }
+					}
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_kind value = 7 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_treasury value = 0 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_pp value = 30 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_equipment value = 0 }
+					STP_pc_charter_tikhoreva_pay_project = yes
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 7 compare = equals } }
+					STP_pc_charter_tikhoreva_finish_project = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_refund_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 7 compare = equals } }
+					STP_pc_charter_tikhoreva_cancel_project = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	STP_pc_charter_tikhoreva_verify_norm = {
+		icon = generic_industry
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_tikhoreva_current = yes
+			has_completed_focus = STP_pc_charter_tikhoreva_public_results
+			check_variable = { var = STP_pc_charter_tikhoreva_norm_method value = 2 compare = equals }
+			NOT = { has_country_flag = STP_pc_charter_tikhoreva_norms_corrected }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_project_idle_tt
+				STP_pc_charter_tikhoreva_project_idle = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_pilot_operational_tt
+				STP_pc_charter_tikhoreva_pilot_operational = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pc_charter_tikhoreva_verify_norm_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		days_remove = 28
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				STP_pc_charter_tikhoreva_work_current = no
+				STP_pc_charter_tikhoreva_pilot_operational = no
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_verify_norm_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_tikhoreva_current = yes
+						has_completed_focus = STP_pc_charter_tikhoreva_public_results
+						check_variable = { var = STP_pc_charter_tikhoreva_norm_method value = 2 compare = equals }
+						NOT = { has_country_flag = STP_pc_charter_tikhoreva_norms_corrected }
+						STP_pc_charter_tikhoreva_work_current = yes
+						custom_trigger_tooltip = {
+							tooltip = STP_pc_charter_tikhoreva_project_idle_tt
+							STP_pc_charter_tikhoreva_project_idle = yes
+						}
+						custom_trigger_tooltip = {
+							tooltip = STP_pc_charter_tikhoreva_pilot_operational_tt
+							STP_pc_charter_tikhoreva_pilot_operational = yes
+						}
+						check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+					}
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_kind value = 8 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_treasury value = 300 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_pp value = 0 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_equipment value = 0 }
+					STP_pc_charter_tikhoreva_pay_project = yes
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 8 compare = equals } }
+					STP_pc_charter_tikhoreva_finish_project = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_refund_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 8 compare = equals } }
+					STP_pc_charter_tikhoreva_cancel_project = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	STP_pc_charter_tikhoreva_replicate_pilot = {
+		icon = generic_industry
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_tikhoreva_current = yes
+			has_completed_focus = STP_pc_charter_tikhoreva_tested_arsenal
+			NOT = { has_country_flag = STP_pc_charter_tikhoreva_replication_completed }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_project_idle_tt
+				STP_pc_charter_tikhoreva_project_idle = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_pilot_operational_tt
+				STP_pc_charter_tikhoreva_pilot_operational = yes
+			}
+			has_completed_focus = STP_pc_charter_tikhoreva_research_in_service
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_norms_corrected_tt
+				has_country_flag = STP_pc_charter_tikhoreva_norms_corrected
+			}
+			any_owned_state = {
+				is_controlled_by = ROOT
+				free_building_slots = {
+					building = arms_factory
+					size > 0
+					include_locked = yes
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pc_charter_tikhoreva_replicate_pilot_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
+			NOT = { has_equipment = { support_equipment < 100 } }
+		}
+		days_remove = 42
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				STP_pc_charter_tikhoreva_work_current = no
+				STP_pc_charter_tikhoreva_pilot_operational = no
+				STP_pc_charter_tikhoreva_replication_site_current = no
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_replicate_pilot_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_charter_tikhoreva_current = yes
+						has_completed_focus = STP_pc_charter_tikhoreva_tested_arsenal
+						NOT = { has_country_flag = STP_pc_charter_tikhoreva_replication_completed }
+						STP_pc_charter_tikhoreva_work_current = yes
+						custom_trigger_tooltip = {
+							tooltip = STP_pc_charter_tikhoreva_project_idle_tt
+							STP_pc_charter_tikhoreva_project_idle = yes
+						}
+						custom_trigger_tooltip = {
+							tooltip = STP_pc_charter_tikhoreva_pilot_operational_tt
+							STP_pc_charter_tikhoreva_pilot_operational = yes
+						}
+						has_completed_focus = STP_pc_charter_tikhoreva_research_in_service
+						custom_trigger_tooltip = {
+							tooltip = STP_pc_charter_tikhoreva_norms_corrected_tt
+							has_country_flag = STP_pc_charter_tikhoreva_norms_corrected
+						}
+						any_owned_state = {
+							is_controlled_by = ROOT
+							free_building_slots = {
+								building = arms_factory
+								size > 0
+								include_locked = yes
+							}
+						}
+						check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
+						NOT = { has_equipment = { support_equipment < 100 } }
+					}
+					random_owned_controlled_state = {
+						limit = {
+							free_building_slots = {
+								building = arms_factory
+								size > 0
+								include_locked = yes
+							}
+						}
+						set_state_flag = STP_pc_charter_tikhoreva_replication_site
+					}
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_kind value = 9 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_treasury value = 450 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_pp value = 0 }
+					set_temp_variable = { var = STP_pc_charter_tikhoreva_input_equipment value = 100 }
+					STP_pc_charter_tikhoreva_pay_project = yes
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 9 compare = equals } }
+					STP_pc_charter_tikhoreva_finish_project = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_refund_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 9 compare = equals } }
+					STP_pc_charter_tikhoreva_cancel_project = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	STP_pc_charter_tikhoreva_abandon_pilot = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = {
+			check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 10 compare = equals }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_charter_tikhoreva_refund_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 10 compare = equals } }
+					STP_pc_charter_tikhoreva_cancel_project = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 100
+				OR = {
+					STP_pc_charter_tikhoreva_work_current = no
+					STP_pc_charter_tikhoreva_pilot_site_current = no
+				}
+			}
+		}
+	}
+
+	STP_pc_charter_tikhoreva_ratify_programme = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_tikhoreva_current = yes
+			has_country_flag = STP_pc_charter_tikhoreva_report_pending
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_audit_completed_tt
+				has_country_flag = STP_pc_charter_tikhoreva_audit_completed
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_pilot_operational_tt
+				STP_pc_charter_tikhoreva_pilot_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_norms_corrected_tt
+				has_country_flag = STP_pc_charter_tikhoreva_norms_corrected
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_project_idle_tt
+				STP_pc_charter_tikhoreva_project_idle = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_tikhoreva_final_review_closed_tt
+				NOT = { has_country_flag = STP_pc_charter_tikhoreva_final_review_open }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = { STP_pc_charter_tikhoreva_open_final_review = yes }
+		}
+		ai_will_do = { base = 10 }
 	}
 
 	STP_pc_charter_tikhoreva_procurement = {
@@ -9760,8 +12148,10 @@ STP_postwar_administration = {
 			has_completed_focus = STP_pc_charter_tikhoreva_open_tenders
 		}
 		available = {
-			STP_pc_charter_tikhoreva_current = yes
-			STP_pc_focus_available = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
 		}
 		cost = 75
 		fire_only_once = no

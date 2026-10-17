@@ -121,6 +121,13 @@ defined_text = {
 defined_text = {
 	name = ADISCORDGetStartupPageTitle2
 	text = {
+		trigger = {
+			tag = VAL
+			check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+		}
+		localization_key = VAL_startup_path_2_title
+	}
+	text = {
 		trigger = { tag = STP }
 		localization_key = STP_startup_guide_party_title
 	}

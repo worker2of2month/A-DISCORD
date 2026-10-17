@@ -1526,6 +1526,26 @@ class ValStelanderContractTests(unittest.TestCase):
 
 
 class ValRewardValidatorTests(unittest.TestCase):
+    def test_duration_ceiling_distinguishes_major_programmes_from_ordinary_focuses(self):
+        from tools.validators.validate_adiscord_val_rework import validate_focus_durations
+
+        ceilings = {
+            "VAL_Shield_Special_Forces": 10,
+            "VAL_Armored_Assault_Corps": 10,
+            "VAL_Expedition_Cruisers": 10,
+            "VAL_Naval_Contract_Office": 5,
+            "VAL_probe": 5,
+        }
+        for name, ceiling in ceilings.items():
+            for cost in (ceiling, ceiling + 0.5, ceiling + 1):
+                with self.subTest(name=name, cost=cost):
+                    focus = f"focus = {{\n\tid = {name}\n\tcost = {cost}\n}}"
+                    self.assertEqual(bool(validate_focus_durations([focus])), cost > ceiling)
+        self.assertEqual(
+            validate_focus_durations(["focus = {\n\tid = VAL_probe\n}"]),
+            ["VAL_probe has no cost"],
+        )
+
     def reward_issues(self, reward, effects=""):
         from tools.validators.validate_adiscord_val_rework import (
             validate_supplemental_rewards,
@@ -1588,6 +1608,23 @@ class ValRewardValidatorTests(unittest.TestCase):
             with self.subTest(amount=amount):
                 self.assertEqual(bool(self.reward_issues(reward)), amount == 0)
 
+    def test_modifier_inputs_follow_called_refresh_helpers_only(self):
+        from tools.validators.validate_adiscord_val_rework import validate_supplemental_rewards
+
+        focus = "focus_tree = { focus = { id = VAL_probe completion_reward = { add_command_power = 20 add_to_variable = { var = VAL_input value = 0.03 } VAL_refresh_contract_modifier = yes } } }"
+        dynamic = "VAL_contract_state = { army_org_factor = VAL_output }"
+        helper = "VAL_helper = { if = { limit = { always = yes } add_to_variable = { var = VAL_output value = VAL_input } } }"
+        for called, reset_input in ((True, False), (False, False), (True, True)):
+            refresh = "VAL_refresh_contract_modifier = { set_variable = { var = VAL_output value = 0 } "
+            if called:
+                refresh += "VAL_helper = yes "
+            if reset_input:
+                refresh += "set_variable = { var = VAL_input value = 0 } "
+            refresh += "}"
+            with self.subTest(called=called, reset_input=reset_input):
+                issues = validate_supplemental_rewards(focus, refresh + helper, dynamic)
+                self.assertEqual(bool(issues), not called or reset_input)
+
     def test_modifier_addition_must_survive_later_refresh(self):
         from tools.validators.validate_adiscord_val_rework import (
             validate_supplemental_rewards,
@@ -1625,6 +1662,14 @@ class ValRewardValidatorTests(unittest.TestCase):
             "new_world": (ROOT / "common/national_focus/ADISCORD_VAL_new_world.txt").read_text(encoding="utf-8"),
             "effects": EFFECTS_PATH.read_text(encoding="utf-8-sig"),
         }
+
+    def variable_addition(self, source, variable):
+        matches = [
+            body for body in named_blocks(source, "add_to_variable")
+            if re.search(rf"\bvar\s*=\s*{re.escape(variable)}\b", body)
+        ]
+        self.assertEqual(len(matches), 1, f"Expected one addition to {variable}")
+        return matches[0]
 
     def preview_issues(self, ideas=None, sources=None, dynamic=None):
         from tools.validators.validate_adiscord_val_rework import (
@@ -1686,9 +1731,9 @@ class ValRewardValidatorTests(unittest.TestCase):
         for key, variable, amount in (
             ("effects", "VAL_nw_factory_output", "0.05"),
             ("effects", "VAL_nw_trade_income", "0.05"),
-            ("new_world", "VAL_nw_admin_expense", "-0.05"),
+            ("effects", "VAL_nw_admin_expense", "-0.05"),
         ):
-            original = f"add_to_variable = {{ var = {variable} value = {amount} }}"
+            original = self.variable_addition(sources[key], variable)
             for changed in (
                 original.replace(amount, str(float(amount) * 2)),
                 original.replace("add_to_variable", "set_variable"),
@@ -1696,7 +1741,7 @@ class ValRewardValidatorTests(unittest.TestCase):
                 f"STS = {{ {original} }}",
             ):
                 with self.subTest(variable=variable, mutation=changed):
-                    self.assertIn(original, sources[key])
+                    self.assertNotEqual(original, changed)
                     mutated = sources | {key: sources[key].replace(original, changed)}
                     self.assertTrue(self.preview_issues(sources=mutated)[1])
         missing = sources.copy()
@@ -1708,16 +1753,18 @@ class ValRewardValidatorTests(unittest.TestCase):
     def test_new_world_direct_delta_requires_installation_refresh_and_budget_invalidation(self):
         sources = self.preview_sources()
         helper = named_blocks(sources["effects"], "VAL_nw_improve_industry")[0]
-        addition = "add_to_variable = { var = VAL_nw_factory_output value = 0.05 }"
-        for changed in (
-            helper.replace("modifier = VAL_nw_industrial_network", "modifier = VAL_wrong_network"),
-            helper.replace("force_update_dynamic_modifier = yes", "force_update_dynamic_modifier = no"),
-            helper.replace("ADISCORD_economy_mark_dirty = yes", "ADISCORD_economy_mark_dirty = no"),
-            helper.replace(addition, "")[:-1] + addition + " }",
-            helper.replace(addition, f"if = {{ limit = {{ always = no }} {addition} }}"),
+        network = named_blocks(sources["effects"], "VAL_nw_ensure_network_modifier")[0]
+        addition = self.variable_addition(helper, "VAL_nw_factory_output")
+        for original, changed in (
+            (network, network.replace("modifier = VAL_nw_industrial_network", "modifier = VAL_wrong_network")),
+            (network, network.replace("force_update_dynamic_modifier = yes", "force_update_dynamic_modifier = no")),
+            (network, network.replace("ADISCORD_economy_mark_dirty = yes", "ADISCORD_economy_mark_dirty = no")),
+            (helper, helper.replace(addition, "")[:-1] + addition + " }"),
+            (helper, helper.replace(addition, f"if = {{ limit = {{ always = no }} {addition} }}")),
         ):
             with self.subTest(helper=changed):
-                mutated = sources | {"effects": sources["effects"].replace(helper, changed)}
+                self.assertNotEqual(original, changed)
+                mutated = sources | {"effects": sources["effects"].replace(original, changed)}
                 self.assertTrue(self.preview_issues(sources=mutated)[1])
 
     def test_direct_preview_proof_uses_mapping_and_sum_without_named_allowlists(self):

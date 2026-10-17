@@ -67,7 +67,6 @@ IVN_start_marches_revolt = {
 		set_capital = { state = 95 }
 		inherit_technology = IVN
 		ADISCORD_economy_initialize_country = yes
-		recruit_character = IVN_Rostislav_Karn
 		promote_character = {
 			character = IVN_Rostislav_Karn
 			ideology = chauvinism_ideology

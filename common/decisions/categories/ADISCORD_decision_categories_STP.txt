@@ -150,12 +150,17 @@ STP_postwar_administration = {
 		OR = {
 			has_completed_focus = STP_pw_regional_citizenship
 			has_completed_focus = STP_pc_heg_administrations
+			STP_pc_sword_directory_current = yes
+			has_variable = STP_sdir_arsenal_deposit
+			has_variable = STP_sdir_naval_deposit
+			has_variable = STP_sdir_rear_deposit
+			has_variable = STP_pc_charter_tikhoreva_project_kind
 			AND = {
 				STP_pc_charter_government_current = yes
 				OR = {
-					has_completed_focus = STP_pc_charter_sotnikov_civil_return
-					has_completed_focus = STP_pc_charter_shabrat_district_grants
-					has_completed_focus = STP_pc_charter_tikhoreva_open_tenders
+					has_completed_focus = STP_pc_charter_sotnikov_mandate
+					has_completed_focus = STP_pc_charter_shabrat_mandate
+					has_completed_focus = STP_pc_charter_tikhoreva_mandate
 				}
 			}
 		}

@@ -1482,6 +1482,7 @@ VAL_refresh_contract_modifier = {
 		}
 		set_variable = { var = VAL_contract_band value = VAL_contract_new_band }
 	}
+	VAL_council_apply_modifiers = yes
 	if = {
 		limit = { has_dynamic_modifier = { modifier = VAL_contract_state } }
 		force_update_dynamic_modifier = yes
@@ -2340,7 +2341,7 @@ VAL_close_partner_offer = {
 	else_if = { limit = { has_country_flag = VAL_partner_offer_arsenal } VAL_close_partner_arsenal_offer = yes }
 	else_if = { limit = { has_country_flag = VAL_partner_offer_strategic } VAL_close_partner_strategic_offer = yes }
 }
-VAL_close_partner_trade_offer = { VAL_refund_trade_fee = yes clr_country_flag = VAL_partner_offer_trade VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending } }
+VAL_close_partner_trade_offer = { VAL_refund_trade_fee = yes clr_country_flag = VAL_council_retry_offer clr_country_flag = VAL_partner_offer_trade VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending } }
 VAL_close_partner_hire_offer = { clr_country_flag = VAL_partner_offer_hire VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending } }
 VAL_close_partner_arms_offer = { clr_country_flag = VAL_partner_offer_arms VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending } }
 VAL_close_partner_bulk_offer = { clr_country_flag = VAL_partner_offer_bulk VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending } }
@@ -2618,7 +2619,10 @@ VAL_settle_partner_trade = {
 	if = {
 		limit = { VAL_partner_trade_can_accept = yes }
 		if = { limit = { has_country_flag = VAL_trade_fee_paid } clr_country_flag = VAL_trade_fee_paid }
-		else = { VAL = { add_political_power = -100 } }
+		else_if = {
+			limit = { NOT = { has_country_flag = VAL_council_retry_offer } }
+			VAL = { add_political_power = -100 }
+		}
 		VAL_start_market_year = yes
 		VAL_contract_record_success = yes
 		VAL_begin_partner_contract_year = yes
@@ -4031,6 +4035,10 @@ VAL_pay_quarterly_contract_norm = {
 			}
 		}
 	}
+	if = {
+		limit = { has_country_flag = VAL_quarterly_contract_paid }
+		VAL_council_supply_mandate_success = yes
+	}
 }
 
 VAL_subcontract_quarterly_norm = {
@@ -4039,6 +4047,10 @@ VAL_subcontract_quarterly_norm = {
 		ADISCORD_economy_spend_500 = yes
 		ADISCORD_economy_spend_500 = yes
 		set_country_flag = { flag = VAL_quarterly_contract_paid value = 2 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_quarterly_contract_paid }
+		VAL_council_supply_mandate_success = yes
 	}
 }
 
@@ -4054,6 +4066,10 @@ VAL_complete_quarterly_contract_norm = {
 	clamp_variable = { var = VAL_contract_reputation_level min = 0 max = 3 }
 	VAL_refresh_contract_reputation = yes
 	country_event = { id = val_rework.1 days = 1 }
+	if = {
+		limit = { has_power_balance = { id = VAL_command_balance } }
+		add_power_balance_value = { id = VAL_command_balance value = 0.05 }
+	}
 }
 
 VAL_fail_quarterly_contract_norm = {
@@ -4064,6 +4080,11 @@ VAL_fail_quarterly_contract_norm = {
 	add_to_variable = { var = VAL_quarterly_contract_failures value = 1 }
 	VAL_refresh_contract_reputation = yes
 	country_event = { id = val_rework.1 days = 1 }
+	VAL_council_record_failure = yes
+	if = {
+		limit = { check_variable = { var = VAL_council_mandate_kind value = 3 compare = equals } }
+		VAL_council_mandate_failed = yes
+	}
 }
 
 VAL_resolve_quarterly_contract_norm = {
@@ -5185,6 +5206,8 @@ VAL_frontier_settle_defeat = {
 			set_cosmetic_tag = VAL_dopotroydsk
 			set_politics = { ruling_party = pragmatism elections_allowed = no }
 			promote_character = { character = VAL_party_administration ideology = pragmatism_ideology }
+			VAL_refresh_contract_modifier = yes
+			mark_focus_tree_layout_dirty = yes
 			set_rule = { can_join_factions = no can_create_factions = no }
 			ADISCORD_economy_mark_dirty = yes
 		}
@@ -6489,6 +6512,9 @@ VAL_initialize_command_balance = {
 		limit = { NOT = { has_country_flag = VAL_command_balance_initialized } NOT = { has_country_flag = VAL_stelander_defeated } }
 		set_power_balance = { id = VAL_command_balance set_value = 0.10 }
 		set_country_flag = VAL_command_balance_initialized
+		set_variable = { var = VAL_council_casualties_snapshot value = casualties_k }
+		set_variable = { var = VAL_council_casualty_accumulation value = 0 }
+		set_variable = { var = VAL_council_loss_threshold value = 25 }
 	}
 }
 
@@ -9323,6 +9349,7 @@ VAL_fail_resource_aid = {
 	if = {
 		limit = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } }
 		set_variable = { var = VAL_resource_aid_state value = -1 }
+		VAL_council_record_failure = yes
 		country_event = { id = val_contract.371 }
 	}
 }
@@ -9384,6 +9411,7 @@ VAL_fail_northern_aid = {
 	if = {
 		limit = { check_variable = { var = VAL_northern_aid_state value = 1 compare = equals } }
 		set_variable = { var = VAL_northern_aid_state value = -1 }
+		VAL_council_record_failure = yes
 		country_event = { id = val_contract.371 }
 	}
 }
@@ -10413,6 +10441,7 @@ VAL_military_settle = {
 			event_target:VAL_military_customer = { VAL_contract_record_success = yes }
 		}
 		else = {
+			VAL_council_record_failure = yes
 			add_to_variable = { var = ADISCORD_economy_treasury value = VAL_military_escrow }
 			event_target:VAL_military_customer = {
 				add_to_variable = { var = VAL_refund_due value = VAL.VAL_military_escrow }
@@ -10698,7 +10727,10 @@ VAL_order_1_quarterly_reconcile = {
 			activate_mission = VAL_order_1_deadline
 			add_days_mission_timeout = { mission = VAL_order_1_deadline days = -15 }
 		}
-		else = { VAL_order_1_cancel = yes }
+		else = {
+			VAL_council_record_failure = yes
+			VAL_order_1_cancel = yes
+		}
 	}
 }
 VAL_order_1_reconcile = {
@@ -10883,7 +10915,10 @@ VAL_order_2_quarterly_reconcile = {
 			activate_mission = VAL_order_2_deadline
 			add_days_mission_timeout = { mission = VAL_order_2_deadline days = -15 }
 		}
-		else = { VAL_order_2_cancel = yes }
+		else = {
+			VAL_council_record_failure = yes
+			VAL_order_2_cancel = yes
+		}
 	}
 }
 VAL_order_2_reconcile = {
@@ -11031,3 +11066,905 @@ VAL_settle_stelander_support_victory = {
 }
 
 # VAL: settle the wager only from the authoritative STP-STS war result.
+
+# --- commanders_council ---
+# COUNTRY VAL. The first Council programme establishes representation once.
+VAL_council_initialize_seats = {
+	if = {
+		limit = { NOT = { has_country_flag = VAL_council_seats_initialized } }
+		set_country_flag = VAL_council_seats_initialized
+		set_variable = { var = VAL_council_seats_garrison value = 2 }
+		set_variable = { var = VAL_council_seats_front value = 2 }
+		set_variable = { var = VAL_council_seats_supply value = 2 }
+	}
+}
+
+# COUNTRY VAL. Input: temporary VAL_council_seat_side (1 garrison, 2 front, 3 supply).
+# The strongest other delegation supplies or receives the seat. Ties use that order.
+VAL_council_select_seat_rival = {
+	set_temp_variable = { var = VAL_council_seat_rival value = 0 }
+	set_temp_variable = { var = VAL_council_rival_seats value = -1 }
+	if = {
+		limit = {
+			NOT = { check_variable = { var = VAL_council_seat_side value = 1 compare = equals } }
+			check_variable = { var = VAL_council_seats_garrison value = VAL_council_rival_seats compare = greater_than }
+		}
+		set_temp_variable = { var = VAL_council_seat_rival value = 1 }
+		set_temp_variable = { var = VAL_council_rival_seats value = VAL_council_seats_garrison }
+	}
+	if = {
+		limit = {
+			NOT = { check_variable = { var = VAL_council_seat_side value = 2 compare = equals } }
+			check_variable = { var = VAL_council_seats_front value = VAL_council_rival_seats compare = greater_than }
+		}
+		set_temp_variable = { var = VAL_council_seat_rival value = 2 }
+		set_temp_variable = { var = VAL_council_rival_seats value = VAL_council_seats_front }
+	}
+	if = {
+		limit = {
+			NOT = { check_variable = { var = VAL_council_seat_side value = 3 compare = equals } }
+			check_variable = { var = VAL_council_seats_supply value = VAL_council_rival_seats compare = greater_than }
+		}
+		set_temp_variable = { var = VAL_council_seat_rival value = 3 }
+		set_temp_variable = { var = VAL_council_rival_seats value = VAL_council_seats_supply }
+	}
+}
+
+# COUNTRY VAL. Input: seat_side and seat_delta (+1 success, -1 failure). Total stays six.
+VAL_council_transfer_seat = {
+	VAL_council_select_seat_rival = yes
+	if = {
+		limit = {
+			check_variable = { var = VAL_council_seat_side value = 1 compare = equals }
+			OR = {
+				AND = {
+					check_variable = { var = VAL_council_seat_delta value = 1 compare = equals }
+					check_variable = { var = VAL_council_rival_seats value = 0 compare = greater_than }
+				}
+				AND = {
+					check_variable = { var = VAL_council_seat_delta value = -1 compare = equals }
+					check_variable = { var = VAL_council_seats_garrison value = 0 compare = greater_than }
+				}
+			}
+		}
+		add_to_variable = { var = VAL_council_seats_garrison value = VAL_council_seat_delta }
+		if = {
+			limit = { check_variable = { var = VAL_council_seat_rival value = 2 compare = equals } }
+			subtract_from_variable = { var = VAL_council_seats_front value = VAL_council_seat_delta }
+		}
+		if = {
+			limit = { check_variable = { var = VAL_council_seat_rival value = 3 compare = equals } }
+			subtract_from_variable = { var = VAL_council_seats_supply value = VAL_council_seat_delta }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = { var = VAL_council_seat_side value = 2 compare = equals }
+			OR = {
+				AND = {
+					check_variable = { var = VAL_council_seat_delta value = 1 compare = equals }
+					check_variable = { var = VAL_council_rival_seats value = 0 compare = greater_than }
+				}
+				AND = {
+					check_variable = { var = VAL_council_seat_delta value = -1 compare = equals }
+					check_variable = { var = VAL_council_seats_front value = 0 compare = greater_than }
+				}
+			}
+		}
+		add_to_variable = { var = VAL_council_seats_front value = VAL_council_seat_delta }
+		if = {
+			limit = { check_variable = { var = VAL_council_seat_rival value = 1 compare = equals } }
+			subtract_from_variable = { var = VAL_council_seats_garrison value = VAL_council_seat_delta }
+		}
+		if = {
+			limit = { check_variable = { var = VAL_council_seat_rival value = 3 compare = equals } }
+			subtract_from_variable = { var = VAL_council_seats_supply value = VAL_council_seat_delta }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = { var = VAL_council_seat_side value = 3 compare = equals }
+			OR = {
+				AND = {
+					check_variable = { var = VAL_council_seat_delta value = 1 compare = equals }
+					check_variable = { var = VAL_council_rival_seats value = 0 compare = greater_than }
+				}
+				AND = {
+					check_variable = { var = VAL_council_seat_delta value = -1 compare = equals }
+					check_variable = { var = VAL_council_seats_supply value = 0 compare = greater_than }
+				}
+			}
+		}
+		add_to_variable = { var = VAL_council_seats_supply value = VAL_council_seat_delta }
+		if = {
+			limit = { check_variable = { var = VAL_council_seat_rival value = 1 compare = equals } }
+			subtract_from_variable = { var = VAL_council_seats_garrison value = VAL_council_seat_delta }
+		}
+		if = {
+			limit = { check_variable = { var = VAL_council_seat_rival value = 2 compare = equals } }
+			subtract_from_variable = { var = VAL_council_seats_front value = VAL_council_seat_delta }
+		}
+	}
+}
+
+# COUNTRY VAL. Fix the approved delay when payment is made; later votes do not rewrite it.
+VAL_council_schedule_approval = {
+	set_temp_variable = { var = VAL_council_approval_adjustment value = 0 }
+	if = {
+		limit = { check_variable = { var = VAL_council_seats_garrison value = 4 compare = greater_than_or_equals } }
+		if = {
+			limit = { check_variable = { var = VAL_council_mandate_kind value = 1 compare = equals } }
+			set_temp_variable = { var = VAL_council_approval_adjustment value = -7 }
+		}
+		else = { set_temp_variable = { var = VAL_council_approval_adjustment value = 7 } }
+	}
+	if = {
+		limit = { check_variable = { var = VAL_council_seats_front value = 4 compare = greater_than_or_equals } }
+		if = {
+			limit = { check_variable = { var = VAL_council_mandate_kind value = 2 compare = equals } }
+			set_temp_variable = { var = VAL_council_approval_adjustment value = -7 }
+		}
+		else = { set_temp_variable = { var = VAL_council_approval_adjustment value = 7 } }
+	}
+	if = {
+		limit = { check_variable = { var = VAL_council_seats_supply value = 4 compare = greater_than_or_equals } }
+		if = {
+			limit = { check_variable = { var = VAL_council_mandate_kind value = 3 compare = equals } }
+			set_temp_variable = { var = VAL_council_approval_adjustment value = -7 }
+		}
+		else = { set_temp_variable = { var = VAL_council_approval_adjustment value = 7 } }
+	}
+	activate_mission = VAL_council_mandate_approval
+	add_days_mission_timeout = { mission = VAL_council_mandate_approval days = VAL_council_approval_adjustment }
+}
+
+VAL_council_register_loan_default = {
+	if = {
+		limit = {
+			has_variable = VAL_council_loan_debt
+			NOT = { has_country_flag = VAL_council_loan_default }
+		}
+		set_country_flag = VAL_council_loan_default
+		set_temp_variable = { var = VAL_council_seat_side value = 3 }
+		set_temp_variable = { var = VAL_council_seat_delta value = 1 }
+		VAL_council_transfer_seat = yes
+		VAL_refresh_contract_modifier = yes
+		country_event = { id = val_council.5 }
+	}
+}
+
+VAL_council_reset_loss_tracking = {
+	set_variable = { var = VAL_council_casualties_snapshot value = casualties_k }
+	set_variable = { var = VAL_council_casualty_accumulation value = 0 }
+}
+
+VAL_council_begin_loss_tracking = {
+	if = {
+		limit = {
+			VAL_council_tracked_operation = no
+		}
+		VAL_council_reset_loss_tracking = yes
+	}
+}
+
+VAL_council_register_stelander_war = {
+	if = {
+		limit = {
+			OR = {
+				has_war_with = STP
+				has_war_with = STS
+				has_war_with = SRP
+			}
+		}
+		set_country_flag = VAL_council_stelander_war_started
+		VAL_council_check_coup = yes
+	}
+}
+
+VAL_council_check_coup = {
+	if = {
+		limit = {
+			VAL_council_coup_ready = yes
+			NOT = {
+				has_active_mission = VAL_council_ultimatum
+			}
+		}
+		activate_mission = VAL_council_ultimatum
+		country_event = { id = val_council.1 }
+	}
+}
+
+VAL_council_record_failure = {
+	if = {
+		limit = {
+			tag = VAL
+			has_power_balance = { id = VAL_command_balance }
+		}
+		add_power_balance_value = { id = VAL_command_balance value = -0.15 }
+		VAL_council_check_coup = yes
+	}
+}
+
+VAL_council_take_power = {
+	if = {
+		limit = {
+			VAL_council_coup_ready = yes
+		}
+		set_country_flag = VAL_council_in_power
+		VAL_council_initialize_seats = yes
+		remove_mission = VAL_council_ultimatum
+		remove_power_balance = { id = VAL_command_balance }
+		retire_character = VAL_Valera_Solgalov
+		promote_character = { character = VAL_Commanders_Council ideology = contractual_etatism }
+		set_politics = {
+			ruling_party = etatism
+			elections_allowed = no
+		}
+		set_variable = { var = VAL_council_casualties_snapshot value = casualties_k }
+		set_variable = { var = VAL_council_casualty_accumulation value = 0 }
+		mark_focus_tree_layout_dirty = yes
+		VAL_refresh_contract_modifier = yes
+		country_event = { id = val_council.2 }
+		news_event = { id = val_council.10 hours = 1 }
+	}
+}
+
+VAL_council_weekly = {
+	if = {
+		limit = {
+			OR = {
+				has_power_balance = { id = VAL_command_balance }
+				AND = {
+					has_country_flag = VAL_council_in_power
+					has_completed_focus = VAL_council_losses_review
+					VAL_council_tracked_operation = yes
+				}
+			}
+		}
+		set_temp_variable = { var = VAL_council_new_losses value = casualties_k }
+		subtract_from_temp_variable = { var = VAL_council_new_losses value = VAL_council_casualties_snapshot }
+		clamp_temp_variable = { var = VAL_council_new_losses min = 0 max = 1000000 }
+		set_variable = { var = VAL_council_casualties_snapshot value = casualties_k }
+		add_to_variable = { var = VAL_council_casualty_accumulation value = VAL_council_new_losses }
+		set_variable = { var = VAL_council_loss_threshold value = deployed_army_manpower_k }
+		multiply_variable = { var = VAL_council_loss_threshold value = 0.08 }
+		clamp_variable = { var = VAL_council_loss_threshold min = 25 max = 1000000 }
+		if = {
+			limit = { check_variable = { var = VAL_council_casualty_accumulation value = VAL_council_loss_threshold compare = greater_than_or_equals } }
+			subtract_from_variable = { var = VAL_council_casualty_accumulation value = VAL_council_loss_threshold }
+			if = {
+				limit = { has_power_balance = { id = VAL_command_balance } }
+				add_power_balance_value = { id = VAL_command_balance value = -0.10 }
+			}
+			else_if = {
+				limit = {
+					has_completed_focus = VAL_council_losses_review
+					OR = {
+						has_variable = VAL_council_mandate_kind
+						has_country_flag = VAL_council_emergency_budget
+					}
+				}
+				VAL_council_open_case = yes
+			}
+		}
+		VAL_council_check_coup = yes
+	}
+	else = { VAL_council_reset_loss_tracking = yes }
+	if = {
+		limit = { has_country_flag = VAL_council_in_power }
+		if = {
+			limit = {
+				OR = {
+					has_capitulated = yes
+					is_subject = yes
+					has_war = no
+				}
+			}
+			VAL_council_close_emergency = yes
+		}
+		VAL_council_reconcile_mandate = yes
+	}
+}
+
+VAL_council_apply_modifiers = {
+	set_variable = { var = VAL_council_max_planning value = 0 }
+	set_variable = { var = VAL_council_civilian_construction value = 0 }
+	set_variable = { var = VAL_council_social_expense value = 0 }
+	set_variable = { var = VAL_council_attrition value = 0 }
+	if = {
+		limit = {
+			VAL_council_governs = yes
+		}
+		add_to_variable = { var = VAL_contract_army_expense_factor value = VAL_council_base_army_expense }
+		add_to_variable = { var = VAL_contract_stability_factor value = VAL_council_base_stability }
+		add_to_variable = { var = VAL_council_max_planning value = VAL_council_base_planning }
+		add_to_variable = { var = VAL_contract_command_power_factor value = VAL_council_base_command_gain }
+		add_to_variable = { var = VAL_contract_admin_expense_factor value = VAL_council_base_admin_expense }
+		add_to_variable = { var = VAL_contract_reinforce_rate value = VAL_council_base_reinforce }
+		add_to_variable = { var = VAL_contract_supply_factor value = VAL_council_base_supply }
+		add_to_variable = { var = VAL_contract_org_factor value = VAL_council_base_organization }
+		add_to_variable = { var = VAL_contract_planning_factor value = VAL_council_base_planning_speed }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = VAL_council_base_trade_income }
+		if = {
+			limit = {
+				has_country_flag = VAL_council_staff_program
+			}
+			add_to_variable = { var = VAL_contract_planning_factor value = 0.1 }
+			add_to_variable = { var = VAL_contract_org_regain value = 0.05 }
+		}
+		if = {
+			limit = {
+				check_variable = { var = VAL_council_reserve_rifles value = 10000 compare = greater_than_or_equals }
+			}
+			add_to_variable = { var = VAL_contract_supply_factor value = -0.03 }
+		}
+		if = {
+			limit = {
+				has_country_flag = VAL_council_inspection_savings
+			}
+			add_to_variable = { var = VAL_contract_army_expense_factor value = -0.05 }
+		}
+		if = {
+			limit = {
+				has_country_flag = VAL_council_emergency_budget
+			}
+			add_to_variable = { var = VAL_contract_factory_output_factor value = 0.1 }
+			add_to_variable = { var = VAL_contract_army_expense_factor value = 0.1 }
+			add_to_variable = { var = VAL_council_civilian_construction value = -0.1 }
+		}
+		if = {
+			limit = {
+				has_country_flag = VAL_council_public_shock
+			}
+			add_to_variable = { var = VAL_contract_stability_factor value = -0.03 }
+		}
+		if = {
+			limit = {
+				has_country_flag = VAL_council_family_support
+			}
+			add_to_variable = { var = VAL_contract_stability_factor value = 0.05 }
+			add_to_variable = { var = VAL_council_social_expense value = 0.05 }
+		}
+		if = {
+			limit = {
+				has_country_flag = VAL_council_acceptance_bonus
+			}
+			add_to_variable = { var = VAL_council_attrition value = -0.05 }
+		}
+		if = {
+			limit = {
+				has_country_flag = VAL_council_discipline
+			}
+			add_to_variable = { var = VAL_contract_planning_factor value = -0.1 }
+		}
+		if = {
+			limit = {
+				has_country_flag = VAL_council_case_open
+			}
+			add_to_variable = { var = VAL_contract_command_power_factor value = -0.1 }
+		}
+		if = {
+			limit = {
+				has_country_flag = VAL_council_mandate_active
+				check_variable = { var = VAL_council_mandate_kind value = 1 compare = equals }
+			}
+			add_to_variable = { var = VAL_contract_defence_factor value = 0.05 }
+		}
+		if = {
+			limit = {
+				has_country_flag = VAL_council_mandate_active
+				check_variable = { var = VAL_council_mandate_kind value = 2 compare = equals }
+			}
+			add_to_variable = { var = VAL_contract_planning_factor value = 0.1 }
+		}
+		if = {
+			limit = {
+				has_country_flag = VAL_council_mandate_active
+				check_variable = { var = VAL_council_mandate_kind value = 3 compare = equals }
+			}
+			add_to_variable = { var = VAL_contract_factory_output_factor value = 0.05 }
+		}
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_council_loan_default
+		}
+		add_to_variable = { var = VAL_contract_stability_factor value = -0.05 }
+	}
+}
+
+VAL_council_start_staff_program = {
+	set_country_flag = VAL_council_staff_program
+	remove_mission = VAL_council_staff_program_timer
+	activate_mission = VAL_council_staff_program_timer
+	VAL_refresh_contract_modifier = yes
+}
+
+VAL_council_start_inspection_savings = {
+	set_country_flag = VAL_council_inspection_savings
+	remove_mission = VAL_council_inspection_savings_timer
+	activate_mission = VAL_council_inspection_savings_timer
+	VAL_refresh_contract_modifier = yes
+}
+
+VAL_council_start_inspection = {
+	set_country_flag = VAL_council_inspection
+	remove_mission = VAL_council_inspection_timer
+	activate_mission = VAL_council_inspection_timer
+	VAL_refresh_contract_modifier = yes
+}
+
+VAL_council_start_public_shock = {
+	set_country_flag = VAL_council_public_shock
+	remove_mission = VAL_council_public_shock_timer
+	activate_mission = VAL_council_public_shock_timer
+	VAL_refresh_contract_modifier = yes
+}
+
+VAL_council_start_family_support = {
+	set_country_flag = VAL_council_family_support
+	remove_mission = VAL_council_family_support_timer
+	activate_mission = VAL_council_family_support_timer
+	VAL_refresh_contract_modifier = yes
+}
+
+VAL_council_start_acceptance_bonus = {
+	set_country_flag = VAL_council_acceptance_bonus
+	remove_mission = VAL_council_acceptance_bonus_timer
+	activate_mission = VAL_council_acceptance_bonus_timer
+	VAL_refresh_contract_modifier = yes
+}
+
+VAL_council_start_discipline = {
+	set_country_flag = VAL_council_discipline
+	remove_mission = VAL_council_discipline_timer
+	activate_mission = VAL_council_discipline_timer
+	VAL_refresh_contract_modifier = yes
+}
+
+VAL_council_start_prevention = {
+	set_country_flag = VAL_council_prevention
+	remove_mission = VAL_council_prevention_timer
+	activate_mission = VAL_council_prevention_timer
+	VAL_refresh_contract_modifier = yes
+}
+
+VAL_council_start_emergency_budget = {
+	set_country_flag = VAL_council_emergency_budget
+	remove_mission = VAL_council_emergency_budget_timer
+	activate_mission = VAL_council_emergency_budget_timer
+	VAL_refresh_contract_modifier = yes
+}
+
+VAL_council_close_emergency = {
+	if = {
+		limit = {
+			has_country_flag = VAL_council_emergency_budget
+		}
+		clr_country_flag = VAL_council_emergency_budget
+		remove_mission = VAL_council_emergency_budget_timer
+		set_country_flag = { flag = VAL_council_budget_cooldown value = 1 days = 90 }
+		VAL_refresh_contract_modifier = yes
+	}
+}
+
+VAL_council_reserve_stock = {
+	set_temp_variable = { var = VAL_council_reserve_remaining value = 10000 }
+	every_possible_country = {
+		limit = { VAL = { check_variable = { var = VAL_council_reserve_remaining value = 0 compare = greater_than } } }
+		if = {
+			limit = { VAL = { check_variable = { var = VAL_council_reserve_remaining value = 0 compare = greater_than } } }
+			VAL = {
+				set_variable = { var = VAL_council_reserve_removed value = num_equipment@infantry_equipment }
+				set_temp_variable = { var = VAL_council_reserve_debit value = VAL_council_reserve_remaining }
+				multiply_temp_variable = { var = VAL_council_reserve_debit value = -1 }
+				add_equipment_to_stockpile = { type = infantry_equipment amount = VAL_council_reserve_debit producer = PREV }
+				subtract_from_variable = { var = VAL_council_reserve_removed value = num_equipment@infantry_equipment }
+				subtract_from_temp_variable = { var = VAL_council_reserve_remaining value = VAL_council_reserve_removed }
+			}
+			if = {
+				limit = { VAL = { check_variable = { var = VAL_council_reserve_removed value = 0 compare = greater_than } } }
+				set_variable = { var = VAL_council_reserved_by_producer value = VAL.VAL_council_reserve_removed }
+			}
+		}
+	}
+	clear_variable = VAL_council_reserve_removed
+	if = {
+		limit = { check_variable = { var = VAL_council_reserve_remaining value = 0 compare = equals } }
+		set_variable = { var = VAL_council_reserve_rifles value = 10000 }
+		VAL_refresh_contract_modifier = yes
+	}
+	else = { VAL_council_release_reserve = yes }
+}
+
+VAL_council_release_reserve = {
+	every_possible_country = {
+		limit = {
+			has_variable = VAL_council_reserved_by_producer
+		}
+		VAL = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = PREV.VAL_council_reserved_by_producer producer = PREV }
+		}
+		clear_variable = VAL_council_reserved_by_producer
+	}
+	clear_variable = VAL_council_reserve_rifles
+	VAL_refresh_contract_modifier = yes
+}
+
+VAL_council_consume_reserve = {
+	every_possible_country = {
+		limit = {
+			has_variable = VAL_council_reserved_by_producer
+		}
+		clear_variable = VAL_council_reserved_by_producer
+	}
+	clear_variable = VAL_council_reserve_rifles
+}
+
+VAL_council_repay_loan = {
+	if = {
+		limit = {
+			has_variable = VAL_council_loan_debt
+			check_variable = { var = ADISCORD_economy_treasury value = VAL_council_loan_debt compare = greater_than_or_equals }
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = VAL_council_loan_debt }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = VAL_council_loan_debt }
+		ADISCORD_economy_mark_dirty = yes
+		clear_variable = VAL_council_loan_debt
+		clr_country_flag = VAL_council_loan_default
+		remove_mission = VAL_council_loan_deadline
+		VAL_refresh_contract_modifier = yes
+	}
+}
+
+VAL_council_start_order = {
+	set_variable = { var = VAL_council_order_paid value = VAL_council_order_price }
+	set_variable = { var = VAL_council_order_due value = 0 }
+	set_variable = { var = VAL_council_order_batches value = 1 }
+	if = {
+		limit = {
+			has_country_flag = VAL_council_order_installment
+		}
+		set_variable = { var = VAL_council_order_paid value = 300 }
+		set_variable = { var = VAL_council_order_due value = 300 }
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_council_order_schedule
+		}
+		set_variable = { var = VAL_council_order_batches value = 2 }
+	}
+	subtract_from_variable = { var = ADISCORD_economy_treasury value = VAL_council_order_paid }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = VAL_council_order_paid }
+	ADISCORD_economy_mark_dirty = yes
+	activate_mission = VAL_council_order_arrival
+	if = {
+		limit = {
+			has_completed_focus = VAL_council_brokers
+		}
+		add_days_mission_timeout = { mission = VAL_council_order_arrival days = -31 }
+	}
+	clr_country_flag = VAL_council_order_installment
+	clr_country_flag = VAL_council_order_schedule
+}
+
+VAL_council_deliver_order = {
+	if = {
+		limit = {
+			has_variable = VAL_council_order_kind
+			has_country_flag = VAL_council_order_arrived
+			exists = yes
+			has_capitulated = no
+			check_variable = { var = ADISCORD_economy_treasury value = VAL_council_order_due compare = greater_than_or_equals }
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = VAL_council_order_due }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = VAL_council_order_due }
+		add_to_variable = { var = VAL_council_order_paid value = VAL_council_order_due }
+		set_variable = { var = VAL_council_order_due value = 0 }
+		if = {
+			limit = { check_variable = { var = VAL_council_order_kind value = 1 compare = equals } }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 15000 producer = VAL }
+		}
+		else_if = {
+			limit = { check_variable = { var = VAL_council_order_kind value = 2 compare = equals } }
+			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = VAL }
+		}
+		else = { add_equipment_to_stockpile = { type = motorized_equipment amount = 300 producer = VAL } }
+		if = {
+			limit = { has_country_flag = VAL_council_order_checked }
+			VAL_council_start_acceptance_bonus = yes
+			clr_country_flag = VAL_council_order_checked
+		}
+		subtract_from_variable = { var = VAL_council_order_paid value = VAL_council_order_unit_price }
+		subtract_from_variable = { var = VAL_council_order_batches value = 1 }
+		clr_country_flag = VAL_council_order_arrived
+		if = {
+			limit = { check_variable = { var = VAL_council_order_batches value = 1 compare = greater_than_or_equals } }
+			activate_mission = VAL_council_order_arrival
+			add_days_mission_timeout = { mission = VAL_council_order_arrival days = -15 }
+		}
+		else = { VAL_council_clear_order = yes }
+		ADISCORD_economy_mark_dirty = yes
+		country_event = { id = val_council.6 }
+	}
+}
+
+VAL_council_clear_order = {
+	clear_variable = VAL_council_order_kind
+	clear_variable = VAL_council_order_price
+	clear_variable = VAL_council_order_unit_price
+	clear_variable = VAL_council_order_paid
+	clear_variable = VAL_council_order_due
+	clear_variable = VAL_council_order_batches
+	clr_country_flag = VAL_council_order_arrived
+	clr_country_flag = VAL_council_order_checked
+	clr_country_flag = VAL_council_order_installment
+	clr_country_flag = VAL_council_order_schedule
+	remove_mission = VAL_council_order_arrival
+}
+
+VAL_council_cancel_order = {
+	if = {
+		limit = {
+			has_variable = VAL_council_order_kind
+		}
+		multiply_variable = { var = VAL_council_order_paid value = 0.75 }
+		add_to_variable = { var = ADISCORD_economy_treasury value = VAL_council_order_paid }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_council_order_paid }
+		ADISCORD_economy_mark_dirty = yes
+		VAL_council_clear_order = yes
+	}
+}
+
+VAL_council_daily = {
+	if = {
+		limit = {
+			has_country_flag = VAL_council_order_arrived
+		}
+		VAL_council_deliver_order = yes
+	}
+	if = {
+		limit = {
+			has_variable = VAL_council_mandate_kind
+		}
+		VAL_council_reconcile_mandate = yes
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_council_emergency_budget
+			OR = {
+				has_war = no
+				VAL_council_operational = no
+			}
+		}
+		VAL_council_close_emergency = yes
+	}
+}
+
+VAL_council_activate_mandate = {
+	if = {
+		limit = {
+			has_variable = VAL_council_mandate_kind
+			VAL_council_operational = yes
+		}
+		set_country_flag = VAL_council_mandate_active
+		activate_mission = VAL_council_mandate_deadline
+		if = {
+			limit = {
+				check_variable = { var = VAL_council_mandate_kind value = 3 compare = equals }
+			}
+			set_temp_variable = { var = VAL_council_supply_days value = days_mission_timeout@VAL_quarterly_contract_deadline }
+			subtract_from_temp_variable = { var = VAL_council_supply_days value = 60 }
+			add_days_mission_timeout = { mission = VAL_council_mandate_deadline days = VAL_council_supply_days }
+		}
+		VAL_refresh_contract_modifier = yes
+		VAL_council_reconcile_mandate = yes
+	}
+	else = {
+		VAL_council_withdraw_mandate = yes
+	}
+}
+
+VAL_council_supply_mandate_success = {
+	if = {
+		limit = {
+			check_variable = { var = VAL_council_mandate_kind value = 3 compare = equals }
+		}
+		set_country_flag = VAL_council_supply_fulfilled
+		VAL_council_reconcile_mandate = yes
+	}
+}
+
+VAL_council_clear_mandate = {
+	clear_variable = VAL_council_mandate_kind
+	clr_country_flag = VAL_council_mandate_active
+	clr_country_flag = VAL_council_mandate_expired
+	clr_country_flag = VAL_council_mandate_extended
+	clr_country_flag = VAL_council_supply_fulfilled
+	remove_mission = VAL_council_mandate_deadline
+	remove_mission = VAL_council_mandate_approval
+	set_country_flag = { flag = VAL_council_mandate_cooldown value = 1 days = 90 }
+	VAL_refresh_contract_modifier = yes
+}
+
+VAL_council_mandate_success = {
+	if = {
+		limit = {
+			has_variable = VAL_council_mandate_kind
+		}
+		if = {
+			limit = {
+				has_variable = VAL_council_mandate_deposit
+			}
+			add_to_variable = { var = ADISCORD_economy_treasury value = VAL_council_mandate_deposit }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_council_mandate_deposit }
+			ADISCORD_economy_mark_dirty = yes
+			clear_variable = VAL_council_mandate_deposit
+		}
+		add_political_power = 25
+		add_command_power = 15
+		set_temp_variable = { var = VAL_council_seat_side value = VAL_council_mandate_kind }
+		set_temp_variable = { var = VAL_council_seat_delta value = 1 }
+		VAL_council_transfer_seat = yes
+		VAL_council_clear_mandate = yes
+		country_event = { id = val_council.8 }
+	}
+}
+
+VAL_council_mandate_failed = {
+	if = {
+		limit = {
+			has_variable = VAL_council_mandate_kind
+		}
+		clear_variable = VAL_council_mandate_deposit
+		if = {
+			limit = {
+				has_country_flag = VAL_council_family_support
+			}
+			add_stability = -0.01
+		}
+		else = {
+			add_stability = -0.03
+		}
+		set_temp_variable = { var = VAL_council_seat_side value = VAL_council_mandate_kind }
+		set_temp_variable = { var = VAL_council_seat_delta value = -1 }
+		VAL_council_transfer_seat = yes
+		VAL_council_clear_mandate = yes
+		VAL_council_open_case = yes
+	}
+}
+
+VAL_council_withdraw_mandate = {
+	if = {
+		limit = {
+			has_variable = VAL_council_mandate_kind
+		}
+		if = {
+			limit = {
+				has_variable = VAL_council_mandate_deposit
+			}
+			multiply_variable = { var = VAL_council_mandate_deposit value = 0.75 }
+			add_to_variable = { var = ADISCORD_economy_treasury value = VAL_council_mandate_deposit }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_council_mandate_deposit }
+			ADISCORD_economy_mark_dirty = yes
+			clear_variable = VAL_council_mandate_deposit
+		}
+		VAL_council_clear_mandate = yes
+	}
+}
+
+VAL_council_reconcile_mandate = {
+	if = {
+		limit = { has_variable = VAL_council_mandate_kind }
+		if = {
+			limit = { VAL_council_operational = no }
+			VAL_council_withdraw_mandate = yes
+		}
+		else_if = {
+			limit = {
+				NOT = { check_variable = { var = VAL_council_mandate_kind value = 3 compare = equals } }
+				NOT = { event_target:VAL_council_mandate_enemy = { has_war_with = VAL } }
+			}
+			if = {
+				limit = {
+					has_country_flag = VAL_council_mandate_active
+					check_variable = { var = VAL_council_mandate_kind value = 2 compare = equals }
+					event_target:VAL_council_mandate_target = { is_controlled_by = VAL }
+				}
+				VAL_council_mandate_success = yes
+			}
+			else = { VAL_council_withdraw_mandate = yes }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = VAL_council_mandate_kind value = 1 compare = equals }
+				NOT = { event_target:VAL_council_mandate_target = { is_owned_by = VAL is_controlled_by = VAL } }
+			}
+			VAL_council_mandate_failed = yes
+		}
+		else_if = {
+			limit = { has_country_flag = VAL_council_mandate_active }
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							check_variable = { var = VAL_council_mandate_kind value = 2 compare = equals }
+							event_target:VAL_council_mandate_target = { is_controlled_by = VAL }
+						}
+						has_country_flag = VAL_council_supply_fulfilled
+						AND = {
+							check_variable = { var = VAL_council_mandate_kind value = 1 compare = equals }
+							has_country_flag = VAL_council_mandate_expired
+						}
+					}
+				}
+				VAL_council_mandate_success = yes
+			}
+			else_if = {
+				limit = {
+					NOT = { check_variable = { var = VAL_council_mandate_kind value = 3 compare = equals } }
+					has_war = no
+				}
+				VAL_council_withdraw_mandate = yes
+			}
+			else_if = {
+				limit = { has_country_flag = VAL_council_mandate_expired }
+				VAL_council_mandate_failed = yes
+			}
+		}
+	}
+}
+
+VAL_council_open_case = {
+	if = {
+		limit = {
+			VAL_council_operational = yes
+			OR = {
+				has_completed_focus = VAL_council_losses_review
+				has_completed_focus = VAL_council_takes_command
+			}
+			NOT = {
+				has_country_flag = VAL_council_case_open
+			}
+			NOT = {
+				has_country_flag = VAL_council_case_cooldown
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = VAL_council_prevention
+			}
+			clr_country_flag = VAL_council_prevention
+			remove_mission = VAL_council_prevention_timer
+			set_country_flag = { flag = VAL_council_case_cooldown value = 1 days = 60 }
+		}
+		else = {
+			set_country_flag = VAL_council_case_open
+			country_event = { id = val_council.7 }
+		}
+		VAL_refresh_contract_modifier = yes
+	}
+}
+
+VAL_council_close_case = {
+	clr_country_flag = VAL_council_case_open
+	set_country_flag = { flag = VAL_council_case_cooldown value = 1 days = 60 }
+	VAL_refresh_contract_modifier = yes
+}
+
+VAL_council_finish_political_reform = {
+	VAL_reform_political_payroll = yes
+	VAL_apply_contract_administration_3 = yes
+}
+
+VAL_reform_political_payroll = {
+	if = {
+		limit = {
+			NOT = {
+				has_country_flag = VAL_political_payroll_reformed
+			}
+		}
+		set_country_flag = VAL_political_payroll_reformed
+		VAL_reform_mercenary_payroll = yes
+	}
+}

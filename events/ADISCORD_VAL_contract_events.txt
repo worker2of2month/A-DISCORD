@@ -3074,3 +3074,192 @@ country_event = {
 		custom_effect_tooltip = VAL_epilogue_thanks_tt
 	}
 }
+
+# --- commanders_council ---
+add_namespace = val_council
+
+country_event = {
+	id = val_council.1
+	title = val_council.1.t
+	desc = val_council.1.d
+	picture = GFX_report_event_generic_parliament
+	is_triggered_only = yes
+	fire_only_once = no
+	option = {
+		name = val_council.1.a
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = val_council.1.b
+		trigger = {
+			VAL_council_coup_ready = yes
+		}
+		ai_chance = { factor = 0 }
+		VAL_council_take_power = yes
+	}
+}
+
+country_event = {
+	id = val_council.2
+	title = val_council.2.t
+	desc = val_council.2.d
+	picture = GFX_report_event_generic_parliament
+	is_triggered_only = yes
+	fire_only_once = no
+	option = {
+		name = val_council.2.a
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = val_council.3
+	title = val_council.3.t
+	desc = val_council.3.d
+	picture = GFX_report_event_generic_parliament
+	is_triggered_only = yes
+	fire_only_once = no
+	option = {
+		name = val_council.3.a
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = val_council.4
+	title = val_council.4.t
+	desc = val_council.4.d
+	picture = GFX_report_event_generic_parliament
+	is_triggered_only = yes
+	fire_only_once = no
+	option = {
+		name = val_council.4.a
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = val_council.5
+	title = val_council.5.t
+	desc = val_council.5.d
+	picture = GFX_report_event_generic_parliament
+	is_triggered_only = yes
+	fire_only_once = no
+	option = {
+		name = val_council.5.a
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = val_council.6
+	title = val_council.6.t
+	desc = val_council.6.d
+	picture = GFX_report_event_generic_parliament
+	is_triggered_only = yes
+	fire_only_once = no
+	option = {
+		name = val_council.6.a
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = val_council.7
+	title = val_council.7.t
+	desc = val_council.7.d
+	picture = GFX_report_event_generic_parliament
+	is_triggered_only = yes
+	fire_only_once = no
+	option = {
+		name = val_council.7.a
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = val_council.8
+	title = val_council.8.t
+	desc = val_council.8.d
+	picture = GFX_report_event_generic_parliament
+	is_triggered_only = yes
+	fire_only_once = no
+	option = {
+		name = val_council.8.a
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = val_council.9
+	title = val_council.9.t
+	desc = val_council.9.d
+	picture = GFX_report_event_generic_parliament
+	is_triggered_only = yes
+	option = {
+		name = val_council.9.a
+		trigger = {
+			has_variable = VAL_council_audit_receivable
+		}
+		ai_chance = {
+			factor = 70
+		}
+		if = {
+			limit = {
+				hidden_trigger = { has_variable = VAL_council_audit_receivable }
+			}
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 producer = VAL }
+			add_equipment_to_stockpile = { type = motorized_equipment amount = 100 producer = VAL }
+			hidden_effect = {
+				clear_variable = VAL_council_audit_receivable
+			}
+		}
+	}
+	option = {
+		name = val_council.9.b
+		trigger = {
+			has_variable = VAL_council_audit_receivable
+		}
+		ai_chance = {
+			factor = 30
+		}
+		if = {
+			limit = {
+				hidden_trigger = { has_variable = VAL_council_audit_receivable }
+			}
+			custom_effect_tooltip = VAL_council_grant_350_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 350 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 350 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			hidden_effect = {
+				clear_variable = VAL_council_audit_receivable
+			}
+		}
+	}
+	option = {
+		name = val_council.9.c
+		trigger = {
+			NOT = {
+				has_variable = VAL_council_audit_receivable
+			}
+		}
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+news_event = {
+	id = val_council.10
+	title = val_council.10.t
+	desc = val_council.10.d
+	picture = GFX_news_event_adiscord_army_formation
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = val_council.10.a
+	}
+}

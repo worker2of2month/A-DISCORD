@@ -8291,7 +8291,7 @@ class PostwarFocusContracts(unittest.TestCase):
             directory = {name for name in visible if name.startswith("STP_pc_sdir_")}
             ordinary = {name for name in visible if name.startswith("STP_pc_sot_")}
             with self.subTest(arrested=arrested):
-                self.assertEqual((len(directory), len(ordinary)), (10, 0) if arrested else (0, 10))
+                self.assertEqual((len(directory), len(ordinary)), (40, 0) if arrested else (0, 10))
                 positions = [visible[name] for name in directory | ordinary]
                 self.assertEqual(len(positions), len(set(positions)))
         triggers = {
@@ -8301,14 +8301,79 @@ class PostwarFocusContracts(unittest.TestCase):
         for trigger, focus in (
             ("STP_pc_val_campaign_route_current", "STP_pc_sdir_val_war"),
             ("STP_pc_nod_campaign_route_current", "STP_pc_sdir_nod_war"),
-            ("STP_pc_val_subjugation_war", "STP_pc_sdir_val_war"),
-            ("STP_pc_nod_subjugation_war", "STP_pc_sdir_nod_war"),
         ):
             with self.subTest(trigger=trigger):
                 self.assertIn(
                     focus,
                     {e.value for e in walk(triggers[trigger]) if e.key == "has_completed_focus"},
                 )
+        for trigger in ("STP_pc_val_subjugation_war", "STP_pc_nod_subjugation_war"):
+            with self.subTest(early_victory=trigger):
+                self.assertTrue(
+                    matches_conditions(
+                        triggers[trigger],
+                        {("STS", "STP_pc_sword_directory_branch", "yes"): True},
+                        "STS",
+                    )
+                )
+
+    def test_directory_justice_choice_stays_open_with_inherited_field_courts(self):
+        from decimal import Decimal
+
+        focuses = {
+            scalar(e.value, "id"): e.value
+            for e in entries("focus_trees/STP/postwar/shabrat/focuses.txt")
+            if e.key == "focus"
+        }
+        prepare = ast_block(
+            entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+            "STP_cw_prepare_successor",
+        )
+        self.assertTrue(
+            any(e.value == "ADISCORD_justice_field_courts" for e in walk(prepare))
+        )
+        ideas = ast_block(
+            ast_block(entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "ideas"),
+            "country",
+        )
+        dynamic = ast_block(
+            entries("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt"),
+            "STP_pw_republic_dynamic",
+        )
+        bindings = {
+            e.key: e.value
+            for e in dynamic
+            if isinstance(e.value, str) and e.value.startswith("STP_pw_")
+        }
+        facts = {
+            ("STS", "has_idea", "ADISCORD_justice_field_courts"): True,
+            ("STS", "STP_pc_sword_directory_current", "yes"): True,
+            ("STS", "STP_pc_focus_available", "yes"): True,
+        }
+        for suffix in ("military_prosecution", "field_courts"):
+            name = "STP_pc_sdir_" + suffix
+            focus = focuses[name]
+            with self.subTest(focus=name):
+                self.assertFalse(any(e.key == "bypass" for e in focus))
+                self.assertTrue(matches_conditions(ast_block(focus, "available"), facts, "STS"))
+                reward = ast_block(focus, "completion_reward")
+                self.assertEqual(scalar(reward, "add_ideas"), "ADISCORD_justice_" + suffix)
+                swap = ast_block(ast_block(reward, "effect_tooltip"), "swap_ideas")
+                preview = ast_block(ideas, scalar(swap, "add_idea"))
+                expected = {
+                    bindings[e.key]: Decimal(e.value)
+                    for e in ast_block(preview, "modifier")
+                }
+                hidden = ast_block(reward, "hidden_effect")
+                actual = {
+                    scalar(e.value, "var"): Decimal(scalar(e.value, "value"))
+                    for e in hidden
+                    if e.key == "add_to_variable"
+                }
+                self.assertTrue(actual)
+                self.assertEqual(actual, expected)
+                self.assertEqual(scalar(hidden, "STP_pw_refresh_modifier"), "yes")
+                self.assertEqual(scalar(ast_block(preview, "allowed"), "always"), "no")
 
     def test_war_and_postwar_focus_names_and_descriptions_are_localised(self):
         for language in ("russian", "english"):

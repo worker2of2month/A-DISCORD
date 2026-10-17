@@ -5174,6 +5174,109 @@ STP_pc_charter_install_sotnikov = {
 	}
 }
 
+STP_pc_charter_sotnikov_refund_reintegration = {
+	if = {
+		limit = { has_country_flag = STP_pc_charter_sotnikov_reintegration_receipt }
+		clr_country_flag = STP_pc_charter_sotnikov_reintegration_receipt
+		add_political_power = 60
+		add_to_variable = { var = ADISCORD_economy_treasury value = 600 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 600 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pc_charter_sotnikov_settle_reintegration = {
+	if = {
+		limit = { has_country_flag = STP_pc_charter_sotnikov_reintegration_receipt }
+		if = {
+			limit = {
+				STP_pc_charter_sotnikov_programme_current = yes
+				STP_pc_charter_sotnikov_workshop_site = yes
+				has_completed_focus = STP_pc_charter_sotnikov_civil_return
+				NOT = { has_country_flag = STP_pc_charter_sotnikov_reintegration_done }
+			}
+			# Consume the payment before delivery so cancellation and expiry cannot both settle it.
+			clr_country_flag = STP_pc_charter_sotnikov_reintegration_receipt
+			set_country_flag = STP_pc_charter_sotnikov_reintegration_done
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = {
+						building = industrial_complex
+						size > 0
+						include_locked = yes
+					}
+				}
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			add_stability = 0.02
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { STP_pc_charter_sotnikov_refund_reintegration = yes }
+	}
+}
+
+STP_pc_charter_sotnikov_refund_supply = {
+	if = {
+		limit = { has_country_flag = STP_pc_charter_sotnikov_supply_receipt }
+		clr_country_flag = STP_pc_charter_sotnikov_supply_receipt
+		add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pc_charter_sotnikov_settle_supply = {
+	if = {
+		limit = { has_country_flag = STP_pc_charter_sotnikov_supply_receipt }
+		if = {
+			limit = {
+				STP_pc_charter_sotnikov_programme_current = yes
+				has_completed_focus = STP_pc_charter_sotnikov_rescue_stores
+				has_idea = ADISCORD_logistics_civilian_contracts
+				NOT = { has_country_flag = STP_pc_charter_sotnikov_supply_delivered }
+			}
+			clr_country_flag = STP_pc_charter_sotnikov_supply_receipt
+			set_country_flag = STP_pc_charter_sotnikov_supply_delivered
+			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = ROOT }
+			add_equipment_to_stockpile = { type = motorized_equipment amount = 50 producer = ROOT }
+			army_experience = 20
+		}
+		else = { STP_pc_charter_sotnikov_refund_supply = yes }
+	}
+}
+
+STP_pc_charter_sotnikov_confirm_legacy = {
+	if = {
+		limit = {
+			has_completed_focus = STP_pc_charter_sotnikov_charter_fulfilled
+			STP_pc_charter_sotnikov_legacy_unclaimed = yes
+		}
+		if = {
+			limit = { STP_pc_charter_sotnikov_law_earned = yes }
+			add_ideas = STP_pc_charter_sotnikov_legacy_law
+			remove_country_leader_trait = STP_charter_sotnikov_oath
+			add_country_leader_trait = STP_charter_sotnikov_guarantor
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else_if = {
+			limit = { STP_pc_charter_sotnikov_defenders_earned = yes }
+			add_ideas = STP_pc_charter_sotnikov_legacy_defenders
+			remove_country_leader_trait = STP_charter_sotnikov_oath
+			add_country_leader_trait = STP_charter_sotnikov_guarantor
+			ADISCORD_economy_mark_dirty = yes
+		}
+		if = {
+			limit = { STP_pc_charter_sotnikov_legacy_unclaimed = no }
+			set_temp_variable = { var = ADISCORD_superevent_request value = 22 }
+			ADISCORD_superevent_enqueue = yes
+		}
+	}
+}
+
 STP_pc_charter_install_shabrat = {
 	if = {
 		limit = {
@@ -5200,6 +5303,333 @@ STP_pc_charter_install_shabrat = {
 		}
 		set_variable = { var = STP_pc_charter_cabinet value = 2 }
 		STP_pc_charter_confirm_government = yes
+	}
+}
+
+# COUNTRY: one paid operation owns the receipt until delivery or cancellation.
+STP_pc_charter_tikhoreva_pay_project = {
+	set_variable = { var = STP_pc_charter_tikhoreva_project_kind value = STP_pc_charter_tikhoreva_input_kind }
+	add_to_variable = { var = STP_pc_charter_tikhoreva_deposit_treasury value = STP_pc_charter_tikhoreva_input_treasury }
+	add_to_variable = { var = STP_pc_charter_tikhoreva_deposit_pp value = STP_pc_charter_tikhoreva_input_pp }
+	add_to_variable = { var = STP_pc_charter_tikhoreva_deposit_equipment value = STP_pc_charter_tikhoreva_input_equipment }
+	subtract_from_variable = { var = ADISCORD_economy_treasury value = STP_pc_charter_tikhoreva_input_treasury }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = STP_pc_charter_tikhoreva_input_treasury }
+	multiply_temp_variable = { var = STP_pc_charter_tikhoreva_input_pp value = -1 }
+	add_political_power = STP_pc_charter_tikhoreva_input_pp
+	if = {
+		limit = { check_variable = { var = STP_pc_charter_tikhoreva_input_equipment value = 0 compare = greater_than } }
+		multiply_temp_variable = { var = STP_pc_charter_tikhoreva_input_equipment value = -1 }
+		add_equipment_to_stockpile = { type = support_equipment amount = STP_pc_charter_tikhoreva_input_equipment }
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+STP_pc_charter_tikhoreva_clear_receipt = {
+	clear_variable = STP_pc_charter_tikhoreva_project_kind
+	clear_variable = STP_pc_charter_tikhoreva_deposit_treasury
+	clear_variable = STP_pc_charter_tikhoreva_deposit_pp
+	clear_variable = STP_pc_charter_tikhoreva_deposit_equipment
+	clear_variable = STP_pc_charter_tikhoreva_acceptance_method
+}
+
+STP_pc_charter_tikhoreva_cancel_project = {
+	if = {
+		limit = { has_variable = STP_pc_charter_tikhoreva_project_kind }
+		add_to_variable = { var = ADISCORD_economy_treasury value = STP_pc_charter_tikhoreva_deposit_treasury }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_pc_charter_tikhoreva_deposit_treasury }
+		add_political_power = STP_pc_charter_tikhoreva_deposit_pp
+		if = {
+			limit = { check_variable = { var = STP_pc_charter_tikhoreva_deposit_equipment value = 0 compare = greater_than } }
+			add_equipment_to_stockpile = { type = support_equipment amount = STP_pc_charter_tikhoreva_deposit_equipment }
+		}
+		# The site can already belong to another country when a paid operation ends.
+		every_state = {
+			limit = {
+				OR = {
+					has_state_flag = STP_pc_charter_tikhoreva_pilot_site
+					has_state_flag = STP_pc_charter_tikhoreva_replication_site
+				}
+			}
+			clr_state_flag = STP_pc_charter_tikhoreva_pilot_site
+			clr_state_flag = STP_pc_charter_tikhoreva_replication_site
+		}
+		STP_pc_charter_tikhoreva_clear_receipt = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pc_charter_tikhoreva_open_norm_review = {
+	if = {
+		limit = {
+			STP_pc_charter_tikhoreva_work_current = yes
+			STP_pc_charter_tikhoreva_pilot_operational = yes
+			has_completed_focus = STP_pc_charter_tikhoreva_public_results
+			NOT = { has_variable = STP_pc_charter_tikhoreva_norm_method }
+			NOT = { has_country_flag = STP_pc_charter_tikhoreva_norm_review_open }
+		}
+		set_country_flag = STP_pc_charter_tikhoreva_norm_review_open
+		country_event = { id = ADISCORD_STP_pc.85 hours = 1 }
+	}
+}
+
+STP_pc_charter_tikhoreva_finish_project = {
+	if = {
+		limit = { STP_pc_charter_tikhoreva_work_current = no }
+		STP_pc_charter_tikhoreva_cancel_project = yes
+	}
+	else_if = {
+		limit = {
+			OR = {
+				check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 1 compare = equals }
+				check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 2 compare = equals }
+			}
+		}
+		set_country_flag = STP_pc_charter_tikhoreva_audit_completed
+		add_timed_idea = { idea = STP_pc_charter_trusted_accounts days = 180 }
+		STP_pc_charter_tikhoreva_clear_receipt = yes
+	}
+	else_if = {
+		limit = {
+			OR = {
+				check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 3 compare = equals }
+				check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 4 compare = equals }
+			}
+		}
+		if = {
+			limit = { STP_pc_charter_tikhoreva_pilot_site_current = yes }
+			# The construction deposit remains reserved until the workshop works.
+			set_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 10 }
+			set_country_flag = STP_pc_charter_tikhoreva_acceptance_open
+			country_event = { id = ADISCORD_STP_pc.67 hours = 1 }
+		}
+		else = { STP_pc_charter_tikhoreva_cancel_project = yes }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 5 compare = equals }
+				check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 6 compare = equals }
+			}
+		}
+		if = {
+			limit = { STP_pc_charter_tikhoreva_pilot_site_current = yes }
+			random_owned_controlled_state = {
+				limit = {
+					has_state_flag = STP_pc_charter_tikhoreva_pilot_site
+					free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+				}
+				add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+				clr_state_flag = STP_pc_charter_tikhoreva_pilot_site
+				set_state_flag = STP_pc_charter_tikhoreva_pilot_operational
+			}
+			STP_pc_charter_tikhoreva_clear_receipt = yes
+			STP_pc_charter_tikhoreva_open_norm_review = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { STP_pc_charter_tikhoreva_cancel_project = yes }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 7 compare = equals }
+				check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 8 compare = equals }
+			}
+		}
+		if = {
+			limit = { STP_pc_charter_tikhoreva_pilot_operational = yes }
+			set_country_flag = STP_pc_charter_tikhoreva_norms_corrected
+			remove_ideas = STP_pc_charter_hard_norms
+			add_stability = 0.02
+			STP_pc_charter_tikhoreva_clear_receipt = yes
+		}
+		else = { STP_pc_charter_tikhoreva_cancel_project = yes }
+	}
+	else_if = {
+		limit = { check_variable = { var = STP_pc_charter_tikhoreva_project_kind value = 9 compare = equals } }
+		if = {
+			limit = {
+				STP_pc_charter_tikhoreva_replication_site_current = yes
+				STP_pc_charter_tikhoreva_pilot_operational = yes
+				has_country_flag = STP_pc_charter_tikhoreva_norms_corrected
+			}
+			random_owned_controlled_state = {
+				limit = {
+					has_state_flag = STP_pc_charter_tikhoreva_replication_site
+					free_building_slots = { building = arms_factory size > 0 include_locked = yes }
+				}
+				add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+				clr_state_flag = STP_pc_charter_tikhoreva_replication_site
+			}
+			set_country_flag = STP_pc_charter_tikhoreva_replication_completed
+			STP_pc_charter_tikhoreva_clear_receipt = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { STP_pc_charter_tikhoreva_cancel_project = yes }
+	}
+}
+
+STP_pc_charter_tikhoreva_open_final_review = {
+	if = {
+		limit = {
+			STP_pc_charter_tikhoreva_current = yes
+			NOT = { has_idea = STP_pc_charter_tikhoreva_legacy_ledger }
+			NOT = { has_idea = STP_pc_charter_tikhoreva_legacy_utility }
+			NOT = { has_country_flag = STP_pc_charter_tikhoreva_final_review_open }
+		}
+		set_country_flag = STP_pc_charter_tikhoreva_final_review_open
+		country_event = { id = ADISCORD_STP_pc.70 hours = 1 }
+	}
+}
+
+STP_pc_charter_tikhoreva_confirm_legacy = {
+	remove_country_leader_trait = STP_charter_tikhoreva_auditor
+	add_country_leader_trait = STP_charter_tikhoreva_steward
+	clr_country_flag = STP_pc_charter_tikhoreva_report_pending
+	clr_country_flag = STP_pc_charter_tikhoreva_final_review_open
+	if = {
+		limit = { NOT = { has_country_flag = STP_pc_charter_tikhoreva_celebrated } }
+		set_country_flag = STP_pc_charter_tikhoreva_celebrated
+		set_temp_variable = { ADISCORD_superevent_request = 24 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# COUNTRY: clear the receipt before any refund or delivery can be repeated.
+STP_pc_charter_shabrat_clear_receipt = {
+	clear_variable = STP_pc_charter_shabrat_project_kind
+	clear_variable = STP_pc_charter_shabrat_deposit
+	clear_variable = STP_pc_charter_shabrat_pp_deposit
+}
+
+STP_pc_charter_shabrat_refund = {
+	if = {
+		limit = { has_variable = STP_pc_charter_shabrat_project_kind }
+		set_temp_variable = { var = STP_pc_charter_shabrat_cash_return value = STP_pc_charter_shabrat_deposit }
+		set_temp_variable = { var = STP_pc_charter_shabrat_pp_return value = STP_pc_charter_shabrat_pp_deposit }
+		STP_pc_charter_shabrat_clear_receipt = yes
+		add_to_variable = { var = ADISCORD_economy_treasury value = STP_pc_charter_shabrat_cash_return }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_pc_charter_shabrat_cash_return }
+		add_political_power = STP_pc_charter_shabrat_pp_return
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY, FROM state: only the district holding this receipt may settle it.
+STP_pc_charter_shabrat_finish_compact = {
+	if = {
+		limit = {
+			check_variable = { var = STP_pc_charter_shabrat_project_kind value = 3 compare = equals }
+			FROM = { has_state_flag = STP_pc_charter_shabrat_compact_pending }
+		}
+		if = {
+			limit = {
+				STP_pc_charter_shabrat_current = yes
+				STP_pc_focus_available = yes
+				check_variable = { var = STP_pc_charter_shabrat_deposit value = 600 compare = equals }
+				check_variable = { var = STP_pc_charter_shabrat_pp_deposit value = 75 compare = equals }
+				FROM = {
+					is_owned_by = ROOT
+					is_controlled_by = ROOT
+					free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+				}
+			}
+			STP_pc_charter_shabrat_clear_receipt = yes
+			FROM = {
+				clr_state_flag = STP_pc_charter_shabrat_compact_pending
+				if = {
+					limit = { NOT = { has_state_flag = STP_pc_charter_shabrat_compact } }
+					set_state_flag = STP_pc_charter_shabrat_compact
+				}
+				add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+			}
+			add_stability = 0.02
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = {
+			FROM = { clr_state_flag = STP_pc_charter_shabrat_compact_pending }
+			STP_pc_charter_shabrat_refund = yes
+		}
+	}
+}
+
+STP_pc_charter_shabrat_finish_registers = {
+	if = {
+		limit = { check_variable = { var = STP_pc_charter_shabrat_project_kind value = 1 compare = equals } }
+		if = {
+			limit = {
+				STP_pc_charter_shabrat_current = yes
+				STP_pc_focus_available = yes
+				check_variable = { var = STP_pc_charter_shabrat_registers value = 2 compare = equals }
+			}
+			STP_pc_charter_shabrat_clear_receipt = yes
+			set_variable = { var = STP_pc_charter_shabrat_registers value = 1 }
+			add_stability = 0.02
+		}
+		else = { STP_pc_charter_shabrat_refund = yes }
+	}
+}
+
+STP_pc_charter_shabrat_finish_citizenship = {
+	if = {
+		limit = { check_variable = { var = STP_pc_charter_shabrat_project_kind value = 2 compare = equals } }
+		if = {
+			limit = {
+				STP_pc_charter_shabrat_current = yes
+				STP_pc_focus_available = yes
+				check_variable = { var = STP_pc_charter_shabrat_oath value = 1 compare = greater_than }
+			}
+			STP_pc_charter_shabrat_clear_receipt = yes
+			set_variable = { var = STP_pc_charter_shabrat_oath value = 1 }
+			add_stability = 0.02
+		}
+		else = { STP_pc_charter_shabrat_refund = yes }
+	}
+}
+
+STP_pc_charter_shabrat_finish_defence = {
+	if = {
+		limit = { check_variable = { var = STP_pc_charter_shabrat_project_kind value = 4 compare = equals } }
+		if = {
+			limit = {
+				STP_pc_charter_shabrat_current = yes
+				STP_pc_focus_available = yes
+				STP_pc_charter_shabrat_citizenship_settled = yes
+				any_owned_state = { STP_pc_charter_shabrat_compact_active = yes }
+				NOT = { has_country_flag = STP_pc_charter_shabrat_defence_delivered }
+			}
+			STP_pc_charter_shabrat_clear_receipt = yes
+			set_country_flag = STP_pc_charter_shabrat_defence_delivered
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 900 producer = ROOT }
+			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = ROOT }
+			if = {
+				limit = { has_completed_focus = STP_pc_charter_shabrat_district_reserves }
+				add_command_power = 20
+			}
+			else = { army_experience = 20 }
+		}
+		else = { STP_pc_charter_shabrat_refund = yes }
+	}
+}
+
+STP_pc_charter_shabrat_award_districts = {
+	if = {
+		limit = { STP_pc_charter_shabrat_districts_ready = yes }
+		add_ideas = STP_pc_charter_shabrat_legacy_districts
+		remove_country_leader_trait = STP_charter_shabrat_founder
+		add_country_leader_trait = STP_charter_shabrat_first_citizen
+		set_temp_variable = { ADISCORD_superevent_request = 23 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+STP_pc_charter_shabrat_award_nation = {
+	if = {
+		limit = { STP_pc_charter_shabrat_nation_ready = yes }
+		add_ideas = STP_pc_charter_shabrat_legacy_nation
+		remove_country_leader_trait = STP_charter_shabrat_founder
+		add_country_leader_trait = STP_charter_shabrat_first_citizen
+		set_temp_variable = { ADISCORD_superevent_request = 23 }
+		ADISCORD_superevent_enqueue = yes
 	}
 }
 
@@ -5287,6 +5717,455 @@ STP_pc_lock_directory = {
 		promote_character = { character = STP_Leonid_Barchel ideology = steland_military_directory }
 	}
 	set_politics = { ruling_party = etatism elections_allowed = no }
+	if = {
+		limit = { STP_pc_sword_directory_branch = yes }
+		STP_sdir_reorganize_districts = yes
+	}
+}
+
+# COUNTRY STS: the temporary input applies the choice inside its own focus reward.
+# Later settlements read the completed focus without duplicating its state.
+STP_sdir_apply_district_government = {
+	if = {
+		limit = {
+			STP_pc_sword_directory_branch = yes
+			check_variable = { var = STP_pc_course value = 3 compare = equals }
+			is_subject = no
+			has_capitulated = no
+		}
+		every_subject_country = {
+			limit = { OR = { tag = VAL tag = NOD } }
+			if = {
+				limit = {
+					STS = {
+						OR = {
+							check_variable = { var = STP_sdir_government_input value = 2 compare = equals }
+							AND = {
+								NOT = { check_variable = { var = STP_sdir_government_input value = 1 compare = equals } }
+								has_completed_focus = STP_pc_sdir_field_compacts
+							}
+						}
+					}
+				}
+				if = {
+					limit = { NOT = { has_autonomy_state = autonomy_STP_directory_compact } }
+					STS = {
+						set_autonomy = {
+							target = PREV
+							autonomy_state = autonomy_STP_directory_compact
+							freedom_level = 0.05
+							end_wars = no
+							end_civil_wars = no
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					STS = {
+						OR = {
+							check_variable = { var = STP_sdir_government_input value = 1 compare = equals }
+							has_completed_focus = STP_pc_sdir_central_command
+						}
+					}
+					NOT = { has_autonomy_state = autonomy_STP_directory_command }
+				}
+				STS = {
+					set_autonomy = {
+						target = PREV
+						autonomy_state = autonomy_STP_directory_command
+						freedom_level = 0.05
+						end_wars = no
+						end_civil_wars = no
+					}
+				}
+			}
+			if = {
+				limit = { tag = VAL }
+				set_cosmetic_tag = VAL_STS_arsenal_district
+				STP_heg_install_val_administrator = yes
+			}
+			else = {
+				set_cosmetic_tag = NOD_STS_naval_district
+				STP_heg_install_nod_administrator = yes
+			}
+			ADISCORD_release_non_participating_minor_optimization = yes
+			ADISCORD_economy_initialize_country = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY STS: only land already owned by the directory or its districts can move.
+# Occupation by an unrelated participant blocks that state's transfer.
+STP_sdir_reorganize_districts = {
+	if = {
+		limit = {
+			STP_pc_sword_directory_branch = yes
+			check_variable = { var = STP_pc_course value = 3 compare = equals }
+			is_subject = no
+			has_capitulated = no
+		}
+		if = {
+			limit = { VAL = { is_subject_of = STS } }
+			VAL = {
+				every_owned_state = {
+					limit = {
+						OR = { state = 24 state = 42 state = 55 }
+						OR = {
+							is_controlled_by = VAL
+							is_controlled_by = STS
+							controller = { is_subject_of = STS }
+						}
+					}
+					transfer_state_to = STS
+					set_state_controller_to = STS
+				}
+				54 = {
+					if = {
+						limit = {
+							is_owned_by = VAL
+							OR = {
+								is_controlled_by = STS
+								controller = { is_subject_of = STS }
+							}
+						}
+						set_state_controller_to = VAL
+					}
+				}
+				57 = {
+					if = {
+						limit = {
+							is_owned_by = VAL
+							OR = {
+								is_controlled_by = STS
+								controller = { is_subject_of = STS }
+							}
+						}
+						set_state_controller_to = VAL
+					}
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		if = {
+			limit = { NOD = { is_subject_of = STS } }
+			NOD = {
+				every_owned_state = {
+					limit = {
+						OR = { state = 10 state = 11 }
+						OR = {
+							is_controlled_by = NOD
+							is_controlled_by = STS
+							controller = { is_subject_of = STS }
+						}
+					}
+					transfer_state_to = STS
+					set_state_controller_to = STS
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		if = {
+			limit = { VAL = { OR = { exists = no is_subject_of = STS } } }
+			every_owned_state = {
+				limit = {
+					OR = { state = 48 state = 54 state = 56 state = 57 state = 168 }
+					is_controlled_by = STS
+				}
+				VAL = { transfer_state = PREV }
+				set_state_controller_to = VAL
+			}
+			if = {
+				limit = { VAL = { exists = yes is_subject = no } }
+				set_autonomy = {
+					target = VAL
+					autonomy_state = autonomy_STP_provisional_administration
+					freedom_level = 0.05
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+		}
+		if = {
+			limit = { NOD = { OR = { exists = no is_subject_of = STS } } }
+			every_owned_state = {
+				limit = {
+					OR = { state = 12 state = 13 state = 17 state = 18 state = 30 }
+					is_controlled_by = STS
+				}
+				NOD = { transfer_state = PREV }
+				set_state_controller_to = NOD
+			}
+			if = {
+				limit = { NOD = { exists = yes is_subject = no } }
+				set_autonomy = {
+					target = NOD
+					autonomy_state = autonomy_STP_provisional_administration
+					freedom_level = 0.05
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+		}
+		STP_sdir_consolidate_bezhaysk_administration = yes
+		STP_sdir_absorb_cannibal_conquests = yes
+		STP_sdir_apply_district_government = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# Country holding. The receipt names an awarded participant, not every later subject of STS.
+STP_sdir_merge_bezhaysk_holding = {
+	if = {
+		limit = { STP_sdir_bezhaysk_member_mergeable = yes }
+		every_owned_state = {
+			if = {
+				limit = { is_core_of = PREV }
+				add_core_of = BJK
+			}
+		}
+		if = {
+			limit = { is_ai = no }
+			BJK = { change_tag_from = PREV }
+		}
+		clr_country_flag = STP_sdir_bezhaysk_awarded
+		BJK = {
+			annex_country = {
+				target = PREV
+				transfer_troops = yes
+			}
+		}
+		# Native annexation can leave impassable owned states behind.
+		every_owned_state = {
+			BJK = { transfer_state = PREV }
+			set_state_controller_to = BJK
+		}
+	}
+}
+
+STP_sdir_install_bezhaysk_administration = {
+	if = {
+		limit = { is_subject_of = STS }
+		if = {
+			limit = { NOT = { has_cosmetic_tag = BJK_STS_administration } }
+			create_country_leader = {
+				name = STP_sdir_bezhaysk_administrator
+				desc = STP_sdir_bezhaysk_administrator_desc
+				ideology = steland_military_directory
+				expire = "2300.1.1"
+			}
+		}
+		set_politics = {
+			ruling_party = etatism
+			elections_allowed = no
+		}
+		set_country_leader_portrait = {
+			ideology = etatism
+			portrait = GFX_portrait_STP_Military_Collegium
+		}
+		set_cosmetic_tag = BJK_STS_administration
+		clr_country_flag = ADISCORD_bezhaysk_val_administration
+		clr_country_flag = ADISCORD_bezhaysk_nod_administration
+		every_owned_state = {
+			if = {
+				limit = {
+					OR = {
+						is_controlled_by = STS
+						controller = { is_subject_of = STS }
+					}
+				}
+				set_state_controller_to = BJK
+			}
+		}
+		if = {
+			limit = { 41 = { is_owned_by = BJK is_controlled_by = BJK } }
+			set_capital = { state = 41 }
+		}
+		ADISCORD_release_non_participating_minor_optimization = yes
+		ADISCORD_economy_initialize_country = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_sdir_transfer_bezhaysk_neighbour_state = {
+	if = {
+		limit = { STP_sdir_bezhaysk_state_from_neighbour = yes }
+		owner = { ADISCORD_economy_mark_dirty = yes }
+		BJK = { transfer_state = PREV }
+		set_state_controller_to = BJK
+	}
+}
+
+STP_sdir_take_bezhaysk_neighbour_holding = {
+	if = {
+		limit = { STP_sdir_bezhaysk_neighbour_holding_available = yes }
+		overlord = {
+			set_autonomy = {
+				target = PREV
+				autonomy_state = autonomy_free
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+		STS = {
+			set_autonomy = {
+				target = PREV
+				autonomy_state = autonomy_STP_provisional_administration
+				freedom_level = 0.05
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+		set_country_flag = STP_sdir_bezhaysk_awarded
+	}
+}
+
+STP_sdir_consolidate_bezhaysk_administration = {
+	if = {
+		limit = {
+			STP_pc_sword_directory_branch = yes
+			is_subject = no
+			has_capitulated = no
+			STP_sdir_bezhaysk_neighbour_transition_available = yes
+		}
+		if = {
+			limit = { BJK = { exists = no } }
+			41 = { STP_sdir_transfer_bezhaysk_neighbour_state = yes }
+		}
+		if = {
+			limit = { BJK = { is_subject_of = VAL } }
+			VAL = {
+				set_autonomy = {
+					target = BJK
+					autonomy_state = autonomy_free
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+		}
+		else_if = {
+			limit = { BJK = { is_subject_of = NOD } }
+			NOD = {
+				set_autonomy = {
+					target = BJK
+					autonomy_state = autonomy_free
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+		}
+		set_autonomy = {
+			target = BJK
+			autonomy_state = autonomy_STP_provisional_administration
+			freedom_level = 0.05
+			end_wars = no
+			end_civil_wars = no
+		}
+		4 = { STP_sdir_transfer_bezhaysk_neighbour_state = yes }
+		5 = { STP_sdir_transfer_bezhaysk_neighbour_state = yes }
+		6 = { STP_sdir_transfer_bezhaysk_neighbour_state = yes }
+		7 = { STP_sdir_transfer_bezhaysk_neighbour_state = yes }
+		9 = { STP_sdir_transfer_bezhaysk_neighbour_state = yes }
+		31 = { STP_sdir_transfer_bezhaysk_neighbour_state = yes }
+		41 = { STP_sdir_transfer_bezhaysk_neighbour_state = yes }
+		BJK = { STP_sdir_install_bezhaysk_administration = yes }
+	}
+	if = {
+		limit = {
+			STP_pc_sword_directory_branch = yes
+			is_subject = no
+			has_capitulated = no
+			BJK = {
+				exists = yes
+				is_subject_of = STS
+				has_cosmetic_tag = BJK_STS_administration
+			}
+		}
+		BLD = { STP_sdir_take_bezhaysk_neighbour_holding = yes }
+		BHG = { STP_sdir_take_bezhaysk_neighbour_holding = yes }
+		BGT = { STP_sdir_take_bezhaysk_neighbour_holding = yes }
+		BBV = { STP_sdir_take_bezhaysk_neighbour_holding = yes }
+		BCM = { STP_sdir_take_bezhaysk_neighbour_holding = yes }
+		BLD = { STP_sdir_merge_bezhaysk_holding = yes }
+		BHG = { STP_sdir_merge_bezhaysk_holding = yes }
+		BGT = { STP_sdir_merge_bezhaysk_holding = yes }
+		BBV = { STP_sdir_merge_bezhaysk_holding = yes }
+		BCM = { STP_sdir_merge_bezhaysk_holding = yes }
+		BJK = { STP_sdir_install_bezhaysk_administration = yes }
+	}
+}
+
+# STS scope. The shared victory router has frozen the defeated feudal bloc before calling this effect.
+STP_sdir_settle_bezhaysk_administration = {
+	if = {
+		limit = {
+			STP_pc_sword_directory_branch = yes
+			is_subject = no
+			has_capitulated = no
+			BJK = {
+				exists = yes
+				OR = { is_subject = no is_subject_of = STS }
+			}
+		}
+		BJK = {
+			if = {
+				limit = { is_faction_leader = yes }
+				dismantle_faction = yes
+			}
+		}
+		for_each_scope_loop = {
+			array = ADISCORD_bezhaysk_settlement_members
+			if = {
+				limit = {
+					exists = yes
+					OR = {
+						is_subject = no
+						is_subject_of = BJK
+						is_subject_of = STS
+					}
+				}
+				if = {
+					limit = { has_war_with = STS }
+					white_peace = STS
+				}
+				if = {
+					limit = { is_subject_of = BJK }
+					BJK = {
+						set_autonomy = {
+							target = PREV
+							autonomy_state = autonomy_free
+							end_wars = no
+							end_civil_wars = no
+						}
+					}
+				}
+				if = {
+					limit = { is_in_faction = yes NOT = { is_in_faction_with = STS } }
+					leave_faction = yes
+				}
+				STS = {
+					set_autonomy = {
+						target = PREV
+						autonomy_state = autonomy_STP_provisional_administration
+						freedom_level = 0.05
+						end_wars = no
+						end_civil_wars = no
+					}
+				}
+				if = {
+					limit = { NOT = { tag = BJK } }
+					set_country_flag = STP_sdir_bezhaysk_awarded
+				}
+				ADISCORD_release_non_participating_minor_optimization = yes
+				ADISCORD_economy_initialize_country = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		BJK = { STP_sdir_install_bezhaysk_administration = yes }
+		STP_sdir_consolidate_bezhaysk_administration = yes
+	}
 }
 
 # STS: contacts open the current unresolved neighbour's existing crisis.
@@ -5424,6 +6303,38 @@ STP_pc_form_liberation_coalition = {
 	}
 }
 
+# COUNTRY recipient: invoked only after its government accepts the quoted package.
+STP_pc_charter_deliver_partner_programme = {
+	if = {
+		limit = {
+			STP_pc_liberation_reply_is_current = yes
+			STP_pc_charter_partner_payable = yes
+			STS = { has_variable = STP_pc_lib_package_cabinet }
+		}
+		STS = {
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+		if = {
+			limit = { STS = { check_variable = { var = STP_pc_lib_package_cabinet value = 1 compare = equals } } }
+			ADISCORD_reform_social_system_development = yes
+		}
+		else_if = {
+			limit = { STS = { check_variable = { var = STP_pc_lib_package_cabinet value = 2 compare = equals } } }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 900 producer = STS }
+			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = STS }
+		}
+		else_if = {
+			limit = { STS = { check_variable = { var = STP_pc_lib_package_cabinet value = 3 compare = equals } } }
+			add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = STS }
+			add_equipment_to_stockpile = { type = train_equipment amount = 2 producer = STS }
+			add_tech_bonus = { name = STP_pc_charter_partner_research bonus = 0.5 uses = 1 category = industry }
+		}
+		STS = { clear_variable = STP_pc_lib_package_cabinet }
+	}
+}
+
 STP_pc_offer_liberation_package = {
 	# A country removed before answering cannot keep the next recipient waiting.
 	if = {
@@ -5438,9 +6349,16 @@ STP_pc_offer_liberation_package = {
 		}
 		clr_country_flag = STP_pc_lib_package_pending
 		clear_variable = STP_pc_lib_package_tag
+		clear_variable = STP_pc_lib_package_cabinet
 	}
 	if = {
 		limit = { has_country_flag = STP_pc_lib_package_pending }
+	}
+	else_if = {
+		limit = {
+			STP_pc_charter_government_current = yes
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+		}
 	}
 	else_if = {
 		limit = {
@@ -5455,6 +6373,10 @@ STP_pc_offer_liberation_package = {
 			}
 		}
 		set_variable = { var = STP_pc_lib_package_tag value = 1 }
+		if = {
+			limit = { STP_pc_charter_government_current = yes }
+			set_variable = { var = STP_pc_lib_package_cabinet value = STP_pc_charter_cabinet }
+		}
 		set_country_flag = STP_pc_lib_package_pending
 		VAL = { country_event = { id = ADISCORD_STP_pc.11 } }
 	}
@@ -5468,11 +6390,16 @@ STP_pc_offer_liberation_package = {
 			}
 		}
 		set_variable = { var = STP_pc_lib_package_tag value = 2 }
+		if = {
+			limit = { STP_pc_charter_government_current = yes }
+			set_variable = { var = STP_pc_lib_package_cabinet value = STP_pc_charter_cabinet }
+		}
 		set_country_flag = STP_pc_lib_package_pending
 		NOD = { country_event = { id = ADISCORD_STP_pc.11 } }
 	}
 	else = {
 		clear_variable = STP_pc_lib_package_tag
+		clear_variable = STP_pc_lib_package_cabinet
 	}
 }
 
@@ -5495,6 +6422,13 @@ STP_pc_recover_stelander_cores_from_val = {
 				OR = {
 					is_owned_by = VAL
 					owner = { is_subject_of = VAL }
+				}
+				OR = {
+					STS = { STP_pc_sword_directory_branch = no }
+					is_controlled_by = STS
+					is_controlled_by = VAL
+					controller = { is_subject_of = STS }
+					controller = { is_subject_of = VAL }
 				}
 			}
 			if = {
@@ -5843,8 +6777,22 @@ STP_pc_begin_settlement = {
 			if = {
 				limit = { STP_pc_val_subjugation_war = yes }
 				VAL = { clr_country_flag = VAL_council_revanche_active }
-				STP_pc_settle_val_northern_conquests = yes
-				STP_heg_prepare_val_administration = yes
+				if = {
+					limit = { STP_pc_sword_directory_current = yes }
+					VAL = { VAL_enter_stelander_defeat = yes }
+					if = {
+						limit = { has_war_with = VAL }
+						white_peace = VAL
+					}
+					STP_heg_prepare_val_administration = yes
+					STP_sdir_absorb_cannibal_conquests = yes
+					STP_pc_settle_val_northern_conquests = yes
+					STP_sdir_reorganize_districts = yes
+				}
+				else = {
+					STP_pc_settle_val_northern_conquests = yes
+					STP_heg_prepare_val_administration = yes
+				}
 			}
 			else_if = {
 				limit = { VAL = { has_country_flag = VAL_council_revanche_active } }
@@ -5872,6 +6820,10 @@ STP_pc_begin_settlement = {
 				NOD = { set_country_flag = STP_pc_defeated_by_sts }
 				if = { limit = { has_war_with = NOD } white_peace = NOD }
 				STP_heg_prepare_nod_administration = yes
+				if = {
+					limit = { STP_pc_sword_directory_current = yes }
+					STP_sdir_reorganize_districts = yes
+				}
 			}
 			else = {
 				NOD = { set_country_flag = STP_pc_defeated_by_sts }
@@ -5945,6 +6897,7 @@ STP_pc_finish_liberation_package = {
 		STS = {
 			clr_country_flag = STP_pc_lib_package_pending
 			clear_variable = STP_pc_lib_package_tag
+			clear_variable = STP_pc_lib_package_cabinet
 			if = {
 				limit = { has_country_flag = STP_pc_liberation_coalition }
 				STP_pc_form_liberation_coalition = yes
@@ -8971,6 +9924,20 @@ STP_occidia_settle_victory = {
 		clr_country_flag = STP_occidia_campaign_active
 		SRP = { STP_cw_finish_mobilization = yes remove_mission = STP_occidia_invasion_warning }
 		annex_country = { target = SRP transfer_troops = no }
+		if = {
+			limit = { STP_pc_sword_directory_current = yes }
+			every_owned_state = {
+				limit = {
+					OR = { state = 43 state = 44 state = 45 state = 88 }
+					OR = {
+						is_controlled_by = STS
+						is_controlled_by = SRP
+					}
+				}
+				set_state_controller_to = STS
+			}
+			STP_sdir_reorganize_districts = yes
+		}
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
@@ -9394,14 +10361,21 @@ STP_heg_reconcile_frontier_expansion = {
 # Subject scope. Only remove this route's banner; later political identities own theirs.
 STP_heg_clear_foreign_administration_flag = {
 	if = {
+		limit = { NOT = { is_subject_of = STS } }
+		clr_country_flag = STP_sdir_bezhaysk_awarded
+	}
+	if = {
 		limit = {
 			NOT = { is_subject_of = STS }
 			OR = {
 				has_cosmetic_tag = NOD_STS_administration
 				has_cosmetic_tag = VAL_STS_administration
+				has_cosmetic_tag = NOD_STS_naval_district
+				has_cosmetic_tag = VAL_STS_arsenal_district
 				has_cosmetic_tag = YPR_STS_administration
 				has_cosmetic_tag = TFF_STS_administration
 				has_cosmetic_tag = NKA_STS_administration
+				has_cosmetic_tag = BJK_STS_administration
 			}
 		}
 		drop_cosmetic_tag = yes
@@ -14906,128 +15880,89 @@ STP_heg_clear_cannibal_campaign = {
 	}
 }
 
+STP_heg_enroll_cannibal_member = {
+	if = {
+		limit = { STP_heg_cannibal_target_available = yes }
+		ADISCORD_release_non_participating_minor_optimization = yes
+		set_country_flag = STP_heg_cannibal_campaign_active
+		if = {
+			limit = {
+				OR = {
+					is_major = no
+					has_country_flag = RUS_crisis_added_major
+					RUS_crisis_other_major_required = yes
+				}
+			}
+			set_country_flag = STP_heg_cannibal_added_major
+			set_major = yes
+		}
+	}
+}
+
+# Country scope. The anchor and leader are local targets established by the launch.
+STP_heg_join_cannibal_war = {
+	if = {
+		limit = {
+			has_country_flag = STP_heg_cannibal_campaign_active
+			NOT = { has_war_with = event_target:STP_heg_cannibal_leader }
+			event_target:STP_heg_cannibal_war_anchor = {
+				has_war_with = event_target:STP_heg_cannibal_leader
+			}
+		}
+		add_to_war = {
+			targeted_alliance = event_target:STP_heg_cannibal_war_anchor
+			enemy = event_target:STP_heg_cannibal_leader
+			hostility_reason = asked_to_join
+			single_target_only = yes
+		}
+	}
+}
+
 STP_heg_start_cannibal_campaign = {
 	if = {
 		limit = { STP_heg_can_start_cannibal_campaign = yes }
-		CIN = {
-			if = {
-				limit = { STP_heg_cannibal_target_available = yes }
-				ADISCORD_release_non_participating_minor_optimization = yes
-				set_country_flag = STP_heg_cannibal_campaign_active
-				if = {
-					limit = {
-						OR = {
-							is_major = no
-							has_country_flag = RUS_crisis_added_major
-							RUS_crisis_other_major_required = yes
-						}
-					}
-					set_country_flag = STP_heg_cannibal_added_major
-					set_major = yes
-				}
-			}
-		}
-		OSF = {
-			if = {
-				limit = { STP_heg_cannibal_target_available = yes }
-				ADISCORD_release_non_participating_minor_optimization = yes
-				set_country_flag = STP_heg_cannibal_campaign_active
-				if = {
-					limit = {
-						OR = {
-							is_major = no
-							has_country_flag = RUS_crisis_added_major
-							RUS_crisis_other_major_required = yes
-						}
-					}
-					set_country_flag = STP_heg_cannibal_added_major
-					set_major = yes
-				}
-			}
-		}
-		APH = {
-			if = {
-				limit = { STP_heg_cannibal_target_available = yes }
-				ADISCORD_release_non_participating_minor_optimization = yes
-				set_country_flag = STP_heg_cannibal_campaign_active
-				if = {
-					limit = {
-						OR = {
-							is_major = no
-							has_country_flag = RUS_crisis_added_major
-							RUS_crisis_other_major_required = yes
-						}
-					}
-					set_country_flag = STP_heg_cannibal_added_major
-					set_major = yes
-				}
-			}
-		}
+		set_country_flag = STP_heg_cannibal_campaign_active
+		save_event_target_as = STP_heg_cannibal_leader
+		CIN = { STP_heg_enroll_cannibal_member = yes }
+		OSF = { STP_heg_enroll_cannibal_member = yes }
+		APH = { STP_heg_enroll_cannibal_member = yes }
 		if = {
 			limit = { CIN = { has_country_flag = STP_heg_cannibal_campaign_active } }
 			CIN = { save_event_target_as = STP_heg_cannibal_war_anchor }
-			declare_war_on = { target = CIN type = annex_everything }
+			declare_war_on = {
+				target = CIN
+				type = annex_everything
+			}
 		}
 		else_if = {
 			limit = { OSF = { has_country_flag = STP_heg_cannibal_campaign_active } }
 			OSF = { save_event_target_as = STP_heg_cannibal_war_anchor }
-			declare_war_on = { target = OSF type = annex_everything }
+			declare_war_on = {
+				target = OSF
+				type = annex_everything
+			}
 		}
 		else_if = {
 			limit = { APH = { has_country_flag = STP_heg_cannibal_campaign_active } }
 			APH = { save_event_target_as = STP_heg_cannibal_war_anchor }
-			declare_war_on = { target = APH type = annex_everything }
-		}
-		CIN = {
-			if = {
-				limit = {
-					has_country_flag = STP_heg_cannibal_campaign_active
-					NOT = { has_war_with = STS }
-					event_target:STP_heg_cannibal_war_anchor = { has_war_with = STS }
-				}
-				add_to_war = {
-					targeted_alliance = event_target:STP_heg_cannibal_war_anchor
-					enemy = STS
-					hostility_reason = asked_to_join
-					single_target_only = yes
-				}
+			declare_war_on = {
+				target = APH
+				type = annex_everything
 			}
 		}
-		OSF = {
-			if = {
-				limit = {
-					has_country_flag = STP_heg_cannibal_campaign_active
-					NOT = { has_war_with = STS }
-					event_target:STP_heg_cannibal_war_anchor = { has_war_with = STS }
-				}
-				add_to_war = {
-					targeted_alliance = event_target:STP_heg_cannibal_war_anchor
-					enemy = STS
-					hostility_reason = asked_to_join
-					single_target_only = yes
-				}
-			}
-		}
-		APH = {
-			if = {
-				limit = {
-					has_country_flag = STP_heg_cannibal_campaign_active
-					NOT = { has_war_with = STS }
-					event_target:STP_heg_cannibal_war_anchor = { has_war_with = STS }
-				}
-				add_to_war = {
-					targeted_alliance = event_target:STP_heg_cannibal_war_anchor
-					enemy = STS
-					hostility_reason = asked_to_join
-					single_target_only = yes
-				}
-			}
-		}
+		CIN = { STP_heg_join_cannibal_war = yes }
+		OSF = { STP_heg_join_cannibal_war = yes }
+		APH = { STP_heg_join_cannibal_war = yes }
 		if = {
-			limit = { event_target:STP_heg_cannibal_war_anchor = { has_war_with = STS } }
+			limit = {
+				has_completed_focus = STP_pc_heg_northern_administration
+				event_target:STP_heg_cannibal_war_anchor = {
+					has_war_with = event_target:STP_heg_cannibal_leader
+				}
+			}
 			NKA = {
 				add_to_war = {
-					targeted_alliance = STS
+					targeted_alliance = event_target:STP_heg_cannibal_leader
 					enemy = event_target:STP_heg_cannibal_war_anchor
 					hostility_reason = asked_to_join
 				}
@@ -15037,180 +15972,841 @@ STP_heg_start_cannibal_campaign = {
 	}
 }
 
-# Native capitulation scope. Territorial delivery uses the pre-peace ownership
-# snapshot, as the default surrender handler can otherwise restore controllers.
+# Native capitulation scope. A receipt belongs only to this campaign's victor.
 STP_heg_settle_cannibal_campaign = {
 	if = {
 		limit = { STP_heg_cannibal_capitulation_managed = yes }
 		ROOT = { set_country_flag = STP_heg_cannibal_defeated }
 		STS = { STP_heg_finish_cannibal_campaign = yes }
+		STP = { STP_heg_finish_cannibal_campaign = yes }
 	}
 }
 
-# STS scope. Freeze every participant and its land before a native white peace
-# can close the shared war and invoke reconciliation for the other members.
+# Member country scope. Freeze owners and eligible controllers before native peace.
+STP_heg_snapshot_cannibal_member = {
+	if = {
+		limit = {
+			has_country_flag = STP_heg_cannibal_campaign_active
+			has_country_flag = STP_heg_cannibal_defeated
+		}
+		event_target:STP_heg_cannibal_leader = {
+			add_to_temp_array = {
+				array = STP_heg_cannibal_defeated_countries
+				value = PREV
+			}
+		}
+		if = {
+			limit = { all_owned_state = { STP_heg_cannibal_state_awardable = yes } }
+			event_target:STP_heg_cannibal_leader = {
+				add_to_temp_array = {
+					array = STP_heg_cannibal_annexable_countries
+					value = PREV
+				}
+			}
+		}
+		every_owned_state = {
+			limit = { STP_heg_cannibal_state_awardable = yes }
+			event_target:STP_heg_cannibal_leader = {
+				add_to_temp_array = {
+					array = STP_heg_cannibal_awarded_states
+					value = PREV
+				}
+			}
+		}
+	}
+}
+
+# STP/STS scope. Peace may synchronously invoke callbacks for all coalition members.
+# The guard preserves the snapshots until the complete territorial award is delivered.
 STP_heg_finish_cannibal_campaign = {
 	if = {
 		limit = { STP_heg_cannibal_campaign_won = yes }
 		set_country_flag = STP_heg_cannibal_settlement_in_progress
+		save_event_target_as = STP_heg_cannibal_leader
+		save_event_target_as = STP_heg_cannibal_recipient
+		if = {
+			limit = { has_completed_focus = STP_pc_heg_northern_administration }
+			NKA = { save_event_target_as = STP_heg_cannibal_recipient }
+		}
 		clear_temp_array = STP_heg_cannibal_defeated_countries
+		clear_temp_array = STP_heg_cannibal_annexable_countries
 		clear_temp_array = STP_heg_cannibal_awarded_states
-		CIN = {
-			if = {
-				limit = { has_country_flag = STP_heg_cannibal_campaign_active }
-				STS = {
-					add_to_temp_array = { array = STP_heg_cannibal_defeated_countries value = PREV }
-				}
-				every_owned_state = {
-					STS = { add_to_temp_array = { array = STP_heg_cannibal_awarded_states value = PREV } }
-				}
-			}
-		}
-		OSF = {
-			if = {
-				limit = { has_country_flag = STP_heg_cannibal_campaign_active }
-				STS = {
-					add_to_temp_array = { array = STP_heg_cannibal_defeated_countries value = PREV }
-				}
-				every_owned_state = {
-					STS = { add_to_temp_array = { array = STP_heg_cannibal_awarded_states value = PREV } }
-				}
-			}
-		}
-		APH = {
-			if = {
-				limit = { has_country_flag = STP_heg_cannibal_campaign_active }
-				STS = {
-					add_to_temp_array = { array = STP_heg_cannibal_defeated_countries value = PREV }
-				}
-				every_owned_state = {
-					STS = { add_to_temp_array = { array = STP_heg_cannibal_awarded_states value = PREV } }
-				}
-			}
-		}
+		CIN = { STP_heg_snapshot_cannibal_member = yes }
+		OSF = { STP_heg_snapshot_cannibal_member = yes }
+		APH = { STP_heg_snapshot_cannibal_member = yes }
 		for_each_scope_loop = {
 			array = STP_heg_cannibal_defeated_countries
 			STP_heg_clear_cannibal_campaign = yes
-			if = { limit = { has_war_with = STS } white_peace = STS }
-			if = { limit = { has_war_with = NKA } white_peace = NKA }
 			if = {
-				limit = { is_ai = no }
-				NKA = { change_tag_from = PREV }
+				limit = { has_war_with = event_target:STP_heg_cannibal_leader }
+				white_peace = event_target:STP_heg_cannibal_leader
 			}
-			NKA = { annex_country = { target = PREV transfer_troops = no } }
-		}
-		for_each_scope_loop = {
-			array = STP_heg_cannibal_awarded_states
-			NKA = { transfer_state = PREV }
-			set_state_controller_to = NKA
 			if = {
 				limit = {
-					OR = {
-						is_core_of = CIN
-						is_core_of = OSF
-						is_core_of = APH
+					event_target:STP_heg_cannibal_leader = {
+						has_completed_focus = STP_pc_heg_northern_administration
+					}
+					has_war_with = NKA
+				}
+				white_peace = NKA
+			}
+			if = { limit = { is_in_faction = yes } leave_faction = yes }
+			event_target:STP_heg_cannibal_leader = {
+				set_autonomy = {
+					target = PREV
+					autonomy_state = autonomy_puppet
+					freedom_level = 0.10
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+			every_owned_state = {
+				limit = {
+					controller = {
+						OR = {
+							tag = event_target:STP_heg_cannibal_leader
+							is_subject_of = event_target:STP_heg_cannibal_leader
+						}
 					}
 				}
-				add_core_of = NKA
+				set_state_controller_to = PREV
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+		if = {
+			limit = { STP_heg_cannibal_direct_settlement = yes }
+			for_each_scope_loop = {
+				array = STP_heg_cannibal_annexable_countries
+				if = {
+					limit = { is_subject_of = event_target:STP_heg_cannibal_leader }
+					if = {
+						limit = { is_ai = no }
+						event_target:STP_heg_cannibal_recipient = { change_tag_from = PREV }
+					}
+					event_target:STP_heg_cannibal_recipient = {
+						annex_country = {
+							target = PREV
+							transfer_troops = no
+						}
+					}
+				}
+			}
+			for_each_scope_loop = {
+				array = STP_heg_cannibal_awarded_states
+				if = {
+					limit = {
+						OR = {
+							is_owned_by = event_target:STP_heg_cannibal_recipient
+							owner = { is_subject_of = event_target:STP_heg_cannibal_leader }
+						}
+						controller = {
+							OR = {
+								tag = event_target:STP_heg_cannibal_leader
+								is_subject_of = event_target:STP_heg_cannibal_leader
+							}
+						}
+					}
+					event_target:STP_heg_cannibal_recipient = { transfer_state = PREV }
+					set_state_controller_to = event_target:STP_heg_cannibal_recipient
+					if = {
+						limit = {
+							OR = {
+								is_core_of = CIN
+								is_core_of = OSF
+								is_core_of = APH
+							}
+						}
+						add_core_of = event_target:STP_heg_cannibal_recipient
+					}
+				}
 			}
 		}
 		clear_temp_array = STP_heg_cannibal_defeated_countries
+		clear_temp_array = STP_heg_cannibal_annexable_countries
 		clear_temp_array = STP_heg_cannibal_awarded_states
-		NKA = {
-			if = {
-				limit = { owns_state = 64 }
-				set_capital = { state = 64 remember_old_capital = no }
+		if = {
+			limit = { has_completed_focus = STP_pc_heg_northern_administration }
+			NKA = {
+				if = {
+					limit = { owns_state = 64 }
+					set_capital = {
+						state = 64
+						remember_old_capital = no
+					}
+				}
+				STP_heg_install_nka_administrator = yes
+				ADISCORD_economy_mark_dirty = yes
 			}
-			STP_heg_install_nka_administrator = yes
-			ADISCORD_economy_mark_dirty = yes
 		}
 		clr_country_flag = STP_heg_cannibal_settlement_in_progress
+		STP_heg_clear_cannibal_campaign = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
-# Event-driven reconciliation; a different overlord or a peace ends the mandate.
+# Member scope. Native subjugation, disappearance or a separate peace closes enrollment.
+STP_heg_reconcile_cannibal_member = {
+	if = {
+		limit = {
+			has_country_flag = STP_heg_cannibal_campaign_active
+			OR = {
+				exists = no
+				is_subject = yes
+				NOT = {
+					OR = {
+						AND = {
+							has_war_with = STS
+							STS = { STP_heg_cannibal_leader_current = yes }
+						}
+						AND = {
+							has_war_with = STP
+							STP = { STP_heg_cannibal_leader_current = yes }
+						}
+					}
+				}
+			}
+		}
+		STP_heg_clear_cannibal_campaign = yes
+	}
+}
+
+# Event-driven reconciliation. Temporary local targets are rebuilt on each callback.
 STP_heg_reconcile_cannibal_campaign = {
-	CIN = {
+	if = {
+		limit = {
+			STS = { NOT = { has_country_flag = STP_heg_cannibal_settlement_in_progress } }
+			STP = { NOT = { has_country_flag = STP_heg_cannibal_settlement_in_progress } }
+		}
+		CIN = { STP_heg_reconcile_cannibal_member = yes }
+		OSF = { STP_heg_reconcile_cannibal_member = yes }
+		APH = { STP_heg_reconcile_cannibal_member = yes }
+		STS = { STP_heg_finish_cannibal_campaign = yes }
+		STP = { STP_heg_finish_cannibal_campaign = yes }
 		if = {
 			limit = {
-				has_country_flag = STP_heg_cannibal_campaign_active
+				CIN = { NOT = { has_country_flag = STP_heg_cannibal_campaign_active } }
+				OSF = { NOT = { has_country_flag = STP_heg_cannibal_campaign_active } }
+				APH = { NOT = { has_country_flag = STP_heg_cannibal_campaign_active } }
+			}
+			STS = { STP_heg_clear_cannibal_campaign = yes }
+			STP = { STP_heg_clear_cannibal_campaign = yes }
+		}
+	}
+}
+
+# Subject scope. Whole-country incorporation is allowed only inside the eight-state award.
+STP_sdir_merge_cannibal_subject = {
+	if = {
+		limit = {
+			exists = yes
+			is_subject_of = STS
+			has_war = no
+			all_owned_state = {
+				STP_sdir_cannibal_state_transferable = yes
 				OR = {
-					exists = no
-					is_subject = yes
-					NOT = { has_war_with = STS }
-					STS = {
-						OR = {
-							exists = no
-							is_subject = yes
-							has_capitulated = yes
-						}
+					state = 58
+					state = 59
+					state = 60
+					state = 61
+					state = 62
+					state = 63
+					state = 64
+					state = 65
+				}
+			}
+		}
+		if = {
+			limit = { is_ai = no }
+			STS = { change_tag_from = PREV }
+		}
+		STS = {
+			annex_country = {
+				target = PREV
+				transfer_troops = no
+			}
+		}
+	}
+}
+
+# Peace and subject callbacks can finish a dependant's separate war after the STS treaty.
+STP_sdir_follow_up_cannibal_conquests = {
+	if = {
+		limit = {
+			OR = {
+				ROOT = { OR = { tag = VAL tag = NKA tag = CIN tag = OSF tag = APH } }
+				FROM = { OR = { tag = VAL tag = NKA tag = CIN tag = OSF tag = APH } }
+			}
+			STS = {
+				STP_pc_sword_directory_current = yes
+				NOT = { has_country_flag = STP_heg_cannibal_settlement_in_progress }
+			}
+		}
+		STS = { STP_sdir_absorb_cannibal_conquests = yes }
+	}
+}
+
+# STS scope. Only the directory's existing subjects can surrender these eight states.
+STP_sdir_absorb_cannibal_conquests = {
+	if = {
+		limit = {
+			STP_pc_sword_directory_branch = yes
+			check_variable = { var = STP_pc_course value = 3 compare = equals }
+			is_subject = no
+			has_capitulated = no
+		}
+		VAL = { STP_sdir_merge_cannibal_subject = yes }
+		NKA = { STP_sdir_merge_cannibal_subject = yes }
+		CIN = { STP_sdir_merge_cannibal_subject = yes }
+		OSF = { STP_sdir_merge_cannibal_subject = yes }
+		APH = { STP_sdir_merge_cannibal_subject = yes }
+		58 = {
+			if = {
+				limit = { STP_sdir_cannibal_state_transferable = yes }
+				owner = { ADISCORD_economy_mark_dirty = yes }
+				STS = { transfer_state = 58 }
+				set_state_controller_to = STS
+				add_core_of = STS
+			}
+		}
+		59 = {
+			if = {
+				limit = { STP_sdir_cannibal_state_transferable = yes }
+				owner = { ADISCORD_economy_mark_dirty = yes }
+				STS = { transfer_state = 59 }
+				set_state_controller_to = STS
+				add_core_of = STS
+			}
+		}
+		60 = {
+			if = {
+				limit = { STP_sdir_cannibal_state_transferable = yes }
+				owner = { ADISCORD_economy_mark_dirty = yes }
+				STS = { transfer_state = 60 }
+				set_state_controller_to = STS
+				add_core_of = STS
+			}
+		}
+		61 = {
+			if = {
+				limit = { STP_sdir_cannibal_state_transferable = yes }
+				owner = { ADISCORD_economy_mark_dirty = yes }
+				STS = { transfer_state = 61 }
+				set_state_controller_to = STS
+				add_core_of = STS
+			}
+		}
+		62 = {
+			if = {
+				limit = { STP_sdir_cannibal_state_transferable = yes }
+				owner = { ADISCORD_economy_mark_dirty = yes }
+				STS = { transfer_state = 62 }
+				set_state_controller_to = STS
+				add_core_of = STS
+			}
+		}
+		63 = {
+			if = {
+				limit = { STP_sdir_cannibal_state_transferable = yes }
+				owner = { ADISCORD_economy_mark_dirty = yes }
+				STS = { transfer_state = 63 }
+				set_state_controller_to = STS
+				add_core_of = STS
+			}
+		}
+		64 = {
+			if = {
+				limit = { STP_sdir_cannibal_state_transferable = yes }
+				owner = { ADISCORD_economy_mark_dirty = yes }
+				STS = { transfer_state = 64 }
+				set_state_controller_to = STS
+				add_core_of = STS
+			}
+		}
+		65 = {
+			if = {
+				limit = { STP_sdir_cannibal_state_transferable = yes }
+				owner = { ADISCORD_economy_mark_dirty = yes }
+				STS = { transfer_state = 65 }
+				set_state_controller_to = STS
+				add_core_of = STS
+			}
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# Directory production receipts survive ordinary save/load and settle exactly once.
+
+# Country scope. Charge materials across producers and undo a partial package.
+STP_sdir_pay_district_materials = {
+	set_temp_variable = {
+		var = STP_sdir_district_materials_paid
+		value = 0
+	}
+	set_temp_variable = {
+		var = STP_sdir_district_support_remaining
+		value = STP_sdir_district_support_input
+	}
+	set_temp_variable = {
+		var = STP_sdir_district_trucks_remaining
+		value = STP_sdir_district_trucks_input
+	}
+	every_possible_country = {
+		limit = {
+			PREV = {
+				OR = {
+					check_variable = {
+						var = STP_sdir_district_support_remaining
+						value = 0
+						compare = greater_than
 					}
-					NKA = {
-						OR = {
-							exists = no
-							has_capitulated = yes
-							NOT = { is_subject_of = STS }
-						}
+					check_variable = {
+						var = STP_sdir_district_trucks_remaining
+						value = 0
+						compare = greater_than
 					}
 				}
 			}
-			STP_heg_clear_cannibal_campaign = yes
 		}
-	}
-	OSF = {
-		if = {
-			limit = {
-				has_country_flag = STP_heg_cannibal_campaign_active
-				OR = {
-					exists = no
-					is_subject = yes
-					NOT = { has_war_with = STS }
-					STS = {
-						OR = {
-							exists = no
-							is_subject = yes
-							has_capitulated = yes
-						}
-					}
-					NKA = {
-						OR = {
-							exists = no
-							has_capitulated = yes
-							NOT = { is_subject_of = STS }
-						}
+		PREV = {
+			if = {
+				limit = {
+					check_variable = {
+						var = STP_sdir_district_support_remaining
+						value = 0
+						compare = greater_than
 					}
 				}
-			}
-			STP_heg_clear_cannibal_campaign = yes
-		}
-	}
-	APH = {
-		if = {
-			limit = {
-				has_country_flag = STP_heg_cannibal_campaign_active
-				OR = {
-					exists = no
-					is_subject = yes
-					NOT = { has_war_with = STS }
-					STS = {
-						OR = {
-							exists = no
-							is_subject = yes
-							has_capitulated = yes
-						}
-					}
-					NKA = {
-						OR = {
-							exists = no
-							has_capitulated = yes
-							NOT = { is_subject_of = STS }
-						}
-					}
+				set_temp_variable = {
+					var = STP_sdir_district_material_before
+					value = num_equipment@support_equipment
+				}
+				set_temp_variable = {
+					var = STP_sdir_district_material_debit
+					value = STP_sdir_district_support_remaining
+				}
+				multiply_temp_variable = {
+					var = STP_sdir_district_material_debit
+					value = -1
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = STP_sdir_district_material_debit
+					producer = PREV
+				}
+				subtract_from_temp_variable = {
+					var = STP_sdir_district_material_before
+					value = num_equipment@support_equipment
+				}
+				subtract_from_temp_variable = {
+					var = STP_sdir_district_support_remaining
+					value = STP_sdir_district_material_before
 				}
 			}
-			STP_heg_clear_cannibal_campaign = yes
+			if = {
+				limit = {
+					check_variable = {
+						var = STP_sdir_district_trucks_remaining
+						value = 0
+						compare = greater_than
+					}
+				}
+				set_temp_variable = {
+					var = STP_sdir_district_material_before
+					value = num_equipment@motorized_equipment
+				}
+				set_temp_variable = {
+					var = STP_sdir_district_material_debit
+					value = STP_sdir_district_trucks_remaining
+				}
+				multiply_temp_variable = {
+					var = STP_sdir_district_material_debit
+					value = -1
+				}
+				add_equipment_to_stockpile = {
+					type = motorized_equipment
+					amount = STP_sdir_district_material_debit
+					producer = PREV
+				}
+				subtract_from_temp_variable = {
+					var = STP_sdir_district_material_before
+					value = num_equipment@motorized_equipment
+				}
+				subtract_from_temp_variable = {
+					var = STP_sdir_district_trucks_remaining
+					value = STP_sdir_district_material_before
+				}
+			}
 		}
 	}
-	STS = { STP_heg_finish_cannibal_campaign = yes }
+	if = {
+		limit = {
+			check_variable = {
+				var = STP_sdir_district_support_remaining
+				value = 0
+				compare = equals
+			}
+			check_variable = {
+				var = STP_sdir_district_trucks_remaining
+				value = 0
+				compare = equals
+			}
+		}
+		set_temp_variable = {
+			var = STP_sdir_district_materials_paid
+			value = 1
+		}
+	}
+	else = {
+		set_temp_variable = {
+			var = STP_sdir_district_material_refund
+			value = STP_sdir_district_support_input
+		}
+		subtract_from_temp_variable = {
+			var = STP_sdir_district_material_refund
+			value = STP_sdir_district_support_remaining
+		}
+		add_equipment_to_stockpile = {
+			type = support_equipment
+			amount = STP_sdir_district_material_refund
+		}
+		set_temp_variable = {
+			var = STP_sdir_district_material_refund
+			value = STP_sdir_district_trucks_input
+		}
+		subtract_from_temp_variable = {
+			var = STP_sdir_district_material_refund
+			value = STP_sdir_district_trucks_remaining
+		}
+		add_equipment_to_stockpile = {
+			type = motorized_equipment
+			amount = STP_sdir_district_material_refund
+		}
+	}
+}
+
+# Country scope, FROM is the selected state; the caller supplies only the project kind.
+STP_sdir_district_project_begin = {
+	if = {
+		limit = { STP_sdir_district_project_can_begin = yes }
+		set_temp_variable = {
+			var = STP_sdir_district_support_input
+			value = 100
+		}
+		set_temp_variable = {
+			var = STP_sdir_district_trucks_input
+			value = 0
+		}
+		set_temp_variable = {
+			var = STP_sdir_district_treasury_input
+			value = 350
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_sdir_district_project_input
+					value = 2
+					compare = equals
+				}
+			}
+			set_temp_variable = {
+				var = STP_sdir_district_support_input
+				value = 0
+			}
+			set_temp_variable = {
+				var = STP_sdir_district_trucks_input
+				value = 200
+			}
+			set_temp_variable = {
+				var = STP_sdir_district_treasury_input
+				value = 600
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					var = STP_sdir_district_project_input
+					value = 3
+					compare = equals
+				}
+			}
+			set_temp_variable = {
+				var = STP_sdir_district_treasury_input
+				value = 900
+			}
+		}
+		STP_sdir_pay_district_materials = yes
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_sdir_district_materials_paid
+					value = 1
+					compare = equals
+				}
+			}
+			subtract_from_variable = {
+				var = ADISCORD_economy_treasury
+				value = STP_sdir_district_treasury_input
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_costs
+				value = STP_sdir_district_treasury_input
+			}
+			FROM = {
+				set_variable = {
+					var = STP_sdir_district_project_kind
+					value = PREV.STP_sdir_district_project_input
+				}
+				set_variable = {
+					var = STP_sdir_district_treasury_deposit
+					value = PREV.STP_sdir_district_treasury_input
+				}
+				set_variable = {
+					var = STP_sdir_district_support_deposit
+					value = PREV.STP_sdir_district_support_input
+				}
+				set_variable = {
+					var = STP_sdir_district_trucks_deposit
+					value = PREV.STP_sdir_district_trucks_input
+				}
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+# State scope. A cleared receipt makes repeated completion/cancellation harmless.
+STP_sdir_clear_district_project = {
+	clear_variable = STP_sdir_district_project_kind
+	clear_variable = STP_sdir_district_treasury_deposit
+	clear_variable = STP_sdir_district_support_deposit
+	clear_variable = STP_sdir_district_trucks_deposit
+}
+
+STP_sdir_district_project_refund = {
+	if = {
+		limit = { has_variable = STP_sdir_district_project_kind }
+		STS = {
+			set_temp_variable = {
+				var = STP_sdir_district_treasury_refund
+				value = PREV.STP_sdir_district_treasury_deposit
+			}
+			set_temp_variable = {
+				var = STP_sdir_district_support_refund
+				value = PREV.STP_sdir_district_support_deposit
+			}
+			set_temp_variable = {
+				var = STP_sdir_district_trucks_refund
+				value = PREV.STP_sdir_district_trucks_deposit
+			}
+		}
+		STP_sdir_clear_district_project = yes
+		STS = {
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = STP_sdir_district_treasury_refund
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = STP_sdir_district_treasury_refund
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = STP_sdir_district_support_refund
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = STP_sdir_district_trucks_refund
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+STP_sdir_district_project_finish = {
+	if = {
+		limit = { STP_sdir_district_project_current = yes }
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_sdir_district_project_kind
+					value = 1
+					compare = equals
+				}
+			}
+			STP_sdir_clear_district_project = yes
+			if = {
+				limit = { anti_air_building < 4 }
+				add_building_construction = {
+					type = anti_air_building
+					level = 2
+					instant_build = yes
+				}
+			}
+			else = {
+				add_building_construction = {
+					type = anti_air_building
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					var = STP_sdir_district_project_kind
+					value = 2
+					compare = equals
+				}
+			}
+			STP_sdir_clear_district_project = yes
+			if = {
+				limit = { air_base < 9 }
+				add_building_construction = {
+					type = air_base
+					level = 2
+					instant_build = yes
+				}
+			}
+			else = {
+				add_building_construction = {
+					type = air_base
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+		else = {
+			STP_sdir_clear_district_project = yes
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+		STS = { ADISCORD_economy_mark_dirty = yes }
+	}
+	else = { STP_sdir_district_project_refund = yes }
+}
+
+# Country lifecycle scope. The payer's disappearance cannot strand state receipts.
+STP_sdir_refund_all_district_projects = {
+	1 = { STP_sdir_district_project_refund = yes }
+	2 = { STP_sdir_district_project_refund = yes }
+	3 = { STP_sdir_district_project_refund = yes }
+	10 = { STP_sdir_district_project_refund = yes }
+	11 = { STP_sdir_district_project_refund = yes }
+	24 = { STP_sdir_district_project_refund = yes }
+	28 = { STP_sdir_district_project_refund = yes }
+	29 = { STP_sdir_district_project_refund = yes }
+	42 = { STP_sdir_district_project_refund = yes }
+	43 = { STP_sdir_district_project_refund = yes }
+	44 = { STP_sdir_district_project_refund = yes }
+	45 = { STP_sdir_district_project_refund = yes }
+	46 = { STP_sdir_district_project_refund = yes }
+	53 = { STP_sdir_district_project_refund = yes }
+	54 = { STP_sdir_district_project_refund = yes }
+	55 = { STP_sdir_district_project_refund = yes }
+	57 = { STP_sdir_district_project_refund = yes }
+	58 = { STP_sdir_district_project_refund = yes }
+	59 = { STP_sdir_district_project_refund = yes }
+	60 = { STP_sdir_district_project_refund = yes }
+	61 = { STP_sdir_district_project_refund = yes }
+	62 = { STP_sdir_district_project_refund = yes }
+	63 = { STP_sdir_district_project_refund = yes }
+	64 = { STP_sdir_district_project_refund = yes }
+	65 = { STP_sdir_district_project_refund = yes }
+	88 = { STP_sdir_district_project_refund = yes }
+}
+
+STP_sdir_rear_refund = {
+	if = {
+		limit = {
+			has_variable = STP_sdir_rear_deposit
+			FROM = { has_state_flag = STP_sdir_rear_work }
+		}
+		add_to_variable = { var = ADISCORD_economy_treasury value = STP_sdir_rear_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_sdir_rear_deposit }
+		clear_variable = STP_sdir_rear_deposit
+		FROM = { clr_state_flag = STP_sdir_rear_work }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_sdir_arsenal_begin = {
+	if = {
+		limit = { STP_sdir_arsenal_can_pay = yes }
+		clr_country_flag = STP_sdir_arsenal_offer_pending
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+		set_variable = { var = STP_sdir_arsenal_deposit value = 300 }
+		activate_mission = STP_sdir_arsenal_work
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_sdir_arsenal_refund = {
+	if = {
+		limit = { has_variable = STP_sdir_arsenal_deposit }
+		add_to_variable = { var = ADISCORD_economy_treasury value = STP_sdir_arsenal_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_sdir_arsenal_deposit }
+		clear_variable = STP_sdir_arsenal_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_sdir_arsenal_finish = {
+	if = {
+		limit = { has_variable = STP_sdir_arsenal_deposit }
+		if = {
+			limit = {
+				STP_sdir_programmes_current = yes
+				STP_sdir_arsenal_site_available = yes
+			}
+			clear_variable = STP_sdir_arsenal_deposit
+			set_country_flag = STP_sdir_arsenal_delivered
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 900 }
+			add_equipment_to_stockpile = { type = support_equipment amount = 100 }
+		}
+		else = { STP_sdir_arsenal_refund = yes }
+	}
+}
+
+STP_sdir_naval_begin = {
+	if = {
+		limit = { STP_sdir_naval_can_pay = yes }
+		clr_country_flag = STP_sdir_naval_offer_pending
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+		set_variable = { var = STP_sdir_naval_deposit value = 300 }
+		activate_mission = STP_sdir_naval_work
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_sdir_naval_refund = {
+	if = {
+		limit = { has_variable = STP_sdir_naval_deposit }
+		add_to_variable = { var = ADISCORD_economy_treasury value = STP_sdir_naval_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_sdir_naval_deposit }
+		clear_variable = STP_sdir_naval_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_sdir_naval_finish = {
+	if = {
+		limit = { has_variable = STP_sdir_naval_deposit }
+		if = {
+			limit = {
+				STP_sdir_programmes_current = yes
+				STP_sdir_naval_site_available = yes
+			}
+			clear_variable = STP_sdir_naval_deposit
+			set_country_flag = STP_sdir_naval_delivered
+			add_equipment_to_stockpile = { type = convoy_1 amount = 20 }
+			add_equipment_to_stockpile = { type = motorized_equipment amount = 50 }
+		}
+		else = { STP_sdir_naval_refund = yes }
+	}
 }

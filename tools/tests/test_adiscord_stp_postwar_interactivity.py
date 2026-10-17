@@ -3,6 +3,7 @@
 from tools.lib.on_actions import read_country_on_actions
 from pathlib import Path
 from tools.lib.focus_sources import read_focus_source
+import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -134,9 +135,6 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
         self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
         lines = raw.decode("utf-8-sig").splitlines()
         keys = [
-            "STP_pw_price_50",
-            "STP_pw_price_50_blocked",
-            "STP_pw_price_50_tooltip",
             "STP_postwar_reconstruction_drive",
             "STP_postwar_reconstruction_drive_desc",
             "STP_postwar_propaganda_campaigns",
@@ -150,6 +148,10 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
             "STP_pw_campaign_engineers_of_peace",
             "STP_pw_campaign_victory_means_normal_life",
         ]
+        decisions = read("common/decisions/ADISCORD_STP_decisions.txt")
+        prices = set(re.findall(r"custom_cost_text\s*=\s*(STP_pw_[A-Za-z0-9_]+)", decisions))
+        self.assertTrue(prices)
+        keys.extend(key + suffix for key in sorted(prices) for suffix in ("", "_blocked", "_tooltip"))
         for key in keys:
             found = [line for line in lines if line.lstrip().startswith(key + ":")]
             self.assertEqual(len(found), 1, key)

@@ -5,6 +5,7 @@ VAL_expansion_priority_plan = {
 	desc = ""
 	allowed = { original_tag = VAL }
 	enable = {
+		NOT = { has_country_flag = VAL_council_in_power }
 		NOT = { has_focus_tree = VAL_new_world_focus }
 		tag = VAL
 		is_ai = yes
@@ -14,6 +15,7 @@ VAL_expansion_priority_plan = {
 	}
 	abort = {
 		OR = {
+			has_country_flag = VAL_council_in_power
 			has_focus_tree = VAL_new_world_focus
 			NOT = { tag = VAL }
 			is_subject = yes
@@ -138,4 +140,92 @@ VAL_new_world_plan = {
 		VAL_nw_break_ring
 	}
 	weight = { factor = 100 }
+}
+
+# --- commanders_council ---
+VAL_council_government_plan = {
+	name = "Council government programme"
+	desc = ""
+	allowed = {
+		original_tag = VAL
+	}
+	enable = {
+		is_ai = yes
+		has_focus_tree = VAL_focus
+		VAL_council_operational = yes
+	}
+	abort = {
+		OR = {
+			VAL_council_operational = no
+			NOT = {
+				has_focus_tree = VAL_focus
+			}
+		}
+	}
+	ai_national_focuses = {
+		VAL_council_takes_command
+		VAL_council_supreme_command
+		VAL_council_district_staffs
+		VAL_council_mandatory_reserve
+		VAL_council_state_inspectors
+		VAL_council_emergency_budget
+		VAL_council_contract_review
+		VAL_council_direct_orders
+		VAL_council_procurement_commissions
+		VAL_council_staff_acceptance
+		VAL_council_losses_review
+		VAL_council_officer_inquiry
+		VAL_council_disciplinary_hearings
+		VAL_council_council_inspection
+		VAL_The_Contract_State
+		VAL_Stelander_Crisis_Opens
+		VAL_Seize_The_Northern_Passes
+		VAL_The_Steel_Contract
+		VAL_Occidian_Claims_Commission
+		VAL_Occidian_Registries
+		VAL_Integrate_Occidia
+		VAL_One_Ledger_One_Banner
+		VAL_Market_Roads_North
+		VAL_October_Of_2160
+		VAL_Different_Views_On_Freedom
+		VAL_The_Mercenary_State
+		VAL_Company_Rosters
+		VAL_Company_Service_Code
+		VAL_Hire_Out_War
+		VAL_Stahls_Schedules
+		VAL_Morns_Supply_Trains
+		VAL_Field_Repair_Corps
+		VAL_Logistics_Command
+		VAL_Reserve_Battalions
+		VAL_Operational_Reserves
+		VAL_Contract_General_Staff
+		VAL_Army_Of_The_Ledger
+		VAL_Quarterly_Contract_Norm
+		VAL_Central_Payment_Office
+		VAL_Provincial_Contract_Courts
+		VAL_Operational_Directorate
+		VAL_Vorkerland_Contracts_Burn
+		VAL_Inventory_The_Empty_Yards
+		VAL_Factories_Like_Cathedrals
+		VAL_Ballistics_Schools
+		VAL_Export_Rifles_Not_Promises
+		VAL_Contract_Accounting_Office
+		VAL_Salvage_Every_Barrel
+		VAL_Munitions_Board
+		VAL_Standardize_Rifle_Lots
+		VAL_Standard_Cartridges
+		VAL_Mobilize_Machine_Shops
+		VAL_Three_Shift_Arsenals
+		VAL_Arsenal_Reserve
+		VAL_Reserve_Accounting
+		VAL_Industrial_Mobilization_Plan
+		VAL_Contracts_Outlive_Kings
+		VAL_Foreign_Broker_Licences
+		VAL_Return_Southern_Tsaygen
+		VAL_frontier_conference
+		VAL_frontier_logistics
+		VAL_frontier_provincial_offices
+		VAL_frontier_security_plan
+	}
+	weight = { factor = 50 }
 }

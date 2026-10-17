@@ -616,6 +616,10 @@ class MarchesRevoltTests(unittest.TestCase):
 
     def test_the_legion_takes_the_frontier_army_and_declares_the_war(self):
         start = body(self.IVN_EFFECTS, "IVN_start_marches_revolt")
+        history = (ROOT / "history/countries/IVC - Marches Legion.txt").read_text(encoding="utf-8")
+        self.assertIn("recruit_character = IVN_Rostislav_Karn", history)
+        self.assertNotIn("recruit_character", start)
+        self.assertIn("character = IVN_Rostislav_Karn", start)
         self.assertLess(start.index("set_global_flag = IVN_marches_revolt_active"), start.index("declare_war_on"))
         self.assertIn("IVN_adopt_emergency_order = yes", start)
         self.assertIn("transfer_units_fraction = {", start)

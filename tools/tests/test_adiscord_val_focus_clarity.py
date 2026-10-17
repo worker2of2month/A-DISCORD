@@ -11,6 +11,7 @@ from tools.tests.test_adiscord_stp_preparation import (
 )
 
 from tools.lib.focus_sources import read_focus_source
+from tools.validators.validate_adiscord_val_rework import focus_layout_coordinates, named_blocks
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -119,35 +120,20 @@ class KefreytFocusClarityTests(unittest.TestCase):
         self.assertIn("prerequisite = { focus = VAL_Foreign_Broker_Licences }", tsaygen)
 
     def test_same_row_focuses_keep_visual_clearance(self) -> None:
-        positions: list[tuple[str, int, int]] = []
-        tree = parsed_block(
-            entries("common/national_focus/ADISCORD_national_focus_VAL.txt"),
-            "focus_tree",
-        )
-        for entry in tree:
-            if entry.key == "focus":
-                positions.append(
-                    (
-                        scalar(entry.value, "id"),
-                        int(scalar(entry.value, "x")),
-                        int(scalar(entry.value, "y")),
+        for council in (False, True):
+            positions = focus_layout_coordinates(named_blocks(self.focuses, "focus"), council)
+            self.assertGreater(len(positions), 1, "The layout check must visit focus nodes")
+            rows: dict[int, list[tuple[int, str]]] = {}
+            for focus_id, (x, y) in positions.items():
+                rows.setdefault(y, []).append((x, focus_id))
+            for y, row in rows.items():
+                row.sort()
+                for (left_x, left_id), (right_x, right_id) in zip(row, row[1:]):
+                    self.assertGreaterEqual(
+                        right_x - left_x,
+                        2,
+                        f"Focus nodes merge (council={council}) on row {y}: {left_id} at x={left_x}, {right_id} at x={right_x}",
                     )
-                )
-        self.assertGreater(len(positions), 1, "The layout check must visit focus nodes")
-        self.assertEqual(len(positions), len({name for name, _, _ in positions}))
-
-        rows: dict[int, list[tuple[int, str]]] = {}
-        for focus_id, x, y in positions:
-            rows.setdefault(y, []).append((x, focus_id))
-
-        for y, row in rows.items():
-            row.sort()
-            for (left_x, left_id), (right_x, right_id) in zip(row, row[1:]):
-                self.assertGreaterEqual(
-                    right_x - left_x,
-                    2,
-                    f"Focus nodes visually merge on row {y}: {left_id} at x={left_x}, {right_id} at x={right_x}",
-                )
 
     def test_population_opens_early_and_frontier_waits_for_contract_readiness(self) -> None:
         harvest = focus(self.focuses, "VAL_The_Harvest_Of_Ash")

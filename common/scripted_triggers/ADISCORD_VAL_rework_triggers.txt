@@ -2361,15 +2361,16 @@ VAL_partner_offer_current = {
 }
 
 VAL_partner_trade_terms_valid = {
-	VAL_contract_partner = yes
-	NOT = { has_country_flag = VAL_market_term_started }
-	OR = { has_country_flag = VAL_trade_fee_paid VAL = { NOT = { has_political_power < 100 } } }
-	OR = { AND = { tag = CIN VAL = { NOT = { has_country_flag = VAL_market_contract_CIN_active } } }
-		AND = { tag = OSF VAL = { NOT = { has_country_flag = VAL_market_contract_OSF_active } } }
-		AND = { tag = APH VAL = { NOT = { has_country_flag = VAL_market_contract_APH_active } } }
-		AND = { tag = COF VAL = { NOT = { has_country_flag = VAL_market_contract_COF_active } } }
-		AND = { tag = TFF VAL = { NOT = { has_country_flag = VAL_market_contract_TFF_active } } }
-		AND = { tag = YPR VAL = { NOT = { has_country_flag = VAL_market_contract_YPR_active } } } }
+	VAL_partner_trade_conditions_valid = yes
+	OR = {
+		has_country_flag = VAL_council_retry_offer
+		has_country_flag = VAL_trade_fee_paid
+		VAL = {
+			NOT = {
+				has_political_power < 100
+			}
+		}
+	}
 }
 VAL_partner_trade_can_offer = {
 	VAL_partner_trade_terms_valid = yes
@@ -3280,4 +3281,133 @@ VAL_nw_can_join_khan_intervention = {
 	RUS_crisis_can_enter_common_war = yes
 	RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } }
 	NOT = { has_global_flag = RUS_crisis_world_ended }
+}
+
+# --- commanders_council ---
+VAL_council_governs = {
+	tag = VAL
+	has_country_flag = VAL_council_in_power
+	has_country_leader = { character = VAL_Commanders_Council ruling_only = yes }
+}
+
+VAL_council_operational = {
+	VAL_council_governs = yes
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+}
+
+VAL_council_personal_rule = {
+	has_country_leader = { character = VAL_Valera_Solgalov ruling_only = yes }
+	NOT = {
+		has_country_flag = VAL_council_in_power
+	}
+}
+
+VAL_council_coup_ready = {
+	tag = VAL
+	has_focus_tree = VAL_focus
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	VAL_council_personal_rule = yes
+	has_country_flag = VAL_council_stelander_war_started
+	NOT = {
+		has_country_flag = VAL_stelander_defeated
+	}
+	has_power_balance = { id = VAL_command_balance }
+	power_balance_value = { id = VAL_command_balance value < -0.749 }
+}
+
+VAL_council_program_slot_free = {
+	NOT = {
+		has_country_flag = VAL_council_staff_program
+	}
+	NOT = {
+		has_country_flag = VAL_council_inspection
+	}
+	NOT = {
+		has_country_flag = VAL_council_discipline
+	}
+	NOT = {
+		has_country_flag = VAL_council_hearing
+	}
+	NOT = {
+		has_country_flag = VAL_council_preventive_review
+	}
+}
+
+VAL_council_mandate_slot_free = {
+	NOT = {
+		has_variable = VAL_council_mandate_kind
+	}
+	NOT = {
+		has_country_flag = VAL_council_mandate_cooldown
+	}
+}
+
+VAL_council_order_slot_free = {
+	NOT = {
+		has_variable = VAL_council_order_kind
+	}
+}
+
+VAL_council_tracked_operation = {
+	OR = {
+		has_variable = VAL_council_mandate_kind
+		has_country_flag = VAL_council_emergency_budget
+	}
+}
+
+VAL_council_defence_target = {
+	is_core_of = VAL
+	is_owned_by = VAL
+	is_controlled_by = VAL
+	any_neighbor_state = {
+		controller = {
+			has_war_with = VAL
+		}
+	}
+}
+
+VAL_council_offensive_target = {
+	controller = {
+		has_war_with = VAL
+	}
+	any_neighbor_state = {
+		is_controlled_by = VAL
+	}
+}
+
+VAL_partner_trade_conditions_valid = {
+	VAL_contract_partner = yes
+	NOT = { has_country_flag = VAL_market_term_started }
+	OR = { AND = { tag = CIN VAL = { NOT = { has_country_flag = VAL_market_contract_CIN_active } } }
+		AND = { tag = OSF VAL = { NOT = { has_country_flag = VAL_market_contract_OSF_active } } }
+		AND = { tag = APH VAL = { NOT = { has_country_flag = VAL_market_contract_APH_active } } }
+		AND = { tag = COF VAL = { NOT = { has_country_flag = VAL_market_contract_COF_active } } }
+		AND = { tag = TFF VAL = { NOT = { has_country_flag = VAL_market_contract_TFF_active } } }
+		AND = { tag = YPR VAL = { NOT = { has_country_flag = VAL_market_contract_YPR_active } } } }
+}
+
+# COUNTRY VAL. One paid political settlement per case and per 90-day interval.
+VAL_council_seat_arbitration_ready = {
+	custom_trigger_tooltip = {
+		tooltip = VAL_council_operational_condition_tt
+		VAL_council_operational = yes
+	}
+	has_completed_focus = VAL_council_arbitration
+	custom_trigger_tooltip = {
+		tooltip = has_country_flag_VAL_council_case_open_condition_tt
+		has_country_flag = VAL_council_case_open
+	}
+	custom_trigger_tooltip = {
+		tooltip = VAL_council_arbitration_interval_tt
+		NOT = { has_country_flag = VAL_council_seat_arbitration_cooldown }
+	}
+	NOT = { has_political_power < 50 }
+	custom_trigger_tooltip = {
+		tooltip = VAL_council_arbitration_cash_tt
+		check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	}
 }

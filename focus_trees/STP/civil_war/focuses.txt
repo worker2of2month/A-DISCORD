@@ -665,6 +665,9 @@ focus_tree = {
 				set_temp_variable = { var = STP_hw_mandate_change value = 5 }
 				STP_hw_change_mandate = yes
 			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_cw.100 days = 1 }
+			}
 		}
 	}
 
@@ -684,6 +687,9 @@ focus_tree = {
 				add_to_variable = { var = STP_hw_councils value = 15 }
 				subtract_from_variable = { var = STP_hw_officers value = 5 }
 				STP_hw_refresh = yes
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_cw.101 days = 1 }
 			}
 		}
 	}
@@ -715,6 +721,9 @@ focus_tree = {
 				add_to_variable = { var = STP_hw_underground value = 10 }
 				set_temp_variable = { var = STP_hw_mandate_change value = 12 }
 				STP_hw_change_mandate = yes
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_cw.102 days = 1 }
 			}
 		}
 	}
@@ -768,6 +777,9 @@ focus_tree = {
 				set_temp_variable = { var = STP_hw_mandate_change value = -8 }
 				STP_hw_change_mandate = yes
 			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_cw.103 days = 1 }
+			}
 		}
 	}
 
@@ -791,6 +803,9 @@ focus_tree = {
 				set_temp_variable = { var = STP_hw_mandate_change value = 8 }
 				STP_hw_change_mandate = yes
 			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_cw.104 days = 1 }
+			}
 		}
 	}
 
@@ -811,6 +826,9 @@ focus_tree = {
 				add_to_variable = { var = STP_hw_councils value = 5 }
 				add_to_variable = { var = STP_hw_underground value = 5 }
 				STP_hw_refresh = yes
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_cw.105 days = 1 }
 			}
 		}
 	}
@@ -1283,6 +1301,9 @@ focus_tree = {
 			}
 			custom_effect_tooltip = STP_pf_army_deal_tt
 			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 4 } STP_pf_shift = yes }
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_cw.115 days = 1 }
+			}
 		}
 	}
 
@@ -1312,6 +1333,9 @@ focus_tree = {
 		completion_reward = {
 			add_war_support = 0.05
 			add_stability = 0.02
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_cw.110 days = 1 }
+			}
 		}
 	}
 
@@ -1347,6 +1371,9 @@ focus_tree = {
 				set_temp_variable = { var = STP_pf_selected value = 3 }
 				STP_pf_shift = yes
 			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_cw.111 days = 1 }
+			}
 		}
 	}
 
@@ -1374,6 +1401,9 @@ focus_tree = {
 		completion_reward = {
 			add_stability = 0.05
 			add_war_support = 0.03
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_cw.112 days = 1 }
+			}
 		}
 	}
 
@@ -1413,6 +1443,9 @@ focus_tree = {
 					value = 0.10
 				}
 				STP_cw_refresh_party_modifier = yes
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_cw.113 days = 1 }
 			}
 		}
 	}
@@ -1455,6 +1488,9 @@ focus_tree = {
 					value = -0.03
 				}
 				STP_cw_refresh_army_modifier = yes
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_cw.114 days = 1 }
 			}
 		}
 	}
@@ -2042,7 +2078,12 @@ focus_tree = {
 	# --- Advanced-material economic development ---
 
 # @include STP/postwar/shabrat/focuses.txt#investment
-# @include STP/postwar/shabrat/focuses.txt#charter_programmes
+
+# @include STP/postwar/charter/sotnikov.txt#charter_sotnikov
+
+# @include STP/postwar/charter/shabrat.txt#charter_shabrat
+
+# @include STP/postwar/charter/tikhoreva.txt#charter_tikhoreva
 	focus = {
 		id = STP_pw_regional_citizenship
 		icon = GFX_focus_STP_pw_party_open_settlement
@@ -2178,6 +2219,57 @@ focus_tree = {
 			add_tech_bonus = { name = STP_pw_common_market bonus = 0.5 uses = 1 category = industry }
 		}
 		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = STP_pc_cannibal_campaign
+		icon = GFX_focus_STP_Break_The_Northern_Ring
+		x = 3
+		y = 4
+		cost = 4
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			OR = {
+				tag = STP
+				AND = {
+					tag = STS
+					STP_pc_hegemony_continues = no
+				}
+			}
+		}
+		relative_position_id = STP_pw_regional_citizenship
+		search_filters = { FOCUS_FILTER_ANNEXATION }
+		prerequisite = {
+			focus = STP_pw_common_market
+			focus = STP_pc_sdir_northern_plan
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_cannibal_campaign_government_tt
+				STP_pw_can_reconstruct = yes
+				is_subject = no
+				has_war = no
+			}
+			RUS_crisis_regional_wars_available = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_cannibal_targets_available_tt
+				STP_heg_cannibal_targets_available = yes
+			}
+		}
+		bypass = { STP_heg_cannibals_resolved = yes }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = STP_pc_cannibal_campaign_tt
+			if = {
+				limit = { STP_pc_sword_directory_branch = yes }
+				custom_effect_tooltip = STP_pc_cannibal_campaign_annex_tt
+			}
+			else = {
+				custom_effect_tooltip = STP_pc_cannibal_campaign_subjects_tt
+			}
+			hidden_effect = { STP_heg_start_cannibal_campaign = yes }
+		}
+		ai_will_do = { base = 3 }
 	}
 
 	focus = {

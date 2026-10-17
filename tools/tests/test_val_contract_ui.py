@@ -2621,8 +2621,13 @@ class ValAnnualMarketTests(unittest.TestCase):
             read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"),
             "VAL_partner_trade_terms_valid",
         )
-        self.assertIn("NOT = { has_political_power < 100 }", trigger)
-        self.assertIn("NOT = { has_country_flag = VAL_market_term_started }", trigger)
+        self.assertRegex(trigger, r"NOT\s*=\s*\{\s*has_political_power\s*<\s*100\s*\}")
+        self.assertIn("VAL_partner_trade_conditions_valid = yes", trigger)
+        terms = named_block(
+            read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"),
+            "VAL_partner_trade_conditions_valid",
+        )
+        self.assertIn("NOT = { has_country_flag = VAL_market_term_started }", terms)
 
     def test_cannibal_income_is_lowest_and_cache_invalidated(self):
         ideas = read("common/ideas/ADISCORD_VAL_rework_ideas.txt")
@@ -2844,6 +2849,10 @@ class ValQuarterlySupplyTests(unittest.TestCase):
                     elif e.key == "has_country_flag":
                         answer = e.value in flags
                     elif e.key == "has_capitulated":
+                        answer = False
+                    elif e.key == "tag":
+                        answer = e.value == "VAL"
+                    elif e.key == "has_power_balance":
                         answer = False
                     elif e.key.startswith("event_target:"):
                         answer = True

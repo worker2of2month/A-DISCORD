@@ -661,6 +661,142 @@ ideas = {
 				ADISCORD_economy_admin_expense_factor = -0.05
 			}
 		}
+
+		# --- commanders_council ---
+		VAL_council_equal_votes_delta = {
+			name = VAL_contract_state
+			allowed = {
+				always = no
+			}
+			modifier = {
+				land_reinforce_rate = 0.01
+				supply_consumption_factor = -0.02
+			}
+		}
+
+		VAL_council_large_companies_delta = {
+			name = VAL_contract_state
+			allowed = {
+				always = no
+			}
+			modifier = {
+				max_planning_factor = 0.05
+				ADISCORD_economy_army_expense_factor = 0.03
+			}
+		}
+
+		VAL_council_supreme_command_delta = {
+			name = VAL_contract_state
+			allowed = {
+				always = no
+			}
+			modifier = {
+				army_org_factor = 0.03
+			}
+		}
+
+		VAL_council_inspectors_first_delta = {
+			name = VAL_contract_state
+			allowed = {
+				always = no
+			}
+			modifier = {
+				ADISCORD_economy_army_expense_factor = -0.05
+			}
+		}
+
+		VAL_council_consortium_delta = {
+			name = VAL_contract_state
+			allowed = {
+				always = no
+			}
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+			}
+		}
+
+		VAL_council_officer_inquiry_delta = {
+			name = VAL_contract_state
+			allowed = {
+				always = no
+			}
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		VAL_council_families_first_delta = {
+			name = VAL_contract_state
+			allowed = {
+				always = no
+			}
+			modifier = {
+				stability_factor = 0.05
+				ADISCORD_economy_social_expense_factor = 0.05
+			}
+		}
+
+		VAL_council_agreement_delta = {
+			name = VAL_contract_state
+			allowed = {
+				always = no
+			}
+			modifier = {
+				ADISCORD_economy_army_expense_factor = -0.05
+			}
+		}
+
+		VAL_council_equal_charter_delta = {
+			name = VAL_contract_state
+			allowed = {
+				always = no
+			}
+			modifier = {
+				stability_factor = 0.05
+			}
+		}
+
+		VAL_council_large_charter_delta = {
+			name = VAL_contract_state
+			allowed = {
+				always = no
+			}
+			modifier = {
+				max_planning_factor = 0.05
+			}
+		}
+
+		VAL_council_permanent_delta = {
+			name = VAL_contract_state
+			allowed = {
+				always = no
+			}
+			modifier = {
+				command_power_gain_mult = 0.1
+			}
+		}
+
+		VAL_council_limited_delta = {
+			name = VAL_contract_state
+			allowed = {
+				always = no
+			}
+			modifier = {
+				stability_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = -0.05
+			}
+		}
+
+		VAL_council_public_shock_delta = {
+			name = VAL_contract_state
+			allowed = {
+				always = no
+			}
+			modifier = {
+				stability_factor = -0.03
+				ADISCORD_economy_army_expense_factor = -0.03
+			}
+		}
 	}
 
 	hidden_ideas = {
@@ -1059,5 +1195,6 @@ ideas = {
 			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
+
 	}
 }

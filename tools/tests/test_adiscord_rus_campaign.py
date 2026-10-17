@@ -2396,6 +2396,9 @@ class RusCampaignTests(unittest.TestCase):
         actions = block(panel, "effects")
         visibility = block(panel, "triggers")
         window = next(row.value for row in block(parse("interface/ADISCORD_RUS.gui"), "guiTypes") if row.key == "containerWindowType" and scalar(row.value, "name") == "ADISCORD_RUS_bunker_window")
+        for widget in walk(window):
+            if widget.key == "containerWindowType":
+                self.assertNotIn("alwaystransparent", {row.key for row in widget.value})
         pictures = [row.value for row in walk(window) if row.key == "iconType" and "floor_" in scalar(row.value, "name") and scalar(row.value, "name").endswith("_picture")]
         self.assertEqual(len(pictures), 5)
         self.assertFalse(any("selected_picture" in scalar(row.value, "name") for row in window if row.key == "iconType"))

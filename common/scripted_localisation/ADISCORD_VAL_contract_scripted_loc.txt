@@ -1188,3 +1188,270 @@ defined_text = {
 		localization_key = VAL_nw_status_no_partners
 	}
 }
+
+# --- commanders_council ---
+defined_text = {
+	name = VALGetCouncilConstitution
+	text = {
+		trigger = {
+			has_completed_focus = VAL_council_charter
+			has_completed_focus = VAL_council_equal_votes
+		}
+		localization_key = VAL_COUNCIL_EQUAL
+	}
+	text = {
+		trigger = {
+			has_completed_focus = VAL_council_charter
+			has_completed_focus = VAL_council_large_companies
+		}
+		localization_key = VAL_COUNCIL_LARGE
+	}
+	text = {
+		trigger = {
+			has_completed_focus = VAL_council_permanent_government
+		}
+		localization_key = VAL_COUNCIL_PERMANENT
+	}
+	text = {
+		trigger = {
+			has_completed_focus = VAL_council_limited_mandate
+		}
+		localization_key = VAL_COUNCIL_LIMITED
+	}
+	text = {
+		localization_key = VAL_COUNCIL_PROVISIONAL
+	}
+}
+
+defined_text = {
+	name = VALGetCouncilCase
+	text = {
+		trigger = {
+			has_country_flag = VAL_council_case_open
+		}
+		localization_key = VAL_COUNCIL_CASE_OPEN
+	}
+	text = {
+		localization_key = VAL_COUNCIL_CASE_CLEAR
+	}
+}
+
+defined_text = {
+	name = VALGetCouncilOrder
+	text = {
+		trigger = {
+			has_variable = VAL_council_order_kind
+		}
+		localization_key = VAL_COUNCIL_ORDER_OPEN
+	}
+	text = {
+		localization_key = VAL_COUNCIL_ORDER_CLEAR
+	}
+}
+
+defined_text = {
+	name = VALGetCouncilCargo
+	text = {
+		trigger = {
+			check_variable = { var = VAL_council_order_kind value = 1 compare = equals }
+		}
+		localization_key = VAL_COUNCIL_CARGO_RIFLES
+	}
+	text = {
+		trigger = {
+			check_variable = { var = VAL_council_order_kind value = 2 compare = equals }
+		}
+		localization_key = VAL_COUNCIL_CARGO_SUPPORT
+	}
+	text = {
+		localization_key = VAL_COUNCIL_CARGO_TRUCKS
+	}
+}
+
+defined_text = {
+	name = VALGetCouncilMandate
+	text = {
+		trigger = {
+			check_variable = { var = VAL_council_mandate_kind value = 1 compare = equals }
+		}
+		localization_key = VAL_COUNCIL_MANDATE_DEFENCE
+	}
+	text = {
+		trigger = {
+			check_variable = { var = VAL_council_mandate_kind value = 2 compare = equals }
+		}
+		localization_key = VAL_COUNCIL_MANDATE_OFFENSIVE
+	}
+	text = {
+		trigger = {
+			check_variable = { var = VAL_council_mandate_kind value = 3 compare = equals }
+		}
+		localization_key = VAL_COUNCIL_MANDATE_SUPPLY
+	}
+	text = {
+		localization_key = VAL_COUNCIL_MANDATE_NONE
+	}
+}
+
+defined_text = {
+	name = VALGetCouncilMajority
+	text = {
+		trigger = { check_variable = { var = VAL_council_seats_garrison value = 4 compare = greater_than_or_equals } }
+		localization_key = VAL_COUNCIL_GARRISON
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_council_seats_front value = 4 compare = greater_than_or_equals } }
+		localization_key = VAL_COUNCIL_FRONT
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_council_seats_supply value = 4 compare = greater_than_or_equals } }
+		localization_key = VAL_COUNCIL_SUPPLY
+	}
+	text = { localization_key = VAL_COUNCIL_NO_MAJORITY }
+}
+
+defined_text = {
+	name = VALGetCouncilPatron
+	text = {
+		trigger = { check_variable = { var = VAL_council_mandate_kind value = 1 compare = equals } }
+		localization_key = VAL_COUNCIL_GARRISON
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_council_mandate_kind value = 2 compare = equals } }
+		localization_key = VAL_COUNCIL_FRONT
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_council_mandate_kind value = 3 compare = equals } }
+		localization_key = VAL_COUNCIL_SUPPLY
+	}
+	text = { localization_key = VAL_COUNCIL_NO_PATRON }
+}
+
+defined_text = {
+	name = VALGetCouncilDefenceApproval
+	text = {
+		trigger = { check_variable = { var = VAL_council_seats_garrison value = 4 compare = greater_than_or_equals } }
+		localization_key = VAL_COUNCIL_APPROVAL_7
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = VAL_council_seats_front value = 4 compare = greater_than_or_equals }
+				check_variable = { var = VAL_council_seats_supply value = 4 compare = greater_than_or_equals }
+			}
+		}
+		localization_key = VAL_COUNCIL_APPROVAL_21
+	}
+	text = { localization_key = VAL_COUNCIL_APPROVAL_14 }
+}
+
+defined_text = {
+	name = VALGetCouncilDefenceDonor
+	text = {
+		trigger = {
+			check_variable = { var = VAL_council_seats_front value = VAL_council_seats_supply compare = greater_than_or_equals }
+			check_variable = { var = VAL_council_seats_front value = 0 compare = greater_than }
+		}
+		localization_key = VAL_COUNCIL_FRONT
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_council_seats_supply value = 0 compare = greater_than } }
+		localization_key = VAL_COUNCIL_SUPPLY
+	}
+	text = { localization_key = VAL_COUNCIL_NO_DONOR }
+}
+
+defined_text = {
+	name = VALGetCouncilOffensiveApproval
+	text = {
+		trigger = { check_variable = { var = VAL_council_seats_front value = 4 compare = greater_than_or_equals } }
+		localization_key = VAL_COUNCIL_APPROVAL_7
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = VAL_council_seats_garrison value = 4 compare = greater_than_or_equals }
+				check_variable = { var = VAL_council_seats_supply value = 4 compare = greater_than_or_equals }
+			}
+		}
+		localization_key = VAL_COUNCIL_APPROVAL_21
+	}
+	text = { localization_key = VAL_COUNCIL_APPROVAL_14 }
+}
+
+defined_text = {
+	name = VALGetCouncilOffensiveDonor
+	text = {
+		trigger = {
+			check_variable = { var = VAL_council_seats_garrison value = VAL_council_seats_supply compare = greater_than_or_equals }
+			check_variable = { var = VAL_council_seats_garrison value = 0 compare = greater_than }
+		}
+		localization_key = VAL_COUNCIL_GARRISON
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_council_seats_supply value = 0 compare = greater_than } }
+		localization_key = VAL_COUNCIL_SUPPLY
+	}
+	text = { localization_key = VAL_COUNCIL_NO_DONOR }
+}
+
+defined_text = {
+	name = VALGetCouncilSupplyApproval
+	text = {
+		trigger = { check_variable = { var = VAL_council_seats_supply value = 4 compare = greater_than_or_equals } }
+		localization_key = VAL_COUNCIL_APPROVAL_7
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = VAL_council_seats_garrison value = 4 compare = greater_than_or_equals }
+				check_variable = { var = VAL_council_seats_front value = 4 compare = greater_than_or_equals }
+			}
+		}
+		localization_key = VAL_COUNCIL_APPROVAL_21
+	}
+	text = { localization_key = VAL_COUNCIL_APPROVAL_14 }
+}
+
+defined_text = {
+	name = VALGetCouncilSupplyDonor
+	text = {
+		trigger = {
+			check_variable = { var = VAL_council_seats_garrison value = VAL_council_seats_front compare = greater_than_or_equals }
+			check_variable = { var = VAL_council_seats_garrison value = 0 compare = greater_than }
+		}
+		localization_key = VAL_COUNCIL_GARRISON
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_council_seats_front value = 0 compare = greater_than } }
+		localization_key = VAL_COUNCIL_FRONT
+	}
+	text = { localization_key = VAL_COUNCIL_NO_DONOR }
+}
+
+defined_text = {
+	name = VALGetCouncilArbitrationPoliticalCost
+	text = {
+		trigger = { NOT = { has_political_power < 50 } }
+		localization_key = VAL_COUNCIL_PP50_READY
+	}
+	text = { localization_key = VAL_COUNCIL_PP50_BLOCKED }
+}
+
+defined_text = {
+	name = VALGetCouncilArbitrationTreasuryCost
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } }
+		localization_key = VAL_COUNCIL_CASH200_READY
+	}
+	text = { localization_key = VAL_COUNCIL_CASH200_BLOCKED }
+}
+
+defined_text = {
+	name = VALGetCouncilRepresentation
+	text = {
+		trigger = { has_country_flag = VAL_council_seats_initialized }
+		localization_key = VAL_COUNCIL_REPRESENTATION
+	}
+	text = { localization_key = VAL_COUNCIL_SEATS_PENDING }
+}

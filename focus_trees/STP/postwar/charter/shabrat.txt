@@ -1,0 +1,993 @@
+# @section charter_shabrat
+	# Shabrat: a chain of national diamonds opens into a six-way programme fan.
+	focus = {
+		id = STP_pc_charter_shabrat_mandate
+		icon = GFX_focus_STP_pc_shabrat_politics
+		x = -4
+		y = 1
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_lib_lock }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_country_leader_trait = STP_charter_shabrat_founder
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_mandate_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_stability_factor
+					value = 0.02
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_common_citizenship
+		icon = GFX_focus_STP_cw_protocol_office
+		x = -7
+		y = 2
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_mandate }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_popularity = { ideology = chauvinism popularity = 0.10 }
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_common_citizenship_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_ADISCORD_economy_admin_expense_factor
+					value = -0.02
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_domestic_suppliers
+		icon = GFX_focus_STP_party_industrial_board
+		x = -1
+		y = 2
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_mandate }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_domestic_suppliers_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_industrial_capacity_factory
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_district_registers
+		icon = GFX_focus_STP_cw_quiet_registers
+		x = -4
+		y = 3
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_common_citizenship }
+		prerequisite = { focus = STP_pc_charter_shabrat_domestic_suppliers }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_district_registers_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_ADISCORD_country_development_state_growth_factor
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
+				country_event = {
+					id = ADISCORD_STP_pc.83
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_resistance_memory
+		icon = GFX_focus_STP_cw_press_office
+		x = -6
+		y = 4
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_district_registers }
+		mutually_exclusive = { focus = STP_pc_charter_shabrat_national_service }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_cultural_policy_national_mythmaking }
+				}
+				add_ideas = ADISCORD_cultural_policy_national_mythmaking
+			}
+			else = {
+				add_political_power = 40
+			}
+			add_war_support = 0.03
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_district_grants
+		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
+		x = -11
+		y = 4
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_district_registers }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			unlock_decision_tooltip = STP_pc_charter_shabrat_civic_grants
+			custom_effect_tooltip = STP_pc_charter_civic_grants_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 600 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 600 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_tools_inventory
+		icon = GFX_goal_generic_production
+		x = 3
+		y = 4
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_district_registers }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_tech_bonus = { name = STP_pc_charter_shabrat_tools_inventory bonus = 0.5 uses = 2 category = industry }
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_national_service
+		icon = GFX_focus_STP_pw_party_veteran_reserve
+		x = -2
+		y = 4
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_district_registers }
+		mutually_exclusive = { focus = STP_pc_charter_shabrat_resistance_memory }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_training_reserve_cycles }
+				}
+				add_ideas = ADISCORD_training_reserve_cycles
+			}
+			else = {
+				add_political_power = 75
+			}
+			add_manpower = 4000
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_citizens_protection
+		icon = GFX_focus_STP_ps_asylum_protocol
+		x = -4
+		y = 5
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_resistance_memory focus = STP_pc_charter_shabrat_national_service }
+		prerequisite = { focus = STP_pc_charter_shabrat_district_grants }
+		prerequisite = { focus = STP_pc_charter_shabrat_tools_inventory }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_citizens_protection_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_stability_factor
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
+				country_event = {
+					id = ADISCORD_STP_pc.66
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_national_schools
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = -14
+		y = 6
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_citizens_protection }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_education_civic_curriculum }
+				}
+				add_ideas = ADISCORD_education_civic_curriculum
+			}
+			else = {
+				add_political_power = 40
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_national_compact
+		icon = GFX_focus_STP_pw_party_open_settlement
+		x = -11
+		y = 6
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_citizens_protection }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_national_compact_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_ADISCORD_country_development_society_growth_factor
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_district_workshops
+		icon = GFX_focus_STP_party_industrial_board
+		x = -6
+		y = 6
+		relative_position_id = STP_pc_lib_lock
+		cost = 4
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_citizens_protection }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_tech_bonus = { name = STP_pc_charter_shabrat_district_workshops bonus = 0.5 uses = 1 category = industry }
+			unlock_decision_tooltip = STP_pc_charter_shabrat_civic_grants
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_common_standards
+		icon = GFX_focus_STP_pw_party_domestic_pattern
+		x = -3
+		y = 6
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_citizens_protection }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_common_standards_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_production_factory_max_efficiency_factor
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_national_defence
+		icon = GFX_focus_STP_defense_budget
+		x = 1
+		y = 6
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_citizens_protection }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_officer_corps_general_staff_academy }
+				}
+				add_ideas = ADISCORD_officer_corps_general_staff_academy
+			}
+			else = {
+				add_political_power = 75
+			}
+			add_command_power = 25
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_officer_oath
+		icon = GFX_focus_STP_Turn_The_Young_Officers
+		x = 4
+		y = 6
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_citizens_protection }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			army_experience = 40
+			if = {
+				limit = {
+					has_character = STP_Leonid_Barchel
+					STP_Leonid_Barchel = { NOT = { has_character_flag = STP_cw_arrested } }
+				}
+				add_advisor_role = {
+					character = STP_Leonid_Barchel
+					advisor = {
+						slot = high_command
+						idea_token = STP_pc_charter_barchel_high_command
+						ledger = army
+						traits = { army_commando_2 }
+						cost = 50
+					}
+				}
+			}
+			else = {
+				add_command_power = 40
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_citizenship_duty
+		icon = GFX_focus_STP_party_personnel_commissions
+		x = -12
+		y = 7
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_national_schools }
+		prerequisite = { focus = STP_pc_charter_shabrat_national_compact }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_citizenship_duty_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_political_power_gain
+					value = 0.05
+				}
+				STP_pw_refresh_modifier = yes
+				country_event = {
+					id = ADISCORD_STP_pc.82
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_national_arsenal
+		icon = GFX_focus_STP_defense_budget_tank
+		x = -6
+		y = 7
+		relative_position_id = STP_pc_lib_lock
+		cost = 4
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			any_owned_state = {
+				is_controlled_by = ROOT
+				free_building_slots = {
+					building = arms_factory
+					size > 0
+					include_locked = yes
+				}
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_district_workshops }
+		prerequisite = { focus = STP_pc_charter_shabrat_common_standards }
+		mutually_exclusive = { focus = STP_pc_charter_shabrat_economic_sovereignty }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_industrial_policy_military_prioritization }
+				}
+				add_ideas = ADISCORD_industrial_policy_military_prioritization
+			}
+			else = {
+				add_political_power = 75
+			}
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = {
+						building = arms_factory
+						size > 0
+						include_locked = yes
+					}
+				}
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+			}
+			hidden_effect = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_economic_sovereignty
+		icon = GFX_focus_STP_2160_budget
+		x = -2
+		y = 7
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_district_workshops }
+		prerequisite = { focus = STP_pc_charter_shabrat_common_standards }
+		mutually_exclusive = { focus = STP_pc_charter_shabrat_national_arsenal }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_idea = ADISCORD_industrial_policy_civilian_expansion }
+				}
+				add_ideas = ADISCORD_industrial_policy_civilian_expansion
+			}
+			else = {
+				add_political_power = 75
+			}
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_economic_sovereignty_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_ADISCORD_economy_overall_income_factor
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_district_reserves
+		icon = GFX_goal_generic_allies_build_infantry
+		x = 1
+		y = 7
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_national_defence }
+		prerequisite = { focus = STP_pc_charter_shabrat_officer_oath }
+		mutually_exclusive = { focus = STP_pc_charter_shabrat_border_drills }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_manpower = 3000
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_district_reserves_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_training_time_factor
+					value = -0.05
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_border_drills
+		icon = GFX_focus_STP_cw_arm_the_north
+		x = 5
+		y = 7
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_national_defence }
+		prerequisite = { focus = STP_pc_charter_shabrat_officer_oath }
+		mutually_exclusive = { focus = STP_pc_charter_shabrat_district_reserves }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_tech_bonus = { name = STP_pc_charter_shabrat_border_drills bonus = 0.5 uses = 2 category = infantry_weapons }
+			army_experience = 25
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_protected_communities
+		icon = GFX_focus_STP_pw_party_family_pensions
+		x = -12
+		y = 8
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_citizenship_duty }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_protected_communities_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_stability_factor
+					value = 0.02
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_district_exchange
+		icon = GFX_focus_STP_party_war_transport
+		x = -4
+		y = 8
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_national_arsenal focus = STP_pc_charter_shabrat_economic_sovereignty }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_district_exchange_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_production_speed_buildings_factor
+					value = 0.05
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_defence_stores
+		icon = GFX_focus_STP_ps_northern_arms
+		x = 3
+		y = 8
+		relative_position_id = STP_pc_lib_lock
+		cost = 3
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_district_reserves focus = STP_pc_charter_shabrat_border_drills }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = ROOT }
+			add_equipment_to_stockpile = { type = support_equipment amount = 200 producer = ROOT }
+			army_experience = 15
+			unlock_decision_tooltip = STP_pc_charter_shabrat_defence_contract
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_cabinet_review
+		icon = GFX_focus_generic_treaty
+		x = -4
+		y = 9
+		relative_position_id = STP_pc_lib_lock
+		cost = 4
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_protected_communities }
+		prerequisite = { focus = STP_pc_charter_shabrat_district_exchange }
+		prerequisite = { focus = STP_pc_charter_shabrat_defence_stores }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			custom_effect_tooltip = STP_pc_charter_shabrat_review_tt
+			effect_tooltip = {
+				add_ideas = STP_pc_charter_shabrat_cabinet_review_delta
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_ADISCORD_economy_admin_expense_factor
+					value = -0.02
+				}
+				add_to_variable = {
+					var = STP_pw_research_speed_factor
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_charter_shabrat_charter_fulfilled
+		icon = GFX_goal_generic_national_unity
+		x = -4
+		y = 10
+		relative_position_id = STP_pc_lib_lock
+		cost = 4
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_charter_shabrat_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_charter_shabrat_available_tt
+				STP_pc_charter_shabrat_current = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_charter_shabrat_cabinet_review }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			unlock_decision_tooltip = STP_pc_charter_shabrat_ratify_districts
+			unlock_decision_tooltip = STP_pc_charter_shabrat_ratify_nation
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_pc.69
+					hours = 1
+				}
+			}
+		}
+	}

@@ -68,6 +68,8 @@ class BezhayskUnificationFixture(GenericPeaceFixture):
                 result = self.controllers[current] == self.resolve(value, stack)
             elif key == "controller":
                 result = self.matches(value, stack + [self.controllers[current]])
+            elif key == "STP_pc_sword_directory_branch":
+                result = False
             else:
                 result = super().matches([row], stack)
             if not result:
@@ -278,6 +280,249 @@ class BezhayskStelanderTests(unittest.TestCase):
         model.run()
         self.assertEqual(model.owners[4], "BGT")
         self.assertIn(frozenset(("STS", "BGT")), model.wars)
+
+
+class BezhayskDirectoryFixture(BezhayskStelanderFixture):
+    """Exercise the shared victory dispatch and the directory's dependent settlement."""
+
+    def __init__(self):
+        super().__init__()
+        self.effects.update(load("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"))
+        self.triggers = load("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+        self.flags["STS"].update({"STP_cw_postwar", "STP_shabrat_was_arrested"})
+        self.leader = "STP_grigory_sotnikov"
+        self.autonomy = {}
+        self.portraits = {}
+        self.humans = set()
+        self.handoffs = []
+        self.capitals = {}
+        self.cores = {state: {owner} for state, owner in self.owners.items()}
+
+    def matches(self, rows, stack):
+        current = stack[-1]
+        for row in rows:
+            key, value = row.key, row.value
+            if key in self.triggers:
+                result = self.matches(self.triggers[key], stack) == (value == "yes")
+            elif key == "has_variable":
+                result = False
+            elif key == "has_country_leader":
+                result = current == "STS" and self.leader == scalar(value, "character")
+            elif key == "is_subject":
+                result = (current in self.overlords) == (value == "yes")
+            elif key == "has_war":
+                result = bool(self.enemies(current)) == (value == "yes")
+            elif key == "is_faction_leader":
+                result = (current == "BJK" and current in self.factions) == (value == "yes")
+            elif key == "has_cosmetic_tag":
+                result = self.cosmetics.get(current) == value
+            elif key == "all_owned_state":
+                result = all(self.matches(value, stack + [state]) for state, owner in self.owners.items() if owner == current)
+            elif key == "any_owned_state":
+                result = any(self.matches(value, stack + [state]) for state, owner in self.owners.items() if owner == current)
+            elif key == "is_ai":
+                result = (current not in self.humans) == (value == "yes")
+            elif key == "is_owned_by":
+                result = self.owners.get(current) == self.resolve(value, stack)
+            elif key.isdigit():
+                result = self.matches(value, stack + [int(key)])
+            elif key in REALM:
+                result = self.matches(value, stack + [key])
+            else:
+                result = super().matches([row], stack)
+            if not result:
+                return False
+        return True
+
+    def execute(self, rows, stack=None):
+        stack = stack or ["STS"]
+        current = stack[-1]
+        taken = False
+        for row in rows:
+            key, value = row.key, row.value
+            if key in ("if", "else_if", "else"):
+                if key == "if":
+                    taken = False
+                guard = next((child.value for child in value if child.key == "limit"), [])
+                if not taken and self.matches(guard, stack):
+                    taken = True
+                    self.execute([child for child in value if child.key != "limit"], stack)
+            elif key.isdigit():
+                self.execute(value, stack + [int(key)])
+            elif key in REALM:
+                self.execute(value, stack + [key])
+            elif key == "owner":
+                self.execute(value, stack + [self.owners[current]])
+            elif key == "overlord":
+                self.execute(value, stack + [self.overlords[current]])
+            elif key == "transfer_state":
+                self.owners[self.resolve(value, stack)] = current
+                if current not in self.countries:
+                    self.countries.append(current)
+            elif key == "set_capital":
+                self.capitals[current] = int(scalar(value, "state"))
+            elif key == "set_autonomy":
+                target = self.resolve(scalar(value, "target"), stack)
+                tier = scalar(value, "autonomy_state")
+                assert scalar(value, "end_wars") == "no"
+                assert scalar(value, "end_civil_wars") == "no"
+                if tier == "autonomy_free":
+                    self.overlords.pop(target, None)
+                else:
+                    self.overlords[target] = current
+                self.autonomy[target] = tier
+            elif key == "dismantle_faction":
+                alliance = self.factions.get(current)
+                self.factions = {tag: faction for tag, faction in self.factions.items() if faction != alliance}
+            elif key == "leave_faction":
+                self.factions.pop(current, None)
+            elif key == "create_country_leader":
+                self.leaders[current] = scalar(value, "name")
+            elif key == "set_country_leader_portrait":
+                self.portraits[current] = scalar(value, "portrait")
+            elif key == "drop_cosmetic_tag":
+                self.cosmetics.pop(current, None)
+            elif key == "change_tag_from":
+                self.handoffs.append((self.resolve(value, stack), current))
+            elif key in ("ADISCORD_release_non_participating_minor_optimization", "ADISCORD_economy_initialize_country"):
+                continue
+            else:
+                super().execute([row], stack)
+
+
+class BezhayskDirectoryTests(unittest.TestCase):
+    def test_early_directory_victory_unifies_the_real_bloc_as_a_provisional_administration(self):
+        model = BezhayskDirectoryFixture()
+        model.run()
+        self.assertEqual({model.owners[state] for state in (31, 5, 4, 7, 9, 41)}, {"BJK"})
+        self.assertEqual(model.overlords["BJK"], "STS")
+        self.assertEqual(model.autonomy["BJK"], "autonomy_STP_provisional_administration")
+        self.assertEqual(model.cosmetics["BJK"], "BJK_STS_administration")
+        self.assertEqual(model.leaders["BJK"], "STP_sdir_bezhaysk_administrator")
+        self.assertEqual(model.politics["BJK"], "etatism")
+        self.assertNotIn("BJK", model.annexed)
+        self.assertIn(frozenset(("STS", "NOD")), model.wars)
+        self.assertTrue(model.matches(model.triggers["STP_sdir_bezhaysk_administration_current"], ["STS"]))
+
+    def test_foreign_occupation_blocks_merger_until_real_control_returns(self):
+        model = BezhayskDirectoryFixture()
+        model.controllers[4] = "NOD"
+        model.run()
+        self.assertEqual((model.owners[4], model.controllers[4]), ("BGT", "NOD"))
+        self.assertIn("STP_sdir_bezhaysk_awarded", model.flags["BGT"])
+        model.controllers[4] = "BGT"
+        model.execute(model.effects["STP_sdir_consolidate_bezhaysk_administration"])
+        model.execute(model.effects["STP_sdir_consolidate_bezhaysk_administration"])
+        self.assertEqual((model.owners[4], model.controllers[4]), ("BJK", "BJK"))
+        self.assertEqual(model.annexed.count("BGT"), 1)
+
+    def test_third_party_war_and_detached_foreign_subject_survive_the_settlement(self):
+        model = BezhayskDirectoryFixture()
+        model.wars.add(frozenset(("BLD", "NOD")))
+        model.overlords["BGT"] = "NOD"
+        model.factions.pop("BGT")
+        model.run()
+        self.assertEqual(model.owners[31], "BLD")
+        self.assertEqual(model.owners[4], "BGT")
+        self.assertEqual(model.overlords["BGT"], "NOD")
+        self.assertIn(frozenset(("BLD", "NOD")), model.wars)
+        self.assertNotIn("STP_sdir_bezhaysk_awarded", model.flags["BGT"])
+        model.wars.remove(frozenset(("BLD", "NOD")))
+        model.execute(model.effects["STP_sdir_consolidate_bezhaysk_administration"])
+        self.assertEqual(model.owners[31], "BJK")
+
+    def test_liberation_invalidates_pending_award_and_capital_gate(self):
+        model = BezhayskDirectoryFixture()
+        model.controllers[4] = "NOD"
+        model.run()
+        model.overlords.pop("BGT")
+        model.execute(model.effects["STP_heg_clear_foreign_administration_flag"], ["BGT"])
+        self.assertNotIn("STP_sdir_bezhaysk_awarded", model.flags["BGT"])
+        model.controllers[4] = "BGT"
+        model.execute(model.effects["STP_sdir_consolidate_bezhaysk_administration"])
+        self.assertEqual(model.owners[4], "BGT")
+        model.controllers[41] = "NOD"
+        self.assertFalse(model.matches(model.triggers["STP_sdir_bezhaysk_administration_current"], ["STS"]))
+        model.overlords.pop("BJK")
+        model.execute(model.effects["STP_heg_clear_foreign_administration_flag"], ["BJK"])
+        self.assertNotIn("BJK", model.cosmetics)
+
+    def test_defeated_val_administration_changes_overlord_without_ending_other_wars(self):
+        model = BezhayskDirectoryFixture()
+        model.overlords["VAL"] = "STS"
+        model.overlords["BJK"] = "VAL"
+        model.cosmetics["BJK"] = "BJK_VAL_administration"
+        model.owners = {41: "BJK", 31: "BJK", 4: "BJK", 5: "BJK", 6: "BJK", 7: "BJK", 9: "BJK"}
+        model.controllers = dict(model.owners)
+        model.controllers[41] = "STS"
+        model.wars = {frozenset(("BJK", "NOD"))}
+        model.execute(model.effects["STP_sdir_consolidate_bezhaysk_administration"])
+        self.assertEqual(model.overlords["BJK"], "STS")
+        self.assertEqual(model.cosmetics["BJK"], "BJK_STS_administration")
+        self.assertEqual(model.controllers[41], "BJK")
+        self.assertEqual(model.capitals["BJK"], 41)
+        self.assertIn(frozenset(("BJK", "NOD")), model.wars)
+
+    def test_recreation_uses_defeated_val_land_and_preserves_foreign_property_and_control(self):
+        for third_party in (False, True):
+            model = BezhayskDirectoryFixture()
+            model.countries.remove("BJK")
+            model.overlords.pop("BJK", None)
+            model.overlords["VAL"] = "STS"
+            model.owners = {41: "VAL", 31: "VAL", 4: "VAL", 5: "NOD", 6: "VAL", 7: "VAL", 9: "VAL"}
+            model.controllers = dict(model.owners)
+            model.controllers[4] = "NOD"
+            if third_party:
+                model.controllers[41] = "NOD"
+            model.execute(model.effects["STP_sdir_consolidate_bezhaysk_administration"])
+            if third_party:
+                self.assertNotIn("BJK", model.countries)
+                self.assertEqual(model.owners[41], "VAL")
+            else:
+                self.assertEqual(model.overlords["BJK"], "STS")
+                self.assertEqual(model.owners[41], "BJK")
+                self.assertEqual(model.owners[31], "BJK")
+            self.assertEqual((model.owners[4], model.controllers[4]), ("VAL", "NOD"))
+            self.assertEqual(model.owners[5], "NOD")
+
+    def test_independent_bezhaysk_and_a_foreign_overlord_cannot_be_reassigned(self):
+        for overlord in (None, "NOD"):
+            model = BezhayskDirectoryFixture()
+            model.overlords["VAL"] = "STS"
+            model.cosmetics["BJK"] = "BJK_VAL_administration"
+            if overlord:
+                model.overlords["BJK"] = overlord
+            before = dict(model.owners), dict(model.overlords)
+            model.execute(model.effects["STP_sdir_consolidate_bezhaysk_administration"])
+            self.assertEqual((model.owners, model.overlords), before)
+
+    def test_joint_nod_val_awards_form_one_administration_only_after_both_are_subjects(self):
+        model = BezhayskDirectoryFixture()
+        model.wars = set()
+        model.overlords = {"VAL": "STS", "BJK": "NOD", "BBV": "NOD", "BCM": "NOD", "BLD": "VAL"}
+        model.flags["BJK"].add("ADISCORD_bezhaysk_nod_administration")
+        model.flags["BBV"].add("ADISCORD_bezhaysk_nod_administration")
+        model.flags["BCM"].add("ADISCORD_bezhaysk_nod_administration")
+        model.cosmetics["BLD"] = "BJK_VAL_administration"
+        model.owners = {41: "BJK", 7: "BBV", 9: "BCM", 31: "BLD", 4: "BLD", 5: "BLD", 6: "BLD"}
+        model.controllers = dict(model.owners)
+        model.cores = {state: {owner} for state, owner in model.owners.items()}
+        model.execute(model.effects["STP_sdir_consolidate_bezhaysk_administration"])
+        self.assertEqual(model.overlords["BJK"], "NOD")
+        model.overlords["NOD"] = "STS"
+        model.execute(model.effects["STP_sdir_consolidate_bezhaysk_administration"])
+        self.assertEqual(set(model.owners.values()), {"BJK"})
+        self.assertEqual(model.overlords["BJK"], "STS")
+        self.assertEqual(model.autonomy["BJK"], "autonomy_STP_provisional_administration")
+        self.assertNotIn("ADISCORD_bezhaysk_nod_administration", model.flags["BJK"])
+        self.assertFalse(model.matches(model.triggers["STP_sdir_bezhaysk_reorganization_available"], ["STS"]))
+
+    def test_playable_holding_hands_off_before_merger(self):
+        model = BezhayskDirectoryFixture()
+        model.humans.add("BGT")
+        model.run()
+        self.assertEqual(model.handoffs, [("BGT", "BJK")])
+        self.assertEqual(model.troops["BJK"], 60)
 
 
 class BezhayskPeaceTests(unittest.TestCase):

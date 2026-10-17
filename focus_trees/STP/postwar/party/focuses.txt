@@ -50,6 +50,9 @@
 				STP_pf_shift = yes
 			}
 			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_borons_deal_tt }
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_pw.11 days = 1 }
+			}
 		}
 	}
 

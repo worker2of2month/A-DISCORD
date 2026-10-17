@@ -6,12 +6,45 @@ from pathlib import Path
 
 
 from tools.lib.focus_sources import read_focus_source
+from tools.tests.test_adiscord_val_focus_layout import PERSONAL_FOCUSES
 
 ROOT = Path(__file__).resolve().parents[2]
 FOCUS_PATH = ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt"
 ON_ACTIONS_PATH = ROOT / "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"
 RU_LOC_PATH = ROOT / "localisation/russian/ADISCORD_VAL_decisions_l_russian.yml"
 EN_LOC_PATH = ROOT / "localisation/english/ADISCORD_VAL_decisions_l_english.yml"
+
+CHAPTER_ROOTS = {
+    "VAL_Contracts_Outlive_Kings",
+    "VAL_frontier_conference",
+    "VAL_Return_Southern_Tsaygen",
+    "VAL_Bezhaysk_Operation",
+    "VAL_Marine_Contract_Corps",
+    "VAL_Shield_Special_Forces",
+    "VAL_econ_development_fund",
+    "VAL_Naval_Contract_Office",
+    "VAL_Occidian_Claims_Commission",
+    "VAL_Reopen_Trade_Routes",
+    "VAL_Settle_Industrial_Debts",
+    "VAL_Return_To_World_Market",
+    "VAL_Veterans_Of_The_Campaign",
+}
+REVEAL_MILESTONES = {
+    "VAL_Operational_Directorate",
+    "VAL_Inventory_The_Empty_Yards",
+    "VAL_Resource_War_Contracts",
+    "VAL_Brokered_Steel",
+    "VAL_State_Contract",
+    "VAL_council_charter",
+    "VAL_council_permanent_government",
+    "VAL_council_limited_mandate",
+    "VAL_Industrial_Mobilization_Plan",
+    "VAL_Army_Of_The_Ledger",
+    "VAL_Contracts_Outlive_Kings",
+    "VAL_The_Steel_Contract",
+    "VAL_Campaign_Secured",
+    "VAL_Returning_Buyers",
+}
 
 
 def read(path: Path) -> str:
@@ -111,12 +144,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
 
         self.assertEqual(
             set(expected),
-            {
-                "VAL_Operational_Directorate",
-                "VAL_Inventory_The_Empty_Yards",
-                "VAL_Resource_War_Contracts",
-                "VAL_Brokered_Steel",
-            },
+            REVEAL_MILESTONES,
         )
         for dependency, targets in expected.items():
             key = f"VAL_focus_progression_{dependency}_tt"
@@ -129,9 +157,10 @@ class KefreytFocusStagingTests(unittest.TestCase):
             for localisation in (self.en_loc, self.ru_loc):
                 self.assertRegex(localisation, rf"(?m)^\s*{re.escape(key)}:0?\s+\"")
                 for target in targets:
-                    self.assertIn(
-                        f"${target}$", localisation[localisation.index(key) :]
-                    )
+                    text = re.search(
+                        rf'(?m)^\s*{re.escape(key)}:\d*\s+"([^\"]+)"', localisation
+                    ).group(1)
+                    self.assertIn(f"${target}$", text)
 
     def test_world_event_root_descriptions_omit_reveal_instructions(self) -> None:
         for localisation in (self.en_loc, self.ru_loc):
@@ -217,6 +246,12 @@ class KefreytFocusStagingTests(unittest.TestCase):
             "VAL_Ministry_Of_Contract_Memory",
         )
         for focus_id in first_act:
+            if focus_id in PERSONAL_FOCUSES:
+                self.assertRegex(allow(self.focuses, focus_id), r"VAL_council_governs\s*=\s*no")
+                continue
+            if focus_id == "VAL_One_Ledger_One_Banner":
+                self.assertRegex(allow(self.focuses, focus_id), r"always\s*=\s*yes")
+                continue
             self.assertNotIn(
                 "allow_branch",
                 focus_block(self.focuses, focus_id),
@@ -233,26 +268,37 @@ class KefreytFocusStagingTests(unittest.TestCase):
             "VAL_Reserve_Battalions": "VAL_Morns_Supply_Trains",
             "VAL_Ministry_Auditors": "VAL_Operational_Directorate",
             "VAL_Wireless_Contract_Bureau": "VAL_Ministry_Of_Contract_Memory",
-            "VAL_Occidian_Claims_Commission": "VAL_The_Steel_Contract",
             "VAL_Occidian_Registries": "VAL_Occidian_Claims_Commission",
-            "VAL_econ_development_fund": "VAL_Industrial_Mobilization_Plan",
         }
         for focus_id, milestone in expected.items():
             body = focus_block(self.focuses, focus_id)
-            self.assertNotIn("dynamic = yes", body, focus_id)
-            self.assertNotIn("allow_branch", body, focus_id)
+            if focus_id in PERSONAL_FOCUSES:
+                self.assertRegex(allow(self.focuses, focus_id), r"VAL_council_governs\s*=\s*no")
+            else:
+                self.assertNotIn("dynamic = yes", body, focus_id)
+                self.assertNotIn("allow_branch", body, focus_id)
             self.assertIn(f"has_completed_focus = {milestone}", body, focus_id)
 
-    def test_contracts_outlive_kings_is_a_visible_capstone(self) -> None:
+    def test_contracts_outlive_kings_reveals_after_first_core_programme(self) -> None:
         body = focus_block(self.focuses, "VAL_Contracts_Outlive_Kings")
-        self.assertNotRegex(body, r"(?m)^\s*allow_branch\s*=")
-        self.assertNotIn("dynamic = yes", body)
+        gate = allow(self.focuses, "VAL_Contracts_Outlive_Kings")
+        self.assertIn("dynamic = yes", body)
+        self.assertNotIn("always = yes", gate)
+        self.assertEqual(
+            set(re.findall(r"has_completed_focus\s*=\s*(VAL_\w+)", named_block(gate, "OR"))),
+            {
+                "VAL_State_Contract", "VAL_council_charter",
+                "VAL_council_permanent_government", "VAL_council_limited_mandate",
+                "VAL_Industrial_Mobilization_Plan", "VAL_Army_Of_The_Ledger",
+            },
+        )
         for dependency in (
-            "VAL_State_Contract",
             "VAL_Industrial_Mobilization_Plan",
             "VAL_Army_Of_The_Ledger",
         ):
             self.assertIn(f"prerequisite = {{ focus = {dependency} }}", body)
+        self.assertIn("focus = VAL_State_Contract", body)
+        self.assertIn("focus = VAL_council_charter", body)
         self.assertRegex(body, r"ai_will_do\s*=\s*\{[^}]*base\s*=\s*1000")
 
     def test_foreign_clearing_house_waits_for_the_northern_choice(self) -> None:
@@ -277,8 +323,8 @@ class KefreytFocusStagingTests(unittest.TestCase):
             "VAL_Northern_Settlement",
         )
         gate = focus_block(self.focuses, root)
-        self.assertNotIn("dynamic = yes", gate)
-        self.assertNotIn("allow_branch", gate)
+        self.assertIn("dynamic = yes", gate)
+        self.assertIn("has_completed_focus = VAL_Contracts_Outlive_Kings", allow(self.focuses, root))
         self.assertIn("has_completed_focus = VAL_One_Ledger_One_Banner", gate)
         self.assertIn("has_completed_focus = VAL_Trading_Partners", gate)
         self.assertIn("has_completed_focus = VAL_October_Of_2160", gate)
@@ -353,7 +399,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_collapse_wars_started", vorkerland)
         self.assertIn("has_completed_focus = VAL_Operational_Directorate", vorkerland)
 
-    def test_late_campaign_roadmap_is_static_and_prerequisite_gated(self) -> None:
+    def test_late_chapters_keep_selection_gates_and_reveal_their_internal_roadmap(self) -> None:
         expected = {
             "VAL_Integrate_Occidia": "VAL_Occidian_Registries",
             "VAL_Balchansk_Charter": "VAL_Occidian_Registries",
@@ -376,8 +422,12 @@ class KefreytFocusStagingTests(unittest.TestCase):
         }
         for focus_id, milestone in expected.items():
             body = focus_block(self.focuses, focus_id)
-            self.assertNotIn("allow_branch", body, focus_id)
-            self.assertNotIn("dynamic = yes", body, focus_id)
+            if focus_id in CHAPTER_ROOTS:
+                self.assertIn("allow_branch", body, focus_id)
+                self.assertIn("dynamic = yes", body, focus_id)
+            else:
+                self.assertNotIn("allow_branch", body, focus_id)
+                self.assertNotIn("dynamic = yes", body, focus_id)
             self.assertIn(f"focus = {milestone}", body, focus_id)
 
         southern = focus_block(self.focuses, "VAL_Return_Southern_Tsaygen")
@@ -388,12 +438,15 @@ class KefreytFocusStagingTests(unittest.TestCase):
             "prerequisite = { focus = VAL_Foreign_Broker_Licences }", southern
         )
 
-    def test_only_world_reactive_roots_remain_dynamic(self) -> None:
+    def test_only_world_roots_chapter_roots_and_government_branches_are_dynamic(self) -> None:
         ids = focus_ids(self.focuses)
         staged = []
         for focus_id in ids:
             block = focus_block(self.focuses, focus_id)
             if not re.search(r"(?m)^\s*allow_branch\s*=", block):
+                continue
+            if re.fullmatch(r"\s*allow_branch\s*=\s*\{\s*always\s*=\s*yes\s*\}", allow(self.focuses, focus_id)):
+                self.assertNotIn("dynamic = yes", block)
                 continue
             staged.append(focus_id)
             self.assertIn(
@@ -409,7 +462,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
                 "VAL_Resource_War_Contracts",
                 "VAL_Support_The_Viceroy",
                 "VAL_Westerholm_Concessions",
-            },
+            } | CHAPTER_ROOTS | PERSONAL_FOCUSES | {focus_id for focus_id in ids if focus_id.startswith("VAL_council_")},
         )
 
     def test_frontier_chapter_has_no_old_save_migration(self) -> None:
@@ -441,12 +494,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
         }
         self.assertEqual(
             parents,
-            {
-                "VAL_Operational_Directorate",
-                "VAL_Inventory_The_Empty_Yards",
-                "VAL_Resource_War_Contracts",
-                "VAL_Brokered_Steel",
-            },
+            REVEAL_MILESTONES,
         )
         callers = set()
         for focus_id, focus in focuses.items():

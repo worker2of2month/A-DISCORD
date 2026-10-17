@@ -122,21 +122,22 @@ def event_block(text: str, event_id: str) -> str:
     return text[start:end]
 
 
-def expand(items, parameters=None):
+def expand(items, parameters=None, definitions=None):
     parameters = parameters or {}
-    definitions = {e.key: e.value for e in entries(TRIGGERS)}
+    if definitions is None:
+        definitions = {e.key: e.value for e in entries(TRIGGERS)}
     result = []
     for entry in items:
         key = parameters.get(entry.key, entry.key)
         value = (
-            expand(entry.value, parameters)
+            expand(entry.value, parameters, definitions)
             if isinstance(entry.value, list)
             else parameters.get(entry.value, entry.value)
         )
         if key in definitions:
             if entry.value not in ("yes", "no"):
                 raise AssertionError(f"Unsupported native scripted trigger call: {key}")
-            value = expand(definitions[key], parameters)
+            value = expand(definitions[key], parameters, definitions)
             if entry.value == "no":
                 value = [Entry("AND", value, entry.line)]
             result.append(
@@ -190,17 +191,20 @@ def visible_option_names(event_id: str, facts, scope="STS"):
     return names
 
 
-def execute_package_effects(items, facts, dispatched, scope="STS"):
+def execute_package_effects(items, facts, dispatched, scope="STS", definitions=None, triggers=None):
     """Execute only the parsed package protocol; unknown effects fail closed."""
-    definitions = {entry.key: entry.value for entry in entries(EFFECTS)}
-    definitions.update(
-        {
-            entry.key: entry.value
-            for entry in relative_entries(
-                "common/scripted_effects/ADISCORD_shared_action_effects.txt"
-            )
-        }
-    )
+    if definitions is None:
+        definitions = {entry.key: entry.value for entry in entries(EFFECTS)}
+        definitions.update(
+            {
+                entry.key: entry.value
+                for entry in relative_entries(
+                    "common/scripted_effects/ADISCORD_shared_action_effects.txt"
+                )
+            }
+        )
+    if triggers is None:
+        triggers = {entry.key: entry.value for entry in entries(TRIGGERS)}
     taken = False
     for entry in items:
         key, value = entry.key, entry.value
@@ -211,7 +215,7 @@ def execute_package_effects(items, facts, dispatched, scope="STS"):
                 (child.value for child in value if child.key == "limit"), []
             )
             if not taken and (
-                key == "else" or matches_conditions(expand(condition), facts, scope)
+                key == "else" or matches_conditions(expand(condition, definitions=triggers), facts, scope)
             ):
                 taken = True
                 execute_package_effects(
@@ -219,6 +223,8 @@ def execute_package_effects(items, facts, dispatched, scope="STS"):
                     facts,
                     dispatched,
                     scope,
+                    definitions,
+                    triggers,
                 )
         elif key in {
             "name",
@@ -229,12 +235,13 @@ def execute_package_effects(items, facts, dispatched, scope="STS"):
         }:
             continue
         elif key == "hidden_effect":
-            execute_package_effects(value, facts, dispatched, scope)
-        elif key in {"STP", "STS", "VAL", "NOD"}:
-            execute_package_effects(value, facts, dispatched, key)
-        elif key in {"set_country_flag", "clr_country_flag"}:
-            fact = (scope, "has_country_flag", value)
-            if key == "set_country_flag":
+            execute_package_effects(value, facts, dispatched, scope, definitions, triggers)
+        elif key in {"STP", "STS", "VAL", "NOD", "FROM"} or key.isdigit():
+            execute_package_effects(value, facts, dispatched, key, definitions, triggers)
+        elif key in {"set_country_flag", "clr_country_flag", "set_state_flag", "clr_state_flag"}:
+            flag_type = "has_state_flag" if "state" in key else "has_country_flag"
+            fact = (scope, flag_type, value)
+            if key.startswith("set_"):
                 facts[fact] = True
             else:
                 facts.pop(fact, None)
@@ -255,6 +262,16 @@ def execute_package_effects(items, facts, dispatched, scope="STS"):
             facts.pop((scope, "has_variable", value), None)
         elif key == "country_event":
             dispatched.append((scope, scalar(value, "id")))
+        elif key in {"activate_mission", "remove_mission"}:
+            facts[(scope, "has_active_mission", value)] = key == "activate_mission"
+        elif key == "add_equipment_to_stockpile":
+            equipment = scalar(value, "type")
+            amount = float(scalar(value, "amount"))
+            facts[(scope, "equipment", equipment)] = facts.get((scope, "equipment", equipment), 0) + amount
+        elif key == "add_building_construction":
+            building = scalar(value, "type")
+            level = float(scalar(value, "level"))
+            facts[(scope, "numeric", building)] = facts.get((scope, "numeric", building), 0) + level
         elif key == "send_equipment":
             equipment, amount, recipient = (
                 scalar(value, "equipment"),
@@ -286,7 +303,7 @@ def execute_package_effects(items, facts, dispatched, scope="STS"):
         elif key in definitions:
             if value != "yes":
                 raise AssertionError(f"Unsupported effect call: {key}")
-            execute_package_effects(definitions[key], facts, dispatched, scope)
+            execute_package_effects(definitions[key], facts, dispatched, scope, definitions, triggers)
         else:
             raise AssertionError(f"Unhandled package effect: {key}")
 
@@ -2909,6 +2926,433 @@ class NodrulBorderTreatyContracts(unittest.TestCase):
             self.assertEqual(notices, [("STS", "ADISCORD_STP_pc.49")] if accepted else [])
         return_gate = expand(block(entries(TRIGGERS), "STP_ps_can_launch_return"))
         self.assertTrue(any(e.key == "has_country_flag" and e.value == "STP_pc_defeated_by_sts" for e in walk(return_gate)))
+
+
+class SwordDirectoryTerritorialContracts(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = entries(EFFECTS)
+        cls.triggers = entries(TRIGGERS)
+        cls.reorganisation = block(
+            block(cls.effects, "STP_sdir_reorganize_districts"), "if"
+        )
+
+    def test_direct_annexations_exclude_foreign_control_and_other_states(self):
+        branches = [e.value for e in self.reorganisation if e.key == "if"]
+        for tag, expected_states in (
+            ("VAL", {"24", "42", "55"}),
+            ("NOD", {"10", "11"}),
+        ):
+            branch = next(
+                item for item in branches
+                if any(e.key == tag for e in item)
+            )
+            outer_gate = block(branch, "limit")
+            self.assertFalse(matches_conditions(outer_gate, {}, "STS"))
+            self.assertTrue(matches_conditions(
+                outer_gate, {(tag, "is_subject_of", "STS"): True}, "STS"
+            ))
+            transfer = block(block(branch, tag), "every_owned_state")
+            gate = block(transfer, "limit")
+            for state in sorted(expected_states | {"17", "18", "52", "54", "57", "709"}):
+                for controller in (tag, "STS", "ALLY", "YPR"):
+                    facts = {
+                        (state, "is_controlled_by", controller): True,
+                        (state, "controller"): controller,
+                        ("ALLY", "is_subject_of", "STS"): True,
+                    }
+                    with self.subTest(tag=tag, state=state, controller=controller):
+                        self.assertEqual(
+                            matches_conditions(gate, facts, state),
+                            state in expected_states and controller != "YPR",
+                        )
+            self.assertEqual(scalar(transfer, "transfer_state_to"), "STS")
+            self.assertEqual(scalar(transfer, "set_state_controller_to"), "STS")
+
+    def test_district_recreation_cannot_seize_an_independent_country(self):
+        branches = [
+            e.value for e in self.reorganisation
+            if e.key == "if" and any(c.key == "every_owned_state" for c in e.value)
+        ]
+        self.assertEqual(len(branches), 2)
+        for branch in branches:
+            gate = block(branch, "limit")
+            tag = next(e.key for e in gate if e.key in ("VAL", "NOD"))
+            self.assertFalse(matches_conditions(
+                gate, {(tag, "exists", "yes"): True}, "STS"
+            ))
+            self.assertTrue(matches_conditions(
+                gate, {(tag, "exists", "no"): True}, "STS"
+            ))
+            self.assertTrue(matches_conditions(
+                gate, {(tag, "is_subject_of", "STS"): True}, "STS"
+            ))
+            transfer = block(branch, "every_owned_state")
+            state_gate = block(transfer, "limit")
+            for state in ("48", "54", "57") if tag == "VAL" else ("30",):
+                self.assertFalse(matches_conditions(state_gate, {}, state))
+                self.assertTrue(matches_conditions(
+                    state_gate, {(state, "is_controlled_by", "STS"): True}, state
+                ))
+            self.assertEqual(scalar(block(transfer, tag), "transfer_state"), "PREV")
+            self.assertEqual(scalar(transfer, "set_state_controller_to"), tag)
+
+    def test_core_recovery_cannot_bypass_directory_third_party_control_guard(self):
+        recovery = block(block(self.effects, "STP_pc_recover_stelander_cores_from_val"), "if")
+        gate = block(block(recovery, "every_state"), "limit")
+        definitions = {e.key: e.value for e in self.triggers}
+        for branch in (False, True):
+            for controller in ("STS", "VAL", "ALLY", "VALSUB", "YPR"):
+                facts = {
+                    ("42", "is_owned_by", "VAL"): True,
+                    ("42", "is_controlled_by", controller): True,
+                    ("42", "controller"): controller,
+                    ("ALLY", "is_subject_of", "STS"): True,
+                    ("VALSUB", "is_subject_of", "VAL"): True,
+                    ("STS", "has_country_flag", "STP_cw_postwar"): True,
+                    ("STS", "has_country_flag", "STP_shabrat_was_arrested"): branch,
+                    ("STS", "ruling_leader"): "STP_grigory_sotnikov",
+                }
+                with self.subTest(directory=branch, controller=controller):
+                    self.assertEqual(matches_conditions(expand(gate, definitions=definitions), facts, "42"), not branch or controller != "YPR")
+
+    def test_government_choice_applies_inside_reward_and_to_later_districts(self):
+        government = block(block(self.effects, "STP_sdir_apply_district_government"), "if")
+        subjects = block(government, "every_subject_country")
+        compact = next(
+            e.value for e in subjects
+            if e.key == "if" and any(c.key == "STS" for c in block(e.value, "limit"))
+        )
+        gate = block(compact, "limit")
+        for input_value, completed, expected in (
+            (2, False, True), (1, False, False), (0, True, True),
+            (0, False, False), (1, True, False),
+        ):
+            facts = {
+                ("STS", "variable", "STP_sdir_government_input"): input_value,
+                ("STS", "has_completed_focus", "STP_pc_sdir_field_compacts"): completed,
+            }
+            with self.subTest(input=input_value, completed=completed):
+                self.assertEqual(matches_conditions(gate, facts, "VAL"), expected)
+        for entry in walk(subjects):
+            if entry.key == "set_autonomy":
+                self.assertEqual(scalar(entry.value, "end_wars"), "no")
+                self.assertEqual(scalar(entry.value, "end_civil_wars"), "no")
+
+    def test_both_governance_focuses_change_provisional_factory_transfers(self):
+        tiers = {
+            scalar(e.value, "id"): block(e.value, "modifier")
+            for e in relative_entries("common/autonomous_states/ADISCORD_STP_provisional_administration.txt")
+            if e.key == "autonomy_state"
+        }
+        self.assertEqual(
+            {name: (float(scalar(tiers[name], "cic_to_overlord_factor")), float(scalar(tiers[name], "mic_to_overlord_factor"))) for name in tiers},
+            {
+                "autonomy_STP_provisional_administration": (0.20, 0.35),
+                "autonomy_STP_directory_command": (0.25, 0.45),
+                "autonomy_STP_directory_compact": (0.10, 0.15),
+            },
+        )
+        government = block(block(self.effects, "STP_sdir_apply_district_government"), "if")
+        subjects = block(government, "every_subject_country")
+        for input_value, focus, expected in (
+            (0, None, []),
+            (1, None, ["autonomy_STP_directory_command"]),
+            (2, None, ["autonomy_STP_directory_compact"]),
+            (0, "STP_pc_sdir_central_command", ["autonomy_STP_directory_command"]),
+            (0, "STP_pc_sdir_field_compacts", ["autonomy_STP_directory_compact"]),
+        ):
+            facts = {("STS", "variable", "STP_sdir_government_input"): input_value}
+            if focus:
+                facts[("STS", "has_completed_focus", focus)] = True
+            selected = list(selected_effects(subjects, facts, "VAL"))
+            self.assertEqual(
+                [scalar(e.value, "autonomy_state") for _, e in selected if e.key == "set_autonomy"], expected
+            )
+
+    def test_final_map_requires_each_annexation_and_actual_districts(self):
+        gate = block(self.triggers, "STP_sdir_map_settled")
+        states = {e.key: scalar(e.value, "is_owned_by") for e in gate if e.key.isdigit()}
+        self.assertEqual(states, {
+            "10": "STS", "11": "STS", "24": "STS", "42": "STS", "54": "VAL",
+            "55": "STS", "57": "VAL", "48": "VAL", "30": "NOD",
+        })
+        facts = {
+            ("STS", "STP_pc_sword_directory_current", "yes"): True,
+            ("STS", "STP_sdir_occidia_resolved", "yes"): True,
+            ("STS", "STP_sdir_bezhaysk_administration_current", "yes"): True,
+        }
+        for state, owner in states.items():
+            facts[(state, "is_owned_by", owner)] = True
+            facts[(state, "is_controlled_by", owner)] = True
+        for tag, cosmetic in (("VAL", "VAL_STS_arsenal_district"), ("NOD", "NOD_STS_naval_district")):
+            facts[(tag, "exists", "yes")] = True
+            facts[(tag, "is_subject_of", "STS")] = True
+            facts[(tag, "has_cosmetic_tag", cosmetic)] = True
+        self.assertTrue(matches_conditions(gate, facts, "STS"))
+        for key in facts:
+            with self.subTest(missing=key):
+                self.assertFalse(matches_conditions(gate, {**facts, key: False}, "STS"))
+        occidia = block(self.triggers, "STP_sdir_occidia_resolved")
+        self.assertEqual({e.key for e in occidia if e.key.isdigit()}, {"43", "44", "88"})
+
+    def test_early_victory_is_settled_before_oath_without_historical_inference(self):
+        for name in ("STP_pc_val_subjugation_war", "STP_pc_nod_subjugation_war"):
+            gate = block(self.triggers, name)
+            self.assertTrue(matches_conditions(
+                gate, {("STS", "STP_pc_sword_directory_branch", "yes"): True}, "STS"
+            ))
+            self.assertFalse(matches_conditions(gate, {}, "STS"))
+        settlement = block(self.effects, "STP_pc_begin_settlement")
+        directory = next(
+            e.value for e in walk(settlement)
+            if e.key == "if" and any(c.key == "STP_sdir_absorb_cannibal_conquests" for c in e.value)
+        )
+        keys = [e.key for e in directory]
+        self.assertLess(keys.index("STP_heg_prepare_val_administration"), keys.index("STP_sdir_absorb_cannibal_conquests"))
+        self.assertLess(keys.index("STP_sdir_absorb_cannibal_conquests"), keys.index("STP_pc_settle_val_northern_conquests"))
+        self.assertLess(keys.index("STP_pc_settle_val_northern_conquests"), keys.index("STP_sdir_reorganize_districts"))
+
+    def test_reconciliation_rechecks_current_land_and_never_targets_independent_districts(self):
+        decisions = relative_entries("common/decisions/ADISCORD_STP_decisions.txt")
+        decision = next(e.value for e in walk(decisions) if e.key == "STP_sdir_reconcile_districts")
+        payload = block(block(block(decision, "complete_effect"), "hidden_effect"), "if")
+        facts = {
+            ("STS", "has_war", "no"): True,
+            ("STS", "STP_sdir_programmes_current", "yes"): True,
+            ("STS", "STP_sdir_reorganization_available", "yes"): True,
+        }
+        self.assertTrue(matches_conditions(block(payload, "limit"), facts, "STS"))
+        for key in facts:
+            self.assertFalse(matches_conditions(block(payload, "limit"), {**facts, key: False}, "STS"))
+        self.assertEqual(scalar(payload, "STP_sdir_reorganize_districts"), "yes")
+        available = block(self.triggers, "STP_sdir_reorganization_available")
+        candidates = block(available, "OR")
+        own_states = block(candidates, "any_owned_state")
+        for state, target in (("48", "VAL"), ("54", "VAL"), ("57", "VAL"), ("30", "NOD")):
+            base = {(state, "is_controlled_by", "STS"): True}
+            for ownership in ("independent", "gone", "subject"):
+                current = dict(base)
+                if ownership == "gone":
+                    current[(target, "exists", "no")] = True
+                elif ownership == "subject":
+                    current[(target, "is_subject_of", "STS")] = True
+                with self.subTest(state=state, ownership=ownership):
+                    self.assertEqual(matches_conditions(own_states, current, state), ownership != "independent")
+                    current[(state, "is_controlled_by", "STS")] = False
+                    self.assertFalse(matches_conditions(own_states, current, state))
+        for tag, state in (("VAL", "24"), ("NOD", "10")):
+            country = block(candidates, tag)
+            self.assertEqual(scalar(country, "is_subject_of"), "STS")
+            transfer = block(block(country, "OR"), "any_owned_state")
+            self.assertTrue(matches_conditions(transfer, {(state, "is_controlled_by", tag): True}, state))
+            self.assertFalse(matches_conditions(transfer, {(state, "is_controlled_by", "YPR"): True}, state))
+        self.assertEqual({e.key for e in candidates if e.key.isdigit()}, {str(i) for i in range(58, 66)})
+        northern = block(self.triggers, "STP_sdir_cannibal_reorganization_needed")
+        for eligible, own, control in ((True, False, False), (True, True, False), (True, True, True), (False, False, False)):
+            current = {
+                ("58", "STP_sdir_cannibal_state_transferable", "yes"): eligible,
+                ("58", "is_owned_by", "STS"): own,
+                ("58", "is_controlled_by", "STS"): control,
+            }
+            self.assertEqual(matches_conditions(northern, current, "58"), eligible and not (own and control))
+
+    def test_occidia_focus_uses_existing_war_and_retains_third_party_guards(self):
+        gate = block(self.triggers, "STP_occidia_invasion_available")
+        facts = {
+            ("STS", "STP_pc_sword_directory_current", "yes"): True,
+            ("STS", "has_completed_focus", "STP_pc_sdir_occidia_campaign"): True,
+            ("STS", "is_neighbor_of", "SRP"): True,
+        }
+        for tag in ("STS", "SRP"):
+            for key, value in (("exists", "yes"), ("is_subject", "no"), ("has_capitulated", "no"), ("has_war", "no"), ("is_in_faction", "no")):
+                facts[(tag, key, value)] = True
+        self.assertTrue(matches_conditions(gate, facts, "STS"))
+        for key in (
+            ("SRP", "has_war", "no"),
+            ("SRP", "is_subject", "no"),
+            ("STS", "has_completed_focus", "STP_pc_sdir_occidia_campaign"),
+        ):
+            self.assertFalse(matches_conditions(gate, {**facts, key: False}, "STS"))
+
+
+class SwordDirectoryProgrammeTransactions(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = {e.key: e.value for e in entries(EFFECTS)}
+        cls.triggers = {e.key: e.value for e in entries(TRIGGERS)}
+        cls.decisions = {
+            decision.key: decision.value
+            for category in relative_entries("common/decisions/ADISCORD_STP_decisions.txt")
+            for decision in category.value
+            if decision.key.startswith("STP_sdir_")
+        }
+        cls.events = {
+            scalar(e.value, "id"): e.value
+            for e in entries(EVENTS) if e.key == "country_event"
+        }
+
+    def facts(self, treasury=1000, direct=False):
+        facts = {
+            ("STS", "has_country_flag", "STP_cw_postwar"): True,
+            ("STS", "has_country_flag", "STP_shabrat_was_arrested"): True,
+            ("STS", "ruling_leader"): "STP_grigory_sotnikov",
+            ("STS", "has_completed_focus", "STP_pc_sdir_oath"): True,
+            ("STS", "variable", "STP_pc_course"): 3,
+            ("STS", "is_subject", "no"): True,
+            ("STS", "has_capitulated", "no"): True,
+            ("STS", "variable", "ADISCORD_economy_treasury"): treasury,
+        }
+        for kind, tag, state in (("arsenal", "VAL", "48"), ("naval", "NOD", "30")):
+            facts[("STS", "has_completed_focus", f"STP_pc_sdir_{kind}_programme")] = True
+            facts[(tag, "exists", "yes")] = True
+            facts[(tag, "is_subject_of", "STS")] = True
+            facts[(tag, "has_capitulated", "no")] = True
+            owner = "STS" if direct else tag
+            facts[(state, "is_owned_by", owner)] = True
+            facts[(state, "is_controlled_by", owner)] = True
+        return facts
+
+    def execute(self, items, facts, scope="STS"):
+        dispatched = []
+        execute_package_effects(items, facts, dispatched, scope, self.effects, self.triggers)
+        return dispatched
+
+    def option(self, kind):
+        event_id = "ADISCORD_STP_pc.86" if kind == "arsenal" else "ADISCORD_STP_pc.87"
+        return next(
+            e.value for e in self.events[event_id]
+            if e.key == "option" and scalar(e.value, "name") == event_id + ".a"
+        )
+
+    def test_district_acceptance_debits_exactly_once_and_stale_answers_do_nothing(self):
+        for kind, tag, event_id in (("arsenal", "VAL", "ADISCORD_STP_pc.86"), ("naval", "NOD", "ADISCORD_STP_pc.87")):
+            facts = self.facts(treasury=300)
+            request = block(self.decisions[f"STP_sdir_request_{kind}_programme"], "complete_effect")
+            self.assertEqual(self.execute(request, facts), [(tag, event_id)])
+            self.assertEqual(facts[("STS", "variable", "ADISCORD_economy_treasury")], 300)
+            self.assertEqual(self.execute(request, facts), [])
+            self.execute(self.option(kind), facts, tag)
+            self.execute(self.option(kind), facts, tag)
+            self.assertEqual(facts[("STS", "variable", "ADISCORD_economy_treasury")], 0)
+            self.assertEqual(facts[("STS", "variable", "ADISCORD_economy_current_month_action_costs")], 300)
+            self.assertEqual(facts[("STS", "variable", f"STP_sdir_{kind}_deposit")], 300)
+            self.assertTrue(facts[("STS", "has_active_mission", f"STP_sdir_{kind}_work")])
+            for changed in ("funds", "owner", "controller", "subject", "leader"):
+                stale = self.facts(treasury=300)
+                self.execute(request, stale)
+                state = "48" if kind == "arsenal" else "30"
+                if changed == "funds":
+                    stale[("STS", "variable", "ADISCORD_economy_treasury")] = 299.999
+                elif changed in ("owner", "controller"):
+                    key = "is_owned_by" if changed == "owner" else "is_controlled_by"
+                    stale[(state, key, tag)] = False
+                elif changed == "subject":
+                    stale[(tag, "is_subject_of", "STS")] = False
+                else:
+                    stale[("STS", "ruling_leader")] = "STP_Leonid_Barchel"
+                balance = stale[("STS", "variable", "ADISCORD_economy_treasury")]
+                with self.subTest(kind=kind, stale=changed):
+                    self.execute(self.option(kind), stale, tag)
+                    self.assertEqual(stale[("STS", "variable", "ADISCORD_economy_treasury")], balance)
+                    self.assertNotIn(("STS", "has_variable", f"STP_sdir_{kind}_deposit"), stale)
+                    self.assertNotIn(("STS", "has_country_flag", f"STP_sdir_{kind}_offer_pending"), stale)
+
+    def test_delivery_and_refund_each_settle_paid_receipt_once(self):
+        packages = (
+            ("arsenal", "VAL", "48", {"infantry_equipment": 900, "support_equipment": 100}),
+            ("naval", "NOD", "30", {"convoy_1": 20, "motorized_equipment": 50}),
+        )
+        for kind, tag, state, equipment in packages:
+            for direct in (False, True):
+                for valid in (False, True):
+                    facts = self.facts(treasury=300, direct=direct)
+                    self.execute(self.effects[f"STP_sdir_{kind}_begin"], facts)
+                    self.execute(self.effects[f"STP_sdir_{kind}_begin"], facts)
+                    if not valid:
+                        facts[(state, "is_controlled_by", "STS" if direct else tag)] = False
+                    self.execute(self.effects[f"STP_sdir_{kind}_finish"], facts)
+                    self.execute(self.effects[f"STP_sdir_{kind}_finish"], facts)
+                    self.execute(self.effects[f"STP_sdir_{kind}_refund"], facts)
+                    with self.subTest(kind=kind, direct=direct, valid=valid):
+                        self.assertEqual(facts[("STS", "variable", "ADISCORD_economy_treasury")], 0 if valid else 300)
+                        self.assertNotIn(("STS", "has_variable", f"STP_sdir_{kind}_deposit"), facts)
+                        self.assertEqual(facts.get(("STS", "has_country_flag", f"STP_sdir_{kind}_delivered"), False), valid)
+                        for item, amount in equipment.items():
+                            self.assertEqual(facts.get(("STS", "equipment", item), 0), amount if valid else 0)
+
+    def test_programme_missions_wait_twenty_one_days_without_success_condition(self):
+        for kind in ("arsenal", "naval"):
+            mission = self.decisions[f"STP_sdir_{kind}_work"]
+            self.assertEqual(scalar(mission, "days_mission_timeout"), "21")
+            self.assertEqual(scalar(block(block(mission, "available"), "hidden_trigger"), "always"), "no")
+            self.assertEqual(scalar(block(block(mission, "timeout_effect"), "hidden_effect"), f"STP_sdir_{kind}_finish"), "yes")
+            self.assertEqual(scalar(block(block(mission, "cancel_effect"), "hidden_effect"), f"STP_sdir_{kind}_refund"), "yes")
+
+    def set_target(self, facts, state):
+        for key in [key for key in facts if key[0] == "FROM"]:
+            del facts[key]
+        facts.update({("FROM", *key[1:]): value for key, value in list(facts.items()) if key[0] == state})
+
+    def execute_target(self, items, facts, state):
+        self.set_target(facts, state)
+        self.execute(items, facts)
+        for key in [key for key in facts if key[0] == state]:
+            del facts[key]
+        facts.update({(state, *key[1:]): value for key, value in list(facts.items()) if key[0] == "FROM"})
+
+    def test_rear_escrow_blocks_all_other_targets_until_delivery_or_refund(self):
+        decision = self.decisions["STP_sdir_rebuild_rear"]
+        for outcome in ("delivery", "occupation", "capacity"):
+            facts = self.facts()
+            for state in ("24", "42", "55"):
+                facts[(state, "is_owned_by", "ROOT")] = True
+                facts[(state, "is_controlled_by", "ROOT")] = True
+                facts[(state, "numeric", "infrastructure")] = 2
+            self.execute_target(block(decision, "complete_effect"), facts, "24")
+            for state in ("42", "55"):
+                self.set_target(facts, state)
+                self.assertFalse(matches_conditions(expand(block(decision, "available"), definitions=self.triggers), facts, "STS"))
+                self.execute_target(block(decision, "complete_effect"), facts, state)
+                self.assertNotIn((state, "has_state_flag", "STP_sdir_rear_work"), facts)
+            self.assertEqual(facts[("STS", "variable", "ADISCORD_economy_treasury")], 700)
+            if outcome == "occupation":
+                facts[("24", "is_controlled_by", "ROOT")] = False
+            elif outcome == "capacity":
+                facts[("24", "numeric", "infrastructure")] = 5
+            self.execute_target(block(decision, "remove_effect"), facts, "24")
+            self.execute_target(block(decision, "remove_effect"), facts, "24")
+            self.execute_target(block(decision, "cancel_effect"), facts, "24")
+            with self.subTest(outcome=outcome):
+                self.assertEqual(facts[("STS", "variable", "ADISCORD_economy_treasury")], 700 if outcome == "delivery" else 1000)
+                self.assertEqual(facts[("24", "numeric", "infrastructure")], {"delivery": 3, "occupation": 2, "capacity": 5}[outcome])
+                self.assertNotIn(("STS", "has_variable", "STP_sdir_rear_deposit"), facts)
+                self.assertNotIn(("24", "has_state_flag", "STP_sdir_rear_work"), facts)
+            self.set_target(facts, "42")
+            self.assertTrue(matches_conditions(expand(block(decision, "available"), definitions=self.triggers), facts, "STS"))
+
+    def test_annexation_and_liberation_close_unanswered_offers(self):
+        hooks = block(relative_entries("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"), "on_actions")
+        annex = block(block(hooks, "on_annex"), "effect")
+        own_hooks = block(relative_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions")
+        liberation = block(block(own_hooks, "on_subject_free"), "effect")
+        for kind, tag in (("arsenal", "VAL"), ("naval", "NOD")):
+            flag = f"STP_sdir_{kind}_offer_pending"
+            for hook, annexed in ((annex, True), (liberation, False)):
+                branch = next(
+                    e.value for e in walk(hook)
+                    if e.key == "if" and any(
+                        c.key == "STS" and any(x.key == "clr_country_flag" and x.value == flag for x in c.value)
+                        for c in e.value
+                    )
+                )
+                condition = block(branch, "limit")
+                if annexed:
+                    condition = block(condition, "FROM")
+                self.assertEqual(scalar(condition, "tag"), tag)
+                facts = {("STS", "has_country_flag", flag): True}
+                self.execute(block(branch, "STS"), facts)
+                self.assertNotIn(("STS", "has_country_flag", flag), facts)
 
 
 if __name__ == "__main__":

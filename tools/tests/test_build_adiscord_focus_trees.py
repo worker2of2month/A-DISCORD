@@ -42,6 +42,27 @@ def body_text(source, row):
     return source[opening:block_end(source, opening)]
 
 
+def source_focus_ids(relative):
+    """Inventory raw inputs independently of the assembly result."""
+    source = (ROOT / "focus_trees" / relative).read_text(encoding="utf-8")
+    tree = one(parse_clausewitz(source), "focus_tree")
+    focuses = [row for row in tree if row.key == "focus"]
+    for line in source.splitlines():
+        if not line.startswith("# @include "):
+            continue
+        path, section = line.removeprefix("# @include ").split("#")
+        fragment = (ROOT / "focus_trees" / path).read_text(encoding="utf-8")
+        marker = f"# @section {section}\n"
+        if fragment.count(marker) != 1:
+            raise AssertionError(f"Expected one section {section} in {path}")
+        selected = fragment.split(marker, 1)[1].split("# @section ", 1)[0]
+        rows = parse_clausewitz(selected)
+        if any(row.key != "focus" for row in rows):
+            raise AssertionError(f"Non-focus definition in {path}#{section}")
+        focuses.extend(rows)
+    return [one(row.value, "id") for row in focuses]
+
+
 class SharedFocusHistoryAssemblyTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -62,7 +83,7 @@ class SharedFocusHistoryAssemblyTests(unittest.TestCase):
         self.assertIn("Native layout: shared focus history", self.native_text)
 
     def test_all_original_focus_bodies_and_tree_metadata_are_preserved(self):
-        self.assertEqual(len(self.old_focuses), 149)
+        self.assertEqual(len(self.old_focuses), 179)
         self.assertEqual(self.old_focuses.keys(), self.shared_focuses.keys())
         self.assertFalse(any(row.key == "focus" for row in self.tree))
         for focus_id, original in self.old_focuses.items():
@@ -78,7 +99,7 @@ class SharedFocusHistoryAssemblyTests(unittest.TestCase):
 
     def test_root_references_cover_every_original_focus(self):
         roots = [row.value for row in self.tree if row.key == "shared_focus"]
-        self.assertCountEqual(roots, ["VAL_The_Contract_State", "VAL_Stelander_Crisis_Opens", "VAL_Naval_Contract_Office"])
+        self.assertCountEqual(roots, ["VAL_The_Contract_State", "VAL_Stelander_Crisis_Opens"])
         prerequisites = {
             focus_id: {
                 child.value
@@ -109,9 +130,11 @@ class SharedFocusHistoryAssemblyTests(unittest.TestCase):
         self.assertEqual({key: counts[key] for key in self.old_focuses}, dict.fromkeys(self.old_focuses, 1))
         new_native = parse_clausewitz(read_native_focus_source(OUTPUT_ROOT / SOURCES["VAL/new_world/focuses.txt"]))
         new_tree = one(new_native, "focus_tree")
-        new_ids = {one(row.value, "id") for row in new_tree if row.key == "focus"}
-        self.assertEqual(len(new_ids), 27)
-        self.assertTrue(new_ids.isdisjoint(self.old_focuses))
+        new_ids = [one(row.value, "id") for row in new_tree if row.key == "focus"]
+        self.assertCountEqual(new_ids, source_focus_ids("VAL/new_world/focuses.txt"))
+        self.assertEqual(len(new_ids), len(set(new_ids)))
+        self.assertTrue(set(new_ids).isdisjoint(self.old_focuses))
+        self.assertEqual({key: counts[key] for key in new_ids}, dict.fromkeys(new_ids, 1))
         self.assertEqual(
             [row.value for row in new_tree if row.key == "shared_focus"],
             ["VAL_Naval_Contract_Office"],
@@ -162,6 +185,79 @@ class SharedFocusHistoryAssemblyTests(unittest.TestCase):
         shared = validate_supplemental_rewards(render_shared_history_tree(source), "")
         self.assertEqual(len(ordinary), 1)
         self.assertEqual(shared, ordinary)
+
+
+class STPCharterAssemblyTests(unittest.TestCase):
+    SOURCE = "STP/civil_war/focuses.txt"
+    CANDIDATES = ("sotnikov", "shabrat", "tikhoreva")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.root_text = (ROOT / "focus_trees" / cls.SOURCE).read_text(encoding="utf-8")
+        cls.authored_text = render_source(cls.SOURCE)
+        cls.authored = parse_clausewitz(cls.authored_text)
+        cls.output = OUTPUT_ROOT / SOURCES[cls.SOURCE]
+        cls.native_text = read_native_focus_source(cls.output)
+        cls.native = parse_clausewitz(cls.native_text)
+
+    def test_each_cabinet_is_one_explicit_fragment_with_25_unique_focuses(self):
+        all_ids = []
+        for candidate in self.CANDIDATES:
+            with self.subTest(candidate=candidate):
+                relative = f"STP/postwar/charter/{candidate}.txt"
+                path = ROOT / "focus_trees" / relative
+                self.assertFalse(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+                text = path.read_text(encoding="utf-8")
+                section = f"# @section charter_{candidate}\n"
+                self.assertEqual(text.count("# @section "), 1)
+                self.assertIn(section, text)
+                self.assertNotIn("# @include", text)
+                rows = parse_clausewitz(text)
+                self.assertEqual(len(rows), 25)
+                self.assertTrue(all(row.key == "focus" for row in rows))
+                ids = [one(row.value, "id") for row in rows]
+                self.assertEqual(len(set(ids)), 25)
+                self.assertTrue(all(name.startswith(f"STP_pc_charter_{candidate}_") for name in ids))
+                all_ids.extend(ids)
+                include = f"# @include {relative}#charter_{candidate}\n"
+                self.assertEqual(self.root_text.count(include), 1)
+        self.assertEqual(len(set(all_ids)), 75)
+        common = (ROOT / "focus_trees/STP/postwar/shabrat/focuses.txt").read_text(encoding="utf-8")
+        self.assertNotIn("# @section charter_programmes", common)
+        self.assertFalse(any(
+            row.key == "focus" and one(row.value, "id").startswith("STP_pc_charter_")
+            for row in parse_clausewitz(common)
+        ))
+
+    def test_all_authored_focuses_keep_native_scope_order_and_semantics(self):
+        expected_ids = source_focus_ids(self.SOURCE)
+        self.assertEqual(len(expected_ids), len(set(expected_ids)))
+        for label, rows in (("authored", self.authored), ("native", self.native)):
+            with self.subTest(source=label):
+                self.assertEqual([row.key for row in rows], ["focus_tree"])
+                tree = one(rows, "focus_tree")
+                self.assertEqual(one(tree, "id"), "STP_cw_focus")
+                ids = [one(row.value, "id") for row in tree if row.key == "focus"]
+                self.assertCountEqual(ids, expected_ids)
+                self.assertEqual(len(ids), len(set(ids)))
+        self.assertEqual(semantic(self.native), semantic(self.authored))
+
+    def test_native_header_and_fragment_expansion_match_exact_bytes(self):
+        header = (
+            "# Generated by tools/builders/build_adiscord_focus_trees.py; do not edit.\n"
+            f"# Source: focus_trees/{self.SOURCE}\n\n"
+        )
+        self.assertEqual(self.output.read_bytes(), (header + self.authored_text).encode("utf-8"))
+        self.assertNotIn("# @include", self.authored_text)
+        self.assertNotIn("# @section", self.authored_text)
+        native_tree = one(self.native, "focus_tree")
+        native_focuses = {one(row.value, "id"): row for row in native_tree if row.key == "focus"}
+        for candidate in self.CANDIDATES:
+            text = (ROOT / f"focus_trees/STP/postwar/charter/{candidate}.txt").read_text(encoding="utf-8")
+            for row in parse_clausewitz(text):
+                focus_id = one(row.value, "id")
+                with self.subTest(focus=focus_id):
+                    self.assertEqual(body_text(text, row), body_text(self.native_text, native_focuses[focus_id]))
 
 
 if __name__ == "__main__":

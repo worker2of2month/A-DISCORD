@@ -1794,6 +1794,82 @@ ideas = {
 		STP_pc_sdir_staff_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { stability_factor = 0.05 ADISCORD_economy_admin_expense_factor = -0.04 } }
 		STP_pc_sdir_governors_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { political_power_gain = 0.10 ADISCORD_economy_admin_expense_factor = -0.04 } }
 		STP_pc_sdir_sword_directory_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { army_org_factor = 0.05 industrial_capacity_factory = 0.05 stability_factor = 0.05 } }
+		STP_pc_sdir_military_prosecution_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.02
+			}
+		}
+
+		STP_pc_sdir_field_courts_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.03
+			}
+		}
+
+		STP_pc_sdir_district_audit_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.03
+				ADISCORD_economy_overall_income_factor = 0.03
+			}
+		}
+
+		STP_pc_sdir_service_records_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_country_development_state_growth_factor = 0.05
+			}
+		}
+
+		STP_pc_sdir_mobile_operations_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.05
+				planning_speed = 0.05
+			}
+		}
+
+		STP_pc_sdir_prepared_positions_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.05
+				army_org_regain = 0.05
+			}
+		}
+
+		STP_pc_sdir_arsenal_machine_tools_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.05
+			}
+		}
+
+		STP_pc_sdir_school_network_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
+		}
+
+		STP_pc_sdir_integrated_rear_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.03
+				production_speed_industrial_complex_factor = 0.04
+			}
+		}
+
 		STP_pc_gornin_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { ADISCORD_economy_admin_expense_factor = -0.04 } }
 		STP_pc_vera_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { political_power_gain = 0.05 industrial_capacity_factory = -0.03 } }
 		STP_pc_mountain_defence = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_core_defence_factor = 0.08 } }
