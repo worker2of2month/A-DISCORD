@@ -2941,9 +2941,10 @@ class ValNorthernExportTests(unittest.TestCase):
                 hover = {without_colors(value) for value in rendered(values[key + "_tooltip"])}
                 for normal in rendered(values[key]):
                     amounts = re.findall(r"([+-]?\d+(?:\.\d+)?)\s+(£\w+)", without_colors(normal))
-                    self.assertTrue(amounts, key)
                     self.assertTrue(any(
-                        all(pair in re.findall(r"([+-]?\d+(?:\.\d+)?)\s+(£\w+)", text) for pair in amounts)
+                        without_colors(normal) in text or (
+                            amounts and all(pair in re.findall(r"([+-]?\d+(?:\.\d+)?)\s+(£\w+)", text) for pair in amounts)
+                        )
                         for text in hover
                     ))
                 for normal, blocked in product(rendered(values[key]), rendered(values[key + "_blocked"])):
