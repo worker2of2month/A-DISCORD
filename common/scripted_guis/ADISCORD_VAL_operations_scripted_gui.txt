@@ -83,7 +83,7 @@ scripted_gui = {
    VAL_ops_44_border_visible = { 44 = { controller = { tag = VAL } } }
    VAL_ops_44_contested_visible = { 44 = { controller = { tag = VAL OR = { NOT = { controls_province = 16433 } NOT = { controls_province = 16448 } } } } }
    VAL_ops_45_border_visible = { 45 = { controller = { tag = VAL } } }
-   VAL_ops_45_contested_visible = { 45 = { controller = { tag = VAL OR = { NOT = { controls_province = 111 } NOT = { controls_province = 6675 } NOT = { controls_province = 16458 } NOT = { controls_province = 16459 } NOT = { controls_province = 16461 } NOT = { controls_province = 16529 } } } } }
+   VAL_ops_45_contested_visible = { 45 = { controller = { tag = VAL OR = { NOT = { controls_province = 111 } NOT = { controls_province = 6675 } NOT = { controls_province = 16458 } NOT = { controls_province = 16459 } NOT = { controls_province = 16461 } NOT = { controls_province = 16529 } NOT = { controls_province = 16810 } } } } }
    VAL_ops_88_border_visible = { 88 = { controller = { tag = VAL } } }
    VAL_ops_88_contested_visible = { 88 = { controller = { tag = VAL OR = { NOT = { controls_province = 110 } NOT = { controls_province = 16429 } } } } }
    VAL_ops_58_border_visible = { 58 = { controller = { tag = VAL } } }
@@ -93,7 +93,7 @@ scripted_gui = {
    VAL_ops_60_border_visible = { 60 = { controller = { tag = VAL } } }
    VAL_ops_60_contested_visible = { 60 = { controller = { tag = VAL OR = { NOT = { controls_province = 8171 } NOT = { controls_province = 8273 } NOT = { controls_province = 12326 } NOT = { controls_province = 16299 } NOT = { controls_province = 16340 } NOT = { controls_province = 16341 } } } } }
    VAL_ops_61_border_visible = { 61 = { controller = { tag = VAL } } }
-   VAL_ops_61_contested_visible = { 61 = { controller = { tag = VAL OR = { NOT = { controls_province = 1480 } NOT = { controls_province = 8938 } NOT = { controls_province = 11332 } NOT = { controls_province = 16316 } } } } }
+   VAL_ops_61_contested_visible = { 61 = { controller = { tag = VAL OR = { NOT = { controls_province = 1480 } NOT = { controls_province = 8938 } NOT = { controls_province = 11332 } NOT = { controls_province = 16316 } NOT = { controls_province = 16814 } } } } }
    VAL_ops_62_border_visible = { 62 = { controller = { tag = VAL } } }
    VAL_ops_62_contested_visible = { 62 = { controller = { tag = VAL OR = { NOT = { controls_province = 91 } NOT = { controls_province = 104 } NOT = { controls_province = 1394 } NOT = { controls_province = 5364 } NOT = { controls_province = 8327 } NOT = { controls_province = 16339 } } } } }
    VAL_ops_63_border_visible = { 63 = { controller = { tag = VAL } } }
@@ -103,7 +103,7 @@ scripted_gui = {
    VAL_ops_65_border_visible = { 65 = { controller = { tag = VAL } } }
    VAL_ops_65_contested_visible = { 65 = { controller = { tag = VAL OR = { NOT = { controls_province = 6423 } NOT = { controls_province = 6440 } NOT = { controls_province = 16305 } NOT = { controls_province = 16328 } NOT = { controls_province = 16337 } NOT = { controls_province = 16338 } } } } }
    VAL_ops_24_border_visible = { 24 = { controller = { tag = VAL } } }
-   VAL_ops_24_contested_visible = { 24 = { controller = { tag = VAL OR = { NOT = { controls_province = 3790 } NOT = { controls_province = 4214 } NOT = { controls_province = 4356 } NOT = { controls_province = 9126 } NOT = { controls_province = 10360 } NOT = { controls_province = 10455 } NOT = { controls_province = 10598 } NOT = { controls_province = 10691 } } } } }
+   VAL_ops_24_contested_visible = { 24 = { controller = { tag = VAL OR = { NOT = { controls_province = 3790 } NOT = { controls_province = 4214 } NOT = { controls_province = 4356 } NOT = { controls_province = 9126 } NOT = { controls_province = 10360 } NOT = { controls_province = 10455 } NOT = { controls_province = 10598 } NOT = { controls_province = 10691 } NOT = { controls_province = 16812 } NOT = { controls_province = 16813 } } } } }
    VAL_ops_42_border_visible = { 42 = { controller = { tag = VAL } } }
    VAL_ops_42_contested_visible = { 42 = { controller = { tag = VAL OR = { NOT = { controls_province = 125 } NOT = { controls_province = 16431 } NOT = { controls_province = 16436 } NOT = { controls_province = 16437 } NOT = { controls_province = 16438 } } } } }
    VAL_ops_48_border_visible = { 48 = { controller = { tag = VAL } } }
@@ -121,13 +121,13 @@ scripted_gui = {
    VAL_ops_2_border_visible = { 2 = { controller = { tag = VAL } } }
    VAL_ops_2_contested_visible = { 2 = { controller = { tag = VAL OR = { NOT = { controls_province = 1 } NOT = { controls_province = 10 } NOT = { controls_province = 117 } NOT = { controls_province = 119 } NOT = { controls_province = 134 } NOT = { controls_province = 16445 } NOT = { controls_province = 16539 } NOT = { controls_province = 16540 } NOT = { controls_province = 16541 } NOT = { controls_province = 16547 } NOT = { controls_province = 16553 } } } } }
    VAL_ops_3_border_visible = { 3 = { controller = { tag = VAL } } }
-   VAL_ops_3_contested_visible = { 3 = { controller = { tag = VAL OR = { NOT = { controls_province = 45 } NOT = { controls_province = 63 } NOT = { controls_province = 93 } NOT = { controls_province = 148 } NOT = { controls_province = 149 } NOT = { controls_province = 150 } NOT = { controls_province = 10217 } NOT = { controls_province = 16457 } NOT = { controls_province = 16462 } NOT = { controls_province = 16550 } } } } }
+   VAL_ops_3_contested_visible = { 3 = { controller = { tag = VAL OR = { NOT = { controls_province = 45 } NOT = { controls_province = 63 } NOT = { controls_province = 93 } NOT = { controls_province = 148 } NOT = { controls_province = 149 } NOT = { controls_province = 150 } NOT = { controls_province = 10217 } NOT = { controls_province = 16457 } NOT = { controls_province = 16462 } NOT = { controls_province = 16550 } NOT = { controls_province = 16809 } } } } }
    VAL_ops_28_border_visible = { 28 = { controller = { tag = VAL } } }
    VAL_ops_28_contested_visible = { 28 = { controller = { tag = VAL OR = { NOT = { controls_province = 145 } NOT = { controls_province = 16351 } NOT = { controls_province = 16366 } NOT = { controls_province = 16368 } NOT = { controls_province = 16374 } NOT = { controls_province = 16377 } NOT = { controls_province = 16386 } } } } }
    VAL_ops_29_border_visible = { 29 = { controller = { tag = VAL } } }
    VAL_ops_29_contested_visible = { 29 = { controller = { tag = VAL OR = { NOT = { controls_province = 16345 } } } } }
    VAL_ops_46_border_visible = { 46 = { controller = { tag = VAL } } }
-   VAL_ops_46_contested_visible = { 46 = { controller = { tag = VAL OR = { NOT = { controls_province = 98 } NOT = { controls_province = 100 } NOT = { controls_province = 153 } NOT = { controls_province = 3250 } NOT = { controls_province = 9376 } NOT = { controls_province = 10254 } NOT = { controls_province = 16349 } NOT = { controls_province = 16456 } } } } }
+   VAL_ops_46_contested_visible = { 46 = { controller = { tag = VAL OR = { NOT = { controls_province = 98 } NOT = { controls_province = 100 } NOT = { controls_province = 153 } NOT = { controls_province = 3250 } NOT = { controls_province = 9376 } NOT = { controls_province = 10254 } NOT = { controls_province = 16349 } NOT = { controls_province = 16456 } NOT = { controls_province = 16811 } } } } }
    VAL_ops_53_border_visible = { 53 = { controller = { tag = VAL } } }
    VAL_ops_53_contested_visible = { 53 = { controller = { tag = VAL OR = { NOT = { controls_province = 29 } NOT = { controls_province = 60 } NOT = { controls_province = 68 } NOT = { controls_province = 70 } NOT = { controls_province = 16364 } NOT = { controls_province = 16434 } } } } }
    VAL_ops_709_border_visible = { 709 = { controller = { tag = VAL } } }
@@ -195,17 +195,17 @@ scripted_gui = {
    VAL_ops_168_border_visible = { 168 = { controller = { tag = VAL } } }
    VAL_ops_168_contested_visible = { 168 = { controller = { tag = VAL OR = { NOT = { controls_province = 721 } NOT = { controls_province = 5388 } NOT = { controls_province = 11452 } NOT = { controls_province = 11567 } NOT = { controls_province = 11664 } NOT = { controls_province = 11667 } NOT = { controls_province = 16534 } } } } }
    VAL_ops_169_border_visible = { 169 = { controller = { tag = VAL } } }
-   VAL_ops_169_contested_visible = { 169 = { controller = { tag = VAL OR = { NOT = { controls_province = 973 } NOT = { controls_province = 2306 } NOT = { controls_province = 4707 } NOT = { controls_province = 5849 } NOT = { controls_province = 10693 } NOT = { controls_province = 11913 } NOT = { controls_province = 16464 } NOT = { controls_province = 16476 } } } } }
+   VAL_ops_169_contested_visible = { 169 = { controller = { tag = VAL OR = { NOT = { controls_province = 973 } NOT = { controls_province = 4707 } NOT = { controls_province = 5344 } NOT = { controls_province = 5849 } NOT = { controls_province = 10824 } NOT = { controls_province = 11913 } } } } }
    VAL_ops_167_border_visible = { 167 = { controller = { tag = VAL } } }
    VAL_ops_167_contested_visible = { 167 = { controller = { tag = VAL OR = { NOT = { controls_province = 3481 } NOT = { controls_province = 9757 } NOT = { controls_province = 10989 } NOT = { controls_province = 12523 } NOT = { controls_province = 16500 } } } } }
    VAL_ops_170_border_visible = { 170 = { controller = { tag = VAL } } }
-   VAL_ops_170_contested_visible = { 170 = { controller = { tag = VAL OR = { NOT = { controls_province = 12878 } NOT = { controls_province = 16513 } NOT = { controls_province = 16520 } NOT = { controls_province = 16526 } } } } }
+   VAL_ops_170_contested_visible = { 170 = { controller = { tag = VAL OR = { NOT = { controls_province = 2306 } NOT = { controls_province = 10693 } NOT = { controls_province = 12878 } NOT = { controls_province = 16464 } NOT = { controls_province = 16476 } NOT = { controls_province = 16513 } NOT = { controls_province = 16520 } NOT = { controls_province = 16526 } } } } }
    VAL_ops_171_border_visible = { 171 = { controller = { tag = VAL } } }
    VAL_ops_171_contested_visible = { 171 = { controller = { tag = VAL OR = { NOT = { controls_province = 333 } NOT = { controls_province = 744 } NOT = { controls_province = 1907 } NOT = { controls_province = 5871 } NOT = { controls_province = 11642 } NOT = { controls_province = 12581 } NOT = { controls_province = 16336 } NOT = { controls_province = 16453 } NOT = { controls_province = 16454 } NOT = { controls_province = 16467 } NOT = { controls_province = 16469 } NOT = { controls_province = 16487 } NOT = { controls_province = 16494 } NOT = { controls_province = 16504 } NOT = { controls_province = 16507 } NOT = { controls_province = 16522 } NOT = { controls_province = 16537 } } } } }
    VAL_ops_184_border_visible = { 184 = { controller = { tag = VAL } } }
    VAL_ops_184_contested_visible = { 184 = { controller = { tag = VAL OR = { NOT = { controls_province = 5541 } NOT = { controls_province = 8003 } NOT = { controls_province = 8500 } NOT = { controls_province = 8632 } NOT = { controls_province = 12244 } NOT = { controls_province = 16463 } NOT = { controls_province = 16479 } NOT = { controls_province = 16481 } NOT = { controls_province = 16490 } NOT = { controls_province = 16509 } } } } }
    VAL_ops_185_border_visible = { 185 = { controller = { tag = VAL } } }
-   VAL_ops_185_contested_visible = { 185 = { controller = { tag = VAL OR = { NOT = { controls_province = 372 } NOT = { controls_province = 3130 } NOT = { controls_province = 5344 } NOT = { controls_province = 10824 } } } } }
+   VAL_ops_185_contested_visible = { 185 = { controller = { tag = VAL OR = { NOT = { controls_province = 372 } NOT = { controls_province = 3130 } } } } }
    VAL_ops_203_border_visible = { 203 = { controller = { tag = VAL } } }
    VAL_ops_203_contested_visible = { 203 = { controller = { tag = VAL OR = { NOT = { controls_province = 3941 } NOT = { controls_province = 7409 } NOT = { controls_province = 8855 } NOT = { controls_province = 16466 } NOT = { controls_province = 16484 } NOT = { controls_province = 16536 } } } } }
    VAL_ops_178_border_visible = { 178 = { controller = { tag = VAL } } }
@@ -384,7 +384,7 @@ scripted_gui = {
    STP_ops_44_border_visible = { 44 = { controller = { tag = STS } } }
    STP_ops_44_contested_visible = { 44 = { controller = { tag = STS OR = { NOT = { controls_province = 16433 } NOT = { controls_province = 16448 } } } } }
    STP_ops_45_border_visible = { 45 = { controller = { tag = STS } } }
-   STP_ops_45_contested_visible = { 45 = { controller = { tag = STS OR = { NOT = { controls_province = 111 } NOT = { controls_province = 6675 } NOT = { controls_province = 16458 } NOT = { controls_province = 16459 } NOT = { controls_province = 16461 } NOT = { controls_province = 16529 } } } } }
+   STP_ops_45_contested_visible = { 45 = { controller = { tag = STS OR = { NOT = { controls_province = 111 } NOT = { controls_province = 6675 } NOT = { controls_province = 16458 } NOT = { controls_province = 16459 } NOT = { controls_province = 16461 } NOT = { controls_province = 16529 } NOT = { controls_province = 16810 } } } } }
    STP_ops_88_border_visible = { 88 = { controller = { tag = STS } } }
    STP_ops_88_contested_visible = { 88 = { controller = { tag = STS OR = { NOT = { controls_province = 110 } NOT = { controls_province = 16429 } } } } }
    STP_ops_58_border_visible = { 58 = { controller = { tag = STS } } }
@@ -394,7 +394,7 @@ scripted_gui = {
    STP_ops_60_border_visible = { 60 = { controller = { tag = STS } } }
    STP_ops_60_contested_visible = { 60 = { controller = { tag = STS OR = { NOT = { controls_province = 8171 } NOT = { controls_province = 8273 } NOT = { controls_province = 12326 } NOT = { controls_province = 16299 } NOT = { controls_province = 16340 } NOT = { controls_province = 16341 } } } } }
    STP_ops_61_border_visible = { 61 = { controller = { tag = STS } } }
-   STP_ops_61_contested_visible = { 61 = { controller = { tag = STS OR = { NOT = { controls_province = 1480 } NOT = { controls_province = 8938 } NOT = { controls_province = 11332 } NOT = { controls_province = 16316 } } } } }
+   STP_ops_61_contested_visible = { 61 = { controller = { tag = STS OR = { NOT = { controls_province = 1480 } NOT = { controls_province = 8938 } NOT = { controls_province = 11332 } NOT = { controls_province = 16316 } NOT = { controls_province = 16814 } } } } }
    STP_ops_62_border_visible = { 62 = { controller = { tag = STS } } }
    STP_ops_62_contested_visible = { 62 = { controller = { tag = STS OR = { NOT = { controls_province = 91 } NOT = { controls_province = 104 } NOT = { controls_province = 1394 } NOT = { controls_province = 5364 } NOT = { controls_province = 8327 } NOT = { controls_province = 16339 } } } } }
    STP_ops_63_border_visible = { 63 = { controller = { tag = STS } } }
@@ -404,7 +404,7 @@ scripted_gui = {
    STP_ops_65_border_visible = { 65 = { controller = { tag = STS } } }
    STP_ops_65_contested_visible = { 65 = { controller = { tag = STS OR = { NOT = { controls_province = 6423 } NOT = { controls_province = 6440 } NOT = { controls_province = 16305 } NOT = { controls_province = 16328 } NOT = { controls_province = 16337 } NOT = { controls_province = 16338 } } } } }
    STP_ops_24_border_visible = { 24 = { controller = { tag = STS } } }
-   STP_ops_24_contested_visible = { 24 = { controller = { tag = STS OR = { NOT = { controls_province = 3790 } NOT = { controls_province = 4214 } NOT = { controls_province = 4356 } NOT = { controls_province = 9126 } NOT = { controls_province = 10360 } NOT = { controls_province = 10455 } NOT = { controls_province = 10598 } NOT = { controls_province = 10691 } } } } }
+   STP_ops_24_contested_visible = { 24 = { controller = { tag = STS OR = { NOT = { controls_province = 3790 } NOT = { controls_province = 4214 } NOT = { controls_province = 4356 } NOT = { controls_province = 9126 } NOT = { controls_province = 10360 } NOT = { controls_province = 10455 } NOT = { controls_province = 10598 } NOT = { controls_province = 10691 } NOT = { controls_province = 16812 } NOT = { controls_province = 16813 } } } } }
    STP_ops_42_border_visible = { 42 = { controller = { tag = STS } } }
    STP_ops_42_contested_visible = { 42 = { controller = { tag = STS OR = { NOT = { controls_province = 125 } NOT = { controls_province = 16431 } NOT = { controls_province = 16436 } NOT = { controls_province = 16437 } NOT = { controls_province = 16438 } } } } }
    STP_ops_48_border_visible = { 48 = { controller = { tag = STS } } }
@@ -422,13 +422,13 @@ scripted_gui = {
    STP_ops_2_border_visible = { 2 = { controller = { tag = STS } } }
    STP_ops_2_contested_visible = { 2 = { controller = { tag = STS OR = { NOT = { controls_province = 1 } NOT = { controls_province = 10 } NOT = { controls_province = 117 } NOT = { controls_province = 119 } NOT = { controls_province = 134 } NOT = { controls_province = 16445 } NOT = { controls_province = 16539 } NOT = { controls_province = 16540 } NOT = { controls_province = 16541 } NOT = { controls_province = 16547 } NOT = { controls_province = 16553 } } } } }
    STP_ops_3_border_visible = { 3 = { controller = { tag = STS } } }
-   STP_ops_3_contested_visible = { 3 = { controller = { tag = STS OR = { NOT = { controls_province = 45 } NOT = { controls_province = 63 } NOT = { controls_province = 93 } NOT = { controls_province = 148 } NOT = { controls_province = 149 } NOT = { controls_province = 150 } NOT = { controls_province = 10217 } NOT = { controls_province = 16457 } NOT = { controls_province = 16462 } NOT = { controls_province = 16550 } } } } }
+   STP_ops_3_contested_visible = { 3 = { controller = { tag = STS OR = { NOT = { controls_province = 45 } NOT = { controls_province = 63 } NOT = { controls_province = 93 } NOT = { controls_province = 148 } NOT = { controls_province = 149 } NOT = { controls_province = 150 } NOT = { controls_province = 10217 } NOT = { controls_province = 16457 } NOT = { controls_province = 16462 } NOT = { controls_province = 16550 } NOT = { controls_province = 16809 } } } } }
    STP_ops_28_border_visible = { 28 = { controller = { tag = STS } } }
    STP_ops_28_contested_visible = { 28 = { controller = { tag = STS OR = { NOT = { controls_province = 145 } NOT = { controls_province = 16351 } NOT = { controls_province = 16366 } NOT = { controls_province = 16368 } NOT = { controls_province = 16374 } NOT = { controls_province = 16377 } NOT = { controls_province = 16386 } } } } }
    STP_ops_29_border_visible = { 29 = { controller = { tag = STS } } }
    STP_ops_29_contested_visible = { 29 = { controller = { tag = STS OR = { NOT = { controls_province = 16345 } } } } }
    STP_ops_46_border_visible = { 46 = { controller = { tag = STS } } }
-   STP_ops_46_contested_visible = { 46 = { controller = { tag = STS OR = { NOT = { controls_province = 98 } NOT = { controls_province = 100 } NOT = { controls_province = 153 } NOT = { controls_province = 3250 } NOT = { controls_province = 9376 } NOT = { controls_province = 10254 } NOT = { controls_province = 16349 } NOT = { controls_province = 16456 } } } } }
+   STP_ops_46_contested_visible = { 46 = { controller = { tag = STS OR = { NOT = { controls_province = 98 } NOT = { controls_province = 100 } NOT = { controls_province = 153 } NOT = { controls_province = 3250 } NOT = { controls_province = 9376 } NOT = { controls_province = 10254 } NOT = { controls_province = 16349 } NOT = { controls_province = 16456 } NOT = { controls_province = 16811 } } } } }
    STP_ops_53_border_visible = { 53 = { controller = { tag = STS } } }
    STP_ops_53_contested_visible = { 53 = { controller = { tag = STS OR = { NOT = { controls_province = 29 } NOT = { controls_province = 60 } NOT = { controls_province = 68 } NOT = { controls_province = 70 } NOT = { controls_province = 16364 } NOT = { controls_province = 16434 } } } } }
    STP_ops_709_border_visible = { 709 = { controller = { tag = STS } } }
@@ -496,17 +496,17 @@ scripted_gui = {
    STP_ops_168_border_visible = { 168 = { controller = { tag = STS } } }
    STP_ops_168_contested_visible = { 168 = { controller = { tag = STS OR = { NOT = { controls_province = 721 } NOT = { controls_province = 5388 } NOT = { controls_province = 11452 } NOT = { controls_province = 11567 } NOT = { controls_province = 11664 } NOT = { controls_province = 11667 } NOT = { controls_province = 16534 } } } } }
    STP_ops_169_border_visible = { 169 = { controller = { tag = STS } } }
-   STP_ops_169_contested_visible = { 169 = { controller = { tag = STS OR = { NOT = { controls_province = 973 } NOT = { controls_province = 2306 } NOT = { controls_province = 4707 } NOT = { controls_province = 5849 } NOT = { controls_province = 10693 } NOT = { controls_province = 11913 } NOT = { controls_province = 16464 } NOT = { controls_province = 16476 } } } } }
+   STP_ops_169_contested_visible = { 169 = { controller = { tag = STS OR = { NOT = { controls_province = 973 } NOT = { controls_province = 4707 } NOT = { controls_province = 5344 } NOT = { controls_province = 5849 } NOT = { controls_province = 10824 } NOT = { controls_province = 11913 } } } } }
    STP_ops_167_border_visible = { 167 = { controller = { tag = STS } } }
    STP_ops_167_contested_visible = { 167 = { controller = { tag = STS OR = { NOT = { controls_province = 3481 } NOT = { controls_province = 9757 } NOT = { controls_province = 10989 } NOT = { controls_province = 12523 } NOT = { controls_province = 16500 } } } } }
    STP_ops_170_border_visible = { 170 = { controller = { tag = STS } } }
-   STP_ops_170_contested_visible = { 170 = { controller = { tag = STS OR = { NOT = { controls_province = 12878 } NOT = { controls_province = 16513 } NOT = { controls_province = 16520 } NOT = { controls_province = 16526 } } } } }
+   STP_ops_170_contested_visible = { 170 = { controller = { tag = STS OR = { NOT = { controls_province = 2306 } NOT = { controls_province = 10693 } NOT = { controls_province = 12878 } NOT = { controls_province = 16464 } NOT = { controls_province = 16476 } NOT = { controls_province = 16513 } NOT = { controls_province = 16520 } NOT = { controls_province = 16526 } } } } }
    STP_ops_171_border_visible = { 171 = { controller = { tag = STS } } }
    STP_ops_171_contested_visible = { 171 = { controller = { tag = STS OR = { NOT = { controls_province = 333 } NOT = { controls_province = 744 } NOT = { controls_province = 1907 } NOT = { controls_province = 5871 } NOT = { controls_province = 11642 } NOT = { controls_province = 12581 } NOT = { controls_province = 16336 } NOT = { controls_province = 16453 } NOT = { controls_province = 16454 } NOT = { controls_province = 16467 } NOT = { controls_province = 16469 } NOT = { controls_province = 16487 } NOT = { controls_province = 16494 } NOT = { controls_province = 16504 } NOT = { controls_province = 16507 } NOT = { controls_province = 16522 } NOT = { controls_province = 16537 } } } } }
    STP_ops_184_border_visible = { 184 = { controller = { tag = STS } } }
    STP_ops_184_contested_visible = { 184 = { controller = { tag = STS OR = { NOT = { controls_province = 5541 } NOT = { controls_province = 8003 } NOT = { controls_province = 8500 } NOT = { controls_province = 8632 } NOT = { controls_province = 12244 } NOT = { controls_province = 16463 } NOT = { controls_province = 16479 } NOT = { controls_province = 16481 } NOT = { controls_province = 16490 } NOT = { controls_province = 16509 } } } } }
    STP_ops_185_border_visible = { 185 = { controller = { tag = STS } } }
-   STP_ops_185_contested_visible = { 185 = { controller = { tag = STS OR = { NOT = { controls_province = 372 } NOT = { controls_province = 3130 } NOT = { controls_province = 5344 } NOT = { controls_province = 10824 } } } } }
+   STP_ops_185_contested_visible = { 185 = { controller = { tag = STS OR = { NOT = { controls_province = 372 } NOT = { controls_province = 3130 } } } } }
    STP_ops_203_border_visible = { 203 = { controller = { tag = STS } } }
    STP_ops_203_contested_visible = { 203 = { controller = { tag = STS OR = { NOT = { controls_province = 3941 } NOT = { controls_province = 7409 } NOT = { controls_province = 8855 } NOT = { controls_province = 16466 } NOT = { controls_province = 16484 } NOT = { controls_province = 16536 } } } } }
    STP_ops_178_border_visible = { 178 = { controller = { tag = STS } } }
