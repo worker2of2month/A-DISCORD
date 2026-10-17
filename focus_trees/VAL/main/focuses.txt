@@ -136,7 +136,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_One_Ledger_One_Banner
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_VAL_One_Ledger_One_Banner
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
 		x = 25
 		y = 3
@@ -193,7 +193,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Ballistics_Schools
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_VAL_Ballistics_Schools
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_ARMY }
 		x = 4
 		y = 3
@@ -691,14 +691,29 @@ focus_tree = {
 			focus = VAL_Trading_Partners
 			focus = VAL_October_Of_2160
 		}
-		available = { custom_trigger_tooltip = { tooltip = VAL_tff_freedom_choice_ready_tt VAL_tff_freedom_choice_current = yes } }
+		available = {
+			VAL_frontier_protectorate_partners = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_frontier_northern_war_settled_tt
+				VAL_frontier_northern_war_settled = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_frontier_protectorate_no_pending_tt
+				NOT = { has_country_flag = VAL_frontier_protectorate_pending }
+			}
+		}
+		bypass = { TFF = { is_subject_of = VAL } }
 		cancel_if_invalid = yes
 		ai_will_do = {
 			base = 1
 		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_tff_freedom_focus_tt
-			country_event = { id = val_contract.380 }
+			unlock_decision_tooltip = VAL_campaign_against_nod
+			hidden_effect = {
+				VAL_unlock_operations_map = yes
+				VAL_offer_frontier_protectorate = yes
+			}
 		}
 	}
 
@@ -708,7 +723,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Operational_Directorate
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_VAL_Operational_Directorate
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
 		x = 14
 		y = 1
@@ -730,7 +745,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Ministry_Of_Contract_Memory
-		icon = GFX_goal_generic_propaganda
+		icon = GFX_focus_VAL_Ministry_Of_Contract_Memory
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
 		x = 28
 		y = 1
@@ -761,7 +776,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Paid_Loyalty
-		icon = GFX_goal_generic_demand_territory
+		icon = GFX_focus_VAL_Paid_Loyalty
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
 		x = 18
 		y = 4
@@ -790,7 +805,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Provincial_Brokers
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_focus_VAL_Provincial_Brokers
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
 		x = 22
 		y = 4
@@ -817,7 +832,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Closed_Ledgers
-		icon = GFX_focus_generic_improve_the_administration
+		icon = GFX_focus_VAL_Closed_Ledgers
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
 		x = 20
 		y = 5
@@ -911,7 +926,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Contract_Accounting_Office
-		icon = GFX_focus_generic_stockpile_currency
+		icon = GFX_focus_VAL_Contract_Accounting_Office
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY }
 		x = 2
 		y = 2
@@ -950,7 +965,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Salvage_Every_Barrel
-		icon = GFX_goal_generic_construct_mil_factory
+		icon = GFX_focus_VAL_Salvage_Every_Barrel
 		search_filters = { FOCUS_FILTER_VAL_ARMY }
 		x = 2
 		y = 3
@@ -1106,7 +1121,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Border_Survey_Corps
-		icon = GFX_focus_generic_mountain_fortification
+		icon = GFX_focus_VAL_Border_Survey_Corps
 		search_filters = { FOCUS_FILTER_VAL_ARMY }
 		x = 42
 		y = 3
@@ -1159,7 +1174,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Motorized_Columns
-		icon = GFX_focus_generic_truck
+		icon = GFX_focus_VAL_Motorized_Columns
 		search_filters = { FOCUS_FILTER_VAL_ARMY }
 		x = 38
 		y = 4
@@ -1238,7 +1253,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Field_Repair_Corps
-		icon = GFX_focus_generic_limited_social_mobilization
+		icon = GFX_focus_VAL_Field_Repair_Corps
 		search_filters = { FOCUS_FILTER_VAL_ARMY }
 		x = 34
 		y = 5
@@ -1519,7 +1534,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Wireless_Contract_Bureau
-		icon = GFX_goal_generic_propaganda
+		icon = GFX_focus_VAL_Wireless_Contract_Bureau
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
 		x = 30
 		y = 2
@@ -2081,7 +2096,7 @@ focus_tree = {
 	#############################################
 	focus = {
 		id = VAL_Stelander_Crisis_Opens
-		icon = GFX_goal_generic_major_war
+		icon = GFX_focus_VAL_Stelander_Crisis_Opens
 		search_filters = { FOCUS_FILTER_VAL_STELANDER }
 		x = 14
 		y = 7

@@ -62,6 +62,25 @@ def resolve_border_neighbors(items, neighbors, scope="VAL"):
 
 
 class ValCampaignContractsTests(unittest.TestCase):
+    def test_frontier_protectorate_leaves_the_two_independent_northern_enemies_reachable(self):
+        gate = block(entries(TRIGGERS), "VAL_can_attack_northern_coalition")
+        facts = {("VAL", "has_completed_focus", "VAL_Northern_Settlement"): True}
+        for tag in ("VAL", "YPR", "COF", "TFF"):
+            for key, value in (("exists", "yes"), ("has_capitulated", "no"),
+                               ("has_war", "no"), ("is_subject", "no"),
+                               ("is_in_faction", "no")):
+                facts[tag, key, value] = True
+        facts["TFF", "is_subject", "no"] = False
+        facts["TFF", "is_subject_of", "VAL"] = True
+        facts["TFF", "is_in_faction", "no"] = False
+        facts["TFF", "is_in_faction_with", "VAL"] = True
+        for bordering, expected in (("YPR", True), ("COF", True), ("TFF", False)):
+            with self.subTest(bordering=bordering):
+                neighbors = {"YPR": (), "COF": (), "TFF": ()}
+                neighbors[bordering] = ("VAL",) if bordering == "TFF" else ("TFF",)
+                resolved = resolve_border_neighbors(gate, neighbors)
+                self.assertEqual(matches_conditions(resolved, facts, "VAL"), expected)
+
     def test_northern_campaign_requires_a_current_border_for_focus_and_war(self):
         gate = block(entries(TRIGGERS), "VAL_can_attack_northern_coalition")
         focuses = block(entries(FOCUSES), "focus_tree")
@@ -203,23 +222,17 @@ class ValCampaignContractsTests(unittest.TestCase):
                 self.assertFalse(matches_conditions(gate, stale, "STS"))
 
     def test_coalition_cleanup_only_releases_majors_created_by_this_campaign(self):
-        effects = entries(EFFECTS)
-        cleanup = block(effects, "VAL_close_northern_coalition_campaign")
+        from tools.tests.test_adiscord_peace_coalition_lifecycle import NorthernWarEntryFixture
+
         for original_major in (False, True):
             with self.subTest(original_major=original_major):
-                facts = {("VAL", "VAL_can_attack_northern_coalition", "yes"): True}
-                for country in ("YPR", "COF", "TFF"):
-                    facts[(country, "is_major", "yes")] = original_major
-                    facts[(country, "is_major", "no")] = not original_major
-                startup = list(selected_effects(block(effects, "VAL_begin_northern_coalition_campaign"), facts))
-                for scope, entry in startup:
-                    if entry.key == "set_country_flag" and isinstance(entry.value, str):
-                        facts[(scope, "has_country_flag", entry.value)] = True
-                changes = [
-                    (scope, entry.value) for scope, entry in selected_effects(cleanup, facts)
-                    if entry.key == "set_major"
-                ]
-                self.assertEqual(changes, [] if original_major else [(tag, "no") for tag in ("YPR", "COF", "TFF")])
+                fixture = NorthernWarEntryFixture()
+                initial = {"YPR", "COF", "TFF"} if original_major else set()
+                fixture.majors = initial.copy()
+                fixture.execute(fixture.effects["VAL_begin_northern_coalition_campaign"])
+                self.assertEqual(fixture.majors, {"YPR", "COF", "TFF"})
+                fixture.execute(fixture.effects["VAL_close_northern_coalition_campaign"])
+                self.assertEqual(fixture.majors, initial)
 
     def test_military_final_closes_new_alliance_offers(self):
         gate = block(entries(TRIGGERS), "VAL_stelander_equal_partner_available")

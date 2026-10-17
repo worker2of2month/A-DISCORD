@@ -789,6 +789,27 @@ class NorthernWarEntryFixture(TreatyFixture):
 
 
 class NorthernWarEntryTests(unittest.TestCase):
+    def test_frontier_subject_survives_both_entry_ticks_and_the_remaining_settlement(self):
+        f = NorthernWarEntryFixture()
+        f.subjects["TFF"] = "VAL"
+        f.factions["TFF"] = "contract"
+        f.factions["VAL"] = "contract"
+        f.execute(f.effects["VAL_begin_northern_coalition_campaign"])
+        f.tick()
+        f.tick()
+        self.assertEqual(f.enemies("VAL"), {"YPR", "COF"})
+        self.assertIn("VAL_northern_coalition_campaign_active", f.flags["VAL"])
+        self.assertNotIn("VAL_northern_coalition_campaign_member", f.flags["TFF"])
+        self.assertNotIn("VAL_northern_coalition_added_major", f.flags["TFF"])
+        self.assertEqual(f.factions["TFF"], "contract")
+        f.capitulated.update({"YPR", "COF"})
+        f.execute(f.effects["VAL_settle_northern_coalition_victory"])
+        self.assertEqual(f.subjects, {"YPR": "VAL", "COF": "VAL", "TFF": "VAL"})
+        self.assertEqual(f.factions["TFF"], "contract")
+        self.assertEqual(f.majors, {"TFF"})
+        self.assertFalse(f.wars)
+        self.assertIn("VAL_northern_coalition_settlement_completed", f.flags["VAL"])
+
     def test_queued_declaration_and_invitations_retain_the_scripted_campaign(self):
         f = NorthernWarEntryFixture()
         f.execute(f.effects["VAL_begin_northern_coalition_campaign"])

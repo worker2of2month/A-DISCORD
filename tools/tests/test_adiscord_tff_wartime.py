@@ -439,12 +439,19 @@ class TFFFreedomNegotiationTests(unittest.TestCase):
                 self.outputs.append((tag, "subject", target))
                 self.facts[target, "is_subject_of", "VAL"] = tag == "VAL"
                 self.facts[target, "is_subject_of", "TFF"] = tag == "TFF"
+            elif e.key in ("set_temp_variable", "set_variable"):
+                self.facts[tag, "variable", scalar(e.value, "var")] = float(scalar(e.value, "value"))
             elif e.key == "country_event":
                 self.outputs.append((tag, "event", scalar(e.value, "id")))
             elif e.key in (
                 "VAL_open_nod_frontier_offer",
                 "VAL_accept_nod_frontier_offer",
                 "VAL_transfer_yubora_administrations",
+                "VAL_offer_frontier_protectorate",
+                "VAL_accept_frontier_protectorate",
+                "VAL_finish_frontier_protectorate",
+                "VAL_final_crisis_join_war",
+                "VAL_final_crisis_register_member",
             ):
                 self.execute(self.effects[e.key], tag)
             elif e.key not in ("name", "trigger", "ai_chance", "custom_effect_tooltip"):
@@ -486,9 +493,9 @@ class TFFFreedomNegotiationTests(unittest.TestCase):
                 "A treaty must not transfer twice",
             )
 
-    def test_final_signature_uses_quoted_terms_not_current_policy(self):
+    def test_final_signature_uses_quoted_terms_not_a_later_quote(self):
         self.flag("VAL", "VAL_nod_frontier_offer_pending", 2)
-        self.flag("VAL", "VAL_tff_freedom_policy", 1)
+        self.facts["VAL", "variable", "VAL_nod_quote_tier"] = 1
         self.execute(self.option("val_contract.350", "val_contract.350.accept"), "TFF")
         self.assertEqual(
             self.facts["VAL", "variable", "flag_value_VAL_nod_frontier_agreement"], 2
@@ -520,227 +527,22 @@ class TFFFreedomNegotiationTests(unittest.TestCase):
             )
             self.assertEqual(self.outputs, [])
 
-    def test_early_principles_need_a_reply_and_never_start_war(self):
-        self.execute(self.option("val_contract.380", "val_contract.380.compromise"))
-        self.assertTrue(
-            self.facts["VAL", "has_country_flag", "VAL_tff_principles_pending"]
-        )
-        self.assertFalse(
-            self.facts.get(
-                ("VAL", "has_country_flag", "VAL_tff_principles_accepted"), False
-            )
-        )
-        self.assertEqual(self.outputs, [("TFF", "event", "val_contract.381")])
-        self.outputs.clear()
-        self.execute(self.option("val_contract.381", "val_contract.381.accept"), "TFF")
-        self.assertTrue(
-            self.facts["VAL", "has_country_flag", "VAL_tff_principles_accepted"]
-        )
-        self.assertFalse(
-            self.facts["VAL", "has_country_flag", "VAL_tff_principles_pending"]
-        )
-        self.assertFalse(
-            self.facts.get(
-                ("VAL", "has_country_flag", "VAL_nod_frontier_agreement"), False
-            )
-        )
-        self.assertEqual(self.outputs, [("VAL", "event", "val_contract.382")])
-
-    def test_unattended_refusal_and_late_principles_cannot_change_final_treaty(self):
-        from tools.tests.test_adiscord_stp_preparation import scalar
-
-        self.assertTrue("val_contract.381" in self.events)
-        first = next(
-            e.value for e in self.events["val_contract.381"] if e.key == "option"
-        )
-        self.assertEqual(scalar(first, "name"), "val_contract.381.refuse")
-        for signed in (False, True):
+    def test_current_quote_is_selected_at_military_negotiations_and_cannot_be_overwritten(self):
+        for choice, tier in (("compromise", 1), ("firm", 2)):
             self.setUp()
-            self.flag("VAL", "VAL_tff_freedom_policy", 2)
-            self.flag("VAL", "VAL_tff_principles_pending")
-            if signed:
-                self.flag("VAL", "VAL_nod_frontier_agreement", 1)
-            self.execute(first, "TFF")
-            self.outputs.clear()
-            self.execute(
-                self.option("val_contract.381", "val_contract.381.accept"), "TFF"
-            )
-            self.assertFalse(
-                self.facts.get(
-                    ("VAL", "has_country_flag", "VAL_tff_principles_accepted"), False
-                )
-            )
-            self.assertFalse(
-                self.facts["VAL", "has_country_flag", "VAL_tff_principles_pending"]
-            )
-            self.assertEqual(self.outputs, [])
-
-    def test_focus_opens_a_policy_choice_on_either_previous_branch(self):
-        from tools.tests.test_adiscord_stp_preparation import (
-            entries,
-            block,
-            scalar,
-            matches_conditions,
-        )
-
-        tree = block(
-            entries("common/national_focus/ADISCORD_national_focus_VAL.txt"),
-            "focus_tree",
-        )
-        focus = next(
-            e.value
-            for e in tree
-            if e.key == "focus"
-            and scalar(e.value, "id") == "VAL_Different_Views_On_Freedom"
-        )
-        for previous in ("VAL_Trading_Partners", "VAL_October_Of_2160"):
-            self.setUp()
-            self.facts["VAL", "has_completed_focus", previous] = True
-            self.assertTrue(
-                matches_conditions(
-                    self.expanded(block(focus, "available")), self.facts, "VAL"
-                )
-            )
-            self.execute(block(focus, "completion_reward"))
-            self.assertEqual(self.outputs, [("VAL", "event", "val_contract.380")])
-        self.flag("VAL", "VAL_nod_frontier_agreement")
-        self.assertFalse(
-            matches_conditions(
-                self.expanded(block(focus, "available")), self.facts, "VAL"
-            )
-        )
-
-    def test_scripted_nod_defeat_blocks_focus_and_open_negotiations(self):
-        from tools.tests.test_adiscord_stp_preparation import (
-            entries, block, scalar, matches_conditions,
-        )
-
-        tree = block(
-            entries("common/national_focus/ADISCORD_national_focus_VAL.txt"),
-            "focus_tree",
-        )
-        focus = next(
-            e.value for e in tree
-            if e.key == "focus"
-            and scalar(e.value, "id") == "VAL_Different_Views_On_Freedom"
-        )
-        defeats = [
-            (("NOD", "variable", "STP_cw_northern_campaign_status"), 3),
-            *[
-                (("NOD", "has_country_flag", flag), True)
-                for flag in (
-                    "NOD_cw_defeated", "STP_pc_defeated_by_sts",
-                    "STP_heg_defeated_by_sts", "VAL_final_defeat_pending",
-                    "VAL_nodrul_administration_pending",
-                )
-            ],
-        ]
-        for key, value in defeats:
-            with self.subTest(result=key):
-                self.setUp()
-                self.facts[key] = value
-                self.assertFalse(matches_conditions(
-                    self.expanded(block(focus, "available")), self.facts, "VAL"
-                ))
-                for choice in ("firm", "compromise"):
-                    self.execute(self.option(
-                        "val_contract.380", "val_contract.380." + choice
-                    ))
-                self.assertFalse(self.facts.get(
-                    ("VAL", "has_country_flag", "VAL_tff_freedom_policy"), False
-                ))
-                self.flag("VAL", "VAL_tff_freedom_policy", 1)
-                self.flag("VAL", "VAL_tff_principles_pending")
-                self.execute(
-                    self.option("val_contract.381", "val_contract.381.accept"), "TFF"
-                )
-                self.assertFalse(self.facts.get(
-                    ("VAL", "has_country_flag", "VAL_tff_principles_accepted"), False
-                ))
-                self.assertFalse(self.facts[
-                    "VAL", "has_country_flag", "VAL_tff_principles_pending"
-                ])
-                self.assertEqual(self.outputs, [])
-
-    def test_issued_quote_cannot_be_replaced_and_closes_old_principles_offer(self):
-        self.assertTrue("VAL_open_nod_frontier_offer" in self.effects)
-        for policy in (0, 1, 2):
-            self.setUp()
-            self.flag("VAL", "VAL_tff_freedom_policy", policy)
-            self.flag("VAL", "VAL_tff_principles_pending")
-            self.execute(self.effects["VAL_open_nod_frontier_offer"])
-            expected = 2 if policy == 2 else 1
-            self.assertEqual(
-                self.facts[
-                    "VAL", "variable", "flag_value_VAL_nod_frontier_offer_pending"
-                ],
-                expected,
-            )
-            self.assertFalse(
-                self.facts["VAL", "has_country_flag", "VAL_tff_principles_pending"]
-            )
-            self.flag("VAL", "VAL_tff_freedom_policy", 1 if policy == 2 else 2)
-            self.execute(self.effects["VAL_open_nod_frontier_offer"])
-            self.assertEqual(
-                self.facts[
-                    "VAL", "variable", "flag_value_VAL_nod_frontier_offer_pending"
-                ],
-                expected,
-            )
+            self.execute(self.option("val_contract.380", "val_contract.380." + choice))
+            self.assertEqual(self.facts["VAL", "variable", "flag_value_VAL_nod_frontier_offer_pending"], tier)
             self.assertEqual(self.outputs, [("TFF", "event", "val_contract.350")])
+            self.execute(self.option("val_contract.380", "val_contract.380." + ("firm" if tier == 1 else "compromise")))
+            self.assertEqual(self.facts["VAL", "variable", "flag_value_VAL_nod_frontier_offer_pending"], tier)
+            self.assertEqual(len(self.outputs), 1)
 
-    def test_pending_or_signed_military_terms_block_a_late_policy_answer(self):
-        for flag in ("VAL_nod_frontier_offer_pending", "VAL_nod_frontier_agreement"):
-            self.setUp()
-            self.flag("VAL", flag, 1)
-            self.execute(self.option("val_contract.380", "val_contract.380.firm"))
-            self.assertFalse(
-                self.facts.get(
-                    ("VAL", "has_country_flag", "VAL_tff_freedom_policy"), False
-                )
-            )
-            self.flag("VAL", "VAL_tff_freedom_policy", 2)
-            self.flag("VAL", "VAL_tff_principles_pending")
-            self.execute(
-                self.option("val_contract.381", "val_contract.381.accept"), "TFF"
-            )
-            self.assertFalse(
-                self.facts.get(
-                    ("VAL", "has_country_flag", "VAL_tff_principles_accepted"), False
-                )
-            )
-            self.assertEqual(self.facts["VAL", "variable", "flag_value_" + flag], 1)
-            self.assertEqual(self.outputs, [])
-
-    def test_agreed_principles_ease_war_negotiations_but_firm_terms_remain_harder(self):
-        from tools.tests.test_adiscord_stp_preparation import (
-            block,
-            scalar,
-            matches_conditions,
-        )
-
-        def weight(option):
-            rows = block(option, "ai_chance")
-            result = float(scalar(rows, "base"))
-            for modifier in (e.value for e in rows if e.key == "modifier"):
-                gate = self.expanded([e for e in modifier if e.key != "factor"])
-                if matches_conditions(gate, self.facts, "TFF"):
-                    result *= float(scalar(modifier, "factor"))
-            return result
-
-        for terms, agreed, expected in (
-            (1, False, 0.8),
-            (1, True, 0.95),
-            (2, False, 0.2),
-            (2, True, 0.5),
-        ):
-            self.flag("VAL", "VAL_nod_frontier_offer_pending", terms)
-            self.flag("VAL", "VAL_tff_principles_accepted", int(agreed))
-            accepted = weight(
-                self.option("val_contract.350", "val_contract.350.accept")
-            )
-            refused = weight(self.option("val_contract.350", "val_contract.350.refuse"))
-            self.assertAlmostEqual(accepted / (accepted + refused), expected)
+    def test_protectorate_negotiation_blocks_a_competing_partition_quote(self):
+        self.flag("VAL", "VAL_frontier_protectorate_pending", 1)
+        for choice in ("firm", "compromise"):
+            self.execute(self.option("val_contract.380", "val_contract.380." + choice))
+        self.assertEqual(self.outputs, [])
+        self.assertFalse(self.facts.get(("VAL", "has_country_flag", "VAL_nod_frontier_offer_pending"), False))
 
     def test_partition_consumes_signed_terms_after_delivering_the_right_share(self):
         for terms, expected in ((1, ["YPR", "DCA"]), (2, ["YPR"])):
@@ -759,6 +561,210 @@ class TFFFreedomNegotiationTests(unittest.TestCase):
             self.assertFalse(
                 any(x[1:] == ("event", "val_contract.352") for x in self.outputs)
             )
+
+
+class TFFProtectorateRouteTests(unittest.TestCase):
+    """Evaluate the new route against current relations, not historical promises."""
+
+    expanded = TFFFreedomNegotiationTests.expanded
+    flag = TFFFreedomNegotiationTests.flag
+    execute = TFFFreedomNegotiationTests.execute
+    option = TFFFreedomNegotiationTests.option
+
+    def setUp(self):
+        TFFFreedomNegotiationTests.setUp(self)
+        self.facts.update({
+            ("VAL", "has_war", "no"): True,
+            ("VAL", "is_in_faction", "no"): True,
+            ("TFF", "has_war", "no"): True,
+            ("STP", "exists", "yes"): True,
+            ("STP", "has_capitulated", "no"): True,
+            ("STP", "is_subject_of", "NOD"): True,
+            ("TFF", "capital"): "83",
+            ("83", "is_owned_by", "TFF"): True,
+            ("83", "is_controlled_by", "TFF"): True,
+        })
+
+    def matches(self, name, scope="VAL"):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
+        self.assertTrue(name in self.triggers, name)
+        return matches_conditions(self.expanded(self.triggers[name]), self.facts, scope)
+
+    def test_joint_campaign_requires_a_living_stelander_member_of_nodruls_bloc(self):
+        for tag in ("STP", "STS"):
+            for relation in ("is_subject_of", "is_in_faction_with"):
+                with self.subTest(tag=tag, relation=relation):
+                    self.setUp()
+                    self.facts["VAL", "has_completed_focus", "VAL_Different_Views_On_Freedom"] = True
+                    self.facts["TFF", "is_subject_of", "VAL"] = True
+                    self.facts["STP", "is_subject_of", "NOD"] = False
+                    self.facts[tag, "exists", "yes"] = True
+                    self.facts[tag, "has_capitulated", "no"] = True
+                    self.facts[tag, relation, "NOD"] = True
+                    self.assertTrue(self.matches("VAL_frontier_joint_campaign_ready"))
+                    self.facts[tag, relation, "NOD"] = False
+                    self.assertFalse(self.matches("VAL_frontier_joint_campaign_ready"))
+
+    def test_foreign_subject_enemy_and_competing_offer_cannot_be_subjugated(self):
+        for fact in (
+            ("TFF", "is_subject", "no"),
+            ("VAL", "is_subject", "no"),
+            ("TFF", "has_capitulated", "no"),
+        ):
+            self.setUp()
+            self.facts[fact] = False
+            self.assertFalse(self.matches("VAL_frontier_protectorate_available"))
+        for fact in (
+            ("TFF", "has_war_with", "VAL"),
+            ("TFF", "is_in_faction_with", "NOD"),
+            ("VAL", "has_country_flag", "VAL_nod_frontier_offer_pending"),
+            ("VAL", "has_country_flag", "VAL_nod_frontier_agreement"),
+        ):
+            self.setUp()
+            self.facts[fact] = True
+            self.assertFalse(self.matches("VAL_frontier_protectorate_available"))
+
+    def test_subject_route_replaces_prior_stelander_victory_only_while_bloc_exists(self):
+        self.facts["VAL", "has_completed_focus", "VAL_Different_Views_On_Freedom"] = True
+        self.facts["TFF", "is_subject_of", "VAL"] = True
+        self.facts["TFF", "is_subject", "no"] = False
+        self.assertTrue(self.matches("VAL_frontier_joint_campaign_ready"))
+        self.assertTrue(self.matches("VAL_nod_campaign_stelander_ready"))
+        self.facts["STP", "is_subject_of", "NOD"] = False
+        self.assertFalse(self.matches("VAL_frontier_joint_campaign_ready"))
+        self.assertFalse(self.matches("VAL_nod_campaign_stelander_ready"))
+
+    def test_liberated_or_capitulated_frontier_cannot_supply_the_route(self):
+        for free, capitulated in ((True, False), (False, True)):
+            self.setUp()
+            self.facts["VAL", "has_completed_focus", "VAL_Different_Views_On_Freedom"] = True
+            self.facts["TFF", "is_subject_of", "VAL"] = not free
+            self.facts["TFF", "has_capitulated", "no"] = not capitulated
+            self.assertFalse(self.matches("VAL_frontier_joint_campaign_ready"))
+
+    def test_native_war_callback_registers_the_early_campaign_and_delayed_enemy_join(self):
+        from tools.tests.test_adiscord_stp_preparation import block, entries, walk
+
+        hooks = block(entries("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"), "on_actions")
+        callback = block(block(hooks, "on_war_relation_added"), "effect")
+        paths = [e.value for e in walk(callback) if e.key == "if"
+                 and any(child.key == "VAL_final_crisis_join_war" for child in e.value)]
+        self.assertEqual(len(paths), 1)
+        self.facts["VAL", "has_completed_focus", "VAL_Northern_Settlement"] = False
+        self.facts["VAL", "has_completed_focus", "VAL_Different_Views_On_Freedom"] = True
+        self.facts["TFF", "is_subject_of", "VAL"] = True
+        self.execute([next(e for e in walk(callback) if e.key == "if" and e.value == paths[0])])
+        self.assertFalse(self.facts.get(("NOD", "has_country_flag", "VAL_final_war_member")))
+        self.facts["VAL", "has_war_with", "NOD"] = True
+        self.execute([next(e for e in walk(callback) if e.key == "if" and e.value == paths[0])])
+        self.assertEqual(self.facts["VAL", "variable", "VAL_final_crisis_phase"], 2)
+        self.assertTrue(self.facts["NOD", "has_country_flag", "VAL_final_war_member"])
+        self.assertTrue(any(row[0:2] == ("STP", "add_to_war") for row in self.outputs))
+        self.facts["STP", "has_war_with", "VAL"] = True
+        self.execute(self.effects["VAL_final_crisis_join_war"])
+        self.assertTrue(self.facts["STP", "has_country_flag", "VAL_final_war_member"])
+        self.assertTrue(any(row[1] == "VAL_call_subjects_to_wars" for row in self.outputs))
+
+    def test_focus_unlocks_the_existing_campaign_and_sends_a_protectorate_offer(self):
+        from tools.tests.test_adiscord_stp_preparation import block, entries, scalar
+
+        tree = block(entries("focus_trees/VAL/main/focuses.txt"), "focus_tree")
+        focus = next(e.value for e in tree if e.key == "focus"
+                     and scalar(e.value, "id") == "VAL_Different_Views_On_Freedom")
+        self.execute(block(focus, "completion_reward"))
+        self.assertIn(("VAL", "unlock_decision_tooltip", "VAL_campaign_against_nod"), self.outputs)
+        self.assertIn(("TFF", "event", "val_contract.381"), self.outputs)
+        self.assertFalse(any(e[1] == "subject" for e in self.outputs))
+
+    def test_refusal_or_timeout_does_not_subjugate_and_closes_pending_offer(self):
+        self.flag("VAL", "VAL_frontier_protectorate_pending", 1)
+        self.execute(self.option("val_contract.381", "val_contract.381.refuse"), "TFF")
+        self.assertFalse(self.facts["VAL", "has_country_flag", "VAL_frontier_protectorate_pending"])
+        self.assertFalse(any(e[1] == "subject" for e in self.outputs))
+
+    def test_ai_consent_tracks_northern_result_and_delivered_aid(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, matches_conditions
+
+        def weight(option):
+            rows = block(option, "ai_chance")
+            result = float(scalar(rows, "base"))
+            for modifier in (e.value for e in rows if e.key == "modifier"):
+                if matches_conditions(self.expanded([e for e in modifier if e.key != "factor"]), self.facts, "TFF"):
+                    result *= float(scalar(modifier, "factor"))
+            return result
+
+        for outcome, rifles, expected in ((3, 50000, .90), (3, 0, .10),
+                                           (2, 50000, .60), (2, 0, .25),
+                                           (4, 50000, .75), (4, 0, .25)):
+            with self.subTest(outcome=outcome, rifles=rifles):
+                self.facts["NOD", "variable", "STP_cw_northern_campaign_status"] = outcome
+                self.facts["VAL", "variable", "VAL_northern_aid_rifles"] = rifles
+                yes = weight(self.option("val_contract.381", "val_contract.381.accept"))
+                no = weight(self.option("val_contract.381", "val_contract.381.refuse"))
+                self.assertAlmostEqual(yes / (yes + no), expected)
+
+    def test_protectorate_waits_for_consent_then_converts_once_on_the_delayed_callback(self):
+        self.flag("VAL", "VAL_frontier_protectorate_pending", 1)
+        self.execute(self.option("val_contract.381", "val_contract.381.accept"), "TFF")
+        self.assertIn(("VAL", "event", "val_contract.383"), self.outputs)
+        self.assertFalse(any(row[1] == "subject" for row in self.outputs))
+        self.outputs.clear()
+        self.execute(self.effects["VAL_finish_frontier_protectorate"])
+        self.assertIn(("VAL", "subject", "TFF"), self.outputs)
+        self.assertFalse(self.facts["VAL", "has_country_flag", "VAL_frontier_protectorate_pending"])
+        self.outputs.clear()
+        self.execute(self.effects["VAL_finish_frontier_protectorate"])
+        self.execute(self.option("val_contract.381", "val_contract.381.refuse"), "TFF")
+        self.assertEqual(self.outputs, [])
+
+    def test_foreign_subjugation_before_delayed_conversion_cancels_without_stealing_subject(self):
+        self.flag("VAL", "VAL_frontier_protectorate_pending", 2)
+        self.facts["TFF", "is_subject", "no"] = False
+        self.execute(self.effects["VAL_finish_frontier_protectorate"])
+        self.assertFalse(any(row[1] == "subject" for row in self.outputs))
+        self.assertFalse(self.facts["VAL", "has_country_flag", "VAL_frontier_protectorate_pending"])
+
+    def test_northern_partners_reform_their_faction_after_native_detachment(self):
+        self.flag("VAL", "VAL_frontier_protectorate_pending", 1)
+        self.facts["TFF", "is_in_faction", "yes"] = True
+        self.facts["TFF", "is_faction_leader", "yes"] = True
+        for tag in ("YPR", "COF"):
+            self.facts[tag, "exists", "yes"] = True
+            self.facts[tag, "is_subject", "no"] = True
+            self.facts[tag, "has_war", "no"] = True
+            self.facts[tag, "is_in_faction_with", "TFF"] = True
+        self.execute(self.effects["VAL_accept_frontier_protectorate"])
+        self.assertIn(("TFF", "dismantle_faction", "yes"), self.outputs)
+        self.assertFalse(any(row[1] == "create_faction_from_template" for row in self.outputs))
+        self.facts["TFF", "is_in_faction", "yes"] = False
+        for tag in ("YPR", "COF"):
+            self.facts[tag, "is_in_faction_with", "TFF"] = False
+            self.facts[tag, "is_in_faction", "no"] = True
+        self.execute(self.effects["VAL_finish_frontier_protectorate"])
+        self.assertIn(("YPR", "add_to_faction", "COF"), self.outputs)
+        self.assertIn(("VAL", "subject", "TFF"), self.outputs)
+
+    def test_campaign_is_visible_without_the_late_focus_and_cancels_when_the_bloc_breaks(self):
+        from tools.tests.test_adiscord_stp_preparation import block, entries, matches_conditions, scalar, walk
+
+        decision = block(block(entries("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_military_operations"), "VAL_campaign_against_nod")
+        self.facts["VAL", "has_completed_focus", "VAL_Northern_Settlement"] = False
+        self.facts["VAL", "has_completed_focus", "VAL_Different_Views_On_Freedom"] = True
+        self.facts["TFF", "is_subject_of", "VAL"] = True
+        self.facts["VAL", "FROM"] = "NOD"
+        from dataclasses import replace
+        def target(rows):
+            return [replace(e, key="NOD" if e.key == "FROM" else e.key,
+                            value=target(e.value) if isinstance(e.value, list) else e.value) for e in rows]
+        self.assertTrue(matches_conditions(target(block(decision, "visible")), self.facts, "VAL"))
+        self.assertEqual(scalar(decision, "cost"), "60")
+        self.assertEqual(scalar(decision, "days_remove"), "30")
+        gate = target(self.expanded(block(decision, "cancel_trigger")))
+        self.assertFalse(matches_conditions(gate, self.facts, "VAL"))
+        self.facts["STP", "is_subject_of", "NOD"] = False
+        self.assertTrue(matches_conditions(gate, self.facts, "VAL"))
+
 
 
 if __name__ == "__main__":

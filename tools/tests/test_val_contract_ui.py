@@ -288,6 +288,8 @@ class ValNorthernCoalitionAidTests(unittest.TestCase):
                     )
                 elif row.key == "VAL_complete_northern_aid":
                     tick(facts, row.key)
+                elif row.key in ("remove_mission", "clear_global_event_target"):
+                    continue
                 else:
                     self.fail(f"Unexpected daily effect: {row.key}")
 
@@ -316,8 +318,20 @@ class ValNorthernCoalitionAidTests(unittest.TestCase):
         self.assertEqual(facts[days], 30)
         facts["COF", "volunteers"] = 1
         tick(facts)
-        self.assertEqual(facts[days], 0)
+        self.assertEqual(facts[days], 30)
         self.assertEqual(facts["VAL", "variable", "VAL_northern_aid_state"], 2)
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
+        tick(facts, "VAL_close_northern_aid")
+        self.assertTrue(matches_conditions(
+            self.expand(self.triggers["VAL_northern_aid_sufficient"], facts), facts, "VAL"
+        ))
+
+        facts = self.facts(state=1)
+        facts["VAL", "has_active_mission", "VAL_northern_aid_deadline"] = True
+        facts[days] = 29
+        tick(facts)
+        self.assertEqual(facts[days], 0)
 
     def test_rifle_shipments_share_one_ledger_without_duplicate_payment(self):
         from tools.tests.test_adiscord_stp_preparation import selected_effects, scalar
@@ -2141,7 +2155,7 @@ class TestValProgressionChoices(unittest.TestCase):
             named_block(nod, "cancel_trigger"),
         )
         self.assertIn(
-            "NOT = { VAL_northern_foothold_secured = yes }",
+            "NOT = { OR = { VAL_northern_foothold_secured = yes VAL_frontier_joint_campaign_ready = yes } }",
             named_block(nod, "cancel_trigger"),
         )
         self.assertIn(
@@ -2266,6 +2280,7 @@ class TestValProgressionChoices(unittest.TestCase):
                 "VAL_economic_settlement_ready_tt",
                 "VAL_northern_expansion_deferred_tt",
                 "VAL_nod_campaign_foothold_tt",
+                "VAL_nod_joint_campaign_foothold_tt",
                 "VAL_nod_requires_stelander_victory_tt",
             ):
                 self.assertRegex(text, rf'(?m)^ {key}:\d* "[^\r\n]*"$')

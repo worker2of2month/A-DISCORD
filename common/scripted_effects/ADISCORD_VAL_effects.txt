@@ -7452,24 +7452,27 @@ VAL_begin_northern_coalition_campaign = {
 			}
 		}
 		TFF = {
-			set_country_flag = VAL_northern_coalition_campaign_member
 			if = {
-				limit = {
-					OR = {
-						is_major = no
-						has_country_flag = RUS_crisis_added_major
-						RUS_crisis_other_major_required = yes
+				limit = { is_subject = no }
+				set_country_flag = VAL_northern_coalition_campaign_member
+				if = {
+					limit = {
+						OR = {
+							is_major = no
+							has_country_flag = RUS_crisis_added_major
+							RUS_crisis_other_major_required = yes
+						}
 					}
+					set_country_flag = VAL_northern_coalition_added_major
+					set_major = yes
 				}
-				set_country_flag = VAL_northern_coalition_added_major
-				set_major = yes
 			}
 		}
 		if = {
 			limit = {
 				YPR = { is_in_faction = no }
 				COF = { is_in_faction = no }
-				TFF = { is_in_faction = no }
+				TFF = { OR = { is_in_faction = no is_subject_of = VAL } }
 			}
 			YPR = {
 				create_faction_from_template = {
@@ -7477,7 +7480,7 @@ VAL_begin_northern_coalition_campaign = {
 					name = STP_northern_defence_alliance
 				}
 				add_to_faction = COF
-				add_to_faction = TFF
+				if = { limit = { TFF = { is_subject = no } } add_to_faction = TFF }
 			}
 		}
 		declare_war_on = { target = YPR type = annex_everything }
@@ -7562,9 +7565,9 @@ VAL_settle_northern_coalition_victory = {
 			}
 		}
 		TFF = {
-			if = { limit = { exists = yes } VAL_end_administration_wars = yes }
+			if = { limit = { exists = yes NOT = { is_subject_of = VAL } } VAL_end_administration_wars = yes }
 			if = {
-				limit = { exists = yes is_in_faction = yes }
+				limit = { exists = yes NOT = { is_subject_of = VAL } is_in_faction = yes }
 				if = { limit = { is_faction_leader = yes } dismantle_faction = yes }
 				else = { leave_faction = yes }
 			}
@@ -7605,7 +7608,7 @@ VAL_settle_northern_coalition_victory = {
 			}
 		}
 		if = {
-			limit = { TFF = { exists = yes } }
+			limit = { TFF = { exists = yes NOT = { is_subject_of = VAL } } }
 			set_autonomy = {
 				target = TFF
 				autonomy_state = autonomy_VAL_contract_administration
@@ -7966,16 +7969,105 @@ VAL_initialize_partition_administration = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
-# VAL scope. Freeze the territorial package before the recipient sees its offer.
+# VAL scope. The receipt covers the answer window and delayed subjugation.
+VAL_offer_frontier_protectorate = {
+	if = {
+		limit = { VAL_frontier_protectorate_available = yes }
+		set_country_flag = { flag = VAL_frontier_protectorate_pending value = 1 days = 37 }
+		TFF = { country_event = { id = val_contract.381 } }
+	}
+}
+
+VAL_accept_frontier_protectorate = {
+	if = {
+		limit = { VAL_frontier_protectorate_offer_current = yes }
+		set_country_flag = { flag = VAL_frontier_protectorate_pending value = 2 days = 3 }
+		TFF = {
+			if = {
+				limit = {
+					is_in_faction = yes
+					NOT = { is_in_faction_with = VAL }
+				}
+				if = {
+					limit = { is_faction_leader = yes }
+					dismantle_faction = yes
+				}
+				else = { faction_leader = { remove_from_faction = TFF } }
+			}
+		}
+		# A faction leader must leave its old alliance before native subjugation.
+		country_event = { id = val_contract.383 days = 1 }
+	}
+}
+
+VAL_finish_frontier_protectorate = {
+	if = {
+		limit = { has_country_flag = { flag = VAL_frontier_protectorate_pending value > 1 } }
+		# Re-form the remaining northern alliance after native detachment settles.
+		if = {
+			limit = {
+				YPR = {
+					exists = yes
+					is_subject = no
+					is_in_faction = no
+					has_war = no
+				}
+				COF = {
+					exists = yes
+					is_subject = no
+					is_in_faction = no
+					has_war = no
+				}
+			}
+			YPR = {
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = STP_northern_defence_alliance
+				}
+				add_to_faction = COF
+			}
+		}
+		if = {
+			limit = { VAL_frontier_protectorate_partners = yes }
+			set_autonomy = {
+				target = TFF
+				autonomy_state = autonomy_VAL_contract_administration
+				freedom_level = 0.10
+				end_wars = no
+				end_civil_wars = no
+			}
+			if = {
+				limit = { TFF = { is_subject_of = VAL } }
+				TFF = { ADISCORD_release_non_participating_minor_optimization = yes }
+				if = {
+					limit = { is_in_faction = no }
+					create_faction_from_template = {
+						template = faction_template_ADISCORD_standard
+						name = VAL_northern_expansion_faction
+					}
+				}
+				if = {
+					limit = { TFF = { NOT = { is_in_faction_with = VAL } } }
+					add_to_faction = TFF
+				}
+				ADISCORD_economy_mark_dirty = yes
+				TFF = { ADISCORD_economy_mark_dirty = yes }
+			}
+		}
+		clr_country_flag = VAL_frontier_protectorate_pending
+		country_event = { id = val_contract.382 }
+	}
+}
+
+# The quote is temporary input from the player's current treaty choice.
 VAL_open_nod_frontier_offer = {
 	if = {
 		limit = { VAL_nod_frontier_offer_current = yes NOT = { has_country_flag = VAL_nod_frontier_offer_pending has_country_flag = VAL_campaign_mobilizing } }
 		if = {
-			limit = { has_country_flag = { flag = VAL_tff_freedom_policy value > 1 } }
-			set_country_flag = { flag = VAL_nod_frontier_offer_pending value = 2 days = 15 }
+			limit = { check_variable = { var = VAL_nod_quote_tier value = 2 compare = equals } }
+			set_country_flag = { flag = VAL_nod_frontier_offer_pending value = 2 days = 36 }
 		}
-		else = { set_country_flag = { flag = VAL_nod_frontier_offer_pending value = 1 days = 15 } }
-		clr_country_flag = VAL_tff_principles_pending
+		else = { set_country_flag = { flag = VAL_nod_frontier_offer_pending value = 1 days = 36 } }
 		TFF = { country_event = { id = val_contract.350 } }
 	}
 }
@@ -7989,7 +8081,6 @@ VAL_accept_nod_frontier_offer = {
 		}
 		else = { set_country_flag = { flag = VAL_nod_frontier_agreement value = 1 } }
 		clr_country_flag = VAL_nod_frontier_offer_pending
-		clr_country_flag = VAL_tff_principles_pending
 		VAL_call_frontier_partner = yes
 		country_event = { id = val_contract.351 }
 	}
@@ -8693,21 +8784,42 @@ VAL_final_crisis_register_member = {
 
 VAL_final_crisis_join_war = {
 	if = {
-		limit = { has_war_with = NOD NOT = { check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals } } }
-		set_variable = { var = VAL_final_crisis_phase value = 2 }
-		NOD = { VAL_final_crisis_register_member = yes }
+		limit = { has_war_with = NOD }
+		if = {
+			limit = { NOT = { check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals } } }
+			set_variable = { var = VAL_final_crisis_phase value = 2 }
+		}
+		NOD = {
+			if = {
+				limit = { NOT = { has_country_flag = VAL_final_war_member } }
+				VAL_final_crisis_register_member = yes
+			}
+		}
+		# Allied invitations can become visible on a later war-relation callback.
 		STP = {
 			if = {
 				limit = { exists = yes has_capitulated = no OR = { is_in_faction_with = NOD is_subject_of = NOD NOD = { is_subject_of = STP } } NOT = { is_in_faction_with = VAL is_subject_of = VAL } }
 				if = { limit = { NOT = { has_war_with = VAL } } add_to_war = { targeted_alliance = NOD enemy = VAL hostility_reason = asked_to_join single_target_only = yes } }
-				if = { limit = { has_war_with = VAL } VAL_final_crisis_register_member = yes }
+				if = {
+					limit = {
+						has_war_with = VAL
+						NOT = { has_country_flag = VAL_final_war_member }
+					}
+					VAL_final_crisis_register_member = yes
+				}
 			}
 		}
 		STS = {
 			if = {
 				limit = { exists = yes has_capitulated = no OR = { is_in_faction_with = NOD is_subject_of = NOD } NOT = { is_in_faction_with = VAL is_subject_of = VAL } }
 				if = { limit = { NOT = { has_war_with = VAL } } add_to_war = { targeted_alliance = NOD enemy = VAL hostility_reason = asked_to_join single_target_only = yes } }
-				if = { limit = { has_war_with = VAL } VAL_final_crisis_register_member = yes }
+				if = {
+					limit = {
+						has_war_with = VAL
+						NOT = { has_country_flag = VAL_final_war_member }
+					}
+					VAL_final_crisis_register_member = yes
+				}
 			}
 		}
 		if = { limit = { NOT = { has_dynamic_modifier = { modifier = VAL_final_war_preparation } } } add_dynamic_modifier = { modifier = VAL_final_war_preparation } }
@@ -9450,10 +9562,14 @@ VAL_northern_aid_daily = {
 				}
 			}
 			if = {
-				limit = { VAL_northern_aid_volunteers_present = yes }
-				add_to_variable = { var = VAL_northern_aid_volunteer_days value = 1 }
+				limit = { check_variable = { var = VAL_northern_aid_volunteer_days value = 30 compare = less_than } }
+				# A completed tour remains delivered aid after volunteers return home.
+				if = {
+					limit = { VAL_northern_aid_volunteers_present = yes }
+					add_to_variable = { var = VAL_northern_aid_volunteer_days value = 1 }
+				}
+				else = { set_variable = { var = VAL_northern_aid_volunteer_days value = 0 } }
 			}
-			else = { set_variable = { var = VAL_northern_aid_volunteer_days value = 0 } }
 			VAL_complete_northern_aid = yes
 		}
 	}

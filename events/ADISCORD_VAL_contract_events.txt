@@ -1329,7 +1329,7 @@ country_event = {
 	option = { name = val_contract.348.a }
 }
 
-# The policy is selected once. TFF accepts principles separately from war entry.
+# Independent partners choose the actual quote when opening military talks.
 country_event = {
 	id = val_contract.380
 	title = val_contract.380.t
@@ -1338,83 +1338,116 @@ country_event = {
 	is_triggered_only = yes
 	timeout_days = 21
 	option = {
+		name = val_contract.family.cancel
+		ai_chance = { base = 0 }
+	}
+	option = {
 		name = val_contract.380.firm
-		trigger = { VAL_tff_freedom_choice_current = yes }
-		ai_chance = { base = 30 modifier = { factor = 4 has_completed_focus = VAL_October_Of_2160 } }
-		custom_effect_tooltip = VAL_tff_firm_policy_tt
+		trigger = {
+			VAL_nod_frontier_offer_current = yes
+			NOT = { has_country_flag = VAL_nod_frontier_offer_pending }
+		}
+		ai_chance = { base = 30 }
+		custom_effect_tooltip = VAL_nod_frontier_limited_terms_tt
 		hidden_effect = {
-			if = {
-				limit = { VAL_tff_freedom_choice_current = yes }
-				set_country_flag = { flag = VAL_tff_freedom_policy value = 2 }
-				set_country_flag = { flag = VAL_tff_principles_pending days = 15 }
-				TFF = { country_event = { id = val_contract.381 } }
-			}
+			set_temp_variable = { var = VAL_nod_quote_tier value = 2 }
+			VAL_open_nod_frontier_offer = yes
 		}
 	}
 	option = {
 		name = val_contract.380.compromise
-		trigger = { VAL_tff_freedom_choice_current = yes }
-		ai_chance = { base = 70 modifier = { factor = 2 has_completed_focus = VAL_Trading_Partners } }
-		custom_effect_tooltip = VAL_tff_compromise_policy_tt
+		trigger = {
+			VAL_nod_frontier_offer_current = yes
+			NOT = { has_country_flag = VAL_nod_frontier_offer_pending }
+		}
+		ai_chance = { base = 70 }
+		custom_effect_tooltip = VAL_nod_frontier_terms_tt
 		hidden_effect = {
-			if = {
-				limit = { VAL_tff_freedom_choice_current = yes }
-				set_country_flag = { flag = VAL_tff_freedom_policy value = 1 }
-				set_country_flag = { flag = VAL_tff_principles_pending days = 15 }
-				TFF = { country_event = { id = val_contract.381 } }
-			}
+			set_temp_variable = { var = VAL_nod_quote_tier value = 1 }
+			VAL_open_nod_frontier_offer = yes
 		}
 	}
-	option = { name = val_contract.352.obsolete trigger = { VAL_tff_freedom_choice_current = no } }
 }
 
 country_event = {
 	id = val_contract.381
 	title = val_contract.381.t
-	desc = { trigger = { VAL = { has_country_flag = { flag = VAL_tff_freedom_policy value < 2 } } } text = val_contract.381.compromise }
-	desc = { trigger = { VAL = { has_country_flag = { flag = VAL_tff_freedom_policy value > 1 } } } text = val_contract.381.firm }
+	desc = val_contract.381.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	timeout_days = 35
 	option = {
 		name = val_contract.381.refuse
-		ai_chance = { base = 20 modifier = { factor = 4 VAL = { has_country_flag = { flag = VAL_tff_freedom_policy value > 1 } } } }
-		custom_effect_tooltip = VAL_tff_principles_refused_tt
-		hidden_effect = {
-			if = {
-				limit = { VAL_tff_principles_offer_current = yes }
-				VAL = { clr_country_flag = VAL_tff_principles_pending country_event = { id = val_contract.382 } }
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 9
+				NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals } }
+				VAL = { VAL_northern_aid_sufficient = no }
 			}
-			else = { VAL = { clr_country_flag = VAL_tff_principles_pending } }
+			modifier = {
+				factor = 3
+				NOD = { NOT = { check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals } } }
+				VAL = { VAL_northern_aid_sufficient = no }
+			}
+		}
+		hidden_effect = {
+			VAL = {
+				if = {
+					limit = { has_country_flag = { flag = VAL_frontier_protectorate_pending value < 2 } }
+					clr_country_flag = VAL_frontier_protectorate_pending
+					country_event = { id = val_contract.382 }
+				}
+			}
 		}
 	}
 	option = {
 		name = val_contract.381.accept
-		trigger = { VAL_tff_principles_offer_current = yes }
-		ai_chance = { base = 80 modifier = { factor = 0.25 VAL = { has_country_flag = { flag = VAL_tff_freedom_policy value > 1 } } } }
-		custom_effect_tooltip = VAL_tff_principles_accepted_tt
-		hidden_effect = {
-			if = {
-				limit = { VAL_tff_principles_offer_current = yes }
-				VAL = {
-					set_country_flag = VAL_tff_principles_accepted
-					clr_country_flag = VAL_tff_principles_pending
-					country_event = { id = val_contract.382 }
-				}
+		trigger = { VAL_frontier_protectorate_offer_current = yes }
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 9
+				NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals } }
+				VAL = { VAL_northern_aid_sufficient = yes }
 			}
-			else = { VAL = { clr_country_flag = VAL_tff_principles_pending } }
+			modifier = {
+				factor = 1.5
+				NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 2 compare = equals } }
+				VAL = { VAL_northern_aid_sufficient = yes }
+			}
+			modifier = {
+				factor = 3
+				NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 4 compare = equals } }
+				VAL = { VAL_northern_aid_sufficient = yes }
+			}
 		}
+		custom_effect_tooltip = VAL_frontier_protectorate_terms_tt
+		hidden_effect = { VAL = { VAL_accept_frontier_protectorate = yes } }
 	}
 }
 
 country_event = {
 	id = val_contract.382
 	title = val_contract.382.t
-	desc = { trigger = { has_country_flag = VAL_tff_principles_accepted } text = val_contract.382.accepted }
-	desc = { trigger = { NOT = { has_country_flag = VAL_tff_principles_accepted } } text = val_contract.382.refused }
+	desc = {
+		trigger = { TFF = { is_subject_of = VAL } }
+		text = val_contract.382.accepted
+	}
+	desc = {
+		trigger = { NOT = { TFF = { is_subject_of = VAL } } }
+		text = val_contract.382.refused
+	}
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	option = { name = val_contract.382.a }
+}
+
+country_event = {
+	id = val_contract.383
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { VAL_finish_frontier_protectorate = yes }
 }
 
 # The first option is the unattended answer; an obsolete offer only closes.
@@ -1445,8 +1478,6 @@ country_event = {
 		ai_chance = {
 			base = 80
 			modifier = { factor = 0.25 VAL_nod_limited_offer = yes }
-			modifier = { factor = 4 VAL_nod_limited_offer = yes VAL = { has_country_flag = VAL_tff_principles_accepted } }
-			modifier = { factor = 4.75 VAL_nod_limited_offer = no VAL = { has_country_flag = VAL_tff_principles_accepted } }
 		}
 		if = { limit = { hidden_trigger = { VAL_nod_limited_offer = yes } } custom_effect_tooltip = VAL_nod_frontier_limited_terms_tt }
 		else = { custom_effect_tooltip = VAL_nod_frontier_terms_tt }
@@ -1598,10 +1629,15 @@ country_event = {
 				is_subject = no
 				has_war_with = YPR
 				has_war_with = COF
-				has_war_with = TFF
 				NOT = { YPR = { is_subject = yes } }
 				NOT = { COF = { is_subject = yes } }
-				NOT = { TFF = { is_subject = yes } }
+				OR = {
+					TFF = { is_subject_of = VAL }
+					AND = {
+						has_war_with = TFF
+						TFF = { is_subject = no }
+					}
+				}
 			}
 			VAL_call_subjects_to_wars = yes
 		}

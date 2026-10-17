@@ -13,7 +13,12 @@ VAL_new_world_category = {
 VAL_military_operations = {
 	priority = 1000
 	allowed = { tag = VAL }
-	visible = { has_country_flag = VAL_operations_map_unlocked }
+	visible = {
+		OR = {
+			has_country_flag = VAL_operations_map_unlocked
+			has_completed_focus = VAL_Different_Views_On_Freedom
+		}
+	}
 	visible_when_empty = yes
 	scripted_gui = ADISCORD_VAL_operations_panel
 }

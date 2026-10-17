@@ -349,6 +349,14 @@
       "status": "active"
     },
     {
+      "id": "val_contract.383",
+      "namespace": "val_contract",
+      "number": 383,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_contract",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_pc.40",
       "namespace": "ADISCORD_STP_pc",
       "number": 40,

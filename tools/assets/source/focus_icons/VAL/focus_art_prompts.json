@@ -1,0 +1,490 @@
+{
+  "tool": "built-in image_gen",
+  "workflow": {
+    "assets": "Separate transparent PNGs directly in this folder",
+    "composition": "Display in chat only; do not save compositions in mod",
+    "prompts": "Append all focus prompts to this single file"
+  },
+  "focuses": [
+    {
+      "focus_id": "VAL_Army_Of_The_Ledger",
+      "title": "Армия единого реестра",
+      "tool": "built-in image_gen",
+      "uniform_reference": "gfx/models/units/ADISCORD_regulars/VAL_regular.mesh",
+      "assets": [
+        {
+          "file": "kefreyt_regular_with_rifle.png",
+          "source": "exec-f2d8478a-c138-4dfe-a328-3e259f4b8463.png",
+          "prompt": "Use case: stylized-concept. ONE isolated Kefreyt regular infantry soldier, from knees up, for HOI4 focus Army of the Unified Register. Supplied screenshot is the ACTUAL native VAL_regular mesh UNIFORM reference. Ignore browser UI and grid. Faithfully translate this model into gritty realistic photographic cloth and equipment: dark navy blue and charcoal camouflage jacket/trousers, compact dark teal combat helmet, black lower-face balaclava leaving only eyes and upper cheeks visible, two small RED collar tabs, bulky desaturated blue-grey rectangular plate carrier with two broad lower front pouches, smaller side pouches and central upper square panel, brown utility belt with pouches, dark knee pads. Do NOT use olive STP uniform, no burgundy scarf or Khan cap, no new insignia or robot. Calm authoritative upright pose slightly turned left, rifle held horizontally diagonal across lower chest by both anatomically correct hands, wooden dark brown and steel AK type rifle, muzzle left and below face, trigger finger straight. Complete head helmet elbows hands and rifle within generous margins, natural deliberate crop just below knees. Strong silhouette and broad contrast readable at150px. Photoreal distressed print grain, dark steel blue palette, hard selective silver edge highlights, restrained warm amber reflection on right edges. True transparent alpha background, no ground shadow, room, fog, flag, book, lettering or frame."
+        },
+        {
+          "file": "regimental_service_register.png",
+          "source": "exec-3865190a-a605-41df-9d22-cf79e69c1d3b.png",
+          "prompt": "Use case: stylized-concept. ONE isolated open military regimental service register as separate transparent PNG for Kefreyt HOI4 focus Army of the Unified Register. Heavy worn dark brown leather bound ledger, ivory grey pages, big tarnished steel clip fixed at top of right page, sparse broad ruled columns and several dark handwritten entries/checks without readable words or numbers. Low diagonal oblique perspective, book lies flat, near edge slopes down to right, pages are foreshortened, not standing front-facing. Full book inside margins. Broad clear simple shape for150px icon collage, realistic leather/paper/metal, gritty printed grain, dark charcoal shadows, cool silver highlights, subtle amber right edge light. No pen hands stamps flags weapons desk scene outside shadow haze frame symbols or lettering. True alpha transparency."
+        },
+        {
+          "file": "kefreyt_waving_flag.png",
+          "source": "exec-6ff4b48a-82b5-4e94-8ccf-0f6f7e90ec63.png",
+          "prompt": "Use case: stylized-concept. ONE isolated waving Kefreyt military flag as transparent PNG cutout asset. Supplied image is the EXACT flag design reference: deep wine red plain rectangular cloth field, white horizontal AK rifle silhouette across upper centre with muzzle pointing LEFT and stock RIGHT, white leafy branch below curving from lower left to lower right. Preserve recognizable symbol orientation, arrangement and proportions faithfully. No eagle stars letters numbers stripes extra badges or symbols. Flag attached along LEFT edge to a short dark steel pole with simple plain cap, winds toward RIGHT in two broad folds, full flag and short pole inside clear margins. Compact broad silhouette no long bare pole. Realistic heavy coarse cloth, worn but not torn, strong dark crimson fold shadows and silver red highlights, discreet warm amber edge reflection. Gritty photoreal HOI4 cutout collage aesthetic. True transparent alpha background, no room sky floor cloud halo shadow or additional objects."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "status": "generation_blocked",
+        "prompt": "Use case: compositing. ONE finished compact HOI4 national focus cutout collage Army of the Unified Register for Kefreyt. Exactly three input elements:1 soldier in actual VAL regular uniform,2 open regimental ledger with steel clip,3 red Kefreyt flag with white rifle and leafy branch. Preserve soldier's dark navy camouflage, helmet, lower-face mask, blue-grey rectangular vest, RED collar tabs, wood-steel rifle and natural hand anatomy. Layout: waist-up soldier dominant at centre RIGHT, head upper right, rifle across torso. Large open ledger in lower LEFT foreground overlapping lower torso and natural figure crop, pages at low diagonal perspective, clip visible. Flag behind at upper LEFT with pole along left edge, white rifle and branch mostly visible left of soldier. Tight asymmetric overlapping THREE large masses, broad compact silhouette width about1.35 times height, no catalogue spacing, no long bare poles or full legs. Photoreal printed cutout aesthetic matching Kefreyt dark industrial focus art: charcoal steel blue, worn brown leather, ivory paper, saturated deep red cloth; cool silver rim highlights and subtle warm orange edge reflections. Strong major shapes readable at150x150, restrained fine detail. All objects fully inside clear transparent margins, no framing rectangle, scenery, floor, broad fog/glow cloud, badges, decorative gold, readable text, extra props or people. TRUE transparent alpha outside silhouette and gaps. High resolution authoring composition."
+      }
+    },
+    {
+      "focus_id": "VAL_Factories_Like_Cathedrals",
+      "title": "Модернизация оружейных заводов",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "arms_factory_milling_machine.png",
+          "source": "exec-75320fc1-3cce-4108-8c04-51055458f7e5.png",
+          "prompt": "Use case: stylized-concept. ONE isolated heavy industrial milling machine as a transparent PNG asset for fictional HOI4 national focus Modernization of Arms Factories, Kefreyt. Compact powerful mid20th-century machine tool with squat cast iron base, broad horizontal worktable, chunky vertical milling head above a plain clamped steel billet, two large silver handwheels and a small attached motor. Only external machine appearance, no diagrams, measurements, instructional details or exposed internals. Three-quarter front view facing slightly left, complete machine within generous margins. Broad simple recognizable silhouette readable at150px. Charcoal blue-grey enamel, worn oily dark steel, hard cold silver edge highlights, localized warm orange factory reflection on right edges, discreet dark red painted stripe. Gritty realistic photographic cutout with coarse printed grain. No worker, firearms, factory room, floor tile, text, logos, sparks, smoke or broad halo. TRUE alpha transparency outside object and gaps. Square compact composition."
+        },
+        {
+          "file": "finished_rifles_shipping_crate.png",
+          "source": "exec-93f481b1-8dde-41bd-bb85-f571092cd835.png",
+          "prompt": "Use case: stylized-concept. ONE isolated long open wooden shipping crate containing THREE finished fictional military service rifles resting neatly parallel in padded slots, transparent PNG asset for a HOI4 national focus about industrial modernization. Plain sturdy dark brown timber box with worn steel corner brackets, lid absent, three recognizable wood-stock steel rifle silhouettes lying diagonally from lower left stocks to upper right barrels. Exterior appearance only, complete assembled rifles, no diagrams, disassembly or ammunition. Bold simple forms at small icon scale. Front three-quarter view from above, wide low horizontal silhouette, complete crate within clear transparent margins. Gritty photoreal printed cutout, oily charcoal steel, dark walnut stocks, cold silver metal edges, subtle amber factory reflection along right edges, one small faded red stripe on crate. No text, numbers, insignia, people, workbench, factory room, ground shadow, haze, smoke or glow cloud. True transparent alpha background and exterior gaps."
+        },
+        {
+          "file": "arms_factory_workshop_building.png",
+          "source": "exec-1b729235-6a28-4d96-af0a-76a5bba8be57.png",
+          "prompt": "Use case: stylized-concept. ONE isolated compact industrial factory building cutout for HOI4 Kefreyt focus Modernization of Arms Factories. Broad squat dark brick and steel machine workshop, three connected sawtooth roof bays, large tall orange amber illuminated factory windows, a single short thick chimney at rear left, broad closed freight door. Heavy practical early-to-mid20th-century industrial architecture maintained but worn, not ruined. Front three-quarter view slightly from above, low wide silhouette, building width twice its height including chimney. Entire structure within ample margins, no terrain base or road. Realistic gritty printed cutout, deep charcoal black and brown brick, cool silver roof edge highlights, orange interior light behind windows, muted dark red accents. Large clear structural forms for150px icon. TRUE transparent alpha outside building. No people, vehicles, rifles, machinery outside, text, logo, flag, mountains, sky, ground, smoke plumes, haze or outer glow cloud. No ornamental towers, palace or cathedral."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-16e6c6e5-b1dd-4a59-8ec1-4a6a83b800fd.png",
+        "prompt": "Use case: compositing. Make ONE compact HOI4 national focus icon for Kefreyt Modernization of Arms Factories. Combine exactly three supplied cutout assets: image1 heavy industrial milling machine, image2 wooden crate containing finished rifles, image3 factory building with orange windows. Machine is the dominant large object at LEFT centre, factory is smaller behind at upper RIGHT with its roof and amber windows clearly visible, long low crate lies diagonally across lower foreground partly overlapping machine feet. Tight interlocking collage with exaggerated symbolic scales, not a literal scene or three equally sized product thumbnails. Preserve object designs and three rifles resting in crate. Square canvas with wide compact silhouette about1.3:1, clear margins around every object. Broad high contrast forms readable at150px. Gritty photoreal printed cutout aesthetic, charcoal blue steel and dark brown timber, selective bright silver edges and orange light from factory windows reflected onto nearby machine. Faded red accents only. No people, text, logos, flags, border, arrows, additional props, smoke, floor, outside cast shadow or broad halo. True transparent alpha around silhouette and gaps. Focus on industry and completed equipment, no schematics or technical instructions."
+      }
+    },
+    {
+      "focus_id": "VAL_Price_Of_Loyalty",
+      "title": "Цена верности",
+      "tool": "built-in image_gen",
+      "uniform_reference": "gfx/models/units/ADISCORD_regulars/VAL_regular.mesh",
+      "flag_reference": "gfx/flags/VAL.tga",
+      "assets": [
+        {
+          "file": "loyalty_mercenary_captain.png",
+          "source": "exec-6f9a3e53-ffcd-4c35-a691-953e79ae2265.png",
+          "prompt": "Use case: style-transfer. Create a transparent waist-up cutout of a Kefreyt mercenary captain based faithfully on the PROVIDED RENDER OF THE ACTUAL GAME MODEL. Preserve its distinctive equipment: rounded dark charcoal helmet without brim, black cloth covering nose/mouth and neck with eyes visible, dark navy-black mottled uniform, muted dark blue-green plate carrier with rectangular central chest panel, two large lower front pouches, side pouches, radio and antenna on viewer LEFT upper chest, small muted burgundy collar tabs, brown belt pouches. No Khan cap or scarf, no parade medals, no gold braid, no invented emblem. Relaxed standing three-quarter pose turned slightly LEFT, arms lowered, stern eyes looking left toward payment outside frame, shoulders slightly asymmetric. Full helmet and upper body down to belt with clean cutout lower contour, both arms visible, no weapon or banknotes in this individual asset. Translate native low-poly reference into painterly realistic HOI4 focus art: broad painted tonal masses, controlled texture, matte cloth, blackened steel, selective warm amber highlights and subtle crimson rim, deep charcoal shadows. Not shiny product render, not neon cyan. Strong readable silhouette at 150px. TRUE transparent background, no environment, ground, rectangle, haze, flag or extra objects."
+        },
+        {
+          "file": "loyalty_waving_flag.png",
+          "source": "exec-d7b1e272-aa54-4e99-ba02-c7c9ebb6923b.png",
+          "prompt": "Use case: style-transfer. Make a single wind-blown fabric flag cutout based on the supplied ACTUAL Kefreyt flag texture. Preserve its design: solid deep burgundy field, a WHITE horizontal AK silhouette above a WHITE leafy branch. Rifle muzzle points LEFT and stock RIGHT. Preserve the branch leaf arrangement and the relative positions of both white symbols, do NOT substitute any eagle, crest, stars, text or other emblem. A broad flag flowing toward LEFT from a short dark pole on RIGHT, with 2-3 shallow fabric folds so the complete original white symbol remains clearly recognizable and not hidden. Slight oblique perspective, wide low silhouette. Painterly realistic HOI4 focus art, matte woven cloth, restrained warm highlights and deep red-black shadows, dramatic irregular cloth edge without ragged damage. Transparent alpha background, entire flag and short pole inside margins. No scene, people, ground, pedestal, golden ornament, smoke or glow plate. Treat this image as a textile rendering of the provided exact design, not a new flag design."
+        },
+        {
+          "file": "loyalty_payment_hand.png",
+          "source": "exec-77fe1c6e-0f6a-4715-8ee0-32cfb5c9e274.png",
+          "prompt": "Use case: stylized-concept. One isolated transparent cutout asset for a painterly realistic HOI4 national focus icon about buying mercenary loyalty. A single human right hand and forearm extending horizontally from LEFT toward RIGHT, offering one thick bundled stack of worn generic ivory-grey banknotes. Dark charcoal wool sleeve with a small plain cuff, palm supports the bundle from below, thumb gently holds its side, natural believable five-finger anatomy with fingers partially occluded under banknotes. Three-quarter view from slightly above, banknotes readable as cash at small icon size, restrained plain banknote engraving, no readable writing or currency logos. Low wide silhouette, full hand, banknote bundle and a short sleeve section comfortably inside margins. Matte painterly material treatment, broad tonal masses, warm amber light from upper left, dark burgundy reflected light, deliberate soft texture, deep controlled shadows. Clean transparent alpha background, no person, flag, desk, coins, weapons, extra hands, glowing rectangle, smoke or environment.",
+          "edit_prompt": "Use case: background-extraction. Edit supplied hand offering bundled banknotes. Keep hand, sleeve, fingers, banknote bundle, camera and colors exactly as they are. Remove ALL diffuse amber/brown glow and haze around the object, leaving a clean tightly isolated silhouette on fully transparent background. Subject itself fully opaque. Alpha only for object edge antialiasing, no shadow or ambient color outside outline. Preserve entire sleeve and cash inside image.",
+          "note": "Soft surrounding glow remains in generated alpha"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "status": "generation_blocked",
+        "prompt": "Use case: compositing. Assemble these THREE supplied cutout assets into ONE compact WIDE national-focus icon for Hearts of Iron IV titled conceptually Price of Loyalty (NO text printed). Image 1 is the actual-model-derived Kefreyt mercenary soldier: preserve exact helmet, mask, dark mottled navy uniform, rectangular armor and radio; place waist-up on RIGHT looking LEFT. Image 2 is the actual-flag-derived burgundy Kefreyt flag with white left-facing rifle and leafy branch: place behind him flowing widely to LEFT across upper background, preserve emblem and leave it visible to left of soldier. Image 3 is a hand offering bundled cash: place from LEFT across bottom foreground toward the soldier, smaller than his torso, cash at center, do not add any other hands. Tight natural overlaps, three objects only. Entire assembled silhouette roughly 1.8:1, width much greater than height; character uses rightmost 40 percent, flag upper left and hand lower left. Icon collage with painterly realistic rendering, strong broad values readable at 180px, matte cloth and blackened steel, rich burgundy and muted amber rim lights, dark shadows. Clean organic silhouette on TRUE transparent background, absolutely no rectangular backdrop, no scenery, no title, no border, no floating fog or halo filling empty space. Keep all elements fully inside canvas margins. Do not turn into a full scene or vertical portrait."
+      }
+    },
+    {
+      "focus_id": "VAL_Field_Repair_Corps",
+      "title": "Полевой ремонтный корпус",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "field_repair_tank_engine.png",
+          "source": "exec-2cf0836e-1faf-4e56-b4fa-218a50168272.png",
+          "prompt": "Use case: stylized-concept. Single isolated tank diesel engine cutout for a Hearts of Iron IV national focus icon, Field Repair Corps of the fictional industrial state Kefreyt. A compact heavy V-shaped diesel engine removed for repair, 3/4 view from slightly above, strong broad engine block and paired cylinder banks, a few thick hoses and recognizable front pulley, believable integrated machinery but simplify tiny components for readability at 150px. Low broad silhouette, front faces toward lower right, complete object comfortably within margins. Matte blackened steel, oily dark blue-grey cast metal, worn burgundy-red valve covers, discreet brass pipe fittings, restrained warm amber highlights and cool silver edges. Gritty painterly realistic collage aesthetic with broad shadow shapes and selective detail, NOT polished showroom rendering. Entire engine is ONE separate asset. True transparent alpha background, no floor or cast shadow outside silhouette, no fog/glow around object, no mechanic, workshop, tools, track, flag, captions, labels, diagrams or frame."
+        },
+        {
+          "file": "field_repair_toolbox.png",
+          "source": "exec-4a8580d3-29de-4e85-a8d4-6536343dc64f.png",
+          "prompt": "Use case: stylized-concept. ONE isolated open field mechanic's toolbox as transparent PNG cutout asset for a gritty HOI4 focus icon. Low wide rectangular steel toolbox, worn dark burgundy paint on exterior, hinged lid open at 60 degrees, dark interior with THREE large clearly recognizable tools: broad open-ended wrench, short heavy hammer and pliers resting in compartments. Three-quarter view slightly from above, front corner facing lower left. Strong simple silhouette, complete toolbox and tools within generous margins. Matte oily steel and chipped paint, realistic painterly printed collage, strong broad tones readable at 150 pixels, restrained silver edge highlights and warm amber reflections, dark blue-grey shadows. No writing or symbols. Strict isolated object with tight clean silhouette, fully transparent surrounding pixels and gaps, no floor, environment, glow, haze, shadow outside object, engine, track, people, hands, extra props or border."
+        },
+        {
+          "file": "field_repair_track_section.png",
+          "source": "exec-e963b3cf-4eac-4335-8592-ac6fb1097599.png",
+          "prompt": "Use case: stylized-concept. One detached short section of steel tank caterpillar track consisting of EIGHT connected broad rectangular links as a separate transparent PNG asset. The track section curves gently like a shallow bent ribbon from lower LEFT to upper RIGHT, seen in three-quarter view; strong repetitive broad tread plates and connecting hinge pins, mildly curled upper end shows underside. Wide diagonal silhouette about 2:1, complete section inside clear margins. Dark oily blue-grey cast steel, polished silver worn tread ridges, tiny rusty brown areas, selective warm amber side reflections. Gritty painterly realistic HOI4 national focus cutout, big tonal shapes readable at small icon size, matte industrial metal, no glossy ornament. TRUE transparent background, tightly isolated solid object, no scene, ground, drop shadow, smoky aura, glow cloud, other components, wheels, tools, people, labels, text or border."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-70ee4fe5-2110-415b-a65f-ca7abae3219f.png",
+        "prompt": "Use case: compositing. Assemble the THREE supplied assets into one finished compact wide HOI4 national focus icon for Field Repair Corps. Image1 burgundy/black tank diesel engine is dominant on LEFT, image2 open burgundy toolbox with wrench hammer and pliers is at lower RIGHT in front, image3 detached steel track strip runs diagonally behind both from lower left to upper right, its curved upper end clearly visible above toolbox. Tight overlapping emblem collage, symbolic scales: engine about 60% of composition width, toolbox about 40%, track supports the silhouette. Do not simply put three disconnected products side by side. Overall organic silhouette distinctly WIDE, approx 1.8 width to 1 height on landscape canvas, generous transparent outside margins. Preserve object designs and materials. Deep blue-grey blackened steel, worn burgundy paint, oily surfaces, controlled bright silver contours and a few warm amber welding-like glints on edges. Painterly realistic HOI4 focus art, broad strong tonal masses readable at 180px, soften unnecessary fine texture. No additional objects, people, flags, text or borders. Remove all existing diffuse background halos from individual references. TRUE transparent alpha outside the object silhouettes, no floor, fog, cloud, cast shadow backdrop or rectangular background."
+      }
+    },
+    {
+      "focus_id": "VAL_Ballistics_Schools",
+      "title": "Баллистические школы",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "ballistics_classroom_board.png",
+          "source": "exec-132b39ff-e6bb-42a9-b1f6-83a47650605e.png",
+          "prompt": "Use case: stylized-concept. ONE isolated military classroom chalkboard, separate transparent PNG asset for fictional HOI4 focus Ballistics Schools. Squat wide rectangular black slate board in heavy worn dark brown wood frame with metal corner brackets, very short chalk ledge, NO floor stand or legs. Slight three-quarter view, left edge nearer viewer. A single large simple white chalk parabola across board, a horizontal baseline and three short dashed guide lines, purely symbolic teaching sketch, NO numeric values, equations, weapon specifications, targeting data or readable text. Simple major lines readable at150px. Weathered charcoal slate with subtle rubbed chalk, dark walnut frame, cold silver rim highlights and very restrained amber reflection along right frame, gritty realistic printed collage style matching Kefreyt dark industrial art. Complete frame inside clear margins. True transparent alpha outside object. No people, chalk pieces, protractor, shell, books, scene, floor shadow, smoke, broad halo, emblem or badge."
+        },
+        {
+          "file": "ballistics_training_projectile.png",
+          "source": "exec-ffc3ae6d-100e-4ae6-95ab-3bc1cbc2a9af.png",
+          "prompt": "Use case: stylized-concept. ONE isolated inert artillery projectile teaching prop for a fictional HOI4 national focus Ballistics Schools. A complete solid exterior-only museum classroom dummy: stout dark blued steel cylindrical body with ogival tapered rounded tip, one broad dull brass band near flat base, a small faded dark red paint band below shoulder. No cartridge case, no cutaway, internals, dimensions, labels or manufacturing details. Standing diagonally tilted about20 degrees toward upper right, complete tip and base inside generous margins. Strong simple heavy silhouette, realistic scuffed metal, bright cool silver edge highlights, subtle warm amber reflection, deep charcoal shadows, gritty printed photographic cutout style. TRUE transparent alpha background, no pedestal, ground shadow, smoke, sparks, explosion, hands, weapons, text or other props."
+        },
+        {
+          "file": "ballistics_brass_protractor.png",
+          "source": "exec-bf6489f8-a2d5-4db3-8b42-e85e6588d047.png",
+          "prompt": "Use case: stylized-concept. ONE isolated vintage brass mechanical semicircular protractor, separate transparent PNG asset for a fictional HOI4 national focus Ballistics Schools. A thick broad half-circle brass plate with a semicircular open center, chunky flat horizontal base, and one dark steel pivoting ruler arm rising diagonally toward upper right from a large central screw. Only a few broad engraved tick marks, no numbers or readable writing. Three-quarter perspective slightly viewed from above, entire object in frame with clear margins. Worn tarnished golden brass, rubbed silver-steel arm, bold beveled edges, deep charcoal shadows, restrained warm highlights. Gritty realistic photographic collage cutout, simple strong silhouette readable at small icon size. True transparent alpha background. No people, hands, board, shells, books, floor, cast ground shadow, badge, decorative ornaments, glow clouds or other objects."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-e427c613-ac0b-4979-8aa0-9592c0ad2eda.png",
+        "prompt": "Use case: compositing. Assemble the THREE supplied cutout assets into ONE compact HOI4 national focus icon Ballistics Schools for Kefreyt. Image1 chalkboard forms the broad rear upper mass, retain its white chalk parabola visibly in upper center. Image2 dark steel teaching projectile large in LEFT foreground, leaning slightly right, brass base near bottom left, tip rising above the board's left upper edge. Image3 brass semicircular protractor smaller in LOWER RIGHT foreground overlapping lower board frame and partially overlapping shell base. Exactly three objects, tight purposeful overlapping collage with strong scale hierarchy, board wide rear mass, shell dominant diagonal accent, brass instrument supporting bottom. Overall silhouette wide about 1.4:1, generous transparent margins. Preserve actual input object designs. Gritty painterly photographic cutout style for small 150px national focus art: charcoal slate, dark steel, worn brown wood, dull brass, restrained dark red projectile band; cold silver rims and warm amber highlights on solid edges. Strong big shapes, clear trajectory arch, reduce unnecessary microtexture. Remove diffuse background glow from references; TRUE transparent alpha immediately outside object edges and gaps. No people, floor, room, background rectangle, smoke, glow cloud, extra props, readable lettering, border, crest or additional symbols."
+      }
+    },
+    {
+      "focus_id": "VAL_Different_Views_On_Freedom",
+      "title": "Разные взгляды на свободу",
+      "tool": "built-in image_gen",
+      "flag_references": [
+        "gfx/flags/VAL.tga",
+        "gfx/flags/TFF.tga"
+      ],
+      "assets": [
+        {
+          "file": "freedom_broken_shackle_fist.png",
+          "source": "exec-dbe736f7-c9d3-4299-b4ae-0720afd6bef6.png",
+          "prompt": "Use case: stylized-concept. ONE isolated symbolic raised bare human fist with a short forearm for fictional strategy-game focus Different Views on Freedom. Strong weathered adult hand with anatomically correct clenched fingers and thumb, viewed from three-quarter angle, leaning slightly up toward LEFT. An open broken iron cuff loosely around the wrist, THREE short thick chain links extending toward RIGHT and ending in one visibly broken link. No injury, blood or distressed person; allegorical object about independence. Sleeve of rough faded charcoal cloth at lower forearm, no insignia. Strong simple shape readable at 150px, matte painterly realistic HOI4 cutout collage, earthy skin, blackened blue-grey iron, warm amber highlights on knuckles, crisp silver chain edges, broad deep shadows, restrained grain. Complete fist cuff chain and forearm inside margins. TRUE transparent background and clean silhouette, no scenery, floor, smoke, glow cloud, other hand, flag, words, border or documents."
+        },
+        {
+          "file": "freedom_gloved_chain_grip.png",
+          "source": "exec-b9b7a8bd-e929-4c28-9c61-e452e2163403.png",
+          "prompt": "Use case: stylized-concept. ONE isolated hand in a dark worn black leather glove gripping a short heavy steel chain, for a fictional strategy-game allegorical icon Different Views on Freedom. Short forearm enters from RIGHT, hand in firm natural clenched grip at centre, chain emerges toward LEFT with four linked broad oval links and a broken end. Fingers clearly wrap around the chain without intersecting metal. Dark navy wool sleeve with plain burgundy cuff trim, no emblems, no armor. Broad low horizontal shape, thumb uppermost, complete hand chain and sleeve within margins. Realistic painterly HOI4 focus collage, matte black leather, steel-blue iron, deep burgundy fabric, restrained cool silver highlights with warm amber glints, broad dark masses readable at 150px. TRUE transparent alpha background and clean edges. No body, other hand, cuff restraint, scene, flag, papers, blood, glow cloud, ground, title or frame."
+        },
+        {
+          "file": "freedom_frontier_kefreyt_banners.png",
+          "source": "exec-c16dd141-873a-4b87-83f1-a7f7ca583e70.png",
+          "prompt": "Use case: style-transfer. Create ONE isolated paired fabric-banner backdrop for a fictional strategy-game icon about two views of freedom. Use BOTH supplied actual game flag designs faithfully. Image1 is Kefreyt: deep burgundy red field with white LEFT-facing rifle above white leafy branch; place this banner on RIGHT. Image2 is Frontier: black field, large ivory circle with black mountains at top and black star centrally above a small black horizontal balance/scales-like mark; retain the red upper-left corner field visible in reference; place this banner on LEFT. Do not invent or swap emblems, retain their visible shapes and color layouts from references. Two broad rectangular cloth flags meet and slightly overlap along center, flowing outward to opposite sides in shallow folds, no flagpoles. Overall low wide 2:1 shape, symbols visible on outer upper halves where foreground objects can later overlap lower center. Matte woven fabric, subdued grey-black and burgundy, restrained amber edge lights, realistic painterly HOI4 cutout collage, strong broad tonal masses and modest distressed print texture. Complete fabric silhouettes within margins. TRUE transparent alpha outside cloth, no scene, floor, smoke, glow cloud, hands, chains, writing, decorative trim or frame."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-182dbc21-9904-4336-af2d-4c8f0a5e772d.png",
+        "prompt": "Use case: compositing. Assemble these THREE supplied cutout assets into ONE WIDE compact national-focus collage for the fictional strategy game focus Different Views on Freedom. This symbolizes two fictional neighbors disagreeing about independence and contractual obligations. Reference1 bare raised fist with broken wrist cuff goes on LEFT foreground, fist tilted slightly outward; its short chain points toward centre. Reference2 black-gloved hand with navy sleeve and burgundy trim goes on RIGHT foreground pulling the other chain end toward right. Reference3 paired actual-design game flags behind: black-and-ivory Frontier on LEFT, burgundy Kefreyt on RIGHT. Keep both flag emblems visible ABOVE and outward from hands; flags create a low wide background made ONLY of cloth. Two broken chain ends stop at the centre with a clear small gap: chain is visibly BROKEN, never continuous. A few tiny warm metal glints at fracture, no explosion. Hands lower in composition with bare fist left-of-centre and gloved grip right-of-centre. Wide 1.8:1 interlocking silhouette, no tall poster, no large empty spacing. Exactly these three assets, no extra hands, documents, people, text, border, pedestals or scenery. Preserve anatomically correct hands and supplied banner symbols. Painterly realistic HOI4 focus art, warm skin against cold leather and steel, deep burgundy/black cloth, clear silver edge accents, strong readable tonal blocks at 180px. True transparent background beyond silhouette and in gaps, no fog or halo rectangle, all objects within safe canvas margins."
+      }
+    },
+    {
+      "focus_id": "VAL_Motorized_Columns",
+      "title": "Моторизованные колонны",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "motorized_canvas_cargo_truck.png",
+          "source": "exec-8bb503b8-fb8f-434c-b656-ceddc7710ec4.png",
+          "prompt": "Use case: stylized-concept. ONE isolated military logistics truck as separate transparent PNG asset for HOI4 focus Motorized Columns of fictional industrial Kefreyt. Rugged mid20th-century conventional long-hood 6x6 cargo truck, three axles, broad split windshield, heavy rectangular grille, round headlights, tall covered cargo bed with worn dark grey-brown canvas stretched over hoops. Front three-quarter view, nose points toward lower LEFT, rear extends to upper RIGHT. Complete vehicle all wheels, bumper, mirrors and canvas inside generous clear margins. Squat broad powerful silhouette, slightly elevated view with visible hood top, no extreme perspective. Charcoal blue-grey painted cab, muddy dark tyres, worn brown-grey canvas, one small plain burgundy rectangle on door without insignia. Gritty realistic painterly photographic collage, selective crisp silver rim highlights and warm amber reflected edges, broad tonal masses readable at150px. True transparent alpha tightly outside vehicle and wheel gaps. No people, visible driver, weapons, crates, road, ground plane or cast shadow outside silhouette, fog, dust, glow cloud, text, symbols, background or frame."
+        },
+        {
+          "file": "motorized_strapped_supply_crates.png",
+          "source": "exec-ef520351-3682-42c5-8958-aaf33431f89a.png",
+          "prompt": "Use case: stylized-concept. ONE isolated compact bundle of military supply crates, separate transparent PNG asset for fictional HOI4 Motorized Columns focus. Two closed stout wooden transport boxes stacked together, large broad box below and smaller box on top slightly offset, both firmly held together by two thick dark leather cargo straps with simple steel buckles. Dark weathered brown timber, heavy blackened steel corner protectors, subtle worn burgundy painted stripe on front. Three-quarter view slightly from above, broad front and right side visible, low wide silhouette, full bundle inside ample margins. Gritty realistic painterly photographic cutout, cool silver edge highlights, subdued warm amber reflections, simple large planes readable in150px collage. TRUE transparent alpha immediately outside object. No readable labels, writing, insignia, loose ammunition, weapons, people, vehicles, floor, ground shadow, scenery, halo, smoke or extra props."
+        },
+        {
+          "file": "motorized_red_route_arrow.png",
+          "source": "exec-af0f55c2-41db-48a1-9ec5-8135f7fc70d9.png",
+          "prompt": "Use case: stylized-concept. ONE isolated broad red military map route arrow as a separate transparent PNG overlay for a gritty HOI4 national focus collage. A SINGLE continuous wide ribbon-shaped arrow traveling from lower RIGHT through a shallow upward sweeping curve to upper LEFT, ending in one large clearly recognizable triangular arrowhead pointing LEFT. Low wide silhouette about2.3:1, simple bold shape, complete arrow within generous margins. Deep burgundy-crimson enamel face with restrained brighter red highlights, thin dark steel beveled edge, subtly distressed printed texture, matte industrial appearance. Nearly frontal orthographic view, slight bevel gives thickness but no twisted ribbon. Main arrowhead large enough to read when partly behind a truck. No text, map, grid, flags, badges, stars, people, vehicles, other arrows, detached speed marks, floor, shadow outside silhouette, glow cloud or scenery. TRUE transparent alpha background and clean perimeter."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-717ef6a3-53fe-4909-978d-1fcfbb29e5ff.png",
+        "prompt": "Use case: compositing. Make ONE finished compact HOI4 national focus icon Motorized Columns for Kefreyt, from exactly the three input assets. Image1 dark military canvas cargo truck is the dominant foreground mass across CENTER LEFT, nose points lower left, preserve all wheels and recognisable cab and canvas. Image2 strapped supply crates smaller at LOWER RIGHT, about30 percent composition width, overlapping truck rear wheels slightly but not covering cab or main front wheel. Image3 broad crimson route arrow BEHIND truck, its curved tail at right and its large arrowhead emerging clearly ABOVE cab toward upper LEFT. Arrow indicates same leftward travel direction as truck. Tight overlapping three-part collage, not a row of disconnected products. Wide organic silhouette width about1.6 times height, generous transparent margins, no cropping. Preserve input materials, shapes and dark blue-grey truck with muted brown canvas and small burgundy door rectangle. Gritty realistic painterly focus art, broad contrasting tonal masses readable at150px, selective cold silver edges and warm amber glints, deep red route accent. Simplify excess microtexture. TRUE transparent alpha outside solid object silhouettes and in gaps; REMOVE all soft background haze or diffuse halos present in reference cutouts. No people, floor, scenery, badges, gold frame, extra vehicles, props, lettering, broad glow or cast ground shadow."
+      }
+    },
+    {
+      "focus_id": "VAL_Wireless_Contract_Bureau",
+      "title": "Бюро контрактного вещания",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "broadcast_radio_transmitter.png",
+          "source": "exec-45f2296c-d591-4f60-9a91-2ed6fc9bc87f.png",
+          "prompt": "Use case: stylized-concept. ONE isolated vintage radio broadcast transmitter cabinet, separate transparent PNG cutout asset for HOI4 focus Contract Broadcasting Bureau of fictional industrial Kefreyt. Heavy compact low wide rectangular tabletop valve radio transmitter, three-quarter view slightly from above with front and right side visible. Dark blue-grey blackened steel enclosure, two large black tuning knobs, one broad amber illuminated horizontal tuning scale, two small round cream analog meters, a small red indicator, broad ventilation slots. No separate microphone or headphones, no tall antenna, no loose trailing cable. Solid simple silhouette width about1.7 times height. Scuffed matte paint and selective worn silver edges, warm amber light only within scale and subtle metal reflections. Gritty realistic painterly photographic collage, broad strong tonal masses readable at150px, restrained fine detail. Complete object inside ample margins. TRUE transparent alpha immediately outside solid object. No floor, ground shadow, scenery, background glow, haze, people, papers, emblems, labels, readable text, numbers, frame or extra props."
+        },
+        {
+          "file": "broadcast_studio_microphone.png",
+          "source": "exec-04c4e57d-58f3-4dea-91fe-334afecc05d3.png",
+          "prompt": "Use case: stylized-concept. ONE isolated vintage studio broadcasting microphone on a SHORT integrated desktop pedestal, separate transparent PNG asset for HOI4 focus Contract Broadcasting Bureau, fictional industrial Kefreyt. Large chunky rounded rectangular microphone head with broad horizontal silver grille slats and dark recesses, mounted in a sturdy curved dark steel yoke, short thick stem, small heavy oval base. Head occupies upper two-thirds of total height, total silhouette compact rather than tall thin stand. Three-quarter view turned slightly toward viewer RIGHT. Worn brushed silver and blackened blue-grey steel, tiny dark burgundy painted accent on yoke, controlled warm amber rim glints. Gritty realistic painterly photographic collage with broad tones readable at150px, restrained texture. Entire head, yoke and base inside generous margins. TRUE transparent alpha outside object and open gaps. No cable, logo, lettering, people, hands, radio, papers, floor, exterior drop shadow, room, haze, glow cloud, badges or other props."
+        },
+        {
+          "file": "broadcast_printed_leaflets.png",
+          "source": "exec-5c2cb379-445c-4697-a20a-e031d835f7a6.png",
+          "prompt": "Use case: stylized-concept. ONE isolated small fan of THREE printed fictional government broadcast leaflets, separate transparent PNG asset for HOI4 Contract Broadcasting Bureau focus. Three slightly aged cream rectangular paper sheets partly overlapping in a tight fan, lying at a LOW OBLIQUE three-quarter angle with pronounced foreshortening, nearer bottom edges broad and far top edges narrow, not upright front-facing posters. Their combined silhouette low wide about1.6:1. Uppermost sheet has one broad burgundy headline band with simple ivory typographic strokes suggesting print, a smaller burgundy subheading bar, and two columns of sparse dark grey short print lines; no actual readable words, no gibberish alphabet, no emblems, faces or photographs. Rear sheets show cream margins and partial red header blocks. Slight curled paper corners and convincing thickness, worn but intact, no excessive tears. Gritty realistic painterly photographic cutout, warm ivory and deep burgundy with broad dark shadow planes between overlapping sheets, cool silver-white paper edges, restrained warm amber reflections. Full fan within generous margins. TRUE transparent alpha outside paper silhouette. No desk, hands, microphone, radio, pen, seals, separate symbols, background, cast shadow beyond paper, glow or haze."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-5d81a36f-b0a9-4889-a32e-557149ed329d.png",
+        "prompt": "Use case: compositing. Assemble exactly the THREE supplied assets into ONE compact WIDE HOI4 national focus icon for Contract Broadcasting Bureau, fictional industrial Kefreyt. Image1 heavy dark radio broadcast transmitter forms dominant CENTER RIGHT rear mass, its amber tuning scale fully readable as a bright horizontal strip. Image2 silver vintage studio microphone is large LEFT foreground overlapping only left quarter of transmitter, grille head rises slightly above radio top, its short pedestal close to bottom edge. Image3 small fan of cream printed leaflets with burgundy headers at LOWER RIGHT foreground, LOW sloping perspective overlapping only lower right corner of radio, no more than25 percent total image area. Strong hierarchy: radio largest broad mass, microphone strong vertical silver counterpoint, papers small bright accent. Tight intentional overlap, organic silhouette about1.6:1 width to height, generous transparent margins, no catalogue spacing, preserve input object designs and camera perspectives. Gritty realistic painterly printed cutout style, blackened blue-grey metal, worn silver, warm amber scale, cream paper and dark burgundy ink; strong broad tones readable at150px, reduce excessive microtexture, controlled edge highlights. TRUE transparent alpha tightly outside silhouettes and gaps. No extra objects, people, wires, antennas, broadcast wave symbols, text captions, readable slogans, backdrop, room, floor, exterior drop shadow, smoke, broad halo or decorative frame."
+      }
+    },
+    {
+      "focus_id": "VAL_Border_Survey_Corps",
+      "title": "Корпус пограничной разведки",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "border_recon_binoculars.png",
+          "source": "exec-edee10a9-e715-4127-aefb-4ec25d9f41e0.png",
+          "prompt": "Use case: stylized-concept. ONE isolated field binoculars cutout for a fictional HOI4 national focus Border Reconnaissance Corps. Broad old military optical binoculars seen in three-quarter view slightly from above, paired large objective lenses facing lower left, short eyepieces toward upper right, strong simple bridge and central focus wheel. Both barrels visible, no distorted or duplicated lenses. Matte black leatherette and worn dark blue-grey metal, subtle silver edges, a small faded burgundy cloth tab on one strap lug; only a very short tucked strap segment, no long dangling strap. Restrained pale green glass reflections, no glowing lenses. Gritty painterly realistic focus collage, broad high-contrast masses readable at 150px, controlled texture, cool light from upper left and slight warm amber edge reflection. Low wide silhouette, entire binoculars within clear margins. TRUE transparent alpha background, clean isolated object edge, no ground, shadow outside object, halo, fog, people, hands, flags, text, compass, landscape or frame."
+        },
+        {
+          "file": "border_recon_compass.png",
+          "source": "exec-1ec121a5-f392-446e-ad36-f7ccbdbdb2b0.png",
+          "prompt": "Use case: stylized-concept. ONE isolated worn military pocket compass with open hinged lid, transparent cutout for HOI4 national focus Border Reconnaissance Corps. Round dark gunmetal case with restrained tarnished brass rim, ivory-grey dial, strong black cardinal ticks, simple single burgundy-red and ivory two-ended needle. No words or numbers, no decorative script. Hinged metal lid open behind dial at a low angle so shape stays broad and compact, three-quarter view slightly above, dial facing viewer and upper left. Short plain attachment loop on right. Entire object inside margins. Matte realistic painterly printed collage, broad readable tonal blocks at 150px, dark navy-grey shadows, small silver worn edges and warm amber reflections, discreet fine scuffs. One separate object, opaque subject on true transparent alpha background, NO surrounding glow cloud, shadow, floor, scenery, hands, flags, binoculars, map, extra objects or border."
+        },
+        {
+          "file": "border_recon_mountain_pass.png",
+          "source": "exec-6f66bffa-a90a-46c2-b216-d9e5e69b51f0.png",
+          "prompt": "Use case: stylized-concept. ONE isolated terrain cutout: rugged rocky mountain pass with a narrow winding dirt road between two jagged outcrops, as background asset for HOI4 national focus Border Reconnaissance Corps. A broad shallow horizontal arrangement, width about twice height. LEFT crag low and broken, RIGHT ridge slightly taller, central V-shaped saddle, narrow pale road curves from lower centre into the distant gap. Only three major rock masses, dark blue-grey slate with cold silver ridgelines, muted brown gravel, tiny sparse dry grass, no dramatic snow peaks. Gritty painterly realistic cutout collage with clear broad values at 150px, restrained texture, cool directional light and very subtle warm ridge highlights. Irregular natural rock/terrain contour along sides and bottom, not an isometric floating block, not a diorama pedestal. The road belongs entirely inside the rocky cutout. TRUE transparent alpha around the silhouette including sky area above ridges. No sky, clouds, fog, glow haze, sun, rectangle, frame, people, buildings, flags, tools, compass, binoculars or text. Keep complete terrain outline inside safe margins."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-177be1f2-b381-4400-a27c-9b6baacdf999.png",
+        "prompt": "Use case: compositing. Assemble the THREE supplied cutouts into ONE wide compact HOI4 national focus icon Border Reconnaissance Corps for Kefreyt. Reference1 binoculars large and dominant in LEFT foreground, diagonally aimed toward lower left. Reference2 open compass in lower RIGHT foreground, smaller than binoculars, its pale dial and burgundy needle clear. Reference3 rocky mountain pass is behind both objects, broad low silhouette with jagged ridge across upper right and the pale road visible in CENTRAL gap between instruments. Tight symbolic overlapping collage, NOT a literal realistic scale landscape, NOT separate catalogue objects. Engineered layout overall width 1.8 times height. Binoculars fill about 55% width and compass 35%; mountain tops should frame them without creating a tall poster. Preserve shapes and believable optics, compass and road from inputs. Cold blue-grey rock and blackened metal, ivory dial, very small burgundy fabric/needle accents, restrained warm silver/amber rim lights. Gritty painterly realistic printed HOI4 focus collage, broad strong contrast readable at 180px, avoid excessive microtexture. Remove diffuse surrounding halos from the individual input assets. True transparent alpha outside silhouette and gaps. No sky, room, ground plane outside terrain, haze, fog, glowing rectangle, people, flags, extra objects, readable writing or border. All objects inside safe canvas margins."
+      }
+    },
+    {
+      "focus_id": "VAL_One_Ledger_One_Banner",
+      "title": "Одна книга, одно знамя",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "unified_state_contract_ledger.png",
+          "source": "exec-317bc2ad-b85a-46e0-9b81-2450835d5a4f.png",
+          "prompt": "Use case: stylized-concept. One separate transparent PNG asset for a HOI4 national focus One Ledger, One Banner: a massive OPEN state contract register with thick ivory pages, dark charcoal leather binding, worn gunmetal corner guards, single burgundy ribbon bookmark hanging over lower edge. Broad low open book, three-quarter view from above, spine diagonal from upper right to lower left, pages face viewer. Simple sparse ruled accounting columns with short dark handwriting strokes, no readable words, no large lettering, no fantasy runes. Several subtle small red rectangular registration marks on pages, clean authority rather than messy debris. Entire book within generous margins, low wide silhouette. Painterly realistic distressed printed collage for tiny 150px strategy icons: strong broad light pages against dark binding, matte leather, controlled fine texture, cool charcoal shadows and selective warm amber highlights. TRUE transparent background, no desk, floor, outside cast shadow, diffuse aura, extra papers, stamp, flag, pen, hands, people or border. A single grounded substantial administrative ledger, not an ornate magical tome."
+        },
+        {
+          "file": "unified_state_registry_stamp.png",
+          "source": "exec-4700a4be-a147-454f-99fc-ff3ff842784b.png",
+          "prompt": "Use case: stylized-concept. ONE isolated heavy administrative desk stamp for a fictional HOI4 national focus One Ledger One Banner. Squat substantial dark wood handle stained burgundy, worn blue-black metal neck and broad oval steel stamping base. Stamp tilted diagonally toward LEFT, entire single object in three-quarter view; flat base underside only partly visible with no readable design. Strong compact silhouette, wide base and short rounded handle rather than tall thin handle. No detached wax seal or paper. Matte realistic painterly focus-icon collage, restrained scuffs, broad dark charcoal masses, muted burgundy wood, small cool silver edge highlights and warm amber reflected light. Recognizable at 150px. Complete object with generous clear margins. True transparent alpha background, tightly cut out: no floor, drop shadow, glow halo, fog, book, flag, hands, symbols, lettering, frame or scene."
+        },
+        {
+          "file": "loyalty_waving_flag.png",
+          "reused_from": "VAL_Price_Of_Loyalty",
+          "flag_reference": "gfx/flags/VAL.tga"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-2e58ed95-72ec-488c-81d6-9cca61738c6e.png",
+        "prompt": "Use case: compositing. Compose THREE provided assets into ONE finished wide compact HOI4 national-focus cutout icon, concept One Ledger One Banner for fictional Kefreyt. Image1 open state register is the main foreground object spanning lower LEFT and centre, thick ivory pages and black binding with burgundy ribbon. Image2 dark burgundy-handled administrative stamp sits at lower RIGHT overlapping the right book edge, tilted diagonally left, smaller than register. Image3 exact supplied Kefreyt flag flows across the BACK, its white left-facing rifle above white leafy branch fully recognizable in upper band above book; short pole far right. Preserve supplied flag design, do not add lettering, stars or eagle. Broad roughly 1.8:1 silhouette, compact tight overlap, clear hierarchy: large book, wide banner, small stamp. Not a vertical poster or catalogue row. Painterly realistic strategy-game collage, matte dark charcoal metal/leather, ivory paper and deep burgundy cloth, restrained amber rim accents, broad high contrast forms readable at 180px. Keep thin texture subordinate to large shapes. Entire silhouette inside comfortable margins. True transparent alpha beyond objects, no rectangular background, sky, desk, floor, haze, glow cloud, extra objects, people, documents, border or title."
+      }
+    },
+    {
+      "focus_id": "VAL_Ministry_Of_Contract_Memory",
+      "title": "Министерство контрактной памяти",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "contract_memory_ministry_building.png",
+          "source": "exec-60b7d8ff-c8c0-4c84-94a4-d3bdfecd53cb.png",
+          "prompt": "Use case: stylized-concept. ONE isolated compact monumental government ministry building, transparent PNG cutout asset for HOI4 focus Ministry of Contract Memory of fictional industrial Kefreyt. Austere squat broad stone facade with central recessed entrance, four thick square pillars, heavy flat cornice, two short attached side wings with narrow dark windows, three visible floors. Two long plain dark burgundy cloth banners hang between outer pillars, NO symbols. Three-quarter front view slightly from above, broad silhouette about1.8:1, entire building with shallow entrance steps inside ample margins. Blackened blue-grey stone and dark concrete, restrained warm amber light in a few windows and entrance, worn silver edge highlights, institutional oppressive atmosphere. Gritty realistic painterly photographic focus collage with large clear planes readable at150px, restrained fine texture. TRUE transparent alpha tightly outside building silhouette. No terrain base, plaza, roads, people, statues, flags on poles, coat of arms, readable lettering, labels, sky, clouds, fog, glow halo, floor or external cast shadow. One separate building only."
+        },
+        {
+          "file": "contract_memory_archive_dossier.png",
+          "source": "exec-c0686044-f7d3-4a69-b5c1-1b9bd7e91ea4.png",
+          "prompt": "Use case: stylized-concept. ONE isolated thick archival contract dossier as a transparent PNG cutout asset for HOI4 Ministry of Contract Memory focus. A broad heavy dark burgundy cloth-backed file folder lying nearly flat, partly open with a thick stack of aged ivory papers held by two plain steel fasteners along the left margin. Top sheet visible, has short faded dark ink lines, several thick black rectangular redaction bars and a single dark red circular ink stamp without legible letters or emblem. A few index tabs protrude from right paper edge. Low oblique perspective with pronounced foreshortening: broad near edge at lower left, far edge recedes upper right, object wide and shallow not upright toward viewer. Clear paper thickness, believable folds, no flying loose sheets. Worn burgundy binding, warm cream pages, black ink, muted steel hardware. Gritty realistic painterly photographic cutout, strong broad tonal shapes readable at150px, selective light edge highlights, restrained microtexture. Entire dossier within generous margins. TRUE transparent alpha outside silhouette. No separate stamping tool, pen, hands, table, floor, background, glow haze, cast exterior shadow, people, labels or readable text."
+        },
+        {
+          "file": "contract_memory_official_stamp.png",
+          "source": "exec-04558191-638d-4941-8ef0-a2d9c0883c71.png",
+          "prompt": "Use case: stylized-concept. ONE isolated heavy vintage bureaucratic rubber hand stamp for HOI4 focus Ministry of Contract Memory, separate transparent PNG asset. Short stout turned dark walnut handle with broad rounded top, attached to a thick rectangular blackened steel stamping foot with a thin dark burgundy rubber underside. Entire stamp leans slightly LEFT about15 degrees, front three-quarter view slightly from above, show solid rectangular foot and carved wood handle, convincing functional proportions. Dark worn brown wood, charcoal blue-grey steel, restrained warm brass collar, crisp selective silver edge highlights, faint red ink residue along lower edge. Gritty realistic painterly photographic cutout, strong chunky recognizable silhouette readable at150px. Complete stamp inside generous margins. TRUE transparent alpha outside object. No printed words or lettering, ornamental emblem, hand, document, ink pad, seal impression, floor, scenery, external cast shadow, fog, glow cloud or other props."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-548af8f0-03df-4cb6-a00f-a663ec9b6f27.png",
+        "prompt": "Use case: compositing. Assemble exactly the THREE input assets into one finished compact wide HOI4 national focus icon Ministry of Contract Memory for fictional Kefreyt. Image1 austere dark ministry facade forms broad upper BACK mass, keep central square pillars and both burgundy hanging banners visible. Image2 thick burgundy archival dossier with cream papers and black redaction bars dominates LOWER LEFT foreground, low oblique foreshortened perspective, overlaps building steps and lower facade. Image3 heavy wooden-handled rectangular bureaucratic stamp at LOWER RIGHT leaning gently left toward dossier, foot overlaps the right paper edge but leaves black redaction bars and circular red ink impression visible. Tight intentional overlap, symbolic scale, building upper60 percent height, dossier lower35 percent, stamp about45 percent height, no detached objects. Strong wide organic silhouette approximately1.65:1 width to height. Gritty realistic painterly printed cutout aesthetic matching industrial Kefreyt focus art, dark charcoal blue-grey stone and steel, burgundy cloth and binding, aged cream paper, walnut handle, selective cool silver contours and restrained warm amber window lights. Broad readable shapes at150px and simplified fine texture. Preserve input object designs and coherent perspective, all objects comfortably within transparent margins. TRUE transparent alpha outside silhouette and gaps. No people, extra objects, readable lettering, titles, emblems, floor, plaza, sky, fog, external cast shadow, glow halo or decorative frame."
+      }
+    },
+    {
+      "focus_id": "VAL_Provincial_Brokers",
+      "title": "Провинциальные посредники",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "provincial_brokers_handshake.png",
+          "source": "exec-85a1bc86-f227-4e0a-8881-4fa76f034b8d.png",
+          "prompt": "Use case: stylized-concept. ONE isolated handshake cutout as separate transparent PNG for a fictional HOI4 focus Provincial Brokers. Exactly TWO adult human hands shaking firmly, with short forearms entering from left and right. Left arm wears worn dark brown civilian wool jacket and pale cuff; right arm wears dark navy charcoal jacket with small plain burgundy cuff detail. No faces, bodies, emblems or jewelry. Believable natural grip and correct finger anatomy, thumbs visible, fingers naturally occluded, no fused fingers. Three-quarter view slightly from above, compact horizontal silhouette about 2:1, full hands and short sleeves inside safe margins. Grounded provincial business agreement, not luxury executive advertising. Matte painterly realistic printed strategy-game icon, broad clear shapes readable at 150px, warm weathered skin, deep charcoal shadows, muted brown/navy fabric, selective warm amber highlights and cool silver rim accents. True transparent alpha background, no scene, floor, table, halo, haze, cast shadow outside object, money, documents, phone, flags, text or frame."
+        },
+        {
+          "file": "provincial_brokers_field_telephone.png",
+          "source": "exec-16afcf15-7a11-4464-b00b-d1151b9be82d.png",
+          "prompt": "Use case: stylized-concept. ONE isolated compact rugged field telephone in an open rectangular metal carry case, separate transparent PNG asset for fictional HOI4 Provincial Brokers focus. Old black handset rests horizontally across upper cradle, simple small circular dial on angled front plate, a short coiled black cord loops against side. Low broad box, lid tilted open behind with unmarked dark inner panel, no antenna and no radio display. Three-quarter view slightly from above, front faces lower left. Matte charcoal steel and black bakelite, one worn burgundy-red enamel strip along lower case, minor scratches, tiny silver screws and warm amber highlights, cold blue-grey shadows. Painterly realistic printed collage, broad clear shapes readable at150px, avoid micro-detail clutter. Complete object inside margins. True transparent background, no floor, scenery, outside shadow, broad haze or glow, hands, people, flag, papers, extra props, text, emblem or frame."
+        },
+        {
+          "file": "provincial_brokers_office.png",
+          "source": "exec-3068ab63-f874-408f-83d2-7a62667d082b.png",
+          "prompt": "Use case: stylized-concept. ONE isolated modest provincial contractor office building cutout for fictional industrial HOI4 state Kefreyt. Small broad TWO-storey grey-brown brick office, shallow dark slate pitched roof, six simple windows and a central ground-floor doorway with worn burgundy metal canopy. Two windows emit muted amber light. Short plain doorstep, no large stairs. Three-quarter view mostly frontal showing a little right side, low broad silhouette about 2:1. Practical weathered provincial architecture, no palace columns, towers, ornaments or modern glass. Broad readable wall/roof/window masses at150px, matte painterly realistic printed collage, charcoal blue-grey shadows and muted warm highlights, restrained brick texture. Entire building inside margins, tightly cropped to actual building outline with irregular foundation edge. TRUE transparent alpha all around, no sky, landscape, pavement, outside ground shadow, haze, glow cloud, trees, people, vehicles, phone, hands, banners, signs, lettering or border."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-9b9381f4-8dc6-4530-aba9-db043682872b.png",
+        "prompt": "Use case: compositing. ONE finished compact WIDE HOI4 focus icon for Provincial Brokers in fictional Kefreyt. Assemble exactly three supplied cutouts. Image1 handshake is the MAIN symbol large across LEFT and lower centre, preserve two natural human hands and short brown civilian/navy burgundy-trimmed sleeves. Image2 open dark burgundy field telephone occupies lower RIGHT foreground partly overlapping sleeve, handset and circular dial remain clear. Image3 modest provincial brick office is SMALLER behind in upper centre/left, show roof and warm lit upper windows above handshake, lower wall occluded. Tight interlocking collage with symbolic exaggerated scales, NOT a full street scene, NOT three separate equally sized products. Whole silhouette about1.8:1 wide, no tall poster. Handshake about60% total width, telephone about35%, building behind spreads across middle half. Preserve object designs. Matte realistic painterly printed focus art, broad dark steel/navy/brown masses, warm skin and amber windows, muted burgundy accents, controlled silver highlights and modest edge light. Clear at180px, reduce microtexture. True transparent alpha outside objects and gaps, no rectangle, fog, floor, sky, scenery, additional props, extra hands, flag, documents, money, title or border. All objects fully inside safe margins."
+      }
+    },
+    {
+      "focus_id": "VAL_Stelander_Crisis_Opens",
+      "title": "После стеландского раскола",
+      "tool": "built-in image_gen",
+      "references": [
+        "gfx/interface/STP_regions/STP_regions_map_background.png",
+        "gfx/leaders/VAL/portrait_VAL_Valera_Solgalov.png"
+      ],
+      "assets": [
+        {
+          "file": "stelander_split_country_map.png",
+          "source": "exec-3d54f405-b057-4817-b53b-0fd1837690c7.png",
+          "prompt": "Use case: style-transfer and background-extraction. Input image is the ACTUAL Stelander map from the game. Extract and faithfully TRACE ONLY the single centrally highlighted grey country region enclosed by the thin beige boundary. This exact country contour is mandatory: near-vertical irregular western edge, narrow stepped north-west shoulder, small notch across north top, protruding rounded northeastern cap, concave stepped east edge, broad southeast foot, and distinctive narrow deep inlet/notch at bottom slightly left of center. Preserve outline proportions and orientation from input exactly, do not invent geography. Ignore and remove all surrounding grey land, black ocean, horizontal scanlines, map UI and rectangular backdrop. Turn the traced country itself into a thick dark burgundy-red painted plaster map silhouette with worn silver-grey chipped edges. Front-facing orthographic view, north stays up. Split this country plate into TWO complementary pieces along one jagged mostly vertical crack running from top center to bottom center, move pieces slightly apart horizontally so a thin transparent gap shows; no other islands or detached chips. The combined pieces still plainly reconstruct the input country's silhouette. Strong gritty realistic painterly HOI4 focus asset, dark red face, subtle bevel edge and dramatic restrained amber light inside broken edges, no flames. One isolated map asset with two pieces, generous transparent margins, TRUE transparent alpha outside region and inside crack. No eyes, face, other props, text, symbols, labels, grid, rectangular paper, scene, ground, fog or glow cloud."
+        },
+        {
+          "file": "stelander_split_solgalov_eyes.png",
+          "source": "exec-b0320ac9-9ca9-4583-89cb-3711516244bb.png",
+          "prompt": "Use case: identity-preserve and background-extraction. Reference is the ACTUAL in-game portrait of Valera Solgalov, fictional leader. Create ONE separate transparent horizontal cutout of ONLY HIS EYES, EYEBROWS AND GLASSES with a narrow surrounding band of forehead, temples and upper nose bridge. Preserve this specific man's recognizable brow shape, stern narrowed gaze, brown hairline at upper corners if needed, angular rectangular dark thin metal glasses and warm light skin. Eyes should remain subtly visible through lightly tinted lenses; retain glasses shape, do not replace with black opaque sunglasses or remove them. Faithful character identity and slight three-quarter angle from original, gaze directed toward viewer. Do not include full face, mouth, beard, chin, shoulders or clothing. A dramatic wide eye-region strip about3:1 width to height, soft controlled alpha feather only at outer skin edges into total transparency, solid crisp eyebrows, eyes and glasses. Gritty realistic painterly HOI4 focus portrait style, muted warm skin with dark cool shadows, selective subdued amber brow highlight, no scanlines. Entire strip inside generous transparent margins. No rectangle backdrop, smoke, floating cloud, map, symbols, scenery, lettering or other objects. This is a separate eyes asset intended behind a split map."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-4934387a-5070-4b81-b858-ab9cef5e1136.png",
+        "prompt": "Use case: compositing. Create ONE finished HOI4 focus icon After the Stelander Split from EXACTLY TWO supplied assets. Image1 is the actual referenced country silhouette of Stelander fractured into two burgundy-red plates. Preserve its distinctive outer country contour, north-up orientation, northeastern cap, concave eastern edge and deep narrow southern notch. Do NOT invent new geography, stretch country sideways, turn it into rectangular paper or replace it with some other nation. Image2 is ONLY Valera Solgalov's stern eye region with his rectangular tinted glasses, preserve likeness, eye gaze and glasses. Composition: huge watching eyes form a wide horizontal BACK layer across upper third, dark outer skin edges softly feather into transparency. Split-country map in FRONT across middle and lower portion, taller than wide, centered below eyes, covering lower bridge and cheeks but leave BOTH eyes and eyebrows clearly visible above the map's upper rim. The two map fragments pull slightly left and right from their common jagged vertical fracture, narrow open rift from north to south, restrained warm highlights only on broken edges. Map is foreground and eyes are behind it, do not print eyes onto map surface. Strong compact silhouette slightly wider than tall, eyes span almost full width and country map about65 percent width. Entire composition within clear margins. Gritty realistic painterly focus collage, charcoal shadows, deep burgundy map, chipped silver borders, muted skin and amber highlights, broad readable shapes at150px. TRUE transparent alpha outside silhouettes. No complete head, mouth, beard, torso, props, paper, binoculars, ingots, flags, text, frame, scenery, floating smoke, fog or broad glow backdrop."
+      },
+      "earlier_variant": {
+        "status": "superseded_by_user_direction",
+        "assets_saved": false,
+        "prompts": [
+          "Use case: stylized-concept. ONE isolated torn military planning map as separate transparent PNG cutout asset for HOI4 focus After the Stelander Split, fictional industrial Kefreyt. A wide aged cream folded paper map torn into TWO adjacent large halves along ONE jagged near-vertical central rupture with a narrow transparent gap. Both halves together form a single low wide asset. Low oblique perspective viewed from above, paper plane recedes toward upper right, broad near edge and slightly curled corners. Map surface contains abstract schematic grey contour marks, a few broad muted burgundy territorial patches and black route lines, NO real-world geography, readable place names, numerals, flags or emblems. The torn central divide must be clearly visible at small icon scale. Gritty realistic painterly photographic cutout with broad readable shapes, dark brown fold shadows, cream highlighted paper edges, restrained fine texture. Entire paper halves inside ample margins, width roughly1.7:1 height. TRUE transparent alpha outside paper and between torn halves. No table, terrain, floor, extra loose scraps, pins, hands, weapons, binoculars, arrows, text, smoke, fire, halo or external cast shadow.",
+          "Use case: stylized-concept. ONE isolated pair of rugged mid20th-century military field binoculars, separate transparent PNG cutout asset for HOI4 focus After the Stelander Split, fictional Kefreyt. Heavy classic porro-prism binoculars with two broad objective barrels and squat angular prism housings connected by stout central focusing bridge. Three-quarter view from above, objective lenses face lower LEFT and eyepieces recede upper RIGHT. Broad compact diagonal silhouette, no neck strap or carrying case. Worn charcoal blue-black metal with dark pebbled grips, restrained silver edge wear, very muted blue-green lens reflections, subtle warm amber glints. Gritty realistic painterly photographic focus collage, large clear shapes readable at150px, restrained texture. Entire object inside ample margins. TRUE transparent alpha outside solid object and between barrels. No people, hands, maps, labels, lettering, insignia, floor, scene, exterior cast shadow, fog or glow halo.",
+          "Use case: stylized-concept. ONE isolated compact stack of THREE heavy industrial STEEL ingots, separate transparent PNG asset for HOI4 focus After the Stelander Split, fictional industrial Kefreyt. Two broad long trapezoidal cast steel bars below with one bar centered on top, simple pyramid arrangement, all parallel, front three-quarter view slightly from above, near short ends face lower LEFT and length recedes upper RIGHT. Chunky simple low wide silhouette, clearly STEEL not gold or silver treasure. Dark blue-grey mill scale on sides, bright cool rubbed metallic top edges, a few rusty brown patches, subtle warm amber reflection on right rim, rough industrial cast texture. Gritty realistic painterly photographic focus collage with broad tonal masses readable at150px. Entire stack within generous margins. TRUE transparent alpha outside bars. No pallet, straps, tools, markings, labels, text, people, factory, floor, exterior drop shadow, smoke, glow or other objects.",
+          "Use case: compositing. Assemble exactly THREE input asset groups into ONE finished compact wide HOI4 national focus icon After the Stelander Split for fictional Kefreyt. Image1 torn cream planning map forms broad upper BACK mass, its TWO halves separated by obvious jagged transparent central gap; keep the upper two thirds of this tear OPEN and clearly visible as main story symbol. Preserve the abstract burgundy map patches and paper folds. Image2 dark field binoculars large at lower LEFT foreground overlapping left map corner, objective lenses face lower left. Image3 stack of three dark steel ingots smaller at lower RIGHT foreground overlapping right map corner, not gold. Tight connected visual collage through overlaps, no catalogue spacing. Map approximately upper65 percent height, binoculars lower45 percent height, steel lower35 percent height, strong hierarchy. Wide silhouette about1.6:1 with generous transparent margins. Gritty realistic painterly printed cutout, broad strong tonal masses readable at150px, cream paper contrasted with charcoal blue-grey equipment and cool silver steel, restrained warm amber edge glints, burgundy ink accent. Reduce fine texture. Remove all diffuse background halos from input references. TRUE transparent alpha outside silhouettes and in central torn gap. No people, extra objects, flags, recognizable real geography, labels, captions, lettering, floor, table, scenery, smoke, fire, exterior shadows or glow cloud."
+        ]
+      }
+    },
+    {
+      "focus_id": "VAL_Operational_Directorate",
+      "title": "Оперативное управление",
+      "tool": "built-in image_gen",
+      "map_reference": "gfx/interface/VAL_operations/VAL_ops_map_background.png",
+      "assets": [
+        {
+          "file": "operational_directorate_map_board.png",
+          "source": "exec-a12fbed6-369a-4ec1-b326-32a434a80d93.png",
+          "prompt": "Use case: style-transfer. Create ONE isolated operational map board for fictional HOI4 Kefreyt Operational Directorate focus. Reference is ACTUAL in-game operations map: retain recognizable coastline and central outlined territory shape, islands and relative geography exactly as reference, do not substitute Earth continents. Render this map as muted ivory/grey ink on dark blue-grey field with thin grid lines, mounted within a very thin worn charcoal metal frame. A low tilted drafting board viewed obliquely from above, top edge farther away, perspective makes it a WIDE low trapezoid, not an upright vertical poster; full map remains within board. No readable labels; add only four small plain burgundy circular location dots distributed over land. Dominant large simple geography, not tiny details. Matte painterly realistic printed HOI4 cutout collage, deep charcoal shadows, selective silver edges, faint amber rim accents, weathered but legible map. Entire single board inside margins. True transparent alpha outside board, no desk, easel legs, floor, environment, cast shadow beyond object, fog, halo, headphones, separate markers, people, flags, weapons, text or border outside the physical frame."
+        },
+        {
+          "file": "operational_directorate_headset.png",
+          "source": "exec-531c44f3-efa4-47a7-b816-3a45b9d85bf6.png",
+          "prompt": "Use case: stylized-concept. ONE isolated old-fashioned communications operator headset, separate transparent PNG cutout for fictional HOI4 Operational Directorate focus. Two substantial black bakelite ear cups with dark leather pads, a curved worn dark steel headband with short burgundy leather padding, small simple metal microphone boom projecting toward lower right, one short coiled cord tucked close below. Headset resting on its side in three-quarter view from slightly above, low broad diagonal silhouette, ear cups clearly visible and connected logically. No modern gamer lights or plastic neon. Matte charcoal blue-grey metal, worn black leather, muted burgundy detail, restrained warm amber and cool silver edges. Painterly realistic printed collage, broad readable forms for150px focus icons, controlled grain. Complete object comfortably inside margins. True transparent alpha background, no floor, outside cast shadow, glow cloud, fog, head, hands, person, map, phone, markers, labels, symbols, text or frame."
+        },
+        {
+          "file": "operational_directorate_garrison_markers.png",
+          "source": "exec-0e4a7e31-5505-48d1-89fc-d8e7bcfcaeb1.png",
+          "prompt": "Use case: stylized-concept. ONE isolated cluster of THREE chunky operational map markers for a fictional HOI4 Operational Directorate focus. Plain squat rectangular wooden blocks on small flat bases, painted worn deep burgundy-red, with a simple small ivory X tactical infantry symbol on each front face. No other letters, numbers or logos. One large marker at front right, two slightly smaller staggered behind to left, tight compact grouping, all three visible, no chess crowns or figurines. Low 3/4 view from above, stable wide silhouette. Matte painted wood and a few subtle scuffed silver-grey base edges, painterly realistic printed cutout aesthetic, broad bold readable shapes at150px, restrained warm highlights and charcoal blue shadows. Entire group within generous margins. True transparent alpha background and gaps, no map, table, floor, outside drop shadow, haze, glow cloud, hands, flags, headset, arrows, additional props or frame."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-090ca442-e173-42cb-90c7-87088f44de13.png",
+        "prompt": "Use case: compositing. Assemble the three supplied assets into ONE WIDE compact HOI4 national focus icon Operational Directorate for fictional Kefreyt. Image1 actual-game-geography operations board is broad background occupying entire width, gently tilted with map still clearly visible across upper half. Preserve supplied coastline and outlined central territory, no invented continents. Image2 operator headset dominates lower LEFT foreground, rotated slightly diagonal, boom microphone points toward centre. Image3 three burgundy wooden unit markers arranged compactly at lower RIGHT, smaller than headset; preserve ivory X marks. Tight overlapping symbolic-scale collage, three main masses, no extra props. Overall silhouette WIDE approx1.8:1, not square poster. Map's top edge creates upper boundary, headset and markers break lower and side edges so the whole icon is not just a rectangle. Strong readability at180px, painterly realistic printed focus aesthetic, matte blue-grey/charcoal metal and leather, ivory map outlines, deep burgundy markers, selective cool silver and warm amber rim highlights, broad controlled shadow masses. Remove all diffuse halos around input objects. TRUE transparent alpha outside silhouette and gaps, no fog, room, floor, flags, people, documents, additional writing, outer frame or decorative badge. Entire composition inside safe margins."
+      }
+    },
+    {
+      "focus_id": "VAL_Operational_Reserves",
+      "title": "Оперативные резервы",
+      "tool": "built-in image_gen",
+      "references": [
+        "tools/assets/reference/focus_icons/VAL/val_regular_native_reference.png"
+      ],
+      "assets": [
+        {
+          "file": "operational_reserves_helmet.png",
+          "source": "exec-4edb35c6-d31f-43bc-8773-1c1c7ec7c9dd.png",
+          "prompt": "Use case: style-transfer. ONE isolated military helmet derived faithfully from helmet worn by actual VAL regular soldier in input reference, separate transparent PNG asset for HOI4 focus Operational Reserves. Use ONLY the rounded low dome dark blue-green charcoal helmet shape from reference, no face, person, body, viewer UI or grid. Helmet removed and resting at a slight angle, three-quarter front view from above, broad front rim and side visible, simple short dark chinstrap tucked against underside without long dangling parts. Matte scuffed dark navy-green metal, restrained cold silver edge wear and faint warm amber reflected rim. No emblem, numbers, flag or invented attachments, no goggles. Strong squat broad silhouette, gritty realistic painterly photographic cutout, bold tonal shapes readable at150px, restrained texture. Entire helmet inside generous margins, TRUE transparent alpha outside helmet and open gaps. No floor, external cast shadow, smoke, haze, glow, badge, weapons, pack or clothing. ONE helmet only."
+        },
+        {
+          "file": "operational_reserves_rifle_rack.png",
+          "source": "exec-587fafdc-182a-4686-8d43-c5c15bc3d9c6.png",
+          "prompt": "Use case: stylized-concept. ONE isolated compact military storage rack holding THREE complete reserve service rifles, separate transparent PNG cutout asset for fictional HOI4 focus Operational Reserves of Kefreyt. Simple low dark brown wooden rack with black steel fittings, three assembled wood-stock steel rifles resting butt-down in its base and barrels upright leaning together slightly toward upper LEFT, parallel with clear spacing, no bayonets or slings. Exterior appearance only, no disassembly, diagrams or ammunition. Front three-quarter view slightly from above, strong simple silhouette, all stocks and muzzles fully inside ample margins. Worn dark walnut, charcoal blue-grey metal, selective cold silver edges and subtle warm amber reflections, tiny plain burgundy stripe on rack base. Gritty realistic painterly photographic focus collage with bold tonal masses readable at150px, restrained fine texture. TRUE transparent alpha outside rack and in gaps between rifles. No people, floor, wall, room, exterior cast shadow, labels, emblems, smoke, glow halo, helmet, bags or other props."
+        },
+        {
+          "file": "operational_reserves_kitbag.png",
+          "source": "exec-bc3e8a18-e5dd-46b8-ba89-940be03d3b5c.png",
+          "prompt": "Use case: stylized-concept. ONE isolated packed military canvas kitbag for fictional Kefreyt HOI4 focus Operational Reserves, separate transparent PNG asset. Stout squat rectangular dark blue-grey canvas field pack with heavy folded flap, two broad brown leather vertical straps and simple steel buckles; compact rolled grey wool blanket strapped tightly across the TOP as integrated part of issued kit. Small plain muted burgundy cloth patch on front, no markings. Three-quarter front view slightly from above, bag broad and compact rather than long cylindrical duffel, soft weight and convincing canvas creases, no loose trailing shoulder straps. Dark navy charcoal cloth, worn brown leather, subdued silver metal fittings, selective warm amber rim reflections, gritty realistic painterly photographic cutout with large clear tonal masses readable at150px. Entire packed kit inside generous margins, TRUE transparent alpha outside silhouette. No people, hands, helmet, weapon, extra separate props, floor, ground shadow, scenery, labels, text, flags, smoke or glow cloud."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-914c1ab6-6f7c-4ca5-ba65-330c3437f607.png",
+        "prompt": "Use case: compositing. Assemble exactly THREE supplied asset groups into ONE finished compact wide HOI4 national focus icon Operational Reserves for Kefreyt. Image1 dark blue-green military helmet is LARGE lower LEFT foreground, main recognition symbol. Image2 storage rack with exactly THREE parallel wood-stock reserve rifles sits behind helmet upper LEFT and CENTER, stocks and rack base substantially overlapped by helmet, retain three clear barrels rising above helmet leaning slightly left. Image3 dark navy canvas kitbag with strapped grey blanket sits RIGHT, overlaps right end of rack and a small portion of helmet rim, smaller than helmet in visual dominance. Tight compact overlapping collage, symbolic scales, no catalogue spacing. Overall broad silhouette about1.45:1 width to height, generous clear margins, full rifle muzzles inside frame. Preserve designs and actual-model helmet shape. Dark blue-grey charcoal palette, worn walnut rifle stocks and brown straps, muted burgundy accent on bag, cool silver metal edges and restrained amber rim glints. Gritty realistic painterly printed cutout, broad strong tonal masses readable at150px, reduce excess microtexture. TRUE transparent alpha tightly outside solid object silhouette and gaps. Remove diffuse background halos from input references. No soldiers, hands, flags, badges, extra props, lettering, floor, scene, exterior cast shadow, glow cloud, fog or decorative frame."
+      }
+    },
+    {
+      "focus_id": "VAL_Contract_Accounting_Office",
+      "title": "Промышленный бюджет",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "industrial_budget_adding_machine.png",
+          "source": "exec-fca9b393-36ba-4b9a-928c-fe1bec1b2c2b.png",
+          "prompt": "Use case: stylized-concept. ONE isolated old mechanical adding machine as separate transparent PNG for a fictional HOI4 focus Industrial Budget. Heavy compact low rectangular charcoal cast-metal body, angled keyboard with several neat rows of large ivory and dark burgundy round keys, small horizontal mechanical number-window strip at rear, a short sturdy crank on right side, no screen and no typewriter carriage. Keys have subtle small worn numerals but no readable branding. Three-quarter view slightly from above, front faces lower left, low wide strong silhouette, all parts inside safe margins. Practical mid-century industrial accounting equipment, matte blackened blue-grey metal, selective silver worn edges, dark burgundy side inset, ivory keys, restrained warm amber highlights. Painterly realistic printed collage with broad tonal masses readable at150px and controlled detail. TRUE transparent alpha background, clean cutout edge, no surrounding glow cloud, floor, cast shadow outside object, desk, paper roll, loose papers, book, money, hands, factory, people, text captions or frame."
+        },
+        {
+          "file": "industrial_budget_banknote_bundles.png",
+          "source": "exec-53843592-1f63-4e87-b4ba-f803ab4b30b0.png",
+          "prompt": "Use case: stylized-concept. ONE isolated compact group of THREE thick bundled stacks of fictional treasury banknotes, separate transparent PNG for HOI4 Industrial Budget focus. Two low bundles laid beside each other, third slightly overlaps behind. Worn ivory-grey paper with restrained dark engraved border patterns and plain abstract oval centres, no real currency, portraits, readable words or logos. Broad faded burgundy paper straps around bundles. Three-quarter view from slightly above, low horizontal silhouette about2:1, clear thick layered paper edges. Monetary budget, not treasure: no gold, coins, vault or chest. Matte painterly realistic printed strategy-game collage, broad readable shapes at150px, charcoal blue-grey shadows, warm ivory highlights, deep burgundy bands, modest scuffs, controlled fine detail. All three bundles inside generous margins. True transparent alpha background, no table, floor, outside cast shadow, glow cloud, haze, hands, people, factory, calculator, books, extra props or frame."
+        },
+        {
+          "file": "arms_factory_workshop_building.png",
+          "reused_from": "VAL_Factories_Like_Cathedrals"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-d7fd6f24-3845-4a84-a6cd-d0f3cb81f534.png",
+        "prompt": "Use case: compositing. ONE finished WIDE compact HOI4 national-focus cutout collage Industrial Budget for fictional Kefreyt. Exactly THREE supplied assets: image1 mechanical adding machine dominant at LEFT foreground, image2 three bundled ivory banknote stacks at lower RIGHT foreground, image3 factory workshop with amber windows behind at upper RIGHT/centre. Factory smaller in symbolic scale, roofline and glowing upper windows visible above cash and machine, most lower facade hidden by overlap. Adding machine has ivory/burgundy keys, crank, dark charcoal case: preserve these. Cash stacks remain generic fictional banknotes with burgundy straps, no added currency text. Tight interlocking composition about1.8:1 wide silhouette, no tall poster and no product catalogue gaps. Machine approx55% total width, cash approx40%, factory behind across right half. Painterly realistic printed HOI4 icon style, broad high contrast readable at180px, matte blackened steel and dark brick, warm ivory money, deep burgundy accents, orange factory light reflected subtly along objects, selective silver edge highlights. Reduce microtexture. Preserve designs of inputs, no extra props, books, flags, people, charts, captions or border. Remove diffuse halos in input assets. True transparent alpha beyond object outlines and gaps, no floor, scene, sky, haze, smoke cloud, or rectangular background. Entire assembled silhouette inside safe margins."
+      }
+    },
+    {
+      "focus_id": "VAL_Closed_Ledgers",
+      "title": "Закрытые реестры",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "closed_ledgers_state_register.png",
+          "source": "exec-a7bda121-1a8b-4785-9425-7b0a9109b6f1.png",
+          "prompt": "Use case: stylized-concept. ONE isolated OPEN official accounting ledger as a separate transparent PNG asset for HOI4 focus Closed Ledgers in fictional Kefreyt. Thick broad dark burgundy cloth-bound book open to two aged cream pages containing simple ruled accounting columns, short dark ink entries as small indistinct strokes, several strong dark-red total lines, no legible words or numbers. Sturdy worn steel corner protectors and dark spine, a single burgundy ribbon bookmark tucked near central gutter. LOW oblique perspective: book lies flat receding toward upper RIGHT with strongly foreshortened pages and broad near edge lower LEFT, not upright facing viewer. Strong low wide silhouette, visibly thick page block, entire book within ample margins. Gritty realistic painterly photographic collage, cream paper, deep burgundy binding, charcoal shadows, restrained cool silver edge highlights and warm amber reflections; broad tonal shapes readable at150px, restrained tiny details. TRUE transparent alpha outside solid silhouette. No hands, quill, pen, lock, key, additional books, table, background, floor, external cast shadow, fog or glow halo."
+        },
+        {
+          "file": "closed_ledgers_locked_books.png",
+          "source": "exec-9b1954b9-6863-4468-b4d1-d7c7a03cf6ac.png",
+          "prompt": "Use case: stylized-concept. ONE isolated compact stack of TWO CLOSED private military accounting books secured together by a heavy blackened steel chain and ONE squat locked iron padlock hanging prominently on FRONT. Separate transparent PNG cutout asset for fictional HOI4 focus Closed Ledgers of Kefreyt. Thick worn dark brown leather books with cream page edges, stacked slightly offset but tightly held by chain wrapped around entire stack, simple broad flat covers with no decorative designs. Three-quarter front view slightly from above, broad compact silhouette. Padlock has visible simple keyhole, solid dark steel body and silver worn edges, no labels. Broad chain links, not tangled loops, readable at150px. Gritty realistic painterly photographic collage, charcoal shadows, worn brown leather, cold silver highlights, restrained amber reflections. Entire stack and padlock within ample margins. TRUE transparent alpha outside object and chain gaps. No key, open books, hands, text, emblems, floor, table, background, external cast shadow, fog, halo or other props."
+        },
+        {
+          "file": "closed_ledgers_iron_key.png",
+          "source": "exec-7e496005-4546-459e-a0d9-e868d6f9870e.png",
+          "prompt": "Use case: stylized-concept. ONE isolated stout old institutional iron key, separate transparent PNG asset for fictional HOI4 focus Closed Ledgers of Kefreyt. Simple broad oval open bow at lower LEFT, short thick straight shaft runs diagonally to upper RIGHT, chunky rectangular bit with two simple broad notches at far end. Functional utilitarian shape, no decorative scrollwork. Dark blue-grey forged steel with polished silver worn edges and tiny warm amber reflections, subtle age pitting. Slight three-quarter view, low wide diagonal silhouette, entire key inside generous margins. Gritty realistic painterly photographic cutout, broad readable shape at150px, restrained fine detail. TRUE transparent alpha outside key and through oval bow. No other keys, keyring, chain, lock, book, paper, hand, floor, external cast shadow, scenery, halo, fog, text or emblems."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-55b5af18-4137-4e91-a089-d7cf5cf5b070.png",
+        "prompt": "Use case: compositing. Assemble exactly THREE input asset groups into ONE compact wide HOI4 national focus icon Closed Ledgers for fictional Kefreyt. Concept: unified state accounting eliminates captains' hidden parallel books. Image1 open burgundy official ledger with cream ruled pages is dominant LOWER LEFT and CENTER foreground, low foreshortened perspective. Image2 two brown closed books wrapped in chain with iron padlock form smaller raised UPPER RIGHT rear mass; position them so the padlock is fully visible at right beside open ledger and NOT hidden by pages. Image3 stout silver-grey steel key lies diagonally along LOWER edge of open ledger, oval bow lower left and bit toward center right, key about40 percent total width, subordinate accent. Tight overlapping connected collage, no disconnected product row, clear scale hierarchy and broad organic silhouette about1.55:1 width to height. Preserve input book designs, chain and padlock. Dark burgundy and brown leather, ivory paper, blackened steel and selective cool silver rims with restrained amber glints. Gritty realistic painterly printed cutout style, strong broad tonal masses readable at150px, simplify tiny writing. Remove diffuse background haze from references. TRUE transparent alpha outside object silhouettes and gaps. All objects fully within generous margins. No people, hands, additional props, titles, readable text, badges, floor, scene, cast ground shadows, fog or broad glow."
+      }
+    }
+  ]
+}

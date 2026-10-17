@@ -35,6 +35,7 @@ VAL_expansion_priority_plan = {
 		VAL_One_Ledger_One_Banner
 		VAL_Market_Roads_North
 		VAL_October_Of_2160
+		VAL_Different_Views_On_Freedom
 		VAL_The_Mercenary_State
 		VAL_Company_Rosters
 		VAL_Company_Service_Code

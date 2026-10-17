@@ -877,6 +877,7 @@ VAL_can_attack_northern_coalition = {
 			}
 		}
 		TFF = {
+			is_subject = no
 			any_neighbor_country = {
 				has_capitulated = no
 				OR = {
@@ -903,7 +904,10 @@ VAL_can_attack_northern_coalition = {
 	TFF = {
 		exists = yes
 		has_capitulated = no
-		is_subject = no
+		OR = {
+			is_subject = no
+			is_subject_of = VAL
+		}
 		has_war = no
 		NOT = { has_war_with = VAL }
 	}
@@ -911,11 +915,27 @@ VAL_can_attack_northern_coalition = {
 		AND = {
 			YPR = { is_in_faction = no }
 			COF = { is_in_faction = no }
-			TFF = { is_in_faction = no }
+			TFF = {
+				OR = {
+					is_in_faction = no
+					is_subject_of = VAL
+				}
+			}
 		}
 		AND = {
-			YPR = { is_in_faction_with = COF is_in_faction_with = TFF }
-			COF = { is_in_faction_with = TFF }
+			YPR = {
+				is_in_faction_with = COF
+				OR = {
+					is_in_faction_with = TFF
+					TFF = { is_subject_of = VAL }
+				}
+			}
+			COF = {
+				OR = {
+					is_in_faction_with = TFF
+					TFF = { is_subject_of = VAL }
+				}
+			}
 		}
 	}
 }
@@ -1070,6 +1090,7 @@ VAL_stelander_dominated = {
 # does not satisfy the final requirement to dominate all of Stelander.
 VAL_nod_campaign_stelander_ready = {
 	OR = {
+		VAL_frontier_joint_campaign_ready = yes
 		VAL_stelander_dominated = yes
 		AND = {
 			has_country_flag = STP_val_nod_partition
@@ -1433,38 +1454,124 @@ VAL_frontier_partner_available = {
 	TFF = { exists = yes has_capitulated = no is_subject = no NOT = { has_war_with = VAL } }
 }
 
-# Early principles cannot rewrite an issued military offer or a signed partition.
-VAL_tff_principles_context = {
-	VAL_frontier_partner_available = yes
-	VAL = { NOT = { has_country_flag = VAL_nod_frontier_offer_pending has_country_flag = VAL_nod_frontier_agreement } }
+# Current diplomatic membership, rechecked when the delayed war order arrives.
+VAL_nod_stelander_bloc = {
 	NOD = {
 		exists = yes
 		has_capitulated = no
 		is_subject = no
-		# Scripted peace preserves NOD and can clear native capitulation.
 		NOT = {
-			check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals }
-			has_country_flag = NOD_cw_defeated
-			has_country_flag = STP_pc_defeated_by_sts
-			has_country_flag = STP_heg_defeated_by_sts
 			has_country_flag = VAL_final_defeat_pending
 			has_country_flag = VAL_nodrul_administration_pending
 		}
 	}
-	DCA = { exists = no }
-	TFF = { NOT = { is_in_faction_with = NOD } }
+	OR = {
+		STP = {
+			exists = yes
+			has_capitulated = no
+			OR = {
+				is_subject_of = NOD
+				is_in_faction_with = NOD
+			}
+			NOT = { is_subject_of = VAL }
+		}
+		STS = {
+			exists = yes
+			has_capitulated = no
+			OR = {
+				is_subject_of = NOD
+				is_in_faction_with = NOD
+			}
+			NOT = { is_subject_of = VAL }
+		}
+	}
 }
 
-VAL_tff_freedom_choice_current = {
+# The accepted protectorate survives a later change in the enemy alliance.
+VAL_frontier_protectorate_partners = {
+	VAL_frontier_partner_available = yes
+	VAL = {
+		has_war = no
+		OR = {
+			is_in_faction = no
+			is_faction_leader = yes
+		}
+		NOT = {
+			is_in_faction_with = NOD
+		}
+		custom_trigger_tooltip = {
+			tooltip = VAL_frontier_protectorate_before_victory_tt
+			NOT = { has_country_flag = VAL_stelander_defeated }
+		}
+		custom_trigger_tooltip = {
+			tooltip = VAL_frontier_protectorate_no_treaty_tt
+			NOT = {
+				has_country_flag = VAL_nod_frontier_offer_pending
+				has_country_flag = VAL_nod_frontier_agreement
+			}
+		}
+	}
+	TFF = {
+		has_war = no
+		NOT = { is_in_faction_with = NOD }
+		custom_trigger_tooltip = {
+			tooltip = VAL_frontier_protectorate_alignment_tt
+			OR = {
+				is_in_faction_with = VAL
+				NOT = {
+					any_other_country = {
+						is_in_faction_with = TFF
+						NOT = {
+							OR = {
+								tag = YPR
+								tag = COF
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+VAL_frontier_northern_war_settled = {
+	NOD = {
+		OR = {
+			check_variable = { var = STP_cw_northern_campaign_status value = 2 compare = equals }
+			check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals }
+			check_variable = { var = STP_cw_northern_campaign_status value = 4 compare = equals }
+		}
+	}
+}
+
+VAL_frontier_protectorate_available = {
+	VAL_frontier_protectorate_partners = yes
+	VAL_frontier_northern_war_settled = yes
+	VAL = { NOT = { has_country_flag = VAL_frontier_protectorate_pending } }
+}
+
+VAL_frontier_protectorate_offer_current = {
+	VAL_frontier_protectorate_partners = yes
+	VAL_frontier_northern_war_settled = yes
+	VAL = {
+		has_country_flag = { flag = VAL_frontier_protectorate_pending value < 2 }
+	}
+}
+
+VAL_frontier_joint_campaign_ready = {
 	tag = VAL
-	VAL_tff_principles_context = yes
-	NOT = { has_country_flag = VAL_tff_freedom_policy }
-}
-
-VAL_tff_principles_offer_current = {
-	tag = TFF
-	VAL_tff_principles_context = yes
-	VAL = { has_country_flag = VAL_tff_freedom_policy has_country_flag = VAL_tff_principles_pending }
+	has_completed_focus = VAL_Different_Views_On_Freedom
+	VAL_nod_stelander_bloc = yes
+	TFF = {
+		exists = yes
+		has_capitulated = no
+		is_subject_of = VAL
+		NOT = { has_war_with = VAL }
+		capital_scope = {
+			is_owned_by = TFF
+			is_controlled_by = TFF
+		}
+	}
 }
 
 VAL_nod_limited_offer = {
@@ -1477,7 +1584,14 @@ VAL_nod_limited_agreement = {
 
 VAL_nod_frontier_offer_current = {
 	VAL_frontier_partner_available = yes
-	VAL = { has_completed_focus = VAL_Northern_Settlement NOT = { has_country_flag = VAL_stelander_defeated has_country_flag = VAL_nod_frontier_agreement } }
+	VAL = {
+		has_completed_focus = VAL_Northern_Settlement
+		NOT = {
+			has_country_flag = VAL_stelander_defeated
+			has_country_flag = VAL_nod_frontier_agreement
+			has_country_flag = VAL_frontier_protectorate_pending
+		}
+	}
 	TFF = { NOT = { is_in_faction_with = NOD } }
 	NOD = {
 		exists = yes has_capitulated = no is_subject = no

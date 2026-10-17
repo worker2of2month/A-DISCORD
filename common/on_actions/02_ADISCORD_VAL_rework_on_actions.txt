@@ -117,6 +117,18 @@ on_actions = {
 					VAL_adopt_northern_coalition_defensive_campaign = yes
 					VAL_call_subjects_to_wars = yes
 					VAL_final_crisis_initialize = yes
+					if = {
+						limit = {
+							has_war_with = NOD
+							VAL_final_campaign_separate_from_frontier = yes
+							NOT = { has_country_flag = VAL_joint_nod_campaign_with_sts }
+							OR = {
+								VAL_frontier_joint_campaign_ready = yes
+								check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
+							}
+						}
+						VAL_final_crisis_join_war = yes
+					}
 					VAL_final_crisis_reconcile = yes
 					VAL_call_frontier_partner = yes
 					VAL_call_stelander_partner_to_wars = yes

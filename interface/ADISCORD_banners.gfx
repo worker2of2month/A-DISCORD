@@ -157,4 +157,10 @@ spriteTypes = {
 		texturefile = "gfx/texticons/adiscord/banners/chauvinism_banner.png"
 		legacy_lazy_load = no
 	}
+
+	spriteType = {
+		name = "GFX_dorian_technocracy_banner"
+		texturefile = "gfx/texticons/adiscord/banners/dorian_technocracy_banner.png"
+		legacy_lazy_load = no
+	}
 }
