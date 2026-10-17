@@ -2926,6 +2926,21 @@ class ValNorthernExportTests(unittest.TestCase):
         def without_colors(text):
             return re.sub(r"§.", "", text)
 
+        def contains_price(price, tooltip):
+            pattern = r"\[[^\]]+\]|£\w+|[+-]?\d+(?:\.\d+)?"
+            expected = re.findall(pattern, without_colors(price))
+            actual = re.findall(pattern, without_colors(tooltip))
+            return bool(expected) and any(
+                actual[index:index + len(expected)] == expected
+                for index in range(len(actual) - len(expected) + 1)
+            )
+
+        sample = "§Y50§! £political_power_texticon / §Y200§! £ADISCORD_economy_treasury_texticon"
+        self.assertTrue(contains_price(sample, sample.replace(" / ", ", ")))
+        self.assertFalse(contains_price(sample, sample.replace("50", "150")))
+        self.assertFalse(contains_price(sample, sample.replace("200", "2000")))
+        self.assertFalse(contains_price(sample, "50 £political_power_texticon"))
+
         for key in price_keys:
             with self.subTest(price=key):
                 self.assertIn(key + "_blocked", values)
@@ -2940,13 +2955,7 @@ class ValNorthernExportTests(unittest.TestCase):
                 )
                 hover = {without_colors(value) for value in rendered(values[key + "_tooltip"])}
                 for normal in rendered(values[key]):
-                    amounts = re.findall(r"([+-]?\d+(?:\.\d+)?)\s+(£\w+)", without_colors(normal))
-                    self.assertTrue(any(
-                        without_colors(normal) in text or (
-                            amounts and all(pair in re.findall(r"([+-]?\d+(?:\.\d+)?)\s+(£\w+)", text) for pair in amounts)
-                        )
-                        for text in hover
-                    ))
+                    self.assertTrue(any(contains_price(normal, text) for text in hover))
                 for normal, blocked in product(rendered(values[key]), rendered(values[key + "_blocked"])):
                     self.assertEqual(re.findall(r"£\w+", normal), re.findall(r"£\w+", blocked))
 
@@ -9014,11 +9023,15 @@ class ValFormationAndCommandTests(unittest.TestCase):
         actions = block(
             parse_clausewitz(ON_ACTIONS_PATH.read_text(encoding="utf-8")), "on_actions"
         )
-        handlers = [
-            entry for entry in block(block(actions, "on_state_control_changed"), "effect")
+        callback_effects = block(block(actions, "on_state_control_changed"), "effect")
+        indices = [
+            index for index, entry in enumerate(callback_effects)
             if any(child.key in ("set_state_flag", "clr_state_flag") and child.value == "VAL_bop_core_lost"
                    for child in walk([entry]))
         ]
+        self.assertEqual(len(indices), 2)
+        self.assertEqual(indices[1], indices[0] + 1)
+        handlers = [callback_effects[index] for index in indices]
         self.assertEqual([entry.key for entry in handlers], ["if", "else_if"])
         facts = {
             ("VAL", "has_country_flag", "fixture_bop_active"): True,
