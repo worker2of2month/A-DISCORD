@@ -2932,6 +2932,65 @@ country_event = {
 	option = { name = ADISCORD_STP_preparation.30.a }
 }
 
+# VAL scope. Kefreyt's briefing on Shabrat follows Stelander's choice of side
+# on either route; the weekly dispatcher sets the one-time guard.
+country_event = {
+	id = ADISCORD_STP_preparation.31
+	title = ADISCORD_STP_preparation.31.t
+	desc = ADISCORD_STP_preparation.31.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_STP_preparation.31.a
+		ai_chance = { base = 80 }
+		unlock_decision_tooltip = STP_ps_val_sell_rifles
+		unlock_decision_tooltip = STP_ps_val_send_supply
+		hidden_effect = { STP_ps_authorize_val_supply = yes }
+	}
+	option = {
+		name = ADISCORD_STP_preparation.31.b
+		ai_chance = { base = 20 }
+		custom_effect_tooltip = STP_ps_val_dossier_wait_tt
+	}
+}
+
+# STP scope on Shabrat's route. Kefreyt has already reserved the rifles;
+# each answer either pays and dispatches them or returns them.
+country_event = {
+	id = ADISCORD_STP_preparation.32
+	title = ADISCORD_STP_preparation.32.t
+	desc = ADISCORD_STP_preparation.32.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 14
+	option = {
+		name = ADISCORD_STP_preparation.32.b
+		ai_chance = { base = 1 }
+		hidden_effect = { VAL = { STP_ps_cancel_val_sale = yes } }
+	}
+	option = {
+		name = ADISCORD_STP_preparation.32.a
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+		}
+		ai_chance = { base = 9 }
+		custom_effect_tooltip = STP_ps_val_sale_payment_tt
+		hidden_effect = { STP_ps_accept_val_sale = yes }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.33
+	title = ADISCORD_STP_preparation.33.t
+	desc = ADISCORD_STP_preparation.33.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_STP_preparation.33.a
+		custom_effect_tooltip = STP_ps_val_sale_returned_tt
+	}
+}
+
 add_namespace = ADISCORD_STP_ch
 
 country_event = {

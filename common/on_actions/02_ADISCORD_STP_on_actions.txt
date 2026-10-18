@@ -125,6 +125,21 @@ on_actions = {
 
 	on_weekly_VAL = {
 		effect = {
+			# The Shabrat briefing precedes the party-route envoy, which waits a week.
+			if = {
+				limit = {
+					NOT = { has_country_flag = STP_ps_val_dossier_shown }
+					is_subject = no
+					has_capitulated = no
+					NOT = { has_war_with = STP }
+					STP = {
+						exists = yes
+						STP_cw_preparation_open = yes
+					}
+				}
+				set_country_flag = STP_ps_val_dossier_shown
+				country_event = { id = ADISCORD_STP_preparation.31 }
+			}
 			if = {
 				limit = {
 					STP_cw_kefreyt_aid_open = yes

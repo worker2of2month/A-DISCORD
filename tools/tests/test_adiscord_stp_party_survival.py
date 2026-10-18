@@ -173,6 +173,51 @@ class PartySurvivalContracts(unittest.TestCase):
             keys = [e.key for e in walk(self.effects[name])]
             self.assertLess(keys.index(clear), keys.index(reward), name)
 
+    def test_prewar_rifle_sale_shares_the_receipt_and_settles_each_payer(self):
+        decision = self.decisions['STP_ps_val_sell_rifles']
+        self.assertEqual(one(decision, 'cost'), '0')
+        price = str(signature(one(decision, 'custom_cost_trigger')))
+        self.assertIn('infantry_equipment', price)
+        self.assertIn('12000', price)
+        calls = [
+            e
+            for e in walk(one(decision, 'complete_effect'))
+            if e.key == 'STP_ps_begin_val_sale'
+        ]
+        self.assertEqual(len(calls), 1)
+
+        begin = list(walk(self.effects['STP_ps_begin_val_sale']))
+        keys = [e.key for e in begin]
+        self.assertEqual(keys[1:3], ['limit', 'STP_ps_val_sale_open'])
+        self.assertLess(keys.index('STP_cw_pay_rifles'), keys.index('set_variable'))
+        contracts = [
+            one(e.value, 'value')
+            for e in begin
+            if e.key == 'set_variable' and one(e.value, 'var') == 'STP_ps_val_receipt_contract'
+        ]
+        self.assertEqual(contracts, ['5', '4'])
+        self.assertIn('ADISCORD_STP_preparation.32', str(signature(begin)))
+
+        accept = self.effects['STP_ps_accept_val_sale']
+        paid = [e.key for e in walk(children(accept, 'if')[0])]
+        self.assertLess(paid.index('ADISCORD_economy_spend_100'), paid.index('STP_ps_start_val_departure'))
+        self.assertIn('STP_ps_cancel_val_sale', [e.key for e in walk(children(accept, 'else')[0])])
+
+        refund = [e.key for e in walk(self.effects['STP_ps_refund_val_supply'])]
+        self.assertLess(refund.index('STP_ps_clear_val_receipt'), refund.index('STP'))
+        self.assertLess(refund.index('STP'), refund.index('STS'))
+
+        resolve = signature(self.effects['STP_ps_resolve_val_supply'])
+        self.assertIn("('var', 'STP_ps_val_shabrat_credit')", str(resolve))
+        self.assertIn("('var', 'STP_ps_cargo_intercepted'), ('value', '0')", str(resolve))
+
+        settle = list(walk(self.effects['STP_ps_settle_val_credit']))
+        settle_keys = [e.key for e in settle]
+        self.assertIn(('has_global_flag', 'STP_cw_started'), [(e.key, e.value) for e in settle])
+        self.assertLess(settle_keys.index('clear_variable'), settle_keys.index('subtract_from_variable'))
+        hostilities = [e.key for e in walk(self.effects['STP_cw_begin_hostilities'])]
+        self.assertIn('STP_ps_settle_val_credit', hostilities)
+
     def test_government_deadline_reads_current_control(self):
         triggers = {
             e.key: e.value

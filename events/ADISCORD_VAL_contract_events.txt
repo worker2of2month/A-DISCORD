@@ -1745,6 +1745,25 @@ country_event = {
 	immediate = { VAL_complete_ainholm_colony = yes }
 }
 
+# Confirm the issued declaration once after the native diplomacy tick.
+country_event = {
+	id = val_contract.356
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = VAL
+		has_country_flag = VAL_final_war_entry_pending
+	}
+	immediate = {
+		VAL_final_crisis_join_war = yes
+		if = {
+			limit = { has_country_flag = VAL_final_war_entry_pending }
+			clr_country_flag = VAL_final_war_entry_pending
+			log = "[VAL_PEACE] Nodrul declaration did not establish an eligible war"
+		}
+	}
+}
+
 # One-shot confirmation of native war entry, not a recurring campaign pulse.
 country_event = {
 	id = val_rework.117

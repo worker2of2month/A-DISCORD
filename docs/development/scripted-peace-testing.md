@@ -48,6 +48,17 @@ conference loser orders, and liberation before the remaining member falls.
 Script execution in this hook alone does not prove the engine cancels the UI;
 the cold-run check must also confirm that no ordinary conference opens.
 
+Kefreyt's direct Nodrul campaign keeps a pending-entry receipt from declaration
+until the native war relation is confirmed. The decision and escalation timer
+use the same launcher. Both orientations of `on_war_relation_added` can register
+the campaign; one hidden callback after an hour confirms entry if that hook was missed
+or clears a rejected launch. Membership and campaign-added major status begin
+only with the live war. Check immediate and deferred entry, failed declarations,
+an existing major, and a Stelander subject which must remain on Kefreyt's side.
+Include the decision unlocked through Different Views on Freedom without the
+Northern Settlement preparation phase. A war without the launch receipt must
+still satisfy its own existing campaign conditions.
+
 The Party's postwar victory over Kefreyt uses the same subject treaty whether
 STP launched its own operation or defeated a Kefreyt invasion. The immediate
 callback requires the live STP-VAL war and victory credit for STP or its subject.

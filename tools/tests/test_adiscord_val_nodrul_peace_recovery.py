@@ -4,6 +4,8 @@ from tools.validators.validate_adiscord_division_templates import parse_clausewi
 
 
 from tools.lib.focus_sources import read_focus_source
+from tools.tests.test_adiscord_peace_coalition_lifecycle import TreatyFixture
+from tools.tests.test_adiscord_stp_preparation import block, scalar
 
 ROOT = Path(__file__).resolve().parents[2]
 EFFECTS = ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt"
@@ -12,6 +14,224 @@ TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"
 DECISIONS = ROOT / "common/decisions/ADISCORD_VAL_decisions.txt"
 EVENTS = ROOT / "events/ADISCORD_VAL_contract_events.txt"
 VAL_ON_ACTIONS = ROOT / "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"
+
+
+class NodrulWarEntryFixture(TreatyFixture):
+    """Execute the launch across immediate, deferred and rejected native entry."""
+
+    def __init__(self, entry="deferred"):
+        super().__init__()
+        self.root, self.winner = "VAL", "NOD"
+        self.entry = entry
+        self.declarations = []
+        self.events = []
+        self.modifiers = set()
+        self.completed = {"VAL_Different_Views_On_Freedom"}
+        self.existing = {"VAL", "NOD", "STP"}
+        self.capitulated = set()
+        self.subjects["STP"] = "VAL"
+        self.flags["VAL"].update({"VAL_campaign_mobilizing", "VAL_council_in_power"})
+        self.flags["NOD"].add("VAL_campaign_target")
+        self.load(str(EFFECTS))
+        self.load(str(TRIGGERS), True)
+        # Territorial access is covered by the campaign contracts. Keep the
+        # real registration predicates, callbacks and phase writes executable.
+        self.triggers["VAL_nod_campaign_stelander_ready"] = []
+        self.triggers["VAL_northern_foothold_secured"] = []
+        self.triggers["RUS_crisis_regional_wars_available"] = []
+        self.stubs.update({
+            "VAL_adopt_northern_coalition_defensive_campaign",
+            "VAL_call_subjects_to_wars",
+            "VAL_final_crisis_reconcile",
+            "VAL_call_frontier_partner",
+            "VAL_call_stelander_partner_to_wars",
+            "STP_cw_release_tff_to_northern_war",
+        })
+        hooks = block(parse_clausewitz(VAL_ON_ACTIONS.read_text(encoding="utf-8")), "on_actions")
+        effect = block(block(hooks, "on_war_relation_added"), "effect")
+        self.registration_hook = [next(
+            e for e in effect if e.key == "if"
+            and any(child.key == "VAL" and any(
+                call.key == "VAL_final_crisis_initialize" for call in child.value
+            ) for child in e.value)
+        )]
+
+    def matches(self, rows, stack):
+        current = stack[-1]
+        for entry in rows:
+            key, value = entry.key, entry.value
+            if key == "OR":
+                matched = any(self.matches([child], stack) for child in value)
+            elif key == "NOT":
+                matched = not any(self.matches([child], stack) for child in value)
+            elif key == "has_war":
+                matched = bool(self.enemies(current)) == (value == "yes")
+            elif key == "has_variable":
+                matched = (current, value) in self.variables
+            elif key == "has_completed_focus":
+                matched = current == "VAL" and value in self.completed
+            elif key == "has_dynamic_modifier":
+                matched = (current, scalar(value, "modifier")) in self.modifiers
+            elif key == "check_variable":
+                actual = self.variables.get((current, scalar(value, "var")), 0)
+                expected = float(scalar(value, "value"))
+                comparison = scalar(value, "compare")
+                matched = {
+                    "equals": actual == expected,
+                    "greater_than": actual > expected,
+                    "less_than": actual < expected,
+                    "greater_than_or_equals": actual >= expected,
+                    "less_than_or_equals": actual <= expected,
+                }[comparison]
+            else:
+                matched = super().matches([entry], stack)
+            if not matched:
+                return False
+        return True
+
+    def execute(self, rows, stack=None):
+        stack = stack or [self.root]
+        current = stack[-1]
+        taken = False
+        for entry in rows:
+            key, value = entry.key, entry.value
+            if key in ("if", "else_if", "else"):
+                if key == "if":
+                    taken = False
+                gate = next((child.value for child in value if child.key == "limit"), [])
+                if not taken and self.matches(gate, stack):
+                    taken = True
+                    self.execute([child for child in value if child.key != "limit"], stack)
+            elif key == "declare_war_on":
+                target = self.resolve(scalar(value, "target"), stack)
+                self.declarations.append((current, target))
+                if self.entry == "immediate":
+                    self.wars.add(frozenset((current, target)))
+                    self.war_callback("VAL", "NOD")
+            elif key == "country_event":
+                self.events.append((current, scalar(value, "id")))
+            elif key == "hidden_effect":
+                self.execute(value, stack)
+            elif key == "add_dynamic_modifier":
+                self.modifiers.add((current, scalar(value, "modifier")))
+            elif key == "unlock_decision_tooltip":
+                pass
+            else:
+                super().execute([entry], stack)
+
+    def launch_decision(self):
+        decision = parse_clausewitz(named_block(
+            DECISIONS.read_text(encoding="utf-8"), "VAL_campaign_against_nod"
+        ))[0].value
+        self.execute(block(decision, "remove_effect"), ["VAL"])
+
+    def war_callback(self, root, sender):
+        previous = self.root, self.winner
+        self.root, self.winner = root, sender
+        self.execute(self.registration_hook, [root])
+        self.root, self.winner = previous
+
+    def confirm_entry(self):
+        queued, self.events = self.events, []
+        definitions = parse_clausewitz(EVENTS.read_text(encoding="utf-8"))
+        for recipient, event_id in queued:
+            event = next(e.value for e in definitions if e.key == "country_event"
+                         and scalar(e.value, "id") == event_id)
+            if self.matches(block(event, "trigger"), [recipient]):
+                self.execute(block(event, "immediate"), [recipient])
+
+
+class NodrulWarEntryTests(unittest.TestCase):
+    def assert_registered(self, fixture):
+        self.assertEqual(fixture.variables.get(("VAL", "VAL_final_crisis_phase")), 2)
+        self.assertIn("VAL_final_war_member", fixture.flags["NOD"])
+        self.assertIn("NOD", fixture.majors)
+        self.assertNotIn("STP", fixture.majors)
+        self.assertNotIn("VAL_final_war_member", fixture.flags["STP"])
+        self.assertNotIn("VAL_final_war_entry_pending", fixture.flags["VAL"])
+
+    def test_decision_registers_deferred_war_in_both_callback_orientations(self):
+        for root, sender in (("VAL", "NOD"), ("NOD", "VAL")):
+            with self.subTest(root=root):
+                fixture = NodrulWarEntryFixture()
+                fixture.launch_decision()
+                self.assertEqual(fixture.declarations, [("VAL", "NOD")])
+                self.assertNotIn("VAL_campaign_mobilizing", fixture.flags["VAL"])
+                fixture.wars.add(frozenset(("VAL", "NOD")))
+                fixture.war_callback(root, sender)
+                self.assert_registered(fixture)
+
+    def test_confirmation_registers_entry_without_a_war_callback(self):
+        fixture = NodrulWarEntryFixture()
+        fixture.launch_decision()
+        fixture.wars.add(frozenset(("VAL", "NOD")))
+        fixture.confirm_entry()
+        self.assert_registered(fixture)
+
+    def test_immediate_entry_does_not_redeclare_or_requeue_registration(self):
+        fixture = NodrulWarEntryFixture("immediate")
+        fixture.launch_decision()
+        fixture.confirm_entry()
+        self.assert_registered(fixture)
+        self.assertEqual(fixture.declarations, [("VAL", "NOD")])
+        self.assertEqual(fixture.events, [])
+
+    def test_automatic_launch_registers_after_deferred_native_entry(self):
+        fixture = NodrulWarEntryFixture()
+        fixture.completed.add("VAL_Northern_Settlement")
+        fixture.variables["VAL", "VAL_final_crisis_phase"] = 1
+        fixture.execute(fixture.effects["VAL_final_crisis_execute_launch"])
+        self.assertNotIn("NOD", fixture.majors)
+        fixture.wars.add(frozenset(("VAL", "NOD")))
+        fixture.war_callback("NOD", "VAL")
+        fixture.confirm_entry()
+        self.assert_registered(fixture)
+        self.assertEqual(fixture.declarations, [("VAL", "NOD")])
+
+    def test_existing_major_status_is_not_owned_by_the_new_campaign(self):
+        fixture = NodrulWarEntryFixture()
+        fixture.majors.add("NOD")
+        fixture.launch_decision()
+        fixture.wars.add(frozenset(("VAL", "NOD")))
+        fixture.confirm_entry()
+        self.assert_registered(fixture)
+        self.assertNotIn("VAL_final_war_added_major", fixture.flags["NOD"])
+
+    def test_unrequested_war_does_not_claim_the_decision_campaign(self):
+        fixture = NodrulWarEntryFixture()
+        fixture.wars.add(frozenset(("VAL", "NOD")))
+        fixture.war_callback("NOD", "VAL")
+        self.assertNotIn(("VAL", "VAL_final_crisis_phase"), fixture.variables)
+        self.assertNotIn("VAL_final_war_member", fixture.flags["NOD"])
+
+    def test_confirmation_discards_entry_when_val_becomes_a_subject(self):
+        fixture = NodrulWarEntryFixture()
+        fixture.launch_decision()
+        fixture.subjects["VAL"] = "ZZZ"
+        fixture.wars.add(frozenset(("VAL", "NOD")))
+        fixture.confirm_entry()
+        self.assertNotIn("VAL_final_war_entry_pending", fixture.flags["VAL"])
+        self.assertNotIn("VAL_final_war_member", fixture.flags["NOD"])
+        self.assertNotIn("NOD", fixture.majors)
+        self.assertEqual(fixture.events, [])
+
+    def test_rejected_entry_leaves_no_membership_or_major_status(self):
+        for route in ("decision", "escalation"):
+            with self.subTest(route=route):
+                fixture = NodrulWarEntryFixture("rejected")
+                if route == "decision":
+                    fixture.launch_decision()
+                else:
+                    fixture.completed.add("VAL_Northern_Settlement")
+                    fixture.variables["VAL", "VAL_final_crisis_phase"] = 1
+                    fixture.execute(fixture.effects["VAL_final_crisis_execute_launch"])
+                self.assertEqual(fixture.declarations, [("VAL", "NOD")])
+                fixture.confirm_entry()
+                self.assertNotEqual(fixture.variables.get(("VAL", "VAL_final_crisis_phase")), 2)
+                self.assertNotIn("VAL_final_war_member", fixture.flags["NOD"])
+                self.assertNotIn("NOD", fixture.majors)
+                self.assertNotIn("VAL_final_war_entry_pending", fixture.flags["VAL"])
+                self.assertEqual(fixture.events, [])
 
 
 class FinalSettlementFixture:
@@ -431,8 +651,10 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("VAL_release_party_nodrul_for_final_campaign = yes", launch)
         self.assertIn("id = val_rework.122 days = 1", launch)
         self.assertNotIn("declare_war_on = { target = STP", launch)
+        self.assertIn("VAL_final_crisis_declare_war = yes", execute)
         self.assertIn(
-            "declare_war_on = { target = NOD type = annex_everything }", execute
+            "declare_war_on = { target = NOD type = annex_everything }",
+            named_block(self.source, "VAL_final_crisis_declare_war"),
         )
 
         decision = named_block(

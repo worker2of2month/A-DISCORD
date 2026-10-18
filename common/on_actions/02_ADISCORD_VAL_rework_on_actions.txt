@@ -127,6 +127,7 @@ on_actions = {
 							VAL_final_campaign_separate_from_frontier = yes
 							NOT = { has_country_flag = VAL_joint_nod_campaign_with_sts }
 							OR = {
+								has_country_flag = VAL_final_war_entry_pending
 								VAL_frontier_joint_campaign_ready = yes
 								check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
 							}

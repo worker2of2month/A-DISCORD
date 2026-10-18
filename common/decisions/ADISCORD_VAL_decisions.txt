@@ -771,8 +771,7 @@ VAL_military_operations = {
 					VAL_begin_joint_nod_shabrat_campaign = yes
 				}
 				else = {
-					declare_war_on = { target = FROM type = annex_everything }
-					VAL_final_crisis_join_war = yes
+					VAL_final_crisis_declare_war = yes
 				}
 				NOD = { if = { limit = { exists = yes } STP_cw_release_tff_to_northern_war = yes } }
 			}

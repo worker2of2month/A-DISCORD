@@ -3232,7 +3232,13 @@ STP_cw_begin_hostilities = {
 			remove_ideas = STP_hidden_slaves_trade
 			remove_ideas = STP_legalize
 			remove_ideas = STP_worldwide_famous_tourist_destination
-			if = { limit = { VAL = { exists = yes } } VAL = { VAL_open_refugee_waves = yes } }
+			if = {
+				limit = { VAL = { exists = yes } }
+				VAL = {
+					VAL_open_refugee_waves = yes
+					STP_ps_settle_val_credit = yes
+				}
+			}
 			hidden_effect = {
 				# Playback waits until change_tag_from has assigned the human to the chosen side.
 				country_event = { id = ADISCORD_STP_cw.95 hours = 1 }
@@ -9232,13 +9238,112 @@ STP_ps_begin_val_supply = {
 			clr_country_flag = STP_cw_rifles_paid
 			set_variable = { var = STP_ps_val_receipt_rifles value = 12000 }
 			add_to_variable = { var = STP_ps_val_sequence value = 1 }
-			set_variable = { var = STP_ps_val_receipt_stage value = 1 }
-			activate_mission = STP_ps_val_departure
-			if = { limit = { NOT = { has_country_flag = STP_ps_val_first_dispatch } }
-				set_country_flag = STP_ps_val_first_dispatch
-				add_days_mission_timeout = { mission = STP_ps_val_departure days = 7 }
+			STP_ps_start_val_departure = yes
+		}
+	}
+}
+
+# VAL scope. A paid receipt starts the shared Shabrat shipment schedule.
+STP_ps_start_val_departure = {
+	set_variable = { var = STP_ps_val_receipt_stage value = 1 }
+	activate_mission = STP_ps_val_departure
+	if = { limit = { NOT = { has_country_flag = STP_ps_val_first_dispatch } }
+		set_country_flag = STP_ps_val_first_dispatch
+		add_days_mission_timeout = { mission = STP_ps_val_departure days = 7 }
+	}
+	if = { limit = { has_country_flag = STP_ps_val_pressure_active } add_days_mission_timeout = { mission = STP_ps_val_departure days = 14 } }
+}
+
+# VAL scope. A pre-war sale uses the same receipt as free shipments.
+# Contract 4 waits at stage 0 for Stelander's payment on Shabrat's route;
+# contract 5 is a credit that STS repays when hostilities begin.
+STP_ps_begin_val_sale = {
+	if = {
+		limit = { STP_ps_val_sale_open = yes }
+		set_temp_variable = { var = STP_cw_rifle_cost value = 12000 }
+		set_temp_variable = { var = STP_ps_partial_refund value = num_equipment@infantry_equipment }
+		STP_cw_pay_rifles = yes
+		if = { limit = { NOT = { has_country_flag = STP_cw_rifles_paid } }
+			subtract_from_temp_variable = { var = STP_ps_partial_refund value = num_equipment@infantry_equipment }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = STP_ps_partial_refund producer = VAL }
+		}
+		if = { limit = { has_country_flag = STP_cw_rifles_paid }
+			clr_country_flag = STP_cw_rifles_paid
+			set_variable = { var = STP_ps_val_receipt_rifles value = 12000 }
+			add_to_variable = { var = STP_ps_val_sequence value = 1 }
+			if = {
+				limit = { STP = { has_country_flag = STP_sided_with_the_party_flag } }
+				set_variable = { var = STP_ps_val_receipt_contract value = 5 }
+				STP_ps_start_val_departure = yes
 			}
-			if = { limit = { has_country_flag = STP_ps_val_pressure_active } add_days_mission_timeout = { mission = STP_ps_val_departure days = 14 } }
+			else = {
+				set_variable = { var = STP_ps_val_receipt_contract value = 4 }
+				set_variable = { var = STP_ps_val_receipt_stage value = 0 }
+				STP = { country_event = { id = ADISCORD_STP_preparation.32 } }
+			}
+		}
+	}
+}
+
+# STP scope on Shabrat's route. Payment and departure happen together;
+# a stale or unaffordable answer returns the reserved rifles.
+STP_ps_accept_val_sale = {
+	if = {
+		limit = {
+			STP_cw_preparation_open = yes
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			VAL = {
+				STP_ps_val_supply_open = yes
+				STP_ps_val_sale_awaits_payment = yes
+			}
+		}
+		ADISCORD_economy_spend_100 = yes
+		VAL = {
+			set_variable = { var = STP_ps_val_receipt_money value = 100 }
+			STP_ps_start_val_departure = yes
+		}
+	}
+	else = { VAL = { STP_ps_cancel_val_sale = yes } }
+}
+
+# VAL scope. Only an unanswered quote is cancelled; a departed shipment keeps its escrow.
+STP_ps_cancel_val_sale = {
+	if = {
+		limit = { STP_ps_val_sale_awaits_payment = yes }
+		STP_ps_refund_val_supply = yes
+		country_event = { id = ADISCORD_STP_preparation.33 }
+	}
+}
+
+# VAL scope. STS repays pre-war credit once hostilities begin, up to its treasury;
+# the unpaid remainder is written off with the debt.
+STP_ps_settle_val_credit = {
+	if = {
+		limit = {
+			has_variable = STP_ps_val_shabrat_credit
+			has_global_flag = STP_cw_started
+		}
+		set_temp_variable = { var = STP_ps_credit_due value = STP_ps_val_shabrat_credit }
+		clear_variable = STP_ps_val_shabrat_credit
+		if = {
+			limit = { STS = { exists = yes has_capitulated = no } }
+			STS = { ADISCORD_economy_initialize_country = yes }
+			set_temp_variable = { var = STP_ps_credit_paid value = STS.ADISCORD_economy_treasury }
+			if = {
+				limit = { check_variable = { var = STP_ps_credit_paid value = STP_ps_credit_due compare = greater_than } }
+				set_temp_variable = { var = STP_ps_credit_paid value = STP_ps_credit_due }
+			}
+			if = {
+				limit = { check_variable = { var = STP_ps_credit_paid value = 0 compare = greater_than } }
+				STS = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = PREV.STP_ps_credit_paid }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = PREV.STP_ps_credit_paid }
+					ADISCORD_economy_mark_dirty = yes
+				}
+				add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_credit_paid }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_credit_paid }
+				ADISCORD_economy_mark_dirty = yes
+			}
 		}
 	}
 }
@@ -9273,7 +9378,25 @@ STP_ps_refund_val_supply = {
 			add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = VAL }
 			add_manpower = 12600
 		}
-		if = { limit = { STS = { exists = yes } }
+		# A pre-war sale was paid by Stelander itself on Shabrat's route.
+		if = {
+			limit = {
+				check_variable = { var = STP_ps_contract_type value = 4 compare = equals }
+				STP = { exists = yes }
+			}
+			STP = {
+				add_to_variable = {
+					var = ADISCORD_economy_treasury
+					value = PREV.STP_ps_refund_money
+				}
+				add_to_variable = {
+					var = ADISCORD_economy_current_month_action_income
+					value = PREV.STP_ps_refund_money
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		else_if = { limit = { STS = { exists = yes } }
 			STS = {
 				add_to_variable = {
 					var = ADISCORD_economy_treasury
@@ -9331,6 +9454,15 @@ STP_ps_resolve_val_supply = {
 			add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_cargo_payment }
 			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_cargo_payment }
 			ADISCORD_economy_mark_dirty = yes
+			# A credit sale is owed only for rifles that reached Shabrat's network.
+			if = {
+				limit = {
+					check_variable = { var = STP_ps_contract_type value = 5 compare = equals }
+					check_variable = { var = STP_ps_cargo_intercepted value = 0 compare = equals }
+				}
+				add_to_variable = { var = STP_ps_val_shabrat_credit value = 100 }
+				STP_ps_settle_val_credit = yes
+			}
 			# Paid Shabrat contracts become fulfilled only after the convoy resolves.
 			# Ordinary preparation shipments (type 0) and export cargo (type 3) do not.
 			if = {

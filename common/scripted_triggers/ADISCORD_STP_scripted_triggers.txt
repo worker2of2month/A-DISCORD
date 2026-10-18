@@ -2529,6 +2529,21 @@ STP_ps_val_supply_open = {
 		STS = { exists = yes has_capitulated = no has_war_with = STP }
 	}
 }
+# VAL scope. Pre-war sales to Shabrat's network share the shipment receipt.
+STP_ps_val_sale_open = {
+	STP_ps_val_supply_open = yes
+	has_country_flag = STP_ps_val_authorized
+	STP = { STP_cw_preparation_open = yes }
+	NOT = { has_variable = STP_ps_val_receipt_rifles }
+	NOT = { has_country_flag = STP_ps_val_supply_cooldown }
+	NOT = { has_equipment = { infantry_equipment < 12000 } }
+}
+# VAL scope. A Shabrat-route quote has reserved rifles but no payment yet.
+STP_ps_val_sale_awaits_payment = {
+	check_variable = { var = STP_ps_val_receipt_contract value = 4 compare = equals }
+	check_variable = { var = STP_ps_val_receipt_stage value = 0 compare = equals }
+	has_variable = STP_ps_val_receipt_rifles
+}
 STP_ps_val_intelligence_available = {
 	tag = STP exists = yes has_capitulated = no
 	OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes }

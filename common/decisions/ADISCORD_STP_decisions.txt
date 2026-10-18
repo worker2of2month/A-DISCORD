@@ -6522,6 +6522,42 @@ STP_cw_external_intervention = {
 		ai_will_do = { base = 4 modifier = { factor = 0 has_equipment = { infantry_equipment < 40000 } } }
 	}
 
+	STP_ps_val_sell_rifles = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = {
+			has_country_flag = STP_ps_val_authorized
+			STP_ps_val_supply_open = yes
+			STP = { STP_cw_preparation_open = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_program_available_tt
+				NOT = { has_variable = STP_ps_val_receipt_rifles }
+				NOT = { has_country_flag = STP_ps_val_supply_cooldown }
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_ps_val_sell_rifles_cost
+		custom_cost_trigger = { NOT = { has_equipment = { infantry_equipment < 12000 } } }
+		complete_effect = {
+			if = {
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = STP_ps_val_sale_party_route_tt
+						STP = { has_country_flag = STP_sided_with_the_party_flag }
+					}
+				}
+				custom_effect_tooltip = STP_ps_val_sell_rifles_credit_tt
+			}
+			else = {
+				custom_effect_tooltip = STP_ps_val_sell_rifles_paid_tt
+			}
+			hidden_effect = { STP_ps_begin_val_sale = yes }
+		}
+		ai_will_do = { base = 6 modifier = { factor = 0 has_equipment = { infantry_equipment < 40000 } } }
+	}
+
 	STP_ps_fund_nod = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }

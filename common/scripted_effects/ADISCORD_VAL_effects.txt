@@ -8869,7 +8869,12 @@ VAL_final_crisis_register_member = {
 
 VAL_final_crisis_join_war = {
 	if = {
-		limit = { has_war_with = NOD }
+		limit = {
+			has_war_with = NOD
+			has_capitulated = no
+			is_subject = no
+		}
+		clr_country_flag = VAL_final_war_entry_pending
 		if = {
 			limit = { NOT = { check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals } } }
 			set_variable = { var = VAL_final_crisis_phase value = 2 }
@@ -8913,6 +8918,35 @@ VAL_final_crisis_join_war = {
 	}
 }
 
+# COUNTRY VAL. Native war entry may become visible after declare_war_on returns.
+# Keep the launch receipt through that callback; failed entry has one timed cleanup.
+VAL_final_crisis_declare_war = {
+	if = {
+		limit = {
+			tag = VAL
+			has_capitulated = no
+			is_subject = no
+			NOT = { has_war_with = NOD }
+			NOT = { has_country_flag = VAL_final_war_entry_pending }
+			NOD = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				NOT = { is_in_faction_with = VAL }
+			}
+		}
+		set_country_flag = VAL_final_war_entry_pending
+		declare_war_on = { target = NOD type = annex_everything }
+		VAL_final_crisis_join_war = yes
+		if = {
+			limit = { has_country_flag = VAL_final_war_entry_pending }
+			hidden_effect = {
+				country_event = { id = val_contract.356 hours = 1 }
+			}
+		}
+	}
+}
+
 VAL_release_party_nodrul_for_final_campaign = {
 	if = {
 		limit = {
@@ -8950,9 +8984,7 @@ VAL_final_crisis_execute_launch = {
 			}
 		}
 		clr_country_flag = VAL_final_party_nod_release_pending
-		NOD = { VAL_final_crisis_register_member = yes }
-		declare_war_on = { target = NOD type = annex_everything }
-		VAL_final_crisis_join_war = yes
+		VAL_final_crisis_declare_war = yes
 	}
 }
 
@@ -8984,6 +9016,7 @@ VAL_final_refund_supply_order = {
 
 VAL_final_crisis_close = {
 	log = "VAL_PEACE_TRACE final_close ROOT=[ROOT.GetTag] FROM=[FROM.GetTag] phase=[?VAL_final_crisis_phase]"
+	clr_country_flag = VAL_final_war_entry_pending
 	set_variable = { var = VAL_final_crisis_phase value = 4 }
 	if = {
 		limit = {
