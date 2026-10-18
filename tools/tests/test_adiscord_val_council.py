@@ -125,7 +125,7 @@ class CouncilWorld(ContractWorld):
                 results.append(self.matches(value, self.scope(key, scope)))
             elif key == "has_cosmetic_tag":
                 results.append(country.get("cosmetic") == value)
-            elif re.fullmatch(r"[A-Z]{3}", key) and isinstance(value, list):
+            elif key in ("OCA", "NKA") and isinstance(value, list):
                 results.append(self.matches(value, key))
             else:
                 results.append(super().matches(group, scope))
