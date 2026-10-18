@@ -1819,7 +1819,7 @@ VAL_can_proclaim_commonwealth = {
 	tag = VAL
 	has_completed_focus = VAL_Contracts_Outlive_Kings
 	VAL_campaign_objectives_met = yes
-	NOT = { has_cosmetic_tag = VAL_commonwealth }
+	NOT = { has_country_flag = VAL_commonwealth_proclaimed }
 	NOT = { has_stability < 0.50 }
 	29 = { is_owned_by = VAL is_controlled_by = VAL }
 	46 = { is_owned_by = VAL is_controlled_by = VAL }
@@ -3284,10 +3284,36 @@ VAL_nw_can_join_khan_intervention = {
 }
 
 # --- commanders_council ---
+# COUNTRY VAL. The Council regime keeps its institutions when the collective
+# leader is replaced by a delegation head or by Velsky's guaranteed cabinet.
+VAL_council_regime_leader = {
+	OR = {
+		has_country_leader = { character = VAL_Commanders_Council ruling_only = yes }
+		has_country_leader = { character = VAL_Gleb_Osten ruling_only = yes }
+		has_country_leader = { character = VAL_Tamara_Greitz ruling_only = yes }
+		has_country_leader = { character = VAL_Arkadi_Lemm ruling_only = yes }
+		has_country_leader = { character = VAL_Mikhail_Velsky ruling_only = yes }
+	}
+}
+
+# The defeated Council uses a separate tree without the coup's in_power flag.
+VAL_council_identity_available = {
+	tag = VAL
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	VAL_council_regime_leader = yes
+}
+
+VAL_council_can_choose_identity = {
+	VAL_council_identity_available = yes
+	NOT = { has_variable = VAL_council_identity }
+}
+
 VAL_council_governs = {
 	tag = VAL
 	has_country_flag = VAL_council_in_power
-	has_country_leader = { character = VAL_Commanders_Council ruling_only = yes }
+	VAL_council_regime_leader = yes
 }
 
 VAL_council_operational = {
@@ -3376,6 +3402,80 @@ VAL_council_offensive_target = {
 	}
 	any_neighbor_state = {
 		is_controlled_by = VAL
+	}
+}
+
+# COUNTRY VAL. Largest delegation with the tie order of VAL_council_select_seat_rival.
+VAL_council_garrison_leads = {
+	check_variable = { var = VAL_council_seats_garrison value = VAL_council_seats_front compare = greater_than_or_equals }
+	check_variable = { var = VAL_council_seats_garrison value = VAL_council_seats_supply compare = greater_than_or_equals }
+}
+
+VAL_council_front_leads = {
+	VAL_council_garrison_leads = no
+	check_variable = { var = VAL_council_seats_front value = VAL_council_seats_supply compare = greater_than_or_equals }
+}
+
+# COUNTRY VAL. The war that brought the Council to power, against any Stelander side.
+VAL_council_stelander_war = {
+	OR = {
+		has_war_with = STP
+		has_war_with = STS
+		has_war_with = SRP
+	}
+}
+
+# COUNTRY VAL. No owned national district is occupied.
+VAL_council_lines_held = {
+	NOT = {
+		any_owned_state = {
+			is_core_of = VAL
+			NOT = { is_controlled_by = VAL }
+		}
+	}
+}
+
+# COUNTRY VAL. Balchansk and the Iron Shield are held by Kefreyt or by an enemy,
+# and at least one of them is still to be taken.
+VAL_council_iron_shield_open = {
+	43 = {
+		OR = {
+			is_controlled_by = VAL
+			controller = { has_war_with = VAL }
+		}
+	}
+	44 = {
+		OR = {
+			is_controlled_by = VAL
+			controller = { has_war_with = VAL }
+		}
+	}
+	NOT = {
+		43 = { is_controlled_by = VAL }
+		44 = { is_controlled_by = VAL }
+	}
+}
+
+VAL_council_iron_shield_taken = {
+	43 = { is_controlled_by = VAL }
+	44 = { is_controlled_by = VAL }
+}
+
+# COUNTRY VAL. Current goal of the active plan; peace settles the plan by it.
+VAL_council_plan_goal_met = {
+	OR = {
+		AND = {
+			check_variable = { var = VAL_council_plan_kind value = 1 compare = equals }
+			VAL_council_lines_held = yes
+		}
+		AND = {
+			check_variable = { var = VAL_council_plan_kind value = 2 compare = equals }
+			VAL_council_iron_shield_taken = yes
+		}
+		AND = {
+			check_variable = { var = VAL_council_plan_kind value = 3 compare = equals }
+			check_variable = { var = num_equipment@infantry_equipment value = VAL_council_plan_stock compare = greater_than_or_equals }
+		}
 	}
 }
 

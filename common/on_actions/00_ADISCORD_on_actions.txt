@@ -61,7 +61,12 @@ on_actions = {
 					ADISCORD_initialize_foreign_minister = yes
 					ADISCORD_grant_starting_technology_profile = yes
 					if = {
-						limit = { OR = { ADISCORD_is_playable_development_country = yes is_ai = no } }
+						limit = {
+							OR = {
+								ADISCORD_is_playable_development_country = yes
+								is_ai = no
+							}
+						}
 						ADISCORD_initialize_default_country_development = yes
 					}
 				}
@@ -126,7 +131,10 @@ on_actions = {
 					ADISCORD_economy_initialize_country = yes
 					RUS_campaign_initialize = yes
 					if = {
-						limit = { is_ai = no date < 2160.1.2 }
+						limit = {
+							is_ai = no
+							date < 2160.1.2
+						}
 						set_variable = { var = ADISCORD_startup_open value = 1 }
 						clear_variable = ADISCORD_startup_tab
 						clear_variable = ADISCORD_startup_page
@@ -136,7 +144,10 @@ on_actions = {
 				# The fresh-campaign guard also prevents reopening the briefing on reload.
 				STP = {
 					if = {
-						limit = { is_ai = no date < 2160.1.2 }
+						limit = {
+							is_ai = no
+							date < 2160.1.2
+						}
 						set_variable = { var = ADISCORD_startup_open value = 1 }
 						clear_variable = ADISCORD_startup_tab
 						clear_variable = ADISCORD_startup_page
@@ -145,7 +156,10 @@ on_actions = {
 				}
 				VAL = {
 					if = {
-						limit = { is_ai = no date < 2160.1.2 }
+						limit = {
+							is_ai = no
+							date < 2160.1.2
+						}
 						set_variable = { var = ADISCORD_startup_open value = 1 }
 						clear_variable = ADISCORD_startup_tab
 						clear_variable = ADISCORD_startup_page
@@ -154,7 +168,10 @@ on_actions = {
 				}
 				SHL = {
 					if = {
-						limit = { is_ai = no date < 2160.1.2 }
+						limit = {
+							is_ai = no
+							date < 2160.1.2
+						}
 						set_variable = { var = ADISCORD_startup_open value = 1 }
 						clear_variable = ADISCORD_startup_tab
 						clear_variable = ADISCORD_startup_page
@@ -163,7 +180,10 @@ on_actions = {
 				}
 				NAM = {
 					if = {
-						limit = { is_ai = no date < 2160.1.2 }
+						limit = {
+							is_ai = no
+							date < 2160.1.2
+						}
 						set_variable = { var = ADISCORD_startup_open value = 1 }
 						clear_variable = ADISCORD_startup_tab
 						clear_variable = ADISCORD_startup_page
@@ -225,7 +245,12 @@ on_actions = {
 			}
 			# A new enemy relation also covers allies entering an existing war.
 			if = {
-				limit = { OR = { has_global_flag = ADISCORD_fresh_campaign_contract_v1 ADISCORD_economy_has_current_schema = yes } }
+				limit = {
+					OR = {
+						has_global_flag = ADISCORD_fresh_campaign_contract_v1
+						ADISCORD_economy_has_current_schema = yes
+					}
+				}
 				ADISCORD_economy_initialize_country = yes
 				if = {
 					limit = { ADISCORD_economy_has_current_schema = yes }
@@ -234,7 +259,12 @@ on_actions = {
 			}
 			FROM = {
 				if = {
-					limit = { OR = { has_global_flag = ADISCORD_fresh_campaign_contract_v1 ADISCORD_economy_has_current_schema = yes } }
+					limit = {
+						OR = {
+							has_global_flag = ADISCORD_fresh_campaign_contract_v1
+							ADISCORD_economy_has_current_schema = yes
+						}
+					}
 					ADISCORD_economy_initialize_country = yes
 					if = {
 						limit = { ADISCORD_economy_has_current_schema = yes }
@@ -281,7 +311,11 @@ on_actions = {
 				limit = {
 					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 					NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-					OR = { tag = WKR tag = VAD tag = TVA }
+					OR = {
+						tag = WKR
+						tag = VAD
+						tag = TVA
+					}
 					has_war = yes
 				}
 				ADISCORD_vorkerland_update_civil_war_exhaustion = yes
@@ -294,9 +328,17 @@ on_actions = {
 			# Reconcile human handoffs, partial peace and changes of major status
 			# before selecting cadence. Only current enemies are inspected.
 			if = {
-				limit = { NOT = { has_country_flag = ADISCORD_non_participating_minor_optimized } ADISCORD_economy_has_current_schema = yes }
+				limit = {
+					NOT = { has_country_flag = ADISCORD_non_participating_minor_optimized }
+					ADISCORD_economy_has_current_schema = yes
+				}
 				if = {
-					limit = { OR = { has_war = yes has_country_flag = ADISCORD_economy_fighting_human } }
+					limit = {
+						OR = {
+							has_war = yes
+							has_country_flag = ADISCORD_economy_fighting_human
+						}
+					}
 					ADISCORD_economy_refresh_war_participation_tier = yes
 				}
 				else = { ADISCORD_economy_set_simulation_tier = yes }
@@ -308,7 +350,10 @@ on_actions = {
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_fresh_campaign_contract_v1
-					OR = { ADISCORD_is_playable_development_country = yes is_ai = no }
+					OR = {
+						ADISCORD_is_playable_development_country = yes
+						is_ai = no
+					}
 				}
 				ADISCORD_tick_all_society_development_monthly = yes
 			}

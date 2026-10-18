@@ -1378,7 +1378,10 @@ ADISCORD_copy_development_from_prev = {
 	set_variable = { var = ADISCORD_social_system_development_level value = PREV.ADISCORD_social_system_development_level }
 	ADISCORD_apply_social_system_development_level = yes
 	set_variable = { var = ADISCORD_social_system_development_progress value = PREV.ADISCORD_social_system_development_progress }
-	set_variable = { var = ADISCORD_social_system_development_monthly_growth value = PREV.ADISCORD_social_system_development_monthly_growth }
+	set_variable = {
+		var = ADISCORD_social_system_development_monthly_growth
+		value = PREV.ADISCORD_social_system_development_monthly_growth
+	}
 	set_variable = { var = ADISCORD_army_development_level value = PREV.ADISCORD_army_development_level }
 	ADISCORD_apply_army_development_level = yes
 	set_variable = { var = ADISCORD_army_development_progress value = PREV.ADISCORD_army_development_progress }

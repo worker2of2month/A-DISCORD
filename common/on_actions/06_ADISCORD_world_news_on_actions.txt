@@ -10,8 +10,20 @@ on_actions = {
 				limit = {
 					has_global_flag = ADISCORD_vorkerland_collapse_started
 					NOT = { has_global_flag = ADISCORD_news_vorkerland_fighting_published }
-					ROOT = { OR = { tag = WKR tag = VAD tag = TVA } }
-					FROM = { OR = { tag = WKR tag = VAD tag = TVA } }
+					ROOT = {
+						OR = {
+							tag = WKR
+							tag = VAD
+							tag = TVA
+						}
+					}
+					FROM = {
+						OR = {
+							tag = WKR
+							tag = VAD
+							tag = TVA
+						}
+					}
 				}
 				set_global_flag = ADISCORD_news_vorkerland_fighting_published
 				ROOT = { news_event = { id = ADISCORD_world_news.1 hours = 1 } }
@@ -27,8 +39,14 @@ on_actions = {
 					has_global_flag = STP_cw_started
 					NOT = { has_global_flag = ADISCORD_news_stelander_civil_war_published }
 					OR = {
-						AND = { ROOT = { tag = STP } FROM = { tag = STS } }
-						AND = { ROOT = { tag = STS } FROM = { tag = STP } }
+						AND = {
+							ROOT = { tag = STP }
+							FROM = { tag = STS }
+						}
+						AND = {
+							ROOT = { tag = STS }
+							FROM = { tag = STP }
+						}
 					}
 				}
 				set_global_flag = ADISCORD_news_stelander_civil_war_published
@@ -42,8 +60,14 @@ on_actions = {
 					has_global_flag = STP_cw_started
 					NOT = { has_global_flag = ADISCORD_news_kefreyt_intervention_published }
 					OR = {
-						AND = { ROOT = { tag = VAL } FROM = { tag = SRP } }
-						AND = { FROM = { tag = VAL } ROOT = { tag = SRP } }
+						AND = {
+							ROOT = { tag = VAL }
+							FROM = { tag = SRP }
+						}
+						AND = {
+							FROM = { tag = VAL }
+							ROOT = { tag = SRP }
+						}
 					}
 				}
 				set_global_flag = ADISCORD_news_kefreyt_intervention_published
@@ -59,11 +83,27 @@ on_actions = {
 					OR = {
 						AND = {
 							ROOT = { tag = IVN }
-							FROM = { OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD } }
+							FROM = {
+								OR = {
+									tag = ZAO
+									tag = WPA
+									tag = WPS
+									tag = PWR
+									tag = PSD
+								}
+							}
 						}
 						AND = {
 							FROM = { tag = IVN }
-							ROOT = { OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD } }
+							ROOT = {
+								OR = {
+									tag = ZAO
+									tag = WPA
+									tag = WPS
+									tag = PWR
+									tag = PSD
+								}
+							}
 						}
 					}
 				}

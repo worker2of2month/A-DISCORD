@@ -46,9 +46,9 @@ SHL_conclave = {
 		available = {
 			FROM = {
 				custom_trigger_tooltip = {
-				tooltip = SHL_site_available_tt
-				SHL_furnace_site_idle = yes
-			}
+					tooltip = SHL_site_available_tt
+					SHL_furnace_site_idle = yes
+				}
 				check_variable = { var = SHL_furnace_stock value = 2 compare = less_than_or_equals }
 			}
 			check_variable = { var = ADISCORD_economy_treasury value = 25 compare = greater_than_or_equals }
@@ -85,9 +85,9 @@ SHL_conclave = {
 		available = {
 			FROM = {
 				custom_trigger_tooltip = {
-				tooltip = SHL_site_available_tt
-				SHL_furnace_site_idle = yes
-			}
+					tooltip = SHL_site_available_tt
+					SHL_furnace_site_idle = yes
+				}
 				check_variable = { var = SHL_furnace_running value = 1 compare = equals }
 			}
 			check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
@@ -132,9 +132,9 @@ SHL_conclave = {
 		available = {
 			FROM = {
 				custom_trigger_tooltip = {
-				tooltip = SHL_site_available_tt
-				SHL_furnace_site_idle = yes
-			}
+					tooltip = SHL_site_available_tt
+					SHL_furnace_site_idle = yes
+				}
 				check_variable = { var = SHL_furnace_training value = 0 compare = equals }
 			}
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
@@ -173,9 +173,9 @@ SHL_conclave = {
 		available = {
 			FROM = {
 				custom_trigger_tooltip = {
-				tooltip = SHL_site_available_tt
-				SHL_furnace_site_idle = yes
-			}
+					tooltip = SHL_site_available_tt
+					SHL_furnace_site_idle = yes
+				}
 				custom_trigger_tooltip = {
 					tooltip = SHL_owner_settled_tt
 					has_variable = SHL_restart_settled
@@ -455,7 +455,6 @@ SHL_conclave = {
 		}
 		ai_will_do = { base = 1 }
 	}
-
 }
 
 SHL_tenth_project = {
@@ -980,7 +979,6 @@ SHL_quarters_and_borders = {
 			}
 			FROM = {
 				SHL_obligation_site_ready = yes
-
 			}
 			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
 		}
@@ -2047,7 +2045,6 @@ SHL_quarters_and_borders = {
 		}
 		ai_will_do = { base = 30 }
 	}
-
 }
 
 # Shahrabad public campaigns. Slots come from the shared campaign pool.

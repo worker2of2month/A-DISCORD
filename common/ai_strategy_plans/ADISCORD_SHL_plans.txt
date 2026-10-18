@@ -62,4 +62,3 @@ SHL_furnaces_plan = {
 	}
 	weight = { factor = 20 }
 }
-

@@ -978,6 +978,13 @@ def validate_val_preview_ideas(
                         expected[modifier] = expected.get(modifier, 0) + amount
         return expected
 
+    def is_event_dispatch(items):
+        # A scheduled event runs after the reward, so it cannot change this delta.
+        return all(
+            entry.key in {"id", "days", "hours"} and not isinstance(entry.value, list)
+            for entry in items
+        )
+
     def direct_dynamic_delta(items, native):
         """Prove additive same-country outputs and both modifier-presence paths.
 
@@ -1031,6 +1038,8 @@ def validate_val_preview_ideas(
                 dirty = entry.value == "yes" and refreshed
             elif entry.key in {"clear_variable", "remove_dynamic_modifier"}:
                 return {}
+            elif entry.key == "country_event" and is_event_dispatch(entry.value):
+                continue
             elif isinstance(entry.value, list):
                 return {}
         return expected if installed and refreshed and dirty else {}

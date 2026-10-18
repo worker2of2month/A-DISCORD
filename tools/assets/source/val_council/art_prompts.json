@@ -1,0 +1,152 @@
+{
+  "asset_family": "VAL council portraits and Captains Collegium",
+  "tool": "built-in image_gen",
+  "references": [
+    "docs/lore/countries/VAL.md",
+    "gfx/leaders/VAL/portrait_VAL_Commanders_Council.png",
+    "gfx/interface/bop/VAL_bop_general_staff.png"
+  ],
+  "export": {
+    "portraits": "Supplied 156x210 PNGs are copied unchanged. Small portraits are resized to 50x67 from the corresponding large runtime PNG and preserve its identity and composition.",
+    "icon": "Transparent medallion bounds fitted proportionally within a centered 66x66 area on a 78x88 transparent canvas."
+  },
+  "assets": [
+    {
+      "key": "Gleb_Osten",
+      "file": "portrait_VAL_Gleb_Osten.png",
+      "small": "portrait_VAL_Gleb_Osten_small.png",
+      "prompt": "Use case: stylized-concept. Asset type: Hearts of Iron IV total-conversion individual character portrait, final game export 156x210, vertical aspect ratio 26:35. Paint ONE fictional man, Gleb Osten, a veteran garrison commander and elderly commandant of the capital. He is approximately 62, broad heavy angular face, deeply lined brow, short receding steel-grey hair, neat grey moustache, steady tired dark eyes, a stern restrained expression. Chest-up portrait, head and shoulders large and readable, body turned slightly three quarters, face towards viewer, entire head visible with modest top margin. Worn charcoal-olive military tunic, understated dark burgundy piping and small dull brass collar rank tabs, no hat, no real-world insignia, no huge medals, no weapons. Historically grounded military clothing for a fictional industrial postwar society. Rich realistic hand-painted strategy-game leader artwork, subtle brush texture, credible facial anatomy, finely modeled light on face, subdued olive and warm brown palette. Soft upper-left light, plain very dark warm grey-brown painterly background, no scenery, no text, no frame, no border, no watermark, no collage, no graphic design. Opaque background. Strong distinct face that remains legible when exported to 156x210 and 50x67. Render one single portrait filling the tall image.",
+      "source_image": "exec-8063399f-b6e5-40a5-b5b3-315bf799e251.png",
+      "runtime_source": {
+        "kind": "user_supplied_png",
+        "file": "1.png",
+        "sha256": "abb070151c3277dd9285435b752eb76262748ec696a6c0503a7aadc61d555bad"
+      },
+      "exports": [
+        {
+          "path": "gfx/leaders/VAL/portrait_VAL_Gleb_Osten.png",
+          "size": [
+            156,
+            210
+          ]
+        },
+        {
+          "path": "gfx/leaders/VAL/portrait_VAL_Gleb_Osten_small.png",
+          "size": [
+            50,
+            67
+          ]
+        }
+      ]
+    },
+    {
+      "key": "Tamara_Greitz",
+      "file": "portrait_VAL_Tamara_Greitz.png",
+      "small": "portrait_VAL_Tamara_Greitz_small.png",
+      "prompt": "Use case: stylized-concept. Asset type: Hearts of Iron IV total-conversion individual character portrait, final game export 156x210, vertical aspect ratio 26:35. Paint ONE fictional woman, Tamara Greitz, leader of the frontline captains in a fictional industrial postwar military council. She is approximately 38, lean angular face, pronounced cheekbones, determined grey eyes, straight dark eyebrows, short practical dark chestnut hair swept to one side and tucked behind the ears, no hat, no glamour styling. Quiet intense, battle-hardened and impatient expression, lips closed. Chest-up portrait, head and shoulders large and readable, body slightly three-quarter, entire head visible with modest top margin. Worn charcoal-olive officer field tunic, understated dark burgundy piping, compact dull brass collar insignia, no real-world symbols, no elaborate medals, no weapons. Realistic hand-painted strategy-game leader artwork, subtle brush texture, credible anatomy, carefully lit face with weathered outdoor skin. Match a cohesive subdued military set: dark olive clothing, warm low-saturation skin, very dark grey-brown simple painterly background, soft upper-left illumination. No scenery, no text, no frame, no border, no watermark, no collage. Opaque background. Strong distinct face readable at 156x210 and 50x67. Render one single portrait filling the tall image.",
+      "source_image": "exec-6f716b2d-a409-454f-a282-fd7c3275ea25.png",
+      "runtime_source": {
+        "kind": "user_supplied_png",
+        "file": "2.png",
+        "sha256": "4c162d1d4d09c1ba2a723a19aba6f2ca916c42d1a888264a49b9efa35e1533f2"
+      },
+      "exports": [
+        {
+          "path": "gfx/leaders/VAL/portrait_VAL_Tamara_Greitz.png",
+          "size": [
+            156,
+            210
+          ]
+        },
+        {
+          "path": "gfx/leaders/VAL/portrait_VAL_Tamara_Greitz_small.png",
+          "size": [
+            50,
+            67
+          ]
+        }
+      ]
+    },
+    {
+      "key": "Arkadi_Lemm",
+      "file": "portrait_VAL_Arkadi_Lemm.png",
+      "small": "portrait_VAL_Arkadi_Lemm_small.png",
+      "prompt": "Use case: stylized-concept. Asset type: Hearts of Iron IV total-conversion individual character portrait, final game export 156x210, vertical aspect ratio 26:35. Paint ONE fictional man, Arkadi Lemm, a senior military quartermaster who manages supply depots and negotiates grain purchases. About 54, stocky build, round broad face, slightly balding dark hair with grey temples, clean-shaven, small round wire spectacles with clearly visible shrewd eyes, thoughtful guarded expression rather than a grin. Chest-up portrait, head and shoulders large and readable, body in slight three-quarter view, entire head visible and modest top margin. Neat charcoal-olive service tunic with small dull brass collar insignia and restrained burgundy piping, not a civilian suit, no hat, no real-world badges, no elaborate medals, no weapons, no props. Historically grounded fictional industrial postwar clothing. Realistic hand-painted strategy-game leader artwork, subtle brush texture, credible facial anatomy, soft warm upper-left light, low-saturation olive and brown colors, very dark grey-brown simple painterly background. No scenery, no text, no frame, no border, no watermark, no collage. Opaque background. A face clearly distinct from a grey-moustached veteran or a civilian premier, legible at 156x210 and 50x67. Render one single portrait filling the tall image.",
+      "source_image": "exec-ebf4c54c-697a-4218-ae94-16ca59bd144c.png",
+      "runtime_source": {
+        "kind": "user_supplied_png",
+        "file": "3.png",
+        "sha256": "22552b5c40c882e1f8fc63b46c18ef6aef101e9c530075c6f36af3f467c3934f"
+      },
+      "exports": [
+        {
+          "path": "gfx/leaders/VAL/portrait_VAL_Arkadi_Lemm.png",
+          "size": [
+            156,
+            210
+          ]
+        },
+        {
+          "path": "gfx/leaders/VAL/portrait_VAL_Arkadi_Lemm_small.png",
+          "size": [
+            50,
+            67
+          ]
+        }
+      ]
+    },
+    {
+      "key": "Commanders_Council",
+      "file": "portrait_VAL_Commanders_Council.png",
+      "runtime_source": {
+        "kind": "user_supplied_png",
+        "file": "совет.png",
+        "sha256": "a82708cfd110e6f94610caa3690ff7a24f9f83ae6c41f67e5cbe9e38347ecd01"
+      },
+      "exports": [
+        {
+          "path": "gfx/leaders/VAL/portrait_VAL_Commanders_Council.png",
+          "size": [
+            156,
+            210
+          ]
+        }
+      ]
+    },
+    {
+      "key": "Mikhail_Velsky",
+      "file": "portrait_VAL_Mikhail_Velsky.png",
+      "prompt": "Use case: stylized-concept. Asset type: Hearts of Iron IV total-conversion individual civilian leader portrait, final game export 156x210, vertical aspect ratio 26:35. Paint ONE fictional man, Mikhail Velsky, a civilian prime minister and patient experienced administrator of an industrial military state. About 57, slender oval face, high forehead, tidy silver-streaked dark hair combed back, clean-shaven, dark attentive eyes, composed serious expression showing reserve and intelligence. Dark brown-charcoal wool suit, ivory shirt, plain muted burgundy tie, no military uniform, no badges, no medals, no hat. Chest-up portrait, head and shoulders large and readable, slight three-quarter angle, whole head visible with modest top margin. Realistic hand-painted grand-strategy leader artwork, subtle brushwork, credible anatomy, warm softly illuminated face, low saturation, soft upper-left light, very dark grey-brown painterly background. Cohesive with restrained olive-and-brown military council portraits but visibly civilian. No scenery, no text, no frame, no border, no watermark, no collage. Opaque background. Strong distinctive face readable at the final 156x210 pixels. Render one single portrait filling the tall image.",
+      "source_image": "exec-f74f6018-3edd-426c-926f-5e0267d79bd0.png",
+      "runtime_source": {
+        "kind": "user_supplied_png",
+        "file": "4.png",
+        "sha256": "e9aa4af9f86b47d7d196731f724bcdb37edee5d90ca840e692d79de455191350"
+      },
+      "exports": [
+        {
+          "path": "gfx/leaders/VAL/portrait_VAL_Mikhail_Velsky.png",
+          "size": [
+            156,
+            210
+          ]
+        }
+      ]
+    },
+    {
+      "key": "captains_collegium",
+      "file": "VAL_bop_captains_collegium.png",
+      "prompt": "Use case: stylized-concept. Asset type: single raster balance-of-power UI emblem for Hearts of Iron IV, eventual export 78x88 pixels. Create the emblem for the Captains' Collegium, a collective military council. A compact round dark gunmetal medallion with antique gold rim and thick golden laurel branches along left and right lower sides, tied together at the bottom. Within the dark circle, exactly three dignified military officer head-and-shoulder busts sculpted as simplified silver and muted gold metal relief, facing forward: one central officer slightly forward, two flank officers behind, conveying collective command. No realistic skin colors, all figures are embossed metal, no tiny detailed faces. A small simple dark command-table edge across the lower interior can ground the busts but do not overcrowd. Match traditional grand-strategy UI icon finish: hand-painted metallic highlights, bevels, aged gold warm yellow edges, dark recessed steel center, very crisp readable silhouette, top-left highlights and lower-right shadows. Nearly circular badge centered in a slightly taller 39:44 canvas, with about 10 percent transparent space around silhouette and a little more space above and below. Transparent background outside the complete medallion, no rectangle, no drop shadow outside it. No letters, no text, no numbers, no modern flat vector look, no jewels, no crown, no flags, no stars, no weapons. One isolated icon only, not an icon sheet. The design must remain clear at 78x88 pixels. The paired icon is a dark metal roundel with gold laurels and crossed silver swords; match that metallic palette and visual weight while keeping the three officer busts as this emblem's subject.",
+      "source_image": "exec-a9080b87-5b9b-4077-bd7e-fe946b25378b.png",
+      "exports": [
+        {
+          "path": "gfx/interface/bop/VAL_bop_captains_collegium.png",
+          "size": [
+            78,
+            88
+          ]
+        }
+      ]
+    }
+  ]
+}

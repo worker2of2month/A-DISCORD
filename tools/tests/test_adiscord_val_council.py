@@ -1,12 +1,17 @@
 """Execute authored Council transactions; native timers, UI and combat need a cold campaign."""
 
 from dataclasses import replace
+from copy import deepcopy
+from io import BytesIO
 from pathlib import Path
 import itertools
 import re
 import unittest
 
-from tools.tests.test_adiscord_stp_preparation import block, entries, scalar, walk
+from PIL import Image
+
+from tools.builders import build_adiscord_val_flags
+from tools.tests.test_adiscord_stp_preparation import block, entries, matches_conditions, scalar, walk
 from tools.tests.test_adiscord_val_new_world import ContractWorld
 from tools.tests.test_adiscord_val_focus_layout import PERSONAL_FOCUSES
 
@@ -25,10 +30,11 @@ class CouncilWorld(ContractWorld):
     def __init__(self):
         super().__init__()
         self.decisions = {e.key: e.value for e in block(entries(DECISIONS), PREFIX + "government_category")}
+        self.decisions.update({e.key: e.value for e in block(entries(DECISIONS), PREFIX + "balance_category")})
         self.stack = ["VAL"]
         self.countries = ["VAL", "STP", "CIN"]
         for tag in self.countries:
-            self.data[tag].update(cp=100, stability=0.5, missions={}, bop=None,
+            self.data[tag].update(cp=100, stability=0.5, missions={}, bop=None, council_bop=None,
                                   leader="VAL_Valera_Solgalov", tree="VAL_focus", neighbors=[],
                                   cores={"VAL"}, characters={"VAL_Valera_Solgalov"})
         self.val = self.data["VAL"]
@@ -83,10 +89,11 @@ class CouncilWorld(ContractWorld):
             elif key == "has_active_mission":
                 results.append(value in country["missions"])
             elif key == "has_power_balance":
-                results.append(country["bop"] is not None)
+                results.append(country[self.balance_field(value)] is not None)
             elif key == "power_balance_value":
                 operator, amount = value[-2].value, float(value[-1].value)
-                results.append(country["bop"] is not None and (country["bop"] < amount if operator == "<" else country["bop"] > amount))
+                current = country[self.balance_field(value)]
+                results.append(current is not None and (current < amount if operator == "<" else current > amount))
             elif key == "has_focus_tree":
                 results.append(country["tree"] == value)
             elif key == "has_country_leader":
@@ -109,6 +116,9 @@ class CouncilWorld(ContractWorld):
             elif key == "free_building_slots":
                 self.assert_free_factory_slot_check(value)
                 results.append(country["free_slots"] > 0)
+            elif key == "any_owned_state":
+                owned = [state for state, data in list(self.data.items()) if state.isdigit() and data["owner"] == scope]
+                results.append(any(self.matches(value, state) for state in owned))
             elif key == "any_neighbor_state":
                 results.append(any(self.matches(value, state) for state in country["neighbors"]))
             elif key.startswith("event_target:") or key == "PREV":
@@ -116,6 +126,11 @@ class CouncilWorld(ContractWorld):
             else:
                 results.append(super().matches(group, scope))
         return all(results)
+
+    @staticmethod
+    def balance_field(rows):
+        """The old Solgalov balance keeps `bop`; the Council balance is separate."""
+        return "bop" if scalar(rows, "id") == "VAL_command_balance" else "council_bop"
 
     @staticmethod
     def assert_free_factory_slot_check(rows):
@@ -141,7 +156,7 @@ class CouncilWorld(ContractWorld):
             elif key in ("effect_tooltip", "unlock_decision_tooltip"):
                 pass
             elif key == "set_power_balance":
-                country["bop"] = float(scalar(value, "set_value"))
+                country[self.balance_field(value)] = float(scalar(value, "set_value"))
             elif key == "news_event":
                 self.events.append((scope, scalar(value, "id")))
             elif key == "capital_scope":
@@ -181,9 +196,18 @@ class CouncilWorld(ContractWorld):
             elif key == "add_days_mission_timeout":
                 country["missions"][scalar(value, "mission")] += self.number(scalar(value, "days"), scope)
             elif key == "add_power_balance_value":
-                country["bop"] += float(scalar(value, "value"))
+                field = self.balance_field(value)
+                if country[field] is None:
+                    raise AssertionError(("unguarded balance change", scope, scalar(value, "id")))
+                country[field] += float(scalar(value, "value"))
             elif key == "remove_power_balance":
-                country["bop"] = None
+                country[self.balance_field(value)] = None
+            elif key == "set_cosmetic_tag":
+                country["cosmetic"] = value
+            elif key == "add_field_marshal_role":
+                country.setdefault("field_marshals", set()).add(scalar(value, "character"))
+            elif key == "add_dynamic_modifier":
+                country["modifiers"].add(scalar(value, "modifier"))
             elif key == "retire_character":
                 country["characters"].discard(value)
             elif key == "recruit_character":
@@ -359,7 +383,7 @@ class CouncilTransactionsTests(unittest.TestCase):
         self.assertEqual(world.val["tree"], "VAL_focus")
         self.assertEqual(world.val["vars"][PREFIX + "loan_debt"], 550)
         self.assertIn("VAL_quarterly_contract_active", world.val["flags"])
-        self.assertEqual(len(world.visible_council_focuses()), 30)
+        self.assertEqual(len(world.visible_council_focuses()), 32)
         self.assertIn("mark_focus_tree_layout_dirty", world.calls)
 
     def test_ultimatum_cancellation_uses_same_boundary_as_coup(self):
@@ -484,7 +508,7 @@ class CouncilTreeTests(unittest.TestCase):
 
     def test_choices_are_symmetric_and_all_council_nodes_are_reachable(self):
         council = {key: body for key, body in self.focuses.items() if key.startswith(PREFIX)}
-        self.assertEqual(len(council), 30)
+        self.assertEqual(len(council), 32)
         seen = set()
         pairs = set()
         for name, body in council.items():
@@ -493,7 +517,7 @@ class CouncilTreeTests(unittest.TestCase):
                     for other in row.value:
                         self.assertIn(name, [e.value for e in block(council[other.value], "mutually_exclusive")])
                         pairs.add(tuple(sorted((name, other.value))))
-        self.assertEqual(len(pairs), 5)
+        self.assertEqual(len(pairs), 8)
         for chosen in itertools.product(*sorted(pairs)):
             excluded = {item for pair in pairs for item in pair} - set(chosen)
             complete = set(self.focuses) - set(council)
@@ -539,6 +563,10 @@ class CouncilTreeTests(unittest.TestCase):
 
     def test_missions_cannot_auto_succeed_and_dynamic_reads_are_registered(self):
         world = CouncilWorld()
+        # The Iron Shield goal is a real target; its focus opens only while one target is still held by the enemy.
+        world.data["43"]["controller"] = world.data["44"]["controller"] = "STP"
+        world.val["wars"].add("STP")
+        world.data["STP"]["wars"].add("VAL")
         tokens = (ROOT / "common/synchronized_dynamic_tokens/ADISCORD_tokens.txt").read_text().splitlines()
         for name, body in world.decisions.items():
             if any(e.key == "days_mission_timeout" for e in body):
@@ -746,7 +774,7 @@ class CouncilTreeTests(unittest.TestCase):
         world.execute(block(decisions["VAL_debug_council_take_power"], "complete_effect"))
         self.assertEqual(world.val["leader"], "VAL_Commanders_Council")
         self.assertEqual(world.val["vars"][PREFIX + "loan_debt"], 550)
-        self.assertEqual(len(world.visible_council_focuses()), 30)
+        self.assertEqual(len(world.visible_council_focuses()), 32)
         world.execute(block(decisions["VAL_debug_council_take_power"], "complete_effect"))
         self.assertEqual(world.events.count(("VAL", "val_council.10")), 1)
         news = next(e.value for e in entries("events/ADISCORD_VAL_contract_events.txt") if e.key == "news_event" and scalar(e.value, "id") == "val_council.10")
@@ -755,10 +783,11 @@ class CouncilTreeTests(unittest.TestCase):
 
     def test_ai_finishes_alternative_routes_without_choosing_both_sides(self):
         for selected, continuing in (
-            ("captains_agreement", ("company_delegates", "equal_votes", "arbitration", "common_fund", "mutual_guarantees", "charter")),
+            ("captains_agreement", ("company_delegates", "equal_votes", "arbitration", "mutual_guarantees", "charter")),
             ("large_companies", ("arbitration", "charter")),
             ("public_commission", ("publish_losses", "recall_right", "limited_mandate")),
-            ("brokers", ("merchant_guarantees", "supplier_consortium")),
+            ("brokers", ("supplier_consortium", "common_fund")),
+            ("direct_orders", ("staff_acceptance", "common_fund")),
         ):
             world = CouncilWorld()
             world.val["focuses"].add(PREFIX + selected)
@@ -1121,6 +1150,321 @@ class CouncilRepresentationTests(unittest.TestCase):
                 donors = [j for j in range(3) if j != i and values[j] > 0]
                 donor = max(donors, key=lambda j: (values[j], -j)) if donors else None
                 self.assertEqual(text("VALGetCouncil" + kind + "Donor"), "VAL_COUNCIL_NO_DONOR" if donor is None else "VAL_COUNCIL_" + self.CAMPS[donor].upper())
+
+
+class CouncilStoryTests(unittest.TestCase):
+    """Delegation plans, favours, demands and the regime endings share the seat ledger."""
+
+    @staticmethod
+    def seats(world):
+        return tuple(world.val["vars"][PREFIX + "seats_" + camp] for camp in ("garrison", "front", "supply"))
+
+    @staticmethod
+    def set_seats(world, values):
+        for camp, count in zip(("garrison", "front", "supply"), values):
+            world.val["vars"][PREFIX + "seats_" + camp] = count
+
+    def war_world(self):
+        world = CouncilWorld()
+        world.val["wars"].add("STP")
+        world.val["vars"][PREFIX + "loyalists"] = 40
+        world.data["176"].update(owner="VAL", controller="VAL", cores={"VAL"})
+        for state in ("43", "44"):
+            world.data[state].update(owner="STP", controller="STP", cores={"STP"})
+        return world
+
+    def start(self, world, kind):
+        world.val["vars"][PREFIX + "plan_choice"] = kind
+        world.run(PREFIX + "start_plan")
+
+    def test_successful_plan_rewards_its_delegation_once(self):
+        world = self.war_world()
+        self.start(world, 2)
+        self.assertEqual(world.val["missions"][PREFIX + "plan_iron_shield"], 90)
+        mission = world.decisions[PREFIX + "plan_iron_shield"]
+        self.assertFalse(world.matches(block(mission, "available")))
+        world.data["43"]["controller"] = world.data["44"]["controller"] = "VAL"
+        self.assertTrue(world.matches(block(mission, "available")))
+        world.execute(block(mission, "complete_effect"))
+        self.assertEqual(self.seats(world), (1, 3, 2))
+        self.assertAlmostEqual(world.val["council_bop"], 0.10)
+        self.assertEqual(world.val["vars"][PREFIX + "loyalists"], 30)
+        self.assertNotIn(PREFIX + "plan_kind", world.val["vars"])
+        self.assertNotIn(PREFIX + "plan_iron_shield", world.val["missions"])
+        world.run(PREFIX + "plan_success")
+        self.assertEqual(self.seats(world), (1, 3, 2))
+
+    def test_lost_district_fails_the_line_and_the_report_assigns_blame(self):
+        world = self.war_world()
+        self.start(world, 1)
+        world.run(PREFIX + "reconcile_plan")
+        self.assertEqual(world.val["vars"][PREFIX + "plan_kind"], 1)
+        world.data["176"]["controller"] = "STP"
+        world.run(PREFIX + "reconcile_plan")
+        self.assertNotIn(PREFIX + "plan_kind", world.val["vars"])
+        self.assertAlmostEqual(world.val["council_bop"], -0.10)
+        self.assertEqual(world.val["vars"][PREFIX + "loyalists"], 50)
+        self.assertAlmostEqual(world.val["stability"], 0.47)
+        self.assertIn(("VAL", "val_council.17"), world.events)
+        report = next(e.value for e in entries("events/ADISCORD_VAL_contract_events.txt")
+                      if e.key == "country_event" and scalar(e.value, "id") == "val_council.17")
+        option = next(r.value for r in report if r.key == "option")
+        world.execute([row for row in option if row.key not in ("name", "ai_chance")])
+        self.assertEqual(self.seats(world), (1, 3, 2))
+
+    def test_peace_settles_each_plan_by_its_current_goal(self):
+        world = self.war_world()
+        self.start(world, 3)
+        world.val["wars"].clear()
+        world.run(PREFIX + "reconcile_plan")
+        self.assertEqual(self.seats(world), (1, 2, 3))
+        world = self.war_world()
+        self.start(world, 2)
+        world.val["wars"].clear()
+        world.run(PREFIX + "reconcile_plan")
+        self.assertEqual(self.seats(world), (2, 2, 2))
+        self.assertIsNotNone(world.val["council_bop"])
+        self.assertNotIn(PREFIX + "plan_kind", world.val["vars"])
+        self.assertNotIn(("VAL", "val_council.17"), world.events)
+
+    def test_favour_moves_a_seat_and_shares_one_interval(self):
+        world = self.war_world()
+        self.assertEqual(scalar(world.decisions[PREFIX + "favour_front"], "cost"), "30")
+        self.assertTrue(world.choose("favour_front"))
+        self.assertIn(PREFIX + "favour_front", world.val["modifiers"])
+        self.assertEqual(self.seats(world), (1, 3, 2))
+        self.assertAlmostEqual(world.val["council_bop"], -0.05)
+        self.assertFalse(world.choose("favour_supply"))
+        world.val["flags"].discard(PREFIX + "favour_cooldown")
+        self.set_seats(world, (0, 0, 6))
+        self.assertFalse(world.choose("favour_supply"))
+        world.val["wars"].clear()
+        self.set_seats(world, (2, 2, 2))
+        self.assertFalse(world.choose("favour_front"))
+        self.assertTrue(world.choose("favour_supply"))
+
+    def test_five_seats_raise_one_demand_per_interval(self):
+        world = self.war_world()
+        self.set_seats(world, (4, 1, 1))
+        world.val["vars"].update({PREFIX + "seat_side": 1, PREFIX + "seat_delta": 1})
+        world.run(PREFIX + "transfer_seat")
+        self.assertEqual(self.seats(world), (5, 0, 1))
+        self.assertEqual(world.events.count(("VAL", "val_council.18")), 1)
+        world.val["vars"].update({PREFIX + "seat_side": 1, PREFIX + "seat_delta": 1})
+        world.run(PREFIX + "transfer_seat")
+        self.assertEqual(world.events.count(("VAL", "val_council.18")), 1)
+
+    def test_permanent_government_installs_the_largest_delegation_head(self):
+        for values, leader in (((2, 2, 2), "VAL_Gleb_Osten"), ((1, 4, 1), "VAL_Tamara_Greitz"),
+                               ((1, 2, 3), "VAL_Arkadi_Lemm"), ((2, 3, 1), "VAL_Tamara_Greitz")):
+            world = self.war_world()
+            world.val["characters"].update({"VAL_Gleb_Osten", "VAL_Tamara_Greitz", "VAL_Arkadi_Lemm"})
+            world.val["vars"][PREFIX + "identity"] = 2
+            self.set_seats(world, values)
+            world.run(PREFIX + "install_commander")
+            self.assertEqual(world.val["leader"], leader, values)
+            self.assertEqual(world.val["field_marshals"], {leader})
+            self.assertEqual(world.val["cosmetic"], "VAL_valden_republic")
+            self.assertTrue(world.matches(world.triggers[PREFIX + "operational"]))
+            self.assertEqual(len(world.visible_council_focuses()), 32)
+            self.assertIn("mark_focus_tree_layout_dirty", world.calls)
+
+    def test_peace_offers_the_bill_and_the_mandate_term_once(self):
+        world = self.war_world()
+        world.val["flags"].add(PREFIX + "stelander_war_started")
+        world.run(PREFIX + "check_postwar")
+        self.assertNotIn(("VAL", "val_council.15"), world.events)
+        world.val["wars"].clear()
+        world.val["focuses"].add(PREFIX + "limited_mandate")
+        world.run(PREFIX + "check_postwar")
+        world.run(PREFIX + "check_postwar")
+        self.assertEqual(world.events.count(("VAL", "val_council.15")), 1)
+        self.assertEqual(world.events.count(("VAL", "val_council.24")), 1)
+        world = self.war_world()
+        world.val["flags"].update({PREFIX + "stelander_war_started", "VAL_stelander_defeated"})
+        world.val["wars"].clear()
+        world.run(PREFIX + "check_postwar")
+        self.assertNotIn(("VAL", "val_council.15"), world.events)
+
+    def test_solgalov_keeps_velsky_as_starting_prime_minister(self):
+        history = entries("history/countries/VAL - ValeraLand.txt")
+        installed = [row.value for row in block(history, "add_ideas")]
+        self.assertIn("minister_VAL_Mikhail_Velsky", installed)
+        self.assertNotIn("minister_VAL_Valerian_Kraith", installed)
+        ideas = block(entries("common/ideas/ADISCORD_VAL_rework_ideas.txt"), "ideas")
+        cabinet_heads = block(ideas, "political_advisor_head_of_state")
+        minister = block(cabinet_heads, "minister_VAL_Mikhail_Velsky")
+        removal = block(minister, "allowed_to_remove")
+        for leader, expected in (
+            ("VAL_Valera_Solgalov", False),
+            ("VAL_Commanders_Council", True),
+            ("VAL_Mikhail_Velsky", True),
+            ("VAL_Valera_Solgalov", False),
+        ):
+            with self.subTest(leader=leader):
+                facts = {("VAL", "ruling_leader"): leader}
+                self.assertEqual(matches_conditions(removal, facts, "VAL"), expected)
+
+    def test_velsky_cabinet_keeps_the_council_institutions(self):
+        world = self.war_world()
+        world.val["leader"] = "VAL_Mikhail_Velsky"
+        self.assertTrue(world.matches(world.triggers[PREFIX + "operational"]))
+        world.val["leader"] = "VAL_party_administration"
+        self.assertFalse(world.matches(world.triggers[PREFIX + "operational"]))
+
+    def test_regime_closure_removes_the_balance_and_the_plan(self):
+        world = self.war_world()
+        self.start(world, 1)
+        world.run(PREFIX + "close_regime")
+        self.assertIsNone(world.val["council_bop"])
+        self.assertNotIn(PREFIX + "plan_kind", world.val["vars"])
+        self.assertNotIn(PREFIX + "plan_hold_line", world.val["missions"])
+        for name in ("VAL_frontier_settle_defeat", "VAL_enter_stelander_defeat"):
+            self.assertIn(PREFIX + "close_regime", {row.key for row in walk(world.effects[name])}, name)
+
+    def test_loyalist_network_is_clamped_and_reaches_the_aggregate(self):
+        world = self.war_world()
+        world.val["vars"][PREFIX + "loyalists_delta"] = 75
+        world.run(PREFIX + "change_loyalists")
+        self.assertEqual(world.val["vars"][PREFIX + "loyalists"], 100)
+        self.assertEqual(world.events.count(("VAL", "val_council.21")), 1)
+        world.val["vars"][PREFIX + "loyalists_delta"] = 5
+        world.run(PREFIX + "change_loyalists")
+        self.assertEqual(world.events.count(("VAL", "val_council.21")), 1)
+        world.run(PREFIX + "apply_modifiers")
+        self.assertAlmostEqual(world.val["vars"]["VAL_contract_org_factor"], -0.05)
+        self.assertAlmostEqual(world.val["vars"]["VAL_contract_planning_factor"], -0.10)
+
+    def test_balance_extremes_open_council_crises(self):
+        rows = entries("common/bop/VAL.txt")
+        balance = block(rows, PREFIX + "balance")
+        ranges = {scalar(r.value, "id"): r.value for side in balance if side.key == "side" for r in side.value if r.key == "range"}
+        for name, event in ((PREFIX + "collegial_dominance", "val_council.19"), (PREFIX + "command_dominance", "val_council.20")):
+            calls = [scalar(row.value, "id") for row in walk(block(ranges[name], "on_activate")) if row.key == "country_event"]
+            self.assertEqual(calls, [event])
+        self.assertEqual(scalar(balance, "decision_category"), PREFIX + "balance_category")
+
+
+class CouncilIdentityTests(unittest.TestCase):
+    TAGS = ("VAL_kefreyt_state", "VAL_valden_republic", "VAL_united_military_districts")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.event = next(e.value for e in entries("events/ADISCORD_VAL_contract_events.txt")
+                         if e.key == "country_event" and scalar(e.value, "id") == "val_council.25")
+        cls.options = [e.value for e in cls.event if e.key == "option"]
+
+    def visible_options(self, world):
+        return [option for option in self.options if world.matches(block(option, "trigger"))]
+
+    def choose(self, world, index):
+        world.execute(block(self.options[index], "hidden_effect"))
+
+    def test_three_choices_change_one_identity_without_charging_resources(self):
+        template = CouncilWorld()
+        for index, tag in enumerate(self.TAGS):
+            with self.subTest(tag=tag):
+                world = deepcopy(template)
+                self.assertEqual(self.visible_options(world), self.options[:3])
+                before = deepcopy(world.val)
+                self.choose(world, index)
+                expected = deepcopy(before)
+                expected["vars"][PREFIX + "identity"] = index + 1
+                expected["cosmetic"] = tag
+                self.assertEqual(world.val, expected)
+                self.assertEqual(self.visible_options(world), self.options[3:])
+                for repeated in range(3):
+                    self.choose(world, repeated)
+                    self.assertEqual(world.val, expected)
+
+    def test_stale_window_cannot_rename_a_subject_or_replacement_government(self):
+        template = CouncilWorld()
+        for field, value in (("subject", "STP"), ("leader", "VAL_party_administration"),
+                             ("capitulated", True), ("exists", False)):
+            world = deepcopy(template)
+            world.val[field] = value
+            world.val["cosmetic"] = "VAL_STS_administration"
+            before = deepcopy(world.val)
+            self.assertEqual(self.visible_options(world), self.options[3:])
+            for index in range(3):
+                self.choose(world, index)
+                self.assertEqual(world.val, before)
+
+    def test_defeated_council_can_choose_without_the_coup_flag(self):
+        world = CouncilWorld()
+        world.val["flags"].discard(PREFIX + "in_power")
+        world.val["flags"].add("VAL_stelander_defeated")
+        world.val["tree"] = "VAL_defeated_focus"
+        world.run(PREFIX + "offer_identity")
+        self.assertIn(("VAL", "val_council.25"), world.events)
+        self.assertTrue(world.matches(block(self.event, "trigger")))
+        self.choose(world, 2)
+        world.run(PREFIX + "offer_identity")
+        self.assertEqual(world.events.count(("VAL", "val_council.25")), 1)
+        for transition in ("VAL_enter_stelander_defeat", PREFIX + "take_power"):
+            payload = block(world.effects[transition], "if")
+            keys = [entry.key for entry in payload]
+            self.assertLess(keys.index("set_politics"), keys.index(PREFIX + "offer_identity"))
+
+    def test_default_option_and_reforms_preserve_each_selection(self):
+        self.assertEqual(scalar(self.options[0], "name"), "val_council.25.a")
+        self.assertEqual(scalar(self.event, "fire_only_once"), "yes")
+        focuses = {scalar(e.value, "id"): e.value for e in block(entries(FOCUSES), "focus_tree")
+                   if e.key == "focus"}
+        template = CouncilWorld()
+        for index, tag in enumerate(self.TAGS):
+            world = deepcopy(template)
+            self.choose(world, index)
+            world.execute(block(focuses[PREFIX + "charter"], "completion_reward"))
+            self.assertEqual(world.val["cosmetic"], tag)
+            world.run(PREFIX + "install_commander")
+            self.assertEqual(world.val["cosmetic"], tag)
+            world.run(PREFIX + "close_regime")
+            world.val["subject"] = "STP"
+            world.val["cosmetic"] = "VAL_STS_administration"
+            world.run(PREFIX + "apply_identity")
+            self.assertEqual(world.val["cosmetic"], "VAL_STS_administration")
+            world.val["subject"] = None
+            world.run(PREFIX + "offer_identity")
+            self.assertEqual(world.val["cosmetic"], tag)
+            self.assertNotIn(("VAL", "val_council.25"), world.events)
+
+    def test_commonwealth_proclamation_keeps_council_identity(self):
+        template = CouncilWorld()
+        # Exercise proclamation after its separately tested territorial gate succeeds.
+        body = block(template.effects["VAL_adopt_commonwealth"], "if")
+        payload = [e for e in body if e.key not in
+                   ("limit", "VAL_sync_solgalov_portrait", "VAL_grant_contract_warlord")]
+        for index, tag in enumerate(self.TAGS):
+            world = deepcopy(template)
+            self.choose(world, index)
+            world.execute(payload)
+            self.assertEqual(world.val["cosmetic"], tag)
+            self.assertIn("VAL_commonwealth_proclaimed", world.val["flags"])
+        world = deepcopy(template)
+        world.val["leader"] = "VAL_Valera_Solgalov"
+        world.execute(payload)
+        self.assertEqual(world.val["cosmetic"], "VAL_commonwealth")
+
+    def test_flags_colours_and_localised_names_are_bound_to_all_three_tags(self):
+        cosmetics = entries("common/countries/cosmetic.txt")
+        for tag, colour in zip(self.TAGS, ((127, 15, 2), (69, 100, 122), (116, 121, 75))):
+            body = block(cosmetics, tag)
+            self.assertEqual(tuple(int(e.value) for e in block(body, "color")), colour)
+            for language in ("russian", "english"):
+                raw = (ROOT / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml").read_bytes()
+                self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
+                for suffix in ("", "_DEF", "_ADJ"):
+                    self.assertRegex(raw.decode("utf-8-sig"), rf'(?m)^ {tag}{suffix}:0 "[^"\r\n]+"$')
+        for path, expected in build_adiscord_val_flags.outputs(self.TAGS):
+            self.assertEqual(path.read_bytes(), expected)
+            folder = path.parent.name if path.parent.name != "flags" else ""
+            with Image.open(BytesIO(expected)) as texture:
+                self.assertEqual(texture.size, build_adiscord_val_flags.SIZES[folder])
+                self.assertEqual(texture.mode, "RGBA")
+                self.assertEqual(texture.getchannel("A").getextrema(), (255, 255))
+            if path.stem == "VAL_kefreyt_state":
+                self.assertEqual(expected, path.with_name("VAL.tga").read_bytes())
 
 
 if __name__ == "__main__":

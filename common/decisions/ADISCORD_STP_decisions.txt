@@ -10325,6 +10325,84 @@ STP_postwar_administration = {
 		ai_will_do = { base = 4 }
 	}
 
+	# Success is the directory's recovery; the timeout is the loyalist coup.
+	STP_sdir_loyalist_plot = {
+		icon = generic_political_pressure
+		allowed = { tag = STS }
+		activation = {
+			STP_sdir_loyalist_plot_possible = yes
+			STP_sdir_directory_weak = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_directory_recovered_tt
+				STP_sdir_directory_recovered = yes
+			}
+		}
+		cancel_trigger = { STP_sdir_loyalist_plot_possible = no }
+		is_good = no
+		selectable_mission = no
+		fire_only_once = no
+		days_mission_timeout = 60
+		days_re_enable = 1
+		complete_effect = {
+			custom_effect_tooltip = STP_sdir_loyalist_cells_broken_tt
+			hidden_effect = { STP_sdir_break_loyalist_cells = yes }
+		}
+		timeout_effect = {
+			custom_effect_tooltip = STP_sdir_loyalist_coup_tt
+			effect_tooltip = {
+				add_stability = -0.10
+				add_timed_idea = {
+					idea = STP_sdir_loyalist_purge
+					days = 180
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = { STP_sdir_loyalist_plot_possible = yes }
+					set_temp_variable = { var = STP_sdir_restore_input value = 2 }
+					STP_sdir_restore_founder = yes
+					add_stability = -0.10
+					add_timed_idea = {
+						idea = STP_sdir_loyalist_purge
+						days = 180
+					}
+					country_event = { id = ADISCORD_STP_pc.92 hours = 1 }
+				}
+			}
+		}
+	}
+
+	STP_sdir_purge_loyalist_cells = {
+		icon = generic_political_pressure
+		allowed = { tag = STS }
+		visible = { has_active_mission = STP_sdir_loyalist_plot }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_loyalist_plot_open_tt
+				STP_sdir_loyalist_plot_possible = yes
+			}
+		}
+		cost = 75
+		fire_only_once = no
+		days_re_enable = 1
+		complete_effect = {
+			if = {
+				limit = { STP_sdir_loyalist_plot_possible = yes }
+				add_stability = -0.03
+				add_war_support = -0.02
+				custom_effect_tooltip = STP_sdir_loyalist_cells_broken_tt
+				hidden_effect = {
+					STP_sdir_break_loyalist_cells = yes
+					remove_mission = STP_sdir_loyalist_plot
+				}
+			}
+			else = { add_political_power = 75 }
+		}
+		ai_will_do = { base = 6 }
+	}
+
 	STP_pc_charter_sotnikov_review_command = {
 		icon = generic_political_discourse
 		allowed = { tag = STS }
@@ -10357,7 +10435,10 @@ STP_postwar_administration = {
 						check_variable = { var = STP_pc_charter_sotnikov_prison_ruling value = 1 compare = greater_than }
 					}
 				}
-				add_ideas = ADISCORD_justice_military_prosecution
+				if = {
+					limit = { NOT = { has_idea = ADISCORD_justice_military_prosecution } }
+					add_ideas = ADISCORD_justice_military_prosecution
+				}
 				add_stability = 0.02
 				custom_effect_tooltip = STP_pc_charter_sotnikov_civil_review_tt
 				hidden_effect = {

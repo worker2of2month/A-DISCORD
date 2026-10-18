@@ -91,16 +91,6 @@ ideas = {
 			ai_will_do = { factor = 1 }
 		}
 
-		minister_VAL_Valerian_Kraith = {
-			name = minister_VAL_Valerian_Kraith
-			default = no
-			cost = 75
-			picture = generic_political_advisor_europe_1
-			allowed = { tag = VAL }
-			visible = { tag = VAL }
-			allowed_to_remove = { }
-			traits = { minister_trait_VAL_hos_contract_throne }
-		}
 		minister_IVN_Mikhail_Bron = {
 			name = minister_IVN_Mikhail_Bron
 			default = no

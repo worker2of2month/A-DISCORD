@@ -92,13 +92,16 @@ scripted_gui = {
 			STP_regions_88_party_entrenched_visible = { 88 = { STP_region_map_shows_party_held = yes } }
 			STP_regions_88_local_leaning_visible = { 88 = { STP_region_map_shows_local_leaning = yes } }
 			STP_regions_88_local_dominant_visible = { 88 = { STP_region_map_shows_republics_held = yes } }
-
 		}
 	}
 	ADISCORD_STP_party_factions_panel = {
 		context_type = decision_category
 		window_name = "ADISCORD_STP_party_factions_window"
-		visible = { STP_pf_active = yes has_country_flag = STP_pf_initialized has_capitulated = no }
+		visible = {
+			STP_pf_active = yes
+			has_country_flag = STP_pf_initialized
+			has_capitulated = no
+		}
 		properties = {
 			STP_pf_conservatives_card = { frame = STP_pf_conservatives_frame }
 			STP_pf_borons_card = { frame = STP_pf_borons_frame }
@@ -109,5 +112,4 @@ scripted_gui = {
 			STP_pf_radicals_card = { frame = STP_pf_radicals_frame }
 		}
 	}
-
 }

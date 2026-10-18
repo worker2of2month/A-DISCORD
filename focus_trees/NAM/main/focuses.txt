@@ -2536,7 +2536,10 @@ focus_tree = {
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		allow_branch = { has_global_flag = ADISCORD_south_final_started }
-		prerequisite = { focus = NAM_south_oil_tap focus = NAM_south_field_fortresses }
+		prerequisite = {
+			focus = NAM_south_oil_tap
+			focus = NAM_south_field_fortresses
+		}
 		available = {
 			has_capitulated = no
 			NAM_country_operable = yes

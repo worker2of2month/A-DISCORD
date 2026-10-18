@@ -9,7 +9,16 @@ ADISCORD_south_shl_front_nam = {
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
-	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = {
+		type = front_control
+		tag = NAM
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_south_nam_front_shl = {
@@ -21,7 +30,16 @@ ADISCORD_south_nam_front_shl = {
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SHL value = 100 }
-	ai_strategy = { type = front_control tag = SHL ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = yes }
+	ai_strategy = {
+		type = front_control
+		tag = SHL
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_south_shl_front_efl = {
@@ -33,7 +51,16 @@ ADISCORD_south_shl_front_efl = {
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = EFL value = 100 }
-	ai_strategy = { type = front_control tag = EFL ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = {
+		type = front_control
+		tag = EFL
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_south_efl_front_shl = {
@@ -45,7 +72,16 @@ ADISCORD_south_efl_front_shl = {
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SHL value = 100 }
-	ai_strategy = { type = front_control tag = SHL ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		tag = SHL
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
 }
 
 ADISCORD_south_shl_front_azh = {
@@ -57,7 +93,16 @@ ADISCORD_south_shl_front_azh = {
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = AZH value = 100 }
-	ai_strategy = { type = front_control tag = AZH ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = {
+		type = front_control
+		tag = AZH
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_south_azh_front_shl = {
@@ -69,7 +114,16 @@ ADISCORD_south_azh_front_shl = {
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SHL value = 100 }
-	ai_strategy = { type = front_control tag = SHL ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		tag = SHL
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
 }
 
 # The Svetlogorsk uprising pushes from the inside of the oil belt.
@@ -81,5 +135,14 @@ ADISCORD_south_uprising_front = {
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
-	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = {
+		type = front_control
+		tag = NAM
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+		manual_attack = yes
+	}
 }

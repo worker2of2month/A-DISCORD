@@ -2981,8 +2981,18 @@ focus_tree = {
 			hidden_effect = {
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
 				ADISCORD_economy_mark_dirty = yes
-				RHM = { if = { limit = { exists = yes } set_country_flag = ADISCORD_south_indebted_to_SHL } }
-				SDR = { if = { limit = { exists = yes } set_country_flag = ADISCORD_south_indebted_to_SHL } }
+				RHM = {
+					if = {
+						limit = { exists = yes }
+						set_country_flag = ADISCORD_south_indebted_to_SHL
+					}
+				}
+				SDR = {
+					if = {
+						limit = { exists = yes }
+						set_country_flag = ADISCORD_south_indebted_to_SHL
+					}
+				}
 			}
 		}
 		ai_will_do = { base = 5 }

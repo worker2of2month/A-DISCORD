@@ -1,5 +1,4 @@
 leader_traits = {
-
 	Veteran_Of_War = {
 		random = no
 		sprite = 1
@@ -11,5 +10,4 @@ leader_traits = {
 		land_doctrine_cost_factor = -0.25
 		war_stability_factor = 0.24
 	}
-
 }

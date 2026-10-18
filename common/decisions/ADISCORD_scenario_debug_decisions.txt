@@ -8,7 +8,15 @@ ADISCORD_scenario_debug_category = {
 	}
 
 	ADISCORD_debug_open_vorkerland_dirty_zone = {
-		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA tag = RUS } }
+		allowed = {
+			OR = {
+				tag = WRK
+				tag = WKR
+				tag = VAD
+				tag = TVA
+				tag = RUS
+			}
+		}
 		visible = {
 			has_global_flag = ADISCORD_vorkerland_collapse_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_dirty_opened }
@@ -25,7 +33,13 @@ ADISCORD_scenario_debug_category = {
 	}
 
 	ADISCORD_debug_add_vorkerland_war_exhaustion = {
-		allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+		allowed = {
+			OR = {
+				tag = WKR
+				tag = VAD
+				tag = TVA
+			}
+		}
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_started }
 		cost = 0
 		complete_effect = {
@@ -44,7 +58,13 @@ ADISCORD_scenario_debug_category = {
 	}
 
 	ADISCORD_debug_reset_vorkerland_war_exhaustion = {
-		allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+		allowed = {
+			OR = {
+				tag = WKR
+				tag = VAD
+				tag = TVA
+			}
+		}
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_started }
 		cost = 0
 		complete_effect = { ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }
@@ -64,7 +84,13 @@ ADISCORD_scenario_debug_category = {
 	}
 
 	ADISCORD_debug_force_vorkerland_central_victory = {
-		allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+		allowed = {
+			OR = {
+				tag = WKR
+				tag = VAD
+				tag = TVA
+			}
+		}
 		visible = {
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
@@ -93,7 +119,10 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		complete_effect = {
 			if = {
-				limit = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started } WRK = { exists = yes } }
+				limit = {
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started }
+					WRK = { exists = yes }
+				}
 				WRK = { country_event = { id = ADISCORD_vorkerland_collapse.1 } }
 			}
 			set_global_flag = ADISCORD_vorkerland_ivanland_intervention_available
@@ -119,7 +148,14 @@ ADISCORD_scenario_debug_category = {
 	}
 
 	ADISCORD_nam_debug_start_resource_war = {
-		allowed = { OR = { tag = NAM tag = EFL tag = AZH tag = SLF } }
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = EFL
+				tag = AZH
+				tag = SLF
+			}
+		}
 		visible = { NOT = { has_global_flag = ADISCORD_nam_resource_war_started } }
 		cost = 0
 		complete_effect = { ADISCORD_nam_debug_start_resource_war = yes }
@@ -127,7 +163,14 @@ ADISCORD_scenario_debug_category = {
 	}
 
 	ADISCORD_nam_debug_resolve_coalition_victory = {
-		allowed = { OR = { tag = NAM tag = EFL tag = AZH tag = SLF } }
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = EFL
+				tag = AZH
+				tag = SLF
+			}
+		}
 		visible = { has_global_flag = ADISCORD_nam_resource_war_started }
 		cost = 0
 		complete_effect = { ADISCORD_nam_debug_resolve_coalition_victory = yes }
@@ -135,7 +178,14 @@ ADISCORD_scenario_debug_category = {
 	}
 
 	ADISCORD_nam_debug_resolve_nam_victory = {
-		allowed = { OR = { tag = NAM tag = EFL tag = AZH tag = SLF } }
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = EFL
+				tag = AZH
+				tag = SLF
+			}
+		}
 		visible = { has_global_flag = ADISCORD_nam_resource_war_started }
 		cost = 0
 		complete_effect = { ADISCORD_nam_debug_resolve_nam_victory = yes }
@@ -146,7 +196,11 @@ ADISCORD_scenario_debug_category = {
 	ADISCORD_debug_val_open_south_route = {
 		icon = generic_construction
 		allowed = { tag = VAL }
-		visible = { is_debug = yes is_ai = no NOT = { has_country_flag = ADISCORD_debug_val_south_route_active } }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			NOT = { has_country_flag = ADISCORD_debug_val_south_route_active }
+		}
 		cost = 0
 		complete_effect = {
 			set_country_flag = ADISCORD_debug_val_south_route_active
@@ -159,7 +213,11 @@ ADISCORD_scenario_debug_category = {
 	ADISCORD_debug_val_close_south_route = {
 		icon = generic_construction
 		allowed = { tag = VAL }
-		visible = { is_debug = yes is_ai = no has_country_flag = ADISCORD_debug_val_south_route_active }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			has_country_flag = ADISCORD_debug_val_south_route_active
+		}
 		cost = 0
 		complete_effect = {
 			clr_country_flag = ADISCORD_debug_val_south_route_active
@@ -174,7 +232,12 @@ ADISCORD_scenario_debug_category = {
 	ADISCORD_debug_val_upgrade_south_route = {
 		icon = generic_construction
 		allowed = { tag = VAL }
-		visible = { is_debug = yes is_ai = no has_country_flag = ADISCORD_debug_val_south_route_active NOT = { has_country_flag = VAL_route_south_upgraded } }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			has_country_flag = ADISCORD_debug_val_south_route_active
+			NOT = { has_country_flag = VAL_route_south_upgraded }
+		}
 		cost = 0
 		complete_effect = {
 			set_country_flag = VAL_route_south_upgraded
@@ -187,7 +250,11 @@ ADISCORD_scenario_debug_category = {
 	ADISCORD_debug_val_reset_corridor_project = {
 		icon = generic_construction
 		allowed = { tag = VAL }
-		visible = { is_debug = yes is_ai = no has_variable = VAL_corridor_project }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			has_variable = VAL_corridor_project
+		}
 		cost = 0
 		complete_effect = { VAL_refund_corridor_project = yes }
 		ai_will_do = { factor = 0 }
@@ -196,22 +263,35 @@ ADISCORD_scenario_debug_category = {
 	ADISCORD_debug_val_fund_treasury = {
 		icon = generic_economy
 		allowed = { tag = VAL }
-		visible = { is_debug = yes is_ai = no }
+		visible = {
+			is_debug = yes
+			is_ai = no
+		}
 		cost = 0
-		complete_effect = { set_variable = { var = ADISCORD_economy_treasury value = 5000 } ADISCORD_economy_mark_dirty = yes }
+		complete_effect = {
+			set_variable = { var = ADISCORD_economy_treasury value = 5000 }
+			ADISCORD_economy_mark_dirty = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
 	# Scenario controls call the production effects and retain their eligibility checks.
 	ADISCORD_debug_war_log_on = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no NOT = { has_global_flag = ADISCORD_war_debug_logging } }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			NOT = { has_global_flag = ADISCORD_war_debug_logging }
+		}
 		available = { always = yes }
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
 			if = {
-				limit = { is_debug = yes is_ai = no }
+				limit = {
+					is_debug = yes
+					is_ai = no
+				}
 				set_global_flag = ADISCORD_war_debug_logging
 				log = "[ADISCORD_PEACE] trace enabled"
 			}
@@ -221,13 +301,20 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_war_log_off = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no has_global_flag = ADISCORD_war_debug_logging }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			has_global_flag = ADISCORD_war_debug_logging
+		}
 		available = { always = yes }
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
 			if = {
-				limit = { is_debug = yes is_ai = no }
+				limit = {
+					is_debug = yes
+					is_ai = no
+				}
 				clr_global_flag = ADISCORD_war_debug_logging
 			}
 		}
@@ -236,13 +323,19 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_war_snapshot = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no }
+		visible = {
+			is_debug = yes
+			is_ai = no
+		}
 		available = { always = yes }
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
 			if = {
-				limit = { is_debug = yes is_ai = no }
+				limit = {
+					is_debug = yes
+					is_ai = no
+				}
 				ADISCORD_debug_war_snapshot = yes
 			}
 		}
@@ -252,14 +345,35 @@ ADISCORD_scenario_debug_category = {
 	ADISCORD_debug_war_val_start = {
 		icon = generic_prepare_civil_war
 		targets = { CIN OSF APH ERT }
-		target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } } }
-		visible = { is_debug = yes is_ai = no tag = VAL }
-		available = { VAL_frontier_postwar = yes VAL_frontier_idle = yes has_war = no FROM = { has_capitulated = no is_subject = no NOT = { is_in_faction_with = ROOT } } }
+		target_trigger = {
+			FROM = {
+				exists = yes
+				NOT = { tag = ROOT }
+			}
+		}
+		visible = {
+			is_debug = yes
+			is_ai = no
+			tag = VAL
+		}
+		available = {
+			VAL_frontier_postwar = yes
+			VAL_frontier_idle = yes
+			has_war = no
+			FROM = {
+				has_capitulated = no
+				is_subject = no
+				NOT = { is_in_faction_with = ROOT }
+			}
+		}
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
 			if = {
-				limit = { is_debug = yes is_ai = no }
+				limit = {
+					is_debug = yes
+					is_ai = no
+				}
 				if = {
 					limit = { FROM = { tag = CIN } }
 					set_variable = { var = VAL_frontier_target value = 1 }
@@ -290,13 +404,20 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_war_val_check = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			tag = VAL
+		}
 		available = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
 			if = {
-				limit = { is_debug = yes is_ai = no }
+				limit = {
+					is_debug = yes
+					is_ai = no
+				}
 				VAL_frontier_reconcile = yes
 				VAL_frontier_weekly = yes
 			}
@@ -306,13 +427,20 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_war_val_abort = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			tag = VAL
+		}
 		available = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
 			if = {
-				limit = { is_debug = yes is_ai = no }
+				limit = {
+					is_debug = yes
+					is_ai = no
+				}
 				VAL_frontier_close = yes
 			}
 		}
@@ -323,7 +451,11 @@ ADISCORD_scenario_debug_category = {
 	# Parallel-ultimatum cases remain separate wars on purpose.
 	ADISCORD_debug_war_sts_vs_val = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			tag = VAL
+		}
 		available = {
 			has_war = no
 			has_capitulated = no
@@ -351,7 +483,11 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_war_sts_vs_nod = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			tag = VAL
+		}
 		available = {
 			has_war = no
 			has_global_flag = STP_cw_union_wars_finished
@@ -382,7 +518,11 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_war_sts_vs_val_nod = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			tag = VAL
+		}
 		available = {
 			has_war = no
 			has_capitulated = no
@@ -418,7 +558,11 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_war_stp_vs_val = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			tag = VAL
+		}
 		available = {
 			has_war = no
 			has_capitulated = no
@@ -446,7 +590,11 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_war_stp_vs_nod = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			tag = VAL
+		}
 		available = {
 			has_war = no
 			has_global_flag = STP_cw_union_wars_finished
@@ -484,7 +632,11 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_war_stp_vs_val_nod = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			tag = VAL
+		}
 		available = {
 			has_war = no
 			has_capitulated = no
@@ -529,7 +681,11 @@ ADISCORD_scenario_debug_category = {
 		icon = generic_prepare_civil_war
 		targets = { CIN OSF APH }
 		target_trigger = { FROM = { exists = yes } }
-		visible = { is_debug = yes is_ai = no tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			tag = VAL
+		}
 		available = {
 			VAL_frontier_postwar = yes
 			VAL_frontier_idle = yes
@@ -570,7 +726,11 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_war_val_join_sts_nod = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			tag = VAL
+		}
 		available = {
 			has_war = no
 			has_capitulated = no
@@ -607,7 +767,11 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_war_val_vs_nod = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			tag = VAL
+		}
 		available = {
 			has_war = no
 			has_capitulated = no
@@ -634,7 +798,11 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_war_val_nod_victory = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			tag = VAL
+		}
 		available = {
 			has_capitulated = no
 			is_subject = no
@@ -648,7 +816,11 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_war_val_victory = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			tag = VAL
+		}
 		available = {
 			has_capitulated = no
 			is_subject = no
@@ -665,7 +837,11 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_war_val_nod_reconcile = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			tag = VAL
+		}
 		available = {
 			OR = {
 				has_war_with = NOD
@@ -706,17 +882,39 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_war_external_cleanup = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			tag = VAL
+		}
 		available = { always = yes }
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
-			if = { limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } } VAL_frontier_close = yes }
-			if = { limit = { has_variable = VAL_final_crisis_phase check_variable = { var = VAL_final_crisis_phase value = 0 compare = greater_than } } VAL_final_crisis_close = yes }
-			if = { limit = { has_war_with = NOD } white_peace = NOD }
+			if = {
+				limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
+				VAL_frontier_close = yes
+			}
+			if = {
+				limit = {
+					has_variable = VAL_final_crisis_phase
+					check_variable = { var = VAL_final_crisis_phase value = 0 compare = greater_than }
+				}
+				VAL_final_crisis_close = yes
+			}
+			if = {
+				limit = { has_war_with = NOD }
+				white_peace = NOD
+			}
 			STP = {
-				if = { limit = { has_war_with = VAL } white_peace = VAL }
-				if = { limit = { has_war_with = NOD } white_peace = NOD }
+				if = {
+					limit = { has_war_with = VAL }
+					white_peace = VAL
+				}
+				if = {
+					limit = { has_war_with = NOD }
+					white_peace = NOD
+				}
 				clr_country_flag = STP_pw_party_nod_threat_active
 				clr_country_flag = STP_pw_party_compact_pending
 				clr_country_flag = STP_pw_party_nod_invasion_active
@@ -724,8 +922,14 @@ ADISCORD_scenario_debug_category = {
 				remove_decision = STP_pw_party_nod_invasion_countdown
 			}
 			STS = {
-				if = { limit = { has_war_with = VAL } white_peace = VAL }
-				if = { limit = { has_war_with = NOD } white_peace = NOD }
+				if = {
+					limit = { has_war_with = VAL }
+					white_peace = VAL
+				}
+				if = {
+					limit = { has_war_with = NOD }
+					white_peace = NOD
+				}
 				clr_country_flag = VAL_stelander_refused
 			}
 			NOD = {
@@ -744,13 +948,19 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_war_reserves = {
 		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no }
+		visible = {
+			is_debug = yes
+			is_ai = no
+		}
 		available = { always = yes }
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
 			if = {
-				limit = { is_debug = yes is_ai = no }
+				limit = {
+					is_debug = yes
+					is_ai = no
+				}
 				add_manpower = 50000
 				add_equipment_to_stockpile = { type = infantry_equipment amount = 100000 producer = ROOT }
 			}
@@ -763,7 +973,11 @@ ADISCORD_scenario_debug_category = {
 	# Close before reopening to replay the opening flash.
 	ADISCORD_debug_portal_open = {
 		icon = generic_research
-		visible = { is_debug = yes is_ai = no NOT = { has_global_flag = ADISCORD_debug_portal_open } }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			NOT = { has_global_flag = ADISCORD_debug_portal_open }
+		}
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
@@ -775,7 +989,11 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_portal_close = {
 		icon = generic_research
-		visible = { is_debug = yes is_ai = no has_global_flag = ADISCORD_debug_portal_open }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			has_global_flag = ADISCORD_debug_portal_open
+		}
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
@@ -792,7 +1010,10 @@ ADISCORD_scenario_debug_category = {
 	# Orbital laser particle test (independent of the portal test).
 	ADISCORD_debug_orbital_laser_fire = {
 		icon = generic_research
-		visible = { is_debug = yes is_ai = no }
+		visible = {
+			is_debug = yes
+			is_ai = no
+		}
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
@@ -804,7 +1025,11 @@ ADISCORD_scenario_debug_category = {
 
 	ADISCORD_debug_orbital_laser_clear = {
 		icon = generic_research
-		visible = { is_debug = yes is_ai = no has_global_flag = ADISCORD_debug_orbital_laser_active }
+		visible = {
+			is_debug = yes
+			is_ai = no
+			has_global_flag = ADISCORD_debug_orbital_laser_active
+		}
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
@@ -844,7 +1069,10 @@ ADISCORD_test_wars_category = {
 			clr_country_flag = ADISCORD_aph_osf_test_war_decision_unlocked
 
 			OSF = {
-				if = { limit = { is_in_faction_with = APH } leave_faction = yes }
+				if = {
+					limit = { is_in_faction_with = APH }
+					leave_faction = yes
+				}
 			}
 
 			declare_war_on = { target = OSF type = annex_everything }
@@ -853,4 +1081,5 @@ ADISCORD_test_wars_category = {
 		ai_will_do = { factor = 1 }
 	}
 }
+
 # END CONSOLIDATED: ADISCORD_test_wars_decisions.txt

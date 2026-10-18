@@ -6373,6 +6373,126 @@
       "status": "active"
     },
     {
+      "id": "val_council.11",
+      "namespace": "val_council",
+      "number": 11,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.12",
+      "namespace": "val_council",
+      "number": 12,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.13",
+      "namespace": "val_council",
+      "number": 13,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.14",
+      "namespace": "val_council",
+      "number": 14,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.15",
+      "namespace": "val_council",
+      "number": 15,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.16",
+      "namespace": "val_council",
+      "number": 16,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.17",
+      "namespace": "val_council",
+      "number": 17,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.18",
+      "namespace": "val_council",
+      "number": 18,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.19",
+      "namespace": "val_council",
+      "number": 19,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.20",
+      "namespace": "val_council",
+      "number": 20,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.21",
+      "namespace": "val_council",
+      "number": 21,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.22",
+      "namespace": "val_council",
+      "number": 22,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.23",
+      "namespace": "val_council",
+      "number": 23,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.24",
+      "namespace": "val_council",
+      "number": 24,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.25",
+      "namespace": "val_council",
+      "number": 25,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_pc.86",
       "namespace": "ADISCORD_STP_pc",
       "number": 86,
@@ -6386,6 +6506,38 @@
       "number": 87,
       "owner": "events/ADISCORD_STP_events.txt",
       "subsystem": "STP_postwar_course",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.90",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 90,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.91",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 91,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.92",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 92,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.93",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 93,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar_continuation",
       "status": "active"
     }
   ]

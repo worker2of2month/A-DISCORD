@@ -1,5 +1,4 @@
 leader_traits = {
-
 	cof_older_one = {
 		random = no
 		sprite = 1
@@ -19,6 +18,4 @@ leader_traits = {
 		sprite = 1
 		political_power_gain = 0.1
 	}
-
-
 }

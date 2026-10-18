@@ -138,4 +138,7 @@ VAL_council_mandate_approval
 VAL_council_mandate_deadline
 VAL_council_hearing_deadline
 VAL_council_preventive_deadline
+VAL_council_plan_hold_line
+VAL_council_plan_iron_shield
+VAL_council_plan_arsenal
 VAL_quarterly_contract_deadline

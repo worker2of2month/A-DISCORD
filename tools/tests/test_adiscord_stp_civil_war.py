@@ -8291,7 +8291,7 @@ class PostwarFocusContracts(unittest.TestCase):
             directory = {name for name in visible if name.startswith("STP_pc_sdir_")}
             ordinary = {name for name in visible if name.startswith("STP_pc_sot_")}
             with self.subTest(arrested=arrested):
-                self.assertEqual((len(directory), len(ordinary)), (40, 0) if arrested else (0, 10))
+                self.assertEqual((len(directory), len(ordinary)), (41, 0) if arrested else (0, 10))
                 positions = [visible[name] for name in directory | ordinary]
                 self.assertEqual(len(positions), len(set(positions)))
         triggers = {

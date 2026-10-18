@@ -1455,3 +1455,114 @@ defined_text = {
 	}
 	text = { localization_key = VAL_COUNCIL_SEATS_PENDING }
 }
+
+# Council story texts read the settled plan, the largest delegation,
+# Solgalov's fate and the head installed by the permanent government.
+defined_text = {
+	name = VALGetCouncilPlanReport
+	text = {
+		trigger = { check_variable = { var = VAL_council_plan_last value = 1 compare = equals } }
+		localization_key = VAL_COUNCIL_PLAN_REPORT_LINE
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_council_plan_last value = 2 compare = equals } }
+		localization_key = VAL_COUNCIL_PLAN_REPORT_SHIELD
+	}
+	text = { localization_key = VAL_COUNCIL_PLAN_REPORT_ARSENAL }
+}
+
+defined_text = {
+	name = VALGetCouncilPlanFailure
+	text = {
+		trigger = { check_variable = { var = VAL_council_plan_last value = 1 compare = equals } }
+		localization_key = VAL_COUNCIL_PLAN_FAILURE_LINE
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_council_plan_last value = 2 compare = equals } }
+		localization_key = VAL_COUNCIL_PLAN_FAILURE_SHIELD
+	}
+	text = { localization_key = VAL_COUNCIL_PLAN_FAILURE_ARSENAL }
+}
+
+defined_text = {
+	name = VALGetCouncilActivePlan
+	text = {
+		trigger = { check_variable = { var = VAL_council_plan_kind value = 1 compare = equals } }
+		localization_key = VAL_COUNCIL_ACTIVE_PLAN_LINE
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_council_plan_kind value = 2 compare = equals } }
+		localization_key = VAL_COUNCIL_ACTIVE_PLAN_SHIELD
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_council_plan_kind value = 3 compare = equals } }
+		localization_key = VAL_COUNCIL_ACTIVE_PLAN_ARSENAL
+	}
+	text = { localization_key = VAL_COUNCIL_ACTIVE_PLAN_NONE }
+}
+
+defined_text = {
+	name = VALGetCouncilDemand
+	text = {
+		trigger = { VAL_council_garrison_leads = yes }
+		localization_key = VAL_COUNCIL_DEMAND_GARRISON
+	}
+	text = {
+		trigger = { VAL_council_front_leads = yes }
+		localization_key = VAL_COUNCIL_DEMAND_FRONT
+	}
+	text = { localization_key = VAL_COUNCIL_DEMAND_SUPPLY }
+}
+
+defined_text = {
+	name = VALGetCouncilSolgalovFate
+	text = {
+		trigger = { check_variable = { var = VAL_council_solgalov_fate value = 1 compare = equals } }
+		localization_key = VAL_COUNCIL_FATE_TRIAL
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_council_solgalov_fate value = 2 compare = equals } }
+		localization_key = VAL_COUNCIL_FATE_HELD
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_council_solgalov_fate value = 3 compare = equals } }
+		localization_key = VAL_COUNCIL_FATE_EXILE
+	}
+	text = { localization_key = VAL_COUNCIL_FATE_PENDING }
+}
+
+defined_text = {
+	name = VALGetCouncilUnrest
+	text = {
+		trigger = { check_variable = { var = VAL_council_solgalov_fate value = 2 compare = equals } }
+		localization_key = VAL_COUNCIL_UNREST_RESCUE
+	}
+	text = { localization_key = VAL_COUNCIL_UNREST_SABOTAGE }
+}
+
+defined_text = {
+	name = VALGetCouncilCommander
+	text = {
+		trigger = { has_country_leader = { character = VAL_Tamara_Greitz ruling_only = yes } }
+		localization_key = VAL_COUNCIL_COMMANDER_GREITZ
+	}
+	text = {
+		trigger = { has_country_leader = { character = VAL_Arkadi_Lemm ruling_only = yes } }
+		localization_key = VAL_COUNCIL_COMMANDER_LEMM
+	}
+	text = { localization_key = VAL_COUNCIL_COMMANDER_OSTEN }
+}
+
+# Finale and epilogue paragraphs follow the northern course chosen in the main tree.
+defined_text = {
+	name = VALGetNorthCourseFinale
+	text = { trigger = { has_country_flag = VAL_north_open_market } localization_key = VAL_NW_FINALE_OPEN_MARKET }
+	text = { trigger = { has_country_flag = VAL_north_coercive } localization_key = VAL_NW_FINALE_COERCIVE }
+	text = { localization_key = VAL_NW_COURSE_NONE }
+}
+defined_text = {
+	name = VALGetNorthCourseEpilogue
+	text = { trigger = { has_country_flag = VAL_north_open_market } localization_key = VAL_NW_EPILOGUE_OPEN_MARKET }
+	text = { trigger = { has_country_flag = VAL_north_coercive } localization_key = VAL_NW_EPILOGUE_COERCIVE }
+	text = { localization_key = VAL_NW_COURSE_NONE }
+}

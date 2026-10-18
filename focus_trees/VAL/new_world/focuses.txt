@@ -913,6 +913,35 @@ focus_tree = {
 		}
 		completion_reward = {
 			add_stability = 0.05
+			# Northern course flags from the main tree survive the tree change.
+			if = {
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = VAL_nw_course_open_market_tt
+						has_country_flag = VAL_north_open_market
+					}
+				}
+				effect_tooltip = {
+					add_ideas = VAL_nw_open_market_delta
+				}
+				hidden_effect = {
+					VAL_nw_settle_open_market = yes
+				}
+			}
+			else_if = {
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = VAL_nw_course_coercive_tt
+						has_country_flag = VAL_north_coercive
+					}
+				}
+				effect_tooltip = {
+					add_ideas = VAL_nw_coercive_market_delta
+				}
+				hidden_effect = {
+					VAL_nw_settle_coercive_market = yes
+				}
+			}
 			hidden_effect = {
 				country_event = { id = val_rework.129 }
 			}

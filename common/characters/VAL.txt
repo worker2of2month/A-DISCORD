@@ -310,4 +310,74 @@ characters = {
 		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } }
 		country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
 	}
+
+	# Commanders Council: delegation heads and Velsky's guaranteed cabinet.
+	# They are recruited by the coup; portraits are placeholders.
+	VAL_Gleb_Osten = {
+		name = VAL_Gleb_Osten
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_7
+			}
+			army = {
+				large = GFX_Portrait_Forul_Generic_7
+				small = GFX_Portrait_Forul_Generic_7_small
+			}
+		}
+		country_leader = {
+			ideology = contractual_etatism
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
+
+	VAL_Tamara_Greitz = {
+		name = VAL_Tamara_Greitz
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_8
+			}
+			army = {
+				large = GFX_Portrait_Forul_Generic_8
+				small = GFX_Portrait_Forul_Generic_8_small
+			}
+		}
+		country_leader = {
+			ideology = contractual_etatism
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
+
+	VAL_Arkadi_Lemm = {
+		name = VAL_Arkadi_Lemm
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_9
+			}
+			army = {
+				large = GFX_Portrait_Forul_Generic_9
+				small = GFX_Portrait_Forul_Generic_9_small
+			}
+		}
+		country_leader = {
+			ideology = contractual_etatism
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
+
+	VAL_Mikhail_Velsky = {
+		name = VAL_Mikhail_Velsky
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_2
+			}
+		}
+		country_leader = {
+			ideology = contractual_etatism
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
 }

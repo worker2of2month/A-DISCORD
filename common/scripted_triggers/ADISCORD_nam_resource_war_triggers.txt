@@ -46,9 +46,19 @@ ADISCORD_nam_resource_war_defender_capitulation = {
 	}
 	has_war_with = NAM
 	OR = {
-		FROM = { OR = { tag = NAM is_subject_of = NAM } }
+		FROM = {
+			OR = {
+				tag = NAM
+				is_subject_of = NAM
+			}
+		}
 		capital_scope = {
-			controller = { OR = { tag = NAM is_subject_of = NAM } }
+			controller = {
+				OR = {
+					tag = NAM
+					is_subject_of = NAM
+				}
+			}
 		}
 	}
 }

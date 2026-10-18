@@ -322,7 +322,10 @@
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_shabrat_resistance_memory focus = STP_pc_charter_shabrat_national_service }
+		prerequisite = {
+			focus = STP_pc_charter_shabrat_resistance_memory
+			focus = STP_pc_charter_shabrat_national_service
+		}
 		prerequisite = { focus = STP_pc_charter_shabrat_district_grants }
 		prerequisite = { focus = STP_pc_charter_shabrat_tools_inventory }
 		cancel_if_invalid = yes
@@ -862,7 +865,10 @@
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_shabrat_national_arsenal focus = STP_pc_charter_shabrat_economic_sovereignty }
+		prerequisite = {
+			focus = STP_pc_charter_shabrat_national_arsenal
+			focus = STP_pc_charter_shabrat_economic_sovereignty
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
@@ -900,7 +906,10 @@
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_shabrat_district_reserves focus = STP_pc_charter_shabrat_border_drills }
+		prerequisite = {
+			focus = STP_pc_charter_shabrat_district_reserves
+			focus = STP_pc_charter_shabrat_border_drills
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {

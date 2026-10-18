@@ -126,7 +126,12 @@ scripted_gui = {
 		context_type = player_context
 		parent_window_name = "countrypoliticsview"
 		window_name = "ADISCORD_development_launcher"
-		visible = { OR = { ADISCORD_is_playable_development_country = yes is_ai = no } }
+		visible = {
+			OR = {
+				ADISCORD_is_playable_development_country = yes
+				is_ai = no
+			}
+		}
 		effects = {
 			ADISCORD_development_open_click = {
 				if = {
@@ -145,7 +150,10 @@ scripted_gui = {
 		parent_window_name = "countrypoliticsview"
 		window_name = "ADISCORD_development_category_society_type"
 		visible = {
-			OR = { ADISCORD_is_playable_development_country = yes is_ai = no }
+			OR = {
+				ADISCORD_is_playable_development_country = yes
+				is_ai = no
+			}
 			check_variable = { var = ADISCORD_development_show_window value = 1 compare = greater_than_or_equals }
 		}
 		effects = {

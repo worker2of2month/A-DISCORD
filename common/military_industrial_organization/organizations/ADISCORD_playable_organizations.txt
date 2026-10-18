@@ -4,9 +4,24 @@ STP_qol_arsenal = {
 	name = STP_qol_arsenal
 	icon = GFX_idea_ADISCORD_economic_system_industrializing
 	# allowed is evaluated in COUNTRY scope during registration, not at unlock time.
-	allowed = { OR = { tag = STP tag = STS } }
-	visible = { FROM = { STP_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
-	available = { FROM = { STP_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
+	allowed = {
+		OR = {
+			tag = STP
+			tag = STS
+		}
+	}
+	visible = {
+		FROM = {
+			STP_qol_staff_available = yes
+			has_dlc = "Arms Against Tyranny"
+		}
+	}
+	available = {
+		FROM = {
+			STP_qol_staff_available = yes
+			has_dlc = "Arms Against Tyranny"
+		}
+	}
 	equipment_type = { infantry_equipment ADISCORD_squad_weapons_equipment support_equipment }
 	research_categories = { infantry_weapons support_tech }
 	research_bonus = 0.05
@@ -55,9 +70,24 @@ STP_qol_airworks = {
 	name = STP_qol_airworks
 	icon = GFX_idea_ADISCORD_economic_system_technocratic
 	# allowed is evaluated in COUNTRY scope during registration, not at unlock time.
-	allowed = { OR = { tag = STP tag = STS } }
-	visible = { FROM = { STP_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
-	available = { FROM = { STP_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
+	allowed = {
+		OR = {
+			tag = STP
+			tag = STS
+		}
+	}
+	visible = {
+		FROM = {
+			STP_qol_staff_available = yes
+			has_dlc = "Arms Against Tyranny"
+		}
+	}
+	available = {
+		FROM = {
+			STP_qol_staff_available = yes
+			has_dlc = "Arms Against Tyranny"
+		}
+	}
 	equipment_type = { ADISCORD_fighter_archetype ADISCORD_cas_archetype }
 	research_categories = { air_equipment }
 	research_bonus = 0.05
@@ -106,9 +136,24 @@ STP_qol_armor_bureau = {
 	name = STP_qol_armor_bureau
 	icon = GFX_idea_ADISCORD_economic_system_state_coordinated
 	# allowed is evaluated in COUNTRY scope during registration, not at unlock time.
-	allowed = { OR = { tag = STP tag = STS } }
-	visible = { FROM = { STP_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
-	available = { FROM = { STP_qol_elite_army_available = yes has_dlc = "Arms Against Tyranny" } }
+	allowed = {
+		OR = {
+			tag = STP
+			tag = STS
+		}
+	}
+	visible = {
+		FROM = {
+			STP_qol_staff_available = yes
+			has_dlc = "Arms Against Tyranny"
+		}
+	}
+	available = {
+		FROM = {
+			STP_qol_elite_army_available = yes
+			has_dlc = "Arms Against Tyranny"
+		}
+	}
 	equipment_type = { ADISCORD_combat_platform_archetype }
 	research_categories = { armor }
 	research_bonus = 0.08
@@ -158,8 +203,18 @@ VAL_qol_arsenal = {
 	icon = GFX_idea_ADISCORD_economic_system_industrializing
 	# allowed is evaluated in COUNTRY scope during registration, not at unlock time.
 	allowed = { tag = VAL }
-	visible = { FROM = { VAL_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
-	available = { FROM = { VAL_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
+	visible = {
+		FROM = {
+			VAL_qol_staff_available = yes
+			has_dlc = "Arms Against Tyranny"
+		}
+	}
+	available = {
+		FROM = {
+			VAL_qol_staff_available = yes
+			has_dlc = "Arms Against Tyranny"
+		}
+	}
 	equipment_type = { infantry_equipment ADISCORD_squad_weapons_equipment support_equipment }
 	research_categories = { infantry_weapons support_tech }
 	research_bonus = 0.05
@@ -209,8 +264,18 @@ VAL_qol_airworks = {
 	icon = GFX_idea_ADISCORD_economic_system_technocratic
 	# allowed is evaluated in COUNTRY scope during registration, not at unlock time.
 	allowed = { tag = VAL }
-	visible = { FROM = { VAL_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
-	available = { FROM = { VAL_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
+	visible = {
+		FROM = {
+			VAL_qol_staff_available = yes
+			has_dlc = "Arms Against Tyranny"
+		}
+	}
+	available = {
+		FROM = {
+			VAL_qol_staff_available = yes
+			has_dlc = "Arms Against Tyranny"
+		}
+	}
 	equipment_type = { ADISCORD_fighter_archetype ADISCORD_cas_archetype }
 	research_categories = { air_equipment }
 	research_bonus = 0.05
@@ -260,8 +325,18 @@ VAL_qol_armor_bureau = {
 	icon = GFX_idea_ADISCORD_economic_system_state_coordinated
 	# allowed is evaluated in COUNTRY scope during registration, not at unlock time.
 	allowed = { tag = VAL }
-	visible = { FROM = { VAL_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
-	available = { FROM = { VAL_qol_elite_army_available = yes has_dlc = "Arms Against Tyranny" } }
+	visible = {
+		FROM = {
+			VAL_qol_staff_available = yes
+			has_dlc = "Arms Against Tyranny"
+		}
+	}
+	available = {
+		FROM = {
+			VAL_qol_elite_army_available = yes
+			has_dlc = "Arms Against Tyranny"
+		}
+	}
 	equipment_type = { ADISCORD_combat_platform_archetype }
 	research_categories = { armor }
 	research_bonus = 0.08

@@ -16,6 +16,22 @@ python -B -m tools.builders.build_adiscord_island_administration_icon --check
 
 Native sizes are 82x52, 41x26 and 10x7, opaque RGBA TGA. Runtime generators only resize and encode the authored artwork.
 
+## Kefreyt Council
+
+`tools.builders.build_adiscord_val_flags` owns the Council's three flag triplets.
+`VAL_kefreyt_state` copies the existing `VAL` textures byte-for-byte.
+`VAL_valden_republic` and `VAL_united_military_districts` use approved external
+artwork supplied with repeatable `--import-flag TAG PATH` arguments. Use
+`--flags-only VAL_kefreyt_state VAL_valden_republic VAL_united_military_districts`
+to export only this choice set, first with `--check`, then `--apply`.
+
+The import writes runtime textures only; high-resolution originals remain with
+their owner. The 82x52 TGA becomes the runtime master for the two smaller sizes.
+Subsequent `--check` and `--apply` runs need no import arguments. Replacing either
+design requires its external original again. Map colours are defined in
+`common/countries/cosmetic.txt`: Kefreyt State `127 15 2`, Valden Republic
+`69 100 122`, United Military Districts `116 121 75`.
+
 ## Shared generation prompt
 
 Use case: precise-object-edit / logo-brand. Redesign the supplied existing national flag for a fictional Hearts of Iron IV country. Input image is the edit target. Deliver ONE polished full-bleed rectangular flat flag artwork, landscape aspect ratio 82:52. Preserve its recognizable palette and primary field geometry, refine proportions and add the distinctive emblem described below. Crisp flat vector-like shapes, bold enough for 82x52 and 41x26 game textures. Maximum four flat colors. No cloth, no folds, no gradients, no lighting, no texture, no perspective, no borders or empty margins, no lettering, no slogans, no numerals, no watermark, no mockup. Restrained professional vexillology, not an ornate coat of arms. Important emblem should occupy roughly 60 percent of flag height with clean negative space.

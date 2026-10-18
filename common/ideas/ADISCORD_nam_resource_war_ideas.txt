@@ -114,8 +114,7 @@ ideas = {
 			on_add = { ADISCORD_economy_mark_dirty = yes }
 			on_remove = { ADISCORD_economy_mark_dirty = yes }
 			cancel = { NOT = { has_war_with = SLF } }
-			modifier = {
-			}
+			modifier = { }
 			targeted_modifier = {
 				tag = SLF
 				attack_bonus_against = 0.08

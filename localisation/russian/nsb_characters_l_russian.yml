@@ -20,6 +20,10 @@
   VAL_valera_solgalov: "Валера Солгалов"
   VAL_Valera_Solgalov: "Валера Солгалов"
   VAL_Commanders_Council: "Совет командиров"
+  VAL_Gleb_Osten: "Глеб Остен"
+  VAL_Tamara_Greitz: "Тамара Грейц"
+  VAL_Arkadi_Lemm: "Аркадий Лемм"
+  VAL_Mikhail_Velsky: "Михаил Вельский"
   VAL_Kirill_Voron: "Кирилл Ворон"
   VAL_Erika_Stahl: "Эрика Шталь"
   VAL_Boris_Gromov: "Борис Громов"
@@ -224,7 +228,6 @@
  minister_STS_Tomas_Krey: "Томас Крей"
  minister_STS_Lia_Verst: "Леон Верст"
  # VAL
- minister_VAL_Valerian_Kraith: "Валериан Крайт"
  minister_VAL_Arseny_Bragin: "Арсений Брагин"
  minister_VAL_Miron_Sablev: "Мирон Саблев"
  minister_VAL_Lada_Khrom: "Ладислав Хром"

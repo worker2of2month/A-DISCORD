@@ -2,17 +2,14 @@
 ##These ministers are applied to every country. When adding more advisors, modify this file.##
 ##############################################################################################
 
-
 ideas = {
 	# Old vanilla political advisors are disabled; A-Discord uses custom advisor slots.
 
 	# TECHNOLOGY
 	tank_manufacturer = {
-
 		designer = yes
 
 		heavy_tank_manufacturer = {
-
 			picture = generic_tank_manufacturer_1
 
 			research_bonus = {
@@ -20,11 +17,9 @@ ideas = {
 			}
 
 			traits = { heavy_tank_manufacturer }
-
 		}
 
 		fast_tank_manufacturer = {
-
 			picture = generic_tank_manufacturer_2
 
 			research_bonus = {
@@ -35,7 +30,6 @@ ideas = {
 		}
 
 		medium_tank_manufacturer = {
-
 			picture = generic_tank_manufacturer_3
 
 			research_bonus = {
@@ -47,27 +41,21 @@ ideas = {
 	}
 
 	naval_manufacturer = {
-
 		designer = yes
 
 		atlantic_fleet_naval_manufacturer = {
-
 			picture = generic_navy_europe_2
 
 			research_bonus = {
 				naval_equipment = 0.10
 			}
 
-			equipment_bonus = {
-
-			}
+			equipment_bonus = { }
 
 			traits = { atlantic_fleet_naval_manufacturer }
-
 		}
 
 		raiding_fleet_naval_manufacturer = {
-
 			picture = generic_navy_europe_1
 
 			research_bonus = {
@@ -75,17 +63,13 @@ ideas = {
 			}
 
 			traits = { raiding_fleet_naval_manufacturer }
-
 		}
 	}
 
 	aircraft_manufacturer = {
-
-
 		designer = yes
 
 		light_aircraft_manufacturer = {
-
 			picture = generic_air_manufacturer_1
 
 			research_bonus = {
@@ -96,7 +80,6 @@ ideas = {
 		}
 
 		CAS_manufacturer = {
-
 			picture = generic_air_manufacturer_2
 
 			research_bonus = {
@@ -105,14 +88,10 @@ ideas = {
 
 			traits = { CAS_manufacturer }
 
-			equipment_bonus = {
-
-			}
+			equipment_bonus = { }
 		}
 
-
 		medium_aircraft_manufacturer = {
-
 			picture = generic_air_manufacturer_3
 
 			research_bonus = {
@@ -123,9 +102,7 @@ ideas = {
 		}
 
 		heavy_aircraft_manufacturer = {
-
 			picture = generic_air_manufacturer_3
-
 
 			research_bonus = {
 				air_equipment = 0.10
@@ -135,9 +112,7 @@ ideas = {
 		}
 
 		naval_aircraft_manufacturer = {
-
 			picture = generic_air_manufacturer_3
-
 
 			research_bonus = {
 				air_equipment = 0.10
@@ -145,14 +120,10 @@ ideas = {
 
 			traits = { naval_aircraft_manufacturer }
 		}
-
-
 	}
 
 	industrial_concern = {
-
 		refinery_concern = {
-
 			picture = generic_refining_concern_1
 
 			research_bonus = {
@@ -164,19 +135,16 @@ ideas = {
 		}
 
 		industrial_concern = {
-
 			picture = generic_industrial_concern_1
 
 			research_bonus = {
 				industry = 0.10
-
 			}
 
 			traits = { industrial_concern }
 		}
 
 		electronics_concern = {
-
 			picture = generic_electronics_concern_1
 
 			research_bonus = {
@@ -188,11 +156,9 @@ ideas = {
 	}
 
 	materiel_manufacturer = {
-
 		designer = yes
 
 		artillery_manufacturer = {
-
 			picture = generic_artillery_manufacturer_1
 
 			research_bonus = {
@@ -207,7 +173,6 @@ ideas = {
 		}
 
 		infantry_equipment_manufacturer = {
-
 			picture = generic_infantry_equipment_manufacturer_1
 
 			research_bonus = {
@@ -217,11 +182,7 @@ ideas = {
 			traits = { infantry_equipment_manufacturer }
 		}
 
-
-
-
 		motorized_equipment_manufacturer = {
-
 			picture = generic_motorized_equipment_manufacturer_1
 
 			research_bonus = {
@@ -268,7 +229,6 @@ ideas = {
 				land_doctrine = 0.07
 			}
 
-
 			traits = { grand_battle_plan_expert }
 		}
 
@@ -282,7 +242,6 @@ ideas = {
 			research_bonus = {
 				land_doctrine = 0.07
 			}
-
 
 			traits = { mobile_warfare_expert }
 		}
@@ -298,7 +257,6 @@ ideas = {
 				land_doctrine = 0.07
 			}
 
-
 			traits = { mass_assault_expert }
 		}
 
@@ -312,7 +270,6 @@ ideas = {
 			research_bonus = {
 				land_doctrine = 0.07
 			}
-
 
 			traits = { superior_firepower_expert }
 		}
@@ -384,7 +341,6 @@ ideas = {
 
 	# MILITARY
 	army_chief = {
-
 		army_chief_organizational_2_advisor = {
 			allowed = { ADISCORD_has_national_military_staff = no }
 
@@ -393,7 +349,7 @@ ideas = {
 			traits = { army_chief_organizational_2 }
 		}
 
-		army_chief_drill_2_advisor  = {
+		army_chief_drill_2_advisor = {
 			allowed = { ADISCORD_has_national_military_staff = no }
 
 			picture = generic_political_advisor_europe_2
@@ -418,13 +374,11 @@ ideas = {
 
 			picture = generic_political_advisor_europe_4
 
-
 			traits = { army_chief_maneuver_2 }
 		}
 	}
 
 	air_chief = {
-
 		air_chief_ground_support_2_advisor = {
 			allowed = { ADISCORD_has_national_military_staff = no }
 
@@ -470,7 +424,6 @@ ideas = {
 	}
 
 	high_command = {
-
 		army_infantry_2_advisor = {
 			allowed = { ADISCORD_has_national_military_staff = no }
 
@@ -551,5 +504,4 @@ ideas = {
 			traits = { navy_anti_submarine_1 }
 		}
 	}
-
 }

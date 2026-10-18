@@ -1865,6 +1865,61 @@ STP_pc_sdir_nod_resolved = {
 	}
 }
 
+# COUNTRY STS: the party's prisoner passed to the directory at the union victory.
+STP_sdir_founder_in_custody = {
+	has_character = STP_maksim_shabrat
+	STP_maksim_shabrat = { has_character_flag = STP_cw_arrested }
+}
+
+# COUNTRY STS: both the handover and the coup need the sitting directory and its prisoner.
+STP_sdir_founder_restorable = {
+	STP_pc_sword_directory_current = yes
+	STP_sdir_founder_in_custody = yes
+	is_subject = no
+	has_capitulated = no
+}
+
+# COUNTRY STS: STP_sdir_founder_custody 1 = staff guard, 2 = honourable arrest,
+# 3 = loyalist cells broken. Only the first two leave room for a plot.
+STP_sdir_directory_weak = {
+	OR = {
+		surrender_progress > 0.25
+		AND = {
+			check_variable = { var = STP_sdir_founder_custody value = 1 compare = equals }
+			has_stability < 0.30
+		}
+		AND = {
+			check_variable = { var = STP_sdir_founder_custody value = 2 compare = equals }
+			has_stability < 0.45
+		}
+	}
+}
+
+STP_sdir_loyalist_plot_possible = {
+	STP_sdir_founder_restorable = yes
+	OR = {
+		check_variable = { var = STP_sdir_founder_custody value = 1 compare = equals }
+		check_variable = { var = STP_sdir_founder_custody value = 2 compare = equals }
+	}
+	NOT = { has_completed_focus = STP_pc_sdir_sword_directory }
+	NOT = { has_completed_focus = STP_pc_sdir_return_seal }
+}
+
+# COUNTRY STS: the plot is exposed once the directory regains a clear margin.
+STP_sdir_directory_recovered = {
+	NOT = { surrender_progress > 0.10 }
+	OR = {
+		AND = {
+			check_variable = { var = STP_sdir_founder_custody value = 1 compare = equals }
+			NOT = { has_stability < 0.40 }
+		}
+		AND = {
+			check_variable = { var = STP_sdir_founder_custody value = 2 compare = equals }
+			NOT = { has_stability < 0.55 }
+		}
+	}
+}
+
 STP_sdir_occidia_resolved = {
 	tag = STS
 	NOT = { SRP = { exists = yes } }

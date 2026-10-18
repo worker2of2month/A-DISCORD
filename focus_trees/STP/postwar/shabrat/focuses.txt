@@ -2508,6 +2508,7 @@
 				STP_pc_lock_directory = yes
 				mark_focus_tree_layout_dirty = yes
 				country_event = { id = ADISCORD_STP_pc.71 days = 1 }
+				country_event = { id = ADISCORD_STP_pc.90 days = 8 }
 			}
 		}
 	}
@@ -3541,8 +3542,10 @@
 			if = {
 				limit = {
 					NOT = {
-						has_completed_focus = STP_pw_regional_citizenship
-						has_completed_focus = STP_pc_heg_administrations
+						OR = {
+							has_completed_focus = STP_pw_regional_citizenship
+							has_completed_focus = STP_pc_heg_administrations
+						}
 					}
 				}
 				unlock_decision_tooltip = STP_pw_nationalise_region
@@ -3719,6 +3722,7 @@
 		prerequisite = { focus = STP_pc_sdir_arsenal_acceptance }
 		prerequisite = { focus = STP_pc_sdir_naval_repair_yards }
 		prerequisite = { focus = STP_pc_sdir_integrated_rear }
+		mutually_exclusive = { focus = STP_pc_sdir_return_seal }
 		ai_will_do = { base = 4 }
 		completion_reward = {
 			add_war_support = 0.05
@@ -3730,6 +3734,41 @@
 				add_to_variable = { var = STP_pw_stability_factor value = 0.05 }
 				STP_pw_refresh_modifier = yes
 				country_event = { id = ADISCORD_STP_pc.72 days = 1 }
+			}
+		}
+	}
+
+	# The alternative final returns the seal to the arrested founder and his hegemony course.
+	focus = {
+		id = STP_pc_sdir_return_seal
+		icon = GFX_focus_STP_Side_With_Maksim
+		x = 18
+		y = 17
+		cost = 5
+		allow_branch = { STP_pc_sword_directory_branch = yes }
+		available = {
+			hidden_trigger = { STP_pc_sword_directory_current = yes }
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_founder_in_custody_tt
+				STP_sdir_founder_restorable = yes
+			}
+		}
+		prerequisite = { focus = STP_pc_sdir_officer_college }
+		prerequisite = { focus = STP_pc_sdir_integrated_staff }
+		prerequisite = { focus = STP_pc_sdir_arsenal_acceptance }
+		prerequisite = { focus = STP_pc_sdir_naval_repair_yards }
+		prerequisite = { focus = STP_pc_sdir_integrated_rear }
+		mutually_exclusive = { focus = STP_pc_sdir_sword_directory }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+			custom_effect_tooltip = STP_pc_sdir_return_seal_tt
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_pc.91 hours = 1 }
 			}
 		}
 	}

@@ -99,7 +99,6 @@ autonomy_state = {
 	can_lose_level = { always = no }
 }
 
-
 # Created by the late Nodrul settlement of neighbouring client territories.
 # The administration keeps its local map colour and cannot climb normal autonomy levels.
 autonomy_state = {

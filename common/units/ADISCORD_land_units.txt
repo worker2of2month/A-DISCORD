@@ -369,7 +369,6 @@ sub_units = {
 		amphibious = { attack = -0.45 }
 	}
 
-
 	ADISCORD_marine_infantry = {
 		abbreviation = "MAR"
 		sprite = infantry

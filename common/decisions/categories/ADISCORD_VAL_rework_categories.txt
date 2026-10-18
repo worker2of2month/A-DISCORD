@@ -167,3 +167,11 @@ VAL_council_government_category = {
 	}
 	visible_when_empty = yes
 }
+
+# Opened from the balance window of the Council regime.
+VAL_council_balance_category = {
+	allowed = { tag = VAL }
+	visible = {
+		has_power_balance = { id = VAL_council_balance }
+	}
+}

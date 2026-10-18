@@ -164,6 +164,8 @@ VAL_council_government_plan = {
 	}
 	ai_national_focuses = {
 		VAL_council_takes_command
+		VAL_council_war_plan
+		VAL_council_operation_iron_shield
 		VAL_council_supreme_command
 		VAL_council_district_staffs
 		VAL_council_mandatory_reserve
@@ -171,7 +173,6 @@ VAL_council_government_plan = {
 		VAL_council_emergency_budget
 		VAL_council_contract_review
 		VAL_council_direct_orders
-		VAL_council_procurement_commissions
 		VAL_council_staff_acceptance
 		VAL_council_losses_review
 		VAL_council_officer_inquiry

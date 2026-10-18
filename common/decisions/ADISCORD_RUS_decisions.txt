@@ -1,6 +1,5 @@
 # --- rus_crisis_decisions ---
 RUS_last_empire_crisis = {
-
 	RUS_crisis_player_attack = {
 		icon = generic_attack
 		allowed = {
@@ -3569,7 +3568,6 @@ RUS_development_programmes = {
 		}
 		ai_will_do = { base = 1 }
 	}
-
 }
 
 # --- rus_public_campaigns ---
@@ -3829,7 +3827,6 @@ RUS_public_campaigns = {
 			}
 		}
 	}
-
 }
 
 # --- rus_balance_of_power ---

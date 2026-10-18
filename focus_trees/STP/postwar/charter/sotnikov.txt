@@ -186,7 +186,10 @@
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_sotnikov_open_hearings focus = STP_pc_charter_sotnikov_prison_review }
+		prerequisite = {
+			focus = STP_pc_charter_sotnikov_open_hearings
+			focus = STP_pc_charter_sotnikov_prison_review
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
@@ -445,7 +448,10 @@
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_sotnikov_community_clinics focus = STP_pc_charter_sotnikov_homes_for_families }
+		prerequisite = {
+			focus = STP_pc_charter_sotnikov_community_clinics
+			focus = STP_pc_charter_sotnikov_homes_for_families
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
@@ -698,7 +704,10 @@
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_sotnikov_citizen_reserve focus = STP_pc_charter_sotnikov_professional_service }
+		prerequisite = {
+			focus = STP_pc_charter_sotnikov_citizen_reserve
+			focus = STP_pc_charter_sotnikov_professional_service
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {

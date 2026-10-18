@@ -83,10 +83,35 @@ APH_VAL_commissariat = { color = rgb { 93 103 82 } color_ui = rgb { 156 160 139 
 
 VAL_dopotroydsk = { color = rgb { 86 55 38 } color_ui = rgb { 180 126 76 } }
 
+VAL_company_republic = { color = rgb { 104 74 46 } color_ui = rgb { 190 146 96 } }
+
+VAL_military_command = { color = rgb { 70 62 52 } color_ui = rgb { 150 136 112 } }
+
+VAL_kefreyt_state = {
+	color = rgb { 127 15 2 }
+	color_ui = rgb { 127 15 2 }
+}
+
+VAL_valden_republic = {
+	color = rgb { 69 100 122 }
+	color_ui = rgb { 69 100 122 }
+}
+
+VAL_united_military_districts = {
+	color = rgb { 116 121 75 }
+	color_ui = rgb { 116 121 75 }
+}
+
 RUS_last_empire = {
 	color = rgb { 96 16 20 }
 	color_ui = rgb { 196 92 48 }
 }
+
+STS_military_junta = {
+	color = rgb { 78 86 48 }
+	color_ui = rgb { 142 151 95 }
+}
+
 STS_steland = { color = rgb { 72 88 104 } color_ui = rgb { 140 168 188 } }
 
 STS_hegemony = {

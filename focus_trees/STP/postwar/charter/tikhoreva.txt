@@ -296,7 +296,10 @@
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_service_baselines focus = STP_pc_charter_tikhoreva_limits_of_measurement }
+		prerequisite = {
+			focus = STP_pc_charter_tikhoreva_service_baselines
+			focus = STP_pc_charter_tikhoreva_limits_of_measurement
+		}
 		prerequisite = { focus = STP_pc_charter_tikhoreva_published_accounts }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
@@ -485,7 +488,10 @@
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_open_tenders focus = STP_pc_charter_tikhoreva_standard_designs }
+		prerequisite = {
+			focus = STP_pc_charter_tikhoreva_open_tenders
+			focus = STP_pc_charter_tikhoreva_standard_designs
+		}
 		prerequisite = { focus = STP_pc_charter_tikhoreva_published_accounts }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
@@ -781,7 +787,10 @@
 				STP_pc_focus_available = yes
 			}
 		}
-		prerequisite = { focus = STP_pc_charter_tikhoreva_technical_instructors focus = STP_pc_charter_tikhoreva_field_trials }
+		prerequisite = {
+			focus = STP_pc_charter_tikhoreva_technical_instructors
+			focus = STP_pc_charter_tikhoreva_field_trials
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {

@@ -1,7 +1,6 @@
 #ideas
 
 ideas = {
-
 	country = {
 		NOD_hedonism_with_no_bondaries = {
 			allowed = {

@@ -13,7 +13,11 @@ RUS_last_empire_crisis = {
 				NOT = { check_variable = { var = RUS_crisis_phase value = 4 compare = equals } }
 			}
 			AND = {
-				OR = { tag = RUS has_country_flag = RUS_crisis_warned has_country_flag = RUS_crisis_defender }
+				OR = {
+					tag = RUS
+					has_country_flag = RUS_crisis_warned
+					has_country_flag = RUS_crisis_defender
+				}
 				RUS = {
 					check_variable = { var = RUS_crisis_phase value = 0 compare = greater_than }
 					check_variable = { var = RUS_crisis_phase value = 3 compare = less_than }
@@ -22,15 +26,42 @@ RUS_last_empire_crisis = {
 			AND = {
 				has_country_flag = RUS_crisis_settlement_rights
 				OR = {
-					SLA = { exists = yes has_country_flag = RUS_crisis_fragment }
-					RZA = { exists = yes has_country_flag = RUS_crisis_fragment }
-					MLR = { exists = yes has_country_flag = RUS_crisis_fragment }
-					ERT = { exists = yes has_country_flag = RUS_crisis_fragment }
-					IRT = { exists = yes has_country_flag = RUS_crisis_fragment }
-					SCA = { exists = yes has_country_flag = RUS_crisis_fragment }
-					TMR = { exists = yes has_country_flag = RUS_crisis_fragment }
-					VEL = { exists = yes has_country_flag = RUS_crisis_fragment }
-					RLY = { exists = yes has_country_flag = RUS_crisis_fragment }
+					SLA = {
+						exists = yes
+						has_country_flag = RUS_crisis_fragment
+					}
+					RZA = {
+						exists = yes
+						has_country_flag = RUS_crisis_fragment
+					}
+					MLR = {
+						exists = yes
+						has_country_flag = RUS_crisis_fragment
+					}
+					ERT = {
+						exists = yes
+						has_country_flag = RUS_crisis_fragment
+					}
+					IRT = {
+						exists = yes
+						has_country_flag = RUS_crisis_fragment
+					}
+					SCA = {
+						exists = yes
+						has_country_flag = RUS_crisis_fragment
+					}
+					TMR = {
+						exists = yes
+						has_country_flag = RUS_crisis_fragment
+					}
+					VEL = {
+						exists = yes
+						has_country_flag = RUS_crisis_fragment
+					}
+					RLY = {
+						exists = yes
+						has_country_flag = RUS_crisis_fragment
+					}
 				}
 			}
 		}

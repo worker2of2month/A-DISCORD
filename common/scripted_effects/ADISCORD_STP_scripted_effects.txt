@@ -2732,6 +2732,10 @@ STP_cw_finish_mobilization = {
 	clr_country_flag = STP_cw_disruption_cooldown
 	clear_variable = STP_cw_disruption_completed
 	set_country_flag = STP_cw_postwar
+	if = {
+		limit = { has_cosmetic_tag = STS_military_junta }
+		drop_cosmetic_tag = yes
+	}
 	STP_cw_clear_wartime_modifiers = yes
 	if = { limit = { tag = STS } VAL_operations_map_refresh_cache = yes }
 	STP_pw_reconcile_postwar_interactivity = yes
@@ -4483,6 +4487,7 @@ STP_cw_close_nod_after_party_victory = {
 # Winner country scope, original on_capitulation ROOT remains the defeated rival.
 STP_cw_settle_union_victory = {
 	if = { limit = { tag = STS ROOT = { tag = STP } } ROOT = { STP_ps_prepare_exile = yes } }
+	if = { limit = { tag = STS ROOT = { tag = STP } } ROOT = { STP_sdir_take_founder_into_custody = yes } }
 	STS = { STP_cw_remove_kefreyt_volunteers = yes }
 	log = "[STP_CW] capital occupation settlement: [THIS.GetTag] defeated [ROOT.GetTag]; reported FROM=[FROM.GetTag]"
 	if = { limit = { ROOT = { tag = STP } } STP_cw_end_nod_intervention = yes }
@@ -5085,6 +5090,21 @@ STP_pc_align_resistance_ruling_party = {
 				retire_country_leader = yes
 				promote_character = { character = STP_Leonid_Barchel ideology = chauvinism_ideology }
 			}
+		}
+		if = {
+			limit = {
+				has_country_flag = STP_cw_participant
+				NOT = { has_country_flag = STP_cw_postwar }
+				has_country_leader = {
+					character = STP_grigory_sotnikov
+					ruling_only = yes
+				}
+			}
+			set_cosmetic_tag = STS_military_junta
+		}
+		else_if = {
+			limit = { has_cosmetic_tag = STS_military_junta }
+			drop_cosmetic_tag = yes
 		}
 	}
 }
@@ -16808,5 +16828,92 @@ STP_sdir_naval_finish = {
 			add_equipment_to_stockpile = { type = motorized_equipment amount = 50 }
 		}
 		else = { STP_sdir_naval_refund = yes }
+	}
+}
+
+# COUNTRY STP, before annexation: an annexed tag keeps its characters, so the
+# victorious resistance must take the arrested founder while the party still exists.
+STP_sdir_take_founder_into_custody = {
+	if = {
+		limit = {
+			has_character = STP_maksim_shabrat
+			STP_maksim_shabrat = { has_character_flag = STP_cw_arrested }
+			STS = { exists = yes }
+		}
+		STP_maksim_shabrat = {
+			if = {
+				limit = { has_ideology = national_legitimism }
+				remove_country_leader_role = { ideology = national_legitimism }
+			}
+		}
+		set_nationality = {
+			character = STP_maksim_shabrat
+			target_country = STS
+		}
+	}
+}
+
+# COUNTRY STS: exposure and the purge both close the plot without releasing the founder.
+STP_sdir_break_loyalist_cells = {
+	if = {
+		limit = { STP_sdir_loyalist_plot_possible = yes }
+		set_variable = { var = STP_sdir_founder_custody value = 3 }
+		country_event = { id = ADISCORD_STP_pc.93 hours = 1 }
+	}
+}
+
+# COUNTRY STS: STP_sdir_restore_input 1 = handover, 2 = loyalist coup.
+# The founder resumes his hegemony course; the Charter course stays closed by the lock.
+STP_sdir_restore_founder = {
+	if = {
+		limit = { STP_sdir_founder_restorable = yes }
+		# Directory programmes lose their government; bounded receipts are returned first.
+		STP_sdir_refund_all_district_projects = yes
+		STP_sdir_arsenal_refund = yes
+		STP_sdir_naval_refund = yes
+		STP_maksim_shabrat = {
+			clr_character_flag = STP_cw_arrested
+			if = {
+				limit = { NOT = { has_ideology = national_legitimism } }
+				add_country_leader_role = {
+					country_leader = {
+						ideology = national_legitimism
+						expire = "2300.1.1"
+					}
+				}
+			}
+		}
+		# The head of state is the ruling party's leader: promote before switching the party.
+		promote_character = {
+			character = STP_maksim_shabrat
+			ideology = national_legitimism
+		}
+		set_politics = {
+			ruling_party = chauvinism
+			elections_allowed = no
+		}
+		if = {
+			limit = { has_character = STP_grigory_sotnikov }
+			STP_grigory_sotnikov = {
+				if = {
+					limit = { has_ideology = steland_military_directory }
+					remove_country_leader_role = { ideology = steland_military_directory }
+				}
+			}
+			if = {
+				limit = { check_variable = { var = STP_sdir_restore_input value = 2 compare = equals } }
+				STP_grigory_sotnikov = { set_character_flag = STP_cw_arrested }
+				if = {
+					limit = { STP_grigory_sotnikov = { is_unit_leader = yes } }
+					remove_unit_leader_role = { character = STP_grigory_sotnikov }
+				}
+			}
+		}
+		set_variable = { var = STP_pc_course value = 1 }
+		set_variable = { var = STP_pc_founder_choice value = 1 }
+		clear_variable = STP_sdir_founder_custody
+		STP_pw_refresh_modifier = yes
+		mark_focus_tree_layout_dirty = yes
+		ADISCORD_economy_mark_dirty = yes
 	}
 }

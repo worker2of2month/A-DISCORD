@@ -184,15 +184,60 @@ ADISCORD_south_shl_declare_on_north = {
 
 # GLOBAL. Suppressed minors are released before any event, alliance or war.
 ADISCORD_south_wake_regional_countries = {
-	EFL = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
-	AZH = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
-	WEF = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
-	KDR = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
-	RHM = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
-	SDR = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
-	MZR = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
-	KYZ = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
-	GLP = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
+	EFL = {
+		if = {
+			limit = { exists = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
+		}
+	}
+	AZH = {
+		if = {
+			limit = { exists = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
+		}
+	}
+	WEF = {
+		if = {
+			limit = { exists = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
+		}
+	}
+	KDR = {
+		if = {
+			limit = { exists = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
+		}
+	}
+	RHM = {
+		if = {
+			limit = { exists = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
+		}
+	}
+	SDR = {
+		if = {
+			limit = { exists = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
+		}
+	}
+	MZR = {
+		if = {
+			limit = { exists = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
+		}
+	}
+	KYZ = {
+		if = {
+			limit = { exists = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
+		}
+	}
+	GLP = {
+		if = {
+			limit = { exists = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
+		}
+	}
 }
 
 # COUNTRY champion. Leads its own faction and holds mandatory-major status only
@@ -859,19 +904,51 @@ ADISCORD_south_apply_subject_type = {
 			check_variable = { var = global.ADISCORD_south_subject_type value = 1 compare = equals }
 			has_country_flag = ADISCORD_south_north_leader
 		}
-		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_SHL_oil_concession freedom_level = 0.10 end_wars = no end_civil_wars = no } }
+		ROOT = {
+			set_autonomy = {
+				target = PREV
+				autonomy_state = autonomy_SHL_oil_concession
+				freedom_level = 0.10
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
 	}
 	else_if = {
 		limit = { check_variable = { var = global.ADISCORD_south_subject_type value = 2 compare = equals } }
-		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_SHL_compact_charter freedom_level = 0.40 end_wars = no end_civil_wars = no } }
+		ROOT = {
+			set_autonomy = {
+				target = PREV
+				autonomy_state = autonomy_SHL_compact_charter
+				freedom_level = 0.40
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
 	}
 	else_if = {
 		limit = { check_variable = { var = global.ADISCORD_south_subject_type value = 3 compare = equals } }
-		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_NAM_namestnik_office freedom_level = 0.05 end_wars = no end_civil_wars = no } }
+		ROOT = {
+			set_autonomy = {
+				target = PREV
+				autonomy_state = autonomy_NAM_namestnik_office
+				freedom_level = 0.05
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
 	}
 	else_if = {
 		limit = { check_variable = { var = global.ADISCORD_south_subject_type value = 4 compare = equals } }
-		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_NAM_oil_charter freedom_level = 0.40 end_wars = no end_civil_wars = no } }
+		ROOT = {
+			set_autonomy = {
+				target = PREV
+				autonomy_state = autonomy_NAM_oil_charter
+				freedom_level = 0.40
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
 	}
 	else = {
 		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_puppet freedom_level = 0.20 end_wars = no end_civil_wars = no } }
@@ -1018,7 +1095,13 @@ ADISCORD_south_finalize_submission = {
 			}
 			if = {
 				limit = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
-				set_autonomy = { target = PREV autonomy_state = autonomy_SHL_compact_charter freedom_level = 0.40 end_wars = no end_civil_wars = no }
+				set_autonomy = {
+					target = PREV
+					autonomy_state = autonomy_SHL_compact_charter
+					freedom_level = 0.40
+					end_wars = no
+					end_civil_wars = no
+				}
 			}
 			else = {
 				set_autonomy = { target = PREV autonomy_state = autonomy_puppet freedom_level = 0.20 end_wars = no end_civil_wars = no }
@@ -1039,11 +1122,23 @@ ADISCORD_south_finalize_submission = {
 			}
 			if = {
 				limit = { has_completed_focus = NAM_service_state }
-				set_autonomy = { target = PREV autonomy_state = autonomy_NAM_namestnik_office freedom_level = 0.05 end_wars = no end_civil_wars = no }
+				set_autonomy = {
+					target = PREV
+					autonomy_state = autonomy_NAM_namestnik_office
+					freedom_level = 0.05
+					end_wars = no
+					end_civil_wars = no
+				}
 			}
 			else_if = {
 				limit = { has_completed_focus = NAM_federal_charter }
-				set_autonomy = { target = PREV autonomy_state = autonomy_NAM_oil_charter freedom_level = 0.40 end_wars = no end_civil_wars = no }
+				set_autonomy = {
+					target = PREV
+					autonomy_state = autonomy_NAM_oil_charter
+					freedom_level = 0.40
+					end_wars = no
+					end_civil_wars = no
+				}
 			}
 			else = {
 				set_autonomy = { target = PREV autonomy_state = autonomy_puppet freedom_level = 0.20 end_wars = no end_civil_wars = no }

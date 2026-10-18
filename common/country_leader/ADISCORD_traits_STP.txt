@@ -1,5 +1,4 @@
 leader_traits = {
-
 	# Charter cabinet heads: the mandate trait is replaced at the programme's conclusion.
 	STP_charter_sotnikov_oath = {
 		random = no
@@ -45,5 +44,4 @@ leader_traits = {
 		production_factory_efficiency_gain_factor = 0.05
 		stability_factor = 0.03
 	}
-
 }

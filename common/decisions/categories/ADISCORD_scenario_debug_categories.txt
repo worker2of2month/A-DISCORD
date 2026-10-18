@@ -12,4 +12,5 @@ ADISCORD_test_wars_category = {
 
 	visible_when_empty = yes
 }
+
 # END CONSOLIDATED: ADISCORD_test_wars_categories.txt

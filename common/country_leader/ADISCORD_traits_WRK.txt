@@ -1,5 +1,4 @@
 leader_traits = {
-
 	Emergency_Powers = {
 		random = no
 		sprite = 1

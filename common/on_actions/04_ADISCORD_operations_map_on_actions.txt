@@ -7,13 +7,19 @@ on_actions = {
 		effect = {
 			VAL = {
 				if = {
-					limit = { exists = yes has_country_flag = VAL_operations_map_unlocked }
+					limit = {
+						exists = yes
+						has_country_flag = VAL_operations_map_unlocked
+					}
 					VAL_operations_map_refresh_cache = yes
 				}
 			}
 			STS = {
 				if = {
-					limit = { exists = yes has_country_flag = STP_cw_postwar }
+					limit = {
+						exists = yes
+						has_country_flag = STP_cw_postwar
+					}
 					if = {
 						limit = {
 							VAL = {
@@ -95,13 +101,19 @@ on_actions = {
 				}
 				VAL = {
 					if = {
-						limit = { exists = yes has_country_flag = VAL_operations_map_unlocked }
+						limit = {
+							exists = yes
+							has_country_flag = VAL_operations_map_unlocked
+						}
 						VAL_operations_map_refresh_cache = yes
 					}
 				}
 				STS = {
 					if = {
-						limit = { exists = yes has_country_flag = STP_cw_postwar }
+						limit = {
+							exists = yes
+							has_country_flag = STP_cw_postwar
+						}
 						if = {
 							limit = {
 								VAL = {

@@ -19,6 +19,25 @@ ideas = {
 			modifier = { ADISCORD_economy_admin_expense_factor = -0.05 }
 		}
 
+		VAL_nw_open_market_delta = {
+			name = VAL_nw_industrial_network
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.15
+				stability_factor = 0.05
+			}
+		}
+
+		VAL_nw_coercive_market_delta = {
+			name = VAL_nw_industrial_network
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_military_industry_income_factor = 0.07
+				war_support_factor = 0.05
+				stability_factor = -0.03
+			}
+		}
+
 		VAL_nw_guarded_caravans = {
 			picture = VAL_contract_state
 			allowed = { tag = VAL }
@@ -976,6 +995,27 @@ ideas = {
 	}
 
 	political_advisor_head_of_state = {
+		minister_VAL_Mikhail_Velsky = {
+			name = VAL_Mikhail_Velsky
+			default = no
+			cost = 75
+			picture = minister_VAL_Mikhail_Velsky
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			allowed_to_remove = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_prime_minister_change_allowed_tt
+					NOT = {
+						has_country_leader = {
+							character = VAL_Valera_Solgalov
+							ruling_only = yes
+						}
+					}
+				}
+			}
+			traits = { minister_trait_VAL_hos_contract_throne }
+		}
+
 		minister_VAL_Roman_Terek = {
 			name = minister_VAL_Roman_Terek
 			picture = generic_political_advisor_europe_1

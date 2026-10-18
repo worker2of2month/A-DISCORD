@@ -295,6 +295,36 @@ during paid work, inspect every final answer and confirm readable focus and
 decision UI. Check both Sotnikov availability states and the separate directory
 route. Static parsing, tests and AI-plan inventories are not native-game proof.
 
+## Sword directory: the founder's return
+
+When the party arrested Shabrat before the split, Sotnikov leads the sword
+directory (`STP_pc_sdir_*`). The arrested founder stays on STP until the union
+victory: `STP_cw_settle_union_victory` calls `STP_sdir_take_founder_into_custody`
+before annexation, because an annexed tag keeps its characters.
+
+- `.90` follows the oath and records `STP_sdir_founder_custody`: 1 = headquarters
+  guard (+15 command power), 2 = honourable arrest (+3% stability), 3 = loyalist
+  cells broken. The custody value sets the plot margin.
+- `STP_sdir_loyalist_plot` is an activation mission. It starts when the directory
+  is weak: stability below 30% (guard) or 45% (honourable), or surrender progress
+  above 25%. Recovery to 40% or 55% stability with surrender progress no higher
+  than 10% exposes the plot; `STP_sdir_purge_loyalist_cells` (75 political power)
+  ends it at once. Both set value 3 and fire `.93`. The 60-day timeout is the
+  coup: the founder returns, Sotnikov is arrested and loses his unit-leader role,
+  with -10% stability and the 180-day `STP_sdir_loyalist_purge`; `.92` narrates it.
+- `STP_pc_sdir_return_seal` is the exclusive alternative to
+  `STP_pc_sdir_sword_directory`, with the same prerequisites. Its event `.91`
+  keeps Sotnikov as an army-chief advisor (+5% stability) or gives 100 political
+  power; both restore the founder.
+
+`STP_sdir_restore_founder` takes `STP_sdir_restore_input` (1 = handover,
+2 = coup). It refunds directory district, arsenal and naval receipts, clears the
+founder's arrest, promotes him before switching the ruling party to chauvinism
+and sets `STP_pc_course = 1` with `STP_pc_founder_choice = 1`. The existing course
+lock keeps the Charter closed; the founder continues through
+`STP_pc_shabrat_politics` and the hegemony branch and AI plan. Directory focuses
+and subject autonomies already granted remain.
+
 ## Programme index
 
 | # | Сотников | Шабрат | Тихорева |

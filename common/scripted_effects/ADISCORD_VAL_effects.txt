@@ -833,6 +833,35 @@ VAL_nw_improve_trade = {
 	VAL_nw_ensure_network_modifier = yes
 }
 
+# The steel peace focus selects one helper from the northern course of the main tree.
+VAL_nw_settle_open_market = {
+	add_to_variable = {
+		var = VAL_nw_course_pp_gain
+		value = 0.15
+	}
+	add_to_variable = {
+		var = VAL_nw_course_stability
+		value = 0.05
+	}
+	VAL_nw_ensure_network_modifier = yes
+}
+
+VAL_nw_settle_coercive_market = {
+	add_to_variable = {
+		var = VAL_nw_course_military_income
+		value = 0.07
+	}
+	add_to_variable = {
+		var = VAL_nw_course_war_support
+		value = 0.05
+	}
+	add_to_variable = {
+		var = VAL_nw_course_stability
+		value = -0.03
+	}
+	VAL_nw_ensure_network_modifier = yes
+}
+
 VAL_nw_expanded_arsenals_begin = {
 	if = {
 		limit = {
@@ -5204,6 +5233,7 @@ VAL_frontier_settle_defeat = {
 			VAL_frontier_settle_armistice = yes
 			NOD = { puppet = { target = VAL end_wars = no end_civil_wars = no } }
 			set_cosmetic_tag = VAL_dopotroydsk
+			VAL_council_close_regime = yes
 			set_politics = { ruling_party = pragmatism elections_allowed = no }
 			promote_character = { character = VAL_party_administration ideology = pragmatism_ideology }
 			VAL_refresh_contract_modifier = yes
@@ -6053,12 +6083,14 @@ VAL_enter_stelander_defeat = {
 			limit = { has_character = VAL_Valera_Solgalov }
 			retire_character = VAL_Valera_Solgalov
 		}
+		VAL_council_close_regime = yes
 		if = {
 			limit = { has_character = VAL_Commanders_Council }
 			promote_character = { character = VAL_Commanders_Council ideology = contractual_etatism }
 		}
 		set_politics = { ruling_party = etatism elections_allowed = no }
 		load_focus_tree = { tree = VAL_defeated_focus keep_completed = no }
+		VAL_council_offer_identity = yes
 		mark_focus_tree_layout_dirty = yes
 		ADISCORD_economy_mark_dirty = yes
 		log = "[VAL] Shabrat defeat transition: Solgalov removed, commanders council installed"
@@ -8461,7 +8493,17 @@ VAL_debug_force_current_war_victory = {
 VAL_adopt_commonwealth = {
 	if = {
 		limit = { VAL_can_proclaim_commonwealth = yes }
-		set_cosmetic_tag = VAL_commonwealth
+		set_country_flag = VAL_commonwealth_proclaimed
+		if = {
+			limit = {
+				has_variable = VAL_council_identity
+				VAL_council_identity_available = yes
+			}
+			VAL_council_apply_identity = yes
+		}
+		else = {
+			set_cosmetic_tag = VAL_commonwealth
+		}
 		VAL_sync_solgalov_portrait = yes
 		VAL_grant_contract_warlord = yes
 	}
@@ -8664,7 +8706,7 @@ VAL_grant_contract_warlord = {
 	if = {
 		limit = {
 			tag = VAL
-			has_cosmetic_tag = VAL_commonwealth
+			has_country_flag = VAL_commonwealth_proclaimed
 			has_country_leader = { character = VAL_Valera_Solgalov ruling_only = yes }
 		}
 		VAL_Valera_Solgalov = {
@@ -9069,15 +9111,13 @@ VAL_final_crisis_reconcile = {
 		else_if = { limit = { NOT = { OR = { has_war_with = NOD has_war_with = STP has_war_with = STS } } } VAL_final_crisis_close = yes }
 	}
 
-	# Postwar repair is intentionally retried by the weekly reconciliation pass.
-	# This covers both fresh settlements and development saves loaded after a
-	# previously completed final war, without relaxing any territorial requirement.
+	# Reconcile postwar territorial requirements until the Commonwealth is proclaimed.
 	if = {
 		limit = {
 			check_variable = { var = VAL_final_crisis_phase value = 3 compare = greater_than_or_equals }
 			has_capitulated = no
 			is_subject = no
-			NOT = { has_cosmetic_tag = VAL_commonwealth }
+			NOT = { has_country_flag = VAL_commonwealth_proclaimed }
 		}
 		if = { limit = { VAL_can_form_northern_administration = yes } VAL_form_northern_administration = yes }
 		STP = {
@@ -9107,12 +9147,12 @@ VAL_final_crisis_weekly = {
 }
 
 
-# The cosmetic state is authoritative, including when repairing an older save.
+# Proclamation determines Solgalov's portrait independently of Council heraldry.
 VAL_sync_solgalov_portrait = {
 	if = {
 		limit = { has_character = VAL_Valera_Solgalov }
 		if = {
-			limit = { has_cosmetic_tag = VAL_commonwealth }
+			limit = { has_country_flag = VAL_commonwealth_proclaimed }
 			set_portraits = {
 				character = VAL_Valera_Solgalov
 				civilian = { large = GFX_portrait_VAL_Valera_Solgalov_contracts }
@@ -11069,6 +11109,8 @@ VAL_settle_stelander_support_victory = {
 
 # --- commanders_council ---
 # COUNTRY VAL. The first Council programme establishes representation once.
+# The same guard opens the collegium/command balance, so a later reopening
+# never resets it.
 VAL_council_initialize_seats = {
 	if = {
 		limit = { NOT = { has_country_flag = VAL_council_seats_initialized } }
@@ -11076,6 +11118,7 @@ VAL_council_initialize_seats = {
 		set_variable = { var = VAL_council_seats_garrison value = 2 }
 		set_variable = { var = VAL_council_seats_front value = 2 }
 		set_variable = { var = VAL_council_seats_supply value = 2 }
+		set_power_balance = { id = VAL_council_balance set_value = 0 }
 	}
 }
 
@@ -11185,6 +11228,7 @@ VAL_council_transfer_seat = {
 			subtract_from_variable = { var = VAL_council_seats_front value = VAL_council_seat_delta }
 		}
 	}
+	VAL_council_check_demand = yes
 }
 
 # COUNTRY VAL. Fix the approved delay when payment is made; later votes do not rewrite it.
@@ -11250,11 +11294,7 @@ VAL_council_begin_loss_tracking = {
 VAL_council_register_stelander_war = {
 	if = {
 		limit = {
-			OR = {
-				has_war_with = STP
-				has_war_with = STS
-				has_war_with = SRP
-			}
+			VAL_council_stelander_war = yes
 		}
 		set_country_flag = VAL_council_stelander_war_started
 		VAL_council_check_coup = yes
@@ -11285,6 +11325,35 @@ VAL_council_record_failure = {
 	}
 }
 
+# The persistent selection survives reforms; foreign administrations keep their own identity.
+VAL_council_apply_identity = {
+	if = {
+		limit = { VAL_council_identity_available = yes }
+		if = {
+			limit = { check_variable = { var = VAL_council_identity value = 1 compare = equals } }
+			set_cosmetic_tag = VAL_kefreyt_state
+		}
+		else_if = {
+			limit = { check_variable = { var = VAL_council_identity value = 2 compare = equals } }
+			set_cosmetic_tag = VAL_valden_republic
+		}
+		else_if = {
+			limit = { check_variable = { var = VAL_council_identity value = 3 compare = equals } }
+			set_cosmetic_tag = VAL_united_military_districts
+		}
+	}
+}
+
+VAL_council_offer_identity = {
+	if = {
+		limit = { has_variable = VAL_council_identity }
+		VAL_council_apply_identity = yes
+	}
+	else = {
+		country_event = { id = val_council.25 hours = 1 }
+	}
+}
+
 VAL_council_take_power = {
 	if = {
 		limit = {
@@ -11296,16 +11365,20 @@ VAL_council_take_power = {
 		remove_power_balance = { id = VAL_command_balance }
 		retire_character = VAL_Valera_Solgalov
 		promote_character = { character = VAL_Commanders_Council ideology = contractual_etatism }
+		VAL_council_recruit_delegates = yes
 		set_politics = {
 			ruling_party = etatism
 			elections_allowed = no
 		}
 		set_variable = { var = VAL_council_casualties_snapshot value = casualties_k }
 		set_variable = { var = VAL_council_casualty_accumulation value = 0 }
+		set_variable = { var = VAL_council_loyalists value = 40 }
 		mark_focus_tree_layout_dirty = yes
 		VAL_refresh_contract_modifier = yes
 		country_event = { id = val_council.2 }
+		VAL_council_offer_identity = yes
 		news_event = { id = val_council.10 hours = 1 }
+		country_event = { id = val_council.11 days = 10 }
 	}
 }
 
@@ -11363,6 +11436,8 @@ VAL_council_weekly = {
 			VAL_council_close_emergency = yes
 		}
 		VAL_council_reconcile_mandate = yes
+		VAL_council_reconcile_plan = yes
+		VAL_council_check_postwar = yes
 	}
 }
 
@@ -11385,6 +11460,36 @@ VAL_council_apply_modifiers = {
 		add_to_variable = { var = VAL_contract_org_factor value = VAL_council_base_organization }
 		add_to_variable = { var = VAL_contract_planning_factor value = VAL_council_base_planning_speed }
 		add_to_variable = { var = VAL_contract_trade_income_factor value = VAL_council_base_trade_income }
+		# Solgalov loyalists: -0.05 organisation and -0.10 planning speed at 100 points.
+		if = {
+			limit = {
+				has_variable = VAL_council_loyalists
+			}
+			set_temp_variable = { var = VAL_council_loyalist_penalty value = VAL_council_loyalists }
+			multiply_temp_variable = { var = VAL_council_loyalist_penalty value = -0.0005 }
+			add_to_variable = { var = VAL_contract_org_factor value = VAL_council_loyalist_penalty }
+			multiply_temp_variable = { var = VAL_council_loyalist_penalty value = 2 }
+			add_to_variable = { var = VAL_contract_planning_factor value = VAL_council_loyalist_penalty }
+		}
+		if = {
+			limit = {
+				check_variable = { var = VAL_council_plan_kind value = 1 compare = equals }
+			}
+			add_to_variable = { var = VAL_contract_defence_factor value = 0.1 }
+		}
+		if = {
+			limit = {
+				check_variable = { var = VAL_council_plan_kind value = 2 compare = equals }
+			}
+			add_to_variable = { var = VAL_contract_attack_factor value = 0.1 }
+		}
+		if = {
+			limit = {
+				check_variable = { var = VAL_council_plan_kind value = 3 compare = equals }
+			}
+			add_to_variable = { var = VAL_contract_factory_output_factor value = 0.1 }
+			add_to_variable = { var = VAL_contract_supply_factor value = -0.1 }
+		}
 		if = {
 			limit = {
 				has_country_flag = VAL_council_staff_program
@@ -11950,6 +12055,291 @@ VAL_council_close_case = {
 	clr_country_flag = VAL_council_case_open
 	set_country_flag = { flag = VAL_council_case_cooldown value = 1 days = 60 }
 	VAL_refresh_contract_modifier = yes
+}
+
+# COUNTRY VAL. Delegation heads join with the coup; the final programmes promote
+# one of them, or Velsky, without recruiting a leader at that moment.
+VAL_council_recruit_delegates = {
+	if = {
+		limit = {
+			NOT = { has_character = VAL_Gleb_Osten }
+		}
+		recruit_character = VAL_Gleb_Osten
+	}
+	if = {
+		limit = {
+			NOT = { has_character = VAL_Tamara_Greitz }
+		}
+		recruit_character = VAL_Tamara_Greitz
+	}
+	if = {
+		limit = {
+			NOT = { has_character = VAL_Arkadi_Lemm }
+		}
+		recruit_character = VAL_Arkadi_Lemm
+	}
+	if = {
+		limit = {
+			NOT = { has_character = VAL_Mikhail_Velsky }
+		}
+		recruit_character = VAL_Mikhail_Velsky
+	}
+}
+
+# COUNTRY VAL. Input: temporary VAL_council_loyalists_delta.
+# Reaching 80 points offers the unrest event once per 180 days.
+VAL_council_change_loyalists = {
+	if = {
+		limit = {
+			has_variable = VAL_council_loyalists
+		}
+		add_to_variable = { var = VAL_council_loyalists value = VAL_council_loyalists_delta }
+		clamp_variable = { var = VAL_council_loyalists min = 0 max = 100 }
+		VAL_refresh_contract_modifier = yes
+		if = {
+			limit = {
+				check_variable = { var = VAL_council_loyalists value = 80 compare = greater_than_or_equals }
+				VAL_council_operational = yes
+				NOT = { has_country_flag = VAL_council_loyalist_unrest_cooldown }
+			}
+			set_country_flag = { flag = VAL_council_loyalist_unrest_cooldown value = 1 days = 180 }
+			country_event = { id = val_council.21 days = 3 }
+		}
+	}
+}
+
+# COUNTRY VAL. Input: temporary VAL_council_plan_choice. The plan kind is also
+# the delegation that answers for it: 1 garrison, 2 front, 3 supply.
+VAL_council_start_plan = {
+	if = {
+		limit = {
+			NOT = { has_variable = VAL_council_plan_kind }
+		}
+		set_variable = { var = VAL_council_plan_kind value = VAL_council_plan_choice }
+		if = {
+			limit = {
+				check_variable = { var = VAL_council_plan_kind value = 1 compare = equals }
+			}
+			activate_mission = VAL_council_plan_hold_line
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = VAL_council_plan_kind value = 2 compare = equals }
+			}
+			activate_mission = VAL_council_plan_iron_shield
+		}
+		else = {
+			set_variable = { var = VAL_council_plan_stock value = num_equipment@infantry_equipment }
+			activate_mission = VAL_council_plan_arsenal
+		}
+		VAL_refresh_contract_modifier = yes
+	}
+}
+
+VAL_council_clear_plan = {
+	clear_variable = VAL_council_plan_kind
+	clear_variable = VAL_council_plan_stock
+	remove_mission = VAL_council_plan_hold_line
+	remove_mission = VAL_council_plan_iron_shield
+	remove_mission = VAL_council_plan_arsenal
+	VAL_refresh_contract_modifier = yes
+}
+
+# COUNTRY VAL. VAL_council_plan_last keeps the settled plan for its report event.
+VAL_council_plan_success = {
+	if = {
+		limit = {
+			has_variable = VAL_council_plan_kind
+		}
+		set_variable = { var = VAL_council_plan_last value = VAL_council_plan_kind }
+		set_temp_variable = { var = VAL_council_seat_side value = VAL_council_plan_kind }
+		set_temp_variable = { var = VAL_council_seat_delta value = 1 }
+		VAL_council_transfer_seat = yes
+		if = {
+			limit = {
+				has_power_balance = { id = VAL_council_balance }
+			}
+			add_power_balance_value = { id = VAL_council_balance value = 0.10 }
+		}
+		set_temp_variable = { var = VAL_council_loyalists_delta value = -10 }
+		VAL_council_change_loyalists = yes
+		add_political_power = 50
+		army_experience = 15
+		VAL_council_clear_plan = yes
+		country_event = { id = val_council.16 }
+	}
+}
+
+# COUNTRY VAL. The report event assigns responsibility: a lost seat or an inquiry.
+VAL_council_plan_failed = {
+	if = {
+		limit = {
+			has_variable = VAL_council_plan_kind
+		}
+		set_variable = { var = VAL_council_plan_last value = VAL_council_plan_kind }
+		if = {
+			limit = {
+				has_power_balance = { id = VAL_council_balance }
+			}
+			add_power_balance_value = { id = VAL_council_balance value = -0.10 }
+		}
+		set_temp_variable = { var = VAL_council_loyalists_delta value = 10 }
+		VAL_council_change_loyalists = yes
+		add_stability = -0.03
+		VAL_council_clear_plan = yes
+		country_event = { id = val_council.17 }
+	}
+}
+
+# COUNTRY VAL. Peace settles a plan by its current goal: the line must still be
+# held, the passes controlled and the rifle reserve not below its starting level.
+VAL_council_reconcile_plan = {
+	if = {
+		limit = {
+			has_variable = VAL_council_plan_kind
+		}
+		if = {
+			limit = {
+				VAL_council_operational = no
+			}
+			VAL_council_clear_plan = yes
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = VAL_council_plan_kind value = 1 compare = equals }
+				VAL_council_lines_held = no
+			}
+			VAL_council_plan_failed = yes
+		}
+		else_if = {
+			limit = {
+				VAL_council_stelander_war = no
+			}
+			if = {
+				limit = {
+					VAL_council_plan_goal_met = yes
+				}
+				VAL_council_plan_success = yes
+			}
+			else = {
+				VAL_council_clear_plan = yes
+			}
+		}
+	}
+}
+
+# COUNTRY VAL. Five seats let a delegation press one demand per 180 days.
+VAL_council_check_demand = {
+	if = {
+		limit = {
+			VAL_council_operational = yes
+			NOT = { has_country_flag = VAL_council_demand_cooldown }
+			OR = {
+				check_variable = { var = VAL_council_seats_garrison value = 5 compare = greater_than_or_equals }
+				check_variable = { var = VAL_council_seats_front value = 5 compare = greater_than_or_equals }
+				check_variable = { var = VAL_council_seats_supply value = 5 compare = greater_than_or_equals }
+			}
+		}
+		set_country_flag = { flag = VAL_council_demand_cooldown value = 1 days = 180 }
+		country_event = { id = val_council.18 days = 2 }
+	}
+}
+
+# COUNTRY VAL. Output: temporary VAL_council_seat_rival is the largest delegation;
+# ties follow the garrison, front, supply order of the seat transfer.
+VAL_council_select_majority = {
+	set_temp_variable = { var = VAL_council_seat_side value = 0 }
+	VAL_council_select_seat_rival = yes
+}
+
+# COUNTRY VAL. The head of the largest delegation becomes leader and field marshal.
+VAL_council_install_commander = {
+	VAL_council_select_majority = yes
+	if = {
+		limit = {
+			check_variable = { var = VAL_council_seat_rival value = 2 compare = equals }
+		}
+		promote_character = { character = VAL_Tamara_Greitz ideology = contractual_etatism }
+		add_field_marshal_role = {
+			character = VAL_Tamara_Greitz
+			skill = 4
+			attack_skill = 5
+			defense_skill = 2
+			planning_skill = 4
+			logistics_skill = 2
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = VAL_council_seat_rival value = 3 compare = equals }
+		}
+		promote_character = { character = VAL_Arkadi_Lemm ideology = contractual_etatism }
+		add_field_marshal_role = {
+			character = VAL_Arkadi_Lemm
+			skill = 4
+			attack_skill = 2
+			defense_skill = 3
+			planning_skill = 3
+			logistics_skill = 5
+		}
+	}
+	else = {
+		promote_character = { character = VAL_Gleb_Osten ideology = contractual_etatism }
+		add_field_marshal_role = {
+			character = VAL_Gleb_Osten
+			skill = 4
+			attack_skill = 2
+			defense_skill = 5
+			planning_skill = 3
+			logistics_skill = 3
+		}
+	}
+	VAL_council_apply_identity = yes
+	mark_focus_tree_layout_dirty = yes
+	VAL_refresh_contract_modifier = yes
+}
+
+# COUNTRY VAL. Weekly bounded check of the obligations that start with peace.
+VAL_council_check_postwar = {
+	if = {
+		limit = {
+			VAL_council_operational = yes
+			has_country_flag = VAL_council_stelander_war_started
+			VAL_council_stelander_war = no
+			NOT = { has_country_flag = VAL_stelander_defeated }
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = VAL_council_captains_bill }
+			}
+			set_country_flag = VAL_council_captains_bill
+			country_event = { id = val_council.15 days = 7 }
+		}
+		if = {
+			limit = {
+				has_completed_focus = VAL_council_limited_mandate
+				NOT = { has_country_flag = VAL_council_mandate_term_offered }
+			}
+			set_country_flag = VAL_council_mandate_term_offered
+			country_event = { id = val_council.24 days = 14 }
+		}
+	}
+}
+
+# COUNTRY VAL. Terminal handoffs end the Council regime and its political balance.
+VAL_council_close_regime = {
+	if = {
+		limit = {
+			has_variable = VAL_council_plan_kind
+		}
+		VAL_council_clear_plan = yes
+	}
+	if = {
+		limit = {
+			has_power_balance = { id = VAL_council_balance }
+		}
+		remove_power_balance = { id = VAL_council_balance }
+	}
 }
 
 VAL_council_finish_political_reform = {

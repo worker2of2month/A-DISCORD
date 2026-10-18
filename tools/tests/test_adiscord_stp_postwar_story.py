@@ -1928,5 +1928,181 @@ class CharterTransactions(unittest.TestCase):
         self.assertFalse(("VAL", "equipment", "infantry_equipment") in self.facts)
 
 
+class SwordDirectoryFounderReturnTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        source = read(ROOT / "focus_trees/STP/postwar/shabrat/focuses.txt")
+        cls.focuses = {
+            scalar(node.value, "id"): node.value
+            for node in parse_clausewitz(source)
+            if node.key == "focus"
+        }
+        cls.effects = parse_clausewitz(
+            read(ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        )
+        decisions = parse_clausewitz(read(ROOT / "common/decisions/ADISCORD_STP_decisions.txt"))
+        cls.decisions = {
+            entry.key: entry.value
+            for category in decisions
+            if isinstance(category.value, list)
+            for entry in category.value
+            if isinstance(entry.value, list)
+        }
+        cls.events = {
+            scalar(node.value, "id"): node.value
+            for node in parse_clausewitz(read(EVENTS))
+            if node.key == "country_event"
+        }
+
+    @staticmethod
+    def keys(items):
+        return [entry.key for entry in walk(items)]
+
+    @staticmethod
+    def prerequisites(focus):
+        return sorted(
+            child.value
+            for entry in focus
+            if entry.key == "prerequisite"
+            for child in entry.value
+        )
+
+    def test_handover_is_the_exclusive_alternative_final(self):
+        final = self.focuses["STP_pc_sdir_sword_directory"]
+        handover = self.focuses["STP_pc_sdir_return_seal"]
+        self.assertEqual(self.prerequisites(final), self.prerequisites(handover))
+        self.assertEqual(
+            scalar(block(final, "mutually_exclusive"), "focus"), "STP_pc_sdir_return_seal"
+        )
+        self.assertEqual(
+            scalar(block(handover, "mutually_exclusive"), "focus"),
+            "STP_pc_sdir_sword_directory",
+        )
+        self.assertNotEqual(
+            (scalar(final, "x"), scalar(final, "y")),
+            (scalar(handover, "x"), scalar(handover, "y")),
+        )
+        reward = block(handover, "completion_reward")
+        self.assertIn("ADISCORD_STP_pc.91", [e.value for e in walk(reward) if e.key == "id"])
+
+    def test_oath_schedules_the_custody_choice(self):
+        reward = block(self.focuses["STP_pc_sdir_oath"], "completion_reward")
+        ids = [e.value for e in walk(reward) if e.key == "id"]
+        self.assertIn("ADISCORD_STP_pc.90", ids)
+
+    def test_union_victory_takes_the_founder_before_annexation(self):
+        settle = block(self.effects, "STP_cw_settle_union_victory")
+        keys = self.keys(settle)
+        self.assertLess(
+            keys.index("STP_sdir_take_founder_into_custody"), keys.index("annex_country")
+        )
+        custody = block(self.effects, "STP_sdir_take_founder_into_custody")
+        keys = self.keys(custody)
+        self.assertLess(keys.index("remove_country_leader_role"), keys.index("set_nationality"))
+
+    def test_restoration_refunds_programmes_and_reopens_the_hegemony_course(self):
+        restore = block(self.effects, "STP_sdir_restore_founder")
+        keys = self.keys(restore)
+        for refund in (
+            "STP_sdir_refund_all_district_projects",
+            "STP_sdir_arsenal_refund",
+            "STP_sdir_naval_refund",
+        ):
+            self.assertLess(keys.index(refund), keys.index("promote_character"))
+        self.assertLess(keys.index("promote_character"), keys.index("set_politics"))
+        self.assertEqual(
+            scalar(walk_block(restore, "set_politics"), "ruling_party"), "chauvinism"
+        )
+        assigned = {
+            scalar(e.value, "var"): scalar(e.value, "value")
+            for e in walk(restore)
+            if e.key == "set_variable"
+        }
+        self.assertEqual(assigned["STP_pc_course"], "1")
+        self.assertEqual(assigned["STP_pc_founder_choice"], "1")
+        self.assertIn("clr_character_flag", keys)
+        self.assertIn("clear_variable", keys)
+
+    def test_plot_mission_settles_success_and_timeout_once(self):
+        plot = self.decisions["STP_sdir_loyalist_plot"]
+        self.assertEqual(scalar(plot, "selectable_mission"), "no")
+        self.assertEqual(scalar(plot, "is_good"), "no")
+        activation = self.keys(block(plot, "activation"))
+        self.assertIn("STP_sdir_loyalist_plot_possible", activation)
+        self.assertIn("STP_sdir_directory_weak", activation)
+        self.assertIn("STP_sdir_directory_recovered", self.keys(block(plot, "available")))
+        self.assertIn("STP_sdir_break_loyalist_cells", self.keys(block(plot, "complete_effect")))
+        timeout = block(plot, "timeout_effect")
+        temps = [
+            scalar(e.value, "value")
+            for e in walk(timeout)
+            if e.key == "set_temp_variable" and scalar(e.value, "var") == "STP_sdir_restore_input"
+        ]
+        self.assertEqual(temps, ["2"])
+        self.assertIn("STP_sdir_restore_founder", self.keys(timeout))
+        purge = self.decisions["STP_sdir_purge_loyalist_cells"]
+        keys = self.keys(block(purge, "complete_effect"))
+        self.assertLess(keys.index("STP_sdir_break_loyalist_cells"), keys.index("remove_mission"))
+
+    def test_weak_and_recovered_margins_are_disjoint(self):
+        triggers = read(ROOT / "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+
+        def thresholds(name):
+            body = triggers[triggers.index(f"\n{name} = {{") :]
+            body = body[: body.index("\n}\n")]
+            return [float(value) for value in re.findall(r"has_stability < ([0-9.]+)", body)]
+
+        weak = thresholds("STP_sdir_directory_weak")
+        recovered = thresholds("STP_sdir_directory_recovered")
+        self.assertEqual(len(weak), 2)
+        self.assertEqual(len(recovered), 2)
+        for low, high in zip(weak, recovered):
+            self.assertLess(low, high)
+
+    def test_handover_answers_restore_or_close(self):
+        event = self.events["ADISCORD_STP_pc.91"]
+        options = [entry.value for entry in event if entry.key == "option"]
+        self.assertEqual(len(options), 3)
+        for option in options[:2]:
+            self.assertIn("STP_sdir_restore_founder", self.keys(option))
+        self.assertEqual(scalar(options[2], "name"), "ADISCORD_STP_pc.5.closed")
+
+    def test_new_story_text_loads_in_both_languages(self):
+        keys = [
+            "STP_pc_sdir_return_seal",
+            "STP_pc_sdir_return_seal_desc",
+            "STP_pc_sdir_return_seal_tt",
+            "STP_sdir_loyalist_plot",
+            "STP_sdir_loyalist_plot_desc",
+            "STP_sdir_purge_loyalist_cells",
+            "STP_sdir_purge_loyalist_cells_desc",
+            "STP_sdir_loyalist_purge",
+            "STP_sdir_sotnikov_army_chief",
+        ]
+        for number, answers in (("90", "ab"), ("91", "ab"), ("92", "a"), ("93", "a")):
+            keys += [f"ADISCORD_STP_pc.{number}.t", f"ADISCORD_STP_pc.{number}.d"]
+            keys += [f"ADISCORD_STP_pc.{number}.{answer}" for answer in answers]
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            text = read(path)
+            for key in keys:
+                with self.subTest(language=language, key=key):
+                    match = re.search(rf'(?m)^ {re.escape(key)}:\d* "(.*)"\s*$', text)
+                    self.assertIsNotNone(match)
+                    value = match.group(1)
+                    self.assertNotIn("–", value)
+                    self.assertNotIn("—", value)
+                    self.assertLessEqual(len(value), 3000)
+                    self.assertLessEqual(len(value.encode("utf-8")), 5500)
+
+
+def walk_block(items, name):
+    found = [entry.value for entry in walk(items) if entry.key == name]
+    if len(found) != 1 or not isinstance(found[0], list):
+        raise AssertionError(f"Expected one nested block {name}")
+    return found[0]
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -4,6 +4,10 @@ VAL_nw_industrial_network = {
 	industrial_capacity_factory = VAL_nw_factory_output
 	ADISCORD_economy_trade_income_factor = VAL_nw_trade_income
 	ADISCORD_economy_admin_expense_factor = VAL_nw_admin_expense
+	political_power_gain = VAL_nw_course_pp_gain
+	stability_factor = VAL_nw_course_stability
+	war_support_factor = VAL_nw_course_war_support
+	ADISCORD_economy_military_industry_income_factor = VAL_nw_course_military_income
 }
 
 # Independent Kefreyt contract-state modifier.
@@ -136,4 +140,24 @@ VAL_final_war_preparation = {
 	supply_consumption_factor = VAL_final_supply_bonus
 	planning_speed = VAL_final_planning_bonus
 	conscription = VAL_final_reserve_share
+}
+
+# --- commanders_council ---
+# VAL for a limited period after a delegation favour or an accepted demand.
+VAL_council_favour_garrison = {
+	icon = GFX_idea_generic_fortify_the_borders
+	army_defence_factor = 0.10
+	army_org_regain = 0.05
+}
+
+VAL_council_favour_front = {
+	icon = GFX_idea_ADISCORD_law_military_general_staff
+	army_attack_factor = 0.10
+	breakthrough_factor = 0.10
+}
+
+VAL_council_favour_supply = {
+	icon = GFX_idea_generic_production_bonus
+	supply_consumption_factor = -0.10
+	industrial_capacity_factory = 0.05
 }

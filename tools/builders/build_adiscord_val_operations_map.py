@@ -716,7 +716,11 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
             f'  iconType = {{ name = "{prefix}_operations_map" position = {{ x = 20 y = 38 }} quadTextureSprite = "GFX_VAL_ops_map_background" pdx_tooltip = "{prefix}_operations_map_tt" }}\n'
         )
         script.append(
-            f' ADISCORD_{prefix}_operations_panel = {{\n  context_type = decision_category\n  window_name = "ADISCORD_{prefix}_operations_panel_window"\n  visible = {{ always = yes }}\n  triggers = {{\n'
+            f"\tADISCORD_{prefix}_operations_panel = {{\n"
+            "\t\tcontext_type = decision_category\n"
+            f'\t\twindow_name = "ADISCORD_{prefix}_operations_panel_window"\n'
+            "\t\tvisible = { always = yes }\n"
+            "\t\ttriggers = {\n"
         )
         for state in STATE_IDS:
             left, top, _, _ = boxes[state]
@@ -726,7 +730,7 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
             gui.append(
                 f'  iconType = {{ name = "{name}" position = {{ x = {20 + left} y = {38 + top} }} quadTextureSprite = "GFX_VAL_ops_state_{state}" }}\n'
             )
-            script.append(f'   {name}_visible = {{ always = yes }}\n')
+            script.append(f"\t\t\t{name}_visible = {{ always = yes }}\n")
         # Draw borders after all fills so adjacent regions cannot cover their rims.
         for state in STATE_IDS:
             left, top, _, _ = boxes[state]
@@ -735,22 +739,31 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
                     f'  iconType = {{ name = "{prefix}_ops_{state}_{layer}" position = {{ x = {20 + left} y = {38 + top} }} quadTextureSprite = "GFX_VAL_ops_{layer}_{state}" }}\n'
                 )
             script.append(
-                f'   {prefix}_ops_{state}_border_visible = {{ {state} = {{ controller = {{ tag = {viewer} }} }} }}\n'
+                f"\t\t\t{prefix}_ops_{state}_border_visible = {{ {state} = {{ controller = {{ tag = {viewer} }} }} }}\n"
             )
-            provinces = " ".join(
-                f"NOT = {{ controls_province = {p} }}"
+            provinces = "".join(
+                f"\t\t\t\t\t\t\tNOT = {{ controls_province = {p} }}\n"
                 for p in sorted(state_provinces(state))
             )
             script.append(
-                f'   {prefix}_ops_{state}_contested_visible = {{ {state} = {{ controller = {{ tag = {viewer} OR = {{ {provinces} }} }} }} }}\n'
+                f"\t\t\t{prefix}_ops_{state}_contested_visible = {{\n"
+                f"\t\t\t\t{state} = {{\n"
+                "\t\t\t\t\tcontroller = {\n"
+                f"\t\t\t\t\t\ttag = {viewer}\n"
+                "\t\t\t\t\t\tOR = {\n"
+                f"{provinces}"
+                "\t\t\t\t\t\t}\n"
+                "\t\t\t\t\t}\n"
+                "\t\t\t\t}\n"
+                "\t\t\t}\n"
             )
         gui.append(" }\n")
-        script.append("  }\n  properties = {\n")
+        script.append("\t\t}\n\t\tproperties = {\n")
         for state in STATE_IDS:
             name = f"{prefix}_ops_{state}_controller"
             frame_variable = f"operations_state_{state}_frame"
-            script.append(f'   {name} = {{ frame = {frame_variable} }}\n')
-        script.append("  }\n }\n")
+            script.append(f"\t\t\t{name} = {{ frame = {frame_variable} }}\n")
+        script.append("\t\t}\n\t}\n")
     gui.append(
         ' containerWindowType = { name = "ADISCORD_VAL_trade_routes_window" position = { x = 0 y = 0 } size = { width = 460 height = 570 }\n'
     )
@@ -761,18 +774,39 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
         ' spriteType = { name = "GFX_VAL_trade_map" texturefile = "gfx/interface/VAL_operations/VAL_trade_map.png" }\n'
     )
     script.append(
-        ' ADISCORD_VAL_trade_routes_panel = { context_type = decision_category window_name = "ADISCORD_VAL_trade_routes_window" visible = { always = yes } triggers = {\n'
+        "\tADISCORD_VAL_trade_routes_panel = {\n"
+        "\t\tcontext_type = decision_category\n"
+        '\t\twindow_name = "ADISCORD_VAL_trade_routes_window"\n'
+        "\t\tvisible = { always = yes }\n"
+        "\t\ttriggers = {\n"
     )
-    risk = 'check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than }'
+    risk = (
+        "check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals }",
+        "check_variable = { var = VAL_corridor_security value = 3 compare = less_than }",
+    )
     for row, route in enumerate(trade_route_states()):
         gfx.append(
             f' spriteType = {{ name = "GFX_VAL_trade_route_{route}" texturefile = "gfx/interface/VAL_operations/VAL_trade_route_{route}.png" noOfFrames = 4 }}\n'
         )
+        # Each condition is a list of trigger lines, indented relative to its label.
         conditions = (
-            f'NOT = {{ VAL_trade_route_{route}_open = yes }} NOT = {{ has_country_flag = VAL_route_{route}_commissioned }}',
-            f'VAL_trade_route_{route}_open = yes NOT = {{ AND = {{ {risk} }} }}',
-            f'VAL_trade_route_{route}_open = yes {risk}',
-            f'NOT = {{ VAL_trade_route_{route}_open = yes }} has_country_flag = VAL_route_{route}_commissioned',
+            (
+                f"NOT = {{ VAL_trade_route_{route}_open = yes }}",
+                f"NOT = {{ has_country_flag = VAL_route_{route}_commissioned }}",
+            ),
+            (
+                f"VAL_trade_route_{route}_open = yes",
+                "NOT = {",
+                "\tAND = {",
+                *(f"\t\t{line}" for line in risk),
+                "\t}",
+                "}",
+            ),
+            (f"VAL_trade_route_{route}_open = yes", *risk),
+            (
+                f"NOT = {{ VAL_trade_route_{route}_open = yes }}",
+                f"has_country_flag = VAL_route_{route}_commissioned",
+            ),
         )
         # The standing north road exists before the corridor UI, but the category
         # itself stays hidden. All expansion routes share the second-wave gate.
@@ -784,23 +818,24 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
         gui.append(
             f'  iconType = {{ name = "{icon_name}" position = {{ x = 20 y = 8 }} quadTextureSprite = "GFX_VAL_trade_route_{route}" }}\n'
         )
-        script.append(f'  {icon_name}_visible = {{ {route_gate} }}\n')
+        script.append(f"\t\t\t{icon_name}_visible = {{ {route_gate} }}\n")
         for frame, condition in enumerate(conditions, 1):
             name = f'trade_{route}_{frame}'
             # A separate status row gives each overlapping route its own hit area.
             gui.append(
                 f'  instantTextBoxType = {{ name = "{name}_label" position = {{ x = 20 y = {354+row*25} }} font = "hoi_16mbs" text = "VAL_trade_{route}_{frame}" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_{route}_tt" }}\n'
             )
-            script.append(f'  {name}_label_visible = {{ {route_gate} {condition} }}\n')
+            body = "".join(f"\t\t\t\t{line}\n" for line in (route_gate, *condition))
+            script.append(f"\t\t\t{name}_label_visible = {{\n{body}\t\t\t}}\n")
     gui.append(
         '  instantTextBoxType = { name = "legend" position = { x = 20 y = 515 } font = "hoi_16mbs" text = "VAL_trade_map_legend" maxWidth = 420 maxHeight = 48 }\n }\n}\n'
     )
     gfx.append('}\n')
-    script.append(' }\n  properties = {\n')
+    script.append("\t\t}\n\t\tproperties = {\n")
     for route in trade_route_states():
         icon_name = f"trade_{route}_map"
-        script.append(f'   {icon_name} = {{ frame = {icon_name}_frame }}\n')
-    script.append('  }\n }\n}\n')
+        script.append(f"\t\t\t{icon_name} = {{ frame = {icon_name}_frame }}\n")
+    script.append("\t\t}\n\t}\n}\n")
     return {
         "interface/ADISCORD_VAL_operations.gui": "".join(gui),
         "interface/ADISCORD_VAL_operations.gfx": "".join(gfx),

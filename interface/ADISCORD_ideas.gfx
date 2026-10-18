@@ -100,7 +100,13 @@ spriteTypes = {
 		name = "GFX_idea_minister_STP_Cyan_Crowe"
 		texturefile = "gfx/interface/ideas/STP/Ministers/minister_STP_portrait_STP_Cyan_Crowe.png"
 	}
+
 	###VAL
+	spriteType = {
+		name = "GFX_idea_minister_VAL_Mikhail_Velsky"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Mikhail_Velsky_small.png"
+	}
+
 	spriteType = {
 		name = "GFX_idea_VAL_contract_service"
 		texturefile = "gfx/interface/ideas/laws/military_mobilization/ADISCORD_military_mobilization_val_contract_service.png"

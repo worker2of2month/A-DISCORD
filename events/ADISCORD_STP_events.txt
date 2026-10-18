@@ -1431,7 +1431,9 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = { NOT = { has_variable = STP_pc_charter_cabinet } }
+				# The head of state is the ruling party's leader, so the party follows the promotion.
 				promote_character = STP_maksim_shabrat
+				set_politics = { ruling_party = chauvinism elections_allowed = no }
 				if = {
 					limit = {
 						check_variable = { var = STP_pc_course value = 4 compare = equals }
@@ -7100,7 +7102,10 @@ country_event = {
 			}
 			add_stability = 0.04
 			add_war_support = -0.03
-			add_ideas = ADISCORD_justice_military_prosecution
+			if = {
+				limit = { NOT = { has_idea = ADISCORD_justice_military_prosecution } }
+				add_ideas = ADISCORD_justice_military_prosecution
+			}
 			custom_effect_tooltip = STP_pc_charter_sotnikov_trial_civil_tt
 			hidden_effect = {
 				set_variable = { var = STP_pc_charter_sotnikov_command_ruling value = 1 }
@@ -7123,7 +7128,10 @@ country_event = {
 			}
 			add_stability = 0.02
 			army_experience = 20
-			add_ideas = ADISCORD_justice_military_prosecution
+			if = {
+				limit = { NOT = { has_idea = ADISCORD_justice_military_prosecution } }
+				add_ideas = ADISCORD_justice_military_prosecution
+			}
 			custom_effect_tooltip = STP_pc_charter_sotnikov_trial_review_tt
 			hidden_effect = {
 				set_variable = { var = STP_pc_charter_sotnikov_command_ruling value = 2 }
@@ -7654,6 +7662,139 @@ country_event = {
 		}
 	}
 	option = { name = ADISCORD_STP_pc.72.a }
+}
+
+# The directory decides how the founder taken from the party's Fada prison is held.
+# The custody choice sets the stability margin of the later loyalist plot.
+country_event = {
+	id = ADISCORD_STP_pc.90
+	title = ADISCORD_STP_pc.90.t
+	desc = ADISCORD_STP_pc.90.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		STP_sdir_founder_restorable = yes
+		NOT = { has_variable = STP_sdir_founder_custody }
+	}
+	option = {
+		name = ADISCORD_STP_pc.90.a
+		trigger = {
+			STP_sdir_founder_restorable = yes
+			NOT = { has_variable = STP_sdir_founder_custody }
+		}
+		ai_chance = { base = 70 }
+		if = {
+			limit = {
+				STP_sdir_founder_restorable = yes
+				NOT = { has_variable = STP_sdir_founder_custody }
+			}
+			add_command_power = 15
+			custom_effect_tooltip = STP_sdir_custody_guard_tt
+			hidden_effect = {
+				set_variable = { var = STP_sdir_founder_custody value = 1 }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.90.b
+		trigger = {
+			STP_sdir_founder_restorable = yes
+			NOT = { has_variable = STP_sdir_founder_custody }
+		}
+		ai_chance = { base = 30 }
+		if = {
+			limit = {
+				STP_sdir_founder_restorable = yes
+				NOT = { has_variable = STP_sdir_founder_custody }
+			}
+			add_stability = 0.03
+			custom_effect_tooltip = STP_sdir_custody_honour_tt
+			hidden_effect = {
+				set_variable = { var = STP_sdir_founder_custody value = 2 }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.closed
+		trigger = {
+			OR = {
+				STP_sdir_founder_restorable = no
+				has_variable = STP_sdir_founder_custody
+			}
+		}
+	}
+}
+
+# The handover focus has already closed the sword directory final; every answer
+# restores the founder, and only the role left to Sotnikov differs.
+country_event = {
+	id = ADISCORD_STP_pc.91
+	title = ADISCORD_STP_pc.91.t
+	desc = ADISCORD_STP_pc.91.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	option = {
+		name = ADISCORD_STP_pc.91.a
+		trigger = { STP_sdir_founder_restorable = yes }
+		ai_chance = { base = 60 }
+		custom_effect_tooltip = STP_sdir_founder_returns_tt
+		add_stability = 0.05
+		add_advisor_role = {
+			character = STP_grigory_sotnikov
+			advisor = {
+				slot = army_chief
+				idea_token = STP_sdir_sotnikov_army_chief
+				ledger = army
+				traits = { army_chief_defensive_2 }
+				cost = 50
+			}
+		}
+		hidden_effect = {
+			set_temp_variable = { var = STP_sdir_restore_input value = 1 }
+			STP_sdir_restore_founder = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.91.b
+		trigger = { STP_sdir_founder_restorable = yes }
+		ai_chance = { base = 40 }
+		custom_effect_tooltip = STP_sdir_founder_returns_tt
+		add_political_power = 100
+		hidden_effect = {
+			set_temp_variable = { var = STP_sdir_restore_input value = 1 }
+			STP_sdir_restore_founder = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.5.closed
+		trigger = { STP_sdir_founder_restorable = no }
+	}
+}
+
+# Narration only: the mission timeout has already restored the founder.
+country_event = {
+	id = ADISCORD_STP_pc.92
+	title = ADISCORD_STP_pc.92.t
+	desc = ADISCORD_STP_pc.92.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_pc.92.a }
+}
+
+# Narration only: exposure or the purge has already closed the plot.
+country_event = {
+	id = ADISCORD_STP_pc.93
+	title = ADISCORD_STP_pc.93.t
+	desc = ADISCORD_STP_pc.93.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_pc.93.a }
 }
 
 # Focus-driven scenes recheck the current side and campaign phase after completion.

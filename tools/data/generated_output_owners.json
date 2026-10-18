@@ -1925,7 +1925,16 @@
         "gfx/flags/small/DCA.tga",
         "gfx/flags/YPR_VAL_administration.tga",
         "gfx/flags/medium/YPR_VAL_administration.tga",
-        "gfx/flags/small/YPR_VAL_administration.tga"
+        "gfx/flags/small/YPR_VAL_administration.tga",
+        "gfx/flags/VAL_kefreyt_state.tga",
+        "gfx/flags/medium/VAL_kefreyt_state.tga",
+        "gfx/flags/small/VAL_kefreyt_state.tga",
+        "gfx/flags/VAL_valden_republic.tga",
+        "gfx/flags/medium/VAL_valden_republic.tga",
+        "gfx/flags/small/VAL_valden_republic.tga",
+        "gfx/flags/VAL_united_military_districts.tga",
+        "gfx/flags/medium/VAL_united_military_districts.tga",
+        "gfx/flags/small/VAL_united_military_districts.tga"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_val_flags.py",
@@ -1937,7 +1946,12 @@
         "gfx/flags/small/NOD_VAL_administration.tga",
         "gfx/flags/YPR.tga",
         "gfx/flags/medium/YPR.tga",
-        "gfx/flags/small/YPR.tga"
+        "gfx/flags/small/YPR.tga",
+        "gfx/flags/VAL.tga",
+        "gfx/flags/medium/VAL.tga",
+        "gfx/flags/small/VAL.tga",
+        "gfx/flags/VAL_valden_republic.tga",
+        "gfx/flags/VAL_united_military_districts.tga"
       ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive",

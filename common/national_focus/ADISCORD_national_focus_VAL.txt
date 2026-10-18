@@ -125,7 +125,13 @@ focus_tree = {
 
 shared_focus = {
 		id = VAL_The_Contract_State
-		icon = GFX_focus_VAL_The_Contract_State
+		# Under Council rule the coup dirties the layout and swaps out Solgalov's portrait.
+		icon = {
+			GFX_focus_VAL_Army_Of_The_Ledger = {
+				VAL_council_governs = yes
+			}
+			GFX_focus_VAL_The_Contract_State = yes
+		}
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS FOCUS_FILTER_VAL_MANPOWER }
 		x = 32
 		y = 0
@@ -590,7 +596,7 @@ shared_focus = {
 
 shared_focus = {
 		id = VAL_Gromovs_Assault_Tables
-		icon = GFX_goal_generic_attack_allies
+		icon = GFX_focus_VAL_Gromovs_Assault_Tables
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_MANPOWER }
 		x = 52
 		y = 3
@@ -816,6 +822,7 @@ shared_focus = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Trading_Partners_tt
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_trading_partners_delta } }
 			add_political_power = 50
+			custom_effect_tooltip = VAL_north_open_market_finale_tt
 			hidden_effect = {
 				set_country_flag = VAL_north_open_market
 				VAL_refresh_contract_modifier = yes
@@ -848,6 +855,7 @@ shared_focus = {
 			add_war_support = 0.05
 			add_equipment_to_stockpile = { type = artillery_equipment amount = 150 producer = VAL }
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_north_coercive_delta } }
+			custom_effect_tooltip = VAL_north_coercive_finale_tt
 			country_event = { id = val_rework.8 }
 			hidden_effect = {
 				set_country_flag = VAL_north_coercive
@@ -2470,7 +2478,13 @@ shared_focus = {
 
 shared_focus = {
 		id = VAL_Stelander_Crisis_Opens
-		icon = GFX_focus_VAL_Stelander_Crisis_Opens
+		# Under Council rule the coup dirties the layout and swaps out Solgalov's portrait.
+		icon = {
+			GFX_focus_VAL_Operational_Directorate = {
+				VAL_council_governs = yes
+			}
+			GFX_focus_VAL_Stelander_Crisis_Opens = yes
+		}
 		search_filters = { FOCUS_FILTER_VAL_STELANDER }
 		x = 26
 		y = 6
@@ -4639,6 +4653,181 @@ shared_focus = {
 			hidden_effect = {
 				VAL_council_initialize_seats = yes
 				VAL_refresh_contract_modifier = yes
+				country_event = { id = val_council.14 days = 1 }
+			}
+		}
+	}
+
+shared_focus = {
+		id = VAL_council_war_plan
+		dynamic = yes
+		allow_branch = {
+			VAL_council_governs = yes
+		}
+		icon = GFX_goal_generic_position_armies
+		x = 44
+		y = 2
+		cost = 1
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		prerequisite = {
+			focus = VAL_council_takes_command
+		}
+		bypass = {
+			VAL_council_stelander_war = no
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_in_power_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_stelander_war_tt
+				VAL_council_stelander_war = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+		completion_reward = {
+			army_experience = 10
+			add_command_power = 15
+			custom_effect_tooltip = VAL_council_war_plan_tt
+		}
+	}
+
+shared_focus = {
+		id = VAL_council_hold_the_line
+		dynamic = yes
+		allow_branch = {
+			VAL_council_governs = yes
+		}
+		icon = GFX_goal_generic_defence
+		x = 42
+		y = 3
+		cost = 1
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		prerequisite = {
+			focus = VAL_council_war_plan
+		}
+		mutually_exclusive = {
+			focus = VAL_council_operation_iron_shield
+			focus = VAL_council_arsenal_war
+		}
+		bypass = {
+			VAL_council_stelander_war = no
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_in_power_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_stelander_war_tt
+				VAL_council_stelander_war = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_lines_held_tt
+				VAL_council_lines_held = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+		completion_reward = {
+			custom_effect_tooltip = VAL_council_hold_the_line_tt
+			hidden_effect = {
+				set_temp_variable = { var = VAL_council_plan_choice value = 1 }
+				VAL_council_start_plan = yes
+			}
+		}
+	}
+
+shared_focus = {
+		id = VAL_council_operation_iron_shield
+		dynamic = yes
+		allow_branch = {
+			VAL_council_governs = yes
+		}
+		icon = GFX_goal_generic_major_war
+		x = 44
+		y = 3
+		cost = 1
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		prerequisite = {
+			focus = VAL_council_war_plan
+		}
+		mutually_exclusive = {
+			focus = VAL_council_hold_the_line
+			focus = VAL_council_arsenal_war
+		}
+		bypass = {
+			VAL_council_stelander_war = no
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_in_power_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_stelander_war_tt
+				VAL_council_stelander_war = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_iron_shield_open_tt
+				VAL_council_iron_shield_open = yes
+			}
+		}
+		ai_will_do = {
+			base = 6
+		}
+		completion_reward = {
+			custom_effect_tooltip = VAL_council_operation_iron_shield_tt
+			hidden_effect = {
+				set_temp_variable = { var = VAL_council_plan_choice value = 2 }
+				VAL_council_start_plan = yes
+			}
+		}
+	}
+
+shared_focus = {
+		id = VAL_council_arsenal_war
+		dynamic = yes
+		allow_branch = {
+			VAL_council_governs = yes
+		}
+		icon = GFX_goal_generic_small_arms
+		x = 46
+		y = 3
+		cost = 1
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		prerequisite = {
+			focus = VAL_council_war_plan
+		}
+		mutually_exclusive = {
+			focus = VAL_council_hold_the_line
+			focus = VAL_council_operation_iron_shield
+		}
+		bypass = {
+			VAL_council_stelander_war = no
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_in_power_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_stelander_war_tt
+				VAL_council_stelander_war = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+		completion_reward = {
+			custom_effect_tooltip = VAL_council_arsenal_war_tt
+			hidden_effect = {
+				set_temp_variable = { var = VAL_council_plan_choice value = 3 }
+				VAL_council_start_plan = yes
 			}
 		}
 	}
@@ -4670,6 +4859,7 @@ shared_focus = {
 			base = 0
 		}
 		completion_reward = {
+			add_power_balance_value = { id = VAL_council_balance value = -0.15 }
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = VAL_contract_delta_dummy
@@ -4743,6 +4933,7 @@ shared_focus = {
 			base = 6
 		}
 		completion_reward = {
+			add_power_balance_value = { id = VAL_council_balance value = -0.05 }
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = VAL_contract_delta_dummy
@@ -4787,6 +4978,7 @@ shared_focus = {
 			base = 0
 		}
 		completion_reward = {
+			add_power_balance_value = { id = VAL_council_balance value = 0.05 }
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = VAL_contract_delta_dummy
@@ -4854,12 +5046,13 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_goal_generic_production
-		x = 42
-		y = 3
+		x = 32
+		y = 4
 		cost = 2
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
 		prerequisite = {
-			focus = VAL_council_captains_agreement
+			focus = VAL_council_brokers
+			focus = VAL_council_direct_orders
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -4896,9 +5089,6 @@ shared_focus = {
 		y = 5
 		cost = 2
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
-		prerequisite = {
-			focus = VAL_council_common_fund
-		}
 		prerequisite = {
 			focus = VAL_council_equal_votes
 			focus = VAL_council_large_companies
@@ -4948,6 +5138,7 @@ shared_focus = {
 			base = 6
 		}
 		completion_reward = {
+			add_power_balance_value = { id = VAL_council_balance value = -0.15 }
 			custom_effect_tooltip = VAL_focus_progression_VAL_council_charter_tt
 			if = {
 				limit = {
@@ -4990,6 +5181,7 @@ shared_focus = {
 				}
 			}
 			VAL_council_finish_political_reform = yes
+		VAL_council_apply_identity = yes
 			country_event = { id = val_council.3 days = 1 }
 			hidden_effect = {
 				VAL_refresh_contract_modifier = yes
@@ -5025,6 +5217,7 @@ shared_focus = {
 			base = 6
 		}
 		completion_reward = {
+			add_power_balance_value = { id = VAL_council_balance value = 0.15 }
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = VAL_contract_delta_dummy
@@ -5216,6 +5409,7 @@ shared_focus = {
 			}
 		}
 		completion_reward = {
+			add_power_balance_value = { id = VAL_council_balance value = 0.15 }
 			custom_effect_tooltip = VAL_focus_progression_VAL_council_permanent_government_tt
 			effect_tooltip = {
 				swap_ideas = {
@@ -5227,7 +5421,12 @@ shared_focus = {
 				add_to_variable = { var = VAL_council_base_command_gain value = 0.1 }
 			}
 			VAL_council_finish_political_reform = yes
-			country_event = { id = val_council.4 days = 1 }
+			custom_effect_tooltip = VAL_council_install_commander_tt
+			hidden_effect = {
+				VAL_council_install_commander = yes
+				country_event = { id = val_council.22 days = 1 }
+				news_event = { id = val_council.23 days = 1 }
+			}
 			unlock_decision_tooltip = VAL_council_extend_emergency
 			hidden_effect = {
 				VAL_refresh_contract_modifier = yes
@@ -5270,6 +5469,7 @@ shared_focus = {
 			}
 		}
 		completion_reward = {
+			add_power_balance_value = { id = VAL_council_balance value = -0.1 }
 			custom_effect_tooltip = VAL_focus_progression_VAL_council_limited_mandate_tt
 			effect_tooltip = {
 				swap_ideas = {
@@ -5283,6 +5483,10 @@ shared_focus = {
 			}
 			VAL_council_finish_political_reform = yes
 			country_event = { id = val_council.4 days = 1 }
+			custom_effect_tooltip = VAL_council_limited_term_tt
+			hidden_effect = {
+				VAL_council_check_postwar = yes
+			}
 			hidden_effect = {
 				VAL_refresh_contract_modifier = yes
 			}
@@ -5422,80 +5626,6 @@ shared_focus = {
 	}
 
 shared_focus = {
-		id = VAL_council_merchant_guarantees
-		dynamic = yes
-		allow_branch = {
-			VAL_council_governs = yes
-		}
-		icon = GFX_focus_generic_treaty
-		x = 30
-		y = 4
-		cost = 2
-		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
-		prerequisite = {
-			focus = VAL_council_brokers
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = VAL_council_in_power_tt
-				VAL_council_operational = yes
-			}
-		}
-		ai_will_do = {
-			base = 6
-		}
-		completion_reward = {
-			custom_effect_tooltip = VAL_council_grant_250_tt
-			hidden_effect = {
-				add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
-				ADISCORD_economy_mark_dirty = yes
-			}
-			unlock_decision_tooltip = VAL_council_merchant_guarantee
-			unlock_decision_tooltip = VAL_council_withdraw_merchant_guarantee
-			unlock_decision_tooltip = VAL_council_buy_installment
-			hidden_effect = {
-				VAL_refresh_contract_modifier = yes
-			}
-		}
-	}
-
-shared_focus = {
-		id = VAL_council_procurement_commissions
-		dynamic = yes
-		allow_branch = {
-			VAL_council_governs = yes
-		}
-		icon = GFX_goal_generic_production
-		x = 34
-		y = 4
-		cost = 2
-		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
-		prerequisite = {
-			focus = VAL_council_direct_orders
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = VAL_council_in_power_tt
-				VAL_council_operational = yes
-			}
-		}
-		ai_will_do = {
-			base = 6
-		}
-		completion_reward = {
-			add_equipment_to_stockpile = { type = motorized_equipment amount = 150 producer = VAL }
-			add_equipment_to_stockpile = { type = support_equipment amount = 75 producer = VAL }
-			unlock_decision_tooltip = VAL_council_buy_support
-			unlock_decision_tooltip = VAL_council_buy_trucks
-			unlock_decision_tooltip = VAL_council_schedule_rifles
-			hidden_effect = {
-				VAL_refresh_contract_modifier = yes
-			}
-		}
-	}
-
-shared_focus = {
 		id = VAL_council_supplier_consortium
 		dynamic = yes
 		allow_branch = {
@@ -5503,11 +5633,11 @@ shared_focus = {
 		}
 		icon = GFX_focus_generic_treaty
 		x = 30
-		y = 5
+		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
 		prerequisite = {
-			focus = VAL_council_merchant_guarantees
+			focus = VAL_council_brokers
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -5528,6 +5658,15 @@ shared_focus = {
 			hidden_effect = {
 				add_to_variable = { var = VAL_council_base_trade_income value = 0.05 }
 			}
+			custom_effect_tooltip = VAL_council_grant_250_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			unlock_decision_tooltip = VAL_council_merchant_guarantee
+			unlock_decision_tooltip = VAL_council_withdraw_merchant_guarantee
+			unlock_decision_tooltip = VAL_council_buy_installment
 			unlock_decision_tooltip = VAL_council_consortium_norm
 			hidden_effect = {
 				VAL_refresh_contract_modifier = yes
@@ -5543,11 +5682,11 @@ shared_focus = {
 		}
 		icon = GFX_goal_generic_production
 		x = 34
-		y = 5
+		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
 		prerequisite = {
-			focus = VAL_council_procurement_commissions
+			focus = VAL_council_direct_orders
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -5559,8 +5698,12 @@ shared_focus = {
 			base = 6
 		}
 		completion_reward = {
-			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = VAL }
+			add_equipment_to_stockpile = { type = motorized_equipment amount = 150 producer = VAL }
+			add_equipment_to_stockpile = { type = support_equipment amount = 225 producer = VAL }
 			add_tech_bonus = { name = VAL_council_staff_acceptance bonus = 0.5 uses = 1 category = infantry_weapons }
+			unlock_decision_tooltip = VAL_council_buy_support
+			unlock_decision_tooltip = VAL_council_buy_trucks
+			unlock_decision_tooltip = VAL_council_schedule_rifles
 			unlock_decision_tooltip = VAL_council_check_shipment
 			hidden_effect = {
 				VAL_refresh_contract_modifier = yes
@@ -5631,6 +5774,12 @@ shared_focus = {
 			base = 6
 		}
 		completion_reward = {
+			add_power_balance_value = { id = VAL_council_balance value = 0.1 }
+			custom_effect_tooltip = VAL_council_loyalists_m15_tt
+			hidden_effect = {
+				set_temp_variable = { var = VAL_council_loyalists_delta value = -15 }
+				VAL_council_change_loyalists = yes
+			}
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = VAL_contract_delta_dummy
@@ -5675,6 +5824,12 @@ shared_focus = {
 			base = 0
 		}
 		completion_reward = {
+			add_power_balance_value = { id = VAL_council_balance value = -0.1 }
+			custom_effect_tooltip = VAL_council_loyalists_m10_tt
+			hidden_effect = {
+				set_temp_variable = { var = VAL_council_loyalists_delta value = -10 }
+				VAL_council_change_loyalists = yes
+			}
 			hidden_effect = {
 				add_to_variable = { var = VAL_council_base_army_expense value = -0.03 }
 			}
@@ -5720,6 +5875,11 @@ shared_focus = {
 			base = 6
 		}
 		completion_reward = {
+			custom_effect_tooltip = VAL_council_loyalists_m10_tt
+			hidden_effect = {
+				set_temp_variable = { var = VAL_council_loyalists_delta value = -10 }
+				VAL_council_change_loyalists = yes
+			}
 			unlock_decision_tooltip = VAL_council_discipline_staff
 			unlock_decision_tooltip = VAL_council_fund_corrections
 			hidden_effect = {
@@ -5752,6 +5912,11 @@ shared_focus = {
 			base = 6
 		}
 		completion_reward = {
+			custom_effect_tooltip = VAL_council_loyalists_m5_tt
+			hidden_effect = {
+				set_temp_variable = { var = VAL_council_loyalists_delta value = -5 }
+				VAL_council_change_loyalists = yes
+			}
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = VAL_contract_delta_dummy
@@ -5794,6 +5959,11 @@ shared_focus = {
 			base = 6
 		}
 		completion_reward = {
+			custom_effect_tooltip = VAL_council_loyalists_m10_tt
+			hidden_effect = {
+				set_temp_variable = { var = VAL_council_loyalists_delta value = -10 }
+				VAL_council_change_loyalists = yes
+			}
 			custom_effect_tooltip = VAL_council_first_prevention_tt
 			hidden_effect = {
 				VAL_council_start_prevention = yes
@@ -5830,6 +6000,11 @@ shared_focus = {
 			base = 6
 		}
 		completion_reward = {
+			custom_effect_tooltip = VAL_council_loyalists_m5_tt
+			hidden_effect = {
+				set_temp_variable = { var = VAL_council_loyalists_delta value = -5 }
+				VAL_council_change_loyalists = yes
+			}
 			custom_effect_tooltip = VAL_council_recall_tt
 			unlock_decision_tooltip = VAL_council_recall_command
 			hidden_effect = {

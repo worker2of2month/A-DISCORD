@@ -309,7 +309,10 @@ RUS_crisis_programme_focus_available = {
 
 RUS_crisis_all_defenders_defeated = {
 	check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
-	any_of_scopes = { array = global.RUS_crisis_defenders always = yes }
+	any_of_scopes = {
+		array = global.RUS_crisis_defenders
+		always = yes
+	}
 	NOT = {
 		any_of_scopes = {
 			array = global.RUS_crisis_defenders
@@ -325,7 +328,12 @@ RUS_crisis_all_defenders_defeated = {
 			OR = {
 				has_capitulated = no
 				capital_scope = {
-					NOT = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS } } }
+					NOT = {
+						OR = {
+							is_controlled_by = RUS
+							controller = { is_subject_of = RUS }
+						}
+					}
 				}
 			}
 		}
@@ -346,8 +354,18 @@ RUS_crisis_fragment_available = {
 # Native diplomacy callbacks keep ROOT and FROM; ignore other countries' wars.
 RUS_crisis_callback_relevant = {
 	OR = {
-		ROOT = { OR = { tag = RUS has_country_flag = RUS_crisis_defender } }
-		FROM = { OR = { tag = RUS has_country_flag = RUS_crisis_defender } }
+		ROOT = {
+			OR = {
+				tag = RUS
+				has_country_flag = RUS_crisis_defender
+			}
+		}
+		FROM = {
+			OR = {
+				tag = RUS
+				has_country_flag = RUS_crisis_defender
+			}
+		}
 	}
 }
 
@@ -407,37 +425,85 @@ ADISCORD_vorkerland_rus_current_target_capitulated = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
 			country_exists = SLA
 			has_war_with = SLA
-			SLA = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = SLA } } } }
+			SLA = {
+				ADISCORD_vorkerland_rus_target_defeated = yes
+				capital_scope = {
+					OR = {
+						is_controlled_by = RUS
+						controller = { is_subject_of = RUS has_war_with = SLA }
+					}
+				}
+			}
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
 			country_exists = RZA
 			has_war_with = RZA
-			RZA = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = RZA } } } }
+			RZA = {
+				ADISCORD_vorkerland_rus_target_defeated = yes
+				capital_scope = {
+					OR = {
+						is_controlled_by = RUS
+						controller = { is_subject_of = RUS has_war_with = RZA }
+					}
+				}
+			}
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
 			country_exists = MLR
 			has_war_with = MLR
-			MLR = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = MLR } } } }
+			MLR = {
+				ADISCORD_vorkerland_rus_target_defeated = yes
+				capital_scope = {
+					OR = {
+						is_controlled_by = RUS
+						controller = { is_subject_of = RUS has_war_with = MLR }
+					}
+				}
+			}
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
 			country_exists = ERT
 			has_war_with = ERT
-			ERT = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = ERT } } } }
+			ERT = {
+				ADISCORD_vorkerland_rus_target_defeated = yes
+				capital_scope = {
+					OR = {
+						is_controlled_by = RUS
+						controller = { is_subject_of = RUS has_war_with = ERT }
+					}
+				}
+			}
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
 			country_exists = IRT
 			has_war_with = IRT
-			IRT = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = IRT } } } }
+			IRT = {
+				ADISCORD_vorkerland_rus_target_defeated = yes
+				capital_scope = {
+					OR = {
+						is_controlled_by = RUS
+						controller = { is_subject_of = RUS has_war_with = IRT }
+					}
+				}
+			}
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
 			country_exists = SCA
 			has_war_with = SCA
-			SCA = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = SCA } } } }
+			SCA = {
+				ADISCORD_vorkerland_rus_target_defeated = yes
+				capital_scope = {
+					OR = {
+						is_controlled_by = RUS
+						controller = { is_subject_of = RUS has_war_with = SCA }
+					}
+				}
+			}
 		}
 	}
 }
@@ -770,32 +836,56 @@ RUS_ai_proclamation_pending = {
 }
 
 ADISCORD_vorkerland_rus_borders_dirty_sla = {
-	SLA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+	SLA = {
+		exists = yes
+		is_subject = no
+		NOT = { has_capitulated = yes }
+	}
 	any_owned_state = { any_neighbor_state = { is_owned_by = SLA } }
 }
 
 ADISCORD_vorkerland_rus_borders_dirty_rza = {
-	RZA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+	RZA = {
+		exists = yes
+		is_subject = no
+		NOT = { has_capitulated = yes }
+	}
 	any_owned_state = { any_neighbor_state = { is_owned_by = RZA } }
 }
 
 ADISCORD_vorkerland_rus_borders_dirty_mlr = {
-	MLR = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+	MLR = {
+		exists = yes
+		is_subject = no
+		NOT = { has_capitulated = yes }
+	}
 	any_owned_state = { any_neighbor_state = { is_owned_by = MLR } }
 }
 
 ADISCORD_vorkerland_rus_borders_dirty_ert = {
-	ERT = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+	ERT = {
+		exists = yes
+		is_subject = no
+		NOT = { has_capitulated = yes }
+	}
 	any_owned_state = { any_neighbor_state = { is_owned_by = ERT } }
 }
 
 ADISCORD_vorkerland_rus_borders_dirty_irt = {
-	IRT = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+	IRT = {
+		exists = yes
+		is_subject = no
+		NOT = { has_capitulated = yes }
+	}
 	any_owned_state = { any_neighbor_state = { is_owned_by = IRT } }
 }
 
 ADISCORD_vorkerland_rus_borders_dirty_sca = {
-	SCA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+	SCA = {
+		exists = yes
+		is_subject = no
+		NOT = { has_capitulated = yes }
+	}
 	any_owned_state = { any_neighbor_state = { is_owned_by = SCA } }
 }
 
@@ -876,7 +966,10 @@ ADISCORD_vorkerland_rus_holds_sca_playable = {
 ADISCORD_vorkerland_rus_target_defeated = {
 	OR = {
 		has_capitulated = yes
-		AND = { tag = ROOT has_country_flag = ADISCORD_vorkerland_rus_capitulation_current }
+		AND = {
+			tag = ROOT
+			has_country_flag = ADISCORD_vorkerland_rus_capitulation_current
+		}
 	}
 }
 

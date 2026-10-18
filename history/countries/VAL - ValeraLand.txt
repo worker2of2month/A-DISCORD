@@ -66,7 +66,7 @@ add_ideas = {
 	ADISCORD_economic_system_state_coordinated
 
 	#ministers
-	minister_VAL_Valerian_Kraith
+	minister_VAL_Mikhail_Velsky
 	minister_VAL_Arseny_Bragin
 	minister_VAL_Miron_Sablev
 	minister_VAL_Lada_Khrom

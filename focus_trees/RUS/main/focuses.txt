@@ -77,7 +77,10 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 14
-			modifier = { factor = 2 has_equipment = { infantry_equipment < 8000 } }
+			modifier = {
+				factor = 2
+				has_equipment = { infantry_equipment < 8000 }
+			}
 		}
 	}
 
@@ -157,7 +160,10 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 80
-			modifier = { factor = 0 NOT = { has_global_flag = ADISCORD_vorkerland_dirty_opened } }
+			modifier = {
+				factor = 0
+				NOT = { has_global_flag = ADISCORD_vorkerland_dirty_opened }
+			}
 		}
 	}
 
@@ -610,7 +616,10 @@ focus_tree = {
 		x = 14
 		y = 21
 		cost = 4
-		prerequisite = { focus = RUS_black_army_tribunals focus = RUS_scientists_at_headquarters }
+		prerequisite = {
+			focus = RUS_black_army_tribunals
+			focus = RUS_scientists_at_headquarters
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt

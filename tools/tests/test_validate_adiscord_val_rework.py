@@ -1743,13 +1743,21 @@ class ValRewardValidatorTests(unittest.TestCase):
     def test_new_world_previews_match_signed_native_variable_deltas(self):
         accepted, issues = self.preview_issues()
         self.assertEqual(issues, [])
-        previews = {"VAL_nw_industry_delta", "VAL_nw_trade_delta", "VAL_nw_admin_delta"}
+        previews = {
+            "VAL_nw_industry_delta",
+            "VAL_nw_trade_delta",
+            "VAL_nw_admin_delta",
+            "VAL_nw_open_market_delta",
+            "VAL_nw_coercive_market_delta",
+        }
         self.assertLessEqual(previews, accepted)
         sources = self.preview_sources()
         for key, variable, amount in (
             ("effects", "VAL_nw_factory_output", "0.05"),
             ("effects", "VAL_nw_trade_income", "0.05"),
             ("effects", "VAL_nw_admin_expense", "-0.05"),
+            ("effects", "VAL_nw_course_pp_gain", "0.15"),
+            ("effects", "VAL_nw_course_military_income", "0.07"),
         ):
             original = self.variable_addition(sources[key], variable)
             for changed in (
@@ -9115,7 +9123,7 @@ class ValFormationAndCommandTests(unittest.TestCase):
         self.assertTrue(matches_conditions(gate, facts, "VAL"))
         for key, value in [(key, False) for key in facts if key[1] != "numeric"] + [
             (("VAL", "numeric", "has_stability"), 0.499),
-            (("VAL", "has_cosmetic_tag", "VAL_commonwealth"), True),
+            (("VAL", "has_country_flag", "VAL_commonwealth_proclaimed"), True),
         ]:
             self.assertFalse(
                 matches_conditions(gate, {**facts, key: value}, "VAL"), key
@@ -9137,23 +9145,27 @@ class ValFormationAndCommandTests(unittest.TestCase):
             walk,
         )
 
-        bop = parse_clausewitz(
+        balances = parse_clausewitz(
             (ROOT / "common/bop/VAL.txt").read_text(encoding="utf-8")
         )
-        ranges = [e.value for e in walk(bop) if e.key == "range"]
-        intervals = sorted(
-            (float(scalar(r, "min")), float(scalar(r, "max"))) for r in ranges
+        self.assertEqual(
+            [e.key for e in balances], ["VAL_command_balance", "VAL_council_balance"]
         )
-        self.assertEqual(len(intervals), 7)
-        self.assertEqual(intervals[0][0], -1)
-        self.assertEqual(intervals[-1][1], 1)
-        for left, right in zip(intervals, intervals[1:]):
-            self.assertEqual(left[1], right[0])
-        for r in ranges:
-            if scalar(r, "id").endswith("dominance"):
-                self.assertLess(
-                    float(scalar(block(r, "modifier"), "stability_factor")), 0
-                )
+        for balance in balances:
+            ranges = [e.value for e in walk(balance.value) if e.key == "range"]
+            intervals = sorted(
+                (float(scalar(r, "min")), float(scalar(r, "max"))) for r in ranges
+            )
+            self.assertEqual(len(intervals), 7, balance.key)
+            self.assertEqual(intervals[0][0], -1)
+            self.assertEqual(intervals[-1][1], 1)
+            for left, right in zip(intervals, intervals[1:]):
+                self.assertEqual(left[1], right[0])
+            for r in ranges:
+                if scalar(r, "id").endswith("dominance"):
+                    self.assertLess(
+                        float(scalar(block(r, "modifier"), "stability_factor")), 0
+                    )
         decisions = block(
             parse_clausewitz(DECISIONS_PATH.read_text(encoding="utf-8")),
             "VAL_command_balance_category",

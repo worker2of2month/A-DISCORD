@@ -21,8 +21,7 @@ focus_tree = {
 		available = {
 			is_completed_by_event = yes
 		}
-		completion_reward = {
-		}
+		completion_reward = { }
 	}
 
 	focus = {
@@ -34,8 +33,7 @@ focus_tree = {
 		available = {
 			is_completed_by_event = yes
 		}
-		completion_reward = {
-		}
+		completion_reward = { }
 	}
 
 	focus = {
@@ -47,8 +45,7 @@ focus_tree = {
 		available = {
 			is_completed_by_event = yes
 		}
-		completion_reward = {
-		}
+		completion_reward = { }
 	}
 
 	focus = {

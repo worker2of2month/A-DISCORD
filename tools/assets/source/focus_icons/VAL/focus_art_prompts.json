@@ -485,6 +485,34 @@
         "source": "exec-55b5af18-4137-4e91-a089-d7cf5cf5b070.png",
         "prompt": "Use case: compositing. Assemble exactly THREE input asset groups into ONE compact wide HOI4 national focus icon Closed Ledgers for fictional Kefreyt. Concept: unified state accounting eliminates captains' hidden parallel books. Image1 open burgundy official ledger with cream ruled pages is dominant LOWER LEFT and CENTER foreground, low foreshortened perspective. Image2 two brown closed books wrapped in chain with iron padlock form smaller raised UPPER RIGHT rear mass; position them so the padlock is fully visible at right beside open ledger and NOT hidden by pages. Image3 stout silver-grey steel key lies diagonally along LOWER edge of open ledger, oval bow lower left and bit toward center right, key about40 percent total width, subordinate accent. Tight overlapping connected collage, no disconnected product row, clear scale hierarchy and broad organic silhouette about1.55:1 width to height. Preserve input book designs, chain and padlock. Dark burgundy and brown leather, ivory paper, blackened steel and selective cool silver rims with restrained amber glints. Gritty realistic painterly printed cutout style, strong broad tonal masses readable at150px, simplify tiny writing. Remove diffuse background haze from references. TRUE transparent alpha outside object silhouettes and gaps. All objects fully within generous margins. No people, hands, additional props, titles, readable text, badges, floor, scene, cast ground shadows, fog or broad glow."
       }
+    },
+    {
+      "focus_id": "VAL_Tank_Crew_School",
+      "title": "Школа танковых экипажей",
+      "tool": "built-in image_gen",
+      "model_reference": "gfx/models/units/ADISCORD_country_vehicles/VAL_tank.mesh",
+      "assets": [
+        {
+          "file": "tank_crew_school_native_tank.png",
+          "source": "exec-56eaa721-3af2-4c9c-a57d-7539821623e3.png",
+          "prompt": "Use case: style-transfer. ONE isolated Kefreyt tank cutout based faithfully on the supplied render of the ACTUAL native VAL_tank.mesh model, for HOI4 Tank Crew School focus. Preserve distinctive low angular olive-grey hull, angular turret with broad white stripe on side, chunky rectangular applique armor blocks along turret and hull sides, six visible road wheels, long straight cannon with thick sleeve midway, two slim antennas, tiny blue vision block on turret. Translate low-poly model into matte painterly realistic printed focus artwork without redesigning it as a recognizable real-world tank. Change view so tank points to RIGHT, front-right three-quarter view slightly from above, whole barrel antennas tracks inside generous margins. No invented insignia or numbers. Broad readable silhouette, restrained weathering, blackened tracks, desaturated olive steel, cool silver edges and warm amber accents, controlled texture for150px. True transparent alpha background, no terrain, floor, dust, smoke, shooting, halo, crew, helmet, target, labels or border."
+        },
+        {
+          "file": "tank_crew_school_padded_helmet.png",
+          "source": "exec-04988700-7af6-48df-a2b1-24cf51a2c828.png",
+          "prompt": "Use case: stylized-concept. ONE isolated empty tank crew padded helmet, separate transparent PNG for fictional HOI4 Tank Crew School focus. Classic soft black leather tanker's helmet with three thick padded longitudinal crown ribs, bulky integrated round earphones and short throat-microphone strap folded against lower ear flap, small worn burgundy fabric tab. NO human head or face, no mannequin, goggles, symbols, lettering or flags. Three-quarter view turned slightly RIGHT, crown and both ear flaps recognizable, compact broad silhouette, complete helmet within margins. Matte weathered leather and dark steel fittings, painterly realistic printed strategy-game collage, broad deep charcoal/blue-grey shadows, selective cool silver and warm amber edge highlights, controlled texture readable at150px. True transparent background and open face area, no diffuse halo, floor, outside cast shadow, fog, tank, target, extra props or border."
+        },
+        {
+          "file": "tank_crew_school_range_target.png",
+          "source": "exec-4fd158d4-8e9f-4c54-800f-4d1dc67f69e9.png",
+          "prompt": "Use case: stylized-concept. ONE isolated training range target cutout for fictional HOI4 Tank Crew School focus. Broad square weathered steel target plate on two very SHORT thick dark wood supports, slightly tilted in three-quarter view, matte dirty ivory painted face with THREE broad concentric burgundy-red target rings and a dark small bullseye. Three visible small punched impact holes clustered near centre with chipped paint, no explosive damage. Strong compact silhouette, no long poles or ground base, entire object within margins. Dark steel edge, worn muted ivory and burgundy paint, restrained cool silver and warm amber highlights, painterly realistic printed focus collage with broad shapes readable at150px. True transparent alpha background, no floor, landscape, cast shadow outside object, halo, smoke, bullets, firearms, tank, people, numbers, words, extra props or outer frame."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-7de78ed4-1d0e-4859-b30a-810508157b0c.png",
+        "prompt": "Use case: compositing. ONE compact WIDE HOI4 national focus cutout collage Tank Crew School for fictional Kefreyt. Combine exactly these THREE supplied assets: image1 actual-model-derived olive-grey tank with white turret stripe and armor blocks, image2 empty black padded tank crew helmet, image3 ivory/burgundy target board. Helmet LARGE in LEFT foreground as main training symbol, tank across CENTRE behind helmet pointing RIGHT, barrel fully visible, target smaller at far RIGHT slightly behind barrel with bullseye visible above it. Tank's tracks remain visible along lower centre, target short supports naturally overlap with tracks but objects never fuse. Tight interlocking symbolic-scale composition width about1.8 times height, no tall poster, no catalogue gaps. Preserve native tank's angular turret, white side stripe, rectangular armor, blue viewing block, two antennas and six road wheels; preserve helmet padding and target concentric rings. Gritty matte painterly realistic printed focus art, broad readable shapes at180px, dark charcoal leather, desaturated olive armor, warm ivory and burgundy target, selective cool silver and warm amber edge accents. Reduce microtexture. Remove diffuse surrounding halos from all input objects. True transparent alpha beyond silhouette and gaps, no environment, ground, battlefield, smoke, firing, people, flags, extra objects, words or frame. Entire barrel antennas and all objects inside generous margins."
+      }
     }
   ]
 }

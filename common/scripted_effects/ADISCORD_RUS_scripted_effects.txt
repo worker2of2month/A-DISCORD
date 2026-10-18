@@ -51,7 +51,6 @@ RUS_crisis_enforce_truce = {
 	}
 }
 
-
 # COUNTRY defender. The roster is captured before declaring war because native
 # war callbacks may immediately call allies. Preserve other campaigns' ownership.
 RUS_crisis_register_defender = {
@@ -77,7 +76,10 @@ RUS_crisis_launch = {
 	if = {
 		limit = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
 		if = {
-			limit = { RUS_crisis_project_active = yes RUS_lab_reactor_access = yes }
+			limit = {
+				RUS_crisis_project_active = yes
+				RUS_lab_reactor_access = yes
+			}
 			set_variable = { var = RUS_crisis_phase value = 2 }
 			clear_global_event_target = RUS_crisis_war_anchor
 			# An existing player offensive supplies the native war for intervention.
@@ -613,7 +615,12 @@ RUS_crisis_check_external_end = {
 			}
 		}
 		if = {
-			limit = { OR = { exists = no is_subject = yes } }
+			limit = {
+				OR = {
+					exists = no
+					is_subject = yes
+				}
+			}
 			RUS_crisis_close = yes
 		}
 		else = {
@@ -685,7 +692,12 @@ RUS_crisis_record_capitulation = {
 		limit = {
 			RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } }
 			ROOT = { has_country_flag = RUS_crisis_defender }
-			FROM = { OR = { tag = RUS is_subject_of = RUS } }
+			FROM = {
+				OR = {
+					tag = RUS
+					is_subject_of = RUS
+				}
+			}
 		}
 		ROOT = { set_country_flag = RUS_crisis_capitulation_current }
 		RUS = { RUS_crisis_resolve_capitulation = yes }
@@ -698,7 +710,14 @@ RUS_crisis_record_capitulation = {
 		limit = {
 			RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } }
 			ROOT = { has_country_flag = RUS_crisis_defender }
-			FROM = { NOT = { OR = { tag = RUS is_subject_of = RUS } } }
+			FROM = {
+				NOT = {
+					OR = {
+						tag = RUS
+						is_subject_of = RUS
+					}
+				}
+			}
 		}
 		# A foreign victory leaves this country to its own war settlement.
 		ROOT = { RUS_crisis_remove_defender = yes }
@@ -967,7 +986,16 @@ RUS_crisis_dissolve_empire = {
 			leave_faction = yes
 		}
 		if = {
-			limit = { OR = { tag = SLA tag = RZA tag = MLR tag = ERT tag = IRT tag = SCA } }
+			limit = {
+				OR = {
+					tag = SLA
+					tag = RZA
+					tag = MLR
+					tag = ERT
+					tag = IRT
+					tag = SCA
+				}
+			}
 			set_country_flag = RUS_crisis_fragment
 		}
 		every_enemy_country = {
@@ -1556,27 +1584,57 @@ RUS_energy_contracts_recount = {
 	set_temp_variable = { var = RUS_energy_contracts_before value = RUS_energy_contracts }
 	set_variable = { var = RUS_energy_contracts value = 0 }
 	if = {
-		limit = { SLA = { has_country_flag = RUS_energy_customer RUS_energy_customer_valid = yes } }
+		limit = {
+			SLA = {
+				has_country_flag = RUS_energy_customer
+				RUS_energy_customer_valid = yes
+			}
+		}
 		add_to_variable = { var = RUS_energy_contracts value = 1 }
 	}
 	if = {
-		limit = { RZA = { has_country_flag = RUS_energy_customer RUS_energy_customer_valid = yes } }
+		limit = {
+			RZA = {
+				has_country_flag = RUS_energy_customer
+				RUS_energy_customer_valid = yes
+			}
+		}
 		add_to_variable = { var = RUS_energy_contracts value = 1 }
 	}
 	if = {
-		limit = { MLR = { has_country_flag = RUS_energy_customer RUS_energy_customer_valid = yes } }
+		limit = {
+			MLR = {
+				has_country_flag = RUS_energy_customer
+				RUS_energy_customer_valid = yes
+			}
+		}
 		add_to_variable = { var = RUS_energy_contracts value = 1 }
 	}
 	if = {
-		limit = { ERT = { has_country_flag = RUS_energy_customer RUS_energy_customer_valid = yes } }
+		limit = {
+			ERT = {
+				has_country_flag = RUS_energy_customer
+				RUS_energy_customer_valid = yes
+			}
+		}
 		add_to_variable = { var = RUS_energy_contracts value = 1 }
 	}
 	if = {
-		limit = { IRT = { has_country_flag = RUS_energy_customer RUS_energy_customer_valid = yes } }
+		limit = {
+			IRT = {
+				has_country_flag = RUS_energy_customer
+				RUS_energy_customer_valid = yes
+			}
+		}
 		add_to_variable = { var = RUS_energy_contracts value = 1 }
 	}
 	if = {
-		limit = { SCA = { has_country_flag = RUS_energy_customer RUS_energy_customer_valid = yes } }
+		limit = {
+			SCA = {
+				has_country_flag = RUS_energy_customer
+				RUS_energy_customer_valid = yes
+			}
+		}
 		add_to_variable = { var = RUS_energy_contracts value = 1 }
 	}
 	if = {
@@ -2177,134 +2235,346 @@ RUS_show_khan_died_superevent = {
 
 # --- rus_last_empire_effects ---
 ADISCORD_vorkerland_rus_core_dirty_sla = {
-	49 = { add_core_of = RUS add_claim_by = RUS }
+	49 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
 	50 = { add_core_of = RUS }
-	51 = { add_core_of = RUS add_claim_by = RUS }
-	155 = { add_core_of = RUS add_claim_by = RUS }
-	176 = { add_core_of = RUS add_claim_by = RUS }
-	187 = { add_core_of = RUS add_claim_by = RUS }
-	191 = { add_core_of = RUS add_claim_by = RUS }
+	51 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	155 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	176 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	187 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	191 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
 	233 = { add_core_of = RUS }
 	329 = { add_core_of = RUS }
 	330 = { add_core_of = RUS }
 	461 = { add_core_of = RUS }
-	710 = { add_core_of = RUS add_claim_by = RUS }
-	711 = { add_core_of = RUS add_claim_by = RUS }
-	712 = { add_core_of = RUS add_claim_by = RUS }
+	710 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	711 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	712 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
 }
 
 ADISCORD_vorkerland_rus_core_dirty_rza = {
-	125 = { add_core_of = RUS add_claim_by = RUS }
-	177 = { add_core_of = RUS add_claim_by = RUS }
+	125 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	177 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
 	186 = { add_core_of = RUS }
-	188 = { add_core_of = RUS add_claim_by = RUS }
-	192 = { add_core_of = RUS add_claim_by = RUS }
-	208 = { add_core_of = RUS add_claim_by = RUS }
-	213 = { add_core_of = RUS add_claim_by = RUS }
-	214 = { add_core_of = RUS add_claim_by = RUS }
-	215 = { add_core_of = RUS add_claim_by = RUS }
-	216 = { add_core_of = RUS add_claim_by = RUS }
-	217 = { add_core_of = RUS add_claim_by = RUS }
-	220 = { add_core_of = RUS add_claim_by = RUS }
+	188 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	192 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	208 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	213 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	214 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	215 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	216 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	217 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	220 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
 }
 
 ADISCORD_vorkerland_rus_core_dirty_mlr = {
-	152 = { add_core_of = RUS add_claim_by = RUS }
-	153 = { add_core_of = RUS add_claim_by = RUS }
-	154 = { add_core_of = RUS add_claim_by = RUS }
-	189 = { add_core_of = RUS add_claim_by = RUS }
-	190 = { add_core_of = RUS add_claim_by = RUS }
-	219 = { add_core_of = RUS add_claim_by = RUS }
-	221 = { add_core_of = RUS add_claim_by = RUS }
-	222 = { add_core_of = RUS add_claim_by = RUS }
-	224 = { add_core_of = RUS add_claim_by = RUS }
+	152 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	153 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	154 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	189 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	190 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	219 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	221 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	222 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	224 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
 }
 
 ADISCORD_vorkerland_rus_core_dirty_ert = {
-	167 = { add_core_of = RUS add_claim_by = RUS }
-	169 = { add_core_of = RUS add_claim_by = RUS }
+	167 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	169 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
 	170 = { add_core_of = RUS }
-	171 = { add_core_of = RUS add_claim_by = RUS }
-	184 = { add_core_of = RUS add_claim_by = RUS }
-	185 = { add_core_of = RUS add_claim_by = RUS }
-	203 = { add_core_of = RUS add_claim_by = RUS }
+	171 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	184 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	185 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	203 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
 }
 
 ADISCORD_vorkerland_rus_core_dirty_irt = {
-	178 = { add_core_of = RUS add_claim_by = RUS }
-	180 = { add_core_of = RUS add_claim_by = RUS }
-	181 = { add_core_of = RUS add_claim_by = RUS }
-	182 = { add_core_of = RUS add_claim_by = RUS }
-	183 = { add_core_of = RUS add_claim_by = RUS }
-	193 = { add_core_of = RUS add_claim_by = RUS }
-	206 = { add_core_of = RUS add_claim_by = RUS }
-	207 = { add_core_of = RUS add_claim_by = RUS }
+	178 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	180 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	181 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	182 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	183 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	193 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	206 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	207 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
 }
 
 ADISCORD_vorkerland_rus_core_dirty_sca = {
-	165 = { add_core_of = RUS add_claim_by = RUS }
-	166 = { add_core_of = RUS add_claim_by = RUS }
-	172 = { add_core_of = RUS add_claim_by = RUS }
-	173 = { add_core_of = RUS add_claim_by = RUS }
-	204 = { add_core_of = RUS add_claim_by = RUS }
-	205 = { add_core_of = RUS add_claim_by = RUS }
-	209 = { add_core_of = RUS add_claim_by = RUS }
-	210 = { add_core_of = RUS add_claim_by = RUS }
-	211 = { add_core_of = RUS add_claim_by = RUS }
-	212 = { add_core_of = RUS add_claim_by = RUS }
+	165 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	166 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	172 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	173 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	204 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	205 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	209 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	210 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	211 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
+	212 = {
+		add_core_of = RUS
+		add_claim_by = RUS
+	}
 }
 
 ADISCORD_vorkerland_rus_annex_dirty_target = {
 	# annex_country can leave the tag alive on impassable leftovers.
 	# Sweep remaining owned states so the neighbour does not survive the peace.
 	if = {
-		limit = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals } country_exists = SLA }
+		limit = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
+			country_exists = SLA
+		}
 		annex_country = { target = SLA transfer_troops = no }
 		if = {
 			limit = { country_exists = SLA }
-			SLA = { every_owned_state = { set_state_owner_to = RUS set_state_controller_to = RUS } }
+			SLA = {
+				every_owned_state = {
+					set_state_owner_to = RUS
+					set_state_controller_to = RUS
+				}
+			}
 		}
 	}
 	else_if = {
-		limit = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals } country_exists = RZA }
+		limit = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
+			country_exists = RZA
+		}
 		annex_country = { target = RZA transfer_troops = no }
 		if = {
 			limit = { country_exists = RZA }
-			RZA = { every_owned_state = { set_state_owner_to = RUS set_state_controller_to = RUS } }
+			RZA = {
+				every_owned_state = {
+					set_state_owner_to = RUS
+					set_state_controller_to = RUS
+				}
+			}
 		}
 	}
 	else_if = {
-		limit = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals } country_exists = MLR }
+		limit = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
+			country_exists = MLR
+		}
 		annex_country = { target = MLR transfer_troops = no }
 		if = {
 			limit = { country_exists = MLR }
-			MLR = { every_owned_state = { set_state_owner_to = RUS set_state_controller_to = RUS } }
+			MLR = {
+				every_owned_state = {
+					set_state_owner_to = RUS
+					set_state_controller_to = RUS
+				}
+			}
 		}
 	}
 	else_if = {
-		limit = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals } country_exists = ERT }
+		limit = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
+			country_exists = ERT
+		}
 		# Resolve the separately occupied VAL claim before consuming ERT ownership.
-		VAL = { if = { limit = { VAL_frontier_eastern_claim_ready = yes } VAL_frontier_settle_victory = yes } }
+		VAL = {
+			if = {
+				limit = { VAL_frontier_eastern_claim_ready = yes }
+				VAL_frontier_settle_victory = yes
+			}
+		}
 		annex_country = { target = ERT transfer_troops = no }
 		if = {
 			limit = { country_exists = ERT }
-			ERT = { every_owned_state = { set_state_owner_to = RUS set_state_controller_to = RUS } }
+			ERT = {
+				every_owned_state = {
+					set_state_owner_to = RUS
+					set_state_controller_to = RUS
+				}
+			}
 		}
 	}
 	else_if = {
-		limit = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals } country_exists = IRT }
+		limit = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
+			country_exists = IRT
+		}
 		annex_country = { target = IRT transfer_troops = no }
 		if = {
 			limit = { country_exists = IRT }
-			IRT = { every_owned_state = { set_state_owner_to = RUS set_state_controller_to = RUS } }
+			IRT = {
+				every_owned_state = {
+					set_state_owner_to = RUS
+					set_state_controller_to = RUS
+				}
+			}
 		}
 	}
 	else_if = {
-		limit = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals } country_exists = SCA }
+		limit = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
+			country_exists = SCA
+		}
 		annex_country = { target = SCA transfer_troops = no }
 		if = {
 			limit = { country_exists = SCA }
-			SCA = { every_owned_state = { set_state_owner_to = RUS set_state_controller_to = RUS } }
+			SCA = {
+				every_owned_state = {
+					set_state_owner_to = RUS
+					set_state_controller_to = RUS
+				}
+			}
 		}
 	}
 }
@@ -2450,7 +2720,19 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
 			OR = {
 				ADISCORD_vorkerland_rus_holds_sla_playable = yes
-				AND = { country_exists = SLA has_war_with = SLA SLA = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = SLA } } } } }
+				AND = {
+					country_exists = SLA
+					has_war_with = SLA
+					SLA = {
+						ADISCORD_vorkerland_rus_target_defeated = yes
+						capital_scope = {
+							OR = {
+								is_controlled_by = RUS
+								controller = { is_subject_of = RUS has_war_with = SLA }
+							}
+						}
+					}
+				}
 			}
 		}
 		ADISCORD_vorkerland_rus_annex_dirty_target = yes
@@ -2472,7 +2754,19 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
 			OR = {
 				ADISCORD_vorkerland_rus_holds_rza_playable = yes
-				AND = { country_exists = RZA has_war_with = RZA RZA = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = RZA } } } } }
+				AND = {
+					country_exists = RZA
+					has_war_with = RZA
+					RZA = {
+						ADISCORD_vorkerland_rus_target_defeated = yes
+						capital_scope = {
+							OR = {
+								is_controlled_by = RUS
+								controller = { is_subject_of = RUS has_war_with = RZA }
+							}
+						}
+					}
+				}
 			}
 		}
 		ADISCORD_vorkerland_rus_annex_dirty_target = yes
@@ -2492,7 +2786,19 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
 			OR = {
 				ADISCORD_vorkerland_rus_holds_mlr_playable = yes
-				AND = { country_exists = MLR has_war_with = MLR MLR = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = MLR } } } } }
+				AND = {
+					country_exists = MLR
+					has_war_with = MLR
+					MLR = {
+						ADISCORD_vorkerland_rus_target_defeated = yes
+						capital_scope = {
+							OR = {
+								is_controlled_by = RUS
+								controller = { is_subject_of = RUS has_war_with = MLR }
+							}
+						}
+					}
+				}
 			}
 		}
 		ADISCORD_vorkerland_rus_annex_dirty_target = yes
@@ -2512,7 +2818,19 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
 			OR = {
 				ADISCORD_vorkerland_rus_holds_ert_playable = yes
-				AND = { country_exists = ERT has_war_with = ERT ERT = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = ERT } } } } }
+				AND = {
+					country_exists = ERT
+					has_war_with = ERT
+					ERT = {
+						ADISCORD_vorkerland_rus_target_defeated = yes
+						capital_scope = {
+							OR = {
+								is_controlled_by = RUS
+								controller = { is_subject_of = RUS has_war_with = ERT }
+							}
+						}
+					}
+				}
 			}
 		}
 		ADISCORD_vorkerland_rus_annex_dirty_target = yes
@@ -2532,7 +2850,19 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
 			OR = {
 				ADISCORD_vorkerland_rus_holds_irt_playable = yes
-				AND = { country_exists = IRT has_war_with = IRT IRT = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = IRT } } } } }
+				AND = {
+					country_exists = IRT
+					has_war_with = IRT
+					IRT = {
+						ADISCORD_vorkerland_rus_target_defeated = yes
+						capital_scope = {
+							OR = {
+								is_controlled_by = RUS
+								controller = { is_subject_of = RUS has_war_with = IRT }
+							}
+						}
+					}
+				}
 			}
 		}
 		ADISCORD_vorkerland_rus_annex_dirty_target = yes
@@ -2552,7 +2882,19 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
 			OR = {
 				ADISCORD_vorkerland_rus_holds_sca_playable = yes
-				AND = { country_exists = SCA has_war_with = SCA SCA = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = SCA } } } } }
+				AND = {
+					country_exists = SCA
+					has_war_with = SCA
+					SCA = {
+						ADISCORD_vorkerland_rus_target_defeated = yes
+						capital_scope = {
+							OR = {
+								is_controlled_by = RUS
+								controller = { is_subject_of = RUS has_war_with = SCA }
+							}
+						}
+					}
+				}
 			}
 		}
 		ADISCORD_vorkerland_rus_annex_dirty_target = yes
@@ -4097,7 +4439,7 @@ RUS_campaign_initialize = {
 		set_variable = { var = RUS_government_mandate_mobilization value = 0 }
 		set_variable = { var = RUS_government_mandate_stability value = 0 }
 		set_variable = { var = RUS_government_depot_efficiency value = 0 }
-	set_variable = { var = RUS_government_trickleback value = 0 }
+		set_variable = { var = RUS_government_trickleback value = 0 }
 		set_variable = { var = RUS_army_casualty_return value = 0 }
 		set_variable = { var = RUS_army_factory_efficiency value = 0 }
 		set_variable = { var = RUS_air_accidents value = 0 }
@@ -5064,7 +5406,10 @@ RUS_public_campaigns_shutdown = {
 # --- rus_reactor_preparation_and_energy ---
 RUS_crisis_fortify_reactor_state = {
 	if = {
-		limit = { is_owned_by = RUS is_controlled_by = RUS }
+		limit = {
+			is_owned_by = RUS
+			is_controlled_by = RUS
+		}
 		add_building_construction = { type = bunker level = 2 instant_build = yes }
 		add_building_construction = { type = anti_air_building level = 2 instant_build = yes }
 	}

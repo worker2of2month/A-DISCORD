@@ -271,4 +271,3 @@ SWI_bba = {
 WTT_is_chinese_warlord = {
 	always = no
 }
-

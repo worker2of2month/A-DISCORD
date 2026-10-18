@@ -30,7 +30,16 @@ ADISCORD_vorkerland_rus_dirty_sla_offensive = {
 		has_war_with = SLA
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = SLA ratio = 0.01 priority = 1600 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		tag = SLA
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
 	ai_strategy = { type = consider_weak id = SLA value = 120 }
 	ai_strategy = { type = conquer id = SLA value = 200 }
 }
@@ -42,7 +51,16 @@ ADISCORD_vorkerland_rus_dirty_rza_offensive = {
 		has_war_with = RZA
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = RZA ratio = 0.01 priority = 1600 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		tag = RZA
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
 	ai_strategy = { type = consider_weak id = RZA value = 120 }
 	ai_strategy = { type = conquer id = RZA value = 200 }
 }
@@ -54,7 +72,16 @@ ADISCORD_vorkerland_rus_dirty_mlr_offensive = {
 		has_war_with = MLR
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = MLR ratio = 0.01 priority = 1600 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		tag = MLR
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
 	ai_strategy = { type = consider_weak id = MLR value = 120 }
 	ai_strategy = { type = conquer id = MLR value = 200 }
 }
@@ -66,7 +93,16 @@ ADISCORD_vorkerland_rus_dirty_ert_offensive = {
 		has_war_with = ERT
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = ERT ratio = 0.01 priority = 1600 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		tag = ERT
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
 	ai_strategy = { type = consider_weak id = ERT value = 120 }
 	ai_strategy = { type = conquer id = ERT value = 200 }
 }
@@ -78,7 +114,16 @@ ADISCORD_vorkerland_rus_dirty_irt_offensive = {
 		has_war_with = IRT
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = IRT ratio = 0.01 priority = 1600 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		tag = IRT
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
 	ai_strategy = { type = consider_weak id = IRT value = 120 }
 	ai_strategy = { type = conquer id = IRT value = 200 }
 }
@@ -90,7 +135,16 @@ ADISCORD_vorkerland_rus_dirty_sca_offensive = {
 		has_war_with = SCA
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = SCA ratio = 0.01 priority = 1600 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		tag = SCA
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
 	ai_strategy = { type = consider_weak id = SCA value = 120 }
 	ai_strategy = { type = conquer id = SCA value = 200 }
 }

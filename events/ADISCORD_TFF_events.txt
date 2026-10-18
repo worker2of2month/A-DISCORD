@@ -39,7 +39,6 @@ news_event = {
 	option = { name = ADISCORD_TFF.10.a }
 }
 
-
 news_event = {
 	id = ADISCORD_TFF.11
 	title = ADISCORD_TFF.11.t

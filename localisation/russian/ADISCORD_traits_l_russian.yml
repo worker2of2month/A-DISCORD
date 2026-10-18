@@ -68,7 +68,7 @@
  # Minister traits - Head of State
  minister_trait_STP_hos_master_of_destinies: "Господин судеб"
  minister_trait_STS_hos_district_chancery: "Окружная канцелярия"
- minister_trait_VAL_hos_contract_throne: "Канцлер договорной власти"
+ minister_trait_VAL_hos_contract_throne: "Премьер-министр"
  minister_trait_IVN_hos_locked_cabinet: "Режим закрытого кабинета"
  minister_trait_WIT_hos_quick_compromises: "Тактик быстрых компромиссов"
  minister_trait_WRK_hos_emergency_bureau: "Чрезвычайный администратор"

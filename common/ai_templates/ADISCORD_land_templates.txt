@@ -9,7 +9,10 @@ ADISCORD_garrison_templates = {
 	role = garrison
 	upgrade_prio = {
 		base = 1
-		modifier = { factor = 15 NOT = { ai_has_role_template = garrison } }
+		modifier = {
+			factor = 15
+			NOT = { ai_has_role_template = garrison }
+		}
 	}
 	ADISCORD_garrison_levy = {
 		enable = {
@@ -23,12 +26,29 @@ ADISCORD_garrison_templates = {
 					AND = {
 						has_global_flag = STP_cw_started
 						NOT = { has_global_flag = STP_cw_union_wars_finished }
-						OR = { tag = STP tag = STS tag = SRP }
+						OR = {
+							tag = STP
+							tag = STS
+							tag = SRP
+						}
 					}
-					AND = { OR = { tag = STP tag = STS tag = SRP } has_war = yes }
+					AND = {
+						OR = {
+							tag = STP
+							tag = STS
+							tag = SRP
+						}
+						has_war = yes
+					}
 					AND = {
 						has_war = yes
-						OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = VAL }
+						OR = {
+							tag = NOD
+							tag = YPR
+							tag = COF
+							tag = TFF
+							tag = VAL
+						}
 					}
 				}
 			}
@@ -51,7 +71,13 @@ ADISCORD_territorial_templates = {
 			is_ai = yes
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-			OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD }
+			OR = {
+				tag = ZAO
+				tag = WPA
+				tag = WPS
+				tag = PWR
+				tag = PSD
+			}
 		}
 		reinforce_prio = 1
 		upgrade_prio = { base = 14 }
@@ -65,9 +91,20 @@ ADISCORD_territorial_templates = {
 				AND = {
 					has_global_flag = STP_cw_started
 					NOT = { has_global_flag = STP_cw_union_wars_finished }
-					OR = { tag = STP tag = STS tag = SRP }
+					OR = {
+						tag = STP
+						tag = STS
+						tag = SRP
+					}
 				}
-				AND = { OR = { tag = STP tag = STS tag = SRP } has_war = yes }
+				AND = {
+					OR = {
+						tag = STP
+						tag = STS
+						tag = SRP
+					}
+					has_war = yes
+				}
 			}
 		}
 		reinforce_prio = 1
@@ -78,7 +115,13 @@ ADISCORD_territorial_templates = {
 	ADISCORD_border_territorial_militia = {
 		enable = {
 			has_war = yes
-			OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = VAL }
+			OR = {
+				tag = NOD
+				tag = YPR
+				tag = COF
+				tag = TFF
+				tag = VAL
+			}
 		}
 		reinforce_prio = 1
 		upgrade_prio = { base = 14 }
@@ -159,6 +202,7 @@ ADISCORD_infantry_templates = {
 		}
 	}
 }
+
 # Assault formations use the mobile role.  This keeps them as a limited
 # offensive reserve rather than replacing every ordinary infantry division.
 ADISCORD_assault_templates = {
@@ -335,7 +379,11 @@ ADISCORD_tank_templates = {
 			is_ai = yes
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-			OR = { tag = WKR tag = VAD tag = TVA }
+			OR = {
+				tag = WKR
+				tag = VAD
+				tag = TVA
+			}
 			has_tech = ADISCORD_tech_armored_carrier_program
 			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
 			has_tech = ADISCORD_tech_standardized_field_tool_chests

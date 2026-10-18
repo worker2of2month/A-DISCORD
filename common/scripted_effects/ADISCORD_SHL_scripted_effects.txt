@@ -198,7 +198,9 @@ SHL_produce_period = {
 			set_variable = { var = SHL_tenth_planned_price value = SHL_tenth_planned_packets }
 			multiply_variable = { var = SHL_tenth_planned_price value = 25 }
 			if = {
-				limit = { check_variable = { var = ADISCORD_economy_treasury value = SHL_tenth_planned_price compare = greater_than_or_equals } }
+				limit = {
+					check_variable = { var = ADISCORD_economy_treasury value = SHL_tenth_planned_price compare = greater_than_or_equals }
+				}
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_tenth_planned_price }
 				add_to_variable = { var = SHL_tenth_stock value = SHL_tenth_planned_packets }
 			}
@@ -282,7 +284,11 @@ SHL_produce_site = {
 			set_variable = { var = SHL_planned_price value = SHL_planned_packets }
 			multiply_variable = { var = SHL_planned_price value = 25 }
 			if = {
-				limit = { SHL = { check_variable = { var = ADISCORD_economy_treasury value = PREV.SHL_planned_price compare = greater_than_or_equals } } }
+				limit = {
+					SHL = {
+						check_variable = { var = ADISCORD_economy_treasury value = PREV.SHL_planned_price compare = greater_than_or_equals }
+					}
+				}
 				SHL = { subtract_from_variable = { var = ADISCORD_economy_treasury value = PREV.SHL_planned_price } }
 				add_to_variable = { var = SHL_furnace_stock value = SHL_planned_packets }
 			}
@@ -513,7 +519,7 @@ SHL_begin_restart = {
 				SHL_furnace_site_idle = yes
 				has_variable = SHL_restart_settled
 				check_variable = { var = SHL_furnace_running value = 0 compare = equals }
-					check_variable = { var = SHL_furnace_stock value = 1 compare = greater_than_or_equals }
+				check_variable = { var = SHL_furnace_stock value = 1 compare = greater_than_or_equals }
 			}
 			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
 		}

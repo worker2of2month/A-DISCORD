@@ -3079,6 +3079,63 @@ country_event = {
 add_namespace = val_council
 
 country_event = {
+	id = val_council.25
+	title = val_council.25.t
+	desc = val_council.25.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		VAL_council_can_choose_identity = yes
+	}
+	option = {
+		name = val_council.25.a
+		trigger = { VAL_council_can_choose_identity = yes }
+		ai_chance = { factor = 100 }
+		custom_effect_tooltip = VAL_council_identity_state_tt
+		hidden_effect = {
+			if = {
+				limit = { VAL_council_can_choose_identity = yes }
+				set_variable = { var = VAL_council_identity value = 1 }
+				VAL_council_apply_identity = yes
+			}
+		}
+	}
+	option = {
+		name = val_council.25.b
+		trigger = { VAL_council_can_choose_identity = yes }
+		ai_chance = { factor = 0 }
+		custom_effect_tooltip = VAL_council_identity_republic_tt
+		hidden_effect = {
+			if = {
+				limit = { VAL_council_can_choose_identity = yes }
+				set_variable = { var = VAL_council_identity value = 2 }
+				VAL_council_apply_identity = yes
+			}
+		}
+	}
+	option = {
+		name = val_council.25.c
+		trigger = { VAL_council_can_choose_identity = yes }
+		ai_chance = { factor = 0 }
+		custom_effect_tooltip = VAL_council_identity_districts_tt
+		hidden_effect = {
+			if = {
+				limit = { VAL_council_can_choose_identity = yes }
+				set_variable = { var = VAL_council_identity value = 3 }
+				VAL_council_apply_identity = yes
+			}
+		}
+	}
+	# An open ballot cannot replace a later government's identity or an earlier choice.
+	option = {
+		name = val_council.25.closed
+		trigger = { VAL_council_can_choose_identity = no }
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
 	id = val_council.1
 	title = val_council.1.t
 	desc = val_council.1.d
@@ -3261,5 +3318,439 @@ news_event = {
 	fire_only_once = yes
 	option = {
 		name = val_council.10.a
+	}
+}
+
+# Council story: Solgalov's fate, the delegations, war plans and the postwar bill.
+country_event = {
+	id = val_council.11
+	title = val_council.11.t
+	desc = val_council.11.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	trigger = {
+		VAL_council_operational = yes
+	}
+	option = {
+		name = val_council.11.a
+		ai_chance = { factor = 40 }
+		add_political_power = 50
+		add_stability = -0.03
+		add_power_balance_value = { id = VAL_council_balance value = -0.10 }
+		custom_effect_tooltip = VAL_council_loyalists_p15_tt
+		custom_effect_tooltip = VAL_council_trial_archive_tt
+		hidden_effect = {
+			set_variable = { var = VAL_council_solgalov_fate value = 1 }
+			set_temp_variable = { var = VAL_council_loyalists_delta value = 15 }
+			VAL_council_change_loyalists = yes
+			country_event = { id = val_council.12 days = 30 }
+		}
+	}
+	option = {
+		name = val_council.11.b
+		ai_chance = { factor = 40 }
+		add_stability = 0.03
+		add_power_balance_value = { id = VAL_council_balance value = 0.05 }
+		custom_effect_tooltip = VAL_council_loyalists_m5_tt
+		custom_effect_tooltip = VAL_council_solgalov_held_tt
+		hidden_effect = {
+			set_variable = { var = VAL_council_solgalov_fate value = 2 }
+			set_temp_variable = { var = VAL_council_loyalists_delta value = -5 }
+			VAL_council_change_loyalists = yes
+		}
+	}
+	option = {
+		name = val_council.11.c
+		ai_chance = { factor = 20 }
+		add_political_power = -25
+		add_war_support = -0.05
+		custom_effect_tooltip = VAL_council_loyalists_m20_tt
+		hidden_effect = {
+			set_variable = { var = VAL_council_solgalov_fate value = 3 }
+			set_temp_variable = { var = VAL_council_loyalists_delta value = -20 }
+			VAL_council_change_loyalists = yes
+		}
+	}
+}
+
+country_event = {
+	id = val_council.12
+	title = val_council.12.t
+	desc = val_council.12.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = {
+		VAL_council_operational = yes
+		check_variable = { var = VAL_council_solgalov_fate value = 1 compare = equals }
+	}
+	option = {
+		name = val_council.12.a
+		ai_chance = { factor = 50 }
+		add_stability = -0.05
+		add_war_support = 0.05
+		add_power_balance_value = { id = VAL_council_balance value = 0.15 }
+		custom_effect_tooltip = VAL_council_loyalists_m30_tt
+		custom_effect_tooltip = VAL_council_krutov_resigns_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_council_loyalists_delta value = -30 }
+			VAL_council_change_loyalists = yes
+			news_event = { id = val_council.13 hours = 6 }
+		}
+	}
+	option = {
+		name = val_council.12.b
+		ai_chance = { factor = 50 }
+		add_stability = 0.02
+		add_power_balance_value = { id = VAL_council_balance value = -0.10 }
+		custom_effect_tooltip = VAL_council_loyalists_m5_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_council_loyalists_delta value = -5 }
+			VAL_council_change_loyalists = yes
+		}
+	}
+}
+
+news_event = {
+	id = val_council.13
+	title = val_council.13.t
+	desc = val_council.13.d
+	picture = GFX_news_event_adiscord_kefreyt_address
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = val_council.13.a
+	}
+}
+
+country_event = {
+	id = val_council.14
+	title = val_council.14.t
+	desc = val_council.14.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		VAL_council_operational = yes
+	}
+	option = {
+		name = val_council.14.a
+		ai_chance = { factor = 30 }
+		add_power_balance_value = { id = VAL_council_balance value = -0.05 }
+		custom_effect_tooltip = VAL_council_favour_garrison_seat_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_council_seat_side value = 1 }
+			set_temp_variable = { var = VAL_council_seat_delta value = 1 }
+			VAL_council_transfer_seat = yes
+		}
+	}
+	option = {
+		name = val_council.14.b
+		ai_chance = { factor = 40 }
+		add_power_balance_value = { id = VAL_council_balance value = 0.05 }
+		custom_effect_tooltip = VAL_council_favour_front_seat_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_council_seat_side value = 2 }
+			set_temp_variable = { var = VAL_council_seat_delta value = 1 }
+			VAL_council_transfer_seat = yes
+		}
+	}
+	option = {
+		name = val_council.14.c
+		ai_chance = { factor = 30 }
+		add_political_power = 25
+		custom_effect_tooltip = VAL_council_favour_supply_seat_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_council_seat_side value = 3 }
+			set_temp_variable = { var = VAL_council_seat_delta value = 1 }
+			VAL_council_transfer_seat = yes
+		}
+	}
+}
+
+country_event = {
+	id = val_council.15
+	title = val_council.15.t
+	desc = val_council.15.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = {
+		VAL_council_operational = yes
+	}
+	option = {
+		name = val_council.15.a
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		ai_chance = { factor = 50 }
+		custom_effect_tooltip = VAL_council_pay_300_tt
+		add_stability = 0.05
+		custom_effect_tooltip = VAL_council_loyalists_m10_tt
+		hidden_effect = {
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+			ADISCORD_economy_mark_dirty = yes
+			set_temp_variable = { var = VAL_council_loyalists_delta value = -10 }
+			VAL_council_change_loyalists = yes
+		}
+	}
+	option = {
+		name = val_council.15.b
+		ai_chance = { factor = 30 }
+		add_political_power = 25
+		add_stability = -0.02
+		custom_effect_tooltip = VAL_council_favour_garrison_seat_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_council_seat_side value = 1 }
+			set_temp_variable = { var = VAL_council_seat_delta value = 1 }
+			VAL_council_transfer_seat = yes
+		}
+	}
+	option = {
+		name = val_council.15.c
+		ai_chance = { factor = 20 }
+		add_stability = -0.05
+		add_power_balance_value = { id = VAL_council_balance value = 0.15 }
+		custom_effect_tooltip = VAL_council_loyalists_p10_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_council_loyalists_delta value = 10 }
+			VAL_council_change_loyalists = yes
+		}
+	}
+}
+
+country_event = {
+	id = val_council.16
+	title = val_council.16.t
+	desc = val_council.16.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	option = {
+		name = val_council.16.a
+	}
+}
+
+country_event = {
+	id = val_council.17
+	title = val_council.17.t
+	desc = val_council.17.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = {
+		name = val_council.17.a
+		ai_chance = { factor = 60 }
+		custom_effect_tooltip = VAL_council_plan_author_loses_seat_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_council_seat_side value = VAL_council_plan_last }
+			set_temp_variable = { var = VAL_council_seat_delta value = -1 }
+			VAL_council_transfer_seat = yes
+			VAL_refresh_contract_modifier = yes
+		}
+	}
+	option = {
+		name = val_council.17.b
+		ai_chance = { factor = 40 }
+		add_command_power = -25
+		custom_effect_tooltip = VAL_council_plan_staff_case_tt
+		hidden_effect = {
+			VAL_council_open_case = yes
+		}
+	}
+}
+
+country_event = {
+	id = val_council.18
+	title = val_council.18.t
+	desc = val_council.18.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		VAL_council_operational = yes
+	}
+	option = {
+		name = val_council.18.a
+		ai_chance = { factor = 50 }
+		add_stability = 0.03
+		add_power_balance_value = { id = VAL_council_balance value = -0.15 }
+		if = {
+			limit = {
+				VAL_council_garrison_leads = yes
+			}
+			add_dynamic_modifier = { modifier = VAL_council_favour_garrison days = 90 }
+		}
+		else_if = {
+			limit = {
+				VAL_council_front_leads = yes
+			}
+			add_dynamic_modifier = { modifier = VAL_council_favour_front days = 90 }
+		}
+		else = {
+			add_dynamic_modifier = { modifier = VAL_council_favour_supply days = 90 }
+		}
+	}
+	option = {
+		name = val_council.18.b
+		ai_chance = { factor = 50 }
+		add_stability = -0.03
+		add_power_balance_value = { id = VAL_council_balance value = 0.15 }
+		custom_effect_tooltip = VAL_council_leader_loses_seat_tt
+		hidden_effect = {
+			VAL_council_select_majority = yes
+			set_temp_variable = { var = VAL_council_seat_side value = VAL_council_seat_rival }
+			set_temp_variable = { var = VAL_council_seat_delta value = -1 }
+			VAL_council_transfer_seat = yes
+			VAL_refresh_contract_modifier = yes
+		}
+	}
+}
+
+country_event = {
+	id = val_council.19
+	title = val_council.19.t
+	desc = val_council.19.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	trigger = {
+		VAL_council_operational = yes
+	}
+	option = {
+		name = val_council.19.a
+		trigger = {
+			NOT = { has_political_power < 50 }
+		}
+		ai_chance = { factor = 60 }
+		add_political_power = -50
+		add_power_balance_value = { id = VAL_council_balance value = 0.25 }
+	}
+	option = {
+		name = val_council.19.b
+		ai_chance = { factor = 40 }
+		add_stability = -0.05
+		add_power_balance_value = { id = VAL_council_balance value = 0.15 }
+		custom_effect_tooltip = VAL_council_leader_gains_seat_tt
+		hidden_effect = {
+			VAL_council_select_majority = yes
+			set_temp_variable = { var = VAL_council_seat_side value = VAL_council_seat_rival }
+			set_temp_variable = { var = VAL_council_seat_delta value = 1 }
+			VAL_council_transfer_seat = yes
+			VAL_refresh_contract_modifier = yes
+		}
+	}
+}
+
+country_event = {
+	id = val_council.20
+	title = val_council.20.t
+	desc = val_council.20.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = {
+		VAL_council_operational = yes
+	}
+	option = {
+		name = val_council.20.a
+		ai_chance = { factor = 50 }
+		add_command_power = -30
+		add_stability = -0.05
+		add_power_balance_value = { id = VAL_council_balance value = -0.10 }
+		custom_effect_tooltip = VAL_council_loyalists_m10_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_council_loyalists_delta value = -10 }
+			VAL_council_change_loyalists = yes
+		}
+	}
+	option = {
+		name = val_council.20.b
+		ai_chance = { factor = 50 }
+		add_stability = 0.03
+		add_power_balance_value = { id = VAL_council_balance value = -0.30 }
+	}
+}
+
+country_event = {
+	id = val_council.21
+	title = val_council.21.t
+	desc = val_council.21.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	trigger = {
+		VAL_council_operational = yes
+		check_variable = { var = VAL_council_loyalists value = 70 compare = greater_than_or_equals }
+	}
+	option = {
+		name = val_council.21.a
+		ai_chance = { factor = 50 }
+		add_command_power = -30
+		add_stability = -0.03
+		add_power_balance_value = { id = VAL_council_balance value = 0.10 }
+		custom_effect_tooltip = VAL_council_loyalists_m25_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_council_loyalists_delta value = -25 }
+			VAL_council_change_loyalists = yes
+		}
+	}
+	option = {
+		name = val_council.21.b
+		trigger = {
+			NOT = { has_political_power < 50 }
+		}
+		ai_chance = { factor = 50 }
+		add_political_power = -50
+		add_power_balance_value = { id = VAL_council_balance value = -0.10 }
+		custom_effect_tooltip = VAL_council_loyalists_m15_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_council_loyalists_delta value = -15 }
+			VAL_council_change_loyalists = yes
+		}
+	}
+}
+
+country_event = {
+	id = val_council.22
+	title = val_council.22.t
+	desc = val_council.22.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = {
+		name = val_council.22.a
+	}
+}
+
+news_event = {
+	id = val_council.23
+	title = val_council.23.t
+	desc = val_council.23.d
+	picture = GFX_news_event_adiscord_army_formation
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = val_council.23.a
+	}
+}
+
+country_event = {
+	id = val_council.24
+	title = val_council.24.t
+	desc = val_council.24.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = {
+		VAL_council_operational = yes
+	}
+	option = {
+		name = val_council.24.a
+		ai_chance = { factor = 70 }
+		add_stability = 0.05
+		add_power_balance_value = { id = VAL_council_balance value = -0.10 }
+		custom_effect_tooltip = VAL_council_velsky_cabinet_tt
+		hidden_effect = {
+			promote_character = { character = VAL_Mikhail_Velsky ideology = contractual_etatism }
+			mark_focus_tree_layout_dirty = yes
+			VAL_refresh_contract_modifier = yes
+		}
+	}
+	option = {
+		name = val_council.24.b
+		ai_chance = { factor = 30 }
+		add_stability = -0.05
+		add_power_balance_value = { id = VAL_council_balance value = 0.20 }
 	}
 }

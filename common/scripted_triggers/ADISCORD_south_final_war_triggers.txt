@@ -142,9 +142,18 @@ ADISCORD_south_final_broken = {
 # GLOBAL. The flagged northern leader still leads its side against Shahrabad.
 ADISCORD_south_north_leader_fights = {
 	OR = {
-		NAM = { ADISCORD_south_north_leader_viable = yes has_war_with = SHL }
-		EFL = { ADISCORD_south_north_leader_viable = yes has_war_with = SHL }
-		AZH = { ADISCORD_south_north_leader_viable = yes has_war_with = SHL }
+		NAM = {
+			ADISCORD_south_north_leader_viable = yes
+			has_war_with = SHL
+		}
+		EFL = {
+			ADISCORD_south_north_leader_viable = yes
+			has_war_with = SHL
+		}
+		AZH = {
+			ADISCORD_south_north_leader_viable = yes
+			has_war_with = SHL
+		}
 	}
 }
 

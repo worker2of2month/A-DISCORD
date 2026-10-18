@@ -2029,12 +2029,12 @@ class TestValProgressionChoices(unittest.TestCase):
         adopt = named_block(effects, "VAL_adopt_commonwealth")
         self.assertIn("VAL_can_proclaim_commonwealth = yes", adopt)
         self.assertLess(
-            adopt.index("set_cosmetic_tag = VAL_commonwealth"),
+            adopt.index("set_country_flag = VAL_commonwealth_proclaimed"),
             adopt.index("VAL_sync_solgalov_portrait = yes"),
         )
         sync = named_block(effects, "VAL_sync_solgalov_portrait")
         self.assertIn("has_character = VAL_Valera_Solgalov", sync)
-        self.assertIn("has_cosmetic_tag = VAL_commonwealth", sync)
+        self.assertIn("has_country_flag = VAL_commonwealth_proclaimed", sync)
         self.assertIn("large = GFX_portrait_VAL_Valera_Solgalov_contracts", sync)
         self.assertIn("large = GFX_portrait_VAL_Valera_Solgalov }", sync)
         self.assertNotIn("recruit_character", sync)

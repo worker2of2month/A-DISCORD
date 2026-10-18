@@ -54,3 +54,69 @@ VAL_command_balance = {
 		}
 	}
 }
+
+# COUNTRY VAL. Opened once by the Council's first seat initialisation.
+# Extreme ranges ask the player for a response once per entry; removal belongs
+# to the defeat and administration handoffs that end the Council regime.
+VAL_council_balance = {
+	initial_value = 0
+	left_side = VAL_council_collegial_side
+	right_side = VAL_council_command_side
+	decision_category = VAL_council_balance_category
+	range = {
+		id = VAL_council_balance_compromise
+		min = -0.10
+		max = 0.10
+		modifier = { stability_factor = 0.03 }
+	}
+	side = {
+		id = VAL_council_collegial_side
+		icon = GFX_bop_SWI_centralization_council_side
+		range = {
+			id = VAL_council_collegial_influence
+			min = -0.35
+			max = -0.10
+			modifier = { stability_factor = 0.05 political_power_gain = -0.05 }
+		}
+		range = {
+			id = VAL_council_collegial_control
+			min = -0.75
+			max = -0.35
+			modifier = { stability_factor = 0.08 political_power_gain = -0.10 planning_speed = -0.05 }
+		}
+		range = {
+			id = VAL_council_collegial_dominance
+			min = -1.00
+			max = -0.75
+			modifier = { stability_factor = -0.05 political_power_gain = -0.15 planning_speed = -0.15 army_org_factor = -0.05 }
+			on_activate = {
+				country_event = { id = val_council.19 }
+			}
+		}
+	}
+	side = {
+		id = VAL_council_command_side
+		icon = GFX_bop_VAL_general_staff
+		range = {
+			id = VAL_council_command_influence
+			min = 0.10
+			max = 0.35
+			modifier = { planning_speed = 0.05 command_power_gain_mult = 0.05 }
+		}
+		range = {
+			id = VAL_council_command_control
+			min = 0.35
+			max = 0.75
+			modifier = { planning_speed = 0.10 command_power_gain_mult = 0.10 stability_factor = -0.05 }
+		}
+		range = {
+			id = VAL_council_command_dominance
+			min = 0.75
+			max = 1.00
+			modifier = { planning_speed = 0.15 command_power_gain_mult = 0.15 army_attack_factor = 0.05 stability_factor = -0.10 }
+			on_activate = {
+				country_event = { id = val_council.20 }
+			}
+		}
+	}
+}

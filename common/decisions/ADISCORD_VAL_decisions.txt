@@ -1970,7 +1970,10 @@ VAL_frontier = {
 				}
 			}
 		}
-		visible = { has_completed_focus = VAL_Contracts_Outlive_Kings NOT = { has_cosmetic_tag = VAL_commonwealth } }
+		visible = {
+			has_completed_focus = VAL_Contracts_Outlive_Kings
+			NOT = { has_country_flag = VAL_commonwealth_proclaimed }
+		}
 		available = {
 			custom_trigger_tooltip = { tooltip = VAL_commonwealth_requirements_tt VAL_can_proclaim_commonwealth = yes }
 		}
@@ -1980,7 +1983,6 @@ VAL_frontier = {
 			custom_effect_tooltip = VAL_commonwealth_proclaimed_tt
 			hidden_effect = {
 				VAL_adopt_commonwealth = yes
-				set_country_flag = VAL_commonwealth_proclaimed
 				country_event = { id = ADISCORD_superevent.9 }
 			}
 		}
@@ -5074,7 +5076,7 @@ VAL_council_government_category = {
 			tag = VAL
 		}
 		visible = {
-			has_completed_focus = VAL_council_procurement_commissions
+			has_completed_focus = VAL_council_staff_acceptance
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -5118,7 +5120,7 @@ VAL_council_government_category = {
 			tag = VAL
 		}
 		visible = {
-			has_completed_focus = VAL_council_procurement_commissions
+			has_completed_focus = VAL_council_staff_acceptance
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -5162,7 +5164,7 @@ VAL_council_government_category = {
 			tag = VAL
 		}
 		visible = {
-			has_completed_focus = VAL_council_merchant_guarantees
+			has_completed_focus = VAL_council_supplier_consortium
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -5253,7 +5255,7 @@ VAL_council_government_category = {
 			tag = VAL
 		}
 		visible = {
-			has_completed_focus = VAL_council_merchant_guarantees
+			has_completed_focus = VAL_council_supplier_consortium
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -5303,7 +5305,7 @@ VAL_council_government_category = {
 			tag = VAL
 		}
 		visible = {
-			has_completed_focus = VAL_council_procurement_commissions
+			has_completed_focus = VAL_council_staff_acceptance
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -7438,5 +7440,288 @@ VAL_council_government_category = {
 			}
 		}
 		ai_will_do = { base = 2 }
+	}
+
+	# Council war plans: the plan kind names the delegation that answers for it.
+	VAL_council_plan_hold_line = {
+		icon = generic_fortify_the_borders
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			check_variable = { var = VAL_council_plan_kind value = 1 compare = equals }
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 90
+		is_good = yes
+		timeout_effect = {
+			if = {
+				limit = {
+					VAL_council_lines_held = yes
+				}
+				VAL_council_plan_success = yes
+			}
+			else = {
+				VAL_council_plan_failed = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				VAL_council_operational = no
+				VAL_council_stelander_war = no
+				VAL_council_lines_held = no
+			}
+		}
+		cancel_effect = {
+			VAL_council_reconcile_plan = yes
+		}
+	}
+
+	VAL_council_plan_iron_shield = {
+		icon = generic_attack
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			check_variable = { var = VAL_council_plan_kind value = 2 compare = equals }
+		}
+		activation = { always = no }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_iron_shield_taken_tt
+				VAL_council_iron_shield_taken = yes
+			}
+		}
+		selectable_mission = no
+		days_mission_timeout = 90
+		is_good = yes
+		complete_effect = {
+			VAL_council_plan_success = yes
+		}
+		timeout_effect = {
+			VAL_council_plan_failed = yes
+		}
+		cancel_trigger = {
+			OR = {
+				VAL_council_operational = no
+				VAL_council_stelander_war = no
+			}
+		}
+		cancel_effect = {
+			VAL_council_reconcile_plan = yes
+		}
+	}
+
+	VAL_council_plan_arsenal = {
+		icon = generic_industry
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			check_variable = { var = VAL_council_plan_kind value = 3 compare = equals }
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 120
+		is_good = yes
+		timeout_effect = {
+			if = {
+				limit = {
+					VAL_council_plan_goal_met = yes
+				}
+				VAL_council_plan_success = yes
+			}
+			else = {
+				VAL_council_plan_failed = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				VAL_council_operational = no
+				VAL_council_stelander_war = no
+			}
+		}
+		cancel_effect = {
+			VAL_council_reconcile_plan = yes
+		}
+	}
+}
+
+VAL_council_balance_category = {
+	VAL_council_favour_garrison = {
+		icon = generic_fortify_the_borders
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_country_flag = VAL_council_seats_initialized
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_favour_interval_tt
+				NOT = { has_country_flag = VAL_council_favour_cooldown }
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_seat_available_tt
+				check_variable = { var = VAL_council_seats_garrison value = 6 compare = less_than }
+			}
+			has_war = yes
+		}
+		cost = 30
+		complete_effect = {
+			add_dynamic_modifier = { modifier = VAL_council_favour_garrison days = 120 }
+			add_manpower = 4000
+			add_power_balance_value = { id = VAL_council_balance value = -0.05 }
+			custom_effect_tooltip = VAL_council_favour_garrison_seat_tt
+			hidden_effect = {
+				set_country_flag = { flag = VAL_council_favour_cooldown value = 1 days = 120 }
+				set_temp_variable = { var = VAL_council_seat_side value = 1 }
+				set_temp_variable = { var = VAL_council_seat_delta value = 1 }
+				VAL_council_transfer_seat = yes
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	VAL_council_favour_front = {
+		icon = generic_attack
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_country_flag = VAL_council_seats_initialized
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_favour_interval_tt
+				NOT = { has_country_flag = VAL_council_favour_cooldown }
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_seat_available_tt
+				check_variable = { var = VAL_council_seats_front value = 6 compare = less_than }
+			}
+			has_war = yes
+		}
+		cost = 30
+		complete_effect = {
+			add_dynamic_modifier = { modifier = VAL_council_favour_front days = 120 }
+			add_power_balance_value = { id = VAL_council_balance value = -0.05 }
+			custom_effect_tooltip = VAL_council_favour_front_seat_tt
+			hidden_effect = {
+				set_country_flag = { flag = VAL_council_favour_cooldown value = 1 days = 120 }
+				set_temp_variable = { var = VAL_council_seat_side value = 2 }
+				set_temp_variable = { var = VAL_council_seat_delta value = 1 }
+				VAL_council_transfer_seat = yes
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	VAL_council_favour_supply = {
+		icon = generic_industry
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_country_flag = VAL_council_seats_initialized
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_favour_interval_tt
+				NOT = { has_country_flag = VAL_council_favour_cooldown }
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_seat_available_tt
+				check_variable = { var = VAL_council_seats_supply value = 6 compare = less_than }
+			}
+		}
+		cost = 30
+		complete_effect = {
+			add_dynamic_modifier = { modifier = VAL_council_favour_supply days = 120 }
+			add_equipment_to_stockpile = { type = motorized_equipment amount = 100 producer = VAL }
+			add_power_balance_value = { id = VAL_council_balance value = -0.05 }
+			custom_effect_tooltip = VAL_council_favour_supply_seat_tt
+			hidden_effect = {
+				set_country_flag = { flag = VAL_council_favour_cooldown value = 1 days = 120 }
+				set_temp_variable = { var = VAL_council_seat_side value = 3 }
+				set_temp_variable = { var = VAL_council_seat_delta value = 1 }
+				VAL_council_transfer_seat = yes
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	VAL_council_convene_full_council = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_power_balance = { id = VAL_council_balance }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			power_balance_value = { id = VAL_council_balance value > -0.75 }
+		}
+		cost = 50
+		days_re_enable = 90
+		complete_effect = {
+			add_power_balance_value = { id = VAL_council_balance value = -0.15 }
+			add_stability = 0.02
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	VAL_council_single_order = {
+		icon = generic_political_pressure
+		allowed = {
+			tag = VAL
+		}
+		visible = {
+			has_power_balance = { id = VAL_council_balance }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_operational_condition_tt
+				VAL_council_operational = yes
+			}
+			power_balance_value = { id = VAL_council_balance value < 0.75 }
+			NOT = { command_power < 25 }
+		}
+		cost = 50
+		days_re_enable = 90
+		complete_effect = {
+			add_command_power = -25
+			add_power_balance_value = { id = VAL_council_balance value = 0.15 }
+		}
+		ai_will_do = {
+			base = 1
+		}
 	}
 }

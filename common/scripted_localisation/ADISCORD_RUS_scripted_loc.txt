@@ -880,7 +880,6 @@ defined_text = {
 	text = { localization_key = RUS_market_surplus_cost_rifles_low }
 }
 
-
 defined_text = {
 	name = GetRUSBunkerSelected1
 	text = {
@@ -1992,7 +1991,6 @@ defined_text = {
 	text = { localization_key = RUS_bunker_ui_rock }
 }
 
-
 defined_text = {
 	name = GetRUSBunkerProjectName
 	text = {
@@ -2074,30 +2072,25 @@ defined_text = {
 	text = { localization_key = RUS_bunker_queue_empty }
 }
 
-
 defined_text = {
 	name = GetRUSBunkerRecipe2
 	text = { localization_key = RUS_bunker_utilities }
 }
-
 
 defined_text = {
 	name = GetRUSBunkerRecipe3
 	text = { localization_key = RUS_bunker_working_heart }
 }
 
-
 defined_text = {
 	name = GetRUSBunkerRecipe4
 	text = { localization_key = RUS_bunker_science_wing }
 }
 
-
 defined_text = {
 	name = GetRUSBunkerRecipe5
 	text = { localization_key = RUS_bunker_memory_vault }
 }
-
 
 defined_text = {
 	name = GetRUSBunkerRecipe1
