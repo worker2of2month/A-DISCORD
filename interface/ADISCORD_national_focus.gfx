@@ -1870,6 +1870,141 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_VAL_Three_Shift_Arsenals"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Three_Shift_Arsenals.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Standard_Cartridges"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Standard_Cartridges.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Export_Clearing_House"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Export_Clearing_House.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Hire_Out_War"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Hire_Out_War.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Serial_Armor_Production"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Serial_Armor_Production.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Standardize_Rifle_Lots"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Standardize_Rifle_Lots.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Central_Payment_Office"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Central_Payment_Office.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Quarterly_Contract_Norm"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Quarterly_Contract_Norm.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Armored_Design_Bureau"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Armored_Design_Bureau.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Contract_General_Staff"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Contract_General_Staff.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Morns_Supply_Trains"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Morns_Supply_Trains.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Contractor_Officers"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Contractor_Officers.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Company_Mandates"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Company_Mandates.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Reserve_Battalions"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Reserve_Battalions.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Vorons_Companies"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Vorons_Companies.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Provincial_Contract_Courts"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Provincial_Contract_Courts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_State_Contract"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_State_Contract.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Two_Concurrent_Narratives"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Two_Concurrent_Narratives.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Westerholm_Concessions"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Westerholm_Concessions.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Inventory_The_Empty_Yards"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Inventory_The_Empty_Yards.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Ministry_Auditors"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Ministry_Auditors.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Captains_Cannot_Veto"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Captains_Cannot_Veto.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Armored_Contract_Companies"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Armored_Contract_Companies.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Stahls_Schedules"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Stahls_Schedules.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Arsenal_Reserve"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Arsenal_Reserve.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Trading_Partners"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Trading_Partners.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Munitions_Board"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Munitions_Board.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_VAL_Gromovs_Assault_Tables"
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Gromovs_Assault_Tables.png"
 	}

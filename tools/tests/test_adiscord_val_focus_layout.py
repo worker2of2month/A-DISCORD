@@ -14,6 +14,7 @@ PERSONAL_FOCUSES = {
         "The_Weaponry_Baron", "Price_Of_Loyalty", "Count_The_Captains",
         "Paid_Loyalty", "Provincial_Brokers", "Closed_Ledgers",
         "State_Above_Captains", "Captains_Cannot_Veto", "State_Contract",
+        "Loyal_Captains_Honours", "Krutovs_Eyes",
     )
 }
 

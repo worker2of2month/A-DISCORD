@@ -161,3 +161,10 @@ VAL_council_favour_supply = {
 	supply_consumption_factor = -0.10
 	industrial_capacity_factory = 0.05
 }
+
+# VAL for 60 days after Krutov's staff loyalty review under Solgalov's rule.
+VAL_staff_review_disruption = {
+	icon = GFX_idea_ADISCORD_law_military_general_staff
+	planning_speed = -0.10
+	army_org_factor = -0.03
+}

@@ -123,6 +123,10 @@ class CouncilWorld(ContractWorld):
                 results.append(any(self.matches(value, state) for state in country["neighbors"]))
             elif key.startswith("event_target:") or key == "PREV":
                 results.append(self.matches(value, self.scope(key, scope)))
+            elif key == "has_cosmetic_tag":
+                results.append(country.get("cosmetic") == value)
+            elif re.fullmatch(r"[A-Z]{3}", key) and isinstance(value, list):
+                results.append(self.matches(value, key))
             else:
                 results.append(super().matches(group, scope))
         return all(results)
@@ -204,6 +208,8 @@ class CouncilWorld(ContractWorld):
                 country[self.balance_field(value)] = None
             elif key == "set_cosmetic_tag":
                 country["cosmetic"] = value
+            elif key == "drop_cosmetic_tag":
+                country["cosmetic"] = None
             elif key == "add_field_marshal_role":
                 country.setdefault("field_marshals", set()).add(scalar(value, "character"))
             elif key == "add_dynamic_modifier":
@@ -1334,6 +1340,80 @@ class CouncilStoryTests(unittest.TestCase):
         world.run(PREFIX + "apply_modifiers")
         self.assertAlmostEqual(world.val["vars"]["VAL_contract_org_factor"], -0.05)
         self.assertAlmostEqual(world.val["vars"]["VAL_contract_planning_factor"], -0.10)
+
+    def test_solgalov_dominance_exposes_the_conspiracy_and_closes_the_coup(self):
+        balance = block(entries("common/bop/VAL.txt"), "VAL_command_balance")
+        ranges = {scalar(r.value, "id"): r.value for side in balance if side.key == "side" for r in side.value if r.key == "range"}
+        calls = [scalar(row.value, "id") for row in walk(block(ranges["VAL_solgalov_dominance"], "on_activate")) if row.key == "country_event"]
+        self.assertEqual(calls, ["val_council.27"])
+        event = next(e.value for e in entries("events/ADISCORD_VAL_contract_events.txt")
+                     if e.key == "country_event" and scalar(e.value, "id") == "val_council.27")
+        options = [row.value for row in event if row.key == "option"]
+        self.assertEqual(len(options), 2)
+        for option in options:
+            self.assertIn("VAL_expose_command_conspiracy", {row.key for row in walk(option)})
+        world = CouncilWorld()
+        world.val["flags"].discard(PREFIX + "in_power")
+        world.val["leader"] = "VAL_Valera_Solgalov"
+        world.val["flags"].add(PREFIX + "stelander_war_started")
+        world.val["bop"] = 0.8
+        world.run("VAL_expose_command_conspiracy")
+        self.assertIsNone(world.val["bop"])
+        self.assertEqual(world.events.count(("VAL", "val_council.28")), 1)
+        world.run("VAL_expose_command_conspiracy")
+        self.assertEqual(world.events.count(("VAL", "val_council.28")), 1)
+        self.assertFalse(world.matches(world.triggers[PREFIX + "coup_ready"]))
+
+    def test_personal_branch_balance_decisions_have_real_prices(self):
+        category = {e.key: e.value for e in block(entries(DECISIONS), "VAL_command_balance_category")}
+        honours, review = category["VAL_honour_loyal_captains"], category["VAL_staff_loyalty_review"]
+        def values(rows):
+            return {row.value for row in walk(rows) if isinstance(row.value, str)}
+
+        self.assertIn("VAL_Loyal_Captains_Honours", values(block(honours, "visible")))
+        self.assertIn("VAL_Krutovs_Eyes", values(block(review, "visible")))
+        honour_effect = {row.key for row in walk(block(honours, "complete_effect"))}
+        self.assertIn("subtract_from_variable", honour_effect)
+        self.assertIn("ADISCORD_economy_mark_dirty", honour_effect)
+        review_effect = {row.key: row.value for row in walk(block(review, "complete_effect"))}
+        self.assertEqual(review_effect["add_command_power"], "-30")
+        self.assertEqual(scalar(review_effect["add_dynamic_modifier"], "modifier"), "VAL_staff_review_disruption")
+        settle = category["VAL_settle_command_crisis"]
+        self.assertNotIn("VAL_solgalov_dominance", values(block(settle, "available")))
+
+    def test_contract_administrations_follow_identity_with_their_own_shade(self):
+        world = self.war_world()
+        world.countries += ["OCA", "NKA"]
+        for tag in ("OCA", "NKA"):
+            world.data[tag].update(subject="VAL", exists=True)
+        for identity, suffix in ((2, "republic"), (3, "districts")):
+            world.val["vars"][PREFIX + "identity"] = identity
+            world.run(PREFIX + "tint_administrations")
+            self.assertEqual(world.data["OCA"]["cosmetic"], "OCA_VAL_" + suffix)
+            self.assertEqual(world.data["NKA"]["cosmetic"], "NKA_VAL_" + suffix)
+        world.val["vars"][PREFIX + "identity"] = 1
+        world.run(PREFIX + "tint_administrations")
+        self.assertIsNone(world.data["OCA"]["cosmetic"])
+        world.val["vars"][PREFIX + "identity"] = 3
+        world.data["NKA"].update(subject="STS", cosmetic="NKA_STS_administration")
+        world.run(PREFIX + "tint_administrations")
+        self.assertEqual(world.data["NKA"]["cosmetic"], "NKA_STS_administration")
+        world.val["leader"] = "VAL_party_administration"
+        world.run(PREFIX + "tint_administrations")
+        self.assertIsNone(world.data["OCA"]["cosmetic"])
+        cosmetic = (ROOT / "common/countries/cosmetic.txt").read_text(encoding="utf-8")
+        for tag in ("OCA", "NKA"):
+            for suffix in ("republic", "districts"):
+                name = f"{tag}_VAL_{suffix}"
+                self.assertIn(name + " = {", cosmetic)
+                for folder in ("gfx/flags", "gfx/flags/medium", "gfx/flags/small"):
+                    self.assertTrue((ROOT / folder / (name + ".tga")).exists(), (folder, name))
+        apply = self.effects_body("VAL_council_apply_identity")
+        self.assertEqual(apply[-1].key, PREFIX + "tint_administrations")
+
+    @staticmethod
+    def effects_body(name):
+        return next(e.value for e in entries(EFFECTS) if e.key == name)
 
     def test_balance_extremes_open_council_crises(self):
         rows = entries("common/bop/VAL.txt")

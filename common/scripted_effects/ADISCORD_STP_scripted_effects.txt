@@ -4527,6 +4527,16 @@ STP_cw_settle_union_victory = {
 	}
 	if = { limit = { has_dynamic_modifier = { modifier = STP_cw_election_mandate_dynamic } } remove_dynamic_modifier = { modifier = STP_cw_election_mandate_dynamic } }
 	set_country_flag = STP_cw_won_union_battle
+	if = {
+		limit = {
+			tag = STS
+			VAL = {
+				exists = yes
+				has_country_flag = VAL_cw_arms_contract_fulfilled
+			}
+		}
+		VAL = { country_event = { id = val_rework.151 days = 2 } }
+	}
 	if = { limit = { tag = STS } STP_cw_close_last_banquet_technical = yes }
 	STP_cw_finish_mobilization = yes
 	if = { limit = { tag = STS } STP_pw_rebuild_economy_after_unification = yes }

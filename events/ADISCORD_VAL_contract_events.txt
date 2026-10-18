@@ -579,6 +579,174 @@ country_event = {
 	}
 }
 
+# Late foreign-policy scenes follow campaign actions and completed settlements.
+
+country_event = {
+	id = val_rework.149
+	title = val_rework.149.t
+	desc = val_rework.149.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = VAL
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		has_country_leader = { character = VAL_Valera_Solgalov ruling_only = yes }
+		OR = {
+			STP = {
+				exists = yes
+				NOT = { is_subject_of = VAL }
+			}
+			STS = {
+				exists = yes
+				NOT = { is_subject_of = VAL }
+			}
+		}
+	}
+	option = {
+		name = val_rework.149.a
+	}
+}
+
+country_event = {
+	id = val_rework.150
+	title = val_rework.150.t
+	desc = val_rework.150.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = VAL
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		has_country_leader = { character = VAL_Valera_Solgalov ruling_only = yes }
+		NOD = {
+			exists = yes
+			has_capitulated = no
+			NOT = { is_subject_of = VAL }
+		}
+	}
+	option = {
+		name = val_rework.150.a
+	}
+}
+
+country_event = {
+	id = val_rework.151
+	title = val_rework.151.t
+	desc = val_rework.151.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = VAL
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		has_country_leader = { character = VAL_Valera_Solgalov ruling_only = yes }
+		has_country_flag = VAL_cw_arms_contract_fulfilled
+		NOT = { has_war_with = STS }
+		STS = {
+			exists = yes
+			has_capitulated = no
+			is_subject = no
+			has_country_flag = STP_cw_won_union_battle
+			has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+		}
+	}
+	option = {
+		name = val_rework.151.a
+	}
+}
+
+country_event = {
+	id = val_rework.152
+	title = val_rework.152.t
+	desc = val_rework.152.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = VAL
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		has_country_leader = { character = VAL_Valera_Solgalov ruling_only = yes }
+		has_country_flag = VAL_campaign_mobilizing
+		OR = {
+			STP = {
+				exists = yes
+				has_country_flag = VAL_campaign_target
+			}
+			STS = {
+				exists = yes
+				has_country_flag = VAL_campaign_target
+			}
+		}
+	}
+	option = {
+		name = val_rework.152.a
+	}
+}
+
+country_event = {
+	id = val_rework.153
+	title = val_rework.153.t
+	desc = {
+		trigger = { NOD = { is_subject_of = VAL } }
+		text = val_rework.153.dominated
+	}
+	desc = {
+		trigger = {
+			NOT = { NOD = { is_subject_of = VAL } }
+			has_country_flag = VAL_joint_nod_settlement_completed
+		}
+		text = val_rework.153.shared
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				NOD = { is_subject_of = VAL }
+				has_country_flag = VAL_joint_nod_settlement_completed
+			}
+			OR = {
+				is_subject = yes
+				has_country_flag = VAL_frontier_armistice_signed
+			}
+		}
+		text = val_rework.153.setback
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				NOD = { is_subject_of = VAL }
+				has_country_flag = VAL_joint_nod_settlement_completed
+				is_subject = yes
+				has_country_flag = VAL_frontier_armistice_signed
+			}
+		}
+		text = val_rework.153.agreement
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = VAL
+		exists = yes
+		NOT = { has_war_with = NOD }
+		OR = {
+			NOD = { exists = yes }
+			has_country_flag = VAL_joint_nod_settlement_completed
+		}
+	}
+	option = {
+		name = val_rework.153.a
+	}
+}
+
 country_event = {
 	id = val_rework.10
 	title = val_rework.10.t
@@ -3752,5 +3920,57 @@ country_event = {
 		ai_chance = { factor = 30 }
 		add_stability = -0.05
 		add_power_balance_value = { id = VAL_council_balance value = 0.20 }
+	}
+}
+
+# Solgalov's dominance: Krutov exposes the generals' conspiracy and the command balance ends.
+country_event = {
+	id = val_council.27
+	title = val_council.27.t
+	desc = val_council.27.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = {
+		has_power_balance = { id = VAL_command_balance }
+		VAL_council_personal_rule = yes
+	}
+	option = {
+		name = val_council.27.a
+		ai_chance = { factor = 50 }
+		add_stability = -0.05
+		add_war_support = 0.05
+		add_command_power = -50
+		custom_effect_tooltip = VAL_focus_authority_10_tt
+		custom_effect_tooltip = VAL_command_conspiracy_closed_tt
+		hidden_effect = {
+			set_temp_variable = { var = ADISCORD_VAL_effect_value value = 10 }
+			VAL_change_contract_authority = yes
+			VAL_expose_command_conspiracy = yes
+		}
+	}
+	option = {
+		name = val_council.27.b
+		ai_chance = { factor = 50 }
+		add_stability = 0.03
+		add_political_power = -50
+		custom_effect_tooltip = VAL_focus_authority_5_tt
+		custom_effect_tooltip = VAL_command_conspiracy_closed_tt
+		hidden_effect = {
+			set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
+			VAL_change_contract_authority = yes
+			VAL_expose_command_conspiracy = yes
+		}
+	}
+}
+
+news_event = {
+	id = val_council.28
+	title = val_council.28.t
+	desc = val_council.28.d
+	picture = GFX_news_event_adiscord_kefreyt_address
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = val_council.28.a
 	}
 }

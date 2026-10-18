@@ -879,6 +879,7 @@ VAL_military_operations = {
 					}
 					set_country_flag = VAL_campaign_mobilizing
 					FROM = { set_country_flag = VAL_campaign_target }
+					country_event = { id = val_rework.152 }
 				}
 			}
 		}
@@ -2844,22 +2845,65 @@ VAL_command_balance_category = {
 		available = {
 			has_capitulated = no
 			is_subject = no
-			OR = {
-				is_power_balance_in_range = {
-					id = VAL_command_balance
-					range = VAL_staff_dominance
-				}
-				is_power_balance_in_range = {
-					id = VAL_command_balance
-					range = VAL_solgalov_dominance
-				}
+			is_power_balance_in_range = {
+				id = VAL_command_balance
+				range = VAL_staff_dominance
 			}
 		}
 		cost = 120
 		days_re_enable = 180
 		complete_effect = {
-			if = { limit = { power_balance_value = { id = VAL_command_balance value < 0 } } add_power_balance_value = { id = VAL_command_balance value = 0.40 } }
-			else = { add_power_balance_value = { id = VAL_command_balance value = -0.40 } }
+			add_power_balance_value = { id = VAL_command_balance value = 0.40 }
+		}
+		ai_will_do = { base = 1 }
+	}
+	# Solgalov's personal branch: loyalty bought with money or enforced by Krutov's review.
+	VAL_honour_loyal_captains = {
+		icon = generic_political_pressure
+		visible = {
+			has_power_balance = { id = VAL_command_balance }
+			has_completed_focus = VAL_Loyal_Captains_Honours
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			power_balance_value = { id = VAL_command_balance value < 0.75 }
+			custom_trigger_tooltip = {
+				tooltip = VAL_honour_loyal_captains_cash_tt
+				check_variable = { var = ADISCORD_economy_treasury value = 75 compare = greater_than_or_equals }
+			}
+		}
+		cost = 50
+		days_re_enable = 90
+		complete_effect = {
+			add_power_balance_value = { id = VAL_command_balance value = 0.20 }
+			custom_effect_tooltip = VAL_honour_loyal_captains_pay_tt
+			hidden_effect = {
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 75 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 75 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = { base = 1 }
+	}
+	VAL_staff_loyalty_review = {
+		icon = generic_army_support
+		visible = {
+			has_power_balance = { id = VAL_command_balance }
+			has_completed_focus = VAL_Krutovs_Eyes
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			power_balance_value = { id = VAL_command_balance value < 0.75 }
+			NOT = { command_power < 30 }
+		}
+		cost = 40
+		days_re_enable = 120
+		complete_effect = {
+			add_command_power = -30
+			add_power_balance_value = { id = VAL_command_balance value = 0.25 }
+			add_dynamic_modifier = { modifier = VAL_staff_review_disruption days = 60 }
 		}
 		ai_will_do = { base = 1 }
 	}
@@ -7666,59 +7710,6 @@ VAL_council_balance_category = {
 				set_temp_variable = { var = VAL_council_seat_delta value = 1 }
 				VAL_council_transfer_seat = yes
 			}
-		}
-		ai_will_do = {
-			base = 1
-		}
-	}
-
-	VAL_council_convene_full_council = {
-		icon = generic_political_discourse
-		allowed = {
-			tag = VAL
-		}
-		visible = {
-			has_power_balance = { id = VAL_council_balance }
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = VAL_council_operational_condition_tt
-				VAL_council_operational = yes
-			}
-			power_balance_value = { id = VAL_council_balance value > -0.75 }
-		}
-		cost = 50
-		days_re_enable = 90
-		complete_effect = {
-			add_power_balance_value = { id = VAL_council_balance value = -0.15 }
-			add_stability = 0.02
-		}
-		ai_will_do = {
-			base = 1
-		}
-	}
-
-	VAL_council_single_order = {
-		icon = generic_political_pressure
-		allowed = {
-			tag = VAL
-		}
-		visible = {
-			has_power_balance = { id = VAL_council_balance }
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = VAL_council_operational_condition_tt
-				VAL_council_operational = yes
-			}
-			power_balance_value = { id = VAL_council_balance value < 0.75 }
-			NOT = { command_power < 25 }
-		}
-		cost = 50
-		days_re_enable = 90
-		complete_effect = {
-			add_command_power = -25
-			add_power_balance_value = { id = VAL_council_balance value = 0.15 }
 		}
 		ai_will_do = {
 			base = 1

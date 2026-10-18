@@ -312,16 +312,17 @@ characters = {
 	}
 
 	# Commanders Council: delegation heads and Velsky's guaranteed cabinet.
-	# They are recruited by the coup; portraits are placeholders.
+	# They are recruited by the coup.
 	VAL_Gleb_Osten = {
 		name = VAL_Gleb_Osten
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_7
+				large = GFX_portrait_VAL_Gleb_Osten
+				small = GFX_portrait_VAL_Gleb_Osten_small
 			}
 			army = {
-				large = GFX_Portrait_Forul_Generic_7
-				small = GFX_Portrait_Forul_Generic_7_small
+				large = GFX_portrait_VAL_Gleb_Osten
+				small = GFX_portrait_VAL_Gleb_Osten_small
 			}
 		}
 		country_leader = {
@@ -335,11 +336,12 @@ characters = {
 		name = VAL_Tamara_Greitz
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_8
+				large = GFX_portrait_VAL_Tamara_Greitz
+				small = GFX_portrait_VAL_Tamara_Greitz_small
 			}
 			army = {
-				large = GFX_Portrait_Forul_Generic_8
-				small = GFX_Portrait_Forul_Generic_8_small
+				large = GFX_portrait_VAL_Tamara_Greitz
+				small = GFX_portrait_VAL_Tamara_Greitz_small
 			}
 		}
 		country_leader = {
@@ -353,11 +355,12 @@ characters = {
 		name = VAL_Arkadi_Lemm
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_9
+				large = GFX_portrait_VAL_Arkadi_Lemm
+				small = GFX_portrait_VAL_Arkadi_Lemm_small
 			}
 			army = {
-				large = GFX_Portrait_Forul_Generic_9
-				small = GFX_Portrait_Forul_Generic_9_small
+				large = GFX_portrait_VAL_Arkadi_Lemm
+				small = GFX_portrait_VAL_Arkadi_Lemm_small
 			}
 		}
 		country_leader = {
@@ -371,7 +374,8 @@ characters = {
 		name = VAL_Mikhail_Velsky
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_2
+				large = GFX_portrait_VAL_Mikhail_Velsky
+				small = GFX_portrait_VAL_Mikhail_Velsky_small
 			}
 		}
 		country_leader = {

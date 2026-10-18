@@ -83,10 +83,6 @@ APH_VAL_commissariat = { color = rgb { 93 103 82 } color_ui = rgb { 156 160 139 
 
 VAL_dopotroydsk = { color = rgb { 86 55 38 } color_ui = rgb { 180 126 76 } }
 
-VAL_company_republic = { color = rgb { 104 74 46 } color_ui = rgb { 190 146 96 } }
-
-VAL_military_command = { color = rgb { 70 62 52 } color_ui = rgb { 150 136 112 } }
-
 VAL_kefreyt_state = {
 	color = rgb { 127 15 2 }
 	color_ui = rgb { 127 15 2 }
@@ -101,6 +97,15 @@ VAL_united_military_districts = {
 	color = rgb { 116 121 75 }
 	color_ui = rgb { 116 121 75 }
 }
+
+# Contract administrations keep their lighter offset from Kefreyt's chosen identity.
+OCA_VAL_republic = { color = rgb { 108 143 162 } color_ui = rgb { 108 143 162 } }
+
+OCA_VAL_districts = { color = rgb { 155 164 115 } color_ui = rgb { 155 164 115 } }
+
+NKA_VAL_republic = { color = rgb { 93 128 149 } color_ui = rgb { 93 128 149 } }
+
+NKA_VAL_districts = { color = rgb { 140 149 102 } color_ui = rgb { 140 149 102 } }
 
 RUS_last_empire = {
 	color = rgb { 96 16 20 }

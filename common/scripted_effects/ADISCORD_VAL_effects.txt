@@ -5038,6 +5038,11 @@ VAL_frontier_settle_victory = {
 			limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } APH = { has_country_flag = VAL_frontier_member } }
 			set_temp_variable = { var = VAL_frontier_settle_APH value = 1 }
 		}
+		# Guarantor membership is cleared by peace. Queue only this war's northern scene.
+		if = {
+			limit = { NOD = { has_country_flag = VAL_frontier_guarantor } }
+			country_event = { id = val_rework.153 days = 2 }
+		}
 		VAL_frontier_close = yes
 		if = {
 			limit = { OR = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } check_variable = { var = VAL_frontier_settle_CIN value = 1 compare = equals } } }
@@ -5195,6 +5200,11 @@ VAL_frontier_settle_armistice = {
 			limit = { STP = { exists = yes has_country_flag = VAL_frontier_guarantor has_war_with = VAL has_country_flag = STP_cw_won_union_battle } }
 			set_temp_variable = { var = VAL_frontier_party_receives_border value = 1 }
 		}
+		# Guarantor membership is cleared by peace. Queue only this war's northern scene.
+		if = {
+			limit = { NOD = { has_country_flag = VAL_frontier_guarantor } }
+			country_event = { id = val_rework.153 days = 2 }
+		}
 		VAL_frontier_close = yes
 		if = {
 			limit = { check_variable = { var = VAL_frontier_party_receives_border value = 1 compare = equals } STP = { exists = yes has_country_flag = STP_cw_won_union_battle } }
@@ -5236,6 +5246,7 @@ VAL_frontier_settle_defeat = {
 			VAL_council_close_regime = yes
 			set_politics = { ruling_party = pragmatism elections_allowed = no }
 			promote_character = { character = VAL_party_administration ideology = pragmatism_ideology }
+			VAL_council_tint_administrations = yes
 			VAL_refresh_contract_modifier = yes
 			mark_focus_tree_layout_dirty = yes
 			set_rule = { can_join_factions = no can_create_factions = no }
@@ -6250,6 +6261,7 @@ VAL_form_northern_administration = {
 			}
 			set_autonomy = { target = NKA autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
 			VAL = { VAL_call_subjects_to_wars = yes }
+			VAL = { VAL_council_tint_administrations = yes }
 			ADISCORD_economy_mark_dirty = yes
 			country_event = { id = val_contract.346 }
 		}
@@ -6350,6 +6362,7 @@ VAL_form_occidian_administration = {
 			}
 			OCA = { VAL_initialize_balchansk_administration = yes }
 			VAL_reconcile_occidian_resource_rights = yes
+			VAL = { VAL_council_tint_administrations = yes }
 			clr_country_flag = VAL_occidian_settlement_pending
 			ADISCORD_economy_mark_dirty = yes
 		}
@@ -6696,6 +6709,7 @@ VAL_settle_joint_nod_shabrat_victory = {
 		}
 
 		set_country_flag = VAL_joint_nod_settlement_completed
+		country_event = { id = val_rework.153 days = 2 }
 		clr_country_flag = VAL_joint_nod_campaign_with_sts
 		NOD = {
 			clr_country_flag = VAL_joint_nod_campaign_target
@@ -7819,7 +7833,10 @@ VAL_finish_nodrul_administration = {
 		promote_character = { character = STP_Pavel_Lanskoy ideology = contractual_etatism }
 		load_focus_tree = { tree = VAL_administration_focus keep_completed = no }
 		mark_focus_tree_layout_dirty = yes
-		VAL = { country_event = { id = val_contract.348 } }
+		VAL = {
+			country_event = { id = val_contract.348 }
+			country_event = { id = val_rework.153 days = 2 }
+		}
 		clr_country_flag = NOD_cw_entered
 		clr_country_flag = NOD_cw_intervention_ready
 		clr_country_flag = NOD_cw_intervention_approved
@@ -11342,6 +11359,7 @@ VAL_council_apply_identity = {
 			set_cosmetic_tag = VAL_united_military_districts
 		}
 	}
+	VAL_council_tint_administrations = yes
 }
 
 VAL_council_offer_identity = {
@@ -11351,6 +11369,19 @@ VAL_council_offer_identity = {
 	}
 	else = {
 		country_event = { id = val_council.25 hours = 1 }
+	}
+}
+
+# COUNTRY VAL. Solgalov's dominance ends the command balance for the campaign;
+# the coup requires this balance, so the Council route closes with it.
+VAL_expose_command_conspiracy = {
+	if = {
+		limit = {
+			has_power_balance = { id = VAL_command_balance }
+		}
+		remove_power_balance = { id = VAL_command_balance }
+		remove_mission = VAL_council_ultimatum
+		news_event = { id = val_council.28 hours = 6 }
 	}
 }
 
@@ -12339,6 +12370,86 @@ VAL_council_close_regime = {
 			has_power_balance = { id = VAL_council_balance }
 		}
 		remove_power_balance = { id = VAL_council_balance }
+	}
+}
+
+# COUNTRY VAL. Kefreyt's own contract administrations take a lighter shade of
+# the chosen Council identity; the state identity and any other overlord keep
+# their own colour. Call after every identity change and administration creation.
+VAL_council_tint_administrations = {
+	if = {
+		limit = {
+			OCA = {
+				exists = yes
+				is_subject_of = VAL
+			}
+		}
+		OCA = {
+			if = {
+				limit = {
+					VAL = {
+						VAL_council_identity_available = yes
+						check_variable = { var = VAL_council_identity value = 2 compare = equals }
+					}
+				}
+				set_cosmetic_tag = OCA_VAL_republic
+			}
+			else_if = {
+				limit = {
+					VAL = {
+						VAL_council_identity_available = yes
+						check_variable = { var = VAL_council_identity value = 3 compare = equals }
+					}
+				}
+				set_cosmetic_tag = OCA_VAL_districts
+			}
+			else_if = {
+				limit = {
+					OR = {
+						has_cosmetic_tag = OCA_VAL_republic
+						has_cosmetic_tag = OCA_VAL_districts
+					}
+				}
+				drop_cosmetic_tag = yes
+			}
+		}
+	}
+	if = {
+		limit = {
+			NKA = {
+				exists = yes
+				is_subject_of = VAL
+			}
+		}
+		NKA = {
+			if = {
+				limit = {
+					VAL = {
+						VAL_council_identity_available = yes
+						check_variable = { var = VAL_council_identity value = 2 compare = equals }
+					}
+				}
+				set_cosmetic_tag = NKA_VAL_republic
+			}
+			else_if = {
+				limit = {
+					VAL = {
+						VAL_council_identity_available = yes
+						check_variable = { var = VAL_council_identity value = 3 compare = equals }
+					}
+				}
+				set_cosmetic_tag = NKA_VAL_districts
+			}
+			else_if = {
+				limit = {
+					OR = {
+						has_cosmetic_tag = NKA_VAL_republic
+						has_cosmetic_tag = NKA_VAL_districts
+					}
+				}
+				drop_cosmetic_tag = yes
+			}
+		}
 	}
 }
 

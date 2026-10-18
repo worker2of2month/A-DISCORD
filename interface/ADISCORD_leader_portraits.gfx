@@ -364,6 +364,46 @@ spriteTypes = {
 	}
 	###VAL
 	spriteType = {
+		name = "GFX_portrait_VAL_Gleb_Osten"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Gleb_Osten.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_Gleb_Osten_small"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Gleb_Osten_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_Tamara_Greitz"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Tamara_Greitz.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_Tamara_Greitz_small"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Tamara_Greitz_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_Arkadi_Lemm"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Arkadi_Lemm.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_Arkadi_Lemm_small"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Arkadi_Lemm_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_Mikhail_Velsky"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Mikhail_Velsky.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_Mikhail_Velsky_small"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Mikhail_Velsky_small.png"
+	}
+
+	spriteType = {
 		name = "GFX_portrait_VAL_Commanders_Council"
 		texturefile = "gfx/leaders/VAL/portrait_VAL_Commanders_Council.png"
 	}

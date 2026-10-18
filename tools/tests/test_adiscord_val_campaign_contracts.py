@@ -1,6 +1,8 @@
 """Parsed route and payment scenarios; these do not simulate the HOI4 engine."""
 
 from dataclasses import replace
+from pathlib import Path
+import re
 import unittest
 
 from tools.tests.test_adiscord_stp_preparation import (
@@ -451,6 +453,163 @@ class ValCampaignContractsTests(unittest.TestCase):
                         if scope == "VAL" and entry.key == "transfer_state"
                     ]
                     self.assertEqual(bool(transfers), owner == "ERT")
+
+class ValLateStoryTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.events = {
+            scalar(entry.value, "id"): entry.value
+            for entry in entries("events/ADISCORD_VAL_contract_events.txt")
+            if entry.key == "country_event"
+        }
+
+    def scene(self, number):
+        event_id = f"val_rework.{number}"
+        self.assertTrue(event_id in self.events, f"Missing scene: {event_id}")
+        return self.events[event_id]
+
+    def test_arms_scene_requires_delivery_and_a_surviving_independent_winner(self):
+        scene = self.scene(151)
+        facts = {
+            ("VAL", "exists", "yes"): True,
+            ("VAL", "has_capitulated", "no"): True,
+            ("VAL", "is_subject", "no"): True,
+            ("VAL", "ruling_leader"): "VAL_Valera_Solgalov",
+            ("VAL", "has_country_flag", "VAL_cw_arms_contract_fulfilled"): True,
+            ("STS", "exists", "yes"): True,
+            ("STS", "has_capitulated", "no"): True,
+            ("STS", "is_subject", "no"): True,
+            ("STS", "ruling_leader"): "STP_maksim_shabrat",
+            ("STS", "has_country_flag", "STP_cw_won_union_battle"): True,
+        }
+        gate = block(scene, "trigger")
+        self.assertTrue(matches_conditions(gate, facts, "VAL"))
+        changes = (
+            (("VAL", "has_country_flag", "VAL_cw_arms_contract_fulfilled"), False),
+            (("STS", "has_country_flag", "STP_cw_won_union_battle"), False),
+            (("STS", "exists", "yes"), False),
+            (("STS", "is_subject", "no"), False),
+            (("STS", "has_capitulated", "no"), False),
+            (("VAL", "has_war_with", "STS"), True),
+            (("VAL", "ruling_leader"), "VAL_Commanders_Council"),
+            (("STS", "ruling_leader"), "STP_Pavel_Lanskoy"),
+        )
+        for key, value in changes:
+            with self.subTest(changed=key):
+                self.assertFalse(matches_conditions(gate, {**facts, key: value}, "VAL"))
+
+    def test_northern_outcomes_select_exactly_one_current_description(self):
+        scene = self.scene(153)
+        scenarios = (
+            ({("NOD", "is_subject_of", "VAL"): True}, "dominated"),
+            ({("VAL", "has_country_flag", "VAL_joint_nod_settlement_completed"): True}, "shared"),
+            ({("VAL", "is_subject", "yes"): True}, "setback"),
+            ({("VAL", "has_country_flag", "VAL_frontier_armistice_signed"): True}, "setback"),
+            ({}, "agreement"),
+            ({("NOD", "is_subject_of", "VAL"): True,
+              ("VAL", "has_country_flag", "VAL_frontier_armistice_signed"): True}, "dominated"),
+        )
+        for facts, expected in scenarios:
+            with self.subTest(expected=expected, facts=facts):
+                descriptions = [
+                    scalar(entry.value, "text") for entry in scene
+                    if entry.key == "desc"
+                    and matches_conditions(block(entry.value, "trigger"), facts, "VAL")
+                ]
+                self.assertEqual(descriptions, [f"val_rework.153.{expected}"])
+        gate = block(scene, "trigger")
+        facts = {("VAL", "exists", "yes"): True, ("NOD", "exists", "yes"): True}
+        self.assertTrue(matches_conditions(gate, facts, "VAL"))
+        self.assertFalse(matches_conditions(gate, {**facts, ("VAL", "has_war_with", "NOD"): True}, "VAL"))
+        self.assertFalse(matches_conditions(gate, {**facts, ("NOD", "exists", "yes"): False}, "VAL"))
+
+    def test_arms_story_dispatch_does_not_require_the_optional_support_programme(self):
+        settlement = block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+                           "STP_cw_settle_union_victory")
+        dispatches = [entry for entry in settlement if entry.key == "if" and any(
+            child.key == "country_event" and scalar(child.value, "id") == "val_rework.151"
+            for child in walk(entry.value)
+        )]
+        self.assertEqual(len(dispatches), 1)
+        for winner, delivered, expected in (("STS", True, True), ("STS", False, False), ("STP", True, False)):
+            with self.subTest(winner=winner, delivered=delivered):
+                facts = {
+                    ("VAL", "exists", "yes"): True,
+                    ("VAL", "has_country_flag", "VAL_cw_arms_contract_fulfilled"): delivered,
+                }
+                calls = [(scope, scalar(entry.value, "id"))
+                         for scope, entry in selected_effects(dispatches, facts, winner)
+                         if entry.key == "country_event"]
+                self.assertEqual(calls, [("VAL", "val_rework.151")] if expected else [])
+
+    def test_tribal_peace_only_dispatches_northern_story_for_its_actual_guarantor(self):
+        for name in ("VAL_frontier_settle_victory", "VAL_frontier_settle_armistice"):
+            settlement = block(block(entries(EFFECTS), name), "if")
+            close = next(i for i, entry in enumerate(settlement) if entry.key == "VAL_frontier_close")
+            dispatches = [(i, entry) for i, entry in enumerate(settlement) if entry.key == "if" and any(
+                child.key == "country_event" and scalar(child.value, "id") == "val_rework.153"
+                for child in walk(entry.value)
+            )]
+            self.assertEqual(len(dispatches), 1)
+            index, dispatch = dispatches[0]
+            self.assertLess(index, close)
+            for guarantor in (True, False):
+                facts = {("NOD", "has_country_flag", "VAL_frontier_guarantor"): guarantor}
+                calls = [entry for _, entry in selected_effects([dispatch], facts) if entry.key == "country_event"]
+                self.assertEqual(len(calls), int(guarantor))
+
+    def test_propaganda_scene_requires_a_stelander_mobilisation_under_solgalov(self):
+        gate = block(self.scene(152), "trigger")
+        facts = {
+            ("VAL", "exists", "yes"): True,
+            ("VAL", "has_capitulated", "no"): True,
+            ("VAL", "is_subject", "no"): True,
+            ("VAL", "ruling_leader"): "VAL_Valera_Solgalov",
+            ("VAL", "has_country_flag", "VAL_campaign_mobilizing"): True,
+        }
+        for target in ("STP", "STS", "NOD"):
+            for mobilizing in (True, False):
+                current = {
+                    **facts,
+                    (target, "exists", "yes"): True,
+                    (target, "has_country_flag", "VAL_campaign_target"): True,
+                    ("VAL", "has_country_flag", "VAL_campaign_mobilizing"): mobilizing,
+                }
+                self.assertEqual(matches_conditions(gate, current, "VAL"), target != "NOD" and mobilizing)
+                current[("VAL", "ruling_leader")] = "VAL_Commanders_Council"
+                self.assertFalse(matches_conditions(gate, current, "VAL"))
+
+    def test_story_windows_are_once_only_and_close_without_gameplay_or_navigation(self):
+        for number in range(149, 154):
+            with self.subTest(event=number):
+                scene = self.scene(number)
+                self.assertEqual(scalar(scene, "is_triggered_only"), "yes")
+                self.assertEqual(scalar(scene, "fire_only_once"), "yes")
+                self.assertFalse(any(entry.key == "immediate" for entry in scene))
+                options = [entry.value for entry in scene if entry.key == "option"]
+                self.assertEqual(len(options), 1)
+                self.assertEqual([entry.key for entry in options[0]], ["name"])
+
+    def test_story_pages_have_complete_bounded_localisation_in_both_languages(self):
+        root = Path(__file__).resolve().parents[2]
+        for language in ("russian", "english"):
+            path = root / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
+            data = path.read_bytes()
+            self.assertTrue(data.startswith(b"\xef\xbb\xbf"))
+            values = dict(re.findall(r'^\s*([^\s:#]+):\d*\s+"(.*)"\s*$', data.decode("utf-8-sig"), re.M))
+            for number in range(149, 154):
+                scene = self.scene(number)
+                keys = [scalar(scene, "title"), scalar(block(scene, "option"), "name")]
+                keys += [scalar(entry.value, "text") if isinstance(entry.value, list) else entry.value
+                         for entry in scene if entry.key == "desc"]
+                for key in keys:
+                    with self.subTest(language=language, key=key):
+                        self.assertIn(key, values)
+                        text = values[key].replace("\\n", "\n")
+                        self.assertNotRegex(text, r'[\u2013\u2014\u2022;$]')
+                        self.assertLessEqual(len(text), 3000)
+                        self.assertLessEqual(len(text.encode("utf-8")), 5500)
+
 
 if __name__ == "__main__":
     unittest.main()

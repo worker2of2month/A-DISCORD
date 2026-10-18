@@ -51,6 +51,10 @@ VAL_command_balance = {
 			min = 0.75
 			max = 1.00
 			modifier = { political_power_gain = 0.25 production_factory_efficiency_gain_factor = 0.10 army_org_factor = -0.07 stability_factor = -0.10 }
+			# Solgalov's dominance exposes the generals' conspiracy and closes this balance.
+			on_activate = {
+				country_event = { id = val_council.27 }
+			}
 		}
 	}
 }
