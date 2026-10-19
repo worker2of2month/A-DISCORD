@@ -1870,6 +1870,11 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_VAL_Reserve_Accounting"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Reserve_Accounting.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_VAL_Three_Shift_Arsenals"
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Three_Shift_Arsenals.png"
 	}

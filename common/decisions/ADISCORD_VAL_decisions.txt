@@ -2779,25 +2779,21 @@ VAL_foreign_sales = {
 }
 
 VAL_command_balance_category = {
-	VAL_staff_authority = {
+	# The staff distributes army orders itself: material help paid for with authority.
+	VAL_staff_army_orders = {
 		icon = generic_army_support
 		visible = { has_power_balance = { id = VAL_command_balance } }
-		available = { has_capitulated = no is_subject = no power_balance_value = { id = VAL_command_balance value > -0.75 } }
-		cost = 40
+		available = {
+			has_capitulated = no
+			is_subject = no
+			power_balance_value = { id = VAL_command_balance value > -0.75 }
+		}
+		cost = 15
 		days_re_enable = 90
 		complete_effect = {
 			add_power_balance_value = { id = VAL_command_balance value = -0.15 }
-		}
-		ai_will_do = { base = 1 }
-	}
-	VAL_solgalov_authority = {
-		icon = generic_political_pressure
-		visible = { has_power_balance = { id = VAL_command_balance } }
-		available = { has_capitulated = no is_subject = no power_balance_value = { id = VAL_command_balance value < 0.75 } }
-		cost = 40
-		days_re_enable = 90
-		complete_effect = {
-			add_power_balance_value = { id = VAL_command_balance value = 0.15 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = VAL }
+			army_experience = 10
 		}
 		ai_will_do = { base = 1 }
 	}
