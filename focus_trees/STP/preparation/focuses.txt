@@ -281,7 +281,7 @@ focus_tree = {
 			STP_cw_preparation_open = yes
 			has_country_flag = STP_sided_with_Maksim_flag
 		}
-		icon = GFX_focus_STP_Side_With_Maksim
+		icon = GFX_focus_STP_Call_For_Shabrat
 		x = -8
 		y = 3
 		cost = 2

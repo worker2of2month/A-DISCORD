@@ -560,6 +560,32 @@
         "source": "exec-9b8c8b9f-6218-471b-a9d8-f455dc55b211.png",
         "prompt": "Assemble three supplied cutouts into a WIDE HOI4 focus icon Shabrat Headquarters, silhouette1.9:1. Shabrat image1 behind the left half of desk image2, face and glasses unchanged, holding the receiver; telephone cable connects visually to empty telephone base on desk. Desk spans entire bottom, don't put his fingers onto desk: his free hand is hidden behind desk edge. Native blue banner image3 behind at right, preserve exact white rising diagonal and small FOUR-point gold star upper-left. Tightly overlapping realistic miniature political photo-collage, cold blue-black/silver, restrained skin tone, no gold halo. No additional people, props, text, frame, room or ground. Transparent alpha outside silhouette, full head and flag top in frame."
       }
+    },
+    {
+      "focus_id": "STP_Count_The_Loyalists",
+      "title": "Проверить списки делегатов",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "delegate_lists_open_register.png",
+          "source": "exec-e7e085f7-9f31-44b8-98fb-89fc345d746d.png",
+          "prompt": "One isolated opened delegate register in a stiff dark navy binder, viewed three-quarter from above, broad horizontal silhouette. Cream pages show orderly columns, six simple checkboxes and short abstract black name-like strokes with NO legible names or words, two checked boxes and remaining blank. Plain metal binder clips, slightly worn paper. Realistic dark political HOI4 photomontage like refs, cold grey shadows and pale silver-white paper, no gold. No hands, pen, magnifier, table or other props. True transparent alpha background, full book edges visible."
+        },
+        {
+          "file": "delegate_lists_magnifying_glass.png",
+          "source": "exec-7108d8da-7e48-4ed3-aaf7-e6538d006a09.png",
+          "prompt": "One isolated old handheld magnifying glass, large round clear glass lens in worn silver metal ring, short dark wooden handle angled down-right. Three-quarter front view, whole object visible, lens clear and transparent, restrained white specular reflection only. Realistic dark blue-grey political photo-collage asset for HOI4, match cold silver edge highlights of references. No eye, hand, paper, text, ground, halo or background, true transparent alpha including clear areas of lens."
+        },
+        {
+          "file": "district_authority_file_cabinet.png",
+          "reused_from": "STP_pw_republic_district_authority"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-387b7185-3e6b-4eb2-a915-63eadb09f575.png",
+        "prompt": "Wide tightly overlapping fictional HOI4 icon Verify Delegate Lists from supplied cutouts: open register image1 spans lower whole width, magnifier image2 large over left page with readable checkbox visible through glass and handle diagonally lower-right, file cabinet image3 small dark background right. Main emphasis bright lens ring over paper. Width1.9xheight, realistic cold dark blue-silver political collage, paper desaturated cream, no readable names or words. No people, new props, frame, scene, floor or halo; transparent outside silhouettes. Keep full handle and register corners within canvas."
+      }
     }
   ],
   "shared_assets": [
@@ -663,7 +689,7 @@
         "description": "Свяжем окружных организаторов со служащими центральных ведомств. Проверенные посредники смогут задержать прибытие партийной комиссии.",
         "current_icon": "GFX_focus_generic_improve_the_administration",
         "current_texture": null,
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_Call_For_Shabrat",
