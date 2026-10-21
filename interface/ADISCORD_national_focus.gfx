@@ -344,6 +344,11 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_STP_cw_pay_officials"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_pay_officials.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_STP_cw_district_printing"
 		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_district_printing.png"
 	}

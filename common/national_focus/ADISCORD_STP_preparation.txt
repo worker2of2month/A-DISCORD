@@ -148,7 +148,7 @@ focus_tree = {
 			STP_cw_preparation_open = yes
 			has_country_flag = STP_sided_with_Maksim_flag
 		}
-		icon = GFX_focus_generic_improve_the_administration
+		icon = GFX_focus_STP_cw_pay_officials
 		x = -1
 		y = 3
 		cost = 3

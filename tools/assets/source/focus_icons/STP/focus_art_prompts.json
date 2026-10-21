@@ -586,6 +586,56 @@
         "source": "exec-387b7185-3e6b-4eb2-a915-63eadb09f575.png",
         "prompt": "Wide tightly overlapping fictional HOI4 icon Verify Delegate Lists from supplied cutouts: open register image1 spans lower whole width, magnifier image2 large over left page with readable checkbox visible through glass and handle diagonally lower-right, file cabinet image3 small dark background right. Main emphasis bright lens ring over paper. Width1.9xheight, realistic cold dark blue-silver political collage, paper desaturated cream, no readable names or words. No people, new props, frame, scene, floor or halo; transparent outside silhouettes. Keep full handle and register corners within canvas."
       }
+    },
+    {
+      "focus_id": "STP_cw_delay_election_commission",
+      "title": "Затянуть избирательную комиссию",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "election_commission_hourglass.png",
+          "source": "exec-b17028c8-a32a-42a2-8c72-8719a0b7698b.png",
+          "prompt": "Single isolated hourglass with a plain dark steel frame, four slender supports, clear glass bulbs, pale silver-grey sand halfway through. Short sturdy proportions, three-quarter view, entire object visible. Realistic worn materials, cold blue-black shadows and subdued silver highlights in style of supplied HOI4 focus references, no bronze gold ornament. No symbols letters hands desk or other props, transparent alpha background including clear glass regions, no broad halo."
+        },
+        {
+          "file": "delegate_lists_open_register.png",
+          "reused_from": "STP_Count_The_Loyalists"
+        },
+        {
+          "file": "district_assembly_presiding_gavel.png",
+          "reused_from": "STP_pc_lib_assembly"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-9f560e41-b30e-4c40-8099-c014f8bf7d23.png",
+        "prompt": "Wide compact fictional HOI4 icon Delay the Election Commission assembled from 3 assets: hourglass large on left, opened delegate register fanning across lower middle and right, presiding gavel resting diagonally on register foreground right. Tight overlap, width1.9xheight, hourglass upper half provides strong silhouette, pale sand and paper balanced against dark steel. Realistic cold blue-black/silver political collage. No people, new props, text, extra marks, background, table, frame or halo. Transparent alpha outside object group; every object fully in frame."
+      }
+    },
+    {
+      "focus_id": "STP_cw_national_mandate",
+      "title": "Гарантии передачи власти",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "national_mandate_ballot_box.png",
+          "source": "exec-39846b32-288e-42c4-b324-2fbb6cb9e5e5.png",
+          "prompt": "Single isolated sealed civic ballot box made of dark navy painted wood with simple iron corner braces, narrow slot at top and one folded pale ballot partly inserted. No hand, lock chains, insignia, flag, writing, question marks or checkmarks. Three-quarter view, broad compact cubic shape, dark realistic HOI4 political collage texture matching reference icons, cold silver highlights and blue-black shadows, pale paper small accent. Entire object visible on true transparent alpha background, no ground or halo."
+        },
+        {
+          "file": "niansas_administration_key_handover.png",
+          "reused_from": "STP_cw_district_administration"
+        },
+        {
+          "file": "restore_civil_authority_hanging_flag.png",
+          "reused_from": "STP_cw_restore_civil_authority"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-ee344128-aa2a-4368-b9e2-3a9fde5bcf70.png",
+        "prompt": "Assemble these three cutouts into a wide HOI4 national focus icon Guarantees of Power Transfer: sealed ballot box image1 left and central, native banner image3 behind right, key-handover hands image2 smaller across lower foreground linking box and banner. Ballot and silver key clearly readable, keep hands natural and flag exact white rising diagonal plus small four-point gold star in upper-left. Compact overlapping width1.9xheight, cold blue-black silver realistic political collage, restrained skin tone, no extra figures or props, title, frame, backdrop or glow. Transparent alpha background."
+      }
     }
   ],
   "shared_assets": [
@@ -705,7 +755,7 @@
         "description": "Через штаб потребуем повторно сверить мандаты и отложить объявление результата.",
         "current_icon": "GFX_focus_generic_improve_the_administration",
         "current_texture": null,
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_cw_officer_contacts",
@@ -985,7 +1035,7 @@
         "description": "Добьёмся публичного признания избирательной процедуры и откроем переговоры с командованием о подчинении объявленному результату. При широкой поддержке и действующем обязательстве гарнизона сопротивление партии можно ограничить отдельным мятежом. Для этого нужны устойчиво работающие администрации Монаии и Ниансаса.",
         "current_icon": "GFX_focus_STP_Triumph_Of_Common_Sense",
         "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Triumph_Of_Common_Sense.png",
-        "art_status": "planned"
+        "art_status": "generated"
       }
     ]
   }
