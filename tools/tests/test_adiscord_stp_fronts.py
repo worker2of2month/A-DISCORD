@@ -435,7 +435,7 @@ class ShabratAssaultWaveAndAirTests(unittest.TestCase):
             bootstrap.index("STP_cw_sts_ai_air_arm = yes"),
         )
 
-    def test_shabrat_air_focuses_grant_cas_and_the_plan_takes_them(self) -> None:
+    def test_shabrat_air_focuses_unlock_programmes_and_the_plan_takes_them(self) -> None:
         source = (ROOT / "focus_trees/STP/civil_war/focuses.txt").read_text(encoding="utf-8-sig")
         plan = (ROOT / "common/ai_strategy_plans/ADISCORD_STP_plans.txt").read_text(encoding="utf-8")
         war_plan = named_block(plan, "STS_shabrat_civil_war_plan")
@@ -443,7 +443,8 @@ class ShabratAssaultWaveAndAirTests(unittest.TestCase):
             body = source[source.index(f"id = {focus}\n"):]
             body = body[:body.index("\n\t}\n")]
             self.assertIn("tag = STS", body, focus)
-            self.assertIn("type = ADISCORD_cas_airframe_2170", body, focus)
+            self.assertNotIn("add_equipment_to_stockpile", body, focus)
+            self.assertIn("unlock_decision_tooltip", body, focus)
             self.assertIn(focus, war_plan)
         # The air branch follows the Last Banquet so the decisive window keeps its clock.
         self.assertLess(war_plan.index("STP_cw_last_banquet"), war_plan.index("STP_cw_strike_squadrons"))

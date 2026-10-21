@@ -39,6 +39,21 @@ spriteTypes = {
 
 	###STP
 	spriteType = {
+		name = "GFX_idea_STP_resistance_battle"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_resistance_battle.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_STP_mountain_mandate"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_mountain_mandate.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_STP_stalled_offensive"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_stalled_offensive.png"
+	}
+
+	spriteType = {
 		name = "GFX_idea_STP_civil_war_aftermath"
 		texturefile = "gfx/interface/ideas/STP/idea_STP_civil_war_aftermath.png"
 	}

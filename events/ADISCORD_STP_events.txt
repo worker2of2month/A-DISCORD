@@ -2260,35 +2260,35 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		is_ai = no
 		has_global_flag = STP_cw_started
 		NOT = { has_global_flag = STP_cw_union_wars_finished }
-		OR = {
-			AND = { tag = STP has_war_with = STS }
-			AND = { tag = STS has_war_with = STP }
-		}
 	}
 	immediate = {
-		# The chosen side is authoritative. change_tag_from can hand human control
-		# over after this callback has already been queued, so tag alone can briefly
-		# describe the old country and select the wrong civil-war theme.
+		# The callback is queued before the player handoff. Resolve both playback
+		# scopes explicitly; STP's preparation choice already belongs to the Party.
 		if = {
 			limit = {
-				OR = {
-					has_country_flag = STP_sided_with_Maksim_flag
-					tag = STS
+				has_global_flag = STP_cw_started
+				NOT = { has_global_flag = STP_cw_union_wars_finished }
+			}
+			STS = {
+				if = {
+					limit = {
+						is_ai = no
+						has_war_with = STP
+					}
+					scoped_play_song = "ADISCORD_stp_civil_war"
 				}
 			}
-			scoped_play_song = "ADISCORD_stp_civil_war"
-		}
-		else_if = {
-			limit = {
-				OR = {
-					has_country_flag = STP_sided_with_the_party_flag
-					tag = STP
+			STP = {
+				if = {
+					limit = {
+						is_ai = no
+						has_war_with = STS
+					}
+					scoped_play_song = "ADISCORD_stp_party"
 				}
 			}
-			scoped_play_song = "ADISCORD_stp_party"
 		}
 	}
 }
@@ -2445,10 +2445,10 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		if = {
-			limit = { tag = STP STP_cw_fada_captured = yes }
+			limit = { tag = STP STP_cw_party_government_defeated = yes }
 			STS = {
 				if = {
-					limit = { has_country_flag = STP_cw_last_banquet_started }
+					limit = { has_country_flag = STP_cw_last_banquet_started controls_province = 145 }
 					STP_cw_resolve_last_banquet_success = yes
 				}
 				STP_cw_settle_union_victory = yes
@@ -2966,12 +2966,13 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_preparation.32.b
 		ai_chance = { base = 1 }
+		custom_effect_tooltip = STP_ps_val_sale_pause_tt
 		hidden_effect = { VAL = { STP_ps_cancel_val_sale = yes } }
 	}
 	option = {
 		name = ADISCORD_STP_preparation.32.a
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
 		}
 		ai_chance = { base = 9 }
 		custom_effect_tooltip = STP_ps_val_sale_payment_tt

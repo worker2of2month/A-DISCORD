@@ -150,7 +150,6 @@ STP_ps_defence_dynamic = {
 STP_ps_nodes_dynamic = {
 	icon = GFX_idea_ADISCORD_law_military_cadre_army
 	enable = { STP_ps_war_active = yes }
-	ADISCORD_economy_admin_expense_factor = STP_ps_emergency_expense
 	planning_speed = STP_ps_node_planning
 	army_speed_factor = STP_ps_node_redeployment
 }
@@ -178,7 +177,7 @@ STP_ch_institutions = {
 }
 
 STP_hw_stall_dynamic = {
-	icon = GFX_idea_STP_National_Strikes
+	icon = GFX_idea_STP_stalled_offensive
 	enable = { STP_hw_stall_active = yes }
 	war_support_factor = STP_hw_stall_support
 	army_org_regain = STP_hw_stall_recovery
@@ -187,7 +186,7 @@ STP_hw_stall_dynamic = {
 
 # Shabrat's popular mandate: 50 is neutral, the refresh effect scales the values.
 STP_hw_mandate_dynamic = {
-	icon = GFX_idea_STP_National_Strikes
+	icon = GFX_idea_STP_mountain_mandate
 	enable = { STP_hw_war_current = yes }
 	stability_factor = STP_hw_mandate_stability
 	war_support_factor = STP_hw_mandate_war_support

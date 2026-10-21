@@ -1020,15 +1020,13 @@ class CivilWarContracts(unittest.TestCase):
         )
         audio = ast_block(first_time.value, "hidden_effect")
         self.assertFalse(any(e.key == "scoped_play_song" for e in walk(audio)))
-        for scope in (audio, ast_block(audio, "STS")):
-            callbacks = [
-                e.value
-                for e in scope
-                if e.key == "country_event"
-                and scalar(e.value, "id") == "ADISCORD_STP_cw.95"
-            ]
-            self.assertEqual(len(callbacks), 1)
-            self.assertEqual(scalar(callbacks[0], "hours"), "1")
+        callbacks = [
+            (scope, scalar(e.value, "hours"))
+            for scope, e in selected_effects(audio, {}, "STP")
+            if e.key == "country_event"
+            and scalar(e.value, "id") == "ADISCORD_STP_cw.95"
+        ]
+        self.assertEqual(callbacks, [("STP", "1")])
         party_story = [
             scope
             for scope, e in selected_effects(audio, {}, "STP")
@@ -1050,42 +1048,59 @@ class CivilWarContracts(unittest.TestCase):
             and scalar(e.value, "id") == "ADISCORD_STP_cw.94"
         )
         self.assertEqual(scalar(playback, "hidden"), "yes")
-        playback_cases = (
-            ("STP", "STS", "STP_sided_with_the_party_flag", "ADISCORD_stp_party"),
-            ("STS", "STP", "STP_sided_with_Maksim_flag", "ADISCORD_stp_civil_war"),
-            # Regression: the Shabrat choice can queue playback before change_tag_from
-            # finishes handing human control to STS. The side flag must win over tag.
-            ("STP", "STS", "STP_sided_with_Maksim_flag", "ADISCORD_stp_civil_war"),
-        )
-        for tag, enemy, side_flag, song in playback_cases:
-            for human, war, finished in (
-                (True, True, False),
-                (False, True, False),
-                (True, False, False),
-                (True, True, True),
+        # The queued event can retain STP while its human has moved to STS.
+        # STP's preparation flag has already been replaced with the Party flag.
+        for recipient in ("STP", "STS"):
+            for party_human, shabrat_human in (
+                (False, True), (True, False), (True, True), (False, False)
             ):
-                facts = {
-                    (tag, "is_ai", "no"): human,
-                    (tag, "has_war_with", enemy): war,
-                    (tag, "has_country_flag", side_flag): True,
-                    (tag, "has_global_flag", "STP_cw_started"): True,
-                    (tag, "has_global_flag", "STP_cw_union_wars_finished"): finished,
-                }
-                eligible = matches_conditions(
-                    ast_block(playback, "trigger"), facts, tag
-                )
-                self.assertEqual(eligible, human and war and not finished)
-                if eligible:
-                    chosen_songs = [
-                        e.value
-                        for _, e in selected_effects(
-                            ast_block(playback, "immediate"), facts, tag
+                for started, war, finished in (
+                    (True, True, False),
+                    (False, False, False),
+                    (True, False, False),
+                    (True, True, True),
+                ):
+                    with self.subTest(
+                        recipient=recipient,
+                        party_human=party_human,
+                        shabrat_human=shabrat_human,
+                        started=started,
+                        war=war,
+                        finished=finished,
+                    ):
+                        facts = {
+                            ("STP", "is_ai", "no"): party_human,
+                            ("STS", "is_ai", "no"): shabrat_human,
+                            ("STP", "has_war_with", "STS"): war,
+                            ("STS", "has_war_with", "STP"): war,
+                            ("STP", "has_country_flag", "STP_sided_with_the_party_flag"): True,
+                            ("STS", "has_country_flag", "STP_sided_with_Maksim_flag"): True,
+                            (recipient, "has_global_flag", "STP_cw_started"): started,
+                            (recipient, "has_global_flag", "STP_cw_union_wars_finished"): finished,
+                        }
+                        self.assertEqual(
+                            matches_conditions(
+                                ast_block(playback, "trigger"), facts, recipient
+                            ),
+                            started and not finished,
                         )
-                        if e.key == "scoped_play_song"
-                    ]
-                    self.assertEqual(chosen_songs, [song])
+                        chosen_songs = [
+                            (scope, e.value)
+                            for scope, e in selected_effects(
+                                ast_block(playback, "immediate"), facts, recipient
+                            )
+                            if e.key == "scoped_play_song"
+                        ]
+                        expected = []
+                        if started and war and not finished:
+                            if shabrat_human:
+                                expected.append(("STS", "ADISCORD_stp_civil_war"))
+                            if party_human:
+                                expected.append(("STP", "ADISCORD_stp_party"))
+                        self.assertCountEqual(chosen_songs, expected)
             self.assertEqual(
-                matches_conditions(ast_block(story, "trigger"), {}, tag), tag == "STP"
+                matches_conditions(ast_block(story, "trigger"), {}, recipient),
+                recipient == "STP",
             )
         self.assertLess(
             first_time.value.index(
@@ -1697,25 +1712,25 @@ class CivilWarContracts(unittest.TestCase):
                 None,
                 {"STP": 0.4, "STS": 0.4, "SRP": 0.2},
                 {"STP": 16, "STS": 14, "SRP": 10},
-                1,
+                Fraction(3, 5),
             ),
             (
                 "shabrat",
                 {"STP": 0.3, "STS": 0.5, "SRP": 0.2},
                 {"STP": 14, "STS": 16, "SRP": 10},
-                1,
+                Fraction(3, 5),
             ),
             (
                 "party",
                 {"STP": 0.4, "STS": 0.4, "SRP": 0.2},
                 {"STP": 16, "STS": 16, "SRP": 10},
-                1,
+                Fraction(3, 5),
             ),
             (
                 "limited",
                 {"STP": 0.16, "STS": 0.64, "SRP": 0.2},
                 {"STP": 5, "STS": 16, "SRP": 10},
-                1,
+                Fraction(3, 5),
             ),
         ):
             heavy_plan = {"STP": 3 if winner == "limited" else 6, "STS": 6, "SRP": 0}
@@ -6803,6 +6818,144 @@ class NorthernCampaignContracts(unittest.TestCase):
             )
 
 
+class ShabratWarLogisticsContracts(unittest.TestCase):
+    """Exercise authored receipts and callbacks, without emulating native mission timing."""
+
+    def setUp(self):
+        names = {
+            "STP_cw_shabrat_logistics_active",
+            "STP_cw_abila_depot_held",
+            "STP_cw_can_spend_600",
+        }
+        self.triggers = [
+            e for e in entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+            if e.key in names
+        ]
+        self.effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        self.decisions = ast_block(
+            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council"
+        )
+        self.state = {
+            ("STS", "has_war_with", "STP"): True,
+            ("STS", "has_capitulated", "no"): True,
+            ("STP", "exists", "yes"): True,
+            ("STP", "has_capitulated", "no"): True,
+            ("1", "is_owned_by", "ROOT"): True,
+            ("1", "is_controlled_by", "ROOT"): True,
+            ("STS", "has_completed_focus", "STP_cw_mobile_workshops"): True,
+        }
+        self.stocks = 0
+
+    def expand(self, items, parameters=None):
+        return NorthernCampaignContracts.expand(self, items, parameters)
+
+    def put(self, name, value):
+        self.state["STS", "variable", name] = value
+        self.state["STS", "has_variable", name] = True
+
+    def value(self, name):
+        return self.state.get(("STS", "variable", name), 0)
+
+    def run_body(self, body):
+        definitions = {e.key: e.value for e in self.effects}
+        for scope, effect in selected_effects(self.expand(body), self.state, "STS"):
+            self.assertEqual(scope, "STS")
+            if effect.key in definitions and effect.value == "yes":
+                self.run_body(definitions[effect.key])
+            elif effect.key in {
+                "set_variable", "set_temp_variable", "add_to_variable", "subtract_from_variable"
+            }:
+                name = scalar(effect.value, "var")
+                raw = scalar(effect.value, "value")
+                try:
+                    value = float(raw)
+                except ValueError:
+                    value = self.value(raw)
+                if effect.key == "add_to_variable":
+                    value += self.value(name)
+                elif effect.key == "subtract_from_variable":
+                    value = self.value(name) - value
+                self.put(name, value)
+            elif effect.key == "clear_variable":
+                self.state.pop((scope, "variable", effect.value), None)
+                self.state[scope, "has_variable", effect.value] = False
+            elif effect.key == "add_equipment_to_stockpile":
+                self.stocks += float(scalar(effect.value, "amount"))
+
+    def run_effect(self, name):
+        self.run_body(ast_block(self.effects, name))
+
+    def test_workshop_exact_price_duplicate_payment_and_three_delivery_cap(self):
+        decision = ast_block(self.decisions, "STP_cw_repair_rifle_batch")
+        self.assertEqual(scalar(decision, "cost"), "0")
+        self.assertEqual(scalar(decision, "days_remove"), "21")
+        self.put("ADISCORD_economy_treasury", 599.5)
+        self.run_body(ast_block(decision, "complete_effect"))
+        self.assertEqual(self.value("ADISCORD_economy_treasury"), 599.5)
+        self.assertEqual(self.value("STP_cw_workshop_deposit"), 0)
+        self.put("ADISCORD_economy_treasury", 1800)
+        for batch in range(3):
+            self.run_body(ast_block(decision, "complete_effect"))
+            self.run_body(ast_block(decision, "complete_effect"))
+            self.assertEqual(self.value("ADISCORD_economy_treasury"), 1200 - batch * 600)
+            self.run_body(ast_block(decision, "remove_effect"))
+            self.run_body(ast_block(decision, "remove_effect"))
+            self.run_body(ast_block(decision, "cancel_effect"))
+            self.assertEqual(self.stocks, (batch + 1) * 20000)
+        self.put("ADISCORD_economy_treasury", 600)
+        self.run_body(ast_block(decision, "complete_effect"))
+        self.assertEqual(self.value("ADISCORD_economy_treasury"), 600)
+        self.assertEqual(self.value("STP_cw_workshop_batches"), 3)
+
+    def test_cancel_or_peace_refunds_paid_workshop_once_and_prevents_delivery(self):
+        decision = ast_block(self.decisions, "STP_cw_repair_rifle_batch")
+        for terminal in (False, True):
+            with self.subTest(terminal=terminal):
+                self.setUp()
+                self.put("ADISCORD_economy_treasury", 600)
+                self.run_body(ast_block(decision, "complete_effect"))
+                if terminal:
+                    self.state["STS", "has_war_with", "STP"] = False
+                    self.run_effect("STP_cw_close_ground_logistics")
+                else:
+                    self.run_body(ast_block(decision, "cancel_effect"))
+                self.run_body(ast_block(decision, "remove_effect"))
+                self.run_body(ast_block(decision, "cancel_effect"))
+                self.assertEqual(self.value("ADISCORD_economy_treasury"), 600)
+                self.assertEqual(self.stocks, 0)
+
+    def test_depot_requires_continuous_control_and_never_duplicates_stock(self):
+        self.put("STP_cw_depot_remaining", 50000)
+        self.put("STP_cw_depot_in_transit", 1)
+        self.state["1", "is_controlled_by", "ROOT"] = False
+        self.run_effect("STP_cw_finish_depot_evacuation")
+        self.assertEqual(self.stocks, 0)
+        self.assertEqual(self.value("STP_cw_depot_remaining"), 50000)
+        self.state["1", "is_controlled_by", "ROOT"] = True
+        self.run_effect("STP_cw_finish_depot_evacuation")
+        self.assertEqual(self.stocks, 0)
+        self.put("STP_cw_depot_in_transit", 1)
+        self.run_effect("STP_cw_finish_depot_evacuation")
+        self.run_effect("STP_cw_finish_depot_evacuation")
+        self.assertEqual(self.stocks, 50000)
+
+    def test_fund_pays_only_three_tranches_and_cleanup_stops_unpaid_delivery(self):
+        mission = ast_block(self.decisions, "STP_cw_war_fund_delivery")
+        self.assertFalse(matches_conditions(ast_block(mission, "available"), self.state, "STS"))
+        self.assertEqual(scalar(mission, "days_mission_timeout"), "21")
+        self.run_effect("STP_cw_receive_fund_tranche")
+        self.put("STP_cw_fund_remaining", 4000)
+        for _ in range(3):
+            self.run_effect("STP_cw_finish_fund_tranche")
+        self.assertEqual(self.value("ADISCORD_economy_treasury"), 6000)
+        self.put("STP_cw_fund_remaining", 4000)
+        self.put("STP_cw_depot_remaining", 50000)
+        self.run_effect("STP_cw_close_ground_logistics")
+        self.run_effect("STP_cw_finish_fund_tranche")
+        self.assertEqual(self.value("ADISCORD_economy_treasury"), 6000)
+        self.assertEqual(self.value("STP_cw_depot_remaining"), 0)
+
+
 class WartimeProgramContracts(unittest.TestCase):
     def setUp(self):
         self.triggers = [
@@ -9195,7 +9348,7 @@ if __name__ == "__main__":
 
 
 class CivilWarAirMandateContracts(unittest.TestCase):
-    def test_party_air_wings_require_the_prewar_focus_for_every_election_result(self):
+    def test_party_retains_air_wings_for_every_election_result(self):
         start = ast_block(
             ast_block(
                 entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
@@ -9225,7 +9378,7 @@ class CivilWarAirMandateContracts(unittest.TestCase):
                 )
                 self.assertEqual(
                     float(scalar(transfers[-1].value, "air_ratio")),
-                    0.8 if prepared else 1,
+                    0.5 if prepared else 0.6,
                 )
 
     def test_air_stockpile_reallocation_precedes_focus_tree_replacement(self):
@@ -9282,6 +9435,8 @@ class CivilWarAirMandateContracts(unittest.TestCase):
                             value = (
                                 stocks[(who, raw.split("@", 1)[1])]
                                 if raw.startswith("num_equipment@")
+                                else facts[(who, "variable", raw)]
+                                if (who, "variable", raw) in facts
                                 else float(raw)
                             )
                             facts[key] = (
@@ -9311,10 +9466,12 @@ class CivilWarAirMandateContracts(unittest.TestCase):
                     )
                     self.assertEqual(stocks[("SRP", typ)], 0)
                     self.assertEqual(
-                        stocks[("STP", typ)], int(total * 0.2 + 0.5) if prepared else 0
+                        stocks[("STP", typ)], int(total * (0.5 if prepared else 0.4) + 0.5)
                     )
-                    if total:
-                        self.assertGreater(stocks[("STS", typ)], stocks[("STP", typ)])
+                    self.assertLessEqual(
+                        abs(stocks[("STP", typ)] - total * (0.5 if prepared else 0.4)),
+                        0.5,
+                    )
 
     def test_party_victory_baseline_has_equal_paid_line_armies(self):
         start = ast_block(
@@ -9577,7 +9734,7 @@ class PartyRightPreparationRewardsTests(unittest.TestCase):
             )
             self.assertEqual(scalar(focus, "cancel_if_invalid"), "yes")
 
-    def test_northern_unlocks_are_shorter_and_air_share_is_unchanged(self):
+    def test_northern_unlocks_and_wartime_air_split_use_current_contracts(self):
         tree = ast_block(
             entries("focus_trees/STP/preparation/focuses.txt"), "focus_tree"
         )
@@ -9597,6 +9754,170 @@ class PartyRightPreparationRewardsTests(unittest.TestCase):
             read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
             "STP_cw_start",
         )
-        self.assertIn("air_ratio = 0.8", air)
-        self.assertIn("air_ratio = 1", air)
+        self.assertIn("air_ratio = 0.5", air)
+        self.assertIn("air_ratio = 0.6", air)
         self.assertEqual(scalar(focuses["STP_ps_loyal_aircrews"], "cost"), "3")
+
+
+class CivilWarAirProgrammeTests(unittest.TestCase):
+    def setUp(self):
+        self.effects = {
+            e.key: e.value
+            for e in entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        }
+        self.actions = {
+            e.key: e.value
+            for e in ast_block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council")
+        }
+        self.scope = "STS"
+        self.facts = {}
+        self.equipment = {}
+        self.ideas = {}
+        for tag in ("STS", "STP"):
+            self.facts[(tag, "variable", "ADISCORD_economy_treasury")] = 5000
+            for kind in ("air", "aa"):
+                self.facts[(tag, f"STP_cw_{kind}_work_available", "yes")] = True
+            self.facts[(tag, "STP_cw_air_operation_available", "yes")] = True
+            self.facts[(tag, "numeric", "command_power")] = 25
+
+    def value(self, name):
+        return self.facts.get((self.scope, "variable", name), 0)
+
+    def execute(self, body):
+        for who, entry in selected_effects(body, self.facts, self.scope):
+            key, value = entry.key, entry.value
+            if key in ("custom_effect_tooltip", "ADISCORD_economy_mark_dirty"):
+                continue
+            if key.startswith("STP_cw_") and key in self.effects:
+                self.execute(self.effects[key])
+            elif key in ("set_variable", "set_temp_variable", "add_to_variable", "subtract_from_variable"):
+                name, raw = scalar(value, "var"), scalar(value, "value")
+                try:
+                    amount = float(raw)
+                except ValueError:
+                    amount = self.facts.get((who, "variable", raw), 0)
+                address = (who, "variable", name)
+                if key == "subtract_from_variable":
+                    amount = -amount
+                if key in ("add_to_variable", "subtract_from_variable"):
+                    amount += self.facts.get(address, 0)
+                self.facts[address] = amount
+                self.facts[(who, "has_variable", name)] = True
+            elif key == "clear_variable":
+                self.facts.pop((who, "variable", value), None)
+                self.facts.pop((who, "has_variable", value), None)
+            elif key == "add_equipment_to_stockpile":
+                equipment = scalar(value, "type")
+                self.equipment[equipment] = self.equipment.get(equipment, 0) + float(scalar(value, "amount"))
+            elif key == "add_command_power":
+                self.facts[(who, "numeric", "command_power")] += float(value)
+            elif key == "add_timed_idea":
+                self.ideas[scalar(value, "idea")] = int(scalar(value, "days"))
+            elif key == "remove_ideas":
+                self.ideas.pop(value, None)
+            else:
+                raise AssertionError(f"Unhandled air programme effect: {key}")
+
+    def action(self, name, callback):
+        self.execute(ast_block(self.actions["STP_cw_" + name], callback))
+
+    def test_two_paid_batches_deliver_sixty_planes_once_without_overwriting_deposit(self):
+        self.action("restore_air_reserve", "complete_effect")
+        self.assertEqual(self.value("ADISCORD_economy_treasury"), 4400)
+        self.action("restore_air_reserve", "complete_effect")
+        self.action("complete_air_reserve", "complete_effect")
+        self.assertEqual(self.value("ADISCORD_economy_treasury"), 4400)
+        self.assertEqual(self.value("STP_cw_air_deposit"), 600)
+        self.action("restore_air_reserve", "remove_effect")
+        self.action("restore_air_reserve", "remove_effect")
+        self.action("complete_air_reserve", "complete_effect")
+        self.assertEqual(self.value("ADISCORD_economy_treasury"), 3200)
+        self.action("restore_air_reserve", "cancel_effect")
+        self.assertEqual(self.value("STP_cw_air_deposit"), 1200)
+        self.action("complete_air_reserve", "remove_effect")
+        self.action("complete_air_reserve", "remove_effect")
+        self.action("complete_air_reserve", "complete_effect")
+        self.assertEqual(self.equipment, {"ADISCORD_cas_airframe_2170": 60})
+        self.assertEqual(self.value("ADISCORD_economy_treasury"), 3200)
+        self.assertEqual(self.value("STP_cw_air_batches_delivered"), 2)
+        self.assertEqual(self.value("STP_cw_air_deposit"), 0)
+
+    def test_cancel_loss_and_settlement_refund_each_order_once_and_allow_no_late_reward(self):
+        for name, kind, tag in (("restore_air_reserve", "air", "STS"), ("order_divisional_aa", "aa", "STP")):
+            for terminal in ("cancel", "lost_site", "settlement"):
+                with self.subTest(order=name, terminal=terminal):
+                    self.setUp()
+                    self.scope = tag
+                    self.action(name, "complete_effect")
+                    self.assertEqual(self.value("ADISCORD_economy_treasury"), 4400)
+                    if terminal == "cancel":
+                        self.action(name, "cancel_effect")
+                    elif terminal == "lost_site":
+                        self.facts[(tag, f"STP_cw_{kind}_work_available", "yes")] = False
+                        self.action(name, "remove_effect")
+                    else:
+                        self.execute(self.effects["STP_cw_close_air_programmes"])
+                    self.action(name, "cancel_effect")
+                    self.action(name, "remove_effect")
+                    self.assertEqual(self.value("ADISCORD_economy_treasury"), 5000)
+                    self.assertEqual(self.value(f"STP_cw_{kind}_deposit"), 0)
+                    self.assertFalse(self.equipment)
+
+    def test_aa_order_equips_two_real_support_companies_and_stops_after_two_batches(self):
+        self.scope = "STP"
+        for _ in range(3):
+            self.action("order_divisional_aa", "complete_effect")
+            self.action("order_divisional_aa", "remove_effect")
+        self.assertEqual(self.equipment, {"anti_air_equipment": 80, "infantry_equipment": 1080})
+        self.assertEqual(self.value("ADISCORD_economy_treasury"), 3800)
+        self.assertEqual(self.value("STP_cw_aa_batches_delivered"), 2)
+        templates = read("history/units/ADISCORD_STP_civil_war_templates.txt")
+        self.assertIn('name = "Stelander Assault Division"', templates)
+        self.assertIn("anti_air = { x = 0 y = 2 }", templates)
+
+    def test_affordability_boundaries_and_operation_duration(self):
+        for price, name in ((600, "restore_air_reserve"), (1200, "complete_air_reserve")):
+            action = self.actions["STP_cw_" + name]
+            for amount, expected in ((price - 0.001, False), (price, True)):
+                self.facts[("STS", "variable", "ADISCORD_economy_treasury")] = amount
+                self.assertEqual(matches_conditions(ast_block(action, "custom_cost_trigger"), self.facts, "STS"), expected)
+            self.assertEqual(scalar(action, "days_remove"), "21")
+        operation = self.actions["STP_cw_launch_air_operation"]
+        self.facts[("STS", "numeric", "command_power")] = 24.999
+        self.action("launch_air_operation", "complete_effect")
+        self.assertFalse(self.ideas)
+        self.facts[("STS", "numeric", "command_power")] = 25
+        self.action("launch_air_operation", "complete_effect")
+        self.assertEqual(self.facts[("STS", "numeric", "command_power")], 0)
+        self.assertEqual(self.ideas, {"STP_cw_assault_air_cover_idea": 21})
+        self.assertEqual(scalar(operation, "days_re_enable"), "42")
+
+    def test_air_operations_and_repairs_share_crews_and_cleanup_runs_on_war_settlement(self):
+        triggers = entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+        work = ast_block(triggers, "STP_cw_air_work_available")
+        operation = ast_block(triggers, "STP_cw_air_operation_available")
+        self.assertIn("STP_cw_assault_air_cover_idea", [e.value for e in walk(ast_block(work, "NOT"))])
+        self.assertEqual(
+            {e.value for e in walk(ast_block(operation, "NOT"))},
+            {"STP_cw_air_deposit", "STP_cw_assault_air_cover_idea"},
+        )
+        settlement = self.effects["STP_cw_clear_wartime_modifiers"]
+        self.assertIn("STP_cw_close_air_programmes", [e.key for e in walk(settlement)])
+
+    def test_air_choices_rejoin_and_leave_room_for_the_ground_branch(self):
+        focuses = {
+            scalar(e.value, "id"): e.value
+            for e in walk(entries("focus_trees/STP/civil_war/focuses.txt"))
+            if e.key == "focus" and isinstance(e.value, list) and any(v.key == "id" for v in e.value)
+        }
+        left, right = "STP_cw_air_service_columns", "STP_cw_forward_airstrips"
+        for a, b in ((left, right), (right, left)):
+            self.assertEqual(scalar(ast_block(focuses[a], "mutually_exclusive"), "focus"), b)
+        self.assertEqual(
+            {e.value for e in ast_block(focuses["STP_cw_assault_air_cover"], "prerequisite")},
+            {left, right},
+        )
+        self.assertEqual((scalar(focuses[left], "x"), scalar(focuses[right], "x")), ("14", "16"))
+        self.assertEqual(scalar(focuses["STP_cw_assault_air_cover"], "x"), "15")
+        for name in (left, right, "STP_cw_strike_squadrons", "STP_cw_assault_air_cover"):
+            self.assertFalse(any(e.key == "add_equipment_to_stockpile" for e in walk(focuses[name])))

@@ -420,13 +420,19 @@ class StelanderPreparationTests(unittest.TestCase):
             )
         depots = block(focuses["STP_cw_open_local_depots"], "completion_reward")
         self.assertEqual(
-            scalar(block(depots, "add_equipment_to_stockpile"), "amount"), "80000"
+            scalar(block(depots, "add_equipment_to_stockpile"), "amount"), "30000"
         )
         self.assertNotIn(
             "prerequisite", {e.key for e in focuses["STP_cw_open_local_depots"]}
         )
         fund = block(focuses["STP_cw_war_fund"], "completion_reward")
-        self.assertEqual(scalar(fund, "STP_receive_6000"), "yes")
+        self.assertEqual(
+            scalar(block(fund, "hidden_effect"), "STP_cw_receive_fund_tranche"), "yes"
+        )
+        self.assertEqual(
+            scalar(block(block(fund, "hidden_effect"), "set_variable"), "value"),
+            "4000",
+        )
 
     def test_counterintelligence_missions_follow_each_district_without_releasing_it_early(
         self,

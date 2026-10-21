@@ -314,6 +314,56 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_STP_cw_reserve_commanders"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_reserve_commanders.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_casualty_routes"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_casualty_routes.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_warehouse_inventory"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_warehouse_inventory.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_supply_officers"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_supply_officers.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_courier_service"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_courier_service.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_district_printing"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_district_printing.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_defensive_lines"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_defensive_lines.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_heavy_reserve"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_heavy_reserve.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_abila_reserve"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_abila_reserve.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_republic_district_authority"
+		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pw_republic_district_authority.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_STP_pw_republic_new_republic"
 		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pw_republic_new_republic.png"
 	}

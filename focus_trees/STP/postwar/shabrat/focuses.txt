@@ -23,7 +23,7 @@
 
 	focus = {
 		id = STP_pw_republic_district_authority
-		icon = GFX_focus_VAL_Provincial_Brokers
+		icon = GFX_focus_STP_pw_republic_district_authority
 		x = 0
 		y = 5
 		cost = 3

@@ -2419,3 +2419,12 @@ defined_text = {
 	}
 	text = { localization_key = STP_heg_number_50 }
 }
+
+defined_text = {
+	name = STPGetCongressCabinet
+	text = {
+		trigger = { STP = { has_country_flag = STP_ps_temporary_government } }
+		localization_key = STP_ps_cabinet_location
+	}
+	text = { localization_key = STP_ps_cabinet_unformed }
+}

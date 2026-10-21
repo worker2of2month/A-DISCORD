@@ -1,6 +1,6 @@
 STP_cw_defend_fada = {
 	allowed = { original_tag = STP }
-	enable = { has_global_flag = STP_cw_started has_war_with = STS }
+	enable = { has_global_flag = STP_cw_started has_war_with = STS STP_ps_holds_congress = yes }
 	abort_when_not_enabled = yes
 	ai_strategy = {
 		type = put_unit_buffers
@@ -659,10 +659,21 @@ STP_pc_prepare_NOD_STS = {
 
 STP_ps_defensive_front = {
 	allowed = { original_tag = STP }
-	enable = { STP_ps_war_active = yes STP_ps_can_counterattack = no }
+	enable = { STP_ps_war_active = yes STP_ps_can_local_counterattack = no }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = STS value = 100 }
 	ai_strategy = { type = front_control tag = STS ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = no manual_attack = no }
+}
+
+STP_ps_local_counterattacks = {
+	allowed = { original_tag = STP }
+	enable = {
+		STP_ps_can_local_counterattack = yes
+		STP_ps_can_counterattack = no
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = STS value = 100 }
+	ai_strategy = { type = front_control tag = STS ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 
 # The split already fields roughly 18-24 formations per side. Once that force

@@ -1382,7 +1382,7 @@ ideas = {
 			}
 		}
 		STP_cw_resistance_battle_spirit = {
-			picture = STP_National_Strikes
+			picture = STP_resistance_battle
 			allowed = { tag = STS }
 			removal_cost = -1
 			cancel = { NOT = { OR = { has_war_with = STP has_war_with = NOD } } }

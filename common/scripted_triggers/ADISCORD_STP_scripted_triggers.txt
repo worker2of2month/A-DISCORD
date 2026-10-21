@@ -24,6 +24,30 @@ STP_cw_mountain_war_active = {
 	}
 }
 
+# COUNTRY: the Abliya workshops and flight operations use the same ground crews.
+STP_cw_air_work_available = {
+	tag = STS
+	STP_cw_mountain_war_active = yes
+	1 = { is_owned_by = ROOT is_controlled_by = ROOT air_base > 0 }
+	NOT = { has_idea = STP_cw_assault_air_cover_idea }
+}
+
+STP_cw_air_operation_available = {
+	tag = STS
+	STP_cw_mountain_war_active = yes
+	any_owned_state = { is_controlled_by = ROOT air_base > 0 }
+	NOT = {
+		has_variable = STP_cw_air_deposit
+		has_idea = STP_cw_assault_air_cover_idea
+	}
+}
+
+STP_cw_aa_work_available = {
+	tag = STP
+	STP_cw_mountain_war_active = yes
+	28 = { is_owned_by = ROOT is_controlled_by = ROOT }
+}
+
 # STS: recognition and aid require the same living, independent counterpart.
 STP_cw_republics_partner_available = {
 	tag = STS
@@ -2407,6 +2431,25 @@ STP_cw_disruption_target = {
 	any_state_division = { OWNER = { tag = STP } division_has_battalion_in_template = ADISCORD_territorial }
 }
 
+# COUNTRY: these orders belong only to Shabrat's war against the party.
+STP_cw_shabrat_logistics_active = {
+	tag = STS
+	has_war_with = STP
+	has_capitulated = no
+	NOT = { has_country_flag = STP_cw_postwar }
+	STP = {
+		exists = yes
+		has_capitulated = no
+	}
+}
+
+STP_cw_abila_depot_held = {
+	1 = {
+		is_owned_by = ROOT
+		is_controlled_by = ROOT
+	}
+}
+
 STP_cw_can_spend_600 = { check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals } }
 
 STP_cw_can_spend_1200 = { check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals } }
@@ -2446,7 +2489,32 @@ STP_pf_can_negotiate = {
 # Party survival: country scope unless a province is explicitly named.
 STP_ps_holds_congress = { controls_province = 145 }
 STP_ps_government_operational = {
-	OR = { STP_ps_holds_congress = yes has_country_flag = STP_ps_temporary_government }
+	OR = {
+		STP_ps_holds_congress = yes
+		AND = {
+			has_country_flag = STP_ps_temporary_government
+			STP_ps_cabinet_site_held = yes
+		}
+	}
+}
+STP_ps_cabinet_site_available = {
+	any_owned_state = {
+		is_controlled_by = PREV
+		NOT = { state = 28 }
+	}
+}
+STP_ps_cabinet_site_held = {
+	event_target:STP_ps_cabinet_seat = {
+		is_owned_by = STP
+		is_controlled_by = STP
+	}
+}
+STP_ps_can_relocate_government = {
+	STP_ps_war_active = yes
+	STP_ps_government_operational = no
+	STP_ps_cabinet_site_available = yes
+	NOT = { has_country_flag = STP_ps_temporary_government }
+	NOT = { has_variable = STP_ps_cabinet_deposit }
 }
 STP_ps_war_active = {
 	tag = STP has_war_with = STS has_capitulated = no
@@ -2456,6 +2524,11 @@ STP_ps_can_counterattack = {
 	STP_ps_war_active = yes
 	STP_ps_government_operational = yes
 	check_variable = { var = STP_ps_stage value = 4 compare = equals }
+}
+STP_ps_can_local_counterattack = {
+	STP_ps_war_active = yes
+	STP_ps_government_operational = yes
+	check_variable = { var = STP_ps_stage value = 2 compare = greater_than_or_equals }
 }
 STP_ps_can_start_stage = {
 	STP_ps_war_active = yes STP_ps_government_operational = yes
@@ -2536,7 +2609,8 @@ STP_ps_val_sale_open = {
 	STP = { STP_cw_preparation_open = yes }
 	NOT = { has_variable = STP_ps_val_receipt_rifles }
 	NOT = { has_country_flag = STP_ps_val_supply_cooldown }
-	NOT = { has_equipment = { infantry_equipment < 12000 } }
+	NOT = { has_country_flag = STP_ps_val_sale_cooldown }
+	NOT = { has_equipment = { infantry_equipment < 25000 } }
 }
 # VAL scope. A Shabrat-route quote has reserved rifles but no payment yet.
 STP_ps_val_sale_awaits_payment = {
@@ -2848,6 +2922,17 @@ STP_cw_fada_battle_active = {
 STP_cw_fada_captured = {
 	STP_cw_fada_battle_active = yes
 	STS = { controls_province = 145 }
+}
+
+STP_cw_party_government_defeated = {
+	STP_cw_fada_battle_active = yes
+	STP = {
+		STP_ps_government_operational = no
+		OR = {
+			has_country_flag = STP_ps_government_collapsed
+			has_country_flag = STP_ps_temporary_government
+		}
+	}
 }
 
 # COUNTRY with a state in FROM: integration follows a directly held core frontier.

@@ -178,7 +178,7 @@ class PartySurvivalContracts(unittest.TestCase):
         self.assertEqual(one(decision, 'cost'), '0')
         price = str(signature(one(decision, 'custom_cost_trigger')))
         self.assertIn('infantry_equipment', price)
-        self.assertIn('12000', price)
+        self.assertIn('25000', price)
         calls = [
             e
             for e in walk(one(decision, 'complete_effect'))
@@ -200,7 +200,7 @@ class PartySurvivalContracts(unittest.TestCase):
 
         accept = self.effects['STP_ps_accept_val_sale']
         paid = [e.key for e in walk(children(accept, 'if')[0])]
-        self.assertLess(paid.index('ADISCORD_economy_spend_100'), paid.index('STP_ps_start_val_departure'))
+        self.assertLess(paid.index('ADISCORD_economy_spend_500'), paid.index('STP_ps_start_val_departure'))
         self.assertIn('STP_ps_cancel_val_sale', [e.key for e in walk(children(accept, 'else')[0])])
 
         refund = [e.key for e in walk(self.effects['STP_ps_refund_val_supply'])]
@@ -217,6 +217,113 @@ class PartySurvivalContracts(unittest.TestCase):
         self.assertLess(settle_keys.index('clear_variable'), settle_keys.index('subtract_from_variable'))
         hostilities = [e.key for e in walk(self.effects['STP_cw_begin_hostilities'])]
         self.assertIn('STP_ps_settle_val_credit', hostilities)
+
+    def test_prewar_sale_reserves_and_charges_the_quoted_package(self):
+        begin = list(walk(self.effects['STP_ps_begin_val_sale']))
+        for variable in ('STP_cw_rifle_cost', 'STP_ps_val_receipt_rifles'):
+            amounts = [
+                one(e.value, 'value')
+                for e in begin
+                if e.key in ('set_variable', 'set_temp_variable')
+                and one(e.value, 'var') == variable
+            ]
+            self.assertEqual(amounts, ['25000'])
+
+        facts = {
+            ('STP', 'STP_cw_preparation_open', 'yes'): True,
+            ('VAL', 'STP_ps_val_supply_open', 'yes'): True,
+            ('VAL', 'STP_ps_val_sale_awaits_payment', 'yes'): True,
+        }
+        events = parse_clausewitz(read('events/ADISCORD_STP_events.txt'))
+        event = next(
+            e.value for e in events
+            if e.key == 'country_event'
+            and one(e.value, 'id') == 'ADISCORD_STP_preparation.32'
+        )
+        answer = next(
+            option for option in children(event, 'option')
+            if one(option, 'name') == 'ADISCORD_STP_preparation.32.a'
+        )
+        for money, affordable in ((499.9, False), (500, True), (500.1, True)):
+            with self.subTest(money=money):
+                facts[('STP', 'variable', 'ADISCORD_economy_treasury')] = money
+                self.assertEqual(
+                    matches_conditions(one(answer, 'trigger'), facts), affordable
+                )
+                selected = list(selected_effects(
+                    self.effects['STP_ps_accept_val_sale'], facts
+                ))
+                payments = [
+                    scope for scope, entry in selected
+                    if entry.key == 'ADISCORD_economy_spend_500'
+                ]
+                self.assertEqual(payments, ['STP'] if affordable else [])
+                receipts = [
+                    (scope, one(entry.value, 'value'))
+                    for scope, entry in selected
+                    if entry.key == 'set_variable'
+                    and one(entry.value, 'var') == 'STP_ps_val_receipt_money'
+                ]
+                self.assertEqual(receipts, [('VAL', '500')] if affordable else [])
+
+        credits = [
+            one(e.value, 'value')
+            for e in walk(self.effects['STP_ps_resolve_val_supply'])
+            if e.key == 'add_to_variable'
+            and one(e.value, 'var') == 'STP_ps_val_shabrat_credit'
+        ]
+        self.assertEqual(credits, ['500'])
+
+    def test_prewar_sale_stock_and_cooldown_gate_every_new_offer(self):
+        triggers = {e.key: e.value for e in parse_clausewitz(read(TRIGGERS))}
+        decision = self.decisions['STP_ps_val_sell_rifles']
+        facts = {
+            ('VAL', 'STP_ps_val_supply_open', 'yes'): True,
+            ('VAL', 'has_country_flag', 'STP_ps_val_authorized'): True,
+            ('STP', 'STP_cw_preparation_open', 'yes'): True,
+        }
+        for rifles, affordable in ((24999.9, False), (25000, True), (25000.1, True)):
+            for paused in (False, True):
+                with self.subTest(rifles=rifles, paused=paused):
+                    facts[('VAL', 'equipment', 'infantry_equipment')] = rifles
+                    facts[('VAL', 'has_country_flag', 'STP_ps_val_sale_cooldown')] = paused
+                    self.assertEqual(
+                        matches_conditions(triggers['STP_ps_val_sale_open'], facts, 'VAL'),
+                        affordable and not paused,
+                    )
+                    self.assertEqual(
+                        matches_conditions(one(decision, 'custom_cost_trigger'), facts, 'VAL'),
+                        affordable,
+                    )
+                    self.assertEqual(
+                        matches_conditions(one(decision, 'available'), facts, 'VAL'),
+                        not paused,
+                    )
+
+    def test_prewar_sale_pause_applies_to_both_sales_only_at_settlement(self):
+        clear = self.effects['STP_ps_clear_val_receipt']
+        for contract in range(6):
+            facts = {('VAL', 'variable', 'STP_ps_val_receipt_contract'): contract}
+            selected = list(selected_effects(clear, facts, 'VAL'))
+            flags = {
+                one(entry.value, 'flag'): one(entry.value, 'days')
+                for scope, entry in selected if entry.key == 'set_country_flag'
+            }
+            self.assertEqual(flags['STP_ps_val_supply_cooldown'], '7')
+            self.assertEqual(
+                flags.get('STP_ps_val_sale_cooldown'),
+                '90' if contract in (4, 5) else None,
+            )
+            if contract in (4, 5):
+                keys = [entry.key for scope, entry in selected]
+                self.assertLess(keys.index('set_country_flag'), keys.index('clear_variable'))
+
+        for effect in ('STP_ps_resolve_val_supply', 'STP_ps_refund_val_supply'):
+            self.assertIn('STP_ps_clear_val_receipt', [e.key for e in walk(self.effects[effect])])
+        self.assertIn(
+            'STP_ps_refund_val_supply',
+            [e.key for e in walk(self.effects['STP_ps_cancel_val_sale'])],
+        )
 
     def test_government_deadline_reads_current_control(self):
         triggers = {
@@ -1112,16 +1219,20 @@ class FadaMissionContracts(unittest.TestCase):
     def expand(self, nodes):
         result = []
         for e in nodes:
-            if e.key in {'STP_cw_fada_battle_active', 'STP_cw_fada_captured'}:
+            if e.key in {
+                'STP_cw_fada_battle_active',
+                'STP_cw_fada_captured',
+                'STP_cw_party_government_defeated',
+                'STP_ps_government_operational',
+                'STP_ps_holds_congress',
+                'STP_ps_war_active',
+                'STP_ps_can_local_counterattack',
+                'STP_ps_can_counterattack',
+            }:
                 self.assertIn(e.value, ('yes', 'no'))
                 self.assertIn(e.key, self.triggers)
-                result.append(
-                    Entry(
-                        'AND' if e.value == 'yes' else 'NOT',
-                        self.expand(self.triggers[e.key]),
-                        e.line,
-                    )
-                )
+                body = Entry('AND', self.expand(self.triggers[e.key]), e.line)
+                result.append(body if e.value == 'yes' else Entry('NOT', [body], e.line))
             else:
                 result.append(
                     Entry(
@@ -1190,7 +1301,8 @@ class FadaMissionContracts(unittest.TestCase):
             self.assertIn(name, self.missions)
             mission = self.missions[name]
             self.assertIn(
-                'STP_cw_fada_captured', str(signature(one(mission, 'available')))
+                'STP_cw_party_government_defeated',
+                str(signature(one(mission, 'available'))),
             )
             self.assertIn(
                 'STP_cw_resolve_fada_capture',
@@ -1199,7 +1311,8 @@ class FadaMissionContracts(unittest.TestCase):
         self.assertIn('STP_cw_resolve_fada_capture', self.effects)
         dispatch = self.effects['STP_cw_resolve_fada_capture']
         self.assertIn(
-            'STP_cw_fada_captured', str(signature(one(one(dispatch, 'if'), 'limit')))
+            'STP_cw_party_government_defeated',
+            str(signature(one(one(dispatch, 'if'), 'limit'))),
         )
         receiver = one(one(dispatch, 'if'), 'STP')
         self.assertEqual(
@@ -1214,10 +1327,136 @@ class FadaMissionContracts(unittest.TestCase):
         self.assertEqual(len(handlers), 1)
         handler = handlers[0]
         self.assertEqual(one(handler, 'hidden'), 'yes')
-        self.assertIn('STP_cw_fada_captured', str(signature(one(handler, 'immediate'))))
+        self.assertIn(
+            'STP_cw_party_government_defeated',
+            str(signature(one(handler, 'immediate'))),
+        )
         winner = one(one(one(handler, 'immediate'), 'if'), 'STS')
         self.assertIn('STP_cw_resolve_last_banquet_success', str(signature(winner)))
         self.assertEqual(one(winner, 'STP_cw_settle_union_victory'), 'yes')
+
+    def test_capture_alone_never_defeats_party_and_relocated_seat_is_required(self):
+        gate = self.expand(self.triggers['STP_cw_party_government_defeated'])
+        for tag, at_war, finished, congress, relocated, seat_held, expired in product(
+            ('STP', 'STS'), *(6 * [(False, True)])
+        ):
+            facts = {
+                (tag, 'has_global_flag', 'STP_cw_started'): True,
+                (tag, 'has_global_flag', 'STP_cw_union_wars_finished'): finished,
+                ('STP', 'exists', 'yes'): True,
+                ('STS', 'exists', 'yes'): True,
+                ('STP', 'has_war_with', 'STS'): at_war,
+                ('STP', 'controls_province', '145'): congress,
+                ('STP', 'has_country_flag', 'STP_ps_temporary_government'): relocated,
+                ('STP', 'STP_ps_cabinet_site_held', 'yes'): seat_held,
+                ('STP', 'has_country_flag', 'STP_ps_government_collapsed'): expired,
+            }
+            expected = (
+                at_war and not finished and not congress
+                and not (relocated and seat_held) and (expired or relocated)
+            )
+            self.assertEqual(matches_conditions(gate, facts, tag), expected, facts)
+
+    def test_deadline_failure_enters_shared_settlement_but_live_government_survives(self):
+        timeout = self.effects['STP_ps_congress_timeout']
+        for active, government in product((False, True), repeat=2):
+            payload = [entry for _, entry in selected_effects(timeout, {
+                ('STP', 'STP_ps_war_active', 'yes'): active,
+                ('STP', 'STP_ps_government_operational', 'no'): not government,
+            })]
+            events = [one(e.value, 'id') for e in payload if e.key == 'country_event']
+            self.assertEqual(events, ['ADISCORD_STP_cw.205'] if active and not government else [])
+        self.assertNotIn('STP_ps_district_concessions', str(signature(timeout)))
+
+    def test_relocated_seat_cannot_be_replaced_and_is_owned_and_controlled(self):
+        held = one(self.triggers['STP_ps_cabinet_site_held'], 'event_target:STP_ps_cabinet_seat')
+        self.assertEqual(signature(held), [('is_owned_by', 'STP'), ('is_controlled_by', 'STP')])
+        gate = self.triggers['STP_ps_can_relocate_government']
+        for relocated, pending, held_district in product((False, True), repeat=3):
+            facts = {
+                ('STP', 'STP_ps_war_active', 'yes'): True,
+                ('STP', 'STP_ps_government_operational', 'no'): True,
+                ('STP', 'STP_ps_cabinet_site_available', 'yes'): held_district,
+                ('STP', 'has_country_flag', 'STP_ps_temporary_government'): relocated,
+                ('STP', 'has_variable', 'STP_ps_cabinet_deposit'): pending,
+            }
+            self.assertEqual(matches_conditions(gate, facts), held_district and not relocated and not pending)
+        finish = self.effects['STP_ps_finish_cabinet']
+        for held_district in (False, True):
+            facts = {
+                ('STP', 'STP_ps_war_active', 'yes'): True,
+                ('STP', 'STP_ps_government_operational', 'no'): True,
+                ('STP', 'STP_ps_cabinet_site_held', 'yes'): held_district,
+                ('STP', 'has_variable', 'STP_ps_cabinet_deposit'): True,
+            }
+            payload = [entry for _, entry in selected_effects(finish, facts)]
+            completed = [e.value for e in payload if e.key == 'set_country_flag']
+            self.assertEqual('STP_ps_temporary_government' in completed, held_district)
+            self.assertEqual('STP_ps_refund_cabinet' in [e.key for e in payload], not held_district)
+        cleanup = str(signature(self.effects['STP_ps_close_defence']))
+        self.assertIn("('clear_global_event_target', 'STP_ps_cabinet_seat')", cleanup)
+        self.assertIn("('clear_variable', 'STP_ps_congress_days_left')", cleanup)
+
+    def test_retake_pauses_deadline_without_resetting_elapsed_days(self):
+        resolve = list(walk(self.effects['STP_ps_resolve_congress_crisis']))
+        save = next(i for i, e in enumerate(resolve) if e.key == 'set_variable' and one(e.value, 'var') == 'STP_ps_congress_days_left')
+        remove = next(i for i, e in enumerate(resolve) if e.key == 'remove_mission')
+        self.assertLess(save, remove)
+        self.assertEqual(one(resolve[save].value, 'value'), 'days_mission_timeout@STP_ps_congress_deadline')
+        reopened = str(signature(self.effects['STP_ps_open_congress_crisis']))
+        self.assertIn('STP_ps_congress_days_left', reopened)
+        self.assertIn('add_days_mission_timeout', reopened)
+        self.assertEqual(
+            signature(one(self.missions['STP_ps_congress_deadline'], 'cancel_trigger')),
+            [('STP_ps_war_active', 'no')],
+        )
+        tokens = read('common/synchronized_dynamic_tokens/ADISCORD_tokens.txt').split()
+        self.assertEqual(tokens.count('STP_ps_congress_deadline'), 1)
+
+    def test_initial_split_keeps_congress_even_for_limited_party_revolt(self):
+        start = list(walk(self.effects['STP_cw_start']))
+        self.assertNotIn('28', [e.value for e in start if e.key == 'transfer_state'])
+        capitals = [one(e.value, 'state') for e in start if e.key == 'set_capital']
+        self.assertIn('28', capitals)
+        state = one(parse_clausewitz(read('history/states/28-Fada.txt')), 'state')
+        self.assertIn('145', [e.value for e in one(state, 'provinces')])
+        self.assertEqual(one(one(state, 'history'), 'owner'), 'STP')
+
+    def test_all_cabinet_routes_fit_crisis_and_cancel_when_the_chosen_seat_is_lost(self):
+        deadline = int(one(self.missions['STP_ps_congress_deadline'], 'days_mission_timeout'))
+        base_days = int(one(self.missions['STP_ps_cabinet_work'], 'days_mission_timeout'))
+        self.assertEqual(deadline, 21)
+        for name, expected in (
+            ('STP_ps_emergency_cabinet', 7),
+            ('STP_ps_emergency_cabinet_administrative', 14),
+            ('STP_ps_emergency_cabinet_prepared', 7),
+        ):
+            action = self.missions[name]
+            deltas = [int(one(e.value, 'days')) for e in walk(action) if e.key == 'add_days_mission_timeout']
+            self.assertEqual(base_days + sum(deltas), expected)
+            self.assertLess(expected, deadline)
+            complete = list(walk(one(action, 'complete_effect')))
+            keys = [e.key for e in complete]
+            self.assertLess(keys.index('STP_ps_select_cabinet_site'), keys.index('activate_mission'))
+        cancel = str(signature(one(self.missions['STP_ps_cabinet_work'], 'cancel_trigger')))
+        self.assertIn("('STP_ps_cabinet_site_held', 'no')", cancel)
+
+    def test_limited_counterattacks_start_at_stage_two_full_offensive_at_four(self):
+        ai = {e.key: e.value for e in parse_clausewitz(read('common/ai_strategy/ADISCORD_STP_civil_war.txt'))}
+        for stage, government in product(range(1, 5), (False, True)):
+            facts = {
+                ('STP', 'has_war_with', 'STS'): True,
+                ('STP', 'has_capitulated', 'no'): True,
+                ('STP', 'controls_province', '145'): government,
+                ('STP', 'variable', 'STP_ps_stage'): stage,
+            }
+            limited = matches_conditions(self.expand(one(ai['STP_ps_local_counterattacks'], 'enable')), facts)
+            full = matches_conditions(self.expand(self.triggers['STP_ps_can_counterattack']), facts)
+            self.assertEqual(limited, government and stage in (2, 3))
+            self.assertEqual(full, government and stage == 4)
+        local_policy = next(e.value for e in ai['STP_ps_local_counterattacks'] if e.key == 'ai_strategy' and one(e.value, 'type') == 'front_control')
+        self.assertEqual(one(local_policy, 'execution_type'), 'careful')
+        self.assertEqual(one(local_policy, 'execute_order'), 'yes')
 
     def test_union_cleanup_removes_both_fada_missions(self):
         cleanup = str(signature(self.effects['STP_cw_check_union_wars_finished']))

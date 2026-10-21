@@ -1,4 +1,4 @@
-picture="thumbnail.png"
+picture="thumbnail.gif"
 version="1.19.2"
 tags={
 	"National Focuses"

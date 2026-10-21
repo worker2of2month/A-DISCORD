@@ -631,6 +631,8 @@ STP_cw_clear_political_modifiers = {
 STP_cw_clear_wartime_modifiers = {
 	if = {
 		limit = { OR = { tag = STP tag = STS } }
+		STP_cw_close_ground_logistics = yes
+		STP_cw_close_air_programmes = yes
 		STP_cw_clear_political_modifiers = yes
 		if = {
 			limit = { tag = STS }
@@ -3243,7 +3245,6 @@ STP_cw_begin_hostilities = {
 				# Playback waits until change_tag_from has assigned the human to the chosen side.
 				country_event = { id = ADISCORD_STP_cw.95 hours = 1 }
 				country_event = { id = ADISCORD_STP_cw.94 hours = 1 }
-				STS = { country_event = { id = ADISCORD_STP_cw.95 hours = 1 } }
 			}
 			remove_mission = STP_cw_nod_warning
 			clr_country_flag = STP_cw_nod_warning_active
@@ -3468,67 +3469,141 @@ STP_cw_send_air_reserves_to_resistance = {
 STP_cw_divide_air_reserves = {
 	STP_cw_send_air_reserves_to_resistance = yes
 	SRP = { STP_cw_send_air_reserves_to_resistance = yes }
-	if = {
-		limit = { has_completed_focus = STP_ps_loyal_aircrews }
-		STS = {
-			set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_fighter_archetype }
-			multiply_temp_variable = { var = STP_cw_air_transfer value = 0.2 }
-			round_temp_variable = STP_cw_air_transfer
-			if = {
-				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
-				send_equipment = { type = ADISCORD_fighter_archetype amount = STP_cw_air_transfer target = STP }
-			}
-			set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_cas_archetype }
-			multiply_temp_variable = { var = STP_cw_air_transfer value = 0.2 }
-			round_temp_variable = STP_cw_air_transfer
-			if = {
-				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
-				send_equipment = { type = ADISCORD_cas_archetype amount = STP_cw_air_transfer target = STP }
-			}
-			set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_rocket_strike_archetype }
-			multiply_temp_variable = { var = STP_cw_air_transfer value = 0.2 }
-			round_temp_variable = STP_cw_air_transfer
-			if = {
-				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
-				send_equipment = { type = ADISCORD_rocket_strike_archetype amount = STP_cw_air_transfer target = STP }
-			}
-			set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_bomber_archetype }
-			multiply_temp_variable = { var = STP_cw_air_transfer value = 0.2 }
-			round_temp_variable = STP_cw_air_transfer
-			if = {
-				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
-				send_equipment = { type = ADISCORD_bomber_archetype amount = STP_cw_air_transfer target = STP }
-			}
-			set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_naval_aircraft_archetype }
-			multiply_temp_variable = { var = STP_cw_air_transfer value = 0.2 }
-			round_temp_variable = STP_cw_air_transfer
-			if = {
-				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
-				send_equipment = { type = ADISCORD_naval_aircraft_archetype amount = STP_cw_air_transfer target = STP }
-			}
-			set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_cv_fighter_archetype }
-			multiply_temp_variable = { var = STP_cw_air_transfer value = 0.2 }
-			round_temp_variable = STP_cw_air_transfer
-			if = {
-				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
-				send_equipment = { type = ADISCORD_cv_fighter_archetype amount = STP_cw_air_transfer target = STP }
-			}
-			set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_cv_bomber_archetype }
-			multiply_temp_variable = { var = STP_cw_air_transfer value = 0.2 }
-			round_temp_variable = STP_cw_air_transfer
-			if = {
-				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
-				send_equipment = { type = ADISCORD_cv_bomber_archetype amount = STP_cw_air_transfer target = STP }
-			}
-			set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_zeppelin_equipment }
-			multiply_temp_variable = { var = STP_cw_air_transfer value = 0.2 }
-			round_temp_variable = STP_cw_air_transfer
-			if = {
-				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
-				send_equipment = { type = ADISCORD_zeppelin_equipment amount = STP_cw_air_transfer target = STP }
-			}
+	STS = {
+		set_temp_variable = { var = STP_cw_air_party_share value = 0.4 }
+		if = {
+			limit = { STP = { has_completed_focus = STP_ps_loyal_aircrews } }
+			set_temp_variable = { var = STP_cw_air_party_share value = 0.5 }
+		}
+		set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_fighter_archetype }
+		multiply_temp_variable = { var = STP_cw_air_transfer value = STP_cw_air_party_share }
+		round_temp_variable = STP_cw_air_transfer
+		if = {
+			limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+			send_equipment = { type = ADISCORD_fighter_archetype amount = STP_cw_air_transfer target = STP }
+		}
+		set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_cas_archetype }
+		multiply_temp_variable = { var = STP_cw_air_transfer value = STP_cw_air_party_share }
+		round_temp_variable = STP_cw_air_transfer
+		if = {
+			limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+			send_equipment = { type = ADISCORD_cas_archetype amount = STP_cw_air_transfer target = STP }
+		}
+		set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_rocket_strike_archetype }
+		multiply_temp_variable = { var = STP_cw_air_transfer value = STP_cw_air_party_share }
+		round_temp_variable = STP_cw_air_transfer
+		if = {
+			limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+			send_equipment = { type = ADISCORD_rocket_strike_archetype amount = STP_cw_air_transfer target = STP }
+		}
+		set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_bomber_archetype }
+		multiply_temp_variable = { var = STP_cw_air_transfer value = STP_cw_air_party_share }
+		round_temp_variable = STP_cw_air_transfer
+		if = {
+			limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+			send_equipment = { type = ADISCORD_bomber_archetype amount = STP_cw_air_transfer target = STP }
+		}
+		set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_naval_aircraft_archetype }
+		multiply_temp_variable = { var = STP_cw_air_transfer value = STP_cw_air_party_share }
+		round_temp_variable = STP_cw_air_transfer
+		if = {
+			limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+			send_equipment = { type = ADISCORD_naval_aircraft_archetype amount = STP_cw_air_transfer target = STP }
+		}
+		set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_cv_fighter_archetype }
+		multiply_temp_variable = { var = STP_cw_air_transfer value = STP_cw_air_party_share }
+		round_temp_variable = STP_cw_air_transfer
+		if = {
+			limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+			send_equipment = { type = ADISCORD_cv_fighter_archetype amount = STP_cw_air_transfer target = STP }
+		}
+		set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_cv_bomber_archetype }
+		multiply_temp_variable = { var = STP_cw_air_transfer value = STP_cw_air_party_share }
+		round_temp_variable = STP_cw_air_transfer
+		if = {
+			limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+			send_equipment = { type = ADISCORD_cv_bomber_archetype amount = STP_cw_air_transfer target = STP }
+		}
+		set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_zeppelin_equipment }
+		multiply_temp_variable = { var = STP_cw_air_transfer value = STP_cw_air_party_share }
+		round_temp_variable = STP_cw_air_transfer
+		if = {
+			limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+			send_equipment = { type = ADISCORD_zeppelin_equipment amount = STP_cw_air_transfer target = STP }
 		}
 	}
+}
+
+# COUNTRY: clear each deposit before refund or delivery; late callbacks cannot settle it twice.
+STP_cw_refund_air_work = {
+	if = {
+		limit = { has_variable = STP_cw_air_deposit }
+		set_temp_variable = { var = STP_cw_air_refund value = STP_cw_air_deposit }
+		clear_variable = STP_cw_air_deposit
+		add_to_variable = { var = ADISCORD_economy_treasury value = STP_cw_air_refund }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_cw_air_refund }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_cw_refund_aa_work = {
+	if = {
+		limit = { has_variable = STP_cw_aa_deposit }
+		set_temp_variable = { var = STP_cw_air_refund value = STP_cw_aa_deposit }
+		clear_variable = STP_cw_aa_deposit
+		add_to_variable = { var = ADISCORD_economy_treasury value = STP_cw_air_refund }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_cw_air_refund }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_cw_finish_air_work = {
+	if = {
+		limit = { has_variable = STP_cw_air_deposit }
+		if = {
+			limit = {
+				STP_cw_air_work_available = yes
+				OR = {
+					AND = {
+						check_variable = { var = STP_cw_air_deposit value = 600 compare = equals }
+						check_variable = { var = STP_cw_air_batches_delivered value = 1 compare = less_than }
+					}
+					AND = {
+						check_variable = { var = STP_cw_air_deposit value = 1200 compare = equals }
+						check_variable = { var = STP_cw_air_batches_delivered value = 1 compare = equals }
+					}
+				}
+			}
+			clear_variable = STP_cw_air_deposit
+			add_to_variable = { var = STP_cw_air_batches_delivered value = 1 }
+			add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 30 producer = STS }
+		}
+		else = { STP_cw_refund_air_work = yes }
+	}
+}
+
+STP_cw_finish_aa_work = {
+	if = {
+		limit = { has_variable = STP_cw_aa_deposit }
+		if = {
+			limit = {
+				STP_cw_aa_work_available = yes
+				check_variable = { var = STP_cw_aa_deposit value = 600 compare = equals }
+				check_variable = { var = STP_cw_aa_batches_delivered value = 2 compare = less_than }
+			}
+			clear_variable = STP_cw_aa_deposit
+			add_to_variable = { var = STP_cw_aa_batches_delivered value = 1 }
+			add_equipment_to_stockpile = { type = anti_air_equipment amount = 40 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 540 }
+		}
+		else = { STP_cw_refund_aa_work = yes }
+	}
+}
+
+STP_cw_close_air_programmes = {
+	STP_cw_refund_air_work = yes
+	STP_cw_refund_aa_work = yes
+	remove_ideas = STP_cw_assault_air_cover_idea
 }
 
 # When the party is played, the AI resistance opens the war with a ground-attack
@@ -3753,10 +3828,10 @@ STP_cw_start = {
 		}
 		if = {
 			limit = { has_completed_focus = STP_ps_loyal_aircrews }
-			transfer_units_fraction = { target = STS size = 0 stockpile_ratio = var:STP_cw_resistance_stockpile_ratio army_ratio = 0 navy_ratio = var:STP_cw_navy_share air_ratio = 0.8 keep_unit_leaders_trigger = { always = yes } }
+			transfer_units_fraction = { target = STS size = 0 stockpile_ratio = var:STP_cw_resistance_stockpile_ratio army_ratio = 0 navy_ratio = var:STP_cw_navy_share air_ratio = 0.5 keep_unit_leaders_trigger = { always = yes } }
 		}
 		else = {
-			transfer_units_fraction = { target = STS size = 0 stockpile_ratio = var:STP_cw_resistance_stockpile_ratio army_ratio = 0 navy_ratio = var:STP_cw_navy_share air_ratio = 1 keep_unit_leaders_trigger = { always = yes } }
+			transfer_units_fraction = { target = STS size = 0 stockpile_ratio = var:STP_cw_resistance_stockpile_ratio army_ratio = 0 navy_ratio = var:STP_cw_navy_share air_ratio = 0.6 keep_unit_leaders_trigger = { always = yes } }
 		}
 		STP_cw_divide_air_reserves = yes
 		log = "[STP_CW] STP proportional allocation: manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]"
@@ -4499,7 +4574,11 @@ STP_cw_settle_union_victory = {
 	if = { limit = { ROOT = { tag = STP } } STP_cw_end_nod_intervention = yes }
 	if = { limit = { ROOT = { tag = STS } } STP_cw_close_nod_after_party_victory = yes }
 	if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-	ROOT = { STP_pf_clear = yes remove_ideas = { STP_cw_party_battle_spirit STP_cw_resistance_battle_spirit } }
+	ROOT = {
+		STP_cw_clear_wartime_modifiers = yes
+		STP_pf_clear = yes
+		remove_ideas = { STP_cw_party_battle_spirit STP_cw_resistance_battle_spirit }
+	}
 	annex_country = { target = ROOT transfer_troops = no }
 	if = {
 		limit = {
@@ -4577,7 +4656,10 @@ STP_cw_settle_nod_victory = {
 		STS = { STP_cw_remove_kefreyt_volunteers = yes }
 		STP = {
 			if = { limit = { has_war_with = STS } white_peace = STS }
-			STS = { remove_ideas = STP_cw_resistance_battle_spirit }
+			STS = {
+				STP_cw_clear_wartime_modifiers = yes
+				remove_ideas = STP_cw_resistance_battle_spirit
+			}
 			annex_country = { target = STS transfer_troops = no }
 			set_country_flag = STP_cw_won_union_battle
 			STP_cw_finish_mobilization = yes
@@ -7529,6 +7611,73 @@ STP_debug_resolve_sotnikov_victory = {
 	}
 }
 
+# COUNTRY: receipts are consumed before delivery or refund, including peace cleanup.
+STP_cw_finish_depot_evacuation = {
+	if = {
+		limit = {
+			has_variable = STP_cw_depot_in_transit
+			check_variable = { var = STP_cw_depot_remaining value = 50000 compare = greater_than_or_equals }
+			STP_cw_shabrat_logistics_active = yes
+			STP_cw_abila_depot_held = yes
+		}
+		clear_variable = STP_cw_depot_in_transit
+		clear_variable = STP_cw_depot_remaining
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 50000 }
+	}
+	else = { clear_variable = STP_cw_depot_in_transit }
+}
+
+STP_cw_refund_workshop_order = {
+	if = {
+		limit = { has_variable = STP_cw_workshop_deposit }
+		set_temp_variable = { var = STP_cw_workshop_refund value = STP_cw_workshop_deposit }
+		clear_variable = STP_cw_workshop_deposit
+		add_to_variable = { var = ADISCORD_economy_treasury value = STP_cw_workshop_refund }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_cw_workshop_refund }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_cw_finish_workshop_order = {
+	if = {
+		limit = {
+			STP_cw_shabrat_logistics_active = yes
+			check_variable = { var = STP_cw_workshop_deposit value = 600 compare = greater_than_or_equals }
+			check_variable = { var = STP_cw_workshop_batches value = 3 compare = less_than }
+		}
+		clear_variable = STP_cw_workshop_deposit
+		add_to_variable = { var = STP_cw_workshop_batches value = 1 }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 20000 }
+	}
+	else = { STP_cw_refund_workshop_order = yes }
+}
+
+STP_cw_receive_fund_tranche = {
+	ADISCORD_economy_initialize_country = yes
+	add_to_variable = { var = ADISCORD_economy_treasury value = 2000 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 2000 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+STP_cw_finish_fund_tranche = {
+	if = {
+		limit = {
+			STP_cw_shabrat_logistics_active = yes
+			check_variable = { var = STP_cw_fund_remaining value = 2000 compare = greater_than_or_equals }
+		}
+		subtract_from_variable = { var = STP_cw_fund_remaining value = 2000 }
+		STP_cw_receive_fund_tranche = yes
+	}
+}
+
+STP_cw_close_ground_logistics = {
+	STP_cw_refund_workshop_order = yes
+	clear_variable = STP_cw_depot_in_transit
+	clear_variable = STP_cw_depot_remaining
+	clear_variable = STP_cw_fund_remaining
+	remove_mission = STP_cw_war_fund_delivery
+}
+
 STP_cw_spend_600 = {
 	ADISCORD_economy_initialize_country = yes
 	subtract_from_variable = { var = ADISCORD_economy_treasury value = 600 }
@@ -8545,6 +8694,10 @@ STP_ps_close_defence = {
 	remove_mission = STP_ps_reorg_3
 	remove_mission = STP_ps_congress_deadline
 	clr_country_flag = STP_ps_congress_crisis
+	clr_country_flag = STP_ps_government_collapsed
+	clr_country_flag = STP_ps_temporary_government
+	clear_variable = STP_ps_congress_days_left
+	clear_global_event_target = STP_ps_cabinet_seat
 	if = { limit = { has_dynamic_modifier = { modifier = STP_ps_defence_dynamic } } remove_dynamic_modifier = { modifier = STP_ps_defence_dynamic } }
 	if = { limit = { has_dynamic_modifier = { modifier = STP_ps_nodes_dynamic } } remove_dynamic_modifier = { modifier = STP_ps_nodes_dynamic } }
 	clear_variable = STP_ps_reorg_1_specialization_days
@@ -8564,30 +8717,42 @@ STP_ps_open_congress_crisis = {
 		}
 		if = { limit = { STP_ps_government_operational = no }
 			STP_ps_pause_reorganisation = yes
-			if = { limit = { NOT = { has_country_flag = STP_ps_district_concessions } } activate_mission = STP_ps_congress_deadline }
+			if = {
+				limit = { NOT = { has_country_flag = STP_ps_temporary_government } }
+				activate_mission = STP_ps_congress_deadline
+				if = {
+					limit = { has_variable = STP_ps_congress_days_left }
+					set_temp_variable = { var = STP_ps_days_delta value = STP_ps_congress_days_left }
+					subtract_from_temp_variable = { var = STP_ps_days_delta value = 21 }
+					add_days_mission_timeout = { mission = STP_ps_congress_deadline days = STP_ps_days_delta }
+				}
+			}
 		}
 	}
 }
 STP_ps_resolve_congress_crisis = {
 	if = { limit = { STP_ps_government_operational = yes }
+		if = {
+			limit = { has_active_mission = STP_ps_congress_deadline }
+			set_variable = { var = STP_ps_congress_days_left value = days_mission_timeout@STP_ps_congress_deadline }
+			clamp_variable = { var = STP_ps_congress_days_left min = 1 }
+		}
 		remove_mission = STP_ps_congress_deadline
 		if = { limit = { STP_ps_holds_congress = yes } clr_country_flag = STP_ps_congress_crisis }
 		STP_ps_resume_reorganisation = yes
 	}
 }
 STP_ps_congress_timeout = {
-	if = { limit = { STP_ps_war_active = yes STP_ps_government_operational = no NOT = { has_country_flag = STP_ps_district_concessions } }
-		set_country_flag = STP_ps_district_concessions
-		add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.10 }
-		STP_ps_refresh_nodes = yes
-		ADISCORD_economy_mark_dirty = yes
+	if = { limit = { STP_ps_war_active = yes STP_ps_government_operational = no }
+		set_country_flag = STP_ps_government_collapsed
+		country_event = { id = ADISCORD_STP_cw.205 }
 	}
 	else = { STP_ps_resolve_congress_crisis = yes }
 }
 STP_ps_poll_nodes = {
 	if = { limit = { STP_ps_war_active = yes }
 		if = { limit = { controls_province = 145 NOT = { has_country_flag = STP_ps_node_seen_145 } } set_country_flag = STP_ps_node_seen_145 }
-		if = { limit = { has_country_flag = STP_ps_node_seen_145 NOT = { controls_province = 145 } NOT = { has_country_flag = STP_ps_node_lost_145 } }
+		if = { limit = { NOT = { controls_province = 145 } NOT = { has_country_flag = STP_ps_node_lost_145 } }
 			set_country_flag = STP_ps_node_lost_145
 			STP_ps_open_congress_crisis = yes
 			STP_ps_refresh_nodes = yes
@@ -8641,12 +8806,14 @@ STP_ps_poll_nodes = {
 
 			STP_ps_refresh_nodes = yes
 		}
+		if = {
+			limit = { STP_cw_party_government_defeated = yes }
+			country_event = { id = ADISCORD_STP_cw.205 }
+		}
 	}
 }
 STP_ps_refresh_nodes = {
 	set_variable = { var = STP_ps_node_planning value = 0 }
-	set_variable = { var = STP_ps_emergency_expense value = 0 }
-	if = { limit = { has_country_flag = STP_ps_district_concessions } set_variable = { var = STP_ps_emergency_expense value = 0.10 } }
 	set_variable = { var = STP_ps_node_redeployment value = 0 }
 	if = { limit = { has_country_flag = STP_ps_node_lost_145 } set_variable = { var = STP_ps_node_planning value = -0.15 } }
 	if = { limit = { has_country_flag = STP_ps_node_lost_45 } set_variable = { var = STP_ps_node_redeployment value = -0.20 } }
@@ -8660,10 +8827,30 @@ STP_ps_refund_cabinet = {
 		add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
 		ADISCORD_economy_mark_dirty = yes
+		if = {
+			limit = { NOT = { has_country_flag = STP_ps_temporary_government } }
+			clear_global_event_target = STP_ps_cabinet_seat
+		}
 	}
 }
+
+# The relocation receipt names one held district throughout the work and the war.
+STP_ps_select_cabinet_site = {
+	clear_global_event_target = STP_ps_cabinet_seat
+	if = {
+		limit = { capital_scope = { is_owned_by = STP is_controlled_by = STP NOT = { state = 28 } } }
+		capital_scope = { save_global_event_target_as = STP_ps_cabinet_seat }
+	}
+	else = {
+		random_owned_state = {
+			limit = { is_controlled_by = STP NOT = { state = 28 } }
+			save_global_event_target_as = STP_ps_cabinet_seat
+		}
+	}
+}
+
 STP_ps_finish_cabinet = {
-	if = { limit = { STP_ps_war_active = yes STP_ps_government_operational = no has_variable = STP_ps_cabinet_deposit }
+	if = { limit = { STP_ps_war_active = yes STP_ps_government_operational = no STP_ps_cabinet_site_held = yes has_variable = STP_ps_cabinet_deposit NOT = { has_country_flag = STP_ps_temporary_government } }
 		clear_variable = STP_ps_cabinet_deposit
 		set_country_flag = STP_ps_temporary_government
 		STP_ps_resolve_congress_crisis = yes
@@ -9198,10 +9385,6 @@ STP_ps_finalize_centre = {
 	add_to_variable = { var = STP_pw_stability_factor value = 0.05 }
 	add_to_variable = { var = STP_pw_political_power_gain value = 0.10 }
 	add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.08 }
-	if = { limit = { has_country_flag = STP_ps_district_concessions }
-		subtract_from_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.10 }
-		clr_country_flag = STP_ps_district_concessions
-	}
 	STP_pw_refresh_modifier = yes
 	ADISCORD_economy_mark_dirty = yes
 }
@@ -9263,7 +9446,7 @@ STP_ps_start_val_departure = {
 STP_ps_begin_val_sale = {
 	if = {
 		limit = { STP_ps_val_sale_open = yes }
-		set_temp_variable = { var = STP_cw_rifle_cost value = 12000 }
+		set_temp_variable = { var = STP_cw_rifle_cost value = 25000 }
 		set_temp_variable = { var = STP_ps_partial_refund value = num_equipment@infantry_equipment }
 		STP_cw_pay_rifles = yes
 		if = { limit = { NOT = { has_country_flag = STP_cw_rifles_paid } }
@@ -9272,7 +9455,7 @@ STP_ps_begin_val_sale = {
 		}
 		if = { limit = { has_country_flag = STP_cw_rifles_paid }
 			clr_country_flag = STP_cw_rifles_paid
-			set_variable = { var = STP_ps_val_receipt_rifles value = 12000 }
+			set_variable = { var = STP_ps_val_receipt_rifles value = 25000 }
 			add_to_variable = { var = STP_ps_val_sequence value = 1 }
 			if = {
 				limit = { STP = { has_country_flag = STP_sided_with_the_party_flag } }
@@ -9294,15 +9477,15 @@ STP_ps_accept_val_sale = {
 	if = {
 		limit = {
 			STP_cw_preparation_open = yes
-			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
 			VAL = {
 				STP_ps_val_supply_open = yes
 				STP_ps_val_sale_awaits_payment = yes
 			}
 		}
-		ADISCORD_economy_spend_100 = yes
+		ADISCORD_economy_spend_500 = yes
 		VAL = {
-			set_variable = { var = STP_ps_val_receipt_money value = 100 }
+			set_variable = { var = STP_ps_val_receipt_money value = 500 }
 			STP_ps_start_val_departure = yes
 		}
 	}
@@ -9351,6 +9534,16 @@ STP_ps_settle_val_credit = {
 	}
 }
 STP_ps_clear_val_receipt = {
+	# Apply the sale pause before clearing its contract type; other cargo keeps its own cadence.
+	if = {
+		limit = {
+			OR = {
+				check_variable = { var = STP_ps_val_receipt_contract value = 4 compare = equals }
+				check_variable = { var = STP_ps_val_receipt_contract value = 5 compare = equals }
+			}
+		}
+		set_country_flag = { flag = STP_ps_val_sale_cooldown days = 90 }
+	}
 	clear_variable = STP_ps_val_receipt_rifles
 	clear_variable = STP_ps_val_receipt_stage
 	clear_variable = STP_ps_val_receipt_contract
@@ -9463,7 +9656,7 @@ STP_ps_resolve_val_supply = {
 					check_variable = { var = STP_ps_contract_type value = 5 compare = equals }
 					check_variable = { var = STP_ps_cargo_intercepted value = 0 compare = equals }
 				}
-				add_to_variable = { var = STP_ps_val_shabrat_credit value = 100 }
+				add_to_variable = { var = STP_ps_val_shabrat_credit value = 500 }
 				STP_ps_settle_val_credit = yes
 			}
 			# Paid Shabrat contracts become fulfilled only after the convoy resolves.
@@ -10164,7 +10357,7 @@ STP_ps_adjust_reorg_3 = {
 # Calling the settlement directly from the STS mission would annex the winner.
 STP_cw_resolve_fada_capture = {
 	if = {
-		limit = { STP_cw_fada_captured = yes }
+		limit = { STP_cw_party_government_defeated = yes }
 		STP = { country_event = { id = ADISCORD_STP_cw.205 } }
 	}
 }
