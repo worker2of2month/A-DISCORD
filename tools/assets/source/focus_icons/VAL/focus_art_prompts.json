@@ -513,6 +513,48 @@
         "source": "exec-7de78ed4-1d0e-4859-b30a-810508157b0c.png",
         "prompt": "Use case: compositing. ONE compact WIDE HOI4 national focus cutout collage Tank Crew School for fictional Kefreyt. Combine exactly these THREE supplied assets: image1 actual-model-derived olive-grey tank with white turret stripe and armor blocks, image2 empty black padded tank crew helmet, image3 ivory/burgundy target board. Helmet LARGE in LEFT foreground as main training symbol, tank across CENTRE behind helmet pointing RIGHT, barrel fully visible, target smaller at far RIGHT slightly behind barrel with bullseye visible above it. Tank's tracks remain visible along lower centre, target short supports naturally overlap with tracks but objects never fuse. Tight interlocking symbolic-scale composition width about1.8 times height, no tall poster, no catalogue gaps. Preserve native tank's angular turret, white side stripe, rectangular armor, blue viewing block, two antennas and six road wheels; preserve helmet padding and target concentric rings. Gritty matte painterly realistic printed focus art, broad readable shapes at180px, dark charcoal leather, desaturated olive armor, warm ivory and burgundy target, selective cool silver and warm amber edge accents. Reduce microtexture. Remove diffuse surrounding halos from all input objects. True transparent alpha beyond silhouette and gaps, no environment, ground, battlefield, smoke, firing, people, flags, extra objects, words or frame. Entire barrel antennas and all objects inside generous margins."
       }
+    },
+    {
+      "focus_id": "VAL_Reserve_Accounting",
+      "assets": [
+        {
+          "file": "reserve_supply_register.png",
+          "source": "exec-e54adeb3-c80f-4d1c-af8b-3162bcfacb51.png",
+          "sha256": "7e6653cc9b93b07c0e3b56c8fc1f24031e684f7af514bd5c093e4850e19288af"
+        },
+        {
+          "file": "reserve_sealed_resource_crate.png",
+          "source": "exec-a95af0d2-3dc3-4139-9ab8-ff4c82c2c580.png",
+          "sha256": "ee98bda95318f2b7e8e0e03e7b204762928351eb919d84f225aace2c1264d5bd"
+        },
+        {
+          "file": "reserve_supply_standard_marker.png",
+          "source": "exec-163b9042-dece-4bb0-8eec-1eeed8b0f5fc.png",
+          "sha256": "4dbeaf8e7dcdc07fd364b29daad3485854008db4d898c29f336160b41e7390fb"
+        }
+      ],
+      "status": "complete"
+    },
+    {
+      "focus_id": "VAL_Industrial_Mobilization_Plan",
+      "assets": [
+        {
+          "file": "industrial_mobilization_plan_board.png",
+          "source": "exec-59134b4e-625c-479e-88db-adca6877789b.png",
+          "sha256": "f59e01700228fe2482ecdfde8b6ab3e2524ba3291cafedb7f2e8e40ed491480e"
+        },
+        {
+          "file": "industrial_factory_output_counter.png",
+          "source": "exec-cd3ddabf-9a6b-4741-bc6a-ed0b5914a9b7.png",
+          "sha256": "b5c6dba90df7dd8ff2a6d367bac6dc424e26d2974bd58cb08987bd546b037622"
+        },
+        {
+          "file": "industrial_steel_allocation_cradle.png",
+          "source": "exec-e35d3789-5a9f-4b68-8951-89aad56c83e7.png",
+          "sha256": "f82efca2a65dbf96d9b04afceba59597a8c0bf3d9387e9306a4f1d886e129258"
+        }
+      ],
+      "status": "complete"
     }
   ]
 }

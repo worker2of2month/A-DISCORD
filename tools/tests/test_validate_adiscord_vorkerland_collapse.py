@@ -391,7 +391,8 @@ country_event = {
         wrk_history = read("history/countries/WRK - WorkerLand.txt")
         self.assertEqual(wrk_history.count(f"set_country_flag = {marker}"), 1)
         self.assertEqual(startup.count(f"clr_country_flag = {marker}"), 1)
-        self.assertEqual(startup.count("country_event = {"), 1)
+        self.assertEqual(startup.count("country_event = {"), 2)
+        self.assertIn("id = ADISCORD_vorkerland_preparation.1 days = 14", startup)
         for forbidden in (
             "adiscord_vorkerland_collapse.",
             "migration",
@@ -3173,7 +3174,8 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertEqual(keys.count(form), 1)
         self.assertLess(keys.index("ADISCORD_vorkerland_apply_initial_map"), keys.index(form))
         self.assertLess(keys.index("ADISCORD_vorkerland_prepare_claimant_characters"), keys.index(form))
-        self.assertEqual(keys.count("random_list"), 1)
+        self.assertEqual(keys.count("ADISCORD_vorkerland_prep_resolve_fate"), 1)
+        self.assertLess(keys.index("ADISCORD_vorkerland_prep_resolve_fate"), keys.index(form))
 
         effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
         definition = parse_clausewitz(named_block(effects, form))[0].value

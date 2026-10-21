@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "assets": [
+    {
+      "file": "imperial_trust_flag_shield.png",
+      "runtime": "gfx/interface/bop/STP_bop_heg_trust.png",
+      "runtime_size": [
+        78,
+        88
+      ],
+      "tool": "image_gen",
+      "reference_images": [
+        "tools/assets/source/STS_hegemony_flag.png",
+        "tools/assets/source/bop/STP/shabrat_flag_star.png"
+      ],
+      "prompt": "Create ONE imperial political balance-of-power game icon for Maksim Shabrat. Image 1 is the authoritative imperial FLAG DESIGN. Image 2 is the approved visual-style and layout reference only. Use the composition and painterly aged-brass materials of image 2: slim pole at left, waving cloth, compact foreground emblem, low bronze base, free irregular silhouette on genuine transparency, readable when reduced to 78x88 pixels. The flag must faithfully reproduce IMAGE 1, NOT image 2: deep navy-blue cloth everywhere except a broad WHITE diagonal stripe descending from UPPER LEFT to LOWER RIGHT, with a narrower RED stripe immediately along its LOWER-LEFT-facing edge. The distinctive golden four-pointed angular emblem with the dark-blue lightning-shaped cut across its middle belongs in the UPPER RIGHT of the flag, exactly like image 1. Preserve its distinctive silhouette, do not replace it with a plain star. No black stripe, no yellow stripe, no ascending white stripe, no star at the hoist. Show soft folds but keep the heraldic geometry obvious. This is the TRUST / LOYALTY side: pristine intact flag, dignified steady composition. In the foreground on the base place one compact upright dark-blue shield with brass edges and the same gold imperial star emblem; the shield is intact, clean and strong. The flag remains dominant and the shield should not obscure its design. Restrained game illustration with clear silhouettes, moderate hand-painted detail, warm metallic highlights. No face, bust, portrait, crown, medal surround, oval frame, eagle, text, numbers, glow cloud or environment. Complete icon within frame, small transparent margin, near-square upright 78:88 composition."
+    },
+    {
+      "file": "imperial_resentment_broken_shield.png",
+      "runtime": "gfx/interface/bop/STP_bop_heg_resentment.png",
+      "runtime_size": [
+        78,
+        88
+      ],
+      "tool": "image_gen",
+      "reference_images": [
+        "tools/assets/source/bop/STP/imperial_trust_flag_shield.png"
+      ],
+      "prompt": "Create the RESENTMENT / BETRAYED TRUST counterpart of this same political balance-of-power game icon. Preserve its exact composition, flag identity, colors and heraldry, pole placement, size, camera, aged-brass painterly materials and transparent background. Make only the damage/status changes: the dark-blue foreground shield must be visibly split into TWO SEPARATED jagged halves by one broad diagonal fracture, with a clear empty dark/transparent gap that remains legible at 78x88 pixels, breaking its golden imperial star emblem across the same fracture. One half sits slightly lower and tilted, still attached to the base. The waving flag remains clearly recognizable, with a few large torn notches and ragged frayed edges on its right fly edge and lower free edge. Preserve the blue cloth and the WHITE diagonal descending from UPPER LEFT to LOWER RIGHT with RED immediately along its lower-left edge, and preserve the distinctive golden angular four-pointed emblem in the UPPER RIGHT. Give the damage restrained dark patina and small exposed metal highlights; no flames, smoke, blood, weapons, text or added symbols. Do not change this into another country's flag. Keep the base and pole, no excessive debris, no portrait or surrounding medallion. Same upright near-square 78:88 framing, whole icon visible on genuine alpha transparency. The damage should visibly communicate trust broken rather than a different faction."
+    },
+    {
+      "file": "party_flag_statutes.png",
+      "runtime": "gfx/interface/bop/STP_bop_shabrat_bad.png",
+      "runtime_size": [
+        78,
+        88
+      ],
+      "tool": "image_gen",
+      "reference_images": [
+        "gfx/interface/bop/RUS_bop_scientists.png",
+        "gfx/flags/STP.tga"
+      ],
+      "prompt": "Create ONE small political balance-of-power game icon. Reference 1 defines the visual language and composition: an elegant waving flag on a slender dark brass pole at the left, a compact sculptural emblem at the lower foreground, and a shallow aged bronze base. Freestanding irregular silhouette with real transparent background. Match its restrained hand-painted realistic game-art treatment, subdued blue cloth, aged brass highlights, soft shadows inside the object and readable simplified masses. This must look like a sibling asset to reference 1. Do not use a portrait, statue bust, circular badge, oval medal, enclosing frame, disc, text or a rectangular backdrop. Preserve enough broad shapes to remain legible at 78x88 pixels. Near-square upright composition with all objects fully visible and a small transparent border. Reference 2 defines the flag's actual identity and color pattern; reproduce the geometric arrangement faithfully on waving cloth rather than inventing a new flag. Subject: the Party of Stelander. The flag from reference 2 has a deep blue upper-left field with a WHITE MANY-POINTED STAR near the hoist, a white diagonal band rising toward the upper right, and black then golden-yellow horizontal fields in the lower-right portion, plus the small red triangle at the extreme upper right. The white many-rayed star must be clean and recognizable. Foreground emblem: a small closed dark book of party statutes with an ivory paper edge and a deep burgundy wax seal, resting on the bronze base at the lower center. Make the pole, waving flag and compact book into one cohesive tiny icon; the flag is the dominant element. Do not copy the scientific tower, atom or eagle from reference 1."
+    },
+    {
+      "file": "shabrat_flag_star.png",
+      "refinement_prompts": ["Precisely correct the FLAG PATTERN ONLY. Image 1 is the authoritative actual STS flag design. Image 2 is the existing illustrated game icon to edit. On the waving fabric of image 2, reproduce image 1 faithfully: the WHOLE cloth is deep royal/navy BLUE on BOTH sides of ONE WHITE DIAGONAL STRIPE running from the LOWER LEFT at the hoist to the UPPER RIGHT at the fly. There are NO BLACK STRIPES and NO YELLOW STRIPES or colored lower panels anywhere on the cloth. Replace all existing black and yellow fabric areas with the same BLUE fabric, with natural folds and shading. Place a SMALL golden FOUR-POINTED STAR in the upper-left near the pole, matching image 1's placement and scale: its center is approximately 15 percent of the flat flag width from the hoist and 25 percent of flag height from the top; it is a small symbol, not a large central star. The star has four slender points, the vertical points longer than the horizontal points. The white stripe must connect the bottom-left edge to the top-right edge just as in image 1, naturally deformed by the fabric's existing folds. Keep EVERYTHING ELSE in image 2 unchanged: the flag silhouette, folds, brass edging, pole and finial, the large separate sculptural golden four-pointed star on the pedestal below the flag, bronze base and ribbons, layout, composition, size, material style, lighting and transparency. Do not recolor the separate metal star or base. No text, no additional symbols. Clean transparent background outside the icon."],
+      "runtime": "gfx/interface/bop/STP_bop_shabrat_good.png",
+      "runtime_size": [
+        78,
+        88
+      ],
+      "tool": "image_gen",
+      "reference_images": [
+        "gfx/interface/bop/RUS_bop_black_army.png",
+        "gfx/flags/STS.tga"
+      ],
+      "prompt": "Create ONE small political balance-of-power game icon. Reference 1 defines the visual language and composition: an elegant waving flag on a slender dark brass pole at the left, a compact sculptural emblem at the lower foreground, and a shallow aged bronze base. Freestanding irregular silhouette with real transparent background. Match its restrained hand-painted realistic game-art treatment, subdued blue cloth, aged brass highlights, soft shadows inside the object and readable simplified masses. This must look like a sibling asset to reference 1. Do not use a portrait, statue bust, circular badge, oval medal, enclosing frame, disc, text or a rectangular backdrop. Preserve enough broad shapes to remain legible at 78x88 pixels. Near-square upright composition with all objects fully visible and a small transparent border. Reference 2 defines the flag's actual identity and color pattern; reproduce the geometric arrangement faithfully on waving cloth rather than inventing a new flag. Subject: Shabrat's movement. The flag from reference 2 has a deep blue upper-left field with a GOLDEN FOUR-POINTED STAR near the hoist, a white diagonal band rising toward the upper right, and black then golden-yellow horizontal fields in the lower-right portion. The four-pointed star must have precisely four long points, with the vertical pair taller, and must be clean and recognizable. Foreground emblem: a single small sculptural golden four-pointed star of the same shape, mounted vertically at the lower center on the bronze base. Keep its silhouette simple and strong. Make the pole, waving flag and lower golden star into one cohesive tiny icon; the flag is the dominant element. Do not copy the eagle, atom or scientific tower from reference 1. No laurel wreath."
+    }
+  ]
+}

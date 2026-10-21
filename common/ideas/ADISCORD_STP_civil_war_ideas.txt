@@ -1,5 +1,20 @@
 ideas = {
 	country = {
+		STP_heg_pensions_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { ADISCORD_economy_admin_expense_factor = 0.02 }
+		}
+		STP_heg_victory_press = {
+			picture = STP_security_pressure
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				political_power_factor = 0.05
+				stability_factor = 0.02
+			}
+		}
+
 
 		# Charter cabinet programme deltas are previews only.
 		STP_pc_charter_sotnikov_mandate_delta = {

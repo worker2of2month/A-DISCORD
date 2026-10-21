@@ -7854,6 +7854,7 @@ STP_postwar_propaganda_campaigns = {
 	STP_pw_campaign_country_is_being_built = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = STS }
+		visible = { has_completed_focus = STP_pw_republic_restore_roads }
 		available = { ADISCORD_has_campaign_slot = yes }
 		cost = 25
 		days_remove = 55
@@ -7874,6 +7875,7 @@ STP_postwar_propaganda_campaigns = {
 	STP_pw_campaign_one_steland = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = STS }
+		visible = { has_completed_focus = STP_pc_two_borders }
 		available = { ADISCORD_has_campaign_slot = yes }
 		cost = 20
 		days_remove = 50
@@ -7894,6 +7896,7 @@ STP_postwar_propaganda_campaigns = {
 	STP_pw_campaign_engineers_of_peace = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = STS }
+		visible = { has_completed_focus = STP_pc_economy_repair_workshops }
 		available = { ADISCORD_has_campaign_slot = yes }
 		cost = 25
 		days_remove = 60
@@ -7915,6 +7918,7 @@ STP_postwar_propaganda_campaigns = {
 	STP_pw_campaign_victory_means_normal_life = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = STS }
+		visible = { has_completed_focus = STP_pw_republic_new_republic }
 		available = { ADISCORD_has_campaign_slot = yes }
 		cost = 20
 		days_remove = 45
@@ -17831,5 +17835,273 @@ STP_pw_programme = {
 			}
 		}
 		ai_will_do = { base = 5 }
+	}
+}
+
+STP_heg_betrayal_category = {
+	STP_heg_receive_delegation = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = {
+			has_power_balance = { id = STP_heg_betrayal }
+			has_completed_focus = STP_pc_heg_chancellery
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_relief_available_tt
+				STP_heg_relief_available = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_heg_delegation_price
+		custom_cost_trigger = { STP_heg_delegation_affordable = yes }
+		days_remove = 14
+		cancel_trigger = {
+			OR = {
+				STP_heg_betrayal_active = no
+				has_capitulated = yes
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_heg_receive_delegation_delivery_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_heg_relief_available = yes
+						STP_heg_delegation_affordable = yes
+					}
+					set_variable = { var = STP_heg_operation_kind value = 1 }
+					if = {
+						limit = { has_completed_focus = STP_pc_heg_old_guard }
+						set_variable = { var = STP_heg_paid_pp value = 25 }
+						add_political_power = -25
+					}
+					else = {
+						set_variable = { var = STP_heg_paid_pp value = 50 }
+						add_political_power = -50
+					}
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_heg_operation_kind value = 1 compare = equals } }
+					STP_heg_finish_operation = yes
+				}
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_heg_operation_kind value = 1 compare = equals } }
+					STP_heg_refund_operation = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				political_power < 75
+			}
+		}
+	}
+
+	STP_heg_pay_veterans = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = {
+			has_power_balance = { id = STP_heg_betrayal }
+			has_completed_focus = STP_pc_heg_old_guard
+			NOT = { has_country_flag = STP_heg_veterans_recalled }
+		}
+		available = {
+			NOT = { has_country_flag = STP_heg_veterans_recalled }
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_relief_available_tt
+				STP_heg_relief_available = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_heg_price_100
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } }
+		days_remove = 21
+		cancel_trigger = {
+			OR = {
+				STP_heg_betrayal_active = no
+				has_capitulated = yes
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_heg_pay_veterans_delivery_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_heg_relief_available = yes
+						has_completed_focus = STP_pc_heg_old_guard
+						NOT = { has_country_flag = STP_heg_veterans_recalled }
+						check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+					}
+					set_variable = { var = STP_heg_operation_kind value = 2 }
+					set_variable = { var = STP_heg_paid_treasury value = 100 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_heg_operation_kind value = 2 compare = equals } }
+					STP_heg_finish_operation = yes
+				}
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_heg_operation_kind value = 2 compare = equals } }
+					STP_heg_refund_operation = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				political_power < 75
+			}
+		}
+	}
+
+	STP_heg_train_cadres = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = {
+			has_power_balance = { id = STP_heg_betrayal }
+			has_completed_focus = STP_pc_heg_new_ladder
+			NOT = { has_country_flag = STP_heg_cadres_trained }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_operation_available_tt
+				STP_heg_operation_available = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_heg_price_100
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } }
+		days_remove = 28
+		cancel_trigger = {
+			OR = {
+				STP_heg_betrayal_active = no
+				has_capitulated = yes
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_heg_train_cadres_delivery_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_heg_operation_available = yes
+						check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+						NOT = { has_country_flag = STP_heg_cadres_trained }
+					}
+					set_variable = { var = STP_heg_operation_kind value = 3 }
+					set_variable = { var = STP_heg_paid_treasury value = 100 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_heg_operation_kind value = 3 compare = equals } }
+					STP_heg_finish_operation = yes
+				}
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_heg_operation_kind value = 3 compare = equals } }
+					STP_heg_refund_operation = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				political_power < 75
+			}
+		}
+	}
+
+	STP_heg_victory_campaign = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = {
+			has_power_balance = { id = STP_heg_betrayal }
+			has_completed_focus = STP_pc_heg_official_history
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_operation_available_tt
+				STP_heg_operation_available = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_heg_price_25
+		custom_cost_trigger = { NOT = { political_power < 25 } }
+		days_remove = 21
+		days_re_enable = 90
+		cancel_trigger = {
+			OR = {
+				STP_heg_betrayal_active = no
+				has_capitulated = yes
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_heg_victory_campaign_delivery_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_heg_operation_available = yes
+						NOT = { political_power < 25 }
+					}
+					set_variable = { var = STP_heg_operation_kind value = 4 }
+					set_variable = { var = STP_heg_paid_pp value = 25 }
+					add_political_power = -25
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_heg_operation_kind value = 4 compare = equals } }
+					STP_heg_finish_operation = yes
+				}
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_heg_operation_kind value = 4 compare = equals } }
+					STP_heg_refund_operation = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				political_power < 75
+			}
+		}
 	}
 }

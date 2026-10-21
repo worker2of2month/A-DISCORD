@@ -172,9 +172,7 @@ class NewSaveMaterializationTests(unittest.TestCase):
             0,
         )
         self.assertEqual(
-            immediate.count(
-                "set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad"
-            ),
+            immediate.count("ADISCORD_vorkerland_prep_resolve_fate = yes"),
             1,
         )
         self.assertEqual(
@@ -227,14 +225,16 @@ class NewSaveMaterializationTests(unittest.TestCase):
             self.assertGreater(clear_position, handoff_end)
             self.assertLess(clear_position, annex_position)
 
+        fate = named_block(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), "ADISCORD_vorkerland_prep_resolve_fate")
+        self.assertEqual(immediate.count("ADISCORD_vorkerland_prep_resolve_fate = yes"), 1)
         fate_rolls = [
             block
-            for block in named_blocks(immediate, "random_list")
+            for block in named_blocks(fate, "random_list")
             if "ADISCORD_vorkerland_worker_safe_with_loyalists" in block
         ]
         self.assertEqual(len(fate_rolls), 1)
         for preference_flag in PLAYER_PREFERENCE_FLAGS:
-            self.assertNotIn(preference_flag, fate_rolls[0])
+            self.assertNotIn(preference_flag, fate)
 
     def test_wars_wait_for_structure_and_a_completed_identity_assertion(self) -> None:
         collapse_events = source_section(

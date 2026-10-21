@@ -6,7 +6,7 @@ Each campaign has three industrial concerns: two basic (75 PP), one advanced (12
 
 ## Elite unlocks
 
-- STP, administration: `STP_pc_shabrat_cabinet`, `STP_pw_republic_district_authority`, `STP_pw_party_executive_secretariat`.
+- STP, administration: `STP_pc_after_victory`, `STP_pw_republic_district_authority`, `STP_pw_party_executive_secretariat`.
 - STP, industry: `STP_pc_investment_integrated_economy`, `STP_pw_republic_industrial_settlement`, `STP_pw_party_industrial_settlement`.
 - STP, army: `STP_pc_army_staff_doctrine`, `STP_pw_republic_professional_service`, `STP_pw_party_professional_service`.
 - VAL, administration: `VAL_State_Contract`.

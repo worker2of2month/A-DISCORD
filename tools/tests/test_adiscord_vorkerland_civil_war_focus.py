@@ -208,12 +208,12 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
     def test_manifest_has_all_bounded_lifecycle_definitions(self) -> None:
         self.assertEqual(tuple(self.blocks), lifecycle_order())
         # The worker and technocratic routes continue in their own trees after the Unity Tower.
-        self.assertEqual(len(self.blocks), 278)
+        self.assertEqual(len(self.blocks), 286)
         self.assertEqual(len(DEPTH_FOCUSES), 63)
         self.assertEqual(len(WKR_VARIANT_FOCUSES), 6)
         self.assertEqual(len(VAD_VARIANT_FOCUSES), 6)
         self.assertEqual(len(TVA_VARIANT_FOCUSES), 6)
-        self.assertEqual(len(PREWAR_WRK_FOCUSES), 10)
+        self.assertEqual(len(PREWAR_WRK_FOCUSES), 18)
         self.assertEqual(len(PREWAR_VAD_FOCUSES), 10)
         self.assertEqual(len(PREWAR_WRK_EXPANSION_FOCUSES), 4)
         self.assertEqual(len(PREWAR_VAD_EXPANSION_FOCUSES), 4)
@@ -1463,14 +1463,9 @@ focus = {
                 with self.subTest(focus_id=focus_id):
                     block = self.blocks[focus_id]
                     self.assertEqual(_phase_flags(block), {PREWAR_PHASE})
-                    self.assertIn(
-                        (
-                            f"allow_branch = {{ tag = {tag}"
-                            if tag == "WRK"
-                            else "allow_branch = { OR = { tag = EYR tag = EGC tag = RIV tag = YOR }"
-                        ),
-                        block,
-                    )
+                    allowed_tags = set(re.findall(r"\btag\s*=\s*([A-Z]{3})", _allow_branch(block)))
+                    expected_tags = {"WRK"} if tag == "WRK" else {"EYR", "EGC", "RIV", "YOR"}
+                    self.assertEqual(allowed_tags, expected_tags)
 
     def test_vad_prewar_continuity_paths_are_short_and_reward_dense(self) -> None:
         terminal = "VAD_form_emergency_chancery"

@@ -654,8 +654,11 @@ def upstream_contract_issues(root: Path, campaign_state_effects: str) -> list[st
     collapse = (
         collapse_path.read_text(encoding="utf-8-sig") if collapse_path.is_file() else ""
     )
+    preparation_path = root / STORY_EFFECTS
+    preparation = preparation_path.read_text(encoding="utf-8-sig") if preparation_path.is_file() else ""
+    fate = named_block(preparation, "ADISCORD_vorkerland_prep_resolve_fate")
     for flag, _ in WORKER_FATE_DISPATCH:
-        if f"set_global_flag = {flag}" not in collapse:
+        if f"set_global_flag = {flag}" not in fate:
             issues.append(
                 f"Worker fate news reads {flag}, which the collapse layer no longer sets"
             )

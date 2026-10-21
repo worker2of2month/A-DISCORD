@@ -5133,6 +5133,7 @@ STP_pc_install_resistance_successor = {
 		STS = {
 			STP_cw_establish_resistance_command = yes
 			STP_pc_align_resistance_ruling_party = yes
+			STP_heg_betrayal_reconcile = yes
 		}
 	}
 }
@@ -5702,6 +5703,7 @@ STP_pc_charter_install_tikhoreva = {
 
 # STS: lock course 2. Hegemony is closed. Vanilla elections stay off.
 STP_pc_lock_freedom = {
+	STP_heg_betrayal_close = yes
 	set_variable = { var = STP_pc_course value = 2 }
 	set_country_flag = STP_pc_course_locked
 	if = {
@@ -5730,6 +5732,7 @@ STP_pc_lock_freedom = {
 
 # STS: lock course 3 for Sotnikov or Barchel.
 STP_pc_lock_directory = {
+	STP_heg_betrayal_close = yes
 	set_variable = { var = STP_pc_course value = 3 }
 	set_country_flag = STP_pc_course_locked
 	if = {
@@ -17058,4 +17061,173 @@ STP_sdir_restore_founder = {
 		mark_focus_tree_layout_dirty = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
+}
+
+# The score is a display value; native BOP ranges apply and remove their own modifiers.
+STP_heg_betrayal_refresh = {
+	if = {
+		limit = { has_power_balance = { id = STP_heg_betrayal } }
+		set_variable = { var = STP_heg_betrayal_score value = power_balance_value }
+		add_to_variable = { var = STP_heg_betrayal_score value = 1 }
+		multiply_variable = { var = STP_heg_betrayal_score value = 50 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_heg_betrayal_initialize = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = STP_heg_betrayal_initialized }
+			NOT = { has_completed_focus = STP_pc_heg_revolution_name }
+		}
+		set_country_flag = STP_heg_betrayal_initialized
+		set_power_balance = { id = STP_heg_betrayal set_value = -0.60 }
+		STP_heg_betrayal_refresh = yes
+	}
+}
+
+# Receipts store actual payments, including the veteran-route discount.
+STP_heg_refund_operation = {
+	if = {
+		limit = { has_variable = STP_heg_paid_pp }
+		add_political_power = STP_heg_paid_pp
+	}
+	if = {
+		limit = { has_variable = STP_heg_paid_treasury }
+		add_to_variable = { var = ADISCORD_economy_treasury value = STP_heg_paid_treasury }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_heg_paid_treasury }
+		ADISCORD_economy_mark_dirty = yes
+	}
+	clear_variable = STP_heg_paid_pp
+	clear_variable = STP_heg_paid_treasury
+	clear_variable = STP_heg_operation_kind
+}
+
+STP_heg_betrayal_close = {
+	STP_heg_refund_operation = yes
+	remove_decision = STP_heg_receive_delegation
+	remove_decision = STP_heg_pay_veterans
+	remove_decision = STP_heg_train_cadres
+	remove_decision = STP_heg_victory_campaign
+	clr_country_flag = STP_heg_relief_cooldown
+	if = {
+		limit = { has_power_balance = { id = STP_heg_betrayal } }
+		remove_power_balance = { id = STP_heg_betrayal }
+	}
+	clear_variable = STP_heg_betrayal_score
+	ADISCORD_economy_mark_dirty = yes
+}
+
+STP_heg_betrayal_reconcile = {
+	if = {
+		limit = {
+			has_country_flag = STP_heg_betrayal_initialized
+			OR = {
+				has_power_balance = { id = STP_heg_betrayal }
+				has_variable = STP_heg_operation_kind
+			}
+			STP_heg_personal_course = no
+		}
+		STP_heg_betrayal_close = yes
+	}
+}
+
+STP_heg_betrayal_add_5 = {
+	custom_effect_tooltip = STP_heg_betrayal_add_5_tt
+	hidden_effect = {
+		if = {
+			limit = { STP_heg_betrayal_active = yes }
+			add_power_balance_value = { id = STP_heg_betrayal value = 0.10 }
+			STP_heg_betrayal_refresh = yes
+		}
+	}
+}
+
+STP_heg_betrayal_add_10 = {
+	custom_effect_tooltip = STP_heg_betrayal_add_10_tt
+	hidden_effect = {
+		if = {
+			limit = { STP_heg_betrayal_active = yes }
+			add_power_balance_value = { id = STP_heg_betrayal value = 0.20 }
+			STP_heg_betrayal_refresh = yes
+		}
+	}
+}
+
+STP_heg_betrayal_add_15 = {
+	custom_effect_tooltip = STP_heg_betrayal_add_15_tt
+	hidden_effect = {
+		if = {
+			limit = { STP_heg_betrayal_active = yes }
+			add_power_balance_value = { id = STP_heg_betrayal value = 0.30 }
+			STP_heg_betrayal_refresh = yes
+		}
+	}
+}
+
+STP_heg_betrayal_reduce_10 = {
+	custom_effect_tooltip = STP_heg_betrayal_reduce_10_tt
+	hidden_effect = {
+		if = {
+			limit = { STP_heg_betrayal_active = yes }
+			add_power_balance_value = { id = STP_heg_betrayal value = -0.20 }
+			STP_heg_betrayal_refresh = yes
+		}
+	}
+}
+
+STP_heg_betrayal_reduce_15 = {
+	custom_effect_tooltip = STP_heg_betrayal_reduce_15_tt
+	hidden_effect = {
+		if = {
+			limit = { STP_heg_betrayal_active = yes }
+			add_power_balance_value = { id = STP_heg_betrayal value = -0.30 }
+			STP_heg_betrayal_refresh = yes
+		}
+	}
+}
+
+STP_heg_finish_operation = {
+	if = {
+		limit = {
+			has_variable = STP_heg_operation_kind
+			STP_heg_betrayal_active = yes
+			has_capitulated = no
+		}
+		if = {
+			limit = { check_variable = { var = STP_heg_operation_kind value = 1 compare = equals } }
+			add_power_balance_value = { id = STP_heg_betrayal value = -0.20 }
+			set_country_flag = { flag = STP_heg_relief_cooldown days = 90 }
+			country_event = { id = ADISCORD_STP_pc.100 days = 2 }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_heg_operation_kind value = 2 compare = equals } }
+			add_power_balance_value = { id = STP_heg_betrayal value = -0.30 }
+			set_country_flag = { flag = STP_heg_relief_cooldown days = 90 }
+			if = {
+				limit = { NOT = { has_country_flag = STP_heg_veterans_recalled } }
+				set_country_flag = STP_heg_veterans_recalled
+				add_manpower = 1500
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_heg_operation_kind value = 3 compare = equals } }
+			if = {
+				limit = { NOT = { has_country_flag = STP_heg_cadres_trained } }
+				set_country_flag = STP_heg_cadres_trained
+				ADISCORD_reform_state_development = yes
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_heg_operation_kind value = 4 compare = equals } }
+			add_power_balance_value = { id = STP_heg_betrayal value = 0.10 }
+			add_timed_idea = { idea = STP_heg_victory_press days = 90 }
+			country_event = { id = ADISCORD_STP_pc.103 days = 3 }
+		}
+		clear_variable = STP_heg_paid_pp
+		clear_variable = STP_heg_paid_treasury
+		clear_variable = STP_heg_operation_kind
+		STP_heg_betrayal_refresh = yes
+	}
+	else = { STP_heg_refund_operation = yes }
 }

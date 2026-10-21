@@ -95,6 +95,14 @@ def matches_conditions(items, facts, scope="STP"):
                 and matches_conditions(entry.value, facts, country)
                 for country in countries
             )
+        if entry.key == "any_subject_country":
+            # Dynamic civil-war tags such as D01 are valid subjects.
+            countries = {key[0] for key in facts if re.fullmatch(r"[A-Z][A-Z0-9]{2}", key[0])}
+            return any(
+                facts.get((country, "is_subject_of", scope), False)
+                and matches_conditions(entry.value, facts, country)
+                for country in countries
+            )
         if entry.key == "any_owned_state":
             extras = [e for e in entry.value if e.key != "is_controlled_by"]
             if not any(

@@ -6,3 +6,12 @@ TFF_frontier_at_war = {
 		has_war_with = NOD
 	}
 }
+
+# Shown while Kefreyt's Ardent network is running or holds the mandate.
+TFF_mandate_dispute = {
+	icon = generic_prepare_civil_war
+	allowed = { tag = TFF }
+	visible = {
+		VAL = { VAL_ardent_network_active = yes }
+	}
+}

@@ -45,4 +45,16 @@ spriteTypes = {
 		name = "GFX_bop_STP_radicals"
 		texturefile = "gfx/interface/STP_regions/STP_regions_faction_radicals.png"
 	}
+
+	spriteType = {
+		name = "GFX_bop_STP_heg_trust"
+		texturefile = "gfx/interface/bop/STP_bop_heg_trust.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_bop_STP_heg_resentment"
+		texturefile = "gfx/interface/bop/STP_bop_heg_resentment.png"
+		legacy_lazy_load = no
+	}
 }

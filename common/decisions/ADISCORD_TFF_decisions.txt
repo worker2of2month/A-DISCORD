@@ -125,3 +125,30 @@ TFF_frontier_at_war = {
 		ai_will_do = { base = 100 }
 	}
 }
+
+TFF_mandate_dispute = {
+	TFF_expose_kefreyt_network = {
+		icon = generic_political_pressure
+		allowed = { tag = TFF }
+		visible = {
+			VAL = { VAL_ardent_network_active = yes }
+		}
+		cost = 35
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = TFF_expose_kefreyt_network_tt
+			hidden_effect = {
+				VAL = {
+					if = {
+						limit = { VAL_ardent_network_active = yes }
+						VAL_ardent_expose_network = yes
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 20
+			modifier = { factor = 0 has_political_power < 100 }
+		}
+	}
+}

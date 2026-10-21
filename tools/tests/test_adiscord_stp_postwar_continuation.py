@@ -32,7 +32,6 @@ LOC = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
 LEDGER = ROOT / "tools/data/adiscord_event_ids.json"
 
 PERSONAL_FOCUS_IDS = (
-    "STP_pc_shabrat_cabinet",
     "STP_pc_shabrat_politics",
     "STP_pc_hegemony_open",
     "STP_pc_freedom_open",
@@ -734,21 +733,29 @@ class PostwarContinuationContracts(unittest.TestCase):
             "16",
         )
 
-    def test_shabrat_cabinet_names_the_union_and_installs_ministers(self) -> None:
-        focus = war_focuses()["STP_pc_shabrat_cabinet"]
-        self.assertEqual(scalar(focus, "x"), "14")
-        self.assertEqual(scalar(focus, "y"), "4")
+    def test_victory_government_names_the_union_and_installs_founder_ministers(self) -> None:
+        focuses = war_focuses()
+        self.assertNotIn("STP_pc_shabrat_cabinet", focuses)
+        focus = focuses["STP_pc_after_victory"]
         self.assertEqual(
             [e.value for e in block(focus, "prerequisite") if e.key == "focus"],
-            ["STP_pc_after_victory"],
+            ["STP_cw_restore_civil_authority"],
         )
         reward = block(focus, "completion_reward")
         self.assertEqual(
-            {e.key for e in reward},
-            {"custom_effect_tooltip", "hidden_effect"},
-            "cabinet bookkeeping must not expand the focus reward tooltip",
+            [e.value for e in reward if e.key == "custom_effect_tooltip"],
+            ["STP_pw_campaign_capacity_tt", "STP_pw_recovery_start_tt", "STP_qol_elite_administration_tt"],
         )
-        mechanics = block(reward, "hidden_effect")
+        self.assertEqual(scalar(reward, "set_cosmetic_tag"), "STS_steland")
+        self.assertEqual(scalar(reward, "add_political_power"), "75")
+        hidden = block(reward, "hidden_effect")
+        self.assertEqual(scalar(hidden, "STP_pw_begin_recovery"), "yes")
+        mechanics = next(
+            e.value for e in hidden
+            if e.key == "if" and any(child.key == "set_party_name" for child in e.value)
+        )
+        self.assertEqual(scalar(block(mechanics, "limit"), "STP_pc_founder_rules"), "yes")
+        self.assertEqual(scalar(mechanics, "ADISCORD_economy_mark_dirty"), "yes")
         party = block(mechanics, "set_party_name")
         self.assertEqual(scalar(party, "ideology"), "chauvinism")
         self.assertEqual(scalar(party, "name"), "STS_chauvinism_party")
@@ -765,8 +772,13 @@ class PostwarContinuationContracts(unittest.TestCase):
                 "minister_STS_Lia_Verst",
             },
         )
+        for founder in (True, False):
+            facts = {("STS", "STP_pc_founder_rules", "yes"): founder}
+            selected = list(selected_effects(reward, facts, "STS"))
+            self.assertEqual(sum(e.key == "set_party_name" for _, e in selected), int(founder))
+            self.assertEqual(sum(e.key == "add_ideas" for _, e in selected), int(founder))
         loc = read(LOC)
-        self.assertIn('STP_pc_shabrat_cabinet: "Кабинет основателя"', loc)
+        self.assertIn('STP_pc_after_victory: "Правительство победы"', loc)
         parties = (ROOT / "localisation/russian/parties_l_russian.yml").read_text(
             encoding="utf-8-sig"
         )
@@ -2669,7 +2681,7 @@ class KefreytEmergencyContracts(unittest.TestCase):
         }
         for tag, postwar, expected in (
             ("STP", False, (-8, 0)), ("STS", False, (-8, 0)),
-            ("STP", True, (13, 13)), ("STS", True, (7, 16)),
+            ("STP", True, (13, 13)), ("STS", True, (5, 16)),
         ):
             facts = {(tag, "has_country_flag", "STP_cw_postwar"): postwar}
             x, y = int(scalar(root, "x")), int(scalar(root, "y"))

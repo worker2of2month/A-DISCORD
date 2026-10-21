@@ -19,7 +19,7 @@ focus_tree = {
 			}
 		}
 		offset = {
-			x = 15
+			x = 13
 			y = 16
 			trigger = {
 				tag = STS
@@ -1163,7 +1163,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_first_postwar_budget
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_STP_cw_first_postwar_budget
 		x = 7
 		offset = { x = 9 trigger = { tag = STS } }
 		y = 0
@@ -1180,7 +1180,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_restore_civil_authority
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_cw_restore_civil_authority
 		x = 7
 		offset = { x = 9 trigger = { tag = STS } }
 		y = 1

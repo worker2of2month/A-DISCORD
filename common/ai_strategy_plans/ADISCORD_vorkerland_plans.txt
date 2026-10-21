@@ -1890,9 +1890,14 @@ ADISCORD_vorkerland_wrk_prewar_compact_plan = {
 	}
 	ai_national_focuses = {
 		WRK_measure_confederation_fault_lines
+		WRK_reopen_emergency_workshops
+		WRK_preserve_machine_tools
+		WRK_collect_officer_returns
+		WRK_contract_local_garrisons
 		WRK_convene_council_of_republics
 		WRK_bind_districts_to_charter
 		WRK_issue_continuity_orders
+		WRK_prepare_military_evacuation
 		WRK_open_worker_vadl_backchannel
 		WRK_offer_emergency_compact
 	}
@@ -1917,9 +1922,14 @@ ADISCORD_vorkerland_wrk_prewar_hardline_plan = {
 	}
 	ai_national_focuses = {
 		WRK_measure_confederation_fault_lines
+		WRK_reopen_emergency_workshops
+		WRK_prioritize_arsenal_output
+		WRK_collect_officer_returns
+		WRK_prepare_officer_reserve
 		WRK_inventory_emergency_stores
 		WRK_disperse_railway_reserves
 		WRK_issue_continuity_orders
+		WRK_prepare_civil_evacuation
 		WRK_mobilize_loyal_republics
 		WRK_place_reserves_under_worker
 	}

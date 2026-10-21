@@ -23,7 +23,7 @@ FOCUS = ROOT / "focus_trees/STP"
 EVENTS = ROOT / "events/ADISCORD_STP_events.txt"
 DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
 
-SCORE_TOTAL = 107
+SCORE_TOTAL = 106
 
 INTRO_FOCUSES = (
     "STP_NECTAR_OF_GODS",
@@ -104,12 +104,10 @@ RECONSTRUCTION_FOCUSES = (
     "STP_pc_economy_recovery_budget",
     "STP_pc_development_country_must_live",
     "STP_pc_development_posters_on_ruins",
-    "STP_pc_development_rebuild_as_duty",
     "STP_pc_development_engineers_on_radio",
-    "STP_pc_development_reopen_universities",
     "STP_pc_development_generation_reconstruction",
+    "STP_pc_development_reopen_universities",
     "STP_pc_development_national_research_institutes",
-    "STP_pc_shabrat_cabinet",
     "STP_pw_republic_new_republic",
     "STP_pw_republic_district_authority",
     "STP_pw_republic_civil_records",
@@ -129,7 +127,6 @@ RECONSTRUCTION_FOCUSES = (
 )
 HEGEMONY_FOCUSES = (
     "STP_pc_after_victory",
-    "STP_pc_shabrat_cabinet",
     "STP_pc_war_ledgers",
     "STP_pc_two_borders",
     "STP_pc_shabrat_politics",
@@ -140,6 +137,13 @@ HEGEMONY_FOCUSES = (
     "STP_pc_heg_limit_parties",
     "STP_pc_heg_lock",
     "STP_pc_heg_person",
+    "STP_pc_heg_chancellery",
+    "STP_pc_heg_trusted_list",
+    "STP_pc_heg_old_guard",
+    "STP_pc_heg_personal_oath",
+    "STP_pc_heg_rewrite_mandate",
+    "STP_pc_heg_closed_session",
+    "STP_pc_heg_revolution_name",
     "STP_pc_heg_regional_system",
     "STP_pw_take_bezhaysk",
     "STP_pc_heg_nod_break",
@@ -180,7 +184,6 @@ FOCUS_WEIGHTS = {
     "STP_cw_first_postwar_budget": 8,
     "STP_cw_restore_civil_authority": 8,
     "STP_pc_after_victory": 10,
-    "STP_pc_shabrat_cabinet": 12,
     "STP_pc_shabrat_politics": 12,
     "STP_pc_hegemony_open": 12,
     "STP_pc_freedom_open": 2,

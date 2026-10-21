@@ -297,6 +297,36 @@ spriteTypes = {
 		name = "GFX_focus_STP_ps_joint_staff"
 		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ps_joint_staff.png"
 	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_first_postwar_budget"
+		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_cw_first_postwar_budget.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_restore_civil_authority"
+		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_cw_restore_civil_authority.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_after_victory"
+		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_after_victory.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_republic_new_republic"
+		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pw_republic_new_republic.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_lib_assembly"
+		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_lib_assembly.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_freedom_open"
+		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_freedom_open.png"
+	}
 	spriteType = {
 		name = "GFX_focus_STP_ps_asylum_protocol"
 		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ps_asylum_protocol.png"
@@ -1783,7 +1813,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_ps_permanent_security"
-		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_ps_permanent_security.png"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ps_permanent_security.png"
 	}
 
 	spriteType = {
@@ -1867,6 +1897,16 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_focus_VAL_Army_Of_The_Ledger"
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Army_Of_The_Ledger.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_The_Steel_Contract"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_The_Steel_Contract.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Integrate_Occidia"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Integrate_Occidia.png"
 	}
 
 	spriteType = {
@@ -2173,4 +2213,44 @@ spriteTypes = {
 	spriteType = { name = "GFX_focus_WRK_pw_ebern_campaign" texturefile = "gfx/interface/goals/goal_generic_occypy_start_war.dds" }
 	spriteType = { name = "GFX_focus_WRK_pw_afrela_campaign" texturefile = "gfx/interface/goals/goal_generic_territory_or_war.dds" }
 	spriteType = { name = "GFX_focus_WRK_pw_regional_settlement" texturefile = "gfx/interface/goals/goal_generic_more_territorial_claims.dds" }
+
+	spriteType = {
+		name = "GFX_focus_WRK_reopen_emergency_workshops"
+		texturefile = "gfx/interface/goals/focus_generic_industry_1.dds"
+	}
+
+	spriteType = {
+		name = "GFX_focus_WRK_prioritize_arsenal_output"
+		texturefile = "gfx/interface/goals/focus_generic_military_industry.dds"
+	}
+
+	spriteType = {
+		name = "GFX_focus_WRK_preserve_machine_tools"
+		texturefile = "gfx/interface/goals/focus_generic_industry_investment.dds"
+	}
+
+	spriteType = {
+		name = "GFX_focus_WRK_collect_officer_returns"
+		texturefile = "gfx/interface/goals/focus_generic_military_mission.dds"
+	}
+
+	spriteType = {
+		name = "GFX_focus_WRK_contract_local_garrisons"
+		texturefile = "gfx/interface/goals/focus_generic_manpower.dds"
+	}
+
+	spriteType = {
+		name = "GFX_focus_WRK_prepare_officer_reserve"
+		texturefile = "gfx/interface/goals/focus_generic_military_academy.dds"
+	}
+
+	spriteType = {
+		name = "GFX_focus_WRK_prepare_civil_evacuation"
+		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
+	}
+
+	spriteType = {
+		name = "GFX_focus_WRK_prepare_military_evacuation"
+		texturefile = "gfx/interface/goals/focus_generic_arms_trade.dds"
+	}
 }

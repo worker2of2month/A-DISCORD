@@ -22,6 +22,7 @@ on_actions = {
 						RUS = { ADISCORD_vorkerland_apply_dirty_modifiers = yes }
 					}
 					ADISCORD_vorkerland_set_phase_prewar = yes
+					country_event = { id = ADISCORD_vorkerland_preparation.1 days = 14 }
 					country_event = {
 						id = ADISCORD_vorkerland_phase.1
 						days = 175

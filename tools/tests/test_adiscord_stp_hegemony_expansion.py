@@ -1827,5 +1827,412 @@ class DistrictProjectTests(unittest.TestCase):
         self.assertFalse(any(name.startswith("STP_sdir_district_") for _scope, name in f.variables))
 
 
+class BetrayalFixture:
+    """Execute the bounded payment/BOP contract; this is not native runtime QA."""
+
+    def __init__(self):
+        self.effects = {e.key: e.value for e in entries(
+            "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
+        )}
+        self.triggers = {e.key: e.value for e in entries(
+            "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"
+        )}
+        self.decisions = {e.key: e.value for e in block(entries(
+            "common/decisions/ADISCORD_STP_decisions.txt"
+        ), "STP_heg_betrayal_category")}
+        self.variables = {"ADISCORD_economy_treasury": 200}
+        self.flags = {"STP_cw_postwar"}
+        self.completed = {"STP_pc_hegemony_open"}
+        self.leader = "STP_maksim_shabrat"
+        self.capitulated = False
+        self.balance = None
+        self.modifiers = set()
+        self.pp = 100
+        self.manpower = 0
+        self.calls = []
+        self.run("STP_heg_betrayal_initialize")
+
+    def number(self, token):
+        if token == "power_balance_value":
+            return self.balance
+        try:
+            return float(token)
+        except ValueError:
+            return self.variables.get(token, 0)
+
+    def matches(self, rows):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
+        results = []
+        index = 0
+        while index < len(rows):
+            e = rows[index]
+            k, v = e.key, e.value
+            if not k:
+                name, operator, value = (r.value for r in rows[index:index + 3])
+                assert name == "political_power" and operator == "<"
+                result = self.pp < float(value)
+                index += 2
+            elif k in ("AND", "hidden_trigger", "custom_trigger_tooltip"):
+                result = self.matches([r for r in v if r.key != "tooltip"])
+            elif k in ("OR", "NOT"):
+                groups = []
+                cursor = 0
+                while cursor < len(v):
+                    width = 3 if not v[cursor].key else 1
+                    groups.append(v[cursor:cursor + width])
+                    cursor += width
+                any_match = any(self.matches(group) for group in groups)
+                result = any_match if k == "OR" else not any_match
+            elif k in self.triggers:
+                assert v in ("yes", "no"), k
+                result = self.matches(self.triggers[k]) == (v == "yes")
+            elif k == "has_power_balance":
+                assert scalar(v, "id") == "STP_heg_betrayal"
+                result = self.balance is not None
+            elif k == "has_variable":
+                result = v in self.variables
+            elif k == "has_country_flag":
+                result = v in self.flags
+            elif k == "has_completed_focus":
+                result = v in self.completed
+            else:
+                facts = {
+                    ("STS", "ruling_leader"): self.leader,
+                    ("STS", "has_capitulated", "yes"): self.capitulated,
+                    ("STS", "has_capitulated", "no"): not self.capitulated,
+                    ("STS", "power_balance_value", "STP_heg_betrayal"): self.balance,
+                }
+                facts.update({("STS", "variable", n): x for n, x in self.variables.items()})
+                facts.update({("STS", "has_dynamic_modifier", n): True for n in self.modifiers})
+                result = matches_conditions([e], facts, "STS")
+            results.append(result)
+            index += 1
+        return all(results)
+
+    def run(self, name):
+        self.execute(self.effects[name])
+
+    def action(self, name, phase):
+        self.execute(block(self.decisions["STP_heg_" + name], phase))
+
+    def execute(self, rows):
+        taken = False
+        for e in rows:
+            k, v = e.key, e.value
+            if k in ("if", "else_if", "else"):
+                if k == "if":
+                    taken = False
+                limit = next((r.value for r in v if r.key == "limit"), [])
+                if not taken and self.matches(limit):
+                    taken = True
+                    self.execute([r for r in v if r.key != "limit"])
+            elif k == "hidden_effect":
+                self.execute(v)
+            elif k in ("ADISCORD_economy_mark_dirty", "ADISCORD_reform_state_development"):
+                self.calls.append(k)
+            elif k in self.effects:
+                assert v == "yes", k
+                self.run(k)
+            elif k in ("set_variable", "add_to_variable", "subtract_from_variable", "multiply_variable"):
+                name = scalar(v, "var")
+                amount = self.number(scalar(v, "value"))
+                old = self.variables.get(name, 0)
+                self.variables[name] = {
+                    "set_variable": amount,
+                    "add_to_variable": old + amount,
+                    "subtract_from_variable": old - amount,
+                    "multiply_variable": old * amount,
+                }[k]
+            elif k == "clear_variable":
+                self.variables.pop(v, None)
+            elif k == "set_country_flag":
+                self.flags.add(v if isinstance(v, str) else scalar(v, "flag"))
+            elif k == "clr_country_flag":
+                self.flags.discard(v)
+            elif k == "set_power_balance":
+                self.balance = float(scalar(v, "set_value"))
+            elif k == "add_power_balance_value":
+                self.balance = max(-1, min(1, self.balance + float(scalar(v, "value"))))
+            elif k == "remove_power_balance":
+                self.balance = None
+            elif k == "add_dynamic_modifier":
+                self.modifiers.add(scalar(v, "modifier"))
+            elif k == "remove_dynamic_modifier":
+                self.modifiers.discard(v)
+            elif k == "add_political_power":
+                self.pp += self.number(v)
+            elif k == "add_manpower":
+                self.manpower += self.number(v)
+            elif k == "remove_decision":
+                self.calls.append(k + ":" + v)
+            elif k == "add_timed_idea":
+                self.calls.append(scalar(v, "idea"))
+            elif k == "country_event":
+                self.calls.append(scalar(v, "id"))
+            elif k != "custom_effect_tooltip":
+                raise AssertionError(f"Unsupported betrayal effect: {k}")
+
+
+class BetrayalLifecycleTests(unittest.TestCase):
+    def test_focus_forks_merge_and_localisation_values_load(self):
+        from tools.tests.test_adiscord_stp_preparation import walk
+
+        names = (
+            "chancellery", "trusted_list", "old_guard", "new_ladder",
+            "personal_oath", "official_history", "rewrite_mandate",
+            "public_trial", "closed_session", "revolution_name",
+        )
+        focuses = {scalar(e.value, "id"): e.value for e in entries(
+            "focus_trees/STP/postwar/shabrat/focuses.txt"
+        ) if e.key == "focus"}
+        nodes = {name: focuses["STP_pc_heg_" + name] for name in names}
+        positions = {(scalar(node, "x"), scalar(node, "y")) for node in nodes.values()}
+        self.assertEqual(len(positions), 10)
+        for left, right, merge in (
+            ("old_guard", "new_ladder", None),
+            ("public_trial", "closed_session", "revolution_name"),
+        ):
+            self.assertEqual(scalar(block(nodes[left], "mutually_exclusive"), "focus"), "STP_pc_heg_" + right)
+            self.assertEqual(scalar(block(nodes[right], "mutually_exclusive"), "focus"), "STP_pc_heg_" + left)
+            if merge:
+                prerequisites = [{e.value for e in row.value} for row in nodes[merge] if row.key == "prerequisite"]
+                self.assertIn({"STP_pc_heg_" + left, "STP_pc_heg_" + right}, prerequisites)
+        route = ("chancellery", "trusted_list", "old_guard", "personal_oath",
+                 "rewrite_mandate", "closed_session", "revolution_name")
+        self.assertEqual(sum(int(scalar(nodes[n], "cost")) * 7 for n in route), 175)
+        self.assertEqual((int(scalar(nodes["public_trial"], "cost")) - int(scalar(nodes["closed_session"], "cost"))) * 7, 7)
+        generated = (ROOT / "common/national_focus/ADISCORD_STP_civil_war.txt").read_text(encoding="utf-8")
+        for name in names:
+            self.assertEqual(len(re.findall(r"(?m)^\s*id = STP_pc_heg_" + name + r"$", generated)), 1)
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            values = {}
+            for line in path.read_text(encoding="utf-8-sig").splitlines():
+                match = re.fullmatch(r'\s+([^ :]+):(?:\d+)?\s+"((?:[^"\\]|\\.)*)"\s*', line)
+                if match:
+                    values[match[1]] = match[2]
+            for name in names:
+                for suffix in ("", "_desc"):
+                    self.assertIn("STP_pc_heg_" + name + suffix, values)
+            event_rows = [e.value for e in entries("events/ADISCORD_STP_events.txt")
+                          if e.key == "country_event" and scalar(e.value, "id") in
+                          {f"ADISCORD_STP_pc.{number}" for number in range(100, 108)}]
+            self.assertEqual(len(event_rows), 8)
+            for row in event_rows:
+                for entry in walk(row):
+                    if entry.key in ("title", "desc", "text", "name") and isinstance(entry.value, str):
+                        value = values[entry.value].replace(r"\n", "\n")
+                        self.assertNotRegex(value, "[\u2013\u2014]")
+                        self.assertLessEqual(len(value), 3000)
+                        self.assertLessEqual(len(value.encode("utf-8")), 5500)
+
+    def test_initialization_preserves_progress_and_final_cannot_reopen(self):
+        f = BetrayalFixture()
+        self.assertAlmostEqual(f.variables["STP_heg_betrayal_score"], 20)
+        f.run("STP_heg_betrayal_add_15")
+        f.run("STP_heg_betrayal_initialize")
+        self.assertAlmostEqual(f.variables["STP_heg_betrayal_score"], 35)
+        f.completed.add("STP_pc_heg_revolution_name")
+        f.run("STP_heg_betrayal_close")
+        f.run("STP_heg_betrayal_initialize")
+        self.assertIsNone(f.balance)
+        self.assertFalse(f.modifiers)
+
+    def test_penalties_belong_to_native_bop_ranges(self):
+        balance = block(entries("common/bop/STP.txt"), "STP_heg_betrayal")
+        ranges = {
+            scalar(r.value, "id"): r.value
+            for side in balance if side.key == "side"
+            for r in side.value if r.key == "range"
+        }
+        expected = {
+            "quiet": (-1, -.5, {}),
+            "doubts": (-.5, 0, {"stability_factor": -.03}),
+            "anger": (0, .5, {"stability_factor": -.06, "political_power_factor": -.05}),
+            "rupture": (.5, 1, {
+                "stability_factor": -.10, "political_power_factor": -.10,
+                "ADISCORD_economy_admin_expense_factor": .05,
+            }),
+        }
+        for suffix, (low, high, modifiers) in expected.items():
+            with self.subTest(range=suffix):
+                native = ranges["STP_heg_betrayal_" + suffix]
+                self.assertEqual(float(scalar(native, "min")), low)
+                self.assertEqual(float(scalar(native, "max")), high)
+                actual = next((e.value for e in native if e.key == "modifier"), [])
+                self.assertEqual({e.key: float(e.value) for e in actual}, modifiers)
+                self.assertEqual(scalar(block(native, "on_deactivate"), "ADISCORD_economy_mark_dirty"), "yes")
+        f = BetrayalFixture()
+        for score in (100, 75, 50, 25, 0):
+            f.balance = score / 50 - 1
+            f.run("STP_heg_betrayal_refresh")
+            self.assertAlmostEqual(f.variables["STP_heg_betrayal_score"], score)
+            self.assertFalse(f.modifiers)
+        self.assertNotIn("STP_heg_betrayal_penalties", read(
+            "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt"))
+
+    def test_fractional_affordability_and_actual_discount_receipt(self):
+        for discount, price in ((False, 50), (True, 25)):
+            for balance in (price - .01, price):
+                with self.subTest(discount=discount, balance=balance):
+                    f = BetrayalFixture()
+                    if discount:
+                        f.completed.add("STP_pc_heg_old_guard")
+                    f.pp = balance
+                    f.action("receive_delegation", "complete_effect")
+                    self.assertEqual(f.pp, balance if balance < price else 0)
+                    f.completed.add("STP_pc_heg_old_guard")
+                    f.action("receive_delegation", "cancel_effect")
+                    f.action("receive_delegation", "cancel_effect")
+                    self.assertEqual(f.pp, balance)
+
+    def test_treasury_boundary_shared_slot_and_refund_ledger(self):
+        f = BetrayalFixture()
+        f.completed.add("STP_pc_heg_old_guard")
+        f.variables["ADISCORD_economy_treasury"] = 99.99
+        f.action("pay_veterans", "complete_effect")
+        self.assertNotIn("STP_heg_operation_kind", f.variables)
+        f.variables["ADISCORD_economy_treasury"] = 100
+        f.action("pay_veterans", "complete_effect")
+        for name in ("receive_delegation", "pay_veterans", "train_cadres", "victory_campaign"):
+            f.action(name, "complete_effect")
+        self.assertEqual(f.variables["STP_heg_operation_kind"], 2)
+        self.assertEqual(f.pp, 100)
+        self.assertEqual(f.variables["ADISCORD_economy_treasury"], 0)
+        f.run("STP_heg_betrayal_close")
+        f.action("pay_veterans", "remove_effect")
+        self.assertEqual(f.variables["ADISCORD_economy_treasury"], 100)
+        self.assertEqual(f.variables["ADISCORD_economy_current_month_action_costs"], 100)
+        self.assertEqual(f.variables["ADISCORD_economy_current_month_action_income"], 100)
+
+    def test_relief_delivery_once_and_shared_cooldown(self):
+        for action, expected in (("receive_delegation", 10), ("pay_veterans", 5)):
+            with self.subTest(action=action):
+                f = BetrayalFixture()
+                f.completed.add("STP_pc_heg_old_guard")
+                f.action(action, "complete_effect")
+                f.action(action, "remove_effect")
+                f.action(action, "remove_effect")
+                self.assertAlmostEqual(f.variables["STP_heg_betrayal_score"], expected)
+                self.assertIn("STP_heg_relief_cooldown", f.flags)
+                f.action("pay_veterans", "complete_effect")
+                f.action("receive_delegation", "complete_effect")
+                self.assertNotIn("STP_heg_operation_kind", f.variables)
+
+    def test_every_pending_action_refunds_on_final_or_country_loss(self):
+        for action in ("receive_delegation", "pay_veterans", "train_cadres", "victory_campaign"):
+            for cause in ("final", "leader", "capitulation"):
+                with self.subTest(action=action, cause=cause):
+                    f = BetrayalFixture()
+                    f.completed.add("STP_pc_heg_old_guard")
+                    f.action(action, "complete_effect")
+                    if cause == "final":
+                        f.completed.add("STP_pc_heg_revolution_name")
+                        f.run("STP_heg_betrayal_close")
+                    elif cause == "leader":
+                        f.leader = "STP_other"
+                        f.run("STP_heg_betrayal_reconcile")
+                    else:
+                        f.capitulated = True
+                    f.action(action, "remove_effect")
+                    f.action(action, "cancel_effect")
+                    self.assertEqual(f.pp, 100)
+                    self.assertEqual(f.variables["ADISCORD_economy_treasury"], 200)
+                    self.assertNotIn("STP_heg_operation_kind", f.variables)
+                    if cause != "capitulation":
+                        self.assertIsNone(f.balance)
+                        self.assertFalse(f.modifiers)
+
+    def test_veteran_recall_is_paid_once_and_cancellation_releases_it(self):
+        f = BetrayalFixture()
+        f.action("pay_veterans", "complete_effect")
+        self.assertNotIn("STP_heg_operation_kind", f.variables)
+        f.completed.add("STP_pc_heg_old_guard")
+        f.action("pay_veterans", "complete_effect")
+        f.action("pay_veterans", "cancel_effect")
+        self.assertEqual(f.manpower, 0)
+        self.assertNotIn("STP_heg_veterans_recalled", f.flags)
+        self.assertEqual(f.variables["ADISCORD_economy_treasury"], 200)
+        f.action("pay_veterans", "complete_effect")
+        f.action("pay_veterans", "remove_effect")
+        f.action("pay_veterans", "remove_effect")
+        self.assertEqual(f.manpower, 1500)
+        self.assertEqual(f.variables["ADISCORD_economy_treasury"], 100)
+        f.flags.discard("STP_heg_relief_cooldown")
+        f.action("pay_veterans", "complete_effect")
+        self.assertNotIn("STP_heg_operation_kind", f.variables)
+        f.run("STP_heg_betrayal_close")
+        self.assertEqual(f.manpower, 1500)
+        self.assertIn("STP_heg_veterans_recalled", f.flags)
+
+    def test_personal_routes_have_distinct_programmes_and_rejoin(self):
+        focuses = {scalar(e.value, "id"): e.value for e in entries(
+            "focus_trees/STP/postwar/shabrat/focuses.txt") if e.key == "focus"}
+        def focus(name):
+            return focuses["STP_pc_heg_" + name]
+        def parents(name):
+            return {e.value for e in block(focus(name), "prerequisite")}
+        self.assertEqual(parents("personal_oath"), {"STP_pc_heg_old_guard"})
+        self.assertEqual(parents("official_history"), {"STP_pc_heg_new_ladder"})
+        self.assertEqual(parents("rewrite_mandate"), {
+            "STP_pc_heg_personal_oath", "STP_pc_heg_official_history"})
+        for branch, action in (("old_guard", "pay_veterans"), ("new_ladder", "train_cadres")):
+            self.assertEqual(scalar(block(focus(branch), "completion_reward"),
+                                    "unlock_decision_tooltip"), "STP_heg_" + action)
+        self.assertNotIn("STP_heg_betrayal_reduce_15", {
+            e.key for e in block(focus("old_guard"), "completion_reward")})
+        # These rows show reconstruction, personal rule and the imperial trunk together.
+        for names in (
+            ("STP_pw_republic_civil_workshops", "STP_pw_republic_accountable_arsenals",
+             "STP_pc_heg_trusted_list", "STP_pc_heg_emergency"),
+            ("STP_pw_republic_industrial_settlement", "STP_pc_heg_old_guard",
+             "STP_pc_heg_new_ladder", "STP_pc_heg_subordinate"),
+            ("STP_pc_heg_personal_oath", "STP_pc_heg_official_history",
+             "STP_pc_heg_limit_parties"),
+        ):
+            positions = sorted(int(scalar(focuses[name], "x")) for name in names)
+            self.assertTrue(all(b - a >= 2 for a, b in zip(positions, positions[1:])))
+
+    def test_training_and_press_deliver_once_and_keep_their_prices(self):
+        for action, reward in (("train_cadres", "ADISCORD_reform_state_development"),
+                               ("victory_campaign", "STP_heg_victory_press")):
+            f = BetrayalFixture()
+            f.action(action, "complete_effect")
+            f.action(action, "remove_effect")
+            f.action(action, "remove_effect")
+            self.assertEqual(f.calls.count(reward), 1)
+            self.assertEqual(f.pp, 75 if action == "victory_campaign" else 100)
+            self.assertEqual(f.variables["ADISCORD_economy_treasury"], 100 if action == "train_cadres" else 200)
+
+    def test_letters_and_press_follow_completed_operations(self):
+        source = read("focus_trees/STP/postwar/shabrat/focuses.txt")
+        for event in ("ADISCORD_STP_pc.100", "ADISCORD_STP_pc.103"):
+            self.assertNotIn(event, source)
+        for action, event in (("receive_delegation", "ADISCORD_STP_pc.100"),
+                              ("victory_campaign", "ADISCORD_STP_pc.103")):
+            f = BetrayalFixture()
+            f.action(action, "complete_effect")
+            self.assertNotIn(event, f.calls)
+            f.action(action, "remove_effect")
+            f.action(action, "remove_effect")
+            self.assertEqual(f.calls.count(event), 1)
+
+    def test_story_choices_have_free_timeout_answer_and_safe_late_close(self):
+        events = {scalar(e.value, "id"): e.value for e in entries("events/ADISCORD_STP_events.txt")
+                  if e.key == "country_event"}
+        for number in (101, 102, 104, 105, 106):
+            f = BetrayalFixture()
+            f.pp = 0
+            event = events[f"ADISCORD_STP_pc.{number}"]
+            self.assertEqual(scalar(event, "timeout_days"), "14")
+            options = [e.value for e in event if e.key == "option"]
+            self.assertTrue(f.matches(block(options[0], "trigger")))
+            self.assertFalse(f.matches(block(options[1], "trigger")))
+            f.completed.add("STP_pc_heg_revolution_name")
+            self.assertEqual([f.matches(block(o, "trigger")) for o in options], [False, False, True])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -2883,7 +2883,7 @@ STP_qol_staff_available = {
 STP_qol_elite_administration_available = {
 	STP_qol_staff_available = yes
 	OR = {
-		has_completed_focus = STP_pc_shabrat_cabinet
+		has_completed_focus = STP_pc_after_victory
 		has_completed_focus = STP_pw_republic_district_authority
 		has_completed_focus = STP_pw_party_executive_secretariat
 	}
@@ -4485,4 +4485,43 @@ STP_sdir_naval_can_pay = {
 	STP_sdir_naval_site_available = yes
 	NOT = { has_variable = STP_sdir_naval_deposit }
 	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+}
+
+# Personal consolidation remains separate from the inherited external course.
+STP_heg_personal_course = {
+	tag = STS
+	has_country_flag = STP_cw_postwar
+	STP_pc_founder_rules = yes
+	STP_pc_hegemony_continues = yes
+}
+
+STP_heg_betrayal_active = {
+	STP_heg_personal_course = yes
+	has_completed_focus = STP_pc_hegemony_open
+	has_power_balance = { id = STP_heg_betrayal }
+	NOT = { has_completed_focus = STP_pc_heg_revolution_name }
+}
+
+STP_heg_operation_available = {
+	STP_heg_betrayal_active = yes
+	has_capitulated = no
+	NOT = { has_variable = STP_heg_operation_kind }
+}
+
+STP_heg_relief_available = {
+	STP_heg_operation_available = yes
+	NOT = { has_country_flag = STP_heg_relief_cooldown }
+}
+
+STP_heg_delegation_affordable = {
+	OR = {
+		AND = {
+			has_completed_focus = STP_pc_heg_old_guard
+			NOT = { political_power < 25 }
+		}
+		AND = {
+			NOT = { has_completed_focus = STP_pc_heg_old_guard }
+			NOT = { political_power < 50 }
+		}
+	}
 }

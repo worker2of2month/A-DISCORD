@@ -682,6 +682,7 @@ VAL_military_operations = {
 			has_completed_focus = VAL_Northern_Settlement
 			TFF = { exists = yes } NOD = { exists = yes is_subject = no }
 			NOT = { has_country_flag = VAL_nod_frontier_agreement }
+			NOT = { check_variable = { var = VAL_ardent_stage value = 1 compare = equals } }
 		}
 		available = {
 			custom_trigger_tooltip = { tooltip = VAL_nod_frontier_offer_possible_tt VAL_nod_frontier_offer_current = yes }
@@ -691,6 +692,356 @@ VAL_military_operations = {
 		days_re_enable = 30
 		complete_effect = { country_event = { id = val_contract.380 } }
 		ai_will_do = { base = 20 }
+	}
+
+	# Refused protectorate: Ardent keeps the wartime mandate with Kefreyt's backing.
+	# The operations share the foreign-operation slot; VAL_ardent_operation_paid
+	# is their single payment receipt because only one can run at a time.
+	VAL_ardent_mandate = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = {
+			VAL_ardent_route_visible = yes
+			NOT = { has_country_flag = VAL_ardent_mandate_secured }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_ardent_operations_open_tt
+				VAL_ardent_operations_open = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_ardent_operation_slot_free_tt
+				NOT = { has_country_flag = VAL_foreign_operation_active }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_ardent_mandate_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 50 }
+			ADISCORD_economy_can_spend_50 = yes
+		}
+		days_remove = 30
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = VAL_ardent_mandate_start_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_ardent_operations_open = yes
+						NOT = { has_country_flag = VAL_foreign_operation_active }
+						NOT = { has_political_power < 50 }
+						ADISCORD_economy_can_spend_50 = yes
+					}
+					add_political_power = -50
+					ADISCORD_economy_spend_50 = yes
+					set_country_flag = VAL_foreign_operation_active
+					set_country_flag = VAL_ardent_operation_paid
+				}
+			}
+		}
+		cancel_trigger = {
+			hidden_trigger = {
+				OR = {
+					NOT = { has_country_flag = VAL_ardent_operation_paid }
+					NOT = { VAL_ardent_operations_open = yes }
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = VAL_ardent_operation_cancelled_50_tt
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = VAL_ardent_operation_paid }
+					ADISCORD_economy_receive_50 = yes
+					clr_country_flag = VAL_ardent_operation_paid
+					clr_country_flag = VAL_foreign_operation_active
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					has_country_flag = VAL_ardent_operation_paid
+					VAL_ardent_operations_open = yes
+				}
+				custom_effect_tooltip = VAL_ardent_mandate_success_tt
+				hidden_effect = {
+					clr_country_flag = VAL_ardent_operation_paid
+					clr_country_flag = VAL_foreign_operation_active
+					set_country_flag = VAL_ardent_mandate_secured
+					TFF = { country_event = { id = ADISCORD_TFF.20 } }
+				}
+			}
+			else = {
+				custom_effect_tooltip = VAL_ardent_operation_cancelled_50_tt
+				hidden_effect = {
+					if = {
+						limit = { has_country_flag = VAL_ardent_operation_paid }
+						ADISCORD_economy_receive_50 = yes
+						clr_country_flag = VAL_ardent_operation_paid
+						clr_country_flag = VAL_foreign_operation_active
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = { factor = 0 NOT = { ADISCORD_economy_can_spend_100 = yes } }
+		}
+	}
+
+	# Trade route: Kesai joins the committee if the assembly still holds it.
+	VAL_ardent_community_debts = {
+		icon = ADISCORD_deal
+		allowed = { tag = VAL }
+		visible = {
+			VAL_ardent_route_visible = yes
+			has_completed_focus = VAL_Trading_Partners
+			has_country_flag = VAL_ardent_mandate_secured
+			NOT = { has_country_flag = VAL_ardent_route_prepared }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_ardent_operations_open_tt
+				VAL_ardent_operations_open = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_ardent_operation_slot_free_tt
+				NOT = { has_country_flag = VAL_foreign_operation_active }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_ardent_community_debts_cost
+		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
+		days_remove = 30
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = VAL_ardent_community_debts_start_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_ardent_operations_open = yes
+						has_country_flag = VAL_ardent_mandate_secured
+						NOT = { has_country_flag = VAL_foreign_operation_active }
+						ADISCORD_economy_can_spend_100 = yes
+					}
+					ADISCORD_economy_spend_100 = yes
+					set_country_flag = VAL_foreign_operation_active
+					set_country_flag = VAL_ardent_operation_paid
+				}
+			}
+		}
+		cancel_trigger = {
+			hidden_trigger = {
+				OR = {
+					NOT = { has_country_flag = VAL_ardent_operation_paid }
+					NOT = { VAL_ardent_operations_open = yes }
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = VAL_ardent_operation_cancelled_100_tt
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = VAL_ardent_operation_paid }
+					ADISCORD_economy_receive_100 = yes
+					clr_country_flag = VAL_ardent_operation_paid
+					clr_country_flag = VAL_foreign_operation_active
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					has_country_flag = VAL_ardent_operation_paid
+					VAL_ardent_operations_open = yes
+				}
+				custom_effect_tooltip = VAL_ardent_community_debts_success_tt
+				hidden_effect = {
+					clr_country_flag = VAL_ardent_operation_paid
+					clr_country_flag = VAL_foreign_operation_active
+					set_country_flag = VAL_ardent_route_prepared
+				}
+			}
+			else = {
+				custom_effect_tooltip = VAL_ardent_operation_cancelled_100_tt
+				hidden_effect = {
+					if = {
+						limit = { has_country_flag = VAL_ardent_operation_paid }
+						ADISCORD_economy_receive_100 = yes
+						clr_country_flag = VAL_ardent_operation_paid
+						clr_country_flag = VAL_foreign_operation_active
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = { factor = 0 NOT = { ADISCORD_economy_can_spend_250 = yes } }
+		}
+	}
+
+	# Coercive route: instructors raise the committee's share of the Frontier army.
+	VAL_ardent_october_instructors = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = {
+			VAL_ardent_route_visible = yes
+			has_completed_focus = VAL_October_Of_2160
+			has_country_flag = VAL_ardent_mandate_secured
+			NOT = { has_country_flag = VAL_ardent_route_prepared }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_ardent_operations_open_tt
+				VAL_ardent_operations_open = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_ardent_operation_slot_free_tt
+				NOT = { has_country_flag = VAL_foreign_operation_active }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_ardent_october_instructors_cost
+		custom_cost_trigger = {
+			NOT = { command_power < 25 }
+			ADISCORD_economy_can_spend_50 = yes
+		}
+		days_remove = 30
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = VAL_ardent_october_instructors_start_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_ardent_operations_open = yes
+						has_country_flag = VAL_ardent_mandate_secured
+						NOT = { has_country_flag = VAL_foreign_operation_active }
+						NOT = { command_power < 25 }
+						ADISCORD_economy_can_spend_50 = yes
+					}
+					add_command_power = -25
+					ADISCORD_economy_spend_50 = yes
+					set_country_flag = VAL_foreign_operation_active
+					set_country_flag = VAL_ardent_operation_paid
+				}
+			}
+		}
+		cancel_trigger = {
+			hidden_trigger = {
+				OR = {
+					NOT = { has_country_flag = VAL_ardent_operation_paid }
+					NOT = { VAL_ardent_operations_open = yes }
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = VAL_ardent_operation_cancelled_50_cp_tt
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = VAL_ardent_operation_paid }
+					ADISCORD_economy_receive_50 = yes
+					clr_country_flag = VAL_ardent_operation_paid
+					clr_country_flag = VAL_foreign_operation_active
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					has_country_flag = VAL_ardent_operation_paid
+					VAL_ardent_operations_open = yes
+				}
+				custom_effect_tooltip = VAL_ardent_october_instructors_success_tt
+				hidden_effect = {
+					clr_country_flag = VAL_ardent_operation_paid
+					clr_country_flag = VAL_foreign_operation_active
+					set_country_flag = VAL_ardent_route_prepared
+				}
+			}
+			else = {
+				custom_effect_tooltip = VAL_ardent_operation_cancelled_50_cp_tt
+				hidden_effect = {
+					if = {
+						limit = { has_country_flag = VAL_ardent_operation_paid }
+						ADISCORD_economy_receive_50 = yes
+						clr_country_flag = VAL_ardent_operation_paid
+						clr_country_flag = VAL_foreign_operation_active
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = { factor = 0 NOT = { ADISCORD_economy_can_spend_100 = yes } }
+		}
+	}
+
+	VAL_ardent_uprising = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = {
+			VAL_ardent_route_visible = yes
+			has_country_flag = VAL_ardent_mandate_secured
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_ardent_operations_open_tt
+				VAL_ardent_operations_open = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_ardent_no_running_operation_tt
+				NOT = { has_country_flag = VAL_ardent_operation_paid }
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_ardent_frontier_at_peace_tt
+				TFF = { has_war = no }
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_ardent_border_districts_tt
+				TFF = {
+					83 = {
+						is_owned_by = TFF
+						is_controlled_by = TFF
+					}
+					85 = {
+						is_owned_by = TFF
+						is_controlled_by = TFF
+					}
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_ardent_uprising_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			NOT = { has_equipment = { infantry_equipment < 2000 } }
+		}
+		complete_effect = {
+			custom_effect_tooltip = VAL_ardent_uprising_tt
+			if = {
+				limit = {
+					has_country_flag = VAL_ardent_route_prepared
+					has_completed_focus = VAL_October_Of_2160
+				}
+				custom_effect_tooltip = VAL_ardent_uprising_instructors_tt
+			}
+			else_if = {
+				limit = {
+					has_country_flag = VAL_ardent_route_prepared
+					has_completed_focus = VAL_Trading_Partners
+				}
+				custom_effect_tooltip = VAL_ardent_uprising_debts_tt
+			}
+			else = {
+				custom_effect_tooltip = VAL_ardent_uprising_base_tt
+			}
+			hidden_effect = { VAL_ardent_start_uprising = yes }
+		}
+		ai_will_do = {
+			base = 2
+			modifier = { factor = 10 has_country_flag = VAL_ardent_route_prepared }
+		}
 	}
 
 	VAL_campaign_against_nod = {

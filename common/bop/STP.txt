@@ -115,3 +115,59 @@ STP_party_constitution = {
 		}
 	}
 }
+
+# Betrayal score is (native balance + 1) * 50; native ranges own the modifiers.
+STP_heg_betrayal = {
+	initial_value = -0.60
+	left_side = STP_heg_trust_side
+	right_side = STP_heg_resentment_side
+	decision_category = STP_heg_betrayal_category
+	side = {
+		id = STP_heg_trust_side
+		icon = GFX_bop_STP_heg_trust
+		range = {
+			id = STP_heg_betrayal_quiet
+			min = -1
+			max = -0.50
+			on_activate = { STP_heg_betrayal_refresh = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = STP_heg_betrayal_doubts
+			min = -0.50
+			max = 0
+			modifier = {
+				stability_factor = -0.03
+			}
+			on_activate = { STP_heg_betrayal_refresh = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+	side = {
+		id = STP_heg_resentment_side
+		icon = GFX_bop_STP_heg_resentment
+		range = {
+			id = STP_heg_betrayal_anger
+			min = 0
+			max = 0.50
+			modifier = {
+				stability_factor = -0.06
+				political_power_factor = -0.05
+			}
+			on_activate = { STP_heg_betrayal_refresh = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = STP_heg_betrayal_rupture
+			min = 0.50
+			max = 1
+			modifier = {
+				stability_factor = -0.10
+				political_power_factor = -0.10
+				ADISCORD_economy_admin_expense_factor = 0.05
+			}
+			on_activate = { STP_heg_betrayal_refresh = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+}

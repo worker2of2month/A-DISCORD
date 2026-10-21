@@ -208,12 +208,10 @@ STS_shabrat_reconstruction_plan = {
 		STP_pc_economy_recovery_budget
 		STP_pc_development_country_must_live
 		STP_pc_development_posters_on_ruins
-		STP_pc_development_rebuild_as_duty
 		STP_pc_development_engineers_on_radio
-		STP_pc_development_reopen_universities
 		STP_pc_development_generation_reconstruction
+		STP_pc_development_reopen_universities
 		STP_pc_development_national_research_institutes
-		STP_pc_shabrat_cabinet
 		STP_pw_republic_new_republic
 		STP_pw_republic_district_authority
 		STP_pw_republic_civil_records
@@ -263,7 +261,6 @@ STS_shabrat_hegemony_plan = {
 
 	ai_national_focuses = {
 		STP_pc_after_victory
-		STP_pc_shabrat_cabinet
 		STP_pc_war_ledgers
 		STP_pc_two_borders
 		STP_pc_shabrat_politics
@@ -274,6 +271,13 @@ STS_shabrat_hegemony_plan = {
 		STP_pc_heg_limit_parties
 		STP_pc_heg_lock
 		STP_pc_heg_person
+		STP_pc_heg_chancellery
+		STP_pc_heg_trusted_list
+		STP_pc_heg_old_guard
+		STP_pc_heg_personal_oath
+		STP_pc_heg_rewrite_mandate
+		STP_pc_heg_closed_session
+		STP_pc_heg_revolution_name
 		STP_pc_heg_regional_system
 		STP_pw_take_bezhaysk
 		STP_pc_heg_nod_break

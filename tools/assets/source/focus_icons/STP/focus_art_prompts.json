@@ -1,0 +1,221 @@
+{
+  "tool": "built-in image_gen",
+  "workflow": {
+    "individual_assets": "Separate transparent PNG files, flat country directory.",
+    "compositions": "Chat only; files remain outside the mod."
+  },
+  "focuses": [
+    {
+      "focus_id": "STP_cw_abila_workshops",
+      "title": "Мастерские Абилии",
+      "tool": "built-in image_gen",
+      "style_reference_paths": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/shabrat/GFX_focus_STP_Turn_The_Young_Officers.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_northern_desk.png"
+      ],
+      "assets": [
+        {
+          "file": "abila_workshops_metal_lathe.png",
+          "source": "exec-63a331f4-9150-4e47-a366-887694de6ec5.png",
+          "prompt": "Use case: stylized-concept. Make one separate transparent PNG cutout asset for a Hearts of Iron IV national focus titled Workshops of Abilia, Shabrat resistance. The two references are STYLE ONLY: dark painterly realistic collage miniatures, strong readable masses, aged materials, deep charcoal shadows, muted blue-grey steel and brown wood, selective warm amber practical lighting. Match their grounded gritty appearance. No people, no words, no logo, no border, no flag, no extra unrelated objects. Full isolated object with a compact clear silhouette and a little transparent margin. Actual alpha transparency everywhere outside the object including openings. No floor plane, no backdrop, no smoky haze or soft glow surrounding the silhouette. Detail should support readability at 180-pixel icon size. Subject: one old heavy metalworking lathe, long horizontal bed, chunky headstock on left, three-jaw chuck, carriage and handwheels, tailstock right, sturdy cast iron base. Worn dark desaturated blue-grey paint exposing steel. Three-quarter view from slightly above, front and left visible, machine extends left to right. A mounted small industrial task lamp casts a restrained amber pool directly onto the chuck and carriage; shade and lamp stay part of the machine. Both feet fully visible. Aspect ratio landscape about 3:2; machine fills frame. Not a factory room or a catalogue white studio product shot."
+        },
+        {
+          "file": "abila_workshops_rifle_workbench.png",
+          "source": "exec-6687335c-168a-4216-a01b-cd05de9b53e5.png",
+          "prompt": "Use case: stylized-concept. Make one separate transparent PNG cutout asset for a Hearts of Iron IV national focus titled Workshops of Abilia, Shabrat resistance. The two references are STYLE ONLY: dark painterly realistic collage miniatures, strong readable masses, aged materials, deep charcoal shadows, muted blue-grey steel and brown wood, selective warm amber practical lighting. Match their grounded gritty appearance. No people, no words, no logo, no border, no flag, no extra unrelated objects. Full isolated object with a compact clear silhouette and a little transparent margin. Actual alpha transparency everywhere outside the object including openings. No floor plane, no backdrop, no smoky haze or soft glow surrounding the silhouette. Detail should support readability at 180-pixel icon size. Subject: a single compact battered gunsmith's workbench with thick dark oak top, iron legs and lower shelf. One intact wooden-stock military rifle rests horizontally across the top with its fore-end supported in padded bench vise at center, stock left and barrel right. A small hammer and oil bottle lie on the surface. This is an illustrative prop, no diagrams or assembly instructions. All rifle and table parts contained within frame, all legs visible. Front three-quarter view from slightly above, tabletop legible. Wide low silhouette, rifle is clear at small scale. Restrained amber light falls from upper left but there is NO visible lamp and absolutely NO halo or ambient glow behind or around the cutout; edges are crisp and background is 100% transparent. No floor, no cast shadow outside the object. Landscape 3:2."
+        },
+        {
+          "file": "abila_workshops_factory_building.png",
+          "source": "exec-787a1c43-e57f-49a6-aae8-1acbea5cf442.png",
+          "prompt": "Use case: stylized-concept. Make one separate transparent PNG cutout asset for a Hearts of Iron IV national focus titled Workshops of Abilia, Shabrat resistance. The two references are STYLE ONLY: dark painterly realistic collage miniatures, strong readable masses, aged materials, deep charcoal shadows, muted blue-grey steel and brown wood, selective warm amber practical lighting. Match their grounded gritty appearance. No people, no words, no logo, no border, no flag, no extra unrelated objects. Full isolated object with a compact clear silhouette and a little transparent margin. Actual alpha transparency everywhere outside the object including openings. No floor plane, no backdrop, no smoky haze or soft glow surrounding the silhouette. Detail should support readability at 180-pixel icon size. Subject: one low compact soot-stained brick industrial workshop building, single storey, broad pitched corrugated metal roof, modest chimney, closed wide wooden factory doors and a row of three small windows glowing dim amber. A few narrow snow remnants on roof edges to suggest mountain country, but no mountains and no landscape. Exterior three-quarter view, front and right side visible. Dark desaturated slate-blue brick, oxidized metal roof, the warm windows are small points. Entire building cut out, visible foundation forms the bottom boundary with no terrain slab. No separate props, no weapons, no people. Crisp silhouette, absolutely no diffuse haze or glow outside walls. Intended as background-right element of a small horizontal icon. Landscape image."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "status": "generation_blocked",
+        "reason": "Image generator output safety check: violence",
+        "prompt": "Use case: compositing. Assemble these three supplied cutout assets into ONE wide Hearts of Iron IV national focus icon for 'Workshops of Abilia', Shabrat resistance. Input 1 lathe is the large left mass, input 2 rifle workbench is the lower foreground center-right mass, input 3 workshop building is the upper rear-right mass. Preserve their specific designs, shapes, materials and restrained warm lighting. Dense deliberate overlapping collage, not three separate objects in a row. Lathe remains clearly identifiable, rifle silhouette remains unobstructed above its vise. Building is smaller and darker behind the bench, roof/chimney/windows visible. Lathe about 55% total width, bench 50%, building 50%, overlapping; unified total silhouette width:height around 1.85:1. Wide landscape canvas about 1536x864, composition fills it with small transparent margin. Actual transparent background outside the combined silhouettes and through openings; no rectangular scene background, no floor, no haze or external glow, no text, no badge frame, no flag, no people, no extra props. Gritty realistic painterly political strategy-game icon. Deep blue-grey steel shadows and warm amber on working surfaces, restrained silver highlights. This is a composition preview made from the three assets; do not turn it into a realistic room."
+      }
+    },
+    {
+      "focus_id": "STP_cw_restore_civil_authority",
+      "title": "Вернуть гражданскую власть",
+      "tool": "built-in image_gen",
+      "style_reference_paths": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_Break_The_Northern_Ring.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_End_Kefreit.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_shabrat_politics.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_Steland_Hegemony.png"
+      ],
+      "assets": [
+        {
+          "file": "restore_civil_authority_council.png",
+          "source": "exec-b3153c9a-df3a-438f-867f-a1444e603a79.png",
+          "prompt": "Use case: stylized-concept. Create a separate transparent PNG asset for a small Hearts of Iron IV focus icon, 'Restore Civil Authority'. Attached 4 images are the user's EXACT STYLE references: compact gritty cutout photo-collage, realistic forms, hard-edged silhouette, high contrast cold blue-black shadows and sharp silver/off-white highlights, muted color, slight painterly unification, restrained detail that reads at 150px. Especially follow the council table in reference 3. Avoid polished 3D product-render appearance, amber/gold lighting, thick glowing outlines, soft vignettes, illustration background, badges, lettering. All subject edges within frame. True transparent alpha outside subjects and through gaps. Subject: a compact civilian council meeting, one unified cutout group of SIX adult civilian delegates in dark charcoal suits seated around a low broad dark wooden conference table seen from a slightly raised frontal three-quarter viewpoint. One silver-haired woman and one brown-haired middle-aged man among delegates, natural serious discussion, no identifiable real politicians. Three faces visible at far side, two seated profiles at ends, one back of head and shoulders foreground. A few small off-white sheets on the table, no readable writing, hands resting naturally, no raised gestures. Eye-level faces visible above table. Wide low triangular silhouette, width about 1.8 times height. Table front and all seated figures form one compact island. Cold directional light illuminates faces, white collars, knuckles and papers, deep blue-black shadows simplify suits. No flags, no walls, no room, no chairs extending far, no emblem, no guns, no border. It must look like a miniature photographic political collage scene like reference 3, not a detailed cinematic scene."
+        },
+        {
+          "file": "restore_civil_authority_hanging_flag.png",
+          "source": "exec-2548543c-a737-4337-95d4-bad32a10784c.png",
+          "prompt": "Use case: stylized-concept. Create a separate transparent PNG asset for a small Hearts of Iron IV focus icon, 'Restore Civil Authority'. Attached 4 images are the user's EXACT STYLE references: compact gritty cutout photo-collage, realistic forms, hard-edged silhouette, high contrast cold blue-black shadows and sharp silver/off-white highlights, muted color, slight painterly unification, restrained detail that reads at 150px. Especially follow the council table in reference 3. Avoid polished 3D product-render appearance, amber/gold lighting, thick glowing outlines, soft vignettes, illustration background, badges, lettering. All subject edges within frame. True transparent alpha outside subjects and through gaps. Subject: ONE hanging ceremonial cloth flag of fictional Shabrat's republic, for the side of a civilian council icon. Image 5 is the exact flag design reference: royal/dark blue field, exactly one small golden FOUR-pointed star in upper-left canton, one broad clean WHITE diagonal stripe running from bottom left to top right. Absolutely no red band, no extra stars, no sunburst, no eagle. Preserve the design faithfully across cloth folds. The banner is suspended from a slim dark silver horizontal top rod, cloth hanging downward in a few broad folds, bottom edge softly uneven, no fringe or stand. Vertical cloth proportions around 2:3. Subtle silver-blue light on cloth ridges, deep navy folds, restrained yellow star. No floor, no surrounding room. Only this single complete flag and its top rod isolated on transparent alpha, no labels, no duplicate."
+        },
+        {
+          "file": "restore_civil_authority_administration.png",
+          "source": "exec-74a72177-1f61-4760-89ef-a6fd47f7e74c.png",
+          "prompt": "Use case: stylized-concept. Create a separate transparent PNG asset for a small Hearts of Iron IV focus icon, 'Restore Civil Authority'. Attached 4 images are the user's EXACT STYLE references: compact gritty cutout photo-collage, realistic forms, hard-edged silhouette, high contrast cold blue-black shadows and sharp silver/off-white highlights, muted color, slight painterly unification, restrained detail that reads at 150px. Especially follow the council table in reference 3. Avoid polished 3D product-render appearance, amber/gold lighting, thick glowing outlines, soft vignettes, illustration background, badges, lettering. All subject edges within frame. True transparent alpha outside subjects and through gaps. Subject: ONE broad compact civic administration building, restrained early twentieth-century municipal architecture, two storeys, central entrance with four plain stone pilasters and a low triangular pediment, short symmetrical wings and narrow tall windows. Low wide silhouette, width 2.2 times height, shallow three-quarter view mostly frontal. Weathered cold grey stone with dark blue-black roof, selective pale silver highlights on cornices, windows nearly black. Serious modest provincial government building, not a palace, cathedral, US Capitol or famous landmark. No dome, no clock, no lettering, no emblems, no flags, no people, no surrounding city, no gardens, no sky. Isolate only building and small entrance steps on transparent background. It will sit BEHIND a foreground council meeting, so readable simple architecture, dark understated texture, not a detailed architectural visualization. Landscape canvas."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-fd04026a-3c39-4404-9453-1ba1989686f3.png",
+        "prompt": "Use case: compositing. Make ONE assembled wide national-focus icon for 'Restore Civil Authority'. Inputs 1-3 are the actual assets to combine: (1) six civilian delegates at a conference table, (2) hanging blue flag with golden four-pointed star and white ascending diagonal stripe, (3) grey civic administration building. Input 4 is the target style/composition reference from user's game mod. Place council large across the entire lower foreground, faces and hands crisp; make the grey building a smaller darker low backdrop behind their heads in upper center; use TWO scaled copies of the same blue flag asset as narrow flanking banners behind the council left and right, preserve star and ascending white stripe on both, do not mirror the symbols. Preserve actual asset designs. Dense overlapping cutout collage, wide low total silhouette with width about 1.8 times height, no tall tower, no rectangular background. Council remains dominant and building subdued, thin pale blue/silver contour light and deep blue-black shadows. Match the miniature political photo-collage quality of input 4. No additional props, no lettering, no new symbols, no frame, no floor or room, no hazy glow outside silhouettes. True transparent alpha background with little padding, landscape canvas. This preview should read instantly as civilians governing after a crisis, a close formal council meeting framed by its republic's banners."
+      }
+    },
+    {
+      "focus_id": "STP_pc_after_victory",
+      "title": "Правительство победы",
+      "tool": "built-in image_gen",
+      "style_reference_paths": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_Break_The_Northern_Ring.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_End_Kefreit.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_shabrat_politics.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_Steland_Hegemony.png"
+      ],
+      "portrait_reference_paths": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/leaders/STP/portrait_STP_Maksim_Shabrat.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/leaders/STP/portrait_STP_Leonid_Barchel.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/leaders/STP/portrait_STP_Ilya_Gornin.png"
+      ],
+      "flag_reference": "gfx/flags/STS_steland.tga",
+      "assets": [
+        {
+          "file": "victory_government_cabinet.png",
+          "source": "exec-c49430fb-247c-499d-99c1-589ba4a50c2e.png",
+          "prompt": "Use case: identity-preserve / stylized-concept. Make ONE separate transparent cutout group for the Hearts of Iron IV focus 'Government of Victory'. Images 1,2,3 are the exact in-mod portrait references for fictional characters: 1 Maksim Shabrat, younger brown-haired man with rectangular black glasses and stern face; 2 Leonid Barchel, middle-aged clean-shaven brown-haired officer in high-collared brown uniform; 3 Ilya Gornin, older thin grey-haired civilian with narrow glasses. Preserve these three identities, hairstyles, glasses and age differences. Image 4 is STYLE reference only: gritty miniature realistic political photo-collage with hard silhouette, navy-black shadows and silver-white directional highlights. Compose these three men as a tightly overlapping waist-up group: Shabrat centered and slightly ahead wearing a dark civilian suit, white shirt and dark tie, Barchel left rear in his original high-collared uniform, Gornin right rear in a dark suit. Calm serious cabinet portrait after a civil war, not celebrating, no salutes. Shabrat looks forward, other men slightly turned toward center. Their shoulders create a wide low triangular silhouette, clean naturally cropped lower boundary at waist, arms at sides not reaching beyond image. No full legs, no table, no flag, no podium, no papers, no extra people, no weapons or new medals, no text. Cold blue-silver palette with natural desaturated skin, textured painterly unification, not glossy 3D. Entire group fully in frame with margin, landscape 3:2. Actual transparent alpha background, no room, no vignette, no glow or smoke behind silhouettes."
+        },
+        {
+          "file": "victory_government_silver_laurel.png",
+          "source": "exec-e78ae3f6-2bc3-4fcc-b02f-3fa9b3641517.png",
+          "prompt": "Use case: stylized-concept. ONE separate transparent cutout asset for a Hearts of Iron IV focus icon 'Government of Victory'. The reference shows the user's metallic political icon style. Subject: two connected sculpted SILVER LAUREL branches forming a low broad upward-curving arc, tied together at bottom center with a small plain dark steel band. The branches spread widely left and right and tips rise gently, leaving a completely open transparent center; not a full circular wreath and not a shield frame. Width 3 times height. Large individually readable laurel leaves with sharp embossed ridges, worn brushed silver, charcoal recesses, subtle blue reflections. Strong small-icon silhouette. Strictly silver and blue-black, no gold, no lettering, no star, no eagle, no flag, no pedestal, no background, no floor, no glow cloud. Front view with slight dimensional relief. Entire arc fully in frame with margin, landscape. True alpha transparency around and between all leaves. Gritty realistic game collage texture, not polished jewelry, not vector."
+        },
+        {
+          "file": "restore_civil_authority_hanging_flag.png",
+          "reused_from": "STP_cw_restore_civil_authority",
+          "note": "STS.tga and STS_steland.tga verified pixel-identical."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-31ee9c29-59e4-4069-9161-2116b212cb88.png",
+        "prompt": "Use case: compositing. Assemble a WIDE national-focus icon titled Government of Victory using inputs 1-3 and the miniature gritty blue-silver style of input 4. Input1 is the three-person cabinet: retain all three EXACT faces, Shabrat with dark rectangular glasses in front center, Barchel officer on left, elderly Gornin on right. They are the dominant large central group. Input2 is their actual navy flag with one gold four-point star and a white diagonal stripe; place a SINGLE draped flag behind the group's left half, top bar angled slightly, star visible in an exposed upper-left patch, cloth mostly obscured by shoulders. Do not add or mirror another flag. Input3 is the silver laurel arc: place low and broad across the bottom, wrapping the lower torso edges without touching faces, extending laterally to help make the design wide. Compact overlapping political photo-collage. Make total silhouette width roughly 1.8 times height, a low broad composition on landscape 16:9 canvas. Use chest-up framing for the group to avoid a tall portrait. White collars and faces clearly separated from blue-black suit masses, sharp silver highlights on laurel, deeply shaded fabric, no broad halo. No words, no numerals, no border, no weapons, no podium, no building, no backdrop or smoke. True transparent background outside assembled silhouette and through gaps. Keep margins around complete flag bar and laurel tips. Output one unified composition preview, not a sheet."
+      }
+    },
+    {
+      "focus_id": "STP_pc_freedom_open",
+      "title": "Свобода против рабства",
+      "tool": "built-in image_gen",
+      "style_reference_paths": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_Break_The_Northern_Ring.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_End_Kefreit.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_shabrat_politics.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_Steland_Hegemony.png"
+      ],
+      "assets": [
+        {
+          "file": "freedom_open_hand_broken_shackle.png",
+          "source": "exec-bf881a3b-2f7d-4992-985f-1926abf6fedf.png",
+          "prompt": "Use case: stylized-concept. Make ONE isolated transparent cutout asset for a Hearts of Iron IV political focus 'Freedom against slavery'. Reference 1 and 2 are STYLE ONLY: gritty cold-blue and silver political collage miniature, high contrast hard silhouette, realistic texture. Subject: a single realistic adult human RIGHT hand and short forearm rising diagonally from lower left toward upper center, open palm facing viewer and slightly upward, fingers naturally relaxed and separated, thumb clearly on viewer's left, anatomically correct five fingers. A heavy aged iron wrist cuff has broken open at the wrist; two short chain ends of 2-3 links dangle left and right, with one clearly snapped link. No injury, no wounds or skin marks, no violence happening. A simple dark civilian coat sleeve at lower cut-off edge. Pale naturally colored skin with cold directional silver-white light, deep navy charcoal metal shadows. Hand is the dominant readable mass, opening cuff and broken link clearly visible. No clenched fist, no second hand, no body, no face, no extra fingers. Do not turn skin into metal statue. No backdrop, no floor, no frame, no text, no flags, no papers, no broad glow or smoke. Actual transparent alpha background outside cutout and through chain holes. Full fingertips and chain ends inside canvas, margin around every edge. Landscape 3:2 canvas, compact diagonal pose suited to foreground of a wide icon."
+        },
+        {
+          "file": "freedom_open_assembly_seats.png",
+          "source": "exec-03ce2f2d-28c0-4c53-8d9d-3a77a516dae9.png",
+          "prompt": "Use case: stylized-concept. ONE isolated transparent cutout asset for a Hearts of Iron IV focus on civilian freedom and local councils. Follow attached style references: gritty miniature realistic political photo-collage, hard silhouette, strong cold navy-black shadows with silver-white highlights, restrained detail. Subject: a compact horseshoe of THREE stepped curved rows of dark blue upholstered parliamentary seats with dark wood writing desks, surrounding a small central plain speaker lectern. View from elevated front, interior represented as a freestanding miniature cutout of ONLY seats, desks and lectern. Wide low semicircular silhouette, width 2.3 times height. About 18-24 seats total, chunky readable shapes, no tiny crowd. Vacant chamber seats symbolize the new elected Assembly. No enclosing building, no walls, no ceiling, no floor rectangle; transparent gaps between furniture and beneath structure. Cool worn dark wood, navy fabric, subtle silver edges and pale papers in just two places, no readable text. Not a concert theatre: functional parliamentary desk benches, modest republican council. No flags, no emblem, no eagle, no people, no throne, no weapons, no golden ornament. Fully contained in frame with transparent margin, landscape. No glow, no haze, no vignette, actual transparent alpha background."
+        },
+        {
+          "file": "restore_civil_authority_hanging_flag.png",
+          "reused_from": "STP_cw_restore_civil_authority"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-c3814cc2-f872-44b3-abaa-9add03ac7c8e.png",
+        "prompt": "Use case: compositing. Create a wide horizontal Hearts of Iron IV national focus icon 'Freedom against slavery' from the supplied THREE cutout assets. Input 1: the uninjured open human hand with broken iron cuff and short broken chain ends. Input 2: miniature semicircular parliament seats. Input 3: actual navy flag with white ascending diagonal stripe and gold four-point star. Inputs 4 and 5: exact target political game icon style. Compose a compact allegorical collage: large open palm angled upward in left foreground, wrist originates near lower middle, broken cuff and both chain ends clearly visible; parliamentary semicircle extends broadly across right and lower background, several rows and lectern visibly recognizable; single small draped banner occupies upper-right behind seats, its gold star and white stripe visible. Hand around 45 percent width, chamber around 65 percent width, flag 25 percent width, dense overlapping layers, wide low combined silhouette about 1.85:1. Preserve hand anatomy (five fingers) and the reference designs; hand not covering the entire chamber. Cold pale silver highlights on skin and iron, dark navy and charcoal shadows, subdued wood, strong light/dark masses that work at 150px. No new objects, no text, no border, no extra hand or person, no fire, no blood, no additional flags, no solid scene background, no floor or room. True transparent alpha outside the silhouette and through gaps, no large soft glow cloud. Landscape 16:9 image, complete composition inside with small margins. This symbolizes constitutional freedom and shared government."
+      }
+    },
+    {
+      "focus_id": "STP_pc_lib_assembly",
+      "title": "Собрание округов",
+      "tool": "built-in image_gen",
+      "style_reference_paths": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_Break_The_Northern_Ring.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_End_Kefreit.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_shabrat_politics.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_Steland_Hegemony.png"
+      ],
+      "assets": [
+        {
+          "file": "district_assembly_voting_delegates.png",
+          "source": "exec-8be32314-80b0-4870-9eb0-e9ca1a65ee72.png",
+          "prompt": "Use case: stylized-concept. ONE isolated transparent group asset for Hearts of Iron IV focus 'Assembly of Districts'. Style references: cold navy-black and silver realistic political photo-collage, hard silhouette, high contrast, restrained textures readable as tiny icon, especially council image 1. Subject: THREE civilian delegates seen from behind and slightly above, seated side by side at a narrow low dark wooden desk, voting by raising one hand each. Left adult woman in charcoal jacket with hair in bun raises her LEFT hand to shoulder-head height. Center grey-haired man in dark navy suit raises RIGHT hand slightly above head. Right brown-haired man in charcoal suit raises RIGHT hand to head height. Three backs, three raised arms, three visible open palms, anatomically correct five fingers per hand, natural bent elbows, varied hand heights. Their other arms rest naturally at desk. Serious parliamentary voting, ordinary civilian clothing, no military uniforms. Crop naturally to waist and front edge of desk, no chair legs. Group overall broad and low, width 1.8 times height. Cold pale highlights on hands, shirt cuffs and hair, very dark navy suit masses. No leader portrait, no front-facing faces, no flags, no papers, no writing, no emblem, no raised fists, no straight-arm salutes. Transparent alpha background, entire silhouette and all fingers fully inside with margin, no room, no floor, no mist, no broad glow. Landscape."
+        },
+        {
+          "file": "district_assembly_presiding_gavel.png",
+          "source": "exec-dc70de8a-ad45-4cd8-84b8-81ddc0f1b67a.png",
+          "prompt": "Use case: stylized-concept. Create ONE separate transparent PNG asset for a Hearts of Iron IV political focus icon 'Assembly of Districts'. The supplied image is STYLE reference only: gritty dark realistic photo-collage with cold silver highlights. Subject: a substantial plain dark walnut parliamentary presiding officer's gavel resting diagonally across a low circular wooden sounding block. Large head at upper left, sturdy handle pointing toward lower right, fully visible. Simple worn silver ferrule around the center of the gavel head, no gold. Deep charcoal-brown wood, fine scratches, cold white-blue light on top edges, dark blue shadows. Strong clear shape readable at 150px; restrained texture, not ornate jewelry, not a cartoon. Broad compact silhouette about 1.7:1. No hand, no other objects, no words, no scales, no flags, no emblems, no desk or surface, no floor, no shadows extending outside subject, no diffuse glow or vignette. True transparent alpha background with clean cutout and transparent gaps between handle and block. Whole object inside landscape frame with margin."
+        },
+        {
+          "file": "freedom_open_assembly_seats.png",
+          "reused_from": "STP_pc_freedom_open"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-3b12b42b-88e1-4ba1-9d32-15d83b0de062.png",
+        "prompt": "Use case: compositing. Assemble one wide compact Hearts of Iron IV focus icon 'Assembly of Districts' using supplied assets 1-3. Image4 is target miniature political collage STYLE only. Foreground central scene: the three civilian delegates seen from behind raising one hand each to vote, preserve all three bodies and exact hand anatomy. Keep their backs and hands as the main mass taking about 70% width; left woman, central grey-haired man, right brown-haired man. Behind them place the broad curved parliamentary seating from image3, darker and smaller, its top curved rows visible around their shoulders and through gaps between the raised arms, no seats pasted over hands. Across the lower-left foreground place the silver-banded wooden gavel and sounding block from image2 as an emblem-like secondary prop occupying about 35% width, diagonally pointing toward bottom center, never covering a face or a voting hand. Dense overlapping composition, do not arrange isolated objects side by side. Wide silhouette width:height 1.85:1, landscape 16:9 canvas. Gritty photo-realistic cutout collage, navy-black shadows, silver-white hands and cuffs, subtle blue edge highlights, subdued dark wood. No flags, no laurel, no giant parliament building, no extra people, no words, no frame, no room background, no floor rectangle. True transparent alpha outside the assembled silhouette and through open gaps, no haze or vignette, small margin around all fingers and gavel tip. Readable small-icon shapes, the raised voting hands are the main message."
+      }
+    },
+    {
+      "focus_id": "STP_pw_republic_new_republic",
+      "title": "Службы возвращаются в округа",
+      "tool": "built-in image_gen",
+      "style_reference_paths": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_Break_The_Northern_Ring.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_End_Kefreit.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_shabrat_politics.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/Empire/GFX_focus_STP_Steland_Hegemony.png"
+      ],
+      "assets": [
+        {
+          "file": "district_services_doctors_bag.png",
+          "source": "exec-a9790316-4747-46ac-909e-81da47b0d4e4.png",
+          "prompt": "Use case: stylized-concept. ONE isolated transparent cutout for a Hearts of Iron IV focus 'Civil Services Return to the Districts'. Style reference images: gritty realistic political miniature photo-collage, cold navy-black deep shadows and crisp silver-white highlights, subdued textures, hard readable silhouette, not glossy studio render. Subject: one old rural doctor's sturdy BLACK LEATHER medical bag, squat broad classic hinged Gladstone shape with short curved carry handle and worn silver clasps, slightly open at top. A stethoscope drapes across front, metallic chest piece visible low right; two small folded white bandage rolls visible through opening. A small plain white equal-armed medical cross on front leather provides recognition, no text. All accessories physically attached or tucked into bag, one cohesive object. Three-quarter frontal view, low wide silhouette about 1.5:1, modest realistic wear, intact usable bag. No hand, no person, no needles, no blood, no background, no floor, no lettering, no flags, no glowing aura. Actual transparent alpha outside complete bag and through handle opening, margin on all sides. Cool silvery lighting, no warm golden light."
+        },
+        {
+          "file": "district_services_postal_satchel.png",
+          "source": "exec-3abd5a13-e209-45fe-8391-d354bb57a427.png",
+          "prompt": "Use case: stylized-concept. ONE separate transparent cutout asset for the Hearts of Iron IV national focus 'Civil Services Return to the Districts'. Match attached game's dark cold realistic political collage style: strong readable masses, navy-black shadows, silver-white edge highlights, worn materials, no glossy product studio look. Subject: a rural POSTMAN'S SATCHEL of faded dark navy canvas and charcoal leather trim, half-open broad flap with two dull silver buckles, several off-white sealed envelopes with clearly triangular flaps sticking out of top and one small tied bundle of envelopes visible. No readable writing on envelopes, no stamps or logo. A short loop of shoulder strap runs closely along side, never sprawling out into large empty space. Three-quarter frontal view opposite direction from a typical front-facing doctor's bag, taller trapezoid shape but compact, entire strap and bottom included. Texture of coarse woven fabric contrasts with dark leather. Cold neutral light, muted blue grey, ivory paper stands out. No person, no hand, no separate props, no packages around it, no flag, no emblem, no text, no ground or surrounding scenery. Actual transparent alpha background, cutout with transparent handle/strap openings, no fog or broad halo. Landscape 3:2 frame with little margin."
+        },
+        {
+          "file": "district_services_local_office.png",
+          "source": "exec-898ef1de-014f-404f-a234-3ade88146d93.png",
+          "prompt": "Use case: stylized-concept. ONE isolated transparent cutout asset for a Hearts of Iron IV focus 'Civil Services Return to the Districts'. Follow attached miniature game's political collage style: cold grey-blue realistic worn materials, charcoal shadows, crisp silver highlights, simple readable silhouette. Subject: small modest district public-service office, two storeys, broad rectangular grey plaster and stone facade, dark slate pitched roof, central OPEN wooden entrance door with shallow stone steps, two windows on each side and a row upstairs, no grand columns or dome. Looks recently reopened and repaired after hardship: a few lighter plaster patches, intact roof and windows, dignified practical rural administration building. A small notice case with blank pale cards is mounted beside the door, no readable text or symbols. Narrow weak ivory indoor light in open doorway, otherwise cold light. Three-quarter view from slightly above, front and right side visible, width about 1.8 times height. Complete building and small entry steps only, no pavement slab, no landscaping, no mountains, no sky, no people, no vehicles, no flag, no giant signs, no lettering. Actual transparent alpha all around silhouette, restrained dark windows, no glow cloud. Landscape framing with margin."
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-0e7c6285-abb0-4257-8db4-163da24fecc7.png",
+        "prompt": "Use case: compositing. Assemble ONE wide Hearts of Iron IV national focus icon 'Civil Services Return to the Districts' from the three supplied transparent assets. Image1 doctor's black leather bag with stethoscope and white cross, image2 navy postal satchel with ivory envelopes, image3 reopened small grey district office. Input4 is STYLE reference for dark cold blue-silver miniature game collage. Maintain each asset design and its main readable symbols. Layout: low broad doctor's bag dominates front LEFT, postal satchel front RIGHT slightly behind doctor bag and overlapping it at center, small district office spans the upper BACK CENTER. Building should be distinctly smaller and darker than bags in collage scale; its roof and windows visible, open doorway can peek through a gap near middle. Bags are the main foreground masses, cross and envelopes unobstructed. Dense overlapping wide silhouette about 1.85:1, not three items in separate boxes, not a literal realistic street scene. Cold blue-grey, black leather, silver metal, ivory letters and bandages, subtle warm doorway point only. Sharp edges and deep shadows, clear miniature focus readability. Landscape 16:9 canvas with small margin; all bag edges and full chimneys fit. True transparent alpha background all around, no vignette or haze, no ground, no frame, no text, no added people, no flag, no additional props. Return one complete composition preview."
+      }
+    }
+  ],
+  "shared_assets": [
+    {
+      "asset_id": "stelander_burning_flag",
+      "title": "Сгорающий флаг Стеландера",
+      "file": "stelander_burning_flag.png",
+      "source": "exec-913dcc28-2745-4824-aa3f-0793da25f4e7.png",
+      "reference": "gfx/flags/STP.tga",
+      "tool": "built-in image_gen",
+      "prompt": "Use case: stylized-concept / precise-object-edit. Create one isolated burning cloth flag asset for a Hearts of Iron IV focus icon. The supplied image is the EXACT flag design of fictional Stelander from the user's mod: preserve its royal blue upper-left diagonal field with the white pointed sunburst near the upper-left, and the exposed horizontal bands of red, white, black and golden yellow to the right and lower part exactly as in the reference. Do not substitute another flag or redesign its emblem. Transform this flat design into realistic heavy woven fabric waving in broad legible folds, a wide horizontal silhouette. Flag cloth only, no flagpole, no stand, no people. The bottom edge and right fly edge are burning, with jagged charred tears, glowing ember seams and orange flames rising along the right edge. Keep most of the blue field and white sunburst intact and readable. Fire affects cloth, no other subject. Dark painterly realism, soot, detailed textile, restrained warm fire illumination against cool blue cloth. Full object fully in frame with margin, landscape 3:2 canvas, suitable for compositing at small size. True transparent alpha background, transparent holes through the charred fabric, no solid background, no ground, no scenery, no text or border, no broad smoke cloud or atmospheric vignette. Flame tips can be translucent. One asset only."
+    }
+  ]
+}

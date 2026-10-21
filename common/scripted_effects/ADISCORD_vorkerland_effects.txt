@@ -7570,6 +7570,7 @@ ADISCORD_vorkerland_set_phase_central_showdown = {
 	set_global_flag = ADISCORD_vorkerland_phase_central_showdown
 	ADISCORD_vorkerland_reconcile_campaign_state = yes
 	ADISCORD_vorkerland_refresh_focus_lifecycle = yes
+	ADISCORD_vorkerland_prep_activate_rail = yes
 }
 
 ADISCORD_vorkerland_set_phase_reunification = {
@@ -7870,46 +7871,87 @@ ADISCORD_vorkerland_inherit_wrk_prewar_preparations = {
 			tag = WKR
 			NOT = { has_country_flag = ADISCORD_vorkerland_wrk_prewar_preparations_inherited_v1 }
 		}
+		WKR = { save_event_target_as = ADISCORD_vorkerland_preparation_heir }
+		if = {
+			limit = { 40 = { check_variable = { var = ADISCORD_vorkerland_prep_patron value = 2 compare = equals } } }
+			VAD = { save_event_target_as = ADISCORD_vorkerland_preparation_heir }
+		}
+		else_if = {
+			limit = { 40 = { check_variable = { var = ADISCORD_vorkerland_prep_patron value = 3 compare = equals } } }
+			TVA = { save_event_target_as = ADISCORD_vorkerland_preparation_heir }
+		}
 		if = {
 			limit = { has_completed_focus = WRK_measure_confederation_fault_lines }
-			add_political_power = 40
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_political_power = 40
+			}
 		}
 		if = {
 			limit = { has_completed_focus = WRK_convene_council_of_republics }
-			add_political_power = 50
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_political_power = 50
+			}
 		}
 		if = {
 			limit = { has_completed_focus = WRK_inventory_emergency_stores }
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 9000 producer = WKR }
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 9000 producer = WKR }
+			}
 		}
 		if = {
 			limit = { has_completed_focus = WRK_bind_districts_to_charter }
-			add_stability = 0.04
-			add_command_power = 10
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_stability = 0.04
+				add_command_power = 10
+			}
 		}
 		if = {
 			limit = { has_completed_focus = WRK_disperse_railway_reserves }
-			add_equipment_to_stockpile = { type = train_equipment_1 amount = 10 producer = WKR }
-			army_experience = 20
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_equipment_to_stockpile = { type = train_equipment_1 amount = 10 producer = WKR }
+				army_experience = 20
+			}
+		}
+		if = {
+			limit = { has_completed_focus = WRK_reopen_emergency_workshops }
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_equipment_to_stockpile = {
+					type = support_equipment_1
+					amount = 60
+					producer = WRK
+				}
+			}
+		}
+		if = {
+			limit = { has_completed_focus = WRK_collect_officer_returns }
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_manpower = 1000
+			}
 		}
 		if = {
 			limit = { has_completed_focus = WRK_issue_continuity_orders }
-			add_command_power = 20
-			army_experience = 15
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_command_power = 20
+				army_experience = 15
+			}
 		}
 		if = {
 			limit = { has_completed_focus = WRK_place_reserves_under_worker }
-			add_manpower = 1000
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5400 producer = WKR }
-			add_timed_idea = { idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70 }
+			WKR = {
+				add_manpower = 1000
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5400 producer = WKR }
+				add_timed_idea = { idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70 }
+			}
 		}
 		if = {
 			limit = {
 				has_completed_focus = WRK_offer_emergency_compact
 				has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified
 			}
-			add_stability = 0.03
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5000 producer = WKR }
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_stability = 0.03
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5000 producer = WKR }
+			}
 		}
 		set_country_flag = ADISCORD_vorkerland_wrk_prewar_preparations_inherited_v1
 	}
@@ -8331,6 +8373,7 @@ ADISCORD_vorkerland_begin_central_preparation = {
 		}
 		ADISCORD_vorkerland_set_phase_central_preparation = yes
 		set_global_flag = ADISCORD_vorkerland_consolidation_clock_started
+		ADISCORD_vorkerland_prep_dispatch_treaties = yes
 		clr_global_flag = ADISCORD_vorkerland_central_border_launch_failed
 		# Each surviving claimant carries the same fallback; phase.4 is idempotent.
 		WKR = { if = { limit = { exists = yes } activate_mission = ADISCORD_vorkerland_consolidation_deadline country_event = { id = ADISCORD_vorkerland_phase.4 days = 180 } } }
@@ -9019,6 +9062,9 @@ ADISCORD_vorkerland_form_wrk_from_wkr = {
 }
 
 ADISCORD_vorkerland_complete_wrk_from_wkr = {
+	WKR = { ADISCORD_vorkerland_prep_return_reserves_to_successor = yes }
+	VAD = { ADISCORD_vorkerland_prep_return_reserves_to_successor = yes }
+	TVA = { ADISCORD_vorkerland_prep_return_reserves_to_successor = yes }
 	ADISCORD_vorkerland_inherit_worker_reform_spirits = yes
 	if = {
 		limit = { country_exists = WKR }
@@ -9153,6 +9199,9 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 }
 
 ADISCORD_vorkerland_complete_wrk_from_vad = {
+	WKR = { ADISCORD_vorkerland_prep_return_reserves_to_successor = yes }
+	VAD = { ADISCORD_vorkerland_prep_return_reserves_to_successor = yes }
+	TVA = { ADISCORD_vorkerland_prep_return_reserves_to_successor = yes }
 	ADISCORD_vorkerland_scrub_dormant_wrk_crisis = yes
 	if = {
 		limit = { country_exists = VAD }
@@ -9273,6 +9322,9 @@ ADISCORD_vorkerland_form_wrk_from_tva = {
 }
 
 ADISCORD_vorkerland_complete_wrk_from_tva = {
+	WKR = { ADISCORD_vorkerland_prep_return_reserves_to_successor = yes }
+	VAD = { ADISCORD_vorkerland_prep_return_reserves_to_successor = yes }
+	TVA = { ADISCORD_vorkerland_prep_return_reserves_to_successor = yes }
 	ADISCORD_vorkerland_scrub_dormant_wrk_crisis = yes
 	if = {
 		limit = { country_exists = TVA }
@@ -9539,6 +9591,7 @@ ADISCORD_vorkerland_finalize_reunified_wrk = {
 			limit = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished } }
 			ADISCORD_west_seed_leans = yes
 		}
+		ADISCORD_vorkerland_prep_settle_treaties = yes
 		set_global_flag = ADISCORD_vorkerland_central_war_finished
 		set_global_flag = ADISCORD_vorkerland_collapse_finished
 		ADISCORD_vorkerland_reconcile_campaign_state = yes
@@ -11468,5 +11521,933 @@ ADISCORD_vorkerland_pw_finish_rebuild = {
 		ADISCORD_vorkerland_pw_rebuild_reward = yes
 		set_state_flag = ADISCORD_vorkerland_pw_district_rebuilt
 		ROOT = { ADISCORD_economy_mark_dirty = yes }
+	}
+}
+
+# --- preparation_effects ---
+
+ADISCORD_vorkerland_prep_release_slot = {
+	WRK = {
+		subtract_from_variable = {
+			var = ADISCORD_vorkerland_prep_active
+			value = 1
+		}
+		clamp_variable = {
+			var = ADISCORD_vorkerland_prep_active
+			min = 0
+			max = 2
+		}
+	}
+}
+
+ADISCORD_vorkerland_prep_refund_project = {
+	if = {
+		limit = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+		clr_state_flag = ADISCORD_vorkerland_prep_pending
+		WRK = {
+			add_political_power = PREV.ADISCORD_vorkerland_prep_paid_pp
+			add_command_power = PREV.ADISCORD_vorkerland_prep_paid_command
+			add_manpower = PREV.ADISCORD_vorkerland_prep_paid_people
+			add_equipment_to_stockpile = {
+				type = infantry_equipment_0
+				amount = PREV.ADISCORD_vorkerland_prep_paid_rifles
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment_1
+				amount = PREV.ADISCORD_vorkerland_prep_paid_support
+			}
+			add_equipment_to_stockpile = {
+				type = train_equipment_1
+				amount = PREV.ADISCORD_vorkerland_prep_paid_trains
+			}
+		}
+		ADISCORD_vorkerland_prep_release_slot = yes
+		clear_variable = ADISCORD_vorkerland_prep_project
+		clear_variable = ADISCORD_vorkerland_prep_recipient
+		ADISCORD_vorkerland_prep_clear_receipt = yes
+	}
+}
+
+ADISCORD_vorkerland_prep_clear_receipt = {
+	clear_variable = ADISCORD_vorkerland_prep_paid_pp
+	clear_variable = ADISCORD_vorkerland_prep_paid_command
+	clear_variable = ADISCORD_vorkerland_prep_paid_people
+	clear_variable = ADISCORD_vorkerland_prep_paid_rifles
+	clear_variable = ADISCORD_vorkerland_prep_paid_support
+	clear_variable = ADISCORD_vorkerland_prep_paid_trains
+}
+
+ADISCORD_vorkerland_prep_yield_object = {
+	if = {
+		limit = { has_state_flag = ADISCORD_vorkerland_prep_contested }
+		clr_state_flag = ADISCORD_vorkerland_prep_contested
+		set_variable = {
+			var = ADISCORD_vorkerland_prep_recipient
+			value = ADISCORD_vorkerland_prep_rival
+		}
+		if = {
+			limit = { state = 40 }
+			set_variable = {
+				var = ADISCORD_vorkerland_prep_project
+				value = 2
+			}
+		}
+	}
+}
+
+ADISCORD_vorkerland_prep_finish_project = {
+	if = {
+		limit = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+		clr_state_flag = ADISCORD_vorkerland_prep_pending
+		ADISCORD_vorkerland_prep_release_slot = yes
+		clear_variable = ADISCORD_vorkerland_prep_paid_pp
+		clear_variable = ADISCORD_vorkerland_prep_paid_command
+		set_state_flag = ADISCORD_vorkerland_prep_contested
+		if = {
+			limit = { state = 32 }
+			set_variable = {
+				var = ADISCORD_vorkerland_prep_rival
+				value = 2
+			}
+			if = {
+				limit = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_recipient
+						value = 2
+						compare = equals
+					}
+				}
+				set_variable = {
+					var = ADISCORD_vorkerland_prep_rival
+					value = 3
+				}
+			}
+			WRK = { activate_mission = ADISCORD_vorkerland_prep_contest_arsenal }
+		}
+		if = {
+			limit = { state = 33 }
+			set_variable = {
+				var = ADISCORD_vorkerland_prep_rival
+				value = 3
+			}
+			if = {
+				limit = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_recipient
+						value = 3
+						compare = equals
+					}
+				}
+				set_variable = {
+					var = ADISCORD_vorkerland_prep_rival
+					value = 2
+				}
+			}
+			WRK = { activate_mission = ADISCORD_vorkerland_prep_contest_rail }
+		}
+		if = {
+			limit = { state = 36 }
+			set_variable = {
+				var = ADISCORD_vorkerland_prep_rival
+				value = 1
+			}
+			if = {
+				limit = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_recipient
+						value = 1
+						compare = equals
+					}
+				}
+				set_variable = {
+					var = ADISCORD_vorkerland_prep_rival
+					value = 3
+				}
+			}
+			WRK = { activate_mission = ADISCORD_vorkerland_prep_contest_industry }
+		}
+		if = {
+			limit = { state = 37 }
+			set_variable = {
+				var = ADISCORD_vorkerland_prep_rival
+				value = 2
+			}
+			if = {
+				limit = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_recipient
+						value = 2
+						compare = equals
+					}
+				}
+				set_variable = {
+					var = ADISCORD_vorkerland_prep_rival
+					value = 3
+				}
+			}
+			WRK = { activate_mission = ADISCORD_vorkerland_prep_contest_garrison }
+		}
+		if = {
+			limit = { state = 38 }
+			set_variable = {
+				var = ADISCORD_vorkerland_prep_rival
+				value = 1
+			}
+			if = {
+				limit = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_recipient
+						value = 1
+						compare = equals
+					}
+				}
+				set_variable = {
+					var = ADISCORD_vorkerland_prep_rival
+					value = 3
+				}
+			}
+			WRK = { activate_mission = ADISCORD_vorkerland_prep_contest_archives }
+		}
+		if = {
+			limit = { state = 40 }
+			set_variable = {
+				var = ADISCORD_vorkerland_prep_rival
+				value = 2
+			}
+			if = {
+				limit = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_recipient
+						value = 2
+						compare = equals
+					}
+				}
+				set_variable = {
+					var = ADISCORD_vorkerland_prep_rival
+					value = 3
+				}
+			}
+			WRK = { activate_mission = ADISCORD_vorkerland_prep_contest_communications }
+		}
+	}
+}
+
+ADISCORD_vorkerland_prep_close_prewar = {
+	32 = {
+		ADISCORD_vorkerland_prep_refund_project = yes
+		ADISCORD_vorkerland_prep_yield_object = yes
+	}
+	33 = {
+		ADISCORD_vorkerland_prep_refund_project = yes
+		ADISCORD_vorkerland_prep_yield_object = yes
+	}
+	36 = {
+		ADISCORD_vorkerland_prep_refund_project = yes
+		ADISCORD_vorkerland_prep_yield_object = yes
+	}
+	37 = {
+		ADISCORD_vorkerland_prep_refund_project = yes
+		ADISCORD_vorkerland_prep_yield_object = yes
+	}
+	38 = {
+		ADISCORD_vorkerland_prep_refund_project = yes
+		ADISCORD_vorkerland_prep_yield_object = yes
+	}
+	40 = {
+		ADISCORD_vorkerland_prep_refund_project = yes
+		ADISCORD_vorkerland_prep_yield_object = yes
+	}
+}
+
+ADISCORD_vorkerland_prep_resolve_fate = {
+	if = {
+		limit = {
+			40 = {
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_project
+					value = 1
+					compare = equals
+				}
+				NOT = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+			}
+		}
+		set_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+	}
+	else_if = {
+		limit = {
+			40 = {
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_project
+					value = 2
+					compare = equals
+				}
+				NOT = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+			}
+		}
+		set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+	}
+	else = {
+		random_list = {
+			60 = { set_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			25 = { set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad }
+			10 = { set_global_flag = ADISCORD_vorkerland_worker_missing }
+			5 = { set_global_flag = ADISCORD_vorkerland_worker_killed }
+		}
+	}
+}
+
+ADISCORD_vorkerland_prep_receive_asset = {
+	if = {
+		limit = {
+			PREV = { state = 32 }
+		}
+		if = {
+			limit = {
+				PREV = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_project
+						value = 1
+						compare = equals
+					}
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment_0
+				amount = 5400
+			}
+		}
+		else_if = {
+			limit = {
+				PREV = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_project
+						value = 2
+						compare = equals
+					}
+				}
+			}
+			set_variable = {
+				var = ADISCORD_vorkerland_prep_reserve_rifles
+				value = 8100
+			}
+		}
+	}
+	if = {
+		limit = {
+			PREV = { state = 33 }
+		}
+		if = {
+			limit = {
+				PREV = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_project
+						value = 1
+						compare = equals
+					}
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = train_equipment_1
+				amount = 5
+			}
+		}
+		else_if = {
+			limit = {
+				PREV = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_project
+						value = 2
+						compare = equals
+					}
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = train_equipment_1
+				amount = 10
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment_1
+				amount = 150
+			}
+		}
+	}
+	if = {
+		limit = {
+			PREV = { state = 36 }
+		}
+		if = {
+			limit = {
+				PREV = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_project
+						value = 1
+						compare = equals
+					}
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment_0
+				amount = 7200
+			}
+		}
+		else_if = {
+			limit = {
+				PREV = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_project
+						value = 2
+						compare = equals
+					}
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment_1
+				amount = 300
+			}
+			add_tech_bonus = {
+				name = ADISCORD_vorkerland_prep_specialists_bonus
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+	}
+	if = {
+		limit = {
+			PREV = { state = 37 }
+		}
+		if = {
+			limit = {
+				PREV = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_project
+						value = 1
+						compare = equals
+					}
+				}
+			}
+			ADISCORD_vorkerland_prep_deploy_guard = yes
+			add_stability = 0.03
+		}
+		else_if = {
+			limit = {
+				PREV = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_project
+						value = 2
+						compare = equals
+					}
+				}
+			}
+			set_variable = {
+				var = ADISCORD_vorkerland_prep_reserve_guard
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = {
+			PREV = { state = 38 }
+		}
+		if = {
+			limit = {
+				PREV = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_project
+						value = 1
+						compare = equals
+					}
+				}
+			}
+			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.10 }
+			ADISCORD_vorkerland_add_legitimacy = yes
+			add_political_power = 40
+		}
+		else_if = {
+			limit = {
+				PREV = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_project
+						value = 2
+						compare = equals
+					}
+				}
+			}
+			add_manpower = 6000
+		}
+	}
+	if = {
+		limit = {
+			PREV = { state = 40 }
+		}
+		if = {
+			limit = {
+				PREV = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_project
+						value = 1
+						compare = equals
+					}
+				}
+			}
+			add_command_power = 15
+		}
+		else_if = {
+			limit = {
+				PREV = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_project
+						value = 2
+						compare = equals
+					}
+				}
+			}
+			add_command_power = 15
+		}
+	}
+}
+
+ADISCORD_vorkerland_prep_settle_object = {
+	if = {
+		limit = {
+			has_variable = ADISCORD_vorkerland_prep_project
+			NOT = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+			NOT = { has_state_flag = ADISCORD_vorkerland_prep_settled }
+		}
+		set_state_flag = ADISCORD_vorkerland_prep_settled
+		if = {
+			limit = {
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 1
+					compare = equals
+				}
+			}
+			WKR = { ADISCORD_vorkerland_prep_receive_asset = yes }
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 2
+					compare = equals
+				}
+			}
+			VAD = { ADISCORD_vorkerland_prep_receive_asset = yes }
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 3
+					compare = equals
+				}
+			}
+			TVA = { ADISCORD_vorkerland_prep_receive_asset = yes }
+		}
+		ADISCORD_vorkerland_prep_clear_receipt = yes
+	}
+}
+
+ADISCORD_vorkerland_prep_settle_assets = {
+	32 = { ADISCORD_vorkerland_prep_settle_object = yes }
+	33 = { ADISCORD_vorkerland_prep_settle_object = yes }
+	36 = { ADISCORD_vorkerland_prep_settle_object = yes }
+	37 = { ADISCORD_vorkerland_prep_settle_object = yes }
+	38 = { ADISCORD_vorkerland_prep_settle_object = yes }
+	40 = { ADISCORD_vorkerland_prep_settle_object = yes }
+}
+
+ADISCORD_vorkerland_prep_deploy_guard = {
+	ADISCORD_vorkerland_ensure_emergency_militia_template = yes
+	capital_scope = {
+		create_unit = {
+			division = "name = \"ADISCORD_vorkerland_continuity_guard\" division_template = \"Emergency Militia\" start_experience_factor = 0.25 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = PREV
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+}
+
+ADISCORD_vorkerland_prep_deploy_trained_guard = {
+	ADISCORD_vorkerland_ensure_emergency_militia_template = yes
+	capital_scope = {
+		create_unit = {
+			division = "name = \"ADISCORD_vorkerland_continuity_guard\" division_template = \"Emergency Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = PREV
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+}
+
+ADISCORD_vorkerland_prep_deliver_rifles = {
+	if = {
+		limit = {
+			ADISCORD_vorkerland_prep_reserve_open = yes
+			check_variable = {
+				var = ADISCORD_vorkerland_prep_reserve_rifles
+				value = 0
+				compare = greater_than
+			}
+		}
+		add_equipment_to_stockpile = {
+			type = infantry_equipment_0
+			amount = ADISCORD_vorkerland_prep_reserve_rifles
+		}
+		clear_variable = ADISCORD_vorkerland_prep_reserve_rifles
+	}
+}
+
+ADISCORD_vorkerland_prep_deliver_guard = {
+	if = {
+		limit = {
+			ADISCORD_vorkerland_prep_reserve_open = yes
+			check_variable = {
+				var = ADISCORD_vorkerland_prep_reserve_guard
+				value = 0
+				compare = greater_than
+			}
+		}
+		ADISCORD_vorkerland_prep_deploy_trained_guard = yes
+		clear_variable = ADISCORD_vorkerland_prep_reserve_guard
+	}
+}
+
+ADISCORD_vorkerland_prep_return_reserves_to_successor = {
+	if = {
+		limit = {
+			check_variable = {
+				var = ADISCORD_vorkerland_prep_reserve_rifles
+				value = 0
+				compare = greater_than
+			}
+		}
+		WRK = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment_0
+				amount = PREV.ADISCORD_vorkerland_prep_reserve_rifles
+			}
+		}
+		clear_variable = ADISCORD_vorkerland_prep_reserve_rifles
+	}
+	if = {
+		limit = {
+			check_variable = {
+				var = ADISCORD_vorkerland_prep_reserve_guard
+				value = 0
+				compare = greater_than
+			}
+		}
+		WRK = {
+			add_manpower = 3000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment_0
+				amount = 2700
+			}
+		}
+		clear_variable = ADISCORD_vorkerland_prep_reserve_guard
+	}
+}
+
+ADISCORD_vorkerland_prep_activate_rail = {
+	33 = {
+		if = {
+			limit = {
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_project
+					value = 1
+					compare = equals
+				}
+				has_state_flag = ADISCORD_vorkerland_prep_settled
+				NOT = { has_state_flag = ADISCORD_vorkerland_prep_rail_activated }
+			}
+			set_state_flag = ADISCORD_vorkerland_prep_rail_activated
+			add_dynamic_modifier = {
+				modifier = ADISCORD_vorkerland_prep_rail_crews
+				days = 180
+			}
+		}
+	}
+}
+
+ADISCORD_vorkerland_prep_accept_offer = {
+	if = {
+		limit = { ADISCORD_vorkerland_prep_offer_valid = yes }
+		clr_country_flag = ADISCORD_vorkerland_prep_offer_pending
+		set_country_flag = ADISCORD_vorkerland_prep_treaty_signed
+		if = {
+			limit = { tag = EYR }
+			FROM = {
+				add_political_power = -35
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = -1500
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment_0
+				amount = 1500
+			}
+		}
+		if = {
+			limit = { tag = EGC }
+			FROM = {
+				add_political_power = -35
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = -100
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment_1
+				amount = 100
+			}
+		}
+		if = {
+			limit = { tag = RIV }
+			FROM = {
+				add_political_power = -35
+				add_equipment_to_stockpile = {
+					type = train_equipment
+					amount = -5
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = train_equipment_1
+				amount = 5
+			}
+		}
+		if = {
+			limit = { tag = YOR }
+			FROM = {
+				add_political_power = -35
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = -2000
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment_0
+				amount = 2000
+			}
+		}
+		if = {
+			limit = {
+				FROM = { tag = WRK }
+			}
+			set_variable = {
+				var = ADISCORD_vorkerland_prep_treaty_patron
+				value = FROM.ADISCORD_vorkerland_prep_patron
+			}
+		}
+		else_if = {
+			limit = {
+				FROM = { tag = WKR }
+			}
+			set_variable = {
+				var = ADISCORD_vorkerland_prep_treaty_patron
+				value = 1
+			}
+		}
+		else_if = {
+			limit = {
+				FROM = { tag = VAD }
+			}
+			set_variable = {
+				var = ADISCORD_vorkerland_prep_treaty_patron
+				value = 2
+			}
+		}
+		else = {
+			set_variable = {
+				var = ADISCORD_vorkerland_prep_treaty_patron
+				value = 3
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					FROM = { tag = WRK }
+				}
+			}
+			FROM = { set_country_flag = ADISCORD_vorkerland_preserve_wartime_faction }
+			ADISCORD_vorkerland_join_coalition_of_FROM = yes
+		}
+	}
+}
+
+ADISCORD_vorkerland_prep_settle_treaties = {
+	EYR = {
+		if = {
+			limit = {
+				has_country_flag = ADISCORD_vorkerland_prep_treaty_signed
+				exists = yes
+				is_subject = no
+				is_in_faction_with = WRK
+				OR = {
+					AND = {
+						check_variable = {
+							var = ADISCORD_vorkerland_prep_treaty_patron
+							value = 1
+							compare = equals
+						}
+						has_global_flag = ADISCORD_vorkerland_worker_won
+					}
+					AND = {
+						check_variable = {
+							var = ADISCORD_vorkerland_prep_treaty_patron
+							value = 2
+							compare = equals
+						}
+						has_global_flag = ADISCORD_vorkerland_vlad_won
+					}
+					AND = {
+						check_variable = {
+							var = ADISCORD_vorkerland_prep_treaty_patron
+							value = 3
+							compare = equals
+						}
+						has_global_flag = ADISCORD_vorkerland_dorian_won
+					}
+				}
+			}
+			set_country_flag = ADISCORD_vorkerland_prep_independence_guaranteed
+		}
+		clr_country_flag = ADISCORD_vorkerland_prep_offer_pending
+	}
+	EGC = {
+		if = {
+			limit = {
+				has_country_flag = ADISCORD_vorkerland_prep_treaty_signed
+				exists = yes
+				is_subject = no
+				is_in_faction_with = WRK
+				OR = {
+					AND = {
+						check_variable = {
+							var = ADISCORD_vorkerland_prep_treaty_patron
+							value = 1
+							compare = equals
+						}
+						has_global_flag = ADISCORD_vorkerland_worker_won
+					}
+					AND = {
+						check_variable = {
+							var = ADISCORD_vorkerland_prep_treaty_patron
+							value = 2
+							compare = equals
+						}
+						has_global_flag = ADISCORD_vorkerland_vlad_won
+					}
+					AND = {
+						check_variable = {
+							var = ADISCORD_vorkerland_prep_treaty_patron
+							value = 3
+							compare = equals
+						}
+						has_global_flag = ADISCORD_vorkerland_dorian_won
+					}
+				}
+			}
+			set_country_flag = ADISCORD_vorkerland_prep_independence_guaranteed
+		}
+		clr_country_flag = ADISCORD_vorkerland_prep_offer_pending
+	}
+	RIV = {
+		if = {
+			limit = {
+				has_country_flag = ADISCORD_vorkerland_prep_treaty_signed
+				exists = yes
+				is_subject = no
+				is_in_faction_with = WRK
+				OR = {
+					AND = {
+						check_variable = {
+							var = ADISCORD_vorkerland_prep_treaty_patron
+							value = 1
+							compare = equals
+						}
+						has_global_flag = ADISCORD_vorkerland_worker_won
+					}
+					AND = {
+						check_variable = {
+							var = ADISCORD_vorkerland_prep_treaty_patron
+							value = 2
+							compare = equals
+						}
+						has_global_flag = ADISCORD_vorkerland_vlad_won
+					}
+					AND = {
+						check_variable = {
+							var = ADISCORD_vorkerland_prep_treaty_patron
+							value = 3
+							compare = equals
+						}
+						has_global_flag = ADISCORD_vorkerland_dorian_won
+					}
+				}
+			}
+			set_country_flag = ADISCORD_vorkerland_prep_independence_guaranteed
+		}
+		clr_country_flag = ADISCORD_vorkerland_prep_offer_pending
+	}
+	YOR = {
+		if = {
+			limit = {
+				has_country_flag = ADISCORD_vorkerland_prep_treaty_signed
+				exists = yes
+				is_subject = no
+				is_in_faction_with = WRK
+				OR = {
+					AND = {
+						check_variable = {
+							var = ADISCORD_vorkerland_prep_treaty_patron
+							value = 1
+							compare = equals
+						}
+						has_global_flag = ADISCORD_vorkerland_worker_won
+					}
+					AND = {
+						check_variable = {
+							var = ADISCORD_vorkerland_prep_treaty_patron
+							value = 2
+							compare = equals
+						}
+						has_global_flag = ADISCORD_vorkerland_vlad_won
+					}
+					AND = {
+						check_variable = {
+							var = ADISCORD_vorkerland_prep_treaty_patron
+							value = 3
+							compare = equals
+						}
+						has_global_flag = ADISCORD_vorkerland_dorian_won
+					}
+				}
+			}
+			set_country_flag = ADISCORD_vorkerland_prep_independence_guaranteed
+		}
+		clr_country_flag = ADISCORD_vorkerland_prep_offer_pending
+	}
+}
+
+ADISCORD_vorkerland_prep_dispatch_treaties = {
+	WKR = {
+		if = {
+			limit = { ADISCORD_vorkerland_prep_diplomacy_open = yes }
+			country_event = { id = ADISCORD_vorkerland_preparation.21 }
+		}
+	}
+	VAD = {
+		if = {
+			limit = { ADISCORD_vorkerland_prep_diplomacy_open = yes }
+			country_event = { id = ADISCORD_vorkerland_preparation.21 }
+		}
+	}
+	TVA = {
+		if = {
+			limit = { ADISCORD_vorkerland_prep_diplomacy_open = yes }
+			country_event = { id = ADISCORD_vorkerland_preparation.21 }
+		}
 	}
 }

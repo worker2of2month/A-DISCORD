@@ -8128,3 +8128,306 @@ country_event = {
 		name = ADISCORD_STP_pw.11.a
 	}
 }
+
+# Personal hegemony: old allies and the end of the collective mandate.
+
+country_event = {
+	id = ADISCORD_STP_pc.100
+	title = ADISCORD_STP_pc.100.t
+	desc = ADISCORD_STP_pc.100.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		tag = STS
+		STP_heg_betrayal_active = yes
+	}
+	option = { name = ADISCORD_STP_pc.100.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.101
+	title = ADISCORD_STP_pc.101.t
+	desc = ADISCORD_STP_pc.101.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		tag = STS
+		STP_heg_betrayal_active = yes
+		has_completed_focus = STP_pc_heg_trusted_list
+	}
+	option = {
+		name = ADISCORD_STP_pc.101.a
+		trigger = {
+			STP_heg_betrayal_active = yes
+			NOT = { has_variable = STP_heg_appointments_choice }
+		}
+		ai_chance = { factor = 60 }
+		hidden_effect = { set_variable = { var = STP_heg_appointments_choice value = 1 } }
+		add_political_power = 25
+		STP_heg_betrayal_add_10 = yes
+	}
+	option = {
+		name = ADISCORD_STP_pc.101.b
+		trigger = {
+			STP_heg_betrayal_active = yes
+			NOT = { has_variable = STP_heg_appointments_choice }
+			NOT = { political_power < 25 }
+		}
+		ai_chance = { factor = 40 }
+		hidden_effect = { set_variable = { var = STP_heg_appointments_choice value = 2 } }
+		add_political_power = -25
+		STP_heg_betrayal_reduce_10 = yes
+	}
+	option = {
+		name = STP_heg_event_close
+		trigger = {
+			OR = {
+				STP_heg_betrayal_active = no
+				has_variable = STP_heg_appointments_choice
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.102
+	title = ADISCORD_STP_pc.102.t
+	desc = ADISCORD_STP_pc.102.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		tag = STS
+		STP_heg_betrayal_active = yes
+		has_completed_focus = STP_pc_heg_personal_oath
+	}
+	option = {
+		name = ADISCORD_STP_pc.102.a
+		trigger = {
+			STP_heg_betrayal_active = yes
+			NOT = { has_variable = STP_heg_oath_choice }
+		}
+		ai_chance = { factor = 60 }
+		hidden_effect = { set_variable = { var = STP_heg_oath_choice value = 1 } }
+		add_command_power = 15
+		STP_heg_betrayal_add_10 = yes
+	}
+	option = {
+		name = ADISCORD_STP_pc.102.b
+		trigger = {
+			STP_heg_betrayal_active = yes
+			NOT = { has_variable = STP_heg_oath_choice }
+			NOT = { political_power < 50 }
+		}
+		ai_chance = { factor = 40 }
+		hidden_effect = { set_variable = { var = STP_heg_oath_choice value = 2 } }
+		add_political_power = -50
+		STP_heg_betrayal_reduce_10 = yes
+	}
+	option = {
+		name = STP_heg_event_close
+		trigger = {
+			OR = {
+				STP_heg_betrayal_active = no
+				has_variable = STP_heg_oath_choice
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.103
+	title = ADISCORD_STP_pc.103.t
+	desc = ADISCORD_STP_pc.103.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		tag = STS
+		STP_heg_betrayal_active = yes
+		has_completed_focus = STP_pc_heg_official_history
+	}
+	option = { name = ADISCORD_STP_pc.103.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.104
+	title = ADISCORD_STP_pc.104.t
+	desc = ADISCORD_STP_pc.104.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		tag = STS
+		STP_heg_betrayal_active = yes
+		has_completed_focus = STP_pc_heg_rewrite_mandate
+	}
+	option = {
+		name = ADISCORD_STP_pc.104.a
+		trigger = {
+			STP_heg_betrayal_active = yes
+			NOT = { has_variable = STP_heg_mandate_choice }
+		}
+		ai_chance = { factor = 60 }
+		hidden_effect = { set_variable = { var = STP_heg_mandate_choice value = 1 } }
+		add_political_power = 25
+		STP_heg_betrayal_add_10 = yes
+	}
+	option = {
+		name = ADISCORD_STP_pc.104.b
+		trigger = {
+			STP_heg_betrayal_active = yes
+			NOT = { has_variable = STP_heg_mandate_choice }
+			NOT = { political_power < 25 }
+		}
+		ai_chance = { factor = 40 }
+		hidden_effect = { set_variable = { var = STP_heg_mandate_choice value = 2 } }
+		add_political_power = -25
+		STP_heg_betrayal_reduce_10 = yes
+	}
+	option = {
+		name = STP_heg_event_close
+		trigger = {
+			OR = {
+				STP_heg_betrayal_active = no
+				has_variable = STP_heg_mandate_choice
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.105
+	title = ADISCORD_STP_pc.105.t
+	desc = ADISCORD_STP_pc.105.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		tag = STS
+		STP_heg_betrayal_active = yes
+		has_completed_focus = STP_pc_heg_public_trial
+	}
+	option = {
+		name = ADISCORD_STP_pc.105.a
+		trigger = {
+			STP_heg_betrayal_active = yes
+			NOT = { has_variable = STP_heg_opposition_choice }
+		}
+		ai_chance = { factor = 60 }
+		hidden_effect = { set_variable = { var = STP_heg_opposition_choice value = 1 } }
+
+	}
+	option = {
+		name = ADISCORD_STP_pc.105.b
+		trigger = {
+			STP_heg_betrayal_active = yes
+			NOT = { has_variable = STP_heg_opposition_choice }
+			NOT = { political_power < 50 }
+		}
+		ai_chance = { factor = 40 }
+		hidden_effect = { set_variable = { var = STP_heg_opposition_choice value = 2 } }
+		add_political_power = -50
+		STP_heg_betrayal_reduce_10 = yes
+	}
+	option = {
+		name = STP_heg_event_close
+		trigger = {
+			OR = {
+				STP_heg_betrayal_active = no
+				has_variable = STP_heg_opposition_choice
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.106
+	title = ADISCORD_STP_pc.106.t
+	desc = ADISCORD_STP_pc.106.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		tag = STS
+		STP_heg_betrayal_active = yes
+		has_completed_focus = STP_pc_heg_closed_session
+	}
+	option = {
+		name = ADISCORD_STP_pc.106.a
+		trigger = {
+			STP_heg_betrayal_active = yes
+			NOT = { has_variable = STP_heg_opposition_choice }
+		}
+		ai_chance = { factor = 60 }
+		hidden_effect = { set_variable = { var = STP_heg_opposition_choice value = 1 } }
+		STP_heg_betrayal_reduce_10 = yes
+		effect_tooltip = { add_ideas = STP_heg_pensions_delta }
+		hidden_effect = {
+			add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.02 }
+			STP_pw_refresh_modifier = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.106.b
+		trigger = {
+			STP_heg_betrayal_active = yes
+			NOT = { has_variable = STP_heg_opposition_choice }
+			NOT = { political_power < 75 }
+		}
+		ai_chance = { factor = 40 }
+		hidden_effect = { set_variable = { var = STP_heg_opposition_choice value = 2 } }
+		add_political_power = -75
+		STP_heg_betrayal_reduce_15 = yes
+	}
+	option = {
+		name = STP_heg_event_close
+		trigger = {
+			OR = {
+				STP_heg_betrayal_active = no
+				has_variable = STP_heg_opposition_choice
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.107
+	title = ADISCORD_STP_pc.107.t
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pc_heg_old_guard
+			has_completed_focus = STP_pc_heg_closed_session
+		}
+		text = ADISCORD_STP_pc.107.accepted
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				AND = {
+					has_completed_focus = STP_pc_heg_old_guard
+					has_completed_focus = STP_pc_heg_closed_session
+				}
+			}
+		}
+		text = ADISCORD_STP_pc.107.d
+	}
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		tag = STS
+		has_completed_focus = STP_pc_heg_revolution_name
+	}
+	option = { name = ADISCORD_STP_pc.107.a }
+}

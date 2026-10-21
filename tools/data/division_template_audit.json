@@ -16245,6 +16245,26 @@
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.8,
       "count": 4
+    },
+    {
+      "key": "adiscord_vorkerland_preparation_guard",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Emergency Militia",
+      "legacy_names": [],
+      "start_experience_factor": 0.25,
+      "start_equipment_factor": 1.0,
+      "count": 1
+    },
+    {
+      "key": "adiscord_vorkerland_preparation_trained_guard",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Emergency Militia",
+      "legacy_names": [],
+      "start_experience_factor": 0.5,
+      "start_equipment_factor": 1.0,
+      "count": 1
     }
   ]
 }

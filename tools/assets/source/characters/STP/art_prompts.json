@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "assets": [
+    {
+      "file": "maksim_shabrat_full_body_arms_open.png",
+      "tool": "image_gen",
+      "transparent_background": true,
+      "reference_images": [
+        {
+          "path": "C:/Users/Admin/AppData/Local/Temp/codex-clipboard-4492f2e1-ba21-4f3e-85e8-1774089e329f.png",
+          "role": "pose and painterly style"
+        },
+        {
+          "path": "gfx/leaders/STP/portrait_STP_Maksim_Shabrat.png",
+          "role": "character identity and clothing"
+        }
+      ],
+      "prompt": "Создай один отдельный игровой ассет: Максим Шабрат со второго референса, в полный рост, на настоящем прозрачном фоне. Первый референс задаёт только позу и живописную манеру: корпус почти фронтально, слегка откинут назад; голова запрокинута вверх и немного к левому краю изображения; рука слева на изображении вытянута в сторону почти горизонтально, ладонь открыта вверх; рука справа поднята по диагонали выше плеча, ладонь раскрыта. Второй референс задаёт личность: точно сохрани узнаваемые черты лица, форму носа и рта, тёмные прямоугольные очки, короткие тёмно-каштановые волосы с боковым пробором, возраст и обычное телосложение. Лицо серьёзное, сдержанное, без улыбки. Одежда по второму портрету: чёрный пиджак поверх тёмного свитера с высоким воротом; продолжи образ чёрными прямыми брюками и чёрными кожаными туфлями. Реалистичная детальная живопись, умеренные тёплые оранжевые отблески на ткани и коже как в первом референсе, читаемые тёмные детали. Полностью покажи обе кисти, все пальцы, ноги и обувь, оставь прозрачные поля вокруг всей фигуры. Анатомически корректные руки. Только один мужчина, без огня, дыма, окружения, пола, падающей тени, предметов, текста, рамки, водяного знака и полос сканирования исходного портрета. Не переносить светлые волосы или лицо мужчины из первого референса.",
+      "refinement_prompt": "Edit this image into a clean transparent character cutout. Preserve the exact same full-body man, recognizable face, dark rectangular eyeglasses, hair, facial expression, raised outstretched arms, hands, all clothing, shoes, pose, framing and painterly detail. Preserve the warm orange reflected lighting ONLY ON HIS SKIN AND CLOTHING. Remove ALL background, ALL orange atmosphere, ALL glow and halo around the silhouette, ALL haze between the arms and torso and between the legs, and any ground shadow. The area outside the precise human silhouette must be completely transparent with alpha zero, including the gaps around the fingers, arms and legs. His body and clothes must remain fully opaque. Crisp natural antialiased cutout edges, no external rim glow, no background color, no checkerboard painted into the image. Do not crop or restyle the figure."
+    }
+  ]
+}

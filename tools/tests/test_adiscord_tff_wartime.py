@@ -635,6 +635,76 @@ class TFFProtectorateRouteTests(unittest.TestCase):
         self.assertFalse(self.matches("VAL_frontier_joint_campaign_ready"))
         self.assertFalse(self.matches("VAL_nod_campaign_stelander_ready"))
 
+    def test_victorious_ardent_committee_supplies_the_joint_route(self):
+        self.facts["VAL", "has_completed_focus", "VAL_Different_Views_On_Freedom"] = True
+        self.facts["TFF", "exists", "yes"] = False
+        self.facts.update({
+            ("D01", "is_subject_of", "VAL"): True,
+            ("D01", "has_country_flag", "VAL_ardent_committee"): True,
+            ("D01", "has_capitulated", "no"): True,
+            ("D01", "capital"): "83",
+            ("83", "owner"): "D01",
+            ("83", "controller"): "D01",
+        })
+        self.assertTrue(self.matches("VAL_frontier_joint_campaign_ready"))
+        self.facts["83", "controller"] = "NOD"
+        self.assertFalse(self.matches("VAL_frontier_joint_campaign_ready"))
+        self.facts["83", "controller"] = "D01"
+        self.facts["D01", "has_country_flag", "VAL_ardent_committee"] = False
+        self.assertFalse(self.matches("VAL_frontier_joint_campaign_ready"))
+
+    def test_ardent_operations_open_only_after_a_refused_protectorate(self):
+        def open_route():
+            self.setUp()
+            self.facts["VAL", "has_completed_focus", "VAL_Different_Views_On_Freedom"] = True
+            self.facts["TFF", "has_character", "TFF_Colt_Ardent"] = True
+
+        open_route()
+        self.assertTrue(self.matches("VAL_ardent_operations_open"))
+        for fact, value in (
+            (("VAL", "has_country_flag", "VAL_frontier_protectorate_pending"), True),
+            (("VAL", "has_country_flag", "VAL_stelander_defeated"), True),
+            (("VAL", "has_country_flag", "VAL_nod_frontier_agreement"), True),
+            (("VAL", "variable", "VAL_ardent_stage"), 1),
+            (("TFF", "is_subject_of", "VAL"), True),
+            (("TFF", "is_in_faction_with", "VAL"), True),
+            (("TFF", "has_war_with", "VAL"), True),
+            (("TFF", "has_character", "TFF_Colt_Ardent"), False),
+            (("NOD", "variable", "STP_cw_northern_campaign_status"), 1),
+        ):
+            with self.subTest(fact=fact):
+                open_route()
+                self.facts[fact] = value
+                self.assertFalse(self.matches("VAL_ardent_operations_open"))
+
+    def test_ardent_uprising_needs_mandate_price_and_border_districts(self):
+        def ready():
+            self.setUp()
+            self.facts.update({
+                ("VAL", "has_completed_focus", "VAL_Different_Views_On_Freedom"): True,
+                ("TFF", "has_character", "TFF_Colt_Ardent"): True,
+                ("VAL", "has_country_flag", "VAL_ardent_mandate_secured"): True,
+                ("VAL", "equipment", "infantry_equipment"): 2000,
+                ("VAL", "numeric", "has_political_power"): 25,
+                ("85", "is_owned_by", "TFF"): True,
+                ("85", "is_controlled_by", "TFF"): True,
+            })
+
+        ready()
+        self.assertTrue(self.matches("VAL_ardent_uprising_ready"))
+        for fact, value in (
+            (("VAL", "has_country_flag", "VAL_ardent_mandate_secured"), False),
+            (("VAL", "has_country_flag", "VAL_ardent_operation_paid"), True),
+            (("VAL", "equipment", "infantry_equipment"), 1999.5),
+            (("VAL", "numeric", "has_political_power"), 24.9),
+            (("TFF", "has_war", "no"), False),
+            (("85", "is_controlled_by", "TFF"), False),
+        ):
+            with self.subTest(fact=fact):
+                ready()
+                self.facts[fact] = value
+                self.assertFalse(self.matches("VAL_ardent_uprising_ready"))
+
     def test_liberated_or_capitulated_frontier_cannot_supply_the_route(self):
         for free, capitulated in ((True, False), (False, True)):
             self.setUp()

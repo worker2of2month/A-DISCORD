@@ -63,15 +63,25 @@ ADISCORD_vorkerland_prewar_category = {
 # --- diplomacy_categories ---
 ADISCORD_vorkerland_regional_diplomacy_category = {
 	icon = ADISCORD_deal
-	allowed = { OR = { tag = WKR tag = VAD } }
+	allowed = {
+		OR = {
+			tag = WRK
+			tag = WKR
+			tag = VAD
+			tag = TVA
+		}
+	}
 	visible = {
 		OR = {
+			ADISCORD_vorkerland_prep_diplomacy_open = yes
 			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
 			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
 		}
 		NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 	}
 }
+
+
 
 # --- focus_decision_categories ---
 ADISCORD_vorkerland_focus_operations_category = {
@@ -83,9 +93,15 @@ ADISCORD_vorkerland_focus_operations_category = {
 			tag = WRK
 		}
 	}
-
 	visible = {
 		OR = {
+			AND = {
+				ADISCORD_vorkerland_prep_reserve_open = yes
+				OR = {
+					has_variable = ADISCORD_vorkerland_prep_reserve_rifles
+					has_variable = ADISCORD_vorkerland_prep_reserve_guard
+				}
+			}
 			# Central district campaigns open with the verified regional war graph;
 			# claimant capstones are required only for the final showdown.
 			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
@@ -103,6 +119,8 @@ ADISCORD_vorkerland_focus_operations_category = {
 		}
 	}
 }
+
+
 
 ADISCORD_vorkerland_allied_support_category = {
 	icon = ADISCORD_deal

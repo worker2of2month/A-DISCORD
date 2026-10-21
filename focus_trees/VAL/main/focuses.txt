@@ -2655,7 +2655,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_The_Steel_Contract
-		icon = GFX_goal_generic_construct_mil_factory
+		icon = GFX_focus_VAL_The_Steel_Contract
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_AUTHORITY }
 		x = 26
 		y = 8
@@ -3033,7 +3033,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Integrate_Occidia
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_focus_VAL_Integrate_Occidia
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_RECOVERY }
 		x = 28
 		y = 11

@@ -1618,6 +1618,44 @@ country_event = {
 	immediate = { VAL_finish_frontier_protectorate = yes }
 }
 
+# VAL_ardent_stage is already terminal when the settlement sends this result.
+country_event = {
+	id = val_contract.390
+	title = val_contract.390.t
+	desc = {
+		trigger = { check_variable = { var = VAL_ardent_stage value = 2 compare = equals } }
+		text = val_contract.390.won
+	}
+	desc = {
+		trigger = { NOT = { check_variable = { var = VAL_ardent_stage value = 2 compare = equals } } }
+		text = val_contract.390.lost
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = {
+		name = val_contract.390.a
+		trigger = { check_variable = { var = VAL_ardent_stage value = 2 compare = equals } }
+		custom_effect_tooltip = val_contract.390.won_tt
+	}
+	option = {
+		name = val_contract.390.b
+		trigger = { NOT = { check_variable = { var = VAL_ardent_stage value = 2 compare = equals } } }
+		custom_effect_tooltip = val_contract.390.lost_tt
+	}
+}
+
+country_event = {
+	id = val_contract.391
+	title = val_contract.391.t
+	desc = val_contract.391.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = val_contract.391.a
+		custom_effect_tooltip = val_contract.391.a_tt
+	}
+}
+
 # The first option is the unattended answer; an obsolete offer only closes.
 country_event = {
 	id = val_contract.350

@@ -1,0 +1,469 @@
+defined_text = {
+	name = GetVorkerlandPrepPatron
+	text = {
+		trigger = {
+			OR = {
+				tag = WKR
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_patron
+					value = 1
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_patron_1
+	}
+	text = {
+		trigger = {
+			OR = {
+				tag = VAD
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_patron
+					value = 2
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_patron_2
+	}
+	text = {
+		trigger = {
+			OR = {
+				tag = TVA
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_patron
+					value = 3
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_patron_3
+	}
+	text = { localization_key = ADISCORD_vorkerland_prep_unselected }
+}
+
+defined_text = {
+	name = GetVorkerlandPrepRecipient
+	text = {
+		trigger = {
+			check_variable = {
+				var = ADISCORD_vorkerland_prep_recipient
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_patron_1
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = ADISCORD_vorkerland_prep_recipient
+				value = 2
+				compare = equals
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_patron_2
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = ADISCORD_vorkerland_prep_recipient
+				value = 3
+				compare = equals
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_patron_3
+	}
+	text = { localization_key = ADISCORD_vorkerland_prep_unselected }
+}
+
+defined_text = {
+	name = GetVorkerlandPrepRival
+	text = {
+		trigger = {
+			check_variable = {
+				var = ADISCORD_vorkerland_prep_rival
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_patron_1
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = ADISCORD_vorkerland_prep_rival
+				value = 2
+				compare = equals
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_patron_2
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = ADISCORD_vorkerland_prep_rival
+				value = 3
+				compare = equals
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_patron_3
+	}
+	text = { localization_key = ADISCORD_vorkerland_prep_unselected }
+}
+
+defined_text = {
+	name = GetVorkerlandPrepArsenal
+	text = {
+		trigger = {
+			32 = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+		}
+		localization_key = ADISCORD_vorkerland_prep_working
+	}
+	text = {
+		trigger = {
+			32 = { has_state_flag = ADISCORD_vorkerland_prep_contested }
+		}
+		localization_key = ADISCORD_vorkerland_prep_contested
+	}
+	text = {
+		trigger = {
+			32 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 1
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_1
+	}
+	text = {
+		trigger = {
+			32 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 2
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_2
+	}
+	text = {
+		trigger = {
+			32 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 3
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_3
+	}
+	text = { localization_key = ADISCORD_vorkerland_prep_empty }
+}
+
+defined_text = {
+	name = GetVorkerlandPrepRail
+	text = {
+		trigger = {
+			33 = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+		}
+		localization_key = ADISCORD_vorkerland_prep_working
+	}
+	text = {
+		trigger = {
+			33 = { has_state_flag = ADISCORD_vorkerland_prep_contested }
+		}
+		localization_key = ADISCORD_vorkerland_prep_contested
+	}
+	text = {
+		trigger = {
+			33 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 1
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_1
+	}
+	text = {
+		trigger = {
+			33 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 2
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_2
+	}
+	text = {
+		trigger = {
+			33 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 3
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_3
+	}
+	text = { localization_key = ADISCORD_vorkerland_prep_empty }
+}
+
+defined_text = {
+	name = GetVorkerlandPrepIndustry
+	text = {
+		trigger = {
+			36 = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+		}
+		localization_key = ADISCORD_vorkerland_prep_working
+	}
+	text = {
+		trigger = {
+			36 = { has_state_flag = ADISCORD_vorkerland_prep_contested }
+		}
+		localization_key = ADISCORD_vorkerland_prep_contested
+	}
+	text = {
+		trigger = {
+			36 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 1
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_1
+	}
+	text = {
+		trigger = {
+			36 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 2
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_2
+	}
+	text = {
+		trigger = {
+			36 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 3
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_3
+	}
+	text = { localization_key = ADISCORD_vorkerland_prep_empty }
+}
+
+defined_text = {
+	name = GetVorkerlandPrepGarrison
+	text = {
+		trigger = {
+			37 = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+		}
+		localization_key = ADISCORD_vorkerland_prep_working
+	}
+	text = {
+		trigger = {
+			37 = { has_state_flag = ADISCORD_vorkerland_prep_contested }
+		}
+		localization_key = ADISCORD_vorkerland_prep_contested
+	}
+	text = {
+		trigger = {
+			37 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 1
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_1
+	}
+	text = {
+		trigger = {
+			37 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 2
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_2
+	}
+	text = {
+		trigger = {
+			37 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 3
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_3
+	}
+	text = { localization_key = ADISCORD_vorkerland_prep_empty }
+}
+
+defined_text = {
+	name = GetVorkerlandPrepArchives
+	text = {
+		trigger = {
+			38 = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+		}
+		localization_key = ADISCORD_vorkerland_prep_working
+	}
+	text = {
+		trigger = {
+			38 = { has_state_flag = ADISCORD_vorkerland_prep_contested }
+		}
+		localization_key = ADISCORD_vorkerland_prep_contested
+	}
+	text = {
+		trigger = {
+			38 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 1
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_1
+	}
+	text = {
+		trigger = {
+			38 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 2
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_2
+	}
+	text = {
+		trigger = {
+			38 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 3
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_3
+	}
+	text = { localization_key = ADISCORD_vorkerland_prep_empty }
+}
+
+defined_text = {
+	name = GetVorkerlandPrepCommunications
+	text = {
+		trigger = {
+			40 = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+		}
+		localization_key = ADISCORD_vorkerland_prep_working
+	}
+	text = {
+		trigger = {
+			40 = { has_state_flag = ADISCORD_vorkerland_prep_contested }
+		}
+		localization_key = ADISCORD_vorkerland_prep_contested
+	}
+	text = {
+		trigger = {
+			40 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 1
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_1
+	}
+	text = {
+		trigger = {
+			40 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 2
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_2
+	}
+	text = {
+		trigger = {
+			40 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_recipient
+					value = 3
+					compare = equals
+				}
+			}
+		}
+		localization_key = ADISCORD_vorkerland_prep_ready_3
+	}
+	text = { localization_key = ADISCORD_vorkerland_prep_empty }
+}
+
+defined_text = {
+	name = GetVorkerlandPreparationSummary
+	text = {
+		trigger = { tag = WRK }
+		localization_key = ADISCORD_vorkerland_prep_federal_summary
+	}
+	text = { localization_key = ADISCORD_vorkerland_prep_district_summary }
+}
+
+defined_text = {
+	name = GetVorkerlandTreatyTiming
+	text = {
+		trigger = {
+			FROM = { tag = WRK }
+		}
+		localization_key = ADISCORD_vorkerland_prep_treaty_deferred
+	}
+	text = { localization_key = ADISCORD_vorkerland_prep_treaty_immediate }
+}

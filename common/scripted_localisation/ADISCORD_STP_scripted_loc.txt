@@ -2410,3 +2410,12 @@ defined_text = {
 	}
 	text = { localization_key = STP_ch_empty }
 }
+
+defined_text = {
+	name = STPGetHegDelegationPrice
+	text = {
+		trigger = { has_completed_focus = STP_pc_heg_old_guard }
+		localization_key = STP_heg_number_25
+	}
+	text = { localization_key = STP_heg_number_50 }
+}

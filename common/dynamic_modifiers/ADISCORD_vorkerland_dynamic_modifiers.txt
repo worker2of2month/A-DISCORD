@@ -219,3 +219,10 @@ ADISCORD_vorkerland_empire_industry = {
 	enable = { ADISCORD_vorkerland_world_empire_active = yes }
 	industrial_capacity_factory = WRK_empire_output
 }
+
+ADISCORD_vorkerland_prep_rail_crews = {
+	enable = { always = yes }
+	icon = GFX_modifiers_generic_military_plans
+	local_supplies = 0.20
+	remove_trigger = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+}

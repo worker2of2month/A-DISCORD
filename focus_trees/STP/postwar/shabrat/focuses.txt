@@ -1,7 +1,7 @@
 # @section reconstruction
 	focus = {
 		id = STP_pw_republic_new_republic
-		icon = GFX_focus_generic_self_management
+		icon = GFX_focus_STP_pw_republic_new_republic
 		x = 4
 		y = 4
 		prerequisite = { focus = STP_pc_after_victory }
@@ -10,6 +10,7 @@
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			unlock_decision_tooltip = STP_pw_campaign_victory_means_normal_life
 			unlock_decision_tooltip = STP_pw_restore_services
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_new_republic_delta } }
 			hidden_effect = {
@@ -22,7 +23,7 @@
 
 	focus = {
 		id = STP_pw_republic_district_authority
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_VAL_Provincial_Brokers
 		x = 0
 		y = 5
 		cost = 3
@@ -47,7 +48,7 @@
 
 	focus = {
 		id = STP_pw_republic_civil_records
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_VAL_Reclamation_Land_Register
 		x = 0
 		y = 6
 		cost = 4
@@ -56,6 +57,11 @@
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pw_state_growth_step_tt
+			hidden_effect = {
+				ADISCORD_increase_state_development_monthly_growth = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
 			add_stability = 0.03
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_civil_records_delta } }
 			hidden_effect = {
@@ -69,7 +75,7 @@
 
 	focus = {
 		id = STP_pw_republic_open_settlement
-		icon = GFX_goal_generic_positive_trade_relations
+		icon = GFX_focus_VAL_Company_Mandates
 		x = -1
 		y = 7
 		cost = 5
@@ -91,7 +97,7 @@
 
 	focus = {
 		id = STP_pw_republic_firm_settlement
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_VAL_Ministry_Auditors
 		x = 1
 		y = 7
 		cost = 5
@@ -112,7 +118,7 @@
 
 	focus = {
 		id = STP_pw_republic_civil_charter
-		icon = GFX_goal_generic_neutrality_focus
+		icon = GFX_focus_VAL_One_Ledger_One_Banner
 		x = 0
 		y = 8
 		cost = 5
@@ -142,6 +148,7 @@
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			unlock_decision_tooltip = STP_pw_campaign_country_is_being_built
 			random_owned_controlled_state = {
 				limit = { OR = { is_core_of = STP is_core_of = STS } infrastructure < 5 }
 				add_building_construction = { type = infrastructure level = 1 instant_build = yes }
@@ -156,7 +163,7 @@
 
 	focus = {
 		id = STP_pw_republic_homes_for_returnees
-		icon = GFX_goal_generic_construct_civilian
+		icon = GFX_focus_VAL_Reclamation_Return_Home
 		x = 6
 		y = 6
 		cost = 4
@@ -187,6 +194,11 @@
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pw_economic_growth_step_tt
+			hidden_effect = {
+				ADISCORD_increase_economic_development_monthly_growth = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
 			custom_effect_tooltip = STP_pw_civil_factory_or_reserve_tt
 			hidden_effect = {
 				if = {
@@ -220,7 +232,7 @@
 
 	focus = {
 		id = STP_pw_republic_accountable_arsenals
-		icon = GFX_goal_generic_construct_mil_factory
+		icon = GFX_focus_VAL_Inventory_The_Empty_Yards
 		x = 7
 		y = 7
 		cost = 5
@@ -262,7 +274,7 @@
 
 	focus = {
 		id = STP_pw_republic_industrial_settlement
-		icon = GFX_focus_generic_industry_3
+		icon = GFX_focus_VAL_The_Steel_Contract
 		x = 6
 		y = 8
 		cost = 5
@@ -287,7 +299,7 @@
 
 	focus = {
 		id = STP_pw_republic_army_register
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_focus_VAL_Army_Of_The_Ledger
 		x = 28
 		y = 4
 		prerequisite = { focus = STP_pc_after_victory }
@@ -309,7 +321,7 @@
 
 	focus = {
 		id = STP_pw_republic_officer_school
-		icon = GFX_focus_generic_military_academy
+		icon = GFX_focus_RUS_officer_courses
 		x = 28
 		y = 5
 		cost = 4
@@ -331,7 +343,7 @@
 
 	focus = {
 		id = STP_pw_republic_supply_service
-		icon = GFX_focus_generic_truck
+		icon = GFX_focus_VAL_Morns_Supply_Trains
 		x = 28
 		y = 6
 		cost = 4
@@ -351,7 +363,7 @@
 
 	focus = {
 		id = STP_pw_republic_professional_service
-		icon = GFX_focus_generic_military_mission
+		icon = GFX_focus_VAL_Contractor_Officers
 		x = 28
 		y = 7
 		cost = 5
@@ -375,7 +387,7 @@
 
 	focus = {
 		id = STP_pw_take_bezhaysk
-		icon = GFX_goal_generic_territory_or_war
+		icon = GFX_focus_VAL_Frontier_Assault
 		x = 31
 		y = 8
 		cost = 5
@@ -390,7 +402,7 @@
 
 	focus = {
 		id = STP_pw_republic_settled_state
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_VAL_State_Contract
 		x = 4
 		y = 10
 		prerequisite = { focus = STP_pw_republic_civil_charter }
@@ -410,7 +422,7 @@
 
 	focus = {
 		id = STP_pw_republic_shield_corps
-		icon = GFX_goal_generic_special_forces
+		icon = GFX_focus_VAL_Vorons_Companies
 		x = 26
 		y = 6
 		cost = 5
@@ -439,7 +451,7 @@
 # @section politics
 	focus = {
 		id = STP_pc_after_victory
-		icon = GFX_focus_STP_Show_Him_The_Truth
+		icon = GFX_focus_STP_pc_after_victory
 		prerequisite = { focus = STP_cw_restore_civil_authority }
 		x = 16
 		y = 3
@@ -453,13 +465,34 @@
 		}
 		ai_will_do = { base = 10 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pw_campaign_capacity_tt
 			set_cosmetic_tag = STS_steland
 			add_political_power = 75
 			custom_effect_tooltip = STP_pw_recovery_start_tt
+			custom_effect_tooltip = STP_qol_elite_administration_tt
 			hidden_effect = {
+				if = {
+					limit = { NOT = { has_country_flag = STP_pw_propaganda_slot_1 } }
+					ADISCORD_campaign_slot_grant = yes
+					set_country_flag = STP_pw_propaganda_slot_1
+				}
 				STP_pw_begin_recovery = yes
 				if = {
 					limit = { STP_pc_founder_rules = yes }
+					set_party_name = {
+						ideology = chauvinism
+						long_name = STS_chauvinism_party_long
+						name = STS_chauvinism_party
+					}
+					add_ideas = {
+						minister_STS_Marta_Eirich
+						minister_STS_Leonid_Barchel
+						minister_STS_Ignat_Forel
+						minister_STS_Nika_Volgina
+						minister_STS_Tomas_Krey
+						minister_STS_Lia_Verst
+					}
+					ADISCORD_economy_mark_dirty = yes
 					country_event = { id = ADISCORD_STP_pc.16 days = 1 }
 				}
 				if = { limit = { is_ai = no } scoped_play_song = "ADISCORD_stp_civil_war_end" }
@@ -468,45 +501,8 @@
 	}
 
 	focus = {
-		id = STP_pc_shabrat_cabinet
-		icon = GFX_focus_generic_self_management
-		x = 14
-		y = 4
-		cost = 4
-		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_founder_rules = yes }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
-			}
-			hidden_trigger = { STP_pc_founder_rules = yes }
-		}
-		prerequisite = { focus = STP_pc_after_victory }
-		ai_will_do = { base = 12 }
-		completion_reward = {
-			custom_effect_tooltip = STP_qol_elite_administration_tt
-			hidden_effect = {
-				set_party_name = {
-					ideology = chauvinism
-					long_name = STS_chauvinism_party_long
-					name = STS_chauvinism_party
-				}
-				add_ideas = {
-					minister_STS_Marta_Eirich
-					minister_STS_Leonid_Barchel
-					minister_STS_Ignat_Forel
-					minister_STS_Nika_Volgina
-					minister_STS_Tomas_Krey
-					minister_STS_Lia_Verst
-				}
-				ADISCORD_economy_mark_dirty = yes
-			}
-		}
-	}
-
-	focus = {
 		id = STP_pc_war_ledgers
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_VAL_Reserve_Accounting
 		x = 8
 		y = 5
 		prerequisite = { focus = STP_pw_republic_new_republic }
@@ -528,7 +524,7 @@
 
 	focus = {
 		id = STP_pc_two_borders
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_focus_STP_cw_northern_dossier
 		x = 24
 		y = 4
 		cost = 2
@@ -542,6 +538,20 @@
 		prerequisite = { focus = STP_pc_after_victory }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pw_campaign_capacity_tt
+			hidden_effect = {
+				if = {
+					limit = { NOT = { has_country_flag = STP_pw_propaganda_slot_2 } }
+					ADISCORD_campaign_slot_grant = yes
+					set_country_flag = STP_pw_propaganda_slot_2
+				}
+			}
+			custom_effect_tooltip = STP_pw_state_growth_step_tt
+			hidden_effect = {
+				ADISCORD_increase_state_development_monthly_growth = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+			unlock_decision_tooltip = STP_pw_campaign_one_steland
 			add_intel = { target = VAL army_intel = 10 }
 			add_intel = { target = NOD army_intel = 10 }
 		}
@@ -549,7 +559,7 @@
 
 	focus = {
 		id = STP_pw_republic_mountain_school
-		icon = GFX_focus_generic_mountain_fortification
+		icon = GFX_focus_RUS_field_sappers
 		x = 25
 		y = 9
 		cost = 4
@@ -569,7 +579,7 @@
 
 	focus = {
 		id = STP_pc_army_mountain
-		icon = GFX_focus_generic_mountain_fortification
+		icon = GFX_focus_RUS_patient_war
 		x = 27
 		y = 9
 		prerequisite = { focus = STP_pw_republic_professional_service }
@@ -587,7 +597,7 @@
 
 	focus = {
 		id = STP_pc_army_against_heavy
-		icon = GFX_goal_generic_army_artillery2
+		icon = GFX_focus_RUS_artillery_tables
 		x = 29
 		y = 9
 		prerequisite = { focus = STP_pw_republic_professional_service }
@@ -605,7 +615,7 @@
 
 	focus = {
 		id = STP_pc_army_limited_offense
-		icon = GFX_goal_generic_occupy_states_ongoing_war
+		icon = GFX_focus_RUS_swift_columns
 		x = 28
 		y = 11
 		prerequisite = { focus = STP_pc_army_mountain }
@@ -628,7 +638,7 @@
 
 	focus = {
 		id = STP_pc_army_hegemony_cadres
-		icon = GFX_focus_STP_It_Has_Only_Begun
+		icon = GFX_focus_STP_Turn_The_Young_Officers
 		x = 26
 		y = 12
 		cost = 5
@@ -652,7 +662,7 @@
 
 	focus = {
 		id = STP_pc_army_republic_control
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_RUS_district_courts
 		x = 28
 		y = 13
 		cost = 5
@@ -682,7 +692,7 @@
 
 	focus = {
 		id = STP_pc_army_staff_doctrine
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_focus_VAL_Contract_General_Staff
 		x = 30
 		y = 12
 		cost = 5
@@ -720,7 +730,7 @@
 
 	focus = {
 		id = STP_pc_navy_coast
-		icon = GFX_focus_generic_coastal_fort
+		icon = GFX_focus_RUS_quiet_perimeter
 		x = 3
 		y = 6
 		prerequisite = {
@@ -764,7 +774,7 @@
 
 	focus = {
 		id = STP_pc_navy_ports
-		icon = GFX_goal_generic_construct_naval_dockyard
+		icon = GFX_focus_STP_cw_port_budget
 		x = 3
 		y = 7
 		cost = 2
@@ -786,7 +796,7 @@
 
 	focus = {
 		id = STP_pw_republic_marine_school
-		icon = GFX_goal_generic_amphibious_assault
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 4
 		y = 9
 		cost = 2
@@ -805,7 +815,7 @@
 
 	focus = {
 		id = STP_pc_navy_yards
-		icon = GFX_goal_generic_construct_naval_dockyard
+		icon = GFX_focus_STP_cw_port_budget
 		x = 3
 		y = 8
 		prerequisite = { focus = STP_pc_navy_ports }
@@ -830,7 +840,7 @@
 
 	focus = {
 		id = STP_pc_navy_escorts
-		icon = GFX_goal_generic_navy_cruiser
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 2
 		y = 9
 		cost = 4
@@ -884,7 +894,7 @@
 
 	focus = {
 		id = STP_pc_navy_deny
-		icon = GFX_goal_generic_occupy_start_coast
+		icon = GFX_focus_VAL_Border_Survey_Corps
 		x = 2
 		y = 10
 		cost = 5
@@ -922,7 +932,7 @@
 
 	focus = {
 		id = STP_pc_air_crews
-		icon = GFX_goal_generic_air_fighter
+		icon = GFX_focus_RUS_flight_school
 		x = 29
 		y = 14
 		prerequisite = { focus = STP_pw_republic_professional_service }
@@ -940,7 +950,7 @@
 
 	focus = {
 		id = STP_pc_air_fields
-		icon = GFX_goal_generic_air_production
+		icon = GFX_focus_RUS_capital_airfields
 		x = 29
 		y = 15
 		cost = 5
@@ -964,7 +974,7 @@
 
 	focus = {
 		id = STP_pc_air_shield
-		icon = GFX_goal_generic_air_fighter2
+		icon = GFX_focus_RUS_fighter_cover
 		x = 28
 		y = 16
 		cost = 5
@@ -986,7 +996,7 @@
 
 	focus = {
 		id = STP_pc_air_support
-		icon = GFX_goal_generic_CAS
+		icon = GFX_focus_RUS_assault_squadrons
 		x = 28
 		y = 17
 		cost = 5
@@ -1006,7 +1016,7 @@
 
 	focus = {
 		id = STP_pc_air_import
-		icon = GFX_focus_generic_aircraft_production
+		icon = GFX_focus_RUS_military_contract_board
 		x = 30
 		y = 16
 		cost = 5
@@ -1027,7 +1037,7 @@
 
 	focus = {
 		id = STP_pc_air_domestic
-		icon = GFX_goal_generic_air_production
+		icon = GFX_focus_RUS_aircraft_workshops
 		x = 29
 		y = 18
 		cost = 5
@@ -1099,7 +1109,10 @@
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_hegemony_open_delta } }
+			custom_effect_tooltip = STP_heg_betrayal_start_tt
 			hidden_effect = {
+				STP_heg_betrayal_initialize = yes
+				mark_focus_tree_layout_dirty = yes
 				if = {
 					limit = { NOT = { has_country_flag = STP_imperial_union_proclaimed } }
 					set_cosmetic_tag = STS_hegemony
@@ -1117,7 +1130,7 @@
 
 	focus = {
 		id = STP_pc_freedom_open
-		icon = GFX_focus_STP_Show_Him_The_Truth
+		icon = GFX_focus_STP_pc_freedom_open
 		x = 14
 		y = 5
 		cost = 3
@@ -1160,7 +1173,7 @@
 
 	focus = {
 		id = STP_pc_shared_archive_policy
-		icon = GFX_focus_STP_cw_expose_the_cabinet
+		icon = GFX_focus_VAL_Closed_Ledgers
 		x = 16
 		y = 6
 		cost = 4
@@ -1183,7 +1196,7 @@
 
 	focus = {
 		id = STP_pc_heg_unity
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_RUS_parallel_public_addresses
 		x = 12
 		y = 6
 		cost = 4
@@ -1198,6 +1211,7 @@
 		prerequisite = { focus = STP_pc_hegemony_open }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			STP_heg_betrayal_add_10 = yes
 			add_political_power = 30
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_heg_unity_delta } }
 			hidden_effect = {
@@ -1210,7 +1224,7 @@
 
 	focus = {
 		id = STP_pc_heg_emergency
-		icon = GFX_focus_STP_Emergency_Presidium
+		icon = GFX_focus_VAL_Operational_Directorate
 		x = 12
 		y = 7
 		cost = 4
@@ -1225,14 +1239,14 @@
 		prerequisite = { focus = STP_pc_heg_unity }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			country_event = { id = ADISCORD_STP_pc.12 }
+			STP_heg_betrayal_add_10 = yes
 			add_timed_idea = { idea = STP_pc_emergency_decree days = 180 }
 		}
 	}
 
 	focus = {
 		id = STP_pc_heg_subordinate
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_VAL_Company_Mandates
 		x = 12
 		y = 8
 		cost = 4
@@ -1247,6 +1261,7 @@
 		prerequisite = { focus = STP_pc_heg_emergency }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			STP_heg_betrayal_add_10 = yes
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_heg_subordinate_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.05 }
@@ -1258,7 +1273,7 @@
 
 	focus = {
 		id = STP_pc_heg_limit_parties
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_VAL_Captains_Cannot_Veto
 		x = 12
 		y = 9
 		cost = 4
@@ -1273,6 +1288,7 @@
 		prerequisite = { focus = STP_pc_heg_subordinate }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			STP_heg_betrayal_add_10 = yes
 			add_ideas = STP_pc_drift_defence
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_heg_limit_delta } }
 			hidden_effect = { add_to_variable = { var = STP_pw_research_speed_factor value = -0.03 } add_to_variable = { var = STP_pw_political_power_gain value = 0.15 } STP_pw_refresh_modifier = yes }
@@ -1303,7 +1319,7 @@
 
 	focus = {
 		id = STP_pc_heg_person
-		icon = GFX_focus_STP_Show_Him_The_Truth
+		icon = GFX_focus_STP_Kefreite_Security_Offer
 		x = 10
 		y = 11
 		cost = 5
@@ -1328,7 +1344,7 @@
 
 	focus = {
 		id = STP_pc_heg_regional_system
-		icon = GFX_goal_generic_territory_or_war
+		icon = GFX_focus_VAL_Reclamation_Survey
 		x = 12
 		y = 11
 		cost = 5
@@ -1351,7 +1367,7 @@
 	focus = {
 		id = STP_pc_heg_val_audit
 		icon = GFX_focus_STP_Kefreite_Security_Offer
-		x = 8
+		x = 4
 		y = 12
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -1385,8 +1401,8 @@
 
 	focus = {
 		id = STP_pc_heg_val_terms
-		icon = GFX_focus_generic_diplomatic_treaty
-		x = 10
+		icon = GFX_focus_VAL_Trading_Partners
+		x = 4
 		y = 13
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -1418,7 +1434,7 @@
 	focus = {
 		id = STP_pc_heg_val_force
 		icon = GFX_focus_STP_End_Kefreit
-		x = 10
+		x = 4
 		y = 14
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -1448,7 +1464,7 @@
 
 	focus = {
 		id = STP_pc_heg_nod_break
-		icon = GFX_focus_generic_strike_at_democracy1
+		icon = GFX_focus_RUS_press_the_closed_zone
 		x = 16
 		y = 12
 		cost = 3
@@ -1525,7 +1541,7 @@
 
 	focus = {
 		id = STP_pc_heg_clients
-		icon = GFX_goal_generic_improve_relations
+		icon = GFX_focus_VAL_Provincial_Brokers
 		x = 12
 		y = 14
 		cost = 3
@@ -1546,7 +1562,7 @@
 
 	focus = {
 		id = STP_pc_heg_burden
-		icon = GFX_goal_generic_dangerous_deal
+		icon = GFX_focus_VAL_Price_Of_Loyalty
 		x = 12
 		y = 15
 		cost = 3
@@ -1572,7 +1588,7 @@
 
 	focus = {
 		id = STP_pc_heg_administrations
-		icon = GFX_focus_generic_improve_the_administration
+		icon = GFX_focus_VAL_Ministry_Auditors
 		x = 12
 		y = 16
 		cost = 3
@@ -1681,7 +1697,7 @@
 
 	focus = {
 		id = STP_pc_heg_final_kefreyt
-		icon = GFX_focus_ADISCORD_All_In
+		icon = GFX_focus_STP_End_Kefreit
 		x = 12
 		y = 18
 		cost = 4
@@ -1709,7 +1725,7 @@
 
 	focus = {
 		id = STP_pc_heg_northern_administration
-		icon = GFX_focus_generic_improve_the_administration
+		icon = GFX_focus_VAL_Reclamation_Land_Register
 		x = 12
 		y = 19
 		cost = 3
@@ -1749,8 +1765,323 @@
 	}
 
 	focus = {
+		id = STP_pc_heg_chancellery
+		icon = GFX_focus_RUS_seal_chancery
+		x = 9
+		y = 6
+		cost = 3
+		allow_branch = { STP_heg_personal_course = yes }
+		prerequisite = {
+			focus = STP_pc_hegemony_open
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_betrayal_active_tt
+				STP_heg_betrayal_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 2 }
+		completion_reward = {
+			unlock_decision_tooltip = STP_heg_receive_delegation
+		}
+	}
+
+	focus = {
+		id = STP_pc_heg_trusted_list
+		icon = GFX_focus_RUS_trained_administrators
+		x = 9
+		y = 7
+		cost = 3
+		allow_branch = { STP_heg_personal_course = yes }
+		prerequisite = {
+			focus = STP_pc_heg_chancellery
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_betrayal_active_tt
+				STP_heg_betrayal_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 2 }
+		completion_reward = {
+			STP_heg_betrayal_add_5 = yes
+			country_event = { id = ADISCORD_STP_pc.101 hours = 1 }
+		}
+	}
+
+	focus = {
+		id = STP_pc_heg_old_guard
+		icon = GFX_focus_STP_Turn_The_Young_Officers
+		x = 8
+		y = 8
+		cost = 4
+		allow_branch = { STP_heg_personal_course = yes }
+		prerequisite = {
+			focus = STP_pc_heg_trusted_list
+		}
+		mutually_exclusive = { focus = STP_pc_heg_new_ladder }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_betrayal_active_tt
+				STP_heg_betrayal_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_appointments_settled_tt
+				has_variable = STP_heg_appointments_choice
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 6 }
+		completion_reward = {
+			unlock_decision_tooltip = STP_heg_pay_veterans
+			custom_effect_tooltip = STP_heg_delegation_discount_tt
+		}
+	}
+
+	focus = {
+		id = STP_pc_heg_new_ladder
+		icon = GFX_focus_RUS_officer_courses
+		x = 10
+		y = 8
+		cost = 4
+		allow_branch = { STP_heg_personal_course = yes }
+		prerequisite = {
+			focus = STP_pc_heg_trusted_list
+		}
+		mutually_exclusive = { focus = STP_pc_heg_old_guard }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_betrayal_active_tt
+				STP_heg_betrayal_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_appointments_settled_tt
+				has_variable = STP_heg_appointments_choice
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 2 }
+		completion_reward = {
+			STP_heg_betrayal_add_15 = yes
+			unlock_decision_tooltip = STP_heg_train_cadres
+		}
+	}
+
+	focus = {
+		id = STP_pc_heg_personal_oath
+		icon = GFX_focus_RUS_written_oaths
+		x = 8
+		y = 9
+		cost = 3
+		allow_branch = { STP_heg_personal_course = yes }
+		prerequisite = {
+			focus = STP_pc_heg_old_guard
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_betrayal_active_tt
+				STP_heg_betrayal_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 2 }
+		completion_reward = {
+			country_event = { id = ADISCORD_STP_pc.102 days = 10 }
+		}
+	}
+
+	focus = {
+		id = STP_pc_heg_official_history
+		icon = GFX_focus_VAL_Ministry_Of_Contract_Memory
+		x = 10
+		y = 9
+		cost = 3
+		allow_branch = { STP_heg_personal_course = yes }
+		prerequisite = {
+			focus = STP_pc_heg_new_ladder
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_betrayal_active_tt
+				STP_heg_betrayal_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 2 }
+		completion_reward = {
+			STP_heg_betrayal_add_10 = yes
+			unlock_decision_tooltip = STP_heg_victory_campaign
+		}
+	}
+
+	focus = {
+		id = STP_pc_heg_rewrite_mandate
+		icon = GFX_focus_VAL_Quarterly_Contract_Norm
+		x = 9
+		y = 10
+		cost = 4
+		allow_branch = { STP_heg_personal_course = yes }
+		prerequisite = {
+			focus = STP_pc_heg_official_history
+			focus = STP_pc_heg_personal_oath
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_betrayal_active_tt
+				STP_heg_betrayal_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_oath_settled_tt
+				OR = {
+					has_completed_focus = STP_pc_heg_official_history
+					has_variable = STP_heg_oath_choice
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 2 }
+		completion_reward = {
+			country_event = { id = ADISCORD_STP_pc.104 days = 21 }
+		}
+	}
+
+	focus = {
+		id = STP_pc_heg_public_trial
+		icon = GFX_focus_VAL_Provincial_Contract_Courts
+		x = 8
+		y = 12
+		cost = 4
+		allow_branch = { STP_heg_personal_course = yes }
+		prerequisite = {
+			focus = STP_pc_heg_rewrite_mandate
+		}
+		mutually_exclusive = { focus = STP_pc_heg_closed_session }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_betrayal_active_tt
+				STP_heg_betrayal_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_mandate_settled_tt
+				has_variable = STP_heg_mandate_choice
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 2 }
+		completion_reward = {
+			STP_heg_betrayal_add_15 = yes
+			add_political_power = 50
+			country_event = { id = ADISCORD_STP_pc.105 days = 14 }
+		}
+	}
+
+	focus = {
+		id = STP_pc_heg_closed_session
+		icon = GFX_focus_VAL_Company_Mandates
+		x = 10
+		y = 12
+		cost = 3
+		allow_branch = { STP_heg_personal_course = yes }
+		prerequisite = {
+			focus = STP_pc_heg_rewrite_mandate
+		}
+		mutually_exclusive = { focus = STP_pc_heg_public_trial }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_betrayal_active_tt
+				STP_heg_betrayal_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_mandate_settled_tt
+				has_variable = STP_heg_mandate_choice
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 6 }
+		completion_reward = {
+			country_event = { id = ADISCORD_STP_pc.106 days = 14 }
+		}
+	}
+
+	focus = {
+		id = STP_pc_heg_revolution_name
+		icon = GFX_focus_STP_Triumph_Of_Common_Sense
+		x = 9
+		y = 13
+		cost = 5
+		allow_branch = { STP_heg_personal_course = yes }
+		prerequisite = {
+			focus = STP_pc_heg_public_trial
+			focus = STP_pc_heg_closed_session
+		}
+		prerequisite = { focus = STP_pc_heg_person }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_betrayal_active_tt
+				STP_heg_betrayal_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_opposition_settled_tt
+				has_variable = STP_heg_opposition_choice
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 6 }
+		completion_reward = {
+			custom_effect_tooltip = STP_heg_betrayal_end_tt
+			hidden_effect = {
+				STP_heg_betrayal_close = yes
+				set_politics = { ruling_party = chauvinism elections_allowed = no }
+				country_event = { id = ADISCORD_STP_pc.107 hours = 1 }
+			}
+		}
+	}
+
+	focus = {
 		id = STP_pc_lib_assembly
-		icon = GFX_focus_generic_self_management
+		icon = GFX_focus_STP_pc_lib_assembly
 		x = 14
 		y = 6
 		cost = 4
@@ -1777,7 +2108,7 @@
 
 	focus = {
 		id = STP_pc_lib_institutions
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_VAL_Provincial_Contract_Courts
 		x = 14
 		y = 7
 		cost = 4
@@ -1804,7 +2135,7 @@
 
 	focus = {
 		id = STP_pc_lib_civil_army
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_focus_STP_pc_lib_assembly
 		x = 14
 		y = 8
 		cost = 5
@@ -1891,7 +2222,7 @@
 
 	focus = {
 		id = STP_pc_lib_lock
-		icon = GFX_focus_STP_Show_Him_The_Truth
+		icon = GFX_focus_VAL_One_Ledger_One_Banner
 		x = 14
 		y = 9
 		cost = 3
@@ -1913,7 +2244,7 @@
 
 	focus = {
 		id = STP_pc_lib_competition
-		icon = GFX_goal_generic_elections
+		icon = GFX_focus_RUS_aimaq_council
 		x = 18
 		y = 10
 		cost = 5
@@ -1945,7 +2276,7 @@
 
 	focus = {
 		id = STP_pc_lib_succession
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_focus_RUS_seal_chancery
 		x = 18
 		y = 11
 		cost = 5
@@ -1967,7 +2298,7 @@
 
 	focus = {
 		id = STP_pc_lib_emergency_limit
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_VAL_Quarterly_Contract_Norm
 		x = 22
 		y = 10
 		cost = 5
@@ -1989,7 +2320,7 @@
 
 	focus = {
 		id = STP_pc_lib_prepare_neighbors
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_focus_STP_cw_northern_dossier
 		x = 24
 		y = 10
 		cost = 4
@@ -2012,7 +2343,7 @@
 
 	focus = {
 		id = STP_pc_lib_local_contacts
-		icon = GFX_goal_generic_intelligence_exchange
+		icon = GFX_focus_RUS_foreign_press_bureau
 		x = 24
 		y = 11
 		cost = 2
@@ -2035,7 +2366,7 @@
 
 	focus = {
 		id = STP_pc_lib_crisis
-		icon = GFX_goal_generic_major_war
+		icon = GFX_focus_VAL_Operational_Directorate
 		x = 24
 		y = 12
 		cost = 4
@@ -2072,7 +2403,7 @@
 
 	focus = {
 		id = STP_pc_lib_war
-		icon = GFX_goal_generic_occupy_states_ongoing_war
+		icon = GFX_focus_VAL_Frontier_Assault
 		x = 24
 		y = 13
 		cost = 4
@@ -2116,7 +2447,7 @@
 
 	focus = {
 		id = STP_pc_lib_transition
-		icon = GFX_focus_generic_improve_the_administration
+		icon = GFX_focus_VAL_Provincial_Brokers
 		x = 24
 		y = 14
 		cost = 5
@@ -2155,7 +2486,7 @@
 
 	focus = {
 		id = STP_pc_lib_independent_gov
-		icon = GFX_goal_generic_improve_relations
+		icon = GFX_focus_VAL_State_Contract
 		x = 24
 		y = 15
 		cost = 5
@@ -2181,7 +2512,7 @@
 
 	focus = {
 		id = STP_pc_lib_coalition
-		icon = GFX_goal_generic_alliance
+		icon = GFX_focus_RUS_parallel_public_addresses
 		x = 22
 		y = 16
 		cost = 5
@@ -2208,7 +2539,7 @@
 
 	focus = {
 		id = STP_pc_sot_chain
-		icon = GFX_focus_STP_bookmark_support_party
+		icon = GFX_focus_VAL_Contract_General_Staff
 		x = 16
 		y = 4
 		cost = 2
@@ -2232,7 +2563,7 @@
 
 	focus = {
 		id = STP_pc_sot_field
-		icon = GFX_focus_generic_military_academy
+		icon = GFX_focus_STP_Turn_The_Young_Officers
 		x = 16
 		y = 5
 		cost = 5
@@ -2259,7 +2590,7 @@
 
 	focus = {
 		id = STP_pc_sot_regions
-		icon = GFX_goal_generic_allies_build_infantry
+		icon = GFX_focus_VAL_Reserve_Battalions
 		x = 16
 		y = 6
 		cost = 5
@@ -2281,7 +2612,7 @@
 
 	focus = {
 		id = STP_pc_sot_state
-		icon = GFX_focus_STP_bookmark_last_banquet
+		icon = GFX_focus_RUS_imperial_general_staff
 		x = 16
 		y = 7
 		cost = 5
@@ -2307,7 +2638,7 @@
 
 	focus = {
 		id = STP_pc_sot_two_threats
-		icon = GFX_goal_generic_territory_or_war
+		icon = GFX_focus_STP_cw_northern_dossier
 		x = 18
 		y = 8
 		cost = 2
@@ -2345,7 +2676,7 @@
 
 	focus = {
 		id = STP_pc_sot_limits
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_VAL_Captains_Cannot_Veto
 		x = 16
 		y = 9
 		cost = 5
@@ -2367,7 +2698,7 @@
 
 	focus = {
 		id = STP_pc_sot_keep_command
-		icon = GFX_goal_generic_military_deal
+		icon = GFX_focus_VAL_Count_The_Captains
 		x = 15
 		y = 11
 		cost = 5
@@ -2411,7 +2742,7 @@
 
 	focus = {
 		id = STP_pc_sot_transfer
-		icon = GFX_goal_generic_elections
+		icon = GFX_focus_RUS_seal_chancery
 		x = 17
 		y = 11
 		cost = 5
@@ -2438,7 +2769,7 @@
 
 	focus = {
 		id = STP_pc_sot_val_defense
-		icon = GFX_goal_generic_fortify_city
+		icon = GFX_focus_RUS_patient_war
 		x = 14
 		y = 9
 		cost = 5
@@ -2460,7 +2791,7 @@
 
 	focus = {
 		id = STP_pc_sot_nod_watch
-		icon = GFX_focus_generic_mountain_fortification
+		icon = GFX_focus_VAL_Border_Survey_Corps
 		x = 18
 		y = 9
 		cost = 5
@@ -2485,7 +2816,7 @@
 
 	focus = {
 		id = STP_pc_sdir_oath
-		icon = GFX_focus_STP_Turn_The_Young_Officers
+		icon = GFX_focus_RUS_written_oaths
 		x = 16
 		y = 4
 		cost = 3
@@ -2515,7 +2846,7 @@
 
 	focus = {
 		id = STP_pc_sdir_occidia_campaign
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_RUS_claim_the_opened_zone
 		x = 11
 		y = 5
 		cost = 3
@@ -2537,7 +2868,7 @@
 
 	focus = {
 		id = STP_pc_sdir_field_army
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_VAL_Contractor_Officers
 		x = 14
 		y = 5
 		cost = 4
@@ -2565,7 +2896,7 @@
 
 	focus = {
 		id = STP_pc_sdir_district_levies
-		icon = GFX_focus_STP_pw_party_veteran_reserve
+		icon = GFX_focus_VAL_Reserve_Battalions
 		x = 18
 		y = 5
 		cost = 4
@@ -2592,7 +2923,7 @@
 
 	focus = {
 		id = STP_pc_sdir_war_orders
-		icon = GFX_focus_STP_defense_budget
+		icon = GFX_focus_RUS_military_contract_board
 		x = 14
 		y = 6
 		cost = 5
@@ -2625,7 +2956,7 @@
 
 	focus = {
 		id = STP_pc_sdir_staff_rule
-		icon = GFX_focus_STP_party_war_directorate
+		icon = GFX_focus_RUS_imperial_general_staff
 		x = 18
 		y = 6
 		cost = 4
@@ -2652,7 +2983,7 @@
 
 	focus = {
 		id = STP_pc_sdir_northern_plan
-		icon = GFX_focus_STP_Break_The_Northern_Ring
+		icon = GFX_focus_STP_cw_northern_dossier
 		x = 16
 		y = 7
 		cost = 3
@@ -2752,7 +3083,7 @@
 
 	focus = {
 		id = STP_pc_sdir_military_governors
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_RUS_military_governors
 		x = 16
 		y = 9
 		cost = 4
@@ -2791,7 +3122,7 @@
 
 	focus = {
 		id = STP_pc_sdir_central_command
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_VAL_Contract_General_Staff
 		x = 14
 		y = 10
 		cost = 3
@@ -2818,7 +3149,7 @@
 
 	focus = {
 		id = STP_pc_sdir_field_compacts
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_VAL_Company_Mandates
 		x = 18
 		y = 10
 		cost = 3
@@ -2845,7 +3176,7 @@
 
 	focus = {
 		id = STP_pc_sdir_arsenal_programme
-		icon = GFX_focus_STP_defense_budget
+		icon = GFX_focus_VAL_Salvage_Every_Barrel
 		x = 14
 		y = 11
 		cost = 3
@@ -2869,7 +3200,7 @@
 
 	focus = {
 		id = STP_pc_sdir_naval_programme
-		icon = GFX_focus_STP_party_port_contracts
+		icon = GFX_focus_STP_cw_port_budget
 		x = 18
 		y = 11
 		cost = 3
@@ -2893,7 +3224,7 @@
 
 	focus = {
 		id = STP_pc_sdir_rear_reconstruction
-		icon = GFX_focus_STP_cw_repair_niansas
+		icon = GFX_focus_VAL_Reclamation_Road_Crews
 		x = 11
 		y = 10
 		cost = 3
@@ -2915,7 +3246,7 @@
 
 	focus = {
 		id = STP_pc_sdir_command_register
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_VAL_Army_Of_The_Ledger
 		x = 10
 		y = 6
 		cost = 2
@@ -2937,7 +3268,7 @@
 
 	focus = {
 		id = STP_pc_sdir_military_prosecution
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_VAL_Provincial_Contract_Courts
 		x = 9
 		y = 7
 		cost = 2
@@ -2969,7 +3300,7 @@
 
 	focus = {
 		id = STP_pc_sdir_field_courts
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_RUS_district_courts
 		x = 11
 		y = 7
 		cost = 2
@@ -3001,7 +3332,7 @@
 
 	focus = {
 		id = STP_pc_sdir_district_audit
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_VAL_Ministry_Auditors
 		x = 10
 		y = 8
 		cost = 3
@@ -3035,7 +3366,7 @@
 
 	focus = {
 		id = STP_pc_sdir_service_records
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_VAL_Closed_Ledgers
 		x = 10
 		y = 9
 		cost = 2
@@ -3066,7 +3397,7 @@
 
 	focus = {
 		id = STP_pc_sdir_officer_college
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_RUS_officer_courses
 		x = 10
 		y = 15
 		cost = 4
@@ -3100,7 +3431,7 @@
 
 	focus = {
 		id = STP_pc_sdir_signal_corps
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_RUS_air_control_network
 		x = 22
 		y = 7
 		cost = 3
@@ -3125,7 +3456,7 @@
 
 	focus = {
 		id = STP_pc_sdir_motor_columns
-		icon = GFX_focus_STP_cw_repair_niansas
+		icon = GFX_focus_VAL_Morns_Supply_Trains
 		x = 22
 		y = 8
 		cost = 3
@@ -3147,7 +3478,7 @@
 
 	focus = {
 		id = STP_pc_sdir_mobile_operations
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_VAL_Motorized_Columns
 		x = 20
 		y = 9
 		cost = 3
@@ -3179,7 +3510,7 @@
 
 	focus = {
 		id = STP_pc_sdir_prepared_positions
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_RUS_patient_war
 		x = 24
 		y = 9
 		cost = 3
@@ -3211,7 +3542,7 @@
 
 	focus = {
 		id = STP_pc_sdir_forward_airfields
-		icon = GFX_focus_STP_defense_budget
+		icon = GFX_focus_RUS_capital_airfields
 		x = 22
 		y = 10
 		cost = 3
@@ -3235,7 +3566,7 @@
 
 	focus = {
 		id = STP_pc_sdir_integrated_staff
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_RUS_air_ground_coordination
 		x = 22
 		y = 12
 		cost = 4
@@ -3257,7 +3588,7 @@
 
 	focus = {
 		id = STP_pc_sdir_arsenal_standards
-		icon = GFX_focus_STP_defense_budget
+		icon = GFX_focus_VAL_Standardize_Rifle_Lots
 		x = 14
 		y = 12
 		cost = 3
@@ -3278,7 +3609,7 @@
 
 	focus = {
 		id = STP_pc_sdir_arsenal_machine_tools
-		icon = GFX_focus_STP_defense_budget
+		icon = GFX_focus_RUS_precision_lathes
 		x = 14
 		y = 13
 		cost = 3
@@ -3309,7 +3640,7 @@
 
 	focus = {
 		id = STP_pc_sdir_arsenal_acceptance
-		icon = GFX_focus_STP_defense_budget
+		icon = GFX_focus_VAL_Inventory_The_Empty_Yards
 		x = 14
 		y = 14
 		cost = 3
@@ -3394,7 +3725,7 @@
 
 	focus = {
 		id = STP_pc_sdir_naval_signals
-		icon = GFX_focus_STP_party_port_contracts
+		icon = GFX_focus_RUS_air_control_network
 		x = 18
 		y = 12
 		cost = 3
@@ -3416,7 +3747,7 @@
 
 	focus = {
 		id = STP_pc_sdir_convoy_escorts
-		icon = GFX_focus_STP_party_port_contracts
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 18
 		y = 13
 		cost = 3
@@ -3438,7 +3769,7 @@
 
 	focus = {
 		id = STP_pc_sdir_naval_repair_yards
-		icon = GFX_focus_STP_party_port_contracts
+		icon = GFX_focus_STP_cw_port_budget
 		x = 18
 		y = 14
 		cost = 3
@@ -3523,7 +3854,7 @@
 
 	focus = {
 		id = STP_pc_sdir_annexed_registers
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_VAL_Reclamation_Land_Register
 		x = 8
 		y = 12
 		cost = 3
@@ -3555,7 +3886,7 @@
 
 	focus = {
 		id = STP_pc_sdir_covered_frontier
-		icon = GFX_focus_STP_defense_budget
+		icon = GFX_focus_RUS_quiet_perimeter
 		x = 6
 		y = 13
 		cost = 3
@@ -3577,7 +3908,7 @@
 
 	focus = {
 		id = STP_pc_sdir_return_to_work
-		icon = GFX_focus_STP_cw_repair_niansas
+		icon = GFX_focus_VAL_Reclamation_Workshops
 		x = 10
 		y = 13
 		cost = 3
@@ -3599,7 +3930,7 @@
 
 	focus = {
 		id = STP_pc_sdir_fuel_depots
-		icon = GFX_focus_STP_cw_repair_niansas
+		icon = GFX_focus_RUS_aviation_fuel_reserve
 		x = 8
 		y = 14
 		cost = 3
@@ -3621,7 +3952,7 @@
 
 	focus = {
 		id = STP_pc_sdir_school_network
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 8
 		y = 15
 		cost = 3
@@ -3652,7 +3983,7 @@
 
 	focus = {
 		id = STP_pc_sdir_integrated_rear
-		icon = GFX_focus_STP_cw_repair_niansas
+		icon = GFX_focus_RUS_bunker_layer_service_school
 		x = 8
 		y = 16
 		cost = 4
@@ -3741,7 +4072,7 @@
 	# The alternative final returns the seal to the arrested founder and his hegemony course.
 	focus = {
 		id = STP_pc_sdir_return_seal
-		icon = GFX_focus_STP_Side_With_Maksim
+		icon = GFX_focus_RUS_seal_chancery
 		x = 18
 		y = 17
 		cost = 5
@@ -3775,7 +4106,7 @@
 
 	focus = {
 		id = STP_pc_gornin_charter
-		icon = GFX_focus_generic_self_management
+		icon = GFX_focus_VAL_One_Ledger_One_Banner
 		x = 14
 		y = 4
 		cost = 5
@@ -3821,7 +4152,7 @@
 
 	focus = {
 		id = STP_pc_vera_lists
-		icon = GFX_focus_STP_cw_quiet_registers
+		icon = GFX_focus_VAL_Closed_Ledgers
 		x = 18
 		y = 4
 		cost = 5
@@ -3848,7 +4179,7 @@
 
 	focus = {
 		id = STP_pc_val_renew_aid
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_focus_RUS_military_contract_board
 		x = 6
 		y = 13
 		cost = 4
@@ -3862,7 +4193,7 @@
 
 	focus = {
 		id = STP_pc_val_border_compact
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_focus_VAL_Westerholm_Concessions
 		x = 6
 		y = 13
 		cost = 4
@@ -3876,7 +4207,7 @@
 
 	focus = {
 		id = STP_pc_val_ratify
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_focus_VAL_Trading_Partners
 		x = 6
 		y = 14
 		cost = 4
@@ -3890,7 +4221,7 @@
 
 	focus = {
 		id = STP_pc_nod_ratify
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_focus_RUS_foreign_press_bureau
 		x = 18
 		y = 13
 		cost = 4
@@ -3904,7 +4235,7 @@
 
 	focus = {
 		id = STP_pc_nod_recognition
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_focus_VAL_Company_Mandates
 		x = 18
 		y = 12
 		cost = 4
@@ -3919,7 +4250,7 @@
 # @section economy
 	focus = {
 		id = STP_pc_economy_count_the_cost
-		icon = GFX_goal_generic_consumer_goods
+		icon = GFX_focus_RUS_state_budget
 		x = 32
 		y = 4
 		cost = 3
@@ -3943,7 +4274,7 @@
 
 	focus = {
 		id = STP_pc_economy_reopen_tax_offices
-		icon = GFX_focus_generic_improve_the_administration
+		icon = GFX_focus_RUS_trained_administrators
 		x = 32
 		y = 5
 		cost = 4
@@ -3973,6 +4304,7 @@
 		prerequisite = { focus = STP_pc_economy_reopen_tax_offices }
 		ai_will_do = { base = 8 }
 		completion_reward = {
+			unlock_decision_tooltip = STP_pw_campaign_engineers_of_peace
 			custom_effect_tooltip = STP_pc_economy_repair_workshops_tt
 			hidden_effect = {
 				if = {
@@ -4003,7 +4335,7 @@
 
 	focus = {
 		id = STP_pc_economy_stabilize_currency
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_VAL_Export_Clearing_House
 		x = 33
 		y = 6
 		cost = 4
@@ -4028,7 +4360,7 @@
 
 	focus = {
 		id = STP_pc_economy_recovery_budget
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Central_Payment_Office
 		x = 32
 		y = 7
 		cost = 5
@@ -4057,8 +4389,8 @@
 
 	focus = {
 		id = STP_pc_development_country_must_live
-		icon = GFX_goal_generic_propaganda
-		x = 36
+		icon = GFX_focus_VAL_Wireless_Contract_Bureau
+		x = 20
 		y = 4
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -4072,19 +4404,14 @@
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_ADISCORD_country_development_global_growth_factor value = 0.05 }
 				STP_pw_refresh_modifier = yes
-				if = {
-					limit = { NOT = { has_country_flag = STP_pw_propaganda_slot_1 } }
-					ADISCORD_campaign_slot_grant = yes
-					set_country_flag = STP_pw_propaganda_slot_1
-				}
 			}
 		}
 	}
 
 	focus = {
 		id = STP_pc_development_posters_on_ruins
-		icon = GFX_goal_generic_propaganda
-		x = 36
+		icon = GFX_focus_VAL_Two_Concurrent_Narratives
+		x = 20
 		y = 5
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -4095,7 +4422,6 @@
 			custom_effect_tooltip = STP_pc_development_posters_on_ruins_tt
 			hidden_effect = {
 				ADISCORD_increase_society_development_monthly_growth = yes
-				ADISCORD_increase_state_development_monthly_growth = yes
 				add_to_variable = { var = STP_pw_ADISCORD_country_development_society_growth_factor value = 0.05 }
 				STP_pw_refresh_modifier = yes
 			}
@@ -4104,18 +4430,18 @@
 
 	focus = {
 		id = STP_pc_development_rebuild_as_duty
-		icon = GFX_goal_generic_construct_infrastructure
-		x = 35
+		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		x = 21
 		y = 6
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pc_focus_available = yes } }
 		prerequisite = { focus = STP_pc_development_posters_on_ruins }
+		mutually_exclusive = { focus = STP_pc_development_engineers_on_radio }
 		ai_will_do = { base = 8 }
 		completion_reward = {
 			custom_effect_tooltip = STP_pc_development_rebuild_as_duty_tt
 			hidden_effect = {
-				ADISCORD_increase_economic_development_monthly_growth = yes
 				add_to_variable = { var = STP_pw_ADISCORD_country_development_economic_growth_factor value = 0.07 }
 				add_to_variable = { var = STP_pw_production_speed_buildings_factor value = 0.05 }
 				STP_pw_refresh_modifier = yes
@@ -4125,18 +4451,18 @@
 
 	focus = {
 		id = STP_pc_development_engineers_on_radio
-		icon = GFX_focus_generic_industry_3
-		x = 37
+		icon = GFX_focus_VAL_Wireless_Contract_Bureau
+		x = 23
 		y = 6
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pc_focus_available = yes } }
 		prerequisite = { focus = STP_pc_development_posters_on_ruins }
+		mutually_exclusive = { focus = STP_pc_development_rebuild_as_duty }
 		ai_will_do = { base = 8 }
 		completion_reward = {
 			custom_effect_tooltip = STP_pc_development_engineers_on_radio_tt
 			hidden_effect = {
-				ADISCORD_increase_state_development_monthly_growth = yes
 				add_to_variable = { var = STP_pw_ADISCORD_country_development_state_growth_factor value = 0.07 }
 				add_to_variable = { var = STP_pw_research_speed_factor value = 0.03 }
 				STP_pw_refresh_modifier = yes
@@ -4146,14 +4472,16 @@
 
 	focus = {
 		id = STP_pc_development_generation_reconstruction
-		icon = GFX_focus_generic_self_management
-		x = 36
+		icon = GFX_focus_VAL_Reclamation_Return_Home
+		x = 20
 		y = 7
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pc_focus_available = yes } }
-		prerequisite = { focus = STP_pc_development_rebuild_as_duty }
-		prerequisite = { focus = STP_pc_development_engineers_on_radio }
+		prerequisite = {
+			focus = STP_pc_development_rebuild_as_duty
+			focus = STP_pc_development_engineers_on_radio
+		}
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			add_stability = 0.04
@@ -4167,24 +4495,19 @@
 				add_to_variable = { var = STP_pw_ADISCORD_country_development_state_growth_factor value = 0.05 }
 				add_to_variable = { var = STP_pw_ADISCORD_country_development_economic_growth_factor value = 0.05 }
 				STP_pw_refresh_modifier = yes
-				if = {
-					limit = { NOT = { has_country_flag = STP_pw_propaganda_slot_2 } }
-					ADISCORD_campaign_slot_grant = yes
-					set_country_flag = STP_pw_propaganda_slot_2
-				}
 			}
 		}
 	}
 
 	focus = {
 		id = STP_pc_development_reopen_universities
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 38
-		y = 7
+		y = 8
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pc_focus_available = yes } }
-		prerequisite = { focus = STP_pc_development_engineers_on_radio }
+		prerequisite = { focus = STP_pc_development_generation_reconstruction }
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			ADISCORD_reform_cultural_development = yes
@@ -4199,7 +4522,7 @@
 
 	focus = {
 		id = STP_pc_development_national_research_institutes
-		icon = GFX_focus_generic_industry_3
+		icon = GFX_focus_RUS_empire_without_rivals
 		x = 36
 		y = 9
 		cost = 5
@@ -4224,7 +4547,7 @@
 	# A functioning Bezhaysk administration provides access without direct annexation.
 	focus = {
 		id = STP_pc_development_captured_institutes
-		icon = GFX_focus_research
+		icon = GFX_focus_RUS_scientists_council
 		x = 38
 		y = 10
 		cost = 5
@@ -4255,7 +4578,7 @@
 # @section investment
 	focus = {
 		id = STP_pc_investment_development_fund
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_RUS_underground_fund
 		x = 34
 		y = 10
 		cost = 3
@@ -4307,7 +4630,7 @@
 
 	focus = {
 		id = STP_pc_investment_special_metallurgy
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Westerholm_Concessions
 		x = 36
 		y = 11
 		cost = 5
@@ -4326,7 +4649,7 @@
 
 	focus = {
 		id = STP_pc_investment_automation
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Three_Shift_Arsenals
 		x = 32
 		y = 12
 		cost = 3
@@ -4342,7 +4665,7 @@
 
 	focus = {
 		id = STP_pc_investment_logistics
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Motorized_Columns
 		x = 36
 		y = 12
 		cost = 3
@@ -4358,7 +4681,7 @@
 
 	focus = {
 		id = STP_pc_investment_computing
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_ADISCORD_Wall_Of_Screens
 		x = 32
 		y = 13
 		cost = 3
@@ -4374,7 +4697,7 @@
 
 	focus = {
 		id = STP_pc_investment_defense_orders
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Munitions_Board
 		x = 36
 		y = 13
 		cost = 5
@@ -4397,7 +4720,7 @@
 
 	focus = {
 		id = STP_pc_investment_export_finance
-		icon = GFX_goal_generic_trade
+		icon = GFX_focus_VAL_Export_Clearing_House
 		x = 36
 		y = 14
 		cost = 3
@@ -4416,7 +4739,7 @@
 
 	focus = {
 		id = STP_pc_investment_integrated_economy
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_The_Steel_Contract
 		x = 34
 		y = 15
 		cost = 5
@@ -4444,7 +4767,7 @@
 
 	focus = {
 		id = STP_pc_navy_capital
-		icon = GFX_goal_generic_navy_battleship
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 0
 		y = 10
 		cost = 10

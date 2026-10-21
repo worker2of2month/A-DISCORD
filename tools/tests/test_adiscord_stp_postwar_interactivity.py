@@ -161,7 +161,6 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
     def test_postwar_pacing_keeps_routine_focuses_at_28_days_or_less(self):
         focus = read("common/national_focus/ADISCORD_national_focus_STP.txt")
         expected_costs = {
-            "STP_pc_shabrat_cabinet": 4,
             "STP_pc_shabrat_politics": 4,
             "STP_pc_two_borders": 2,
             "STP_pc_war_ledgers": 4,

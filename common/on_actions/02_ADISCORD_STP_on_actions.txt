@@ -1,4 +1,13 @@
 on_actions = {
+	on_government_change = {
+		effect = {
+			if = {
+				limit = { tag = STS }
+				STP_heg_betrayal_reconcile = yes
+			}
+		}
+	}
+
 	on_daily_STS = {
 		effect = { STP_hw_stall_tick = yes }
 	}

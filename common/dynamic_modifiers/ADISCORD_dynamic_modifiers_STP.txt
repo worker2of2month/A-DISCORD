@@ -70,7 +70,7 @@ STP_cw_election_mandate_dynamic = {
 }
 
 STP_pw_reconstruction_dynamic = {
-	icon = GFX_idea_ADISCORD_law_civic_local_councils
+	icon = GFX_idea_STP_civil_war_aftermath
 	enable = {
 		OR = {
 			tag = STP
@@ -83,7 +83,7 @@ STP_pw_reconstruction_dynamic = {
 }
 
 STP_pw_republic_dynamic = {
-	icon = GFX_idea_ADISCORD_law_civic_local_councils
+	icon = GFX_idea_STP_district_republic
 	enable = { tag = STS }
 	ADISCORD_economy_admin_expense_factor = STP_pw_ADISCORD_economy_admin_expense_factor
 	ADISCORD_economy_overall_income_factor = STP_pw_ADISCORD_economy_overall_income_factor

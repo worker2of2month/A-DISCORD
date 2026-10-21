@@ -620,7 +620,7 @@ class PlayableStaffTests(unittest.TestCase):
         routes = {
             'STP': {
                 'administration': (
-                    'STP_pc_shabrat_cabinet',
+                    'STP_pc_after_victory',
                     'STP_pw_republic_district_authority',
                     'STP_pw_party_executive_secretariat',
                 ),

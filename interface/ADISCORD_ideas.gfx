@@ -39,6 +39,16 @@ spriteTypes = {
 
 	###STP
 	spriteType = {
+		name = "GFX_idea_STP_civil_war_aftermath"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_civil_war_aftermath.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_STP_district_republic"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_district_republic.png"
+	}
+
+	spriteType = {
 		name = "GFX_idea_STP_apolitical_population"
 		texturefile = "gfx/interface/ideas/STP/idea_STP_apolitical_population.dds"
 	}

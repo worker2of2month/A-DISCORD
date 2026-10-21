@@ -8134,6 +8134,215 @@ VAL_finish_frontier_protectorate = {
 	}
 }
 
+# VAL scope. VAL_ardent_stage: 0 preparation, 1 civil war, 2 committee in
+# Kefreyt's administration, 3 assembly victory. The price is debited only
+# after the native split has produced the committee.
+VAL_ardent_start_uprising = {
+	if = {
+		limit = { VAL_ardent_uprising_ready = yes }
+		TFF = {
+			ADISCORD_release_non_participating_minor_optimization = yes
+			if = {
+				limit = {
+					VAL = {
+						has_country_flag = VAL_ardent_route_prepared
+						has_completed_focus = VAL_October_Of_2160
+					}
+				}
+				start_civil_war = {
+					ideology = etatism
+					size = 0
+					army_ratio = 0.50
+					navy_ratio = 0
+					air_ratio = 0
+					capital = 83
+					states = { 83 85 }
+				}
+			}
+			else_if = {
+				limit = {
+					VAL = {
+						has_country_flag = VAL_ardent_route_prepared
+						has_completed_focus = VAL_Trading_Partners
+					}
+					86 = {
+						is_owned_by = TFF
+						is_controlled_by = TFF
+					}
+				}
+				start_civil_war = {
+					ideology = etatism
+					size = 0
+					army_ratio = 0.35
+					navy_ratio = 0
+					air_ratio = 0
+					capital = 83
+					states = { 83 85 86 }
+				}
+			}
+			else = {
+				start_civil_war = {
+					ideology = etatism
+					size = 0
+					army_ratio = 0.35
+					navy_ratio = 0
+					air_ratio = 0
+					capital = 83
+					states = { 83 85 }
+				}
+			}
+			if = {
+				limit = {
+					any_other_country = {
+						original_tag = TFF
+						has_government = etatism
+					}
+				}
+				# The committee shares original_tag with the assembly; later
+				# callbacks use this cached country and its flag, never TFF.
+				random_other_country = {
+					limit = {
+						original_tag = TFF
+						has_government = etatism
+					}
+					save_global_event_target_as = VAL_ardent_committee
+					set_country_flag = VAL_ardent_committee
+					set_cosmetic_tag = TFF_ardent_committee
+					set_popularities = {
+						etatism = 70
+						anarchism = 30
+					}
+				}
+				if = {
+					limit = { has_character = TFF_Colt_Ardent }
+					set_nationality = {
+						character = TFF_Colt_Ardent
+						target_country = event_target:VAL_ardent_committee
+					}
+				}
+				if = {
+					limit = { has_idea = minister_TFF_Colt_Ardent }
+					remove_ideas = minister_TFF_Colt_Ardent
+				}
+				event_target:VAL_ardent_committee = {
+					add_country_leader_role = {
+						character = TFF_Colt_Ardent
+						country_leader = {
+							ideology = contractual_etatism
+							desc = TFF_Colt_Ardent_committee_desc
+							expire = "2200.1.1.1"
+						}
+					}
+					promote_character = {
+						character = TFF_Colt_Ardent
+						ideology = contractual_etatism
+					}
+					add_equipment_to_stockpile = {
+						type = infantry_equipment
+						amount = 2000
+						producer = VAL
+					}
+					ADISCORD_economy_initialize_country = yes
+					ADISCORD_economy_mark_dirty = yes
+				}
+				# The assembly revokes the wartime mandate that left with Ardent.
+				clr_country_flag = TFF_wartime_command_active
+				if = {
+					limit = { has_idea = TFF_emergency_frontier_command }
+					remove_ideas = TFF_emergency_frontier_command
+				}
+				if = {
+					limit = { has_cosmetic_tag = TFF_frontier_defense_confederation }
+					drop_cosmetic_tag = yes
+				}
+				if = {
+					limit = { has_character = The_Absent_Government }
+					promote_character = {
+						character = The_Absent_Government
+						ideology = anarchism_ideology
+					}
+				}
+				ADISCORD_economy_mark_dirty = yes
+				VAL = {
+					add_political_power = -25
+					add_equipment_to_stockpile = {
+						type = infantry_equipment
+						amount = -2000
+					}
+					set_variable = { var = VAL_ardent_stage value = 1 }
+					clr_country_flag = VAL_ardent_mandate_secured
+					clr_country_flag = VAL_ardent_route_prepared
+				}
+				country_event = { id = ADISCORD_TFF.21 }
+			}
+		}
+	}
+}
+
+# VAL scope. The committee keeps its own tag after annexing the assembly.
+VAL_ardent_settle_committee_victory = {
+	set_variable = { var = VAL_ardent_stage value = 2 }
+	if = {
+		limit = {
+			exists = yes
+			has_capitulated = no
+			is_subject = no
+			event_target:VAL_ardent_committee = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+			}
+		}
+		set_autonomy = {
+			target = event_target:VAL_ardent_committee
+			autonomy_state = autonomy_VAL_contract_administration
+			freedom_level = 0.10
+			end_wars = no
+			end_civil_wars = no
+		}
+		if = {
+			limit = { event_target:VAL_ardent_committee = { is_subject_of = VAL } }
+			event_target:VAL_ardent_committee = {
+				ADISCORD_release_non_participating_minor_optimization = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+			if = {
+				limit = { is_in_faction = no }
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = VAL_northern_expansion_faction
+				}
+			}
+			if = {
+				limit = {
+					is_faction_leader = yes
+					event_target:VAL_ardent_committee = { is_in_faction = no }
+				}
+				add_to_faction = event_target:VAL_ardent_committee
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+	country_event = { id = val_contract.390 }
+}
+
+VAL_ardent_settle_assembly_victory = {
+	set_variable = { var = VAL_ardent_stage value = 3 }
+	country_event = { id = val_contract.390 }
+}
+
+# VAL scope. Exposure forfeits a running payment and the secured mandate;
+# the decision's cancel trigger then closes the operation without a refund.
+VAL_ardent_expose_network = {
+	if = {
+		limit = { has_country_flag = VAL_ardent_operation_paid }
+		clr_country_flag = VAL_ardent_operation_paid
+		clr_country_flag = VAL_foreign_operation_active
+	}
+	clr_country_flag = VAL_ardent_mandate_secured
+	country_event = { id = val_contract.391 }
+}
+
 # The quote is temporary input from the player's current treaty choice.
 VAL_open_nod_frontier_offer = {
 	if = {

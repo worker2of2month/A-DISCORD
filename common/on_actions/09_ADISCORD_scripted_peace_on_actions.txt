@@ -1591,6 +1591,36 @@ on_actions = {
 					ROOT = { clr_country_flag = STP_pw_party_northern_march_capitulation_reserved }
 					set_global_flag = skip_default_capitulation
 				}
+				# Ardent's civil war. The stage changes before white_peace so the
+				# kefreyt:on_peace fallback cannot settle the same war again.
+				if = {
+					limit = {
+						VAL = { check_variable = { var = VAL_ardent_stage value = 1 compare = equals } }
+						ROOT = { tag = TFF }
+						FROM = { has_country_flag = VAL_ardent_committee }
+					}
+					set_global_flag = skip_default_capitulation
+					VAL = { set_variable = { var = VAL_ardent_stage value = 2 } }
+					FROM = {
+						if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+						annex_country = { target = ROOT transfer_troops = yes }
+					}
+					VAL = { VAL_ardent_settle_committee_victory = yes }
+				}
+				else_if = {
+					limit = {
+						VAL = { check_variable = { var = VAL_ardent_stage value = 1 compare = equals } }
+						ROOT = { has_country_flag = VAL_ardent_committee }
+						FROM = { tag = TFF }
+					}
+					set_global_flag = skip_default_capitulation
+					VAL = { set_variable = { var = VAL_ardent_stage value = 3 } }
+					FROM = {
+						if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+						annex_country = { target = ROOT transfer_troops = yes }
+					}
+					VAL = { VAL_ardent_settle_assembly_victory = yes }
+				}
 				# END frontier:on_capitulation
 
 				# BEGIN rin:on_capitulation
@@ -2125,6 +2155,26 @@ on_actions = {
 				if = { limit = { STP = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STP = { VAL_cede_stelander_border = yes } }
 				if = { limit = { STS = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STS = { VAL_cede_stelander_border = yes } }
 				VAL_queue_frontier_reconciliation = yes
+				# Ardent's civil war ended outside the bespoke capitulation: a surviving
+				# committee keeps its districts under Kefreyt, a removed one has lost.
+				if = {
+					limit = {
+						VAL = { check_variable = { var = VAL_ardent_stage value = 1 compare = equals } }
+						event_target:VAL_ardent_committee = {
+							OR = {
+								exists = no
+								NOT = { has_war_with = TFF }
+							}
+						}
+					}
+					if = {
+						limit = { event_target:VAL_ardent_committee = { exists = yes } }
+						VAL = { VAL_ardent_settle_committee_victory = yes }
+					}
+					else = {
+						VAL = { VAL_ardent_settle_assembly_victory = yes }
+					}
+				}
 				# END kefreyt:on_peace
 				# BEGIN stelander:on_peace
 				STS = { STP_pc_close_liberation_war_receipt = yes }

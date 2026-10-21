@@ -164,6 +164,37 @@ LOCALISED_IDS = (
 )
 
 TOOLTIP_IDS = (
+    "ADISCORD_vorkerland_prep_worker_reserves_fixed_tt",
+    "ADISCORD_vorkerland_prep_begin_tt",
+    "ADISCORD_vorkerland_prep_cadre_school_result_tt",
+    "ADISCORD_vorkerland_prep_civil_evacuation_result_tt",
+    "ADISCORD_vorkerland_prep_defend_tt",
+    "ADISCORD_vorkerland_prep_district_open_tt",
+    "ADISCORD_vorkerland_prep_evacuate_trains_result_tt",
+    "ADISCORD_vorkerland_prep_finish_tt",
+    "ADISCORD_vorkerland_prep_local_guard_result_tt",
+    "ADISCORD_vorkerland_prep_military_evacuation_result_tt",
+    "ADISCORD_vorkerland_prep_mobilisation_lists_result_tt",
+    "ADISCORD_vorkerland_prep_offer_egc_tt",
+    "ADISCORD_vorkerland_prep_offer_eyr_tt",
+    "ADISCORD_vorkerland_prep_offer_riv_tt",
+    "ADISCORD_vorkerland_prep_offer_yor_tt",
+    "ADISCORD_vorkerland_prep_open_stores_result_tt",
+    "ADISCORD_vorkerland_prep_patron_tt",
+    "ADISCORD_vorkerland_prep_project_tt",
+    "ADISCORD_vorkerland_prep_protect_rail_result_tt",
+    "ADISCORD_vorkerland_prep_public_charter_result_tt",
+    "ADISCORD_vorkerland_prep_recipient_tt",
+    "ADISCORD_vorkerland_prep_refund_tt",
+    "ADISCORD_vorkerland_prep_release_guard_tt",
+    "ADISCORD_vorkerland_prep_release_rifles_tt",
+    "ADISCORD_vorkerland_prep_save_specialists_result_tt",
+    "ADISCORD_vorkerland_prep_seal_reserve_result_tt",
+    "ADISCORD_vorkerland_prep_slot_tt",
+    "ADISCORD_vorkerland_prep_treaty_tt",
+    "ADISCORD_vorkerland_prep_war_shifts_result_tt",
+    "ADISCORD_vorkerland_prep_yield_tt",
+
     "ADISCORD_vorkerland_launch_central_minor_wave_target_tt",
     "ADISCORD_vorkerland_launch_central_minor_wave_recovery_tt",
     "ADISCORD_vorkerland_launch_central_minor_wave_pending_tt",
@@ -1099,10 +1130,16 @@ def collect_issues() -> list[str]:
     if not (ROOT / RUSSIAN_LOCALISATION).read_bytes().startswith(b"\xef\xbb\xbf"):
         issues.append("Russian focus-decision localisation must use UTF-8 BOM")
     expected = expected_localisation_keys()
-    for language, entries in (
-        ("English", localisation_entries(english)),
-        ("Russian", localisation_entries(russian)),
+    for language, entries, path in (
+        ("English", localisation_entries(english), ENGLISH_LOCALISATION),
+        ("Russian", localisation_entries(russian), RUSSIAN_LOCALISATION),
     ):
+        preparation_entries = localisation_entries(read(path))
+        entries.update({
+            key: preparation_entries[key]
+            for key in TOOLTIP_IDS
+            if key.startswith("ADISCORD_vorkerland_prep_") and key in preparation_entries
+        })
         if set(entries) != expected:
             issues.append(
                 f"{language} localisation key mismatch: "

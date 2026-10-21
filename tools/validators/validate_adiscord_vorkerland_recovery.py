@@ -750,17 +750,20 @@ def validate_new_save_materialization() -> list[str]:
                 "collapse event .1 must consume preferences without creating new ones"
             )
 
+    fate = named_block(_load(COLLAPSE_EFFECTS, issues), "ADISCORD_vorkerland_prep_resolve_fate")
+    if immediate.count("ADISCORD_vorkerland_prep_resolve_fate = yes") != 1:
+        issues.append("collapse event .1 must resolve the prepared evacuation exactly once")
     fate_lists = [
         block
-        for block in named_blocks(immediate, "random_list")
+        for block in named_blocks(fate, "random_list")
         if "ADISCORD_vorkerland_worker_safe_with_loyalists" in block
     ]
     if len(fate_lists) != 1:
         issues.append(
-            "collapse event .1 must retain exactly one independent Worker-fate roll"
+            "unprepared evacuation must retain exactly one independent Worker-fate fallback"
         )
     elif any(
-        preference_flag in fate_lists[0] for preference_flag in PLAYER_PREFERENCE_FLAGS
+        preference_flag in fate for preference_flag in PLAYER_PREFERENCE_FLAGS
     ):
         issues.append(
             "Worker's random fate must not read the player's claimant preference"
@@ -768,10 +771,10 @@ def validate_new_save_materialization() -> list[str]:
     if "has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified" in immediate:
         issues.append("regional guarantees must not force a claimant or Worker's fate")
     if (
-        immediate.count("set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad")
-        != 1
+        fate.count("set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad")
+        != 2
     ):
-        issues.append("the independent fate roll must retain one Worker rescue path")
+        issues.append("prepared evacuation and the fallback must each retain the Worker rescue path")
     if immediate.count("ADISCORD_vorkerland_form_joint_government = yes") != 1:
         issues.append("joint government must retain exactly one bounded wartime roll")
 
@@ -830,7 +833,7 @@ def validate_new_save_materialization() -> list[str]:
                 issues.append(diagnostic)
 
     begin_position = immediate.find("ADISCORD_vorkerland_begin_collapse = yes")
-    fate_position = immediate.find("random_list = {")
+    fate_position = immediate.find("ADISCORD_vorkerland_prep_resolve_fate = yes")
     split_position = immediate.find("ADISCORD_vorkerland_apply_initial_map = yes")
     characters_position = immediate.find(
         "ADISCORD_vorkerland_prepare_claimant_characters = yes"

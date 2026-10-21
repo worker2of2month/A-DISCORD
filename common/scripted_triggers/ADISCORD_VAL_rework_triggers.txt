@@ -1558,19 +1558,93 @@ VAL_frontier_protectorate_offer_current = {
 	}
 }
 
+# The victorious Ardent committee annexes TFF under its own dynamic tag, so the
+# subject scan identifies it by the committee flag instead of the TFF tag.
 VAL_frontier_joint_campaign_ready = {
 	tag = VAL
 	has_completed_focus = VAL_Different_Views_On_Freedom
 	VAL_nod_stelander_bloc = yes
+	OR = {
+		TFF = {
+			exists = yes
+			has_capitulated = no
+			is_subject_of = VAL
+			NOT = { has_war_with = VAL }
+			capital_scope = {
+				is_owned_by = TFF
+				is_controlled_by = TFF
+			}
+		}
+		any_subject_country = {
+			has_country_flag = VAL_ardent_committee
+			has_capitulated = no
+			NOT = { has_war_with = VAL }
+			capital_scope = {
+				owner = { has_country_flag = VAL_ardent_committee }
+				controller = { has_country_flag = VAL_ardent_committee }
+			}
+		}
+	}
+}
+
+# VAL scope. The Ardent route follows a refused protectorate: the offer is sent
+# when the focus completes, so a completed focus without the pending receipt
+# and without a subject Frontier means the communes declined it.
+VAL_ardent_route_visible = {
+	tag = VAL
+	has_completed_focus = VAL_Different_Views_On_Freedom
+	NOT = { has_country_flag = VAL_frontier_protectorate_pending }
+	NOT = { has_country_flag = VAL_stelander_defeated }
+	NOT = { check_variable = { var = VAL_ardent_stage value = 0 compare = greater_than } }
 	TFF = {
 		exists = yes
+		NOT = { is_subject_of = VAL }
+	}
+}
+
+VAL_ardent_operations_open = {
+	VAL_ardent_route_visible = yes
+	VAL_frontier_northern_war_settled = yes
+	has_capitulated = no
+	is_subject = no
+	NOT = { has_country_flag = VAL_nod_frontier_offer_pending }
+	NOT = { has_country_flag = VAL_nod_frontier_agreement }
+	TFF = {
 		has_capitulated = no
-		is_subject_of = VAL
+		is_subject = no
 		NOT = { has_war_with = VAL }
-		capital_scope = {
+		NOT = { is_in_faction_with = VAL }
+		has_character = TFF_Colt_Ardent
+	}
+}
+
+# VAL scope. Odar and Yorlun are the border districts Ardent commanded against
+# NOD; the assembly keeps Vairand, Etriyam and the northern lighthouse.
+VAL_ardent_uprising_ready = {
+	VAL_ardent_operations_open = yes
+	has_country_flag = VAL_ardent_mandate_secured
+	NOT = { has_country_flag = VAL_ardent_operation_paid }
+	NOT = { has_political_power < 25 }
+	NOT = { has_equipment = { infantry_equipment < 2000 } }
+	TFF = {
+		has_war = no
+		83 = {
 			is_owned_by = TFF
 			is_controlled_by = TFF
 		}
+		85 = {
+			is_owned_by = TFF
+			is_controlled_by = TFF
+		}
+	}
+}
+
+# VAL scope. The assembly can answer a running payment or a secured mandate.
+VAL_ardent_network_active = {
+	NOT = { check_variable = { var = VAL_ardent_stage value = 0 compare = greater_than } }
+	OR = {
+		has_country_flag = VAL_ardent_mandate_secured
+		has_country_flag = VAL_ardent_operation_paid
 	}
 }
 

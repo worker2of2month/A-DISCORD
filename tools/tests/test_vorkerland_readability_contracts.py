@@ -1,6 +1,6 @@
 """Structural and truth-table contracts for the imperial campaign.
 
-The evaluator below covers only the five native target predicates and boolean
+The evaluator below covers only the six native target predicates and boolean
 composition. It is not a substitute for a Clausewitz campaign or UI test.
 """
 
@@ -36,6 +36,7 @@ FIELDS = (
     "has_capitulated",
     "has_war_with",
     "is_in_faction_with",
+    "has_country_flag",
 )
 
 
@@ -95,6 +96,9 @@ def evaluate(entries, facts, scope, definitions):
         actual = facts[scope][key]
         if value in ("yes", "no"):
             return actual == (value == "yes")
+        if key == "has_country_flag":
+            assert value == "ADISCORD_vorkerland_prep_independence_guaranteed"
+            return actual
         if value != "WRK":
             raise AssertionError(f"Unexpected relation target: {value}")
         return actual
@@ -113,9 +117,9 @@ class ImperialReclamationContracts(unittest.TestCase):
     def dispatch(self):
         return body(parse_clausewitz(read(EFFECTS)), DISPATCH)
 
-    def test_candidate_predicate_preserves_all_five_conditions(self):
+    def test_candidate_predicate_preserves_all_six_conditions(self):
         expected = parse_clausewitz(
-            "exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK }"
+            "exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } NOT = { has_country_flag = ADISCORD_vorkerland_prep_independence_guaranteed }"
         )
         self.assertEqual(canonical(self.definitions()[TARGET]), canonical(expected))
 
@@ -180,7 +184,7 @@ class ImperialReclamationContracts(unittest.TestCase):
         ]
         for eligible in eligible_sets:
             facts = {
-                t: dict(zip(FIELDS, (t in eligible, False, False, False, False)))
+                t: dict(zip(FIELDS, (t in eligible, False, False, False, False, False)))
                 for t in TARGETS
             }
             chosen = None

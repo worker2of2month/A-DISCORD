@@ -63,7 +63,22 @@ PREWAR_WRK_EXPANSION_FOCUSES = (
     "WRK_place_reserves_under_worker",
 )
 
-PREWAR_WRK_FOCUSES = (*PREWAR_WRK_BASE_FOCUSES, *PREWAR_WRK_EXPANSION_FOCUSES)
+PREWAR_WRK_PROGRAMME_FOCUSES = (
+    "WRK_reopen_emergency_workshops",
+    "WRK_prioritize_arsenal_output",
+    "WRK_preserve_machine_tools",
+    "WRK_collect_officer_returns",
+    "WRK_contract_local_garrisons",
+    "WRK_prepare_officer_reserve",
+    "WRK_prepare_civil_evacuation",
+    "WRK_prepare_military_evacuation",
+)
+
+PREWAR_WRK_FOCUSES = (
+    *PREWAR_WRK_BASE_FOCUSES,
+    *PREWAR_WRK_EXPANSION_FOCUSES,
+    *PREWAR_WRK_PROGRAMME_FOCUSES,
+)
 
 PREWAR_VAD_BASE_FOCUSES = (
     "VAD_review_district_obligations",
@@ -257,14 +272,14 @@ SHOWDOWN_FOCUSES = {
 }
 
 PREWAR_EXPANSION_POSITIONS = {
-    "WRK_open_worker_vadl_backchannel": (4, 4),
-    "WRK_offer_emergency_compact": (4, 5),
-    "WRK_mobilize_loyal_republics": (2, 4),
-    "WRK_place_reserves_under_worker": (2, 5),
-    "VAD_prepare_vadl_worker_terms": (14, 4),
-    "VAD_ratify_emergency_compact": (14, 5),
-    "VAD_activate_eastern_mandate": (12, 4),
-    "VAD_seal_district_arsenals": (12, 5),
+    "WRK_open_worker_vadl_backchannel": (10, 4),
+    "WRK_offer_emergency_compact": (10, 5),
+    "WRK_mobilize_loyal_republics": (8, 4),
+    "WRK_place_reserves_under_worker": (8, 5),
+    "VAD_prepare_vadl_worker_terms": (28, 4),
+    "VAD_ratify_emergency_compact": (28, 5),
+    "VAD_activate_eastern_mandate": (26, 4),
+    "VAD_seal_district_arsenals": (26, 5),
 }
 
 PREWAR_EXPANSION_COSTS = {
@@ -314,6 +329,8 @@ PREWAR_COURSE_SELECTIONS = {
 
 PREWAR_WRK_CARRYOVER_FOCUSES = (
     *PREWAR_WRK_BASE_FOCUSES,
+    "WRK_reopen_emergency_workshops",
+    "WRK_collect_officer_returns",
     "WRK_place_reserves_under_worker",
 )
 
@@ -848,8 +865,8 @@ def wrk_focus_texture_path(focus_id: str) -> str:
 
 def _check_focus_gfx(focus_gfx: str, shine_source: str) -> list[str]:
     issues: list[str] = []
-    if len(WRK_TREE_FOCUSES) != 43 or len(set(WRK_TREE_FOCUSES)) != 43:
-        issues.append("WRK drop-in focus icon manifest must contain 43 unique ids")
+    if len(WRK_TREE_FOCUSES) != 51 or len(set(WRK_TREE_FOCUSES)) != 51:
+        issues.append("WRK drop-in focus icon manifest must contain 51 unique ids")
     for focus_id in FOCUS_IDS:
         sprite = focus_icon_name(focus_id)
         texture = focus_texture_path(focus_id)
@@ -871,8 +888,7 @@ def _check_wrk_focus_gfx(focus_gfx: str, shine_source: str) -> list[str]:
 
 
 FOCUS_IDS = (
-    *PREWAR_WRK_BASE_FOCUSES,
-    *PREWAR_WRK_EXPANSION_FOCUSES,
+    *PREWAR_WRK_FOCUSES,
     *PREWAR_VAD_BASE_FOCUSES,
     *PREWAR_VAD_EXPANSION_FOCUSES,
     RETIRED_WARTIME_FOCUSES[0],
@@ -2580,8 +2596,8 @@ DEPTH_AI_PLANS = {
 
 LAYOUT_BANDS = {
     "postwar_expansion": ((0, 60), (22, 45)),
-    "prewar_WRK": ((0, 8), (0, 6)),
-    "prewar_VAD": ((10, 18), (0, 6)),
+    "prewar_WRK": ((0, 14), (0, 6)),
+    "prewar_VAD": ((24, 32), (0, 6)),
     "retired": ((20, 24), (0, 6)),
     "war_WKR": ((0, 24), (7, 20)),
     "war_VAD": ((26, 54), (7, 20)),
@@ -2604,8 +2620,8 @@ POSTWAR_BAND_BY_ROUTE = {
 }
 
 LAYOUT_ANCHORS = {
-    "WRK_measure_confederation_fault_lines": (1, 0),
-    "VAD_review_district_obligations": (11, 0),
+    "WRK_measure_confederation_fault_lines": (7, 0),
+    "VAD_review_district_obligations": (25, 0),
     "ADISCORD_vorkerland_stabilize_claimant_regime": (21, 0),
     "WKR_affirm_worker_mandate": (8, 7),
     "VAD_proclaim_joint_charter": (33, 7),
@@ -2870,6 +2886,7 @@ def expected_localisation_keys() -> set[str]:
         "ADISCORD_vorkerland_claimant_focus_phase_tt",
         "ADISCORD_vorkerland_central_showdown_phase_tt",
         "ADISCORD_vorkerland_wrk_preparations_carry_over_tt",
+        "ADISCORD_vorkerland_prep_worker_reserves_fixed_tt",
         "ADISCORD_vorkerland_unlock_core_restoration_decisions_tt",
         "WRK_worker_recognize_free_republics_tt",
         "WRK_worker_write_constitutional_guarantees_tt",
@@ -3366,9 +3383,9 @@ def collect_issues() -> list[str]:
         issues.append(
             f"focus IDs/order differ from the lifecycle manifest: {tuple(blocks)}"
         )
-    if len(FOCUS_IDS) != 238:
+    if len(FOCUS_IDS) != 246:
         issues.append(
-            f"validator manifest must contain 238 definitions, found {len(FOCUS_IDS)}"
+            f"validator manifest must contain 246 definitions, found {len(FOCUS_IDS)}"
         )
     issues.extend(_check_graph(blocks))
 

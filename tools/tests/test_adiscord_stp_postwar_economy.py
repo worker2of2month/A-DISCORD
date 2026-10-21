@@ -28,6 +28,56 @@ def focus_block(text: str, focus_id: str) -> str:
 
 
 class ShabratPostwarEconomyTests(unittest.TestCase):
+    def test_development_choices_rejoin_and_campaigns_follow_their_own_focus(self):
+        from tools.tests.test_adiscord_stp_preparation import block, entries, scalar
+
+        focuses = {scalar(e.value, "id"): e.value for e in entries(
+            "focus_trees/STP/postwar/shabrat/focuses.txt") if e.key == "focus"}
+        left = "STP_pc_development_rebuild_as_duty"
+        right = "STP_pc_development_engineers_on_radio"
+        for chosen, excluded in ((left, right), (right, left)):
+            self.assertEqual(scalar(block(focuses[chosen], "mutually_exclusive"), "focus"), excluded)
+        merge = focuses["STP_pc_development_generation_reconstruction"]
+        self.assertEqual({e.value for e in block(merge, "prerequisite")}, {left, right})
+        campaigns = block(entries("common/decisions/ADISCORD_STP_decisions.txt"),
+                          "STP_postwar_propaganda_campaigns")
+        mapping = {
+            "STP_pw_campaign_victory_means_normal_life": "STP_pw_republic_new_republic",
+            "STP_pw_campaign_country_is_being_built": "STP_pw_republic_restore_roads",
+            "STP_pw_campaign_engineers_of_peace": "STP_pc_economy_repair_workshops",
+            "STP_pw_campaign_one_steland": "STP_pc_two_borders",
+        }
+        for decision, focus_id in mapping.items():
+            self.assertEqual(scalar(block(block(campaigns, decision), "visible"),
+                                    "has_completed_focus"), focus_id)
+            rewards = block(focuses[focus_id], "completion_reward")
+            self.assertIn(decision, [e.value for e in rewards if e.key == "unlock_decision_tooltip"])
+        for focus_id, direction in (
+            ("STP_pw_republic_civil_records", "state"),
+            ("STP_pw_republic_civil_workshops", "economic"),
+            ("STP_pc_two_borders", "state"),
+        ):
+            body = focus_block(read("common/national_focus/ADISCORD_national_focus_STP.txt"), focus_id)
+            self.assertIn("ADISCORD_increase_" + direction + "_development_monthly_growth = yes", body)
+
+    def test_central_reconstruction_space_respects_other_route_nodes(self):
+        from tools.tests.test_adiscord_stp_preparation import entries, scalar
+
+        focuses = {scalar(e.value, "id"): e.value for e in entries(
+            "focus_trees/STP/postwar/shabrat/focuses.txt") if e.key == "focus"}
+        moved = ["STP_pc_development_" + suffix for suffix in (
+            "country_must_live", "posters_on_ruins", "rebuild_as_duty",
+            "engineers_on_radio", "generation_reconstruction")]
+        for focus_id in moved:
+            x = int(scalar(focuses[focus_id], "x"))
+            y = int(scalar(focuses[focus_id], "y"))
+            self.assertTrue(20 <= x <= 24)
+            for other_id, other in focuses.items():
+                if other_id == focus_id or int(scalar(other, "y")) != y:
+                    continue
+                self.assertGreaterEqual(abs(x - int(scalar(other, "x"))), 2,
+                                        (focus_id, other_id))
+
     def test_unification_rebuilds_economy_after_annexation(self):
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         self.assertIn("STP_pw_rebuild_economy_after_unification = {", effects)
@@ -119,7 +169,7 @@ class ShabratPostwarEconomyTests(unittest.TestCase):
         self.assertEqual(first_block.count("add_research_slot = 1"), 1)
         self.assertEqual(second_block.count("add_research_slot = 1"), 1)
         self.assertIn(
-            "prerequisite = { focus = STP_pc_development_engineers_on_radio }",
+            "prerequisite = { focus = STP_pc_development_generation_reconstruction }",
             first_block,
         )
         self.assertIn(

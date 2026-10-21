@@ -357,6 +357,22 @@
       "status": "active"
     },
     {
+      "id": "val_contract.390",
+      "namespace": "val_contract",
+      "number": 390,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_contract",
+      "status": "active"
+    },
+    {
+      "id": "val_contract.391",
+      "namespace": "val_contract",
+      "number": 391,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_contract",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_pc.40",
       "namespace": "ADISCORD_STP_pc",
       "number": 40,
@@ -608,6 +624,22 @@
       "id": "ADISCORD_TFF.11",
       "namespace": "ADISCORD_TFF",
       "number": 11,
+      "owner": "events/ADISCORD_TFF_events.txt",
+      "subsystem": "tff_wartime",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_TFF.20",
+      "namespace": "ADISCORD_TFF",
+      "number": 20,
+      "owner": "events/ADISCORD_TFF_events.txt",
+      "subsystem": "tff_wartime",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_TFF.21",
+      "namespace": "ADISCORD_TFF",
+      "number": 21,
       "owner": "events/ADISCORD_TFF_events.txt",
       "subsystem": "tff_wartime",
       "status": "active"
@@ -6626,6 +6658,102 @@
       "number": 153,
       "owner": "events/ADISCORD_VAL_contract_events.txt",
       "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_preparation.1",
+      "namespace": "ADISCORD_vorkerland_preparation",
+      "number": 1,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_preparation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_preparation.20",
+      "namespace": "ADISCORD_vorkerland_preparation",
+      "number": 20,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_preparation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_preparation.21",
+      "namespace": "ADISCORD_vorkerland_preparation",
+      "number": 21,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_preparation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_preparation.22",
+      "namespace": "ADISCORD_vorkerland_preparation",
+      "number": 22,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_preparation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.100",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 100,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_hegemony_personal_rule",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.101",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 101,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_hegemony_personal_rule",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.102",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 102,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_hegemony_personal_rule",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.103",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 103,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_hegemony_personal_rule",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.104",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 104,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_hegemony_personal_rule",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.105",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 105,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_hegemony_personal_rule",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.106",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 106,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_hegemony_personal_rule",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.107",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 107,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_hegemony_personal_rule",
       "status": "active"
     }
   ]

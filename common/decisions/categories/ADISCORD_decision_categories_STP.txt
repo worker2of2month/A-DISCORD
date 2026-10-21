@@ -175,7 +175,12 @@ STP_postwar_propaganda_campaigns = {
 	visible = {
 		tag = STS
 		has_country_flag = STP_cw_postwar
-		has_completed_focus = STP_pc_development_country_must_live
+		OR = {
+			has_completed_focus = STP_pw_republic_new_republic
+			has_completed_focus = STP_pw_republic_restore_roads
+			has_completed_focus = STP_pc_two_borders
+			has_completed_focus = STP_pc_economy_repair_workshops
+		}
 	}
 	visible_when_empty = yes
 	priority = 17
@@ -267,4 +272,8 @@ STP_pw_programme = {
 		has_completed_focus = STP_pw_party_new_republic
 	}
 	priority = 99
+}
+
+STP_heg_betrayal_category = {
+	allowed = { tag = STS }
 }
