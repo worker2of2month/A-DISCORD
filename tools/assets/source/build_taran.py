@@ -22,6 +22,7 @@ from types import SimpleNamespace
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(ROOT))
 STAGE = ROOT / "work/taran-model"
 DEST = ROOT / "gfx/models/units/ADISCORD_country_vehicles"
 NAME = "STS_taran"
@@ -267,6 +268,11 @@ def vehicle():
 
 
 def animate(model, rig, clip):
+    if clip == "idle":
+        from tools.assets.source.country_vehicles.build_idle import export_idle
+
+        export_idle(rig, NAME, STAGE / f"{NAME}_idle.anim", pdx)
+        return
     rig.animation_data_clear()
     for bone in rig.pose.bones:
         bone.matrix_basis = Matrix.Identity(4)
@@ -391,6 +397,8 @@ def verify():
         motion = max((a - b).length for points in samples[1:] for a, b in zip(samples[0], points))
         loop_error = max((a - b).length for a, b in zip(samples[0], samples[-1]))
         assert loop_error < .001, (clip, loop_error)
+        if clip == "idle":
+            assert motion > .05, (clip, motion)
         if clip in ("move", "attack"):
             assert motion > .10, (clip, motion)
         def pose_motion(prefix):
@@ -413,6 +421,7 @@ def verify():
     report["files"] = {name: digest(STAGE / name) for name in NATIVE_FILES}
     report["blend_sha256"] = digest(STAGE / f"{NAME}.blend")
     report["generator_sha256"] = digest(Path(__file__))
+    report["idle_generator_sha256"] = digest(Path(__file__).with_name("country_vehicles") / "build_idle.py")
     write_changed(STAGE / f"{NAME}_verification.json", (json.dumps(report, indent=2) + "\n").encode())
     print(json.dumps(report, indent=2), flush=True)
 
@@ -494,6 +503,7 @@ def package(apply=False):
     report = json.loads(report_path.read_text())
     assert report["bones"] <= MAX_JOINTS
     assert digest(Path(__file__)) == report["generator_sha256"], "Rebuild after editing the generator"
+    assert digest(Path(__file__).with_name("country_vehicles") / "build_idle.py") == report["idle_generator_sha256"]
     assert digest(STAGE / f"{NAME}.blend") == report["blend_sha256"]
     assert digest(STAGE / f"{NAME}_portrait.png") == report["portrait_sha256"]
     files = {DEST / report_path.name: report_path.read_bytes()}

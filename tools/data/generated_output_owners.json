@@ -38,6 +38,7 @@
     "doctrine_system",
     "val_operations_map",
     "stp_regions_map",
+    "nam_basin_map",
     "island_administration_icon",
     "party_texticons",
     "vorkerland_flags",
@@ -1510,6 +1511,26 @@
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_stp_regions_map"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_stp_regions_map", "--apply"],
       "may_delete_outputs": true,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "nam_basin_map",
+      "owner_module": "tools.builders.build_adiscord_nam_basin_map",
+      "output_globs": [
+        "gfx/interface/NAM_basin/*.png",
+        "interface/ADISCORD_NAM_basin.gui",
+        "interface/ADISCORD_NAM_basin.gfx"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_nam_basin_map.py",
+        "history/states/*.txt",
+        "map/definition.csv",
+        "map/provinces.bmp",
+        "map/heightmap.bmp"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_nam_basin_map"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_nam_basin_map", "--apply"],
+      "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
     {

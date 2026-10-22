@@ -78,7 +78,7 @@ def apc_registry():
                    f'\tpdxmesh = "ADISCORD_{name}_mesh"\n\tdefault_state = "idle"\n'
                    + apc_states(vehicle=True) + '}\n')
         assets += (f'\nentity = {{\n\tclone = "{tag}_infantry_entity"\n'
-                   f'\tname = "ADISCORD_{name}_escort_entity"\n\tscale = 0.25\n}}\n')
+                   f'\tname = "ADISCORD_{name}_escort_entity"\n}}\n')
         assets += (f'\nentity = {{\n\tname = "ADISCORD_{name}_entity"\n'
                    '\tpdxmesh = "motorized_frame_mesh"\n\tdefault_state = "idle"\n'
                    + apc_states()

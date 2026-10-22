@@ -526,7 +526,6 @@ entity = {
 entity = {
 	clone = "VAL_infantry_entity"
 	name = "ADISCORD_VAL_apc_escort_entity"
-	scale = 0.25
 }
 
 entity = {
@@ -705,7 +704,6 @@ entity = {
 entity = {
 	clone = "STP_infantry_entity"
 	name = "ADISCORD_STP_apc_escort_entity"
-	scale = 0.25
 }
 
 entity = {
@@ -884,7 +882,6 @@ entity = {
 entity = {
 	clone = "STS_infantry_entity"
 	name = "ADISCORD_STS_apc_escort_entity"
-	scale = 0.25
 }
 
 entity = {
@@ -1063,7 +1060,6 @@ entity = {
 entity = {
 	clone = "NAM_infantry_entity"
 	name = "ADISCORD_NAM_apc_escort_entity"
-	scale = 0.25
 }
 
 entity = {

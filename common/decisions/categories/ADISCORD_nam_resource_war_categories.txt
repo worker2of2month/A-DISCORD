@@ -30,7 +30,7 @@ NAM_national_programmes = {
 			has_global_flag = ADISCORD_nam_resource_war_standoff
 		}
 	}
-	scripted_gui = ADISCORD_NAM_basin_launcher
+	scripted_gui = ADISCORD_NAM_basin_panel
 }
 
 NAM_overseas_districts = {
@@ -58,6 +58,7 @@ NAM_public_campaigns = {
 }
 
 NAM_supports = {
+	scripted_gui = ADISCORD_NAM_supports
 	icon = generic_political_pressure
 	allowed = { tag = NAM }
 	visible = {

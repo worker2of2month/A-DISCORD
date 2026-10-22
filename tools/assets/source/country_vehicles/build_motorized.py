@@ -345,6 +345,11 @@ def vehicle(tag):
 
 
 def animate(model, rig, clip):
+    if clip == "idle":
+        from tools.assets.source.country_vehicles.build_idle import export_idle
+
+        export_idle(rig, model.name, STAGE / f"{model.name}_idle.anim", pdx)
+        return
     rig.animation_data_clear()
     for bone in rig.pose.bones:
         bone.matrix_basis = Matrix.Identity(4)
@@ -462,6 +467,8 @@ def verify(tag):
         loop_error = max((a - b).length for a, b in zip(samples[0], samples[-1]))
         assert loop_error < .001, (name, clip, loop_error)
         metrics = {"max_vertex_motion": motion, "loop_error": loop_error}
+        if clip == "idle":
+            assert motion > .05, (name, clip, motion)
         if clip != "idle":
             assert motion > .10, (name, clip, motion)
             prefix = "wheel_" if clip == "move" else "gun"
@@ -519,6 +526,7 @@ def package(apply=False):
         raise FileNotFoundError("Build and verify the APC package in Blender first")
     report = json.loads(report_path.read_text())
     assert report["generator_sha256"] == digest(Path(__file__)), "Rebuild after generator edits"
+    assert report["idle_generator_sha256"] == digest(SOURCE / "build_idle.py"), "Rebuild after idle edits"
     files = {REPORT: report_path.read_bytes()}
     for tag in TAGS:
         name = f"{tag}_apc"
@@ -558,7 +566,8 @@ def main():
         pdx = load_exporter()
         from io_pdx_mesh import pdx_data
         native.bpy, native.bmesh, native.Matrix, native.Vector = bpy, bmesh, Matrix, Vector
-        report = {"generator_sha256": digest(Path(__file__)), "models": {}}
+        report = {"generator_sha256": digest(Path(__file__)),
+                  "idle_generator_sha256": digest(SOURCE / "build_idle.py"), "models": {}}
         for tag in TAGS:
             export(tag)
             report["models"][f"{tag}_apc"] = verify(tag)

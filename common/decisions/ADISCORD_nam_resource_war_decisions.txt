@@ -11,6 +11,7 @@ NAM_restitution = {
 				has_completed_focus = NAM_restitution_desk
 				has_country_flag = NAM_rw_talks_open
 			}
+			NOT = { has_country_flag = NAM_rw_war_dispatched }
 		}
 		available = {
 			NAM_country_operable = yes
@@ -281,6 +282,7 @@ NAM_mobilisation = {
 			has_completed_focus = NAM_line_survey
 			FROM = {
 				is_owned_by = ROOT
+				is_controlled_by = ROOT
 				NOT = { has_state_flag = NAM_line_prepared }
 				# Only a state with a foreign land border can hold a line.
 				any_neighbor_state = { NOT = { is_owned_by = ROOT } }
@@ -368,7 +370,11 @@ NAM_mobilisation = {
 		visible = {
 			ADISCORD_nam_resource_war_active = yes
 			has_completed_focus = NAM_scorched_wells
-			FROM = { is_controlled_by = ROOT }
+			FROM = {
+				is_controlled_by = ROOT
+				NOT = { has_state_flag = NAM_wells_scorched }
+				NAM_rw_field_under_threat = yes
+			}
 		}
 		available = {
 			NAM_country_operable = yes
@@ -421,6 +427,11 @@ NAM_mobilisation = {
 		visible = {
 			ADISCORD_nam_resource_war_active = yes
 			VAL = { exists = yes }
+			230 = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+			}
+			VAL = { VAL_nam_aid_request_concession_open = yes }
 		}
 		available = {
 			NAM_country_operable = yes
@@ -460,6 +471,7 @@ NAM_mobilisation = {
 		visible = {
 			ADISCORD_nam_resource_war_active = yes
 			VAL = { exists = yes }
+			VAL = { VAL_nam_aid_request_open = yes }
 		}
 		available = {
 			NAM_country_operable = yes
@@ -579,6 +591,7 @@ NAM_national_programmes = {
 			NOT = { has_country_flag = NAM_district_compact }
 			NOT = { has_global_flag = ADISCORD_nam_resource_war_started }
 			NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+			NAM_can_sign_compact = yes
 		}
 		available = {
 			NAM_country_operable = yes
@@ -631,6 +644,8 @@ NAM_national_programmes = {
 		icon = generic_industry
 		visible = {
 			has_completed_focus = NAM_export_quays
+			owns_state = 700
+			controls_state = 700
 		}
 		available = {
 			NAM_country_operable = yes
@@ -765,6 +780,8 @@ NAM_national_programmes = {
 		icon = ADISCORD_arms_supply
 		visible = {
 			has_completed_focus = NAM_emergency_writ
+			NAM_wartime_programmes_open = yes
+			has_war = yes
 		}
 		available = {
 			NAM_country_operable = yes
@@ -824,6 +841,8 @@ NAM_national_programmes = {
 		icon = generic_industry
 		visible = {
 			has_completed_focus = NAM_emergency_writ
+			NAM_wartime_programmes_open = yes
+			has_war_with = SLF
 		}
 		available = {
 			NAM_country_operable = yes
@@ -881,6 +900,8 @@ NAM_national_programmes = {
 		icon = generic_industry
 		visible = {
 			has_completed_focus = NAM_relief_columns
+			NAM_wartime_programmes_open = yes
+			has_war = yes
 		}
 		available = {
 			NAM_country_operable = yes
@@ -932,6 +953,8 @@ NAM_national_programmes = {
 		icon = generic_industry
 		visible = {
 			has_completed_focus = NAM_civil_dividend
+			has_war = no
+			NOT = { has_idea = NAM_housing_programme }
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1064,6 +1087,7 @@ NAM_national_programmes = {
 		icon = ADISCORD_inspection
 		visible = {
 			has_completed_focus = NAM_seal_registry
+			has_war = no
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1086,6 +1110,7 @@ NAM_national_programmes = {
 		icon = generic_industry
 		visible = {
 			has_completed_focus = NAM_oil_fund
+			NAM_has_charter_member = yes
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1128,6 +1153,7 @@ NAM_national_programmes = {
 		visible = {
 			has_completed_focus = NAM_south_oil_tap
 			ADISCORD_south_final_active = yes
+			has_war_with = SHL
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1154,7 +1180,7 @@ NAM_national_programmes = {
 		}
 		visible = {
 			has_completed_focus = NAM_contract_bureau
-			FROM = { NOT = { has_country_flag = NAM_oil_client } }
+			FROM = { NAM_oil_buyer_eligible = yes }
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1167,7 +1193,7 @@ NAM_national_programmes = {
 				FROM = { NAM_oil_unit_free_for_buyer = yes }
 			}
 		}
-		cost = 15
+		cost = 50
 		fire_only_once = no
 		days_re_enable = 30
 		complete_effect = {
@@ -1230,7 +1256,7 @@ NAM_national_programmes = {
 		}
 		visible = {
 			has_completed_focus = NAM_fuel_leverage
-			FROM = { NOT = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } } }
+			FROM = { NAM_fuel_embargo_target_valid = yes }
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1303,7 +1329,12 @@ NAM_national_programmes = {
 		on_map_mode = map_and_decisions_view
 		visible = {
 			has_completed_focus = NAM_field_repair_crews
-			FROM = { is_owned_by = ROOT }
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+				NOT = { has_state_flag = NAM_wells_scorched }
+				check_variable = { var = NAM_field_condition value = 100 compare = less_than }
+			}
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1396,6 +1427,7 @@ NAM_national_programmes = {
 			has_completed_focus = NAM_refinery_programme
 			FROM = {
 				is_owned_by = ROOT
+				is_controlled_by = ROOT
 				NOT = { has_state_flag = NAM_refinery_built }
 			}
 		}
@@ -1482,7 +1514,12 @@ NAM_national_programmes = {
 			has_completed_focus = NAM_klyuchevsk_pipeline
 			FROM = {
 				is_owned_by = ROOT
+				is_controlled_by = ROOT
 				NOT = { has_state_flag = NAM_pipeline_built }
+			}
+			700 = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
 			}
 		}
 		available = {
@@ -1577,6 +1614,7 @@ NAM_national_programmes = {
 			has_completed_focus = NAM_overseas_buyers
 			FROM = {
 				is_owned_by = ROOT
+				is_controlled_by = ROOT
 				NOT = { has_state_flag = NAM_sea_terminal_built }
 			}
 		}
@@ -1746,6 +1784,11 @@ NAM_overseas_districts = {
 			has_completed_focus = NAM_island_concession
 			NOT = { VAL = { NAM_steel_concession_holder = yes } }
 			NOT = { GLP = { NAM_steel_concession_holder = yes } }
+			231 = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+			}
+			FROM = { NAM_steel_concession_target_valid = yes }
 		}
 		available = {
 			NAM_country_operable = yes
@@ -1789,6 +1832,8 @@ NAM_overseas_districts = {
 			has_completed_focus = NAM_reclaim_230
 			NOT = { has_country_flag = NAM_val_concession_renegotiated }
 			VAL = { has_country_flag = VAL_nam_concession_active }
+			owns_state = 230
+			VAL = { NOT = { has_war_with = ROOT } }
 		}
 		available = {
 			NAM_country_operable = yes
@@ -2592,6 +2637,7 @@ NAM_treasury = {
 		icon = ADISCORD_treasury
 		visible = {
 			has_completed_focus = NAM_one_budget
+			NOT = { has_idea = NAM_bond_payments }
 		}
 		available = {
 			NAM_country_operable = yes
@@ -2641,6 +2687,10 @@ NAM_treasury = {
 		icon = generic_construction
 		visible = {
 			has_completed_focus = NAM_machine_shops
+			700 = {
+				is_owned_by = NAM
+				is_controlled_by = NAM
+			}
 		}
 		available = {
 			NAM_country_operable = yes
@@ -2897,6 +2947,7 @@ NAM_treasury = {
 		icon = ADISCORD_treasury
 		visible = {
 			has_completed_focus = NAM_crisis_office
+			NOT = { has_country_flag = NAM_crisis_fund }
 		}
 		available = {
 			NAM_country_operable = yes
@@ -2993,6 +3044,8 @@ ADISCORD_south_final_war_category = {
 			}
 			ADISCORD_south_final_active = yes
 			has_country_flag = ADISCORD_south_north_leader
+			has_war_with = SHL
+			SHL = { NOT = { has_dynamic_modifier = { modifier = NAM_south_convoy_blockade } } }
 		}
 		available = {
 			NAM_country_operable = yes
@@ -3048,6 +3101,7 @@ NAM_underground = {
 			has_completed_focus = NAM_veter_channel
 			NAM_underground_open = yes
 			NOT = { has_country_flag = NAM_veter_talks_1_done }
+			NAM_veter_talks_possible = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -3090,6 +3144,7 @@ NAM_underground = {
 			has_country_flag = NAM_veter_talks_1_done
 			NAM_underground_open = yes
 			NOT = { has_country_flag = NAM_veter_talks_2_done }
+			NAM_veter_talks_possible = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -3153,6 +3208,7 @@ NAM_underground = {
 		visible = {
 			has_country_flag = NAM_veter_talks_2_done
 			NAM_underground_open = yes
+			NAM_veter_talks_possible = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -3221,7 +3277,12 @@ NAM_underground = {
 		visible = {
 			has_completed_focus = NAM_cache_hunters
 			NAM_underground_open = yes
-			FROM = { is_owned_by = ROOT }
+			check_variable = { NAM_underground > 0 }
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+				NOT = { has_state_flag = NAM_caches_searched }
+			}
 		}
 		available = {
 			NAM_country_operable = yes

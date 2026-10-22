@@ -7,7 +7,7 @@ Python: this_file --output PATH --apply, then --check
 Uses the existing militia rig and locators. HAZ replaces the body with the
 packed HAZ_sentinel_source.blend and fits its weights to the native rig.
 Use --assets-only with --tags HAZ to retain its existing entity bindings.
-NAM uses --rig-source GLB, retains its geometry and bakes adapted native poses.
+NAM retains the Vorkerland infantry mesh, native rig and animations with a warmer cloth palette.
 Only the marked northern bindings and named model package belong to this builder.
 """
 
@@ -40,7 +40,7 @@ CONFIG = {
     'RUS': ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh',
     'SHL': ROOT / 'gfx/models/units/APH_irregular_infantry.mesh',
     'ARB': ROOT / 'gfx/models/units/APH_irregular_infantry.mesh',
-    'NAM': GAME / 'gfx/models/units/GER_infantry.mesh',
+    'NAM': ROOT / 'gfx/models/units/ADISCORD_regulars/WRK_line.mesh',
     'HAZ': ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh',
     'MON': ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh',
     **{
@@ -55,7 +55,7 @@ NORMALS = {
     'RUS': ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds',
     'SHL': ROOT / 'gfx/models/units/APH_irregular_infantry_normal.dds',
     'ARB': ROOT / 'gfx/models/units/APH_irregular_infantry_normal.dds',
-    'NAM': GAME / 'gfx/models/units/GER_infantry_normal.dds',
+    'NAM': ROOT / 'gfx/models/units/ADISCORD_regulars/WRK_line_body_normal.dds',
     'HAZ': ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds',
     'MON': ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds',
     **{
@@ -217,11 +217,6 @@ def bindings():
                 source,
                 count=1,
             )
-            if tag == 'NAM':
-                source = re.sub(
-                    r'type = "GER_infantry_([^"]+)"',
-                    r'type = "ADISCORD_NAM_\1"', source,
-                )
             if armoured_guard:
                 retinue_meshes.append('\t' + source)
             else:
@@ -282,29 +277,6 @@ def bindings():
         ).encode(),
         asset_path: (asset + '\n' + START + entity_text + '\n' + END).encode(),
     }
-
-
-def nam_animation_sources():
-    """Resolve every native clip inherited by the two infantry weapon families."""
-    gfx = (ROOT / 'gfx/entities/ADISCORD_country_infantry.gfx').read_text()
-    required = set()
-    for block in blocks(gfx, 'pdxmesh'):
-        if re.search(r'name\s*=\s*"STP_shabrat_(?:mg_)?infantry_mesh"', block):
-            required.update(re.findall(r'type\s*=\s*"([^"]+)"', block))
-    animation_file = GAME / 'gfx/models/units/animation.asset'
-    result = {}
-    for block in blocks(animation_file.read_text(), 'animation'):
-        name = re.search(r'name\s*=\s*"([^"]+)"', block)[1]
-        if name in required:
-            filename = re.search(r'file\s*=\s*"([^"]+)"', block)[1]
-            result[name] = animation_file.parent / filename
-    assert set(result) == required
-    assert all(path.is_file() for path in result.values())
-    return result
-
-
-def nam_clip_name(path):
-    return path.name.replace('GER_infantry_', 'NAM_')
 
 
 def build(output):
@@ -791,267 +763,7 @@ def fitted_panel_factory(body, mesh, smooth=False):
     return panel
 
 
-NAM_JOINTS = {
-    'Hips': 'Hip', 'Spine': 'back_mid', 'Spine1': 'back_mid',
-    'Spine2': 'back_mid', 'Neck': 'head', 'Head': 'head',
-    **{side + part: side + part for side in ('Left', 'Right')
-       for part in ('Shoulder', 'Arm', 'ForeArm', 'Hand', 'UpLeg', 'Leg', 'Foot', 'ToeBase')},
-}
-NAM_ATTACHMENTS = {
-    'Right_Hand_node': ('NAM_RightHand', 'RightHand'),
-    'Left_Hand_node': ('NAM_LeftHand', 'LeftHand'),
-    'mid_back_node': ('NAM_Spine2', 'back_mid'),
-    'Root_node_2': ('NAM_Hips', 'Root'),
-    'Right_Hand_node_2': ('NAM_RightHand', 'RightHand'),
-    'Right_Hand_node_3': ('NAM_RightHand', 'RightHand'),
-    'Right_Hand_node_4': ('NAM_RightHand', 'RightHand'),
-    'Left_Hand_node_2': ('NAM_LeftHand', 'LeftHand'),
-    'Root_node_1': ('NAM_Hips', 'Root'),
-}
-NAM_MOUTH = (0.0, -0.54, 6.61)
-
-
-def nam_compact_rig(body, rig):
-    """Merge static auxiliary chains and distal finger weights for the 50-bone shader."""
-    import bpy
-    from mathutils import Matrix
-
-    rig.animation_data_clear()
-    for bone in rig.pose.bones:
-        bone.matrix_basis = Matrix.Identity(4)
-    scale = 7.5 / 1.7
-    for vertex in body.data.vertices:
-        vertex.co *= scale
-    bpy.context.view_layer.objects.active = rig
-    bpy.ops.object.mode_set(mode='EDIT')
-    for bone in rig.data.edit_bones:
-        bone.head *= scale
-        bone.tail *= scale
-    # Sleeve helpers originate at the upper arm and must not inherit elbow flexion.
-    for helper, parent in (('Bone_043', 'LeftArm'), ('Bone_039', 'RightArm')):
-        rig.data.edit_bones[helper].parent = rig.data.edit_bones['mixamorig:' + parent]
-    bpy.ops.object.mode_set(mode='OBJECT')
-    removed = {
-        bone.name for bone in rig.data.bones
-        if bone.name.startswith('Bone_')
-        or bone.name in ('headfront', 'mixamorig:HeadTop_End', 'mixamorig:Spine1')
-        or bone.name.endswith('Toe_End')
-        or ('Hand' in bone.name and bone.name[-1:] in ('3', '4'))
-    }
-    parents = {}
-    for name in removed:
-        parent = rig.data.bones[name].parent
-        while parent.name in removed:
-            parent = parent.parent
-        parents[name] = parent.name
-    for vertex in body.data.vertices:
-        transferred = {}
-        for weight in vertex.groups:
-            name = body.vertex_groups[weight.group].name
-            if name in parents:
-                parent = parents[name]
-                transferred[parent] = transferred.get(parent, 0) + weight.weight
-        for name, weight in transferred.items():
-            body.vertex_groups[name].add([vertex.index], weight, 'ADD')
-    for name in removed:
-        group = body.vertex_groups.get(name)
-        if group:
-            body.vertex_groups.remove(group)
-    bpy.ops.object.mode_set(mode='EDIT')
-    for bone in rig.data.edit_bones:
-        if bone.name not in removed and bone.parent and bone.parent.name in removed:
-            bone.parent = rig.data.edit_bones[parents[bone.parent.name]]
-    for name in removed:
-        rig.data.edit_bones.remove(rig.data.edit_bones[name])
-    bpy.ops.object.mode_set(mode='OBJECT')
-    for bone in rig.data.bones:
-        bone.name = bone.name.replace('mixamorig:', 'NAM_')
-    for vertex in body.data.vertices:
-        weights = {body.vertex_groups[w.group].name: w.weight for w in vertex.groups}
-        # Collar and shoulder cloth must follow the chest during a head turn.
-        center = max(0, min(1, (0.55 - abs(vertex.co.x)) / 0.25))
-        height = max(0, min(1, (vertex.co.z - 6.05) / 0.42))
-        head = max(0, min(1, (vertex.co.z - 6.35) / 0.25))
-        neck_factor = max(center * height, head)
-        for name in ('NAM_Neck', 'NAM_Head'):
-            weight = weights.get(name, 0)
-            weights[name] = weight * neck_factor
-            weights['NAM_Spine2'] = weights.get('NAM_Spine2', 0) + weight * (1 - neck_factor)
-        strongest = sorted(weights.items(), key=lambda item: item[1], reverse=True)[:4]
-        total = sum(weight for _, weight in strongest)
-        for weight in list(vertex.groups):
-            body.vertex_groups[weight.group].remove([vertex.index])
-        for name, weight in strongest:
-            if weight > 0:
-                body.vertex_groups[name].add([vertex.index], weight / total, 'REPLACE')
-    return scale
-
-
-def nam_rest_alignment(target, source):
-    from mathutils import Quaternion
-
-    alignment = {name: Quaternion() for name in target}
-    for side in ('Left', 'Right'):
-        for part, child in (
-            ('Shoulder', 'Arm'), ('Arm', 'ForeArm'), ('ForeArm', 'Hand'),
-            ('UpLeg', 'Leg'), ('Leg', 'Foot'), ('Foot', 'ToeBase'),
-        ):
-            name = 'NAM_' + side + part
-            a = target['NAM_' + side + child].translation - target[name].translation
-            b = source[side + child].translation - source[side + part].translation
-            alignment[name] = a.normalized().rotation_difference(b.normalized())
-        alignment['NAM_' + side + 'Hand'] = alignment['NAM_' + side + 'ForeArm']
-    return alignment
-
-
-def nam_retarget_pose(rig, donor, rest, native_rest, alignment, pose):
-    """Transfer native motion while keeping head and arms relative to the adapted torso."""
-    from mathutils import Matrix, Vector
-
-    world = {}
-    hip_rotation = (donor.pose.bones['Hip'].matrix @ native_rest['Hip'].inverted()).to_quaternion()
-    back_rotation = (donor.pose.bones['back_mid'].matrix @ native_rest['back_mid'].inverted()).to_quaternion()
-    torso_rotation = hip_rotation.slerp(back_rotation, 0.45)
-    torso_adjustment = torso_rotation @ back_rotation.inverted()
-    for bone in rig.data.bones:
-        if bone.name.startswith('NAM_attach_'):
-            continue
-        initial = rest[bone.name]
-        parent = bone.parent
-        base = world[parent.name] @ rest[parent.name].inverted() @ initial if parent else initial.copy()
-        short = bone.name.removeprefix('NAM_')
-        desired = base
-        if short in NAM_JOINTS:
-            source = NAM_JOINTS[short]
-            delta = donor.pose.bones[source].matrix @ native_rest[source].inverted()
-            rotation = delta.to_quaternion() @ alignment[bone.name] @ initial.to_quaternion()
-            location = (delta @ initial).translation if short == 'Hips' else base.translation
-            if short.startswith('Spine'):
-                rotation = torso_rotation @ initial.to_quaternion()
-            elif short == 'Neck':
-                head_rotation = torso_adjustment @ delta.to_quaternion()
-                rotation = torso_rotation.slerp(head_rotation, 0.25) @ initial.to_quaternion()
-            elif short == 'Head':
-                rotation = torso_adjustment @ rotation
-            elif short.endswith(('Shoulder', 'Arm', 'Hand')):
-                rotation = torso_adjustment @ rotation
-            desired = Matrix.LocRotScale(location, rotation, Vector((1, 1, 1)))
-        elif 'Hand' in short and short[-1:] in ('1', '2'):
-            side = 1 if short.startswith('Left') else -1
-            axis = initial.to_quaternion().inverted() @ Vector((0, side, 0))
-            angle = 55 if short.endswith('1') else 80
-            if 'Thumb' in short:
-                axis = initial.to_quaternion().inverted() @ Vector((0, 0, side))
-                angle = 55 if short.endswith('1') else 45
-            desired = base @ Matrix.Rotation(math.radians(angle), 4, axis)
-        world[bone.name] = desired
-    for locator, (target_parent, source_parent) in NAM_ATTACHMENTS.items():
-        if source_parent == 'Root':
-            desired = donor.pose.bones[locator].matrix.copy()
-        else:
-            offset = native_rest[source_parent].to_quaternion().inverted() @ (
-                alignment[target_parent] @ rest[target_parent].to_quaternion()
-            )
-            conversion = Matrix.LocRotScale(Vector(), offset.inverted(), Vector((1, 1, 1)))
-            desired = world[target_parent] @ conversion @ donor.pose.bones[source_parent].matrix.inverted() @ donor.pose.bones[locator].matrix
-        world['NAM_attach_' + locator] = desired
-    for locator in ('Right_Hand_node', 'Left_Hand_node', 'mid_back_node', 'Root_node_2'):
-        world['NAM_attach_' + locator] @= Matrix.Scale(0.9, 4)
-    # The source chest joint sits lower than the GLB's upper spine. Place slung
-    # weapons against the model's back while retaining native visibility timing.
-    stowed = 'NAM_attach_mid_back_node'
-    stowed_scale = world[stowed].to_scale().x
-    torso_matrix = world['NAM_Spine2'] @ rest['NAM_Spine2'].inverted()
-    stowed_rotation = (
-        torso_matrix.to_quaternion()
-        @ Matrix.Rotation(math.radians(-20), 4, 'Y').to_quaternion()
-        @ Matrix.Rotation(math.radians(-90), 4, 'X').to_quaternion()
-    )
-    world[stowed] = Matrix.LocRotScale(
-        torso_matrix @ Vector((0.15, 1.0, 4.6)), stowed_rotation,
-        Vector((stowed_scale,) * 3),
-    )
-    if pose in ('attack_stand_mg', 'attack_crouch_mg', 'charge_mg_shoot'):
-        nam_aim_grip(world, rest)
-    elif pose.startswith('long_idle03_'):
-        cigarette = donor.pose.bones['Right_Hand_node_2'].matrix
-        if cigarette.to_scale().x > 0.1:
-            native_head = donor.pose.bones['head'].matrix @ native_rest['head'].inverted()
-            mouth = (native_head @ native_rest['mouth']).translation
-            offset = cigarette.translation - mouth
-            contact = max(0, min(1, (0.7 - offset.length) / 0.35))
-            target_head = world['NAM_Head'] @ rest['NAM_Head'].inverted()
-            offset = target_head.to_quaternion() @ native_head.to_quaternion().inverted() @ offset
-            target = target_head @ Vector(NAM_MOUTH) + offset
-            displacement = target - world['NAM_attach_Right_Hand_node_2'].translation
-            hand = world['NAM_RightHand']
-            nam_place_hand(world, rest, 'Right', hand.translation + displacement * contact,
-                           hand.to_quaternion())
-    return world
-
-
-def nam_place_hand(world, rest, side, goal, rotation, pole=None):
-    from mathutils import Matrix, Vector
-
-    hand = 'NAM_' + side + 'Hand'
-    upper = 'NAM_' + side + 'Arm'
-    lower = 'NAM_' + side + 'ForeArm'
-    a = world[upper].translation.copy()
-    b = world[lower].translation.copy()
-    c = world[hand].translation.copy()
-    length1 = (b - a).length
-    length2 = (c - b).length
-    axis = (goal - a).normalized()
-    distance = min((goal - a).length, length1 + length2 - 0.001)
-    distance = max(distance, abs(length1 - length2) + 0.001)
-    goal = a + axis * distance
-    pole = b - a if pole is None else pole
-    bend = (pole - axis * pole.dot(axis)).normalized()
-    along = (length1 * length1 - length2 * length2 + distance * distance) / (2 * distance)
-    height = math.sqrt(max(0, length1 * length1 - along * along))
-    elbow = a + axis * along + bend * height
-    upper_rotation = (b - a).rotation_difference(elbow - a) @ world[upper].to_quaternion()
-    lower_rotation = (c - b).rotation_difference(goal - elbow) @ world[lower].to_quaternion()
-    hand_before = world[hand].copy()
-    world[upper] = Matrix.LocRotScale(a, upper_rotation, Vector((1, 1, 1)))
-    world[lower] = Matrix.LocRotScale(elbow, lower_rotation, Vector((1, 1, 1)))
-    world[hand] = Matrix.LocRotScale(goal, rotation, Vector((1, 1, 1)))
-    adjustment = world[hand] @ hand_before.inverted()
-    for name in world:
-        if name.startswith(hand) and name != hand:
-            world[name] = adjustment @ world[name]
-        elif name.startswith('NAM_attach_' + side + '_Hand_node'):
-            world[name] = adjustment @ world[name]
-
-
-def nam_aim_grip(world, rest):
-    """Seat the stock at the shoulder and solve both arms against the weapon grips."""
-    from mathutils import Matrix, Vector
-
-    locator = 'NAM_attach_Right_Hand_node'
-    weapon = world[locator].copy()
-    if weapon.to_scale().x < 0.1:
-        return
-    torso = (world['NAM_Spine2'] @ rest['NAM_Spine2'].inverted()).to_quaternion()
-    shoulder = world['NAM_RightArm'].translation + torso @ Vector((0.12, -0.18, 0.22))
-    weapon.translation = shoulder - weapon.to_3x3() @ Vector((0, 1.48, 0.18))
-    for side, palm, angle in (
-        ('Right', (-0.12, 0.25, -0.17), -90),
-        ('Left', (0.08, -0.75, 0.20), 180),
-    ):
-        hand = 'NAM_' + side + 'Hand'
-        delta = weapon.to_quaternion() @ Matrix.Rotation(math.radians(angle), 4, 'Y').to_quaternion()
-        palm_offset = (
-            (rest[hand + 'Index1'].translation + rest[hand + 'Pinky1'].translation) * 0.5
-            - rest[hand].translation
-        ) * 0.6
-        goal = weapon @ Vector(palm) - delta @ palm_offset
-        pole = torso @ Vector((1 if side == 'Left' else -1, -0.3, -1))
-        nam_place_hand(world, rest, side, goal, delta @ rest[hand].to_quaternion(), pole)
-    world[locator] = weapon
-
-
-def nam_native_frames(animation, donor, pdx):
+def native_animation_frames(animation, donor, pdx):
     """Decode native local transforms without repeatedly inserting Blender keyframes."""
     from types import SimpleNamespace
     from mathutils import Matrix, Quaternion, Vector
@@ -1083,7 +795,7 @@ def nam_native_frames(animation, donor, pdx):
         yield SimpleNamespace(pose=SimpleNamespace(bones=world))
 
 
-def nam_apply_pose(rig, sample):
+def apply_native_pose(rig, sample):
     import bpy
     from mathutils import Matrix
 
@@ -1098,141 +810,34 @@ def nam_apply_pose(rig, sample):
     bpy.context.view_layer.update()
 
 
-def build_nam_rigged(output, pdx, source):
+def build_nam_field(output):
+    """Preserve the Vorkerland skeleton, skin, geometry and attachment transforms."""
     import bpy
-    import xml.etree.ElementTree as Xml
-    from types import SimpleNamespace
-    from mathutils import Matrix, Quaternion, Vector
+    import numpy as np
     from io_pdx_mesh import pdx_data
 
-    if source is None or not source.is_file():
-        raise ValueError('NAM requires --rig-source pointing to its animated GLB.')
-    bpy.ops.wm.read_factory_settings(use_empty=True)
-    scene = bpy.context.scene
-    scene.render.fps = 30
-    bpy.ops.import_scene.gltf(filepath=str(source))
-    body = next(obj for obj in scene.objects if obj.type == 'MESH')
-    rig = next(obj for obj in scene.objects if obj.type == 'ARMATURE')
-    body.name = 'NAM_body'
-    nam_compact_rig(body, rig)
-    material = body.data.materials[0]
-    shader = material.node_tree.nodes.get('Principled BSDF')
-    texture_images = {
-        'body': shader.inputs['Base Color'].links[0].from_node.image,
-        'body_normal': shader.inputs['Normal'].links[0].from_node.inputs['Color'].links[0].from_node.image,
-        'surface': shader.inputs['Roughness'].links[0].from_node.inputs['Color'].links[0].from_node.image,
-    }
-    for name, image in texture_images.items():
-        image.filepath_raw = str(output / f'NAM_{name}.png')
+    donor = CONFIG['NAM']
+    tree = pdx_data.read_meshfile(str(donor))
+    for shape in tree.find('object'):
+        for element in shape.findall('mesh'):
+            material = element.find('material')
+            for channel in ('diff', 'n', 'spec'):
+                original = material.attrib[channel][0]
+                assert original.startswith('WRK_line_'), original
+                material.attrib[channel] = [original.replace('WRK_line_', 'NAM_field_')]
+    pdx_data.write_meshfile(str(output / 'NAM_field.mesh'), tree)
+    finalize_mesh(output / 'NAM_field.mesh')
+    for part, tint in (('body', (1.18, 1.12, 1.04)), ('gear', (1.10, 1.05, 0.98))):
+        image = bpy.data.images.load(str(donor.parent / f'WRK_line_{part}_diffuse.dds'), check_existing=False)
+        pixels = np.asarray(image.pixels[:], dtype=np.float32).reshape(-1, 4)
+        red, green, blue = pixels[:, 0], pixels[:, 1], pixels[:, 2]
+        # The olive cloth mask excludes skin, dark leather and brass insignia.
+        cloth = (red < green * 1.15) & (green > blue * 1.18) & (green > 0.02)
+        pixels[cloth, :3] = np.minimum(1, pixels[cloth, :3] * np.asarray(tint))
+        image.pixels.foreach_set(pixels.ravel())
+        image.filepath_raw = str(output / f'NAM_{part}.png')
         image.file_format = 'PNG'
         image.save()
-    before = set(scene.objects)
-    pdx.import_meshfile(str(CONFIG['NAM']), imp_locs=False)
-    donor = next(obj for obj in set(scene.objects) - before if obj.type == 'ARMATURE')
-    native_rest = {bone.name: bone.matrix_local.copy() for bone in donor.data.bones}
-    native = pdx_data.read_meshfile(str(CONFIG['NAM']))
-    mouth_locator = native.find('locator').find('head')
-    native_rest['mouth'] = native_rest['head'] @ pdx.swap_coord_space(
-        Matrix.Translation(mouth_locator.attrib['p'])
-    )
-    rest = {bone.name: bone.matrix_local.copy() for bone in rig.data.bones}
-    alignment = nam_rest_alignment(rest, native_rest)
-    bpy.context.view_layer.objects.active = rig
-    bpy.ops.object.mode_set(mode='EDIT')
-    for locator, (target_parent, _) in NAM_ATTACHMENTS.items():
-        bone = rig.data.edit_bones.new('NAM_attach_' + locator)
-        bone.head = rig.data.edit_bones[target_parent].head
-        bone.tail = bone.head + Vector((0, 0.1, 0))
-        bone.parent = rig.data.edit_bones[target_parent]
-    bpy.ops.object.mode_set(mode='OBJECT')
-    rest.update({bone.name: bone.matrix_local.copy() for bone in rig.data.bones})
-    hierarchy = pdx.get_skeleton_hierarchy(rig)
-    assert len(hierarchy) == len(rig.data.bones) <= 50
-    clip_dir = output / 'NAM_animations'
-    clip_dir.mkdir(exist_ok=True)
-    clip_reports = {}
-    for clip in sorted(set(nam_animation_sources().values())):
-        animation = pdx_data.read_meshfile(str(clip))
-        source_info = animation.find('info').attrib
-        pose = clip.stem.removeprefix('GER_infantry_')
-        frames = source_info['sa'][0]
-        fps = source_info['fps'][0]
-        tree = Xml.Element('File', {'pdxasset': [1, 0]})
-        info = Xml.SubElement(tree, 'info', {'fps': [fps], 'sa': [frames], 'j': [len(hierarchy)]})
-        samples = Xml.SubElement(tree, 'samples')
-        packed = {'t': [], 'q': [], 's': []}
-        for index, native_pose in enumerate(nam_native_frames(animation, donor, pdx)):
-            world = nam_retarget_pose(rig, native_pose, rest, native_rest, alignment, pose)
-            for bone in hierarchy:
-                parent = world[bone.parent.name] if bone.parent else Matrix.Identity(4)
-                local = pdx.swap_coord_space(parent.inverted_safe() @ world[bone.name])
-                translation, rotation, scale = local.decompose()
-                values = {'t': list(translation), 'q': [rotation.x, rotation.y, rotation.z, rotation.w], 's': [scale.x]}
-                name = bone.name.removeprefix('NAM_attach_') if bone.name.startswith('NAM_attach_') else bone.name
-                if index == 0:
-                    Xml.SubElement(info, name, {'sa': ['tqs'], **values})
-                for channel in packed:
-                    packed[channel].extend(values[channel])
-        samples.attrib.update(packed)
-        destination = clip_dir / nam_clip_name(clip)
-        pdx_data.write_animfile(str(destination), tree)
-        clip_reports[destination.name] = {
-            'source_sha256': hashlib.sha256(clip.read_bytes()).hexdigest(),
-            'frames': frames, 'fps': fps,
-            'sha256': hashlib.sha256(destination.read_bytes()).hexdigest(),
-        }
-    for obj in list(scene.objects):
-        if obj not in (rig, body):
-            bpy.data.objects.remove(obj, do_unlink=True)
-    for bone in rig.data.bones:
-        if bone.name.startswith('NAM_attach_'):
-            bone.name = bone.name.removeprefix('NAM_attach_')
-    for bone in rig.pose.bones:
-        bone.matrix_basis = Matrix.Identity(4)
-    for kind in ('diffuse', 'normal', 'specular'):
-        image = output / ('NAM_body.png' if kind == 'diffuse' else 'NAM_body_normal.png')
-        (output / f'NAM_field_body_{kind}.dds').write_bytes(image.read_bytes())
-    body.data.materials.clear()
-    spec = SimpleNamespace(shader=['PdxMeshAdvanced'], diff=['NAM_field_body_diffuse.dds'],
-                           n=['NAM_field_body_normal.dds'], spec=['NAM_field_body_specular.dds'])
-    body.data.materials.append(pdx.create_shader(spec, 'NAM_body', str(output)))
-    bpy.ops.object.select_all(action='DESELECT')
-    body.select_set(True)
-    pdx.export_meshfile(str(output / 'NAM_field.mesh'), exp_selected=True, exp_locs=False)
-    exported = pdx_data.read_meshfile(str(output / 'NAM_field.mesh'))
-    locators = exported.find('locator')
-    native = pdx_data.read_meshfile(str(CONFIG['NAM']))
-    parents = {'head': 'NAM_Head', 'LeftToeBase': 'NAM_LeftToeBase', 'RightToeBase': 'NAM_RightToeBase'}
-    for locator in native.find('locator'):
-        attributes = locator.attrib
-        parent = attributes.get('pa', [None])[0]
-        if parent is None:
-            Xml.SubElement(locators, locator.tag, attributes)
-            continue
-        target = parents[parent]
-        x, y, z, w = attributes['q']
-        local = pdx.swap_coord_space(Matrix.LocRotScale(
-            Vector(attributes['p']), Quaternion((w, x, y, z)), Vector((1, 1, 1)),
-        ))
-        offset = rest[target].to_quaternion().inverted() @ native_rest[parent].to_quaternion()
-        local = pdx.swap_coord_space(offset.to_matrix().to_4x4() @ local)
-        if locator.tag == 'head':
-            local.translation = pdx.swap_coord_space(rest[target].inverted() @ Vector(NAM_MOUTH))
-        translation, rotation, _ = local.decompose()
-        Xml.SubElement(locators, locator.tag, {
-            'p': list(translation), 'q': [rotation.x, rotation.y, rotation.z, rotation.w],
-            'tx': [value for column in local.transposed() for value in column], 'pa': [target],
-        })
-    pdx_data.write_meshfile(str(output / 'NAM_field.mesh'), exported)
-    finalize_mesh(output / 'NAM_field.mesh')
-    metadata = {
-        'source': {'filename': source.name, 'sha256': hashlib.sha256(source.read_bytes()).hexdigest()},
-        'bones': [bone.name for bone in pdx.get_skeleton_hierarchy(rig)],
-        'clips': clip_reports,
-        'rest_positions': [list(pdx.swap_coord_space(vertex.co)) for vertex in body.data.vertices],
-    }
-    (output / 'NAM_build.json').write_text(json.dumps(metadata, indent=2))
-    bpy.ops.wm.save_as_mainfile(filepath=str(output / 'NAM.blend'))
 
 
 def imperial_carrier(body, mesh, cloth, trim, brass):
@@ -1779,7 +1384,7 @@ def build_hazard_sentinel(output, pdx):
     bpy.ops.wm.save_as_mainfile(filepath=str(output / f'{tag}.blend'))
 
 
-def build_field(tag, output, rig_source=None):
+def build_field(tag, output):
     """Keep the donor garment topology and skin while replacing its field kit."""
     import bpy
     import bmesh
@@ -1810,7 +1415,7 @@ def build_field(tag, output, rig_source=None):
     exec(compile(source, '<Blender material compatibility>', 'exec'), pdx.__dict__)
     output.mkdir(parents=True, exist_ok=True)
     if tag == 'NAM':
-        build_nam_rigged(output, pdx, rig_source)
+        build_nam_field(output)
         return
     if tag == 'HAZ':
         build_hazard_sentinel(output, pdx)
@@ -2294,34 +1899,34 @@ def verify(output, tags, walk=False):
             for part in model_parts(tag)
             for kind in ('diffuse', 'normal', 'specular')
         )]
-        metadata = None
-        if tag == 'NAM':
-            metadata = json.loads((output / 'NAM_build.json').read_text())
-            inputs.extend(sorted((path.parent / 'NAM').glob('*.anim')))
-            inputs.append(path.parent / 'NAM/animation.asset')
         input_hashes = {
             source: hashlib.sha256(source.read_bytes()).hexdigest()
             for source in inputs
         }
         tree = pdx_data.read_meshfile(str(path))
-        if metadata is None:
-            assert [(n.tag, n.attrib) for n in tree.find('locator')] == [
-                (n.tag, n.attrib) for n in donor.find('locator')
-            ]
+        assert [(n.tag, n.attrib) for n in tree.find('locator')] == [
+            (n.tag, n.attrib) for n in donor.find('locator')
+        ]
         shapes = []
         for shape in tree.find('object'):
+            if tag == 'NAM':
+                original_shape = donor.find('object').find(shape.tag)
+                assert original_shape is not None
+                for element, original in zip(shape.findall('mesh'), original_shape.findall('mesh'), strict=True):
+                    assert element.attrib == original.attrib
+                    skin, original_skin = element.find('skin').attrib, original.find('skin').attrib
+                    assert {key: value for key, value in skin.items() if key != 'ix'} == {
+                        key: value for key, value in original_skin.items() if key != 'ix'
+                    }
+                    assert all(
+                        actual == expected for actual, expected, weight in zip(
+                            skin['ix'], original_skin['ix'], skin['w'], strict=True,
+                        ) if weight > 0
+                    )
             bones = shape.find('skeleton')
-            expected = metadata['bones'] if metadata else [b.tag for b in donor_bones]
+            expected = [b.tag for b in donor_bones]
             assert [b.tag for b in bones] == expected
             assert len(bones) <= 50
-            if metadata:
-                from mathutils.kdtree import KDTree
-
-                original_positions = metadata['rest_positions']
-                positions = KDTree(len(original_positions))
-                for index, position in enumerate(original_positions):
-                    positions.insert(Vector(position), index)
-                positions.balance()
             for element in shape.findall('mesh'):
                 data = pdx_data.PDXData(element)
                 count = len(data.p) // 3
@@ -2345,10 +1950,7 @@ def verify(output, tags, walk=False):
                     weighted.update(
                         index for index, weight in zip(indices, weights) if weight > 0
                     )
-                if metadata:
-                    assert all(positions.find(Vector(data.p[i:i + 3]))[2] < 0.00001
-                               for i in range(0, len(data.p), 3))
-                for index in weighted if metadata is None else ():
+                for index in weighted:
                     bone, original = bones[index], donor_bones[index]
                     assert bone.attrib.get('pa') == original.attrib.get('pa')
                     assert (
@@ -2377,14 +1979,20 @@ def verify(output, tags, walk=False):
                     face.use_smooth = True
                 if tag == 'NAM':
                     # Changing smoothing after import invalidates Blender's encoded normal basis.
-                    element = next(iter(tree.find('object'))).find('mesh')
+                    element = next(
+                        element for shape in tree.find('object') for element in shape.findall('mesh')
+                        if len(element.attrib['p']) == len(obj.data.vertices) * 3
+                    )
                     normals = pdx_data.PDXData(element).n
-                    vectors = [pdx.swap_coord_space(Vector(normals[i:i + 3]))
+                    vectors = [pdx.swap_coord_space(Vector(normals[i:i + 3])).normalized()
                                for i in range(0, len(normals), 3)]
                     assert len(vectors) == len(obj.data.vertices)
                     obj.data.normals_split_custom_set_from_vertices(vectors)
-                    assert max((obj.data.corner_normals[loop.index].vector - vectors[loop.vertex_index]).length
-                               for loop in obj.data.loops) < 0.001
+                    normal_error = max(
+                        (obj.data.corner_normals[loop.index].vector - vectors[loop.vertex_index]).length
+                        for loop in obj.data.loops
+                    )
+                    assert normal_error < 0.002, (obj.name, normal_error)
         scene.render.engine = 'CYCLES'
         scene.cycles.samples = 24
         scene.render.resolution_x, scene.render.resolution_y = 650, 800
@@ -2430,31 +2038,6 @@ def verify(output, tags, walk=False):
         )
         scene.camera = camera
         rigs = [obj for obj in scene.objects if obj.type == 'ARMATURE']
-        if metadata:
-            expected_clips = {nam_clip_name(clip) for clip in nam_animation_sources().values()}
-            assert expected_clips == set(metadata['clips'])
-            assert expected_clips == {source.name for source in inputs if source.suffix == '.anim'}
-            for clip in sorted(expected_clips):
-                animation_path = path.parent / 'NAM' / clip
-                animation = pdx_data.read_meshfile(str(animation_path))
-                info = animation.find('info')
-                assert [bone.tag for bone in info] == metadata['bones']
-                assert info.attrib['j'] == [len(metadata['bones'])]
-                frames = info.attrib['sa'][0]
-                for channel, size in (('t', 3), ('q', 4), ('s', 1)):
-                    values = animation.find('samples').attrib[channel]
-                    assert len(values) == frames * len(metadata['bones']) * size
-                    assert all(math.isfinite(value) for value in values)
-                sample_frames = (0, (frames - 1) // 2, frames - 1)
-                for frame, sample in enumerate(nam_native_frames(animation, rigs[0], pdx)):
-                    if frame not in sample_frames:
-                        continue
-                    nam_apply_pose(rigs[0], sample)
-                    graph = bpy.context.evaluated_depsgraph_get()
-                    for obj in (o for o in scene.objects if o.type == 'MESH'):
-                        evaluated = obj.evaluated_get(graph)
-                        assert all(math.isfinite(x) for v in evaluated.data.vertices for x in v.co)
-                        assert max(v.co.length for v in evaluated.data.vertices) < 20, (clip, frame)
         weapons = []
         props = []
         if tag in ('MON', 'HAZ', 'NAM'):
@@ -2507,7 +2090,7 @@ def verify(output, tags, walk=False):
             rotation = camera.rotation_euler.copy()
             scale = camera.data.ortho_scale
             width, height = scene.render.resolution_x, scene.render.resolution_y
-            head = rigs[0].pose.bones['NAM_Head' if tag == 'NAM' else 'head']
+            head = rigs[0].pose.bones['head']
             target = (
                 rigs[0].matrix_world @ head.matrix @ head.bone.matrix_local.inverted()
                 @ Vector((0, 0, 5.95))
@@ -2523,8 +2106,8 @@ def verify(output, tags, walk=False):
                 bpy.ops.render.render(write_still=True)
             if tag == 'NAM':
                 target = rigs[0].matrix_world @ (
-                    (rigs[0].pose.bones['NAM_LeftHand'].matrix.translation
-                     + rigs[0].pose.bones['NAM_RightHand'].matrix.translation) * 0.5
+                    (rigs[0].pose.bones['LeftHand'].matrix.translation
+                     + rigs[0].pose.bones['RightHand'].matrix.translation) * 0.5
                 )
                 camera.data.ortho_scale = 2.8
                 camera.location = target + Vector((8, -16, 4))
@@ -2549,8 +2132,7 @@ def verify(output, tags, walk=False):
             for rig in rigs:
                 rig.animation_data_clear()
             pdx.import_animfile(
-                str(path.parent / 'NAM' / f'NAM_{pose}.anim' if tag == 'NAM'
-                    else GAME / f'gfx/models/units/GER_infantry_{pose}.anim')
+                str(GAME / f'gfx/models/units/GER_infantry_{pose}.anim')
             )
             frames = (1, (scene.frame_end + 1) // 2, scene.frame_end)
             for frame in frames:
@@ -2621,13 +2203,13 @@ def verify(output, tags, walk=False):
                 ('long_idle03_rifle', 16), ('long_idle03_mg', 16),
             ):
                 rigs[0].animation_data_clear()
-                animation = pdx_data.read_meshfile(str(path.parent / 'NAM' / f'NAM_{pose}.anim'))
+                animation = pdx_data.read_meshfile(str(GAME / f'gfx/models/units/GER_infantry_{pose}.anim'))
                 count = animation.find('info').attrib['sa'][0]
                 chosen = {round(index * (count - 1) / (sample_count - 1)) for index in range(sample_count)}
-                for frame, sample in enumerate(nam_native_frames(animation, rigs[0], pdx)):
+                for frame, sample in enumerate(native_animation_frames(animation, rigs[0], pdx)):
                     if frame not in chosen:
                         continue
-                    nam_apply_pose(rigs[0], sample)
+                    apply_native_pose(rigs[0], sample)
                     place_weapons(pose)
                     scene.render.filepath = str(output / f'{tag}_{pose}_sample_{frame:03d}.png')
                     bpy.ops.render.render(write_still=True)
@@ -2646,17 +2228,16 @@ def verify(output, tags, walk=False):
             'shapes': shapes,
             'poses': poses,
         }
-        if metadata:
-            report[tag]['source'] = metadata['source']
-            report[tag]['bones'] = metadata['bones']
-            report[tag]['animations'] = {
-                source.name: input_hashes[source] for source in inputs
-                if source.suffix in ('.anim', '.asset')
+        if tag == 'NAM':
+            report[tag]['source'] = {
+                'file': str(CONFIG[tag].relative_to(ROOT)).replace('\\', '/'),
+                'sha256': hashlib.sha256(CONFIG[tag].read_bytes()).hexdigest(),
             }
-            report[tag]['animation_sources'] = metadata['clips']
-            report[tag]['geometry'] = 'Supplied GLB vertices retained at native infantry scale.'
-            report[tag]['motion'] = 'Adapted native clips, including idle, walking and smoking; shoulder and grip constraints for automatic fire.'
-            report[tag]['runtime'] = 'Offline native export and re-import only; HOI4 cold-load pending.'
+            report[tag]['bones'] = [bone.tag for bone in donor_bones]
+            report[tag]['geometry'] = 'Vorkerland infantry geometry, skeleton, skin and locators retained.'
+            report[tag]['geometry_matches_source'] = True
+            report[tag]['motion'] = 'Native GER infantry clips shared with Vorkerland; no custom animation package.'
+            report[tag]['runtime'] = 'Offline native re-import only; HOI4 cold-load pending.'
     report_path = output / 'verification.json'
     previous = json.loads(report_path.read_text()) if report_path.exists() else {}
     previous.update(report)
@@ -2665,7 +2246,7 @@ def verify(output, tags, walk=False):
 
 
 def model_parts(tag):
-    return ('body',) if tag in ('HAZ', 'NAM') else ('body', 'gear')
+    return ('body',) if tag == 'HAZ' else ('body', 'gear')
 
 
 def package(output, apply=False, check=False, tags=None, assets_only=False):
@@ -2718,24 +2299,22 @@ def package(output, apply=False, check=False, tags=None, assets_only=False):
         ).read_bytes()
     for tag in tags:
         files[dest / f'{tag}_field.mesh'] = (output / f'{tag}_field.mesh').read_bytes()
-        if tag == 'NAM':
-            animation_blocks = ['# Generated by tools/assets/source/build_northern_infantry.py']
-            for name, source in sorted(nam_animation_sources().items()):
-                clip = nam_clip_name(source)
-                files[dest / 'NAM' / clip] = (output / 'NAM_animations' / clip).read_bytes()
-                name = name.replace('GER_infantry_', 'ADISCORD_NAM_')
-                animation_blocks.append(f'animation = {{\n\tname = "{name}"\n\tfile = "{clip}"\n}}')
-            files[dest / 'NAM/animation.asset'] = ('\n\n'.join(animation_blocks) + '\n').encode()
         for part in model_parts(tag):
             files[dest / f'{tag}_field_{part}_diffuse.dds'] = dds(
                 Image.open(output / f'{tag}_{part}.png')
             )
+            if tag == 'NAM':
+                for kind in ('normal', 'specular'):
+                    files[dest / f'NAM_field_{part}_{kind}.dds'] = (
+                        CONFIG[tag].parent / f'WRK_line_{part}_{kind}.dds'
+                    ).read_bytes()
+                continue
             normal = (
                 Image.open(NORMALS[tag])
                 if part == 'body'
                 else Image.new('RGBA', (512, 512), (255, 128, 0, 128))
             )
-            if tag in ('HAZ', 'NAM') and part == 'body':
+            if tag == 'HAZ' and part == 'body':
                 # UnpackRRxGNormal reads X from green and negates alpha for Y.
                 source_normal = Image.open(output / f'{tag}_body_normal.png').convert('RGB')
                 red, green, _ = source_normal.split()
@@ -2744,13 +2323,6 @@ def package(output, apply=False, check=False, tags=None, assets_only=False):
                 ))
             files[dest / f'{tag}_field_{part}_normal.dds'] = dds(normal, True)
             specular = Image.new('RGBA', (512, 512), (0, 48, 0, 36))
-            if tag == 'NAM':
-                surface = Image.open(output / 'NAM_surface.png').convert('RGB')
-                _, roughness, metalness = surface.split()
-                specular = Image.merge('RGBA', (
-                    Image.new('L', surface.size, 0), Image.new('L', surface.size, 48),
-                    metalness, ImageOps.invert(roughness),
-                ))
             if tag == 'MON' and part == 'gear':
                 surface = Image.open(output / 'MON_surface.png').convert('RGB')
                 strength, metalness, gloss = surface.split()
@@ -2786,11 +2358,6 @@ def package(output, apply=False, check=False, tags=None, assets_only=False):
                 assert digest == hashlib.sha256(files[dest / name]).hexdigest(), (
                     name + ': re-run --verify'
                 )
-            if tag == 'NAM':
-                for name, digest in verified[tag]['animations'].items():
-                    assert digest == hashlib.sha256(files[dest / 'NAM' / name]).hexdigest(), (
-                        name + ': re-run --verify'
-                    )
         for path, content in files.items():
             if str(path.relative_to(ROOT)) in changed:
                 path.parent.mkdir(parents=True, exist_ok=True)
@@ -2810,8 +2377,6 @@ def package(output, apply=False, check=False, tags=None, assets_only=False):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--rig-source', type=Path,
-                        help='NAM GLB with its original skin and skeleton.')
     parser.add_argument('--assets-only', action='store_true',
                         help='Keep existing entity bindings when replacing an already registered model.')
     parser.add_argument(
@@ -2838,7 +2403,7 @@ if __name__ == '__main__':
             if tag == 'COF':
                 build(args.output.resolve())
             else:
-                build_field(tag, args.output.resolve(), args.rig_source)
+                build_field(tag, args.output.resolve())
     elif args.verify:
         verify(args.output.resolve(), args.tags, args.walk)
     elif args.finalize:

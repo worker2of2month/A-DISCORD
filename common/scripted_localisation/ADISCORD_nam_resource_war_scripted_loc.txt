@@ -920,3 +920,22 @@ defined_text = {
 		localization_key = NAM_bw_concession_free
 	}
 }
+# Compact label for the decision-category map; the full name stays in its tooltip.
+defined_text = {
+	name = NAMBasinPhaseShortLabel
+	text = {
+		trigger = { ADISCORD_nam_resource_war_active = yes }
+		localization_key = NAM_bw_phase_discipline_short
+	}
+	text = {
+		trigger = { NAM_rw_clock_running = yes }
+		localization_key = NAM_bw_phase_tension_short
+	}
+	text = {
+		trigger = { has_dynamic_modifier = { modifier = NAM_seal_discipline_dynamic } }
+		localization_key = NAM_bw_phase_discipline_short
+	}
+	text = {
+		localization_key = NAM_bw_phase_tension_short
+	}
+}

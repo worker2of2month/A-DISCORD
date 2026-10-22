@@ -1,7 +1,4 @@
 spriteTypes = {
-	# Svetlogorye basin window. Existing textures only: the dark card tile keeps
-	# three-pixel borders, so it scales to every card and gauge size; the button
-	# tile carries the native disabled shading for blocked card actions.
 	corneredTileSpriteType = {
 		name = "GFX_NAM_bw_card"
 		size = { x = 64 y = 64 }
@@ -19,4 +16,135 @@ spriteTypes = {
 		tilingCenter = yes
 		effectFile = "gfx/FX/buttonstate.lua"
 	}
+	# BEGIN GENERATED NAM BASIN MAP
+	spriteType = {
+		name = "GFX_NAM_bw_map"
+		texturefile = "gfx/interface/NAM_basin/map.png"
+		noOfFrames = 1
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_state_67"
+		texturefile = "gfx/interface/NAM_basin/state_67.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_state_688"
+		texturefile = "gfx/interface/NAM_basin/state_688.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_state_689"
+		texturefile = "gfx/interface/NAM_basin/state_689.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_state_690"
+		texturefile = "gfx/interface/NAM_basin/state_690.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_state_719"
+		texturefile = "gfx/interface/NAM_basin/state_719.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_state_700"
+		texturefile = "gfx/interface/NAM_basin/state_700.png"
+		noOfFrames = 4
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_NAM_bw_panel"
+		size = { x = 64 y = 64 }
+		textureFile = "gfx/interface/NAM_basin/panel.png"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_NAM_bw_row"
+		size = { x = 64 y = 64 }
+		textureFile = "gfx/interface/NAM_basin/row.png"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_marker"
+		texturefile = "gfx/interface/NAM_basin/marker.png"
+		noOfFrames = 1
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_support_nam"
+		texturefile = "gfx/interface/NAM_basin/support_nam.png"
+		noOfFrames = 1
+	}
+
+	spriteType = {
+		name = "GFX_NAM_support_nam_texticon"
+		texturefile = "gfx/interface/NAM_basin/texticon_nam.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_support_oil"
+		texturefile = "gfx/interface/NAM_basin/support_oil.png"
+		noOfFrames = 1
+	}
+
+	spriteType = {
+		name = "GFX_NAM_support_oil_texticon"
+		texturefile = "gfx/interface/NAM_basin/texticon_oil.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_support_dist"
+		texturefile = "gfx/interface/NAM_basin/support_dist.png"
+		noOfFrames = 1
+	}
+
+	spriteType = {
+		name = "GFX_NAM_support_dist_texticon"
+		texturefile = "gfx/interface/NAM_basin/texticon_dist.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_support_garr"
+		texturefile = "gfx/interface/NAM_basin/support_garr.png"
+		noOfFrames = 1
+	}
+
+	spriteType = {
+		name = "GFX_NAM_support_garr_texticon"
+		texturefile = "gfx/interface/NAM_basin/texticon_garr.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_support_trade"
+		texturefile = "gfx/interface/NAM_basin/support_trade.png"
+		noOfFrames = 1
+	}
+
+	spriteType = {
+		name = "GFX_NAM_support_trade_texticon"
+		texturefile = "gfx/interface/NAM_basin/texticon_trade.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+	# END GENERATED NAM BASIN MAP
 }

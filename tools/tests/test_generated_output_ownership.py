@@ -71,6 +71,7 @@ REQUIRED_FAMILIES = {
     "resource_assets",
     "strategic_regions",
     "stp_regions_map",
+    "nam_basin_map",
     "stp_flags",
     "stp_portraits",
     "stp_party_ideologies",

@@ -1,16 +1,24 @@
 {
   "NAM": {
-    "sha256": "cbd0512d152caf0b70598e7a0c6c6387ea44f974638a025667e2bdc6a70c0353",
+    "sha256": "0d1078fb0f59d78995105083ca2997a4c46a8615644b5fb9a51179fd06536e8a",
     "textures": {
-      "NAM_field_body_diffuse.dds": "76148f8676f7bf4699197cd75ee922c794165d350f378d7bf2e0133ab3943b87",
-      "NAM_field_body_normal.dds": "f4f9fe7de9c989736e8a25578b8affd5d432944dcaf9bc061e723b4c1bcf5ca5",
-      "NAM_field_body_specular.dds": "dc6c15f8541211a68a0c3e424411c0c603f5e00c9c934e9d3063860bca22133e"
+      "NAM_field_body_diffuse.dds": "479364b726a7a7d64c937dc49cab17d843620139e15f2189d6e4d6a95f48fb10",
+      "NAM_field_body_normal.dds": "0e1da3351cd0e20fae33216ee833d6fbeca2eb495fc96cf6e3ea9d6fef43f1d1",
+      "NAM_field_body_specular.dds": "f6f3c85a6fc207fa61bb787711e1edea7dc38e757774384be3a3dd8dd054c5b8",
+      "NAM_field_gear_diffuse.dds": "b1297453a1c9e23328ad038e17486b67984741615f6a7b48ef30d387ec8d76bc",
+      "NAM_field_gear_normal.dds": "58f851b30c03b01d0593b4c9151cec4f04d5da00254da3c09d33af700aaa2aa8",
+      "NAM_field_gear_specular.dds": "3c881e04d6779ad0c9bfdcce3ccf386825fd43c7910368aa08bfa1a8dba5cb1a"
     },
     "shapes": [
       {
-        "vertices": 6695,
-        "triangles": 8369,
-        "bones": 50
+        "vertices": 7377,
+        "triangles": 2463,
+        "bones": 33
+      },
+      {
+        "vertices": 10086,
+        "triangles": 12584,
+        "bones": 33
       }
     ],
     "poses": {
@@ -112,335 +120,48 @@
       ]
     },
     "source": {
-      "filename": "NAM_infantry_rig_fixed.glb",
-      "sha256": "06afd0aff538a52af57ec291dc8a4a299db7983a559c4ea8fc6e027e0418612b"
+      "file": "gfx/models/units/ADISCORD_regulars/WRK_line.mesh",
+      "sha256": "03ec9ea0f837d0cb1de6e8be2304e3be9d16e6fe05fda7c5f5454fd144a89b75"
     },
     "bones": [
-      "NAM_Hips",
-      "NAM_Spine",
-      "NAM_Spine2",
-      "NAM_Neck",
-      "NAM_Head",
-      "NAM_LeftShoulder",
-      "NAM_LeftArm",
-      "NAM_LeftForeArm",
-      "NAM_LeftHand",
-      "NAM_LeftHandPinky1",
-      "NAM_LeftHandPinky2",
-      "NAM_LeftHandRing1",
-      "NAM_LeftHandRing2",
-      "NAM_LeftHandThumb1",
-      "NAM_LeftHandThumb2",
-      "NAM_LeftHandMiddle1",
-      "NAM_LeftHandMiddle2",
-      "NAM_LeftHandIndex1",
-      "NAM_LeftHandIndex2",
+      "Root",
+      "Hip",
+      "LeftUpLeg",
+      "LeftLeg",
+      "LeftFoot",
+      "LeftToeBase",
+      "back_mid",
+      "LeftShoulder",
+      "LeftArm",
+      "LeftForeArm",
+      "LeftForeArmRoll",
+      "LeftHand",
       "Left_Hand_node",
       "Left_Hand_node_2",
-      "NAM_RightShoulder",
-      "NAM_RightArm",
-      "NAM_RightForeArm",
-      "NAM_RightHand",
-      "NAM_RightHandPinky1",
-      "NAM_RightHandPinky2",
-      "NAM_RightHandThumb1",
-      "NAM_RightHandThumb2",
-      "NAM_RightHandRing1",
-      "NAM_RightHandRing2",
-      "NAM_RightHandMiddle1",
-      "NAM_RightHandMiddle2",
-      "NAM_RightHandIndex1",
-      "NAM_RightHandIndex2",
+      "Left_Hand_node_3",
+      "Left_Hand_node_4",
+      "head",
+      "RightShoulder",
+      "RightArm",
+      "RightForeArm",
+      "RightForeArmRoll",
+      "RightHand",
       "Right_Hand_node",
       "Right_Hand_node_2",
       "Right_Hand_node_3",
       "Right_Hand_node_4",
       "mid_back_node",
-      "NAM_LeftUpLeg",
-      "NAM_LeftLeg",
-      "NAM_LeftFoot",
-      "NAM_LeftToeBase",
-      "NAM_RightUpLeg",
-      "NAM_RightLeg",
-      "NAM_RightFoot",
-      "NAM_RightToeBase",
-      "Root_node_2",
-      "Root_node_1"
+      "RightUpLeg",
+      "RightLeg",
+      "RightFoot",
+      "RightToeBase",
+      "Root_node_1",
+      "Root_node_2"
     ],
-    "animations": {
-      "NAM_aim_exercise.anim": "98bc48209c90ceef175bca4beba672a9c936280e91e8fb307060a4509e78fe69",
-      "NAM_aim_exercise_mg.anim": "7489bdbaf90e91b2fd95b010c2d16aa0a50a7bad402c48df33f11e596cf7b886",
-      "NAM_attack_crouch_mg.anim": "44a689ae0f5d0c51a3a174d9084faab6d1da1bbc8c9977730a3245f6990f0bbb",
-      "NAM_attack_crouch_rifle.anim": "5e031d25b4a29c0a37eb9cb44164ec72e55499d7a0eead6f884e3283c6758cff",
-      "NAM_attack_stand_mg.anim": "750f0e7e0420f017f1be684787cf5062e0d50cae2eaa1abb1aaec3dde10378df",
-      "NAM_attack_stand_rifle.anim": "0c43e55260e7112e1ef1eeb660a823ec68e477d1763cdf6a61466a9ab9528759",
-      "NAM_cavalry_rider_idle_mg.anim": "4c81435a62b882e56d0838c47d8bd0c3125d22252c59e013acbcd07f9d89b285",
-      "NAM_cavalry_rider_idle_rifle.anim": "0fb8475638bd2c3bd18562c9a857c7665007f5fc2a940102c22343db9caa9c99",
-      "NAM_cavalry_rider_moving_mg.anim": "a65985672d4f46c7ba551bbd103269041f2569ab2eb78d2b3ec94f3600646086",
-      "NAM_cavalry_rider_moving_rifle.anim": "db8e0f95d58ce7c09dd63ad7fb7e66d5b048f43cef8a6759fdbcd1aa74138918",
-      "NAM_charge_mg.anim": "8020b88f6aeb6e52f38f541b8ad56ec021f1a3db45620b3d281c5f6cae3cb5c8",
-      "NAM_charge_mg_shoot.anim": "00a0fed28f0adee63e2be7f3480b6327a1e0dc9cafffcd52da739209414d7bd7",
-      "NAM_charge_rifle.anim": "d0660d6f2da3f254863ae486feed7678bf7a1175d2f11085d9b2c65ff5cf133b",
-      "NAM_charge_rifle_shoot.anim": "2d6caf3592df99431db7c81e5130dbae1266f99b0c240aa99bbcc323076241ca",
-      "NAM_death_mg.anim": "1f5f83bad210be3dbcf22ef61fab7a801302deabc756780e90c722877860b222",
-      "NAM_death_rifle.anim": "f8972f640dc93e9557456462bb90453c08f0b86362034cd04716eea2319b8db5",
-      "NAM_guard_rifle.anim": "842076cef568771d4bc9d7c64397d7f3d05698a628b161d0c95d965dbc625a2c",
-      "NAM_idle_mg.anim": "021c95fdd2d1ac9e4193d27e227eedd0cd49c2bf8c01ab348c04d50d5807a706",
-      "NAM_idle_rifle.anim": "47e88f3ad0389557a9e88287fe54282b8f5e733fd4d61348dbb56ed7384fb11f",
-      "NAM_idle_training.anim": "0946a91041e6354a8d094d928ae06e2b339d91c5d2f49e1fdc32992827054394",
-      "NAM_jumping_jacks.anim": "e02b80007e60b974e154a12b52291f369f8e5919f223f59359034bc8346b3178",
-      "NAM_long_idle01_mg.anim": "0af0f12e47dccecfd49e935dd1f7f26268f64fd9e28192855f011fdeffad714f",
-      "NAM_long_idle01_rifle.anim": "b574813f087b27a03e8ed3e4fd8f0175737a57d8fa6293095ce98bc89c94c91c",
-      "NAM_long_idle02_mg.anim": "cd648dc681fa952839fdcfbfb85f452133db408bf72d2c5375016b5b8cd38157",
-      "NAM_long_idle02_rifle.anim": "4b0602d6cc29c489ed141311fb5f74f6a304dadca3606b28bb6e2ac20795f54f",
-      "NAM_long_idle03_mg.anim": "3b1c8a2111f46ebdf038bfb61fa94614711b260913f4423082f822619193aa4f",
-      "NAM_long_idle03_rifle.anim": "25510a27c5bca2987cbee0f97a01bf58cb3d5fb137307b04ea303682183f5ab6",
-      "NAM_long_idle04_mg.anim": "b6d27cb345cc45c53ae88d6a2ee2e7f375c12c14a1eecbdfb5d949832f188c74",
-      "NAM_long_idle04_rifle.anim": "e3c08e26192217777e754a64047486aec2253edbb47fa676c9da1f8032d669fc",
-      "NAM_long_idle05_mg.anim": "1547349d11769da02a2cb0e72622cc721b8f1160eb7cb9487cdaa6eb57b6e709",
-      "NAM_long_idle05_rifle.anim": "41a530a017c7be1e2835f09c1e0ebae64176aec81e042aa59ca4ced1f5f1a42e",
-      "NAM_march_mg.anim": "db0bfc26698097ca75a64acf41c3fd6351a9182c3535b226f25c15461083a3dd",
-      "NAM_march_rifle.anim": "12dbc0604627e8cbda6ae855bfcb574a19c425106fc55d26c7daf3c9097722a1",
-      "NAM_moving_mg.anim": "3212b752bd46585cae48abcb8bb5feacaa71809d3cbd2d805e74ab1733f231d3",
-      "NAM_moving_rifle.anim": "e50b8d0d47ff9d6c50d033b258faa9cb78dd99a64ed93b1378daa427c3637e44",
-      "NAM_pushup.anim": "74bb49e3b1b4dfbc7e7952a3ebdc949822524f417f43da0f1624e8dc78d0596d",
-      "NAM_retreat_mg.anim": "3a6914cc2a3e6bcd4fff6febe7b3db566f6bc25e3d2851236c912e2657eb6520",
-      "NAM_retreat_rifle.anim": "150a222ca2b935d8a946b86cbbdb1aab6c75c8ae89ce9e40bae520c29e30a100",
-      "animation.asset": "64d2bdfe9087f60b625fc4f2646e3afbf1af091078150c51e7d03a67b31a1a68"
-    },
-    "animation_sources": {
-      "NAM_aim_exercise.anim": {
-        "source_sha256": "2976f3fdce971ff44e65df887ce9ebb3ddf8c4c2b21b26ece97c4d7d35861e7a",
-        "frames": 308,
-        "fps": 30.097719192504883,
-        "sha256": "98bc48209c90ceef175bca4beba672a9c936280e91e8fb307060a4509e78fe69"
-      },
-      "NAM_aim_exercise_mg.anim": {
-        "source_sha256": "c918b018d691912b1891e933ff01c9c828d6deba62a89f91795ac1f0c930c704",
-        "frames": 318,
-        "fps": 30.094636917114258,
-        "sha256": "7489bdbaf90e91b2fd95b010c2d16aa0a50a7bad402c48df33f11e596cf7b886"
-      },
-      "NAM_attack_crouch_mg.anim": {
-        "source_sha256": "a427c239ab9d2e7448cb32ebdab49705c713b5a9a3800a2b8603a468020a12fa",
-        "frames": 99,
-        "fps": 30.306121826171875,
-        "sha256": "44a689ae0f5d0c51a3a174d9084faab6d1da1bbc8c9977730a3245f6990f0bbb"
-      },
-      "NAM_attack_crouch_rifle.anim": {
-        "source_sha256": "e3af3b3f6e1da953c22ef905285c6781768cd563415dd6b722921e910ea25938",
-        "frames": 79,
-        "fps": 30.384614944458008,
-        "sha256": "5e031d25b4a29c0a37eb9cb44164ec72e55499d7a0eead6f884e3283c6758cff"
-      },
-      "NAM_attack_stand_mg.anim": {
-        "source_sha256": "2197c767c7fcd3314a8c5b82053f10ca880d3d0701a98152178cbeff7562c31c",
-        "frames": 97,
-        "fps": 30.3125,
-        "sha256": "750f0e7e0420f017f1be684787cf5062e0d50cae2eaa1abb1aaec3dde10378df"
-      },
-      "NAM_attack_stand_rifle.anim": {
-        "source_sha256": "1ca1deb13c5caf1a925b86e965347422da74a5d24c477d7aca9a40282824ef9f",
-        "frames": 79,
-        "fps": 30.384614944458008,
-        "sha256": "0c43e55260e7112e1ef1eeb660a823ec68e477d1763cdf6a61466a9ab9528759"
-      },
-      "NAM_cavalry_rider_idle_mg.anim": {
-        "source_sha256": "3c238a18f13b867aaefbb60388edcdc800cb20284ee2a40a0e6794adc47c00e7",
-        "frames": 301,
-        "fps": 30.100000381469727,
-        "sha256": "4c81435a62b882e56d0838c47d8bd0c3125d22252c59e013acbcd07f9d89b285"
-      },
-      "NAM_cavalry_rider_idle_rifle.anim": {
-        "source_sha256": "3f78d1d4b3d0cb5683017493a72da28cb23696c78dbcf873c998011629b9a479",
-        "frames": 301,
-        "fps": 30.100000381469727,
-        "sha256": "0fb8475638bd2c3bd18562c9a857c7665007f5fc2a940102c22343db9caa9c99"
-      },
-      "NAM_cavalry_rider_moving_mg.anim": {
-        "source_sha256": "fb996223e46eff06b320348713966860ecce0cda29f48a5bde5633ccd3bed764",
-        "frames": 48,
-        "fps": 30.63829803466797,
-        "sha256": "a65985672d4f46c7ba551bbd103269041f2569ab2eb78d2b3ec94f3600646086"
-      },
-      "NAM_cavalry_rider_moving_rifle.anim": {
-        "source_sha256": "4f0867349b0f7ee323b05eda0973a54f3be40eb69ae23450ced84dba368bbbbd",
-        "frames": 48,
-        "fps": 30.0,
-        "sha256": "db8e0f95d58ce7c09dd63ad7fb7e66d5b048f43cef8a6759fdbcd1aa74138918"
-      },
-      "NAM_charge_mg.anim": {
-        "source_sha256": "c99d7d02d80702062efa44b7392bd26e723402751c566ab79a7e8ca5e07ec6ad",
-        "frames": 61,
-        "fps": 30.5,
-        "sha256": "8020b88f6aeb6e52f38f541b8ad56ec021f1a3db45620b3d281c5f6cae3cb5c8"
-      },
-      "NAM_charge_mg_shoot.anim": {
-        "source_sha256": "ac4e705308d420f3d964d4b4b76eba6aae54d0e1ed9a0495537cdc5866ec2b23",
-        "frames": 61,
-        "fps": 30.5,
-        "sha256": "00a0fed28f0adee63e2be7f3480b6327a1e0dc9cafffcd52da739209414d7bd7"
-      },
-      "NAM_charge_rifle.anim": {
-        "source_sha256": "3c05fe67cd629594ce9aa609415878832e239bb7fa8c9928cd76e9f72496678d",
-        "frames": 61,
-        "fps": 30.5,
-        "sha256": "d0660d6f2da3f254863ae486feed7678bf7a1175d2f11085d9b2c65ff5cf133b"
-      },
-      "NAM_charge_rifle_shoot.anim": {
-        "source_sha256": "db977fab916efd084b871462d846b8c77b524889cbbe21df8f7ba5452bcd96ce",
-        "frames": 81,
-        "fps": 30.375,
-        "sha256": "2d6caf3592df99431db7c81e5130dbae1266f99b0c240aa99bbcc323076241ca"
-      },
-      "NAM_death_mg.anim": {
-        "source_sha256": "cc283b9253a4b1c3328adcb3a34a72c2c1ef8f96ef772573b8ea91c8a4bb3b3c",
-        "frames": 92,
-        "fps": 30.329669952392578,
-        "sha256": "1f5f83bad210be3dbcf22ef61fab7a801302deabc756780e90c722877860b222"
-      },
-      "NAM_death_rifle.anim": {
-        "source_sha256": "7a43f1aab2f04435c2f61105dbdb8ebbf18d511d7614e6bbcdae90b8f92fb730",
-        "frames": 64,
-        "fps": 30.4761905670166,
-        "sha256": "f8972f640dc93e9557456462bb90453c08f0b86362034cd04716eea2319b8db5"
-      },
-      "NAM_guard_rifle.anim": {
-        "source_sha256": "66207346504aa257eab29bb030bdb3eb24465665494bc515131b2b864ad53967",
-        "frames": 577,
-        "fps": 30.05208396911621,
-        "sha256": "842076cef568771d4bc9d7c64397d7f3d05698a628b161d0c95d965dbc625a2c"
-      },
-      "NAM_idle_mg.anim": {
-        "source_sha256": "bd6ad770bc8e5c085fcebdf694121f92fed027d7d1397739955dd0ab3eb84523",
-        "frames": 180,
-        "fps": 30.1675968170166,
-        "sha256": "021c95fdd2d1ac9e4193d27e227eedd0cd49c2bf8c01ab348c04d50d5807a706"
-      },
-      "NAM_idle_rifle.anim": {
-        "source_sha256": "e08af4aaf57d00e6941f5e2803b59563cb351baf11a56ec668ed917e7391c8a7",
-        "frames": 181,
-        "fps": 30.16666603088379,
-        "sha256": "47e88f3ad0389557a9e88287fe54282b8f5e733fd4d61348dbb56ed7384fb11f"
-      },
-      "NAM_idle_training.anim": {
-        "source_sha256": "dd1402107416159de2959ac07c52310732c923e059278c827635420d8640f2ef",
-        "frames": 88,
-        "fps": 30.34482765197754,
-        "sha256": "0946a91041e6354a8d094d928ae06e2b339d91c5d2f49e1fdc32992827054394"
-      },
-      "NAM_jumping_jacks.anim": {
-        "source_sha256": "8b622d7f81d5aadb9d60393da5584bc13733ffd01c8674e8ba4e5448361e9721",
-        "frames": 171,
-        "fps": 30.176469802856445,
-        "sha256": "e02b80007e60b974e154a12b52291f369f8e5919f223f59359034bc8346b3178"
-      },
-      "NAM_long_idle01_mg.anim": {
-        "source_sha256": "9ad6af144585e206be23d0a000a61970a71c92b1ab271d05fd0dffd7f29229b5",
-        "frames": 276,
-        "fps": 30.10909080505371,
-        "sha256": "0af0f12e47dccecfd49e935dd1f7f26268f64fd9e28192855f011fdeffad714f"
-      },
-      "NAM_long_idle01_rifle.anim": {
-        "source_sha256": "2de404e04785faf3474f9f13df5ff76407dd8219ab40e01c9ff90e78a74fc1d6",
-        "frames": 276,
-        "fps": 30.10909080505371,
-        "sha256": "b574813f087b27a03e8ed3e4fd8f0175737a57d8fa6293095ce98bc89c94c91c"
-      },
-      "NAM_long_idle02_mg.anim": {
-        "source_sha256": "658cffa3f7b1bf4b11786c10f2976ddd243d9bd92cbed73f95c89a4af4cf89b5",
-        "frames": 248,
-        "fps": 30.0,
-        "sha256": "cd648dc681fa952839fdcfbfb85f452133db408bf72d2c5375016b5b8cd38157"
-      },
-      "NAM_long_idle02_rifle.anim": {
-        "source_sha256": "7b01c732efcc9022b87bfc19e48775dd9f111fa4034da1379dba0454b4633c36",
-        "frames": 248,
-        "fps": 30.0,
-        "sha256": "4b0602d6cc29c489ed141311fb5f74f6a304dadca3606b28bb6e2ac20795f54f"
-      },
-      "NAM_long_idle03_mg.anim": {
-        "source_sha256": "e635b263fa1bb064914e971a3ad4387ba75698e645176d49ac174147e93c5ca1",
-        "frames": 770,
-        "fps": 30.039011001586914,
-        "sha256": "3b1c8a2111f46ebdf038bfb61fa94614711b260913f4423082f822619193aa4f"
-      },
-      "NAM_long_idle03_rifle.anim": {
-        "source_sha256": "310fad70255683fda1fe0b3deebefe65ecbb2dc8636adb94b68729f2fdd92b71",
-        "frames": 770,
-        "fps": 30.039011001586914,
-        "sha256": "25510a27c5bca2987cbee0f97a01bf58cb3d5fb137307b04ea303682183f5ab6"
-      },
-      "NAM_long_idle04_mg.anim": {
-        "source_sha256": "13ed50718faeb11f0414ceca881b6b4d73ec5350a3742cd806974b28f7ccf392",
-        "frames": 179,
-        "fps": 30.16853904724121,
-        "sha256": "b6d27cb345cc45c53ae88d6a2ee2e7f375c12c14a1eecbdfb5d949832f188c74"
-      },
-      "NAM_long_idle04_rifle.anim": {
-        "source_sha256": "cdf500492d200bc9aca2f37335e2adcc2535ee74b3ec6fb9d600f7df850cecf4",
-        "frames": 179,
-        "fps": 30.16853904724121,
-        "sha256": "e3c08e26192217777e754a64047486aec2253edbb47fa676c9da1f8032d669fc"
-      },
-      "NAM_long_idle05_mg.anim": {
-        "source_sha256": "d40b7b18e04a383bbd12b46f15602df939789eecf1fa7ffc8fa68737bae1cbf3",
-        "frames": 185,
-        "fps": 30.163043975830078,
-        "sha256": "1547349d11769da02a2cb0e72622cc721b8f1160eb7cb9487cdaa6eb57b6e709"
-      },
-      "NAM_long_idle05_rifle.anim": {
-        "source_sha256": "9c4528a39e0ecef1089a4035551d111b5fb5f497d1f908ff977f73d30b87525c",
-        "frames": 185,
-        "fps": 30.163043975830078,
-        "sha256": "41a530a017c7be1e2835f09c1e0ebae64176aec81e042aa59ca4ced1f5f1a42e"
-      },
-      "NAM_march_mg.anim": {
-        "source_sha256": "37799e4c1f05917b97e0bdbf0cd79f0f7c3615169c331db4f345bd021dfef21d",
-        "frames": 36,
-        "fps": 30.85714340209961,
-        "sha256": "db0bfc26698097ca75a64acf41c3fd6351a9182c3535b226f25c15461083a3dd"
-      },
-      "NAM_march_rifle.anim": {
-        "source_sha256": "199e94103c0cf034e1ec39ef16ff6241949e600461c114cfe70aee404639decc",
-        "frames": 36,
-        "fps": 30.85714340209961,
-        "sha256": "12dbc0604627e8cbda6ae855bfcb574a19c425106fc55d26c7daf3c9097722a1"
-      },
-      "NAM_moving_mg.anim": {
-        "source_sha256": "8110ba370a0cc144bbab3149c66e79ef5ef18ac76a8549c85bb26f5c0551e0bf",
-        "frames": 41,
-        "fps": 30.75,
-        "sha256": "3212b752bd46585cae48abcb8bb5feacaa71809d3cbd2d805e74ab1733f231d3"
-      },
-      "NAM_moving_rifle.anim": {
-        "source_sha256": "3435e1f4b59520cc513cf3ab56bc02b14e98eb59b2ca1573e27d7f4b1a646fec",
-        "frames": 41,
-        "fps": 30.75,
-        "sha256": "e50b8d0d47ff9d6c50d033b258faa9cb78dd99a64ed93b1378daa427c3637e44"
-      },
-      "NAM_pushup.anim": {
-        "source_sha256": "410aac604574a8b83f927d722770d60c379d1dc754a9a4ba48d4fc902837fe64",
-        "frames": 496,
-        "fps": 30.060606002807617,
-        "sha256": "74bb49e3b1b4dfbc7e7952a3ebdc949822524f417f43da0f1624e8dc78d0596d"
-      },
-      "NAM_retreat_mg.anim": {
-        "source_sha256": "cac9f65c9c9a76c258ec0db893caaecda50682d5e807b846e332286d48eaff5c",
-        "frames": 51,
-        "fps": 30.600000381469727,
-        "sha256": "3a6914cc2a3e6bcd4fff6febe7b3db566f6bc25e3d2851236c912e2657eb6520"
-      },
-      "NAM_retreat_rifle.anim": {
-        "source_sha256": "db5e534aa01709c5079b7cdb9d8f3fca675350931bf1dd9deb8cf98e9fdf1f51",
-        "frames": 51,
-        "fps": 30.600000381469727,
-        "sha256": "150a222ca2b935d8a946b86cbbdb1aab6c75c8ae89ce9e40bae520c29e30a100"
-      }
-    },
-    "geometry": "Supplied GLB vertices retained at native infantry scale.",
-    "motion": "Adapted native clips, including idle, walking and smoking; shoulder and grip constraints for automatic fire.",
-    "runtime": "Offline native export and re-import only; HOI4 cold-load pending.",
+    "geometry": "Vorkerland infantry geometry, skeleton, skin and locators retained.",
+    "geometry_matches_source": true,
+    "motion": "Native GER infantry clips shared with Vorkerland; no custom animation package.",
+    "runtime": "Offline native re-import only; HOI4 cold-load pending.",
     "bindings": {
       "tags": [
         "NAM",

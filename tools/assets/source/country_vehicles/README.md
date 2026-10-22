@@ -4,6 +4,8 @@
 `build_motorized.py` owns the four wheeled APC meshes, textures, animation
 clips and packed Blender scenes in this family. It uses the native geometry
 helpers in `build_country_cas.py` and `build_taran.py`.
+`build_idle.py` owns the shared idle motion for these four APCs, the VAL/NOD/STP
+tanks and STS Taran. The APC and Taran geometry builders call its exporter.
 
 - VAL: long, low eight-wheel wedge hull with overlapping side skirts and a wide,
   flat faceted turret; blue-grey panels.
@@ -24,7 +26,30 @@ The root entity uses the native `motorized_frame_mesh`. The vehicle and existing
 national rifle infantry are separate attachments, with idle, move, retreat,
 attack, defend, support attack, training and death states. The frame already
 scales its vehicle attachment to 0.7 in idle; the APC mesh scale is 0.95 and the
-escort scale is 0.25. The native unit presentation still needs an in-game check.
+escort inherits the national infantry entity's scale without an additional
+override. The native unit presentation still needs an in-game check.
+
+Idle cycles last 8-11.5 seconds. Turrets scan six degrees to either side, guns
+adjust elevation and the hull has a small engine vibration. Taran uses only
+elevation within its fixed mount. The root, wheels and track links stay still.
+Native reimport checks position and velocity continuity at the loop seam.
+
+To update only idle motion while preserving installed meshes, paint, movement
+and attack clips:
+
+```powershell
+& 'D:/steam/steamapps/common/Blender/blender.exe' --background --factory-startup --threads 4 --python tools/assets/source/country_vehicles/build_idle.py -- --build
+python -B -m tools.assets.source.country_vehicles.build_idle --check
+python -B -m tools.assets.source.country_vehicles.build_idle --apply
+python -B -m tools.assets.source.country_vehicles.build_idle --check
+python -B -m unittest tools.tests.test_adiscord_country_vehicles.GroundVehicleIdleTests
+```
+
+This stages exports in the system temporary directory `adiscord-vehicle-idle`,
+updates the idle action in existing APC Blender scenes, and records the native
+input hashes and motion measurements in
+`docs/development/model-verification/vehicle_idle.json`. Rebuild idle after
+changing any of its input meshes; the installer rejects changed input hashes.
 
 ## Rebuild
 

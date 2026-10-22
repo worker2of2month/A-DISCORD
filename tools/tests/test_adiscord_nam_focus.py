@@ -1,11 +1,14 @@
 """Parsed NAM campaign scenarios; native loading and UI need a fresh game."""
 
 from dataclasses import replace
+from contextlib import redirect_stdout
+from io import StringIO
 from itertools import product
 from pathlib import Path
 import json
 import re
 import unittest
+from unittest.mock import patch
 
 from tools.builders.build_adiscord_focus_trees import expected_outputs
 from tools.tests.test_adiscord_stp_preparation import (
@@ -533,6 +536,172 @@ class NamPillarsTests(unittest.TestCase):
         hooks = read("common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt")
         self.assertIn("on_monthly_NAM", hooks)
         self.assertIn("NAM = {\n\t\t\t\t\tNAM_groups_initialize = yes", read("common/on_actions/00_ADISCORD_on_actions.txt"))
+
+
+class NamValidatorTests(unittest.TestCase):
+    """Exercise the production validator without changing loaded game files."""
+
+    def validate(self, sources=None, states=None):
+        from tools.validators import validate_adiscord_nam_resource_war as validator
+
+        original_read = validator.read
+        original_state = validator.state_source
+        sources = sources or {}
+        states = states or {}
+
+        def read_source(path):
+            return sources[path] if path in sources else original_read(path)
+
+        def read_state(state):
+            return states[state] if state in states else original_state(state)
+
+        with patch.object(validator, "ISSUES", []), patch.object(
+            validator, "read", read_source
+        ), patch.object(validator, "state_source", read_state), redirect_stdout(StringIO()):
+            result = validator.main()
+            return result, list(validator.ISSUES)
+
+    def assert_rejected(self, message, **overrides):
+        result, issues = self.validate(**overrides)
+        self.assertEqual(result, 1)
+        self.assertTrue(any(message in issue for issue in issues), issues)
+
+    def test_current_campaign_passes(self):
+        result, issues = self.validate()
+        self.assertEqual((result, issues), (0, []))
+
+    def test_wrong_stockpiles_still_fail(self):
+        path = f"common/scripted_effects/{BASE}_effects.txt"
+        source = read(path)
+        for tag, amount in (("EFL", 30000), ("AZH", 18000), ("SLF", 18000), ("NAM", 15000)):
+            with self.subTest(tag=tag):
+                token = f"type = infantry_equipment amount = {amount} producer = {tag}"
+                self.assertEqual(source.count(token), 1)
+                changed = source.replace(token, token.replace(str(amount), str(amount // 10)))
+                message = "emergency defence" if tag == "NAM" else f"stockpile for {tag}"
+                self.assert_rejected(message, sources={path: changed})
+
+    def test_global_one_shot_news_still_fail(self):
+        from tools.validators.validate_adiscord_nam_resource_war import typed_blocks
+
+        path = f"events/{BASE}_events.txt"
+        source = read(path)
+        for event in typed_blocks(source, "news_event"):
+            event_id = re.search(r"\bid\s*=\s*(\S+)", event)[1]
+            with self.subTest(event=event_id):
+                changed = source.replace(event, event.replace("fire_only_once = no", "fire_only_once = yes"))
+                self.assert_rejected(event_id, sources={path: changed})
+
+    def test_debug_category_remains_debug_only_and_country_independent(self):
+        path = "common/decisions/categories/ADISCORD_scenario_debug_categories.txt"
+        source = read(path)
+        for before, after in (("always = yes", "tag = NAM"), ("is_debug = yes", "always = yes")):
+            with self.subTest(condition=before):
+                self.assert_rejected("shared scenario debug category", sources={path: source.replace(before, after)})
+
+    def test_old_capital_and_victory_points_still_fail(self):
+        from tools.validators.validate_adiscord_nam_resource_war import state_source
+
+        path = "history/countries/NAM - NamestnikLand.txt"
+        self.assert_rejected("history capital", sources={path: read(path).replace("capital = 700", "capital = 689")})
+        for state, before, after in (
+            (67, "victory_points = { 6099 3 }", "victory_points = { 6099 3 }\n victory_points = { 1710 2 }"),
+            (688, "victory_points = { 16721 3 }", "victory_points = { 689 3 }"),
+            (689, "history = {", "history = {\n victory_points = { 2038 5 }"),
+            (700, "victory_points = { 16716 5 }", "victory_points = { 16716 4 }"),
+        ):
+            source = state_source(state)
+            with self.subTest(state=state):
+                self.assertIn(before, source)
+                self.assert_rejected(f"state {state}", states={state: source.replace(before, after)})
+
+
+class NamBasinGuiTests(unittest.TestCase):
+    """Map navigation must never pay for or start a district operation."""
+
+    @classmethod
+    def setUpClass(cls):
+        root = block(parsed("common/scripted_guis/ADISCORD_NAM_scripted_gui.txt"), "scripted_gui")
+        cls.panel = block(root, "ADISCORD_NAM_basin_panel")
+        cls.effects = block(cls.panel, "effects")
+        cls.triggers = block(cls.panel, "triggers")
+
+    def test_all_six_map_markers_only_select_their_district(self):
+        for state in (67, 688, 689, 690, 719, 700):
+            click = block(self.effects, f"NAM_bw_select_{state}_click")
+            self.assertEqual([entry.key for entry in click], ["set_variable"])
+            self.assertEqual(scalar(block(click, "set_variable"), "NAM_bw_selected_state"), str(state))
+            visible = block(self.triggers, f"NAM_bw_card_{state}_visible")
+            if state == 67:
+                visible = block(visible, "OR")
+                self.assertEqual(scalar(block(visible, "NOT"), "has_variable"), "NAM_bw_selected_state")
+            check = block(visible, "check_variable")
+            self.assertEqual(scalar(check, "var"), "NAM_bw_selected_state")
+            self.assertEqual(scalar(check, "value"), str(state))
+            self.assertEqual(scalar(check, "compare"), "equals")
+
+    def test_map_is_embedded_in_the_native_decision_category(self):
+        self.assertEqual(scalar(self.panel, "context_type"), "decision_category")
+        category = block(parsed(f"common/decisions/categories/{BASE}_categories.txt"), "NAM_national_programmes")
+        self.assertEqual(scalar(category, "scripted_gui"), "ADISCORD_NAM_basin_panel")
+        source = read("common/scripted_guis/ADISCORD_NAM_scripted_gui.txt")
+        self.assertNotIn("NAM_bw_open", source)
+        self.assertNotIn("NAM_bw_close_button", source)
+        self.assertNotIn("every_country", source)
+
+    def test_map_operations_keep_the_existing_targeted_decision_dispatch(self):
+        for state in (67, 688, 689, 690, 719, 700):
+            operations = ("line",) if state == 700 else ("repair", "refinery", "line")
+            for operation in operations:
+                click = block(self.effects, f"NAM_bw_{state}_{operation}_click")
+                guarded = block(click, "if")
+                limit = block(block(guarded, "limit"), str(state))
+                self.assertEqual(scalar(limit, f"NAM_bw_{operation}_startable"), "yes")
+                dispatch = block(guarded, "activate_targeted_decision")
+                self.assertEqual(scalar(dispatch, "target"), str(state))
+                decision = {"repair": "NAM_project_repair_wells", "refinery": "NAM_project_refinery", "line": "NAM_prepare_line"}[operation]
+                self.assertEqual(scalar(dispatch, "decision"), decision)
+                self.assertEqual([entry.key for entry in guarded], ["limit", "activate_targeted_decision"])
+
+    def test_compact_categories_keep_every_group_input_and_rules(self):
+        gui = read("interface/ADISCORD_NAM_basin.gui")
+        for language in ("russian", "english"):
+            loc = read(f"localisation/{language}/{BASE}_l_{language}.yml")
+            for group in ("nam", "oil", "dist", "garr", "trade"):
+                self.assertIn(f'NAM_bw_support_{group}', gui)
+                row = re.search(rf'^ NAM_bw_support_{group}:.*$', loc, re.M).group()
+                self.assertIn(f"NAM_grp_{group}_support", row)
+                self.assertIn(f"NAM_grp_{group}_influence", row)
+            self.assertRegex(loc, r'(?m)^ NAM_bw_support_rules:.*120.*')
+            self.assertRegex(loc, r'(?m)^ NAM_bw_programme_rules:.*420.*')
+            self.assertNotIn("[?]", loc)
+
+    def test_map_geometry_and_generated_files_match(self):
+        from tools.builders.build_adiscord_nam_basin_map import build_outputs, check_outputs
+
+        outputs, geometry = build_outputs()
+        self.assertEqual(set(geometry), {67, 688, 689, 690, 719, 700})
+        for state, node in geometry.items():
+            self.assertTrue(node["mask"].getbbox(), state)
+            self.assertGreater(node["mask"].getpixel(node["anchor"]), 0, state)
+        self.assertEqual(check_outputs(outputs), [])
+
+    def test_support_texticons_cover_focus_and_decision_rewards(self):
+        from PIL import Image
+
+        sprites = block(parsed("interface/ADISCORD_NAM_basin.gfx"), "spriteTypes")
+        definitions = {scalar(entry.value, "name"): entry.value for entry in sprites}
+        for group in ("nam", "oil", "dist", "garr", "trade"):
+            sprite = definitions[f"GFX_NAM_support_{group}_texticon"]
+            with Image.open(ROOT / scalar(sprite, "texturefile")) as icon:
+                self.assertEqual(icon.size, (20, 20))
+                self.assertEqual(icon.mode, "RGBA")
+            for language in ("russian", "english"):
+                loc = read(f"localisation/{language}/{BASE}_l_{language}.yml")
+                values = dict(re.findall(r'^ ([^ :]+):\d* "(.*)"$', loc, re.M))
+                for key in (f"NAM_concede_{group}_tt", f"NAM_bribe_{group}_tt", f"NAM_favour_{group}_tt"):
+                    self.assertRegex(values[key], rf'§[GRY][+-]\d+§! £NAM_support_{group}_texticon')
+                self.assertIn(f"£NAM_support_{group}_texticon", values["NAM_grp_independence_day_tt"])
 
 
 if __name__ == "__main__":

@@ -135,8 +135,7 @@ class TaranTests(unittest.TestCase):
         self.assertEqual(set(report["animations"]), {"idle", "move", "attack"})
         for clip, metrics in report["animations"].items():
             self.assertLess(metrics["loop_error"], .001, clip)
-            if clip != "idle":
-                self.assertGreater(metrics["max_vertex_motion"], .10, clip)
+            self.assertGreater(metrics["max_vertex_motion"], .05 if clip == "idle" else .10, clip)
         for name, expected in report["files"].items():
             self.assertEqual(hashlib.sha256((folder / name).read_bytes()).hexdigest(), expected)
 

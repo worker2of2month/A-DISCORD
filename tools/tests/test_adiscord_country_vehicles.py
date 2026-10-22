@@ -356,6 +356,35 @@ class SharedAircraftTests(unittest.TestCase):
         self.assertEqual(len(hashes), 30)
 
 
+class GroundVehicleIdleTests(unittest.TestCase):
+    def test_idle_moves_weapons_with_stationary_running_gear_and_a_smooth_loop(self):
+        from tools.assets.source.country_vehicles import build_idle as builder
+
+        report = json.loads(builder.REPORT.read_text())
+        self.assertEqual(report["generator_sha256"], builder.digest(Path(builder.__file__)))
+        self.assertEqual(set(report["models"]), set(builder.NAMES))
+        for name, row in report["models"].items():
+            with self.subTest(name=name):
+                self.assertEqual(builder.digest(DEST / f"{name}_idle.anim"), row["sha256"])
+                for filename, expected in row["inputs"].items():
+                    self.assertEqual(builder.digest(DEST / filename), expected)
+                metrics = row["animation"]
+                self.assertTrue(metrics["native_reimport"])
+                self.assertFalse(metrics["hoi4_runtime_verified"])
+                self.assertGreaterEqual(metrics["frames"] / metrics["fps"], 8)
+                self.assertGreater(metrics["max_vertex_motion"], .05)
+                self.assertLess(metrics["max_vertex_motion"], 1.5)
+                self.assertLess(metrics["loop_error"], .001)
+                self.assertLess(metrics["velocity_loop_error"], .005)
+                self.assertGreater(metrics["bone_motion"]["gun"], .02)
+                if name != "STS_taran":
+                    self.assertGreater(metrics["bone_motion"]["turret"], .05)
+                self.assertIn("vehicle_root", metrics["stationary_bones"])
+                self.assertGreater(len(metrics["stationary_bones"]), 1)
+                for bone in metrics["stationary_bones"]:
+                    self.assertLess(metrics["bone_motion"][bone], .00001)
+
+
 class ArmoredPersonnelCarrierTests(unittest.TestCase):
     def test_native_meshes_and_animation_reports_match_installed_files(self):
         from tools.assets.source.country_vehicles import build_motorized as builder
@@ -381,8 +410,7 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
                 self.assertEqual(set(row["animations"]), {"idle", "move", "attack"})
                 for clip, metrics in row["animations"].items():
                     self.assertLess(metrics["loop_error"], .001)
-                    if clip != "idle":
-                        self.assertGreater(metrics["max_vertex_motion"], .10)
+                    self.assertGreater(metrics["max_vertex_motion"], .05 if clip == "idle" else .10)
                 wheels = row["animations"]["move"]["moving_bones"]
                 expected_wheels = {"VAL_apc": 8, "STP_apc": 4, "STS_apc": 6, "NAM_apc": 8}
                 self.assertEqual(len(wheels), expected_wheels[name])
