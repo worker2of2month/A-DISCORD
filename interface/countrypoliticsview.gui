@@ -885,6 +885,7 @@ guiTypes = {
 			spriteType = "GFX_idea_categories"
 			position = { x=4 y=8 }
 			Orientation = "UPPER_LEFT"
+			hide = yes
 		}
 		
 		instantTextboxType = {

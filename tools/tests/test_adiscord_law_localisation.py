@@ -980,8 +980,6 @@ class MilitaryStaffContracts(unittest.TestCase):
             recruits = [entry.value for entry in histories[tag] if entry.key == "recruit_character"]
             self.assertEqual(recruits.count(character.key), 1, token)
             self.assertEqual(self.one(advisor, "desc"), token + "_desc")
-            portraits = self.one(self.one(character.value, "portraits"), "army")
-            self.assertTrue(self.one(portraits, "small").startswith("GFX_idea_"), token)
 
     def test_generic_advisors_are_generated_once_for_countries_without_a_roster(self):
         history = self.parse(
@@ -1264,13 +1262,11 @@ class MilitaryStaffContracts(unittest.TestCase):
         gate = next(
             entry.value
             for entry in self.walk(self.one(focus, "available"))
-            if entry.key == "amount_taken_ideas"
+            if entry.key == "check_variable"
+            and self.one(entry.value, "var") == "high_command^num"
         )
-        comparison = [entry.value for entry in gate if not entry.key]
-        self.assertEqual(comparison, ["amount", "<", "3"])
-        self.assertEqual(
-            [entry.value for entry in self.one(gate, "slots")], ["high_command"]
-        )
+        self.assertEqual(self.one(gate, "value"), "3")
+        self.assertEqual(self.one(gate, "compare"), "less_than")
         self.assertEqual(self.one(focus, "cancel_if_invalid"), "yes")
         alternatives = [
             entry

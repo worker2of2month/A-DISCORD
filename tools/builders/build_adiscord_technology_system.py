@@ -9376,6 +9376,20 @@ COUNTRY_AIRCRAFT_CARD_FAMILIES = {
     "SRP": "STS",
 }
 
+# Ready-to-use cards can cover one role without overriding the other role's art or names.
+COUNTRY_AIRCRAFT_ROLE_TEXTURES = {
+    "RUS": {
+        "fighter": tuple(
+            f"gfx/interface/technologies/ADISCORD_aircraft_RUS_{tier}.png"
+            for tier in range(1, 4)
+        ),
+        "cas": tuple(
+            f"gfx/interface/technologies/ADISCORD_aircraft_cas_RUS_{tier}.png"
+            for tier in range(1, 4)
+        ),
+    },
+}
+
 # Rank by the research unlock, not by the older year suffix in an equipment ID.
 # The supplied third card also represents every subsequent production model.
 AIRCRAFT_CARD_TIERS = {
@@ -9501,6 +9515,10 @@ def country_aircraft_gfx_entries() -> str:
                 f"GFX_{tag}_{key}_medium",
                 f"gfx/interface/technologies/ADISCORD_{prefix}_{family}_{tier}.dds",
             )
+    for tag, roles in COUNTRY_AIRCRAFT_ROLE_TEXTURES.items():
+        for key, (tier, role) in cards.items():
+            if role in roles:
+                add(f"GFX_{tag}_{key}_medium", roles[role][tier - 1])
     entries.append(AIRCRAFT_CARDS_END)
     return "".join(entries)
 
@@ -9528,6 +9546,12 @@ def aircraft_icon_outputs(role: str = "all") -> dict[Path, bytes]:
                         raise ValueError(f"DDS encoding altered aircraft artwork: {source}")
                 target = ROOT / "gfx/interface/technologies" / f"ADISCORD_{prefix}_{family}_{tier}.dds"
                 outputs[target] = content
+    outputs[ROOT / "interface/ADISCORD_technologies.gfx"] = aircraft_gfx_output()
+    return outputs
+
+
+def aircraft_gfx_output() -> bytes:
+    """Refresh sprite bindings independently of optional authoring PNG sources."""
     path = ROOT / "interface/ADISCORD_technologies.gfx"
     original = path.read_bytes()
     text = path.read_text(encoding="utf-8")
@@ -9540,8 +9564,7 @@ def aircraft_icon_outputs(role: str = "all") -> dict[Path, bytes]:
         text = text[:last_brace] + country_aircraft_gfx_entries() + text[last_brace:]
     if b"\r\n" in original:
         text = text.replace("\n", "\r\n")
-    outputs[path] = text.encode("utf-8")
-    return outputs
+    return text.encode("utf-8")
 
 
 UNIFORM_CARDS_BEGIN = "\t# BEGIN ADISCORD country uniform cards\n"

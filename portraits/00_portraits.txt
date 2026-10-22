@@ -203,3 +203,12 @@ ERT = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Ge
 IRT = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
 SCA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
 EXZ = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+
+NAM = {
+	army = {
+		male = {
+			"GFX_Portrait_NAM_Generic_land_20"
+			"GFX_Portrait_NAM_Generic_land_21"
+		}
+	}
+}

@@ -2152,9 +2152,10 @@
 					hidden_trigger = { is_ai = yes }
 					STP_cw_sotnikov_available = no
 					has_idea = STP_pc_sotnikov_civil_staff
-					amount_taken_ideas = {
-						amount < 3
-						slots = { high_command }
+					check_variable = {
+						var = high_command^num
+						value = 3
+						compare = less_than
 					}
 				}
 			}
@@ -2171,9 +2172,10 @@
 					if = {
 						limit = {
 							is_ai = yes
-							amount_taken_ideas = {
-								amount > 2
-								slots = { high_command }
+							check_variable = {
+								var = high_command^num
+								value = 2
+								compare = greater_than
 							}
 						}
 						if = {
@@ -3144,7 +3146,7 @@
 			hidden_effect = {
 				set_temp_variable = { var = STP_sdir_government_input value = 1 }
 				STP_sdir_apply_district_government = yes
-				clear_temp_variable = STP_sdir_government_input
+				set_temp_variable = { var = STP_sdir_government_input value = 0 }
 			}
 		}
 	}
@@ -3171,7 +3173,7 @@
 			hidden_effect = {
 				set_temp_variable = { var = STP_sdir_government_input value = 2 }
 				STP_sdir_apply_district_government = yes
-				clear_temp_variable = STP_sdir_government_input
+				set_temp_variable = { var = STP_sdir_government_input value = 0 }
 			}
 		}
 	}

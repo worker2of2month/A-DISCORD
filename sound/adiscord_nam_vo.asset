@@ -1,0 +1,254 @@
+category = {
+	name = "Voices"
+	soundeffects = {
+		NAM_infantry_idle
+		NAM_infantry_move_out
+		NAM_infantry_neutral_combat
+		NAM_infantry_positive_combat
+		NAM_infantry_retreat
+	}
+	compressor = {
+		enabled = yes
+		pregain = 0.0
+		postgain = 2.0
+		ratio = 10.0
+		threshold = -10.0
+		attacktime = 0.030
+		releasetime = 1.2
+	}
+}
+
+soundeffect = {
+	name = "NAM_infantry_idle"
+	sounds = {
+		sound = "NAM_idle_001"
+		sound = "NAM_idle_002"
+		sound = "NAM_idle_003"
+		sound = "NAM_idle_004"
+		sound = "NAM_idle_005"
+		sound = "NAM_idle_006"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.00
+	volume_random_offset = { 0.0 0.0 }
+	playbackrate_random_offset = { 0.0 0.0 }
+}
+
+soundeffect = {
+	name = "NAM_infantry_move_out"
+	sounds = {
+		sound = "NAM_moving_001"
+		sound = "NAM_moving_002"
+		sound = "NAM_moving_003"
+		sound = "NAM_moving_004"
+		sound = "NAM_moving_005"
+		sound = "NAM_moving_006"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.00
+	volume_random_offset = { 0.0 0.0 }
+	playbackrate_random_offset = { 0.0 0.0 }
+}
+
+soundeffect = {
+	name = "NAM_infantry_neutral_combat"
+	sounds = {
+		sound = "NAM_neutral_001"
+		sound = "NAM_neutral_002"
+		sound = "NAM_neutral_003"
+		sound = "NAM_neutral_004"
+		sound = "NAM_neutral_005"
+		sound = "NAM_neutral_006"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.00
+	volume_random_offset = { 0.0 0.0 }
+	playbackrate_random_offset = { 0.0 0.0 }
+}
+
+soundeffect = {
+	name = "NAM_infantry_positive_combat"
+	sounds = {
+		sound = "NAM_positive_001"
+		sound = "NAM_positive_002"
+		sound = "NAM_positive_003"
+		sound = "NAM_positive_004"
+		sound = "NAM_positive_005"
+		sound = "NAM_positive_006"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.00
+	volume_random_offset = { 0.0 0.0 }
+	playbackrate_random_offset = { 0.0 0.0 }
+}
+
+soundeffect = {
+	name = "NAM_infantry_retreat"
+	sounds = {
+		sound = "NAM_retreat_001"
+		sound = "NAM_retreat_002"
+		sound = "NAM_retreat_003"
+		sound = "NAM_retreat_004"
+		sound = "NAM_retreat_005"
+		sound = "NAM_retreat_006"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.00
+	volume_random_offset = { 0.0 0.0 }
+	playbackrate_random_offset = { 0.0 0.0 }
+}
+
+sound = {
+	name = "NAM_idle_001"
+	file = "NAM/NAM_idle_001.wav"
+}
+
+sound = {
+	name = "NAM_idle_002"
+	file = "NAM/NAM_idle_002.wav"
+}
+
+sound = {
+	name = "NAM_idle_003"
+	file = "NAM/NAM_idle_003.wav"
+}
+
+sound = {
+	name = "NAM_idle_004"
+	file = "NAM/NAM_idle_004.wav"
+}
+
+sound = {
+	name = "NAM_idle_005"
+	file = "NAM/NAM_idle_005.wav"
+}
+
+sound = {
+	name = "NAM_idle_006"
+	file = "NAM/NAM_idle_006.wav"
+}
+
+sound = {
+	name = "NAM_moving_001"
+	file = "NAM/NAM_moving_001.wav"
+}
+
+sound = {
+	name = "NAM_moving_002"
+	file = "NAM/NAM_moving_002.wav"
+}
+
+sound = {
+	name = "NAM_moving_003"
+	file = "NAM/NAM_moving_003.wav"
+}
+
+sound = {
+	name = "NAM_moving_004"
+	file = "NAM/NAM_moving_004.wav"
+}
+
+sound = {
+	name = "NAM_moving_005"
+	file = "NAM/NAM_moving_005.wav"
+}
+
+sound = {
+	name = "NAM_moving_006"
+	file = "NAM/NAM_moving_006.wav"
+}
+
+sound = {
+	name = "NAM_neutral_001"
+	file = "NAM/NAM_neutral_001.wav"
+}
+
+sound = {
+	name = "NAM_neutral_002"
+	file = "NAM/NAM_neutral_002.wav"
+}
+
+sound = {
+	name = "NAM_neutral_003"
+	file = "NAM/NAM_neutral_003.wav"
+}
+
+sound = {
+	name = "NAM_neutral_004"
+	file = "NAM/NAM_neutral_004.wav"
+}
+
+sound = {
+	name = "NAM_neutral_005"
+	file = "NAM/NAM_neutral_005.wav"
+}
+
+sound = {
+	name = "NAM_neutral_006"
+	file = "NAM/NAM_neutral_006.wav"
+}
+
+sound = {
+	name = "NAM_positive_001"
+	file = "NAM/NAM_positive_001.wav"
+}
+
+sound = {
+	name = "NAM_positive_002"
+	file = "NAM/NAM_positive_002.wav"
+}
+
+sound = {
+	name = "NAM_positive_003"
+	file = "NAM/NAM_positive_003.wav"
+}
+
+sound = {
+	name = "NAM_positive_004"
+	file = "NAM/NAM_positive_004.wav"
+}
+
+sound = {
+	name = "NAM_positive_005"
+	file = "NAM/NAM_positive_005.wav"
+}
+
+sound = {
+	name = "NAM_positive_006"
+	file = "NAM/NAM_positive_006.wav"
+}
+
+sound = {
+	name = "NAM_retreat_001"
+	file = "NAM/NAM_retreat_001.wav"
+}
+
+sound = {
+	name = "NAM_retreat_002"
+	file = "NAM/NAM_retreat_002.wav"
+}
+
+sound = {
+	name = "NAM_retreat_003"
+	file = "NAM/NAM_retreat_003.wav"
+}
+
+sound = {
+	name = "NAM_retreat_004"
+	file = "NAM/NAM_retreat_004.wav"
+}
+
+sound = {
+	name = "NAM_retreat_005"
+	file = "NAM/NAM_retreat_005.wav"
+}
+
+sound = {
+	name = "NAM_retreat_006"
+	file = "NAM/NAM_retreat_006.wav"
+}

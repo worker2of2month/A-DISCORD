@@ -39,6 +39,10 @@ class CouncilWorld(ContractWorld):
                                   leader="VAL_Valera_Solgalov", tree="VAL_focus", neighbors=[],
                                   cores={"VAL"}, characters={"VAL_Valera_Solgalov"})
         self.val = self.data["VAL"]
+        self.val["characters"].update(
+            entry.value for entry in entries("history/countries/VAL - ValeraLand.txt")
+            if entry.key == "recruit_character"
+        )
         self.val["flags"].add(PREFIX + "in_power")
         self.val["leader"] = "VAL_Commanders_Council"
         self.val["capital"] = "176"
@@ -218,8 +222,14 @@ class CouncilWorld(ContractWorld):
                 country.setdefault("modifier_days", {})[scalar(value, "modifier")] = scalar(value, "days")
             elif key == "retire_character":
                 country["characters"].discard(value)
-            elif key == "recruit_character":
-                country["characters"].add(value)
+            elif key == "add_country_leader_role":
+                character = scalar(value, "character")
+                assert character in country["characters"], character
+                country.setdefault("leader_roles", {})[character] = scalar(
+                    block(value, "country_leader"), "ideology"
+                )
+                if scalar(value, "promote_leader") == "yes":
+                    country["leader"] = character
             elif key == "promote_character":
                 country["leader"] = scalar(value, "character")
             elif key == "set_politics":
@@ -541,6 +551,7 @@ class CouncilTransactionsTests(unittest.TestCase):
 
     def test_coup_waits_for_war_preserves_receipts_and_fires_after_peace(self):
         world = CouncilWorld()
+        self.assertFalse(world.val.get("leader_roles"))
         world.val["flags"].discard(PREFIX + "in_power")
         world.val["leader"] = "VAL_Valera_Solgalov"
         world.val["flags"].add("VAL_quarterly_contract_active")
@@ -556,6 +567,10 @@ class CouncilTransactionsTests(unittest.TestCase):
         world.val["wars"].clear()
         world.expire("ultimatum")
         self.assertEqual(world.val["leader"], "VAL_Commanders_Council")
+        self.assertEqual(world.val["leader_roles"], dict.fromkeys(
+            ("VAL_Gleb_Osten", "VAL_Tamara_Greitz", "VAL_Arkadi_Lemm", "VAL_Mikhail_Velsky"),
+            "contractual_etatism",
+        ))
         self.assertEqual(world.val["tree"], "VAL_focus")
         self.assertEqual(world.val["vars"][PREFIX + "loan_debt"], 550)
         self.assertIn("VAL_quarterly_contract_active", world.val["flags"])

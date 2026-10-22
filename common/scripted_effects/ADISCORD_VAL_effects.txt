@@ -12481,32 +12481,39 @@ VAL_council_close_case = {
 	VAL_refresh_contract_modifier = yes
 }
 
-# COUNTRY VAL. Delegation heads join with the coup; the final programmes promote
-# one of them, or Velsky, without recruiting a leader at that moment.
+# COUNTRY VAL. Activate dormant delegates without replacing the ruling Council.
 VAL_council_recruit_delegates = {
-	if = {
-		limit = {
-			NOT = { has_character = VAL_Gleb_Osten }
+	add_country_leader_role = {
+		character = VAL_Gleb_Osten
+		promote_leader = no
+		country_leader = {
+			ideology = contractual_etatism
+			expire = "2200.1.1.1"
 		}
-		recruit_character = VAL_Gleb_Osten
 	}
-	if = {
-		limit = {
-			NOT = { has_character = VAL_Tamara_Greitz }
+	add_country_leader_role = {
+		character = VAL_Tamara_Greitz
+		promote_leader = no
+		country_leader = {
+			ideology = contractual_etatism
+			expire = "2200.1.1.1"
 		}
-		recruit_character = VAL_Tamara_Greitz
 	}
-	if = {
-		limit = {
-			NOT = { has_character = VAL_Arkadi_Lemm }
+	add_country_leader_role = {
+		character = VAL_Arkadi_Lemm
+		promote_leader = no
+		country_leader = {
+			ideology = contractual_etatism
+			expire = "2200.1.1.1"
 		}
-		recruit_character = VAL_Arkadi_Lemm
 	}
-	if = {
-		limit = {
-			NOT = { has_character = VAL_Mikhail_Velsky }
+	add_country_leader_role = {
+		character = VAL_Mikhail_Velsky
+		promote_leader = no
+		country_leader = {
+			ideology = contractual_etatism
+			expire = "2200.1.1.1"
 		}
-		recruit_character = VAL_Mikhail_Velsky
 	}
 }
 

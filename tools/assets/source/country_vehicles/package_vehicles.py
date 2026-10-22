@@ -28,6 +28,71 @@ NAMES += tuple(f"{tag}_{prefix}{role}" for tag in TAGS for prefix in ("early_", 
 SHARED_NAMES = tuple(f"{family}_{prefix}{role}" for family in FAMILIES
                      for prefix in PREFIXES for role in ("fighter", "cas"))
 SPECIAL_NAMES = ("STS_taran",)
+APC_TAGS = ("VAL", "STP", "STS", "NAM")
+APC_ROUTES = (
+    "mechanized", *[f"mechanized_{level}" for level in range(4)],
+    "motorized", "motorized_0", "motorized_1", "motorized_equipment", "motorized_equipment_1",
+    "ADISCORD_mechanized_infantry", "ADISCORD_armored_carrier_archetype",
+    "ADISCORD_armored_carrier_2163", "ADISCORD_ifv_2170", "ADISCORD_networked_ifv_2183",
+)
+
+
+def apc_states(vehicle=False):
+    text = ""
+    for state, clip in (
+        ("idle", "idle"), ("training", "idle"), ("death", "idle"),
+        ("move", "move"), ("retreat", "move"),
+        ("attack", "attack"), ("defend", "attack"), ("support_attack", "attack"),
+    ):
+        text += f'\tstate = {{\n\t\tname = "{state}"\n\t\tanimation = "{clip}"\n'
+        text += '\t\tanimation_blend_time = 0.3\n\t\tanimation_speed = 1.0\n'
+        if vehicle and clip == "move":
+            for node in ("left_wheel", "right_wheel"):
+                text += ('\t\tevent = {\n\t\t\ttime = 0\n'
+                         f'\t\t\tnode = "{node}"\n'
+                         '\t\t\tparticle = "tank_moving_tracks_particle"\n'
+                         '\t\t\tkeep_particle = no\n\t\t\ttrigger_once = yes\n\t\t}\n')
+            text += ('\t\tevent = {\n\t\t\ttrigger_once = yes\n'
+                     '\t\t\tsound = { soundeffect = "motorized_unit_move_animation" }\n\t\t}\n')
+        if vehicle and clip == "attack":
+            text += ('\t\tevent = {\n\t\t\ttime = 0\n\t\t\tnode = "barrel"\n'
+                     '\t\t\tparticle = "mechanized_attack_barrel_particle"\n'
+                     '\t\t\tkeep_particle = yes\n\t\t}\n'
+                     '\t\tevent = { sound = { soundeffect = "mechanized_units_mg_fire" } }\n')
+        text += '\t}\n'
+    return text
+
+
+def apc_registry():
+    gfx, assets, animations = "", "", ""
+    for tag in APC_TAGS:
+        name = f"{tag}_apc"
+        gfx += (f'\tpdxmesh = {{\n\t\tname = "ADISCORD_{name}_mesh"\n'
+                f'\t\tfile = "gfx/models/units/ADISCORD_country_vehicles/{name}.mesh"\n'
+                '\t\tscale = 0.95\n')
+        for clip in ("idle", "move", "attack"):
+            gfx += f'\t\tanimation = {{ id = "{clip}" type = "ADISCORD_{name}_{clip}_animation" }}\n'
+            animations += f'animation = {{ name = "ADISCORD_{name}_{clip}_animation" file = "{name}_{clip}.anim" }}\n'
+        gfx += '\t}\n'
+        assets += (f'\nentity = {{\n\tname = "ADISCORD_{name}_vehicle_entity"\n'
+                   f'\tpdxmesh = "ADISCORD_{name}_mesh"\n\tdefault_state = "idle"\n'
+                   + apc_states(vehicle=True) + '}\n')
+        assets += (f'\nentity = {{\n\tclone = "{tag}_infantry_entity"\n'
+                   f'\tname = "ADISCORD_{name}_escort_entity"\n\tscale = 0.25\n}}\n')
+        assets += (f'\nentity = {{\n\tname = "ADISCORD_{name}_entity"\n'
+                   '\tpdxmesh = "motorized_frame_mesh"\n\tdefault_state = "idle"\n'
+                   + apc_states()
+                   + '\tattach = {\n\t\tname = "vehicle"\n'
+                   + f'\t\tvehicle = "ADISCORD_{name}_vehicle_entity"\n\t}}\n'
+                   + '\tattach = {\n\t\tname = "infantry"\n'
+                   + f'\t\tinfantry = "ADISCORD_{name}_escort_entity"\n\t}}\n}}\n')
+    for identity in country_families():
+        tag = identity.split("_", 1)[0]
+        if tag in APC_TAGS:
+            assets += "\n"
+            for route in APC_ROUTES:
+                assets += alias(f"ADISCORD_{tag}_apc_entity", f"{identity}_{route}_entity")
+    return gfx, assets, animations
 
 
 def air_routes():
@@ -108,7 +173,10 @@ def registry():
         if not tank:
             assets += "\tscale = 0.20\n"
         assets += "}\n"
-    gfx += "}\n"
+    apc_gfx, apc_assets, apc_animations = apc_registry()
+    gfx += apc_gfx + "}\n"
+    assets += apc_assets
+    animations += apc_animations
     routes = air_routes()
     assets += "\n"
     for name, (role, tier) in routes.items():

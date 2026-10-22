@@ -2,7 +2,7 @@ guiTypes = {
 	containerWindowType = {
 		name = "ADISCORD_SHL_furnaces_window"
 		position = { x = 0 y = 0 }
-		size = { width = 460 height = 570 }
+		size = { width = 460 height = 778 }
 		instantTextBoxType = {
 			name = "SHL_panel_title"
 			position = { x = 8 y = 4 }
@@ -51,7 +51,7 @@ guiTypes = {
 			text = "SHL_furnace_1_condition"
 			font = "hoi_16mbs"
 			maxWidth = 134
-			maxHeight = 20
+			maxHeight = 34
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -84,7 +84,7 @@ guiTypes = {
 			text = "SHL_furnace_2_condition"
 			font = "hoi_16mbs"
 			maxWidth = 134
-			maxHeight = 20
+			maxHeight = 34
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -117,7 +117,7 @@ guiTypes = {
 			text = "SHL_furnace_3_condition"
 			font = "hoi_16mbs"
 			maxWidth = 134
-			maxHeight = 20
+			maxHeight = 34
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -150,7 +150,7 @@ guiTypes = {
 			text = "SHL_furnace_4_condition"
 			font = "hoi_16mbs"
 			maxWidth = 134
-			maxHeight = 20
+			maxHeight = 34
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -183,7 +183,7 @@ guiTypes = {
 			text = "SHL_furnace_5_condition"
 			font = "hoi_16mbs"
 			maxWidth = 134
-			maxHeight = 20
+			maxHeight = 34
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -216,7 +216,7 @@ guiTypes = {
 			text = "SHL_furnace_6_condition"
 			font = "hoi_16mbs"
 			maxWidth = 134
-			maxHeight = 20
+			maxHeight = 34
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -249,7 +249,7 @@ guiTypes = {
 			text = "SHL_furnace_7_condition"
 			font = "hoi_16mbs"
 			maxWidth = 134
-			maxHeight = 20
+			maxHeight = 34
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -282,7 +282,7 @@ guiTypes = {
 			text = "SHL_furnace_8_condition"
 			font = "hoi_16mbs"
 			maxWidth = 134
-			maxHeight = 20
+			maxHeight = 34
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -315,12 +315,12 @@ guiTypes = {
 			text = "SHL_furnace_9_condition"
 			font = "hoi_16mbs"
 			maxWidth = 134
-			maxHeight = 20
+			maxHeight = 34
 			alwaystransparent = yes
 		}
 		instantTextBoxType = {
 			name = "SHL_panel_selection"
-			position = { x = 8 y = 286 }
+			position = { x = 8 y = 320 }
 			text = "SHL_panel_selection"
 			font = "hoi_16mbs"
 			maxWidth = 444
@@ -329,7 +329,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "SHL_panel_selected_details"
-			position = { x = 8 y = 312 }
+			position = { x = 8 y = 344 }
 			text = "SHL_panel_selected_details"
 			font = "hoi_16mbs"
 			maxWidth = 444
@@ -338,16 +338,16 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "SHL_panel_forecast"
-			position = { x = 8 y = 363 }
+			position = { x = 8 y = 450 }
 			text = "SHL_panel_forecast"
 			font = "hoi_16mbs"
 			maxWidth = 444
-			maxHeight = 24
+			maxHeight = 80
 			format = center
 		}
 		instantTextBoxType = {
 			name = "SHL_panel_project"
-			position = { x = 8 y = 390 }
+			position = { x = 8 y = 603 }
 			text = "SHL_panel_project"
 			font = "hoi_16mbs"
 			maxWidth = 444
@@ -356,7 +356,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "SHL_panel_policy"
-			position = { x = 8 y = 436 }
+			position = { x = 8 y = 648 }
 			text = "SHL_panel_policy"
 			font = "hoi_16mbs"
 			maxWidth = 444
@@ -365,11 +365,79 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "SHL_panel_ledger"
-			position = { x = 8 y = 510 }
+			position = { x = 8 y = 718 }
 			text = "SHL_panel_ledger"
 			font = "hoi_16mbs"
 			maxWidth = 444
 			maxHeight = 54
+			format = center
+		}
+		buttonType = {
+			name = "SHL_furnace_10_button"
+			position = { x = 8 y = 285 }
+			size = { x = 444 y = 30 }
+			quadTextureSprite = "GFX_SHL_furnace_button"
+			buttonText = "SHL_furnace_10_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "SHL_furnace_select_tt"
+		}
+		instantTextBoxType = {
+			name = "SHL_panel_recipient"
+			position = { x = 8 y = 392 }
+			text = "SHL_panel_recipient"
+			font = "hoi_16mbs"
+			maxWidth = 444
+			maxHeight = 24
+			format = center
+		}
+		buttonType = {
+			name = "SHL_recipient_export_button"
+			position = { x = 8 y = 418 }
+			size = { x = 108 y = 28 }
+			quadTextureSprite = "GFX_SHL_furnace_button"
+			buttonText = "SHL_recipient_export"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "SHL_recipient_export_tt"
+		}
+		buttonType = {
+			name = "SHL_recipient_arsenal_button"
+			position = { x = 120 y = 418 }
+			size = { x = 108 y = 28 }
+			quadTextureSprite = "GFX_SHL_furnace_button"
+			buttonText = "SHL_recipient_arsenal"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "SHL_recipient_arsenal_tt"
+		}
+		buttonType = {
+			name = "SHL_recipient_quarters_button"
+			position = { x = 232 y = 418 }
+			size = { x = 108 y = 28 }
+			quadTextureSprite = "GFX_SHL_furnace_button"
+			buttonText = "SHL_recipient_quarters"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "SHL_recipient_quarters_tt"
+		}
+		buttonType = {
+			name = "SHL_recipient_crest_button"
+			position = { x = 344 y = 418 }
+			size = { x = 108 y = 28 }
+			quadTextureSprite = "GFX_SHL_furnace_button"
+			buttonText = "SHL_recipient_crest"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "SHL_recipient_crest_tt"
+		}
+		instantTextBoxType = {
+			name = "SHL_panel_delivery_totals"
+			position = { x = 8 y = 532 }
+			text = "SHL_panel_delivery_totals"
+			font = "hoi_16mbs"
+			maxWidth = 444
+			maxHeight = 68
 			format = center
 		}
 	}

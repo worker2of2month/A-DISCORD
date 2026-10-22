@@ -896,3 +896,396 @@ defined_text = {
 	}
 	text = { localization_key = SHL_cabinet_story_unratified }
 }
+
+defined_text = {
+	name = SHLGetPoliticalCourse
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+		localization_key = SHL_course_ratified_house
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+		localization_key = SHL_course_ratified_city
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+		localization_key = SHL_course_ratified_state
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+		localization_key = SHL_regency_council
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		localization_key = SHL_shift_councils
+	}
+	text = {
+		trigger = { has_completed_focus = SHL_new_house }
+		localization_key = SHL_course_provisional_house
+	}
+	text = {
+		trigger = { has_completed_focus = SHL_open_conclave }
+		localization_key = SHL_course_provisional_city
+	}
+	text = {
+		trigger = { has_completed_focus = SHL_nur_directorate }
+		localization_key = SHL_course_provisional_state
+	}
+	text = { localization_key = SHL_course_undecided }
+}
+
+defined_text = {
+	name = SHLGetRecipient1
+	text = {
+		trigger = {
+			has_variable = SHL_obligation_kind
+			check_variable = { var = SHL_obligation_site value = 287 compare = equals }
+		}
+		localization_key = SHL_recipient_order
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_recipient_1 value = 3 compare = equals }
+			check_variable = { var = SHL_owner_1 value = 0 compare = equals }
+		}
+		localization_key = SHL_recipient_crest
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_1 value = 1 compare = equals } }
+		localization_key = SHL_recipient_arsenal
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_1 value = 2 compare = equals } }
+		localization_key = SHL_recipient_quarters
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_1 value = 3 compare = equals } }
+		localization_key = SHL_recipient_compensation
+	}
+	text = { localization_key = SHL_recipient_export }
+}
+
+defined_text = {
+	name = SHLGetRecipient2
+	text = {
+		trigger = {
+			has_variable = SHL_obligation_kind
+			check_variable = { var = SHL_obligation_site value = 288 compare = equals }
+		}
+		localization_key = SHL_recipient_order
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_recipient_2 value = 3 compare = equals }
+			check_variable = { var = SHL_owner_2 value = 0 compare = equals }
+		}
+		localization_key = SHL_recipient_crest
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_2 value = 1 compare = equals } }
+		localization_key = SHL_recipient_arsenal
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_2 value = 2 compare = equals } }
+		localization_key = SHL_recipient_quarters
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_2 value = 3 compare = equals } }
+		localization_key = SHL_recipient_compensation
+	}
+	text = { localization_key = SHL_recipient_export }
+}
+
+defined_text = {
+	name = SHLGetRecipient3
+	text = {
+		trigger = {
+			has_variable = SHL_obligation_kind
+			check_variable = { var = SHL_obligation_site value = 289 compare = equals }
+		}
+		localization_key = SHL_recipient_order
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_recipient_3 value = 3 compare = equals }
+			check_variable = { var = SHL_owner_3 value = 0 compare = equals }
+		}
+		localization_key = SHL_recipient_crest
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_3 value = 1 compare = equals } }
+		localization_key = SHL_recipient_arsenal
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_3 value = 2 compare = equals } }
+		localization_key = SHL_recipient_quarters
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_3 value = 3 compare = equals } }
+		localization_key = SHL_recipient_compensation
+	}
+	text = { localization_key = SHL_recipient_export }
+}
+
+defined_text = {
+	name = SHLGetRecipient4
+	text = {
+		trigger = {
+			has_variable = SHL_obligation_kind
+			check_variable = { var = SHL_obligation_site value = 290 compare = equals }
+		}
+		localization_key = SHL_recipient_order
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_recipient_4 value = 3 compare = equals }
+			check_variable = { var = SHL_owner_4 value = 0 compare = equals }
+		}
+		localization_key = SHL_recipient_crest
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_4 value = 1 compare = equals } }
+		localization_key = SHL_recipient_arsenal
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_4 value = 2 compare = equals } }
+		localization_key = SHL_recipient_quarters
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_4 value = 3 compare = equals } }
+		localization_key = SHL_recipient_compensation
+	}
+	text = { localization_key = SHL_recipient_export }
+}
+
+defined_text = {
+	name = SHLGetRecipient5
+	text = {
+		trigger = {
+			has_variable = SHL_obligation_kind
+			check_variable = { var = SHL_obligation_site value = 291 compare = equals }
+		}
+		localization_key = SHL_recipient_order
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_recipient_5 value = 3 compare = equals }
+			check_variable = { var = SHL_owner_5 value = 0 compare = equals }
+		}
+		localization_key = SHL_recipient_crest
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_5 value = 1 compare = equals } }
+		localization_key = SHL_recipient_arsenal
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_5 value = 2 compare = equals } }
+		localization_key = SHL_recipient_quarters
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_5 value = 3 compare = equals } }
+		localization_key = SHL_recipient_compensation
+	}
+	text = { localization_key = SHL_recipient_export }
+}
+
+defined_text = {
+	name = SHLGetRecipient6
+	text = {
+		trigger = {
+			has_variable = SHL_obligation_kind
+			check_variable = { var = SHL_obligation_site value = 292 compare = equals }
+		}
+		localization_key = SHL_recipient_order
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_recipient_6 value = 3 compare = equals }
+			check_variable = { var = SHL_owner_6 value = 0 compare = equals }
+		}
+		localization_key = SHL_recipient_crest
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_6 value = 1 compare = equals } }
+		localization_key = SHL_recipient_arsenal
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_6 value = 2 compare = equals } }
+		localization_key = SHL_recipient_quarters
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_6 value = 3 compare = equals } }
+		localization_key = SHL_recipient_compensation
+	}
+	text = { localization_key = SHL_recipient_export }
+}
+
+defined_text = {
+	name = SHLGetRecipient7
+	text = {
+		trigger = {
+			has_variable = SHL_obligation_kind
+			check_variable = { var = SHL_obligation_site value = 293 compare = equals }
+		}
+		localization_key = SHL_recipient_order
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_recipient_7 value = 3 compare = equals }
+			check_variable = { var = SHL_owner_7 value = 0 compare = equals }
+		}
+		localization_key = SHL_recipient_crest
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_7 value = 1 compare = equals } }
+		localization_key = SHL_recipient_arsenal
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_7 value = 2 compare = equals } }
+		localization_key = SHL_recipient_quarters
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_7 value = 3 compare = equals } }
+		localization_key = SHL_recipient_compensation
+	}
+	text = { localization_key = SHL_recipient_export }
+}
+
+defined_text = {
+	name = SHLGetRecipient8
+	text = {
+		trigger = {
+			has_variable = SHL_obligation_kind
+			check_variable = { var = SHL_obligation_site value = 294 compare = equals }
+		}
+		localization_key = SHL_recipient_order
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_recipient_8 value = 3 compare = equals }
+			check_variable = { var = SHL_owner_8 value = 0 compare = equals }
+		}
+		localization_key = SHL_recipient_crest
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_8 value = 1 compare = equals } }
+		localization_key = SHL_recipient_arsenal
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_8 value = 2 compare = equals } }
+		localization_key = SHL_recipient_quarters
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_8 value = 3 compare = equals } }
+		localization_key = SHL_recipient_compensation
+	}
+	text = { localization_key = SHL_recipient_export }
+}
+
+defined_text = {
+	name = SHLGetRecipient9
+	text = {
+		trigger = {
+			has_variable = SHL_obligation_kind
+			check_variable = { var = SHL_obligation_site value = 295 compare = equals }
+		}
+		localization_key = SHL_recipient_order
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_recipient_9 value = 3 compare = equals }
+			check_variable = { var = SHL_owner_9 value = 0 compare = equals }
+		}
+		localization_key = SHL_recipient_crest
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_9 value = 1 compare = equals } }
+		localization_key = SHL_recipient_arsenal
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_9 value = 2 compare = equals } }
+		localization_key = SHL_recipient_quarters
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_9 value = 3 compare = equals } }
+		localization_key = SHL_recipient_compensation
+	}
+	text = { localization_key = SHL_recipient_export }
+}
+
+defined_text = {
+	name = SHLGetRecipient10
+	text = {
+		trigger = { check_variable = { var = SHL_delivery_block_10 value = 4 compare = equals } }
+		localization_key = SHL_recipient_order
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_recipient_10 value = 3 compare = equals }
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+		}
+		localization_key = SHL_recipient_crest
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_10 value = 1 compare = equals } }
+		localization_key = SHL_recipient_arsenal
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_10 value = 2 compare = equals } }
+		localization_key = SHL_recipient_quarters
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_10 value = 3 compare = equals } }
+		localization_key = SHL_recipient_compensation
+	}
+	text = { localization_key = SHL_recipient_export }
+}
+
+defined_text = {
+	name = SHLGetRecipientSelected
+	text = {
+		trigger = { check_variable = { var = SHL_selected_order value = 1 compare = equals } }
+		localization_key = SHL_recipient_order
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_selected_recipient value = 3 compare = equals }
+			check_variable = { var = SHL_selected_owner value = 0 compare = equals }
+		}
+		localization_key = SHL_recipient_crest
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_recipient value = 1 compare = equals } }
+		localization_key = SHL_recipient_arsenal
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_recipient value = 2 compare = equals } }
+		localization_key = SHL_recipient_quarters
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_recipient value = 3 compare = equals } }
+		localization_key = SHL_recipient_compensation
+	}
+	text = { localization_key = SHL_recipient_export }
+}
+
+defined_text = {
+	name = SHLGetDeliveryBlock
+	text = {
+		trigger = { check_variable = { var = SHL_selected_delivery_block value = 1 compare = equals } }
+		localization_key = SHL_delivery_stopped
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_delivery_block value = 2 compare = equals } }
+		localization_key = SHL_delivery_occupied
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_delivery_block value = 3 compare = equals } }
+		localization_key = SHL_delivery_shortage
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_delivery_block value = 4 compare = equals } }
+		localization_key = SHL_delivery_order
+	}
+	text = { localization_key = SHL_delivery_ready }
+}

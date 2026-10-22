@@ -15,6 +15,10 @@ recruit_character = VAL_Leonid_Vargan
 recruit_character = VAL_Sergei_Volkov
 recruit_character = VAL_Artem_Rask
 recruit_character = VAL_STS_administrator
+recruit_character = VAL_Gleb_Osten
+recruit_character = VAL_Tamara_Greitz
+recruit_character = VAL_Arkadi_Lemm
+recruit_character = VAL_Mikhail_Velsky
 
 ####### Basic shit
 

@@ -2223,6 +2223,7 @@ on_actions = {
 						VAL = { VAL_ardent_settle_assembly_victory = yes }
 					}
 				}
+				TFF = { ADISCORD_TFF_reconcile_kefreyt_campaign = yes }
 				# END kefreyt:on_peace
 				# BEGIN stelander:on_peace
 				STS = { STP_pc_close_liberation_war_receipt = yes }

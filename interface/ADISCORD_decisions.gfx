@@ -75,6 +75,66 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
+	spriteType = {
+		name = "GFX_decision_ADISCORD_mobilization"
+		texturefile = "gfx/interface/decisions/decision_ADISCORD_mobilization.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_ADISCORD_negotiations"
+		texturefile = "gfx/interface/decisions/decision_ADISCORD_negotiations.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_ADISCORD_construction"
+		texturefile = "gfx/interface/decisions/decision_ADISCORD_construction.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_ADISCORD_recruitment"
+		texturefile = "gfx/interface/decisions/decision_ADISCORD_recruitment.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_ADISCORD_arms_supply"
+		texturefile = "gfx/interface/decisions/decision_ADISCORD_arms_supply.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_ADISCORD_logistics"
+		texturefile = "gfx/interface/decisions/decision_ADISCORD_logistics.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_ADISCORD_treasury"
+		texturefile = "gfx/interface/decisions/decision_ADISCORD_treasury.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_ADISCORD_inspection"
+		texturefile = "gfx/interface/decisions/decision_ADISCORD_inspection.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_ADISCORD_operations"
+		texturefile = "gfx/interface/decisions/decision_ADISCORD_operations.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_ADISCORD_resettlement"
+		texturefile = "gfx/interface/decisions/decision_ADISCORD_resettlement.png"
+		legacy_lazy_load = no
+	}
+
 	corneredTileSpriteType = {
 		name = "GFX_ADISCORD_decisions_window_bg"
 		size = { x = 192 y = 192 }

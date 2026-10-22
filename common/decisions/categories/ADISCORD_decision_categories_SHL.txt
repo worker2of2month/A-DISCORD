@@ -31,13 +31,7 @@ SHL_public_campaigns = {
 	priority = 22
 }
 
-SHL_fire_shares = {
-	icon = generic_industry
-	allowed = { tag = SHL }
-	visible = { has_country_flag = SHL_fire_initialized }
-	visible_when_empty = yes
-	priority = 21
-}
+
 
 SHL_treasury = {
 	icon = generic_industry

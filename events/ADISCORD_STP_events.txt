@@ -1055,8 +1055,22 @@ news_event = {
 
 news_event = {
 	id = ADISCORD_STP_cw.72
-	title = ADISCORD_STP_cw.72.t
-	desc = ADISCORD_STP_cw.72.d
+	title = {
+		trigger = { STS = { has_country_leader = { character = STP_grigory_sotnikov ruling_only = yes } } }
+		text = ADISCORD_STP_cw.72.sotnikov.t
+	}
+	title = {
+		trigger = { NOT = { STS = { has_country_leader = { character = STP_grigory_sotnikov ruling_only = yes } } } }
+		text = ADISCORD_STP_cw.72.t
+	}
+	desc = {
+		trigger = { STS = { has_country_leader = { character = STP_grigory_sotnikov ruling_only = yes } } }
+		text = ADISCORD_STP_cw.72.sotnikov.d
+	}
+	desc = {
+		trigger = { NOT = { STS = { has_country_leader = { character = STP_grigory_sotnikov ruling_only = yes } } } }
+		text = ADISCORD_STP_cw.72.d
+	}
 	picture = GFX_news_event_adiscord_urban_resistance
 	major = yes
 	is_triggered_only = yes
@@ -1075,7 +1089,14 @@ news_event = {
 			ADISCORD_superevent_enqueue = yes
 		}
 	}
-	option = { name = ADISCORD_STP_cw.72.a }
+	option = {
+		name = ADISCORD_STP_cw.72.sotnikov.a
+		trigger = { STS = { has_country_leader = { character = STP_grigory_sotnikov ruling_only = yes } } }
+	}
+	option = {
+		name = ADISCORD_STP_cw.72.a
+		trigger = { NOT = { STS = { has_country_leader = { character = STP_grigory_sotnikov ruling_only = yes } } } }
+	}
 }
 
 
@@ -8438,7 +8459,7 @@ country_event = {
 		trigger = {
 			STP_heg_betrayal_active = yes
 			NOT = { has_variable = STP_heg_appointments_choice }
-			NOT = { political_power < 25 }
+			NOT = { has_political_power < 25 }
 		}
 		ai_chance = { factor = 40 }
 		hidden_effect = { set_variable = { var = STP_heg_appointments_choice value = 2 } }
@@ -8485,7 +8506,7 @@ country_event = {
 		trigger = {
 			STP_heg_betrayal_active = yes
 			NOT = { has_variable = STP_heg_oath_choice }
-			NOT = { political_power < 50 }
+			NOT = { has_political_power < 50 }
 		}
 		ai_chance = { factor = 40 }
 		hidden_effect = { set_variable = { var = STP_heg_oath_choice value = 2 } }
@@ -8548,7 +8569,7 @@ country_event = {
 		trigger = {
 			STP_heg_betrayal_active = yes
 			NOT = { has_variable = STP_heg_mandate_choice }
-			NOT = { political_power < 25 }
+			NOT = { has_political_power < 25 }
 		}
 		ai_chance = { factor = 40 }
 		hidden_effect = { set_variable = { var = STP_heg_mandate_choice value = 2 } }
@@ -8594,7 +8615,7 @@ country_event = {
 		trigger = {
 			STP_heg_betrayal_active = yes
 			NOT = { has_variable = STP_heg_opposition_choice }
-			NOT = { political_power < 50 }
+			NOT = { has_political_power < 50 }
 		}
 		ai_chance = { factor = 40 }
 		hidden_effect = { set_variable = { var = STP_heg_opposition_choice value = 2 } }
@@ -8645,7 +8666,7 @@ country_event = {
 		trigger = {
 			STP_heg_betrayal_active = yes
 			NOT = { has_variable = STP_heg_opposition_choice }
-			NOT = { political_power < 75 }
+			NOT = { has_political_power < 75 }
 		}
 		ai_chance = { factor = 40 }
 		hidden_effect = { set_variable = { var = STP_heg_opposition_choice value = 2 } }

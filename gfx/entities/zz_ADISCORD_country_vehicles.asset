@@ -412,6 +412,1042 @@ entity = {
 	default_state = "idle"
 }
 
+entity = {
+	name = "ADISCORD_VAL_apc_vehicle_entity"
+	pdxmesh = "ADISCORD_VAL_apc_mesh"
+	default_state = "idle"
+	state = {
+		name = "idle"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "training"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "death"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "move"
+		animation = "move"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "left_wheel"
+			particle = "tank_moving_tracks_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			time = 0
+			node = "right_wheel"
+			particle = "tank_moving_tracks_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			trigger_once = yes
+			sound = { soundeffect = "motorized_unit_move_animation" }
+		}
+	}
+	state = {
+		name = "retreat"
+		animation = "move"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "left_wheel"
+			particle = "tank_moving_tracks_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			time = 0
+			node = "right_wheel"
+			particle = "tank_moving_tracks_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			trigger_once = yes
+			sound = { soundeffect = "motorized_unit_move_animation" }
+		}
+	}
+	state = {
+		name = "attack"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "barrel"
+			particle = "mechanized_attack_barrel_particle"
+			keep_particle = yes
+		}
+		event = { sound = { soundeffect = "mechanized_units_mg_fire" } }
+	}
+	state = {
+		name = "defend"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "barrel"
+			particle = "mechanized_attack_barrel_particle"
+			keep_particle = yes
+		}
+		event = { sound = { soundeffect = "mechanized_units_mg_fire" } }
+	}
+	state = {
+		name = "support_attack"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "barrel"
+			particle = "mechanized_attack_barrel_particle"
+			keep_particle = yes
+		}
+		event = { sound = { soundeffect = "mechanized_units_mg_fire" } }
+	}
+}
+
+entity = {
+	clone = "VAL_infantry_entity"
+	name = "ADISCORD_VAL_apc_escort_entity"
+	scale = 0.25
+}
+
+entity = {
+	name = "ADISCORD_VAL_apc_entity"
+	pdxmesh = "motorized_frame_mesh"
+	default_state = "idle"
+	state = {
+		name = "idle"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "training"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "death"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "move"
+		animation = "move"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "retreat"
+		animation = "move"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "attack"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "defend"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "support_attack"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	attach = {
+		name = "vehicle"
+		vehicle = "ADISCORD_VAL_apc_vehicle_entity"
+	}
+	attach = {
+		name = "infantry"
+		infantry = "ADISCORD_VAL_apc_escort_entity"
+	}
+}
+
+entity = {
+	name = "ADISCORD_STP_apc_vehicle_entity"
+	pdxmesh = "ADISCORD_STP_apc_mesh"
+	default_state = "idle"
+	state = {
+		name = "idle"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "training"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "death"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "move"
+		animation = "move"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "left_wheel"
+			particle = "tank_moving_tracks_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			time = 0
+			node = "right_wheel"
+			particle = "tank_moving_tracks_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			trigger_once = yes
+			sound = { soundeffect = "motorized_unit_move_animation" }
+		}
+	}
+	state = {
+		name = "retreat"
+		animation = "move"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "left_wheel"
+			particle = "tank_moving_tracks_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			time = 0
+			node = "right_wheel"
+			particle = "tank_moving_tracks_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			trigger_once = yes
+			sound = { soundeffect = "motorized_unit_move_animation" }
+		}
+	}
+	state = {
+		name = "attack"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "barrel"
+			particle = "mechanized_attack_barrel_particle"
+			keep_particle = yes
+		}
+		event = { sound = { soundeffect = "mechanized_units_mg_fire" } }
+	}
+	state = {
+		name = "defend"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "barrel"
+			particle = "mechanized_attack_barrel_particle"
+			keep_particle = yes
+		}
+		event = { sound = { soundeffect = "mechanized_units_mg_fire" } }
+	}
+	state = {
+		name = "support_attack"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "barrel"
+			particle = "mechanized_attack_barrel_particle"
+			keep_particle = yes
+		}
+		event = { sound = { soundeffect = "mechanized_units_mg_fire" } }
+	}
+}
+
+entity = {
+	clone = "STP_infantry_entity"
+	name = "ADISCORD_STP_apc_escort_entity"
+	scale = 0.25
+}
+
+entity = {
+	name = "ADISCORD_STP_apc_entity"
+	pdxmesh = "motorized_frame_mesh"
+	default_state = "idle"
+	state = {
+		name = "idle"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "training"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "death"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "move"
+		animation = "move"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "retreat"
+		animation = "move"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "attack"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "defend"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "support_attack"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	attach = {
+		name = "vehicle"
+		vehicle = "ADISCORD_STP_apc_vehicle_entity"
+	}
+	attach = {
+		name = "infantry"
+		infantry = "ADISCORD_STP_apc_escort_entity"
+	}
+}
+
+entity = {
+	name = "ADISCORD_STS_apc_vehicle_entity"
+	pdxmesh = "ADISCORD_STS_apc_mesh"
+	default_state = "idle"
+	state = {
+		name = "idle"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "training"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "death"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "move"
+		animation = "move"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "left_wheel"
+			particle = "tank_moving_tracks_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			time = 0
+			node = "right_wheel"
+			particle = "tank_moving_tracks_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			trigger_once = yes
+			sound = { soundeffect = "motorized_unit_move_animation" }
+		}
+	}
+	state = {
+		name = "retreat"
+		animation = "move"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "left_wheel"
+			particle = "tank_moving_tracks_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			time = 0
+			node = "right_wheel"
+			particle = "tank_moving_tracks_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			trigger_once = yes
+			sound = { soundeffect = "motorized_unit_move_animation" }
+		}
+	}
+	state = {
+		name = "attack"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "barrel"
+			particle = "mechanized_attack_barrel_particle"
+			keep_particle = yes
+		}
+		event = { sound = { soundeffect = "mechanized_units_mg_fire" } }
+	}
+	state = {
+		name = "defend"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "barrel"
+			particle = "mechanized_attack_barrel_particle"
+			keep_particle = yes
+		}
+		event = { sound = { soundeffect = "mechanized_units_mg_fire" } }
+	}
+	state = {
+		name = "support_attack"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "barrel"
+			particle = "mechanized_attack_barrel_particle"
+			keep_particle = yes
+		}
+		event = { sound = { soundeffect = "mechanized_units_mg_fire" } }
+	}
+}
+
+entity = {
+	clone = "STS_infantry_entity"
+	name = "ADISCORD_STS_apc_escort_entity"
+	scale = 0.25
+}
+
+entity = {
+	name = "ADISCORD_STS_apc_entity"
+	pdxmesh = "motorized_frame_mesh"
+	default_state = "idle"
+	state = {
+		name = "idle"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "training"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "death"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "move"
+		animation = "move"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "retreat"
+		animation = "move"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "attack"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "defend"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "support_attack"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	attach = {
+		name = "vehicle"
+		vehicle = "ADISCORD_STS_apc_vehicle_entity"
+	}
+	attach = {
+		name = "infantry"
+		infantry = "ADISCORD_STS_apc_escort_entity"
+	}
+}
+
+entity = {
+	name = "ADISCORD_NAM_apc_vehicle_entity"
+	pdxmesh = "ADISCORD_NAM_apc_mesh"
+	default_state = "idle"
+	state = {
+		name = "idle"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "training"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "death"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "move"
+		animation = "move"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "left_wheel"
+			particle = "tank_moving_tracks_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			time = 0
+			node = "right_wheel"
+			particle = "tank_moving_tracks_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			trigger_once = yes
+			sound = { soundeffect = "motorized_unit_move_animation" }
+		}
+	}
+	state = {
+		name = "retreat"
+		animation = "move"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "left_wheel"
+			particle = "tank_moving_tracks_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			time = 0
+			node = "right_wheel"
+			particle = "tank_moving_tracks_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			trigger_once = yes
+			sound = { soundeffect = "motorized_unit_move_animation" }
+		}
+	}
+	state = {
+		name = "attack"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "barrel"
+			particle = "mechanized_attack_barrel_particle"
+			keep_particle = yes
+		}
+		event = { sound = { soundeffect = "mechanized_units_mg_fire" } }
+	}
+	state = {
+		name = "defend"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "barrel"
+			particle = "mechanized_attack_barrel_particle"
+			keep_particle = yes
+		}
+		event = { sound = { soundeffect = "mechanized_units_mg_fire" } }
+	}
+	state = {
+		name = "support_attack"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+		event = {
+			time = 0
+			node = "barrel"
+			particle = "mechanized_attack_barrel_particle"
+			keep_particle = yes
+		}
+		event = { sound = { soundeffect = "mechanized_units_mg_fire" } }
+	}
+}
+
+entity = {
+	clone = "NAM_infantry_entity"
+	name = "ADISCORD_NAM_apc_escort_entity"
+	scale = 0.25
+}
+
+entity = {
+	name = "ADISCORD_NAM_apc_entity"
+	pdxmesh = "motorized_frame_mesh"
+	default_state = "idle"
+	state = {
+		name = "idle"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "training"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "death"
+		animation = "idle"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "move"
+		animation = "move"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "retreat"
+		animation = "move"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "attack"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "defend"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	state = {
+		name = "support_attack"
+		animation = "attack"
+		animation_blend_time = 0.3
+		animation_speed = 1.0
+	}
+	attach = {
+		name = "vehicle"
+		vehicle = "ADISCORD_NAM_apc_vehicle_entity"
+	}
+	attach = {
+		name = "infantry"
+		infantry = "ADISCORD_NAM_apc_escort_entity"
+	}
+}
+
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_mechanized_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_mechanized_0_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_mechanized_1_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_mechanized_2_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_mechanized_3_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_motorized_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_motorized_0_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_motorized_1_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_mechanized_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_mechanized_0_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_mechanized_1_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_mechanized_2_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_mechanized_3_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_motorized_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_motorized_0_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_motorized_1_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_mechanized_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_mechanized_0_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_mechanized_1_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_mechanized_2_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_mechanized_3_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_motorized_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_motorized_0_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_motorized_1_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_mechanized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_mechanized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_mechanized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_mechanized_2_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_mechanized_3_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_motorized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_motorized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_motorized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_empire_mechanized_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_empire_mechanized_0_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_empire_mechanized_1_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_empire_mechanized_2_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_empire_mechanized_3_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_empire_motorized_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_empire_motorized_0_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_empire_motorized_1_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_empire_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_empire_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_empire_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_empire_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_empire_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_empire_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_empire_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_dopotroydsk_mechanized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_dopotroydsk_mechanized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_dopotroydsk_mechanized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_dopotroydsk_mechanized_2_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_dopotroydsk_mechanized_3_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_dopotroydsk_motorized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_dopotroydsk_motorized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_dopotroydsk_motorized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_dopotroydsk_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_dopotroydsk_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_dopotroydsk_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_dopotroydsk_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_dopotroydsk_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_dopotroydsk_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_dopotroydsk_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_kefreyt_state_mechanized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_kefreyt_state_mechanized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_kefreyt_state_mechanized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_kefreyt_state_mechanized_2_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_kefreyt_state_mechanized_3_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_kefreyt_state_motorized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_kefreyt_state_motorized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_kefreyt_state_motorized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_kefreyt_state_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_kefreyt_state_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_kefreyt_state_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_kefreyt_state_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_kefreyt_state_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_kefreyt_state_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_kefreyt_state_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_valden_republic_mechanized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_valden_republic_mechanized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_valden_republic_mechanized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_valden_republic_mechanized_2_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_valden_republic_mechanized_3_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_valden_republic_motorized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_valden_republic_motorized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_valden_republic_motorized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_valden_republic_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_valden_republic_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_valden_republic_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_valden_republic_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_valden_republic_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_valden_republic_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_valden_republic_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_united_military_districts_mechanized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_united_military_districts_mechanized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_united_military_districts_mechanized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_united_military_districts_mechanized_2_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_united_military_districts_mechanized_3_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_united_military_districts_motorized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_united_military_districts_motorized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_united_military_districts_motorized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_united_military_districts_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_united_military_districts_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_united_military_districts_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_united_military_districts_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_united_military_districts_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_united_military_districts_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_united_military_districts_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_military_junta_mechanized_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_military_junta_mechanized_0_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_military_junta_mechanized_1_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_military_junta_mechanized_2_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_military_junta_mechanized_3_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_military_junta_motorized_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_military_junta_motorized_0_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_military_junta_motorized_1_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_military_junta_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_military_junta_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_military_junta_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_military_junta_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_military_junta_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_military_junta_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_military_junta_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_steland_mechanized_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_steland_mechanized_0_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_steland_mechanized_1_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_steland_mechanized_2_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_steland_mechanized_3_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_steland_motorized_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_steland_motorized_0_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_steland_motorized_1_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_steland_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_steland_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_steland_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_steland_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_steland_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_steland_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_steland_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_hegemony_mechanized_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_hegemony_mechanized_0_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_hegemony_mechanized_1_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_hegemony_mechanized_2_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_hegemony_mechanized_3_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_hegemony_motorized_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_hegemony_motorized_0_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_hegemony_motorized_1_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_hegemony_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_hegemony_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_hegemony_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_hegemony_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_hegemony_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_hegemony_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_hegemony_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_stelander_union_mechanized_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_stelander_union_mechanized_0_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_stelander_union_mechanized_1_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_stelander_union_mechanized_2_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_stelander_union_mechanized_3_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_stelander_union_motorized_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_stelander_union_motorized_0_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_stelander_union_motorized_1_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_stelander_union_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_stelander_union_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_stelander_union_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_stelander_union_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_stelander_union_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_stelander_union_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_STS_apc_entity" name = "STS_stelander_union_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_liberated_mechanized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_liberated_mechanized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_liberated_mechanized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_liberated_mechanized_2_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_liberated_mechanized_3_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_liberated_motorized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_liberated_motorized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_liberated_motorized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_liberated_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_liberated_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_liberated_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_liberated_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_liberated_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_liberated_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_liberated_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_commonwealth_mechanized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_commonwealth_mechanized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_commonwealth_mechanized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_commonwealth_mechanized_2_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_commonwealth_mechanized_3_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_commonwealth_motorized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_commonwealth_motorized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_commonwealth_motorized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_commonwealth_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_commonwealth_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_commonwealth_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_commonwealth_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_commonwealth_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_commonwealth_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_commonwealth_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_revolution_capital_mechanized_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_revolution_capital_mechanized_0_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_revolution_capital_mechanized_1_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_revolution_capital_mechanized_2_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_revolution_capital_mechanized_3_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_revolution_capital_motorized_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_revolution_capital_motorized_0_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_revolution_capital_motorized_1_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_revolution_capital_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_revolution_capital_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_revolution_capital_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_revolution_capital_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_revolution_capital_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_revolution_capital_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_revolution_capital_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_great_stelander_mechanized_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_great_stelander_mechanized_0_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_great_stelander_mechanized_1_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_great_stelander_mechanized_2_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_great_stelander_mechanized_3_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_great_stelander_motorized_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_great_stelander_motorized_0_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_great_stelander_motorized_1_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_great_stelander_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_great_stelander_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_great_stelander_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_great_stelander_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_great_stelander_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_great_stelander_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_STP_apc_entity" name = "STP_great_stelander_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STP_revolution_mechanized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STP_revolution_mechanized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STP_revolution_mechanized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STP_revolution_mechanized_2_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STP_revolution_mechanized_3_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STP_revolution_motorized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STP_revolution_motorized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STP_revolution_motorized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STP_revolution_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STP_revolution_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STP_revolution_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STP_revolution_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STP_revolution_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STP_revolution_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STP_revolution_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STS_administration_mechanized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STS_administration_mechanized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STS_administration_mechanized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STS_administration_mechanized_2_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STS_administration_mechanized_3_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STS_administration_motorized_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STS_administration_motorized_0_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STS_administration_motorized_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STS_administration_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STS_administration_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STS_administration_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STS_administration_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STS_administration_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STS_administration_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_VAL_apc_entity" name = "VAL_STS_administration_ADISCORD_networked_ifv_2183_entity" }
+
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_confederation_mechanized_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_confederation_mechanized_0_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_confederation_mechanized_1_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_confederation_mechanized_2_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_confederation_mechanized_3_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_confederation_motorized_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_confederation_motorized_0_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_confederation_motorized_1_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_confederation_motorized_equipment_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_confederation_motorized_equipment_1_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_confederation_ADISCORD_mechanized_infantry_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_confederation_ADISCORD_armored_carrier_archetype_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_confederation_ADISCORD_armored_carrier_2163_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_confederation_ADISCORD_ifv_2170_entity" }
+entity = { clone = "ADISCORD_NAM_apc_entity" name = "NAM_confederation_ADISCORD_networked_ifv_2183_entity" }
+
 entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "ADISCORD_fighter_entity" }
 entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "ADISCORD_fighter_archetype_entity" }
 entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "ADISCORD_fighter_0_entity" }
@@ -3642,6 +4678,41 @@ entity = { clone = "ADISCORD_DEF_cas_entity" name = "IRT_medium_plane_1_entity" 
 entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IRT_medium_plane_2_entity" }
 entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IRT_medium_plane_3_entity" }
 
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVC_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVC_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVC_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVC_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVC_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVC_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVC_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVC_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVC_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVC_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVC_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVC_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVC_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVC_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVC_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVC_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVC_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVC_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVC_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVC_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVC_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVC_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVC_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVC_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVC_light_plane_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVC_light_plane_0_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVC_light_plane_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVC_light_plane_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVC_light_plane_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVC_medium_plane_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVC_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVC_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVC_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVC_medium_plane_3_entity" }
+
 entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_ADISCORD_fighter_entity" }
 entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_ADISCORD_fighter_archetype_entity" }
 entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_ADISCORD_fighter_0_entity" }
@@ -6512,6 +7583,76 @@ entity = { clone = "ADISCORD_DEF_cas_entity" name = "ZTA_medium_plane_1_entity" 
 entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "ZTA_medium_plane_2_entity" }
 entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "ZTA_medium_plane_3_entity" }
 
+entity = { clone = "ADISCORD_RUS_early_fighter_entity" name = "RUS_world_anarchy_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_RUS_early_fighter_entity" name = "RUS_world_anarchy_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_RUS_early_fighter_entity" name = "RUS_world_anarchy_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_RUS_fighter_entity" name = "RUS_world_anarchy_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_RUS_future_fighter_entity" name = "RUS_world_anarchy_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_RUS_future_fighter_entity" name = "RUS_world_anarchy_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_RUS_early_cas_entity" name = "RUS_world_anarchy_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_RUS_early_cas_entity" name = "RUS_world_anarchy_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_RUS_early_cas_entity" name = "RUS_world_anarchy_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_RUS_cas_entity" name = "RUS_world_anarchy_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_world_anarchy_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_world_anarchy_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_RUS_early_fighter_entity" name = "RUS_world_anarchy_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_RUS_fighter_entity" name = "RUS_world_anarchy_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_RUS_fighter_entity" name = "RUS_world_anarchy_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_RUS_future_fighter_entity" name = "RUS_world_anarchy_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_RUS_future_fighter_entity" name = "RUS_world_anarchy_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_RUS_future_fighter_entity" name = "RUS_world_anarchy_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_RUS_early_cas_entity" name = "RUS_world_anarchy_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_RUS_cas_entity" name = "RUS_world_anarchy_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_RUS_cas_entity" name = "RUS_world_anarchy_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_world_anarchy_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_world_anarchy_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_world_anarchy_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_RUS_early_fighter_entity" name = "RUS_world_anarchy_light_plane_entity" }
+entity = { clone = "ADISCORD_RUS_early_fighter_entity" name = "RUS_world_anarchy_light_plane_0_entity" }
+entity = { clone = "ADISCORD_RUS_fighter_entity" name = "RUS_world_anarchy_light_plane_1_entity" }
+entity = { clone = "ADISCORD_RUS_future_fighter_entity" name = "RUS_world_anarchy_light_plane_2_entity" }
+entity = { clone = "ADISCORD_RUS_future_fighter_entity" name = "RUS_world_anarchy_light_plane_3_entity" }
+entity = { clone = "ADISCORD_RUS_early_cas_entity" name = "RUS_world_anarchy_medium_plane_entity" }
+entity = { clone = "ADISCORD_RUS_early_cas_entity" name = "RUS_world_anarchy_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_RUS_cas_entity" name = "RUS_world_anarchy_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_world_anarchy_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_world_anarchy_medium_plane_3_entity" }
+
+entity = { clone = "ADISCORD_RUS_early_fighter_entity" name = "RUS_last_bunker_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_RUS_early_fighter_entity" name = "RUS_last_bunker_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_RUS_early_fighter_entity" name = "RUS_last_bunker_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_RUS_fighter_entity" name = "RUS_last_bunker_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_RUS_future_fighter_entity" name = "RUS_last_bunker_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_RUS_future_fighter_entity" name = "RUS_last_bunker_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_RUS_early_cas_entity" name = "RUS_last_bunker_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_RUS_early_cas_entity" name = "RUS_last_bunker_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_RUS_early_cas_entity" name = "RUS_last_bunker_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_RUS_cas_entity" name = "RUS_last_bunker_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_last_bunker_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_last_bunker_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_RUS_early_fighter_entity" name = "RUS_last_bunker_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_RUS_fighter_entity" name = "RUS_last_bunker_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_RUS_fighter_entity" name = "RUS_last_bunker_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_RUS_future_fighter_entity" name = "RUS_last_bunker_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_RUS_future_fighter_entity" name = "RUS_last_bunker_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_RUS_future_fighter_entity" name = "RUS_last_bunker_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_RUS_early_cas_entity" name = "RUS_last_bunker_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_RUS_cas_entity" name = "RUS_last_bunker_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_RUS_cas_entity" name = "RUS_last_bunker_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_last_bunker_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_last_bunker_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_last_bunker_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_RUS_early_fighter_entity" name = "RUS_last_bunker_light_plane_entity" }
+entity = { clone = "ADISCORD_RUS_early_fighter_entity" name = "RUS_last_bunker_light_plane_0_entity" }
+entity = { clone = "ADISCORD_RUS_fighter_entity" name = "RUS_last_bunker_light_plane_1_entity" }
+entity = { clone = "ADISCORD_RUS_future_fighter_entity" name = "RUS_last_bunker_light_plane_2_entity" }
+entity = { clone = "ADISCORD_RUS_future_fighter_entity" name = "RUS_last_bunker_light_plane_3_entity" }
+entity = { clone = "ADISCORD_RUS_early_cas_entity" name = "RUS_last_bunker_medium_plane_entity" }
+entity = { clone = "ADISCORD_RUS_early_cas_entity" name = "RUS_last_bunker_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_RUS_cas_entity" name = "RUS_last_bunker_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_last_bunker_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_last_bunker_medium_plane_3_entity" }
+
 entity = { clone = "ADISCORD_NOD_early_fighter_entity" name = "STP_empire_ADISCORD_fighter_entity" }
 entity = { clone = "ADISCORD_NOD_early_fighter_entity" name = "STP_empire_ADISCORD_fighter_archetype_entity" }
 entity = { clone = "ADISCORD_NOD_early_fighter_entity" name = "STP_empire_ADISCORD_fighter_0_entity" }
@@ -6687,6 +7828,41 @@ entity = { clone = "ADISCORD_WRK_cas_entity" name = "WRK_vorkerland_joint_govern
 entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "WRK_vorkerland_joint_government_medium_plane_2_entity" }
 entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "WRK_vorkerland_joint_government_medium_plane_3_entity" }
 
+entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "WRK_vorkerland_world_empire_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "WRK_vorkerland_world_empire_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "WRK_vorkerland_world_empire_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_WRK_fighter_entity" name = "WRK_vorkerland_world_empire_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "WRK_vorkerland_world_empire_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "WRK_vorkerland_world_empire_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "WRK_vorkerland_world_empire_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "WRK_vorkerland_world_empire_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "WRK_vorkerland_world_empire_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_WRK_cas_entity" name = "WRK_vorkerland_world_empire_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "WRK_vorkerland_world_empire_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "WRK_vorkerland_world_empire_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "WRK_vorkerland_world_empire_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_WRK_fighter_entity" name = "WRK_vorkerland_world_empire_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_WRK_fighter_entity" name = "WRK_vorkerland_world_empire_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "WRK_vorkerland_world_empire_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "WRK_vorkerland_world_empire_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "WRK_vorkerland_world_empire_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "WRK_vorkerland_world_empire_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_WRK_cas_entity" name = "WRK_vorkerland_world_empire_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_WRK_cas_entity" name = "WRK_vorkerland_world_empire_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "WRK_vorkerland_world_empire_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "WRK_vorkerland_world_empire_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "WRK_vorkerland_world_empire_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "WRK_vorkerland_world_empire_light_plane_entity" }
+entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "WRK_vorkerland_world_empire_light_plane_0_entity" }
+entity = { clone = "ADISCORD_WRK_fighter_entity" name = "WRK_vorkerland_world_empire_light_plane_1_entity" }
+entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "WRK_vorkerland_world_empire_light_plane_2_entity" }
+entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "WRK_vorkerland_world_empire_light_plane_3_entity" }
+entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "WRK_vorkerland_world_empire_medium_plane_entity" }
+entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "WRK_vorkerland_world_empire_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_WRK_cas_entity" name = "WRK_vorkerland_world_empire_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "WRK_vorkerland_world_empire_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "WRK_vorkerland_world_empire_medium_plane_3_entity" }
+
 entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "SOL_vorkerland_worker_protectorate_ADISCORD_fighter_entity" }
 entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "SOL_vorkerland_worker_protectorate_ADISCORD_fighter_archetype_entity" }
 entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "SOL_vorkerland_worker_protectorate_ADISCORD_fighter_0_entity" }
@@ -6721,6 +7897,41 @@ entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "SOL_vorkerland_worker
 entity = { clone = "ADISCORD_WRK_cas_entity" name = "SOL_vorkerland_worker_protectorate_medium_plane_1_entity" }
 entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "SOL_vorkerland_worker_protectorate_medium_plane_2_entity" }
 entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "SOL_vorkerland_worker_protectorate_medium_plane_3_entity" }
+
+entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_WRK_fighter_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_WRK_cas_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_WRK_fighter_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_WRK_fighter_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_WRK_cas_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_WRK_cas_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "SOL_vorkerland_restoration_administration_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "SOL_vorkerland_restoration_administration_light_plane_entity" }
+entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "SOL_vorkerland_restoration_administration_light_plane_0_entity" }
+entity = { clone = "ADISCORD_WRK_fighter_entity" name = "SOL_vorkerland_restoration_administration_light_plane_1_entity" }
+entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "SOL_vorkerland_restoration_administration_light_plane_2_entity" }
+entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "SOL_vorkerland_restoration_administration_light_plane_3_entity" }
+entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "SOL_vorkerland_restoration_administration_medium_plane_entity" }
+entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "SOL_vorkerland_restoration_administration_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_WRK_cas_entity" name = "SOL_vorkerland_restoration_administration_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "SOL_vorkerland_restoration_administration_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "SOL_vorkerland_restoration_administration_medium_plane_3_entity" }
 
 entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "PWR_rimat_republic_ADISCORD_fighter_entity" }
 entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "PWR_rimat_republic_ADISCORD_fighter_archetype_entity" }
@@ -7072,6 +8283,251 @@ entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_dopotroydsk_medium_plan
 entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_dopotroydsk_medium_plane_2_entity" }
 entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_dopotroydsk_medium_plane_3_entity" }
 
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_kefreyt_state_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_kefreyt_state_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_kefreyt_state_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_VAL_fighter_entity" name = "VAL_kefreyt_state_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_kefreyt_state_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_kefreyt_state_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_kefreyt_state_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_kefreyt_state_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_kefreyt_state_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_kefreyt_state_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_kefreyt_state_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_kefreyt_state_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_kefreyt_state_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_VAL_fighter_entity" name = "VAL_kefreyt_state_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_VAL_fighter_entity" name = "VAL_kefreyt_state_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_kefreyt_state_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_kefreyt_state_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_kefreyt_state_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_kefreyt_state_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_kefreyt_state_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_kefreyt_state_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_kefreyt_state_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_kefreyt_state_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_kefreyt_state_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_kefreyt_state_light_plane_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_kefreyt_state_light_plane_0_entity" }
+entity = { clone = "ADISCORD_VAL_fighter_entity" name = "VAL_kefreyt_state_light_plane_1_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_kefreyt_state_light_plane_2_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_kefreyt_state_light_plane_3_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_kefreyt_state_medium_plane_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_kefreyt_state_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_kefreyt_state_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_kefreyt_state_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_kefreyt_state_medium_plane_3_entity" }
+
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_valden_republic_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_valden_republic_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_valden_republic_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_VAL_fighter_entity" name = "VAL_valden_republic_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_valden_republic_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_valden_republic_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_valden_republic_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_valden_republic_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_valden_republic_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_valden_republic_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_valden_republic_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_valden_republic_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_valden_republic_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_VAL_fighter_entity" name = "VAL_valden_republic_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_VAL_fighter_entity" name = "VAL_valden_republic_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_valden_republic_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_valden_republic_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_valden_republic_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_valden_republic_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_valden_republic_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_valden_republic_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_valden_republic_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_valden_republic_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_valden_republic_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_valden_republic_light_plane_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_valden_republic_light_plane_0_entity" }
+entity = { clone = "ADISCORD_VAL_fighter_entity" name = "VAL_valden_republic_light_plane_1_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_valden_republic_light_plane_2_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_valden_republic_light_plane_3_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_valden_republic_medium_plane_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_valden_republic_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_valden_republic_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_valden_republic_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_valden_republic_medium_plane_3_entity" }
+
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_united_military_districts_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_united_military_districts_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_united_military_districts_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_VAL_fighter_entity" name = "VAL_united_military_districts_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_united_military_districts_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_united_military_districts_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_united_military_districts_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_united_military_districts_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_united_military_districts_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_united_military_districts_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_united_military_districts_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_united_military_districts_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_united_military_districts_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_VAL_fighter_entity" name = "VAL_united_military_districts_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_VAL_fighter_entity" name = "VAL_united_military_districts_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_united_military_districts_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_united_military_districts_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_united_military_districts_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_united_military_districts_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_united_military_districts_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_united_military_districts_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_united_military_districts_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_united_military_districts_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_united_military_districts_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_united_military_districts_light_plane_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_united_military_districts_light_plane_0_entity" }
+entity = { clone = "ADISCORD_VAL_fighter_entity" name = "VAL_united_military_districts_light_plane_1_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_united_military_districts_light_plane_2_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_united_military_districts_light_plane_3_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_united_military_districts_medium_plane_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_united_military_districts_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_united_military_districts_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_united_military_districts_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_united_military_districts_medium_plane_3_entity" }
+
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "OCA_VAL_republic_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "OCA_VAL_republic_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "OCA_VAL_republic_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "OCA_VAL_republic_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "OCA_VAL_republic_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "OCA_VAL_republic_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "OCA_VAL_republic_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "OCA_VAL_republic_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "OCA_VAL_republic_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "OCA_VAL_republic_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "OCA_VAL_republic_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "OCA_VAL_republic_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "OCA_VAL_republic_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "OCA_VAL_republic_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "OCA_VAL_republic_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "OCA_VAL_republic_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "OCA_VAL_republic_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "OCA_VAL_republic_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "OCA_VAL_republic_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "OCA_VAL_republic_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "OCA_VAL_republic_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "OCA_VAL_republic_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "OCA_VAL_republic_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "OCA_VAL_republic_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "OCA_VAL_republic_light_plane_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "OCA_VAL_republic_light_plane_0_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "OCA_VAL_republic_light_plane_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "OCA_VAL_republic_light_plane_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "OCA_VAL_republic_light_plane_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "OCA_VAL_republic_medium_plane_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "OCA_VAL_republic_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "OCA_VAL_republic_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "OCA_VAL_republic_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "OCA_VAL_republic_medium_plane_3_entity" }
+
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "OCA_VAL_districts_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "OCA_VAL_districts_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "OCA_VAL_districts_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "OCA_VAL_districts_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "OCA_VAL_districts_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "OCA_VAL_districts_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "OCA_VAL_districts_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "OCA_VAL_districts_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "OCA_VAL_districts_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "OCA_VAL_districts_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "OCA_VAL_districts_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "OCA_VAL_districts_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "OCA_VAL_districts_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "OCA_VAL_districts_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "OCA_VAL_districts_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "OCA_VAL_districts_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "OCA_VAL_districts_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "OCA_VAL_districts_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "OCA_VAL_districts_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "OCA_VAL_districts_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "OCA_VAL_districts_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "OCA_VAL_districts_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "OCA_VAL_districts_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "OCA_VAL_districts_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "OCA_VAL_districts_light_plane_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "OCA_VAL_districts_light_plane_0_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "OCA_VAL_districts_light_plane_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "OCA_VAL_districts_light_plane_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "OCA_VAL_districts_light_plane_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "OCA_VAL_districts_medium_plane_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "OCA_VAL_districts_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "OCA_VAL_districts_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "OCA_VAL_districts_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "OCA_VAL_districts_medium_plane_3_entity" }
+
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_VAL_republic_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_VAL_republic_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_VAL_republic_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "NKA_VAL_republic_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_VAL_republic_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_VAL_republic_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_VAL_republic_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_VAL_republic_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_VAL_republic_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "NKA_VAL_republic_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_VAL_republic_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_VAL_republic_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_VAL_republic_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "NKA_VAL_republic_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "NKA_VAL_republic_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_VAL_republic_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_VAL_republic_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_VAL_republic_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_VAL_republic_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "NKA_VAL_republic_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "NKA_VAL_republic_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_VAL_republic_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_VAL_republic_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_VAL_republic_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_VAL_republic_light_plane_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_VAL_republic_light_plane_0_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "NKA_VAL_republic_light_plane_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_VAL_republic_light_plane_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_VAL_republic_light_plane_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_VAL_republic_medium_plane_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_VAL_republic_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "NKA_VAL_republic_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_VAL_republic_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_VAL_republic_medium_plane_3_entity" }
+
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_VAL_districts_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_VAL_districts_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_VAL_districts_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "NKA_VAL_districts_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_VAL_districts_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_VAL_districts_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_VAL_districts_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_VAL_districts_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_VAL_districts_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "NKA_VAL_districts_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_VAL_districts_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_VAL_districts_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_VAL_districts_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "NKA_VAL_districts_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "NKA_VAL_districts_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_VAL_districts_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_VAL_districts_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_VAL_districts_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_VAL_districts_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "NKA_VAL_districts_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "NKA_VAL_districts_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_VAL_districts_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_VAL_districts_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_VAL_districts_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_VAL_districts_light_plane_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_VAL_districts_light_plane_0_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "NKA_VAL_districts_light_plane_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_VAL_districts_light_plane_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_VAL_districts_light_plane_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_VAL_districts_medium_plane_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_VAL_districts_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "NKA_VAL_districts_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_VAL_districts_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_VAL_districts_medium_plane_3_entity" }
+
 entity = { clone = "ADISCORD_RUS_early_fighter_entity" name = "RUS_last_empire_ADISCORD_fighter_entity" }
 entity = { clone = "ADISCORD_RUS_early_fighter_entity" name = "RUS_last_empire_ADISCORD_fighter_archetype_entity" }
 entity = { clone = "ADISCORD_RUS_early_fighter_entity" name = "RUS_last_empire_ADISCORD_fighter_0_entity" }
@@ -7106,6 +8562,41 @@ entity = { clone = "ADISCORD_RUS_early_cas_entity" name = "RUS_last_empire_mediu
 entity = { clone = "ADISCORD_RUS_cas_entity" name = "RUS_last_empire_medium_plane_1_entity" }
 entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_last_empire_medium_plane_2_entity" }
 entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_last_empire_medium_plane_3_entity" }
+
+entity = { clone = "ADISCORD_STP_early_fighter_entity" name = "STS_military_junta_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_STP_early_fighter_entity" name = "STS_military_junta_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_STP_early_fighter_entity" name = "STS_military_junta_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_STP_fighter_entity" name = "STS_military_junta_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_STP_future_fighter_entity" name = "STS_military_junta_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_STP_future_fighter_entity" name = "STS_military_junta_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_STP_early_cas_entity" name = "STS_military_junta_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_STP_early_cas_entity" name = "STS_military_junta_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_STP_early_cas_entity" name = "STS_military_junta_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_STP_cas_entity" name = "STS_military_junta_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_STP_future_cas_entity" name = "STS_military_junta_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_STP_future_cas_entity" name = "STS_military_junta_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_STP_early_fighter_entity" name = "STS_military_junta_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_STP_fighter_entity" name = "STS_military_junta_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_STP_fighter_entity" name = "STS_military_junta_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_STP_future_fighter_entity" name = "STS_military_junta_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_STP_future_fighter_entity" name = "STS_military_junta_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_STP_future_fighter_entity" name = "STS_military_junta_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_STP_early_cas_entity" name = "STS_military_junta_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_STP_cas_entity" name = "STS_military_junta_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_STP_cas_entity" name = "STS_military_junta_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_STP_future_cas_entity" name = "STS_military_junta_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_STP_future_cas_entity" name = "STS_military_junta_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_STP_future_cas_entity" name = "STS_military_junta_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_STP_early_fighter_entity" name = "STS_military_junta_light_plane_entity" }
+entity = { clone = "ADISCORD_STP_early_fighter_entity" name = "STS_military_junta_light_plane_0_entity" }
+entity = { clone = "ADISCORD_STP_fighter_entity" name = "STS_military_junta_light_plane_1_entity" }
+entity = { clone = "ADISCORD_STP_future_fighter_entity" name = "STS_military_junta_light_plane_2_entity" }
+entity = { clone = "ADISCORD_STP_future_fighter_entity" name = "STS_military_junta_light_plane_3_entity" }
+entity = { clone = "ADISCORD_STP_early_cas_entity" name = "STS_military_junta_medium_plane_entity" }
+entity = { clone = "ADISCORD_STP_early_cas_entity" name = "STS_military_junta_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_STP_cas_entity" name = "STS_military_junta_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_STP_future_cas_entity" name = "STS_military_junta_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_STP_future_cas_entity" name = "STS_military_junta_medium_plane_3_entity" }
 
 entity = { clone = "ADISCORD_STP_early_fighter_entity" name = "STS_steland_ADISCORD_fighter_entity" }
 entity = { clone = "ADISCORD_STP_early_fighter_entity" name = "STS_steland_ADISCORD_fighter_archetype_entity" }
@@ -7176,6 +8667,41 @@ entity = { clone = "ADISCORD_STP_early_cas_entity" name = "STS_hegemony_medium_p
 entity = { clone = "ADISCORD_STP_cas_entity" name = "STS_hegemony_medium_plane_1_entity" }
 entity = { clone = "ADISCORD_STP_future_cas_entity" name = "STS_hegemony_medium_plane_2_entity" }
 entity = { clone = "ADISCORD_STP_future_cas_entity" name = "STS_hegemony_medium_plane_3_entity" }
+
+entity = { clone = "ADISCORD_STP_early_fighter_entity" name = "STS_stelander_union_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_STP_early_fighter_entity" name = "STS_stelander_union_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_STP_early_fighter_entity" name = "STS_stelander_union_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_STP_fighter_entity" name = "STS_stelander_union_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_STP_future_fighter_entity" name = "STS_stelander_union_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_STP_future_fighter_entity" name = "STS_stelander_union_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_STP_early_cas_entity" name = "STS_stelander_union_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_STP_early_cas_entity" name = "STS_stelander_union_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_STP_early_cas_entity" name = "STS_stelander_union_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_STP_cas_entity" name = "STS_stelander_union_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_STP_future_cas_entity" name = "STS_stelander_union_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_STP_future_cas_entity" name = "STS_stelander_union_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_STP_early_fighter_entity" name = "STS_stelander_union_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_STP_fighter_entity" name = "STS_stelander_union_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_STP_fighter_entity" name = "STS_stelander_union_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_STP_future_fighter_entity" name = "STS_stelander_union_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_STP_future_fighter_entity" name = "STS_stelander_union_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_STP_future_fighter_entity" name = "STS_stelander_union_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_STP_early_cas_entity" name = "STS_stelander_union_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_STP_cas_entity" name = "STS_stelander_union_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_STP_cas_entity" name = "STS_stelander_union_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_STP_future_cas_entity" name = "STS_stelander_union_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_STP_future_cas_entity" name = "STS_stelander_union_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_STP_future_cas_entity" name = "STS_stelander_union_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_STP_early_fighter_entity" name = "STS_stelander_union_light_plane_entity" }
+entity = { clone = "ADISCORD_STP_early_fighter_entity" name = "STS_stelander_union_light_plane_0_entity" }
+entity = { clone = "ADISCORD_STP_fighter_entity" name = "STS_stelander_union_light_plane_1_entity" }
+entity = { clone = "ADISCORD_STP_future_fighter_entity" name = "STS_stelander_union_light_plane_2_entity" }
+entity = { clone = "ADISCORD_STP_future_fighter_entity" name = "STS_stelander_union_light_plane_3_entity" }
+entity = { clone = "ADISCORD_STP_early_cas_entity" name = "STS_stelander_union_medium_plane_entity" }
+entity = { clone = "ADISCORD_STP_early_cas_entity" name = "STS_stelander_union_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_STP_cas_entity" name = "STS_stelander_union_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_STP_future_cas_entity" name = "STS_stelander_union_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_STP_future_cas_entity" name = "STS_stelander_union_medium_plane_3_entity" }
 
 entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_liberated_ADISCORD_fighter_entity" }
 entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_liberated_ADISCORD_fighter_archetype_entity" }
@@ -7631,6 +9157,181 @@ entity = { clone = "ADISCORD_RUS_early_cas_entity" name = "RUS_restoration_state
 entity = { clone = "ADISCORD_RUS_cas_entity" name = "RUS_restoration_state_medium_plane_1_entity" }
 entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_restoration_state_medium_plane_2_entity" }
 entity = { clone = "ADISCORD_RUS_future_cas_entity" name = "RUS_restoration_state_medium_plane_3_entity" }
+
+entity = { clone = "ADISCORD_NOD_early_fighter_entity" name = "NOD_STS_administration_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_NOD_early_fighter_entity" name = "NOD_STS_administration_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_NOD_early_fighter_entity" name = "NOD_STS_administration_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_NOD_fighter_entity" name = "NOD_STS_administration_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_NOD_future_fighter_entity" name = "NOD_STS_administration_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_NOD_future_fighter_entity" name = "NOD_STS_administration_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_NOD_early_cas_entity" name = "NOD_STS_administration_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_NOD_early_cas_entity" name = "NOD_STS_administration_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_NOD_early_cas_entity" name = "NOD_STS_administration_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_NOD_cas_entity" name = "NOD_STS_administration_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_NOD_future_cas_entity" name = "NOD_STS_administration_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_NOD_future_cas_entity" name = "NOD_STS_administration_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_NOD_early_fighter_entity" name = "NOD_STS_administration_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_NOD_fighter_entity" name = "NOD_STS_administration_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_NOD_fighter_entity" name = "NOD_STS_administration_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_NOD_future_fighter_entity" name = "NOD_STS_administration_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_NOD_future_fighter_entity" name = "NOD_STS_administration_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_NOD_future_fighter_entity" name = "NOD_STS_administration_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_NOD_early_cas_entity" name = "NOD_STS_administration_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_NOD_cas_entity" name = "NOD_STS_administration_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_NOD_cas_entity" name = "NOD_STS_administration_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_NOD_future_cas_entity" name = "NOD_STS_administration_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_NOD_future_cas_entity" name = "NOD_STS_administration_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_NOD_future_cas_entity" name = "NOD_STS_administration_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_NOD_early_fighter_entity" name = "NOD_STS_administration_light_plane_entity" }
+entity = { clone = "ADISCORD_NOD_early_fighter_entity" name = "NOD_STS_administration_light_plane_0_entity" }
+entity = { clone = "ADISCORD_NOD_fighter_entity" name = "NOD_STS_administration_light_plane_1_entity" }
+entity = { clone = "ADISCORD_NOD_future_fighter_entity" name = "NOD_STS_administration_light_plane_2_entity" }
+entity = { clone = "ADISCORD_NOD_future_fighter_entity" name = "NOD_STS_administration_light_plane_3_entity" }
+entity = { clone = "ADISCORD_NOD_early_cas_entity" name = "NOD_STS_administration_medium_plane_entity" }
+entity = { clone = "ADISCORD_NOD_early_cas_entity" name = "NOD_STS_administration_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_NOD_cas_entity" name = "NOD_STS_administration_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_NOD_future_cas_entity" name = "NOD_STS_administration_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_NOD_future_cas_entity" name = "NOD_STS_administration_medium_plane_3_entity" }
+
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_STS_administration_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_STS_administration_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_STS_administration_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_VAL_fighter_entity" name = "VAL_STS_administration_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_STS_administration_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_STS_administration_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_STS_administration_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_STS_administration_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_STS_administration_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_STS_administration_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_STS_administration_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_STS_administration_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_STS_administration_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_VAL_fighter_entity" name = "VAL_STS_administration_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_VAL_fighter_entity" name = "VAL_STS_administration_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_STS_administration_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_STS_administration_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_STS_administration_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_STS_administration_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_STS_administration_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_STS_administration_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_STS_administration_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_STS_administration_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_STS_administration_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_STS_administration_light_plane_entity" }
+entity = { clone = "ADISCORD_VAL_early_fighter_entity" name = "VAL_STS_administration_light_plane_0_entity" }
+entity = { clone = "ADISCORD_VAL_fighter_entity" name = "VAL_STS_administration_light_plane_1_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_STS_administration_light_plane_2_entity" }
+entity = { clone = "ADISCORD_VAL_future_fighter_entity" name = "VAL_STS_administration_light_plane_3_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_STS_administration_medium_plane_entity" }
+entity = { clone = "ADISCORD_VAL_early_cas_entity" name = "VAL_STS_administration_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_VAL_cas_entity" name = "VAL_STS_administration_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_STS_administration_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_VAL_future_cas_entity" name = "VAL_STS_administration_medium_plane_3_entity" }
+
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "YPR_STS_administration_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "YPR_STS_administration_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "YPR_STS_administration_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "YPR_STS_administration_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "YPR_STS_administration_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "YPR_STS_administration_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "YPR_STS_administration_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "YPR_STS_administration_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "YPR_STS_administration_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "YPR_STS_administration_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "YPR_STS_administration_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "YPR_STS_administration_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "YPR_STS_administration_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "YPR_STS_administration_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "YPR_STS_administration_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "YPR_STS_administration_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "YPR_STS_administration_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "YPR_STS_administration_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "YPR_STS_administration_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "YPR_STS_administration_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "YPR_STS_administration_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "YPR_STS_administration_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "YPR_STS_administration_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "YPR_STS_administration_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "YPR_STS_administration_light_plane_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "YPR_STS_administration_light_plane_0_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "YPR_STS_administration_light_plane_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "YPR_STS_administration_light_plane_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "YPR_STS_administration_light_plane_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "YPR_STS_administration_medium_plane_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "YPR_STS_administration_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "YPR_STS_administration_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "YPR_STS_administration_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "YPR_STS_administration_medium_plane_3_entity" }
+
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "TFF_STS_administration_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "TFF_STS_administration_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "TFF_STS_administration_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "TFF_STS_administration_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "TFF_STS_administration_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "TFF_STS_administration_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "TFF_STS_administration_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "TFF_STS_administration_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "TFF_STS_administration_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "TFF_STS_administration_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "TFF_STS_administration_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "TFF_STS_administration_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "TFF_STS_administration_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "TFF_STS_administration_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "TFF_STS_administration_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "TFF_STS_administration_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "TFF_STS_administration_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "TFF_STS_administration_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "TFF_STS_administration_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "TFF_STS_administration_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "TFF_STS_administration_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "TFF_STS_administration_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "TFF_STS_administration_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "TFF_STS_administration_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "TFF_STS_administration_light_plane_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "TFF_STS_administration_light_plane_0_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "TFF_STS_administration_light_plane_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "TFF_STS_administration_light_plane_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "TFF_STS_administration_light_plane_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "TFF_STS_administration_medium_plane_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "TFF_STS_administration_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "TFF_STS_administration_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "TFF_STS_administration_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "TFF_STS_administration_medium_plane_3_entity" }
+
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_STS_administration_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_STS_administration_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_STS_administration_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "NKA_STS_administration_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_STS_administration_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_STS_administration_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_STS_administration_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_STS_administration_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_STS_administration_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "NKA_STS_administration_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_STS_administration_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_STS_administration_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_STS_administration_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "NKA_STS_administration_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "NKA_STS_administration_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_STS_administration_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_STS_administration_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_STS_administration_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_STS_administration_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "NKA_STS_administration_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "NKA_STS_administration_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_STS_administration_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_STS_administration_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_STS_administration_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_STS_administration_light_plane_entity" }
+entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "NKA_STS_administration_light_plane_0_entity" }
+entity = { clone = "ADISCORD_DEF_fighter_entity" name = "NKA_STS_administration_light_plane_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_STS_administration_light_plane_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "NKA_STS_administration_light_plane_3_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_STS_administration_medium_plane_entity" }
+entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "NKA_STS_administration_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_DEF_cas_entity" name = "NKA_STS_administration_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_STS_administration_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "NKA_STS_administration_medium_plane_3_entity" }
 
 entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "DAN_confederation_ADISCORD_fighter_entity" }
 entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "DAN_confederation_ADISCORD_fighter_archetype_entity" }

@@ -110,10 +110,6 @@ focus_tree = {
 				SHL_refresh_conclave_power = yes
 			}
 			unlock_decision_tooltip = SHL_allow_extinction
-			unlock_decision_tooltip = SHL_fire_give_crest
-			unlock_decision_tooltip = SHL_fire_give_quart
-			unlock_decision_tooltip = SHL_fire_give_state
-			unlock_decision_tooltip = SHL_fire_give_front
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -123,7 +119,7 @@ focus_tree = {
 		icon = GFX_focus_generic_currency_reforms
 		x = 14
 		y = 5
-		cost = 4
+		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = SHL_conclave_rules
@@ -155,7 +151,7 @@ focus_tree = {
 		icon = GFX_focus_generic_industrial_experts
 		x = 14
 		y = 6
-		cost = 4
+		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = SHL_common_industrial_account
@@ -836,7 +832,7 @@ focus_tree = {
 		icon = GFX_focus_generic_industrialists
 		x = 11
 		y = 4
-		cost = 4
+		cost = 1
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = SHL_conclave_rules
@@ -851,6 +847,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_provisional_house_tt
 			unlock_decision_tooltip = SHL_export_contract
 			hidden_effect = { country_event = { id = ADISCORD_SHL.100 days = 1 } }
 		}
@@ -910,7 +907,7 @@ focus_tree = {
 		icon = GFX_focus_generic_social_democracy
 		x = 16
 		y = 4
-		cost = 4
+		cost = 1
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = SHL_conclave_rules
@@ -925,6 +922,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_provisional_city_tt
 			unlock_decision_tooltip = SHL_civic_order
 			hidden_effect = { country_event = { id = ADISCORD_SHL.100 days = 1 } }
 		}
@@ -984,7 +982,7 @@ focus_tree = {
 		icon = GFX_focus_generic_military_dictatorship
 		x = 20
 		y = 4
-		cost = 4
+		cost = 1
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = SHL_conclave_rules
@@ -999,6 +997,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_provisional_state_tt
 			unlock_decision_tooltip = SHL_war_orders
 			hidden_effect = { country_event = { id = ADISCORD_SHL.100 days = 1 } }
 		}
@@ -1541,7 +1540,7 @@ focus_tree = {
 			focus = SHL_house_compromise
 		}
 		prerequisite = {
-			focus = SHL_tenth_voice
+			focus = SHL_workers_charter
 		}
 		available = {
 			SHL_country_operable = yes
@@ -1735,10 +1734,9 @@ focus_tree = {
 				set_variable = { var = SHL_prog_ending value = 11 }
 				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
 			}
-			custom_effect_tooltip = SHL_fire_settle_tt
+			custom_effect_tooltip = SHL_delivery_houses_a_tt
 			hidden_effect = {
-				SHL_fire_course_targets = yes
-				SHL_fire_settle = yes
+				SHL_refresh_furnaces = yes
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -1776,10 +1774,9 @@ focus_tree = {
 				set_variable = { var = SHL_prog_ending value = 12 }
 				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
 			}
-			custom_effect_tooltip = SHL_fire_settle_tt
+			custom_effect_tooltip = SHL_delivery_houses_b_tt
 			hidden_effect = {
-				SHL_fire_course_targets = yes
-				SHL_fire_settle = yes
+				SHL_refresh_furnaces = yes
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -1798,7 +1795,7 @@ focus_tree = {
 			focus = SHL_city_charters
 		}
 		prerequisite = {
-			focus = SHL_tenth_voice
+			focus = SHL_workers_charter
 		}
 		available = {
 			SHL_country_operable = yes
@@ -1998,10 +1995,9 @@ focus_tree = {
 				set_variable = { var = SHL_prog_ending value = 21 }
 				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
 			}
-			custom_effect_tooltip = SHL_fire_settle_tt
+			custom_effect_tooltip = SHL_delivery_cities_a_tt
 			hidden_effect = {
-				SHL_fire_course_targets = yes
-				SHL_fire_settle = yes
+				SHL_refresh_furnaces = yes
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -2039,10 +2035,9 @@ focus_tree = {
 				set_variable = { var = SHL_prog_ending value = 22 }
 				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
 			}
-			custom_effect_tooltip = SHL_fire_settle_tt
+			custom_effect_tooltip = SHL_delivery_cities_b_tt
 			hidden_effect = {
-				SHL_fire_course_targets = yes
-				SHL_fire_settle = yes
+				SHL_refresh_furnaces = yes
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -2061,7 +2056,7 @@ focus_tree = {
 			focus = SHL_common_dispatch
 		}
 		prerequisite = {
-			focus = SHL_tenth_voice
+			focus = SHL_workers_charter
 		}
 		available = {
 			SHL_country_operable = yes
@@ -2260,10 +2255,9 @@ focus_tree = {
 				set_variable = { var = SHL_prog_ending value = 31 }
 				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
 			}
-			custom_effect_tooltip = SHL_fire_settle_tt
+			custom_effect_tooltip = SHL_delivery_directorate_a_tt
 			hidden_effect = {
-				SHL_fire_course_targets = yes
-				SHL_fire_settle = yes
+				SHL_refresh_furnaces = yes
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -2302,10 +2296,9 @@ focus_tree = {
 				set_variable = { var = SHL_prog_ending value = 32 }
 				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
 			}
-			custom_effect_tooltip = SHL_fire_settle_tt
+			custom_effect_tooltip = SHL_delivery_directorate_b_tt
 			hidden_effect = {
-				SHL_fire_course_targets = yes
-				SHL_fire_settle = yes
+				SHL_refresh_furnaces = yes
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -2511,10 +2504,9 @@ focus_tree = {
 				set_variable = { var = SHL_prog_ending value = 41 }
 				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
 			}
-			custom_effect_tooltip = SHL_fire_settle_tt
+			custom_effect_tooltip = SHL_delivery_regency_a_tt
 			hidden_effect = {
-				SHL_fire_course_targets = yes
-				SHL_fire_settle = yes
+				SHL_refresh_furnaces = yes
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -2553,10 +2545,9 @@ focus_tree = {
 				set_variable = { var = SHL_prog_ending value = 42 }
 				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
 			}
-			custom_effect_tooltip = SHL_fire_settle_tt
+			custom_effect_tooltip = SHL_delivery_regency_b_tt
 			hidden_effect = {
-				SHL_fire_course_targets = yes
-				SHL_fire_settle = yes
+				SHL_refresh_furnaces = yes
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -2781,10 +2772,9 @@ focus_tree = {
 				set_variable = { var = SHL_prog_ending value = 51 }
 				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
 			}
-			custom_effect_tooltip = SHL_fire_settle_tt
+			custom_effect_tooltip = SHL_delivery_commune_a_tt
 			hidden_effect = {
-				SHL_fire_course_targets = yes
-				SHL_fire_settle = yes
+				SHL_refresh_furnaces = yes
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -2823,10 +2813,9 @@ focus_tree = {
 				set_variable = { var = SHL_prog_ending value = 52 }
 				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
 			}
-			custom_effect_tooltip = SHL_fire_settle_tt
+			custom_effect_tooltip = SHL_delivery_commune_b_tt
 			hidden_effect = {
-				SHL_fire_course_targets = yes
-				SHL_fire_settle = yes
+				SHL_refresh_furnaces = yes
 			}
 		}
 		ai_will_do = { base = 5 }

@@ -250,7 +250,7 @@ ADISCORD_west_influence_category = {
 
 	# Itoran courses court the West in their own way.
 	ADISCORD_west_ivn_humanitarian_convoys = {
-		icon = generic_political_discourse
+		icon = ADISCORD_logistics
 		allowed = { tag = IVN }
 		targets = { WIT IIA IBA IBL PWR PSD ZAO WPA WPS ROM TRU }
 		target_root_trigger = {

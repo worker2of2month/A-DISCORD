@@ -357,7 +357,7 @@ characters = {
 	}
 
 	# Commanders Council: delegation heads and Velsky's guaranteed cabinet.
-	# They are recruited by the coup.
+	# History creates dormant characters; the coup grants their political roles.
 	VAL_Gleb_Osten = {
 		name = VAL_Gleb_Osten
 		portraits = {
@@ -369,11 +369,6 @@ characters = {
 				large = GFX_portrait_VAL_Gleb_Osten
 				small = GFX_portrait_VAL_Gleb_Osten_small
 			}
-		}
-		country_leader = {
-			ideology = contractual_etatism
-			expire = "2200.1.1.1"
-			id = -1
 		}
 	}
 
@@ -389,11 +384,6 @@ characters = {
 				small = GFX_portrait_VAL_Tamara_Greitz_small
 			}
 		}
-		country_leader = {
-			ideology = contractual_etatism
-			expire = "2200.1.1.1"
-			id = -1
-		}
 	}
 
 	VAL_Arkadi_Lemm = {
@@ -408,11 +398,6 @@ characters = {
 				small = GFX_portrait_VAL_Arkadi_Lemm_small
 			}
 		}
-		country_leader = {
-			ideology = contractual_etatism
-			expire = "2200.1.1.1"
-			id = -1
-		}
 	}
 
 	VAL_Mikhail_Velsky = {
@@ -422,11 +407,6 @@ characters = {
 				large = GFX_portrait_VAL_Mikhail_Velsky
 				small = GFX_portrait_VAL_Mikhail_Velsky_small
 			}
-		}
-		country_leader = {
-			ideology = contractual_etatism
-			expire = "2200.1.1.1"
-			id = -1
 		}
 	}
 

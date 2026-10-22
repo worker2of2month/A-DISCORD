@@ -255,7 +255,7 @@ STP_elections_in_the_party = {
 	}
 
 	STP_pm_buy_draft_lists = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_mobilization
 		allowed = { tag = STP }
 		visible = {
 			has_country_flag = STP_sided_with_the_party_flag
@@ -733,7 +733,7 @@ STP_battle_for_stelander = {
 		}
 	}
 	STP_cw_prepare_defensive_line = {
-		icon = generic_construction
+		icon = ADISCORD_construction
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_cw_defensive_lines STP_cw_preparation_open = yes FROM = { NOT = { has_state_flag = STP_cw_defensive_line_prepared } } }
 		available = {
@@ -762,7 +762,7 @@ STP_battle_for_stelander = {
 		ai_will_do = { base = 5 }
 	}
 	STP_cw_prepare_assault_group = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_recruitment
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_cw_heavy_reserve STP_cw_preparation_open = yes }
 		available = {
@@ -2580,7 +2580,7 @@ STP_battle_for_stelander = {
 	}
 
 	STP_shabrat_reconstruction_program = {
-		icon = generic_construction
+		icon = ADISCORD_construction
 		allowed = { tag = STP }
 		visible = {
 			has_country_flag = STP_sided_with_Maksim_flag
@@ -2727,7 +2727,7 @@ STP_cw_war_council = {
 	}
 
 	STP_cw_repair_rifle_batch = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_arms_supply
 		allowed = { tag = STS }
 		visible = {
 			has_completed_focus = STP_cw_mobile_workshops
@@ -2775,7 +2775,7 @@ STP_cw_war_council = {
 	}
 
 	STP_cw_war_fund_delivery = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_treasury
 		allowed = { tag = STS }
 		activation = {
 			STP_cw_shabrat_logistics_active = yes
@@ -2881,7 +2881,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pv_house_bonds = {
-		icon = generic_political_discourse
+		icon = ADISCORD_treasury
 		allowed = { tag = STP }
 		visible = {
 			has_completed_focus = STP_pv_war_budget
@@ -2968,7 +2968,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pv_northern_loan = {
-		icon = generic_improve_relations
+		icon = ADISCORD_treasury
 		allowed = { tag = STP }
 		visible = {
 			has_completed_focus = STP_pv_lower_market_ledgers
@@ -3217,7 +3217,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pm_paid_recruiters = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_recruitment
 		allowed = { tag = STP }
 		visible = {
 			STP_pv_war_current = yes
@@ -3242,7 +3242,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pm_smuggler_rifles = {
-		icon = generic_industry
+		icon = ADISCORD_arms_supply
 		allowed = { tag = STP }
 		visible = {
 			STP_pv_war_current = yes
@@ -3529,7 +3529,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pw_party_prepare_northern_campaign = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_mobilization
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_pw_party_northern_campaign NOD = { exists = yes is_subject = no } NOT = { check_variable = { var = STP_pw_party_northern_supply value = 1 compare = greater_than_or_equals } } }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_party_northern_work_available_tt STP_pw_party_northern_work_current = yes
@@ -3579,7 +3579,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pw_party_launch_northern_campaign = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_pw_party_northern_campaign NOD = { exists = yes is_subject = no } NOT = { has_war_with = NOD } }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_party_launch_northern_campaign_available_tt STP_pw_party_can_launch_northern_campaign = yes } }
@@ -3759,7 +3759,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pw_launch_bezhaysk_operation = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = STS }
 		visible = { has_completed_focus = STP_pw_take_bezhaysk BJK = { exists = yes owns_state = 41 } }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_bezhaysk_available_tt STP_pw_can_attack_bezhaysk = yes } }
@@ -3772,7 +3772,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pw_party_launch_bezhaysk_operation = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_pw_party_bezhaysk_campaign NOT = { has_country_flag = ADISCORD_bezhaysk_campaign_active } BJK = { exists = yes owns_state = 41 } }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_party_bezhaysk_available_tt STP_pw_party_can_attack_bezhaysk = yes } }
@@ -3792,7 +3792,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pw_party_launch_kefreyt_operation = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_pw_party_kefreyt_campaign NOT = { has_country_flag = STP_pw_party_kefreyt_campaign_active } NOT = { has_country_flag = STP_pw_party_kefreyt_victory } VAL = { exists = yes } }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_party_kefreyt_available_tt STP_pw_party_can_attack_kefreyt = yes } }
@@ -3811,7 +3811,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pw_party_launch_northern_march = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = STP }
 		visible = {
 			has_completed_focus = STP_pw_party_northern_march
@@ -3836,7 +3836,7 @@ STP_cw_war_council = {
 
 	# The fixed wartime template and its existing payment helper own the price.
 	STP_party_form_assault_column = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_recruitment
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_cw_assault_columns NOT = { has_country_flag = STP_cw_postwar } }
 		available = {
@@ -3933,7 +3933,7 @@ STP_cw_war_council = {
 
 
 	STP_pw_prepare_val_campaign = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_logistics
 		allowed = { tag = STS }
 		visible = { STP_pc_val_campaign_route_current = yes NOT = { has_country_flag = STP_pc_val_terms_accepted } VAL = { exists = yes } }
 		available = {
@@ -4031,7 +4031,7 @@ STP_cw_war_council = {
 		}
 	}
 	STP_pw_begin_val_campaign = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = STS }
 		visible = {
 			OR = {
@@ -4064,7 +4064,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pw_prepare_nod_campaign = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_logistics
 		allowed = { tag = STS }
 		visible = { STP_pc_nod_campaign_route_current = yes NOT = { has_country_flag = STP_pc_nod_terms_accepted } NOD = { exists = yes } }
 		available = {
@@ -4161,7 +4161,7 @@ STP_cw_war_council = {
 		}
 	}
 	STP_pw_begin_nod_campaign = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = STS }
 		visible = {
 			OR = {
@@ -4390,7 +4390,7 @@ STP_cw_war_council = {
 	}
 
 	STP_cw_front_operation = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = STS }
 		activation = { always = no }
 		visible = { has_active_mission = STP_cw_front_operation }
@@ -4452,7 +4452,7 @@ STP_cw_war_council = {
 	}
 
 	STP_cw_purchase_arsenal_batch = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_arms_supply
 		allowed = { OR = { tag = STP tag = STS tag = SRP } }
 		visible = { has_completed_focus = STP_cw_wartime_arsenals NOT = { has_country_flag = STP_cw_postwar } }
 		available = { STP_cw_can_rearm = yes any_owned_state = { is_controlled_by = PREV } }
@@ -4612,7 +4612,7 @@ STP_cw_war_council = {
 	}
 
 	STP_cw_raise_territorial_brigade = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_recruitment
 		allowed = { OR = { tag = STP tag = STS tag = SRP } }
 		visible = { has_country_flag = STP_cw_participant NOT = { has_country_flag = STP_cw_postwar } STP_cw_can_rearm = yes }
 		available = {
@@ -4705,7 +4705,7 @@ STP_cw_war_council = {
 	}
 
 	STP_cw_train_reserve_brigades = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_recruitment
 		allowed = { OR = { tag = STP tag = STS tag = SRP } }
 		visible = { has_completed_focus = STP_cw_mobilization_register NOT = { has_country_flag = STP_cw_postwar } }
 		available = {
@@ -5279,7 +5279,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pw_army_procurement = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_arms_supply
 		allowed = { tag = STS }
 		visible = { has_completed_focus = STP_pc_army_against_heavy }
 		available = { STP_pw_can_reconstruct = yes  }
@@ -5345,7 +5345,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pw_settle_kefreyt_accounts = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_treasury
 		allowed = { tag = STS }
 		visible = { has_completed_focus = STP_pc_war_ledgers has_country_flag = STP_cw_kefreyt_shipment_received NOT = { has_country_flag = STP_pw_kefreyt_accounts_settled } }
 		available = { STP_pw_can_reconstruct = yes VAL = { exists = yes has_capitulated = no }
@@ -5370,7 +5370,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pw_plan_offensive = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = STS }
 		visible = { has_completed_focus = STP_pc_army_limited_offense }
 		available = { STP_pw_can_reconstruct = yes has_war = yes NOT = { has_idea = STP_pc_limited_offense } }
@@ -5384,7 +5384,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pc_launch_val_liberation = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = STS }
 		visible = {
 			has_completed_focus = STP_pc_lib_war
@@ -5421,7 +5421,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pc_launch_nod_liberation = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = STS }
 		visible = {
 			has_completed_focus = STP_pc_lib_war
@@ -5778,7 +5778,7 @@ STP_cw_war_council = {
 
 
 	STP_ps_transport = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_logistics
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_party_war_transport STP_ps_war_active = yes  }
 		available = {
@@ -5851,7 +5851,7 @@ STP_cw_war_council = {
 
 
 	STP_ps_ammunition = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_arms_supply
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_ps_ammunition_board STP_ps_war_active = yes  }
 		available = {
@@ -6009,7 +6009,7 @@ STP_cw_war_council = {
 
 
 	STP_ps_reserve_training = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_recruitment
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_ps_operational_reserve STP_ps_war_active = yes  }
 		available = {
@@ -6228,7 +6228,7 @@ STP_cw_war_council = {
 
 	STP_ps_district_rebuild = {
 		allowed = { tag = STP }
-		icon = generic_construction
+		icon = ADISCORD_construction
 		state_target = yes targets = { 2 3 29 45 46 53 }
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		visible = { tag = STP STP_pw_can_reconstruct = yes has_completed_focus = STP_ps_district_fund }
@@ -6349,7 +6349,7 @@ STP_cw_war_council = {
 
 	# Resistance war: coalition decisions keep the three pillars in balance.
 	STP_hw_staff_briefing = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = STS }
 		visible = {
 			has_completed_focus = STP_hw_mountain_mandate
@@ -6375,7 +6375,7 @@ STP_cw_war_council = {
 	}
 
 	STP_hw_council_guarantees = {
-		icon = generic_political_discourse
+		icon = ADISCORD_negotiations
 		allowed = { tag = STS }
 		visible = {
 			has_completed_focus = STP_hw_mountain_mandate
@@ -6547,7 +6547,7 @@ STP_cw_external_intervention = {
 	}
 
 	NOD_cw_northern_conscription = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_recruitment
 		allowed = { tag = NOD }
 		visible = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } }
 		available = {
@@ -6586,7 +6586,7 @@ STP_cw_external_intervention = {
 	}
 	NOD_cw_northern_mobilization = {
 		activation = { always = no }
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_mobilization
 		allowed = { tag = NOD }
 		visible = { has_country_flag = STP_cw_northern_crisis_pending }
 		available = { hidden_trigger = { always = no } }
@@ -6625,7 +6625,7 @@ STP_cw_external_intervention = {
 		ai_will_do = { base = 100 }
 	}
 	STP_cw_supply_the_north = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_logistics
 		allowed = { OR = { tag = STP tag = STS } }
 		targets = { YPR COF TFF }
 		target_trigger = { FROM = { exists = yes } }
@@ -6830,7 +6830,7 @@ STP_cw_external_intervention = {
 
 	# Government preparation and foreign supply.
 	STP_ps_nod_rifle_purchase = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_arms_supply
 		allowed = { tag = NOD }
 		visible = {  tag = NOD STP_ps_northern_front_active = yes has_country_flag = STP_ps_nod_procurement_credit  }
 		available = {
@@ -6934,7 +6934,7 @@ STP_cw_external_intervention = {
 	}
 
 	STP_ps_val_sell_rifles = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_arms_supply
 		allowed = { tag = VAL }
 		visible = {
 			has_country_flag = STP_ps_val_authorized
@@ -7685,7 +7685,7 @@ STP_cw_external_intervention = {
 		timeout_effect = { hidden_effect = { STP_pw_party_launch_nod_invasion = yes } }
 	}
 	STP_pw_party_nod_emergency_mobilization = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_mobilization
 		allowed = { tag = STP }
 		visible = {
 			tag = STP
@@ -7820,7 +7820,7 @@ STP_cw_external_intervention = {
 		ai_will_do = { base = 20 }
 	}
 	STP_pw_party_nod_staff_readiness = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_mobilization
 		allowed = { tag = STP }
 		visible = {
 			tag = STP
@@ -7871,7 +7871,7 @@ STP_cw_external_intervention = {
 
 STP_cw_northern_aid = {
 	STP_cw_fund_northern_forts = {
-		icon = generic_construction
+		icon = ADISCORD_construction
 		allowed = { OR = { tag = STP tag = STS } }
 		visible = {
 			has_country_flag = STP_cw_northern_aid_open
@@ -7964,7 +7964,7 @@ STP_cw_northern_aid = {
 	}
 
 	STP_cw_send_northern_engineers = {
-		icon = generic_construction
+		icon = ADISCORD_construction
 		allowed = { OR = { tag = STP tag = STS } }
 		targets = { YPR COF TFF }
 		target_trigger = { FROM = { exists = yes } }
@@ -8136,7 +8136,7 @@ STP_cw_northern_aid = {
 
 STP_postwar_reconstruction_drive = {
 	STP_pw_reconstruction_emergency_repairs = {
-		icon = generic_construction
+		icon = ADISCORD_construction
 		allowed = { tag = STS }
 		visible = { has_completed_focus = STP_pc_after_victory NOT = { has_country_flag = STP_pw_reconstruction_drive_completed } }
 		available = { STP_pw_can_reconstruct = yes check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals } }
@@ -8191,7 +8191,7 @@ STP_postwar_reconstruction_drive = {
 	}
 
 	STP_pw_reconstruction_publish_war_accounts = {
-		icon = generic_political_pressure
+		icon = ADISCORD_inspection
 		allowed = { tag = STS }
 		visible = { has_completed_focus = STP_pc_after_victory NOT = { has_country_flag = STP_pw_reconstruction_drive_completed } }
 		available = { STP_pw_can_reconstruct = yes }
@@ -8210,7 +8210,7 @@ STP_postwar_reconstruction_drive = {
 	}
 
 	STP_pw_reconstruction_veteran_housing = {
-		icon = generic_construction
+		icon = ADISCORD_construction
 		allowed = { tag = STS }
 		visible = { has_completed_focus = STP_pc_after_victory NOT = { has_country_flag = STP_pw_reconstruction_drive_completed } }
 		available = { STP_pw_can_reconstruct = yes check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
@@ -9833,7 +9833,7 @@ STP_party_factions = {
 		cancel_effect = { hidden_effect = { STP_ps_build_hq_refund = yes } }
 	}
 	STP_ps_prepare_evacuation = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_resettlement
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_ps_reserve_hq tag = STP STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag NOT = { has_country_flag = STP_ps_prepare_evacuation_completed } }
 		available = {
@@ -9921,7 +9921,7 @@ STP_ps_exile = {
 
 
 	STP_ps_exile_training = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_mobilization
 		allowed = { tag = NOD }
 		visible = { has_completed_focus = STP_ps_exile_formations tag = NOD STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_exile_received NOT = { has_country_flag = STP_ps_exile_training_completed } }
 		available = {
@@ -9985,7 +9985,7 @@ STP_ps_exile = {
 
 
 	STP_ps_exile_formation = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_recruitment
 		allowed = { tag = NOD }
 		visible = { has_completed_focus = STP_ps_exile_formations tag = NOD STP_ps_exile_formation_context = yes has_country_flag = STP_ps_exile_received  }
 		available = {
@@ -10867,7 +10867,7 @@ STP_postwar_administration = {
 	}
 
 	STP_pc_charter_sotnikov_review_command = {
-		icon = generic_political_discourse
+		icon = ADISCORD_inspection
 		allowed = { tag = STS }
 		visible = {
 			STP_pc_charter_sotnikov_current = yes
@@ -11031,7 +11031,7 @@ STP_postwar_administration = {
 	}
 
 	STP_pc_charter_sotnikov_supply_contract = {
-		icon = generic_production
+		icon = ADISCORD_logistics
 		allowed = { tag = STS }
 		visible = {
 			STP_pc_charter_sotnikov_current = yes
@@ -11673,7 +11673,7 @@ STP_postwar_administration = {
 	}
 
 	STP_pc_charter_shabrat_ratify_districts = {
-		icon = generic_political_discourse
+		icon = ADISCORD_negotiations
 		allowed = {
 			tag = STS
 		}
@@ -11719,7 +11719,7 @@ STP_postwar_administration = {
 	}
 
 	STP_pc_charter_shabrat_ratify_nation = {
-		icon = generic_political_discourse
+		icon = ADISCORD_negotiations
 		allowed = {
 			tag = STS
 		}
@@ -11791,7 +11791,7 @@ STP_postwar_administration = {
 	}
 
 	STP_pc_charter_tikhoreva_public_audit = {
-		icon = generic_industry
+		icon = ADISCORD_inspection
 		allowed = { tag = STS }
 		visible = {
 			STP_pc_charter_tikhoreva_current = yes
@@ -11866,7 +11866,7 @@ STP_postwar_administration = {
 	}
 
 	STP_pc_charter_tikhoreva_professional_audit = {
-		icon = generic_industry
+		icon = ADISCORD_inspection
 		allowed = { tag = STS }
 		visible = {
 			STP_pc_charter_tikhoreva_current = yes
@@ -12918,7 +12918,7 @@ STP_party_constitution_category = {
 
 STP_ch_chapters = {
 	STP_party_property_hearings = {
-		icon = generic_political_discourse
+		icon = ADISCORD_negotiations
 		allowed = { tag = STP }
 		visible = {
 			has_idea = STP_party_property_disputes
@@ -12980,7 +12980,7 @@ STP_ch_chapters = {
 	}
 
 	STP_party_contract_arbitration = {
-		icon = generic_political_discourse
+		icon = ADISCORD_negotiations
 		allowed = { tag = STP }
 		visible = {
 			has_idea = STP_party_contract_disputes
@@ -13011,7 +13011,7 @@ STP_ch_chapters = {
 	}
 
 	STP_party_detention_review = {
-		icon = generic_political_discourse
+		icon = ADISCORD_inspection
 		allowed = { tag = STP }
 		visible = {
 			has_idea = STP_party_archive_backlog
@@ -13042,7 +13042,7 @@ STP_ch_chapters = {
 	}
 
 	STP_party_mandate_audit = {
-		icon = generic_political_discourse
+		icon = ADISCORD_inspection
 		allowed = { tag = STP }
 		visible = {
 			has_idea = STP_party_mandate_disputes
@@ -13110,7 +13110,7 @@ STP_ch_chapters = {
 	}
 
 	STP_party_labour_inspections = {
-		icon = generic_political_discourse
+		icon = ADISCORD_inspection
 		allowed = { tag = STP }
 		visible = {
 			has_idea = STP_party_forced_labour_resistance
@@ -15964,7 +15964,7 @@ STP_ch_chapters = {
 		}
 	}
 	STP_ch_supply_buffer = {
-		icon = generic_political_discourse
+		icon = ADISCORD_logistics
 		allowed = {
 			tag = STP
 		}
@@ -16090,7 +16090,7 @@ STP_ch_chapters = {
 		}
 	}
 	STP_ch_security_review = {
-		icon = generic_political_discourse
+		icon = ADISCORD_inspection
 		allowed = {
 			tag = STP
 		}
@@ -17978,7 +17978,7 @@ STP_pw_programme = {
 		ai_will_do = { base = 10 }
 	}
 	STP_pw_prog_apparatus_audit = {
-		icon = generic_reform
+		icon = ADISCORD_inspection
 		allowed = { tag = STP }
 		visible = {
 			STP_pw_can_reconstruct = yes
@@ -18028,7 +18028,7 @@ STP_pw_programme = {
 		ai_will_do = { base = 10 }
 	}
 	STP_pw_prog_reconstruction_bonds = {
-		icon = generic_political_discourse
+		icon = ADISCORD_treasury
 		allowed = { tag = STP }
 		visible = {
 			STP_pw_can_reconstruct = yes
@@ -18151,7 +18151,7 @@ STP_pw_programme = {
 		ai_will_do = { base = 5 }
 	}
 	STP_pw_prog_northern_credit = {
-		icon = generic_political_discourse
+		icon = ADISCORD_treasury
 		allowed = { tag = STP }
 		visible = {
 			STP_pw_can_reconstruct = yes
@@ -18202,7 +18202,7 @@ STP_pw_programme = {
 		ai_will_do = { base = 5 }
 	}
 	STP_pw_prog_trade_credit = {
-		icon = generic_trade
+		icon = ADISCORD_treasury
 		allowed = { tag = STP }
 		visible = {
 			STP_pw_can_reconstruct = yes
@@ -18291,7 +18291,7 @@ STP_pw_programme = {
 
 STP_heg_betrayal_category = {
 	STP_heg_receive_delegation = {
-		icon = generic_political_discourse
+		icon = ADISCORD_negotiations
 		allowed = { tag = STS }
 		visible = {
 			has_power_balance = { id = STP_heg_betrayal }
@@ -18354,7 +18354,7 @@ STP_heg_betrayal_category = {
 			base = 4
 			modifier = {
 				factor = 0
-				political_power < 75
+				has_political_power < 75
 			}
 		}
 	}
@@ -18422,7 +18422,7 @@ STP_heg_betrayal_category = {
 			base = 4
 			modifier = {
 				factor = 0
-				political_power < 75
+				has_political_power < 75
 			}
 		}
 	}
@@ -18488,7 +18488,7 @@ STP_heg_betrayal_category = {
 			base = 4
 			modifier = {
 				factor = 0
-				political_power < 75
+				has_political_power < 75
 			}
 		}
 	}
@@ -18508,7 +18508,7 @@ STP_heg_betrayal_category = {
 		}
 		cost = 0
 		custom_cost_text = STP_heg_price_25
-		custom_cost_trigger = { NOT = { political_power < 25 } }
+		custom_cost_trigger = { NOT = { has_political_power < 25 } }
 		days_remove = 21
 		days_re_enable = 90
 		cancel_trigger = {
@@ -18523,7 +18523,7 @@ STP_heg_betrayal_category = {
 				if = {
 					limit = {
 						STP_heg_operation_available = yes
-						NOT = { political_power < 25 }
+						NOT = { has_political_power < 25 }
 					}
 					set_variable = { var = STP_heg_operation_kind value = 4 }
 					set_variable = { var = STP_heg_paid_pp value = 25 }
@@ -18551,7 +18551,7 @@ STP_heg_betrayal_category = {
 			base = 4
 			modifier = {
 				factor = 0
-				political_power < 75
+				has_political_power < 75
 			}
 		}
 	}
