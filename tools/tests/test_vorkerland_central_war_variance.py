@@ -55,7 +55,7 @@ class VorkerlandCentralWarVarianceTests(unittest.TestCase):
             )
         self.assertNotIn('oob = "VAD"', read("history/countries/VAD - VadlLand.txt"))
 
-    def test_each_prewar_infantry_role_uses_worker_mesh_at_all_tiers(self) -> None:
+    def test_each_prewar_infantry_role_uses_assigned_mesh_at_all_tiers(self) -> None:
         entities = read("gfx/entities/zz_ADISCORD_country_infantry.asset")
         for tag in (
             "WRK",
@@ -80,7 +80,9 @@ class VorkerlandCentralWarVarianceTests(unittest.TestCase):
             for tier in range(8):
                 suffix = f"_{tier + 1}" if tier else ""
                 for role in ("infantry", "ADISCORD_militia", "mountaineers"):
-                    binding = f'clone = "ADISCORD_WRK_line_infantry{suffix}_entity" name = "{tag}_confederation_{role}{suffix}_entity"'
+                    parent = (f"NAM_{role}{suffix}_entity" if tag == "NAM"
+                              else f"ADISCORD_WRK_line_infantry{suffix}_entity")
+                    binding = f'clone = "{parent}" name = "{tag}_confederation_{role}{suffix}_entity"'
                     self.assertEqual(entities.count(binding), 1)
 
     def test_consolidation_clock_is_one_shot_and_survives_a_lost_host(self) -> None:

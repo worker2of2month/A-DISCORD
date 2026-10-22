@@ -215,6 +215,66 @@ class WorldNewsContracts(unittest.TestCase):
                 self.assertIn(key, self.ru)
                 self.assertIn(key, self.en)
 
+    def test_stelander_victory_news_names_the_winner_for_every_receiver(self):
+        from tools.tests.test_adiscord_stp_preparation import (
+            block,
+            matches_conditions,
+            scalar,
+            selected_effects,
+        )
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        event = parse_clausewitz(event_block(self.stp_events, "ADISCORD_STP_cw.72"))
+        cases = (
+            ("STP_grigory_sotnikov", "ADISCORD_STP_cw.72.sotnikov", "20"),
+            ("STP_maksim_shabrat", "ADISCORD_STP_cw.72", "9"),
+        )
+        for receiver in ("STS", "STP", "VAL"):
+            for leader, prefix, request in cases:
+                with self.subTest(receiver=receiver, leader=leader):
+                    facts = {("STS", "ruling_leader"): leader}
+                    for field, value_key, suffix in (
+                        ("title", "text", "t"),
+                        ("desc", "text", "d"),
+                        ("option", "name", "a"),
+                    ):
+                        visible = []
+                        for entry in event:
+                            if entry.key != field:
+                                continue
+                            if isinstance(entry.value, str):
+                                visible.append(entry.value)
+                                continue
+                            conditions = next(
+                                (item.value for item in entry.value if item.key == "trigger"),
+                                [],
+                            )
+                            if matches_conditions(conditions, facts, receiver):
+                                visible.append(scalar(entry.value, value_key))
+                        self.assertEqual(visible, [f"{prefix}.{suffix}"], field)
+                    effects = list(selected_effects(block(event, "immediate"), facts, receiver))
+                    self.assertEqual(
+                        [scalar(entry.value, "ADISCORD_superevent_request")
+                         for _, entry in effects if entry.key == "set_temp_variable"],
+                        [request],
+                    )
+
+    def test_stelander_victory_news_variants_have_complete_bilingual_text(self):
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"), language)
+            source = path.read_text(encoding="utf-8-sig")
+            for prefix in ("ADISCORD_STP_cw.72", "ADISCORD_STP_cw.72.sotnikov"):
+                for suffix in ("t", "d", "a"):
+                    key = f"{prefix}.{suffix}"
+                    values = re.findall(
+                        rf'^ {re.escape(key)}:\d* "([^"\n]+)"$', source, re.M
+                    )
+                    self.assertEqual(len(values), 1, (language, key))
+                    value = values[0].replace(r"\n", "\n")
+                    self.assertLessEqual(len(value), 3000, key)
+                    self.assertLessEqual(len(value.encode("utf-8")), 5500, key)
+
     def test_world_news_localisation_uses_utf8_bom(self):
         self.assertTrue(self.ru_path.read_bytes().startswith(b"\xef\xbb\xbf"))
         self.assertTrue(self.en_path.read_bytes().startswith(b"\xef\xbb\xbf"))
@@ -258,15 +318,48 @@ class WorldNewsContracts(unittest.TestCase):
     def test_frontier_second_war_news_requires_real_joint_war_and_uses_valid_bonus(
         self,
     ):
+        from itertools import product
+
+        from tools.tests.test_adiscord_stp_preparation import scalar, selected_effects
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
         source = read("common/scripted_effects/ADISCORD_TFF_effects.txt")
-        support = named_block(source, "ADISCORD_TFF_begin_kefreyt_campaign")
-        self.assertIn("has_war_with = NOD", support)
-        self.assertIn("VAL = { has_war_with = NOD", support)
-        self.assertIn(
-            "NOT = { has_global_flag = ADISCORD_news_frontier_second_war_published }",
-            support,
-        )
-        self.assertIn("id = ADISCORD_TFF.11 hours = 1", support)
+        support = parse_clausewitz(named_block(source, "ADISCORD_TFF_begin_kefreyt_campaign"))
+        publication_flag = "ADISCORD_news_frontier_second_war_published"
+        for tff_at_war, val_at_war, agreement, published in product((False, True), repeat=4):
+            with self.subTest(
+                tff_at_war=tff_at_war, val_at_war=val_at_war,
+                agreement=agreement, published=published,
+            ):
+                facts = {
+                    ("TFF", "exists", "yes"): True,
+                    ("TFF", "has_capitulated", "no"): True,
+                    ("TFF", "is_subject", "no"): True,
+                    ("TFF", "has_war_with", "NOD"): tff_at_war,
+                    ("VAL", "has_war_with", "NOD"): val_at_war,
+                    ("VAL", "has_country_flag", "VAL_nod_frontier_agreement"): agreement,
+                    ("TFF", "has_global_flag", publication_flag): published,
+                }
+                effects = list(selected_effects(support, facts, "TFF"))
+                calls = [entry.value for _, entry in effects if entry.key == "news_event"]
+                eligible = tff_at_war and val_at_war and agreement
+                self.assertEqual(
+                    [scalar(call, "id") for call in calls],
+                    ["ADISCORD_TFF.11"] if eligible and not published else [],
+                )
+                ideas = [entry.value for _, entry in effects if entry.key == "add_ideas"]
+                self.assertEqual(ideas, ["TFF_kefreyt_northern_campaign"] if eligible else [])
+                if calls:
+                    self.assertEqual(scalar(calls[0], "hours"), "1")
+                    publication = next(
+                        index for index, (_, entry) in enumerate(effects)
+                        if entry.key == "set_global_flag" and entry.value == publication_flag
+                    )
+                    delivery = next(
+                        index for index, (_, entry) in enumerate(effects)
+                        if entry.key == "news_event"
+                    )
+                    self.assertLess(publication, delivery)
         event = event_block(read("events/ADISCORD_TFF_events.txt"), "ADISCORD_TFF.11")
         for token in ("major = yes", "fire_only_once = no", "is_triggered_only = yes"):
             self.assertIn(token, event)

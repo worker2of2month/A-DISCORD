@@ -8,7 +8,49 @@ scripted_gui = {
 			has_country_flag = SHL_furnaces_initialized
 		}
 		ai_enabled = { always = no }
+		triggers = {
+			SHL_furnace_10_button_visible = { check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals } }
+			SHL_recipient_export_button_click_enabled = {
+				SHL_can_assign_delivery = yes
+			}
+			SHL_recipient_arsenal_button_click_enabled = {
+				SHL_can_assign_delivery = yes
+			}
+			SHL_recipient_quarters_button_click_enabled = {
+				SHL_can_assign_delivery = yes
+			}
+			SHL_recipient_crest_button_click_enabled = {
+				SHL_can_assign_delivery = yes
+				NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+			}
+		}
 		effects = {
+			SHL_furnace_10_button_click = {
+				set_variable = { var = SHL_selected_furnace value = 10 }
+				SHL_refresh_selected_furnace = yes
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			}
+			SHL_recipient_export_button_click = {
+				set_variable = { var = SHL_assignment value = 0 }
+				SHL_assign_selected_delivery = yes
+				clear_variable = SHL_assignment
+			}
+			SHL_recipient_arsenal_button_click = {
+				set_variable = { var = SHL_assignment value = 1 }
+				SHL_assign_selected_delivery = yes
+				clear_variable = SHL_assignment
+			}
+			SHL_recipient_quarters_button_click = {
+				set_variable = { var = SHL_assignment value = 2 }
+				SHL_assign_selected_delivery = yes
+				clear_variable = SHL_assignment
+			}
+			SHL_recipient_crest_button_click = {
+				set_variable = { var = SHL_assignment value = 3 }
+				SHL_assign_selected_delivery = yes
+				clear_variable = SHL_assignment
+			}
+
 			SHL_furnace_1_button_click = {
 				set_variable = { var = SHL_selected_furnace value = 1 }
 				SHL_refresh_selected_furnace = yes

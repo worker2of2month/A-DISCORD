@@ -808,6 +808,42 @@ SHL_quarters_and_borders = {
 		}
 	}
 
+	SHL_back_shift_councils = {
+		icon = generic_political_discourse
+		visible = { SHL_can_back_shift_councils = yes }
+		available = { SHL_can_back_shift_councils = yes }
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = SHL_commune_course_tt
+			hidden_effect = {
+				if = {
+					limit = { SHL_can_back_shift_councils = yes }
+					SHL_commit_commune_course = yes
+				}
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	SHL_back_crests = {
+		icon = generic_political_discourse
+		visible = { SHL_can_back_crests = yes }
+		available = { SHL_can_back_crests = yes }
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = SHL_regency_course_tt
+			hidden_effect = {
+				if = {
+					limit = { SHL_can_back_crests = yes }
+					SHL_commit_regency_course = yes
+				}
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
 	SHL_shift_mediation = {
 		icon = generic_political_discourse
 		visible = { has_country_flag = SHL_strike_active }
@@ -980,12 +1016,12 @@ SHL_quarters_and_borders = {
 			FROM = {
 				SHL_obligation_site_ready = yes
 			}
-			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = SHL_arsenal_price compare = greater_than_or_equals }
 		}
 		cost = 0
-		custom_cost_text = SHL_cost_120
+		custom_cost_text = SHL_cost_arsenal
 		custom_cost_trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = SHL_arsenal_price compare = greater_than_or_equals }
 		}
 		days_re_enable = 1
 		fire_only_once = no
@@ -1400,12 +1436,12 @@ SHL_quarters_and_borders = {
 				SHL_obligation_site_ready = yes
 				infrastructure < 5
 			}
-			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = SHL_civic_price compare = greater_than_or_equals }
 		}
 		cost = 0
-		custom_cost_text = SHL_cost_120
+		custom_cost_text = SHL_cost_civic
 		custom_cost_trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = SHL_civic_price compare = greater_than_or_equals }
 		}
 		days_re_enable = 1
 		fire_only_once = no
@@ -2512,95 +2548,7 @@ SHL_public_campaigns = {
 }
 
 # Division of the fire.
-SHL_fire_shares = {
-	SHL_fire_give_crest = {
-		icon = generic_industry
-		visible = { has_completed_focus = SHL_conclave_rules }
-		available = {
-			SHL_country_operable = yes
-			check_variable = { var = SHL_share_crest value = 70 compare = less_than }
-		}
-		cost = 15
-		days_re_enable = 28
-		complete_effect = {
-			custom_effect_tooltip = SHL_fire_give_crest_tt
-			hidden_effect = { SHL_fire_give_to_crest = yes }
-		}
-		ai_will_do = {
-			base = 0
-			modifier = {
-				add = 10
-				check_variable = { var = SHL_house_pressure value = 50 compare = greater_than_or_equals }
-			}
-		}
-	}
 
-	SHL_fire_give_quart = {
-		icon = generic_industry
-		visible = { has_completed_focus = SHL_conclave_rules }
-		available = {
-			SHL_country_operable = yes
-			check_variable = { var = SHL_share_quart value = 70 compare = less_than }
-		}
-		cost = 15
-		days_re_enable = 28
-		complete_effect = {
-			custom_effect_tooltip = SHL_fire_give_quart_tt
-			hidden_effect = { SHL_fire_give_to_quart = yes }
-		}
-		ai_will_do = {
-			base = 0
-			modifier = {
-				add = 10
-				check_variable = { var = SHL_unrest value = 50 compare = greater_than_or_equals }
-			}
-		}
-	}
-
-	SHL_fire_give_state = {
-		icon = generic_industry
-		visible = { has_completed_focus = SHL_conclave_rules }
-		available = {
-			SHL_country_operable = yes
-			check_variable = { var = SHL_share_state value = 70 compare = less_than }
-		}
-		cost = 15
-		days_re_enable = 28
-		complete_effect = {
-			custom_effect_tooltip = SHL_fire_give_state_tt
-			hidden_effect = { SHL_fire_give_to_state = yes }
-		}
-		ai_will_do = {
-			base = 0
-			modifier = {
-				add = 10
-				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = less_than }
-			}
-		}
-	}
-
-	SHL_fire_give_front = {
-		icon = generic_industry
-		visible = { has_completed_focus = SHL_conclave_rules }
-		available = {
-			SHL_country_operable = yes
-			check_variable = { var = SHL_share_front value = 70 compare = less_than }
-		}
-		cost = 15
-		days_re_enable = 28
-		complete_effect = {
-			custom_effect_tooltip = SHL_fire_give_front_tt
-			hidden_effect = { SHL_fire_give_to_front = yes }
-		}
-		ai_will_do = {
-			base = 0
-			modifier = {
-				add = 10
-				has_war = yes
-			}
-		}
-	}
-}
 
 # Treasury of the Conclave: money for power, power for money and crisis reserves.
 SHL_treasury = {

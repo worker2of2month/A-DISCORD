@@ -98,6 +98,20 @@ idea_categories = {
 		removal_cost = 0
 	}
 
+	ADISCORD_development_laws = {
+		slot = ADISCORD_society_development_laws
+		slot = ADISCORD_social_system_development_laws
+		slot = ADISCORD_army_development_laws
+		slot = ADISCORD_cultural_development_laws
+		slot = ADISCORD_state_development_laws
+		slot = ADISCORD_economic_development_laws
+		slot = ADISCORD_science_development_laws
+
+		ledger = civilian
+		cost = 0
+		removal_cost = -1
+	}
+
 	military_staff = {
 		character_slot = army_chief
 		character_slot = navy_chief
@@ -111,20 +125,6 @@ idea_categories = {
 
 		cost = 150
 		removal_cost = 0
-	}
-
-	ADISCORD_development_laws = {
-		slot = ADISCORD_society_development_laws
-		slot = ADISCORD_social_system_development_laws
-		slot = ADISCORD_army_development_laws
-		slot = ADISCORD_cultural_development_laws
-		slot = ADISCORD_state_development_laws
-		slot = ADISCORD_economic_development_laws
-		slot = ADISCORD_science_development_laws
-
-		ledger = civilian
-		cost = 0
-		removal_cost = -1
 	}
 
 	academy_spirit = {

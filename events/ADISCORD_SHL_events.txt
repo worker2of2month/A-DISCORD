@@ -124,7 +124,14 @@ country_event = {
 country_event = {
 	id = ADISCORD_SHL.5
 	title = ADISCORD_SHL.5.t
-	desc = ADISCORD_SHL.5.d
+	desc = {
+		trigger = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
+		text = ADISCORD_SHL.5.d
+	}
+	desc = {
+		trigger = { check_variable = { var = SHL_political_course value = 0 compare = greater_than } }
+		text = ADISCORD_SHL.5.settled
+	}
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	trigger = {
@@ -189,23 +196,38 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_SHL.20.b
+		trigger = { has_country_flag = SHL_strike_active }
 		custom_effect_tooltip = SHL_strike_wait_tt
-		hidden_effect = { activate_mission = SHL_strike_mission }
+		hidden_effect = {
+			if = {
+				limit = { has_country_flag = SHL_strike_active }
+				activate_mission = SHL_strike_mission
+			}
+		}
 		ai_chance = { base = 30 }
 	}
 	option = {
 		name = ADISCORD_SHL.20.a
-		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals } }
+		trigger = {
+			has_country_flag = SHL_strike_active
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
 		custom_effect_tooltip = SHL_strike_concede_tt
 		hidden_effect = { SHL_strike_concede = yes }
 		ai_chance = { base = 40 }
 	}
 	option = {
 		name = ADISCORD_SHL.20.c
-		trigger = { has_completed_focus = SHL_railway_guard }
-		add_stability = -0.03
-		custom_effect_tooltip = SHL_strike_suppress_tt
-		hidden_effect = { SHL_strike_suppress = yes }
+		trigger = {
+			has_country_flag = SHL_strike_active
+			has_completed_focus = SHL_railway_guard
+		}
+		if = {
+			limit = { hidden_trigger = { has_country_flag = SHL_strike_active } }
+			add_stability = -0.03
+			custom_effect_tooltip = SHL_strike_suppress_tt
+			hidden_effect = { SHL_strike_suppress = yes }
+		}
 		ai_chance = {
 			base = 20
 			modifier = {
@@ -213,6 +235,22 @@ country_event = {
 				check_variable = { var = SHL_suppressions value = 1 compare = greater_than_or_equals }
 			}
 		}
+	}
+	option = {
+		name = SHL_back_shift_councils
+		trigger = { SHL_can_back_shift_councils = yes }
+		custom_effect_tooltip = SHL_commune_course_tt
+		hidden_effect = {
+			if = {
+				limit = { SHL_can_back_shift_councils = yes }
+				SHL_commit_commune_course = yes
+			}
+		}
+		ai_chance = { base = 0 }
+	}
+	option = {
+		name = SHL_crisis_already_resolved
+		trigger = { NOT = { has_country_flag = SHL_strike_active } }
 	}
 }
 
@@ -228,21 +266,30 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_SHL.21.b
-		add_stability = -0.08
-		add_war_support = 0.05
-		add_timed_idea = {
-			idea = SHL_martial_law
-			days = 180
+		trigger = { has_country_flag = SHL_strike_active }
+		if = {
+			limit = { hidden_trigger = { has_country_flag = SHL_strike_active } }
+			add_stability = -0.08
+			add_war_support = 0.05
+			add_timed_idea = {
+				idea = SHL_martial_law
+				days = 180
+			}
+			custom_effect_tooltip = SHL_martial_law_tt
+			hidden_effect = { SHL_declare_martial_law = yes }
 		}
-		custom_effect_tooltip = SHL_martial_law_tt
-		hidden_effect = { SHL_declare_martial_law = yes }
 		ai_chance = { base = 50 }
 	}
 	option = {
 		name = ADISCORD_SHL.21.a
-		trigger = { NOT = { check_variable = { var = SHL_political_course value = 4 compare = equals } } }
+		trigger = { SHL_can_back_shift_councils = yes }
 		custom_effect_tooltip = SHL_commune_course_tt
-		hidden_effect = { SHL_commit_commune_course = yes }
+		hidden_effect = {
+			if = {
+				limit = { SHL_can_back_shift_councils = yes }
+				SHL_commit_commune_course = yes
+			}
+		}
 		ai_chance = {
 			base = 5
 			modifier = {
@@ -250,6 +297,10 @@ country_event = {
 				check_variable = { var = SHL_political_course value = 2 compare = equals }
 			}
 		}
+	}
+	option = {
+		name = SHL_crisis_already_resolved
+		trigger = { NOT = { has_country_flag = SHL_strike_active } }
 	}
 }
 
@@ -277,25 +328,65 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_SHL.30.b
+		trigger = { has_country_flag = SHL_conspiracy_active }
 		custom_effect_tooltip = SHL_conspiracy_wait_tt
-		hidden_effect = { activate_mission = SHL_conspiracy_mission }
+		hidden_effect = {
+			if = {
+				limit = { has_country_flag = SHL_conspiracy_active }
+				activate_mission = SHL_conspiracy_mission
+			}
+		}
 		ai_chance = { base = 30 }
 	}
 	option = {
 		name = ADISCORD_SHL.30.a
-		trigger = { NOT = { has_political_power < 40 } }
-		add_political_power = -40
-		custom_effect_tooltip = SHL_conspiracy_guarantees_tt
-		hidden_effect = { SHL_conspiracy_guarantees = yes }
+		trigger = {
+			has_country_flag = SHL_conspiracy_active
+			OR = {
+				SHL_has_delivery_majority = yes
+				NOT = { has_political_power < 40 }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { has_country_flag = SHL_conspiracy_active } }
+			if = {
+				limit = { NOT = { SHL_has_delivery_majority = yes } }
+				add_political_power = -40
+			}
+			custom_effect_tooltip = SHL_conspiracy_guarantees_tt
+			hidden_effect = { SHL_conspiracy_guarantees = yes }
+		}
 		ai_chance = { base = 40 }
 	}
 	option = {
 		name = ADISCORD_SHL.30.c
-		trigger = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
-		add_stability = -0.05
-		custom_effect_tooltip = SHL_conspiracy_arrests_tt
-		hidden_effect = { SHL_conspiracy_arrests = yes }
+		trigger = {
+			has_country_flag = SHL_conspiracy_active
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+		}
+		if = {
+			limit = { hidden_trigger = { has_country_flag = SHL_conspiracy_active } }
+			add_stability = -0.05
+			custom_effect_tooltip = SHL_conspiracy_arrests_tt
+			hidden_effect = { SHL_conspiracy_arrests = yes }
+		}
 		ai_chance = { base = 30 }
+	}
+	option = {
+		name = SHL_back_crests
+		trigger = { SHL_can_back_crests = yes }
+		custom_effect_tooltip = SHL_regency_course_tt
+		hidden_effect = {
+			if = {
+				limit = { SHL_can_back_crests = yes }
+				SHL_commit_regency_course = yes
+			}
+		}
+		ai_chance = { base = 0 }
+	}
+	option = {
+		name = SHL_crisis_already_resolved
+		trigger = { NOT = { has_country_flag = SHL_conspiracy_active } }
 	}
 }
 
@@ -311,20 +402,34 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_SHL.31.b
-		add_stability = -0.10
-		add_timed_idea = {
-			idea = SHL_broken_conclave
-			days = 365
+		trigger = { has_country_flag = SHL_conspiracy_active }
+		if = {
+			limit = { hidden_trigger = { has_country_flag = SHL_conspiracy_active } }
+			add_stability = -0.10
+			add_timed_idea = {
+				idea = SHL_broken_conclave
+				days = 365
+			}
+			custom_effect_tooltip = SHL_resist_crests_tt
+			hidden_effect = { SHL_resist_crests = yes }
 		}
-		custom_effect_tooltip = SHL_resist_crests_tt
-		hidden_effect = { SHL_resist_crests = yes }
 		ai_chance = { base = 30 }
 	}
 	option = {
 		name = ADISCORD_SHL.31.a
+		trigger = { SHL_can_back_crests = yes }
 		custom_effect_tooltip = SHL_regency_course_tt
-		hidden_effect = { SHL_commit_regency_course = yes }
+		hidden_effect = {
+			if = {
+				limit = { SHL_can_back_crests = yes }
+				SHL_commit_regency_course = yes
+			}
+		}
 		ai_chance = { base = 20 }
+	}
+	option = {
+		name = SHL_crisis_already_resolved
+		trigger = { NOT = { has_country_flag = SHL_conspiracy_active } }
 	}
 }
 

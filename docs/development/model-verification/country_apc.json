@@ -1,0 +1,211 @@
+{
+  "generator_sha256": "2ab2b627f76262f2d0c869dc53226d797ba55b82e98951f20ae10b0ca114141a",
+  "models": {
+    "VAL_apc": {
+      "triangles": 5552,
+      "vertices": 13951,
+      "materials": 1,
+      "bones": 12,
+      "locators": [
+        "root",
+        "barrel",
+        "left_wheel",
+        "right_wheel"
+      ],
+      "animations": {
+        "idle": {
+          "max_vertex_motion": 0.0,
+          "loop_error": 0.0
+        },
+        "move": {
+          "max_vertex_motion": 1.3745379339011567,
+          "loop_error": 3.371747880871523e-07,
+          "moving_bones": [
+            "wheel_-1_0",
+            "wheel_-1_1",
+            "wheel_-1_2",
+            "wheel_-1_3",
+            "wheel_1_0",
+            "wheel_1_1",
+            "wheel_1_2",
+            "wheel_1_3"
+          ]
+        },
+        "attack": {
+          "max_vertex_motion": 0.1000001432373094,
+          "loop_error": 0.0,
+          "moving_bones": [
+            "gun"
+          ]
+        }
+      },
+      "native_reimport": true,
+      "rigid_skin_slots_validated": true,
+      "hoi4_runtime_verified": false,
+      "files": {
+        "VAL_apc.mesh": "b10604ada9789baee547bd716aabbffa2f85b15258f467a5eb2e073659d37644",
+        "VAL_apc_idle.anim": "96bf9d21c48573a9797b4ef59ba6566223c69b87c9bb3b5dcac0be18a3223fe0",
+        "VAL_apc_move.anim": "f5a15d014f9bf390c421d9b899055f269738b49c0dfa8cf723011e172427ab11",
+        "VAL_apc_attack.anim": "f432880fc8225f9c524d1757225865f476ee3ef8d8883605fe2423d3899ee30b",
+        "VAL_apc_diffuse.dds": "c55c6484a65704443f55dad18aadcb2b921c1512e179133a715cc8de665c94cd",
+        "VAL_apc_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+        "VAL_apc_specular.dds": "de6b3d63df3966977c4280d8684aaed1bd08d0acf515bfaf448126a20991b066"
+      },
+      "blend_sha256": "b2fc160116a9136502cbdc8a3bb60c5422fe3cf5b86974c9df8dac4a10f5a608"
+    },
+    "STP_apc": {
+      "triangles": 4488,
+      "vertices": 11106,
+      "materials": 1,
+      "bones": 10,
+      "locators": [
+        "root",
+        "barrel",
+        "left_wheel",
+        "right_wheel"
+      ],
+      "animations": {
+        "idle": {
+          "max_vertex_motion": 0.0,
+          "loop_error": 0.0
+        },
+        "move": {
+          "max_vertex_motion": 1.6121766023920094,
+          "loop_error": 3.769728732309794e-07,
+          "moving_bones": [
+            "wheel_-1_0",
+            "wheel_-1_1",
+            "wheel_-1_2",
+            "wheel_1_0",
+            "wheel_1_1",
+            "wheel_1_2"
+          ]
+        },
+        "attack": {
+          "max_vertex_motion": 0.1000001432373094,
+          "loop_error": 0.0,
+          "moving_bones": [
+            "gun"
+          ]
+        }
+      },
+      "native_reimport": true,
+      "rigid_skin_slots_validated": true,
+      "hoi4_runtime_verified": false,
+      "files": {
+        "STP_apc.mesh": "7aa8f7720706bbd88d37c218d6e5c651024c21256aede95af14165569fd081c4",
+        "STP_apc_idle.anim": "31f9f05fa9da2f7db1b7892efad3dfe5c4e0c94c8605d040e20ac454170b1cf4",
+        "STP_apc_move.anim": "25d1f0c0cfbbd9c3c8447c024a511dcd8c921a3c76cbff60966d283b7001d68f",
+        "STP_apc_attack.anim": "e3d514a538952465db4deb3c1c3d5a6abfe32d8e3e9c2f2ec4afc3f6cd955528",
+        "STP_apc_diffuse.dds": "41c6060d24c129a8eebb51affc49831a5094784b5b45dc1f6d0259098472052c",
+        "STP_apc_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+        "STP_apc_specular.dds": "de6b3d63df3966977c4280d8684aaed1bd08d0acf515bfaf448126a20991b066"
+      },
+      "blend_sha256": "611d343f27dda1de31d626a428f35b8e68a3b907f12a7907b693c6f023a64592"
+    },
+    "STS_apc": {
+      "triangles": 5584,
+      "vertices": 14059,
+      "materials": 1,
+      "bones": 12,
+      "locators": [
+        "root",
+        "barrel",
+        "left_wheel",
+        "right_wheel"
+      ],
+      "animations": {
+        "idle": {
+          "max_vertex_motion": 0.0,
+          "loop_error": 0.0
+        },
+        "move": {
+          "max_vertex_motion": 1.3745379339011567,
+          "loop_error": 3.371747880871523e-07,
+          "moving_bones": [
+            "wheel_-1_0",
+            "wheel_-1_1",
+            "wheel_-1_2",
+            "wheel_-1_3",
+            "wheel_1_0",
+            "wheel_1_1",
+            "wheel_1_2",
+            "wheel_1_3"
+          ]
+        },
+        "attack": {
+          "max_vertex_motion": 0.1000001432373094,
+          "loop_error": 0.0,
+          "moving_bones": [
+            "gun"
+          ]
+        }
+      },
+      "native_reimport": true,
+      "rigid_skin_slots_validated": true,
+      "hoi4_runtime_verified": false,
+      "files": {
+        "STS_apc.mesh": "81b75a1d606037309529a1d6b262c7336b6cb28ec2ba50be2ee8c6ae802f7497",
+        "STS_apc_idle.anim": "18e68960168a340e37e7d0175e31c655983544ac4f8979ec6e7dc8d4a8220838",
+        "STS_apc_move.anim": "d7a2ec8b739bd63dd07aa33f9c2823e3e93f0abfa2bbe8efdff21f70a0d9612c",
+        "STS_apc_attack.anim": "134bb8f7463b11a1d0350f8bf557bb2ecee88518d05a069d5d24834e99c7037c",
+        "STS_apc_diffuse.dds": "c433db8d55fad7c19676c6d97c05ca0603dc8c51fd8ce64aa553a3bbebb4a76c",
+        "STS_apc_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+        "STS_apc_specular.dds": "de6b3d63df3966977c4280d8684aaed1bd08d0acf515bfaf448126a20991b066"
+      },
+      "blend_sha256": "f24bb51db2d5c684ac1c3546b8babe3e6924911fd38bce664940e12378879d34"
+    },
+    "NAM_apc": {
+      "triangles": 5920,
+      "vertices": 14890,
+      "materials": 1,
+      "bones": 12,
+      "locators": [
+        "root",
+        "barrel",
+        "left_wheel",
+        "right_wheel"
+      ],
+      "animations": {
+        "idle": {
+          "max_vertex_motion": 0.0,
+          "loop_error": 0.0
+        },
+        "move": {
+          "max_vertex_motion": 1.3745379339011567,
+          "loop_error": 3.371747880871523e-07,
+          "moving_bones": [
+            "wheel_-1_0",
+            "wheel_-1_1",
+            "wheel_-1_2",
+            "wheel_-1_3",
+            "wheel_1_0",
+            "wheel_1_1",
+            "wheel_1_2",
+            "wheel_1_3"
+          ]
+        },
+        "attack": {
+          "max_vertex_motion": 0.1000001432373094,
+          "loop_error": 0.0,
+          "moving_bones": [
+            "gun"
+          ]
+        }
+      },
+      "native_reimport": true,
+      "rigid_skin_slots_validated": true,
+      "hoi4_runtime_verified": false,
+      "files": {
+        "NAM_apc.mesh": "ca55b45ff5823179b19cb7f41b943dd411f8de3e721fd86bfabb246fbfeccead",
+        "NAM_apc_idle.anim": "8de8b7e0cb789ae9cb5020dfe67d72b66a92937b6bec256a7a1d15f039918057",
+        "NAM_apc_move.anim": "fbddf85655d466996000682a474d1759e672ba4598870735ee4af9b2378d08b1",
+        "NAM_apc_attack.anim": "0b9a1f91b28319eafeaaee432a06c9e094ee15086bb0cbc3e0f7721d0b997d6a",
+        "NAM_apc_diffuse.dds": "a29bebc8debfadd31624fac02eab5bcef14bc49a1a60beb5f3cfefc6f85e4aff",
+        "NAM_apc_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+        "NAM_apc_specular.dds": "de6b3d63df3966977c4280d8684aaed1bd08d0acf515bfaf448126a20991b066"
+      },
+      "blend_sha256": "5b1cae20aea1edda2704de1da0a57f80a0236224891e2267d4c943eaecdac058"
+    }
+  }
+}

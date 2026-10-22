@@ -320,4 +320,36 @@ objectTypes = {
 		animation = { id = "move" type = "ADISCORD_STS_taran_move_animation" }
 		animation = { id = "attack" type = "ADISCORD_STS_taran_attack_animation" }
 	}
+	pdxmesh = {
+		name = "ADISCORD_VAL_apc_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/VAL_apc.mesh"
+		scale = 0.95
+		animation = { id = "idle" type = "ADISCORD_VAL_apc_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_VAL_apc_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_VAL_apc_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_STP_apc_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/STP_apc.mesh"
+		scale = 0.95
+		animation = { id = "idle" type = "ADISCORD_STP_apc_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_STP_apc_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_STP_apc_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_STS_apc_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/STS_apc.mesh"
+		scale = 0.95
+		animation = { id = "idle" type = "ADISCORD_STS_apc_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_STS_apc_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_STS_apc_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_NAM_apc_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/NAM_apc.mesh"
+		scale = 0.95
+		animation = { id = "idle" type = "ADISCORD_NAM_apc_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_NAM_apc_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_NAM_apc_attack_animation" }
+	}
 }

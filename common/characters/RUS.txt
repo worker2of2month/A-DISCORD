@@ -171,7 +171,7 @@ characters = {
 		name = ADISCORD_staff_RUS_Roman_Ostretsov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_def_western_european_2d
+				small = GFX_portrait_RUS_staff_01_small
 			}
 		}
 		advisor = {
@@ -192,7 +192,7 @@ characters = {
 		name = ADISCORD_staff_RUS_Sergei_Panov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+				small = GFX_portrait_RUS_staff_02_small
 			}
 		}
 		advisor = {
@@ -213,7 +213,7 @@ characters = {
 		name = ADISCORD_staff_RUS_Timofei_Rogov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+				small = GFX_portrait_RUS_staff_03_small
 			}
 		}
 		advisor = {
@@ -234,7 +234,7 @@ characters = {
 		name = ADISCORD_staff_RUS_Fedor_Sazonov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_def_western_european_2d
+				small = GFX_portrait_RUS_staff_04_small
 			}
 		}
 		advisor = {
@@ -256,7 +256,7 @@ characters = {
 		name = ADISCORD_staff_RUS_Yuri_Tumanov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_log_western_european_2d
+				small = GFX_portrait_RUS_staff_05_small
 			}
 		}
 		advisor = {
@@ -278,7 +278,7 @@ characters = {
 		name = ADISCORD_staff_RUS_Arkady_Uvarov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_art_western_european_2d
+				small = GFX_portrait_RUS_staff_06_small
 			}
 		}
 		advisor = {
@@ -300,7 +300,7 @@ characters = {
 		name = ADISCORD_staff_RUS_Vladimir_Frolov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_off_western_european_2d
+				small = GFX_portrait_RUS_staff_07_small
 			}
 		}
 		advisor = {

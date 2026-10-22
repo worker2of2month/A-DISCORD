@@ -980,8 +980,6 @@ class MilitaryStaffContracts(unittest.TestCase):
             recruits = [entry.value for entry in histories[tag] if entry.key == "recruit_character"]
             self.assertEqual(recruits.count(character.key), 1, token)
             self.assertEqual(self.one(advisor, "desc"), token + "_desc")
-            portraits = self.one(self.one(character.value, "portraits"), "army")
-            self.assertTrue(self.one(portraits, "small").startswith("GFX_idea_"), token)
 
     def test_generic_advisors_are_generated_once_for_countries_without_a_roster(self):
         history = self.parse(

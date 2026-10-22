@@ -1,0 +1,69 @@
+{
+  "NAM": {
+    "sha256": "16c195ea7c177b0281e916cdf89d85274a4da1b757682e74c8edb0042bb7ace3",
+    "textures": {
+      "NAM_field_body_diffuse.dds": "76148f8676f7bf4699197cd75ee922c794165d350f378d7bf2e0133ab3943b87",
+      "NAM_field_body_normal.dds": "f4f9fe7de9c989736e8a25578b8affd5d432944dcaf9bc061e723b4c1bcf5ca5",
+      "NAM_field_body_specular.dds": "dc6c15f8541211a68a0c3e424411c0c603f5e00c9c934e9d3063860bca22133e"
+    },
+    "shapes": [
+      {
+        "vertices": 6695,
+        "triangles": 8369,
+        "bones": 33
+      }
+    ],
+    "poses": {
+      "idle_rifle": [
+        1,
+        91,
+        181
+      ],
+      "moving_rifle": [
+        1,
+        21,
+        41
+      ],
+      "attack_stand_rifle": [
+        1,
+        40,
+        79
+      ],
+      "idle_mg": [
+        1,
+        90,
+        180
+      ],
+      "moving_mg": [
+        1,
+        21,
+        41
+      ],
+      "attack_stand_mg": [
+        1,
+        49,
+        97
+      ]
+    },
+    "source": {
+      "filename": "Meshy_AI_Stoic_Infantryman_1022210514_texture.blend",
+      "sha256": "8c3f02dcd19d75c4b48c2d208816b8a832631e7f3d7de3a10beac28c5f4d883c"
+    },
+    "bindings": {
+      "sha256": "b586de3d9cc48fd587465c13288113638be5757477763e75e82af004d01da026",
+      "tags": [
+        "NAM",
+        "NAM_confederation"
+      ],
+      "roles": [
+        "infantry",
+        "ADISCORD_militia",
+        "ADISCORD_territorial",
+        "mountaineers"
+      ],
+      "weapon_levels": 8
+    },
+    "verification_scope": "Offline Blender re-import and native animation sampling; HOI4 runtime not checked.",
+    "deterministic_rebuild": true
+  }
+}

@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+from pathlib import Path
 import re
 import unittest
 
@@ -353,6 +354,89 @@ class SharedAircraftTests(unittest.TestCase):
                         self.assertEqual(hashlib.sha256((DEST / filename).read_bytes()).hexdigest(), expected)
                     hashes.add(row["files"][name + ".mesh"])
         self.assertEqual(len(hashes), 30)
+
+
+class ArmoredPersonnelCarrierTests(unittest.TestCase):
+    def test_native_meshes_and_animation_reports_match_installed_files(self):
+        from tools.assets.source.country_vehicles import build_motorized as builder
+
+        report = json.loads(builder.REPORT.read_text())
+        self.assertEqual(report["generator_sha256"], builder.digest(Path(builder.__file__)))
+        self.assertEqual(set(report["models"]), {"VAL_apc", "STP_apc", "STS_apc", "NAM_apc"})
+        hashes = set()
+        for name, row in report["models"].items():
+            with self.subTest(name=name):
+                self.assertTrue(row["native_reimport"])
+                self.assertTrue(row["rigid_skin_slots_validated"])
+                self.assertFalse(row["hoi4_runtime_verified"])
+                self.assertGreater(row["triangles"], 1000)
+                self.assertLess(row["triangles"], 16000)
+                self.assertEqual(row["materials"], 1)
+                self.assertLessEqual(row["bones"], 50)
+                self.assertEqual(set(row["files"]), set(builder.native_files(name)))
+                for filename, expected in row["files"].items():
+                    self.assertEqual(builder.digest(DEST / filename), expected)
+                self.assertEqual(builder.digest(SOURCE / f"{name}.blend"), row["blend_sha256"])
+                hashes.add(row["files"][f"{name}.mesh"])
+                self.assertEqual(set(row["animations"]), {"idle", "move", "attack"})
+                for clip, metrics in row["animations"].items():
+                    self.assertLess(metrics["loop_error"], .001)
+                    if clip != "idle":
+                        self.assertGreater(metrics["max_vertex_motion"], .10)
+                wheels = row["animations"]["move"]["moving_bones"]
+                self.assertEqual(len(wheels), 6 if name == "STP_apc" else 8)
+                self.assertEqual(row["animations"]["attack"]["moving_bones"], ["gun"])
+        self.assertEqual(len(hashes), 4)
+
+    def test_carriers_resolve_for_equipment_levels_and_country_identities(self):
+        from tools.assets.source.country_vehicles import package_vehicles as registry
+
+        text = (ROOT / "gfx/entities/zz_ADISCORD_country_vehicles.asset").read_text()
+        routes = {name: parent for parent, name in re.findall(
+            r'entity = \{ clone = "([^"]+)" name = "([^"]+)" \}', text,
+        )}
+        expected_routes = (
+            "mechanized", "mechanized_0", "mechanized_1", "mechanized_2",
+            "ADISCORD_armored_carrier_2163", "ADISCORD_ifv_2170",
+            "ADISCORD_networked_ifv_2183", "motorized", "motorized_equipment_1",
+        )
+        for identity in registry.country_families():
+            tag = identity.split("_", 1)[0]
+            if tag not in ("VAL", "STP", "STS", "NAM"):
+                continue
+            for suffix in expected_routes:
+                with self.subTest(identity=identity, suffix=suffix):
+                    self.assertEqual(routes.get(f"{identity}_{suffix}_entity"), f"ADISCORD_{tag}_apc_entity")
+        units = (ROOT / "common/units/ADISCORD_land_units.txt").read_text()
+        block = units.split("ADISCORD_mechanized_infantry = {", 1)[1].split("\n\t}", 1)[0]
+        self.assertIn("sprite = mechanized", block)
+        self.assertIn("transport = ADISCORD_armored_carrier_archetype", block)
+
+    def test_apc_entities_keep_native_states_and_national_escort(self):
+        from tools.assets.source.build_northern_infantry import blocks
+
+        assets = (ROOT / "gfx/entities/zz_ADISCORD_country_vehicles.asset").read_text()
+        entities = {re.search(r'\bname = "([^"]+)"', block)[1]: block
+                    for block in blocks(assets, "entity")}
+        infantry = (ROOT / "gfx/entities/zz_ADISCORD_country_infantry.asset").read_text()
+        for tag in ("VAL", "STP", "STS", "NAM"):
+            wrapper = entities[f"ADISCORD_{tag}_apc_entity"]
+            vehicle = entities[f"ADISCORD_{tag}_apc_vehicle_entity"]
+            escort = entities[f"ADISCORD_{tag}_apc_escort_entity"]
+            self.assertIn('pdxmesh = "motorized_frame_mesh"', wrapper)
+            self.assertIn(f'vehicle = "ADISCORD_{tag}_apc_vehicle_entity"', wrapper)
+            self.assertIn(f'infantry = "ADISCORD_{tag}_apc_escort_entity"', wrapper)
+            self.assertIn(f'clone = "{tag}_infantry_entity"', escort)
+            self.assertIn(f'name = "{tag}_infantry_entity"', infantry)
+            for name, clip in (("idle", "idle"), ("move", "move"), ("retreat", "move"),
+                               ("training", "idle"), ("death", "idle"), ("attack", "attack"),
+                               ("defend", "attack"), ("support_attack", "attack")):
+                for entity in (wrapper, vehicle):
+                    self.assertRegex(entity, rf'name = "{name}"\s+animation = "{clip}"')
+            for node in ("barrel", "left_wheel", "right_wheel"):
+                self.assertIn(f'node = "{node}"', vehicle)
+        self.assertNotIn("mechanized_entity", entities)
+        self.assertNotIn("motorized_entity", entities)
 
 
 if __name__ == "__main__":

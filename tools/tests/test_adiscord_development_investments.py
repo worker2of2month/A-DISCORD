@@ -442,7 +442,7 @@ class CountryDevelopmentReformTests(unittest.TestCase):
         categories = (ROOT / "common/idea_tags/00_idea.txt").read_text(encoding="utf-8")
         category = named_block(categories, "ADISCORD_development_laws")
         self.assertEqual(re.findall(r"slot = (\w+)", category), [group.key for group in groups])
-        self.assertLess(categories.index("military_staff ="), categories.index("ADISCORD_development_laws ="))
+        self.assertLess(categories.index("ADISCORD_development_laws ="), categories.index("military_staff ="))
         self.assertLess(categories.index("army_laws ="), categories.index("economic_laws ="))
         for axis, group in zip(axes, groups):
             settings = {entry.key: entry.value for entry in group.value}

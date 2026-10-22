@@ -10,13 +10,13 @@ SHL_furnaces_plan = {
 	ai_national_focuses = {
 		SHL_law_of_continuous_fire
 		SHL_census_of_nine
+		SHL_reserve_for_next_shift
+		SHL_conclave_rules
+		SHL_open_conclave
 		SHL_railway_guard
 		SHL_factory_militia
 		SHL_campaign_logistics
 		SHL_southern_watch
-		SHL_reserve_for_next_shift
-		SHL_conclave_rules
-		SHL_open_conclave
 		SHL_city_charters
 		SHL_city_war_mandate
 		SHL_no_more_rations
@@ -34,10 +34,10 @@ SHL_furnaces_plan = {
 		SHL_own_transport
 		SHL_common_fund
 		SHL_workers_charter
+		SHL_rights_without_fire
 		SHL_build_tenth_complex
 		SHL_first_pour_focus
 		SHL_tenth_voice
-		SHL_rights_without_fire
 		SHL_quarter_listening
 		SHL_heralds_table
 		SHL_shift_arbitration

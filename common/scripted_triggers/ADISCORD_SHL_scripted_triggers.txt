@@ -120,6 +120,18 @@ SHL_conspiracy_ready = {
 	check_variable = { var = SHL_cycle_number value = SHL_conspiracy_ready_cycle compare = greater_than_or_equals }
 }
 
+SHL_can_back_shift_councils = {
+	SHL_country_operable = yes
+	has_country_flag = SHL_strike_active
+	check_variable = { var = SHL_political_course value = 4 compare = less_than }
+}
+
+SHL_can_back_crests = {
+	SHL_country_operable = yes
+	has_country_flag = SHL_conspiracy_active
+	check_variable = { var = SHL_political_course value = 4 compare = less_than }
+}
+
 SHL_can_lead_alliance = {
 	SHL_country_operable = yes
 	is_subject = no
@@ -277,6 +289,14 @@ SHL_export_access = {
 
 SHL_civic_access = {
 	OR = {
+		AND = {
+			check_variable = { var = SHL_prog_ending value = 12 compare = equals }
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+		}
+		AND = {
+			check_variable = { var = SHL_prog_ending value = 31 compare = equals }
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+		}
 		check_variable = { var = SHL_political_course value = 2 compare = equals }
 		AND = {
 			check_variable = { var = SHL_political_course value = 0 compare = equals }
@@ -294,6 +314,14 @@ SHL_civic_access = {
 
 SHL_arsenal_access = {
 	OR = {
+		AND = {
+			check_variable = { var = SHL_prog_ending value = 22 compare = equals }
+			check_variable = { var = SHL_political_course value = 2 compare = equals }
+		}
+		AND = {
+			check_variable = { var = SHL_prog_ending value = 41 compare = equals }
+			check_variable = { var = SHL_political_course value = 4 compare = equals }
+		}
 		check_variable = { var = SHL_political_course value = 3 compare = equals }
 		has_completed_focus = SHL_mobilise_furnaces
 		has_completed_focus = SHL_war_directorate
@@ -414,7 +442,7 @@ SHL_house_mandate_current = {
 		check_variable = { var = SHL_political_course value = 1 compare = equals }
 		AND = {
 			check_variable = { var = SHL_political_course value = 0 compare = equals }
-			has_completed_focus = SHL_house_compromise
+			has_completed_focus = SHL_new_house
 		}
 	}
 }
@@ -424,7 +452,7 @@ SHL_city_mandate_current = {
 		check_variable = { var = SHL_political_course value = 2 compare = equals }
 		AND = {
 			check_variable = { var = SHL_political_course value = 0 compare = equals }
-			has_completed_focus = SHL_city_charters
+			has_completed_focus = SHL_open_conclave
 		}
 	}
 }
@@ -434,7 +462,7 @@ SHL_directorate_mandate_current = {
 		check_variable = { var = SHL_political_course value = 3 compare = equals }
 		AND = {
 			check_variable = { var = SHL_political_course value = 0 compare = equals }
-			has_completed_focus = SHL_common_dispatch
+			has_completed_focus = SHL_nur_directorate
 		}
 	}
 }
@@ -727,6 +755,86 @@ SHL_cistern_coalition_control = {
 				is_in_faction_with = SHL
 				has_war_with = MZR
 			}
+		}
+	}
+}
+
+SHL_has_delivery_majority = {
+	NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+	check_variable = { var = SHL_crest_support value = 0 compare = greater_than }
+	check_variable = { var = SHL_crest_support_twice value = SHL_house_votes compare = greater_than }
+}
+
+SHL_can_assign_delivery = {
+	SHL_country_operable = yes
+	OR = {
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 1 compare = equals }
+			287 = {
+				SHL_furnace_site_controlled = yes
+				NOT = { SHL_obligation_here = yes }
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 2 compare = equals }
+			288 = {
+				SHL_furnace_site_controlled = yes
+				NOT = { SHL_obligation_here = yes }
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 3 compare = equals }
+			289 = {
+				SHL_furnace_site_controlled = yes
+				NOT = { SHL_obligation_here = yes }
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 4 compare = equals }
+			290 = {
+				SHL_furnace_site_controlled = yes
+				NOT = { SHL_obligation_here = yes }
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 5 compare = equals }
+			291 = {
+				SHL_furnace_site_controlled = yes
+				NOT = { SHL_obligation_here = yes }
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 6 compare = equals }
+			292 = {
+				SHL_furnace_site_controlled = yes
+				NOT = { SHL_obligation_here = yes }
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 7 compare = equals }
+			293 = {
+				SHL_furnace_site_controlled = yes
+				NOT = { SHL_obligation_here = yes }
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 8 compare = equals }
+			294 = {
+				SHL_furnace_site_controlled = yes
+				NOT = { SHL_obligation_here = yes }
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 9 compare = equals }
+			295 = {
+				SHL_furnace_site_controlled = yes
+				NOT = { SHL_obligation_here = yes }
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 10 compare = equals }
+			check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals }
+			294 = { SHL_furnace_site_controlled = yes }
 		}
 	}
 }

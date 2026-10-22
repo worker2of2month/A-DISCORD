@@ -50,6 +50,25 @@ def custom_entity_name(prefix: str, level: int) -> str:
 
 
 class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
+    def test_nam_keeps_its_model_across_confederation_collapse_and_weapon_tiers(self) -> None:
+        entities = entity_blocks(COUNTRY_ASSET)
+        asset = COUNTRY_ASSET.read_text(encoding="utf-8")
+        for level in range(8):
+            infantry = custom_entity_name("NAM_infantry", level)
+            parent = custom_entity_name("STP_infantry", level)
+            pose = "rifle" if level == 0 else "mg"
+            self.assertIn(f'clone = "{parent}"', entities[infantry])
+            self.assertIn(f'pdxmesh = "ADISCORD_NAM_field_{pose}_mesh"', entities[infantry])
+            for role in ("infantry", "ADISCORD_militia", "ADISCORD_territorial", "mountaineers"):
+                regular = custom_entity_name(f"NAM_{role}", level)
+                cosmetic = custom_entity_name(f"NAM_confederation_{role}", level)
+                for name in (regular, cosmetic):
+                    self.assertEqual(asset.count(f'name = "{name}"'), 1, name)
+                if role != "infantry":
+                    self.assertIn(f'clone = "{infantry}"', entities[regular])
+                self.assertIn(f'clone = "{regular}"', entities[cosmetic])
+                self.assertLess(asset.index(entities[regular]), asset.index(entities[cosmetic]))
+
     def test_bezhaysk_retinues_and_montar_guard_keep_models_and_weapons_at_every_tier(self) -> None:
         history = (ROOT / "history/countries/BJK - Besjaysk.txt").read_text(
             encoding="utf-8"

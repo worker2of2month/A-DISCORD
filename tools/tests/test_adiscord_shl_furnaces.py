@@ -3,6 +3,8 @@
 import unittest
 import re
 from collections import defaultdict
+from copy import deepcopy
+from functools import lru_cache
 from pathlib import Path
 
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -41,12 +43,34 @@ def focus_definition(identifier):
     return next(entry.value for entry in tree if entry.key == "focus" and scalar(entry.value, "id") == identifier)
 
 
+@lru_cache(maxsize=None)
+def shared_definitions(relative_path, names):
+    definitions = {
+        entry.key: entry.value
+        for entry in parse_clausewitz((ROOT / relative_path).read_text(encoding="utf-8"))
+    }
+    return {name: definitions[name] for name in names}
+
+
 class ScriptMachine:
     def __init__(self, effects, triggers):
         self.effects = {e.key: e.value for e in effects}
         self.triggers = {e.key: e.value for e in triggers}
         # Shared southern triggers referenced by SHL campaign conditions.
         self.triggers.update({e.key: e.value for e in parse_clausewitz(SOUTH_TRIGGER_PATH.read_text(encoding="utf-8"))})
+        # Execute shared settlement and development rules from their owning sources.
+        self.effects.update(shared_definitions(
+            "common/scripted_effects/ADISCORD_RUS_scripted_effects.txt",
+            ("RUS_crisis_release_other_major",),
+        ))
+        self.triggers.update(shared_definitions(
+            "common/scripted_triggers/ADISCORD_RUS_scripted_triggers.txt",
+            ("RUS_crisis_other_major_required",),
+        ))
+        self.effects.update(shared_definitions(
+            "common/scripted_effects/ADISCORD_society_development_effects.txt",
+            ("ADISCORD_reform_social_system_development", "ADISCORD_initialize_society_development_variables"),
+        ))
         self.variables = defaultdict(dict)
         self.flags = defaultdict(set)
         self.global_flags = {"ADISCORD_fresh_campaign_contract_v1"}
@@ -74,11 +98,13 @@ class ScriptMachine:
         self.equipment = defaultdict(float)
         self.previous_scope = "SHL"
         # Neighbour countries and simple engine facts used by the crisis layer.
+        self.ai = False
         self.countries = {tag: {"exists": True, "is_subject": False, "has_war": False} for tag in NEIGHBOURS}
         self.wars = set()
         self.factions = {}
         self.missions = set()
         self.ideas = set()
+        self.enabled_advisors = defaultdict(set)
         self.stability = 0.5
         self.manpower = 100000.0
         self.country_manpower = defaultdict(float)
@@ -210,7 +236,7 @@ class ScriptMachine:
                     raise AssertionError("Unsupported equipment comparison: " + repr(tokens))
                 return self.equipment[(scope, tokens[0])] < float(tokens[2])
             if e.key == "has_dynamic_modifier":
-                return e.value in self.dynamic
+                return (scalar(e.value, "modifier") if isinstance(e.value, list) else e.value) in self.dynamic
             if e.key == "has_building":
                 return self.factories > 0
             if e.key == "free_building_slots":
@@ -222,7 +248,7 @@ class ScriptMachine:
             if e.key == "exists" or e.key == "always":
                 return e.value == "yes"
             if e.key == "is_ai":
-                return e.value == "no"
+                return self.ai == (e.value == "yes")
             if e.key in self.triggers:
                 result = self.matches(self.triggers[e.key], scope, target)
                 return result == (e.value == "yes")
@@ -330,6 +356,8 @@ class ScriptMachine:
                 self.idea_days[scalar(e.value, "idea")] = int(scalar(e.value, "days"))
             elif e.key == "add_ideas":
                 self.ideas.add(e.value)
+            elif e.key == "activate_advisor":
+                self.enabled_advisors[scope].add(e.value)
             elif e.key == "add_manpower":
                 if scope == "SHL":
                     self.manpower += self.value(e.value, scope)
@@ -361,10 +389,10 @@ class ScriptMachine:
                 self.calls.append((e.key, scope))
             elif e.key in (
                 "set_politics", "add_popularity", "promote_character", "retire_character",
-                "mark_focus_tree_layout_dirty", "add_war_support",
+                "mark_focus_tree_layout_dirty", "force_update_dynamic_modifier", "add_war_support",
                 "ADISCORD_release_non_participating_minor_optimization",
                 "ADISCORD_south_crisis_add_campaign", "ADISCORD_south_crisis_cycle",
-                "SHL_fire_cycle", "SHL_crisis_draw", "SHL_fire_refresh", "SHL_fire_transfer", "SHL_fire_course_targets", "SHL_fire_settle",
+                "SHL_crisis_draw",
                 "add_claim_by",
             ):
                 self.calls.append((e.key, scope))
@@ -578,7 +606,7 @@ class FurnaceAccountingTests(unittest.TestCase):
         m = self.machine
         m.control["288"] = "AZH"
         m.run("SHL_produce_period")
-        self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 1280)
+        self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 1480)
         self.assertEqual(m.variables["287"]["SHL_furnace_stock"], 1)
         self.assertEqual(m.variables["287"]["SHL_furnace_wear"], 26)
         self.assertEqual(m.variables["288"]["SHL_furnace_stock"], 2)
@@ -680,7 +708,7 @@ class FurnaceAccountingTests(unittest.TestCase):
         m.variables["SHL"]["ADISCORD_economy_treasury"] = 50
         m.variables["287"]["SHL_furnace_stock"] = 0
         m.run("SHL_produce_site", scope="287")
-        self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 60)
+        self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 85)
         self.assertEqual(m.variables["287"]["SHL_furnace_shortages"], 0)
 
     def test_planned_supply_never_borrows_or_buys_fractional_packets(self):
@@ -766,8 +794,8 @@ class FurnaceAccountingTests(unittest.TestCase):
         m.run("SHL_produce_period")
         self.assertEqual(country["SHL_tenth_stock"], 0)
         self.assertEqual(country["SHL_tenth_wear"], 20)
-        self.assertEqual(country["SHL_last_cycle_income"], 500)
-        self.assertEqual(country["ADISCORD_economy_treasury"], 1450)
+        self.assertEqual(country["SHL_last_cycle_income"], 900)
+        self.assertEqual(country["ADISCORD_economy_treasury"], 1850)
 
     def test_tenth_restart_waits_and_lost_capital_refunds(self):
         m = self.machine
@@ -815,7 +843,7 @@ class FurnaceAccountingTests(unittest.TestCase):
         m.variables["SHL"]["SHL_selected_furnace"] = 1
         m.run("SHL_refresh_furnaces")
         m.execute(block(decision_definition("SHL_shift_overtime"), "complete_effect"), "SHL")
-        self.assertEqual(m.variables["SHL"]["SHL_selected_period_income"], 50)
+        self.assertEqual(m.variables["SHL"]["SHL_selected_period_income"], 90)
         self.assertEqual(m.variables["SHL"]["SHL_selected_period_cost"], 2)
 
     def test_air_defence_never_builds_for_an_enemy_or_above_the_native_cap(self):
@@ -830,6 +858,8 @@ class FurnaceAccountingTests(unittest.TestCase):
         self.assertFalse(m.matches(block(focus, "available"), "SHL"))
         m.execute(block(focus, "completion_reward"), "SHL")
         self.assertEqual(m.anti_air, 5)
+        self.assertEqual(m.enabled_advisors["SHL"], {"ADISCORD_staff_SHL_Navid_Azari"})
+        self.assertNotIn("MZR", m.enabled_advisors)
 
     def test_ai_never_spends_on_a_cold_or_unworn_repair(self):
         m = self.machine
@@ -891,16 +921,16 @@ class ObligationAccountingTests(unittest.TestCase):
         self.c["SHL_selected_furnace"] = 9
         self.cycle()
         self.assertEqual(self.c["SHL_obligation_progress"], 1)
-        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1340)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1540)
         self.cycle()
         self.assertNotIn("SHL_obligation_kind", self.c)
-        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1740)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 2140)
 
     def test_shortage_cannot_create_weapons_or_consume_the_deposit(self):
         self.begin(3)
         self.m.variables["287"]["SHL_furnace_stock"] = 0
         self.cycle()
-        self.assertEqual(self.c["SHL_obligation_deposit"], 120)
+        self.assertEqual(self.c["SHL_obligation_deposit"], 90)
         self.assertEqual(self.c["SHL_obligation_progress"], 0)
         self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 0)
 
@@ -909,13 +939,13 @@ class ObligationAccountingTests(unittest.TestCase):
         self.cycle()
         self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 750)
         self.assertEqual(self.m.equipment[("SHL", "ADISCORD_squad_weapons_equipment_0")], 5)
-        self.assertEqual(self.c["SHL_obligation_deposit"], 60)
+        self.assertEqual(self.c["SHL_obligation_deposit"], 45)
         before = self.c["ADISCORD_economy_treasury"]
         self.m.run("SHL_cancel_obligation")
         self.m.run("SHL_cancel_obligation")
-        self.assertEqual(self.c["ADISCORD_economy_treasury"], before + 60)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], before + 45)
         self.cycle()
-        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 750)
+        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 1050)
 
     def test_overtime_delivers_two_paid_batches_without_normal_revenue(self):
         self.begin(3)
@@ -923,7 +953,7 @@ class ObligationAccountingTests(unittest.TestCase):
         self.cycle()
         self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 1500)
         self.assertEqual(self.m.equipment[("SHL", "ADISCORD_squad_weapons_equipment_0")], 10)
-        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1280)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1630)
         self.assertNotIn("SHL_obligation_kind", self.c)
 
     def test_civic_order_builds_only_after_real_pours_and_refunds_at_cap(self):
@@ -934,7 +964,7 @@ class ObligationAccountingTests(unittest.TestCase):
         before = self.c["ADISCORD_economy_treasury"]
         self.cycle()
         self.assertEqual(self.m.infrastructure, 5)
-        self.assertEqual(self.c["ADISCORD_economy_treasury"], before + 280 + 120)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], before + 480 + 90)
         self.assertNotIn("SHL_obligation_kind", self.c)
 
     def test_civic_order_delivers_infrastructure_and_civic_constituency(self):
@@ -943,14 +973,14 @@ class ObligationAccountingTests(unittest.TestCase):
         self.cycle()
         self.assertEqual(self.m.infrastructure, 1)
         self.assertEqual(self.c["SHL_city_support"], 5)
-        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1440)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1870)
 
     def test_occupation_pauses_but_ownership_loss_settles_once(self):
         self.begin(2)
         self.m.control["287"] = "MZR"
         self.cycle()
         self.assertEqual(self.c["SHL_obligation_progress"], 0)
-        self.assertEqual(self.c["SHL_obligation_deposit"], 120)
+        self.assertEqual(self.c["SHL_obligation_deposit"], 90)
         self.m.control["287"] = "SHL"
         self.cycle()
         self.assertEqual(self.c["SHL_obligation_progress"], 1)
@@ -958,7 +988,7 @@ class ObligationAccountingTests(unittest.TestCase):
         before = self.c["ADISCORD_economy_treasury"]
         self.m.run("SHL_refresh_furnaces")
         self.m.run("SHL_refresh_furnaces")
-        self.assertEqual(self.c["ADISCORD_economy_treasury"], before + 120)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], before + 90)
         self.assertNotIn("SHL_obligation_kind", self.c)
 
     def test_compatible_ratification_keeps_paid_progress_and_new_owner(self):
@@ -979,14 +1009,14 @@ class ObligationAccountingTests(unittest.TestCase):
         before = self.c["ADISCORD_economy_treasury"]
         self.m.run("SHL_commit_regency_course")
         self.assertNotIn("SHL_obligation_kind", self.c)
-        self.assertEqual(self.c["ADISCORD_economy_treasury"], before + 60)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], before + 45)
         self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 750)
 
     def test_pledge_uses_cash_after_deductions_and_returns_excess(self):
         self.begin(4)
         self.c.update({"SHL_shift_policy": 1, "SHL_income_deduction": 8, "SHL_obligation_liability": 30})
         self.cycle()
-        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1150 + 8 * 42 + 12)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1858)
         self.assertNotIn("SHL_obligation_kind", self.c)
 
     def test_unpaid_advance_becomes_real_public_debt_once(self):
@@ -1041,7 +1071,7 @@ class ObligationAccountingTests(unittest.TestCase):
         self.m.run("SHL_refresh_furnaces")
         self.c["SHL_selected_furnace"] = 1
         self.m.run("SHL_refresh_selected_furnace")
-        self.assertEqual(self.c["SHL_selected_period_income"], 35)
+        self.assertEqual(self.c["SHL_selected_period_income"], 0)
         recipient["SHL_furnace_stock"] = 1
         self.cycle()
         self.assertEqual(recipient["SHL_furnace_running"], 1)
@@ -1055,7 +1085,7 @@ class ObligationAccountingTests(unittest.TestCase):
         self.cycle()
         self.assertEqual(self.c["SHL_obligation_progress"], 0)
         self.assertEqual(self.m.variables["288"]["SHL_operation_deposit"], 80)
-        self.assertEqual(self.c["SHL_last_cycle_income"], 280)
+        self.assertEqual(self.c["SHL_last_cycle_income"], 420)
 
     def test_relief_preview_follows_recipient_readiness(self):
         self.relief(stopped=True)
@@ -1064,7 +1094,7 @@ class ObligationAccountingTests(unittest.TestCase):
         self.assertEqual(self.c["SHL_selected_period_income"], 0)
         self.m.variables["288"]["SHL_operation_deposit"] = 80
         self.m.run("SHL_refresh_furnaces")
-        self.assertEqual(self.c["SHL_selected_period_income"], 35)
+        self.assertEqual(self.c["SHL_selected_period_income"], 0)
 
     def test_foreclosure_removes_a_real_vote_and_cannot_repeat(self):
         self.begin(4)
@@ -1079,10 +1109,10 @@ class ObligationAccountingTests(unittest.TestCase):
         self.assertNotIn("SHL_obligation_kind", self.c)
 
     def test_affordability_and_second_site_cannot_overwrite_receipt(self):
-        self.c["ADISCORD_economy_treasury"] = 119.99
+        self.c["ADISCORD_economy_treasury"] = 89.99
         self.begin(3)
         self.assertNotIn("SHL_obligation_kind", self.c)
-        self.c["ADISCORD_economy_treasury"] = 120
+        self.c["ADISCORD_economy_treasury"] = 90
         self.begin(3)
         self.m.run("SHL_begin_arsenal_order", target="288")
         self.assertEqual(self.c["ADISCORD_economy_treasury"], 0)
@@ -1093,7 +1123,7 @@ class ObligationAccountingTests(unittest.TestCase):
             self.assertEqual(scalar(block(focus_definition(focus), "prerequisite"), "focus"), "SHL_conclave_rules")
         for focus in ("SHL_admit_tenth_house", "SHL_rights_without_fire", "SHL_state_furnaces"):
             prerequisites = [scalar(e.value, "focus") for e in focus_definition(focus) if e.key == "prerequisite"]
-            self.assertIn("SHL_tenth_voice", prerequisites)
+            self.assertIn("SHL_workers_charter", prerequisites)
             self.assertEqual(len(prerequisites), 2)
         self.c["SHL_political_course"] = 3
         self.assertTrue(self.m.matches(self.m.triggers["SHL_arsenal_access"], "SHL"))
@@ -1126,16 +1156,16 @@ class CrisisLayerTests(unittest.TestCase):
         c["SHL_cycle_idle_sites"] = 2
         self.m.run("SHL_update_tensions")
         self.assertEqual(c["SHL_unrest"], 31)
-        self.assertEqual(c["SHL_house_pressure"], 20)
+        self.assertEqual(c["SHL_house_pressure"], 25)
 
     def test_reform_courses_move_crest_pressure(self):
         c = self.country()
         c["SHL_political_course"] = 3
         self.m.run("SHL_update_tensions")
-        self.assertEqual(c["SHL_house_pressure"], 23)
+        self.assertEqual(c["SHL_house_pressure"], 28)
         c["SHL_political_course"] = 1
         self.m.run("SHL_update_tensions")
-        self.assertEqual(c["SHL_house_pressure"], 21)
+        self.assertEqual(c["SHL_house_pressure"], 31)
 
     def test_strike_fires_once_and_charges_every_producing_furnace(self):
         c = self.country()
@@ -1146,7 +1176,7 @@ class CrisisLayerTests(unittest.TestCase):
         self.assertEqual(c["SHL_income_deduction"], 10)
         before = c["ADISCORD_economy_treasury"]
         self.m.run("SHL_produce_period")
-        self.assertEqual(c["ADISCORD_economy_treasury"] - before, 9 * 25)
+        self.assertEqual(c["ADISCORD_economy_treasury"] - before, 9 * 50)
 
     def test_strike_concession_is_paid_once_and_sets_cooldown(self):
         c = self.country()
@@ -1716,6 +1746,29 @@ class MazarBorderPactTests(unittest.TestCase):
         self.assertEqual(self.m.wars, {foreign_war})
         self.assertEqual(self.m.majors, {"MZR"})
 
+    def test_major_release_preserves_another_campaign_and_transfers_the_khan_receipt(self):
+        for country in ("SHL", "MZR"):
+            for other_receipt, keeps_major, khan_receipt in (
+                (None, False, False),
+                ("ADISCORD_south_added_major", True, False),
+                ("RUS_crisis_defender", True, True),
+            ):
+                with self.subTest(country=country, other_receipt=other_receipt):
+                    self.setUp()
+                    self.m.majors.add(country)
+                    self.m.flags[country].add("SHL_mzr_added_major")
+                    if other_receipt:
+                        self.m.flags[country].add(other_receipt)
+                    other_country = "MZR" if country == "SHL" else "SHL"
+                    self.m.flags[other_country].add("ADISCORD_west_added_major")
+                    self.m.run("SHL_release_mzr_principal", scope=country)
+                    self.m.run("SHL_release_mzr_principal", scope=country)
+                    self.assertNotIn("SHL_mzr_added_major", self.m.flags[country])
+                    self.assertEqual(country in self.m.majors, keeps_major)
+                    self.assertEqual("RUS_crisis_added_major" in self.m.flags[country], khan_receipt)
+                    if other_receipt:
+                        self.assertIn(other_receipt, self.m.flags[country])
+
     def test_neutrality_timeout_is_free_and_keeps_the_existing_pact(self):
         self.prepare()
         self.m.run("SHL_accept_mzr_pact", scope="KYZ")
@@ -1811,7 +1864,7 @@ class SouthernCampaignTests(unittest.TestCase):
         self.assertEqual(c["SHL_obligation_site"], 287)
         self.pour()
         self.assertNotIn("SHL_campaign_reserve", c)
-        self.assertEqual(c["SHL_last_cycle_income"], 280)
+        self.assertEqual(c["SHL_last_cycle_income"], 480)
         self.pour()
         self.assertEqual(c["SHL_campaign_reserve"], 1)
         self.assertEqual(self.m.variables["287"]["SHL_furnace_stock"], 1)
@@ -2275,6 +2328,10 @@ class ShahrabadCabinetTests(unittest.TestCase):
         c["ADISCORD_economy_treasury"] = 500
         charter = block(focus_definition("SHL_workers_charter"), "completion_reward")
         self.m.execute(charter, "SHL")
+        self.assertEqual(c["ADISCORD_social_system_development_level"], 1)
+        self.assertEqual(c["ADISCORD_social_system_development_progress"], 25)
+        self.assertEqual(c["ADISCORD_social_system_development_monthly_growth"], 2)
+        self.assertIn("ADISCORD_economy_mark_dirty", self.m.calls)
         self.m.run("SHL_recognise_quarter_registers")
         self.assertEqual(c["ADISCORD_economy_treasury"], 500)
         self.assertNotIn("SHL_unregistered_quarters", self.m.ideas)
@@ -2282,6 +2339,20 @@ class ShahrabadCabinetTests(unittest.TestCase):
         self.assertFalse(self.m.matches(block(options[1], "trigger"), "SHL"))
         default = options[0]
         self.assertTrue(self.m.matches(block(default, "trigger"), "SHL"))
+
+    def test_social_charter_preserves_existing_development_before_adding_its_reward(self):
+        c = self.country()
+        c.update({
+            "ADISCORD_social_system_development_level": 3,
+            "ADISCORD_social_system_development_progress": 53,
+            "ADISCORD_social_system_development_monthly_growth": 3,
+        })
+        charter = block(focus_definition("SHL_workers_charter"), "completion_reward")
+        self.m.execute(charter, "SHL")
+        self.assertEqual(c["ADISCORD_social_system_development_level"], 3)
+        self.assertEqual(c["ADISCORD_social_system_development_progress"], 78)
+        self.assertEqual(c["ADISCORD_social_system_development_monthly_growth"], 5)
+        self.assertIn("ADISCORD_economy_mark_dirty", self.m.calls)
 
     def test_initial_story_clock_does_not_need_focuses_and_open_cabinet_has_safe_exit(self):
         effects = parse_clausewitz(EFFECT_PATH.read_text(encoding="utf-8"))
@@ -2333,8 +2404,8 @@ def walk_entries(items):
             yield from walk_entries(entry.value)
 
 
-class FireDivisionTests(unittest.TestCase):
-    """Division of the fire: four revenue shares and the course endings."""
+class DeliveryStructureTests(unittest.TestCase):
+    """Delivery ownership, course endings and aggregate previews."""
 
     SHARES = ("crest", "quart", "state", "front")
     COURSES = ("houses", "cities", "directorate", "regency", "commune")
@@ -2345,27 +2416,17 @@ class FireDivisionTests(unittest.TestCase):
         cls.focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
         cls.effects = {e.key: e.value for e in parse_clausewitz(EFFECT_PATH.read_text(encoding="utf-8"))}
 
-    def test_start_and_every_course_target_divide_exactly_one_hundred(self):
-        start = {scalar(e.value, "var"): float(scalar(e.value, "value")) for e in walk_entries(self.effects["SHL_fire_initialize"]) if e.key == "set_variable"}
-        self.assertEqual(sum(start.values()), 100)
-        values = [float(scalar(e.value, "value")) for e in walk_entries(self.effects["SHL_fire_course_targets"]) if e.key == "set_variable" and scalar(e.value, "var").startswith("SHL_fire_target_")]
-        self.assertEqual(len(values), 20)
-        for index in range(0, 20, 4):
-            self.assertEqual(sum(values[index:index + 4]), 100)
+    def test_percentage_system_has_no_runtime_consumers(self):
+        for name in self.effects:
+            self.assertFalse(name.startswith("SHL_fire_"), name)
+        for path in (EFFECT_PATH, ROOT / "focus_trees/SHL/main/focuses.txt",
+                     ROOT / "common/decisions/ADISCORD_SHL_decisions.txt",
+                     ROOT / "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_SHL.txt"):
+            source = path.read_text(encoding="utf-8-sig")
+            for token in ("SHL_share_", "SHL_fire_dynamic", "SHL_fire_cycle", "SHL_fire_give_"):
+                self.assertNotIn(token, source)
 
-    def test_shares_change_only_through_the_owned_effects(self):
-        writers = ("add_to_variable", "subtract_from_variable", "set_variable")
-        for name, value in self.effects.items():
-            if name in ("SHL_fire_transfer", "SHL_fire_initialize", "SHL_fire_settle"):
-                continue
-            for entry in walk_entries(value):
-                if entry.key in writers and isinstance(entry.value, list):
-                    self.assertFalse(str(scalar(entry.value, "var")).startswith("SHL_share_"), name)
-        tree = (ROOT / "focus_trees/SHL/main/focuses.txt").read_text(encoding="utf-8")
-        self.assertNotIn("var = SHL_share_", tree)
-        self.assertEqual(tree.count("SHL_fire_transfer = yes"), tree.count("set_temp_variable = { var = SHL_fire_amount"))
-
-    def test_each_course_final_offers_two_exclusive_endings_that_settle_the_fire(self):
+    def test_each_course_final_offers_two_exclusive_delivery_endings(self):
         finals = {
             "houses": "SHL_conclave_of_ten",
             "cities": "SHL_southern_compact",
@@ -2381,7 +2442,8 @@ class FireDivisionTests(unittest.TestCase):
                 self.assertEqual(scalar(block(ending, "prerequisite"), "focus"), final, name)
                 self.assertEqual(scalar(block(ending, "mutually_exclusive"), "focus"), f"SHL_{course}_prog_ending_{other}")
                 reward = repr(block(ending, "completion_reward"))
-                self.assertLess(reward.index("SHL_fire_course_targets"), reward.rindex("SHL_fire_settle"), name)
+                self.assertIn(f"SHL_delivery_{course}_{side}_tt", reward)
+                self.assertIn("SHL_refresh_furnaces", reward)
                 self.assertIn("SHL_prog_ending", reward)
                 self.assertIn(f"SHL_pow_{course}_prog_ending_{side}_idea = {{", ideas)
         tree = (ROOT / "focus_trees/SHL/main/focuses.txt").read_text(encoding="utf-8")
@@ -2396,15 +2458,470 @@ class FireDivisionTests(unittest.TestCase):
         self.assertEqual(len(defined), len(set(defined)))
         self.assertEqual(used, set(defined))
 
-    def test_division_runs_on_the_furnace_cycle_without_new_hooks(self):
-        self.assertIn("SHL_fire_cycle", repr(self.effects["SHL_run_cycle"]))
-        startup = (ROOT / "common/on_actions/00_ADISCORD_on_actions.txt").read_text(encoding="utf-8")
-        self.assertIn("SHL_initialize_furnaces = yes\n\t\t\t\t\tSHL_fire_initialize = yes", startup)
+    def test_deliveries_reuse_production_and_no_new_periodic_hook(self):
+        self.assertIn("SHL_deliver_site_heat", repr(self.effects["SHL_produce_site"]))
+        self.assertIn("SHL_deliver_tenth_heat", repr(self.effects["SHL_produce_period"]))
         hooks = "".join(path.read_text(encoding="utf-8-sig") for path in (ROOT / "common/on_actions").glob("*.txt"))
         self.assertNotIn("on_monthly_SHL", hooks)
-        refresh = repr(self.effects["SHL_fire_refresh"])
-        self.assertIn("force_update_dynamic_modifier", refresh)
-        self.assertNotIn("every_country", refresh)
+        self.assertNotIn("SHL_fire_initialize", hooks)
+
+
+class EarlyCampaignTests(unittest.TestCase):
+    def setUp(self):
+        CrisisLayerTests.setUp(self)
+        self.country()["SHL_city_support"] = 20
+
+    country = CrisisLayerTests.country
+    event = ShahrabadCabinetTests.event
+
+    def test_unanswered_starting_problems_reach_crises_in_seven_and_eight_cycles(self):
+        self.m.ideas.add("SHL_unregistered_quarters")
+        reached = {}
+        for cycle in range(1, 9):
+            self.country()["SHL_cycle_number"] = cycle
+            self.m.run("SHL_update_tensions")
+            for kind, predicate in (("strike", "SHL_strike_ready"), ("crests", "SHL_conspiracy_ready")):
+                if kind not in reached and self.m.matches(self.m.triggers[predicate], "SHL"):
+                    reached[kind] = cycle * 28
+        self.assertEqual(reached, {"strike": 196, "crests": 224})
+
+    def test_pressure_sources_end_when_their_actual_problem_is_resolved(self):
+        self.m.ideas.add("SHL_unregistered_quarters")
+        self.m.run("SHL_recognise_quarter_registers")
+        self.country()["SHL_project_stage"] = 4
+        before = (self.country()["SHL_unrest"], self.country()["SHL_house_pressure"])
+        self.m.run("SHL_update_tensions")
+        self.assertEqual((self.country()["SHL_unrest"], self.country()["SHL_house_pressure"]), before)
+        self.country().update({"SHL_project_stage": 0, "SHL_political_course": 5})
+        self.m.run("SHL_update_tensions")
+        self.assertEqual(self.country()["SHL_house_pressure"], before[1])
+
+    def test_careful_shift_reduces_unrest_despite_unregistered_quarters(self):
+        self.m.ideas.add("SHL_unregistered_quarters")
+        self.country()["SHL_shift_policy"] = 2
+        self.m.run("SHL_update_tensions")
+        self.assertEqual(self.country()["SHL_unrest"], 24)
+
+    def test_provisional_course_moves_tensions_before_ownership_ratification(self):
+        for focus, unrest, pressure in (
+            ("SHL_new_house", 25, 23),
+            ("SHL_open_conclave", 23, 28),
+            ("SHL_nur_directorate", 25, 28),
+        ):
+            with self.subTest(focus=focus):
+                self.setUp()
+                self.m.focuses.add(focus)
+                self.m.run("SHL_update_tensions")
+                self.assertEqual((self.country()["SHL_unrest"], self.country()["SHL_house_pressure"]), (unrest, pressure))
+                self.assertEqual(self.country().get("SHL_political_course", 0), 0)
+                self.assertEqual(self.m.variables["287"]["SHL_furnace_owner"], 0)
+
+    def test_ratification_applies_one_course_drift_and_preserves_the_selected_platform(self):
+        for focus, effect, expected in (
+            ("SHL_new_house", "SHL_commit_house_course", 11),
+            ("SHL_open_conclave", "SHL_commit_city_course", 46),
+            ("SHL_nur_directorate", "SHL_commit_state_course", 51),
+        ):
+            with self.subTest(focus=focus):
+                self.setUp()
+                self.m.focuses.add(focus)
+                self.m.run("SHL_update_tensions")
+                self.m.run(effect)
+                self.m.run("SHL_update_tensions")
+                self.assertEqual(self.country()["SHL_house_pressure"], expected)
+
+    def test_crisis_choices_are_available_immediately_and_settle_paid_orders_once(self):
+        for kind, crisis, decision, event_id, course in (
+            (3, "SHL_strike_active", "SHL_back_shift_councils", "ADISCORD_SHL.20", 5),
+            (2, "SHL_conspiracy_active", "SHL_back_crests", "ADISCORD_SHL.30", 4),
+        ):
+            with self.subTest(course=course):
+                self.setUp()
+                self.c = self.country()
+                ObligationAccountingTests.begin(self, kind)
+                self.m.run("SHL_produce_period")
+                paid_remainder = self.country()["SHL_obligation_deposit"]
+                before = self.country()["ADISCORD_economy_treasury"]
+                weapons = dict(self.m.equipment)
+                self.m.flags["SHL"].add(crisis)
+                entry = decision_definition(decision)
+                self.assertTrue(self.m.matches(block(entry, "visible"), "SHL"))
+                self.assertTrue(self.m.matches(block(entry, "available"), "SHL"))
+                option = next(e.value for e in self.event(event_id) if e.key == "option" and scalar(e.value, "name") == decision)
+                self.assertTrue(self.m.matches(block(option, "trigger"), "SHL"))
+                self.m.execute(block(entry, "complete_effect"), "SHL")
+                self.m.execute(block(entry, "complete_effect"), "SHL")
+                self.assertEqual(self.country()["SHL_political_course"], course)
+                self.assertNotIn(crisis, self.m.flags["SHL"])
+                self.assertNotIn("SHL_obligation_kind", self.country())
+                self.assertEqual(self.country()["ADISCORD_economy_treasury"], before + paid_remainder)
+                self.assertEqual(dict(self.m.equipment), weapons)
+                self.assertFalse(self.m.matches(block(entry, "available"), "SHL"))
+
+    def test_each_production_policy_pays_the_forecast_for_nine_and_tenth_furnaces(self):
+        for policy, revenue, wear, packets in ((0, 60, 6, 1), (1, 90, 10, 2), (2, 25, 3, 1)):
+            with self.subTest(policy=policy):
+                self.setUp()
+                c = self.country()
+                c.update({"SHL_shift_policy": policy, "SHL_selected_furnace": 1,
+                          "SHL_project_stage": 4, "SHL_tenth_running": 1,
+                          "SHL_tenth_stock": 3, "SHL_tenth_wear": 20})
+                self.m.run("SHL_refresh_furnaces")
+                self.assertEqual(c["SHL_selected_period_income"], revenue)
+                before = c["ADISCORD_economy_treasury"]
+                self.m.run("SHL_produce_period")
+                self.assertEqual(c["ADISCORD_economy_treasury"] - before, revenue * 10)
+                self.assertEqual(c["SHL_tenth_stock"], 3 - packets)
+                self.assertEqual(c["SHL_tenth_wear"], 20 + wear)
+                self.assertEqual(self.m.variables["287"]["SHL_furnace_stock"], 3 - packets)
+                self.assertEqual(self.m.variables["287"]["SHL_furnace_wear"], 20 + wear)
+
+    def test_open_crisis_answers_cannot_reopen_or_charge_after_a_regime_decision(self):
+        for event_id, crisis, decision in (
+            ("ADISCORD_SHL.20", "SHL_strike_active", "SHL_back_shift_councils"),
+            ("ADISCORD_SHL.21", "SHL_strike_active", "SHL_back_shift_councils"),
+            ("ADISCORD_SHL.30", "SHL_conspiracy_active", "SHL_back_crests"),
+            ("ADISCORD_SHL.31", "SHL_conspiracy_active", "SHL_back_crests"),
+        ):
+            options = [e.value for e in self.event(event_id) if e.key == "option"]
+            for option in options:
+                with self.subTest(event=event_id, option=scalar(option, "name")):
+                    self.setUp()
+                    self.country()["SHL_political_course"] = 3
+                    self.m.focuses.add("SHL_railway_guard")
+                    self.m.flags["SHL"].add(crisis)
+                    was_available = self.m.matches(block(option, "trigger"), "SHL")
+                    self.m.execute(block(decision_definition(decision), "complete_effect"), "SHL")
+                    fields = ("variables", "flags", "missions", "ideas", "idea_days", "values",
+                              "stability", "equipment", "scheduled")
+                    before = deepcopy({field: getattr(self.m, field) for field in fields})
+                    # An already-open window or its timeout may still submit an old answer.
+                    effects = [e for e in option if e.key not in ("name", "trigger", "ai_chance")]
+                    self.m.execute(effects, "SHL")
+                    self.assertEqual({field: getattr(self.m, field) for field in fields}, before)
+                    if was_available:
+                        self.assertFalse(self.m.matches(block(option, "trigger"), "SHL"))
+
+    def test_resolved_crisis_windows_have_one_available_close_only_answer(self):
+        for event_id, crisis in (
+            ("ADISCORD_SHL.20", "SHL_strike_active"),
+            ("ADISCORD_SHL.21", "SHL_strike_active"),
+            ("ADISCORD_SHL.30", "SHL_conspiracy_active"),
+            ("ADISCORD_SHL.31", "SHL_conspiracy_active"),
+        ):
+            with self.subTest(event=event_id):
+                self.setUp()
+                self.m.flags["SHL"].discard(crisis)
+                options = [e.value for e in self.event(event_id) if e.key == "option"]
+                available = [option for option in options if self.m.matches(block(option, "trigger"), "SHL")]
+                self.assertEqual(len(available), 1)
+                self.assertEqual(scalar(available[0], "name"), "SHL_crisis_already_resolved")
+                self.assertFalse([e for e in available[0] if e.key not in ("name", "trigger", "ai_chance")])
+
+    def test_direct_routes_ratify_on_day_252_without_a_finished_tenth_furnace(self):
+        for first, second, ratify in (
+            ("SHL_new_house", "SHL_house_compromise", "SHL_admit_tenth_house"),
+            ("SHL_open_conclave", "SHL_city_charters", "SHL_rights_without_fire"),
+            ("SHL_nur_directorate", "SHL_common_dispatch", "SHL_state_furnaces"),
+        ):
+            with self.subTest(course=first):
+                self.setUp()
+                elapsed = 0
+                engineer_finish = 0
+                route = ("SHL_law_of_continuous_fire", "SHL_census_of_nine",
+                         "SHL_reserve_for_next_shift", "SHL_conclave_rules", first,
+                         "SHL_common_industrial_account", "SHL_engineer_society", second,
+                         "SHL_right_to_land", "SHL_common_fund", "SHL_workers_charter", ratify)
+                for identifier in route:
+                    if identifier == "SHL_right_to_land":
+                        elapsed = max(elapsed, engineer_finish)
+                        self.m.run("SHL_finish_project")
+                    focus = focus_definition(identifier)
+                    for prerequisite in (e.value for e in focus if e.key == "prerequisite"):
+                        self.assertTrue(any(e.value in self.m.focuses for e in prerequisite), identifier)
+                    self.assertTrue(self.m.matches(block(focus, "available"), "SHL"), identifier)
+                    elapsed += int(scalar(focus, "cost")) * 7
+                    self.m.focuses.add(identifier)
+                    if identifier == first:
+                        self.assertEqual(elapsed, 84)
+                    elif identifier == "SHL_engineer_society":
+                        self.m.run("SHL_begin_engineers")
+                        engineer_finish = elapsed + int(scalar(decision_definition("SHL_project_engineers"), "days_remove"))
+                    elif identifier == "SHL_workers_charter":
+                        self.m.execute(block(block(focus, "completion_reward"), "hidden_effect"), "SHL")
+                self.assertEqual(elapsed, 252)
+                self.assertEqual(self.country()["SHL_project_stage"], 1)
+                reward = block(block(focus_definition(ratify), "completion_reward"), "hidden_effect")
+                self.m.execute(reward, "SHL")
+                settled = dict(self.country())
+                self.m.execute(reward, "SHL")
+                self.assertEqual(dict(self.country()), settled)
+
+
+
+
+class DeliveryAccountingTests(unittest.TestCase):
+    def setUp(self):
+        ObligationAccountingTests.setUp(self)
+        self.c.update({"SHL_unrest": 50, "SHL_house_pressure": 50})
+
+    def assign(self, site, recipient):
+        self.c.update({"SHL_selected_furnace": site, "SHL_assignment": recipient})
+        self.m.run("SHL_assign_selected_delivery")
+
+    def test_assignment_persists_without_paying_on_click(self):
+        before = self.c["ADISCORD_economy_treasury"]
+        self.assign(1, 1)
+        self.assign(1, 1)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], before)
+        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 0)
+        self.m.run("SHL_produce_period")
+        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 300)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], before + 480)
+        self.m.run("SHL_produce_period")
+        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 600)
+
+    def test_every_course_shift_and_recipient_has_exact_outputs(self):
+        for course in range(6):
+            for shift in range(3):
+                for recipient in range(4):
+                    with self.subTest(course=course, shift=shift, recipient=recipient):
+                        self.setUp()
+                        self.c.update({"SHL_political_course": course, "SHL_shift_policy": shift})
+                        self.assign(1, recipient)
+                        self.m.run("SHL_refresh_delivery_terms")
+                        before = self.c["ADISCORD_economy_treasury"]
+                        self.m.run("SHL_produce_site", scope="287")
+                        effective = 0 if course == 5 and recipient == 3 else recipient
+                        self.assertEqual(self.c["ADISCORD_economy_treasury"] - before,
+                                         (60, 90, 25)[shift] if effective == 0 else 0)
+                        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")],
+                                         (300, 600, 150)[shift] if effective == 1 else 0)
+                        quarters = (6, 9, 3) if course in (2, 5) else (4, 6, 2)
+                        crests = (6, 9, 3) if course in (1, 4) else (4, 6, 2)
+                        self.assertEqual(self.c["SHL_unrest"], 50 - (quarters[shift] if effective == 2 else 0))
+                        self.assertEqual(self.c["SHL_house_pressure"], 50 - (crests[shift] if effective == 3 else 0))
+                        self.assertEqual(self.m.variables["287"]["SHL_furnace_stock"], 2 - (2 if shift == 1 else 1))
+
+    def test_stopped_occupied_lost_and_unsupplied_sites_deliver_nothing(self):
+        for failure in ("stopped", "occupied", "lost", "stock"):
+            for recipient in (1, 2, 3):
+                with self.subTest(failure=failure, recipient=recipient):
+                    self.setUp()
+                    self.assign(1, recipient)
+                    if failure == "stopped":
+                        self.m.variables["287"]["SHL_furnace_running"] = 0
+                    elif failure == "occupied":
+                        self.m.control["287"] = "MZR"
+                    elif failure == "lost":
+                        self.m.ownership["287"] = "MZR"
+                    else:
+                        self.m.variables["287"]["SHL_furnace_stock"] = 0
+                    self.m.run("SHL_produce_period")
+                    self.m.run("SHL_refresh_furnaces")
+                    self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 0)
+                    self.assertEqual(self.c["SHL_unrest"], 50)
+                    self.assertEqual(self.c["SHL_house_pressure"], 50)
+                    self.assertEqual(self.c["SHL_crest_support"], 0)
+
+    def test_tenth_assignment_is_independent_of_eighth_furnace(self):
+        self.c.update({"SHL_project_stage": 4, "SHL_tenth_running": 1, "SHL_tenth_stock": 2})
+        self.assign(8, 2)
+        self.assign(10, 1)
+        self.m.run("SHL_produce_period")
+        self.assertEqual(self.m.variables["294"]["SHL_furnace_recipient"], 2)
+        self.assertEqual(self.c["SHL_tenth_recipient"], 1)
+        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 300)
+        self.assertEqual(self.c["SHL_unrest"], 46)
+        self.assertEqual(self.c["SHL_last_cycle_income"], 480)
+
+    def test_support_expires_without_production_and_cannot_restore_ownership(self):
+        self.c["SHL_shift_policy"] = 1
+        for site in range(1, 6):
+            self.assign(site, 3)
+        self.m.run("SHL_produce_period")
+        self.m.run("SHL_refresh_furnaces")
+        self.assertEqual(self.c["SHL_crest_support"], 5)
+        self.assertTrue(self.m.matches(self.m.triggers["SHL_has_delivery_majority"], "SHL"))
+        self.m.variables["287"]["SHL_furnace_owner"] = 2
+        self.m.run("SHL_refresh_furnaces")
+        self.assertEqual(self.c["SHL_crest_support"], 4)
+        self.assertEqual(self.c["SHL_house_votes"], 8)
+        self.assertFalse(self.m.matches(self.m.triggers["SHL_has_delivery_majority"], "SHL"))
+        self.m.run("SHL_produce_period")
+        self.m.run("SHL_refresh_furnaces")
+        self.assertEqual(self.c["SHL_crest_support"], 0)
+        self.assertEqual(self.m.variables["287"]["SHL_furnace_owner"], 2)
+
+    def test_order_locks_assignment_and_has_no_duplicate_ordinary_delivery(self):
+        ObligationAccountingTests.begin(self, 3)
+        self.assign(1, 2)
+        self.assertEqual(self.m.variables["287"]["SHL_furnace_recipient"], 1)
+        self.c["SHL_shift_policy"] = 1
+        self.m.run("SHL_produce_period")
+        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 1500)
+        self.assertEqual(self.c["SHL_unrest"], 50)
+        self.assertNotIn("SHL_obligation_kind", self.c)
+        self.assign(1, 2)
+        self.assertEqual(self.m.variables["287"]["SHL_furnace_recipient"], 2)
+
+    def test_contract_quote_does_not_change_when_final_is_completed(self):
+        ObligationAccountingTests.begin(self, 3)
+        self.m.run("SHL_produce_period")
+        self.c["SHL_prog_ending"] = 32
+        self.c["SHL_political_course"] = 3
+        self.m.run("SHL_refresh_delivery_terms")
+        self.assertEqual(self.c["SHL_arsenal_price"], 60)
+        self.assertEqual(self.c["SHL_obligation_batch_price"], 45)
+        before = self.c["ADISCORD_economy_treasury"]
+        self.m.run("SHL_cancel_obligation")
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], before + 45)
+
+    def test_each_final_changes_terms_without_reassigning_furnaces(self):
+        expected = {11: (120, 120, 180, 4), 12: (120, 120, 180, 4),
+                    21: (60, 120, 180, 6), 22: (90, 90, 180, 6),
+                    31: (90, 90, 180, 4), 32: (120, 60, 180, 4),
+                    41: (120, 90, 180, 4), 42: (120, 120, 165, 4),
+                    51: (120, 120, 180, 8), 52: (120, 120, 180, 6)}
+        courses = ("houses", "cities", "directorate", "regency", "commune")
+        for ending, values in expected.items():
+            with self.subTest(ending=ending):
+                self.setUp()
+                self.assign(1, 1)
+                self.c["SHL_political_course"] = ending // 10
+                focus = f"SHL_{courses[ending // 10 - 1]}_prog_ending_{'a' if ending % 10 == 1 else 'b'}"
+                self.m.execute([entry for entry in block(focus_definition(focus), "completion_reward") if entry.key == "hidden_effect"], "SHL")
+                self.assertEqual(tuple(self.c[name] for name in ("SHL_civic_price", "SHL_arsenal_price", "SHL_pledge_price", "SHL_delivery_quarters")), values)
+                self.assertEqual(self.m.variables["287"]["SHL_furnace_recipient"], 1)
+        for ending, access in ((12, "civic"), (22, "arsenal"), (31, "civic"), (41, "arsenal")):
+            self.c["SHL_prog_ending"] = ending
+            self.c["SHL_political_course"] = ending // 10
+            self.assertTrue(self.m.matches(self.m.triggers[f"SHL_{access}_access"], "SHL"))
+
+    def test_export_and_relief_finals_fix_duration_at_order_start(self):
+        self.c["SHL_prog_ending"] = 11
+        ObligationAccountingTests.begin(self, 1)
+        self.assertEqual(self.c["SHL_obligation_deadline"], 4)
+        self.c["SHL_prog_ending"] = 12
+        self.assertEqual(self.c["SHL_obligation_deadline"], 4)
+        self.m.run("SHL_cancel_obligation")
+        self.c["SHL_prog_ending"] = 52
+        ObligationAccountingTests.relief(self)
+        self.m.run("SHL_produce_period")
+        self.assertNotIn("SHL_obligation_kind", self.c)
+        self.assertEqual(self.m.variables["288"]["SHL_furnace_wear"], 26)
+
+    def test_preview_matches_deliveries_and_does_not_mutate_production(self):
+        for shift in range(3):
+            with self.subTest(shift=shift):
+                self.setUp()
+                self.c.update({"SHL_shift_policy": shift, "SHL_regular_supply": 1,
+                               "ADISCORD_economy_treasury": 75})
+                for state in range(287, 296):
+                    self.m.variables[str(state)]["SHL_furnace_stock"] = 0
+                for site, recipient in ((1, 1), (3, 2), (4, 3)):
+                    self.assign(site, recipient)
+                before = deepcopy(self.m.variables)
+                self.m.run("SHL_refresh_furnaces")
+                forecast = tuple(self.c[name] for name in ("SHL_preview_income", "SHL_preview_rifles", "SHL_preview_quarters", "SHL_preview_crests"))
+                for state in range(287, 296):
+                    self.assertEqual(self.m.variables[str(state)], before[str(state)])
+                self.assertEqual(self.c["ADISCORD_economy_treasury"], 75)
+                self.m.run("SHL_produce_period")
+                actual = (self.c["ADISCORD_economy_treasury"] - 75,
+                          self.m.equipment[("SHL", "infantry_equipment")],
+                          50 - self.c["SHL_unrest"], 50 - self.c["SHL_house_pressure"])
+                self.assertEqual(actual, forecast)
+                self.assertEqual(self.c["SHL_selected_period_income"], self.c["SHL_selected_delivery_cash"])
+
+    def test_save_load_preserves_assignments_and_discounted_receipt(self):
+        self.assign(2, 2)
+        ObligationAccountingTests.begin(self, 3)
+        self.m.run("SHL_produce_period")
+        restored = deepcopy(self.m)
+        self.m.run("SHL_produce_period")
+        restored.run("SHL_produce_period")
+        self.assertEqual(dict(self.m.equipment), dict(restored.equipment))
+        self.assertEqual(dict(self.m.variables), dict(restored.variables))
+
+    def test_ai_reserves_supply_and_repairs_before_diverting_heat(self):
+        self.m.ai = True
+        self.m.countries["SHL"] = {"has_war": True}
+        self.c["ADISCORD_economy_treasury"] = 100
+        self.m.run("SHL_ai_allocate_deliveries")
+        self.assertTrue(all(self.m.variables[str(state)]["SHL_furnace_recipient"] == 0 for state in range(287, 296)))
+        self.c["ADISCORD_economy_treasury"] = 1000
+        self.m.run("SHL_ai_allocate_deliveries")
+        self.assertEqual([self.m.variables[str(state)]["SHL_furnace_recipient"] for state in range(287, 291)], [2, 3, 1, 0])
+
+    def test_economic_examples_include_real_supply_but_not_hypothetical_repairs(self):
+        for arsenal, quarters, expected in ((0, 0, 315), (1, 1, 195), (2, 1, 135)):
+            with self.subTest(arsenal=arsenal, quarters=quarters):
+                self.setUp()
+                self.c["SHL_regular_supply"] = 1
+                for state in range(287, 296):
+                    self.m.variables[str(state)]["SHL_furnace_stock"] = 0
+                for index in range(1, arsenal + 1):
+                    self.assign(index, 1)
+                if quarters:
+                    self.assign(9, 2)
+                self.m.run("SHL_produce_period")
+                self.assertEqual(self.c["ADISCORD_economy_treasury"] - 1000, expected)
+                self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], arsenal * 300)
+
+    def test_discount_affordability_and_refund_use_the_same_quote(self):
+        for kind, ending, course, price in (("civic", 12, 1, 120), ("civic", 0, 2, 90),
+                                            ("civic", 21, 2, 60), ("arsenal", 0, 3, 90),
+                                            ("arsenal", 32, 3, 60)):
+            for balance, allowed in ((price - 0.01, False), (price, True)):
+                with self.subTest(kind=kind, ending=ending, balance=balance):
+                    self.setUp()
+                    self.c.update({"SHL_political_course": course, "SHL_prog_ending": ending,
+                                   "ADISCORD_economy_treasury": balance})
+                    self.m.run("SHL_refresh_furnaces")
+                    decision = decision_definition("SHL_civic_order" if kind == "civic" else "SHL_war_orders")
+                    self.assertEqual(self.m.matches(block(decision, "custom_cost_trigger"), "SHL"), allowed)
+                    self.m.run(f"SHL_begin_{kind}_order", target="287")
+                    self.assertEqual("SHL_obligation_kind" in self.c, allowed)
+                    self.assertAlmostEqual(self.c["ADISCORD_economy_treasury"], balance - (price if allowed else 0))
+                    self.m.run("SHL_cancel_obligation")
+                    self.assertAlmostEqual(self.c["ADISCORD_economy_treasury"], balance)
+
+    def test_compensation_and_commune_do_not_restore_house_votes(self):
+        self.c["SHL_political_course"] = 2
+        self.m.variables["287"]["SHL_furnace_owner"] = 1
+        self.assign(1, 3)
+        self.m.run("SHL_produce_period")
+        self.m.run("SHL_refresh_furnaces")
+        self.assertEqual(self.c["SHL_house_pressure"], 46)
+        self.assertEqual(self.c["SHL_crest_support"], 0)
+        self.assertEqual(self.m.variables["287"]["SHL_furnace_owner"], 1)
+        self.m.run("SHL_commit_commune_course")
+        self.assertEqual(self.m.variables["287"]["SHL_furnace_recipient"], 2)
+        self.assign(1, 3)
+        self.assertEqual(self.m.variables["287"]["SHL_furnace_recipient"], 2)
+
+    def test_conclave_guarantees_charge_only_without_actual_majority(self):
+        events = parse_clausewitz((ROOT / "events/ADISCORD_SHL_events.txt").read_text(encoding="utf-8"))
+        event = next(e.value for e in events if isinstance(e.value, list) and scalar(e.value, "id") == "ADISCORD_SHL.30")
+        option = next(e.value for e in event if e.key == "option" and scalar(e.value, "name") == "ADISCORD_SHL.30.a")
+        for supported in (False, True):
+            with self.subTest(supported=supported):
+                self.setUp()
+                if supported:
+                    for site in range(1, 6):
+                        self.assign(site, 3)
+                self.m.run("SHL_produce_period")
+                self.m.run("SHL_refresh_furnaces")
+                self.m.flags["SHL"].add("SHL_conspiracy_active")
+                before = self.m.values["political_power"]
+                self.assertTrue(self.m.matches(block(option, "trigger"), "SHL"))
+                self.m.execute([e for e in option if e.key == "if"], "SHL")
+                self.assertEqual(self.m.values["political_power"], before - (0 if supported else 40))
+                self.assertNotIn("SHL_conspiracy_active", self.m.flags["SHL"])
+
+    begin = ObligationAccountingTests.begin
+
 
 if __name__ == "__main__":
     unittest.main()
