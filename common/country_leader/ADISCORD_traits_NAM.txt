@@ -1,0 +1,68 @@
+leader_traits = {
+	# Egor Rom, in every role he holds.
+	NAM_trait_keeper_of_seals = {
+		random = no
+		sprite = 1
+		political_power_gain = 0.05
+		stability_factor = 0.02
+	}
+
+	NAM_trait_oil_ledger = {
+		random = no
+		sprite = 1
+		fuel_gain_factor = 0.05
+		consumer_goods_factor = -0.01
+	}
+
+	# Every rival who takes the seals by force.
+	NAM_trait_usurper_of_seals = {
+		random = no
+		sprite = 1
+		political_power_gain = 0.10
+		war_support_factor = 0.05
+		stability_factor = -0.05
+	}
+
+	NAM_trait_klyuchevsk_magnate = {
+		random = no
+		sprite = 1
+		fuel_gain_factor = 0.10
+		production_factory_efficiency_gain_factor = 0.03
+	}
+
+	NAM_trait_harbour_master = {
+		random = no
+		sprite = 1
+		convoy_escort_efficiency = 0.10
+		ADISCORD_economy_trade_income_factor = 0.05
+	}
+
+	NAM_trait_garrison_commandant = {
+		random = no
+		sprite = 1
+		army_org_factor = 0.05
+		army_defence_factor = 0.05
+	}
+
+	NAM_trait_registrar_of_seals = {
+		random = no
+		sprite = 1
+		compliance_gain = 0.04
+		ADISCORD_economy_tax_collection_factor = 0.05
+	}
+
+	# Leaders of the charter endings.
+	NAM_trait_council_chair = {
+		random = no
+		sprite = 1
+		stability_factor = 0.05
+		research_speed_factor = 0.03
+	}
+
+	NAM_trait_oil_union_treasurer = {
+		random = no
+		sprite = 1
+		fuel_gain_factor = 0.10
+		ADISCORD_economy_trade_income_factor = 0.05
+	}
+}

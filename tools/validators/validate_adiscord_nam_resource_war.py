@@ -110,6 +110,780 @@ def owner_of_state(state_id: int) -> str | None:
     return match.group(1) if match else None
 
 
+OIL_BUYERS = {
+    "EFL", "AZH", "VAL", "STP", "STS", "RHM", "MZR",
+    "SHL", "RUS", "WEF", "KDR", "SDR", "GLP", "KYZ",
+}
+FIELD_CAPACITY = {67: 8, 688: 2, 689: 4, 690: 3, 719: 1}
+PROJECT_PRICES = {
+    "NAM_project_repair_wells": (25, 150, 45, "NAM_project_complete_repair"),
+    "NAM_project_refinery": (40, 300, 90, "NAM_project_complete_refinery"),
+    "NAM_project_pipeline": (35, 350, 120, "NAM_project_complete_pipeline"),
+    "NAM_project_sea_terminal": (30, 250, 90, "NAM_project_complete_terminal"),
+}
+DECISION_FOCUS_GATES = {
+    "NAM_restitution_note": "NAM_restitution_desk",
+    "NAM_order_resource_guard": "NAM_mobilisation_office",
+    "NAM_order_field_infantry": "NAM_mobilisation_office",
+    "NAM_order_motor_column": "NAM_motor_column_orders",
+    "NAM_order_coastal_battalion": "NAM_coastal_battalions",
+    "NAM_prepare_line": "NAM_line_survey",
+    "NAM_scorch_wells": "NAM_scorched_wells",
+    "NAM_oil_contract_offer": "NAM_contract_bureau",
+    "NAM_fuel_embargo": "NAM_fuel_leverage",
+    "NAM_project_repair_wells": "NAM_field_repair_crews",
+    "NAM_project_refinery": "NAM_refinery_programme",
+    "NAM_project_pipeline": "NAM_klyuchevsk_pipeline",
+    "NAM_project_sea_terminal": "NAM_overseas_buyers",
+    "NAM_island_steel_levy": "NAM_island_levy_office",
+    "NAM_island_concession_231": "NAM_island_concession",
+    "NAM_island_convoy_service": "NAM_island_convoys",
+    "NAM_renegotiate_val_concession": "NAM_reclaim_230",
+    "NAM_south_allied_fuel": "NAM_south_allied_fuel_office",
+    "NAM_south_convoy_interdiction": "NAM_south_convoy_hunters",
+}
+
+
+def check_oil_monopoly(
+    effects: str,
+    triggers: str,
+    on_actions: str,
+    decisions: str,
+    categories: str,
+    events: str,
+    hostilities: str,
+) -> None:
+    """Oil throughput, contracts, embargo, field projects and the islands."""
+    initialize = named_block(effects, "NAM_oil_initialize")
+    for state_id, capacity in FIELD_CAPACITY.items():
+        state_block = named_block(initialize, str(state_id))
+        check(
+            f"var = NAM_field_capacity value = {capacity}" in state_block
+            and "var = NAM_field_condition value = 80" in state_block,
+            f"field {state_id} must start with capacity {capacity} and condition 80",
+        )
+    groups_init = named_block(effects, "NAM_groups_initialize")
+    check(
+        "NAM_oil_initialize = yes" in groups_init
+        and "var = NAM_project_slots value = 1" in groups_init,
+        "the single startup entry must seed the oil system and one project slot",
+    )
+    refresh = named_block(effects, "NAM_oil_refresh")
+    check(
+        all(f"{state_id} = {{ NAM_field_update_units = yes }}" in refresh for state_id in FIELD_CAPACITY)
+        and "NAM_oil_count_clients = yes" in refresh
+        and "has_country_flag = NAM_rw_tribute" in refresh
+        and "NAM_rw_azh_treaty" not in effects
+        and "NAM_sea_terminal_built" in refresh,
+        "NAM_oil_refresh must count fields, the terminal, contracts and tribute; the Azhar treaty is retired",
+    )
+    check(
+        "is_controlled_by = NAM" in named_block(effects, "NAM_field_update_units"),
+        "throughput must count only fields Svetlogorye controls",
+    )
+    oil_effects = [
+        named_block(effects, name)
+        for name in (
+            "NAM_oil_refresh",
+            "NAM_oil_monthly",
+            "NAM_oil_settle_clients",
+            "NAM_oil_validate_clients",
+            "NAM_oil_count_clients",
+            "NAM_island_levy_monthly",
+            "NAM_rus_coalition_check",
+        )
+    ]
+    check(
+        all(block and "every_country" not in block for block in oil_effects),
+        "recurring oil work must read fixed tags, never scan every country",
+    )
+    for list_effect, call in (
+        ("NAM_oil_count_clients", "NAM_oil_count_client"),
+        ("NAM_oil_validate_clients", "NAM_oil_validate_client"),
+        ("NAM_oil_settle_clients", "NAM_oil_settle_client"),
+        ("NAM_oil_release_all_buyers", "NAM_oil_release_buyer"),
+    ):
+        listed = set(
+            re.findall(
+                rf"\b([A-Z]{{3}})\s*=\s*\{{\s*{call}\s*=\s*yes\s*\}}",
+                named_block(effects, list_effect),
+            )
+        )
+        check(listed == OIL_BUYERS, f"{list_effect} must cover the fixed buyer list: {sorted(listed)}")
+    buyer_trigger = set(re.findall(r"tag\s*=\s*([A-Z]{3})", named_block(triggers, "NAM_oil_buyer_tag")))
+    check(buyer_trigger == OIL_BUYERS, f"NAM_oil_buyer_tag drifted: {sorted(buyer_trigger)}")
+    offer = named_block(decisions, "NAM_oil_contract_offer")
+    offer_targets = set(re.findall(r"[A-Z]{3}", named_block(offer, "targets")))
+    check(offer_targets == OIL_BUYERS, f"contract targets drifted: {sorted(offer_targets)}")
+    check(
+        "NAM_oil_unit_free_for_buyer = yes" in offer
+        and "NAM_oil_offer_contract = yes" in offer,
+        "a contract offer needs a free unit and the buyer's consent event",
+    )
+    sign = named_block(effects, "NAM_oil_sign_contract")
+    check(
+        "NAM_oil_unit_free_for_buyer = yes" in sign
+        and "set_country_flag = NAM_oil_client" in sign
+        and "NAM_oil_refresh = yes" in sign
+        and "ADISCORD_nam_oil.2" in sign,
+        "signature must recheck capacity, set the client flag, refresh and inform Svetlogorye",
+    )
+    settle = named_block(effects, "NAM_oil_settle_client")
+    check(
+        "NOT = { has_fuel < 1500 }" in settle
+        and "add_fuel = 1500" in settle
+        and "add_fuel = -1500" in settle
+        and "value = 40" in settle,
+        "monthly settlement must move 1500 fuel from stock and earn 40 treasury",
+    )
+    check(
+        "NAM_add_treasury = yes" in named_block(effects, "NAM_oil_settle_clients"),
+        "contract revenue must enter through the treasury helper",
+    )
+    validate = named_block(effects, "NAM_oil_validate_client")
+    check(
+        "has_war_with = NAM" in validate
+        and "modifier = NAM_fuel_shortage" in validate
+        and "days = 90" in validate,
+        "a war with a client must end its contract with a 90-day shortage",
+    )
+    for removal in re.finditer(r"remove_dynamic_modifier\s*=\s*\{\s*modifier\s*=\s*(\w+)", effects):
+        window = effects[max(0, removal.start() - 300) : removal.start()]
+        check(
+            f"has_dynamic_modifier = {{ modifier = {removal.group(1)} }}" in window,
+            f"remove_dynamic_modifier {removal.group(1)} lacks its has_dynamic_modifier guard",
+        )
+    check(
+        "NAM_oil_validate_clients = yes" in hostilities
+        and hostilities.count("NOT = { has_country_flag = NAM_oil_client }") == 2,
+        "hostilities must end belligerent contracts and spare RHM/MZR clients the volunteer idea",
+    )
+    tension = named_block(effects, "NAM_rw_tension_monthly")
+    check(
+        tension.count("modifier = NAM_fuel_embargo_modifier") == 2,
+        "each embargo on Eflor or Azhar must add restitution pressure",
+    )
+    check(
+        "NAM_oil_release_all_buyers = yes" in named_block(effects, "NAM_oil_close_all")
+        and "NAM_oil_release_all_buyers = yes" in named_block(effects, "NAM_rw_settle_island_exile")
+        and "NAM_steel_concession_end" not in named_block(effects, "NAM_rw_settle_island_exile"),
+        "the partition must close every contract; the island exile keeps the steel concession",
+    )
+    buy_time = named_block(effects, "NAM_rw_buy_time")
+    check(
+        "NOT = { has_country_flag = NAM_rw_time_bought }" in buy_time
+        and "NOT = { has_fuel < 12000 }" in buy_time
+        and buy_time.count("add_fuel = -12000") == 1
+        and "AZH = { add_fuel = 12000 }" in buy_time
+        and "set_country_flag = NAM_rw_time_bought" in buy_time
+        and "NOT = { NAM_rw_time_bought_active = yes }" in named_block(triggers, "NAM_rw_war_window_open")
+        and "days < 75" in named_block(triggers, "NAM_rw_time_bought_active"),
+        "Azhar's delay must be paid once in fuel and close the war window for 75 days",
+    )
+    check(
+        "NAM_oil_refresh = yes" in named_block(effects, "NAM_rw_start_tribute"),
+        "starting the tribute must commit its units",
+    )
+    check(
+        "NAM_oil_monthly = yes" in named_block(effects, "NAM_rw_monthly")
+        and "NAM_rw_monthly = yes" in named_block(on_actions, "on_monthly_NAM"),
+        "contracts must settle inside on_monthly_NAM",
+    )
+    check(
+        "NAM_oil_refresh = yes" in named_block(on_actions, "on_state_control_changed"),
+        "control changes must refresh oil throughput",
+    )
+    check(
+        "NAM_oil_refresh = yes" in named_block(decisions, "NAM_scorch_wells")
+        and "modifier = NAM_scorched_wells_modifier" in named_block(decisions, "NAM_scorch_wells"),
+        "scorched wells must refresh throughput and use the renamed state modifier",
+    )
+    slot = named_block(triggers, "NAM_project_slot_free")
+    check(
+        "value = NAM_projects_in_progress compare = greater_than" in slot
+        and "value = 2 compare = less_than" in slot,
+        "field projects must respect NAM_project_slots and the ceiling of two",
+    )
+    for decision_name, (pp, treasury, days, completion) in PROJECT_PRICES.items():
+        decision = named_block(decisions, decision_name)
+        complete = named_block(decision, "complete_effect")
+        check(
+            "cost = 0" in decision
+            and "custom_cost_text = NAM_cost_project_" in decision
+            and f"NOT = {{ has_political_power < {pp} }}" in decision
+            and f"value = {treasury} compare = greater_than_or_equals" in decision
+            and f"days_remove = {days}" in decision
+            and "NAM_project_slot_free = yes" in decision
+            and "has_decision" not in decision,
+            f"{decision_name} lacks its exact price, duration or slot contract",
+        )
+        check(
+            complete.count(f"add_political_power = -{pp}") == 1
+            and complete.count(f"var = NAM_treasury_amount value = {treasury}") == 1
+            and complete.count("NAM_spend_treasury = yes") == 1
+            and f"var = NAM_project_deposit value = {treasury}" in complete
+            and "NAM_project_begin = yes" in complete,
+            f"{decision_name} must debit each currency once into the state escrow",
+        )
+        check(
+            f"{completion} = yes" in named_block(decision, "remove_effect")
+            and "NAM_project_release = yes" in named_block(decision, "cancel_effect"),
+            f"{decision_name} must settle at completion and refund on cancellation",
+        )
+        settle_block = named_block(effects, completion)
+        check(
+            "is_owned_by = NAM" in settle_block
+            and "is_controlled_by = NAM" in settle_block
+            and "NAM_project_release = yes" in settle_block,
+            f"{completion} must recheck ownership and control and refund a lost state",
+        )
+    check(
+        "has_state_flag = NAM_project_in_progress" in named_block(effects, "NAM_project_release"),
+        "a project refund must settle only a state holding the escrow",
+    )
+    for decision_name, focus in DECISION_FOCUS_GATES.items():
+        decision = named_block(decisions, decision_name)
+        check(
+            f"has_completed_focus = {focus}" in named_block(decision, "visible"),
+            f"{decision_name} must be gated by its unlocking focus {focus}",
+        )
+    for decision_name in ("NAM_island_convoy_service", "NAM_south_convoy_interdiction"):
+        decision = named_block(decisions, decision_name)
+        check(
+            "cost = 0" in decision and "custom_cost_text" in decision and "hidden_trigger" in decision,
+            f"{decision_name} must recheck its custom price before the single debit",
+        )
+    check(
+        "NAM_overseas_districts = {" in categories
+        and "ADISCORD_nam_resource_war_compromise" in named_block(categories, "NAM_national_programmes"),
+        "the islands category and the defeat-route programme visibility are required",
+    )
+    for event_id in (
+        "ADISCORD_nam_oil.1",
+        "ADISCORD_nam_oil.2",
+        "ADISCORD_nam_oil.4",
+        "ADISCORD_nam_oil.5",
+        "ADISCORD_nam_oil.6",
+        "ADISCORD_nam_oil.7",
+        "ADISCORD_nam_oil.10",
+    ):
+        check(
+            re.search(rf"(?m)^\s*id\s*=\s*{re.escape(event_id)}\s*$", events) is not None,
+            f"{event_id} is not defined",
+        )
+    entry = next(
+        (
+            block
+            for block in typed_blocks(events, "country_event")
+            if re.search(r"(?m)^\s*id\s*=\s*ADISCORD_nam_resource_war\.1\s*$", block)
+        ),
+        "",
+    )
+    check(
+        "global.NAM_rw_entry_dispatches" in entry
+        and "value = 0 compare = less_than_or_equals" in entry
+        and entry.count("NAM_rw_count_entry_dispatch = yes") == 3,
+        "the entry event must stop the war only when no other dispatch is queued",
+    )
+    check(
+        "NAM_rw_time_bought_active = yes" in entry
+        and "set_global_flag = ADISCORD_nam_resource_war_time_deferred" in entry
+        and "days = 75" in entry,
+        "the entry event must honour Azhar's delay and move the backstop by 75 days once",
+    )
+    check(
+        "NAM_rw_count_entry_dispatch = yes" in named_block(effects, "ADISCORD_nam_resource_war_schedule")
+        and "NAM_rw_count_entry_dispatch = yes" in named_block(effects, "NAM_rw_tension_clamp"),
+        "every scheduled entry dispatch must be counted",
+    )
+
+
+FAVOUR_FOCUSES = {
+    "nam": "NAM_namestnik_circuits",
+    "oil": "NAM_supports_oil_compact",
+    "dist": "NAM_district_assemblies",
+    "garr": "NAM_garrison_assembly",
+    "trade": "NAM_supports_export_houses",
+}
+
+
+def event_block(events: str, event_id: str) -> str:
+    return next(
+        (
+            block
+            for block in typed_blocks(events, "country_event")
+            if re.search(rf"(?m)^\s*id\s*=\s*{re.escape(event_id)}\s*$", block)
+        ),
+        "",
+    )
+
+
+def check_ladder(
+    effects: str,
+    triggers: str,
+    on_actions: str,
+    decisions: str,
+    categories: str,
+    events: str,
+    hostilities: str,
+) -> None:
+    """Ladder of seals, rivals, underground, endings, memoirs and the war of return."""
+    bop = read("common/bop/NAM.txt")
+    check(
+        "NAM_ladder_bop = {" in bop
+        and "left_side = NAM_bop_vertical" in bop
+        and "right_side = NAM_bop_districts" in bop
+        and bop.count("on_activate = { ADISCORD_economy_mark_dirty = yes }") == bop.count("range = {")
+        and bop.count("on_deactivate = { ADISCORD_economy_mark_dirty = yes }") == bop.count("range = {"),
+        "NAM_ladder_bop must exist and mark the economy dirty on every range change",
+    )
+    declare = named_block(effects, "NAM_ladder_declare_independence")
+    check(
+        "NAM_ladder_declare_independence = yes" in named_block(effects, "ADISCORD_nam_resource_war_schedule")
+        and "NOT = { has_country_flag = NAM_independence_declared }" in declare
+        and "NOT = { has_power_balance = { id = NAM_ladder_bop } }" in declare
+        and declare.count("set_power_balance") == 1
+        and "set_power_balance = { id = NAM_ladder_bop set_value = 0 }" in declare
+        and "value = -0.25" in declare
+        and "value = 0.25" in declare
+        and "NOT = { has_variable = NAM_underground }" in declare
+        and "id = ADISCORD_nam_groups.12" in declare,
+        "the declaration must create the ladder once, apply the course shift and open .12",
+    )
+    runtime = "\n".join((effects, events, decisions))
+    check(
+        runtime.count("set_power_balance") == 1,
+        "only the declaration may set the ladder balance; later writers add to it",
+    )
+    declaration_event = event_block(events, "ADISCORD_nam_groups.12")
+    check(
+        "value = -0.15" in declaration_event and "value = 0.15" in declaration_event,
+        "the declaration answers must tilt the ladder by 0.15",
+    )
+    monthly = named_block(effects, "NAM_groups_monthly")
+    check(
+        "value = 0.5" in monthly and "value = 1 }" not in monthly,
+        "pillar drift must be half a point a month",
+    )
+    for group, focus in FAVOUR_FOCUSES.items():
+        decision = named_block(decisions, f"NAM_favour_{group}")
+        check(
+            f"has_completed_focus = {focus}" in named_block(decision, "visible")
+            and f"var = NAM_grp_{group}_support value = 70 compare = greater_than_or_equals" in decision
+            and f"idea = NAM_favour_{group}_idea" in decision
+            and "days = 120" in decision
+            and "NAM_favour_pay_support = yes" in decision
+            and "days_re_enable" in decision,
+            f"NAM_favour_{group} lacks its focus gate, 70-support price or 120-day favour",
+        )
+    tokens = read("common/synchronized_dynamic_tokens/ADISCORD_tokens.txt")
+    for mission in ("NAM_rival_demand", "NAM_war_of_return_deadline"):
+        check(
+            re.search(rf"(?m)^{mission}\s*$", tokens) is not None,
+            f"{mission} is not registered in the synchronized token file",
+        )
+    rival_mission = named_block(decisions, "NAM_rival_demand")
+    check(
+        "NAM_rival_demand_met = yes" in named_block(rival_mission, "available")
+        and "days_mission_timeout = 60" in rival_mission
+        and "NAM_rival_demand_paid = yes" in rival_mission
+        and "NAM_rival_refuse = yes" in named_block(rival_mission, "timeout_effect"),
+        "the rival demand must succeed on its term and count its deadline as a refusal",
+    )
+    deadline = named_block(decisions, "NAM_war_of_return_deadline")
+    check(
+        "available = { hidden_trigger = { always = no } }" in deadline
+        and "days_mission_timeout = 365" in deadline,
+        "the war-of-return deadline must be a 365-day timeout-only mission",
+    )
+    refuse = named_block(effects, "NAM_rival_refuse")
+    check(
+        "NAM_rival_current_heard = no" in refuse
+        and "NAM_rival_current_pillar_broken = yes" in refuse
+        and refuse.find("NAM_rival_current_pillar_broken = yes") < refuse.find("NAM_rival_pillar_add = yes")
+        and "NAM_rival_open_coup = yes" in refuse,
+        "an unheard rival of a pillar already below 25 must open the coup on refusal",
+    )
+    rivals_monthly = named_block(effects, "NAM_rivals_monthly")
+    check(
+        "has_country_flag = NAM_coup_pending" in rivals_monthly
+        and "clr_country_flag = NAM_coup_pending" in rivals_monthly
+        and "days = 120" in rivals_monthly
+        and "id = ADISCORD_nam_groups.20" in rivals_monthly,
+        "the rival cycle must run every 120 days and consume the Night of Seals",
+    )
+    coup = named_block(effects, "NAM_coup_install")
+    check(
+        coup.count("add_country_leader_role") == 4
+        and coup.count("promote_leader = yes") == 4
+        and coup.count("ideology = etatism_ideology") == 4
+        and "set_country_flag = NAM_coup_succeeded" in coup,
+        "every coup leader must take an etatist leader role",
+    )
+    ladder_monthly = named_block(effects, "NAM_ladder_monthly")
+    check(
+        "NAM_ladder_monthly = yes" in named_block(on_actions, "on_monthly_NAM")
+        and "every_country" not in ladder_monthly
+        and "every_country" not in named_block(effects, "NAM_underground_monthly")
+        and "every_country" not in rivals_monthly,
+        "ladder upkeep must run in on_monthly_NAM without world scans",
+    )
+    check(
+        "NOT = { has_country_flag = NAM_veter_amnesty }"
+        in named_block(effects, "ADISCORD_nam_resource_war_start_mainland_rebellion")
+        and "NOT = { has_country_flag = NAM_veter_amnesty }"
+        in named_block(event_block(events, "ADISCORD_nam_resource_war.2"), "trigger")
+        and "set_country_flag = NAM_veter_amnesty" in named_block(effects, "NAM_veter_amnesty")
+        and "recruit_character = NAM_Yaroslav_Veter" in named_block(effects, "NAM_veter_amnesty"),
+        "the amnesty must recruit Veter for NAM and prevent SLF for good",
+    )
+    clamp = named_block(effects, "NAM_underground_clamp")
+    check(
+        "min = 0" in clamp and "max = 100" in clamp and "has_country_flag = NAM_veter_amnesty" in clamp,
+        "the underground clamp must hold 0-100 and keep an amnestied network at 0",
+    )
+    for ending, tag, spirit in (
+        ("NAM_apply_ending_iron", "NAM_iron_ladder", "NAM_spirit_iron_ladder"),
+        ("NAM_apply_ending_service", "NAM_service_republic", "NAM_spirit_service_republic"),
+        ("NAM_apply_ending_federation", "NAM_federation", "NAM_spirit_federation"),
+        ("NAM_apply_ending_oil_union", "NAM_oil_union", "NAM_spirit_oil_union"),
+    ):
+        block = named_block(effects, ending)
+        check(
+            f"set_cosmetic_tag = {tag}" in block
+            and f"add_ideas = {spirit}" in block
+            and "has_country_flag = NAM_coup_succeeded" in block
+            and "set_country_flag = NAM_ladder_settled" in block,
+            f"{ending} must keep a coup leader, set its name and its spirit",
+        )
+        for size in ("", "medium/", "small/"):
+            check(
+                (ROOT / "gfx" / "flags" / f"{size}{tag}.tga").exists(),
+                f"missing flag gfx/flags/{size}{tag}.tga",
+            )
+    dispatcher = event_block(events, "ADISCORD_nam_memoir.99")
+    check(
+        "hidden = yes" in dispatcher and "NAM_memoir_dispatch = yes" in dispatcher,
+        "the memoir dispatcher must be a hidden event",
+    )
+    memoir = named_block(effects, "NAM_memoir_dispatch")
+    check(
+        "is_ai = no" in memoir and "days = 90" in memoir and "NAM_memoir_next < 6" in memoir,
+        "memoirs reach human rulers every 90 days, five chapters at most",
+    )
+    for chapter in range(1, 6):
+        page = event_block(events, f"ADISCORD_nam_memoir.{chapter}")
+        second = event_block(events, f"ADISCORD_nam_memoir.{chapter + 10}")
+        check(
+            "is_ai = no" in page
+            and page.count("option = {") == 2
+            and f"id = ADISCORD_nam_memoir.{chapter + 10}" in page
+            and second.count("option = {") == 1
+            and "country_event" not in named_block(second, "option"),
+            f"memoir chapter {chapter} needs a continuation page and a full exit on both pages",
+        )
+    for number in range(1, 7):
+        check(
+            bool(event_block(events, f"ADISCORD_nam_archive.{number}")),
+            f"ADISCORD_nam_archive.{number} is not defined",
+        )
+    start = named_block(effects, "NAM_war_of_return_start")
+    close = named_block(effects, "NAM_war_of_return_close")
+    check(
+        "NAM_war_of_return_can_start = yes" in start
+        and "declare_war_on" in start
+        and "add_to_war" in start
+        and "ADISCORD_nam_resource_war_reserve_major = yes" in start
+        and "activate_mission = NAM_war_of_return_deadline" in start
+        and "id = ADISCORD_nam_resource_war.61 days = 365" in start,
+        "the war of return must declare one coalition war with its temporary majors and deadline",
+    )
+    check(
+        close.find("set_global_flag = NAM_war_of_return_resolved") < close.find("white_peace")
+        and "ADISCORD_nam_resource_war_release_major = yes" in close
+        and "remove_mission = NAM_war_of_return_deadline" in close,
+        "every war-of-return exit must resolve first, then end the war and release majors",
+    )
+    for resolver in (
+        "NAM_war_of_return_resolve_victory",
+        "NAM_war_of_return_resolve_front",
+        "NAM_war_of_return_close_external",
+    ):
+        check(
+            "NAM_war_of_return_close = yes" in named_block(effects, resolver),
+            f"{resolver} must run the shared war-of-return cleanup",
+        )
+    check(
+        "NAM_war_of_return_close = yes"
+        in named_block(effects, "ADISCORD_nam_resource_war_resolve_coalition_victory"),
+        "a lost war of return must close the campaign before the partition",
+    )
+    check(
+        on_actions.count("NAM_war_of_return_close_external = yes") >= 3
+        and "NAM_war_of_return_resolve_victory = yes" in on_actions
+        and "NAM_wor_record_capitulation = yes" in on_actions,
+        "the scripted peace hooks must dispatch the war of return",
+    )
+    delivery = named_block(effects, "NAM_deliver_mobilisation_orders")
+    spawn = named_block(effects, "NAM_order_spawn_one")
+    check(
+        "capital_scope" not in delivery
+        and delivery.count("NAM_order_spawn_one = yes") == 4
+        and "has_full_control_of_state" in spawn
+        and "is_fully_controlled_by = NAM" in spawn
+        and "log = " in spawn
+        and "NAM_order_unlock_templates = yes" in delivery,
+        "paid formations must spawn one by one in a fully held Svetlogorsk state and be logged",
+    )
+    check(
+        "NAM_order_ensure_templates = yes" in named_block(effects, "NAM_order_register")
+        and -1 < hostilities.find("NAM_order_ensure_templates = yes")
+        < hostilities.find('load_oob = "NAM_resource_war"')
+        < hostilities.find("NAM_deliver_mobilisation_orders = yes"),
+        "the order templates must exist from the first order and before the baseline OOB",
+    )
+    templates = named_block(effects, "NAM_order_ensure_templates")
+    check(
+        templates.count("ADISCORD_mechanized_infantry = {") == 4
+        and "has_tech = ADISCORD_tech_armored_carrier_program" in templates
+        and "set_technology" in named_block(effects, "NAM_order_grant_motor_technology")
+        and "NAM_order_grant_motor_technology = yes" in named_block(decisions, "NAM_order_motor_column"),
+        "the motorised order must grant the carrier programme before its mechanised template",
+    )
+    close_preparation = named_block(effects, "NAM_rw_close_preparation")
+    check(
+        "id = ADISCORD_nam_resource_war.24" in close_preparation
+        and close_preparation.find("ADISCORD_nam_resource_war.24")
+        < close_preparation.find("NAM_refund_mobilisation_orders = yes"),
+        "an unrequested refund of paid orders must be announced with its amounts",
+    )
+    check(
+        "NAM_rw_clear_punishment = yes" in on_actions,
+        "annexation must clear the punitive spirits",
+    )
+
+
+BORDER_BELT_STATES = (720, 721, 722, 701)
+STANDOFF_FOCUS_BYPASS = (
+    "AND = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started "
+    "NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled } }"
+)
+
+
+def check_settlement(
+    effects: str,
+    triggers: str,
+    decisions: str,
+    categories: str,
+    events: str,
+    loc: str,
+) -> None:
+    """Standoff at the deadline, Azhar treaty term, Veter refunds and route gates."""
+    belt = named_block(triggers, "NAM_rw_holds_border_belt")
+    check(
+        all(f"controls_state = {state_id}" in belt for state_id in BORDER_BELT_STATES),
+        "the border-belt trigger must read control of 720, 721, 722 and 701",
+    )
+    # The decisive ground ends the war for either side after a 7-day recheck.
+    queue = named_block(effects, "NAM_rw_queue_front_check")
+    resolution = named_block(effects, "ADISCORD_nam_resource_war_front_resolution")
+    territorial = named_block(triggers, "NAM_rw_territorial_victory")
+    coalition_ground = named_block(triggers, "NAM_rw_coalition_territorial_victory")
+    check(
+        "NAM_rw_territorial_victory = yes" in queue
+        and "NAM_rw_coalition_territorial_victory = yes" in queue
+        and "flag = NAM_rw_front_check_pending" in queue
+        and "id = ADISCORD_nam_resource_war.51 days = 7" in queue
+        and "NAM_rw_queue_front_check = yes"
+        in read("common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt")
+        and "ADISCORD_nam_resource_war_front_resolution = yes"
+        in event_block(events, "ADISCORD_nam_resource_war.51")
+        and "clr_country_flag = NAM_rw_front_check_pending" in resolution
+        and "NAM_rw_territorial_victory = yes" in resolution
+        and "NAM_rw_coalition_territorial_victory = yes" in resolution,
+        "control changes must queue one debounced front settlement that rechecks the ground",
+    )
+    check(
+        all(f"controls_state = {state_id}" in territorial for state_id in (720, 721, 701, 722))
+        and "67 = { NAM_rw_field_taken_by_coalition = yes }" in coalition_ground,
+        "the territorial settlements must read the border belts and the Northern Deposits",
+    )
+    record = named_block(triggers, "ADISCORD_nam_victory_record_complete")
+    check(
+        "has_capitulated" not in record
+        and "ADISCORD_nam_resource_war_record_uncapitulation = yes"
+        in read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"),
+        "the victory record must use defeat receipts that liberation clears",
+    )
+    close_external = named_block(effects, "ADISCORD_nam_resource_war_close_external")
+    check(
+        close_external.find("ADISCORD_nam_resource_war_timeout_resolution = yes")
+        < close_external.find("set_global_flag = ADISCORD_nam_resource_war_resolved"),
+        "a native peace between independent principals must still settle by the oil score",
+    )
+    address = event_block(events, "ADISCORD_nam_resource_war.70")
+    check(
+        address.count("option = {") == 3 and "fire_only_once = yes" in address,
+        "Rom's address needs its three tones of speech",
+    )
+    timeout = named_block(effects, "ADISCORD_nam_resource_war_timeout_resolution")
+    victory_call = timeout.find("ADISCORD_nam_resource_war_resolve_nam_victory = yes")
+    check(
+        -1 < timeout.find("NAM_rw_holds_border_belt = yes") < victory_call
+        < timeout.find("ADISCORD_nam_resource_war_resolve_standoff = yes")
+        < timeout.find("ADISCORD_nam_resource_war_resolve_compromise = yes"),
+        "a timeout score of 100 wins the treaty only with a border district; otherwise it is a standoff",
+    )
+    standoff = named_block(effects, "ADISCORD_nam_resource_war_resolve_standoff")
+    for token in (
+        "ADISCORD_nam_resource_war_active = yes",
+        "set_global_flag = ADISCORD_nam_resource_war_resolved",
+        "set_global_flag = ADISCORD_nam_resource_war_nam_victory",
+        "set_global_flag = ADISCORD_nam_resource_war_standoff",
+        "clr_global_flag = ADISCORD_nam_resource_war_started",
+        "ADISCORD_nam_resource_war_end_all_wars = yes",
+        "annex_country = { target = SLF transfer_troops = no }",
+        "ADISCORD_nam_resource_war_clear_temporary_support = yes",
+        "VAL_deliver_nam_concession = yes",
+        "VAL_settle_resource_aid = yes",
+        "tree = NAM_postwar_focus",
+        "keep_completed = yes",
+        "ADISCORD_nam_resource_news.3",
+    ):
+        check(token in standoff, f"the standoff settlement lacks {token}")
+    for token in (
+        "NAM_rw_award_border_state",
+        "NAM_rw_punish_defeated_coalition",
+        "NAM_treaty_independence_recognised",
+        "VAL_cancel_nam_concession",
+        "annex_country = { target = NAM",
+    ):
+        check(token not in standoff, f"the standoff settlement must not apply {token}")
+    news_three = next(
+        (
+            block
+            for block in typed_blocks(events, "news_event")
+            if re.search(r"(?m)^\s*id\s*=\s*ADISCORD_nam_resource_news\.3\s*$", block)
+        ),
+        "",
+    )
+    check(
+        "ADISCORD_nam_resource_news.3.t_standoff" in news_three
+        and "ADISCORD_nam_resource_news.3.d_standoff" in news_three,
+        "news .3 needs the standoff title and description",
+    )
+    recognition = event_block(events, "ADISCORD_nam_resource_war.12")
+    check(
+        "has_global_flag = ADISCORD_nam_resource_war_standoff" in recognition
+        and "ADISCORD_nam_resource_war.12.d_standoff" in recognition,
+        "the recognition-focus event needs its standoff text",
+    )
+    check(
+        "has_global_flag = ADISCORD_nam_resource_war_standoff"
+        in named_block(categories, "NAM_national_programmes"),
+        "the national programmes category must stay open after a standoff",
+    )
+
+    for effect_name in (
+        "ADISCORD_nam_resource_war_resolve_nam_victory",
+        "ADISCORD_nam_resource_war_resolve_standoff",
+        "ADISCORD_nam_resource_war_resolve_compromise",
+        "NAM_rw_settle_island_exile",
+        "ADISCORD_nam_resource_war_close_external",
+    ):
+        check(
+            "ADISCORD_nam_resource_war_clear_temporary_support = yes"
+            in named_block(effects, effect_name),
+            f"{effect_name} must run the shared wartime cleanup",
+        )
+    check(
+        "azh_neutral" not in effects + triggers + events + decisions
+        and event_block(events, "ADISCORD_nam_resource_war.22") == ""
+        and event_block(events, "ADISCORD_nam_resource_war.23") == "",
+        "the Azhar neutrality route is retired",
+    )
+    ultimatum = event_block(events, "ADISCORD_nam_resource_war.21")
+    buy_option = ultimatum[ultimatum.find("ADISCORD_nam_resource_war.21.c"):]
+    check(
+        "NOT = { has_country_flag = NAM_rw_time_bought }" in buy_option
+        and "NOT = { has_fuel < 12000 }" in buy_option
+        and "NAM_rw_buy_time = yes" in buy_option,
+        "the ultimatum must offer Azhar's paid delay once and only with the fuel in stock",
+    )
+
+    refund = named_block(effects, "NAM_veter_talks_refund")
+    check(
+        "NAM_add_treasury = yes" in refund
+        and "clear_variable = NAM_veter_talks_deposit" in refund
+        and "add_political_power" not in refund,
+        "broken-off talks must return only the treasury deposit",
+    )
+    check(
+        "custom_effect_tooltip = NAM_veter_talks_1_cancel_tt"
+        in named_block(named_block(decisions, "NAM_veter_talks_1"), "cancel_effect"),
+        "the first round must explain that its political power is not refunded",
+    )
+    for number, amount in ((2, 100), (3, 200)):
+        talks = named_block(decisions, f"NAM_veter_talks_{number}")
+        check(
+            f"var = NAM_veter_talks_deposit value = {amount}" in named_block(talks, "complete_effect")
+            and "NAM_veter_talks_refund = yes" in named_block(talks, "cancel_effect")
+            and "clear_variable = NAM_veter_talks_deposit" in named_block(talks, "remove_effect"),
+            f"NAM_veter_talks_{number} must hold its {amount} treasury in escrow until it ends",
+        )
+
+    for decision_name in ("NAM_south_allied_fuel", "NAM_south_convoy_interdiction"):
+        check(
+            "has_completed_focus = NAM_defeat_southern_charter"
+            in named_block(named_block(decisions, decision_name), "visible"),
+            f"{decision_name} must also open on the defeat route's Southern Compact",
+        )
+    main_tree = read("focus_trees/NAM/main/focuses.txt")
+    for focus in typed_blocks(main_tree, "focus"):
+        if "tooltip = NAM_restitution_clock_tt" in named_block(focus, "available"):
+            check(
+                has_script_fragment(named_block(focus, "bypass"), STANDOFF_FOCUS_BYPASS),
+                "a focus waiting for the restitution clock must bypass once the entry has closed",
+            )
+
+    check(
+        "NAM_coup_leader" not in effects and "NAM_war_of_return_front_peace" not in effects,
+        "unread coup-leader and front-peace markers must stay removed",
+    )
+    for key in (
+        "NAM_Arseny_Klyuch_advisor",
+        "NAM_Lev_Gavanov_advisor",
+        "NAM_Taras_Shtyk_advisor",
+        "NAM_Vera_Pechat_advisor",
+        "ADISCORD_nam_resource_news.3.t_standoff",
+        "ADISCORD_nam_resource_news.3.d_standoff",
+        "ADISCORD_nam_resource_war.12.d_standoff",
+        "ADISCORD_nam_resource_war.21.c",
+        "NAM_rw_21_c_tt",
+        "NAM_rw_next_time_bought",
+        "ADISCORD_nam_resource_news.2.t_exile",
+        "ADISCORD_nam_resource_news.2.d_exile",
+        "ADISCORD_nam_resource_news.2.a_exile",
+        "ADISCORD_nam_resource_war.70.d",
+        "NAM_orders_summary_delivered",
+        "NAM_veter_talks_1_cancel_tt",
+        "NAM_veter_talks_2_cancel_tt",
+        "NAM_veter_talks_3_cancel_tt",
+    ):
+        check(
+            re.search(rf"(?m)^\s*{re.escape(key)}:", loc) is not None,
+            f"missing localisation key {key}",
+        )
+    # Event paper is light: its descriptions use native dark text only.
+    paper_keys = set(re.findall(r"\b(?:desc|text)\s*=\s*([A-Za-z0-9_.]+)", events))
+    for match in re.finditer(r'(?m)^\s*([A-Za-z0-9_.]+):\d*\s*"(.*)"\s*$', loc):
+        if match.group(1) in paper_keys:
+            check(
+                "§Y" not in match.group(2),
+                f"{match.group(1)} uses yellow text on event paper",
+            )
+
+
 def main() -> int:
     files = (
         "common/country_tags/03_ADISCORD_nam_resource_war_tags.txt",
@@ -162,6 +936,18 @@ def main() -> int:
                 re.DOTALL,
             )
         )
+        # NAM's baseline OOB carries units only; the order templates are
+        # created by NAM_order_ensure_templates before the OOB loads.
+        if relative == "history/units/NAM_resource_war.txt":
+            defined_templates |= set(
+                re.findall(
+                    r'division_template\s*=\s*\{\s*name\s*=\s*"([^"]+)"',
+                    named_block(
+                        sources["common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"],
+                        "NAM_order_ensure_templates",
+                    ),
+                )
+            )
         referenced_templates = set(
             re.findall(
                 r'division_template\s*=\s*"([^"]+)"',
@@ -348,8 +1134,8 @@ def main() -> int:
         "country_exists = AZH",
         "set_global_flag = ADISCORD_nam_resource_war_scheduled",
         "id = ADISCORD_nam_resource_war.1",
-        "days = 850",
-        "random_days = 90",
+        "days = 420",
+        "random_days = 60",
     ):
         check(
             schedule.count(token) == 1,
@@ -395,13 +1181,19 @@ def main() -> int:
         entry_immediate,
     )
     check(
-        len(retry_calls) == 1,
-        "resource-war .1 must contain exactly one delayed self-retry",
+        len(retry_calls) == 3,
+        "resource-war .1 must contain one protocol deferral, one bought delay and one delayed self-retry",
     )
     for token, expected in (
         ("NOT = { has_global_flag = ADISCORD_nam_resource_war_retry_used }", 1),
         ("set_global_flag = ADISCORD_nam_resource_war_retry_used", 1),
+        ("NOT = { has_global_flag = ADISCORD_nam_resource_war_protocol_deferred }", 1),
+        ("set_global_flag = ADISCORD_nam_resource_war_protocol_deferred", 1),
+        ("NOT = { has_global_flag = ADISCORD_nam_resource_war_time_deferred }", 1),
+        ("set_global_flag = ADISCORD_nam_resource_war_time_deferred", 1),
         ("clr_global_flag = ADISCORD_nam_resource_war_scheduled", 1),
+        ("days = 365", 1),
+        ("days = 75", 1),
         ("days = 120", 1),
         ("random_days = 90", 1),
     ):
@@ -409,13 +1201,30 @@ def main() -> int:
             entry_immediate.count(token) == expected,
             f"resource-war .1 has non-exact bounded retry token: {token}",
         )
+    retry_guard = entry_immediate.find(
+        "NOT = { has_global_flag = ADISCORD_nam_resource_war_retry_used }"
+    )
+    retry_setter = entry_immediate.find(
+        "set_global_flag = ADISCORD_nam_resource_war_retry_used"
+    )
+    deferral_guard = entry_immediate.find(
+        "NOT = { has_global_flag = ADISCORD_nam_resource_war_protocol_deferred }"
+    )
+    deferral_setter = entry_immediate.find(
+        "set_global_flag = ADISCORD_nam_resource_war_protocol_deferred"
+    )
     check(
-        entry_immediate.find(
-            "NOT = { has_global_flag = ADISCORD_nam_resource_war_retry_used }"
-        )
-        < entry_immediate.find("set_global_flag = ADISCORD_nam_resource_war_retry_used")
-        < entry_immediate.find("id = ADISCORD_nam_resource_war.1"),
+        retry_guard
+        < retry_setter
+        < entry_immediate.find("id = ADISCORD_nam_resource_war.1", retry_setter),
         "resource-war .1 self-retry is not protected by its permanent one-retry guard",
+    )
+    check(
+        deferral_guard
+        < deferral_setter
+        < entry_immediate.find("id = ADISCORD_nam_resource_war.1", deferral_setter)
+        < retry_guard,
+        "the protocol deferral of .1 is not a single guarded reschedule",
     )
     runtime_entry = "\n".join((effects, news, on_actions, collapse_events))
     check(
@@ -465,57 +1274,105 @@ def main() -> int:
         "EFL must add AZH to the wartime resource faction exactly once",
     )
     check(
-        start.count("leave_faction = yes") == 3,
+        (start + hostilities).count("leave_faction = yes") == 3,
         "NAM, EFL, and AZH must clear obsolete faction ties before the new faction is formed",
     )
 
+    # The declaration belongs to hostilities: EFL declares, or NAM after a first
+    # strike, and AZH joins the same war unless the faction call already did.
     efl_declaration = (
         "EFL = { declare_war_on = { target = NAM type = annex_everything } }"
     )
+    nam_declaration = (
+        "NAM = { declare_war_on = { target = EFL type = annex_everything } }"
+    )
     azh_join_pattern = re.compile(
-        r"AZH\s*=\s*\{\s*add_to_war\s*=\s*\{\s*"
+        r"AZH\s*=\s*\{\s*if\s*=\s*\{\s*limit\s*=\s*\{\s*NOT\s*=\s*\{\s*has_war_with\s*=\s*NAM\s*\}\s*\}\s*"
+        r"add_to_war\s*=\s*\{\s*"
         r"targeted_alliance\s*=\s*EFL\s+enemy\s*=\s*NAM\s+"
-        r"hostility_reason\s*=\s*asked_to_join\s+single_target_only\s*=\s*yes\s*\}\s*\}",
+        r"hostility_reason\s*=\s*asked_to_join\s+single_target_only\s*=\s*yes\s*\}\s*\}\s*\}",
         re.DOTALL,
     )
-    check(efl_declaration in start, "EFL does not declare the NAM annexation war")
     check(
-        azh_join_pattern.search(start) is not None,
+        efl_declaration in hostilities and nam_declaration in hostilities,
+        "hostilities must declare the single war from EFL or, after a first strike, from NAM",
+    )
+    check(
+        hostilities.count("declare_war_on") == 2
+        and "has_country_flag = NAM_rw_first_strike" in hostilities,
+        "the first-strike declarer must be the only alternative to the EFL declaration",
+    )
+    check(
+        azh_join_pattern.search(hostilities) is not None,
         "AZH does not join EFL's existing war against NAM",
     )
     check(
-        "AZH = { declare_war_on = { target = NAM" not in start,
+        "AZH = { declare_war_on = { target = NAM" not in hostilities,
         "AZH still creates an independent second war against NAM",
     )
+    check(
+        "azh_neutral" not in hostilities
+        and "AZH = { ADISCORD_nam_resource_war_reserve_major = yes }" in hostilities
+        and "add_claim_by = AZH" in hostilities,
+        "AZH must always enter the faction, the war, the claims and major status",
+    )
 
-    create_position = start.find("create_faction_from_template")
-    declare_position = start.find(efl_declaration)
-    join_position = start.find("add_to_war")
+    create_position = hostilities.find("create_faction_from_template")
+    declare_position = hostilities.find(nam_declaration)
+    join_position = hostilities.find("add_to_war")
     check(
         -1 not in (create_position, declare_position, join_position)
         and create_position < declare_position < join_position,
-        "faction creation, EFL declaration, and AZH war entry are in the wrong order",
+        "faction creation, the declaration, and AZH war entry are in the wrong order",
+    )
+    # The victory treaty carves border slivers from both principals: 720, 721
+    # and 701 from Eflor, 722 from a belligerent Azhar, never the core 68/691.
+    victory_award = named_block(effects, "ADISCORD_nam_resource_war_resolve_nam_victory")
+    check(
+        all(
+            f"{state_id} = {{ NAM_rw_award_border_state = yes }}" in victory_award
+            for state_id in (720, 721, 701, 722)
+        )
+        and "69 = { add_claim_by = NAM }" in victory_award
+        and "transfer_state = 691" not in victory_award
+        and "NAM = { transfer_state = 68 }" not in effects,
+        "NAM victory must award the border slivers 720, 721, 701 and 722",
+    )
+    award = named_block(effects, "NAM_rw_award_border_state")
+    check(
+        has_script_fragment(award, "NAM = { transfer_state = PREV } remove_core_of = EFL add_core_of = NAM set_state_controller_to = NAM")
+        and has_script_fragment(award, "NAM = { transfer_state = PREV } remove_core_of = AZH add_core_of = NAM set_state_controller_to = NAM"),
+        "border awards must move ownership, cores and control from the defeated principal",
     )
     check(
-        "transfer_state = 691" in effects and "69 = { add_claim_by = NAM }" in effects,
-        "NAM victory is missing its limited border compensation",
-    )
-    check(
-        "NAM = { transfer_state = 68 }" not in effects
-        and has_script_fragment(
-            effects,
-            "691 = { remove_core_of = EFL add_core_of = NAM set_state_controller_to = NAM }",
-        ),
-        "NAM victory must transfer the connected Eflorian border state 691",
+        "NAM_rw_punish_defeated_coalition = yes" in victory_award
+        and "idea = NAM_ruined_economy" in named_block(effects, "NAM_rw_apply_punishment")
+        and "idea = NAM_army_of_shame" in named_block(effects, "NAM_rw_apply_punishment")
+        and "days = 730" in named_block(effects, "NAM_rw_apply_punishment"),
+        "a NAM victory must punish each defeated principal with both timed spirits",
     )
     check(
         "228 = { add_core_of = NAM" not in effects
         and "231 = { add_core_of = NAM" not in effects,
         "NAM victory must not turn its island colonies back into NAM cores",
     )
+    coalition_treaty = named_block(effects, "ADISCORD_nam_resource_war_resolve_coalition_victory")
+    exile = named_block(effects, "NAM_rw_settle_island_exile")
     check(
-        all(f"transfer_state = {state}" in effects for state in range(225, 232)),
-        "coalition treaty does not account for every NAM island state",
+        all(f"transfer_state = {state}" not in coalition_treaty for state in range(225, 232))
+        and "NAM_rw_can_go_into_exile = yes" in coalition_treaty
+        and "NAM_rw_settle_island_exile = yes" in coalition_treaty
+        and "annex_country = { target = NAM transfer_troops = no }" in coalition_treaty
+        and all(f"state = {state}" in named_block(triggers, "NAM_rw_island_state") for state in range(225, 232)),
+        "the coalition treaty must leave the islands to an exiled NAM and annex only a NAM without islands",
+    )
+    check(
+        exile.find("set_global_flag = ADISCORD_nam_resource_war_island_exile")
+        < exile.find("load_focus_tree")
+        and "tree = NAM_defeated_focus" in exile
+        and "keep_completed = no" in exile
+        and "set_capital = { state = 228 }" in exile,
+        "the island exile must set its flag before the defeat tree and move the capital to 228 first",
     )
     check(
         "days = 420" in effects
@@ -523,8 +1380,34 @@ def main() -> int:
         and "timeout_resolution" in effects,
         "war needs the 420-day deterministic anti-stalemate deadline",
     )
+    # The timeout is settled by the oil score of the fields NAM still controls.
+    timeout = named_block(effects, "ADISCORD_nam_resource_war_timeout_resolution")
+    oil_score = named_block(effects, "NAM_rw_compute_oil_score")
+    for state_id, oil in ((67, 80), (688, 12), (689, 36), (690, 24), (719, 12)):
+        check(
+            has_script_fragment(
+                oil_score,
+                f"if = {{ limit = {{ NAM = {{ controls_state = {state_id} }} }} "
+                f"add_to_temp_variable = {{ var = NAM_rw_oil_score value = {oil} }} }}",
+            ),
+            f"oil score lacks state {state_id} worth {oil}",
+        )
+    resolution_order = [
+        timeout.find("value = 100 compare = greater_than_or_equals"),
+        timeout.find("ADISCORD_nam_resource_war_resolve_nam_victory = yes"),
+        timeout.find("value = 36 compare = greater_than_or_equals"),
+        timeout.find("ADISCORD_nam_resource_war_resolve_compromise = yes"),
+        timeout.find("ADISCORD_nam_resource_war_resolve_coalition_victory = yes"),
+    ]
+    check(
+        "NAM_rw_compute_oil_score = yes" in timeout
+        and -1 not in resolution_order
+        and resolution_order == sorted(resolution_order)
+        and "controls_state = 67" not in timeout,
+        "timeout must settle by oil score: >= 100 victory or standoff, 36-99 compromise, < 36 partition",
+    )
     for equipment_id, amount, producer in (
-        ("infantry_equipment", 6000, "NAM"),
+        ("infantry_equipment", 20000, "NAM"),
         ("infantry_equipment", 3000, "EFL"),
         ("infantry_equipment", 1800, "AZH"),
         ("infantry_equipment", 1800, "SLF"),
@@ -537,7 +1420,7 @@ def main() -> int:
             f"incorrect resource-war stockpile for {producer}: expected {amount} {equipment_id}",
         )
     check(
-        ai.count("manual_attack = yes") == 3 and ai.count("priority = 1500") >= 6,
+        ai.count("manual_attack = yes") == 5 and ai.count("priority = 1500") >= 6,
         "coalition attack or NAM three-front defence AI is incomplete",
     )
     for strategy in re.findall(r"ai_strategy\s*=\s*\{([^{}]*)\}", ai, re.DOTALL):
@@ -614,46 +1497,153 @@ def main() -> int:
         "remove_ideas = ADISCORD_nam_last_line_administration" in cleanup,
         "NAM outcome cleanup leaves the last-line idea active",
     )
+    # The underground decides the uprising: >= 60 always, 30-59 a 50/50 roll,
+    # below 30 never. An effective compact is checked first.
+    uprising_call = "id = ADISCORD_nam_resource_war.2 days = 45 random_days = 30"
+    underground_order = [
+        hostilities.find("NAM_compact_effective = yes"),
+        hostilities.find("var = NAM_underground value = 60 compare = greater_than_or_equals"),
+        hostilities.find("var = NAM_underground value = 30 compare = greater_than_or_equals"),
+        hostilities.find(f"50 = {{ country_event = {{ {uprising_call} }} }}"),
+        hostilities.find("50 = { set_global_flag = ADISCORD_nam_resource_war_SLF_defeated }"),
+    ]
     check(
-        hostilities.count("random_list = {") >= 1
-        and "50 = { country_event = { id = ADISCORD_nam_resource_war.2 days = 45 random_days = 30 } }"
-        in hostilities
-        and "50 = { set_global_flag = ADISCORD_nam_resource_war_SLF_defeated }"
-        in hostilities,
-        "Svetlogorsk uprising must be a 50/50 wartime roll with the intended 45-75 day response window",
+        -1 not in underground_order
+        and underground_order == sorted(underground_order)
+        and hostilities.count("random_list = {") == 1
+        and hostilities.count(uprising_call) == 2,
+        "Svetlogorsk uprising must follow the underground thresholds "
+        "with the intended 45-75 day response window",
     )
 
-    prewar_category = named_block(
-        prewar_categories, "ADISCORD_nam_prewar_defence_category"
+    check(
+        "ADISCORD_nam_prewar_defence_category" not in prewar_categories
+        and "ADISCORD_nam_fortify_" not in prewar_decisions,
+        "retired one-off fortification decisions or their category remain",
+    )
+    line_decision = named_block(prewar_decisions, "NAM_prepare_line")
+    check(
+        "targets = { 67 688 689 690 719 700 }" in line_decision
+        and "custom_cost_text = NAM_cost_line" in line_decision
+        and "cost = 0" in line_decision
+        and "days_remove = 35" in line_decision
+        and "NOT = { has_political_power < 30 }" in line_decision
+        and "value = 100 compare = greater_than_or_equals" in line_decision
+        and "NAM_line_slot_free = yes" in line_decision
+        and "has_decision" not in line_decision,
+        "NAM_prepare_line lacks its exact price, slot or state-flag escrow contract",
+    )
+    for effect_name in ("NAM_line_complete", "NAM_line_release"):
+        check(
+            "has_state_flag = NAM_line_in_progress" in named_block(effects, effect_name),
+            f"{effect_name} must settle only a line holding its state escrow",
+        )
+    # A completed line fortifies every border province (level 1, level 2 on
+    # border victory points) through the native selector, never a fixed list.
+    line_complete = named_block(effects, "NAM_line_complete")
+    check(
+        re.search(r"province\s*=\s*\d+", line_complete) is None
+        and has_script_fragment(
+            line_complete,
+            "add_building_construction = { type = bunker level = 1 instant_build = yes "
+            "province = { all_provinces = yes limit_to_border = yes } }",
+        )
+        and has_script_fragment(
+            line_complete,
+            "add_building_construction = { type = bunker level = 1 instant_build = yes "
+            "province = { all_provinces = yes limit_to_border = yes limit_to_victory_point > 0 } }",
+        ),
+        "defence lines must fortify every border province through the native selector",
     )
     check(
-        "tag = NAM" in prewar_category
-        and "ADISCORD_vorkerland_collapse_wars_started" in prewar_category
-        and "ADISCORD_nam_resource_war_started" in prewar_category,
-        "NAM prewar-defence category is not scoped to the warning window",
+        "any_neighbor_state = { NOT = { is_owned_by = ROOT } }"
+        in named_block(line_decision, "visible"),
+        "defence lines may be offered only for states with a foreign land border",
     )
-    expected_forts = {
-        "ADISCORD_nam_fortify_extraction_line": {1015: 1, 4912: 1, 8058: 2},
-        "ADISCORD_nam_fortify_azhar_approaches": {461: 1, 6961: 1, 2299: 2},
+
+    # Paid mobilisation: custom price, exact boundaries, escrow counters and a
+    # refund path before the war.
+    order_prices = {
+        "NAM_order_resource_guard": ("NAM_order_guard_paid", 25, 200, 9600),
+        "NAM_order_field_infantry": ("NAM_order_infantry_paid", 15, 100, 6300),
+        "NAM_order_motor_column": ("NAM_order_motor_paid", 25, 250, 4600),
+        "NAM_order_coastal_battalion": ("NAM_order_coastal_paid", 10, 50, 3300),
     }
-    for decision_name, forts in expected_forts.items():
+    refund = named_block(effects, "NAM_refund_mobilisation_orders")
+    delivery = named_block(effects, "NAM_deliver_mobilisation_orders")
+    for decision_name, (counter, pp, treasury, manpower) in order_prices.items():
         decision = named_block(prewar_decisions, decision_name)
+        complete = named_block(decision, "complete_effect")
         check(
-            "cost = 20" in decision
-            and "days_remove = 35" in decision
-            and "fire_only_once = yes" in decision
-            and "base = 1000" in decision,
-            f"{decision_name} lacks the bounded player/AI preparation contract",
+            "cost = 0" in decision
+            and "custom_cost_text = NAM_cost_order_" in decision
+            and f"NOT = {{ has_political_power < {pp} }}" in decision
+            and f"value = {treasury} compare = greater_than_or_equals" in decision
+            and f"NOT = {{ has_manpower < {manpower} }}" in decision
+            and "NAM_order_can_place = yes" in decision,
+            f"{decision_name} lacks its exact custom-cost contract",
         )
-        actual = {
-            int(province): int(level)
-            for level, province in re.findall(
-                r"add_building_construction\s*=\s*\{\s*type\s*=\s*bunker\s+level\s*=\s*(\d+)\s+"
-                r"instant_build\s*=\s*yes\s+province\s*=\s*(\d+)\s*\}",
-                decision,
-            )
-        }
-        check(actual == forts, f"{decision_name} fort line drifted: {actual}")
+        check(
+            complete.count(f"add_political_power = -{pp}") == 1
+            and complete.count(f"add_manpower = -{manpower}") == 1
+            and complete.count(f"var = NAM_treasury_amount value = {treasury}") == 1
+            and complete.count("NAM_spend_treasury = yes") == 1
+            and complete.count(f"add_to_variable = {{ var = {counter} value = 1 }}") == 1,
+            f"{decision_name} must debit each currency exactly once into its escrow",
+        )
+        check(
+            counter in refund
+            and counter in delivery
+            and f"add_manpower = {manpower}" in refund,
+            f"{decision_name} escrow is not settled by refund and delivery",
+        )
+    check(
+        "NAM_deliver_mobilisation_orders = yes" in hostilities
+        and hostilities.find('load_oob = "NAM_resource_war"')
+        < hostilities.find("NAM_deliver_mobilisation_orders = yes"),
+        "paid orders must be delivered at hostilities after the OOB defines templates",
+    )
+    check(
+        "NAM_rw_close_preparation = yes" in entry_event
+        and "NAM_refund_mobilisation_orders = yes"
+        in named_block(effects, "NAM_rw_close_preparation"),
+        "a stopped war entry must refund the paid orders",
+    )
+    order_cap_trigger = named_block(triggers, "NAM_order_can_place")
+    check(
+        "var = NAM_order_cap value = NAM_orders_paid compare = greater_than"
+        in order_cap_trigger
+        and "var = NAM_orders_paid value = 6 compare = less_than" in order_cap_trigger,
+        "mobilisation orders must respect NAM_order_cap and the ceiling of six",
+    )
+
+    # Restitution clock and the field missions.
+    clamp = named_block(effects, "NAM_rw_tension_clamp")
+    check(
+        "id = ADISCORD_nam_resource_war.20" in clamp
+        and "id = ADISCORD_nam_resource_war.21" in clamp
+        and "NAM_rw_war_window_open = yes" in clamp
+        and "id = ADISCORD_nam_resource_war.1 days = 7 random_days = 14" in clamp,
+        "the restitution clamp must own the notes, ultimatum and war thresholds",
+    )
+    window = named_block(triggers, "NAM_rw_war_window_open")
+    check(
+        "days > 299" in window and "days > 664" in window,
+        "the war window must keep the 300-day minimum and the protocol's 365-day delay",
+    )
+    tokens = read("common/synchronized_dynamic_tokens/ADISCORD_tokens.txt")
+    for mission in ("NAM_hold_field_67", "NAM_hold_field_689", "NAM_hold_field_690"):
+        mission_block = named_block(prewar_decisions, mission)
+        check(
+            "available = { hidden_trigger = { always = no } }" in mission_block
+            and "days_mission_timeout = 120" in mission_block
+            and "timeout_effect" in mission_block,
+            f"{mission} must be a 120-day timeout-only mission",
+        )
+        check(
+            re.search(rf"(?m)^{mission}\s*$", tokens) is not None,
+            f"{mission} is not registered in the synchronized token file",
+        )
     check(
         "tag = RHM" in ai
         and "id = EFL" in ai
@@ -673,7 +1663,8 @@ def main() -> int:
     )
     check(
         news.count("news_event = {") == 6,
-        "world news must contain war start, uprising/suppression, peaceful partition, and two terminal outcomes",
+        "world news must contain war start, uprising/suppression, the compromise "
+        "and two terminal outcomes",
     )
 
     news_blocks = typed_blocks(news, "news_event")
@@ -713,7 +1704,7 @@ def main() -> int:
         "ADISCORD_nam_resource_news.3": "ADISCORD_nam_resource_war_resolve_nam_victory",
         "ADISCORD_nam_resource_news.5": "ADISCORD_nam_resource_war_start_mainland_rebellion",
         "ADISCORD_nam_resource_news.6": "ADISCORD_nam_resource_war_mark_rebels_defeated",
-        "ADISCORD_nam_resource_news.7": "ADISCORD_nam_resource_war_resolve_peaceful_withdrawal",
+        "ADISCORD_nam_resource_news.7": "ADISCORD_nam_resource_war_resolve_compromise",
     }
     for event_id, effect_name in expected_news_calls.items():
         call_pattern = re.compile(
@@ -751,6 +1742,8 @@ def main() -> int:
     for effect_name in (
         "ADISCORD_nam_resource_war_resolve_coalition_victory",
         "ADISCORD_nam_resource_war_resolve_nam_victory",
+        "ADISCORD_nam_resource_war_resolve_standoff",
+        "ADISCORD_nam_resource_war_resolve_compromise",
     ):
         outcome = named_block(effects, effect_name)
         check(
@@ -787,10 +1780,17 @@ def main() -> int:
         == {"WRK", "WKR", "VAD", "TVA", "IVN", "NAM", "EFL", "AZH", "SLF"},
         f"shared scenario debug category has wrong allowed tags: {sorted(shared_debug_tags)}",
     )
+    check(
+        "ADISCORD_nam_resource_war_resolve_compromise = yes"
+        in named_block(effects, "ADISCORD_nam_debug_resolve_compromise"),
+        "debug compromise action does not smoke its production outcome-news path",
+    )
     for decision_name in (
         "ADISCORD_nam_debug_start_resource_war",
         "ADISCORD_nam_debug_resolve_coalition_victory",
         "ADISCORD_nam_debug_resolve_nam_victory",
+        "ADISCORD_nam_debug_resolve_compromise",
+        "ADISCORD_nam_debug_add_tension",
     ):
         decision = named_block(debug_decisions, decision_name)
         decision_tags = set(
@@ -847,113 +1847,88 @@ def main() -> int:
             f"NAM {hook} does not dispatch the shared capitulation recorder",
         )
 
-    peaceful = named_block(
-        effects, "ADISCORD_nam_resource_war_resolve_peaceful_withdrawal"
-    )
+    # Compromise peace: the rump NAM survives with its islands, the coalition
+    # takes the fields it holds, and a year of tribute begins.
     check(
-        "set_global_flag = ADISCORD_nam_resource_war_resolved" in peaceful
-        and "set_global_flag = ADISCORD_nam_resource_war_peaceful_partition"
-        in peaceful,
-        "peaceful NAM withdrawal lacks terminal flags",
+        "ADISCORD_nam_resource_war_resolve_peaceful_withdrawal" not in effects
+        and "ADISCORD_nam_resource_war_peaceful_partition" not in effects,
+        "the dead peaceful-withdrawal settlement must be removed",
     )
-    check(
-        "declare_war_on" not in peaceful
-        and "add_to_war" not in peaceful
-        and "load_oob" not in peaceful,
-        "peaceful NAM withdrawal must not perform military setup",
-    )
-    check(
-        peaceful.find(
-            "EFL = { if = { limit = { is_in_faction = yes } leave_faction = yes } }"
-        )
-        < peaceful.find("create_faction_from_template = {")
-        and peaceful.find(
-            "AZH = { if = { limit = { is_in_faction = yes } leave_faction = yes } }"
-        )
-        < peaceful.find("create_faction_from_template = {"),
-        "peaceful partition must detach both recipients before creating their new faction",
-    )
-    peaceful_allocations = {
-        "EFL": {"67", "225", "228", "230", "231", "688"},
-        "AZH": {"226", "227", "229", "689", "690"},
-    }
-    for recipient, expected_states in peaceful_allocations.items():
-        recipient_settlement = named_block(peaceful, recipient)
-        recipient_states = set(
-            re.findall(r"transfer_state\s*=\s*(\d+)", recipient_settlement)
-        )
+    compromise = named_block(effects, "ADISCORD_nam_resource_war_resolve_compromise")
+    for token in (
+        "set_global_flag = ADISCORD_nam_resource_war_resolved",
+        "set_global_flag = ADISCORD_nam_resource_war_compromise",
+        "clr_global_flag = ADISCORD_nam_resource_war_started",
+        "VAL_cancel_nam_concession = yes",
+        "VAL_settle_resource_aid = yes",
+        "ADISCORD_nam_resource_war_end_all_wars = yes",
+        "ADISCORD_nam_resource_war_clear_temporary_support = yes",
+        "NAM_rw_start_tribute = yes",
+        "tree = NAM_defeated_focus",
+        "keep_completed = no",
+        "annex_country = { target = SLF transfer_troops = no }",
+        "ADISCORD_nam_resource_news.7",
+    ):
+        check(token in compromise, f"compromise peace lacks {token}")
+    for state_id in (67, 689, 690, 719):
         check(
-            recipient_states == expected_states,
-            f"{recipient} peaceful allocation is wrong: {sorted(recipient_states)}",
+            f"{state_id} = {{ NAM_rw_compromise_cede_field = yes }}" in compromise,
+            f"compromise peace does not settle field {state_id} by its controller",
         )
     check(
-        "annex_country = { target = NAM transfer_troops = no }" in peaceful,
-        "peaceful settlement must dissolve residual NAM administration",
+        "annex_country = { target = NAM" not in compromise
+        and all(f"transfer_state = {state}" not in compromise for state in range(225, 232)),
+        "compromise peace must keep NAM and its island states",
     )
     check(
-        "ADISCORD_nam_resource_news.7" in peaceful,
-        "peaceful settlement lacks its world-news call",
+        compromise.find("NAM_rw_compromise_cede_field = yes")
+        < compromise.find("ADISCORD_nam_resource_war_end_all_wars = yes"),
+        "compromise transfers must read wartime control before white peace",
+    )
+    nam_victory_tree = named_block(effects, "ADISCORD_nam_resource_war_resolve_nam_victory")
+    check(
+        "tree = NAM_postwar_focus" in nam_victory_tree
+        and "keep_completed = yes" in nam_victory_tree,
+        "NAM victory must load the post-war tree and keep completed focuses",
+    )
+    tribute = named_block(effects, "NAM_rw_start_tribute")
+    check(
+        "flag = NAM_rw_tribute" in tribute and "days = 365" in tribute,
+        "tribute must be the 365-day NAM_rw_tribute country flag",
     )
 
     coalition_victory = named_block(
         effects, "ADISCORD_nam_resource_war_resolve_coalition_victory"
     )
     efl_settlement = named_block(coalition_victory, "EFL")
-    coalition_allocations = {
-        "EFL": {"67", "225", "228", "230", "231", "688"},
-        "AZH": {"226", "227", "229", "689", "690"},
-    }
-    for recipient, expected_states in coalition_allocations.items():
-        recipient_settlement = named_block(coalition_victory, recipient)
-        recipient_states = set(
-            re.findall(r"transfer_state\s*=\s*(\d+)", recipient_settlement)
-        )
+    for state_id in (67, 688, 689, 690, 700, 719):
         check(
-            recipient_states == expected_states,
-            f"{recipient} coalition allocation is wrong: {sorted(recipient_states)}",
+            f"{state_id} = {{ NAM_rw_cede_mainland_state = yes }}" in coalition_victory,
+            f"coalition treaty does not cede mainland state {state_id}",
         )
-        for state_id in expected_states:
-            state_block = named_block(coalition_victory, state_id)
-            check(
-                re.search(rf"\badd_core_of\s*=\s*{recipient}\b", state_block)
-                is not None,
-                f"coalition allocation state {state_id} does not add an {recipient} core",
-            )
-            check(
-                re.search(
-                    rf"\bset_state_controller_to\s*=\s*{recipient}\b", state_block
-                )
-                is not None,
-                f"coalition allocation state {state_id} is not controlled by {recipient}",
-            )
+    cede = named_block(effects, "NAM_rw_cede_mainland_state")
+    check(
+        has_script_fragment(
+            cede,
+            "AZH = { transfer_state = PREV } remove_core_of = NAM add_core_of = AZH add_claim_by = NAM set_state_controller_to = AZH",
+        )
+        and has_script_fragment(
+            cede,
+            "EFL = { transfer_state = PREV } remove_core_of = NAM add_core_of = EFL add_claim_by = NAM set_state_controller_to = EFL",
+        )
+        and all(f"state = {state_id}" in cede for state_id in (689, 690, 700, 719)),
+        "mainland cession must give Azhar the southern fields and the harbour and Eflor the rest",
+    )
     check(
         "annex_country = { target = SLF transfer_troops = no }" in efl_settlement,
         "EFL does not eliminate the temporary SLF uprising",
     )
     check(
-        "annex_country = { target = NAM transfer_troops = no }" in coalition_victory,
-        "coalition settlement lacks the NAM residual-state safety annexation",
-    )
-    check(
         has_script_fragment(
             coalition_victory,
-            "688 = { remove_core_of = SLF remove_core_of = NAM add_core_of = EFL set_state_controller_to = EFL }",
+            "688 = { remove_core_of = SLF if = { limit = { is_owned_by = EFL } remove_core_of = NAM add_core_of = EFL add_claim_by = NAM set_state_controller_to = EFL } }",
         ),
         "state 688 cleanup is incomplete",
-    )
-    check(
-        has_script_fragment(
-            coalition_victory,
-            "689 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }",
-        ),
-        "state 689 cleanup is incomplete",
-    )
-    check(
-        has_script_fragment(
-            coalition_victory,
-            "690 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }",
-        ),
-        "state 690 cleanup is incomplete",
     )
 
     nam_victory = named_block(effects, "ADISCORD_nam_resource_war_resolve_nam_victory")
@@ -1277,7 +2252,8 @@ def main() -> int:
         67: {"oil": 80, "chromium": 6},
         688: {"oil": 12, "chromium": 1},
         689: {"oil": 36, "chromium": 5},
-        690: {"oil": 36, "chromium": 3},
+        690: {"oil": 24, "chromium": 3},
+        719: {"oil": 12},
     }
     for state_id, resources in expected_resources.items():
         state = state_source(state_id)
@@ -1288,7 +2264,7 @@ def main() -> int:
             )
     check(
         sum(resources["oil"] for resources in expected_resources.values()) == 164
-        and sum(resources["chromium"] for resources in expected_resources.values())
+        and sum(resources.get("chromium", 0) for resources in expected_resources.values())
         == 15,
         "NAM resource redistribution changed the theatre's total deposits",
     )
@@ -1312,9 +2288,21 @@ def main() -> int:
             int(value)
             for value in re.findall(r"(?m)^\s*location\s*=\s*(\d+)\s*$", nam_war_oob)
         ]
-        == [4912, 8058, 6961, 2299, 4912, 6961],
-        "NAM wartime divisions are not distributed across the western and eastern fronts",
+        == [4912, 8058, 2299],
+        "NAM wartime baseline must be one guard and two infantry divisions on the field fronts",
     )
+    for template in (
+        "NAM Resource Guard",
+        "NAM Resource Infantry",
+        "NAM Motor Column",
+        "NAM Coastal Battalion",
+    ):
+        check(
+            f'name = "{template}"' in named_block(effects, "NAM_order_ensure_templates")
+            and f'\\"{template}\\"' in effects
+            and f'name = "{template}"' not in nam_war_oob,
+            f"order template {template} is not defined once by NAM_order_ensure_templates or not spawned by delivery",
+        )
 
     expected_victory_points = {
         67: {1710: 2, 6099: 3},
@@ -1324,8 +2312,9 @@ def main() -> int:
         688: {689: 3},
         689: {2038: 5},
         690: {8058: 2, 9016: 2},
-        691: {8057: 3},
+        691: {},
         692: {493: 3, 5039: 2},
+        720: {8057: 3},
     }
     for state_id, points in expected_victory_points.items():
         state = state_source(state_id)
@@ -1346,7 +2335,7 @@ def main() -> int:
         "NAM mainland VP total must be 17",
     )
     check(
-        sum(sum(expected_victory_points[state].values()) for state in (68, 70, 691))
+        sum(sum(expected_victory_points[state].values()) for state in (68, 70, 691, 720))
         == 16,
         "EFL mainland VP total must be 16",
     )
@@ -1410,12 +2399,32 @@ def main() -> int:
         "ADISCORD_nam_debug_start_resource_war",
         "ADISCORD_nam_debug_resolve_coalition_victory",
         "ADISCORD_nam_debug_resolve_nam_victory",
-        "ADISCORD_nam_prewar_defence_category",
-        "ADISCORD_nam_prewar_defence_category_desc",
-        "ADISCORD_nam_fortify_extraction_line",
-        "ADISCORD_nam_fortify_extraction_line_desc",
-        "ADISCORD_nam_fortify_azhar_approaches",
-        "ADISCORD_nam_fortify_azhar_approaches_desc",
+        "ADISCORD_nam_debug_resolve_compromise",
+        "ADISCORD_nam_debug_add_tension",
+        "NAM_restitution",
+        "NAM_restitution_desc",
+        "NAM_mobilisation",
+        "NAM_mobilisation_desc",
+        "NAM_prepare_line",
+        "NAM_prepare_line_desc",
+        "NAM_cost_line",
+        "NAM_cost_line_blocked",
+        "NAM_cost_line_tooltip",
+        "NAM_cost_order_guard",
+        "NAM_cost_order_guard_blocked",
+        "NAM_cost_order_guard_tooltip",
+        "NAM_cost_order_infantry",
+        "NAM_cost_order_infantry_blocked",
+        "NAM_cost_order_infantry_tooltip",
+        "NAM_cost_order_motor",
+        "NAM_cost_order_motor_blocked",
+        "NAM_cost_order_motor_tooltip",
+        "NAM_cost_order_coastal",
+        "NAM_cost_order_coastal_blocked",
+        "NAM_cost_order_coastal_tooltip",
+        "ADISCORD_nam_resource_news.7.t",
+        "ADISCORD_nam_resource_news.7.d",
+        "ADISCORD_nam_resource_news.1.d_strike",
     ):
         check(
             re.search(rf"(?m)^\s*{re.escape(key)}:", loc) is not None,
@@ -1430,8 +2439,45 @@ def main() -> int:
         "obsolete uprising-victory debug localisation remains",
     )
     check(
-        loc.count("§RDEBUG:§!") == 3,
-        "all three debug entry points need the red DEBUG prefix",
+        loc.count("§RDEBUG:§!") == 9,
+        "all nine debug entry points need the red DEBUG prefix",
+    )
+    for veter_key in (
+        "ADISCORD_nam_resource_war.2.d",
+        "ADISCORD_nam_resource_news.5.d",
+        "ADISCORD_nam_resource_news.6.d",
+    ):
+        value = re.search(rf'(?m)^\s*{re.escape(veter_key)}:\d*\s*"(.*)"\s*$', loc)
+        check(
+            value is not None and "Ярослав Ветер" in value.group(1),
+            f"{veter_key} must name Yaroslav Veter",
+        )
+
+    check_oil_monopoly(
+        effects,
+        triggers,
+        on_actions,
+        prewar_decisions,
+        prewar_categories,
+        news,
+        hostilities,
+    )
+    check_ladder(
+        effects,
+        triggers,
+        on_actions,
+        prewar_decisions,
+        prewar_categories,
+        news,
+        hostilities,
+    )
+    check_settlement(
+        effects,
+        triggers,
+        prewar_decisions,
+        prewar_categories,
+        news,
+        loc,
     )
 
     for relative, size in (

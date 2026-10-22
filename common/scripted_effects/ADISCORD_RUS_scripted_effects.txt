@@ -61,6 +61,14 @@ RUS_crisis_register_defender = {
 		add_to_array = { array = global.RUS_crisis_defenders value = THIS }
 		if = {
 			limit = {
+				tag = NAM
+				NOT = { has_country_flag = NAM_rus_oil_offered }
+			}
+			country_event = { id = ADISCORD_nam_oil.10 hours = 6 }
+			set_country_flag = NAM_rus_oil_offered
+		}
+		if = {
+			limit = {
 				OR = {
 					is_major = no
 					RUS_crisis_other_major_required = yes

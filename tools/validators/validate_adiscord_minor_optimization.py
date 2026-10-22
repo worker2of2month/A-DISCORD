@@ -191,7 +191,7 @@ SOUTH_FINAL_WAR_FILES = {
     Path("common/decisions/ADISCORD_south_final_war_decisions.txt"),
     Path("common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"),
     Path("common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt"),
-    Path("common/national_focus/ADISCORD_NAM_focus.txt"),
+    Path("common/national_focus/ADISCORD_NAM_postwar.txt"),
     Path("common/national_focus/ADISCORD_SHL_focus.txt"),
     Path("common/scripted_effects/ADISCORD_south_final_war_effects.txt"),
     Path("common/scripted_triggers/ADISCORD_south_final_war_triggers.txt"),

@@ -1,0 +1,538 @@
+guiTypes = {
+	# Launcher row inside the NAM_national_programmes decision category.
+	containerWindowType = {
+		name = "ADISCORD_NAM_basin_launcher_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 46 }
+
+		buttonType = {
+			name = "NAM_bw_open_button"
+			position = { x = 8 y = 5 }
+			quadTextureSprite = "GFX_button_221x34"
+			buttonText = "NAM_bw_open"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_bw_open_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_launcher_summary"
+			position = { x = 238 y = 5 }
+			text = "NAM_bw_launcher_summary"
+			font = "hoi_16mbs"
+			maxWidth = 214
+			maxHeight = 36
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_open_tt"
+		}
+	}
+
+	# Basin window. Six node cards share one inner layout: name, four status
+	# lines and up to three actions on the right. Card element names carry the
+	# state ID because the scripted GUI binds triggers and effects by name.
+	containerWindowType = {
+		name = "ADISCORD_NAM_basin_window"
+		position = { x = 0 y = 0 }
+		size = { width = 704 height = 662 }
+		orientation = center
+		origo = center
+		moveable = yes
+		clipping = no
+
+		background = {
+			name = "NAM_bw_background"
+			quadTextureSprite = "GFX_ADISCORD_constructions_window_bg"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_bw_title"
+			position = { x = 16 y = 12 }
+			text = "NAM_bw_title"
+			font = "hoi_20b"
+			maxWidth = 600
+			maxHeight = 24
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_title_tt"
+		}
+		buttonType = {
+			name = "NAM_bw_close_button"
+			position = { x = 664 y = 6 }
+			quadTextureSprite = "GFX_closebutton"
+			clicksound = click_close
+			pdx_tooltip = "NAM_bw_close_tt"
+		}
+
+		# ----- Gauges -----
+		containerWindowType = {
+			name = "NAM_bw_phase"
+			position = { x = 12 y = 44 }
+			size = { width = 220 height = 96 }
+			background = {
+				name = "NAM_bw_phase_background"
+				quadTextureSprite = "GFX_NAM_bw_card"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_phase_label"
+				position = { x = 10 y = 6 }
+				text = "NAM_bw_phase_label"
+				font = "hoi_16mbs"
+				maxWidth = 200
+				maxHeight = 20
+				fixedsize = yes
+				pdx_tooltip = "NAM_bw_phase_tt"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_phase_value"
+				position = { x = 10 y = 26 }
+				text = "NAM_bw_phase_value"
+				font = "hoi_20b"
+				maxWidth = 200
+				maxHeight = 24
+				fixedsize = yes
+				pdx_tooltip = "NAM_bw_phase_tt"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_phase_detail"
+				position = { x = 10 y = 52 }
+				text = "NAM_bw_phase_detail"
+				font = "hoi_16mbs"
+				maxWidth = 200
+				maxHeight = 40
+				fixedsize = yes
+				pdx_tooltip = "NAM_bw_phase_tt"
+			}
+		}
+		containerWindowType = {
+			name = "NAM_bw_underground"
+			position = { x = 242 y = 44 }
+			size = { width = 220 height = 96 }
+			background = {
+				name = "NAM_bw_underground_background"
+				quadTextureSprite = "GFX_NAM_bw_card"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_underground_label"
+				position = { x = 10 y = 6 }
+				text = "NAM_underground"
+				font = "hoi_16mbs"
+				maxWidth = 200
+				maxHeight = 20
+				fixedsize = yes
+				pdx_tooltip = "NAM_underground_desc"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_underground_value"
+				position = { x = 10 y = 26 }
+				text = "NAM_bw_underground_value"
+				font = "hoi_20b"
+				maxWidth = 200
+				maxHeight = 24
+				fixedsize = yes
+				pdx_tooltip = "NAM_underground_desc"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_underground_detail"
+				position = { x = 10 y = 52 }
+				text = "NAM_bw_underground_detail"
+				font = "hoi_16mbs"
+				maxWidth = 200
+				maxHeight = 40
+				fixedsize = yes
+				pdx_tooltip = "NAM_underground_desc"
+			}
+		}
+		containerWindowType = {
+			name = "NAM_bw_ladder"
+			position = { x = 472 y = 44 }
+			size = { width = 220 height = 96 }
+			background = {
+				name = "NAM_bw_ladder_background"
+				quadTextureSprite = "GFX_NAM_bw_card"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_ladder_label"
+				position = { x = 10 y = 6 }
+				text = "NAM_ladder_bop"
+				font = "hoi_16mbs"
+				maxWidth = 200
+				maxHeight = 20
+				fixedsize = yes
+				pdx_tooltip = "NAM_bw_ladder_tt"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_ladder_value"
+				position = { x = 10 y = 26 }
+				text = "NAM_bw_ladder_value"
+				font = "hoi_20b"
+				maxWidth = 200
+				maxHeight = 24
+				fixedsize = yes
+				pdx_tooltip = "NAM_bw_ladder_tt"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_ladder_detail"
+				position = { x = 10 y = 52 }
+				text = "NAM_bw_ladder_detail"
+				font = "hoi_16mbs"
+				maxWidth = 200
+				maxHeight = 40
+				fixedsize = yes
+				pdx_tooltip = "NAM_bw_ladder_tt"
+			}
+		}
+
+		# ----- Node cards -----
+		containerWindowType = {
+			name = "NAM_bw_card_67"
+			position = { x = 12 y = 148 }
+			size = { width = 334 height = 104 }
+			background = {
+				name = "NAM_bw_card_67_background"
+				quadTextureSprite = "GFX_NAM_bw_card"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_card_67_title"
+				position = { x = 10 y = 6 }
+				text = "[67.GetName]"
+				font = "hoi_18mbs"
+				maxWidth = 214
+				maxHeight = 20
+				fixedsize = yes
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_card_67_body"
+				position = { x = 10 y = 28 }
+				text = "NAM_bw_card_67_body"
+				font = "hoi_16mbs"
+				maxWidth = 214
+				maxHeight = 72
+				fixedsize = yes
+			}
+			buttonType = {
+				name = "NAM_bw_67_repair"
+				position = { x = 232 y = 8 }
+				size = { x = 92 y = 26 }
+				quadTextureSprite = "GFX_NAM_bw_button"
+				buttonText = "NAM_bw_repair_label"
+				buttonFont = "hoi_16mbs"
+				clicksound = click_default
+				pdx_tooltip = "NAM_bw_67_repair_tt"
+			}
+			buttonType = {
+				name = "NAM_bw_67_refinery"
+				position = { x = 232 y = 38 }
+				size = { x = 92 y = 26 }
+				quadTextureSprite = "GFX_NAM_bw_button"
+				buttonText = "NAM_bw_refinery_label"
+				buttonFont = "hoi_16mbs"
+				clicksound = click_default
+				pdx_tooltip = "NAM_bw_67_refinery_tt"
+			}
+			buttonType = {
+				name = "NAM_bw_67_line"
+				position = { x = 232 y = 68 }
+				size = { x = 92 y = 26 }
+				quadTextureSprite = "GFX_NAM_bw_button"
+				buttonText = "NAM_bw_line_label"
+				buttonFont = "hoi_16mbs"
+				clicksound = click_default
+				pdx_tooltip = "NAM_bw_67_line_tt"
+			}
+		}
+		containerWindowType = {
+			name = "NAM_bw_card_688"
+			position = { x = 358 y = 148 }
+			size = { width = 334 height = 104 }
+			background = {
+				name = "NAM_bw_card_688_background"
+				quadTextureSprite = "GFX_NAM_bw_card"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_card_688_title"
+				position = { x = 10 y = 6 }
+				text = "[688.GetName]"
+				font = "hoi_18mbs"
+				maxWidth = 214
+				maxHeight = 20
+				fixedsize = yes
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_card_688_body"
+				position = { x = 10 y = 28 }
+				text = "NAM_bw_card_688_body"
+				font = "hoi_16mbs"
+				maxWidth = 214
+				maxHeight = 72
+				fixedsize = yes
+			}
+			buttonType = {
+				name = "NAM_bw_688_repair"
+				position = { x = 232 y = 8 }
+				size = { x = 92 y = 26 }
+				quadTextureSprite = "GFX_NAM_bw_button"
+				buttonText = "NAM_bw_repair_label"
+				buttonFont = "hoi_16mbs"
+				clicksound = click_default
+				pdx_tooltip = "NAM_bw_688_repair_tt"
+			}
+			buttonType = {
+				name = "NAM_bw_688_refinery"
+				position = { x = 232 y = 38 }
+				size = { x = 92 y = 26 }
+				quadTextureSprite = "GFX_NAM_bw_button"
+				buttonText = "NAM_bw_refinery_label"
+				buttonFont = "hoi_16mbs"
+				clicksound = click_default
+				pdx_tooltip = "NAM_bw_688_refinery_tt"
+			}
+			buttonType = {
+				name = "NAM_bw_688_line"
+				position = { x = 232 y = 68 }
+				size = { x = 92 y = 26 }
+				quadTextureSprite = "GFX_NAM_bw_button"
+				buttonText = "NAM_bw_line_label"
+				buttonFont = "hoi_16mbs"
+				clicksound = click_default
+				pdx_tooltip = "NAM_bw_688_line_tt"
+			}
+		}
+		containerWindowType = {
+			name = "NAM_bw_card_689"
+			position = { x = 12 y = 260 }
+			size = { width = 334 height = 104 }
+			background = {
+				name = "NAM_bw_card_689_background"
+				quadTextureSprite = "GFX_NAM_bw_card"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_card_689_title"
+				position = { x = 10 y = 6 }
+				text = "[689.GetName]"
+				font = "hoi_18mbs"
+				maxWidth = 214
+				maxHeight = 20
+				fixedsize = yes
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_card_689_body"
+				position = { x = 10 y = 28 }
+				text = "NAM_bw_card_689_body"
+				font = "hoi_16mbs"
+				maxWidth = 214
+				maxHeight = 72
+				fixedsize = yes
+			}
+			buttonType = {
+				name = "NAM_bw_689_repair"
+				position = { x = 232 y = 8 }
+				size = { x = 92 y = 26 }
+				quadTextureSprite = "GFX_NAM_bw_button"
+				buttonText = "NAM_bw_repair_label"
+				buttonFont = "hoi_16mbs"
+				clicksound = click_default
+				pdx_tooltip = "NAM_bw_689_repair_tt"
+			}
+			buttonType = {
+				name = "NAM_bw_689_refinery"
+				position = { x = 232 y = 38 }
+				size = { x = 92 y = 26 }
+				quadTextureSprite = "GFX_NAM_bw_button"
+				buttonText = "NAM_bw_refinery_label"
+				buttonFont = "hoi_16mbs"
+				clicksound = click_default
+				pdx_tooltip = "NAM_bw_689_refinery_tt"
+			}
+			buttonType = {
+				name = "NAM_bw_689_line"
+				position = { x = 232 y = 68 }
+				size = { x = 92 y = 26 }
+				quadTextureSprite = "GFX_NAM_bw_button"
+				buttonText = "NAM_bw_line_label"
+				buttonFont = "hoi_16mbs"
+				clicksound = click_default
+				pdx_tooltip = "NAM_bw_689_line_tt"
+			}
+		}
+		containerWindowType = {
+			name = "NAM_bw_card_690"
+			position = { x = 358 y = 260 }
+			size = { width = 334 height = 104 }
+			background = {
+				name = "NAM_bw_card_690_background"
+				quadTextureSprite = "GFX_NAM_bw_card"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_card_690_title"
+				position = { x = 10 y = 6 }
+				text = "[690.GetName]"
+				font = "hoi_18mbs"
+				maxWidth = 214
+				maxHeight = 20
+				fixedsize = yes
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_card_690_body"
+				position = { x = 10 y = 28 }
+				text = "NAM_bw_card_690_body"
+				font = "hoi_16mbs"
+				maxWidth = 214
+				maxHeight = 72
+				fixedsize = yes
+			}
+			buttonType = {
+				name = "NAM_bw_690_repair"
+				position = { x = 232 y = 8 }
+				size = { x = 92 y = 26 }
+				quadTextureSprite = "GFX_NAM_bw_button"
+				buttonText = "NAM_bw_repair_label"
+				buttonFont = "hoi_16mbs"
+				clicksound = click_default
+				pdx_tooltip = "NAM_bw_690_repair_tt"
+			}
+			buttonType = {
+				name = "NAM_bw_690_refinery"
+				position = { x = 232 y = 38 }
+				size = { x = 92 y = 26 }
+				quadTextureSprite = "GFX_NAM_bw_button"
+				buttonText = "NAM_bw_refinery_label"
+				buttonFont = "hoi_16mbs"
+				clicksound = click_default
+				pdx_tooltip = "NAM_bw_690_refinery_tt"
+			}
+			buttonType = {
+				name = "NAM_bw_690_line"
+				position = { x = 232 y = 68 }
+				size = { x = 92 y = 26 }
+				quadTextureSprite = "GFX_NAM_bw_button"
+				buttonText = "NAM_bw_line_label"
+				buttonFont = "hoi_16mbs"
+				clicksound = click_default
+				pdx_tooltip = "NAM_bw_690_line_tt"
+			}
+		}
+		containerWindowType = {
+			name = "NAM_bw_card_719"
+			position = { x = 12 y = 372 }
+			size = { width = 334 height = 104 }
+			background = {
+				name = "NAM_bw_card_719_background"
+				quadTextureSprite = "GFX_NAM_bw_card"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_card_719_title"
+				position = { x = 10 y = 6 }
+				text = "[719.GetName]"
+				font = "hoi_18mbs"
+				maxWidth = 214
+				maxHeight = 20
+				fixedsize = yes
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_card_719_body"
+				position = { x = 10 y = 28 }
+				text = "NAM_bw_card_719_body"
+				font = "hoi_16mbs"
+				maxWidth = 214
+				maxHeight = 72
+				fixedsize = yes
+			}
+			buttonType = {
+				name = "NAM_bw_719_repair"
+				position = { x = 232 y = 8 }
+				size = { x = 92 y = 26 }
+				quadTextureSprite = "GFX_NAM_bw_button"
+				buttonText = "NAM_bw_repair_label"
+				buttonFont = "hoi_16mbs"
+				clicksound = click_default
+				pdx_tooltip = "NAM_bw_719_repair_tt"
+			}
+			buttonType = {
+				name = "NAM_bw_719_refinery"
+				position = { x = 232 y = 38 }
+				size = { x = 92 y = 26 }
+				quadTextureSprite = "GFX_NAM_bw_button"
+				buttonText = "NAM_bw_refinery_label"
+				buttonFont = "hoi_16mbs"
+				clicksound = click_default
+				pdx_tooltip = "NAM_bw_719_refinery_tt"
+			}
+			buttonType = {
+				name = "NAM_bw_719_line"
+				position = { x = 232 y = 68 }
+				size = { x = 92 y = 26 }
+				quadTextureSprite = "GFX_NAM_bw_button"
+				buttonText = "NAM_bw_line_label"
+				buttonFont = "hoi_16mbs"
+				clicksound = click_default
+				pdx_tooltip = "NAM_bw_719_line_tt"
+			}
+		}
+		containerWindowType = {
+			name = "NAM_bw_card_700"
+			position = { x = 358 y = 372 }
+			size = { width = 334 height = 104 }
+			background = {
+				name = "NAM_bw_card_700_background"
+				quadTextureSprite = "GFX_NAM_bw_card"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_card_700_title"
+				position = { x = 10 y = 6 }
+				text = "[700.GetName]"
+				font = "hoi_18mbs"
+				maxWidth = 214
+				maxHeight = 20
+				fixedsize = yes
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_card_700_body"
+				position = { x = 10 y = 28 }
+				text = "NAM_bw_card_700_body"
+				font = "hoi_16mbs"
+				maxWidth = 214
+				maxHeight = 72
+				fixedsize = yes
+			}
+			buttonType = {
+				name = "NAM_bw_700_line"
+				position = { x = 232 y = 68 }
+				size = { x = 92 y = 26 }
+				quadTextureSprite = "GFX_NAM_bw_button"
+				buttonText = "NAM_bw_line_label"
+				buttonFont = "hoi_16mbs"
+				clicksound = click_default
+				pdx_tooltip = "NAM_bw_700_line_tt"
+			}
+		}
+
+		# ----- Oil exports and islands -----
+		containerWindowType = {
+			name = "NAM_bw_summary"
+			position = { x = 12 y = 484 }
+			size = { width = 680 height = 166 }
+			background = {
+				name = "NAM_bw_summary_background"
+				quadTextureSprite = "GFX_NAM_bw_card"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_summary_title"
+				position = { x = 10 y = 6 }
+				text = "NAM_bw_summary_title"
+				font = "hoi_18mbs"
+				maxWidth = 660
+				maxHeight = 20
+				fixedsize = yes
+				pdx_tooltip = "NAM_bw_summary_tt"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_summary_text"
+				position = { x = 10 y = 28 }
+				text = "NAM_bw_summary_text"
+				font = "hoi_16mbs"
+				maxWidth = 660
+				maxHeight = 132
+				fixedsize = yes
+				pdx_tooltip = "NAM_bw_summary_tt"
+			}
+		}
+	}
+}

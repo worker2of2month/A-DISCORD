@@ -37,7 +37,7 @@ ORDER = {
         'northern_reservation',
         'livonn',
     ],
-    'on_uncapitulation': ['kefreyt'],
+    'on_uncapitulation': ['kefreyt', 'nam'],
     'on_peace': [
         'nam',
         'shahrabad',

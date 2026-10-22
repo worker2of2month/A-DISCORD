@@ -192,6 +192,101 @@ ADISCORD_scenario_debug_category = {
 		ai_will_do = { factor = 0 }
 	}
 
+	ADISCORD_nam_debug_resolve_compromise = {
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = EFL
+				tag = AZH
+				tag = SLF
+			}
+		}
+		visible = { has_global_flag = ADISCORD_nam_resource_war_started }
+		cost = 0
+		complete_effect = { ADISCORD_nam_debug_resolve_compromise = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_add_tension = {
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = EFL
+				tag = AZH
+				tag = SLF
+			}
+		}
+		visible = { NAM_rw_clock_running = yes }
+		cost = 0
+		complete_effect = { ADISCORD_nam_debug_add_tension = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_damage_fields = {
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = EFL
+				tag = AZH
+				tag = SLF
+			}
+		}
+		visible = { country_exists = NAM }
+		cost = 0
+		complete_effect = { ADISCORD_nam_debug_damage_fields = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_rival_demand = {
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = EFL
+				tag = AZH
+				tag = SLF
+			}
+		}
+		visible = { NAM = { NAM_ladder_formed = yes } }
+		cost = 0
+		complete_effect = { ADISCORD_nam_debug_rival_demand = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_underground = {
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = EFL
+				tag = AZH
+				tag = SLF
+			}
+		}
+		visible = { country_exists = NAM }
+		cost = 0
+		complete_effect = { ADISCORD_nam_debug_underground = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_war_of_return = {
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = EFL
+				tag = AZH
+				tag = SLF
+			}
+		}
+		visible = {
+			OR = {
+				has_global_flag = ADISCORD_nam_resource_war_compromise
+				has_global_flag = ADISCORD_nam_resource_war_island_exile
+			}
+		}
+		cost = 0
+		complete_effect = { ADISCORD_nam_debug_war_of_return = yes }
+		ai_will_do = { factor = 0 }
+	}
+
 	# VAL trade-route controls keep the real route refresh and payment path intact.
 	ADISCORD_debug_val_open_south_route = {
 		icon = generic_construction

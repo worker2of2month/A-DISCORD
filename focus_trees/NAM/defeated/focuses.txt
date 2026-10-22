@@ -1,0 +1,910 @@
+focus_tree = {
+	id = NAM_defeated_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 100
+			original_tag = NAM
+			OR = {
+				has_global_flag = ADISCORD_nam_resource_war_compromise
+				has_global_flag = ADISCORD_nam_resource_war_island_exile
+			}
+		}
+	}
+	default = no
+	continuous_focus_position = {
+		x = 50
+		y = 1900
+	}
+
+	# Loaded by the compromise peace and by the island exile, both without the
+	# post-war chapter. Completed pre-war focuses stay readable because that tree
+	# is shared history. In exile Svetlogorye holds only the islands, so only the
+	# course of return is shown and mainland rewards fall back to the capital.
+
+	focus = {
+		id = NAM_defeat_count_losses
+		icon = GFX_focus_generic_commission
+		x = 10
+		y = 0
+		cost = 1
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 50
+			add_stability = 0.05
+		}
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_rump_cabinet
+		icon = GFX_focus_generic_improve_the_administration
+		x = 2
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_defeat_count_losses }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.03
+			add_political_power = 40
+			custom_effect_tooltip = NAM_grp_defeat_rump_cabinet_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 3 }
+				add_to_variable = { var = NAM_grp_oil_support value = 3 }
+				add_to_variable = { var = NAM_grp_dist_support value = 3 }
+				add_to_variable = { var = NAM_grp_garr_support value = 3 }
+				add_to_variable = { var = NAM_grp_trade_support value = 3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_harbour_economy
+		icon = GFX_focus_generic_merchant_fleet
+		x = 10
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_NAVY_XP }
+		prerequisite = { focus = NAM_defeat_count_losses }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_receive_250_tt
+			hidden_effect = { NAM_receive_250 = yes }
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 10
+				producer = NAM
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_island_refuge
+		icon = GFX_focus_generic_smugglers
+		x = 18
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_NAVY_XP }
+		prerequisite = { focus = NAM_defeat_count_losses }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			228 = {
+				if = {
+					limit = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			231 = {
+				if = {
+					limit = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			navy_experience = 10
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_purge_of_seals
+		icon = GFX_focus_generic_sympathetic_judges
+		x = 2
+		y = 2
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_defeat_rump_cabinet }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.03
+			custom_effect_tooltip = NAM_grp_defeat_purge_of_seals_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = -8 }
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				NAM_groups_refresh = yes
+			}
+			if = {
+				limit = { has_power_balance = { id = NAM_ladder_bop } }
+				add_power_balance_value = {
+					id = NAM_ladder_bop
+					value = 0.10
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_refugee_quarters
+		icon = GFX_focus_generic_low_cost_housing
+		x = 5
+		y = 2
+		cost = 2
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_defeat_harbour_economy }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 5000
+			add_stability = -0.02
+			# South Harbour receives the quarters while it is ours; in exile the
+			# refugees settle around the island capital instead.
+			if = {
+				limit = {
+					700 = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+				}
+				700 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				capital_scope = {
+					if = {
+						limit = {
+							is_owned_by = NAM
+							is_controlled_by = NAM
+						}
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = {
+							type = industrial_complex
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_island_foundries
+		icon = GFX_focus_generic_steel_mill
+		x = 18
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_defeat_island_refuge }
+		available = {
+			has_capitulated = no
+			owns_state = 228
+			controls_state = 228
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			228 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	# ----- The course after the defeat -----
+	# Revenge rebuilds the army for a war of return; accommodation buys the
+	# tribute out and leads Svetlogorye into the South with its former enemies.
+	# The island exile leaves nothing to accommodate: allow_branch hides that
+	# course and every focus that only it reaches.
+
+	focus = {
+		id = NAM_defeat_revenge
+		icon = GFX_focus_generic_provoke_border_clashes
+		x = 9
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_defeat_harbour_economy }
+		mutually_exclusive = { focus = NAM_defeat_accommodation }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_war_support = 0.10
+			custom_effect_tooltip = NAM_grp_defeat_revenge_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 8 }
+				add_to_variable = { var = NAM_grp_trade_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_accommodation
+		icon = GFX_goal_generic_improve_relations
+		x = 11
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_defeat_harbour_economy }
+		mutually_exclusive = { focus = NAM_defeat_revenge }
+		allow_branch = {
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+		}
+		available = {
+			has_capitulated = no
+			hidden_trigger = {
+				NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.05
+			EFL = {
+				if = {
+					limit = { exists = yes }
+					add_opinion_modifier = {
+						target = NAM
+						modifier = improve_relation
+					}
+				}
+			}
+			AZH = {
+				if = {
+					limit = { exists = yes }
+					add_opinion_modifier = {
+						target = NAM
+						modifier = improve_relation
+					}
+				}
+			}
+			custom_effect_tooltip = NAM_grp_defeat_accommodation_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_trade_support value = 8 }
+				add_to_variable = { var = NAM_grp_garr_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# ----- Revenge -----
+	# The same course serves the island exile: the arsenal falls back to the
+	# island capital, the reserve and the war chest add shipping for a landing,
+	# and the underground claims South Harbour as well.
+
+	focus = {
+		id = NAM_defeat_rebuild_arsenal
+		icon = GFX_goal_generic_construct_mil_factory
+		x = 6
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_defeat_revenge }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = {
+					700 = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+				}
+				700 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = arms_factory
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				capital_scope = {
+					if = {
+						limit = {
+							is_owned_by = NAM
+							is_controlled_by = NAM
+						}
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = {
+							type = arms_factory
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 3000
+				producer = NAM
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_hidden_reserve
+		icon = GFX_focus_generic_turning_a_blind_eye
+		x = 9
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_defeat_revenge }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = { has_completed_focus = NAM_concealed_reserve }
+				add_fuel = 10000
+			}
+			else = {
+				add_fuel = 4000
+			}
+			if = {
+				limit = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+				add_equipment_to_stockpile = {
+					type = convoy
+					amount = 10
+					producer = NAM
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_underground_return
+		icon = GFX_focus_generic_forest_brothers
+		x = 5
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = { focus = NAM_defeat_rebuild_arsenal }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			67 = {
+				if = {
+					limit = { NOT = { is_owned_by = NAM } }
+					add_claim_by = NAM
+				}
+			}
+			688 = {
+				if = {
+					limit = { NOT = { is_owned_by = NAM } }
+					add_claim_by = NAM
+				}
+			}
+			689 = {
+				if = {
+					limit = { NOT = { is_owned_by = NAM } }
+					add_claim_by = NAM
+				}
+			}
+			690 = {
+				if = {
+					limit = { NOT = { is_owned_by = NAM } }
+					add_claim_by = NAM
+				}
+			}
+			719 = {
+				if = {
+					limit = { NOT = { is_owned_by = NAM } }
+					add_claim_by = NAM
+				}
+			}
+			700 = {
+				if = {
+					limit = { NOT = { is_owned_by = NAM } }
+					add_claim_by = NAM
+				}
+			}
+			add_war_support = 0.05
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_officer_cadres
+		icon = GFX_focus_generic_military_academy
+		x = 7
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = NAM_defeat_rebuild_arsenal
+			focus = NAM_defeat_hidden_reserve
+		}
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 25
+			add_command_power = 30
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_new_levies
+		icon = GFX_goal_generic_allies_build_infantry
+		x = 9
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		prerequisite = { focus = NAM_defeat_hidden_reserve }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 8000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 2000
+				producer = NAM
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_war_chest
+		icon = GFX_focus_generic_money_for_equipment
+		x = 9
+		y = 5
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_defeat_new_levies }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_receive_250_tt
+			hidden_effect = { NAM_receive_250 = yes }
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 100
+				producer = NAM
+			}
+			# In exile the return starts with a crossing; the fund also pays
+			# for an island dockyard.
+			if = {
+				limit = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+				capital_scope = {
+					if = {
+						limit = {
+							is_owned_by = NAM
+							is_controlled_by = NAM
+						}
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = {
+							type = dockyard
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_war_of_return
+		icon = GFX_goal_generic_major_war
+		x = 6
+		y = 6
+		cost = 3
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
+		prerequisite = { focus = NAM_defeat_underground_return }
+		prerequisite = {
+			focus = NAM_defeat_officer_cadres
+			focus = NAM_defeat_war_chest
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			has_war = no
+			NOT = { has_country_flag = NAM_rw_tribute }
+			custom_trigger_tooltip = {
+				tooltip = NAM_war_of_return_ready_tt
+				NAM_war_of_return_can_start = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_war_support = 0.10
+			army_experience = 15
+			custom_effect_tooltip = NAM_war_of_return_start_tt
+			hidden_effect = { NAM_war_of_return_start = yes }
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	# ----- Accommodation -----
+
+	focus = {
+		id = NAM_defeat_early_tribute
+		icon = GFX_focus_generic_concessions
+		x = 12
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_defeat_accommodation }
+		allow_branch = {
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+		}
+		bypass = {
+			NOT = { has_country_flag = NAM_rw_tribute }
+		}
+		available = {
+			has_capitulated = no
+			has_country_flag = NAM_rw_tribute
+			NOT = { has_fuel < 6000 }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_fuel = -6000
+			EFL = {
+				if = {
+					limit = { exists = yes }
+					add_fuel = 3000
+				}
+			}
+			AZH = {
+				if = {
+					limit = { exists = yes }
+					add_fuel = 3000
+				}
+			}
+			custom_effect_tooltip = NAM_defeat_early_tribute_tt
+			hidden_effect = {
+				clr_country_flag = NAM_rw_tribute
+				NAM_oil_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_oil_union
+		icon = GFX_focus_generic_industrialists
+		x = 14
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_defeat_accommodation }
+		allow_branch = {
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+		}
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_defeat_oil_union_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_oil_bonus_units value = 2 }
+				NAM_oil_refresh = yes
+			}
+			custom_effect_tooltip = NAM_grp_defeat_oil_union_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = 6 }
+				add_to_variable = { var = NAM_grp_trade_support value = 4 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_open_border
+		icon = GFX_focus_generic_immigration
+		x = 12
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_defeat_early_tribute }
+		allow_branch = {
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+		}
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.05
+			add_manpower = 3000
+			custom_effect_tooltip = NAM_grp_defeat_open_border_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_joint_fields
+		icon = GFX_focus_generic_offshore_oil_rig
+		x = 14
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_defeat_oil_union }
+		allow_branch = {
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+		}
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_receive_250_tt
+			hidden_effect = { NAM_receive_250 = yes }
+			add_political_power = 50
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_road_south
+		icon = GFX_focus_generic_influence_middle_east
+		x = 13
+		y = 5
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = NAM_defeat_open_border
+			focus = NAM_defeat_joint_fields
+		}
+		allow_branch = {
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+		}
+		bypass = {
+			EFL = { ADISCORD_south_campaign_target_settled = yes }
+			AZH = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_defeat_road_south_tt
+			hidden_effect = {
+				EFL = { ADISCORD_south_offer_alliance = yes }
+				AZH = { ADISCORD_south_offer_alliance = yes }
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_southern_charter
+		icon = GFX_goal_generic_forceful_treaty
+		x = 13
+		y = 6
+		cost = 4
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = { focus = NAM_defeat_road_south }
+		allow_branch = {
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+		}
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_final_ready_tt
+				ADISCORD_south_final_can_start = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_defeat_southern_charter_tt
+			hidden_effect = { ADISCORD_south_final_war_start = yes }
+			unlock_decision_tooltip = NAM_south_allied_fuel
+			unlock_decision_tooltip = NAM_south_convoy_interdiction
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_defeat_oil_peace
+		icon = GFX_goal_generic_neutrality_focus
+		x = 15
+		y = 5
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_defeat_joint_fields }
+		allow_branch = {
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+		}
+		available = {
+			has_capitulated = no
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.05
+			add_political_power = 60
+			add_fuel = 5000
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# ----- A second chapter for Svetlogorye -----
+
+	focus = {
+		id = NAM_defeat_second_chapter
+		icon = GFX_focus_generic_phoenix
+		x = 10
+		y = 7
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_RESEARCH }
+		prerequisite = {
+			focus = NAM_defeat_war_of_return
+			focus = NAM_defeat_oil_peace
+			focus = NAM_defeat_southern_charter
+		}
+		available = {
+			has_capitulated = no
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_research_slot = 1
+			add_political_power = 75
+			add_stability = 0.05
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+}

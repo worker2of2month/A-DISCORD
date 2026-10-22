@@ -721,4 +721,8 @@
  STATE_716: "Middle March"
  STATE_717: "Rinval Fens"
  STATE_718: "Port of Misstana"
+ STATE_719: "East Sukhorechye"
+ STATE_720: "Moren District"
+ STATE_721: "Loren Borderland"
+ STATE_722: "Azhar Seaboard"
  # END GENERATED: tools.builders.build_adiscord_new_states

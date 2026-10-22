@@ -15,9 +15,254 @@ characters = {
 			}
 		}
 		country_leader = {
+			desc = NAM_Egor_Rom_desc
 			ideology = etatism_ideology
+			traits = {
+				NAM_trait_keeper_of_seals
+				NAM_trait_oil_ledger
+			}
 			expire = "2200.1.1.1"
 			id = -1
+		}
+	}
+
+	# Rivals of the ladder. Each speaks for one pillar; hearing his pillar's
+	# focus opens his advisor seat. A coup adds his leader role at runtime.
+	NAM_Arseny_Klyuch = {
+		name = NAM_Arseny_Klyuch
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_8
+				small = GFX_Portrait_Forul_Generic_8_small
+			}
+		}
+		advisor = {
+			slot = political_advisor_minister_of_economy
+			idea_token = NAM_Arseny_Klyuch_advisor
+			desc = NAM_Arseny_Klyuch_advisor_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { original_tag = NAM }
+			visible = { tag = NAM }
+			available = {
+				has_completed_focus = NAM_hear_klyuchevsk
+				NAM_rival_klyuch_free = yes
+			}
+			traits = { ADISCORD_qol_industrial_planner }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	NAM_Lev_Gavanov = {
+		name = NAM_Lev_Gavanov
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_7
+				small = GFX_Portrait_Forul_Generic_7_small
+			}
+		}
+		advisor = {
+			slot = political_advisor_minister_of_foreign_affairs
+			idea_token = NAM_Lev_Gavanov_advisor
+			desc = NAM_Lev_Gavanov_advisor_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { original_tag = NAM }
+			visible = { tag = NAM }
+			available = {
+				has_completed_focus = NAM_hear_the_harbour
+				NAM_rival_gavanov_free = yes
+			}
+			traits = { minister_trait_foreign_trade }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	NAM_Taras_Shtyk = {
+		name = NAM_Taras_Shtyk
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_3
+				small = GFX_Portrait_Forul_Generic_3_small
+			}
+		}
+		advisor = {
+			slot = political_advisor_minister_of_defense
+			idea_token = NAM_Taras_Shtyk_advisor
+			desc = NAM_Taras_Shtyk_advisor_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { original_tag = NAM }
+			visible = { tag = NAM }
+			available = {
+				has_completed_focus = NAM_hear_the_commandant
+				NAM_rival_shtyk_free = yes
+			}
+			traits = { ADISCORD_qol_general_staff }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	NAM_Vera_Pechat = {
+		name = NAM_Vera_Pechat
+		portraits = {
+			civilian = {
+				large = GFX_portrait_unknown_female
+				small = GFX_portrait_unknown_female_small
+			}
+		}
+		advisor = {
+			slot = political_advisor_chief_of_intelligence
+			idea_token = NAM_Vera_Pechat_advisor
+			desc = NAM_Vera_Pechat_advisor_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { original_tag = NAM }
+			visible = { tag = NAM }
+			available = {
+				has_completed_focus = NAM_hear_the_registrar
+				NAM_rival_pechat_free = yes
+			}
+			traits = { ADISCORD_qol_registrar }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	# Leaders of the charter endings. Their leader roles are added by the
+	# ending effects, so they never compete with the ruling leader earlier.
+	NAM_Nadezhda_Okrug = {
+		name = NAM_Nadezhda_Okrug
+		portraits = {
+			civilian = {
+				large = GFX_portrait_unknown_female
+				small = GFX_portrait_unknown_female_small
+			}
+		}
+	}
+
+	NAM_Kirill_Vykup = {
+		name = NAM_Kirill_Vykup
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_1
+				small = GFX_Portrait_Forul_Generic_1_small
+			}
+		}
+	}
+
+	# Yaroslav Veter on Svetlogorye's side after the amnesty. The uprising keeps
+	# its own SLF character; this one is recruited only by the amnesty.
+	NAM_Yaroslav_Veter = {
+		name = NAM_Yaroslav_Veter
+		portraits = {
+			army = {
+				large = GFX_Portrait_Forul_Generic_9
+				small = GFX_Portrait_Forul_Generic_9_small
+			}
+		}
+		corps_commander = {
+			traits = {
+				guerilla_fighter
+				ambusher
+				hill_fighter
+			}
+			skill = 3
+			attack_skill = 3
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 3
+			legacy_id = -1
+		}
+	}
+
+	# Commander of the basin army: a cautious staff officer who plans the
+	# defence of the fields before any counterstroke.
+	NAM_Grigory_Levashov = {
+		name = NAM_Grigory_Levashov
+		portraits = {
+			army = {
+				large = GFX_Portrait_Forul_Generic_6
+				small = GFX_Portrait_Forul_Generic_6_small
+			}
+		}
+		field_marshal = {
+			traits = {
+				defensive_doctrine
+				logistics_wizard
+			}
+			skill = 3
+			attack_skill = 2
+			defense_skill = 4
+			planning_skill = 3
+			logistics_skill = 3
+			legacy_id = -1
+		}
+	}
+
+	# Field commanders of the basin and the South Harbour squadron.
+	NAM_Gleb_Burov = {
+		name = NAM_Gleb_Burov
+		portraits = {
+			army = {
+				large = GFX_Portrait_Forul_Generic_4
+				small = GFX_Portrait_Forul_Generic_4_small
+			}
+		}
+		corps_commander = {
+			traits = {
+				hill_fighter
+				trait_engineer
+			}
+			skill = 3
+			attack_skill = 2
+			defense_skill = 4
+			planning_skill = 3
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
+	NAM_Anton_Zhar = {
+		name = NAM_Anton_Zhar
+		portraits = {
+			army = {
+				large = GFX_Portrait_Forul_Generic_5
+				small = GFX_Portrait_Forul_Generic_5_small
+			}
+		}
+		corps_commander = {
+			traits = {
+				infantry_leader
+				urban_assault_specialist
+			}
+			skill = 2
+			attack_skill = 3
+			defense_skill = 2
+			planning_skill = 2
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
+	NAM_Matvei_Prichal = {
+		name = NAM_Matvei_Prichal
+		portraits = {
+			navy = {
+				large = GFX_Portrait_Forul_Generic_2
+				small = GFX_Portrait_Forul_Generic_2_small
+			}
+		}
+		navy_leader = {
+			traits = {
+				fleet_protector
+				blockade_runner
+			}
+			skill = 2
+			attack_skill = 2
+			defense_skill = 3
+			maneuvering_skill = 2
+			coordination_skill = 2
+			legacy_id = -1
 		}
 	}
 

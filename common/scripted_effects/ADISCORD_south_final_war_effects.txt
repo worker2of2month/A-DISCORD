@@ -991,11 +991,16 @@ ADISCORD_south_demand_annexation = {
 	}
 }
 
+# A follower of another regional faction is invited to switch sides; it leaves
+# that faction only through its own answer in ADISCORD_south.40.
 ADISCORD_south_offer_alliance = {
 	if = {
 		limit = {
 			ADISCORD_south_campaign_target_valid = yes
-			is_in_faction = no
+			OR = {
+				is_in_faction = no
+				ADISCORD_south_alliance_switch_possible = yes
+			}
 		}
 		ADISCORD_release_non_participating_minor_optimization = yes
 		set_variable = { var = ADISCORD_south_offer_kind value = 3 }
@@ -1016,13 +1021,22 @@ ADISCORD_south_accept_offer = {
 			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } }
 			if = {
 				limit = {
-					is_in_faction = no
+					OR = {
+						is_in_faction = no
+						ADISCORD_south_alliance_switch_possible = yes
+					}
 					FROM = {
 						OR = {
 							is_in_faction = no
 							is_faction_leader = yes
 						}
 					}
+				}
+				# leave_faction applies at once, so the follower joins the
+				# champion in the same tick, as in the resource-war alliance setup.
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
 				}
 				FROM = {
 					ADISCORD_south_ensure_campaign_faction = yes
@@ -1064,7 +1078,10 @@ ADISCORD_south_accept_offer = {
 	clear_variable = ADISCORD_south_offer_kind
 }
 
-# COUNTRY target (event ROOT); FROM is the champion.
+# COUNTRY target (event ROOT); FROM is the champion. A refusing faction member
+# is defended by its regional partners in the same war. The default
+# capitulation handler settles it both ways: it waits for the last capitulating
+# faction member, then the victor annexes every defeated participant.
 ADISCORD_south_refuse_offer = {
 	if = {
 		limit = {
@@ -1075,8 +1092,43 @@ ADISCORD_south_refuse_offer = {
 		}
 		set_country_flag = ADISCORD_south_campaign_target
 		FROM = { declare_war_on = { target = PREV type = annex_everything } }
+		if = {
+			limit = { is_in_faction = yes }
+			ADISCORD_south_refusal_partners_defend = yes
+		}
 	}
 	clear_variable = ADISCORD_south_offer_kind
+}
+
+# COUNTRY refusing target (event ROOT); FROM is the champion. Bounded to the
+# regional tags; the native defensive call may already have added them.
+ADISCORD_south_refusal_partners_defend = {
+	EFL = { ADISCORD_south_defend_refusing_partner = yes }
+	AZH = { ADISCORD_south_defend_refusing_partner = yes }
+	WEF = { ADISCORD_south_defend_refusing_partner = yes }
+	KDR = { ADISCORD_south_defend_refusing_partner = yes }
+	RHM = { ADISCORD_south_defend_refusing_partner = yes }
+	SDR = { ADISCORD_south_defend_refusing_partner = yes }
+	MZR = { ADISCORD_south_defend_refusing_partner = yes }
+	KYZ = { ADISCORD_south_defend_refusing_partner = yes }
+	GLP = { ADISCORD_south_defend_refusing_partner = yes }
+}
+
+ADISCORD_south_defend_refusing_partner = {
+	if = {
+		limit = {
+			exists = yes
+			NOT = { tag = ROOT }
+			is_in_faction_with = ROOT
+			has_capitulated = no
+			NOT = { has_war_with = FROM }
+		}
+		add_to_war = {
+			targeted_alliance = ROOT
+			enemy = FROM
+			hostility_reason = asked_to_join
+		}
+	}
 }
 
 # COUNTRY target, one day after accepting submission.
@@ -1265,6 +1317,8 @@ ADISCORD_south_raid_north_fuel = {
 				type = infrastructure
 				damage = 1
 			}
+			set_temp_variable = { var = NAM_field_damage_amount value = 15 }
+			NAM_field_apply_damage = yes
 		}
 	}
 }

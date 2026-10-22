@@ -19,6 +19,11 @@ from tools.validators.validate_adiscord_nam_resource_war import (
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE = "ADISCORD_nam_resource_war"
+TREES = {
+    "main": ("focus_trees/NAM/main/focuses.txt", "NAM_focus", "ADISCORD_NAM_focus.txt"),
+    "postwar": ("focus_trees/NAM/postwar/focuses.txt", "NAM_postwar_focus", "ADISCORD_NAM_postwar.txt"),
+    "defeated": ("focus_trees/NAM/defeated/focuses.txt", "NAM_defeated_focus", "ADISCORD_NAM_defeated.txt"),
+}
 
 
 def read(path):
@@ -27,6 +32,27 @@ def read(path):
 
 def parsed(path):
     return parse_clausewitz(read(path))
+
+
+def tree_focuses(kind):
+    tree = block(parsed(TREES[kind][0]), "focus_tree")
+    return tree, {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+
+
+def reachable(focuses, blocked):
+    """Prerequisite closure only; availability and bypass are engine-evaluated."""
+    completed = set()
+    while True:
+        ready = set()
+        for name, focus in focuses.items():
+            if name in completed or name in blocked:
+                continue
+            requirements = [entry.value for entry in focus if entry.key == "prerequisite"]
+            if all(any(child.value in completed for child in group) for group in requirements):
+                ready.add(name)
+        if not ready:
+            return completed
+        completed.update(ready)
 
 
 class NamCampaignTests(unittest.TestCase):
@@ -79,8 +105,9 @@ class NamCampaignTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.tree = block(parsed("focus_trees/NAM/main/focuses.txt"), "focus_tree")
-        cls.focuses = {scalar(e.value, "id"): e.value for e in cls.tree if e.key == "focus"}
+        cls.tree, cls.focuses = tree_focuses("main")
+        cls.postwar_tree, cls.postwar = tree_focuses("postwar")
+        cls.defeated_tree, cls.defeated = tree_focuses("defeated")
         cls.triggers = {e.key: e.value for e in parsed(f"common/scripted_triggers/{BASE}_triggers.txt")}
         cls.effects = {}
         for path in (f"common/scripted_effects/{BASE}_effects.txt", "common/scripted_effects/ADISCORD_shared_action_effects.txt"):
@@ -153,46 +180,70 @@ class NamCampaignTests(unittest.TestCase):
         self.assertEqual(scalar(self.tree, "id"), "NAM_focus")
         country = block(self.tree, "country")
         self.assertEqual(scalar(block(country, "modifier"), "tag"), "NAM")
-        output = ROOT / "common/national_focus/ADISCORD_NAM_focus.txt"
-        self.assertEqual(output.read_bytes(), expected_outputs()[output])
+        selection = {
+            "postwar": (self.postwar_tree, "ADISCORD_nam_resource_war_nam_victory"),
+            "defeated": (self.defeated_tree, "ADISCORD_nam_resource_war_compromise"),
+        }
+        for kind, (tree, flag) in selection.items():
+            self.assertEqual(scalar(tree, "id"), TREES[kind][1])
+            modifier = block(block(tree, "country"), "modifier")
+            self.assertEqual(scalar(modifier, "original_tag"), "NAM")
+            self.assertEqual(scalar(modifier, "has_global_flag"), flag)
         owners = json.loads(read("tools/data/generated_output_owners.json"))
-        self.assertIn("common/national_focus/ADISCORD_NAM_focus.txt", str(owners))
+        for kind, (_, _, filename) in TREES.items():
+            output = ROOT / "common/national_focus" / filename
+            self.assertEqual(output.read_bytes(), expected_outputs()[output], kind)
+            self.assertIn(f"common/national_focus/{filename}", str(owners))
 
     def test_unique_layout_and_real_rewards(self):
-        coordinates = set()
-        self.assertEqual(len(self.focuses), 70)
-        filters = set()
-        for name, focus in self.focuses.items():
-            coordinate = (scalar(focus, "x"), scalar(focus, "y"))
-            self.assertNotIn(coordinate, coordinates, name)
-            coordinates.add(coordinate)
-            self.assertTrue(block(focus, "completion_reward"), name)
-            self.assertIn(int(scalar(focus, "cost")), range(1, 6))
-            filters.add(tuple(e.value for e in block(focus, "search_filters")))
-            self.assertEqual(scalar(block(focus, "available"), "has_capitulated"), "no")
-        self.assertGreaterEqual(len(filters), 4)
+        expected = {"main": (self.focuses, 102), "postwar": (self.postwar, 54), "defeated": (self.defeated, 24)}
+        names = [name for focuses, _ in expected.values() for name in focuses]
+        self.assertEqual(len(names), len(set(names)))
+        for kind, (focuses, count) in expected.items():
+            coordinates = set()
+            self.assertEqual(len(focuses), count, kind)
+            filters = set()
+            for name, focus in focuses.items():
+                coordinate = (scalar(focus, "x"), scalar(focus, "y"))
+                self.assertNotIn(coordinate, coordinates, name)
+                coordinates.add(coordinate)
+                self.assertTrue(block(focus, "completion_reward"), name)
+                self.assertIn(int(scalar(focus, "cost")), range(1, 6))
+                filters.add(tuple(e.value for e in block(focus, "search_filters")))
+                self.assertEqual(scalar(block(focus, "available"), "has_capitulated"), "no")
+                for group in (e.value for e in focus if e.key == "prerequisite"):
+                    for child in group:
+                        self.assertIn(child.value, focuses, (name, "prerequisite leaves its tree"))
+            self.assertGreaterEqual(len(filters), 4, kind)
 
-    def test_all_sixteen_policy_combinations_reach_a_final(self):
+    def test_every_policy_combination_reaches_the_branch_finals(self):
         pairs = (("vertical", "districts"), ("export_quays", "domestic_refining"),
-                 ("field_guards", "mobile_columns"), ("civil_dividend", "armed_peace"))
+                 ("field_guards", "mobile_columns"), ("supports_oil_compact", "supports_export_houses"),
+                 ("court_azhar", "fuel_leverage"), ("island_levy_office", "island_concession"))
+        # Course-gated alternatives follow the ladder course chosen in the first pair.
+        course = {
+            "vertical": {"NAM_district_assemblies", "NAM_veter_channel", "NAM_district_volunteers"},
+            "districts": {"NAM_namestnik_circuits", "NAM_cache_hunters", "NAM_martial_seals"},
+        }
+        finals = ("NAM_seal_courts", "NAM_quiet_wells", "NAM_civilian_combine", "NAM_quartermaster",
+                  "NAM_pillar_arbitration", "NAM_general_staff_plan", "NAM_island_governors", "NAM_rom_address")
         for choices in product(*pairs):
             blocked = {"NAM_" + other for pair, chosen in zip(pairs, choices) for other in pair if other != chosen}
-            completed = set()
-            while True:
-                ready = set()
-                for name, focus in self.focuses.items():
-                    if name in completed or name in blocked:
-                        continue
-                    requirements = [entry.value for entry in focus if entry.key == "prerequisite"]
-                    if all(any(child.value in completed for child in group) for group in requirements):
-                        ready.add(name)
-                if not ready:
-                    break
-                completed.update(ready)
-            self.assertIn("NAM_svetlogorye", completed, choices)
+            completed = reachable(self.focuses, blocked | course[choices[0]])
+            for final in finals:
+                self.assertIn(final, completed, choices)
             for pair, chosen in zip(pairs, choices):
                 group = block(self.focuses["NAM_" + chosen], "mutually_exclusive")
                 self.assertEqual({e.value for e in group}, {"NAM_" + n for n in pair if n != chosen})
+        for state, federal in (("service_state", "federal_charter"), ("federal_charter", "service_state")):
+            for peace in (("civil_dividend", "armed_peace"), ("armed_peace", "civil_dividend")):
+                completed = reachable(self.postwar, {"NAM_" + federal, "NAM_" + peace[1]})
+                self.assertIn("NAM_svetlogorye", completed)
+                ending = "NAM_ladder_of_seals" if state == "service_state" else "NAM_common_fuel_market"
+                self.assertIn(ending, completed, state)
+        for chosen, other in (("revenge", "accommodation"), ("accommodation", "revenge")):
+            completed = reachable(self.defeated, {"NAM_defeat_" + other})
+            self.assertIn("NAM_defeat_second_chapter", completed, chosen)
 
     def test_normal_preparation_fits_external_clock(self):
         path = ("inventory", "open_ledgers", "districts", "public_payroll", "district_guarantees")
@@ -200,8 +251,19 @@ class NamCampaignTests(unittest.TestCase):
         self.assertEqual(days, 77)
         self.assertLess(days + 60, 850)
         self.assertNotIn("prerequisite", [e.key for e in self.focuses["NAM_alarm"]])
-        self.assertNotIn("prerequisite", [e.key for e in self.focuses["NAM_recognition"]])
+        self.assertNotIn("prerequisite", [e.key for e in self.postwar["NAM_recognition"]])
+        self.assertNotIn("prerequisite", [e.key for e in self.defeated["NAM_defeat_count_losses"]])
         self.assertEqual(int(scalar(self.focuses["NAM_alarm"], "cost")), 1)
+        # One full pre-war route (vertical, refining, field guards) fits before the backstop war.
+        blocked = {"NAM_districts", "NAM_export_quays", "NAM_mobile_columns", "NAM_supports_export_houses",
+                   "NAM_fuel_leverage", "NAM_island_concession", "NAM_hear_the_harbour", "NAM_hear_the_registrar",
+                   "NAM_concealed_reserve", "NAM_basin_is_ours", "NAM_district_assemblies", "NAM_veter_channel"}
+        war = {name for name, focus in self.focuses.items() if "allow_branch" in [e.key for e in focus]}
+        route = reachable(self.focuses, blocked | war)
+        self.assertLessEqual(sum(int(scalar(self.focuses[name], "cost")) * 7 for name in route), 1000)
+        for name, focus in self.focuses.items():
+            if "NAM_restitution_clock_tt" in repr(block(focus, "available")):
+                self.assertIn("ADISCORD_nam_resource_war_started", repr(block(focus, "bypass")), name)
 
     def test_late_political_routes_still_have_a_usable_result(self):
         facts = self.facts()
@@ -346,7 +408,7 @@ class NamCampaignTests(unittest.TestCase):
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             text = path.read_text(encoding="utf-8-sig")
             values = dict(re.findall(r'^\s*([^ #:\s]+):\s*"(.*)"\s*$', text, re.M))
-            for name in self.focuses:
+            for name in (*self.focuses, *self.postwar, *self.defeated):
                 self.assertIn(name, values)
                 self.assertIn(name + "_desc", values)
             for name, decision in self.decisions.items():
@@ -363,7 +425,8 @@ class NamCampaignTests(unittest.TestCase):
                     self.assertLessEqual(len(prose), 3000)
                     self.assertLessEqual(len(prose.encode("utf-8")), 5500)
                     self.assertNotIn("§Y", prose)
-        for path in ("focus_trees/NAM/main/focuses.txt", f"common/decisions/{BASE}_decisions.txt", f"common/ideas/{BASE}_ideas.txt", f"events/{BASE}_events.txt"):
+        for path in (*(source for source, _, _ in TREES.values()), "common/ai_strategy_plans/ADISCORD_NAM_plans.txt",
+                     f"common/decisions/{BASE}_decisions.txt", f"common/ideas/{BASE}_ideas.txt", f"events/{BASE}_events.txt"):
             self.assertFalse((ROOT / path).read_bytes().startswith(b"\xef\xbb\xbf"))
             self.assertTrue(balanced_braces(read(path)), path)
 
@@ -388,8 +451,9 @@ class NamPillarsTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.tree = block(parsed("focus_trees/NAM/main/focuses.txt"), "focus_tree")
-        cls.focuses = {scalar(e.value, "id"): e.value for e in cls.tree if e.key == "focus"}
+        cls.focuses = {}
+        for kind in TREES:
+            cls.focuses.update(tree_focuses(kind)[1])
         cls.effects = {e.key: e.value for e in parsed(f"common/scripted_effects/{BASE}_effects.txt")}
 
     def changes(self, entries, kind):
@@ -424,15 +488,23 @@ class NamPillarsTests(unittest.TestCase):
             "NAM_ladder_of_seals": ("NAM_ladder_ending_iron", "NAM_ladder_ending_service"),
             "NAM_common_fuel_market": ("NAM_charter_ending_federation", "NAM_charter_ending_oil_union"),
         }
+        effects = {
+            "NAM_ladder_ending_iron": "NAM_apply_ending_iron",
+            "NAM_ladder_ending_service": "NAM_apply_ending_service",
+            "NAM_charter_ending_federation": "NAM_apply_ending_federation",
+            "NAM_charter_ending_oil_union": "NAM_apply_ending_oil_union",
+        }
         for final, pair in finals.items():
             for name in pair:
                 focus = self.focuses[name]
                 self.assertEqual([e.value for e in block(focus, "prerequisite")], [final], name)
                 other = next(n for n in pair if n != name)
                 self.assertEqual([e.value for e in block(focus, "mutually_exclusive")], [other], name)
-                self.assertIn("NAM_prog_ending", repr(block(focus, "completion_reward")), name)
-        tree = read("focus_trees/NAM/main/focuses.txt")
-        self.assertNotIn("NAM_programme", tree)
+                reward = block(focus, "completion_reward")
+                self.assertIn("NAM_prog_ending", repr(reward), name)
+                self.assertIn((effects[name], "yes"), [(e.key, e.value) for e in reward], name)
+        for source, _, _ in TREES.values():
+            self.assertNotIn("NAM_programme", read(source))
 
     def test_every_support_shift_refreshes_and_is_localised(self):
         texts = {language: read(f"localisation/{language}/{BASE}_l_{language}.yml") for language in ("russian", "english")}
