@@ -808,6 +808,7 @@ NAM_ATTACHMENTS = {
     'Left_Hand_node_2': ('NAM_LeftHand', 'LeftHand'),
     'Root_node_1': ('NAM_Hips', 'Root'),
 }
+NAM_MOUTH = (0.0, -0.54, 6.61)
 
 
 def nam_compact_rig(body, rig):
@@ -833,10 +834,9 @@ def nam_compact_rig(body, rig):
     removed = {
         bone.name for bone in rig.data.bones
         if bone.name.startswith('Bone_')
-        or bone.name in ('headfront', 'mixamorig:HeadTop_End')
+        or bone.name in ('headfront', 'mixamorig:HeadTop_End', 'mixamorig:Spine1')
         or bone.name.endswith('Toe_End')
         or ('Hand' in bone.name and bone.name[-1:] in ('3', '4'))
-        or 'HandPinky2' in bone.name
     }
     parents = {}
     for name in removed:
@@ -955,7 +955,100 @@ def nam_retarget_pose(rig, donor, rest, native_rest, alignment, pose):
             conversion = Matrix.LocRotScale(Vector(), offset.inverted(), Vector((1, 1, 1)))
             desired = world[target_parent] @ conversion @ donor.pose.bones[source_parent].matrix.inverted() @ donor.pose.bones[locator].matrix
         world['NAM_attach_' + locator] = desired
+    for locator in ('Right_Hand_node', 'Left_Hand_node', 'mid_back_node', 'Root_node_2'):
+        world['NAM_attach_' + locator] @= Matrix.Scale(0.9, 4)
+    # The source chest joint sits lower than the GLB's upper spine. Place slung
+    # weapons against the model's back while retaining native visibility timing.
+    stowed = 'NAM_attach_mid_back_node'
+    stowed_scale = world[stowed].to_scale().x
+    torso_matrix = world['NAM_Spine2'] @ rest['NAM_Spine2'].inverted()
+    stowed_rotation = (
+        torso_matrix.to_quaternion()
+        @ Matrix.Rotation(math.radians(-20), 4, 'Y').to_quaternion()
+        @ Matrix.Rotation(math.radians(-90), 4, 'X').to_quaternion()
+    )
+    world[stowed] = Matrix.LocRotScale(
+        torso_matrix @ Vector((0.15, 1.0, 4.6)), stowed_rotation,
+        Vector((stowed_scale,) * 3),
+    )
+    if pose in ('attack_stand_mg', 'attack_crouch_mg', 'charge_mg_shoot'):
+        nam_aim_grip(world, rest)
+    elif pose.startswith('long_idle03_'):
+        cigarette = donor.pose.bones['Right_Hand_node_2'].matrix
+        if cigarette.to_scale().x > 0.1:
+            native_head = donor.pose.bones['head'].matrix @ native_rest['head'].inverted()
+            mouth = (native_head @ native_rest['mouth']).translation
+            offset = cigarette.translation - mouth
+            contact = max(0, min(1, (0.7 - offset.length) / 0.35))
+            target_head = world['NAM_Head'] @ rest['NAM_Head'].inverted()
+            offset = target_head.to_quaternion() @ native_head.to_quaternion().inverted() @ offset
+            target = target_head @ Vector(NAM_MOUTH) + offset
+            displacement = target - world['NAM_attach_Right_Hand_node_2'].translation
+            hand = world['NAM_RightHand']
+            nam_place_hand(world, rest, 'Right', hand.translation + displacement * contact,
+                           hand.to_quaternion())
     return world
+
+
+def nam_place_hand(world, rest, side, goal, rotation, pole=None):
+    from mathutils import Matrix, Vector
+
+    hand = 'NAM_' + side + 'Hand'
+    upper = 'NAM_' + side + 'Arm'
+    lower = 'NAM_' + side + 'ForeArm'
+    a = world[upper].translation.copy()
+    b = world[lower].translation.copy()
+    c = world[hand].translation.copy()
+    length1 = (b - a).length
+    length2 = (c - b).length
+    axis = (goal - a).normalized()
+    distance = min((goal - a).length, length1 + length2 - 0.001)
+    distance = max(distance, abs(length1 - length2) + 0.001)
+    goal = a + axis * distance
+    pole = b - a if pole is None else pole
+    bend = (pole - axis * pole.dot(axis)).normalized()
+    along = (length1 * length1 - length2 * length2 + distance * distance) / (2 * distance)
+    height = math.sqrt(max(0, length1 * length1 - along * along))
+    elbow = a + axis * along + bend * height
+    upper_rotation = (b - a).rotation_difference(elbow - a) @ world[upper].to_quaternion()
+    lower_rotation = (c - b).rotation_difference(goal - elbow) @ world[lower].to_quaternion()
+    hand_before = world[hand].copy()
+    world[upper] = Matrix.LocRotScale(a, upper_rotation, Vector((1, 1, 1)))
+    world[lower] = Matrix.LocRotScale(elbow, lower_rotation, Vector((1, 1, 1)))
+    world[hand] = Matrix.LocRotScale(goal, rotation, Vector((1, 1, 1)))
+    adjustment = world[hand] @ hand_before.inverted()
+    for name in world:
+        if name.startswith(hand) and name != hand:
+            world[name] = adjustment @ world[name]
+        elif name.startswith('NAM_attach_' + side + '_Hand_node'):
+            world[name] = adjustment @ world[name]
+
+
+def nam_aim_grip(world, rest):
+    """Seat the stock at the shoulder and solve both arms against the weapon grips."""
+    from mathutils import Matrix, Vector
+
+    locator = 'NAM_attach_Right_Hand_node'
+    weapon = world[locator].copy()
+    if weapon.to_scale().x < 0.1:
+        return
+    torso = (world['NAM_Spine2'] @ rest['NAM_Spine2'].inverted()).to_quaternion()
+    shoulder = world['NAM_RightArm'].translation + torso @ Vector((0.12, -0.18, 0.22))
+    weapon.translation = shoulder - weapon.to_3x3() @ Vector((0, 1.48, 0.18))
+    for side, palm, angle in (
+        ('Right', (-0.12, 0.25, -0.17), -90),
+        ('Left', (0.08, -0.75, 0.20), 180),
+    ):
+        hand = 'NAM_' + side + 'Hand'
+        delta = weapon.to_quaternion() @ Matrix.Rotation(math.radians(angle), 4, 'Y').to_quaternion()
+        palm_offset = (
+            (rest[hand + 'Index1'].translation + rest[hand + 'Pinky1'].translation) * 0.5
+            - rest[hand].translation
+        ) * 0.6
+        goal = weapon @ Vector(palm) - delta @ palm_offset
+        pole = torso @ Vector((1 if side == 'Left' else -1, -0.3, -1))
+        nam_place_hand(world, rest, side, goal, delta @ rest[hand].to_quaternion(), pole)
+    world[locator] = weapon
 
 
 def nam_native_frames(animation, donor, pdx):
@@ -990,6 +1083,21 @@ def nam_native_frames(animation, donor, pdx):
         yield SimpleNamespace(pose=SimpleNamespace(bones=world))
 
 
+def nam_apply_pose(rig, sample):
+    import bpy
+    from mathutils import Matrix
+
+    for bone in rig.data.bones:
+        parent = bone.parent
+        parent_world = sample.pose.bones[parent.name].matrix if parent else Matrix.Identity(4)
+        parent_rest = parent.matrix_local if parent else Matrix.Identity(4)
+        rig.pose.bones[bone.name].matrix_basis = bone.convert_local_to_pose(
+            sample.pose.bones[bone.name].matrix, bone.matrix_local,
+            parent_matrix=parent_world, parent_matrix_local=parent_rest, invert=True,
+        )
+    bpy.context.view_layer.update()
+
+
 def build_nam_rigged(output, pdx, source):
     import bpy
     import xml.etree.ElementTree as Xml
@@ -1022,6 +1130,11 @@ def build_nam_rigged(output, pdx, source):
     pdx.import_meshfile(str(CONFIG['NAM']), imp_locs=False)
     donor = next(obj for obj in set(scene.objects) - before if obj.type == 'ARMATURE')
     native_rest = {bone.name: bone.matrix_local.copy() for bone in donor.data.bones}
+    native = pdx_data.read_meshfile(str(CONFIG['NAM']))
+    mouth_locator = native.find('locator').find('head')
+    native_rest['mouth'] = native_rest['head'] @ pdx.swap_coord_space(
+        Matrix.Translation(mouth_locator.attrib['p'])
+    )
     rest = {bone.name: bone.matrix_local.copy() for bone in rig.data.bones}
     alignment = nam_rest_alignment(rest, native_rest)
     bpy.context.view_layer.objects.active = rig
@@ -1103,6 +1216,8 @@ def build_nam_rigged(output, pdx, source):
         ))
         offset = rest[target].to_quaternion().inverted() @ native_rest[parent].to_quaternion()
         local = pdx.swap_coord_space(offset.to_matrix().to_4x4() @ local)
+        if locator.tag == 'head':
+            local.translation = pdx.swap_coord_space(rest[target].inverted() @ Vector(NAM_MOUTH))
         translation, rotation, _ = local.decompose()
         Xml.SubElement(locators, locator.tag, {
             'p': list(translation), 'q': [rotation.x, rotation.y, rotation.z, rotation.w],
@@ -2334,21 +2449,14 @@ def verify(output, tags, walk=False):
                 for frame, sample in enumerate(nam_native_frames(animation, rigs[0], pdx)):
                     if frame not in sample_frames:
                         continue
-                    for bone in rigs[0].data.bones:
-                        parent = bone.parent
-                        parent_world = sample.pose.bones[parent.name].matrix if parent else Matrix.Identity(4)
-                        parent_rest = parent.matrix_local if parent else Matrix.Identity(4)
-                        rigs[0].pose.bones[bone.name].matrix_basis = bone.convert_local_to_pose(
-                            sample.pose.bones[bone.name].matrix, bone.matrix_local,
-                            parent_matrix=parent_world, parent_matrix_local=parent_rest, invert=True,
-                        )
-                    bpy.context.view_layer.update()
+                    nam_apply_pose(rigs[0], sample)
                     graph = bpy.context.evaluated_depsgraph_get()
                     for obj in (o for o in scene.objects if o.type == 'MESH'):
                         evaluated = obj.evaluated_get(graph)
                         assert all(math.isfinite(x) for v in evaluated.data.vertices for x in v.co)
                         assert max(v.co.length for v in evaluated.data.vertices) < 20, (clip, frame)
         weapons = []
+        props = []
         if tag in ('MON', 'HAZ', 'NAM'):
             for level in (0, 1):
                 before = set(scene.objects)
@@ -2364,9 +2472,24 @@ def verify(output, tags, walk=False):
                     left = obj.copy()
                     scene.collection.objects.link(left)
                     weapons.extend(((level, obj, 'Right_Hand_node'), (level, left, 'Left_Hand_node')))
+                    if tag == 'NAM':
+                        for bone in ('mid_back_node', 'Root_node_2'):
+                            extra = obj.copy()
+                            scene.collection.objects.link(extra)
+                            weapons.append((level, extra, bone))
             from build_crimson_sentinel import configure_preview_materials
 
             configure_preview_materials()
+        if tag == 'NAM':
+            for filename, bone in (
+                ('cigarette.mesh', 'Right_Hand_node_2'), ('cigarette.mesh', 'Root_node_1'),
+                ('cigarette_package.mesh', 'Right_Hand_node_3'),
+                ('cigarette_package.mesh', 'Left_Hand_node_2'), ('lighter.mesh', 'Right_Hand_node_4'),
+            ):
+                before = set(scene.objects)
+                pdx.import_meshfile(str(GAME / 'gfx/models/units' / filename),
+                                    imp_skel=False, imp_locs=False)
+                props.extend((obj, bone) for obj in set(scene.objects) - before if obj.type == 'MESH')
 
         def place_weapons(pose):
             level = 0 if pose.endswith('rifle') else 1
@@ -2374,8 +2497,10 @@ def verify(output, tags, walk=False):
                 obj.hide_render = tier != level
                 obj.matrix_world = (
                     rigs[0].matrix_world @ rigs[0].pose.bones[bone].matrix
-                    @ Matrix.Scale(0.9 if tier == 0 else 1.0, 4)
+                    @ Matrix.Scale(0.9 if tier == 0 and bone != 'mid_back_node' else 1.0, 4)
                 )
+            for obj, bone in props:
+                obj.matrix_world = rigs[0].matrix_world @ rigs[0].pose.bones[bone].matrix
 
         def render_details(pose):
             location = camera.location.copy()
@@ -2488,6 +2613,25 @@ def verify(output, tags, walk=False):
                         bpy.ops.render.render(write_still=True)
                     scene.cycles.samples = 24
                     scene.render.resolution_percentage = 100
+        if tag == 'NAM' and walk:
+            scene.cycles.samples = 12
+            scene.render.resolution_percentage = 70
+            for pose, sample_count in (
+                ('idle_rifle', 8), ('idle_mg', 8), ('attack_stand_mg', 8),
+                ('long_idle03_rifle', 16), ('long_idle03_mg', 16),
+            ):
+                rigs[0].animation_data_clear()
+                animation = pdx_data.read_meshfile(str(path.parent / 'NAM' / f'NAM_{pose}.anim'))
+                count = animation.find('info').attrib['sa'][0]
+                chosen = {round(index * (count - 1) / (sample_count - 1)) for index in range(sample_count)}
+                for frame, sample in enumerate(nam_native_frames(animation, rigs[0], pdx)):
+                    if frame not in chosen:
+                        continue
+                    nam_apply_pose(rigs[0], sample)
+                    place_weapons(pose)
+                    scene.render.filepath = str(output / f'{tag}_{pose}_sample_{frame:03d}.png')
+                    bpy.ops.render.render(write_still=True)
+                poses[pose + '_sequence'] = sorted(chosen)
         # A preview validates the imported files, not a package replaced mid-render.
         assert input_hashes == {
             source: hashlib.sha256(source.read_bytes()).hexdigest()
@@ -2511,6 +2655,7 @@ def verify(output, tags, walk=False):
             }
             report[tag]['animation_sources'] = metadata['clips']
             report[tag]['geometry'] = 'Supplied GLB vertices retained at native infantry scale.'
+            report[tag]['motion'] = 'Adapted native clips, including idle, walking and smoking; shoulder and grip constraints for automatic fire.'
             report[tag]['runtime'] = 'Offline native export and re-import only; HOI4 cold-load pending.'
     report_path = output / 'verification.json'
     previous = json.loads(report_path.read_text()) if report_path.exists() else {}
