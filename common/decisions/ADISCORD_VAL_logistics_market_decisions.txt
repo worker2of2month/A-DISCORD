@@ -311,7 +311,7 @@ VAL_population_markets = {
 
 	VAL_train_refugee_volunteers = {
 		cancel_if_not_visible = no
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_recruitment
 		allowed = { tag = VAL }
 		visible = {
 			OR = {
@@ -620,7 +620,7 @@ VAL_population_markets = {
 	}
 
 	VAL_recruit_contract_reserves = {
-		icon = generic_manpower
+		icon = ADISCORD_recruitment
 		allowed = { tag = VAL }
 		visible = {
 			has_completed_focus = VAL_The_Contract_State
@@ -685,7 +685,7 @@ VAL_population_markets = {
 	}
 
 	VAL_recall_contract_veterans = {
-		icon = generic_manpower
+		icon = ADISCORD_recruitment
 		allowed = { tag = VAL }
 		visible = {
 			has_completed_focus = VAL_The_Contract_State
@@ -750,7 +750,7 @@ VAL_population_markets = {
 	}
 
 	VAL_launch_national_recruitment = {
-		icon = generic_manpower
+		icon = ADISCORD_recruitment
 		allowed = { tag = VAL }
 		visible = { has_completed_focus = VAL_Army_Of_The_Ledger }
 		available = {
@@ -830,7 +830,7 @@ VAL_population_markets = {
 
 	VAL_recruit_local_volunteers = {
 		cancel_if_not_visible = no
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_recruitment
 		allowed = { tag = VAL }
 		visible = {
 			OR = {
@@ -889,7 +889,7 @@ VAL_population_markets = {
 	}
 
 	VAL_expand_refugee_housing = {
-		icon = generic_construction
+		icon = ADISCORD_construction
 		allowed = { tag = VAL }
 		visible = { has_completed_focus = VAL_The_Contract_State }
 		available = {
@@ -1100,7 +1100,7 @@ VAL_trade_routes = {
 	}
 
 	VAL_upgrade_occidia_route = {
-		icon = generic_construction
+		icon = ADISCORD_construction
 		allowed = { tag = VAL }
 		visible = {
 			VAL_trade_corridors_unlocked = yes
@@ -1167,7 +1167,7 @@ VAL_trade_routes = {
 		ai_will_do = { base = 3 }
 	}
 	VAL_upgrade_north_route = {
-		icon = generic_construction
+		icon = ADISCORD_construction
 		allowed = { tag = VAL }
 		visible = {
 			VAL_trade_corridors_unlocked = yes
@@ -1234,7 +1234,7 @@ VAL_trade_routes = {
 		ai_will_do = { base = 3 }
 	}
 	VAL_upgrade_stelander_route = {
-		icon = generic_construction
+		icon = ADISCORD_construction
 		allowed = { tag = VAL }
 		visible = {
 			VAL_trade_corridors_unlocked = yes
@@ -1301,7 +1301,7 @@ VAL_trade_routes = {
 		ai_will_do = { base = 3 }
 	}
 	VAL_upgrade_vorkerland_route = {
-		icon = generic_construction
+		icon = ADISCORD_construction
 		allowed = { tag = VAL }
 		visible = {
 			VAL_trade_corridors_unlocked = yes
@@ -1368,7 +1368,7 @@ VAL_trade_routes = {
 		ai_will_do = { base = 3 }
 	}
 	VAL_upgrade_south_route = {
-		icon = generic_construction
+		icon = ADISCORD_construction
 		allowed = { tag = VAL }
 		visible = {
 			has_completed_focus = VAL_Southern_Trade_Charter

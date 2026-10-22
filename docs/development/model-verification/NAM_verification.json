@@ -1,15 +1,23 @@
 {
   "NAM": {
-    "sha256": "16c195ea7c177b0281e916cdf89d85274a4da1b757682e74c8edb0042bb7ace3",
+    "sha256": "adb80e423a2955e1c534747f1e5d48158469ac5a4dbd79a0d2195ee9e6ffb900",
     "textures": {
       "NAM_field_body_diffuse.dds": "76148f8676f7bf4699197cd75ee922c794165d350f378d7bf2e0133ab3943b87",
       "NAM_field_body_normal.dds": "f4f9fe7de9c989736e8a25578b8affd5d432944dcaf9bc061e723b4c1bcf5ca5",
-      "NAM_field_body_specular.dds": "dc6c15f8541211a68a0c3e424411c0c603f5e00c9c934e9d3063860bca22133e"
+      "NAM_field_body_specular.dds": "dc6c15f8541211a68a0c3e424411c0c603f5e00c9c934e9d3063860bca22133e",
+      "NAM_field_gear_diffuse.dds": "edf0bb08f338802da8955e20fc51e77df91b6ea89ad7c4f8af168087d42fc901",
+      "NAM_field_gear_normal.dds": "13172a7842a2a910ba1f3bc7b39055a3f82ea4bdf7744efc27811fe963909ee4",
+      "NAM_field_gear_specular.dds": "21cd30f78432e957606769d64a92ebd87e822c907abb38bcab7d42a5ebb7e22a"
     },
     "shapes": [
       {
-        "vertices": 6695,
-        "triangles": 8369,
+        "vertices": 342,
+        "triangles": 314,
+        "bones": 33
+      },
+      {
+        "vertices": 5969,
+        "triangles": 7471,
         "bones": 33
       }
     ],
@@ -63,7 +71,16 @@
       ],
       "weapon_levels": 8
     },
-    "verification_scope": "Offline Blender re-import and native animation sampling; HOI4 runtime not checked.",
+    "hand_source": {
+      "path": "gfx/models/units/STP_infantry_hedonist.mesh",
+      "sha256": "50c56bdd4e3e2c67a0802d46dc4bb2d31f3ade1c31751c07f469970327772357"
+    },
+    "detail_poses": [
+      "idle_rifle",
+      "attack_stand_rifle",
+      "attack_stand_mg"
+    ],
+    "verification_scope": "Offline Blender re-import, native animation sampling, neck and grip detail renders; HOI4 runtime not checked.",
     "deterministic_rebuild": true
   }
 }

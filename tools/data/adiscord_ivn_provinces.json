@@ -52,7 +52,7 @@
     {
       "province": 16819,
       "parent": 932,
-      "state": 713,
+      "state": 717,
       "kind": "city",
       "rgb": [
         149,
@@ -525,7 +525,7 @@
     {
       "province": 16862,
       "parent": 12790,
-      "state": 25,
+      "state": 717,
       "kind": "split",
       "rgb": [
         17,

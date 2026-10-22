@@ -481,6 +481,13 @@ class FurnaceAccountingTests(unittest.TestCase):
     def test_source_exists(self):
         self.assertTrue(EFFECT_PATH.exists(), "SHL implementation is absent")
 
+    def test_treasury_receipt_pays_250_and_refreshes_the_budget(self):
+        machine = self.machine
+        machine.variables["SHL"]["ADISCORD_economy_treasury"] = 100
+        machine.run("SHL_receive_250")
+        self.assertEqual(machine.variables["SHL"]["ADISCORD_economy_treasury"], 350)
+        self.assertIn("ADISCORD_economy_mark_dirty", machine.calls)
+
     def test_paid_repair_is_single_payment_and_single_delivery(self):
         m = self.machine
         m.run("SHL_begin_repair", target="287")

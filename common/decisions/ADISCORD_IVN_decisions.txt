@@ -2,7 +2,7 @@ IVN_marches_category = {
 	# A paid construction programme. The site is checked again on delivery;
 	# without one the price is returned instead of a factory.
 	IVN_march_workshops = {
-		icon = generic_construction
+		icon = ADISCORD_construction
 		allowed = { tag = IVN }
 		visible = { has_completed_focus = IVN_march_reconstruction }
 		available = {
@@ -50,7 +50,7 @@ IVN_marches_category = {
 
 	# The trained reserve is called up for a chosen moment of the war.
 	IVN_reserve_call_up = {
-		icon = generic_manpower
+		icon = ADISCORD_recruitment
 		allowed = { tag = IVN }
 		visible = { has_completed_focus = IVN_citizen_reserve }
 		cost = 25

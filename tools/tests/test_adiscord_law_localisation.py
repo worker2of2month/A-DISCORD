@@ -1262,13 +1262,11 @@ class MilitaryStaffContracts(unittest.TestCase):
         gate = next(
             entry.value
             for entry in self.walk(self.one(focus, "available"))
-            if entry.key == "amount_taken_ideas"
+            if entry.key == "check_variable"
+            and self.one(entry.value, "var") == "high_command^num"
         )
-        comparison = [entry.value for entry in gate if not entry.key]
-        self.assertEqual(comparison, ["amount", "<", "3"])
-        self.assertEqual(
-            [entry.value for entry in self.one(gate, "slots")], ["high_command"]
-        )
+        self.assertEqual(self.one(gate, "value"), "3")
+        self.assertEqual(self.one(gate, "compare"), "less_than")
         self.assertEqual(self.one(focus, "cancel_if_invalid"), "yes")
         alternatives = [
             entry

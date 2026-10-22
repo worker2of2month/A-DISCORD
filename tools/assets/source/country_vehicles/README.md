@@ -5,11 +5,14 @@
 clips and packed Blender scenes in this family. It uses the native geometry
 helpers in `build_country_cas.py` and `build_taran.py`.
 
-- VAL: low eight-wheel hull, angular remote weapon station, blue-grey panels.
-- STP: taller six-wheel hull, enclosed cupola, burgundy panels and brass trim.
-- STS: eight-wheel hull, shielded weapon station, olive paint and external kit.
-- NAM: eight-wheel hull, enclosed weapon station with raised optics, teal paint,
-  ochre identification strips and rear ventilation housings.
+- VAL: long, low eight-wheel wedge hull with overlapping side skirts and a wide,
+  flat faceted turret; blue-grey panels.
+- STP: short four-wheel chassis with a raised cabin, rear drum turret and commander's
+  cupola; burgundy panels and brass trim.
+- STS: six-wheel chassis with a separate engine hood, driver's cab and troop box;
+  open shielded weapon mount, olive paint and external kit.
+- NAM: wide eight-wheel amphibious hull with a boat bow, side floats and stern jets;
+  rear asymmetric turret with an offset optic housing, teal paint and ochre strips.
 
 The existing `ADISCORD_mechanized_infantry` battalion uses `sprite = mechanized`.
 National and cosmetic identities route its visual levels and carrier equipment

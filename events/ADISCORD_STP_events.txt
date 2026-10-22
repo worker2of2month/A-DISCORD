@@ -8459,7 +8459,7 @@ country_event = {
 		trigger = {
 			STP_heg_betrayal_active = yes
 			NOT = { has_variable = STP_heg_appointments_choice }
-			NOT = { political_power < 25 }
+			NOT = { has_political_power < 25 }
 		}
 		ai_chance = { factor = 40 }
 		hidden_effect = { set_variable = { var = STP_heg_appointments_choice value = 2 } }
@@ -8506,7 +8506,7 @@ country_event = {
 		trigger = {
 			STP_heg_betrayal_active = yes
 			NOT = { has_variable = STP_heg_oath_choice }
-			NOT = { political_power < 50 }
+			NOT = { has_political_power < 50 }
 		}
 		ai_chance = { factor = 40 }
 		hidden_effect = { set_variable = { var = STP_heg_oath_choice value = 2 } }
@@ -8569,7 +8569,7 @@ country_event = {
 		trigger = {
 			STP_heg_betrayal_active = yes
 			NOT = { has_variable = STP_heg_mandate_choice }
-			NOT = { political_power < 25 }
+			NOT = { has_political_power < 25 }
 		}
 		ai_chance = { factor = 40 }
 		hidden_effect = { set_variable = { var = STP_heg_mandate_choice value = 2 } }
@@ -8615,7 +8615,7 @@ country_event = {
 		trigger = {
 			STP_heg_betrayal_active = yes
 			NOT = { has_variable = STP_heg_opposition_choice }
-			NOT = { political_power < 50 }
+			NOT = { has_political_power < 50 }
 		}
 		ai_chance = { factor = 40 }
 		hidden_effect = { set_variable = { var = STP_heg_opposition_choice value = 2 } }
@@ -8666,7 +8666,7 @@ country_event = {
 		trigger = {
 			STP_heg_betrayal_active = yes
 			NOT = { has_variable = STP_heg_opposition_choice }
-			NOT = { political_power < 75 }
+			NOT = { has_political_power < 75 }
 		}
 		ai_chance = { factor = 40 }
 		hidden_effect = { set_variable = { var = STP_heg_opposition_choice value = 2 } }

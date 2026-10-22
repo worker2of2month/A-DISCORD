@@ -144,7 +144,7 @@ ADISCORD_vorkerland_allied_support_category = {
 # --- collapse_decisions ---
 ADISCORD_vorkerland_collapse_category = {
 	ADISCORD_vorkerland_raise_emergency_levies = {
-		icon = generic_manpower
+		icon = ADISCORD_recruitment
 		allowed = { ADISCORD_vorkerland_is_minor_combatant = yes }
 		visible = {
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -168,7 +168,7 @@ ADISCORD_vorkerland_collapse_category = {
 	# war timer. The invasion mission begins only after this 120-day preparation
 	# still satisfies the material readiness contract.
 	ADISCORD_ivanland_prepare_northern_expedition = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_mobilization
 		allowed = { tag = IVN }
 		visible = {
 			has_global_flag = ADISCORD_vorkerland_ivanland_planning_unlocked_v4
@@ -2980,7 +2980,7 @@ ADISCORD_vorkerland_prewar_category = {
 	}
 
 	ADISCORD_vorkerland_prep_mobilisation_lists = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_mobilization
 		allowed = { tag = WRK }
 		state_target = yes
 		targets = { 38 }
@@ -4552,7 +4552,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 	}
 
 	ADISCORD_vorkerland_wkr_retreat_levy_1 = {
-		icon = generic_manpower
+		icon = ADISCORD_recruitment
 		allowed = { tag = WKR }
 		visible = {
 			has_country_flag = ADISCORD_vorkerland_focus_wkr_retreat_levies_unlocked
@@ -4575,7 +4575,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 	}
 
 	ADISCORD_vorkerland_wkr_retreat_levy_2 = {
-		icon = generic_manpower
+		icon = ADISCORD_recruitment
 		allowed = { tag = WKR }
 		visible = {
 			has_country_flag = ADISCORD_vorkerland_focus_wkr_retreat_levies_unlocked
@@ -4599,7 +4599,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 	}
 
 	ADISCORD_vorkerland_vad_retreat_levy_1 = {
-		icon = generic_manpower
+		icon = ADISCORD_recruitment
 		allowed = { tag = VAD }
 		visible = {
 			has_country_flag = ADISCORD_vorkerland_focus_vad_retreat_levies_unlocked
@@ -4622,7 +4622,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 	}
 
 	ADISCORD_vorkerland_vad_retreat_levy_2 = {
-		icon = generic_manpower
+		icon = ADISCORD_recruitment
 		allowed = { tag = VAD }
 		visible = {
 			has_country_flag = ADISCORD_vorkerland_focus_vad_retreat_levies_unlocked
@@ -4646,7 +4646,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 	}
 
 	ADISCORD_vorkerland_tva_retreat_levy_1 = {
-		icon = generic_manpower
+		icon = ADISCORD_recruitment
 		allowed = { tag = TVA }
 		visible = {
 			has_country_flag = ADISCORD_vorkerland_focus_tva_retreat_levies_unlocked
@@ -4669,7 +4669,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 	}
 
 	ADISCORD_vorkerland_tva_retreat_levy_2 = {
-		icon = generic_manpower
+		icon = ADISCORD_recruitment
 		allowed = { tag = TVA }
 		visible = {
 			has_country_flag = ADISCORD_vorkerland_focus_tva_retreat_levies_unlocked
@@ -4982,7 +4982,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 	# District reconstruction. The paid programme reserves one concurrent slot
 	# and its district from payment through completion or cancellation.
 	ADISCORD_vorkerland_pw_rebuild_district = {
-		icon = generic_construction
+		icon = ADISCORD_construction
 		allowed = { tag = WRK }
 		state_target = yes
 		on_map_mode = map_and_decisions_view

@@ -9,6 +9,12 @@ SHL_apply_starting_economy = {
 	ADISCORD_economy_sync_starting_accounting = yes
 }
 
+SHL_receive_250 = {
+	add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
+	ADISCORD_economy_clamp_treasury = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
 SHL_initialize_furnaces = {
 	if = {
 		limit = {

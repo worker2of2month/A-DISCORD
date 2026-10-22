@@ -845,7 +845,7 @@ SHL_quarters_and_borders = {
 	}
 
 	SHL_shift_mediation = {
-		icon = generic_political_discourse
+		icon = ADISCORD_negotiations
 		visible = { has_country_flag = SHL_strike_active }
 		available = { SHL_country_operable = yes }
 		cost = 30
@@ -862,7 +862,7 @@ SHL_quarters_and_borders = {
 	}
 
 	SHL_nur_audience = {
-		icon = generic_political_discourse
+		icon = ADISCORD_negotiations
 		visible = { has_country_flag = SHL_conspiracy_active }
 		available = { SHL_country_operable = yes }
 		cost = 40
@@ -935,7 +935,7 @@ SHL_quarters_and_borders = {
 	# ----- Levies and war production -----
 
 	SHL_raise_furnace_guard = {
-		icon = generic_allies_build_infantry
+		icon = ADISCORD_recruitment
 		visible = {
 			has_completed_focus = SHL_factory_militia
 			num_divisions < 16
@@ -1084,7 +1084,7 @@ SHL_quarters_and_borders = {
 	}
 
 	SHL_artesian_wells = {
-		icon = generic_construction
+		icon = ADISCORD_construction
 		visible = {
 			has_completed_focus = SHL_water_question
 			check_variable = { var = SHL_water_crisis value = 1 compare = equals }
@@ -1976,7 +1976,7 @@ SHL_quarters_and_borders = {
 	}
 
 	SHL_offer_cistern_charter = {
-		icon = generic_political_discourse
+		icon = ADISCORD_negotiations
 		visible = {
 			check_variable = { var = SHL_mzr_outcome value = 1 compare = equals }
 			OR = {
@@ -2001,7 +2001,7 @@ SHL_quarters_and_borders = {
 	}
 
 	SHL_reconstruct_south = {
-		icon = generic_construction
+		icon = ADISCORD_construction
 		state_target = yes
 		targets = { 269 273 707 287 288 289 290 291 292 293 294 295 }
 		visible = {
@@ -2060,7 +2060,7 @@ SHL_quarters_and_borders = {
 		ai_will_do = { base = 20 }
 	}
 	SHL_cistern_concession = {
-		icon = generic_political_discourse
+		icon = ADISCORD_negotiations
 		visible = {
 			check_variable = { var = SHL_mzr_outcome value = 1 compare = equals }
 			OR = {

@@ -112,8 +112,8 @@ def prepare():
             write_changed(STAGE / f"{tag}_apc_{channel}.dds", dds_bytes(texture))
 
 
-def wheel(model, side, y, index, radius):
-    x, z = side * 1.38, radius + .05
+def wheel(model, side, y, index, radius, half_track):
+    x, z = side * half_track, radius + .05
     bone = model.bone(f"wheel_{side}_{index}", (x, y, z))
     model.rod((x - .23, y, z), (x + .23, y, z), radius, 2, bone, sides=20)
     outer = x + side * .245
@@ -132,95 +132,215 @@ def wheel(model, side, y, index, radius):
     return bone
 
 
+def chassis(model, body, axles, radius, half_track, front, rear):
+    model.box((0, (front + rear) / 2, .77), (1.65, rear - front - .5, .30), 1, body)
+    model.wheels = [wheel(model, side, y, i, radius, half_track)
+                    for side in (-1, 1) for i, y in enumerate(axles)]
+    for y in axles:
+        model.rod((-half_track, y, radius), (half_track, y, radius), .12, 12, body)
+    model.locators = {
+        "root": ((0, 0, 0), "vehicle_root"),
+        "left_wheel": ((-half_track, axles[-1], .15), "vehicle_root"),
+        "right_wheel": ((half_track, axles[-1], .15), "vehicle_root"),
+    }
+
+
+def hatch(model, body, center, width=.75, length=.85):
+    x, y, z = center
+    model.box(center, (width, length, .09), 1, body)
+    model.box((x, y, z + .055), (width - .08, length - .08, .04), 9, body)
+    model.rod((x - .16, y, z + .14), (x + .16, y, z + .14), .03, 3, body)
+
+
+def headlamp(model, body, x, y, z):
+    model.rod((x, y + .08, z), (x, y, z), .15, 1, body)
+    model.rod((x, y - .01, z), (x, y - .025, z), .105, 13, body)
+
+
+def gun_barrel(model, gun, x, start_y, end_y, z, radius):
+    model.rod((x, start_y, z), (x, end_y, z), radius, 12, gun)
+    model.rod((x, end_y + .12, z), (x, end_y - .05, z), radius * 1.35, 3, gun)
+    model.rod((x, end_y - .055, z), (x, end_y - .065, z), radius * .78, 7, gun)
+    model.locators["barrel"] = ((x, end_y - .07, z), gun)
+
+
+def val_vehicle(model, body):
+    # The low continuous roof and overlapping skirts define the wedge profile.
+    hull(model, [(.60, 2.0, -3.10, 3.15, .32),
+                 (1.25, 3.05, -3.90, 3.50, .55),
+                 (1.86, 2.55, -2.20, 3.20, .32)], 0, body)
+    chassis(model, body, (-2.55, -1.05, .85, 2.35), .64, 1.48, -3.90, 3.50)
+    for side in (-1, 1):
+        for y in (-2.05, -.65, .75, 2.15):
+            model.plate([(side * 1.60, y - .66, 1.66),
+                         (side * 1.60, y + .66, 1.66),
+                         (side * 1.60, y + .51, 1.02),
+                         (side * 1.60, y - .48, 1.13)], .14, 9, body, axis=0)
+        model.box((side * 1.30, 2.42, 1.69), (.06, .61, .30), 8, body)
+        model.box((side * .65, -2.27, 1.83), (.59, .17, .09), 5, body)
+        headlamp(model, body, side * 1.10, -3.55, 1.36)
+        model.box((side * .96, 3.36, 1.42), (.25, .08, .12), 10, body)
+        hatch(model, body, (side * .60, 2.15, 1.92), .88, 1.18)
+    model.box((0, 3.40, 1.35), (1.65, .12, .96), 1, body)
+    model.box((0, 3.48, 1.35), (1.46, .05, .79), 9, body)
+    for y in (-1.96, -1.78, -1.60, -1.42):
+        model.box((.72, y, 1.91), (.82, .07, .04), 7, body)
+    turret = model.bone("turret", (0, .15, 1.87), body)
+    gun = model.bone("gun", (0, -.96, 2.20), turret)
+    model.rod((0, .15, 1.84), (0, .15, 2.01), .77, 1, turret, sides=16)
+    hull(model, [(2.00, 2.12, -1.13, 1.16, .46),
+                 (2.38, 1.42, -.71, .91, .31)], 9, turret)
+    model.box((0, -1.02, 2.20), (.40, .54, .24), 1, gun)
+    gun_barrel(model, gun, 0, -1.25, -3.07, 2.20, .064)
+    model.box((.75, .10, 2.37), (.30, .55, .26), 1, turret)
+    model.box((.75, -.19, 2.39), (.23, .035, .13), 5, turret)
+    model.box((0, .83, 2.33), (.96, .35, .08), 1, turret)
+    model.rod((-.89, 2.78, 1.88), (-.89, 2.78, 2.72), .018, 3, body)
+
+
+def stp_vehicle(model, body):
+    # A short four-wheel chassis carries a raised cabin and a rear drum turret.
+    hull(model, [(.65, 1.90, -2.37, 2.34, .16),
+                 (1.31, 2.45, -2.83, 2.74, .22),
+                 (1.78, 2.28, -2.40, 2.62, .16)], 0, body)
+    chassis(model, body, (-1.86, 1.78), .86, 1.29, -2.83, 2.74)
+    hull(model, [(1.58, 2.27, -1.92, 2.61, .14),
+                 (2.52, 2.02, -1.35, 2.47, .16)], 0, body)
+    model.box((0, -2.72, 1.41), (1.33, .12, .44), 7, body)
+    for x in (-.48, -.24, 0, .24, .48):
+        model.box((x, -2.79, 1.41), (.05, .035, .41), 4, body)
+    for side in (-1, 1):
+        model.box((side * .50, -1.57, 2.22), (.78, .07, .37), 5, body,
+                  Matrix.Rotation(-.54, 3, "X"))
+        model.box((side * 1.105, -.76, 2.02), (.055, .87, .81), 9, body)
+        model.box((side * 1.14, -.84, 2.28), (.035, .62, .26), 5, body)
+        model.box((side * 1.19, -.42, 1.93), (.04, .18, .045), 4, body)
+        model.box((side * 1.11, 1.45, 2.09), (.07, 1.13, .59), 8, body)
+        model.box((side * 1.17, .47, 1.76), (.10, 3.55, .09), 4, body)
+        for y in (-1.86, 1.78):
+            model.box((side * 1.33, y, 1.80), (.70, 1.87, .13), 1, body)
+        model.box((side * 1.31, -.02, 1.01), (.48, 1.13, .12), 12, body)
+        headlamp(model, body, side * .97, -2.63, 1.65)
+    model.box((0, 2.62, 1.81), (1.20, .12, 1.16), 1, body)
+    model.rod((.73, 2.73, 1.87), (.73, 2.99, 1.87), .52, 2, body, sides=20)
+    model.rod((.73, 3.0, 1.87), (.73, 3.04, 1.87), .27, 4, body)
+    hatch(model, body, (-.40, -.50, 2.57), .72, .75)
+    turret = model.bone("turret", (0, 1.08, 2.51), body)
+    gun = model.bone("gun", (0, .31, 2.91), turret)
+    model.rod((0, 1.08, 2.51), (0, 1.08, 2.66), .86, 1, turret, sides=20)
+    model.rod((0, 1.08, 2.64), (0, 1.08, 3.19), .78, 0, turret, end_radius=.70, sides=20)
+    model.rod((0, 1.08, 3.19), (0, 1.08, 3.25), .73, 4, turret, sides=20)
+    model.rod((0, 1.21, 3.25), (0, 1.21, 3.43), .37, 1, turret, sides=12)
+    model.rod((0, 1.21, 3.43), (0, 1.21, 3.48), .40, 4, turret, sides=12)
+    model.box((0, .35, 2.91), (.45, .28, .35), 1, gun)
+    gun_barrel(model, gun, 0, .23, -.80, 2.91, .10)
+    for side in (-1, 1):
+        model.box((side * .70, 1.06, 3.03), (.04, .28, .09), 7, turret)
+    model.rod((-.83, 2.16, 2.52), (-.83, 2.16, 3.23), .025, 3, body)
+
+
+def sts_vehicle(model, body):
+    # The engine hood, driver's cab and troop box remain separate masses.
+    hull(model, [(.65, 1.86, -3.25, 2.94, .15),
+                 (1.22, 2.45, -3.57, 3.24, .22)], 1, body)
+    chassis(model, body, (-2.48, .91, 2.38), .76, 1.38, -3.57, 3.24)
+    hull(model, [(1.18, 2.22, -3.54, -1.31, .17),
+                 (1.84, 1.73, -3.28, -1.25, .15)], 0, body)
+    model.box((0, -3.48, 1.52), (1.43, .10, .52), 7, body)
+    for x in (-.55, -.28, 0, .28, .55):
+        model.box((x, -3.55, 1.52), (.055, .055, .47), 12, body)
+    hull(model, [(1.20, 2.43, -1.49, .11, .13),
+                 (2.63, 2.01, -1.02, .06, .10)], 0, body)
+    hull(model, [(1.18, 2.47, -.02, 3.24, .10),
+                 (2.37, 2.40, -.02, 3.18, .10)], 0, body)
+    for side in (-1, 1):
+        model.box((side * .49, -1.16, 2.27), (.80, .07, .43), 5, body,
+                  Matrix.Rotation(-.32, 3, "X"))
+        model.box((side * 1.10, -.62, 2.26), (.045, .65, .39), 5, body)
+        model.box((side * 1.19, -.61, 1.72), (.07, .91, .57), 9, body)
+        for y in (.45, 1.48, 2.58):
+            model.box((side * 1.25, y, 1.81), (.10, .09, 1.09), 1, body)
+        model.box((side * 1.26, 1.92, 2.11), (.04, .60, .30), 8, body)
+        model.box((side * 1.40, 1.64, 1.64), (.47, 3.05, .12), 12, body)
+        model.box((side * 1.40, -2.48, 1.63), (.54, 1.90, .12), 12, body)
+        model.box((side * 1.32, -.67, .94), (.51, 1.0, .12), 12, body)
+        headlamp(model, body, side * .96, -3.43, 1.61)
+        model.box((side * .65, 3.23, 1.79), (1.04, .10, 1.01), 9, body)
+        model.box((side * .76, 2.54, 2.61), (.65, .83, .43), 14, body)
+        model.box((side * .76, 2.54, 2.84), (.09, .85, .04), 11, body)
+    model.rod((-1.25, .07, 1.55), (-1.25, .07, 2.89), .095, 12, body)
+    model.rod((-1.25, .07, 2.89), (-1.25, .31, 2.89), .095, 12, body)
+    model.box((0, -3.62, 1.00), (2.70, .20, .21), 12, body)
+    turret = model.bone("turret", (0, 1.02, 2.37), body)
+    gun = model.bone("gun", (0, .56, 2.99), turret)
+    model.rod((0, 1.02, 2.38), (0, 1.02, 2.48), .60, 12, turret, sides=12)
+    model.rod((0, 1.02, 2.47), (0, 1.02, 3.03), .14, 12, turret)
+    model.box((0, 1.35, 2.65), (.44, .44, .11), 2, turret)
+    model.plate([(-.76, .51, 2.64), (.76, .51, 2.64), (.70, .51, 3.27),
+                 (.22, .51, 3.27), (.22, .51, 2.91), (-.22, .51, 2.91),
+                 (-.22, .51, 3.27), (-.70, .51, 3.27)], .10, 0, turret, axis=1)
+    for side in (-1, 1):
+        model.box((side * .73, .99, 2.96), (.09, .90, .59), 9, turret)
+    model.box((0, .94, 2.99), (.24, .76, .20), 12, gun)
+    gun_barrel(model, gun, 0, .60, -.67, 2.99, .052)
+    model.box((.31, .99, 2.93), (.37, .47, .30), 11, gun)
+    model.rod((.98, 2.05, 2.38), (.98, 2.05, 3.22), .022, 3, body)
+
+
+def nam_vehicle(model, body):
+    # The wide boat bow and long side floats give the amphibious hull its outline.
+    hull(model, [(.61, 1.55, -2.60, 2.94, .40),
+                 (1.22, 2.90, -4.05, 3.54, .90),
+                 (2.01, 2.76, -2.83, 3.33, .59)], 0, body)
+    chassis(model, body, (-2.12, -.73, .73, 2.12), .59, 1.40, -4.05, 3.54)
+    for side in (-1, 1):
+        x = side * 1.53
+        model.plate([(x, -3.37, 1.54), (x, -2.47, 2.00),
+                     (x, 2.98, 2.00), (x, 3.53, 1.60),
+                     (x, 2.93, 1.21), (x, -2.77, 1.21)], .49, 1, body, axis=0)
+        model.box((side * 1.79, .18, 1.67), (.04, 4.81, .10), 6, body)
+        model.box((side * 1.79, 2.27, 1.70), (.045, .62, .44), 8, body)
+        model.box((side * .53, -2.24, 2.10), (.77, .82, .20), 1, body)
+        model.box((side * .53, -2.67, 2.12), (.62, .05, .12), 5, body)
+        headlamp(model, body, side * 1.13, -2.94, 1.93)
+        model.rod((side * .95, 3.38, 1.07), (side * .95, 3.80, 1.07), .30, 12, body, sides=16)
+        model.rod((side * .95, 3.81, 1.07), (side * .95, 3.83, 1.07), .23, 7, body, sides=16)
+        for angle in (0, math.pi / 2):
+            model.box((side * .95, 3.85, 1.07), (.43, .04, .055), 3, body,
+                      Matrix.Rotation(angle, 3, "Y"))
+    model.plate([(-1.04, -3.25, 1.70), (1.04, -3.25, 1.70),
+                 (.89, -2.76, 1.98), (-.89, -2.76, 1.98)], .07, 9, body)
+    hatch(model, body, (-.65, -.55, 2.06), .88, 1.20)
+    for y in (2.53, 2.72, 2.91, 3.10):
+        model.box((0, y, 2.06), (1.57, .09, .06), 7, body)
+    model.box((0, 3.42, 1.69), (1.03, .12, .76), 9, body)
+    turret = model.bone("turret", (.20, 1.02, 2.02), body)
+    gun = model.bone("gun", (.20, .01, 2.53), turret)
+    model.rod((.20, 1.02, 2.02), (.20, 1.02, 2.23), .74, 1, turret, sides=16)
+    start = len(model.vertices)
+    hull(model, [(2.20, 1.52, -.11, 2.15, .26),
+                 (2.87, .95, .47, 1.98, .18)], 0, turret)
+    for index in range(start, len(model.vertices)):
+        x, y, z = model.vertices[index]
+        model.vertices[index] = (x + .20, y, z)
+    model.box((-.78, 1.09, 2.64), (.54, 1.36, .50), 1, turret)
+    model.box((-.78, .39, 2.67), (.39, .05, .27), 5, turret)
+    model.box((.88, 1.43, 2.64), (.41, 1.14, .36), 9, turret)
+    model.box((.20, 1.65, 2.91), (.61, .62, .10), 1, turret)
+    model.box((.20, .06, 2.53), (.43, .54, .33), 1, gun)
+    gun_barrel(model, gun, .20, -.18, -1.59, 2.53, .075)
+    for y in (.70, 1.0, 1.3):
+        model.rod((1.04, y, 2.69), (1.22, y - .19, 2.91), .09, 12, turret, sides=8)
+    model.rod((1.02, 2.20, 2.01), (1.02, 2.20, 3.18), .021, 3, body)
+    model.rod((.73, 2.30, 2.01), (.73, 2.30, 2.87), .018, 3, body)
+
+
 def vehicle(tag):
     model = native.Model(f"{tag}_apc")
     body = model.bone("hull", (0, 0, 1.5))
-    top = {"VAL": 2.04, "STP": 2.40, "STS": 2.14, "NAM": 2.22}[tag]
-    front = -3.5 if tag != "STP" else -3.15
-    rear = 3.25 if tag != "STP" else 2.9
-    hull(model, [(0.65, 1.9, front + .55, rear - .25, .25),
-                 (1.23, 2.62, front, rear, .30),
-                 (top, 2.24, front + .95, rear - .20, .24)], 0, body)
-    model.box((0, 0, .75), (1.6, 5.2, .30), 1)
-    axles = (-2.15, -.72, .72, 2.15) if tag != "STP" else (-1.95, 0, 1.95)
-    radius = .66 if tag != "STP" else .78
-    model.wheels = [wheel(model, side, y, i, radius) for side in (-1, 1) for i, y in enumerate(axles)]
-    for y in axles:
-        model.rod((-1.40, y, radius), (1.40, y, radius), .12, 12)
-    for side in (-1, 1):
-        # Separate armour modules leave wheel travel visible below the shoulder.
-        for y in (-1.6, -.45, .7, 1.85):
-            model.box((side * 1.245, y, top - .37), (.12, 1.00, .53), 9, body)
-        model.box((side * 1.43, .02, 1.58), (.30, rear - front - 1.0, .12), 1, body)
-        model.box((side * 1.32, 1.95, top - .33), (.06, .62, .42), 8, body)
-        window_z = top - .34
-        window_y = front + .95 * (window_z - 1.23) / (top - 1.23) - .045
-        slope = -math.atan(.95 / (top - 1.23))
-        model.box((side * .68, window_y, window_z), (.62, .08, .26), 5, body,
-                  Matrix.Rotation(slope, 3, "X"))
-        model.rod((side * 1.08, front + .23, 1.38), (side * 1.08, front + .08, 1.38), .16, 1, body)
-        model.rod((side * 1.08, front + .065, 1.38), (side * 1.08, front + .055, 1.38), .115, 13, body)
-        model.box((side * 1.10, rear - .04, 1.44), (.18, .08, .14), 10, body)
-        model.rod((side * 1.14, -.8, top + .01), (side * 1.14, .65, top + .01), .035, 3, body)
-        model.box((side * 1.46, rear - .20, .82), (.31, .13, .70), 2)
-    model.box((0, front + .16, 1.01), (2.7, .18, .18), 12, body)
-    model.box((0, rear - .055, 1.53), (1.50, .12, .98), 1, body)
-    model.box((0, rear + .015, 1.53), (1.35, .04, .84), 9, body)
-    for x in (-.53, .53):
-        model.box((x, rear + .06, 1.17), (.22, .10, .10), 3, body)
-    for x in (-.60, .60):
-        model.box((x, 1.55, top + .04), (.88, 1.0, .09), 1, body)
-        model.rod((x - .18, 1.55, top + .13), (x + .18, 1.55, top + .13), .035, 3, body)
-    for y in (-1.75, -1.55, -1.35, -1.15):
-        model.box((.62, y, top + .045), (.70, .08, .04), 7, body)
-    turret = model.bone("turret", (0, -.35, top), body)
-    gun = model.bone("gun", (0, -.90, top + .45), turret)
-    model.rod((0, -.35, top), (0, -.35, top + .17), .69, 1, turret, sides=16)
-    if tag == "VAL":
-        hull(model, [(top + .13, 1.25, -1.03, .29, .22),
-                     (top + .58, .85, -.79, .12, .18)], 9, turret)
-        model.box((.46, -.50, top + .49), (.23, .34, .27), 1, turret)
-        model.box((.46, -.685, top + .49), (.16, .035, .16), 5, turret)
-    elif tag == "STP":
-        model.rod((0, -.35, top + .15), (0, -.35, top + .63), .60, 0, turret, end_radius=.43, sides=12)
-        model.rod((0, -.35, top + .63), (0, -.35, top + .70), .46, 4, turret, sides=12)
-        for side in (-1, 1):
-            model.box((side * 1.27, .3, top - .05), (.08, 4.1, .085), 4, body)
-    elif tag == "NAM":
-        hull(model, [(top + .13, 1.35, -1.10, .45, .18),
-                     (top + .65, .98, -.91, .30, .16)], 1, turret)
-        model.box((.43, -.40, top + .76), (.34, .40, .35), 0, turret)
-        model.box((.43, -.615, top + .77), (.25, .04, .20), 5, turret)
-        model.box((0, -.3, top + .68), (.55, .70, .06), 9, turret)
-        for side in (-1, 1):
-            model.box((side * 1.31, .2, top - .54), (.05, 3.9, .11), 6, body)
-            model.box((side * .84, 2.58, top + .15), (.43, .64, .26), 1, body)
-            for y in (2.36, 2.49, 2.62, 2.75):
-                model.box((side * .84, y, top + .29), (.36, .055, .035), 7, body)
-            for index in range(3):
-                y = -.12 + index * .17
-                model.rod((side * .62, y, top + .36),
-                          (side * .86, y - .14, top + .55), .075, 12, turret, sides=8)
-        model.rod((.89, 1.12, top), (.89, 1.12, top + .85), .022, 3, body)
-    else:
-        model.box((0, -.35, top + .39), (.86, .96, .45), 1, turret)
-        for side in (-1, 1):
-            model.box((side * .54, -.4, top + .45), (.12, 1.04, .53), 0, turret,
-                      Matrix.Rotation(side * .16, 3, "Y"))
-        for side in (-1, 1):
-            model.box((side * .73, 2.62, top + .22), (.56, .58, .38), 14, body)
-            model.box((side * .73, 2.62, top + .42), (.09, .60, .04), 11, body)
-    model.box((0, -.91, top + .44), (.30, .53, .26), 1, gun)
-    model.rod((0, -1.10, top + .45), (0, -2.0, top + .45), .065, 12, gun)
-    model.rod((0, -2.0, top + .45), (0, -2.13, top + .45), .09, 3, gun)
-    model.rod((0, -2.14, top + .45), (0, -2.15, top + .45), .052, 7, gun)
-    model.rod((-.87, 1.15, top), (-.87, 1.15, top + 1.15), .022, 3, body)
-    model.locators = {
-        "root": ((0, 0, 0), "vehicle_root"),
-        "barrel": ((0, -2.16, top + .45), gun),
-        "left_wheel": ((-1.4, 2.2, .15), "vehicle_root"),
-        "right_wheel": ((1.4, 2.2, .15), "vehicle_root"),
-    }
+    builders = {"VAL": val_vehicle, "STP": stp_vehicle,
+                "STS": sts_vehicle, "NAM": nam_vehicle}
+    builders[tag](model, body)
     return model
 
 

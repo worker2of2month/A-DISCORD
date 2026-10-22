@@ -384,7 +384,8 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
                     if clip != "idle":
                         self.assertGreater(metrics["max_vertex_motion"], .10)
                 wheels = row["animations"]["move"]["moving_bones"]
-                self.assertEqual(len(wheels), 6 if name == "STP_apc" else 8)
+                expected_wheels = {"VAL_apc": 8, "STP_apc": 4, "STS_apc": 6, "NAM_apc": 8}
+                self.assertEqual(len(wheels), expected_wheels[name])
                 self.assertEqual(row["animations"]["attack"]["moving_bones"], ["gun"])
         self.assertEqual(len(hashes), 4)
 

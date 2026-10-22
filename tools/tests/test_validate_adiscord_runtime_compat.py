@@ -7,6 +7,39 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class RuntimeCompatibilityTests(unittest.TestCase):
+    def test_stp_scripts_use_native_power_and_temporary_variable_operations(self):
+        paths = (
+            "common/decisions/ADISCORD_STP_decisions.txt",
+            "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt",
+            "events/ADISCORD_STP_events.txt",
+            "focus_trees/STP/postwar/shabrat/focuses.txt",
+            "common/national_focus/ADISCORD_STP_civil_war.txt",
+        )
+        for relative in paths:
+            with self.subTest(path=relative):
+                source = (ROOT / relative).read_text(encoding="utf-8")
+                self.assertFalse(re.search(r"\bpolitical_power\s*[<>=]", source), relative)
+                self.assertFalse(re.search(r"\bclear_temp_variable\s*=", source), relative)
+
+    def test_val_delegates_are_recruited_dormant_and_gain_roles_at_the_coup(self):
+        from tools.tests.test_adiscord_stp_preparation import block, entries, scalar
+
+        history = entries("history/countries/VAL - ValeraLand.txt")
+        recruits = [entry.value for entry in history if entry.key == "recruit_character"]
+        characters = block(entries("common/characters/VAL.txt"), "characters")
+        activation = block(entries("common/scripted_effects/ADISCORD_VAL_effects.txt"),
+                           "VAL_council_recruit_delegates")
+        roles = {scalar(entry.value, "character"): entry.value for entry in activation
+                 if entry.key == "add_country_leader_role"}
+        for name in ("VAL_Gleb_Osten", "VAL_Tamara_Greitz", "VAL_Arkadi_Lemm", "VAL_Mikhail_Velsky"):
+            with self.subTest(character=name):
+                self.assertEqual(recruits.count(name), 1)
+                self.assertNotIn("country_leader", {entry.key for entry in block(characters, name)})
+                self.assertIn(name, roles)
+                self.assertEqual(scalar(roles[name], "promote_leader"), "no")
+                self.assertEqual(scalar(block(roles[name], "country_leader"), "ideology"),
+                                 "contractual_etatism")
+
     def test_character_recruitment_is_not_used_in_runtime_scripts(self):
         invalid = []
         for folder in ("common", "events"):

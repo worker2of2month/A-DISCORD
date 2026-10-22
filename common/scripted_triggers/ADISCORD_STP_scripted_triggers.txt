@@ -4724,11 +4724,11 @@ STP_heg_delegation_affordable = {
 	OR = {
 		AND = {
 			has_completed_focus = STP_pc_heg_old_guard
-			NOT = { political_power < 25 }
+			NOT = { has_political_power < 25 }
 		}
 		AND = {
 			NOT = { has_completed_focus = STP_pc_heg_old_guard }
-			NOT = { political_power < 50 }
+			NOT = { has_political_power < 50 }
 		}
 	}
 }
