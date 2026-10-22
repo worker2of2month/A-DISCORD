@@ -440,7 +440,7 @@
         "history/states/68[8-9]-*.txt",
         "history/states/69[0-9]-*.txt",
         "history/states/70[0-9]-*.txt",
-        "history/states/71[0-7]-*.txt",
+        "history/states/71[0-8]-*.txt",
         "localisation/russian/victory_points_l_russian.yml",
         "localisation/russian/state_names_l_russian.yml",
         "map/buildings.txt"

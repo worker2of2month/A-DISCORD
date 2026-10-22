@@ -2763,6 +2763,10 @@
         "STATE_717": {
           "russian": "Ринвальские топи",
           "english": "Rinval Fens"
+        },
+        "STATE_718": {
+          "russian": "Порт Мисстаны",
+          "english": "Port of Misstana"
         }
       }
     },
@@ -3131,6 +3135,14 @@
         "VICTORY_POINTS_16802": {
           "russian": "Восточный Стеланд",
           "english": "East Steland"
+        },
+        "VICTORY_POINTS_16709": {
+          "russian": "Порт Мисстаны",
+          "english": "Port of Misstana"
+        },
+        "VICTORY_POINTS_16712": {
+          "russian": "Порт Каван",
+          "english": "Port Kavan"
         },
         "VICTORY_POINTS_12219": {
           "russian": "Пустоград",

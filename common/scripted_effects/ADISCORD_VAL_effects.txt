@@ -7065,6 +7065,7 @@ VAL_restore_stelander_conquered_administrations = {
 		7 = { if = { limit = { is_owned_by = STS } add_core_of = BBV BBV = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BBV } } }
 		8 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
 		9 = { if = { limit = { is_owned_by = STS } add_core_of = BCM BCM = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BCM } } }
+		718 = { if = { limit = { is_owned_by = STS } add_core_of = BCM BCM = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BCM } } }
 		15 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
 		16 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
 		19 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }

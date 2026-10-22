@@ -10217,6 +10217,255 @@ VAL_operations_map_refresh_cache = {
 	}
 	if = {
 		limit = {
+			718 = {
+				controller = {
+					OR = {
+						tag = STP
+						has_cosmetic_tag = STL_VAL_administration
+					}
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 2 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					OR = {
+						tag = BJK
+						is_subject_of = BJK
+					}
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 17 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = VAL
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 1 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = STS
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 3 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = SRP
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 4 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = NOD
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 5 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = CIN
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 6 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = OSF
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 7 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = APH
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 8 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = ERT
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 9 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = NKA
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 10 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = OCA
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 11 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = YPR
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 12 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = COF
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 13 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = TFF
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 14 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = EXZ
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 15 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = IRT
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 16 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = BLD
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 18 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = BHG
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 19 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = BGT
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 20 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = BBV
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 21 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = BCM
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 22 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = WCA
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 23 }
+	}
+	else_if = {
+		limit = {
+			718 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_718_frame value = 24 }
+	}
+	else = {
+		set_variable = { var = operations_state_718_frame value = 25 }
+	}
+	if = {
+		limit = {
 			14 = {
 				controller = {
 					OR = {
@@ -18228,6 +18477,7 @@ VAL_operations_map_copy_val_cache = {
 	set_variable = { var = operations_state_9_frame value = VAL.operations_state_9_frame }
 	set_variable = { var = operations_state_31_frame value = VAL.operations_state_31_frame }
 	set_variable = { var = operations_state_41_frame value = VAL.operations_state_41_frame }
+	set_variable = { var = operations_state_718_frame value = VAL.operations_state_718_frame }
 	set_variable = { var = operations_state_14_frame value = VAL.operations_state_14_frame }
 	set_variable = { var = operations_state_8_frame value = VAL.operations_state_8_frame }
 	set_variable = { var = operations_state_15_frame value = VAL.operations_state_15_frame }

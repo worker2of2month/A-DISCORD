@@ -44,6 +44,7 @@ GEOGRAPHIC_STATE_ANCHORS = {
     700: (24, 5),
     701: (24, 1),
     709: (16, 1),  # Island sovereignty does not change Eastern Forul geography.
+    718: (16, 1),  # The southern Misstana island joins its port in Eastern Forul.
     461: (67, 2),  # Deliberately realigned Exclusion Zone fringe.
 }
 

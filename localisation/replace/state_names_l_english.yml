@@ -720,4 +720,5 @@
  STATE_715: "Northern Shore"
  STATE_716: "Middle March"
  STATE_717: "Rinval Fens"
+ STATE_718: "Port of Misstana"
  # END GENERATED: tools.builders.build_adiscord_new_states

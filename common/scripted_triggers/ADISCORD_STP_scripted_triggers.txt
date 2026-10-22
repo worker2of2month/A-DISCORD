@@ -1500,6 +1500,8 @@ STP_imperial_union_required_states_controlled = {
 	controls_state = 8
 	owns_state = 9
 	controls_state = 9
+	owns_state = 718
+	controls_state = 718
 	owns_state = 10
 	controls_state = 10
 	owns_state = 11
@@ -2225,6 +2227,7 @@ STP_sdir_bezhaysk_neighbour_transition_available = {
 				6 = { STP_sdir_bezhaysk_state_from_neighbour = yes }
 				7 = { STP_sdir_bezhaysk_state_from_neighbour = yes }
 				9 = { STP_sdir_bezhaysk_state_from_neighbour = yes }
+				718 = { STP_sdir_bezhaysk_state_from_neighbour = yes }
 				31 = { STP_sdir_bezhaysk_state_from_neighbour = yes }
 				41 = { STP_sdir_bezhaysk_state_from_neighbour = yes }
 			}

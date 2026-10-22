@@ -6467,6 +6467,7 @@ STP_sdir_consolidate_bezhaysk_administration = {
 		6 = { STP_sdir_transfer_bezhaysk_neighbour_state = yes }
 		7 = { STP_sdir_transfer_bezhaysk_neighbour_state = yes }
 		9 = { STP_sdir_transfer_bezhaysk_neighbour_state = yes }
+		718 = { STP_sdir_transfer_bezhaysk_neighbour_state = yes }
 		31 = { STP_sdir_transfer_bezhaysk_neighbour_state = yes }
 		41 = { STP_sdir_transfer_bezhaysk_neighbour_state = yes }
 		BJK = { STP_sdir_install_bezhaysk_administration = yes }

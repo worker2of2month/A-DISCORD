@@ -194,6 +194,7 @@ EXCLUSION_BOUNDARY_SPAWN_STATES = {
     715,
     716,
     717,
+    718,
 }
 
 

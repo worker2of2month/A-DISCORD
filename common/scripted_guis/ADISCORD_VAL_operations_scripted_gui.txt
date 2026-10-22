@@ -46,6 +46,7 @@ scripted_gui = {
 			VAL_ops_9_controller_visible = { always = yes }
 			VAL_ops_31_controller_visible = { always = yes }
 			VAL_ops_41_controller_visible = { always = yes }
+			VAL_ops_718_controller_visible = { always = yes }
 			VAL_ops_14_controller_visible = { always = yes }
 			VAL_ops_8_controller_visible = { always = yes }
 			VAL_ops_15_controller_visible = { always = yes }
@@ -732,8 +733,6 @@ scripted_gui = {
 							NOT = { controls_province = 16506 }
 							NOT = { controls_province = 16549 }
 							NOT = { controls_province = 16651 }
-							NOT = { controls_province = 16709 }
-							NOT = { controls_province = 16710 }
 						}
 					}
 				}
@@ -763,6 +762,19 @@ scripted_gui = {
 							NOT = { controls_province = 16446 }
 							NOT = { controls_province = 16449 }
 							NOT = { controls_province = 16451 }
+						}
+					}
+				}
+			}
+			VAL_ops_718_border_visible = { 718 = { controller = { tag = VAL } } }
+			VAL_ops_718_contested_visible = {
+				718 = {
+					controller = {
+						tag = VAL
+						OR = {
+							NOT = { controls_province = 16709 }
+							NOT = { controls_province = 16710 }
+							NOT = { controls_province = 16712 }
 						}
 					}
 				}
@@ -1354,6 +1366,7 @@ scripted_gui = {
 			VAL_ops_9_controller = { frame = operations_state_9_frame }
 			VAL_ops_31_controller = { frame = operations_state_31_frame }
 			VAL_ops_41_controller = { frame = operations_state_41_frame }
+			VAL_ops_718_controller = { frame = operations_state_718_frame }
 			VAL_ops_14_controller = { frame = operations_state_14_frame }
 			VAL_ops_8_controller = { frame = operations_state_8_frame }
 			VAL_ops_15_controller = { frame = operations_state_15_frame }
@@ -1434,6 +1447,7 @@ scripted_gui = {
 			STP_ops_9_controller_visible = { always = yes }
 			STP_ops_31_controller_visible = { always = yes }
 			STP_ops_41_controller_visible = { always = yes }
+			STP_ops_718_controller_visible = { always = yes }
 			STP_ops_14_controller_visible = { always = yes }
 			STP_ops_8_controller_visible = { always = yes }
 			STP_ops_15_controller_visible = { always = yes }
@@ -2120,8 +2134,6 @@ scripted_gui = {
 							NOT = { controls_province = 16506 }
 							NOT = { controls_province = 16549 }
 							NOT = { controls_province = 16651 }
-							NOT = { controls_province = 16709 }
-							NOT = { controls_province = 16710 }
 						}
 					}
 				}
@@ -2151,6 +2163,19 @@ scripted_gui = {
 							NOT = { controls_province = 16446 }
 							NOT = { controls_province = 16449 }
 							NOT = { controls_province = 16451 }
+						}
+					}
+				}
+			}
+			STP_ops_718_border_visible = { 718 = { controller = { tag = STS } } }
+			STP_ops_718_contested_visible = {
+				718 = {
+					controller = {
+						tag = STS
+						OR = {
+							NOT = { controls_province = 16709 }
+							NOT = { controls_province = 16710 }
+							NOT = { controls_province = 16712 }
 						}
 					}
 				}
@@ -2742,6 +2767,7 @@ scripted_gui = {
 			STP_ops_9_controller = { frame = operations_state_9_frame }
 			STP_ops_31_controller = { frame = operations_state_31_frame }
 			STP_ops_41_controller = { frame = operations_state_41_frame }
+			STP_ops_718_controller = { frame = operations_state_718_frame }
 			STP_ops_14_controller = { frame = operations_state_14_frame }
 			STP_ops_8_controller = { frame = operations_state_8_frame }
 			STP_ops_15_controller = { frame = operations_state_15_frame }

@@ -124,6 +124,9 @@ spriteTypes = {
  spriteType = { name = "GFX_VAL_ops_state_41" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_41.png" noOfFrames = 25 transparencecheck = yes }
  spriteType = { name = "GFX_VAL_ops_border_41" texturefile = "gfx/interface/VAL_operations/VAL_ops_border_41.png" }
  spriteType = { name = "GFX_VAL_ops_contested_41" texturefile = "gfx/interface/VAL_operations/VAL_ops_contested_41.png" }
+ spriteType = { name = "GFX_VAL_ops_state_718" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_718.png" noOfFrames = 25 transparencecheck = yes }
+ spriteType = { name = "GFX_VAL_ops_border_718" texturefile = "gfx/interface/VAL_operations/VAL_ops_border_718.png" }
+ spriteType = { name = "GFX_VAL_ops_contested_718" texturefile = "gfx/interface/VAL_operations/VAL_ops_contested_718.png" }
  spriteType = { name = "GFX_VAL_ops_state_14" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_14.png" noOfFrames = 25 transparencecheck = yes }
  spriteType = { name = "GFX_VAL_ops_border_14" texturefile = "gfx/interface/VAL_operations/VAL_ops_border_14.png" }
  spriteType = { name = "GFX_VAL_ops_contested_14" texturefile = "gfx/interface/VAL_operations/VAL_ops_contested_14.png" }
