@@ -1896,6 +1896,8 @@ class CivilWarContracts(unittest.TestCase):
             ),
         ):
             heavy_plan = {"STP": 3 if winner == "limited" else 6, "STS": 6, "SRP": 0}
+            core_plan = {"STP": 0 if winner == "limited" else 8}
+            core_heavy = 0 if winner == "limited" else 6
             base_claim = {
                 tag: Fraction(plan[tag] * 6000 + heavy_plan[tag] * 7900) for tag in plan
             }
@@ -1964,20 +1966,33 @@ class CivilWarContracts(unittest.TestCase):
                                 if sum(rifle_prepared.values())
                                 else 0
                             )
+                            # The party core is part of its baseline but is
+                            # paid before the other baselines are scaled.
+                            rifle_core = min(
+                                total - rifle_paid_preparation,
+                                core_plan["STP"] * 5400 + core_heavy * 7110,
+                            )
+                            rifle_rest = {
+                                tag: rifle_base[tag]
+                                - (core_plan["STP"] * 5400 + core_heavy * 7110 if tag == "STP" else 0)
+                                for tag in plan
+                            }
                             rifle_paid_base = min(
-                                total - rifle_paid_preparation, sum(rifle_base.values())
+                                total - rifle_paid_preparation - rifle_core,
+                                sum(rifle_rest.values()),
                             )
                             rifle_base_scale = rifle_paid_base / sum(
-                                rifle_base.values()
+                                rifle_rest.values()
                             )
                             rifle_remainder = (
-                                total - rifle_paid_preparation - rifle_paid_base
+                                total - rifle_paid_preparation - rifle_core - rifle_paid_base
                             )
                             for tag in plan:
                                 expected_stock = (
                                     rifle_prepared[tag] * rifle_preparation_scale
-                                    + rifle_base[tag] * rifle_base_scale
+                                    + rifle_rest[tag] * rifle_base_scale
                                     + rifle_remainder * Fraction(str(shares[tag]))
+                                    + (rifle_core if tag == "STP" else 0)
                                 )
                                 self.assertEqual(stock[tag], expected_stock)
                                 if total >= sum(rifle_prepared.values()) + sum(
@@ -1991,16 +2006,26 @@ class CivilWarContracts(unittest.TestCase):
                             preparation_scale = (
                                 funded_preparation / required if required else 0
                             )
+                            core_claim = core_plan["STP"] * 6000 + core_heavy * 7900
+                            funded_core = min(total - funded_preparation, core_claim)
+                            base_rest = {
+                                tag: base_claim[tag] - (core_claim if tag == "STP" else 0)
+                                for tag in plan
+                            }
                             funded_base = min(
-                                total - funded_preparation, sum(base_claim.values())
+                                total - funded_preparation - funded_core,
+                                sum(base_rest.values()),
                             )
-                            base_scale = funded_base / sum(base_claim.values())
-                            remainder = total - funded_preparation - funded_base
+                            base_scale = funded_base / sum(base_rest.values())
+                            remainder = (
+                                total - funded_preparation - funded_core - funded_base
+                            )
                             for tag in plan:
                                 expected = (
                                     prepared_claim[tag] * preparation_scale
-                                    + base_claim[tag] * base_scale
+                                    + base_rest[tag] * base_scale
                                     + remainder * Fraction(str(shares[tag]))
+                                    + (funded_core if tag == "STP" else 0)
                                 )
                                 # STP retains both successor rounding residuals;
                                 # the successors each round one allocation only.

@@ -2014,3 +2014,91 @@ class CongressSiegeContracts(unittest.TestCase):
         self.assertTrue(1500 < int(one(control, 'priority')) < 1600)
         defend = str(signature(one(ai['STP_cw_defend_fada'], 'enable')))
         self.assertIn('STP_ps_congress_siege', defend)
+
+
+class PartyAssaultEquipmentContracts(unittest.TestCase):
+    """The party's assault core keeps first claim on its non-rifle package."""
+
+    TYPES = {
+        '1': ('ADISCORD_squad_weapons_equipment', 'STP_cw_payment_ADISCORD_squad_weapons_equipment'),
+        '2': ('support_equipment', 'STP_cw_payment_support_equipment'),
+        '3': ('artillery_equipment', 'STP_cw_payment_artillery_equipment'),
+        '4': ('anti_air_equipment', 'STP_cw_payment_anti_air_equipment'),
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
+
+    def test_top_up_runs_after_transfers_and_before_party_payments(self):
+        start = one(self.effects['STP_cw_start'], 'if')
+        keys = [e.key for e in start]
+        secure = keys.index('STP_cw_secure_party_assault_equipment')
+        self.assertEqual(keys.count('STP_cw_secure_party_assault_equipment'), 1)
+        self.assertLess(keys.index('STP_cw_divide_air_reserves'), secure)
+        self.assertLess(secure, keys.index('load_oob'))
+        first_payment = min(
+            i for i, e in enumerate(start)
+            if 'STP_cw_mobilize_assault_division' in str(signature([e]))
+        )
+        self.assertLess(secure, first_payment)
+
+    def test_package_matches_the_assault_payment(self):
+        payment = {
+            one(e.value, 'var'): one(e.value, 'value')
+            for e in walk(self.effects['STP_cw_pay_assault_division'])
+            if e.key == 'set_temp_variable'
+        }
+        helper = self.effects['STP_cw_secure_core_equipment_type']
+        needs = {'1': one(helper[0].value, 'value')}
+        holdings = {'1': one(helper[1].value, 'value')}
+        for branch in (e.value for e in helper if e.key == 'if'):
+            limit = signature(one(branch, 'limit'))
+            if 'STP_cw_core_equipment_type' not in str(limit):
+                continue
+            number = one(one(one(branch, 'limit'), 'check_variable'), 'value')
+            values = {one(e.value, 'var'): one(e.value, 'value') for e in branch if e.key == 'set_temp_variable'}
+            needs[number] = values['STP_cw_core_shortfall']
+            holdings[number] = values['STP_cw_core_holding']
+        for number, (archetype, payment_var) in self.TYPES.items():
+            self.assertEqual(needs[number], payment[payment_var], archetype)
+            self.assertEqual(holdings[number], f'num_equipment@{archetype}')
+        secure = self.effects['STP_cw_secure_party_assault_equipment']
+        types = [
+            one(e.value, 'value') for e in secure
+            if e.key == 'set_temp_variable' and one(e.value, 'var') == 'STP_cw_core_equipment_type'
+        ]
+        self.assertEqual(types, ['1', '2', '3', '4'])
+        counts = [
+            one(e.value, 'value') for e in walk(secure)
+            if e.key == 'set_temp_variable' and one(e.value, 'var') == 'STP_cw_core_assault_divisions'
+        ]
+        self.assertEqual(counts, ['6', '3'])
+
+    def test_donors_send_only_the_capped_shortfall_to_the_party(self):
+        donor = self.effects['STP_cw_return_core_equipment']
+        sends = [e.value for e in walk(donor) if e.key == 'send_equipment']
+        self.assertEqual(
+            sorted(one(s, 'type') for s in sends),
+            sorted(archetype for archetype, _ in self.TYPES.values()),
+        )
+        for send in sends:
+            self.assertEqual(one(send, 'target'), 'STP')
+            self.assertEqual(one(send, 'amount'), 'STP_cw_core_transfer')
+        cap = next(
+            e.value for e in donor
+            if e.key == 'if' and 'STP_cw_core_shortfall' in str(signature(one(e.value, 'limit')))
+        )
+        capped = one(cap, 'set_temp_variable')
+        self.assertEqual(one(capped, 'var'), 'STP_cw_core_transfer')
+        self.assertEqual(one(capped, 'value'), 'STP_cw_core_shortfall')
+        keys = [e.key for e in donor]
+        # Rounding happens after the cap and before the send.
+        self.assertLess(keys.index('round_temp_variable'), len(keys) - 1)
+        helper = self.effects['STP_cw_secure_core_equipment_type']
+        donors = [
+            child.key
+            for branch in helper if branch.key == 'if'
+            for child in branch.value if child.key in ('STS', 'SRP')
+        ]
+        self.assertEqual(donors, ['STS', 'SRP'])
