@@ -3,3 +3,4 @@ __pycache__/
 /.superpowers/
 /imgui.ini
 _tmp_*
+/.claude/settings.local.json
