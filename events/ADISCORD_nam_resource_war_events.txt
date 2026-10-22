@@ -1,15 +1,64 @@
 add_namespace = ADISCORD_nam_resource_war
 
-# The fresh collapse edge schedules this once. A temporary third-party war gets
-# one delayed retry; the second failed check terminates the bounded entry path.
+# The fresh collapse edge schedules this once as the backstop deadline; the
+# restitution clock and a first strike dispatch it earlier. A signed Klyuchevsk
+# protocol defers the backstop once by 365 days. A temporary third-party war
+# gets one delayed retry. global.NAM_rw_entry_dispatches counts the queued
+# copies: a failed check stops the entry and refunds the orders only when no
+# other copy is queued, so a pending retry owns the final decision.
 country_event = {
 	id = ADISCORD_nam_resource_war.1
 	hidden = yes
 	is_triggered_only = yes
 
 	immediate = {
+		subtract_from_variable = { var = global.NAM_rw_entry_dispatches value = 1 }
+		clamp_variable = {
+			var = global.NAM_rw_entry_dispatches
+			min = 0
+			max = 100
+		}
 		if = {
-			limit = { ADISCORD_nam_resource_war_ready = yes }
+			limit = {
+				has_country_flag = NAM_rw_protocol_signed
+				NOT = { has_country_flag = NAM_rw_war_dispatched }
+				NOT = { has_global_flag = ADISCORD_nam_resource_war_protocol_deferred }
+				NAM_rw_clock_running = yes
+			}
+			set_global_flag = ADISCORD_nam_resource_war_protocol_deferred
+			NAM_rw_count_entry_dispatch = yes
+			country_event = {
+				id = ADISCORD_nam_resource_war.1
+				days = 365
+			}
+		}
+		# Azhar's bought delay: no war starts inside the 75 days, and the
+		# first backstop after the payment moves 75 days later.
+		else_if = {
+			limit = {
+				has_country_flag = NAM_rw_time_bought
+				NOT = { has_country_flag = NAM_rw_first_strike }
+				NAM_rw_clock_running = yes
+				OR = {
+					NAM_rw_time_bought_active = yes
+					AND = {
+						NOT = { has_country_flag = NAM_rw_war_dispatched }
+						NOT = { has_global_flag = ADISCORD_nam_resource_war_time_deferred }
+					}
+				}
+			}
+			set_global_flag = ADISCORD_nam_resource_war_time_deferred
+			NAM_rw_count_entry_dispatch = yes
+			country_event = {
+				id = ADISCORD_nam_resource_war.1
+				days = 75
+			}
+		}
+		else_if = {
+			limit = {
+				has_global_flag = ADISCORD_nam_resource_war_scheduled
+				ADISCORD_nam_resource_war_ready = yes
+			}
 			ADISCORD_nam_resource_war_start = yes
 		}
 		else_if = {
@@ -24,14 +73,22 @@ country_event = {
 				country_exists = AZH
 			}
 			set_global_flag = ADISCORD_nam_resource_war_retry_used
+			NAM_rw_count_entry_dispatch = yes
 			country_event = {
 				id = ADISCORD_nam_resource_war.1
 				days = 120
 				random_days = 90
 			}
 		}
-		else = {
+		else_if = {
+			limit = {
+				has_global_flag = ADISCORD_nam_resource_war_scheduled
+				NOT = { has_global_flag = ADISCORD_nam_resource_war_started }
+				NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+				check_variable = { var = global.NAM_rw_entry_dispatches value = 0 compare = less_than_or_equals }
+			}
 			clr_global_flag = ADISCORD_nam_resource_war_scheduled
+			NAM = { NAM_rw_close_preparation = yes }
 			log = "[ADISCORD][NAM][ENTRY] Resource-war entry stopped after its bounded readiness checks."
 		}
 	}
@@ -46,7 +103,10 @@ country_event = {
 
 	trigger = {
 		ADISCORD_nam_resource_war_active = yes
-		NAM = { NOT = { has_country_flag = NAM_compact_ratified } }
+		NAM = {
+			NOT = { has_country_flag = NAM_compact_ratified }
+			NOT = { has_country_flag = NAM_veter_amnesty }
+		}
 		688 = { is_owned_by = NAM }
 	}
 
@@ -89,7 +149,14 @@ add_namespace = ADISCORD_nam_resource_news
 news_event = {
 	id = ADISCORD_nam_resource_news.1
 	title = ADISCORD_nam_resource_news.1.t
-	desc = ADISCORD_nam_resource_news.1.d
+	desc = {
+		trigger = { NAM = { has_country_flag = NAM_rw_first_strike } }
+		text = ADISCORD_nam_resource_news.1.d_strike
+	}
+	desc = {
+		trigger = { NAM = { NOT = { has_country_flag = NAM_rw_first_strike } } }
+		text = ADISCORD_nam_resource_news.1.d
+	}
 	picture = GFX_news_event_adiscord_vorkerland_explosion
 	major = yes
 	fire_only_once = no
@@ -97,21 +164,58 @@ news_event = {
 	option = { name = ADISCORD_nam_resource_news.1.a }
 }
 
+# The coalition's treaty: the island exile or, without an island, the partition.
 news_event = {
 	id = ADISCORD_nam_resource_news.2
-	title = ADISCORD_nam_resource_news.2.t
-	desc = ADISCORD_nam_resource_news.2.d
+	title = {
+		trigger = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+		text = ADISCORD_nam_resource_news.2.t_exile
+	}
+	title = {
+		trigger = { NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile } }
+		text = ADISCORD_nam_resource_news.2.t
+	}
+	desc = {
+		trigger = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+		text = ADISCORD_nam_resource_news.2.d_exile
+	}
+	desc = {
+		trigger = { NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile } }
+		text = ADISCORD_nam_resource_news.2.d
+	}
 	picture = GFX_news_event_adiscord_vorkerland_explosion
 	major = yes
 	fire_only_once = no
 	is_triggered_only = yes
-	option = { name = ADISCORD_nam_resource_news.2.a }
+	option = {
+		name = ADISCORD_nam_resource_news.2.a_exile
+		trigger = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+	}
+	option = {
+		name = ADISCORD_nam_resource_news.2.a
+		trigger = { NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile } }
+	}
 }
 
+# The border treaty and the standoff at the deadline share one announcement.
 news_event = {
 	id = ADISCORD_nam_resource_news.3
-	title = ADISCORD_nam_resource_news.3.t
-	desc = ADISCORD_nam_resource_news.3.d
+	title = {
+		trigger = { NOT = { has_global_flag = ADISCORD_nam_resource_war_standoff } }
+		text = ADISCORD_nam_resource_news.3.t
+	}
+	title = {
+		trigger = { has_global_flag = ADISCORD_nam_resource_war_standoff }
+		text = ADISCORD_nam_resource_news.3.t_standoff
+	}
+	desc = {
+		trigger = { NOT = { has_global_flag = ADISCORD_nam_resource_war_standoff } }
+		text = ADISCORD_nam_resource_news.3.d
+	}
+	desc = {
+		trigger = { has_global_flag = ADISCORD_nam_resource_war_standoff }
+		text = ADISCORD_nam_resource_news.3.d_standoff
+	}
 	picture = GFX_news_event_adiscord_vorkerland_explosion
 	major = yes
 	fire_only_once = no
@@ -219,6 +323,41 @@ country_event = {
 		}
 		ai_chance = { factor = 30 }
 	}
+	# Affordable from the starting treasury: the fields are paid, the city waits.
+	option = {
+		name = ADISCORD_nam_resource_war.10.c
+		trigger = {
+			NAM_country_operable = yes
+			NOT = { has_completed_focus = NAM_recognition }
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 100
+				compare = greater_than_or_equals
+			}
+		}
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_country_operable = yes
+					NOT = { has_completed_focus = NAM_recognition }
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 100
+						compare = greater_than_or_equals
+					}
+				}
+			}
+			custom_effect_tooltip = NAM_crisis_pay_100_tt
+			custom_effect_tooltip = NAM_rw_10_c_tt
+			hidden_effect = {
+				ADISCORD_economy_spend_100 = yes
+				add_to_variable = { var = NAM_grp_oil_support value = 8 }
+				add_to_variable = { var = NAM_grp_dist_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_chance = { factor = 40 }
+	}
 	option = {
 		name = ADISCORD_nam_resource_war.close
 		trigger = {
@@ -242,18 +381,41 @@ country_event = {
 		tag = NAM
 		ADISCORD_nam_resource_war_active = yes
 	}
-	option = { name = ADISCORD_nam_resource_war.11.a }
+	option = {
+		name = ADISCORD_nam_resource_war.11.a
+		# The paid mobilisation report: every formation delivered at hostilities.
+		if = {
+			limit = { check_variable = { NAM_orders_delivered > 0 } }
+			custom_effect_tooltip = NAM_orders_delivered_tt
+		}
+		else = {
+			custom_effect_tooltip = NAM_orders_none_delivered_tt
+		}
+	}
 }
 
 country_event = {
 	id = ADISCORD_nam_resource_war.12
 	title = ADISCORD_nam_resource_war.12.t
-	desc = ADISCORD_nam_resource_war.12.d
+	desc = {
+		trigger = { NAM_independence_recognised = yes }
+		text = ADISCORD_nam_resource_war.12.d
+	}
+	desc = {
+		trigger = { NOT = { NAM_independence_recognised = yes } }
+		text = ADISCORD_nam_resource_war.12.d_standoff
+	}
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	fire_only_once = yes
+	# One text describes the signed recognition treaty, the other the
+	# standoff at the deadline, which ended the war without a treaty.
 	trigger = {
 		tag = NAM
+		OR = {
+			NAM_independence_recognised = yes
+			has_global_flag = ADISCORD_nam_resource_war_standoff
+		}
 	}
 	option = { name = ADISCORD_nam_resource_war.12.a }
 }
@@ -269,6 +431,386 @@ country_event = {
 		tag = NAM
 	}
 	option = { name = ADISCORD_nam_resource_war.13.a }
+}
+
+# ----- Rom's address -----
+# Fired by the focus NAM_rom_address. Each tone of the speech wins a different
+# audience; the first option is the safe answer for an unattended window.
+country_event = {
+	id = ADISCORD_nam_resource_war.70
+	title = ADISCORD_nam_resource_war.70.t
+	desc = ADISCORD_nam_resource_war.70.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_resource_war.70.a
+		add_stability = 0.04
+		custom_effect_tooltip = NAM_rom_address_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_nam_support value = 5 }
+			add_to_variable = { var = NAM_grp_garr_support value = 5 }
+			add_to_variable = { var = NAM_grp_dist_support value = -3 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.70.b
+		add_stability = 0.02
+		custom_effect_tooltip = NAM_rom_address_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_oil_support value = 6 }
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			add_to_variable = { var = NAM_grp_trade_support value = -3 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.70.c
+		add_war_support = 0.06
+		custom_effect_tooltip = NAM_rom_address_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = 5 }
+			add_to_variable = { var = NAM_grp_trade_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# ----- Restitution pressure -----
+# Pressure reaches 40: the neighbours' first formal notes.
+country_event = {
+	id = ADISCORD_nam_resource_war.20
+	title = ADISCORD_nam_resource_war.20.t
+	desc = ADISCORD_nam_resource_war.20.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_resource_war.20.a
+		trigger = { NAM_rw_clock_running = yes }
+		custom_effect_tooltip = NAM_rw_20_a_tt
+		unlock_decision_tooltip = NAM_restitution_note
+		hidden_effect = {
+			set_country_flag = NAM_rw_talks_open
+			add_to_variable = { var = NAM_rw_tension value = -5 }
+			NAM_rw_tension_clamp = yes
+		}
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.20.b
+		trigger = { NAM_rw_clock_running = yes }
+		add_war_support = 0.05
+		custom_effect_tooltip = NAM_rw_20_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_rw_tension value = 5 }
+			NAM_rw_tension_clamp = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.close
+		trigger = { NOT = { NAM_rw_clock_running = yes } }
+		ai_chance = { base = 100 }
+	}
+}
+
+# Pressure reaches 70: the joint ultimatum. Rejection is the first option, so
+# an unanswered window keeps the status quo.
+country_event = {
+	id = ADISCORD_nam_resource_war.21
+	title = ADISCORD_nam_resource_war.21.t
+	desc = ADISCORD_nam_resource_war.21.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_resource_war.21.a
+		trigger = { NAM_rw_ultimatum_open = yes }
+		add_war_support = 0.10
+		custom_effect_tooltip = NAM_rw_21_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_rw_tension value = 10 }
+			NAM_rw_tension_clamp = yes
+		}
+		ai_chance = { base = 45 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.21.b
+		trigger = {
+			NAM_rw_ultimatum_open = yes
+			owns_state = 719
+			AZH = {
+				exists = yes
+				NOT = { has_war_with = NAM }
+			}
+		}
+		custom_effect_tooltip = NAM_rw_21_b_tt
+		hidden_effect = { NAM_rw_sign_klyuchevsk_protocol = yes }
+		ai_chance = { base = 15 }
+	}
+	# Azhar sells a pause, not neutrality: the war is only delayed.
+	option = {
+		name = ADISCORD_nam_resource_war.21.c
+		trigger = {
+			NAM_rw_ultimatum_open = yes
+			NOT = { has_country_flag = NAM_rw_time_bought }
+			NOT = { has_fuel < 12000 }
+			AZH = {
+				exists = yes
+				NOT = { has_war_with = NAM }
+			}
+		}
+		custom_effect_tooltip = NAM_rw_21_c_tt
+		hidden_effect = { NAM_rw_buy_time = yes }
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.21.e
+		trigger = { NAM_rw_ultimatum_open = yes }
+		custom_effect_tooltip = NAM_rw_21_e_tt
+		hidden_effect = {
+			set_country_flag = NAM_rw_first_strike
+			set_country_flag = NAM_rw_war_dispatched
+			NAM_rw_count_entry_dispatch = yes
+			country_event = {
+				id = ADISCORD_nam_resource_war.1
+				days = 1
+				random_days = 6
+			}
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				factor = 0
+				check_variable = { var = NAM_orders_paid value = 4 compare = less_than }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.close
+		trigger = { NOT = { NAM_rw_ultimatum_open = yes } }
+		ai_chance = { base = 100 }
+	}
+}
+
+# The front check queued by on_state_control_changed: after 7 days the
+# decisive ground is read again before either treaty is imposed.
+country_event = {
+	id = ADISCORD_nam_resource_war.51
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = { ADISCORD_nam_resource_war_front_resolution = yes }
+}
+
+# ----- Seal discipline -----
+# Discipline falls below 50.
+country_event = {
+	id = ADISCORD_nam_resource_war.30
+	title = ADISCORD_nam_resource_war.30.t
+	desc = ADISCORD_nam_resource_war.30.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_resource_war.30.a
+		add_war_support = -0.03
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.30.b
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		if = {
+			limit = {
+				hidden_trigger = {
+					check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+				}
+			}
+			custom_effect_tooltip = NAM_seal_30_b_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 150 }
+				NAM_spend_treasury = yes
+				add_to_variable = { var = NAM_seal_discipline value = 15 }
+				NAM_seal_discipline_clamp = yes
+			}
+		}
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.30.c
+		add_stability = -0.05
+		custom_effect_tooltip = NAM_seal_30_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = 5 }
+			add_to_variable = { var = NAM_grp_dist_support value = -5 }
+			NAM_groups_refresh = yes
+			add_to_variable = { var = NAM_seal_discipline value = 12 }
+			NAM_seal_discipline_clamp = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Discipline falls below 25.
+country_event = {
+	id = ADISCORD_nam_resource_war.31
+	title = ADISCORD_nam_resource_war.31.t
+	desc = ADISCORD_nam_resource_war.31.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_resource_war.31.a
+		add_war_support = -0.05
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.31.b
+		trigger = { NOT = { has_fuel < 10000 } }
+		add_fuel = -10000
+		custom_effect_tooltip = NAM_seal_31_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_seal_discipline value = 20 }
+			NAM_seal_discipline_clamp = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.31.c
+		trigger = { NOT = { has_political_power < 50 } }
+		add_political_power = -50
+		custom_effect_tooltip = NAM_seal_31_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = -10 }
+			NAM_groups_refresh = yes
+			add_to_variable = { var = NAM_seal_discipline value = 15 }
+			NAM_seal_discipline_clamp = yes
+		}
+		ai_chance = { base = 40 }
+	}
+}
+
+# Discipline reaches 0: the Night of Seals. The ladder turns towards the
+# vertical and its weakest-supported rival claims the leadership: the
+# NAM_coup_pending window is read by the rivals' coup path.
+country_event = {
+	id = ADISCORD_nam_resource_war.32
+	title = ADISCORD_nam_resource_war.32.t
+	desc = ADISCORD_nam_resource_war.32.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_resource_war.32.a
+		add_stability = -0.15
+		if = {
+			limit = { has_power_balance = { id = NAM_ladder_bop } }
+			add_power_balance_value = {
+				id = NAM_ladder_bop
+				value = -0.20
+			}
+		}
+		custom_effect_tooltip = NAM_seal_32_a_tt
+		hidden_effect = {
+			set_country_flag = {
+				flag = NAM_coup_pending
+				value = 1
+				days = 60
+			}
+			set_variable = { var = NAM_seal_discipline value = 30 }
+			NAM_seal_discipline_clamp = yes
+		}
+	}
+}
+
+# The war entry stopped after its bounded checks: the paid orders returned
+# without the player releasing them, so the refund is announced in full.
+country_event = {
+	id = ADISCORD_nam_resource_war.24
+	title = ADISCORD_nam_resource_war.24.t
+	desc = ADISCORD_nam_resource_war.24.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_resource_war.24.a
+		custom_effect_tooltip = NAM_orders_refunded_tt
+	}
+}
+
+# ----- War of return -----
+# Svetlogorye and every owner of its lost fields learn of the declaration.
+country_event = {
+	id = ADISCORD_nam_resource_war.60
+	title = ADISCORD_nam_resource_war.60.t
+	desc = {
+		trigger = { tag = NAM }
+		text = ADISCORD_nam_resource_war.60.d
+	}
+	desc = {
+		trigger = { NOT = { tag = NAM } }
+		text = ADISCORD_nam_resource_war.60.d_target
+	}
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { NAM_war_of_return_active = yes }
+
+	option = {
+		name = ADISCORD_nam_resource_war.60.a
+		trigger = { tag = NAM }
+		custom_effect_tooltip = NAM_war_of_return_terms_tt
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.60.b
+		trigger = { NOT = { tag = NAM } }
+	}
+}
+
+# The deadline of the war of return: white peace at the current front.
+country_event = {
+	id = ADISCORD_nam_resource_war.61
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { NAM_war_of_return_active = yes }
+	immediate = { NAM_war_of_return_resolve_front = yes }
+}
+
+# Svetlogorye learns how the war of return ended.
+country_event = {
+	id = ADISCORD_nam_resource_war.62
+	title = ADISCORD_nam_resource_war.62.t
+	desc = {
+		trigger = { has_global_flag = NAM_war_of_return_won }
+		text = ADISCORD_nam_resource_war.62.d_won
+	}
+	desc = {
+		trigger = { NOT = { has_global_flag = NAM_war_of_return_won } }
+		text = ADISCORD_nam_resource_war.62.d_front
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = { name = ADISCORD_nam_resource_war.62.a }
 }
 
 add_namespace = ADISCORD_nam_groups
@@ -388,6 +930,256 @@ country_event = {
 	}
 }
 
+# ----- Ladder of seals -----
+# The collapse edge: Svetlogorye proclaims independence. The ladder already
+# exists when this opens; each answer only tilts it.
+country_event = {
+	id = ADISCORD_nam_groups.12
+	title = ADISCORD_nam_groups.12.t
+	desc = ADISCORD_nam_groups.12.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_groups.12.a
+		trigger = { NAM_ladder_formed = yes }
+		add_power_balance_value = {
+			id = NAM_ladder_bop
+			value = -0.15
+		}
+		custom_effect_tooltip = NAM_declaration_vertical_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_nam_support value = 5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 3
+				has_completed_focus = NAM_vertical
+			}
+			modifier = {
+				factor = 0.2
+				has_completed_focus = NAM_districts
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_nam_groups.12.b
+		trigger = { NAM_ladder_formed = yes }
+		add_power_balance_value = {
+			id = NAM_ladder_bop
+			value = 0.15
+		}
+		custom_effect_tooltip = NAM_declaration_districts_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 3
+				has_completed_focus = NAM_districts
+			}
+			modifier = {
+				factor = 0.2
+				has_completed_focus = NAM_vertical
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.close
+		trigger = { NOT = { NAM_ladder_formed = yes } }
+		ai_chance = { base = 100 }
+	}
+}
+
+# A rival speaks for the weakest pillar and names his term. Accepting is the
+# first option, so an unanswered demand never risks the seals.
+country_event = {
+	id = ADISCORD_nam_groups.20
+	title = ADISCORD_nam_groups.20.t
+	desc = {
+		trigger = { check_variable = { NAM_rival_current = 1 } }
+		text = ADISCORD_nam_groups.20.d_pechat
+	}
+	desc = {
+		trigger = { check_variable = { NAM_rival_current = 2 } }
+		text = ADISCORD_nam_groups.20.d_klyuch
+	}
+	desc = {
+		trigger = { check_variable = { NAM_rival_current = 3 } }
+		text = ADISCORD_nam_groups.20.d_shtyk
+	}
+	desc = {
+		trigger = { check_variable = { NAM_rival_current = 4 } }
+		text = ADISCORD_nam_groups.20.d_gavanov
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_groups.20.a
+		trigger = {
+			NAM_country_operable = yes
+			NOT = { has_country_flag = NAM_coup_succeeded }
+		}
+		custom_effect_tooltip = NAM_rival_demand_accept_tt
+		hidden_effect = { NAM_rival_accept_demand = yes }
+		ai_chance = {
+			base = 60
+			modifier = {
+				factor = 3
+				NAM_rival_current_pillar_broken = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_nam_groups.20.b
+		trigger = {
+			NAM_country_operable = yes
+			NOT = { has_country_flag = NAM_coup_succeeded }
+		}
+		custom_effect_tooltip = NAM_rival_demand_refuse_tt
+		hidden_effect = { NAM_rival_refuse = yes }
+		ai_chance = {
+			base = 40
+			modifier = {
+				factor = 0
+				NAM_rival_current_pillar_broken = yes
+				NAM_rival_current_heard = no
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.close
+		trigger = {
+			OR = {
+				NAM_country_operable = no
+				has_country_flag = NAM_coup_succeeded
+			}
+		}
+		hidden_effect = { clr_country_flag = NAM_rival_event_pending }
+		ai_chance = { base = 100 }
+	}
+}
+
+# The rival claims the seals. Arrest and the districts' crowds are the first
+# answers when the country can afford them; otherwise the rival takes power.
+country_event = {
+	id = ADISCORD_nam_groups.21
+	title = ADISCORD_nam_groups.21.t
+	desc = {
+		trigger = { check_variable = { NAM_rival_current = 1 } }
+		text = ADISCORD_nam_groups.21.d_pechat
+	}
+	desc = {
+		trigger = { check_variable = { NAM_rival_current = 2 } }
+		text = ADISCORD_nam_groups.21.d_klyuch
+	}
+	desc = {
+		trigger = { check_variable = { NAM_rival_current = 3 } }
+		text = ADISCORD_nam_groups.21.d_shtyk
+	}
+	desc = {
+		trigger = { check_variable = { NAM_rival_current = 4 } }
+		text = ADISCORD_nam_groups.21.d_gavanov
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_groups.21.a
+		trigger = {
+			NAM_country_operable = yes
+			NOT = { has_country_flag = NAM_coup_succeeded }
+			NOT = { has_country_flag = NAM_ladder_settled }
+			custom_trigger_tooltip = {
+				tooltip = NAM_rival_can_arrest_tt
+				NAM_rival_can_arrest = yes
+			}
+		}
+		add_political_power = -75
+		add_stability = -0.05
+		custom_effect_tooltip = NAM_coup_arrest_tt
+		hidden_effect = {
+			clr_country_flag = NAM_rival_event_pending
+			set_temp_variable = { var = NAM_rival_delta value = -10 }
+			NAM_rival_pillar_add = yes
+			NAM_rival_remove_current = yes
+		}
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_nam_groups.21.b
+		trigger = {
+			NAM_country_operable = yes
+			NOT = { has_country_flag = NAM_coup_succeeded }
+			NOT = { has_country_flag = NAM_ladder_settled }
+			custom_trigger_tooltip = {
+				tooltip = NAM_rival_can_rally_tt
+				NAM_rival_can_rally_districts = yes
+			}
+		}
+		add_stability = -0.03
+		add_power_balance_value = {
+			id = NAM_ladder_bop
+			value = 0.15
+		}
+		custom_effect_tooltip = NAM_coup_rally_tt
+		hidden_effect = {
+			clr_country_flag = NAM_rival_event_pending
+			add_to_variable = { var = NAM_grp_nam_support value = -10 }
+			add_to_variable = { var = NAM_grp_dist_support value = 5 }
+			NAM_groups_refresh = yes
+			NAM_rival_remove_current = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_groups.21.c
+		trigger = {
+			NAM_country_operable = yes
+			NOT = { has_country_flag = NAM_coup_succeeded }
+			NOT = { has_country_flag = NAM_ladder_settled }
+		}
+		custom_effect_tooltip = NAM_coup_yield_tt
+		hidden_effect = { NAM_coup_install = yes }
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.close
+		trigger = {
+			OR = {
+				NAM_country_operable = no
+				has_country_flag = NAM_coup_succeeded
+				has_country_flag = NAM_ladder_settled
+			}
+		}
+		hidden_effect = { clr_country_flag = NAM_rival_event_pending }
+		ai_chance = { base = 100 }
+	}
+}
+
+# ----- Underground -----
+# Yaroslav Veter accepts the amnesty and leaves the underground.
+country_event = {
+	id = ADISCORD_nam_groups.30
+	title = ADISCORD_nam_groups.30.t
+	desc = ADISCORD_nam_groups.30.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = NAM }
+
+	option = { name = ADISCORD_nam_groups.30.a }
+}
+
 # Random incidents: each option settles the crisis once and reopens the draw.
 add_namespace = ADISCORD_nam_crisis
 
@@ -427,6 +1219,14 @@ country_event = {
 		hidden_effect = {
 			add_to_variable = { var = NAM_grp_oil_support value = -8 }
 			NAM_groups_refresh = yes
+			# The fire burns out in the Northern Deposits.
+			67 = {
+				if = {
+					limit = { is_controlled_by = NAM }
+					set_temp_variable = { var = NAM_field_damage_amount value = 20 }
+					NAM_field_apply_damage = yes
+				}
+			}
 			clr_country_flag = NAM_crisis_open
 		}
 		ai_chance = { base = 50 }
@@ -645,5 +1445,548 @@ country_event = {
 			clr_country_flag = NAM_crisis_open
 		}
 		ai_chance = { base = 80 }
+	}
+}
+
+# Oil monopoly: contracts, island concessions and the crisis coalition.
+add_namespace = ADISCORD_nam_oil
+
+# Buyer receives Svetlogorye's fuel contract; FROM is Svetlogorye. Declining
+# is the first option, so an unanswered offer commits nobody.
+country_event = {
+	id = ADISCORD_nam_oil.1
+	title = ADISCORD_nam_oil.1.t
+	desc = ADISCORD_nam_oil.1.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_nam_oil.1.a
+		custom_effect_tooltip = NAM_oil_1_a_tt
+		hidden_effect = { NAM_oil_decline_contract = yes }
+		ai_chance = {
+			base = 30
+			modifier = {
+				factor = 3
+				has_opinion = {
+					target = NAM
+					value < -25
+				}
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_nam_oil.1.b
+		trigger = {
+			NOT = { has_war_with = NAM }
+			NAM = { NAM_country_operable = yes }
+		}
+		custom_effect_tooltip = NAM_oil_1_b_tt
+		hidden_effect = { NAM_oil_sign_contract = yes }
+		ai_chance = {
+			base = 40
+			modifier = {
+				factor = 3
+				has_fuel < 5000
+			}
+			modifier = {
+				factor = 1.5
+				has_fuel < 20000
+			}
+			modifier = {
+				factor = 1.5
+				has_opinion = {
+					target = NAM
+					value > 0
+				}
+			}
+		}
+	}
+}
+
+# Svetlogorye learns the buyer's answer; FROM is the buyer.
+country_event = {
+	id = ADISCORD_nam_oil.2
+	title = ADISCORD_nam_oil.2.t
+	desc = {
+		trigger = { FROM = { has_country_flag = NAM_oil_client } }
+		text = ADISCORD_nam_oil.2.d_signed
+	}
+	desc = {
+		trigger = {
+			FROM = {
+				NOT = { has_country_flag = NAM_oil_client }
+				has_country_flag = NAM_oil_offer_lapsed
+			}
+		}
+		text = ADISCORD_nam_oil.2.d_lapsed
+	}
+	desc = {
+		trigger = {
+			FROM = {
+				NOT = { has_country_flag = NAM_oil_client }
+				NOT = { has_country_flag = NAM_oil_offer_lapsed }
+			}
+		}
+		text = ADISCORD_nam_oil.2.d_refused
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = { name = ADISCORD_nam_oil.2.a }
+}
+
+# VAL or GLP receives the Middle Island steel concession; FROM is Svetlogorye.
+country_event = {
+	id = ADISCORD_nam_oil.4
+	title = ADISCORD_nam_oil.4.t
+	desc = ADISCORD_nam_oil.4.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = { ADISCORD_economy_initialize_country = yes }
+	}
+
+	option = {
+		name = ADISCORD_nam_oil.4.a
+		custom_effect_tooltip = NAM_oil_4_a_tt
+		hidden_effect = { NAM_steel_concession_decline = yes }
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_oil.4.b
+		trigger = {
+			NOT = { has_war_with = NAM }
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+			231 = {
+				is_owned_by = NAM
+				is_controlled_by = NAM
+			}
+			NOT = { VAL = { NAM_steel_concession_holder = yes } }
+			NOT = { GLP = { NAM_steel_concession_holder = yes } }
+		}
+		custom_effect_tooltip = NAM_oil_4_b_tt
+		hidden_effect = { NAM_steel_concession_grant = yes }
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0.3
+				check_variable = { var = ADISCORD_economy_treasury value = 600 compare = less_than }
+			}
+		}
+	}
+}
+
+# Svetlogorye learns the concession answer; FROM is VAL or GLP.
+country_event = {
+	id = ADISCORD_nam_oil.5
+	title = ADISCORD_nam_oil.5.t
+	desc = {
+		trigger = { FROM = { NAM_steel_concession_holder = yes } }
+		text = ADISCORD_nam_oil.5.d_signed
+	}
+	desc = {
+		trigger = { FROM = { NOT = { NAM_steel_concession_holder = yes } } }
+		text = ADISCORD_nam_oil.5.d_refused
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = { name = ADISCORD_nam_oil.5.a }
+}
+
+# Kefreyt is asked to pay new terms for the Western Island concession. Paying
+# is the first option while VAL can afford it; refusal loses the concession.
+country_event = {
+	id = ADISCORD_nam_oil.6
+	title = ADISCORD_nam_oil.6.t
+	desc = ADISCORD_nam_oil.6.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+
+	option = {
+		name = ADISCORD_nam_oil.6.a
+		trigger = {
+			has_country_flag = VAL_nam_concession_active
+			NOT = { has_war_with = NAM }
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = NAM_oil_6_a_tt
+		hidden_effect = { NAM_val_concession_renegotiated = yes }
+		ai_chance = {
+			base = 60
+			modifier = {
+				factor = 0.3
+				check_variable = { var = ADISCORD_economy_treasury value = 600 compare = less_than }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_nam_oil.6.b
+		trigger = { has_country_flag = VAL_nam_concession_active }
+		custom_effect_tooltip = NAM_oil_6_b_tt
+		hidden_effect = { NAM_val_concession_revoked = yes }
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_oil.close
+		trigger = { NOT = { has_country_flag = VAL_nam_concession_active } }
+		hidden_effect = { NAM = { clr_country_flag = NAM_val_renegotiation_pending } }
+		ai_chance = { base = 100 }
+	}
+}
+
+# Svetlogorye learns Kefreyt's answer; FROM is VAL.
+country_event = {
+	id = ADISCORD_nam_oil.7
+	title = ADISCORD_nam_oil.7.t
+	desc = {
+		trigger = { FROM = { has_country_flag = VAL_nam_concession_active } }
+		text = ADISCORD_nam_oil.7.d_paid
+	}
+	desc = {
+		trigger = { FROM = { NOT = { has_country_flag = VAL_nam_concession_active } } }
+		text = ADISCORD_nam_oil.7.d_revoked
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = { name = ADISCORD_nam_oil.7.a }
+}
+
+# Svetlogorye fights in the Khan's crisis coalition. The demand for a share is
+# the first option: an unanswered window spends no fuel.
+country_event = {
+	id = ADISCORD_nam_oil.10
+	title = ADISCORD_nam_oil.10.t
+	desc = ADISCORD_nam_oil.10.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_oil.10.a
+		add_political_power = 50
+		custom_effect_tooltip = NAM_oil_10_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_oil_support value = 6 }
+			add_to_variable = { var = NAM_grp_trade_support value = 6 }
+			NAM_groups_refresh = yes
+			for_each_scope_loop = {
+				array = global.RUS_crisis_defenders
+				NAM_rus_refuse_member = yes
+			}
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_oil.10.b
+		trigger = { NAM_rus_coalition_member = yes }
+		add_war_support = 0.05
+		custom_effect_tooltip = NAM_oil_10_b_tt
+		hidden_effect = {
+			for_each_scope_loop = {
+				array = global.RUS_crisis_defenders
+				NAM_rus_supply_member = yes
+			}
+		}
+		ai_chance = {
+			base = 40
+			modifier = {
+				factor = 0
+				has_fuel < 9000
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_nam_oil.10.c
+		trigger = {
+			NAM_rus_coalition_member = yes
+			has_completed_focus = NAM_contract_bureau
+		}
+		custom_effect_tooltip = NAM_oil_10_c_tt
+		hidden_effect = {
+			for_each_scope_loop = {
+				array = global.RUS_crisis_defenders
+				NAM_rus_offer_member_contract = yes
+			}
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Notes of Egor Rom: five chapters, each with an optional second page.
+# Every page closes completely; nothing in gameplay depends on reading them.
+add_namespace = ADISCORD_nam_memoir
+
+# Hidden dispatcher: one chapter every 90 days for a human ruler.
+country_event = {
+	id = ADISCORD_nam_memoir.99
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	immediate = { NAM_memoir_dispatch = yes }
+}
+
+country_event = {
+	id = ADISCORD_nam_memoir.1
+	title = ADISCORD_nam_memoir.1.t
+	desc = ADISCORD_nam_memoir.1.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		is_ai = no
+	}
+
+	option = {
+		name = ADISCORD_nam_memoir.read_on
+		hidden_effect = { country_event = { id = ADISCORD_nam_memoir.11 } }
+	}
+	option = {
+		name = ADISCORD_nam_memoir.put_away
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_memoir.11
+	title = ADISCORD_nam_memoir.1.t
+	desc = ADISCORD_nam_memoir.11.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_memoir.close
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_memoir.2
+	title = ADISCORD_nam_memoir.2.t
+	desc = ADISCORD_nam_memoir.2.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		is_ai = no
+	}
+
+	option = {
+		name = ADISCORD_nam_memoir.read_on
+		hidden_effect = { country_event = { id = ADISCORD_nam_memoir.12 } }
+	}
+	option = {
+		name = ADISCORD_nam_memoir.put_away
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_memoir.12
+	title = ADISCORD_nam_memoir.2.t
+	desc = ADISCORD_nam_memoir.12.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_memoir.close
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_memoir.3
+	title = ADISCORD_nam_memoir.3.t
+	desc = ADISCORD_nam_memoir.3.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		is_ai = no
+	}
+
+	option = {
+		name = ADISCORD_nam_memoir.read_on
+		hidden_effect = { country_event = { id = ADISCORD_nam_memoir.13 } }
+	}
+	option = {
+		name = ADISCORD_nam_memoir.put_away
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_memoir.13
+	title = ADISCORD_nam_memoir.3.t
+	desc = ADISCORD_nam_memoir.13.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_memoir.close
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_memoir.4
+	title = ADISCORD_nam_memoir.4.t
+	desc = ADISCORD_nam_memoir.4.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		is_ai = no
+	}
+
+	option = {
+		name = ADISCORD_nam_memoir.read_on
+		hidden_effect = { country_event = { id = ADISCORD_nam_memoir.14 } }
+	}
+	option = {
+		name = ADISCORD_nam_memoir.put_away
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_memoir.14
+	title = ADISCORD_nam_memoir.4.t
+	desc = ADISCORD_nam_memoir.14.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_memoir.close
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_memoir.5
+	title = ADISCORD_nam_memoir.5.t
+	desc = ADISCORD_nam_memoir.5.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		is_ai = no
+	}
+
+	option = {
+		name = ADISCORD_nam_memoir.read_on
+		hidden_effect = { country_event = { id = ADISCORD_nam_memoir.15 } }
+	}
+	option = {
+		name = ADISCORD_nam_memoir.put_away
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_memoir.15
+	title = ADISCORD_nam_memoir.5.t
+	desc = ADISCORD_nam_memoir.15.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_memoir.close
+	}
+}
+
+# Archive documents opened by focuses of the three Svetlogorye trees.
+add_namespace = ADISCORD_nam_archive
+
+country_event = {
+	id = ADISCORD_nam_archive.1
+	title = ADISCORD_nam_archive.1.t
+	desc = ADISCORD_nam_archive.1.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_archive.1.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_archive.2
+	title = ADISCORD_nam_archive.2.t
+	desc = ADISCORD_nam_archive.2.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_archive.2.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_archive.3
+	title = ADISCORD_nam_archive.3.t
+	desc = ADISCORD_nam_archive.3.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_archive.3.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_archive.4
+	title = ADISCORD_nam_archive.4.t
+	desc = ADISCORD_nam_archive.4.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_archive.4.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_archive.5
+	title = ADISCORD_nam_archive.5.t
+	desc = ADISCORD_nam_archive.5.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_archive.5.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_archive.6
+	title = ADISCORD_nam_archive.6.t
+	desc = ADISCORD_nam_archive.6.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_archive.6.a
 	}
 }

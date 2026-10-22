@@ -222,6 +222,15 @@ ADISCORD_south_campaign_target_valid = {
 	NOT = { has_global_flag = ADISCORD_south_final_started }
 }
 
+# COUNTRY target. A follower of another regional faction (AZH in Eflor's
+# Restitution Alliance) may answer an alliance invitation by switching sides;
+# faction leaders and members of outside factions are not invited.
+ADISCORD_south_alliance_switch_possible = {
+	is_in_faction = yes
+	is_faction_leader = no
+	faction_leader = { ADISCORD_south_regional_country = yes }
+}
+
 # COUNTRY target. Nothing is left to win from it for the champion in ROOT.
 ADISCORD_south_campaign_target_settled = {
 	OR = {

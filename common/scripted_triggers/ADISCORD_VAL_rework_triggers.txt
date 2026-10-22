@@ -1729,9 +1729,10 @@ VAL_can_attack_bezhaysk = {
 	}
 }
 
-VAL_nam_concession_negotiable = {
+# COUNTRY VAL. Stable conditions of the island offer; a pending answer from EFL
+# or NAM is excluded here so it cannot cancel VAL_Support_The_Viceroy mid-research.
+VAL_support_viceroy_possible = {
 	NOT = { has_variable = VAL_resource_aid_side }
-	NOT = { has_country_flag = VAL_efl_concession_offer_pending }
 	tag = VAL
 	has_completed_focus = VAL_Resource_War_Contracts
 	has_capitulated = no
@@ -1743,6 +1744,88 @@ VAL_nam_concession_negotiable = {
 	NAM = { exists = yes has_capitulated = no is_subject = no }
 	230 = { is_owned_by = NAM is_controlled_by = NAM }
 	EFL = { NOT = { has_country_flag = VAL_export_customer_cooldown } NOT = { has_idea = VAL_paid_military_advisors } }
+}
+
+VAL_nam_concession_negotiable = {
+	VAL_support_viceroy_possible = yes
+	NOT = { has_country_flag = VAL_efl_concession_offer_pending }
+	NOT = { has_variable = VAL_nam_request_terms }
+}
+
+# COUNTRY VAL. Svetlogorye may ask for aid on its own initiative; VAL's focus
+# progress is not required because the aid category opens with the war itself.
+VAL_nam_aid_request_base = {
+	tag = VAL
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	ADISCORD_nam_resource_war_active = yes
+	NOT = { has_variable = VAL_resource_aid_side }
+	NOT = { has_war_with = NAM }
+	NOT = { has_country_flag = VAL_nam_concession_agreed }
+	NOT = { has_country_flag = VAL_nam_concession_granted }
+	NOT = { has_country_flag = VAL_efl_concession_offer_pending }
+	NAM = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		OR = {
+			has_war_with = EFL
+			has_war_with = AZH
+		}
+	}
+	EFL = {
+		NOT = { has_country_flag = VAL_export_customer_cooldown }
+		NOT = { has_idea = VAL_paid_military_advisors }
+	}
+}
+
+# COUNTRY VAL. A new NAM request can be sent: no offer or request is awaiting an
+# answer and VAL has not declined NAM within the last 60 days.
+VAL_nam_aid_request_open = {
+	VAL_nam_aid_request_base = yes
+	NOT = { has_country_flag = VAL_nam_concession_offer_pending }
+	NOT = { has_variable = VAL_nam_request_terms }
+	NAM = { NOT = { has_country_flag = VAL_nam_aid_request_refused } }
+}
+
+# COUNTRY VAL. Request terms 1: aid for extraction rights in state 230.
+VAL_nam_aid_request_concession_open = {
+	VAL_nam_aid_request_open = yes
+	230 = { is_owned_by = NAM is_controlled_by = NAM }
+}
+
+# COUNTRY VAL. Request terms 2: aid for a 400 treasury fee held in VAL escrow.
+VAL_nam_aid_request_paid_open = {
+	VAL_nam_aid_request_open = yes
+	NAM = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } }
+}
+
+# COUNTRY VAL. NAM answers VAL's island offer with the paid alternative instead.
+VAL_nam_counter_offer_possible = {
+	VAL_nam_aid_request_base = yes
+	has_country_flag = VAL_nam_concession_offer_pending
+	NOT = { has_variable = VAL_nam_request_terms }
+	NAM = {
+		NOT = { has_country_flag = VAL_nam_aid_request_refused }
+		check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+	}
+}
+
+# COUNTRY VAL. The pending NAM request can still be accepted on its stored terms.
+VAL_nam_aid_request_current = {
+	VAL_nam_aid_request_base = yes
+	NOT = { has_country_flag = VAL_nam_concession_offer_pending }
+	OR = {
+		AND = {
+			check_variable = { var = VAL_nam_request_terms value = 1 compare = equals }
+			230 = { is_owned_by = NAM is_controlled_by = NAM }
+		}
+		AND = {
+			check_variable = { var = VAL_nam_request_terms value = 2 compare = equals }
+			NAM = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } }
+		}
+	}
 }
 
 VAL_nam_concession_deliverable = {
@@ -2812,6 +2895,7 @@ VAL_wasteland_capitulation_managed = {
 VAL_efl_concession_negotiable = {
 	NOT = { has_variable = VAL_resource_aid_side }
 	NOT = { has_country_flag = VAL_nam_concession_offer_pending }
+	NOT = { has_variable = VAL_nam_request_terms }
 	tag = VAL
 	has_completed_focus = VAL_Resource_War_Contracts
 	has_capitulated = no

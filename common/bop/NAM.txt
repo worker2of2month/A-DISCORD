@@ -1,0 +1,83 @@
+# Ladder of seals: the namestnik vertical (negative) against the districts
+# (positive). The independence declaration creates it once; focuses, favours,
+# rival outcomes and the Night of Seals move it afterwards.
+NAM_ladder_bop = {
+	initial_value = 0
+	left_side = NAM_bop_vertical
+	right_side = NAM_bop_districts
+	decision_category = NAM_supports
+	range = {
+		id = NAM_ladder_compromise
+		min = -0.10
+		max = 0.10
+		modifier = {
+			stability_factor = 0.03
+			political_power_gain = 0.05
+		}
+		on_activate = { ADISCORD_economy_mark_dirty = yes }
+		on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+	}
+	side = {
+		id = NAM_bop_vertical
+		icon = GFX_bop_ETH_centralisation_side
+		range = {
+			id = NAM_ladder_vertical_influence
+			min = -0.50
+			max = -0.10
+			modifier = {
+				political_power_gain = 0.10
+				ADISCORD_economy_tax_collection_factor = 0.04
+				compliance_gain = 0.02
+				stability_factor = -0.02
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = NAM_ladder_vertical_dominance
+			min = -1.00
+			max = -0.50
+			modifier = {
+				political_power_gain = 0.20
+				ADISCORD_economy_tax_collection_factor = 0.08
+				compliance_gain = 0.04
+				army_org_factor = 0.03
+				stability_factor = -0.06
+				research_speed_factor = -0.03
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+	side = {
+		id = NAM_bop_districts
+		icon = GFX_bop_ETH_decentralisation_side
+		range = {
+			id = NAM_ladder_districts_influence
+			min = 0.10
+			max = 0.50
+			modifier = {
+				stability_factor = 0.04
+				research_speed_factor = 0.02
+				production_speed_buildings_factor = 0.03
+				political_power_gain = -0.05
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = NAM_ladder_districts_dominance
+			min = 0.50
+			max = 1.00
+			modifier = {
+				stability_factor = 0.08
+				research_speed_factor = 0.04
+				production_speed_buildings_factor = 0.06
+				political_power_gain = -0.10
+				ADISCORD_economy_tax_collection_factor = -0.04
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+}

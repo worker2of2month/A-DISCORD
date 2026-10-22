@@ -20,13 +20,96 @@ on_actions = {
 				}
 				NAM = { ADISCORD_nam_refresh_emergency_defence = yes }
 			}
+			# The decisive ground of either side queues one delayed front check.
+			if = {
+				limit = {
+					ADISCORD_nam_resource_war_active = yes
+					OR = {
+						ROOT = { tag = NAM }
+						FROM = { tag = NAM }
+					}
+					FROM.FROM = {
+						OR = {
+							state = 67
+							state = 688
+							state = 689
+							state = 690
+							state = 719
+							state = 720
+							state = 721
+							state = 722
+							state = 701
+						}
+					}
+				}
+				NAM = { NAM_rw_queue_front_check = yes }
+			}
+			# A lost field shakes seal discipline; a lost line may be prepared
+			# again after recapture.
+			if = {
+				limit = {
+					FROM = { tag = NAM }
+					FROM.FROM = {
+						OR = {
+							state = 67
+							state = 688
+							state = 689
+							state = 690
+							state = 719
+							state = 700
+						}
+					}
+				}
+				FROM.FROM = { clr_state_flag = NAM_line_prepared }
+				if = {
+					limit = {
+						ADISCORD_nam_resource_war_active = yes
+						FROM.FROM = { NOT = { state = 700 } }
+					}
+					NAM = { NAM_seal_discipline_field_lost = yes }
+				}
+			}
+			# Oil throughput counts controlled fields, the pipeline end and the
+			# sea terminal; the island steel concession needs Svetlogorsk control.
+			if = {
+				limit = {
+					OR = {
+						ROOT = { tag = NAM }
+						FROM = { tag = NAM }
+					}
+					FROM.FROM = {
+						OR = {
+							state = 67
+							state = 688
+							state = 689
+							state = 690
+							state = 719
+							state = 700
+						}
+					}
+				}
+				NAM = { NAM_oil_refresh = yes }
+			}
+			if = {
+				limit = {
+					FROM = { tag = NAM }
+					FROM.FROM = { state = 231 }
+				}
+				VAL = { NAM_steel_concession_validate = yes }
+				GLP = { NAM_steel_concession_validate = yes }
+			}
 		}
 	}
-	# Pillars of power drift once a month; the hook serves one tag only.
+	# Pillars, incidents, the restitution clock, deliveries, seal discipline,
+	# oil contracts, the island levy, the underground and the rivals advance once
+	# a month; the hook serves
+	# one tag and reads fixed tags only.
 	on_monthly_NAM = {
 		effect = {
 			NAM_groups_monthly = yes
 			NAM_crisis_draw = yes
+			NAM_rw_monthly = yes
+			NAM_ladder_monthly = yes
 		}
 	}
 }

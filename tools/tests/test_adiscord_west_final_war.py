@@ -728,12 +728,12 @@ class SubjectIntegrationRemovalTests(unittest.TestCase):
                 self.assertEqual([(e.key, e.value) for e in gate], [("always", "no")])
 
     def test_southern_heritage_keeps_its_rewards_without_an_annexation_unlock(self):
-        for country, identifier in (
-            ("NAM", "NAM_south_heritage"),
-            ("SHL", "SHL_south_crown_of_the_south"),
+        for country, tree, identifier in (
+            ("NAM", "postwar", "NAM_south_heritage"),
+            ("SHL", "main", "SHL_south_crown_of_the_south"),
         ):
             with self.subTest(country=country):
-                path = ROOT / f"focus_trees/{country}/main/focuses.txt"
+                path = ROOT / f"focus_trees/{country}/{tree}/focuses.txt"
                 reward = block(focus_blocks(path)[identifier], "completion_reward")
                 self.assertTrue(reward)
                 self.assertNotIn("unlock_decision_tooltip", repr(reward))

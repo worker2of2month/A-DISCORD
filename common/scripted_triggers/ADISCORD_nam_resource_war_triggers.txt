@@ -11,8 +11,13 @@ ADISCORD_nam_resource_war_ready = {
 		controls_state = 67
 		controls_state = 688
 		controls_state = 689
-		controls_state = 700
 		controls_state = 690
+		controls_state = 700
+		# The Klyuchevsk protocol ceded East Sukhorechye to Azhar before the war.
+		OR = {
+			controls_state = 719
+			has_country_flag = NAM_rw_protocol_signed
+		}
 	}
 	EFL = {
 		is_subject = no
@@ -21,12 +26,15 @@ ADISCORD_nam_resource_war_ready = {
 		controls_state = 70
 		controls_state = 691
 		controls_state = 701
+		controls_state = 720
+		controls_state = 721
 	}
 	AZH = {
 		is_subject = no
 		has_war = no
 		controls_state = 69
 		controls_state = 692
+		controls_state = 722
 	}
 }
 
@@ -63,27 +71,121 @@ ADISCORD_nam_resource_war_defender_capitulation = {
 	}
 }
 
+# Any scope. At the timeout a held basin wins the border treaty only together
+# with a captured border district of a principal: Eflor's 720, 721 and 701 or
+# Azhar's seaboard 722.
+NAM_rw_holds_border_belt = {
+	NAM = {
+		OR = {
+			controls_state = 720
+			controls_state = 721
+			controls_state = 722
+			controls_state = 701
+		}
+	}
+}
+
+# Any scope. The defeat receipts are authoritative: native has_capitulated of
+# the principal that fell first is not reliable when the last one capitulates.
+# on_uncapitulation clears a liberated principal's receipt, so a revived ally
+# blocks the treaty again. Azhar counts as defeated once it has left the war.
 ADISCORD_nam_victory_record_complete = {
 	has_global_flag = ADISCORD_nam_resource_war_EFL_defeated
-	has_global_flag = ADISCORD_nam_resource_war_AZH_defeated
-	# Only the current native callback may precede has_capitulated.
-	EFL = {
-		OR = {
-			has_capitulated = yes
-			AND = {
-				tag = ROOT
-				has_country_flag = ADISCORD_nam_capitulation_reserved
+	OR = {
+		has_global_flag = ADISCORD_nam_resource_war_AZH_defeated
+		AZH = {
+			OR = {
+				exists = no
+				NOT = { has_war_with = NAM }
 			}
 		}
 	}
-	AZH = {
+}
+
+# STATE. The controller is a coalition principal or its subject.
+NAM_rw_state_held_by_coalition = {
+	controller = {
 		OR = {
-			has_capitulated = yes
-			AND = {
-				tag = ROOT
-				has_country_flag = ADISCORD_nam_capitulation_reserved
-			}
+			tag = EFL
+			tag = AZH
+			is_subject_of = EFL
+			is_subject_of = AZH
 		}
+	}
+}
+
+# STATE field. A Svetlogorsk field occupied by the coalition.
+NAM_rw_field_taken_by_coalition = {
+	is_owned_by = NAM
+	NAM_rw_state_held_by_coalition = yes
+}
+
+# Any scope. Every border belt of the principals is in Svetlogorsk hands:
+# Eflor's 720, 721 and 701 and, while Azhar fights, its seaboard 722. Every
+# field Svetlogorye still owns is under its control.
+NAM_rw_territorial_victory = {
+	NAM = {
+		controls_state = 720
+		controls_state = 721
+		controls_state = 701
+		OR = {
+			controls_state = 722
+			NOT = { has_war_with = AZH }
+		}
+		OR = {
+			NOT = { owns_state = 67 }
+			controls_state = 67
+		}
+		OR = {
+			NOT = { owns_state = 688 }
+			controls_state = 688
+		}
+		OR = {
+			NOT = { owns_state = 689 }
+			controls_state = 689
+		}
+		OR = {
+			NOT = { owns_state = 690 }
+			controls_state = 690
+		}
+		OR = {
+			NOT = { owns_state = 719 }
+			controls_state = 719
+		}
+	}
+}
+
+# Any scope. The coalition holds the Northern Deposits and at least one more
+# Svetlogorsk field. Fields held by the uprising do not count.
+NAM_rw_coalition_territorial_victory = {
+	67 = { NAM_rw_field_taken_by_coalition = yes }
+	OR = {
+		688 = { NAM_rw_field_taken_by_coalition = yes }
+		689 = { NAM_rw_field_taken_by_coalition = yes }
+		690 = { NAM_rw_field_taken_by_coalition = yes }
+		719 = { NAM_rw_field_taken_by_coalition = yes }
+	}
+}
+
+# STATE. One of the overseas districts 225-231.
+NAM_rw_island_state = {
+	OR = {
+		state = 225
+		state = 226
+		state = 227
+		state = 228
+		state = 229
+		state = 230
+		state = 231
+	}
+}
+
+# Any scope. Svetlogorye still owns an overseas district: a lost war ends in
+# the island exile instead of the partition.
+NAM_rw_can_go_into_exile = {
+	NAM = {
+		exists = yes
+		any_owned_state = { NAM_rw_island_state = yes }
 	}
 }
 
@@ -171,5 +273,501 @@ NAM_wartime_programmes_open = {
 			ADISCORD_south_final_active = yes
 			has_country_flag = ADISCORD_south_north_leader
 		}
+	}
+}
+
+# ----- Restitution pressure -----
+# The restitution clock runs between the collapse schedule and the war.
+NAM_rw_clock_running = {
+	has_global_flag = ADISCORD_nam_resource_war_scheduled
+	NOT = { has_global_flag = ADISCORD_nam_resource_war_started }
+	NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+}
+
+# COUNTRY NAM. Fuel bought Azhar's delay: no war is dispatched for 75 days
+# after the payment. The flag is permanent, so the purchase happens once.
+NAM_rw_time_bought_active = {
+	has_country_flag = {
+		flag = NAM_rw_time_bought
+		days < 75
+	}
+}
+
+# COUNTRY NAM. The scheduled flag was set at the collapse edge, so its age is
+# the time since the collapse wars began: 300 days, or 665 after the protocol.
+# A bought delay closes the window until it runs out.
+NAM_rw_war_window_open = {
+	NOT = { NAM_rw_time_bought_active = yes }
+	OR = {
+		AND = {
+			NOT = { has_country_flag = NAM_rw_protocol_signed }
+			has_global_flag = {
+				flag = ADISCORD_nam_resource_war_scheduled
+				days > 299
+			}
+		}
+		has_global_flag = {
+			flag = ADISCORD_nam_resource_war_scheduled
+			days > 664
+		}
+	}
+}
+
+# COUNTRY NAM. The ultimatum still has a course to choose.
+NAM_rw_ultimatum_open = {
+	NAM_country_operable = yes
+	NAM_rw_clock_running = yes
+	NOT = { has_country_flag = NAM_rw_war_dispatched }
+	EFL = { exists = yes }
+}
+
+# ----- Mobilisation and defence lines -----
+# COUNTRY NAM. A new order fits under NAM_order_cap and the absolute ceiling of six.
+NAM_order_can_place = {
+	NAM_country_operable = yes
+	NAM_rw_clock_running = yes
+	check_variable = { var = NAM_order_cap value = NAM_orders_paid compare = greater_than }
+	check_variable = { var = NAM_orders_paid value = 6 compare = less_than }
+}
+
+# COUNTRY NAM. Defence lines are prepared before and during the resource war.
+NAM_line_programme_open = {
+	OR = {
+		NAM_rw_clock_running = yes
+		ADISCORD_nam_resource_war_active = yes
+	}
+}
+
+# COUNTRY NAM.
+NAM_line_slot_free = {
+	check_variable = { var = NAM_line_slots value = NAM_lines_in_progress compare = greater_than }
+}
+
+# STATE field. The front has reached it: part of the state or a neighbouring
+# district is held by a country at war with Svetlogorye.
+NAM_rw_field_under_threat = {
+	OR = {
+		NOT = { is_fully_controlled_by = NAM }
+		any_neighbor_state = {
+			controller = { has_war_with = NAM }
+		}
+	}
+}
+
+# COUNTRY NAM. Eflor and Azhar signed the recognition treaty after a victory.
+NAM_independence_recognised = {
+	has_country_flag = NAM_treaty_independence_recognised
+}
+
+# ----- Oil monopoly -----
+# COUNTRY. The fixed list of states that may buy Svetlogorye's oil.
+NAM_oil_buyer_tag = {
+	OR = {
+		tag = EFL
+		tag = AZH
+		tag = VAL
+		tag = STP
+		tag = STS
+		tag = RHM
+		tag = MZR
+		tag = SHL
+		tag = RUS
+		tag = WEF
+		tag = KDR
+		tag = SDR
+		tag = GLP
+		tag = KYZ
+	}
+}
+
+# COUNTRY. Buyers reached by sea; only they may use the South Harbour terminal unit.
+NAM_oil_overseas_buyer = {
+	OR = {
+		tag = VAL
+		tag = STP
+		tag = STS
+		tag = RUS
+	}
+}
+
+# COUNTRY buyer. A new contract may be offered to it.
+NAM_oil_buyer_eligible = {
+	NAM_oil_buyer_tag = yes
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = NAM }
+	NOT = { has_country_flag = NAM_oil_client }
+	NOT = { has_country_flag = NAM_oil_offer_pending }
+	NOT = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } }
+}
+
+# COUNTRY buyer. Svetlogorye has a free throughput unit this buyer may use.
+NAM_oil_unit_free_for_buyer = {
+	OR = {
+		AND = {
+			NAM_oil_overseas_buyer = yes
+			NAM = { check_variable = { var = NAM_oil_free_units value = 1 compare = greater_than_or_equals } }
+		}
+		NAM = { check_variable = { var = NAM_oil_free_land_units value = 1 compare = greater_than_or_equals } }
+	}
+}
+
+# COUNTRY. Eflor, Azhar or Shahrabad may be placed under the fuel embargo.
+NAM_fuel_embargo_target_valid = {
+	OR = {
+		tag = EFL
+		tag = AZH
+		tag = SHL
+	}
+	exists = yes
+	NOT = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } }
+	NOT = { has_country_flag = NAM_oil_client }
+	# Tribute obliges deliveries to the neighbours.
+	NOT = {
+		AND = {
+			OR = {
+				tag = EFL
+				tag = AZH
+			}
+			NAM = { has_country_flag = NAM_rw_tribute }
+		}
+	}
+}
+
+# COUNTRY NAM. Parallel field projects: NAM_project_slots, never more than two.
+NAM_project_slot_free = {
+	check_variable = { var = NAM_project_slots value = NAM_projects_in_progress compare = greater_than }
+	check_variable = { var = NAM_projects_in_progress value = 2 compare = less_than }
+}
+
+# STATE. Owned and controlled by Svetlogorye with no project in progress.
+NAM_project_state_ready = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NOT = { has_state_flag = NAM_project_in_progress }
+}
+
+# COUNTRY VAL or GLP. Holds the steel concession of the Middle Island.
+NAM_steel_concession_holder = {
+	has_country_flag = NAM_steel_concession_231
+}
+
+# COUNTRY. The steel concession may be offered to it.
+NAM_steel_concession_target_valid = {
+	OR = {
+		tag = VAL
+		tag = GLP
+	}
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = NAM }
+	NOT = { VAL = { NAM_steel_concession_holder = yes } }
+	NOT = { GLP = { NAM_steel_concession_holder = yes } }
+}
+
+# COUNTRY. The southern ally may receive Svetlogorye's fuel.
+NAM_south_fuel_recipient = {
+	ADISCORD_south_regional_country = yes
+	exists = yes
+	has_capitulated = no
+	ADISCORD_south_on_north_side = yes
+}
+
+# COUNTRY NAM. Svetlogorye fights in the Khan's crisis coalition.
+NAM_rus_coalition_member = {
+	has_country_flag = RUS_crisis_defender
+	has_war_with = RUS
+}
+
+# ----- Ladder of seals -----
+# COUNTRY NAM. The declaration of independence has created the ladder.
+NAM_ladder_formed = {
+	has_power_balance = { id = NAM_ladder_bop }
+}
+
+# COUNTRY NAM. A rival is still in Svetlogorye's politics and not its ruler.
+# Rival numbers: 1 Vera Pechat (namestniks), 2 Arseny Klyuch (oil),
+# 3 Taras Shtyk (garrisons), 4 Lev Gavanov (export houses).
+NAM_rival_pechat_free = {
+	NOT = { has_country_flag = NAM_rival_1_removed }
+	NOT = { has_country_leader = { character = NAM_Vera_Pechat ruling_only = yes } }
+}
+
+NAM_rival_klyuch_free = {
+	NOT = { has_country_flag = NAM_rival_2_removed }
+	NOT = { has_country_leader = { character = NAM_Arseny_Klyuch ruling_only = yes } }
+}
+
+NAM_rival_shtyk_free = {
+	NOT = { has_country_flag = NAM_rival_3_removed }
+	NOT = { has_country_leader = { character = NAM_Taras_Shtyk ruling_only = yes } }
+}
+
+NAM_rival_gavanov_free = {
+	NOT = { has_country_flag = NAM_rival_4_removed }
+	NOT = { has_country_leader = { character = NAM_Lev_Gavanov ruling_only = yes } }
+}
+
+# COUNTRY NAM. The demand cycle may open a new demand.
+NAM_rival_cycle_open = {
+	NAM_country_operable = yes
+	NAM_ladder_formed = yes
+	NOT = { has_country_flag = NAM_coup_succeeded }
+	NOT = { has_country_flag = NAM_rival_cooldown }
+	NOT = { has_country_flag = NAM_rival_event_pending }
+	NOT = { has_active_mission = NAM_rival_demand }
+	OR = {
+		NAM_rival_pechat_free = yes
+		NAM_rival_klyuch_free = yes
+		NAM_rival_shtyk_free = yes
+		NAM_rival_gavanov_free = yes
+	}
+}
+
+# COUNTRY NAM. The current rival's pillar received its hearing focus: a heard
+# rival never stakes the seals on a refusal.
+NAM_rival_current_heard = {
+	OR = {
+		AND = {
+			check_variable = { NAM_rival_current = 1 }
+			has_completed_focus = NAM_hear_the_registrar
+		}
+		AND = {
+			check_variable = { NAM_rival_current = 2 }
+			has_completed_focus = NAM_hear_klyuchevsk
+		}
+		AND = {
+			check_variable = { NAM_rival_current = 3 }
+			has_completed_focus = NAM_hear_the_commandant
+		}
+		AND = {
+			check_variable = { NAM_rival_current = 4 }
+			has_completed_focus = NAM_hear_the_harbour
+		}
+	}
+}
+
+# COUNTRY NAM. The current rival's pillar has fallen below 25 support.
+NAM_rival_current_pillar_broken = {
+	OR = {
+		AND = {
+			check_variable = { NAM_rival_current = 1 }
+			check_variable = { NAM_grp_nam_support < 25 }
+		}
+		AND = {
+			check_variable = { NAM_rival_current = 2 }
+			check_variable = { NAM_grp_oil_support < 25 }
+		}
+		AND = {
+			check_variable = { NAM_rival_current = 3 }
+			check_variable = { NAM_grp_garr_support < 25 }
+		}
+		AND = {
+			check_variable = { NAM_rival_current = 4 }
+			check_variable = { NAM_grp_trade_support < 25 }
+		}
+	}
+}
+
+# COUNTRY NAM. The promised term of the current demand is in hand; the
+# mission collects it at once.
+NAM_rival_demand_met = {
+	OR = {
+		AND = {
+			check_variable = { NAM_rival_current = 1 }
+			NOT = { has_political_power < 100 }
+		}
+		AND = {
+			check_variable = { NAM_rival_current = 2 }
+			NOT = { has_fuel < 8000 }
+		}
+		AND = {
+			check_variable = { NAM_rival_current = 3 }
+			NOT = { has_manpower < 5000 }
+		}
+		AND = {
+			check_variable = { NAM_rival_current = 4 }
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+	}
+}
+
+# COUNTRY NAM. The garrisons will arrest a rival, unless he commands them.
+NAM_rival_can_arrest = {
+	NOT = { check_variable = { NAM_rival_current = 3 } }
+	NOT = { check_variable = { NAM_grp_garr_support < 50 } }
+	NOT = { has_political_power < 75 }
+}
+
+# COUNTRY NAM. The districts can bring the city into the streets.
+NAM_rival_can_rally_districts = {
+	NOT = { check_variable = { NAM_grp_dist_support < 60 } }
+	NAM_ladder_formed = yes
+	power_balance_value = {
+		id = NAM_ladder_bop
+		value > 0
+	}
+}
+
+# ----- Underground -----
+NAM_underground_open = {
+	NOT = { has_country_flag = NAM_veter_amnesty }
+}
+
+# COUNTRY NAM. Talks need a living network and no open uprising.
+NAM_veter_talks_possible = {
+	NAM_country_operable = yes
+	NAM_underground_open = yes
+	NOT = { country_exists = SLF }
+}
+
+# ----- War of return -----
+NAM_war_of_return_active = {
+	has_global_flag = NAM_war_of_return_started
+	NOT = { has_global_flag = NAM_war_of_return_resolved }
+}
+
+# STATE field. Another independent country owns a lost Svetlogorsk field.
+NAM_wor_field_held_by_rival = {
+	NOT = { is_owned_by = NAM }
+	owner = {
+		is_subject = no
+		has_capitulated = no
+		NOT = { is_in_faction_with = NAM }
+	}
+}
+
+# STATE field. The field is Svetlogorsk or its owner can be fought for it.
+NAM_wor_field_contestable = {
+	OR = {
+		is_owned_by = NAM
+		owner = {
+			is_subject = no
+			NOT = { is_in_faction_with = NAM }
+			NOT = { is_subject_of = NAM }
+		}
+	}
+}
+
+# COUNTRY NAM. Called by NAM_defeat_war_of_return before its war effect.
+NAM_war_of_return_can_start = {
+	NAM_country_operable = yes
+	is_subject = no
+	has_war = no
+	OR = {
+		has_global_flag = ADISCORD_nam_resource_war_compromise
+		has_global_flag = ADISCORD_nam_resource_war_island_exile
+	}
+	NOT = { has_global_flag = NAM_war_of_return_started }
+	NOT = { has_country_flag = NAM_rw_tribute }
+	OR = {
+		67 = { NAM_wor_field_held_by_rival = yes }
+		688 = { NAM_wor_field_held_by_rival = yes }
+		689 = { NAM_wor_field_held_by_rival = yes }
+		690 = { NAM_wor_field_held_by_rival = yes }
+		719 = { NAM_wor_field_held_by_rival = yes }
+		700 = { NAM_wor_field_held_by_rival = yes }
+	}
+	67 = { NAM_wor_field_contestable = yes }
+	688 = { NAM_wor_field_contestable = yes }
+	689 = { NAM_wor_field_contestable = yes }
+	690 = { NAM_wor_field_contestable = yes }
+	719 = { NAM_wor_field_contestable = yes }
+	700 = { NAM_wor_field_contestable = yes }
+}
+
+# Any scope. Every owner of a lost field has fallen; the callback ROOT counts
+# through its reserved receipt before the native flag updates. A liberated
+# participant blocks the settlement again.
+NAM_wor_all_defeated = {
+	all_of_scopes = {
+		array = global.NAM_wor_participants
+		OR = {
+			exists = no
+			has_capitulated = yes
+			AND = {
+				tag = ROOT
+				has_country_flag = NAM_wor_capitulation_reserved
+			}
+		}
+	}
+}
+
+# COUNTRY. A participant of the war of return that is still fighting it.
+NAM_wor_participant = {
+	has_country_flag = NAM_wor_participant
+	has_war_with = NAM
+}
+
+# ----- Basin window -----
+# The basin window starts NAM_project_repair_wells, NAM_project_refinery and
+# NAM_prepare_line through activate_targeted_decision, which skips their
+# visible, target, available and cost blocks. The triggers below repeat those
+# blocks and must change together with them; each complete_effect still
+# rechecks slot, target and price before its single debit.
+
+# COUNTRY NAM. The custom price of each decision.
+NAM_bw_can_pay_repair = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+}
+
+NAM_bw_can_pay_refinery = {
+	NOT = { has_political_power < 40 }
+	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+}
+
+NAM_bw_can_pay_line = {
+	NOT = { has_political_power < 30 }
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+}
+
+# STATE field. NAM_project_repair_wells may start here now.
+NAM_bw_repair_startable = {
+	is_owned_by = NAM
+	NAM_project_state_ready = yes
+	NOT = { has_state_flag = NAM_wells_scorched }
+	check_variable = { var = NAM_field_condition value = 100 compare = less_than }
+	NAM = {
+		NAM_country_operable = yes
+		has_completed_focus = NAM_field_repair_crews
+		NAM_project_slot_free = yes
+		NAM_bw_can_pay_repair = yes
+	}
+}
+
+# STATE field. NAM_project_refinery may start here now.
+NAM_bw_refinery_startable = {
+	is_owned_by = NAM
+	NOT = { has_state_flag = NAM_refinery_built }
+	NAM_project_state_ready = yes
+	NAM = {
+		NAM_country_operable = yes
+		has_completed_focus = NAM_refinery_programme
+		NAM_project_slot_free = yes
+		NAM_bw_can_pay_refinery = yes
+	}
+}
+
+# STATE node. NAM_prepare_line is offered here: its visible block.
+NAM_bw_line_offered = {
+	is_owned_by = NAM
+	NOT = { has_state_flag = NAM_line_prepared }
+	any_neighbor_state = { NOT = { is_owned_by = NAM } }
+	NAM = {
+		NAM_line_programme_open = yes
+		has_completed_focus = NAM_line_survey
+	}
+}
+
+# STATE node. NAM_prepare_line may start here now.
+NAM_bw_line_startable = {
+	NAM_bw_line_offered = yes
+	is_controlled_by = NAM
+	NOT = { has_state_flag = NAM_line_in_progress }
+	NAM = {
+		NAM_country_operable = yes
+		NAM_line_slot_free = yes
+		NAM_bw_can_pay_line = yes
 	}
 }

@@ -1,0 +1,233 @@
+# Svetlogorye takes the district course before the resource war, keeps the
+# coalition talking and prepares positional defence of the fields.
+NAM_prewar_plan = {
+	name = "NAM district course"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_focus
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_focus }
+		}
+	}
+	ai_national_focuses = {
+		NAM_inventory
+		NAM_metropolitan_quota
+		NAM_deliver_the_quota
+		NAM_metropolitan_depots
+		NAM_open_ledgers
+		NAM_districts
+		NAM_count_garrisons
+		NAM_field_guards
+		NAM_well_register
+		NAM_domestic_refining
+		NAM_letters_to_the_centre
+		NAM_public_payroll
+		NAM_district_guarantees
+		NAM_one_budget
+		NAM_independence_day
+		NAM_neutral_basin
+		NAM_restitution_desk
+		NAM_court_azhar
+		NAM_mobilisation_office
+		NAM_line_survey
+		NAM_line_engineers
+		NAM_reserve_rolls
+		NAM_contract_bureau
+		NAM_underground_reports
+		NAM_veter_channel
+		NAM_amnesty_lists
+		NAM_mine_councils
+		NAM_quiet_wells
+		NAM_district_assemblies
+		NAM_seal_courts
+		NAM_basin_talks
+		NAM_general_staff_plan
+		NAM_provisional_statute
+		NAM_rom_address
+		NAM_supports_council
+		NAM_supports_oil_compact
+		NAM_supports_balance
+		NAM_garrison_assembly
+		NAM_rivals_ledger
+		NAM_hear_klyuchevsk
+		NAM_hear_the_commandant
+		NAM_pillar_arbitration
+		NAM_field_repair_crews
+		NAM_refinery_programme
+		NAM_machine_shops
+		NAM_klyuchevsk_pipeline
+		NAM_deep_wells
+		NAM_fuel_depots
+		NAM_second_drilling_crew
+		NAM_engineer_depots
+		NAM_quartermaster
+		NAM_port_arsenal
+		NAM_officer_courses
+		NAM_harbour_service
+		NAM_repair_yard
+		NAM_escort_school
+		NAM_coastal_battalions
+		NAM_coastal_watch
+		NAM_island_accounts
+		NAM_island_levy_office
+		NAM_island_convoys
+		NAM_island_governors
+		NAM_crisis_office
+		NAM_field_firefighters
+		NAM_chancellery_purge
+		NAM_tax_rolls
+		NAM_civilian_combine
+		NAM_basin_roads
+		NAM_technical_college
+		NAM_alarm
+		NAM_hold_basin
+		NAM_relief_columns
+		NAM_discipline_of_seals
+		NAM_counterstroke
+		NAM_volunteer_levies
+		NAM_wells_under_guard
+		NAM_last_reserve
+		NAM_district_volunteers
+		NAM_oil_score
+	}
+	weight = { factor = 20 }
+}
+
+NAM_postwar_plan = {
+	name = "NAM federal charter"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_postwar_focus
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_postwar_focus }
+		}
+	}
+	ai_national_focuses = {
+		NAM_recognition
+		NAM_federal_charter
+		NAM_civil_repair
+		NAM_law_after_war
+		NAM_aftermath_commission
+		NAM_normalisation
+		NAM_oil_ministry
+		NAM_district_council
+		NAM_armed_peace
+		NAM_oil_fund
+		NAM_district_militia
+		NAM_prisoner_exchange
+		NAM_border_trade_posts
+		NAM_aftermath_settled
+		NAM_export_consortium
+		NAM_middle_loren_wells
+		NAM_reclaim_230
+		NAM_oil_exchange
+		NAM_national_university
+		NAM_common_fuel_market
+		NAM_charter_ending_federation
+		NAM_veterans_return
+		NAM_svetlogorye
+		NAM_svetlogorsk_shipyards
+		NAM_south_oil_for_water
+		NAM_south_fenn_guarantee
+		NAM_south_oil_charter
+		NAM_south_war_council
+		NAM_south_allied_fuel_office
+		NAM_south_oil_tap
+		NAM_south_field_fortresses
+		NAM_south_counteroffensive
+		NAM_south_heritage
+		NAM_rus_crisis_watch
+		NAM_rus_fuel_for_coalition
+		NAM_rus_expedition_staff
+	}
+	weight = { factor = 20 }
+}
+
+NAM_defeated_plan = {
+	name = "NAM accommodation"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_defeated_focus
+		NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_defeated_focus }
+			has_global_flag = ADISCORD_nam_resource_war_island_exile
+		}
+	}
+	ai_national_focuses = {
+		NAM_defeat_count_losses
+		NAM_defeat_harbour_economy
+		NAM_defeat_accommodation
+		NAM_defeat_early_tribute
+		NAM_defeat_oil_union
+		NAM_defeat_rump_cabinet
+		NAM_defeat_refugee_quarters
+		NAM_defeat_open_border
+		NAM_defeat_joint_fields
+		NAM_defeat_oil_peace
+		NAM_defeat_road_south
+		NAM_defeat_southern_charter
+		NAM_defeat_island_refuge
+		NAM_defeat_island_foundries
+		NAM_defeat_purge_of_seals
+		NAM_defeat_second_chapter
+	}
+	weight = { factor = 20 }
+}
+
+# In island exile only the course of return remains: the islands are rebuilt
+# first, then the army and shipping for the war of return.
+NAM_defeated_exile_plan = {
+	name = "NAM island exile"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_defeated_focus
+		has_global_flag = ADISCORD_nam_resource_war_island_exile
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_defeated_focus }
+		}
+	}
+	ai_national_focuses = {
+		NAM_defeat_count_losses
+		NAM_defeat_island_refuge
+		NAM_defeat_harbour_economy
+		NAM_defeat_revenge
+		NAM_defeat_island_foundries
+		NAM_defeat_rebuild_arsenal
+		NAM_defeat_hidden_reserve
+		NAM_defeat_rump_cabinet
+		NAM_defeat_underground_return
+		NAM_defeat_officer_cadres
+		NAM_defeat_new_levies
+		NAM_defeat_war_chest
+		NAM_defeat_refugee_quarters
+		NAM_defeat_war_of_return
+		NAM_defeat_purge_of_seals
+		NAM_defeat_second_chapter
+	}
+	weight = { factor = 20 }
+}

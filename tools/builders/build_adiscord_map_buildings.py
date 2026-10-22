@@ -88,7 +88,7 @@ def required_spawns(state_id: int) -> dict[str, int]:
 # The deliberate resource-war split assigns the original state positions to
 # their physical provinces. Every resulting state still needs the complete set
 # of 1.19 spawn anchors even when a building is not present at game start.
-NAM_RESOURCE_WAR_SPAWN_STATES = {67, 68, 69, 70, 688, 689, 690, 691, 692}
+NAM_RESOURCE_WAR_SPAWN_STATES = {67, 68, 69, 70, 688, 689, 690, 691, 692, 719, 720, 721, 722}
 NAM_SPLIT_SPAWN_POSITION_CANDIDATES = {
     (67, "air_base"): ("67;air_base;3701.00;10.25;548.00;0.66;0",),
     (67, "anti_air_building"): (

@@ -112,3 +112,811 @@ defined_text = {
 		localization_key = NAM_compact_absent
 	}
 }
+
+# The next step of the restitution clock in the NAM_restitution category.
+defined_text = {
+	name = NAMGetTensionNext
+	text = {
+		trigger = { NOT = { NAM_rw_clock_running = yes } }
+		localization_key = NAM_rw_next_idle
+	}
+	text = {
+		trigger = { has_country_flag = NAM_rw_war_dispatched }
+		localization_key = NAM_rw_next_dispatched
+	}
+	text = {
+		trigger = { NOT = { has_country_flag = NAM_rw_notes_sent } }
+		localization_key = NAM_rw_next_notes
+	}
+	text = {
+		trigger = { NOT = { has_country_flag = NAM_rw_ultimatum_sent } }
+		localization_key = NAM_rw_next_ultimatum
+	}
+	text = {
+		trigger = { NAM_rw_time_bought_active = yes }
+		localization_key = NAM_rw_next_time_bought
+	}
+	text = {
+		trigger = { NAM_rw_war_window_open = yes }
+		localization_key = NAM_rw_next_war
+	}
+	text = {
+		trigger = { has_country_flag = NAM_rw_protocol_signed }
+		localization_key = NAM_rw_next_window_protocol
+	}
+	text = {
+		localization_key = NAM_rw_next_window
+	}
+}
+
+# The mobilisation ledger in the NAM_mobilisation category: open orders before
+# the war, the delivered formations from hostilities on.
+defined_text = {
+	name = NAMGetOrdersSummary
+	text = {
+		trigger = { has_global_flag = ADISCORD_nam_resource_war_started }
+		localization_key = NAM_orders_summary_delivered
+	}
+	text = {
+		trigger = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+		localization_key = NAM_orders_summary_closed
+	}
+	text = {
+		localization_key = NAM_orders_summary_open
+	}
+}
+
+# Remaining days of the three field hold orders while they run.
+defined_text = {
+	name = NAMGetHold67
+	text = {
+		trigger = { has_active_mission = NAM_hold_field_67 }
+		localization_key = NAM_hold_67_running
+	}
+	text = {
+		localization_key = NAM_hold_none
+	}
+}
+
+defined_text = {
+	name = NAMGetHold689
+	text = {
+		trigger = { has_active_mission = NAM_hold_field_689 }
+		localization_key = NAM_hold_689_running
+	}
+	text = {
+		localization_key = NAM_hold_none
+	}
+}
+
+defined_text = {
+	name = NAMGetHold690
+	text = {
+		trigger = { has_active_mission = NAM_hold_field_690 }
+		localization_key = NAM_hold_690_running
+	}
+	text = {
+		localization_key = NAM_hold_none
+	}
+}
+
+# ----- Ladder of seals -----
+# The current rival of NAM_rival_current, his pillar and his term.
+defined_text = {
+	name = NAMGetRivalName
+	text = {
+		trigger = { check_variable = { NAM_rival_current = 1 } }
+		localization_key = NAM_rival_name_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_rival_current = 2 } }
+		localization_key = NAM_rival_name_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_rival_current = 3 } }
+		localization_key = NAM_rival_name_3
+	}
+	text = {
+		localization_key = NAM_rival_name_4
+	}
+}
+
+defined_text = {
+	name = NAMGetRivalPillar
+	text = {
+		trigger = { check_variable = { NAM_rival_current = 1 } }
+		localization_key = NAM_rival_pillar_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_rival_current = 2 } }
+		localization_key = NAM_rival_pillar_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_rival_current = 3 } }
+		localization_key = NAM_rival_pillar_3
+	}
+	text = {
+		localization_key = NAM_rival_pillar_4
+	}
+}
+
+defined_text = {
+	name = NAMGetRivalTerm
+	text = {
+		trigger = { check_variable = { NAM_rival_current = 1 } }
+		localization_key = NAM_rival_term_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_rival_current = 2 } }
+		localization_key = NAM_rival_term_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_rival_current = 3 } }
+		localization_key = NAM_rival_term_3
+	}
+	text = {
+		localization_key = NAM_rival_term_4
+	}
+}
+
+# What a refusal costs: a heard rival only loses face; an unheard rival of a
+# pillar below 25 stakes the seals.
+defined_text = {
+	name = NAMGetRivalRefusal
+	text = {
+		trigger = { NAM_rival_current_heard = yes }
+		localization_key = NAM_rival_refusal_heard
+	}
+	text = {
+		trigger = { NAM_rival_current_pillar_broken = yes }
+		localization_key = NAM_rival_refusal_coup
+	}
+	text = {
+		localization_key = NAM_rival_refusal_plain
+	}
+}
+
+defined_text = {
+	name = NAMGetUndergroundStatus
+	text = {
+		trigger = { has_country_flag = NAM_veter_amnesty }
+		localization_key = NAM_underground_amnestied
+	}
+	text = {
+		trigger = { check_variable = { NAM_underground > 59 } }
+		localization_key = NAM_underground_status_high
+	}
+	text = {
+		trigger = { check_variable = { NAM_underground > 29 } }
+		localization_key = NAM_underground_status_mid
+	}
+	text = {
+		localization_key = NAM_underground_status_low
+	}
+}
+
+# ----- Basin window -----
+# COUNTRY NAM unless noted. The header gauge follows the campaign phase:
+# restitution pressure before the war, seal discipline during and after it.
+defined_text = {
+	name = NAMBasinPhaseLabel
+	text = {
+		trigger = { ADISCORD_nam_resource_war_active = yes }
+		localization_key = NAM_seal_discipline_dynamic
+	}
+	text = {
+		trigger = { NAM_rw_clock_running = yes }
+		localization_key = NAM_restitution
+	}
+	text = {
+		trigger = { has_dynamic_modifier = { modifier = NAM_seal_discipline_dynamic } }
+		localization_key = NAM_seal_discipline_dynamic
+	}
+	text = {
+		localization_key = NAM_restitution
+	}
+}
+
+defined_text = {
+	name = NAMBasinPhaseValue
+	text = {
+		trigger = { ADISCORD_nam_resource_war_active = yes }
+		localization_key = NAM_bw_value_discipline
+	}
+	text = {
+		trigger = { NAM_rw_clock_running = yes }
+		localization_key = NAM_bw_value_tension
+	}
+	text = {
+		trigger = { has_dynamic_modifier = { modifier = NAM_seal_discipline_dynamic } }
+		localization_key = NAM_bw_value_discipline
+	}
+	text = {
+		localization_key = NAM_bw_value_tension
+	}
+}
+
+# The tension branches follow NAMGetTensionNext in a shorter form for the gauge.
+defined_text = {
+	name = NAMBasinPhaseDetail
+	text = {
+		trigger = {
+			ADISCORD_nam_resource_war_active = yes
+			has_country_flag = NAM_seal_night
+		}
+		localization_key = NAM_bw_discipline_night
+	}
+	text = {
+		trigger = {
+			ADISCORD_nam_resource_war_active = yes
+			check_variable = { var = NAM_seal_discipline value = 25 compare = less_than }
+		}
+		localization_key = NAM_bw_discipline_next_0
+	}
+	text = {
+		trigger = {
+			ADISCORD_nam_resource_war_active = yes
+			check_variable = { var = NAM_seal_discipline value = 50 compare = less_than }
+		}
+		localization_key = NAM_bw_discipline_next_25
+	}
+	text = {
+		trigger = { ADISCORD_nam_resource_war_active = yes }
+		localization_key = NAM_bw_discipline_next_50
+	}
+	text = {
+		trigger = {
+			NAM_rw_clock_running = yes
+			has_country_flag = NAM_rw_war_dispatched
+		}
+		localization_key = NAM_bw_tension_dispatched
+	}
+	text = {
+		trigger = {
+			NAM_rw_clock_running = yes
+			NOT = { has_country_flag = NAM_rw_notes_sent }
+		}
+		localization_key = NAM_bw_tension_notes
+	}
+	text = {
+		trigger = {
+			NAM_rw_clock_running = yes
+			NOT = { has_country_flag = NAM_rw_ultimatum_sent }
+		}
+		localization_key = NAM_bw_tension_ultimatum
+	}
+	text = {
+		trigger = {
+			NAM_rw_clock_running = yes
+			NAM_rw_time_bought_active = yes
+		}
+		localization_key = NAM_bw_tension_time_bought
+	}
+	text = {
+		trigger = {
+			NAM_rw_clock_running = yes
+			NAM_rw_war_window_open = yes
+		}
+		localization_key = NAM_bw_tension_war
+	}
+	text = {
+		trigger = {
+			NAM_rw_clock_running = yes
+			has_country_flag = NAM_rw_protocol_signed
+		}
+		localization_key = NAM_bw_tension_window_protocol
+	}
+	text = {
+		trigger = { NAM_rw_clock_running = yes }
+		localization_key = NAM_bw_tension_window
+	}
+	text = {
+		trigger = { has_dynamic_modifier = { modifier = NAM_seal_discipline_dynamic } }
+		localization_key = NAM_bw_discipline_peace
+	}
+	text = {
+		trigger = {
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+		}
+		localization_key = NAM_bw_tension_pending
+	}
+	text = {
+		localization_key = NAM_rw_next_idle
+	}
+}
+
+defined_text = {
+	name = NAMBasinPhaseTooltip
+	text = {
+		trigger = { ADISCORD_nam_resource_war_active = yes }
+		localization_key = NAM_seal_discipline_dynamic_desc
+	}
+	text = {
+		trigger = { NAM_rw_clock_running = yes }
+		localization_key = NAM_restitution_desc
+	}
+	text = {
+		trigger = { has_dynamic_modifier = { modifier = NAM_seal_discipline_dynamic } }
+		localization_key = NAM_seal_discipline_dynamic_desc
+	}
+	text = {
+		localization_key = NAM_restitution_desc
+	}
+}
+
+# The native ladder ranges of common/bop/NAM.txt.
+defined_text = {
+	name = NAMBasinLadder
+	text = {
+		trigger = { NOT = { NAM_ladder_formed = yes } }
+		localization_key = NAM_bw_ladder_unformed
+	}
+	text = {
+		trigger = {
+			is_power_balance_in_range = {
+				id = NAM_ladder_bop
+				range = NAM_ladder_vertical_dominance
+			}
+		}
+		localization_key = NAM_ladder_vertical_dominance
+	}
+	text = {
+		trigger = {
+			is_power_balance_in_range = {
+				id = NAM_ladder_bop
+				range = NAM_ladder_vertical_influence
+			}
+		}
+		localization_key = NAM_ladder_vertical_influence
+	}
+	text = {
+		trigger = {
+			is_power_balance_in_range = {
+				id = NAM_ladder_bop
+				range = NAM_ladder_districts_dominance
+			}
+		}
+		localization_key = NAM_ladder_districts_dominance
+	}
+	text = {
+		trigger = {
+			is_power_balance_in_range = {
+				id = NAM_ladder_bop
+				range = NAM_ladder_districts_influence
+			}
+		}
+		localization_key = NAM_ladder_districts_influence
+	}
+	text = {
+		localization_key = NAM_ladder_compromise
+	}
+}
+
+# Card actions: the description, the decision's own cost line and, in the
+# target state's scope, the first condition that blocks the start.
+defined_text = {
+	name = NAMBasinRepairBody
+	text = {
+		localization_key = NAM_bw_repair_body
+	}
+}
+
+defined_text = {
+	name = NAMBasinRefineryBody
+	text = {
+		localization_key = NAM_bw_refinery_body
+	}
+}
+
+defined_text = {
+	name = NAMBasinLineBody
+	text = {
+		localization_key = NAM_bw_line_body
+	}
+}
+
+defined_text = {
+	name = NAMBasinRepairCost
+	text = {
+		trigger = { NAM_bw_can_pay_repair = yes }
+		localization_key = NAM_cost_project_repair
+	}
+	text = {
+		localization_key = NAM_cost_project_repair_blocked
+	}
+}
+
+defined_text = {
+	name = NAMBasinRefineryCost
+	text = {
+		trigger = { NAM_bw_can_pay_refinery = yes }
+		localization_key = NAM_cost_project_refinery
+	}
+	text = {
+		localization_key = NAM_cost_project_refinery_blocked
+	}
+}
+
+defined_text = {
+	name = NAMBasinLineCost
+	text = {
+		trigger = { NAM_bw_can_pay_line = yes }
+		localization_key = NAM_cost_line
+	}
+	text = {
+		localization_key = NAM_cost_line_blocked
+	}
+}
+
+# STATE field.
+defined_text = {
+	name = NAMBasinRepairStatus
+	text = {
+		trigger = {
+			OR = {
+				NOT = { is_owned_by = NAM }
+				NOT = { is_controlled_by = NAM }
+			}
+		}
+		localization_key = NAM_bw_reason_not_held
+	}
+	text = {
+		trigger = { has_state_flag = NAM_project_in_progress }
+		localization_key = NAM_bw_reason_project_busy
+	}
+	text = {
+		trigger = { has_state_flag = NAM_wells_scorched }
+		localization_key = NAM_bw_reason_scorched
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_field_condition value = 100 compare = greater_than_or_equals } }
+		localization_key = NAM_bw_reason_condition_full
+	}
+	text = {
+		trigger = { NAM = { NAM_project_slot_free = no } }
+		localization_key = NAM_bw_reason_project_slots
+	}
+	text = {
+		trigger = { NAM = { NAM_bw_can_pay_repair = no } }
+		localization_key = NAM_bw_reason_resources
+	}
+	text = {
+		localization_key = NAM_bw_reason_ready
+	}
+}
+
+# STATE field.
+defined_text = {
+	name = NAMBasinRefineryStatus
+	text = {
+		trigger = {
+			OR = {
+				NOT = { is_owned_by = NAM }
+				NOT = { is_controlled_by = NAM }
+			}
+		}
+		localization_key = NAM_bw_reason_not_held
+	}
+	text = {
+		trigger = { has_state_flag = NAM_refinery_built }
+		localization_key = NAM_bw_reason_refinery_built
+	}
+	text = {
+		trigger = { has_state_flag = NAM_project_in_progress }
+		localization_key = NAM_bw_reason_project_busy
+	}
+	text = {
+		trigger = { NAM = { NAM_project_slot_free = no } }
+		localization_key = NAM_bw_reason_project_slots
+	}
+	text = {
+		trigger = { NAM = { NAM_bw_can_pay_refinery = no } }
+		localization_key = NAM_bw_reason_resources
+	}
+	text = {
+		localization_key = NAM_bw_reason_ready
+	}
+}
+
+# STATE node.
+defined_text = {
+	name = NAMBasinLineStatus
+	text = {
+		trigger = { NOT = { is_owned_by = NAM } }
+		localization_key = NAM_bw_reason_not_held
+	}
+	text = {
+		trigger = { has_state_flag = NAM_line_prepared }
+		localization_key = NAM_bw_reason_line_prepared
+	}
+	text = {
+		trigger = { has_state_flag = NAM_line_in_progress }
+		localization_key = NAM_bw_reason_line_busy
+	}
+	text = {
+		trigger = { NOT = { is_controlled_by = NAM } }
+		localization_key = NAM_bw_reason_not_held
+	}
+	text = {
+		trigger = { NAM = { NAM_line_slot_free = no } }
+		localization_key = NAM_bw_reason_line_slots
+	}
+	text = {
+		trigger = { NAM = { NAM_bw_can_pay_line = no } }
+		localization_key = NAM_bw_reason_resources
+	}
+	text = {
+		localization_key = NAM_bw_reason_ready
+	}
+}
+
+# STATE node. Owner and controller of a field or of the harbour.
+defined_text = {
+	name = NAMBasinControl
+	text = {
+		trigger = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+		}
+		localization_key = NAM_bw_node_held
+	}
+	text = {
+		trigger = { is_owned_by = NAM }
+		localization_key = NAM_bw_node_occupied
+	}
+	text = {
+		localization_key = NAM_bw_node_lost
+	}
+}
+
+# STATE field. Condition and the units NAM_oil_refresh last derived from it.
+defined_text = {
+	name = NAMBasinOutput
+	text = {
+		trigger = { has_state_flag = NAM_wells_scorched }
+		localization_key = NAM_bw_output_scorched
+	}
+	text = {
+		trigger = { NOT = { is_controlled_by = NAM } }
+		localization_key = NAM_bw_output_stopped
+	}
+	text = {
+		localization_key = NAM_bw_output
+	}
+}
+
+# STATE field. The project deposit identifies the work in progress.
+defined_text = {
+	name = NAMBasinWorks
+	text = {
+		trigger = {
+			has_state_flag = NAM_project_in_progress
+			check_variable = { NAM_project_deposit = 150 }
+		}
+		localization_key = NAM_bw_works_repair
+	}
+	text = {
+		trigger = {
+			has_state_flag = NAM_project_in_progress
+			check_variable = { NAM_project_deposit = 300 }
+		}
+		localization_key = NAM_bw_works_refinery
+	}
+	text = {
+		trigger = {
+			has_state_flag = NAM_project_in_progress
+			check_variable = { NAM_project_deposit = 350 }
+		}
+		localization_key = NAM_bw_works_pipeline
+	}
+	text = {
+		trigger = { has_state_flag = NAM_project_in_progress }
+		localization_key = NAM_bw_works_generic
+	}
+	text = {
+		trigger = { has_state_flag = NAM_refinery_built }
+		localization_key = NAM_bw_works_refinery_built
+	}
+	text = {
+		localization_key = NAM_bw_works_none
+	}
+}
+
+# STATE node.
+defined_text = {
+	name = NAMBasinLine
+	text = {
+		trigger = { has_state_flag = NAM_line_prepared }
+		localization_key = NAM_bw_line_prepared
+	}
+	text = {
+		trigger = { has_state_flag = NAM_line_in_progress }
+		localization_key = NAM_bw_line_building
+	}
+	text = {
+		localization_key = NAM_bw_line_none
+	}
+}
+
+# STATE 700. The terminal unit counts only while Svetlogorye holds the harbour.
+defined_text = {
+	name = NAMBasinTerminal
+	text = {
+		trigger = {
+			has_state_flag = NAM_project_in_progress
+			check_variable = { NAM_project_deposit = 250 }
+		}
+		localization_key = NAM_bw_terminal_building
+	}
+	text = {
+		trigger = {
+			has_state_flag = NAM_sea_terminal_built
+			is_controlled_by = NAM
+		}
+		localization_key = NAM_bw_terminal_working
+	}
+	text = {
+		trigger = { has_state_flag = NAM_sea_terminal_built }
+		localization_key = NAM_bw_terminal_idle
+	}
+	text = {
+		localization_key = NAM_bw_terminal_none
+	}
+}
+
+# STATE 690. The pipeline unit counts while Svetlogorye holds both ends.
+defined_text = {
+	name = NAMBasinPipeline
+	text = {
+		trigger = {
+			has_state_flag = NAM_project_in_progress
+			check_variable = { NAM_project_deposit = 350 }
+		}
+		localization_key = NAM_bw_pipeline_building
+	}
+	text = {
+		trigger = {
+			has_state_flag = NAM_pipeline_built
+			is_controlled_by = NAM
+			700 = { is_controlled_by = NAM }
+		}
+		localization_key = NAM_bw_pipeline_working
+	}
+	text = {
+		trigger = { has_state_flag = NAM_pipeline_built }
+		localization_key = NAM_bw_pipeline_idle
+	}
+	text = {
+		localization_key = NAM_bw_pipeline_none
+	}
+}
+
+# Oil exports. Tribute holds two committed units.
+defined_text = {
+	name = NAMBasinTribute
+	text = {
+		trigger = { has_country_flag = NAM_rw_tribute }
+		localization_key = NAM_bw_tribute
+	}
+	text = {
+		localization_key = NAM_bw_empty
+	}
+}
+
+defined_text = {
+	name = NAMBasinClientsNone
+	text = {
+		trigger = { check_variable = { var = NAM_oil_contracts value = 1 compare = less_than } }
+		localization_key = NAM_bw_clients_none
+	}
+	text = {
+		localization_key = NAM_bw_empty
+	}
+}
+
+# COUNTRY buyer of the fixed contract list.
+defined_text = {
+	name = NAMBasinClient
+	text = {
+		trigger = { has_country_flag = NAM_oil_client }
+		localization_key = NAM_bw_client_entry
+	}
+	text = {
+		trigger = { has_country_flag = NAM_oil_offer_pending }
+		localization_key = NAM_bw_client_pending
+	}
+	text = {
+		localization_key = NAM_bw_empty
+	}
+}
+
+# COUNTRY EFL, AZH or SHL.
+defined_text = {
+	name = NAMBasinEmbargo
+	text = {
+		trigger = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } }
+		localization_key = NAM_bw_embargo_entry
+	}
+	text = {
+		localization_key = NAM_bw_empty
+	}
+}
+
+defined_text = {
+	name = NAMBasinEmbargoNone
+	text = {
+		trigger = {
+			NOT = { EFL = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } } }
+			NOT = { AZH = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } } }
+			NOT = { SHL = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } } }
+		}
+		localization_key = NAM_bw_embargo_none
+	}
+	text = {
+		localization_key = NAM_bw_empty
+	}
+}
+
+# Islands: the levy flag, the convoy route modifier and the 231 concession.
+defined_text = {
+	name = NAMBasinLevy
+	text = {
+		trigger = { has_country_flag = NAM_island_levy_active }
+		localization_key = NAM_bw_levy_active
+	}
+	text = {
+		localization_key = NAM_bw_levy_idle
+	}
+}
+
+defined_text = {
+	name = NAMBasinConvoy
+	text = {
+		trigger = {
+			OR = {
+				225 = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
+				226 = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
+				227 = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
+				228 = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
+				229 = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
+				230 = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
+				231 = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
+			}
+		}
+		localization_key = NAM_bw_convoy_active
+	}
+	text = {
+		localization_key = NAM_bw_convoy_idle
+	}
+}
+
+defined_text = {
+	name = NAMBasinConcession231
+	text = {
+		trigger = { VAL = { NAM_steel_concession_holder = yes } }
+		localization_key = NAM_bw_concession_val
+	}
+	text = {
+		trigger = { GLP = { NAM_steel_concession_holder = yes } }
+		localization_key = NAM_bw_concession_glp
+	}
+	text = {
+		trigger = { has_country_flag = NAM_concession_231_pending }
+		localization_key = NAM_bw_concession_pending
+	}
+	text = {
+		trigger = {
+			231 = {
+				OR = {
+					NOT = { is_owned_by = NAM }
+					NOT = { is_controlled_by = NAM }
+				}
+			}
+		}
+		localization_key = NAM_bw_concession_lost
+	}
+	text = {
+		localization_key = NAM_bw_concession_free
+	}
+}

@@ -185,7 +185,8 @@ class CoastalSeaRegionTests(unittest.TestCase):
     def test_svetlogorye_massif_is_on_the_mainland_with_snowy_peaks(self) -> None:
         memberships = builder.load_states()
         self.assertTrue(
-            geography.RELIEF_PROVINCES <= memberships[67] | memberships[690]
+            geography.RELIEF_PROVINCES
+            <= memberships[67] | memberships[690] | memberships[719]
         )
         self.assertEqual(
             len(
@@ -343,7 +344,7 @@ class CoastalSeaRegionTests(unittest.TestCase):
         for parent, city, population in (
             (290, 699, 29510),
             (689, 700, states.NAM_POPULATION[689] + states.NAM_POPULATION[700]),
-            (691, 701, 280000),
+            (691, 701, 280000 - states.NAM_VICTORY_BORDER_PROFILES[720]["population"]),
         ):
             sources = [states.state_path(state).read_text() for state in (parent, city)]
             self.assertEqual(

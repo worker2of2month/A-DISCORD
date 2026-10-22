@@ -15,7 +15,7 @@ from tools.builders.build_adiscord_trade_regions import (
 )
 
 
-EXPECTED_STATE_COUNTS = {1: 60, 2: 65, 3: 83, 4: 8, 5: 99, 6: 42, 7: 360}
+EXPECTED_STATE_COUNTS = {1: 62, 2: 65, 3: 84, 4: 8, 5: 100, 6: 42, 7: 360}
 EXPECTED_PROVINCE_COUNTS = {
     1: 622,
     2: 752,
@@ -43,6 +43,10 @@ GEOGRAPHIC_STATE_ANCHORS = {
     699: (42, 3),
     700: (24, 5),
     701: (24, 1),
+    719: (24, 5),  # The Azhar border strip stays in Vorkerland when ceded.
+    720: (24, 1),  # Border belts follow their parents' geography, not a victor.
+    721: (24, 1),
+    722: (24, 3),
     709: (16, 1),  # Island sovereignty does not change Eastern Forul geography.
     718: (16, 1),  # The southern Misstana island joins its port in Eastern Forul.
     461: (67, 2),  # Deliberately realigned Exclusion Zone fringe.

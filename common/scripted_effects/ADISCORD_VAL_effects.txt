@@ -8929,6 +8929,107 @@ VAL_check_nam_concession = {
 	}
 }
 
+# COUNTRY VAL. Svetlogorye's own aid request or counter-offer. The caller sets the
+# VAL-scoped temp variable VAL_nam_request_terms_input (1 = aid for the state 230
+# concession, 2 = aid for a 400 treasury fee) inside VAL = { } before this call.
+# NAM is debited only after VAL accepts in val_contract.375.
+VAL_receive_nam_aid_request = {
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					check_variable = { VAL_nam_request_terms_input = 1 }
+					VAL_nam_aid_request_concession_open = yes
+				}
+				AND = {
+					check_variable = { VAL_nam_request_terms_input = 2 }
+					VAL_nam_aid_request_paid_open = yes
+				}
+			}
+		}
+		set_variable = { var = VAL_nam_request_terms value = VAL_nam_request_terms_input }
+		country_event = { id = val_contract.375 }
+	}
+}
+
+# COUNTRY VAL. Stored terms are rechecked for both parties at the answer.
+VAL_accept_nam_aid_request = {
+	if = {
+		limit = {
+			VAL_nam_aid_request_current = yes
+			check_variable = { var = VAL_nam_request_terms value = 1 compare = equals }
+		}
+		NAM = { VAL_begin_partner_contract_year = yes }
+		set_country_flag = VAL_nam_concession_agreed
+		set_variable = { var = VAL_resource_aid_side value = 1 }
+		VAL_start_resource_aid = yes
+		clear_variable = VAL_nam_request_terms
+		NAM = { country_event = { id = val_contract.376 hours = 1 } }
+	}
+	else_if = {
+		limit = {
+			VAL_nam_aid_request_current = yes
+			check_variable = { var = VAL_nam_request_terms value = 2 compare = equals }
+		}
+		NAM = {
+			VAL_begin_partner_contract_year = yes
+			ADISCORD_economy_initialize_country = yes
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 400 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+		set_variable = { var = VAL_nam_aid_fee_escrow value = 400 }
+		set_variable = { var = VAL_resource_aid_side value = 1 }
+		VAL_start_resource_aid = yes
+		clear_variable = VAL_nam_request_terms
+		NAM = { country_event = { id = val_contract.376 hours = 1 } }
+	}
+	else = {
+		VAL_decline_nam_aid_request = yes
+	}
+}
+
+# COUNTRY VAL. Decline, timeout or a request that lapsed before the answer.
+VAL_decline_nam_aid_request = {
+	if = {
+		limit = { has_variable = VAL_nam_request_terms }
+		clear_variable = VAL_nam_request_terms
+		NAM = {
+			set_country_flag = { flag = VAL_nam_aid_request_refused days = 60 }
+			country_event = { id = val_contract.377 hours = 1 }
+		}
+	}
+}
+
+# COUNTRY VAL. The paid NAM contract's fee stays in escrow until the aid is
+# fulfilled; literal amounts keep the debit and both settlements equal.
+VAL_release_nam_aid_fee = {
+	if = {
+		limit = { check_variable = { var = VAL_nam_aid_fee_escrow value = 0 compare = greater_than } }
+		ADISCORD_economy_initialize_country = yes
+		add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 400 }
+		ADISCORD_economy_mark_dirty = yes
+		clear_variable = VAL_nam_aid_fee_escrow
+	}
+}
+
+# COUNTRY VAL. Missed deadline, breach or a war that ended before fulfilment.
+VAL_refund_nam_aid_fee = {
+	if = {
+		limit = { check_variable = { var = VAL_nam_aid_fee_escrow value = 0 compare = greater_than } }
+		if = {
+			limit = { NAM = { exists = yes } }
+			NAM = {
+				ADISCORD_economy_initialize_country = yes
+				add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 400 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		clear_variable = VAL_nam_aid_fee_escrow
+	}
+}
 
 VAL_grant_contract_warlord = {
 	if = {
@@ -9643,6 +9744,7 @@ VAL_complete_resource_aid = {
 		limit = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } VAL_resource_aid_sufficient = yes }
 		set_variable = { var = VAL_resource_aid_state value = 2 }
 		if = { limit = { check_variable = { var = VAL_resource_aid_side value = 1 compare = equals } } set_country_flag = VAL_nam_aid_delivered }
+		VAL_release_nam_aid_fee = yes
 	}
 }
 
@@ -9650,6 +9752,7 @@ VAL_fail_resource_aid = {
 	if = {
 		limit = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } }
 		set_variable = { var = VAL_resource_aid_state value = -1 }
+		VAL_refund_nam_aid_fee = yes
 		VAL_council_record_failure = yes
 		country_event = { id = val_contract.371 }
 	}
@@ -9768,6 +9871,7 @@ VAL_resource_aid_daily = {
 			set_variable = { var = VAL_resource_aid_state value = 3 }
 			remove_mission = VAL_resource_aid_deadline
 			remove_ideas = VAL_resource_volunteer_mandate
+			VAL_refund_nam_aid_fee = yes
 			VAL_cancel_nam_concession = yes
 		}
 		else_if = {
@@ -9827,6 +9931,7 @@ VAL_settle_resource_aid = {
 			}
 			VAL_fail_resource_aid = yes
 		}
+		VAL_refund_nam_aid_fee = yes
 		set_variable = { var = VAL_resource_aid_state value = 3 }
 		remove_mission = VAL_resource_aid_deadline
 		remove_ideas = VAL_resource_volunteer_mandate

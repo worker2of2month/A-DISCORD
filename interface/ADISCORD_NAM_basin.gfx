@@ -1,0 +1,22 @@
+spriteTypes = {
+	# Svetlogorye basin window. Existing textures only: the dark card tile keeps
+	# three-pixel borders, so it scales to every card and gauge size; the button
+	# tile carries the native disabled shading for blocked card actions.
+	corneredTileSpriteType = {
+		name = "GFX_NAM_bw_card"
+		size = { x = 64 y = 64 }
+		textureFile = "gfx/interface/ADISCORD_RUS/bunker_card.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_NAM_bw_button"
+		size = { x = 60 y = 23 }
+		textureFile = "gfx/interface/tiles/tiling_sort_button.dds"
+		borderSize = { x = 20 y = 12 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
+}

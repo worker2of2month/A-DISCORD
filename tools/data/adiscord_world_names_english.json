@@ -2767,6 +2767,22 @@
         "STATE_718": {
           "russian": "Порт Мисстаны",
           "english": "Port of Misstana"
+        },
+        "STATE_719": {
+          "russian": "Восточное Сухоречье",
+          "english": "East Sukhorechye"
+        },
+        "STATE_720": {
+          "russian": "Моренский округ",
+          "english": "Moren District"
+        },
+        "STATE_721": {
+          "russian": "Лоренское порубежье",
+          "english": "Loren Borderland"
+        },
+        "STATE_722": {
+          "russian": "Ажарское взморье",
+          "english": "Azhar Seaboard"
         }
       }
     },

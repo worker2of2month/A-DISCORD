@@ -206,3 +206,24 @@ NKA_STS_administration = {
 	color = rgb { 88 99 72 }
 	color_ui = rgb { 88 99 72 }
 }
+
+# Svetlogorye after its ending: shades of the original NAM colour.
+NAM_iron_ladder = {
+	color = rgb { 46 32 84 }
+	color_ui = rgb { 104 86 168 }
+}
+
+NAM_service_republic = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 122 104 186 }
+}
+
+NAM_federation = {
+	color = rgb { 76 66 128 }
+	color_ui = rgb { 140 128 200 }
+}
+
+NAM_oil_union = {
+	color = rgb { 52 46 92 }
+	color_ui = rgb { 118 110 170 }
+}

@@ -41,3 +41,51 @@ NAM_loyalty_dynamic = {
 	army_org_factor = NAM_loy_army_org
 	ADISCORD_economy_trade_income_factor = NAM_loy_trade_income
 }
+
+# Seal discipline. NAM_seal_discipline_clamp derives the value from 0-100 discipline.
+NAM_seal_discipline_dynamic = {
+	icon = GFX_idea_generic_fortify_the_borders
+	enable = { tag = NAM }
+	army_org_factor = NAM_seal_org_factor
+}
+
+# STATE. Scorched wells yield nothing to any owner or occupier for 180 days.
+NAM_scorched_wells_modifier = {
+	icon = GFX_modifiers_sabotaged_resource
+	enable = { always = yes }
+	state_resources_factor = -1.0
+}
+
+# COUNTRY former client. A contract voided by war leaves its fuel plan empty
+# for 90 days.
+NAM_fuel_shortage = {
+	icon = GFX_idea_ADISCORD_trade_policy_closed_economy
+	enable = { always = yes }
+	fuel_gain_factor = -0.25
+	army_fuel_consumption_factor = 0.10
+}
+
+# COUNTRY target. Lasts until Svetlogorye lifts it; ends with Svetlogorye.
+NAM_fuel_embargo_modifier = {
+	icon = GFX_idea_ADISCORD_trade_policy_limited_exports
+	enable = { always = yes }
+	remove_trigger = { NOT = { country_exists = NAM } }
+	fuel_gain_factor = -0.20
+	army_fuel_consumption_factor = 0.05
+}
+
+# STATE island. Regular convoys carry the islands' ore and their supplies.
+NAM_island_convoy_route = {
+	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	enable = { always = yes }
+	state_resources_factor = 0.15
+	compliance_growth = 0.05
+}
+
+# COUNTRY SHL. Svetlogorsk convoy hunters cut the furnaces' fuel routes.
+NAM_south_convoy_blockade = {
+	icon = GFX_idea_ADISCORD_trade_policy_limited_exports
+	enable = { always = yes }
+	fuel_gain_factor = -0.25
+	industrial_capacity_factory = -0.05
+}

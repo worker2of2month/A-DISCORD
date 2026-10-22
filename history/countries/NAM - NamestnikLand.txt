@@ -4,6 +4,16 @@ oob = "NAM"
 ####### Characters
 
 recruit_character = NAM_Egor_Rom
+recruit_character = NAM_Arseny_Klyuch
+recruit_character = NAM_Lev_Gavanov
+recruit_character = NAM_Taras_Shtyk
+recruit_character = NAM_Vera_Pechat
+recruit_character = NAM_Nadezhda_Okrug
+recruit_character = NAM_Kirill_Vykup
+recruit_character = NAM_Grigory_Levashov
+recruit_character = NAM_Gleb_Burov
+recruit_character = NAM_Anton_Zhar
+recruit_character = NAM_Matvei_Prichal
 
 ####### Basic shit
 

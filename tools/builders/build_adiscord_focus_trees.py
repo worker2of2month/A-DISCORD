@@ -16,6 +16,8 @@ OUTPUT_ROOT = ROOT / "common/national_focus"
 SOURCES = {
     "NOD/main/focuses.txt": "ADISCORD_NOD_focus.txt",
     "NAM/main/focuses.txt": "ADISCORD_NAM_focus.txt",
+    "NAM/postwar/focuses.txt": "ADISCORD_NAM_postwar.txt",
+    "NAM/defeated/focuses.txt": "ADISCORD_NAM_defeated.txt",
     "SHL/main/focuses.txt": "ADISCORD_SHL_focus.txt",
     "IVN/main/focuses.txt": "ADISCORD_IVN_focus.txt",
     "RUS/main/focuses.txt": "ADISCORD_national_focus_RUS.txt",
@@ -37,7 +39,7 @@ SOURCES = {
 }
 INCLUDE = re.compile(r"(?m)^# @include ([\w/.-]+)#(\w+)\n")
 SECTION = re.compile(r"(?m)^# @section (\w+)\n")
-SHARED_HISTORY_SOURCES = frozenset({"VAL/main/focuses.txt"})
+SHARED_HISTORY_SOURCES = frozenset({"VAL/main/focuses.txt", "NAM/main/focuses.txt"})
 
 
 def block_end(source: str, opening: int) -> int:

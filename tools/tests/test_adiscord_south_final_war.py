@@ -155,7 +155,7 @@ class SouthFinalWarContractTests(unittest.TestCase):
             ]
             self.assertEqual(courses, [course], identifier)
             self.assertIn("ADISCORD_south_final_war_start", text, identifier)
-        nam = focus_blocks(ROOT / "focus_trees/NAM/main/focuses.txt")
+        nam = focus_blocks(ROOT / "focus_trees/NAM/postwar/focuses.txt")
         for identifier, path in (("NAM_south_seal_over_furnaces", "NAM_service_state"), ("NAM_south_oil_charter", "NAM_federal_charter")):
             available = repr(next(e.value for e in nam[identifier] if e.key == "available"))
             self.assertIn(path, available, identifier)
@@ -196,7 +196,11 @@ class SouthFinalWarContractTests(unittest.TestCase):
     def test_campaign_focuses_bypass_exactly_their_targets(self):
         offers = ("ADISCORD_south_demand_submission", "ADISCORD_south_demand_annexation", "ADISCORD_south_offer_alliance")
         checked = 0
-        for path in (ROOT / "focus_trees/SHL/main/focuses.txt", ROOT / "focus_trees/NAM/main/focuses.txt"):
+        for path in (
+            ROOT / "focus_trees/SHL/main/focuses.txt",
+            ROOT / "focus_trees/NAM/postwar/focuses.txt",
+            ROOT / "focus_trees/NAM/defeated/focuses.txt",
+        ):
             for identifier, focus in focus_blocks(path).items():
                 reward = next(e.value for e in focus if e.key == "completion_reward")
                 targets = {e.key for e in flatten(reward) if isinstance(e.value, list) and any(i.key in offers for i in e.value)}
@@ -207,7 +211,7 @@ class SouthFinalWarContractTests(unittest.TestCase):
                 self.assertEqual({e.key for e in bypass}, targets, identifier)
                 available = repr(next(e.value for e in focus if e.key == "available"))
                 self.assertIn("ADISCORD_south_final_started", available, identifier)
-        self.assertEqual(checked, 15)
+        self.assertEqual(checked, 16)
 
     def test_answers_always_clear_the_pending_offer(self):
         for name in ("ADISCORD_south_accept_offer", "ADISCORD_south_refuse_offer"):
@@ -262,7 +266,12 @@ class FocusAggregateTests(unittest.TestCase):
         ROOT / "common/ideas/ADISCORD_nam_resource_war_ideas.txt",
         ROOT / "common/ideas/ADISCORD_southern_desert_ideas.txt",
     )
-    TREES = (ROOT / "focus_trees/NAM/main/focuses.txt", ROOT / "focus_trees/SHL/main/focuses.txt")
+    TREES = (
+        ROOT / "focus_trees/NAM/main/focuses.txt",
+        ROOT / "focus_trees/NAM/postwar/focuses.txt",
+        ROOT / "focus_trees/NAM/defeated/focuses.txt",
+        ROOT / "focus_trees/SHL/main/focuses.txt",
+    )
     REFRESH = {
         "NAM_administration_dynamic": "NAM_refresh_administration",
         "NAM_garrison_dynamic": "NAM_refresh_garrison",

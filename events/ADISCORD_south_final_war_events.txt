@@ -444,6 +444,13 @@ country_event = {
 		trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals } }
 	}
 	desc = {
+		text = ADISCORD_south.40.d_alliance_switch
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
+			is_in_faction = yes
+		}
+	}
+	desc = {
 		text = ADISCORD_south.40.d_alliance_shl
 		trigger = {
 			check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
@@ -463,6 +470,13 @@ country_event = {
 	option = {
 		name = ADISCORD_south.40.a
 		if = {
+			limit = {
+				check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
+				is_in_faction = yes
+			}
+			custom_effect_tooltip = ADISCORD_south_offer_alliance_switch_accept_tt
+		}
+		else_if = {
 			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } }
 			custom_effect_tooltip = ADISCORD_south_offer_alliance_accept_tt
 		}
@@ -507,6 +521,11 @@ country_event = {
 				factor = 0.5
 				check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals }
 			}
+			modifier = {
+				factor = 0.5
+				check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
+				is_in_faction = yes
+			}
 		}
 	}
 
@@ -515,6 +534,10 @@ country_event = {
 		if = {
 			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } }
 			custom_effect_tooltip = ADISCORD_south_offer_alliance_refuse_tt
+		}
+		else_if = {
+			limit = { is_in_faction = yes }
+			custom_effect_tooltip = ADISCORD_south_offer_war_refuse_faction_tt
 		}
 		else = {
 			custom_effect_tooltip = ADISCORD_south_offer_war_refuse_tt

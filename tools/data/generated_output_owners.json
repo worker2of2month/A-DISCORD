@@ -440,7 +440,8 @@
         "history/states/68[8-9]-*.txt",
         "history/states/69[0-9]-*.txt",
         "history/states/70[0-9]-*.txt",
-        "history/states/71[0-8]-*.txt",
+        "history/states/71[0-9]-*.txt",
+        "history/states/72[0-2]-*.txt",
         "localisation/russian/victory_points_l_russian.yml",
         "localisation/russian/state_names_l_russian.yml",
         "map/buildings.txt"
@@ -1868,6 +1869,8 @@
       "output_globs": [
         "common/national_focus/ADISCORD_NOD_focus.txt",
         "common/national_focus/ADISCORD_NAM_focus.txt",
+        "common/national_focus/ADISCORD_NAM_postwar.txt",
+        "common/national_focus/ADISCORD_NAM_defeated.txt",
         "common/national_focus/ADISCORD_SHL_focus.txt",
         "common/national_focus/ADISCORD_IVN_focus.txt",
         "common/national_focus/ADISCORD_national_focus_RUS.txt",

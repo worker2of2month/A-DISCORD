@@ -1737,15 +1737,25 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	timeout_days = 35
+	# The first option is the unattended answer: no contract and no payment.
 	option = {
 		name = val_contract.349.refuse
 		ai_chance = { base = 20 }
-		hidden_effect = { VAL_record_partner_refusal = yes  VAL = { clr_country_flag = VAL_nam_concession_offer_pending } }
+		hidden_effect = {
+			if = {
+				limit = { VAL = { has_country_flag = VAL_nam_concession_offer_pending } }
+				VAL_record_partner_refusal = yes
+				VAL = {
+					clr_country_flag = VAL_nam_concession_offer_pending
+					country_event = { id = val_contract.378 hours = 1 }
+				}
+			}
+		}
 	}
 	option = {
 		name = val_contract.349.accept
 		trigger = { tag = NAM VAL = { has_country_flag = VAL_nam_concession_offer_pending VAL_nam_concession_negotiable = yes } }
-		ai_chance = { base = 80 }
+		ai_chance = { base = 70 }
 		custom_effect_tooltip = VAL_nam_concession_terms_tt
 		hidden_effect = {
 			if = {
@@ -1757,7 +1767,22 @@ country_event = {
 					clr_country_flag = VAL_efl_concession_offer_pending
 					set_variable = { var = VAL_resource_aid_side value = 1 }
 					VAL_start_resource_aid = yes
+					country_event = { id = val_contract.378 hours = 1 }
 				}
+			}
+		}
+	}
+	# Counter-offer: VAL answers it in val_contract.375 before NAM pays anything.
+	option = {
+		name = val_contract.349.counter
+		trigger = { tag = NAM VAL = { VAL_nam_counter_offer_possible = yes } }
+		ai_chance = { base = 10 }
+		custom_effect_tooltip = VAL_nam_counter_offer_tt
+		hidden_effect = {
+			VAL = {
+				clr_country_flag = VAL_nam_concession_offer_pending
+				set_temp_variable = { VAL_nam_request_terms_input = 2 }
+				VAL_receive_nam_aid_request = yes
 			}
 		}
 	}
@@ -2268,6 +2293,99 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	option = { name = val_contract.373.a }
+}
+
+# VAL answers Svetlogorye's aid request or counter-offer. The stored terms are
+# cleared by either answer; the unattended timeout declines without payment.
+country_event = {
+	id = val_contract.375
+	title = val_contract.375.t
+	desc = {
+		text = val_contract.375.d_concession
+		trigger = { check_variable = { var = VAL_nam_request_terms value = 1 compare = equals } }
+	}
+	desc = {
+		text = val_contract.375.d_paid
+		trigger = { NOT = { check_variable = { var = VAL_nam_request_terms value = 1 compare = equals } } }
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 30
+	option = {
+		name = val_contract.375.decline
+		ai_chance = {
+			base = 30
+			modifier = {
+				factor = 3
+				has_equipment = { infantry_equipment < 50000 }
+				has_manpower < 2000
+			}
+		}
+		hidden_effect = { VAL_decline_nam_aid_request = yes }
+	}
+	option = {
+		name = val_contract.375.accept
+		trigger = { VAL_nam_aid_request_current = yes }
+		ai_chance = {
+			base = 70
+			modifier = {
+				factor = 0.5
+				check_variable = { var = VAL_nam_request_terms value = 2 compare = equals }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = VAL_nam_request_terms value = 1 compare = equals } }
+			custom_effect_tooltip = VAL_nam_concession_terms_tt
+		}
+		else = {
+			custom_effect_tooltip = VAL_nam_paid_aid_terms_tt
+		}
+		hidden_effect = { VAL_accept_nam_aid_request = yes }
+	}
+}
+
+# NAM: Kefreyt accepted the request.
+country_event = {
+	id = val_contract.376
+	title = val_contract.376.t
+	desc = {
+		text = val_contract.376.d_concession
+		trigger = { VAL = { has_country_flag = VAL_nam_concession_agreed } }
+	}
+	desc = {
+		text = val_contract.376.d_paid
+		trigger = { VAL = { NOT = { has_country_flag = VAL_nam_concession_agreed } } }
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_contract.376.a }
+}
+
+# NAM: Kefreyt declined the request or it lapsed before an answer.
+country_event = {
+	id = val_contract.377
+	title = val_contract.377.t
+	desc = val_contract.377.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_contract.377.a }
+}
+
+# VAL: Svetlogorye answered the island offer from the focus or the decision.
+country_event = {
+	id = val_contract.378
+	title = val_contract.378.t
+	desc = {
+		text = val_contract.378.d_accepted
+		trigger = { has_country_flag = VAL_nam_concession_agreed }
+	}
+	desc = {
+		text = val_contract.378.d_refused
+		trigger = { NOT = { has_country_flag = VAL_nam_concession_agreed } }
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_contract.378.a }
 }
 
 country_event = {

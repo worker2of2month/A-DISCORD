@@ -28,8 +28,13 @@ NAM_SVETLOGORSK_PROVINCES = {689, 1710, 3127, 4025, 8635, 9211, 10967, 16721}
 NAM_RESIDUAL_CITY_STATE_ID = 689
 NAM_RESIDUAL_CITY_PROVINCES = {176, 2038, 2231, 2299, 7618, 7639, 8358}
 NAM_DRYRIVER_STATE_ID = 690
+NAM_EAST_DRYRIVER_STATE_ID = 719
+NAM_EAST_DRYRIVER_PROVINCES = {461, 6961}
 EFL_MIDDLE_LOREN_STATE_ID = 691
 AZH_BLACK_COAST_STATE_ID = 692
+EFL_MOREN_STATE_ID = 720
+EFL_LOREN_BORDERLAND_STATE_ID = 721
+AZH_SEABOARD_STATE_ID = 722
 NAM_ORIGINAL_MAINLAND_PROVINCES = {
     176,
     334,
@@ -307,7 +312,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                 state_id = int(fields[0])
                 counts[state_id] = counts.get(state_id, 0) + 1
 
-        for state_id in (67, 68, 69, 70, 688, 689, 690, 691, 692):
+        for state_id in (67, 68, 69, 70, 688, 689, 690, 691, 692, 719, 720, 721, 722):
             with self.subTest(state=state_id):
                 self.assertGreaterEqual(counts.get(state_id, 0), 1)
 
@@ -318,11 +323,14 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         self.assertEqual(self.states[residual], NAM_RESIDUAL_CITY_PROVINCES)
         dryriver = NAM_DRYRIVER_STATE_ID
         self.assertEqual(self.states[dryriver], set(builder.NAM_DRYRIVER_PROVINCES))
+        east_dryriver = NAM_EAST_DRYRIVER_STATE_ID
+        self.assertEqual(self.states[east_dryriver], NAM_EAST_DRYRIVER_PROVINCES)
         self.assertEqual(
             self.states[67]
             | self.states[svetlogorsk]
             | self.states[residual]
             | self.states[dryriver]
+            | self.states[east_dryriver]
             | self.states[700],
             NAM_ORIGINAL_MAINLAND_PROVINCES | {16716, 16721},
         )
@@ -331,28 +339,41 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             self.states[svetlogorsk],
             self.states[residual],
             self.states[dryriver],
+            self.states[east_dryriver],
             self.states[700],
         )
         for index, provinces in enumerate(nam_parts):
             for other in nam_parts[index + 1 :]:
                 self.assertFalse(provinces & other)
         self.assertEqual(
-            self.states[68] | self.states[EFL_MIDDLE_LOREN_STATE_ID],
+            self.states[68]
+            | self.states[EFL_MIDDLE_LOREN_STATE_ID]
+            | self.states[EFL_MOREN_STATE_ID],
             set(builder.EFL_ORIGINAL_UPPER_LOREN_PROVINCES),
         )
         self.assertFalse(self.states[68] & self.states[EFL_MIDDLE_LOREN_STATE_ID])
+        self.assertFalse(
+            self.states[EFL_MIDDLE_LOREN_STATE_ID] & self.states[EFL_MOREN_STATE_ID]
+        )
         self.assertEqual(
-            self.states[69] | self.states[AZH_BLACK_COAST_STATE_ID],
+            self.states[70] | self.states[EFL_LOREN_BORDERLAND_STATE_ID],
+            set(builder.EFL_ORIGINAL_LOWER_LOREN_PROVINCES),
+        )
+        self.assertFalse(self.states[70] & self.states[EFL_LOREN_BORDERLAND_STATE_ID])
+        self.assertEqual(
+            self.states[69]
+            | self.states[AZH_BLACK_COAST_STATE_ID]
+            | self.states[AZH_SEABOARD_STATE_ID],
             set(builder.AZH_ORIGINAL_PROVINCES),
         )
         self.assertFalse(self.states[69] & self.states[AZH_BLACK_COAST_STATE_ID])
+        self.assertFalse(self.states[69] & self.states[AZH_SEABOARD_STATE_ID])
 
         province_types, colors = regions.load_province_definitions()
         physical = regions.load_province_adjacency(
             province_types, colors, include_special_adjacencies=False
         )
-        for state_id in (67, 68, 69, 688, 689, 690, 691, 692, 700, 701):
-            provinces = self.states[state_id]
+        def connected(provinces: set[int]) -> bool:
             reached = {next(iter(provinces))}
             frontier = list(reached)
             while frontier:
@@ -360,15 +381,64 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                 for neighbour in physical[province] & provinces - reached:
                     reached.add(neighbour)
                     frontier.append(neighbour)
-            self.assertEqual(reached, provinces)
+            return reached == provinces
+
+        for state_id in (
+            67, 68, 69, 70, 688, 689, 690, 691, 692, 700, 701, 719, 720, 721, 722
+        ):
+            with self.subTest(contiguous_state=state_id):
+                self.assertTrue(connected(self.states[state_id]))
 
         self.assertIn(67, self.physical_state_adjacency[svetlogorsk])
         self.assertIn(70, self.physical_state_adjacency[svetlogorsk])
         self.assertEqual(
-            self.physical_state_adjacency[svetlogorsk] - {67, 70, 689, 690}, set()
+            self.physical_state_adjacency[svetlogorsk]
+            - {67, 70, 689, 690, EFL_LOREN_BORDERLAND_STATE_ID},
+            set(),
         )
-        self.assertEqual(self.physical_state_adjacency[residual], {69, 688, 690, 700})
+        self.assertEqual(
+            self.physical_state_adjacency[residual],
+            {688, 690, 700, east_dryriver, AZH_SEABOARD_STATE_ID},
+        )
         self.assertIn(residual, self.physical_state_adjacency[svetlogorsk])
+
+        def union(state_ids) -> set[int]:
+            return set().union(*(self.states[state_id] for state_id in state_ids))
+
+        # The Azhar border strip can be ceded without splitting the NAM mainland.
+        self.assertIn(69, self.physical_state_adjacency[east_dryriver])
+        nam_mainland = (67, svetlogorsk, residual, dryriver, 700)
+        self.assertTrue(connected(union(nam_mainland)))
+
+        # A NAM victory takes border belts, never a capital, and leaves both
+        # coalition members in one piece.
+        for belt in (
+            EFL_MOREN_STATE_ID,
+            EFL_LOREN_BORDERLAND_STATE_ID,
+            AZH_SEABOARD_STATE_ID,
+        ):
+            with self.subTest(belt=belt):
+                self.assertTrue(
+                    self.physical_state_adjacency[belt] & set(nam_mainland)
+                )
+                self.assertNotIn(259, self.states[belt])
+                self.assertNotIn(367, self.states[belt])
+        self.assertIn(EFL_MOREN_STATE_ID, self.physical_state_adjacency[701])
+        self.assertTrue(
+            connected(
+                union(
+                    (
+                        *nam_mainland,
+                        EFL_MOREN_STATE_ID,
+                        EFL_LOREN_BORDERLAND_STATE_ID,
+                        AZH_SEABOARD_STATE_ID,
+                        701,
+                    )
+                )
+            )
+        )
+        self.assertTrue(connected(union((68, 70, EFL_MIDDLE_LOREN_STATE_ID))))
+        self.assertTrue(connected(union((69, AZH_BLACK_COAST_STATE_ID))))
 
     def test_svetlogorsk_split_preserves_nam_population_and_industry(self) -> None:
         mainland = state_source(67)
@@ -376,6 +446,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         residual = state_source(NAM_RESIDUAL_CITY_STATE_ID)
         harbour = state_source(700)
         dryriver = state_source(NAM_DRYRIVER_STATE_ID)
+        east_dryriver = state_source(NAM_EAST_DRYRIVER_STATE_ID)
         population = builder.NAM_POPULATION
         for source, state_id in (
             (mainland, 67),
@@ -383,8 +454,13 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             (residual, NAM_RESIDUAL_CITY_STATE_ID),
             (harbour, 700),
             (dryriver, NAM_DRYRIVER_STATE_ID),
+            (east_dryriver, NAM_EAST_DRYRIVER_STATE_ID),
         ):
             self.assertEqual(int(scalar(source, "manpower")), population[state_id], state_id)
+        self.assertEqual(
+            population[NAM_DRYRIVER_STATE_ID] + population[NAM_EAST_DRYRIVER_STATE_ID],
+            1_000_000,
+        )
         for building, expected in {
             "industrial_complex": 5,
             "arms_factory": 3,
@@ -396,7 +472,8 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                 + building_level(svetlogorsk, building)
                 + building_level(residual, building)
                 + building_level(harbour, building)
-                + building_level(dryriver, building),
+                + building_level(dryriver, building)
+                + building_level(east_dryriver, building),
                 expected,
             )
         self.assertEqual(building_level(svetlogorsk, "industrial_complex"), 1)
@@ -421,11 +498,12 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(
-                resources["chromium"]
+                resources.get("chromium", 0)
                 for resources in builder.NAM_MAINLAND_STATE_RESOURCES.values()
             ),
             15,
         )
+        self.assertNotRegex(east_dryriver, r"(?m)^\s*chromium\s*=")
         self.assertRegex(harbour, r"16716\s*=\s*\{\s*naval_base\s*=\s*1\s*\}")
 
     def test_nam_victory_uses_connected_eflorian_border_state(self) -> None:
@@ -452,7 +530,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             NAM_DRYRIVER_STATE_ID,
         }
         self.assertIn(
-            691,
+            EFL_MOREN_STATE_ID,
             set().union(
                 *(self.physical_state_adjacency[state] for state in nam_mainland)
             ),
@@ -475,7 +553,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             "ADISCORD_nam_fortify_extraction_line": {67: {4912}, 690: {1015, 8058}},
             "ADISCORD_nam_fortify_azhar_approaches": {690: {461, 6961}, 689: {2299}},
         }
-        enemy_states = {68, 69, 691, 692}
+        enemy_states = {68, 69, 691, 692, 720, 721, 722}
         for decision_name, state_forts in expected.items():
             decision = named_block(decisions, decision_name)
             self.assertIn("days_remove = 35", decision)
@@ -740,10 +818,14 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             688: {16721: 3, 1710: 2},
             689: {},
             690: {8058: 2, 9016: 2},
-            691: {8057: 3},
+            691: {},
             692: {493: 3, 5039: 2},
             700: {16716: 5},
             701: {16717: 5},
+            719: {},
+            720: {8057: 3},
+            721: {},
+            722: {},
         }
         self.assertEqual(
             {
@@ -763,12 +845,16 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                     )
 
         self.assertEqual(
-            sum(sum(expected[state].values()) for state in (67, 688, 689, 690, 700)), 17
+            sum(sum(expected[state].values()) for state in (67, 688, 689, 690, 700, 719)),
+            17,
         )
         self.assertEqual(
-            sum(sum(expected[state].values()) for state in (68, 70, 691, 701)), 21
+            sum(sum(expected[state].values()) for state in (68, 70, 691, 701, 720, 721)),
+            21,
         )
-        self.assertEqual(sum(sum(expected[state].values()) for state in (69, 692)), 12)
+        self.assertEqual(
+            sum(sum(expected[state].values()) for state in (69, 692, 722)), 12
+        )
 
         localisation = (
             builder.ROOT / "localisation" / "russian" / "victory_points_l_russian.yml"
@@ -791,7 +877,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         )
         self.assertTrue(state_localisation.read_bytes().startswith(codecs.BOM_UTF8))
         state_names = state_localisation.read_text(encoding="utf-8-sig")
-        for state_id in (690, 691, 692):
+        for state_id in (690, 691, 692, 719, 720, 721, 722):
             self.assertEqual(
                 len(
                     re.findall(
@@ -1029,13 +1115,17 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                 self.assertRegex(source, r"(?m)^\s*owner\s*=\s*NAM\s*$")
                 self.assertNotRegex(source, r"(?m)^\s*add_core_of\s*=\s*NAM\s*$")
                 self.assertIn("# adiscord_nam_overseas_colony = yes", source)
+                for port, level in builder.NAM_OVERSEAS_PORTS[state_id]:
+                    self.assertRegex(
+                        source, rf"(?m)^\s*{port}\s*=\s*\{{\s*naval_base\s*=\s*{level}\s*\}}"
+                    )
 
     def test_nam_coalition_front_can_supply_an_offensive(self) -> None:
         for state_id, profile in builder.NAM_COALITION_FRONT_PROFILES.items():
             with self.subTest(state=state_id):
                 self.assert_profile_applied(state_id, profile)
                 source = state_source(state_id)
-                self.assertGreaterEqual(int(scalar(source, "manpower")), 180_000)
+                self.assertGreaterEqual(int(scalar(source, "manpower")), 150_000)
                 self.assertLessEqual(int(scalar(source, "manpower")), 520_000)
                 self.assertEqual(building_level(source, "infrastructure"), 3)
                 supplies = float(scalar(source, "local_supplies"))

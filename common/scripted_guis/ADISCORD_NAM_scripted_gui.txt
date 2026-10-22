@@ -1,0 +1,224 @@
+scripted_gui = {
+	# Launcher row in NAM_national_programmes; it only toggles the window flag.
+	ADISCORD_NAM_basin_launcher = {
+		context_type = decision_category
+		window_name = "ADISCORD_NAM_basin_launcher_window"
+		visible = {
+			tag = NAM
+			has_country_flag = NAM_groups_initialized
+		}
+		ai_enabled = { always = no }
+		effects = {
+			NAM_bw_open_button_click = {
+				if = {
+					limit = { has_country_flag = NAM_bw_open }
+					clr_country_flag = NAM_bw_open
+				}
+				else = {
+					set_country_flag = NAM_bw_open
+				}
+			}
+		}
+	}
+
+	# Basin window. It has no dirty variable: its inputs include political
+	# power, treasury, control and focus completion, which have no shared
+	# invalidation, so it keeps the native per-tick refresh. The window flag
+	# keeps it closed by default; its checks read fixed states and tags only.
+	# Card actions start the existing targeted decisions; the decisions keep
+	# their own debit, escrow, timer, cancellation and refund.
+	ADISCORD_NAM_basin_panel = {
+		context_type = player_context
+		window_name = "ADISCORD_NAM_basin_window"
+		visible = {
+			tag = NAM
+			has_country_flag = NAM_bw_open
+		}
+		ai_enabled = { always = no }
+		effects = {
+			NAM_bw_close_button_click = {
+				clr_country_flag = NAM_bw_open
+			}
+			NAM_bw_67_repair_click = {
+				if = {
+					limit = { 67 = { NAM_bw_repair_startable = yes } }
+					activate_targeted_decision = { target = 67 decision = NAM_project_repair_wells }
+				}
+			}
+			NAM_bw_688_repair_click = {
+				if = {
+					limit = { 688 = { NAM_bw_repair_startable = yes } }
+					activate_targeted_decision = { target = 688 decision = NAM_project_repair_wells }
+				}
+			}
+			NAM_bw_689_repair_click = {
+				if = {
+					limit = { 689 = { NAM_bw_repair_startable = yes } }
+					activate_targeted_decision = { target = 689 decision = NAM_project_repair_wells }
+				}
+			}
+			NAM_bw_690_repair_click = {
+				if = {
+					limit = { 690 = { NAM_bw_repair_startable = yes } }
+					activate_targeted_decision = { target = 690 decision = NAM_project_repair_wells }
+				}
+			}
+			NAM_bw_719_repair_click = {
+				if = {
+					limit = { 719 = { NAM_bw_repair_startable = yes } }
+					activate_targeted_decision = { target = 719 decision = NAM_project_repair_wells }
+				}
+			}
+			NAM_bw_67_refinery_click = {
+				if = {
+					limit = { 67 = { NAM_bw_refinery_startable = yes } }
+					activate_targeted_decision = { target = 67 decision = NAM_project_refinery }
+				}
+			}
+			NAM_bw_688_refinery_click = {
+				if = {
+					limit = { 688 = { NAM_bw_refinery_startable = yes } }
+					activate_targeted_decision = { target = 688 decision = NAM_project_refinery }
+				}
+			}
+			NAM_bw_689_refinery_click = {
+				if = {
+					limit = { 689 = { NAM_bw_refinery_startable = yes } }
+					activate_targeted_decision = { target = 689 decision = NAM_project_refinery }
+				}
+			}
+			NAM_bw_690_refinery_click = {
+				if = {
+					limit = { 690 = { NAM_bw_refinery_startable = yes } }
+					activate_targeted_decision = { target = 690 decision = NAM_project_refinery }
+				}
+			}
+			NAM_bw_719_refinery_click = {
+				if = {
+					limit = { 719 = { NAM_bw_refinery_startable = yes } }
+					activate_targeted_decision = { target = 719 decision = NAM_project_refinery }
+				}
+			}
+			NAM_bw_67_line_click = {
+				if = {
+					limit = { 67 = { NAM_bw_line_startable = yes } }
+					activate_targeted_decision = { target = 67 decision = NAM_prepare_line }
+				}
+			}
+			NAM_bw_688_line_click = {
+				if = {
+					limit = { 688 = { NAM_bw_line_startable = yes } }
+					activate_targeted_decision = { target = 688 decision = NAM_prepare_line }
+				}
+			}
+			NAM_bw_689_line_click = {
+				if = {
+					limit = { 689 = { NAM_bw_line_startable = yes } }
+					activate_targeted_decision = { target = 689 decision = NAM_prepare_line }
+				}
+			}
+			NAM_bw_690_line_click = {
+				if = {
+					limit = { 690 = { NAM_bw_line_startable = yes } }
+					activate_targeted_decision = { target = 690 decision = NAM_prepare_line }
+				}
+			}
+			NAM_bw_719_line_click = {
+				if = {
+					limit = { 719 = { NAM_bw_line_startable = yes } }
+					activate_targeted_decision = { target = 719 decision = NAM_prepare_line }
+				}
+			}
+			NAM_bw_700_line_click = {
+				if = {
+					limit = { 700 = { NAM_bw_line_startable = yes } }
+					activate_targeted_decision = { target = 700 decision = NAM_prepare_line }
+				}
+			}
+		}
+		# A button is shown where its decision is visible and enabled where the
+		# decision can start; the tooltip names the first blocking condition.
+		triggers = {
+			NAM_bw_underground_visible = {
+				NOT = { has_country_flag = NAM_veter_amnesty }
+			}
+			NAM_bw_67_repair_visible = {
+				has_completed_focus = NAM_field_repair_crews
+				67 = { is_owned_by = NAM }
+			}
+			NAM_bw_688_repair_visible = {
+				has_completed_focus = NAM_field_repair_crews
+				688 = { is_owned_by = NAM }
+			}
+			NAM_bw_689_repair_visible = {
+				has_completed_focus = NAM_field_repair_crews
+				689 = { is_owned_by = NAM }
+			}
+			NAM_bw_690_repair_visible = {
+				has_completed_focus = NAM_field_repair_crews
+				690 = { is_owned_by = NAM }
+			}
+			NAM_bw_719_repair_visible = {
+				has_completed_focus = NAM_field_repair_crews
+				719 = { is_owned_by = NAM }
+			}
+			NAM_bw_67_repair_click_enabled = { 67 = { NAM_bw_repair_startable = yes } }
+			NAM_bw_688_repair_click_enabled = { 688 = { NAM_bw_repair_startable = yes } }
+			NAM_bw_689_repair_click_enabled = { 689 = { NAM_bw_repair_startable = yes } }
+			NAM_bw_690_repair_click_enabled = { 690 = { NAM_bw_repair_startable = yes } }
+			NAM_bw_719_repair_click_enabled = { 719 = { NAM_bw_repair_startable = yes } }
+			NAM_bw_67_refinery_visible = {
+				has_completed_focus = NAM_refinery_programme
+				67 = {
+					is_owned_by = NAM
+					NOT = { has_state_flag = NAM_refinery_built }
+				}
+			}
+			NAM_bw_688_refinery_visible = {
+				has_completed_focus = NAM_refinery_programme
+				688 = {
+					is_owned_by = NAM
+					NOT = { has_state_flag = NAM_refinery_built }
+				}
+			}
+			NAM_bw_689_refinery_visible = {
+				has_completed_focus = NAM_refinery_programme
+				689 = {
+					is_owned_by = NAM
+					NOT = { has_state_flag = NAM_refinery_built }
+				}
+			}
+			NAM_bw_690_refinery_visible = {
+				has_completed_focus = NAM_refinery_programme
+				690 = {
+					is_owned_by = NAM
+					NOT = { has_state_flag = NAM_refinery_built }
+				}
+			}
+			NAM_bw_719_refinery_visible = {
+				has_completed_focus = NAM_refinery_programme
+				719 = {
+					is_owned_by = NAM
+					NOT = { has_state_flag = NAM_refinery_built }
+				}
+			}
+			NAM_bw_67_refinery_click_enabled = { 67 = { NAM_bw_refinery_startable = yes } }
+			NAM_bw_688_refinery_click_enabled = { 688 = { NAM_bw_refinery_startable = yes } }
+			NAM_bw_689_refinery_click_enabled = { 689 = { NAM_bw_refinery_startable = yes } }
+			NAM_bw_690_refinery_click_enabled = { 690 = { NAM_bw_refinery_startable = yes } }
+			NAM_bw_719_refinery_click_enabled = { 719 = { NAM_bw_refinery_startable = yes } }
+			NAM_bw_67_line_visible = { 67 = { NAM_bw_line_offered = yes } }
+			NAM_bw_688_line_visible = { 688 = { NAM_bw_line_offered = yes } }
+			NAM_bw_689_line_visible = { 689 = { NAM_bw_line_offered = yes } }
+			NAM_bw_690_line_visible = { 690 = { NAM_bw_line_offered = yes } }
+			NAM_bw_719_line_visible = { 719 = { NAM_bw_line_offered = yes } }
+			NAM_bw_700_line_visible = { 700 = { NAM_bw_line_offered = yes } }
+			NAM_bw_67_line_click_enabled = { 67 = { NAM_bw_line_startable = yes } }
+			NAM_bw_688_line_click_enabled = { 688 = { NAM_bw_line_startable = yes } }
+			NAM_bw_689_line_click_enabled = { 689 = { NAM_bw_line_startable = yes } }
+			NAM_bw_690_line_click_enabled = { 690 = { NAM_bw_line_startable = yes } }
+			NAM_bw_719_line_click_enabled = { 719 = { NAM_bw_line_startable = yes } }
+			NAM_bw_700_line_click_enabled = { 700 = { NAM_bw_line_startable = yes } }
+		}
+	}
+}

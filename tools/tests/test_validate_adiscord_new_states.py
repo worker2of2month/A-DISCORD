@@ -553,7 +553,7 @@ class NudgeMetadataTests(unittest.TestCase):
                 self.assertEqual(builder.state_metadata_plan({49})[target], planned)
 
     def test_shell_recovery_preserves_membership_and_economy(self):
-        for state_id in (241, 282, 290, 688, 689, 690):
+        for state_id in (241, 282, 290, 688, 689, 690, 719, 720, 721, 722):
             with self.subTest(state=state_id), tempfile.TemporaryDirectory() as directory:
                 original_path = builder.state_path(state_id)
                 original = original_path.read_text(encoding="utf-8")
