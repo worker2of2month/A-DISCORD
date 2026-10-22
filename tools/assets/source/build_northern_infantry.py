@@ -1088,118 +1088,7 @@ def build_nam_rigged(output, pdx, source):
     bpy.ops.wm.save_as_mainfile(filepath=str(output / 'NAM.blend'))
 
 
-def nam_project_uniform(body, source, output):
-    """Project reference cloth onto native UVs without transferring anatomy or skin weights."""
-    import bpy
-    from mathutils import Vector
-
-    if source is None or not source.is_file():
-        raise ValueError('NAM requires --appearance-source pointing to the supplied Blender model.')
-    with bpy.data.libraries.load(str(source), link=False) as (available, loaded):
-        loaded.objects = available.objects
-    proxy = max((obj for obj in loaded.objects if obj.type == 'MESH'),
-                key=lambda obj: len(obj.data.polygons))
-    bpy.context.scene.collection.objects.link(proxy)
-    low = min(vertex.co.z for vertex in proxy.data.vertices)
-    scale = 7.5 / (max(vertex.co.z for vertex in proxy.data.vertices) - low)
-    for vertex in proxy.data.vertices:
-        x, y, z = vertex.co
-        x, y, z = x * scale, y * scale + 0.35, (z - low) * scale
-        point = Vector((x, y, z))
-        arm = min(1.0, max(0.0, (abs(x) - 0.65) / 0.50))
-        arm *= min(1.0, max(0.0, (z - 5.10) / 0.40))
-        if abs(x) < 1.95:
-            fraction = (abs(x) - 0.75) / 1.20
             start = Vector((0.714055, 0.123987, 5.869019))
-            end = Vector((1.629704, 0.192788, 5.142997))
-            center_y = 0.600 + fraction * 0.006
-            center_z = 5.870 + fraction * (5.7455 - 5.870)
-        else:
-            fraction = (abs(x) - 1.95) / 1.00
-            start = Vector((1.629704, 0.192788, 5.142997))
-            end = Vector((2.363523, -0.091841, 4.648998))
-            center_y = 0.606 + fraction * (0.583 - 0.606)
-            center_z = 5.7455 + fraction * (5.690 - 5.7455)
-        along = (end - start).normalized()
-        across = (Vector((0, 1, 0)) - along * along.y).normalized()
-        up = along.cross(across).normalized()
-        fitted = start.lerp(end, fraction) + across * (y - center_y) + up * (z - center_z)
-        fitted.x *= 1 if x >= 0 else -1
-        point = point.lerp(fitted, arm)
-        point.y -= 0.15 * (1.0 - arm)
-        # Match only the projection cage's coat hem to the target garment.
-        hem = min(1.0, max(0.0, (4.65 - z) / 0.95))
-        hem *= min(1.0, max(0.0, (z - 3.0) / 0.65))
-        point.z -= 0.35 * hem * (1.0 - arm)
-        vertex.co = point
-    proxy.data.update()
-    scene = bpy.context.scene
-    scene.render.engine = 'CYCLES'
-    scene.cycles.samples = 8
-    projection = bpy.data.images.new('NAM projected cloth', 2048, 2048, alpha=False)
-    targets = []
-    for material in body.data.materials:
-        node = material.node_tree.nodes.new('ShaderNodeTexImage')
-        node.image = projection
-        material.node_tree.nodes.active = node
-        targets.append((material, node))
-    bpy.ops.object.select_all(action='DESELECT')
-    proxy.select_set(True)
-    body.select_set(True)
-    bpy.context.view_layer.objects.active = body
-    scene.render.bake.use_selected_to_active = True
-    scene.render.bake.cage_extrusion = 0.65
-    scene.render.bake.max_ray_distance = 2.0
-    scene.render.bake.use_pass_direct = False
-    scene.render.bake.use_pass_indirect = False
-    scene.render.bake.use_pass_color = True
-    scene.render.bake.margin = 12
-    bpy.ops.object.bake(type='DIFFUSE')
-    scene.render.bake.use_selected_to_active = False
-    projection.filepath_raw = str(output / 'NAM_cloth_projection.png')
-    projection.file_format = 'PNG'
-    projection.save()
-    for index, (material, node) in enumerate(targets):
-        if index:
-            shader = material.node_tree.nodes.get('Principled BSDF')
-            material.node_tree.links.new(node.outputs['Color'], shader.inputs['Base Color'])
-    bpy.data.objects.remove(proxy, do_unlink=True)
-
-
-def nam_field_kit(body, mesh, cloth, canvas, bindings, helmet_geometry):
-    """Fit field equipment to the unchanged vanilla body and native joints."""
-    from infantry_polish import cloth_bag
-
-    steel = cloth('NAM olive steel', (0.095, 0.099, 0.078))
-    vertices, faces = helmet_geometry
-    helmet = mesh('NAM steel helmet',
-                  [(x, y, 6.72 + (z - 6.72) * 1.22 + 0.04) for x, y, z in vertices],
-                  faces, steel, 'head')
-    for face in helmet.data.polygons:
-        face.use_smooth = True
-    panel = fitted_panel_factory(body, mesh, smooth=True)
-    for back in (False, True):
-        side = 'Rear' if back else 'Front'
-        for x in (-0.55, 0.55):
-            panel(side + ' canvas brace', x, 5.30, 0.14, 1.40, canvas,
-                  back=back, offset=0.025)
-    buckle = cloth('Plain belt buckle', (0.15, 0.14, 0.09))
-    panel('Plain belt buckle', 0, 4.64, 0.23, 0.19, buckle, offset=0.035)
-    for label, cx, cy, cz, width, depth, height, rear in (
-        ('Left ammunition pouch', -0.48, -0.68, 4.36, 0.55, 0.28, 0.64, False),
-        ('Right ammunition pouch', 0.48, -0.68, 4.36, 0.55, 0.28, 0.64, False),
-        ('Left rear pouch', -0.48, 0.70, 4.30, 0.55, 0.28, 0.64, True),
-        ('Right rear pouch', 0.48, 0.70, 4.30, 0.55, 0.28, 0.64, True),
-    ):
-        for part, kind, vertices, faces in cloth_bag(width, depth, height):
-            mesh(
-                label + ' ' + part,
-                [(cx + (x if rear else -x), cy + (y if rear else -y), cz + z)
-                 for x, y, z in vertices],
-                faces, canvas if kind == 'canvas' else bindings, 'Hip',
-            )
-
-
 def imperial_carrier(body, mesh, cloth, trim, brass):
     """Fit segmented armour to the donor surface and interpolate its skin."""
     panel = fitted_panel_factory(body, mesh)
@@ -1744,7 +1633,7 @@ def build_hazard_sentinel(output, pdx):
     bpy.ops.wm.save_as_mainfile(filepath=str(output / f'{tag}.blend'))
 
 
-def build_field(tag, output, appearance_source=None):
+def build_field(tag, output, rig_source=None):
     """Keep the donor garment topology and skin while replacing its field kit."""
     import bpy
     import bmesh
@@ -1774,6 +1663,9 @@ def build_field(tag, output, appearance_source=None):
         source = source.replace(line, '')
     exec(compile(source, '<Blender material compatibility>', 'exec'), pdx.__dict__)
     output.mkdir(parents=True, exist_ok=True)
+    if tag == 'NAM':
+        build_nam_rigged(output, pdx, rig_source)
+        return
     if tag == 'HAZ':
         build_hazard_sentinel(output, pdx)
         return
@@ -1790,19 +1682,10 @@ def build_field(tag, output, appearance_source=None):
         if obj not in (body, rig):
             bpy.data.objects.remove(obj, do_unlink=True)
     body.name = tag + '_body'
-    native_normals = {}
-    if tag == 'NAM':
-        for face in body.data.polygons:
-            face.use_smooth = True
-        for loop in body.data.loops:
-            key = tuple(round(c, 6) for c in body.data.vertices[loop.vertex_index].co)
-            key += tuple(round(c, 6) for c in body.data.uv_layers.active.data[loop.index].uv)
-            native_normals[key] = body.data.corner_normals[loop.index].vector.copy()
     # Whole islands keep native leather pouches separate from cloth tinting.
     small_kit = set()
     native_head = set()
-    native_hands = set()
-    if tag in ('TFF', 'YPR', 'RUS', 'NAM', 'HAZ', 'MON') or tag in RETINUE_STYLES:
+    if tag in ('TFF', 'YPR', 'RUS', 'HAZ', 'MON') or tag in RETINUE_STYLES:
         keys = [tuple(round(x, 4) for x in v.co) for v in body.data.vertices]
         adjacent = {k: set() for k in keys}
         for face in body.data.polygons:
@@ -1819,35 +1702,23 @@ def build_field(tag, output, appearance_source=None):
                         remaining.remove(k)
                         component.add(k)
                         stack.append(k)
-            if min(k[2] for k in component) > (6.7 if tag == 'NAM' else 6.9):
+            if min(k[2] for k in component) > 6.9:
                 cap.update(component)
-            if tag in ('MON', 'NAM') and min(k[2] for k in component) > 5.8 and max(abs(k[0]) for k in component) < 0.5:
+            if tag == 'MON' and min(k[2] for k in component) > 5.8 and max(abs(k[0]) for k in component) < 0.5:
                 native_head.update(component)
-            if tag == 'NAM' and min(abs(k[0]) for k in component) > 2.2:
-                native_hands.update(component)
             if (
-                min(k[2] for k in component) > (3.4 if tag == 'NAM' else 3.8)
+                min(k[2] for k in component) > 3.8
                 and max(k[2] for k in component) < 5
                 and len(component) < 100
-                and (tag != 'NAM' or max(abs(k[0]) for k in component) < 1.2)
             ):
                 small_kit.update(component)
-        if tag in ('TFF', 'RUS', 'NAM', 'HAZ', 'MON') or tag in RETINUE_STYLES:
+        if tag in ('TFF', 'RUS', 'HAZ', 'MON') or tag in RETINUE_STYLES:
             assert cap
-            if tag == 'NAM':
-                indices = [v.index for v in body.data.vertices if keys[v.index] in cap]
-                remap = {index: i for i, index in enumerate(indices)}
-                helmet_geometry = (
-                    [tuple(body.data.vertices[i].co) for i in indices],
-                    [tuple(remap[i] for i in face.vertices) for face in body.data.polygons
-                     if all(i in remap for i in face.vertices)],
-                )
-            removed = cap | small_kit if tag == 'NAM' else cap
             bm = bmesh.new()
             bm.from_mesh(body.data)
             bmesh.ops.delete(
                 bm,
-                geom=[v for v in bm.verts if tuple(round(x, 4) for x in v.co) in removed],
+                geom=[v for v in bm.verts if tuple(round(x, 4) for x in v.co) in cap],
                 context='VERTS',
             )
             bm.to_mesh(body.data)
@@ -1902,10 +1773,7 @@ def build_field(tag, output, appearance_source=None):
             links.new(outside.outputs[0], region.inputs[0])
             links.new(upper.outputs[0], region.inputs[1])
             clean = nodes.new('ShaderNodeMixRGB')
-            if tag == 'NAM':
-                upper.inputs['From Min'].default_value = 5.45
-                upper.inputs['From Max'].default_value = 5.65
-            links.new(upper.outputs[0] if tag == 'NAM' else region.outputs[0], clean.inputs[0])
+            links.new(region.outputs[0], clean.inputs[0])
             links.new(bw.outputs[0], clean.inputs[1])
             clean.inputs[2].default_value = (0.50, 0.50, 0.50, 1)
             intensity = nodes.new('ShaderNodeMath')
@@ -1956,12 +1824,6 @@ def build_field(tag, output, appearance_source=None):
         canvas_color = (0.065, 0.085, 0.060)
         wool_color = (0.017, 0.022, 0.020)
         scarf_color = (0.18, 0.23, 0.115)
-    elif tag == 'NAM':
-        jacket_color = (0.15, 0.16, 0.105)
-        trouser_color = (0.10, 0.115, 0.075)
-        canvas_color = (0.26, 0.22, 0.14)
-        wool_color = (0.028, 0.050, 0.032)
-        scarf_color = (0.07, 0.08, 0.05)
     else:
         jacket_color = olive if tag == 'YPR' else (0.16, 0.105, 0.055)
         trouser_color = (0.12, 0.14, 0.085) if tag == 'YPR' else (0.055, 0.068, 0.065)
@@ -1975,7 +1837,7 @@ def build_field(tag, output, appearance_source=None):
     scarf = cloth('Frontier wool scarf', scarf_color)
     for mat in (jacket, trousers, canvas):
         body.data.materials.append(mat)
-    if tag in ('HAZ', 'NAM'):
+    if tag == 'HAZ':
         body.data.materials.append(wool)
     for face in body.data.polygons:
         x, y, z = face.center
@@ -1988,18 +1850,13 @@ def build_field(tag, output, appearance_source=None):
             ) / len(face.loop_indices)
             vertex_key = tuple(round(v, 4) for v in body.data.vertices[face.vertices[0]].co)
             skin = vertex_key in native_head or (abs(x) > 2.30 and uv.x > 0.58 and uv.y > 0.70)
-        if tag == 'NAM':
-            vertex_key = tuple(round(v, 4) for v in body.data.vertices[face.vertices[0]].co)
-            skin = vertex_key in native_head or vertex_key in native_hands
         if tag == 'HAZ' and skin:
             face.material_index = 4
         elif tag == 'YPR' and z > 6.80:
             face.material_index = 3
-        elif tag == 'NAM' and not skin and z > 5.95 and abs(x) < 0.58:
-            face.material_index = 4
         elif (
             skin
-            or (z < 1.15 and tag != 'NAM')
+            or z < 1.15
             or tuple(round(v, 4) for v in body.data.vertices[face.vertices[0]].co)
             in small_kit
         ):
@@ -2013,12 +1870,10 @@ def build_field(tag, output, appearance_source=None):
             ) / len(face.loop_indices)
             pants = (
                 uv.x < 0.44 and uv.y < 0.45
-                if tag in ('TFF', 'RUS', 'NAM', 'HAZ', 'MON') or tag in RETINUE_STYLES
+                if tag in ('TFF', 'RUS', 'HAZ', 'MON') or tag in RETINUE_STYLES
                 else z < 3.55
             )
             face.material_index = 2 if pants else 1
-    if tag == 'NAM':
-        nam_project_uniform(body, appearance_source, output)
     bake_diffuse(body, output / f'{tag}_body.png', tag + '_body')
     gear = []
 
@@ -2038,8 +1893,6 @@ def build_field(tag, output, appearance_source=None):
         montar_guard_kit(body, mesh, cloth, canvas)
     elif tag == 'HAZ':
         hazard_kit(body, mesh, cloth, jacket, canvas, wool)
-    elif tag == 'NAM':
-        nam_field_kit(body, mesh, cloth, canvas, wool, helmet_geometry)
     elif tag in RETINUE_STYLES:
         retinue_kit(tag, body, mesh, cloth, canvas, scarf)
     elif tag == 'YPR':
@@ -2225,13 +2078,6 @@ def build_field(tag, output, appearance_source=None):
         )
         bm.to_mesh(obj.data)
         bm.free()
-        if tag == 'NAM' and part == 'body':
-            normals = []
-            for loop in obj.data.loops:
-                key = tuple(round(c, 6) for c in obj.data.vertices[loop.vertex_index].co)
-                key += tuple(round(c, 6) for c in obj.data.uv_layers.active.data[loop.index].uv)
-                normals.append(native_normals[key])
-            obj.data.normals_split_custom_set(normals)
         spec = SimpleNamespace(
             shader=['PdxMeshAdvanced'],
             diff=[f'{tag}_field_{part}_diffuse.dds'],
@@ -2258,62 +2104,6 @@ def build_field(tag, output, appearance_source=None):
     if tag in ('HAZ', 'MON'):
         bpy.ops.file.pack_all()
     bpy.ops.wm.save_as_mainfile(filepath=str(output / f'{tag}.blend'))
-
-
-def verify_native_body(donor, exported, pdx_data):
-    """Reject body retargeting: retained vertices must keep native positions and weights."""
-    from mathutils import Vector
-    from mathutils.kdtree import KDTree
-
-    original = max(
-        (pdx_data.PDXData(element) for shape in donor.find('object')
-         for element in shape.findall('mesh')),
-        key=lambda data: len(data.p),
-    )
-    body = next(
-        pdx_data.PDXData(element) for shape in exported.find('object')
-        for element in shape.findall('mesh')
-        if pdx_data.PDXData(element).material.diff == ['NAM_field_body_diffuse.dds']
-    )
-    count = len(original.p) // 3
-    tree = KDTree(count)
-    for index in range(count):
-        tree.insert(Vector(original.p[index * 3:index * 3 + 3]), index)
-    tree.balance()
-
-    def weights(data, index):
-        stride = data.skin.bones[0]
-        start = index * stride
-        return {
-            bone: weight for bone, weight in zip(
-                data.skin.ix[start:start + stride], data.skin.w[start:start + stride]
-            ) if weight > 0
-        }
-
-    max_position_error = 0.0
-    max_weight_error = 0.0
-    for index in range(len(body.p) // 3):
-        point = Vector(body.p[index * 3:index * 3 + 3])
-        candidates = tree.find_range(point, 0.0001)
-        assert candidates, ('NAM: body geometry differs from vanilla', index)
-        current_weights = weights(body, index)
-        differences = []
-        for _, original_index, distance in candidates:
-            native_weights = weights(original, original_index)
-            error = max(
-                abs(current_weights.get(bone, 0) - native_weights.get(bone, 0))
-                for bone in current_weights.keys() | native_weights.keys()
-            )
-            differences.append((error, distance))
-        weight_error, position_error = min(differences)
-        assert weight_error < 0.0001, ('NAM: body weights differ from vanilla', index)
-        max_position_error = max(max_position_error, position_error)
-        max_weight_error = max(max_weight_error, weight_error)
-    return {
-        'vertices_checked': len(body.p) // 3,
-        'maximum_position_error': max_position_error,
-        'maximum_weight_error': max_weight_error,
-    }
 
 
 def verify(output, tags, walk=False):
@@ -2358,19 +2148,34 @@ def verify(output, tags, walk=False):
             for part in model_parts(tag)
             for kind in ('diffuse', 'normal', 'specular')
         )]
+        metadata = None
+        if tag == 'NAM':
+            metadata = json.loads((output / 'NAM_build.json').read_text())
+            inputs.extend(sorted((path.parent / 'NAM').glob('*.anim')))
+            inputs.append(path.parent / 'NAM/animation.asset')
         input_hashes = {
             source: hashlib.sha256(source.read_bytes()).hexdigest()
             for source in inputs
         }
         tree = pdx_data.read_meshfile(str(path))
-        native_body = verify_native_body(donor, tree, pdx_data) if tag == 'NAM' else None
-        assert [(n.tag, n.attrib) for n in tree.find('locator')] == [
-            (n.tag, n.attrib) for n in donor.find('locator')
-        ]
+        if metadata is None:
+            assert [(n.tag, n.attrib) for n in tree.find('locator')] == [
+                (n.tag, n.attrib) for n in donor.find('locator')
+            ]
         shapes = []
         for shape in tree.find('object'):
             bones = shape.find('skeleton')
-            assert [b.tag for b in bones] == [b.tag for b in donor_bones]
+            expected = metadata['bones'] if metadata else [b.tag for b in donor_bones]
+            assert [b.tag for b in bones] == expected
+            assert len(bones) <= 50
+            if metadata:
+                from mathutils.kdtree import KDTree
+
+                original_positions = metadata['rest_positions']
+                positions = KDTree(len(original_positions))
+                for index, position in enumerate(original_positions):
+                    positions.insert(Vector(position), index)
+                positions.balance()
             for element in shape.findall('mesh'):
                 data = pdx_data.PDXData(element)
                 count = len(data.p) // 3
@@ -2394,7 +2199,10 @@ def verify(output, tags, walk=False):
                     weighted.update(
                         index for index, weight in zip(indices, weights) if weight > 0
                     )
-                for index in weighted:
+                if metadata:
+                    assert all(positions.find(Vector(data.p[i:i + 3]))[2] < 0.00001
+                               for i in range(0, len(data.p), 3))
+                for index in weighted if metadata is None else ():
                     bone, original = bones[index], donor_bones[index]
                     assert bone.attrib.get('pa') == original.attrib.get('pa')
                     assert (
@@ -2416,7 +2224,7 @@ def verify(output, tags, walk=False):
         bpy.ops.wm.read_factory_settings(use_empty=True)
         pdx.import_meshfile(str(path), imp_locs=False)
         scene = bpy.context.scene
-        if tag == 'MON':
+        if tag in ('MON', 'NAM'):
             # The importer supplies native custom normals but leaves faces flat.
             for obj in (o for o in scene.objects if o.type == 'MESH'):
                 for face in obj.data.polygons:
@@ -2466,6 +2274,30 @@ def verify(output, tags, walk=False):
         )
         scene.camera = camera
         rigs = [obj for obj in scene.objects if obj.type == 'ARMATURE']
+        if metadata:
+            expected_clips = {nam_clip_name(clip) for clip in nam_animation_sources().values()}
+            assert expected_clips == set(metadata['clips'])
+            assert expected_clips == {source.name for source in inputs if source.suffix == '.anim'}
+            for clip in sorted(expected_clips):
+                animation_path = path.parent / 'NAM' / clip
+                animation = pdx_data.read_animfile(str(animation_path))
+                info = animation.find('info')
+                assert [bone.tag for bone in info] == metadata['bones']
+                assert info.attrib['j'] == [len(metadata['bones'])]
+                frames = info.attrib['sa'][0]
+                for channel, size in (('t', 3), ('q', 4), ('s', 1)):
+                    values = animation.find('samples').attrib[channel]
+                    assert len(values) == frames * len(metadata['bones']) * size
+                    assert all(math.isfinite(value) for value in values)
+                rigs[0].animation_data_clear()
+                pdx.import_animfile(str(animation_path))
+                for frame in (scene.frame_start, (scene.frame_start + scene.frame_end) // 2, scene.frame_end):
+                    scene.frame_set(frame)
+                    graph = bpy.context.evaluated_depsgraph_get()
+                    for obj in (o for o in scene.objects if o.type == 'MESH'):
+                        evaluated = obj.evaluated_get(graph)
+                        assert all(math.isfinite(x) for v in evaluated.data.vertices for x in v.co)
+                        assert max(v.co.length for v in evaluated.data.vertices) < 20, (clip, frame)
         weapons = []
         if tag in ('MON', 'HAZ', 'NAM'):
             for level in (0, 1):
@@ -2500,7 +2332,7 @@ def verify(output, tags, walk=False):
             rotation = camera.rotation_euler.copy()
             scale = camera.data.ortho_scale
             width, height = scene.render.resolution_x, scene.render.resolution_y
-            head = rigs[0].pose.bones['head']
+            head = rigs[0].pose.bones['NAM_Head' if tag == 'NAM' else 'head']
             target = (
                 rigs[0].matrix_world @ head.matrix @ head.bone.matrix_local.inverted()
                 @ Vector((0, 0, 5.95))
@@ -2516,8 +2348,8 @@ def verify(output, tags, walk=False):
                 bpy.ops.render.render(write_still=True)
             if tag == 'NAM':
                 target = rigs[0].matrix_world @ (
-                    (rigs[0].pose.bones['LeftHand'].matrix.translation
-                     + rigs[0].pose.bones['RightHand'].matrix.translation) * 0.5
+                    (rigs[0].pose.bones['NAM_LeftHand'].matrix.translation
+                     + rigs[0].pose.bones['NAM_RightHand'].matrix.translation) * 0.5
                 )
                 camera.data.ortho_scale = 2.8
                 camera.location = target + Vector((8, -16, 4))
@@ -2542,7 +2374,8 @@ def verify(output, tags, walk=False):
             for rig in rigs:
                 rig.animation_data_clear()
             pdx.import_animfile(
-                str(GAME / f'gfx/models/units/GER_infantry_{pose}.anim')
+                str(path.parent / 'NAM' / f'NAM_{pose}.anim' if tag == 'NAM'
+                    else GAME / f'gfx/models/units/GER_infantry_{pose}.anim')
             )
             frames = (1, (scene.frame_end + 1) // 2, scene.frame_end)
             for frame in frames:
@@ -2619,12 +2452,15 @@ def verify(output, tags, walk=False):
             'shapes': shapes,
             'poses': poses,
         }
-        if native_body is not None:
-            report[tag]['native_body'] = native_body
-            report[tag]['source'] = {
-                'path': str(CONFIG[tag].relative_to(GAME)).replace('\\', '/'),
-                'sha256': hashlib.sha256(CONFIG[tag].read_bytes()).hexdigest(),
+        if metadata:
+            report[tag]['source'] = metadata['source']
+            report[tag]['animations'] = {
+                source.name: input_hashes[source] for source in inputs
+                if source.suffix in ('.anim', '.asset')
             }
+            report[tag]['animation_sources'] = metadata['clips']
+            report[tag]['geometry'] = 'Supplied GLB vertices retained at native infantry scale.'
+            report[tag]['runtime'] = 'Offline native export and re-import only; HOI4 cold-load pending.'
     report_path = output / 'verification.json'
     previous = json.loads(report_path.read_text()) if report_path.exists() else {}
     previous.update(report)
@@ -2633,7 +2469,7 @@ def verify(output, tags, walk=False):
 
 
 def model_parts(tag):
-    return ('body',) if tag == 'HAZ' else ('body', 'gear')
+    return ('body',) if tag in ('HAZ', 'NAM') else ('body', 'gear')
 
 
 def package(output, apply=False, check=False, tags=None, assets_only=False):
@@ -2686,6 +2522,14 @@ def package(output, apply=False, check=False, tags=None, assets_only=False):
         ).read_bytes()
     for tag in tags:
         files[dest / f'{tag}_field.mesh'] = (output / f'{tag}_field.mesh').read_bytes()
+        if tag == 'NAM':
+            animation_blocks = ['# Generated by tools/assets/source/build_northern_infantry.py']
+            for name, source in sorted(nam_animation_sources().items()):
+                clip = nam_clip_name(source)
+                files[dest / 'NAM' / clip] = (output / 'NAM_animations' / clip).read_bytes()
+                name = name.replace('GER_infantry_', 'ADISCORD_NAM_')
+                animation_blocks.append(f'animation = {{\n\tname = "{name}"\n\tfile = "{clip}"\n}}')
+            files[dest / 'NAM/animation.asset'] = ('\n\n'.join(animation_blocks) + '\n').encode()
         for part in model_parts(tag):
             files[dest / f'{tag}_field_{part}_diffuse.dds'] = dds(
                 Image.open(output / f'{tag}_{part}.png')
@@ -2695,7 +2539,7 @@ def package(output, apply=False, check=False, tags=None, assets_only=False):
                 if part == 'body'
                 else Image.new('RGBA', (512, 512), (255, 128, 0, 128))
             )
-            if tag == 'HAZ' and part == 'body':
+            if tag in ('HAZ', 'NAM') and part == 'body':
                 # UnpackRRxGNormal reads X from green and negates alpha for Y.
                 source_normal = Image.open(output / f'{tag}_body_normal.png').convert('RGB')
                 red, green, _ = source_normal.split()
@@ -2704,6 +2548,13 @@ def package(output, apply=False, check=False, tags=None, assets_only=False):
                 ))
             files[dest / f'{tag}_field_{part}_normal.dds'] = dds(normal, True)
             specular = Image.new('RGBA', (512, 512), (0, 48, 0, 36))
+            if tag == 'NAM':
+                surface = Image.open(output / 'NAM_surface.png').convert('RGB')
+                _, roughness, metalness = surface.split()
+                specular = Image.merge('RGBA', (
+                    Image.new('L', surface.size, 0), Image.new('L', surface.size, 48),
+                    metalness, ImageOps.invert(roughness),
+                ))
             if tag == 'MON' and part == 'gear':
                 surface = Image.open(output / 'MON_surface.png').convert('RGB')
                 strength, metalness, gloss = surface.split()
@@ -2728,6 +2579,11 @@ def package(output, apply=False, check=False, tags=None, assets_only=False):
                 assert digest == hashlib.sha256(files[dest / name]).hexdigest(), (
                     name + ': re-run --verify'
                 )
+            if tag == 'NAM':
+                for name, digest in verified[tag]['animations'].items():
+                    assert digest == hashlib.sha256(files[dest / 'NAM' / name]).hexdigest(), (
+                        name + ': re-run --verify'
+                    )
         for path, content in files.items():
             if str(path.relative_to(ROOT)) in changed:
                 path.parent.mkdir(parents=True, exist_ok=True)
@@ -2747,8 +2603,8 @@ def package(output, apply=False, check=False, tags=None, assets_only=False):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--appearance-source', type=Path,
-                        help='NAM supplied Blender appearance reference; geometry and rig remain native.')
+    parser.add_argument('--rig-source', type=Path,
+                        help='NAM animated GLB with Walking and Running clips.')
     parser.add_argument('--assets-only', action='store_true',
                         help='Keep existing entity bindings when replacing an already registered model.')
     parser.add_argument(
@@ -2775,7 +2631,7 @@ if __name__ == '__main__':
             if tag == 'COF':
                 build(args.output.resolve())
             else:
-                build_field(tag, args.output.resolve(), args.appearance_source)
+                build_field(tag, args.output.resolve(), args.rig_source)
     elif args.verify:
         verify(args.output.resolve(), args.tags, args.walk)
     elif args.finalize:
