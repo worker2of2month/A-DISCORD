@@ -864,7 +864,12 @@ characters = {
 			removal_cost = 0
 			allowed = { tag = STS }
 			visible = { tag = STS }
-			available = { has_completed_focus = STP_pc_army_hegemony_cadres }
+			available = {
+				OR = {
+					has_completed_focus = STP_pc_army_hegemony_cadres
+					has_completed_focus = STP_pc_sdir_field_army
+				}
+			}
 			traits = { army_chief_offensive_2 }
 			ai_will_do = { factor = 2 }
 		}
@@ -885,7 +890,12 @@ characters = {
 			removal_cost = 0
 			allowed = { tag = STS }
 			visible = { tag = STS }
-			available = { has_completed_focus = STP_pc_army_republic_control }
+			available = {
+				OR = {
+					has_completed_focus = STP_pc_army_republic_control
+					has_completed_focus = STP_pc_sdir_district_levies
+				}
+			}
 			traits = { army_chief_defensive_2 }
 			ai_will_do = { factor = 2 }
 		}
@@ -969,7 +979,12 @@ characters = {
 			removal_cost = 0
 			allowed = { tag = STS }
 			visible = { tag = STS }
-			available = { has_completed_focus = STP_pc_navy_escorts }
+			available = {
+				OR = {
+					has_completed_focus = STP_pc_navy_escorts
+					has_completed_focus = STP_pc_sdir_convoy_escorts
+				}
+			}
 			traits = { navy_chief_maneuver_2 }
 			ai_will_do = { factor = 2 }
 		}
@@ -1032,7 +1047,12 @@ characters = {
 			removal_cost = 0
 			allowed = { tag = STS }
 			visible = { tag = STS }
-			available = { has_completed_focus = STP_pc_air_shield }
+			available = {
+				OR = {
+					has_completed_focus = STP_pc_air_shield
+					has_completed_focus = STP_pc_sdir_integrated_staff
+				}
+			}
 			traits = { air_chief_all_weather_2 }
 			ai_will_do = { factor = 2 }
 		}
@@ -1227,7 +1247,12 @@ characters = {
 			removal_cost = 0
 			allowed = { tag = STS }
 			visible = { tag = STS }
-			available = { has_completed_focus = STP_pw_republic_officer_school }
+			available = {
+				OR = {
+					has_completed_focus = STP_pw_republic_officer_school
+					has_completed_focus = STP_pc_sdir_officer_college
+				}
+			}
 			traits = { ADISCORD_staff_senior_theorist }
 			ai_will_do = { factor = 2 }
 		}
