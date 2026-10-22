@@ -92,6 +92,24 @@ STP_sided_with_Hedersett_trigger = {
 }
 
 # COUNTRY: the election result alone does not end the prewar cabinet's mandate.
+STP_pw_party_trial_pending = {
+	tag = STS
+	has_country_flag = STP_cw_won_union_battle
+	has_country_flag = STP_cw_postwar
+	NOT = { has_variable = STP_pw_party_trial_verdict }
+	STP = { exists = no }
+}
+
+STP_pw_party_specialists_available = {
+	OR = {
+		tag = STP
+		AND = {
+			tag = STS
+			check_variable = { var = STP_pw_party_trial_verdict value = 2 compare = equals }
+		}
+	}
+}
+
 STP_party_minister_change_allowed = {
 	custom_trigger_tooltip = {
 		tooltip = STP_party_minister_change_allowed_tt
@@ -1239,6 +1257,16 @@ STP_pc_charter_shabrat_nation_ready = {
 	STP_pc_charter_shabrat_citizenship_settled = yes
 	has_country_flag = STP_pc_charter_shabrat_defence_delivered
 	any_owned_state = { STP_pc_charter_shabrat_compact_active = yes }
+}
+
+STP_pc_stelander_union_requirements_met = {
+	STP_pc_charter_shabrat_current = yes
+	has_completed_focus = STP_pc_charter_shabrat_charter_fulfilled
+	OR = {
+		has_idea = STP_pc_charter_shabrat_legacy_districts
+		has_idea = STP_pc_charter_shabrat_legacy_nation
+	}
+	NOT = { has_country_flag = STP_pc_stelander_union_proclaimed }
 }
 
 STP_pc_charter_tikhoreva_current = {
@@ -2602,11 +2630,22 @@ STP_ps_val_supply_open = {
 		STS = { exists = yes has_capitulated = no has_war_with = STP }
 	}
 }
+
+# STP scope. The Party route uses credit; Shabrat must be able to pay the quote.
+STP_ps_val_sale_buyer_ready = {
+	OR = {
+		has_country_flag = STP_sided_with_the_party_flag
+		check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+	}
+}
+
 # VAL scope. Pre-war sales to Shabrat's network share the shipment receipt.
 STP_ps_val_sale_open = {
 	STP_ps_val_supply_open = yes
 	has_country_flag = STP_ps_val_authorized
 	STP = { STP_cw_preparation_open = yes }
+	STP = { STP_ps_val_sale_buyer_ready = yes }
+	NOT = { has_country_flag = STP_ps_val_sale_declined }
 	NOT = { has_variable = STP_ps_val_receipt_rifles }
 	NOT = { has_country_flag = STP_ps_val_supply_cooldown }
 	NOT = { has_country_flag = STP_ps_val_sale_cooldown }

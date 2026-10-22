@@ -22,6 +22,18 @@ def parse_localisation(path: Path) -> tuple[str, dict[str, str], dict[str, int]]
     return text, dict(pairs), dict(counts)
 
 
+def military_advisor_definitions():
+    from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+    for path in (ROOT / "common/characters").glob("*.txt"):
+        for root in parse_clausewitz(path.read_text(encoding="utf-8-sig")):
+            if root.key == "characters":
+                for character in root.value:
+                    for role in character.value:
+                        if role.key == "advisor":
+                            yield character, role.value
+
+
 APPROVED_RU_CIVILIAN_NAMES = {
     "ADISCORD_society_type_laws": "Общественный уклад",
     "ADISCORD_information_open_press": "Свободная пресса",
@@ -538,6 +550,23 @@ class SevenRowPoliticsContracts(unittest.TestCase):
                             if isinstance(e.value, list)
                             and not e.key.endswith("_vacant")
                         )
+        from tools.validators.validate_adiscord_division_templates import Entry
+        from tools.tests.test_adiscord_stp_party_route import walk
+
+        for character, advisor in military_advisor_definitions():
+            slot = self.one(advisor, "slot")
+            if slot in candidates:
+                candidates[slot].append(Entry(character.key, advisor, character.line))
+        general_history = parse_clausewitz(
+            (ROOT / "history/general/ADISCORD_general_history.txt").read_text(encoding="utf-8")
+        )
+        for entry in walk(general_history):
+            if entry.key == "generate_character":
+                advisor = self.one(entry.value, "advisor")
+                slot = self.one(advisor, "slot")
+                if slot in candidates:
+                    token = self.one(entry.value, "token_base")
+                    candidates[slot].append(Entry(token, advisor, entry.line))
         tags = set()
         for path in (ROOT / "common/country_tags").glob("*.txt"):
             tags.update(
@@ -641,7 +670,12 @@ class SevenRowPoliticsContracts(unittest.TestCase):
                 if matches_conditions(self.one(idea.value, "allowed"), {}, tag)
             ]
             dynamic = re.fullmatch(r"D\d\d", tag) is not None
-            self.assertEqual(len(eligible), 2 if dynamic else 1, tag)
+            inherited = tag == "STS"
+            self.assertEqual(len(eligible), 2 if dynamic or inherited else 1, tag)
+            if inherited:
+                self.assertIn("minister_STP_Adrian_Vels", [idea.key for idea in eligible])
+                eligible = [idea for idea in eligible if idea.key.startswith("minister_STS_")]
+                self.assertEqual(len(eligible), 1)
             if not dynamic:
                 self.assertTrue(eligible[0].key.startswith(f"minister_{tag}_"), tag)
         for idea in choices:
@@ -738,6 +772,7 @@ class SevenRowPoliticsContracts(unittest.TestCase):
 
     def test_foreign_minister_initializer_preserves_occupied_cabinets(self):
         from tools.tests.test_adiscord_stp_preparation import selected_effects
+        from tools.tests.test_adiscord_stp_party_route import walk
         from tools.validators.validate_adiscord_division_templates import (
             parse_clausewitz,
         )
@@ -752,9 +787,14 @@ class SevenRowPoliticsContracts(unittest.TestCase):
         for idea in self.groups["political_advisor_minister_of_foreign_affairs"]:
             if not idea.key.startswith("minister_"):
                 continue
-            tag = self.one(self.one(idea.value, "allowed"), "tag")
-            with self.subTest(tag=tag):
-                self.assertEqual(list(selected_effects(initializer, {}, tag)), [])
+            tags = {
+                entry.value for entry in walk(self.one(idea.value, "allowed"))
+                if entry.key == "tag"
+            }
+            self.assertTrue(tags, idea.key)
+            for tag in tags:
+                with self.subTest(tag=tag, minister=idea.key):
+                    self.assertEqual(list(selected_effects(initializer, {}, tag)), [])
 
     def test_foreign_ministers_are_initialized_once_before_the_starting_budget(self):
         from tools.tests.test_adiscord_stp_preparation import selected_effects
@@ -803,9 +843,40 @@ class SevenRowPoliticsContracts(unittest.TestCase):
 
 
 class MilitaryStaffContracts(unittest.TestCase):
+    starting_tags = {
+        "STP", "STS", "SRP", "VAL", "RUS", "IVN", "NAM", "NOD", "SHL",
+        "WRK", "WKR", "VAD", "TVA", "EYR", "EGC", "RIV", "YOR", "IBA", "ZAO",
+    }
+
+    def test_character_slots_have_no_unregistered_legacy_ideas(self):
+        categories = self.one(
+            self.parse((ROOT / "common/idea_tags/00_idea.txt").read_text(encoding="utf-8")),
+            "idea_categories",
+        )
+        character_slots = {
+            entry.value
+            for category in categories
+            for entry in category.value
+            if entry.key == "character_slot"
+        }
+        misplaced = []
+        for path in (ROOT / "common/ideas").glob("*.txt"):
+            for root in self.parse(path.read_text(encoding="utf-8-sig")):
+                if root.key != "ideas":
+                    continue
+                for group in root.value:
+                    if group.key in character_slots:
+                        misplaced.extend(
+                            (path.name, group.key, entry.key)
+                            for entry in group.value
+                            if isinstance(entry.value, list)
+                        )
+        self.assertEqual(len(misplaced), 0, misplaced[:10])
+
     @classmethod
     def setUpClass(cls):
         from tools.validators.validate_adiscord_division_templates import (
+            Entry,
             parse_clausewitz,
         )
         from tools.tests.test_adiscord_stp_party_route import one, walk
@@ -813,14 +884,6 @@ class MilitaryStaffContracts(unittest.TestCase):
         cls.one = staticmethod(one)
         cls.walk = staticmethod(walk)
         cls.parse = staticmethod(parse_clausewitz)
-        cls.ideas = one(
-            parse_clausewitz(
-                (ROOT / "common/ideas/ADISCORD_ministers_all_countries.txt").read_text(
-                    encoding="utf-8"
-                )
-            ),
-            "ideas",
-        )
         cls.slots = (
             "army_chief",
             "navy_chief",
@@ -829,15 +892,23 @@ class MilitaryStaffContracts(unittest.TestCase):
             "theorist",
         )
         cls.candidates = [
-            (group.key, idea)
-            for group in cls.ideas
-            if group.key in cls.slots
-            for idea in group.value
+            (one(advisor, "slot"), Entry(one(advisor, "idea_token"), advisor, character.line))
+            for character, advisor in military_advisor_definitions()
+            if character.key.startswith("ADISCORD_staff_")
         ]
         cls.focuses = {}
         for filename in (
             "ADISCORD_national_focus_VAL.txt",
             "ADISCORD_STP_civil_war.txt",
+            "ADISCORD_national_focus_RUS.txt",
+            "ADISCORD_IVN_focus.txt",
+            "ADISCORD_NAM_focus.txt",
+            "ADISCORD_NOD_focus.txt",
+            "ADISCORD_SHL_focus.txt",
+            "ADISCORD_Vorkerland_worker_confederation.txt",
+            "ADISCORD_Vorkerland_technical_directorate.txt",
+            "ADISCORD_Vorkerland_world_empire.txt",
+            "ADISCORD_Vorkerland_zao.txt",
         ):
             tree = one(
                 parse_clausewitz(
@@ -866,7 +937,8 @@ class MilitaryStaffContracts(unittest.TestCase):
             "ADISCORD_has_national_military_staff",
         )
         tags = [entry.value for entry in self.walk(trigger) if entry.key == "tag"]
-        self.assertEqual(len(set(tags)), 30)
+        self.assertEqual(len(set(tags)), 38)
+        self.assertTrue(self.starting_tags.issubset(tags))
         for tag in tags:
             counts = Counter()
             for slot, idea in self.candidates:
@@ -880,6 +952,54 @@ class MilitaryStaffContracts(unittest.TestCase):
                 )
             if tag in ("VAL", "STP", "STS"):
                 self.assertGreaterEqual(sum(counts.values()), 14, tag)
+
+    def test_all_named_advisors_are_recruited_once_in_their_country_history(self):
+        definitions = [
+            (character, advisor)
+            for character, advisor in military_advisor_definitions()
+            if character.key.startswith("ADISCORD_staff_")
+        ]
+        self.assertEqual(len(definitions), 312)
+        self.assertEqual(len({character.key for character, _ in definitions}), 312)
+        histories = {}
+        for path in (ROOT / "history/countries").glob("*.txt"):
+            histories[path.name[:3]] = self.parse(path.read_text(encoding="utf-8-sig"))
+        for character, advisor in definitions:
+            token = self.one(advisor, "idea_token")
+            self.assertEqual(token, character.key)
+            tag = token.split("_")[2]
+            recruits = [entry.value for entry in histories[tag] if entry.key == "recruit_character"]
+            self.assertEqual(recruits.count(character.key), 1, token)
+            self.assertEqual(self.one(advisor, "desc"), token + "_desc")
+            portraits = self.one(self.one(character.value, "portraits"), "army")
+            self.assertTrue(self.one(portraits, "small").startswith("GFX_idea_"), token)
+
+    def test_generic_advisors_are_generated_once_for_countries_without_a_roster(self):
+        history = self.parse(
+            (ROOT / "history/general/ADISCORD_general_history.txt").read_text(encoding="utf-8")
+        )
+        countries = self.one(history, "every_possible_country")
+        self.assertEqual(
+            self.one(self.one(countries, "limit"), "ADISCORD_has_national_military_staff"),
+            "no",
+        )
+        generated = [entry.value for entry in countries if entry.key == "generate_character"]
+        self.assertEqual(len(generated), 30)
+        tokens = [self.one(character, "token_base") for character in generated]
+        self.assertEqual(len(set(tokens)), len(tokens))
+        slots = Counter()
+        for character in generated:
+            advisor = self.one(character, "advisor")
+            slot = self.one(advisor, "slot")
+            slots[slot] += 1
+            self.assertEqual(
+                self.one(self.one(advisor, "allowed"), "ADISCORD_has_national_military_staff"),
+                "no",
+            )
+            if slot == "high_command":
+                self.assertIn(self.one(advisor, "ledger"), ("army", "navy", "air"))
+        for slot in self.slots:
+            self.assertGreaterEqual(slots[slot], 3 if slot == "high_command" else 1)
 
     def test_named_staff_have_valid_traits_ledgers_and_can_be_dismissed(self):
         trait_ids = set()
@@ -922,7 +1042,7 @@ class MilitaryStaffContracts(unittest.TestCase):
             focus = self.focuses[unlocks[0]]
             reward = self.one(focus, "completion_reward")
             self.assertIn(
-                idea.key, [entry.value for entry in reward if entry.key == "add_ideas"]
+                idea.key, [entry.value for entry in reward if entry.key == "activate_advisor"]
             )
             self.assertFalse(any(entry.key == "bypass" for entry in focus), unlocks[0])
             tag = self.one(self.one(idea.value, "allowed"), "tag")
@@ -935,7 +1055,130 @@ class MilitaryStaffContracts(unittest.TestCase):
                         if entry.key == "tag"
                     ],
                 )
-        self.assertEqual(appointments, 13)
+        self.assertEqual(appointments, 25)
+
+    def test_starting_history_fills_every_seat_without_unlocking_elites(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
+        candidates = {idea.key: (slot, idea.value) for slot, idea in self.candidates}
+        expected = Counter({slot: 3 if slot == "high_command" else 1 for slot in self.slots})
+        for tag in self.starting_tags:
+            path = next((ROOT / "history/countries").glob(tag + " - *.txt"))
+            history = self.parse(path.read_text(encoding="utf-8-sig"))
+            installed = []
+            recruited = set()
+            for entry in history:
+                if entry.key == "recruit_character":
+                    recruited.add(entry.value)
+                if entry.key == "activate_advisor" and entry.value in candidates:
+                    self.assertIn(entry.value, recruited, (tag, entry.value))
+                    installed.append(entry.value)
+            self.assertEqual(len(installed), len(set(installed)), tag)
+            self.assertEqual(Counter(candidates[key][0] for key in installed), expected, tag)
+            for key in installed:
+                body = candidates[key][1]
+                self.assertEqual(self.one(body, "cost"), "100", key)
+                for gate in ("allowed", "visible", "available"):
+                    self.assertTrue(matches_conditions(self.one(body, gate), {}, tag), key)
+                self.assertFalse(
+                    any(e.key == "has_completed_focus" for e in self.walk(body)), key
+                )
+
+    def test_khan_appointments_use_recruited_commanders_and_keep_combat_roles(self):
+        characters = self.one(
+            self.parse((ROOT / "common/characters/RUS.txt").read_text(encoding="utf-8")),
+            "characters",
+        )
+        history = (ROOT / "history/countries/RUS - RusniaLand.txt").read_text(encoding="utf-8")
+        for character, role in (
+            ("RUS_Mikhail_Rakitin", "field_marshal"),
+            ("RUS_Konstantin_Vyazemsky", "corps_commander"),
+        ):
+            body = self.one(characters, character)
+            self.assertTrue(self.one(body, role))
+            self.assertIn("recruit_character = " + character, history)
+            advisor = self.one(body, "advisor")
+            self.assertEqual(self.one(self.one(advisor, "allowed"), "original_tag"), "RUS")
+            focus = self.one(self.one(advisor, "available"), "has_completed_focus")
+            token = self.one(advisor, "idea_token")
+            reward = self.one(self.focuses[focus], "completion_reward")
+            self.assertIn(token, [e.value for e in reward if e.key == "activate_advisor"])
+            self.assertNotIn("activate_advisor = " + token, history)
+            for language in ("russian", "english"):
+                _, names, counts = parse_localisation(
+                    ROOT / f"localisation/{language}/nsb_characters_l_{language}.yml"
+                )
+                self.assertEqual(counts[token], 1)
+                self.assertTrue(names[token + "_desc"])
+
+    def test_reunification_preserves_every_occupied_or_vacant_seat(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions, selected_effects
+
+        effects = self.parse(
+            (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
+        )
+        effect_id = "ADISCORD_vorkerland_transfer_military_staff_to_wrk"
+        transfer = self.one(effects, effect_id)
+        candidates = {idea.key: idea.value for _, idea in self.candidates}
+        old_staff = {key for key in candidates if key.startswith("ADISCORD_staff_WRK_")}
+        for tag, route in (("WKR", "worker"), ("VAD", "joint"), ("TVA", "utilitarian")):
+            roster = sorted(key for key in candidates if key.startswith(f"ADISCORD_staff_{tag}_"))
+            self.assertEqual(len(roster), 7)
+            route_flag = "ADISCORD_vorkerland_route_" + route
+            formation = self.one(effects, "ADISCORD_vorkerland_form_wrk_from_" + tag.lower())
+            ordered = list(self.walk(formation))
+            call = next(e for e in ordered if e.key == effect_id)
+            flag = next(e for e in ordered if e.key == "set_country_flag" and e.value == route_flag)
+            handoff = next(e for e in ordered if e.key == "change_tag_from")
+            self.assertLess(ordered.index(flag), ordered.index(call))
+            self.assertLess(ordered.index(call), ordered.index(handoff))
+            source_calls = [
+                entry for entry in formation
+                if entry.key == tag and call in entry.value
+            ]
+            self.assertEqual(len(source_calls), 1)
+            for mask in range(1 << len(roster)):
+                hired = {key for index, key in enumerate(roster) if mask & (1 << index)}
+                state = {tag: set(hired), "WRK": set(old_staff)}
+                owners = {key: tag for key in roster}
+                facts = {(tag, "has_idea", key): True for key in hired}
+                facts.update({(tag, "has_character", key): True for key in roster})
+                for scope, entry in selected_effects(transfer, facts, tag):
+                    self.assertIn(
+                        entry.key,
+                        ("activate_advisor", "deactivate_advisor", "remove_ideas", "set_nationality"),
+                    )
+                    if entry.key == "set_nationality":
+                        character = self.one(entry.value, "character")
+                        self.assertEqual(owners[character], scope)
+                        self.assertNotIn(character, state[scope])
+                        owners[character] = self.one(entry.value, "target_country")
+                    elif entry.key == "activate_advisor":
+                        self.assertEqual(owners[entry.value], scope)
+                        state[scope].add(entry.value)
+                    elif entry.key == "deactivate_advisor":
+                        self.assertIn(entry.value, state[scope])
+                        state[scope].remove(entry.value)
+                    elif entry.key == "remove_ideas":
+                        values = {e.value for e in entry.value}
+                        state[scope].difference_update(values)
+                self.assertEqual(state["WRK"], hired, (tag, mask))
+                self.assertFalse(state[tag], (tag, mask))
+                self.assertEqual(set(owners.values()), {"WRK"}, (tag, mask))
+            for key in roster:
+                body = candidates[key]
+                self.assertTrue(matches_conditions(self.one(body, "allowed"), {}, "WRK"))
+                for gate in ("available", "visible"):
+                    self.assertFalse(matches_conditions(self.one(body, gate), {}, "WRK"))
+                    for current_route in ("worker", "joint", "utilitarian"):
+                        facts = {
+                            ("WRK", "has_country_flag", "ADISCORD_vorkerland_route_" + current_route): True
+                        }
+                        self.assertEqual(
+                            matches_conditions(self.one(body, gate), facts, "WRK"),
+                            current_route == route,
+                            (key, current_route),
+                        )
 
     def test_kefreyt_commanders_keep_single_character_identity_and_native_focus_appointments(
         self,
@@ -1019,7 +1262,7 @@ class MilitaryStaffContracts(unittest.TestCase):
             idea.key
             for slot, idea in self.candidates
             if slot == "high_command"
-            and self.one(self.one(idea.value, "allowed"), "tag") == "STS"
+            and idea.key.startswith("ADISCORD_staff_STS_")
         ]
         self.assertEqual(len(candidates), 6)
         for hired in combinations(candidates, 3):

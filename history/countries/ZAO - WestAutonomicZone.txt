@@ -41,3 +41,21 @@ set_stability = -0.25
 set_research_slots = 4
 
 set_cosmetic_tag = ZAO_confederation
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_ZAO_Edgar_Treiber
+recruit_character = ADISCORD_staff_ZAO_Otto_Brenner
+recruit_character = ADISCORD_staff_ZAO_Ernst_Wolff
+recruit_character = ADISCORD_staff_ZAO_Konrad_Becker
+recruit_character = ADISCORD_staff_ZAO_Ludwig_Walter
+recruit_character = ADISCORD_staff_ZAO_Otto_Garten
+recruit_character = ADISCORD_staff_ZAO_Wilhelm_Dreyer
+recruit_character = ADISCORD_staff_ZAO_Adrian_Ebers
+
+activate_advisor = ADISCORD_staff_ZAO_Edgar_Treiber
+activate_advisor = ADISCORD_staff_ZAO_Ernst_Wolff
+activate_advisor = ADISCORD_staff_ZAO_Konrad_Becker
+activate_advisor = ADISCORD_staff_ZAO_Ludwig_Walter
+activate_advisor = ADISCORD_staff_ZAO_Otto_Garten
+activate_advisor = ADISCORD_staff_ZAO_Wilhelm_Dreyer
+activate_advisor = ADISCORD_staff_ZAO_Adrian_Ebers

@@ -12,3 +12,20 @@ set_popularities = {
 set_stability = 0.45
 set_war_support = 0.55
 recruit_character = SRP_Federal_Council
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_SRP_Konstantin_Gradov
+recruit_character = ADISCORD_staff_SRP_Maksim_Kurbatov
+recruit_character = ADISCORD_staff_SRP_Petr_Losev
+recruit_character = ADISCORD_staff_SRP_Ruslan_Malinin
+recruit_character = ADISCORD_staff_SRP_Semyon_Nekrasov
+recruit_character = ADISCORD_staff_SRP_Stanislav_Ostretsov
+recruit_character = ADISCORD_staff_SRP_Aleksei_Panov
+
+activate_advisor = ADISCORD_staff_SRP_Konstantin_Gradov
+activate_advisor = ADISCORD_staff_SRP_Maksim_Kurbatov
+activate_advisor = ADISCORD_staff_SRP_Petr_Losev
+activate_advisor = ADISCORD_staff_SRP_Ruslan_Malinin
+activate_advisor = ADISCORD_staff_SRP_Semyon_Nekrasov
+activate_advisor = ADISCORD_staff_SRP_Stanislav_Ostretsov
+activate_advisor = ADISCORD_staff_SRP_Aleksei_Panov

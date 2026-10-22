@@ -53,3 +53,22 @@ add_ideas = {
 set_research_slots = 2
 
 set_cosmetic_tag = NAM_confederation
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_NAM_Gennady_Panov
+recruit_character = ADISCORD_staff_NAM_Viktor_Belousov
+recruit_character = ADISCORD_staff_NAM_Andrei_Krasnov
+recruit_character = ADISCORD_staff_NAM_Dmitri_Rogov
+recruit_character = ADISCORD_staff_NAM_Dmitri_Sazonov
+recruit_character = ADISCORD_staff_NAM_Ilya_Tumanov
+recruit_character = ADISCORD_staff_NAM_Konstantin_Uvarov
+recruit_character = ADISCORD_staff_NAM_Maksim_Frolov
+recruit_character = ADISCORD_staff_NAM_Petr_Chernov
+
+activate_advisor = ADISCORD_staff_NAM_Gennady_Panov
+activate_advisor = ADISCORD_staff_NAM_Dmitri_Rogov
+activate_advisor = ADISCORD_staff_NAM_Dmitri_Sazonov
+activate_advisor = ADISCORD_staff_NAM_Ilya_Tumanov
+activate_advisor = ADISCORD_staff_NAM_Konstantin_Uvarov
+activate_advisor = ADISCORD_staff_NAM_Maksim_Frolov
+activate_advisor = ADISCORD_staff_NAM_Petr_Chernov

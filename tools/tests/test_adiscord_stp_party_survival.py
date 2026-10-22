@@ -32,7 +32,12 @@ TRIGGERS = 'common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt'
 def expand_survival_gates(items):
     """Expand only the new gates; pre-existing predicates are explicit scenario facts."""
     definitions = {e.key: e.value for e in parse_clausewitz(read(TRIGGERS))}
-    names = {'STP_ps_nod_order_current', 'STP_ps_can_launch_return'}
+    names = {
+        'STP_ps_nod_order_current',
+        'STP_ps_can_launch_return',
+        'STP_ps_val_sale_buyer_ready',
+        'STP_ps_val_sale_open',
+    }
 
     def expand(nodes):
         expanded = []
@@ -54,6 +59,268 @@ def expand_survival_gates(items):
         return expanded
 
     return expand(items)
+
+
+class CongressDefenceContracts(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
+        cls.decisions = {
+            d.key: d.value
+            for c in parse_clausewitz(read(DECISIONS))
+            for d in c.value
+            if isinstance(d.value, list)
+        }
+
+    def test_fortifications_finish_only_while_party_holds_congress(self):
+        name = 'STP_cw_fortify_congress'
+        self.assertIn(name, list(self.decisions))
+        decision = self.decisions[name]
+        self.assertEqual(one(decision, 'cost'), '0')
+        self.assertEqual(one(decision, 'days_remove'), '15')
+        self.assertEqual(one(decision, 'fire_only_once'), 'yes')
+        for war, owner, controller in product((False, True), repeat=3):
+            facts = {
+                ('STP', 'STP_ps_war_active', 'yes'): war,
+                ('STP', 'owns_state', '28'): owner,
+                ('STP', 'controls_province', '145'): controller,
+            }
+            valid = war and owner and controller
+            self.assertEqual(matches_conditions(one(decision, 'visible'), facts), valid)
+            self.assertEqual(matches_conditions(one(decision, 'cancel_trigger'), facts), not valid)
+            effects = [e for _, e in selected_effects(one(decision, 'remove_effect'), facts)]
+            buildings = [e.value for e in walk(effects) if e.key == 'add_building_construction']
+            self.assertEqual(len(buildings), int(valid))
+            if valid:
+                self.assertEqual(one(buildings[0], 'province'), '145')
+                self.assertEqual(one(buildings[0], 'level'), '2')
+                self.assertEqual(one(buildings[0], 'type'), 'bunker')
+        self.assertFalse(children(decision, 'complete_effect'))
+        self.assertFalse(children(decision, 'cancel_effect'))
+
+    def test_ai_starts_real_decision_once_and_after_player_handoff(self):
+        name = 'STP_cw_ai_fortify_congress'
+        self.assertIn(name, list(self.effects))
+        for ai, active, war in product((False, True), repeat=3):
+            facts = {
+                ('STP', 'is_ai', 'yes'): ai,
+                ('STP', 'has_decision', 'STP_cw_fortify_congress'): active,
+                ('STP', 'STP_ps_war_active', 'yes'): war,
+                ('STP', 'owns_state', '28'): True,
+                ('STP', 'controls_province', '145'): True,
+            }
+            effects = [e for _, e in selected_effects(self.effects[name], facts)]
+            self.assertEqual(
+                [e.value for e in effects if e.key == 'activate_decision'],
+                ['STP_cw_fortify_congress'] if ai and war and not active else [],
+            )
+        self.assertIn(name, str(signature(self.effects['STP_cw_begin_hostilities'])))
+        events = parse_clausewitz(read('events/ADISCORD_STP_events.txt'))
+        event = next(
+            e.value for e in events
+            if e.key == 'country_event' and one(e.value, 'id') == 'ADISCORD_STP_cw.94'
+        )
+        self.assertEqual(one(one(event, 'immediate'), name), 'yes')
+
+    def test_guard_is_a_complete_starting_package_with_duplicate_protection(self):
+        name = 'STP_cw_raise_congress_guard'
+        self.assertIn(name, list(self.effects))
+        gate = one(one(self.effects[name], 'if'), 'limit')
+        for party, owner, controller, template in product((False, True), repeat=4):
+            scope = 'STP' if party else 'STS'
+            facts = {
+                (scope, 'owns_state', '28'): owner,
+                (scope, 'controls_province', '145'): controller,
+                (scope, 'numeric', 'has_manpower'): 0,
+                (scope, 'equipment', 'infantry_equipment'): 0,
+                (scope, 'has_template', 'Congress Infantry Guard'): template,
+            }
+            valid = party and owner and controller and not template
+            self.assertEqual(matches_conditions(gate, facts, scope), valid)
+            effects = [e for _, e in selected_effects(self.effects[name], facts, scope)]
+            self.assertEqual(sum(e.key == 'create_unit' for e in effects), 2 if valid else 0)
+            self.assertFalse([
+                e for e in effects
+                if e.key in ('add_manpower', 'add_equipment_to_stockpile', 'STP_cw_pay_rifles')
+            ])
+        body = one(self.effects[name], 'if')
+        template = one(body, 'division_template')
+        regiments = one(template, 'regiments')
+        support = one(template, 'support')
+        units = one(parse_clausewitz(read('common/units/ADISCORD_land_units.txt')), 'sub_units')
+        self.assertEqual(len(regiments), 6)
+        self.assertTrue(all(e.key == 'infantry' for e in regiments))
+        self.assertEqual([e.key for e in support], ['engineer'])
+        self.assertEqual(one(template, 'priority'), '2')
+        self.assertEqual(one(template, 'is_locked'), 'yes')
+        self.assertEqual(one(template, 'force_allow_recruiting'), 'no')
+        loop = one(one(body, '28'), 'for_loop_effect')
+        count = int(one(loop, 'end'))
+        self.assertEqual(count, 2)
+        manpower = 0
+        equipment = {}
+        for slot in regiments + support:
+            battalion = one(units, slot.key)
+            manpower += count * int(one(battalion, 'manpower'))
+            for need in one(battalion, 'need'):
+                equipment[need.key] = equipment.get(need.key, 0) + count * int(need.value)
+        self.assertEqual(manpower, 12600)
+        self.assertEqual(equipment, {
+            'infantry_equipment': 11340,
+            'ADISCORD_squad_weapons_equipment': 96,
+            'support_equipment': 60,
+        })
+        unit = one(loop, 'create_unit')
+        division = parse_clausewitz(one(unit, 'division'))
+        self.assertEqual(one(division, 'location'), '145')
+        self.assertEqual(one(division, 'start_experience_factor'), '0.3')
+        self.assertEqual(one(division, 'start_equipment_factor'), '1.0')
+        self.assertEqual(one(division, 'start_manpower_factor'), '1.0')
+        self.assertEqual(one(unit, 'owner'), 'STP')
+        self.assertEqual(one(unit, 'allow_spawning_on_enemy_provs'), 'no')
+        start = one(self.effects['STP_cw_start'], 'if')
+        calls = [e.key for e in start]
+        self.assertEqual(calls.count(name), 1)
+        index = calls.index(name)
+        before = str(signature(start[:index]))
+        after = str(signature(start[index + 1:]))
+        self.assertIn('STP_party_reinforced_garrison_asset', before)
+        self.assertNotIn('STP_cw_mobilize_assault_division', before)
+        self.assertIn('STP_cw_mobilize_assault_division', after)
+
+    def test_guard_uses_standard_equipment_without_special_unlocks(self):
+        body = one(self.effects['STP_cw_raise_congress_guard'], 'if')
+        self.assertFalse([
+            e for e in walk(body)
+            if e.key in (
+                'create_equipment_variant', 'complete_special_project',
+                'set_technology', 'unlock_subunit',
+            )
+        ])
+        loop = one(one(body, '28'), 'for_loop_effect')
+        division = parse_clausewitz(one(one(loop, 'create_unit'), 'division'))
+        self.assertFalse(children(division, 'force_equipment_variants'))
+
+    def test_localisation_and_script_encoding(self):
+        root = Path(__file__).resolve().parents[2]
+        for language in ('russian', 'english'):
+            path = root / f'localisation/{language}/ADISCORD_STP_l_{language}.yml'
+            raw = path.read_bytes()
+            self.assertTrue(raw.startswith(b'\xef\xbb\xbf'))
+            lines = raw.decode('utf-8-sig').splitlines()
+            for key in ('STP_cw_fortify_congress', 'STP_cw_fortify_congress_desc'):
+                matches = [line for line in lines if line.startswith(f' {key}:')]
+                self.assertEqual(len(matches), 1)
+                self.assertRegex(matches[0], rf'^ {key}: "[^"\r\n]+"$')
+            report = next(
+                line for line in lines
+                if line.startswith(' STP_battle_for_stelander_desc:')
+            )
+            self.assertIn('§Y2§!', report)
+            self.assertIn('§Y6§!', report)
+            self.assertNotIn('щит', report.lower())
+            self.assertNotIn('shield', report.lower())
+            self.assertNotIn('§Y6000§! £manpower_texticon', report)
+            self.assertNotIn('§Y5400§! £infantry_equipment_texticon', report)
+        for path in (EFFECTS, DECISIONS, 'events/ADISCORD_STP_events.txt'):
+            self.assertFalse((root / path).read_bytes().startswith(b'\xef\xbb\xbf'))
+
+
+class CivilWarAIReadinessContracts(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.ai = {
+            e.key: e.value for e in parse_clausewitz(
+                read('common/ai_strategy/ADISCORD_STP_civil_war.txt')
+            )
+        }
+
+    def test_congress_guard_has_a_garrison_role_without_field_conversion(self):
+        templates = parse_clausewitz(read('common/ai_templates/ADISCORD_land_templates.txt'))
+        roles = [e.value for e in templates if children(e.value, 'role') == ['garrison']]
+        self.assertEqual(len(roles), 1)
+        targets = {e.key: e.value for e in roles[0] if isinstance(e.value, list)}
+        self.assertIn('STP_congress_guard', list(targets))
+        target = targets['STP_congress_guard']
+        self.assertEqual(one(one(target, 'can_upgrade_in_field'), 'always'), 'no')
+        self.assertEqual(
+            signature(one(one(target, 'target_template'), 'regiments')),
+            [('infantry', '6')],
+        )
+        self.assertEqual(
+            signature(one(one(target, 'target_template'), 'support')),
+            [('engineer', '1')],
+        )
+        for party, war, congress in product((False, True), repeat=3):
+            scope = 'STP' if party else 'STS'
+            facts = {
+                (scope, 'is_ai', 'yes'): True,
+                (scope, 'STP_ps_war_active', 'yes'): war,
+                (scope, 'controls_province', '145'): congress,
+                (scope, 'has_template', 'Congress Infantry Guard'): True,
+            }
+            self.assertEqual(
+                matches_conditions(one(target, 'enable'), facts, scope),
+                party and war and congress,
+            )
+        defence = self.ai['STP_cw_defend_fada']
+        types = [one(e.value, 'type') for e in defence if e.key == 'ai_strategy']
+        self.assertIn('garrison', types)
+        self.assertIn('put_unit_buffers', types)
+
+    def test_party_readiness_overrides_full_attack_but_not_initial_recovery(self):
+        name = 'STP_ps_cautious_counterattack'
+        self.assertIn(name, list(self.ai))
+        policy = self.ai[name]
+        for ready, stock, strength in product((False, True), (0.049, 0.05), (0.79, 0.8)):
+            facts = {
+                ('STP', 'is_ai', 'yes'): True,
+                ('STP', 'STP_ps_can_counterattack', 'yes'): ready,
+                ('STP', 'stockpile_ratio', 'infantry_equipment'): stock,
+                ('STP', 'fighting_army_strength_ratio', 'STS'): strength,
+            }
+            self.assertEqual(
+                matches_conditions(one(policy, 'enable'), facts),
+                ready and (stock < 0.05 or strength < 0.8),
+            )
+        front = one(policy, 'ai_strategy')
+        self.assertGreater(int(one(front, 'priority')), 1500)
+        self.assertEqual(one(front, 'execution_type'), 'careful')
+        self.assertEqual(one(front, 'execute_order'), 'yes')
+
+    def test_shabrat_shortages_override_nod_assault_without_abandoning_front(self):
+        name = 'STS_shabrat_cautious_nod_front'
+        self.assertIn(name, list(self.ai))
+        policy = self.ai[name]
+        for war, stock, strength in product((False, True), (0.049, 0.05), (0.79, 0.8)):
+            facts = {
+                ('STS', 'is_ai', 'yes'): True,
+                ('STS', 'has_capitulated', 'no'): True,
+                ('STS', 'has_war_with', 'NOD'): war,
+                ('STS', 'stockpile_ratio', 'infantry_equipment'): stock,
+                ('STS', 'fighting_army_strength_ratio', 'NOD'): strength,
+            }
+            self.assertEqual(
+                matches_conditions(one(policy, 'enable'), facts, 'STS'),
+                war and (stock < 0.05 or strength < 0.8),
+            )
+        front = one(policy, 'ai_strategy')
+        self.assertGreater(int(one(front, 'priority')), 1800)
+        self.assertEqual(one(front, 'tag'), 'NOD')
+        self.assertEqual(one(front, 'execute_order'), 'yes')
+        self.assertEqual(one(front, 'manual_attack'), 'no')
+
+    def test_shabrat_army_profile_does_not_duplicate_front_demand(self):
+        army = self.ai['STS_shabrat_civil_war_army']
+        self.assertFalse([
+            e for e in army if e.key == 'ai_strategy'
+            and one(e.value, 'type') == 'front_unit_request'
+        ])
+        front = self.ai['STS_cw_front_against_stp']
+        self.assertTrue([
+            e for e in front if e.key == 'ai_strategy'
+            and one(e.value, 'type') == 'front_unit_request'
+        ])
 
 
 class PartySurvivalContracts(unittest.TestCase):
@@ -281,6 +548,7 @@ class PartySurvivalContracts(unittest.TestCase):
             ('VAL', 'STP_ps_val_supply_open', 'yes'): True,
             ('VAL', 'has_country_flag', 'STP_ps_val_authorized'): True,
             ('STP', 'STP_cw_preparation_open', 'yes'): True,
+            ('STP', 'STP_ps_val_sale_buyer_ready', 'yes'): True,
         }
         for rifles, affordable in ((24999.9, False), (25000, True), (25000.1, True)):
             for paused in (False, True):
@@ -299,6 +567,57 @@ class PartySurvivalContracts(unittest.TestCase):
                         matches_conditions(one(decision, 'available'), facts, 'VAL'),
                         not paused,
                     )
+
+    def test_prewar_sale_checks_buyer_before_reserving_rifles(self):
+        decision = self.decisions['STP_ps_val_sell_rifles']
+        facts = {
+            ('VAL', 'STP_ps_val_supply_open', 'yes'): True,
+            ('VAL', 'has_country_flag', 'STP_ps_val_authorized'): True,
+            ('VAL', 'equipment', 'infantry_equipment'): 25000,
+            ('STP', 'STP_cw_preparation_open', 'yes'): True,
+        }
+        available = expand_survival_gates(one(decision, 'available'))
+        begin = expand_survival_gates(self.effects['STP_ps_begin_val_sale'])
+        for party, declined, money in product(
+            (False, True), (False, True), (-100, 0, 499.9, 500, 500.1)
+        ):
+            with self.subTest(party=party, declined=declined, money=money):
+                facts[('STP', 'has_country_flag', 'STP_sided_with_the_party_flag')] = party
+                facts[('VAL', 'has_country_flag', 'STP_ps_val_sale_declined')] = declined
+                facts[('STP', 'variable', 'ADISCORD_economy_treasury')] = money
+                expected = not declined and (party or money >= 500)
+                self.assertEqual(matches_conditions(available, facts, 'VAL'), expected)
+                selected = list(selected_effects(begin, facts, 'VAL'))
+                self.assertEqual(
+                    any(e.key == 'STP_cw_pay_rifles' for _, e in selected), expected
+                )
+
+    def test_prewar_sale_refusal_closes_future_offers_only_while_pending(self):
+        events = parse_clausewitz(read('events/ADISCORD_STP_events.txt'))
+        event = next(
+            e.value for e in events
+            if e.key == 'country_event'
+            and one(e.value, 'id') == 'ADISCORD_STP_preparation.32'
+        )
+        refusal = children(event, 'option')[0]
+        self.assertEqual(one(refusal, 'name'), 'ADISCORD_STP_preparation.32.b')
+        self.assertIn('STP_ps_decline_val_sale', [e.key for e in walk(refusal)])
+        decline = self.effects['STP_ps_decline_val_sale']
+        for pending in (False, True):
+            selected = list(selected_effects(
+                decline, {('VAL', 'STP_ps_val_sale_awaits_payment', 'yes'): pending}, 'VAL'
+            ))
+            self.assertEqual(
+                [(scope, e.value) for scope, e in selected if e.key == 'set_country_flag'],
+                [('VAL', 'STP_ps_val_sale_declined')] if pending else [],
+            )
+            self.assertEqual(
+                [e.key for _, e in selected if e.key == 'STP_ps_cancel_val_sale'],
+                ['STP_ps_cancel_val_sale'] if pending else [],
+            )
+        self.assertNotIn(
+            'STP_ps_val_sale_declined', str(signature(self.effects['STP_ps_cancel_val_sale']))
+        )
 
     def test_prewar_sale_pause_applies_to_both_sales_only_at_settlement(self):
         clear = self.effects['STP_ps_clear_val_receipt']

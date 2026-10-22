@@ -2122,6 +2122,15 @@ defined_text = {
 	}
 }
 
+defined_text = {
+	name = STPGetCoalitionReport
+	text = {
+		trigger = { STP_hw_war_current = yes }
+		localization_key = STP_hw_coalition_report
+	}
+	text = { localization_key = STP_ps_empty }
+}
+
 # Party war: inheritance of the festival.
 defined_text = {
 	name = STPGetStalledWarReport

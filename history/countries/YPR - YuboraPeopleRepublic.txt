@@ -37,3 +37,12 @@ set_research_slots = 2
 
 # The administration effect activates this dormant political role.
 recruit_character = YPR_Contract_Council
+
+# Military leadership candidates.
+recruit_character = ADISCORD_staff_YPR_Viktor_Frolov
+recruit_character = ADISCORD_staff_YPR_Georgy_Chernov
+recruit_character = ADISCORD_staff_YPR_Denis_Vedenin
+recruit_character = ADISCORD_staff_YPR_Yevgeny_Gradov
+recruit_character = ADISCORD_staff_YPR_Igor_Kurbatov
+recruit_character = ADISCORD_staff_YPR_Kirill_Losev
+recruit_character = ADISCORD_staff_YPR_Leonid_Malinin

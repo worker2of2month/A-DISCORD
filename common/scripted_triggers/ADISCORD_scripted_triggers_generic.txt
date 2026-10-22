@@ -229,6 +229,14 @@ ADISCORD_has_national_military_staff = {
 		tag = BTL
 		tag = STS
 		tag = SRP
+		tag = SHL
+		tag = WKR
+		tag = TVA
+		tag = EYR
+		tag = EGC
+		tag = RIV
+		tag = YOR
+		tag = IBA
 	}
 }
 

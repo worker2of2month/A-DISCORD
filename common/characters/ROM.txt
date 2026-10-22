@@ -24,4 +24,155 @@ characters = {
 			desc = ROM_Erwin_Von_Romanovskiy_desc
 		}
 	}
+
+	# ROM military leadership.
+	ADISCORD_staff_ROM_Georg_Meiner = {
+		name = ADISCORD_staff_ROM_Georg_Meiner
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_ROM_Georg_Meiner
+			desc = ADISCORD_staff_ROM_Georg_Meiner_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ROM }
+			visible = { tag = ROM }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_ROM_Dietrich_Roemer = {
+		name = ADISCORD_staff_ROM_Dietrich_Roemer
+		portraits = {
+			army = {
+				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			idea_token = ADISCORD_staff_ROM_Dietrich_Roemer
+			desc = ADISCORD_staff_ROM_Dietrich_Roemer_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ROM }
+			visible = { tag = ROM }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_ROM_Emil_Scholz = {
+		name = ADISCORD_staff_ROM_Emil_Scholz
+		portraits = {
+			army = {
+				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+			}
+		}
+		advisor = {
+			slot = air_chief
+			idea_token = ADISCORD_staff_ROM_Emil_Scholz
+			desc = ADISCORD_staff_ROM_Emil_Scholz_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ROM }
+			visible = { tag = ROM }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_ROM_Felix_Treiber = {
+		name = ADISCORD_staff_ROM_Felix_Treiber
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_ROM_Felix_Treiber
+			desc = ADISCORD_staff_ROM_Felix_Treiber_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ROM }
+			visible = { tag = ROM }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_ROM_Gustav_Wolff = {
+		name = ADISCORD_staff_ROM_Gustav_Wolff
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_log_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_ROM_Gustav_Wolff
+			desc = ADISCORD_staff_ROM_Gustav_Wolff_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ROM }
+			visible = { tag = ROM }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_ROM_Heinrich_Becker = {
+		name = ADISCORD_staff_ROM_Heinrich_Becker
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_art_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_ROM_Heinrich_Becker
+			desc = ADISCORD_staff_ROM_Heinrich_Becker_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ROM }
+			visible = { tag = ROM }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_ROM_Johann_Walter = {
+		name = ADISCORD_staff_ROM_Johann_Walter
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_off_western_european_2d
+			}
+		}
+		advisor = {
+			slot = theorist
+			idea_token = ADISCORD_staff_ROM_Johann_Walter
+			desc = ADISCORD_staff_ROM_Johann_Walter_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ROM }
+			visible = { tag = ROM }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			ai_will_do = { factor = 1 }
+		}
+	}
 }

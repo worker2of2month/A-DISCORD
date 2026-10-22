@@ -10,10 +10,36 @@ ADISCORD_garrison_templates = {
 	upgrade_prio = {
 		base = 1
 		modifier = {
+			factor = 0
+			tag = STP
+			STP_ps_war_active = yes
+			has_template = "Congress Infantry Guard"
+		}
+		modifier = {
 			factor = 15
 			NOT = { ai_has_role_template = garrison }
 		}
 	}
+	# Exact matching gives the Congress infantry guards a garrison role.
+	# Role selection is separate from template upgrades and field conversions.
+	STP_congress_guard = {
+		enable = {
+			is_ai = yes
+			tag = STP
+			STP_ps_war_active = yes
+			controls_province = 145
+			has_template = "Congress Infantry Guard"
+		}
+		reinforce_prio = 2
+		custom_icon = 3
+		upgrade_prio = { base = 100 }
+		can_upgrade_in_field = { always = no }
+		target_template = {
+			regiments = { infantry = 6 }
+			support = { engineer = 1 }
+		}
+	}
+
 	ADISCORD_garrison_levy = {
 		enable = {
 			NOT = {

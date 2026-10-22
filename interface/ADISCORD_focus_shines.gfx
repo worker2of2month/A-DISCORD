@@ -2794,6 +2794,196 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_STP_cw_cabinet_archives_shine"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_cabinet_archives.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_cabinet_archives.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_district_administration_shine"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_district_administration.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_district_administration.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_delay_election_commission_shine"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_delay_election_commission.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_delay_election_commission.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_The_Silent_Mountain_March_shine"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_The_Silent_Mountain_March.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_The_Silent_Mountain_March.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_autonomy_guarantees_shine"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_autonomy_guarantees.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_autonomy_guarantees.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_border_evidence_shine"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_border_evidence.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_border_evidence.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_Garrisons_Hesitate_shine"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Garrisons_Hesitate.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Garrisons_Hesitate.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_prepare_capital_sabotage_shine"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_prepare_capital_sabotage.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_prepare_capital_sabotage.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_local_council_envoys_shine"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_local_council_envoys.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_local_council_envoys.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_STATE_OF_THE_REPUBLIC_shine"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_STATE_OF_THE_REPUBLIC.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_STATE_OF_THE_REPUBLIC.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
 		name = "GFX_focus_STP_cw_pay_officials_shine"
 		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_pay_officials.png"
 		effectFile = "gfx/FX/buttonstate.lua"

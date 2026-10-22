@@ -3,3 +3,20 @@ set_popularities = { etatism = 0 chauvinism = 0 humanism = 0 pragmatism = 0 tech
 recruit_character = TVA_Dorian_Worx
 set_research_slots = 2
 add_ideas = { limited_conscription }
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_TVA_Walter_Krause
+recruit_character = ADISCORD_staff_TVA_Otto_Lindner
+recruit_character = ADISCORD_staff_TVA_Ernst_Weber
+recruit_character = ADISCORD_staff_TVA_Leon_Kessler
+recruit_character = ADISCORD_staff_TVA_Bruno_Adler
+recruit_character = ADISCORD_staff_TVA_Kurt_Heinemann
+recruit_character = ADISCORD_staff_TVA_Felix_Wendt
+
+activate_advisor = ADISCORD_staff_TVA_Walter_Krause
+activate_advisor = ADISCORD_staff_TVA_Otto_Lindner
+activate_advisor = ADISCORD_staff_TVA_Ernst_Weber
+activate_advisor = ADISCORD_staff_TVA_Leon_Kessler
+activate_advisor = ADISCORD_staff_TVA_Bruno_Adler
+activate_advisor = ADISCORD_staff_TVA_Kurt_Heinemann
+activate_advisor = ADISCORD_staff_TVA_Felix_Wendt

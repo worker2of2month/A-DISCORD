@@ -482,6 +482,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			activate_advisor = ADISCORD_staff_WRK_Pavel_Barsov
 			army_experience = 100
 			effect_tooltip = { add_ideas = WRK_empire_delta_imperial_general_staff }
 			hidden_effect = {

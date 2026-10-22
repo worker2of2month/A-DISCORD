@@ -39,3 +39,20 @@ set_popularities = {
 set_stability = 0.31
 
 set_research_slots = 2
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_VAD_Ruslan_Rogov
+recruit_character = ADISCORD_staff_VAD_Semyon_Sazonov
+recruit_character = ADISCORD_staff_VAD_Stanislav_Tumanov
+recruit_character = ADISCORD_staff_VAD_Aleksei_Uvarov
+recruit_character = ADISCORD_staff_VAD_Andrei_Frolov
+recruit_character = ADISCORD_staff_VAD_Boris_Chernov
+recruit_character = ADISCORD_staff_VAD_Viktor_Vedenin
+
+activate_advisor = ADISCORD_staff_VAD_Ruslan_Rogov
+activate_advisor = ADISCORD_staff_VAD_Semyon_Sazonov
+activate_advisor = ADISCORD_staff_VAD_Stanislav_Tumanov
+activate_advisor = ADISCORD_staff_VAD_Aleksei_Uvarov
+activate_advisor = ADISCORD_staff_VAD_Andrei_Frolov
+activate_advisor = ADISCORD_staff_VAD_Boris_Chernov
+activate_advisor = ADISCORD_staff_VAD_Viktor_Vedenin

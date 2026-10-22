@@ -1102,6 +1102,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			activate_advisor = ADISCORD_staff_SHL_Navid_Azari
 			air_experience = 10
 			if = {
 				limit = {
@@ -1346,6 +1347,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			activate_advisor = ADISCORD_staff_SHL_Rashid_Farrokh
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea

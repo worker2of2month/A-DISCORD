@@ -11,3 +11,20 @@ recruit_character = YOR_Pavel_Korin
 set_research_slots = 2
 
 set_cosmetic_tag = YOR_confederation
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_YOR_Nikolai_Denisov
+recruit_character = ADISCORD_staff_YOR_Leonid_Kireev
+recruit_character = ADISCORD_staff_YOR_Alexei_Naumov
+recruit_character = ADISCORD_staff_YOR_Dmitri_Lapin
+recruit_character = ADISCORD_staff_YOR_Pavel_Savin
+recruit_character = ADISCORD_staff_YOR_Sergei_Rodionov
+recruit_character = ADISCORD_staff_YOR_Viktor_Kuzmin
+
+activate_advisor = ADISCORD_staff_YOR_Nikolai_Denisov
+activate_advisor = ADISCORD_staff_YOR_Leonid_Kireev
+activate_advisor = ADISCORD_staff_YOR_Alexei_Naumov
+activate_advisor = ADISCORD_staff_YOR_Dmitri_Lapin
+activate_advisor = ADISCORD_staff_YOR_Pavel_Savin
+activate_advisor = ADISCORD_staff_YOR_Sergei_Rodionov
+activate_advisor = ADISCORD_staff_YOR_Viktor_Kuzmin

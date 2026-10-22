@@ -126,3 +126,28 @@ VAL_qol_initialize_party_leaders = yes
 recruit_character = VAL_Anton_Rein
 recruit_character = VAL_Irina_Karst
 recruit_character = VAL_Viktor_Bran
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_VAL_Kirill_Gradov
+recruit_character = ADISCORD_staff_VAL_Sergei_Rogov
+recruit_character = ADISCORD_staff_VAL_Leonid_Kurbatov
+recruit_character = ADISCORD_staff_VAL_Timofei_Sazonov
+recruit_character = ADISCORD_staff_VAL_Vladimir_Litvin
+recruit_character = ADISCORD_staff_VAL_Mikhail_Losev
+recruit_character = ADISCORD_staff_VAL_Fedor_Tumanov
+recruit_character = ADISCORD_staff_VAL_Nikolai_Malinin
+recruit_character = ADISCORD_staff_VAL_Oleg_Nekrasov
+recruit_character = ADISCORD_staff_VAL_Pavel_Ostretsov
+recruit_character = ADISCORD_staff_VAL_Yuri_Uvarov
+recruit_character = ADISCORD_staff_VAL_Arkady_Frolov
+recruit_character = ADISCORD_staff_VAL_Vladimir_Chernov
+recruit_character = ADISCORD_staff_VAL_Roman_Panov
+recruit_character = ADISCORD_staff_VAL_Gennady_Vedenin
+
+activate_advisor = ADISCORD_staff_VAL_Kirill_Gradov
+activate_advisor = ADISCORD_staff_VAL_Leonid_Kurbatov
+activate_advisor = ADISCORD_staff_VAL_Mikhail_Losev
+activate_advisor = ADISCORD_staff_VAL_Nikolai_Malinin
+activate_advisor = ADISCORD_staff_VAL_Oleg_Nekrasov
+activate_advisor = ADISCORD_staff_VAL_Pavel_Ostretsov
+activate_advisor = ADISCORD_staff_VAL_Roman_Panov

@@ -169,4 +169,1506 @@ characters = {
 			id = -1
 		}
 	}
+
+	# EGC military leadership.
+	ADISCORD_staff_EGC_Boris_Tarasov = {
+		name = ADISCORD_staff_EGC_Boris_Tarasov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_EGC_Boris_Tarasov
+			desc = ADISCORD_staff_EGC_Boris_Tarasov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EGC }
+			visible = { tag = EGC }
+			available = { always = yes }
+			traits = { army_chief_drill_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EGC_Alexei_Demin = {
+		name = ADISCORD_staff_EGC_Alexei_Demin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			idea_token = ADISCORD_staff_EGC_Alexei_Demin
+			desc = ADISCORD_staff_EGC_Alexei_Demin_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EGC }
+			visible = { tag = EGC }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EGC_Viktor_Polevoy = {
+		name = ADISCORD_staff_EGC_Viktor_Polevoy
+		portraits = {
+			army = {
+				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+			}
+		}
+		advisor = {
+			slot = air_chief
+			idea_token = ADISCORD_staff_EGC_Viktor_Polevoy
+			desc = ADISCORD_staff_EGC_Viktor_Polevoy_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EGC }
+			visible = { tag = EGC }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EGC_Andrei_Zhuravlev = {
+		name = ADISCORD_staff_EGC_Andrei_Zhuravlev
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_EGC_Andrei_Zhuravlev
+			desc = ADISCORD_staff_EGC_Andrei_Zhuravlev_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EGC }
+			visible = { tag = EGC }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EGC_Konstantin_Rudenko = {
+		name = ADISCORD_staff_EGC_Konstantin_Rudenko
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_log_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_EGC_Konstantin_Rudenko
+			desc = ADISCORD_staff_EGC_Konstantin_Rudenko_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EGC }
+			visible = { tag = EGC }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EGC_Mikhail_Belkin = {
+		name = ADISCORD_staff_EGC_Mikhail_Belkin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_art_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_EGC_Mikhail_Belkin
+			desc = ADISCORD_staff_EGC_Mikhail_Belkin_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EGC }
+			visible = { tag = EGC }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EGC_Pavel_Korotkov = {
+		name = ADISCORD_staff_EGC_Pavel_Korotkov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_off_western_european_2d
+			}
+		}
+		advisor = {
+			slot = theorist
+			idea_token = ADISCORD_staff_EGC_Pavel_Korotkov
+			desc = ADISCORD_staff_EGC_Pavel_Korotkov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EGC }
+			visible = { tag = EGC }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	# EYR military leadership.
+	ADISCORD_staff_EYR_Andrei_Rozhin = {
+		name = ADISCORD_staff_EYR_Andrei_Rozhin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_EYR_Andrei_Rozhin
+			desc = ADISCORD_staff_EYR_Andrei_Rozhin_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EYR }
+			visible = { tag = EYR }
+			available = { always = yes }
+			traits = { army_chief_defensive_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EYR_Viktor_Kedrin = {
+		name = ADISCORD_staff_EYR_Viktor_Kedrin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			idea_token = ADISCORD_staff_EYR_Viktor_Kedrin
+			desc = ADISCORD_staff_EYR_Viktor_Kedrin_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EYR }
+			visible = { tag = EYR }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EYR_Pavel_Lunin = {
+		name = ADISCORD_staff_EYR_Pavel_Lunin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+			}
+		}
+		advisor = {
+			slot = air_chief
+			idea_token = ADISCORD_staff_EYR_Pavel_Lunin
+			desc = ADISCORD_staff_EYR_Pavel_Lunin_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EYR }
+			visible = { tag = EYR }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EYR_Sergei_Vetkin = {
+		name = ADISCORD_staff_EYR_Sergei_Vetkin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_EYR_Sergei_Vetkin
+			desc = ADISCORD_staff_EYR_Sergei_Vetkin_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EYR }
+			visible = { tag = EYR }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EYR_Roman_Zimin = {
+		name = ADISCORD_staff_EYR_Roman_Zimin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_log_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_EYR_Roman_Zimin
+			desc = ADISCORD_staff_EYR_Roman_Zimin_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EYR }
+			visible = { tag = EYR }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EYR_Mikhail_Rakitov = {
+		name = ADISCORD_staff_EYR_Mikhail_Rakitov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_art_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_EYR_Mikhail_Rakitov
+			desc = ADISCORD_staff_EYR_Mikhail_Rakitov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EYR }
+			visible = { tag = EYR }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EYR_Leonid_Kravtsov = {
+		name = ADISCORD_staff_EYR_Leonid_Kravtsov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_off_western_european_2d
+			}
+		}
+		advisor = {
+			slot = theorist
+			idea_token = ADISCORD_staff_EYR_Leonid_Kravtsov
+			desc = ADISCORD_staff_EYR_Leonid_Kravtsov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EYR }
+			visible = { tag = EYR }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	# IBA military leadership.
+	ADISCORD_staff_IBA_Mikhail_Mironov = {
+		name = ADISCORD_staff_IBA_Mikhail_Mironov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_IBA_Mikhail_Mironov
+			desc = ADISCORD_staff_IBA_Mikhail_Mironov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = IBA }
+			visible = { tag = IBA }
+			available = { always = yes }
+			traits = { army_chief_defensive_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_IBA_Andrei_Selivanov = {
+		name = ADISCORD_staff_IBA_Andrei_Selivanov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			idea_token = ADISCORD_staff_IBA_Andrei_Selivanov
+			desc = ADISCORD_staff_IBA_Andrei_Selivanov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = IBA }
+			visible = { tag = IBA }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_IBA_Viktor_Nikitin = {
+		name = ADISCORD_staff_IBA_Viktor_Nikitin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+			}
+		}
+		advisor = {
+			slot = air_chief
+			idea_token = ADISCORD_staff_IBA_Viktor_Nikitin
+			desc = ADISCORD_staff_IBA_Viktor_Nikitin_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = IBA }
+			visible = { tag = IBA }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_IBA_Pavel_Terekhov = {
+		name = ADISCORD_staff_IBA_Pavel_Terekhov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_IBA_Pavel_Terekhov
+			desc = ADISCORD_staff_IBA_Pavel_Terekhov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = IBA }
+			visible = { tag = IBA }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_IBA_Sergei_Ustinov = {
+		name = ADISCORD_staff_IBA_Sergei_Ustinov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_log_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_IBA_Sergei_Ustinov
+			desc = ADISCORD_staff_IBA_Sergei_Ustinov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = IBA }
+			visible = { tag = IBA }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_IBA_Nikolai_Somov = {
+		name = ADISCORD_staff_IBA_Nikolai_Somov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_art_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_IBA_Nikolai_Somov
+			desc = ADISCORD_staff_IBA_Nikolai_Somov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = IBA }
+			visible = { tag = IBA }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_IBA_Roman_Ageev = {
+		name = ADISCORD_staff_IBA_Roman_Ageev
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_off_western_european_2d
+			}
+		}
+		advisor = {
+			slot = theorist
+			idea_token = ADISCORD_staff_IBA_Roman_Ageev
+			desc = ADISCORD_staff_IBA_Roman_Ageev_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = IBA }
+			visible = { tag = IBA }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	# PWR military leadership.
+	ADISCORD_staff_PWR_Johann_Becker = {
+		name = ADISCORD_staff_PWR_Johann_Becker
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_PWR_Johann_Becker
+			desc = ADISCORD_staff_PWR_Johann_Becker_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PWR }
+			visible = { tag = PWR }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_PWR_Karl_Walter = {
+		name = ADISCORD_staff_PWR_Karl_Walter
+		portraits = {
+			army = {
+				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			idea_token = ADISCORD_staff_PWR_Karl_Walter
+			desc = ADISCORD_staff_PWR_Karl_Walter_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PWR }
+			visible = { tag = PWR }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_PWR_Karl_Garten = {
+		name = ADISCORD_staff_PWR_Karl_Garten
+		portraits = {
+			army = {
+				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+			}
+		}
+		advisor = {
+			slot = air_chief
+			idea_token = ADISCORD_staff_PWR_Karl_Garten
+			desc = ADISCORD_staff_PWR_Karl_Garten_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PWR }
+			visible = { tag = PWR }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_PWR_Leon_Dreyer = {
+		name = ADISCORD_staff_PWR_Leon_Dreyer
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_PWR_Leon_Dreyer
+			desc = ADISCORD_staff_PWR_Leon_Dreyer_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PWR }
+			visible = { tag = PWR }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_PWR_Martin_Ebers = {
+		name = ADISCORD_staff_PWR_Martin_Ebers
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_log_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_PWR_Martin_Ebers
+			desc = ADISCORD_staff_PWR_Martin_Ebers_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PWR }
+			visible = { tag = PWR }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_PWR_Niklas_Vogel = {
+		name = ADISCORD_staff_PWR_Niklas_Vogel
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_art_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_PWR_Niklas_Vogel
+			desc = ADISCORD_staff_PWR_Niklas_Vogel_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PWR }
+			visible = { tag = PWR }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_PWR_Oskar_Hartwig = {
+		name = ADISCORD_staff_PWR_Oskar_Hartwig
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_off_western_european_2d
+			}
+		}
+		advisor = {
+			slot = theorist
+			idea_token = ADISCORD_staff_PWR_Oskar_Hartwig
+			desc = ADISCORD_staff_PWR_Oskar_Hartwig_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PWR }
+			visible = { tag = PWR }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	# RIV military leadership.
+	ADISCORD_staff_RIV_Artem_Volgin = {
+		name = ADISCORD_staff_RIV_Artem_Volgin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_RIV_Artem_Volgin
+			desc = ADISCORD_staff_RIV_Artem_Volgin_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RIV }
+			visible = { tag = RIV }
+			available = { always = yes }
+			traits = { army_chief_maneuver_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_RIV_Ivan_Seleznev = {
+		name = ADISCORD_staff_RIV_Ivan_Seleznev
+		portraits = {
+			army = {
+				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			idea_token = ADISCORD_staff_RIV_Ivan_Seleznev
+			desc = ADISCORD_staff_RIV_Ivan_Seleznev_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RIV }
+			visible = { tag = RIV }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_RIV_Sergei_Ordyntsev = {
+		name = ADISCORD_staff_RIV_Sergei_Ordyntsev
+		portraits = {
+			army = {
+				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+			}
+		}
+		advisor = {
+			slot = air_chief
+			idea_token = ADISCORD_staff_RIV_Sergei_Ordyntsev
+			desc = ADISCORD_staff_RIV_Sergei_Ordyntsev_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RIV }
+			visible = { tag = RIV }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_RIV_Pavel_Dolgov = {
+		name = ADISCORD_staff_RIV_Pavel_Dolgov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_RIV_Pavel_Dolgov
+			desc = ADISCORD_staff_RIV_Pavel_Dolgov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RIV }
+			visible = { tag = RIV }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_RIV_Viktor_Rybakov = {
+		name = ADISCORD_staff_RIV_Viktor_Rybakov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_log_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_RIV_Viktor_Rybakov
+			desc = ADISCORD_staff_RIV_Viktor_Rybakov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RIV }
+			visible = { tag = RIV }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_RIV_Roman_Elagin = {
+		name = ADISCORD_staff_RIV_Roman_Elagin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_art_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_RIV_Roman_Elagin
+			desc = ADISCORD_staff_RIV_Roman_Elagin_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RIV }
+			visible = { tag = RIV }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_RIV_Andrei_Sitnikov = {
+		name = ADISCORD_staff_RIV_Andrei_Sitnikov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_off_western_european_2d
+			}
+		}
+		advisor = {
+			slot = theorist
+			idea_token = ADISCORD_staff_RIV_Andrei_Sitnikov
+			desc = ADISCORD_staff_RIV_Andrei_Sitnikov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RIV }
+			visible = { tag = RIV }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	# TVA military leadership.
+	ADISCORD_staff_TVA_Walter_Krause = {
+		name = ADISCORD_staff_TVA_Walter_Krause
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_TVA_Walter_Krause
+			desc = ADISCORD_staff_TVA_Walter_Krause_desc
+			cost = 100
+			removal_cost = 0
+			allowed = {
+				OR = {
+					tag = TVA
+					tag = WRK
+				}
+			}
+			visible = {
+				OR = {
+					tag = TVA
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+					}
+				}
+			}
+			available = {
+				OR = {
+					tag = TVA
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+					}
+				}
+			}
+			traits = { army_chief_planning_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_TVA_Otto_Lindner = {
+		name = ADISCORD_staff_TVA_Otto_Lindner
+		portraits = {
+			army = {
+				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			idea_token = ADISCORD_staff_TVA_Otto_Lindner
+			desc = ADISCORD_staff_TVA_Otto_Lindner_desc
+			cost = 100
+			removal_cost = 0
+			allowed = {
+				OR = {
+					tag = TVA
+					tag = WRK
+				}
+			}
+			visible = {
+				OR = {
+					tag = TVA
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+					}
+				}
+			}
+			available = {
+				OR = {
+					tag = TVA
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+					}
+				}
+			}
+			traits = { navy_chief_decisive_battle_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_TVA_Ernst_Weber = {
+		name = ADISCORD_staff_TVA_Ernst_Weber
+		portraits = {
+			army = {
+				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+			}
+		}
+		advisor = {
+			slot = air_chief
+			idea_token = ADISCORD_staff_TVA_Ernst_Weber
+			desc = ADISCORD_staff_TVA_Ernst_Weber_desc
+			cost = 100
+			removal_cost = 0
+			allowed = {
+				OR = {
+					tag = TVA
+					tag = WRK
+				}
+			}
+			visible = {
+				OR = {
+					tag = TVA
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+					}
+				}
+			}
+			available = {
+				OR = {
+					tag = TVA
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+					}
+				}
+			}
+			traits = { air_chief_reform_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_TVA_Leon_Kessler = {
+		name = ADISCORD_staff_TVA_Leon_Kessler
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_TVA_Leon_Kessler
+			desc = ADISCORD_staff_TVA_Leon_Kessler_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = {
+				OR = {
+					tag = TVA
+					tag = WRK
+				}
+			}
+			visible = {
+				OR = {
+					tag = TVA
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+					}
+				}
+			}
+			available = {
+				OR = {
+					tag = TVA
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+					}
+				}
+			}
+			traits = { army_infantry_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_TVA_Bruno_Adler = {
+		name = ADISCORD_staff_TVA_Bruno_Adler
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_log_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_TVA_Bruno_Adler
+			desc = ADISCORD_staff_TVA_Bruno_Adler_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = {
+				OR = {
+					tag = TVA
+					tag = WRK
+				}
+			}
+			visible = {
+				OR = {
+					tag = TVA
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+					}
+				}
+			}
+			available = {
+				OR = {
+					tag = TVA
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+					}
+				}
+			}
+			traits = { army_logistics_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_TVA_Kurt_Heinemann = {
+		name = ADISCORD_staff_TVA_Kurt_Heinemann
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_art_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_TVA_Kurt_Heinemann
+			desc = ADISCORD_staff_TVA_Kurt_Heinemann_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = {
+				OR = {
+					tag = TVA
+					tag = WRK
+				}
+			}
+			visible = {
+				OR = {
+					tag = TVA
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+					}
+				}
+			}
+			available = {
+				OR = {
+					tag = TVA
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+					}
+				}
+			}
+			traits = { army_regrouping_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_TVA_Felix_Wendt = {
+		name = ADISCORD_staff_TVA_Felix_Wendt
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_off_western_european_2d
+			}
+		}
+		advisor = {
+			slot = theorist
+			idea_token = ADISCORD_staff_TVA_Felix_Wendt
+			desc = ADISCORD_staff_TVA_Felix_Wendt_desc
+			cost = 100
+			removal_cost = 0
+			allowed = {
+				OR = {
+					tag = TVA
+					tag = WRK
+				}
+			}
+			visible = {
+				OR = {
+					tag = TVA
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+					}
+				}
+			}
+			available = {
+				OR = {
+					tag = TVA
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+					}
+				}
+			}
+			traits = { ADISCORD_staff_theorist }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	# WKR military leadership.
+	ADISCORD_staff_WKR_Sergei_Lugovoy = {
+		name = ADISCORD_staff_WKR_Sergei_Lugovoy
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_WKR_Sergei_Lugovoy
+			desc = ADISCORD_staff_WKR_Sergei_Lugovoy_desc
+			cost = 100
+			removal_cost = 0
+			allowed = {
+				OR = {
+					tag = WKR
+					tag = WRK
+				}
+			}
+			visible = {
+				OR = {
+					tag = WKR
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_worker
+					}
+				}
+			}
+			available = {
+				OR = {
+					tag = WKR
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_worker
+					}
+				}
+			}
+			traits = { army_chief_morale_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_WKR_Pavel_Sedykh = {
+		name = ADISCORD_staff_WKR_Pavel_Sedykh
+		portraits = {
+			army = {
+				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			idea_token = ADISCORD_staff_WKR_Pavel_Sedykh
+			desc = ADISCORD_staff_WKR_Pavel_Sedykh_desc
+			cost = 100
+			removal_cost = 0
+			allowed = {
+				OR = {
+					tag = WKR
+					tag = WRK
+				}
+			}
+			visible = {
+				OR = {
+					tag = WKR
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_worker
+					}
+				}
+			}
+			available = {
+				OR = {
+					tag = WKR
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_worker
+					}
+				}
+			}
+			traits = { navy_chief_decisive_battle_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_WKR_Viktor_Yasnov = {
+		name = ADISCORD_staff_WKR_Viktor_Yasnov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+			}
+		}
+		advisor = {
+			slot = air_chief
+			idea_token = ADISCORD_staff_WKR_Viktor_Yasnov
+			desc = ADISCORD_staff_WKR_Viktor_Yasnov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = {
+				OR = {
+					tag = WKR
+					tag = WRK
+				}
+			}
+			visible = {
+				OR = {
+					tag = WKR
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_worker
+					}
+				}
+			}
+			available = {
+				OR = {
+					tag = WKR
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_worker
+					}
+				}
+			}
+			traits = { air_chief_reform_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_WKR_Roman_Borodin = {
+		name = ADISCORD_staff_WKR_Roman_Borodin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_WKR_Roman_Borodin
+			desc = ADISCORD_staff_WKR_Roman_Borodin_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = {
+				OR = {
+					tag = WKR
+					tag = WRK
+				}
+			}
+			visible = {
+				OR = {
+					tag = WKR
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_worker
+					}
+				}
+			}
+			available = {
+				OR = {
+					tag = WKR
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_worker
+					}
+				}
+			}
+			traits = { army_infantry_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_WKR_Alexei_Zubarev = {
+		name = ADISCORD_staff_WKR_Alexei_Zubarev
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_log_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_WKR_Alexei_Zubarev
+			desc = ADISCORD_staff_WKR_Alexei_Zubarev_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = {
+				OR = {
+					tag = WKR
+					tag = WRK
+				}
+			}
+			visible = {
+				OR = {
+					tag = WKR
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_worker
+					}
+				}
+			}
+			available = {
+				OR = {
+					tag = WKR
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_worker
+					}
+				}
+			}
+			traits = { army_logistics_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_WKR_Mikhail_Greben = {
+		name = ADISCORD_staff_WKR_Mikhail_Greben
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_art_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_WKR_Mikhail_Greben
+			desc = ADISCORD_staff_WKR_Mikhail_Greben_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = {
+				OR = {
+					tag = WKR
+					tag = WRK
+				}
+			}
+			visible = {
+				OR = {
+					tag = WKR
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_worker
+					}
+				}
+			}
+			available = {
+				OR = {
+					tag = WKR
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_worker
+					}
+				}
+			}
+			traits = { army_regrouping_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_WKR_Anton_Vedeneyev = {
+		name = ADISCORD_staff_WKR_Anton_Vedeneyev
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_off_western_european_2d
+			}
+		}
+		advisor = {
+			slot = theorist
+			idea_token = ADISCORD_staff_WKR_Anton_Vedeneyev
+			desc = ADISCORD_staff_WKR_Anton_Vedeneyev_desc
+			cost = 100
+			removal_cost = 0
+			allowed = {
+				OR = {
+					tag = WKR
+					tag = WRK
+				}
+			}
+			visible = {
+				OR = {
+					tag = WKR
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_worker
+					}
+				}
+			}
+			available = {
+				OR = {
+					tag = WKR
+					AND = {
+						tag = WRK
+						has_country_flag = ADISCORD_vorkerland_route_worker
+					}
+				}
+			}
+			traits = { ADISCORD_staff_theorist }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	# YOR military leadership.
+	ADISCORD_staff_YOR_Nikolai_Denisov = {
+		name = ADISCORD_staff_YOR_Nikolai_Denisov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_YOR_Nikolai_Denisov
+			desc = ADISCORD_staff_YOR_Nikolai_Denisov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YOR }
+			visible = { tag = YOR }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_YOR_Leonid_Kireev = {
+		name = ADISCORD_staff_YOR_Leonid_Kireev
+		portraits = {
+			army = {
+				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			idea_token = ADISCORD_staff_YOR_Leonid_Kireev
+			desc = ADISCORD_staff_YOR_Leonid_Kireev_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YOR }
+			visible = { tag = YOR }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_YOR_Alexei_Naumov = {
+		name = ADISCORD_staff_YOR_Alexei_Naumov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+			}
+		}
+		advisor = {
+			slot = air_chief
+			idea_token = ADISCORD_staff_YOR_Alexei_Naumov
+			desc = ADISCORD_staff_YOR_Alexei_Naumov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YOR }
+			visible = { tag = YOR }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_YOR_Dmitri_Lapin = {
+		name = ADISCORD_staff_YOR_Dmitri_Lapin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_YOR_Dmitri_Lapin
+			desc = ADISCORD_staff_YOR_Dmitri_Lapin_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YOR }
+			visible = { tag = YOR }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_YOR_Pavel_Savin = {
+		name = ADISCORD_staff_YOR_Pavel_Savin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_log_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_YOR_Pavel_Savin
+			desc = ADISCORD_staff_YOR_Pavel_Savin_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YOR }
+			visible = { tag = YOR }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_YOR_Sergei_Rodionov = {
+		name = ADISCORD_staff_YOR_Sergei_Rodionov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_art_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_YOR_Sergei_Rodionov
+			desc = ADISCORD_staff_YOR_Sergei_Rodionov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YOR }
+			visible = { tag = YOR }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_YOR_Viktor_Kuzmin = {
+		name = ADISCORD_staff_YOR_Viktor_Kuzmin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_off_western_european_2d
+			}
+		}
+		advisor = {
+			slot = theorist
+			idea_token = ADISCORD_staff_YOR_Viktor_Kuzmin
+			desc = ADISCORD_staff_YOR_Viktor_Kuzmin_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YOR }
+			visible = { tag = YOR }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			ai_will_do = { factor = 1 }
+		}
+	}
 }

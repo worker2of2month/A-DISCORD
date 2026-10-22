@@ -1,5 +1,5 @@
 # Generic society development effects.
-# Use variables for levels and ideas for visible national spirit effects.
+# Variables own levels and progress; automatic laws apply the active modifiers.
 
 ADISCORD_apply_society_development_level = {
 	if = {
@@ -655,6 +655,116 @@ ADISCORD_decrease_economic_development = {
 	ADISCORD_update_total_country_development = yes
 }
 
+# Scientific capacity follows research slots and the current research budget.
+ADISCORD_apply_science_development_level = {
+	if = {
+		limit = {
+			NOT = { has_variable = ADISCORD_science_development_level }
+		}
+		set_variable = { var = ADISCORD_science_development_level value = 1 }
+	}
+	if = {
+		limit = { ADISCORD_science_development_at_most_1 = yes }
+		ADISCORD_set_science_development_1 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_science_development_exact_2 = yes }
+		ADISCORD_set_science_development_2 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_science_development_exact_3 = yes }
+		ADISCORD_set_science_development_3 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_science_development_exact_4 = yes }
+		ADISCORD_set_science_development_4 = yes
+	}
+	else = {
+		ADISCORD_set_science_development_5 = yes
+	}
+}
+
+ADISCORD_set_science_development_1 = {
+	set_variable = { var = ADISCORD_science_development_level value = 1 }
+	set_variable = { var = ADISCORD_science_development_progress value = 0 }
+	remove_ideas = ADISCORD_science_development_1
+	remove_ideas = ADISCORD_science_development_2
+	remove_ideas = ADISCORD_science_development_3
+	remove_ideas = ADISCORD_science_development_4
+	remove_ideas = ADISCORD_science_development_5
+	add_ideas = ADISCORD_science_development_1
+}
+
+ADISCORD_set_science_development_2 = {
+	set_variable = { var = ADISCORD_science_development_level value = 2 }
+	set_variable = { var = ADISCORD_science_development_progress value = 0 }
+	remove_ideas = ADISCORD_science_development_1
+	remove_ideas = ADISCORD_science_development_2
+	remove_ideas = ADISCORD_science_development_3
+	remove_ideas = ADISCORD_science_development_4
+	remove_ideas = ADISCORD_science_development_5
+	add_ideas = ADISCORD_science_development_2
+}
+
+ADISCORD_set_science_development_3 = {
+	set_variable = { var = ADISCORD_science_development_level value = 3 }
+	set_variable = { var = ADISCORD_science_development_progress value = 0 }
+	remove_ideas = ADISCORD_science_development_1
+	remove_ideas = ADISCORD_science_development_2
+	remove_ideas = ADISCORD_science_development_3
+	remove_ideas = ADISCORD_science_development_4
+	remove_ideas = ADISCORD_science_development_5
+	add_ideas = ADISCORD_science_development_3
+}
+
+ADISCORD_set_science_development_4 = {
+	set_variable = { var = ADISCORD_science_development_level value = 4 }
+	set_variable = { var = ADISCORD_science_development_progress value = 0 }
+	remove_ideas = ADISCORD_science_development_1
+	remove_ideas = ADISCORD_science_development_2
+	remove_ideas = ADISCORD_science_development_3
+	remove_ideas = ADISCORD_science_development_4
+	remove_ideas = ADISCORD_science_development_5
+	add_ideas = ADISCORD_science_development_4
+}
+
+ADISCORD_set_science_development_5 = {
+	set_variable = { var = ADISCORD_science_development_level value = 5 }
+	set_variable = { var = ADISCORD_science_development_progress value = 0 }
+	remove_ideas = ADISCORD_science_development_1
+	remove_ideas = ADISCORD_science_development_2
+	remove_ideas = ADISCORD_science_development_3
+	remove_ideas = ADISCORD_science_development_4
+	remove_ideas = ADISCORD_science_development_5
+	add_ideas = ADISCORD_science_development_5
+}
+
+ADISCORD_increase_science_development = {
+	if = {
+		limit = {
+			NOT = { has_variable = ADISCORD_science_development_level }
+		}
+		set_variable = { var = ADISCORD_science_development_level value = 1 }
+	}
+	add_to_variable = { var = ADISCORD_science_development_level value = 1 }
+	clamp_variable = { var = ADISCORD_science_development_level min = 1 max = 5 }
+	ADISCORD_apply_science_development_level = yes
+	ADISCORD_update_total_country_development = yes
+}
+
+ADISCORD_decrease_science_development = {
+	if = {
+		limit = {
+			NOT = { has_variable = ADISCORD_science_development_level }
+		}
+		set_variable = { var = ADISCORD_science_development_level value = 1 }
+	}
+	add_to_variable = { var = ADISCORD_science_development_level value = -1 }
+	clamp_variable = { var = ADISCORD_science_development_level min = 1 max = 5 }
+	ADISCORD_apply_science_development_level = yes
+	ADISCORD_update_total_country_development = yes
+}
+
 ADISCORD_initialize_society_development_variables = {
 	# Monthly growth is stored as progress points per month. 100 points changes a level.
 	if = {
@@ -765,6 +875,18 @@ ADISCORD_initialize_society_development_variables = {
 		}
 		set_variable = { var = ADISCORD_economic_development_monthly_growth value = 0 }
 	}
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_science_development_level } }
+		set_variable = { var = ADISCORD_science_development_level value = 1 }
+	}
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_science_development_progress } }
+		set_variable = { var = ADISCORD_science_development_progress value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_science_development_monthly_growth } }
+		set_variable = { var = ADISCORD_science_development_monthly_growth value = 0 }
+	}
 }
 
 ADISCORD_update_total_country_development = {
@@ -778,27 +900,29 @@ ADISCORD_update_total_country_development = {
 	add_to_variable = { var = ADISCORD_total_development_score value = ADISCORD_state_development_level }
 	add_to_variable = { var = ADISCORD_total_development_score value = ADISCORD_economic_development_level }
 
+	add_to_variable = { var = ADISCORD_total_development_score value = ADISCORD_science_development_level }
+
 	if = {
 		limit = {
-			check_variable = { var = ADISCORD_total_development_score value = 30 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_total_development_score value = 35 compare = greater_than_or_equals }
 		}
 		set_variable = { var = ADISCORD_total_development_level value = 5 }
 	}
 	else_if = {
 		limit = {
-			check_variable = { var = ADISCORD_total_development_score value = 24 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_total_development_score value = 28 compare = greater_than_or_equals }
 		}
 		set_variable = { var = ADISCORD_total_development_level value = 4 }
 	}
 	else_if = {
 		limit = {
-			check_variable = { var = ADISCORD_total_development_score value = 18 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_total_development_score value = 21 compare = greater_than_or_equals }
 		}
 		set_variable = { var = ADISCORD_total_development_level value = 3 }
 	}
 	else_if = {
 		limit = {
-			check_variable = { var = ADISCORD_total_development_score value = 12 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_total_development_score value = 14 compare = greater_than_or_equals }
 		}
 		set_variable = { var = ADISCORD_total_development_level value = 2 }
 	}
@@ -821,6 +945,7 @@ ADISCORD_tick_all_society_development_progress = {
 	ADISCORD_tick_cultural_development_monthly = yes
 	ADISCORD_tick_state_development_monthly = yes
 	ADISCORD_tick_economic_development_monthly = yes
+	ADISCORD_tick_science_development_monthly = yes
 }
 
 ADISCORD_tick_all_society_development_yearly = {
@@ -848,6 +973,9 @@ ADISCORD_initialize_default_country_development = {
 	ADISCORD_set_cultural_development_1 = yes
 	ADISCORD_set_state_development_1 = yes
 	ADISCORD_set_economic_development_1 = yes
+	set_variable = { var = ADISCORD_science_development_level value = amount_research_slots }
+	clamp_variable = { var = ADISCORD_science_development_level min = 1 max = 3 }
+	ADISCORD_apply_science_development_level = yes
 	ADISCORD_initialize_society_development_variables = yes
 	ADISCORD_update_total_country_development = yes
 }
@@ -1368,7 +1496,7 @@ ADISCORD_reform_economic_development = {
 }
 
 # Recipient scope, PREV is the donor. Call only at an authored country handoff.
-# Level setters refresh spirits and reset progress, so restore the receipt afterwards.
+# Level setters refresh laws and reset progress, so restore the receipt afterwards.
 ADISCORD_copy_development_from_prev = {
 	PREV = { ADISCORD_initialize_society_development_variables = yes }
 	set_variable = { var = ADISCORD_society_development_level value = PREV.ADISCORD_society_development_level }
@@ -1398,6 +1526,63 @@ ADISCORD_copy_development_from_prev = {
 	ADISCORD_apply_economic_development_level = yes
 	set_variable = { var = ADISCORD_economic_development_progress value = PREV.ADISCORD_economic_development_progress }
 	set_variable = { var = ADISCORD_economic_development_monthly_growth value = PREV.ADISCORD_economic_development_monthly_growth }
+	set_variable = { var = ADISCORD_science_development_level value = PREV.ADISCORD_science_development_level }
+	ADISCORD_apply_science_development_level = yes
+	set_variable = { var = ADISCORD_science_development_progress value = PREV.ADISCORD_science_development_progress }
+	set_variable = { var = ADISCORD_science_development_monthly_growth value = PREV.ADISCORD_science_development_monthly_growth }
 	ADISCORD_update_total_country_development = yes
 	ADISCORD_economy_mark_dirty = yes
+}
+
+ADISCORD_tick_science_development_monthly = {
+	ADISCORD_calculate_science_development_gain = yes
+	add_to_variable = { var = ADISCORD_science_development_progress value = ADISCORD_science_development_monthly_gain }
+	if = {
+		limit = {
+			check_variable = {
+				var = ADISCORD_science_development_progress
+				value = 100
+				compare = greater_than_or_equals
+			}
+		}
+		if = {
+			limit = { ADISCORD_science_development_at_least_5 = yes }
+			set_variable = { var = ADISCORD_science_development_progress value = 0 }
+		}
+		else = {
+			set_temp_variable = { var = ADISCORD_development_remainder value = ADISCORD_science_development_progress }
+			add_to_temp_variable = { var = ADISCORD_development_remainder value = -100 }
+			ADISCORD_increase_science_development = yes
+			set_variable = { var = ADISCORD_science_development_progress value = ADISCORD_development_remainder }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = { var = ADISCORD_science_development_progress value = -100 compare = less_than_or_equals }
+		}
+		if = {
+			limit = { ADISCORD_science_development_at_most_1 = yes }
+			set_variable = { var = ADISCORD_science_development_progress value = 0 }
+		}
+		else = {
+			set_temp_variable = { var = ADISCORD_development_remainder value = ADISCORD_science_development_progress }
+			add_to_temp_variable = { var = ADISCORD_development_remainder value = 100 }
+			ADISCORD_decrease_science_development = yes
+			set_variable = { var = ADISCORD_science_development_progress value = ADISCORD_development_remainder }
+		}
+	}
+	if = {
+		limit = {
+			ADISCORD_science_development_at_least_5 = yes
+			check_variable = { var = ADISCORD_science_development_progress value = 0 compare = greater_than }
+		}
+		set_variable = { var = ADISCORD_science_development_progress value = 0 }
+	}
+	if = {
+		limit = {
+			ADISCORD_science_development_at_most_1 = yes
+			check_variable = { var = ADISCORD_science_development_progress value = 0 compare = less_than }
+		}
+		set_variable = { var = ADISCORD_science_development_progress value = 0 }
+	}
 }

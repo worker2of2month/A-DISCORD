@@ -11,3 +11,20 @@ recruit_character = EGC_Ruslan_Pike
 set_research_slots = 2
 
 set_cosmetic_tag = EGC_confederation
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_EGC_Boris_Tarasov
+recruit_character = ADISCORD_staff_EGC_Alexei_Demin
+recruit_character = ADISCORD_staff_EGC_Viktor_Polevoy
+recruit_character = ADISCORD_staff_EGC_Andrei_Zhuravlev
+recruit_character = ADISCORD_staff_EGC_Konstantin_Rudenko
+recruit_character = ADISCORD_staff_EGC_Mikhail_Belkin
+recruit_character = ADISCORD_staff_EGC_Pavel_Korotkov
+
+activate_advisor = ADISCORD_staff_EGC_Boris_Tarasov
+activate_advisor = ADISCORD_staff_EGC_Alexei_Demin
+activate_advisor = ADISCORD_staff_EGC_Viktor_Polevoy
+activate_advisor = ADISCORD_staff_EGC_Andrei_Zhuravlev
+activate_advisor = ADISCORD_staff_EGC_Konstantin_Rudenko
+activate_advisor = ADISCORD_staff_EGC_Mikhail_Belkin
+activate_advisor = ADISCORD_staff_EGC_Pavel_Korotkov

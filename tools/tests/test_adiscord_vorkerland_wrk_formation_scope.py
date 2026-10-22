@@ -164,14 +164,15 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
         ])
         self.assertFalse(any(e.key in ("transfer_state", "change_tag_from", "annex_country") for _, e in actions))
 
-    def test_all_routes_annex_only_claimants_and_oitfort_with_troop_transfer(self) -> None:
+    def test_all_routes_annex_claimants_oitfort_and_zshat_with_troop_transfer(self) -> None:
         effects = {e.key: e.value for e in parse_clausewitz(self.effects)}
         for winner, route in (("WKR", "worker"), ("VAD", "joint"), ("TVA", "utilitarian")):
             with self.subTest(winner=winner):
                 facts = {
                     ("WRK", "has_country_flag", f"ADISCORD_vorkerland_route_{route}"): True,
+                    ("EGC", "has_country_flag", "ADISCORD_vorkerland_prep_treaty_signed"): True,
                 }
-                for tag in ("WKR", "VAD", "TVA", "WTD"):
+                for tag in ("WKR", "VAD", "TVA", "WTD", "EGC"):
                     facts[("WRK", "country_exists", tag)] = True
                 dispatch = list(selected_effects(
                     effects["ADISCORD_vorkerland_finish_delayed_wrk_handoff"], facts, "WRK"
@@ -182,7 +183,10 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
                 actions = list(selected_effects(effects[dispatch[0][1].key], facts, "WRK"))
                 expanded = []
                 for scope, entry in actions:
-                    if entry.key == "ADISCORD_vorkerland_absorb_wtd_after_reunification":
+                    if entry.key in (
+                        "ADISCORD_vorkerland_absorb_wtd_after_reunification",
+                        "ADISCORD_vorkerland_absorb_egc_after_reunification",
+                    ):
                         expanded.extend(selected_effects(effects[entry.key], facts, scope))
                     else:
                         expanded.append((scope, entry))
@@ -193,7 +197,58 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
                         self.assertEqual(scope, "WRK")
                         self.assertEqual(scalar(entry.value, "transfer_troops"), "yes")
                         annexations.append(scalar(entry.value, "target"))
-                self.assertCountEqual(annexations, ["WKR", "VAD", "TVA", "WTD"])
+                self.assertCountEqual(annexations, ["WKR", "VAD", "TVA", "WTD", "EGC"])
+
+    def test_zshat_player_handoff_precedes_annexation(self) -> None:
+        event = parse_clausewitz(event_block(self.events, "ADISCORD_vorkerland_phase.7"))
+        facts = {
+            ("WRK", "is_ai", "yes"): True,
+            ("EGC", "exists", "yes"): True,
+            ("EGC", "is_ai", "no"): True,
+        }
+        actions = list(selected_effects(parsed_block(event, "immediate"), facts, "WRK"))
+        self.assertEqual([e.key for _, e in actions], ["country_event", "change_tag_from"])
+        self.assertEqual(scalar(actions[0][1].value, "id"), "ADISCORD_vorkerland_phase.7")
+        self.assertEqual(actions[1][1].value, "EGC")
+        facts[("WRK", "is_ai", "yes")] = False
+        actions = list(selected_effects(parsed_block(event, "immediate"), facts, "WRK"))
+        self.assertFalse(any(e.key == "change_tag_from" for _, e in actions))
+        self.assertEqual(actions[0][1].key, "ADISCORD_vorkerland_finish_delayed_wrk_handoff")
+
+    def test_zshat_settlement_controls_owned_districts_and_skips_absent_country(self) -> None:
+        effect = parse_clausewitz(named_block(
+            self.effects, "ADISCORD_vorkerland_absorb_egc_after_reunification"
+        ))
+        facts = {
+            ("WRK", "country_exists", "EGC"): True,
+            ("81", "is_owned_by", "WRK"): True,
+            ("110", "is_owned_by", "WRK"): True,
+            ("124", "is_owned_by", "WRK"): False,
+        }
+        actions = list(selected_effects(effect, facts, "WRK"))
+        self.assertEqual(
+            [(scope, entry.value) for scope, entry in actions if entry.key == "set_state_controller_to"],
+            [("81", "WRK"), ("110", "WRK")],
+        )
+        self.assertIn("ADISCORD_economy_mark_dirty", [entry.key for _, entry in actions])
+        facts[("WRK", "country_exists", "EGC")] = False
+        self.assertEqual(list(selected_effects(effect, facts, "WRK")), [])
+
+    def test_surviving_zshat_blocks_terminal_verification(self) -> None:
+        gate = parse_clausewitz(named_block(
+            self.triggers, "ADISCORD_vorkerland_reunification_verified"
+        ))
+        facts = {
+            ("WRK", "country_exists", "WRK"): True,
+            ("WRK", "is_subject", "no"): True,
+            ("WRK", "controls_state", "32"): True,
+            ("WRK", "has_country_flag", "ADISCORD_vorkerland_route_joint"): True,
+            ("32", "is_owned_by", "WRK"): True,
+            ("32", "is_controlled_by", "WRK"): True,
+        }
+        self.assertTrue(matches_conditions(gate, facts, "WRK"))
+        facts[("WRK", "country_exists", "EGC")] = True
+        self.assertFalse(matches_conditions(gate, facts, "WRK"))
 
     def test_worker_victory_is_checked_on_the_living_claimant(self) -> None:
         candidate = named_block(

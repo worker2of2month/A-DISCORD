@@ -1653,6 +1653,7 @@
         "gfx/flags/**/STP_revolution_capital.tga",
         "gfx/flags/**/STP_great_stelander.tga",
         "gfx/flags/**/STS_hegemony.tga",
+        "gfx/flags/**/STS_stelander_union.tga",
         "gfx/flags/**/NOD_STS_administration.tga",
         "gfx/flags/**/NKA_STS_administration.tga",
         "gfx/flags/**/VAL_STS_administration.tga",
@@ -1992,6 +1993,7 @@
         "music/superevent_itora_civilwar.ogg",
         "music/superevent_rus_khan_defeated.ogg",
         "music/superevent_vorkerland_joint_victory.ogg",
+        "music/superevent_stelander_sotnikov_civilwar.ogg",
         "music/one_minute_of_silence.ogg",
         "music/two_minutes_of_silence.ogg",
         "music/ADISCORD_stp_civil_war_end_after_superevent.ogg"
@@ -2016,7 +2018,8 @@
         "sound/superevents/superevent_itora_vorkerland_war_sound.wav",
         "sound/superevents/superevent_itora_civilwar_sound.wav",
         "sound/superevents/superevent_rus_khan_defeated_sound.wav",
-        "sound/superevents/superevent_vorkerland_joint_victory_sound.wav"
+        "sound/superevents/superevent_vorkerland_joint_victory_sound.wav",
+        "sound/superevents/superevent_stelander_sotnikov_civilwar_sound.wav"
       ],
       "may_delete_outputs": true,
       "ownership_mode": "exclusive",

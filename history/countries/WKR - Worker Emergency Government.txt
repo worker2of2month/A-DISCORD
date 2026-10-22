@@ -18,3 +18,20 @@ set_popularities = {
 
 recruit_character = WKR_Emergency_Coordination_Committee
 add_ideas = { limited_conscription }
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_WKR_Sergei_Lugovoy
+recruit_character = ADISCORD_staff_WKR_Pavel_Sedykh
+recruit_character = ADISCORD_staff_WKR_Viktor_Yasnov
+recruit_character = ADISCORD_staff_WKR_Roman_Borodin
+recruit_character = ADISCORD_staff_WKR_Alexei_Zubarev
+recruit_character = ADISCORD_staff_WKR_Mikhail_Greben
+recruit_character = ADISCORD_staff_WKR_Anton_Vedeneyev
+
+activate_advisor = ADISCORD_staff_WKR_Sergei_Lugovoy
+activate_advisor = ADISCORD_staff_WKR_Pavel_Sedykh
+activate_advisor = ADISCORD_staff_WKR_Viktor_Yasnov
+activate_advisor = ADISCORD_staff_WKR_Roman_Borodin
+activate_advisor = ADISCORD_staff_WKR_Alexei_Zubarev
+activate_advisor = ADISCORD_staff_WKR_Mikhail_Greben
+activate_advisor = ADISCORD_staff_WKR_Anton_Vedeneyev

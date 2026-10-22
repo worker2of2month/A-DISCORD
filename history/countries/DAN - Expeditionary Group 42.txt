@@ -32,3 +32,12 @@ add_ideas = {
 set_research_slots = 2
 
 set_cosmetic_tag = DAN_confederation
+
+# Military leadership candidates.
+recruit_character = ADISCORD_staff_DAN_Timofei_Gradov
+recruit_character = ADISCORD_staff_DAN_Fedor_Kurbatov
+recruit_character = ADISCORD_staff_DAN_Yuri_Losev
+recruit_character = ADISCORD_staff_DAN_Arkady_Malinin
+recruit_character = ADISCORD_staff_DAN_Vladimir_Nekrasov
+recruit_character = ADISCORD_staff_DAN_Gennady_Ostretsov
+recruit_character = ADISCORD_staff_DAN_Dmitri_Panov

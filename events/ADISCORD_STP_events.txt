@@ -50,19 +50,32 @@ country_event = {
 	desc = ADISCORD_STP_preparation.27.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } }
+	timeout_days = 1
+	trigger = {
+		tag = STP
+		has_country_flag = STP_intro_story_active
+		NOT = { has_global_flag = STP_cw_started }
+	}
 	option = {
 		name = ADISCORD_STP_preparation.27.no
 		ai_chance = { base = 100 }
-		hidden_effect = { set_country_flag = STP_skip_intro_story_events }
+		STP_finish_intro_story = yes
 	}
 	option = {
 		name = ADISCORD_STP_preparation.27.yes
 		trigger = { is_ai = no }
 		ai_chance = { base = 0 }
 		hidden_effect = {
-			clr_country_flag = STP_skip_intro_story_events
-			country_event = { id = ADISCORD_STP_preparation.15 hours = 1 }
+			if = {
+				limit = {
+					has_country_flag = STP_intro_story_active
+					NOT = { has_global_flag = STP_cw_started }
+				}
+				country_event = { id = ADISCORD_STP_preparation.15 hours = 1 }
+				country_event = { id = ADISCORD_STP_preparation.23 days = 7 }
+				country_event = { id = ADISCORD_STP_preparation.16 days = 14 }
+				country_event = { id = ADISCORD_STP_preparation.25 days = 21 }
+			}
 		}
 	}
 }
@@ -73,13 +86,18 @@ country_event = {
 	desc = ADISCORD_STP_preparation.15.d
 	picture = GFX_event_adiscord_nectar_of_the_gods
 	is_triggered_only = yes
+	timeout_days = 6
 	trigger = {
 		tag = STP
 		NOT = { has_global_flag = STP_cw_started }
-		NOT = { has_country_flag = STP_skip_intro_story_events }
+		has_country_flag = STP_intro_story_active
 	}
-	immediate = { clear_variable = STP_nectar_story_page }
 	option = { name = ADISCORD_STP_preparation.15.a }
+	option = {
+		name = STP_intro_story_stop
+		custom_effect_tooltip = STP_intro_story_stop_tt
+		STP_finish_intro_story = yes
+	}
 }
 
 country_event = {
@@ -88,34 +106,41 @@ country_event = {
 	desc = ADISCORD_STP_preparation.16.d
 	picture = GFX_event_adiscord_nectar_of_the_gods
 	is_triggered_only = yes
-	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started }  NOT = { has_country_flag = STP_skip_intro_story_events } }
-	immediate = { clear_variable = STP_nectar_story_page }
+	timeout_days = 6
+	trigger = {
+		tag = STP
+		NOT = { has_global_flag = STP_cw_started }
+		has_country_flag = STP_intro_story_active
+	}
 	option = { name = ADISCORD_STP_preparation.16.a }
+	option = {
+		name = STP_intro_story_stop
+		custom_effect_tooltip = STP_intro_story_stop_tt
+		STP_finish_intro_story = yes
+	}
 }
 
-# Pre-choice lore is paced through one-week focuses; each focus opens exactly one story card.
+# The opening focus schedules these cards; ending the reading suppresses pending arrivals.
 country_event = {
 	id = ADISCORD_STP_preparation.23
 	title = ADISCORD_STP_preparation.23.t
 	desc = ADISCORD_STP_preparation.23.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
+	timeout_days = 6
 	trigger = {
 		tag = STP
-		NOT = {
-			has_global_flag = STP_cw_started
-		}
-		NOT = {
-			has_country_flag = STP_sided_with_Maksim_flag
-		}
-		NOT = {
-			has_country_flag = STP_sided_with_the_party_flag
-		}
-		NOT = {
-			has_country_flag = STP_skip_intro_story_events
-		}
+		NOT = { has_global_flag = STP_cw_started }
+		NOT = { has_country_flag = STP_sided_with_Maksim_flag }
+		NOT = { has_country_flag = STP_sided_with_the_party_flag }
+		has_country_flag = STP_intro_story_active
 	}
 	option = { name = ADISCORD_STP_preparation.23.a }
+	option = {
+		name = STP_intro_story_stop
+		custom_effect_tooltip = STP_intro_story_stop_tt
+		STP_finish_intro_story = yes
+	}
 }
 
 country_event = {
@@ -124,22 +149,20 @@ country_event = {
 	desc = ADISCORD_STP_preparation.25.d
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
+	timeout_days = 6
 	trigger = {
 		tag = STP
-		NOT = {
-			has_global_flag = STP_cw_started
-		}
-		NOT = {
-			has_country_flag = STP_sided_with_Maksim_flag
-		}
-		NOT = {
-			has_country_flag = STP_sided_with_the_party_flag
-		}
-		NOT = {
-			has_country_flag = STP_skip_intro_story_events
-		}
+		NOT = { has_global_flag = STP_cw_started }
+		NOT = { has_country_flag = STP_sided_with_Maksim_flag }
+		NOT = { has_country_flag = STP_sided_with_the_party_flag }
+		has_country_flag = STP_intro_story_active
 	}
 	option = { name = ADISCORD_STP_preparation.25.a }
+	option = {
+		name = STP_intro_story_stop
+		custom_effect_tooltip = STP_intro_story_stop_tt
+		STP_finish_intro_story = yes
+	}
 }
 
 country_event = {
@@ -1176,6 +1199,96 @@ country_event = {
 		name = ADISCORD_STP_pw.6.b
 		ai_chance = { factor = 50 }
 		add_ideas = ADISCORD_drugs_medical_distribution
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pw.7
+	title = ADISCORD_STP_pw.7.t
+	desc = ADISCORD_STP_pw.7.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 30
+	trigger = {
+		tag = STS
+		has_country_flag = STP_cw_won_union_battle
+		has_country_flag = STP_cw_postwar
+		controls_province = 145
+	}
+	option = {
+		name = ADISCORD_STP_pw.7.a
+		ai_chance = { factor = 25 }
+	}
+	option = {
+		name = ADISCORD_STP_pw.7.b
+		ai_chance = { factor = 25 }
+		set_province_name = {
+			id = 145
+			name = STP_pw_congress_free_stelander
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pw.7.c
+		ai_chance = { factor = 25 }
+		set_province_name = {
+			id = 145
+			name = STP_pw_palace_of_accord
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pw.7.e
+		ai_chance = { factor = 25 }
+		set_province_name = {
+			id = 145
+			name = STP_pw_house_of_resistance
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pw.8
+	title = ADISCORD_STP_pw.8.t
+	desc = ADISCORD_STP_pw.8.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 30
+	trigger = { STP_pw_party_trial_pending = yes }
+	option = {
+		name = ADISCORD_STP_pw.8.mercy
+		trigger = { STP_pw_party_trial_pending = yes }
+		ai_chance = { factor = 50 }
+		if = {
+			limit = { hidden_trigger = { STP_pw_party_trial_pending = yes } }
+			custom_effect_tooltip = STP_pw_party_trial_specialists_tt
+			if = {
+				limit = { STP = { has_character = STP_Roland_Keitel } }
+				custom_effect_tooltip = STP_pw_party_trial_keitel_tt
+			}
+			if = {
+				limit = { STP = { has_character = STP_Maurice_Dallon } }
+				custom_effect_tooltip = STP_pw_party_trial_dallon_tt
+			}
+			hidden_effect = { STP_pw_pardon_party_specialists = yes }
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pw.8.execute
+		trigger = { STP_pw_party_trial_pending = yes }
+		ai_chance = { factor = 50 }
+		if = {
+			limit = { hidden_trigger = { STP_pw_party_trial_pending = yes } }
+			add_political_power = 50
+			add_stability = 0.02
+			custom_effect_tooltip = STP_pw_party_trial_development_tt
+			custom_effect_tooltip = STP_pw_party_trial_execution_tt
+			hidden_effect = { STP_pw_execute_party_defendants = yes }
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pw.8.closed
+		trigger = { STP_pw_party_trial_pending = no }
 	}
 }
 
@@ -2251,7 +2364,23 @@ country_event = {
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	trigger = { tag = STP }
-	option = { name = ADISCORD_STP_cw.94.a }
+	immediate = { STP_cw_ai_fortify_congress = yes }
+	option = {
+		name = ADISCORD_STP_cw.94.a
+		hidden_effect = {
+			# The war or player country may change while the story remains open.
+			if = {
+				limit = {
+					tag = STP
+					is_ai = no
+					has_global_flag = STP_cw_started
+					has_war_with = STS
+					NOT = { has_global_flag = STP_cw_union_wars_finished }
+				}
+				scoped_play_song = "ADISCORD_stp_party"
+			}
+		}
+	}
 }
 
 # Presentation runs after the side-choice effect and player handoff finish.
@@ -2260,34 +2389,54 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
+		tag = STS
+		is_ai = no
 		has_global_flag = STP_cw_started
+		has_war_with = STP
 		NOT = { has_global_flag = STP_cw_union_wars_finished }
 	}
 	immediate = {
-		# The callback is queued before the player handoff. Resolve both playback
-		# scopes explicitly; STP's preparation choice already belongs to the Party.
 		if = {
 			limit = {
+				tag = STS
+				is_ai = no
 				has_global_flag = STP_cw_started
+				has_war_with = STP
 				NOT = { has_global_flag = STP_cw_union_wars_finished }
 			}
-			STS = {
-				if = {
-					limit = {
-						is_ai = no
-						has_war_with = STP
-					}
-					scoped_play_song = "ADISCORD_stp_civil_war"
+			country_event = { id = ADISCORD_STP_cw.96 }
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_cw.96
+	title = ADISCORD_STP_cw.96.t
+	desc = ADISCORD_STP_cw.96.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 7
+	trigger = {
+		tag = STS
+		is_ai = no
+		has_global_flag = STP_cw_started
+		has_war_with = STP
+		NOT = { has_global_flag = STP_cw_union_wars_finished }
+	}
+	option = {
+		name = ADISCORD_STP_cw.96.a
+		hidden_effect = {
+			# The war or player country may change while the story remains open.
+			if = {
+				limit = {
+					tag = STS
+					is_ai = no
+					has_global_flag = STP_cw_started
+					has_war_with = STP
+					NOT = { has_global_flag = STP_cw_union_wars_finished }
 				}
-			}
-			STP = {
-				if = {
-					limit = {
-						is_ai = no
-						has_war_with = STS
-					}
-					scoped_play_song = "ADISCORD_stp_party"
-				}
+				scoped_play_song = "ADISCORD_stp_civil_war"
 			}
 		}
 	}
@@ -2966,8 +3115,8 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_preparation.32.b
 		ai_chance = { base = 1 }
-		custom_effect_tooltip = STP_ps_val_sale_pause_tt
-		hidden_effect = { VAL = { STP_ps_cancel_val_sale = yes } }
+		custom_effect_tooltip = STP_ps_val_sale_declined_tt
+		hidden_effect = { VAL = { STP_ps_decline_val_sale = yes } }
 	}
 	option = {
 		name = ADISCORD_STP_preparation.32.a
@@ -6946,6 +7095,7 @@ country_event = {
 		trigger = { STP_pc_charter_shabrat_districts_ready = yes }
 		ai_chance = { base = 50 }
 		effect_tooltip = { add_ideas = STP_pc_charter_shabrat_legacy_districts }
+		unlock_decision_tooltip = STP_pc_proclaim_stelander_union
 		hidden_effect = { STP_pc_charter_shabrat_award_districts = yes }
 	}
 	option = {
@@ -6953,6 +7103,7 @@ country_event = {
 		trigger = { STP_pc_charter_shabrat_nation_ready = yes }
 		ai_chance = { base = 50 }
 		effect_tooltip = { add_ideas = STP_pc_charter_shabrat_legacy_nation }
+		unlock_decision_tooltip = STP_pc_proclaim_stelander_union
 		hidden_effect = { STP_pc_charter_shabrat_award_nation = yes }
 	}
 	option = {

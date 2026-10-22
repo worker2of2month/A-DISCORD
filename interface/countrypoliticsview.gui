@@ -780,7 +780,7 @@ guiTypes = {
 		
 		containerWindowType = {
 			name = "ideas"
-			# Negative height leaves only the bottom inset; development opens separately.
+			# Negative height leaves only the bottom inset for the scrollable law list.
 			position = { x = 0 y = 545 }
 			size = { width=570 height=-8 }
 			clipping = yes

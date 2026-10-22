@@ -1,7 +1,15 @@
 STP_cw_defend_fada = {
 	allowed = { original_tag = STP }
-	enable = { has_global_flag = STP_cw_started has_war_with = STS STP_ps_holds_congress = yes }
+	enable = {
+		is_ai = yes
+		STP_ps_war_active = yes
+		owns_state = 28
+		STP_ps_holds_congress = yes
+	}
 	abort_when_not_enabled = yes
+	# Native VP defence and the regional buffer complement the garrison role.
+	# These are AI priorities, not a movement lock on province 145.
+	ai_strategy = { type = garrison value = 20 }
 	ai_strategy = {
 		type = put_unit_buffers
 		ratio = 0.20
@@ -78,7 +86,8 @@ STS_shabrat_civil_war_army = {
 	ai_strategy = { type = unit_ratio id = fighter value = 20 }
 	ai_strategy = { type = force_concentration_factor value = 50 }
 	ai_strategy = { type = consider_weak id = STP value = 20 }
-	ai_strategy = { type = front_unit_request tag = STP value = 120 }
+	# Base front demand belongs to STS_cw_front_against_stp. Operations add
+	# their local requests separately instead of duplicating the entire front.
 	ai_strategy = { type = front_control tag = STP ratio = 0.01 priority = 1500 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
 	ai_strategy = { type = conquer id = STP value = 250 }
 	ai_strategy = { type = dont_defend_ally_borders value = 1 }
@@ -241,6 +250,32 @@ STS_shabrat_nod_front = {
 	ai_strategy = { type = front_control tag = NOD ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
 	ai_strategy = { type = conquer id = NOD value = 250 }
 	ai_strategy = { type = force_concentration_factor value = 80 }
+}
+
+# Shortages can affect the northern war even while the Party front is strong.
+# Keep the live front staffed, but let native careful attacks select openings.
+STS_shabrat_cautious_nod_front = {
+	allowed = { original_tag = STS }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_war_with = NOD
+		OR = {
+			stockpile_ratio = { archetype = infantry_equipment ratio < 0.05 }
+			fighting_army_strength_ratio = { tag = NOD ratio < 0.8 }
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = NOD
+		ratio = 0.01
+		priority = 1900
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
 }
 
 NOD_pw_party_invasion_front = {
@@ -663,6 +698,31 @@ STP_ps_defensive_front = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = STS value = 100 }
 	ai_strategy = { type = front_control tag = STS ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = no manual_attack = no }
+}
+
+# Completing reorganisation permits an offensive; it does not guarantee that
+# losses and equipment shortages have already been replenished.
+STP_ps_cautious_counterattack = {
+	allowed = { original_tag = STP }
+	enable = {
+		is_ai = yes
+		STP_ps_can_counterattack = yes
+		OR = {
+			stockpile_ratio = { archetype = infantry_equipment ratio < 0.05 }
+			fighting_army_strength_ratio = { tag = STS ratio < 0.8 }
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = STS
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
 }
 
 STP_ps_local_counterattacks = {

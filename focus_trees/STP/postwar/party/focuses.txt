@@ -532,7 +532,7 @@
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			ADISCORD_reform_army_development = yes
-			add_ideas = ADISCORD_staff_STP_Erhard_Kleist
+			activate_advisor = ADISCORD_staff_STP_Erhard_Kleist
 			if = {
 				limit = { NOT = { STP_pf_settled = yes } }
 				custom_effect_tooltip = STP_pf_army_program_1_tt
@@ -570,7 +570,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
-			add_ideas = ADISCORD_staff_STP_Viktor_Korneev
+			activate_advisor = ADISCORD_staff_STP_Viktor_Korneev
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_supply_service_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_supply_consumption_factor value = -0.07 }
@@ -601,7 +601,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
-			add_ideas = ADISCORD_staff_STP_Hermann_Alten
+			activate_advisor = ADISCORD_staff_STP_Hermann_Alten
 			custom_effect_tooltip = STP_qol_armor_bureau_tt
 			if = {
 				limit = { has_dlc = "Arms Against Tyranny" }
@@ -2053,7 +2053,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
-			add_ideas = ADISCORD_staff_STP_Alexandr_Veber
+			activate_advisor = ADISCORD_staff_STP_Alexandr_Veber
 			add_tech_bonus = { name = STP_pw_infantry_lessons_bonus bonus = 0.5 uses = 1 category = infantry_weapons }
 			unlock_decision_tooltip = STP_pw_party_standard_order
 			custom_effect_tooltip = STP_pw_party_standard_order_unlock_summary_tt
@@ -2251,7 +2251,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
-			add_ideas = ADISCORD_staff_STP_Erwin_Noll
+			activate_advisor = ADISCORD_staff_STP_Erwin_Noll
 			army_experience = 30
 			add_equipment_to_stockpile = { type = artillery_equipment amount = 200 }
 			add_equipment_to_stockpile = { type = anti_air_equipment amount = 100 }
@@ -2298,7 +2298,7 @@
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_ideas = ADISCORD_staff_STP_Henrik_Brand
+			activate_advisor = ADISCORD_staff_STP_Henrik_Brand
 			STP_pw_open_marine_school = yes
 		}
 		ai_will_do = { base = 3 }

@@ -27,7 +27,7 @@ state={
 		add_core_of = VAL
 
 		victory_points = { 16521 25 }
-		victory_points = { 16519 10 }
+		victory_points = { 16530 10 }
 		victory_points = { 16515 10 }
 	}
 }

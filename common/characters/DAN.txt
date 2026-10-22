@@ -20,4 +20,155 @@ characters = {
 			id = -1
 		}
 	}
+
+	# DAN military leadership.
+	ADISCORD_staff_DAN_Timofei_Gradov = {
+		name = ADISCORD_staff_DAN_Timofei_Gradov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_DAN_Timofei_Gradov
+			desc = ADISCORD_staff_DAN_Timofei_Gradov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = DAN }
+			visible = { tag = DAN }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_DAN_Fedor_Kurbatov = {
+		name = ADISCORD_staff_DAN_Fedor_Kurbatov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			idea_token = ADISCORD_staff_DAN_Fedor_Kurbatov
+			desc = ADISCORD_staff_DAN_Fedor_Kurbatov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = DAN }
+			visible = { tag = DAN }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_DAN_Yuri_Losev = {
+		name = ADISCORD_staff_DAN_Yuri_Losev
+		portraits = {
+			army = {
+				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+			}
+		}
+		advisor = {
+			slot = air_chief
+			idea_token = ADISCORD_staff_DAN_Yuri_Losev
+			desc = ADISCORD_staff_DAN_Yuri_Losev_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = DAN }
+			visible = { tag = DAN }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_DAN_Arkady_Malinin = {
+		name = ADISCORD_staff_DAN_Arkady_Malinin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_DAN_Arkady_Malinin
+			desc = ADISCORD_staff_DAN_Arkady_Malinin_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = DAN }
+			visible = { tag = DAN }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_DAN_Vladimir_Nekrasov = {
+		name = ADISCORD_staff_DAN_Vladimir_Nekrasov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_log_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_DAN_Vladimir_Nekrasov
+			desc = ADISCORD_staff_DAN_Vladimir_Nekrasov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = DAN }
+			visible = { tag = DAN }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_DAN_Gennady_Ostretsov = {
+		name = ADISCORD_staff_DAN_Gennady_Ostretsov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_art_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_DAN_Gennady_Ostretsov
+			desc = ADISCORD_staff_DAN_Gennady_Ostretsov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = DAN }
+			visible = { tag = DAN }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_DAN_Dmitri_Panov = {
+		name = ADISCORD_staff_DAN_Dmitri_Panov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_off_western_european_2d
+			}
+		}
+		advisor = {
+			slot = theorist
+			idea_token = ADISCORD_staff_DAN_Dmitri_Panov
+			desc = ADISCORD_staff_DAN_Dmitri_Panov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = DAN }
+			visible = { tag = DAN }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			ai_will_do = { factor = 1 }
+		}
+	}
 }

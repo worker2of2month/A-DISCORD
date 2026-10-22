@@ -137,6 +137,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			activate_advisor = ADISCORD_staff_NOD_Erich_Seewald
 			hidden_effect = {
 				create_equipment_variant = {
 					name = "ADISCORD_submarine_2155"
@@ -176,6 +177,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			activate_advisor = ADISCORD_staff_NOD_Martin_Hagen
 			set_technology = {
 				ADISCORD_tech_amphibious_formation_organization = 1
 				ADISCORD_tech_amphibious_staff_sections = 1

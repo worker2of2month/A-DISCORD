@@ -254,7 +254,7 @@ class CountryDevelopmentReformTests(unittest.TestCase):
 
         fixture = self.fixture({"STP": {}, "STS": {}, "WRK": {}})
         donor = fixture.scopes["STP"]
-        for index, axis in enumerate(self.AXES):
+        for index, axis in enumerate((*self.AXES, "science")):
             prefix = f"ADISCORD_{axis}_development"
             donor[prefix + "_level"] = 2 + index % 3
             donor[prefix + "_progress"] = 95.25 + index
@@ -265,7 +265,7 @@ class CountryDevelopmentReformTests(unittest.TestCase):
             fixture.run("ADISCORD_copy_development_from_prev", recipient, source)
             for key, expected in original.items():
                 self.assertEqual(fixture.scopes[recipient][key], expected, key)
-            for axis in self.AXES:
+            for axis in (*self.AXES, "science"):
                 prefix = f"ADISCORD_{axis}_development"
                 level = original[prefix + "_level"]
                 for candidate in range(1, 6):
@@ -273,7 +273,7 @@ class CountryDevelopmentReformTests(unittest.TestCase):
                         fixture.scopes[recipient].get(f"idea@{prefix}_{candidate}", False),
                         candidate == level,
                     )
-            self.assertEqual(fixture.scopes[recipient]["ADISCORD_total_development_score"], 18)
+            self.assertEqual(fixture.scopes[recipient]["ADISCORD_total_development_score"], 20)
         self.assertEqual(donor, original)
 
     def test_successor_ticks_are_scheduled_once_for_humans_and_ai(self):
@@ -376,6 +376,116 @@ class CountryDevelopmentReformTests(unittest.TestCase):
             formation += named_block(vorkerland, "ADISCORD_vorkerland_complete_wrk_from_" + tag.lower())
             self.assertEqual(formation.count("ADISCORD_copy_development_from_prev = yes"), 1)
             self.assertLess(formation.index("ADISCORD_copy_development_from_prev"), formation.index(f"annex_country = {{ target = {tag}"))
+
+    def test_science_start_uses_research_slots_with_a_three_level_ceiling(self):
+        for slots, expected in ((0, 1), (1, 1), (2, 2), (3, 3), (6, 3)):
+            with self.subTest(slots=slots):
+                fixture = self.fixture({"A": {"amount_research_slots": slots}})
+                fixture.run("ADISCORD_initialize_default_country_development")
+                state = fixture.scopes["A"]
+                self.assertEqual(state["ADISCORD_science_development_level"], expected)
+                self.assertTrue(state[f"idea@ADISCORD_science_development_{expected}"])
+
+    def test_science_budget_growth_recomputes_without_accumulating(self):
+        fixture = self.fixture({"A": {"amount_research_slots": 3}})
+        state = fixture.scopes["A"]
+        for mode, expected in ((1, 0.9), (2, 1.95), (3, 3), (4, 6), (5, 9), (3, 3)):
+            with self.subTest(mode=mode):
+                state["ADISCORD_economy_research_spending_mode"] = mode
+                fixture.run("ADISCORD_calculate_science_development_gain")
+                self.assertAlmostEqual(state["ADISCORD_science_development_monthly_gain"], expected)
+        state["ADISCORD_country_development_final_global_growth_factor_bp"] = 110
+        fixture.run("ADISCORD_calculate_science_development_gain")
+        self.assertAlmostEqual(state["ADISCORD_science_development_monthly_gain"], 3.3)
+        state["amount_research_slots"] = 0
+        fixture.run("ADISCORD_calculate_science_development_gain")
+        self.assertEqual(state["ADISCORD_science_development_monthly_gain"], 0)
+
+    def test_science_threshold_changes_one_law_and_keeps_fractional_remainder(self):
+        for progress, level, remainder in ((96.9, 3, 99.9), (97, 4, 0), (99.25, 4, 2.25), (-104.5, 2, -1.5)):
+            with self.subTest(progress=progress):
+                fixture = self.fixture({"A": {"amount_research_slots": 3}})
+                fixture.run("ADISCORD_initialize_default_country_development")
+                state = fixture.scopes["A"]
+                state["ADISCORD_science_development_progress"] = progress
+                state["ADISCORD_economy_research_spending_mode"] = 3
+                fixture.run("ADISCORD_tick_science_development_monthly")
+                self.assertEqual(state["ADISCORD_science_development_level"], level)
+                self.assertAlmostEqual(state["ADISCORD_science_development_progress"], remainder)
+                for candidate in range(1, 6):
+                    self.assertEqual(state.get(f"idea@ADISCORD_science_development_{candidate}", False), candidate == level)
+
+    def test_science_cap_and_aggregate_use_all_seven_directions(self):
+        fixture = self.fixture({"A": {"amount_research_slots": 3}})
+        fixture.run("ADISCORD_initialize_default_country_development")
+        state = fixture.scopes["A"]
+        for axis in (*self.AXES, "science"):
+            fixture.run(f"ADISCORD_set_{axis}_development_5")
+        state["ADISCORD_science_development_progress"] = 99
+        fixture.run("ADISCORD_tick_science_development_monthly")
+        fixture.run("ADISCORD_update_total_country_development")
+        self.assertEqual(state["ADISCORD_science_development_level"], 5)
+        self.assertEqual(state["ADISCORD_science_development_progress"], 0)
+        self.assertEqual(state["ADISCORD_total_development_score"], 35)
+        self.assertEqual(state["ADISCORD_total_development_level"], 5)
+        fixture.run("ADISCORD_set_science_development_4")
+        fixture.run("ADISCORD_update_total_country_development")
+        self.assertEqual(state["ADISCORD_total_development_level"], 4)
+
+    def test_development_laws_are_registered_visible_and_not_manually_selectable(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        text = (ROOT / "common/ideas/ADISCORD_society_development.txt").read_text(encoding="utf-8")
+        groups = parse_clausewitz(text)[0].value
+        axes = (*self.AXES, "science")
+        self.assertEqual([group.key for group in groups], [f"ADISCORD_{axis}_development_laws" for axis in axes])
+        categories = (ROOT / "common/idea_tags/00_idea.txt").read_text(encoding="utf-8")
+        category = named_block(categories, "ADISCORD_development_laws")
+        self.assertEqual(re.findall(r"slot = (\w+)", category), [group.key for group in groups])
+        self.assertLess(categories.index("military_staff ="), categories.index("ADISCORD_development_laws ="))
+        self.assertLess(categories.index("army_laws ="), categories.index("economic_laws ="))
+        for axis, group in zip(axes, groups):
+            settings = {entry.key: entry.value for entry in group.value}
+            self.assertEqual(settings["law"], "yes")
+            laws = [entry for entry in group.value if isinstance(entry.value, list)]
+            self.assertEqual(len(laws), 5)
+            for level, law in enumerate(laws, 1):
+                self.assertEqual(law.key, f"ADISCORD_{axis}_development_{level}")
+                values = {entry.key: entry.value for entry in law.value}
+                self.assertNotIn("allowed", values)
+                self.assertEqual(values["cancel_if_invalid"], "no")
+                self.assertEqual(values["removal_cost"], "-1")
+                self.assertEqual(values["allowed_to_remove"][0].value, "no")
+                condition = values["available"][0]
+                self.assertEqual(condition.key, "custom_trigger_tooltip")
+                self.assertEqual({entry.key: entry.value for entry in condition.value}, {
+                    "tooltip": "ADISCORD_development_automatic_tt", "always": "no",
+                })
+                modifiers = {entry.key: entry.value for entry in values["modifier"]}
+                self.assertEqual(modifiers["custom_modifier_tooltip"], f"ADISCORD_{axis}_development_status_tt")
+                if axis == "science":
+                    self.assertAlmostEqual(float(modifiers["research_speed_factor"]), (-0.06, -0.03, 0, 0.03, 0.06)[level - 1])
+
+    def test_law_progress_and_science_localisation_load_in_both_languages(self):
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_society_development_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            text = path.read_text(encoding="utf-8-sig")
+            entries = re.findall(r'^ ([A-Za-z0-9_]+):(?:0)? "([^"\n]*)"$', text, re.M)
+            values = dict(entries)
+            self.assertEqual(len(entries), len(values))
+            for axis in (*self.AXES, "science"):
+                prefix = f"ADISCORD_{axis}_development"
+                self.assertIn(prefix + "_laws", values)
+                status = values[prefix + "_status_tt"]
+                for field in ("level", "progress"):
+                    self.assertIn(f"[?{prefix}_{field}|", status)
+                gain = "ADISCORD_economy_monthly_development_gain" if axis == "economic" else prefix + "_monthly_gain"
+                self.assertIn(f"[?{gain}|", status)
+                self.assertIn("$ADISCORD_development_automatic_tt$", status)
+                for level in range(1, 6):
+                    self.assertIn(f"{prefix}_{level}", values)
+                    self.assertIn(f"{prefix}_{level}_desc", values)
 
     def test_reform_tooltips_are_valid_single_line_localisation(self):
         for language in ("russian", "english"):

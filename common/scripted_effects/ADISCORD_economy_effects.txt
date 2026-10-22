@@ -2532,6 +2532,35 @@ ADISCORD_economy_clamp_treasury = {
 		set_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_treasury_cap }
 	}
 }
+ADISCORD_calculate_science_development_gain = {
+	set_variable = { var = ADISCORD_science_development_monthly_gain value = amount_research_slots }
+	add_to_variable = { var = ADISCORD_science_development_monthly_gain value = ADISCORD_science_development_monthly_growth }
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 1 compare = equals } }
+		multiply_variable = { var = ADISCORD_science_development_monthly_gain value = 0.30 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 2 compare = equals } }
+		multiply_variable = { var = ADISCORD_science_development_monthly_gain value = 0.65 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = equals } }
+		multiply_variable = { var = ADISCORD_science_development_monthly_gain value = 2 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 5 compare = equals } }
+		multiply_variable = { var = ADISCORD_science_development_monthly_gain value = 3 }
+	}
+	if = {
+		limit = { has_variable = ADISCORD_country_development_final_global_growth_factor_bp }
+		multiply_variable = {
+			var = ADISCORD_science_development_monthly_gain
+			value = ADISCORD_country_development_final_global_growth_factor_bp
+		}
+		divide_variable = { var = ADISCORD_science_development_monthly_gain value = 100 }
+	}
+}
+
 ADISCORD_economy_calculate_social_development_gain = {
 	set_variable = {
 		var = ADISCORD_social_system_development_monthly_gain
@@ -2559,6 +2588,7 @@ ADISCORD_economy_calculate_social_development_gain = {
 }
 
 ADISCORD_economy_calculate_other_development_gains = {
+	ADISCORD_calculate_science_development_gain = yes
 	set_variable = { var = ADISCORD_society_development_monthly_gain value = ADISCORD_society_development_monthly_growth }
 	multiply_variable = { var = ADISCORD_society_development_monthly_gain value = ADISCORD_country_development_final_global_growth_factor_bp }
 	divide_variable = { var = ADISCORD_society_development_monthly_gain value = 100 }

@@ -8868,6 +8868,47 @@ ADISCORD_vorkerland_absorb_wtd_after_reunification = {
 	}
 }
 
+# COUNTRY WRK: Zshat's treaty preserves its command only during the civil war.
+# Phase.7 handles a human EGC player before the army and territory are absorbed.
+ADISCORD_vorkerland_absorb_egc_after_reunification = {
+	if = {
+		limit = { country_exists = EGC }
+		EGC = {
+			if = {
+				limit = { is_subject = yes }
+				overlord = {
+					set_autonomy = {
+						target = EGC
+						autonomy_state = autonomy_free
+					}
+				}
+			}
+			if = { limit = { is_in_faction = yes } leave_faction = yes }
+			if = { limit = { has_war_with = WRK } white_peace = WRK }
+			clr_country_flag = ADISCORD_vorkerland_reunification_ally
+			ADISCORD_vorkerland_reconcile_coalition_obligation = yes
+			clr_country_flag = ADISCORD_vorkerland_prep_offer_pending
+			clr_country_flag = ADISCORD_vorkerland_prep_treaty_signed
+			clear_variable = ADISCORD_vorkerland_prep_treaty_patron
+		}
+		annex_country = { target = EGC transfer_troops = yes }
+		# Native annexation can leave residual ownership or foreign control.
+		if = {
+			limit = { country_exists = EGC }
+			EGC = {
+				every_owned_state = {
+					set_state_owner_to = WRK
+					set_state_controller_to = WRK
+				}
+			}
+		}
+		81 = { if = { limit = { is_owned_by = WRK } set_state_controller_to = WRK } }
+		110 = { if = { limit = { is_owned_by = WRK } set_state_controller_to = WRK } }
+		124 = { if = { limit = { is_owned_by = WRK } set_state_controller_to = WRK } }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
 # Carry only earned claimant cores into the restored country. Every state is
 # explicit and must belong to WRK after the losing claimant shells are annexed;
 # temporary control drift cannot erase an already earned integration core.
@@ -8977,6 +9018,404 @@ ADISCORD_vorkerland_inherit_worker_reform_spirits = {
 		add_ideas = ADISCORD_vorkerland_erased_nations
 	}
 }
+
+# COUNTRY winning claimant. Move its occupied seats after WRK adopts the route,
+# before annexation consumes the source. Vacancies remain vacant.
+ADISCORD_vorkerland_transfer_military_staff_to_wrk = {
+	WRK = {
+		remove_ideas = {
+			ADISCORD_staff_WRK_Stanislav_Malinin
+			ADISCORD_staff_WRK_Andrei_Severov
+			ADISCORD_staff_WRK_Viktor_Hess
+			ADISCORD_staff_WRK_Pavel_Barsov
+			ADISCORD_staff_WRK_Aleksei_Nekrasov
+			ADISCORD_staff_WRK_Andrei_Ostretsov
+			ADISCORD_staff_WRK_Boris_Panov
+			ADISCORD_staff_WRK_Viktor_Rogov
+			ADISCORD_staff_WRK_Georgy_Sazonov
+			ADISCORD_staff_WRK_Denis_Tumanov
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_WKR_Sergei_Lugovoy }
+		if = {
+			limit = { has_idea = ADISCORD_staff_WKR_Sergei_Lugovoy }
+			deactivate_advisor = ADISCORD_staff_WKR_Sergei_Lugovoy
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_WKR_Sergei_Lugovoy
+			}
+			WRK = { activate_advisor = ADISCORD_staff_WKR_Sergei_Lugovoy }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_WKR_Sergei_Lugovoy
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_WKR_Pavel_Sedykh }
+		if = {
+			limit = { has_idea = ADISCORD_staff_WKR_Pavel_Sedykh }
+			deactivate_advisor = ADISCORD_staff_WKR_Pavel_Sedykh
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_WKR_Pavel_Sedykh
+			}
+			WRK = { activate_advisor = ADISCORD_staff_WKR_Pavel_Sedykh }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_WKR_Pavel_Sedykh
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_WKR_Viktor_Yasnov }
+		if = {
+			limit = { has_idea = ADISCORD_staff_WKR_Viktor_Yasnov }
+			deactivate_advisor = ADISCORD_staff_WKR_Viktor_Yasnov
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_WKR_Viktor_Yasnov
+			}
+			WRK = { activate_advisor = ADISCORD_staff_WKR_Viktor_Yasnov }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_WKR_Viktor_Yasnov
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_WKR_Roman_Borodin }
+		if = {
+			limit = { has_idea = ADISCORD_staff_WKR_Roman_Borodin }
+			deactivate_advisor = ADISCORD_staff_WKR_Roman_Borodin
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_WKR_Roman_Borodin
+			}
+			WRK = { activate_advisor = ADISCORD_staff_WKR_Roman_Borodin }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_WKR_Roman_Borodin
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_WKR_Alexei_Zubarev }
+		if = {
+			limit = { has_idea = ADISCORD_staff_WKR_Alexei_Zubarev }
+			deactivate_advisor = ADISCORD_staff_WKR_Alexei_Zubarev
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_WKR_Alexei_Zubarev
+			}
+			WRK = { activate_advisor = ADISCORD_staff_WKR_Alexei_Zubarev }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_WKR_Alexei_Zubarev
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_WKR_Mikhail_Greben }
+		if = {
+			limit = { has_idea = ADISCORD_staff_WKR_Mikhail_Greben }
+			deactivate_advisor = ADISCORD_staff_WKR_Mikhail_Greben
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_WKR_Mikhail_Greben
+			}
+			WRK = { activate_advisor = ADISCORD_staff_WKR_Mikhail_Greben }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_WKR_Mikhail_Greben
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_WKR_Anton_Vedeneyev }
+		if = {
+			limit = { has_idea = ADISCORD_staff_WKR_Anton_Vedeneyev }
+			deactivate_advisor = ADISCORD_staff_WKR_Anton_Vedeneyev
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_WKR_Anton_Vedeneyev
+			}
+			WRK = { activate_advisor = ADISCORD_staff_WKR_Anton_Vedeneyev }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_WKR_Anton_Vedeneyev
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_VAD_Ruslan_Rogov }
+		if = {
+			limit = { has_idea = ADISCORD_staff_VAD_Ruslan_Rogov }
+			deactivate_advisor = ADISCORD_staff_VAD_Ruslan_Rogov
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_VAD_Ruslan_Rogov
+			}
+			WRK = { activate_advisor = ADISCORD_staff_VAD_Ruslan_Rogov }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_VAD_Ruslan_Rogov
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_VAD_Semyon_Sazonov }
+		if = {
+			limit = { has_idea = ADISCORD_staff_VAD_Semyon_Sazonov }
+			deactivate_advisor = ADISCORD_staff_VAD_Semyon_Sazonov
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_VAD_Semyon_Sazonov
+			}
+			WRK = { activate_advisor = ADISCORD_staff_VAD_Semyon_Sazonov }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_VAD_Semyon_Sazonov
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_VAD_Stanislav_Tumanov }
+		if = {
+			limit = { has_idea = ADISCORD_staff_VAD_Stanislav_Tumanov }
+			deactivate_advisor = ADISCORD_staff_VAD_Stanislav_Tumanov
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_VAD_Stanislav_Tumanov
+			}
+			WRK = { activate_advisor = ADISCORD_staff_VAD_Stanislav_Tumanov }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_VAD_Stanislav_Tumanov
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_VAD_Aleksei_Uvarov }
+		if = {
+			limit = { has_idea = ADISCORD_staff_VAD_Aleksei_Uvarov }
+			deactivate_advisor = ADISCORD_staff_VAD_Aleksei_Uvarov
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_VAD_Aleksei_Uvarov
+			}
+			WRK = { activate_advisor = ADISCORD_staff_VAD_Aleksei_Uvarov }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_VAD_Aleksei_Uvarov
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_VAD_Andrei_Frolov }
+		if = {
+			limit = { has_idea = ADISCORD_staff_VAD_Andrei_Frolov }
+			deactivate_advisor = ADISCORD_staff_VAD_Andrei_Frolov
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_VAD_Andrei_Frolov
+			}
+			WRK = { activate_advisor = ADISCORD_staff_VAD_Andrei_Frolov }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_VAD_Andrei_Frolov
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_VAD_Boris_Chernov }
+		if = {
+			limit = { has_idea = ADISCORD_staff_VAD_Boris_Chernov }
+			deactivate_advisor = ADISCORD_staff_VAD_Boris_Chernov
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_VAD_Boris_Chernov
+			}
+			WRK = { activate_advisor = ADISCORD_staff_VAD_Boris_Chernov }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_VAD_Boris_Chernov
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_VAD_Viktor_Vedenin }
+		if = {
+			limit = { has_idea = ADISCORD_staff_VAD_Viktor_Vedenin }
+			deactivate_advisor = ADISCORD_staff_VAD_Viktor_Vedenin
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_VAD_Viktor_Vedenin
+			}
+			WRK = { activate_advisor = ADISCORD_staff_VAD_Viktor_Vedenin }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_VAD_Viktor_Vedenin
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_TVA_Walter_Krause }
+		if = {
+			limit = { has_idea = ADISCORD_staff_TVA_Walter_Krause }
+			deactivate_advisor = ADISCORD_staff_TVA_Walter_Krause
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_TVA_Walter_Krause
+			}
+			WRK = { activate_advisor = ADISCORD_staff_TVA_Walter_Krause }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_TVA_Walter_Krause
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_TVA_Otto_Lindner }
+		if = {
+			limit = { has_idea = ADISCORD_staff_TVA_Otto_Lindner }
+			deactivate_advisor = ADISCORD_staff_TVA_Otto_Lindner
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_TVA_Otto_Lindner
+			}
+			WRK = { activate_advisor = ADISCORD_staff_TVA_Otto_Lindner }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_TVA_Otto_Lindner
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_TVA_Ernst_Weber }
+		if = {
+			limit = { has_idea = ADISCORD_staff_TVA_Ernst_Weber }
+			deactivate_advisor = ADISCORD_staff_TVA_Ernst_Weber
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_TVA_Ernst_Weber
+			}
+			WRK = { activate_advisor = ADISCORD_staff_TVA_Ernst_Weber }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_TVA_Ernst_Weber
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_TVA_Leon_Kessler }
+		if = {
+			limit = { has_idea = ADISCORD_staff_TVA_Leon_Kessler }
+			deactivate_advisor = ADISCORD_staff_TVA_Leon_Kessler
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_TVA_Leon_Kessler
+			}
+			WRK = { activate_advisor = ADISCORD_staff_TVA_Leon_Kessler }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_TVA_Leon_Kessler
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_TVA_Bruno_Adler }
+		if = {
+			limit = { has_idea = ADISCORD_staff_TVA_Bruno_Adler }
+			deactivate_advisor = ADISCORD_staff_TVA_Bruno_Adler
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_TVA_Bruno_Adler
+			}
+			WRK = { activate_advisor = ADISCORD_staff_TVA_Bruno_Adler }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_TVA_Bruno_Adler
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_TVA_Kurt_Heinemann }
+		if = {
+			limit = { has_idea = ADISCORD_staff_TVA_Kurt_Heinemann }
+			deactivate_advisor = ADISCORD_staff_TVA_Kurt_Heinemann
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_TVA_Kurt_Heinemann
+			}
+			WRK = { activate_advisor = ADISCORD_staff_TVA_Kurt_Heinemann }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_TVA_Kurt_Heinemann
+			}
+		}
+	}
+	if = {
+		limit = { has_character = ADISCORD_staff_TVA_Felix_Wendt }
+		if = {
+			limit = { has_idea = ADISCORD_staff_TVA_Felix_Wendt }
+			deactivate_advisor = ADISCORD_staff_TVA_Felix_Wendt
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_TVA_Felix_Wendt
+			}
+			WRK = { activate_advisor = ADISCORD_staff_TVA_Felix_Wendt }
+		}
+		else = {
+			set_nationality = {
+				target_country = WRK
+				character = ADISCORD_staff_TVA_Felix_Wendt
+			}
+		}
+	}
+}
+
 ADISCORD_vorkerland_form_wrk_from_wkr = {
 	if = { limit = { country_exists = VAD } VAD = { ADISCORD_vorkerland_release_losing_claimant_subjects = yes } }
 	if = { limit = { country_exists = TVA } TVA = { ADISCORD_vorkerland_release_losing_claimant_subjects = yes } }
@@ -9054,6 +9493,7 @@ ADISCORD_vorkerland_form_wrk_from_wkr = {
 	clr_country_flag = ADISCORD_vorkerland_route_joint
 	clr_country_flag = ADISCORD_vorkerland_route_utilitarian
 	set_country_flag = ADISCORD_vorkerland_route_worker
+	WKR = { ADISCORD_vorkerland_transfer_military_staff_to_wrk = yes }
 	country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }
 	if = {
 		limit = { WKR = { is_ai = no } }
@@ -9078,6 +9518,7 @@ ADISCORD_vorkerland_complete_wrk_from_wkr = {
 	if = { limit = { country_exists = VAD } annex_country = { target = VAD transfer_troops = yes } }
 	if = { limit = { country_exists = TVA } annex_country = { target = TVA transfer_troops = yes } }
 	ADISCORD_vorkerland_absorb_wtd_after_reunification = yes
+	ADISCORD_vorkerland_absorb_egc_after_reunification = yes
 	ADISCORD_vorkerland_finalize_wrk_formation = yes
 	set_country_flag = ADISCORD_vorkerland_route_worker
 	set_cosmetic_tag = WRK_vorkerland_emergency
@@ -9191,6 +9632,7 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 	clr_country_flag = ADISCORD_vorkerland_route_joint
 	clr_country_flag = ADISCORD_vorkerland_route_utilitarian
 	set_country_flag = ADISCORD_vorkerland_route_joint
+	VAD = { ADISCORD_vorkerland_transfer_military_staff_to_wrk = yes }
 	country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }
 	if = {
 		limit = { VAD = { is_ai = no } }
@@ -9215,6 +9657,7 @@ ADISCORD_vorkerland_complete_wrk_from_vad = {
 	if = { limit = { country_exists = WKR } annex_country = { target = WKR transfer_troops = yes } }
 	if = { limit = { country_exists = TVA } annex_country = { target = TVA transfer_troops = yes } }
 	ADISCORD_vorkerland_absorb_wtd_after_reunification = yes
+	ADISCORD_vorkerland_absorb_egc_after_reunification = yes
 	ADISCORD_vorkerland_finalize_wrk_formation = yes
 	# route_joint also covers an ordinary VAD victory; the government flag
 	# distinguishes the rescue council from Vlad's imperial restoration.
@@ -9314,6 +9757,7 @@ ADISCORD_vorkerland_form_wrk_from_tva = {
 	clr_country_flag = ADISCORD_vorkerland_route_joint
 	clr_country_flag = ADISCORD_vorkerland_route_utilitarian
 	set_country_flag = ADISCORD_vorkerland_route_utilitarian
+	TVA = { ADISCORD_vorkerland_transfer_military_staff_to_wrk = yes }
 	country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }
 	if = {
 		limit = { TVA = { is_ai = no } }
@@ -9338,6 +9782,7 @@ ADISCORD_vorkerland_complete_wrk_from_tva = {
 	if = { limit = { country_exists = WKR } annex_country = { target = WKR transfer_troops = yes } }
 	if = { limit = { country_exists = VAD } annex_country = { target = VAD transfer_troops = yes } }
 	ADISCORD_vorkerland_absorb_wtd_after_reunification = yes
+	ADISCORD_vorkerland_absorb_egc_after_reunification = yes
 	ADISCORD_vorkerland_finalize_wrk_formation = yes
 	# route_utilitarian is retained as the established focus/save contract for
 	# the TVA claimant. Dorian's visible state and politics remain technocratic.
@@ -12315,44 +12760,7 @@ ADISCORD_vorkerland_prep_settle_treaties = {
 		}
 		clr_country_flag = ADISCORD_vorkerland_prep_offer_pending
 	}
-	EGC = {
-		if = {
-			limit = {
-				has_country_flag = ADISCORD_vorkerland_prep_treaty_signed
-				exists = yes
-				is_subject = no
-				is_in_faction_with = WRK
-				OR = {
-					AND = {
-						check_variable = {
-							var = ADISCORD_vorkerland_prep_treaty_patron
-							value = 1
-							compare = equals
-						}
-						has_global_flag = ADISCORD_vorkerland_worker_won
-					}
-					AND = {
-						check_variable = {
-							var = ADISCORD_vorkerland_prep_treaty_patron
-							value = 2
-							compare = equals
-						}
-						has_global_flag = ADISCORD_vorkerland_vlad_won
-					}
-					AND = {
-						check_variable = {
-							var = ADISCORD_vorkerland_prep_treaty_patron
-							value = 3
-							compare = equals
-						}
-						has_global_flag = ADISCORD_vorkerland_dorian_won
-					}
-				}
-			}
-			set_country_flag = ADISCORD_vorkerland_prep_independence_guaranteed
-		}
-		clr_country_flag = ADISCORD_vorkerland_prep_offer_pending
-	}
+	EGC = { clr_country_flag = ADISCORD_vorkerland_prep_offer_pending }
 	RIV = {
 		if = {
 			limit = {

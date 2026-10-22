@@ -2577,7 +2577,7 @@ country_event = {
 	}
 
 	immediate = {
-		# A human Oitfort administration follows the united state only when
+		# A human wartime administration follows the united state only when
 		# WRK has no human controller. Queue settlement before changing control.
 		if = {
 			limit = {
@@ -2589,6 +2589,17 @@ country_event = {
 			}
 			country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }
 			change_tag_from = WTD
+		}
+		else_if = {
+			limit = {
+				is_ai = yes
+				EGC = {
+					exists = yes
+					is_ai = no
+				}
+			}
+			country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }
+			change_tag_from = EGC
 		}
 		else = {
 			ADISCORD_vorkerland_finish_delayed_wrk_handoff = yes

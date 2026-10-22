@@ -1,0 +1,34 @@
+{
+  "generation_tool": "image_gen.imagegen",
+  "transparent_background": true,
+  "shared_prompt": "Use case: stylized-concept. Asset type: a single tiny readable raster icon for the dark interface of a Hearts of Iron IV mod. A polished hand-painted strategy-game inventory pictogram, bold simple silhouette, restrained warm ivory and muted brass with dark charcoal outlines, minimal broad shading, crisp opaque object edges, no fine texture, no decorative border or badge or frame. Square composition, centered subject filling 85 percent of the canvas. Designed to remain clearly recognizable at only 28 by 28 pixels. Actual transparent background, no ground plane, no cast shadow outside the object, no backdrop, no checkerboard, no text, letters, watermark or logo. Generate one icon, not a sheet. ",
+  "export": {
+    "size": [
+      28,
+      28
+    ],
+    "content_size": [
+      26,
+      26
+    ],
+    "mode": "RGBA",
+    "resampling": "LANCZOS"
+  },
+  "icons": {
+    "officers": {
+      "subject_prompt": "Subject: one large easily recognizable military officer shoulder board / epaulette. A single dark olive rectangular epaulette with a broad golden edge and TWO large golden five-point stars arranged vertically. Front view, slight diagonal tilt. Thick shapes, obvious officer insignia, no weapons, no person, no coat.",
+      "texture": "gfx/texticons/adiscord/custom/STP_hw_officers.png",
+      "sprite": "GFX_STP_hw_officers_texticon"
+    },
+    "councils": {
+      "subject_prompt": "Subject: a recognizable small mountain town council hall: a stout ivory stone civic building with a broad triangular gable roof and three very thick columns, one simple slate-blue mountain peak rising immediately behind the roof. A very compact unified silhouette. Frontal view. Broad large architectural shapes only, no tiny windows, no scenery, no landscape background, no flag.",
+      "texture": "gfx/texticons/adiscord/custom/STP_hw_councils.png",
+      "sprite": "GFX_STP_hw_councils_texticon"
+    },
+    "underground": {
+      "subject_prompt": "Subject: one recognizable folded underground newspaper. A thick warm-ivory folded newspaper with a large charcoal rectangular headline bar and just three broad dark horizontal print lines, slightly tilted. One turned corner makes the paper shape obvious. No readable text or letters. No printing machine, no megaphone, no extra objects.",
+      "texture": "gfx/texticons/adiscord/custom/STP_hw_underground.png",
+      "sprite": "GFX_STP_hw_underground_texticon"
+    }
+  }
+}

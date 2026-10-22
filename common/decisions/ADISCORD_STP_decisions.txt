@@ -2600,6 +2600,47 @@ STP_battle_for_stelander = {
 
 STP_cw_war_council = {
 
+	STP_cw_fortify_congress = {
+		icon = generic_construct_civilian
+		allowed = { tag = STP }
+		visible = {
+			STP_ps_war_active = yes
+			owns_state = 28
+			controls_province = 145
+		}
+		cost = 0
+		days_remove = 15
+		fire_only_once = yes
+		highlight_states = { highlight_state_targets = { state = 28 } }
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					STP_ps_war_active = yes
+					owns_state = 28
+					controls_province = 145
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					STP_ps_war_active = yes
+					owns_state = 28
+					controls_province = 145
+				}
+				28 = {
+					add_building_construction = {
+						type = bunker
+						level = 2
+						province = 145
+						instant_build = yes
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 1000 }
+	}
+
 	STP_cw_evacuate_depot = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }
@@ -6856,6 +6897,14 @@ STP_cw_external_intervention = {
 			custom_trigger_tooltip = {
 				tooltip = STP_ps_val_sale_cooldown_tt
 				NOT = { has_country_flag = STP_ps_val_sale_cooldown }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_val_sale_not_declined_tt
+				NOT = { has_country_flag = STP_ps_val_sale_declined }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_val_sale_buyer_ready_tt
+				STP = { STP_ps_val_sale_buyer_ready = yes }
 			}
 		}
 		cost = 0
@@ -11606,6 +11655,7 @@ STP_postwar_administration = {
 			effect_tooltip = {
 				add_ideas = STP_pc_charter_shabrat_legacy_districts
 			}
+			unlock_decision_tooltip = STP_pc_proclaim_stelander_union
 			hidden_effect = {
 				STP_pc_charter_shabrat_award_districts = yes
 			}
@@ -11651,6 +11701,7 @@ STP_postwar_administration = {
 			effect_tooltip = {
 				add_ideas = STP_pc_charter_shabrat_legacy_nation
 			}
+			unlock_decision_tooltip = STP_pc_proclaim_stelander_union
 			hidden_effect = {
 				STP_pc_charter_shabrat_award_nation = yes
 			}
@@ -11658,6 +11709,32 @@ STP_postwar_administration = {
 		ai_will_do = {
 			base = 10
 		}
+	}
+
+	STP_pc_proclaim_stelander_union = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = {
+			STP_pc_charter_shabrat_current = yes
+			has_completed_focus = STP_pc_charter_shabrat_charter_fulfilled
+			NOT = { has_country_flag = STP_pc_stelander_union_proclaimed }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_stelander_union_legacy_tt
+				OR = {
+					has_idea = STP_pc_charter_shabrat_legacy_districts
+					has_idea = STP_pc_charter_shabrat_legacy_nation
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_stelander_union_proclaim_tt
+			hidden_effect = { STP_pc_proclaim_stelander_union = yes }
+		}
+		ai_will_do = { base = 15 }
 	}
 
 	STP_pc_charter_tikhoreva_public_audit = {

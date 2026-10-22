@@ -58,6 +58,16 @@ characters = {
 			logistics_skill = 3
 			legacy_id = -1
 		}
+
+		advisor = {
+			slot = army_chief
+			idea_token = RUS_Rakitin_army_chief
+			allowed = { original_tag = RUS }
+			available = { has_completed_focus = RUS_imperial_general_staff }
+			traits = { army_chief_organizational_2 }
+			cost = 150
+			ai_will_do = { factor = 2 }
+		}
 	}
 
 	RUS_Viktor_Belov = {
@@ -115,6 +125,16 @@ characters = {
 			logistics_skill = 2
 			legacy_id = -1
 		}
+
+		advisor = {
+			slot = theorist
+			idea_token = RUS_Vyazemsky_theorist
+			allowed = { original_tag = RUS }
+			available = { has_completed_focus = RUS_staff_college }
+			traits = { ADISCORD_staff_senior_theorist }
+			cost = 150
+			ai_will_do = { factor = 2 }
+		}
 	}
 
 	RUS_Nikolai_Gorin = {
@@ -143,6 +163,157 @@ characters = {
 				large = GFX_Portrait_Forul_Generic_2
 				small = GFX_Portrait_Forul_Generic_2_small
 			}
+		}
+	}
+
+	# RUS military leadership.
+	ADISCORD_staff_RUS_Roman_Ostretsov = {
+		name = ADISCORD_staff_RUS_Roman_Ostretsov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_RUS_Roman_Ostretsov
+			desc = ADISCORD_staff_RUS_Roman_Ostretsov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RUS }
+			visible = { tag = RUS }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_RUS_Sergei_Panov = {
+		name = ADISCORD_staff_RUS_Sergei_Panov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			idea_token = ADISCORD_staff_RUS_Sergei_Panov
+			desc = ADISCORD_staff_RUS_Sergei_Panov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RUS }
+			visible = { tag = RUS }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_RUS_Timofei_Rogov = {
+		name = ADISCORD_staff_RUS_Timofei_Rogov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+			}
+		}
+		advisor = {
+			slot = air_chief
+			idea_token = ADISCORD_staff_RUS_Timofei_Rogov
+			desc = ADISCORD_staff_RUS_Timofei_Rogov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RUS }
+			visible = { tag = RUS }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_RUS_Fedor_Sazonov = {
+		name = ADISCORD_staff_RUS_Fedor_Sazonov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_RUS_Fedor_Sazonov
+			desc = ADISCORD_staff_RUS_Fedor_Sazonov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RUS }
+			visible = { tag = RUS }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_RUS_Yuri_Tumanov = {
+		name = ADISCORD_staff_RUS_Yuri_Tumanov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_log_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_RUS_Yuri_Tumanov
+			desc = ADISCORD_staff_RUS_Yuri_Tumanov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RUS }
+			visible = { tag = RUS }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_RUS_Arkady_Uvarov = {
+		name = ADISCORD_staff_RUS_Arkady_Uvarov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_art_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_RUS_Arkady_Uvarov
+			desc = ADISCORD_staff_RUS_Arkady_Uvarov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RUS }
+			visible = { tag = RUS }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_RUS_Vladimir_Frolov = {
+		name = ADISCORD_staff_RUS_Vladimir_Frolov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_off_western_european_2d
+			}
+		}
+		advisor = {
+			slot = theorist
+			idea_token = ADISCORD_staff_RUS_Vladimir_Frolov
+			desc = ADISCORD_staff_RUS_Vladimir_Frolov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RUS }
+			visible = { tag = RUS }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			ai_will_do = { factor = 1 }
 		}
 	}
 }

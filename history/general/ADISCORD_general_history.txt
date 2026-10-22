@@ -2,3 +2,486 @@
 # being constructed. Saves created before this contract never acquire the flag,
 # so newly added systems can decline initialization instead of migrating them.
 set_global_flag = ADISCORD_fresh_campaign_contract_v1
+
+# Generic advisors are created once for countries without a national roster.
+every_possible_country = {
+	limit = { ADISCORD_has_national_military_staff = no }
+	generate_character = {
+		token_base = rocket_scientist_advisor
+		name = rocket_scientist_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_arab_3
+			}
+		}
+		advisor = {
+			slot = theorist
+			allowed = { ADISCORD_has_national_military_staff = no }
+			research_bonus = { rocketry = 0.10 }
+			traits = { rocket_scientist }
+		}
+	}
+
+	generate_character = {
+		token_base = nuclear_scientist_advisor
+		name = nuclear_scientist_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_2
+			}
+		}
+		advisor = {
+			slot = theorist
+			allowed = { ADISCORD_has_national_military_staff = no }
+			research_bonus = { nuclear = 0.10 }
+			traits = { nuclear_scientist }
+		}
+	}
+
+	generate_character = {
+		token_base = grand_battle_plan_expert_advisor
+		name = grand_battle_plan_expert_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_charles_de_gaulle
+			}
+		}
+		advisor = {
+			slot = theorist
+			allowed = { ADISCORD_has_national_military_staff = no }
+			cost = 250
+			research_bonus = { land_doctrine = 0.07 }
+			traits = { grand_battle_plan_expert }
+		}
+	}
+
+	generate_character = {
+		token_base = mobile_warfare_expert_advisor
+		name = mobile_warfare_expert_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_erich_bey
+			}
+		}
+		advisor = {
+			slot = theorist
+			allowed = { ADISCORD_has_national_military_staff = no }
+			cost = 250
+			research_bonus = { land_doctrine = 0.07 }
+			traits = { mobile_warfare_expert }
+		}
+	}
+
+	generate_character = {
+		token_base = mass_assault_expert_advisor
+		name = mass_assault_expert_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_georgy_zhukov
+			}
+		}
+		advisor = {
+			slot = theorist
+			allowed = { ADISCORD_has_national_military_staff = no }
+			cost = 250
+			research_bonus = { land_doctrine = 0.07 }
+			traits = { mass_assault_expert }
+		}
+	}
+
+	generate_character = {
+		token_base = superior_firepower_expert_advisor
+		name = superior_firepower_expert_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_omar_bradley
+			}
+		}
+		advisor = {
+			slot = theorist
+			allowed = { ADISCORD_has_national_military_staff = no }
+			cost = 250
+			research_bonus = { land_doctrine = 0.07 }
+			traits = { superior_firepower_expert }
+		}
+	}
+
+	generate_character = {
+		token_base = close_air_support_proponent_advisor
+		name = close_air_support_proponent_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_3
+			}
+		}
+		advisor = {
+			slot = theorist
+			allowed = { ADISCORD_has_national_military_staff = no }
+			cost = 250
+			research_bonus = { air_doctrine = 0.07 }
+			traits = { close_air_support_proponent }
+		}
+	}
+
+	generate_character = {
+		token_base = air_warfare_theorist_advisor
+		name = air_warfare_theorist_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_4
+			}
+		}
+		advisor = {
+			slot = theorist
+			allowed = { ADISCORD_has_national_military_staff = no }
+			research_bonus = { air_doctrine = 0.07 }
+			traits = { air_warfare_theorist }
+		}
+	}
+
+	generate_character = {
+		token_base = dive_bomber_advisor
+		name = dive_bomber_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_asia_2
+			}
+		}
+		advisor = {
+			slot = theorist
+			allowed = { ADISCORD_has_national_military_staff = no }
+			research_bonus = { air_doctrine = 0.07 }
+			traits = { dive_bomber }
+		}
+	}
+
+	generate_character = {
+		token_base = submarine_specialist_advisor
+		name = submarine_specialist_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_2
+			}
+		}
+		advisor = {
+			slot = theorist
+			allowed = { ADISCORD_has_national_military_staff = no }
+			cost = 250
+			research_bonus = { naval_doctrine = 0.07 }
+			traits = { submarine_specialist }
+		}
+	}
+
+	generate_character = {
+		token_base = naval_theorist_advisor
+		name = naval_theorist_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_arab_3
+			}
+		}
+		advisor = {
+			slot = theorist
+			allowed = { ADISCORD_has_national_military_staff = no }
+			research_bonus = { naval_doctrine = 0.07 }
+			traits = { naval_theorist }
+		}
+	}
+
+	generate_character = {
+		token_base = army_chief_organizational_2_advisor
+		name = army_chief_organizational_2_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_1
+			}
+		}
+		advisor = {
+			slot = army_chief
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { army_chief_organizational_2 }
+		}
+	}
+
+	generate_character = {
+		token_base = army_chief_drill_2_advisor
+		name = army_chief_drill_2_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_2
+			}
+		}
+		advisor = {
+			slot = army_chief
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { army_chief_drill_2 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	generate_character = {
+		token_base = army_chief_offensive_2_advisor
+		name = army_chief_offensive_2_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_3
+			}
+		}
+		advisor = {
+			slot = army_chief
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { army_chief_offensive_2 }
+		}
+	}
+
+	generate_character = {
+		token_base = army_chief_maneuver
+		name = army_chief_maneuver
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_4
+			}
+		}
+		advisor = {
+			slot = army_chief
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { army_chief_maneuver_2 }
+		}
+	}
+
+	generate_character = {
+		token_base = air_chief_ground_support_2_advisor
+		name = air_chief_ground_support_2_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_5
+			}
+		}
+		advisor = {
+			slot = air_chief
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { air_chief_ground_support_2 }
+		}
+	}
+
+	generate_character = {
+		token_base = air_chief_all_weather_2_advisor
+		name = air_chief_all_weather_2_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_6
+			}
+		}
+		advisor = {
+			slot = air_chief
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { air_chief_all_weather_2 }
+		}
+	}
+
+	generate_character = {
+		token_base = air_chief_reform_2_advisor
+		name = air_chief_reform_2_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_arab_2
+			}
+		}
+		advisor = {
+			slot = air_chief
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { air_chief_reform_2 }
+		}
+	}
+
+	generate_character = {
+		token_base = navy_chief_decisive_battle_2_advisor
+		name = navy_chief_decisive_battle_2_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_arab_2
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { navy_chief_decisive_battle_2 }
+		}
+	}
+
+	generate_character = {
+		token_base = navy_chief_commerce_raiding_3_advisor
+		name = navy_chief_commerce_raiding_3_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_2
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { navy_chief_commerce_raiding_3 }
+		}
+	}
+
+	generate_character = {
+		token_base = army_infantry_2_advisor
+		name = army_infantry_2_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_1
+			}
+		}
+		advisor = {
+			slot = high_command
+			ledger = army
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { army_infantry_2 }
+		}
+	}
+
+	generate_character = {
+		token_base = tank_expert_advisor
+		name = tank_expert_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_3
+			}
+		}
+		advisor = {
+			slot = high_command
+			ledger = army
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { army_armored_3 }
+		}
+	}
+
+	generate_character = {
+		token_base = army_regrouping_2_advisor
+		name = army_regrouping_2_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_south_america_1
+			}
+		}
+		advisor = {
+			slot = high_command
+			ledger = army
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { army_regrouping_2 }
+		}
+	}
+
+	generate_character = {
+		token_base = army_logistics_2_advisor
+		name = army_logistics_2_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_3
+			}
+		}
+		advisor = {
+			slot = high_command
+			ledger = army
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { army_logistics_2 }
+		}
+	}
+
+	generate_character = {
+		token_base = air_close_air_support_2_advisor
+		name = air_close_air_support_2_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_arab_3
+			}
+		}
+		advisor = {
+			slot = high_command
+			ledger = air
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { air_close_air_support_2 }
+		}
+	}
+
+	generate_character = {
+		token_base = air_bomber_interception_2_advisor
+		name = air_bomber_interception_2_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_1
+			}
+		}
+		advisor = {
+			slot = high_command
+			ledger = air
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { air_bomber_interception_2 }
+		}
+	}
+
+	generate_character = {
+		token_base = air_airborne_2_advisor
+		name = air_airborne_2_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_6
+			}
+		}
+		advisor = {
+			slot = high_command
+			ledger = air
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { air_airborne_2 }
+		}
+	}
+
+	generate_character = {
+		token_base = navy_naval_air_defense_2_advisor
+		name = navy_naval_air_defense_2_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_arab_1
+			}
+		}
+		advisor = {
+			slot = high_command
+			ledger = navy
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { navy_naval_air_defense_2 }
+		}
+	}
+
+	generate_character = {
+		token_base = navy_fleet_logistics_2_advisor
+		name = navy_fleet_logistics_2_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_1
+			}
+		}
+		advisor = {
+			slot = high_command
+			ledger = navy
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { navy_fleet_logistics_2 }
+		}
+	}
+
+	generate_character = {
+		token_base = navy_anti_submarine_1_advisor
+		name = navy_anti_submarine_1_advisor
+		portraits = {
+			army = {
+				small = GFX_idea_generic_political_advisor_europe_5
+			}
+		}
+		advisor = {
+			slot = high_command
+			ledger = navy
+			allowed = { ADISCORD_has_national_military_staff = no }
+			traits = { navy_anti_submarine_1 }
+		}
+	}
+
+}

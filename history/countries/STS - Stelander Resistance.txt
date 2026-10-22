@@ -19,3 +19,33 @@ recruit_character = STS_Oleg_Vershin
 
 # The administration effect activates this dormant political role.
 recruit_character = STS_VAL_Andrei_Rudnev
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_STS_Fedor_Vedenin
+recruit_character = ADISCORD_staff_STS_Konstantin_Panov
+recruit_character = ADISCORD_staff_STS_Alexei_Barinov
+recruit_character = ADISCORD_staff_STS_Nikolai_Vetrov
+recruit_character = ADISCORD_staff_STS_Sergei_Tretyakov
+recruit_character = ADISCORD_staff_STS_Yuri_Gradov
+recruit_character = ADISCORD_staff_STS_Maksim_Rogov
+recruit_character = ADISCORD_staff_STS_Boris_Ostrovsky
+recruit_character = ADISCORD_staff_STS_Arkady_Kurbatov
+recruit_character = ADISCORD_staff_STS_Petr_Sazonov
+recruit_character = ADISCORD_staff_STS_Pavel_Berezov
+recruit_character = ADISCORD_staff_STS_Vladimir_Losev
+recruit_character = ADISCORD_staff_STS_Gennady_Malinin
+recruit_character = ADISCORD_staff_STS_Dmitri_Nekrasov
+recruit_character = ADISCORD_staff_STS_Ruslan_Tumanov
+recruit_character = ADISCORD_staff_STS_Semyon_Uvarov
+recruit_character = ADISCORD_staff_STS_Stanislav_Frolov
+recruit_character = ADISCORD_staff_STS_Ilya_Ostretsov
+recruit_character = ADISCORD_staff_STS_Aleksei_Chernov
+recruit_character = ADISCORD_staff_STS_Mikhail_Rakitin
+
+activate_advisor = ADISCORD_staff_STS_Fedor_Vedenin
+activate_advisor = ADISCORD_staff_STS_Yuri_Gradov
+activate_advisor = ADISCORD_staff_STS_Arkady_Kurbatov
+activate_advisor = ADISCORD_staff_STS_Vladimir_Losev
+activate_advisor = ADISCORD_staff_STS_Gennady_Malinin
+activate_advisor = ADISCORD_staff_STS_Dmitri_Nekrasov
+activate_advisor = ADISCORD_staff_STS_Ilya_Ostretsov

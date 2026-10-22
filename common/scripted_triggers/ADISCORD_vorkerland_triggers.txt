@@ -1758,6 +1758,7 @@ ADISCORD_vorkerland_reunification_verified = {
 	NOT = { country_exists = VAD }
 	NOT = { country_exists = TVA }
 	NOT = { country_exists = WTD }
+	NOT = { country_exists = EGC }
 }
 
 ADISCORD_vorkerland_can_commit_to_showdown = {

@@ -20,4 +20,155 @@ characters = {
 			id = -1
 		}
 	}
+
+	# YPR military leadership.
+	ADISCORD_staff_YPR_Viktor_Frolov = {
+		name = ADISCORD_staff_YPR_Viktor_Frolov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_YPR_Viktor_Frolov
+			desc = ADISCORD_staff_YPR_Viktor_Frolov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YPR }
+			visible = { tag = YPR }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_YPR_Georgy_Chernov = {
+		name = ADISCORD_staff_YPR_Georgy_Chernov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			idea_token = ADISCORD_staff_YPR_Georgy_Chernov
+			desc = ADISCORD_staff_YPR_Georgy_Chernov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YPR }
+			visible = { tag = YPR }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_YPR_Denis_Vedenin = {
+		name = ADISCORD_staff_YPR_Denis_Vedenin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+			}
+		}
+		advisor = {
+			slot = air_chief
+			idea_token = ADISCORD_staff_YPR_Denis_Vedenin
+			desc = ADISCORD_staff_YPR_Denis_Vedenin_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YPR }
+			visible = { tag = YPR }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_YPR_Yevgeny_Gradov = {
+		name = ADISCORD_staff_YPR_Yevgeny_Gradov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_YPR_Yevgeny_Gradov
+			desc = ADISCORD_staff_YPR_Yevgeny_Gradov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YPR }
+			visible = { tag = YPR }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_YPR_Igor_Kurbatov = {
+		name = ADISCORD_staff_YPR_Igor_Kurbatov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_log_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_YPR_Igor_Kurbatov
+			desc = ADISCORD_staff_YPR_Igor_Kurbatov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YPR }
+			visible = { tag = YPR }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_YPR_Kirill_Losev = {
+		name = ADISCORD_staff_YPR_Kirill_Losev
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_art_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_YPR_Kirill_Losev
+			desc = ADISCORD_staff_YPR_Kirill_Losev_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YPR }
+			visible = { tag = YPR }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_YPR_Leonid_Malinin = {
+		name = ADISCORD_staff_YPR_Leonid_Malinin
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_off_western_european_2d
+			}
+		}
+		advisor = {
+			slot = theorist
+			idea_token = ADISCORD_staff_YPR_Leonid_Malinin
+			desc = ADISCORD_staff_YPR_Leonid_Malinin_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YPR }
+			visible = { tag = YPR }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			ai_will_do = { factor = 1 }
+		}
+	}
 }

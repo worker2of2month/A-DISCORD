@@ -35,6 +35,11 @@ WRK_vorkerland_joint_government = {
 	color_ui = rgb { 214 180 102 }
 }
 
+WRK_vorkerland_world_empire = {
+	color = rgb { 64 8 12 }
+	color_ui = rgb { 64 8 12 }
+}
+
 SOL_vorkerland_worker_protectorate = {
 	color = rgb { 191 143 35 }
 	color_ui = rgb { 231 183 75 }
@@ -120,6 +125,11 @@ STS_military_junta = {
 STS_steland = { color = rgb { 72 88 104 } color_ui = rgb { 140 168 188 } }
 
 STS_hegemony = {
+	color = rgb { 72 88 104 }
+	color_ui = rgb { 140 168 188 }
+}
+
+STS_stelander_union = {
 	color = rgb { 72 88 104 }
 	color_ui = rgb { 140 168 188 }
 }

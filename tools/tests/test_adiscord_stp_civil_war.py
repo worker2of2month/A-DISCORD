@@ -1026,7 +1026,7 @@ class CivilWarContracts(unittest.TestCase):
             if e.key == "country_event"
             and scalar(e.value, "id") == "ADISCORD_STP_cw.95"
         ]
-        self.assertEqual(callbacks, [("STP", "1")])
+        self.assertEqual(callbacks, [("STS", "1")])
         party_story = [
             scope
             for scope, e in selected_effects(audio, {}, "STP")
@@ -1048,8 +1048,8 @@ class CivilWarContracts(unittest.TestCase):
             and scalar(e.value, "id") == "ADISCORD_STP_cw.94"
         )
         self.assertEqual(scalar(playback, "hidden"), "yes")
-        # The queued event can retain STP while its human has moved to STS.
-        # STP's preparation flag has already been replaced with the Party flag.
+        # Each callback belongs to its recipient after the player handoff.
+        # It must never select another country's theme, including in multiplayer.
         for recipient in ("STP", "STS"):
             for party_human, shabrat_human in (
                 (False, True), (True, False), (True, True), (False, False)
@@ -1082,7 +1082,8 @@ class CivilWarContracts(unittest.TestCase):
                             matches_conditions(
                                 ast_block(playback, "trigger"), facts, recipient
                             ),
-                            started and not finished,
+                            started and war and not finished
+                            and recipient == "STS" and shabrat_human,
                         )
                         chosen_songs = [
                             (scope, e.value)
@@ -1091,13 +1092,20 @@ class CivilWarContracts(unittest.TestCase):
                             )
                             if e.key == "scoped_play_song"
                         ]
-                        expected = []
-                        if started and war and not finished:
-                            if shabrat_human:
-                                expected.append(("STS", "ADISCORD_stp_civil_war"))
-                            if party_human:
-                                expected.append(("STP", "ADISCORD_stp_party"))
-                        self.assertCountEqual(chosen_songs, expected)
+                        self.assertEqual(chosen_songs, [])
+                        opening_events = [
+                            (scope, scalar(e.value, "id"))
+                            for scope, e in selected_effects(
+                                ast_block(playback, "immediate"), facts, recipient
+                            )
+                            if e.key == "country_event"
+                        ]
+                        self.assertEqual(
+                            opening_events,
+                            [("STS", "ADISCORD_STP_cw.96")]
+                            if recipient == "STS" and shabrat_human
+                            and started and war and not finished else [],
+                        )
             self.assertEqual(
                 matches_conditions(ast_block(story, "trigger"), {}, recipient),
                 recipient == "STP",
@@ -1144,6 +1152,85 @@ class CivilWarContracts(unittest.TestCase):
                 ROOT / "localisation" / "russian" / "ADISCORD_music_l_russian.yml"
             ).read_text(encoding="utf-8-sig"),
         )
+
+    def test_shabrat_opening_response_plays_music_only_during_his_war(self):
+        events = entries("events/ADISCORD_STP_events.txt")
+        openings = [
+            e.value for e in events
+            if e.key == "country_event"
+            and scalar(e.value, "id") == "ADISCORD_STP_cw.96"
+        ]
+        self.assertEqual(len(openings), 1)
+        opening = openings[0]
+        self.assertEqual(scalar(opening, "fire_only_once"), "yes")
+        self.assertEqual(scalar(opening, "timeout_days"), "7")
+        options = [e.value for e in opening if e.key == "option"]
+        self.assertEqual(len(options), 1)
+        self.assertFalse(any(e.key == "trigger" for e in options[0]))
+        self.assertFalse(any(
+            e.key == "scoped_play_song"
+            for immediate in opening if immediate.key == "immediate"
+            for e in walk(immediate.value)
+        ))
+        for recipient, human, started, war, finished, expected in (
+            ("STS", True, True, True, False, ["ADISCORD_stp_civil_war"]),
+            ("STS", False, True, True, False, []),
+            ("STP", True, True, True, False, []),
+            ("STS", True, False, True, False, []),
+            ("STS", True, True, False, False, []),
+            ("STS", True, True, True, True, []),
+        ):
+            with self.subTest(recipient=recipient, human=human, started=started,
+                              war=war, finished=finished):
+                facts = {
+                    (recipient, "is_ai", "no"): human,
+                    (recipient, "has_global_flag", "STP_cw_started"): started,
+                    (recipient, "has_global_flag", "STP_cw_union_wars_finished"): finished,
+                    (recipient, "has_war_with", "STP"): war,
+                }
+                self.assertEqual(
+                    matches_conditions(ast_block(opening, "trigger"), facts, recipient),
+                    bool(expected),
+                )
+                songs = [
+                    e.value for _, e in selected_effects(options[0], facts, recipient)
+                    if e.key == "scoped_play_song"
+                ]
+                self.assertEqual(songs, expected)
+
+    def test_hedersett_response_plays_party_music_only_during_his_war(self):
+        story = next(
+            e.value for e in entries("events/ADISCORD_STP_events.txt")
+            if e.key == "country_event"
+            and scalar(e.value, "id") == "ADISCORD_STP_cw.94"
+        )
+        self.assertFalse(any(
+            e.key == "scoped_play_song" for e in walk(ast_block(story, "immediate"))
+        ))
+        options = [e.value for e in story if e.key == "option"]
+        self.assertEqual(len(options), 1)
+        self.assertFalse(any(e.key == "trigger" for e in options[0]))
+        for recipient, human, started, war, finished, expected in (
+            ("STP", True, True, True, False, ["ADISCORD_stp_party"]),
+            ("STP", False, True, True, False, []),
+            ("STS", True, True, True, False, []),
+            ("STP", True, False, True, False, []),
+            ("STP", True, True, False, False, []),
+            ("STP", True, True, True, True, []),
+        ):
+            with self.subTest(recipient=recipient, human=human, started=started,
+                              war=war, finished=finished):
+                facts = {
+                    (recipient, "is_ai", "no"): human,
+                    (recipient, "has_global_flag", "STP_cw_started"): started,
+                    (recipient, "has_global_flag", "STP_cw_union_wars_finished"): finished,
+                    (recipient, "has_war_with", "STS"): war,
+                }
+                songs = [
+                    e.value for _, e in selected_effects(options[0], facts, recipient)
+                    if e.key == "scoped_play_song"
+                ]
+                self.assertEqual(songs, expected)
 
     def test_mobilization_pays_real_six_battalion_cost_before_creation(self):
         effect = block(self.effects, "STP_cw_mobilize_brigade")
@@ -2368,11 +2455,14 @@ class CivilWarContracts(unittest.TestCase):
         for name in (
             "STP_cw_settle_union_victory",
             "STP_cw_settle_nod_victory",
-            "VAL_cw_settle_republics",
         ):
             self.assertIn(
                 "STP_cw_check_union_wars_finished = yes", block(self.effects, name)
             )
+        self.assertNotIn(
+            "STP_cw_check_union_wars_finished",
+            block(self.effects, "VAL_cw_settle_republics"),
+        )
         router = block(
             read_country_on_actions(
                 "common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'
@@ -2397,6 +2487,7 @@ class CivilWarContracts(unittest.TestCase):
             for republic_war in (False, True):
                 facts = {
                     ("STP", "has_global_flag", "STP_cw_started"): True,
+                    ("STS", "has_country_flag", "STP_cw_won_union_battle"): True,
                     ("STP", "has_war_with", "STS"): civil_war,
                     ("SRP", "has_war_with", "VAL"): republic_war,
                 }
@@ -2441,9 +2532,10 @@ class CivilWarContracts(unittest.TestCase):
             ]
             points = [position(f, tag) for f in visible]
             self.assertEqual(len(points), len(set(points)), tag)
+            # The air-service choice extends STS to x=16, clear of the ground branch.
             self.assertLessEqual(
                 max(x for x, _ in points) - min(x for x, _ in points),
-                {"STS": 18, "STP": 28, "SRP": 7}[tag],
+                {"STS": 20, "STP": 28, "SRP": 7}[tag],
                 tag,
             )
             for x in {x for x, _ in points}:
@@ -7705,6 +7797,46 @@ class KefreytVolunteerContracts(unittest.TestCase):
         "anti_air_equipment": 60,
     }
 
+    def test_volunteers_remain_until_a_union_winner_is_recorded(self):
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        closure = ast_block(effects, "STP_cw_check_union_wars_finished")
+        cases = (
+            (None, True, False, False),
+            (None, False, False, False),
+            ("SRP", False, False, False),
+            ("VAL", False, False, False),
+            ("STP", True, False, False),
+            ("STS", True, False, False),
+            ("STP", False, False, True),
+            ("STS", False, False, True),
+            ("STP", False, True, False),
+            ("STS", False, True, False),
+        )
+        for caller in ("STP", "STS", "VAL", "SRP"):
+            for winner, war, closed, expected in cases:
+                with self.subTest(caller=caller, winner=winner, war=war, closed=closed):
+                    facts = {
+                        (caller, "has_global_flag", "STP_cw_started"): True,
+                        (caller, "has_global_flag", "STP_cw_union_wars_finished"): closed,
+                        ("STP", "has_war_with", "STS"): war,
+                        ("VAL", "has_country_flag", "VAL_cw_settled"): True,
+                        ("SRP", "has_country_flag", "STP_cw_postwar"): True,
+                    }
+                    if winner:
+                        facts[winner, "has_country_flag", "STP_cw_won_union_battle"] = True
+                    selected = list(selected_effects(closure, facts, caller))
+                    finished = [
+                        e for _, e in selected
+                        if e.key == "set_global_flag"
+                        and e.value == "STP_cw_union_wars_finished"
+                    ]
+                    removed = [
+                        scope for scope, e in selected
+                        if e.key == "STP_cw_remove_kefreyt_volunteers"
+                    ]
+                    self.assertEqual(len(finished), int(expected))
+                    self.assertEqual(removed, ["STS"] if expected else [])
+
     def test_offer_acceptance_and_full_package_payment_have_separate_gates(self):
         events = entries("events/ADISCORD_STP_events.txt")
         event = next(
@@ -8687,7 +8819,7 @@ class PostwarFocusContracts(unittest.TestCase):
             self.assertEqual(len(points), len(set(points)))
             self.assertLessEqual(
                 max(x for x, _ in points) - min(x for x, _ in points),
-                29 if tag == "STS" else 54,
+                40 if tag == "STS" else 54,
             )
             self.assertLessEqual(max(y for _, y in points), 10 if tag == "STS" else 18)
             for focus in focuses.values():
@@ -8883,16 +9015,34 @@ class PostwarFocusContracts(unittest.TestCase):
                 for e in items
             ]
 
-        for name, focus in self.new.items():
-            if not name.endswith(("civil_workshops", "accountable_arsenals")):
-                continue
+        factory_focuses = {
+            name: focus
+            for name, focus in self.new.items()
+            if name.endswith(("civil_workshops", "accountable_arsenals"))
+        }
+        self.assertEqual(
+            set(factory_focuses),
+            {
+                "STP_pw_republic_civil_workshops",
+                "STP_pw_republic_accountable_arsenals",
+                "STP_pw_party_civil_workshops",
+                "STP_pw_party_accountable_arsenals",
+            },
+        )
+        for name, focus in factory_focuses.items():
             factory = (
                 "industrial_complex"
                 if name.endswith("civil_workshops")
                 else "arms_factory"
             )
             reward = ast_block(focus, "completion_reward")
-            mechanics = ast_block(reward, "hidden_effect")
+            # Growth and construction can have separate hidden payloads.
+            mechanics = [
+                child
+                for entry in reward
+                if entry.key == "hidden_effect"
+                for child in entry.value
+            ]
             project = ast_block(mechanics, "if")
             possible = ast_block(ast_block(project, "limit"), "any_owned_state")
             target = ast_block(project, "random_owned_controlled_state")

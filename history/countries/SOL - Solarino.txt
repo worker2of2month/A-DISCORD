@@ -40,3 +40,12 @@ set_stability = 0.54
 set_research_slots = 2
 
 set_cosmetic_tag = SOL_confederation
+
+# Military leadership candidates.
+recruit_character = ADISCORD_staff_SOL_Karl_Roemer
+recruit_character = ADISCORD_staff_SOL_Leon_Scholz
+recruit_character = ADISCORD_staff_SOL_Martin_Treiber
+recruit_character = ADISCORD_staff_SOL_Niklas_Wolff
+recruit_character = ADISCORD_staff_SOL_Oskar_Becker
+recruit_character = ADISCORD_staff_SOL_Paul_Walter
+recruit_character = ADISCORD_staff_SOL_Richard_Garten

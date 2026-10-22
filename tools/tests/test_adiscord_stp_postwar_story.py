@@ -174,6 +174,124 @@ class FounderCourseChoiceTests(unittest.TestCase):
                     self.assertNotIn("§Y", value)
 
 
+class PartyTrialTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.events = parse_clausewitz(read(EVENTS))
+        cls.effects = parse_clausewitz(read(
+            ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
+        ))
+        cls.triggers = parse_clausewitz(read(
+            ROOT / "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"
+        ))
+
+    def trial(self):
+        return next(
+            node.value for node in self.events if node.key == "country_event"
+            and scalar(node.value, "id") == "ADISCORD_STP_pw.8"
+        )
+
+    def test_verdict_requires_victory_and_cannot_be_settled_twice(self):
+        pending = block(self.triggers, "STP_pw_party_trial_pending")
+        self.assertTrue(pending)
+        facts = {
+            ("STS", "has_country_flag", "STP_cw_won_union_battle"): True,
+            ("STS", "has_country_flag", "STP_cw_postwar"): True,
+            ("STP", "exists", "yes"): False,
+            ("STP", "exists", "no"): True,
+        }
+        self.assertTrue(matches_conditions(pending, facts, "STS"))
+        for blocker in (
+            ("STS", "has_variable", "STP_pw_party_trial_verdict"),
+            ("STP", "exists", "yes"),
+        ):
+            blocked = facts | {blocker: True}
+            if blocker == ("STP", "exists", "yes"):
+                blocked["STP", "exists", "no"] = False
+            self.assertFalse(matches_conditions(pending, blocked, "STS"))
+        self.assertFalse(matches_conditions(pending, facts, "STP"))
+        event = self.trial()
+        self.assertEqual(scalar(event, "fire_only_once"), "yes")
+        options = [node.value for node in event if node.key == "option"]
+        self.assertEqual(len(options), 3)
+        self.assertEqual(scalar(options[0], "name"), "ADISCORD_STP_pw.8.mercy")
+        settled = {("STS", "STP_pw_party_trial_pending", "yes"): False}
+        for option in options[:2]:
+            payload = [node for node in option if node.key not in {"name", "trigger", "ai_chance"}]
+            self.assertEqual(list(selected_effects(payload, settled, "STS")), [])
+        self.assertEqual(scalar(block(options[2], "trigger"), "STP_pw_party_trial_pending"), "no")
+
+    def test_only_existing_party_generals_transfer_without_recreation(self):
+        effect = block(self.effects, "STP_pw_pardon_party_specialists")
+        self.assertTrue(effect)
+        donor = block(effect, "STP")
+        generals = ("STP_Roland_Keitel", "STP_Maurice_Dallon")
+        for present in ((), generals[:1], generals):
+            facts = {("STP", "has_character", general): True for general in present}
+            transfers = [node.value for _, node in selected_effects(donor, facts, "STP")
+                         if node.key == "set_nationality"]
+            self.assertEqual([scalar(node, "character") for node in transfers], list(present))
+            self.assertTrue(all(scalar(node, "target_country") == "STS" for node in transfers))
+        self.assertFalse(any(node.key in {"recruit_character", "create_corps_commander"}
+                             for node in walk(effect)))
+
+    def test_three_ministers_are_allowed_at_start_but_visible_only_after_pardon(self):
+        ideas = parse_clausewitz(read(ROOT / "common/ideas/ADISCORD_ministers_all_countries.txt"))
+        eligibility = block(self.triggers, "STP_pw_party_specialists_available")
+        self.assertTrue(eligibility)
+        for verdict, expected in ((0, False), (1, False), (2, True)):
+            self.assertEqual(matches_conditions(eligibility, {
+                ("STS", "variable", "STP_pw_party_trial_verdict"): verdict,
+            }, "STS"), expected)
+        self.assertTrue(matches_conditions(eligibility, {}, "STP"))
+        for name in ("Lorian_Vell", "Vesper_Monray", "Adrian_Vels"):
+            minister = next(node.value for node in walk(ideas) if node.key == f"minister_STP_{name}")
+            self.assertTrue(matches_conditions(block(minister, "allowed"), {}, "STS"))
+            for field in ("visible", "available"):
+                for unlocked in (False, True):
+                    facts = {
+                        ("STS", "STP_pw_party_specialists_available", "yes"): unlocked,
+                        ("STS", "STP_party_minister_change_allowed", "yes"): True,
+                    }
+                    self.assertEqual(matches_conditions(block(minister, field), facts, "STS"), unlocked)
+            self.assertEqual(scalar(minister, "cost"), "75")
+
+    def test_execution_pays_exactly_the_agreed_package_without_monthly_growth(self):
+        options = [node.value for node in self.trial() if node.key == "option"]
+        execute = next(option for option in options
+                       if scalar(option, "name") == "ADISCORD_STP_pw.8.execute")
+        facts = {("STS", "STP_pw_party_trial_pending", "yes"): True}
+        active = [node for _, node in selected_effects(execute, facts, "STS")]
+        self.assertEqual(scalar(active, "add_political_power"), "50")
+        self.assertEqual(scalar(active, "add_stability"), "0.02")
+        effect = block(self.effects, "STP_pw_execute_party_defendants")
+        additions = [node.value for node in effect if node.key == "add_to_variable"]
+        self.assertEqual(len(additions), 1)
+        self.assertEqual(scalar(additions[0], "var"), "ADISCORD_state_development_progress")
+        self.assertEqual(scalar(additions[0], "value"), "5")
+        self.assertFalse(any(node.key.startswith("ADISCORD_tick_") for node in walk(effect)))
+        donor = block(effect, "STP")
+        facts = {
+            ("STP", "has_character", "STP_Roland_Keitel"): True,
+            ("NOD", "has_character", "STP_rufus_hedersett"): True,
+        }
+        retired = [node.value for _, node in selected_effects(donor, facts, "STP")
+                   if node.key == "retire_character"]
+        self.assertEqual(retired, ["STP_Roland_Keitel"])
+
+    def test_trial_is_scheduled_for_the_resistance_after_union_victory(self):
+        settlement = block(self.effects, "STP_cw_settle_union_victory")
+        calls = [node.value for node in settlement if node.key == "if"
+                 and any(child.key == "country_event"
+                         and scalar(child.value, "id") == "ADISCORD_STP_pw.8"
+                         for child in node.value)]
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(scalar(block(calls[0], "limit"), "tag"), "STS")
+        call = next(node.value for node in calls[0] if node.key == "country_event"
+                    and scalar(node.value, "id") == "ADISCORD_STP_pw.8")
+        self.assertEqual(scalar(call, "days"), "7")
+
+
 class ShabratPostwarStoryTests(unittest.TestCase):
     def test_story_localisation_has_one_canonical_owner(self) -> None:
         for filename in (
@@ -1798,8 +1916,55 @@ class CharterTransactions(unittest.TestCase):
         self.execute(self.effects[prefix + "award_districts"])
         self.mark("has_country_flag", prefix + "defence_delivered")
         self.execute(self.effects[prefix + "award_nation"])
-        self.assertEqual(sum(c[1] == "ADISCORD_superevent_enqueue" for c in self.calls), 1)
+        self.assertFalse(any(c[1] == "ADISCORD_superevent_enqueue" for c in self.calls))
         self.assertTrue(self.facts[("STS", "has_idea", prefix + "legacy_districts")])
+
+    def test_stelander_union_proclamation_accepts_either_final_once(self):
+        name = "STP_pc_proclaim_stelander_union"
+        self.assertTrue(name in self.decisions, f"Missing decision {name}")
+        self.assertTrue(name in self.effects, f"Missing effect {name}")
+        for ending in ("districts", "nation"):
+            with self.subTest(ending=ending):
+                self.setUp()
+                self.cabinet("shabrat")
+                self.mark("has_completed_focus", "STP_pc_charter_shabrat_charter_fulfilled")
+                self.mark("has_idea", f"STP_pc_charter_shabrat_legacy_{ending}")
+                decision = self.decisions[name]
+                self.assertTrue(self.conditions(block(decision, "visible")))
+                self.assertTrue(self.conditions(block(decision, "available")))
+                self.assertEqual(scalar(decision, "cost"), "0")
+                self.decision(name)
+                self.execute(self.effects[name])
+                self.assertEqual(sum(c[1] == "ADISCORD_superevent_enqueue" for c in self.calls), 1)
+                self.assertEqual(
+                    [c for c in self.calls if c[1] == "set_cosmetic_tag"],
+                    [("STS", "set_cosmetic_tag", "STS_stelander_union")],
+                )
+                self.assertEqual(self.number("ADISCORD_superevent_request", "STS"), 23)
+                self.assertFalse(self.conditions(block(decision, "visible")))
+                self.assertEqual(self.facts[("STS", "leader")], "STP_maksim_shabrat")
+                self.assertEqual(self.number("ADISCORD_economy_treasury", "STS"), 5000)
+                self.assertEqual(self.facts[("STS", "numeric", "has_political_power")], 500)
+
+    def test_stelander_union_rejects_unfinished_and_other_governments(self):
+        name = "STP_pc_proclaim_stelander_union"
+        self.assertTrue(name in self.effects, f"Missing effect {name}")
+        for cabinet, completed, legacy in (
+            ("shabrat", False, False),
+            ("shabrat", True, False),
+            ("shabrat", False, True),
+            ("sotnikov", True, True),
+            ("tikhoreva", True, True),
+        ):
+            with self.subTest(cabinet=cabinet, completed=completed, legacy=legacy):
+                self.setUp()
+                self.cabinet(cabinet)
+                if completed:
+                    self.mark("has_completed_focus", "STP_pc_charter_shabrat_charter_fulfilled")
+                if legacy:
+                    self.mark("has_idea", "STP_pc_charter_shabrat_legacy_districts")
+                self.execute(self.effects[name])
+                self.assertEqual(self.calls, [])
 
     def test_paid_programmes_reject_fractional_shortages(self):
         cases = {

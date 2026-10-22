@@ -32,3 +32,12 @@ add_ideas = {
 }
 
 set_research_slots = 2
+
+# Military leadership candidates.
+recruit_character = ADISCORD_staff_EFL_Adrian_Dreyer
+recruit_character = ADISCORD_staff_EFL_Bruno_Ebers
+recruit_character = ADISCORD_staff_EFL_Bruno_Vogel
+recruit_character = ADISCORD_staff_EFL_Walter_Hartwig
+recruit_character = ADISCORD_staff_EFL_Georg_Kramer
+recruit_character = ADISCORD_staff_EFL_Dietrich_Lorenz
+recruit_character = ADISCORD_staff_EFL_Emil_Meiner

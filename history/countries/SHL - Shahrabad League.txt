@@ -56,3 +56,22 @@ add_ideas = {
 	minister_SHL_Bahram_Kaveh
 	minister_SHL_Ramin_Farzan
 }
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_SHL_Farid_Rahmani
+recruit_character = ADISCORD_staff_SHL_Rashid_Farrokh
+recruit_character = ADISCORD_staff_SHL_Kamran_Daryan
+recruit_character = ADISCORD_staff_SHL_Nadir_Rostami
+recruit_character = ADISCORD_staff_SHL_Navid_Azari
+recruit_character = ADISCORD_staff_SHL_Bahram_Sadri
+recruit_character = ADISCORD_staff_SHL_Reza_Mehrabi
+recruit_character = ADISCORD_staff_SHL_Arman_Kaviani
+recruit_character = ADISCORD_staff_SHL_Dara_Farzan
+
+activate_advisor = ADISCORD_staff_SHL_Farid_Rahmani
+activate_advisor = ADISCORD_staff_SHL_Kamran_Daryan
+activate_advisor = ADISCORD_staff_SHL_Nadir_Rostami
+activate_advisor = ADISCORD_staff_SHL_Bahram_Sadri
+activate_advisor = ADISCORD_staff_SHL_Reza_Mehrabi
+activate_advisor = ADISCORD_staff_SHL_Arman_Kaviani
+activate_advisor = ADISCORD_staff_SHL_Dara_Farzan

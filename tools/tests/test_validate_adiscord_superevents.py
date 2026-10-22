@@ -90,8 +90,13 @@ class SupereventContractTests(unittest.TestCase):
                         requests.append(values["ADISCORD_superevent_request"])
                     elif values.get("var") == "ADISCORD_superevent_request":
                         requests.append(values["value"])
-                self.assertEqual(requests, [request], (candidate, answer))
-                self.assertEqual(sum(node.key == "ADISCORD_superevent_enqueue" for node in actual), 1)
+                expected_requests = [] if candidate == "shabrat" else [request]
+                self.assertEqual(requests, expected_requests, (candidate, answer))
+                self.assertEqual(sum(node.key == "ADISCORD_superevent_enqueue" for node in actual), len(expected_requests))
+                if candidate == "shabrat":
+                    self.assertTrue(any(node.key == "unlock_decision_tooltip"
+                                        and node.value == "STP_pc_proclaim_stelander_union"
+                                        for node in actual))
                 self.assertTrue(any(node.key == "add_ideas" and node.value.startswith(f"STP_pc_charter_{candidate}_legacy_")
                                     for node in actual), (candidate, answer))
             provisional = next(node.value for node in event if node.key == "option"

@@ -35,3 +35,12 @@ add_ideas = {
 }
 
 set_research_slots = 2
+
+# Military leadership candidates.
+recruit_character = ADISCORD_staff_PIV_Igor_Nekrasov
+recruit_character = ADISCORD_staff_PIV_Kirill_Ostretsov
+recruit_character = ADISCORD_staff_PIV_Leonid_Panov
+recruit_character = ADISCORD_staff_PIV_Mikhail_Rogov
+recruit_character = ADISCORD_staff_PIV_Nikolai_Sazonov
+recruit_character = ADISCORD_staff_PIV_Oleg_Tumanov
+recruit_character = ADISCORD_staff_PIV_Pavel_Uvarov

@@ -169,15 +169,16 @@ def matches_conditions(items, facts, scope="STP"):
             return compare(
                 facts.get((scope, "equipment", equipment), 0), operator, float(amount)
             )
-        if entry.key == "stockpile_ratio":
-            equipment = scalar(entry.value, "archetype")
+        if entry.key in ("stockpile_ratio", "fighting_army_strength_ratio"):
+            target_key = "archetype" if entry.key == "stockpile_ratio" else "tag"
+            target = scalar(entry.value, target_key)
             field, operator, amount = (
                 child.value for child in entry.value if not child.key
             )
             if field != "ratio":
-                raise AssertionError(f"Unsupported stockpile comparison: {field}")
+                raise AssertionError(f"Unsupported {entry.key} comparison: {field}")
             return compare(
-                facts[(scope, "stockpile_ratio", equipment)], operator, float(amount)
+                facts[(scope, entry.key, target)], operator, float(amount)
             )
         if entry.key in (
             "has_global_flag",
@@ -1181,214 +1182,228 @@ class StelanderPreparationTests(unittest.TestCase):
                         "a stale offer must not change the course or the republics",
                     )
 
-    def test_nectar_native_events_preserve_every_paragraph_without_a_timer(self):
+    def _intro_sources(self):
+        self.intro_effect_definitions = entries(
+            "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
+        )
+        tree = next(
+            e.value
+            for e in parse_clausewitz(
+                (ROOT / "common/national_focus/ADISCORD_STP_preparation.txt").read_text(
+                    encoding="utf-8"
+                )
+            )
+            if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus"
+        )
+        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        events = {
+            scalar(e.value, "id"): e.value
+            for e in entries("events/ADISCORD_STP_events.txt")
+            if e.key == "country_event"
+        }
+        return focuses, events
+
+    def _apply_intro_effects(self, payload, facts, scheduled):
+        """Execute the intro's parsed branches and accounting; leave economy setup external."""
+        definitions = self.intro_effect_definitions
+        for scope, effect in selected_effects(payload, facts):
+            key, value = effect.key, effect.value
+            if key in ("STP_finish_intro_story", "STP_receive_1200"):
+                self._apply_intro_effects(block(definitions, key), facts, scheduled)
+            elif key in ("set_country_flag", "clr_country_flag"):
+                facts[(scope, "has_country_flag", value)] = key == "set_country_flag"
+            elif key == "add_political_power":
+                balance = (scope, "numeric", "political_power")
+                facts[balance] = facts.get(balance, 0) + float(value)
+            elif key == "add_to_variable":
+                balance = (scope, "variable", scalar(value, "var"))
+                facts[balance] = facts.get(balance, 0) + float(scalar(value, "value"))
+            elif key == "country_event":
+                scheduled.append(value)
+            elif key == "ADISCORD_economy_mark_dirty":
+                facts[(scope, "economy_dirty")] = True
+            else:
+                self.assertIn(
+                    key,
+                    (
+                        "name",
+                        "trigger",
+                        "ai_chance",
+                        "custom_effect_tooltip",
+                        "ADISCORD_economy_initialize_country",
+                    ),
+                )
+
+    def test_nectar_native_events_preserve_every_paragraph(self):
         import hashlib
 
-        loc_path = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
-        self.assertTrue(loc_path.read_bytes().startswith(b"\xef\xbb\xbf"))
-        values = dict(
-            re.findall(
-                r'^ ([\w.]+):\s*"(.*)"$', loc_path.read_text(encoding="utf-8-sig"), re.M
+        _, events = self._intro_sources()
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            values = dict(
+                re.findall(
+                    r'^ ([\w.]+):(?:\d+)?\s*"(.*)"$',
+                    path.read_text(encoding="utf-8-sig"),
+                    re.M,
+                )
             )
-        )
-        events = {
-            scalar(e.value, "id"): e.value
-            for e in entries("events/ADISCORD_STP_events.txt")
-            if e.key == "country_event"
-        }
-        tree = next(
-            e.value
-            for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
-            if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus"
-        )
-        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+            chapters = []
+            for number in (15, 16, 23, 25):
+                event = events[f"ADISCORD_STP_preparation.{number}"]
+                self.assertIn(scalar(event, "title"), values)
+                text = values[scalar(event, "desc")]
+                rendered = text.replace(r"\n", "\n")
+                self.assertLessEqual(len(rendered), 3000)
+                self.assertLessEqual(len(rendered.encode("utf-8")), 5500)
+                options = [e.value for e in event if e.key == "option"]
+                self.assertEqual(len(options), 2)
+                for option in options:
+                    self.assertIn(scalar(option, "name"), values)
+                if number in (15, 16):
+                    chapters.append(text)
+                    self.assertEqual(
+                        scalar(event, "picture"), "GFX_event_adiscord_nectar_of_the_gods"
+                    )
+            if language == "russian":
+                self.assertEqual(
+                    hashlib.sha256(r"\n\n".join(chapters).encode("utf-8")).hexdigest(),
+                    "e446fb5189d587cc505488c17b2285bfb4ab671b6edad7c62ae71a888d7a6a94",
+                )
 
-        prompt_call = block(
-            block(focuses["STP_NECTAR_OF_GODS"], "completion_reward"), "country_event"
-        )
-        self.assertEqual(scalar(prompt_call, "id"), "ADISCORD_STP_preparation.27")
-        prompt = events["ADISCORD_STP_preparation.27"]
-        prompt_options = [entry.value for entry in prompt if entry.key == "option"]
-        self.assertEqual(len(prompt_options), 2)
-        self.assertEqual(
-            scalar(prompt_options[0], "name"), "ADISCORD_STP_preparation.27.no"
-        )
-        self.assertEqual(
-            scalar(prompt_options[1], "name"), "ADISCORD_STP_preparation.27.yes"
-        )
-        self.assertIn(
-            "STP_skip_intro_story_events",
-            [e.value for e in walk(prompt_options[0]) if e.key == "set_country_flag"],
-        )
-        self.assertIn(
-            "ADISCORD_STP_preparation.15",
-            [
-                scalar(e.value, "id")
-                for e in walk(prompt_options[1])
-                if e.key == "country_event"
-            ],
-        )
-
-        chapters = []
-        for number in (15, 16):
-            event_id = f"ADISCORD_STP_preparation.{number}"
-            event = events[event_id]
-            self.assertFalse(any(e.key in ("hidden", "fire_only_once") for e in event))
-            self.assertEqual(
-                scalar(event, "picture"), "GFX_event_adiscord_nectar_of_the_gods"
-            )
-            self.assertIn(scalar(event, "title"), values)
-            text = values[scalar(event, "desc")]
-            chapters.append(text)
-            rendered = text.replace(r"\n", "\n")
-            self.assertLessEqual(len(rendered), 3000)
-            self.assertLessEqual(len(rendered.encode("utf-8")), 5500)
-            self.assertEqual(
-                [(e.key, e.value) for e in block(event, "immediate")],
-                [("clear_variable", "STP_nectar_story_page")],
-            )
-            options = [entry.value for entry in event if entry.key == "option"]
-            self.assertEqual(len(options), 1)
-            self.assertIn(scalar(options[0], "name"), values)
-        self.assertEqual(
-            hashlib.sha256(r"\n\n".join(chapters).encode("utf-8")).hexdigest(),
-            "e446fb5189d587cc505488c17b2285bfb4ab671b6edad7c62ae71a888d7a6a94",
-        )
-        self.assertEqual(
-            scalar(
-                block(focuses["STP_NECTAR_OF_GODS"], "completion_reward"),
-                "add_political_power",
-            ),
-            "35",
-        )
-        self.assertEqual(
-            scalar(
-                block(focuses["STP_2160_budget"], "completion_reward"),
-                "STP_receive_1200",
-            ),
-            "yes",
-        )
-        for path in (
-            "interface/ADISCORD_STP_regions.gui",
-            "common/scripted_guis/ADISCORD_STP_regions_scripted_gui.txt",
+    def test_intro_lore_is_paced_inside_one_28_day_focus(self):
+        focuses, events = self._intro_sources()
+        focus = focuses["STP_NECTAR_OF_GODS"]
+        self.assertEqual(scalar(focus, "cost"), "4")
+        self.assertEqual(scalar(focus, "cancelable"), "no")
+        for removed in (
+            "STP_REVOLUTION_FROM_THE_NORTH",
+            "STP_2160_budget",
+            "STP_BEHIND_THE_LIGHTS",
         ):
-            self.assertNotIn(
-                "ADISCORD_STP_nectar_story",
-                (ROOT / path).read_text(encoding="utf-8-sig"),
-            )
-        self.assertFalse(any(key.startswith("STP_nectar_") for key in values))
+            self.assertNotIn(removed, focuses)
+        successor = focuses["STP_STATE_OF_THE_REPUBLIC"]
+        self.assertEqual(
+            scalar(block(successor, "prerequisite"), "focus"), "STP_NECTAR_OF_GODS"
+        )
+        self.assertEqual(scalar(successor, "y"), "1")
+        self.assertEqual(scalar(successor, "cost"), "1")
 
-    def test_intro_story_skip_only_suppresses_lore_popups(self):
-        events = {
-            scalar(e.value, "id"): e.value
-            for e in entries("events/ADISCORD_STP_events.txt")
-            if e.key == "country_event"
-        }
+        facts, scheduled = {}, []
+        self._apply_intro_effects(block(focus, "select_effect"), facts, scheduled)
+        self._apply_intro_effects(block(focus, "select_effect"), facts, scheduled)
+        self.assertEqual(len(scheduled), 1)
+        self.assertEqual(scalar(scheduled[0], "id"), "ADISCORD_STP_preparation.27")
         prompt = events["ADISCORD_STP_preparation.27"]
+        self.assertEqual(scalar(prompt, "timeout_days"), "1")
         options = [e.value for e in prompt if e.key == "option"]
-        self.assertEqual(len(options), 2)
-        self.assertIn(
-            "STP_skip_intro_story_events",
-            [e.value for e in walk(options[0]) if e.key == "set_country_flag"],
-        )
-        self.assertIn(
-            "ADISCORD_STP_preparation.15",
-            [
-                scalar(e.value, "id")
-                for e in walk(options[1])
-                if e.key == "country_event"
-            ],
-        )
-
-        skipped = {("STP", "has_country_flag", "STP_skip_intro_story_events"): True}
-        for event_id in (
-            "ADISCORD_STP_preparation.15",
-            "ADISCORD_STP_preparation.16",
-            "ADISCORD_STP_preparation.23",
-            "ADISCORD_STP_preparation.25",
-        ):
-            trigger = block(events[event_id], "trigger")
-            self.assertFalse(matches_conditions(trigger, skipped), event_id)
-            self.assertTrue(matches_conditions(trigger, {}), event_id)
-
-        tree = next(
-            e.value
-            for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
-            if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus"
-        )
-        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
-        first_call = block(
-            block(focuses["STP_NECTAR_OF_GODS"], "completion_reward"), "country_event"
-        )
-        self.assertEqual(scalar(first_call, "id"), "ADISCORD_STP_preparation.27")
+        self.assertEqual(scalar(options[0], "name"), "ADISCORD_STP_preparation.27.no")
+        self.assertEqual(scalar(block(options[0], "ai_chance"), "base"), "100")
+        scheduled.clear()
+        self._apply_intro_effects(options[1], facts, scheduled)
         self.assertEqual(
-            scalar(
-                block(focuses["STP_NECTAR_OF_GODS"], "completion_reward"),
-                "add_political_power",
-            ),
-            "35",
+            [scalar(call, "id") for call in scheduled],
+            [f"ADISCORD_STP_preparation.{number}" for number in (15, 23, 16, 25)],
         )
+        self.assertEqual(scalar(scheduled[0], "hours"), "1")
         self.assertEqual(
-            scalar(
-                block(focuses["STP_2160_budget"], "completion_reward"),
-                "STP_receive_1200",
-            ),
-            "yes",
+            [scalar(call, "days") for call in scheduled[1:]], ["7", "14", "21"]
         )
+        self.assertLess(1 + 21 + 1 / 24, 4 * 7)
 
-    def test_intro_lore_is_paced_by_five_one_week_focuses(self):
-        tree = next(
-            e.value
-            for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
-            if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus"
-        )
-        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
-        order = (
-            ("STP_NECTAR_OF_GODS", None, "ADISCORD_STP_preparation.27"),
-            (
-                "STP_REVOLUTION_FROM_THE_NORTH",
-                "STP_NECTAR_OF_GODS",
-                "ADISCORD_STP_preparation.23",
-            ),
-            (
-                "STP_2160_budget",
-                "STP_REVOLUTION_FROM_THE_NORTH",
-                "ADISCORD_STP_preparation.16",
-            ),
-            ("STP_BEHIND_THE_LIGHTS", "STP_2160_budget", "ADISCORD_STP_preparation.25"),
-            ("STP_STATE_OF_THE_REPUBLIC", "STP_BEHIND_THE_LIGHTS", None),
-        )
-        for focus_id, parent, event_id in order:
-            focus = focuses[focus_id]
-            self.assertEqual(scalar(focus, "cost"), "1", focus_id)
-            if parent is not None:
-                self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), parent)
-            if event_id is not None:
-                call = block(block(focus, "completion_reward"), "country_event")
-                self.assertEqual(scalar(call, "id"), event_id)
-
-        events = {
-            scalar(e.value, "id"): e.value
-            for e in entries("events/ADISCORD_STP_events.txt")
-            if e.key == "country_event"
-        }
-        prompt_options = [
+    def test_intro_skip_and_completion_settle_exactly_once(self):
+        focuses, events = self._intro_sources()
+        focus = focuses["STP_NECTAR_OF_GODS"]
+        options = [
             e.value for e in events["ADISCORD_STP_preparation.27"] if e.key == "option"
         ]
-        self.assertIn(
-            "ADISCORD_STP_preparation.15",
-            [
-                scalar(e.value, "id")
-                for e in walk(prompt_options[1])
-                if e.key == "country_event"
-            ],
-        )
-        for event_id in (
-            "ADISCORD_STP_preparation.15",
-            "ADISCORD_STP_preparation.23",
-            "ADISCORD_STP_preparation.25",
-        ):
-            self.assertEqual(len([e for e in events[event_id] if e.key == "option"]), 1)
+        completion = block(focus, "completion_reward")
+        sequences = {
+            "skip then complete": (options[0], completion),
+            "late skip": (completion, options[0]),
+            "repeated skip": (options[0], options[0], completion),
+            "repeated completion": (completion, completion),
+        }
+        for name, sequence in sequences.items():
+            with self.subTest(sequence=name):
+                facts = {
+                    ("STP", "numeric", "political_power"): 10,
+                    ("STP", "variable", "ADISCORD_economy_treasury"): 250,
+                    ("STP", "variable", "ADISCORD_economy_current_month_action_income"): 90,
+                }
+                scheduled = []
+                self._apply_intro_effects(block(focus, "select_effect"), facts, scheduled)
+                scheduled.clear()
+                for payload in sequence:
+                    self._apply_intro_effects(payload, facts, scheduled)
+                self.assertEqual(facts[("STP", "numeric", "political_power")], 45)
+                self.assertEqual(
+                    facts[("STP", "variable", "ADISCORD_economy_treasury")], 1450
+                )
+                self.assertEqual(
+                    facts[("STP", "variable", "ADISCORD_economy_current_month_action_income")],
+                    1290,
+                )
+                self.assertTrue(facts[("STP", "economy_dirty")])
+                self.assertFalse(
+                    facts[("STP", "has_country_flag", "STP_intro_story_active")]
+                )
+                self._apply_intro_effects(options[1], facts, scheduled)
+                self.assertEqual(
+                    scheduled, [], "late reading consent must not reopen the story"
+                )
+
+    def test_each_intro_page_has_a_full_exit_and_pending_cards_close(self):
+        focuses, events = self._intro_sources()
+        focus = focuses["STP_NECTAR_OF_GODS"]
+        for number in (15, 23, 16, 25):
+            event = events[f"ADISCORD_STP_preparation.{number}"]
+            trigger = block(event, "trigger")
+            options = [e.value for e in event if e.key == "option"]
+            self.assertEqual(scalar(event, "timeout_days"), "6")
+            self.assertEqual(scalar(options[1], "name"), "STP_intro_story_stop")
+            facts = {("STP", "has_country_flag", "STP_intro_story_active"): True}
+            self.assertTrue(matches_conditions(trigger, facts))
+            self.assertFalse(matches_conditions(trigger, {}))
+            self.assertFalse(
+                matches_conditions(
+                    trigger,
+                    facts | {("STP", "has_global_flag", "STP_cw_started"): True},
+                )
+            )
+            scheduled = []
+            self._apply_intro_effects(options[0], facts, scheduled)
+            self.assertTrue(matches_conditions(trigger, facts))
+            self._apply_intro_effects(options[1], facts, scheduled)
+            self.assertFalse(matches_conditions(trigger, facts))
+            self._apply_intro_effects(block(focus, "completion_reward"), facts, scheduled)
+            self.assertEqual(facts[("STP", "numeric", "political_power")], 35)
+            self.assertEqual(facts[("STP", "variable", "ADISCORD_economy_treasury")], 1200)
+            self.assertEqual(scheduled, [])
+
+    def test_intro_reading_page_timeouts_leave_rewards_to_focus_completion(self):
+        focuses, events = self._intro_sources()
+        focus = focuses["STP_NECTAR_OF_GODS"]
+        prompt = events["ADISCORD_STP_preparation.27"]
+        options = [e.value for e in prompt if e.key == "option"]
+        facts, scheduled = {}, []
+        self._apply_intro_effects(block(focus, "select_effect"), facts, scheduled)
+        scheduled.clear()
+        self._apply_intro_effects(options[1], facts, scheduled)
+        self.assertEqual(len(scheduled), 4)
+        for call in scheduled:
+            event = events[scalar(call, "id")]
+            self.assertTrue(matches_conditions(block(event, "trigger"), facts))
+            first_option = next(e.value for e in event if e.key == "option")
+            self._apply_intro_effects(first_option, facts, [])
+        self.assertNotIn(("STP", "numeric", "political_power"), facts)
+        self.assertNotIn(("STP", "variable", "ADISCORD_economy_treasury"), facts)
+        self._apply_intro_effects(block(focus, "completion_reward"), facts, [])
+        self.assertEqual(facts[("STP", "numeric", "political_power")], 35)
+        self.assertEqual(facts[("STP", "variable", "ADISCORD_economy_treasury")], 1200)
+        for call in scheduled:
+            event = events[scalar(call, "id")]
+            self.assertFalse(matches_conditions(block(event, "trigger"), facts))
 
     def test_sparse_ambient_life_events_are_paced_and_registered(self):
         import json
@@ -1440,7 +1455,7 @@ class StelanderPreparationTests(unittest.TestCase):
             encoding="utf-8-sig"
         )
         self.assertIn("реактора нулевой точки", ru)
-        self.assertIn("Нет, перейти к игре", ru)
+        self.assertIn("Не читать: получить награды сейчас", ru)
 
     def test_regional_preparation_appears_after_its_focus_and_restores_lost_assets(
         self,
@@ -4547,10 +4562,12 @@ class StelanderPreparationTests(unittest.TestCase):
     def test_union_settlement_clears_both_claimants_only_after_their_war_ends(self):
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         finish = block(effects, "STP_cw_check_union_wars_finished")
-        for at_war, already_finished, expected in (
-            (True, False, set()),
-            (False, False, {"STP", "STS"}),
-            (False, True, set()),
+        for at_war, winner, already_finished, expected in (
+            (True, "STS", False, set()),
+            (False, None, False, set()),
+            (False, "STP", False, {"STP", "STS"}),
+            (False, "STS", False, {"STP", "STS"}),
+            (False, "STS", True, set()),
         ):
             facts = {
                 ("STP", "has_global_flag", "STP_cw_started"): True,
@@ -4561,6 +4578,8 @@ class StelanderPreparationTests(unittest.TestCase):
                 ): already_finished,
                 ("STP", "has_war_with", "STS"): at_war,
             }
+            if winner:
+                facts[winner, "has_country_flag", "STP_cw_won_union_battle"] = True
             calls = {
                 scope
                 for scope, e in selected_effects(finish, facts)
@@ -7112,13 +7131,7 @@ class StelanderPreparationTests(unittest.TestCase):
             for e in trees
             if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus"
         )
-        intro = {
-            "STP_NECTAR_OF_GODS",
-            "STP_REVOLUTION_FROM_THE_NORTH",
-            "STP_2160_budget",
-            "STP_BEHIND_THE_LIGHTS",
-            "STP_STATE_OF_THE_REPUBLIC",
-        }
+        intro = {"STP_NECTAR_OF_GODS", "STP_STATE_OF_THE_REPUBLIC"}
         for focus in (e.value for e in tree if e.key == "focus"):
             focus_id = scalar(focus, "id")
             if focus_id not in intro:

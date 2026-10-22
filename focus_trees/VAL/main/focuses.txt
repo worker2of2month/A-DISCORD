@@ -4376,7 +4376,7 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Contract_Landing_Craft }
 		completion_reward = {
-			add_ideas = ADISCORD_staff_VAL_Vladimir_Litvin
+			activate_advisor = ADISCORD_staff_VAL_Vladimir_Litvin
 			add_ideas = VAL_marine_contract_corps
 			army_experience = 20
 			add_war_support = 0.03

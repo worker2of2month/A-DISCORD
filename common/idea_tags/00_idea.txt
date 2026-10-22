@@ -53,21 +53,6 @@ idea_categories = {
 		removal_cost = -1
 	}
 
-	economic_laws = {
-		slot = trade_laws
-		slot = economy
-		slot = ADISCORD_economic_system_laws
-		slot = ADISCORD_taxation_laws
-		slot = ADISCORD_industrial_policy_laws
-		slot = ADISCORD_labor_policy_laws
-		slot = ADISCORD_infrastructure_laws
-
-		ledger = civilian
-
-		cost = 150
-		removal_cost = -1
-	}
-
 	army_laws = {
 		slot = mobilization_laws
 		slot = ADISCORD_military_organization_laws
@@ -76,6 +61,21 @@ idea_categories = {
 		slot = ADISCORD_training_laws
 		slot = ADISCORD_internal_security_laws
 		slot = ADISCORD_military_justice_laws
+
+		ledger = civilian
+
+		cost = 150
+		removal_cost = -1
+	}
+
+	economic_laws = {
+		slot = trade_laws
+		slot = economy
+		slot = ADISCORD_economic_system_laws
+		slot = ADISCORD_taxation_laws
+		slot = ADISCORD_industrial_policy_laws
+		slot = ADISCORD_labor_policy_laws
+		slot = ADISCORD_infrastructure_laws
 
 		ledger = civilian
 
@@ -111,6 +111,20 @@ idea_categories = {
 
 		cost = 150
 		removal_cost = 0
+	}
+
+	ADISCORD_development_laws = {
+		slot = ADISCORD_society_development_laws
+		slot = ADISCORD_social_system_development_laws
+		slot = ADISCORD_army_development_laws
+		slot = ADISCORD_cultural_development_laws
+		slot = ADISCORD_state_development_laws
+		slot = ADISCORD_economic_development_laws
+		slot = ADISCORD_science_development_laws
+
+		ledger = civilian
+		cost = 0
+		removal_cost = -1
 	}
 
 	academy_spirit = {

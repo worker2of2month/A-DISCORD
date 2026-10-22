@@ -437,6 +437,19 @@ class PreparationAccounting(unittest.TestCase):
                     script.effect(P + "settle_treaties")
                     self.assertEqual(P + "independence_guaranteed" in district.flags, allied and winner == promised)
 
+    def test_zshat_treaty_does_not_grant_postwar_independence(self):
+        for winner, flag in enumerate(("worker_won", "vlad_won", "dorian_won"), 1):
+            with self.subTest(winner=winner):
+                script = Script()
+                script.globals = {V + flag}
+                script.scopes["WRK"].faction = "WRK"
+                district = script.scopes["EGC"]
+                district.flags.add(P + "treaty_signed")
+                district.variables[P + "treaty_patron"] = winner
+                district.faction = "WRK"
+                script.effect(P + "settle_treaties")
+                self.assertNotIn(P + "independence_guaranteed", district.flags)
+
     def test_reserve_delivery_waits_for_a_live_capital_and_cannot_repeat(self):
         script = Script()
         script.root = "VAD"

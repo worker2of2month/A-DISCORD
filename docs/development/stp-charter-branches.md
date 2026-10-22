@@ -168,7 +168,18 @@ oath, an operating district agreement and no outstanding paid project. The
 districts legacy additionally requires district participation in the common
 decision; the national-defence legacy requires the completed defence delivery.
 A provisional `.69` leaves these programmes available. Either successful award
-grants its legacy, the first-citizen trait and superevent 23 exactly once.
+grants its legacy and the first-citizen trait, then unlocks the free national
+decision `STP_pc_proclaim_stelander_union` in the postwar administration category.
+The decision adopts the `STS_stelander_union` name and flag and enqueues
+superevent 23 once. Its effect rechecks the current Shabrat charter government,
+completed capstone and either earned legacy before recording the proclamation.
+The presentation-only console gateway remains `ADISCORD_superevent.20`.
+
+The Union flag is defined geometrically in `tools/builders/build_adiscord_stp_flags.py`.
+Its navy field, ivory band, gold mountain star and laurel branches are exported
+in all three native sizes with `--flags-only STS_stelander_union`; run `--check`,
+then `--apply`, then `--check`. The super-event retains the shared Shabrat
+illustration and audio until dedicated assets are selected.
 
 ## Tikhoreva: a reported result must survive inspection
 

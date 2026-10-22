@@ -21,4 +21,155 @@ characters = {
 			traits = { iron_hand }
 		}
 	}
+
+	# EFL military leadership.
+	ADISCORD_staff_EFL_Adrian_Dreyer = {
+		name = ADISCORD_staff_EFL_Adrian_Dreyer
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_EFL_Adrian_Dreyer
+			desc = ADISCORD_staff_EFL_Adrian_Dreyer_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EFL }
+			visible = { tag = EFL }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EFL_Bruno_Ebers = {
+		name = ADISCORD_staff_EFL_Bruno_Ebers
+		portraits = {
+			army = {
+				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			idea_token = ADISCORD_staff_EFL_Bruno_Ebers
+			desc = ADISCORD_staff_EFL_Bruno_Ebers_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EFL }
+			visible = { tag = EFL }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EFL_Bruno_Vogel = {
+		name = ADISCORD_staff_EFL_Bruno_Vogel
+		portraits = {
+			army = {
+				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+			}
+		}
+		advisor = {
+			slot = air_chief
+			idea_token = ADISCORD_staff_EFL_Bruno_Vogel
+			desc = ADISCORD_staff_EFL_Bruno_Vogel_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EFL }
+			visible = { tag = EFL }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EFL_Walter_Hartwig = {
+		name = ADISCORD_staff_EFL_Walter_Hartwig
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_EFL_Walter_Hartwig
+			desc = ADISCORD_staff_EFL_Walter_Hartwig_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EFL }
+			visible = { tag = EFL }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EFL_Georg_Kramer = {
+		name = ADISCORD_staff_EFL_Georg_Kramer
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_log_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_EFL_Georg_Kramer
+			desc = ADISCORD_staff_EFL_Georg_Kramer_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EFL }
+			visible = { tag = EFL }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EFL_Dietrich_Lorenz = {
+		name = ADISCORD_staff_EFL_Dietrich_Lorenz
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_art_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_EFL_Dietrich_Lorenz
+			desc = ADISCORD_staff_EFL_Dietrich_Lorenz_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EFL }
+			visible = { tag = EFL }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_EFL_Emil_Meiner = {
+		name = ADISCORD_staff_EFL_Emil_Meiner
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_off_western_european_2d
+			}
+		}
+		advisor = {
+			slot = theorist
+			idea_token = ADISCORD_staff_EFL_Emil_Meiner
+			desc = ADISCORD_staff_EFL_Emil_Meiner_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EFL }
+			visible = { tag = EFL }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			ai_will_do = { factor = 1 }
+		}
+	}
 }

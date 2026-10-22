@@ -370,6 +370,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			activate_advisor = ADISCORD_staff_WRK_Viktor_Hess
 			ADISCORD_reform_army_development = yes
 			army_experience = 75
 			add_equipment_to_stockpile = { type = motorized_equipment_1 amount = 1000 producer = WRK }

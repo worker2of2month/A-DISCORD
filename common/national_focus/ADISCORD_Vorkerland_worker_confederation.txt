@@ -344,6 +344,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			activate_advisor = ADISCORD_staff_WRK_Andrei_Severov
 			ADISCORD_reform_army_development = yes
 			army_experience = 75
 			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_conf_elected_officers }

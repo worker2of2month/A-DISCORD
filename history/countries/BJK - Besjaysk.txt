@@ -67,3 +67,12 @@ set_autonomy = {
 	target = BCM
 	autonomous_state = autonomy_feodal_comitatus
 }
+
+# Military leadership candidates.
+recruit_character = ADISCORD_staff_BJK_Oskar_Vogel
+recruit_character = ADISCORD_staff_BJK_Paul_Hartwig
+recruit_character = ADISCORD_staff_BJK_Paul_Kramer
+recruit_character = ADISCORD_staff_BJK_Richard_Lorenz
+recruit_character = ADISCORD_staff_BJK_Robert_Meiner
+recruit_character = ADISCORD_staff_BJK_Rudolf_Roemer
+recruit_character = ADISCORD_staff_BJK_Stefan_Scholz

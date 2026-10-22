@@ -303,6 +303,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			activate_advisor = RUS_Rakitin_army_chief
 			army_experience = 20
 			add_command_power = 15
 			add_political_power = 35
@@ -4453,6 +4454,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			activate_advisor = RUS_Vyazemsky_theorist
 			effect_tooltip = { add_ideas = RUS_staff_college_delta }
 			hidden_effect = {
 				add_to_variable = { var = RUS_army_org value = 0.03 }

@@ -88,3 +88,22 @@ set_autonomy = {
 	target = SLI
 	autonomy_state = autonomy_NOD_protected_administration
 }
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_NOD_Franz_Garten
+recruit_character = ADISCORD_staff_NOD_Martin_Hagen
+recruit_character = ADISCORD_staff_NOD_Hans_Dreyer
+recruit_character = ADISCORD_staff_NOD_Erich_Seewald
+recruit_character = ADISCORD_staff_NOD_Edgar_Ebers
+recruit_character = ADISCORD_staff_NOD_Ernst_Vogel
+recruit_character = ADISCORD_staff_NOD_Konrad_Hartwig
+recruit_character = ADISCORD_staff_NOD_Ludwig_Kramer
+recruit_character = ADISCORD_staff_NOD_Otto_Lorenz
+
+activate_advisor = ADISCORD_staff_NOD_Franz_Garten
+activate_advisor = ADISCORD_staff_NOD_Hans_Dreyer
+activate_advisor = ADISCORD_staff_NOD_Edgar_Ebers
+activate_advisor = ADISCORD_staff_NOD_Ernst_Vogel
+activate_advisor = ADISCORD_staff_NOD_Konrad_Hartwig
+activate_advisor = ADISCORD_staff_NOD_Ludwig_Kramer
+activate_advisor = ADISCORD_staff_NOD_Otto_Lorenz

@@ -168,7 +168,7 @@ PRESENTATIONS = (
     ),
     SupereventPresentation(
         "superevent_stelander_sotnikov_civilwar",
-        "superevent_stelander_shabrat_victory_sound_e",
+        "superevent_stelander_sotnikov_civilwar_sound_e",
         legacy_music_asset=False,
     ),
     SupereventPresentation(

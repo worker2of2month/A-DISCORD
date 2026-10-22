@@ -91,3 +91,12 @@ sound = {
 	name = "superevent_vorkerland_joint_victory_sound"
 	file = "superevents/superevent_vorkerland_joint_victory_sound.wav"
 }
+
+# CC0 effects: craigsmith (bells), SoundsExciting (crowd), ted (fireworks).
+# https://freesound.org/people/craigsmith/sounds/480014/
+# https://freesound.org/people/SoundsExciting/sounds/365132/
+# https://freesound.org/people/ted/sounds/434225/
+sound = {
+	name = "superevent_stelander_sotnikov_civilwar_sound"
+	file = "superevents/superevent_stelander_sotnikov_civilwar_sound.wav"
+}

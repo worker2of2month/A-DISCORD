@@ -11,3 +11,20 @@ recruit_character = EYR_Irina_Koval
 set_research_slots = 2
 
 set_cosmetic_tag = EYR_confederation
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_EYR_Andrei_Rozhin
+recruit_character = ADISCORD_staff_EYR_Viktor_Kedrin
+recruit_character = ADISCORD_staff_EYR_Pavel_Lunin
+recruit_character = ADISCORD_staff_EYR_Sergei_Vetkin
+recruit_character = ADISCORD_staff_EYR_Roman_Zimin
+recruit_character = ADISCORD_staff_EYR_Mikhail_Rakitov
+recruit_character = ADISCORD_staff_EYR_Leonid_Kravtsov
+
+activate_advisor = ADISCORD_staff_EYR_Andrei_Rozhin
+activate_advisor = ADISCORD_staff_EYR_Viktor_Kedrin
+activate_advisor = ADISCORD_staff_EYR_Pavel_Lunin
+activate_advisor = ADISCORD_staff_EYR_Sergei_Vetkin
+activate_advisor = ADISCORD_staff_EYR_Roman_Zimin
+activate_advisor = ADISCORD_staff_EYR_Mikhail_Rakitov
+activate_advisor = ADISCORD_staff_EYR_Leonid_Kravtsov

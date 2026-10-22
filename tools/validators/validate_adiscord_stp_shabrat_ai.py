@@ -23,13 +23,10 @@ FOCUS = ROOT / "focus_trees/STP"
 EVENTS = ROOT / "events/ADISCORD_STP_events.txt"
 DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
 
-SCORE_TOTAL = 106
+SCORE_TOTAL = 103
 
 INTRO_FOCUSES = (
     "STP_NECTAR_OF_GODS",
-    "STP_REVOLUTION_FROM_THE_NORTH",
-    "STP_2160_budget",
-    "STP_BEHIND_THE_LIGHTS",
     "STP_STATE_OF_THE_REPUBLIC",
 )
 CORE_FOCUSES = (
@@ -160,9 +157,6 @@ HEGEMONY_FOCUSES = (
 
 FOCUS_WEIGHTS = {
     "STP_NECTAR_OF_GODS": 20,
-    "STP_REVOLUTION_FROM_THE_NORTH": 20,
-    "STP_2160_budget": 20,
-    "STP_BEHIND_THE_LIGHTS": 20,
     "STP_STATE_OF_THE_REPUBLIC": 20,
     "STP_Show_Him_The_Truth": 0,
     "STP_Govern_In_His_Name": 0,

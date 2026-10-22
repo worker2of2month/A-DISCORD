@@ -79,6 +79,80 @@
   ],
   "templates": [
     {
+      "key": "script_stp_congress_guard",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Congress Infantry Guard",
+      "display_name": "Congress Infantry Guard",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 50.642857142857146,
+        "manpower": 6300.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48.0,
+          "infantry_equipment": 5670.0,
+          "support_equipment": 30.0
+        },
+        "supply": 0.38
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_stp_congress_guard"
+      },
+      "definition_metadata": {
+        "is_locked": true,
+        "force_allow_recruiting": false
+      }
+    },
+    {
       "key": "script_stp_underground_cell",
       "source": {
         "kind": "script",
@@ -13666,6 +13740,25 @@
     }
   ],
   "references": [
+    {
+      "key": "stp_congress_guard_deployment",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Congress Infantry Guard",
+      "legacy_names": [],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1,
+      "start_manpower_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "stp_congress_guard_postwar_unlock",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Congress Infantry Guard",
+      "legacy_names": [],
+      "count": 2
+    },
     {
       "key": "stp_rear_cell_paid_deployment",
       "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",

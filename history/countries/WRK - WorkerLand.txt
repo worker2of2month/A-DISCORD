@@ -141,3 +141,23 @@ ADISCORD_vorkerland_sync_all_party_identities = yes
 set_convoys = 533
 
 set_cosmetic_tag = WRK_confederation
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_WRK_Stanislav_Malinin
+recruit_character = ADISCORD_staff_WRK_Andrei_Severov
+recruit_character = ADISCORD_staff_WRK_Viktor_Hess
+recruit_character = ADISCORD_staff_WRK_Pavel_Barsov
+recruit_character = ADISCORD_staff_WRK_Aleksei_Nekrasov
+recruit_character = ADISCORD_staff_WRK_Andrei_Ostretsov
+recruit_character = ADISCORD_staff_WRK_Boris_Panov
+recruit_character = ADISCORD_staff_WRK_Viktor_Rogov
+recruit_character = ADISCORD_staff_WRK_Georgy_Sazonov
+recruit_character = ADISCORD_staff_WRK_Denis_Tumanov
+
+activate_advisor = ADISCORD_staff_WRK_Stanislav_Malinin
+activate_advisor = ADISCORD_staff_WRK_Aleksei_Nekrasov
+activate_advisor = ADISCORD_staff_WRK_Andrei_Ostretsov
+activate_advisor = ADISCORD_staff_WRK_Boris_Panov
+activate_advisor = ADISCORD_staff_WRK_Viktor_Rogov
+activate_advisor = ADISCORD_staff_WRK_Georgy_Sazonov
+activate_advisor = ADISCORD_staff_WRK_Denis_Tumanov

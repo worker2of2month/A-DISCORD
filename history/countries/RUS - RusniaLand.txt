@@ -72,3 +72,20 @@ add_ideas = {
 set_research_slots = 1
 
 set_country_flag = RUS_campaign_start_pending
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_RUS_Roman_Ostretsov
+recruit_character = ADISCORD_staff_RUS_Sergei_Panov
+recruit_character = ADISCORD_staff_RUS_Timofei_Rogov
+recruit_character = ADISCORD_staff_RUS_Fedor_Sazonov
+recruit_character = ADISCORD_staff_RUS_Yuri_Tumanov
+recruit_character = ADISCORD_staff_RUS_Arkady_Uvarov
+recruit_character = ADISCORD_staff_RUS_Vladimir_Frolov
+
+activate_advisor = ADISCORD_staff_RUS_Roman_Ostretsov
+activate_advisor = ADISCORD_staff_RUS_Sergei_Panov
+activate_advisor = ADISCORD_staff_RUS_Timofei_Rogov
+activate_advisor = ADISCORD_staff_RUS_Fedor_Sazonov
+activate_advisor = ADISCORD_staff_RUS_Yuri_Tumanov
+activate_advisor = ADISCORD_staff_RUS_Arkady_Uvarov
+activate_advisor = ADISCORD_staff_RUS_Vladimir_Frolov

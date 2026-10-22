@@ -3,6 +3,26 @@
 
 # Core initialization, suspicion and leader health (COUNTRY)
 
+# The receipt covers both early story exits and focus completion, including late event answers.
+STP_finish_intro_story = {
+	hidden_effect = { clr_country_flag = STP_intro_story_active }
+	if = {
+		limit = {
+			hidden_trigger = {
+				tag = STP
+				NOT = { has_global_flag = STP_cw_started }
+				NOT = { has_country_flag = STP_intro_rewards_received }
+			}
+		}
+		add_political_power = 35
+		custom_effect_tooltip = STP_cw_treasury_1200_tt
+		hidden_effect = {
+			set_country_flag = STP_intro_rewards_received
+			STP_receive_1200 = yes
+		}
+	}
+}
+
 # STP, after successor creation but before district transfer and focus replacement.
 STP_cw_preserve_council_guarantees = {
 	if = {
@@ -2330,6 +2350,48 @@ STP_cw_mobilize_volunteer_brigade = {
 	}
 }
 
+# COUNTRY: the Congress starts with two equipped infantry guards.
+# The locked template prevents another deployment during this campaign.
+STP_cw_raise_congress_guard = {
+	if = {
+		limit = {
+			tag = STP
+			owns_state = 28
+			controls_province = 145
+			NOT = { has_template = "Congress Infantry Guard" }
+		}
+		division_template = {
+			name = "Congress Infantry Guard"
+			template_counter = 3
+			priority = 2
+			is_locked = yes
+			force_allow_recruiting = no
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 0 y = 2 }
+				infantry = { x = 1 y = 0 }
+				infantry = { x = 1 y = 1 }
+				infantry = { x = 1 y = 2 }
+			}
+			support = {
+				engineer = { x = 0 y = 0 }
+			}
+		}
+		28 = {
+			for_loop_effect = {
+				end = 2
+				value = STP_cw_formation_index
+				create_unit = {
+					division = "division_template = \"Congress Infantry Guard\" location = 145 start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					owner = STP
+					allow_spawning_on_enemy_provs = no
+				}
+			}
+		}
+	}
+}
+
 STP_cw_mobilize_brigade = {
 	if = {
 		limit = {
@@ -2752,6 +2814,11 @@ STP_cw_finish_mobilization = {
 		limit = { has_country_flag = STP_cw_templates_loaded }
 		set_division_template_lock = { division_template = "Stelander Territorial Brigade" is_locked = no }
 		set_division_template_lock = { division_template = "Stelander Assault Division" is_locked = no }
+	}
+	if = {
+		limit = { has_template = "Congress Infantry Guard" }
+		set_division_template_lock = { division_template = "Congress Infantry Guard" is_locked = no }
+		set_division_force_allow_recruiting = { division_template = "Congress Infantry Guard" force_allow_recruiting = yes }
 	}
 }
 
@@ -3208,6 +3275,21 @@ STP_cw_establish_resistance_command = {
 	}
 }
 
+# COUNTRY: start the native timed decision before the AI's ordinary choices.
+# The delayed capital briefing repeats this check after a player tag handoff.
+STP_cw_ai_fortify_congress = {
+	if = {
+		limit = {
+			is_ai = yes
+			STP_ps_war_active = yes
+			owns_state = 28
+			controls_province = 145
+			NOT = { has_decision = STP_cw_fortify_congress }
+		}
+		activate_decision = STP_cw_fortify_congress
+	}
+}
+
 # COUNTRY (STP). Predetermined sides call this at the end of setup.
 # An unset human side still waits on .30; AI never waits.
 STP_cw_begin_hostilities = {
@@ -3242,8 +3324,8 @@ STP_cw_begin_hostilities = {
 				}
 			}
 			hidden_effect = {
-				# Playback waits until change_tag_from has assigned the human to the chosen side.
-				country_event = { id = ADISCORD_STP_cw.95 hours = 1 }
+				# Opening stories wait until change_tag_from has assigned the human to the chosen side.
+				STS = { country_event = { id = ADISCORD_STP_cw.95 hours = 1 } }
 				country_event = { id = ADISCORD_STP_cw.94 hours = 1 }
 			}
 			remove_mission = STP_cw_nod_warning
@@ -3284,6 +3366,7 @@ STP_cw_begin_hostilities = {
 		STS = { every_owned_state = { set_state_controller_to = PREV } }
 		SRP = { every_owned_state = { set_state_controller_to = PREV } }
 		STS = { STP_hw_stall_begin = yes }
+		STP_cw_ai_fortify_congress = yes
 		if = {
 			limit = { has_war_with = STS NOT = { has_idea = STP_cw_party_battle_spirit } }
 			STP_cw_poll_nod_intervention = yes
@@ -3659,7 +3742,7 @@ STP_cw_start = {
 		limit = { STP_cw_can_start = yes }
 		set_country_flag = STP_cw_participant
 		clr_country_flag = STP_cw_uprising_prepared
-		clear_variable = STP_nectar_story_page
+		clr_country_flag = STP_intro_story_active
 		remove_mission = STP_cw_election_window
 		remove_mission = STP_cw_credentials_review
 		remove_mission = ivanov_health_is_getting_worse
@@ -3872,6 +3955,7 @@ STP_cw_start = {
 		if = { limit = { 2 = { is_owned_by = STP has_state_flag = STP_party_reinforced_garrison_asset } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		if = { limit = { 29 = { is_owned_by = STP has_state_flag = STP_party_reinforced_garrison_asset } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		if = { limit = { 45 = { is_owned_by = STP has_state_flag = STP_party_reinforced_garrison_asset } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
+		STP_cw_raise_congress_guard = yes
 		if = {
 			limit = { has_country_flag = STP_cw_limited_party_revolt }
 			for_loop_effect = { end = 3 value = STP_cw_formation_index STP_cw_mobilize_assault_division = yes }
@@ -4013,7 +4097,6 @@ VAL_cw_settle_republics = {
 		VAL_change_contract_authority = yes
 		country_event = { id = ADISCORD_STP_cw.23 }
 		log = "[STP_CW] VAL military settlement: temporary administration of 43/44/45/88"
-		STP_cw_check_union_wars_finished = yes
 		STP_cw_queue_peace_reconciliation = yes
 	}
 }
@@ -4497,13 +4580,17 @@ STP_cw_reconcile_scripted_peace = {
 	}
 }
 
-# Called after an actual settlement. Only the STP/STS war determines the
-# union outcome; a separate VAL/SRP war neither delays nor completes it.
+# A recorded STP/STS victory and the end of their war authorize cleanup.
+# The VAL/SRP settlement owns only its separate front.
 STP_cw_check_union_wars_finished = {
 	if = {
 		limit = {
 			has_global_flag = STP_cw_started
 			NOT = { has_global_flag = STP_cw_union_wars_finished }
+			OR = {
+				STP = { has_country_flag = STP_cw_won_union_battle }
+				STS = { has_country_flag = STP_cw_won_union_battle }
+			}
 			NOT = { STP = { has_war_with = STS } }
 		}
 		set_global_flag = STP_cw_union_wars_finished
@@ -4626,7 +4713,12 @@ STP_cw_settle_union_victory = {
 	STP_cw_finish_mobilization = yes
 	if = { limit = { tag = STS } STP_pw_rebuild_economy_after_unification = yes }
 	if = { limit = { tag = STP } STP_pv_resolve_victory = yes }
-	if = { limit = { tag = STS } STP_hw_resolve_victory = yes }
+	if = {
+		limit = { tag = STS }
+		STP_hw_resolve_victory = yes
+		country_event = { id = ADISCORD_STP_pw.7 days = 3 }
+		country_event = { id = ADISCORD_STP_pw.8 days = 7 }
+	}
 	# The party and NOD victory settlements can both run for one result; major
 	# news stays repeatable, so the publication flag is the one-shot guard.
 	if = {
@@ -4827,6 +4919,66 @@ STP_cw_end_northern_colonial_war = {
 			if = { limit = { has_war_with = YPR } white_peace = YPR }
 			if = { limit = { has_war_with = COF } white_peace = COF }
 			if = { limit = { has_war_with = TFF } white_peace = TFF }
+		}
+	}
+}
+
+# COUNTRY STS: the verdict is permanent and also gates the former party ministers.
+STP_pw_pardon_party_specialists = {
+	set_variable = { var = STP_pw_party_trial_verdict value = 2 }
+	# Annexation retains the donor's characters. Transfer existing officers only,
+	# at the verdict, preserving their experience and earned traits.
+	STP = {
+		if = {
+			limit = { has_character = STP_Roland_Keitel }
+			STP_Roland_Keitel = { release_from_captivity = yes }
+			set_nationality = {
+				character = STP_Roland_Keitel
+				target_country = STS
+			}
+		}
+		if = {
+			limit = { has_character = STP_Maurice_Dallon }
+			STP_Maurice_Dallon = { release_from_captivity = yes }
+			set_nationality = {
+				character = STP_Maurice_Dallon
+				target_country = STS
+			}
+		}
+	}
+}
+
+STP_pw_execute_party_defendants = {
+	set_variable = { var = STP_pw_party_trial_verdict value = 1 }
+	ADISCORD_initialize_society_development_variables = yes
+	add_to_variable = { var = ADISCORD_state_development_progress value = 5 }
+	ADISCORD_economy_mark_dirty = yes
+	# Only defendants still belonging to the defeated party are sentenced here.
+	# Exiles and officers already serving another country keep their own lifecycle.
+	STP = {
+		if = {
+			limit = { has_character = STP_rufus_hedersett }
+			retire_character = STP_rufus_hedersett
+		}
+		if = {
+			limit = { has_character = STP_Cyan_Crowe }
+			retire_character = STP_Cyan_Crowe
+		}
+		if = {
+			limit = { has_character = STP_August_Veil }
+			retire_character = STP_August_Veil
+		}
+		if = {
+			limit = { has_character = STP_Edgar_Renner }
+			retire_character = STP_Edgar_Renner
+		}
+		if = {
+			limit = { has_character = STP_Roland_Keitel }
+			retire_character = STP_Roland_Keitel
+		}
+		if = {
+			limit = { has_character = STP_Maurice_Dallon }
+			retire_character = STP_Maurice_Dallon
 		}
 	}
 }
@@ -5736,8 +5888,6 @@ STP_pc_charter_shabrat_award_districts = {
 		add_ideas = STP_pc_charter_shabrat_legacy_districts
 		remove_country_leader_trait = STP_charter_shabrat_founder
 		add_country_leader_trait = STP_charter_shabrat_first_citizen
-		set_temp_variable = { ADISCORD_superevent_request = 23 }
-		ADISCORD_superevent_enqueue = yes
 	}
 }
 
@@ -5747,6 +5897,14 @@ STP_pc_charter_shabrat_award_nation = {
 		add_ideas = STP_pc_charter_shabrat_legacy_nation
 		remove_country_leader_trait = STP_charter_shabrat_founder
 		add_country_leader_trait = STP_charter_shabrat_first_citizen
+	}
+}
+
+STP_pc_proclaim_stelander_union = {
+	if = {
+		limit = { STP_pc_stelander_union_requirements_met = yes }
+		set_country_flag = STP_pc_stelander_union_proclaimed
+		set_cosmetic_tag = STS_stelander_union
 		set_temp_variable = { ADISCORD_superevent_request = 23 }
 		ADISCORD_superevent_enqueue = yes
 	}
@@ -9490,6 +9648,15 @@ STP_ps_accept_val_sale = {
 		}
 	}
 	else = { VAL = { STP_ps_cancel_val_sale = yes } }
+}
+
+# VAL scope. Refusal closes further quotes; stale answers cannot close a paid deal.
+STP_ps_decline_val_sale = {
+	if = {
+		limit = { STP_ps_val_sale_awaits_payment = yes }
+		set_country_flag = STP_ps_val_sale_declined
+		STP_ps_cancel_val_sale = yes
+	}
 }
 
 # VAL scope. Only an unanswered quote is cancelled; a departed shipment keeps its escrow.

@@ -37,3 +37,12 @@ set_stability = 0.40
 set_research_slots = 2
 
 set_cosmetic_tag = ROM_confederation
+
+# Military leadership candidates.
+recruit_character = ADISCORD_staff_ROM_Georg_Meiner
+recruit_character = ADISCORD_staff_ROM_Dietrich_Roemer
+recruit_character = ADISCORD_staff_ROM_Emil_Scholz
+recruit_character = ADISCORD_staff_ROM_Felix_Treiber
+recruit_character = ADISCORD_staff_ROM_Gustav_Wolff
+recruit_character = ADISCORD_staff_ROM_Heinrich_Becker
+recruit_character = ADISCORD_staff_ROM_Johann_Walter

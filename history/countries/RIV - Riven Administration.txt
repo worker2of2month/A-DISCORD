@@ -11,3 +11,20 @@ recruit_character = RIV_Mikhail_Arsenyev
 set_research_slots = 2
 
 set_cosmetic_tag = RIV_confederation
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_RIV_Artem_Volgin
+recruit_character = ADISCORD_staff_RIV_Ivan_Seleznev
+recruit_character = ADISCORD_staff_RIV_Sergei_Ordyntsev
+recruit_character = ADISCORD_staff_RIV_Pavel_Dolgov
+recruit_character = ADISCORD_staff_RIV_Viktor_Rybakov
+recruit_character = ADISCORD_staff_RIV_Roman_Elagin
+recruit_character = ADISCORD_staff_RIV_Andrei_Sitnikov
+
+activate_advisor = ADISCORD_staff_RIV_Artem_Volgin
+activate_advisor = ADISCORD_staff_RIV_Ivan_Seleznev
+activate_advisor = ADISCORD_staff_RIV_Sergei_Ordyntsev
+activate_advisor = ADISCORD_staff_RIV_Pavel_Dolgov
+activate_advisor = ADISCORD_staff_RIV_Viktor_Rybakov
+activate_advisor = ADISCORD_staff_RIV_Roman_Elagin
+activate_advisor = ADISCORD_staff_RIV_Andrei_Sitnikov

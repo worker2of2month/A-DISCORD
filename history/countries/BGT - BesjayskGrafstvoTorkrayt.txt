@@ -31,3 +31,12 @@ add_ideas = {
 }
 
 set_research_slots = 2
+
+# Military leadership candidates.
+recruit_character = ADISCORD_staff_BGT_Martin_Meiner
+recruit_character = ADISCORD_staff_BGT_Niklas_Roemer
+recruit_character = ADISCORD_staff_BGT_Niklas_Scholz
+recruit_character = ADISCORD_staff_BGT_Oskar_Treiber
+recruit_character = ADISCORD_staff_BGT_Paul_Wolff
+recruit_character = ADISCORD_staff_BGT_Richard_Becker
+recruit_character = ADISCORD_staff_BGT_Robert_Walter

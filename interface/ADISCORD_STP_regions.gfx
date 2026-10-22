@@ -60,4 +60,22 @@ spriteTypes = {
 		texturefile = "gfx/texticons/adiscord/custom/STP_ch_security.png"
 		legacy_lazy_load = no
 	}
+
+	spriteType = {
+		name = "GFX_STP_hw_officers_texticon"
+		texturefile = "gfx/texticons/adiscord/custom/STP_hw_officers.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_STP_hw_councils_texticon"
+		texturefile = "gfx/texticons/adiscord/custom/STP_hw_councils.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_STP_hw_underground_texticon"
+		texturefile = "gfx/texticons/adiscord/custom/STP_hw_underground.png"
+		legacy_lazy_load = no
+	}
 }

@@ -1,68 +1,130 @@
-# Generic society development hidden ideas.
-# Country variables store durable level state; hidden ideas apply the active modifiers.
+# Development variables select one automatic law in each slot.
+# Manual selection is disabled; scripted level setters retain campaign ownership.
 
 ideas = {
-	hidden_ideas = {
+	ADISCORD_society_development_laws = {
+		law = yes
+		use_list_view = yes
+
 		ADISCORD_society_development_1 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_democratic_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_society_icon_1
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_society_development_status_tt
 				stability_factor = -0.06
 				political_power_gain = -0.05
 			}
 		}
 
 		ADISCORD_society_development_2 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_democratic_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_society_icon_2
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_society_development_status_tt
 				stability_factor = -0.03
 			}
 		}
 
 		ADISCORD_society_development_3 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_democratic_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_society_icon_3
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_society_development_status_tt
 				stability_factor = 0.02
 			}
 		}
 
 		ADISCORD_society_development_4 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_democratic_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_society_icon_4
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_society_development_status_tt
 				stability_factor = 0.05
 				political_power_gain = 0.03
 			}
 		}
 
 		ADISCORD_society_development_5 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_democratic_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_society_icon_5
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_society_development_status_tt
 				stability_factor = 0.08
 				war_support_factor = 0.04
 				political_power_gain = 0.05
 			}
 		}
+	}
+
+	ADISCORD_social_system_development_laws = {
+		law = yes
+		use_list_view = yes
 
 		ADISCORD_social_system_development_1 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_democratic_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_social_system_icon_1
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_social_system_development_status_tt
 				research_speed_factor = -0.05
 				stability_factor = -0.02
 				production_speed_buildings_factor = -0.03
@@ -70,32 +132,59 @@ ideas = {
 		}
 
 		ADISCORD_social_system_development_2 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_democratic_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_social_system_icon_2
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_social_system_development_status_tt
 				research_speed_factor = -0.02
 			}
 		}
 
 		ADISCORD_social_system_development_3 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_democratic_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_social_system_icon_3
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_social_system_development_status_tt
 				research_speed_factor = 0.01
 				stability_factor = 0.01
 			}
 		}
 
 		ADISCORD_social_system_development_4 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_democratic_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_social_system_icon_4
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_social_system_development_status_tt
 				research_speed_factor = 0.04
 				production_speed_buildings_factor = 0.03
 				stability_factor = 0.02
@@ -103,23 +192,46 @@ ideas = {
 		}
 
 		ADISCORD_social_system_development_5 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_democratic_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_social_system_icon_5
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_social_system_development_status_tt
 				research_speed_factor = 0.06
 				stability_factor = 0.03
 				production_speed_buildings_factor = 0.04
 			}
 		}
+	}
+
+	ADISCORD_army_development_laws = {
+		law = yes
+		use_list_view = yes
 
 		ADISCORD_army_development_1 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_fascism_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_army_icon_1
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_army_development_status_tt
 				army_org_factor = -0.08
 				army_morale_factor = -0.08
 				training_time_factor = 0.12
@@ -128,11 +240,20 @@ ideas = {
 		}
 
 		ADISCORD_army_development_2 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_fascism_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_army_icon_2
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_army_development_status_tt
 				army_org_factor = -0.04
 				army_morale_factor = -0.04
 				training_time_factor = 0.06
@@ -140,22 +261,40 @@ ideas = {
 		}
 
 		ADISCORD_army_development_3 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_fascism_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_army_icon_3
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_army_development_status_tt
 				army_org_factor = 0.02
 				army_morale_factor = 0.02
 			}
 		}
 
 		ADISCORD_army_development_4 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_fascism_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_army_icon_4
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_army_development_status_tt
 				army_org_factor = 0.05
 				army_morale_factor = 0.05
 				training_time_factor = -0.04
@@ -164,24 +303,47 @@ ideas = {
 		}
 
 		ADISCORD_army_development_5 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_fascism_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_army_icon_5
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_army_development_status_tt
 				army_org_factor = 0.08
 				army_morale_factor = 0.08
 				training_time_factor = -0.06
 				command_power_gain = 0.10
 			}
 		}
+	}
+
+	ADISCORD_cultural_development_laws = {
+		law = yes
+		use_list_view = yes
 
 		ADISCORD_cultural_development_1 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_communism_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_cultural_icon_1
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_cultural_development_status_tt
 				stability_factor = -0.05
 				drift_defence_factor = -0.10
 				political_power_gain = -0.03
@@ -189,33 +351,60 @@ ideas = {
 		}
 
 		ADISCORD_cultural_development_2 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_communism_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_cultural_icon_2
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_cultural_development_status_tt
 				stability_factor = -0.02
 				war_support_factor = -0.02
 			}
 		}
 
 		ADISCORD_cultural_development_3 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_communism_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_cultural_icon_3
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_cultural_development_status_tt
 				stability_factor = 0.02
 				drift_defence_factor = 0.05
 			}
 		}
 
 		ADISCORD_cultural_development_4 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_communism_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_cultural_icon_4
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_cultural_development_status_tt
 				stability_factor = 0.04
 				drift_defence_factor = 0.10
 				political_power_gain = 0.03
@@ -223,125 +412,334 @@ ideas = {
 		}
 
 		ADISCORD_cultural_development_5 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_communism_drift_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_cultural_icon_5
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_cultural_development_status_tt
 				stability_factor = 0.06
 				war_support_factor = 0.04
 				drift_defence_factor = 0.15
 				research_speed_factor = -0.01
 			}
 		}
+	}
+
+	ADISCORD_state_development_laws = {
+		law = yes
+		use_list_view = yes
 
 		ADISCORD_state_development_1 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_intel_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_state_icon_1
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_state_development_status_tt
 				political_power_gain = -0.10
 				production_speed_buildings_factor = -0.05
 			}
 		}
 
 		ADISCORD_state_development_2 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_intel_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_state_icon_2
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_state_development_status_tt
 				political_power_gain = -0.05
 			}
 		}
 
 		ADISCORD_state_development_3 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_intel_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_state_icon_3
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_state_development_status_tt
 				political_power_gain = 0.02
 				production_speed_buildings_factor = 0.02
 			}
 		}
 
 		ADISCORD_state_development_4 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_intel_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_state_icon_4
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_state_development_status_tt
 				political_power_gain = 0.06
 				production_speed_buildings_factor = 0.04
 			}
 		}
 
 		ADISCORD_state_development_5 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_intel_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_state_icon_5
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_state_development_status_tt
 				political_power_gain = 0.10
 				production_speed_buildings_factor = 0.06
 				stability_factor = -0.01
 			}
 		}
+	}
+
+	ADISCORD_economic_development_laws = {
+		law = yes
+		use_list_view = yes
 
 		ADISCORD_economic_development_1 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_production_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_economic_icon_1
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_economic_development_status_tt
 				production_speed_buildings_factor = -0.08
 				industrial_capacity_factory = -0.05
 			}
 		}
 
 		ADISCORD_economic_development_2 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_production_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_economic_icon_2
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_economic_development_status_tt
 				production_speed_buildings_factor = -0.03
 			}
 		}
 
 		ADISCORD_economic_development_3 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_production_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_economic_icon_3
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_economic_development_status_tt
 				production_speed_buildings_factor = 0.02
 				industrial_capacity_factory = 0.02
 			}
 		}
 
 		ADISCORD_economic_development_4 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_production_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_economic_icon_4
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_economic_development_status_tt
 				production_speed_buildings_factor = 0.04
 				industrial_capacity_factory = 0.04
 			}
 		}
 
 		ADISCORD_economic_development_5 = {
-			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_production_bonus
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_economic_icon_5
 			modifier = {
+				custom_modifier_tooltip = ADISCORD_economic_development_status_tt
 				production_speed_buildings_factor = 0.06
 				industrial_capacity_factory = 0.06
 				research_speed_factor = 0.02
+			}
+		}
+	}
+
+	ADISCORD_science_development_laws = {
+		law = yes
+		use_list_view = yes
+
+		ADISCORD_science_development_1 = {
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_science_icon_1
+			modifier = {
+				custom_modifier_tooltip = ADISCORD_science_development_status_tt
+				research_speed_factor = -0.06
+			}
+		}
+
+		ADISCORD_science_development_2 = {
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_science_icon_2
+			modifier = {
+				custom_modifier_tooltip = ADISCORD_science_development_status_tt
+				research_speed_factor = -0.03
+			}
+		}
+
+		ADISCORD_science_development_3 = {
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_science_icon_3
+			modifier = {
+				custom_modifier_tooltip = ADISCORD_science_development_status_tt
+				research_speed_factor = 0
+			}
+		}
+
+		ADISCORD_science_development_4 = {
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_science_icon_4
+			modifier = {
+				custom_modifier_tooltip = ADISCORD_science_development_status_tt
+				research_speed_factor = 0.03
+			}
+		}
+
+		ADISCORD_science_development_5 = {
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_development_automatic_tt
+					always = no
+				}
+			}
+			allowed_to_remove = { always = no }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			picture = ADISCORD_development_science_icon_5
+			modifier = {
+				custom_modifier_tooltip = ADISCORD_science_development_status_tt
+				research_speed_factor = 0.06
 			}
 		}
 	}

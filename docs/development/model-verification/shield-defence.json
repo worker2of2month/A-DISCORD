@@ -1,0 +1,38 @@
+{
+  "clip_sha256": "fea38633bd989133901371368fde39ed8107ebd02adbad76bd488678c835d5c9",
+  "frames": 49,
+  "fps": 24,
+  "max_shield_hand_relative_matrix_error": 5.245208740234375e-06,
+  "max_root_and_foot_matrix_drift": 6.854534149169922e-07,
+  "runtime_HOI4": "not run",
+  "source_generator": "C:\\Work and hide\\urban-shield-soldier\\animate_native.py",
+  "source_generator_sha256": "a3906a8e800bebeea23c2ec0af1effd53bc7a6587aa65bb6e9e5b9f03863f4ff",
+  "entity_state": "ADISCORD_urban_breacher_entity/defend",
+  "animation": "attack",
+  "native_roundtrip_clips_passed": 13,
+  "generator_check_differences": 0,
+  "focused_tests": {
+    "passed": 19,
+    "baseline_error": "test_new_icon_frames_are_different_in_every_supported_size: missing tools/assets/source/ADISCORD_hazard_infantry.png; reproduced using HEAD test source"
+  },
+  "total_validator": "exit 0; output identical to previous animation revision",
+  "diff_check": "passed",
+  "temporary_previews_cleanup": "blocked by tool policy; two PNG files remain in docs/development/previews/shield-defence",
+  "max_leg_segment_length_error": 9.083801142395487e-07,
+  "loop_endpoint_error": 1.430511474609375e-06,
+  "standing_head_height": 6.484994888305664,
+  "defence_head_height_range": [
+    5.555744171142578,
+    5.598857402801514
+  ],
+  "defence_hip_height_range": [
+    3.115164279937744,
+    3.115164279937744
+  ],
+  "video": "C:/Users/Admin/.codex/visualizations/2026/10/22/01a16429-aaee-7c02-9763-6a1fcb6787d8/shield-defence-steady.mp4",
+  "max_body_degrees_per_frame": 1.3544359539282473,
+  "max_body_degrees_per_frame_squared": 1.2735817795756637,
+  "max_hip_step": 0.0,
+  "max_hip_acceleration": 0.0,
+  "max_lower_body_matrix_drift": 5.960464477539062e-07
+}

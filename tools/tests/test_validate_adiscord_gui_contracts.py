@@ -888,65 +888,20 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
         self.assertIn('verticalScrollbar = "right_vertical_slider"', ideas)
         self.assertIn('clipping = yes', ideas)
 
-    def test_development_popup_fits_above_laws_and_launcher_clears_header_controls(
-        self,
-    ):
-        development_text = (ROOT / 'interface' / 'ADISCORD_CountryView.gui').read_text(
-            encoding='utf-8-sig'
-        )
-        politics_text = (ROOT / 'interface' / 'countrypoliticsview.gui').read_text(
-            encoding='utf-8-sig'
-        )
-
-        panel = gui_node_body(
-            development_text, 'ADISCORD_development_category_society_type'
-        )
-        x, y = _gui_position(panel)
-        width, height = _gui_size(panel)
-        self.assertIn('Orientation = UPPER_LEFT', panel)
-        self.assertGreaterEqual(x, 0)
-        self.assertGreaterEqual(y, 44)
-        self.assertLessEqual(x + width, 594)
-        politics = gui_node_body(politics_text, 'countrypoliticsview')
-        self.assertLessEqual(
-            y + height, _gui_position(gui_node_body(politics, 'ideas'))[1]
-        )
-        self.assertLessEqual(78 + y + height, 720)
-        self.assertIn('quadTextureSprite = "GFX_tiled_plain_bg_adiscord"', panel)
-        close = gui_node_body(panel, 'ADISCORD_development_close')
-        cx, cy = _gui_position(close)
-        cw, ch = _gui_size(close)
-        self.assertLessEqual(cx + cw, width)
-        self.assertLessEqual(
-            cy + ch, 55
-        )  # Header must not cover the first indicator row.
-        for category in (
-            'society',
-            'social_system',
-            'army',
-            'cultural',
-            'state',
-            'economic',
-        ):
-            self.assertTrue(
-                gui_node_body(panel, f'ADISCORD_development_{category}_level')
-            )
-            self.assertTrue(
-                gui_node_body(panel, f'ADISCORD_development_{category}_growth')
-            )
-
-        launcher = gui_node_body(development_text, 'ADISCORD_development_launcher')
-        lx, ly = _gui_position(launcher)
-        button = gui_node_body(launcher, 'ADISCORD_development_open')
-        bx, by = _gui_position(button)
-        bw, bh = _gui_size(button)
-        title = gui_node_body(politics, 'political_title')
-        self.assertGreaterEqual(lx + bx, _gui_position(title)[0] + _gui_size(title)[0])
-        self.assertLessEqual(
-            lx + bx + bw,
-            _gui_position(gui_node_body(politics, 'manage_occupied_button'))[0],
-        )
-        self.assertLessEqual(ly + by + bh, 47)  # Portrait/focus area begins here.
+    def test_development_uses_native_law_row_without_overlay(self):
+        development = (ROOT / 'interface/ADISCORD_CountryView.gui').read_text(encoding='utf-8-sig')
+        scripted = (ROOT / 'common/scripted_guis/CountryView_ScriptedGui.txt').read_text(encoding='utf-8-sig')
+        self.assertNotIn('ADISCORD_development_launcher', development)
+        self.assertNotIn('ADISCORD_development_category_society_type', development)
+        self.assertNotIn('CountryDevelopmentScript', scripted)
+        self.assertNotIn('ADISCORD_development_show_window', scripted)
+        politics = (ROOT / 'interface/countrypoliticsview.gui').read_text(encoding='utf-8-sig')
+        category = gui_node_body(politics, 'country_politics_idea_category_entry')
+        grid = gui_node_body(category.replace('gridboxtype', 'gridBoxType'), 'ideas_grid')
+        self.assertIn('max_slots = { x = 7 y = 1 }', grid)
+        x, _ = _gui_position(grid)
+        slot_width = int(re.search(r'slotsize\s*=\s*\{\s*width\s*=\s*(\d+)', grid).group(1))
+        self.assertLessEqual(x + 6 * slot_width + 64, _gui_size(category)[0])
 
 
 class DiplomacyGuiContractTests(unittest.TestCase):
@@ -2567,7 +2522,7 @@ class StartupGuideContractTests(unittest.TestCase):
         sprites = _unique_direct_block(gfx, 'spriteTypes')
         expected = {
             'background': (1000, 620),
-            'tab': (221, 36),
+            'tab': (146, 36),
             'page': (359, 36),
             'launcher': (98, 26),
             'close': (36, 36),
@@ -2628,13 +2583,14 @@ class StartupGuideContractTests(unittest.TestCase):
             size = _unique_direct_block(body, 'size')
             width = int(_direct_scalar(size, 'x'))
             height = int(_direct_scalar(size, 'y'))
+            self.assertEqual((width, height), (146, 36))
             self.assertGreaterEqual(x, previous_right + 10)
             self.assertEqual(y, 570)
             self.assertLessEqual(x + width, 976)
             self.assertLessEqual(y + height, 608)
             self.assertEqual(
                 _direct_scalar(body, 'quadTextureSprite'),
-                'GFX_ADISCORD_politics_header_button',
+                'GFX_ADISCORD_startup_tab',
             )
             previous_right = x + width
             if tab is None:

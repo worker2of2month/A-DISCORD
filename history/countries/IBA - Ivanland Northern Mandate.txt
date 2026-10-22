@@ -2,3 +2,20 @@ set_politics = { ruling_party = humanism elections_allowed = yes }
 set_popularities = { etatism = 10 chauvinism = 5 humanism = 65 pragmatism = 15 technocracy = 5 }
 recruit_character = IBA_Matvey_Mateusk
 set_research_slots = 2
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_IBA_Mikhail_Mironov
+recruit_character = ADISCORD_staff_IBA_Andrei_Selivanov
+recruit_character = ADISCORD_staff_IBA_Viktor_Nikitin
+recruit_character = ADISCORD_staff_IBA_Pavel_Terekhov
+recruit_character = ADISCORD_staff_IBA_Sergei_Ustinov
+recruit_character = ADISCORD_staff_IBA_Nikolai_Somov
+recruit_character = ADISCORD_staff_IBA_Roman_Ageev
+
+activate_advisor = ADISCORD_staff_IBA_Mikhail_Mironov
+activate_advisor = ADISCORD_staff_IBA_Andrei_Selivanov
+activate_advisor = ADISCORD_staff_IBA_Viktor_Nikitin
+activate_advisor = ADISCORD_staff_IBA_Pavel_Terekhov
+activate_advisor = ADISCORD_staff_IBA_Sergei_Ustinov
+activate_advisor = ADISCORD_staff_IBA_Nikolai_Somov
+activate_advisor = ADISCORD_staff_IBA_Roman_Ageev

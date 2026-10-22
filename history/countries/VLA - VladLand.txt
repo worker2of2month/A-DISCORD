@@ -41,3 +41,12 @@ set_stability = -0.89
 set_research_slots = 4
 
 set_cosmetic_tag = VLA_confederation
+
+# Military leadership candidates.
+recruit_character = ADISCORD_staff_VLA_Viktor_Chernov
+recruit_character = ADISCORD_staff_VLA_Georgy_Vedenin
+recruit_character = ADISCORD_staff_VLA_Georgy_Gradov
+recruit_character = ADISCORD_staff_VLA_Denis_Kurbatov
+recruit_character = ADISCORD_staff_VLA_Yevgeny_Losev
+recruit_character = ADISCORD_staff_VLA_Igor_Malinin
+recruit_character = ADISCORD_staff_VLA_Kirill_Nekrasov

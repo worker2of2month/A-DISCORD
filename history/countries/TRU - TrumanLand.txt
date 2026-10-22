@@ -38,3 +38,12 @@ set_stability = 0.25
 set_research_slots = 2
 
 set_cosmetic_tag = TRU_confederation
+
+# Military leadership candidates.
+recruit_character = ADISCORD_staff_TRU_Vladimir_Uvarov
+recruit_character = ADISCORD_staff_TRU_Gennady_Frolov
+recruit_character = ADISCORD_staff_TRU_Gennady_Chernov
+recruit_character = ADISCORD_staff_TRU_Dmitri_Vedenin
+recruit_character = ADISCORD_staff_TRU_Dmitri_Gradov
+recruit_character = ADISCORD_staff_TRU_Ilya_Kurbatov
+recruit_character = ADISCORD_staff_TRU_Konstantin_Losev

@@ -55,3 +55,12 @@ add_ideas = {
 }
 
 set_research_slots = 1
+
+# Military leadership candidates.
+recruit_character = ADISCORD_staff_COF_Felix_Ebers
+recruit_character = ADISCORD_staff_COF_Gustav_Vogel
+recruit_character = ADISCORD_staff_COF_Heinrich_Hartwig
+recruit_character = ADISCORD_staff_COF_Johann_Kramer
+recruit_character = ADISCORD_staff_COF_Karl_Lorenz
+recruit_character = ADISCORD_staff_COF_Leon_Meiner
+recruit_character = ADISCORD_staff_COF_Martin_Roemer

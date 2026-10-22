@@ -1219,7 +1219,7 @@ focus_tree = {
 		id = STP_cw_first_postwar_budget
 		icon = GFX_focus_STP_cw_first_postwar_budget
 		x = 7
-		offset = { x = 9 trigger = { tag = STS } }
+		offset = { x = 25 trigger = { tag = STS } }
 		y = 0
 		allow_branch = { has_country_flag = STP_cw_postwar }
 		cost = 3
@@ -1236,7 +1236,7 @@ focus_tree = {
 		id = STP_cw_restore_civil_authority
 		icon = GFX_focus_STP_cw_restore_civil_authority
 		x = 7
-		offset = { x = 9 trigger = { tag = STS } }
+		offset = { x = 25 trigger = { tag = STS } }
 		y = 1
 		allow_branch = { has_country_flag = STP_cw_postwar }
 		cost = 5
@@ -2181,7 +2181,7 @@ focus_tree = {
 	focus = {
 		id = STP_pw_republic_army_register
 		icon = GFX_focus_VAL_Army_Of_The_Ledger
-		x = 28
+		x = 38
 		y = 4
 		prerequisite = { focus = STP_pc_after_victory }
 		cost = 3
@@ -2203,7 +2203,7 @@ focus_tree = {
 	focus = {
 		id = STP_pw_republic_officer_school
 		icon = GFX_focus_RUS_officer_courses
-		x = 28
+		x = 38
 		y = 5
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -2212,7 +2212,7 @@ focus_tree = {
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			ADISCORD_reform_army_development = yes
-			add_ideas = ADISCORD_staff_STS_Mikhail_Rakitin
+			activate_advisor = ADISCORD_staff_STS_Mikhail_Rakitin
 			add_tech_bonus = { name = STP_pw_infantry_lessons_bonus bonus = 0.5 uses = 1 category = infantry_weapons }
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_officer_school_delta } }
 			hidden_effect = {
@@ -2225,7 +2225,7 @@ focus_tree = {
 	focus = {
 		id = STP_pw_republic_supply_service
 		icon = GFX_focus_VAL_Morns_Supply_Trains
-		x = 28
+		x = 38
 		y = 6
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -2245,7 +2245,7 @@ focus_tree = {
 	focus = {
 		id = STP_pw_republic_professional_service
 		icon = GFX_focus_VAL_Contractor_Officers
-		x = 28
+		x = 38
 		y = 7
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -2269,7 +2269,7 @@ focus_tree = {
 	focus = {
 		id = STP_pw_take_bezhaysk
 		icon = GFX_focus_VAL_Frontier_Assault
-		x = 31
+		x = 44
 		y = 8
 		cost = 5
 		prerequisite = { focus = STP_pw_republic_professional_service }
@@ -2304,7 +2304,7 @@ focus_tree = {
 	focus = {
 		id = STP_pw_republic_shield_corps
 		icon = GFX_focus_VAL_Vorons_Companies
-		x = 26
+		x = 34
 		y = 6
 		cost = 5
 		allow_branch = {
@@ -2862,7 +2862,7 @@ focus_tree = {
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			ADISCORD_reform_army_development = yes
-			add_ideas = ADISCORD_staff_STP_Erhard_Kleist
+			activate_advisor = ADISCORD_staff_STP_Erhard_Kleist
 			if = {
 				limit = { NOT = { STP_pf_settled = yes } }
 				custom_effect_tooltip = STP_pf_army_program_1_tt
@@ -2900,7 +2900,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
-			add_ideas = ADISCORD_staff_STP_Viktor_Korneev
+			activate_advisor = ADISCORD_staff_STP_Viktor_Korneev
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_supply_service_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_supply_consumption_factor value = -0.07 }
@@ -2931,7 +2931,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
-			add_ideas = ADISCORD_staff_STP_Hermann_Alten
+			activate_advisor = ADISCORD_staff_STP_Hermann_Alten
 			custom_effect_tooltip = STP_qol_armor_bureau_tt
 			if = {
 				limit = { has_dlc = "Arms Against Tyranny" }
@@ -4184,7 +4184,7 @@ focus_tree = {
 		id = STP_pc_after_victory
 		icon = GFX_focus_STP_pc_after_victory
 		prerequisite = { focus = STP_cw_restore_civil_authority }
-		x = 16
+		x = 32
 		y = 3
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -4256,7 +4256,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_two_borders
 		icon = GFX_focus_STP_cw_northern_dossier
-		x = 24
+		x = 48
 		y = 4
 		cost = 2
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -4291,7 +4291,7 @@ focus_tree = {
 	focus = {
 		id = STP_pw_republic_mountain_school
 		icon = GFX_focus_RUS_field_sappers
-		x = 25
+		x = 34
 		y = 9
 		cost = 4
 		allow_branch = {
@@ -4311,7 +4311,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_army_mountain
 		icon = GFX_focus_RUS_patient_war
-		x = 27
+		x = 38
 		y = 9
 		prerequisite = { focus = STP_pw_republic_professional_service }
 		cost = 5
@@ -4329,7 +4329,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_army_against_heavy
 		icon = GFX_focus_RUS_artillery_tables
-		x = 29
+		x = 42
 		y = 9
 		prerequisite = { focus = STP_pw_republic_professional_service }
 		cost = 5
@@ -4347,7 +4347,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_army_limited_offense
 		icon = GFX_focus_RUS_swift_columns
-		x = 28
+		x = 38
 		y = 11
 		prerequisite = { focus = STP_pc_army_mountain }
 		prerequisite = { focus = STP_pc_army_against_heavy }
@@ -4370,8 +4370,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_army_hegemony_cadres
 		icon = GFX_focus_STP_Turn_The_Young_Officers
-		x = 26
-		y = 12
+		x = 34
+		y = 13
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
@@ -4386,7 +4386,7 @@ focus_tree = {
 		mutually_exclusive = { focus = STP_pc_army_staff_doctrine }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			add_ideas = ADISCORD_staff_STS_Alexei_Barinov
+			activate_advisor = ADISCORD_staff_STS_Alexei_Barinov
 			add_timed_idea = { idea = STP_pc_heg_cadres days = -1 }
 		}
 	}
@@ -4394,7 +4394,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_army_republic_control
 		icon = GFX_focus_RUS_district_courts
-		x = 28
+		x = 40
 		y = 13
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -4410,7 +4410,7 @@ focus_tree = {
 		mutually_exclusive = { focus = STP_pc_army_staff_doctrine }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			add_ideas = ADISCORD_staff_STS_Nikolai_Vetrov
+			activate_advisor = ADISCORD_staff_STS_Nikolai_Vetrov
 			add_stability = 0.05
 			custom_effect_tooltip = STP_pc_civil_appointment_tt
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_army_republic_delta } }
@@ -4424,8 +4424,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_army_staff_doctrine
 		icon = GFX_focus_VAL_Contract_General_Staff
-		x = 30
-		y = 12
+		x = 44
+		y = 13
 		cost = 5
 		allow_branch = { NOT = { has_variable = STP_pc_charter_cabinet } has_country_flag = STP_cw_postwar tag = STS }
 		available = {
@@ -4441,7 +4441,7 @@ focus_tree = {
 		mutually_exclusive = { focus = STP_pc_army_republic_control }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			add_ideas = ADISCORD_staff_STS_Sergei_Tretyakov
+			activate_advisor = ADISCORD_staff_STS_Sergei_Tretyakov
 			custom_effect_tooltip = STP_qol_armor_bureau_tt
 			if = { limit = { has_dlc = "Arms Against Tyranny" } unlock_military_industrial_organization_tooltip = mio:STP_qol_armor_bureau }
 
@@ -4462,7 +4462,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_navy_coast
 		icon = GFX_focus_RUS_quiet_perimeter
-		x = 3
+		x = -6
 		y = 6
 		prerequisite = {
 			focus = STP_pw_republic_restore_roads
@@ -4506,7 +4506,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_navy_ports
 		icon = GFX_focus_STP_cw_port_budget
-		x = 3
+		x = -6
 		y = 7
 		cost = 2
 		allow_branch = { tag = STS }
@@ -4528,8 +4528,8 @@ focus_tree = {
 	focus = {
 		id = STP_pw_republic_marine_school
 		icon = GFX_focus_VAL_Marine_Contract_Corps
-		x = 4
-		y = 9
+		x = -4
+		y = 8
 		cost = 2
 		allow_branch = { tag = STS }
 		prerequisite = { focus = STP_pc_navy_ports }
@@ -4547,7 +4547,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_navy_yards
 		icon = GFX_focus_STP_cw_port_budget
-		x = 3
+		x = -8
 		y = 8
 		prerequisite = { focus = STP_pc_navy_ports }
 		cost = 5
@@ -4572,7 +4572,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_navy_escorts
 		icon = GFX_focus_VAL_Marine_Contract_Corps
-		x = 2
+		x = -8
 		y = 9
 		cost = 4
 		allow_branch = { tag = STS }
@@ -4586,7 +4586,7 @@ focus_tree = {
 		prerequisite = { focus = STP_pc_navy_yards }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			add_ideas = ADISCORD_staff_STS_Boris_Ostrovsky
+			activate_advisor = ADISCORD_staff_STS_Boris_Ostrovsky
 			add_ideas = STP_pc_navy_staff_idea
 			add_tech_bonus = { name = STP_pc_naval_bonus bonus = 0.5 uses = 1 category = naval_equipment }
 			set_technology = {
@@ -4626,7 +4626,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_navy_deny
 		icon = GFX_focus_VAL_Border_Survey_Corps
-		x = 2
+		x = -6
 		y = 10
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -4664,8 +4664,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_air_crews
 		icon = GFX_focus_RUS_flight_school
-		x = 29
-		y = 14
+		x = 48
+		y = 9
 		prerequisite = { focus = STP_pw_republic_professional_service }
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -4682,8 +4682,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_air_fields
 		icon = GFX_focus_RUS_capital_airfields
-		x = 29
-		y = 15
+		x = 48
+		y = 10
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
@@ -4706,8 +4706,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_air_shield
 		icon = GFX_focus_RUS_fighter_cover
-		x = 28
-		y = 16
+		x = 46
+		y = 11
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
@@ -4719,7 +4719,7 @@ focus_tree = {
 		prerequisite = { focus = STP_pc_air_fields }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			add_ideas = ADISCORD_staff_STS_Pavel_Berezov
+			activate_advisor = ADISCORD_staff_STS_Pavel_Berezov
 			random_owned_controlled_state = { add_building_construction = { type = anti_air_building level = 1 instant_build = yes } }
 			add_tech_bonus = { name = STP_pc_fighter_bonus bonus = 0.5 uses = 1 category = air_equipment }
 		}
@@ -4728,8 +4728,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_air_support
 		icon = GFX_focus_RUS_assault_squadrons
-		x = 28
-		y = 17
+		x = 46
+		y = 12
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
@@ -4748,8 +4748,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_air_import
 		icon = GFX_focus_RUS_military_contract_board
-		x = 30
-		y = 16
+		x = 50
+		y = 11
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
@@ -4769,8 +4769,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_air_domestic
 		icon = GFX_focus_RUS_aircraft_workshops
-		x = 29
-		y = 18
+		x = 48
+		y = 14
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
@@ -4791,7 +4791,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_shabrat_politics
 		icon = GFX_focus_STP_pc_shabrat_politics
-		x = 16
+		x = 20
 		y = 4
 		cost = 4
 		allow_branch = {
@@ -4820,7 +4820,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_hegemony_open
 		icon = GFX_focus_STP_Steland_Hegemony
-		x = 12
+		x = 16
 		y = 5
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_founder_rules = yes }
@@ -4862,7 +4862,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_freedom_open
 		icon = GFX_focus_STP_pc_freedom_open
-		x = 14
+		x = 24
 		y = 5
 		cost = 3
 		allow_branch = {
@@ -4905,7 +4905,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_shared_archive_policy
 		icon = GFX_focus_VAL_Closed_Ledgers
-		x = 16
+		x = 20
 		y = 6
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_course_continues = yes }
@@ -4928,7 +4928,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_unity
 		icon = GFX_focus_RUS_parallel_public_addresses
-		x = 12
+		x = 16
 		y = 6
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -4956,7 +4956,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_emergency
 		icon = GFX_focus_VAL_Operational_Directorate
-		x = 12
+		x = 16
 		y = 7
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -4978,7 +4978,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_subordinate
 		icon = GFX_focus_VAL_Company_Mandates
-		x = 12
+		x = 16
 		y = 8
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -5005,7 +5005,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_limit_parties
 		icon = GFX_focus_VAL_Captains_Cannot_Veto
-		x = 12
+		x = 16
 		y = 9
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -5029,7 +5029,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_lock
 		icon = GFX_focus_STP_Triumph_Of_Common_Sense
-		x = 12
+		x = 16
 		y = 10
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -5051,7 +5051,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_person
 		icon = GFX_focus_STP_Kefreite_Security_Offer
-		x = 10
+		x = 14
 		y = 11
 		cost = 5
 		allow_branch = {
@@ -5076,7 +5076,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_regional_system
 		icon = GFX_focus_VAL_Reclamation_Survey
-		x = 12
+		x = 18
 		y = 11
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -5098,7 +5098,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_val_audit
 		icon = GFX_focus_STP_Kefreite_Security_Offer
-		x = 4
+		x = 2
 		y = 12
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -5133,7 +5133,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_val_terms
 		icon = GFX_focus_VAL_Trading_Partners
-		x = 4
+		x = 2
 		y = 13
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -5165,7 +5165,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_val_force
 		icon = GFX_focus_STP_End_Kefreit
-		x = 4
+		x = 2
 		y = 14
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -5196,7 +5196,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_nod_break
 		icon = GFX_focus_RUS_press_the_closed_zone
-		x = 16
+		x = 22
 		y = 12
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -5244,7 +5244,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_nod_force
 		icon = GFX_focus_destroy_nodrul
-		x = 16
+		x = 22
 		y = 13
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -5273,7 +5273,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_clients
 		icon = GFX_focus_VAL_Provincial_Brokers
-		x = 12
+		x = 18
 		y = 14
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -5294,7 +5294,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_burden
 		icon = GFX_focus_VAL_Price_Of_Loyalty
-		x = 12
+		x = 18
 		y = 15
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -5320,7 +5320,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_administrations
 		icon = GFX_focus_VAL_Ministry_Auditors
-		x = 12
+		x = 18
 		y = 16
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -5350,7 +5350,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_final_north
 		icon = GFX_focus_STP_Break_The_Northern_Ring
-		x = 12
+		x = 18
 		y = 17
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -5387,7 +5387,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_frontier_ain
 		icon = GFX_focus_STP_Break_The_Northern_Ring
-		x = 9
+		x = 14
 		y = 17
 		cost = 4
 		allow_branch = {
@@ -5408,7 +5408,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_frontier_cof
 		icon = GFX_focus_STP_Break_The_Northern_Ring
-		x = 15
+		x = 22
 		y = 17
 		cost = 4
 		allow_branch = {
@@ -5429,7 +5429,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_final_kefreyt
 		icon = GFX_focus_STP_End_Kefreit
-		x = 12
+		x = 18
 		y = 18
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -5457,7 +5457,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_northern_administration
 		icon = GFX_focus_VAL_Reclamation_Land_Register
-		x = 12
+		x = 18
 		y = 19
 		cost = 3
 		allow_branch = {
@@ -5477,7 +5477,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_cannibal_campaign
 		icon = GFX_focus_STP_Break_The_Northern_Ring
-		x = 12
+		x = 18
 		y = 20
 		cost = 4
 		allow_branch = {
@@ -5498,7 +5498,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_chancellery
 		icon = GFX_focus_RUS_seal_chancery
-		x = 9
+		x = 10
 		y = 6
 		cost = 3
 		allow_branch = { STP_heg_personal_course = yes }
@@ -5525,7 +5525,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_trusted_list
 		icon = GFX_focus_RUS_trained_administrators
-		x = 9
+		x = 10
 		y = 7
 		cost = 3
 		allow_branch = { STP_heg_personal_course = yes }
@@ -5586,7 +5586,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_new_ladder
 		icon = GFX_focus_RUS_officer_courses
-		x = 10
+		x = 12
 		y = 8
 		cost = 4
 		allow_branch = { STP_heg_personal_course = yes }
@@ -5646,7 +5646,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_official_history
 		icon = GFX_focus_VAL_Ministry_Of_Contract_Memory
-		x = 10
+		x = 12
 		y = 9
 		cost = 3
 		allow_branch = { STP_heg_personal_course = yes }
@@ -5674,7 +5674,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_rewrite_mandate
 		icon = GFX_focus_VAL_Quarterly_Contract_Norm
-		x = 9
+		x = 10
 		y = 10
 		cost = 4
 		allow_branch = { STP_heg_personal_course = yes }
@@ -5743,7 +5743,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_closed_session
 		icon = GFX_focus_VAL_Company_Mandates
-		x = 10
+		x = 12
 		y = 12
 		cost = 3
 		allow_branch = { STP_heg_personal_course = yes }
@@ -5775,7 +5775,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_heg_revolution_name
 		icon = GFX_focus_STP_Triumph_Of_Common_Sense
-		x = 9
+		x = 10
 		y = 13
 		cost = 5
 		allow_branch = { STP_heg_personal_course = yes }
@@ -5813,7 +5813,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_lib_assembly
 		icon = GFX_focus_STP_pc_lib_assembly
-		x = 14
+		x = 24
 		y = 6
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
@@ -5840,7 +5840,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_lib_institutions
 		icon = GFX_focus_VAL_Provincial_Contract_Courts
-		x = 14
+		x = 24
 		y = 7
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
@@ -5867,7 +5867,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_lib_civil_army
 		icon = GFX_focus_STP_pc_lib_assembly
-		x = 14
+		x = 24
 		y = 8
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
@@ -5954,7 +5954,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_lib_lock
 		icon = GFX_focus_VAL_One_Ledger_One_Banner
-		x = 14
+		x = 24
 		y = 9
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
@@ -5976,7 +5976,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_lib_competition
 		icon = GFX_focus_RUS_aimaq_council
-		x = 18
+		x = 30
 		y = 10
 		cost = 5
 		allow_branch = { NOT = { has_variable = STP_pc_charter_cabinet } has_country_flag = STP_cw_postwar STP_pc_founder_rules = yes }
@@ -6008,7 +6008,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_lib_succession
 		icon = GFX_focus_RUS_seal_chancery
-		x = 18
+		x = 30
 		y = 11
 		cost = 5
 		allow_branch = { NOT = { has_variable = STP_pc_charter_cabinet } has_country_flag = STP_cw_postwar STP_pc_founder_rules = yes }
@@ -6030,7 +6030,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_lib_emergency_limit
 		icon = GFX_focus_VAL_Quarterly_Contract_Norm
-		x = 22
+		x = 28
 		y = 10
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
@@ -6052,7 +6052,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_lib_prepare_neighbors
 		icon = GFX_focus_STP_cw_northern_dossier
-		x = 24
+		x = 36
 		y = 10
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
@@ -6075,7 +6075,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_lib_local_contacts
 		icon = GFX_focus_RUS_foreign_press_bureau
-		x = 24
+		x = 36
 		y = 11
 		cost = 2
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
@@ -6098,7 +6098,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_lib_crisis
 		icon = GFX_focus_VAL_Operational_Directorate
-		x = 24
+		x = 36
 		y = 12
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
@@ -6135,7 +6135,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_lib_war
 		icon = GFX_focus_VAL_Frontier_Assault
-		x = 24
+		x = 36
 		y = 13
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
@@ -6179,7 +6179,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_lib_transition
 		icon = GFX_focus_VAL_Provincial_Brokers
-		x = 24
+		x = 36
 		y = 14
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
@@ -6218,7 +6218,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_lib_independent_gov
 		icon = GFX_focus_VAL_State_Contract
-		x = 24
+		x = 36
 		y = 15
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
@@ -6244,7 +6244,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_lib_coalition
 		icon = GFX_focus_RUS_parallel_public_addresses
-		x = 22
+		x = 32
 		y = 16
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
@@ -7953,7 +7953,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_nod_ratify
 		icon = GFX_focus_RUS_foreign_press_bureau
-		x = 18
+		x = 26
 		y = 13
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -7967,7 +7967,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_nod_recognition
 		icon = GFX_focus_VAL_Company_Mandates
-		x = 18
+		x = 26
 		y = 12
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
@@ -8180,7 +8180,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
-			add_ideas = ADISCORD_staff_STP_Alexandr_Veber
+			activate_advisor = ADISCORD_staff_STP_Alexandr_Veber
 			add_tech_bonus = { name = STP_pw_infantry_lessons_bonus bonus = 0.5 uses = 1 category = infantry_weapons }
 			unlock_decision_tooltip = STP_pw_party_standard_order
 			custom_effect_tooltip = STP_pw_party_standard_order_unlock_summary_tt
@@ -8378,7 +8378,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
-			add_ideas = ADISCORD_staff_STP_Erwin_Noll
+			activate_advisor = ADISCORD_staff_STP_Erwin_Noll
 			army_experience = 30
 			add_equipment_to_stockpile = { type = artillery_equipment amount = 200 }
 			add_equipment_to_stockpile = { type = anti_air_equipment amount = 100 }
@@ -8425,7 +8425,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_ideas = ADISCORD_staff_STP_Henrik_Brand
+			activate_advisor = ADISCORD_staff_STP_Henrik_Brand
 			STP_pw_open_marine_school = yes
 		}
 		ai_will_do = { base = 3 }
@@ -15519,7 +15519,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_economy_count_the_cost
 		icon = GFX_focus_RUS_state_budget
-		x = 32
+		x = 54
 		y = 4
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -15543,7 +15543,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_economy_reopen_tax_offices
 		icon = GFX_focus_RUS_trained_administrators
-		x = 32
+		x = 54
 		y = 5
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -15564,7 +15564,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_economy_repair_workshops
 		icon = GFX_focus_VAL_Reclamation_Workshops
-		x = 31
+		x = 52
 		y = 6
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -15604,7 +15604,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_economy_stabilize_currency
 		icon = GFX_focus_VAL_Export_Clearing_House
-		x = 33
+		x = 56
 		y = 6
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -15629,7 +15629,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_economy_recovery_budget
 		icon = GFX_focus_VAL_Central_Payment_Office
-		x = 32
+		x = 54
 		y = 7
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -15658,7 +15658,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_development_country_must_live
 		icon = GFX_focus_VAL_Wireless_Contract_Bureau
-		x = 20
+		x = 62
 		y = 4
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -15679,7 +15679,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_development_posters_on_ruins
 		icon = GFX_focus_VAL_Two_Concurrent_Narratives
-		x = 20
+		x = 62
 		y = 5
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -15699,7 +15699,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_development_rebuild_as_duty
 		icon = GFX_focus_VAL_Reclamation_Road_Crews
-		x = 21
+		x = 60
 		y = 6
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -15720,7 +15720,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_development_engineers_on_radio
 		icon = GFX_focus_VAL_Wireless_Contract_Bureau
-		x = 23
+		x = 64
 		y = 6
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -15741,7 +15741,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_development_generation_reconstruction
 		icon = GFX_focus_VAL_Reclamation_Return_Home
-		x = 20
+		x = 62
 		y = 7
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -15770,7 +15770,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_development_reopen_universities
 		icon = GFX_focus_RUS_scientists_at_headquarters
-		x = 38
+		x = 64
 		y = 8
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -15791,7 +15791,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_development_national_research_institutes
 		icon = GFX_focus_RUS_empire_without_rivals
-		x = 36
+		x = 62
 		y = 9
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -15816,7 +15816,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_development_captured_institutes
 		icon = GFX_focus_RUS_scientists_council
-		x = 38
+		x = 62
 		y = 10
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -16092,8 +16092,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_investment_development_fund
 		icon = GFX_focus_RUS_underground_fund
-		x = 34
-		y = 10
+		x = 54
+		y = 9
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -16122,8 +16122,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_investment_precision_industry
 		icon = GFX_focus_VAL_Reclamation_Industrial_Sites
-		x = 32
-		y = 11
+		x = 52
+		y = 10
 		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -16144,8 +16144,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_investment_special_metallurgy
 		icon = GFX_focus_VAL_Westerholm_Concessions
-		x = 36
-		y = 11
+		x = 56
+		y = 10
 		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -16163,8 +16163,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_investment_automation
 		icon = GFX_focus_VAL_Three_Shift_Arsenals
-		x = 32
-		y = 12
+		x = 52
+		y = 11
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -16179,8 +16179,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_investment_logistics
 		icon = GFX_focus_VAL_Motorized_Columns
-		x = 36
-		y = 12
+		x = 56
+		y = 11
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -16195,8 +16195,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_investment_computing
 		icon = GFX_focus_ADISCORD_Wall_Of_Screens
-		x = 32
-		y = 13
+		x = 52
+		y = 12
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -16211,8 +16211,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_investment_defense_orders
 		icon = GFX_focus_VAL_Munitions_Board
-		x = 36
-		y = 13
+		x = 56
+		y = 12
 		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -16234,8 +16234,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_investment_export_finance
 		icon = GFX_focus_VAL_Export_Clearing_House
-		x = 36
-		y = 14
+		x = 56
+		y = 13
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -16253,8 +16253,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_investment_integrated_economy
 		icon = GFX_focus_VAL_The_Steel_Contract
-		x = 34
-		y = 15
+		x = 54
+		y = 14
 		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -16281,7 +16281,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_navy_capital
 		icon = GFX_focus_VAL_Marine_Contract_Corps
-		x = 0
+		x = -10
 		y = 10
 		cost = 10
 		prerequisite = { focus = STP_pc_navy_escorts }
@@ -19298,7 +19298,7 @@ focus_tree = {
 		y = 3
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar OR = { tag = STP tag = STS } }
-		offset = { x = 20 y = 1 trigger = { tag = STS } }
+		offset = { x = 48 y = 1 trigger = { tag = STS } }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = STP_pc_after_victory focus = STP_pw_party_new_republic }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_integration_government_tt STP_pw_can_reconstruct = yes is_subject = no } }

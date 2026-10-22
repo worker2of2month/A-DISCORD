@@ -1216,7 +1216,7 @@ focus_tree = {
 		id = STP_cw_first_postwar_budget
 		icon = GFX_focus_STP_cw_first_postwar_budget
 		x = 7
-		offset = { x = 9 trigger = { tag = STS } }
+		offset = { x = 25 trigger = { tag = STS } }
 		y = 0
 		allow_branch = { has_country_flag = STP_cw_postwar }
 		cost = 3
@@ -1233,7 +1233,7 @@ focus_tree = {
 		id = STP_cw_restore_civil_authority
 		icon = GFX_focus_STP_cw_restore_civil_authority
 		x = 7
-		offset = { x = 9 trigger = { tag = STS } }
+		offset = { x = 25 trigger = { tag = STS } }
 		y = 1
 		allow_branch = { has_country_flag = STP_cw_postwar }
 		cost = 5
@@ -2142,7 +2142,7 @@ focus_tree = {
 		y = 3
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar OR = { tag = STP tag = STS } }
-		offset = { x = 20 y = 1 trigger = { tag = STS } }
+		offset = { x = 48 y = 1 trigger = { tag = STS } }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = STP_pc_after_victory focus = STP_pw_party_new_republic }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_integration_government_tt STP_pw_can_reconstruct = yes is_subject = no } }

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 import re
 import tempfile
 import unittest
@@ -2853,6 +2854,76 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
                 suffix = "" if level == 0 else f"_{level + 1}"
                 self.assertIn(f'"{tag}_ADISCORD_urban_breacher{suffix}_entity"', entities)
         self.assertEqual(len(list(models.MODEL.glob("urban_breacher_*.anim"))), 13)
+
+    def test_shield_defence_has_soft_burst_response_and_closes_its_loop(self):
+        from tools.assets.source import build_shield_infantry as models
+
+        entity = self.read("gfx/entities/ADISCORD_urban_breacher.asset")
+        defence = next(
+            block for block in re.findall(r"state = \{(.*?)(?=\n\t\})", entity, re.S)
+            if 'name = "defend"' in block
+        )
+        clip = re.search(r'animation = "([^"]+)"', defence)[1]
+        shots = [float(value) for value in re.findall(r"time = ([\d.]+)\s+node =", defence)]
+        animation = models.native_reader().read_meshfile(str(models.MODEL / f"urban_breacher_{clip}.anim"))
+        info = animation.find("info")
+        samples = animation.find("samples").attrib
+        animated = [bone.tag for bone in info if "q" in bone.attrib["sa"][0]]
+        stride = len(animated) * 4
+        offset = animated.index("back_mid") * 4
+        frames = info.attrib["sa"][0]
+
+        def torso_rotation(frame):
+            start = frame * stride + offset
+            values = samples["q"][start:start + 4]
+            length = math.sqrt(sum(value * value for value in values))
+            return [value / length for value in values]
+
+        def rotation_angle(before, after):
+            dot = min(1.0, abs(sum(a * b for a, b in zip(before, after))))
+            return math.degrees(2 * math.acos(dot))
+
+        self.assertTrue(shots)
+        burst_starts = [shots[0]] + [
+            after for before, after in zip(shots, shots[1:]) if after - before > 0.25
+        ]
+        for seconds in burst_starts:
+            frame = round(seconds * info.attrib["fps"][0])
+            before = torso_rotation(frame - 1)
+            response = max(rotation_angle(before, torso_rotation(frame + delay)) for delay in range(1, 7))
+            self.assertGreater(response, 0.5, f"No visible body response at {seconds}s")
+        rotations = [torso_rotation(frame) for frame in range(frames)]
+        steps = [rotation_angle(a, b) for a, b in zip(rotations, rotations[1:])]
+        self.assertLess(max(steps), 2.5, "Torso changes angle too far in one frame")
+        acceleration = [
+            math.degrees(2 * math.sqrt(sum((a - 2 * b + c) ** 2 for a, b, c in zip(
+                rotations[index - 1], rotations[index], rotations[index + 1]
+            ))))
+            for index in range(1, frames - 1)
+        ]
+        self.assertLess(max(acceleration), 1.3, "Torso reverses recoil abruptly")
+        for key, width in (("t", 3), ("q", 4), ("s", 1)):
+            frame_width = sum(key in bone.attrib["sa"][0] for bone in info) * width
+            self.assertEqual(len(samples[key]), frame_width * frames)
+            for first, last in zip(samples[key][:frame_width], samples[key][-frame_width:]):
+                self.assertAlmostEqual(first, last, delta=1e-5)
+
+    def test_shield_defence_holds_low_stance_without_repeated_squats(self):
+        from tools.assets.source import build_shield_infantry as models
+
+        reader = models.native_reader()
+        idle = reader.read_meshfile(str(models.MODEL / "urban_breacher_idle.anim"))
+        attack = reader.read_meshfile(str(models.MODEL / "urban_breacher_attack.anim"))
+        info = attack.find("info")
+        translated = [bone.tag for bone in info if "t" in bone.attrib["sa"][0]]
+        if "Hip" in translated:
+            offset = translated.index("Hip") * 3 + 1
+            heights = attack.find("samples").attrib["t"][offset::len(translated) * 3]
+        else:
+            heights = info.find("Hip").attrib["t"][1:2]
+        standing_height = idle.find("info/Hip").attrib["t"][1]
+        self.assertLess(max(heights), standing_height - 0.45)
+        self.assertLess(max(heights) - min(heights), 1e-4, "The defence loop must not repeat squats")
 
     def test_shield_localisation_has_its_own_role_and_valid_encoding(self):
         for language in ("russian", "english"):

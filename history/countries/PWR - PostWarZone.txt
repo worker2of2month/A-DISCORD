@@ -44,3 +44,12 @@ set_stability = -0.89
 set_research_slots = 2
 
 set_cosmetic_tag = PWR_confederation
+
+# Military leadership candidates.
+recruit_character = ADISCORD_staff_PWR_Johann_Becker
+recruit_character = ADISCORD_staff_PWR_Karl_Walter
+recruit_character = ADISCORD_staff_PWR_Karl_Garten
+recruit_character = ADISCORD_staff_PWR_Leon_Dreyer
+recruit_character = ADISCORD_staff_PWR_Martin_Ebers
+recruit_character = ADISCORD_staff_PWR_Niklas_Vogel
+recruit_character = ADISCORD_staff_PWR_Oskar_Hartwig

@@ -20,4 +20,197 @@ characters = {
 			id = -1
 		}
 	}
+
+	# NAM military leadership.
+	ADISCORD_staff_NAM_Gennady_Panov = {
+		name = ADISCORD_staff_NAM_Gennady_Panov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_NAM_Gennady_Panov
+			desc = ADISCORD_staff_NAM_Gennady_Panov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_NAM_Viktor_Belousov = {
+		name = ADISCORD_staff_NAM_Viktor_Belousov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_NAM_Viktor_Belousov
+			desc = ADISCORD_staff_NAM_Viktor_Belousov_desc
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { has_completed_focus = NAM_field_guards }
+			traits = { army_chief_defensive_2 }
+			ai_will_do = { factor = 2 }
+		}
+	}
+
+	ADISCORD_staff_NAM_Andrei_Krasnov = {
+		name = ADISCORD_staff_NAM_Andrei_Krasnov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_NAM_Andrei_Krasnov
+			desc = ADISCORD_staff_NAM_Andrei_Krasnov_desc
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { has_completed_focus = NAM_mobile_columns }
+			traits = { army_chief_maneuver_2 }
+			ai_will_do = { factor = 2 }
+		}
+	}
+
+	ADISCORD_staff_NAM_Dmitri_Rogov = {
+		name = ADISCORD_staff_NAM_Dmitri_Rogov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			idea_token = ADISCORD_staff_NAM_Dmitri_Rogov
+			desc = ADISCORD_staff_NAM_Dmitri_Rogov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_NAM_Dmitri_Sazonov = {
+		name = ADISCORD_staff_NAM_Dmitri_Sazonov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+			}
+		}
+		advisor = {
+			slot = air_chief
+			idea_token = ADISCORD_staff_NAM_Dmitri_Sazonov
+			desc = ADISCORD_staff_NAM_Dmitri_Sazonov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_NAM_Ilya_Tumanov = {
+		name = ADISCORD_staff_NAM_Ilya_Tumanov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_def_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_NAM_Ilya_Tumanov
+			desc = ADISCORD_staff_NAM_Ilya_Tumanov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_NAM_Konstantin_Uvarov = {
+		name = ADISCORD_staff_NAM_Konstantin_Uvarov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_log_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_NAM_Konstantin_Uvarov
+			desc = ADISCORD_staff_NAM_Konstantin_Uvarov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_NAM_Maksim_Frolov = {
+		name = ADISCORD_staff_NAM_Maksim_Frolov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_art_western_european_2d
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_NAM_Maksim_Frolov
+			desc = ADISCORD_staff_NAM_Maksim_Frolov_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_NAM_Petr_Chernov = {
+		name = ADISCORD_staff_NAM_Petr_Chernov
+		portraits = {
+			army = {
+				small = GFX_idea_generic_army_chief_off_western_european_2d
+			}
+		}
+		advisor = {
+			slot = theorist
+			idea_token = ADISCORD_staff_NAM_Petr_Chernov
+			desc = ADISCORD_staff_NAM_Petr_Chernov_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			ai_will_do = { factor = 1 }
+		}
+	}
 }

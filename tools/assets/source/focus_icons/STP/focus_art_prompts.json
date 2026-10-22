@@ -1044,6 +1044,993 @@
         "source": "exec-edbbd369-24ce-4178-8ce8-78d91a416bf4.png",
         "prompt": "Compose wide HOI4 focus State of the Republic from supplied 3 assets: tired president Ivanov image1 on left and center, open administrative dossier image2 in lower foreground as his report, hourglass image3 at right. Preserve exact reference face glasses and silver hair, his hand at temple intact; lower hand hidden BEHIND folder edge, no fingers fused into papers. Tight overlapping silhouette1.85:1, dark cold blue-black silver photomontage with subtle dark green jacket and burgundy tie, paper subdued. No new people, text, flags, desk, chair, background, frame or halo. True transparent alpha, entire head and hourglass visible."
       }
+    },
+    {
+      "focus_id": "STP_cw_unified_headquarters",
+      "title": "Приказы из одного штаба",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "unified_headquarters_rear_commander.png",
+          "source": "exec-81c58ffe-72a4-432a-8a5b-7a7e284bc4c1.png",
+          "prompt": "One separate transparent cutout asset for a HOI4 civil-war focus Orders from One Headquarters. Supporting reference1 is exact native Shabrat militia uniform: slate blue-grey mottled jacket, soft dark cap, grey scarf, black straps, tan utility pouches, yellow LEFT upper-arm band. Style refs2-3 cold dark realistic photomontage. Subject: waist-up commander viewed from BACK, three-quarter rear angle, slightly leaning forward to study a map that will be added later. Head turned just slightly left, both elbows bent low; both hands kept in front of torso, not protruding down beyond the cutout waist. Preserve uniform details and yellow band, no medals. Whole cap shoulders elbows visible, clean contour, authentic fabric. No table, map, phone, weapons, room, scenery, flags, writing, frame or halo. True alpha transparency, desaturated blue-black shadows and silver edge light, wide human torso silhouette."
+        },
+        {
+          "file": "unified_headquarters_field_telephone.png",
+          "source": "exec-ff9f510a-08b8-4e72-9fa2-2a2bea238280.png",
+          "prompt": "One separate cutout: vintage rugged military field telephone, black bakelite handset seated correctly on its cradle, dark slate metal rectangular carrying case, hand-crank on right and a short neat coil of cable curled beside base. Three-quarter view slightly above, squat horizontal silhouette, entire object and cable in frame. Cold silver highlights, deep blue-black shadows, used practical materials. Match dark realistic HOI4 collage style of two references. No words, symbols, people, table, background, ground shadows or exterior glow. True transparent alpha. Not a radio, no antenna, no rotary dial."
+        },
+        {
+          "file": "reserve_commanders_terrain_tray.png",
+          "reused_from": "STP_cw_reserve_commanders"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "status": "generation_blocked",
+        "reason": "Image generator output safety check: violence",
+        "request_id": "aacf1f9f-f746-4509-9552-41a3b743c7ea",
+        "prompt": "Compose a wide transparent strategy-game focus icon using three provided cutouts. Image1 rear-view uniformed commander on right, image2 old field telephone large at left foreground, image3 tabletop relief model of mountains low across center. A quiet command-room planning symbol, no combat. Commander torso is behind the terrain tray, hands completely occluded by his body; never invent pointing fingers on tray. Keep his head cap yellow armband and shoulders. Phone and terrain model overlap slightly; map tray low, commander occupies right 40%, full silhouette ratio1.85:1. Preserve designs, dark steel blue and silver palette, no new objects, no text, weapons, room, glow, floor or frame. True alpha transparency outside clean combined silhouette."
+      },
+      "variants": [
+        {
+          "name": "unfolded_topographic_map",
+          "status": "generation_blocked",
+          "request_id": "06a2cdb6-0ce2-4e9b-af16-020ca9861557",
+          "prompt": "Separate transparent cutout asset of a wide unfolded creased military topographic map for a fictional mountainous region, viewed obliquely from slightly above. Very wide low silhouette; sturdy aged grey-beige paper, bent corners, thin contour lines and road junctions, three bold small blue directional arrows converge on one central junction. No readable words or numbers, no real-world borders. Two plain flat blue unit counters rest ON paper as part of map. No hands, table, pencils, phone, frames or other props. Dark realistic HOI4 photo-collage like reference images, restrained cold silver-blue rim light, paper toned down to grey. True alpha outside paper with crisp outline, zero glow, haze, shadow or black gradient outside object. Landscape."
+        }
+      ]
+    },
+    {
+      "focus_id": "STP_cw_mountain_school",
+      "title": "Подготовка горных частей",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "mountain_school_rope_ice_axe.png",
+          "source": "exec-f2b23a6d-e5bc-4650-b733-c75d61c634ad.png",
+          "prompt": "Dark realistic photo-collage cutout for a small strategy-game icon, desaturated slate blue-black shadows and cold silver highlights, worn believable materials, strong readable silhouette. True alpha transparency outside the object and through openings. No outer haze, gradient, floor, frame, words, logos or extra props. Preserve the entire object inside the canvas. Subject: one mountaineering equipment bundle, heavy coiled hemp climbing rope with one old steel ice axe lying diagonally across it, two steel carabiners clipped to rope. Practical 20th century mountain expedition equipment, realistic weathered steel and grey-beige rope. Three-quarter view, compact diagonal silhouette, no person or scenery."
+        },
+        {
+          "file": "reserve_commanders_instructor.png",
+          "reused_from": "STP_cw_reserve_commanders"
+        },
+        {
+          "file": "abila_reserve_field_pack.png",
+          "reused_from": "STP_cw_abila_reserve"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-1e53ec3c-2ffb-4051-a61a-cb0e0d298f1d.png",
+        "prompt": "Combine three supplied cutouts into a wide compact game focus collage: image1 instructor waist-up on left, image2 coiled climbing rope and ice axe diagonal lower center, image3 backpack smaller on right. Theme mountain training and expedition preparedness. Preserve instructor uniform and fingers already holding his clipboard. Slight overlap of all three, readable silhouettes, width1.85 height1. Dark steel blue silver palette. True alpha outside combined silhouette. No new people, weapons, scenery, text, flags, room, ground or frame."
+      }
+    },
+    {
+      "focus_id": "STP_cw_mountain_assault",
+      "title": "Штурм перевалов",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "defensive_lines_mountain_ridge.png",
+          "reused_from": "STP_cw_defensive_lines"
+        },
+        {
+          "file": "mountain_school_rope_ice_axe.png",
+          "reused_from": "STP_cw_mountain_school"
+        },
+        {
+          "file": "heavy_reserve_regular_helmet.png",
+          "reused_from": "STP_cw_heavy_reserve"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-ff6d78d4-e3ef-4c90-946d-de8aa159370e.png",
+        "prompt": "Wide symbolic game focus collage made from exactly3 reference cutouts: snowy mountain ridge across rear upper half, climbing rope and ice axe large diagonal in left foreground, steel helmet at lower right partially overlapping rope. Preserve objects, rugged cold slate blue and silver palette. Tight silhouette1.85:1, no people, scenery beyond supplied ridge, weapons, text, frames, halos or extra props. True transparent background everywhere outside combined cutout. Show full mountain summit and helmet."
+      }
+    },
+    {
+      "focus_id": "STP_cw_open_local_depots",
+      "title": "Открыть местные склады",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "vorkerland_stores_abandoned_warehouse.png",
+          "reused_from": "STP_cw_seize_vorkerland_stores"
+        },
+        {
+          "file": "warehouse_service_supply_rack.png",
+          "reused_from": "STP_cw_warehouse_inventory"
+        },
+        {
+          "file": "cabinet_archives_silver_key.png",
+          "reused_from": "STP_cw_cabinet_archives"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-804bbee7-bb95-4db9-936e-b7ea81d1aa8c.png",
+        "prompt": "Create one wide transparent icon about opening local supply depots. Reference1 warehouse with open doors in rear left-center, reference2 low stocked supply shelf in front extending right, reference3 large silver key diagonal across front bottom-left. Exactly these three objects in an overlapping compact collage, key very readable, warehouse upper roof visible. Dark realistic worn blue-black and silver, aspect1.85:1. No people, new props, words, floor, square backdrop, external glow or haze. True transparent alpha, all outer contours remain crisp."
+      }
+    },
+    {
+      "focus_id": "STP_cw_war_fund",
+      "title": "Военный фонд сопротивления",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "war_fund_donation_hand.png",
+          "source": "exec-c7317d86-8f90-401f-8c18-b1c875846979.png",
+          "prompt": "Dark realistic photo-collage cutout for a small strategy-game icon, desaturated slate blue-black shadows and cold silver highlights, worn believable materials, strong readable silhouette. True alpha transparency outside the object and through openings. No outer haze, gradient, floor, frame, words, logos or extra props. Preserve the entire object inside the canvas. One human right hand and forearm in a worn dark blue civilian jacket sleeve, side view reaching diagonally from upper right to lower left, holding a small folded banknote as a charitable donation between thumb and index finger. Natural adult hand with exactly five fingers, only thumb and index extended, other three softly curled, anatomically coherent. Banknote abstract decorative lines, no readable text or real currency symbols. No recipient, money box or background. Entire hand and sleeve cuff visible. Muted skin and cold highlights."
+        },
+        {
+          "file": "military_committee_banknote_bundles.png",
+          "reused_from": "STP_cw_military_committee_fund"
+        },
+        {
+          "file": "military_committee_cashbox.png",
+          "reused_from": "STP_cw_military_committee_fund"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-445fd8cf-66d7-43b9-8204-ee5e486b9375.png",
+        "prompt": "Compose a wide compact transparent icon about a community donation fund. Supporting insert1 hand offering banknote from upper right toward left; insert2 banknote bundles in lower left; insert3 closed cashbox low center-right. Hand hovers just above cashbox, fingers remain anatomically as reference and do not melt into lid. Three overlapping objects, no new props or people. Desaturated blue black silver collage, width1.85 height1, trim excess empty margins. No text, background, ground, glow, frame or emblem. True alpha outside object silhouettes."
+      }
+    },
+    {
+      "focus_id": "STP_cw_open_conscription",
+      "title": "Открыть призыв",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "abila_reserve_reservist.png",
+          "reused_from": "STP_cw_abila_reserve"
+        },
+        {
+          "file": "delegate_lists_open_register.png",
+          "reused_from": "STP_Count_The_Loyalists"
+        },
+        {
+          "file": "heavy_reserve_regular_helmet.png",
+          "reused_from": "STP_cw_heavy_reserve"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-4651ff21-0961-4bdb-a4a4-db35e5e8f594.png",
+        "prompt": "Wide transparent strategy game icon: supporting image1 arriving reservist carrying bag on LEFT, image2 open registration book spread across lower center, image3 steel helmet on lower RIGHT. Calm enrollment theme, preserve native bluegrey uniform with yellow armband, bag and existing hands, book overlaps lower thighs not hands. Three clear elements in dense1.85:1 wide collage. Cold dark blue-black silver, muted paper, no weapons, text, extra people, background, floor, halo or frame. Genuine alpha outside combined cutout."
+      }
+    },
+    {
+      "focus_id": "STP_cw_wartime_laboratories",
+      "title": "Военные лаборатории",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "wartime_laboratories_microscope.png",
+          "source": "exec-8f057789-7971-4b07-9e0d-154fa7973fb5.png",
+          "prompt": "Dark realistic photo-collage cutout for a small strategy-game icon, desaturated slate blue-black shadows and cold silver highlights, worn believable materials, strong readable silhouette. True alpha transparency outside the object and through openings. No outer haze, gradient, floor, frame, words, logos or extra props. Preserve the entire object inside the canvas. One separate vintage laboratory optical microscope, heavy black enamel horseshoe base, curved steel arm, single angled eyepiece, rotating objectives above empty glass stage, coarse focus knob and small mirror. Full three-quarter view, entire microscope fits frame. Practical mid-century scientific equipment, aged dark navy enamel and silver metal, no labels. Not steampunk, no brass decoration, no person or furniture."
+        },
+        {
+          "file": "underground_cells_portable_radio.png",
+          "reused_from": "STP_cw_disruption_cells"
+        },
+        {
+          "file": "abila_workshops_factory_building.png",
+          "reused_from": "STP_cw_abila_workshops"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-c470166d-9947-4d74-a782-6aa5bbc6ae48.png",
+        "prompt": "Compose3 supplied cutouts into wide industrial research icon. Microscope image1 large left foreground, radio image2 low right foreground, brick workshop image3 smaller and darker in rear middle. Dense balanced overlapping collage, microscope eyepiece and factory chimney wholly in frame, radio aerial not taller than microscope. Ratio1.85:1. Keep dark realistic blueblack silver palette and small amber window accents. True alpha outside silhouette, no words, persons, new props, floor, glow or frame."
+      }
+    },
+    {
+      "focus_id": "STP_Turn_The_Young_Officers",
+      "title": "Перетянуть молодых офицеров",
+      "tool": "built-in image_gen",
+      "date": "2026-10-22",
+      "style_reference_paths": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/leaders/STP/portrait_STP_Severin_Drake.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_pay_officials.png"
+      ],
+      "assets": [
+        {
+          "file": "young_officers_severin_drake.png",
+          "prompt": "Use case: identity-preserve. Create ONE separate transparent cutout asset for a HOI4 national focus Win Over the Young Officers. Image1 is the canonical Severin Drake face and uniform reference: preserve this exact mature clean-shaven face, dark peaked cap with small star badge, dark brown-green greatcoat and broad fur collar. Do not make him younger. Image2 is style reference only, cold dark realistic strategy-game collage with silver edges. Reconstruct Drake from cap to mid chest, slight three-quarter turn toward viewer right, confident reserved expression. Keep both shoulders complete. No hands, no other people or props. Photographic painterly finish, detailed worn cloth, restrained cool steel-blue highlights on coat with natural warm skin. True transparent background, crisp isolated silhouette with margin on all sides, no rectangular portrait backdrop, no haze, floor, outline, text or watermark. Broad readable masses for small icon.",
+          "source": "C:/Users/Admin/.codex/generated_images/01a1308d-ff0f-76d0-9a29-2bcba021f8b4/exec-5f31f887-b1f2-4516-969c-b98da27cccf5.png",
+          "sha256": "8e2ba5ec2df64431a34b402638926c2420e6f2dede935cabf7a223d11163939a"
+        },
+        {
+          "file": "young_officers_field_epaulettes.png",
+          "prompt": "Use case: stylized-concept. Generate ONE separate transparent asset for a HOI4 focus Win Over the Young Officers: a pair of worn junior officer shoulder boards, laid diagonally together as one compact object, muted olive-charcoal cloth, dull silver piping and two small silver rank stars on each. They are simple flat rectangular fabric shoulder straps with pointed button end, NOT fringed ceremonial epaulettes. Front three-quarter view slightly from above, overlapping left board in front of right, all edges fully visible. Style reference image is style ONLY: grounded miniature photomontage with deep blue-black shadows, crisp silver edge highlights, natural aged materials, restrained colors. Strong readable silhouette, no ornate gold, extra medals, people, words, ribbons or weapons. Real transparent alpha through gaps and outside object, no ground shadow or halo. Generous margin.",
+          "source": "C:/Users/Admin/.codex/generated_images/01a1308d-ff0f-76d0-9a29-2bcba021f8b4/exec-1d5c61f1-d5d5-4357-9ac6-4c3fe713cd07.png",
+          "sha256": "7c466694571c8070d47ae926e15039d9fa46a67f101ebabeceeb03d36e991b0f"
+        },
+        {
+          "file": "young_officers_sealed_orders.png",
+          "prompt": "Use case: stylized-concept. Generate ONE separate transparent cutout asset for a HOI4 focus Win Over the Young Officers: a single thick folded military order in an open aged kraft envelope, with one ivory folded page partially emerging, bound by a narrow dark cord and modest burgundy wax seal on the lower envelope. No readable text, handwriting only subtle sparse lines on paper. Broad simple silhouette, slightly foreshortened three-quarter top view, long axis rising from lower left to upper right about 15 degrees. Realistic weathered paper but not overly torn. Image1 is STYLE ONLY: dark cool steel-blue and charcoal shading, silver edge highlights, small warm material accents, detailed painterly photomontage. Entire envelope and page contained in frame. No hand, tabletop, stamps, flags, weapons, extra objects, border or background. Genuine transparent alpha, no haze or ground shadow, comfortable transparent margins.",
+          "source": "C:/Users/Admin/.codex/generated_images/01a1308d-ff0f-76d0-9a29-2bcba021f8b4/exec-c5638e9a-88c2-4246-85f2-b050af5cd417.png",
+          "sha256": "e0522cdc77d8e62f29219fcab92e8a3827a9a15105137d7c2f83e6916e44625d"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "C:/Users/Admin/.codex/generated_images/01a1308d-ff0f-76d0-9a29-2bcba021f8b4/exec-9375bc9f-d0c9-4e69-bdb8-daa86f48e11e.png",
+        "prompt": "Use case: compositing. Assemble one compact wide transparent HOI4 national focus icon Win Over the Young Officers using exactly the three provided cutouts. Image1 Severin Drake portrait is the MAIN object occupying left and center, exact face and cap preserved. Image2 pair of silver-edged junior officer shoulder boards at the far right, visibly separate from his shoulders. Image3 packet of orders with burgundy seal in the lower foreground between chest and shoulder boards, angle gently rising right. Three bold overlapping masses, width1.65 times height, full cap and face unobscured. Keep portrait face large and readable at150px. Reduce order packet brightness to avoid overpowering face. Grounded realistic photomontage: deep cold blue-black shadows, steel-silver highlights on cloth edges, natural skin, muted parchment and burgundy accent. Absolutely REMOVE any glow, smoke or haze outside the physical reference objects. True alpha transparency outside the combined silhouette, clean cutout edges, no circular or rectangular background, no floor, no external shadow, no words, symbols added, weapons or other people. Keep all objects fully within frame with margin."
+      },
+      "review": {
+        "critic": "accepted",
+        "checked_at": [
+          150,
+          150
+        ],
+        "note": "Face, shoulder boards and sealed orders readable. Alpha composite checked, no visible halo."
+      }
+    },
+    {
+      "focus_id": "STP_cw_mobilization_register",
+      "title": "Мобилизационный реестр",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "district_authority_file_cabinet.png",
+          "reused_from": "STP_pw_republic_district_authority"
+        },
+        {
+          "file": "delegate_lists_open_register.png",
+          "reused_from": "STP_Count_The_Loyalists"
+        },
+        {
+          "file": "heavy_reserve_regular_helmet.png",
+          "reused_from": "STP_cw_heavy_reserve"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-9d0e86af-2417-4c4d-985b-57e80333756a.png",
+        "prompt": "A wide transparent game icon made from exactly3 supporting images: dark card-index cabinet rear left, open enrollment register low across center foreground, steel helmet on right resting against register edge. Preserve recognizable designs and each separate contour, layered compact1.85:1 silhouette. Muted paper, cold silver and dark blueblack tones. No people, new props, text, glow, background, floor or frame. True alpha transparency."
+      }
+    },
+    {
+      "focus_id": "STP_cw_wartime_arsenals",
+      "title": "Арсеналы военного времени",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "abila_workshops_metal_lathe.png",
+          "reused_from": "STP_cw_abila_workshops"
+        },
+        {
+          "file": "abila_workshops_factory_building.png",
+          "reused_from": "STP_cw_abila_workshops"
+        },
+        {
+          "file": "abila_reserve_rifle_chest.png",
+          "reused_from": "STP_cw_abila_reserve"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-b108991c-f84b-4d72-9028-81832775483f.png",
+        "prompt": "Assemble a wide HOI4 focus illustration of wartime arsenals from exactly the3 supplied cutouts. Old lathe on left, brick workshop in rear upper center, closed-action rifles neatly stored in their open wooden transport chest across lower right. No people or active combat. Dense overlapping dark blueblack silver collage, restrained amber lamp and windows. Width1.85 height1, intact entire silhouette. No additions, text, room, ground, glow or frame. Transparent alpha outside objects."
+      }
+    },
+    {
+      "focus_id": "STP_cw_supply_routes",
+      "title": "Дороги к фронту",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "supply_routes_canvas_truck.png",
+          "source": "exec-95d59e2b-9d4e-4793-970b-e1e81b37c9e1.png",
+          "prompt": "Edit target image1 existing cargo truck. Preserve exact body shape, proportions, three axles, wheels, mirrors, tarpaulin and front-left view. Change door's burgundy rectangle to one small muted ochre yellow rectangle, no symbols. Change overall warm brown lighting to cold desaturated slate-blue and silver to match style reference2. Canvas dark grey, headlights dim warm points only. Remove exterior halo and ground/shadow completely. Deliver ONE complete separate truck cutout on true alpha, entire vehicle within margin, no new objects, text, people or backdrop."
+        },
+        {
+          "file": "supply_routes_stone_bridge.png",
+          "source": "exec-d1280bf3-959e-44f6-a7c8-415a3013cce6.png",
+          "prompt": "Dark realistic photo-collage cutout for a small strategy-game icon, desaturated slate blue-black shadows and cold silver highlights, worn believable materials, strong readable silhouette. True alpha transparency outside the object and through openings. No outer haze, gradient, floor, frame, words, logos or extra props. Preserve the entire object inside the canvas. Subject one isolated short mountain road bridge, sturdy rough stone single arch, low stone parapets and broad dark gravel road on top, with a narrow piece of rocky road at each end. Three-quarter slightly elevated view, road runs from near lower left toward upper right. No river, sky, mountains, distant scenery, vehicles or people. Complete bridge including arch opening and both end abutments clearly cut out, wide low silhouette around2:1. Cold grey rock and desaturated blue tones."
+        },
+        {
+          "file": "defensive_lines_entrenching_shovel.png",
+          "reused_from": "STP_cw_defensive_lines"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-616fac88-6f80-4c36-bb00-7489615e2acf.png",
+        "prompt": "Wide transparent game icon about road logistics and repair. Use supporting image1 cargo truck as largest left/front object, image2 stone arch bridge at right/rear, image3 spade diagonally across lower right foreground. These are symbolic overlapping cutouts, truck should not actually drive on tiny bridge; keep separate recognizable scales. Cold steel-blue silver, dark shadows, tiny yellow door marker preserved. Width1.85 height1, true alpha outside clean silhouette. No people, words, signs, flags, extra landscape, floor, halo or frame."
+      }
+    },
+    {
+      "focus_id": "STP_cw_line_formations",
+      "title": "Линейные бригады",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "line_formations_regular_soldiers.png",
+          "source": "exec-ef54d76c-afa7-4687-82ff-52b2f17e0745.png",
+          "prompt": "Dark realistic photo-collage cutout for a small strategy-game icon, desaturated slate blue-black shadows and cold silver highlights, worn believable materials, strong readable silhouette. True alpha transparency outside the object and through openings. No outer haze, gradient, floor, frame, words, logos or extra props. Preserve the entire object inside the canvas. One separate grouped character cutout: two adult Shabrat regular infantrymen standing at ease side by side, one slightly ahead left, shown head to knees, no weapons. EXACT uniform reference1: grey rounded steel helmets, slate-grey mottled cloth uniform, tan plate-carrier pouches, black belts, yellow LEFT upper-arm bands. Different realistic faces, short hair, clean-shaven. Hands resting naturally low by belts, no gestures. Their silhouettes overlap lightly; keep both heads and elbows wholly visible. Style refs2-3. Calm disciplined formation, not a combat scene. No scenery, flags or text."
+        },
+        {
+          "file": "abila_reserve_rifle_chest.png",
+          "reused_from": "STP_cw_abila_reserve"
+        },
+        {
+          "file": "abila_reserve_field_pack.png",
+          "reused_from": "STP_cw_abila_reserve"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-34696d9c-0d88-4b36-9d22-804511deb11c.png",
+        "prompt": "Dark realistic photo-collage cutout for a small strategy-game icon, desaturated slate blue-black shadows and cold silver highlights, worn believable materials, strong readable silhouette. True alpha transparency outside the object and through openings. No outer haze, gradient, floor, frame, words, logos or extra props. Preserve the entire object inside the canvas. Wide horizontal assembled focus illustration, approximately 1.85:1 silhouette. Input1 pair of regular soldiers in the rear centre, retain their exact grey uniforms, tan vests and yellow armbands. Input2 open rifle chest across the lower left foreground. Input3 field pack at lower right. Three substantial overlapping elements, compact broad base, soldiers scaled to make room for equipment, crisp silhouettes, subdued blue rim highlights. No new objects or scenery. No text."
+      }
+    },
+    {
+      "focus_id": "STP_cw_road_to_fada",
+      "title": "Открыть дорогу на Фаду",
+      "assets": [
+        {
+          "file": "supply_routes_stone_bridge.png",
+          "reused_from": "STP_cw_supply_routes"
+        },
+        {
+          "file": "line_formations_regular_soldiers.png",
+          "reused_from": "STP_cw_line_formations"
+        },
+        {
+          "file": "defensive_lines_entrenching_shovel.png",
+          "reused_from": "STP_cw_defensive_lines"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Dark realistic photo-collage cutout for a small strategy-game icon, desaturated slate blue-black shadows and cold silver highlights, worn believable materials, strong readable silhouette. True alpha transparency outside the object and through openings. No outer haze, gradient, floor, frame, words, logos or extra props. Preserve the entire object inside the canvas. Assemble a broad 1.85:1 focus icon using these three input objects: arch bridge runs from lower left towards upper right, pair of regular soldiers shown as small half-length figures at left behind bridge, large entrenching shovel diagonally across lower right. Theme reopening approaches to the capital. Keep the bridge open and its arches readable. Compact overlapping photo collage, about three major elements, no scenery, text or additional props.",
+        "source": "exec-6f6244c8-f074-4b98-af05-6caea505ec7e.png"
+      },
+      "tool": "built-in image_gen"
+    },
+    {
+      "focus_id": "STP_cw_cut_capital_roads",
+      "title": "Перерезать столичные дороги",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "capital_roads_road_barrier.png",
+          "source": "exec-8633c942-81cd-4502-8190-e8edf4ea02f6.png",
+          "prompt": "Dark realistic photo-collage cutout for a small strategy-game icon, desaturated slate blue-black shadows and cold silver highlights, worn believable materials, strong readable silhouette. True alpha transparency outside the object and through openings. No outer haze, gradient, floor, frame, words, logos or extra props. Preserve the entire object inside the canvas. One isolated road closure barrier: heavy weathered horizontal timber beam painted faded yellow and charcoal diagonal stripes, supported by two sturdy dark steel A-frame trestles. Slight three-quarter perspective, broad low silhouette. A short heavy chain hangs between supports. Entire barrier visible, no signs, words, road, scene, people or vehicles. Supporting refs are style only."
+        },
+        {
+          "file": "supply_routes_canvas_truck.png",
+          "reused_from": "STP_cw_supply_routes"
+        },
+        {
+          "file": "restore_civil_authority_administration.png",
+          "reused_from": "STP_cw_restore_civil_authority"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Dark realistic photo-collage cutout for a small strategy-game icon, desaturated slate blue-black shadows and cold silver highlights, worn believable materials, strong readable silhouette. True alpha transparency outside the object and through openings. No outer haze, gradient, floor, frame, words, logos or extra props. Preserve the entire object inside the canvas. Wide horizontal 1.85:1 focus collage: input1 road barrier stretches across entire lower foreground, input2 canvas truck seen behind it on left, input3 government building behind right. Three objects, distinct silhouettes and clear overlap. Theme blocked approaches to the capital. No people, explosions, additional props, road surface or background. Preserve yellow-charcoal barrier and grey truck.",
+        "source": "exec-0ce94ea8-521c-4843-957e-6c884828a878.png"
+      }
+    },
+    {
+      "focus_id": "STP_cw_government_quarter_assault",
+      "title": "Штурм правительственного района",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "heavy_reserve_field_gun.png",
+          "reused_from": "STP_cw_heavy_reserve"
+        },
+        {
+          "file": "bronze_congress_dark_low_angle.png",
+          "reused_from": "shared_assets/bronze_congress_native_building"
+        },
+        {
+          "file": "capital_disruption_smoke_effect.png",
+          "reused_from": "STP_cw_prepare_capital_sabotage"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-a18af578-a586-41cc-aada-c1845abcdb61.png",
+        "prompt": "Wide 1.85:1 transparent strategy focus collage using three inputs. Image1 Bronze Congress is authoritative: KEEP its new low front-right view, right wing receding right, dark cold grey masonry and muted dark aged bronze. Put it rear centre/right, broad monumental facade. Image2 field gun lower left, barrel points up-left, all wheels visible, gun does not obscure facade eagle. Image3 restrained dark smoke curls along base and behind sides, very few tiny orange embers. Keep overall dark and desaturated like image1, NO bright gold or white facade and NO warm rim lighting. Three main elements only, clear broad compact silhouette, no ground, frame, people or additional objects. All edges inside canvas."
+      },
+      "variants": [
+        {
+          "assets": [
+            {
+              "file": "heavy_reserve_field_gun.png",
+              "reused_from": "STP_cw_heavy_reserve"
+            },
+            {
+              "file": "restore_civil_authority_administration.png",
+              "reused_from": "STP_cw_restore_civil_authority"
+            },
+            {
+              "file": "capital_disruption_smoke_effect.png",
+              "reused_from": "STP_cw_prepare_capital_sabotage"
+            }
+          ],
+          "composition": {
+            "delivery": "chat_only",
+            "prompt": "Dark realistic photo-collage cutout for a small strategy-game icon, desaturated slate blue-black shadows and cold silver highlights, worn believable materials, strong readable silhouette. True alpha transparency outside the object and through openings. No outer haze, gradient, floor, frame, words, logos or extra props. Preserve the entire object inside the canvas. Assemble wide 1.85:1 symbolic strategy focus collage from three input cutouts: field gun across foreground left, large government administration facade behind right, smoke plume behind and around lower facade but keep columns readable. Strong compact broad silhouette, silver architectural highlights, restrained orange embers. No people, injuries, battle scene, text or added objects. Entire gun wheels and building roof fit inside image.",
+            "source": "exec-bffc2f40-deff-45c0-8900-7776ca7bd6a8.png"
+          },
+          "status": "superseded_generic_building"
+        },
+        {
+          "assets": [
+            {
+              "file": "heavy_reserve_field_gun.png",
+              "reused_from": "STP_cw_heavy_reserve"
+            },
+            {
+              "file": "bronze_congress_native_building.png",
+              "reused_from": "shared_assets/bronze_congress_native_building"
+            },
+            {
+              "file": "capital_disruption_smoke_effect.png",
+              "reused_from": "STP_cw_prepare_capital_sabotage"
+            }
+          ],
+          "composition": {
+            "delivery": "chat_only",
+            "source": "exec-bdbb90d0-6b52-47d4-a609-c9481d7b9128.png",
+            "prompt": "Compositing: wide horizontal 1.85:1 strategy focus icon. Three source objects only. Input1 authoritative Bronze Congress building occupies rear centre/right, retain its exact stepped architecture, white columns, bronze facade reliefs and eagle. Input2 old field gun across lower left foreground with barrel angled up-left; do not cover central facade eagle. Input3 charcoal smoke behind lower sides with restrained orange embers. Dark realistic photomontage with cool blue-grey edge highlights and warm bronze accents. Compact overlapping broad silhouette, transparent surroundings, keep entire roof and wheels inside frame. No people or additional architecture. No added words, frame or ground plane."
+          },
+          "status": "superseded_bright_building"
+        }
+      ]
+    },
+    {
+      "focus_id": "STP_cw_district_levies",
+      "title": "Окружной набор",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "abila_reserve_reservist.png",
+          "reused_from": "STP_cw_abila_reserve"
+        },
+        {
+          "file": "district_services_local_office.png",
+          "reused_from": "STP_pw_republic_new_republic"
+        },
+        {
+          "file": "abila_reserve_field_pack.png",
+          "reused_from": "STP_cw_abila_reserve"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Dark realistic photo-collage cutout for a small strategy-game icon, desaturated slate blue-black shadows and cold silver highlights, worn believable materials, strong readable silhouette. True alpha transparency outside the object and through openings. No outer haze, gradient, floor, frame, words, logos or extra props. Preserve the entire object inside the canvas. Wide horizontal 1.85:1 assembled focus collage. Theme district recruitment: reference1 militia reservist half-length dominates left, reference2 small local administrative office fills back right, reference3 field pack in lower right foreground. Three distinct major objects overlapping closely, no extra papers or props. Preserve soft cap, grey scarf, mottled grey militia jacket and yellow armband. Calm documentary expression. No text.",
+        "source": "exec-f027631e-3454-4399-b28b-84141fd955d3.png"
+      }
+    },
+    {
+      "focus_id": "STP_cw_hold_resource_belt",
+      "title": "Удержать ресурсный пояс",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "resource_belt_ore_cart.png",
+          "source": "exec-3edf9a80-1ab7-4084-982c-78ab8443e306.png",
+          "prompt": "Dark realistic photo-collage cutout, cold silver-blue highlights. Single riveted iron ore cart filled with rough metallic ore, four flanged wheels, three-quarter view, true transparent background, no rails or scenery."
+        },
+        {
+          "file": "abila_workshops_factory_building.png",
+          "reused_from": "STP_cw_abila_workshops"
+        },
+        {
+          "file": "defensive_lines_concrete_shelter.png",
+          "reused_from": "STP_cw_defensive_lines"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-0fb2b5d0-a0c1-4294-ae6c-0389de6e321d.png",
+        "prompt": "Wide 1.85:1 compact collage: ore cart lower left, factory behind centre, concrete shelter lower right. Three overlapping elements, transparent background."
+      }
+    },
+    {
+      "focus_id": "STP_hw_council_of_passes",
+      "title": "Совет перевалов",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "district_assembly_voting_delegates.png",
+          "reused_from": "STP_pc_lib_assembly"
+        },
+        {
+          "file": "defensive_lines_mountain_ridge.png",
+          "reused_from": "STP_cw_defensive_lines"
+        },
+        {
+          "file": "district_assembly_presiding_gavel.png",
+          "reused_from": "STP_pc_lib_assembly"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Compositing: three-element wide horizontal 1.85:1 strategy focus collage for Council of the Passes. Image1 voting delegates from behind across lower left/centre, image2 mountain ridge fills rear width, image3 gavel on round block in lower right foreground. Keep three raised hands clearly visible against mountains, realistic faces need not be visible. Dark realistic cutouts, slate blue-black shadows, restrained silver light, no golden glow, no scene background, no added people or text. True transparent background, compact wide silhouette, entire gavel fits.",
+        "source": "exec-db99e3ce-6af2-4fdf-81b3-f23d01b7aed4.png"
+      }
+    },
+    {
+      "focus_id": "STP_hw_mountain_mandate",
+      "title": "Мандат гор",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "mountain_mandate_shabrat_portrait.png",
+          "source": "exec-c353bf20-5022-4885-b48b-30d2b10f3f96.png",
+          "prompt": "Identity-preserving portrait cutout for a dark realistic strategy focus icon. Input1 is exact character Maksim Shabrat: preserve short brown side-parted hair, rectangular black glasses, clean-shaven face and facial proportions. Half-length standing portrait in same worn dark charcoal civilian wool coat and dark sweater, serious restrained expression, looking slightly to viewer right, arms resting down naturally. Do not add uniform, medals, weapons or objects. Cool desaturated grey-blue lighting and subtle silver rim, weathered realistic photomontage texture, NOT glossy or bright. True alpha background, entire head shoulders and elbows inside frame. One person only."
+        },
+        {
+          "file": "defensive_lines_mountain_ridge.png",
+          "reused_from": "STP_cw_defensive_lines"
+        },
+        {
+          "file": "restore_civil_authority_hanging_flag.png",
+          "reused_from": "STP_cw_restore_civil_authority"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Wide 1.85:1 transparent focus collage: input1 exact Shabrat portrait half-length on left, input2 mountain ridge stretches across lower right, input3 hanging resistance flag behind right, preserve blue field white diagonal rising left-bottom to right-top and gold four-point star upper-left. Keep face identity. Compact three-element overlapping silhouette, no new objects or letters, realistic dark cool desaturated photo-collage with muted silver edges. Portrait occupies only left third, mountains and flag broaden composition. No background.",
+        "source": "exec-13052962-fe76-455e-b1ed-22f3496c36c7.png"
+      }
+    },
+    {
+      "focus_id": "STP_hw_leaflets_over_fada",
+      "title": "Листовки над Фадой",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "leaflets_over_fada_flying_papers.png",
+          "source": "exec-96a7da28-cf44-4af5-a870-85758284fcff.png",
+          "prompt": "Create ONE grouped cutout asset: five loose printed leaflets fluttering in an arcing horizontal fan, different mild paper curls, spaced enough to distinguish sheets. Use input1 paper and print style, but REMOVE binding twine and stack, these sheets are airborne. Off-white weathered paper, muted dark blue header blocks with a single white diagonal, small abstract black print strokes only, NO legible words. Realistic dark strategy focus photomontage with cool silver edge highlights, true alpha gaps between all papers. All sheets within frame, no scene, hands or other objects."
+        },
+        {
+          "file": "bronze_congress_dark_low_angle.png",
+          "reused_from": "shared_assets/bronze_congress_native_building"
+        },
+        {
+          "file": "district_printing_mechanical_press.png",
+          "reused_from": "STP_cw_district_printing"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Wide 1.85:1 transparent three-element focus collage. Input1 five fluttering leaflets in a broad arc above top centre, input2 dark Bronze Congress building behind right, input3 mechanical printing press large lower left. Preserve building model architecture, muted dark bronze and cold grey stone. Focus on papers reaching capital. Clear separated paper silhouettes, compact overlap of building and press, no extra elements, people, words, scenery or lighting haze. Dark realistic photomontage, restrained silver-blue highlights, no warm gold glow.",
+        "source": "exec-c3bb66a9-afc9-472f-9cd9-8bbeb4ad1828.png"
+      }
+    },
+    {
+      "focus_id": "STP_hw_open_black_book",
+      "title": "Открыть Чёрную книгу",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "black_book_open_registry.png",
+          "source": "exec-945ae359-2508-4187-88e6-cc5276e6898a.png",
+          "prompt": "One separate transparent realistic strategy-icon asset: heavy old black leather account book opened diagonally in three-quarter view, thick worn charcoal leather covers clearly visible, slightly yellow-grey pages filled with neat tiny abstract handwritten entries and ruled columns. A dark blue cloth bookmark between pages. No readable titles or letters, no pen or other props, no scene. Broad low silhouette, cold slate shadows and muted silver highlights, restrained aged materials. Entire book inside canvas, true alpha around it, no glow. Use the input only for material and dark photo-collage style."
+        },
+        {
+          "file": "underground_cells_portable_radio.png",
+          "reused_from": "STP_cw_disruption_cells"
+        },
+        {
+          "file": "delegate_lists_magnifying_glass.png",
+          "reused_from": "STP_Count_The_Loyalists"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Compositing. Three-object dark realistic strategy focus icon, wide 1.85:1. Input1 open black leather registry spreads across lower foreground, input2 portable radio behind right with antenna contained in frame, input3 magnifying glass diagonally across open pages at left, lens showing enlarged abstract entry strokes. Match dark slate/charcoal, cold silver edges and muted aged paper. Keep black leather binding prominent. No added props, backdrop, readable labels or glow. True alpha background, compact broad silhouette.",
+        "source": "exec-d6ed4ec9-9658-4190-9baf-e03aa49a3b98.png"
+      }
+    },
+    {
+      "focus_id": "STP_hw_unified_district_command",
+      "title": "Единое командование округов",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "heavy_reserve_regular_helmet.png",
+          "reused_from": "STP_cw_heavy_reserve"
+        },
+        {
+          "file": "unified_headquarters_field_telephone.png",
+          "reused_from": "STP_cw_unified_headquarters"
+        },
+        {
+          "file": "restore_civil_authority_hanging_flag.png",
+          "reused_from": "STP_cw_restore_civil_authority"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Wide horizontal 1.85:1 dark realistic focus collage from exactly three source assets. Grey regular helmet large at lower left, black field telephone stretched across lower right, resistance banner behind centre, draped diagonally to broaden silhouette. Preserve exact flag: navy blue with rising white diagonal and gold four-point star upper-left. Cold desaturated slate lighting and muted silver edges, no gold glow. No soldiers, terrain map, background, extra props or text. True alpha outside objects.",
+        "source": "exec-ac3ffd8e-52f6-4fc3-bf9a-8e51c855264f.png"
+      }
+    },
+    {
+      "focus_id": "STP_hw_kefreyt_contract",
+      "title": "Контракт с Кефрейтом",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "../VAL/kefreyt_waving_flag.png",
+          "reused_from": "VAL/shared_kefreyt_flag"
+        },
+        {
+          "file": "abila_reserve_rifle_chest.png",
+          "reused_from": "STP_cw_abila_reserve"
+        },
+        {
+          "file": "resource_belt_ore_cart.png",
+          "reused_from": "STP_cw_hold_resource_belt"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Wide 1.85:1 transparent strategy focus collage using three references: Kefreyt burgundy flag behind across top, open rifle chest lower left, iron ore cart lower right. Meaning foreign arms supplied in exchange for resource rights. Preserve exact white flag emblem: rifle over leafy branch on burgundy field. Dark weathered realistic photo-collage, desaturated slate steel, muted burgundy cloth, silver edge highlights, no glow, no people, no papers, no text. Compact overlaps, three strong elements, whole silhouette fits.",
+        "source": "exec-b19d876e-b0eb-493a-a0fa-a67a4e482701.png"
+      }
+    },
+    {
+      "focus_id": "STP_hw_mountains_pay",
+      "title": "Горы платят сами",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "war_fund_donation_hand.png",
+          "reused_from": "STP_cw_war_fund"
+        },
+        {
+          "file": "defensive_lines_mountain_ridge.png",
+          "reused_from": "STP_cw_defensive_lines"
+        },
+        {
+          "file": "abila_reserve_field_pack.png",
+          "reused_from": "STP_cw_abila_reserve"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Three-element wide 1.85:1 dark focus photo-collage. Input1 hand offering folded banknote reaches from upper left toward centre, input2 mountain ridge broad across back, input3 worn field pack large lower right. Theme local self-financing and sacrifice of supplies. Hand natural five fingers, banknote clear, three objects with tight overlap, dark charcoal and slate blue materials with small yellow cloth accent, muted silver rim. True alpha, no scene, foreign flags, text or extra coins.",
+        "source": "exec-e80beb07-6d56-4654-9228-8564cbc576af.png"
+      }
+    },
+    {
+      "focus_id": "STP_hw_coalition_congress",
+      "title": "Съезд коалиции",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "coalition_congress_three_delegates.png",
+          "source": "exec-a4205894-537c-4986-837a-8fc245a65de3.png",
+          "prompt": "One grouped transparent character asset for dark realistic strategy focus collage: three adult delegates seated shoulder to shoulder at a very short simple dark desk edge, waist up, sober discussion. Left middle-aged officer wearing grey mottled jacket and yellow left armband consistent with input uniform, uncovered head and grey hair; centre elderly mountain village elder in plain charcoal wool coat with short grey beard; right adult female print worker in dark blue work jacket, tied-back brown hair, lightly ink-stained fingers folded together on desk. No weapons, papers, flags or symbols. Natural distinct faces, quiet engaged postures, full heads and elbows in frame. Dark cold desaturated slate blue and charcoal, muted silver edges, realistic worn photo-collage style, true transparent background, wide low group."
+        },
+        {
+          "file": "restore_civil_authority_hanging_flag.png",
+          "reused_from": "STP_cw_restore_civil_authority"
+        },
+        {
+          "file": "district_assembly_presiding_gavel.png",
+          "reused_from": "STP_pc_lib_assembly"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Precise compositing correction to image1: turn this rectangular scene into an isolated three-element strategy icon cutout. Zoom OUT by 25 percent so all three people, entire gavel including handle, short desk edge, and flag are inside canvas with 8 percent clear TRANSPARENT margin on every side. Flag must be a finite hanging cloth with clearly visible ragged/folded outer silhouette, NOT full-canvas backdrop. Desk must be a short floating desk cutout ending just outside elbows, NOT full-width floor. Preserve exact three people, poses and their hand anatomy, cold dark colors, blue-white-gold flag design. All surrounding space true alpha including upper corners. Wide 1.85:1 arrangement, no scene or new objects.",
+        "variants": [
+          {
+            "source": "exec-19692399-6055-4c3a-b538-d62ed8912693.png",
+            "prompt": "Three-element wide horizontal 1.85:1 transparent dark strategy focus collage. Input1 coalition group of officer elder and female printer behind a short desk fills broad foreground. Input2 resistance banner behind left and centre, preserve blue/white diagonal/gold fourpoint star. Input3 gavel at lower right partly overlapping desk edge. Preserve all three people's faces and natural hands, no extra figures. Dark realistic cold blue-grey style, subdued silver edges, no glow, scenery, added text or borders.",
+            "status": "rejected_rectangular_scene"
+          }
+        ],
+        "source": "exec-1c9a252d-c8d5-481b-937f-ef051c020372.png"
+      }
+    },
+    {
+      "focus_id": "STP_hw_course_staff",
+      "title": "Директория офицеров",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "line_formations_regular_soldiers.png",
+          "reused_from": "STP_cw_line_formations"
+        },
+        {
+          "file": "district_authority_seal_press.png",
+          "reused_from": "STP_pw_republic_district_authority"
+        },
+        {
+          "file": "unified_headquarters_field_telephone.png",
+          "reused_from": "STP_cw_unified_headquarters"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Wide horizontal 1.85:1 transparent focus collage, exactly three element groups. Input1 pair of unarmed regular soldiers half-length at rear left, retain grey helmets mottled uniform tan vests yellow armbands. Input2 heavy official seal press large lower centre/right. Input3 black field telephone lower left. Symbolic temporary military administration, no action scene, no additional people, flags, maps or text. Cold dark realistic collage, subdued silver edges, coherent compact silhouette, entire figures' heads and seal handle inside frame.",
+        "source": "exec-d1ef258a-c891-4872-aeeb-32b15cb1b312.png"
+      }
+    },
+    {
+      "focus_id": "STP_hw_course_councils",
+      "title": "Республика советов",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "freedom_open_assembly_seats.png",
+          "reused_from": "STP_pc_freedom_open"
+        },
+        {
+          "file": "autonomy_treaty_voting_hand.png",
+          "reused_from": "STP_cw_autonomy_guarantees"
+        },
+        {
+          "file": "defensive_lines_mountain_ridge.png",
+          "reused_from": "STP_cw_defensive_lines"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Wide 1.85:1 three-element transparent strategy focus collage. Input1 semicircular assembly seats across lower width, input2 one raised voting hand emerges at left foreground, input3 mountain ridge across rear. Preserve five-finger hand with sleeve and natural anatomy. Seats dark blue and worn wood, mountains dark slate with muted snow. Low wide composition with compact overlap and clear silhouettes, cold silver edge highlights, realistic photo-collage. No added people, flags, words, floor or scene.",
+        "source": "exec-6635e7f1-7bbb-46ae-a748-cd4da6479a34.png"
+      }
+    },
+    {
+      "focus_id": "STP_hw_course_truth",
+      "title": "Комиссия правды",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "cabinet_archives_open_dossier.png",
+          "reused_from": "STP_cw_cabinet_archives"
+        },
+        {
+          "file": "district_assembly_presiding_gavel.png",
+          "reused_from": "STP_pc_lib_assembly"
+        },
+        {
+          "file": "freedom_open_hand_broken_shackle.png",
+          "reused_from": "STP_pc_freedom_open"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Wide 1.85:1 transparent strategy focus icon photoreal collage of exactly three reference objects. Open archival dossier stretches across lower center, presiding gavel diagonally across its right front, open hand with broken shackle rises left rear. Preserve each object's design and anatomy. Dark aged paper, dark wood, grey steel, restrained cold silver-blue edges. Wide compact silhouette, no scene, no background, no additional words, no glow cloud.",
+        "source": "exec-7e56d9e8-97b4-4d0f-9bcd-413a1a1e0541.png"
+      }
+    },
+    {
+      "focus_id": "STP_cw_strike_squadrons",
+      "title": "Собрать лётный резерв",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "flight_reserve_native_propeller_aircraft.png",
+          "source": "exec-fc6b3efd-db9a-4fc7-95f5-d7aea4db45ea.png",
+          "prompt": "Create one isolated aircraft game-art asset based closely on input1 actual low-poly native model. Preserve single-engine propeller aircraft silhouette, straight tapered low wings, single tail fin, canopy proportions, three propeller blades and front-left downward orientation. Upgrade low-poly surfaces into realistic worn dull olive-grey metal with fine rivets, cool restrained highlights. Replace ONLY existing wing flag markings with small blue and white diagonal insignia matching the cloth flag in input2, gold four-point star, no red/yellow national bands. Input2 is insignia reference only, do not include cloth. Entire plane and wings in frame with margins. Transparent background, no smoke, no scene, no text, no extra objects.",
+          "model_reference": "gfx/models/units/ADISCORD_country_vehicles/STP_early_fighter.mesh"
+        },
+        {
+          "file": "../RUS/airfield_runway_and_hangars.png",
+          "reused_from": "RUS/shared_airfield"
+        },
+        {
+          "file": "../RUS/autonomous_workshops_wrench.png",
+          "reused_from": "RUS/shared_workshop_tools"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Assemble a wide 1.85:1 transparent focus icon from three input assets. Plane in input1 is large upper-center facing lower left, preserve its shape and blue-white gold-star markings. From input2 place its pair of hangars along lower back, shorten runway visually to compact foundation. Input3 large worn steel wrench diagonally across lower foreground. Photoreal game collage, compact overlapping silhouettes, muted olive grey and cold steel, restrained edge lighting. All objects fully inside frame, no scene background, no smoke, no text.",
+        "source": "exec-702d76c8-37d2-443f-8bab-4ca03433e552.png"
+      }
+    },
+    {
+      "focus_id": "STP_cw_forward_airstrips",
+      "title": "Ближе к линии огня",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "../RUS/airfield_runway_and_hangars.png",
+          "reused_from": "RUS/shared_airfield"
+        },
+        {
+          "file": "flight_reserve_native_propeller_aircraft.png",
+          "reused_from": "STP_cw_strike_squadrons"
+        },
+        {
+          "file": "defensive_lines_mountain_ridge.png",
+          "reused_from": "STP_cw_defensive_lines"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Wide 1.85:1 transparent focus icon collage. Dominant runway and hangars from input1 across lower two-thirds, rugged mountain ridge input3 as low rear silhouette, aircraft input2 smaller crossing upper left toward viewer. Preserve reference aircraft and markings. All three subjects recognizably separate overlapping cutouts, crisp worn detail, cold desaturated slate/olive palette and restrained silver edges, minimal warm runway lamps. No rectangular landscape, sky, extra elements or words.",
+        "source": "exec-ce7cd80f-5304-4f42-a595-00db283c221c.png"
+      }
+    },
+    {
+      "focus_id": "STP_cw_air_service_columns",
+      "title": "Моторы обратно в строй",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "../RUS/aircraft_engine.png",
+          "reused_from": "RUS/shared_aircraft_engine"
+        },
+        {
+          "file": "supply_routes_canvas_truck.png",
+          "reused_from": "STP_cw_supply_routes"
+        },
+        {
+          "file": "../RUS/autonomous_workshops_wrench.png",
+          "reused_from": "RUS/shared_workshop_tools"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Wide 1.85:1 transparent strategy focus collage of exactly three inputs: aircraft propeller engine on stand dominates left foreground, canvas truck is smaller behind it at right, large steel wrench rests diagonally along bottom foreground. Preserve object details, truck shape and markings, distinct engine silhouette. Realistic worn metal olive canvas dark steel, restrained cool edge highlights. No background scenery, floor, rectangular panel, smoke or words, clean compact overlapping cutouts with transparent space around.",
+        "source": "exec-e45b5871-e3e1-4a84-8709-a50605bb55de.png"
+      }
+    },
+    {
+      "focus_id": "STP_cw_assault_air_cover",
+      "title": "Единый график вылетов",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "flight_reserve_native_propeller_aircraft.png",
+          "reused_from": "STP_cw_strike_squadrons"
+        },
+        {
+          "file": "kreyden_disruption_factory_clock.png",
+          "reused_from": "STP_cw_prepare_industry_sabotage"
+        },
+        {
+          "file": "underground_cells_portable_radio.png",
+          "reused_from": "STP_cw_disruption_cells"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Wide 1.85:1 transparent strategy focus icon photoreal collage from three references. Large clock behind at center-left, propeller aircraft overlapping upper clock and spreading across upper width pointed left, compact portable radio foreground right. Clock hands and face clearly visible in lower-left, plane markings and geometry preserved, radio knobs legible. Cold grey steel, muted olive, ivory dial, thin blue-silver edge lighting, no broad glow or additional symbols. Low wide interlocking silhouette, no floor scene or words.",
+        "source": "exec-35924f7e-ae96-468b-ba8b-2eb9dbaccd57.png"
+      }
+    },
+    {
+      "focus_id": "STP_cw_front_scouts",
+      "title": "Связные переднего края",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "underground_cells_courier_pair.png",
+          "reused_from": "STP_cw_disruption_cells"
+        },
+        {
+          "file": "border_evidence_binoculars.png",
+          "reused_from": "STP_cw_border_evidence"
+        },
+        {
+          "file": "courier_service_dispatch_tube.png",
+          "reused_from": "STP_cw_courier_service"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Wide 1.85:1 transparent focus collage. Input1 courier pair at left rear preserve faces grey patterned uniforms soft caps face scarves tan pouches yellow armbands. Large binoculars input2 at right front, dispatch tube input3 diagonal across lower width. Exactly these three groups, realistic cutout montage in dark cold grey palette with restrained silver blue edge light, no background scene or haze or words. Compact overlap, fully visible heads and binocular lenses, no newly added hands.",
+        "source": "exec-09f2a0b9-ee6b-4ca1-9820-dd08cdae089c.png"
+      }
+    },
+    {
+      "focus_id": "STP_cw_organize_underground",
+      "title": "Поднять партийный тыл",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "underground_cells_courier_pair.png",
+          "reused_from": "STP_cw_disruption_cells"
+        },
+        {
+          "file": "underground_cells_portable_radio.png",
+          "reused_from": "STP_cw_disruption_cells"
+        },
+        {
+          "file": "abila_reserve_rifle_chest.png",
+          "reused_from": "STP_cw_abila_reserve"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Wide 1.85:1 transparent fictional strategy-game focus icon collage using three references. Courier pair upper center, preserve faces grey mottled uniforms soft caps scarves yellow armbands. Portable radio lower left; open wooden storage chest with rifles from input3 forms wide lower right foreground. Three clear overlapping silhouettes, realistic worn dark steel and grey cloth with modest cool silver edges, no scene or action, no added people, hands, symbols, text, fire or broad glow. Clean readable compact composition.",
+        "source": "exec-518d5360-d2a8-446a-8a32-afd91b50e39f.png"
+      }
+    },
+    {
+      "focus_id": "STP_cw_mobile_workshops",
+      "title": "Ремонт вслед за фронтом",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "supply_routes_canvas_truck.png",
+          "reused_from": "STP_cw_supply_routes"
+        },
+        {
+          "file": "abila_workshops_metal_lathe.png",
+          "reused_from": "STP_cw_abila_workshops"
+        },
+        {
+          "file": "../RUS/autonomous_workshops_wrench.png",
+          "reused_from": "RUS/shared_workshop_tools"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Wide 1.85:1 transparent game focus collage. Canvas truck input1 behind at left, metal lathe input2 dominates lower center-right, steel wrench input3 diagonally across lowest foreground. Preserve mechanical shapes and truck design. Dark worn steel, blue-grey paint, muted olive canvas, selective cool edge light with no bright gold. Three cleanly readable overlapping cutout objects, no additional tools, people, scenery, floor, smoke, words or rectangular background.",
+        "source": "exec-d6ae447b-9b87-4231-93f5-d8f2f2fe0dd5.png"
+      }
+    },
+    {
+      "focus_id": "STP_cw_frontline_relief",
+      "title": "Смена на передовой",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "frontline_relief_resting_regular.png",
+          "source": "exec-354b9c7d-e7e2-40d1-9f07-079a58ecab43.png",
+          "prompt": "Create one isolated realistic soldier asset for fictional strategy game based on uniform in input1 native model. Adult male resting seated on a plain low wooden crate, elbows resting on knees, relaxed open hands, tired calm expression looking left. Entire body boots and crate visible with margins. Preserve native uniform: rounded grey steel helmet, dark blue-grey mottled fatigues, tan vest and belt pouches, black straps, yellow left upper arm band. Upgrade low-poly to realistic cloth metal skin detail. No weapon, injuries, blood, other people or scene. Three-quarter front view, compact seated pose, muted grey palette, restrained cool silver edge lighting, transparent background."
+        },
+        {
+          "file": "abila_reserve_field_pack.png",
+          "reused_from": "STP_cw_abila_reserve"
+        },
+        {
+          "file": "election_commission_hourglass.png",
+          "reused_from": "STP_cw_delay_election_commission"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Assemble a wide 1.85:1 transparent focus collage of exactly three reference assets. Resting seated soldier at left, field pack lower center overlapping only crate and boots, large hourglass at right slightly behind pack. Soldier fully visible from helmet to boots, preserve face uniform and relaxed hands, no hands touching added objects. Dark grey steel tan cloth, pale hourglass sand and muted yellow armband only warm accents. Realistic compact overlapping cutouts, no landscape floor words extra objects or broad glow. Wide balanced silhouette.",
+        "source": "exec-2c98d6cf-1185-4507-baf4-1c89ab75299c.png"
+      }
+    },
+    {
+      "focus_id": "STP_cw_route_columns",
+      "title": "Колонны снабжения",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "supply_routes_canvas_truck.png",
+          "reused_from": "STP_cw_supply_routes"
+        },
+        {
+          "file": "warehouse_service_supply_rack.png",
+          "reused_from": "STP_cw_warehouse_inventory"
+        },
+        {
+          "file": "kreyden_disruption_factory_clock.png",
+          "reused_from": "STP_cw_prepare_industry_sabotage"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "prompt": "Wide 1.85:1 transparent strategy focus icon collage with three subjects. Canvas truck input1 dominant at front-left facing viewer-left, supply rack from input2 runs wide along lower right behind truck, large clock input3 upper rear right with face mostly readable. Preserve reference truck design and markings and worn stores. Dark cold steel grey, muted canvas, pale clock dial, restrained blue-silver edge highlights. Overlapping compact cutout montage, no ground, road, landscape, words, smoke, arrows or extra subjects.",
+        "source": "exec-248b2b58-0bb8-41b8-b024-43af5c4a5e1c.png"
+      }
     }
   ],
   "shared_assets": [
@@ -1055,6 +2042,33 @@
       "reference": "gfx/flags/STP.tga",
       "tool": "built-in image_gen",
       "prompt": "Use case: stylized-concept / precise-object-edit. Create one isolated burning cloth flag asset for a Hearts of Iron IV focus icon. The supplied image is the EXACT flag design of fictional Stelander from the user's mod: preserve its royal blue upper-left diagonal field with the white pointed sunburst near the upper-left, and the exposed horizontal bands of red, white, black and golden yellow to the right and lower part exactly as in the reference. Do not substitute another flag or redesign its emblem. Transform this flat design into realistic heavy woven fabric waving in broad legible folds, a wide horizontal silhouette. Flag cloth only, no flagpole, no stand, no people. The bottom edge and right fly edge are burning, with jagged charred tears, glowing ember seams and orange flames rising along the right edge. Keep most of the blue field and white sunburst intact and readable. Fire affects cloth, no other subject. Dark painterly realism, soot, detailed textile, restrained warm fire illumination against cool blue cloth. Full object fully in frame with margin, landscape 3:2 canvas, suitable for compositing at small size. True transparent alpha background, transparent holes through the charred fabric, no solid background, no ground, no scenery, no text or border, no broad smoke cloud or atmospheric vignette. Flame tips can be translucent. One asset only."
+    },
+    {
+      "asset_id": "bronze_congress_native_building",
+      "title": "Бронзовый конгресс по игровой модели",
+      "file": "bronze_congress_dark_low_angle.png",
+      "source": "exec-fa92c150-4ec4-402d-87ed-bd07e6aedcf8.png",
+      "reference": "gfx/models/buildings/stelander_special/ADISCORD_congress.mesh",
+      "texture_reference": "gfx/models/buildings/stelander_special/ADISCORD_congress_texture.dds",
+      "tool": "built-in image_gen",
+      "prompt": "Use case: style transfer of native model render into realistic strategy-game focus asset. Image1 is authoritative for EXACT architecture AND CAMERA: Bronze Congress viewed almost at facade eye-level from front-right, RIGHT side recedes to right, front facade left of centre. Match that angle precisely, DO NOT revert to overhead/front-left view. Image2 is only material/exposure reference: dark cool grey stone, aged dark brown bronze, desaturated restrained lighting. Recreate image1 with detailed worn realistic masonry, preserving stepped roof, rectangular raised roof crest, colonnaded wings, paired tall relief panels, eagle over three doors, broad stairs and two plinth fixtures. Preserve fascia inscription CONCILIVM AENEVM. Entire building fits, wide squat monumental silhouette. Low contrast matte bronze, no gold shine, no white stone, no blown highlights. Narrow cool silver edge light keeps silhouette readable. Standalone isolated building on true alpha transparency, no ground, shadows outside object, scenery, smoke, people or additional objects.",
+      "variants": [
+        {
+          "asset_id": "bronze_congress_native_building",
+          "title": "Бронзовый конгресс по игровой модели",
+          "file": "bronze_congress_native_building.png",
+          "source": "exec-1cbdbf79-6fce-4e32-a15a-37077b45745c.png",
+          "reference": "gfx/models/buildings/stelander_special/ADISCORD_congress.mesh",
+          "texture_reference": "gfx/models/buildings/stelander_special/ADISCORD_congress_texture.dds",
+          "tool": "built-in image_gen",
+          "prompt": "Use case: style-transfer. Create one separate transparent PNG focus-art asset of the Bronze Congress building. Input1 is the authoritative front three-quarter render of the ACTUAL game model; input2 is another angle of the SAME model. Preserve exact architectural identity: broad symmetrical stepped massing, central tall rectangular hall, lower colonnaded wings, tiers of flat roofs, bronze raised central roof crest, white-grey columns, paired tall bronze figurative relief panels, bronze eagle above three entrance doors, broad front stairs and small bronze fixtures on two stair plinths. Preserve the existing fascia lettering CONCILIVM AENEVM; no other words. Keep its warm bronze ornament and cool white-grey stone. Enhance realistic masonry, metal relief detail and dramatic cold silver edge lighting for a small dark strategy-game focus collage. Front three-quarter view matching input1, slightly lower camera, wide grounded silhouette, entire building and steps visible with margin. No added domes, pediments, flags, people, weapons, smoke, trees, scenery, ground plane, cast shadow or border. True transparent background outside the building, clean cutout edges. This is a standalone building asset, not a composition."
+        },
+        {
+          "source": "exec-62ce6ec1-5e48-4bca-88a5-3e80776a7846.png",
+          "prompt": "Precise lighting and color edit. Image1 is the edit target, a Bronze Congress building isolated on alpha. Image2 is ONLY the desired color, brightness and texture reference. Keep image1's exact architecture, silhouette, camera angle, steps, columns, roof crest, eagle, reliefs and existing inscription unchanged. Match the dark subdued cold slate-grey exposure of image2. Change bright white stone to weathered medium-dark grey stone, deepen recesses to charcoal, retain fine detail with narrow muted silver highlights. Change shiny yellow-gold ornament to dark aged brown bronze, very low saturation, matte with restrained edge glints. Remove warm golden rim lighting and blown roof highlights. Overall substantially darker, weathered realistic focus-icon cutout. Still readable, not crushed to black. No added ornaments, smoke, scenery or objects. Preserve true transparent background and full building in frame. One building only.",
+          "delivery": "external_variant"
+        }
+      ]
     }
   ],
   "prewar_focus_catalog": {
@@ -1466,6 +2480,308 @@
         "current_icon": "GFX_focus_STP_Triumph_Of_Common_Sense",
         "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Triumph_Of_Common_Sense.png",
         "art_status": "generated"
+      }
+    ]
+  },
+  "wartime_focus_catalog": {
+    "source": "focus_trees/STP/civil_war/focuses.txt",
+    "scope": "Shabrat and shared civil-war branches; excludes Party, SRP, postwar and separate Kefreyt emergency branch",
+    "focuses": [
+      {
+        "focus_id": "STP_cw_unified_headquarters",
+        "title": "Приказы из одного штаба",
+        "description": "Сведём отряды под общее командование.",
+        "current_icon": "GFX_focus_STP_Turn_The_Young_Officers",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Turn_The_Young_Officers.png"
+      },
+      {
+        "focus_id": "STP_cw_mountain_school",
+        "title": "Подготовка горных частей",
+        "description": "Горные дороги требуют небольших, хорошо подготовленных соединений. Инструкторы соберут горнострелковые бригады с сапёрными ротами, а склады выделят снаряжение. Людей и время на подготовку предоставит действующая армия.",
+        "current_icon": "GFX_focus_STP_cw_reserve_commanders",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_reserve_commanders.png"
+      },
+      {
+        "focus_id": "STP_cw_mountain_assault",
+        "title": "Штурм перевалов",
+        "description": "Передовые группы научатся обходить огневые точки по склонам и удерживать захваченные проходы до подхода основных сил.",
+        "current_icon": "GFX_focus_STP_cw_arm_the_north",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_arm_the_north.png"
+      },
+      {
+        "focus_id": "STP_cw_open_local_depots",
+        "title": "Открыть местные склады",
+        "description": "Окружные комитеты передадут фронту доступные запасы ведомственных складов и добровольческих дружин. Основной резерв остаётся в хранилищах Аблии: его предстоит рассортировать и вывезти, сохранив контроль над округом.",
+        "current_icon": "GFX_focus_STP_cw_warehouse_inventory",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_warehouse_inventory.png"
+      },
+      {
+        "focus_id": "STP_cw_war_fund",
+        "title": "Военный фонд сопротивления",
+        "description": "Объединим пожертвования сторонников и взносы окружных комитетов в военном фонде. Деньги поступят тремя траншами: штабу придётся выбирать, что оплатить первым - ремонт оружия, авиацию или расширение арсеналов.",
+        "current_icon": "GFX_focus_STP_2160_budget",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_2160_budget.png"
+      },
+      {
+        "focus_id": "STP_cw_open_conscription",
+        "title": "Открыть призыв",
+        "description": "Штаб сопротивления вводит закон «Расширенный призыв» вместо добровольцев или ограниченного набора. Новые резервисты прибывают постепенно, а подготовка пополнений занимает больше времени.",
+        "current_icon": "GFX_focus_STP_cw_abila_reserve",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_abila_reserve.png"
+      },
+      {
+        "focus_id": "STP_cw_wartime_laboratories",
+        "title": "Военные лаборатории",
+        "description": "Сведём конструкторские бюро и заводские лаборатории в одну военную программу. Возвращение гражданской власти положит конец военному порядку работы.",
+        "current_icon": "GFX_focus_STP_pw_party_civilian_retraining",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/party/GFX_focus_STP_pw_party_civilian_retraining.png"
+      },
+      {
+        "focus_id": "STP_cw_mobilization_register",
+        "title": "Мобилизационный реестр",
+        "description": "Составим реестр пополнений для территориальных бригад и учебного резерва.",
+        "current_icon": "GFX_focus_STP_party_personnel_commissions",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/party/GFX_focus_STP_party_personnel_commissions.png"
+      },
+      {
+        "focus_id": "STP_cw_wartime_arsenals",
+        "title": "Арсеналы военного времени",
+        "description": "Мастерские столицы переходят на военное производство. Новые заводы и дополнительные смены поддержат пополнение фронта. Из ремонтных запасов поступят винтовки и орудия. Военный совет сможет выкупать готовые партии оружия за деньги и расширять арсеналы в подконтрольных регионах.",
+        "current_icon": "GFX_focus_RUS_industrial_belt",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/RUS/GFX_focus_RUS_industrial_belt.png"
+      },
+      {
+        "focus_id": "STP_cw_supply_routes",
+        "title": "Дороги к фронту",
+        "description": "Расширим дорожную сеть и наладим подвоз. Военный совет сможет перевести фронт на перегруппировку: части восстановят силы, пожертвовав наступательным темпом.",
+        "current_icon": "GFX_focus_STP_cw_supply_officers",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_supply_officers.png"
+      },
+      {
+        "focus_id": "STP_cw_line_formations",
+        "title": "Линейные бригады",
+        "description": "Организуем линейные бригады.",
+        "current_icon": "GFX_focus_STP_cw_abila_reserve",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_abila_reserve.png"
+      },
+      {
+        "focus_id": "STP_cw_road_to_fada",
+        "title": "Открыть дорогу на Фаду",
+        "description": "Улучшим дорогу на подступах к Фаде и организуем смену передовых частей. В Ниансасе работы начнутся, если он остаётся под нашим контролем.",
+        "current_icon": "GFX_focus_STP_All_In",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/_shared/GFX_focus_ADISCORD_All_In.png"
+      },
+      {
+        "focus_id": "STP_cw_last_banquet",
+        "title": "Последний банкет",
+        "description": "Штаб составит план наступления на Бронзовый конгресс.",
+        "current_icon": "GFX_focus_STP_Operation_Last_Banquette",
+        "art_status": "existing_country_art",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Operation_Last_Banquette.png"
+      },
+      {
+        "focus_id": "STP_cw_cut_capital_roads",
+        "title": "Перерезать столичные дороги",
+        "description": "Ударим по подвозу Фады.",
+        "current_icon": "GFX_focus_STP_Ruin_Their_Deal",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Ruin_Their_Deal.png"
+      },
+      {
+        "focus_id": "STP_cw_district_levies",
+        "title": "Окружной набор",
+        "description": "Откроем набор в контролируемых округах и направим людей и винтовки на формирование линейных бригад.",
+        "current_icon": "GFX_focus_STP_cw_arm_the_north",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_arm_the_north.png"
+      },
+      {
+        "focus_id": "STP_cw_government_quarter_assault",
+        "title": "Штурм правительственного района",
+        "description": "Согласуем артиллерию и штурмовые части против Бронзового конгресса.",
+        "current_icon": "GFX_focus_STP_All_In",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/_shared/GFX_focus_ADISCORD_All_In.png"
+      },
+      {
+        "focus_id": "STP_cw_hold_resource_belt",
+        "title": "Удержать ресурсный пояс",
+        "description": "Укрепим снабжение Крейдена, Монаии или Аблии.",
+        "current_icon": "GFX_focus_STP_cw_repair_niansas",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_repair_niansas.png"
+      },
+      {
+        "focus_id": "STP_hw_mountain_mandate",
+        "title": "Мандат гор",
+        "description": "Шабрат воюет не приказом, а доверием высокогорья. Мандат гор растёт с победами и правдой о режиме и тает с каждым месяцем войны, реквизицией и провалом. Коалиция держится на трёх опорах: офицерах, горных советах и подпольной печати.",
+        "current_icon": "GFX_focus_STP_Side_With_Maksim",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Side_With_Maksim.png"
+      },
+      {
+        "focus_id": "STP_hw_leaflets_over_fada",
+        "title": "Листовки над Фадой",
+        "description": "Над кварталами столицы рассыплют списки погибших в горах и цены, по которым партия продавала мир. В казармах Фады станут спорить, за что стоять.",
+        "current_icon": "GFX_focus_STP_Open_Wounds_Of_The_System",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Open_Wounds_Of_The_System.png"
+      },
+      {
+        "focus_id": "STP_hw_council_of_passes",
+        "title": "Совет перевалов",
+        "description": "Старосты перевалов соберутся за одним столом со штабом. Советы дадут людей, но потребуют слова в решениях, которые раньше принимали офицеры.",
+        "current_icon": "GFX_focus_generic_diplomatic_treaty",
+        "art_status": "generated",
+        "current_texture": null
+      },
+      {
+        "focus_id": "STP_hw_open_black_book",
+        "title": "Открыть Чёрную книгу",
+        "description": "Реестр клиентов Нижнего рынка уйдёт в эфир: имена, маршруты, подписи. Партии будет нечем ответить, а нодрулским покровителям придётся объяснять, кого они защищали.",
+        "current_icon": "GFX_focus_generic_secret_service_agency",
+        "art_status": "generated",
+        "current_texture": null
+      },
+      {
+        "focus_id": "STP_hw_unified_district_command",
+        "title": "Единое командование округов",
+        "description": "Ополчения перевалов перейдут под общий штаб. Бои станут управляемее, но советы запомнят, кто забрал у них командиров.",
+        "current_icon": "GFX_focus_STP_ROTATE_DISTRICT_COMMAND",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/party/GFX_focus_STP_ROTATE_DISTRICT_COMMAND.png"
+      },
+      {
+        "focus_id": "STP_hw_kefreyt_contract",
+        "title": "Контракт с Кефрейтом",
+        "description": "Кефрейт поставит винтовки, орудия и квартирмейстеров. Цена - ресурсные права после войны и вопрос, за чью независимость сражаются горы.",
+        "current_icon": "GFX_focus_STP_Kefreite_Security_Offer",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Kefreite_Security_Offer.png"
+      },
+      {
+        "focus_id": "STP_hw_mountains_pay",
+        "title": "Горы платят сами",
+        "description": "Ни одного чужого контракта. Округа отдадут собственных сыновей и последние запасы, зато победа останется их победой.",
+        "current_icon": "GFX_focus_STP_Ruin_Their_Deal",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Ruin_Their_Deal.png"
+      },
+      {
+        "focus_id": "STP_hw_coalition_congress",
+        "title": "Съезд коалиции",
+        "description": "Офицеры, старосты и печатники впервые соберутся открыто. Съезд решит, кто будет говорить от имени победы.",
+        "current_icon": "GFX_focus_STP_Triumph_Of_Common_Sense",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Triumph_Of_Common_Sense.png"
+      },
+      {
+        "focus_id": "STP_hw_course_staff",
+        "title": "Директория офицеров",
+        "description": "Победу доведёт штаб. После войны страной временно будет управлять военная директория, пока горы не научатся жить без сирен.",
+        "current_icon": "GFX_focus_STP_ps_joint_staff",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/party/GFX_focus_STP_ps_joint_staff.png"
+      },
+      {
+        "focus_id": "STP_hw_course_councils",
+        "title": "Республика советов",
+        "description": "Власть уйдёт вниз, к перевалам и шахтёрским посёлкам. Новая республика будет медленнее, но её не купит ни один дом.",
+        "current_icon": "GFX_goal_generic_national_unity",
+        "art_status": "generated",
+        "current_texture": null
+      },
+      {
+        "focus_id": "STP_hw_course_truth",
+        "title": "Комиссия правды",
+        "description": "Первым делом после победы - открытые суды над клиентами Нижнего рынка. Страна должна увидеть, чем был оплачен праздник.",
+        "current_icon": "GFX_focus_STP_cw_expose_the_cabinet",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Open_Their_Eyes.png"
+      },
+      {
+        "focus_id": "STP_cw_strike_squadrons",
+        "title": "Собрать лётный резерв",
+        "description": "Часть авиачастей осталась у партии. Прежде чем требовать постоянного прикрытия, надо вернуть в строй запасные машины и собрать технические команды. Ремонт займёт время и средства военного бюджета.",
+        "current_icon": "GFX_focus_RUS_assault_squadrons",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/RUS/GFX_focus_RUS_assault_squadrons.png"
+      },
+      {
+        "focus_id": "STP_cw_forward_airstrips",
+        "title": "Ближе к линии огня",
+        "description": "Расширим Аблию и подготовим полосу подскока у фронта. Ударные вылеты можно будет назначить сразу после завершения работ; ремонт второй партии машин придётся отложить до объединения воздушного командования.",
+        "current_icon": "GFX_focus_RUS_capital_airfields",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/RUS/GFX_focus_RUS_capital_airfields.png"
+      },
+      {
+        "focus_id": "STP_cw_air_service_columns",
+        "title": "Моторы обратно в строй",
+        "description": "Подвоз двигателей и работа мастерских дадут нам вторую партию исправных машин раньше нового наступления. Для этого улучшим дороги Аблии. Координированные ударные вылеты откроются после объединения воздушного командования.",
+        "current_icon": "GFX_focus_RUS_aircraft_workshops",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/RUS/GFX_focus_RUS_aircraft_workshops.png"
+      },
+      {
+        "focus_id": "STP_cw_assault_air_cover",
+        "title": "Единый график вылетов",
+        "description": "Сведём заявки наземных частей, ремонтные работы и лётные смены в один график. Теперь можно завершить обе ремонтные партии и выбрать момент воздушной операции. Техники не могут одновременно обслуживать ударную группу и ремонтировать резерв.",
+        "current_icon": "GFX_focus_RUS_air_control_network",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/RUS/GFX_focus_RUS_air_control_network.png"
+      },
+      {
+        "focus_id": "STP_cw_front_scouts",
+        "title": "Связные переднего края",
+        "description": "Свяжем окружные группы с армейскими штабами. Сведения о партийных частях позволят выбрать участок наступления до того, как туда подойдут резервы.",
+        "current_icon": "GFX_focus_STP_cw_courier_service",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_courier_service.png"
+      },
+      {
+        "focus_id": "STP_cw_organize_underground",
+        "title": "Поднять партийный тыл",
+        "description": "Разведчики восстановят связь с местными сторонниками Шабрата и снабдят вооружённые ячейки нашими людьми и оружием. Такие отряды нарушат тыловое сообщение, но без поддержки фронта рискуют оказаться в окружении.",
+        "current_icon": "GFX_focus_STP_Open_Their_Eyes",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Open_Their_Eyes.png"
+      },
+      {
+        "focus_id": "STP_cw_mobile_workshops",
+        "title": "Ремонт вслед за фронтом",
+        "description": "Соберём оружейников и оборудование в подвижные мастерские. Три партии повреждённых винтовок можно вернуть в строй, оплачивая работу по мере поступления средств. Оснащение мастерских отправим сразу, а арсеналы перейдут на удлинённые смены.",
+        "current_icon": "GFX_focus_STP_cw_warehouse_inventory",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_warehouse_inventory.png"
+      },
+      {
+        "focus_id": "STP_cw_frontline_relief",
+        "title": "Смена на передовой",
+        "description": "Составим график смены батальонов и направим пополнение в действующие части. Уставшие подразделения должны восстанавливать порядок, а не продолжать наступление без остановки.",
+        "current_icon": "GFX_focus_STP_cw_casualty_routes",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_casualty_routes.png"
+      },
+      {
+        "focus_id": "STP_cw_route_columns",
+        "title": "Колонны снабжения",
+        "description": "Выделим транспорт и единый график движения для передовых складов. Снабжение не должно останавливаться вслед за первой же удачной атакой.",
+        "current_icon": "GFX_focus_STP_cw_supply_officers",
+        "art_status": "generated",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_supply_officers.png"
       }
     ]
   }

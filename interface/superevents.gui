@@ -686,7 +686,7 @@ guiTypes = {
 		click_to_front = no
 		clipping = no
 		hide_sound = click_close
-		show_sound = superevent_stelander_shabrat_victory_sound_e
+		show_sound = superevent_stelander_sotnikov_civilwar_sound_e
 
 		iconType = {
 			name = "superevent_stelander_sotnikov_civilwar"

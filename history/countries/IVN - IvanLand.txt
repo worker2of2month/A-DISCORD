@@ -68,3 +68,22 @@ set_autonomy = {
 	autonomy_state = autonomy_island_administration
 	freedom_level = 0.00
 }
+
+# Military advisors are recruited before their starting appointments.
+recruit_character = ADISCORD_staff_IVN_Sergei_Kurbatov
+recruit_character = ADISCORD_staff_IVN_Mikhail_Leskov
+recruit_character = ADISCORD_staff_IVN_Timofei_Losev
+recruit_character = ADISCORD_staff_IVN_Fedor_Malinin
+recruit_character = ADISCORD_staff_IVN_Sergei_Lebedev
+recruit_character = ADISCORD_staff_IVN_Yuri_Nekrasov
+recruit_character = ADISCORD_staff_IVN_Arkady_Ostretsov
+recruit_character = ADISCORD_staff_IVN_Vladimir_Panov
+recruit_character = ADISCORD_staff_IVN_Gennady_Rogov
+
+activate_advisor = ADISCORD_staff_IVN_Sergei_Kurbatov
+activate_advisor = ADISCORD_staff_IVN_Timofei_Losev
+activate_advisor = ADISCORD_staff_IVN_Fedor_Malinin
+activate_advisor = ADISCORD_staff_IVN_Yuri_Nekrasov
+activate_advisor = ADISCORD_staff_IVN_Arkady_Ostretsov
+activate_advisor = ADISCORD_staff_IVN_Vladimir_Panov
+activate_advisor = ADISCORD_staff_IVN_Gennady_Rogov

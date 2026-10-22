@@ -243,8 +243,22 @@ class StaffPortraitTests(unittest.TestCase):
                 if not isinstance(entry.value, list):
                     continue
                 names = [item.value for item in entry.value if item.key == 'name']
-                if names and 'portrait' in names[0].lower():
+                if names and (
+                    'portrait' in names[0].lower() or names[0].startswith('GFX_idea_')
+                ):
                     cls.sprites.setdefault(names[0], []).append(entry)
+
+        cls.inherited_sprites = set()
+        game_root = os.environ.get('HOI4_GAME_DIR')
+        if game_root:
+            path = Path(game_root) / 'interface/ideas.gfx'
+            for entry in walk(parse_clausewitz(path.read_text(encoding='utf-8-sig'))):
+                if entry.key != 'spriteType':
+                    continue
+                name = scalar(entry.value, 'name')
+                if name.startswith('GFX_idea_') and name not in cls.sprites:
+                    cls.sprites[name] = [entry]
+                    cls.inherited_sprites.add(name)
 
         cls.staff = {}
         for path in (ROOT / 'common/characters').glob('*.txt'):
@@ -257,23 +271,29 @@ class StaffPortraitTests(unittest.TestCase):
                 )
                 if military or any(role.key in ('army', 'navy') for role in portraits):
                     cls.staff[character.key] = portraits
+        for entry in walk(parse('history/general/ADISCORD_general_history.txt')):
+            if entry.key == 'generate_character':
+                cls.staff[scalar(entry.value, 'token_base')] = block(entry.value, 'portraits')
 
     def assert_compact_portrait(self, name):
         from PIL import Image
 
-        self.assertIn(name, self.sprites)
+        if name.startswith('GFX_idea_') and not os.environ.get('HOI4_GAME_DIR') and name not in self.sprites:
+            self.skipTest('Set HOI4_GAME_DIR to check inherited vanilla idea sprites')
+        self.assertTrue(name in self.sprites, name)
         definitions = self.sprites[name]
         self.assertEqual(len(definitions), 1, name)
         sprite = definitions[0]
         texture = ROOT / scalar(sprite.value, 'texturefile')
         if not texture.exists():
             relative = scalar(sprite.value, 'texturefile')
-            self.assertRegex(
-                relative,
-                r'^gfx/(?:interface/ideas/idea_europe_generic_'
-                r'(?:[1-3]|land_[1-5]|land_13|navy_[1-3])|'
-                r'leaders/(?:leader_unknown(?:_female)?|operative_unknown))\.dds$',
-            )
+            if name not in self.inherited_sprites:
+                self.assertRegex(
+                    relative,
+                    r'^gfx/(?:interface/ideas/idea_europe_generic_'
+                    r'(?:[1-3]|land_[1-5]|land_13|navy_[1-3])|'
+                    r'leaders/(?:leader_unknown(?:_female)?|operative_unknown))\.dds$',
+                )
             game_root = os.environ.get('HOI4_GAME_DIR')
             if not game_root:
                 self.skipTest('Set HOI4_GAME_DIR to check inherited vanilla textures')
@@ -297,7 +317,10 @@ class StaffPortraitTests(unittest.TestCase):
                     self.assert_compact_portrait(scalar(role.value, 'small'))
 
     def test_random_pools_and_small_aliases_do_not_use_full_size_sprites(self):
-        names = {name for name in self.sprites if name.lower().endswith('_small')}
+        names = {
+            name for name in self.sprites
+            if 'portrait' in name.lower() and name.lower().endswith('_small')
+        }
         for entry in walk(parse('portraits/00_portraits.txt')):
             if isinstance(entry.value, str) and entry.value.startswith('GFX_'):
                 names.add(entry.value + '_small')

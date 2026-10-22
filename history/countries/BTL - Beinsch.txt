@@ -36,3 +36,12 @@ add_ideas = {
 }
 
 set_research_slots = 2
+
+# Military leadership candidates.
+recruit_character = ADISCORD_staff_BTL_Karl_Wolff
+recruit_character = ADISCORD_staff_BTL_Leon_Becker
+recruit_character = ADISCORD_staff_BTL_Leon_Walter
+recruit_character = ADISCORD_staff_BTL_Martin_Garten
+recruit_character = ADISCORD_staff_BTL_Niklas_Dreyer
+recruit_character = ADISCORD_staff_BTL_Oskar_Ebers
+recruit_character = ADISCORD_staff_BTL_Paul_Vogel
