@@ -1088,7 +1088,6 @@ def build_nam_rigged(output, pdx, source):
     bpy.ops.wm.save_as_mainfile(filepath=str(output / 'NAM.blend'))
 
 
-            start = Vector((0.714055, 0.123987, 5.869019))
 def imperial_carrier(body, mesh, cloth, trim, brass):
     """Fit segmented armour to the donor surface and interpolate its skin."""
     panel = fitted_panel_factory(body, mesh)
