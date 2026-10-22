@@ -1047,13 +1047,14 @@ class MilitaryStaffContracts(unittest.TestCase):
                 continue
             appointments += 1
             self.assertNotEqual(slot, "high_command")
-            self.assertEqual(len(unlocks), 1)
+            for unlock in unlocks:
+                focus = self.focuses[unlock]
+                reward = self.one(focus, "completion_reward")
+                self.assertIn(
+                    idea.key, [entry.value for entry in reward if entry.key == "activate_advisor"]
+                )
+                self.assertFalse(any(entry.key == "bypass" for entry in focus), unlock)
             focus = self.focuses[unlocks[0]]
-            reward = self.one(focus, "completion_reward")
-            self.assertIn(
-                idea.key, [entry.value for entry in reward if entry.key == "activate_advisor"]
-            )
-            self.assertFalse(any(entry.key == "bypass" for entry in focus), unlocks[0])
             tag = self.one(self.one(idea.value, "allowed"), "tag")
             if tag in ("STP", "STS"):
                 self.assertIn(
@@ -1065,6 +1066,39 @@ class MilitaryStaffContracts(unittest.TestCase):
                     ],
                 )
         self.assertEqual(appointments, 25)
+
+    def test_sotnikov_directory_unlocks_each_staff_post_without_shabrat_focuses(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
+        appointments = {
+            "STP_pc_sdir_field_army": "Alexei_Barinov",
+            "STP_pc_sdir_district_levies": "Nikolai_Vetrov",
+            "STP_pc_sdir_officer_college": "Mikhail_Rakitin",
+            "STP_pc_sdir_integrated_staff": "Pavel_Berezov",
+            "STP_pc_sdir_convoy_escorts": "Boris_Ostrovsky",
+        }
+        candidates = {idea.key: (slot, idea.value) for slot, idea in self.candidates}
+        for unlock, person in appointments.items():
+            token = "ADISCORD_staff_STS_" + person
+            slot, advisor = candidates[token]
+            gate = self.one(advisor, "available")
+            with self.subTest(focus=unlock):
+                self.assertFalse(matches_conditions(gate, {}, "STS"))
+                facts = {("STS", "has_completed_focus", unlock): True}
+                self.assertTrue(matches_conditions(gate, facts, "STS"))
+                reward = self.one(self.focuses[unlock], "completion_reward")
+                self.assertEqual(
+                    [entry.value for entry in reward if entry.key == "activate_advisor"],
+                    [token],
+                )
+                for other in appointments.keys() - {unlock}:
+                    self.assertFalse(matches_conditions(
+                        gate, {("STS", "has_completed_focus", other): True}, "STS"
+                    ))
+        self.assertEqual(
+            {candidates["ADISCORD_staff_STS_" + person][0] for person in appointments.values()},
+            {"army_chief", "navy_chief", "air_chief", "theorist"},
+        )
 
     def test_starting_history_fills_every_seat_without_unlocking_elites(self):
         from tools.tests.test_adiscord_stp_preparation import matches_conditions

@@ -2603,6 +2603,27 @@ STP_ps_can_relocate_government = {
 	NOT = { has_country_flag = STP_ps_temporary_government }
 	NOT = { has_variable = STP_ps_cabinet_deposit }
 }
+
+STP_operations_map_available = {
+	OR = {
+		AND = {
+			tag = STS
+			has_country_flag = STP_cw_postwar
+		}
+		AND = {
+			tag = STP
+			has_country_flag = STP_sided_with_the_party_flag
+			OR = {
+				has_country_flag = STP_cw_postwar
+				AND = {
+					has_global_flag = STP_cw_started
+					has_country_flag = STP_cw_participant
+				}
+			}
+		}
+	}
+}
+
 STP_ps_war_active = {
 	tag = STP has_war_with = STS has_capitulated = no
 	NOT = { has_global_flag = STP_cw_union_wars_finished }

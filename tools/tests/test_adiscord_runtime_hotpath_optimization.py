@@ -50,7 +50,16 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
             "on_actions",
         )
         controllers = (("VAL", 1), ("STP", 2), ("STS", 3), ("BLD", 18), ("RZA", 25))
-        for hook, val_exists, val_unlocked, sts_exists, sts_unlocked, stp_exists, stp_unlocked, special in product(
+        for (
+            hook,
+            val_exists,
+            val_unlocked,
+            sts_exists,
+            sts_unlocked,
+            stp_exists,
+            stp_unlocked,
+            special,
+        ) in product(
             ("on_startup", "on_state_control_changed"),
             (False, True),
             (False, True),
@@ -85,7 +94,10 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
                         frame = {"BLD": 17, "RZA": 2}[controller]
                     expected[f"operations_state_{state}_frame"] = frame
                 stale = {name: 99 for name in expected}
-                values = {tag: {**stale, "unrelated": 123} for tag in ("VAL", "STS", "STP")}
+                values = {
+                    tag: {**stale, "unrelated": 123}
+                    for tag in ("VAL", "STS", "STP")
+                }
                 full_passes = []
                 writes = {"VAL": 0, "STS": 0, "STP": 0}
 
@@ -132,7 +144,9 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
         )
 
         gate = block(
-            parse_clausewitz(read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")),
+            parse_clausewitz(
+                read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+            ),
             "STP_operations_map_available",
         )
         for tag, party, started, participant, postwar in product(
@@ -148,7 +162,8 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
                 tag == "STP" and party and (postwar or (started and participant))
             )
             self.assertEqual(
-                matches_conditions(gate, facts, tag), expected,
+                matches_conditions(gate, facts, tag),
+                expected,
                 (tag, party, started, participant, postwar),
             )
 
@@ -156,10 +171,16 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
             read("common/decisions/categories/ADISCORD_decision_categories_STP.txt"),
             "STP_military_operations",
         )
-        allowed = block(block(parse_clausewitz(category), "STP_military_operations"), "allowed")
+        allowed = block(
+            block(parse_clausewitz(category), "STP_military_operations"), "allowed"
+        )
         for tag in ("STP", "STS", "SRP"):
-            self.assertEqual(matches_conditions(allowed, {}, tag), tag in ("STP", "STS"))
-        self.assertIn("STP_operations_map_available = yes", named_block(category, "visible"))
+            self.assertEqual(
+                matches_conditions(allowed, {}, tag), tag in ("STP", "STS")
+            )
+        self.assertIn(
+            "STP_operations_map_available = yes", named_block(category, "visible")
+        )
 
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         start = named_block(effects, "STP_cw_begin_hostilities")
@@ -169,11 +190,15 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
         )
         finish = named_block(effects, "STP_cw_finish_mobilization")
         refresh = next(
-            entry.value for entry in block(parse_clausewitz(finish), "STP_cw_finish_mobilization")
+            entry.value
+            for entry in block(parse_clausewitz(finish), "STP_cw_finish_mobilization")
             if isinstance(entry.value, list)
             and any(child.key == "VAL_operations_map_refresh_cache" for child in entry.value)
         )
-        self.assertIn("STP_operations_map_available", [entry.key for entry in block(refresh, "limit")])
+        self.assertIn(
+            "STP_operations_map_available",
+            [entry.key for entry in block(refresh, "limit")],
+        )
 
     def test_kefreyt_contract_monthly_hook_is_tag_scoped(self) -> None:
         source = read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt")

@@ -1030,4 +1030,105 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/STS/portrait_STS_staff_16.png"
 	}
 
+	# VAL army advisors use preframed compact portraits.
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_01_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_01.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_02_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_02.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_03_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_03.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_04_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_04.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_05_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_05.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_06_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_06.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_07_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_07.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_08_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_08.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_09_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_09.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_10_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_10.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_11_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_11.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_12_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_12.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_13_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_13.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_14_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_14.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_15_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_15.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_16_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_16.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_17_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_17.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_18_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_18.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_19_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_19.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_staff_20_small"
+		texturefile = "gfx/interface/ideas/VAL/portrait_VAL_staff_20.png"
+	}
+
 }

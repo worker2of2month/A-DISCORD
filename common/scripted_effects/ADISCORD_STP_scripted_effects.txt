@@ -2820,7 +2820,10 @@ STP_cw_finish_mobilization = {
 		drop_cosmetic_tag = yes
 	}
 	STP_cw_clear_wartime_modifiers = yes
-	if = { limit = { tag = STS } VAL_operations_map_refresh_cache = yes }
+	if = {
+		limit = { STP_operations_map_available = yes }
+		VAL_operations_map_refresh_cache = yes
+	}
 	STP_pw_reconcile_postwar_interactivity = yes
 	STP_qol_initialize_staff = yes
 	mark_focus_tree_layout_dirty = yes
@@ -3452,6 +3455,7 @@ STP_cw_begin_hostilities = {
 		every_owned_state = { set_state_controller_to = PREV }
 		STS = { every_owned_state = { set_state_controller_to = PREV } }
 		SRP = { every_owned_state = { set_state_controller_to = PREV } }
+		VAL_operations_map_refresh_cache = yes
 		STS = { STP_hw_stall_begin = yes }
 		STP_cw_ai_fortify_congress = yes
 		if = {

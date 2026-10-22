@@ -78,11 +78,11 @@ scripted_gui = {
 			VAL_ops_193_controller_visible = { always = yes }
 			VAL_ops_206_controller_visible = { always = yes }
 			VAL_ops_207_controller_visible = { always = yes }
-			VAL_ops_43_border_visible = { 43 = { controller = { tag = VAL } } }
+			VAL_ops_43_border_visible = { 43 = { is_controlled_by = ROOT } }
 			VAL_ops_43_contested_visible = {
 				43 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 95 }
 							NOT = { controls_province = 101 }
@@ -93,11 +93,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_44_border_visible = { 44 = { controller = { tag = VAL } } }
+			VAL_ops_44_border_visible = { 44 = { is_controlled_by = ROOT } }
 			VAL_ops_44_contested_visible = {
 				44 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 16433 }
 							NOT = { controls_province = 16448 }
@@ -105,11 +105,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_45_border_visible = { 45 = { controller = { tag = VAL } } }
+			VAL_ops_45_border_visible = { 45 = { is_controlled_by = ROOT } }
 			VAL_ops_45_contested_visible = {
 				45 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 111 }
 							NOT = { controls_province = 6675 }
@@ -122,11 +122,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_88_border_visible = { 88 = { controller = { tag = VAL } } }
+			VAL_ops_88_border_visible = { 88 = { is_controlled_by = ROOT } }
 			VAL_ops_88_contested_visible = {
 				88 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 110 }
 							NOT = { controls_province = 16429 }
@@ -134,11 +134,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_58_border_visible = { 58 = { controller = { tag = VAL } } }
+			VAL_ops_58_border_visible = { 58 = { is_controlled_by = ROOT } }
 			VAL_ops_58_contested_visible = {
 				58 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 10212 }
 							NOT = { controls_province = 16310 }
@@ -151,11 +151,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_59_border_visible = { 59 = { controller = { tag = VAL } } }
+			VAL_ops_59_border_visible = { 59 = { is_controlled_by = ROOT } }
 			VAL_ops_59_contested_visible = {
 				59 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 3595 }
 							NOT = { controls_province = 6206 }
@@ -165,11 +165,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_60_border_visible = { 60 = { controller = { tag = VAL } } }
+			VAL_ops_60_border_visible = { 60 = { is_controlled_by = ROOT } }
 			VAL_ops_60_contested_visible = {
 				60 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 8171 }
 							NOT = { controls_province = 8273 }
@@ -181,11 +181,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_61_border_visible = { 61 = { controller = { tag = VAL } } }
+			VAL_ops_61_border_visible = { 61 = { is_controlled_by = ROOT } }
 			VAL_ops_61_contested_visible = {
 				61 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 1480 }
 							NOT = { controls_province = 8938 }
@@ -196,11 +196,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_62_border_visible = { 62 = { controller = { tag = VAL } } }
+			VAL_ops_62_border_visible = { 62 = { is_controlled_by = ROOT } }
 			VAL_ops_62_contested_visible = {
 				62 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 91 }
 							NOT = { controls_province = 104 }
@@ -212,11 +212,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_63_border_visible = { 63 = { controller = { tag = VAL } } }
+			VAL_ops_63_border_visible = { 63 = { is_controlled_by = ROOT } }
 			VAL_ops_63_contested_visible = {
 				63 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 128 }
 							NOT = { controls_province = 135 }
@@ -225,11 +225,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_64_border_visible = { 64 = { controller = { tag = VAL } } }
+			VAL_ops_64_border_visible = { 64 = { is_controlled_by = ROOT } }
 			VAL_ops_64_contested_visible = {
 				64 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 1493 }
 							NOT = { controls_province = 5898 }
@@ -243,11 +243,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_65_border_visible = { 65 = { controller = { tag = VAL } } }
+			VAL_ops_65_border_visible = { 65 = { is_controlled_by = ROOT } }
 			VAL_ops_65_contested_visible = {
 				65 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 6423 }
 							NOT = { controls_province = 6440 }
@@ -259,11 +259,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_24_border_visible = { 24 = { controller = { tag = VAL } } }
+			VAL_ops_24_border_visible = { 24 = { is_controlled_by = ROOT } }
 			VAL_ops_24_contested_visible = {
 				24 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 3790 }
 							NOT = { controls_province = 4214 }
@@ -279,11 +279,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_42_border_visible = { 42 = { controller = { tag = VAL } } }
+			VAL_ops_42_border_visible = { 42 = { is_controlled_by = ROOT } }
 			VAL_ops_42_contested_visible = {
 				42 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 125 }
 							NOT = { controls_province = 16431 }
@@ -294,11 +294,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_48_border_visible = { 48 = { controller = { tag = VAL } } }
+			VAL_ops_48_border_visible = { 48 = { is_controlled_by = ROOT } }
 			VAL_ops_48_contested_visible = {
 				48 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 16514 }
 							NOT = { controls_province = 16515 }
@@ -310,11 +310,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_54_border_visible = { 54 = { controller = { tag = VAL } } }
+			VAL_ops_54_border_visible = { 54 = { is_controlled_by = ROOT } }
 			VAL_ops_54_contested_visible = {
 				54 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 728 }
 							NOT = { controls_province = 4369 }
@@ -331,11 +331,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_55_border_visible = { 55 = { controller = { tag = VAL } } }
+			VAL_ops_55_border_visible = { 55 = { is_controlled_by = ROOT } }
 			VAL_ops_55_contested_visible = {
 				55 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 114 }
 							NOT = { controls_province = 9617 }
@@ -344,11 +344,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_56_border_visible = { 56 = { controller = { tag = VAL } } }
+			VAL_ops_56_border_visible = { 56 = { is_controlled_by = ROOT } }
 			VAL_ops_56_contested_visible = {
 				56 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 1142 }
 							NOT = { controls_province = 4712 }
@@ -363,11 +363,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_57_border_visible = { 57 = { controller = { tag = VAL } } }
+			VAL_ops_57_border_visible = { 57 = { is_controlled_by = ROOT } }
 			VAL_ops_57_contested_visible = {
 				57 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 556 }
 							NOT = { controls_province = 779 }
@@ -383,11 +383,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_1_border_visible = { 1 = { controller = { tag = VAL } } }
+			VAL_ops_1_border_visible = { 1 = { is_controlled_by = ROOT } }
 			VAL_ops_1_contested_visible = {
 				1 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 43 }
 							NOT = { controls_province = 44 }
@@ -403,11 +403,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_2_border_visible = { 2 = { controller = { tag = VAL } } }
+			VAL_ops_2_border_visible = { 2 = { is_controlled_by = ROOT } }
 			VAL_ops_2_contested_visible = {
 				2 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 1 }
 							NOT = { controls_province = 10 }
@@ -424,11 +424,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_3_border_visible = { 3 = { controller = { tag = VAL } } }
+			VAL_ops_3_border_visible = { 3 = { is_controlled_by = ROOT } }
 			VAL_ops_3_contested_visible = {
 				3 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 45 }
 							NOT = { controls_province = 63 }
@@ -445,11 +445,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_28_border_visible = { 28 = { controller = { tag = VAL } } }
+			VAL_ops_28_border_visible = { 28 = { is_controlled_by = ROOT } }
 			VAL_ops_28_contested_visible = {
 				28 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 145 }
 							NOT = { controls_province = 16351 }
@@ -462,22 +462,22 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_29_border_visible = { 29 = { controller = { tag = VAL } } }
+			VAL_ops_29_border_visible = { 29 = { is_controlled_by = ROOT } }
 			VAL_ops_29_contested_visible = {
 				29 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 16345 }
 						}
 					}
 				}
 			}
-			VAL_ops_46_border_visible = { 46 = { controller = { tag = VAL } } }
+			VAL_ops_46_border_visible = { 46 = { is_controlled_by = ROOT } }
 			VAL_ops_46_contested_visible = {
 				46 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 98 }
 							NOT = { controls_province = 100 }
@@ -492,11 +492,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_53_border_visible = { 53 = { controller = { tag = VAL } } }
+			VAL_ops_53_border_visible = { 53 = { is_controlled_by = ROOT } }
 			VAL_ops_53_contested_visible = {
 				53 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 29 }
 							NOT = { controls_province = 60 }
@@ -508,11 +508,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_709_border_visible = { 709 = { controller = { tag = VAL } } }
+			VAL_ops_709_border_visible = { 709 = { is_controlled_by = ROOT } }
 			VAL_ops_709_contested_visible = {
 				709 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 16802 }
 							NOT = { controls_province = 16803 }
@@ -525,11 +525,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_10_border_visible = { 10 = { controller = { tag = VAL } } }
+			VAL_ops_10_border_visible = { 10 = { is_controlled_by = ROOT } }
 			VAL_ops_10_contested_visible = {
 				10 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 12 }
 							NOT = { controls_province = 22 }
@@ -541,11 +541,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_11_border_visible = { 11 = { controller = { tag = VAL } } }
+			VAL_ops_11_border_visible = { 11 = { is_controlled_by = ROOT } }
 			VAL_ops_11_contested_visible = {
 				11 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 13 }
 							NOT = { controls_province = 23 }
@@ -556,11 +556,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_12_border_visible = { 12 = { controller = { tag = VAL } } }
+			VAL_ops_12_border_visible = { 12 = { is_controlled_by = ROOT } }
 			VAL_ops_12_contested_visible = {
 				12 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 80 }
 							NOT = { controls_province = 121 }
@@ -577,11 +577,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_13_border_visible = { 13 = { controller = { tag = VAL } } }
+			VAL_ops_13_border_visible = { 13 = { is_controlled_by = ROOT } }
 			VAL_ops_13_contested_visible = {
 				13 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 8 }
 							NOT = { controls_province = 26 }
@@ -596,11 +596,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_17_border_visible = { 17 = { controller = { tag = VAL } } }
+			VAL_ops_17_border_visible = { 17 = { is_controlled_by = ROOT } }
 			VAL_ops_17_contested_visible = {
 				17 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 32 }
 							NOT = { controls_province = 34 }
@@ -611,11 +611,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_18_border_visible = { 18 = { controller = { tag = VAL } } }
+			VAL_ops_18_border_visible = { 18 = { is_controlled_by = ROOT } }
 			VAL_ops_18_contested_visible = {
 				18 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 14 }
 							NOT = { controls_province = 15 }
@@ -626,11 +626,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_30_border_visible = { 30 = { controller = { tag = VAL } } }
+			VAL_ops_30_border_visible = { 30 = { is_controlled_by = ROOT } }
 			VAL_ops_30_contested_visible = {
 				30 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 12434 }
 							NOT = { controls_province = 16346 }
@@ -643,11 +643,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_4_border_visible = { 4 = { controller = { tag = VAL } } }
+			VAL_ops_4_border_visible = { 4 = { is_controlled_by = ROOT } }
 			VAL_ops_4_contested_visible = {
 				4 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 49 }
 							NOT = { controls_province = 82 }
@@ -661,11 +661,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_5_border_visible = { 5 = { controller = { tag = VAL } } }
+			VAL_ops_5_border_visible = { 5 = { is_controlled_by = ROOT } }
 			VAL_ops_5_contested_visible = {
 				5 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 25 }
 							NOT = { controls_province = 27 }
@@ -681,11 +681,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_6_border_visible = { 6 = { controller = { tag = VAL } } }
+			VAL_ops_6_border_visible = { 6 = { is_controlled_by = ROOT } }
 			VAL_ops_6_contested_visible = {
 				6 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 53 }
 							NOT = { controls_province = 57 }
@@ -696,11 +696,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_7_border_visible = { 7 = { controller = { tag = VAL } } }
+			VAL_ops_7_border_visible = { 7 = { is_controlled_by = ROOT } }
 			VAL_ops_7_contested_visible = {
 				7 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 66 }
 							NOT = { controls_province = 72 }
@@ -716,11 +716,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_9_border_visible = { 9 = { controller = { tag = VAL } } }
+			VAL_ops_9_border_visible = { 9 = { is_controlled_by = ROOT } }
 			VAL_ops_9_contested_visible = {
 				9 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 5 }
 							NOT = { controls_province = 19 }
@@ -738,11 +738,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_31_border_visible = { 31 = { controller = { tag = VAL } } }
+			VAL_ops_31_border_visible = { 31 = { is_controlled_by = ROOT } }
 			VAL_ops_31_contested_visible = {
 				31 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 5736 }
 							NOT = { controls_province = 16354 }
@@ -752,11 +752,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_41_border_visible = { 41 = { controller = { tag = VAL } } }
+			VAL_ops_41_border_visible = { 41 = { is_controlled_by = ROOT } }
 			VAL_ops_41_contested_visible = {
 				41 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 16439 }
 							NOT = { controls_province = 16443 }
@@ -767,11 +767,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_14_border_visible = { 14 = { controller = { tag = VAL } } }
+			VAL_ops_14_border_visible = { 14 = { is_controlled_by = ROOT } }
 			VAL_ops_14_contested_visible = {
 				14 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 2 }
 							NOT = { controls_province = 75 }
@@ -784,11 +784,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_8_border_visible = { 8 = { controller = { tag = VAL } } }
+			VAL_ops_8_border_visible = { 8 = { is_controlled_by = ROOT } }
 			VAL_ops_8_contested_visible = {
 				8 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 9 }
 							NOT = { controls_province = 17 }
@@ -799,11 +799,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_15_border_visible = { 15 = { controller = { tag = VAL } } }
+			VAL_ops_15_border_visible = { 15 = { is_controlled_by = ROOT } }
 			VAL_ops_15_contested_visible = {
 				15 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 11 }
 							NOT = { controls_province = 33 }
@@ -818,11 +818,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_16_border_visible = { 16 = { controller = { tag = VAL } } }
+			VAL_ops_16_border_visible = { 16 = { is_controlled_by = ROOT } }
 			VAL_ops_16_contested_visible = {
 				16 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 28 }
 							NOT = { controls_province = 124 }
@@ -835,11 +835,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_19_border_visible = { 19 = { controller = { tag = VAL } } }
+			VAL_ops_19_border_visible = { 19 = { is_controlled_by = ROOT } }
 			VAL_ops_19_contested_visible = {
 				19 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 4 }
 							NOT = { controls_province = 48 }
@@ -849,11 +849,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_20_border_visible = { 20 = { controller = { tag = VAL } } }
+			VAL_ops_20_border_visible = { 20 = { is_controlled_by = ROOT } }
 			VAL_ops_20_contested_visible = {
 				20 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 6 }
 							NOT = { controls_province = 21 }
@@ -866,11 +866,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_21_border_visible = { 21 = { controller = { tag = VAL } } }
+			VAL_ops_21_border_visible = { 21 = { is_controlled_by = ROOT } }
 			VAL_ops_21_contested_visible = {
 				21 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 37 }
 							NOT = { controls_province = 39 }
@@ -881,11 +881,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_22_border_visible = { 22 = { controller = { tag = VAL } } }
+			VAL_ops_22_border_visible = { 22 = { is_controlled_by = ROOT } }
 			VAL_ops_22_contested_visible = {
 				22 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 92 }
 							NOT = { controls_province = 103 }
@@ -896,11 +896,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_83_border_visible = { 83 = { controller = { tag = VAL } } }
+			VAL_ops_83_border_visible = { 83 = { is_controlled_by = ROOT } }
 			VAL_ops_83_contested_visible = {
 				83 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 7 }
 							NOT = { controls_province = 30 }
@@ -916,11 +916,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_84_border_visible = { 84 = { controller = { tag = VAL } } }
+			VAL_ops_84_border_visible = { 84 = { is_controlled_by = ROOT } }
 			VAL_ops_84_contested_visible = {
 				84 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 4887 }
 							NOT = { controls_province = 4925 }
@@ -935,11 +935,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_85_border_visible = { 85 = { controller = { tag = VAL } } }
+			VAL_ops_85_border_visible = { 85 = { is_controlled_by = ROOT } }
 			VAL_ops_85_contested_visible = {
 				85 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 3 }
 							NOT = { controls_province = 16 }
@@ -952,11 +952,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_86_border_visible = { 86 = { controller = { tag = VAL } } }
+			VAL_ops_86_border_visible = { 86 = { is_controlled_by = ROOT } }
 			VAL_ops_86_contested_visible = {
 				86 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 18 }
 							NOT = { controls_province = 24 }
@@ -972,11 +972,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_87_border_visible = { 87 = { controller = { tag = VAL } } }
+			VAL_ops_87_border_visible = { 87 = { is_controlled_by = ROOT } }
 			VAL_ops_87_contested_visible = {
 				87 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 40 }
 							NOT = { controls_province = 46 }
@@ -995,33 +995,33 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_303_border_visible = { 303 = { controller = { tag = VAL } } }
+			VAL_ops_303_border_visible = { 303 = { is_controlled_by = ROOT } }
 			VAL_ops_303_contested_visible = {
 				303 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 3261 }
 						}
 					}
 				}
 			}
-			VAL_ops_118_border_visible = { 118 = { controller = { tag = VAL } } }
+			VAL_ops_118_border_visible = { 118 = { is_controlled_by = ROOT } }
 			VAL_ops_118_contested_visible = {
 				118 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 147 }
 						}
 					}
 				}
 			}
-			VAL_ops_119_border_visible = { 119 = { controller = { tag = VAL } } }
+			VAL_ops_119_border_visible = { 119 = { is_controlled_by = ROOT } }
 			VAL_ops_119_contested_visible = {
 				119 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 59 }
 							NOT = { controls_province = 96 }
@@ -1032,11 +1032,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_168_border_visible = { 168 = { controller = { tag = VAL } } }
+			VAL_ops_168_border_visible = { 168 = { is_controlled_by = ROOT } }
 			VAL_ops_168_contested_visible = {
 				168 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 721 }
 							NOT = { controls_province = 5388 }
@@ -1049,11 +1049,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_169_border_visible = { 169 = { controller = { tag = VAL } } }
+			VAL_ops_169_border_visible = { 169 = { is_controlled_by = ROOT } }
 			VAL_ops_169_contested_visible = {
 				169 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 973 }
 							NOT = { controls_province = 4707 }
@@ -1065,11 +1065,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_167_border_visible = { 167 = { controller = { tag = VAL } } }
+			VAL_ops_167_border_visible = { 167 = { is_controlled_by = ROOT } }
 			VAL_ops_167_contested_visible = {
 				167 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 3481 }
 							NOT = { controls_province = 9757 }
@@ -1080,11 +1080,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_170_border_visible = { 170 = { controller = { tag = VAL } } }
+			VAL_ops_170_border_visible = { 170 = { is_controlled_by = ROOT } }
 			VAL_ops_170_contested_visible = {
 				170 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 2306 }
 							NOT = { controls_province = 10693 }
@@ -1098,11 +1098,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_171_border_visible = { 171 = { controller = { tag = VAL } } }
+			VAL_ops_171_border_visible = { 171 = { is_controlled_by = ROOT } }
 			VAL_ops_171_contested_visible = {
 				171 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 333 }
 							NOT = { controls_province = 744 }
@@ -1125,11 +1125,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_184_border_visible = { 184 = { controller = { tag = VAL } } }
+			VAL_ops_184_border_visible = { 184 = { is_controlled_by = ROOT } }
 			VAL_ops_184_contested_visible = {
 				184 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 5541 }
 							NOT = { controls_province = 8003 }
@@ -1145,11 +1145,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_185_border_visible = { 185 = { controller = { tag = VAL } } }
+			VAL_ops_185_border_visible = { 185 = { is_controlled_by = ROOT } }
 			VAL_ops_185_contested_visible = {
 				185 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 372 }
 							NOT = { controls_province = 3130 }
@@ -1157,11 +1157,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_203_border_visible = { 203 = { controller = { tag = VAL } } }
+			VAL_ops_203_border_visible = { 203 = { is_controlled_by = ROOT } }
 			VAL_ops_203_contested_visible = {
 				203 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 3941 }
 							NOT = { controls_province = 7409 }
@@ -1173,11 +1173,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_178_border_visible = { 178 = { controller = { tag = VAL } } }
+			VAL_ops_178_border_visible = { 178 = { is_controlled_by = ROOT } }
 			VAL_ops_178_contested_visible = {
 				178 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 6151 }
 							NOT = { controls_province = 6377 }
@@ -1189,11 +1189,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_180_border_visible = { 180 = { controller = { tag = VAL } } }
+			VAL_ops_180_border_visible = { 180 = { is_controlled_by = ROOT } }
 			VAL_ops_180_contested_visible = {
 				180 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 1440 }
 							NOT = { controls_province = 2399 }
@@ -1206,11 +1206,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_181_border_visible = { 181 = { controller = { tag = VAL } } }
+			VAL_ops_181_border_visible = { 181 = { is_controlled_by = ROOT } }
 			VAL_ops_181_contested_visible = {
 				181 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 841 }
 							NOT = { controls_province = 2144 }
@@ -1230,11 +1230,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_182_border_visible = { 182 = { controller = { tag = VAL } } }
+			VAL_ops_182_border_visible = { 182 = { is_controlled_by = ROOT } }
 			VAL_ops_182_contested_visible = {
 				182 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 188 }
 							NOT = { controls_province = 309 }
@@ -1248,11 +1248,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_183_border_visible = { 183 = { controller = { tag = VAL } } }
+			VAL_ops_183_border_visible = { 183 = { is_controlled_by = ROOT } }
 			VAL_ops_183_contested_visible = {
 				183 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 2617 }
 							NOT = { controls_province = 6019 }
@@ -1264,11 +1264,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_193_border_visible = { 193 = { controller = { tag = VAL } } }
+			VAL_ops_193_border_visible = { 193 = { is_controlled_by = ROOT } }
 			VAL_ops_193_contested_visible = {
 				193 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 4336 }
 							NOT = { controls_province = 4527 }
@@ -1280,11 +1280,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_206_border_visible = { 206 = { controller = { tag = VAL } } }
+			VAL_ops_206_border_visible = { 206 = { is_controlled_by = ROOT } }
 			VAL_ops_206_contested_visible = {
 				206 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 599 }
 							NOT = { controls_province = 726 }
@@ -1295,11 +1295,11 @@ scripted_gui = {
 					}
 				}
 			}
-			VAL_ops_207_border_visible = { 207 = { controller = { tag = VAL } } }
+			VAL_ops_207_border_visible = { 207 = { is_controlled_by = ROOT } }
 			VAL_ops_207_contested_visible = {
 				207 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = VAL
 						OR = {
 							NOT = { controls_province = 1136 }
 							NOT = { controls_province = 2895 }
@@ -1466,11 +1466,11 @@ scripted_gui = {
 			STP_ops_193_controller_visible = { always = yes }
 			STP_ops_206_controller_visible = { always = yes }
 			STP_ops_207_controller_visible = { always = yes }
-			STP_ops_43_border_visible = { 43 = { controller = { tag = STS } } }
+			STP_ops_43_border_visible = { 43 = { is_controlled_by = ROOT } }
 			STP_ops_43_contested_visible = {
 				43 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 95 }
 							NOT = { controls_province = 101 }
@@ -1481,11 +1481,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_44_border_visible = { 44 = { controller = { tag = STS } } }
+			STP_ops_44_border_visible = { 44 = { is_controlled_by = ROOT } }
 			STP_ops_44_contested_visible = {
 				44 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 16433 }
 							NOT = { controls_province = 16448 }
@@ -1493,11 +1493,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_45_border_visible = { 45 = { controller = { tag = STS } } }
+			STP_ops_45_border_visible = { 45 = { is_controlled_by = ROOT } }
 			STP_ops_45_contested_visible = {
 				45 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 111 }
 							NOT = { controls_province = 6675 }
@@ -1510,11 +1510,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_88_border_visible = { 88 = { controller = { tag = STS } } }
+			STP_ops_88_border_visible = { 88 = { is_controlled_by = ROOT } }
 			STP_ops_88_contested_visible = {
 				88 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 110 }
 							NOT = { controls_province = 16429 }
@@ -1522,11 +1522,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_58_border_visible = { 58 = { controller = { tag = STS } } }
+			STP_ops_58_border_visible = { 58 = { is_controlled_by = ROOT } }
 			STP_ops_58_contested_visible = {
 				58 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 10212 }
 							NOT = { controls_province = 16310 }
@@ -1539,11 +1539,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_59_border_visible = { 59 = { controller = { tag = STS } } }
+			STP_ops_59_border_visible = { 59 = { is_controlled_by = ROOT } }
 			STP_ops_59_contested_visible = {
 				59 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 3595 }
 							NOT = { controls_province = 6206 }
@@ -1553,11 +1553,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_60_border_visible = { 60 = { controller = { tag = STS } } }
+			STP_ops_60_border_visible = { 60 = { is_controlled_by = ROOT } }
 			STP_ops_60_contested_visible = {
 				60 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 8171 }
 							NOT = { controls_province = 8273 }
@@ -1569,11 +1569,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_61_border_visible = { 61 = { controller = { tag = STS } } }
+			STP_ops_61_border_visible = { 61 = { is_controlled_by = ROOT } }
 			STP_ops_61_contested_visible = {
 				61 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 1480 }
 							NOT = { controls_province = 8938 }
@@ -1584,11 +1584,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_62_border_visible = { 62 = { controller = { tag = STS } } }
+			STP_ops_62_border_visible = { 62 = { is_controlled_by = ROOT } }
 			STP_ops_62_contested_visible = {
 				62 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 91 }
 							NOT = { controls_province = 104 }
@@ -1600,11 +1600,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_63_border_visible = { 63 = { controller = { tag = STS } } }
+			STP_ops_63_border_visible = { 63 = { is_controlled_by = ROOT } }
 			STP_ops_63_contested_visible = {
 				63 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 128 }
 							NOT = { controls_province = 135 }
@@ -1613,11 +1613,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_64_border_visible = { 64 = { controller = { tag = STS } } }
+			STP_ops_64_border_visible = { 64 = { is_controlled_by = ROOT } }
 			STP_ops_64_contested_visible = {
 				64 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 1493 }
 							NOT = { controls_province = 5898 }
@@ -1631,11 +1631,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_65_border_visible = { 65 = { controller = { tag = STS } } }
+			STP_ops_65_border_visible = { 65 = { is_controlled_by = ROOT } }
 			STP_ops_65_contested_visible = {
 				65 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 6423 }
 							NOT = { controls_province = 6440 }
@@ -1647,11 +1647,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_24_border_visible = { 24 = { controller = { tag = STS } } }
+			STP_ops_24_border_visible = { 24 = { is_controlled_by = ROOT } }
 			STP_ops_24_contested_visible = {
 				24 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 3790 }
 							NOT = { controls_province = 4214 }
@@ -1667,11 +1667,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_42_border_visible = { 42 = { controller = { tag = STS } } }
+			STP_ops_42_border_visible = { 42 = { is_controlled_by = ROOT } }
 			STP_ops_42_contested_visible = {
 				42 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 125 }
 							NOT = { controls_province = 16431 }
@@ -1682,11 +1682,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_48_border_visible = { 48 = { controller = { tag = STS } } }
+			STP_ops_48_border_visible = { 48 = { is_controlled_by = ROOT } }
 			STP_ops_48_contested_visible = {
 				48 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 16514 }
 							NOT = { controls_province = 16515 }
@@ -1698,11 +1698,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_54_border_visible = { 54 = { controller = { tag = STS } } }
+			STP_ops_54_border_visible = { 54 = { is_controlled_by = ROOT } }
 			STP_ops_54_contested_visible = {
 				54 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 728 }
 							NOT = { controls_province = 4369 }
@@ -1719,11 +1719,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_55_border_visible = { 55 = { controller = { tag = STS } } }
+			STP_ops_55_border_visible = { 55 = { is_controlled_by = ROOT } }
 			STP_ops_55_contested_visible = {
 				55 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 114 }
 							NOT = { controls_province = 9617 }
@@ -1732,11 +1732,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_56_border_visible = { 56 = { controller = { tag = STS } } }
+			STP_ops_56_border_visible = { 56 = { is_controlled_by = ROOT } }
 			STP_ops_56_contested_visible = {
 				56 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 1142 }
 							NOT = { controls_province = 4712 }
@@ -1751,11 +1751,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_57_border_visible = { 57 = { controller = { tag = STS } } }
+			STP_ops_57_border_visible = { 57 = { is_controlled_by = ROOT } }
 			STP_ops_57_contested_visible = {
 				57 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 556 }
 							NOT = { controls_province = 779 }
@@ -1771,11 +1771,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_1_border_visible = { 1 = { controller = { tag = STS } } }
+			STP_ops_1_border_visible = { 1 = { is_controlled_by = ROOT } }
 			STP_ops_1_contested_visible = {
 				1 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 43 }
 							NOT = { controls_province = 44 }
@@ -1791,11 +1791,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_2_border_visible = { 2 = { controller = { tag = STS } } }
+			STP_ops_2_border_visible = { 2 = { is_controlled_by = ROOT } }
 			STP_ops_2_contested_visible = {
 				2 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 1 }
 							NOT = { controls_province = 10 }
@@ -1812,11 +1812,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_3_border_visible = { 3 = { controller = { tag = STS } } }
+			STP_ops_3_border_visible = { 3 = { is_controlled_by = ROOT } }
 			STP_ops_3_contested_visible = {
 				3 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 45 }
 							NOT = { controls_province = 63 }
@@ -1833,11 +1833,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_28_border_visible = { 28 = { controller = { tag = STS } } }
+			STP_ops_28_border_visible = { 28 = { is_controlled_by = ROOT } }
 			STP_ops_28_contested_visible = {
 				28 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 145 }
 							NOT = { controls_province = 16351 }
@@ -1850,22 +1850,22 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_29_border_visible = { 29 = { controller = { tag = STS } } }
+			STP_ops_29_border_visible = { 29 = { is_controlled_by = ROOT } }
 			STP_ops_29_contested_visible = {
 				29 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 16345 }
 						}
 					}
 				}
 			}
-			STP_ops_46_border_visible = { 46 = { controller = { tag = STS } } }
+			STP_ops_46_border_visible = { 46 = { is_controlled_by = ROOT } }
 			STP_ops_46_contested_visible = {
 				46 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 98 }
 							NOT = { controls_province = 100 }
@@ -1880,11 +1880,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_53_border_visible = { 53 = { controller = { tag = STS } } }
+			STP_ops_53_border_visible = { 53 = { is_controlled_by = ROOT } }
 			STP_ops_53_contested_visible = {
 				53 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 29 }
 							NOT = { controls_province = 60 }
@@ -1896,11 +1896,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_709_border_visible = { 709 = { controller = { tag = STS } } }
+			STP_ops_709_border_visible = { 709 = { is_controlled_by = ROOT } }
 			STP_ops_709_contested_visible = {
 				709 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 16802 }
 							NOT = { controls_province = 16803 }
@@ -1913,11 +1913,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_10_border_visible = { 10 = { controller = { tag = STS } } }
+			STP_ops_10_border_visible = { 10 = { is_controlled_by = ROOT } }
 			STP_ops_10_contested_visible = {
 				10 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 12 }
 							NOT = { controls_province = 22 }
@@ -1929,11 +1929,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_11_border_visible = { 11 = { controller = { tag = STS } } }
+			STP_ops_11_border_visible = { 11 = { is_controlled_by = ROOT } }
 			STP_ops_11_contested_visible = {
 				11 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 13 }
 							NOT = { controls_province = 23 }
@@ -1944,11 +1944,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_12_border_visible = { 12 = { controller = { tag = STS } } }
+			STP_ops_12_border_visible = { 12 = { is_controlled_by = ROOT } }
 			STP_ops_12_contested_visible = {
 				12 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 80 }
 							NOT = { controls_province = 121 }
@@ -1965,11 +1965,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_13_border_visible = { 13 = { controller = { tag = STS } } }
+			STP_ops_13_border_visible = { 13 = { is_controlled_by = ROOT } }
 			STP_ops_13_contested_visible = {
 				13 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 8 }
 							NOT = { controls_province = 26 }
@@ -1984,11 +1984,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_17_border_visible = { 17 = { controller = { tag = STS } } }
+			STP_ops_17_border_visible = { 17 = { is_controlled_by = ROOT } }
 			STP_ops_17_contested_visible = {
 				17 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 32 }
 							NOT = { controls_province = 34 }
@@ -1999,11 +1999,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_18_border_visible = { 18 = { controller = { tag = STS } } }
+			STP_ops_18_border_visible = { 18 = { is_controlled_by = ROOT } }
 			STP_ops_18_contested_visible = {
 				18 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 14 }
 							NOT = { controls_province = 15 }
@@ -2014,11 +2014,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_30_border_visible = { 30 = { controller = { tag = STS } } }
+			STP_ops_30_border_visible = { 30 = { is_controlled_by = ROOT } }
 			STP_ops_30_contested_visible = {
 				30 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 12434 }
 							NOT = { controls_province = 16346 }
@@ -2031,11 +2031,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_4_border_visible = { 4 = { controller = { tag = STS } } }
+			STP_ops_4_border_visible = { 4 = { is_controlled_by = ROOT } }
 			STP_ops_4_contested_visible = {
 				4 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 49 }
 							NOT = { controls_province = 82 }
@@ -2049,11 +2049,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_5_border_visible = { 5 = { controller = { tag = STS } } }
+			STP_ops_5_border_visible = { 5 = { is_controlled_by = ROOT } }
 			STP_ops_5_contested_visible = {
 				5 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 25 }
 							NOT = { controls_province = 27 }
@@ -2069,11 +2069,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_6_border_visible = { 6 = { controller = { tag = STS } } }
+			STP_ops_6_border_visible = { 6 = { is_controlled_by = ROOT } }
 			STP_ops_6_contested_visible = {
 				6 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 53 }
 							NOT = { controls_province = 57 }
@@ -2084,11 +2084,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_7_border_visible = { 7 = { controller = { tag = STS } } }
+			STP_ops_7_border_visible = { 7 = { is_controlled_by = ROOT } }
 			STP_ops_7_contested_visible = {
 				7 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 66 }
 							NOT = { controls_province = 72 }
@@ -2104,11 +2104,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_9_border_visible = { 9 = { controller = { tag = STS } } }
+			STP_ops_9_border_visible = { 9 = { is_controlled_by = ROOT } }
 			STP_ops_9_contested_visible = {
 				9 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 5 }
 							NOT = { controls_province = 19 }
@@ -2126,11 +2126,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_31_border_visible = { 31 = { controller = { tag = STS } } }
+			STP_ops_31_border_visible = { 31 = { is_controlled_by = ROOT } }
 			STP_ops_31_contested_visible = {
 				31 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 5736 }
 							NOT = { controls_province = 16354 }
@@ -2140,11 +2140,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_41_border_visible = { 41 = { controller = { tag = STS } } }
+			STP_ops_41_border_visible = { 41 = { is_controlled_by = ROOT } }
 			STP_ops_41_contested_visible = {
 				41 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 16439 }
 							NOT = { controls_province = 16443 }
@@ -2155,11 +2155,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_14_border_visible = { 14 = { controller = { tag = STS } } }
+			STP_ops_14_border_visible = { 14 = { is_controlled_by = ROOT } }
 			STP_ops_14_contested_visible = {
 				14 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 2 }
 							NOT = { controls_province = 75 }
@@ -2172,11 +2172,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_8_border_visible = { 8 = { controller = { tag = STS } } }
+			STP_ops_8_border_visible = { 8 = { is_controlled_by = ROOT } }
 			STP_ops_8_contested_visible = {
 				8 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 9 }
 							NOT = { controls_province = 17 }
@@ -2187,11 +2187,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_15_border_visible = { 15 = { controller = { tag = STS } } }
+			STP_ops_15_border_visible = { 15 = { is_controlled_by = ROOT } }
 			STP_ops_15_contested_visible = {
 				15 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 11 }
 							NOT = { controls_province = 33 }
@@ -2206,11 +2206,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_16_border_visible = { 16 = { controller = { tag = STS } } }
+			STP_ops_16_border_visible = { 16 = { is_controlled_by = ROOT } }
 			STP_ops_16_contested_visible = {
 				16 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 28 }
 							NOT = { controls_province = 124 }
@@ -2223,11 +2223,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_19_border_visible = { 19 = { controller = { tag = STS } } }
+			STP_ops_19_border_visible = { 19 = { is_controlled_by = ROOT } }
 			STP_ops_19_contested_visible = {
 				19 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 4 }
 							NOT = { controls_province = 48 }
@@ -2237,11 +2237,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_20_border_visible = { 20 = { controller = { tag = STS } } }
+			STP_ops_20_border_visible = { 20 = { is_controlled_by = ROOT } }
 			STP_ops_20_contested_visible = {
 				20 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 6 }
 							NOT = { controls_province = 21 }
@@ -2254,11 +2254,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_21_border_visible = { 21 = { controller = { tag = STS } } }
+			STP_ops_21_border_visible = { 21 = { is_controlled_by = ROOT } }
 			STP_ops_21_contested_visible = {
 				21 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 37 }
 							NOT = { controls_province = 39 }
@@ -2269,11 +2269,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_22_border_visible = { 22 = { controller = { tag = STS } } }
+			STP_ops_22_border_visible = { 22 = { is_controlled_by = ROOT } }
 			STP_ops_22_contested_visible = {
 				22 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 92 }
 							NOT = { controls_province = 103 }
@@ -2284,11 +2284,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_83_border_visible = { 83 = { controller = { tag = STS } } }
+			STP_ops_83_border_visible = { 83 = { is_controlled_by = ROOT } }
 			STP_ops_83_contested_visible = {
 				83 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 7 }
 							NOT = { controls_province = 30 }
@@ -2304,11 +2304,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_84_border_visible = { 84 = { controller = { tag = STS } } }
+			STP_ops_84_border_visible = { 84 = { is_controlled_by = ROOT } }
 			STP_ops_84_contested_visible = {
 				84 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 4887 }
 							NOT = { controls_province = 4925 }
@@ -2323,11 +2323,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_85_border_visible = { 85 = { controller = { tag = STS } } }
+			STP_ops_85_border_visible = { 85 = { is_controlled_by = ROOT } }
 			STP_ops_85_contested_visible = {
 				85 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 3 }
 							NOT = { controls_province = 16 }
@@ -2340,11 +2340,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_86_border_visible = { 86 = { controller = { tag = STS } } }
+			STP_ops_86_border_visible = { 86 = { is_controlled_by = ROOT } }
 			STP_ops_86_contested_visible = {
 				86 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 18 }
 							NOT = { controls_province = 24 }
@@ -2360,11 +2360,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_87_border_visible = { 87 = { controller = { tag = STS } } }
+			STP_ops_87_border_visible = { 87 = { is_controlled_by = ROOT } }
 			STP_ops_87_contested_visible = {
 				87 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 40 }
 							NOT = { controls_province = 46 }
@@ -2383,33 +2383,33 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_303_border_visible = { 303 = { controller = { tag = STS } } }
+			STP_ops_303_border_visible = { 303 = { is_controlled_by = ROOT } }
 			STP_ops_303_contested_visible = {
 				303 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 3261 }
 						}
 					}
 				}
 			}
-			STP_ops_118_border_visible = { 118 = { controller = { tag = STS } } }
+			STP_ops_118_border_visible = { 118 = { is_controlled_by = ROOT } }
 			STP_ops_118_contested_visible = {
 				118 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 147 }
 						}
 					}
 				}
 			}
-			STP_ops_119_border_visible = { 119 = { controller = { tag = STS } } }
+			STP_ops_119_border_visible = { 119 = { is_controlled_by = ROOT } }
 			STP_ops_119_contested_visible = {
 				119 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 59 }
 							NOT = { controls_province = 96 }
@@ -2420,11 +2420,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_168_border_visible = { 168 = { controller = { tag = STS } } }
+			STP_ops_168_border_visible = { 168 = { is_controlled_by = ROOT } }
 			STP_ops_168_contested_visible = {
 				168 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 721 }
 							NOT = { controls_province = 5388 }
@@ -2437,11 +2437,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_169_border_visible = { 169 = { controller = { tag = STS } } }
+			STP_ops_169_border_visible = { 169 = { is_controlled_by = ROOT } }
 			STP_ops_169_contested_visible = {
 				169 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 973 }
 							NOT = { controls_province = 4707 }
@@ -2453,11 +2453,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_167_border_visible = { 167 = { controller = { tag = STS } } }
+			STP_ops_167_border_visible = { 167 = { is_controlled_by = ROOT } }
 			STP_ops_167_contested_visible = {
 				167 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 3481 }
 							NOT = { controls_province = 9757 }
@@ -2468,11 +2468,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_170_border_visible = { 170 = { controller = { tag = STS } } }
+			STP_ops_170_border_visible = { 170 = { is_controlled_by = ROOT } }
 			STP_ops_170_contested_visible = {
 				170 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 2306 }
 							NOT = { controls_province = 10693 }
@@ -2486,11 +2486,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_171_border_visible = { 171 = { controller = { tag = STS } } }
+			STP_ops_171_border_visible = { 171 = { is_controlled_by = ROOT } }
 			STP_ops_171_contested_visible = {
 				171 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 333 }
 							NOT = { controls_province = 744 }
@@ -2513,11 +2513,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_184_border_visible = { 184 = { controller = { tag = STS } } }
+			STP_ops_184_border_visible = { 184 = { is_controlled_by = ROOT } }
 			STP_ops_184_contested_visible = {
 				184 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 5541 }
 							NOT = { controls_province = 8003 }
@@ -2533,11 +2533,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_185_border_visible = { 185 = { controller = { tag = STS } } }
+			STP_ops_185_border_visible = { 185 = { is_controlled_by = ROOT } }
 			STP_ops_185_contested_visible = {
 				185 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 372 }
 							NOT = { controls_province = 3130 }
@@ -2545,11 +2545,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_203_border_visible = { 203 = { controller = { tag = STS } } }
+			STP_ops_203_border_visible = { 203 = { is_controlled_by = ROOT } }
 			STP_ops_203_contested_visible = {
 				203 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 3941 }
 							NOT = { controls_province = 7409 }
@@ -2561,11 +2561,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_178_border_visible = { 178 = { controller = { tag = STS } } }
+			STP_ops_178_border_visible = { 178 = { is_controlled_by = ROOT } }
 			STP_ops_178_contested_visible = {
 				178 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 6151 }
 							NOT = { controls_province = 6377 }
@@ -2577,11 +2577,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_180_border_visible = { 180 = { controller = { tag = STS } } }
+			STP_ops_180_border_visible = { 180 = { is_controlled_by = ROOT } }
 			STP_ops_180_contested_visible = {
 				180 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 1440 }
 							NOT = { controls_province = 2399 }
@@ -2594,11 +2594,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_181_border_visible = { 181 = { controller = { tag = STS } } }
+			STP_ops_181_border_visible = { 181 = { is_controlled_by = ROOT } }
 			STP_ops_181_contested_visible = {
 				181 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 841 }
 							NOT = { controls_province = 2144 }
@@ -2618,11 +2618,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_182_border_visible = { 182 = { controller = { tag = STS } } }
+			STP_ops_182_border_visible = { 182 = { is_controlled_by = ROOT } }
 			STP_ops_182_contested_visible = {
 				182 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 188 }
 							NOT = { controls_province = 309 }
@@ -2636,11 +2636,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_183_border_visible = { 183 = { controller = { tag = STS } } }
+			STP_ops_183_border_visible = { 183 = { is_controlled_by = ROOT } }
 			STP_ops_183_contested_visible = {
 				183 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 2617 }
 							NOT = { controls_province = 6019 }
@@ -2652,11 +2652,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_193_border_visible = { 193 = { controller = { tag = STS } } }
+			STP_ops_193_border_visible = { 193 = { is_controlled_by = ROOT } }
 			STP_ops_193_contested_visible = {
 				193 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 4336 }
 							NOT = { controls_province = 4527 }
@@ -2668,11 +2668,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_206_border_visible = { 206 = { controller = { tag = STS } } }
+			STP_ops_206_border_visible = { 206 = { is_controlled_by = ROOT } }
 			STP_ops_206_contested_visible = {
 				206 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 599 }
 							NOT = { controls_province = 726 }
@@ -2683,11 +2683,11 @@ scripted_gui = {
 					}
 				}
 			}
-			STP_ops_207_border_visible = { 207 = { controller = { tag = STS } } }
+			STP_ops_207_border_visible = { 207 = { is_controlled_by = ROOT } }
 			STP_ops_207_contested_visible = {
 				207 = {
+					is_controlled_by = ROOT
 					controller = {
-						tag = STS
 						OR = {
 							NOT = { controls_province = 1136 }
 							NOT = { controls_province = 2895 }
