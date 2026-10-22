@@ -7831,7 +7831,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
                 ROOT / "common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt"
             ).read_text(encoding="utf-8")
         )
-        for prefix, viewer in (("VAL", "VAL"), ("STP", "STS")):
+        for prefix, viewer in (("VAL", "VAL"), ("STP", "STS"), ("STP", "STP")):
             layers = {
                 e.key: e.value
                 for e in block(
@@ -7844,7 +7844,10 @@ class ValExpandedCampaignTests(unittest.TestCase):
             }
             for state in STATE_IDS:
                 provinces = sorted(state_provinces(state))
-                facts = {(str(state), "controller"): viewer}
+                facts = {
+                    (str(state), "controller"): viewer,
+                    (str(state), "is_controlled_by", "ROOT"): True,
+                }
                 facts.update(
                     {(viewer, "controls_province", str(p)): True for p in provinces}
                 )
@@ -7861,6 +7864,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
                     matches_conditions(layer, facts, viewer), (viewer, state)
                 )
                 facts[str(state), "controller"] = "NOD"
+                facts[str(state), "is_controlled_by", "ROOT"] = False
                 self.assertFalse(
                     matches_conditions(layer, facts, viewer), (viewer, state)
                 )
