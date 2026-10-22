@@ -2320,7 +2320,12 @@ class StartupGuideContractTests(unittest.TestCase):
         self.assertEqual(cleared, allowed - {'ADISCORD_startup_open'})
         for name, payload in handlers.items():
             if (
-                name.endswith(('_country_click', '_guide_click', '_paths_click'))
+                name.endswith(
+                    (
+                        '_country_click', '_guide_click', '_paths_click',
+                        '_region_click', '_world_click',
+                    )
+                )
                 or '_page_' in name
             ):
                 self.assertIn(
@@ -2373,7 +2378,7 @@ class StartupGuideContractTests(unittest.TestCase):
             for _, name, _ in named_gui_nodes(gui)
             if name.startswith('ADISCORD_startup_text_')
         }
-        self.assertEqual(len(pages), 47)
+        self.assertEqual(len(pages), 53)
         for tag in ('STP', 'VAL', 'RUS', 'SHL', 'NAM'):
             topics = {
                 'STP': ('history', 'nodrul', 'party'),
@@ -2393,6 +2398,15 @@ class StartupGuideContractTests(unittest.TestCase):
                 for spoiler in (0, 1)
             ]
             cases += [(1, 3, spoiler, f'{tag}_startup_guide') for spoiler in (0, 1)]
+            cases += [
+                (tab, page, spoiler, expected)
+                for tab, expected in (
+                    (3, f'{tag}_startup_region'),
+                    (4, 'ADISCORD_startup_world_body'),
+                )
+                for page in range(4)
+                for spoiler in (0, 1)
+            ]
             cases += [
                 (
                     2,
@@ -2416,6 +2430,24 @@ class StartupGuideContractTests(unittest.TestCase):
                     )
                 ]
                 self.assertEqual(chosen, [expected], (tag, tab, page, spoilers))
+                if tab in (3, 4):
+                    hidden_controls = (
+                        'page_0', 'page_1', 'page_2', 'page_3', 'spoilers',
+                        'intro_note', 'guide_note', 'paths_note',
+                        'stp_picture', 'val_picture', 'rus_picture',
+                        'shl_picture', 'nam_picture',
+                    )
+                    for control in hidden_controls:
+                        self.assertFalse(
+                            matches_conditions(
+                                _unique_direct_block(
+                                    triggers, f'ADISCORD_startup_{control}_visible'
+                                ),
+                                facts,
+                                tag,
+                            ),
+                            (tag, tab, control),
+                        )
                 self.assertEqual(
                     matches_conditions(
                         _unique_direct_block(
@@ -2460,7 +2492,11 @@ class StartupGuideContractTests(unittest.TestCase):
         for key in re.findall(r'localization_key\s*=\s*(\w+)', loc):
             self.assertIn(key, by_language['russian'])
         gui = self.read('interface/ADISCORD_startup_menu.gui')
-        for key in re.findall(r'text\s*=\s*"((?:STP|VAL|RUS|SHL|NAM)_startup_\w+)"', gui):
+        for key in re.findall(
+            r'(?:text|buttonText)\s*=\s*"'
+            r'((?:ADISCORD|STP|VAL|RUS|SHL|NAM)_startup_\w+)"',
+            gui,
+        ):
             self.assertIn(key, by_language['russian'])
         for path in (
             'common/scripted_guis/ADISCORD_startup_menu.txt',
@@ -2574,6 +2610,55 @@ class StartupGuideContractTests(unittest.TestCase):
             (ROOT / 'tools/assets/source/startup/rus.png').read_bytes(),
         )
 
+    def test_footer_tabs_fit_and_select_their_own_content(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
+        gui = self.read('interface/ADISCORD_startup_menu.gui')
+        menu = _unique_direct_block(self.scripts(), 'ADISCORDStartupMenu')
+        effects = _unique_direct_block(menu, 'effects')
+        triggers = _unique_direct_block(menu, 'triggers')
+        previous_right = 24
+        for name, tab in (
+            ('country', 0), ('region', 3), ('world', 4),
+            ('guide', 1), ('paths', 2), ('play', None),
+        ):
+            node = gui_node_body(gui, f'ADISCORD_startup_{name}')
+            body = economy_validator.parse_clausewitz(node)
+            x, y = _gui_position(node)
+            size = _unique_direct_block(body, 'size')
+            width = int(_direct_scalar(size, 'x'))
+            height = int(_direct_scalar(size, 'y'))
+            self.assertGreaterEqual(x, previous_right + 10)
+            self.assertEqual(y, 570)
+            self.assertLessEqual(x + width, 976)
+            self.assertLessEqual(y + height, 608)
+            self.assertEqual(
+                _direct_scalar(body, 'quadTextureSprite'),
+                'GFX_ADISCORD_politics_header_button',
+            )
+            previous_right = x + width
+            if tab is None:
+                continue
+            click = _unique_direct_block(effects, f'ADISCORD_startup_{name}_click')
+            assignment = _unique_direct_block(click, 'set_variable')
+            self.assertEqual(_direct_scalar(assignment, 'var'), 'ADISCORD_startup_tab')
+            self.assertEqual(int(_direct_scalar(assignment, 'value')), tab)
+            self.assertEqual(
+                {e.value for e in click if e.key == 'clear_variable'},
+                {'ADISCORD_startup_page', 'ADISCORD_startup_spoilers'},
+            )
+            for current_tab in range(5):
+                self.assertEqual(
+                    matches_conditions(
+                        _unique_direct_block(
+                            triggers, f'ADISCORD_startup_{name}_click_enabled'
+                        ),
+                        {('STP', 'variable', 'ADISCORD_startup_tab'): current_tab},
+                        'STP',
+                    ),
+                    current_tab != tab,
+                )
+
     def test_launcher_does_not_cover_existing_political_controls(self):
         gui = self.read('interface/ADISCORD_startup_menu.gui')
         launcher = gui_node_body(gui, 'ADISCORD_startup_launcher')
@@ -2608,7 +2693,7 @@ class StartupGuideContractTests(unittest.TestCase):
                 body = gui_node_body(gui, name)
                 ast = economy_validator.parse_clausewitz(body)
                 key = _direct_scalar(ast, 'text')
-                self.assertRegex(key, r'^(STP|VAL|RUS|SHL|NAM)_startup_\w+$')
+                self.assertRegex(key, r'^(ADISCORD|STP|VAL|RUS|SHL|NAM)_startup_\w+$')
                 self.assertEqual(_direct_scalar(ast, 'scrollbarType'), 'standardtext_slider')
                 self.assertNotIn('fixedsize = yes', body)
                 self.assertNotIn('alwaystransparent = yes', body)
@@ -2622,6 +2707,9 @@ class StartupGuideContractTests(unittest.TestCase):
                 if key.endswith('_country'):
                     self.assertEqual((x, y), (34, 138))
                     self.assertLessEqual(x + width + 24, 746)
+                elif key.endswith(('_region', '_world_body')):
+                    self.assertEqual((x, y), (34, 112))
+                    self.assertLessEqual(x + width + 24, 984)
                 else:
                     self.assertEqual((x, y), (460, 152))
                     self.assertLessEqual(x + width + 24, 984)
@@ -2634,7 +2722,7 @@ class StartupGuideContractTests(unittest.TestCase):
         intro = localisation_value(russian, 'STP_startup_country')
         self.assertIn('§YМаксим Шабрат§!', intro)
         self.assertIn('монополию', intro)
-        self.assertIn('§YПётр Иванов и партия§!', intro)
+        self.assertIn('§YПётр Иванов и Высшие Дома§!', intro)
         self.assertIn(
             '§YMaksim Shabrat§!', localisation_value(english, 'STP_startup_country')
         )

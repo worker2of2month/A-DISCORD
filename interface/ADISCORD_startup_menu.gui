@@ -55,26 +55,44 @@ guiTypes = {
 		buttonType = {
 			name = "ADISCORD_startup_country"
 			position = { x = 34 y = 570 }
-			size = { x = 221 y = 36 }
-			quadTextureSprite = "GFX_ADISCORD_startup_tab"
+			size = { x = 146 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_politics_header_button"
 			buttonText = "ADISCORD_startup_country"
 			buttonFont = "hoi_16mbs"
 			clicksound = click_default
 		}
 		buttonType = {
+			name = "ADISCORD_startup_region"
+			position = { x = 190 y = 570 }
+			size = { x = 146 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_politics_header_button"
+			buttonText = "ADISCORD_startup_region"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+		}
+		buttonType = {
+			name = "ADISCORD_startup_world"
+			position = { x = 346 y = 570 }
+			size = { x = 146 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_politics_header_button"
+			buttonText = "ADISCORD_startup_world"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+		}
+		buttonType = {
 			name = "ADISCORD_startup_guide"
-			position = { x = 268 y = 570 }
-			size = { x = 221 y = 36 }
-			quadTextureSprite = "GFX_ADISCORD_startup_tab"
+			position = { x = 502 y = 570 }
+			size = { x = 146 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_politics_header_button"
 			buttonText = "ADISCORD_startup_guide"
 			buttonFont = "hoi_16mbs"
 			clicksound = click_default
 		}
 		buttonType = {
 			name = "ADISCORD_startup_paths"
-			position = { x = 502 y = 570 }
-			size = { x = 221 y = 36 }
-			quadTextureSprite = "GFX_ADISCORD_startup_tab"
+			position = { x = 658 y = 570 }
+			size = { x = 146 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_politics_header_button"
 			buttonText = "ADISCORD_startup_paths"
 			buttonFont = "hoi_16mbs"
 			clicksound = click_default
@@ -692,6 +710,72 @@ guiTypes = {
 			format = left
 			scrollbarType = standardtext_slider
 		}
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_STP_startup_region"
+			position = { x = 34 y = 112 }
+			font = "hoi_18mbs"
+			text = "STP_startup_region"
+			maxWidth = 900
+			maxHeight = 428
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_VAL_startup_region"
+			position = { x = 34 y = 112 }
+			font = "hoi_18mbs"
+			text = "VAL_startup_region"
+			maxWidth = 900
+			maxHeight = 428
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_RUS_startup_region"
+			position = { x = 34 y = 112 }
+			font = "hoi_18mbs"
+			text = "RUS_startup_region"
+			maxWidth = 900
+			maxHeight = 428
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_region"
+			position = { x = 34 y = 112 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_region"
+			maxWidth = 900
+			maxHeight = 428
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_region"
+			position = { x = 34 y = 112 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_region"
+			maxWidth = 900
+			maxHeight = 428
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_ADISCORD_startup_world_body"
+			position = { x = 34 y = 112 }
+			font = "hoi_18mbs"
+			text = "ADISCORD_startup_world_body"
+			maxWidth = 900
+			maxHeight = 428
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
 		buttonType = {
 			name = "ADISCORD_startup_spoilers"
 			position = { x = 34 y = 510 }
@@ -703,9 +787,9 @@ guiTypes = {
 		}
 		buttonType = {
 			name = "ADISCORD_startup_play"
-			position = { x = 740 y = 570 }
-			size = { x = 221 y = 36 }
-			quadTextureSprite = "GFX_ADISCORD_startup_tab"
+			position = { x = 814 y = 570 }
+			size = { x = 146 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_politics_header_button"
 			buttonText = "ADISCORD_startup_play"
 			buttonFont = "hoi_16mbs"
 			clicksound = click_default

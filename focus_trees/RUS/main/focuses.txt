@@ -4126,7 +4126,7 @@ focus_tree = {
 
 	focus = {
 		id = RUS_black_army_banner
-		icon = GFX_focus_RUS_black_army_tribunals
+		icon = GFX_focus_RUS_seal_chancery
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
 		x = 14
 		y = 4

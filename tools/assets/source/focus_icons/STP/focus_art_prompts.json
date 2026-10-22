@@ -20,22 +20,48 @@
           "prompt": "Use case: stylized-concept. Make one separate transparent PNG cutout asset for a Hearts of Iron IV national focus titled Workshops of Abilia, Shabrat resistance. The two references are STYLE ONLY: dark painterly realistic collage miniatures, strong readable masses, aged materials, deep charcoal shadows, muted blue-grey steel and brown wood, selective warm amber practical lighting. Match their grounded gritty appearance. No people, no words, no logo, no border, no flag, no extra unrelated objects. Full isolated object with a compact clear silhouette and a little transparent margin. Actual alpha transparency everywhere outside the object including openings. No floor plane, no backdrop, no smoky haze or soft glow surrounding the silhouette. Detail should support readability at 180-pixel icon size. Subject: one old heavy metalworking lathe, long horizontal bed, chunky headstock on left, three-jaw chuck, carriage and handwheels, tailstock right, sturdy cast iron base. Worn dark desaturated blue-grey paint exposing steel. Three-quarter view from slightly above, front and left visible, machine extends left to right. A mounted small industrial task lamp casts a restrained amber pool directly onto the chuck and carriage; shade and lamp stay part of the machine. Both feet fully visible. Aspect ratio landscape about 3:2; machine fills frame. Not a factory room or a catalogue white studio product shot."
         },
         {
-          "file": "abila_workshops_rifle_workbench.png",
-          "source": "exec-6687335c-168a-4216-a01b-cd05de9b53e5.png",
-          "prompt": "Use case: stylized-concept. Make one separate transparent PNG cutout asset for a Hearts of Iron IV national focus titled Workshops of Abilia, Shabrat resistance. The two references are STYLE ONLY: dark painterly realistic collage miniatures, strong readable masses, aged materials, deep charcoal shadows, muted blue-grey steel and brown wood, selective warm amber practical lighting. Match their grounded gritty appearance. No people, no words, no logo, no border, no flag, no extra unrelated objects. Full isolated object with a compact clear silhouette and a little transparent margin. Actual alpha transparency everywhere outside the object including openings. No floor plane, no backdrop, no smoky haze or soft glow surrounding the silhouette. Detail should support readability at 180-pixel icon size. Subject: a single compact battered gunsmith's workbench with thick dark oak top, iron legs and lower shelf. One intact wooden-stock military rifle rests horizontally across the top with its fore-end supported in padded bench vise at center, stock left and barrel right. A small hammer and oil bottle lie on the surface. This is an illustrative prop, no diagrams or assembly instructions. All rifle and table parts contained within frame, all legs visible. Front three-quarter view from slightly above, tabletop legible. Wide low silhouette, rifle is clear at small scale. Restrained amber light falls from upper left but there is NO visible lamp and absolutely NO halo or ambient glow behind or around the cutout; edges are crisp and background is 100% transparent. No floor, no cast shadow outside the object. Landscape 3:2."
-        },
-        {
           "file": "abila_workshops_factory_building.png",
           "source": "exec-787a1c43-e57f-49a6-aae8-1acbea5cf442.png",
           "prompt": "Use case: stylized-concept. Make one separate transparent PNG cutout asset for a Hearts of Iron IV national focus titled Workshops of Abilia, Shabrat resistance. The two references are STYLE ONLY: dark painterly realistic collage miniatures, strong readable masses, aged materials, deep charcoal shadows, muted blue-grey steel and brown wood, selective warm amber practical lighting. Match their grounded gritty appearance. No people, no words, no logo, no border, no flag, no extra unrelated objects. Full isolated object with a compact clear silhouette and a little transparent margin. Actual alpha transparency everywhere outside the object including openings. No floor plane, no backdrop, no smoky haze or soft glow surrounding the silhouette. Detail should support readability at 180-pixel icon size. Subject: one low compact soot-stained brick industrial workshop building, single storey, broad pitched corrugated metal roof, modest chimney, closed wide wooden factory doors and a row of three small windows glowing dim amber. A few narrow snow remnants on roof edges to suggest mountain country, but no mountains and no landscape. Exterior three-quarter view, front and right side visible. Dark desaturated slate-blue brick, oxidized metal roof, the warm windows are small points. Entire building cut out, visible foundation forms the bottom boundary with no terrain slab. No separate props, no weapons, no people. Crisp silhouette, absolutely no diffuse haze or glow outside walls. Intended as background-right element of a small horizontal icon. Landscape image."
+        },
+        {
+          "file": "warehouse_service_platform_scale.png",
+          "reused_from": "STP_cw_warehouse_inventory"
         }
       ],
       "composition": {
         "delivery": "chat_only",
-        "status": "generation_blocked",
-        "reason": "Image generator output safety check: violence",
-        "prompt": "Use case: compositing. Assemble these three supplied cutout assets into ONE wide Hearts of Iron IV national focus icon for 'Workshops of Abilia', Shabrat resistance. Input 1 lathe is the large left mass, input 2 rifle workbench is the lower foreground center-right mass, input 3 workshop building is the upper rear-right mass. Preserve their specific designs, shapes, materials and restrained warm lighting. Dense deliberate overlapping collage, not three separate objects in a row. Lathe remains clearly identifiable, rifle silhouette remains unobstructed above its vise. Building is smaller and darker behind the bench, roof/chimney/windows visible. Lathe about 55% total width, bench 50%, building 50%, overlapping; unified total silhouette width:height around 1.85:1. Wide landscape canvas about 1536x864, composition fills it with small transparent margin. Actual transparent background outside the combined silhouettes and through openings; no rectangular scene background, no floor, no haze or external glow, no text, no badge frame, no flag, no people, no extra props. Gritty realistic painterly political strategy-game icon. Deep blue-grey steel shadows and warm amber on working surfaces, restrained silver highlights. This is a composition preview made from the three assets; do not turn it into a realistic room."
-      }
+        "source": "exec-6afde29c-8b66-4c70-83b6-24ad6013a7ff.png",
+        "prompt": "Create a wide transparent HOI4 economic focus collage about industrial workshops. Three supporting insert references: image1 old metal lathe, image2 small brick factory building, image3 parcel weighing platform scale. Use exactly these three objects, no weapons or people. Large lathe lower left and center, factory smaller behind it upper center right, weighing scale lower right with circular dial visible. Dense overlapping silhouette with width 1.85 times height. Dark desaturated cold steel and blue-black shading, silver edge highlights, small muted amber practical lights. Full isolated cutout on true transparent alpha, remove any exterior haze from references, no floor, rectangular background, labels, words, icon frame or extra props. Readable as small strategy game focus icon. Entire lathe, roof, chimney and weighing scale fit within frame."
+      },
+      "variants": [
+        {
+          "name": "original_rifle_workbench",
+          "assets": [
+            {
+              "file": "abila_workshops_metal_lathe.png",
+              "source": "exec-63a331f4-9150-4e47-a366-887694de6ec5.png",
+              "prompt": "Use case: stylized-concept. Make one separate transparent PNG cutout asset for a Hearts of Iron IV national focus titled Workshops of Abilia, Shabrat resistance. The two references are STYLE ONLY: dark painterly realistic collage miniatures, strong readable masses, aged materials, deep charcoal shadows, muted blue-grey steel and brown wood, selective warm amber practical lighting. Match their grounded gritty appearance. No people, no words, no logo, no border, no flag, no extra unrelated objects. Full isolated object with a compact clear silhouette and a little transparent margin. Actual alpha transparency everywhere outside the object including openings. No floor plane, no backdrop, no smoky haze or soft glow surrounding the silhouette. Detail should support readability at 180-pixel icon size. Subject: one old heavy metalworking lathe, long horizontal bed, chunky headstock on left, three-jaw chuck, carriage and handwheels, tailstock right, sturdy cast iron base. Worn dark desaturated blue-grey paint exposing steel. Three-quarter view from slightly above, front and left visible, machine extends left to right. A mounted small industrial task lamp casts a restrained amber pool directly onto the chuck and carriage; shade and lamp stay part of the machine. Both feet fully visible. Aspect ratio landscape about 3:2; machine fills frame. Not a factory room or a catalogue white studio product shot."
+            },
+            {
+              "file": "abila_workshops_rifle_workbench.png",
+              "source": "exec-6687335c-168a-4216-a01b-cd05de9b53e5.png",
+              "prompt": "Use case: stylized-concept. Make one separate transparent PNG cutout asset for a Hearts of Iron IV national focus titled Workshops of Abilia, Shabrat resistance. The two references are STYLE ONLY: dark painterly realistic collage miniatures, strong readable masses, aged materials, deep charcoal shadows, muted blue-grey steel and brown wood, selective warm amber practical lighting. Match their grounded gritty appearance. No people, no words, no logo, no border, no flag, no extra unrelated objects. Full isolated object with a compact clear silhouette and a little transparent margin. Actual alpha transparency everywhere outside the object including openings. No floor plane, no backdrop, no smoky haze or soft glow surrounding the silhouette. Detail should support readability at 180-pixel icon size. Subject: a single compact battered gunsmith's workbench with thick dark oak top, iron legs and lower shelf. One intact wooden-stock military rifle rests horizontally across the top with its fore-end supported in padded bench vise at center, stock left and barrel right. A small hammer and oil bottle lie on the surface. This is an illustrative prop, no diagrams or assembly instructions. All rifle and table parts contained within frame, all legs visible. Front three-quarter view from slightly above, tabletop legible. Wide low silhouette, rifle is clear at small scale. Restrained amber light falls from upper left but there is NO visible lamp and absolutely NO halo or ambient glow behind or around the cutout; edges are crisp and background is 100% transparent. No floor, no cast shadow outside the object. Landscape 3:2."
+            },
+            {
+              "file": "abila_workshops_factory_building.png",
+              "source": "exec-787a1c43-e57f-49a6-aae8-1acbea5cf442.png",
+              "prompt": "Use case: stylized-concept. Make one separate transparent PNG cutout asset for a Hearts of Iron IV national focus titled Workshops of Abilia, Shabrat resistance. The two references are STYLE ONLY: dark painterly realistic collage miniatures, strong readable masses, aged materials, deep charcoal shadows, muted blue-grey steel and brown wood, selective warm amber practical lighting. Match their grounded gritty appearance. No people, no words, no logo, no border, no flag, no extra unrelated objects. Full isolated object with a compact clear silhouette and a little transparent margin. Actual alpha transparency everywhere outside the object including openings. No floor plane, no backdrop, no smoky haze or soft glow surrounding the silhouette. Detail should support readability at 180-pixel icon size. Subject: one low compact soot-stained brick industrial workshop building, single storey, broad pitched corrugated metal roof, modest chimney, closed wide wooden factory doors and a row of three small windows glowing dim amber. A few narrow snow remnants on roof edges to suggest mountain country, but no mountains and no landscape. Exterior three-quarter view, front and right side visible. Dark desaturated slate-blue brick, oxidized metal roof, the warm windows are small points. Entire building cut out, visible foundation forms the bottom boundary with no terrain slab. No separate props, no weapons, no people. Crisp silhouette, absolutely no diffuse haze or glow outside walls. Intended as background-right element of a small horizontal icon. Landscape image."
+            }
+          ],
+          "composition": {
+            "delivery": "chat_only",
+            "status": "generation_blocked",
+            "reason": "Image generator output safety check: violence",
+            "prompt": "Use case: compositing. Assemble these three supplied cutout assets into ONE wide Hearts of Iron IV national focus icon for 'Workshops of Abilia', Shabrat resistance. Input 1 lathe is the large left mass, input 2 rifle workbench is the lower foreground center-right mass, input 3 workshop building is the upper rear-right mass. Preserve their specific designs, shapes, materials and restrained warm lighting. Dense deliberate overlapping collage, not three separate objects in a row. Lathe remains clearly identifiable, rifle silhouette remains unobstructed above its vise. Building is smaller and darker behind the bench, roof/chimney/windows visible. Lathe about 55% total width, bench 50%, building 50%, overlapping; unified total silhouette width:height around 1.85:1. Wide landscape canvas about 1536x864, composition fills it with small transparent margin. Actual transparent background outside the combined silhouettes and through openings; no rectangular scene background, no floor, no haze or external glow, no text, no badge frame, no flag, no people, no extra props. Gritty realistic painterly political strategy-game icon. Deep blue-grey steel shadows and warm amber on working surfaces, restrained silver highlights. This is a composition preview made from the three assets; do not turn it into a realistic room."
+          }
+        }
+      ]
     },
     {
       "focus_id": "STP_cw_restore_civil_authority",
@@ -636,6 +662,388 @@
         "source": "exec-ee344128-aa2a-4368-b9e2-3a9fde5bcf70.png",
         "prompt": "Assemble these three cutouts into a wide HOI4 national focus icon Guarantees of Power Transfer: sealed ballot box image1 left and central, native banner image3 behind right, key-handover hands image2 smaller across lower foreground linking box and banner. Ballot and silver key clearly readable, keep hands natural and flag exact white rising diagonal plus small four-point gold star in upper-left. Compact overlapping width1.9xheight, cold blue-black silver realistic political collage, restrained skin tone, no extra figures or props, title, frame, backdrop or glow. Transparent alpha background."
       }
+    },
+    {
+      "focus_id": "STP_cw_military_committee_fund",
+      "title": "Средства военного комитета",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "military_committee_banknote_bundles.png",
+          "source": "exec-ae42b761-ae2c-45dc-94fc-774730d6f160.png",
+          "prompt": "One isolated compact pile of fictional treasury banknote bundles, three thick stacks slightly offset, wrapped with plain offwhite paper bands. Banknotes desaturated grey-blue with fine abstract guilloche ornaments, no readable numbers, country names, portraits, dollar symbols or real currencies. Realistic worn paper edges, dark cold blue-grey shadows and silver-white highlights matching HOI4 focus refs. Wide low silhouette, no coins, hands, chest, table, floor or halo. True transparent alpha."
+        },
+        {
+          "file": "military_committee_cashbox.png",
+          "source": "exec-e4ba767f-8459-4e7d-a5a8-1296b3d93fc6.png",
+          "prompt": "One isolated closed portable metal cashbox, squat rectangular steel chest with small carrying handle folded flat on lid and a brass keyhole centered front, scuffed dark navy-grey paint. Three-quarter top front view, realistic worn steel texture, cold blue-black shadows, narrow silver highlights, minimal brass. Wide compact simple silhouette for HOI4 political focus, supplied images style references only. No money, papers, person, text, emblems, floor or halo. Transparent alpha background and complete object edges."
+        },
+        {
+          "file": "heavy_reserve_regular_helmet.png",
+          "reused_from": "STP_cw_heavy_reserve"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-16bbe528-b9c3-44e6-95b4-8907d47446d8.png",
+        "prompt": "Assemble a wide HOI4 icon Military Committee Funds from supplied three assets: closed metal cashbox image1 left-back, plain steel helmet image2 center-back tilted slightly, banknote bundles image3 large across lower-right foreground. Three compact overlapping forms, width1.9xheight, helmet remains dominant recognizable military cue. Realistic gritty cold blue-grey and silver political collage, no gold shine except tiny cashbox keyhole. No symbols, words, people, ground, frame, background or extra props. True transparent alpha."
+      }
+    },
+    {
+      "focus_id": "STP_cw_seize_vorkerland_accounts",
+      "title": "Замороженные счета Воркерланда",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "vorkerland_accounts_chained_safe.png",
+          "source": "exec-5e7fad7b-5863-4bdb-bdca-941f90e99d6f.png",
+          "prompt": "One isolated squat old bank safe, dark blue-black painted iron, heavy CLOSED door with circular combination dial and silver handle, a single taut chain passing diagonally around safe secured by one small padlock. Three-quarter front view, full safe visible. Credible worn realistic prop, no instructions/cutaways, symbols, flags, writing or frost. Cold silver edge highlights and deep blue-grey shadows matching HOI4 political icon style references. Compact wide-ish shape. Transparent alpha background, no floor, room, money or other props."
+        },
+        {
+          "file": "warehouse_service_stock_ledger.png",
+          "reused_from": "STP_cw_warehouse_inventory"
+        },
+        {
+          "file": "military_committee_banknote_bundles.png",
+          "reused_from": "STP_cw_military_committee_fund"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-a1354f9d-2d1e-4707-9cd0-46b0f1ea5b06.png",
+        "prompt": "Wide compact HOI4 focus Frozen Vorkerland Accounts, assemble only supplied assets: chained closed safe image1 dominant upper-left, open ledger image2 lower middle extending to right, banknote bundles image3 lower-right over ledger edge. Preserve visible chain and padlock. Three overlapping forms, width1.9xheight, realistic cold blue-black silver political photomontage, desaturated paper, no literal ice/frost, text, flags, people, frame, ground or extra objects. Transparent alpha outside silhouette. Full safe and ledger corners in frame."
+      }
+    },
+    {
+      "focus_id": "STP_cw_seize_vorkerland_stores",
+      "title": "Склады распавшейся конфедерации",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "vorkerland_stores_abandoned_warehouse.png",
+          "source": "exec-ffce3c79-1c94-40c2-ae6e-c902bbf885ab.png",
+          "prompt": "One isolated abandoned supply warehouse facade miniature, low wide old brick shed with corrugated dark metal roof and two partly open tall steel doors, a few CLOSED wooden crates visible in the dark entrance. No damage battle, people or weapons. Worn desaturated grey masonry, dark blue-black shadow, cold silver edge highlights. Realistic photo-collage style for HOI4 national focus, match supplied icons. Full building edges visible, no surrounding landscape ground slab, sky, flags, text, frame or halo. Transparent alpha background."
+        },
+        {
+          "file": "supply_officers_loaded_handcart.png",
+          "reused_from": "STP_cw_supply_officers"
+        },
+        {
+          "file": "warehouse_service_stock_ledger.png",
+          "reused_from": "STP_cw_warehouse_inventory"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-21133c10-b3a8-4a51-aa68-66b6bf2c8a90.png",
+        "prompt": "Assemble wide compact HOI4 focus Stores of the Collapsed Confederation from3 assets. Abandoned warehouse spans background, loaded handcart large lower-left coming out of open door, open stock ledger smaller lower-right. Main meaning recovered stores and inventory, not battle. Tight overlapping silhouette width1.95xheight, cold blue-black silver realistic photomontage, subdued paper and wood. Preserve warehouse doors and both cart wheels. No people, labels, flags, additional props, scenery, ground, frame or broad glow. Transparent alpha outside objects."
+      }
+    },
+    {
+      "focus_id": "STP_cw_cabinet_archives",
+      "title": "Ведомственные документы",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "cabinet_archives_open_dossier.png",
+          "source": "exec-353a9673-e98a-429e-a25d-36afbb77707f.png",
+          "prompt": "One isolated open administrative dossier, dark grey stiff paper folder spread horizontally, cream typed sheets with abstract short black lines and two small monochrome photographs clipped to top page, photos depict a grey office doorway and a distant industrial building, no people, names or readable text. Thin blue cloth tie trails from folder edge. Realistic worn paper, cold grey shadows and silver-white highlights, dark blue-black cover matching supplied HOI4 political collage style. Wide low shape, complete corners, transparent background, no pen, hands, desk, magnifier, stamps or glow."
+        },
+        {
+          "file": "cabinet_archives_silver_key.png",
+          "source": "exec-e9b5df83-098a-485d-8051-00f2bacd29f9.png",
+          "prompt": "One isolated plain old archive key, worn silver steel with a simple oval bow, solid shaft, square bit with two blunt teeth. Diagonal from lower-left bit to upper-right bow, entire key visible. Realistic dark grey metal with crisp cold silver highlight, restrained blue-black shadows matching supplied political HOI4 icon style, strong readable simple shape. No engraving, text, ornament, rings, hands, papers, ground or halo. True transparent alpha."
+        },
+        {
+          "file": "district_authority_file_cabinet.png",
+          "reused_from": "STP_pw_republic_district_authority"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-ce86e26d-82a3-4e37-a52b-52bf28699772.png",
+        "prompt": "Compose wide HOI4 focus Departmental Documents from three supplied cutouts: file cabinet image3 dark smaller background left, opened dossier image1 dominates lower middle and right, silver archive key image2 diagonal across dossier lower-left toward upper-right, not hiding both photos. Tight overlapping silhouette1.9:1, cold blue-black silver realistic political photomontage, restrained paper brightness. No people, labels, new symbols, frame, ground, room or broad glow. Transparent alpha outside all objects, full key bow and folder corners in frame."
+      }
+    },
+    {
+      "focus_id": "STP_cw_border_evidence",
+      "title": "Пограничные свидетельства",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "border_evidence_binoculars.png",
+          "source": "exec-71d739dd-fb7f-43ca-a11f-ba87e357a325.png",
+          "prompt": "One isolated worn pair of old field binoculars, black leather-covered body, dark steel rims, two large front lenses seen in three-quarter view, short loose strap curled beneath. Compact broad silhouette, entire binoculars and strap visible. Realistic dark cold blue-grey photomontage prop for HOI4 focus, restrained silver edges, lenses subtle blue reflection, no bright glow. No hands, people, lettering, emblems, terrain or background. Transparent alpha. Supplied icons are style refs only."
+        },
+        {
+          "file": "border_evidence_frontier_post.png",
+          "source": "exec-f5201b82-e243-42d6-b12c-fdcb36cca57b.png",
+          "prompt": "One isolated generic frontier marker post, weathered square wooden pillar with peaked cap, alternating worn dark blue-grey and dirty white diagonal bands, no country emblem, flag, crest, numbers or text. Short secondary segment of plain dark fence rail attached near lower side. Three-quarter view, stout readable silhouette for HOI4 focus collage. Cold realistic grey-blue texture and silver highlights matching refs, no landscape, ground, plants, people, wire coil, snow or glow. Transparent alpha, entire post visible."
+        },
+        {
+          "file": "cabinet_archives_open_dossier.png",
+          "reused_from": "STP_cw_cabinet_archives"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-7b6c88b8-d648-401a-b0e7-a01accb17ba3.png",
+        "prompt": "Wide compact HOI4 focus Border Testimonies from three supplied cutouts: frontier marker image1 smaller at back-left, open dossier image2 spreads across bottom, binoculars image3 large central-right on dossier. Three strong overlapping shapes, marker not too tall so silhouette width1.9xheight. Photographs remain partially visible, no legible text. Realistic cold blue-black and silver political photomontage, no people, extra props, landscape, border scene, frame or halo. True transparent alpha outside objects, complete edges."
+      }
+    },
+    {
+      "focus_id": "STP_Garrisons_Hesitate",
+      "title": "Договор с гарнизонами",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "garrison_agreement_civil_military_handshake.png",
+          "source": "exec-11333da8-884a-4009-8121-5f4a6f6d4cff.png",
+          "prompt": "One isolated civilian-military handshake cutout, only two hands and short forearms, left sleeve plain charcoal civilian suit with white cuff, right sleeve slate blue-grey mottled uniform patterned like image3 with small part of yellow armband visible near outer edge. Natural anatomically clear handshake, no extra hands or fingers, no gloves. Wide horizontal silhouette and entire clasp in frame. Realistic cold blue-black silver political photomontage style refs1-2, desaturated skin, no warm glow. No weapons, pens, paper, table, people bodies, background, medals, text or insignia. Transparent alpha."
+        },
+        {
+          "file": "heavy_reserve_regular_helmet.png",
+          "reused_from": "STP_cw_heavy_reserve"
+        },
+        {
+          "file": "restore_civil_authority_hanging_flag.png",
+          "reused_from": "STP_cw_restore_civil_authority"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-7d0a5881-00ea-4d67-ae70-0f482c10d69a.png",
+        "prompt": "Assemble wide compact HOI4 focus Agreement with the Garrisons: civilian-military handshake image1 large across lower foreground, steel helmet image2 left-back, native blue banner image3 behind right. Preserve natural hands and military sleeve pattern, exact white ascending diagonal and small four-point gold star of banner. Width1.9xheight, tightly overlapping realistic cold blue-black/silver political photomontage, subtle skin, muted green helmet. No text, new props, full people, frame, ground, scene or glow. True transparent alpha."
+      }
+    },
+    {
+      "focus_id": "STP_cw_local_council_envoys",
+      "title": "Посланники к советам",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "council_envoys_travelling_delegate.png",
+          "source": "exec-8e95b22e-7c07-49de-8ec8-82030fd689e4.png",
+          "prompt": "Single separate waist-up civilian envoy seen from three-quarter back, turned to the right with only a sliver of calm face visible, plain dark grey travel coat and soft worn cap held in one hand at waist, other arm relaxed. A modest middle-aged messenger attending district councils, no uniform or symbols. Strong readable silhouette, entire head elbows cap hands visible. Dark realistic HOI4 political collage style refs, cold blue-black shadows and silver-grey rim highlights, natural desaturated skin. No bag, weapons, papers, table, room, flags, text or glow. Transparent alpha."
+        },
+        {
+          "file": "freedom_open_assembly_seats.png",
+          "reused_from": "STP_pc_freedom_open"
+        },
+        {
+          "file": "district_services_postal_satchel.png",
+          "reused_from": "STP_pw_republic_new_republic"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-97675cc5-1c5f-4066-8d04-f39faa30fab9.png",
+        "prompt": "Assemble wide HOI4 focus Envoys to the Councils: envoy seen from back image1 on left, facing the empty council benches image2 spread horizontally to right, postal satchel image3 small lower-middle foreground. Crop envoy below waist behind satchel only. Tight coherent overlapping collage width1.9xheight, realistic cold blue-black silver political miniature, restrained brown wood and leather, complete head and cap visible. No extra people, flags, text, scenery, room, ground, frame or broad glow. Transparent alpha outside irregular silhouette."
+      }
+    },
+    {
+      "focus_id": "STP_cw_autonomy_guarantees",
+      "title": "Ратифицировать договор",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "autonomy_treaty_voting_hand.png",
+          "source": "exec-5d9b1bca-df6d-4d62-baf6-3656db88d7cc.png",
+          "prompt": "Single isolated raised adult right hand voting at a civilian council, five natural relaxed fingers slightly apart, palm faces viewer at subtle angle, forearm rises nearly vertically from lower-left with charcoal civilian wool jacket sleeve and narrow white cuff. Not salute, no militaristic pose, no fist. Clear natural anatomy, whole fingertips and cuff visible. Realistic dark political HOI4 collage texture, cool desaturated skin with cold silver-blue rim lighting, blue-black sleeve. No people bodies, text, flags, objects, room, ground or glow. Transparent alpha. Reference icons style only."
+        },
+        {
+          "file": "freedom_open_assembly_seats.png",
+          "reused_from": "STP_pc_freedom_open"
+        },
+        {
+          "file": "district_assembly_presiding_gavel.png",
+          "reused_from": "STP_pc_lib_assembly"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-7e625588-1d2f-4c5a-9c85-c2721be35ffd.png",
+        "prompt": "Assemble three supplied cutouts into wide HOI4 focus Ratify the Treaty: raised civilian voting hand image1 left, council seats image2 smaller stretching behind right, chairman gavel image3 prominent horizontal across lower foreground. Hand and gavel dominant, seating secondary. Tight coherent collage silhouette width1.9xheight, cold blue-black/silver realistic dark political miniature, restrained wood and skin. No extra hands, faces, documents, flags, text, frame, room, ground or halo. True transparent alpha, whole fingertips and gavel handle within frame."
+      }
+    },
+    {
+      "focus_id": "STP_The_Silent_Mountain_March",
+      "title": "Окружные управления",
+      "phase": "prewar",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "prewar_district_administrations_doorway.png",
+          "source": "exec-aecace09-24d2-40e1-82b2-0aef3be6bccd.png",
+          "prompt": "Single isolated civic office entrance miniature, broad pair of heavy dark wooden doors standing slightly open within worn grey stone doorway, plain transom window and small unmarked metal plaque at right. Dim neutral interior visible as thin sliver, intact well-used institution, no people or symbols. Front three-quarter view, broad compact silhouette, no large building around it, no stairs/base/ground slab. Realistic dark blue-black silver HOI4 political collage matching refs, restrained natural wood. True transparent alpha, no writing, flags, room scene, halo or frame."
+        },
+        {
+          "file": "district_authority_seal_press.png",
+          "reused_from": "STP_pw_republic_district_authority"
+        },
+        {
+          "file": "cabinet_archives_silver_key.png",
+          "reused_from": "STP_cw_cabinet_archives"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-8bf707c0-21e7-4f35-9714-9c0eb16aeaad.png",
+        "prompt": "Assemble a wide compact HOI4 focus District Administrations PREWAR: civic doorway image1 back-left, seal press image2 large right foreground, silver key image3 laid across lower foreground diagonally. Three readable overlapping silhouettes, width1.9xheight, doorway kept squat relative to press so composition stays horizontal. Realistic dark cold blue-black silver political photomontage, restrained wood, no people, papers, words, flags, other objects, scene, floor, frame or halo. Transparent alpha outside objects and complete edges."
+      }
+    },
+    {
+      "focus_id": "STP_THE_MOUNTAIN_WINDOW",
+      "title": "Выбрать день выступления",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "uprising_day_marked_calendar.png",
+          "source": "exec-d5002a87-c4aa-4898-b927-05f70e7e73fa.png",
+          "prompt": "One isolated small old tabletop flip calendar on dark metal triangular stand, broad cream rectangular page with simple blank grid of seven columns and four rows, a single middle cell circled in muted dark red pencil. NO numerals, month names, letters or words. Three-quarter view, wide squat readable silhouette. Worn paper and steel, cold blue-grey silver realistic political photomontage matching HOI4 icon references, restrained red accent only. No hand, pen, clock, desk, room or halo. Transparent alpha, full stand and page visible."
+        },
+        {
+          "file": "election_commission_hourglass.png",
+          "reused_from": "STP_cw_delay_election_commission"
+        },
+        {
+          "file": "defensive_lines_mountain_ridge.png",
+          "reused_from": "STP_cw_defensive_lines"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-428308f0-17a1-4c64-b747-0e16f106dbaf.png",
+        "prompt": "Assemble wide HOI4 icon Choose the Day of the Uprising from supplied cutouts: mountain ridge image3 dark small background across upper edge, calendar image1 large lower-left and center, hourglass image2 right. Tight overlap, broad silhouette1.9xheight, calendar's single muted red circle is focal accent. Realistic cold blue-black/silver political photomontage, pale paper subdued, no readable text, no people, weapons, flags, extra props, ground, scene, frame or halo. Transparent alpha, complete object edges."
+      }
+    },
+    {
+      "focus_id": "STP_cw_prepare_capital_sabotage",
+      "title": "Заряды у Конгресса",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "capital_disruption_disconnected_telephone.png",
+          "source": "exec-6890399a-0f4e-4df5-871f-c81df7b3900b.png",
+          "prompt": "One isolated broken old field telephone as fictional strategy-game symbolic prop, black handset resting crookedly over a scuffed dark metal base, cord visibly severed with two loose short ends separated. No internal electrical detail, wiring diagram, tools, explosive or instructions. Realistic worn cold blue-grey steel and black rubber, narrow silver highlights, dark photo-collage HOI4 style references. Broad low readable silhouette, full handset and cable tips visible, transparent alpha background, no hands, text, ground, scenery or halo."
+        },
+        {
+          "file": "capital_disruption_smoke_effect.png",
+          "source": "exec-31f52a26-938a-4e7d-974e-fd25046f8912.png",
+          "prompt": "One separate wide cinematic smoke-and-dust effect asset for a HOI4 focus collage: low dense dark grey-blue smoke plume curling horizontally, small muted orange glow with few tiny embers at base center. No explosive device, projectile, people, buildings, ground or debris objects. Realistic volumetric soot, restrained silver-blue edges, dramatic dark style matching references. Transparent alpha fading naturally at smoke edges, no rectangular backdrop, broad canvas width2xheight, not a mushroom cloud or huge fireball."
+        },
+        {
+          "file": "restore_civil_authority_administration.png",
+          "reused_from": "STP_cw_restore_civil_authority"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-cd365918-eaeb-4cba-9136-c5712fe750a3.png",
+        "prompt": "Create wide symbolic HOI4 fictional strategy focus icon 'Charges near Congress' from supplied three cutouts: grey civic building image1 in background left, disconnected field telephone image2 large foreground right, low smoke effect image3 along base partly in front of building. Non-graphic dramatic political collage symbolizing disrupted communications; no people, casualties, explosive devices or instructions. Building remains recognizable, phone cut cord visible, smoke restrained. Tight silhouette1.9:1, cold blue-black silver with tiny orange ember accent. No text, frame, new objects, scene or ground. Transparent alpha outside irregular silhouette and smoke edges."
+      }
+    },
+    {
+      "focus_id": "STP_cw_prepare_industry_sabotage",
+      "title": "Срыв смен Крейдена",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "kreyden_disruption_broken_cogwheel.png",
+          "source": "exec-505e5ae0-4bbe-448c-8f05-cf720a69ac1c.png",
+          "prompt": "One isolated large broken industrial steel cogwheel, rough dark metal with a wedge-shaped segment missing at lower-right, separated broken segment lying close beneath. Nontechnical symbolic prop, no machine diagram, methods or tools. Three-quarter view, chunky thick teeth, cold silver scuffed edges and deep blue-black shadows, gritty realistic HOI4 political photomontage matching references. Full wheel and fragment visible, no people, hands, factory, smoke, ground, text or halo. Transparent alpha."
+        },
+        {
+          "file": "kreyden_disruption_factory_clock.png",
+          "source": "exec-4bf060e8-c565-4f00-a92f-5f0b566fb59d.png",
+          "prompt": "Single isolated old industrial wall clock, round thick dark steel case, cracked dirty offwhite face behind glass with twelve plain black tick marks and two black hands at about10:10. No numerals, letters, words, logo, visible gears or wires. Slight three-quarter angle, realistic scratched cold grey metal and subdued silver highlights, blue-black shadows matching HOI4 focus style refs. Entire clock visible, no wall, hands/people, other objects, ground or halo. Transparent alpha."
+        },
+        {
+          "file": "abila_workshops_factory_building.png",
+          "reused_from": "STP_cw_abila_workshops"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-7e691754-cbae-4cd7-abb7-512c1b9926be.png",
+        "prompt": "Assemble wide compact HOI4 focus Disrupted Shifts of Kreyden from3 cutouts: factory building image3 small dark upper background, broken steel cogwheel image1 dominant left foreground with missing segment visibly open, cracked factory clock image2 right foreground. Keep factory chimneys visible above cog, gear and clock overlap slightly, width1.9xheight silhouette. Realistic cold blue-black silver political photomontage, no fire, smoke, people, text, new props, ground, scene, frame or halo. Transparent alpha."
+      }
+    },
+    {
+      "focus_id": "STP_cw_disruption_cells",
+      "title": "Боевые группы подполья",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "underground_cells_courier_pair.png",
+          "source": "exec-e8007177-c9aa-4033-b6eb-910e6321b37a.png",
+          "prompt": "Single isolated pair of adult fictional resistance couriers as one character-group asset, waist-up, one in foreground left three-quarter looking right, second behind right looking left, quiet alert poses with arms lowered. Uniforms based on image3 actual game model: slate blue-grey mottled jackets, soft dark caps, grey neck scarves, simple black harness with tan pouches and small yellow upper-left-arm bands. Lower faces partially covered by scarves, eyes visible. No weapons, military plans, instructions, action, heroic gestures or insignia. Natural anatomy, separate clear heads, full cap edges. Realistic dark political HOI4 photo-collage style refs1-2, cold silver-blue edge light, muted skin. True transparent alpha, no background, table, text or glow."
+        },
+        {
+          "file": "underground_cells_portable_radio.png",
+          "source": "exec-3cca00b3-868f-438d-807d-0d8f3be954ac.png",
+          "prompt": "One isolated old portable field radio, dark blue-grey rectangular metal case with carry handle, short telescopic antenna angled right, simple round tuning dial, small speaker grille, coiled cable to a plain handset resting beside base. Complete broad compact prop, no visible circuitry, frequencies, brand, numbers or writing. Realistic worn cold dark steel with silver edges matching HOI4 focus reference style. No people, hands, table, scenery, extra objects, floor or halo. True transparent alpha."
+        },
+        {
+          "file": "cabinet_archives_open_dossier.png",
+          "reused_from": "STP_cw_cabinet_archives"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-df952c37-c99f-4656-b6fd-a924305e4c6e.png",
+        "prompt": "Assemble wide fictional HOI4 focus Underground Combat Groups: two uniformed couriers image1 on left and center-back, portable radio image2 prominent right foreground, open dossier image3 horizontal along lower edge. Exactly three assets, crop character lower waists behind dossier, retain distinct heads and yellow armbands. Tight overlapping silhouette width1.9xheight, gritty cold blue-black silver political photomontage, restrained skin/khaki, no broad background glow around figures. No weapons, text, extra characters, map plans, instructions, frame, room or ground. True transparent alpha outside silhouettes."
+      }
+    },
+    {
+      "focus_id": "STP_REVOLUTION_FROM_THE_NORTH",
+      "title": "Революция с Севера",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "northern_revolution_nodrul_banner.png",
+          "source": "exec-d48a4906-3678-47f2-a190-15037263073f.png",
+          "prompt": "Generate one separate realistic draped cloth flag based EXACTLY on image3 flat native mod flag: deep royal blue field, a single white horizontal stripe across LOWER portion (position as reference), white many-point sunburst in UPPER LEFT canton. Do not change this to diagonal stripe, star or another nation's flag. Cloth hangs from a short dark metal horizontal rod, spread into a wide waving drape with restrained folds keeping white sunburst and stripe unmistakable. Gritty realistic political HOI4 collage style images1-2, cold blue-black shadows/silver highlights. No text, gold trim, other emblems, people, background, ground or halo. Transparent alpha, entire cloth and rod inside frame."
+        },
+        {
+          "file": "restore_civil_authority_administration.png",
+          "reused_from": "STP_cw_restore_civil_authority"
+        },
+        {
+          "file": "military_committee_banknote_bundles.png",
+          "reused_from": "STP_cw_military_committee_fund"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-1ce539cb-edf3-43c6-afb0-f7bc1f1c1959.png",
+        "prompt": "Wide HOI4 political focus Revolution from the North: native Nodrul flag image1 spread in background across full width, civic government building image2 central-left foreground, fictional banknote bundles image3 lower-right. Symbolize imported political influence through money and institutions. Preserve EXACT flag white sunburst upper-left and white HORIZONTAL lower stripe, do not use Shabrat diagonal flag. Three overlapping readable forms, silhouette1.9:1, gritty cold blue-black silver photomontage matching supplied objects, pale notes small accents. No people, weapons, flames, text, frame, ground, new props or halo. Transparent alpha."
+      }
+    },
+    {
+      "focus_id": "STP_STATE_OF_THE_REPUBLIC",
+      "title": "Положение республики",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "state_of_republic_tired_ivanov.png",
+          "source": "exec-669233cb-f91a-40c6-b0fb-16961fa4b2ce.png",
+          "prompt": "Separate waist-up portrait cutout of fictional president Petr Ivanov, faithfully based on reference image3: swept-back silver-grey hair, square black glasses, lined clean-shaven face, stern older man, dark green formal jacket over white shirt and dark muted burgundy tie. Show him tired but dignified, seated leaning slightly forward, eyes lowered as if losing concentration, one hand lightly touching temple and other resting low. No new medals or insignia. Natural hands, full head shoulders elbows in frame. Realistic dark HOI4 political photomontage matching style refs1-2, cold blue-black shadows and restrained silver highlights, desaturated skin. No chair, desk, documents, medical devices, room, text, flag or halo. True transparent alpha."
+        },
+        {
+          "file": "cabinet_archives_open_dossier.png",
+          "reused_from": "STP_cw_cabinet_archives"
+        },
+        {
+          "file": "election_commission_hourglass.png",
+          "reused_from": "STP_cw_delay_election_commission"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-edbbd369-24ce-4178-8ce8-78d91a416bf4.png",
+        "prompt": "Compose wide HOI4 focus State of the Republic from supplied 3 assets: tired president Ivanov image1 on left and center, open administrative dossier image2 in lower foreground as his report, hourglass image3 at right. Preserve exact reference face glasses and silver hair, his hand at temple intact; lower hand hidden BEHIND folder edge, no fingers fused into papers. Tight overlapping silhouette1.85:1, dark cold blue-black silver photomontage with subtle dark green jacket and burgundy tie, paper subdued. No new people, text, flags, desk, chair, background, frame or halo. True transparent alpha, entire head and hourglass visible."
+      }
     }
   ],
   "shared_assets": [
@@ -667,7 +1075,7 @@
         "description": "Чтобы понять сегодняшний Стеландер, нужно вспомнить, как нодрулский политический проект стал внутренним порядком страны.",
         "current_icon": "GFX_focus_generic_diplomatic_treaty",
         "current_texture": null,
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_2160_budget",
@@ -691,7 +1099,7 @@
         "description": "После утверждения бюджета кабинет готовит доклад президенту. На приёме становится ясно, что Иванов больше не может вести дела в прежнем темпе. Нам предстоит решить, кому доверить подготовку к переходу власти.",
         "current_icon": "GFX_focus_STP_Nectar_of_the_Gods",
         "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Nectar_of_the_Gods.png",
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_Show_Him_The_Truth",
@@ -705,9 +1113,11 @@
         "focus_id": "STP_cw_pay_officials",
         "title": "Служащие лесного округа",
         "description": "Чиновники региона [53.GetName] подготовят передачу управления Шабрату. Администрацию ещё нужно защитить от проверок.",
-        "current_icon": "GFX_focus_generic_improve_the_administration",
-        "current_texture": null,
-        "art_status": "generated"
+        "current_icon": "GFX_focus_STP_cw_pay_officials",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_pay_officials.png",
+        "art_status": "generated",
+        "initial_icon": "GFX_focus_generic_improve_the_administration",
+        "initial_texture": null
       },
       {
         "focus_id": "STP_cw_repair_niansas",
@@ -745,9 +1155,11 @@
         "focus_id": "STP_Call_For_Shabrat",
         "title": "Штаб Шабрата",
         "description": "Постоянный штаб возьмёт на себя переговоры с чиновниками и подготовку публичных договорённостей.",
-        "current_icon": "GFX_focus_STP_Side_With_Maksim",
-        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Side_With_Maksim.png",
-        "art_status": "generated"
+        "current_icon": "GFX_focus_STP_Call_For_Shabrat",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Call_For_Shabrat.png",
+        "art_status": "generated",
+        "initial_icon": "GFX_focus_STP_Side_With_Maksim",
+        "initial_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Side_With_Maksim.png"
       },
       {
         "focus_id": "STP_cw_delay_election_commission",
@@ -771,7 +1183,7 @@
         "description": "Связи среди столичных служащих позволяют подготовить удар по управлению гарнизоном.",
         "current_icon": "GFX_focus_generic_secret_service_agency",
         "current_texture": null,
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_cw_prepare_industry_sabotage",
@@ -779,7 +1191,7 @@
         "description": "Завербованные работники Крейдена подготовят удар по промышленному снабжению партии.",
         "current_icon": "GFX_focus_generic_industry_3",
         "current_texture": null,
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_cw_disruption_cells",
@@ -787,7 +1199,7 @@
         "description": "Объединим связи промышленного и столичного подполья в сеть боевых групп. После раскола Шабрат сможет оплачивать операции против партийных территориальных бригад.",
         "current_icon": "GFX_focus_generic_secret_service_agency",
         "current_texture": null,
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_Garrisons_Hesitate",
@@ -795,15 +1207,17 @@
         "description": "Заключим соглашения с гарнизонами и дадим офицерам гарантии служебных полномочий. Это ослабит поддержку Шабрата на выборах.",
         "current_icon": "GFX_goal_generic_national_unity",
         "current_texture": null,
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_cw_district_printing",
         "title": "Окружные типографии",
         "description": "Типографии обеспечат общую избирательную кампанию и связь между окружными организациями.",
-        "current_icon": "GFX_focus_STP_Open_Wounds_Of_The_System",
-        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Open_Wounds_Of_The_System.png",
-        "art_status": "generated"
+        "current_icon": "GFX_focus_STP_cw_district_printing",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_district_printing.png",
+        "art_status": "generated",
+        "initial_icon": "GFX_focus_STP_Open_Wounds_Of_The_System",
+        "initial_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Open_Wounds_Of_The_System.png"
       },
       {
         "focus_id": "STP_The_Silent_Mountain_March",
@@ -811,7 +1225,7 @@
         "description": "Договоримся с чиновниками региона [2.GetName] о продолжении работы после смены власти. Поддержка Шабрата укрепится, а администрация сможет подготовить передачу округа. До подведения итогов её придётся защитить от партийных проверок.",
         "current_icon": "GFX_goal_generic_national_unity",
         "current_texture": null,
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_THE_MOUNTAIN_WINDOW",
@@ -819,7 +1233,7 @@
         "description": "Северная кампания сковывает армию Нодрула. Подготовим выступление, пока основные силы соседа заняты. Начало восстания прервёт выборы и незавершённые операции; ожидание позволит получить мандат, но противник может успеть освободить войска.",
         "current_icon": "GFX_focus_STP_Side_With_Maksim",
         "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Side_With_Maksim.png",
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_cw_local_council_envoys",
@@ -827,7 +1241,7 @@
         "description": "Признаем советы Ливонинского округа стороной переговоров. Без договорённости об автономии усиление советов укрепит самостоятельные республики.",
         "current_icon": "GFX_focus_generic_diplomatic_treaty",
         "current_texture": null,
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_cw_autonomy_guarantees",
@@ -835,7 +1249,7 @@
         "description": "Советы уже заключили договор о переходе Ливонинского округа к Шабрату. Закрепим его и гарантируем самостоятельность отделившимся западным советам. После раскола поддержим их снабжение против Кефрейта, а после победы придётся определить судьбу гарантий.",
         "current_icon": "GFX_focus_STP_Triumph_Of_Common_Sense",
         "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Triumph_Of_Common_Sense.png",
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_cw_northern_dossier",
@@ -859,7 +1273,7 @@
         "description": "После распада Воркерланда брошенные склады на стеландерской стороне можно изъять без сделки с претендентами.",
         "current_icon": "GFX_focus_generic_stockpile_currency",
         "current_texture": null,
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_cw_seize_vorkerland_accounts",
@@ -867,7 +1281,7 @@
         "description": "Конфедеративные расчётные счета на нашей стороне больше некому защищать. Правительство распорядится передать эти средства под управление местного казначейства.",
         "current_icon": "GFX_focus_generic_treaty",
         "current_texture": null,
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_cw_border_evidence",
@@ -875,7 +1289,7 @@
         "description": "Соберём приказы, показания пограничников и сведения о подготовке вмешательства. Их публикация даст Шабрату больше времени до вмешательства.",
         "current_icon": "GFX_focus_generic_diplomatic_treaty",
         "current_texture": null,
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_cw_arm_the_north",
@@ -891,7 +1305,7 @@
         "description": "Через служащих получим списки назначений, ведомости и закрытые счета. Новые посредники усилят сеть сторонников. Затем документы можно опубликовать или использовать в переговорах с министрами.",
         "current_icon": "GFX_focus_generic_secret_service_agency",
         "current_texture": null,
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_cw_expose_the_cabinet",
@@ -937,25 +1351,31 @@
         "focus_id": "STP_cw_abila_reserve",
         "title": "Резерв Абилии",
         "description": "Подготовим резервистов и переведём снаряжение на склад Абилии для будущих бригад сопротивления.",
-        "current_icon": "GFX_goal_generic_small_arms",
-        "current_texture": null,
-        "art_status": "generated"
+        "current_icon": "GFX_focus_STP_cw_abila_reserve",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_abila_reserve.png",
+        "art_status": "generated",
+        "initial_icon": "GFX_goal_generic_small_arms",
+        "initial_texture": null
       },
       {
         "focus_id": "STP_cw_reserve_commanders",
         "title": "Командиры резервных рот",
         "description": "Подготовим командиров и их заместителей для резервных подразделений.",
-        "current_icon": "GFX_focus_generic_military_academy",
-        "current_texture": null,
-        "art_status": "generated"
+        "current_icon": "GFX_focus_STP_cw_reserve_commanders",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_reserve_commanders.png",
+        "art_status": "generated",
+        "initial_icon": "GFX_focus_generic_military_academy",
+        "initial_texture": null
       },
       {
         "focus_id": "STP_cw_casualty_routes",
         "title": "Маршруты эвакуации раненых",
         "description": "Снабженцы свяжут перевязочные пункты с транспортом и местами отдыха.",
-        "current_icon": "GFX_focus_generic_supply_line",
-        "current_texture": null,
-        "art_status": "generated"
+        "current_icon": "GFX_focus_STP_cw_casualty_routes",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_casualty_routes.png",
+        "art_status": "generated",
+        "initial_icon": "GFX_focus_generic_supply_line",
+        "initial_texture": null
       },
       {
         "focus_id": "STP_cw_military_committee_fund",
@@ -963,7 +1383,7 @@
         "description": "Военные предлагают направить собранные сторонниками средства на оснащение ударной части. Комитет получит деньги сразу, но гражданские делегаты увидят в этом подготовку захвата власти. Строительство собственных мастерских придётся отложить.",
         "current_icon": "GFX_goal_generic_army_artillery",
         "current_texture": null,
-        "art_status": "planned"
+        "art_status": "generated"
       },
       {
         "focus_id": "STP_cw_abila_workshops",
@@ -977,17 +1397,21 @@
         "focus_id": "STP_cw_warehouse_inventory",
         "title": "Складская служба",
         "description": "Снабженцам нужны согласованные заявки, надёжные кладовщики и порядок выдачи имущества. Подготовим эту службу для будущей армии сопротивления.",
-        "current_icon": "GFX_focus_generic_reinforcing_the_supply_network",
-        "current_texture": null,
-        "art_status": "generated"
+        "current_icon": "GFX_focus_STP_cw_warehouse_inventory",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_warehouse_inventory.png",
+        "art_status": "generated",
+        "initial_icon": "GFX_focus_generic_reinforcing_the_supply_network",
+        "initial_texture": null
       },
       {
         "focus_id": "STP_cw_supply_officers",
         "title": "Офицеры снабжения",
         "description": "Снабженцы согласуют выдачу имущества будущим частям. Укрепим связи в регионе [46.GetName] для подготовки окружного склада.",
-        "current_icon": "GFX_focus_generic_supply_line",
-        "current_texture": null,
-        "art_status": "generated"
+        "current_icon": "GFX_focus_STP_cw_supply_officers",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_supply_officers.png",
+        "art_status": "generated",
+        "initial_icon": "GFX_focus_generic_supply_line",
+        "initial_texture": null
       },
       {
         "focus_id": "STP_cw_district_administration",
@@ -1001,9 +1425,11 @@
         "focus_id": "STP_cw_courier_service",
         "title": "Служба связных",
         "description": "Постоянные связные улучшат работу сети сторонников и доставку документов. Осторожная передача распоряжений снизит подозрения партии.",
-        "current_icon": "GFX_focus_generic_supply_line",
-        "current_texture": null,
-        "art_status": "generated"
+        "current_icon": "GFX_focus_STP_cw_courier_service",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_courier_service.png",
+        "art_status": "generated",
+        "initial_icon": "GFX_focus_generic_supply_line",
+        "initial_texture": null
       },
       {
         "focus_id": "STP_cw_operational_orders",
@@ -1017,17 +1443,21 @@
         "focus_id": "STP_cw_defensive_lines",
         "title": "Подготовить оборонительные рубежи",
         "description": "Инженеры подготовят рубеж вокруг Абилии, который будет занят сопротивлением при расколе. Позиции в других опорных округах требуют отдельного финансирования и времени.",
-        "current_icon": "GFX_focus_generic_mountain_fortification",
-        "current_texture": null,
-        "art_status": "generated"
+        "current_icon": "GFX_focus_STP_cw_defensive_lines",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_defensive_lines.png",
+        "art_status": "generated",
+        "initial_icon": "GFX_focus_generic_mountain_fortification",
+        "initial_texture": null
       },
       {
         "focus_id": "STP_cw_heavy_reserve",
         "title": "Усиленные боевые группы",
         "description": "Организуем набор и снабжение усиленных частей с артиллерией и подразделениями поддержки. Отдельный заказ покроет людей, вооружение и обучение для будущей армии Шабрата.",
-        "current_icon": "GFX_goal_generic_army_artillery",
-        "current_texture": null,
-        "art_status": "generated"
+        "current_icon": "GFX_focus_STP_cw_heavy_reserve",
+        "current_texture": "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_heavy_reserve.png",
+        "art_status": "generated",
+        "initial_icon": "GFX_goal_generic_army_artillery",
+        "initial_texture": null
       },
       {
         "focus_id": "STP_cw_national_mandate",

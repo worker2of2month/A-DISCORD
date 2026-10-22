@@ -57,6 +57,16 @@ scripted_gui = {
 				clear_variable = ADISCORD_startup_page
 				clear_variable = ADISCORD_startup_spoilers
 			}
+			ADISCORD_startup_region_click = {
+				set_variable = { var = ADISCORD_startup_tab value = 3 }
+				clear_variable = ADISCORD_startup_page
+				clear_variable = ADISCORD_startup_spoilers
+			}
+			ADISCORD_startup_world_click = {
+				set_variable = { var = ADISCORD_startup_tab value = 4 }
+				clear_variable = ADISCORD_startup_page
+				clear_variable = ADISCORD_startup_spoilers
+			}
 			ADISCORD_startup_page_0_click = {
 				set_variable = { var = ADISCORD_startup_page value = 0 }
 				clear_variable = ADISCORD_startup_spoilers
@@ -99,6 +109,16 @@ scripted_gui = {
 			ADISCORD_startup_paths_click_enabled = {
 				NOT = {
 					check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+				}
+			}
+			ADISCORD_startup_region_click_enabled = {
+				NOT = {
+					check_variable = { var = ADISCORD_startup_tab value = 3 compare = equals }
+				}
+			}
+			ADISCORD_startup_world_click_enabled = {
+				NOT = {
+					check_variable = { var = ADISCORD_startup_tab value = 4 compare = equals }
 				}
 			}
 			ADISCORD_startup_page_0_visible = {
@@ -446,6 +466,29 @@ scripted_gui = {
 				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
 				check_variable = { var = ADISCORD_startup_page value = 1 compare = equals }
 				check_variable = { var = ADISCORD_startup_spoilers value = 1 compare = equals }
+			}
+			ADISCORD_startup_text_STP_startup_region_visible = {
+				tag = STP
+				check_variable = { var = ADISCORD_startup_tab value = 3 compare = equals }
+			}
+			ADISCORD_startup_text_VAL_startup_region_visible = {
+				tag = VAL
+				check_variable = { var = ADISCORD_startup_tab value = 3 compare = equals }
+			}
+			ADISCORD_startup_text_RUS_startup_region_visible = {
+				tag = RUS
+				check_variable = { var = ADISCORD_startup_tab value = 3 compare = equals }
+			}
+			ADISCORD_startup_text_SHL_startup_region_visible = {
+				tag = SHL
+				check_variable = { var = ADISCORD_startup_tab value = 3 compare = equals }
+			}
+			ADISCORD_startup_text_NAM_startup_region_visible = {
+				tag = NAM
+				check_variable = { var = ADISCORD_startup_tab value = 3 compare = equals }
+			}
+			ADISCORD_startup_text_ADISCORD_startup_world_body_visible = {
+				check_variable = { var = ADISCORD_startup_tab value = 4 compare = equals }
 			}
 			ADISCORD_startup_intro_note_visible = {
 				check_variable = { var = ADISCORD_startup_tab value = 0 compare = equals }
