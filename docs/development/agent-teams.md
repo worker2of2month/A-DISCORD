@@ -44,14 +44,17 @@ Report: changed paths, checks run with their result, open questions.
 ```
 
 `tools` is optional; omit it to inherit every tool. Restrict a reviewer or
-lore auditor to `Read, Grep, Glob` so it cannot edit files.
+lore auditor to `Read, Grep, Glob` so it cannot edit files. MCP tools are
+listed by their full names, as `blender-modeler` does with `mcp__blender__*`;
+the MCP server itself is configured per developer and must be running.
 
 ## Splitting work
 
 - One owner per file. In this mod the conflict hubs are a country's
   `events/ADISCORD_<TAG>_events.txt`, its decisions and decision categories,
   its scripted effects/triggers, `localisation/russian/ADISCORD_<TAG>_l_russian.yml`
-  and the generated `common/national_focus/` output.
+  and the generated `common/national_focus/` output. For models, the hub is
+  the live Blender scene: one modeller at a time.
 - Prefer splitting by country or by engine data type within one country, not
   by individual focus.
 - Focus sources may be edited by several roles only in different
