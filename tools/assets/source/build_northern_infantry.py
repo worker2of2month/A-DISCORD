@@ -904,16 +904,15 @@ def nam_rest_alignment(target, source):
     return alignment
 
 
-def nam_retarget_pose(rig, donor, rest, native_rest, alignment, pose, own_pose):
-    """Keep native weapon timing, with an upright idle and source locomotion torso/legs."""
+def nam_retarget_pose(rig, donor, rest, native_rest, alignment, pose):
+    """Transfer native motion while keeping head and arms relative to the adapted torso."""
     from mathutils import Matrix, Vector
 
     world = {}
     hip_rotation = (donor.pose.bones['Hip'].matrix @ native_rest['Hip'].inverted()).to_quaternion()
     back_rotation = (donor.pose.bones['back_mid'].matrix @ native_rest['back_mid'].inverted()).to_quaternion()
     torso_rotation = hip_rotation.slerp(back_rotation, 0.45)
-    upright = pose in ('idle_rifle', 'idle_mg', 'idle_training', 'guard_rifle')
-    locomotion = pose.startswith(('moving_', 'march_', 'retreat_', 'charge_'))
+    torso_adjustment = torso_rotation @ back_rotation.inverted()
     for bone in rig.data.bones:
         if bone.name.startswith('NAM_attach_'):
             continue
@@ -930,7 +929,12 @@ def nam_retarget_pose(rig, donor, rest, native_rest, alignment, pose, own_pose):
             if short.startswith('Spine'):
                 rotation = torso_rotation @ initial.to_quaternion()
             elif short == 'Neck':
-                rotation = torso_rotation.slerp(delta.to_quaternion(), 0.25) @ initial.to_quaternion()
+                head_rotation = torso_adjustment @ delta.to_quaternion()
+                rotation = torso_rotation.slerp(head_rotation, 0.25) @ initial.to_quaternion()
+            elif short == 'Head':
+                rotation = torso_adjustment @ rotation
+            elif short.endswith(('Shoulder', 'Arm', 'Hand')):
+                rotation = torso_adjustment @ rotation
             desired = Matrix.LocRotScale(location, rotation, Vector((1, 1, 1)))
         elif 'Hand' in short and short[-1:] in ('1', '2'):
             side = 1 if short.startswith('Left') else -1
@@ -940,17 +944,6 @@ def nam_retarget_pose(rig, donor, rest, native_rest, alignment, pose, own_pose):
                 axis = initial.to_quaternion().inverted() @ Vector((0, 0, side))
                 angle = 55 if short.endswith('1') else 45
             desired = base @ Matrix.Rotation(math.radians(angle), 4, axis)
-        torso_or_leg = short in ('Hips', 'Spine', 'Spine1', 'Spine2', 'Neck', 'Head') or any(
-            part in short for part in ('UpLeg', 'Leg', 'Foot', 'ToeBase')
-        )
-        if torso_or_leg and upright:
-            desired = initial.copy()
-        elif torso_or_leg and locomotion:
-            desired = own_pose[bone.name].copy()
-        elif short in NAM_JOINTS and ('Hand' in short or short.endswith(('Shoulder', 'Arm'))) and (upright or locomotion):
-            own_back = (world['NAM_Spine2'] @ rest['NAM_Spine2'].inverted()).to_quaternion()
-            rotation = own_back @ back_rotation.inverted() @ desired.to_quaternion()
-            desired = Matrix.LocRotScale(desired.translation, rotation, Vector((1, 1, 1)))
         world[bone.name] = desired
     for locator, (target_parent, source_parent) in NAM_ATTACHMENTS.items():
         if source_parent == 'Root':
@@ -1013,25 +1006,6 @@ def build_nam_rigged(output, pdx, source):
     body = next(obj for obj in scene.objects if obj.type == 'MESH')
     rig = next(obj for obj in scene.objects if obj.type == 'ARMATURE')
     body.name = 'NAM_body'
-    cycles = {}
-    for track in rig.animation_data.nla_tracks:
-        track.mute = True
-    for action in list(bpy.data.actions):
-        if action.name not in ('Walking', 'Running'):
-            continue
-        rig.animation_data.action = action
-        rig.animation_data.action_slot = action.slots[0]
-        frames = []
-        for frame in range(round(action.frame_range[0]), round(action.frame_range[1]) + 1):
-            scene.frame_set(frame)
-            sample = {}
-            for bone in rig.pose.bones:
-                matrix = bone.matrix.copy()
-                matrix.translation *= 7.5 / 1.7
-                sample[bone.name.replace('mixamorig:', 'NAM_')] = matrix
-            frames.append(sample)
-        cycles[action.name] = frames
-    assert set(cycles) == {'Walking', 'Running'}
     nam_compact_rig(body, rig)
     material = body.data.materials[0]
     shader = material.node_tree.nodes.get('Principled BSDF')
@@ -1070,18 +1044,12 @@ def build_nam_rigged(output, pdx, source):
         pose = clip.stem.removeprefix('GER_infantry_')
         frames = source_info['sa'][0]
         fps = source_info['fps'][0]
-        loop = cycles['Running' if pose.startswith(('charge_', 'retreat_')) else 'Walking']
         tree = Xml.Element('File', {'pdxasset': [1, 0]})
         info = Xml.SubElement(tree, 'info', {'fps': [fps], 'sa': [frames], 'j': [len(hierarchy)]})
         samples = Xml.SubElement(tree, 'samples')
         packed = {'t': [], 'q': [], 's': []}
         for index, native_pose in enumerate(nam_native_frames(animation, donor, pdx)):
-            position = index * (len(loop) - 1) / max(1, frames - 1)
-            lower = int(position)
-            upper = min(lower + 1, len(loop) - 1)
-            own_pose = {name: loop[lower][name].lerp(loop[upper][name], position - lower)
-                        for name in loop[lower]}
-            world = nam_retarget_pose(rig, native_pose, rest, native_rest, alignment, pose, own_pose)
+            world = nam_retarget_pose(rig, native_pose, rest, native_rest, alignment, pose)
             for bone in hierarchy:
                 parent = world[bone.parent.name] if bone.parent else Matrix.Identity(4)
                 local = pdx.swap_coord_space(parent.inverted_safe() @ world[bone.name])
@@ -2698,7 +2666,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--rig-source', type=Path,
-                        help='NAM animated GLB with Walking and Running clips.')
+                        help='NAM GLB with its original skin and skeleton.')
     parser.add_argument('--assets-only', action='store_true',
                         help='Keep existing entity bindings when replacing an already registered model.')
     parser.add_argument(
