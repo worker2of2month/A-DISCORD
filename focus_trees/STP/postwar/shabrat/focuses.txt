@@ -2884,6 +2884,7 @@
 		mutually_exclusive = { focus = STP_pc_sdir_district_levies }
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			activate_advisor = ADISCORD_staff_STS_Alexei_Barinov
 			army_experience = 15
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_sdir_field_army_delta } }
 			hidden_effect = {
@@ -2912,6 +2913,7 @@
 		mutually_exclusive = { focus = STP_pc_sdir_field_army }
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			activate_advisor = ADISCORD_staff_STS_Nikolai_Vetrov
 			add_manpower = 15000
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_sdir_district_levies_delta } }
 			hidden_effect = {
@@ -3409,11 +3411,11 @@
 				STP_pc_focus_available = yes
 			}
 		}
-		bypass = { amount_research_slots > 5 }
 		prerequisite = { focus = STP_pc_sdir_service_records }
 		prerequisite = { focus = STP_pc_sdir_signal_corps }
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			activate_advisor = ADISCORD_staff_STS_Mikhail_Rakitin
 			if = {
 				limit = { amount_research_slots < 6 }
 				add_research_slot = 1
@@ -3581,6 +3583,7 @@
 		prerequisite = { focus = STP_pc_sdir_forward_airfields }
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			activate_advisor = ADISCORD_staff_STS_Pavel_Berezov
 			air_experience = 35
 			add_tech_bonus = { name = STP_pc_sdir_integrated_staff bonus = 0.5 uses = 2 category = air_equipment }
 		}
@@ -3762,6 +3765,7 @@
 		prerequisite = { focus = STP_pc_sdir_naval_signals }
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			activate_advisor = ADISCORD_staff_STS_Boris_Ostrovsky
 			add_equipment_to_stockpile = { type = convoy amount = 10 producer = ROOT }
 			add_tech_bonus = { name = STP_pc_sdir_convoy_escorts bonus = 0.5 uses = 1 category = naval_equipment }
 		}

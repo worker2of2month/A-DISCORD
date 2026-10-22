@@ -811,7 +811,7 @@ characters = {
 		name = ADISCORD_staff_STS_Fedor_Vedenin
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_def_western_european_2d
+				small = GFX_portrait_STS_staff_01_small
 			}
 		}
 		advisor = {
@@ -832,7 +832,7 @@ characters = {
 		name = ADISCORD_staff_STS_Konstantin_Panov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_def_western_european_2d
+				small = GFX_portrait_STS_staff_02_small
 			}
 		}
 		advisor = {
@@ -853,7 +853,7 @@ characters = {
 		name = ADISCORD_staff_STS_Alexei_Barinov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_def_western_european_2d
+				small = GFX_portrait_STS_staff_03_small
 			}
 		}
 		advisor = {
@@ -864,7 +864,12 @@ characters = {
 			removal_cost = 0
 			allowed = { tag = STS }
 			visible = { tag = STS }
-			available = { has_completed_focus = STP_pc_army_hegemony_cadres }
+			available = {
+				OR = {
+					has_completed_focus = STP_pc_army_hegemony_cadres
+					has_completed_focus = STP_pc_sdir_field_army
+				}
+			}
 			traits = { army_chief_offensive_2 }
 			ai_will_do = { factor = 2 }
 		}
@@ -874,7 +879,7 @@ characters = {
 		name = ADISCORD_staff_STS_Nikolai_Vetrov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_def_western_european_2d
+				small = GFX_portrait_STS_staff_04_small
 			}
 		}
 		advisor = {
@@ -885,7 +890,12 @@ characters = {
 			removal_cost = 0
 			allowed = { tag = STS }
 			visible = { tag = STS }
-			available = { has_completed_focus = STP_pc_army_republic_control }
+			available = {
+				OR = {
+					has_completed_focus = STP_pc_army_republic_control
+					has_completed_focus = STP_pc_sdir_district_levies
+				}
+			}
 			traits = { army_chief_defensive_2 }
 			ai_will_do = { factor = 2 }
 		}
@@ -895,7 +905,7 @@ characters = {
 		name = ADISCORD_staff_STS_Sergei_Tretyakov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_def_western_european_2d
+				small = GFX_portrait_STS_staff_05_small
 			}
 		}
 		advisor = {
@@ -916,7 +926,7 @@ characters = {
 		name = ADISCORD_staff_STS_Yuri_Gradov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+				small = GFX_portrait_STS_staff_06_small
 			}
 		}
 		advisor = {
@@ -937,7 +947,7 @@ characters = {
 		name = ADISCORD_staff_STS_Maksim_Rogov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+				small = GFX_portrait_STS_staff_07_small
 			}
 		}
 		advisor = {
@@ -958,7 +968,7 @@ characters = {
 		name = ADISCORD_staff_STS_Boris_Ostrovsky
 		portraits = {
 			army = {
-				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+				small = GFX_portrait_STS_staff_08_small
 			}
 		}
 		advisor = {
@@ -969,7 +979,12 @@ characters = {
 			removal_cost = 0
 			allowed = { tag = STS }
 			visible = { tag = STS }
-			available = { has_completed_focus = STP_pc_navy_escorts }
+			available = {
+				OR = {
+					has_completed_focus = STP_pc_navy_escorts
+					has_completed_focus = STP_pc_sdir_convoy_escorts
+				}
+			}
 			traits = { navy_chief_maneuver_2 }
 			ai_will_do = { factor = 2 }
 		}
@@ -979,7 +994,7 @@ characters = {
 		name = ADISCORD_staff_STS_Arkady_Kurbatov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+				small = GFX_portrait_STS_staff_09_small
 			}
 		}
 		advisor = {
@@ -1000,7 +1015,7 @@ characters = {
 		name = ADISCORD_staff_STS_Petr_Sazonov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+				small = GFX_portrait_STS_staff_10_small
 			}
 		}
 		advisor = {
@@ -1021,7 +1036,7 @@ characters = {
 		name = ADISCORD_staff_STS_Pavel_Berezov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+				small = GFX_portrait_STS_staff_11_small
 			}
 		}
 		advisor = {
@@ -1032,7 +1047,12 @@ characters = {
 			removal_cost = 0
 			allowed = { tag = STS }
 			visible = { tag = STS }
-			available = { has_completed_focus = STP_pc_air_shield }
+			available = {
+				OR = {
+					has_completed_focus = STP_pc_air_shield
+					has_completed_focus = STP_pc_sdir_integrated_staff
+				}
+			}
 			traits = { air_chief_all_weather_2 }
 			ai_will_do = { factor = 2 }
 		}
@@ -1042,7 +1062,7 @@ characters = {
 		name = ADISCORD_staff_STS_Vladimir_Losev
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_def_western_european_2d
+				small = GFX_portrait_STS_staff_12_small
 			}
 		}
 		advisor = {
@@ -1064,7 +1084,7 @@ characters = {
 		name = ADISCORD_staff_STS_Gennady_Malinin
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_log_western_european_2d
+				small = GFX_portrait_STS_staff_13_small
 			}
 		}
 		advisor = {
@@ -1086,7 +1106,7 @@ characters = {
 		name = ADISCORD_staff_STS_Dmitri_Nekrasov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_art_western_european_2d
+				small = GFX_portrait_STS_staff_14_small
 			}
 		}
 		advisor = {
@@ -1108,7 +1128,7 @@ characters = {
 		name = ADISCORD_staff_STS_Ruslan_Tumanov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_def_western_european_2d
+				small = GFX_portrait_STS_staff_15_small
 			}
 		}
 		advisor = {
@@ -1130,7 +1150,7 @@ characters = {
 		name = ADISCORD_staff_STS_Semyon_Uvarov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_log_western_european_2d
+				small = GFX_portrait_STS_staff_16_small
 			}
 		}
 		advisor = {
@@ -1152,7 +1172,7 @@ characters = {
 		name = ADISCORD_staff_STS_Stanislav_Frolov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_art_western_european_2d
+				small = GFX_portrait_STS_staff_01_small
 			}
 		}
 		advisor = {
@@ -1174,7 +1194,7 @@ characters = {
 		name = ADISCORD_staff_STS_Ilya_Ostretsov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_off_western_european_2d
+				small = GFX_portrait_STS_staff_06_small
 			}
 		}
 		advisor = {
@@ -1195,7 +1215,7 @@ characters = {
 		name = ADISCORD_staff_STS_Aleksei_Chernov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_off_western_european_2d
+				small = GFX_portrait_STS_staff_10_small
 			}
 		}
 		advisor = {
@@ -1216,7 +1236,7 @@ characters = {
 		name = ADISCORD_staff_STS_Mikhail_Rakitin
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_off_western_european_2d
+				small = GFX_portrait_STS_staff_14_small
 			}
 		}
 		advisor = {
@@ -1227,7 +1247,12 @@ characters = {
 			removal_cost = 0
 			allowed = { tag = STS }
 			visible = { tag = STS }
-			available = { has_completed_focus = STP_pw_republic_officer_school }
+			available = {
+				OR = {
+					has_completed_focus = STP_pw_republic_officer_school
+					has_completed_focus = STP_pc_sdir_officer_college
+				}
+			}
 			traits = { ADISCORD_staff_senior_theorist }
 			ai_will_do = { factor = 2 }
 		}

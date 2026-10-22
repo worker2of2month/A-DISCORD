@@ -2820,7 +2820,10 @@ STP_cw_finish_mobilization = {
 		drop_cosmetic_tag = yes
 	}
 	STP_cw_clear_wartime_modifiers = yes
-	if = { limit = { tag = STS } VAL_operations_map_refresh_cache = yes }
+	if = {
+		limit = { STP_operations_map_available = yes }
+		VAL_operations_map_refresh_cache = yes
+	}
 	STP_pw_reconcile_postwar_interactivity = yes
 	STP_qol_initialize_staff = yes
 	mark_focus_tree_layout_dirty = yes
@@ -3452,6 +3455,7 @@ STP_cw_begin_hostilities = {
 		every_owned_state = { set_state_controller_to = PREV }
 		STS = { every_owned_state = { set_state_controller_to = PREV } }
 		SRP = { every_owned_state = { set_state_controller_to = PREV } }
+		VAL_operations_map_refresh_cache = yes
 		STS = { STP_hw_stall_begin = yes }
 		STP_cw_ai_fortify_congress = yes
 		if = {
@@ -3576,11 +3580,31 @@ STP_cw_allocate_formation_reserves = {
 	set_temp_variable = { var = STP_cw_resistance_heavy_reserve value = 6 }
 	multiply_temp_variable = { var = STP_cw_resistance_heavy_reserve value = STP_cw_input_heavy }
 	add_to_temp_variable = { var = STP_cw_resistance_base_reserve value = STP_cw_resistance_heavy_reserve }
+	# The government's regular core - six assault divisions and eight line
+	# brigades - is paid after preparations and before the scaled baselines,
+	# so a short reserve cannot strip the party below a field army. The core
+	# is part of the party baseline, not an extra claim. A limited revolt
+	# keeps its own small baseline without a core.
+	set_temp_variable = { var = STP_cw_party_core_reserve value = 8 }
+	multiply_temp_variable = { var = STP_cw_party_core_reserve value = STP_cw_input_light }
+	set_temp_variable = { var = STP_cw_party_core_heavy value = 6 }
+	multiply_temp_variable = { var = STP_cw_party_core_heavy value = STP_cw_input_heavy }
+	add_to_temp_variable = { var = STP_cw_party_core_reserve value = STP_cw_party_core_heavy }
+	if = {
+		limit = { has_country_flag = STP_cw_limited_party_revolt }
+		set_temp_variable = { var = STP_cw_party_core_reserve value = 0 }
+	}
+	subtract_from_temp_variable = { var = STP_cw_party_base_reserve value = STP_cw_party_core_reserve }
 	set_temp_variable = { var = STP_cw_base_reserve value = STP_cw_party_base_reserve }
 	add_to_temp_variable = { var = STP_cw_base_reserve value = STP_cw_resistance_base_reserve }
 	add_to_temp_variable = { var = STP_cw_base_reserve value = STP_cw_republics_base_reserve }
 	set_temp_variable = { var = STP_cw_unassigned_reserve value = STP_cw_allocation_pool }
 	subtract_from_temp_variable = { var = STP_cw_unassigned_reserve value = STP_cw_prepared_reserve }
+	if = {
+		limit = { check_variable = { var = STP_cw_party_core_reserve value = STP_cw_unassigned_reserve compare = greater_than } }
+		set_temp_variable = { var = STP_cw_party_core_reserve value = STP_cw_unassigned_reserve }
+	}
+	subtract_from_temp_variable = { var = STP_cw_unassigned_reserve value = STP_cw_party_core_reserve }
 	if = {
 		limit = { check_variable = { var = STP_cw_base_reserve value = STP_cw_unassigned_reserve compare = greater_than } }
 		set_temp_variable = { var = STP_cw_base_share value = STP_cw_unassigned_reserve }
@@ -3714,6 +3738,109 @@ STP_cw_divide_air_reserves = {
 			limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
 			send_equipment = { type = ADISCORD_zeppelin_equipment amount = STP_cw_air_transfer target = STP }
 		}
+	}
+}
+
+# COUNTRY STP, after the stockpile and air transfers. The allocation reserves
+# rifles and recruits for the party's assault core; the rest of each package
+# (48 squad weapons, 30 support, 60 artillery, 20 anti-air) has the same first
+# claim here. A shortfall returns from STS, then SRP, by native transfers that
+# keep models and producers.
+STP_cw_secure_party_assault_equipment = {
+	set_temp_variable = { var = STP_cw_core_assault_divisions value = 6 }
+	if = {
+		limit = { has_country_flag = STP_cw_limited_party_revolt }
+		set_temp_variable = { var = STP_cw_core_assault_divisions value = 3 }
+	}
+	set_temp_variable = { var = STP_cw_core_equipment_type value = 1 }
+	STP_cw_secure_core_equipment_type = yes
+	set_temp_variable = { var = STP_cw_core_equipment_type value = 2 }
+	STP_cw_secure_core_equipment_type = yes
+	set_temp_variable = { var = STP_cw_core_equipment_type value = 3 }
+	STP_cw_secure_core_equipment_type = yes
+	set_temp_variable = { var = STP_cw_core_equipment_type value = 4 }
+	STP_cw_secure_core_equipment_type = yes
+}
+
+# COUNTRY STP. Inputs: STP_cw_core_assault_divisions and STP_cw_core_equipment_type
+# (1 squad weapons, 2 support, 3 artillery, 4 anti-air). One spare unit covers
+# fractional stock against the exact payment check.
+STP_cw_secure_core_equipment_type = {
+	set_temp_variable = { var = STP_cw_core_shortfall value = 48 }
+	set_temp_variable = { var = STP_cw_core_holding value = num_equipment@ADISCORD_squad_weapons_equipment }
+	if = {
+		limit = { check_variable = { var = STP_cw_core_equipment_type value = 2 compare = equals } }
+		set_temp_variable = { var = STP_cw_core_shortfall value = 30 }
+		set_temp_variable = { var = STP_cw_core_holding value = num_equipment@support_equipment }
+	}
+	if = {
+		limit = { check_variable = { var = STP_cw_core_equipment_type value = 3 compare = equals } }
+		set_temp_variable = { var = STP_cw_core_shortfall value = 60 }
+		set_temp_variable = { var = STP_cw_core_holding value = num_equipment@artillery_equipment }
+	}
+	if = {
+		limit = { check_variable = { var = STP_cw_core_equipment_type value = 4 compare = equals } }
+		set_temp_variable = { var = STP_cw_core_shortfall value = 20 }
+		set_temp_variable = { var = STP_cw_core_holding value = num_equipment@anti_air_equipment }
+	}
+	multiply_temp_variable = { var = STP_cw_core_shortfall value = STP_cw_core_assault_divisions }
+	add_to_temp_variable = { var = STP_cw_core_shortfall value = 1 }
+	subtract_from_temp_variable = { var = STP_cw_core_shortfall value = STP_cw_core_holding }
+	if = {
+		limit = { check_variable = { var = STP_cw_core_shortfall value = 0 compare = greater_than } }
+		STS = { STP_cw_return_core_equipment = yes }
+	}
+	if = {
+		limit = {
+			check_variable = { var = STP_cw_core_shortfall value = 0 compare = greater_than }
+			SRP = { exists = yes }
+		}
+		SRP = { STP_cw_return_core_equipment = yes }
+	}
+	log = "[STP_CW] party assault equipment type=[?STP_cw_core_equipment_type] remaining shortfall=[?STP_cw_core_shortfall]"
+}
+
+# COUNTRY donor (STS or SRP), called by STP_cw_secure_core_equipment_type.
+# Sends at most the party's shortfall and at most what the donor holds.
+STP_cw_return_core_equipment = {
+	set_temp_variable = { var = STP_cw_core_transfer value = num_equipment@ADISCORD_squad_weapons_equipment }
+	if = {
+		limit = { check_variable = { var = STP_cw_core_equipment_type value = 2 compare = equals } }
+		set_temp_variable = { var = STP_cw_core_transfer value = num_equipment@support_equipment }
+	}
+	if = {
+		limit = { check_variable = { var = STP_cw_core_equipment_type value = 3 compare = equals } }
+		set_temp_variable = { var = STP_cw_core_transfer value = num_equipment@artillery_equipment }
+	}
+	if = {
+		limit = { check_variable = { var = STP_cw_core_equipment_type value = 4 compare = equals } }
+		set_temp_variable = { var = STP_cw_core_transfer value = num_equipment@anti_air_equipment }
+	}
+	if = {
+		limit = { check_variable = { var = STP_cw_core_transfer value = STP_cw_core_shortfall compare = greater_than } }
+		set_temp_variable = { var = STP_cw_core_transfer value = STP_cw_core_shortfall }
+	}
+	# Round down, so a fractional stock is never overdrawn; the spare unit absorbs it.
+	subtract_from_temp_variable = { var = STP_cw_core_transfer value = 0.5 }
+	round_temp_variable = STP_cw_core_transfer
+	if = {
+		limit = { check_variable = { var = STP_cw_core_transfer value = 0 compare = greater_than } }
+		if = {
+			limit = { check_variable = { var = STP_cw_core_equipment_type value = 1 compare = equals } }
+			send_equipment = { type = ADISCORD_squad_weapons_equipment amount = STP_cw_core_transfer target = STP }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_cw_core_equipment_type value = 2 compare = equals } }
+			send_equipment = { type = support_equipment amount = STP_cw_core_transfer target = STP }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_cw_core_equipment_type value = 3 compare = equals } }
+			send_equipment = { type = artillery_equipment amount = STP_cw_core_transfer target = STP }
+		}
+		else = {
+			send_equipment = { type = anti_air_equipment amount = STP_cw_core_transfer target = STP }
+		}
+		subtract_from_temp_variable = { var = STP_cw_core_shortfall value = STP_cw_core_transfer }
 	}
 }
 
@@ -4021,6 +4148,7 @@ STP_cw_start = {
 			transfer_units_fraction = { target = STS size = 0 stockpile_ratio = var:STP_cw_resistance_stockpile_ratio army_ratio = 0 navy_ratio = var:STP_cw_navy_share air_ratio = 0.6 keep_unit_leaders_trigger = { always = yes } }
 		}
 		STP_cw_divide_air_reserves = yes
+		STP_cw_secure_party_assault_equipment = yes
 		log = "[STP_CW] STP proportional allocation: manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]"
 		STS = { log = "[STP_CW] STS proportional allocation: manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]" }
 		SRP = { log = "[STP_CW] SRP proportional allocation: manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]" }

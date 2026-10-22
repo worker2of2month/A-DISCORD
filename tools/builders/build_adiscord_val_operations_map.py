@@ -1,4 +1,4 @@
-"""Build the shared Kefreyt and postwar Stelander operations map."""
+"""Build the shared Kefreyt and Stelander operations map."""
 
 from __future__ import annotations
 
@@ -447,12 +447,17 @@ def operations_map_effects() -> str:
         lines.append("\t}\n")
     lines.append("}\n\n")
 
-    lines.append("# COUNTRY STS: call only after VAL refreshed its cache in the same callback.\n")
-    lines.append("VAL_operations_map_copy_val_cache = {\n")
-    for state in STATE_IDS:
-        variable = f"operations_state_{state}_frame"
-        lines.append(f"\tset_variable = {{ var = {variable} value = VAL.{variable} }}\n")
-    lines.append("}\n\n")
+    for source in ("VAL", "STS"):
+        lines.append(
+            f"# COUNTRY: call only after {source} refreshed its cache in the same callback.\n"
+        )
+        lines.append(f"VAL_operations_map_copy_{source.lower()}_cache = {{\n")
+        for state in STATE_IDS:
+            variable = f"operations_state_{state}_frame"
+            lines.append(
+                f"\tset_variable = {{ var = {variable} value = {source}.{variable} }}\n"
+            )
+        lines.append("}\n\n")
 
     lines.append("VAL_trade_routes_map_refresh_cache = {\n")
     pressure = "check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals }"
@@ -708,7 +713,7 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
             gfx.append(
                 f' spriteType = {{ name = "GFX_VAL_ops_{layer}_{state}" texturefile = "gfx/interface/VAL_operations/VAL_ops_{layer}_{state}.png" }}\n'
             )
-    for prefix, viewer in (("VAL", "VAL"), ("STP", "STS")):
+    for prefix in ("VAL", "STP"):
         gui.append(
             f' containerWindowType = {{\n  name = "ADISCORD_{prefix}_operations_panel_window"\n  position = {{ x = 0 y = 0 }}\n  size = {{ width = 460 height = 398 }}\n  clipping = no\n'
         )
@@ -739,7 +744,7 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
                     f'  iconType = {{ name = "{prefix}_ops_{state}_{layer}" position = {{ x = {20 + left} y = {38 + top} }} quadTextureSprite = "GFX_VAL_ops_{layer}_{state}" }}\n'
                 )
             script.append(
-                f"\t\t\t{prefix}_ops_{state}_border_visible = {{ {state} = {{ controller = {{ tag = {viewer} }} }} }}\n"
+                f"\t\t\t{prefix}_ops_{state}_border_visible = {{ {state} = {{ is_controlled_by = ROOT }} }}\n"
             )
             provinces = "".join(
                 f"\t\t\t\t\t\t\tNOT = {{ controls_province = {p} }}\n"
@@ -748,8 +753,8 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
             script.append(
                 f"\t\t\t{prefix}_ops_{state}_contested_visible = {{\n"
                 f"\t\t\t\t{state} = {{\n"
+                "\t\t\t\t\tis_controlled_by = ROOT\n"
                 "\t\t\t\t\tcontroller = {\n"
-                f"\t\t\t\t\t\ttag = {viewer}\n"
                 "\t\t\t\t\t\tOR = {\n"
                 f"{provinces}"
                 "\t\t\t\t\t\t}\n"

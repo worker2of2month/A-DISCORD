@@ -149,8 +149,13 @@ STP_imperial_union_category = {
 }
 
 STP_military_operations = {
-	allowed = { tag = STS }
-	visible = { has_country_flag = STP_cw_postwar }
+	allowed = {
+		OR = {
+			tag = STP
+			tag = STS
+		}
+	}
+	visible = { STP_operations_map_available = yes }
 	visible_when_empty = yes
 	priority = 20
 	scripted_gui = ADISCORD_STP_operations_panel

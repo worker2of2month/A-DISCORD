@@ -18434,7 +18434,7 @@ VAL_operations_map_refresh_cache = {
 	}
 }
 
-# COUNTRY STS: call only after VAL refreshed its cache in the same callback.
+# COUNTRY: call only after VAL refreshed its cache in the same callback.
 VAL_operations_map_copy_val_cache = {
 	set_variable = { var = operations_state_43_frame value = VAL.operations_state_43_frame }
 	set_variable = { var = operations_state_44_frame value = VAL.operations_state_44_frame }
@@ -18510,6 +18510,84 @@ VAL_operations_map_copy_val_cache = {
 	set_variable = { var = operations_state_193_frame value = VAL.operations_state_193_frame }
 	set_variable = { var = operations_state_206_frame value = VAL.operations_state_206_frame }
 	set_variable = { var = operations_state_207_frame value = VAL.operations_state_207_frame }
+}
+
+# COUNTRY: call only after STS refreshed its cache in the same callback.
+VAL_operations_map_copy_sts_cache = {
+	set_variable = { var = operations_state_43_frame value = STS.operations_state_43_frame }
+	set_variable = { var = operations_state_44_frame value = STS.operations_state_44_frame }
+	set_variable = { var = operations_state_45_frame value = STS.operations_state_45_frame }
+	set_variable = { var = operations_state_88_frame value = STS.operations_state_88_frame }
+	set_variable = { var = operations_state_58_frame value = STS.operations_state_58_frame }
+	set_variable = { var = operations_state_59_frame value = STS.operations_state_59_frame }
+	set_variable = { var = operations_state_60_frame value = STS.operations_state_60_frame }
+	set_variable = { var = operations_state_61_frame value = STS.operations_state_61_frame }
+	set_variable = { var = operations_state_62_frame value = STS.operations_state_62_frame }
+	set_variable = { var = operations_state_63_frame value = STS.operations_state_63_frame }
+	set_variable = { var = operations_state_64_frame value = STS.operations_state_64_frame }
+	set_variable = { var = operations_state_65_frame value = STS.operations_state_65_frame }
+	set_variable = { var = operations_state_24_frame value = STS.operations_state_24_frame }
+	set_variable = { var = operations_state_42_frame value = STS.operations_state_42_frame }
+	set_variable = { var = operations_state_48_frame value = STS.operations_state_48_frame }
+	set_variable = { var = operations_state_54_frame value = STS.operations_state_54_frame }
+	set_variable = { var = operations_state_55_frame value = STS.operations_state_55_frame }
+	set_variable = { var = operations_state_56_frame value = STS.operations_state_56_frame }
+	set_variable = { var = operations_state_57_frame value = STS.operations_state_57_frame }
+	set_variable = { var = operations_state_1_frame value = STS.operations_state_1_frame }
+	set_variable = { var = operations_state_2_frame value = STS.operations_state_2_frame }
+	set_variable = { var = operations_state_3_frame value = STS.operations_state_3_frame }
+	set_variable = { var = operations_state_28_frame value = STS.operations_state_28_frame }
+	set_variable = { var = operations_state_29_frame value = STS.operations_state_29_frame }
+	set_variable = { var = operations_state_46_frame value = STS.operations_state_46_frame }
+	set_variable = { var = operations_state_53_frame value = STS.operations_state_53_frame }
+	set_variable = { var = operations_state_709_frame value = STS.operations_state_709_frame }
+	set_variable = { var = operations_state_10_frame value = STS.operations_state_10_frame }
+	set_variable = { var = operations_state_11_frame value = STS.operations_state_11_frame }
+	set_variable = { var = operations_state_12_frame value = STS.operations_state_12_frame }
+	set_variable = { var = operations_state_13_frame value = STS.operations_state_13_frame }
+	set_variable = { var = operations_state_17_frame value = STS.operations_state_17_frame }
+	set_variable = { var = operations_state_18_frame value = STS.operations_state_18_frame }
+	set_variable = { var = operations_state_30_frame value = STS.operations_state_30_frame }
+	set_variable = { var = operations_state_4_frame value = STS.operations_state_4_frame }
+	set_variable = { var = operations_state_5_frame value = STS.operations_state_5_frame }
+	set_variable = { var = operations_state_6_frame value = STS.operations_state_6_frame }
+	set_variable = { var = operations_state_7_frame value = STS.operations_state_7_frame }
+	set_variable = { var = operations_state_9_frame value = STS.operations_state_9_frame }
+	set_variable = { var = operations_state_31_frame value = STS.operations_state_31_frame }
+	set_variable = { var = operations_state_41_frame value = STS.operations_state_41_frame }
+	set_variable = { var = operations_state_718_frame value = STS.operations_state_718_frame }
+	set_variable = { var = operations_state_14_frame value = STS.operations_state_14_frame }
+	set_variable = { var = operations_state_8_frame value = STS.operations_state_8_frame }
+	set_variable = { var = operations_state_15_frame value = STS.operations_state_15_frame }
+	set_variable = { var = operations_state_16_frame value = STS.operations_state_16_frame }
+	set_variable = { var = operations_state_19_frame value = STS.operations_state_19_frame }
+	set_variable = { var = operations_state_20_frame value = STS.operations_state_20_frame }
+	set_variable = { var = operations_state_21_frame value = STS.operations_state_21_frame }
+	set_variable = { var = operations_state_22_frame value = STS.operations_state_22_frame }
+	set_variable = { var = operations_state_83_frame value = STS.operations_state_83_frame }
+	set_variable = { var = operations_state_84_frame value = STS.operations_state_84_frame }
+	set_variable = { var = operations_state_85_frame value = STS.operations_state_85_frame }
+	set_variable = { var = operations_state_86_frame value = STS.operations_state_86_frame }
+	set_variable = { var = operations_state_87_frame value = STS.operations_state_87_frame }
+	set_variable = { var = operations_state_303_frame value = STS.operations_state_303_frame }
+	set_variable = { var = operations_state_118_frame value = STS.operations_state_118_frame }
+	set_variable = { var = operations_state_119_frame value = STS.operations_state_119_frame }
+	set_variable = { var = operations_state_168_frame value = STS.operations_state_168_frame }
+	set_variable = { var = operations_state_169_frame value = STS.operations_state_169_frame }
+	set_variable = { var = operations_state_167_frame value = STS.operations_state_167_frame }
+	set_variable = { var = operations_state_170_frame value = STS.operations_state_170_frame }
+	set_variable = { var = operations_state_171_frame value = STS.operations_state_171_frame }
+	set_variable = { var = operations_state_184_frame value = STS.operations_state_184_frame }
+	set_variable = { var = operations_state_185_frame value = STS.operations_state_185_frame }
+	set_variable = { var = operations_state_203_frame value = STS.operations_state_203_frame }
+	set_variable = { var = operations_state_178_frame value = STS.operations_state_178_frame }
+	set_variable = { var = operations_state_180_frame value = STS.operations_state_180_frame }
+	set_variable = { var = operations_state_181_frame value = STS.operations_state_181_frame }
+	set_variable = { var = operations_state_182_frame value = STS.operations_state_182_frame }
+	set_variable = { var = operations_state_183_frame value = STS.operations_state_183_frame }
+	set_variable = { var = operations_state_193_frame value = STS.operations_state_193_frame }
+	set_variable = { var = operations_state_206_frame value = STS.operations_state_206_frame }
+	set_variable = { var = operations_state_207_frame value = STS.operations_state_207_frame }
 }
 
 VAL_trade_routes_map_refresh_cache = {
