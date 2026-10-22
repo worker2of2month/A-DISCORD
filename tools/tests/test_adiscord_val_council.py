@@ -31,6 +31,7 @@ class CouncilWorld(ContractWorld):
         super().__init__()
         self.decisions = {e.key: e.value for e in block(entries(DECISIONS), PREFIX + "government_category")}
         self.decisions.update({e.key: e.value for e in block(entries(DECISIONS), PREFIX + "balance_category")})
+        self.decisions.update({e.key: e.value for e in block(entries(DECISIONS), "VAL_command_balance_category")})
         self.stack = ["VAL"]
         self.countries = ["VAL", "STP", "CIN"]
         for tag in self.countries:
@@ -214,6 +215,7 @@ class CouncilWorld(ContractWorld):
                 country.setdefault("field_marshals", set()).add(scalar(value, "character"))
             elif key == "add_dynamic_modifier":
                 country["modifiers"].add(scalar(value, "modifier"))
+                country.setdefault("modifier_days", {})[scalar(value, "modifier")] = scalar(value, "days")
             elif key == "retire_character":
                 country["characters"].discard(value)
             elif key == "recruit_character":
@@ -245,6 +247,174 @@ class CouncilWorld(ContractWorld):
 
     def balance(self):
         return self.val["vars"]["ADISCORD_economy_treasury"]
+
+
+class CommandConsolidationTests(unittest.TestCase):
+    """Execute payment and terminal callbacks; native countdown scheduling remains external."""
+
+    def world(self):
+        world = CouncilWorld()
+        world.val["flags"].discard(PREFIX + "in_power")
+        world.val["leader"] = "VAL_Valera_Solgalov"
+        world.val["bop"] = 0.75
+        world.val["focuses"].add("VAL_Captains_Cannot_Veto")
+        world.run("VAL_expose_command_conspiracy")
+        return world
+
+    def start(self, world, route):
+        decision = world.decisions["VAL_command_" + route]
+        world.execute(block(decision, "complete_effect"))
+
+    def timeout(self, world, route):
+        timer = "VAL_command_" + route + "_timer"
+        world.val["missions"].pop(timer, None)
+        world.execute(block(world.decisions[timer], "timeout_effect"))
+
+    def test_focus_threshold_and_exact_costs_gate_both_routes(self):
+        for route in ("trial", "retirements"):
+            for missing in ("focus", "balance", "political_power", "second_currency"):
+                with self.subTest(route=route, missing=missing):
+                    world = self.world()
+                    world.val["pp"] = 100
+                    world.val["cp"] = 50
+                    world.val["vars"]["ADISCORD_economy_treasury"] = 250
+                    if missing == "focus":
+                        world.val["focuses"].clear()
+                    elif missing == "balance":
+                        world.val["bop"] = 0.749999
+                    elif missing == "political_power":
+                        world.val["pp"] = 99.99
+                    elif route == "trial":
+                        world.val["cp"] = 49.99
+                    else:
+                        world.val["vars"]["ADISCORD_economy_treasury"] = 249.99
+                    before = world.balance(), world.val["pp"], world.val["cp"]
+                    self.start(world, route)
+                    self.assertEqual((world.balance(), world.val["pp"], world.val["cp"]), before)
+                    self.assertNotIn("VAL_command_consolidation_kind", world.val["vars"])
+
+    def test_paid_routes_finish_once_with_distinct_costs_and_consequences(self):
+        for route, days, treasury, cp in (("trial", 90, 2000, 50), ("retirements", 120, 1750, 100)):
+            with self.subTest(route=route):
+                world = self.world()
+                self.start(world, route)
+                self.assertEqual(world.val["bop"], 0.75)
+                self.assertEqual(world.val["missions"]["VAL_command_" + route + "_timer"], days)
+                self.assertFalse(world.matches(block(world.decisions["VAL_command_" + route + "_timer"], "available")))
+                self.start(world, route)
+                self.start(world, "retirements" if route == "trial" else "trial")
+                self.assertEqual((world.balance(), world.val["pp"], world.val["cp"]), (treasury, 900, cp))
+                # A saved campaign retains the paid receipt and native mission state.
+                world.val = world.data["VAL"] = deepcopy(world.val)
+                self.timeout(world, route)
+                self.timeout(world, route)
+                world.run("VAL_cancel_command_consolidation")
+                self.assertIsNone(world.val["bop"])
+                self.assertEqual((world.balance(), world.val["pp"], world.val["cp"]), (treasury, 900, cp))
+                self.assertNotIn("VAL_command_consolidation_kind", world.val["vars"])
+                self.assertEqual(world.events.count(("VAL", "val_council.28")), 1)
+                self.assertAlmostEqual(world.val["stability"], 0.45 if route == "trial" else 0.5)
+                if route == "trial":
+                    self.assertEqual(world.val["modifier_days"]["VAL_command_trial_disruption"], "180")
+                    modifier = block(entries("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"), "VAL_command_trial_disruption")
+                    self.assertEqual(scalar(modifier, "army_org_factor"), "-0.05")
+                else:
+                    self.assertNotIn("VAL_command_trial_disruption", world.val["modifiers"])
+
+    def test_exact_affordability_is_available_and_debited_to_zero(self):
+        for route in ("trial", "retirements"):
+            world = self.world()
+            world.val["pp"] = 100
+            world.val["cp"] = 50
+            world.val["vars"]["ADISCORD_economy_treasury"] = 250
+            decision = world.decisions["VAL_command_" + route]
+            self.assertTrue(world.matches(block(decision, "visible")))
+            self.assertTrue(world.matches(block(decision, "available")))
+            self.assertTrue(world.matches(block(decision, "custom_cost_trigger")))
+            self.assertEqual(scalar(decision, "cost"), "0")
+            self.start(world, route)
+            self.assertEqual(world.val["pp"], 0)
+            self.assertEqual(world.val["cp"] if route == "trial" else world.balance(), 0)
+
+    def test_exact_threshold_does_not_cancel_and_all_cost_tooltips_load(self):
+        world = self.world()
+        self.start(world, "retirements")
+        balance = block(entries("common/bop/VAL.txt"), "VAL_command_balance")
+        dominance = next(row.value for side in balance if side.key == "side" for row in side.value
+                         if row.key == "range" and scalar(row.value, "id") == "VAL_solgalov_dominance")
+        world.execute(block(dominance, "on_deactivate"))
+        self.assertEqual(world.balance(), 1750)
+        self.assertEqual(world.val["missions"]["VAL_command_retirements_timer"], 120)
+        required = set()
+        for route in ("trial", "retirements"):
+            for name in ("VAL_command_" + route, "VAL_command_" + route + "_timer"):
+                required.update((name, name + "_desc"))
+                for row in walk(world.decisions[name]):
+                    if row.key in ("custom_effect_tooltip", "tooltip", "custom_cost_text"):
+                        required.add(row.value)
+                    if row.key == "custom_cost_text":
+                        required.update((row.value + "_blocked", row.value + "_tooltip"))
+        for language in ("russian", "english"):
+            text = (ROOT / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml").read_text(encoding="utf-8-sig")
+            for key in required:
+                self.assertRegex(text, rf'(?m)^ {re.escape(key)}:(?:0)? "(?:[^"\\\r\n]|\\.)*"$', key)
+
+    def test_range_exit_refunds_only_unused_pensions_and_restarts_full_term(self):
+        balance = block(entries("common/bop/VAL.txt"), "VAL_command_balance")
+        dominance = next(row.value for side in balance if side.key == "side" for row in side.value
+                         if row.key == "range" and scalar(row.value, "id") == "VAL_solgalov_dominance")
+        for route, days in (("trial", 90), ("retirements", 120)):
+            world = self.world()
+            self.start(world, route)
+            world.val["bop"] = 0.749999
+            world.execute(block(dominance, "on_deactivate"))
+            world.val["bop"] = 0.8
+            self.timeout(world, route)
+            world.run("VAL_cancel_command_consolidation")
+            self.assertEqual(world.val["bop"], 0.8)
+            self.assertEqual(world.balance(), 2000)
+            self.assertEqual(world.val["pp"], 900)
+            self.assertEqual(world.val["cp"], 50 if route == "trial" else 100)
+            self.assertAlmostEqual(world.val["stability"], 0.5)
+            self.start(world, route)
+            self.assertEqual(world.val["missions"]["VAL_command_" + route + "_timer"], days)
+
+    def test_terminal_changes_cancel_and_late_timeout_cannot_close_balance(self):
+        for change in ("subject", "capitulated", "leader", "defeat", "balance_removed"):
+            for route in ("trial", "retirements"):
+                with self.subTest(change=change, route=route):
+                    world = self.world()
+                    self.start(world, route)
+                    if change == "subject":
+                        world.val["subject"] = "STP"
+                    elif change == "capitulated":
+                        world.val["capitulated"] = True
+                    elif change == "leader":
+                        world.val["leader"] = "VAL_Commanders_Council"
+                    elif change == "defeat":
+                        world.val["flags"].add("VAL_stelander_defeated")
+                    else:
+                        world.val["bop"] = None
+                    timer = world.decisions["VAL_command_" + route + "_timer"]
+                    self.assertTrue(world.matches(block(timer, "cancel_trigger")))
+                    self.timeout(world, route)
+                    world.execute(block(timer, "cancel_effect"))
+                    self.assertEqual(world.balance(), 2000)
+                    self.assertEqual(world.val["pp"], 900)
+                    self.assertNotIn("VAL_command_consolidation_kind", world.val["vars"])
+                    self.assertNotIn(("VAL", "val_council.28"), world.events)
+
+    def test_unpaid_and_other_route_callbacks_cannot_settle_a_new_operation(self):
+        world = self.world()
+        self.timeout(world, "trial")
+        self.timeout(world, "retirements")
+        self.assertEqual(world.val["bop"], 0.75)
+        self.start(world, "retirements")
+        self.timeout(world, "trial")
+        self.assertEqual(world.val["vars"]["VAL_command_consolidation_kind"], 2)
+        self.assertEqual(world.balance(), 1750)
+        self.timeout(world, "retirements")
+        self.assertIsNone(world.val["bop"])
 
 
 class CouncilTransactionsTests(unittest.TestCase):
@@ -617,7 +787,7 @@ class CouncilTreeTests(unittest.TestCase):
             self.assertNotRegex(authored, "[\u2013\u2014]")
             seen = set()
             for line in authored.splitlines():
-                if not line.strip():
+                if not line.strip() or line.lstrip().startswith("#"):
                     continue
                 self.assertRegex(line, r'^ [\w.]+:0 "(?:[^"\\]|\\.)*"$')
                 key = line.split(":", 1)[0].strip()
@@ -836,6 +1006,8 @@ class CouncilRepresentationTests(unittest.TestCase):
     def mandate_world(self, kind, course=None):
         world = CouncilWorld()
         world.val["focuses"].add(PREFIX + "takes_command")
+        if kind == "offensive":
+            world.val["focuses"].add(PREFIX + "war_plan")
         if course:
             world.val["focuses"].add(PREFIX + course)
         if kind == "supply":
@@ -1033,15 +1205,50 @@ class CouncilRepresentationTests(unittest.TestCase):
                 self.assertEqual(world.val["pp"], 100)
                 self.assertEqual(world.val["missions"][PREFIX + "mandate_approval"], delay - 1)
 
-    def test_mandates_open_at_the_root_on_both_political_routes(self):
+    def test_root_keeps_defence_and_supply_while_war_plan_opens_offensives(self):
         world = CouncilWorld()
         unlocks = {row.value for row in block(self.root, "completion_reward") if row.key == "unlock_decision_tooltip"}
-        expected = {PREFIX + "mandate_" + kind + "_ordinary" for kind in ("defence", "offensive", "supply")}
+        expected = {PREFIX + "mandate_" + kind + "_ordinary" for kind in ("defence", "supply")}
         self.assertTrue(expected <= unlocks)
+        offensive = PREFIX + "mandate_offensive_ordinary"
+        self.assertNotIn(offensive, unlocks)
+        plan = next(row.value for row in block(entries(FOCUSES), "focus_tree")
+                    if row.key == "focus" and scalar(row.value, "id") == PREFIX + "war_plan")
+        self.assertIn(offensive, {row.value for row in walk(block(plan, "completion_reward"))
+                                 if row.key == "unlock_decision_tooltip"})
         for course in ("captains_agreement", "supreme_command"):
             world.val["focuses"] = {PREFIX + "takes_command", PREFIX + course}
             for name in expected:
                 self.assertTrue(world.matches(block(world.decisions[name], "visible")), (course, name))
+            self.assertFalse(world.matches(block(world.decisions[offensive], "visible")))
+            world.val["focuses"].add(PREFIX + "war_plan")
+            self.assertTrue(world.matches(block(world.decisions[offensive], "visible")))
+
+    def test_offensive_mandates_cannot_be_paid_before_the_war_plan(self):
+        for course, variant, price in ((None, "ordinary", 20), ("large_companies", "priority", 10), ("equal_votes", "contested", 35)):
+            with self.subTest(course=course):
+                world = self.mandate_world("offensive", course)
+                world.val["focuses"].discard(PREFIX + "war_plan")
+                decision = world.decisions[PREFIX + "mandate_offensive_" + variant]
+                self.assertFalse(world.matches(block(decision, "visible")))
+                world.execute(block(decision, "complete_effect"))
+                self.assertEqual(world.val["pp"], 1000)
+                self.assertNotIn(PREFIX + "mandate_kind", world.val["vars"])
+                world.val["focuses"].add(PREFIX + "war_plan")
+                self.assertTrue(world.matches(block(decision, "visible")))
+                self.assertTrue(world.choose("mandate_offensive_" + variant))
+                self.assertEqual(world.val["pp"], 1000 - price)
+                self.assertEqual(world.val["vars"][PREFIX + "mandate_kind"], 2)
+                self.assertEqual(world.val["missions"][PREFIX + "mandate_approval"], 14)
+
+    def test_war_plan_unlock_remains_obtainable_after_stelander_peace(self):
+        world = CouncilWorld()
+        world.val["focuses"].add(PREFIX + "takes_command")
+        plan = next(row.value for row in block(entries(FOCUSES), "focus_tree")
+                    if row.key == "focus" and scalar(row.value, "id") == PREFIX + "war_plan")
+        self.assertTrue(world.matches(block(plan, "available")))
+        bypass = [row for row in plan if row.key == "bypass"]
+        self.assertFalse(bypass and world.matches(bypass[0].value))
 
     def test_approval_uses_current_majority_and_keeps_the_paid_delay(self):
         world = CouncilWorld()
@@ -1341,28 +1548,28 @@ class CouncilStoryTests(unittest.TestCase):
         self.assertAlmostEqual(world.val["vars"]["VAL_contract_org_factor"], -0.05)
         self.assertAlmostEqual(world.val["vars"]["VAL_contract_planning_factor"], -0.10)
 
-    def test_solgalov_dominance_exposes_the_conspiracy_and_closes_the_coup(self):
+    def test_solgalov_dominance_reveals_but_does_not_remove_the_balance(self):
         balance = block(entries("common/bop/VAL.txt"), "VAL_command_balance")
         ranges = {scalar(r.value, "id"): r.value for side in balance if side.key == "side" for r in side.value if r.key == "range"}
-        calls = [scalar(row.value, "id") for row in walk(block(ranges["VAL_solgalov_dominance"], "on_activate")) if row.key == "country_event"]
-        self.assertEqual(calls, ["val_council.27"])
         event = next(e.value for e in entries("events/ADISCORD_VAL_contract_events.txt")
                      if e.key == "country_event" and scalar(e.value, "id") == "val_council.27")
         options = [row.value for row in event if row.key == "option"]
-        self.assertEqual(len(options), 2)
-        for option in options:
-            self.assertIn("VAL_expose_command_conspiracy", {row.key for row in walk(option)})
         world = CouncilWorld()
         world.val["flags"].discard(PREFIX + "in_power")
         world.val["leader"] = "VAL_Valera_Solgalov"
         world.val["flags"].add(PREFIX + "stelander_war_started")
         world.val["bop"] = 0.8
-        world.run("VAL_expose_command_conspiracy")
-        self.assertIsNone(world.val["bop"])
-        self.assertEqual(world.events.count(("VAL", "val_council.28")), 1)
-        world.run("VAL_expose_command_conspiracy")
-        self.assertEqual(world.events.count(("VAL", "val_council.28")), 1)
-        self.assertFalse(world.matches(world.triggers[PREFIX + "coup_ready"]))
+        world.execute(block(ranges["VAL_solgalov_dominance"], "on_activate"))
+        world.execute(block(ranges["VAL_solgalov_dominance"], "on_activate"))
+        self.assertEqual(world.val["bop"], 0.8)
+        self.assertEqual(world.events.count(("VAL", "val_council.27")), 1)
+        for option in options:
+            before = world.balance(), world.val["pp"], world.val["cp"]
+            world.execute([row for row in option if row.key not in ("name", "ai_chance", "trigger")])
+            self.assertEqual((world.balance(), world.val["pp"], world.val["cp"]), before)
+            self.assertEqual(world.val["bop"], 0.8)
+        world.val["bop"] = -0.8
+        self.assertTrue(world.matches(world.triggers[PREFIX + "coup_ready"]))
 
     def test_personal_branch_balance_decisions_have_real_prices(self):
         category = {e.key: e.value for e in block(entries(DECISIONS), "VAL_command_balance_category")}

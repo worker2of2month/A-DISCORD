@@ -1042,6 +1042,28 @@ ideas = {
 	}
 
 	political_advisor_minister_of_defense = {
+		minister_VAL_Andrei_Krutov = {
+			name = minister_VAL_Andrei_Krutov
+			picture = minister_VAL_Andrei_Krutov
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { always = yes }
+			allowed_to_remove = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_military_chancellery_change_allowed_tt
+					NOT = {
+						has_country_leader = {
+							character = VAL_Valera_Solgalov
+							ruling_only = yes
+						}
+					}
+				}
+			}
+			cost = 75
+			traits = { minister_trait_VAL_military_chancellery }
+			ai_will_do = { factor = 1 }
+		}
+
 		minister_VAL_Inga_Voss = {
 			name = minister_VAL_Inga_Voss
 			picture = generic_political_advisor_europe_2

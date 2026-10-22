@@ -79,9 +79,6 @@ def expected_outputs(include_portraits: bool = True) -> dict[Path, bytes]:
             definitions.append('\t\teffectFile = "gfx/FX/buttonstate.lua"')
         definitions.append('\t}')
     if include_portraits:
-        outputs[OUTPUT / 'rus.png'] = (
-            ROOT / 'tools/assets/source/startup/rus.png'
-        ).read_bytes()
         for tag, (source, box) in PORTRAIT_CROPS.items():
             with Image.open(ROOT / source) as image:
                 portrait = image.convert('RGB').crop(box).resize(PORTRAIT, Image.LANCZOS)

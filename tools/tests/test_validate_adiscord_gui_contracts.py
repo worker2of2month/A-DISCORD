@@ -729,26 +729,35 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
         categories = [
             entry
             for entry in soundeffect_ast
-            if entry.key == 'category' and isinstance(entry.value, list)
+            if entry.key == 'category'
+            and isinstance(entry.value, list)
+            and _direct_scalar(entry.value, 'name') == 'ADISCORD_UI'
         ]
         self.assertEqual(len(categories), 1)
         category = categories[0].value
         self.assertEqual(_direct_scalar(category, 'name'), 'ADISCORD_UI')
         category_members = _unique_direct_block(category, 'soundeffects')
         self.assertIsNotNone(category_members)
-        self.assertEqual(
-            [(entry.key, entry.value) for entry in category_members],
-            [
-                ('', 'ADISCORD_pol_menu_open_sound'),
-                ('', 'ADISCORD_pol_menu_close_sound'),
-            ],
+        required_sounds = (
+            'ADISCORD_pol_menu_open_sound',
+            'ADISCORD_pol_menu_close_sound',
         )
-        top_level_soundeffects = [
-            entry
-            for entry in soundeffect_ast
-            if entry.key == 'soundeffect' and isinstance(entry.value, list)
-        ]
-        self.assertEqual(len(top_level_soundeffects), 2)
+        for sound_name in required_sounds:
+            with self.subTest(sound=sound_name):
+                self.assertEqual(
+                    sum(entry.value == sound_name for entry in category_members), 1
+                )
+                definitions = [
+                    entry.value
+                    for entry in soundeffect_ast
+                    if entry.key == 'soundeffect'
+                    and isinstance(entry.value, list)
+                    and _direct_scalar(entry.value, 'name') == sound_name
+                ]
+                self.assertEqual(len(definitions), 1)
+                sounds = _unique_direct_block(definitions[0], 'sounds')
+                self.assertIsNotNone(sounds)
+                self.assertEqual(_direct_scalar(sounds, 'sound'), sound_name)
 
     def test_frontend_menu_controls_match_engine_lookup_types(self):
         main = (ROOT / 'interface' / 'frontendmainview.gui').read_text(
@@ -812,6 +821,7 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
             'complete_focus_01.wav',
             'event_popup_01.wav',
             'research_complete_01.wav',
+            'player_declare_war_01.wav',
         }
 
         self.assertEqual(
@@ -1000,7 +1010,7 @@ class NationalFocusGuiContractTests(unittest.TestCase):
                 self.assertIn('scrollbarType = standardtext_slider', node)
                 self.assertLessEqual(x + w + 20, width)
 
-    def test_focus_symbols_and_tree_geometry_only_widen_horizontal_spacing(self):
+    def test_focus_symbols_keep_native_geometry_and_taller_row_spacing(self):
         local = (ROOT / 'interface/nationalfocusview.gui').read_text(
             encoding='utf-8-sig'
         )
@@ -1032,7 +1042,7 @@ class NationalFocusGuiContractTests(unittest.TestCase):
             re.sub(r'\s+', '', gui_node_body(local, 'focus_spacing')),
             re.sub(
                 r'\s+', '', gui_node_body(native, 'focus_spacing')
-            ).replace('x=96', 'x=108'),
+            ).replace('y=130', 'y=140'),
         )
         tree = gui_node_body(local, 'tree')
         self.assertIn('drag_scroll = { left middle }', tree)
@@ -2560,9 +2570,12 @@ class StartupGuideContractTests(unittest.TestCase):
                 node = gui_node_body(gui, f'ADISCORD_startup_{tag}_picture')
                 self.assertNotRegex(node, r'\bscale\s*=')
                 self.assertEqual(_gui_position(node), (746, 108))
-        self.assertEqual(
-            (ROOT / 'gfx/interface/startup/rus.png').read_bytes(),
-            (ROOT / 'tools/assets/source/startup/rus.png').read_bytes(),
+        from tools.builders.build_adiscord_startup_ui_assets import expected_outputs
+
+        # Supplied country artwork is independent of the generated skin.
+        self.assertNotIn(
+            ROOT / 'gfx/interface/startup/rus.png',
+            expected_outputs(),
         )
 
     def test_footer_tabs_fit_and_select_their_own_content(self):

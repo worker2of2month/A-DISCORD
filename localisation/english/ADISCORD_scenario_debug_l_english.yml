@@ -47,7 +47,7 @@
  ADISCORD_debug_war_log_off_desc: "Stops automatic peace tracing. Manual snapshots remain available."
  ADISCORD_debug_war_snapshot: "§RDEBUG:§! Dump War and Territory State"
  ADISCORD_debug_war_snapshot_desc: "Writes the current country, enemies, factions, capitals, owned states and controllers to game.log. Also records Kefreyt campaign variables and the disputed eastern states. Does not change the map."
- ADISCORD_debug_war_val_start: "§RDEBUG:§! Start the Frontier War with [FROM.GetName]"
+ ADISCORD_debug_war_val_start: "§RDEBUG:§! Start the Frontier War with [FROM.GetADISCORDDecisionCountryName]"
  ADISCORD_debug_war_val_start_desc: "Skips the demand and refusal, then calls the real Kefreyt campaign: coalition, majors and war entry. Still requires the actual post-Stelander-war world and valid territory. It does not forge a civil-war victory."
  ADISCORD_debug_war_val_check: "§RDEBUG:§! Recheck the Frontier Treaty"
  ADISCORD_debug_war_val_check_desc: "Runs the existing campaign check once against actual ownership, control and members. Does not mark any country defeated or bypass living allies."

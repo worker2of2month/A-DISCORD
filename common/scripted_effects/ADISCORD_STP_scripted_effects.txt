@@ -549,11 +549,17 @@ STP_cw_initialize_focus_modifiers = {
 		set_variable = { var = STP_cw_army_planning_speed value = 0 }
 		set_variable = { var = STP_cw_army_org_regain value = 0 }
 		set_variable = { var = STP_cw_army_supply_consumption_factor value = 0 }
+		set_variable = { var = STP_cw_army_core_defence value = 0 }
+		set_variable = { var = STP_cw_army_training_time value = 0 }
+		set_variable = { var = STP_cw_army_mobilization value = 0 }
 		# Reserved for Shabrat's army after the split.
 		set_variable = { var = STP_cw_pending_army_org_factor value = 0 }
 		set_variable = { var = STP_cw_pending_army_planning_speed value = 0 }
 		set_variable = { var = STP_cw_pending_army_org_regain value = 0 }
 		set_variable = { var = STP_cw_pending_army_supply_consumption_factor value = 0 }
+		set_variable = { var = STP_cw_pending_army_core_defence value = 0 }
+		set_variable = { var = STP_cw_pending_army_training_time value = 0 }
+		set_variable = { var = STP_cw_pending_army_mobilization value = 0 }
 	}
 }
 
@@ -625,6 +631,9 @@ STP_cw_clear_resistance_modifiers = {
 	clear_variable = STP_cw_pending_army_planning_speed
 	clear_variable = STP_cw_pending_army_org_regain
 	clear_variable = STP_cw_pending_army_supply_consumption_factor
+	clear_variable = STP_cw_pending_army_core_defence
+	clear_variable = STP_cw_pending_army_training_time
+	clear_variable = STP_cw_pending_army_mobilization
 	force_update_dynamic_modifier = yes
 }
 
@@ -670,6 +679,9 @@ STP_cw_clear_wartime_modifiers = {
 		clear_variable = STP_cw_army_planning_speed
 		clear_variable = STP_cw_army_org_regain
 		clear_variable = STP_cw_army_supply_consumption_factor
+		clear_variable = STP_cw_army_core_defence
+		clear_variable = STP_cw_army_training_time
+		clear_variable = STP_cw_army_mobilization
 		clear_variable = STP_cw_mandate_org_regain
 		clear_variable = STP_cw_mandate_core_defence
 		clear_variable = STP_cw_mandate_training_time
@@ -747,6 +759,8 @@ STP_cw_finish_elections = {
 		# Freeze the mandate before closing the BOP or distributing army reserves.
 		# A disputed result favours the incumbent apparatus. Exceptional support
 		# requires surviving civil and military commitments, not only the BOP threshold.
+		# A larger margin wins districts, not army bonuses: those come from the
+		# officer and reserve focuses through STP_cw_pending_army_*.
 		if = {
 			limit = { power_balance_value = { id = STP_shabrat_election_legitimacy value > 0.1 } }
 			set_country_flag = STP_cw_shabrat_election_victory
@@ -755,13 +769,6 @@ STP_cw_finish_elections = {
 			set_variable = { var = STP_cw_mandate_core_defence value = 0.10 }
 			set_variable = { var = STP_cw_mandate_training_time value = -0.15 }
 			set_variable = { var = STP_cw_mandate_mobilization value = 0.20 }
-			if = {
-				limit = { power_balance_value = { id = STP_shabrat_election_legitimacy value > 0.55 } }
-				set_variable = { var = STP_cw_mandate_org_regain value = 0.30 }
-				set_variable = { var = STP_cw_mandate_core_defence value = 0.15 }
-				set_variable = { var = STP_cw_mandate_training_time value = -0.20 }
-				set_variable = { var = STP_cw_mandate_mobilization value = 0.30 }
-			}
 			if = {
 				limit = { has_country_flag = STP_cw_public_command_agreement STP_cw_public_command_available = yes }
 				add_to_variable = { var = STP_cw_mandate_org_regain value = 0.10 }
@@ -2695,8 +2702,20 @@ STP_cw_remove_kefreyt_volunteers = {
 }
 
 # COUNTRY: call only after payment or consumption of one prepared escrow entry.
+# STP_cw_start grants the party a few capital slots through a temporary
+# variable; later paid orders have none and use the ordinary front placement.
 STP_cw_deploy_assault_division = {
 	if = {
+		limit = {
+			tag = STP
+			check_variable = { var = STP_cw_capital_assault_slots value = 0 compare = greater_than }
+			owns_state = 28
+			controls_state = 28
+		}
+		subtract_from_temp_variable = { var = STP_cw_capital_assault_slots value = 1 }
+		28 = { STP_cw_create_assault_division = yes }
+	}
+	else_if = {
 		limit = { any_owned_state = { is_controlled_by = PREV STP_cw_state_faces_rival = yes } }
 		random_owned_controlled_state = {
 			limit = { STP_cw_state_faces_rival = yes }
@@ -3024,6 +3043,9 @@ STP_cw_transfer_preparation_modifiers = {
 				NOT = { check_variable = { var = STP_cw_pending_army_planning_speed value = 0 compare = equals } }
 				NOT = { check_variable = { var = STP_cw_pending_army_org_regain value = 0 compare = equals } }
 				NOT = { check_variable = { var = STP_cw_pending_army_supply_consumption_factor value = 0 compare = equals } }
+				NOT = { check_variable = { var = STP_cw_pending_army_core_defence value = 0 compare = equals } }
+				NOT = { check_variable = { var = STP_cw_pending_army_training_time value = 0 compare = equals } }
+				NOT = { check_variable = { var = STP_cw_pending_army_mobilization value = 0 compare = equals } }
 			}
 		}
 		STS = {
@@ -3031,6 +3053,9 @@ STP_cw_transfer_preparation_modifiers = {
 			set_variable = { var = STP_cw_army_planning_speed value = STP.STP_cw_pending_army_planning_speed }
 			set_variable = { var = STP_cw_army_org_regain value = STP.STP_cw_pending_army_org_regain }
 			set_variable = { var = STP_cw_army_supply_consumption_factor value = STP.STP_cw_pending_army_supply_consumption_factor }
+			set_variable = { var = STP_cw_army_core_defence value = STP.STP_cw_pending_army_core_defence }
+			set_variable = { var = STP_cw_army_training_time value = STP.STP_cw_pending_army_training_time }
+			set_variable = { var = STP_cw_army_mobilization value = STP.STP_cw_pending_army_mobilization }
 			STP_cw_refresh_army_modifier = yes
 		}
 	}
@@ -3195,6 +3220,57 @@ STP_cw_commission_korsh = {
 	}
 }
 
+# COUNTRY STS: apply uniforms after character transfers; absent officers stay untouched.
+STP_cw_apply_sts_officer_portraits = {
+	if = {
+		limit = { tag = STS }
+		if = {
+			limit = { has_character = STP_Leonid_Barchel }
+			set_portraits = {
+				character = STP_Leonid_Barchel
+				army = {
+					large = GFX_portrait_STS_Leonid_Barchel
+					small = GFX_portrait_STS_Leonid_Barchel_small
+				}
+				civilian = {
+					large = GFX_portrait_STS_Leonid_Barchel
+					small = GFX_portrait_STS_Leonid_Barchel_small
+				}
+			}
+		}
+		if = {
+			limit = { has_character = STP_Edmund_Ravel }
+			set_portraits = {
+				character = STP_Edmund_Ravel
+				army = {
+					large = GFX_portrait_STS_Edmund_Ravel
+					small = GFX_portrait_STS_Edmund_Ravel_small
+				}
+			}
+		}
+		if = {
+			limit = { has_character = STP_Roland_Keitel }
+			set_portraits = {
+				character = STP_Roland_Keitel
+				army = {
+					large = GFX_portrait_STS_Roland_Keitel
+					small = GFX_portrait_STS_Roland_Keitel_small
+				}
+			}
+		}
+		if = {
+			limit = { has_character = STP_Maurice_Dallon }
+			set_portraits = {
+				character = STP_Maurice_Dallon
+				army = {
+					large = GFX_portrait_STS_Maurice_Dallon
+					small = GFX_portrait_STS_Maurice_Dallon_small
+				}
+			}
+		}
+	}
+}
+
 # COUNTRY (STS): create only Shabrat's missing role; never recruit an absent character.
 # Promote with a registered subtype. set_politics stays in the align helper so the
 # ruling party matches the person who actually received the role.
@@ -3304,6 +3380,22 @@ STP_cw_begin_hostilities = {
 		if = {
 			limit = { NOT = { has_global_flag = STP_cw_started } }
 			set_global_flag = STP_cw_started
+			hidden_effect = {
+				# A pending player handoff must finish before queuing its opening.
+				if = {
+					limit = {
+						NOT = {
+							AND = {
+								is_ai = no
+								has_country_flag = STP_sided_with_Maksim_flag
+							}
+						}
+					}
+					country_event = { id = ADISCORD_STP_cw.95 hours = 1 }
+					log = "STP_CW_OPENING queued_without_handoff country=[THIS.GetTag]"
+				}
+				else = { log = "STP_CW_OPENING waiting_for_handoff country=[THIS.GetTag]" }
+			}
 			# Side selection is already resolved; STP now represents the Party,
 			# including when its prewar government supported Shabrat.
 			clr_country_flag = STP_sided_with_Maksim_flag
@@ -3322,11 +3414,6 @@ STP_cw_begin_hostilities = {
 					VAL_open_refugee_waves = yes
 					STP_ps_settle_val_credit = yes
 				}
-			}
-			hidden_effect = {
-				# Opening stories wait until change_tag_from has assigned the human to the chosen side.
-				STS = { country_event = { id = ADISCORD_STP_cw.95 hours = 1 } }
-				country_event = { id = ADISCORD_STP_cw.94 hours = 1 }
 			}
 			remove_mission = STP_cw_nod_warning
 			clr_country_flag = STP_cw_nod_warning_active
@@ -3467,6 +3554,19 @@ STP_cw_allocate_formation_reserves = {
 		set_temp_variable = { var = STP_cw_party_base_reserve value = 16 }
 		set_temp_variable = { var = STP_cw_resistance_base_reserve value = 16 }
 		set_temp_variable = { var = STP_cw_resistance_remainder_share value = 0.4 }
+	}
+	# Garrison agreements and Drake's officers move two party line brigades each
+	# to Shabrat. STP_cw_start spawns them under the same conditions, so their
+	# recruits and rifles leave the party's baseline share.
+	if = {
+		limit = { has_completed_focus = STP_Garrisons_Hesitate }
+		subtract_from_temp_variable = { var = STP_cw_party_base_reserve value = 2 }
+		add_to_temp_variable = { var = STP_cw_resistance_base_reserve value = 2 }
+	}
+	if = {
+		limit = { has_country_flag = STP_cw_young_officers_ready }
+		subtract_from_temp_variable = { var = STP_cw_party_base_reserve value = 2 }
+		add_to_temp_variable = { var = STP_cw_resistance_base_reserve value = 2 }
 	}
 	multiply_temp_variable = { var = STP_cw_party_base_reserve value = STP_cw_input_light }
 	multiply_temp_variable = { var = STP_cw_resistance_base_reserve value = STP_cw_input_light }
@@ -3875,7 +3975,11 @@ STP_cw_start = {
 			STS = { army_experience = 15 }
 		}
 		STP_cw_transfer_preparation_modifiers = yes
-		STS = { STP_cw_establish_resistance_command = yes STP_pc_align_resistance_ruling_party = yes }
+		STS = {
+			STP_cw_apply_sts_officer_portraits = yes
+			STP_cw_establish_resistance_command = yes
+			STP_pc_align_resistance_ruling_party = yes
+		}
 		set_politics = { ruling_party = hedonism elections_allowed = no }
 		if = { limit = { has_character = STP_rufus_hedersett } promote_character = STP_rufus_hedersett }
 		# Apply the paid rifle-package shares to the native stockpile transfer so
@@ -3956,13 +4060,20 @@ STP_cw_start = {
 		if = { limit = { 29 = { is_owned_by = STP has_state_flag = STP_party_reinforced_garrison_asset } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		if = { limit = { 45 = { is_owned_by = STP has_state_flag = STP_party_reinforced_garrison_asset } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		STP_cw_raise_congress_guard = yes
+		# The first three paid party assault divisions form in Fada: the Congress
+		# borders Shabrat's districts from the first day. Counts and prices stay.
+		set_temp_variable = { var = STP_cw_capital_assault_slots value = 3 }
 		if = {
 			limit = { has_country_flag = STP_cw_limited_party_revolt }
 			for_loop_effect = { end = 3 value = STP_cw_formation_index STP_cw_mobilize_assault_division = yes }
 		}
 		else = { for_loop_effect = { end = 6 value = STP_cw_formation_index STP_cw_mobilize_assault_division = yes } }
-		if = { limit = { has_country_flag = STP_cw_limited_party_revolt } for_loop_effect = { end = 5 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
-		else = { for_loop_effect = { end = 14 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
+		# Four of these line brigades stay with the party only without the
+		# defections counted in STP_cw_allocate_formation_reserves.
+		if = { limit = { has_country_flag = STP_cw_limited_party_revolt } for_loop_effect = { end = 1 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
+		else = { for_loop_effect = { end = 10 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
+		if = { limit = { NOT = { has_completed_focus = STP_Garrisons_Hesitate } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
+		if = { limit = { NOT = { has_country_flag = STP_cw_young_officers_ready } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		if = { limit = { NOT = { has_country_flag = STP_cw_shabrat_election_victory } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		STS = {
 			if = {
@@ -4005,6 +4116,8 @@ STP_cw_start = {
 			if = { limit = { STP = { has_country_flag = STP_cw_local_recruits_ready } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 			for_loop_effect = { end = 6 value = STP_cw_formation_index STP_cw_mobilize_assault_division = yes }
 			for_loop_effect = { end = 12 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes }
+			if = { limit = { STP = { has_completed_focus = STP_Garrisons_Hesitate } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
+			if = { limit = { STP = { has_country_flag = STP_cw_young_officers_ready } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 			if = { limit = { STP = { NOT = { has_country_flag = STP_cw_party_election_victory } } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 			if = { limit = { STP = { has_country_flag = STP_cw_shabrat_election_victory } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 			if = { limit = { STP = { has_country_flag = STP_cw_party_election_victory } } for_loop_effect = { end = 4 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
@@ -4033,7 +4146,13 @@ STP_cw_start = {
 			limit = { is_ai = no has_country_flag = STP_sided_with_Maksim_flag STS = { exists = yes } }
 			STP_cw_commission_korsh = yes
 			STP_cw_begin_hostilities = yes
-			STS = { change_tag_from = STP }
+			log = "STP_CW_OPENING predetermined_handoff_begin country=[THIS.GetTag]"
+			STS = {
+				change_tag_from = STP
+				log = "STP_CW_OPENING predetermined_handoff_end country=[THIS.GetTag]"
+				STP = { country_event = { id = ADISCORD_STP_cw.95 hours = 1 } }
+				log = "STP_CW_OPENING predetermined_opening_queued country=[THIS.GetTag]"
+			}
 		}
 		else_if = {
 			limit = { is_ai = no has_country_flag = STP_sided_with_the_party_flag }
@@ -4946,6 +5065,7 @@ STP_pw_pardon_party_specialists = {
 			}
 		}
 	}
+	STS = { STP_cw_apply_sts_officer_portraits = yes }
 }
 
 STP_pw_execute_party_defendants = {
@@ -7857,6 +7977,44 @@ STP_cw_spend_2400 = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
+# COUNTRY STP: debit the tier checked by STP_cw_can_pay_disperse_network,
+# then raise the price of the next use.
+STP_cw_pay_disperse_network = {
+	if = {
+		limit = { check_variable = { var = STP_cw_disperse_uses value = 1 compare = less_than } }
+		add_political_power = -20
+	}
+	else_if = {
+		limit = { check_variable = { var = STP_cw_disperse_uses value = 1 compare = equals } }
+		add_political_power = -40
+	}
+	else_if = {
+		limit = { check_variable = { var = STP_cw_disperse_uses value = 2 compare = equals } }
+		add_political_power = -60
+	}
+	else = { add_political_power = -80 }
+	add_to_variable = { var = STP_cw_disperse_uses value = 1 }
+}
+
+# COUNTRY STP: debit the tier checked by STP_cw_can_pay_false_trail.
+STP_cw_pay_false_trail = {
+	if = {
+		limit = { check_variable = { var = STP_cw_false_trail_uses value = 1 compare = less_than } }
+		add_political_power = -15
+	}
+	else_if = {
+		limit = { check_variable = { var = STP_cw_false_trail_uses value = 1 compare = equals } }
+		add_political_power = -25
+	}
+	else_if = {
+		limit = { check_variable = { var = STP_cw_false_trail_uses value = 2 compare = equals } }
+		add_political_power = -35
+	}
+	else = { add_political_power = -45 }
+	STP_cw_spend_600 = yes
+	add_to_variable = { var = STP_cw_false_trail_uses value = 1 }
+}
+
 STP_receive_900 = {
 	ADISCORD_economy_initialize_country = yes
 	add_to_variable = { var = ADISCORD_economy_treasury value = 900 }
@@ -8775,6 +8933,7 @@ STP_ps_refresh_defence = {
 		}
 	}
 	if = { limit = { STP_ps_war_active = yes NOT = { has_dynamic_modifier = { modifier = STP_ps_defence_dynamic } } } add_dynamic_modifier = { modifier = STP_ps_defence_dynamic } }
+	STP_ps_refresh_capital_defence = yes
 }
 STP_ps_finish_stage = {
 	if = {
@@ -8851,6 +9010,11 @@ STP_ps_close_defence = {
 	remove_mission = STP_ps_reorg_2
 	remove_mission = STP_ps_reorg_3
 	remove_mission = STP_ps_congress_deadline
+	# Clear the siege marker before its mission can run a late callback.
+	clr_country_flag = STP_ps_congress_siege
+	remove_mission = STP_ps_congress_siege
+	clr_country_flag = STP_ps_fada_militia_raised
+	clear_variable = STP_ps_fada_militia_count
 	clr_country_flag = STP_ps_congress_crisis
 	clr_country_flag = STP_ps_government_collapsed
 	clr_country_flag = STP_ps_temporary_government
@@ -8858,6 +9022,8 @@ STP_ps_close_defence = {
 	clear_global_event_target = STP_ps_cabinet_seat
 	if = { limit = { has_dynamic_modifier = { modifier = STP_ps_defence_dynamic } } remove_dynamic_modifier = { modifier = STP_ps_defence_dynamic } }
 	if = { limit = { has_dynamic_modifier = { modifier = STP_ps_nodes_dynamic } } remove_dynamic_modifier = { modifier = STP_ps_nodes_dynamic } }
+	if = { limit = { has_dynamic_modifier = { modifier = STP_ps_capital_defence_dynamic } } remove_dynamic_modifier = { modifier = STP_ps_capital_defence_dynamic } }
+	clear_variable = STP_ps_capital_defence
 	clear_variable = STP_ps_reorg_1_specialization_days
 	clear_variable = STP_ps_reorg_2_specialization_days
 	clear_variable = STP_ps_reorg_3_specialization_days
@@ -8912,11 +9078,12 @@ STP_ps_poll_nodes = {
 		if = { limit = { controls_province = 145 NOT = { has_country_flag = STP_ps_node_seen_145 } } set_country_flag = STP_ps_node_seen_145 }
 		if = { limit = { NOT = { controls_province = 145 } NOT = { has_country_flag = STP_ps_node_lost_145 } }
 			set_country_flag = STP_ps_node_lost_145
-			STP_ps_open_congress_crisis = yes
+			STP_ps_begin_congress_siege = yes
 			STP_ps_refresh_nodes = yes
 		}
 		if = { limit = { controls_province = 145 has_country_flag = STP_ps_node_lost_145 }
 			clr_country_flag = STP_ps_node_lost_145
+			STP_ps_lift_congress_siege = yes
 			STP_ps_resolve_congress_crisis = yes
 			STP_ps_refresh_nodes = yes
 		}
@@ -8976,6 +9143,194 @@ STP_ps_refresh_nodes = {
 	if = { limit = { has_country_flag = STP_ps_node_lost_145 } set_variable = { var = STP_ps_node_planning value = -0.15 } }
 	if = { limit = { has_country_flag = STP_ps_node_lost_45 } set_variable = { var = STP_ps_node_redeployment value = -0.20 } }
 	if = { limit = { STP_ps_war_active = yes NOT = { has_dynamic_modifier = { modifier = STP_ps_nodes_dynamic } } } add_dynamic_modifier = { modifier = STP_ps_nodes_dynamic } }
+	STP_ps_refresh_capital_defence = yes
+}
+
+# COUNTRY STP. Fada is organised for defence while the party holds the Congress
+# in the first two reorganisation stages; a siege raises the bonus. Callers:
+# node changes, stage changes and the siege timeout.
+STP_ps_refresh_capital_defence = {
+	set_variable = { var = STP_ps_capital_defence value = 0 }
+	if = {
+		limit = {
+			STP_ps_war_active = yes
+			STP_ps_holds_congress = yes
+			check_variable = { var = STP_ps_stage value = 3 compare = less_than }
+		}
+		set_variable = { var = STP_ps_capital_defence value = 0.10 }
+	}
+	if = {
+		limit = {
+			STP_ps_war_active = yes
+			has_country_flag = STP_ps_congress_siege
+		}
+		set_variable = { var = STP_ps_capital_defence value = 0.20 }
+	}
+	if = { limit = { STP_ps_war_active = yes NOT = { has_dynamic_modifier = { modifier = STP_ps_capital_defence_dynamic } } } add_dynamic_modifier = { modifier = STP_ps_capital_defence_dynamic } }
+}
+
+# COUNTRY STP, from the daily node poll. Until the Congress has fallen once,
+# its loss opens a seven-day siege instead of the government crisis. A later
+# loss reopens the crisis at once with its preserved remaining days.
+STP_ps_begin_congress_siege = {
+	if = {
+		limit = {
+			STP_ps_war_active = yes
+			STP_ps_holds_congress = no
+			NOT = { has_country_flag = STP_ps_congress_fell }
+			NOT = { has_country_flag = STP_ps_congress_siege }
+			NOT = { has_country_flag = STP_ps_congress_crisis }
+		}
+		set_country_flag = STP_ps_congress_siege
+		activate_mission = STP_ps_congress_siege
+		STP_ps_raise_fada_militia = yes
+		country_event = { id = ADISCORD_STP_cw.230 }
+		STS = { country_event = { id = ADISCORD_STP_cw.230 } }
+	}
+	else_if = {
+		limit = { NOT = { has_country_flag = STP_ps_congress_siege } }
+		STP_ps_open_congress_crisis = yes
+	}
+}
+
+# COUNTRY STP: the party retook the Congress before the siege timed out.
+STP_ps_lift_congress_siege = {
+	if = {
+		limit = { has_country_flag = STP_ps_congress_siege }
+		clr_country_flag = STP_ps_congress_siege
+		remove_mission = STP_ps_congress_siege
+		country_event = { id = ADISCORD_STP_cw.231 }
+		STS = { country_event = { id = ADISCORD_STP_cw.231 } }
+	}
+}
+
+# COUNTRY STP: siege mission timeout. A Congress retaken on the last day,
+# before the daily poll saw it, still ends as a repelled assault.
+STP_ps_congress_siege_timeout = {
+	if = {
+		limit = { has_country_flag = STP_ps_congress_siege }
+		if = {
+			limit = {
+				STP_ps_war_active = yes
+				STP_ps_holds_congress = no
+			}
+			clr_country_flag = STP_ps_congress_siege
+			STP_ps_open_congress_crisis = yes
+			country_event = { id = ADISCORD_STP_cw.232 }
+			STS = { country_event = { id = ADISCORD_STP_cw.232 } }
+		}
+		else_if = {
+			limit = { STP_ps_holds_congress = yes }
+			STP_ps_lift_congress_siege = yes
+		}
+		else = { clr_country_flag = STP_ps_congress_siege }
+		STP_ps_refresh_capital_defence = yes
+	}
+}
+
+# COUNTRY STP: Fada's workers' militia rises once per war when the Congress is
+# stormed. Each brigade pays the ordinary territorial price, 6000 recruits and
+# 5400 rifles, and forms in a party-held Fada district outside the Congress.
+STP_ps_raise_fada_militia = {
+	if = {
+		limit = {
+			STP_ps_war_active = yes
+			owns_state = 28
+			NOT = { has_country_flag = STP_ps_fada_militia_raised }
+		}
+		set_country_flag = STP_ps_fada_militia_raised
+		set_variable = { var = STP_ps_fada_militia_count value = 0 }
+		for_loop_effect = {
+			end = 3
+			value = STP_ps_militia_index
+			if = {
+				limit = {
+					OR = {
+						controls_province = 16374
+						controls_province = 16386
+						controls_province = 16377
+						controls_province = 16366
+						controls_province = 16351
+						controls_province = 16368
+					}
+					NOT = { has_manpower < 6000 }
+					NOT = { has_equipment = { infantry_equipment < 5400 } }
+				}
+				set_temp_variable = { var = STP_cw_rifle_cost value = 5400 }
+				STP_cw_pay_rifles = yes
+				if = {
+					limit = { has_country_flag = STP_cw_rifles_paid }
+					add_manpower = -6000
+					STP_ps_create_fada_militia = yes
+					add_to_variable = { var = STP_ps_fada_militia_count value = 1 }
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY STP: called only after payment and a district check. The nearest
+# held approaches to the Congress come first.
+STP_ps_create_fada_militia = {
+	if = {
+		limit = { controls_province = 16374 }
+		28 = {
+			create_unit = {
+				division = "division_template = \"Stelander Territorial Brigade\" location = 16374 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = STP
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else_if = {
+		limit = { controls_province = 16386 }
+		28 = {
+			create_unit = {
+				division = "division_template = \"Stelander Territorial Brigade\" location = 16386 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = STP
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else_if = {
+		limit = { controls_province = 16377 }
+		28 = {
+			create_unit = {
+				division = "division_template = \"Stelander Territorial Brigade\" location = 16377 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = STP
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else_if = {
+		limit = { controls_province = 16366 }
+		28 = {
+			create_unit = {
+				division = "division_template = \"Stelander Territorial Brigade\" location = 16366 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = STP
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else_if = {
+		limit = { controls_province = 16351 }
+		28 = {
+			create_unit = {
+				division = "division_template = \"Stelander Territorial Brigade\" location = 16351 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = STP
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else = {
+		28 = {
+			create_unit = {
+				division = "division_template = \"Stelander Territorial Brigade\" location = 16368 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = STP
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
 }
 
 STP_ps_refund_cabinet = {

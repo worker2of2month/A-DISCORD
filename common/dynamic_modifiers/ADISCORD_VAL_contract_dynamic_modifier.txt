@@ -168,3 +168,8 @@ VAL_staff_review_disruption = {
 	planning_speed = -0.10
 	army_org_factor = -0.03
 }
+
+VAL_command_trial_disruption = {
+	icon = GFX_idea_ADISCORD_law_military_general_staff
+	army_org_factor = -0.05
+}

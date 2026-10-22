@@ -141,6 +141,8 @@
  VAL_emergency_service_contracts:0 "Issue Emergency Service Contracts"
  VAL_emergency_service_contracts_desc:0 "Bypass the normal training cycle and mobilize a full block of local contract reservists. Spend §Y500§! treasury funds, §Y25§! command power, £infantry_equipment_texticon §Y10,000§! infantry equipment and £population_texticon §Y10,000§! local reserve to gain £manpower_texticon §Y10,000§! manpower immediately. Stability: §R-1%§!. Available once every §Y120 days§!."
  VAL_emergency_service_cost:0 "§Y500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power  §Y10000§! £infantry_equipment_texticon  §Y10000§! £population_texticon"
+ VAL_emergency_service_cost_tooltip: "§Y500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power  §Y10000§! £infantry_equipment_texticon  §Y10000§! £population_texticon"
+ VAL_emergency_service_cost_blocked: "§R500§! £ADISCORD_economy_treasury_texticon  §R25§! £command_power\n§R10000§! £infantry_equipment_texticon  §R10000§! £population_texticon"
  VAL_emergency_service_result_tt:0 "Gain £manpower_texticon §Y10,000§! manpower immediately. Stability: §R-1%§!."
 
  VAL_recruit_local_volunteers:0 "Recruit local volunteers"

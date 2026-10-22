@@ -81,6 +81,8 @@ STP_ps_reorg_3
 
 STP_ps_congress_deadline
 
+STP_ps_congress_siege
+
 STP_ps_opposition_preparation_second
 STP_ps_val_departure
 STP_pw_party_nod_invasion_countdown
@@ -125,6 +127,8 @@ RUS_bunker_upgrade_4
 RUS_bunker_upgrade_5
 RUS_bunker_energy_sale
 VAL_council_ultimatum
+VAL_command_trial_timer
+VAL_command_retirements_timer
 VAL_council_staff_program_timer
 VAL_council_inspection_savings_timer
 VAL_council_inspection_timer

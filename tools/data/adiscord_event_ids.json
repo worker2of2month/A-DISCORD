@@ -85,6 +85,30 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_STP_cw.230",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 230,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_civil_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_cw.231",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 231,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_civil_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_cw.232",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 232,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_civil_war",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_pw.6",
       "namespace": "ADISCORD_STP_pw",
       "number": 6,

@@ -415,7 +415,12 @@ STP_cw_region_goes_to_resistance = {
 			NOT = { STP_cw_region_goes_to_republics = yes }
 			OR = {
 				STP = { has_country_flag = STP_cw_limited_party_revolt }
-				STP = { STP_cw_high_shabrat_legitimacy = yes }
+				# A strong mandate settles districts that already lean to the resistance;
+				# it does not hand over party or local strongholds by itself.
+				AND = {
+					STP = { STP_cw_high_shabrat_legitimacy = yes }
+					STP_region_resistance_leaning = yes
+				}
 				STP_region_resistance_overwhelming = yes
 				AND = {
 					state = 3
@@ -610,9 +615,13 @@ VAL_cw_external_course_available = {
 	NOT = { has_country_flag = VAL_stelander_defeated }
 }
 
-# The course is chosen at the split; a military order needs 60 days of preparation.
+# A route focus authorizes mobilisation after the republics' 60-day preparation window.
 VAL_cw_can_intervene = {
 	VAL_cw_external_course_available = yes
+	OR = {
+		has_completed_focus = VAL_Seize_The_Northern_Passes
+		has_completed_focus = VAL_Arms_For_The_Burning
+	}
 	custom_trigger_tooltip = {
 		tooltip = VAL_cw_republics_grace_elapsed_tt
 		has_global_flag = { flag = STP_cw_started days > 59 }
@@ -2486,6 +2495,53 @@ STP_cw_can_spend_2400 = { check_variable = { var = ADISCORD_economy_treasury val
 
 STP_cw_can_spend_6000 = { check_variable = { var = ADISCORD_economy_treasury value = 6000 compare = greater_than_or_equals } }
 
+# COUNTRY STP: every paid escape from the party's attention costs more than
+# the last. The tiers match STP_cw_pay_disperse_network and the cost text.
+STP_cw_can_pay_disperse_network = {
+	OR = {
+		AND = {
+			check_variable = { var = STP_cw_disperse_uses value = 1 compare = less_than }
+			NOT = { has_political_power < 20 }
+		}
+		AND = {
+			check_variable = { var = STP_cw_disperse_uses value = 1 compare = equals }
+			NOT = { has_political_power < 40 }
+		}
+		AND = {
+			check_variable = { var = STP_cw_disperse_uses value = 2 compare = equals }
+			NOT = { has_political_power < 60 }
+		}
+		AND = {
+			check_variable = { var = STP_cw_disperse_uses value = 3 compare = greater_than_or_equals }
+			NOT = { has_political_power < 80 }
+		}
+	}
+}
+
+# COUNTRY STP: tiers match STP_cw_pay_false_trail and the cost text. Only the
+# PP price rises; the 600 treasury share of each trail stays fixed.
+STP_cw_can_pay_false_trail = {
+	STP_cw_can_spend_600 = yes
+	OR = {
+		AND = {
+			check_variable = { var = STP_cw_false_trail_uses value = 1 compare = less_than }
+			NOT = { has_political_power < 15 }
+		}
+		AND = {
+			check_variable = { var = STP_cw_false_trail_uses value = 1 compare = equals }
+			NOT = { has_political_power < 25 }
+		}
+		AND = {
+			check_variable = { var = STP_cw_false_trail_uses value = 2 compare = equals }
+			NOT = { has_political_power < 35 }
+		}
+		AND = {
+			check_variable = { var = STP_cw_false_trail_uses value = 3 compare = greater_than_or_equals }
+			NOT = { has_political_power < 45 }
+		}
+	}
+}
+
 STP_uses_campaign_currency_scale = { OR = { tag = STP tag = STS tag = SRP } }
 
 # COUNTRY STP: faction politics persist through the party's war and reconstruction.
@@ -2516,9 +2572,12 @@ STP_pf_can_negotiate = {
 
 # Party survival: country scope unless a province is explicitly named.
 STP_ps_holds_congress = { controls_province = 145 }
+# The government still sits during the siege window: the Congress counts as
+# fallen only after STS has held it until STP_ps_congress_siege times out.
 STP_ps_government_operational = {
 	OR = {
 		STP_ps_holds_congress = yes
+		has_country_flag = STP_ps_congress_siege
 		AND = {
 			has_country_flag = STP_ps_temporary_government
 			STP_ps_cabinet_site_held = yes

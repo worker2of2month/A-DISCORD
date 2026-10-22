@@ -66,6 +66,7 @@ IVN_start_marches_revolt = {
 	IVC = {
 		set_capital = { state = 95 }
 		inherit_technology = IVN
+		add_ideas = minister_IVC_Viktor_Laren
 		ADISCORD_economy_initialize_country = yes
 		promote_character = {
 			character = IVN_Rostislav_Karn

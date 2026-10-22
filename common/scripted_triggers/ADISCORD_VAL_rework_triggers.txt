@@ -3404,6 +3404,30 @@ VAL_council_personal_rule = {
 	}
 }
 
+# COUNTRY VAL. The full paid term must remain under independent personal rule.
+VAL_command_consolidation_holds = {
+	tag = VAL
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	VAL_council_personal_rule = yes
+	NOT = { has_country_flag = VAL_stelander_defeated }
+	has_country_flag = VAL_command_conspiracy_exposed
+	has_completed_focus = VAL_Captains_Cannot_Veto
+	has_power_balance = { id = VAL_command_balance }
+	NOT = { power_balance_value = { id = VAL_command_balance value < 0.75 } }
+}
+
+VAL_command_trial_affordable = {
+	NOT = { has_political_power < 100 }
+	NOT = { command_power < 50 }
+}
+
+VAL_command_retirements_affordable = {
+	NOT = { has_political_power < 100 }
+	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+}
+
 VAL_council_coup_ready = {
 	tag = VAL
 	has_focus_tree = VAL_focus

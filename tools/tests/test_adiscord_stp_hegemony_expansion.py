@@ -909,7 +909,7 @@ class FrontierExpansionTests(unittest.TestCase):
             native = read("common/national_focus/ADISCORD_STP_civil_war.txt")
             self.assertEqual(native.count(f"id = {key}"), 1)
             for lang in ("russian", "english"):
-                loc = read(f"localisation/{lang}/ADISCORD_STP_hegemony_l_{lang}.yml")
+                loc = read(f"localisation/{lang}/ADISCORD_STP_l_{lang}.yml")
                 self.assertEqual(len(re.findall(rf"(?m)^ {key}:", loc)), 1)
                 self.assertIn(f"{key}_desc:", loc)
 
@@ -1502,7 +1502,7 @@ class NorthernAdministrationTests(unittest.TestCase):
             position = (scalar(selected[0], "x"), scalar(selected[0], "y"))
             self.assertEqual(sum((scalar(f, "x"), scalar(f, "y")) == position for f in focuses), 1)
             for lang in ("russian", "english"):
-                source = read(f"localisation/{lang}/ADISCORD_STP_hegemony_l_{lang}.yml")
+                source = read(f"localisation/{lang}/ADISCORD_STP_l_{lang}.yml")
                 for key in (name, name + "_desc"):
                     self.assertEqual(len(re.findall(rf'(?m)^ {key}:\d* "[^"\n]*"$', source)), 1)
 

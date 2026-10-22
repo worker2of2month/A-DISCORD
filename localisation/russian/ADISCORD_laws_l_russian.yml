@@ -371,6 +371,12 @@
  ADISCORD_justice_military_prosecution: "Военная прокуратура"
  ADISCORD_justice_military_prosecution_desc: "Отдельная служба расследует злоупотребления и следит за исполнением уставов. Проверки требуют времени, но помогают частям восстанавливать организованность."
 
+ political_advisor_head_of_state: "Глава государства"
+ political_advisor_minister_of_defense: "Министр обороны"
+ political_advisor_minister_of_economy: "Министр экономики"
+ political_advisor_minister_of_health: "Министр здравоохранения"
+ political_advisor_minister_of_education: "Министр образования"
+ political_advisor_chief_of_intelligence: "Глава разведки"
  political_advisor_minister_of_foreign_affairs: "Министр иностранных дел"
 
  ADISCORD_foreign_career_diplomat: "Леонард Вейс"

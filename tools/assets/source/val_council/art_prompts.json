@@ -147,6 +147,32 @@
           ]
         }
       ]
+    },
+    {
+      "key": "Andrei_Krutov",
+      "small": "portrait_VAL_Andrei_Krutov_small.png",
+      "prompt": "Use case: style-transfer. Asset type: a single Hearts of Iron IV advisor portrait icon for the A-Discord mod. Image 1 is the exact advisor-card layout and frame reference, not the identity to copy. Images 2 and 3 are painting, lighting and uniform style references only. Create Andrei Sergeyevich Krutov, a NEW fictional male character, in the same compact tilted silver-grey photo frame as image 1. He is the head of Kefreyt's military chancellery, a loyal veteran in his late fifties: broad but not heavy face, short practical dark ash-brown hair greying at the temples, slightly receding hairline, thick straight eyebrows, clean shaven, weathered cheeks and forehead, alert warm grey eyes, firmly closed mouth with a very slight dry, restrained half-smile. Distinct identity from both reference men: do not copy their faces, no moustache, no glasses. Head and upper shoulders large and clear inside the photograph, entire head visible; subtle three-quarter pose facing slightly right. Charcoal-olive military officer tunic with restrained deep-burgundy collar piping and small dull brass collar insignia, no hat, no medals, no real-world symbols, no weapons. Match the references' realistic hand-painted grand-strategy portrait finish, muted warm skin, soft directional face lighting, subdued grey-lavender photographic background and very fine horizontal old-photo texture. The frame must match image 1: thin worn silver rim with dark bevel, slightly counterclockwise tilt, subtle dark backing shadow, portrait fills the frame. Frame and head occupy the same relative positions as image 1. Render the entire icon, including frame, isolated on a truly transparent background; keep the outer corners and edge margins transparent, no white box or checkerboard drawn in. Canvas aspect ratio 62:67, intended final export 62x67 pixels; create at high resolution but keep the face and silhouette legible when downscaled. One portrait card only, no collage, no text, no letters, no watermark, no extra decorations.",
+      "references": [
+        "gfx/leaders/VAL/portrait_VAL_Mikhail_Velsky_small.png",
+        "gfx/leaders/VAL/portrait_VAL_Mikhail_Velsky.png",
+        "gfx/leaders/VAL/portrait_VAL_Gleb_Osten.png"
+      ],
+      "source_image": "exec-f4d0aa51-764c-4ee9-a9aa-704d05f014c4.png",
+      "export": "The supplied 62x67 RGBA advisor-card PNG is copied unchanged, preserving the frame and transparency.",
+      "exports": [
+        {
+          "path": "gfx/leaders/VAL/portrait_VAL_Andrei_Krutov_small.png",
+          "size": [
+            62,
+            67
+          ]
+        }
+      ],
+      "runtime_source": {
+        "kind": "user_supplied_png",
+        "file": "portar idea.png",
+        "sha256": "d81180059a077009c1ef793b3d62d1b575b356aa7d2860ab152341ffc7e4c0e0"
+      }
     }
   ]
 }

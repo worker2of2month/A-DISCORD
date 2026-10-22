@@ -2393,7 +2393,7 @@ class StelanderPreparationTests(unittest.TestCase):
             ("STP", "equipment", "infantry_equipment"): 200000,
         }
         specs = {
-            "STP_cw_warehouse_inventory": 28,
+            "STP_cw_warehouse_inventory": 14,
             "STP_cw_abila_reserve": 14,
             "STP_cw_expose_the_cabinet": 21,
             "STP_cw_buy_silence": 21,
@@ -2493,7 +2493,6 @@ class StelanderPreparationTests(unittest.TestCase):
     ):
         specs = {
             "STP_bargain_with_local_councils": (10, "treasury", 1200),
-            "STP_prepare_false_trail": (15, "treasury", 600),
             "STP_region_unique_operation_3": (10, "treasury", 1200),
             "STP_region_unique_operation_45": (15, "treasury", 2400),
             "STP_region_unique_operation_46": (20, "treasury", 1200),
@@ -2721,6 +2720,126 @@ class StelanderPreparationTests(unittest.TestCase):
                     else:
                         self.assertIn(f"§Y{resource_price}§! £{icon}", shown)
 
+    def test_escape_prices_rise_per_use_with_matching_check_debit_and_label(self):
+        decisions = {
+            e.key: e.value
+            for group in entries("common/decisions/ADISCORD_STP_decisions.txt")
+            for e in group.value
+            if isinstance(e.value, list)
+        }
+        triggers = entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        getters = {
+            scalar(e.value, "name"): e.value
+            for e in entries("common/scripted_localisation/ADISCORD_STP_scripted_loc.txt")
+            if e.key == "defined_text"
+        }
+        loc = dict(
+            re.findall(
+                r'^ ([\w.]+):(?:\d+)?\s*"(.*)"$',
+                (ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml").read_text(
+                    encoding="utf-8-sig"
+                ),
+                re.M,
+            )
+        )
+        specs = (
+            (
+                "STP_cw_disperse_network",
+                "STP_cw_can_pay_disperse_network",
+                "STP_cw_pay_disperse_network",
+                "STP_cw_disperse_uses",
+                (20, 40, 60, 80),
+                False,
+                "STPGetDisperseNetworkCost",
+            ),
+            (
+                "STP_prepare_false_trail",
+                "STP_cw_can_pay_false_trail",
+                "STP_cw_pay_false_trail",
+                "STP_cw_false_trail_uses",
+                (15, 25, 35, 45),
+                True,
+                "STPGetFalseTrailCost",
+            ),
+        )
+        for decision, check, payer, counter, prices, treasury, getter in specs:
+            action = decisions[decision]
+            self.assertEqual(scalar(block(action, "custom_cost_trigger"), check), "yes")
+            trigger = block(triggers, check)
+            self.assertEqual(scalar(action, "cost"), "0")
+            self.assertEqual(
+                [e.key for e in walk(block(action, "complete_effect")) if e.key == payer],
+                [payer],
+                "pay exactly once, when the operation starts",
+            )
+            self.assertFalse(
+                any(e.key == payer for e in walk(block(action, "remove_effect")))
+            )
+            for uses in range(6):
+                price = prices[min(uses, 3)]
+                with self.subTest(decision=decision, uses=uses):
+
+                    def facts(power, cash):
+                        return {
+                            ("STP", "variable", counter): uses,
+                            ("STP", "numeric", "has_political_power"): power,
+                            ("STP", "STP_cw_can_spend_600", "yes"): cash,
+                        }
+
+                    self.assertTrue(matches_conditions(trigger, facts(price, True)))
+                    self.assertFalse(
+                        matches_conditions(trigger, facts(price - 0.5, True))
+                    )
+                    self.assertEqual(
+                        matches_conditions(trigger, facts(price, False)), not treasury
+                    )
+                    paid = [
+                        e
+                        for _, e in selected_effects(
+                            block(effects, payer), facts(price, True)
+                        )
+                    ]
+                    self.assertEqual(
+                        [e.value for e in paid if e.key == "add_political_power"],
+                        [str(-price)],
+                    )
+                    self.assertEqual(
+                        sum(e.key == "STP_cw_spend_600" for e in paid), int(treasury)
+                    )
+                    self.assertEqual(
+                        [
+                            (scalar(e.value, "var"), scalar(e.value, "value"))
+                            for e in paid
+                            if e.key == "add_to_variable"
+                        ],
+                        [(counter, "1")],
+                    )
+                    for suffix, colour in (("", "§Y"), ("Blocked", "§R")):
+                        chosen = next(
+                            option
+                            for option in (
+                                e.value
+                                for e in getters[getter + suffix]
+                                if e.key == "text"
+                            )
+                            if not any(c.key == "trigger" for c in option)
+                            or matches_conditions(
+                                block(option, "trigger"), facts(0, False)
+                            )
+                        )
+                        shown = loc[scalar(chosen, "localization_key")]
+                        self.assertTrue(
+                            shown.startswith(
+                                f"{colour}{price}§! £political_power_texticon"
+                            ),
+                            shown,
+                        )
+                        self.assertEqual(
+                            f"{colour}600§! £ADISCORD_economy_treasury_texticon" in shown,
+                            treasury,
+                        )
+
     def test_native_stp_custom_prices_have_affordable_blocked_and_hover_labels(self):
         categories = entries("common/decisions/ADISCORD_STP_decisions.txt")
         actions = {
@@ -2765,7 +2884,11 @@ class StelanderPreparationTests(unittest.TestCase):
                 )
                 return values[scalar(chosen, "localization_key")]
 
-            return re.sub(r"\[(STPGetChapter\w+)\]", substitute, value)
+            return re.sub(
+                r"\[(STPGetChapter\w+|STPGetDisperseNetworkCost\w*|STPGetFalseTrailCost\w*)\]",
+                substitute,
+                value,
+            )
 
         for key in price_keys:
             with self.subTest(price=key):
@@ -3945,7 +4068,7 @@ class StelanderPreparationTests(unittest.TestCase):
                     checked.add(scalar(focus, "id"))
         self.assertEqual(
             len(checked),
-            39,
+            41,
             "every persistent focus reward needs a checked delta preview",
         )
         self.assertNotIn("STP_party_war_transport", checked)
@@ -4054,12 +4177,18 @@ class StelanderPreparationTests(unittest.TestCase):
             "planning_speed",
             "org_regain",
             "supply_consumption_factor",
+            "core_defence",
+            "training_time",
+            "mobilization",
         )
         scenarios = (
-            (0, 0, 0, 0),
-            (0, 0, 0, -0.08),
-            (0, 0, 0.15, 0),
-            (0.13, 0.30, 0.25, -0.16),
+            (0, 0, 0, 0, 0, 0, 0),
+            (0, 0, 0, -0.08, 0, 0, 0),
+            (0, 0, 0.15, 0, 0, 0, 0),
+            (0, 0, 0, 0, 0.10, 0, 0),
+            (0, 0, 0, 0, 0, -0.10, 0),
+            (0, 0, 0, 0, 0, 0, 0.10),
+            (0.13, 0.30, 0.25, -0.16, 0.10, -0.10, 0.10),
         )
         for values in scenarios:
             with self.subTest(pending=values):
@@ -4077,7 +4206,7 @@ class StelanderPreparationTests(unittest.TestCase):
                         and scalar(e.value, "var").startswith("STP_cw_army_")
                     ]
                     self.assertEqual(
-                        len(army), 4 if any(values) and attempt == 0 else 0
+                        len(army), 7 if any(values) and attempt == 0 else 0
                     )
                     refreshed = [
                         (scope, e.value)
@@ -4136,6 +4265,9 @@ class StelanderPreparationTests(unittest.TestCase):
                 "STP_cw_army_planning_speed": "STP.STP_cw_pending_army_planning_speed",
                 "STP_cw_army_org_regain": "STP.STP_cw_pending_army_org_regain",
                 "STP_cw_army_supply_consumption_factor": "STP.STP_cw_pending_army_supply_consumption_factor",
+                "STP_cw_army_core_defence": "STP.STP_cw_pending_army_core_defence",
+                "STP_cw_army_training_time": "STP.STP_cw_pending_army_training_time",
+                "STP_cw_army_mobilization": "STP.STP_cw_pending_army_mobilization",
                 "STP_cw_mandate_org_regain": "STP.STP_cw_mandate_org_regain",
                 "STP_cw_mandate_core_defence": "STP.STP_cw_mandate_core_defence",
                 "STP_cw_mandate_training_time": "STP.STP_cw_mandate_training_time",
@@ -4399,6 +4531,9 @@ class StelanderPreparationTests(unittest.TestCase):
                 "STP_cw_pending_army_planning_speed",
                 "STP_cw_pending_army_org_regain",
                 "STP_cw_pending_army_supply_consumption_factor",
+                "STP_cw_pending_army_core_defence",
+                "STP_cw_pending_army_training_time",
+                "STP_cw_pending_army_mobilization",
             },
         )
         removed = [
@@ -4421,6 +4556,9 @@ class StelanderPreparationTests(unittest.TestCase):
             "STP_cw_pending_army_planning_speed",
             "STP_cw_pending_army_org_regain",
             "STP_cw_pending_army_supply_consumption_factor",
+            "STP_cw_pending_army_core_defence",
+            "STP_cw_pending_army_training_time",
+            "STP_cw_pending_army_mobilization",
         }
         for present in (False, True):
             for value in (0, 0.15):
@@ -4479,6 +4617,9 @@ class StelanderPreparationTests(unittest.TestCase):
             "STP_cw_army_planning_speed",
             "STP_cw_army_org_regain",
             "STP_cw_army_supply_consumption_factor",
+            "STP_cw_army_core_defence",
+            "STP_cw_army_training_time",
+            "STP_cw_army_mobilization",
             "STP_cw_party_political_power_gain",
             "STP_cw_party_stability_factor",
             "STP_cw_party_command_power_gain_mult",
@@ -4487,6 +4628,9 @@ class StelanderPreparationTests(unittest.TestCase):
             "STP_cw_pending_army_planning_speed",
             "STP_cw_pending_army_org_regain",
             "STP_cw_pending_army_supply_consumption_factor",
+            "STP_cw_pending_army_core_defence",
+            "STP_cw_pending_army_training_time",
+            "STP_cw_pending_army_mobilization",
             "STP_cw_mandate_org_regain",
             "STP_cw_mandate_core_defence",
             "STP_cw_mandate_training_time",
@@ -4966,7 +5110,7 @@ class StelanderPreparationTests(unittest.TestCase):
                 "STP_THE_MOUNTAIN_WINDOW",
             },
         )
-        self.assertEqual(days(route), 70)
+        self.assertEqual(days(route), 56)
         for name in route:
             self.assertNotIn(
                 "STP_Call_For_Shabrat",
@@ -5037,7 +5181,7 @@ class StelanderPreparationTests(unittest.TestCase):
                 )
             )
         )
-        self.assertEqual(days(funded_political | all_military), 336)
+        self.assertEqual(days(funded_political | all_military), 294)
         self.assertGreater(
             days(funded_political | all_military),
             preparation_days,
@@ -5206,6 +5350,9 @@ class StelanderPreparationTests(unittest.TestCase):
             if isinstance(e.value, list)
         }
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        triggers = entries(
+            "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"
+        )
         health = int(
             scalar(decisions["ivanov_health_is_getting_worse"], "days_mission_timeout")
         )
@@ -5415,6 +5562,12 @@ class StelanderPreparationTests(unittest.TestCase):
                     matches_conditions(block(action, condition), facts),
                     (name, condition, start),
                 )
+            facts[("STP", "variable", "STP_cw_false_trail_uses")] = sum(
+                task == "STP_prepare_false_trail" for _, _, task in intervals
+            )
+            facts[("STP", "STP_cw_can_pay_false_trail", "yes")] = matches_conditions(
+                block(triggers, "STP_cw_can_pay_false_trail"), facts
+            )
             if any(e.key == "custom_cost_trigger" for e in action):
                 self.assertTrue(
                     matches_conditions(block(action, "custom_cost_trigger"), facts),
@@ -5425,15 +5578,20 @@ class StelanderPreparationTests(unittest.TestCase):
             )
             intervals.append((start, end, name))
             transactions.append((start, -float(scalar(action, "cost"))))
+            paid = []
+            for _, e in selected_effects(block(action, "complete_effect"), facts):
+                if e.key == "STP_cw_pay_false_trail":
+                    paid.extend(
+                        entry
+                        for _, entry in selected_effects(block(effects, e.key), facts)
+                    )
+                else:
+                    paid.append(e)
             transactions.extend(
-                (start, float(e.value))
-                for _, e in selected_effects(block(action, "complete_effect"), facts)
-                if e.key == "add_political_power"
+                (start, float(e.value)) for e in paid if e.key == "add_political_power"
             )
             treasury_expenses.extend(
-                (start, 600)
-                for _, e in selected_effects(block(action, "complete_effect"), facts)
-                if e.key == "STP_cw_spend_600"
+                (start, 600) for e in paid if e.key == "STP_cw_spend_600"
             )
             return end
 
@@ -5490,7 +5648,8 @@ class StelanderPreparationTests(unittest.TestCase):
                 0,
                 f"day {day}: route exceeded the explicit 75 PP opening reserve",
             )
-        self.assertEqual(balance, 80)
+        # Four rising false trails (15/25/35/45 PP) leave a narrow margin.
+        self.assertEqual(balance, 20)
         self.assertEqual(sum(amount for _, amount in treasury_expenses), 2400)
         for day in range(deadline):
             occupied = sum(start <= day < end for start, end, _ in intervals)
@@ -5779,8 +5938,8 @@ class StelanderPreparationTests(unittest.TestCase):
             (0.1, None),
             (0.1001, (0.20, 0.10, -0.15, 0.20)),
             (0.55, (0.20, 0.10, -0.15, 0.20)),
-            (0.5501, (0.30, 0.15, -0.20, 0.30)),
-            (0.8, (0.30, 0.15, -0.20, 0.30)),
+            (0.5501, (0.20, 0.10, -0.15, 0.20)),
+            (0.8, (0.20, 0.10, -0.15, 0.20)),
         ):
             for limited_ready in (False, True):
                 facts = {
@@ -5867,7 +6026,6 @@ class StelanderPreparationTests(unittest.TestCase):
         }
         previews = {
             "STP_cw_mandate_majority_idea": (0.20, 0.10, -0.15, 0.20),
-            "STP_cw_mandate_strong_idea": (0.30, 0.15, -0.20, 0.30),
         }
         for idea, values in previews.items():
             modifiers = block(block(ideas, idea), "modifier")
@@ -5989,11 +6147,7 @@ class StelanderPreparationTests(unittest.TestCase):
                                     additions.get(name, Decimal(0)) + amount
                                 )
                     receives = balance > 0.1 and active_agreement and command_survives
-                    base = (
-                        (".30", ".15", "-.20", ".30")
-                        if balance > 0.55
-                        else (".20", ".10", "-.15", ".20")
-                    )
+                    base = (".20", ".10", "-.15", ".20")
                     expected = (
                         dict(zip(names, map(Decimal, base))) if balance > 0.1 else {}
                     )
@@ -8553,7 +8707,7 @@ class StelanderPreparationTests(unittest.TestCase):
             self.assertEqual(
                 scalar(block(focus, "prerequisite"), "focus"), "STP_cw_abila_reserve"
             )
-            self.assertEqual(scalar(focus, "cost"), "4" if focus is fund else "3")
+            self.assertEqual(scalar(focus, "cost"), "2")
         reward = block(fund, "completion_reward")
         income = {
             scalar(e.value, "var"): float(scalar(e.value, "value"))
@@ -8567,8 +8721,18 @@ class StelanderPreparationTests(unittest.TestCase):
                 "ADISCORD_economy_current_month_action_income": 18000,
             },
         )
-        self.assertEqual(
-            float(scalar(block(reward, "add_power_balance_value"), "value")), -0.10
+        # The committee's money draws the party's attention, not the voters'.
+        self.assertFalse(any(e.key == "add_power_balance_value" for e in walk(reward)))
+        suspicion = [
+            scalar(e.value, "value")
+            for e in walk(reward)
+            if e.key == "set_temp_variable"
+            and scalar(e.value, "var") == "STP_party_suspicion_change"
+        ]
+        self.assertEqual(suspicion, ["8"])
+        self.assertIn(
+            "STP_change_party_suspicion",
+            {e.key for e in walk(block(reward, "hidden_effect"))},
         )
         self.assertFalse(
             any(

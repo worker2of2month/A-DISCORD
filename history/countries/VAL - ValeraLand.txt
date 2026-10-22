@@ -67,7 +67,7 @@ add_ideas = {
 
 	#ministers
 	minister_VAL_Mikhail_Velsky
-	minister_VAL_Arseny_Bragin
+	minister_VAL_Andrei_Krutov
 	minister_VAL_Miron_Sablev
 	minister_VAL_Lada_Khrom
 	minister_VAL_Einar_Toll

@@ -1602,6 +1602,32 @@ class ValRewardValidatorTests(unittest.TestCase):
             )
         )
 
+    def test_existing_commander_training_is_a_reward_only_when_executed(self):
+        for effect in ('add_attack', 'add_defense', 'add_planning', 'add_logistics'):
+            for amount in (-1, 0, 1):
+                reward = f"VAL_Sergei_Volkov = {{ {effect} = {amount} }}"
+                with self.subTest(effect=effect, amount=amount):
+                    self.assertEqual(
+                        bool(self.reward_issues("army_experience = 25 " + reward)),
+                        amount <= 0,
+                    )
+                    self.assertTrue(self.reward_issues(
+                        "army_experience = 25 effect_tooltip = { " + reward + " }"
+                    ))
+        for effect in (
+            "add_unit_leader_trait = logistics_wizard",
+            "promote_leader = yes",
+        ):
+            reward = "VAL_Sergei_Volkov = { " + effect + " }"
+            with self.subTest(effect=effect):
+                self.assertFalse(self.reward_issues("army_experience = 25 " + reward))
+                self.assertTrue(self.reward_issues(
+                    "army_experience = 25 effect_tooltip = { " + reward + " }"
+                ))
+        self.assertTrue(self.reward_issues(
+            "army_experience = 25 VAL_Sergei_Volkov = { promote_leader = no }"
+        ))
+
     def test_timed_flag_is_not_a_reward_and_does_not_hide_a_real_reward(self):
         marker = "set_country_flag = { flag = VAL_pending days = 42 }"
         self.assertTrue(self.reward_issues("add_political_power = 25 " + marker))

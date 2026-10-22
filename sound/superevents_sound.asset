@@ -100,3 +100,10 @@ sound = {
 	name = "superevent_stelander_sotnikov_civilwar_sound"
 	file = "superevents/superevent_stelander_sotnikov_civilwar_sound.wav"
 }
+
+# Vangelis, 1492: Conquest of Paradise (1992).
+# Excerpt 00:00-01:00, four-second fade-out and constant gain of +3.06 dB.
+sound = {
+	name = "superevent_stelander_shabrat_republic_sound"
+	file = "superevents/superevent_stelander_shabrat_republic_sound.wav"
+}

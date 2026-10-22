@@ -13826,6 +13826,16 @@
       "count": 1
     },
     {
+      "key": "adiscord_stp_fada_militia_territorial_brigade",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Stelander Territorial Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.05,
+      "start_equipment_factor": 1,
+      "count": 6
+    },
+    {
       "key": "adiscord_stp_scripted_effects_technical_reference_regular_army",
       "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
       "kind": "technical_reference",

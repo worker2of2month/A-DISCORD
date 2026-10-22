@@ -4,7 +4,11 @@ STP_cw_defend_fada = {
 		is_ai = yes
 		STP_ps_war_active = yes
 		owns_state = 28
-		STP_ps_holds_congress = yes
+		# The siege window still counts as a defended Congress.
+		OR = {
+			STP_ps_holds_congress = yes
+			has_country_flag = STP_ps_congress_siege
+		}
 	}
 	abort_when_not_enabled = yes
 	# Native VP defence and the regional buffer complement the garrison role.
@@ -16,6 +20,46 @@ STP_cw_defend_fada = {
 		states = { 28 }
 		subtract_invasions_from_need = yes
 		subtract_fronts_from_need = no
+	}
+}
+
+# Province 145 borders Old Fada (53) and Neansas (3) directly, so the Congress
+# is a front province from the first day. Staff those front sections and allow
+# careful local attacks inside Fada even while the general front stays passive;
+# this also covers retaking the Congress after it falls.
+STP_cw_hold_fada_front = {
+	allowed = { original_tag = STP }
+	enable = {
+		is_ai = yes
+		STP_ps_war_active = yes
+		owns_state = 28
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_unit_request
+		state_trigger = {
+			OR = {
+				state = 28
+				state = 3
+				state = 53
+			}
+			FROM = { tag = STS }
+		}
+		value = 120
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			state = 28
+			FROM = { tag = STS }
+		}
+		ratio = 0.01
+		# Above the passive stage-1 front (1500), below shortage recovery (1600).
+		priority = 1550
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
 	}
 }
 

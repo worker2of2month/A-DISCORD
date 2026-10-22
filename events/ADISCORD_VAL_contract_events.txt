@@ -3980,43 +3980,21 @@ country_event = {
 	}
 }
 
-# Solgalov's dominance: Krutov exposes the generals' conspiracy and the command balance ends.
+# Discovery opens paid preparation; acknowledging the report cannot settle the conspiracy.
 country_event = {
 	id = val_council.27
 	title = val_council.27.t
 	desc = val_council.27.d
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
+	fire_only_once = yes
 	trigger = {
 		has_power_balance = { id = VAL_command_balance }
 		VAL_council_personal_rule = yes
 	}
 	option = {
 		name = val_council.27.a
-		ai_chance = { factor = 50 }
-		add_stability = -0.05
-		add_war_support = 0.05
-		add_command_power = -50
-		custom_effect_tooltip = VAL_focus_authority_10_tt
-		custom_effect_tooltip = VAL_command_conspiracy_closed_tt
-		hidden_effect = {
-			set_temp_variable = { var = ADISCORD_VAL_effect_value value = 10 }
-			VAL_change_contract_authority = yes
-			VAL_expose_command_conspiracy = yes
-		}
-	}
-	option = {
-		name = val_council.27.b
-		ai_chance = { factor = 50 }
-		add_stability = 0.03
-		add_political_power = -50
-		custom_effect_tooltip = VAL_focus_authority_5_tt
-		custom_effect_tooltip = VAL_command_conspiracy_closed_tt
-		hidden_effect = {
-			set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
-			VAL_change_contract_authority = yes
-			VAL_expose_command_conspiracy = yes
-		}
+		custom_effect_tooltip = VAL_command_conspiracy_preparation_tt
 	}
 }
 

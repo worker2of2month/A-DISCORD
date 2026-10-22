@@ -88,7 +88,11 @@
       "owner_module": "tools.builders.build_adiscord_stp_party_ideologies",
       "source_inputs": [
         "tools/builders/build_adiscord_stp_party_ideologies.py",
-        "tools/assets/source/stp_party_ideologies/*.png",
+        "tools/assets/source/stp_party_ideologies/radical_hedonism.png",
+        "tools/assets/source/stp_party_ideologies/commercial_hedonism.png",
+        "tools/assets/source/stp_party_ideologies/patronal_hedonism.png",
+        "tools/assets/source/stp_party_ideologies/steland_military_etatism.png",
+        "tools/assets/source/stp_party_ideologies/steland_security_etatism.png",
         "tools/assets/source/stp_party_ideologies/prompts.md",
         "gfx/interface/ideologies/aristocratic_hedonism_group.png"
       ],
@@ -121,7 +125,6 @@
       "owner_module": "tools.builders.build_adiscord_startup_ui_assets",
       "source_inputs": [
         "tools/builders/build_adiscord_startup_ui_assets.py",
-        "tools/assets/source/startup/rus.png",
         "gfx/interface/superevents/NAM/namestnik lost.png",
         "gfx/loadingscreens/load_3.dds"
       ],
@@ -132,7 +135,6 @@
         "gfx/interface/startup/page.png",
         "gfx/interface/startup/launcher.png",
         "gfx/interface/startup/close.png",
-        "gfx/interface/startup/rus.png",
         "gfx/interface/startup/shl.png",
         "gfx/interface/startup/nam.png"
       ],
@@ -1994,6 +1996,7 @@
         "music/superevent_rus_khan_defeated.ogg",
         "music/superevent_vorkerland_joint_victory.ogg",
         "music/superevent_stelander_sotnikov_civilwar.ogg",
+        "music/superevent_stelander_shabrat_republic.ogg",
         "music/one_minute_of_silence.ogg",
         "music/two_minutes_of_silence.ogg",
         "music/ADISCORD_stp_civil_war_end_after_superevent.ogg"
@@ -2019,7 +2022,8 @@
         "sound/superevents/superevent_itora_civilwar_sound.wav",
         "sound/superevents/superevent_rus_khan_defeated_sound.wav",
         "sound/superevents/superevent_vorkerland_joint_victory_sound.wav",
-        "sound/superevents/superevent_stelander_sotnikov_civilwar_sound.wav"
+        "sound/superevents/superevent_stelander_sotnikov_civilwar_sound.wav",
+        "sound/superevents/superevent_stelander_shabrat_republic_sound.wav"
       ],
       "may_delete_outputs": true,
       "ownership_mode": "exclusive",

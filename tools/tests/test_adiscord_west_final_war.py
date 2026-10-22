@@ -628,6 +628,22 @@ class MarchesRevoltTests(unittest.TestCase):
         self.assertEqual(set(re.findall(r"\b(\d+) = \{ IVN_marches_revolt_take_state = yes \}", states)), {"92", "95", "96", "97"})
         self.assertIn("is_controlled_by = IVN", body(self.IVN_EFFECTS, "IVN_marches_revolt_take_state"))
 
+    def test_the_legion_appoints_its_foreign_minister_before_budget_initialization(self):
+        effects = parse_clausewitz(self.IVN_EFFECTS.read_text(encoding="utf-8"))
+        start = block(effects, "IVN_start_marches_revolt")
+        selected = list(selected_effects(start, {}, "IVN"))
+        appointments = [
+            (scope, entry.value)
+            for scope, entry in selected
+            if entry.key == "add_ideas"
+        ]
+        self.assertEqual(appointments, [("IVC", "minister_IVC_Viktor_Laren")])
+        legion_effects = [entry.key for scope, entry in selected if scope == "IVC"]
+        self.assertLess(
+            legion_effects.index("add_ideas"),
+            legion_effects.index("ADISCORD_economy_initialize_country"),
+        )
+
     def test_both_outcomes_keep_the_itoran_tag(self):
         resolve = body(self.IVN_EFFECTS, "IVN_resolve_marches_revolt")
         self.assertIn("target = IVC", resolve)

@@ -1293,7 +1293,9 @@ ideas = {
 			allowed = { always = no }
 			modifier = { army_org_regain = 0.15 }
 		}
-		STP_cw_reserve_commanders_idea = { name = STP_cw_military_staff_dynamic allowed = { always = no } modifier = { army_org_factor = 0.05 planning_speed = 0.10 } }
+		STP_cw_reserve_commanders_idea = { name = STP_cw_military_staff_dynamic allowed = { always = no } modifier = { army_org_factor = 0.05 planning_speed = 0.10 mobilization_speed = 0.10 } }
+		STP_cw_defensive_lines_idea = { name = STP_cw_military_staff_dynamic allowed = { always = no } modifier = { army_core_defence_factor = 0.10 } }
+		STP_cw_heavy_reserve_idea = { name = STP_cw_military_staff_dynamic allowed = { always = no } modifier = { training_time_factor = -0.10 } }
 		STP_ps_northern_lessons_delta = {
 			name = STP_cw_military_staff_dynamic
 			allowed = { always = no }
@@ -1356,11 +1358,6 @@ ideas = {
 			name = STP_cw_election_mandate_dynamic
 			allowed = { always = no }
 			modifier = { army_org_regain = 0.20 army_core_defence_factor = 0.10 training_time_factor = -0.15 mobilization_speed = 0.20 }
-		}
-		STP_cw_mandate_strong_idea = {
-			name = STP_cw_election_mandate_dynamic
-			allowed = { always = no }
-			modifier = { army_org_regain = 0.30 army_core_defence_factor = 0.15 training_time_factor = -0.20 mobilization_speed = 0.30 }
 		}
 		STP_cw_mandate_command_agreement_idea = {
 			name = STP_cw_election_mandate_dynamic

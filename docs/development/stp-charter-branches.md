@@ -179,7 +179,15 @@ The Union flag is defined geometrically in `tools/builders/build_adiscord_stp_fl
 Its navy field, ivory band, gold mountain star and laurel branches are exported
 in all three native sizes with `--flags-only STS_stelander_union`; run `--check`,
 then `--apply`, then `--check`. The super-event retains the shared Shabrat
-illustration and audio until dedicated assets are selected.
+illustration. Its dedicated GUI sound is
+`superevent_stelander_shabrat_republic_sound_e`: the opening 60 seconds of
+Vangelis, *1492: Conquest of Paradise*, with a 30 ms onset fade, four-second
+closing fade and constant gain of +3.06 dB. The PCM master uses stereo 44.1 kHz
+and 16-bit samples, with an integrated level of approximately -20 LUFS and
+peaks below -3 dBTP. The existing 60-second silent carrier covers the excerpt.
+Regenerate its OGG mirror through `tools.builders.build_adiscord_superevent_music`
+with `--track superevent_stelander_shabrat_republic`, using `--check`, `--apply`,
+then `--check`.
 
 ## Tikhoreva: a reported result must survive inspection
 

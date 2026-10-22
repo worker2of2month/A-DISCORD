@@ -145,9 +145,12 @@ STS = {
 
 	army = {
 		male = {
-			"GFX_portrait_STP_Leonid_Barchel"
-			"GFX_portrait_STP_Edmund_Ravel"
+			"GFX_portrait_STS_Leonid_Barchel"
+			"GFX_portrait_STS_Edmund_Ravel"
 			"GFX_portrait_STP_Severin_Drake"
+		}
+		female = {
+			"GFX_portrait_STS_Elena_Vetrova"
 		}
 	}
 }

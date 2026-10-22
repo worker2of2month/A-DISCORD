@@ -6059,6 +6059,7 @@ VAL_enter_stelander_defeat = {
 			tag = VAL
 			NOT = { has_country_flag = VAL_stelander_defeated }
 		}
+		VAL_cancel_command_consolidation = yes
 		set_country_flag = VAL_stelander_defeated
 		VAL_close_northern_coalition_campaign = yes
 		if = { limit = { has_power_balance = { id = VAL_command_balance } } remove_power_balance = { id = VAL_command_balance } }
@@ -11614,17 +11615,59 @@ VAL_council_offer_identity = {
 	}
 }
 
-# COUNTRY VAL. Solgalov's dominance ends the command balance for the campaign;
-# the coup requires this balance, so the Council route closes with it.
+# COUNTRY VAL. Discovery survives a loss of influence; payment and completion are separate.
 VAL_expose_command_conspiracy = {
 	if = {
 		limit = {
 			has_power_balance = { id = VAL_command_balance }
+			VAL_council_personal_rule = yes
+			NOT = { power_balance_value = { id = VAL_command_balance value < 0.75 } }
+			NOT = { has_country_flag = VAL_command_conspiracy_exposed }
 		}
+		set_country_flag = VAL_command_conspiracy_exposed
+		country_event = { id = val_council.27 }
+	}
+}
+
+# The kind is the payment receipt: 1 = trial, 2 = pensions held until retirement.
+# Clear it before removing missions or the balance, whose callbacks can re-enter cleanup.
+VAL_cancel_command_consolidation = {
+	if = {
+		limit = { has_variable = VAL_command_consolidation_kind }
+		if = {
+			limit = { check_variable = { var = VAL_command_consolidation_kind value = 2 compare = equals } }
+			add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+		clear_variable = VAL_command_consolidation_kind
+		remove_mission = VAL_command_trial_timer
+		remove_mission = VAL_command_retirements_timer
+	}
+}
+
+# Called only by the paid mission's matching timeout. All current political conditions
+# are checked again, so a terminal handoff cannot be followed by a successful purge.
+VAL_finish_command_consolidation = {
+	if = {
+		limit = {
+			VAL_command_consolidation_holds = yes
+			has_variable = VAL_command_consolidation_kind
+		}
+		if = {
+			limit = { check_variable = { var = VAL_command_consolidation_kind value = 1 compare = equals } }
+			add_stability = -0.05
+			add_dynamic_modifier = { modifier = VAL_command_trial_disruption days = 180 }
+		}
+		clear_variable = VAL_command_consolidation_kind
+		remove_mission = VAL_command_trial_timer
+		remove_mission = VAL_command_retirements_timer
 		remove_power_balance = { id = VAL_command_balance }
 		remove_mission = VAL_council_ultimatum
+		clr_country_flag = VAL_command_conspiracy_exposed
 		news_event = { id = val_council.28 hours = 6 }
 	}
+	else = { VAL_cancel_command_consolidation = yes }
 }
 
 VAL_council_take_power = {
@@ -11632,6 +11675,8 @@ VAL_council_take_power = {
 		limit = {
 			VAL_council_coup_ready = yes
 		}
+		VAL_cancel_command_consolidation = yes
+		clr_country_flag = VAL_command_conspiracy_exposed
 		set_country_flag = VAL_council_in_power
 		VAL_council_initialize_seats = yes
 		remove_mission = VAL_council_ultimatum
@@ -12601,6 +12646,8 @@ VAL_council_check_postwar = {
 
 # COUNTRY VAL. Terminal handoffs end the Council regime and its political balance.
 VAL_council_close_regime = {
+	VAL_cancel_command_consolidation = yes
+	clr_country_flag = VAL_command_conspiracy_exposed
 	if = {
 		limit = {
 			has_variable = VAL_council_plan_kind

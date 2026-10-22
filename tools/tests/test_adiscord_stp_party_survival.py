@@ -79,22 +79,29 @@ class CongressDefenceContracts(unittest.TestCase):
         self.assertEqual(one(decision, 'cost'), '0')
         self.assertEqual(one(decision, 'days_remove'), '15')
         self.assertEqual(one(decision, 'fire_only_once'), 'yes')
-        for war, owner, controller in product((False, True), repeat=3):
+        for war, owner, controller, flanks in product((False, True), repeat=4):
             facts = {
                 ('STP', 'STP_ps_war_active', 'yes'): war,
                 ('STP', 'owns_state', '28'): owner,
                 ('STP', 'controls_province', '145'): controller,
+                ('STP', 'controls_province', '16374'): flanks,
+                ('STP', 'controls_province', '16386'): flanks,
             }
             valid = war and owner and controller
             self.assertEqual(matches_conditions(one(decision, 'visible'), facts), valid)
             self.assertEqual(matches_conditions(one(decision, 'cancel_trigger'), facts), not valid)
             effects = [e for _, e in selected_effects(one(decision, 'remove_effect'), facts)]
-            buildings = [e.value for e in walk(effects) if e.key == 'add_building_construction']
-            self.assertEqual(len(buildings), int(valid))
+            buildings = {
+                one(e.value, 'province'): (one(e.value, 'type'), one(e.value, 'level'))
+                for e in walk(effects) if e.key == 'add_building_construction'
+            }
+            expected = {}
             if valid:
-                self.assertEqual(one(buildings[0], 'province'), '145')
-                self.assertEqual(one(buildings[0], 'level'), '2')
-                self.assertEqual(one(buildings[0], 'type'), 'bunker')
+                expected['145'] = ('bunker', '3')
+                if flanks:
+                    expected['16374'] = ('bunker', '2')
+                    expected['16386'] = ('bunker', '2')
+            self.assertEqual(buildings, expected)
         self.assertFalse(children(decision, 'complete_effect'))
         self.assertFalse(children(decision, 'cancel_effect'))
 
@@ -1792,3 +1799,218 @@ class FadaMissionContracts(unittest.TestCase):
                 'STP_cw_fada_timeout_tt',
             ):
                 self.assertRegex(text, rf'(?m)^ {name}:')
+
+
+class CongressSiegeContracts(unittest.TestCase):
+    """The first loss of province 145 is a seven-day siege, not an instant crisis."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
+        cls.triggers = {e.key: e.value for e in parse_clausewitz(read(TRIGGERS))}
+        cls.decisions = {
+            d.key: d.value
+            for c in parse_clausewitz(read(DECISIONS))
+            for d in c.value
+            if isinstance(d.value, list)
+        }
+        cls.events = {
+            one(e.value, 'id'): e.value
+            for e in parse_clausewitz(read('events/ADISCORD_STP_events.txt'))
+            if e.key == 'country_event'
+        }
+
+    @staticmethod
+    def calls(effect, facts):
+        return [(scope, e) for scope, e in selected_effects(effect, facts)]
+
+    def test_daily_poll_routes_the_congress_through_the_siege(self):
+        keys = [e.key for e in walk(self.effects['STP_ps_poll_nodes'])]
+        self.assertIn('STP_ps_begin_congress_siege', keys)
+        self.assertIn('STP_ps_lift_congress_siege', keys)
+        self.assertNotIn('STP_ps_open_congress_crisis', keys)
+
+    def test_only_a_congress_that_never_fell_gets_a_siege(self):
+        effect = self.effects['STP_ps_begin_congress_siege']
+        for fell, siege, crisis in product((False, True), repeat=3):
+            facts = {
+                ('STP', 'STP_ps_war_active', 'yes'): True,
+                ('STP', 'STP_ps_holds_congress', 'no'): True,
+                ('STP', 'has_country_flag', 'STP_ps_congress_fell'): fell,
+                ('STP', 'has_country_flag', 'STP_ps_congress_siege'): siege,
+                ('STP', 'has_country_flag', 'STP_ps_congress_crisis'): crisis,
+            }
+            calls = self.calls(effect, facts)
+            keys = [e.key for _, e in calls]
+            opens = not (fell or siege or crisis)
+            self.assertEqual('activate_mission' in keys, opens)
+            self.assertEqual('STP_ps_raise_fada_militia' in keys, opens)
+            self.assertEqual(
+                sorted(
+                    scope for scope, e in calls
+                    if e.key == 'country_event'
+                    and one(e.value, 'id') == 'ADISCORD_STP_cw.230'
+                ),
+                ['STP', 'STS'] if opens else [],
+            )
+            self.assertEqual(
+                'STP_ps_open_congress_crisis' in keys, not opens and not siege
+            )
+
+    def test_siege_mission_is_timeout_only_and_registered(self):
+        mission = self.decisions['STP_ps_congress_siege']
+        self.assertEqual(one(mission, 'days_mission_timeout'), '7')
+        self.assertEqual(one(one(one(mission, 'available'), 'hidden_trigger'), 'always'), 'no')
+        self.assertEqual(one(mission, 'selectable_mission'), 'no')
+        self.assertIn(
+            'STP_ps_congress_siege_timeout',
+            str(signature(one(mission, 'timeout_effect'))),
+        )
+        tokens = read('common/synchronized_dynamic_tokens/ADISCORD_tokens.txt').split()
+        self.assertEqual(tokens.count('STP_ps_congress_siege'), 1)
+
+    def test_timeout_settles_by_current_control(self):
+        effect = self.effects['STP_ps_congress_siege_timeout']
+        for holds in (False, True):
+            facts = {
+                ('STP', 'has_country_flag', 'STP_ps_congress_siege'): True,
+                ('STP', 'STP_ps_war_active', 'yes'): True,
+                ('STP', 'STP_ps_holds_congress', 'no'): not holds,
+                ('STP', 'STP_ps_holds_congress', 'yes'): holds,
+            }
+            calls = self.calls(effect, facts)
+            keys = [e.key for _, e in calls]
+            self.assertEqual('STP_ps_open_congress_crisis' in keys, not holds)
+            self.assertEqual('STP_ps_lift_congress_siege' in keys, holds)
+            fell = [
+                scope for scope, e in calls
+                if e.key == 'country_event' and one(e.value, 'id') == 'ADISCORD_STP_cw.232'
+            ]
+            self.assertEqual(sorted(fell), [] if holds else ['STP', 'STS'])
+            if not holds:
+                # The crisis reads government_operational, which the flag still satisfies.
+                self.assertLess(
+                    keys.index('clr_country_flag'), keys.index('STP_ps_open_congress_crisis')
+                )
+
+    def test_government_keeps_working_during_the_siege(self):
+        gate = self.triggers['STP_ps_government_operational']
+        facts = {('STP', 'has_country_flag', 'STP_ps_congress_siege'): True}
+        self.assertTrue(matches_conditions(gate, facts))
+        self.assertFalse(matches_conditions(gate, {}))
+
+    def test_militia_pays_the_standard_price_once(self):
+        effect = self.effects['STP_ps_raise_fada_militia']
+        for raised, manpower, rifles in product(
+            (False, True), (5999, 6000), (5399, 5400)
+        ):
+            facts = {
+                ('STP', 'STP_ps_war_active', 'yes'): True,
+                ('STP', 'owns_state', '28'): True,
+                ('STP', 'has_country_flag', 'STP_ps_fada_militia_raised'): raised,
+                ('STP', 'controls_province', '16374'): True,
+                ('STP', 'numeric', 'has_manpower'): manpower,
+                ('STP', 'equipment', 'infantry_equipment'): rifles,
+                ('STP', 'has_country_flag', 'STP_cw_rifles_paid'): True,
+            }
+            keys = [e.key for _, e in self.calls(effect, facts)]
+            paid = not raised and manpower >= 6000 and rifles >= 5400
+            self.assertEqual(keys.count('STP_cw_pay_rifles'), 3 if paid else 0)
+            self.assertEqual(keys.count('STP_ps_create_fada_militia'), 3 if paid else 0)
+            self.assertEqual(keys.count('set_country_flag'), 0 if raised else 1)
+        payment = [
+            e for e in walk(effect)
+            if e.key == 'add_manpower' or (e.key == 'set_temp_variable' and one(e.value, 'var') == 'STP_cw_rifle_cost')
+        ]
+        self.assertEqual(
+            [e.value if e.key == 'add_manpower' else one(e.value, 'value') for e in payment],
+            ['5400', '-6000'],
+        )
+        create = self.effects['STP_ps_create_fada_militia']
+        locations = {
+            one(parse_clausewitz(one(e.value, 'division')), 'location')
+            for e in walk(create) if e.key == 'create_unit'
+        }
+        self.assertEqual(locations, {'16374', '16386', '16377', '16366', '16351', '16368'})
+
+    def test_war_end_clears_siege_and_capital_defence(self):
+        cleanup = str(signature(self.effects['STP_ps_close_defence']))
+        for entry in (
+            "('clr_country_flag', 'STP_ps_congress_siege')",
+            "('remove_mission', 'STP_ps_congress_siege')",
+            "('clr_country_flag', 'STP_ps_fada_militia_raised')",
+            "('clear_variable', 'STP_ps_capital_defence')",
+        ):
+            self.assertIn(entry, cleanup)
+        self.assertIn('STP_ps_capital_defence_dynamic', cleanup)
+
+    def test_capital_defence_follows_stage_and_siege(self):
+        effect = self.effects['STP_ps_refresh_capital_defence']
+        for holds, siege, stage in product((False, True), (False, True), (1, 2, 3, 4)):
+            facts = {
+                ('STP', 'STP_ps_war_active', 'yes'): True,
+                ('STP', 'STP_ps_holds_congress', 'yes'): holds,
+                ('STP', 'has_country_flag', 'STP_ps_congress_siege'): siege,
+                ('STP', 'variable', 'STP_ps_stage'): stage,
+            }
+            values = [
+                float(one(e.value, 'value'))
+                for _, e in self.calls(effect, facts)
+                if e.key == 'set_variable' and one(e.value, 'var') == 'STP_ps_capital_defence'
+            ]
+            expected = 0.2 if siege else (0.1 if holds and stage < 3 else 0)
+            self.assertEqual(values[-1], expected)
+        dynamic = one(
+            parse_clausewitz(read('common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt')),
+            'STP_ps_capital_defence_dynamic',
+        )
+        self.assertEqual(one(dynamic, 'army_defence_factor'), 'STP_ps_capital_defence')
+
+    def test_capital_slots_place_only_the_party_start_divisions(self):
+        deploy = self.effects['STP_cw_deploy_assault_division']
+        gate = signature(one(one(deploy, 'if'), 'limit'))
+        self.assertIn(('tag', 'STP'), gate)
+        self.assertIn('STP_cw_capital_assault_slots', str(gate))
+        start = one(self.effects['STP_cw_start'], 'if')
+        keys = [e.key for e in start]
+        slots = [
+            i for i, e in enumerate(start)
+            if e.key == 'set_temp_variable' and one(e.value, 'var') == 'STP_cw_capital_assault_slots'
+        ]
+        self.assertEqual(len(slots), 1)
+        self.assertEqual(one(start[slots[0]].value, 'value'), '3')
+        self.assertLess(keys.index('STP_cw_raise_congress_guard'), slots[0])
+        self.assertNotIn('STP_cw_capital_assault_slots', str(signature(start[:slots[0]])))
+
+    def test_siege_events_reach_both_sides(self):
+        for number in (230, 231, 232):
+            event = self.events[f'ADISCORD_STP_cw.{number}']
+            self.assertEqual(signature(one(event, 'trigger')), [('OR', [('tag', 'STP'), ('tag', 'STS')])])
+            options = children(event, 'option')
+            self.assertEqual(len(options), 2)
+            for language in ('russian', 'english'):
+                text = read(f'localisation/{language}/ADISCORD_STP_l_{language}.yml')
+                for suffix in ('t', 'd_party', 'd_resistance', 'a', 'b'):
+                    self.assertRegex(
+                        text, rf'(?m)^ ADISCORD_STP_cw\.{number}\.{suffix}: "[^"\r\n]+"\r?$'
+                    )
+        registry = read('tools/data/adiscord_event_ids.json')
+        for number in (230, 231, 232):
+            self.assertIn(f'"ADISCORD_STP_cw.{number}"', registry)
+
+    def test_party_ai_holds_the_fada_front(self):
+        ai = {
+            e.key: e.value
+            for e in parse_clausewitz(read('common/ai_strategy/ADISCORD_STP_civil_war.txt'))
+        }
+        profile = ai['STP_cw_hold_fada_front']
+        control = next(
+            e.value for e in profile
+            if e.key == 'ai_strategy' and one(e.value, 'type') == 'front_control'
+        )
+        self.assertEqual(signature(one(control, 'state_trigger')), [('state', '28'), ('FROM', [('tag', 'STS')])])
+        self.assertEqual(one(control, 'execute_order'), 'yes')
+        self.assertEqual(one(control, 'execution_type'), 'careful')
+        self.assertTrue(1500 < int(one(control, 'priority')) < 1600)
+        defend = str(signature(one(ai['STP_cw_defend_fada'], 'enable')))
+        self.assertIn('STP_ps_congress_siege', defend)

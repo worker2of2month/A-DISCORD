@@ -1,4 +1,11 @@
 spriteTypes = {
+	# Native advisor slots can reposition badges; all 18 frames stay transparent.
+	spriteType = {
+		name = "GFX_idea_traits_strip"
+		texturefile = "gfx/interface/ideas/idea_traits_strip.dds"
+		noOfFrames = 18
+	}
+
 
 	###General
 
@@ -130,6 +137,11 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_idea_minister_VAL_Mikhail_Velsky"
 		texturefile = "gfx/leaders/VAL/portrait_VAL_Mikhail_Velsky_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_minister_VAL_Andrei_Krutov"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Andrei_Krutov_small.png"
 	}
 
 	spriteType = {

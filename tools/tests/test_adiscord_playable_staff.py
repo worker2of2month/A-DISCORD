@@ -345,6 +345,84 @@ class StaffPortraitTests(unittest.TestCase):
                             self.assert_compact_portrait(scalar(role.value, 'small'))
 
 
+class ValStartingCommanderTests(unittest.TestCase):
+    commanders = {
+        'VAL_Aleksei_Veyr': 'VAL_Contractor_Officers',
+        'VAL_Maksim_Korvin': 'VAL_Army_Of_The_Ledger',
+        'VAL_Dmitri_Karsov': 'VAL_Contract_General_Staff',
+        'VAL_Leonid_Vargan': 'VAL_New_Supply_Base',
+        'VAL_Sergei_Volkov': 'VAL_Veterans_Of_The_Campaign',
+    }
+
+    def test_named_reserves_start_with_varied_experience_and_distinct_portraits(self):
+        history = parse('history/countries/VAL - ValeraLand.txt')
+        recruited = [e.value for e in history if e.key == 'recruit_character']
+        characters = block(parse('common/characters/VAL.txt'), 'characters')
+        portraits = set()
+        levels = []
+        for name in self.commanders:
+            with self.subTest(character=name):
+                self.assertEqual(recruited.count(name), 1)
+                person = block(characters, name)
+                role_name = (
+                    'field_marshal' if name == 'VAL_Sergei_Volkov' else 'corps_commander'
+                )
+                role = optional_block(person, role_name)
+                self.assertTrue(role, 'Starting recruitment needs an active command role')
+                other_role = 'corps_commander' if role_name == 'field_marshal' else 'field_marshal'
+                self.assertFalse(optional_block(person, other_role))
+                level = int(scalar(role, 'skill'))
+                levels.append(level)
+                self.assertIn(level, range(1, 6))
+                expected_traits = {
+                    'VAL_Aleksei_Veyr': ('commando',),
+                    'VAL_Maksim_Korvin': ('inflexible_strategist',),
+                    'VAL_Dmitri_Karsov': ('armor_officer',),
+                    'VAL_Leonid_Vargan': ('winter_specialist',),
+                    'VAL_Sergei_Volkov': ('thorough_planner', 'organisational_leader'),
+                }[name]
+                self.assertCountEqual(
+                    [e.value for e in block(role, 'traits')], expected_traits
+                )
+                for key in (
+                    'attack_skill', 'defense_skill', 'planning_skill', 'logistics_skill'
+                ):
+                    self.assertIn(int(scalar(role, key)), range(1, 6))
+                army = block(block(person, 'portraits'), 'army')
+                portraits.add(scalar(army, 'large'))
+                self.assertTrue(scalar(army, 'small').endswith('_small'))
+        self.assertEqual(len(portraits), len(self.commanders))
+        self.assertGreater(len(set(levels)), 1)
+        self.assertEqual(levels.count(5), 1)
+
+    def test_focus_rewards_improve_existing_commanders_without_resetting_roles(self):
+        tree = block(parse('focus_trees/VAL/main/focuses.txt'), 'focus_tree')
+        focuses = {scalar(e.value, 'id'): e.value for e in tree if e.key == 'focus'}
+        for name, focus_id in self.commanders.items():
+            with self.subTest(character=name, focus=focus_id):
+                reward = block(focuses[focus_id], 'completion_reward')
+                replacements = [
+                    e for e in walk(reward)
+                    if e.key in ('add_corps_commander_role', 'add_field_marshal_role')
+                    and scalar(e.value, 'character') == name
+                ]
+                self.assertFalse(
+                    replacements, 'Late role creation can overwrite combat progress'
+                )
+                upgrades = [e.value for e in walk(reward) if e.key == name]
+                self.assertEqual(len(upgrades), 1)
+                effects = list(walk(upgrades[0]))
+                self.assertTrue(any(e.key == 'add_unit_leader_trait' for e in effects))
+                self.assertTrue(any(
+                    e.key in ('add_attack', 'add_defense', 'add_planning', 'add_logistics')
+                    for e in effects
+                ))
+                self.assertFalse(any(
+                    e.key in ('skill', 'attack_skill', 'defense_skill', 'planning_skill', 'logistics_skill')
+                    for e in effects
+                ))
+
+
 class PlayableStaffTests(unittest.TestCase):
     def test_deferred_staff_is_registered_in_history_without_early_roles(self):
         for tag in ('STP', 'STS', 'VAL'):

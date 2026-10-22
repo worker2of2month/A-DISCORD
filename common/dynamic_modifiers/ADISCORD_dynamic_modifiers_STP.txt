@@ -58,6 +58,9 @@ STP_cw_military_staff_dynamic = {
 	planning_speed = STP_cw_army_planning_speed
 	army_org_regain = STP_cw_army_org_regain
 	supply_consumption_factor = STP_cw_army_supply_consumption_factor
+	army_core_defence_factor = STP_cw_army_core_defence
+	training_time_factor = STP_cw_army_training_time
+	mobilization_speed = STP_cw_army_mobilization
 }
 
 STP_cw_election_mandate_dynamic = {
@@ -152,6 +155,13 @@ STP_ps_nodes_dynamic = {
 	enable = { STP_ps_war_active = yes }
 	planning_speed = STP_ps_node_planning
 	army_speed_factor = STP_ps_node_redeployment
+}
+
+# Value from STP_ps_refresh_capital_defence; zero once the Congress has fallen.
+STP_ps_capital_defence_dynamic = {
+	icon = GFX_idea_ADISCORD_law_military_cadre_army
+	enable = { STP_ps_war_active = yes }
+	army_defence_factor = STP_ps_capital_defence
 }
 
 # Party war strain: the resort economy pays for the war until it breaks.

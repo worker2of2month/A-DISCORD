@@ -389,6 +389,7 @@ STP_shabrat_election_bop_category = {
 				if = {
 					limit = { has_country_flag = STP_sided_with_Maksim_flag }
 					add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.06 }
+					custom_effect_tooltip = STP_cw_suspicion_3_tt
 				}
 				else_if = {
 					limit = { has_country_flag = STP_sided_with_the_party_flag }
@@ -403,6 +404,8 @@ STP_shabrat_election_bop_category = {
 						if = {
 							limit = { has_country_flag = STP_sided_with_Maksim_flag }
 							add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.06 }
+							set_temp_variable = { var = STP_party_suspicion_change value = 3 }
+							STP_change_party_suspicion = yes
 						}
 						else_if = {
 							limit = { has_country_flag = STP_sided_with_the_party_flag }
@@ -450,6 +453,7 @@ STP_shabrat_election_bop_category = {
 				if = {
 					limit = { has_country_flag = STP_sided_with_Maksim_flag }
 					add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.12 }
+					custom_effect_tooltip = STP_cw_suspicion_6_tt
 				}
 				else_if = {
 					limit = { has_country_flag = STP_sided_with_the_party_flag }
@@ -466,6 +470,8 @@ STP_shabrat_election_bop_category = {
 						if = {
 							limit = { has_country_flag = STP_sided_with_Maksim_flag }
 							add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.12 }
+							set_temp_variable = { var = STP_party_suspicion_change value = 6 }
+							STP_change_party_suspicion = yes
 						}
 						else_if = {
 							limit = { has_country_flag = STP_sided_with_the_party_flag }
@@ -666,11 +672,18 @@ STP_battle_for_stelander = {
 		allowed = { tag = STP }
 		visible = { check_variable = { var = STP_party_suspicion value = 10 compare = greater_than_or_equals } has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active }
 		available = { custom_trigger_tooltip = { tooltip = STP_preparation_slot_available_tt STP_has_political_action_slot = yes } check_variable = { var = STP_party_suspicion value = 10 compare = greater_than_or_equals } }
-		cost = 20
+		custom_cost_trigger = { STP_cw_can_pay_disperse_network = yes }
+		custom_cost_text = STP_cw_disperse_network_cost
+		cost = 0
 		days_remove = 10
 		days_re_enable = 30
 		cancel_trigger = { hidden_trigger = { NOT = { has_country_flag = STP_battle_for_stelander_active } } }
-		complete_effect = { hidden_effect = { STP_political_action_slot_consume = yes } }
+		complete_effect = {
+			hidden_effect = {
+				STP_cw_pay_disperse_network = yes
+				STP_political_action_slot_consume = yes
+			}
+		}
 		cancel_effect = { hidden_effect = { STP_political_action_slot_release = yes } }
 		remove_effect = {
 			custom_effect_tooltip = STP_disperse_result_tt
@@ -1188,8 +1201,8 @@ STP_battle_for_stelander = {
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		on_map_mode = map_and_decisions_view
-		custom_cost_trigger = { NOT = { has_political_power < 15 } STP_cw_can_spend_600 = yes }
-		custom_cost_text = STP_cost_pp15_t600
+		custom_cost_trigger = { STP_cw_can_pay_false_trail = yes }
+		custom_cost_text = STP_false_trail_cost
 		cost = 0
 		days_remove = 7
 		fire_only_once = no
@@ -1219,8 +1232,7 @@ STP_battle_for_stelander = {
 		}
 		complete_effect = {
 			hidden_effect = {
-				add_political_power = -15
-				STP_cw_spend_600 = yes
+				STP_cw_pay_false_trail = yes
 				STP_political_action_slot_consume = yes
 				FROM = { set_state_flag = STP_false_trail_in_progress }
 			}
@@ -2628,12 +2640,36 @@ STP_cw_war_council = {
 					owns_state = 28
 					controls_province = 145
 				}
+				# The Congress itself borders Old Fada and Neansas; 16374 and 16386
+				# are the flanks Shabrat uses to bypass it.
 				28 = {
 					add_building_construction = {
 						type = bunker
-						level = 2
+						level = 3
 						province = 145
 						instant_build = yes
+					}
+				}
+				if = {
+					limit = { controls_province = 16374 }
+					28 = {
+						add_building_construction = {
+							type = bunker
+							level = 2
+							province = 16374
+							instant_build = yes
+						}
+					}
+				}
+				if = {
+					limit = { controls_province = 16386 }
+					28 = {
+						add_building_construction = {
+							type = bunker
+							level = 2
+							province = 16386
+							instant_build = yes
+						}
 					}
 				}
 			}
@@ -5635,6 +5671,23 @@ STP_cw_war_council = {
 		cancel_trigger = { STP_ps_war_active = no }
 		timeout_effect = { hidden_effect = { STP_ps_congress_timeout = yes } }
 		cancel_effect = { hidden_effect = {  } }
+	}
+
+	# Timeout-only: the daily node poll lifts the siege when province 145 is retaken.
+	STP_ps_congress_siege = {
+		allowed = { tag = STP }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_active_mission = STP_ps_congress_siege }
+		days_mission_timeout = 7
+		selectable_mission = no
+		fire_only_once = no
+		cancel_trigger = { STP_ps_war_active = no }
+		timeout_effect = {
+			custom_effect_tooltip = STP_ps_congress_siege_fall_tt
+			hidden_effect = { STP_ps_congress_siege_timeout = yes }
+		}
+		cancel_effect = { hidden_effect = { clr_country_flag = STP_ps_congress_siege } }
 	}
 
 	STP_ps_emergency_cabinet = {

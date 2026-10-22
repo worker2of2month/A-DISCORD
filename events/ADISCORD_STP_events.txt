@@ -588,7 +588,7 @@ country_event = {
 		name = ADISCORD_STP_cw.20.a
 		trigger = { NOT = { VAL_cw_route_focus_completed = yes } VAL_cw_external_course_available = yes NOT = { has_country_flag = VAL_cw_trade_course } }
 		ai_chance = { base = 100 }
-		unlock_decision_tooltip = { decision = VAL_cw_begin_mobilization show_effect_tooltip = yes }
+		custom_effect_tooltip = VAL_cw_mobilization_focus_required_tt
 		hidden_effect = {
 			set_country_flag = VAL_cw_military_course
 			VAL_unlock_operations_map = yes
@@ -605,7 +605,7 @@ country_event = {
 		ai_chance = { base = 20 modifier = { factor = 3 has_country_flag = VAL_cw_supported_resistance } }
 		unlock_decision_tooltip = { decision = VAL_cw_sell_arms_to_resistance show_effect_tooltip = yes }
 		unlock_decision_tooltip = { decision = VAL_cw_offer_contract_formations show_effect_tooltip = yes }
-		unlock_decision_tooltip = { decision = VAL_cw_begin_mobilization show_effect_tooltip = yes }
+		custom_effect_tooltip = VAL_cw_mobilization_focus_required_tt
 		hidden_effect = {
 			if = {
 				limit = {
@@ -845,7 +845,13 @@ country_event = {
 				STS = { set_country_flag = STP_sided_with_Maksim_flag }
 				STP_cw_commission_korsh = yes
 				STP_cw_begin_hostilities = yes
-				STS = { change_tag_from = STP }
+				log = "STP_CW_OPENING default_handoff_begin country=[THIS.GetTag]"
+				STS = {
+					change_tag_from = STP
+					log = "STP_CW_OPENING default_handoff_end country=[THIS.GetTag]"
+					STP = { country_event = { id = ADISCORD_STP_cw.95 hours = 1 } }
+					log = "STP_CW_OPENING default_opening_queued country=[THIS.GetTag]"
+				}
 			}
 			else = {
 				set_country_flag = STP_sided_with_the_party_flag
@@ -864,7 +870,14 @@ country_event = {
 			STP_cw_commission_korsh = yes
 			STP_cw_begin_hostilities = yes
 		}
-		STS = { change_tag_from = STP }
+		STS = {
+			change_tag_from = STP
+			hidden_effect = {
+				log = "STP_CW_OPENING choice_handoff_end country=[THIS.GetTag]"
+				STP = { country_event = { id = ADISCORD_STP_cw.95 hours = 1 } }
+				log = "STP_CW_OPENING choice_opening_queued country=[THIS.GetTag]"
+			}
+		}
 	}
 }
 
@@ -2383,28 +2396,44 @@ country_event = {
 	}
 }
 
-# Presentation runs after the side-choice effect and player handoff finish.
+# Queue without a player-country check; resolve both recipients after the handoff.
 country_event = {
 	id = ADISCORD_STP_cw.95
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		tag = STS
-		is_ai = no
 		has_global_flag = STP_cw_started
-		has_war_with = STP
 		NOT = { has_global_flag = STP_cw_union_wars_finished }
 	}
 	immediate = {
+		log = "STP_CW_OPENING dispatcher_enter country=[THIS.GetTag] from=[FROM.GetTag]"
 		if = {
 			limit = {
-				tag = STS
-				is_ai = no
 				has_global_flag = STP_cw_started
-				has_war_with = STP
 				NOT = { has_global_flag = STP_cw_union_wars_finished }
 			}
-			country_event = { id = ADISCORD_STP_cw.96 }
+			STP = {
+				if = {
+					limit = { has_war_with = STS }
+					country_event = { id = ADISCORD_STP_cw.94 }
+				}
+			}
+			STS = {
+				if = {
+					limit = { is_ai = no }
+					log = "STP_CW_OPENING shabrat_human=yes"
+				}
+				else = { log = "STP_CW_OPENING shabrat_human=no" }
+				if = {
+					limit = {
+						is_ai = no
+						has_war_with = STP
+					}
+					country_event = { id = ADISCORD_STP_cw.96 }
+					log = "STP_CW_OPENING shabrat_story_dispatched"
+				}
+				else = { log = "STP_CW_OPENING shabrat_story_blocked" }
+			}
 		}
 	}
 }
@@ -2424,6 +2453,7 @@ country_event = {
 		has_war_with = STP
 		NOT = { has_global_flag = STP_cw_union_wars_finished }
 	}
+	immediate = { log = "STP_CW_OPENING shabrat_story_enter country=[THIS.GetTag]" }
 	option = {
 		name = ADISCORD_STP_cw.96.a
 		hidden_effect = {
@@ -2603,6 +2633,87 @@ country_event = {
 				STP_cw_settle_union_victory = yes
 			}
 		}
+	}
+}
+
+# Bronze Congress siege. STP_ps_begin_congress_siege, STP_ps_lift_congress_siege
+# and STP_ps_congress_siege_timeout send each event to STP and STS; the
+# settlement already happened in the caller, the options only explain it.
+country_event = {
+	id = ADISCORD_STP_cw.230
+	title = ADISCORD_STP_cw.230.t
+	desc = {
+		trigger = { tag = STP }
+		text = ADISCORD_STP_cw.230.d_party
+	}
+	desc = {
+		trigger = { NOT = { tag = STP } }
+		text = ADISCORD_STP_cw.230.d_resistance
+	}
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = { OR = { tag = STP tag = STS } }
+	option = {
+		name = ADISCORD_STP_cw.230.a
+		trigger = { tag = STP }
+		custom_effect_tooltip = STP_ps_congress_siege_party_tt
+	}
+	option = {
+		name = ADISCORD_STP_cw.230.b
+		trigger = { NOT = { tag = STP } }
+		custom_effect_tooltip = STP_ps_congress_siege_resistance_tt
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_cw.231
+	title = ADISCORD_STP_cw.231.t
+	desc = {
+		trigger = { tag = STP }
+		text = ADISCORD_STP_cw.231.d_party
+	}
+	desc = {
+		trigger = { NOT = { tag = STP } }
+		text = ADISCORD_STP_cw.231.d_resistance
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { OR = { tag = STP tag = STS } }
+	option = {
+		name = ADISCORD_STP_cw.231.a
+		trigger = { tag = STP }
+		custom_effect_tooltip = STP_ps_congress_siege_repelled_tt
+	}
+	option = {
+		name = ADISCORD_STP_cw.231.b
+		trigger = { NOT = { tag = STP } }
+		custom_effect_tooltip = STP_ps_congress_siege_repelled_tt
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_cw.232
+	title = ADISCORD_STP_cw.232.t
+	desc = {
+		trigger = { tag = STP }
+		text = ADISCORD_STP_cw.232.d_party
+	}
+	desc = {
+		trigger = { NOT = { tag = STP } }
+		text = ADISCORD_STP_cw.232.d_resistance
+	}
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { OR = { tag = STP tag = STS } }
+	option = {
+		name = ADISCORD_STP_cw.232.a
+		trigger = { tag = STP }
+		custom_effect_tooltip = STP_ps_congress_siege_fell_party_tt
+	}
+	option = {
+		name = ADISCORD_STP_cw.232.b
+		trigger = { NOT = { tag = STP } }
+		custom_effect_tooltip = STP_ps_congress_siege_fell_resistance_tt
 	}
 }
 

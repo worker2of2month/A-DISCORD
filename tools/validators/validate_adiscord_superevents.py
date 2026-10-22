@@ -183,7 +183,7 @@ PRESENTATIONS = (
     ),
     SupereventPresentation(
         "superevent_stelander_shabrat_republic",
-        "superevent_stelander_shabrat_victory_sound_e",
+        "superevent_stelander_shabrat_republic_sound_e",
         legacy_music_asset=False,
     ),
     SupereventPresentation(

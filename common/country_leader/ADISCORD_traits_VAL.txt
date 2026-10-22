@@ -20,4 +20,12 @@ leader_traits = {
 		command_power_gain = 0.10
 	}
 
+	minister_trait_VAL_military_chancellery = {
+		random = no
+		command_power_gain_mult = 0.10
+		planning_speed = 0.05
+		army_leader_cost_factor = -0.10
+		ai_will_do = { factor = 1 }
+	}
+
 }

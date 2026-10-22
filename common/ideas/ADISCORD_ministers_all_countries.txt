@@ -1909,7 +1909,7 @@ ideas = {
 					ADISCORD_economy_queue_law_refresh = yes
 				}
 			}
-			cancel_if_invalid = no
+			cancel_if_invalid = yes
 			ai_will_do = { factor = 1 }
 		}
 
@@ -1950,6 +1950,36 @@ ideas = {
 			removal_cost = -1
 			allowed = { tag = IVN }
 			visible = { tag = IVN }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_IVC_Viktor_Laren = {
+			name = minister_IVC_Viktor_Laren
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = IVC }
+			visible = { tag = IVC }
 			available = { STP_party_minister_change_allowed = yes }
 			allowed_to_remove = { STP_party_minister_change_allowed = yes }
 			traits = { minister_trait_foreign_minister }

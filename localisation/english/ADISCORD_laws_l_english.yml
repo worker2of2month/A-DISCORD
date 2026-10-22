@@ -371,6 +371,12 @@
  ADISCORD_justice_military_prosecution: "Military Prosecution Service"
  ADISCORD_justice_military_prosecution_desc: "A dedicated service investigates abuses and enforces military regulations. Inspections take time but help formations restore organisation."
 
+ political_advisor_head_of_state: "Head of State"
+ political_advisor_minister_of_defense: "Minister of Defense"
+ political_advisor_minister_of_economy: "Minister of Economy"
+ political_advisor_minister_of_health: "Minister of Health"
+ political_advisor_minister_of_education: "Minister of Education"
+ political_advisor_chief_of_intelligence: "Chief of Intelligence"
  political_advisor_minister_of_foreign_affairs: "Foreign Minister"
 
  ADISCORD_foreign_career_diplomat: "Leonard Weiss"

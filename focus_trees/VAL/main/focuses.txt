@@ -1408,15 +1408,13 @@ focus_tree = {
 		prerequisite = { focus = VAL_Border_Survey_Corps }
 		completion_reward = {
 			ADISCORD_reform_army_development = yes
-			add_corps_commander_role = {
-				character = VAL_Aleksei_Veyr
-				traits = { trickster }
-				skill = 4
-				attack_skill = 5
-				defense_skill = 2
-				planning_skill = 4
-				logistics_skill = 1
-				legacy_id = -1
+			if = {
+				limit = { has_character = VAL_Aleksei_Veyr }
+				VAL_Aleksei_Veyr = {
+					add_unit_leader_trait = trickster
+					add_attack = 1
+					add_planning = 1
+				}
 			}
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_contractor_officers_delta } }
 			VAL_apply_contract_army_2 = yes
@@ -1619,15 +1617,17 @@ focus_tree = {
 
 			custom_effect_tooltip = VAL_qol_elite_army_tt
 
-			add_field_marshal_role = {
-				character = VAL_Dmitri_Karsov
-				traits = { panzer_leader }
-				skill = 5
-				attack_skill = 6
-				defense_skill = 4
-				planning_skill = 5
-				logistics_skill = 3
-				legacy_id = -1
+			if = {
+				limit = { has_character = VAL_Dmitri_Karsov }
+				VAL_Dmitri_Karsov = {
+					if = {
+						limit = { NOT = { is_field_marshal = yes } }
+						promote_leader = yes
+					}
+					add_unit_leader_trait = panzer_leader
+					add_attack = 1
+					add_planning = 1
+				}
 			}
 			add_power_balance_value = { id = VAL_command_balance value = -0.15 }
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_general_staff_delta } }
@@ -1697,7 +1697,7 @@ focus_tree = {
 		id = VAL_Ministry_Auditors
 		icon = GFX_focus_VAL_Ministry_Auditors
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
-		x = 22
+		x = 20
 		y = 2
 		cost = 3
 		prerequisite = { focus = VAL_Operational_Directorate }
@@ -1805,6 +1805,8 @@ focus_tree = {
 		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Captains_Cannot_Veto_tt
+			unlock_decision_tooltip = VAL_command_trial
+			unlock_decision_tooltip = VAL_command_retirements
 			add_stability = 0.03
 			custom_effect_tooltip = VAL_focus_authority_10_tt
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_captains_cannot_veto_delta } }
@@ -2296,15 +2298,13 @@ focus_tree = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Army_Of_The_Ledger_tt
 			unlock_decision_tooltip = VAL_launch_national_recruitment
 			VAL_reform_mercenary_payroll = yes
-			add_corps_commander_role = {
-				character = VAL_Maksim_Korvin
-				traits = { aggressive_assaulter }
-				skill = 4
-				attack_skill = 3
-				defense_skill = 5
-				planning_skill = 2
-				logistics_skill = 4
-				legacy_id = -1
+			if = {
+				limit = { has_character = VAL_Maksim_Korvin }
+				VAL_Maksim_Korvin = {
+					add_unit_leader_trait = infantry_leader
+					add_defense = 1
+					add_logistics = 1
+				}
 			}
 			add_power_balance_value = { id = VAL_command_balance value = -0.1 }
 			VAL_apply_contract_army_3 = yes
@@ -3444,15 +3444,17 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_supply_base_secured_tt VAL_supply_base_secured = yes } }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_New_Supply_Base_tt
-			add_field_marshal_role = {
-				character = VAL_Leonid_Vargan
-				traits = { winter_expert }
-				skill = 6
-				attack_skill = 4
-				defense_skill = 6
-				planning_skill = 5
-				logistics_skill = 4
-				legacy_id = -1
+			if = {
+				limit = { has_character = VAL_Leonid_Vargan }
+				VAL_Leonid_Vargan = {
+					if = {
+						limit = { NOT = { is_field_marshal = yes } }
+						promote_leader = yes
+					}
+					add_unit_leader_trait = winter_expert
+					add_defense = 1
+					add_logistics = 1
+				}
 			}
 			remove_ideas = VAL_vorkerland_metal_shortage
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
@@ -3843,15 +3845,18 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_field_marshal_role = {
-				character = VAL_Sergei_Volkov
-				traits = { offensive_doctrine logistics_wizard }
-				skill = 6
-				attack_skill = 6
-				defense_skill = 5
-				planning_skill = 6
-				logistics_skill = 5
-				legacy_id = -1
+			if = {
+				limit = { has_character = VAL_Sergei_Volkov }
+				VAL_Sergei_Volkov = {
+					if = {
+						limit = { NOT = { is_field_marshal = yes } }
+						promote_leader = yes
+					}
+					add_unit_leader_trait = offensive_doctrine
+					add_unit_leader_trait = logistics_wizard
+					add_planning = 1
+					add_logistics = 1
+				}
 			}
 			army_experience = 25
 			add_command_power = 25
@@ -4697,7 +4702,6 @@ focus_tree = {
 		completion_reward = {
 			custom_effect_tooltip = VAL_council_entry_tt
 			unlock_decision_tooltip = VAL_council_mandate_defence_ordinary
-			unlock_decision_tooltip = VAL_council_mandate_offensive_ordinary
 			unlock_decision_tooltip = VAL_council_mandate_supply_ordinary
 			hidden_effect = {
 				VAL_council_initialize_seats = yes
@@ -4721,23 +4725,27 @@ focus_tree = {
 		prerequisite = {
 			focus = VAL_council_takes_command
 		}
-		bypass = {
-			VAL_council_stelander_war = no
-		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_council_in_power_tt
 				VAL_council_operational = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = VAL_council_stelander_war_tt
-				VAL_council_stelander_war = yes
 			}
 		}
 		ai_will_do = {
 			base = 10
 		}
 		completion_reward = {
+			if = {
+				limit = { has_completed_focus = VAL_council_large_companies }
+				unlock_decision_tooltip = VAL_council_mandate_offensive_priority
+			}
+			else_if = {
+				limit = { has_completed_focus = VAL_council_equal_votes }
+				unlock_decision_tooltip = VAL_council_mandate_offensive_contested
+			}
+			else = {
+				unlock_decision_tooltip = VAL_council_mandate_offensive_ordinary
+			}
 			army_experience = 10
 			add_command_power = 15
 			custom_effect_tooltip = VAL_council_war_plan_tt

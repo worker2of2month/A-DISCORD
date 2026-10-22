@@ -105,7 +105,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_stelander_sotnikov_civilwar"
-		textureFile = "gfx/interface/superevents/STP/superevent_stelander_shabrat_victory.png"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_sotnikov_civilwar.png"
 	}
 
 	spriteType = {
@@ -120,7 +120,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_stelander_shabrat_republic"
-		textureFile = "gfx/interface/superevents/STP/superevent_stelander_shabrat_victory.png"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_shabrat_republic.png"
 	}
 
 	spriteType = {

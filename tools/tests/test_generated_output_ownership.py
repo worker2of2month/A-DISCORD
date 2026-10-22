@@ -125,6 +125,24 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             "copied joint-government flags depend on all three base WRK TGA inputs",
         )
 
+    def test_stp_ideology_exports_do_not_require_a_temporary_preview(self) -> None:
+        from tools.builders import build_adiscord_stp_party_ideologies as ideologies
+
+        sources = set(self.entries["stp_party_ideologies"]["source_inputs"])
+        for subtype in ideologies.LABELS:
+            if subtype != "aristocratic_hedonism":
+                self.assertIn((ideologies.SOURCE / f"{subtype}.png").as_posix(), sources)
+        ordinary = dict(ideologies.outputs())
+        self.assertNotIn(ideologies.PREVIEW, set(ordinary))
+        preview = dict(ideologies.outputs(include_preview=True))
+        self.assertEqual(set(preview), {*ordinary, ideologies.PREVIEW})
+        self.assertEqual(
+            set(self.entries["stp_party_ideologies"]["output_globs"]),
+            {path.as_posix() for path in preview},
+        )
+        for path, data in ordinary.items():
+            self.assertEqual(data, preview[path])
+
     def test_registry_declares_every_builder_that_writes_map_buildings(self) -> None:
         declared_owners = {
             entry["id"]
@@ -198,6 +216,8 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
                 "tools/assets/source/diplomacy_gui/ADISCORD_diplomacy_leader_overlay_master.png",
                 "tools/assets/source/diplomacy_gui/ADISCORD_diplomacy_parties_overlay_master.png",
                 "tools/assets/source/diplomacy_gui/ADISCORD_diplomacy_flag_overlay_master.png",
+                "gfx/interface/diplomacy/ADISCORD_diplomacy_focus_button.dds",
+                "gfx/interface/decisions/ui/ADISCORD_decisions_item_bg.dds",
             },
         )
 

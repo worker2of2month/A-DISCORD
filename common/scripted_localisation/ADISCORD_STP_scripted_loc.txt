@@ -951,6 +951,10 @@ defined_text = {
 		localization_key = STP_ps_congress_held
 	}
 	text = {
+		trigger = { has_country_flag = STP_ps_congress_siege }
+		localization_key = STP_ps_congress_under_siege
+	}
+	text = {
 		trigger = { has_country_flag = STP_ps_temporary_government }
 		localization_key = STP_ps_cabinet_operating
 	}
@@ -2436,4 +2440,106 @@ defined_text = {
 		localization_key = STP_ps_cabinet_location
 	}
 	text = { localization_key = STP_ps_cabinet_unformed }
+}
+
+# Preparation escapes: the price rises with each paid use. The tiers match
+# STP_cw_can_pay_disperse_network and STP_cw_can_pay_false_trail.
+defined_text = {
+	name = STPGetDisperseNetworkCost
+	text = {
+		trigger = {
+			check_variable = { var = STP_cw_disperse_uses value = 1 compare = less_than }
+		}
+		localization_key = STP_cw_disperse_cost_20
+	}
+	text = {
+		trigger = {
+			check_variable = { var = STP_cw_disperse_uses value = 1 compare = equals }
+		}
+		localization_key = STP_cw_disperse_cost_40
+	}
+	text = {
+		trigger = {
+			check_variable = { var = STP_cw_disperse_uses value = 2 compare = equals }
+		}
+		localization_key = STP_cw_disperse_cost_60
+	}
+	text = {
+		localization_key = STP_cw_disperse_cost_80
+	}
+}
+
+defined_text = {
+	name = STPGetDisperseNetworkCostBlocked
+	text = {
+		trigger = {
+			check_variable = { var = STP_cw_disperse_uses value = 1 compare = less_than }
+		}
+		localization_key = STP_cw_disperse_cost_20_blocked
+	}
+	text = {
+		trigger = {
+			check_variable = { var = STP_cw_disperse_uses value = 1 compare = equals }
+		}
+		localization_key = STP_cw_disperse_cost_40_blocked
+	}
+	text = {
+		trigger = {
+			check_variable = { var = STP_cw_disperse_uses value = 2 compare = equals }
+		}
+		localization_key = STP_cw_disperse_cost_60_blocked
+	}
+	text = {
+		localization_key = STP_cw_disperse_cost_80_blocked
+	}
+}
+
+defined_text = {
+	name = STPGetFalseTrailCost
+	text = {
+		trigger = {
+			check_variable = { var = STP_cw_false_trail_uses value = 1 compare = less_than }
+		}
+		localization_key = STP_false_trail_cost_15
+	}
+	text = {
+		trigger = {
+			check_variable = { var = STP_cw_false_trail_uses value = 1 compare = equals }
+		}
+		localization_key = STP_false_trail_cost_25
+	}
+	text = {
+		trigger = {
+			check_variable = { var = STP_cw_false_trail_uses value = 2 compare = equals }
+		}
+		localization_key = STP_false_trail_cost_35
+	}
+	text = {
+		localization_key = STP_false_trail_cost_45
+	}
+}
+
+defined_text = {
+	name = STPGetFalseTrailCostBlocked
+	text = {
+		trigger = {
+			check_variable = { var = STP_cw_false_trail_uses value = 1 compare = less_than }
+		}
+		localization_key = STP_false_trail_cost_15_blocked
+	}
+	text = {
+		trigger = {
+			check_variable = { var = STP_cw_false_trail_uses value = 1 compare = equals }
+		}
+		localization_key = STP_false_trail_cost_25_blocked
+	}
+	text = {
+		trigger = {
+			check_variable = { var = STP_cw_false_trail_uses value = 2 compare = equals }
+		}
+		localization_key = STP_false_trail_cost_35_blocked
+	}
+	text = {
+		localization_key = STP_false_trail_cost_45_blocked
+	}
 }

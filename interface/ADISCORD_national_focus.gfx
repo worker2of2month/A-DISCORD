@@ -344,6 +344,16 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_STP_cw_prepare_industry_sabotage"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_prepare_industry_sabotage.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_disruption_cells"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_disruption_cells.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_STP_cw_cabinet_archives"
 		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_cabinet_archives.png"
 	}

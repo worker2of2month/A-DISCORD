@@ -627,6 +627,15 @@ class SevenRowPoliticsContracts(unittest.TestCase):
                         "ADISCORD_economy_queue_law_refresh", effects, (idea.key, hook)
                     )
 
+    def test_stp_foreign_minister_leaves_when_cabinet_becomes_unavailable(self):
+        ministers = self.groups["political_advisor_minister_of_foreign_affairs"]
+        minister = next(idea for idea in ministers if idea.key == "minister_STP_Adrian_Vels")
+        self.assertEqual(self.one(minister.value, "cancel_if_invalid"), "yes")
+        self.assertEqual(
+            self.one(self.one(minister.value, "available"), "STP_party_minister_change_allowed"),
+            "yes",
+        )
+
     def test_foreign_ministers_have_national_names_offices_and_cabinet_guards(self):
         from tools.tests.test_adiscord_stp_preparation import matches_conditions
         from tools.validators.validate_adiscord_division_templates import (

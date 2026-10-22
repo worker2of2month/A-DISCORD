@@ -123,7 +123,7 @@ focus_tree = {
 		icon = GFX_focus_STP_cw_pay_officials
 		x = -1
 		y = 3
-		cost = 3
+		cost = 2
 		prerequisite = { focus = STP_cw_port_budget }
 		mutually_exclusive = { focus = STP_cw_repair_niansas }
 		ai_will_do = { base = 8 }
@@ -156,7 +156,7 @@ focus_tree = {
 		icon = GFX_focus_STP_cw_repair_niansas
 		x = 1
 		y = 3
-		cost = 3
+		cost = 2
 		prerequisite = { focus = STP_cw_port_budget }
 		mutually_exclusive = { focus = STP_cw_pay_officials }
 		ai_will_do = { base = 12 }
@@ -181,7 +181,7 @@ focus_tree = {
 		icon = GFX_focus_STP_cw_port_budget
 		x = 0
 		y = 2
-		cost = 2
+		cost = 1
 		prerequisite = { focus = STP_cw_officer_contacts }
 		ai_will_do = { base = 2 }
 		completion_reward = {
@@ -214,6 +214,11 @@ focus_tree = {
 		completion_reward = {
 			add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.05 }
 			add_stability = 0.03
+			custom_effect_tooltip = STP_cw_suspicion_3_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_party_suspicion_change value = 3 }
+				STP_change_party_suspicion = yes
+			}
 		}
 	}
 
@@ -320,7 +325,7 @@ focus_tree = {
 		icon = GFX_focus_STP_It_Has_Only_Begun
 		x = 0
 		y = 1
-		cost = 3
+		cost = 2
 		prerequisite = { focus = STP_Show_Him_The_Truth }
 		ai_will_do = { base = 12 }
 		completion_reward = {
@@ -378,7 +383,7 @@ focus_tree = {
 			STP_cw_preparation_open = yes
 			has_country_flag = STP_sided_with_Maksim_flag
 		}
-		icon = GFX_focus_generic_industry_3
+		icon = GFX_focus_STP_cw_prepare_industry_sabotage
 		x = 4
 		y = 4
 		cost = 1
@@ -395,7 +400,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_disruption_cells
 		search_filters = { FOCUS_FILTER_STP_UNDERGROUND }
-		icon = GFX_focus_generic_secret_service_agency
+		icon = GFX_focus_STP_cw_disruption_cells
 		relative_position_id = STP_Show_Him_The_Truth
 		x = 5
 		y = 6
@@ -428,12 +433,17 @@ focus_tree = {
 		icon = GFX_focus_STP_Garrisons_Hesitate
 		x = 3
 		y = 2
-		cost = 3
+		cost = 2
 		prerequisite = { focus = STP_cw_officer_contacts }
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			add_political_power = 100
-			add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.10 }
+			custom_effect_tooltip = STP_cw_suspicion_6_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_party_suspicion_change value = 6 }
+				STP_change_party_suspicion = yes
+			}
+			custom_effect_tooltip = STP_cw_garrison_defection_tt
 			effect_tooltip = {
 				swap_ideas = { remove_idea = STP_cw_army_dummy_idea add_idea = STP_cw_unified_staff_idea }
 			}
@@ -463,7 +473,12 @@ focus_tree = {
 		completion_reward = {
 			add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.05 }
 			custom_effect_tooltip = STP_cw_operation_slot_tt
-			hidden_effect = { STP_political_action_slot_grant = yes }
+			custom_effect_tooltip = STP_cw_suspicion_4_tt
+			hidden_effect = {
+				STP_political_action_slot_grant = yes
+				set_temp_variable = { var = STP_party_suspicion_change value = 4 }
+				STP_change_party_suspicion = yes
+			}
 		}
 	}
 
@@ -485,6 +500,7 @@ focus_tree = {
 		completion_reward = {
 			add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.05 }
 			custom_effect_tooltip = STP_cw_district_administration_2_tt
+			custom_effect_tooltip = STP_cw_suspicion_5_tt
 			hidden_effect = {
 				2 = {
 					if = {
@@ -494,6 +510,8 @@ focus_tree = {
 					set_temp_variable = { var = STP_region_influence_change value = 12 }
 					STP_add_resistance_influence = yes
 				}
+				set_temp_variable = { var = STP_party_suspicion_change value = 5 }
+				STP_change_party_suspicion = yes
 			}
 		}
 	}
@@ -1000,7 +1018,7 @@ focus_tree = {
 		relative_position_id = STP_Show_Him_The_Truth
 		x = -3
 		y = 7
-		cost = 2
+		cost = 1
 		prerequisite = {
 			focus = STP_cw_military_committee_fund
 			focus = STP_cw_abila_workshops
@@ -1017,6 +1035,7 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = { var = STP_cw_pending_army_org_factor value = 0.05 }
 				add_to_variable = { var = STP_cw_pending_army_planning_speed value = 0.10 }
+				add_to_variable = { var = STP_cw_pending_army_mobilization value = 0.10 }
 			}
 		}
 	}
@@ -1028,7 +1047,7 @@ focus_tree = {
 		relative_position_id = STP_Show_Him_The_Truth
 		x = 0
 		y = 6
-		cost = 2
+		cost = 1
 		prerequisite = { focus = STP_cw_supply_officers }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = {
@@ -1047,12 +1066,12 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_military_committee_fund
-		search_filters = { FOCUS_FILTER_STP_ELECTIONS FOCUS_FILTER_STP_ARMY_PREPARATION }
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION FOCUS_FILTER_STP_UNDERGROUND }
 		icon = GFX_goal_generic_army_artillery
 		relative_position_id = STP_Show_Him_The_Truth
 		x = -4
 		y = 6
-		cost = 4
+		cost = 2
 		prerequisite = { focus = STP_cw_abila_reserve }
 		mutually_exclusive = { focus = STP_cw_abila_workshops }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
@@ -1064,7 +1083,7 @@ focus_tree = {
 			base = 5
 			modifier = {
 				factor = 0
-				power_balance_value = { id = STP_shabrat_election_legitimacy value > 0.55 }
+				check_variable = { var = STP_party_suspicion value = 85 compare = greater_than_or_equals }
 			}
 			modifier = {
 				factor = 0
@@ -1074,8 +1093,10 @@ focus_tree = {
 		}
 		completion_reward = {
 			custom_effect_tooltip = STP_cw_military_fund_tt
-			add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.10 }
+			custom_effect_tooltip = STP_cw_suspicion_8_tt
 			hidden_effect = {
+				set_temp_variable = { var = STP_party_suspicion_change value = 8 }
+				STP_change_party_suspicion = yes
 				ADISCORD_economy_initialize_country = yes
 				ADISCORD_economy_recalculate_treasury_cap = yes
 				add_to_variable = { var = ADISCORD_economy_treasury value = 18000 }
@@ -1092,7 +1113,7 @@ focus_tree = {
 		relative_position_id = STP_Show_Him_The_Truth
 		x = -2
 		y = 6
-		cost = 3
+		cost = 2
 		prerequisite = { focus = STP_cw_abila_reserve }
 		mutually_exclusive = { focus = STP_cw_military_committee_fund }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
@@ -1123,7 +1144,7 @@ focus_tree = {
 		relative_position_id = STP_Show_Him_The_Truth
 		x = 0
 		y = 4
-		cost = 4
+		cost = 2
 		prerequisite = {
 			focus = STP_cw_pay_officials
 			focus = STP_cw_repair_niansas
@@ -1153,7 +1174,7 @@ focus_tree = {
 		relative_position_id = STP_Show_Him_The_Truth
 		x = 0
 		y = 5
-		cost = 2
+		cost = 1
 		prerequisite = { focus = STP_cw_warehouse_inventory }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = {
@@ -1197,6 +1218,7 @@ focus_tree = {
 		completion_reward = {
 			add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.10 }
 			custom_effect_tooltip = STP_cw_niansas_administration_tt
+			custom_effect_tooltip = STP_cw_suspicion_5_tt
 			hidden_effect = {
 				3 = {
 					if = {
@@ -1206,6 +1228,8 @@ focus_tree = {
 					set_temp_variable = { var = STP_region_influence_change value = 12 }
 					STP_add_resistance_influence = yes
 				}
+				set_temp_variable = { var = STP_party_suspicion_change value = 5 }
+				STP_change_party_suspicion = yes
 			}
 		}
 	}
@@ -1249,7 +1273,7 @@ focus_tree = {
 		relative_position_id = STP_Show_Him_The_Truth
 		x = 3
 		y = 6
-		cost = 3
+		cost = 2
 		prerequisite = { focus = STP_THE_MOUNTAIN_WINDOW }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = {
@@ -1273,7 +1297,7 @@ focus_tree = {
 		relative_position_id = STP_Show_Him_The_Truth
 		x = -3
 		y = 3
-		cost = 3
+		cost = 2
 		prerequisite = { focus = STP_Turn_The_Young_Officers }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = {
@@ -1286,6 +1310,11 @@ focus_tree = {
 			hidden_effect = { 1 = { set_state_flag = STP_cw_defensive_line_prepared } }
 			add_political_power = 50
 			custom_effect_tooltip = STP_cw_defensive_lines_tt
+			effect_tooltip = { swap_ideas = { remove_idea = STP_cw_army_dummy_idea add_idea = STP_cw_defensive_lines_idea } }
+			custom_effect_tooltip = STP_cw_pending_staff_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_cw_pending_army_core_defence value = 0.10 }
+			}
 		}
 	}
 
@@ -1296,7 +1325,7 @@ focus_tree = {
 		relative_position_id = STP_Show_Him_The_Truth
 		x = -3
 		y = 4
-		cost = 3
+		cost = 2
 		prerequisite = { focus = STP_cw_defensive_lines }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = {
@@ -1306,6 +1335,11 @@ focus_tree = {
 		ai_will_do = { base = 3 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_cw_prepare_assault_group
+			effect_tooltip = { swap_ideas = { remove_idea = STP_cw_army_dummy_idea add_idea = STP_cw_heavy_reserve_idea } }
+			custom_effect_tooltip = STP_cw_pending_staff_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_cw_pending_army_training_time value = -0.10 }
+			}
 		}
 	}
 
@@ -1333,6 +1367,11 @@ focus_tree = {
 			unlock_decision_tooltip = STP_cw_secure_election_result
 			unlock_decision_tooltip = STP_cw_open_civil_registers
 			custom_effect_tooltip = STP_cw_national_mandate_tt
+			custom_effect_tooltip = STP_cw_suspicion_8_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_party_suspicion_change value = 8 }
+				STP_change_party_suspicion = yes
+			}
 		}
 	}
 

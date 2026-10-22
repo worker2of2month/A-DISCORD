@@ -174,7 +174,8 @@ guiTypes = {
 
 		iconType = {
 			name = "idea_traits"
-			position = { x = 53 y = 51 }
+			# Keep the native lookup target outside the visible advisor card.
+			position = { x = -10000 y = -10000 }
 			spriteType = "GFX_idea_traits_strip"
 			centerposition = yes
 			alwaystransparent = yes
@@ -262,7 +263,8 @@ guiTypes = {
 
 		iconType = {
 			name = "idea_traits"
-			position = { x = 53 y = 51 }
+			# Keep the native lookup target outside the visible advisor card.
+			position = { x = -10000 y = -10000 }
 			spriteType = "GFX_idea_traits_strip"
 			centerposition = yes
 			alwaystransparent = yes

@@ -1,0 +1,13 @@
+﻿l_english:
+ ADISCORD_decision_country_WKR: "Vorkerland"
+ ADISCORD_decision_country_WRK: "Vorkerland"
+ ADISCORD_decision_country_VAD: "Central District"
+ ADISCORD_decision_country_TVA: "Vorkensberg"
+ ADISCORD_decision_country_IRT: "Interior"
+ ADISCORD_decision_country_MLR: "Little Lowlands"
+ ADISCORD_decision_country_SLA: "Starolesye"
+ ADISCORD_decision_country_YPR: "Yubor"
+ ADISCORD_decision_country_BTL: "Bayrinzh"
+ ADISCORD_decision_country_VEL: "Vel Union"
+ ADISCORD_decision_country_SRP: "Revival Union"
+ ADISCORD_decision_country_name: "[This.GetName]"

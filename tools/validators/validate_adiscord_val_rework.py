@@ -329,6 +329,11 @@ def validate_supplemental_rewards(
         "recruit_character",
         "add_corps_commander_role",
         "add_field_marshal_role",
+        "add_unit_leader_trait",
+        "add_attack",
+        "add_defense",
+        "add_planning",
+        "add_logistics",
         "set_technology",
         "add_claim_by",
         "create_unit",
@@ -465,6 +470,8 @@ def validate_supplemental_rewards(
                                     addition.get("value", 0)
                                 )
                 continue
+            if entry.key == "promote_leader" and entry.value == "yes":
+                return True
             if entry.key in material:
                 if isinstance(entry.value, str) and positive_reward(entry.value, values):
                     return True

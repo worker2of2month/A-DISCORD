@@ -35,6 +35,79 @@ spriteTypes = {
 	spriteType = { name = "GFX_portrait_NKA_Viktor_Karst" texturefile = "gfx/leaders/VAL/portrait_NKA_Viktor_Karst.png" }
 
 
+	# STS officer uniforms.
+	spriteType = {
+		name = "GFX_portrait_STS_Leonid_Barchel"
+		texturefile = "gfx/leaders/STP/portrait_STS_Leonid_Barchel.png"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_STS_Leonid_Barchel_small"
+		texturefile = "gfx/leaders/STP/portrait_STS_Leonid_Barchel.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STS_Edmund_Ravel"
+		texturefile = "gfx/leaders/STP/portrait_STS_Edmund_Ravel.png"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_STS_Edmund_Ravel_small"
+		texturefile = "gfx/leaders/STP/portrait_STS_Edmund_Ravel.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STS_Roland_Keitel"
+		texturefile = "gfx/leaders/STP/portrait_STS_Roland_Keitel.png"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_STS_Roland_Keitel_small"
+		texturefile = "gfx/leaders/STP/portrait_STS_Roland_Keitel.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STS_Elena_Vetrova"
+		texturefile = "gfx/leaders/STP/portrait_STS_Elena_Vetrova.png"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_STS_Elena_Vetrova_small"
+		texturefile = "gfx/leaders/STP/portrait_STS_Elena_Vetrova.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STS_Pavel_Gromin"
+		texturefile = "gfx/leaders/STP/portrait_STS_Pavel_Gromin.png"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_STS_Pavel_Gromin_small"
+		texturefile = "gfx/leaders/STP/portrait_STS_Pavel_Gromin.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STS_Maurice_Dallon"
+		texturefile = "gfx/leaders/STP/portrait_STS_Maurice_Dallon.png"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_STS_Maurice_Dallon_small"
+		texturefile = "gfx/leaders/STP/portrait_STS_Maurice_Dallon.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
 	###WRK
 	spriteType = {
 		name = "GFX_portrait_WRK_Nikita_Worcker"
@@ -421,12 +494,9 @@ spriteTypes = {
 		texturefile = "gfx/leaders/VAL/portrait_VAL_Kirill_Voron.png"
 	}
 
-	corneredTileSpriteType = {
+	spriteType = {
 		name = "GFX_portrait_VAL_Kirill_Voron_small"
-		texturefile = "gfx/leaders/VAL/portrait_VAL_Kirill_Voron.png"
-		size = { x = 50 y = 67 }
-		borderSize = { x = 0 y = 0 }
-		tilingCenter = no
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Kirill_Voron_small.png"
 	}
 
 	spriteType = {
@@ -434,12 +504,9 @@ spriteTypes = {
 		texturefile = "gfx/leaders/VAL/portrait_VAL_Erika_Stahl.png"
 	}
 
-	corneredTileSpriteType = {
+	spriteType = {
 		name = "GFX_portrait_VAL_Erika_Stahl_small"
-		texturefile = "gfx/leaders/VAL/portrait_VAL_Erika_Stahl.png"
-		size = { x = 50 y = 67 }
-		borderSize = { x = 0 y = 0 }
-		tilingCenter = no
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Erika_Stahl_small.png"
 	}
 
 	spriteType = {
@@ -447,12 +514,9 @@ spriteTypes = {
 		texturefile = "gfx/leaders/VAL/portrait_VAL_Boris_Gromov.png"
 	}
 
-	corneredTileSpriteType = {
+	spriteType = {
 		name = "GFX_portrait_VAL_Boris_Gromov_small"
-		texturefile = "gfx/leaders/VAL/portrait_VAL_Boris_Gromov.png"
-		size = { x = 50 y = 67 }
-		borderSize = { x = 0 y = 0 }
-		tilingCenter = no
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Boris_Gromov_small.png"
 	}
 
 	spriteType = {
@@ -460,12 +524,9 @@ spriteTypes = {
 		texturefile = "gfx/leaders/VAL/portrait_VAL_Renata_Morn.png"
 	}
 
-	corneredTileSpriteType = {
+	spriteType = {
 		name = "GFX_portrait_VAL_Renata_Morn_small"
-		texturefile = "gfx/leaders/VAL/portrait_VAL_Renata_Morn.png"
-		size = { x = 50 y = 67 }
-		borderSize = { x = 0 y = 0 }
-		tilingCenter = no
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Renata_Morn_small.png"
 	}
 
 	spriteType = {
@@ -826,4 +887,66 @@ spriteTypes = {
 		name = "GFX_portrait_VAL_Andrei_Rudnev"
 		texturefile = "gfx/leaders/VAL/portrait_VAL_Andrei_Rudnev.png"
 	}
+
+	# Stelander army advisors use preframed compact portraits.
+	spriteType = {
+		name = "GFX_portrait_STP_staff_01_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_01.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_02_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_02.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_03_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_03.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_04_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_04.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_05_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_05.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_06_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_06.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_07_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_07.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_08_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_08.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_09_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_09.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_10_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_10.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_11_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_11.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_12_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_12.png"
+	}
+
 }

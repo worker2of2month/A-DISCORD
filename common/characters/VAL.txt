@@ -181,6 +181,15 @@ characters = {
 				small = GFX_portrait_VAL_Aleksei_Veyr_small
 			}
 		}
+		corps_commander = {
+			traits = { commando }
+			skill = 3
+			attack_skill = 3
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 2
+			legacy_id = -1
+		}
 	}
 
 	VAL_Maksim_Korvin = {
@@ -190,6 +199,15 @@ characters = {
 				large = GFX_portrait_VAL_Maksim_Korvin
 				small = GFX_portrait_VAL_Maksim_Korvin_small
 			}
+		}
+		corps_commander = {
+			traits = { inflexible_strategist }
+			skill = 2
+			attack_skill = 1
+			defense_skill = 3
+			planning_skill = 1
+			logistics_skill = 2
+			legacy_id = -1
 		}
 	}
 
@@ -215,6 +233,15 @@ characters = {
 				small = GFX_portrait_VAL_Dmitri_Karsov_small
 			}
 		}
+		corps_commander = {
+			traits = { armor_officer }
+			skill = 4
+			attack_skill = 4
+			defense_skill = 2
+			planning_skill = 4
+			logistics_skill = 3
+			legacy_id = -1
+		}
 	}
 
 	VAL_Leonid_Vargan = {
@@ -225,6 +252,15 @@ characters = {
 				small = GFX_portrait_VAL_Leonid_Vargan_small
 			}
 		}
+		corps_commander = {
+			traits = { winter_specialist }
+			skill = 3
+			attack_skill = 1
+			defense_skill = 3
+			planning_skill = 2
+			logistics_skill = 4
+			legacy_id = -1
+		}
 	}
 
 	VAL_Sergei_Volkov = {
@@ -234,6 +270,15 @@ characters = {
 				large = GFX_portrait_VAL_Sergei_Volkov
 				small = GFX_portrait_VAL_Sergei_Volkov_small
 			}
+		}
+		field_marshal = {
+			traits = { thorough_planner organisational_leader }
+			skill = 5
+			attack_skill = 4
+			defense_skill = 4
+			planning_skill = 5
+			logistics_skill = 3
+			legacy_id = -1
 		}
 	}
 	CIN_VAL_commission = { name = CIN_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }

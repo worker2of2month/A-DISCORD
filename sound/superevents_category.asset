@@ -20,6 +20,7 @@ category = {
 		superevent_rus_khan_defeated_sound_e
 		superevent_vorkerland_joint_victory_sound_e
 		superevent_stelander_sotnikov_civilwar_sound_e
+		superevent_stelander_shabrat_republic_sound_e
 	}
 	compressor = {
 		enabled = yes

@@ -7,8 +7,8 @@ VAL_military_operations = {
 		allowed = { tag = VAL }
 		visible = {
 			OR = {
-				has_country_flag = VAL_cw_military_course
-				has_country_flag = VAL_cw_trade_course
+				has_completed_focus = VAL_Seize_The_Northern_Passes
+				has_completed_focus = VAL_Arms_For_The_Burning
 			}
 			NOT = { has_country_flag = VAL_cw_entered }
 			NOT = { has_country_flag = VAL_cw_settled }
@@ -3130,6 +3130,158 @@ VAL_foreign_sales = {
 }
 
 VAL_command_balance_category = {
+	VAL_command_trial = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = {
+			has_power_balance = { id = VAL_command_balance }
+			has_country_flag = VAL_command_conspiracy_exposed
+			has_completed_focus = VAL_Captains_Cannot_Veto
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_personal_rule_tt
+				VAL_council_personal_rule = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_command_consolidation_dominance_tt
+				NOT = { power_balance_value = { id = VAL_command_balance value < 0.75 } }
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_command_consolidation_free_tt
+				NOT = { has_variable = VAL_command_consolidation_kind }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_command_trial_cost
+		custom_cost_trigger = { VAL_command_trial_affordable = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_command_trial_start_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_command_consolidation_holds = yes
+						VAL_command_trial_affordable = yes
+						NOT = { has_variable = VAL_command_consolidation_kind }
+					}
+					add_political_power = -100
+					add_command_power = -50
+					set_variable = { var = VAL_command_consolidation_kind value = 1 }
+					activate_mission = VAL_command_trial_timer
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 0.25 has_war = yes }
+		}
+	}
+
+	VAL_command_retirements = {
+		icon = generic_political_discourse
+		allowed = { tag = VAL }
+		visible = {
+			has_power_balance = { id = VAL_command_balance }
+			has_country_flag = VAL_command_conspiracy_exposed
+			has_completed_focus = VAL_Captains_Cannot_Veto
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_personal_rule_tt
+				VAL_council_personal_rule = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_command_consolidation_dominance_tt
+				NOT = { power_balance_value = { id = VAL_command_balance value < 0.75 } }
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_command_consolidation_free_tt
+				NOT = { has_variable = VAL_command_consolidation_kind }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_command_retirements_cost
+		custom_cost_trigger = { VAL_command_retirements_affordable = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_command_retirements_start_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_command_consolidation_holds = yes
+						VAL_command_retirements_affordable = yes
+						NOT = { has_variable = VAL_command_consolidation_kind }
+					}
+					add_political_power = -100
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = { var = VAL_command_consolidation_kind value = 2 }
+					activate_mission = VAL_command_retirements_timer
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 2 has_war = yes }
+		}
+	}
+
+	VAL_command_trial_timer = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 90
+		is_good = yes
+		timeout_effect = {
+			custom_effect_tooltip = VAL_command_conspiracy_closed_tt
+			effect_tooltip = {
+				add_stability = -0.05
+				add_dynamic_modifier = { modifier = VAL_command_trial_disruption days = 180 }
+			}
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = VAL_command_consolidation_kind value = 1 compare = equals } }
+					VAL_finish_command_consolidation = yes
+				}
+			}
+		}
+		cancel_trigger = { VAL_command_consolidation_holds = no }
+		cancel_effect = {
+			custom_effect_tooltip = VAL_command_trial_cancel_tt
+			hidden_effect = { VAL_cancel_command_consolidation = yes }
+		}
+	}
+
+	VAL_command_retirements_timer = {
+		icon = generic_political_discourse
+		allowed = { tag = VAL }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 120
+		is_good = yes
+		timeout_effect = {
+			custom_effect_tooltip = VAL_command_conspiracy_closed_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = VAL_command_consolidation_kind value = 2 compare = equals } }
+					VAL_finish_command_consolidation = yes
+				}
+			}
+		}
+		cancel_trigger = { VAL_command_consolidation_holds = no }
+		cancel_effect = {
+			custom_effect_tooltip = VAL_command_retirements_cancel_tt
+			hidden_effect = { VAL_cancel_command_consolidation = yes }
+		}
+	}
+
 	# The staff distributes army orders itself: material help paid for with authority.
 	VAL_staff_army_orders = {
 		icon = generic_army_support
@@ -6341,7 +6493,7 @@ VAL_council_government_category = {
 			tag = VAL
 		}
 		visible = {
-			has_completed_focus = VAL_council_takes_command
+			has_completed_focus = VAL_council_war_plan
 			NOT = {
 				has_completed_focus = VAL_council_equal_votes
 			}
@@ -6395,6 +6547,7 @@ VAL_council_government_category = {
 			hidden_effect = {
 				if = {
 					limit = {
+						has_completed_focus = VAL_council_war_plan
 						VAL_council_operational = yes
 						VAL_council_mandate_slot_free = yes
 						has_war = yes
@@ -6439,7 +6592,7 @@ VAL_council_government_category = {
 			tag = VAL
 		}
 		visible = {
-			has_completed_focus = VAL_council_takes_command
+			has_completed_focus = VAL_council_war_plan
 			has_completed_focus = VAL_council_large_companies
 		}
 		available = {
@@ -6488,6 +6641,7 @@ VAL_council_government_category = {
 			hidden_effect = {
 				if = {
 					limit = {
+						has_completed_focus = VAL_council_war_plan
 						VAL_council_operational = yes
 						VAL_council_mandate_slot_free = yes
 						has_war = yes
@@ -6532,7 +6686,7 @@ VAL_council_government_category = {
 			tag = VAL
 		}
 		visible = {
-			has_completed_focus = VAL_council_takes_command
+			has_completed_focus = VAL_council_war_plan
 			has_completed_focus = VAL_council_equal_votes
 		}
 		available = {
@@ -6581,6 +6735,7 @@ VAL_council_government_category = {
 			hidden_effect = {
 				if = {
 					limit = {
+						has_completed_focus = VAL_council_war_plan
 						VAL_council_operational = yes
 						VAL_council_mandate_slot_free = yes
 						has_war = yes
