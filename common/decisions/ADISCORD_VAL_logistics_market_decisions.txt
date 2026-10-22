@@ -1,6 +1,6 @@
 VAL_population_markets = {
 	VAL_accept_vorkerland_refugees = {
-		icon = generic_political_pressure
+		icon = ADISCORD_resettlement
 		allowed = { tag = VAL }
 		visible = {
 			VAL_refugee_vorkerland_war = yes
@@ -54,7 +54,7 @@ VAL_population_markets = {
 	}
 
 	VAL_accept_stelander_refugees = {
-		icon = generic_political_pressure
+		icon = ADISCORD_resettlement
 		allowed = { tag = VAL }
 		visible = {
 			VAL_refugee_stelander_war = yes
@@ -108,7 +108,7 @@ VAL_population_markets = {
 	}
 
 	VAL_accept_nodrul_refugees = {
-		icon = generic_political_pressure
+		icon = ADISCORD_resettlement
 		allowed = { tag = VAL }
 		visible = {
 			VAL_refugee_nodrul_war = yes
@@ -162,7 +162,7 @@ VAL_population_markets = {
 	}
 
 	VAL_accept_north_refugees = {
-		icon = generic_political_pressure
+		icon = ADISCORD_resettlement
 		allowed = { tag = VAL }
 		visible = {
 			VAL_refugee_north_war = yes
@@ -216,7 +216,7 @@ VAL_population_markets = {
 	}
 
 	VAL_accept_perimeter_refugees = {
-		icon = generic_political_pressure
+		icon = ADISCORD_resettlement
 		allowed = { tag = VAL }
 		visible = {
 			VAL_refugee_perimeter_open = yes
@@ -410,7 +410,7 @@ VAL_population_markets = {
 	}
 
 	VAL_fund_resettlement_depots = {
-		icon = generic_construction
+		icon = ADISCORD_resettlement
 		allowed = { tag = VAL }
 		state_target = yes
 		targets = { 24 42 55 56 }
@@ -479,7 +479,7 @@ VAL_population_markets = {
 	}
 
 	VAL_organize_refugee_return = {
-		icon = generic_political_pressure
+		icon = ADISCORD_resettlement
 		allowed = { tag = VAL }
 		visible = {
 			check_variable = { var = VAL_displaced_population value = 15 compare = greater_than_or_equals }
@@ -537,7 +537,7 @@ VAL_population_markets = {
 	}
 
 	VAL_naturalize_refugee_households = {
-		icon = generic_political_pressure
+		icon = ADISCORD_resettlement
 		allowed = { tag = VAL }
 		visible = { has_completed_focus = VAL_The_Contract_State }
 		available = {

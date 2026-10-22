@@ -1,7 +1,7 @@
 # --- rus_crisis_decisions ---
 RUS_last_empire_crisis = {
 	RUS_crisis_player_attack = {
-		icon = generic_attack
+		icon = ADISCORD_operations
 		allowed = {
 			OR = {
 				tag = VAL
@@ -20,7 +20,7 @@ RUS_last_empire_crisis = {
 	}
 
 	RUS_imperial_frontier_campaign = {
-		icon = generic_attack
+		icon = ADISCORD_operations
 		allowed = { tag = RUS }
 		targets = { TMR VEL RLY IRT ERT SCA }
 		target_root_trigger = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
@@ -210,7 +210,7 @@ RUS_last_empire_crisis = {
 # --- rus_last_empire_decisions ---
 ADISCORD_vorkerland_rus_dirty_campaign_category = {
 	RUS_campaign_sla = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = RUS }
 		visible = {
 			has_completed_focus = RUS_drive_starolesye_back
@@ -249,7 +249,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 	}
 
 	RUS_campaign_rza = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = RUS }
 		visible = {
 			has_completed_focus = RUS_press_the_closed_zone
@@ -289,7 +289,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 	}
 
 	RUS_campaign_mlr = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = RUS }
 		visible = {
 			has_completed_focus = RUS_press_the_closed_zone
@@ -329,7 +329,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 	}
 
 	RUS_campaign_ert = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = RUS }
 		visible = {
 			has_completed_focus = RUS_press_the_closed_zone
@@ -369,7 +369,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 	}
 
 	RUS_campaign_irt = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = RUS }
 		visible = {
 			has_completed_focus = RUS_press_the_closed_zone
@@ -409,7 +409,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 	}
 
 	RUS_campaign_sca = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = RUS }
 		visible = {
 			has_completed_focus = RUS_press_the_closed_zone
@@ -1978,7 +1978,7 @@ RUS_bunker_construction = {
 	}
 
 	RUS_rifle_order = {
-		icon = generic_industry
+		icon = ADISCORD_arms_supply
 		allowed = { tag = RUS }
 		visible = {
 			has_completed_focus = RUS_standard_calibres
@@ -2425,7 +2425,7 @@ RUS_bunker_construction = {
 	}
 
 	RUS_bunker_food_convoy = {
-		icon = generic_industry
+		icon = ADISCORD_logistics
 		allowed = { tag = RUS }
 		visible = {
 			has_country_flag = RUS_bunker_initialized
@@ -4022,7 +4022,7 @@ RUS_state_balance_measures_category = {
 	# Timed flags expose native decision cooldowns to the faction panel.
 	# They are written only after payment succeeds and expire with days_re_enable.
 	RUS_favour_shock_fist = {
-		icon = generic_attack
+		icon = ADISCORD_operations
 		visible = { RUS_state_balance_operational = yes }
 		available = {
 			custom_trigger_tooltip = {
@@ -4739,7 +4739,7 @@ RUS_state_balance_category = {
 	}
 
 	RUS_shadow_rifles = {
-		icon = generic_allies_build_infantry
+		icon = ADISCORD_arms_supply
 		visible = { RUS_suspicion_active = yes }
 		available = {
 			custom_trigger_tooltip = {

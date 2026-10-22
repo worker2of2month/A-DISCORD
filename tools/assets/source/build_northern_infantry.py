@@ -802,6 +802,11 @@ NAM_ATTACHMENTS = {
     'Left_Hand_node': ('NAM_LeftHand', 'LeftHand'),
     'mid_back_node': ('NAM_Spine2', 'back_mid'),
     'Root_node_2': ('NAM_Hips', 'Root'),
+    'Right_Hand_node_2': ('NAM_RightHand', 'RightHand'),
+    'Right_Hand_node_3': ('NAM_RightHand', 'RightHand'),
+    'Right_Hand_node_4': ('NAM_RightHand', 'RightHand'),
+    'Left_Hand_node_2': ('NAM_LeftHand', 'LeftHand'),
+    'Root_node_1': ('NAM_Hips', 'Root'),
 }
 
 
@@ -831,6 +836,7 @@ def nam_compact_rig(body, rig):
         or bone.name in ('headfront', 'mixamorig:HeadTop_End')
         or bone.name.endswith('Toe_End')
         or ('Hand' in bone.name and bone.name[-1:] in ('3', '4'))
+        or 'HandPinky2' in bone.name
     }
     parents = {}
     for name in removed:
@@ -865,10 +871,12 @@ def nam_compact_rig(body, rig):
         # Collar and shoulder cloth must follow the chest during a head turn.
         center = max(0, min(1, (0.55 - abs(vertex.co.x)) / 0.25))
         height = max(0, min(1, (vertex.co.z - 6.05) / 0.42))
+        head = max(0, min(1, (vertex.co.z - 6.35) / 0.25))
+        neck_factor = max(center * height, head)
         for name in ('NAM_Neck', 'NAM_Head'):
             weight = weights.get(name, 0)
-            weights[name] = weight * center * height
-            weights['NAM_Spine2'] = weights.get('NAM_Spine2', 0) + weight * (1 - center * height)
+            weights[name] = weight * neck_factor
+            weights['NAM_Spine2'] = weights.get('NAM_Spine2', 0) + weight * (1 - neck_factor)
         strongest = sorted(weights.items(), key=lambda item: item[1], reverse=True)[:4]
         total = sum(weight for _, weight in strongest)
         for weight in list(vertex.groups):
@@ -945,7 +953,7 @@ def nam_retarget_pose(rig, donor, rest, native_rest, alignment, pose, own_pose):
             desired = Matrix.LocRotScale(desired.translation, rotation, Vector((1, 1, 1)))
         world[bone.name] = desired
     for locator, (target_parent, source_parent) in NAM_ATTACHMENTS.items():
-        if locator == 'Root_node_2':
+        if source_parent == 'Root':
             desired = donor.pose.bones[locator].matrix.copy()
         else:
             offset = native_rest[source_parent].to_quaternion().inverted() @ (
@@ -957,11 +965,43 @@ def nam_retarget_pose(rig, donor, rest, native_rest, alignment, pose, own_pose):
     return world
 
 
+def nam_native_frames(animation, donor, pdx):
+    """Decode native local transforms without repeatedly inserting Blender keyframes."""
+    from types import SimpleNamespace
+    from mathutils import Matrix, Quaternion, Vector
+
+    info = animation.find('info')
+    samples = animation.find('samples').attrib
+    offsets = dict.fromkeys(('t', 'q', 's'), 0)
+    hierarchy = pdx.get_skeleton_hierarchy(donor)
+    for _ in range(info.attrib['sa'][0]):
+        local = {}
+        for bone in info:
+            values = {}
+            for channel, size in (('t', 3), ('q', 4), ('s', len(bone.attrib['s']))):
+                if channel in bone.attrib['sa'][0]:
+                    start = offsets[channel]
+                    values[channel] = samples[channel][start:start + size]
+                    offsets[channel] += size
+                else:
+                    values[channel] = bone.attrib[channel]
+            x, y, z, w = values['q']
+            scale = values['s'] * 3 if len(values['s']) == 1 else values['s']
+            local[bone.tag] = pdx.swap_coord_space(Matrix.LocRotScale(
+                Vector(values['t']), Quaternion((w, x, y, z)), Vector(scale),
+            ))
+        world = {}
+        for bone in hierarchy:
+            parent = world[bone.parent.name].matrix if bone.parent else Matrix.Identity(4)
+            world[bone.name] = SimpleNamespace(matrix=parent @ local[bone.name])
+        yield SimpleNamespace(pose=SimpleNamespace(bones=world))
+
+
 def build_nam_rigged(output, pdx, source):
     import bpy
     import xml.etree.ElementTree as Xml
     from types import SimpleNamespace
-    from mathutils import Matrix, Vector
+    from mathutils import Matrix, Quaternion, Vector
     from io_pdx_mesh import pdx_data
 
     if source is None or not source.is_file():
@@ -1025,22 +1065,23 @@ def build_nam_rigged(output, pdx, source):
     clip_dir.mkdir(exist_ok=True)
     clip_reports = {}
     for clip in sorted(set(nam_animation_sources().values())):
-        pdx.import_animfile(str(clip))
+        animation = pdx_data.read_meshfile(str(clip))
+        source_info = animation.find('info').attrib
         pose = clip.stem.removeprefix('GER_infantry_')
-        frames = scene.frame_end - scene.frame_start + 1
+        frames = source_info['sa'][0]
+        fps = source_info['fps'][0]
         loop = cycles['Running' if pose.startswith(('charge_', 'retreat_')) else 'Walking']
         tree = Xml.Element('File', {'pdxasset': [1, 0]})
-        info = Xml.SubElement(tree, 'info', {'fps': [float(scene.render.fps)], 'sa': [frames], 'j': [len(hierarchy)]})
+        info = Xml.SubElement(tree, 'info', {'fps': [fps], 'sa': [frames], 'j': [len(hierarchy)]})
         samples = Xml.SubElement(tree, 'samples')
         packed = {'t': [], 'q': [], 's': []}
-        for index, frame in enumerate(range(scene.frame_start, scene.frame_end + 1)):
-            scene.frame_set(frame)
+        for index, native_pose in enumerate(nam_native_frames(animation, donor, pdx)):
             position = index * (len(loop) - 1) / max(1, frames - 1)
             lower = int(position)
             upper = min(lower + 1, len(loop) - 1)
             own_pose = {name: loop[lower][name].lerp(loop[upper][name], position - lower)
                         for name in loop[lower]}
-            world = nam_retarget_pose(rig, donor, rest, native_rest, alignment, pose, own_pose)
+            world = nam_retarget_pose(rig, native_pose, rest, native_rest, alignment, pose, own_pose)
             for bone in hierarchy:
                 parent = world[bone.parent.name] if bone.parent else Matrix.Identity(4)
                 local = pdx.swap_coord_space(parent.inverted_safe() @ world[bone.name])
@@ -1056,7 +1097,7 @@ def build_nam_rigged(output, pdx, source):
         pdx_data.write_animfile(str(destination), tree)
         clip_reports[destination.name] = {
             'source_sha256': hashlib.sha256(clip.read_bytes()).hexdigest(),
-            'frames': frames, 'fps': scene.render.fps,
+            'frames': frames, 'fps': fps,
             'sha256': hashlib.sha256(destination.read_bytes()).hexdigest(),
         }
     for obj in list(scene.objects):
@@ -1077,6 +1118,29 @@ def build_nam_rigged(output, pdx, source):
     bpy.ops.object.select_all(action='DESELECT')
     body.select_set(True)
     pdx.export_meshfile(str(output / 'NAM_field.mesh'), exp_selected=True, exp_locs=False)
+    exported = pdx_data.read_meshfile(str(output / 'NAM_field.mesh'))
+    locators = exported.find('locator')
+    native = pdx_data.read_meshfile(str(CONFIG['NAM']))
+    parents = {'head': 'NAM_Head', 'LeftToeBase': 'NAM_LeftToeBase', 'RightToeBase': 'NAM_RightToeBase'}
+    for locator in native.find('locator'):
+        attributes = locator.attrib
+        parent = attributes.get('pa', [None])[0]
+        if parent is None:
+            Xml.SubElement(locators, locator.tag, attributes)
+            continue
+        target = parents[parent]
+        x, y, z, w = attributes['q']
+        local = pdx.swap_coord_space(Matrix.LocRotScale(
+            Vector(attributes['p']), Quaternion((w, x, y, z)), Vector((1, 1, 1)),
+        ))
+        offset = rest[target].to_quaternion().inverted() @ native_rest[parent].to_quaternion()
+        local = pdx.swap_coord_space(offset.to_matrix().to_4x4() @ local)
+        translation, rotation, _ = local.decompose()
+        Xml.SubElement(locators, locator.tag, {
+            'p': list(translation), 'q': [rotation.x, rotation.y, rotation.z, rotation.w],
+            'tx': [value for column in local.transposed() for value in column], 'pa': [target],
+        })
+    pdx_data.write_meshfile(str(output / 'NAM_field.mesh'), exported)
     finalize_mesh(output / 'NAM_field.mesh')
     metadata = {
         'source': {'filename': source.name, 'sha256': hashlib.sha256(source.read_bytes()).hexdigest()},
@@ -2228,6 +2292,16 @@ def verify(output, tags, walk=False):
             for obj in (o for o in scene.objects if o.type == 'MESH'):
                 for face in obj.data.polygons:
                     face.use_smooth = True
+                if tag == 'NAM':
+                    # Changing smoothing after import invalidates Blender's encoded normal basis.
+                    element = next(iter(tree.find('object'))).find('mesh')
+                    normals = pdx_data.PDXData(element).n
+                    vectors = [pdx.swap_coord_space(Vector(normals[i:i + 3]))
+                               for i in range(0, len(normals), 3)]
+                    assert len(vectors) == len(obj.data.vertices)
+                    obj.data.normals_split_custom_set_from_vertices(vectors)
+                    assert max((obj.data.corner_normals[loop.index].vector - vectors[loop.vertex_index]).length
+                               for loop in obj.data.loops) < 0.001
         scene.render.engine = 'CYCLES'
         scene.cycles.samples = 24
         scene.render.resolution_x, scene.render.resolution_y = 650, 800
@@ -2279,7 +2353,7 @@ def verify(output, tags, walk=False):
             assert expected_clips == {source.name for source in inputs if source.suffix == '.anim'}
             for clip in sorted(expected_clips):
                 animation_path = path.parent / 'NAM' / clip
-                animation = pdx_data.read_animfile(str(animation_path))
+                animation = pdx_data.read_meshfile(str(animation_path))
                 info = animation.find('info')
                 assert [bone.tag for bone in info] == metadata['bones']
                 assert info.attrib['j'] == [len(metadata['bones'])]
@@ -2288,10 +2362,19 @@ def verify(output, tags, walk=False):
                     values = animation.find('samples').attrib[channel]
                     assert len(values) == frames * len(metadata['bones']) * size
                     assert all(math.isfinite(value) for value in values)
-                rigs[0].animation_data_clear()
-                pdx.import_animfile(str(animation_path))
-                for frame in (scene.frame_start, (scene.frame_start + scene.frame_end) // 2, scene.frame_end):
-                    scene.frame_set(frame)
+                sample_frames = (0, (frames - 1) // 2, frames - 1)
+                for frame, sample in enumerate(nam_native_frames(animation, rigs[0], pdx)):
+                    if frame not in sample_frames:
+                        continue
+                    for bone in rigs[0].data.bones:
+                        parent = bone.parent
+                        parent_world = sample.pose.bones[parent.name].matrix if parent else Matrix.Identity(4)
+                        parent_rest = parent.matrix_local if parent else Matrix.Identity(4)
+                        rigs[0].pose.bones[bone.name].matrix_basis = bone.convert_local_to_pose(
+                            sample.pose.bones[bone.name].matrix, bone.matrix_local,
+                            parent_matrix=parent_world, parent_matrix_local=parent_rest, invert=True,
+                        )
+                    bpy.context.view_layer.update()
                     graph = bpy.context.evaluated_depsgraph_get()
                     for obj in (o for o in scene.objects if o.type == 'MESH'):
                         evaluated = obj.evaluated_get(graph)
@@ -2453,6 +2536,7 @@ def verify(output, tags, walk=False):
         }
         if metadata:
             report[tag]['source'] = metadata['source']
+            report[tag]['bones'] = metadata['bones']
             report[tag]['animations'] = {
                 source.name: input_hashes[source] for source in inputs
                 if source.suffix in ('.anim', '.asset')
@@ -2561,6 +2645,17 @@ def package(output, apply=False, check=False, tags=None, assets_only=False):
                     Image.new('L', surface.size, 0), strength, metalness, gloss,
                 ))
             files[dest / f'{tag}_field_{part}_specular.dds'] = dds(specular, True)
+    verification = output / 'verification.json'
+    if 'NAM' in tags and verification.is_file():
+        report = json.loads(verification.read_text())['NAM']
+        report['bindings'] = {
+            'tags': ['NAM', 'NAM_confederation'],
+            'roles': ['infantry', 'ADISCORD_militia', 'ADISCORD_territorial', 'mountaineers'],
+            'weapon_levels': 8,
+        }
+        files[ROOT / 'docs/development/model-verification/NAM_verification.json'] = (
+            json.dumps({'NAM': report}, indent=2) + '\n'
+        ).encode()
     changed = [
         str(path.relative_to(ROOT))
         for path, content in files.items()

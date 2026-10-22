@@ -192,7 +192,7 @@ NAM_national_programmes = {
 	}
 
 	NAM_supply_order = {
-		icon = generic_industry
+		icon = ADISCORD_arms_supply
 		visible = {
 			OR = {
 				has_completed_focus = NAM_quartermaster
@@ -247,7 +247,7 @@ NAM_national_programmes = {
 	}
 
 	NAM_emergency_arsenal = {
-		icon = generic_industry
+		icon = ADISCORD_arms_supply
 		visible = {
 			has_completed_focus = NAM_emergency_writ
 		}
@@ -529,7 +529,7 @@ NAM_national_programmes = {
 	}
 
 	NAM_district_audit = {
-		icon = generic_political_pressure
+		icon = ADISCORD_inspection
 		visible = {
 			has_completed_focus = NAM_seal_registry
 		}
@@ -1155,7 +1155,7 @@ NAM_supports = {
 # Treasury of Svetlogorye: money for power, power for money and crisis reserves.
 NAM_treasury = {
 	NAM_oil_bonds = {
-		icon = generic_industry
+		icon = ADISCORD_treasury
 		visible = {
 			has_completed_focus = NAM_one_budget
 		}
@@ -1246,7 +1246,7 @@ NAM_treasury = {
 	}
 
 	NAM_fuel_audit = {
-		icon = generic_industry
+		icon = ADISCORD_inspection
 		visible = {
 			has_completed_focus = NAM_well_register
 		}
@@ -1460,7 +1460,7 @@ NAM_treasury = {
 	}
 
 	NAM_crisis_fund = {
-		icon = generic_construction
+		icon = ADISCORD_treasury
 		visible = {
 			has_completed_focus = NAM_crisis_office
 		}

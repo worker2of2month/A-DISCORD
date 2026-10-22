@@ -1769,7 +1769,7 @@ SHL_quarters_and_borders = {
 	}
 
 	SHL_demobilise_campaign_convoy = {
-		icon = generic_industry
+		icon = ADISCORD_logistics
 		visible = { has_variable = SHL_campaign_reserve }
 		available = { SHL_country_operable = yes }
 		cost = 0
@@ -2553,7 +2553,7 @@ SHL_public_campaigns = {
 # Treasury of the Conclave: money for power, power for money and crisis reserves.
 SHL_treasury = {
 	SHL_furnace_bonds = {
-		icon = generic_industry
+		icon = ADISCORD_treasury
 		visible = { has_completed_focus = SHL_common_industrial_account }
 		available = {
 			SHL_country_operable = yes
@@ -2658,7 +2658,7 @@ SHL_treasury = {
 	}
 
 	SHL_crisis_fund = {
-		icon = generic_construction
+		icon = ADISCORD_treasury
 		visible = {
 			has_completed_focus = SHL_incident_office
 		}

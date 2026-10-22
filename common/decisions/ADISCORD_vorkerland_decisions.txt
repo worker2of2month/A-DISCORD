@@ -3142,7 +3142,7 @@ ADISCORD_vorkerland_prewar_category = {
 	}
 
 	ADISCORD_vorkerland_prep_civil_evacuation = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_resettlement
 		allowed = { tag = WRK }
 		state_target = yes
 		targets = { 40 }
@@ -3289,7 +3289,7 @@ ADISCORD_vorkerland_prewar_category = {
 	}
 
 	ADISCORD_vorkerland_prep_military_evacuation = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_resettlement
 		allowed = { tag = WRK }
 		state_target = yes
 		targets = { 40 }
@@ -4918,7 +4918,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 	}
 
 	ADISCORD_vorkerland_pw_ebern_campaign = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = WRK }
 		visible = {
 			OR = {
@@ -4949,7 +4949,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 	}
 
 	ADISCORD_vorkerland_pw_afrela_campaign = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_operations
 		allowed = { tag = WRK }
 		visible = {
 			OR = {
@@ -5038,7 +5038,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 	}
 
 	ADISCORD_vorkerland_prep_release_rifles = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_arms_supply
 		allowed = {
 			OR = {
 				tag = WKR
@@ -5121,7 +5121,7 @@ ADISCORD_vorkerland_rom_tru_category = {
 	}
 
 	ADISCORD_vorkerland_rom_break_valley_administration = {
-		icon = generic_attack
+		icon = ADISCORD_operations
 		allowed = { tag = ROM }
 		activation = { always = no }
 		available = { always = no }
@@ -5192,7 +5192,7 @@ ADISCORD_vorkerland_rom_tru_category = {
 	}
 
 	ADISCORD_vorkerland_tru_break_zlatorech_administration = {
-		icon = generic_attack
+		icon = ADISCORD_operations
 		allowed = { tag = TRU }
 		activation = { always = no }
 		available = { always = no }

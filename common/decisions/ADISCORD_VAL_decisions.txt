@@ -1045,7 +1045,7 @@ VAL_military_operations = {
 	}
 
 	VAL_campaign_against_nod = {
-		icon = generic_prepare_civil_war allowed = { tag = VAL }
+		icon = ADISCORD_operations allowed = { tag = VAL }
 		targets = { NOD }
 		target_trigger = { FROM = { exists = yes } }
 		visible = { OR = { has_completed_focus = VAL_Northern_Settlement has_completed_focus = VAL_Different_Views_On_Freedom } NOT = { has_country_flag = VAL_stelander_defeated } FROM = { OR = { is_subject = no AND = { tag = NOD is_subject_of = STP } } NOT = { has_war_with = ROOT } } }
@@ -1211,7 +1211,7 @@ VAL_military_operations = {
 	}
 
 	VAL_campaign_against_stelander = {
-		icon = generic_prepare_civil_war allowed = { tag = VAL }
+		icon = ADISCORD_operations allowed = { tag = VAL }
 		targets = { STP STS }
 		target_trigger = { FROM = { exists = yes } }
 		visible = { has_completed_focus = VAL_Stelander_Ultimatum NOT = { has_country_flag = VAL_stelander_defeated } FROM = { is_subject = no } }
@@ -3314,7 +3314,7 @@ VAL_command_balance_category = {
 		ai_will_do = { base = 1 }
 	}
 	VAL_contract_audit = {
-		icon = generic_political_pressure
+		icon = ADISCORD_inspection
 		visible = { has_power_balance = { id = VAL_command_balance } }
 		available = { has_capitulated = no is_subject = no has_war = no }
 		cost = 60
@@ -3385,7 +3385,7 @@ VAL_command_balance_category = {
 		ai_will_do = { base = 1 }
 	}
 	VAL_staff_loyalty_review = {
-		icon = generic_army_support
+		icon = ADISCORD_inspection
 		visible = {
 			has_power_balance = { id = VAL_command_balance }
 			has_completed_focus = VAL_Krutovs_Eyes
@@ -3781,7 +3781,7 @@ VAL_stelander_war_aid = {
 	}
 
 	VAL_stelander_rifle_aid = {
-		icon = generic_army_support
+		icon = ADISCORD_arms_supply
 		allowed = { tag = VAL }
 		visible = {
 			VAL_stelander_support_active = yes
@@ -3878,7 +3878,7 @@ VAL_stelander_war_aid = {
 VAL_new_world_category = {
 
 	VAL_nw_supply_partner = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_arms_supply
 		allowed = { tag = VAL }
 		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
 		visible = {
@@ -4084,7 +4084,7 @@ VAL_new_world_category = {
 	}
 
 	VAL_nw_emergency_arsenals = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_arms_supply
 		allowed = { tag = VAL }
 		visible = {
 			NOT = { has_country_flag = VAL_nw_emergency_arsenals_complete }
@@ -4139,7 +4139,7 @@ VAL_new_world_category = {
 	}
 
 	VAL_nw_expanded_arsenals = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_arms_supply
 		allowed = { tag = VAL }
 		visible = {
 			NOT = { has_country_flag = VAL_nw_expanded_arsenals_complete }
@@ -4976,7 +4976,7 @@ VAL_council_government_category = {
 	}
 
 	VAL_council_inspect_accounts = {
-		icon = generic_political_discourse
+		icon = ADISCORD_inspection
 		allowed = {
 			tag = VAL
 		}
@@ -5190,7 +5190,7 @@ VAL_council_government_category = {
 	}
 
 	VAL_council_reserve_rifles = {
-		icon = generic_political_discourse
+		icon = ADISCORD_arms_supply
 		allowed = {
 			tag = VAL
 		}
@@ -5385,7 +5385,7 @@ VAL_council_government_category = {
 	}
 
 	VAL_council_borrow_500 = {
-		icon = generic_political_discourse
+		icon = ADISCORD_treasury
 		allowed = {
 			tag = VAL
 		}
@@ -5430,7 +5430,7 @@ VAL_council_government_category = {
 	}
 
 	VAL_council_borrow_1000 = {
-		icon = generic_political_discourse
+		icon = ADISCORD_treasury
 		allowed = {
 			tag = VAL
 		}
@@ -5476,7 +5476,7 @@ VAL_council_government_category = {
 	}
 
 	VAL_council_repay_loan = {
-		icon = generic_political_discourse
+		icon = ADISCORD_treasury
 		allowed = {
 			tag = VAL
 		}
@@ -5525,7 +5525,7 @@ VAL_council_government_category = {
 	}
 
 	VAL_council_buy_broker_rifles = {
-		icon = generic_political_discourse
+		icon = ADISCORD_arms_supply
 		allowed = {
 			tag = VAL
 		}
@@ -5569,7 +5569,7 @@ VAL_council_government_category = {
 	}
 
 	VAL_council_buy_direct_rifles = {
-		icon = generic_political_discourse
+		icon = ADISCORD_arms_supply
 		allowed = {
 			tag = VAL
 		}
@@ -5657,7 +5657,7 @@ VAL_council_government_category = {
 	}
 
 	VAL_council_buy_trucks = {
-		icon = generic_political_discourse
+		icon = ADISCORD_logistics
 		allowed = {
 			tag = VAL
 		}
@@ -5842,7 +5842,7 @@ VAL_council_government_category = {
 	}
 
 	VAL_council_schedule_rifles = {
-		icon = generic_political_discourse
+		icon = ADISCORD_arms_supply
 		allowed = {
 			tag = VAL
 		}
@@ -5887,7 +5887,7 @@ VAL_council_government_category = {
 	}
 
 	VAL_council_check_shipment = {
-		icon = generic_political_discourse
+		icon = ADISCORD_inspection
 		allowed = {
 			tag = VAL
 		}
@@ -7677,7 +7677,7 @@ VAL_council_government_category = {
 	}
 
 	VAL_council_preventive_review = {
-		icon = generic_political_discourse
+		icon = ADISCORD_inspection
 		allowed = {
 			tag = VAL
 		}
@@ -8025,7 +8025,7 @@ VAL_council_government_category = {
 	}
 
 	VAL_council_plan_iron_shield = {
-		icon = generic_attack
+		icon = ADISCORD_operations
 		allowed = {
 			tag = VAL
 		}
@@ -8138,7 +8138,7 @@ VAL_council_balance_category = {
 	}
 
 	VAL_council_favour_front = {
-		icon = generic_attack
+		icon = ADISCORD_operations
 		allowed = {
 			tag = VAL
 		}

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import re
+import hashlib
+import json
 import unittest
 from pathlib import Path
 
@@ -50,6 +52,32 @@ def custom_entity_name(prefix: str, level: int) -> str:
 
 
 class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
+    def test_nam_animation_package_matches_its_skeleton_and_weapon_attachments(self) -> None:
+        gfx = (ROOT / 'gfx/entities/ADISCORD_country_infantry.gfx').read_text(encoding='utf-8')
+        folder = ROOT / 'gfx/models/units/ADISCORD_regulars/NAM'
+        registered = {}
+        asset = (folder / 'animation.asset').read_text(encoding='utf-8')
+        for match in re.finditer(r'\banimation\s*=\s*\{', asset):
+            block = validator.extract_block(asset, match.start())
+            name = re.search(r'\bname\s*=\s*"([^"]+)"', block)[1]
+            self.assertNotIn(name, registered)
+            registered[name] = re.search(r'\bfile\s*=\s*"([^"]+)"', block)[1]
+        used = set()
+        for match in re.finditer(r'\bpdxmesh\s*=\s*\{', gfx):
+            block = validator.extract_block(gfx, match.start())
+            if re.search(r'name\s*=\s*"ADISCORD_NAM_field_(?:rifle|mg)_mesh"', block):
+                used.update(re.findall(r'\btype\s*=\s*"([^"]+)"', block))
+        self.assertTrue(used)
+        self.assertEqual(used, set(registered))
+        report = json.loads((ROOT / 'docs/development/model-verification/NAM_verification.json').read_text())['NAM']
+        self.assertLessEqual(len(report['bones']), 50)
+        self.assertTrue({attachment for _, attachment, _ in ATTACHMENTS} <= set(report['bones']))
+        self.assertEqual(report['sha256'], hashlib.sha256((folder.parent / 'NAM_field.mesh').read_bytes()).hexdigest())
+        self.assertEqual(set(registered.values()) | {'animation.asset'}, set(report['animations']))
+        for name, digest in report['animations'].items():
+            with self.subTest(file=name):
+                self.assertEqual(digest, hashlib.sha256((folder / name).read_bytes()).hexdigest())
+
     def test_nam_keeps_its_model_across_confederation_collapse_and_weapon_tiers(self) -> None:
         entities = entity_blocks(COUNTRY_ASSET)
         asset = COUNTRY_ASSET.read_text(encoding="utf-8")
