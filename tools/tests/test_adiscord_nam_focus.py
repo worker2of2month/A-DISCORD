@@ -199,7 +199,7 @@ class NamCampaignTests(unittest.TestCase):
             self.assertIn(f"common/national_focus/{filename}", str(owners))
 
     def test_unique_layout_and_real_rewards(self):
-        expected = {"main": (self.focuses, 110), "postwar": (self.postwar, 54), "defeated": (self.defeated, 65)}
+        expected = {"main": (self.focuses, 110), "postwar": (self.postwar, 54), "defeated": (self.defeated, 158)}
         names = [name for focuses, _ in expected.values() for name in focuses]
         self.assertEqual(len(names), len(set(names)))
         for kind, (focuses, count) in expected.items():

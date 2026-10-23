@@ -360,6 +360,129 @@ defined_text = {
 	}
 }
 
+# ----- Exile revolution and the great war of return -----
+# COUNTRY NAM. The war of return's entry, terms and deadline name the war the
+# current route would open: the compromise route's fields or the great war.
+defined_text = {
+	name = NAMGetWarOfReturnReady
+	text = {
+		trigger = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+		localization_key = NAM_war_of_return_ready_exile
+	}
+	text = {
+		localization_key = NAM_war_of_return_ready_compromise
+	}
+}
+
+defined_text = {
+	name = NAMGetWarOfReturnTerms
+	text = {
+		trigger = {
+			OR = {
+				has_global_flag = NAM_wor_exile_war
+				has_global_flag = ADISCORD_nam_resource_war_island_exile
+			}
+		}
+		localization_key = NAM_war_of_return_terms_exile
+	}
+	text = {
+		localization_key = NAM_war_of_return_terms_compromise
+	}
+}
+
+# COUNTRY federal district under the corporate state. The owning corporation
+# (NAM_corp_district_owner) and the claimant of an open dispute
+# (NAM_corp_dispute_claimant), for event .108 and the decisions.
+defined_text = {
+	name = NAMGetCorpOwnerName
+	text = {
+		trigger = { check_variable = { NAM_corp_district_owner = 1 } }
+		localization_key = NAM_corp_name_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_corp_district_owner = 2 } }
+		localization_key = NAM_corp_name_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_corp_district_owner = 3 } }
+		localization_key = NAM_corp_name_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_corp_district_owner = 4 } }
+		localization_key = NAM_corp_name_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_corp_district_owner = 5 } }
+		localization_key = NAM_corp_name_5
+	}
+	text = {
+		localization_key = NAM_corp_name_6
+	}
+}
+
+defined_text = {
+	name = NAMGetCorpClaimantName
+	text = {
+		trigger = { check_variable = { NAM_corp_dispute_claimant = 1 } }
+		localization_key = NAM_corp_name_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_corp_dispute_claimant = 2 } }
+		localization_key = NAM_corp_name_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_corp_dispute_claimant = 3 } }
+		localization_key = NAM_corp_name_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_corp_dispute_claimant = 4 } }
+		localization_key = NAM_corp_name_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_corp_dispute_claimant = 5 } }
+		localization_key = NAM_corp_name_5
+	}
+	text = {
+		localization_key = NAM_corp_name_6
+	}
+}
+
+# COUNTRY NAM. The currency of the landing drill's deposit.
+defined_text = {
+	name = NAMGetDrillCurrency
+	text = {
+		trigger = { has_country_flag = NAM_exile_humanist }
+		localization_key = NAM_drill_currency_capital
+	}
+	text = {
+		localization_key = NAM_drill_currency_loot
+	}
+}
+
+# COUNTRY NAM. The current band of corporate influence in the category text.
+defined_text = {
+	name = NAMGetCorpBand
+	text = {
+		trigger = { has_country_flag = NAM_corp_takeover }
+		localization_key = NAM_corp_band_takeover
+	}
+	text = {
+		trigger = { check_variable = { NAM_corp_influence > 89 } }
+		localization_key = NAM_corp_band_seals
+	}
+	text = {
+		trigger = { check_variable = { NAM_corp_influence > 69 } }
+		localization_key = NAM_corp_band_pressure
+	}
+	text = {
+		trigger = { check_variable = { NAM_corp_influence > 29 } }
+		localization_key = NAM_corp_band_balance
+	}
+	text = {
+		localization_key = NAM_corp_band_low
+	}
+}
+
 # The size of the landing at the South Harbour if the return began today.
 defined_text = {
 	name = NAMGetLandingForecast
@@ -1489,7 +1612,7 @@ defined_text = {
 		localization_key = NAM_pw_reason_inoperable
 	}
 	text = {
-		trigger = { has_global_flag = NAM_war_of_return_started }
+		trigger = { NAM_exile_return_programme_open = no }
 		localization_key = NAM_pw_reason_war_started
 	}
 	text = {

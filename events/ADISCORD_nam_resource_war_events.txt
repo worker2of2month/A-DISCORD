@@ -256,6 +256,65 @@ news_event = {
 	option = { name = ADISCORD_nam_resource_news.7.a }
 }
 
+# The exile war or the great war is lost: the coalition annexes Svetlogorye.
+news_event = {
+	id = ADISCORD_nam_resource_news.8
+	title = ADISCORD_nam_resource_news.8.t
+	desc = ADISCORD_nam_resource_news.8.d
+	picture = GFX_news_event_adiscord_treaty_signing
+	major = yes
+	fire_only_once = no
+	is_triggered_only = yes
+	option = { name = ADISCORD_nam_resource_news.8.a }
+}
+
+# The exile war or the great war is won: annexation under the pillars or the
+# federation under Veter's humanists.
+news_event = {
+	id = ADISCORD_nam_resource_news.9
+	title = {
+		trigger = { NAM = { has_country_flag = NAM_exile_radical } }
+		text = ADISCORD_nam_resource_news.9.t_radical
+	}
+	title = {
+		trigger = { NAM = { NOT = { has_country_flag = NAM_exile_radical } } }
+		text = ADISCORD_nam_resource_news.9.t_federal
+	}
+	desc = {
+		trigger = {
+			NOT = { has_global_flag = NAM_great_war_won }
+			NAM = { has_country_flag = NAM_exile_radical }
+		}
+		text = ADISCORD_nam_resource_news.9.d_radical
+	}
+	desc = {
+		trigger = {
+			NOT = { has_global_flag = NAM_great_war_won }
+			NAM = { NOT = { has_country_flag = NAM_exile_radical } }
+		}
+		text = ADISCORD_nam_resource_news.9.d_federal
+	}
+	desc = {
+		trigger = {
+			has_global_flag = NAM_great_war_won
+			NAM = { has_country_flag = NAM_exile_radical }
+		}
+		text = ADISCORD_nam_resource_news.9.d_great_radical
+	}
+	desc = {
+		trigger = {
+			has_global_flag = NAM_great_war_won
+			NAM = { NOT = { has_country_flag = NAM_exile_radical } }
+		}
+		text = ADISCORD_nam_resource_news.9.d_great_federal
+	}
+	picture = GFX_news_event_adiscord_treaty_signing
+	major = yes
+	fire_only_once = no
+	is_triggered_only = yes
+	option = { name = ADISCORD_nam_resource_news.9.a }
+}
+
 country_event = {
 	id = ADISCORD_nam_resource_war.10
 	title = ADISCORD_nam_resource_war.10.t
@@ -762,12 +821,32 @@ country_event = {
 	id = ADISCORD_nam_resource_war.60
 	title = ADISCORD_nam_resource_war.60.t
 	desc = {
-		trigger = { tag = NAM }
+		trigger = {
+			tag = NAM
+			NOT = { has_global_flag = NAM_wor_exile_war }
+		}
 		text = ADISCORD_nam_resource_war.60.d
 	}
 	desc = {
-		trigger = { NOT = { tag = NAM } }
+		trigger = {
+			NOT = { tag = NAM }
+			NOT = { has_global_flag = NAM_wor_exile_war }
+		}
 		text = ADISCORD_nam_resource_war.60.d_target
+	}
+	desc = {
+		trigger = {
+			tag = NAM
+			has_global_flag = NAM_wor_exile_war
+		}
+		text = ADISCORD_nam_resource_war.60.d_exile
+	}
+	desc = {
+		trigger = {
+			NOT = { tag = NAM }
+			has_global_flag = NAM_wor_exile_war
+		}
+		text = ADISCORD_nam_resource_war.60.d_target_exile
 	}
 	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
@@ -799,12 +878,41 @@ country_event = {
 	id = ADISCORD_nam_resource_war.62
 	title = ADISCORD_nam_resource_war.62.t
 	desc = {
-		trigger = { has_global_flag = NAM_war_of_return_won }
+		trigger = {
+			has_global_flag = NAM_war_of_return_won
+			NOT = { has_global_flag = NAM_wor_exile_war }
+		}
 		text = ADISCORD_nam_resource_war.62.d_won
 	}
 	desc = {
-		trigger = { NOT = { has_global_flag = NAM_war_of_return_won } }
+		trigger = {
+			NOT = { has_global_flag = NAM_war_of_return_won }
+			NOT = { has_global_flag = NAM_wor_exile_war }
+		}
 		text = ADISCORD_nam_resource_war.62.d_front
+	}
+	desc = {
+		trigger = {
+			has_global_flag = NAM_war_of_return_won
+			has_global_flag = NAM_wor_exile_war
+			has_country_flag = NAM_exile_radical
+		}
+		text = ADISCORD_nam_resource_war.62.d_won_radical
+	}
+	desc = {
+		trigger = {
+			has_global_flag = NAM_war_of_return_won
+			has_global_flag = NAM_wor_exile_war
+			NOT = { has_country_flag = NAM_exile_radical }
+		}
+		text = ADISCORD_nam_resource_war.62.d_won_federal
+	}
+	desc = {
+		trigger = {
+			NOT = { has_global_flag = NAM_war_of_return_won }
+			has_global_flag = NAM_wor_exile_war
+		}
+		text = ADISCORD_nam_resource_war.62.d_front_exile
 	}
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
@@ -1444,6 +1552,396 @@ country_event = {
 			limit = { check_variable = { NAM_marines_island > 0 } }
 			custom_effect_tooltip = NAM_landing_island_tt
 		}
+	}
+}
+
+# ----- Exile revolution -----
+# Decision NAM_exile_overthrow_namestnik. Both answers overthrow the namestnik
+# and fix the exile's course for the campaign; the first is the unattended one.
+country_event = {
+	id = ADISCORD_nam_resource_war.100
+	title = ADISCORD_nam_resource_war.100.t
+	desc = ADISCORD_nam_resource_war.100.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = {
+		tag = NAM
+		NAM_exile_revolution_done = no
+	}
+
+	option = {
+		name = ADISCORD_nam_resource_war.100.a
+		custom_effect_tooltip = NAM_exile_radical_tt
+		hidden_effect = { NAM_exile_choose_radical = yes }
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.100.b
+		custom_effect_tooltip = NAM_exile_humanist_tt
+		hidden_effect = { NAM_exile_choose_humanist = yes }
+		ai_chance = { base = 50 }
+	}
+}
+
+# ----- Humanist exile: the corporations -----
+# Influence of 70: the boards ask for guarantees. Every answer closes the event.
+country_event = {
+	id = ADISCORD_nam_resource_war.101
+	title = ADISCORD_nam_resource_war.101.t
+	desc = ADISCORD_nam_resource_war.101.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = {
+		tag = NAM
+		has_country_flag = NAM_exile_humanist
+		NOT = { has_country_flag = NAM_corp_takeover }
+	}
+
+	option = {
+		name = ADISCORD_nam_resource_war.101.a
+		trigger = { NOT = { has_political_power < 40 } }
+		add_political_power = -40
+		custom_effect_tooltip = NAM_corp_101_a_tt
+		hidden_effect = {
+			NAM_corp_close_event = yes
+			add_to_variable = { var = NAM_corp_influence value = -8 }
+			NAM_corp_influence_clamp = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.101.b
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_corp_101_b_tt
+		hidden_effect = {
+			NAM_corp_close_event = yes
+			set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+			NAM_corp_capital_add = yes
+			add_to_variable = { var = NAM_corp_influence value = 5 }
+			NAM_corp_influence_clamp = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.101.c
+		add_stability = -0.02
+		custom_effect_tooltip = NAM_corp_101_c_tt
+		hidden_effect = {
+			NAM_corp_close_event = yes
+			add_to_variable = { var = NAM_corp_influence value = 2 }
+			NAM_corp_influence_clamp = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Influence of 90: the boards demand the seals. A costed answer pushes them
+# back; yielding brings the takeover closer.
+country_event = {
+	id = ADISCORD_nam_resource_war.102
+	title = ADISCORD_nam_resource_war.102.t
+	desc = ADISCORD_nam_resource_war.102.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		tag = NAM
+		has_country_flag = NAM_exile_humanist
+		NOT = { has_country_flag = NAM_corp_takeover }
+	}
+
+	option = {
+		name = ADISCORD_nam_resource_war.102.a
+		trigger = { NOT = { has_political_power < 100 } }
+		add_political_power = -100
+		add_stability = -0.05
+		custom_effect_tooltip = NAM_corp_102_a_tt
+		hidden_effect = {
+			NAM_corp_close_event = yes
+			add_to_variable = { var = NAM_corp_influence value = -20 }
+			NAM_corp_influence_clamp = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.102.b
+		trigger = {
+			check_variable = { var = NAM_corp_capital value = 150 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = NAM_corp_102_b_tt
+		hidden_effect = {
+			NAM_corp_close_event = yes
+			set_temp_variable = { var = NAM_corp_capital_change value = -150 }
+			NAM_corp_capital_add = yes
+			add_to_variable = { var = NAM_corp_influence value = -15 }
+			NAM_corp_influence_clamp = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.102.c
+		custom_effect_tooltip = NAM_corp_102_c_tt
+		hidden_effect = {
+			NAM_corp_close_event = yes
+			set_temp_variable = { var = NAM_corp_capital_change value = 80 }
+			NAM_corp_capital_add = yes
+			add_to_variable = { var = NAM_corp_influence value = 5 }
+			NAM_corp_influence_clamp = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# The boards take power: three months at 90 or the full 100 of influence.
+country_event = {
+	id = ADISCORD_nam_resource_war.103
+	title = ADISCORD_nam_resource_war.103.t
+	desc = ADISCORD_nam_resource_war.103.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = {
+		tag = NAM
+		has_country_flag = NAM_exile_humanist
+		NOT = { has_country_flag = NAM_corp_takeover }
+	}
+
+	option = {
+		name = ADISCORD_nam_resource_war.103.a
+		custom_effect_tooltip = NAM_corp_takeover_tt
+		hidden_effect = { NAM_corp_takeover = yes }
+	}
+}
+
+# ----- Consolidation of the returned south -----
+# NAM_consolidation_open_incident: a conquered state resists the junta or a
+# federal district protests against the humanists. Each course has three
+# answers; the last of each is always available and every answer closes the
+# event.
+country_event = {
+	id = ADISCORD_nam_resource_war.104
+	title = ADISCORD_nam_resource_war.104.t
+	desc = {
+		trigger = { has_country_flag = NAM_exile_radical }
+		text = ADISCORD_nam_resource_war.104.d_radical
+	}
+	desc = {
+		trigger = { NOT = { has_country_flag = NAM_exile_radical } }
+		text = ADISCORD_nam_resource_war.104.d_federal
+	}
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	trigger = {
+		tag = NAM
+		has_country_flag = NAM_consolidation_started
+	}
+
+	option = {
+		name = ADISCORD_nam_resource_war.104.a
+		trigger = {
+			has_country_flag = NAM_exile_radical
+			NOT = { has_manpower < 1000 }
+		}
+		add_manpower = -1000
+		custom_effect_tooltip = NAM_cons_104_a_tt
+		hidden_effect = {
+			NAM_consolidation_close_event = yes
+			set_temp_variable = { var = NAM_cons_change value = 4 }
+			NAM_consolidation_add = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.104.b
+		trigger = {
+			has_country_flag = NAM_exile_radical
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = NAM_cons_104_b_tt
+		hidden_effect = {
+			NAM_consolidation_close_event = yes
+			set_temp_variable = { var = NAM_treasury_amount value = 100 }
+			NAM_spend_treasury = yes
+			set_temp_variable = { var = NAM_cons_change value = 2 }
+			NAM_consolidation_add = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.104.c
+		trigger = { has_country_flag = NAM_exile_radical }
+		custom_effect_tooltip = NAM_cons_104_c_tt
+		hidden_effect = {
+			NAM_consolidation_close_event = yes
+			set_temp_variable = { var = NAM_cons_change value = -6 }
+			NAM_consolidation_add = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.104.e
+		trigger = {
+			NOT = { has_country_flag = NAM_exile_radical }
+			NOT = { has_political_power < 30 }
+		}
+		add_political_power = -30
+		custom_effect_tooltip = NAM_cons_104_e_tt
+		hidden_effect = {
+			NAM_consolidation_close_event = yes
+			set_temp_variable = { var = NAM_cons_change value = 3 }
+			NAM_consolidation_add = yes
+			if = {
+				limit = { event_target:NAM_cons_district = { exists = yes } }
+				event_target:NAM_cons_district = { add_stability = 0.03 }
+			}
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.104.f
+		trigger = {
+			NOT = { has_country_flag = NAM_exile_radical }
+			check_variable = { var = NAM_corp_capital value = 40 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = NAM_cons_104_f_tt
+		hidden_effect = {
+			NAM_consolidation_close_event = yes
+			set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+			NAM_corp_capital_add = yes
+			set_temp_variable = { var = NAM_cons_change value = 4 }
+			NAM_consolidation_add = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.104.g
+		trigger = { NOT = { has_country_flag = NAM_exile_radical } }
+		custom_effect_tooltip = NAM_cons_104_g_tt
+		hidden_effect = {
+			NAM_consolidation_close_event = yes
+			set_temp_variable = { var = NAM_cons_change value = -5 }
+			NAM_consolidation_add = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# ----- Great war -----
+# Svetlogorye and every participant learn of the declaration.
+country_event = {
+	id = ADISCORD_nam_resource_war.105
+	title = ADISCORD_nam_resource_war.105.t
+	desc = {
+		trigger = { tag = NAM }
+		text = ADISCORD_nam_resource_war.105.d
+	}
+	desc = {
+		trigger = { NOT = { tag = NAM } }
+		text = ADISCORD_nam_resource_war.105.d_target
+	}
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { NAM_great_war_active = yes }
+
+	option = {
+		name = ADISCORD_nam_resource_war.105.a
+		trigger = { tag = NAM }
+		custom_effect_tooltip = NAM_great_war_terms_tt
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.105.b
+		trigger = { NOT = { tag = NAM } }
+	}
+}
+
+# The deadline of the great war: the capitals decide, otherwise the front.
+country_event = {
+	id = ADISCORD_nam_resource_war.106
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { NAM_great_war_active = yes }
+	immediate = { NAM_great_war_resolve_front = yes }
+}
+
+# Svetlogorye learns how the great war ended.
+country_event = {
+	id = ADISCORD_nam_resource_war.107
+	title = ADISCORD_nam_resource_war.107.t
+	desc = {
+		trigger = {
+			has_global_flag = NAM_great_war_won
+			has_country_flag = NAM_exile_radical
+		}
+		text = ADISCORD_nam_resource_war.107.d_won_radical
+	}
+	desc = {
+		trigger = {
+			has_global_flag = NAM_great_war_won
+			NOT = { has_country_flag = NAM_exile_radical }
+		}
+		text = ADISCORD_nam_resource_war.107.d_won_federal
+	}
+	desc = {
+		trigger = { NOT = { has_global_flag = NAM_great_war_won } }
+		text = ADISCORD_nam_resource_war.107.d_front
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = { name = ADISCORD_nam_resource_war.107.a }
+}
+
+# ----- Corporate state: rivalry of the corporations -----
+# NAM_corp_open_dispute: the next corporation in turn claims a district. The
+# first two answers settle the dispute; the third leaves it to the board's
+# arbitration, and the district pays no dividend until it is settled.
+country_event = {
+	id = ADISCORD_nam_resource_war.108
+	title = ADISCORD_nam_resource_war.108.t
+	desc = ADISCORD_nam_resource_war.108.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		tag = NAM
+		has_country_flag = NAM_corp_takeover
+	}
+
+	option = {
+		name = ADISCORD_nam_resource_war.108.a
+		add_stability = -0.02
+		custom_effect_tooltip = NAM_corp_108_a_tt
+		hidden_effect = {
+			if = {
+				limit = { event_target:NAM_corp_dispute_district = { exists = yes } }
+				event_target:NAM_corp_dispute_district = { NAM_corp_dispute_award_claimant = yes }
+			}
+			clr_country_flag = NAM_corp_dispute_open
+			set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+			NAM_corp_capital_add = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.108.b
+		trigger = {
+			check_variable = { var = NAM_corp_capital value = 20 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = NAM_corp_108_b_tt
+		hidden_effect = {
+			if = {
+				limit = { event_target:NAM_corp_dispute_district = { exists = yes } }
+				event_target:NAM_corp_dispute_district = { NAM_corp_dispute_clear = yes }
+			}
+			clr_country_flag = NAM_corp_dispute_open
+			set_temp_variable = { var = NAM_corp_capital_change value = -20 }
+			NAM_corp_capital_add = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.108.c
+		custom_effect_tooltip = NAM_corp_108_c_tt
+		ai_chance = { base = 30 }
 	}
 }
 

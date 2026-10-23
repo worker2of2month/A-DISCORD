@@ -3166,6 +3166,8 @@ NAM_field_apply_repair = {
 
 # COUNTRY buyer (decision FROM). The buyer answers in ADISCORD_nam_oil.1.
 NAM_oil_offer_contract = {
+	# A dormant desert minor answers and trades only after it is woken.
+	ADISCORD_release_non_participating_minor_optimization = yes
 	set_country_flag = {
 		flag = NAM_oil_offer_pending
 		value = 1
@@ -4728,12 +4730,22 @@ NAM_rw_clear_punishment = {
 }
 
 # ----- War of return -----
-# The defeat tree's revenge after the compromise or from the island exile: one
-# war against the current owners of the lost fields and the South Harbour
-# (67, 688, 689, 690, 719, 700). NAM capitulation is the coalition treaty;
-# capitulation of every owner returns the states; the 365-day deadline
-# (event .61) settles the contested states at the current front.
-# Every terminal path runs NAM_war_of_return_close.
+# The defeat tree's revenge. After the compromise peace it is one war against
+# the current owners of the lost fields and the South Harbour (67, 688, 689,
+# 690, 719, 700): NAM capitulation is the coalition treaty, capitulation of
+# every owner returns the states, and the 365-day deadline (event .61) settles
+# the contested states at the current front.
+# From the island exile, once the namestnik has fallen, the same entry opens
+# the exile war (global flag NAM_wor_exile_war) against Eflor and Azhar: the
+# two fight in one temporary coalition and the marines land at the South
+# Harbour. Their capitulation returns the homeland, applies the course's
+# settlement to both (annexation and exploitation under the junta, federal
+# districts under the humanists) and opens the consolidation; NAM
+# capitulation annexes Svetlogorye with its islands; at the deadline the side
+# holding the other's capitals wins, otherwise ownership follows the front.
+# The later great war (NAM_great_war_*) reuses the participant array, the
+# coalition, the capitulation receipts and the settlements of this section.
+# Every terminal path runs NAM_war_of_return_close or NAM_great_war_close.
 
 # STATE field. Registers its foreign owner once and claims the field.
 NAM_wor_register_owner = {
@@ -4755,20 +4767,119 @@ NAM_wor_register_owner = {
 	}
 }
 
+# COUNTRY target of the exile war or the great war. Woken from minor
+# suppression before any alliance or war and registered once; the first
+# independent target becomes the coalition's primary.
+NAM_wor_register_target = {
+	if = {
+		limit = {
+			NAM_wor_target_valid = yes
+			NOT = { has_country_flag = NAM_wor_participant }
+		}
+		ADISCORD_release_non_participating_minor_optimization = yes
+		set_country_flag = NAM_wor_participant
+		add_to_array = { array = global.NAM_wor_participants value = THIS }
+		if = {
+			limit = {
+				is_subject = no
+				NOT = { has_global_flag = NAM_wor_primary_saved }
+			}
+			set_global_flag = NAM_wor_primary_saved
+			save_global_event_target_as = NAM_wor_primary
+		}
+	}
+}
+
+# GLOBAL. Each independent target leaves its own alliance, so no outside ally
+# is drawn into the war, and the primary founds a temporary coalition from the
+# shared template. NAM_wor_release_participants dismantles it on every
+# terminal path.
+NAM_wor_form_coalition = {
+	for_each_scope_loop = {
+		array = global.NAM_wor_participants
+		if = {
+			limit = {
+				is_subject = no
+				is_in_faction = yes
+			}
+			leave_faction = yes
+		}
+	}
+	event_target:NAM_wor_primary = {
+		create_faction_from_template = {
+			template = faction_template_ADISCORD_standard
+			name = NAM_wor_coalition_faction
+		}
+		set_country_flag = NAM_wor_coalition_founder
+	}
+	for_each_scope_loop = {
+		array = global.NAM_wor_participants
+		if = {
+			limit = {
+				is_subject = no
+				is_in_faction = no
+			}
+			event_target:NAM_wor_primary = { add_to_faction = PREV }
+		}
+	}
+}
+
+# GLOBAL. The participants not yet at war join the primary's side; each
+# learns of the declaration through the given event.
+NAM_wor_call_participants = {
+	for_each_scope_loop = {
+		array = global.NAM_wor_participants
+		if = {
+			limit = {
+				NOT = { has_war_with = NAM }
+				NOT = { tag = event_target:NAM_wor_primary }
+			}
+			add_to_war = {
+				targeted_alliance = event_target:NAM_wor_primary
+				enemy = NAM
+				hostility_reason = asked_to_join
+			}
+		}
+	}
+}
+
 # COUNTRY NAM. Called by NAM_defeat_war_of_return.
 NAM_war_of_return_start = {
 	if = {
 		limit = { NAM_war_of_return_can_start = yes }
+		set_temp_variable = { var = NAM_wor_start_exile value = 0 }
+		if = {
+			limit = { NAM_wor_exile_war_ready = yes }
+			set_temp_variable = { var = NAM_wor_start_exile value = 1 }
+			set_global_flag = NAM_wor_exile_war
+			# A war of return lost after the compromise may have preceded the exile.
+			clr_global_flag = NAM_war_of_return_resolved
+			clr_global_flag = NAM_war_of_return_won
+		}
 		set_global_flag = NAM_war_of_return_started
 		clear_array = global.NAM_wor_participants
 		clr_global_flag = NAM_wor_primary_saved
 		clear_global_event_target = NAM_wor_primary
-		67 = { NAM_wor_register_owner = yes }
-		688 = { NAM_wor_register_owner = yes }
-		689 = { NAM_wor_register_owner = yes }
-		690 = { NAM_wor_register_owner = yes }
-		719 = { NAM_wor_register_owner = yes }
-		700 = { NAM_wor_register_owner = yes }
+		if = {
+			limit = { check_variable = { NAM_wor_start_exile = 1 } }
+			EFL = { NAM_wor_register_target = yes }
+			AZH = { NAM_wor_register_target = yes }
+			# Svetlogorye claims its homeland again for the war goal.
+			67 = { add_claim_by = NAM }
+			688 = { add_claim_by = NAM }
+			689 = { add_claim_by = NAM }
+			690 = { add_claim_by = NAM }
+			719 = { add_claim_by = NAM }
+			700 = { add_claim_by = NAM }
+		}
+		else = {
+			67 = { NAM_wor_register_owner = yes }
+			688 = { NAM_wor_register_owner = yes }
+			689 = { NAM_wor_register_owner = yes }
+			690 = { NAM_wor_register_owner = yes }
+			719 = { NAM_wor_register_owner = yes }
+			700 = { NAM_wor_register_owner = yes }
+		}
 		if = {
 			limit = { is_in_faction = yes }
 			leave_faction = yes
@@ -4780,24 +4891,24 @@ NAM_war_of_return_start = {
 			array = global.NAM_wor_participants
 			ADISCORD_nam_resource_war_reserve_major = yes
 		}
-		declare_war_on = {
-			target = event_target:NAM_wor_primary
-			type = take_claimed_state
+		if = {
+			limit = { check_variable = { NAM_wor_start_exile = 1 } }
+			NAM_wor_form_coalition = yes
+			declare_war_on = {
+				target = event_target:NAM_wor_primary
+				type = annex_everything
+			}
+		}
+		else = {
+			declare_war_on = {
+				target = event_target:NAM_wor_primary
+				type = take_claimed_state
+			}
 		}
 		# The other owners join the same war on the primary owner's side.
+		NAM_wor_call_participants = yes
 		for_each_scope_loop = {
 			array = global.NAM_wor_participants
-			if = {
-				limit = {
-					NOT = { has_war_with = NAM }
-					NOT = { tag = event_target:NAM_wor_primary }
-				}
-				add_to_war = {
-					targeted_alliance = event_target:NAM_wor_primary
-					enemy = NAM
-					hostility_reason = asked_to_join
-				}
-			}
 			country_event = { id = ADISCORD_nam_resource_war.60 hours = 1 }
 		}
 		# From the islands the return begins with a landing at the old capital.
@@ -4809,12 +4920,9 @@ NAM_war_of_return_start = {
 	}
 }
 
-# GLOBAL. Shared terminal cleanup: ends the war with every participant,
-# releases campaign-added major status and clears the membership. The resolved
-# flag comes first, so the peace callbacks this causes find no open campaign.
-# Two-day capitulation receipts stay until the late callback consumes them.
-NAM_war_of_return_close = {
-	set_global_flag = NAM_war_of_return_resolved
+# GLOBAL. Ends the war with every participant, releases campaign-added major
+# status, dismantles the temporary coalition and clears the membership.
+NAM_wor_release_participants = {
 	for_each_scope_loop = {
 		array = global.NAM_wor_participants
 		if = {
@@ -4826,10 +4934,29 @@ NAM_war_of_return_close = {
 		}
 		ADISCORD_nam_resource_war_release_major = yes
 		clr_country_flag = NAM_wor_participant
+		if = {
+			limit = { has_country_flag = NAM_wor_coalition_founder }
+			clr_country_flag = NAM_wor_coalition_founder
+			if = {
+				limit = {
+					exists = yes
+					is_faction_leader = yes
+				}
+				dismantle_faction = yes
+			}
+		}
 	}
 	clear_array = global.NAM_wor_participants
 	clr_global_flag = NAM_wor_primary_saved
 	clear_global_event_target = NAM_wor_primary
+}
+
+# GLOBAL. Shared terminal cleanup of the war of return. The resolved flag
+# comes first, so the peace callbacks this causes find no open campaign.
+# Two-day capitulation receipts stay until the late callback consumes them.
+NAM_war_of_return_close = {
+	set_global_flag = NAM_war_of_return_resolved
+	NAM_wor_release_participants = yes
 	NAM = {
 		ADISCORD_nam_resource_war_release_major = yes
 		remove_mission = NAM_war_of_return_deadline
@@ -4880,7 +5007,9 @@ NAM_wor_settle_field_at_front = {
 	}
 }
 
-# GLOBAL. Capitulation of every owner: the fields come home.
+# GLOBAL. Capitulation of every owner: the fields come home. After the exile
+# war Eflor and Azhar also receive the course's settlement and the
+# consolidation of the returned south begins.
 NAM_war_of_return_resolve_victory = {
 	if = {
 		limit = { NAM_war_of_return_active = yes }
@@ -4891,7 +5020,20 @@ NAM_war_of_return_resolve_victory = {
 		690 = { NAM_wor_return_field = yes }
 		719 = { NAM_wor_return_field = yes }
 		700 = { NAM_wor_return_field = yes }
-		NAM_war_of_return_close = yes
+		if = {
+			limit = { has_global_flag = NAM_wor_exile_war }
+			NAM_wor_copy_participants = yes
+			NAM_war_of_return_close = yes
+			NAM_wor_settle_list_by_route = yes
+			NAM = {
+				NAM_consolidation_begin = yes
+				news_event = { id = ADISCORD_nam_resource_news.9 hours = 1 }
+			}
+			log = "[ADISCORD][NAM][PEACE] Exile war of return won; Eflor and Azhar receive the course's settlement."
+		}
+		else = {
+			NAM_war_of_return_close = yes
+		}
 		NAM = {
 			add_stability = 0.10
 			NAM_wor_restore_mainland_capital = yes
@@ -4901,9 +5043,49 @@ NAM_war_of_return_resolve_victory = {
 	}
 }
 
+# GLOBAL. NAM capitulation: the exile war annexes Svetlogorye with its islands;
+# the war of return after the compromise falls to the coalition treaty.
+NAM_war_of_return_resolve_defeat = {
+	if = {
+		limit = {
+			NAM_war_of_return_active = yes
+			has_global_flag = NAM_wor_exile_war
+		}
+		NAM_wor_pick_annexer = yes
+		NAM_war_of_return_close = yes
+		NAM_wor_annex_svetlogorye = yes
+	}
+	else = {
+		ADISCORD_nam_resource_war_resolve_coalition_victory = yes
+	}
+}
+
 # GLOBAL. Deadline: white peace at the current front of the contested fields.
+# The exile war first gives the victory to a side holding the other's
+# capitals, then settles every state between the sides at the front.
 NAM_war_of_return_resolve_front = {
 	if = {
+		limit = {
+			NAM_war_of_return_active = yes
+			has_global_flag = NAM_wor_exile_war
+		}
+		if = {
+			limit = { NAM_wor_capitals_taken = yes }
+			log = "[ADISCORD][NAM][PEACE] Exile war deadline: Svetlogorye holds every remaining capital."
+			NAM_war_of_return_resolve_victory = yes
+		}
+		else_if = {
+			limit = { NAM_wor_capital_lost = yes }
+			log = "[ADISCORD][NAM][PEACE] Exile war deadline: the coalition holds the island capital."
+			NAM_war_of_return_resolve_defeat = yes
+		}
+		else = {
+			NAM_wor_settle_front_states = yes
+			NAM_war_of_return_close = yes
+			NAM_wor_after_front = yes
+		}
+	}
+	else_if = {
 		limit = { NAM_war_of_return_active = yes }
 		67 = { NAM_wor_settle_field_at_front = yes }
 		688 = { NAM_wor_settle_field_at_front = yes }
@@ -4943,32 +5125,19 @@ NAM_war_of_return_close_external = {
 	if = {
 		limit = {
 			NAM_war_of_return_active = yes
-			OR = {
-				NAM = {
-					OR = {
-						exists = no
-						is_subject = yes
-					}
-				}
-				NOT = {
-					any_of_scopes = {
-						array = global.NAM_wor_participants
-						exists = yes
-						has_war_with = NAM
-					}
-				}
-			}
+			NAM_wor_campaign_lost_outside_treaty = yes
 		}
 		NAM_war_of_return_close = yes
 	}
 }
 
-# COUNTRY native ROOT of a capitulation. A participant defeated by NAM or its
-# subject keeps a two-day receipt through both callbacks.
+# COUNTRY native ROOT of a capitulation. A participant of the war of return or
+# the great war defeated by NAM or its subject keeps a two-day receipt through
+# both callbacks.
 NAM_wor_record_capitulation = {
 	if = {
 		limit = {
-			NAM_war_of_return_active = yes
+			NAM_wor_campaign_active = yes
 			NAM_wor_participant = yes
 			OR = {
 				FROM = {
@@ -4992,6 +5161,1553 @@ NAM_wor_record_capitulation = {
 			value = 1
 			days = 2
 		}
+	}
+}
+
+# ----- Settlements of the exile war and the great war -----
+# GLOBAL. The participants are copied to a temporary list before the shared
+# cleanup ends the war and dismantles the coalition.
+NAM_wor_copy_participants = {
+	clear_temp_array = NAM_wor_settle_list
+	for_each_scope_loop = {
+		array = global.NAM_wor_participants
+		add_to_temp_array = { NAM_wor_settle_list = THIS }
+	}
+}
+
+# GLOBAL, after the cleanup. Each surviving participant receives the course's
+# settlement: the pillars annex and strip the conquered; Veter's humanists,
+# and the corporate state that may have replaced them, make it a federal
+# district.
+NAM_wor_settle_list_by_route = {
+	for_each_scope_loop = {
+		array = NAM_wor_settle_list
+		if = {
+			limit = { exists = yes }
+			if = {
+				limit = { NAM = { has_country_flag = NAM_exile_radical } }
+				NAM_wor_radical_annex = yes
+			}
+			else = {
+				NAM_wor_federal_district_join = yes
+			}
+		}
+	}
+}
+
+# COUNTRY defeated participant, radical route. Its states are recorded before
+# the annexation and marked once Svetlogorye owns them.
+NAM_wor_radical_annex = {
+	clear_temp_array = NAM_wor_annexed_states
+	every_owned_state = {
+		add_to_temp_array = { NAM_wor_annexed_states = THIS }
+	}
+	NAM_rw_clear_punishment = yes
+	NAM = {
+		annex_country = {
+			target = PREV
+			transfer_troops = no
+		}
+	}
+	for_each_scope_loop = {
+		array = NAM_wor_annexed_states
+		if = {
+			limit = { is_owned_by = NAM }
+			NAM_wor_take_state = yes
+		}
+	}
+}
+
+# STATE now owned by Svetlogorye after the exile war or the great war. The
+# homeland regains its cores; any other state is conquered land: the state
+# flag NAM_conquered_state, NAM's array NAM_conquered_states and, under the
+# pillars, the modifier that blocks its development.
+NAM_wor_take_state = {
+	if = {
+		limit = { NAM_wor_homeland_state = yes }
+		add_core_of = NAM
+	}
+	else = {
+		if = {
+			limit = { NOT = { has_state_flag = NAM_conquered_state } }
+			set_state_flag = NAM_conquered_state
+			NAM = {
+				add_to_array = { array = NAM_conquered_states value = PREV }
+				set_country_flag = NAM_southern_lands_open
+			}
+		}
+		if = {
+			limit = {
+				NAM = { has_country_flag = NAM_exile_radical }
+				NOT = { has_dynamic_modifier = { modifier = NAM_conquered_state_modifier } }
+			}
+			add_dynamic_modifier = { modifier = NAM_conquered_state_modifier }
+		}
+	}
+}
+
+# COUNTRY defeated participant, humanist route. It keeps its government as a
+# federal district of Svetlogorye: all resources, factories and recruits serve
+# the federation through autonomy_NAM_federal_district. Under the corporate
+# state a corporation receives the district at once.
+NAM_wor_federal_district_join = {
+	if = {
+		limit = {
+			is_subject = no
+			is_in_faction = yes
+		}
+		leave_faction = yes
+	}
+	NAM_rw_clear_punishment = yes
+	NAM = { puppet = PREV }
+	NAM = {
+		set_autonomy = {
+			target = PREV
+			autonomy_state = autonomy_NAM_federal_district
+			end_wars = no
+			end_civil_wars = no
+		}
+	}
+	set_country_flag = NAM_federal_district
+	NAM = {
+		add_to_array = { array = NAM_federal_districts value = PREV }
+		set_country_flag = NAM_southern_lands_open
+	}
+	if = {
+		limit = { NAM = { has_country_flag = NAM_corp_takeover } }
+		NAM_corp_assign_district = yes
+	}
+	else = {
+		NAM_federal_district_set_name = yes
+	}
+}
+
+# COUNTRY federal district. Its name in Svetlogorye's colour.
+NAM_federal_district_set_name = {
+	if = {
+		limit = { tag = EFL }
+		set_cosmetic_tag = EFL_NAM_federal_district
+	}
+	else_if = {
+		limit = { tag = AZH }
+		set_cosmetic_tag = AZH_NAM_federal_district
+	}
+	else_if = {
+		limit = { tag = RHM }
+		set_cosmetic_tag = RHM_NAM_federal_district
+	}
+	else_if = {
+		limit = { tag = SDR }
+		set_cosmetic_tag = SDR_NAM_federal_district
+	}
+	else_if = {
+		limit = { tag = KDR }
+		set_cosmetic_tag = KDR_NAM_federal_district
+	}
+}
+
+# GLOBAL, before the cleanup. The participant holding the island capital,
+# otherwise the coalition's first surviving independent member, will annex
+# Svetlogorye; the temp NAM_wor_annexer_found reports the choice.
+NAM_wor_pick_annexer = {
+	set_temp_variable = { var = NAM_wor_annexer_found value = 0 }
+	NAM = {
+		capital_scope = {
+			controller = {
+				if = {
+					limit = {
+						has_country_flag = NAM_wor_participant
+						is_subject = no
+					}
+					save_event_target_as = NAM_wor_annexer
+					set_temp_variable = { var = NAM_wor_annexer_found value = 1 }
+				}
+			}
+		}
+	}
+	for_each_scope_loop = {
+		array = global.NAM_wor_participants
+		if = {
+			limit = {
+				check_variable = { NAM_wor_annexer_found = 0 }
+				exists = yes
+				is_subject = no
+			}
+			save_event_target_as = NAM_wor_annexer
+			set_temp_variable = { var = NAM_wor_annexer_found value = 1 }
+		}
+	}
+}
+
+# GLOBAL, after the cleanup. NAM capitulation from the islands: the annexer
+# takes Svetlogorye with every island.
+NAM_wor_annex_svetlogorye = {
+	if = {
+		limit = {
+			check_variable = { NAM_wor_annexer_found = 1 }
+			NAM = { exists = yes }
+		}
+		log = "[ADISCORD][NAM][PEACE] Svetlogorye capitulated from the islands: [NAM_wor_annexer.GetTag] annexes it."
+		event_target:NAM_wor_annexer = {
+			news_event = { id = ADISCORD_nam_resource_news.8 hours = 1 }
+			annex_country = {
+				target = NAM
+				transfer_troops = no
+			}
+		}
+	}
+}
+
+# GLOBAL, before the cleanup. Without a decision at the deadline ownership
+# follows control between Svetlogorye and the participants. Taken states are
+# recorded first and transferred afterwards, so no state list changes while
+# it is read.
+NAM_wor_settle_front_states = {
+	clear_temp_array = NAM_wor_front_gain
+	clear_temp_array = NAM_wor_front_loss
+	for_each_scope_loop = {
+		array = global.NAM_wor_participants
+		if = {
+			limit = { exists = yes }
+			every_owned_state = {
+				limit = { is_controlled_by = NAM }
+				add_to_temp_array = { NAM_wor_front_gain = THIS }
+			}
+		}
+	}
+	NAM = {
+		every_owned_state = {
+			limit = {
+				controller = {
+					OR = {
+						has_country_flag = NAM_wor_participant
+						AND = {
+							is_subject = yes
+							overlord = { has_country_flag = NAM_wor_participant }
+						}
+					}
+				}
+			}
+			add_to_temp_array = { NAM_wor_front_loss = THIS }
+		}
+	}
+	for_each_scope_loop = {
+		array = NAM_wor_front_gain
+		owner = { save_event_target_as = NAM_wor_old_owner }
+		NAM = { transfer_state = PREV }
+		if = {
+			limit = { NAM_wor_homeland_state = yes }
+			remove_core_of = event_target:NAM_wor_old_owner
+		}
+		NAM_wor_take_state = yes
+	}
+	for_each_scope_loop = {
+		array = NAM_wor_front_loss
+		controller = {
+			save_event_target_as = NAM_wor_new_owner
+			transfer_state = PREV
+		}
+		add_claim_by = NAM
+	}
+	log = "[ADISCORD][NAM][PEACE] Deadline without a decision: ownership follows the front."
+}
+
+# GLOBAL, after a front settlement and its cleanup.
+NAM_wor_after_front = {
+	NAM = {
+		every_owned_state = {
+			limit = { NOT = { is_controlled_by = NAM } }
+			set_state_controller_to = NAM
+		}
+		NAM_wor_restore_mainland_capital = yes
+		NAM_oil_refresh = yes
+		NAM_corp_count_zones = yes
+		if = {
+			limit = { has_global_flag = NAM_great_war_started }
+			country_event = { id = ADISCORD_nam_resource_war.107 hours = 1 }
+		}
+		else = {
+			country_event = { id = ADISCORD_nam_resource_war.62 hours = 1 }
+		}
+	}
+}
+
+# ----- Consolidation of the returned south -----
+# NAM_consolidation (0-100) is Svetlogorye's hold on the regions taken back in
+# the exile war. It starts at 10 with the victory and grows by 2 a month; the
+# junta adds terror and garrison orders and pays garrison upkeep of 3
+# treasury for every conquered state, the humanists add federal treaties and
+# reconstruction funds. Below 70 the regions may revolt or strike (event
+# .104). From 70 the great war against the rest of the south may begin
+# (NAM_great_war_can_start). NAM_consolidation_dynamic turns the hold into
+# stability and compliance.
+
+# COUNTRY NAM. A focus may already have written a value, so only a missing
+# one is seeded.
+NAM_consolidation_begin = {
+	set_country_flag = NAM_consolidation_started
+	if = {
+		limit = { NOT = { has_variable = NAM_consolidation } }
+		set_variable = { var = NAM_consolidation value = 10 }
+	}
+	NAM_consolidation_clamp = yes
+	mark_focus_tree_layout_dirty = yes
+}
+
+# COUNTRY NAM. Every writer of the consolidation calls this clamp.
+NAM_consolidation_clamp = {
+	clamp_variable = {
+		var = NAM_consolidation
+		min = 0
+		max = 100
+	}
+	if = {
+		limit = { has_country_flag = NAM_consolidation_started }
+		set_variable = { var = NAM_cons_mod_stability value = NAM_consolidation }
+		subtract_from_variable = { var = NAM_cons_mod_stability value = 50 }
+		multiply_variable = { var = NAM_cons_mod_stability value = 0.002 }
+		set_variable = { var = NAM_cons_mod_compliance value = NAM_consolidation }
+		multiply_variable = { var = NAM_cons_mod_compliance value = 0.0005 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = NAM_consolidation_dynamic } } }
+			add_dynamic_modifier = { modifier = NAM_consolidation_dynamic }
+		}
+		force_update_dynamic_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY NAM, on_monthly_NAM. Growth, garrison upkeep and the incident roll;
+# the incident reads only NAM's own arrays of conquered states and districts.
+NAM_consolidation_monthly = {
+	if = {
+		limit = {
+			has_country_flag = NAM_consolidation_started
+			NAM_country_operable = yes
+		}
+		set_temp_variable = { var = NAM_cons_delta value = 2 }
+		if = {
+			limit = { has_country_flag = NAM_rad_garrison_order_active }
+			add_to_temp_variable = { var = NAM_cons_delta value = 3 }
+			set_temp_variable = { var = NAM_treasury_amount value = 20 }
+			NAM_spend_treasury = yes
+		}
+		if = {
+			limit = { has_stability < 0.40 }
+			add_to_temp_variable = { var = NAM_cons_delta value = -2 }
+		}
+		set_variable = { var = NAM_consolidation_growth value = NAM_cons_delta }
+		add_to_variable = { var = NAM_consolidation value = NAM_cons_delta }
+		NAM_consolidation_clamp = yes
+		# The junta's garrisons in the conquered states.
+		if = {
+			limit = {
+				has_country_flag = NAM_exile_radical
+				check_variable = { NAM_consolidation < 100 }
+			}
+			set_temp_variable = { var = NAM_treasury_amount value = NAM_conquered_states^num }
+			multiply_temp_variable = { var = NAM_treasury_amount value = 3 }
+			if = {
+				limit = { check_variable = { NAM_treasury_amount > 0 } }
+				NAM_spend_treasury = yes
+			}
+		}
+		if = {
+			limit = {
+				check_variable = { NAM_consolidation < 70 }
+				NOT = { has_country_flag = NAM_cons_incident_cooldown }
+				NOT = { has_country_flag = NAM_cons_event_pending }
+				OR = {
+					AND = {
+						has_country_flag = NAM_exile_radical
+						check_variable = { var = NAM_conquered_states^num value = 0 compare = greater_than }
+					}
+					AND = {
+						has_country_flag = NAM_exile_humanist
+						check_variable = { var = NAM_federal_districts^num value = 0 compare = greater_than }
+					}
+				}
+			}
+			random_list = {
+				70 = {
+					modifier = {
+						factor = 0.7
+						check_variable = { NAM_consolidation < 30 }
+					}
+				}
+				30 = {
+					NAM_consolidation_open_incident = yes
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY NAM. Picks the restless place of event .104: a conquered state under
+# the junta, a federal district under the humanists.
+NAM_consolidation_open_incident = {
+	set_country_flag = {
+		flag = NAM_cons_incident_cooldown
+		value = 1
+		days = 60
+	}
+	set_country_flag = {
+		flag = NAM_cons_event_pending
+		value = 1
+		days = 30
+	}
+	clear_global_event_target = NAM_cons_place
+	clear_global_event_target = NAM_cons_district
+	if = {
+		limit = { has_country_flag = NAM_exile_radical }
+		random_scope_in_array = {
+			array = NAM_conquered_states
+			limit = { is_owned_by = NAM }
+			save_global_event_target_as = NAM_cons_place
+		}
+	}
+	else = {
+		random_scope_in_array = {
+			array = NAM_federal_districts
+			limit = {
+				exists = yes
+				is_subject_of = NAM
+			}
+			save_global_event_target_as = NAM_cons_district
+		}
+	}
+	country_event = { id = ADISCORD_nam_resource_war.104 hours = 6 }
+}
+
+# COUNTRY NAM. Every option of event .104 ends with this call.
+NAM_consolidation_close_event = {
+	clr_country_flag = NAM_cons_event_pending
+}
+
+# COUNTRY NAM. Input: temp NAM_cons_change.
+NAM_consolidation_add = {
+	add_to_variable = { var = NAM_consolidation value = NAM_cons_change }
+	NAM_consolidation_clamp = yes
+}
+
+# COUNTRY NAM. An interrupted reconstruction fund returns its capital.
+NAM_hum_reconstruction_refund = {
+	if = {
+		limit = { check_variable = { var = NAM_hum_reconstruction_deposit value = 0 compare = greater_than } }
+		set_temp_variable = { var = NAM_corp_capital_change value = NAM_hum_reconstruction_deposit }
+		NAM_corp_capital_add = yes
+	}
+	clear_variable = NAM_hum_reconstruction_deposit
+}
+
+# ----- Great war -----
+# After the consolidation Svetlogorye fights the rest of the south in one war:
+# Rahma, Sardan and Kadir, and Eflor or Azhar if either still stands
+# independent. The focus that opens it calls NAM_great_war_start behind
+# NAM_great_war_can_start. The suppressed minors wake before any alliance,
+# the targets fight in one temporary coalition, every participant holds
+# mandatory major status only for this war. Capitulation of all of them
+# applies the course's settlement to the new conquests; NAM capitulation
+# annexes Svetlogorye; at the 365-day deadline (event .106) the side holding
+# the other's capitals wins, otherwise ownership follows the front. Every
+# terminal path runs NAM_great_war_close.
+
+# COUNTRY NAM.
+NAM_great_war_start = {
+	if = {
+		limit = { NAM_great_war_can_start = yes }
+		set_global_flag = NAM_great_war_started
+		clear_array = global.NAM_wor_participants
+		clr_global_flag = NAM_wor_primary_saved
+		clear_global_event_target = NAM_wor_primary
+		EFL = { NAM_wor_register_target = yes }
+		AZH = { NAM_wor_register_target = yes }
+		RHM = { NAM_wor_register_target = yes }
+		SDR = { NAM_wor_register_target = yes }
+		KDR = { NAM_wor_register_target = yes }
+		if = {
+			limit = { is_in_faction = yes }
+			leave_faction = yes
+		}
+		ADISCORD_nam_resource_war_reserve_major = yes
+		for_each_scope_loop = {
+			array = global.NAM_wor_participants
+			ADISCORD_nam_resource_war_reserve_major = yes
+		}
+		NAM_wor_form_coalition = yes
+		declare_war_on = {
+			target = event_target:NAM_wor_primary
+			type = annex_everything
+		}
+		NAM_wor_call_participants = yes
+		for_each_scope_loop = {
+			array = global.NAM_wor_participants
+			country_event = { id = ADISCORD_nam_resource_war.105 hours = 1 }
+		}
+		add_war_support = 0.10
+		activate_mission = NAM_great_war_deadline
+		country_event = { id = ADISCORD_nam_resource_war.105 hours = 1 }
+		country_event = { id = ADISCORD_nam_resource_war.106 days = 365 }
+		log = "[ADISCORD][NAM][GREAT_WAR] Svetlogorye opens the great war against the south."
+	}
+}
+
+# GLOBAL. Shared terminal cleanup of the great war; the resolved flag comes
+# first.
+NAM_great_war_close = {
+	set_global_flag = NAM_great_war_resolved
+	NAM_wor_release_participants = yes
+	NAM = {
+		ADISCORD_nam_resource_war_release_major = yes
+		remove_mission = NAM_great_war_deadline
+		mark_focus_tree_layout_dirty = yes
+	}
+}
+
+# GLOBAL. Capitulation of every participant: the course's settlement.
+NAM_great_war_resolve_victory = {
+	if = {
+		limit = { NAM_great_war_active = yes }
+		set_global_flag = NAM_great_war_won
+		NAM_wor_copy_participants = yes
+		NAM_great_war_close = yes
+		NAM_wor_settle_list_by_route = yes
+		NAM = {
+			add_stability = 0.10
+			NAM_oil_refresh = yes
+			news_event = { id = ADISCORD_nam_resource_news.9 hours = 1 }
+			country_event = { id = ADISCORD_nam_resource_war.107 hours = 1 }
+		}
+		log = "[ADISCORD][NAM][GREAT_WAR] Great war won; the southern settlement applies to every participant."
+	}
+}
+
+# GLOBAL. NAM capitulation in the great war.
+NAM_great_war_resolve_defeat = {
+	if = {
+		limit = { NAM_great_war_active = yes }
+		NAM_wor_pick_annexer = yes
+		NAM_great_war_close = yes
+		NAM_wor_annex_svetlogorye = yes
+	}
+}
+
+# GLOBAL. Event .106 at the deadline.
+NAM_great_war_resolve_front = {
+	if = {
+		limit = { NAM_great_war_active = yes }
+		if = {
+			limit = { NAM_wor_capitals_taken = yes }
+			log = "[ADISCORD][NAM][GREAT_WAR] Deadline: Svetlogorye holds every remaining capital."
+			NAM_great_war_resolve_victory = yes
+		}
+		else_if = {
+			limit = { NAM_wor_capital_lost = yes }
+			log = "[ADISCORD][NAM][GREAT_WAR] Deadline: the coalition holds Svetlogorye's capital."
+			NAM_great_war_resolve_defeat = yes
+		}
+		else = {
+			NAM_wor_settle_front_states = yes
+			NAM_great_war_close = yes
+			NAM_wor_after_front = yes
+		}
+	}
+}
+
+# GLOBAL. Native peace, annexation or subjugation outside the treaty closes
+# the great war without awards.
+NAM_great_war_close_external = {
+	if = {
+		limit = {
+			NAM_great_war_active = yes
+			NAM_wor_campaign_lost_outside_treaty = yes
+		}
+		NAM_great_war_close = yes
+	}
+}
+
+# ----- Exile revolution -----
+# Decision NAM_exile_overthrow_namestnik opens event .100. Its two answers
+# overthrow the namestnik (Egor Rom or a coup leader) and settle the exile's
+# course for the rest of the campaign; the focus tree reads NAM_exile_radical
+# or NAM_exile_humanist.
+
+# COUNTRY NAM. The pillars of Svetlogorye take the seals: a junta under
+# Rostislav Karamyshev, piracy and loot-paid marines.
+NAM_exile_choose_radical = {
+	set_country_flag = NAM_exile_radical
+	NAM_rom_step_down = yes
+	set_popularities = {
+		etatism = 75
+		humanism = 25
+	}
+	set_politics = {
+		ruling_party = etatism
+		elections_allowed = no
+	}
+	add_country_leader_role = {
+		character = NAM_Rostislav_Karamyshev
+		promote_leader = yes
+		country_leader = {
+			desc = NAM_Rostislav_Karamyshev_desc
+			ideology = etatism_ideology
+			traits = {
+				NAM_trait_pillar_junta_chief
+				NAM_trait_corsair_patron
+			}
+			expire = "2200.1.1.1"
+		}
+	}
+	add_ideas = NAM_exile_pillar_junta
+	add_to_variable = { var = NAM_revenge_readiness value = 5 }
+	NAM_revenge_readiness_clamp = yes
+	mark_focus_tree_layout_dirty = yes
+	ADISCORD_economy_mark_dirty = yes
+	log = "[ADISCORD][NAM][EXILE] The pillars overthrow the namestnik."
+}
+
+# COUNTRY NAM. Yaroslav Veter's humanists take power and open the islands to
+# foreign corporations; the exile's loot is sold to the first investors.
+NAM_exile_choose_humanist = {
+	set_country_flag = NAM_exile_humanist
+	NAM_rom_step_down = yes
+	set_popularities = {
+		humanism = 60
+		etatism = 40
+	}
+	set_politics = {
+		ruling_party = humanism
+		elections_allowed = no
+	}
+	if = {
+		limit = { NOT = { has_character = NAM_Yaroslav_Veter } }
+		recruit_character = NAM_Yaroslav_Veter
+	}
+	add_country_leader_role = {
+		character = NAM_Yaroslav_Veter
+		promote_leader = yes
+		country_leader = {
+			desc = NAM_Yaroslav_Veter_leader_desc
+			ideology = humanism_ideology
+			traits = { NAM_trait_voice_of_the_districts }
+			expire = "2200.1.1.1"
+		}
+	}
+	add_ideas = NAM_exile_free_islands
+	NAM_corp_initialize = yes
+	mark_focus_tree_layout_dirty = yes
+	ADISCORD_economy_mark_dirty = yes
+	log = "[ADISCORD][NAM][EXILE] Veter's humanists overthrow the namestnik."
+}
+
+# ----- Humanist exile: corporations and free zones -----
+# NAM_corp_capital is the foreign capital invested in the exile: it buys arms,
+# marines and innovation. NAM_corp_influence (0-100) is the corporations' hold
+# on the government. Below 30 the investors bring little money, from 30 the
+# aggregate NAM_corp_dynamic gives research, efficiency and trade, from 70 it
+# also costs stability and political power and the boards demand guarantees
+# (event .101), from 90 they demand the seals (event .102). Three months at 90
+# or more, or 100 at once, end in the corporate takeover (event .103):
+# corporate boards govern the islands under the cosmetic tag
+# NAM_corporate_state, while the humanist course and its federation continue.
+# NAM_free_zone_slots (1-3) limits the chartered free zones on the islands.
+
+# COUNTRY NAM. Humanist settlement. A focus may already have written a value,
+# so only a missing one is seeded.
+NAM_corp_initialize = {
+	if = {
+		limit = { NOT = { has_variable = NAM_corp_capital } }
+		set_variable = { var = NAM_corp_capital value = 50 }
+	}
+	if = {
+		limit = { NOT = { has_variable = NAM_corp_influence } }
+		set_variable = { var = NAM_corp_influence value = 20 }
+	}
+	if = {
+		limit = { NOT = { has_variable = NAM_free_zone_slots } }
+		set_variable = { var = NAM_free_zone_slots value = 1 }
+	}
+	if = {
+		limit = { NOT = { has_variable = NAM_free_zones_pending } }
+		set_variable = { var = NAM_free_zones_pending value = 0 }
+	}
+	clamp_variable = {
+		var = NAM_free_zone_slots
+		min = 1
+		max = 3
+	}
+	if = {
+		limit = { check_variable = { var = NAM_pirate_loot value = 0 compare = greater_than } }
+		set_temp_variable = { var = NAM_corp_capital_change value = NAM_pirate_loot }
+		NAM_corp_capital_add = yes
+		set_variable = { var = NAM_pirate_loot value = 0 }
+	}
+	NAM_corp_count_zones = yes
+	NAM_corp_influence_clamp = yes
+}
+
+# COUNTRY NAM. Input: temp NAM_corp_capital_change (negative spends).
+NAM_corp_capital_add = {
+	add_to_variable = { var = NAM_corp_capital value = NAM_corp_capital_change }
+	clamp_variable = {
+		var = NAM_corp_capital
+		min = 0
+		max = 100000
+	}
+}
+
+# COUNTRY NAM. Every writer of the influence calls this clamp: it recalculates
+# the aggregate and opens the threshold events. The boards keep 100 once they
+# rule.
+NAM_corp_influence_clamp = {
+	if = {
+		limit = { has_country_flag = NAM_corp_takeover }
+		set_variable = { var = NAM_corp_influence value = 100 }
+	}
+	clamp_variable = {
+		var = NAM_corp_influence
+		min = 0
+		max = 100
+	}
+	NAM_corp_refresh = yes
+	NAM_corp_check_thresholds = yes
+}
+
+# COUNTRY NAM. The aggregate NAM_corp_dynamic: every free zone waives 3% of
+# tax collection; the influence band sets the other fields.
+NAM_corp_refresh = {
+	if = {
+		limit = { has_country_flag = NAM_exile_humanist }
+		set_variable = { var = NAM_corp_mod_tax value = NAM_free_zones_active }
+		multiply_variable = { var = NAM_corp_mod_tax value = -0.03 }
+		if = {
+			limit = { has_country_flag = NAM_corp_takeover }
+			set_variable = { var = NAM_corp_mod_research value = 0.10 }
+			set_variable = { var = NAM_corp_mod_efficiency value = 0.08 }
+			set_variable = { var = NAM_corp_mod_trade value = 0.25 }
+			set_variable = { var = NAM_corp_mod_stability value = -0.05 }
+			set_variable = { var = NAM_corp_mod_pp value = -0.15 }
+		}
+		else_if = {
+			limit = { check_variable = { NAM_corp_influence > 89 } }
+			set_variable = { var = NAM_corp_mod_research value = 0.10 }
+			set_variable = { var = NAM_corp_mod_efficiency value = 0.05 }
+			set_variable = { var = NAM_corp_mod_trade value = 0.20 }
+			set_variable = { var = NAM_corp_mod_stability value = -0.10 }
+			set_variable = { var = NAM_corp_mod_pp value = -0.20 }
+		}
+		else_if = {
+			limit = { check_variable = { NAM_corp_influence > 69 } }
+			set_variable = { var = NAM_corp_mod_research value = 0.08 }
+			set_variable = { var = NAM_corp_mod_efficiency value = 0.05 }
+			set_variable = { var = NAM_corp_mod_trade value = 0.15 }
+			set_variable = { var = NAM_corp_mod_stability value = -0.05 }
+			set_variable = { var = NAM_corp_mod_pp value = -0.10 }
+		}
+		else_if = {
+			limit = { check_variable = { NAM_corp_influence > 29 } }
+			set_variable = { var = NAM_corp_mod_research value = 0.05 }
+			set_variable = { var = NAM_corp_mod_efficiency value = 0.03 }
+			set_variable = { var = NAM_corp_mod_trade value = 0.10 }
+			set_variable = { var = NAM_corp_mod_stability value = 0 }
+			set_variable = { var = NAM_corp_mod_pp value = 0 }
+		}
+		else = {
+			set_variable = { var = NAM_corp_mod_research value = 0 }
+			set_variable = { var = NAM_corp_mod_efficiency value = 0 }
+			set_variable = { var = NAM_corp_mod_trade value = 0 }
+			set_variable = { var = NAM_corp_mod_stability value = 0 }
+			set_variable = { var = NAM_corp_mod_pp value = 0 }
+		}
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = NAM_corp_dynamic } } }
+			add_dynamic_modifier = { modifier = NAM_corp_dynamic }
+		}
+		force_update_dynamic_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY NAM. Crossing 70 opens the guarantees event, crossing 90 the demand
+# for the seals; each arms again ten points lower. 100 queues the takeover.
+NAM_corp_check_thresholds = {
+	if = {
+		limit = {
+			has_country_flag = NAM_exile_humanist
+			NOT = { has_country_flag = NAM_corp_takeover }
+			NAM_country_operable = yes
+		}
+		if = {
+			limit = {
+				has_country_flag = NAM_corp_warned_70
+				check_variable = { NAM_corp_influence < 60 }
+			}
+			clr_country_flag = NAM_corp_warned_70
+		}
+		if = {
+			limit = {
+				has_country_flag = NAM_corp_warned_90
+				check_variable = { NAM_corp_influence < 80 }
+			}
+			clr_country_flag = NAM_corp_warned_90
+		}
+		if = {
+			limit = {
+				check_variable = { NAM_corp_influence > 99 }
+				NOT = { has_country_flag = NAM_corp_takeover_pending }
+			}
+			NAM_corp_queue_takeover = yes
+		}
+		else_if = {
+			limit = {
+				NOT = { has_country_flag = NAM_corp_event_pending }
+				NOT = { has_country_flag = NAM_corp_takeover_pending }
+			}
+			if = {
+				limit = {
+					NOT = { has_country_flag = NAM_corp_warned_90 }
+					check_variable = { NAM_corp_influence > 89 }
+				}
+				set_country_flag = NAM_corp_warned_90
+				set_country_flag = NAM_corp_warned_70
+				NAM_corp_open_event = yes
+				country_event = { id = ADISCORD_nam_resource_war.102 hours = 6 }
+			}
+			else_if = {
+				limit = {
+					NOT = { has_country_flag = NAM_corp_warned_70 }
+					check_variable = { NAM_corp_influence > 69 }
+				}
+				set_country_flag = NAM_corp_warned_70
+				NAM_corp_open_event = yes
+				country_event = { id = ADISCORD_nam_resource_war.101 hours = 6 }
+			}
+		}
+	}
+}
+
+# COUNTRY NAM. At most one corporate event is open; the marker expires by
+# itself, so an event that never fires cannot block the next warning.
+NAM_corp_open_event = {
+	set_country_flag = {
+		flag = NAM_corp_event_pending
+		value = 1
+		days = 30
+	}
+}
+
+# COUNTRY NAM. Every option of events .101 and .102 ends with this call.
+NAM_corp_close_event = {
+	clr_country_flag = NAM_corp_event_pending
+}
+
+# COUNTRY NAM. The takeover event is queued once; its marker also expires.
+NAM_corp_queue_takeover = {
+	set_country_flag = {
+		flag = NAM_corp_takeover_pending
+		value = 1
+		days = 30
+	}
+	country_event = { id = ADISCORD_nam_resource_war.103 hours = 6 }
+}
+
+# COUNTRY NAM. The fixed island states recount the chartered free zones; a
+# zone on an island Svetlogorye no longer owns ends.
+NAM_corp_count_zones = {
+	set_variable = { var = NAM_free_zones_active value = 0 }
+	225 = { NAM_corp_count_zone = yes }
+	226 = { NAM_corp_count_zone = yes }
+	227 = { NAM_corp_count_zone = yes }
+	228 = { NAM_corp_count_zone = yes }
+	229 = { NAM_corp_count_zone = yes }
+	230 = { NAM_corp_count_zone = yes }
+	231 = { NAM_corp_count_zone = yes }
+}
+
+# STATE island.
+NAM_corp_count_zone = {
+	if = {
+		limit = { has_state_flag = NAM_free_zone }
+		if = {
+			limit = { is_owned_by = NAM }
+			NAM = { add_to_variable = { var = NAM_free_zones_active value = 1 } }
+		}
+		else = {
+			clr_state_flag = NAM_free_zone
+			if = {
+				limit = { has_dynamic_modifier = { modifier = NAM_free_zone_state } }
+				remove_dynamic_modifier = { modifier = NAM_free_zone_state }
+			}
+		}
+	}
+}
+
+# STATE island, the end of NAM_corp_charter_free_zone. The zone opens on an
+# island still Svetlogorsk; the signing bonus and the influence follow it.
+NAM_corp_zone_establish = {
+	clr_state_flag = NAM_free_zone_pending
+	NAM = {
+		subtract_from_variable = { var = NAM_free_zones_pending value = 1 }
+		clamp_variable = {
+			var = NAM_free_zones_pending
+			min = 0
+			max = 3
+		}
+	}
+	if = {
+		limit = { is_owned_by = NAM }
+		set_state_flag = NAM_free_zone
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = NAM_free_zone_state } } }
+			add_dynamic_modifier = { modifier = NAM_free_zone_state }
+		}
+		NAM = {
+			NAM_corp_count_zones = yes
+			set_temp_variable = { var = NAM_corp_capital_change value = 20 }
+			NAM_corp_capital_add = yes
+			add_to_variable = { var = NAM_corp_influence value = 5 }
+			NAM_corp_influence_clamp = yes
+		}
+	}
+}
+
+# STATE island. Interrupted negotiations free the slot; political power stays
+# spent.
+NAM_corp_zone_release = {
+	clr_state_flag = NAM_free_zone_pending
+	NAM = {
+		subtract_from_variable = { var = NAM_free_zones_pending value = 1 }
+		clamp_variable = {
+			var = NAM_free_zones_pending
+			min = 0
+			max = 3
+		}
+	}
+}
+
+# COUNTRY NAM. The 3000 leased workers come home; the escrow marks a contract
+# whose recruits have not yet returned.
+NAM_corp_labour_return = {
+	if = {
+		limit = { check_variable = { var = NAM_corp_labour_escrow value = 0 compare = greater_than } }
+		add_manpower = 3000
+	}
+	clear_variable = NAM_corp_labour_escrow
+	clr_country_flag = NAM_corp_labour_leased
+}
+
+# COUNTRY NAM. An interrupted capital-paid programme returns its deposit.
+NAM_corp_park_refund = {
+	if = {
+		limit = { check_variable = { var = NAM_corp_park_deposit value = 0 compare = greater_than } }
+		set_temp_variable = { var = NAM_corp_capital_change value = NAM_corp_park_deposit }
+		NAM_corp_capital_add = yes
+	}
+	clear_variable = NAM_corp_park_deposit
+}
+
+# COUNTRY NAM, on_monthly_NAM under the humanists. Income: every free zone
+# brings 20 capital plus 0.3 per point of influence. Drift: +1 per free zone,
+# +1 while workers are leased, -1 as the government pushes back. Three months
+# at 90 or more queue the takeover. Fixed island states only.
+NAM_corp_monthly = {
+	if = {
+		limit = {
+			has_country_flag = NAM_exile_humanist
+			NAM_country_operable = yes
+			has_variable = NAM_corp_influence
+		}
+		NAM_corp_count_zones = yes
+		set_temp_variable = { var = NAM_corp_capital_change value = NAM_corp_influence }
+		multiply_temp_variable = { var = NAM_corp_capital_change value = 0.3 }
+		add_to_temp_variable = { var = NAM_corp_capital_change value = 20 }
+		multiply_temp_variable = { var = NAM_corp_capital_change value = NAM_free_zones_active }
+		round_temp_variable = NAM_corp_capital_change
+		set_variable = { var = NAM_corp_last_income value = NAM_corp_capital_change }
+		NAM_corp_capital_add = yes
+		if = {
+			limit = { NOT = { has_country_flag = NAM_corp_takeover } }
+			set_temp_variable = { var = NAM_corp_drift value = NAM_free_zones_active }
+			subtract_from_temp_variable = { var = NAM_corp_drift value = 1 }
+			if = {
+				limit = { has_country_flag = NAM_corp_labour_leased }
+				add_to_temp_variable = { var = NAM_corp_drift value = 1 }
+			}
+			set_variable = { var = NAM_corp_last_drift value = NAM_corp_drift }
+			add_to_variable = { var = NAM_corp_influence value = NAM_corp_drift }
+			NAM_corp_influence_clamp = yes
+			if = {
+				limit = { check_variable = { NAM_corp_influence > 89 } }
+				add_to_variable = { var = NAM_corp_top_months value = 1 }
+			}
+			else = {
+				set_variable = { var = NAM_corp_top_months value = 0 }
+			}
+			if = {
+				limit = {
+					check_variable = { NAM_corp_top_months > 2 }
+					NOT = { has_country_flag = NAM_corp_takeover_pending }
+				}
+				NAM_corp_queue_takeover = yes
+			}
+		}
+		else = {
+			set_variable = { var = NAM_corp_last_drift value = 0 }
+			NAM_corp_refresh = yes
+			NAM_corp_districts_monthly = yes
+		}
+	}
+}
+
+# COUNTRY NAM. Event .103: the boards take the seals. Veter's party stays in
+# the government, but the chairman of the boards rules; every owned island is
+# governed by a corporate board.
+NAM_corp_takeover = {
+	set_country_flag = NAM_corp_takeover
+	clr_country_flag = NAM_corp_takeover_pending
+	clr_country_flag = NAM_corp_event_pending
+	set_popularities = {
+		hedonism = 50
+		humanism = 35
+		etatism = 15
+	}
+	set_politics = {
+		ruling_party = hedonism
+		elections_allowed = no
+	}
+	add_country_leader_role = {
+		character = NAM_Mark_Olshansky
+		promote_leader = yes
+		country_leader = {
+			desc = NAM_Mark_Olshansky_desc
+			ideology = commercial_hedonism
+			traits = { NAM_trait_chairman_of_the_boards }
+			expire = "2200.1.1.1"
+		}
+	}
+	set_cosmetic_tag = NAM_corporate_state
+	every_owned_state = {
+		limit = {
+			NAM_rw_island_state = yes
+			NOT = { has_dynamic_modifier = { modifier = NAM_corporate_board_state } }
+		}
+		add_dynamic_modifier = { modifier = NAM_corporate_board_state }
+	}
+	# Every existing federal district passes to a corporation.
+	NAM_corp_init_owner_turn = yes
+	for_each_scope_loop = {
+		array = NAM_federal_districts
+		if = {
+			limit = {
+				exists = yes
+				is_subject_of = NAM
+			}
+			NAM_corp_assign_district = yes
+		}
+	}
+	NAM_corp_influence_clamp = yes
+	# The board focuses of the humanist branch appear after the takeover.
+	mark_focus_tree_layout_dirty = yes
+	log = "[ADISCORD][NAM][CORP] The corporate boards take power."
+}
+
+# ----- Corporate state: the districts of the corporations -----
+# After the takeover every federal district belongs to one of six
+# corporations; the district's variable NAM_corp_district_owner (1-6) names
+# it: 1 the Yuzhneft oil concern, 2 the Island Steel trust, 3 the Sea Line
+# shipping company, 4 the Coastal Arsenal arms company, 5 the Artel labour
+# agency, 6 the Island Credit bank. The owner gives its district a profile
+# modifier and pays the board a monthly dividend; rival corporations dispute
+# districts (event .108); the board auctions districts, arbitrates disputes
+# and renews charters through decisions. The board leader rules the
+# metropole.
+
+# COUNTRY NAM. The owner of the next district handed out.
+NAM_corp_init_owner_turn = {
+	if = {
+		limit = { NOT = { has_variable = NAM_corp_next_owner } }
+		set_variable = { var = NAM_corp_next_owner value = 1 }
+	}
+}
+
+# COUNTRY federal district. A district without an owner receives the next
+# corporation in turn.
+NAM_corp_assign_district = {
+	if = {
+		limit = { NOT = { has_variable = NAM_corp_district_owner } }
+		NAM = { NAM_corp_init_owner_turn = yes }
+		set_variable = { var = NAM_corp_district_owner value = NAM.NAM_corp_next_owner }
+		NAM = {
+			add_to_variable = { var = NAM_corp_next_owner value = 1 }
+			if = {
+				limit = { check_variable = { NAM_corp_next_owner > 6 } }
+				set_variable = { var = NAM_corp_next_owner value = 1 }
+			}
+		}
+	}
+	NAM_corp_district_apply = yes
+}
+
+# COUNTRY federal district. The concession passes to the next corporation.
+NAM_corp_district_rotate = {
+	add_to_variable = { var = NAM_corp_district_owner value = 1 }
+	if = {
+		limit = { check_variable = { NAM_corp_district_owner > 6 } }
+		set_variable = { var = NAM_corp_district_owner value = 1 }
+	}
+	NAM_corp_district_apply = yes
+}
+
+# COUNTRY federal district. The owner's profile modifier and name.
+NAM_corp_district_apply = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_corp_owner_1_district } }
+		remove_dynamic_modifier = { modifier = NAM_corp_owner_1_district }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_corp_owner_2_district } }
+		remove_dynamic_modifier = { modifier = NAM_corp_owner_2_district }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_corp_owner_3_district } }
+		remove_dynamic_modifier = { modifier = NAM_corp_owner_3_district }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_corp_owner_4_district } }
+		remove_dynamic_modifier = { modifier = NAM_corp_owner_4_district }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_corp_owner_5_district } }
+		remove_dynamic_modifier = { modifier = NAM_corp_owner_5_district }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_corp_owner_6_district } }
+		remove_dynamic_modifier = { modifier = NAM_corp_owner_6_district }
+	}
+	if = {
+		limit = { check_variable = { NAM_corp_district_owner = 1 } }
+		add_dynamic_modifier = { modifier = NAM_corp_owner_1_district }
+	}
+	else_if = {
+		limit = { check_variable = { NAM_corp_district_owner = 2 } }
+		add_dynamic_modifier = { modifier = NAM_corp_owner_2_district }
+	}
+	else_if = {
+		limit = { check_variable = { NAM_corp_district_owner = 3 } }
+		add_dynamic_modifier = { modifier = NAM_corp_owner_3_district }
+	}
+	else_if = {
+		limit = { check_variable = { NAM_corp_district_owner = 4 } }
+		add_dynamic_modifier = { modifier = NAM_corp_owner_4_district }
+	}
+	else_if = {
+		limit = { check_variable = { NAM_corp_district_owner = 5 } }
+		add_dynamic_modifier = { modifier = NAM_corp_owner_5_district }
+	}
+	else = {
+		add_dynamic_modifier = { modifier = NAM_corp_owner_6_district }
+	}
+	NAM_corp_district_set_name = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY federal district under the corporate state. Its name joins the
+# owning corporation and the district.
+NAM_corp_district_set_name = {
+	if = {
+		limit = {
+			tag = EFL
+			check_variable = { NAM_corp_district_owner = 1 }
+		}
+		set_cosmetic_tag = EFL_NAM_corp_1
+	}
+	else_if = {
+		limit = {
+			tag = EFL
+			check_variable = { NAM_corp_district_owner = 2 }
+		}
+		set_cosmetic_tag = EFL_NAM_corp_2
+	}
+	else_if = {
+		limit = {
+			tag = EFL
+			check_variable = { NAM_corp_district_owner = 3 }
+		}
+		set_cosmetic_tag = EFL_NAM_corp_3
+	}
+	else_if = {
+		limit = {
+			tag = EFL
+			check_variable = { NAM_corp_district_owner = 4 }
+		}
+		set_cosmetic_tag = EFL_NAM_corp_4
+	}
+	else_if = {
+		limit = {
+			tag = EFL
+			check_variable = { NAM_corp_district_owner = 5 }
+		}
+		set_cosmetic_tag = EFL_NAM_corp_5
+	}
+	else_if = {
+		limit = {
+			tag = EFL
+			check_variable = { NAM_corp_district_owner = 6 }
+		}
+		set_cosmetic_tag = EFL_NAM_corp_6
+	}
+	else_if = {
+		limit = {
+			tag = AZH
+			check_variable = { NAM_corp_district_owner = 1 }
+		}
+		set_cosmetic_tag = AZH_NAM_corp_1
+	}
+	else_if = {
+		limit = {
+			tag = AZH
+			check_variable = { NAM_corp_district_owner = 2 }
+		}
+		set_cosmetic_tag = AZH_NAM_corp_2
+	}
+	else_if = {
+		limit = {
+			tag = AZH
+			check_variable = { NAM_corp_district_owner = 3 }
+		}
+		set_cosmetic_tag = AZH_NAM_corp_3
+	}
+	else_if = {
+		limit = {
+			tag = AZH
+			check_variable = { NAM_corp_district_owner = 4 }
+		}
+		set_cosmetic_tag = AZH_NAM_corp_4
+	}
+	else_if = {
+		limit = {
+			tag = AZH
+			check_variable = { NAM_corp_district_owner = 5 }
+		}
+		set_cosmetic_tag = AZH_NAM_corp_5
+	}
+	else_if = {
+		limit = {
+			tag = AZH
+			check_variable = { NAM_corp_district_owner = 6 }
+		}
+		set_cosmetic_tag = AZH_NAM_corp_6
+	}
+	else_if = {
+		limit = {
+			tag = RHM
+			check_variable = { NAM_corp_district_owner = 1 }
+		}
+		set_cosmetic_tag = RHM_NAM_corp_1
+	}
+	else_if = {
+		limit = {
+			tag = RHM
+			check_variable = { NAM_corp_district_owner = 2 }
+		}
+		set_cosmetic_tag = RHM_NAM_corp_2
+	}
+	else_if = {
+		limit = {
+			tag = RHM
+			check_variable = { NAM_corp_district_owner = 3 }
+		}
+		set_cosmetic_tag = RHM_NAM_corp_3
+	}
+	else_if = {
+		limit = {
+			tag = RHM
+			check_variable = { NAM_corp_district_owner = 4 }
+		}
+		set_cosmetic_tag = RHM_NAM_corp_4
+	}
+	else_if = {
+		limit = {
+			tag = RHM
+			check_variable = { NAM_corp_district_owner = 5 }
+		}
+		set_cosmetic_tag = RHM_NAM_corp_5
+	}
+	else_if = {
+		limit = {
+			tag = RHM
+			check_variable = { NAM_corp_district_owner = 6 }
+		}
+		set_cosmetic_tag = RHM_NAM_corp_6
+	}
+	else_if = {
+		limit = {
+			tag = SDR
+			check_variable = { NAM_corp_district_owner = 1 }
+		}
+		set_cosmetic_tag = SDR_NAM_corp_1
+	}
+	else_if = {
+		limit = {
+			tag = SDR
+			check_variable = { NAM_corp_district_owner = 2 }
+		}
+		set_cosmetic_tag = SDR_NAM_corp_2
+	}
+	else_if = {
+		limit = {
+			tag = SDR
+			check_variable = { NAM_corp_district_owner = 3 }
+		}
+		set_cosmetic_tag = SDR_NAM_corp_3
+	}
+	else_if = {
+		limit = {
+			tag = SDR
+			check_variable = { NAM_corp_district_owner = 4 }
+		}
+		set_cosmetic_tag = SDR_NAM_corp_4
+	}
+	else_if = {
+		limit = {
+			tag = SDR
+			check_variable = { NAM_corp_district_owner = 5 }
+		}
+		set_cosmetic_tag = SDR_NAM_corp_5
+	}
+	else_if = {
+		limit = {
+			tag = SDR
+			check_variable = { NAM_corp_district_owner = 6 }
+		}
+		set_cosmetic_tag = SDR_NAM_corp_6
+	}
+	else_if = {
+		limit = {
+			tag = KDR
+			check_variable = { NAM_corp_district_owner = 1 }
+		}
+		set_cosmetic_tag = KDR_NAM_corp_1
+	}
+	else_if = {
+		limit = {
+			tag = KDR
+			check_variable = { NAM_corp_district_owner = 2 }
+		}
+		set_cosmetic_tag = KDR_NAM_corp_2
+	}
+	else_if = {
+		limit = {
+			tag = KDR
+			check_variable = { NAM_corp_district_owner = 3 }
+		}
+		set_cosmetic_tag = KDR_NAM_corp_3
+	}
+	else_if = {
+		limit = {
+			tag = KDR
+			check_variable = { NAM_corp_district_owner = 4 }
+		}
+		set_cosmetic_tag = KDR_NAM_corp_4
+	}
+	else_if = {
+		limit = {
+			tag = KDR
+			check_variable = { NAM_corp_district_owner = 5 }
+		}
+		set_cosmetic_tag = KDR_NAM_corp_5
+	}
+	else_if = {
+		limit = {
+			tag = KDR
+			check_variable = { NAM_corp_district_owner = 6 }
+		}
+		set_cosmetic_tag = KDR_NAM_corp_6
+	}
+}
+
+# COUNTRY federal district inside the monthly dividend loop: adds its owner's
+# dividend to the temp NAM_corp_dividend and delivers fuel or rifles. A
+# disputed district pays nothing until the dispute is settled.
+NAM_corp_district_dividend = {
+	if = {
+		limit = {
+			has_variable = NAM_corp_district_owner
+			NOT = { has_country_flag = NAM_corp_disputed }
+		}
+		if = {
+			limit = { check_variable = { NAM_corp_district_owner = 1 } }
+			add_to_temp_variable = { var = NAM_corp_dividend value = 8 }
+			NAM = { add_fuel = 500 }
+		}
+		else_if = {
+			limit = { check_variable = { NAM_corp_district_owner = 2 } }
+			add_to_temp_variable = { var = NAM_corp_dividend value = 10 }
+		}
+		else_if = {
+			limit = { check_variable = { NAM_corp_district_owner = 3 } }
+			add_to_temp_variable = { var = NAM_corp_dividend value = 10 }
+		}
+		else_if = {
+			limit = { check_variable = { NAM_corp_district_owner = 4 } }
+			add_to_temp_variable = { var = NAM_corp_dividend value = 6 }
+			NAM = { add_equipment_to_stockpile = { type = infantry_equipment amount = 300 producer = NAM } }
+		}
+		else_if = {
+			limit = { check_variable = { NAM_corp_district_owner = 5 } }
+			add_to_temp_variable = { var = NAM_corp_dividend value = 12 }
+		}
+		else = {
+			add_to_temp_variable = { var = NAM_corp_dividend value = 15 }
+		}
+	}
+}
+
+# COUNTRY NAM, inside NAM_corp_monthly after the takeover. Dividends of the
+# districts and the rivalry roll over NAM's own array of districts.
+NAM_corp_districts_monthly = {
+	set_temp_variable = { var = NAM_corp_dividend value = 0 }
+	set_temp_variable = { var = NAM_corp_district_count value = 0 }
+	for_each_scope_loop = {
+		array = NAM_federal_districts
+		if = {
+			limit = {
+				exists = yes
+				is_subject_of = NAM
+			}
+			if = {
+				limit = { NOT = { has_variable = NAM_corp_district_owner } }
+				NAM_corp_assign_district = yes
+			}
+			NAM_corp_district_dividend = yes
+			add_to_temp_variable = { var = NAM_corp_district_count value = 1 }
+		}
+	}
+	set_variable = { var = NAM_corp_last_dividend value = NAM_corp_dividend }
+	set_temp_variable = { var = NAM_corp_capital_change value = NAM_corp_dividend }
+	NAM_corp_capital_add = yes
+	if = {
+		limit = {
+			check_variable = { NAM_corp_district_count > 1 }
+			NOT = { has_country_flag = NAM_corp_dispute_open }
+			NOT = { has_country_flag = NAM_corp_dispute_cooldown }
+		}
+		random_list = {
+			85 = { }
+			15 = { NAM_corp_open_dispute = yes }
+		}
+	}
+}
+
+# COUNTRY NAM. A rival corporation, the next one in turn, claims a district.
+NAM_corp_open_dispute = {
+	set_country_flag = NAM_corp_dispute_open
+	set_country_flag = {
+		flag = NAM_corp_dispute_cooldown
+		value = 1
+		days = 120
+	}
+	clear_global_event_target = NAM_corp_dispute_district
+	random_scope_in_array = {
+		array = NAM_federal_districts
+		limit = {
+			exists = yes
+			is_subject_of = NAM
+			has_variable = NAM_corp_district_owner
+		}
+		set_country_flag = NAM_corp_disputed
+		set_variable = { var = NAM_corp_dispute_claimant value = NAM_corp_district_owner }
+		add_to_variable = { var = NAM_corp_dispute_claimant value = 1 }
+		if = {
+			limit = { check_variable = { NAM_corp_dispute_claimant > 6 } }
+			set_variable = { var = NAM_corp_dispute_claimant value = 1 }
+		}
+		save_global_event_target_as = NAM_corp_dispute_district
+	}
+	country_event = { id = ADISCORD_nam_resource_war.108 hours = 6 }
+}
+
+# COUNTRY disputed district. The claimant takes the concession.
+NAM_corp_dispute_award_claimant = {
+	set_variable = { var = NAM_corp_district_owner value = NAM_corp_dispute_claimant }
+	NAM_corp_dispute_clear = yes
+	NAM_corp_district_apply = yes
+}
+
+# COUNTRY disputed district. The dispute ends; the board may face another.
+NAM_corp_dispute_clear = {
+	clr_country_flag = NAM_corp_disputed
+	clear_variable = NAM_corp_dispute_claimant
+	NAM = { clr_country_flag = NAM_corp_dispute_open }
+}
+
+# COUNTRY NAM, NAM_corp_board_arbitration. The arbiters settle the open
+# dispute either way with equal odds.
+NAM_corp_arbitrate_dispute = {
+	for_each_scope_loop = {
+		array = NAM_federal_districts
+		if = {
+			limit = {
+				exists = yes
+				has_country_flag = NAM_corp_disputed
+			}
+			random_list = {
+				50 = { NAM_corp_dispute_award_claimant = yes }
+				50 = { NAM_corp_dispute_clear = yes }
+			}
+		}
+	}
+	clr_country_flag = NAM_corp_dispute_open
+}
+
+# ----- Radical exploitation of the conquered south -----
+# STATE conquered, the end of NAM_radical_labour_camp: forced labour extracts
+# the state's resources for Svetlogorye and nothing is built there.
+NAM_radical_open_labour_camp = {
+	clr_state_flag = NAM_labour_camp_building
+	if = {
+		limit = {
+			is_owned_by = NAM
+			NOT = { has_dynamic_modifier = { modifier = NAM_labour_camp_state } }
+		}
+		add_dynamic_modifier = { modifier = NAM_labour_camp_state }
+	}
+}
+
+# STATE conquered, NAM_radical_strip_state. One civilian and one military
+# factory are dismantled when present and their worth goes to Svetlogorye;
+# the stores are requisitioned and the state yields less for a year.
+NAM_radical_strip = {
+	set_state_flag = NAM_state_stripped
+	set_temp_variable = { var = NAM_strip_treasury value = 80 }
+	if = {
+		limit = { industrial_complex > 0 }
+		remove_building = {
+			type = industrial_complex
+			level = 1
+		}
+		add_to_temp_variable = { var = NAM_strip_treasury value = 120 }
+	}
+	if = {
+		limit = { arms_factory > 0 }
+		remove_building = {
+			type = arms_factory
+			level = 1
+		}
+		NAM = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = NAM }
+			add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = NAM }
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 40 producer = NAM }
+		}
+	}
+	add_dynamic_modifier = {
+		modifier = NAM_stripped_state
+		days = 365
+	}
+	NAM = {
+		set_temp_variable = { var = NAM_treasury_amount value = NAM_strip_treasury }
+		NAM_add_treasury = yes
+		add_fuel = 1000
 	}
 }
 
@@ -5486,12 +7202,20 @@ NAM_pirate_monthly = {
 	}
 }
 
-# COUNTRY NAM. NAM_exile_drill was interrupted: the loot deposit returns.
+# COUNTRY NAM. NAM_exile_drill was interrupted: the deposit returns in the
+# currency the course paid with.
 NAM_exile_drill_refund = {
 	if = {
 		limit = { check_variable = { var = NAM_exile_drill_deposit value = 0 compare = greater_than } }
-		set_temp_variable = { var = NAM_pirate_loot_change value = NAM_exile_drill_deposit }
-		NAM_pirate_loot_add = yes
+		if = {
+			limit = { has_country_flag = NAM_exile_humanist }
+			set_temp_variable = { var = NAM_corp_capital_change value = NAM_exile_drill_deposit }
+			NAM_corp_capital_add = yes
+		}
+		else = {
+			set_temp_variable = { var = NAM_pirate_loot_change value = NAM_exile_drill_deposit }
+			NAM_pirate_loot_add = yes
+		}
 	}
 	clear_variable = NAM_exile_drill_deposit
 }
@@ -5545,15 +7269,24 @@ NAM_marine_unlock_template = {
 	}
 }
 
-# COUNTRY NAM. Release before the war of return: loot and recruits return.
+# COUNTRY NAM. Release before the war of return: the recruits and the price
+# return in the currency the course paid with - 50 loot under the junta, 60
+# corporate capital under the humanists.
 NAM_marine_orders_refund = {
 	log = "[ADISCORD][NAM][MARINES] Refund of [?NAM_marine_orders_paid] marine orders."
 	while_loop_effect = {
 		limit = { check_variable = { NAM_marine_orders_paid > 0 } }
 		subtract_from_variable = { var = NAM_marine_orders_paid value = 1 }
 		add_manpower = 4300
-		set_temp_variable = { var = NAM_pirate_loot_change value = 50 }
-		NAM_pirate_loot_add = yes
+		if = {
+			limit = { has_country_flag = NAM_exile_humanist }
+			set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+			NAM_corp_capital_add = yes
+		}
+		else = {
+			set_temp_variable = { var = NAM_pirate_loot_change value = 50 }
+			NAM_pirate_loot_add = yes
+		}
 	}
 	set_variable = { var = NAM_marine_orders_paid value = 0 }
 	NAM_marine_unlock_template = yes

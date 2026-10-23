@@ -1317,6 +1317,23 @@ NAM_national_programmes = {
 		cancel_trigger = { NOT = { NAM_war_of_return_active = yes } }
 	}
 
+	# Displays the great war's deadline; event .106 owns the settlement.
+	NAM_great_war_deadline = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NAM }
+		is_good = no
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { NAM_great_war_active = yes }
+		days_mission_timeout = 365
+		selectable_mission = no
+		fire_only_once = no
+		timeout_effect = {
+			custom_effect_tooltip = NAM_great_war_deadline_tt
+		}
+		cancel_trigger = { NOT = { NAM_great_war_active = yes } }
+	}
+
 	NAM_district_audit = {
 		icon = ADISCORD_inspection
 		visible = {
@@ -2047,7 +2064,10 @@ NAM_overseas_districts = {
 					value = 1
 					days = 40
 				}
-				FROM = { country_event = { id = ADISCORD_nam_oil.4 hours = 6 } }
+				FROM = {
+					ADISCORD_release_non_participating_minor_optimization = yes
+					country_event = { id = ADISCORD_nam_oil.4 hours = 6 }
+				}
 			}
 		}
 		ai_will_do = {
@@ -4120,77 +4140,6 @@ NAM_piracy = {
 		}
 	}
 
-	# Thirty days of landing drill on the island beaches; the loot deposit
-	# returns if the drill is interrupted.
-	NAM_exile_drill = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = NAM }
-		visible = {
-			NAM_piracy_open = yes
-			has_completed_focus = NAM_exile_general_staff
-		}
-		available = {
-			NAM_country_operable = yes
-			custom_trigger_tooltip = {
-				tooltip = NAM_revenge_not_full_tt
-				check_variable = { var = NAM_revenge_readiness value = 100 compare = less_than }
-			}
-		}
-		cost = 0
-		custom_cost_text = NAM_cost_exile_drill
-		custom_cost_trigger = {
-			NOT = { has_political_power < 20 }
-			check_variable = { var = NAM_pirate_loot value = 30 compare = greater_than_or_equals }
-		}
-		fire_only_once = no
-		days_remove = 30
-		days_re_enable = 15
-		cancel_trigger = {
-			NAM_country_operable = no
-		}
-		complete_effect = {
-			if = {
-				limit = {
-					hidden_trigger = {
-						NOT = { has_political_power < 20 }
-						check_variable = { var = NAM_pirate_loot value = 30 compare = greater_than_or_equals }
-					}
-				}
-				add_political_power = -20
-				custom_effect_tooltip = NAM_exile_drill_started_tt
-				hidden_effect = {
-					set_temp_variable = { var = NAM_pirate_loot_change value = -30 }
-					NAM_pirate_loot_add = yes
-					set_variable = { var = NAM_exile_drill_deposit value = 30 }
-					set_country_flag = { flag = NAM_exile_drill_cd value = 1 days = 45 }
-				}
-			}
-		}
-		remove_effect = {
-			if = {
-				limit = {
-					hidden_trigger = {
-						check_variable = { var = NAM_exile_drill_deposit value = 0 compare = greater_than }
-					}
-				}
-				army_experience = 15
-				custom_effect_tooltip = NAM_exile_drill_done_tt
-				hidden_effect = {
-					clear_variable = NAM_exile_drill_deposit
-					add_to_variable = { var = NAM_revenge_readiness value = 10 }
-					NAM_revenge_readiness_clamp = yes
-				}
-			}
-		}
-		cancel_effect = {
-			custom_effect_tooltip = NAM_exile_drill_refund_tt
-			hidden_effect = { NAM_exile_drill_refund = yes }
-		}
-		ai_will_do = {
-			base = 10
-		}
-	}
-
 	# A marine formation for the return: the price waits in escrow and the
 	# landing at the South Harbour delivers it.
 	NAM_order_marines = {
@@ -4245,7 +4194,7 @@ NAM_piracy = {
 		allowed = { tag = NAM }
 		visible = {
 			NAM_piracy_open = yes
-			NOT = { has_global_flag = NAM_war_of_return_started }
+			NAM_exile_return_programme_open = yes
 			check_variable = { var = NAM_marine_orders_paid value = 0 compare = greater_than }
 		}
 		available = { NAM_country_operable = yes }
@@ -4256,5 +4205,964 @@ NAM_piracy = {
 			hidden_effect = { NAM_marine_orders_refund = yes }
 		}
 		ai_will_do = { base = 0 }
+	}
+}
+
+# Island exile: the overthrow of the namestnik (event .100 settles the course)
+# and the landing drill both courses share.
+NAM_exile_politics = {
+	NAM_exile_overthrow_namestnik = {
+		icon = generic_political_pressure
+		allowed = { tag = NAM }
+		visible = { NAM_exile_revolution_open = yes }
+		available = {
+			NAM_country_operable = yes
+			has_war = no
+		}
+		cost = 50
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = NAM_exile_overthrow_namestnik_tt
+			hidden_effect = { country_event = { id = ADISCORD_nam_resource_war.100 hours = 1 } }
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	# Thirty days of landing drill on the island beaches. The junta pays 30
+	# loot, the humanists 30 corporate capital; the deposit returns in the
+	# same currency if the drill is interrupted. The piracy window starts the
+	# junta's drill through activate_decision.
+	NAM_exile_drill = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NAM }
+		visible = {
+			NAM_exile_return_programme_open = yes
+			has_completed_focus = NAM_exile_general_staff
+		}
+		available = {
+			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_revenge_not_full_tt
+				check_variable = { var = NAM_revenge_readiness value = 100 compare = less_than }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_exile_drill
+		custom_cost_trigger = {
+			NOT = { has_political_power < 20 }
+			NAM_exile_drill_currency_ready = yes
+		}
+		fire_only_once = no
+		days_remove = 30
+		days_re_enable = 15
+		cancel_trigger = {
+			NAM_country_operable = no
+		}
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { has_political_power < 20 }
+						NAM_exile_drill_currency_ready = yes
+					}
+				}
+				add_political_power = -20
+				custom_effect_tooltip = NAM_exile_drill_started_tt
+				hidden_effect = {
+					if = {
+						limit = { has_country_flag = NAM_exile_humanist }
+						set_temp_variable = { var = NAM_corp_capital_change value = -30 }
+						NAM_corp_capital_add = yes
+					}
+					else = {
+						set_temp_variable = { var = NAM_pirate_loot_change value = -30 }
+						NAM_pirate_loot_add = yes
+					}
+					set_variable = { var = NAM_exile_drill_deposit value = 30 }
+					set_country_flag = { flag = NAM_exile_drill_cd value = 1 days = 45 }
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = NAM_exile_drill_deposit value = 0 compare = greater_than }
+					}
+				}
+				army_experience = 15
+				custom_effect_tooltip = NAM_exile_drill_done_tt
+				hidden_effect = {
+					clear_variable = NAM_exile_drill_deposit
+					add_to_variable = { var = NAM_revenge_readiness value = 10 }
+					NAM_revenge_readiness_clamp = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_exile_drill_refund_tt
+			hidden_effect = { NAM_exile_drill_refund = yes }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+}
+
+# Humanist exile: foreign corporations finance the return through free zones,
+# island steel, leased labour and innovation; their influence is the price.
+NAM_free_zones = {
+	# Thirty days of negotiation with the investors; the zone opens on an
+	# island Svetlogorye still owns.
+	NAM_corp_charter_free_zone = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 225 226 227 228 229 230 231 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			NAM_corp_open = yes
+			has_completed_focus = NAM_hum_free_zones
+			FROM = {
+				is_owned_by = ROOT
+				NOT = { has_state_flag = NAM_free_zone }
+				NOT = { has_state_flag = NAM_free_zone_pending }
+			}
+		}
+		available = {
+			NAM_country_operable = yes
+			FROM = { is_controlled_by = ROOT }
+			custom_trigger_tooltip = {
+				tooltip = NAM_corp_zone_slot_free_tt
+				NAM_corp_zone_slot_free = yes
+			}
+		}
+		cost = 30
+		fire_only_once = no
+		days_remove = 30
+		cancel_trigger = {
+			OR = {
+				NAM_country_operable = no
+				FROM = { NOT = { is_owned_by = ROOT } }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_corp_charter_started_tt
+			hidden_effect = {
+				FROM = { set_state_flag = NAM_free_zone_pending }
+				add_to_variable = { var = NAM_free_zones_pending value = 1 }
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_corp_charter_done_tt
+			hidden_effect = {
+				FROM = { NAM_corp_zone_establish = yes }
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_corp_charter_cancel_tt
+			hidden_effect = {
+				FROM = { NAM_corp_zone_release = yes }
+			}
+		}
+		ai_will_do = {
+			base = 15
+			modifier = {
+				factor = 0
+				check_variable = { NAM_corp_influence > 69 }
+			}
+		}
+	}
+
+	# The steel of the islands goes abroad for sixty days.
+	NAM_corp_sell_steel = {
+		icon = generic_trade
+		allowed = { tag = NAM }
+		visible = {
+			NAM_corp_open = yes
+			has_completed_focus = NAM_hum_steel_exchange
+		}
+		available = {
+			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_corp_owns_island_tt
+				any_owned_state = { NAM_rw_island_state = yes }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			custom_effect_tooltip = NAM_corp_sell_steel_tt
+			hidden_effect = {
+				every_owned_state = {
+					limit = { NAM_rw_island_state = yes }
+					add_dynamic_modifier = {
+						modifier = NAM_corp_steel_export_state
+						days = 60
+					}
+				}
+				set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+				NAM_corp_capital_add = yes
+				add_to_variable = { var = NAM_corp_influence value = 3 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				check_variable = { NAM_corp_influence > 69 }
+			}
+		}
+	}
+
+	# Three thousand islanders work ninety days in the investors' yards and
+	# come home afterwards.
+	NAM_corp_labour_contract = {
+		icon = ADISCORD_recruitment
+		allowed = { tag = NAM }
+		visible = {
+			NAM_corp_open = yes
+			has_completed_focus = NAM_hum_labour_bureau
+		}
+		available = { NAM_country_operable = yes }
+		cost = 0
+		custom_cost_text = NAM_cost_corp_labour
+		custom_cost_trigger = {
+			NOT = { has_manpower < 3000 }
+		}
+		fire_only_once = no
+		days_remove = 90
+		days_re_enable = 30
+		cancel_trigger = {
+			NAM_country_operable = no
+		}
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { has_manpower < 3000 }
+					}
+				}
+				add_manpower = -3000
+				custom_effect_tooltip = NAM_corp_labour_started_tt
+				hidden_effect = {
+					set_variable = { var = NAM_corp_labour_escrow value = 3000 }
+					set_country_flag = NAM_corp_labour_leased
+					set_temp_variable = { var = NAM_corp_capital_change value = 45 }
+					NAM_corp_capital_add = yes
+					add_to_variable = { var = NAM_corp_influence value = 4 }
+					NAM_corp_influence_clamp = yes
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_corp_labour_return_tt
+			hidden_effect = { NAM_corp_labour_return = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_corp_labour_return_tt
+			hidden_effect = { NAM_corp_labour_return = yes }
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				has_manpower < 10000
+			}
+		}
+	}
+
+	# An innovation park with the investors' engineers: ninety days of work,
+	# then two research breakthroughs in industry.
+	NAM_corp_innovation_park = {
+		icon = ADISCORD_science
+		allowed = { tag = NAM }
+		visible = {
+			NAM_corp_open = yes
+			has_completed_focus = NAM_hum_innovation_parks
+		}
+		available = { NAM_country_operable = yes }
+		cost = 0
+		custom_cost_text = NAM_cost_corp_park
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_remove = 90
+		days_re_enable = 90
+		cancel_trigger = {
+			NAM_country_operable = no
+		}
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { has_political_power < 25 }
+						check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
+					}
+				}
+				add_political_power = -25
+				custom_effect_tooltip = NAM_corp_park_started_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_corp_capital_change value = -60 }
+					NAM_corp_capital_add = yes
+					set_variable = { var = NAM_corp_park_deposit value = 60 }
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = NAM_corp_park_deposit value = 0 compare = greater_than }
+					}
+				}
+				add_tech_bonus = {
+					name = NAM_corp_innovation_park
+					bonus = 0.5
+					uses = 2
+					category = industry
+				}
+				custom_effect_tooltip = NAM_corp_park_done_tt
+				hidden_effect = {
+					clear_variable = NAM_corp_park_deposit
+					add_to_variable = { var = NAM_corp_influence value = 5 }
+					NAM_corp_influence_clamp = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_corp_park_refund_tt
+			hidden_effect = { NAM_corp_park_refund = yes }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	NAM_corp_buy_arms = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = NAM }
+		visible = {
+			NAM_corp_open = yes
+			has_completed_focus = NAM_hum_credit_arms
+		}
+		available = { NAM_country_operable = yes }
+		cost = 0
+		custom_cost_text = NAM_cost_corp_arms
+		custom_cost_trigger = {
+			check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_re_enable = 30
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
+					}
+				}
+				custom_effect_tooltip = NAM_corp_spend_60_tt
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 2000
+					producer = NAM
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 100
+					producer = NAM
+				}
+				add_equipment_to_stockpile = {
+					type = artillery_equipment
+					amount = 30
+					producer = NAM
+				}
+				custom_effect_tooltip = NAM_corp_influence_up_2_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_corp_capital_change value = -60 }
+					NAM_corp_capital_add = yes
+					add_to_variable = { var = NAM_corp_influence value = 2 }
+					NAM_corp_influence_clamp = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 3
+				has_equipment = { infantry_equipment < 3000 }
+			}
+		}
+	}
+
+	# The government reins the boards in: fewer seats, audited contracts.
+	NAM_corp_curb_influence = {
+		icon = generic_reform
+		allowed = { tag = NAM }
+		visible = {
+			NAM_corp_open = yes
+			NOT = { has_country_flag = NAM_corp_takeover }
+			OR = {
+				has_completed_focus = NAM_hum_regulated_partnership
+				has_completed_focus = NAM_hum_charter_commission
+			}
+		}
+		available = {
+			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_corp_influence_above_zero_tt
+				check_variable = { NAM_corp_influence > 0 }
+			}
+		}
+		cost = 50
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			add_stability = -0.02
+			custom_effect_tooltip = NAM_corp_curb_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_corp_influence value = -10 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 30
+				check_variable = { NAM_corp_influence > 79 }
+			}
+		}
+	}
+
+	# New seats and guarantees bring fresh capital and more influence.
+	NAM_corp_court_investors = {
+		icon = ADISCORD_negotiations
+		allowed = { tag = NAM }
+		visible = {
+			NAM_corp_open = yes
+			has_completed_focus = NAM_hum_open_doors
+			NOT = { has_country_flag = NAM_corp_takeover }
+		}
+		available = { NAM_country_operable = yes }
+		cost = 25
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			custom_effect_tooltip = NAM_corp_court_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+				NAM_corp_capital_add = yes
+				add_to_variable = { var = NAM_corp_influence value = 10 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				check_variable = { NAM_corp_influence > 59 }
+			}
+		}
+	}
+
+	# A marine formation paid with foreign capital; the landing at the South
+	# Harbour delivers it like the junta's orders.
+	NAM_order_marines_corp = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NAM }
+		visible = {
+			NAM_corp_open = yes
+			has_completed_focus = NAM_hum_marine_contracts
+		}
+		available = {
+			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_marine_slot_free_tt
+				NAM_marine_order_can_place = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_order_marines_corp
+		custom_cost_trigger = {
+			check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
+			NOT = { has_manpower < 4300 }
+		}
+		fire_only_once = no
+		days_re_enable = 14
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_marine_order_can_place = yes
+						check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
+						NOT = { has_manpower < 4300 }
+					}
+				}
+				add_manpower = -4300
+				custom_effect_tooltip = NAM_order_marines_corp_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_corp_capital_change value = -60 }
+					NAM_corp_capital_add = yes
+					add_to_variable = { var = NAM_marine_orders_paid value = 1 }
+					NAM_marine_ensure_template = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	NAM_order_marines_corp_release = {
+		icon = generic_political_discourse
+		allowed = { tag = NAM }
+		visible = {
+			NAM_corp_open = yes
+			NAM_exile_return_programme_open = yes
+			check_variable = { var = NAM_marine_orders_paid value = 0 compare = greater_than }
+		}
+		available = { NAM_country_operable = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = NAM_order_marines_corp_release_tt
+			hidden_effect = { NAM_marine_orders_refund = yes }
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	# ----- Corporate state: the districts of the corporations -----
+	# The board auctions a district's concession to the next corporation.
+	NAM_corp_auction_district = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		target_array = NAM.NAM_federal_districts
+		target_trigger = {
+			FROM = {
+				exists = yes
+				is_subject_of = ROOT
+				has_variable = NAM_corp_district_owner
+			}
+		}
+		visible = {
+			has_completed_focus = NAM_board_district_auction
+			NAM_corp_open = yes
+			has_country_flag = NAM_corp_takeover
+		}
+		available = { NAM_country_operable = yes }
+		cost = 20
+		fire_only_once = no
+		days_re_enable = 180
+		complete_effect = {
+			custom_effect_tooltip = NAM_corp_auction_tt
+			hidden_effect = {
+				FROM = {
+					NAM_corp_district_rotate = yes
+					add_stability = -0.05
+				}
+				set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+				NAM_corp_capital_add = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	# The board's arbiters settle the open dispute between two corporations.
+	NAM_corp_board_arbitration = {
+		icon = generic_political_discourse
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_board_constitution
+			NAM_corp_open = yes
+			has_country_flag = NAM_corp_takeover
+			has_country_flag = NAM_corp_dispute_open
+		}
+		available = { NAM_country_operable = yes }
+		cost = 0
+		custom_cost_text = NAM_cost_corp_arbitration
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			check_variable = { var = NAM_corp_capital value = 30 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { has_political_power < 25 }
+						check_variable = { var = NAM_corp_capital value = 30 compare = greater_than_or_equals }
+					}
+				}
+				add_political_power = -25
+				add_stability = 0.03
+				custom_effect_tooltip = NAM_corp_arbitration_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_corp_capital_change value = -30 }
+					NAM_corp_capital_add = yes
+					NAM_corp_arbitrate_dispute = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	# A district's charter is renewed for another term.
+	NAM_corp_charter_renewal = {
+		icon = generic_constitutional_guarantees
+		allowed = { tag = NAM }
+		target_array = NAM.NAM_federal_districts
+		target_trigger = {
+			FROM = {
+				exists = yes
+				is_subject_of = ROOT
+				has_variable = NAM_corp_district_owner
+			}
+		}
+		visible = {
+			has_completed_focus = NAM_board_shareholders
+			NAM_corp_open = yes
+			has_country_flag = NAM_corp_takeover
+		}
+		available = { NAM_country_operable = yes }
+		cost = 15
+		fire_only_once = no
+		days_re_enable = 180
+		complete_effect = {
+			custom_effect_tooltip = NAM_corp_renewal_tt
+			hidden_effect = {
+				FROM = { add_stability = 0.05 }
+				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+				NAM_corp_capital_add = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+}
+
+# After the wars of the exile: the junta's labour camps and requisitions on
+# the conquered states, or the humanists' council of federal districts.
+NAM_southern_lands = {
+	# Thirty days to fence the camp; then forced labour extracts the state's
+	# resources for Svetlogorye and nothing is built there.
+	NAM_radical_labour_camp = {
+		icon = generic_resources
+		allowed = { tag = NAM }
+		state_target = yes
+		target_array = NAM.NAM_conquered_states
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				has_state_flag = NAM_conquered_state
+			}
+		}
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			has_country_flag = NAM_exile_radical
+			has_completed_focus = NAM_rad_labour_camps
+			FROM = {
+				is_owned_by = ROOT
+				has_state_flag = NAM_conquered_state
+				NOT = { has_state_flag = NAM_labour_camp_building }
+				NOT = { has_dynamic_modifier = { modifier = NAM_labour_camp_state } }
+			}
+		}
+		available = {
+			NAM_country_operable = yes
+			FROM = { is_controlled_by = ROOT }
+		}
+		cost = 25
+		fire_only_once = no
+		days_remove = 30
+		cancel_trigger = {
+			OR = {
+				NAM_country_operable = no
+				FROM = { NOT = { is_owned_by = ROOT } }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_labour_camp_started_tt
+			hidden_effect = {
+				FROM = { set_state_flag = NAM_labour_camp_building }
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_labour_camp_done_tt
+			hidden_effect = {
+				FROM = { NAM_radical_open_labour_camp = yes }
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_labour_camp_cancel_tt
+			hidden_effect = {
+				FROM = { clr_state_flag = NAM_labour_camp_building }
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# The requisition commands empty the state's depots and dismantle its
+	# workshops once.
+	NAM_radical_strip_state = {
+		icon = ADISCORD_factory
+		allowed = { tag = NAM }
+		state_target = yes
+		target_array = NAM.NAM_conquered_states
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				has_state_flag = NAM_conquered_state
+			}
+		}
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			has_country_flag = NAM_exile_radical
+			has_completed_focus = NAM_rad_spoils_of_return
+			FROM = {
+				is_owned_by = ROOT
+				has_state_flag = NAM_conquered_state
+				NOT = { has_state_flag = NAM_state_stripped }
+			}
+		}
+		available = {
+			NAM_country_operable = yes
+			FROM = { is_controlled_by = ROOT }
+		}
+		cost = 10
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = NAM_strip_state_tt
+			hidden_effect = {
+				FROM = { NAM_radical_strip = yes }
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# The council of federal districts sits with one district's delegates:
+	# the district votes the federal levy and its people gain a voice.
+	NAM_federal_council_session = {
+		icon = generic_constitutional_guarantees
+		allowed = { tag = NAM }
+		target_array = NAM.NAM_federal_districts
+		target_trigger = {
+			FROM = {
+				exists = yes
+				is_subject_of = ROOT
+				has_country_flag = NAM_federal_district
+			}
+		}
+		visible = {
+			has_country_flag = NAM_exile_humanist
+			has_completed_focus = NAM_hum_union_council
+		}
+		available = { NAM_country_operable = yes }
+		cost = 25
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = NAM_federal_council_tt
+			hidden_effect = {
+				FROM = {
+					add_stability = 0.05
+					add_popularity = {
+						ideology = humanism
+						popularity = 0.10
+					}
+				}
+				set_temp_variable = { var = NAM_treasury_amount value = 60 }
+				NAM_add_treasury = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+}
+
+# After the exile war: Svetlogorye strengthens its hold on the returned
+# south before the great war. The junta rules by garrisons and terror, the
+# humanists by federal treaties and reconstruction.
+NAM_consolidation = {
+	# Ninety days of reinforced garrisons in the conquered states: +3
+	# consolidation and 20 treasury of upkeep every month.
+	NAM_rad_garrison_order = {
+		icon = generic_army_support
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_rad_garrison_belt
+			NAM_consolidation_open = yes
+			has_country_flag = NAM_exile_radical
+		}
+		available = { NAM_country_operable = yes }
+		cost = 25
+		fire_only_once = no
+		days_remove = 90
+		days_re_enable = 30
+		cancel_trigger = {
+			NAM_country_operable = no
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_rad_garrison_order_tt
+			hidden_effect = { set_country_flag = NAM_rad_garrison_order_active }
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_rad_garrison_order_end_tt
+			hidden_effect = { clr_country_flag = NAM_rad_garrison_order_active }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_rad_garrison_order_end_tt
+			hidden_effect = { clr_country_flag = NAM_rad_garrison_order_active }
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	# Hostages, curfews and public trials break the resistance for a while.
+	NAM_rad_terror_campaign = {
+		icon = generic_political_pressure
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_rad_martial_law
+			NAM_consolidation_open = yes
+			has_country_flag = NAM_exile_radical
+		}
+		available = { NAM_country_operable = yes }
+		cost = 40
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			add_stability = -0.03
+			custom_effect_tooltip = NAM_rad_terror_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_cons_change value = 8 }
+				NAM_consolidation_add = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# A federal treaty with one district: its rights and its share of the
+	# federation are written down.
+	NAM_hum_federal_treaty = {
+		icon = generic_diplomatic_treaty
+		allowed = { tag = NAM }
+		target_array = NAM.NAM_federal_districts
+		target_trigger = {
+			FROM = {
+				exists = yes
+				is_subject_of = ROOT
+				has_country_flag = NAM_federal_district
+			}
+		}
+		visible = {
+			has_completed_focus = NAM_hum_federal_treaties
+			NAM_consolidation_open = yes
+			has_country_flag = NAM_exile_humanist
+		}
+		available = { NAM_country_operable = yes }
+		cost = 30
+		fire_only_once = no
+		days_re_enable = 120
+		complete_effect = {
+			custom_effect_tooltip = NAM_hum_federal_treaty_tt
+			hidden_effect = {
+				FROM = {
+					add_stability = 0.05
+					add_popularity = {
+						ideology = humanism
+						popularity = 0.05
+					}
+				}
+				set_temp_variable = { var = NAM_cons_change value = 6 }
+				NAM_consolidation_add = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	# Sixty days of rebuilding the war-torn districts with foreign capital; the
+	# deposit returns if the work is interrupted.
+	NAM_hum_reconstruction_fund = {
+		icon = ADISCORD_construction
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_hum_harbour_rebuilding
+			NAM_consolidation_open = yes
+			has_country_flag = NAM_exile_humanist
+		}
+		available = { NAM_country_operable = yes }
+		cost = 0
+		custom_cost_text = NAM_cost_hum_reconstruction
+		custom_cost_trigger = {
+			check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_remove = 60
+		days_re_enable = 30
+		cancel_trigger = {
+			NAM_country_operable = no
+		}
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
+					}
+				}
+				custom_effect_tooltip = NAM_hum_reconstruction_started_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_corp_capital_change value = -60 }
+					NAM_corp_capital_add = yes
+					set_variable = { var = NAM_hum_reconstruction_deposit value = 60 }
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = NAM_hum_reconstruction_deposit value = 0 compare = greater_than }
+					}
+				}
+				custom_effect_tooltip = NAM_hum_reconstruction_done_tt
+				hidden_effect = {
+					clear_variable = NAM_hum_reconstruction_deposit
+					set_temp_variable = { var = NAM_cons_change value = 10 }
+					NAM_consolidation_add = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_hum_reconstruction_refund_tt
+			hidden_effect = { NAM_hum_reconstruction_refund = yes }
+		}
+		ai_will_do = {
+			base = 15
+		}
 	}
 }

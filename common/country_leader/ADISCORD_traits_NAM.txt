@@ -65,4 +65,35 @@ leader_traits = {
 		fuel_gain_factor = 0.10
 		ADISCORD_economy_trade_income_factor = 0.05
 	}
+
+	# Leaders of the exile revolution and the corporate takeover.
+	NAM_trait_pillar_junta_chief = {
+		random = no
+		sprite = 1
+		political_power_gain = 0.10
+		war_support_factor = 0.05
+		stability_factor = -0.03
+	}
+
+	NAM_trait_corsair_patron = {
+		random = no
+		sprite = 1
+		convoy_raiding_efficiency_factor = 0.10
+		navy_org_factor = 0.05
+	}
+
+	NAM_trait_voice_of_the_districts = {
+		random = no
+		sprite = 1
+		stability_factor = 0.05
+		recruitable_population_factor = 0.03
+	}
+
+	NAM_trait_chairman_of_the_boards = {
+		random = no
+		sprite = 1
+		production_factory_efficiency_gain_factor = 0.05
+		ADISCORD_economy_trade_income_factor = 0.10
+		stability_factor = -0.03
+	}
 }

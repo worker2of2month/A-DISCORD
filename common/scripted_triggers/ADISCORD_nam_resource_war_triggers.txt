@@ -662,6 +662,224 @@ NAM_war_of_return_active = {
 	NOT = { has_global_flag = NAM_war_of_return_resolved }
 }
 
+# ----- Exile revolution -----
+# COUNTRY NAM. The island government may overthrow the namestnik: the choice
+# between the pillars and Veter's humanists is made once per campaign.
+NAM_exile_revolution_open = {
+	tag = NAM
+	has_global_flag = ADISCORD_nam_resource_war_island_exile
+	has_completed_focus = NAM_exile_island_government
+	NOT = { has_country_flag = NAM_exile_radical }
+	NOT = { has_country_flag = NAM_exile_humanist }
+}
+
+# COUNTRY NAM. The namestnik has fallen to one of the two courses.
+NAM_exile_revolution_done = {
+	OR = {
+		has_country_flag = NAM_exile_radical
+		has_country_flag = NAM_exile_humanist
+	}
+}
+
+# COUNTRY NAM. The exile still prepares its return: marine orders and the
+# landing drill. The programme closes once the exile war starts.
+NAM_exile_return_programme_open = {
+	tag = NAM
+	has_global_flag = ADISCORD_nam_resource_war_island_exile
+	NAM_exile_revolution_done = yes
+	NOT = { NAM_war_of_return_active = yes }
+	NOT = { has_global_flag = NAM_wor_exile_war }
+	NOT = { has_global_flag = NAM_war_of_return_won }
+}
+
+# COUNTRY NAM. The drill's deposit is in hand in the course's currency: 30
+# corporate capital under the humanists, 30 loot under the junta.
+NAM_exile_drill_currency_ready = {
+	OR = {
+		AND = {
+			has_country_flag = NAM_exile_humanist
+			check_variable = { var = NAM_corp_capital value = 30 compare = greater_than_or_equals }
+		}
+		AND = {
+			NOT = { has_country_flag = NAM_exile_humanist }
+			check_variable = { var = NAM_pirate_loot value = 30 compare = greater_than_or_equals }
+		}
+	}
+}
+
+# COUNTRY. One of the southern states the exile war or the great war fights.
+NAM_wor_southern_tag = {
+	OR = {
+		tag = EFL
+		tag = AZH
+		tag = RHM
+		tag = SDR
+		tag = KDR
+	}
+}
+
+# COUNTRY. A target of the exile war or the great war: present, not yet
+# defeated, neither Svetlogorye's subject nor its ally, independent or bound
+# to another southern state.
+NAM_wor_target_valid = {
+	NAM_wor_southern_tag = yes
+	exists = yes
+	has_capitulated = no
+	NOT = { is_subject_of = NAM }
+	NOT = { is_in_faction_with = NAM }
+	OR = {
+		is_subject = no
+		overlord = { NAM_wor_southern_tag = yes }
+	}
+}
+
+# COUNTRY NAM. The exile war against Eflor and Azhar may begin: the namestnik
+# has fallen, one of the two principals that hold the homeland still stands,
+# and the War for the South does not hold the region's alliances.
+NAM_wor_exile_war_ready = {
+	has_global_flag = ADISCORD_nam_resource_war_island_exile
+	NAM_exile_revolution_done = yes
+	NOT = { has_global_flag = NAM_wor_exile_war }
+	NOT = { NAM_war_of_return_active = yes }
+	NOT = { ADISCORD_south_final_active = yes }
+	OR = {
+		EFL = { NAM_wor_target_valid = yes }
+		AZH = { NAM_wor_target_valid = yes }
+	}
+}
+
+# ----- Great war -----
+NAM_great_war_active = {
+	has_global_flag = NAM_great_war_started
+	NOT = { has_global_flag = NAM_great_war_resolved }
+}
+
+# Any scope. The war of return or the great war is being fought; the
+# capitulation receipts and the settlements serve both.
+NAM_wor_campaign_active = {
+	OR = {
+		NAM_war_of_return_active = yes
+		NAM_great_war_active = yes
+	}
+}
+
+# COUNTRY NAM. The preparation focus calls NAM_great_war_start behind this
+# trigger: the exile war is won, the returned south is consolidated to 70 and
+# one southern state is left to fight.
+NAM_great_war_can_start = {
+	NAM_country_operable = yes
+	is_subject = no
+	has_war = no
+	has_global_flag = NAM_wor_exile_war
+	has_global_flag = NAM_war_of_return_won
+	NAM_exile_revolution_done = yes
+	NOT = { has_global_flag = NAM_great_war_started }
+	NOT = { ADISCORD_south_final_active = yes }
+	custom_trigger_tooltip = {
+		tooltip = NAM_great_war_consolidated_tt
+		check_variable = { var = NAM_consolidation value = 70 compare = greater_than_or_equals }
+	}
+	custom_trigger_tooltip = {
+		tooltip = NAM_great_war_targets_tt
+		OR = {
+			EFL = { NAM_wor_target_valid = yes }
+			AZH = { NAM_wor_target_valid = yes }
+			RHM = { NAM_wor_target_valid = yes }
+			SDR = { NAM_wor_target_valid = yes }
+			KDR = { NAM_wor_target_valid = yes }
+		}
+	}
+}
+
+# STATE. The homeland a victorious return restores with Svetlogorsk cores: the
+# five fields, the South Harbour and any state already a Svetlogorsk core.
+NAM_wor_homeland_state = {
+	OR = {
+		state = 67
+		state = 688
+		state = 689
+		state = 690
+		state = 719
+		state = 700
+		is_core_of = NAM
+	}
+}
+
+# Any scope. At the deadline Svetlogorye holds the capital of every remaining
+# participant.
+NAM_wor_capitals_taken = {
+	all_of_scopes = {
+		array = global.NAM_wor_participants
+		OR = {
+			exists = no
+			has_capitulated = yes
+			capital_scope = { is_controlled_by = NAM }
+		}
+	}
+}
+
+# Any scope. At the deadline a participant holds Svetlogorye's capital.
+NAM_wor_capital_lost = {
+	NAM = {
+		capital_scope = {
+			controller = {
+				OR = {
+					has_country_flag = NAM_wor_participant
+					AND = {
+						is_subject = yes
+						overlord = { has_country_flag = NAM_wor_participant }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Any scope. Svetlogorye has fallen outside the treaty or no participant still
+# fights it.
+NAM_wor_campaign_lost_outside_treaty = {
+	OR = {
+		NAM = {
+			OR = {
+				exists = no
+				is_subject = yes
+			}
+		}
+		NOT = {
+			any_of_scopes = {
+				array = global.NAM_wor_participants
+				exists = yes
+				has_war_with = NAM
+			}
+		}
+	}
+}
+
+# ----- Consolidation of the returned south -----
+# COUNTRY NAM. The consolidation runs after the exile war was won.
+NAM_consolidation_open = {
+	tag = NAM
+	has_country_flag = NAM_consolidation_started
+	NAM_country_operable = yes
+}
+
+# ----- Humanist exile: corporations and free zones -----
+# COUNTRY NAM. Veter's government finances the return with foreign capital.
+NAM_corp_open = {
+	tag = NAM
+	has_country_flag = NAM_exile_humanist
+	NAM_country_operable = yes
+}
+
+# COUNTRY NAM. A free zone may be chartered: NAM_free_zone_slots, never more
+# than three zones chartered or in negotiation.
+NAM_corp_zone_slot_free = {
+	set_temp_variable = { var = NAM_corp_zones_used value = NAM_free_zones_active }
+	add_to_temp_variable = { var = NAM_corp_zones_used value = NAM_free_zones_pending }
+	check_variable = { var = NAM_free_zone_slots value = NAM_corp_zones_used compare = greater_than }
+	check_variable = { var = NAM_corp_zones_used value = 3 compare = less_than }
+}
+
 # STATE field. Another independent country owns a lost Svetlogorsk field.
 NAM_wor_field_held_by_rival = {
 	NOT = { is_owned_by = NAM }
@@ -685,30 +903,36 @@ NAM_wor_field_contestable = {
 }
 
 # COUNTRY NAM. Called by NAM_defeat_war_of_return before its war effect.
+# After the compromise peace the war targets the owners of the lost fields;
+# from the island exile, once the namestnik has fallen, it is the exile war
+# against Eflor and Azhar.
 NAM_war_of_return_can_start = {
 	NAM_country_operable = yes
 	is_subject = no
 	has_war = no
-	OR = {
-		has_global_flag = ADISCORD_nam_resource_war_compromise
-		has_global_flag = ADISCORD_nam_resource_war_island_exile
-	}
-	NOT = { has_global_flag = NAM_war_of_return_started }
 	NOT = { has_country_flag = NAM_rw_tribute }
 	OR = {
-		67 = { NAM_wor_field_held_by_rival = yes }
-		688 = { NAM_wor_field_held_by_rival = yes }
-		689 = { NAM_wor_field_held_by_rival = yes }
-		690 = { NAM_wor_field_held_by_rival = yes }
-		719 = { NAM_wor_field_held_by_rival = yes }
-		700 = { NAM_wor_field_held_by_rival = yes }
+		AND = {
+			has_global_flag = ADISCORD_nam_resource_war_compromise
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+			NOT = { has_global_flag = NAM_war_of_return_started }
+			OR = {
+				67 = { NAM_wor_field_held_by_rival = yes }
+				688 = { NAM_wor_field_held_by_rival = yes }
+				689 = { NAM_wor_field_held_by_rival = yes }
+				690 = { NAM_wor_field_held_by_rival = yes }
+				719 = { NAM_wor_field_held_by_rival = yes }
+				700 = { NAM_wor_field_held_by_rival = yes }
+			}
+			67 = { NAM_wor_field_contestable = yes }
+			688 = { NAM_wor_field_contestable = yes }
+			689 = { NAM_wor_field_contestable = yes }
+			690 = { NAM_wor_field_contestable = yes }
+			719 = { NAM_wor_field_contestable = yes }
+			700 = { NAM_wor_field_contestable = yes }
+		}
+		NAM_wor_exile_war_ready = yes
 	}
-	67 = { NAM_wor_field_contestable = yes }
-	688 = { NAM_wor_field_contestable = yes }
-	689 = { NAM_wor_field_contestable = yes }
-	690 = { NAM_wor_field_contestable = yes }
-	719 = { NAM_wor_field_contestable = yes }
-	700 = { NAM_wor_field_contestable = yes }
 }
 
 # Any scope. Every owner of a lost field has fallen; the callback ROOT counts
@@ -808,10 +1032,13 @@ NAM_bw_line_startable = {
 }
 
 # ----- Island exile: piracy and the revenge landing -----
-# COUNTRY NAM. The exiled government lives from the sea until it returns home.
+# COUNTRY NAM. The pillars' junta lives from the sea until it returns home;
+# before the namestnik falls and under Veter's humanists the flotillas stay in
+# harbour.
 NAM_piracy_open = {
 	tag = NAM
 	has_global_flag = ADISCORD_nam_resource_war_island_exile
+	has_country_flag = NAM_exile_radical
 	NOT = { has_global_flag = NAM_war_of_return_won }
 }
 
@@ -903,9 +1130,9 @@ NAM_pirate_raid_ready = {
 
 # COUNTRY NAM. Another marine formation fits under NAM_marine_order_cap and
 # the absolute ceiling of three; orders close once the war of return begins.
+# The junta pays in loot, the humanists in corporate capital.
 NAM_marine_order_can_place = {
-	NAM_piracy_open = yes
-	NOT = { has_global_flag = NAM_war_of_return_started }
+	NAM_exile_return_programme_open = yes
 	check_variable = { var = NAM_marine_order_cap value = NAM_marine_orders_paid compare = greater_than }
 	check_variable = { var = NAM_marine_orders_paid value = 3 compare = less_than }
 }

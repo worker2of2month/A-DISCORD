@@ -24,8 +24,11 @@ focus_tree = {
 	# post-war chapter. Completed pre-war focuses stay readable because that tree
 	# is shared history. The two outcomes show different courses: the compromise
 	# root and everything only it reaches are hidden in exile, the exile root and
-	# its branches are hidden after a compromise. The war of return and the second
-	# chapter accept either course in their prerequisite groups.
+	# its branches are hidden after a compromise. In exile the overthrow of the
+	# namestnik (event ADISCORD_nam_resource_war.100) sets NAM_exile_radical or
+	# NAM_exile_humanist and redraws the tree; each route's focuses carry its
+	# allow_branch. The war of return and the second chapter accept every course
+	# in their prerequisite groups.
 
 	# ----- Compromise peace -----
 
@@ -590,11 +593,13 @@ focus_tree = {
 		id = NAM_defeat_war_of_return
 		icon = GFX_goal_generic_major_war
 		x = 20
-		y = 7
+		y = 10
 		cost = 8
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
 		# Compromise: the underground and one of the revenge cadres. Exile: the
-		# council of return and the army of return.
+		# council of return and the route's last preparation - the radicals'
+		# plan of the return or the humanists' manifesto. The war is fought
+		# against Eflor and Azhar; NAM_exile_great_war follows it in exile.
 		prerequisite = {
 			focus = NAM_defeat_underground_return
 			focus = NAM_exile_return_council
@@ -602,7 +607,8 @@ focus_tree = {
 		prerequisite = {
 			focus = NAM_defeat_officer_cadres
 			focus = NAM_defeat_war_chest
-			focus = NAM_exile_army_of_return
+			focus = NAM_rad_return_plan
+			focus = NAM_hum_return_manifesto
 		}
 		available = {
 			has_capitulated = no
@@ -870,8 +876,8 @@ focus_tree = {
 	focus = {
 		id = NAM_defeat_second_chapter
 		icon = GFX_focus_generic_phoenix
-		x = 20
-		y = 8
+		x = 16
+		y = 11
 		cost = 10
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_RESEARCH }
 		prerequisite = {
@@ -896,15 +902,20 @@ focus_tree = {
 	}
 
 	# ----- Island exile -----
-	# The government holds only the overseas districts. Four courses prepare the
-	# return: the island administration, the privateers, the army of return and
-	# the mainland underground. The underground and the army lead to the war of
-	# return; NAM_war_of_return_start lands the marines at South Harbour.
+	# The government holds only the overseas districts. The island government
+	# opens the overthrow of the namestnik; the island administration, the staff
+	# in exile and the mainland underground serve both revolutions. The radical
+	# pillars pay for the return with piracy and plunder the conquered south; the
+	# humanists of Yaroslav Veter pay with corporate capital and federate it. Each
+	# route's last preparation and the underground council lead to the war of
+	# return against Eflor and Azhar; NAM_war_of_return_start lands the marines
+	# at South Harbour. After it each route consolidates the reconquered lands
+	# and prepares the great war against Sardan, Rakhma and Kadir.
 
 	focus = {
 		id = NAM_exile_island_government
 		icon = GFX_focus_generic_government_in_exile
-		x = 38
+		x = 48
 		y = 0
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -917,6 +928,7 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 50
 			add_stability = 0.05
+			unlock_decision_tooltip = NAM_exile_overthrow_namestnik
 		}
 		ai_will_do = {
 			base = 50
@@ -1148,7 +1160,7 @@ focus_tree = {
 		id = NAM_exile_home_harbour
 		icon = GFX_focus_generic_happy_cheer
 		x = 22
-		y = 8
+		y = 11
 		cost = 6
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_defeat_war_of_return }
@@ -1183,6 +1195,8 @@ focus_tree = {
 	}
 
 	# ----- Exile: the army of return -----
+	# The staff and its landing drill serve both revolutions; the radical army
+	# below it is paid with loot and leads to the plan of the return.
 
 	focus = {
 		id = NAM_exile_general_staff
@@ -1219,6 +1233,7 @@ focus_tree = {
 		cost = 6
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_exile_general_staff }
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 		}
@@ -1250,6 +1265,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_exile_general_staff }
 		mutually_exclusive = { focus = NAM_exile_levy_of_exiles }
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 		}
@@ -1283,6 +1299,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_exile_general_staff }
 		mutually_exclusive = { focus = NAM_exile_cadre_army }
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 		}
@@ -1315,6 +1332,7 @@ focus_tree = {
 		cost = 5
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_exile_general_staff }
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 		}
@@ -1353,6 +1371,7 @@ focus_tree = {
 			focus = NAM_exile_cadre_army
 			focus = NAM_exile_levy_of_exiles
 		}
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 		}
@@ -1376,6 +1395,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_exile_marine_orders }
 		mutually_exclusive = { focus = NAM_exile_strike_from_within }
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 		}
@@ -1412,6 +1432,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_exile_marine_orders }
 		mutually_exclusive = { focus = NAM_exile_strike_from_the_sea }
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 		}
@@ -1447,6 +1468,7 @@ focus_tree = {
 			focus = NAM_exile_strike_from_the_sea
 			focus = NAM_exile_strike_from_within
 		}
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 		}
@@ -1481,6 +1503,7 @@ focus_tree = {
 		prerequisite = { focus = NAM_exile_landing_school }
 		prerequisite = { focus = NAM_exile_landing_craft }
 		prerequisite = { focus = NAM_exile_arms_purchases }
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 		}
@@ -1500,18 +1523,258 @@ focus_tree = {
 		}
 	}
 
-	# ----- Exile: the privateers -----
+	# ----- Exile radicals: the pillar junta and the return -----
+	# The pillars that overthrew the namestnik rule by tribunal or by a shared
+	# purse; their war council sends agents to Eflor and Azhar and merges with
+	# the loot-paid army in the plan of the return.
+
+	focus = {
+		id = NAM_rad_pillar_junta
+		icon = GFX_focus_generic_military_dictatorship
+		x = 43
+		y = 1
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = { focus = NAM_exile_island_government }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 50
+			add_war_support = 0.05
+			custom_effect_tooltip = NAM_grp_rad_pillar_junta_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 8 }
+				add_to_variable = { var = NAM_grp_oil_support value = 4 }
+				add_to_variable = { var = NAM_grp_nam_support value = -10 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = NAM_rad_tribunals
+		icon = GFX_focus_generic_court
+		x = 45
+		y = 2
+		cost = 6
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = { focus = NAM_rad_pillar_junta }
+		mutually_exclusive = { focus = NAM_rad_pact_of_pillars }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 3000
+			add_stability = -0.05
+			custom_effect_tooltip = NAM_rad_tribunals_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 10 }
+				NAM_revenge_readiness_clamp = yes
+			}
+			custom_effect_tooltip = NAM_grp_rad_tribunals_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = -8 }
+				add_to_variable = { var = NAM_grp_dist_support value = -4 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 12
+		}
+	}
+
+	focus = {
+		id = NAM_rad_pact_of_pillars
+		icon = GFX_goal_generic_dangerous_deal
+		x = 47
+		y = 2
+		cost = 6
+		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_rad_pillar_junta }
+		mutually_exclusive = { focus = NAM_rad_tribunals }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.05
+			custom_effect_tooltip = NAM_rad_pact_of_pillars_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_pirate_loot_change value = 40 }
+				NAM_pirate_loot_add = yes
+			}
+			custom_effect_tooltip = NAM_grp_rad_pact_of_pillars_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = 4 }
+				add_to_variable = { var = NAM_grp_trade_support value = 4 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 8
+		}
+	}
+
+	focus = {
+		id = NAM_rad_war_council
+		icon = GFX_goal_generic_position_armies
+		x = 46
+		y = 3
+		cost = 6
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = {
+			focus = NAM_rad_tribunals
+			focus = NAM_rad_pact_of_pillars
+		}
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_command_power = 25
+			army_experience = 15
+			custom_effect_tooltip = NAM_rad_war_council_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 5 }
+				NAM_revenge_readiness_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	focus = {
+		id = NAM_rad_island_requisitions
+		icon = GFX_focus_generic_expropriate_industrialist
+		x = 45
+		y = 4
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_MANPOWER }
+		prerequisite = { focus = NAM_rad_war_council }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_fuel = 3000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 2000
+				producer = NAM
+			}
+			add_stability = -0.03
+			custom_effect_tooltip = NAM_grp_rad_island_requisitions_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = -5 }
+				add_to_variable = { var = NAM_grp_trade_support value = -3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_rad_enemy_lists
+		icon = GFX_focus_generic_conspiracy
+		x = 47
+		y = 4
+		cost = 6
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_rad_war_council }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			# Agents in the capitals of the two enemies of the war of return.
+			AZH = {
+				if = {
+					limit = { exists = yes }
+					add_war_support = -0.05
+					add_stability = -0.02
+				}
+			}
+			EFL = {
+				if = {
+					limit = { exists = yes }
+					add_war_support = -0.05
+					add_stability = -0.02
+				}
+			}
+			custom_effect_tooltip = NAM_rad_enemy_lists_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 10 }
+				NAM_revenge_readiness_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	focus = {
+		id = NAM_rad_return_plan
+		icon = GFX_goal_generic_occupy_start_war
+		x = 39
+		y = 8
+		cost = 8
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_exile_army_of_return }
+		prerequisite = { focus = NAM_rad_enemy_lists }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 20
+			add_war_support = 0.05
+			custom_effect_tooltip = NAM_rad_return_plan_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 10 }
+				NAM_revenge_readiness_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	# ----- Exile radicals: the privateers -----
 	# Raids need a working island base; marque and brotherhood decide how loud
 	# the fleet is, the squadron or the submarines how it hunts.
 
 	focus = {
 		id = NAM_exile_sea_raiders
 		icon = GFX_focus_generic_piracy
-		x = 41
-		y = 1
+		x = 39
+		y = 2
 		cost = 5
 		search_filters = { FOCUS_FILTER_NAVY_XP }
-		prerequisite = { focus = NAM_exile_island_government }
+		prerequisite = { focus = NAM_rad_pillar_junta }
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -1541,11 +1804,12 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_fences
 		icon = GFX_focus_generic_smugglers
-		x = 38
-		y = 2
+		x = 36
+		y = 3
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_exile_sea_raiders }
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 		}
@@ -1564,12 +1828,13 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_letters_of_marque
 		icon = GFX_focus_generic_treaty
-		x = 40
-		y = 2
+		x = 38
+		y = 3
 		cost = 6
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_NAVY_XP }
 		prerequisite = { focus = NAM_exile_sea_raiders }
 		mutually_exclusive = { focus = NAM_exile_free_brotherhood }
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 		}
@@ -1597,12 +1862,13 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_free_brotherhood
 		icon = GFX_focus_generic_turning_a_blind_eye
-		x = 42
-		y = 2
+		x = 40
+		y = 3
 		cost = 6
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_exile_sea_raiders }
 		mutually_exclusive = { focus = NAM_exile_letters_of_marque }
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 		}
@@ -1632,11 +1898,12 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_tanker_raids
 		icon = GFX_focus_generic_trade_interdiction
-		x = 44
-		y = 2
+		x = 42
+		y = 3
 		cost = 5
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_exile_sea_raiders }
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 		}
@@ -1666,11 +1933,12 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_black_market
 		icon = GFX_focus_generic_arms_trade
-		x = 38
-		y = 3
+		x = 36
+		y = 4
 		cost = 5
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_exile_fences }
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 		}
@@ -1692,14 +1960,15 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_privateer_captains
 		icon = GFX_focus_generic_destroyer
-		x = 41
-		y = 3
+		x = 39
+		y = 4
 		cost = 7
 		search_filters = { FOCUS_FILTER_NAVY_XP }
 		prerequisite = {
 			focus = NAM_exile_letters_of_marque
 			focus = NAM_exile_free_brotherhood
 		}
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -1732,11 +2001,12 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_hidden_anchorages
 		icon = GFX_focus_generic_coastal_fort
-		x = 44
-		y = 3
+		x = 42
+		y = 4
 		cost = 5
 		search_filters = { FOCUS_FILTER_NAVY_XP }
 		prerequisite = { focus = NAM_exile_tanker_raids }
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 			OR = {
@@ -1795,12 +2065,13 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_raider_squadron
 		icon = GFX_goal_generic_navy_cruiser
-		x = 40
-		y = 4
+		x = 38
+		y = 5
 		cost = 7
 		search_filters = { FOCUS_FILTER_NAVY_XP }
 		prerequisite = { focus = NAM_exile_privateer_captains }
 		mutually_exclusive = { focus = NAM_exile_wolfpacks }
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -1843,12 +2114,13 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_wolfpacks
 		icon = GFX_goal_generic_wolf_pack
-		x = 42
-		y = 4
+		x = 40
+		y = 5
 		cost = 7
 		search_filters = { FOCUS_FILTER_NAVY_XP }
 		prerequisite = { focus = NAM_exile_privateer_captains }
 		mutually_exclusive = { focus = NAM_exile_raider_squadron }
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -1891,8 +2163,8 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_corsair_admiralty
 		icon = GFX_focus_generic_naval_discipline
-		x = 41
-		y = 5
+		x = 39
+		y = 6
 		cost = 10
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = {
@@ -1903,6 +2175,7 @@ focus_tree = {
 			focus = NAM_exile_black_market
 			focus = NAM_exile_hidden_anchorages
 		}
+		allow_branch = { has_country_flag = NAM_exile_radical }
 		available = {
 			has_capitulated = no
 		}
@@ -1932,7 +2205,7 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_island_chancellery
 		icon = GFX_focus_generic_improve_the_administration_2
-		x = 51
+		x = 56
 		y = 1
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -1966,7 +2239,7 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_free_port
 		icon = GFX_goal_generic_trade
-		x = 47
+		x = 52
 		y = 2
 		cost = 6
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_NAVY_XP }
@@ -2000,7 +2273,7 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_naval_port
 		icon = GFX_goal_generic_construct_naval_dockyard
-		x = 49
+		x = 54
 		y = 2
 		cost = 6
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
@@ -2040,7 +2313,7 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_refugee_census
 		icon = GFX_focus_generic_immigration
-		x = 54
+		x = 59
 		y = 2
 		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
@@ -2062,7 +2335,7 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_island_lines
 		icon = GFX_goal_generic_construct_infrastructure
-		x = 48
+		x = 53
 		y = 3
 		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
@@ -2097,7 +2370,7 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_refugee_barracks
 		icon = GFX_focus_generic_limited_social_mobilization
-		x = 53
+		x = 58
 		y = 3
 		cost = 5
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_WAR_SUPPORT }
@@ -2126,7 +2399,7 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_refugee_homesteads
 		icon = GFX_focus_generic_low_cost_housing
-		x = 55
+		x = 60
 		y = 3
 		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
@@ -2165,7 +2438,7 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_coastal_batteries
 		icon = GFX_focus_generic_atlantic_coast
-		x = 48
+		x = 53
 		y = 4
 		cost = 5
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_NAVY_XP }
@@ -2223,7 +2496,7 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_island_steel
 		icon = GFX_focus_generic_steel
-		x = 54
+		x = 59
 		y = 4
 		cost = 6
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -2272,7 +2545,7 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_island_foundry
 		icon = GFX_focus_generic_steel_mill
-		x = 51
+		x = 56
 		y = 5
 		cost = 8
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -2327,7 +2600,7 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_overseas_districts
 		icon = GFX_goal_generic_national_unity
-		x = 51
+		x = 56
 		y = 6
 		cost = 10
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
@@ -2355,6 +2628,3161 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 15
+		}
+	}
+
+	# ----- Exile humanists: Yaroslav Veter's government -----
+	# Veter pays for the return with foreign corporate capital instead of
+	# piracy. The free zones choose between open doors and a regulated
+	# partnership; the corporate influence they bring is curbed or courted
+	# through the NAM_free_zones decisions. Should the corporations seize
+	# power (NAM_corp_takeover, set with the NAM_corporate_state cosmetic tag),
+	# the board's own focuses appear.
+
+	focus = {
+		id = NAM_hum_veter_government
+		icon = GFX_focus_generic_freedom_council
+		x = 72
+		y = 1
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_exile_island_government }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.05
+			add_political_power = 40
+			custom_effect_tooltip = NAM_grp_hum_veter_government_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_nam_support value = -10 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	# ----- Exile humanists: free zones and corporate charters -----
+
+	focus = {
+		id = NAM_hum_free_zones
+		icon = GFX_focus_generic_industry_investment
+		x = 66
+		y = 2
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hum_veter_government }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_corp_charter_free_zone
+			custom_effect_tooltip = NAM_hum_free_zones_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 30 }
+				NAM_corp_capital_add = yes
+				add_to_variable = { var = NAM_corp_influence value = 5 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = NAM_hum_open_doors
+		icon = GFX_focus_generic_concessions
+		x = 65
+		y = 3
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_hum_free_zones }
+		mutually_exclusive = { focus = NAM_hum_regulated_partnership }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_corp_court_investors
+			custom_effect_tooltip = NAM_hum_open_doors_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+				NAM_corp_capital_add = yes
+				add_to_variable = { var = NAM_corp_influence value = 15 }
+				NAM_corp_influence_clamp = yes
+				add_to_variable = { var = NAM_free_zone_slots value = 1 }
+				clamp_variable = {
+					var = NAM_free_zone_slots
+					min = 0
+					max = 3
+				}
+			}
+		}
+		ai_will_do = {
+			base = 8
+		}
+	}
+
+	focus = {
+		id = NAM_hum_regulated_partnership
+		icon = GFX_focus_generic_price_controls
+		x = 67
+		y = 3
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hum_free_zones }
+		mutually_exclusive = { focus = NAM_hum_open_doors }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_corp_curb_influence
+			add_stability = 0.03
+			custom_effect_tooltip = NAM_hum_regulated_partnership_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 25 }
+				NAM_corp_capital_add = yes
+				add_to_variable = { var = NAM_corp_influence value = -10 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 12
+		}
+	}
+
+	focus = {
+		id = NAM_hum_steel_exchange
+		icon = GFX_focus_generic_steel
+		x = 66
+		y = 4
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_hum_open_doors
+			focus = NAM_hum_regulated_partnership
+		}
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_corp_sell_steel
+			add_political_power = 25
+			custom_effect_tooltip = NAM_hum_steel_exchange_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 20 }
+				NAM_corp_capital_add = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_hum_innovation_parks
+		icon = GFX_goal_generic_scientific_exchange
+		x = 64
+		y = 5
+		cost = 6
+		search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_hum_steel_exchange }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_corp_innovation_park
+			add_tech_bonus = {
+				name = NAM_hum_innovation_parks
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+			custom_effect_tooltip = NAM_hum_innovation_parks_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_corp_influence value = 5 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_hum_labour_bureau
+		icon = GFX_focus_generic_full_employment
+		x = 68
+		y = 5
+		cost = 5
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_hum_steel_exchange }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_corp_labour_contract
+			add_stability = 0.02
+			custom_effect_tooltip = NAM_hum_labour_bureau_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 15 }
+				NAM_corp_capital_add = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_hum_union_contracts
+		icon = GFX_focus_generic_workers
+		x = 67
+		y = 6
+		cost = 6
+		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_MANPOWER }
+		prerequisite = { focus = NAM_hum_labour_bureau }
+		mutually_exclusive = { focus = NAM_hum_company_towns }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.05
+			custom_effect_tooltip = NAM_hum_union_contracts_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 15 }
+				NAM_corp_capital_add = yes
+				add_to_variable = { var = NAM_corp_influence value = -5 }
+				NAM_corp_influence_clamp = yes
+			}
+			custom_effect_tooltip = NAM_grp_hum_union_contracts_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 12
+		}
+	}
+
+	focus = {
+		id = NAM_hum_company_towns
+		icon = GFX_goal_generic_construct_civ_factory
+		x = 69
+		y = 6
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_hum_labour_bureau }
+		mutually_exclusive = { focus = NAM_hum_union_contracts }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+			capital_scope = {
+				is_owned_by = NAM
+				is_controlled_by = NAM
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = -0.03
+			capital_scope = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			custom_effect_tooltip = NAM_hum_company_towns_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 50 }
+				NAM_corp_capital_add = yes
+				add_to_variable = { var = NAM_corp_influence value = 10 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 8
+		}
+	}
+
+	focus = {
+		id = NAM_hum_charter_harbours
+		icon = GFX_focus_generic_refit_civilian_ships
+		x = 66
+		y = 7
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_NAVY_XP }
+		prerequisite = { focus = NAM_hum_innovation_parks }
+		prerequisite = {
+			focus = NAM_hum_union_contracts
+			focus = NAM_hum_company_towns
+		}
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 15
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_hum_charter_harbours_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_free_zone_slots value = 1 }
+				clamp_variable = {
+					var = NAM_free_zone_slots
+					min = 0
+					max = 3
+				}
+				set_temp_variable = { var = NAM_corp_capital_change value = 20 }
+				NAM_corp_capital_add = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_hum_charter_commission
+		icon = GFX_focus_generic_commission
+		x = 66
+		y = 8
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hum_charter_harbours }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			# The regulated partnership already holds this decision.
+			if = {
+				limit = { NOT = { has_completed_focus = NAM_hum_regulated_partnership } }
+				unlock_decision_tooltip = NAM_corp_curb_influence
+			}
+			add_stability = 0.03
+			custom_effect_tooltip = NAM_hum_charter_commission_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_corp_influence value = -15 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	# ----- Exile humanists: the federal programme and the allies of the return -----
+
+	focus = {
+		id = NAM_hum_federal_programme
+		icon = GFX_focus_generic_social_democracy
+		x = 72
+		y = 2
+		cost = 6
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hum_veter_government }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = { has_power_balance = { id = NAM_ladder_bop } }
+				add_power_balance_value = {
+					id = NAM_ladder_bop
+					value = 0.15
+				}
+			}
+			add_stability = 0.03
+			custom_effect_tooltip = NAM_grp_hum_federal_programme_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 6 }
+				add_to_variable = { var = NAM_grp_trade_support value = 2 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	focus = {
+		id = NAM_hum_appeal_to_nations
+		icon = GFX_goal_generic_improve_relations
+		x = 72
+		y = 3
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hum_federal_programme }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 40
+			add_war_support = 0.03
+			VAL = {
+				if = {
+					limit = {
+						exists = yes
+						NOT = { has_war_with = NAM }
+					}
+					add_opinion_modifier = {
+						target = NAM
+						modifier = improve_relation
+					}
+				}
+			}
+			STP = {
+				if = {
+					limit = {
+						exists = yes
+						NOT = { has_war_with = NAM }
+					}
+					add_opinion_modifier = {
+						target = NAM
+						modifier = improve_relation
+					}
+				}
+			}
+			GLP = {
+				if = {
+					limit = {
+						exists = yes
+						NOT = { has_war_with = NAM }
+					}
+					add_opinion_modifier = {
+						target = NAM
+						modifier = improve_relation
+					}
+				}
+			}
+			SHL = {
+				if = {
+					limit = {
+						exists = yes
+						NOT = { has_war_with = NAM }
+					}
+					add_opinion_modifier = {
+						target = NAM
+						modifier = improve_relation
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_hum_split_coalition
+		icon = GFX_goal_generic_political_pressure
+		x = 72
+		y = 4
+		cost = 6
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hum_appeal_to_nations }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			# The minor allies of the coalition lose the will to fight; the two
+			# principals lose stability.
+			SDR = {
+				if = {
+					limit = { exists = yes }
+					add_war_support = -0.05
+				}
+			}
+			RHM = {
+				if = {
+					limit = { exists = yes }
+					add_war_support = -0.05
+				}
+			}
+			KDR = {
+				if = {
+					limit = { exists = yes }
+					add_war_support = -0.05
+				}
+			}
+			AZH = {
+				if = {
+					limit = { exists = yes }
+					add_stability = -0.02
+				}
+			}
+			EFL = {
+				if = {
+					limit = { exists = yes }
+					add_stability = -0.02
+				}
+			}
+			custom_effect_tooltip = NAM_hum_split_coalition_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 5 }
+				NAM_revenge_readiness_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_hum_mainland_committees
+		icon = GFX_focus_generic_printing_press
+		x = 72
+		y = 5
+		cost = 6
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
+		prerequisite = { focus = NAM_hum_split_coalition }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_war_support = 0.05
+			700 = {
+				if = {
+					limit = { NOT = { is_owned_by = NAM } }
+					owner = { add_stability = -0.03 }
+				}
+			}
+			67 = {
+				if = {
+					limit = { NOT = { is_owned_by = NAM } }
+					owner = { add_war_support = -0.03 }
+				}
+			}
+			custom_effect_tooltip = NAM_hum_mainland_committees_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 10 }
+				NAM_revenge_readiness_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	# ----- Exile humanists: the citizen army -----
+	# Volunteers of the districts or instructors hired with corporate money;
+	# marines are bought with corporate capital instead of loot.
+
+	focus = {
+		id = NAM_hum_citizen_army
+		icon = GFX_focus_generic_manpower
+		x = 78
+		y = 2
+		cost = 6
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_hum_veter_government }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 4000
+			army_experience = 10
+			custom_effect_tooltip = NAM_hum_citizen_army_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 5 }
+				NAM_revenge_readiness_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	focus = {
+		id = NAM_hum_credit_arms
+		icon = GFX_goal_generic_small_arms
+		x = 76
+		y = 3
+		cost = 5
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_hum_citizen_army }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_corp_buy_arms
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 1500
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_hum_credit_arms_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_corp_influence value = 5 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_hum_district_militia
+		icon = GFX_focus_generic_home_defense
+		x = 79
+		y = 3
+		cost = 6
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hum_citizen_army }
+		mutually_exclusive = { focus = NAM_hum_hired_instructors }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 6000
+			add_stability = 0.02
+			custom_effect_tooltip = NAM_grp_hum_district_militia_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 12
+		}
+	}
+
+	focus = {
+		id = NAM_hum_hired_instructors
+		icon = GFX_focus_generic_military_mission
+		x = 81
+		y = 3
+		cost = 6
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_hum_citizen_army }
+		mutually_exclusive = { focus = NAM_hum_district_militia }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 25
+			add_command_power = 20
+			custom_effect_tooltip = NAM_hum_hired_instructors_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_corp_influence value = 10 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 8
+		}
+	}
+
+	focus = {
+		id = NAM_hum_marine_contracts
+		icon = GFX_goal_generic_amphibious_assault
+		x = 80
+		y = 4
+		cost = 6
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = NAM_hum_district_militia
+			focus = NAM_hum_hired_instructors
+		}
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_order_marines_corp
+			add_command_power = 10
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_hum_landing_rehearsals
+		icon = GFX_focus_generic_naval_invasion
+		x = 80
+		y = 5
+		cost = 6
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_hum_marine_contracts }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 10
+				producer = NAM
+			}
+			army_experience = 10
+			custom_effect_tooltip = NAM_hum_landing_rehearsals_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_marine_order_cap value = 1 }
+				clamp_variable = {
+					var = NAM_marine_order_cap
+					min = 0
+					max = 3
+				}
+				add_to_variable = { var = NAM_revenge_readiness value = 10 }
+				NAM_revenge_readiness_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_hum_army_of_citizens
+		icon = GFX_focus_generic_combined_arms
+		x = 78
+		y = 6
+		cost = 8
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = { focus = NAM_hum_landing_rehearsals }
+		prerequisite = { focus = NAM_hum_credit_arms }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_command_power = 20
+			add_war_support = 0.05
+			custom_effect_tooltip = NAM_hum_army_of_citizens_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 15 }
+				NAM_revenge_readiness_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_hum_return_manifesto
+		icon = GFX_goal_generic_propaganda
+		x = 75
+		y = 7
+		cost = 8
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hum_army_of_citizens }
+		prerequisite = { focus = NAM_hum_mainland_committees }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_war_support = 0.10
+			add_stability = 0.03
+			custom_effect_tooltip = NAM_hum_return_manifesto_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 5 }
+				NAM_revenge_readiness_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	# ----- After the return: the radicals hold the reconquered lands -----
+	# The war of return against Eflor and Azhar ends with
+	# NAM_war_of_return_won. Terror, garrisons, tribunals and camps raise
+	# NAM_consolidation, which the great war against Sardan, Rakhma and Kadir
+	# requires; the radical settlement marks taken states with
+	# NAM_conquered_state for the camps and the stripping decision.
+
+	focus = {
+		id = NAM_rad_spoils_of_return
+		icon = GFX_goal_generic_occupy_states_ongoing_war
+		x = 28
+		y = 11
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ANNEXATION }
+		prerequisite = { focus = NAM_defeat_war_of_return }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_war_of_return_won_tt
+				has_global_flag = NAM_war_of_return_won
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_radical_strip_state
+			add_political_power = 50
+			add_fuel = 5000
+			custom_effect_tooltip = NAM_rad_spoils_of_return_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 5 }
+				NAM_consolidation_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = NAM_rad_labour_camps
+		icon = GFX_focus_generic_workers
+		x = 25
+		y = 12
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_MANPOWER }
+		prerequisite = { focus = NAM_rad_spoils_of_return }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_radical_labour_camp
+			add_war_support = 0.03
+			add_stability = -0.03
+			custom_effect_tooltip = NAM_rad_labour_camps_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 5 }
+				NAM_consolidation_clamp = yes
+			}
+			custom_effect_tooltip = NAM_grp_rad_labour_camps_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 4 }
+				add_to_variable = { var = NAM_grp_dist_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	focus = {
+		id = NAM_rad_martial_law
+		icon = GFX_goal_generic_fortify_city
+		x = 28
+		y = 12
+		cost = 5
+		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = { focus = NAM_rad_spoils_of_return }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_rad_terror_campaign
+			add_war_support = 0.03
+			add_stability = -0.02
+			custom_effect_tooltip = NAM_rad_martial_law_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 10 }
+				NAM_consolidation_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	focus = {
+		id = NAM_rad_oil_seizure
+		icon = GFX_goal_generic_oil_refinery
+		x = 31
+		y = 12
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_rad_spoils_of_return }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_fuel = 4000
+			custom_effect_tooltip = NAM_rad_oil_seizure_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_oil_bonus_units value = 1 }
+				NAM_oil_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_rad_garrison_belt
+		icon = GFX_goal_generic_defence
+		x = 25
+		y = 13
+		cost = 6
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_rad_labour_camps }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_rad_garrison_order
+			army_experience = 15
+			custom_effect_tooltip = NAM_rad_garrison_belt_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 10 }
+				NAM_consolidation_clamp = yes
+			}
+			custom_effect_tooltip = NAM_grp_rad_garrison_belt_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_rad_hostage_system
+		icon = GFX_goal_generic_political_pressure
+		x = 27
+		y = 13
+		cost = 6
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_rad_martial_law }
+		mutually_exclusive = { focus = NAM_rad_collaborator_councils }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = -0.05
+			custom_effect_tooltip = NAM_rad_hostage_system_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 20 }
+				NAM_consolidation_clamp = yes
+			}
+			custom_effect_tooltip = NAM_grp_rad_hostage_system_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 12
+		}
+	}
+
+	focus = {
+		id = NAM_rad_collaborator_councils
+		icon = GFX_focus_generic_improve_the_administration
+		x = 29
+		y = 13
+		cost = 6
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_rad_martial_law }
+		mutually_exclusive = { focus = NAM_rad_hostage_system }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 50
+			add_stability = 0.02
+			custom_effect_tooltip = NAM_rad_collaborator_councils_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 10 }
+				NAM_consolidation_clamp = yes
+			}
+			custom_effect_tooltip = NAM_grp_rad_collaborator_councils_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 4 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 8
+		}
+	}
+
+	focus = {
+		id = NAM_rad_field_tribunals
+		icon = GFX_focus_generic_sympathetic_judges
+		x = 31
+		y = 13
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_rad_oil_seizure }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 40
+			add_stability = -0.02
+			custom_effect_tooltip = NAM_rad_field_tribunals_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 10 }
+				NAM_consolidation_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_rad_pacification
+		icon = GFX_goal_generic_territory_or_war
+		x = 28
+		y = 14
+		cost = 8
+		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = NAM_rad_hostage_system
+			focus = NAM_rad_collaborator_councils
+		}
+		prerequisite = { focus = NAM_rad_garrison_belt }
+		prerequisite = { focus = NAM_rad_field_tribunals }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.05
+			add_political_power = 50
+			custom_effect_tooltip = NAM_rad_pacification_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 15 }
+				NAM_consolidation_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	# ----- Radicals: preparing the great war -----
+
+	focus = {
+		id = NAM_rad_three_capitals
+		icon = GFX_focus_generic_secret_service_agency
+		x = 26
+		y = 15
+		cost = 6
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_rad_pacification }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			# Agents in the capitals of the great war's three enemies.
+			SDR = {
+				if = {
+					limit = { exists = yes }
+					add_war_support = -0.05
+				}
+			}
+			RHM = {
+				if = {
+					limit = { exists = yes }
+					add_war_support = -0.05
+				}
+			}
+			KDR = {
+				if = {
+					limit = { exists = yes }
+					add_war_support = -0.05
+				}
+			}
+			add_political_power = 30
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	focus = {
+		id = NAM_rad_penal_legions
+		icon = GFX_goal_generic_axis_build_infantry
+		x = 28
+		y = 15
+		cost = 6
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_rad_pacification }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 8000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 2000
+				producer = NAM
+			}
+			add_stability = -0.03
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	focus = {
+		id = NAM_rad_plunder_economy
+		icon = GFX_goal_generic_production
+		x = 30
+		y = 15
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_rad_pacification }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_fuel = 8000
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 150
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_receive_250_tt
+			hidden_effect = { NAM_receive_250 = yes }
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	focus = {
+		id = NAM_rad_great_war_plan
+		icon = GFX_focus_generic_total_war
+		x = 28
+		y = 16
+		cost = 8
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_rad_three_capitals }
+		prerequisite = { focus = NAM_rad_penal_legions }
+		prerequisite = { focus = NAM_rad_plunder_economy }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 20
+			add_war_support = 0.05
+			add_command_power = 25
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	# ----- After the great war: the radicals strip the conquered south -----
+
+	focus = {
+		id = NAM_rad_southern_tribute
+		icon = GFX_goal_generic_demand_territory
+		x = 28
+		y = 19
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ANNEXATION }
+		prerequisite = { focus = NAM_exile_great_war }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_great_war_won_tt
+				has_global_flag = NAM_great_war_won
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 75
+			add_fuel = 6000
+			custom_effect_tooltip = NAM_receive_250_tt
+			hidden_effect = { NAM_receive_250 = yes }
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = NAM_rad_sardan_levies
+		icon = GFX_focus_generic_full_social_mobilization
+		x = 25
+		y = 20
+		cost = 6
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		prerequisite = { focus = NAM_rad_southern_tribute }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 10000
+			add_stability = -0.03
+			custom_effect_tooltip = NAM_grp_rad_sardan_levies_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_rad_garrison_rule
+		icon = GFX_focus_generic_national_security
+		x = 27
+		y = 20
+		cost = 7
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_rad_southern_tribute }
+		mutually_exclusive = { focus = NAM_rad_extraction_trusts }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 6000
+			army_experience = 20
+			custom_effect_tooltip = NAM_grp_rad_garrison_rule_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 8 }
+				add_to_variable = { var = NAM_grp_trade_support value = -4 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 12
+		}
+	}
+
+	focus = {
+		id = NAM_rad_extraction_trusts
+		icon = GFX_focus_generic_resource_extraction
+		x = 29
+		y = 20
+		cost = 7
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_rad_southern_tribute }
+		mutually_exclusive = { focus = NAM_rad_garrison_rule }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_rad_has_conquered_state_tt
+				any_owned_state = {
+					has_state_flag = NAM_conquered_state
+					is_controlled_by = NAM
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_rad_extraction_trusts_tt
+			hidden_effect = {
+				every_owned_state = {
+					limit = {
+						has_state_flag = NAM_conquered_state
+						is_controlled_by = NAM
+					}
+					random_select_amount = 3
+					add_resource = {
+						type = oil
+						amount = 2
+					}
+				}
+			}
+			custom_effect_tooltip = NAM_receive_250_tt
+			hidden_effect = { NAM_receive_250 = yes }
+			custom_effect_tooltip = NAM_grp_rad_extraction_trusts_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = 6 }
+				add_to_variable = { var = NAM_grp_garr_support value = -3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 8
+		}
+	}
+
+	focus = {
+		id = NAM_rad_kadir_tolls
+		icon = GFX_focus_generic_camel_corps
+		x = 31
+		y = 20
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_rad_southern_tribute }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 30
+			custom_effect_tooltip = NAM_receive_250_tt
+			hidden_effect = { NAM_receive_250 = yes }
+			custom_effect_tooltip = NAM_grp_rad_kadir_tolls_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_trade_support value = 4 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_rad_army_of_dominion
+		icon = GFX_focus_generic_army_doctrines_2
+		x = 25
+		y = 21
+		cost = 7
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_rad_sardan_levies }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 25
+			add_command_power = 30
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_rad_machines_to_islands
+		icon = GFX_goal_generic_construct_mil_factory
+		x = 28
+		y = 21
+		cost = 7
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_rad_garrison_rule
+			focus = NAM_rad_extraction_trusts
+		}
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		# Nothing is left to carry away once no conquered state has a factory.
+		bypass = {
+			NOT = {
+				any_owned_state = {
+					has_state_flag = NAM_conquered_state
+					is_controlled_by = NAM
+					industrial_complex > 0
+				}
+			}
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_rad_conquered_factory_tt
+				any_owned_state = {
+					has_state_flag = NAM_conquered_state
+					is_controlled_by = NAM
+					industrial_complex > 0
+				}
+			}
+			capital_scope = {
+				is_owned_by = NAM
+				is_controlled_by = NAM
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			# Each dismantled civilian factory becomes a military factory in
+			# the capital, so the delivery matches the states actually stripped.
+			custom_effect_tooltip = NAM_rad_machines_to_islands_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						capital_scope = {
+							is_owned_by = NAM
+							is_controlled_by = NAM
+						}
+					}
+					every_owned_state = {
+						limit = {
+							has_state_flag = NAM_conquered_state
+							is_controlled_by = NAM
+							industrial_complex > 0
+						}
+						random_select_amount = 2
+						remove_building = {
+							type = industrial_complex
+							level = 1
+						}
+						ROOT = {
+							capital_scope = {
+								add_extra_state_shared_building_slots = 1
+								add_building_construction = {
+									type = arms_factory
+									level = 1
+									instant_build = yes
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_rad_rakhma_wells
+		icon = GFX_focus_generic_stockpile_fuel
+		x = 31
+		y = 21
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_rad_kadir_tolls }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_fuel = 5000
+			custom_effect_tooltip = NAM_rad_rakhma_wells_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_oil_bonus_units value = 1 }
+				NAM_oil_refresh = yes
+			}
+			custom_effect_tooltip = NAM_grp_rad_rakhma_wells_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = 4 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_rad_pillar_estates
+		icon = GFX_focus_generic_land_redistribution
+		x = 28
+		y = 22
+		cost = 7
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_rad_machines_to_islands }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 50
+			add_stability = 0.03
+			custom_effect_tooltip = NAM_grp_rad_pillar_estates_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 5 }
+				add_to_variable = { var = NAM_grp_oil_support value = 5 }
+				add_to_variable = { var = NAM_grp_trade_support value = 3 }
+				add_to_variable = { var = NAM_grp_dist_support value = -8 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_rad_dominion_of_pillars
+		icon = GFX_goal_generic_military_sphere
+		x = 28
+		y = 23
+		cost = 10
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_rad_pillar_estates }
+		prerequisite = { focus = NAM_rad_army_of_dominion }
+		prerequisite = { focus = NAM_rad_rakhma_wells }
+		allow_branch = { has_country_flag = NAM_exile_radical }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.10
+			add_war_support = 0.05
+			add_political_power = 100
+			add_command_power = 50
+			custom_effect_tooltip = NAM_grp_rad_dominion_of_pillars_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 6 }
+				add_to_variable = { var = NAM_grp_oil_support value = 6 }
+				add_to_variable = { var = NAM_grp_nam_support value = -10 }
+				add_to_variable = { var = NAM_grp_dist_support value = -10 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	# ----- The great war -----
+	# After the return and its consolidation both courses fight Sardan, Rakhma
+	# and Kadir in one war; NAM_great_war_start owns the declaration, the allies
+	# and the settlement, NAM_great_war_won opens each route's last chapter.
+
+	focus = {
+		id = NAM_exile_great_war
+		icon = GFX_goal_generic_major_war
+		x = 39
+		y = 18
+		cost = 8
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
+		prerequisite = {
+			focus = NAM_rad_great_war_plan
+			focus = NAM_hum_union_call
+			focus = NAM_board_stock_mobilisation
+		}
+		allow_branch = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+		available = {
+			has_capitulated = no
+			is_subject = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_great_war_ready_tt
+				NAM_great_war_can_start = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_war_support = 0.10
+			army_experience = 15
+			custom_effect_tooltip = NAM_great_war_start_tt
+			hidden_effect = { NAM_great_war_start = yes }
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	# ----- After the return: the humanists federate the reconquered lands -----
+	# The humanist settlement makes Eflor and Azhar federal districts (country
+	# flag NAM_federal_district, autonomy_NAM_federal_district) that pass their
+	# resources, factories and manpower to the metropole. Treaties, investment
+	# and district autonomy raise NAM_consolidation for the great war.
+
+	focus = {
+		id = NAM_hum_federal_districts
+		icon = GFX_focus_generic_self_management
+		x = 50
+		y = 11
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ANNEXATION }
+		prerequisite = { focus = NAM_defeat_war_of_return }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_war_of_return_won_tt
+				has_global_flag = NAM_war_of_return_won
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 50
+			add_stability = 0.05
+			custom_effect_tooltip = NAM_hum_federal_districts_tt
+			hidden_effect = {
+				every_subject_country = {
+					limit = { has_country_flag = NAM_federal_district }
+					add_stability = 0.05
+				}
+			}
+			custom_effect_tooltip = NAM_consolidation_5_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 5 }
+				NAM_consolidation_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = NAM_hum_federal_treaties
+		icon = GFX_focus_generic_diplomatic_treaty
+		x = 47
+		y = 12
+		cost = 6
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hum_federal_districts }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_hum_federal_treaty
+			add_political_power = 30
+			custom_effect_tooltip = NAM_hum_federal_treaties_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 15 }
+				NAM_consolidation_clamp = yes
+			}
+			custom_effect_tooltip = NAM_grp_hum_federal_treaties_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 4 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	focus = {
+		id = NAM_hum_union_council
+		icon = GFX_focus_generic_the_council_of_europe
+		x = 50
+		y = 12
+		cost = 6
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hum_federal_districts }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_hum_has_federal_district_tt
+				any_subject_country = { has_country_flag = NAM_federal_district }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_federal_council_session
+			custom_effect_tooltip = NAM_hum_union_council_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 5 }
+				NAM_consolidation_clamp = yes
+			}
+			custom_effect_tooltip = NAM_grp_hum_union_council_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	focus = {
+		id = NAM_hum_harbour_rebuilding
+		icon = GFX_focus_generic_economic_recovery
+		x = 53
+		y = 12
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hum_federal_districts }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_hum_reconstruction_fund
+			# The fund rebuilds South Harbour while it is ours.
+			if = {
+				limit = {
+					700 = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+				}
+				700 = {
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			custom_effect_tooltip = NAM_hum_harbour_rebuilding_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 10 }
+				NAM_consolidation_clamp = yes
+				add_to_variable = { var = NAM_corp_influence value = 5 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_hum_truth_commission
+		icon = GFX_focus_generic_public_meetings
+		x = 45
+		y = 13
+		cost = 5
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hum_federal_treaties }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.05
+			custom_effect_tooltip = NAM_hum_truth_commission_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 10 }
+				NAM_consolidation_clamp = yes
+			}
+			custom_effect_tooltip = NAM_grp_hum_truth_commission_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 4 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_hum_district_police
+		icon = GFX_focus_generic_defensive_reorganization
+		x = 47
+		y = 13
+		cost = 6
+		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_hum_federal_treaties }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.02
+			add_command_power = 10
+			custom_effect_tooltip = NAM_hum_district_police_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 10 }
+				NAM_consolidation_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_hum_districts_charter
+		icon = GFX_focus_generic_universal_suffrage
+		x = 49
+		y = 13
+		cost = 7
+		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hum_union_council }
+		mutually_exclusive = { focus = NAM_hum_metropole_charter }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.05
+			custom_effect_tooltip = NAM_hum_districts_charter_tt
+			hidden_effect = {
+				every_subject_country = {
+					limit = { has_country_flag = NAM_federal_district }
+					add_stability = 0.10
+				}
+				add_to_variable = { var = NAM_consolidation value = 15 }
+				NAM_consolidation_clamp = yes
+			}
+			custom_effect_tooltip = NAM_grp_hum_districts_charter_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 12
+		}
+	}
+
+	focus = {
+		id = NAM_hum_metropole_charter
+		icon = GFX_focus_generic_central_planning
+		x = 51
+		y = 13
+		cost = 7
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hum_union_council }
+		mutually_exclusive = { focus = NAM_hum_districts_charter }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 100
+			add_command_power = 25
+			custom_effect_tooltip = NAM_hum_metropole_charter_tt
+			hidden_effect = {
+				every_subject_country = {
+					limit = { has_country_flag = NAM_federal_district }
+					add_stability = -0.05
+				}
+				add_to_variable = { var = NAM_consolidation value = 10 }
+				NAM_consolidation_clamp = yes
+			}
+			custom_effect_tooltip = NAM_grp_hum_metropole_charter_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = -4 }
+				add_to_variable = { var = NAM_grp_trade_support value = 4 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 8
+		}
+	}
+
+	focus = {
+		id = NAM_hum_union_roads
+		icon = GFX_focus_generic_improve_roads
+		x = 53
+		y = 13
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_hum_harbour_rebuilding }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_hum_has_federal_district_tt
+				any_subject_country = { has_country_flag = NAM_federal_district }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_hum_union_roads_tt
+			hidden_effect = {
+				every_subject_country = {
+					limit = { has_country_flag = NAM_federal_district }
+					capital_scope = {
+						if = {
+							limit = { is_owned_by = PREV }
+							add_building_construction = {
+								type = infrastructure
+								level = 1
+								instant_build = yes
+							}
+							add_extra_state_shared_building_slots = 1
+							add_building_construction = {
+								type = industrial_complex
+								level = 1
+								instant_build = yes
+							}
+						}
+					}
+				}
+				add_to_variable = { var = NAM_consolidation value = 5 }
+				NAM_consolidation_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_hum_union_accepted
+		icon = GFX_goal_generic_national_unity
+		x = 50
+		y = 14
+		cost = 8
+		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = NAM_hum_districts_charter
+			focus = NAM_hum_metropole_charter
+		}
+		prerequisite = { focus = NAM_hum_district_police }
+		prerequisite = { focus = NAM_hum_union_roads }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.05
+			add_political_power = 50
+			custom_effect_tooltip = NAM_hum_union_accepted_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 15 }
+				NAM_consolidation_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	# ----- Humanists: preparing the great war -----
+
+	focus = {
+		id = NAM_hum_southern_offer
+		icon = GFX_goal_generic_positive_trade_relations
+		x = 48
+		y = 15
+		cost = 6
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = { focus = NAM_hum_union_accepted }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			# Rejected offers of union divide the elites of the three southern
+			# governments before the war.
+			SDR = {
+				if = {
+					limit = { exists = yes }
+					add_war_support = -0.05
+				}
+			}
+			RHM = {
+				if = {
+					limit = { exists = yes }
+					add_war_support = -0.05
+				}
+			}
+			KDR = {
+				if = {
+					limit = { exists = yes }
+					add_war_support = -0.05
+				}
+			}
+			add_political_power = 30
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	focus = {
+		id = NAM_hum_federal_army
+		icon = GFX_goal_generic_allies_build_infantry
+		x = 50
+		y = 15
+		cost = 7
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_hum_union_accepted }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 8000
+			army_experience = 15
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	focus = {
+		id = NAM_hum_union_war_bonds
+		icon = GFX_focus_generic_stockpile_currency
+		x = 52
+		y = 15
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_hum_union_accepted }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 3000
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 120
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 80
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_hum_union_war_bonds_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_corp_influence value = 5 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	focus = {
+		id = NAM_hum_union_call
+		icon = GFX_goal_generic_major_alliance
+		x = 50
+		y = 16
+		cost = 8
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hum_southern_offer }
+		prerequisite = { focus = NAM_hum_federal_army }
+		prerequisite = { focus = NAM_hum_union_war_bonds }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_war_support = 0.10
+			add_command_power = 20
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	# ----- After the great war: the humanists build a federal union -----
+
+	focus = {
+		id = NAM_hum_southern_districts
+		icon = GFX_goal_generic_alliance
+		x = 50
+		y = 19
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ANNEXATION }
+		prerequisite = { focus = NAM_exile_great_war }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_great_war_won_tt
+				has_global_flag = NAM_great_war_won
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 50
+			custom_effect_tooltip = NAM_hum_federal_districts_tt
+			hidden_effect = {
+				every_subject_country = {
+					limit = { has_country_flag = NAM_federal_district }
+					add_stability = 0.05
+				}
+			}
+			custom_effect_tooltip = NAM_grp_hum_southern_districts_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 4 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = NAM_hum_dry_river_works
+		icon = GFX_focus_generic_land_reclamation
+		x = 45
+		y = 20
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_hum_southern_districts }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.02
+			custom_effect_tooltip = NAM_hum_dry_river_works_tt
+			hidden_effect = {
+				SDR = {
+					if = {
+						limit = {
+							exists = yes
+							has_country_flag = NAM_federal_district
+						}
+						add_stability = 0.05
+						capital_scope = {
+							if = {
+								limit = { is_owned_by = SDR }
+								add_building_construction = {
+									type = infrastructure
+									level = 1
+									instant_build = yes
+								}
+								add_extra_state_shared_building_slots = 1
+								add_building_construction = {
+									type = industrial_complex
+									level = 1
+									instant_build = yes
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_hum_water_compact
+		icon = GFX_focus_generic_hydroelectric_energy
+		x = 47
+		y = 20
+		cost = 6
+		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_hum_southern_districts }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.03
+			custom_effect_tooltip = NAM_hum_water_compact_tt
+			hidden_effect = {
+				RHM = {
+					if = {
+						limit = {
+							exists = yes
+							has_country_flag = NAM_federal_district
+						}
+						add_stability = 0.10
+						capital_scope = {
+							if = {
+								limit = { is_owned_by = RHM }
+								add_building_construction = {
+									type = infrastructure
+									level = 1
+									instant_build = yes
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_hum_union_parliament
+		icon = GFX_focus_generic_vote
+		x = 50
+		y = 20
+		cost = 7
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hum_southern_districts }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.05
+			add_political_power = 50
+			custom_effect_tooltip = NAM_grp_hum_union_parliament_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	focus = {
+		id = NAM_hum_caravan_charter
+		icon = GFX_focus_generic_camel_corps
+		x = 53
+		y = 20
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hum_southern_districts }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_receive_250_tt
+			hidden_effect = { NAM_receive_250 = yes }
+			custom_effect_tooltip = NAM_hum_caravan_charter_tt
+			hidden_effect = {
+				KDR = {
+					if = {
+						limit = {
+							exists = yes
+							has_country_flag = NAM_federal_district
+						}
+						add_stability = 0.05
+						capital_scope = {
+							if = {
+								limit = { is_owned_by = KDR }
+								add_building_construction = {
+									type = infrastructure
+									level = 1
+									instant_build = yes
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_hum_union_university
+		icon = GFX_focus_generic_university_1
+		x = 47
+		y = 21
+		cost = 6
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = NAM_hum_water_compact }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_hum_union_university
+				bonus = 0.5
+				uses = 2
+				category = industry
+			}
+			add_stability = 0.02
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_hum_union_currency
+		icon = GFX_focus_generic_currency_reforms
+		x = 49
+		y = 21
+		cost = 7
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hum_union_parliament }
+		mutually_exclusive = { focus = NAM_hum_union_army }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.03
+			custom_effect_tooltip = NAM_receive_250_tt
+			hidden_effect = { NAM_receive_250 = yes }
+			custom_effect_tooltip = NAM_hum_union_currency_tt
+			hidden_effect = {
+				every_subject_country = {
+					limit = { has_country_flag = NAM_federal_district }
+					add_stability = 0.05
+				}
+			}
+		}
+		ai_will_do = {
+			base = 12
+		}
+	}
+
+	focus = {
+		id = NAM_hum_union_army
+		icon = GFX_focus_generic_soldier_salute
+		x = 51
+		y = 21
+		cost = 7
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_hum_union_parliament }
+		mutually_exclusive = { focus = NAM_hum_union_currency }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 10000
+			army_experience = 20
+		}
+		ai_will_do = {
+			base = 8
+		}
+	}
+
+	focus = {
+		id = NAM_hum_common_market
+		icon = GFX_goal_generic_trade
+		x = 53
+		y = 21
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_hum_caravan_charter }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 50
+			custom_effect_tooltip = NAM_grp_hum_common_market_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_trade_support value = 6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_hum_union_constitution
+		icon = GFX_focus_generic_league_of_nations
+		x = 50
+		y = 22
+		cost = 10
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = NAM_hum_union_currency
+			focus = NAM_hum_union_army
+		}
+		prerequisite = { focus = NAM_hum_union_university }
+		prerequisite = { focus = NAM_hum_common_market }
+		allow_branch = { has_country_flag = NAM_exile_humanist }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.10
+			add_political_power = 100
+			custom_effect_tooltip = NAM_grp_hum_union_constitution_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 6 }
+				add_to_variable = { var = NAM_grp_nam_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	# ----- Exile humanists: the corporate boards -----
+	# Appears once the corporations have seized power (NAM_corp_takeover, set
+	# with the NAM_corporate_state cosmetic tag). Every federal district then
+	# belongs to one corporation, recorded on the district as
+	# NAM_corp_district_owner: 1 oil concern, 2 steel trust, 3 shipping line,
+	# 4 arms company, 5 labour agency, 6 bank. The auction, arbitration and
+	# charter-renewal decisions read and change that owner.
+
+	focus = {
+		id = NAM_hum_board_of_governors
+		icon = GFX_focus_generic_industrialists
+		x = 90
+		y = 2
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hum_veter_government }
+		allow_branch = {
+			has_country_flag = NAM_exile_humanist
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 50
+			add_stability = -0.05
+			custom_effect_tooltip = NAM_hum_board_of_governors_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 80 }
+				NAM_corp_capital_add = yes
+			}
+			custom_effect_tooltip = NAM_grp_hum_board_of_governors_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_trade_support value = 8 }
+				add_to_variable = { var = NAM_grp_dist_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = NAM_hum_company_guard
+		icon = GFX_goal_generic_special_forces
+		x = 87
+		y = 3
+		cost = 6
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_hum_board_of_governors }
+		allow_branch = {
+			has_country_flag = NAM_exile_humanist
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 3000
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_hum_company_guard_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_marine_order_cap value = 1 }
+				clamp_variable = {
+					var = NAM_marine_order_cap
+					min = 0
+					max = 3
+				}
+				add_to_variable = { var = NAM_corp_influence value = 5 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_board_constitution
+		icon = GFX_focus_generic_fiat
+		x = 90
+		y = 3
+		cost = 6
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hum_board_of_governors }
+		allow_branch = {
+			has_country_flag = NAM_exile_humanist
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_corp_board_arbitration
+			add_stability = 0.05
+			add_political_power = 30
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	focus = {
+		id = NAM_board_corporate_courts
+		icon = GFX_focus_generic_court
+		x = 93
+		y = 3
+		cost = 5
+		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hum_board_of_governors }
+		allow_branch = {
+			has_country_flag = NAM_exile_humanist
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 40
+			add_stability = 0.03
+			custom_effect_tooltip = NAM_board_corporate_courts_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 10 }
+				NAM_consolidation_clamp = yes
+				add_to_variable = { var = NAM_corp_influence value = 5 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_board_shareholders
+		icon = GFX_focus_generic_industry_2
+		x = 90
+		y = 4
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_board_constitution }
+		allow_branch = {
+			has_country_flag = NAM_exile_humanist
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_corp_charter_renewal
+			custom_effect_tooltip = NAM_board_shareholders_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+				NAM_corp_capital_add = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_board_district_auction
+		icon = GFX_focus_generic_license_production
+		x = 91
+		y = 5
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ANNEXATION }
+		prerequisite = { focus = NAM_board_shareholders }
+		allow_branch = {
+			has_country_flag = NAM_exile_humanist
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_hum_has_federal_district_tt
+				any_subject_country = { has_country_flag = NAM_federal_district }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_corp_auction_district
+			add_political_power = 30
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_board_eflor_oil
+		icon = GFX_focus_generic_offshore_oil_rig
+		x = 88
+		y = 6
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_board_district_auction }
+		mutually_exclusive = { focus = NAM_board_eflor_steel }
+		allow_branch = {
+			has_country_flag = NAM_exile_humanist
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_efl_district_tt
+				EFL = {
+					exists = yes
+					has_country_flag = NAM_federal_district
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_eflor_oil_tt
+			hidden_effect = {
+				EFL = {
+					set_variable = { NAM_corp_district_owner = 1 }
+					NAM_corp_district_apply = yes
+				}
+				add_to_variable = { var = NAM_oil_bonus_units value = 1 }
+				NAM_oil_refresh = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+				NAM_corp_capital_add = yes
+			}
+		}
+		ai_will_do = {
+			base = 12
+		}
+	}
+
+	focus = {
+		id = NAM_board_eflor_steel
+		icon = GFX_focus_generic_steel_mill
+		x = 90
+		y = 6
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_board_district_auction }
+		mutually_exclusive = { focus = NAM_board_eflor_oil }
+		allow_branch = {
+			has_country_flag = NAM_exile_humanist
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_efl_district_tt
+				EFL = {
+					exists = yes
+					has_country_flag = NAM_federal_district
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_eflor_steel_tt
+			hidden_effect = {
+				EFL = {
+					set_variable = { NAM_corp_district_owner = 2 }
+					NAM_corp_district_apply = yes
+					capital_scope = {
+						if = {
+							limit = { is_owned_by = EFL }
+							add_extra_state_shared_building_slots = 1
+							add_building_construction = {
+								type = arms_factory
+								level = 1
+								instant_build = yes
+							}
+						}
+					}
+				}
+				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+				NAM_corp_capital_add = yes
+			}
+		}
+		ai_will_do = {
+			base = 8
+		}
+	}
+
+	focus = {
+		id = NAM_board_azhar_shipping
+		icon = GFX_focus_generic_merchant_fleet
+		x = 92
+		y = 6
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_NAVY_XP }
+		prerequisite = { focus = NAM_board_district_auction }
+		mutually_exclusive = { focus = NAM_board_azhar_bank }
+		allow_branch = {
+			has_country_flag = NAM_exile_humanist
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_azh_district_tt
+				AZH = {
+					exists = yes
+					has_country_flag = NAM_federal_district
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 20
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_board_azhar_shipping_tt
+			hidden_effect = {
+				AZH = {
+					set_variable = { NAM_corp_district_owner = 3 }
+					NAM_corp_district_apply = yes
+				}
+				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+				NAM_corp_capital_add = yes
+			}
+		}
+		ai_will_do = {
+			base = 8
+		}
+	}
+
+	focus = {
+		id = NAM_board_azhar_bank
+		icon = GFX_focus_generic_monetary_union
+		x = 94
+		y = 6
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_board_district_auction }
+		mutually_exclusive = { focus = NAM_board_azhar_shipping }
+		allow_branch = {
+			has_country_flag = NAM_exile_humanist
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_azh_district_tt
+				AZH = {
+					exists = yes
+					has_country_flag = NAM_federal_district
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_azhar_bank_tt
+			hidden_effect = {
+				AZH = {
+					set_variable = { NAM_corp_district_owner = 6 }
+					NAM_corp_district_apply = yes
+				}
+				set_temp_variable = { var = NAM_corp_capital_change value = 80 }
+				NAM_corp_capital_add = yes
+				add_to_variable = { var = NAM_corp_influence value = 5 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 12
+		}
+	}
+
+	focus = {
+		id = NAM_board_stock_mobilisation
+		icon = GFX_focus_generic_industral_devlopment_bucket
+		x = 91
+		y = 7
+		cost = 8
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_board_eflor_oil
+			focus = NAM_board_eflor_steel
+		}
+		prerequisite = {
+			focus = NAM_board_azhar_shipping
+			focus = NAM_board_azhar_bank
+		}
+		prerequisite = { focus = NAM_hum_company_guard }
+		allow_branch = {
+			has_country_flag = NAM_exile_humanist
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_command_power = 20
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 4000
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 150
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_board_stock_mobilisation_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 10 }
+				NAM_consolidation_clamp = yes
+				add_to_variable = { var = NAM_corp_influence value = 10 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = NAM_hum_board_districts
+		icon = GFX_focus_generic_modernize_industry
+		x = 95
+		y = 19
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_exile_great_war }
+		allow_branch = {
+			has_country_flag = NAM_exile_humanist
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_great_war_won_tt
+				has_global_flag = NAM_great_war_won
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_hum_has_federal_district_tt
+				any_subject_country = { has_country_flag = NAM_federal_district }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_hum_board_districts_tt
+			hidden_effect = {
+				every_subject_country = {
+					limit = { has_country_flag = NAM_federal_district }
+					capital_scope = {
+						if = {
+							limit = { is_owned_by = PREV }
+							add_extra_state_shared_building_slots = 1
+							add_building_construction = {
+								type = arms_factory
+								level = 1
+								instant_build = yes
+							}
+						}
+					}
+				}
+				set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+				NAM_corp_capital_add = yes
+				add_to_variable = { var = NAM_corp_influence value = 10 }
+				NAM_corp_influence_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_board_south_arms
+		icon = GFX_focus_generic_military_industry
+		x = 94
+		y = 20
+		cost = 7
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_hum_board_districts }
+		mutually_exclusive = { focus = NAM_board_south_labour }
+		allow_branch = {
+			has_country_flag = NAM_exile_humanist
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 4000
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 150
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_board_south_arms_tt
+			hidden_effect = {
+				every_subject_country = {
+					limit = {
+						has_country_flag = NAM_federal_district
+						OR = {
+							tag = SDR
+							tag = RHM
+							tag = KDR
+						}
+					}
+					set_variable = { NAM_corp_district_owner = 4 }
+					NAM_corp_district_apply = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 12
+		}
+	}
+
+	focus = {
+		id = NAM_board_south_labour
+		icon = GFX_focus_generic_workers_and_farmers_rise
+		x = 96
+		y = 20
+		cost = 7
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		prerequisite = { focus = NAM_hum_board_districts }
+		mutually_exclusive = { focus = NAM_board_south_arms }
+		allow_branch = {
+			has_country_flag = NAM_exile_humanist
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 12000
+			custom_effect_tooltip = NAM_board_south_labour_tt
+			hidden_effect = {
+				every_subject_country = {
+					limit = {
+						has_country_flag = NAM_federal_district
+						OR = {
+							tag = SDR
+							tag = RHM
+							tag = KDR
+						}
+					}
+					set_variable = { NAM_corp_district_owner = 5 }
+					NAM_corp_district_apply = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 8
+		}
+	}
+
+	focus = {
+		id = NAM_board_union_of_boards
+		icon = GFX_focus_generic_industry_3
+		x = 95
+		y = 21
+		cost = 10
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_board_south_arms
+			focus = NAM_board_south_labour
+		}
+		allow_branch = {
+			has_country_flag = NAM_exile_humanist
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.10
+			add_political_power = 100
+			custom_effect_tooltip = NAM_board_union_of_boards_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 100 }
+				NAM_corp_capital_add = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
 		}
 	}
 }

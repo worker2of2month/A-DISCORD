@@ -682,6 +682,38 @@ ideas = {
 			}
 		}
 
+		# ----- Exile revolution -----
+		# The pillars' junta: the exile lives for the return and from the sea.
+		NAM_exile_pillar_junta = {
+			picture = generic_war_preparation
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				war_support_factor = 0.10
+				political_power_gain = 0.10
+				army_org_factor = 0.05
+				stability_factor = -0.05
+			}
+		}
+
+		# Veter's humanists: an open government of the free islands.
+		NAM_exile_free_islands = {
+			picture = generic_local_self_management
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				stability_factor = 0.08
+				research_speed_factor = 0.03
+				war_support_factor = -0.05
+			}
+		}
+
 		# ----- Punishment of the defeated restitution coalition -----
 		# Timed ideas on EFL and AZH after a Svetlogorsk victory.
 		NAM_ruined_economy = {
