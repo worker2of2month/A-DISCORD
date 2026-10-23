@@ -631,7 +631,7 @@ class NamBasinGuiTests(unittest.TestCase):
             click = block(self.effects, f"NAM_bw_select_{state}_click")
             self.assertEqual([entry.key for entry in click], ["set_variable"])
             self.assertEqual(scalar(block(click, "set_variable"), "NAM_bw_selected_state"), str(state))
-            visible = block(self.triggers, f"NAM_bw_card_{state}_visible")
+            visible = block(self.triggers, f"NAM_bw_card_{state}_title_visible")
             if state == 67:
                 visible = block(visible, "OR")
                 self.assertEqual(scalar(block(visible, "NOT"), "has_variable"), "NAM_bw_selected_state")
@@ -674,7 +674,57 @@ class NamBasinGuiTests(unittest.TestCase):
                 self.assertIn(f"NAM_grp_{group}_influence", row)
             self.assertRegex(loc, r'(?m)^ NAM_bw_support_rules:.*120.*')
             self.assertRegex(loc, r'(?m)^ NAM_bw_programme_rules:.*420.*')
-            self.assertNotIn("[?]", loc)
+            self.assertFalse("[?]" in loc, language)
+
+    def test_card_controls_are_direct_scripted_gui_children(self):
+        roots = block(parsed("interface/ADISCORD_NAM_basin.gui"), "guiTypes")
+        window = next(e.value for e in roots if scalar(e.value, "name") == "ADISCORD_NAM_basin_window")
+        controls = {scalar(e.value, "name"): e.value for e in window if isinstance(e.value, list) and e.key.endswith("Type")}
+        for state in (67, 688, 689, 690, 719, 700):
+            for part in ("title", "body"):
+                name = f"NAM_bw_card_{state}_{part}"
+                self.assertIn(name, controls)
+                self.assertTrue(block(self.triggers, name + "_visible"))
+            operations = ("line",) if state == 700 else ("repair", "refinery", "line")
+            for operation in operations:
+                for suffix in ("", "_price", "_duration"):
+                    name = f"NAM_bw_{state}_{operation}{suffix}"
+                    self.assertIn(name, controls)
+                    self.assertIn("NAM_bw_selected_state", repr(block(self.triggers, name + "_visible")))
+        self.assertIn("NAM_bw_port_guidance", controls)
+        self.assertIn("NAM_bw_selected_state", repr(block(self.triggers, "NAM_bw_port_guidance_visible")))
+
+    def test_gui_uses_native_decision_panels_and_resolved_tooltip_text(self):
+        gui = read("interface/ADISCORD_NAM_basin.gui")
+        self.assertNotIn('quadTextureSprite = "GFX_NAM_bw_panel"', gui)
+        self.assertIn('quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"', gui)
+        for language in ("russian", "english"):
+            loc = read(f"localisation/{language}/{BASE}_l_{language}.yml")
+            for line in loc.splitlines():
+                if line.startswith(" NAM_bw_"):
+                    self.assertNotIn("$", line)
+
+    def test_each_selection_shows_one_card_with_its_own_operations(self):
+        states = (67, 688, 689, 690, 719, 700)
+        for selected in (None, *states):
+            facts = {
+                ("NAM", "has_variable", "NAM_bw_selected_state"): selected is not None,
+                ("NAM", "variable", "NAM_bw_selected_state"): selected or 0,
+                ("NAM", "has_completed_focus", "NAM_field_repair_crews"): True,
+                ("NAM", "has_completed_focus", "NAM_refinery_programme"): True,
+            }
+            for state in states:
+                facts[(str(state), "is_owned_by", "NAM")] = True
+                facts[(str(state), "NAM_bw_line_offered", "yes")] = True
+            for state in states:
+                names = [f"NAM_bw_card_{state}_title", f"NAM_bw_card_{state}_body"]
+                operations = ("line",) if state == 700 else ("repair", "refinery", "line")
+                names.extend(f"NAM_bw_{state}_{operation}{suffix}" for operation in operations for suffix in ("", "_price", "_duration"))
+                if state == 700:
+                    names.append("NAM_bw_port_guidance")
+                for name in names:
+                    with self.subTest(selected=selected, widget=name):
+                        self.assertEqual(matches_conditions(block(self.triggers, name + "_visible"), facts, "NAM"), state == (selected or 67))
 
     def test_map_geometry_and_generated_files_match(self):
         from tools.builders.build_adiscord_nam_basin_map import build_outputs, check_outputs

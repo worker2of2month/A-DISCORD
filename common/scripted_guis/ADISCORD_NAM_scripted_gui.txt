@@ -133,11 +133,70 @@ scripted_gui = {
 		# A button is shown where its decision is visible and enabled where the
 		# decision can start; the tooltip names the first blocking condition.
 		triggers = {
-			NAM_bw_card_67_visible = {
+
+			NAM_bw_card_67_title_visible = {
 				OR = {
 					NOT = { has_variable = NAM_bw_selected_state }
 					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
 				}
+			}
+			NAM_bw_card_67_body_visible = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
+			}
+			NAM_bw_67_repair_price_visible = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
+				has_completed_focus = NAM_field_repair_crews
+				67 = { is_owned_by = NAM }
+			}
+			NAM_bw_67_repair_duration_visible = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
+				has_completed_focus = NAM_field_repair_crews
+				67 = { is_owned_by = NAM }
+			}
+			NAM_bw_67_refinery_price_visible = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
+				has_completed_focus = NAM_refinery_programme
+				67 = {
+					is_owned_by = NAM
+					NOT = { has_state_flag = NAM_refinery_built }
+				}
+			}
+			NAM_bw_67_refinery_duration_visible = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
+				has_completed_focus = NAM_refinery_programme
+				67 = {
+					is_owned_by = NAM
+					NOT = { has_state_flag = NAM_refinery_built }
+				}
+			}
+			NAM_bw_67_line_price_visible = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
+				67 = { NAM_bw_line_offered = yes }
+			}
+			NAM_bw_67_line_duration_visible = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
+				67 = { NAM_bw_line_offered = yes }
 			}
 			NAM_bw_map_67_selected_visible = {
 				OR = {
@@ -162,8 +221,46 @@ scripted_gui = {
 					NOT = { is_owned_by = NAM }
 				}
 			}
-			NAM_bw_card_688_visible = {
+
+			NAM_bw_card_688_title_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+			}
+			NAM_bw_card_688_body_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+			}
+			NAM_bw_688_repair_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+				has_completed_focus = NAM_field_repair_crews
+				688 = { is_owned_by = NAM }
+			}
+			NAM_bw_688_repair_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+				has_completed_focus = NAM_field_repair_crews
+				688 = { is_owned_by = NAM }
+			}
+			NAM_bw_688_refinery_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+				has_completed_focus = NAM_refinery_programme
+				688 = {
+					is_owned_by = NAM
+					NOT = { has_state_flag = NAM_refinery_built }
+				}
+			}
+			NAM_bw_688_refinery_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+				has_completed_focus = NAM_refinery_programme
+				688 = {
+					is_owned_by = NAM
+					NOT = { has_state_flag = NAM_refinery_built }
+				}
+			}
+			NAM_bw_688_line_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+				688 = { NAM_bw_line_offered = yes }
+			}
+			NAM_bw_688_line_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+				688 = { NAM_bw_line_offered = yes }
 			}
 			NAM_bw_map_688_selected_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
@@ -185,8 +282,46 @@ scripted_gui = {
 					NOT = { is_owned_by = NAM }
 				}
 			}
-			NAM_bw_card_689_visible = {
+
+			NAM_bw_card_689_title_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
+			}
+			NAM_bw_card_689_body_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
+			}
+			NAM_bw_689_repair_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
+				has_completed_focus = NAM_field_repair_crews
+				689 = { is_owned_by = NAM }
+			}
+			NAM_bw_689_repair_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
+				has_completed_focus = NAM_field_repair_crews
+				689 = { is_owned_by = NAM }
+			}
+			NAM_bw_689_refinery_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
+				has_completed_focus = NAM_refinery_programme
+				689 = {
+					is_owned_by = NAM
+					NOT = { has_state_flag = NAM_refinery_built }
+				}
+			}
+			NAM_bw_689_refinery_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
+				has_completed_focus = NAM_refinery_programme
+				689 = {
+					is_owned_by = NAM
+					NOT = { has_state_flag = NAM_refinery_built }
+				}
+			}
+			NAM_bw_689_line_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
+				689 = { NAM_bw_line_offered = yes }
+			}
+			NAM_bw_689_line_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
+				689 = { NAM_bw_line_offered = yes }
 			}
 			NAM_bw_map_689_selected_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
@@ -208,8 +343,46 @@ scripted_gui = {
 					NOT = { is_owned_by = NAM }
 				}
 			}
-			NAM_bw_card_690_visible = {
+
+			NAM_bw_card_690_title_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
+			}
+			NAM_bw_card_690_body_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
+			}
+			NAM_bw_690_repair_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
+				has_completed_focus = NAM_field_repair_crews
+				690 = { is_owned_by = NAM }
+			}
+			NAM_bw_690_repair_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
+				has_completed_focus = NAM_field_repair_crews
+				690 = { is_owned_by = NAM }
+			}
+			NAM_bw_690_refinery_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
+				has_completed_focus = NAM_refinery_programme
+				690 = {
+					is_owned_by = NAM
+					NOT = { has_state_flag = NAM_refinery_built }
+				}
+			}
+			NAM_bw_690_refinery_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
+				has_completed_focus = NAM_refinery_programme
+				690 = {
+					is_owned_by = NAM
+					NOT = { has_state_flag = NAM_refinery_built }
+				}
+			}
+			NAM_bw_690_line_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
+				690 = { NAM_bw_line_offered = yes }
+			}
+			NAM_bw_690_line_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
+				690 = { NAM_bw_line_offered = yes }
 			}
 			NAM_bw_map_690_selected_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
@@ -231,8 +404,46 @@ scripted_gui = {
 					NOT = { is_owned_by = NAM }
 				}
 			}
-			NAM_bw_card_719_visible = {
+
+			NAM_bw_card_719_title_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
+			}
+			NAM_bw_card_719_body_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
+			}
+			NAM_bw_719_repair_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
+				has_completed_focus = NAM_field_repair_crews
+				719 = { is_owned_by = NAM }
+			}
+			NAM_bw_719_repair_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
+				has_completed_focus = NAM_field_repair_crews
+				719 = { is_owned_by = NAM }
+			}
+			NAM_bw_719_refinery_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
+				has_completed_focus = NAM_refinery_programme
+				719 = {
+					is_owned_by = NAM
+					NOT = { has_state_flag = NAM_refinery_built }
+				}
+			}
+			NAM_bw_719_refinery_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
+				has_completed_focus = NAM_refinery_programme
+				719 = {
+					is_owned_by = NAM
+					NOT = { has_state_flag = NAM_refinery_built }
+				}
+			}
+			NAM_bw_719_line_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
+				719 = { NAM_bw_line_offered = yes }
+			}
+			NAM_bw_719_line_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
+				719 = { NAM_bw_line_offered = yes }
 			}
 			NAM_bw_map_719_selected_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
@@ -254,8 +465,23 @@ scripted_gui = {
 					NOT = { is_owned_by = NAM }
 				}
 			}
-			NAM_bw_card_700_visible = {
+
+			NAM_bw_card_700_title_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 700 compare = equals }
+			}
+			NAM_bw_card_700_body_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 700 compare = equals }
+			}
+			NAM_bw_port_guidance_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 700 compare = equals }
+			}
+			NAM_bw_700_line_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 700 compare = equals }
+				700 = { NAM_bw_line_offered = yes }
+			}
+			NAM_bw_700_line_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 700 compare = equals }
+				700 = { NAM_bw_line_offered = yes }
 			}
 			NAM_bw_map_700_selected_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 700 compare = equals }
@@ -281,23 +507,36 @@ scripted_gui = {
 			NAM_bw_underground_visible = {
 				NOT = { has_country_flag = NAM_veter_amnesty }
 			}
+
 			NAM_bw_67_repair_visible = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
 				has_completed_focus = NAM_field_repair_crews
 				67 = { is_owned_by = NAM }
 			}
+
 			NAM_bw_688_repair_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
 				has_completed_focus = NAM_field_repair_crews
 				688 = { is_owned_by = NAM }
 			}
+
 			NAM_bw_689_repair_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
 				has_completed_focus = NAM_field_repair_crews
 				689 = { is_owned_by = NAM }
 			}
+
 			NAM_bw_690_repair_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
 				has_completed_focus = NAM_field_repair_crews
 				690 = { is_owned_by = NAM }
 			}
+
 			NAM_bw_719_repair_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
 				has_completed_focus = NAM_field_repair_crews
 				719 = { is_owned_by = NAM }
 			}
@@ -306,35 +545,48 @@ scripted_gui = {
 			NAM_bw_689_repair_click_enabled = { 689 = { NAM_bw_repair_startable = yes } }
 			NAM_bw_690_repair_click_enabled = { 690 = { NAM_bw_repair_startable = yes } }
 			NAM_bw_719_repair_click_enabled = { 719 = { NAM_bw_repair_startable = yes } }
+
 			NAM_bw_67_refinery_visible = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
 				has_completed_focus = NAM_refinery_programme
 				67 = {
 					is_owned_by = NAM
 					NOT = { has_state_flag = NAM_refinery_built }
 				}
 			}
+
 			NAM_bw_688_refinery_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
 				has_completed_focus = NAM_refinery_programme
 				688 = {
 					is_owned_by = NAM
 					NOT = { has_state_flag = NAM_refinery_built }
 				}
 			}
+
 			NAM_bw_689_refinery_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
 				has_completed_focus = NAM_refinery_programme
 				689 = {
 					is_owned_by = NAM
 					NOT = { has_state_flag = NAM_refinery_built }
 				}
 			}
+
 			NAM_bw_690_refinery_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
 				has_completed_focus = NAM_refinery_programme
 				690 = {
 					is_owned_by = NAM
 					NOT = { has_state_flag = NAM_refinery_built }
 				}
 			}
+
 			NAM_bw_719_refinery_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
 				has_completed_focus = NAM_refinery_programme
 				719 = {
 					is_owned_by = NAM
@@ -346,79 +598,46 @@ scripted_gui = {
 			NAM_bw_689_refinery_click_enabled = { 689 = { NAM_bw_refinery_startable = yes } }
 			NAM_bw_690_refinery_click_enabled = { 690 = { NAM_bw_refinery_startable = yes } }
 			NAM_bw_719_refinery_click_enabled = { 719 = { NAM_bw_refinery_startable = yes } }
-			NAM_bw_67_line_visible = { 67 = { NAM_bw_line_offered = yes } }
-			NAM_bw_688_line_visible = { 688 = { NAM_bw_line_offered = yes } }
-			NAM_bw_689_line_visible = { 689 = { NAM_bw_line_offered = yes } }
-			NAM_bw_690_line_visible = { 690 = { NAM_bw_line_offered = yes } }
-			NAM_bw_719_line_visible = { 719 = { NAM_bw_line_offered = yes } }
-			NAM_bw_700_line_visible = { 700 = { NAM_bw_line_offered = yes } }
+
+			NAM_bw_67_line_visible = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
+				67 = { NAM_bw_line_offered = yes }
+			}
+
+			NAM_bw_688_line_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+				688 = { NAM_bw_line_offered = yes }
+			}
+
+			NAM_bw_689_line_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
+				689 = { NAM_bw_line_offered = yes }
+			}
+
+			NAM_bw_690_line_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
+				690 = { NAM_bw_line_offered = yes }
+			}
+
+			NAM_bw_719_line_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
+				719 = { NAM_bw_line_offered = yes }
+			}
+
+			NAM_bw_700_line_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 700 compare = equals }
+				700 = { NAM_bw_line_offered = yes }
+			}
 			NAM_bw_67_line_click_enabled = { 67 = { NAM_bw_line_startable = yes } }
 			NAM_bw_688_line_click_enabled = { 688 = { NAM_bw_line_startable = yes } }
 			NAM_bw_689_line_click_enabled = { 689 = { NAM_bw_line_startable = yes } }
 			NAM_bw_690_line_click_enabled = { 690 = { NAM_bw_line_startable = yes } }
 			NAM_bw_719_line_click_enabled = { 719 = { NAM_bw_line_startable = yes } }
 			NAM_bw_700_line_click_enabled = { 700 = { NAM_bw_line_startable = yes } }
-			NAM_bw_67_repair_row_visible = {
-				has_completed_focus = NAM_field_repair_crews
-				67 = { is_owned_by = NAM }
-			}
-			NAM_bw_67_refinery_row_visible = {
-				has_completed_focus = NAM_refinery_programme
-				67 = {
-					is_owned_by = NAM
-					NOT = { has_state_flag = NAM_refinery_built }
-				}
-			}
-			NAM_bw_67_line_row_visible = { 67 = { NAM_bw_line_offered = yes } }
-			NAM_bw_688_repair_row_visible = {
-				has_completed_focus = NAM_field_repair_crews
-				688 = { is_owned_by = NAM }
-			}
-			NAM_bw_688_refinery_row_visible = {
-				has_completed_focus = NAM_refinery_programme
-				688 = {
-					is_owned_by = NAM
-					NOT = { has_state_flag = NAM_refinery_built }
-				}
-			}
-			NAM_bw_688_line_row_visible = { 688 = { NAM_bw_line_offered = yes } }
-			NAM_bw_689_repair_row_visible = {
-				has_completed_focus = NAM_field_repair_crews
-				689 = { is_owned_by = NAM }
-			}
-			NAM_bw_689_refinery_row_visible = {
-				has_completed_focus = NAM_refinery_programme
-				689 = {
-					is_owned_by = NAM
-					NOT = { has_state_flag = NAM_refinery_built }
-				}
-			}
-			NAM_bw_689_line_row_visible = { 689 = { NAM_bw_line_offered = yes } }
-			NAM_bw_690_repair_row_visible = {
-				has_completed_focus = NAM_field_repair_crews
-				690 = { is_owned_by = NAM }
-			}
-			NAM_bw_690_refinery_row_visible = {
-				has_completed_focus = NAM_refinery_programme
-				690 = {
-					is_owned_by = NAM
-					NOT = { has_state_flag = NAM_refinery_built }
-				}
-			}
-			NAM_bw_690_line_row_visible = { 690 = { NAM_bw_line_offered = yes } }
-			NAM_bw_719_repair_row_visible = {
-				has_completed_focus = NAM_field_repair_crews
-				719 = { is_owned_by = NAM }
-			}
-			NAM_bw_719_refinery_row_visible = {
-				has_completed_focus = NAM_refinery_programme
-				719 = {
-					is_owned_by = NAM
-					NOT = { has_state_flag = NAM_refinery_built }
-				}
-			}
-			NAM_bw_719_line_row_visible = { 719 = { NAM_bw_line_offered = yes } }
-			NAM_bw_700_line_row_visible = { 700 = { NAM_bw_line_offered = yes } }
+
 		}
 	}
 

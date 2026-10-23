@@ -1408,9 +1408,9 @@ def main() -> int:
     )
     for equipment_id, amount, producer in (
         ("infantry_equipment", 20000, "NAM"),
-        ("infantry_equipment", 3000, "EFL"),
-        ("infantry_equipment", 1800, "AZH"),
-        ("infantry_equipment", 1800, "SLF"),
+        ("infantry_equipment", 30000, "EFL"),
+        ("infantry_equipment", 18000, "AZH"),
+        ("infantry_equipment", 18000, "SLF"),
         ("ADISCORD_squad_weapons_equipment_0", 80, "NAM"),
         ("ADISCORD_squad_weapons_equipment_0", 100, "EFL"),
         ("ADISCORD_squad_weapons_equipment_0", 20, "SLF"),
@@ -1470,7 +1470,7 @@ def main() -> int:
         "NOT = { has_country_flag = ADISCORD_nam_emergency_reserve_called }",
         "set_country_flag = ADISCORD_nam_emergency_reserve_called",
         "add_manpower = 7000",
-        "type = infantry_equipment amount = 1500 producer = NAM",
+        "type = infantry_equipment amount = 15000 producer = NAM",
     ):
         check(token in emergency, f"NAM emergency defence lacks bounded token: {token}")
     check(
@@ -1683,12 +1683,14 @@ def main() -> int:
         ]
         check(len(definitions) == 1, f"{event_id} must have exactly one definition")
         if definitions:
+            # Campaign dispatch guards prevent repeats; major broadcasts must
+            # remain deliverable to every recipient, without a global one-shot.
             check(
                 "is_triggered_only = yes" in definitions[0]
-                and "fire_only_once = yes" in definitions[0]
+                and "fire_only_once = no" in definitions[0]
                 and "major = yes" in definitions[0]
                 and "hidden = yes" not in definitions[0],
-                f"{event_id} must be visible major, triggered-only and single-shot",
+                f"{event_id} must be visible major and triggered-only, without a global one-shot",
             )
 
     all_script_sources = {
@@ -1769,16 +1771,10 @@ def main() -> int:
     scenario_debug_category = named_block(
         debug_categories, "ADISCORD_scenario_debug_category"
     )
-    shared_debug_tags = set(
-        re.findall(
-            r"\btag\s*=\s*([A-Z0-9]{3})\b",
-            named_block(scenario_debug_category, "allowed"),
-        )
-    )
     check(
-        shared_debug_tags
-        == {"WRK", "WKR", "VAD", "TVA", "IVN", "NAM", "EFL", "AZH", "SLF"},
-        f"shared scenario debug category has wrong allowed tags: {sorted(shared_debug_tags)}",
+        has_script_fragment(scenario_debug_category, "allowed = { always = yes }")
+        and has_script_fragment(scenario_debug_category, "visible = { is_debug = yes }"),
+        "shared scenario debug category must allow country switching and remain debug-only",
     )
     check(
         "ADISCORD_nam_resource_war_resolve_compromise = yes"
@@ -2225,18 +2221,21 @@ def main() -> int:
         "state 688 must begin as a NAM core before the internal uprising",
     )
     check(
-        owner_of_state(689) == "NAM", "state 689 must begin as NAM's residual port city"
+        owner_of_state(689) == "NAM", "state 689 must begin as NAM's South Coast district"
+    )
+    check(
+        owner_of_state(700) == "NAM", "state 700 must begin as NAM's residual port city"
     )
     check(
         owner_of_state(690) == "NAM", "state 690 must begin as NAM's Dryriver district"
     )
     check(
         re.search(
-            r"(?m)^\s*capital\s*=\s*689\s*$",
+            r"(?m)^\s*capital\s*=\s*700\s*$",
             sources["history/countries/NAM - NamestnikLand.txt"],
         )
         is not None,
-        "NAM history capital must be residual port state 689",
+        "NAM history capital must be residual port state 700",
     )
     check(
         owner_of_state(68) == "EFL"
@@ -2305,42 +2304,46 @@ def main() -> int:
         )
 
     expected_victory_points = {
-        67: {1710: 2, 6099: 3},
+        67: {6099: 3},
         68: {259: 5, 6150: 2},
         69: {367: 5, 8234: 2},
         70: {2986: 2, 6495: 4},
-        688: {689: 3},
-        689: {2038: 5},
+        688: {16721: 3, 1710: 2},
+        689: {},
         690: {8058: 2, 9016: 2},
         691: {},
         692: {493: 3, 5039: 2},
+        700: {16716: 5},
+        701: {16717: 5},
+        719: {},
         720: {8057: 3},
+        721: {},
+        722: {},
     }
     for state_id, points in expected_victory_points.items():
         state = state_source(state_id)
-        for province_id, value in points.items():
-            check(
-                re.search(
-                    rf"victory_points\s*=\s*\{{\s*{province_id}\s+{value}\s*\}}", state
-                )
-                is not None,
-                f"state {state_id} lacks VP {province_id} with value {value}",
+        actual_points = [
+            (int(province), int(value))
+            for province, value in re.findall(
+                r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", without_comments(state)
             )
+        ]
+        check(
+            sorted(actual_points) == sorted(points.items()),
+            f"state {state_id} must have exactly these victory points: {points}, found {actual_points}",
+        )
     check(
-        sum(expected_victory_points[67].values())
-        + sum(expected_victory_points[688].values())
-        + sum(expected_victory_points[689].values())
-        + sum(expected_victory_points[690].values())
+        sum(sum(expected_victory_points[state].values()) for state in (67, 688, 689, 690, 700, 719))
         == 17,
         "NAM mainland VP total must be 17",
     )
     check(
-        sum(sum(expected_victory_points[state].values()) for state in (68, 70, 691, 720))
-        == 16,
-        "EFL mainland VP total must be 16",
+        sum(sum(expected_victory_points[state].values()) for state in (68, 70, 691, 701, 720, 721))
+        == 21,
+        "EFL mainland VP total must be 21",
     )
     check(
-        sum(sum(expected_victory_points[state].values()) for state in (69, 692)) == 12,
+        sum(sum(expected_victory_points[state].values()) for state in (69, 692, 722)) == 12,
         "AZH mainland VP total must be 12",
     )
 
