@@ -49,6 +49,8 @@ NAM_national_programmes = {
 			has_global_flag = ADISCORD_nam_resource_war_standoff
 		}
 	}
+	priority = 22
+	visible_when_empty = yes
 	scripted_gui = ADISCORD_NAM_basin_panel
 }
 
@@ -63,6 +65,7 @@ NAM_overseas_districts = {
 			has_completed_focus = NAM_reclaim_230
 		}
 	}
+	visible_when_empty = yes
 	priority = 18
 }
 
@@ -90,13 +93,7 @@ NAM_supports = {
 NAM_underground = {
 	icon = generic_operation
 	allowed = { tag = NAM }
-	visible = {
-		OR = {
-			has_completed_focus = NAM_veter_channel
-			has_completed_focus = NAM_cache_hunters
-			has_country_flag = NAM_veter_amnesty
-		}
-	}
+	visible = { has_variable = NAM_underground }
 	visible_when_empty = yes
 	priority = 20
 }
@@ -110,5 +107,6 @@ NAM_treasury = {
 			has_completed_focus = NAM_crisis_office
 		}
 	}
+	visible_when_empty = yes
 	priority = 19
 }

@@ -45,7 +45,7 @@ guiTypes = {
 				maxWidth = 398
 				maxHeight = 20
 				fixedsize = yes
-				pdx_tooltip = "NAM_bw_support_rules"
+				pdx_tooltip = "NAM_bw_support_nam_tt"
 			}
 		}
 		containerWindowType = {
@@ -69,7 +69,7 @@ guiTypes = {
 				maxWidth = 398
 				maxHeight = 20
 				fixedsize = yes
-				pdx_tooltip = "NAM_bw_support_rules"
+				pdx_tooltip = "NAM_bw_support_oil_tt"
 			}
 		}
 		containerWindowType = {
@@ -93,7 +93,7 @@ guiTypes = {
 				maxWidth = 398
 				maxHeight = 20
 				fixedsize = yes
-				pdx_tooltip = "NAM_bw_support_rules"
+				pdx_tooltip = "NAM_bw_support_dist_tt"
 			}
 		}
 		containerWindowType = {
@@ -117,7 +117,7 @@ guiTypes = {
 				maxWidth = 398
 				maxHeight = 20
 				fixedsize = yes
-				pdx_tooltip = "NAM_bw_support_rules"
+				pdx_tooltip = "NAM_bw_support_garr_tt"
 			}
 		}
 		containerWindowType = {
@@ -141,7 +141,7 @@ guiTypes = {
 				maxWidth = 398
 				maxHeight = 20
 				fixedsize = yes
-				pdx_tooltip = "NAM_bw_support_rules"
+				pdx_tooltip = "NAM_bw_support_trade_tt"
 			}
 		}
 	}

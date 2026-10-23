@@ -1710,7 +1710,7 @@ SHL_quarters_and_borders = {
 				}
 				add_equipment_to_stockpile = {
 					type = infantry_equipment
-					amount = 1500
+					amount = 13500
 					producer = SHL
 				}
 				add_equipment_to_stockpile = {

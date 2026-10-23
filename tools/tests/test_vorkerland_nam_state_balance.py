@@ -123,87 +123,68 @@ def block_with_id(source: str, block_type: str, identifier: str) -> str:
 
 
 class NamTreatyCityTransferTests(unittest.TestCase):
-    OUTCOMES = (
-        ("ADISCORD_nam_resource_war_resolve_nam_victory", "701", "NAM", "EFL"),
-        ("ADISCORD_nam_resource_war_resolve_coalition_victory", "700", "AZH", "NAM"),
-        ("ADISCORD_nam_resource_war_resolve_peaceful_withdrawal", "700", "AZH", "NAM"),
-    )
+    @classmethod
+    def setUpClass(cls):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
-    def outcome_effects(self, outcome, state, has_owner=True, has_controller=True):
-        from tools.tests.test_adiscord_stp_preparation import (
-            block,
-            parse_clausewitz,
-            selected_effects,
-        )
-
-        path = (
-            builder.ROOT
-            / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"
-        )
-        effects = parse_clausewitz(path.read_text(encoding="utf-8"))
-        facts = {
-            ("NAM", "ADISCORD_nam_resource_war_active", "yes"): True,
-            (state, "country_exists", "OWNER"): has_owner,
-            (state, "country_exists", "CONTROLLER"): has_controller,
+        cls.effects = {
+            entry.key: entry.value for entry in parse_clausewitz(
+                (builder.ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt").read_text(encoding="utf-8")
+            )
         }
-        return list(selected_effects(block(effects, outcome), facts, "NAM"))
 
-    def test_valid_city_receives_ownership_cores_and_control_together(self):
-        for outcome, state, recipient, previous_owner in self.OUTCOMES:
-            with self.subTest(outcome=outcome):
-                effects = self.outcome_effects(outcome, state)
-                transfers = [
-                    (scope, e.value)
-                    for scope, e in effects
-                    if e.key == "transfer_state"
-                ]
-                self.assertEqual(transfers.count((recipient, state)), 1)
-                state_effects = [
-                    (e.key, e.value) for scope, e in effects if scope == state
-                ]
-                self.assertEqual(
-                    state_effects,
-                    [
-                        ("remove_core_of", previous_owner),
-                        ("add_core_of", recipient),
-                        ("set_state_controller_to", recipient),
-                    ],
-                )
+    def selected(self, name, state, facts):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
 
-    def test_missing_owner_or_controller_skips_every_city_mutation(self):
-        for outcome, state, recipient, _ in self.OUTCOMES:
-            for has_owner, has_controller in (
-                (False, True),
-                (True, False),
-                (False, False),
-            ):
-                with self.subTest(
-                    outcome=outcome, owner=has_owner, controller=has_controller
-                ):
-                    effects = self.outcome_effects(
-                        outcome, state, has_owner, has_controller
-                    )
-                    self.assertFalse(
-                        any(
-                            e.key == "transfer_state" and e.value == state
-                            for _, e in effects
-                        )
-                    )
-                    self.assertFalse(any(scope == state for scope, _ in effects))
-                    self.assertTrue(any(e.key == "transfer_state" for _, e in effects))
-                    self.assertTrue(
-                        any(
-                            e.key == "ADISCORD_nam_resource_war_clear_temporary_support"
-                            for _, e in effects
-                        )
-                    )
-                    self.assertTrue(
-                        any(
-                            e.key == "set_global_flag"
-                            and e.value == "ADISCORD_nam_resource_war_resolved"
-                            for _, e in effects
-                        )
-                    )
+        return [
+            (scope, entry.key, state if entry.key == "transfer_state" and entry.value == "PREV" else entry.value)
+            for scope, entry in selected_effects(self.effects[name], facts, state)
+        ]
+
+    def test_border_award_preserves_owner_and_controller_guards(self):
+        from itertools import product
+
+        for state, owner, has_owner, has_controller in product(
+            ("701", "720", "721", "722"), ("EFL", "AZH", "VAL"), (False, True), (False, True)
+        ):
+            facts = {
+                (state, "is_owned_by", owner): True,
+                (state, "country_exists", "OWNER"): has_owner,
+                (state, "country_exists", "CONTROLLER"): has_controller,
+            }
+            selected = self.selected("NAM_rw_award_border_state", state, facts)
+            expected = []
+            if owner in ("EFL", "AZH") and has_owner and has_controller:
+                expected = [
+                    ("NAM", "transfer_state", state),
+                    (state, "remove_core_of", owner),
+                    (state, "add_core_of", "NAM"),
+                    (state, "set_state_controller_to", "NAM"),
+                ]
+            self.assertEqual(selected, expected, (state, owner, has_owner, has_controller))
+
+    def test_partition_keeps_claims_and_falls_back_to_eflor_without_azhar(self):
+        from itertools import product
+
+        for state, owner, azhar in product(
+            ("67", "688", "689", "690", "700", "719"), ("NAM", "VAL"), (False, True)
+        ):
+            facts = {
+                (state, "is_owned_by", owner): True,
+                (state, "country_exists", "AZH"): azhar,
+            }
+            selected = self.selected("NAM_rw_cede_mainland_state", state, facts)
+            expected = []
+            if owner == "NAM":
+                recipient = "AZH" if azhar and state in ("689", "690", "700", "719") else "EFL"
+                expected = [
+                    (recipient, "transfer_state", state),
+                    (state, "remove_core_of", "NAM"),
+                    (state, "add_core_of", recipient),
+                    (state, "add_claim_by", "NAM"),
+                    (state, "set_state_controller_to", recipient),
+                ]
+            self.assertEqual(selected, expected, (state, owner, azhar))
 
 
 class VorkerlandNamStateBalanceTests(unittest.TestCase):
@@ -513,15 +494,12 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             / "scripted_effects"
             / "ADISCORD_nam_resource_war_effects.txt"
         ).read_text(encoding="utf-8-sig")
-        self.assertRegex(
-            effects,
-            r"NAM\s*=\s*\{\s*transfer_state\s*=\s*691\s+transfer_state\s*=\s*701\s*\}",
-        )
-        self.assertIn(
-            "691 = { remove_core_of = EFL add_core_of = NAM set_state_controller_to = NAM }",
-            effects,
-        )
-        self.assertNotIn("NAM = { transfer_state = 68 }", effects)
+        victory = named_block(effects, "ADISCORD_nam_resource_war_resolve_nam_victory")
+        awards = {int(state) for state in re.findall(
+            r"(\d+)\s*=\s*\{\s*NAM_rw_award_border_state\s*=\s*yes\s*\}", victory
+        )}
+        self.assertEqual(awards, {720, 721, 701, 722})
+        self.assertNotIn("NAM = { transfer_state = 68 }", victory)
 
         nam_mainland = {
             67,
@@ -542,41 +520,33 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             ),
         )
 
-    def test_nam_prewar_forts_cover_real_coalition_border_provinces(self) -> None:
-        decisions = (
-            builder.ROOT
-            / "common"
-            / "decisions"
-            / "ADISCORD_nam_resource_war_decisions.txt"
-        ).read_text(encoding="utf-8-sig")
-        expected = {
-            "ADISCORD_nam_fortify_extraction_line": {67: {4912}, 690: {1015, 8058}},
-            "ADISCORD_nam_fortify_azhar_approaches": {690: {461, 6961}, 689: {2299}},
-        }
-        enemy_states = {68, 69, 691, 692, 720, 721, 722}
-        for decision_name, state_forts in expected.items():
-            decision = named_block(decisions, decision_name)
-            self.assertIn("days_remove = 35", decision)
-            self.assertIn("cost = 20", decision)
-            self.assertIn("fire_only_once = yes", decision)
-            for state_id, provinces in state_forts.items():
-                state_block = named_block(decision, str(state_id))
-                actual = {
-                    int(province)
-                    for province in re.findall(
-                        r"add_building_construction\s*=\s*\{[^{}]*type\s*=\s*bunker[^{}]*province\s*=\s*(\d+)",
-                        state_block,
-                    )
-                }
-                self.assertEqual(actual, provinces)
-                for province in provinces:
-                    self.assertIn(province, self.states[state_id])
-                    adjacent_states = {
-                        other_state
-                        for other_state, other_provinces in self.states.items()
-                        if self.physical_province_adjacency[province] & other_provinces
-                    }
-                    self.assertTrue(adjacent_states & enemy_states)
+    def test_nam_prewar_forts_follow_current_border_and_recheck_delivery(self) -> None:
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, parse_clausewitz
+
+        decisions = (builder.ROOT / "common/decisions/ADISCORD_nam_resource_war_decisions.txt").read_text(encoding="utf-8-sig")
+        decision = named_block(decisions, "NAM_prepare_line")
+        self.assertEqual({int(value) for value in named_block(decision, "targets").split()}, {67, 688, 689, 690, 719, 700})
+        self.assertIn("any_neighbor_state", named_block(decision, "visible"))
+        self.assertIn("NAM_line_complete = yes", named_block(decision, "remove_effect"))
+        effects = parse_clausewitz((builder.ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt").read_text(encoding="utf-8-sig"))
+        completion = block(block(effects, "NAM_line_complete"), "if")
+        guard = block(completion, "limit")
+        self.assertEqual(scalar(guard, "has_state_flag"), "NAM_line_in_progress")
+        self.assertEqual(scalar(guard, "is_owned_by"), "NAM")
+        self.assertEqual(scalar(guard, "is_controlled_by"), "NAM")
+        fortifications = [entry.value for entry in completion if entry.key == "add_building_construction"]
+        self.assertEqual(len(fortifications), 2)
+        for construction in fortifications:
+            self.assertEqual(scalar(construction, "type"), "bunker")
+            self.assertEqual(scalar(construction, "level"), "1")
+            provinces = block(construction, "province")
+            self.assertEqual(scalar(provinces, "all_provinces"), "yes")
+            self.assertEqual(scalar(provinces, "limit_to_border"), "yes")
+        town_filter = [
+            entry.value for entry in block(fortifications[1], "province")
+            if not entry.key
+        ]
+        self.assertEqual(town_filter, ["limit_to_victory_point", ">", "0"])
 
     def test_nam_mobilisation_spawns_on_all_live_fronts(self) -> None:
         oob = (builder.ROOT / "history" / "units" / "NAM_resource_war.txt").read_text(
@@ -585,8 +555,8 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         locations = [
             int(value) for value in re.findall(r"(?m)^\s*location\s*=\s*(\d+)\s*$", oob)
         ]
-        self.assertEqual(locations, [4912, 8058, 6961, 2299, 4912, 6961])
-        self.assertEqual(len(locations), 6)
+        self.assertEqual(locations, [4912, 8058, 2299])
+        self.assertEqual(len(locations), 3)
 
         effects = (
             builder.ROOT
@@ -642,7 +612,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             "NOT = { has_country_flag = ADISCORD_nam_emergency_reserve_called }",
             "set_country_flag = ADISCORD_nam_emergency_reserve_called",
             "add_manpower = 7000",
-            "type = infantry_equipment amount = 1500 producer = NAM",
+            "type = infantry_equipment amount = 15000 producer = NAM",
         ):
             self.assertIn(token, refresh)
         self.assertEqual(refresh.count("create_unit = {"), 2)
@@ -713,8 +683,8 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             "country_exists = AZH",
             "set_global_flag = ADISCORD_nam_resource_war_scheduled",
             "id = ADISCORD_nam_resource_war.1",
-            "days = 120",
-            "random_days = 90",
+            "days = 420",
+            "random_days = 60",
         ):
             self.assertEqual(schedule.count(token), 1, token)
         self.assertLess(
@@ -750,7 +720,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                     immediate,
                 )
             ),
-            1,
+            3,
         )
         self.assertEqual(
             immediate.count(
@@ -767,7 +737,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             1,
         )
         self.assertNotIn("ADISCORD_nam_resource_war_schedule = yes", immediate)
-        runtime_entry = "\n".join((effects, events, on_actions, collapse_events))
+        runtime_entry = "\n".join((schedule, events, on_actions, collapse_events))
         self.assertEqual(
             runtime_entry.count(
                 "set_global_flag = ADISCORD_nam_resource_war_retry_used"
@@ -954,51 +924,25 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             with self.subTest(obsolete=obsolete):
                 self.assertNotIn(obsolete, terminal_sources)
 
-        capitulation = named_block(on_actions, "on_capitulation")
-        self.assertRegex(
-            capitulation,
-            r"(?s)ROOT\s*=\s*\{\s*tag\s*=\s*NAM\s*\}.*?"
-            r"FROM\s*=\s*\{\s*OR\s*=\s*\{\s*tag\s*=\s*EFL\s+tag\s*=\s*AZH\s+tag\s*=\s*SLF\s*\}\s*\}.*?"
-            r"ADISCORD_nam_resource_war_resolve_coalition_victory\s*=\s*yes",
-        )
+        capitulation = named_block(on_actions, "on_capitulation_immediate")
+        self.assertIn("ADISCORD_nam_resource_war_resolve_coalition_victory = yes", capitulation)
+        self.assertIn("ADISCORD_nam_capitulation_reserved", capitulation)
+        for tag in ("EFL", "AZH", "SLF"):
+            self.assertIn(f"has_war_with = {tag}", capitulation)
+            self.assertIn(f"is_subject_of = {tag}", capitulation)
 
-        coalition = named_block(
-            effects, "ADISCORD_nam_resource_war_resolve_coalition_victory"
-        )
+        coalition = named_block(effects, "ADISCORD_nam_resource_war_resolve_coalition_victory")
         efl = named_block(coalition, "EFL")
-        azh = named_block(coalition, "AZH")
-        self.assertEqual(
-            {int(state) for state in re.findall(r"transfer_state\s*=\s*(\d+)", efl)},
-            {67, 225, 228, 230, 231, 688},
-        )
-        self.assertEqual(
-            {int(state) for state in re.findall(r"transfer_state\s*=\s*(\d+)", azh)},
-            {226, 227, 229, 689, 690, 700},
-        )
-        for recipient, state_ids in {
-            "EFL": {67, 225, 228, 230, 231, 688},
-            "AZH": {226, 227, 229, 689, 690, 700},
-        }.items():
-            for state_id in state_ids:
-                with self.subTest(recipient=recipient, state=state_id):
-                    state_block = named_block(coalition, str(state_id))
-                    self.assertRegex(state_block, rf"\badd_core_of\s*=\s*{recipient}\b")
-                    self.assertRegex(
-                        state_block,
-                        rf"\bset_state_controller_to\s*=\s*{recipient}\b",
-                    )
-        self.assertIn(
-            "688 = { remove_core_of = SLF remove_core_of = NAM add_core_of = EFL set_state_controller_to = EFL }",
-            coalition,
-        )
-        self.assertIn(
-            "689 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }",
-            coalition,
-        )
-        self.assertIn(
-            "690 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }",
-            coalition,
-        )
+        ceded = {int(state) for state in re.findall(
+            r"(\d+)\s*=\s*\{\s*NAM_rw_cede_mainland_state\s*=\s*yes\s*\}", coalition
+        )}
+        self.assertEqual(ceded, {67, 688, 689, 690, 700, 719})
+        self.assertIn("NAM_rw_can_go_into_exile = yes", coalition)
+        self.assertIn("NAM_rw_settle_island_exile = yes", coalition)
+        self.assertIn("ADISCORD_nam_resource_war_clear_temporary_support = yes", coalition)
+        exile = named_block(effects, "NAM_rw_settle_island_exile")
+        self.assertIn("ADISCORD_nam_resource_war_clear_temporary_support = yes", exile)
+        self.assertLess(coalition.index("NAM_rw_exile_evacuate = yes"), coalition.index("ADISCORD_nam_resource_war_end_all_wars = yes"))
 
         debug_categories = (
             builder.ROOT
@@ -1010,31 +954,18 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         debug_category = named_block(
             debug_categories, "ADISCORD_scenario_debug_category"
         )
-        self.assertEqual(
-            set(
-                re.findall(
-                    r"\btag\s*=\s*([A-Z0-9]{3})\b",
-                    named_block(debug_category, "allowed"),
-                )
-            ),
-            {"WRK", "WKR", "VAD", "TVA", "IVN", "NAM", "EFL", "AZH", "SLF"},
-        )
+        self.assertIn("always = yes", named_block(debug_category, "allowed"))
+        self.assertIn("is_debug = yes", named_block(debug_category, "visible"))
         for decision_name in (
             "ADISCORD_nam_debug_start_resource_war",
             "ADISCORD_nam_debug_resolve_coalition_victory",
             "ADISCORD_nam_debug_resolve_nam_victory",
         ):
-            with self.subTest(decision=decision_name):
-                decision = named_block(debug_decisions, decision_name)
-                self.assertEqual(
-                    set(
-                        re.findall(
-                            r"\btag\s*=\s*([A-Z0-9]{3})\b",
-                            named_block(decision, "allowed"),
-                        )
-                    ),
-                    {"NAM", "EFL", "AZH", "SLF"},
-                )
+            decision = named_block(debug_decisions, decision_name)
+            self.assertEqual(
+                set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", named_block(decision, "allowed"))),
+                {"NAM", "EFL", "AZH", "SLF"},
+            )
         self.assertIn(
             "annex_country = { target = SLF transfer_troops = no }",
             efl,
@@ -1424,7 +1355,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             builder.ROOT / "history" / "units" / "EBA_vorkerland_collapse.txt"
         ).read_text(encoding="utf-8-sig")
         self.assertEqual(eba_oob.count("division = {"), 4)
-        self.assertEqual(eba_oob.count('division_template = "EBA Collapse Militia"'), 4)
+        self.assertEqual(eba_oob.count('division_template = "Collapse Militia"'), 4)
 
         effects = source_section(
             (

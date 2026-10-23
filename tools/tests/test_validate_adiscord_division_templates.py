@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -35,6 +36,93 @@ class StartingTemplateCounterTests(unittest.TestCase):
 
 
 class RepositoryDivisionTemplateAsciiTests(unittest.TestCase):
+    def test_ai_designs_keep_explicit_role_icons(self) -> None:
+        root = Path(__file__).resolve().parents[2]
+        source = (root / "common/ai_templates/ADISCORD_land_templates.txt").read_text(
+            encoding="utf-8"
+        )
+        designs = {}
+        for family in parse_clausewitz(source):
+            for design in family.value:
+                if not isinstance(design.value, list):
+                    continue
+                if not any(child.key == "target_template" for child in design.value):
+                    continue
+                icons = [child.value for child in design.value if child.key == "custom_icon"]
+                self.assertEqual(len(icons), 1, design.key)
+                designs[design.key] = icons[0]
+        self.assertEqual(designs["STP_congress_guard"], "78")
+        self.assertEqual(designs["ADISCORD_marine_brigade"], "34")
+        self.assertEqual(designs["ADISCORD_hazard_detachment"], "2")
+        self.assertEqual(designs["ADISCORD_mechanized_brigade"], "5")
+        self.assertEqual(designs["ADISCORD_mountaineer_brigade"], "110")
+        self.assertEqual(designs["ADISCORD_field_headquarters"], "121")
+
+    def test_active_templates_hide_country_tags_and_use_role_icons(self) -> None:
+        root = Path(__file__).resolve().parents[2]
+        templates, _, issues = collect_templates_and_references(root)
+        self.assertEqual(issues, [])
+        paths = {root / template.path for template in templates}
+        paths.update((root / "common/national_focus").glob("*.txt"))
+        tags = {
+            tag
+            for path in (root / "common/country_tags").glob("*.txt")
+            for tag in re.findall(
+                r"(?m)^\s*([A-Z0-9]{3})\s*=", path.read_text(encoding="utf-8-sig")
+            )
+        }
+
+        def inspect(entries, path):
+            for entry in entries:
+                if not isinstance(entry.value, list):
+                    continue
+                if entry.key == "division_template":
+                    values = {
+                        child.key: child.value
+                        for child in entry.value
+                        if isinstance(child.value, str)
+                    }
+                    if "name" in values:
+                        name = values["name"]
+                        with self.subTest(path=path, template=name):
+                            self.assertNotIn(re.split(r"[ _-]", name)[0], tags)
+                            self.assertEqual(
+                                values.get("template_counter"),
+                                str(starting_template_counter(name)),
+                            )
+                inspect(entry.value, path)
+
+        for path in sorted(paths):
+            inspect(parse_clausewitz(path.read_text(encoding="utf-8-sig")), path)
+
+    def test_reinforcements_reuse_national_templates(self) -> None:
+        root = Path(__file__).resolve().parents[2]
+        for tag, name in (("EFL", "Line Infantry Brigade"), ("AZH", "Basin Levy")):
+            starting = parse_clausewitz(
+                (root / f"history/units/{tag}.txt").read_text(encoding="utf-8")
+            )
+            template = next(
+                entry.value for entry in starting
+                if entry.key == "division_template"
+                and any(child.key == "name" and child.value == name for child in entry.value)
+            )
+            self.assertIn(
+                "ADISCORD_INF_01",
+                [child.value for child in template if child.key == "division_names_group"],
+            )
+            oob = (root / f"history/units/{tag}_nam_resource_war.txt").read_text(
+                encoding="utf-8"
+            )
+            self.assertNotIn("division_template = {", oob)
+            self.assertEqual(oob.count(f'division_template = "{name}"'), 3)
+        effects = (root / "common/scripted_effects/ADISCORD_VAL_effects.txt").read_text(
+            encoding="utf-8"
+        )
+        self.assertEqual(effects.count('name = "Kefreyt Airship"'), 1)
+        self.assertEqual(effects.count("VAL_ensure_airship_template = yes"), 2)
+        self.assertNotIn("Kefreyt Reserve Infantry", effects)
+        self.assertNotIn("Kefreyt Zeppelin Trial", effects)
+
     def test_active_names_follow_audited_encoding_contract(self) -> None:
         root_override = os.environ.get("ADISCORD_DIVISION_AUDIT_ROOT")
         root = Path(root_override) if root_override else Path(__file__).parents[2]

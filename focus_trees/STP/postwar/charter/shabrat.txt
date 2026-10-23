@@ -913,7 +913,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = ROOT }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 27000 producer = ROOT }
 			add_equipment_to_stockpile = { type = support_equipment amount = 200 producer = ROOT }
 			army_experience = 15
 			unlock_decision_tooltip = STP_pc_charter_shabrat_defence_contract

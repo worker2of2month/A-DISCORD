@@ -145,6 +145,40 @@ class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
             with self.subTest(path=path.name):
                 self.assertEqual(path.read_text(encoding="utf-8"), generated.decode("utf-8"))
 
+    def test_eflor_regulars_keep_their_model_and_weapon_progression(self) -> None:
+        entities = entity_blocks(COUNTRY_ASSET)
+        asset = COUNTRY_ASSET.read_text(encoding="utf-8")
+        folder = ROOT / "gfx/models/units/ADISCORD_regulars"
+        report = json.loads(
+            (ROOT / "docs/development/model-verification/EFL_verification.json").read_text()
+        )["EFL"]
+        for level in range(8):
+            name = custom_entity_name("EFL_infantry", level)
+            parent = custom_entity_name("STP_infantry", level)
+            pose = "rifle" if level == 0 else "mg"
+            with self.subTest(level=level):
+                self.assertEqual(asset.count(f'name = "{name}"'), 1)
+                self.assertIn(f'clone = "{parent}"', entities[name])
+                self.assertIn(f'pdxmesh = "ADISCORD_EFL_field_{pose}_mesh"', entities[name])
+                self.assertLess(asset.index(entities[parent]), asset.index(entities[name]))
+                for _, _, weapon_pose in ATTACHMENTS:
+                    self.assertIn(
+                        f'"ADISCORD_infantry_weapon_{level}_{weapon_pose}_entity"',
+                        entities[parent],
+                    )
+        self.assertLessEqual(len(report["bones"]), 50)
+        self.assertTrue({bone for _, bone, _ in ATTACHMENTS} <= set(report["bones"]))
+        self.assertEqual(
+            report["sha256"], hashlib.sha256((folder / "EFL_field.mesh").read_bytes()).hexdigest()
+        )
+        self.assertEqual(len(report["textures"]), 6)
+        for name, digest in report["textures"].items():
+            self.assertEqual(digest, hashlib.sha256((folder / name).read_bytes()).hexdigest())
+        self.assertEqual(set(report["poses"]), {
+            "idle_rifle", "moving_rifle", "attack_stand_rifle",
+            "idle_mg", "moving_mg", "attack_stand_mg",
+        })
+
     def test_territorial_models_survive_regular_infantry_regeneration(self) -> None:
         from tools.assets.source.STP_regulars.package_regulars import bindings
 

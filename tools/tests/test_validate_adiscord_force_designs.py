@@ -462,7 +462,7 @@ class VorkerlandForceDesignTests(unittest.TestCase):
         expected = {
             "history/units/WRK.txt": "Workerland Mobile Group",
             "history/units/VAD.txt": "Armi Mobile Group",
-            "history/units/TVA_vorkerland_collapse.txt": "TVA Mobile Test Group",
+            "history/units/TVA_vorkerland_collapse.txt": "Mobile Test Group",
         }
         for relative, template_name in expected.items():
             templates = named_blocks(read(relative), "division_template")

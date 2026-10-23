@@ -514,6 +514,8 @@ NAM_rival_cycle_open = {
 	NAM_ladder_formed = yes
 	NOT = { has_country_flag = NAM_coup_succeeded }
 	NOT = { has_country_flag = NAM_rival_cooldown }
+	NOT = { has_country_flag = NAM_political_petition_cooldown }
+	NOT = { has_country_flag = NAM_grp_event_pending }
 	NOT = { has_country_flag = NAM_rival_event_pending }
 	NOT = { has_active_mission = NAM_rival_demand }
 	OR = {

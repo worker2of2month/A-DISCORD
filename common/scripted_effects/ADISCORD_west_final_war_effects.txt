@@ -814,7 +814,7 @@ ADISCORD_west_wrk_arm_front_partner = {
 		}
 		add_equipment_to_stockpile = {
 			type = infantry_equipment
-			amount = 3000
+			amount = 27000
 			producer = WRK
 		}
 		add_equipment_to_stockpile = {
@@ -932,12 +932,12 @@ ADISCORD_west_ship_arms = {
 	ROOT = {
 		add_equipment_to_stockpile = {
 			type = infantry_equipment
-			amount = -1000
+			amount = -9000
 		}
 	}
 	add_equipment_to_stockpile = {
 		type = infantry_equipment
-		amount = 1000
+		amount = 9000
 		producer = ROOT
 	}
 	set_temp_variable = { var = ADISCORD_west_push value = ROOT.ADISCORD_west_influence_power }

@@ -70,8 +70,8 @@ class VorkerlandClaimantOpeningBalanceTests(unittest.TestCase):
 
     def test_tva_has_one_mobile_group_without_losing_front_coverage(self):
         oob = read("history/units/TVA_vorkerland_collapse.txt")
-        self.assertEqual(oob.count('division_template = "TVA Mobile Test Group"'), 1)
-        self.assertEqual(oob.count('division_template = "TVA Collapse Militia"'), 18)
+        self.assertEqual(oob.count('division_template = "Mobile Test Group"'), 1)
+        self.assertEqual(oob.count('division_template = "Collapse Militia"'), 18)
 
     def test_initiative_roll_covers_all_claimants_equally_and_only_once(self):
         effect = named_block(self.effects, "ADISCORD_vorkerland_roll_central_initiative")

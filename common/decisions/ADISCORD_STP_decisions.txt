@@ -13677,7 +13677,7 @@ STP_ch_chapters = {
 					has_country_flag = STP_ch_trade_delay_used
 				}
 				NOT = {
-					has_equipment = { infantry_equipment < 1000 }
+					has_equipment = { infantry_equipment < 9000 }
 				}
 			}
 		}
@@ -13685,6 +13685,7 @@ STP_ch_chapters = {
 		fire_only_once = no
 		custom_cost_text = STP_ch_trade_delay_cost
 		custom_cost_trigger = {
+			NOT = { has_equipment = { infantry_equipment < 9000 } }
 			NOT = {
 				has_political_power < 25
 			}
@@ -13699,7 +13700,7 @@ STP_ch_chapters = {
 							has_country_flag = STP_ch_trade_delay_used
 						}
 						NOT = {
-							has_equipment = { infantry_equipment < 1000 }
+							has_equipment = { infantry_equipment < 9000 }
 						}
 						NOT = {
 							has_political_power < 25
@@ -13717,9 +13718,9 @@ STP_ch_chapters = {
 						}
 					}
 
-					add_equipment_to_stockpile = { type = infantry_equipment amount = -1000 }
+					add_equipment_to_stockpile = { type = infantry_equipment amount = -9000 }
 					NOD = {
-						add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = STP }
+						add_equipment_to_stockpile = { type = infantry_equipment amount = 9000 producer = STP }
 					}
 					if = {
 						limit = {
@@ -17088,7 +17089,7 @@ STP_ch_chapters = {
 			effect_tooltip = {
 				add_equipment_to_stockpile = {
 					type = ADISCORD_infantry_equipment_2156
-					amount = 250
+					amount = 2250
 					producer = ROOT
 				}
 			}
@@ -17581,7 +17582,7 @@ STP_ch_chapters = {
 					}
 					add_equipment_to_stockpile = {
 						type = ADISCORD_infantry_equipment_2156
-						amount = 900
+						amount = 8100
 						producer = ROOT
 					}
 					add_equipment_to_stockpile = {
@@ -17594,7 +17595,7 @@ STP_ch_chapters = {
 				else = {
 					add_equipment_to_stockpile = {
 						type = ADISCORD_infantry_equipment_2156
-						amount = 450
+						amount = 4050
 						producer = ROOT
 					}
 					add_equipment_to_stockpile = {
@@ -17677,7 +17678,7 @@ STP_ch_chapters = {
 					}
 					add_equipment_to_stockpile = {
 						type = ADISCORD_infantry_equipment_2156
-						amount = 1350
+						amount = 12150
 						producer = ROOT
 					}
 					add_equipment_to_stockpile = {
@@ -17689,7 +17690,7 @@ STP_ch_chapters = {
 				else = {
 					add_equipment_to_stockpile = {
 						type = ADISCORD_infantry_equipment_2156
-						amount = 900
+						amount = 8100
 						producer = ROOT
 					}
 					add_equipment_to_stockpile = {
@@ -18814,7 +18815,7 @@ STP_pw_programme = {
 			if = {
 				limit = { STP_pw_can_reconstruct = yes check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
 				custom_effect_tooltip = STP_pw_prog_defence_orders_tt
-				add_equipment_to_stockpile = { type = infantry_equipment amount = 6000 producer = ROOT }
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 54000 producer = ROOT }
 				add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = ROOT }
 				add_equipment_to_stockpile = { type = artillery_equipment amount = 60 producer = ROOT }
 				army_experience = 10

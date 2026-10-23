@@ -1299,7 +1299,7 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 1500
+				amount = 13500
 				producer = SHL
 			}
 			unlock_decision_tooltip = SHL_war_orders
@@ -3482,14 +3482,14 @@ focus_tree = {
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 5 compare = equals }
 			NOT = { has_global_flag = ADISCORD_south_final_started }
-			NOT = { has_equipment = { infantry_equipment < 3000 } }
+			NOT = { has_equipment = { infantry_equipment < 27000 } }
 			NAM = { exists = yes }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = -3000
+				amount = -27000
 			}
 			custom_effect_tooltip = SHL_south_oil_underground_tt
 			hidden_effect = { set_country_flag = ADISCORD_south_underground_armed }

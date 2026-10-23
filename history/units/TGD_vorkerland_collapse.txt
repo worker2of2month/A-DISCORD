@@ -1,5 +1,5 @@
 division_template = {
-	name = "TGD Urban Guard"
+	name = "Urban Guard"
 	template_counter = 78
 	division_names_group = TGD_COLLAPSE_INF_01
 	regiments = {
@@ -12,21 +12,21 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 16589
-		division_template = "TGD Urban Guard"
+		division_template = "Urban Guard"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.80
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
 		location = 16589
-		division_template = "TGD Urban Guard"
+		division_template = "Urban Guard"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.80
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 3 }
 		location = 16589
-		division_template = "TGD Urban Guard"
+		division_template = "Urban Guard"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.80
 	}

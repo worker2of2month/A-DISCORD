@@ -2503,6 +2503,54 @@ entity = { clone = "NAM_ADISCORD_militia_8_entity" name = "NAM_confederation_ADI
 entity = { clone = "NAM_ADISCORD_territorial_8_entity" name = "NAM_confederation_ADISCORD_territorial_8_entity" }
 entity = { clone = "NAM_mountaineers_8_entity" name = "NAM_confederation_mountaineers_8_entity" }
 entity = {
+	clone = "STP_infantry_entity"
+	name = "EFL_infantry_entity"
+	pdxmesh = "ADISCORD_EFL_field_rifle_mesh"
+}
+
+entity = {
+	clone = "STP_infantry_2_entity"
+	name = "EFL_infantry_2_entity"
+	pdxmesh = "ADISCORD_EFL_field_mg_mesh"
+}
+
+entity = {
+	clone = "STP_infantry_3_entity"
+	name = "EFL_infantry_3_entity"
+	pdxmesh = "ADISCORD_EFL_field_mg_mesh"
+}
+
+entity = {
+	clone = "STP_infantry_4_entity"
+	name = "EFL_infantry_4_entity"
+	pdxmesh = "ADISCORD_EFL_field_mg_mesh"
+}
+
+entity = {
+	clone = "STP_infantry_5_entity"
+	name = "EFL_infantry_5_entity"
+	pdxmesh = "ADISCORD_EFL_field_mg_mesh"
+}
+
+entity = {
+	clone = "STP_infantry_6_entity"
+	name = "EFL_infantry_6_entity"
+	pdxmesh = "ADISCORD_EFL_field_mg_mesh"
+}
+
+entity = {
+	clone = "STP_infantry_7_entity"
+	name = "EFL_infantry_7_entity"
+	pdxmesh = "ADISCORD_EFL_field_mg_mesh"
+}
+
+entity = {
+	clone = "STP_infantry_8_entity"
+	name = "EFL_infantry_8_entity"
+	pdxmesh = "ADISCORD_EFL_field_mg_mesh"
+}
+
+entity = {
 	name = "ADISCORD_hazard_infantry_entity"
 	pdxmesh = "ADISCORD_HAZ_field_rifle_mesh"
 	default_state = "idle"

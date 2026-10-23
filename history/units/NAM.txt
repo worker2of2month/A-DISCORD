@@ -11,6 +11,8 @@ division_template = {
 
 division_template = {
 	name = "Line Infantry Brigade"
+	is_locked = yes
+	force_allow_recruiting = yes
 	template_counter = 3
 	division_names_group = ADISCORD_INF_01
 	regiments = {
@@ -28,6 +30,8 @@ division_template = {
 
 division_template = {
 	name = "Capital Guard"
+	is_locked = yes
+	force_allow_recruiting = yes
 	template_counter = 78
 	division_names_group = ADISCORD_INF_01
 	regiments = {

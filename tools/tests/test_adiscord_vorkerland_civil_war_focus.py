@@ -2793,10 +2793,10 @@ class FieldTrialTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_tva_trial_affordable = yes", decision)
         begin = _blocks(self.effects, "ADISCORD_vorkerland_tva_begin_field_trial")[0]
         self.assertEqual(begin.count("add_political_power = -30"), 1)
-        self.assertEqual(begin.count("type = infantry_equipment amount = -1000"), 1)
+        self.assertEqual(begin.count("type = infantry_equipment amount = -9000"), 1)
         affordable = _blocks(self.triggers, "ADISCORD_vorkerland_tva_trial_affordable")[0]
         self.assertIn("NOT = { has_political_power < 30 }", affordable)
-        self.assertIn("NOT = { has_equipment = { infantry_equipment < 1000 } }", affordable)
+        self.assertIn("NOT = { has_equipment = { infantry_equipment < 9000 } }", affordable)
 
     def test_bonus_follows_the_committed_protocol(self) -> None:
         success = _blocks(self.effects, "ADISCORD_vorkerland_tva_field_trial_success")[0]

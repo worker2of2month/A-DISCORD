@@ -1965,7 +1965,7 @@ SHL_ensure_levy_template = {
 		limit = { NOT = { has_template = "Furnace Levy" } }
 		division_template = {
 			name = "Furnace Levy"
-			template_counter = 79
+			template_counter = 7
 			is_locked = yes
 			force_allow_recruiting = no
 			regiments = {
@@ -3532,7 +3532,7 @@ SHL_deliver_arsenal_batch = {
 	multiply_variable = { var = SHL_obligation_payment value = SHL_obligation_batch_price }
 	subtract_from_variable = { var = SHL_obligation_deposit value = SHL_obligation_payment }
 	set_variable = { var = SHL_obligation_rifles value = SHL_obligation_work }
-	multiply_variable = { var = SHL_obligation_rifles value = 750 }
+	multiply_variable = { var = SHL_obligation_rifles value = 6750 }
 	set_variable = { var = SHL_obligation_support value = SHL_obligation_work }
 	multiply_variable = { var = SHL_obligation_support value = 5 }
 	add_equipment_to_stockpile = {
@@ -4045,7 +4045,7 @@ SHL_demobilise_convoy = {
 		clr_country_flag = SHL_forced_march_ready
 		add_equipment_to_stockpile = {
 			type = infantry_equipment
-			amount = 1500
+			amount = 13500
 			producer = SHL
 		}
 	}
@@ -4627,7 +4627,7 @@ SHL_refresh_delivery_terms = {
 	set_variable = { var = SHL_civic_price value = 120 }
 	set_variable = { var = SHL_arsenal_price value = 120 }
 	set_variable = { var = SHL_pledge_price value = 180 }
-	set_variable = { var = SHL_delivery_rifles value = 300 }
+	set_variable = { var = SHL_delivery_rifles value = 2700 }
 	set_variable = { var = SHL_delivery_quarters value = 4 }
 	set_variable = { var = SHL_delivery_crest value = 4 }
 	if = {
@@ -5249,7 +5249,7 @@ SHL_preview_delivery = {
 				subtract_from_variable = { var = SHL_preview_batches value = SHL_obligation_progress }
 				clamp_variable = { var = SHL_preview_batches min = 0 max = SHL_preview_cost }
 				set_variable = { var = SHL_preview_site_rifles value = SHL_preview_batches }
-				multiply_variable = { var = SHL_preview_site_rifles value = 750 }
+				multiply_variable = { var = SHL_preview_site_rifles value = 6750 }
 			}
 		}
 		else_if = {

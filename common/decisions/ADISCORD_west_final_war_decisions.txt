@@ -115,7 +115,7 @@ ADISCORD_west_influence_category = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = ADISCORD_west_ship_arms_stock_tt
-				NOT = { has_equipment = { infantry_equipment < 1000 } }
+				NOT = { has_equipment = { infantry_equipment < 9000 } }
 			}
 		}
 		cost = 10
@@ -132,7 +132,7 @@ ADISCORD_west_influence_category = {
 			modifier = {
 				add = 15
 				FROM = { ADISCORD_west_corridor_owner = yes }
-				NOT = { has_equipment = { infantry_equipment < 5000 } }
+				NOT = { has_equipment = { infantry_equipment < 45000 } }
 			}
 			modifier = {
 				factor = 0

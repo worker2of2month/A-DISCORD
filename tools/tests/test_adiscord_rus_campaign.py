@@ -2743,7 +2743,7 @@ class RusCampaignTests(unittest.TestCase):
                 world.value("RUS_suspicion") - 40,
                 round(world.stability - stability, 2),
             ))
-        self.assertEqual(results, [(100, 3000, 1500, 30, 4, 0), (50, 1500, 750, 15, 0, 0.03)])
+        self.assertEqual(results, [(100, 27000, 1500, 30, 4, 0), (50, 13500, 750, 15, 0, 0.03)])
         settle = self.effects["ADISCORD_vorkerland_rus_settle_dirty_target"]
         fired = [row for row in walk(settle) if row.key == "country_event" and scalar(row.value, "id") == "ADISCORD_rus_crisis.30"]
         self.assertEqual(len(fired), 6)

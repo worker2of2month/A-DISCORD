@@ -193,6 +193,7 @@ focus_tree = {
 			}
 			division_template = {
 				name = "Морская пехота Нодрула"
+				template_counter = 34
 				regiments = {
 					ADISCORD_marine_infantry = { x = 0 y = 0 }
 					ADISCORD_marine_infantry = { x = 0 y = 1 }

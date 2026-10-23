@@ -31,7 +31,7 @@ ADISCORD_garrison_templates = {
 			has_template = "Congress Infantry Guard"
 		}
 		reinforce_prio = 2
-		custom_icon = 3
+		custom_icon = 78
 		upgrade_prio = { base = 100 }
 		can_upgrade_in_field = { always = no }
 		target_template = {
@@ -93,6 +93,7 @@ ADISCORD_territorial_templates = {
 	role = militias
 	upgrade_prio = { base = 4 }
 	ADISCORD_vorkerland_northern_line_militia = {
+		custom_icon = 12
 		enable = {
 			is_ai = yes
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -111,6 +112,7 @@ ADISCORD_territorial_templates = {
 		target_template = { regiments = { ADISCORD_militia = 4 } }
 	}
 	ADISCORD_stelander_line_brigade = {
+		custom_icon = 12
 		enable = {
 			is_ai = yes
 			OR = {
@@ -139,6 +141,7 @@ ADISCORD_territorial_templates = {
 		target_template = { regiments = { ADISCORD_territorial = 6 } }
 	}
 	ADISCORD_border_territorial_militia = {
+		custom_icon = 12
 		enable = {
 			has_war = yes
 			OR = {
@@ -163,6 +166,7 @@ ADISCORD_infantry_templates = {
 
 	# Keep the source target first; replace_with advances the existing army.
 	ADISCORD_reconstruction_brigade = {
+		custom_icon = 3
 		reinforce_prio = 1
 		upgrade_prio = { base = 12 }
 		can_upgrade_in_field = {
@@ -176,6 +180,7 @@ ADISCORD_infantry_templates = {
 	}
 
 	ADISCORD_line_brigade = {
+		custom_icon = 3
 		enable = {
 			is_ai = yes
 		}
@@ -197,6 +202,7 @@ ADISCORD_infantry_templates = {
 	}
 
 	ADISCORD_defensive_line_brigade = {
+		custom_icon = 3
 		enable = {
 			has_tech = ADISCORD_tech_forward_supply_hubs
 			has_tech = ADISCORD_tech_scrap_at_launchers
@@ -245,6 +251,7 @@ ADISCORD_assault_templates = {
 	}
 
 	ADISCORD_assault_group = {
+		custom_icon = 4
 		enable = {
 			has_tech = ADISCORD_tech_assault_infantry_formations
 			has_tech = ADISCORD_tech_standardized_field_tool_chests
@@ -279,6 +286,7 @@ ADISCORD_assault_templates = {
 	}
 
 	ADISCORD_mechanized_brigade = {
+		custom_icon = 5
 		enable = {
 			has_tech = ADISCORD_tech_armored_carrier_program
 			has_tech = ADISCORD_tech_standardized_field_tool_chests
@@ -306,6 +314,7 @@ ADISCORD_mountaineer_templates = {
 	role = mountaineers
 	upgrade_prio = { base = 2 }
 	ADISCORD_hazard_detachment = {
+		custom_icon = 2
 		enable = {
 			has_tech = ADISCORD_tech_radiation_patrols
 			OR = {
@@ -329,6 +338,7 @@ ADISCORD_mountaineer_templates = {
 	}
 
 	STP_cw_mountain_brigade = {
+		custom_icon = 110
 		enable = {
 			STP_cw_mountain_war_active = yes
 			has_completed_focus = STP_cw_mountain_school
@@ -341,6 +351,7 @@ ADISCORD_mountaineer_templates = {
 		}
 	}
 	ADISCORD_mountaineer_brigade = {
+		custom_icon = 110
 		enable = {
 			NOT = { ADISCORD_economy_ai_is_crisis = yes }
 			has_equipment = { support_equipment > 400 }
@@ -360,6 +371,7 @@ ADISCORD_mountaineer_templates = {
 	}
 
 	ADISCORD_networked_mountaineer_brigade = {
+		custom_icon = 110
 		enable = {
 			has_tech = ADISCORD_tech_forward_supply_hubs
 			has_tech = ADISCORD_tech_frequency_hopping_field_sets
@@ -401,6 +413,7 @@ ADISCORD_tank_templates = {
 	# group as their collapse OOB.  It is large enough to hold organisation and
 	# breakthrough, but remains a single limited reserve in the emergency economy.
 	ADISCORD_vorkerland_mobile_reserve = {
+		custom_icon = 5
 		enable = {
 			is_ai = yes
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -436,6 +449,7 @@ ADISCORD_tank_templates = {
 	}
 
 	ADISCORD_tank_battlegroup = {
+		custom_icon = 86
 		enable = {
 			has_tech = ADISCORD_tech_armored_carrier_program
 			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
@@ -465,6 +479,7 @@ ADISCORD_tank_templates = {
 	}
 
 	ADISCORD_networked_tank_battlegroup = {
+		custom_icon = 86
 		enable = {
 			has_tech = ADISCORD_tech_armored_carrier_program
 			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
@@ -498,6 +513,7 @@ ADISCORD_tank_templates = {
 	}
 
 	ADISCORD_heavy_tank_battlegroup = {
+		custom_icon = 86
 		enable = {
 			has_tech = ADISCORD_tech_armored_carrier_program
 			has_tech = ADISCORD_tech_heavy_platform_cores
@@ -530,6 +546,7 @@ ADISCORD_army_hq_templates = {
 	upgrade_prio = { base = 0 }
 
 	ADISCORD_field_headquarters = {
+		custom_icon = 121
 		reinforce_prio = 2
 		upgrade_prio = { base = 0 }
 		target_template = {
@@ -544,6 +561,7 @@ ADISCORD_marine_templates = {
 	role = marines
 	upgrade_prio = { base = 3 }
 	ADISCORD_marine_brigade = {
+		custom_icon = 34
 		enable = {
 			ADISCORD_has_marine_training = yes
 			ADISCORD_has_operational_naval_base = yes

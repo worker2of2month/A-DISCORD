@@ -2072,7 +2072,7 @@ class CharterTransactions(unittest.TestCase):
         self.execute(block(option, "hidden_effect"), "VAL")
         self.execute(block(option, "hidden_effect"), "VAL")
         self.assertEqual(self.number("ADISCORD_economy_treasury", "STS"), 0)
-        self.assertEqual(self.facts[("VAL", "equipment", "infantry_equipment")], 900)
+        self.assertEqual(self.facts[("VAL", "equipment", "infantry_equipment")], 8100)
         self.assertEqual(self.facts[("VAL", "equipment", "support_equipment")], 150)
         self.assertFalse(("STS", "equipment", "infantry_equipment") in self.facts)
         self.assertEqual(self.number("ADISCORD_economy_current_month_action_costs", "STS"), 300)

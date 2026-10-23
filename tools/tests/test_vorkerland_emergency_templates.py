@@ -12,17 +12,17 @@ from tools.validators.validate_adiscord_division_templates import (
 
 ROOT = Path(__file__).resolve().parents[2]
 MAPPING = {
-    "Emergency Militia": "ADISCORD_vorkerland_ensure_emergency_militia_template",
-    "Worker Home Guard": "ADISCORD_vorkerland_ensure_worker_home_guard_template",
-    "Workerland Militia": "ADISCORD_vorkerland_ensure_workerland_militia_template",
-    "Workerland Mobile Group": "ADISCORD_vorkerland_ensure_workerland_mobile_group_template",
-    "Armi Security Detachment": "ADISCORD_vorkerland_ensure_armi_security_detachment_template",
-    "Armi Mobile Group": "ADISCORD_vorkerland_ensure_armi_mobile_group_template",
-    "TVA Collapse Militia": "ADISCORD_vorkerland_ensure_tva_collapse_militia_template",
-    "TVA Infiltration Cell": "ADISCORD_vorkerland_ensure_tva_infiltration_cell_template",
-    "WPS Collapse Militia": "ADISCORD_vorkerland_ensure_wps_collapse_militia_template",
-    "TGD Urban Guard": "ADISCORD_vorkerland_ensure_tgd_urban_guard_template",
-    "Line Infantry Brigade": "ADISCORD_vorkerland_ensure_line_infantry_brigade_template",
+    "ADISCORD_vorkerland_ensure_emergency_militia_template": "Emergency Militia",
+    "ADISCORD_vorkerland_ensure_worker_home_guard_template": "Worker Home Guard",
+    "ADISCORD_vorkerland_ensure_workerland_militia_template": "Workerland Militia",
+    "ADISCORD_vorkerland_ensure_workerland_mobile_group_template": "Workerland Mobile Group",
+    "ADISCORD_vorkerland_ensure_armi_security_detachment_template": "Armi Security Detachment",
+    "ADISCORD_vorkerland_ensure_armi_mobile_group_template": "Armi Mobile Group",
+    "ADISCORD_vorkerland_ensure_tva_collapse_militia_template": "Collapse Militia",
+    "ADISCORD_vorkerland_ensure_tva_infiltration_cell_template": "Infiltration Cell",
+    "ADISCORD_vorkerland_ensure_wps_collapse_militia_template": "Collapse Militia",
+    "ADISCORD_vorkerland_ensure_tgd_urban_guard_template": "Urban Guard",
+    "ADISCORD_vorkerland_ensure_line_infantry_brigade_template": "Line Infantry Brigade",
 }
 REQUIRED_METADATA = {
     "Emergency Militia": ("is_locked = yes", "force_allow_recruiting = yes"),
@@ -96,7 +96,7 @@ class EmergencyTemplateTests(unittest.TestCase):
             ).read_text(encoding="utf-8-sig"),
             'emergency_template_effects',
         )
-        for name, effect in MAPPING.items():
+        for effect, name in MAPPING.items():
             with self.subTest(name=name):
                 block = re.search(
                     rf"(?ms)^{re.escape(effect)}\s*=\s*\{{.*?^\}}", source
@@ -118,7 +118,7 @@ class EmergencyTemplateTests(unittest.TestCase):
             'emergency_template_effects',
         )
         for name, required_tokens in REQUIRED_METADATA.items():
-            effect = MAPPING[name]
+            effect = next(effect for effect, template in MAPPING.items() if template == name)
             block = re.search(rf"(?ms)^{re.escape(effect)}\s*=\s*\{{.*?^\}}", source)
             self.assertIsNotNone(block)
             for token in required_tokens:
@@ -129,7 +129,7 @@ class EmergencyTemplateTests(unittest.TestCase):
         all_source = "\n".join(
             (ROOT / path).read_text(encoding="utf-8-sig") for path in CALLSITE_FILES
         )
-        for name, effect in MAPPING.items():
+        for effect, name in MAPPING.items():
             with self.subTest(name=name):
                 for call in re.finditer(
                     r"create_unit\s*=\s*\{[^{}]*division\s*=\s*\"[^\"]*division_template\s*=\s*\\\""
@@ -137,7 +137,7 @@ class EmergencyTemplateTests(unittest.TestCase):
                     all_source,
                 ):
                     before = all_source[max(0, call.start() - 500) : call.start()]
-                    self.assertIn(effect, before)
+                    self.assertTrue(any(candidate in before for candidate, template in MAPPING.items() if template == name))
 
     def test_shared_owner_is_covered_once_in_division_template_audit(self):
         owner_path = "common/scripted_effects/" "ADISCORD_vorkerland_effects.txt"
@@ -149,12 +149,12 @@ class EmergencyTemplateTests(unittest.TestCase):
         covered_names = []
         for row in audit["templates"]:
             sources = [row["source"], *row.get("source_aliases", [])]
-            if row["technical_name"] in MAPPING and any(
+            if row["technical_name"] in MAPPING.values() and any(
                 source.get("path") == owner_path for source in sources
             ):
                 # One audit row can cover several definitions in the same file.
                 covered_names.append(row["technical_name"])
-        self.assertCountEqual(covered_names, MAPPING)
+        self.assertCountEqual(covered_names, MAPPING.values())
 
     def test_shared_owners_replace_redundant_emergency_and_home_guard_blocks(self):
         collapse = source_section(

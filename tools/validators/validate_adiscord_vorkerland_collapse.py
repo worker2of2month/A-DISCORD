@@ -205,17 +205,17 @@ CENTRAL_BRACKET_TAGS = frozenset(CENTRAL_MINOR_TARGETS)
 CLOSED_ZONE_BRACKET_TAGS = frozenset({"RZA", "MLR", "IRT", "ERT", "SCA"})
 MAIN_CLAIMANTS = frozenset({"WKR", "VAD", "TVA"})
 EMERGENCY_TEMPLATE_EFFECTS = {
-    "Emergency Militia": "ADISCORD_vorkerland_ensure_emergency_militia_template",
-    "Worker Home Guard": "ADISCORD_vorkerland_ensure_worker_home_guard_template",
-    "Workerland Militia": "ADISCORD_vorkerland_ensure_workerland_militia_template",
-    "Workerland Mobile Group": "ADISCORD_vorkerland_ensure_workerland_mobile_group_template",
-    "Armi Security Detachment": "ADISCORD_vorkerland_ensure_armi_security_detachment_template",
-    "Armi Mobile Group": "ADISCORD_vorkerland_ensure_armi_mobile_group_template",
-    "TVA Collapse Militia": "ADISCORD_vorkerland_ensure_tva_collapse_militia_template",
-    "TVA Infiltration Cell": "ADISCORD_vorkerland_ensure_tva_infiltration_cell_template",
-    "WPS Collapse Militia": "ADISCORD_vorkerland_ensure_wps_collapse_militia_template",
-    "TGD Urban Guard": "ADISCORD_vorkerland_ensure_tgd_urban_guard_template",
-    "Line Infantry Brigade": "ADISCORD_vorkerland_ensure_line_infantry_brigade_template",
+    "ADISCORD_vorkerland_ensure_emergency_militia_template": "Emergency Militia",
+    "ADISCORD_vorkerland_ensure_worker_home_guard_template": "Worker Home Guard",
+    "ADISCORD_vorkerland_ensure_workerland_militia_template": "Workerland Militia",
+    "ADISCORD_vorkerland_ensure_workerland_mobile_group_template": "Workerland Mobile Group",
+    "ADISCORD_vorkerland_ensure_armi_security_detachment_template": "Armi Security Detachment",
+    "ADISCORD_vorkerland_ensure_armi_mobile_group_template": "Armi Mobile Group",
+    "ADISCORD_vorkerland_ensure_tva_collapse_militia_template": "Collapse Militia",
+    "ADISCORD_vorkerland_ensure_tva_infiltration_cell_template": "Infiltration Cell",
+    "ADISCORD_vorkerland_ensure_wps_collapse_militia_template": "Collapse Militia",
+    "ADISCORD_vorkerland_ensure_tgd_urban_guard_template": "Urban Guard",
+    "ADISCORD_vorkerland_ensure_line_infantry_brigade_template": "Line Infantry Brigade",
 }
 EMERGENCY_TEMPLATE_REQUIRED_METADATA = {
     "Emergency Militia": ("is_locked = yes", "force_allow_recruiting = yes"),
@@ -3318,7 +3318,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
                 issues.append(
                     f"Doctor Worx {target.upper()} infiltration is missing state {state}"
                 )
-        for token in ("TVA Infiltration Cell", "fire_only_once = yes"):
+        for token in ("Infiltration Cell", "fire_only_once = yes"):
             if token not in partisan:
                 issues.append(
                     f"Doctor Worx {target.upper()} infiltration is missing {token}"
@@ -4133,8 +4133,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
     tva_oob = read(root, "history/units/TVA_vorkerland_collapse.txt", issues)
     if (
         tva_oob.count("division = {") != 19
-        or tva_oob.count('division_template = "TVA Mobile Test Group"') != 1
-        or "TVA Infiltration Cell" not in tva_oob
+        or tva_oob.count('division_template = "Mobile Test Group"') != 1
+        or "Infiltration Cell" not in tva_oob
     ):
         issues.append(
             "TVA must start with eighteen militia formations, one mobile group and an infiltration template"
@@ -6644,7 +6644,7 @@ def validate_emergency_templates(root: Path, issues: list[str]) -> None:
     )
     if not balanced(effects):
         issues.append("emergency template effects: unbalanced braces or quote")
-    for name, effect in EMERGENCY_TEMPLATE_EFFECTS.items():
+    for effect, name in EMERGENCY_TEMPLATE_EFFECTS.items():
         block = named_block(effects, effect)
         if (
             not block
@@ -6667,11 +6667,12 @@ def validate_emergency_templates(root: Path, issues: list[str]) -> None:
             r'create_unit\s*=\s*\{[^{}]*division_template\s*=\s*\\"([^"\\]+)', source
         ):
             name = match.group(1)
-            effect = EMERGENCY_TEMPLATE_EFFECTS.get(name)
-            if (
-                effect
-                and effect not in source[max(0, match.start() - 700) : match.start()]
-            ):
+            owner_effects = [
+                effect for effect, template in EMERGENCY_TEMPLATE_EFFECTS.items()
+                if template == name
+            ]
+            before = source[max(0, match.start() - 700) : match.start()]
+            if owner_effects and not any(effect in before for effect in owner_effects):
                 issues.append(f"{relative}: {name} create_unit lacks owner ensure")
 
 

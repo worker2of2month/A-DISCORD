@@ -2294,7 +2294,7 @@ STP_cw_ensure_rear_cell_template = {
 		limit = { NOT = { has_template = "Stelander Underground Cell" } }
 		division_template = {
 			name = "Stelander Underground Cell"
-			template_counter = 12
+			template_counter = 17
 			is_locked = yes
 			force_allow_recruiting = no
 			regiments = {
@@ -2369,7 +2369,7 @@ STP_cw_raise_congress_guard = {
 		}
 		division_template = {
 			name = "Congress Infantry Guard"
-			template_counter = 3
+			template_counter = 78
 			priority = 2
 			is_locked = yes
 			force_allow_recruiting = no
@@ -6118,7 +6118,7 @@ STP_pc_charter_shabrat_finish_defence = {
 			}
 			STP_pc_charter_shabrat_clear_receipt = yes
 			set_country_flag = STP_pc_charter_shabrat_defence_delivered
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 900 producer = ROOT }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 8100 producer = ROOT }
 			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = ROOT }
 			if = {
 				limit = { has_completed_focus = STP_pc_charter_shabrat_district_reserves }
@@ -6850,7 +6850,7 @@ STP_pc_charter_deliver_partner_programme = {
 		}
 		else_if = {
 			limit = { STS = { check_variable = { var = STP_pc_lib_package_cabinet value = 2 compare = equals } } }
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 900 producer = STS }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 8100 producer = STS }
 			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = STS }
 		}
 		else_if = {
@@ -10632,6 +10632,7 @@ STP_ps_deliver_exile_formation = {
 	if = { limit = { NOT = { has_template = "Party Exile Brigade" } }
 		division_template = {
 			name = "Party Exile Brigade"
+			template_counter = 12
 			is_locked = yes
 			force_allow_recruiting = no
 			regiments = {
@@ -12164,7 +12165,7 @@ STP_pw_open_marine_school = {
 				limit = { tag = STP }
 				division_template = {
 					name = "Бригада морской пехоты Стеландера"
-					template_counter = 68
+					template_counter = 34
 					override_model = ADISCORD_STP_marine_entity
 					is_locked = no
 					force_allow_recruiting = yes
@@ -12183,7 +12184,7 @@ STP_pw_open_marine_school = {
 				limit = { tag = STS }
 				division_template = {
 					name = "Бригада морской пехоты Стеландера"
-					template_counter = 68
+					template_counter = 34
 					override_model = ADISCORD_STS_marine_entity
 					is_locked = no
 					force_allow_recruiting = yes
@@ -16441,7 +16442,7 @@ STP_pe_trade_settle = {
 			remove_ideas = STP_pe_trade_crisis
 			add_equipment_to_stockpile = {
 				type = ADISCORD_infantry_equipment_2156
-				amount = 250
+				amount = 2250
 				producer = ROOT
 			}
 		}
@@ -16673,7 +16674,7 @@ STP_pw_open_shield_corps = {
 				limit = { NOT = { has_template = "Stelander Shield Brigade" } }
 				division_template = {
 					name = "Stelander Shield Brigade"
-					template_counter = 3
+					template_counter = 89
 					is_locked = no
 					regiments = {
 						ADISCORD_urban_breacher = { x = 0 y = 0 }
@@ -16737,7 +16738,7 @@ STP_taran_complete_project = {
 			limit = { NOT = { has_template = "Taran Assault Group" } }
 			division_template = {
 				name = "Taran Assault Group"
-				template_counter = 3
+				template_counter = 86
 				is_locked = no
 				regiments = {
 					STP_taran = {
@@ -18007,7 +18008,7 @@ STP_sdir_arsenal_finish = {
 			}
 			clear_variable = STP_sdir_arsenal_deposit
 			set_country_flag = STP_sdir_arsenal_delivered
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 900 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 8100 }
 			add_equipment_to_stockpile = { type = support_equipment amount = 100 }
 		}
 		else = { STP_sdir_arsenal_refund = yes }

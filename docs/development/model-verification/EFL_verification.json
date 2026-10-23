@@ -1,0 +1,102 @@
+{
+  "EFL": {
+    "sha256": "2bf3b7dda5712c659fa47b67cd7f57658265b5e95f98ad73bdcc148c80e1459f",
+    "textures": {
+      "EFL_field_body_diffuse.dds": "f41eb44e074239e29916e6552ddea11b5bba86c4f8995ba3171bdebfc8cba687",
+      "EFL_field_body_normal.dds": "ccb6570bb1566458fe71f870c04993318a6c65055df6f6b545a391bdb2e3618c",
+      "EFL_field_body_specular.dds": "21cd30f78432e957606769d64a92ebd87e822c907abb38bcab7d42a5ebb7e22a",
+      "EFL_field_gear_diffuse.dds": "eb055697d1aaf0904416c0c83559d677537bd8a15a5aa894f3e05c2bdc24824c",
+      "EFL_field_gear_normal.dds": "13172a7842a2a910ba1f3bc7b39055a3f82ea4bdf7744efc27811fe963909ee4",
+      "EFL_field_gear_specular.dds": "9c1f1ca43e12d298b9eefb790980f8c1eee9457f359678358e484d0bd5fccbb3"
+    },
+    "shapes": [
+      {
+        "vertices": 4830,
+        "triangles": 1610,
+        "bones": 33
+      },
+      {
+        "vertices": 3314,
+        "triangles": 3648,
+        "bones": 33
+      }
+    ],
+    "poses": {
+      "idle_rifle": [
+        1,
+        91,
+        181
+      ],
+      "moving_rifle": [
+        1,
+        21,
+        41
+      ],
+      "attack_stand_rifle": [
+        1,
+        40,
+        79
+      ],
+      "idle_mg": [
+        1,
+        90,
+        180
+      ],
+      "moving_mg": [
+        1,
+        21,
+        41
+      ],
+      "attack_stand_mg": [
+        1,
+        49,
+        97
+      ]
+    },
+    "bones": [
+      "Root",
+      "Hip",
+      "LeftUpLeg",
+      "LeftLeg",
+      "LeftFoot",
+      "LeftToeBase",
+      "back_mid",
+      "LeftShoulder",
+      "LeftArm",
+      "LeftForeArm",
+      "LeftForeArmRoll",
+      "LeftHand",
+      "Left_Hand_node",
+      "Left_Hand_node_2",
+      "Left_Hand_node_3",
+      "Left_Hand_node_4",
+      "head",
+      "RightShoulder",
+      "RightArm",
+      "RightForeArm",
+      "RightForeArmRoll",
+      "RightHand",
+      "Right_Hand_node",
+      "Right_Hand_node_2",
+      "Right_Hand_node_3",
+      "Right_Hand_node_4",
+      "mid_back_node",
+      "RightUpLeg",
+      "RightLeg",
+      "RightFoot",
+      "RightToeBase",
+      "Root_node_1",
+      "Root_node_2"
+    ],
+    "bindings": {
+      "tags": [
+        "EFL"
+      ],
+      "roles": [
+        "infantry"
+      ],
+      "weapon_levels": 8
+    },
+    "runtime": "Offline native re-import only; HOI4 cold-load pending."
+  }
+}

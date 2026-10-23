@@ -1,4 +1,234 @@
 defined_text = {
+	name = NAMSupportNamColour
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_nam_support value = 25 compare = less_than_or_equals }
+		}
+		localization_key = NAM_bw_colour_penalty
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_nam_support value = 85 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_bw_colour_demand
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_nam_support value = 70 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_bw_colour_bonus
+	}
+	text = { localization_key = NAM_bw_colour_neutral }
+}
+
+defined_text = {
+	name = NAMSupportNamFavour
+	text = {
+		trigger = { has_idea = NAM_favour_nam_idea }
+		localization_key = NAM_bw_favour_active
+	}
+	text = {
+		trigger = { NOT = { has_completed_focus = NAM_namestnik_circuits } }
+		localization_key = NAM_bw_favour_nam_locked
+	}
+	text = {
+		trigger = { NAM_country_operable = no }
+		localization_key = NAM_bw_favour_inoperable
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_nam_support value = 70 compare = less_than }
+		}
+		localization_key = NAM_bw_favour_low
+	}
+	text = { localization_key = NAM_bw_favour_support_met }
+}
+
+defined_text = {
+	name = NAMSupportOilColour
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_oil_support value = 25 compare = less_than_or_equals }
+		}
+		localization_key = NAM_bw_colour_penalty
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_oil_support value = 85 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_bw_colour_demand
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_oil_support value = 70 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_bw_colour_bonus
+	}
+	text = { localization_key = NAM_bw_colour_neutral }
+}
+
+defined_text = {
+	name = NAMSupportOilFavour
+	text = {
+		trigger = { has_idea = NAM_favour_oil_idea }
+		localization_key = NAM_bw_favour_active
+	}
+	text = {
+		trigger = { NOT = { has_completed_focus = NAM_supports_oil_compact } }
+		localization_key = NAM_bw_favour_oil_locked
+	}
+	text = {
+		trigger = { NAM_country_operable = no }
+		localization_key = NAM_bw_favour_inoperable
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_oil_support value = 70 compare = less_than }
+		}
+		localization_key = NAM_bw_favour_low
+	}
+	text = { localization_key = NAM_bw_favour_support_met }
+}
+
+defined_text = {
+	name = NAMSupportDistColour
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_dist_support value = 25 compare = less_than_or_equals }
+		}
+		localization_key = NAM_bw_colour_penalty
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_dist_support value = 85 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_bw_colour_demand
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_dist_support value = 70 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_bw_colour_bonus
+	}
+	text = { localization_key = NAM_bw_colour_neutral }
+}
+
+defined_text = {
+	name = NAMSupportDistFavour
+	text = {
+		trigger = { has_idea = NAM_favour_dist_idea }
+		localization_key = NAM_bw_favour_active
+	}
+	text = {
+		trigger = { NOT = { has_completed_focus = NAM_district_assemblies } }
+		localization_key = NAM_bw_favour_dist_locked
+	}
+	text = {
+		trigger = { NAM_country_operable = no }
+		localization_key = NAM_bw_favour_inoperable
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_dist_support value = 70 compare = less_than }
+		}
+		localization_key = NAM_bw_favour_low
+	}
+	text = { localization_key = NAM_bw_favour_support_met }
+}
+
+defined_text = {
+	name = NAMSupportGarrColour
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_garr_support value = 25 compare = less_than_or_equals }
+		}
+		localization_key = NAM_bw_colour_penalty
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_garr_support value = 85 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_bw_colour_demand
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_garr_support value = 70 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_bw_colour_bonus
+	}
+	text = { localization_key = NAM_bw_colour_neutral }
+}
+
+defined_text = {
+	name = NAMSupportGarrFavour
+	text = {
+		trigger = { has_idea = NAM_favour_garr_idea }
+		localization_key = NAM_bw_favour_active
+	}
+	text = {
+		trigger = { NOT = { has_completed_focus = NAM_garrison_assembly } }
+		localization_key = NAM_bw_favour_garr_locked
+	}
+	text = {
+		trigger = { NAM_country_operable = no }
+		localization_key = NAM_bw_favour_inoperable
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_garr_support value = 70 compare = less_than }
+		}
+		localization_key = NAM_bw_favour_low
+	}
+	text = { localization_key = NAM_bw_favour_support_met }
+}
+
+defined_text = {
+	name = NAMSupportTradeColour
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_trade_support value = 25 compare = less_than_or_equals }
+		}
+		localization_key = NAM_bw_colour_penalty
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_trade_support value = 85 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_bw_colour_demand
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_trade_support value = 70 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_bw_colour_bonus
+	}
+	text = { localization_key = NAM_bw_colour_neutral }
+}
+
+defined_text = {
+	name = NAMSupportTradeFavour
+	text = {
+		trigger = { has_idea = NAM_favour_trade_idea }
+		localization_key = NAM_bw_favour_active
+	}
+	text = {
+		trigger = { NOT = { has_completed_focus = NAM_supports_export_houses } }
+		localization_key = NAM_bw_favour_trade_locked
+	}
+	text = {
+		trigger = { NAM_country_operable = no }
+		localization_key = NAM_bw_favour_inoperable
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_trade_support value = 70 compare = less_than }
+		}
+		localization_key = NAM_bw_favour_low
+	}
+	text = { localization_key = NAM_bw_favour_support_met }
+}
+
+defined_text = {
 	name = NAMGetNamestnikSupportEffect
 	text = {
 		trigger = {
@@ -377,6 +607,14 @@ defined_text = {
 	text = {
 		trigger = { has_country_flag = NAM_veter_amnesty }
 		localization_key = NAM_underground_amnestied
+	}
+	text = {
+		trigger = { has_war_with = SLF }
+		localization_key = NAM_underground_uprising
+	}
+	text = {
+		trigger = { NAM_underground_active = no }
+		localization_key = NAM_underground_inactive
 	}
 	text = {
 		trigger = { check_variable = { NAM_underground > 59 } }
