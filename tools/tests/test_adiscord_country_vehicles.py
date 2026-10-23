@@ -7,6 +7,8 @@ import re
 import unittest
 
 from tools.lib.paths import repository_root
+from tools.builders.build_adiscord_focus_trees import render_source
+from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 ROOT = repository_root()
 SOURCE = ROOT / "tools/assets/source/country_vehicles"
@@ -466,6 +468,55 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
                 self.assertIn(f'node = "{node}"', vehicle)
         self.assertNotIn("mechanized_entity", entities)
         self.assertNotIn("motorized_entity", entities)
+
+
+class CarrierFocusTests(unittest.TestCase):
+    def test_late_carrier_routes_deliver_equipment_even_with_researched_technology(self):
+        def one(rows, key):
+            matches = [row.value for row in rows if row.key == key]
+            self.assertEqual(len(matches), 1, key)
+            return matches[0]
+
+        cases = (
+            ("STP/civil_war/focuses.txt", "STP_pc_armored_maneuver_companies", "STS",
+             [{"STP_pc_army_against_heavy"}]),
+            ("STP/civil_war/focuses.txt", "STP_pw_party_mechanized_guard", "STP",
+             [{"STP_pw_party_supply_service", "STP_pw_party_professional_service"},
+              {"STP_pw_party_southern_defence"}]),
+            ("VAL/main/focuses.txt", "VAL_Armored_Transport_Contracts", "VAL",
+             [{"VAL_Armored_Contract_Companies"}, {"VAL_Motorized_Columns"}]),
+        )
+        for source, focus_id, tag, parents in cases:
+            with self.subTest(focus=focus_id):
+                tree = one(parse_clausewitz(render_source(source)), "focus_tree")
+                focuses = {one(row.value, "id"): row.value for row in tree if row.key == "focus"}
+                self.assertTrue(focus_id in focuses, focus_id)
+                focus = focuses[focus_id]
+                self.assertEqual(one(focus, "cost"), "5")
+                self.assertEqual(
+                    [{entry.value for entry in row.value} for row in focus if row.key == "prerequisite"],
+                    parents,
+                )
+                reward = one(focus, "completion_reward")
+                grant = one(reward, "add_equipment_to_stockpile")
+                self.assertEqual(one(grant, "type"), "ADISCORD_armored_carrier_2163")
+                self.assertEqual(one(grant, "amount"), "80")
+                self.assertEqual(one(grant, "producer"), tag)
+                conditional = one(reward, "if")
+                missing_tech = one(one(conditional, "limit"), "NOT")
+                self.assertEqual(one(missing_tech, "has_tech"), "ADISCORD_tech_armored_carrier_program")
+                technology = one(conditional, "set_technology")
+                self.assertEqual(one(technology, "ADISCORD_tech_armored_carrier_program"), "1")
+                country = "VAL_decisions" if tag == "VAL" else "STP"
+                for language in ("russian", "english"):
+                    path = ROOT / f"localisation/{language}/ADISCORD_{country}_l_{language}.yml"
+                    raw = path.read_bytes()
+                    self.assertTrue(raw.startswith(b"\xef\xbb\xbf"), path)
+                    for key in (focus_id, focus_id + "_desc"):
+                        self.assertEqual(len(re.findall(
+                            rf'^ {key}:\d* "[^"\r\n]+"\s*$',
+                            raw.decode("utf-8-sig"), re.MULTILINE,
+                        )), 1, key)
 
 
 if __name__ == "__main__":

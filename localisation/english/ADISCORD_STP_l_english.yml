@@ -6101,3 +6101,7 @@
  STP_imperial_union_required_states_controlled: "Every territory claimed for the future Imperial Union is owned and controlled by us"
  STP_imperial_union_requirements_met: "The conditions for proclaiming the Imperial Union are met"
  STP_imperial_union_proclaimed: "The Stelander Imperial Union has been proclaimed"
+ STP_pc_armored_maneuver_companies:0 "Armour for Manoeuvre Companies"
+ STP_pc_armored_maneuver_companies_desc:0 "Professional companies must be able to change positions under fire without losing men before reaching the line. Armoured personnel carriers will protect infantry on the move and help concentrate forces against enemy heavy formations."
+ STP_pw_party_mechanized_guard:0 "Mechanisation of the Guard"
+ STP_pw_party_mechanized_guard_desc:0 "The southern fortifications need a mobile reserve. Equipping the guard with armoured personnel carriers and organising their maintenance through the army reform will let us move infantry to threatened sectors under armour."

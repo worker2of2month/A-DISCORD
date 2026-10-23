@@ -3139,3 +3139,5 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  minister_VAL_Andrei_Krutov:0 "Andrei Krutov"
  minister_VAL_Andrei_Krutov_desc:0 "Andrei Sergeyevich Krutov is the head of the military chancellery and Solgalov's closest ally. He oversees senior command appointments, gathers reports on the condition of the units and maintains contact between the government and the army. Krutov remembers the service of his old comrades and presses for promises to them and their families to be honoured."
  minister_trait_VAL_military_chancellery:0 "Chief of the Military Chancellery"
+ VAL_Armored_Transport_Contracts:0 "Armoured Transport Contracts"
+ VAL_Armored_Transport_Contracts_desc:0 "Tank companies should not have to wait for infantry stranded in unprotected trucks. Experience with motorised columns and serial armour contracts will support an order for personnel carriers with standardised supply and field repair requirements."

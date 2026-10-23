@@ -1531,6 +1531,41 @@ focus_tree = {
 	}
 
 	focus = {
+		id = VAL_Armored_Transport_Contracts
+		icon = GFX_focus_generic_mechanized
+		search_filters = { FOCUS_FILTER_VAL_ARMY }
+		x = 52
+		y = 9
+		offset = {
+			x = 26
+			y = 0
+			trigger = { VAL_council_governs = yes }
+		}
+		cost = 5
+		prerequisite = { focus = VAL_Armored_Contract_Companies }
+		prerequisite = { focus = VAL_Motorized_Columns }
+		available = { has_capitulated = no }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 2 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_tech = ADISCORD_tech_armored_carrier_program }
+				}
+				set_technology = {
+					ADISCORD_tech_armored_carrier_program = 1
+					popup = yes
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_armored_carrier_2163
+				amount = 80
+				producer = VAL
+			}
+		}
+	}
+
+	focus = {
 		id = VAL_Field_Repair_Corps
 		icon = GFX_focus_VAL_Field_Repair_Corps
 		search_filters = { FOCUS_FILTER_VAL_ARMY }

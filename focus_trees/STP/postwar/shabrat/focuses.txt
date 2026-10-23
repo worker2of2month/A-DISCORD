@@ -614,6 +614,43 @@
 	}
 
 	focus = {
+		id = STP_pc_armored_maneuver_companies
+		icon = GFX_focus_generic_mechanized
+		x = 42
+		y = 11
+		prerequisite = { focus = STP_pc_army_against_heavy }
+		cost = 5
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			tag = STS
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 2 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_tech = ADISCORD_tech_armored_carrier_program }
+				}
+				set_technology = {
+					ADISCORD_tech_armored_carrier_program = 1
+					popup = yes
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_armored_carrier_2163
+				amount = 80
+				producer = STS
+			}
+		}
+	}
+
+	focus = {
 		id = STP_pc_army_limited_offense
 		icon = GFX_focus_RUS_swift_columns
 		x = 38

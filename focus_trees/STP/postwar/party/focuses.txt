@@ -2342,6 +2342,47 @@
 		}
 	}
 
+	focus = {
+		id = STP_pw_party_mechanized_guard
+		icon = GFX_focus_generic_mechanized
+		x = 8
+		y = 10
+		cost = 5
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			tag = STP
+		}
+		prerequisite = {
+			focus = STP_pw_party_supply_service
+			focus = STP_pw_party_professional_service
+		}
+		prerequisite = { focus = STP_pw_party_southern_defence }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 3 }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_tech = ADISCORD_tech_armored_carrier_program }
+				}
+				set_technology = {
+					ADISCORD_tech_armored_carrier_program = 1
+					popup = yes
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_armored_carrier_2163
+				amount = 80
+				producer = STP
+			}
+		}
+	}
+
 	# ============================================================
 	# SHABRAT POSTWAR: ECONOMIC RECOVERY
 	# ============================================================

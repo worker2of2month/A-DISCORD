@@ -83,7 +83,7 @@ class SharedFocusHistoryAssemblyTests(unittest.TestCase):
         self.assertIn("Native layout: shared focus history", self.native_text)
 
     def test_all_original_focus_bodies_and_tree_metadata_are_preserved(self):
-        self.assertEqual(len(self.old_focuses), 179)
+        self.assertCountEqual(self.old_focuses, source_focus_ids(VAL_SOURCE))
         self.assertEqual(self.old_focuses.keys(), self.shared_focuses.keys())
         self.assertFalse(any(row.key == "focus" for row in self.tree))
         for focus_id, original in self.old_focuses.items():

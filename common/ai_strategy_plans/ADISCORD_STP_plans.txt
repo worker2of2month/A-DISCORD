@@ -623,6 +623,7 @@ STP_party_reconstruction_plan = {
 		STP_pw_party_field_staff
 		STP_pw_party_border_staff
 		STP_pw_party_southern_defence
+		STP_pw_party_mechanized_guard
 
 		STP_pw_party_northern_protocol
 		STP_pw_party_sovereignty
