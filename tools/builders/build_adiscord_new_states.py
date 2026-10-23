@@ -570,16 +570,17 @@ NAM_POPULATION = {
 # NAM can lose the whole mainland and continue the war from its overseas
 # districts, so each island state starts with one port for naval supply and
 # evacuation. Every province already has a native naval_base_spawn facing an
-# adjacent sea zone; the largest island hosts the main fleet base. Islets with
-# no land link to their state's main port get a level-1 pier for supply.
+# adjacent sea zone; the largest island hosts the main fleet base. Detached
+# islets reach their state's port through the island bridges in
+# map/adjacencies.csv instead of separate piers.
 NAM_OVERSEAS_PORTS = {
-    225: ((11393, 3),),
-    226: ((4396, 2), (8537, 1)),
-    227: ((9192, 2), (2478, 1), (5482, 1), (6322, 1)),
-    228: ((6893, 4), (8682, 1)),
-    229: ((3731, 2),),
-    230: ((2742, 2),),
-    231: ((13018, 3),),
+    225: (11393, 3),
+    226: (4396, 2),
+    227: (9192, 2),
+    228: (6893, 4),
+    229: (3731, 2),
+    230: (2742, 2),
+    231: (13018, 3),
 }
 NAM_STATE_PROFILES = {
     67: {"population": NAM_POPULATION[67], "category": "large_city", "infrastructure": 4, "civilian": 2, "military": 1, "air_base": 1, "supplies": 5.0},
@@ -2399,12 +2400,19 @@ def svetlogorye_homeland_plan() -> dict[Path, bytes]:
             source = set_scalar(source, "manpower", str(NAM_POPULATION[state_id]))
         if state_id in deposits:
             source = ensure_state_resources(source, deposits[state_id])
-        for province, level in NAM_OVERSEAS_PORTS.get(state_id, ()):
+        if state_id in NAM_OVERSEAS_PORTS:
+            province, level = NAM_OVERSEAS_PORTS[state_id]
             province_open, province_close = named_block(source, "provinces")
             if province not in set(map(int, re.findall(r"\d+", source[province_open:province_close]))):
                 raise RuntimeError(f"state {state_id}: port province {province} is outside the state")
             if province not in coastal:
                 raise RuntimeError(f"state {state_id}: port province {province} is not coastal land")
+            # The manifest is the island state's only port; drop any other pier.
+            source = re.sub(
+                rf"(?m)^[ \t]*(?!{province}\b)\d+\s*=\s*\{{\s*naval_base\s*=\s*\d+\s*\}}[ \t]*\n",
+                "",
+                source,
+            )
             source = set_history_province_building(source, province, "naval_base", level)
         outputs[path] = source.encode("utf-8")
     return outputs

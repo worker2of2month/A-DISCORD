@@ -1115,10 +1115,11 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                 self.assertRegex(source, r"(?m)^\s*owner\s*=\s*NAM\s*$")
                 self.assertNotRegex(source, r"(?m)^\s*add_core_of\s*=\s*NAM\s*$")
                 self.assertIn("# adiscord_nam_overseas_colony = yes", source)
-                for port, level in builder.NAM_OVERSEAS_PORTS[state_id]:
-                    self.assertRegex(
-                        source, rf"(?m)^\s*{port}\s*=\s*\{{\s*naval_base\s*=\s*{level}\s*\}}"
-                    )
+                port, level = builder.NAM_OVERSEAS_PORTS[state_id]
+                self.assertRegex(
+                    source, rf"(?m)^\s*{port}\s*=\s*\{{\s*naval_base\s*=\s*{level}\s*\}}"
+                )
+                self.assertEqual(len(re.findall(r"\bnaval_base\s*=", source)), 1)
 
     def test_nam_coalition_front_can_supply_an_offensive(self) -> None:
         for state_id, profile in builder.NAM_COALITION_FRONT_PROFILES.items():

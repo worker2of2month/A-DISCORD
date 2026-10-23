@@ -82,6 +82,16 @@ NAM_island_convoy_route = {
 	compliance_growth = 0.05
 }
 
+# COUNTRY NAM in exile. The coalition's squadrons close the island harbours
+# for 90 days after Svetlogorsk piracy has become notorious.
+NAM_pirate_blockade = {
+	icon = GFX_idea_ADISCORD_trade_policy_limited_exports
+	enable = { always = yes }
+	fuel_gain_factor = -0.25
+	ADISCORD_economy_trade_income_factor = -0.15
+	convoy_raiding_efficiency_factor = -0.15
+}
+
 # COUNTRY SHL. Svetlogorsk convoy hunters cut the furnaces' fuel routes.
 NAM_south_convoy_blockade = {
 	icon = GFX_idea_ADISCORD_trade_policy_limited_exports

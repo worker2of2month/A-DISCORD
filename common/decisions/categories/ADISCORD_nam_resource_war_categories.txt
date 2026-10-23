@@ -1,3 +1,21 @@
+# Visible only while Svetlogorye is still Vorkerland's colony.
+NAM_colony = {
+	icon = generic_industry
+	allowed = { tag = NAM }
+	visible = { NAM_colony_phase = yes }
+	visible_when_empty = yes
+	priority = 25
+}
+
+# The island exile's flotillas, black market, drill and marines.
+NAM_piracy = {
+	icon = generic_naval
+	allowed = { tag = NAM }
+	visible = { NAM_piracy_open = yes }
+	visible_when_empty = yes
+	priority = 25
+}
+
 NAM_restitution = {
 	icon = generic_political_discourse
 	allowed = { tag = NAM }

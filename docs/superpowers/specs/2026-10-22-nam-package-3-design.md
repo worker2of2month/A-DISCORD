@@ -281,9 +281,10 @@ Owner: core phase 3.
   with a 60-day mission `NAM_rival_demand`; refusal lowers that pillar 15;
   a pillar below 25 at refusal triggers the coup event `.21`. A successful coup
   replaces Egor Rom with the rival as leader for the rest of the route.
-- Underground: `NAM_underground` 0..100, 20 at collapse; monthly +2 while
-  district support < 40, +1 while the balance is vertical-dominant, -3 with an
-  active compact. Districts route: talks chain `NAM_veter_talks_1..3` ending in
+- Underground: `NAM_underground` 0..100, 25 from the fresh-campaign startup
+  (M9); monthly base +3, +2 while district support < 40, +1 more below 25,
+  +2 while the balance is vertical-dominant, -1 at district support >= 60,
+  -3 with an active compact. Districts route: talks chain `NAM_veter_talks_1..3` ending in
   amnesty (underground 0, `NAM_Yaroslav_Veter` joins NAM as a general; SLF is
   never created). Talks broken off by an uprising return the treasury deposit
   of rounds 2 and 3 (100 and 200, escrow `NAM_veter_talks_deposit`); political
@@ -370,6 +371,65 @@ Owner: foreign phase (VAL, South, RUS files) and core phases (NAM-side events).
   oil for the people (stability, oil workers and districts) and defiance (war
   support, garrisons); the first option is the unattended answer.
 
+## M9. Colony, active underground and the island exile
+
+Owner: core phase 4 (third playtest batch).
+
+- Colony phase (`NAM_colony_phase`: no `NAM_center_vanished`, no
+  `ADISCORD_vorkerland_collapse_wars_started`). Category `NAM_colony`:
+  `NAM_wrk_fuel_shipment` (4000 fuel, 45-day cooldown; treasury
+  120 + 30 x `NAM_wrk_trade_level`, WRK opinion, namestniks +4, oil -3),
+  `NAM_wrk_trade_concession` (50 PP + 200 treasury in escrow, 45 days; then
+  25 + 15 x level treasury a month in `on_monthly_NAM` until the collapse),
+  `NAM_counterinsurgency_sweep` (state-targeted 67/688/689/690/719/700,
+  20 PP + 75 treasury in a state escrow, 21 days, one at a time, 120-day
+  state cooldown; underground -8, -12 in 688, districts -4, 30% excesses).
+  `NAM_wrk_trade_level` 0..3, focuses add and call `NAM_wrk_trade_refresh`.
+- Collapse: `NAM_ladder_declare_independence` fires `ADISCORD_nam_resource_war.80`
+  "The Centre Is Gone"; its immediate runs `NAM_colony_close` (flag
+  `NAM_center_vanished`, concession ended, `mark_focus_tree_layout_dirty`) and
+  its answer opens `ADISCORD_nam_groups.12`. Running colony decisions refund
+  through their cancel triggers.
+- Underground: runs from day 1 in `on_monthly_NAM` while
+  `NAM_underground_active` (no amnesty, owns 688, resource war not started).
+  The clamp opens threshold events .82/.83/.84 at 40/60/80, re-armed 15 points
+  below. `NAM_underground_sabotage_roll`: from 30, 20% a month (x1.5 from 50,
+  x1.5 again from 70), 60-day cooldown: .85 field fire (15 condition through
+  `NAM_field_apply_damage`), .86 depot raid (up to 1500 NAM rifles), .87
+  attack on a namestnik. Every event has three costed answers. The war-start
+  uprising thresholds (60 always, 30-59 50%) are unchanged.
+- Island exile: `NAM_rw_exile_evacuate` runs inside the coalition treaty
+  before `ADISCORD_nam_resource_war_end_all_wars`: the transports carry at most
+  floor(35%) of `num_divisions`; `delete_unit` removes whole state garrisons,
+  front first (719, 690, 688, 67, 689), then the principals' states (720, 721,
+  722, 701, 68, 70, 691, 69, 692), the harbour 700 last, while more divisions
+  remain than the carried share; 65% of NAM-made rifles, support, artillery and
+  squad weapons are dumped. `NAM_rw_settle_island_exile` burns the ceded
+  fields and the harbour (`NAM_rw_exile_scorch_state`: condition -70,
+  `NAM_scorched_wells_modifier` 180 days, building damage), forms
+  under-strength remnants on the island capital up to the carried share, seeds
+  the piracy variables and fires .81 "Flight to the Islands".
+- Piracy (category `NAM_piracy`, `NAM_piracy_open`): `NAM_pirate_raid`
+  (targets EFL AZH VAL STP STS IIA, 10 PP + 1000 fuel, 25 days, slot from
+  `NAM_pirate_raid_slots`, max 3; haul 50 / prize 15 / failure 35 weighted by
+  `num_ships`, target alert, blockade and notoriety; report .90, human target
+  .91), `NAM_pirate_buy_arms`, `NAM_pirate_buy_heavy_arms`,
+  `NAM_pirate_buy_convoys`, `NAM_pirate_fence_loot` (50 loot -> 100 treasury),
+  `NAM_exile_drill` (20 PP + 30 loot in escrow, 30 days, readiness +10, army
+  XP 15). Notoriety falls 3 a month; from 50 a 40% monthly retaliation chance
+  (120-day cooldown): blockade .92 (`NAM_pirate_blockade`, 90 days) or, from
+  75, punitive raid .93.
+- Marines: `NAM_order_marines` (50 loot + 4300 manpower, escrow
+  `NAM_marine_orders_paid`, cap `NAM_marine_order_cap` base 1 max 3,
+  `NAM_order_marines_release` refunds before the war of return). Template
+  `NAM Island Marines` (4 `ADISCORD_marine_infantry`, engineer) through the
+  script-only tech `ADISCORD_tech_svetlogorsk_marine_corps`.
+- Revenge landing: `NAM_war_of_return_start` from exile calls
+  `NAM_wor_revenge_landing` after the declaration: 2 marine divisions plus a
+  third for a paid order or `NAM_revenge_readiness` >= 70 spawn in state 700
+  (`prioritize_location = 16716`, enemy provinces allowed); further paid
+  orders form on the island capital; report .94.
+
 ## Shared contract for focus rewards
 
 Focus rewards may only use native effects and the identifiers below. A focus
@@ -388,6 +448,13 @@ refresh effect inside `hidden_effect`, with a visible tooltip of the delta.
 | `NAM_underground` + `NAM_underground_clamp = yes` | core 3 | Veter underground 0..100 |
 | `add_power_balance_value = { id = NAM_ladder_bop value = <x> }` | core 3 | Ladder balance, negative toward vertical |
 | `NAM_apply_ending_iron`, `NAM_apply_ending_service`, `NAM_apply_ending_federation`, `NAM_apply_ending_oil_union` | core 3 | Ending effects called by the ending focuses |
+| `NAM_wrk_trade_level` + `NAM_wrk_trade_refresh = yes` | core 4 | Trade houses in the metropole 0..3 |
+| `NAM_center_vanished` country flag | core 4 | Set by event .80 at the collapse; `allow_branch` of post-collapse branches |
+| `NAM_pirate_loot` via temp `NAM_pirate_loot_change` + `NAM_pirate_loot_add = yes` | core 4 | Exile loot |
+| `NAM_pirate_notoriety` + `NAM_pirate_notoriety_clamp = yes` | core 4 | Coalition attention 0..100 |
+| `NAM_pirate_raid_slots` (base 1, max 3) | core 4 | Parallel raids |
+| `NAM_revenge_readiness` + `NAM_revenge_readiness_clamp = yes` | core 4 | Preparation for the return 0..100; 70 adds a landing division |
+| `NAM_marine_order_cap` (base 1, max 3) | core 4 | Marine orders allowed |
 | `ADISCORD_nam_memoir.1..5`, `ADISCORD_nam_archive.1..6` | core 3 | Memoir and archive events |
 
 Decision IDs available to `unlock_decision_tooltip`:

@@ -813,6 +813,640 @@ country_event = {
 	option = { name = ADISCORD_nam_resource_war.62.a }
 }
 
+# ----- The vanished centre -----
+# The Vorkerland collapse: NAM_ladder_declare_independence fires this at the
+# collapse edge. The colony ends in immediate, so the colonial category closes
+# and the post-collapse branches of the tree open even for an unanswered
+# window; the answer opens the declaration event ADISCORD_nam_groups.12.
+country_event = {
+	id = ADISCORD_nam_resource_war.80
+	title = ADISCORD_nam_resource_war.80.t
+	desc = ADISCORD_nam_resource_war.80.d
+	picture = GFX_event_adiscord_vorkerland_explosion
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = NAM }
+
+	immediate = {
+		hidden_effect = { NAM_colony_close = yes }
+	}
+
+	option = {
+		name = ADISCORD_nam_resource_war.80.a
+		custom_effect_tooltip = NAM_center_vanished_tt
+		hidden_effect = { country_event = { id = ADISCORD_nam_groups.12 hours = 6 } }
+	}
+}
+
+# ----- Flight to the islands -----
+# The island exile settlement has evacuated the army and burnt the mainland;
+# the tooltip reports the counts written by NAM_rw_exile_evacuate.
+country_event = {
+	id = ADISCORD_nam_resource_war.81
+	title = ADISCORD_nam_resource_war.81.t
+	desc = ADISCORD_nam_resource_war.81.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	trigger = {
+		tag = NAM
+		has_global_flag = ADISCORD_nam_resource_war_island_exile
+	}
+
+	option = {
+		name = ADISCORD_nam_resource_war.81.a
+		custom_effect_tooltip = NAM_exile_evacuation_tt
+		add_war_support = 0.05
+		custom_effect_tooltip = NAM_exile_vow_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_revenge_readiness value = 10 }
+			NAM_revenge_readiness_clamp = yes
+		}
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.81.b
+		custom_effect_tooltip = NAM_exile_evacuation_tt
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_exile_salvage_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_pirate_loot_change value = 40 }
+			NAM_pirate_loot_add = yes
+		}
+		ai_chance = { base = 40 }
+	}
+}
+
+# ----- Underground: thresholds -----
+# NAM_underground_check_thresholds opens each of these once per crossing. The
+# last option is always available, so the window can always be closed.
+country_event = {
+	id = ADISCORD_nam_resource_war.82
+	title = ADISCORD_nam_resource_war.82.t
+	desc = ADISCORD_nam_resource_war.82.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_resource_war.82.a
+		trigger = { NOT = { has_political_power < 30 } }
+		add_political_power = -30
+		custom_effect_tooltip = NAM_ug_82_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_underground_change value = -10 }
+			NAM_underground_add = yes
+			add_to_variable = { var = NAM_grp_dist_support value = -5 }
+			NAM_groups_refresh = yes
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.82.b
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = NAM_ug_82_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 100 }
+			NAM_spend_treasury = yes
+			set_temp_variable = { var = NAM_underground_change value = -5 }
+			NAM_underground_add = yes
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			NAM_groups_refresh = yes
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.82.c
+		add_stability = -0.02
+		custom_effect_tooltip = NAM_ug_ignore_tt
+		hidden_effect = { NAM_underground_close_event = yes }
+		ai_chance = { base = 20 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.83
+	title = ADISCORD_nam_resource_war.83.t
+	desc = ADISCORD_nam_resource_war.83.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_resource_war.83.a
+		trigger = { NOT = { has_political_power < 50 } }
+		add_political_power = -50
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_ug_83_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_underground_change value = -15 }
+			NAM_underground_add = yes
+			add_to_variable = { var = NAM_grp_dist_support value = -10 }
+			NAM_groups_refresh = yes
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.83.b
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = NAM_ug_83_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 200 }
+			NAM_spend_treasury = yes
+			set_temp_variable = { var = NAM_underground_change value = -8 }
+			NAM_underground_add = yes
+			add_to_variable = { var = NAM_grp_dist_support value = 8 }
+			add_to_variable = { var = NAM_grp_oil_support value = 4 }
+			NAM_groups_refresh = yes
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.83.c
+		add_fuel = -5000
+		custom_effect_tooltip = NAM_ug_83_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_oil_support value = -6 }
+			NAM_groups_refresh = yes
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.84
+	title = ADISCORD_nam_resource_war.84.t
+	desc = ADISCORD_nam_resource_war.84.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_resource_war.84.a
+		trigger = { NOT = { has_manpower < 3000 } }
+		add_manpower = -3000
+		custom_effect_tooltip = NAM_ug_84_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_underground_change value = -20 }
+			NAM_underground_add = yes
+			add_to_variable = { var = NAM_grp_garr_support value = 5 }
+			add_to_variable = { var = NAM_grp_dist_support value = -10 }
+			NAM_groups_refresh = yes
+			set_temp_variable = { var = NAM_ladder_shift value = -0.05 }
+			NAM_ladder_shift = yes
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.84.b
+		trigger = {
+			NOT = { has_political_power < 75 }
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		add_political_power = -75
+		custom_effect_tooltip = NAM_ug_84_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 150 }
+			NAM_spend_treasury = yes
+			set_temp_variable = { var = NAM_underground_change value = -15 }
+			NAM_underground_add = yes
+			add_to_variable = { var = NAM_grp_dist_support value = 8 }
+			add_to_variable = { var = NAM_grp_nam_support value = -8 }
+			NAM_groups_refresh = yes
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.84.c
+		add_stability = -0.06
+		custom_effect_tooltip = NAM_ug_84_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_underground_change value = 5 }
+			NAM_underground_add = yes
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# ----- Underground: sabotage -----
+# NAM_underground_sabotage_roll opens one of these at most once in 60 days.
+# A field strike: the network fires one field Svetlogorye holds.
+country_event = {
+	id = ADISCORD_nam_resource_war.85
+	title = ADISCORD_nam_resource_war.85.t
+	desc = ADISCORD_nam_resource_war.85.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	immediate = {
+		hidden_effect = {
+			random_owned_controlled_state = {
+				limit = { NAM_field_state = yes }
+				save_event_target_as = NAM_ug_field
+				set_temp_variable = { var = NAM_field_damage_amount value = 15 }
+				NAM_field_apply_damage = yes
+			}
+		}
+	}
+
+	option = {
+		name = ADISCORD_nam_resource_war.85.a
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = NAM_ug_85_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 100 }
+			NAM_spend_treasury = yes
+			if = {
+				limit = { has_event_target = NAM_ug_field }
+				event_target:NAM_ug_field = {
+					set_temp_variable = { var = NAM_field_repair_amount value = 10 }
+					NAM_field_apply_repair = yes
+				}
+			}
+			add_to_variable = { var = NAM_grp_oil_support value = 3 }
+			NAM_groups_refresh = yes
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.85.b
+		trigger = { NOT = { has_political_power < 25 } }
+		add_political_power = -25
+		custom_effect_tooltip = NAM_ug_85_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_underground_change value = -8 }
+			NAM_underground_add = yes
+			add_to_variable = { var = NAM_grp_dist_support value = -6 }
+			NAM_groups_refresh = yes
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.85.c
+		add_stability = -0.02
+		custom_effect_tooltip = NAM_ug_85_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_underground_change value = 3 }
+			NAM_underground_add = yes
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# A depot raid: the network carries off rifles of Svetlogorsk make.
+country_event = {
+	id = ADISCORD_nam_resource_war.86
+	title = ADISCORD_nam_resource_war.86.t
+	desc = ADISCORD_nam_resource_war.86.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	immediate = {
+		hidden_effect = {
+			NAM_underground_steal_rifles = yes
+			set_temp_variable = { var = NAM_underground_change value = 4 }
+			NAM_underground_add = yes
+		}
+	}
+
+	option = {
+		name = ADISCORD_nam_resource_war.86.a
+		trigger = { NOT = { has_political_power < 20 } }
+		add_political_power = -20
+		custom_effect_tooltip = NAM_ug_86_a_tt
+		hidden_effect = {
+			random_list = {
+				50 = {
+					add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = NAM }
+					set_temp_variable = { var = NAM_underground_change value = -6 }
+					NAM_underground_add = yes
+				}
+				50 = {
+					add_manpower = -500
+				}
+			}
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.86.b
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = NAM_ug_86_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 100 }
+			NAM_spend_treasury = yes
+			set_country_flag = {
+				flag = NAM_depots_guarded
+				value = 1
+				days = 180
+			}
+			add_to_variable = { var = NAM_grp_garr_support value = 4 }
+			NAM_groups_refresh = yes
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.86.c
+		custom_effect_tooltip = NAM_ug_86_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_underground_change value = 3 }
+			NAM_underground_add = yes
+			add_to_variable = { var = NAM_grp_dist_support value = 2 }
+			NAM_groups_refresh = yes
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# An attack on a namestnik: the vertical demands an answer.
+country_event = {
+	id = ADISCORD_nam_resource_war.87
+	title = ADISCORD_nam_resource_war.87.t
+	desc = ADISCORD_nam_resource_war.87.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_resource_war.87.a
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_ug_87_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_underground_change value = -10 }
+			NAM_underground_add = yes
+			add_to_variable = { var = NAM_grp_nam_support value = 6 }
+			add_to_variable = { var = NAM_grp_dist_support value = -8 }
+			NAM_groups_refresh = yes
+			set_temp_variable = { var = NAM_ladder_shift value = -0.05 }
+			NAM_ladder_shift = yes
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.87.b
+		trigger = { NOT = { has_political_power < 50 } }
+		add_political_power = -50
+		custom_effect_tooltip = NAM_ug_87_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_underground_change value = -5 }
+			NAM_underground_add = yes
+			add_to_variable = { var = NAM_grp_nam_support value = 3 }
+			NAM_groups_refresh = yes
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.87.c
+		add_stability = -0.02
+		custom_effect_tooltip = NAM_ug_87_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_nam_support value = -8 }
+			NAM_groups_refresh = yes
+			NAM_underground_close_event = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# ----- Island exile: piracy -----
+# The flotilla returns. NAM_pirate_raid_settle has applied the outcome; the
+# description follows NAM_pirate_last_result (0 failure, 1 haul, 2 prize).
+country_event = {
+	id = ADISCORD_nam_resource_war.90
+	title = ADISCORD_nam_resource_war.90.t
+	desc = {
+		trigger = { check_variable = { NAM_pirate_last_result = 2 } }
+		text = ADISCORD_nam_resource_war.90.d_prize
+	}
+	desc = {
+		trigger = { check_variable = { NAM_pirate_last_result = 1 } }
+		text = ADISCORD_nam_resource_war.90.d_success
+	}
+	desc = {
+		trigger = { check_variable = { NAM_pirate_last_result = 0 } }
+		text = ADISCORD_nam_resource_war.90.d_failure
+	}
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_resource_war.90.a
+		if = {
+			limit = { check_variable = { NAM_pirate_last_result > 0 } }
+			custom_effect_tooltip = NAM_pirate_report_haul_tt
+		}
+		else_if = {
+			limit = { check_variable = { NAM_pirate_last_loss = 1 } }
+			custom_effect_tooltip = NAM_pirate_report_ship_lost_tt
+		}
+		else = {
+			custom_effect_tooltip = NAM_pirate_report_crew_lost_tt
+		}
+	}
+}
+
+# A human target learns who raided its convoys.
+country_event = {
+	id = ADISCORD_nam_resource_war.91
+	title = ADISCORD_nam_resource_war.91.t
+	desc = ADISCORD_nam_resource_war.91.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = { name = ADISCORD_nam_resource_war.91.a }
+}
+
+# Notoriety of 50 or more: the coalition closes the island harbours.
+country_event = {
+	id = ADISCORD_nam_resource_war.92
+	title = ADISCORD_nam_resource_war.92.t
+	desc = ADISCORD_nam_resource_war.92.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_resource_war.92.a
+		custom_effect_tooltip = NAM_pirate_92_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_pirate_notoriety_change value = -15 }
+			NAM_pirate_notoriety_add = yes
+			set_country_flag = {
+				flag = NAM_pirate_lying_low
+				value = 1
+				days = 60
+			}
+			NAM_pirate_close_event = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.92.b
+		trigger = {
+			check_variable = { var = NAM_pirate_loot value = 50 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = NAM_pirate_92_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_pirate_loot_change value = -50 }
+			NAM_pirate_loot_add = yes
+			set_temp_variable = { var = NAM_pirate_notoriety_change value = -10 }
+			NAM_pirate_notoriety_add = yes
+			NAM_pirate_close_event = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.92.c
+		add_war_support = 0.03
+		custom_effect_tooltip = NAM_pirate_92_c_tt
+		hidden_effect = {
+			NAM_pirate_apply_blockade = yes
+			add_to_variable = { var = NAM_revenge_readiness value = 5 }
+			NAM_revenge_readiness_clamp = yes
+			NAM_pirate_close_event = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# Notoriety of 75 or more: the coalition's squadron shells the island capital
+# before the answer is chosen.
+country_event = {
+	id = ADISCORD_nam_resource_war.93
+	title = ADISCORD_nam_resource_war.93.t
+	desc = ADISCORD_nam_resource_war.93.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	immediate = {
+		hidden_effect = {
+			capital_scope = {
+				damage_building = {
+					type = infrastructure
+					damage = 1
+				}
+				damage_building = {
+					type = naval_base
+					damage = 1
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ADISCORD_nam_resource_war.93.a
+		trigger = {
+			has_navy_size = { size > 0 }
+		}
+		custom_effect_tooltip = NAM_pirate_93_a_tt
+		hidden_effect = {
+			random_list = {
+				50 = {
+					navy_experience = 5
+					add_to_variable = { var = NAM_revenge_readiness value = 5 }
+					NAM_revenge_readiness_clamp = yes
+				}
+				50 = {
+					if = {
+						limit = {
+							has_navy_size = {
+								size > 0
+								unit = ADISCORD_coastal_patrol_vessel
+							}
+						}
+						destroy_ships = {
+							type = ADISCORD_coastal_patrol_ship
+							count = 1
+						}
+					}
+					add_manpower = -1000
+				}
+			}
+			set_temp_variable = { var = NAM_pirate_notoriety_change value = 5 }
+			NAM_pirate_notoriety_add = yes
+			NAM_pirate_close_event = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.93.b
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_pirate_93_b_tt
+		hidden_effect = {
+			multiply_variable = { var = NAM_pirate_loot value = 0.6 }
+			round_variable = NAM_pirate_loot
+			set_temp_variable = { var = NAM_pirate_notoriety_change value = -25 }
+			NAM_pirate_notoriety_add = yes
+			add_to_variable = { var = NAM_revenge_readiness value = -5 }
+			NAM_revenge_readiness_clamp = yes
+			NAM_pirate_close_event = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.93.c
+		custom_effect_tooltip = NAM_pirate_93_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_pirate_notoriety_change value = -15 }
+			NAM_pirate_notoriety_add = yes
+			set_country_flag = {
+				flag = NAM_pirate_lying_low
+				value = 1
+				days = 90
+			}
+			NAM_pirate_close_event = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# ----- Island exile: the revenge landing -----
+# NAM_wor_revenge_landing reports where the marines came ashore.
+country_event = {
+	id = ADISCORD_nam_resource_war.94
+	title = ADISCORD_nam_resource_war.94.t
+	desc = ADISCORD_nam_resource_war.94.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_nam_resource_war.94.a
+		custom_effect_tooltip = NAM_landing_report_tt
+		if = {
+			limit = { check_variable = { NAM_marines_island > 0 } }
+			custom_effect_tooltip = NAM_landing_island_tt
+		}
+	}
+}
+
 add_namespace = ADISCORD_nam_groups
 
 # A pillar of power falls to 20 support.

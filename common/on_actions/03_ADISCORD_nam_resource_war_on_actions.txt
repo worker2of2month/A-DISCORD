@@ -100,16 +100,19 @@ on_actions = {
 			}
 		}
 	}
-	# Pillars, incidents, the restitution clock, deliveries, seal discipline,
-	# oil contracts, the island levy, the underground and the rivals advance once
-	# a month; the hook serves
-	# one tag and reads fixed tags only.
+	# Pillars, incidents, the colonial concession, the restitution clock,
+	# deliveries, seal discipline, oil contracts, the island levy, the
+	# underground, the rivals and the exile's piracy advance once a month; the
+	# hook serves one tag and reads fixed tags only.
 	on_monthly_NAM = {
 		effect = {
 			NAM_groups_monthly = yes
 			NAM_crisis_draw = yes
+			NAM_colony_monthly = yes
 			NAM_rw_monthly = yes
+			NAM_underground_monthly = yes
 			NAM_ladder_monthly = yes
+			NAM_pirate_monthly = yes
 		}
 	}
 }
