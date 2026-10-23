@@ -19,7 +19,7 @@ NAM_ladder_bop = {
 	}
 	side = {
 		id = NAM_bop_vertical
-		icon = GFX_bop_ETH_centralisation_side
+		icon = GFX_bop_NAM_vertical
 		range = {
 			id = NAM_ladder_vertical_influence
 			min = -0.50
@@ -51,7 +51,7 @@ NAM_ladder_bop = {
 	}
 	side = {
 		id = NAM_bop_districts
-		icon = GFX_bop_ETH_decentralisation_side
+		icon = GFX_bop_NAM_districts
 		range = {
 			id = NAM_ladder_districts_influence
 			min = 0.10

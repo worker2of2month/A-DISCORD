@@ -372,24 +372,24 @@ spriteTypes = {
 	}
 
 	spriteType = {
-		name = "GFX_Portrait_NAM_Generic_land_20"
-		texturefile = "gfx/leaders/NAM/portrait_NAM_generic_land_20.png"
+		name = "GFX_Portrait_NAM_Generic_land_1"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_generic_land_01.png"
 	}
 	corneredTileSpriteType = {
-		name = "GFX_Portrait_NAM_Generic_land_20_small"
-		texturefile = "gfx/leaders/NAM/portrait_NAM_generic_land_20.png"
+		name = "GFX_Portrait_NAM_Generic_land_1_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_generic_land_01.png"
 		size = { x = 50 y = 67 }
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = no
 	}
 
 	spriteType = {
-		name = "GFX_Portrait_NAM_Generic_land_21"
-		texturefile = "gfx/leaders/NAM/portrait_NAM_generic_land_21.png"
+		name = "GFX_Portrait_NAM_Generic_land_2"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_generic_land_02.png"
 	}
 	corneredTileSpriteType = {
-		name = "GFX_Portrait_NAM_Generic_land_21_small"
-		texturefile = "gfx/leaders/NAM/portrait_NAM_generic_land_21.png"
+		name = "GFX_Portrait_NAM_Generic_land_2_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_generic_land_02.png"
 		size = { x = 50 y = 67 }
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = no

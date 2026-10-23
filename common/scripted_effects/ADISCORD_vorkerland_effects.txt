@@ -9794,6 +9794,14 @@ ADISCORD_vorkerland_complete_wrk_from_tva = {
 		character = TVA_Dorian_Worx
 		ideology = dorian_technocracy
 	}
+	set_portraits = {
+		character = TVA_Dorian_Worx
+		civilian = { large = GFX_portrait_WRK_Dorian_Worx_victory }
+	}
+	set_country_leader_portrait = {
+		ideology = technocracy
+		portrait = GFX_portrait_WRK_Dorian_Worx_victory
+	}
 	# Level three is the reward for Doctor Worx's verified central victory; the
 	# wartime capstone itself remains bounded at level two.
 	remove_ideas = ADISCORD_vorkerland_tva_field_directorate

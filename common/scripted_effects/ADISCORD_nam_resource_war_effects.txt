@@ -4533,6 +4533,22 @@ NAM_apply_ending_iron = {
 	add_ideas = NAM_spirit_iron_ladder
 	custom_effect_tooltip = NAM_ending_iron_ladder_tt
 	hidden_effect = {
+		if = {
+			limit = {
+				has_country_leader = {
+					character = NAM_Egor_Rom
+					ruling_only = yes
+				}
+			}
+			set_portraits = {
+				character = NAM_Egor_Rom
+				civilian = { large = GFX_portrait_NAM_Egor_Rom_state }
+			}
+			set_country_leader_portrait = {
+				ideology = etatism
+				portrait = GFX_portrait_NAM_Egor_Rom_state
+			}
+		}
 		set_temp_variable = { var = NAM_ladder_shift value = -0.20 }
 		NAM_ladder_shift = yes
 		ADISCORD_economy_mark_dirty = yes
@@ -4554,6 +4570,22 @@ NAM_apply_ending_service = {
 	add_ideas = NAM_spirit_service_republic
 	custom_effect_tooltip = NAM_ending_service_ladder_tt
 	hidden_effect = {
+		if = {
+			limit = {
+				has_country_leader = {
+					character = NAM_Egor_Rom
+					ruling_only = yes
+				}
+			}
+			set_portraits = {
+				character = NAM_Egor_Rom
+				civilian = { large = GFX_portrait_NAM_Egor_Rom_republic }
+			}
+			set_country_leader_portrait = {
+				ideology = etatism
+				portrait = GFX_portrait_NAM_Egor_Rom_republic
+			}
+		}
 		set_temp_variable = { var = NAM_ladder_shift value = 0.10 }
 		NAM_ladder_shift = yes
 		ADISCORD_economy_mark_dirty = yes

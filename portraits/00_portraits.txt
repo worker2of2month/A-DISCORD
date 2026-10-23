@@ -207,8 +207,8 @@ EXZ = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Ge
 NAM = {
 	army = {
 		male = {
-			"GFX_Portrait_NAM_Generic_land_20"
-			"GFX_Portrait_NAM_Generic_land_21"
+			"GFX_Portrait_NAM_Generic_land_1"
+			"GFX_Portrait_NAM_Generic_land_2"
 		}
 	}
 }

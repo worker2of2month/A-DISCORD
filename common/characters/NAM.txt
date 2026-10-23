@@ -181,8 +181,8 @@ characters = {
 		name = NAM_Grigory_Levashov
 		portraits = {
 			army = {
-				large = GFX_Portrait_Forul_Generic_6
-				small = GFX_Portrait_Forul_Generic_6_small
+				large = GFX_portrait_NAM_Grigory_Levashov
+				small = GFX_portrait_NAM_Grigory_Levashov_small
 			}
 		}
 		field_marshal = {
@@ -204,8 +204,8 @@ characters = {
 		name = NAM_Gleb_Burov
 		portraits = {
 			army = {
-				large = GFX_Portrait_Forul_Generic_4
-				small = GFX_Portrait_Forul_Generic_4_small
+				large = GFX_Portrait_NAM_Generic_land_1
+				small = GFX_Portrait_NAM_Generic_land_1_small
 			}
 		}
 		corps_commander = {
@@ -226,8 +226,8 @@ characters = {
 		name = NAM_Anton_Zhar
 		portraits = {
 			army = {
-				large = GFX_Portrait_Forul_Generic_5
-				small = GFX_Portrait_Forul_Generic_5_small
+				large = GFX_Portrait_NAM_Generic_land_2
+				small = GFX_Portrait_NAM_Generic_land_2_small
 			}
 		}
 		corps_commander = {

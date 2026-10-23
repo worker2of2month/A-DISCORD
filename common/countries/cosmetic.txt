@@ -207,23 +207,23 @@ NKA_STS_administration = {
 	color_ui = rgb { 88 99 72 }
 }
 
-# Svetlogorye after its ending: shades of the original NAM colour.
+# Svetlogorye political endings.
 NAM_iron_ladder = {
-	color = rgb { 46 32 84 }
-	color_ui = rgb { 104 86 168 }
+	color = rgb { 128 38 52 }
+	color_ui = rgb { 174 70 84 }
 }
 
 NAM_service_republic = {
-	color = rgb { 59 43 109 }
-	color_ui = rgb { 122 104 186 }
+	color = rgb { 205 158 58 }
+	color_ui = rgb { 224 184 89 }
 }
 
 NAM_federation = {
-	color = rgb { 76 66 128 }
-	color_ui = rgb { 140 128 200 }
+	color = rgb { 66 124 91 }
+	color_ui = rgb { 102 163 127 }
 }
 
 NAM_oil_union = {
-	color = rgb { 52 46 92 }
-	color_ui = rgb { 118 110 170 }
+	color = rgb { 65 94 112 }
+	color_ui = rgb { 105 139 158 }
 }

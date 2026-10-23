@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "assets": [
+    {
+      "runtime": "gfx/interface/bop/NAM_bop_vertical.png",
+      "runtime_size": [
+        78,
+        88
+      ],
+      "tool": "image_gen",
+      "transparent_background": true,
+      "reference_images": [
+        "gfx/interface/bop/VAL_bop_general_staff.png"
+      ],
+      "prompt": "Use case: stylized-concept. Create ONE finished Hearts of Iron IV balance-of-power UI icon for fictional Svetlogorye. Transparent background, isolated circular metal medallion centered in portrait 72:88 aspect ratio, fills 88% width, entire outer edge visible. Designed to stay readable at 72x88 pixels. Antique brass narrow circular rim with two restrained laurel sprigs at bottom sides; dark charcoal inset; raised bright silver main symbol with subtle worn metal highlights. Strong silhouettes, few broad details, no letters, numbers, flags, stars, portraits, geographical maps or invented party emblems. No glow, no outer shadow, no checkerboard, genuine alpha outside emblem. Match the attached reference's material and visual density, not its weapon symbols. Subject: ONE large upright silver desk seal stamp with rounded handle and wide base, resting on a compact three-step plinth. This depicts hierarchical authority and state seals. The stamp is the dominant central silhouette, no crossed weapons."
+    },
+    {
+      "runtime": "gfx/interface/bop/NAM_bop_districts.png",
+      "runtime_size": [
+        78,
+        88
+      ],
+      "tool": "image_gen",
+      "transparent_background": true,
+      "reference_images": [
+        "gfx/interface/bop/VAL_bop_general_staff.png"
+      ],
+      "prompt": "Use case: stylized-concept. Create ONE finished Hearts of Iron IV balance-of-power UI icon for fictional Svetlogorye. Transparent background, isolated circular metal medallion centered in portrait 72:88 aspect ratio, fills 88% width, entire outer edge visible. Designed to stay readable at 72x88 pixels. Antique brass narrow circular rim with two restrained laurel sprigs at bottom sides; dark charcoal inset; raised bright silver main symbol with subtle worn metal highlights. Strong silhouettes, few broad details, no letters, numbers, flags, stars, portraits, geographical maps or invented party emblems. No glow, no outer shadow, no checkerboard, genuine alpha outside emblem. Match the attached reference's material and visual density, not its weapon symbols. Subject: THREE equal-sized silver circular seals linked together by three broad brass connectors into a balanced triangular council arrangement. Each silver seal has one plain recessed center, no lettering. All three seals equal in visual weight. This depicts district councils sharing authority, no dominant central seal and no weapons."
+    }
+  ],
+  "export": {
+    "content_size": [
+      72,
+      88
+    ],
+    "canvas_size": [
+      78,
+      88
+    ],
+    "offset": [
+      3,
+      0
+    ],
+    "resampling": "LANCZOS",
+    "preserve_alpha": true
+  }
+}

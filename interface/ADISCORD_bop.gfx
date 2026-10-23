@@ -1,6 +1,18 @@
 spriteTypes = {
 
 	spriteType = {
+		name = "GFX_bop_NAM_vertical"
+		texturefile = "gfx/interface/bop/NAM_bop_vertical.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_bop_NAM_districts"
+		texturefile = "gfx/interface/bop/NAM_bop_districts.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
 		name = "GFX_bop_RUS_scientists"
 		texturefile = "gfx/interface/bop/RUS_bop_scientists.png"
 		legacy_lazy_load = no

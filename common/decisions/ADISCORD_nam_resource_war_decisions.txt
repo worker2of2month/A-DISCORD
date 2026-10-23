@@ -995,7 +995,7 @@ NAM_national_programmes = {
 				hidden_effect = { ADISCORD_economy_spend_500 = yes }
 				add_equipment_to_stockpile = {
 					type = infantry_equipment
-					amount = 1500
+					amount = 13500
 					producer = NAM
 				}
 				add_equipment_to_stockpile = {

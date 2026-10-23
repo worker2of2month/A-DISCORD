@@ -178,6 +178,10 @@ spriteTypes = {
 		texturefile = "gfx/leaders/WRK/portrait_WRK_Dorian_Worx.png"
 	}
 	spriteType = {
+		name = "GFX_portrait_WRK_Dorian_Worx_victory"
+		texturefile = "gfx/leaders/WRK/portrait_WRK_Dorian_Worx_victory.png"
+	}
+	spriteType = {
 		name = "GFX_portrait_WRK_Richard_Gordon"
 		texturefile = "gfx/leaders/WRK/portrait_WRK_Richard_Gordon.png"
 	}
@@ -707,6 +711,30 @@ spriteTypes = {
 		name = "GFX_portrait_NAM_Egor_Rom"
 		texturefile = "gfx/leaders/NAM/portrait_NAM_Egor_Rom.png"
 	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Egor_Rom_republic"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Egor_Rom_republic.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Egor_Rom_state"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Egor_Rom_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Grigory_Levashov"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Grigory_Levashov.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NAM_Grigory_Levashov_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Grigory_Levashov.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
 	###ROM
 	spriteType = {
 		name = "GFX_portrait_ROM_Erwin_Von_Romanovskiy"
