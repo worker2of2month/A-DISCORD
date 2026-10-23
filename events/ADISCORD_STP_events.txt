@@ -2618,9 +2618,7 @@ country_event = {
 	immediate = {
 		if = {
 			limit = { has_completed_focus = STP_pw_take_bezhaysk STP_pw_can_attack_bezhaysk = yes }
-			set_country_flag = ADISCORD_bezhaysk_campaign_active
-			BJK = { ADISCORD_release_non_participating_minor_optimization = yes }
-			declare_war_on = { target = BJK type = annex_everything }
+			STP_bezhaysk_begin_campaign = yes
 		}
 	}
 }
@@ -8715,4 +8713,51 @@ country_event = {
 		has_completed_focus = STP_pc_heg_revolution_name
 	}
 	option = { name = ADISCORD_STP_pc.107.a }
+}
+
+# Declaration and alliance entry are published on separate diplomatic ticks.
+country_event = {
+	id = ADISCORD_STP_pc.108
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { has_country_flag = STP_bezhaysk_campaign }
+			STP_bezhaysk_join_campaign = yes
+			STP_bezhaysk_queue_reconciliation = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.109
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		clr_country_flag = STP_bezhaysk_reconcile_queued
+		clr_country_flag = STP_bezhaysk_entry_pending
+		STP_bezhaysk_try_settlement = yes
+		STP_bezhaysk_reconcile_campaign = yes
+	}
+}
+
+# Declaration and coalition invitations need separate native diplomatic ticks.
+country_event = {
+	id = ADISCORD_STP_pc.110
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { has_country_flag = STP_heg_cannibal_entry_pending }
+			STP_heg_invite_cannibal_campaign = yes
+			country_event = { id = ADISCORD_STP_pc.111 hours = 1 }
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.111
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { STP_heg_confirm_cannibal_entry = yes }
 }

@@ -97,6 +97,18 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_portrait_STS_Oleg_Vershin"
+		texturefile = "gfx/leaders/STP/portrait_STS_Oleg_Vershin.png"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_STS_Oleg_Vershin_small"
+		texturefile = "gfx/leaders/STP/portrait_STS_Oleg_Vershin.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
 		name = "GFX_portrait_STS_Maurice_Dallon"
 		texturefile = "gfx/leaders/STP/portrait_STS_Maurice_Dallon.png"
 	}

@@ -1563,6 +1563,40 @@ class CouncilStoryTests(unittest.TestCase):
         self.assertAlmostEqual(world.val["vars"]["VAL_contract_org_factor"], -0.05)
         self.assertAlmostEqual(world.val["vars"]["VAL_contract_planning_factor"], -0.10)
 
+    def test_loyalist_preview_excludes_other_bonuses_and_clears_when_inactive(self):
+        world = self.war_world()
+        variables = world.val["vars"]
+        for support, organization, planning in (
+            (100, -0.05, -0.10),
+            (80, -0.04, -0.08),
+            (40, -0.02, -0.04),
+            (0, 0, 0),
+        ):
+            with self.subTest(support=support):
+                variables[PREFIX + "loyalists"] = support
+                variables["VAL_contract_org_factor"] = 0.20
+                variables["VAL_contract_planning_factor"] = 0.30
+                variables[PREFIX + "base_organization"] = 0.01
+                variables[PREFIX + "base_planning_speed"] = 0.02
+                world.run(PREFIX + "apply_modifiers")
+                self.assertAlmostEqual(variables.get(PREFIX + "loyalist_org_penalty", 1), organization)
+                self.assertAlmostEqual(variables.get(PREFIX + "loyalist_planning_penalty", 1), planning)
+                self.assertAlmostEqual(variables["VAL_contract_org_factor"], 0.21 + organization)
+                self.assertAlmostEqual(variables["VAL_contract_planning_factor"], 0.32 + planning)
+
+        for absent in ("network", "government"):
+            with self.subTest(absent=absent):
+                variables[PREFIX + "loyalists"] = 100
+                world.run(PREFIX + "apply_modifiers")
+                if absent == "network":
+                    del variables[PREFIX + "loyalists"]
+                else:
+                    world.val["leader"] = "VAL_Valera_Solgalov"
+                    world.val["flags"].discard(PREFIX + "in_power")
+                world.run(PREFIX + "apply_modifiers")
+                self.assertEqual(variables.get(PREFIX + "loyalist_org_penalty", 1), 0)
+                self.assertEqual(variables.get(PREFIX + "loyalist_planning_penalty", 1), 0)
+
     def test_solgalov_dominance_reveals_but_does_not_remove_the_balance(self):
         balance = block(entries("common/bop/VAL.txt"), "VAL_command_balance")
         ranges = {scalar(r.value, "id"): r.value for side in balance if side.key == "side" for r in side.value if r.key == "range"}

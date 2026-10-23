@@ -23,6 +23,8 @@ on_actions = {
 
 	on_puppet = {
 		effect = {
+			STP = { STP_bezhaysk_queue_reconciliation = yes }
+			STS = { STP_bezhaysk_queue_reconciliation = yes }
 			STP_heg_clear_foreign_administration_flag = yes
 			STP_heg_reconcile_frontier_expansion = yes
 			STP_heg_reconcile_cannibal_campaign = yes
@@ -48,6 +50,8 @@ on_actions = {
 
 	on_release_as_puppet = {
 		effect = {
+			STP = { STP_bezhaysk_queue_reconciliation = yes }
+			STS = { STP_bezhaysk_queue_reconciliation = yes }
 			STP_heg_clear_foreign_administration_flag = yes
 			STP_heg_reconcile_frontier_expansion = yes
 			STP_heg_reconcile_cannibal_campaign = yes
@@ -66,6 +70,8 @@ on_actions = {
 
 	on_subject_free = {
 		effect = {
+			STP = { STP_bezhaysk_queue_reconciliation = yes }
+			STS = { STP_bezhaysk_queue_reconciliation = yes }
 			STP_heg_clear_foreign_administration_flag = yes
 			if = {
 				limit = { tag = VAL }
@@ -341,6 +347,22 @@ on_actions = {
 	# already exist but the original STP technology state is still authoritative.
 	on_war_relation_added = {
 		effect = {
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							ROOT = { tag = BJK }
+							FROM = { has_country_flag = STP_bezhaysk_campaign }
+						}
+						AND = {
+							FROM = { tag = BJK }
+							ROOT = { has_country_flag = STP_bezhaysk_campaign }
+						}
+					}
+				}
+				STP = { STP_bezhaysk_join_campaign = yes }
+				STS = { STP_bezhaysk_join_campaign = yes }
+			}
 			if = {
 				limit = {
 					ROOT = {

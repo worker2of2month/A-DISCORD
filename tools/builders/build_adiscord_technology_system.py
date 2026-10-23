@@ -6970,7 +6970,7 @@ STARTING_COUNTRY_TECH_PROFILE_RATIONALE = {
     "AUR": "Civic republic with restored public utilities but only a modest material base.",
     "AZH": "Black Basin levy couples a small field formation with an operating dockyard and coastal flotilla.",
     "BBV": "Single-state Besjaysk fragment with one inherited formation and no industrial plant.",
-    "BCM": "Single-state Besjaysk fragment sustained by one civilian workshop base.",
+    "BCM": "Besjaysk fragment sustained by one civilian workshop base.",
     "BGT": "Single-state Besjaysk fragment without an established industrial or institutional base.",
     "BHG": "Single-state Besjaysk fragment with one civilian workshop base.",
     "BJK": "Besjaysk core survives as a small fragment rather than a modern institutional state.",

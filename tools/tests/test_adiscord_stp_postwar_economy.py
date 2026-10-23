@@ -210,5 +210,175 @@ class ShabratPostwarEconomyTests(unittest.TestCase):
             self.assertIn(f"{focus_id}_desc:", loc)
 
 
+class ShabratCivicProgrammeTests(unittest.TestCase):
+    PRICES = {
+        "district_staff": (100, 0),
+        "district_clinics": (35, 540),
+        "research_grants": (50, 900),
+        "veteran_instructors": (75, 360),
+        "district_roads": (75, 900),
+        "civil_enterprises": (100, 1800),
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        from tools.tests.test_adiscord_stp_preparation import block, entries
+
+        cls.decisions = {
+            entry.key: entry.value
+            for entry in block(
+                entries("common/decisions/ADISCORD_STP_decisions.txt"),
+                "STP_pw_programme",
+            )
+        }
+        cls.triggers = {
+            entry.key: entry.value
+            for entry in entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+        }
+
+    def test_exact_prices_and_fractional_shortfalls_are_atomic(self):
+        from tools.tests.test_adiscord_stp_preparation import (
+            block, matches_conditions, scalar, selected_effects,
+        )
+
+        for suffix, (power, money) in self.PRICES.items():
+            key = "STP_pw_civic_" + suffix
+            decision = self.decisions[key]
+            self.assertEqual(scalar(decision, "cost"), "0")
+            for power_delta, money_delta, current in (
+                (0, 0, True), (-0.01, 0, True), (0, -0.01, True),
+                (100, 1000, True), (0, 0, False),
+            ):
+                if not money and money_delta:
+                    continue
+                facts = {
+                    ("STS", "numeric", "has_political_power"): power + power_delta,
+                    ("STS", "variable", "ADISCORD_economy_treasury"): money + money_delta,
+                    ("STS", key + "_ready", "yes"): current,
+                }
+                affordable = power_delta >= 0 and money_delta >= 0
+                with self.subTest(programme=suffix, facts=facts):
+                    self.assertEqual(matches_conditions(
+                        block(decision, "custom_cost_trigger"), facts, "STS"
+                    ), affordable)
+                    applied = list(selected_effects(
+                        block(decision, "complete_effect"), facts, "STS"
+                    ))
+                    if not (affordable and current):
+                        self.assertEqual(applied, [])
+                        continue
+                    power_changes = [
+                        float(entry.value) for scope, entry in applied
+                        if entry.key == "add_political_power"
+                    ]
+                    self.assertEqual(power_changes, [-power])
+                    treasury = [
+                        float(scalar(entry.value, "value")) for scope, entry in applied
+                        if entry.key == "subtract_from_variable"
+                        and scalar(entry.value, "var") == "ADISCORD_economy_treasury"
+                    ]
+                    ledger = [
+                        float(scalar(entry.value, "value")) for scope, entry in applied
+                        if entry.key == "add_to_variable"
+                        and scalar(entry.value, "var") == "ADISCORD_economy_current_month_action_costs"
+                    ]
+                    self.assertEqual(treasury, [money] if money else [])
+                    self.assertEqual(ledger, treasury)
+                    self.assertIn("ADISCORD_economy_mark_dirty", [e.key for _, e in applied])
+
+    def test_development_blocks_wasted_purchases_at_maximum_or_pending_level(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
+        for suffix, axis, focus in (
+            ("district_staff", "state", "STP_pc_after_victory"),
+            ("district_clinics", "social_system", "STP_pc_after_victory"),
+            ("research_grants", "science", "STP_pc_development_reopen_universities"),
+        ):
+            trigger = self.triggers["STP_pw_civic_" + suffix + "_ready"]
+            for level, progress, expected in ((4, 99, True), (5, 0, False), (4, 100, False)):
+                facts = {
+                    ("STS", "STP_pw_can_reconstruct", "yes"): True,
+                    ("STS", "has_completed_focus", focus): True,
+                    ("STS", "variable", f"ADISCORD_{axis}_development_level"): level,
+                    ("STS", "variable", f"ADISCORD_{axis}_development_progress"): progress,
+                }
+                with self.subTest(programme=suffix, level=level, progress=progress):
+                    self.assertEqual(matches_conditions(trigger, facts, "STS"), expected)
+                    facts[("STS", "STP_pw_can_reconstruct", "yes")] = False
+                    self.assertFalse(matches_conditions(trigger, facts, "STS"))
+
+    def test_roads_recheck_live_state_before_payment_and_preserve_capacity(self):
+        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, walk
+
+        key = "STP_pw_civic_district_roads"
+        trigger = self.triggers[key + "_ready"]
+        facts = {
+            ("STS", "STP_pw_can_reconstruct", "yes"): True,
+            ("STS", "has_completed_focus", "STP_pw_republic_restore_roads"): True,
+            ("FROM", "is_owned_by", "ROOT"): True,
+            ("FROM", "is_controlled_by", "ROOT"): True,
+            ("FROM", "is_core_of", "STP"): True,
+            ("FROM", "numeric", "infrastructure"): 4,
+        }
+        self.assertTrue(matches_conditions(trigger, facts, "STS"))
+        for changed, value in (
+            (("FROM", "is_owned_by", "ROOT"), False),
+            (("FROM", "is_controlled_by", "ROOT"), False),
+            (("FROM", "is_core_of", "STP"), False),
+            (("FROM", "numeric", "infrastructure"), 5),
+        ):
+            self.assertFalse(matches_conditions(trigger, {**facts, changed: value}, "STS"))
+        for suffix in ("district_roads", "civil_enterprises"):
+            decision = self.decisions["STP_pw_civic_" + suffix]
+            targets = block(decision, "target_trigger")
+            self.assertFalse(any(e.key in ("check_variable", "free_building_slots") for e in walk(targets)))
+            self.assertFalse(any(e.key == "add_extra_state_shared_building_slots" for e in walk(decision)))
+        factory = self.triggers["STP_pw_civic_civil_enterprises_ready"]
+        slots = block(block(factory, "FROM"), "free_building_slots")
+        self.assertIn(("include_locked", "no"), [(e.key, e.value) for e in slots])
+
+    def test_instructors_do_not_waste_experience_above_the_mod_cap(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
+        trigger = self.triggers["STP_pw_civic_veteran_instructors_ready"]
+        for experience, expected in ((975, True), (975.01, False), (1000, False)):
+            facts = {
+                ("STS", "STP_pw_can_reconstruct", "yes"): True,
+                ("STS", "has_completed_focus", "STP_pw_republic_army_register"): True,
+                ("STS", "numeric", "has_army_experience"): experience,
+            }
+            self.assertEqual(matches_conditions(trigger, facts, "STS"), expected)
+
+    def test_programmes_survive_first_plan_and_have_focus_unlocks_and_localisation(self):
+        import re
+        from tools.tests.test_adiscord_stp_preparation import block, entries, matches_conditions, scalar
+
+        category = block(entries("common/decisions/categories/ADISCORD_decision_categories_STP.txt"), "STP_pw_programme")
+        facts = {
+            ("STS", "has_country_flag", "STP_cw_postwar"): True,
+            ("STS", "has_completed_focus", "STP_pc_after_victory"): True,
+            ("STS", "has_country_flag", "STP_pw_reconstruction_drive_completed"): True,
+        }
+        self.assertTrue(matches_conditions(block(category, "allowed"), facts, "STS"))
+        self.assertTrue(matches_conditions(block(category, "visible"), facts, "STS"))
+        source = read("focus_trees/STP/postwar/shabrat/focuses.txt")
+        for suffix in self.PRICES:
+            key = "STP_pw_civic_" + suffix
+            self.assertIn("unlock_decision_tooltip = " + key, source)
+            self.assertEqual(scalar(self.decisions[key], "fire_only_once"), "no")
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            values = dict(re.findall(r'^ ([\w.]+):(?:\d+)? "([^"\r\n]*)"$', path.read_text(encoding="utf-8-sig"), re.M))
+            for suffix, (power, money) in self.PRICES.items():
+                key = "STP_pw_civic_" + suffix
+                for ending in ("", "_desc", "_ready_tt", "_cost", "_cost_blocked", "_cost_tooltip"):
+                    self.assertIn(key + ending, values)
+                for ending in ("_cost", "_cost_blocked", "_cost_tooltip"):
+                    self.assertIn(str(power) + "§! £political_power_texticon", values[key + ending])
+                    if money:
+                        self.assertIn(str(money) + "§! £ADISCORD_economy_treasury_texticon", values[key + ending])
+
+
 if __name__ == "__main__":
     unittest.main()

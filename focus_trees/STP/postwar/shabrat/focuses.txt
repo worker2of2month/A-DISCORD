@@ -148,6 +148,7 @@
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			unlock_decision_tooltip = STP_pw_civic_district_roads
 			unlock_decision_tooltip = STP_pw_campaign_country_is_being_built
 			random_owned_controlled_state = {
 				limit = { OR = { is_core_of = STP is_core_of = STS } infrastructure < 5 }
@@ -308,6 +309,7 @@
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			unlock_decision_tooltip = STP_pw_civic_veteran_instructors
 			army_experience = 25
 			unlock_decision_tooltip = STP_pw_integrate_veterans
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_army_register_delta } }
@@ -396,6 +398,7 @@
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_bezhaysk_available_tt STP_pw_can_attack_bezhaysk = yes } }
 		cancel_if_invalid = yes
 		search_filters = { FOCUS_FILTER_ANNEXATION }
+		select_effect = { hidden_effect = { STP_bezhaysk_prepare_campaign = yes } }
 		completion_reward = { unlock_decision_tooltip = STP_pw_launch_bezhaysk_operation  }
 		ai_will_do = { base = 20 }
 	}
@@ -465,6 +468,8 @@
 		}
 		ai_will_do = { base = 10 }
 		completion_reward = {
+			unlock_decision_tooltip = STP_pw_civic_district_staff
+			unlock_decision_tooltip = STP_pw_civic_district_clinics
 			custom_effect_tooltip = STP_pw_campaign_capacity_tt
 			set_cosmetic_tag = STS_steland
 			add_political_power = 75
@@ -644,8 +649,73 @@
 			}
 			add_equipment_to_stockpile = {
 				type = ADISCORD_armored_carrier_2163
+				amount = 320
+				producer = STS
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 8235
+				producer = STS
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_squad_weapons_equipment
+				amount = 64
+				producer = STS
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
 				amount = 80
 				producer = STS
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 12
+				producer = STS
+			}
+			if = {
+				limit = {
+					NOT = { has_tech = ADISCORD_tech_standardized_field_tool_chests }
+				}
+				set_technology = {
+					ADISCORD_tech_standardized_field_tool_chests = 1
+					popup = yes
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_tech = ADISCORD_tech_frequency_hopping_field_sets }
+				}
+				set_technology = {
+					ADISCORD_tech_frequency_hopping_field_sets = 1
+					popup = yes
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_template = "Манёвренная механизированная бригада" }
+				}
+				division_template = {
+					name = "Манёвренная механизированная бригада"
+					template_counter = 5
+					is_locked = no
+					force_allow_recruiting = yes
+					regiments = {
+						ADISCORD_mechanized_infantry = { x = 0 y = 0 }
+						ADISCORD_mechanized_infantry = { x = 0 y = 1 }
+						ADISCORD_mechanized_infantry = { x = 0 y = 2 }
+						ADISCORD_mechanized_infantry = { x = 0 y = 3 }
+						ADISCORD_mechanized_infantry = { x = 1 y = 0 }
+						ADISCORD_mechanized_infantry = { x = 1 y = 1 }
+						ADISCORD_mechanized_infantry = { x = 1 y = 2 }
+						ADISCORD_mechanized_infantry = { x = 1 y = 3 }
+					}
+					support = {
+						engineer = { x = 0 y = 0 }
+						artillery = { x = 0 y = 1 }
+						maintenance_company = { x = 0 y = 2 }
+						signal_company = { x = 0 y = 3 }
+					}
+				}
 			}
 		}
 	}
@@ -4347,6 +4417,7 @@
 		prerequisite = { focus = STP_pc_economy_reopen_tax_offices }
 		ai_will_do = { base = 8 }
 		completion_reward = {
+			unlock_decision_tooltip = STP_pw_civic_civil_enterprises
 			unlock_decision_tooltip = STP_pw_campaign_engineers_of_peace
 			custom_effect_tooltip = STP_pc_economy_repair_workshops_tt
 			hidden_effect = {
@@ -4553,6 +4624,7 @@
 		prerequisite = { focus = STP_pc_development_generation_reconstruction }
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			unlock_decision_tooltip = STP_pw_civic_research_grants
 			ADISCORD_reform_cultural_development = yes
 			add_research_slot = 1
 			custom_effect_tooltip = STP_pc_development_reopen_universities_tt

@@ -156,6 +156,12 @@ class MandateMechanicTests(unittest.TestCase):
         self.assertTrue(loc_keys(RU).get("STP_hw_mandate_dynamic"))
 
     def test_war_start_monthly_tick_operations_and_victory_are_wired(self):
+        from tools.tests.test_adiscord_stp_preparation import (
+            block,
+            entries,
+            selected_effects,
+        )
+
         actions = compact(text(ON_ACTIONS))
         weekly = actions[actions.index("on_weekly_STS = {"):]
         self.assertIn("STP_hw_begin_war = yes", weekly)
@@ -164,8 +170,17 @@ class MandateMechanicTests(unittest.TestCase):
         self.assertIn("STP_hw_operation_won = yes", compact(definition(EFFECTS, "STP_cw_win_operation")))
         self.assertIn("STP_hw_operation_failed = yes", compact(definition(EFFECTS, "STP_cw_fail_operation")))
         settle = compact(definition(EFFECTS, "STP_cw_settle_union_victory"))
-        self.assertIn("if = { limit = { tag = STS } STP_hw_resolve_victory = yes }", settle)
-        # The victory report reads the course one hour later.
+        settlement = block(entries(EFFECTS), "STP_cw_settle_union_victory")
+        for tag, expected_calls in (("STS", 1), ("STP", 0)):
+            with self.subTest(winner=tag):
+                facts = {(tag, "tag", tag): True}
+                calls = [
+                    (scope, effect.value)
+                    for scope, effect in selected_effects(settlement, facts, tag)
+                    if effect.key == "STP_hw_resolve_victory"
+                ]
+                self.assertEqual(calls, [(tag, "yes")] * expected_calls)
+        # News reads the course after the victory effect settles it.
         self.assertLess(settle.index("STP_hw_resolve_victory"), settle.index("ADISCORD_STP_cw.72"))
         self.assertNotIn("clear_variable = STP_hw_course", compact(definition(EFFECTS, "STP_hw_close_war")))
 
@@ -324,7 +339,7 @@ class StalledWarTests(unittest.TestCase):
         self.assertEqual(scalar(dynamic, "mobilization_speed"), "STP_hw_stall_mobilization")
         for path in (RU, EN):
             keys = loc_keys(path)
-            self.assertIn("[STPGetStalledWarReport]", keys["STP_cw_war_council_desc"])
+            self.assertIn("[STPGetStalledWarReport]", keys["STP_military_operations_desc"])
             self.assertIn("[?STP_hw_stall_stage|0]", keys["STP_hw_stall_report"])
             self.assertIn("[?STP_hw_stall_remaining|0]", keys["STP_hw_stall_report"])
             for key in ("STP_hw_stall_rules", "STP_hw_stall_dynamic_desc", "STP_hw_stall_objectives"):

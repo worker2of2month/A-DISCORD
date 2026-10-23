@@ -95,6 +95,25 @@ def apc_registry():
     return gfx, assets, animations
 
 
+def apc_model_pools():
+    """Register scoped model pools for both required equipment archetypes."""
+    text = HEADER
+    for tag in APC_TAGS:
+        text += f"\n{tag} = {{\n"
+        for archetype in ("infantry_equipment", "ADISCORD_armored_carrier_archetype"):
+            text += (
+                f"\t{archetype} = {{\n"
+                "\t\tpool = {\n"
+                "\t\t\tsub_units = { ADISCORD_mechanized_infantry }\n"
+                "\t\t\tweight = 3000\n"
+                f"\t\t\tmodels = {{ ADISCORD_{tag}_apc_entity }}\n"
+                "\t\t}\n"
+                "\t}\n"
+            )
+        text += "}\n"
+    return text
+
+
 def air_routes():
     routes = {}
     for role in ("fighter", "cas"):
@@ -213,6 +232,7 @@ def package(apply=False):
         MOD / "gfx/entities/ADISCORD_country_vehicles.gfx": gfx.encode(),
         MOD / "gfx/entities/zz_ADISCORD_country_vehicles.asset": assets.encode(),
         DEST / "animation.asset": animations.encode(),
+        MOD / "gfx/interface/equipmentdesigner/graphic_db/ADISCORD_country_vehicles.txt": apc_model_pools().encode(),
     }
     changed = [str(path.relative_to(MOD)) for path, data in files.items()
                if not path.is_file() or path.read_bytes() != data]

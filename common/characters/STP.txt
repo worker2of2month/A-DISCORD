@@ -346,8 +346,8 @@ characters = {
 		name = STP_Oleg_Vershin
 		portraits = {
 			army = {
-				large = GFX_Portrait_STP_Generic_land_4
-				small = GFX_Portrait_STP_Generic_land_4_small
+				large = GFX_portrait_STS_Oleg_Vershin
+				small = GFX_portrait_STS_Oleg_Vershin_small
 			}
 		}
 	}

@@ -3045,7 +3045,10 @@ def localisation(language: str) -> tuple[list[str], set[str]]:
         for index, (slug, ru, en, _effects) in enumerate(
             REWARD_PROFILES[school.profile]
         ):
-            add(reward_id(school, index, slug), ru if is_ru else en)
+            rid = reward_id(school, index, slug)
+            add(rid, ru if is_ru else en)
+            # Native reward tooltips prefix the reward ID with its school ID.
+            add(f"{school.key}_{rid}", ru if is_ru else en)
     return lines, keys
 
 

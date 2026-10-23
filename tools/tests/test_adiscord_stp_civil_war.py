@@ -337,7 +337,7 @@ class CivilWarContracts(unittest.TestCase):
 
     def test_arsenal_batch_checks_cash_boundary_and_pays_only_once(self):
         council = ast_block(
-            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council"
+            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_military_operations"
         )
         decision = ast_block(council, "STP_cw_purchase_arsenal_batch")
         self.assertEqual(scalar(decision, "cost"), "0")
@@ -464,7 +464,7 @@ class CivilWarContracts(unittest.TestCase):
     def test_northern_conscription_delivers_current_law_or_refunds_once(self):
         category = ast_block(
             entries("common/decisions/ADISCORD_STP_decisions.txt"),
-            "STP_cw_external_intervention",
+            "STP_military_operations",
         )
         decision = ast_block(category, "NOD_cw_northern_conscription")
         self.assertEqual(scalar(decision, "cost"), "150")
@@ -1453,7 +1453,7 @@ class CivilWarContracts(unittest.TestCase):
         order = ast_block(
             ast_block(
                 entries("common/decisions/ADISCORD_STP_decisions.txt"),
-                "STP_cw_war_council",
+                "STP_military_operations",
             ),
             "STP_cw_raise_territorial_brigade",
         )
@@ -2283,7 +2283,7 @@ class CivilWarContracts(unittest.TestCase):
         supply = ast_block(
             ast_block(
                 entries("common/decisions/ADISCORD_STP_decisions.txt"),
-                "STP_cw_external_intervention",
+                "STP_military_operations",
             ),
             "STP_cw_supply_the_north",
         )
@@ -4033,7 +4033,7 @@ class CivilWarContracts(unittest.TestCase):
     def test_val_retains_its_separate_timer_and_nod_refusal_stays_final(self):
         category = ast_block(
             entries("common/decisions/ADISCORD_STP_decisions.txt"),
-            "STP_cw_external_intervention",
+            "STP_military_operations",
         )
         for name in ("VAL_cw_intervention_preparation",):
             mission = ast_block(category, name)
@@ -5460,7 +5460,7 @@ class NorthernCampaignContracts(unittest.TestCase):
         entry = self.expand(ast_block(self.triggers, "STP_cw_nod_can_intervene"))
         category = ast_block(
             entries("common/decisions/ADISCORD_STP_decisions.txt"),
-            "STP_cw_external_intervention",
+            "STP_military_operations",
         )
         preparation = ast_block(category, "NOD_cw_intervention_preparation")
         cancel = self.expand(ast_block(preparation, "cancel_trigger"))
@@ -6055,7 +6055,7 @@ class NorthernCampaignContracts(unittest.TestCase):
         decision = ast_block(
             ast_block(
                 entries("common/decisions/ADISCORD_STP_decisions.txt"),
-                "STP_cw_external_intervention",
+                "STP_military_operations",
             ),
             "NOD_cw_call_ain",
         )
@@ -6115,7 +6115,7 @@ class NorthernCampaignContracts(unittest.TestCase):
 
         category = ast_block(
             entries("common/decisions/ADISCORD_STP_decisions.txt"),
-            "STP_cw_external_intervention",
+            "STP_military_operations",
         )
         supply = ast_block(category, "STP_cw_supply_the_north")
         self.assertEqual(scalar(supply, "cost"), "0")
@@ -6796,7 +6796,7 @@ class NorthernCampaignContracts(unittest.TestCase):
         mission = ast_block(
             ast_block(
                 entries("common/decisions/ADISCORD_STP_decisions.txt"),
-                "STP_cw_external_intervention",
+                "STP_military_operations",
             ),
             "NOD_cw_northern_mobilization",
         )
@@ -7009,7 +7009,7 @@ class NorthernCampaignContracts(unittest.TestCase):
         conscription = ast_block(
             ast_block(
                 entries("common/decisions/ADISCORD_STP_decisions.txt"),
-                "STP_cw_external_intervention",
+                "STP_military_operations",
             ),
             "NOD_cw_northern_conscription",
         )
@@ -7073,7 +7073,7 @@ class ShabratWarLogisticsContracts(unittest.TestCase):
         ]
         self.effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         self.decisions = ast_block(
-            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council"
+            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_military_operations"
         )
         self.state = {
             ("STS", "has_war_with", "STP"): True,
@@ -7208,7 +7208,7 @@ class WartimeProgramContracts(unittest.TestCase):
         self.decisions = self.expand(
             ast_block(
                 entries("common/decisions/ADISCORD_STP_decisions.txt"),
-                "STP_cw_war_council",
+                "STP_military_operations",
             )
         )
         self.effects = self.expand(
@@ -8461,7 +8461,7 @@ class RepublicsCouncilContracts(unittest.TestCase):
         decision = ast_block(
             ast_block(
                 entries("common/decisions/ADISCORD_STP_decisions.txt"),
-                "STP_cw_war_council",
+                "STP_military_operations",
             ),
             "STP_cw_fund_republican_supplies",
         )
@@ -8552,7 +8552,7 @@ class RepublicsCouncilContracts(unittest.TestCase):
 
     def test_charter_dialogue_blocks_duplicates_and_closes_after_partner_loss(self):
         council = ast_block(
-            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council"
+            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_military_operations"
         )
         decision = ast_block(council, "STP_cw_negotiate_republican_charter")
         available = self.expand(ast_block(decision, "available"))
@@ -9342,7 +9342,7 @@ class AutomaticFrontOperationContracts(unittest.TestCase):
             )
         }
         council = ast_block(
-            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council"
+            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_military_operations"
         )
         self.mission = ast_block(council, "STP_cw_front_operation")
         self.facts = {
@@ -9536,7 +9536,7 @@ class NorthernOffensiveClockTests(unittest.TestCase):
     def test_northern_push_has_eighty_five_days_and_cancels_after_peace(self):
         council = ast_block(
             entries("common/decisions/ADISCORD_STP_decisions.txt"),
-            "STP_cw_external_intervention",
+            "STP_military_operations",
         )
         mission = ast_block(council, "NOD_cw_northern_push")
         self.assertEqual(scalar(mission, "days_mission_timeout"), "85")
@@ -9610,7 +9610,7 @@ class NorthernOffensiveClockTests(unittest.TestCase):
 
     def test_rear_cell_costs_accept_exact_balances_but_reject_fractions_below(self):
         council = ast_block(
-            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council"
+            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_military_operations"
         )
         action = ast_block(council, "STP_cw_raise_rear_cell")
         self.assertEqual(scalar(action, "cost"), "0")
@@ -9997,7 +9997,7 @@ class NorthernStatusQuoTests(unittest.TestCase):
         self.assertEqual(list(selected_effects(effect, {}, "NOD")), [])
         council = ast_block(
             entries("common/decisions/ADISCORD_STP_decisions.txt"),
-            "STP_cw_external_intervention",
+            "STP_military_operations",
         )
         decision = ast_block(council, "NOD_cw_accept_northern_status_quo")
         self.assertTrue(decision)
@@ -10132,7 +10132,7 @@ class CivilWarAirProgrammeTests(unittest.TestCase):
         }
         self.actions = {
             e.key: e.value
-            for e in ast_block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council")
+            for e in ast_block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_military_operations")
         }
         self.scope = "STS"
         self.facts = {}

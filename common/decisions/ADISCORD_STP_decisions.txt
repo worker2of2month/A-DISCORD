@@ -2610,7 +2610,8 @@ STP_battle_for_stelander = {
 
 }
 
-STP_cw_war_council = {
+STP_military_operations = {
+	# War and recovery
 
 	STP_cw_fortify_congress = {
 		icon = generic_construct_civilian
@@ -2781,7 +2782,10 @@ STP_cw_war_council = {
 			STP_cw_shabrat_logistics_active = yes
 			check_variable = { var = STP_cw_fund_remaining value = 2000 compare = greater_than_or_equals }
 		}
-		visible = { has_active_mission = STP_cw_war_fund_delivery }
+		visible = {
+			has_active_mission = STP_cw_war_fund_delivery
+			STP_cw_shabrat_logistics_active = yes
+		}
 		available = { hidden_trigger = { always = no } }
 		selectable_mission = no
 		fire_only_once = no
@@ -3689,6 +3693,7 @@ STP_cw_war_council = {
 	STP_cw_take_fada = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }
+		visible = { STP_cw_fada_battle_active = yes }
 		activation = { STP_cw_fada_battle_active = yes }
 		available = { custom_trigger_tooltip = { tooltip = STP_cw_fada_captured_tt STP_cw_party_government_defeated = yes } }
 		cancel_trigger = { STP_cw_fada_battle_active = no }
@@ -3708,6 +3713,7 @@ STP_cw_war_council = {
 	STP_cw_hold_fada = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
+		visible = { STP_cw_fada_battle_active = yes }
 		activation = { STP_cw_fada_battle_active = yes }
 		available = { custom_trigger_tooltip = { tooltip = STP_cw_fada_captured_tt STP_cw_party_government_defeated = yes } }
 		cancel_trigger = { STP_cw_fada_battle_active = no }
@@ -3782,9 +3788,7 @@ STP_cw_war_council = {
 			hidden_effect = {
 				if = {
 					limit = { has_completed_focus = STP_pw_party_bezhaysk_campaign STP_pw_party_can_attack_bezhaysk = yes }
-					set_country_flag = ADISCORD_bezhaysk_campaign_active
-					BJK = { ADISCORD_release_non_participating_minor_optimization = yes }
-					declare_war_on = { target = BJK type = annex_everything }
+					STP_bezhaysk_begin_campaign = yes
 				}
 			}
 		}
@@ -4393,7 +4397,12 @@ STP_cw_war_council = {
 		icon = ADISCORD_operations
 		allowed = { tag = STS }
 		activation = { always = no }
-		visible = { has_active_mission = STP_cw_front_operation }
+		visible = {
+			has_active_mission = STP_cw_front_operation
+			has_war_with = STP
+			has_capitulated = no
+			NOT = { has_country_flag = STP_cw_postwar }
+		}
 		available = {
 			has_war_with = STP
 			custom_trigger_tooltip = {
@@ -4481,6 +4490,8 @@ STP_cw_war_council = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }
 		visible = {
+			STP_cw_fada_battle_active = yes
+			NOT = { has_country_flag = STP_cw_postwar }
 			has_completed_focus = STP_cw_last_banquet
 			NOT = { has_country_flag = STP_cw_last_banquet_started }
 			NOT = { has_country_flag = STP_cw_last_banquet_resolved }
@@ -4528,6 +4539,8 @@ STP_cw_war_council = {
 			}
 		}
 		visible = {
+			STP_cw_fada_battle_active = yes
+			NOT = { has_country_flag = STP_cw_postwar }
 			has_country_flag = STP_cw_last_banquet_started
 			NOT = { has_country_flag = STP_cw_last_banquet_resolved }
 		}
@@ -4538,6 +4551,8 @@ STP_cw_war_council = {
 			OR = {
 				has_country_flag = STP_cw_last_banquet_resolved
 				has_country_flag = STP_cw_won_union_battle
+				STP_cw_fada_battle_active = no
+				has_country_flag = STP_cw_postwar
 			}
 		}
 		cancel_effect = { hidden_effect = { STP_cw_close_last_banquet_technical = yes } }
@@ -6425,9 +6440,8 @@ STP_cw_war_council = {
 			modifier = { factor = 0 check_variable = { var = STP_hw_underground value = 70 compare = greater_than } }
 		}
 	}
-}
 
-STP_cw_external_intervention = {
+	# External operations
 	NOD_cw_northern_push = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = NOD }
@@ -6705,7 +6719,11 @@ STP_cw_external_intervention = {
 		activation = { always = no }
 		icon = generic_prepare_civil_war
 		allowed = { tag = NOD }
-		visible = { has_country_flag = NOD_cw_intervention_approved }
+		visible = {
+			has_country_flag = NOD_cw_intervention_approved
+			NOD_cw_intervention_possible = yes
+			NOT = { has_war_with = STS }
+		}
 		available = { hidden_trigger = { always = no } }
 		selectable_mission = no
 		days_mission_timeout = 135
@@ -6730,6 +6748,11 @@ STP_cw_external_intervention = {
 		activation = { always = no }
 		icon = generic_prepare_civil_war
 		allowed = { tag = NOD }
+		visible = {
+			has_country_flag = NOD_cw_intervention_approved
+			NOD_cw_intervention_possible = yes
+			NOT = { has_war_with = STS }
+		}
 		available = { hidden_trigger = { always = no } }
 		selectable_mission = no
 		days_mission_timeout = 7
@@ -6751,14 +6774,40 @@ STP_cw_external_intervention = {
 	STP_cw_nod_neutrality = {
 		icon = generic_improve_relations
 		allowed = { OR = { tag = NOD tag = STS } }
-		visible = { NOD = { has_country_flag = NOD_cw_refused } }
+		visible = {
+			NOT = { has_global_flag = STP_cw_union_wars_finished }
+			STP = { exists = yes }
+			OR = {
+				NOT = { has_global_flag = STP_cw_started }
+				STP = { has_war_with = STS }
+			}
+			NOD = {
+				exists = yes
+				has_country_flag = NOD_cw_refused
+				NOT = { has_war_with = STP }
+				NOT = { has_war_with = STS }
+			}
+		}
 		available = { hidden_trigger = { always = no } }
 	}
 	STP_cw_nod_warning = {
 		activation = { always = no }
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = STP tag = STS } }
-		visible = { has_country_flag = STP_cw_nod_warning_active }
+		visible = {
+			has_country_flag = STP_cw_nod_warning_active
+			NOT = { has_war_with = NOD }
+			NOT = {
+				AND = {
+					tag = STP
+					has_global_flag = STP_cw_started
+				}
+			}
+			NOD = {
+				NOD_cw_intervention_possible = yes
+				has_active_mission = NOD_cw_intervention_preparation
+			}
+		}
 		available = { hidden_trigger = { always = no } }
 		is_good = no
 		selectable_mission = no
@@ -6776,6 +6825,20 @@ STP_cw_external_intervention = {
 		activation = { always = no }
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = STP tag = STS } }
+		visible = {
+			NOT = { has_war_with = NOD }
+			NOT = {
+				AND = {
+					tag = STP
+					has_global_flag = STP_cw_started
+				}
+			}
+			NOD = {
+				NOD_cw_intervention_possible = yes
+				has_country_flag = NOD_cw_intervention_approved
+				has_active_mission = NOD_cw_northern_redeployment
+			}
+		}
 		available = { hidden_trigger = { always = no } }
 		is_good = no
 		selectable_mission = no
@@ -6808,6 +6871,9 @@ STP_cw_external_intervention = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }
 		visible = {
+			has_war_with = STP
+			NOT = { has_war_with = NOD }
+			NOT = { has_global_flag = STP_cw_union_wars_finished }
 			OR = {
 				has_country_flag = STP_cw_nod_warning_cancelled
 				NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals } }
@@ -17801,6 +17867,508 @@ STP_ch_chapters = {
 }
 
 STP_pw_programme = {
+	STP_pw_civic_district_staff = {
+		icon = ADISCORD_inspection
+		allowed = { tag = STS }
+		visible = {
+			has_country_flag = STP_cw_postwar
+			has_completed_focus = STP_pc_after_victory
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_civic_district_staff_ready_tt
+				STP_pw_civic_district_staff_ready = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pw_civic_district_staff_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power < 100
+			}
+		}
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						STP_pw_civic_district_staff_ready = yes
+						NOT = {
+							has_political_power < 100
+						}
+					}
+				}
+				hidden_effect = {
+					add_political_power = -100
+					add_to_variable = {
+						var = ADISCORD_state_development_progress
+						value = 25
+					}
+					ADISCORD_economy_mark_dirty = yes
+				}
+				custom_effect_tooltip = STP_pw_civic_district_staff_result_tt
+			}
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				NOT = {
+					has_political_power > 200
+				}
+			}
+		}
+	}
+
+	STP_pw_civic_district_clinics = {
+		icon = ADISCORD_ivanov_health_worsens
+		allowed = { tag = STS }
+		visible = {
+			has_country_flag = STP_cw_postwar
+			has_completed_focus = STP_pc_after_victory
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_civic_district_clinics_ready_tt
+				STP_pw_civic_district_clinics_ready = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pw_civic_district_clinics_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power < 35
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 540
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						STP_pw_civic_district_clinics_ready = yes
+						NOT = {
+							has_political_power < 35
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 540
+							compare = greater_than_or_equals
+						}
+					}
+				}
+				hidden_effect = {
+					add_political_power = -35
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 540
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 540
+					}
+					add_to_variable = {
+						var = ADISCORD_social_system_development_progress
+						value = 20
+					}
+					ADISCORD_economy_mark_dirty = yes
+				}
+				custom_effect_tooltip = STP_pw_civic_district_clinics_result_tt
+				add_stability = 0.03
+			}
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				NOT = {
+					has_political_power > 135
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 2040
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
+	}
+
+	STP_pw_civic_research_grants = {
+		icon = ADISCORD_science
+		allowed = { tag = STS }
+		visible = {
+			has_country_flag = STP_cw_postwar
+			has_completed_focus = STP_pc_development_reopen_universities
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_civic_research_grants_ready_tt
+				STP_pw_civic_research_grants_ready = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pw_civic_research_grants_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power < 50
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 900
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_re_enable = 180
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						STP_pw_civic_research_grants_ready = yes
+						NOT = {
+							has_political_power < 50
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 900
+							compare = greater_than_or_equals
+						}
+					}
+				}
+				hidden_effect = {
+					add_political_power = -50
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 900
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 900
+					}
+					add_to_variable = {
+						var = ADISCORD_science_development_progress
+						value = 20
+					}
+					ADISCORD_economy_mark_dirty = yes
+				}
+				custom_effect_tooltip = STP_pw_civic_research_grants_result_tt
+				add_tech_bonus = {
+					name = STP_pw_civic_research_grants
+					bonus = 0.5
+					uses = 1
+					category = industry
+					category = electronics
+				}
+			}
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				NOT = {
+					has_political_power > 150
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 2400
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
+	}
+
+	STP_pw_civic_veteran_instructors = {
+		icon = ADISCORD_recruitment
+		allowed = { tag = STS }
+		visible = {
+			has_country_flag = STP_cw_postwar
+			has_completed_focus = STP_pw_republic_army_register
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_civic_veteran_instructors_ready_tt
+				STP_pw_civic_veteran_instructors_ready = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pw_civic_veteran_instructors_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power < 75
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 360
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						STP_pw_civic_veteran_instructors_ready = yes
+						NOT = {
+							has_political_power < 75
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 360
+							compare = greater_than_or_equals
+						}
+					}
+				}
+				hidden_effect = {
+					add_political_power = -75
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 360
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 360
+					}
+					ADISCORD_economy_mark_dirty = yes
+				}
+				army_experience = 25
+			}
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				NOT = {
+					has_political_power > 175
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 1860
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
+	}
+
+	STP_pw_civic_district_roads = {
+		icon = ADISCORD_construction
+		allowed = { tag = STS }
+		state_target = yes
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+				OR = {
+					is_core_of = STP
+					is_core_of = STS
+				}
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			has_country_flag = STP_cw_postwar
+			has_completed_focus = STP_pw_republic_restore_roads
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_civic_district_roads_ready_tt
+				STP_pw_civic_district_roads_ready = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pw_civic_district_roads_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power < 75
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 900
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_re_enable = 180
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						STP_pw_civic_district_roads_ready = yes
+						NOT = {
+							has_political_power < 75
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 900
+							compare = greater_than_or_equals
+						}
+					}
+				}
+				hidden_effect = {
+					add_political_power = -75
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 900
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 900
+					}
+					ADISCORD_economy_mark_dirty = yes
+				}
+				FROM = {
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				NOT = {
+					has_political_power > 175
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 2400
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
+	}
+
+	STP_pw_civic_civil_enterprises = {
+		icon = ADISCORD_factory
+		allowed = { tag = STS }
+		state_target = yes
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+				OR = {
+					is_core_of = STP
+					is_core_of = STS
+				}
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			has_country_flag = STP_cw_postwar
+			has_completed_focus = STP_pc_economy_repair_workshops
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_civic_civil_enterprises_ready_tt
+				STP_pw_civic_civil_enterprises_ready = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pw_civic_civil_enterprises_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power < 100
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 1800
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_re_enable = 180
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						STP_pw_civic_civil_enterprises_ready = yes
+						NOT = {
+							has_political_power < 100
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 1800
+							compare = greater_than_or_equals
+						}
+					}
+				}
+				hidden_effect = {
+					add_political_power = -100
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 1800
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 1800
+					}
+					ADISCORD_economy_mark_dirty = yes
+				}
+				FROM = {
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				NOT = {
+					has_political_power > 200
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 3300
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
+	}
+
 	STP_pw_prog_veteran_artels = {
 		icon = generic_reform
 		allowed = { tag = STP }

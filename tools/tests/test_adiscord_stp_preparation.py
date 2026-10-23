@@ -294,7 +294,7 @@ def selected_effects(items, facts, scope="STP"):
 class StelanderPreparationTests(unittest.TestCase):
     def test_shabrat_volunteers_cost_manpower_but_no_rifles(self):
         decisions = block(
-            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council"
+            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_military_operations"
         )
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         facts = {
@@ -556,7 +556,7 @@ class StelanderPreparationTests(unittest.TestCase):
 
     def test_ai_recruitment_keeps_people_and_rifles_for_field_replacements(self):
         decisions = block(
-            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council"
+            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_military_operations"
         )
         for name, threshold in (
             ("STP_cw_raise_territorial_brigade", 18000),
@@ -3622,7 +3622,7 @@ class StelanderPreparationTests(unittest.TestCase):
         )
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
         decisions = block(
-            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council"
+            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_military_operations"
         )
         for focus_id, decision_id, tag, state, idea, days, opponents in (
             (
@@ -7476,7 +7476,7 @@ class StelanderPreparationTests(unittest.TestCase):
     ):
         decisions = block(
             entries("common/decisions/ADISCORD_STP_decisions.txt"),
-            "STP_cw_external_intervention",
+            "STP_military_operations",
         )
         supply = block(decisions, "STP_cw_supply_the_north")
         self.assertEqual(scalar(supply, "days_remove"), "21")
@@ -8830,7 +8830,7 @@ class OccidiaLateInterventionTests(unittest.TestCase):
     def test_timed_preparation_revalidates_and_cleans_up(self):
         category = block(
             entries("common/decisions/ADISCORD_STP_decisions.txt"),
-            "STP_cw_external_intervention",
+            "STP_military_operations",
         )
         decision = block(category, "STP_occidia_prepare_invasion")
         self.assertEqual(scalar(decision, "days_remove"), "21")

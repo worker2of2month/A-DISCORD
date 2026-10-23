@@ -525,6 +525,281 @@ class BezhayskDirectoryTests(unittest.TestCase):
         self.assertEqual(model.troops["BJK"], 60)
 
 
+class BezhayskCampaignFixture(BezhayskStelanderFixture):
+    """Execute country effects against finite stocks and explicit war facts."""
+
+    def __init__(self, winner="STS"):
+        super().__init__(winner)
+        from tools.tests.test_adiscord_peace_coalition_lifecycle import shared_major_ownership_scripts
+
+        self.effects.update(load("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"))
+        self.triggers = load("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+        major_effects, major_triggers = shared_major_ownership_scripts()
+        self.effects.update(major_effects)
+        self.triggers.update(major_triggers)
+        self.divisions = dict(BJK=2, BLD=3, BHG=1, BGT=1, BBV=1, BCM=1)
+        self.manpower = {tag: 0 for tag in REALM}
+        self.stocks = {tag: {} for tag in REALM}
+        self.variables = {tag: {} for tag in self.countries}
+        self.templates = {tag: set() for tag in REALM}
+        self.capitals = dict(BJK=41, BLD=31, BHG=5, BGT=4, BBV=7, BCM=9)
+        self.majors = set()
+        self.released = set()
+        self.created = []
+        self.publish_division_count = True
+        self.events = []
+        self.flags[winner].add("STP_cw_postwar")
+        self.capitulated = set()
+
+    def number(self, value, country):
+        if value == "num_divisions":
+            return self.divisions.get(country, 0)
+        try:
+            return float(value)
+        except ValueError:
+            return self.variables[country].get(value, 0)
+
+    def matches(self, rows, stack):
+        current = stack[-1]
+        for row in rows:
+            key, value = row.key, row.value
+            if key in self.triggers and (
+                key.startswith("STP_bezhaysk_") or key == "RUS_crisis_other_major_required"
+            ):
+                result = self.matches(self.triggers[key], stack) == (value == "yes")
+            elif key == "AND":
+                result = self.matches(value, stack)
+            elif key == "check_variable":
+                left = self.number(scalar(value, "var"), current)
+                right = self.number(scalar(value, "value"), current)
+                result = {"less_than": left < right, "greater_than": left > right,
+                          "greater_than_or_equals": left >= right, "equals": left == right}[
+                              scalar(value, "compare")]
+            elif key == "capital_scope":
+                result = self.matches(value, stack + [self.capitals[current]])
+            elif key == "is_owned_by":
+                result = self.owners[current] == self.resolve(value, stack)
+            elif key == "has_template":
+                result = value in self.templates[current]
+            elif key == "is_major":
+                result = (current in self.majors) == (value == "yes")
+            elif key == "is_subject":
+                result = (current in self.overlords) == (value == "yes")
+            elif key == "any_enemy_country":
+                result = any(self.matches(value, stack + [tag]) for tag in self.enemies(current))
+            else:
+                result = super().matches([row], stack)
+            if not result:
+                return False
+        return True
+
+    def execute(self, rows, stack=None):
+        stack = stack or [self.winner]
+        current = stack[-1]
+        taken = False
+        for row in rows:
+            key, value = row.key, row.value
+            if key in ("if", "else_if", "else"):
+                if key == "if":
+                    taken = False
+                guard = next((r.value for r in value if r.key == "limit"), [])
+                if not taken and self.matches(guard, stack):
+                    taken = True
+                    self.execute([r for r in value if r.key != "limit"], stack)
+            elif key in ("set_temp_variable", "multiply_temp_variable", "add_to_temp_variable"):
+                name = scalar(value, "var")
+                amount = self.number(scalar(value, "value"), current)
+                if key == "multiply_temp_variable":
+                    amount *= self.variables[current].get(name, 0)
+                elif key == "add_to_temp_variable":
+                    amount += self.variables[current].get(name, 0)
+                self.variables[current][name] = amount
+            elif key == "add_manpower":
+                self.manpower[current] += self.number(value, current)
+            elif key == "add_equipment_to_stockpile":
+                name = scalar(value, "type")
+                self.stocks[current][name] = self.stocks[current].get(name, 0) + self.number(
+                    scalar(value, "amount"), current)
+                assert self.stocks[current][name] >= 0, (current, name)
+            elif key == "division_template":
+                self.templates[current].add(scalar(value, "name"))
+            elif key == "capital_scope":
+                self.execute(value, stack + [self.capitals[current]])
+            elif key == "create_unit":
+                owner = self.resolve(scalar(value, "owner"), stack)
+                if self.publish_division_count:
+                    self.divisions[owner] += 1
+                self.created.append((owner, current, scalar(value, "division")))
+            elif key == "for_loop_effect":
+                for _ in range(int(scalar(value, "end"))):
+                    self.execute([r for r in value if r.key not in ("end", "value")], stack)
+            elif key == "ADISCORD_release_non_participating_minor_optimization":
+                self.released.add(current)
+            elif key == "set_major":
+                (self.majors.add if value == "yes" else self.majors.discard)(current)
+            elif key == "set_country_flag" and isinstance(value, list):
+                self.flags[current].add(scalar(value, "flag"))
+            elif key == "declare_war_on":
+                self.wars.add(frozenset((current, scalar(value, "target"))))
+            elif key == "add_to_war":
+                enemy = self.resolve(scalar(value, "enemy"), stack)
+                assert frozenset(("BJK", enemy)) in self.wars
+                assert scalar(value, "targeted_alliance") == "BJK"
+                self.wars.add(frozenset((current, enemy)))
+            elif key == "country_event":
+                self.events.append((current, scalar(value, "id")))
+            elif key == "set_global_flag":
+                self.global_flags.add(value)
+            elif key == "clr_global_flag":
+                self.global_flags.discard(value)
+            else:
+                super().execute([row], stack)
+
+    def call(self, name, country=None):
+        assert name in self.effects, "Missing campaign effect: " + name
+        self.execute(self.effects[name], [country or self.winner])
+
+    def fire(self, hook, country, section="bezhaysk"):
+        from tools.tests.test_adiscord_stp_preparation import block
+        from tools.tests.test_scripted_peace_on_actions import native_hooks
+
+        self.root = country
+        source = read_scripted_peace(
+            "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt", section
+        )
+        self.execute(block(block(native_hooks(source), hook), "effect"), [country])
+
+
+class BezhayskCampaignTests(unittest.TestCase):
+    def test_muster_fills_fifteen_and_debits_all_spawned_equipment(self):
+        for winner in ("STP", "STS"):
+            model = BezhayskCampaignFixture(winner)
+            model.call("STP_bezhaysk_prepare_campaign")
+            self.assertEqual(model.divisions, dict(BJK=3, BLD=4, BHG=2, BGT=2, BBV=2, BCM=2))
+            self.assertEqual(model.released, set(REALM))
+            self.assertEqual(len(model.created), 6)
+            self.assertEqual(sum(model.manpower.values()), 36000)
+            self.assertEqual(sum(s.get("infantry_equipment_0", 0) for s in model.stocks.values()), 38400)
+            self.assertEqual(sum(s.get("ADISCORD_squad_weapons_equipment_0", 0) for s in model.stocks.values()), 528)
+            snapshot = repr((model.divisions, model.manpower, model.stocks))
+            model.call("STP_bezhaysk_prepare_campaign")
+            self.assertEqual(repr((model.divisions, model.manpower, model.stocks)), snapshot)
+
+    def test_muster_does_not_reinforce_detached_or_occupied_holdings(self):
+        model = BezhayskCampaignFixture()
+        model.overlords.pop("BGT")
+        model.factions.pop("BGT")
+        model.controllers[5] = "NOD"
+        model.call("STP_bezhaysk_prepare_campaign")
+        self.assertEqual(model.divisions["BGT"], 1)
+        self.assertEqual(model.divisions["BHG"], 1)
+        self.assertNotIn("BGT", model.released)
+        self.assertNotIn("BHG", model.released)
+
+    def test_muster_does_not_depend_on_same_tick_division_count_updates(self):
+        model = BezhayskCampaignFixture()
+        model.publish_division_count = False
+        model.call("STP_bezhaysk_prepare_campaign")
+        self.assertEqual(len(model.created), 6)
+        self.assertEqual({tag: sum(owner == tag for owner, _, _ in model.created) for tag in REALM},
+                         {tag: 1 for tag in REALM})
+
+    def test_both_defeat_orders_and_liberation_gate_victory(self):
+        for winner in ("STP", "STS"):
+            for order in (("BJK", "BLD"), ("BLD", "BJK")):
+                model = BezhayskCampaignFixture(winner)
+                model.call("STP_bezhaysk_begin_campaign")
+                self.assertTrue({"BJK", "BLD"} <= model.majors)
+                self.assertTrue(all(frozenset((winner, tag)) in model.wars for tag in REALM))
+                for tag in order:
+                    model.root = tag
+                    model.flags[tag].add("STP_bezhaysk_defeated")
+                    model.capitulated.add(tag)
+                    ready = model.matches(model.triggers["STP_bezhaysk_victory_ready"], [winner])
+                    self.assertEqual(ready, tag == order[-1])
+                model.flags[order[0]].discard("STP_bezhaysk_defeated")
+                model.capitulated.discard(order[0])
+                self.assertFalse(model.matches(model.triggers["STP_bezhaysk_victory_ready"], [winner]))
+
+    def test_external_peace_cleans_campaign_majors_without_victory(self):
+        model = BezhayskCampaignFixture()
+        model.call("STP_bezhaysk_begin_campaign")
+        model.flags[model.winner].discard("STP_bezhaysk_entry_pending")
+        model.wars = {frozenset(("STS", "NOD"))}
+        model.call("STP_bezhaysk_reconcile_campaign")
+        self.assertFalse(model.majors)
+        self.assertNotIn("STP_bezhaysk_campaign", model.flags["STS"])
+        self.assertFalse(model.annexed)
+
+    def test_native_defeat_callbacks_settle_only_after_both_centres(self):
+        for winner in ("STP", "STS"):
+            for order in (("BJK", "BLD"), ("BLD", "BJK")):
+                model = BezhayskCampaignFixture(winner)
+                model.call("STP_bezhaysk_begin_campaign")
+                model.fire("on_capitulation_immediate", order[0])
+                self.assertFalse(model.annexed)
+                model.fire("on_capitulation", order[0])
+                self.assertIn("skip_default_capitulation", model.global_flags)
+                model.global_flags.clear()
+                model.fire("on_uncapitulation", order[0], "stelander")
+                model.fire("on_capitulation_immediate", order[1])
+                self.assertFalse(model.annexed)
+                model.fire("on_capitulation_immediate", order[0])
+                self.assertEqual(set(model.annexed), set(REALM))
+                self.assertEqual(len(model.annexed), 6)
+                self.assertFalse(model.majors)
+                self.assertIn(frozenset((winner, "NOD")), model.wars)
+                model.fire("on_capitulation", order[0])
+                self.assertEqual(len(model.annexed), 6)
+
+    def test_annexed_attacker_releases_majors_without_scheduling_dead_country(self):
+        model = BezhayskCampaignFixture()
+        model.call("STP_bezhaysk_begin_campaign")
+        model.countries.remove("STS")
+        model.events.clear()
+        model.call("STP_bezhaysk_queue_reconciliation")
+        self.assertFalse(model.majors)
+        self.assertEqual(model.events, [])
+
+    def test_capitulated_landros_is_not_enrolled_in_a_new_war(self):
+        for winner in ("STP", "STS"):
+            model = BezhayskCampaignFixture(winner)
+            model.capitulated.add("BLD")
+            model.wars.add(frozenset(("BLD", "NOD")))
+            model.call("STP_bezhaysk_begin_campaign")
+            self.assertNotIn("STP_bezhaysk_campaign_member", model.flags["BLD"])
+            self.assertNotIn("BLD", model.majors)
+            model.flags[winner].discard("STP_bezhaysk_entry_pending")
+            model.call("STP_bezhaysk_reconcile_campaign")
+            self.assertIn("STP_bezhaysk_campaign", model.flags[winner])
+
+    def test_attacker_capitulation_cleans_up_before_any_peace_or_annexation(self):
+        for winner in ("STP", "STS"):
+            model = BezhayskCampaignFixture(winner)
+            model.call("STP_bezhaysk_begin_campaign")
+            model.capitulated.add(winner)
+            wars = set(model.wars)
+            model.fire("on_capitulation", winner)
+            self.assertNotIn("STP_bezhaysk_campaign", model.flags[winner])
+            self.assertFalse(model.majors)
+            self.assertFalse(model.annexed)
+            self.assertEqual(model.wars, wars)
+
+    def test_cleanup_preserves_natural_and_other_campaign_majors(self):
+        for receipt in (None, "RUS_crisis_added_major", "VAL_northern_coalition_added_major"):
+            model = BezhayskCampaignFixture()
+            model.majors.add("BJK")
+            if receipt:
+                model.flags["BJK"].add(receipt)
+            if receipt == "RUS_crisis_added_major":
+                model.flags["BJK"].add("RUS_crisis_defender")
+            model.call("STP_bezhaysk_begin_campaign")
+            self.assertEqual("STP_bezhaysk_added_major" in model.flags["BJK"], bool(receipt))
+            model.call("STP_bezhaysk_close_campaign")
+            self.assertEqual(model.majors, {"BJK"})
+            self.assertNotIn("STP_bezhaysk_added_major", model.flags["BJK"])
+
+
 class BezhayskPeaceTests(unittest.TestCase):
     def read(self, path: str) -> str:
         return (ROOT / path).read_text(encoding="utf-8-sig")
@@ -550,7 +825,7 @@ class BezhayskPeaceTests(unittest.TestCase):
     def test_both_campaigns_record_their_authored_war(self) -> None:
         stp = self.read("events/ADISCORD_STP_events.txt")
         val = self.read("common/national_focus/ADISCORD_national_focus_VAL.txt")
-        self.assertIn("set_country_flag = ADISCORD_bezhaysk_campaign_active", stp)
+        self.assertIn("STP_bezhaysk_begin_campaign = yes", stp)
         self.assertIn("set_country_flag = ADISCORD_bezhaysk_campaign_active", val)
 
     def test_capitulation_router_uses_runtime_receipts_not_focus_history(self) -> None:
@@ -583,15 +858,15 @@ class BezhayskPeaceTests(unittest.TestCase):
             "bezhaysk",
         )
         for effect in (
-            "ADISCORD_bezhaysk_settle_sts_victory = yes",
-            "ADISCORD_bezhaysk_settle_stp_victory = yes",
+            "STP_bezhaysk_accept_defeat = yes",
+            "STP_bezhaysk_try_settlement = yes",
             "ADISCORD_bezhaysk_settle_val_victory = yes",
             "ADISCORD_bezhaysk_settle_val_nod_joint_victory = yes",
             "ADISCORD_bezhaysk_settle_forest_val_victory = yes",
             "ADISCORD_bezhaysk_settle_forest_nod_victory = yes",
         ):
             self.assertIn(effect, router)
-        self.assertEqual(router.count("set_global_flag = skip_default_capitulation"), 7)
+        self.assertEqual(router.count("set_global_flag = skip_default_capitulation"), 5)
 
     def test_settlement_covers_the_feudal_bloc(self) -> None:
         effects = self.read(

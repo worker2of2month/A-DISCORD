@@ -877,6 +877,46 @@ defined_text = {
 }
 
 defined_text = {
+	name = VALGetBlackMarketIncomeEffect
+	text = {
+		trigger = {
+			check_variable = { var = VAL_black_market_pressure value = 75 compare = greater_than_or_equals }
+		}
+		localization_key = VAL_black_market_income_75
+	}
+	text = {
+		trigger = {
+			check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals }
+		}
+		localization_key = VAL_black_market_income_50
+	}
+	text = {
+		trigger = {
+			check_variable = { var = VAL_black_market_pressure value = 25 compare = greater_than_or_equals }
+		}
+		localization_key = VAL_black_market_income_25
+	}
+	text = { localization_key = VAL_black_market_income_0 }
+}
+
+defined_text = {
+	name = VALGetBlackMarketPenalties
+	text = {
+		trigger = { has_idea = VAL_black_market_crisis }
+		localization_key = VAL_black_market_penalties_crisis
+	}
+	text = {
+		trigger = { has_idea = VAL_black_market_high }
+		localization_key = VAL_black_market_penalties_high
+	}
+	text = {
+		trigger = { has_idea = VAL_black_market_low }
+		localization_key = VAL_black_market_penalties_low
+	}
+	text = { localization_key = VAL_black_market_penalties_none }
+}
+
+defined_text = {
 	name = VALTradeBaseNetIncome
 	text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 75 compare = greater_than_or_equals } } localization_key = VAL_trade_net_base_75 }
 	text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } } localization_key = VAL_trade_net_base_50 }

@@ -22,6 +22,14 @@ to their APC. Motorized aliases also resolve to the same model; these aliases
 do not create a battalion or change equipment stats. Other countries retain
 their existing fallback.
 
+`gfx/interface/equipmentdesigner/graphic_db/ADISCORD_country_vehicles.txt` registers
+the national model pools for the division designer. Each pool is restricted to
+`ADISCORD_mechanized_infantry`; both its rifle and carrier archetype select the
+same national vehicle with escort. Ordinary rifle infantry and headquarters do
+not match these pools. Root keys are registered country tags, so cosmetic state
+names do not need separate equipment-database entries. `package_vehicles.py`
+generates this database together with the entity aliases.
+
 The root entity uses the native `motorized_frame_mesh`. The vehicle and existing
 national rifle infantry are separate attachments, with idle, move, retreat,
 attack, defend, support attack, training and death states. The frame already

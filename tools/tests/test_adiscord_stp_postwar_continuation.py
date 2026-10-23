@@ -327,7 +327,7 @@ class PostwarContinuationContracts(unittest.TestCase):
         )
         decisions = entries(ROOT / "common/decisions/ADISCORD_STP_decisions.txt")
         decision = block(
-            block(decisions, "STP_cw_war_council"), "STP_pw_launch_bezhaysk_operation"
+            block(decisions, "STP_military_operations"), "STP_pw_launch_bezhaysk_operation"
         )
         immediate = expand(block(parsed_event("ADISCORD_STP_pc.31"), "immediate"))
         facts = {
@@ -350,12 +350,9 @@ class PostwarContinuationContracts(unittest.TestCase):
         effects = list(selected_effects(immediate, facts, "STS"))
         self.assertEqual(
             [(scope, effect.key) for scope, effect in effects],
-            [
-                ("BJK", "ADISCORD_release_non_participating_minor_optimization"),
-                ("STS", "declare_war_on"),
-            ],
+            [("STS", "STP_bezhaysk_begin_campaign")],
         )
-        self.assertEqual(scalar(effects[-1][1].value, "target"), "BJK")
+        self.assertEqual(effects[0][1].value, "yes")
         for key in facts:
             with self.subTest(invalidated=key):
                 changed = dict(facts)
@@ -1651,7 +1648,7 @@ class HumanistRouteContracts(unittest.TestCase):
             entry.key: entry.value
             for entry in block(
                 relative_entries("common/decisions/ADISCORD_STP_decisions.txt"),
-                "STP_cw_war_council",
+                "STP_military_operations",
             )
             if isinstance(entry.value, list)
         }
@@ -2092,7 +2089,7 @@ class PartyRecoveryTransactions(unittest.TestCase):
     def setUp(self):
         self.decisions = block(
             relative_entries("common/decisions/ADISCORD_STP_decisions.txt"),
-            "STP_cw_war_council",
+            "STP_military_operations",
         )
         self.projects = (
             ("restore_ministries", "services", 60, "new_republic"),
@@ -2248,7 +2245,7 @@ class PostwarRecoveryTransactions(unittest.TestCase):
     def setUp(self):
         self.effects = {e.key: e.value for e in entries(EFFECTS)}
         decisions = relative_entries("common/decisions/ADISCORD_STP_decisions.txt")
-        self.decisions = block(decisions, "STP_cw_war_council")
+        self.decisions = block(decisions, "STP_military_operations")
         self.projects = (
             ("STP_pw_restore_services", "services", 80),
             ("STP_pw_restart_workshops", "industry", 120),
@@ -2550,7 +2547,7 @@ class PostwarDiplomacyTransactions(unittest.TestCase):
     def test_paid_campaign_is_idempotent_and_cancelled_preparation_never_delivers(self):
         council = block(
             relative_entries("common/decisions/ADISCORD_STP_decisions.txt"),
-            "STP_cw_war_council",
+            "STP_military_operations",
         )
         for tag in ("VAL", "NOD"):
             decision = block(council, f"STP_pw_prepare_{tag.lower()}_campaign")
@@ -2583,7 +2580,7 @@ class PostwarDiplomacyTransactions(unittest.TestCase):
     ):
         council = block(
             relative_entries("common/decisions/ADISCORD_STP_decisions.txt"),
-            "STP_cw_war_council",
+            "STP_military_operations",
         )
         ideas = block(
             block(

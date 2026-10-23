@@ -658,6 +658,118 @@ class ShabratTreatyFixture(TreatyFixture):
             self.temporary_variables.clear()
 
 
+class NorthernFinalTreatyTests(unittest.TestCase):
+    def fixture(self, target="YPR"):
+        f = ShabratTreatyFixture()
+        f.root = target
+        f.winner = "STS"
+        f.existing.update(("YPR", "TFF"))
+        f.subjects = {"NOD": "STS", "VAL": "STS"}
+        f.flags["STS"].add("STP_heg_northern_final_started")
+        f.owners = {"17": "YPR", "18": "YPR", "20": "YPR", "84": "TFF"}
+        f.controllers = dict(f.owners)
+        f.wars = {frozenset((tag, target)) for tag in ("STS", "NOD", "VAL")}
+        f.wars.add(frozenset(("STS", "TFF" if target == "YPR" else "YPR")))
+        f.stubs.add("STP_pw_queue_hegemony_epilogue")
+        return f
+
+    def immediate(self, f):
+        actions = block(entries("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"), "on_actions")
+        payload = block(block(actions, "on_capitulation_immediate"), "effect")
+        body = next(e.value for e in payload if e.key == "if")
+        branch = next(
+            e for e in body if e.key == "if"
+            and any(x.key == "STP_heg_northern_final_capitulation_managed" for x in block(e.value, "limit"))
+        )
+        f.execute([branch])
+
+    def test_each_northern_defeat_creates_an_administration_and_closes_subject_wars(self):
+        for target in ("YPR", "TFF"):
+            for winner in ("STS", "NOD"):
+                with self.subTest(target=target, winner=winner):
+                    f = self.fixture(target)
+                    f.winner = winner
+                    self.immediate(f)
+                    self.assertEqual(f.subjects[target], "STS")
+                    self.assertEqual(f.autonomy[target], "autonomy_STP_provisional_administration")
+                    self.assertEqual(f.cosmetics[target], target + "_STS_administration")
+                    self.assertIn("STP_heg_northern_final_capitulation_reserved", f.flags[target])
+                    self.assertNotIn("skip_default_capitulation", f.global_flags)
+                    self.assertFalse(any(target in war for war in f.wars))
+                    self.assertTrue(f.wars, "The other independent northern opponent still fights")
+                    self.assertEqual(f.owners["20"], "YPR")
+                    self.assertEqual(f.owners["84"], "TFF")
+                    before = dict(f.subjects), dict(f.owners), set(f.wars)
+                    self.immediate(f)
+                    self.assertEqual(before, (f.subjects, f.owners, f.wars))
+
+    def test_foreign_victor_or_inactive_campaign_cannot_impose_an_administration(self):
+        for failure in ("foreign_victor", "inactive", "peace", "foreign_subject", "defeated_sts"):
+            with self.subTest(failure=failure):
+                f = self.fixture()
+                if failure == "foreign_victor":
+                    f.winner = "ZZZ"
+                    f.wars.add(frozenset(("ZZZ", "YPR")))
+                elif failure == "inactive":
+                    f.flags["STS"].clear()
+                elif failure == "peace":
+                    f.wars.clear()
+                elif failure == "foreign_subject":
+                    f.subjects["YPR"] = "ZZZ"
+                else:
+                    f.capitulated.add("STS")
+                before = dict(f.subjects), dict(f.owners), set(f.wars)
+                self.immediate(f)
+                self.assertEqual(before, (f.subjects, f.owners, f.wars))
+
+    def test_nodrul_receives_treaty_states_in_either_subjugation_order(self):
+        for nod_first in (False, True):
+            with self.subTest(nod_first=nod_first):
+                f = self.fixture()
+                if not nod_first:
+                    f.subjects.pop("NOD")
+                self.immediate(f)
+                self.assertEqual(f.owners["17"], "NOD" if nod_first else "YPR")
+                f.execute(f.effects["STP_heg_prepare_nod_administration"], ["STS"])
+                for state in ("17", "18"):
+                    self.assertEqual(f.owners[state], "NOD")
+                    self.assertEqual(f.controllers[state], "NOD")
+                before = dict(f.owners), dict(f.controllers)
+                f.execute(f.effects["STP_heg_restore_nod_treaty_states"], ["STS"])
+                self.assertEqual(before, (f.owners, f.controllers))
+
+    def test_return_respects_foreign_ownership_occupation_and_independent_nodrul(self):
+        for owner in ("YPR", "STS", "ZZZ"):
+            for controller in ("YPR", "STS", "VAL", "ZZZ"):
+                for nod_subject in (False, True):
+                    with self.subTest(owner=owner, controller=controller, nod_subject=nod_subject):
+                        f = self.fixture()
+                        f.subjects["YPR"] = "STS"
+                        if not nod_subject:
+                            f.subjects.pop("NOD")
+                        f.owners["17"] = owner
+                        f.controllers["17"] = controller
+                        f.execute(f.effects["STP_heg_restore_nod_treaty_states"], ["STS"])
+                        awarded = nod_subject and owner != "ZZZ" and controller != "ZZZ"
+                        self.assertEqual(f.owners["17"], "NOD" if awarded else owner)
+                        self.assertEqual(f.controllers["17"], "NOD" if awarded else controller)
+                        self.assertEqual(f.owners["20"], "YPR")
+
+    def test_late_callback_reserves_the_scripted_result_from_generic_annexation(self):
+        actions = block(entries("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"), "on_actions")
+        payload = block(block(actions, "on_capitulation"), "effect")
+        body = next(e.value for e in payload if e.key == "if")
+        branch = next(
+            e for e in body if e.key == "if"
+            and "STP_heg_northern_final_capitulation_reserved" in str(block(e.value, "limit"))
+        )
+        f = self.fixture()
+        self.immediate(f)
+        f.execute([branch])
+        self.assertIn("skip_default_capitulation", f.global_flags)
+        self.assertNotIn("STP_heg_northern_final_capitulation_reserved", f.flags["YPR"])
+
+
 class ShabratRepeatedPeaceTests(unittest.TestCase):
     def test_first_then_second_victory_changes_the_surviving_overlord(self):
         for opponent, receipt in (("NOD", "STP_pc_defeated_by_sts"), ("VAL", "VAL_stelander_defeated")):
@@ -941,6 +1053,10 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
         self.humans = set()
         self.handoffs = []
         self.war_sides = []
+        self.pending_diplomacy = []
+        self.pending_events = []
+        self.rejected_entries = set()
+        self.apply_diplomacy = False
 
     def resolve(self, token, stack):
         if token.startswith("event_target:"):
@@ -951,7 +1067,9 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
         current = stack[-1]
         for entry in rows:
             key, value = entry.key, entry.value
-            if key == "STP_pc_hegemony_continues":
+            if key == "has_event_target":
+                result = "event_target:" + value in self.targets
+            elif key == "STP_pc_hegemony_continues":
                 result = (current == "STS" and self.course == "hegemony") == (value == "yes")
             elif key == "STP_pc_sword_directory_branch":
                 result = (current == "STS" and self.course == "directory") == (value == "yes")
@@ -1011,6 +1129,10 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
                 self.controllers[current] = self.resolve(value, stack)
             elif key == "add_core_of":
                 self.cores.setdefault(current, set()).add(self.resolve(value, stack))
+            elif key == "country_event":
+                self.pending_events.append((current, scalar(value, "id")))
+            elif key in ("declare_war_on", "add_to_war") and not self.apply_diplomacy:
+                self.pending_diplomacy.append((entry, list(stack), dict(self.targets)))
             elif key == "declare_war_on":
                 target = scalar(value, "target")
                 self.declarations.append(target)
@@ -1018,6 +1140,8 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
                     self.wars.add(frozenset((current, target)))
                     self.war_sides = [{current}, {target}]
             elif key == "add_to_war":
+                if current in self.rejected_entries:
+                    continue
                 leader = self.resolve(scalar(value, "targeted_alliance"), stack)
                 enemy = self.resolve(scalar(value, "enemy"), stack)
                 assert frozenset((leader, enemy)) in self.wars
@@ -1080,8 +1204,28 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
             self.variables[leader, "STP_pc_course"] = 3
             self.completed.add((leader, "STP_pc_sdir_oath"))
 
-    def launch(self):
+    def tick(self):
+        diplomacy, self.pending_diplomacy = self.pending_diplomacy, []
+        events, self.pending_events = self.pending_events, []
+        self.apply_diplomacy = True
+        for entry, stack, targets in diplomacy:
+            self.targets = targets
+            self.execute([entry], stack)
+        self.apply_diplomacy = False
+        for country, event_id in events:
+            # Every callback reconstructs local targets instead of relying on launch scope.
+            self.targets = {}
+            event = next(
+                e.value for e in entries("events/ADISCORD_STP_events.txt")
+                if e.key == "country_event" and scalar(e.value, "id") == event_id
+            )
+            self.execute(block(event, "immediate"), [country])
+
+    def launch(self, complete_entry=True):
         self.execute(self.effects["STP_heg_start_cannibal_campaign"], [self.leader])
+        if complete_entry:
+            self.tick()
+            self.tick()
 
     def defeat(self, tag):
         self.root = tag

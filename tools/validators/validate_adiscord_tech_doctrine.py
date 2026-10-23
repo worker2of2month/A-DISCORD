@@ -1204,6 +1204,27 @@ def check_applied_technology_programmes(tech_blocks: dict[str, str]) -> list[str
     return issues
 
 
+def check_doctrine_reward_localisation() -> list[str]:
+    issues: list[str] = []
+    for language in ("russian", "english"):
+        path = ROOT / "localisation" / language / f"ADISCORD_mastery_doctrines_l_{language}.yml"
+        values = dict(re.findall(
+            r'^\s+([A-Za-z0-9_]+):\d*\s+"([^"\r\n]*)"\s*$',
+            read_text(path),
+            re.MULTILINE,
+        ))
+        for school in GENERATED_SCHOOLS:
+            for index, (slug, ru, en, _effects) in enumerate(
+                GENERATED_REWARD_PROFILES[school.profile]
+            ):
+                rid = generated_reward_id(school, index, slug)
+                key = f"{school.key}_{rid}"
+                expected = ru if language == "russian" else en
+                if values.get(key) != expected:
+                    issues.append(f"missing or incorrect {language} reward tooltip localisation {key}")
+    return issues
+
+
 def check_duplicate_localisation_keys() -> list[str]:
     issues: list[str] = []
     for language in ("russian", "english"):
@@ -3087,12 +3108,12 @@ def check_technology_description_contract(tech_blocks: dict[str, str]) -> list[s
     russian = read_text(russian_path) if russian_path.exists() else ""
 
     def has_fragment(text: str, tech_id: str, fragment: str) -> bool:
-        return bool(
-            re.search(
-                rf'(?m)^\s*{re.escape(tech_id)}_desc:\d+\s+"[^"]*{re.escape(fragment)}',
-                text,
-            )
+        match = re.search(
+            rf'(?m)^[ \t]*{re.escape(tech_id)}_desc:\d*[ \t]+"'
+            r'((?:\\[^\r\n]|[^"\\\r\n])*)"[ \t]*(?:#[^\r\n]*)?\r?$',
+            text,
         )
+        return match is not None and fragment in match.group(1)
 
     for tech_id, block in tech_blocks.items():
         energy = re.search(r"\bfactory_energy_consumption\s*=\s*([0-9.]+)", block)
@@ -3858,27 +3879,28 @@ def check_economy_spending() -> list[str]:
         return ["common/scripted_effects/ADISCORD_economy_effects.txt missing"]
     text = strip_comments(read_text(effects))
     expected_spenders = {
-        "ADISCORD_economy_repay_debt": -50,
-        "ADISCORD_economy_stabilization_package": -100,
-        "ADISCORD_economy_invest_reserves": -50,
-        "ADISCORD_economy_civilian_investment_action": -50,
-        "ADISCORD_economy_military_investment_action": -50,
+        "ADISCORD_economy_repay_debt": (-50,),
+        "ADISCORD_economy_stabilization_package": (-500, -1200),
+        "ADISCORD_economy_invest_reserves": (-100,),
+        "ADISCORD_economy_civilian_investment_action": (-100,),
+        "ADISCORD_economy_military_investment_action": (-100,),
     }
-    for effect, value in expected_spenders.items():
+    for effect, values in expected_spenders.items():
         match = re.search(rf"\b{re.escape(effect)}\s*=\s*\{{", text)
         if not match:
             issues.append(f"{effect} is missing")
             continue
         block = extract_block(text, match.start())
-        pattern = rf"add_to_variable\s*=\s*\{{[^{{}}]*var\s*=\s*ADISCORD_economy_treasury[^{{}}]*value\s*=\s*{value}\b"
         bounded_repayment = effect == "ADISCORD_economy_repay_debt" and re.search(
             r"subtract_from_variable\s*=\s*\{[^{}]*var\s*=\s*ADISCORD_economy_treasury"
             r"[^{}]*value\s*=\s*ADISCORD_economy_repay_cash_temp\b",
             block,
             re.S,
         )
-        if not re.search(pattern, block, re.S) and not bounded_repayment:
-            issues.append(f"{effect} does not subtract {abs(value)} treasury")
+        for value in values:
+            pattern = rf"add_to_variable\s*=\s*\{{[^{{}}]*var\s*=\s*ADISCORD_economy_treasury[^{{}}]*value\s*=\s*{value}\s*\}}"
+            if not re.search(pattern, block, re.S) and not bounded_repayment:
+                issues.append(f"{effect} does not subtract {abs(value)} treasury")
     return issues
 
 
@@ -4078,6 +4100,7 @@ def main() -> int:
     issues.extend(
         check_generated_doctrine_structure(grand, tracks, subdoctrines, doctrine_blocks)
     )
+    issues.extend(check_doctrine_reward_localisation())
     issues.extend(check_duplicate_localisation_keys())
     issues.extend(check_technology_replace_path())
     issues.extend(check_technology_ui_years())

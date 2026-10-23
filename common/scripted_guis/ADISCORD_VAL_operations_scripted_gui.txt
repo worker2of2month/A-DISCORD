@@ -1404,7 +1404,7 @@ scripted_gui = {
 	ADISCORD_STP_operations_panel = {
 		context_type = decision_category
 		window_name = "ADISCORD_STP_operations_panel_window"
-		visible = { always = yes }
+		visible = { STP_operations_map_available = yes }
 		triggers = {
 			STP_ops_43_controller_visible = { always = yes }
 			STP_ops_44_controller_visible = { always = yes }

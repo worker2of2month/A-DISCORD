@@ -881,6 +881,8 @@ class PartySurvivalContracts(unittest.TestCase):
             'STP_ps_party_programs',
             'STP_ps_northern_support',
             'STP_ps_supply_routes',
+            'STP_cw_war_council',
+            'STP_cw_external_intervention',
         ):
             self.assertNotIn(old, categories)
             self.assertNotIn(old, definitions)
@@ -898,10 +900,10 @@ class PartySurvivalContracts(unittest.TestCase):
         }
         self.assertTrue(domestic <= {e.key for e in categories['STP_party_factions']})
         self.assertTrue(
-            foreign <= {e.key for e in categories['STP_cw_external_intervention']}
+            foreign <= {e.key for e in categories['STP_military_operations']}
         )
         self.assertFalse((domestic | foreign) & elections)
-        council = {e.key for e in categories['STP_cw_war_council']}
+        council = {e.key for e in categories['STP_military_operations']}
         self.assertTrue(
             {'STP_ps_reorg_1_funded', 'STP_ps_ammunition', 'STP_ps_transport'}
             <= council
@@ -1319,7 +1321,7 @@ class PartyUsabilityContracts(unittest.TestCase):
         self.assertEqual(one(dynamic, 'breakthrough_factor'), 'STP_ps_breakthrough')
         self.assertNotIn('army_defence_factor', {e.key for e in dynamic})
 
-    def test_foreign_operations_share_the_external_category(self):
+    def test_foreign_operations_share_the_military_category(self):
         names = [
             'STP_ps_fund_nod',
             'STP_ps_arm_nod',
@@ -1342,7 +1344,7 @@ class PartyUsabilityContracts(unittest.TestCase):
             'STP_pw_party_nod_staff_readiness',
         ]
         for name in names:
-            self.assertEqual(self.owners[name], 'STP_cw_external_intervention', name)
+            self.assertEqual(self.owners[name], 'STP_military_operations', name)
         self.assertNotIn('STP_postwar_nod_ultimatum', self.categories)
 
     def test_domestic_preparation_sits_with_the_party_apparatus(self):
@@ -1368,7 +1370,7 @@ class PartyUsabilityContracts(unittest.TestCase):
                 },
             )
         )
-        external = one(self.categories['STP_cw_external_intervention'], 'visible')
+        external = one(self.categories['STP_military_operations'], 'visible')
         self.assertTrue(
             matches_conditions(
                 external,
@@ -1385,7 +1387,7 @@ class PartyUsabilityContracts(unittest.TestCase):
             )
         )
         self.assertEqual(
-            one(self.categories['STP_cw_war_council'], 'visible_when_empty'), 'no'
+            one(self.categories['STP_military_operations'], 'visible_when_empty'), 'yes'
         )
 
     def test_current_supply_deadline_is_checked_before_both_payments(self):
@@ -1457,11 +1459,19 @@ class PartyUsabilityContracts(unittest.TestCase):
                 'STP_ps_preparation_report',
                 'STP_ps_war_report',
                 'STP_party_factions_desc',
-                'STP_cw_war_council_desc',
+                'STP_military_operations_desc',
             ):
                 self.assertLessEqual(len(values[key]), 560, key)
-            self.assertIn('[STPGetPartySurvival]', values['STP_cw_war_council_desc'])
-            self.assertIn('[STPGetRecoveryReport]', values['STP_cw_war_council_desc'])
+            for report in (
+                'STPGetPartySurvival',
+                'STPGetRecoveryReport',
+                'STPGetKefreytArmyCommitment',
+                'STPGetCoalitionReport',
+                'STPGetWarStrainReport',
+                'STPGetStalledWarReport',
+                'STPGetPartyForeignReport',
+            ):
+                self.assertIn(f'[{report}]', values['STP_military_operations_desc'])
             self.assertIn(
                 '[STPGetPartyPreparationReport]', values['STP_party_factions_desc']
             )

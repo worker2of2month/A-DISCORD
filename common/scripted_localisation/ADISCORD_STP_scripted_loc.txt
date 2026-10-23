@@ -709,6 +709,19 @@ defined_text = {
 defined_text = {
 	name = STPGetKefreytArmyCommitment
 	text = {
+		trigger = {
+			OR = {
+				has_global_flag = STP_cw_union_wars_finished
+				has_country_flag = STP_cw_postwar
+				AND = {
+					has_global_flag = STP_cw_started
+					STP_cw_fada_battle_active = no
+				}
+			}
+		}
+		localization_key = STP_REGION_EMPTY_LINE
+	}
+	text = {
 		trigger = { 1 = { check_variable = { var = STP_cw_kefreyt_volunteers value = 3 compare = equals } } }
 		localization_key = STP_ARMY_KEFREYT_COMMITMENT
 	}
@@ -2135,6 +2148,38 @@ defined_text = {
 	text = { localization_key = STP_ps_empty }
 }
 
+defined_text = {
+	name = STPGetBetrayalEffects
+	text = {
+		trigger = {
+			is_power_balance_in_range = {
+				id = STP_heg_betrayal
+				range = STP_heg_betrayal_rupture
+			}
+		}
+		localization_key = STP_heg_betrayal_effects_rupture
+	}
+	text = {
+		trigger = {
+			is_power_balance_in_range = {
+				id = STP_heg_betrayal
+				range = STP_heg_betrayal_anger
+			}
+		}
+		localization_key = STP_heg_betrayal_effects_anger
+	}
+	text = {
+		trigger = {
+			is_power_balance_in_range = {
+				id = STP_heg_betrayal
+				range = STP_heg_betrayal_doubts
+			}
+		}
+		localization_key = STP_heg_betrayal_effects_doubts
+	}
+	text = { localization_key = STP_heg_betrayal_effects_quiet }
+}
+
 # Party war: inheritance of the festival.
 defined_text = {
 	name = STPGetStalledWarReport
@@ -2541,5 +2586,16 @@ defined_text = {
 	}
 	text = {
 		localization_key = STP_false_trail_cost_45_blocked
+	}
+}
+
+defined_text = {
+	name = STPGetGovernmentProgrammeDesc
+	text = {
+		trigger = { tag = STS }
+		localization_key = STP_pw_programme_civic_desc
+	}
+	text = {
+		localization_key = STP_pw_programme_party_desc
 	}
 }

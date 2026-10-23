@@ -11198,6 +11198,68 @@ STP_heg_start_northern_final_war = {
 	}
 }
 
+# Native ROOT is the defeated northern government. Keep its country and army
+# for the administration, and close war relations with the whole STS side first.
+STP_heg_settle_northern_final = {
+	if = {
+		limit = { STP_heg_northern_final_capitulation_managed = yes }
+		ROOT = {
+			set_country_flag = STP_heg_defeated_by_sts
+			if = { limit = { is_in_faction = yes } leave_faction = yes }
+			every_enemy_country = {
+				limit = { is_subject_of = STS }
+				white_peace = ROOT
+			}
+			if = { limit = { has_war_with = STS } white_peace = STS }
+		}
+		if = {
+			limit = { ROOT = { tag = YPR } }
+			STS = { STP_heg_prepare_ypr_administration = yes }
+		}
+		else = { STS = { STP_heg_prepare_tff_administration = yes } }
+		ROOT = {
+			ADISCORD_economy_update_postwar_demobilization = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+		STS = {
+			STP_pw_queue_hegemony_epilogue = yes
+			ADISCORD_economy_update_postwar_demobilization = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+# STS: the northern treaty ceded 17/18 to YPR. Return them only inside our
+# settled administrations; either government may have been subordinated first.
+STP_heg_restore_nod_treaty_states = {
+	if = {
+		limit = {
+			tag = STS
+			NOD = { exists = yes is_subject_of = STS has_capitulated = no }
+			YPR = { exists = yes is_subject_of = STS has_capitulated = no }
+		}
+		17 = { STP_heg_restore_nod_treaty_state = yes }
+		18 = { STP_heg_restore_nod_treaty_state = yes }
+	}
+}
+
+# STATE: independent ownership and third-party occupation remain outside the treaty.
+STP_heg_restore_nod_treaty_state = {
+	if = {
+		limit = {
+			OR = { is_owned_by = YPR is_owned_by = STS }
+			controller = {
+				OR = { tag = STS is_subject_of = STS }
+			}
+		}
+		transfer_state_to = NOD
+		set_state_controller_to = NOD
+		NOD = { ADISCORD_economy_mark_dirty = yes }
+		YPR = { ADISCORD_economy_mark_dirty = yes }
+		STS = { ADISCORD_economy_mark_dirty = yes }
+	}
+}
+
 STP_heg_start_kefreyt_final_war = {
 	if = {
 		limit = { STP_heg_can_start_kefreyt_final_war = yes }
@@ -11528,6 +11590,7 @@ STP_heg_prepare_nod_administration = {
 			}
 		}
 	}
+	STP_heg_restore_nod_treaty_states = yes
 	ADISCORD_economy_mark_dirty = yes
 }
 
@@ -11561,6 +11624,7 @@ STP_heg_prepare_ypr_administration = {
 			}
 		}
 	}
+	STP_heg_restore_nod_treaty_states = yes
 	ADISCORD_economy_mark_dirty = yes
 }
 
@@ -16880,6 +16944,7 @@ STP_heg_form_northern_administration = {
 
 # Country scope. Only release mandatory-major status owned by this campaign.
 STP_heg_clear_cannibal_campaign = {
+	clr_country_flag = STP_heg_cannibal_entry_pending
 	clr_country_flag = STP_heg_cannibal_defeated
 	clr_country_flag = STP_heg_cannibal_campaign_active
 	if = {
@@ -16931,13 +16996,12 @@ STP_heg_start_cannibal_campaign = {
 	if = {
 		limit = { STP_heg_can_start_cannibal_campaign = yes }
 		set_country_flag = STP_heg_cannibal_campaign_active
-		save_event_target_as = STP_heg_cannibal_leader
+		set_country_flag = STP_heg_cannibal_entry_pending
 		CIN = { STP_heg_enroll_cannibal_member = yes }
 		OSF = { STP_heg_enroll_cannibal_member = yes }
 		APH = { STP_heg_enroll_cannibal_member = yes }
 		if = {
 			limit = { CIN = { has_country_flag = STP_heg_cannibal_campaign_active } }
-			CIN = { save_event_target_as = STP_heg_cannibal_war_anchor }
 			declare_war_on = {
 				target = CIN
 				type = annex_everything
@@ -16945,7 +17009,6 @@ STP_heg_start_cannibal_campaign = {
 		}
 		else_if = {
 			limit = { OSF = { has_country_flag = STP_heg_cannibal_campaign_active } }
-			OSF = { save_event_target_as = STP_heg_cannibal_war_anchor }
 			declare_war_on = {
 				target = OSF
 				type = annex_everything
@@ -16953,31 +17016,180 @@ STP_heg_start_cannibal_campaign = {
 		}
 		else_if = {
 			limit = { APH = { has_country_flag = STP_heg_cannibal_campaign_active } }
-			APH = { save_event_target_as = STP_heg_cannibal_war_anchor }
 			declare_war_on = {
 				target = APH
 				type = annex_everything
 			}
 		}
-		CIN = { STP_heg_join_cannibal_war = yes }
-		OSF = { STP_heg_join_cannibal_war = yes }
-		APH = { STP_heg_join_cannibal_war = yes }
+		hidden_effect = { country_event = { id = ADISCORD_STP_pc.110 hours = 1 } }
+	}
+}
+
+# Rebuild local targets after the declaration has reached the diplomatic tick.
+STP_heg_invite_cannibal_campaign = {
+	if = {
+		limit = {
+			has_country_flag = STP_heg_cannibal_entry_pending
+			STP_heg_cannibal_leader_current = yes
+		}
+		save_event_target_as = STP_heg_cannibal_leader
 		if = {
 			limit = {
-				has_completed_focus = STP_pc_heg_northern_administration
-				event_target:STP_heg_cannibal_war_anchor = {
-					has_war_with = event_target:STP_heg_cannibal_leader
+				CIN = {
+					has_country_flag = STP_heg_cannibal_campaign_active
+					has_war_with = PREV
 				}
 			}
-			NKA = {
-				add_to_war = {
-					targeted_alliance = event_target:STP_heg_cannibal_leader
-					enemy = event_target:STP_heg_cannibal_war_anchor
-					hostility_reason = asked_to_join
+			CIN = { save_event_target_as = STP_heg_cannibal_war_anchor }
+		}
+		else_if = {
+			limit = {
+				OSF = {
+					has_country_flag = STP_heg_cannibal_campaign_active
+					has_war_with = PREV
+				}
+			}
+			OSF = { save_event_target_as = STP_heg_cannibal_war_anchor }
+		}
+		else_if = {
+			limit = {
+				APH = {
+					has_country_flag = STP_heg_cannibal_campaign_active
+					has_war_with = PREV
+				}
+			}
+			APH = { save_event_target_as = STP_heg_cannibal_war_anchor }
+		}
+		if = {
+			limit = { has_event_target = STP_heg_cannibal_war_anchor }
+			CIN = { STP_heg_join_cannibal_war = yes }
+			OSF = { STP_heg_join_cannibal_war = yes }
+			APH = { STP_heg_join_cannibal_war = yes }
+			if = {
+				limit = {
+					has_completed_focus = STP_pc_heg_northern_administration
+					event_target:STP_heg_cannibal_war_anchor = {
+						has_war_with = event_target:STP_heg_cannibal_leader
+					}
+				}
+				NKA = {
+					add_to_war = {
+						targeted_alliance = event_target:STP_heg_cannibal_leader
+						enemy = event_target:STP_heg_cannibal_war_anchor
+						hostility_reason = asked_to_join
+					}
 				}
 			}
 		}
-		STP_heg_reconcile_cannibal_campaign = yes
+	}
+}
+
+# A failed native entry closes only this campaign's wars, without a territorial award.
+STP_heg_abort_cannibal_entry = {
+	save_event_target_as = STP_heg_cannibal_leader
+	set_country_flag = STP_heg_cannibal_settlement_in_progress
+	CIN = {
+		if = {
+			limit = { has_country_flag = STP_heg_cannibal_campaign_active }
+			STP_heg_clear_cannibal_campaign = yes
+			if = {
+				limit = { has_war_with = event_target:STP_heg_cannibal_leader }
+				white_peace = event_target:STP_heg_cannibal_leader
+			}
+			if = {
+				limit = {
+					event_target:STP_heg_cannibal_leader = { has_completed_focus = STP_pc_heg_northern_administration }
+					has_war_with = NKA
+				}
+				white_peace = NKA
+			}
+		}
+	}
+	OSF = {
+		if = {
+			limit = { has_country_flag = STP_heg_cannibal_campaign_active }
+			STP_heg_clear_cannibal_campaign = yes
+			if = {
+				limit = { has_war_with = event_target:STP_heg_cannibal_leader }
+				white_peace = event_target:STP_heg_cannibal_leader
+			}
+			if = {
+				limit = {
+					event_target:STP_heg_cannibal_leader = { has_completed_focus = STP_pc_heg_northern_administration }
+					has_war_with = NKA
+				}
+				white_peace = NKA
+			}
+		}
+	}
+	APH = {
+		if = {
+			limit = { has_country_flag = STP_heg_cannibal_campaign_active }
+			STP_heg_clear_cannibal_campaign = yes
+			if = {
+				limit = { has_war_with = event_target:STP_heg_cannibal_leader }
+				white_peace = event_target:STP_heg_cannibal_leader
+			}
+			if = {
+				limit = {
+					event_target:STP_heg_cannibal_leader = { has_completed_focus = STP_pc_heg_northern_administration }
+					has_war_with = NKA
+				}
+				white_peace = NKA
+			}
+		}
+	}
+	STP_heg_clear_cannibal_campaign = yes
+	clr_country_flag = STP_heg_cannibal_settlement_in_progress
+}
+
+STP_heg_confirm_cannibal_entry = {
+	if = {
+		limit = { has_country_flag = STP_heg_cannibal_entry_pending }
+		if = {
+			limit = {
+				STP_heg_cannibal_leader_current = yes
+				CIN = {
+					OR = {
+						NOT = { has_country_flag = STP_heg_cannibal_campaign_active }
+						AND = {
+							has_war_with = PREV
+							OR = {
+								PREV = { NOT = { has_completed_focus = STP_pc_heg_northern_administration } }
+								has_war_with = NKA
+							}
+						}
+					}
+				}
+				OSF = {
+					OR = {
+						NOT = { has_country_flag = STP_heg_cannibal_campaign_active }
+						AND = {
+							has_war_with = PREV
+							OR = {
+								PREV = { NOT = { has_completed_focus = STP_pc_heg_northern_administration } }
+								has_war_with = NKA
+							}
+						}
+					}
+				}
+				APH = {
+					OR = {
+						NOT = { has_country_flag = STP_heg_cannibal_campaign_active }
+						AND = {
+							has_war_with = PREV
+							OR = {
+								PREV = { NOT = { has_completed_focus = STP_pc_heg_northern_administration } }
+								has_war_with = NKA
+							}
+						}
+					}
+				}
+			}
+			clr_country_flag = STP_heg_cannibal_entry_pending
+			STP_heg_reconcile_cannibal_campaign = yes
+		}
+		else = { STP_heg_abort_cannibal_entry = yes }
 	}
 }
 
@@ -17183,6 +17395,8 @@ STP_heg_reconcile_cannibal_member = {
 STP_heg_reconcile_cannibal_campaign = {
 	if = {
 		limit = {
+			STP = { NOT = { has_country_flag = STP_heg_cannibal_entry_pending } }
+			STS = { NOT = { has_country_flag = STP_heg_cannibal_entry_pending } }
 			STS = { NOT = { has_country_flag = STP_heg_cannibal_settlement_in_progress } }
 			STP = { NOT = { has_country_flag = STP_heg_cannibal_settlement_in_progress } }
 		}
@@ -18074,4 +18288,311 @@ STP_heg_finish_operation = {
 		STP_heg_betrayal_refresh = yes
 	}
 	else = { STP_heg_refund_operation = yes }
+}
+
+# COUNTRY BJK or a surviving holding. The levy opens one finite arsenal per
+# campaign lifetime; cancelling or reselecting a focus cannot issue it again.
+STP_bezhaysk_prepare_member = {
+	if = {
+		limit = {
+			STP_bezhaysk_realm_member = yes
+			has_capitulated = no
+			capital_scope = {
+				is_owned_by = PREV
+				is_controlled_by = PREV
+			}
+			NOT = { has_country_flag = STP_bezhaysk_mobilized }
+		}
+		ADISCORD_release_non_participating_minor_optimization = yes
+		set_country_flag = STP_bezhaysk_mobilized
+		set_temp_variable = { var = STP_bezhaysk_strength value = 2 }
+		if = {
+			limit = { tag = BJK }
+			set_temp_variable = { var = STP_bezhaysk_strength value = 3 }
+		}
+		else_if = {
+			limit = { tag = BLD }
+			set_temp_variable = { var = STP_bezhaysk_strength value = 4 }
+		}
+		set_temp_variable = { var = STP_bezhaysk_manpower value = STP_bezhaysk_strength }
+		multiply_temp_variable = { var = STP_bezhaysk_manpower value = 4000 }
+		set_temp_variable = { var = STP_bezhaysk_rifles value = STP_bezhaysk_manpower }
+		set_temp_variable = { var = STP_bezhaysk_squad_weapons value = STP_bezhaysk_strength }
+		multiply_temp_variable = { var = STP_bezhaysk_squad_weapons value = 48 }
+		add_manpower = STP_bezhaysk_manpower
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = STP_bezhaysk_rifles producer = THIS }
+		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = STP_bezhaysk_squad_weapons producer = THIS }
+		if = {
+			limit = {
+				OR = {
+					tag = BJK
+					tag = BLD
+				}
+			}
+			add_equipment_to_stockpile = { type = support_equipment_1 amount = 60 producer = THIS }
+		}
+		if = {
+			limit = { NOT = { has_template = "Bezhaysk Muster" } }
+			division_template = {
+				name = "Bezhaysk Muster"
+				template_counter = 3
+				division_names_group = ADISCORD_INF_01
+				is_locked = yes
+				force_allow_recruiting = no
+				regiments = {
+					infantry = { x = 0 y = 0 }
+					infantry = { x = 0 y = 1 }
+					infantry = { x = 1 y = 0 }
+					infantry = { x = 1 y = 1 }
+				}
+			}
+		}
+		# Four bounded attempts cover the largest holding. Existing armies are
+		# retained; the muster never replaces later casualties or removes units.
+		set_temp_variable = { var = STP_bezhaysk_muster_count value = num_divisions }
+		for_loop_effect = {
+			end = 4
+			value = STP_bezhaysk_muster_index
+			if = {
+				limit = { check_variable = { var = STP_bezhaysk_muster_count value = STP_bezhaysk_strength compare = less_than } }
+				# Four infantry battalions consume 4000 recruits, 3600 rifles and
+				# 32 squad weapons. The arsenal was issued in this same effect.
+				add_manpower = -4000
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = -3600 producer = THIS }
+				add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = -32 producer = THIS }
+				capital_scope = {
+					create_unit = {
+						division = "division_template = \"Bezhaysk Muster\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						owner = PREV
+					}
+				}
+				add_to_temp_variable = { var = STP_bezhaysk_muster_count value = 1 }
+			}
+		}
+	}
+}
+
+# COUNTRY STP/STS. Selection supplies the whole intact realm with 3/4/2/2/2/2
+# formations and leaves the focus duration for deployment and reinforcement.
+STP_bezhaysk_prepare_campaign = {
+	if = {
+		limit = {
+			OR = {
+				tag = STP
+				tag = STS
+			}
+			has_country_flag = STP_cw_postwar
+			BJK = {
+				exists = yes
+				is_subject = no
+				has_capitulated = no
+			}
+		}
+		BJK = { STP_bezhaysk_prepare_member = yes }
+		BLD = { STP_bezhaysk_prepare_member = yes }
+		BHG = { STP_bezhaysk_prepare_member = yes }
+		BGT = { STP_bezhaysk_prepare_member = yes }
+		BBV = { STP_bezhaysk_prepare_member = yes }
+		BCM = { STP_bezhaysk_prepare_member = yes }
+	}
+}
+
+STP_bezhaysk_enrol_member = {
+	if = {
+		limit = {
+			STP_bezhaysk_realm_member = yes
+			has_capitulated = no
+		}
+		ADISCORD_release_non_participating_minor_optimization = yes
+		set_country_flag = STP_bezhaysk_campaign_member
+		clr_country_flag = STP_bezhaysk_defeated
+		if = {
+			limit = {
+				OR = {
+					tag = BJK
+					tag = BLD
+				}
+				OR = {
+					is_major = no
+					has_country_flag = RUS_crisis_added_major
+					RUS_crisis_other_major_required = yes
+				}
+			}
+			set_country_flag = STP_bezhaysk_added_major
+			set_major = yes
+		}
+	}
+}
+
+STP_bezhaysk_join_member = {
+	if = {
+		limit = {
+			has_country_flag = STP_bezhaysk_campaign_member
+			STP_bezhaysk_realm_member = yes
+			has_capitulated = no
+			NOT = { has_war_with = PREV }
+			NOT = { is_in_faction_with = PREV }
+		}
+		add_to_war = {
+			targeted_alliance = BJK
+			enemy = PREV
+			hostility_reason = asked_to_join
+			single_target_only = yes
+		}
+	}
+}
+
+# COUNTRY attacker. Native declaration may publish the relation on a later tick.
+STP_bezhaysk_join_campaign = {
+	if = {
+		limit = {
+			has_country_flag = STP_bezhaysk_campaign
+			has_country_flag = STP_bezhaysk_entry_pending
+			has_war_with = BJK
+		}
+		BLD = { STP_bezhaysk_join_member = yes }
+		BHG = { STP_bezhaysk_join_member = yes }
+		BGT = { STP_bezhaysk_join_member = yes }
+		BBV = { STP_bezhaysk_join_member = yes }
+		BCM = { STP_bezhaysk_join_member = yes }
+	}
+}
+
+STP_bezhaysk_begin_campaign = {
+	if = {
+		limit = { NOT = { has_country_flag = STP_bezhaysk_campaign } }
+		STP_bezhaysk_prepare_campaign = yes
+		set_country_flag = ADISCORD_bezhaysk_campaign_active
+		set_country_flag = STP_bezhaysk_campaign
+		set_country_flag = STP_bezhaysk_entry_pending
+		BJK = { STP_bezhaysk_enrol_member = yes }
+		BLD = { STP_bezhaysk_enrol_member = yes }
+		BHG = { STP_bezhaysk_enrol_member = yes }
+		BGT = { STP_bezhaysk_enrol_member = yes }
+		BBV = { STP_bezhaysk_enrol_member = yes }
+		BCM = { STP_bezhaysk_enrol_member = yes }
+		declare_war_on = { target = BJK type = annex_everything }
+		STP_bezhaysk_join_campaign = yes
+		country_event = { id = ADISCORD_STP_pc.108 hours = 1 }
+	}
+}
+
+STP_bezhaysk_release_member = {
+	if = {
+		limit = { has_country_flag = STP_bezhaysk_added_major }
+		clr_country_flag = STP_bezhaysk_added_major
+		RUS_crisis_release_other_major = yes
+	}
+	clr_country_flag = STP_bezhaysk_campaign_member
+	clr_country_flag = STP_bezhaysk_defeated
+}
+
+STP_bezhaysk_close_campaign = {
+	if = {
+		limit = { has_country_flag = STP_bezhaysk_campaign }
+		clr_country_flag = STP_bezhaysk_campaign
+		clr_country_flag = ADISCORD_bezhaysk_campaign_active
+		clr_country_flag = STP_bezhaysk_entry_pending
+		clr_country_flag = STP_bezhaysk_reconcile_queued
+		BJK = { STP_bezhaysk_release_member = yes }
+		BLD = { STP_bezhaysk_release_member = yes }
+		BHG = { STP_bezhaysk_release_member = yes }
+		BGT = { STP_bezhaysk_release_member = yes }
+		BBV = { STP_bezhaysk_release_member = yes }
+		BCM = { STP_bezhaysk_release_member = yes }
+	}
+}
+
+STP_bezhaysk_try_settlement = {
+	if = {
+		limit = { STP_bezhaysk_victory_ready = yes }
+		# Release campaign state before white peace dispatches nested callbacks.
+		STP_bezhaysk_close_campaign = yes
+		if = {
+			limit = { tag = STP }
+			ADISCORD_bezhaysk_settle_stp_victory = yes
+		}
+		else = { ADISCORD_bezhaysk_settle_sts_victory = yes }
+	}
+}
+
+# COUNTRY attacker, native ROOT/FROM still identify the loser and its victor.
+STP_bezhaysk_accept_defeat = {
+	if = {
+		limit = {
+			has_country_flag = STP_bezhaysk_campaign
+			exists = yes
+			has_capitulated = no
+			ROOT = {
+				has_country_flag = STP_bezhaysk_campaign_member
+				has_war_with = PREV
+			}
+			FROM = {
+				OR = {
+					tag = PREV
+					is_subject_of = PREV
+				}
+			}
+		}
+		ROOT = {
+			set_country_flag = STP_bezhaysk_defeated
+			set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending value = 1 days = 1 }
+		}
+		set_global_flag = skip_default_capitulation
+		STP_bezhaysk_try_settlement = yes
+		ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending value = 1 days = 1 } }
+		clr_global_flag = skip_default_capitulation
+	}
+}
+
+# COUNTRY attacker. A bounded event waits for native peace/annex/puppet changes;
+# it never reopens a war, retries mobilization or polls the world.
+STP_bezhaysk_queue_reconciliation = {
+	if = {
+		limit = {
+			has_country_flag = STP_bezhaysk_campaign
+			OR = {
+				exists = no
+				has_capitulated = yes
+				is_subject = yes
+			}
+		}
+		STP_bezhaysk_close_campaign = yes
+	}
+	else_if = {
+		limit = {
+			has_country_flag = STP_bezhaysk_campaign
+			NOT = { has_country_flag = STP_bezhaysk_reconcile_queued }
+		}
+		set_country_flag = STP_bezhaysk_reconcile_queued
+		country_event = { id = ADISCORD_STP_pc.109 hours = 1 }
+	}
+}
+
+STP_bezhaysk_reconcile_campaign = {
+	if = {
+		limit = {
+			has_country_flag = STP_bezhaysk_campaign
+			OR = {
+				exists = no
+				has_capitulated = yes
+				is_subject = yes
+				AND = {
+					NOT = { has_country_flag = STP_bezhaysk_entry_pending }
+					OR = {
+						NOT = { has_war_with = BJK }
+						BJK = { is_subject = yes }
+						BLD = {
+							has_country_flag = STP_bezhaysk_campaign_member
+							OR = {
+								NOT = { has_war_with = PREV }
+								STP_bezhaysk_realm_member = no
+							}
+						}
+					}
+				}
+			}
+		}
+		STP_bezhaysk_close_campaign = yes
+	}
 }

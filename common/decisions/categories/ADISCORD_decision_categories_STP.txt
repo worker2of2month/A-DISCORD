@@ -24,37 +24,25 @@ STP_scenario_debug = {
 
 STP_shabrat_election_bop_category = {
 	allowed = { tag = STP }
+	visible = {
+		NOT = { has_global_flag = STP_cw_started }
+		NOT = { has_country_flag = STP_cw_elections_finished }
+	}
 }
 
 STP_battle_for_stelander = {
 	allowed = { tag = STP }
 	visible = {
 		has_country_flag = STP_battle_for_stelander_active
+		NOT = { has_global_flag = STP_cw_started }
+		NOT = { has_country_flag = STP_cw_postwar }
 	}
 	visible_when_empty = yes
 	priority = 20
 	scripted_gui = ADISCORD_STP_regions_panel
 }
 
-STP_cw_war_council = {
-	allowed = {
-		OR = {
-			tag = STP
-			tag = STS
-			tag = SRP
-		}
-	}
-	visible = {
-		OR = {
-			has_country_flag = STP_cw_participant
-			has_country_flag = STP_cw_postwar
-		}
-	}
-	visible_when_empty = no
-	priority = 20
-}
-
-STP_cw_external_intervention = {
+STP_military_operations = {
 	allowed = {
 		OR = {
 			tag = STP
@@ -66,6 +54,9 @@ STP_cw_external_intervention = {
 	}
 	visible = {
 		OR = {
+			STP_operations_map_available = yes
+			has_country_flag = STP_cw_participant
+			has_country_flag = STP_cw_postwar
 			has_global_flag = STP_cw_started
 			AND = {
 				tag = NOD
@@ -110,8 +101,9 @@ STP_cw_external_intervention = {
 			}
 		}
 	}
-	visible_when_empty = no
-	priority = 35
+	visible_when_empty = yes
+	priority = 1100
+	scripted_gui = ADISCORD_STP_operations_panel
 }
 
 STP_cw_northern_aid = {
@@ -146,19 +138,6 @@ STP_imperial_union_category = {
 		has_completed_focus = STP_pc_hegemony_open
 		NOT = { has_country_flag = STP_imperial_union_proclaimed }
 	}
-}
-
-STP_military_operations = {
-	allowed = {
-		OR = {
-			tag = STP
-			tag = STS
-		}
-	}
-	visible = { STP_operations_map_available = yes }
-	visible_when_empty = yes
-	priority = 20
-	scripted_gui = ADISCORD_STP_operations_panel
 }
 
 STP_postwar_reconstruction_drive = {
@@ -270,11 +249,25 @@ STP_ch_chapters = {
 
 STP_pw_programme = {
 	icon = generic_industry
-	allowed = { tag = STP }
+	allowed = {
+		OR = {
+			tag = STP
+			tag = STS
+		}
+	}
 	visible = {
-		STP_pf_active = yes
 		has_country_flag = STP_cw_postwar
-		has_completed_focus = STP_pw_party_new_republic
+		OR = {
+			AND = {
+				tag = STP
+				STP_pf_active = yes
+				has_completed_focus = STP_pw_party_new_republic
+			}
+			AND = {
+				tag = STS
+				has_completed_focus = STP_pc_after_victory
+			}
+		}
 	}
 	priority = 99
 }

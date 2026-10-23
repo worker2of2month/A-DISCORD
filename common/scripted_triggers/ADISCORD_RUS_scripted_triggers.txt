@@ -1854,6 +1854,7 @@ RUS_workshop_training_ready = {
 # --- rus_country_content ---
 RUS_crisis_other_major_required = {
 	OR = {
+		has_country_flag = STP_bezhaysk_added_major
 		has_country_flag = ADISCORD_nam_resource_war_added_major
 		has_country_flag = SHL_mzr_added_major
 		has_country_flag = ADISCORD_south_added_major

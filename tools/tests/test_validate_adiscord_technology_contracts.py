@@ -310,6 +310,59 @@ class TechnologyValidatorNegativeTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.defined_techs, cls.tech_blocks = validator.collect_technologies()
 
+    def test_descriptions_accept_energy_price_after_escaped_quotes(self) -> None:
+        self.assertEqual(
+            validator.check_technology_description_contract(self.tech_blocks), []
+        )
+
+    def test_energy_price_must_be_inside_a_complete_single_line_value(self) -> None:
+        path = validator.ROOT / "localisation/russian/ADISCORD_technology_doctrine_l_russian.yml"
+        source = validator.read_text(path)
+        tech_id = "ADISCORD_tech_concentrated_industrial_zones"
+        line = next(line for line in source.splitlines() if f"{tech_id}_desc:" in line)
+        original_read = validator.read_text
+        for label, replacement in (
+            ("missing price", line.replace("Энергетическая цена:", "Цена:")),
+            ("unclosed value", line[:-1]),
+            ("price outside value", line.replace("Энергетическая цена:", '" Энергетическая цена:')),
+            ("physical newline", line.replace("Энергетическая цена:", "\nЭнергетическая цена:")),
+        ):
+            with self.subTest(label=label):
+                mutated = source.replace(line, replacement, 1)
+
+                def fake_read(candidate: Path) -> str:
+                    return mutated if candidate == path else original_read(candidate)
+
+                with patch.object(validator, "read_text", side_effect=fake_read):
+                    issues = validator.check_technology_description_contract(self.tech_blocks)
+                self.assertIn(f"{tech_id} Russian description hides its energy price", issues)
+
+    def test_economy_spending_accepts_current_prices_and_bounded_repayment(self) -> None:
+        self.assertEqual(validator.check_economy_spending(), [])
+
+    def test_economy_spending_rejects_missing_or_partial_debits(self) -> None:
+        path = validator.ROOT / "common/scripted_effects/ADISCORD_economy_effects.txt"
+        source = validator.read_text(path)
+        for effect, amount in (
+            ("stabilization_package", 500),
+            ("stabilization_package", 1200),
+            ("invest_reserves", 100),
+            ("civilian_investment_action", 100),
+            ("military_investment_action", 100),
+        ):
+            key = f"ADISCORD_economy_{effect}"
+            body = validator.extract_block(source, source.index(f"{key} = {{"))
+            debit = f"var = ADISCORD_economy_treasury value = -{amount}"
+            self.assertIn(debit, body)
+            for replacement in ("value = 0", f"value = -{amount}.5"):
+                with self.subTest(effect=effect, amount=amount, replacement=replacement):
+                    broken_debit = f"var = ADISCORD_economy_treasury {replacement}"
+                    broken_body = body.replace(debit, broken_debit, 1)
+                    broken = source.replace(body, broken_body, 1)
+                    with patch.object(validator, "read_text", return_value=broken):
+                        issues = validator.check_economy_spending()
+                    self.assertIn(f"{key} does not subtract {amount} treasury", issues)
+
     def test_generated_horizontal_tree_positions_match_the_validator_contract(
         self,
     ) -> None:

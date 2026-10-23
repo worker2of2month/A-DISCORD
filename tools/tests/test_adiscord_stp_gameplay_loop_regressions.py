@@ -76,8 +76,8 @@ class StelanderGameplayLoopRegressionTests(unittest.TestCase):
         )
         cls.decisions = entries("common/decisions/ADISCORD_STP_decisions.txt")
         cls.battle = block(cls.decisions, "STP_battle_for_stelander")
-        cls.council = block(cls.decisions, "STP_cw_war_council")
-        cls.external = block(cls.decisions, "STP_cw_external_intervention")
+        cls.council = block(cls.decisions, "STP_military_operations")
+        cls.external = block(cls.decisions, "STP_military_operations")
         cls.tokens = TOKENS.read_text(encoding="utf-8-sig")
         cls.loc = (ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml").read_text(
             encoding="utf-8-sig"
@@ -543,7 +543,15 @@ class StelanderGameplayLoopRegressionTests(unittest.TestCase):
         )
         cancel = block(mission, "cancel_trigger")
         self.assertFalse(
-            matches_conditions(cancel, {("STS", "controls_state", "3"): False}, "STS"),
+            matches_conditions(
+                cancel,
+                {
+                    ("STS", "controls_state", "3"): False,
+                    ("STS", "STP_cw_fada_battle_active", "yes"): True,
+                    ("STS", "STP_cw_fada_battle_active", "no"): False,
+                },
+                "STS",
+            ),
             "losing Niansas must not cancel the deadline",
         )
         self.assertNotIn(
@@ -554,6 +562,59 @@ class StelanderGameplayLoopRegressionTests(unittest.TestCase):
             "STP_cw_close_last_banquet_technical", {e.key for e in walk(settle)}
         )
         self.assertNotIn("add_war_support", {e.key for e in walk(settle)})
+
+    def test_civil_war_missions_hide_after_peace_even_during_another_war(self):
+        battle = block(self.triggers, "STP_cw_fada_battle_active")
+        logistics = block(self.triggers, "STP_cw_shabrat_logistics_active")
+        mission_names = (
+            "STP_cw_take_fada",
+            "STP_cw_front_operation",
+            "STP_cw_war_fund_delivery",
+            "STP_cw_last_banquet_deadline",
+        )
+        for civil_war, nod_war, postwar in itertools.product((False, True), repeat=3):
+            with self.subTest(civil_war=civil_war, nod_war=nod_war, postwar=postwar):
+                facts = {
+                    ("STS", "tag", "STS"): True,
+                    ("STS", "exists", "yes"): True,
+                    ("STS", "has_capitulated", "no"): True,
+                    ("STP", "exists", "yes"): True,
+                    ("STP", "has_capitulated", "no"): True,
+                    ("STP", "has_war_with", "STS"): civil_war,
+                    ("STS", "has_war_with", "STP"): civil_war,
+                    ("STS", "has_war_with", "NOD"): nod_war,
+                    ("STS", "has_global_flag", "STP_cw_started"): True,
+                    ("STS", "has_country_flag", "STP_cw_postwar"): postwar,
+                    ("STS", "has_country_flag", "STP_cw_last_banquet_started"): True,
+                }
+                for name, trigger in (
+                    ("STP_cw_fada_battle_active", battle),
+                    ("STP_cw_shabrat_logistics_active", logistics),
+                ):
+                    active = matches_conditions(trigger, facts, "STS")
+                    facts[("STS", name, "yes")] = active
+                    facts[("STS", name, "no")] = not active
+                for name in mission_names:
+                    facts[("STS", "has_active_mission", name)] = True
+                    visible = block(block(self.council, name), "visible")
+                    expected = civil_war
+                    if name != "STP_cw_take_fada":
+                        expected = expected and not postwar
+                    self.assertEqual(
+                        matches_conditions(visible, facts, "STS"), expected, name
+                    )
+                banquet = block(self.council, "STP_cw_last_banquet_deadline")
+                self.assertEqual(
+                    matches_conditions(block(banquet, "cancel_trigger"), facts, "STS"),
+                    not civil_war or postwar,
+                )
+                cancelled = list(
+                    selected_effects(block(banquet, "cancel_effect"), facts, "STS")
+                )
+                self.assertEqual(
+                    [e.key for _, e in cancelled],
+                    ["STP_cw_close_last_banquet_technical"],
+                )
 
     def test_nod_timing_adjusts_the_authoritative_clock_then_the_mirror(self) -> None:
         adjust = block(self.effects, "STP_cw_adjust_nod_intervention_days")

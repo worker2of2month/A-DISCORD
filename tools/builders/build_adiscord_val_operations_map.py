@@ -720,11 +720,14 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
         gui.append(
             f'  iconType = {{ name = "{prefix}_operations_map" position = {{ x = 20 y = 38 }} quadTextureSprite = "GFX_VAL_ops_map_background" pdx_tooltip = "{prefix}_operations_map_tt" }}\n'
         )
+        map_visibility = (
+            "STP_operations_map_available = yes" if prefix == "STP" else "always = yes"
+        )
         script.append(
             f"\tADISCORD_{prefix}_operations_panel = {{\n"
             "\t\tcontext_type = decision_category\n"
             f'\t\twindow_name = "ADISCORD_{prefix}_operations_panel_window"\n'
-            "\t\tvisible = { always = yes }\n"
+            f"\t\tvisible = {{ {map_visibility} }}\n"
             "\t\ttriggers = {\n"
         )
         for state in STATE_IDS:

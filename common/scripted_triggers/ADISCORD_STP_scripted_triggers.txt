@@ -3115,6 +3115,25 @@ STP_qol_elite_army_available = {
 }
 
 
+# Native capitulation: only a military victory of STS or its subjects settles this war.
+STP_heg_northern_final_capitulation_managed = {
+	ROOT = {
+		OR = { tag = YPR tag = TFF }
+		is_subject = no
+		has_war_with = STS
+	}
+	FROM = {
+		OR = { tag = STS is_subject_of = STS }
+		has_war_with = ROOT
+	}
+	STS = {
+		exists = yes
+		is_subject = no
+		has_capitulated = no
+		has_country_flag = STP_heg_northern_final_started
+	}
+}
+
 # COUNTRY STS: the second hegemony campaign cannot begin while any northern
 # relation created by the first campaign is still at war.
 STP_heg_northern_final_resolved = {
@@ -4384,6 +4403,7 @@ STP_heg_cannibal_capitulation_managed = {
 
 # Every enrolled member must fall; a native liberation clears its defeat receipt.
 STP_heg_cannibal_campaign_won = {
+	NOT = { has_country_flag = STP_heg_cannibal_entry_pending }
 	STP_heg_cannibal_leader_current = yes
 	NOT = { has_country_flag = STP_heg_cannibal_settlement_in_progress }
 	OR = {
@@ -4729,6 +4749,130 @@ STP_heg_delegation_affordable = {
 		AND = {
 			NOT = { has_completed_focus = STP_pc_heg_old_guard }
 			NOT = { has_political_power < 50 }
+		}
+	}
+}
+
+# COUNTRY defender. Detached foreign holdings are never mobilized or enlisted.
+STP_bezhaysk_realm_member = {
+	exists = yes
+	OR = {
+		tag = BJK
+		is_subject_of = BJK
+		AND = {
+			is_subject = no
+			is_in_faction_with = BJK
+		}
+	}
+}
+
+# COUNTRY attacker. Accepted native defeats persist between the two callbacks;
+# on_uncapitulation clears them, so liberation blocks the settlement again.
+STP_bezhaysk_victory_ready = {
+	has_country_flag = STP_bezhaysk_campaign
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	BJK = {
+		exists = yes
+		has_country_flag = STP_bezhaysk_campaign_member
+		has_country_flag = STP_bezhaysk_defeated
+	}
+	OR = {
+		BLD = {
+			has_country_flag = STP_bezhaysk_campaign_member
+			has_country_flag = STP_bezhaysk_defeated
+		}
+		NOT = { BLD = { has_country_flag = STP_bezhaysk_campaign_member } }
+	}
+}
+
+# COUNTRY; targeted civic contracts retain FROM as the selected state.
+STP_pw_civic_district_staff_ready = {
+	tag = STS
+	STP_pw_can_reconstruct = yes
+	has_completed_focus = STP_pc_after_victory
+	check_variable = {
+		var = ADISCORD_state_development_level
+		value = 5
+		compare = less_than
+	}
+	check_variable = {
+		var = ADISCORD_state_development_progress
+		value = 100
+		compare = less_than
+	}
+}
+
+STP_pw_civic_district_clinics_ready = {
+	tag = STS
+	STP_pw_can_reconstruct = yes
+	has_completed_focus = STP_pc_after_victory
+	check_variable = {
+		var = ADISCORD_social_system_development_level
+		value = 5
+		compare = less_than
+	}
+	check_variable = {
+		var = ADISCORD_social_system_development_progress
+		value = 100
+		compare = less_than
+	}
+}
+
+STP_pw_civic_research_grants_ready = {
+	tag = STS
+	STP_pw_can_reconstruct = yes
+	has_completed_focus = STP_pc_development_reopen_universities
+	check_variable = {
+		var = ADISCORD_science_development_level
+		value = 5
+		compare = less_than
+	}
+	check_variable = {
+		var = ADISCORD_science_development_progress
+		value = 100
+		compare = less_than
+	}
+}
+
+STP_pw_civic_veteran_instructors_ready = {
+	tag = STS
+	STP_pw_can_reconstruct = yes
+	has_completed_focus = STP_pw_republic_army_register
+	NOT = { has_army_experience > 975 }
+}
+
+STP_pw_civic_district_roads_ready = {
+	tag = STS
+	STP_pw_can_reconstruct = yes
+	has_completed_focus = STP_pw_republic_restore_roads
+	FROM = {
+		is_owned_by = ROOT
+		is_controlled_by = ROOT
+		OR = {
+			is_core_of = STP
+			is_core_of = STS
+		}
+		infrastructure < 5
+	}
+}
+
+STP_pw_civic_civil_enterprises_ready = {
+	tag = STS
+	STP_pw_can_reconstruct = yes
+	has_completed_focus = STP_pc_economy_repair_workshops
+	FROM = {
+		is_owned_by = ROOT
+		is_controlled_by = ROOT
+		OR = {
+			is_core_of = STP
+			is_core_of = STS
+		}
+		free_building_slots = {
+			building = industrial_complex
+			size > 0
+			include_locked = no
 		}
 	}
 }

@@ -1,15 +1,131 @@
 """Exercise editorial reward lint through parsed, isolated Clausewitz sources."""
 
+from collections import Counter
+from itertools import product
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
 
+from tools.tests.test_adiscord_stp_preparation import (
+    block,
+    scalar,
+    selected_effects,
+    walk,
+)
 from tools.validators import validate_focus_rewards as rewards
+from tools.validators.validate_adiscord_division_templates import _collect_subunits
 
 
 class LoadedFocusRewardTests(unittest.TestCase):
     def test_loaded_mod_has_no_known_weak_standalone_rewards(self):
         self.assertEqual(rewards.collect_issues(), [])
+
+    def test_mechanized_focuses_supply_a_full_recruitable_brigade(self):
+        root = Path(__file__).resolve().parents[2]
+        units, issues = _collect_subunits(root)
+        self.assertEqual(issues, [])
+        equipment_archetypes = {
+            "ADISCORD_armored_carrier_2163": "ADISCORD_armored_carrier_archetype",
+        }
+        focuses = {}
+        for filename in (
+            "ADISCORD_STP_civil_war.txt",
+            "ADISCORD_national_focus_VAL.txt",
+        ):
+            source = (root / "common/national_focus" / filename).read_text(
+                encoding="utf-8"
+            )
+            for entry in walk(rewards.parse_clausewitz(source)):
+                if entry.key in {"focus", "shared_focus"} and isinstance(entry.value, list):
+                    focuses[scalar(entry.value, "id")] = entry.value
+        ai_source = (root / "common/ai_templates/ADISCORD_land_templates.txt").read_text(
+            encoding="utf-8"
+        )
+        standard = next(
+            entry.value
+            for entry in walk(rewards.parse_clausewitz(ai_source))
+            if entry.key == "ADISCORD_mechanized_brigade"
+        )
+        standard_template = block(standard, "target_template")
+        technologies = (
+            "ADISCORD_tech_armored_carrier_program",
+            "ADISCORD_tech_standardized_field_tool_chests",
+            "ADISCORD_tech_frequency_hopping_field_sets",
+        )
+        for focus_id, tag in (
+            ("STP_pc_armored_maneuver_companies", "STS"),
+            ("STP_pw_party_mechanized_guard", "STP"),
+            ("VAL_Armored_Transport_Contracts", "VAL"),
+        ):
+            reward = block(focuses[focus_id], "completion_reward")
+            templates = [e.value for e in walk(reward) if e.key == "division_template"]
+            self.assertEqual(len(templates), 1, focus_id)
+            template = templates[0]
+            name = scalar(template, "name")
+            self.assertEqual(scalar(template, "is_locked"), "no")
+            self.assertEqual(scalar(template, "force_allow_recruiting"), "yes")
+            required_equipment = Counter()
+            for section in ("regiments", "support"):
+                slots = block(template, section)
+                for slot in slots:
+                    required_equipment.update(units[slot.key].equipment)
+                self.assertEqual(
+                    Counter(e.key for e in slots),
+                    {
+                        e.key: int(e.value)
+                        for e in block(standard_template, section)
+                    },
+                )
+                positions = {(scalar(e.value, "x"), scalar(e.value, "y")) for e in slots}
+                self.assertEqual(len(positions), len(slots))
+            for known_techs in product((False, True), repeat=len(technologies)):
+                for has_template in (False, True):
+                    with self.subTest(
+                        focus=focus_id, techs=known_techs, template=has_template
+                    ):
+                        facts = {
+                            (tag, "has_tech", tech): known
+                            for tech, known in zip(technologies, known_techs)
+                        }
+                        facts[(tag, "has_template", name)] = has_template
+                        applied = list(selected_effects(reward, facts, tag))
+                        self.assertTrue(all(scope == tag for scope, _ in applied))
+                        payload = [e for _, e in applied]
+                        keys = [e.key for e in payload]
+                        self.assertEqual(
+                            keys.count("division_template"), int(not has_template)
+                        )
+                        granted = {
+                            tech.key
+                            for effect in payload
+                            if effect.key == "set_technology"
+                            for tech in effect.value
+                            if tech.key != "popup"
+                        }
+                        self.assertEqual(
+                            granted,
+                            {
+                                tech
+                                for tech, known in zip(technologies, known_techs)
+                                if not known
+                            },
+                        )
+                        if not has_template:
+                            for index, key in enumerate(keys):
+                                if key == "set_technology":
+                                    self.assertLess(index, keys.index("division_template"))
+                        delivered_equipment = Counter()
+                        for effect in payload:
+                            if effect.key != "add_equipment_to_stockpile":
+                                continue
+                            equipment = effect.value
+                            self.assertEqual(scalar(equipment, "producer"), tag)
+                            kind = scalar(equipment, "type")
+                            archetype = equipment_archetypes.get(kind, kind)
+                            delivered_equipment[archetype] += float(
+                                scalar(equipment, "amount")
+                            )
+                        self.assertEqual(delivered_equipment, required_equipment)
 
 
 class FocusRewardTests(unittest.TestCase):

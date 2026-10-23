@@ -200,10 +200,13 @@ SOUTH_FINAL_WAR_FILES = {
 for _tag in ("GLP", "KDR", "KYZ", "SDR", "WEF"):
     EVENT_AWAKENED_PARTICIPATION.setdefault(_tag, set()).update(SOUTH_FINAL_WAR_FILES)
 
-# The feudal bloc wakes on war entry or when an authored settlement installs
-# an administration without requiring that minor to have joined the war.
+# The feudal bloc wakes during Stelander preparations, on war entry, or when
+# a settlement installs an administration without requiring prior war entry.
 BEZHAYSK_TAGS = {"BJK", "BLD", "BHG", "BGT", "BBV", "BCM"}
 BEZHAYSK_SHARED_FILES = {
+    Path("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+    Path("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
+    Path("common/on_actions/02_ADISCORD_STP_on_actions.txt"),
     Path("common/on_actions/04_ADISCORD_operations_map_on_actions.txt"),
     Path("common/scripted_effects/ADISCORD_VAL_effects.txt"),
     Path("common/scripted_effects/ADISCORD_VAL_operations_map_effects.txt"),

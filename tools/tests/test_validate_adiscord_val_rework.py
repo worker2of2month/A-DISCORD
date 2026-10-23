@@ -7718,7 +7718,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         )
         self.assertTrue(tags.issubset(builder.MAP_TAGS))
 
-    def test_stelander_operations_share_assets_and_require_postwar(self):
+    def test_stelander_operations_share_assets_and_keep_the_map_unlock(self):
         from tools.builders import build_adiscord_val_operations_map as builder
 
         outputs = builder.interface_outputs(
@@ -7732,13 +7732,16 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertIn('pdx_tooltip = "STP_operations_map_tt"', gui)
         self.assertIn('ADISCORD_STP_operations_panel = {', script)
         self.assertIn(
-            'STP_ops_41_border_visible = { 41 = { controller = { tag = STS', script
+            'STP_ops_41_border_visible = { 41 = { is_controlled_by = ROOT', script
         )
+        panel = named_block_spans(script, "ADISCORD_STP_operations_panel")[0].text
+        self.assertIn("visible = { STP_operations_map_available = yes }", panel)
         categories = (
             ROOT / "common/decisions/categories/ADISCORD_decision_categories_STP.txt"
         ).read_text(encoding="utf-8")
         category = named_block_spans(categories, "STP_military_operations")[0].text
-        self.assertIn("allowed = { tag = STS }", category)
+        for tag in ("STP", "STS", "SRP", "NOD", "VAL"):
+            self.assertIn(f"tag = {tag}", category)
         self.assertIn("has_country_flag = STP_cw_postwar", category)
         self.assertIn("scripted_gui = ADISCORD_STP_operations_panel", category)
 

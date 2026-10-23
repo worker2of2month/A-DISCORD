@@ -174,12 +174,20 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
         allowed = block(
             block(parse_clausewitz(category), "STP_military_operations"), "allowed"
         )
-        for tag in ("STP", "STS", "SRP"):
+        for tag in ("STP", "STS", "SRP", "NOD", "VAL", "RUS"):
             self.assertEqual(
-                matches_conditions(allowed, {}, tag), tag in ("STP", "STS")
+                matches_conditions(allowed, {}, tag),
+                tag in ("STP", "STS", "SRP", "NOD", "VAL"),
             )
         self.assertIn(
             "STP_operations_map_available = yes", named_block(category, "visible")
+        )
+        panel = named_block(
+            read("common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt"),
+            "ADISCORD_STP_operations_panel",
+        )
+        self.assertIn(
+            "STP_operations_map_available = yes", named_block(panel, "visible")
         )
 
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")

@@ -1559,8 +1559,73 @@ focus_tree = {
 			}
 			add_equipment_to_stockpile = {
 				type = ADISCORD_armored_carrier_2163
+				amount = 320
+				producer = VAL
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 8235
+				producer = VAL
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_squad_weapons_equipment
+				amount = 64
+				producer = VAL
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
 				amount = 80
 				producer = VAL
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 12
+				producer = VAL
+			}
+			if = {
+				limit = {
+					NOT = { has_tech = ADISCORD_tech_standardized_field_tool_chests }
+				}
+				set_technology = {
+					ADISCORD_tech_standardized_field_tool_chests = 1
+					popup = yes
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_tech = ADISCORD_tech_frequency_hopping_field_sets }
+				}
+				set_technology = {
+					ADISCORD_tech_frequency_hopping_field_sets = 1
+					popup = yes
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_template = "Механизированная бригада Кефрейта" }
+				}
+				division_template = {
+					name = "Механизированная бригада Кефрейта"
+					template_counter = 5
+					is_locked = no
+					force_allow_recruiting = yes
+					regiments = {
+						ADISCORD_mechanized_infantry = { x = 0 y = 0 }
+						ADISCORD_mechanized_infantry = { x = 0 y = 1 }
+						ADISCORD_mechanized_infantry = { x = 0 y = 2 }
+						ADISCORD_mechanized_infantry = { x = 0 y = 3 }
+						ADISCORD_mechanized_infantry = { x = 1 y = 0 }
+						ADISCORD_mechanized_infantry = { x = 1 y = 1 }
+						ADISCORD_mechanized_infantry = { x = 1 y = 2 }
+						ADISCORD_mechanized_infantry = { x = 1 y = 3 }
+					}
+					support = {
+						engineer = { x = 0 y = 0 }
+						artillery = { x = 0 y = 1 }
+						maintenance_company = { x = 0 y = 2 }
+						signal_company = { x = 0 y = 3 }
+					}
+				}
 			}
 		}
 	}

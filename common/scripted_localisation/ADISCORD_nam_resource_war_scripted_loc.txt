@@ -1,4 +1,26 @@
 defined_text = {
+	name = NAMGetNamestnikSupportEffect
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_nam_support value = 25 compare = less_than_or_equals }
+		}
+		localization_key = NAM_bw_support_nam_penalty
+	}
+	text = { localization_key = NAM_bw_support_nam_tax }
+}
+
+defined_text = {
+	name = NAMGetDistrictSupportEffect
+	text = {
+		trigger = {
+			check_variable = { var = NAM_grp_dist_support value = 25 compare = less_than_or_equals }
+		}
+		localization_key = NAM_bw_support_dist_penalty
+	}
+	text = { localization_key = NAM_bw_support_dist_building }
+}
+
+defined_text = {
 	name = NAMGetCost_pp_75
 	text = {
 		trigger = { NOT = { has_political_power < 75 } }

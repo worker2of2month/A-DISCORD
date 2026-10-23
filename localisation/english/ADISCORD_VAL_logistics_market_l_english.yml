@@ -10,13 +10,13 @@
  VAL_logistics_cost_250:0 "§Y250§! £ADISCORD_economy_treasury_texticon"
 
  VAL_invest_occidian_corridor: "Capitalize the Occidian Trunk"
- VAL_invest_occidian_corridor_desc: "A §Y90-day§! project costing £ADISCORD_economy_treasury_texticon §Y750§!. +1 infrastructure in [43.GetName], [44.GetName] and [88.GetName]; the railway from [43.GetName] to [88.GetName] reaches level 3. An operational route earns §G10§! more per week. Only one corridor can be built at a time. Losing the route or capitulating cancels the project and refunds payment. Income amounts are before grey-market losses."
+ VAL_invest_occidian_corridor_desc: "A §Y90-day§! project costing §Y750§! £ADISCORD_economy_treasury_texticon. +1 infrastructure in [43.GetName], [44.GetName] and [88.GetName]; the railway from [43.GetName] to [88.GetName] reaches level 3. An operational route earns §G10§! more per week. Only one corridor can be built at a time. Losing the route or capitulating cancels the project and refunds payment. Income amounts are before grey-market losses."
  VAL_invest_northern_corridor: "Reinforce the Northern Resource Belt"
- VAL_invest_northern_corridor_desc: "A §Y120-day§! project costing £ADISCORD_economy_treasury_texticon §Y1000§!. +1 infrastructure in [59.GetName], [60.GetName] and [61.GetName]; add 2 steel in [59.GetName] and 2 tungsten in [61.GetName]. An operational route earns §G10§! more per week. Only one corridor can be built at a time. Losing the route or capitulating cancels the project and refunds payment. Income amounts are before grey-market losses."
+ VAL_invest_northern_corridor_desc: "A §Y120-day§! project costing §Y1000§! £ADISCORD_economy_treasury_texticon. +1 infrastructure in [59.GetName], [60.GetName] and [61.GetName]; add 2 steel in [59.GetName] and 2 tungsten in [61.GetName]. An operational route earns §G10§! more per week. Only one corridor can be built at a time. Losing the route or capitulating cancels the project and refunds payment. Income amounts are before grey-market losses."
  VAL_invest_stelander_corridor: "Rebuild the Stelander Road"
- VAL_invest_stelander_corridor_desc: "A §Y60-day§! project costing £ADISCORD_economy_treasury_texticon §Y500§!. +1 infrastructure and +1 building slot in each of [29.GetName] and [46.GetName]. An operational route earns §G10§! more per week. Only one corridor can be built at a time. Losing the route or capitulating cancels the project and refunds payment. Income amounts are before grey-market losses."
+ VAL_invest_stelander_corridor_desc: "A §Y60-day§! project costing §Y500§! £ADISCORD_economy_treasury_texticon. +1 infrastructure and +1 building slot in each of [29.GetName] and [46.GetName]. An operational route earns §G10§! more per week. Only one corridor can be built at a time. Losing the route or capitulating cancels the project and refunds payment. Income amounts are before grey-market losses."
  VAL_invest_vorkerland_corridor: "Restore the Old Vorkerland Channel"
- VAL_invest_vorkerland_corridor_desc: "A §Y75-day§! project costing £ADISCORD_economy_treasury_texticon §Y500§!. +1 infrastructure in [33.GetName]; grey-market pressure falls by 10. An operational route earns §G10§! more per week. Only one corridor can be built at a time. Losing the route or capitulating cancels the project and refunds payment. Income amounts are before grey-market losses."
+ VAL_invest_vorkerland_corridor_desc: "A §Y75-day§! project costing §Y500§! £ADISCORD_economy_treasury_texticon. +1 infrastructure in [33.GetName]; grey-market pressure falls by 10. An operational route earns §G10§! more per week. Only one corridor can be built at a time. Losing the route or capitulating cancels the project and refunds payment. Income amounts are before grey-market losses."
  VAL_secure_trade_columns: "Contract Security Columns"
  VAL_secure_trade_columns_desc: "Hire convoy companies, warehouse auditors and road patrols. Every security level reduces weekly grey-market growth, while the operation immediately lowers pressure by §G5§!."
  VAL_open_emergency_bypass: "Open an Emergency Bypass"
@@ -29,9 +29,9 @@
  VAL_contract_refugee_labor: "Offer Work Contracts"
  VAL_contract_refugee_labor_desc:0 "Employ §Y100,000§! £population_texticon available refugees in construction for 90 days, costing §Y75§! £political_power_texticon. Workers still need housing and cannot be recruited or resettled until completion or cancellation, when all workers return to the available pool."
  VAL_fund_resettlement_depots: "Resettle Refugees in [FROM.GetName]"
- VAL_fund_resettlement_depots_desc: "Move £population_texticon §Y100,000§! admitted refugees into [FROM.GetName] for §Y250§! treasury. The state gains §G100,000 permanent population§!. This program is limited to selected low-population Kefreyt home regions under our control, cannot operate while pollution reclamation is unfinished, and can be used only once per region."
+ VAL_fund_resettlement_depots_desc: "Move §Y100,000§! £population_texticon admitted refugees into [FROM.GetName] for §Y250§! £ADISCORD_economy_treasury_texticon. The state gains §G100,000 permanent population§!. This program is limited to selected low-population Kefreyt home regions under our control, cannot operate while pollution reclamation is unfinished, and can be used only once per region."
  VAL_organize_refugee_return: "Organize Refugee Return"
- VAL_organize_refugee_return_desc: "Once regional wars end, arrange the safe return of £population_texticon §Y150,000§! people for §Y35§! £political_power_texticon. This relieves the resettlement system without granting stability or political power."
+ VAL_organize_refugee_return_desc: "Once regional wars end, arrange the safe return of §Y150,000§! £population_texticon people for §Y35§! £political_power_texticon. This relieves the resettlement system without granting stability or political power."
  VAL_raid_grey_traders:0 "Raid the Shadow Traders"
  VAL_raid_grey_traders_desc:0 "Political backing for inspectors will let us close underground warehouses and drive illicit traders off the contract routes.\n\nCost: §Y100§! £political_power_texticon. Grey-market pressure immediately falls by §G15§!. Available again after §Y30 days§!."
  VAL_raid_grey_traders_available_tt:0 "Grey-market pressure is at least §Y15§! (currently §Y[?VAL_black_market_pressure|0]§!)."
@@ -44,7 +44,7 @@
  VAL_license_grey_brokers: "License the Grey Brokers"
  VAL_license_grey_brokers_desc: "Do not destroy the underground network; make it pay for permission to operate. The treasury immediately receives §G50§!, while grey-market pressure rises by §R15§!."
  VAL_buy_contraband_arms: "Buy Arms Off the Ledger"
- VAL_buy_contraband_arms_desc:0 "When official corridors are overloaded or cut, private brokers can push weapons back onto the market. For §Y250§! treasury we receive §G15,000§! infantry weapons at the cost of §R10§! grey-market pressure."
+ VAL_buy_contraband_arms_desc:0 "When official corridors are overloaded or cut, private brokers can push weapons back onto the market. For §Y250§! £ADISCORD_economy_treasury_texticon we receive §G15,000§! infantry weapons at the cost of §R10§! grey-market pressure."
  VAL_audit_broker_houses: "Audit the Broker Houses"
  VAL_audit_broker_houses_desc:0 "Spend 250 coins to reduce pressure by 25 and dependence by one. Audits close licences and contraband supplies for 60 days; check your weapon stocks before an offensive."
 
@@ -68,7 +68,7 @@
  VAL_closed_border_regime: "Closed Crossings"
  VAL_closed_border_regime_desc: "The emergency border regime reduces population inflow but delays legitimate deals as well."
  VAL_refugee_contract_labor: "Contracts for the Displaced"
- VAL_refugee_contract_labor_desc:0 "Labour contracts give §G+12%§! construction speed and §G+8%§! civilian income at the cost of §R-1%§! stability."
+ VAL_refugee_contract_labor_desc:0 "Labour contracts give §G+12%§! construction speed and §G+8%§! civilian income at the cost of §R-1%§! £stability_texticon."
 
  VAL_refugee_admission_tt: "Admit §Y100,000§! refugees. Grey-market pressure: §R+3§!."
 
@@ -99,7 +99,7 @@
  VAL_accept_north_refugees_desc:0 "Admit §Y100,000§! refugees for §Y100§! coins. Grey market: §R+3§!. Repeat after §Y90 days§!. The admitted population enters the resettlement reserve."
  VAL_accept_perimeter_refugees: "Admit Refugees from Beyond the Perimeter"
  VAL_accept_perimeter_refugees_desc:0 "Admit §Y100,000§! refugees for §Y100§! coins. Grey market: §R+3§!. Repeat after §Y90 days§!. The admitted population enters the resettlement reserve."
- VAL_refugee_resettlement_result_tt:0 "£population_texticon §Y100,000§! displaced people settle permanently in §Y[FROM.GetName]§!."
+ VAL_refugee_resettlement_result_tt:0 "§Y100,000§! £population_texticon displaced people settle permanently in §Y[FROM.GetName]§!."
  VAL_logistics_cost_100_blocked:0 "§R100§! £ADISCORD_economy_treasury_texticon"
  VAL_logistics_cost_100_tooltip:0 "§Y100§! £ADISCORD_economy_treasury_texticon"
  VAL_corridor_project_idle_tt: "The construction office is not working on another corridor"
@@ -122,43 +122,43 @@
 
  VAL_refugee_wave_limit_tt:0 "Fewer than three waves have been admitted from this region."
  VAL_train_refugee_volunteers:0 "Train Refugee Volunteers"
- VAL_train_refugee_volunteers_desc:0 "Train §Y10,000§! £population_texticon available refugees for 35 days using £pol_power §Y75§! political power and £infantry_equipment_texticon §Y5000§! infantry equipment. Another intake is available §Y45 days§! after completion. Trainees still need housing until completion. Capitulation or subjugation cancels training and refunds the people and costs."
- VAL_refugee_training_start_tt:0 "Reserve £population_texticon §Y10,000§! refugees for §Y35 days§!, then add them to army manpower. Cancellation returns the people, £pol_power §Y75§! political power and £infantry_equipment_texticon §Y5000§! infantry equipment."
+ VAL_train_refugee_volunteers_desc:0 "Train §Y10,000§! £population_texticon available refugees for 35 days using §Y75§! £political_power_texticon and §Y5000§! £infantry_equipment_texticon. Another intake is available §Y45 days§! after completion. Trainees still need housing until completion. Capitulation or subjugation cancels training and refunds the people and costs."
+ VAL_refugee_training_start_tt:0 "Reserve §Y10,000§! £population_texticon refugees for §Y35 days§!, then add them to army manpower. Cancellation returns the people, §Y75§! £political_power_texticon and §Y5000§! £infantry_equipment_texticon."
  VAL_refugee_window_open_tt: "An admission window is open for this refugee route. It lasts §Y180 days§! from the start of the flow. If this condition is unmet, the flow has not opened yet, its admission window has expired, or all three waves have already been admitted."
  VAL_refugee_war_active_tt:0 "This route's war is ongoing. Admission is available once every §Y90 days§!."
  VAL_refugee_perimeter_active_tt:0 "The Perimeter is open. Admission is available once every §Y90 days§!."
 
- VAL_local_training_start_tt:0 "Reserve £population_texticon §Y5,000§! local volunteers for §Y35 days§!. Cancellation returns the volunteers, §Y75§! £political_power_texticon and £infantry_equipment_texticon §Y5000§! infantry equipment."
+ VAL_local_training_start_tt:0 "Reserve §Y5,000§! £population_texticon local volunteers for §Y35 days§!. Cancellation returns the volunteers, §Y75§! £political_power_texticon and §Y5000§! £infantry_equipment_texticon."
 
  VAL_offer_settlement_bounties:0 "Offer Settlement Bounties"
- VAL_offer_settlement_bounties_desc:0 "Pay relocation grants and guaranteed first contracts to attract workers and families from outside Kefreyt. The programme brings §Y30,000§! new civilians into the refugee system, costs §Y250§! treasury funds and raises grey-market pressure by §R2§!. Available once every §Y90 days§!."
- VAL_settlement_bounties_tt:0 "Gain £population_texticon §Y30,000§! available settlers. Grey-market pressure: §R+2§!."
+ VAL_offer_settlement_bounties_desc:0 "Pay relocation grants and guaranteed first contracts to attract workers and families from outside Kefreyt. The programme brings §Y30,000§! new civilians into the refugee system, costs §Y250§! £ADISCORD_economy_treasury_texticon funds and raises grey-market pressure by §R2§!. Available once every §Y90 days§!."
+ VAL_settlement_bounties_tt:0 "Gain §Y30,000§! £population_texticon available settlers. Grey-market pressure: §R+2§!."
 
  VAL_naturalize_refugee_households:0 "Naturalize Refugee Households"
- VAL_naturalize_refugee_households_desc:0 "Move established refugee households out of temporary status and into permanent contract citizenship. §Y20,000§! refugees leave the free refugee pool, add §Y10,000§! to the local service reserve and immediately provide §G+1,000§! manpower. The local reserve is a separate pool; use Issue Emergency Service Contracts to mobilize it further. Cost: §Y50§! political power. Available once every §Y45 days§!."
- VAL_naturalization_result_tt:0 "£population_texticon §Y20,000§! refugees add £manpower_texticon §Y10,000§! to the local service reserve and provide §G+1,000§! manpower immediately. Grey-market pressure: §G-1§!."
+ VAL_naturalize_refugee_households_desc:0 "Move established refugee households out of temporary status and into permanent contract citizenship. §Y20,000§! refugees leave the free refugee pool, add §Y10,000§! to the local service reserve and immediately provide §G+1,000§! manpower. The local reserve is a separate pool; use Issue Emergency Service Contracts to mobilize it further. Cost: §Y50§! £political_power_texticon. Available once every §Y45 days§!."
+ VAL_naturalization_result_tt:0 "§Y20,000§! £population_texticon refugees add §Y10,000§! £manpower_texticon to the local service reserve and provide §G+1,000§! manpower immediately. Grey-market pressure: §G-1§!."
 
  VAL_emergency_service_contracts:0 "Issue Emergency Service Contracts"
- VAL_emergency_service_contracts_desc:0 "Bypass the normal training cycle and mobilize a full block of local contract reservists. Spend §Y500§! treasury funds, §Y25§! command power, £infantry_equipment_texticon §Y10,000§! infantry equipment and £population_texticon §Y10,000§! local reserve to gain £manpower_texticon §Y10,000§! manpower immediately. Stability: §R-1%§!. Available once every §Y120 days§!."
+ VAL_emergency_service_contracts_desc:0 "Bypass the normal training cycle and mobilize a full block of local contract reservists. Spend §Y500§! £ADISCORD_economy_treasury_texticon funds, §Y25§! command power, §Y10,000§! £infantry_equipment_texticon and §Y10,000§! £population_texticon local reserve to gain §Y10,000§! £manpower_texticon manpower immediately. Stability: §R-1%§!. Available once every §Y120 days§!."
  VAL_emergency_service_cost:0 "§Y500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power  §Y10000§! £infantry_equipment_texticon  §Y10000§! £population_texticon"
  VAL_emergency_service_cost_tooltip: "§Y500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power  §Y10000§! £infantry_equipment_texticon  §Y10000§! £population_texticon"
  VAL_emergency_service_cost_blocked: "§R500§! £ADISCORD_economy_treasury_texticon  §R25§! £command_power\n§R10000§! £infantry_equipment_texticon  §R10000§! £population_texticon"
- VAL_emergency_service_result_tt:0 "Gain £manpower_texticon §Y10,000§! manpower immediately. Stability: §R-1%§!."
+ VAL_emergency_service_result_tt:0 "Gain §Y10,000§! £manpower_texticon manpower immediately. Stability: §R-1%§!."
 
  VAL_recruit_local_volunteers:0 "Recruit local volunteers"
 
- VAL_recruit_local_volunteers_desc:0 "Conscription remains at 1.25%. The additional contract reserve is 2% of the initial population of Kefreyt's seven states and does not replenish. Each intake trains £population_texticon §Y5,000§! local volunteers over 35 days for §Y75§! £political_power_texticon and £infantry_equipment_texticon §Y5000§! infantry equipment. Capitulation or subjugation refunds the full intake."
+ VAL_recruit_local_volunteers_desc:0 "Conscription remains at 1.25%. The additional contract reserve is 2% of the initial population of Kefreyt's seven states and does not replenish. Each intake trains §Y5,000§! £population_texticon local volunteers over 35 days for §Y75§! £political_power_texticon and §Y5000§! £infantry_equipment_texticon. Capitulation or subjugation refunds the full intake."
 
- VAL_refugee_training_cost:0 "§Y10000§! £population_texticon  §Y75§! £pol_power  §Y5000§! £infantry_equipment_texticon"
- VAL_refugee_training_cost_blocked:0 "§R10000§! £population_texticon  §R75§! £pol_power  §R5000§! £infantry_equipment_texticon"
- VAL_refugee_training_cost_tooltip:0 "Requires §Y10,000§! £population_texticon available refugees, §Y75§! £pol_power political power and §Y5000§! £infantry_equipment_texticon infantry equipment."
+ VAL_refugee_training_cost:0 "§Y10000§! £population_texticon  §Y75§! £political_power_texticon  §Y5000§! £infantry_equipment_texticon"
+ VAL_refugee_training_cost_blocked:0 "§R10000§! £population_texticon  §R75§! £political_power_texticon  §R5000§! £infantry_equipment_texticon"
+ VAL_refugee_training_cost_tooltip:0 "Requires §Y10,000§! £population_texticon available refugees, §Y75§! £political_power_texticon and §Y5000§! £infantry_equipment_texticon."
  VAL_training_cost:0 "§Y5000§! £population_texticon  §Y75§! £political_power_texticon  §Y5000§! £infantry_equipment_texticon"
 
  VAL_training_cost_blocked:0 "§R5000§! £population_texticon  §R75§! £political_power_texticon  §R5000§! £infantry_equipment_texticon"
 
- VAL_training_cost_tooltip:0 "Requires §Y5,000§! £population_texticon volunteers from the reserve named in the decision, §Y75§! £political_power_texticon and §Y5000§! £infantry_equipment_texticon infantry equipment."
+ VAL_training_cost_tooltip:0 "Requires §Y5,000§! £population_texticon volunteers from the reserve named in the decision, §Y75§! £political_power_texticon and §Y5000§! £infantry_equipment_texticon."
 
- VAL_labor_program_tt:0 "Reserve §Y100,000§! £population_texticon refugees for 90 days: §G+12%§! construction speed, §G+8%§! civilian income, §R-1%§! stability. The workers then return to the free reserve."
+ VAL_labor_program_tt:0 "Reserve §Y100,000§! £population_texticon refugees for 90 days: §G+12%§! construction speed, §G+8%§! civilian income, §R-1%§! £stability_texticon. The workers then return to the free reserve."
 
  VAL_expand_refugee_housing:0 "Expand temporary settlements"
 

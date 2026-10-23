@@ -7163,6 +7163,38 @@
       "owner": "events/ADISCORD_STP_events.txt",
       "subsystem": "stp_hegemony_personal_rule",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.108",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 108,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.109",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 109,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.110",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 110,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "ADISCORD_STP_pc",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.111",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 111,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "ADISCORD_STP_pc",
+      "status": "active"
     }
   ]
 }

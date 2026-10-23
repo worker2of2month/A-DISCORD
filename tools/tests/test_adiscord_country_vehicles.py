@@ -469,6 +469,39 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
         self.assertNotIn("mechanized_entity", entities)
         self.assertNotIn("motorized_entity", entities)
 
+    def test_designer_pools_select_only_the_national_mechanized_model(self):
+        from tools.assets.source.country_vehicles import package_vehicles as registry
+
+        def one(rows, key):
+            values = [row.value for row in rows if row.key == key]
+            self.assertEqual(len(values), 1, key)
+            return values[0]
+
+        path = ROOT / "gfx/interface/equipmentdesigner/graphic_db/ADISCORD_country_vehicles.txt"
+        raw = path.read_bytes()
+        self.assertFalse(raw.startswith(b"\xef\xbb\xbf"))
+        self.assertEqual(raw.decode("utf-8"), registry.apc_model_pools())
+        countries = parse_clausewitz(raw.decode("utf-8"))
+        self.assertEqual({row.key for row in countries}, {"VAL", "STP", "STS", "NAM"})
+        for tag in ("VAL", "STP", "STS", "NAM"):
+            country = one(countries, tag)
+            self.assertEqual(
+                {row.key for row in country},
+                {"infantry_equipment", "ADISCORD_armored_carrier_archetype"},
+            )
+            for equipment in country:
+                with self.subTest(tag=tag, equipment=equipment.key):
+                    pool = one(equipment.value, "pool")
+                    self.assertEqual(
+                        {row.value for row in one(pool, "sub_units")},
+                        {"ADISCORD_mechanized_infantry"},
+                    )
+                    self.assertEqual(
+                        {row.value for row in one(pool, "models")},
+                        {f"ADISCORD_{tag}_apc_entity"},
+                    )
+                    self.assertEqual(one(pool, "weight"), "3000")
+
 
 class CarrierFocusTests(unittest.TestCase):
     def test_late_carrier_routes_deliver_equipment_even_with_researched_technology(self):
