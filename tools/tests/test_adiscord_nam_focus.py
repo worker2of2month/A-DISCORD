@@ -27,7 +27,14 @@ TREES = {
     "main": ("focus_trees/NAM/main/focuses.txt", "NAM_focus", "ADISCORD_NAM_focus.txt"),
     "postwar": ("focus_trees/NAM/postwar/focuses.txt", "NAM_postwar_focus", "ADISCORD_NAM_postwar.txt"),
     "defeated": ("focus_trees/NAM/defeated/focuses.txt", "NAM_defeated_focus", "ADISCORD_NAM_defeated.txt"),
+    "exile_radical": ("focus_trees/NAM/exile_radical/focuses.txt", "NAM_exile_radical_focus",
+                      "ADISCORD_NAM_exile_radical.txt"),
+    "exile_humanist": ("focus_trees/NAM/exile_humanist/focuses.txt", "NAM_exile_humanist_focus",
+                       "ADISCORD_NAM_exile_humanist.txt"),
+    "exile_corporate": ("focus_trees/NAM/exile_corporate/focuses.txt", "NAM_exile_corporate_focus",
+                        "ADISCORD_NAM_exile_corporate.txt"),
 }
+EXILE = ("exile_radical", "exile_humanist", "exile_corporate")
 
 
 def read(path):
@@ -112,6 +119,7 @@ class NamCampaignTests(unittest.TestCase):
         cls.tree, cls.focuses = tree_focuses("main")
         cls.postwar_tree, cls.postwar = tree_focuses("postwar")
         cls.defeated_tree, cls.defeated = tree_focuses("defeated")
+        cls.exile_trees = {kind: tree_focuses(kind) for kind in EXILE}
         cls.triggers = {e.key: e.value for e in parsed(f"common/scripted_triggers/{BASE}_triggers.txt")}
         cls.effects = {}
         for path in (f"common/scripted_effects/{BASE}_effects.txt", "common/scripted_effects/ADISCORD_shared_action_effects.txt"):
@@ -194,10 +202,29 @@ class NamCampaignTests(unittest.TestCase):
                 facts = {("NAM", "original_tag", "NAM"): True}
                 if outcome is not None:
                     facts[("NAM", "has_global_flag", BASE + "_" + outcome)] = True
-                expected = outcome in (
-                    ("nam_victory",) if kind == "postwar" else ("compromise", "island_exile")
-                )
+                expected = outcome in (("nam_victory",) if kind == "postwar" else ("compromise",))
                 self.assertEqual(self.matches(conditions, facts), expected, (kind, outcome))
+        # Event .100 and the corporate takeover load the exile trees; each one
+        # also selects only its own course.
+        courses = {
+            "exile_radical": {"NAM_exile_radical"},
+            "exile_humanist": {"NAM_exile_humanist"},
+            "exile_corporate": {"NAM_exile_humanist", "NAM_corp_takeover"},
+        }
+        for kind, own_flags in courses.items():
+            tree = self.exile_trees[kind][0]
+            self.assertEqual(scalar(tree, "id"), TREES[kind][1])
+            modifier = block(block(tree, "country"), "modifier")
+            self.assertEqual(scalar(modifier, "original_tag"), "NAM")
+            conditions = [entry for entry in modifier if entry.key != "add"]
+            for flags in courses.values():
+                facts = {
+                    ("NAM", "original_tag", "NAM"): True,
+                    ("NAM", "has_global_flag", BASE + "_island_exile"): True,
+                }
+                for flag in flags:
+                    facts[("NAM", "has_country_flag", flag)] = True
+                self.assertEqual(self.matches(conditions, facts), flags == own_flags, (kind, flags))
         owners = json.loads(read("tools/data/generated_output_owners.json"))
         for kind, (_, _, filename) in TREES.items():
             output = ROOT / "common/national_focus" / filename
@@ -205,7 +232,12 @@ class NamCampaignTests(unittest.TestCase):
             self.assertIn(f"common/national_focus/{filename}", str(owners))
 
     def test_unique_layout_and_real_rewards(self):
-        expected = {"main": (self.focuses, 110), "postwar": (self.postwar, 54), "defeated": (self.defeated, 158)}
+        expected = {
+            "main": (self.focuses, 110), "postwar": (self.postwar, 54), "defeated": (self.defeated, 24),
+            "exile_radical": (self.exile_trees["exile_radical"][1], 60),
+            "exile_humanist": (self.exile_trees["exile_humanist"][1], 57),
+            "exile_corporate": (self.exile_trees["exile_corporate"][1], 29),
+        }
         names = [name for focuses, _ in expected.values() for name in focuses]
         self.assertEqual(len(names), len(set(names)))
         for kind, (focuses, count) in expected.items():
@@ -253,6 +285,55 @@ class NamCampaignTests(unittest.TestCase):
         for chosen, other in (("revenge", "accommodation"), ("accommodation", "revenge")):
             completed = reachable(self.defeated, {"NAM_defeat_" + other})
             self.assertIn("NAM_defeat_second_chapter", completed, chosen)
+        finals = {
+            "exile_radical": "NAM_rad_dominion_of_pillars",
+            "exile_humanist": "NAM_hum_union_constitution",
+            "exile_corporate": "NAM_board_union_of_boards",
+        }
+        for kind, final in finals.items():
+            focuses = self.exile_trees[kind][1]
+            pairs = sorted({
+                tuple(sorted((name, entry.value)))
+                for name, focus in focuses.items()
+                for group in (e.value for e in focus if e.key == "mutually_exclusive")
+                for entry in group
+            })
+            self.assertGreaterEqual(len(pairs), 4, kind)
+            for side in (0, 1):
+                blocked = {pair[1 - side] for pair in pairs}
+                self.assertIn(final, reachable(focuses, blocked), (kind, side))
+
+    def test_each_exile_tree_owns_its_wars_and_script_gates(self):
+        from tools.builders.build_adiscord_focus_trees import SHARED_HISTORY_SOURCES
+
+        for kind in EXILE:
+            focuses = self.exile_trees[kind][1]
+            self.assertNotIn("allow_branch", read(TREES[kind][0]), kind)
+            for effect in ("NAM_war_of_return_start", "NAM_great_war_start"):
+                callers = [
+                    name for name, focus in focuses.items()
+                    if effect in [e.key for e in walk(block(focus, "completion_reward"))]
+                ]
+                self.assertEqual(len(callers), 1, (kind, effect))
+        self.assertNotIn("allow_branch", read(TREES["defeated"][0]))
+        # Decisions, categories and the piracy window read these completions.
+        gates = {
+            "exile_radical": ("NAM_exile_general_staff", "NAM_exile_sea_raiders", "NAM_exile_black_market",
+                              "NAM_exile_fences", "NAM_exile_marine_orders", "NAM_rad_labour_camps",
+                              "NAM_rad_spoils_of_return", "NAM_rad_garrison_belt", "NAM_rad_martial_law"),
+            "exile_humanist": ("NAM_hum_citizen_army", "NAM_hum_free_zones", "NAM_hum_steel_exchange",
+                               "NAM_hum_labour_bureau", "NAM_hum_innovation_parks", "NAM_hum_credit_arms",
+                               "NAM_hum_regulated_partnership", "NAM_hum_charter_commission",
+                               "NAM_hum_open_doors", "NAM_hum_marine_contracts", "NAM_hum_union_council",
+                               "NAM_hum_federal_treaties", "NAM_hum_harbour_rebuilding"),
+            "exile_corporate": ("NAM_hum_company_guard", "NAM_board_landing_contracts", "NAM_board_constitution",
+                                "NAM_board_shareholders", "NAM_board_district_auction"),
+        }
+        for kind, names in gates.items():
+            for name in names:
+                self.assertIn(name, self.exile_trees[kind][1], (kind, name))
+        # The takeover replaces the humanist tree; its completions must survive.
+        self.assertIn(TREES["exile_humanist"][0].removeprefix("focus_trees/"), SHARED_HISTORY_SOURCES)
 
     def test_normal_preparation_fits_external_clock(self):
         path = ("inventory", "open_ledgers", "districts", "public_payroll", "district_guarantees")
@@ -436,7 +517,8 @@ class NamCampaignTests(unittest.TestCase):
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             text = path.read_text(encoding="utf-8-sig")
             values = dict(re.findall(r'^[ \t]*([^ #:\s]+):\d*[ \t]*"(.*)"[ \t]*$', text, re.M))
-            for name in (*self.focuses, *self.postwar, *self.defeated):
+            exile = [name for kind in EXILE for name in self.exile_trees[kind][1]]
+            for name in (*self.focuses, *self.postwar, *self.defeated, *exile):
                 self.assertIn(name, values.keys())
                 self.assertIn(name + "_desc", values.keys())
             for name, decision in self.decisions.items():

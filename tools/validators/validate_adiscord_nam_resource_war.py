@@ -730,31 +730,41 @@ def check_exile_revolution(
     events: str,
     loc: str,
 ) -> None:
-    """M10: the overthrow, the two courses, the corporations and the great war."""
-    overthrow = named_block(decisions, "NAM_exile_overthrow_namestnik")
+    """M10: the island council, the two courses, the corporations and the great war."""
+    flight = event_block(events, "ADISCORD_nam_resource_war.81")
     revolution = event_block(events, "ADISCORD_nam_resource_war.100")
+    revolution_open = named_block(triggers, "NAM_exile_revolution_open")
     check(
-        "NAM_exile_revolution_open = yes" in overthrow
-        and "has_completed_focus = NAM_exile_island_government" in named_block(triggers, "NAM_exile_revolution_open")
-        and "fire_only_once = yes" in overthrow
-        and "id = ADISCORD_nam_resource_war.100" in overthrow
-        and revolution.count("option = {") == 2
-        and "NAM_exile_choose_radical = yes" in revolution
-        and "NAM_exile_choose_humanist = yes" in revolution,
-        "the overthrow decision must open event .100 with the radical and the humanist answers",
+        "NAM_exile_overthrow_namestnik" not in decisions
+        and "NAM_exile_overthrow_namestnik" not in loc
+        and flight.count("option = {") == 2
+        and flight.count("id = ADISCORD_nam_resource_war.100") == 2
+        and "timeout_days" in flight
+        and "has_completed_focus" not in revolution_open
+        and "has_global_flag = ADISCORD_nam_resource_war_island_exile" in revolution_open
+        and "NAM_exile_revolution_open = yes" in named_block(revolution, "trigger")
+        and "timeout_days" in revolution
+        and revolution.count("option = {") == 2,
+        "every answer of the flight .81 must convene the island council .100, which needs no focus or decision",
+    )
+    options = revolution.split("option = {")[1:]
+    check(
+        len(options) == 2
+        and -1 < options[0].find("NAM_exile_choose_radical = yes") < options[0].find("tree = NAM_exile_radical_focus")
+        and -1 < options[1].find("NAM_exile_choose_humanist = yes") < options[1].find("tree = NAM_exile_humanist_focus")
+        and all("keep_completed = yes" in option for option in options),
+        "each council answer, the unattended junta first, must set its flag and then load its tree",
     )
     radical = named_block(effects, "NAM_exile_choose_radical")
     humanist = named_block(effects, "NAM_exile_choose_humanist")
     check(
         "set_country_flag = NAM_exile_radical" in radical
         and "character = NAM_Rostislav_Karamyshev" in radical
-        and "mark_focus_tree_layout_dirty = yes" in radical
         and "set_country_flag = NAM_exile_humanist" in humanist
         and "character = NAM_Yaroslav_Veter" in humanist
         and "ideology = humanism_ideology" in humanist
-        and "NAM_corp_initialize = yes" in humanist
-        and "mark_focus_tree_layout_dirty = yes" in humanist,
-        "each course must install its leader, set its flag and redraw the tree",
+        and "NAM_corp_initialize = yes" in humanist,
+        "each course must install its leader and set its flag",
     )
     check(
         "has_country_flag = NAM_exile_radical" in named_block(triggers, "NAM_piracy_open")
@@ -794,8 +804,11 @@ def check_exile_revolution(
         "set_cosmetic_tag = NAM_corporate_state" in takeover
         and "character = NAM_Mark_Olshansky" in takeover
         and "modifier = NAM_corporate_board_state" in takeover
-        and "mark_focus_tree_layout_dirty = yes" in takeover,
-        "the takeover must install the board, the cosmetic tag and the island boards",
+        and -1
+        < takeover.find("set_country_flag = NAM_corp_takeover")
+        < takeover.find("tree = NAM_exile_corporate_focus")
+        and "keep_completed = yes" in takeover,
+        "the takeover must install the board, the cosmetic tag, the island boards and the corporate tree",
     )
     for event_id in ("101", "102"):
         block = event_block(events, f"ADISCORD_nam_resource_war.{event_id}")
@@ -831,6 +844,79 @@ def check_exile_revolution(
         and "NAM_war_of_return_resolve_defeat = yes" in read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"),
         "the exile war must settle Eflor and Azhar by the course, then open the consolidation",
     )
+    # Each exile tree opens the drill and the humanist marine contracts.
+    drill_unlocked = named_block(triggers, "NAM_exile_drill_unlocked")
+    check(
+        all(
+            f"has_completed_focus = {focus}" in drill_unlocked
+            for focus in ("NAM_exile_general_staff", "NAM_hum_citizen_army", "NAM_hum_company_guard")
+        )
+        and "NAM_exile_drill_unlocked = yes" in named_block(named_block(decisions, "NAM_exile_drill"), "visible")
+        and "NAM_exile_drill_unlocked = yes" in named_block(categories, "NAM_exile_politics")
+        and "has_completed_focus = NAM_board_landing_contracts"
+        in named_block(named_block(decisions, "NAM_order_marines_corp"), "visible"),
+        "the drill and the humanist marines must open in the junta's, the humanists' and the boards' trees",
+    )
+    # A deadline front settles the return by the homeland it leaves; a failed
+    # war may be renewed after its recovery, and a stale deadline is ignored.
+    front = named_block(effects, "NAM_war_of_return_resolve_front")
+    external = named_block(effects, "NAM_war_of_return_close_external")
+    great_front = named_block(effects, "NAM_great_war_resolve_front")
+    renew = named_block(decisions, "NAM_exile_renew_war_of_return")
+    renew_great = named_block(decisions, "NAM_renew_great_war")
+    check(
+        all(f"owns_state = {state}" in named_block(triggers, "NAM_wor_front_return_held") for state in (67, 688, 689, 690, 719, 700))
+        and -1
+        < front.find("NAM_wor_settle_front_states = yes")
+        < front.find("NAM_wor_front_return_held = yes")
+        < front.find("set_global_flag = NAM_war_of_return_won")
+        < front.find("NAM_consolidation_begin = yes")
+        and "NAM_wor_front_return_held = yes" in external
+        and "set_global_flag = NAM_war_of_return_won" in external
+        and re.search(r"has_global_flag = NAM_wor_exile_war\b", named_block(triggers, "NAM_wor_exile_war_ready")) is None
+        and "has_global_flag = NAM_war_of_return_won" in named_block(triggers, "NAM_wor_exile_war_ready")
+        and re.search(r"has_global_flag = NAM_wor_exile_war\b", named_block(triggers, "NAM_exile_return_programme_open")) is None
+        and "flag = NAM_wor_recovery" in named_block(effects, "NAM_war_of_return_close")
+        and "NAM_war_of_return_start = yes" in renew
+        and "has_global_flag = NAM_wor_recovery" in renew
+        and "flag = NAM_wor_deadline_armed" in named_block(effects, "NAM_war_of_return_start")
+        and "has_global_flag = NAM_wor_deadline_armed"
+        in named_block(event_block(events, "ADISCORD_nam_resource_war.61"), "trigger"),
+        "the exile war must count a homeland front as won and let a failed war be renewed after recovery",
+    )
+    check(
+        "add_to_temp_variable = { var = NAM_wor_front_net value = 1 }" in named_block(effects, "NAM_wor_settle_front_states")
+        and "subtract_from_temp_variable = { var = NAM_wor_front_net value = 1 }"
+        in named_block(effects, "NAM_wor_settle_front_states")
+        and -1
+        < great_front.find("NAM_wor_settle_front_states = yes")
+        < great_front.find("NAM_wor_front_net > 0")
+        < great_front.find("set_global_flag = NAM_great_war_won")
+        and "NAM_great_war_started" not in named_block(triggers, "NAM_great_war_can_start")
+        and "has_global_flag = NAM_great_war_won" in named_block(triggers, "NAM_great_war_can_start")
+        and "flag = NAM_great_war_recovery" in named_block(effects, "NAM_great_war_close")
+        and "clr_global_flag = NAM_great_war_resolved" in named_block(effects, "NAM_great_war_start")
+        and "flag = NAM_great_war_deadline_armed" in named_block(effects, "NAM_great_war_start")
+        and "has_global_flag = NAM_great_war_deadline_armed"
+        in named_block(event_block(events, "ADISCORD_nam_resource_war.106"), "trigger")
+        and "NAM_great_war_start = yes" in renew_great
+        and "has_global_flag = NAM_great_war_recovery" in renew_great,
+        "the great war must count a southward front as won and let a fruitless war be renewed after recovery",
+    )
+    for key in (
+        "NAM_exile_renew_war_of_return",
+        "NAM_exile_renew_war_of_return_desc",
+        "NAM_renew_great_war",
+        "NAM_renew_great_war_desc",
+        "NAM_wor_recovery_tt",
+        "NAM_great_war_recovery_tt",
+        "ADISCORD_nam_resource_war.62.d_held_exile",
+        "ADISCORD_nam_resource_war.107.d_front_won",
+    ):
+        check(
+            re.search(rf"(?m)^\s*{re.escape(key)}:", loc) is not None,
+            f"missing localisation key {key}",
+        )
     # Consolidation between the exile war and the great war.
     consolidation = named_block(effects, "NAM_consolidation_monthly")
     check(
@@ -1833,14 +1919,14 @@ def main() -> int:
         "the coalition treaty must leave the islands to an exiled NAM and annex only a NAM without islands",
     )
     check(
-        exile.find("set_global_flag = ADISCORD_nam_resource_war_island_exile")
-        < exile.find("load_focus_tree")
-        and "tree = NAM_defeated_focus" in exile
-        and "keep_completed = no" in exile
+        "load_focus_tree" not in exile
+        and -1
+        < exile.find("set_global_flag = ADISCORD_nam_resource_war_island_exile")
+        < exile.find("id = ADISCORD_nam_resource_war.81")
         and -1
         < move_capital.find("set_capital = { state = 228 }")
         < move_capital.find("set_capital = { state = 230 }"),
-        "the island exile must set its flag before the defeat tree and move the capital to 228 first",
+        "the island exile must leave the tree to the council of .100 and move the capital to 228 first",
     )
     check(
         "days = 420" in effects

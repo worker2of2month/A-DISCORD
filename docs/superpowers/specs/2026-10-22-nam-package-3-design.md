@@ -47,7 +47,7 @@ oil must matter to other countries.
 | Victory | after war | Border belts and punishment, then `NAM_postwar_focus`: recognition, course, endings, South, EFL/AZH aftermath, RUS crisis |
 | Standoff | after war | Pre-war border, no treaty or punishment, then the same `NAM_postwar_focus` |
 | Compromise | after war | `NAM_defeated_focus`: revenge or accommodation |
-| Island exile | after war | Mainland lost, capital on the islands, `NAM_defeated_focus` with the revanchist branch |
+| Island exile | after war | Mainland lost, capital on the islands; event .100 loads `NAM_exile_radical_focus` or `NAM_exile_humanist_focus`, the takeover `NAM_exile_corporate_focus` |
 | Total partition | after war | Only when NAM owns no island: NAM is annexed |
 
 ## Map split for the war
@@ -184,9 +184,9 @@ Owner: core phase 1.
   (`NAM_rw_can_go_into_exile`), `NAM_rw_settle_island_exile` sets
   `ADISCORD_nam_resource_war_island_exile`, moves the capital to the first
   owned of 228, 225, 227, 231, 226, 229, 230, restores control of the
-  islands, ends oil contracts (the 231 steel concession continues) and loads
-  `NAM_defeated_focus` with `keep_completed = no` unless it is already
-  loaded. Islands are never transferred. Without an island NAM is annexed by
+  islands and ends oil contracts (the 231 steel concession continues); it
+  loads no tree: the island council of event .100 right after the flight
+  loads the course's exile tree (M10). Islands are never transferred. Without an island NAM is annexed by
   EFL as before. News `.2` has exile and partition texts. The war of return
   is open after the compromise or the exile and also targets 700; winning it
   back returns an exiled capital to 700.
@@ -409,7 +409,8 @@ Owner: core phase 4 (third playtest batch).
   fields and the harbour (`NAM_rw_exile_scorch_state`: condition -70,
   `NAM_scorched_wells_modifier` 180 days, building damage), forms
   under-strength remnants on the island capital up to the carried share, seeds
-  the piracy variables and fires .81 "Flight to the Islands".
+  the piracy variables and fires .81 "Flight to the Islands" (7-day timeout);
+  each of its answers convenes the island council .100 six hours later.
 - Piracy (category `NAM_piracy`, `NAM_piracy_open`): one decision per foreign
   shipping lane past the islands, `NAM_pirate_raid_lane_<id>`: oil run AZH-EFL
   (coalition, rich prize x1.5), northern coast RIV-EFL (coalition while EFL
@@ -444,12 +445,15 @@ and in what they do with the conquered south. The exile's road has three
 stages: the war of return against Eflor and Azhar, the consolidation of the
 returned south and the great war against the rest of the south.
 
-- Trigger: decision `NAM_exile_overthrow_namestnik` (category
-  `NAM_exile_politics`, exile flag, after focus `NAM_exile_island_government`,
-  50 PP, once) fires event `ADISCORD_nam_resource_war.100`. Its two answers set
-  the NAM country flag `NAM_exile_radical` (the pillars of Svetlogorye overthrow
-  him) or `NAM_exile_humanist` (the humanists of Yaroslav Veter overthrow him)
-  and call `mark_focus_tree_layout_dirty` in NAM scope. The choice is final.
+- Trigger: no decision. Every answer of the flight event .81 fires the island
+  council `ADISCORD_nam_resource_war.100` six hours later, for the human and
+  the AI alike (trigger `NAM_exile_revolution_open`: NAM, exile flag, no course
+  yet; 7-day timeout, the first answer is the unattended one). Its two answers
+  set the NAM country flag `NAM_exile_radical` (the pillars of Svetlogorye
+  overthrow him) or `NAM_exile_humanist` (the humanists of Yaroslav Veter
+  overthrow him) and then load `NAM_exile_radical_focus` or
+  `NAM_exile_humanist_focus` with `keep_completed = yes`. Until then NAM keeps
+  the tree it lost the war with. The choice is final.
   `NAM_exile_choose_radical`: leader `NAM_Rostislav_Karamyshev` (Rostislav
   Karamyshev, etatism, traits `NAM_trait_pillar_junta_chief` and
   `NAM_trait_corsair_patron`), ruling etatism 75 / humanism 25, spirit
@@ -501,7 +505,8 @@ returned south and the great war against the rest of the south.
   chairman `NAM_Mark_Olshansky` (commercial hedonism, trait
   `NAM_trait_chairman_of_the_boards`), cosmetic tag `NAM_corporate_state`,
   island boards `NAM_corporate_board_state`, influence fixed at 100, and
-  `mark_focus_tree_layout_dirty`. The humanist course continues: every federal
+  `load_focus_tree = { tree = NAM_exile_corporate_focus keep_completed = yes }`
+  after the flag. The humanist course continues: every federal
   district belongs to one of six corporations - 1 Yuzhneft oil concern, 2
   Island Steel trust, 3 Sea Line shipping company, 4 Coastal Arsenal arms
   company, 5 Artel labour agency, 6 Island Credit bank - recorded in the
@@ -528,7 +533,17 @@ returned south and the great war against the rest of the south.
   begins. NAM capitulation: Svetlogorye with its islands is annexed by the
   participant holding its capital or the coalition's first independent member
   (news `.8`). Deadline (event `.61`): the side holding every capital of the
-  other wins outright, otherwise ownership follows the front. The war of return
+  other wins outright, otherwise ownership follows the front. A front
+  settlement, or a native peace that leaves an independent NAM, that gives
+  NAM the South Harbour 700 or any of the fields 67/688/689/690/719
+  (`NAM_wor_front_return_held`) also sets `NAM_war_of_return_won` and begins
+  the consolidation; Eflor and Azhar stay independent and remain great-war
+  targets (`.62.d_held_exile`). Otherwise the exile stays on the islands, the
+  return programme reopens, and after the 180-day `NAM_wor_recovery` the
+  decision `NAM_exile_renew_war_of_return` (category `NAM_exile_politics`,
+  50 PP) declares the next exile war; `NAM_wor_exile_war_ready` blocks only a
+  won or running war. `NAM_wor_deadline_armed` (360 days) makes a deadline
+  event left from an earlier war ignore the renewed one. The war of return
   after the compromise keeps its original field-owner form.
 - Consolidation (`NAM_consolidation` 0..100 with `NAM_consolidation_clamp`;
   `NAM_consolidation_begin` at the exile war's victory sets 10 and the country
@@ -553,6 +568,17 @@ returned south and the great war against the rest of the south.
   capitulation to `NAM_great_war_resolve_defeat` (annexation), the fall of every
   participant to `NAM_great_war_resolve_victory` (the course's policy for all)
   and native peace, annexation or subjugation to `NAM_great_war_close_external`.
+  A deadline front with more states gained than lost (temp
+  `NAM_wor_front_net` > 0) sets `NAM_great_war_won` without settling the
+  survivors (`.107.d_front_won`). Otherwise, after the 180-day
+  `NAM_great_war_recovery`, the decision `NAM_renew_great_war` (category
+  `NAM_consolidation`, 50 PP) restarts it; `NAM_great_war_can_start` blocks
+  only a running or won great war, and `NAM_great_war_deadline_armed` guards
+  `.106` like `.61`.
+- Drill and marines per tree: `NAM_exile_drill` and its category open with
+  `NAM_exile_drill_unlocked` (`NAM_exile_general_staff`,
+  `NAM_hum_citizen_army` or `NAM_hum_company_guard`); `NAM_order_marines_corp`
+  with `NAM_hum_marine_contracts` or `NAM_board_landing_contracts`.
 - Symmetry: in both wars each side wins outright by forcing the other's
   capitulation or by holding all of the other's capitals at the 365-day
   deadline; otherwise ownership follows control for every state between the

@@ -665,12 +665,12 @@ NAM_war_of_return_active = {
 }
 
 # ----- Exile revolution -----
-# COUNTRY NAM. The island government may overthrow the namestnik: the choice
-# between the pillars and Veter's humanists is made once per campaign.
+# COUNTRY NAM. The island council of event .100 may still overthrow the
+# namestnik: the choice between the pillars and Veter's humanists is made once
+# per campaign, right after the flight to the islands.
 NAM_exile_revolution_open = {
 	tag = NAM
 	has_global_flag = ADISCORD_nam_resource_war_island_exile
-	has_completed_focus = NAM_exile_island_government
 	NOT = { has_country_flag = NAM_exile_radical }
 	NOT = { has_country_flag = NAM_exile_humanist }
 }
@@ -684,14 +684,39 @@ NAM_exile_revolution_done = {
 }
 
 # COUNTRY NAM. The exile still prepares its return: marine orders and the
-# landing drill. The programme closes once the exile war starts.
+# landing drill. The programme pauses while an exile war is fought and
+# reopens after one that brought no homeland back, for the next attempt.
 NAM_exile_return_programme_open = {
 	tag = NAM
 	has_global_flag = ADISCORD_nam_resource_war_island_exile
 	NAM_exile_revolution_done = yes
 	NOT = { NAM_war_of_return_active = yes }
-	NOT = { has_global_flag = NAM_wor_exile_war }
 	NOT = { has_global_flag = NAM_war_of_return_won }
+}
+
+# COUNTRY NAM. After a deadline settled at the front, the exile counts as
+# returned once it owns the South Harbour or any of its five fields.
+NAM_wor_front_return_held = {
+	OR = {
+		owns_state = 700
+		owns_state = 67
+		owns_state = 688
+		owns_state = 689
+		owns_state = 690
+		owns_state = 719
+	}
+}
+
+# COUNTRY NAM. The landing drill is open in the course's own tree: the junta's
+# general staff, the humanists' citizen army or the boards' company guard.
+# The humanist focuses are shared with the corporate tree, so a drill opened
+# before the takeover stays open after it.
+NAM_exile_drill_unlocked = {
+	OR = {
+		has_completed_focus = NAM_exile_general_staff
+		has_completed_focus = NAM_hum_citizen_army
+		has_completed_focus = NAM_hum_company_guard
+	}
 }
 
 # COUNTRY NAM. The drill's deposit is in hand in the course's currency: 30
@@ -735,19 +760,35 @@ NAM_wor_target_valid = {
 	}
 }
 
-# COUNTRY NAM. The exile war against Eflor and Azhar may begin: the namestnik
-# has fallen, one of the two principals that hold the homeland still stands,
-# and the War for the South does not hold the region's alliances.
-NAM_wor_exile_war_ready = {
-	has_global_flag = ADISCORD_nam_resource_war_island_exile
-	NAM_exile_revolution_done = yes
-	NOT = { has_global_flag = NAM_wor_exile_war }
-	NOT = { NAM_war_of_return_active = yes }
-	NOT = { ADISCORD_south_final_active = yes }
+# Any scope. Eflor or Azhar still stands outside Svetlogorye's power.
+NAM_wor_principal_standing = {
 	OR = {
 		EFL = { NAM_wor_target_valid = yes }
 		AZH = { NAM_wor_target_valid = yes }
 	}
+}
+
+# Any scope. A southern state is left for the great war to fight.
+NAM_great_war_target_left = {
+	OR = {
+		NAM_wor_principal_standing = yes
+		RHM = { NAM_wor_target_valid = yes }
+		SDR = { NAM_wor_target_valid = yes }
+		KDR = { NAM_wor_target_valid = yes }
+	}
+}
+
+# COUNTRY NAM. The exile war against Eflor and Azhar may begin: the namestnik
+# has fallen, one of the two principals that hold the homeland still stands,
+# and the War for the South does not hold the region's alliances. An exile war
+# that brought no homeland back may be fought again; one that did is won.
+NAM_wor_exile_war_ready = {
+	has_global_flag = ADISCORD_nam_resource_war_island_exile
+	NAM_exile_revolution_done = yes
+	NOT = { has_global_flag = NAM_war_of_return_won }
+	NOT = { NAM_war_of_return_active = yes }
+	NOT = { ADISCORD_south_final_active = yes }
+	NAM_wor_principal_standing = yes
 }
 
 # ----- Great war -----
@@ -765,9 +806,10 @@ NAM_wor_campaign_active = {
 	}
 }
 
-# COUNTRY NAM. The preparation focus calls NAM_great_war_start behind this
-# trigger: the exile war is won, the returned south is consolidated to 70 and
-# one southern state is left to fight.
+# COUNTRY NAM. The preparation focus, or the renewal decision after a great
+# war that ended without a gain, calls NAM_great_war_start behind this
+# trigger: the exile war is won, the great war is neither fought nor won, the
+# returned south is consolidated to 70 and one southern state is left.
 NAM_great_war_can_start = {
 	NAM_country_operable = yes
 	is_subject = no
@@ -775,7 +817,8 @@ NAM_great_war_can_start = {
 	has_global_flag = NAM_wor_exile_war
 	has_global_flag = NAM_war_of_return_won
 	NAM_exile_revolution_done = yes
-	NOT = { has_global_flag = NAM_great_war_started }
+	NOT = { NAM_great_war_active = yes }
+	NOT = { has_global_flag = NAM_great_war_won }
 	NOT = { ADISCORD_south_final_active = yes }
 	custom_trigger_tooltip = {
 		tooltip = NAM_great_war_consolidated_tt
@@ -783,13 +826,7 @@ NAM_great_war_can_start = {
 	}
 	custom_trigger_tooltip = {
 		tooltip = NAM_great_war_targets_tt
-		OR = {
-			EFL = { NAM_wor_target_valid = yes }
-			AZH = { NAM_wor_target_valid = yes }
-			RHM = { NAM_wor_target_valid = yes }
-			SDR = { NAM_wor_target_valid = yes }
-			KDR = { NAM_wor_target_valid = yes }
-		}
+		NAM_great_war_target_left = yes
 	}
 }
 
@@ -904,10 +941,12 @@ NAM_wor_field_contestable = {
 	}
 }
 
-# COUNTRY NAM. Called by NAM_defeat_war_of_return before its war effect.
-# After the compromise peace the war targets the owners of the lost fields;
-# from the island exile, once the namestnik has fallen, it is the exile war
-# against Eflor and Azhar.
+# COUNTRY NAM. Checked before the war effect by the focuses
+# NAM_defeat_war_of_return (compromise), NAM_rad_war_of_return,
+# NAM_hum_war_of_return and NAM_board_war_of_return (exile) and by the
+# renewal decision NAM_exile_renew_war_of_return. After the compromise peace
+# the war targets the owners of the lost fields; from the island exile, once
+# the namestnik has fallen, it is the exile war against Eflor and Azhar.
 NAM_war_of_return_can_start = {
 	NAM_country_operable = yes
 	is_subject = no

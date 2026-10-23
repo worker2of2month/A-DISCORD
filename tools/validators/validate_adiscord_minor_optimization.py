@@ -202,12 +202,15 @@ for _tag in ("GLP", "KDR", "KYZ", "SDR", "WEF"):
 
 # Svetlogorye wakes a desert minor before a fuel contract or island concession
 # offer reaches it, and the exile great war wakes Sardan and Kadir before the
-# declaration; the defeat chapter's post-war focuses read only those woken tags.
+# declaration; the post-war focuses of the three exile trees (junta, humanists
+# and the corporate boards) read only those woken tags.
 NAM_DESERT_FILES = {
     Path("common/decisions/ADISCORD_nam_resource_war_decisions.txt"),
     Path("common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt"),
     Path("events/ADISCORD_nam_resource_war_events.txt"),
-    Path("common/national_focus/ADISCORD_NAM_defeated.txt"),
+    Path("common/national_focus/ADISCORD_NAM_exile_radical.txt"),
+    Path("common/national_focus/ADISCORD_NAM_exile_humanist.txt"),
+    Path("common/national_focus/ADISCORD_NAM_exile_corporate.txt"),
 }
 for _tag in ("GLP", "KDR", "KYZ", "SDR", "WEF"):
     EVENT_AWAKENED_PARTICIPATION[_tag].update(NAM_DESERT_FILES)

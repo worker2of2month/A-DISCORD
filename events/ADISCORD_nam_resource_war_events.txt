@@ -863,13 +863,18 @@ country_event = {
 	}
 }
 
-# The deadline of the war of return: white peace at the current front.
+# The deadline of the war of return: white peace at the current front. A
+# deadline left over from an earlier exile war fires while the current war's
+# NAM_wor_deadline_armed is still set and does nothing.
 country_event = {
 	id = ADISCORD_nam_resource_war.61
 	hidden = yes
 	is_triggered_only = yes
 
-	trigger = { NAM_war_of_return_active = yes }
+	trigger = {
+		NAM_war_of_return_active = yes
+		NOT = { has_global_flag = NAM_wor_deadline_armed }
+	}
 	immediate = { NAM_war_of_return_resolve_front = yes }
 }
 
@@ -895,6 +900,7 @@ country_event = {
 		trigger = {
 			has_global_flag = NAM_war_of_return_won
 			has_global_flag = NAM_wor_exile_war
+			NAM_wor_principal_standing = no
 			has_country_flag = NAM_exile_radical
 		}
 		text = ADISCORD_nam_resource_war.62.d_won_radical
@@ -903,9 +909,20 @@ country_event = {
 		trigger = {
 			has_global_flag = NAM_war_of_return_won
 			has_global_flag = NAM_wor_exile_war
+			NAM_wor_principal_standing = no
 			NOT = { has_country_flag = NAM_exile_radical }
 		}
 		text = ADISCORD_nam_resource_war.62.d_won_federal
+	}
+	# The deadline front or a native peace left the exile part of its homeland
+	# while Eflor or Azhar still stands.
+	desc = {
+		trigger = {
+			has_global_flag = NAM_war_of_return_won
+			has_global_flag = NAM_wor_exile_war
+			NAM_wor_principal_standing = yes
+		}
+		text = ADISCORD_nam_resource_war.62.d_held_exile
 	}
 	desc = {
 		trigger = {
@@ -948,13 +965,16 @@ country_event = {
 
 # ----- Flight to the islands -----
 # The island exile settlement has evacuated the army and burnt the mainland;
-# the tooltip reports the counts written by NAM_rw_exile_evacuate.
+# the tooltip reports the counts written by NAM_rw_exile_evacuate. Every
+# answer, including the unattended first one, convenes the island council of
+# event .100; the salvaged loot is credited before the humanists could sell it.
 country_event = {
 	id = ADISCORD_nam_resource_war.81
 	title = ADISCORD_nam_resource_war.81.t
 	desc = ADISCORD_nam_resource_war.81.d
 	picture = GFX_event_adiscord_expedition_camp
 	is_triggered_only = yes
+	timeout_days = 7
 	trigger = {
 		tag = NAM
 		has_global_flag = ADISCORD_nam_resource_war_island_exile
@@ -969,6 +989,8 @@ country_event = {
 			add_to_variable = { var = NAM_revenge_readiness value = 10 }
 			NAM_revenge_readiness_clamp = yes
 		}
+		custom_effect_tooltip = NAM_exile_council_next_tt
+		hidden_effect = { country_event = { id = ADISCORD_nam_resource_war.100 hours = 6 } }
 		ai_chance = { base = 60 }
 	}
 	option = {
@@ -980,6 +1002,8 @@ country_event = {
 			set_temp_variable = { var = NAM_pirate_loot_change value = 40 }
 			NAM_pirate_loot_add = yes
 		}
+		custom_effect_tooltip = NAM_exile_council_next_tt
+		hidden_effect = { country_event = { id = ADISCORD_nam_resource_war.100 hours = 6 } }
 		ai_chance = { base = 40 }
 	}
 }
@@ -1556,29 +1580,41 @@ country_event = {
 }
 
 # ----- Exile revolution -----
-# Decision NAM_exile_overthrow_namestnik. Both answers overthrow the namestnik
-# and fix the exile's course for the campaign; the first is the unattended one.
+# The island council, opened by every answer of .81 right after the flight.
+# Both answers overthrow the namestnik, fix the exile's course for the
+# campaign and load that course's tree after its flag is set; the first answer
+# is the unattended one, so the exile never stays without a course.
 country_event = {
 	id = ADISCORD_nam_resource_war.100
 	title = ADISCORD_nam_resource_war.100.t
 	desc = ADISCORD_nam_resource_war.100.d
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
-	trigger = {
-		tag = NAM
-		NAM_exile_revolution_done = no
-	}
+	timeout_days = 7
+	trigger = { NAM_exile_revolution_open = yes }
 
 	option = {
 		name = ADISCORD_nam_resource_war.100.a
 		custom_effect_tooltip = NAM_exile_radical_tt
-		hidden_effect = { NAM_exile_choose_radical = yes }
+		hidden_effect = {
+			NAM_exile_choose_radical = yes
+			load_focus_tree = {
+				tree = NAM_exile_radical_focus
+				keep_completed = yes
+			}
+		}
 		ai_chance = { base = 50 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.100.b
 		custom_effect_tooltip = NAM_exile_humanist_tt
-		hidden_effect = { NAM_exile_choose_humanist = yes }
+		hidden_effect = {
+			NAM_exile_choose_humanist = yes
+			load_focus_tree = {
+				tree = NAM_exile_humanist_focus
+				keep_completed = yes
+			}
+		}
 		ai_chance = { base = 50 }
 	}
 }
@@ -1852,13 +1888,18 @@ country_event = {
 	}
 }
 
-# The deadline of the great war: the capitals decide, otherwise the front.
+# The deadline of the great war: the capitals decide, otherwise the front. A
+# deadline left over from an earlier great war is ignored while the current
+# war's NAM_great_war_deadline_armed is set.
 country_event = {
 	id = ADISCORD_nam_resource_war.106
 	hidden = yes
 	is_triggered_only = yes
 
-	trigger = { NAM_great_war_active = yes }
+	trigger = {
+		NAM_great_war_active = yes
+		NOT = { has_global_flag = NAM_great_war_deadline_armed }
+	}
 	immediate = { NAM_great_war_resolve_front = yes }
 }
 
@@ -1869,6 +1910,7 @@ country_event = {
 	desc = {
 		trigger = {
 			has_global_flag = NAM_great_war_won
+			NAM_great_war_target_left = no
 			has_country_flag = NAM_exile_radical
 		}
 		text = ADISCORD_nam_resource_war.107.d_won_radical
@@ -1876,9 +1918,18 @@ country_event = {
 	desc = {
 		trigger = {
 			has_global_flag = NAM_great_war_won
+			NAM_great_war_target_left = no
 			NOT = { has_country_flag = NAM_exile_radical }
 		}
 		text = ADISCORD_nam_resource_war.107.d_won_federal
+	}
+	# The deadline front moved south while part of the coalition still stands.
+	desc = {
+		trigger = {
+			has_global_flag = NAM_great_war_won
+			NAM_great_war_target_left = yes
+		}
+		text = ADISCORD_nam_resource_war.107.d_front_won
 	}
 	desc = {
 		trigger = { NOT = { has_global_flag = NAM_great_war_won } }

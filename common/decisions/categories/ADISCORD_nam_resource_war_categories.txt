@@ -17,18 +17,16 @@ NAM_piracy = {
 	scripted_gui = ADISCORD_NAM_piracy_panel
 }
 
-# The island government decides who overthrows the namestnik, then drills
-# the exiles for the return.
+# After the island council of event .100 the exiles drill for the return,
+# whichever course took the seals, and renew an exile war that failed.
 NAM_exile_politics = {
 	icon = generic_political_pressure
 	allowed = { tag = NAM }
 	visible = {
+		NAM_exile_return_programme_open = yes
 		OR = {
-			NAM_exile_revolution_open = yes
-			AND = {
-				NAM_exile_return_programme_open = yes
-				has_completed_focus = NAM_exile_general_staff
-			}
+			NAM_exile_drill_unlocked = yes
+			has_global_flag = NAM_wor_exile_war
 		}
 	}
 	priority = 26
@@ -76,9 +74,9 @@ NAM_mobilisation = {
 	priority = 23
 }
 
-# The compromise peace and the island exile load the defeat tree; the category
-# stays open on those routes and after a standoff through the settlement flags
-# as well as through the shared main tree.
+# The compromise peace loads the defeat tree and the island exile its course
+# tree; the category stays open on those routes and after a standoff through
+# the settlement flags as well as through the shared main tree.
 NAM_national_programmes = {
 	icon = generic_industry
 	allowed = { tag = NAM }

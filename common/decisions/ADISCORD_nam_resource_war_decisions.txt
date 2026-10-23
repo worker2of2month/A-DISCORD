@@ -4203,28 +4203,9 @@ NAM_piracy = {
 	}
 }
 
-# Island exile: the overthrow of the namestnik (event .100 settles the course)
-# and the landing drill both courses share.
+# Island exile: the landing drill both courses share once the island council
+# of event .100 has chosen the course.
 NAM_exile_politics = {
-	NAM_exile_overthrow_namestnik = {
-		icon = generic_political_pressure
-		allowed = { tag = NAM }
-		visible = { NAM_exile_revolution_open = yes }
-		available = {
-			NAM_country_operable = yes
-			has_war = no
-		}
-		cost = 50
-		fire_only_once = yes
-		complete_effect = {
-			custom_effect_tooltip = NAM_exile_overthrow_namestnik_tt
-			hidden_effect = { country_event = { id = ADISCORD_nam_resource_war.100 hours = 1 } }
-		}
-		ai_will_do = {
-			base = 20
-		}
-	}
-
 	# Thirty days of landing drill on the island beaches. The junta pays 30
 	# loot, the humanists 30 corporate capital; the deposit returns in the
 	# same currency if the drill is interrupted. The piracy window starts the
@@ -4234,7 +4215,7 @@ NAM_exile_politics = {
 		allowed = { tag = NAM }
 		visible = {
 			NAM_exile_return_programme_open = yes
-			has_completed_focus = NAM_exile_general_staff
+			NAM_exile_drill_unlocked = yes
 		}
 		available = {
 			NAM_country_operable = yes
@@ -4302,6 +4283,38 @@ NAM_exile_politics = {
 		}
 		ai_will_do = {
 			base = 10
+		}
+	}
+
+	# An exile war that ended without the South Harbour or a field leaves the
+	# exile on the islands. The course's war focus is spent, so after 180 days
+	# of recovery this decision declares the next exile war on Eflor and Azhar.
+	NAM_exile_renew_war_of_return = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NAM }
+		visible = {
+			has_global_flag = NAM_wor_exile_war
+			NAM_exile_return_programme_open = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_wor_recovery_tt
+				NOT = { has_global_flag = NAM_wor_recovery }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_war_of_return_ready_tt
+				NAM_war_of_return_can_start = yes
+			}
+		}
+		cost = 50
+		fire_only_once = no
+		complete_effect = {
+			add_war_support = 0.05
+			custom_effect_tooltip = NAM_war_of_return_start_tt
+			hidden_effect = { NAM_war_of_return_start = yes }
+		}
+		ai_will_do = {
+			base = 20
 		}
 	}
 }
@@ -4669,13 +4682,17 @@ NAM_free_zones = {
 	}
 
 	# A marine formation paid with foreign capital; the landing at the South
-	# Harbour delivers it like the junta's orders.
+	# Harbour delivers it like the junta's orders. The humanists contract it
+	# through their own focus, the boards after the takeover through theirs.
 	NAM_order_marines_corp = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = NAM }
 		visible = {
 			NAM_corp_open = yes
-			has_completed_focus = NAM_hum_marine_contracts
+			OR = {
+				has_completed_focus = NAM_hum_marine_contracts
+				has_completed_focus = NAM_board_landing_contracts
+			}
 		}
 		available = {
 			NAM_country_operable = yes
@@ -4998,6 +5015,44 @@ NAM_southern_lands = {
 # south before the great war. The junta rules by garrisons and terror, the
 # humanists by federal treaties and reconstruction.
 NAM_consolidation = {
+	# A great war that ended without moving the front south leaves the
+	# consolidated south as it was. The course's great war focus is spent, so
+	# after 180 days of recovery this decision declares the next one.
+	NAM_renew_great_war = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NAM }
+		visible = {
+			NAM_consolidation_open = yes
+			has_global_flag = NAM_great_war_started
+			NOT = { NAM_great_war_active = yes }
+			NOT = { has_global_flag = NAM_great_war_won }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_great_war_recovery_tt
+				NOT = { has_global_flag = NAM_great_war_recovery }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_great_war_consolidated_tt
+				check_variable = { var = NAM_consolidation value = 70 compare = greater_than_or_equals }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_great_war_ready_tt
+				NAM_great_war_can_start = yes
+			}
+		}
+		cost = 50
+		fire_only_once = no
+		complete_effect = {
+			add_war_support = 0.05
+			custom_effect_tooltip = NAM_great_war_start_tt
+			hidden_effect = { NAM_great_war_start = yes }
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
 	# Ninety days of reinforced garrisons in the conquered states: +3
 	# consolidation and 20 treasury of upkeep every month.
 	NAM_rad_garrison_order = {
