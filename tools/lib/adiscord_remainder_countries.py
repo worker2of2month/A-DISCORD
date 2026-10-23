@@ -139,7 +139,7 @@ def country_history(tag: str, row: dict) -> str:
 
 
 def country_oob(tag: str, row: dict) -> str:
-    template = f"{tag} Territorial Brigade"
+    template = "Territorial Brigade"
     lines = [
         HEADER.rstrip(), "division_template = {", f'\tname = "{template}"',
         "\ttemplate_counter = 12",

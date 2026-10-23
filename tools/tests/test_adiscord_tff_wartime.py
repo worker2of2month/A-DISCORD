@@ -684,7 +684,7 @@ class TFFProtectorateRouteTests(unittest.TestCase):
                 ("VAL", "has_completed_focus", "VAL_Different_Views_On_Freedom"): True,
                 ("TFF", "has_character", "TFF_Colt_Ardent"): True,
                 ("VAL", "has_country_flag", "VAL_ardent_mandate_secured"): True,
-                ("VAL", "equipment", "infantry_equipment"): 2000,
+                ("VAL", "equipment", "infantry_equipment"): 18000,
                 ("VAL", "numeric", "has_political_power"): 25,
                 ("85", "is_owned_by", "TFF"): True,
                 ("85", "is_controlled_by", "TFF"): True,
@@ -695,7 +695,7 @@ class TFFProtectorateRouteTests(unittest.TestCase):
         for fact, value in (
             (("VAL", "has_country_flag", "VAL_ardent_mandate_secured"), False),
             (("VAL", "has_country_flag", "VAL_ardent_operation_paid"), True),
-            (("VAL", "equipment", "infantry_equipment"), 1999.5),
+            (("VAL", "equipment", "infantry_equipment"), 17999.5),
             (("VAL", "numeric", "has_political_power"), 24.9),
             (("TFF", "has_war", "no"), False),
             (("85", "is_controlled_by", "TFF"), False),

@@ -1625,7 +1625,7 @@ VAL_ardent_uprising_ready = {
 	has_country_flag = VAL_ardent_mandate_secured
 	NOT = { has_country_flag = VAL_ardent_operation_paid }
 	NOT = { has_political_power < 25 }
-	NOT = { has_equipment = { infantry_equipment < 2000 } }
+	NOT = { has_equipment = { infantry_equipment < 18000 } }
 	TFF = {
 		has_war = no
 		83 = {
@@ -2131,7 +2131,7 @@ VAL_nw_concession_valid = {
 VAL_nw_offer_affordable = {
 	NOT = { has_political_power < 50 }
 	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
-	NOT = { has_equipment = { infantry_equipment < 600 } }
+	NOT = { has_equipment = { infantry_equipment < 5400 } }
 }
 
 # STATE. Civilian construction belongs to its current local owner.

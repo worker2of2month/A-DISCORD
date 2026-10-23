@@ -158,7 +158,7 @@ focus_tree = {
 			unlock_decision_tooltip = VAL_nw_supply_partner
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 600
+				amount = 5400
 				producer = VAL
 			}
 		}

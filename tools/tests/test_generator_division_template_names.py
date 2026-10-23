@@ -6,6 +6,7 @@ import unittest
 from tools.builders import build_adiscord_ainholm_mandate as ainholm
 from tools.builders import build_adiscord_inner_frontier_countries as inner
 from tools.builders import build_adiscord_northern_countries as northern
+from tools.lib import adiscord_remainder_countries as remainder
 
 
 PRINTABLE_ASCII = re.compile(r"^[\x20-\x7e]+$")
@@ -18,6 +19,14 @@ TEMPLATE_REFERENCE = re.compile(r'division_template\s*=\s*"([^"]+)"')
 
 
 class GeneratorDivisionTemplateNameTests(unittest.TestCase):
+    def test_remainder_countries_reuse_a_tag_free_role_name(self) -> None:
+        for tag, row in remainder.COUNTRIES.items():
+            with self.subTest(tag=tag):
+                oob = remainder.country_oob(tag, row)
+                self.assertEqual(TEMPLATE_DEFINITION.findall(oob), ["Territorial Brigade"])
+                self.assertEqual(set(TEMPLATE_REFERENCE.findall(oob)), {"Territorial Brigade"})
+                self.assertIn("template_counter = 12", oob)
+
     def assert_printable_ascii(self, name: str) -> None:
         self.assertRegex(name, PRINTABLE_ASCII)
         self.assertNotRegex(name, CYRILLIC)

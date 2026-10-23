@@ -133,6 +133,25 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 		}
 		add_ideas = ADISCORD_nam_restitution_coalition
 		add_war_support = 0.18
+		if = {
+			limit = { NOT = { has_template = "Line Infantry Brigade" } }
+			division_template = {
+				name = "Line Infantry Brigade"
+				template_counter = 3
+				division_names_group = ADISCORD_INF_01
+				regiments = {
+					infantry = { x = 0 y = 0 }
+					infantry = { x = 0 y = 1 }
+					infantry = { x = 0 y = 2 }
+					infantry = { x = 1 y = 0 }
+					infantry = { x = 1 y = 1 }
+					infantry = { x = 1 y = 2 }
+				}
+				support = {
+					engineer = { x = 0 y = 0 }
+				}
+			}
+		}
 		load_oob = "EFL_nam_resource_war"
 		add_equipment_to_stockpile = { type = infantry_equipment amount = 30000 producer = EFL }
 		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 100 producer = EFL }
@@ -145,6 +164,19 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 		}
 		add_ideas = ADISCORD_nam_restitution_coalition
 		add_war_support = 0.22
+		if = {
+			limit = { NOT = { has_template = "Basin Levy" } }
+			division_template = {
+				name = "Basin Levy"
+				template_counter = 7
+				division_names_group = ADISCORD_INF_01
+				regiments = {
+					ADISCORD_militia = { x = 0 y = 0 }
+					ADISCORD_militia = { x = 0 y = 1 }
+					ADISCORD_militia = { x = 1 y = 0 }
+				}
+			}
+		}
 		load_oob = "AZH_nam_resource_war"
 		add_equipment_to_stockpile = { type = infantry_equipment amount = 18000 producer = AZH }
 	}
@@ -441,11 +473,11 @@ ADISCORD_nam_refresh_emergency_defence = {
 		add_equipment_to_stockpile = { type = artillery_equipment amount = 150 producer = NAM }
 		capital_scope = {
 			create_unit = {
-				division = "name = \"Last Line Guard\" division_template = \"NAM Resource Guard\" start_experience_factor = 0.20 start_equipment_factor = 1.00"
+				division = "name = \"Last Line Guard\" division_template = \"Capital Guard\" start_experience_factor = 0.20 start_equipment_factor = 1.00"
 				owner = NAM
 			}
 			create_unit = {
-				division = "name = \"Last Line Infantry\" division_template = \"NAM Resource Infantry\" start_experience_factor = 0.15 start_equipment_factor = 1.00"
+				division = "name = \"Last Line Infantry\" division_template = \"Line Infantry Brigade\" start_experience_factor = 0.15 start_equipment_factor = 1.00"
 				owner = NAM
 			}
 		}
@@ -670,9 +702,10 @@ NAM_rw_exile_evacuate = {
 	if = {
 		limit = { check_variable = { NAM_exile_to_cut > 0 } }
 		if = {
-			limit = { NOT = { has_template = "NAM Abandoned Columns" } }
+			limit = { NOT = { has_template = "Abandoned Columns" } }
 			division_template = {
-				name = "NAM Abandoned Columns"
+				name = "Abandoned Columns"
+				template_counter = 6
 				division_names_group = ADISCORD_INF_01
 				regiments = {
 					infantry = { x = 0 y = 0 }
@@ -686,6 +719,7 @@ NAM_rw_exile_evacuate = {
 		}
 		every_state = {
 			limit = {
+				check_variable = { NAM_exile_to_cut > 0 }
 				NOT = { NAM_rw_island_state = yes }
 				NOT = { is_controlled_by = NAM }
 				any_state_division = { OWNER = { tag = NAM } }
@@ -706,23 +740,27 @@ NAM_rw_exile_evacuate = {
 		691 = { NAM_rw_exile_abandon_state = yes }
 		69 = { NAM_rw_exile_abandon_state = yes }
 		692 = { NAM_rw_exile_abandon_state = yes }
-		every_state = {
-			limit = {
-				NOT = { NAM_rw_island_state = yes }
-				NOT = { state = 700 }
-				any_state_division = { OWNER = { tag = NAM } }
+		if = {
+			limit = { check_variable = { NAM_exile_to_cut > 0 } }
+			every_state = {
+				limit = {
+					check_variable = { NAM_exile_to_cut > 0 }
+					NOT = { NAM_rw_island_state = yes }
+					NOT = { state = 700 }
+					any_state_division = { OWNER = { tag = NAM } }
+				}
+				NAM_rw_exile_abandon_state = yes
 			}
-			NAM_rw_exile_abandon_state = yes
 		}
 		700 = { NAM_rw_exile_abandon_state = yes }
 		if = {
-			limit = { has_template = "NAM Abandoned Columns" }
+			limit = { has_template = "Abandoned Columns" }
 			delete_unit = {
-				division_template = "NAM Abandoned Columns"
+				division_template = "Abandoned Columns"
 				disband = no
 			}
 			delete_unit_template_and_units = {
-				division_template = "NAM Abandoned Columns"
+				division_template = "Abandoned Columns"
 				disband = no
 			}
 		}
@@ -762,15 +800,19 @@ NAM_rw_exile_evacuate = {
 	multiply_temp_variable = { var = NAM_exile_dump value = -0.65 }
 	round_temp_variable = NAM_exile_dump
 	add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = NAM_exile_dump producer = NAM }
-	set_temp_variable = { var = NAM_exile_mainland_left value = 0 }
-	every_state = {
-		limit = {
-			NOT = { NAM_rw_island_state = yes }
-			any_state_division = { OWNER = { tag = NAM } }
+	# The remaining-mainland count is diagnostic only; it needs a separate world scan.
+	if = {
+		limit = { is_debug = yes }
+		set_temp_variable = { var = NAM_exile_mainland_left value = 0 }
+		every_state = {
+			limit = {
+				NOT = { NAM_rw_island_state = yes }
+				any_state_division = { OWNER = { tag = NAM } }
+			}
+			add_to_temp_variable = { var = NAM_exile_mainland_left value = 1 }
 		}
-		add_to_temp_variable = { var = NAM_exile_mainland_left value = 1 }
+		log = "[ADISCORD][NAM][EXILE] Evacuation: divisions [?NAM_exile_divisions_before] before, [?NAM_exile_divisions_keep] carried by plan, [?NAM_exile_divisions_after] left, [?NAM_exile_divisions_lost] abandoned, [?NAM_exile_to_cut] still to abandon; mainland states still holding NAM divisions [?NAM_exile_mainland_left]; capital [NAM.Capital.GetName]; rifles dumped [?NAM_exile_rifles_dumped], heavy equipment dumped [?NAM_exile_heavy_dumped]."
 	}
-	log = "[ADISCORD][NAM][EXILE] Evacuation: divisions [?NAM_exile_divisions_before] before, [?NAM_exile_divisions_keep] carried by plan, [?NAM_exile_divisions_after] left, [?NAM_exile_divisions_lost] abandoned, [?NAM_exile_to_cut] still to abandon; mainland states still holding NAM divisions [?NAM_exile_mainland_left]; capital [NAM.Capital.GetName]; rifles dumped [?NAM_exile_rifles_dumped], heavy equipment dumped [?NAM_exile_heavy_dumped]."
 }
 
 # COUNTRY NAM. The government in exile sits on the largest island still owned.
@@ -808,12 +850,15 @@ NAM_rw_exile_move_capital = {
 # divisions here are left behind under the temporary template. The count is
 # read inside the loop body, so it falls with every division it marks.
 NAM_rw_exile_abandon_state = {
-	every_state_division = {
-		limit = { OWNER = { tag = NAM } }
-		if = {
-			limit = { check_variable = { NAM_exile_to_cut > 0 } }
-			change_division_template = { division_template = "NAM Abandoned Columns" }
-			subtract_from_temp_variable = { var = NAM_exile_to_cut value = 1 }
+	if = {
+		limit = { check_variable = { NAM_exile_to_cut > 0 } }
+		every_state_division = {
+			limit = { OWNER = { tag = NAM } }
+			if = {
+				limit = { check_variable = { NAM_exile_to_cut > 0 } }
+				change_division_template = { division_template = "Abandoned Columns" }
+				subtract_from_temp_variable = { var = NAM_exile_to_cut value = 1 }
+			}
 		}
 	}
 }
@@ -1355,6 +1400,7 @@ ADISCORD_nam_debug_damage_fields = {
 ADISCORD_nam_debug_rival_demand = {
 	NAM = {
 		clr_country_flag = NAM_rival_cooldown
+		clr_country_flag = NAM_political_petition_cooldown
 		NAM_rivals_monthly = yes
 	}
 }
@@ -1776,13 +1822,19 @@ NAM_groups_refresh = {
 # COUNTRY NAM. At most one group event is open; each group has its own cooldown.
 NAM_groups_check_events = {
 	if = {
-		limit = { NOT = { has_country_flag = NAM_grp_event_pending } }
+		limit = {
+			NOT = { has_country_flag = NAM_grp_event_pending }
+			NOT = { has_country_flag = NAM_rival_event_pending }
+			NOT = { has_country_flag = NAM_political_petition_cooldown }
+			NOT = { has_active_mission = NAM_rival_demand }
+		}
 		if = {
 			limit = {
 				check_variable = { var = NAM_grp_nam_support value = 20 compare = less_than_or_equals }
 				NOT = { has_country_flag = NAM_grp_cd_nam }
 			}
-			set_country_flag = { flag = NAM_grp_cd_nam value = 1 days = 180 }
+			set_country_flag = { flag = NAM_grp_cd_nam value = 1 days = 360 }
+			set_country_flag = { flag = NAM_political_petition_cooldown value = 1 days = 90 }
 			set_country_flag = NAM_grp_event_pending
 			set_variable = { var = NAM_grp_event_group value = 1 }
 			country_event = { id = ADISCORD_nam_groups.1 hours = 6 }
@@ -1792,7 +1844,8 @@ NAM_groups_check_events = {
 				check_variable = { var = NAM_grp_oil_support value = 20 compare = less_than_or_equals }
 				NOT = { has_country_flag = NAM_grp_cd_oil }
 			}
-			set_country_flag = { flag = NAM_grp_cd_oil value = 1 days = 180 }
+			set_country_flag = { flag = NAM_grp_cd_oil value = 1 days = 360 }
+			set_country_flag = { flag = NAM_political_petition_cooldown value = 1 days = 90 }
 			set_country_flag = NAM_grp_event_pending
 			set_variable = { var = NAM_grp_event_group value = 2 }
 			country_event = { id = ADISCORD_nam_groups.1 hours = 6 }
@@ -1802,7 +1855,8 @@ NAM_groups_check_events = {
 				check_variable = { var = NAM_grp_dist_support value = 20 compare = less_than_or_equals }
 				NOT = { has_country_flag = NAM_grp_cd_dist }
 			}
-			set_country_flag = { flag = NAM_grp_cd_dist value = 1 days = 180 }
+			set_country_flag = { flag = NAM_grp_cd_dist value = 1 days = 360 }
+			set_country_flag = { flag = NAM_political_petition_cooldown value = 1 days = 90 }
 			set_country_flag = NAM_grp_event_pending
 			set_variable = { var = NAM_grp_event_group value = 3 }
 			country_event = { id = ADISCORD_nam_groups.1 hours = 6 }
@@ -1812,7 +1866,8 @@ NAM_groups_check_events = {
 				check_variable = { var = NAM_grp_garr_support value = 20 compare = less_than_or_equals }
 				NOT = { has_country_flag = NAM_grp_cd_garr }
 			}
-			set_country_flag = { flag = NAM_grp_cd_garr value = 1 days = 180 }
+			set_country_flag = { flag = NAM_grp_cd_garr value = 1 days = 360 }
+			set_country_flag = { flag = NAM_political_petition_cooldown value = 1 days = 90 }
 			set_country_flag = NAM_grp_event_pending
 			set_variable = { var = NAM_grp_event_group value = 4 }
 			country_event = { id = ADISCORD_nam_groups.1 hours = 6 }
@@ -1822,7 +1877,8 @@ NAM_groups_check_events = {
 				check_variable = { var = NAM_grp_trade_support value = 20 compare = less_than_or_equals }
 				NOT = { has_country_flag = NAM_grp_cd_trade }
 			}
-			set_country_flag = { flag = NAM_grp_cd_trade value = 1 days = 180 }
+			set_country_flag = { flag = NAM_grp_cd_trade value = 1 days = 360 }
+			set_country_flag = { flag = NAM_political_petition_cooldown value = 1 days = 90 }
 			set_country_flag = NAM_grp_event_pending
 			set_variable = { var = NAM_grp_event_group value = 5 }
 			country_event = { id = ADISCORD_nam_groups.1 hours = 6 }
@@ -1832,7 +1888,8 @@ NAM_groups_check_events = {
 				check_variable = { var = NAM_grp_nam_support value = 85 compare = greater_than_or_equals }
 				NOT = { has_country_flag = NAM_grp_dcd_nam }
 			}
-			set_country_flag = { flag = NAM_grp_dcd_nam value = 1 days = 240 }
+			set_country_flag = { flag = NAM_grp_dcd_nam value = 1 days = 360 }
+			set_country_flag = { flag = NAM_political_petition_cooldown value = 1 days = 90 }
 			set_country_flag = NAM_grp_event_pending
 			set_variable = { var = NAM_grp_event_group value = 1 }
 			country_event = { id = ADISCORD_nam_groups.2 hours = 6 }
@@ -1842,7 +1899,8 @@ NAM_groups_check_events = {
 				check_variable = { var = NAM_grp_oil_support value = 85 compare = greater_than_or_equals }
 				NOT = { has_country_flag = NAM_grp_dcd_oil }
 			}
-			set_country_flag = { flag = NAM_grp_dcd_oil value = 1 days = 240 }
+			set_country_flag = { flag = NAM_grp_dcd_oil value = 1 days = 360 }
+			set_country_flag = { flag = NAM_political_petition_cooldown value = 1 days = 90 }
 			set_country_flag = NAM_grp_event_pending
 			set_variable = { var = NAM_grp_event_group value = 2 }
 			country_event = { id = ADISCORD_nam_groups.2 hours = 6 }
@@ -1852,7 +1910,8 @@ NAM_groups_check_events = {
 				check_variable = { var = NAM_grp_dist_support value = 85 compare = greater_than_or_equals }
 				NOT = { has_country_flag = NAM_grp_dcd_dist }
 			}
-			set_country_flag = { flag = NAM_grp_dcd_dist value = 1 days = 240 }
+			set_country_flag = { flag = NAM_grp_dcd_dist value = 1 days = 360 }
+			set_country_flag = { flag = NAM_political_petition_cooldown value = 1 days = 90 }
 			set_country_flag = NAM_grp_event_pending
 			set_variable = { var = NAM_grp_event_group value = 3 }
 			country_event = { id = ADISCORD_nam_groups.2 hours = 6 }
@@ -1862,7 +1921,8 @@ NAM_groups_check_events = {
 				check_variable = { var = NAM_grp_garr_support value = 85 compare = greater_than_or_equals }
 				NOT = { has_country_flag = NAM_grp_dcd_garr }
 			}
-			set_country_flag = { flag = NAM_grp_dcd_garr value = 1 days = 240 }
+			set_country_flag = { flag = NAM_grp_dcd_garr value = 1 days = 360 }
+			set_country_flag = { flag = NAM_political_petition_cooldown value = 1 days = 90 }
 			set_country_flag = NAM_grp_event_pending
 			set_variable = { var = NAM_grp_event_group value = 4 }
 			country_event = { id = ADISCORD_nam_groups.2 hours = 6 }
@@ -1872,7 +1932,8 @@ NAM_groups_check_events = {
 				check_variable = { var = NAM_grp_trade_support value = 85 compare = greater_than_or_equals }
 				NOT = { has_country_flag = NAM_grp_dcd_trade }
 			}
-			set_country_flag = { flag = NAM_grp_dcd_trade value = 1 days = 240 }
+			set_country_flag = { flag = NAM_grp_dcd_trade value = 1 days = 360 }
+			set_country_flag = { flag = NAM_political_petition_cooldown value = 1 days = 90 }
 			set_country_flag = NAM_grp_event_pending
 			set_variable = { var = NAM_grp_event_group value = 5 }
 			country_event = { id = ADISCORD_nam_groups.2 hours = 6 }
@@ -1885,62 +1946,78 @@ NAM_groups_check_events = {
 NAM_groups_monthly = {
 	if = {
 		limit = { has_country_flag = NAM_groups_initialized }
+		# The monthly drift has no new modifier inputs when every group is at rest.
 		if = {
-			limit = { check_variable = { var = NAM_grp_nam_support value = 50.5 compare = greater_than_or_equals } }
-			subtract_from_variable = { var = NAM_grp_nam_support value = 0.5 }
-		}
-		else_if = {
-			limit = { check_variable = { var = NAM_grp_nam_support value = 49.5 compare = less_than_or_equals } }
-			add_to_variable = { var = NAM_grp_nam_support value = 0.5 }
+			limit = {
+				OR = {
+					NOT = { check_variable = { var = NAM_grp_nam_support value = 50 compare = equals } }
+					NOT = { check_variable = { var = NAM_grp_oil_support value = 50 compare = equals } }
+					NOT = { check_variable = { var = NAM_grp_dist_support value = 50 compare = equals } }
+					NOT = { check_variable = { var = NAM_grp_garr_support value = 50 compare = equals } }
+					NOT = { check_variable = { var = NAM_grp_trade_support value = 50 compare = equals } }
+					NOT = { has_dynamic_modifier = { modifier = NAM_loyalty_dynamic } }
+				}
+			}
+			if = {
+				limit = { check_variable = { var = NAM_grp_nam_support value = 50.5 compare = greater_than_or_equals } }
+				subtract_from_variable = { var = NAM_grp_nam_support value = 0.5 }
+			}
+			else_if = {
+				limit = { check_variable = { var = NAM_grp_nam_support value = 49.5 compare = less_than_or_equals } }
+				add_to_variable = { var = NAM_grp_nam_support value = 0.5 }
+			}
+			else = {
+				set_variable = { var = NAM_grp_nam_support value = 50 }
+			}
+			if = {
+				limit = { check_variable = { var = NAM_grp_oil_support value = 50.5 compare = greater_than_or_equals } }
+				subtract_from_variable = { var = NAM_grp_oil_support value = 0.5 }
+			}
+			else_if = {
+				limit = { check_variable = { var = NAM_grp_oil_support value = 49.5 compare = less_than_or_equals } }
+				add_to_variable = { var = NAM_grp_oil_support value = 0.5 }
+			}
+			else = {
+				set_variable = { var = NAM_grp_oil_support value = 50 }
+			}
+			if = {
+				limit = { check_variable = { var = NAM_grp_dist_support value = 50.5 compare = greater_than_or_equals } }
+				subtract_from_variable = { var = NAM_grp_dist_support value = 0.5 }
+			}
+			else_if = {
+				limit = { check_variable = { var = NAM_grp_dist_support value = 49.5 compare = less_than_or_equals } }
+				add_to_variable = { var = NAM_grp_dist_support value = 0.5 }
+			}
+			else = {
+				set_variable = { var = NAM_grp_dist_support value = 50 }
+			}
+			if = {
+				limit = { check_variable = { var = NAM_grp_garr_support value = 50.5 compare = greater_than_or_equals } }
+				subtract_from_variable = { var = NAM_grp_garr_support value = 0.5 }
+			}
+			else_if = {
+				limit = { check_variable = { var = NAM_grp_garr_support value = 49.5 compare = less_than_or_equals } }
+				add_to_variable = { var = NAM_grp_garr_support value = 0.5 }
+			}
+			else = {
+				set_variable = { var = NAM_grp_garr_support value = 50 }
+			}
+			if = {
+				limit = { check_variable = { var = NAM_grp_trade_support value = 50.5 compare = greater_than_or_equals } }
+				subtract_from_variable = { var = NAM_grp_trade_support value = 0.5 }
+			}
+			else_if = {
+				limit = { check_variable = { var = NAM_grp_trade_support value = 49.5 compare = less_than_or_equals } }
+				add_to_variable = { var = NAM_grp_trade_support value = 0.5 }
+			}
+			else = {
+				set_variable = { var = NAM_grp_trade_support value = 50 }
+			}
+			NAM_groups_refresh = yes
 		}
 		else = {
-			set_variable = { var = NAM_grp_nam_support value = 50 }
+			NAM_groups_check_events = yes
 		}
-		if = {
-			limit = { check_variable = { var = NAM_grp_oil_support value = 50.5 compare = greater_than_or_equals } }
-			subtract_from_variable = { var = NAM_grp_oil_support value = 0.5 }
-		}
-		else_if = {
-			limit = { check_variable = { var = NAM_grp_oil_support value = 49.5 compare = less_than_or_equals } }
-			add_to_variable = { var = NAM_grp_oil_support value = 0.5 }
-		}
-		else = {
-			set_variable = { var = NAM_grp_oil_support value = 50 }
-		}
-		if = {
-			limit = { check_variable = { var = NAM_grp_dist_support value = 50.5 compare = greater_than_or_equals } }
-			subtract_from_variable = { var = NAM_grp_dist_support value = 0.5 }
-		}
-		else_if = {
-			limit = { check_variable = { var = NAM_grp_dist_support value = 49.5 compare = less_than_or_equals } }
-			add_to_variable = { var = NAM_grp_dist_support value = 0.5 }
-		}
-		else = {
-			set_variable = { var = NAM_grp_dist_support value = 50 }
-		}
-		if = {
-			limit = { check_variable = { var = NAM_grp_garr_support value = 50.5 compare = greater_than_or_equals } }
-			subtract_from_variable = { var = NAM_grp_garr_support value = 0.5 }
-		}
-		else_if = {
-			limit = { check_variable = { var = NAM_grp_garr_support value = 49.5 compare = less_than_or_equals } }
-			add_to_variable = { var = NAM_grp_garr_support value = 0.5 }
-		}
-		else = {
-			set_variable = { var = NAM_grp_garr_support value = 50 }
-		}
-		if = {
-			limit = { check_variable = { var = NAM_grp_trade_support value = 50.5 compare = greater_than_or_equals } }
-			subtract_from_variable = { var = NAM_grp_trade_support value = 0.5 }
-		}
-		else_if = {
-			limit = { check_variable = { var = NAM_grp_trade_support value = 49.5 compare = less_than_or_equals } }
-			add_to_variable = { var = NAM_grp_trade_support value = 0.5 }
-		}
-		else = {
-			set_variable = { var = NAM_grp_trade_support value = 50 }
-		}
-		NAM_groups_refresh = yes
 	}
 }
 
@@ -2059,6 +2136,8 @@ NAM_groups_event_refuse_demand = {
 }
 
 NAM_groups_close_event = {
+	# The answer refreshes support and may cross another group's threshold.
+	set_country_flag = { flag = NAM_political_petition_cooldown value = 1 days = 90 }
 	clr_country_flag = NAM_grp_event_pending
 	NAM_groups_refresh = yes
 }
@@ -2454,66 +2533,18 @@ NAM_order_grant_motor_technology = {
 	}
 }
 
-# COUNTRY NAM. The four fixed order templates. The first order creates them
-# and hostilities check them again before the baseline OOB and the deliveries
-# refer to them. An existing template is never redefined, and the lock keeps
-# the composition its price assumes while orders can still be placed.
+# COUNTRY NAM. Guard and line infantry use the locked starting templates.
+# Only paid coastal and mechanised orders create their distinct templates.
 # The motorised template needs the carrier programme first.
 NAM_order_ensure_templates = {
 	if = {
-		limit = { NOT = { has_template = "NAM Resource Guard" } }
+		limit = {
+			NOT = { has_template = "Coastal Battalion" }
+			check_variable = { NAM_order_coastal_paid > 0 }
+		}
 		division_template = {
-			name = "NAM Resource Guard"
-			division_names_group = ADISCORD_INF_01
-			is_locked = yes
-			regiments = {
-				infantry = { x = 0 y = 0 }
-				infantry = { x = 0 y = 1 }
-				infantry = { x = 0 y = 2 }
-				infantry = { x = 1 y = 0 }
-				infantry = { x = 1 y = 1 }
-				infantry = { x = 1 y = 2 }
-				infantry = { x = 2 y = 0 }
-				infantry = { x = 2 y = 1 }
-				infantry = { x = 2 y = 2 }
-			}
-			support = {
-				engineer = { x = 0 y = 0 }
-				artillery = { x = 0 y = 1 }
-			}
-		}
-		set_division_force_allow_recruiting = {
-			division_template = "NAM Resource Guard"
-			force_allow_recruiting = yes
-		}
-	}
-	if = {
-		limit = { NOT = { has_template = "NAM Resource Infantry" } }
-		division_template = {
-			name = "NAM Resource Infantry"
-			division_names_group = ADISCORD_INF_01
-			is_locked = yes
-			regiments = {
-				infantry = { x = 0 y = 0 }
-				infantry = { x = 0 y = 1 }
-				infantry = { x = 0 y = 2 }
-				infantry = { x = 1 y = 0 }
-				infantry = { x = 1 y = 1 }
-				infantry = { x = 1 y = 2 }
-			}
-			support = {
-				engineer = { x = 0 y = 0 }
-			}
-		}
-		set_division_force_allow_recruiting = {
-			division_template = "NAM Resource Infantry"
-			force_allow_recruiting = yes
-		}
-	}
-	if = {
-		limit = { NOT = { has_template = "NAM Coastal Battalion" } }
-		division_template = {
-			name = "NAM Coastal Battalion"
+			name = "Coastal Battalion"
+			template_counter = 6
 			division_names_group = ADISCORD_INF_01
 			is_locked = yes
 			regiments = {
@@ -2526,17 +2557,19 @@ NAM_order_ensure_templates = {
 			}
 		}
 		set_division_force_allow_recruiting = {
-			division_template = "NAM Coastal Battalion"
+			division_template = "Coastal Battalion"
 			force_allow_recruiting = yes
 		}
 	}
 	if = {
 		limit = {
-			NOT = { has_template = "NAM Motor Column" }
+			NOT = { has_template = "Motor Column" }
+			check_variable = { NAM_order_motor_paid > 0 }
 			has_tech = ADISCORD_tech_armored_carrier_program
 		}
 		division_template = {
-			name = "NAM Motor Column"
+			name = "Motor Column"
+			template_counter = 5
 			division_names_group = ADISCORD_INF_01
 			is_locked = yes
 			regiments = {
@@ -2551,7 +2584,7 @@ NAM_order_ensure_templates = {
 			}
 		}
 		set_division_force_allow_recruiting = {
-			division_template = "NAM Motor Column"
+			division_template = "Motor Column"
 			force_allow_recruiting = yes
 		}
 	}
@@ -2561,30 +2594,30 @@ NAM_order_ensure_templates = {
 # entry. The templates stay as ordinary, editable templates.
 NAM_order_unlock_templates = {
 	if = {
-		limit = { has_template = "NAM Resource Guard" }
+		limit = { has_template = "Capital Guard" }
 		set_division_template_lock = {
-			division_template = "NAM Resource Guard"
+			division_template = "Capital Guard"
 			is_locked = no
 		}
 	}
 	if = {
-		limit = { has_template = "NAM Resource Infantry" }
+		limit = { has_template = "Line Infantry Brigade" }
 		set_division_template_lock = {
-			division_template = "NAM Resource Infantry"
+			division_template = "Line Infantry Brigade"
 			is_locked = no
 		}
 	}
 	if = {
-		limit = { has_template = "NAM Coastal Battalion" }
+		limit = { has_template = "Coastal Battalion" }
 		set_division_template_lock = {
-			division_template = "NAM Coastal Battalion"
+			division_template = "Coastal Battalion"
 			is_locked = no
 		}
 	}
 	if = {
-		limit = { has_template = "NAM Motor Column" }
+		limit = { has_template = "Motor Column" }
 		set_division_template_lock = {
-			division_template = "NAM Motor Column"
+			division_template = "Motor Column"
 			is_locked = no
 		}
 	}
@@ -2599,7 +2632,7 @@ NAM_deliver_mobilisation_orders = {
 	if = {
 		limit = {
 			check_variable = { var = NAM_order_motor_paid value = 0 compare = greater_than }
-			NOT = { has_template = "NAM Motor Column" }
+			NOT = { has_template = "Motor Column" }
 		}
 		NAM_order_grant_motor_technology = yes
 		NAM_order_ensure_templates = yes
@@ -2766,7 +2799,7 @@ NAM_create_order_by_kind = {
 # STATE. Spawn one paid formation for NAM at full strength.
 NAM_create_order_guard = {
 	create_unit = {
-		division = "division_template = \"NAM Resource Guard\" start_experience_factor = 0.25 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		division = "division_template = \"Capital Guard\" start_experience_factor = 0.25 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 		owner = NAM
 		allow_spawning_on_enemy_provs = no
 	}
@@ -2774,7 +2807,7 @@ NAM_create_order_guard = {
 
 NAM_create_order_infantry = {
 	create_unit = {
-		division = "division_template = \"NAM Resource Infantry\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		division = "division_template = \"Line Infantry Brigade\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 		owner = NAM
 		allow_spawning_on_enemy_provs = no
 	}
@@ -2782,7 +2815,7 @@ NAM_create_order_infantry = {
 
 NAM_create_order_motor = {
 	create_unit = {
-		division = "division_template = \"NAM Motor Column\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		division = "division_template = \"Motor Column\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 		owner = NAM
 		allow_spawning_on_enemy_provs = no
 	}
@@ -2790,7 +2823,7 @@ NAM_create_order_motor = {
 
 NAM_create_order_coastal = {
 	create_unit = {
-		division = "division_template = \"NAM Coastal Battalion\" start_experience_factor = 0.15 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		division = "division_template = \"Coastal Battalion\" start_experience_factor = 0.15 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 		owner = NAM
 		allow_spawning_on_enemy_provs = no
 	}
@@ -2921,10 +2954,20 @@ NAM_seal_discipline_clamp = {
 	}
 	if = {
 		limit = { has_dynamic_modifier = { modifier = NAM_seal_discipline_dynamic } }
-		set_variable = { var = NAM_seal_org_factor value = NAM_seal_discipline }
-		subtract_from_variable = { var = NAM_seal_org_factor value = 50 }
-		divide_variable = { var = NAM_seal_org_factor value = 1000 }
-		force_update_dynamic_modifier = yes
+		set_temp_variable = { var = NAM_seal_org_next value = NAM_seal_discipline }
+		subtract_from_temp_variable = { var = NAM_seal_org_next value = 50 }
+		divide_temp_variable = { var = NAM_seal_org_next value = 1000 }
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = NAM_seal_org_factor }
+					NOT = { check_variable = { var = NAM_seal_org_factor value = NAM_seal_org_next compare = equals } }
+				}
+			}
+			set_variable = { var = NAM_seal_org_factor value = NAM_seal_org_next }
+			force_update_dynamic_modifier = yes
+		}
+		# A newly reached event threshold still matters when the modifier is unchanged.
 		if = {
 			limit = { ADISCORD_nam_resource_war_active = yes }
 			if = {
@@ -3819,7 +3862,7 @@ NAM_ladder_declare_independence = {
 			set_variable = { var = NAM_underground value = 20 }
 		}
 		# The first rival demand follows a full cycle after the declaration.
-		set_country_flag = { flag = NAM_rival_cooldown value = 1 days = 120 }
+		set_country_flag = { flag = NAM_rival_cooldown value = 1 days = 240 }
 		ADISCORD_economy_mark_dirty = yes
 		# Event .80 announces the vanished centre and then opens the
 		# declaration event ADISCORD_nam_groups.12.
@@ -3949,7 +3992,7 @@ NAM_rival_pick_weakest = {
 	}
 }
 
-# COUNTRY NAM. The 120-day demand cycle and the coup window of the Night of
+# COUNTRY NAM. The 240-day demand cycle and the coup window of the Night of
 # Seals. An ending of the ladder settles the order and closes both.
 NAM_rivals_monthly = {
 	if = {
@@ -3974,7 +4017,8 @@ NAM_rivals_monthly = {
 		NAM_rival_pick_weakest = yes
 		if = {
 			limit = { check_variable = { NAM_rival_current > 0 } }
-			set_country_flag = { flag = NAM_rival_cooldown value = 1 days = 120 }
+			set_country_flag = { flag = NAM_rival_cooldown value = 1 days = 240 }
+			set_country_flag = { flag = NAM_political_petition_cooldown value = 1 days = 90 }
 			set_country_flag = NAM_rival_event_pending
 			country_event = { id = ADISCORD_nam_groups.20 hours = 6 }
 		}
@@ -7085,7 +7129,7 @@ NAM_pirate_raid_prize = {
 	NAM_pirate_loot_add = yes
 	NAM_pirate_notoriety_add = yes
 	add_fuel = 2000
-	add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = NAM }
+	add_equipment_to_stockpile = { type = infantry_equipment amount = 9000 producer = NAM }
 	add_equipment_to_stockpile = { type = convoy_1 amount = 3 producer = NAM }
 	if = {
 		limit = { check_variable = { NAM_pirate_victims > 1 } }
@@ -7236,9 +7280,10 @@ NAM_marine_ensure_template = {
 		}
 	}
 	if = {
-		limit = { NOT = { has_template = "NAM Island Marines" } }
+		limit = { NOT = { has_template = "Island Marines" } }
 		division_template = {
-			name = "NAM Island Marines"
+			name = "Island Marines"
+			template_counter = 34
 			division_names_group = ADISCORD_INF_01
 			is_locked = yes
 			regiments = {
@@ -7252,7 +7297,7 @@ NAM_marine_ensure_template = {
 			}
 		}
 		set_division_force_allow_recruiting = {
-			division_template = "NAM Island Marines"
+			division_template = "Island Marines"
 			force_allow_recruiting = yes
 		}
 	}
@@ -7261,9 +7306,9 @@ NAM_marine_ensure_template = {
 # COUNTRY NAM. No marine order remains open.
 NAM_marine_unlock_template = {
 	if = {
-		limit = { has_template = "NAM Island Marines" }
+		limit = { has_template = "Island Marines" }
 		set_division_template_lock = {
-			division_template = "NAM Island Marines"
+			division_template = "Island Marines"
 			is_locked = no
 		}
 	}
@@ -7363,7 +7408,7 @@ NAM_wor_revenge_landing = {
 			add_to_temp_variable = { var = NAM_landing_index value = 1 }
 			700 = {
 				create_unit = {
-					division = "division_template = \"NAM Island Marines\" start_experience_factor = 0.30 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					division = "division_template = \"Island Marines\" start_experience_factor = 0.30 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 					owner = NAM
 					prioritize_location = 16716
 					allow_spawning_on_enemy_provs = no
@@ -7376,7 +7421,7 @@ NAM_wor_revenge_landing = {
 			add_to_temp_variable = { var = NAM_landing_index value = 1 }
 			capital_scope = {
 				create_unit = {
-					division = "division_template = \"NAM Island Marines\" start_experience_factor = 0.30 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					division = "division_template = \"Island Marines\" start_experience_factor = 0.30 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 					owner = NAM
 					allow_spawning_on_enemy_provs = no
 				}

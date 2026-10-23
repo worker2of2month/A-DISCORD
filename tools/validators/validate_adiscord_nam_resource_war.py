@@ -518,9 +518,9 @@ def check_ladder(
     check(
         "has_country_flag = NAM_coup_pending" in rivals_monthly
         and "clr_country_flag = NAM_coup_pending" in rivals_monthly
-        and "days = 120" in rivals_monthly
+        and "flag = NAM_rival_cooldown value = 1 days = 240" in rivals_monthly
         and "id = ADISCORD_nam_groups.20" in rivals_monthly,
-        "the rival cycle must run every 120 days and consume the Night of Seals",
+        "the rival cycle must wait 240 days and consume the Night of Seals",
     )
     coup = named_block(effects, "NAM_coup_install")
     check(
@@ -1044,7 +1044,7 @@ def check_colony_and_exile(
     )
     check(
         "check_variable = { NAM_exile_to_cut > 0 }" in named_block(abandon, "if")
-        and 'change_division_template = { division_template = "NAM Abandoned Columns" }' in abandon
+        and 'change_division_template = { division_template = "Abandoned Columns" }' in abandon
         and "OWNER = { tag = NAM }" in abandon
         and embark.count("teleport_armies = {") == 7
         and embark.count("limit = { tag = NAM }") == 7
@@ -1404,16 +1404,13 @@ def main() -> int:
                 re.DOTALL,
             )
         )
-        # NAM's baseline OOB carries units only; the order templates are
-        # created by NAM_order_ensure_templates before the OOB loads.
-        if relative == "history/units/NAM_resource_war.txt":
+        # The three national armies reuse their campaign-start templates.
+        tag = Path(relative).stem.split("_", 1)[0]
+        if tag in {"NAM", "EFL", "AZH"}:
             defined_templates |= set(
                 re.findall(
                     r'division_template\s*=\s*\{\s*name\s*=\s*"([^"]+)"',
-                    named_block(
-                        sources["common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"],
-                        "NAM_order_ensure_templates",
-                    ),
+                    sources[f"history/units/{tag}.txt"],
                 )
             )
         referenced_templates = set(
@@ -2761,18 +2758,56 @@ def main() -> int:
         == [4912, 8058, 2299],
         "NAM wartime baseline must be one guard and two infantry divisions on the field fronts",
     )
-    for template in (
-        "NAM Resource Guard",
-        "NAM Resource Infantry",
-        "NAM Motor Column",
-        "NAM Coastal Battalion",
-    ):
+    starting_templates = sources["history/units/NAM.txt"]
+    order_templates = named_block(effects, "NAM_order_ensure_templates")
+    unlock_templates = named_block(effects, "NAM_order_unlock_templates")
+    template_sources = (
+        ("Capital Guard", starting_templates, 78, 9, ("engineer", "artillery")),
+        ("Line Infantry Brigade", starting_templates, 3, 6, ("engineer",)),
+        ("Motor Column", order_templates, 5, 4, ("engineer", "artillery")),
+        ("Coastal Battalion", order_templates, 6, 3, ("artillery",)),
+    )
+    for template, owner, counter, battalions, support in template_sources:
+        definitions = [
+            block for block in typed_blocks(owner, "division_template")
+            if f'name = "{template}"' in block
+        ]
+        check(len(definitions) == 1, f"{template} must have one owning definition")
+        definition = definitions[0] if definitions else ""
         check(
-            f'name = "{template}"' in named_block(effects, "NAM_order_ensure_templates")
+            f'template_counter = {counter}' in definition
+            and "is_locked = yes" in definition
             and f'\\"{template}\\"' in effects
+            and f'division_template = "{template}"' in unlock_templates
             and f'name = "{template}"' not in nam_war_oob,
-            f"order template {template} is not defined once by NAM_order_ensure_templates or not spawned by delivery",
+            f"{template} must keep its distinct icon, fixed order composition and settlement unlock",
         )
+        unit = "ADISCORD_mechanized_infantry" if template == "Motor Column" else "infantry"
+        regiments = named_block(definition, "regiments")
+        companies = named_block(definition, "support")
+        check(
+            regiments.count(f"{unit} = {{") == battalions
+            and regiments.count("x =") == battalions
+            and all(f"{company} = {{" in companies for company in support)
+            and companies.count("x =") == len(support),
+            f"{template} must retain the composition covered by its fixed order price",
+        )
+        if owner == starting_templates:
+            check(
+                "force_allow_recruiting = yes" in definition
+                and f'name = "{template}"' not in order_templates,
+                f"{template} must remain recruitable and be reused without a mobilisation duplicate",
+            )
+    check(
+        "check_variable = { NAM_order_coastal_paid > 0 }" in order_templates
+        and "check_variable = { NAM_order_motor_paid > 0 }" in order_templates
+        and "template_counter = 34" in named_block(effects, "NAM_marine_ensure_template"),
+        "specialist templates must be created for paid orders and marines must have their own icon",
+    )
+    check(
+        not re.search(r'name = "NAM (?:Resource|Coastal|Motor|Island)', effects),
+        "NAM templates must not expose a technical country prefix",
+    )
 
     expected_victory_points = {
         67: {6099: 3},
@@ -2923,8 +2958,8 @@ def main() -> int:
     ):
         value = re.search(rf'(?m)^\s*{re.escape(veter_key)}:\d*\s*"(.*)"\s*$', loc)
         check(
-            value is not None and "Ярослав Ветер" in value.group(1),
-            f"{veter_key} must name Yaroslav Veter",
+            value is not None and "Ярослав Вебер" in value.group(1),
+            f"{veter_key} must name Yaroslav Weber",
         )
 
     check_oil_monopoly(

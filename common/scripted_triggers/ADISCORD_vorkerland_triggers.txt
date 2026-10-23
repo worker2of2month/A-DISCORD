@@ -1883,7 +1883,7 @@ ADISCORD_vorkerland_vad_charter_slot_free = {
 
 ADISCORD_vorkerland_tva_trial_affordable = {
 	NOT = { has_political_power < 30 }
-	NOT = { has_equipment = { infantry_equipment < 1000 } }
+	NOT = { has_equipment = { infantry_equipment < 9000 } }
 }
 
 # --- stalemate_triggers ---
@@ -2318,7 +2318,7 @@ ADISCORD_vorkerland_prep_offer_valid = {
 			FROM = {
 				NOT = { has_political_power < 35 }
 				NOT = {
-					has_equipment = { infantry_equipment < 1500 }
+					has_equipment = { infantry_equipment < 13500 }
 				}
 			}
 		}
@@ -2345,7 +2345,7 @@ ADISCORD_vorkerland_prep_offer_valid = {
 			FROM = {
 				NOT = { has_political_power < 35 }
 				NOT = {
-					has_equipment = { infantry_equipment < 2000 }
+					has_equipment = { infantry_equipment < 18000 }
 				}
 			}
 		}

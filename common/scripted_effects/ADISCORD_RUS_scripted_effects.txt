@@ -1687,7 +1687,7 @@ RUS_war_spoils_deliver = {
 	multiply_temp_variable = { var = RUS_war_spoils_cash value = RUS_war_spoils_share }
 	add_to_variable = { var = ADISCORD_economy_treasury value = RUS_war_spoils_cash }
 	add_to_variable = { var = ADISCORD_economy_current_month_action_income value = RUS_war_spoils_cash }
-	set_temp_variable = { var = RUS_war_spoils_rifles value = 3000 }
+	set_temp_variable = { var = RUS_war_spoils_rifles value = 27000 }
 	multiply_temp_variable = { var = RUS_war_spoils_rifles value = RUS_war_spoils_share }
 	add_equipment_to_stockpile = { type = infantry_equipment amount = RUS_war_spoils_rifles producer = RUS }
 	set_temp_variable = { var = RUS_war_spoils_men value = 1500 }
@@ -1719,6 +1719,7 @@ RUS_levy_raise = {
 			limit = { NOT = { has_template = "Aimaq Levy" } }
 			division_template = {
 				name = "Aimaq Levy"
+				template_counter = 7
 				division_names_group = ADISCORD_INF_01
 				is_locked = yes
 				regiments = {
@@ -4947,6 +4948,7 @@ RUS_lab_spawn_zeppelin = {
 		limit = { NOT = { has_template = "Khanate Airship" } }
 		division_template = {
 			name = "Khanate Airship"
+			template_counter = 37
 			override_model = ADISCORD_zeppelin_entity
 			is_locked = yes
 			regiments = {
@@ -5192,12 +5194,12 @@ RUS_bunker_weekly_supply = {
 			}
 			if = {
 				limit = { check_variable = { var = RUS_bunker_layer_3 value = 1 compare = equals } }
-				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 4 producer = RUS }
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 36 producer = RUS }
 				add_equipment_to_stockpile = { type = support_equipment amount = 1 producer = RUS }
 			}
 			if = {
 				limit = { check_variable = { var = RUS_bunker_layer_3 value = 2 compare = equals } }
-				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 10 producer = RUS }
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 90 producer = RUS }
 				add_equipment_to_stockpile = { type = support_equipment amount = 2 producer = RUS }
 			}
 			if = {

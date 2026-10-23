@@ -1000,12 +1000,12 @@
     {
       "key": "oob_azh_nam_resource_war_azh_basin_levy",
       "source": {
-        "kind": "oob",
-        "path": "history/units/AZH_nam_resource_war.txt",
-        "owner": "AZH"
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+        "owner": "script"
       },
-      "technical_name": "AZH Basin Levy",
-      "display_name": "AZH Basin Levy",
+      "technical_name": "Basin Levy",
+      "display_name": "Basin Levy",
       "legacy_names": [],
       "regiments": [
         {
@@ -2623,8 +2623,8 @@
         "path": "history/units/CSL_vorkerland_collapse.txt",
         "owner": "CSL"
       },
-      "technical_name": "CSL Municipal Militia",
-      "display_name": "CSL Municipal Militia",
+      "technical_name": "Municipal Militia",
+      "display_name": "Municipal Militia",
       "legacy_names": [],
       "regiments": [
         {
@@ -2964,8 +2964,8 @@
         "path": "history/units/DVA_vorkerland_collapse.txt",
         "owner": "DVA"
       },
-      "technical_name": "DVA Collapse Militia",
-      "display_name": "DVA Collapse Militia",
+      "technical_name": "Collapse Militia",
+      "display_name": "Collapse Militia",
       "legacy_names": [],
       "regiments": [
         {
@@ -3009,8 +3009,8 @@
         "path": "history/units/EBA_vorkerland_collapse.txt",
         "owner": "EBA"
       },
-      "technical_name": "EBA Collapse Militia",
-      "display_name": "EBA Collapse Militia",
+      "technical_name": "Collapse Militia",
+      "display_name": "Collapse Militia",
       "legacy_names": [],
       "regiments": [
         {
@@ -3257,12 +3257,12 @@
     {
       "key": "oob_efl_nam_resource_war_efl_restoration_brigade",
       "source": {
-        "kind": "oob",
-        "path": "history/units/EFL_nam_resource_war.txt",
-        "owner": "EFL"
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+        "owner": "script"
       },
-      "technical_name": "EFL Restoration Brigade",
-      "display_name": "EFL Restoration Brigade",
+      "technical_name": "Line Infantry Brigade",
+      "display_name": "Line Infantry Brigade",
       "legacy_names": [],
       "regiments": [
         {
@@ -3331,8 +3331,8 @@
         "path": "history/units/EGC_vorkerland_collapse.txt",
         "owner": "EGC"
       },
-      "technical_name": "EGC Collapse Militia",
-      "display_name": "EGC Collapse Militia",
+      "technical_name": "Collapse Militia",
+      "display_name": "Collapse Militia",
       "legacy_names": [],
       "regiments": [
         {
@@ -3430,8 +3430,8 @@
         "path": "history/units/ERT_vorkerland_collapse.txt",
         "owner": "ERT"
       },
-      "technical_name": "ERT Collapse Militia",
-      "display_name": "ERT Collapse Militia",
+      "technical_name": "Collapse Militia",
+      "display_name": "Collapse Militia",
       "legacy_names": [],
       "regiments": [
         {
@@ -3528,8 +3528,8 @@
         "path": "history/units/EYR_vorkerland_collapse.txt",
         "owner": "EYR"
       },
-      "technical_name": "EYR Collapse Militia",
-      "display_name": "EYR Collapse Militia",
+      "technical_name": "Collapse Militia",
+      "display_name": "Collapse Militia",
       "legacy_names": [],
       "regiments": [
         {
@@ -3716,8 +3716,8 @@
         "path": "history/units/IBA_vorkerland_collapse.txt",
         "owner": "IBA"
       },
-      "technical_name": "IBA Border Rifles",
-      "display_name": "IBA Border Rifles",
+      "technical_name": "Border Rifles",
+      "display_name": "Border Rifles",
       "legacy_names": [],
       "regiments": [
         {
@@ -3761,8 +3761,8 @@
         "path": "history/units/IBL_vorkerland_collapse.txt",
         "owner": "IBL"
       },
-      "technical_name": "IBL Frontier Brigade",
-      "display_name": "IBL Frontier Brigade",
+      "technical_name": "Frontier Brigade",
+      "display_name": "Frontier Brigade",
       "legacy_names": [],
       "regiments": [
         {
@@ -3806,8 +3806,8 @@
         "path": "history/units/IRT_vorkerland_collapse.txt",
         "owner": "IRT"
       },
-      "technical_name": "IRT Collapse Militia",
-      "display_name": "IRT Collapse Militia",
+      "technical_name": "Collapse Militia",
+      "display_name": "Collapse Militia",
       "legacy_names": [],
       "regiments": [
         {
@@ -4532,8 +4532,8 @@
         "path": "history/units/MLR_vorkerland_collapse.txt",
         "owner": "MLR"
       },
-      "technical_name": "MLR Collapse Militia",
-      "display_name": "MLR Collapse Militia",
+      "technical_name": "Collapse Militia",
+      "display_name": "Collapse Militia",
       "legacy_names": [],
       "regiments": [
         {
@@ -4908,6 +4908,10 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_nam_line_infantry_brigade"
+      },
+      "definition_metadata": {
+        "is_locked": true,
+        "force_allow_recruiting": true
       }
     },
     {
@@ -5000,188 +5004,24 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_nam_capital_guard"
+      },
+      "definition_metadata": {
+        "is_locked": true,
+        "force_allow_recruiting": true
       }
     },
     {
-      "key": "script_adiscord_nam_resource_war_effects_nam_resource_guard",
+      "key": "script_adiscord_nam_resource_war_effects_coastal_battalion",
       "source": {
         "kind": "script",
         "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
         "owner": "script"
       },
-      "technical_name": "NAM Resource Guard",
+      "technical_name": "Coastal Battalion",
       "definition_metadata": {
         "is_locked": true
       },
-      "display_name": "NAM Resource Guard",
-      "legacy_names": [],
-      "regiments": [
-        {
-          "type": "infantry",
-          "x": 0,
-          "y": 0
-        },
-        {
-          "type": "infantry",
-          "x": 0,
-          "y": 1
-        },
-        {
-          "type": "infantry",
-          "x": 0,
-          "y": 2
-        },
-        {
-          "type": "infantry",
-          "x": 1,
-          "y": 0
-        },
-        {
-          "type": "infantry",
-          "x": 1,
-          "y": 1
-        },
-        {
-          "type": "infantry",
-          "x": 1,
-          "y": 2
-        },
-        {
-          "type": "infantry",
-          "x": 2,
-          "y": 0
-        },
-        {
-          "type": "infantry",
-          "x": 2,
-          "y": 1
-        },
-        {
-          "type": "infantry",
-          "x": 2,
-          "y": 2
-        }
-      ],
-      "support": [
-        {
-          "type": "engineer",
-          "x": 0,
-          "y": 0
-        },
-        {
-          "type": "artillery",
-          "x": 0,
-          "y": 1
-        }
-      ],
-      "computed": {
-        "organization": 47.431818,
-        "manpower": 9600,
-        "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72,
-          "artillery_equipment": 12,
-          "infantry_equipment": 8640,
-          "support_equipment": 30
-        },
-        "supply": 0.72
-      },
-      "equipment_availability": {
-        "ADISCORD_squad_weapons_equipment": true,
-        "artillery_equipment": true,
-        "infantry_equipment": true,
-        "support_equipment": true
-      },
-      "ai_role": "line",
-      "replacement_path": {
-        "kind": "retain",
-        "target": "script_adiscord_nam_resource_war_effects_nam_resource_guard"
-      }
-    },
-    {
-      "key": "script_adiscord_nam_resource_war_effects_nam_resource_infantry",
-      "source": {
-        "kind": "script",
-        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
-        "owner": "script"
-      },
-      "technical_name": "NAM Resource Infantry",
-      "definition_metadata": {
-        "is_locked": true
-      },
-      "display_name": "NAM Resource Infantry",
-      "legacy_names": [],
-      "regiments": [
-        {
-          "type": "infantry",
-          "x": 0,
-          "y": 0
-        },
-        {
-          "type": "infantry",
-          "x": 0,
-          "y": 1
-        },
-        {
-          "type": "infantry",
-          "x": 0,
-          "y": 2
-        },
-        {
-          "type": "infantry",
-          "x": 1,
-          "y": 0
-        },
-        {
-          "type": "infantry",
-          "x": 1,
-          "y": 1
-        },
-        {
-          "type": "infantry",
-          "x": 1,
-          "y": 2
-        }
-      ],
-      "support": [
-        {
-          "type": "engineer",
-          "x": 0,
-          "y": 0
-        }
-      ],
-      "computed": {
-        "organization": 50.642857,
-        "manpower": 6300,
-        "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48,
-          "infantry_equipment": 5670,
-          "support_equipment": 30
-        },
-        "supply": 0.38
-      },
-      "equipment_availability": {
-        "ADISCORD_squad_weapons_equipment": true,
-        "infantry_equipment": true,
-        "support_equipment": true
-      },
-      "ai_role": "line",
-      "replacement_path": {
-        "kind": "retain",
-        "target": "script_adiscord_nam_resource_war_effects_nam_resource_infantry"
-      }
-    },
-    {
-      "key": "script_adiscord_nam_resource_war_effects_nam_coastal_battalion",
-      "source": {
-        "kind": "script",
-        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
-        "owner": "script"
-      },
-      "technical_name": "NAM Coastal Battalion",
-      "definition_metadata": {
-        "is_locked": true
-      },
-      "display_name": "NAM Coastal Battalion",
+      "display_name": "Coastal Battalion",
       "legacy_names": [],
       "regiments": [
         {
@@ -5225,21 +5065,21 @@
       "ai_role": "line",
       "replacement_path": {
         "kind": "retain",
-        "target": "script_adiscord_nam_resource_war_effects_nam_coastal_battalion"
+        "target": "script_adiscord_nam_resource_war_effects_coastal_battalion"
       }
     },
     {
-      "key": "script_adiscord_nam_resource_war_effects_nam_motor_column",
+      "key": "script_adiscord_nam_resource_war_effects_motor_column",
       "source": {
         "kind": "script",
         "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
         "owner": "script"
       },
-      "technical_name": "NAM Motor Column",
+      "technical_name": "Motor Column",
       "definition_metadata": {
         "is_locked": true
       },
-      "display_name": "NAM Motor Column",
+      "display_name": "Motor Column",
       "legacy_names": [],
       "regiments": [
         {
@@ -5297,21 +5137,21 @@
       "ai_role": "line",
       "replacement_path": {
         "kind": "retain",
-        "target": "script_adiscord_nam_resource_war_effects_nam_motor_column"
+        "target": "script_adiscord_nam_resource_war_effects_motor_column"
       }
     },
     {
-      "key": "script_adiscord_nam_resource_war_effects_nam_island_marines",
+      "key": "script_adiscord_nam_resource_war_effects_island_marines",
       "source": {
         "kind": "script",
         "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
         "owner": "script"
       },
-      "technical_name": "NAM Island Marines",
+      "technical_name": "Island Marines",
       "definition_metadata": {
         "is_locked": true
       },
-      "display_name": "NAM Island Marines",
+      "display_name": "Island Marines",
       "legacy_names": [],
       "regiments": [
         {
@@ -5360,18 +5200,18 @@
       "ai_role": "line",
       "replacement_path": {
         "kind": "retain",
-        "target": "script_adiscord_nam_resource_war_effects_nam_island_marines"
+        "target": "script_adiscord_nam_resource_war_effects_island_marines"
       }
     },
     {
-      "key": "script_adiscord_nam_resource_war_effects_nam_abandoned_columns",
+      "key": "script_adiscord_nam_resource_war_effects_abandoned_columns",
       "source": {
         "kind": "script",
         "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
         "owner": "script"
       },
-      "technical_name": "NAM Abandoned Columns",
-      "display_name": "NAM Abandoned Columns",
+      "technical_name": "Abandoned Columns",
+      "display_name": "Abandoned Columns",
       "legacy_names": [],
       "regiments": [
         {
@@ -5415,7 +5255,7 @@
       "ai_role": "line",
       "replacement_path": {
         "kind": "retain",
-        "target": "script_adiscord_nam_resource_war_effects_nam_abandoned_columns"
+        "target": "script_adiscord_nam_resource_war_effects_abandoned_columns"
       }
     },
     {
@@ -6367,8 +6207,8 @@
         "path": "history/units/PSD_vorkerland_collapse.txt",
         "owner": "PSD"
       },
-      "technical_name": "PSD Collapse Militia",
-      "display_name": "PSD Collapse Militia",
+      "technical_name": "Collapse Militia",
+      "display_name": "Collapse Militia",
       "legacy_names": [],
       "regiments": [
         {
@@ -7315,8 +7155,8 @@
         "path": "history/units/RZA_vorkerland_collapse.txt",
         "owner": "RZA"
       },
-      "technical_name": "RZA Collapse Militia",
-      "display_name": "RZA Collapse Militia",
+      "technical_name": "Collapse Militia",
+      "display_name": "Collapse Militia",
       "legacy_names": [],
       "regiments": [
         {
@@ -7413,8 +7253,8 @@
         "path": "history/units/SCA_vorkerland_collapse.txt",
         "owner": "SCA"
       },
-      "technical_name": "SCA Collapse Militia",
-      "display_name": "SCA Collapse Militia",
+      "technical_name": "Collapse Militia",
+      "display_name": "Collapse Militia",
       "legacy_names": [],
       "regiments": [
         {
@@ -7819,8 +7659,8 @@
         "path": "history/units/SLA_vorkerland_collapse.txt",
         "owner": "SLA"
       },
-      "technical_name": "SLA Collapse Militia",
-      "display_name": "SLA Collapse Militia",
+      "technical_name": "Collapse Militia",
+      "display_name": "Collapse Militia",
       "legacy_names": [],
       "regiments": [
         {
@@ -8194,8 +8034,8 @@
         "path": "history/units/SRA_vorkerland_collapse.txt",
         "owner": "SRA"
       },
-      "technical_name": "SRA Collapse Militia",
-      "display_name": "SRA Collapse Militia",
+      "technical_name": "Collapse Militia",
+      "display_name": "Collapse Militia",
       "legacy_names": [],
       "regiments": [
         {
@@ -8769,8 +8609,8 @@
           "owner": "script"
         }
       ],
-      "technical_name": "TGD Urban Guard",
-      "display_name": "TGD Urban Guard",
+      "technical_name": "Urban Guard",
+      "display_name": "Urban Guard",
       "legacy_names": [],
       "regiments": [
         {
@@ -9075,8 +8915,8 @@
           "owner": "script"
         }
       ],
-      "technical_name": "TVA Collapse Militia",
-      "display_name": "TVA Collapse Militia",
+      "technical_name": "Collapse Militia",
+      "display_name": "Collapse Militia",
       "legacy_names": [],
       "regiments": [
         {
@@ -9127,8 +8967,8 @@
           "owner": "script"
         }
       ],
-      "technical_name": "TVA Infiltration Cell",
-      "display_name": "TVA Infiltration Cell",
+      "technical_name": "Infiltration Cell",
+      "display_name": "Infiltration Cell",
       "legacy_names": [],
       "regiments": [
         {
@@ -9167,8 +9007,8 @@
         "path": "history/units/TVA_vorkerland_collapse.txt",
         "owner": "TVA"
       },
-      "technical_name": "TVA Mobile Test Group",
-      "display_name": "TVA Mobile Test Group",
+      "technical_name": "Mobile Test Group",
+      "display_name": "Mobile Test Group",
       "legacy_names": [],
       "regiments": [
         {
@@ -10461,8 +10301,8 @@
         "path": "history/units/WPA_vorkerland_collapse.txt",
         "owner": "WPA"
       },
-      "technical_name": "WPA Collapse Militia",
-      "display_name": "WPA Collapse Militia",
+      "technical_name": "Collapse Militia",
+      "display_name": "Collapse Militia",
       "legacy_names": [],
       "regiments": [
         {
@@ -10513,8 +10353,8 @@
           "owner": "script"
         }
       ],
-      "technical_name": "WPS Collapse Militia",
-      "display_name": "WPS Collapse Militia",
+      "technical_name": "Collapse Militia",
+      "display_name": "Collapse Militia",
       "legacy_names": [],
       "regiments": [
         {
@@ -10902,8 +10742,8 @@
         "path": "history/units/WTD_vorkerland_collapse.txt",
         "owner": "WTD"
       },
-      "technical_name": "WTD Technical Guard",
-      "display_name": "WTD Technical Guard",
+      "technical_name": "Technical Guard",
+      "display_name": "Technical Guard",
       "legacy_names": [],
       "regiments": [
         {
@@ -12590,8 +12430,8 @@
         "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
         "owner": "script"
       },
-      "technical_name": "Kefreyt Reserve Infantry",
-      "display_name": "Kefreyt Reserve Infantry",
+      "technical_name": "Kefreyt Contract Infantry",
+      "display_name": "Kefreyt Contract Infantry",
       "legacy_names": [],
       "regiments": [
         {
@@ -12651,10 +12491,6 @@
       "replacement_path": {
         "kind": "retain",
         "target": "val_focus_reserve_infantry"
-      },
-      "definition_metadata": {
-        "is_locked": true,
-        "force_allow_recruiting": true
       }
     },
     {
@@ -13324,8 +13160,8 @@
         "path": "history/units/PIO.txt",
         "owner": "PIO"
       },
-      "technical_name": "PIO Territorial Brigade",
-      "display_name": "PIO Territorial Brigade",
+      "technical_name": "Territorial Brigade",
+      "display_name": "Territorial Brigade",
       "legacy_names": [],
       "regiments": [
         {
@@ -13371,8 +13207,8 @@
         "path": "history/units/MRV.txt",
         "owner": "MRV"
       },
-      "technical_name": "MRV Territorial Brigade",
-      "display_name": "MRV Territorial Brigade",
+      "technical_name": "Territorial Brigade",
+      "display_name": "Territorial Brigade",
       "legacy_names": [],
       "regiments": [
         {
@@ -13418,8 +13254,8 @@
         "path": "history/units/RVN.txt",
         "owner": "RVN"
       },
-      "technical_name": "RVN Territorial Brigade",
-      "display_name": "RVN Territorial Brigade",
+      "technical_name": "Territorial Brigade",
+      "display_name": "Territorial Brigade",
       "legacy_names": [],
       "regiments": [
         {
@@ -13465,8 +13301,8 @@
         "path": "history/units/SFR.txt",
         "owner": "SFR"
       },
-      "technical_name": "SFR Territorial Brigade",
-      "display_name": "SFR Territorial Brigade",
+      "technical_name": "Territorial Brigade",
+      "display_name": "Territorial Brigade",
       "legacy_names": [],
       "regiments": [
         {
@@ -13512,8 +13348,8 @@
         "path": "history/units/FLR.txt",
         "owner": "FLR"
       },
-      "technical_name": "FLR Territorial Brigade",
-      "display_name": "FLR Territorial Brigade",
+      "technical_name": "Territorial Brigade",
+      "display_name": "Territorial Brigade",
       "legacy_names": [],
       "regiments": [
         {
@@ -13559,8 +13395,8 @@
         "path": "history/units/PRR.txt",
         "owner": "PRR"
       },
-      "technical_name": "PRR Territorial Brigade",
-      "display_name": "PRR Territorial Brigade",
+      "technical_name": "Territorial Brigade",
+      "display_name": "Territorial Brigade",
       "legacy_names": [],
       "regiments": [
         {
@@ -13606,8 +13442,8 @@
         "path": "history/units/ULV.txt",
         "owner": "ULV"
       },
-      "technical_name": "ULV Territorial Brigade",
-      "display_name": "ULV Territorial Brigade",
+      "technical_name": "Territorial Brigade",
+      "display_name": "Territorial Brigade",
       "legacy_names": [],
       "regiments": [
         {
@@ -13653,8 +13489,8 @@
         "path": "history/units/LUR.txt",
         "owner": "LUR"
       },
-      "technical_name": "LUR Territorial Brigade",
-      "display_name": "LUR Territorial Brigade",
+      "technical_name": "Territorial Brigade",
+      "display_name": "Territorial Brigade",
       "legacy_names": [],
       "regiments": [
         {
@@ -13700,8 +13536,8 @@
         "path": "history/units/CHD.txt",
         "owner": "CHD"
       },
-      "technical_name": "CHD Territorial Brigade",
-      "display_name": "CHD Territorial Brigade",
+      "technical_name": "Territorial Brigade",
+      "display_name": "Territorial Brigade",
       "legacy_names": [],
       "regiments": [
         {
@@ -13747,8 +13583,8 @@
         "path": "history/units/EVR.txt",
         "owner": "EVR"
       },
-      "technical_name": "EVR Territorial Brigade",
-      "display_name": "EVR Territorial Brigade",
+      "technical_name": "Territorial Brigade",
+      "display_name": "Territorial Brigade",
       "legacy_names": [],
       "regiments": [
         {
@@ -13794,8 +13630,8 @@
         "path": "history/units/OLR.txt",
         "owner": "OLR"
       },
-      "technical_name": "OLR Territorial Brigade",
-      "display_name": "OLR Territorial Brigade",
+      "technical_name": "Territorial Brigade",
+      "display_name": "Territorial Brigade",
       "legacy_names": [],
       "regiments": [
         {
@@ -13832,44 +13668,6 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_olr_territorial_brigade"
-      }
-    },
-    {
-      "key": "val_zeppelin_trial",
-      "source": {
-        "kind": "script",
-        "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
-        "owner": "script"
-      },
-      "technical_name": "Kefreyt Zeppelin Trial",
-      "display_name": "Kefreyt Zeppelin Trial",
-      "legacy_names": [],
-      "regiments": [
-        {
-          "type": "ADISCORD_zeppelin",
-          "x": 0,
-          "y": 0
-        }
-      ],
-      "support": [],
-      "computed": {
-        "organization": 80.0,
-        "manpower": 400.0,
-        "equipment": {
-          "ADISCORD_zeppelin_equipment": 1.0
-        },
-        "supply": 1.2
-      },
-      "equipment_availability": {
-        "ADISCORD_zeppelin_equipment": true
-      },
-      "ai_role": "utility",
-      "replacement_path": {
-        "kind": "retain",
-        "target": "val_zeppelin_trial"
-      },
-      "definition_metadata": {
-        "is_locked": true
       }
     },
     {
@@ -14175,7 +13973,7 @@
       "key": "adiscord_vorkerland_collapse_decisions_create_unit_tgd_urban_guard_xp_0_1_eq_0_7",
       "path": "common/decisions/ADISCORD_vorkerland_decisions.txt",
       "kind": "create_unit",
-      "technical_name": "TGD Urban Guard",
+      "technical_name": "Urban Guard",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -14185,7 +13983,7 @@
       "key": "adiscord_vorkerland_collapse_decisions_create_unit_tva_collapse_militia_xp_0_1_eq_0_75",
       "path": "common/decisions/ADISCORD_vorkerland_decisions.txt",
       "kind": "create_unit",
-      "technical_name": "TVA Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
@@ -14195,7 +13993,7 @@
       "key": "adiscord_vorkerland_collapse_decisions_create_unit_tva_infiltration_cell_xp_0_25_eq_0_75",
       "path": "common/decisions/ADISCORD_vorkerland_decisions.txt",
       "kind": "create_unit",
-      "technical_name": "TVA Infiltration Cell",
+      "technical_name": "Infiltration Cell",
       "legacy_names": [],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 0.75,
@@ -14205,7 +14003,7 @@
       "key": "adiscord_vorkerland_collapse_decisions_create_unit_wps_collapse_militia_xp_0_1_eq_0_7",
       "path": "common/decisions/ADISCORD_vorkerland_decisions.txt",
       "kind": "create_unit",
-      "technical_name": "WPS Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -14240,120 +14038,120 @@
       "count": 6
     },
     {
-      "key": "adiscord_nam_resource_war_effects_create_unit_nam_resource_guard_xp_0_2_eq_1_0",
+      "key": "adiscord_nam_resource_war_effects_create_unit_capital_guard_xp_0_2_eq_1_0",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "create_unit",
-      "technical_name": "NAM Resource Guard",
+      "technical_name": "Capital Guard",
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 1,
       "count": 1
     },
     {
-      "key": "adiscord_nam_resource_war_effects_create_unit_nam_resource_infantry_xp_0_15_eq_1_0",
+      "key": "adiscord_nam_resource_war_effects_create_unit_line_infantry_brigade_xp_0_15_eq_1_0",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "create_unit",
-      "technical_name": "NAM Resource Infantry",
+      "technical_name": "Line Infantry Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 1,
       "count": 1
     },
     {
-      "key": "adiscord_nam_resource_war_effects_create_unit_nam_resource_guard_xp_0_25_eq_1_0",
+      "key": "adiscord_nam_resource_war_effects_create_unit_capital_guard_xp_0_25_eq_1_0",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "create_unit",
-      "technical_name": "NAM Resource Guard",
+      "technical_name": "Capital Guard",
       "legacy_names": [],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 1,
       "count": 1
     },
     {
-      "key": "adiscord_nam_resource_war_effects_create_unit_nam_resource_infantry_xp_0_2_eq_1_0",
+      "key": "adiscord_nam_resource_war_effects_create_unit_line_infantry_brigade_xp_0_2_eq_1_0",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "create_unit",
-      "technical_name": "NAM Resource Infantry",
+      "technical_name": "Line Infantry Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 1,
       "count": 1
     },
     {
-      "key": "adiscord_nam_resource_war_effects_create_unit_nam_motor_column_xp_0_2_eq_1_0",
+      "key": "adiscord_nam_resource_war_effects_create_unit_motor_column_xp_0_2_eq_1_0",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "create_unit",
-      "technical_name": "NAM Motor Column",
+      "technical_name": "Motor Column",
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 1,
       "count": 1
     },
     {
-      "key": "adiscord_nam_resource_war_effects_create_unit_nam_coastal_battalion_xp_0_15_eq_1_0",
+      "key": "adiscord_nam_resource_war_effects_create_unit_coastal_battalion_xp_0_15_eq_1_0",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "create_unit",
-      "technical_name": "NAM Coastal Battalion",
+      "technical_name": "Coastal Battalion",
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 1,
       "count": 1
     },
     {
-      "key": "adiscord_nam_resource_war_effects_technical_reference_nam_resource_guard",
+      "key": "adiscord_nam_resource_war_effects_technical_reference_capital_guard",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "technical_reference",
-      "technical_name": "NAM Resource Guard",
+      "technical_name": "Capital Guard",
+      "legacy_names": [],
+      "count": 1
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_technical_reference_line_infantry_brigade",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Line Infantry Brigade",
+      "legacy_names": [],
+      "count": 1
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_technical_reference_coastal_battalion",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Coastal Battalion",
       "legacy_names": [],
       "count": 2
     },
     {
-      "key": "adiscord_nam_resource_war_effects_technical_reference_nam_resource_infantry",
+      "key": "adiscord_nam_resource_war_effects_technical_reference_motor_column",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "technical_reference",
-      "technical_name": "NAM Resource Infantry",
+      "technical_name": "Motor Column",
       "legacy_names": [],
       "count": 2
     },
     {
-      "key": "adiscord_nam_resource_war_effects_technical_reference_nam_coastal_battalion",
-      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
-      "kind": "technical_reference",
-      "technical_name": "NAM Coastal Battalion",
-      "legacy_names": [],
-      "count": 2
-    },
-    {
-      "key": "adiscord_nam_resource_war_effects_technical_reference_nam_motor_column",
-      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
-      "kind": "technical_reference",
-      "technical_name": "NAM Motor Column",
-      "legacy_names": [],
-      "count": 2
-    },
-    {
-      "key": "adiscord_nam_resource_war_effects_create_unit_nam_island_marines_xp_0_3_eq_1_0",
+      "key": "adiscord_nam_resource_war_effects_create_unit_island_marines_xp_0_3_eq_1_0",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "create_unit",
-      "technical_name": "NAM Island Marines",
+      "technical_name": "Island Marines",
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
       "count": 2
     },
     {
-      "key": "adiscord_nam_resource_war_effects_technical_reference_nam_island_marines",
+      "key": "adiscord_nam_resource_war_effects_technical_reference_island_marines",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "technical_reference",
-      "technical_name": "NAM Island Marines",
+      "technical_name": "Island Marines",
       "legacy_names": [],
       "count": 2
     },
     {
-      "key": "adiscord_nam_resource_war_effects_technical_reference_nam_abandoned_columns",
+      "key": "adiscord_nam_resource_war_effects_technical_reference_abandoned_columns",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "technical_reference",
-      "technical_name": "NAM Abandoned Columns",
+      "technical_name": "Abandoned Columns",
       "legacy_names": [],
       "count": 3
     },
@@ -14443,7 +14241,7 @@
       "key": "adiscord_vorkerland_focus_decision_effects_create_unit_tva_collapse_militia_xp_0_05_eq_0_55",
       "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
       "kind": "create_unit",
-      "technical_name": "TVA Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.05,
       "start_equipment_factor": 0.55,
@@ -14453,7 +14251,7 @@
       "key": "adiscord_vorkerland_focus_decision_effects_create_unit_tva_collapse_militia_xp_0_02_eq_0_45",
       "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
       "kind": "create_unit",
-      "technical_name": "TVA Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.02,
       "start_equipment_factor": 0.45,
@@ -14559,7 +14357,7 @@
       "key": "azh_nam_resource_war_oob_azh_basin_levy_xp_0_25_eq_0_85",
       "path": "history/units/AZH_nam_resource_war.txt",
       "kind": "oob",
-      "technical_name": "AZH Basin Levy",
+      "technical_name": "Basin Levy",
       "legacy_names": [],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 0.85,
@@ -14569,7 +14367,7 @@
       "key": "azh_nam_resource_war_oob_azh_basin_levy_xp_0_3_eq_0_9",
       "path": "history/units/AZH_nam_resource_war.txt",
       "kind": "oob",
-      "technical_name": "AZH Basin Levy",
+      "technical_name": "Basin Levy",
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 0.9,
@@ -14723,7 +14521,7 @@
       "key": "csl_vorkerland_collapse_oob_csl_municipal_militia_xp_0_05_eq_0_55",
       "path": "history/units/CSL_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "CSL Municipal Militia",
+      "technical_name": "Municipal Militia",
       "legacy_names": [],
       "start_experience_factor": 0.05,
       "start_equipment_factor": 0.55,
@@ -14733,7 +14531,7 @@
       "key": "csl_vorkerland_collapse_oob_csl_municipal_militia_xp_0_05_eq_0_6",
       "path": "history/units/CSL_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "CSL Municipal Militia",
+      "technical_name": "Municipal Militia",
       "legacy_names": [],
       "start_experience_factor": 0.05,
       "start_equipment_factor": 0.6,
@@ -14777,7 +14575,7 @@
       "key": "dva_vorkerland_collapse_oob_dva_collapse_militia_xp_0_1_eq_0_75",
       "path": "history/units/DVA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "DVA Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
@@ -14787,7 +14585,7 @@
       "key": "eba_vorkerland_collapse_oob_eba_collapse_militia_xp_0_1_eq_0_7",
       "path": "history/units/EBA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "EBA Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -14817,7 +14615,7 @@
       "key": "efl_nam_resource_war_oob_efl_restoration_brigade_xp_0_2_eq_0_8",
       "path": "history/units/EFL_nam_resource_war.txt",
       "kind": "oob",
-      "technical_name": "EFL Restoration Brigade",
+      "technical_name": "Line Infantry Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.8,
@@ -14827,7 +14625,7 @@
       "key": "efl_nam_resource_war_oob_efl_restoration_brigade_xp_0_25_eq_0_85",
       "path": "history/units/EFL_nam_resource_war.txt",
       "kind": "oob",
-      "technical_name": "EFL Restoration Brigade",
+      "technical_name": "Line Infantry Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 0.85,
@@ -14837,7 +14635,7 @@
       "key": "egc_vorkerland_collapse_oob_egc_collapse_militia_xp_0_1_eq_0_7",
       "path": "history/units/EGC_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "EGC Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -14847,7 +14645,7 @@
       "key": "egc_vorkerland_collapse_oob_egc_collapse_militia_xp_0_1_eq_0_75",
       "path": "history/units/EGC_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "EGC Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
@@ -14869,7 +14667,7 @@
       "key": "ert_vorkerland_collapse_oob_ert_collapse_militia_xp_0_1_eq_0_85",
       "path": "history/units/ERT_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "ERT Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.85,
@@ -14879,7 +14677,7 @@
       "key": "eyr_vorkerland_collapse_oob_eyr_collapse_militia_xp_0_1_eq_0_7",
       "path": "history/units/EYR_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "EYR Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -14889,7 +14687,7 @@
       "key": "eyr_vorkerland_collapse_oob_eyr_collapse_militia_xp_0_1_eq_0_75",
       "path": "history/units/EYR_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "EYR Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
@@ -14933,7 +14731,7 @@
       "key": "iba_vorkerland_collapse_oob_iba_border_rifles_xp_0_15_eq_0_8",
       "path": "history/units/IBA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "IBA Border Rifles",
+      "technical_name": "Border Rifles",
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.8,
@@ -14943,7 +14741,7 @@
       "key": "iba_vorkerland_collapse_oob_iba_border_rifles_xp_0_2_eq_0_85",
       "path": "history/units/IBA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "IBA Border Rifles",
+      "technical_name": "Border Rifles",
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.85,
@@ -14953,7 +14751,7 @@
       "key": "ibl_vorkerland_collapse_oob_ibl_frontier_brigade_xp_0_15_eq_0_8",
       "path": "history/units/IBL_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "IBL Frontier Brigade",
+      "technical_name": "Frontier Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.8,
@@ -14963,7 +14761,7 @@
       "key": "ibl_vorkerland_collapse_oob_ibl_frontier_brigade_xp_0_2_eq_0_85",
       "path": "history/units/IBL_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "IBL Frontier Brigade",
+      "technical_name": "Frontier Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.85,
@@ -14973,7 +14771,7 @@
       "key": "irt_vorkerland_collapse_oob_irt_collapse_militia_xp_0_1_eq_0_85",
       "path": "history/units/IRT_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "IRT Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.85,
@@ -15173,7 +14971,7 @@
       "key": "mlr_vorkerland_collapse_oob_mlr_collapse_militia_xp_0_1_eq_0_85",
       "path": "history/units/MLR_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "MLR Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.85,
@@ -15244,20 +15042,20 @@
       "count": 2
     },
     {
-      "key": "nam_resource_war_oob_nam_resource_guard_xp_0_45_eq_0_9",
+      "key": "nam_resource_war_oob_capital_guard_xp_0_45_eq_0_9",
       "path": "history/units/NAM_resource_war.txt",
       "kind": "oob",
-      "technical_name": "NAM Resource Guard",
+      "technical_name": "Capital Guard",
       "legacy_names": [],
       "start_experience_factor": 0.45,
       "start_equipment_factor": 0.9,
       "count": 1
     },
     {
-      "key": "nam_resource_war_oob_nam_resource_infantry_xp_0_35_eq_0_95",
+      "key": "nam_resource_war_oob_line_infantry_brigade_xp_0_35_eq_0_95",
       "path": "history/units/NAM_resource_war.txt",
       "kind": "oob",
-      "technical_name": "NAM Resource Infantry",
+      "technical_name": "Line Infantry Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.35,
       "start_equipment_factor": 0.95,
@@ -15429,7 +15227,7 @@
       "key": "psd_vorkerland_collapse_oob_psd_collapse_militia_xp_0_1_eq_0_75",
       "path": "history/units/PSD_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "PSD Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
@@ -15439,7 +15237,7 @@
       "key": "psd_vorkerland_collapse_oob_psd_collapse_militia_xp_0_1_eq_0_8",
       "path": "history/units/PSD_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "PSD Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.8,
@@ -15591,7 +15389,7 @@
       "key": "rza_vorkerland_collapse_oob_rza_collapse_militia_xp_0_1_eq_0_85",
       "path": "history/units/RZA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "RZA Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.85,
@@ -15601,7 +15399,7 @@
       "key": "sca_vorkerland_collapse_oob_sca_collapse_militia_xp_0_1_eq_0_85",
       "path": "history/units/SCA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "SCA Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.85,
@@ -15683,7 +15481,7 @@
       "key": "sla_vorkerland_collapse_oob_sla_collapse_militia_xp_0_1_eq_0_85",
       "path": "history/units/SLA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "SLA Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.85,
@@ -15743,7 +15541,7 @@
       "key": "sra_vorkerland_collapse_oob_sra_collapse_militia_xp_0_1_eq_0_7",
       "path": "history/units/SRA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "SRA Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -15753,7 +15551,7 @@
       "key": "sra_vorkerland_collapse_oob_sra_collapse_militia_xp_0_1_eq_0_75",
       "path": "history/units/SRA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "SRA Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
@@ -15847,7 +15645,7 @@
       "key": "tgd_vorkerland_collapse_oob_tgd_urban_guard_xp_0_15_eq_0_8",
       "path": "history/units/TGD_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "TGD Urban Guard",
+      "technical_name": "Urban Guard",
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.8,
@@ -15889,7 +15687,7 @@
       "key": "tva_vorkerland_collapse_oob_tva_collapse_militia_xp_0_18_eq_0_85",
       "path": "history/units/TVA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "TVA Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.18,
       "start_equipment_factor": 0.85,
@@ -15899,7 +15697,7 @@
       "key": "tva_vorkerland_collapse_oob_tva_collapse_militia_xp_0_2_eq_0_88",
       "path": "history/units/TVA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "TVA Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.88,
@@ -15909,7 +15707,7 @@
       "key": "tva_vorkerland_collapse_oob_tva_mobile_test_group_xp_0_45_eq_0_95",
       "path": "history/units/TVA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "TVA Mobile Test Group",
+      "technical_name": "Mobile Test Group",
       "legacy_names": [],
       "start_experience_factor": 0.45,
       "start_equipment_factor": 0.95,
@@ -15919,7 +15717,7 @@
       "key": "tva_vorkerland_collapse_oob_tva_collapse_militia_xp_0_2_eq_0_85",
       "path": "history/units/TVA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "TVA Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.85,
@@ -15929,7 +15727,7 @@
       "key": "tva_vorkerland_collapse_oob_tva_collapse_militia_xp_0_1_eq_0_85",
       "path": "history/units/TVA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "TVA Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.85,
@@ -16107,7 +15905,7 @@
       "key": "wpa_vorkerland_collapse_oob_wpa_collapse_militia_xp_0_1_eq_0_7",
       "path": "history/units/WPA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "WPA Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -16117,7 +15915,7 @@
       "key": "wpa_vorkerland_collapse_oob_wpa_collapse_militia_xp_0_1_eq_0_75",
       "path": "history/units/WPA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "WPA Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
@@ -16127,7 +15925,7 @@
       "key": "wps_vorkerland_collapse_oob_wps_collapse_militia_xp_0_1_eq_0_7",
       "path": "history/units/WPS_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "WPS Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -16137,7 +15935,7 @@
       "key": "wps_vorkerland_collapse_oob_wps_collapse_militia_xp_0_1_eq_0_75",
       "path": "history/units/WPS_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "WPS Collapse Militia",
+      "technical_name": "Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
@@ -16187,7 +15985,7 @@
       "key": "wtd_vorkerland_collapse_oob_wtd_technical_guard_xp_0_15_eq_0_8",
       "path": "history/units/WTD_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "WTD Technical Guard",
+      "technical_name": "Technical Guard",
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.8,
@@ -16197,7 +15995,7 @@
       "key": "wtd_vorkerland_collapse_oob_wtd_technical_guard_xp_0_2_eq_0_85",
       "path": "history/units/WTD_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "WTD Technical Guard",
+      "technical_name": "Technical Guard",
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.85,
@@ -16435,7 +16233,7 @@
       "key": "val_focus_reserve_infantry_spawn",
       "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
       "kind": "create_unit",
-      "technical_name": "Kefreyt Reserve Infantry",
+      "technical_name": "Kefreyt Contract Infantry",
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 1,
@@ -16555,7 +16353,7 @@
       "key": "pio_oob_territorial_brigade",
       "path": "history/units/PIO.txt",
       "kind": "oob",
-      "technical_name": "PIO Territorial Brigade",
+      "technical_name": "Territorial Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -16565,7 +16363,7 @@
       "key": "mrv_oob_territorial_brigade",
       "path": "history/units/MRV.txt",
       "kind": "oob",
-      "technical_name": "MRV Territorial Brigade",
+      "technical_name": "Territorial Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -16575,7 +16373,7 @@
       "key": "rvn_oob_territorial_brigade",
       "path": "history/units/RVN.txt",
       "kind": "oob",
-      "technical_name": "RVN Territorial Brigade",
+      "technical_name": "Territorial Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -16585,7 +16383,7 @@
       "key": "sfr_oob_territorial_brigade",
       "path": "history/units/SFR.txt",
       "kind": "oob",
-      "technical_name": "SFR Territorial Brigade",
+      "technical_name": "Territorial Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -16595,7 +16393,7 @@
       "key": "flr_oob_territorial_brigade",
       "path": "history/units/FLR.txt",
       "kind": "oob",
-      "technical_name": "FLR Territorial Brigade",
+      "technical_name": "Territorial Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -16605,7 +16403,7 @@
       "key": "prr_oob_territorial_brigade",
       "path": "history/units/PRR.txt",
       "kind": "oob",
-      "technical_name": "PRR Territorial Brigade",
+      "technical_name": "Territorial Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -16615,7 +16413,7 @@
       "key": "ulv_oob_territorial_brigade",
       "path": "history/units/ULV.txt",
       "kind": "oob",
-      "technical_name": "ULV Territorial Brigade",
+      "technical_name": "Territorial Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -16625,7 +16423,7 @@
       "key": "lur_oob_territorial_brigade",
       "path": "history/units/LUR.txt",
       "kind": "oob",
-      "technical_name": "LUR Territorial Brigade",
+      "technical_name": "Territorial Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -16635,7 +16433,7 @@
       "key": "chd_oob_territorial_brigade",
       "path": "history/units/CHD.txt",
       "kind": "oob",
-      "technical_name": "CHD Territorial Brigade",
+      "technical_name": "Territorial Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -16645,7 +16443,7 @@
       "key": "evr_oob_territorial_brigade",
       "path": "history/units/EVR.txt",
       "kind": "oob",
-      "technical_name": "EVR Territorial Brigade",
+      "technical_name": "Territorial Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
@@ -16655,20 +16453,10 @@
       "key": "olr_oob_territorial_brigade",
       "path": "history/units/OLR.txt",
       "kind": "oob",
-      "technical_name": "OLR Territorial Brigade",
+      "technical_name": "Territorial Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 1
-    },
-    {
-      "key": "val_zeppelin_trial_spawn",
-      "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
-      "kind": "create_unit",
-      "technical_name": "Kefreyt Zeppelin Trial",
-      "legacy_names": [],
-      "start_experience_factor": 0.3,
-      "start_equipment_factor": 1,
       "count": 1
     },
     {
@@ -16679,7 +16467,7 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 2
     },
     {
       "key": "rus_lab_airship_spawn",

@@ -944,7 +944,7 @@ class ObligationAccountingTests(unittest.TestCase):
     def test_partial_arsenal_delivery_refunds_only_unmade_batch_once(self):
         self.begin(3)
         self.cycle()
-        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 750)
+        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 6750)
         self.assertEqual(self.m.equipment[("SHL", "ADISCORD_squad_weapons_equipment_0")], 5)
         self.assertEqual(self.c["SHL_obligation_deposit"], 45)
         before = self.c["ADISCORD_economy_treasury"]
@@ -952,13 +952,13 @@ class ObligationAccountingTests(unittest.TestCase):
         self.m.run("SHL_cancel_obligation")
         self.assertEqual(self.c["ADISCORD_economy_treasury"], before + 45)
         self.cycle()
-        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 1050)
+        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 9450)
 
     def test_overtime_delivers_two_paid_batches_without_normal_revenue(self):
         self.begin(3)
         self.c["SHL_shift_policy"] = 1
         self.cycle()
-        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 1500)
+        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 13500)
         self.assertEqual(self.m.equipment[("SHL", "ADISCORD_squad_weapons_equipment_0")], 10)
         self.assertEqual(self.c["ADISCORD_economy_treasury"], 1630)
         self.assertNotIn("SHL_obligation_kind", self.c)
@@ -1017,7 +1017,7 @@ class ObligationAccountingTests(unittest.TestCase):
         self.m.run("SHL_commit_regency_course")
         self.assertNotIn("SHL_obligation_kind", self.c)
         self.assertEqual(self.c["ADISCORD_economy_treasury"], before + 45)
-        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 750)
+        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 6750)
 
     def test_pledge_uses_cash_after_deductions_and_returns_excess(self):
         self.begin(4)
@@ -2683,10 +2683,10 @@ class DeliveryAccountingTests(unittest.TestCase):
         self.assertEqual(self.c["ADISCORD_economy_treasury"], before)
         self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 0)
         self.m.run("SHL_produce_period")
-        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 300)
+        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 2700)
         self.assertEqual(self.c["ADISCORD_economy_treasury"], before + 480)
         self.m.run("SHL_produce_period")
-        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 600)
+        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 5400)
 
     def test_every_course_shift_and_recipient_has_exact_outputs(self):
         for course in range(6):
@@ -2703,7 +2703,7 @@ class DeliveryAccountingTests(unittest.TestCase):
                         self.assertEqual(self.c["ADISCORD_economy_treasury"] - before,
                                          (60, 90, 25)[shift] if effective == 0 else 0)
                         self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")],
-                                         (300, 600, 150)[shift] if effective == 1 else 0)
+                                         (2700, 5400, 1350)[shift] if effective == 1 else 0)
                         quarters = (6, 9, 3) if course in (2, 5) else (4, 6, 2)
                         crests = (6, 9, 3) if course in (1, 4) else (4, 6, 2)
                         self.assertEqual(self.c["SHL_unrest"], 50 - (quarters[shift] if effective == 2 else 0))
@@ -2738,7 +2738,7 @@ class DeliveryAccountingTests(unittest.TestCase):
         self.m.run("SHL_produce_period")
         self.assertEqual(self.m.variables["294"]["SHL_furnace_recipient"], 2)
         self.assertEqual(self.c["SHL_tenth_recipient"], 1)
-        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 300)
+        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 2700)
         self.assertEqual(self.c["SHL_unrest"], 46)
         self.assertEqual(self.c["SHL_last_cycle_income"], 480)
 
@@ -2766,7 +2766,7 @@ class DeliveryAccountingTests(unittest.TestCase):
         self.assertEqual(self.m.variables["287"]["SHL_furnace_recipient"], 1)
         self.c["SHL_shift_policy"] = 1
         self.m.run("SHL_produce_period")
-        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 1500)
+        self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 13500)
         self.assertEqual(self.c["SHL_unrest"], 50)
         self.assertNotIn("SHL_obligation_kind", self.c)
         self.assign(1, 2)
@@ -2874,7 +2874,7 @@ class DeliveryAccountingTests(unittest.TestCase):
                     self.assign(9, 2)
                 self.m.run("SHL_produce_period")
                 self.assertEqual(self.c["ADISCORD_economy_treasury"] - 1000, expected)
-                self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], arsenal * 300)
+                self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], arsenal * 2700)
 
     def test_discount_affordability_and_refund_use_the_same_quote(self):
         for kind, ending, course, price in (("civic", 12, 1, 120), ("civic", 0, 2, 90),

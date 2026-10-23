@@ -368,7 +368,7 @@ class PreparationAccounting(unittest.TestCase):
         self.assertEqual(script.scopes["WRK"].resources["people"], before["people"] + 3000)
 
     def test_offer_requires_consent_and_rechecks_donor_stocks(self):
-        for tag, stock, amount in (("EYR", "infantry_equipment", 1500), ("EGC", "support_equipment", 100), ("RIV", "train_equipment", 5), ("YOR", "infantry_equipment", 2000)):
+        for tag, stock, amount in (("EYR", "infantry_equipment", 13500), ("EGC", "support_equipment", 100), ("RIV", "train_equipment", 5), ("YOR", "infantry_equipment", 18000)):
             script = Script()
             script.source = tag
             script.scopes[tag].subject = "WRK"

@@ -41,6 +41,7 @@ CONFIG = {
     'SHL': ROOT / 'gfx/models/units/APH_irregular_infantry.mesh',
     'ARB': ROOT / 'gfx/models/units/APH_irregular_infantry.mesh',
     'NAM': ROOT / 'gfx/models/units/ADISCORD_regulars/WRK_line.mesh',
+    'EFL': ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh',
     'HAZ': ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh',
     'MON': ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh',
     **{
@@ -56,6 +57,7 @@ NORMALS = {
     'SHL': ROOT / 'gfx/models/units/APH_irregular_infantry_normal.dds',
     'ARB': ROOT / 'gfx/models/units/APH_irregular_infantry_normal.dds',
     'NAM': ROOT / 'gfx/models/units/ADISCORD_regulars/WRK_line_body_normal.dds',
+    'EFL': ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds',
     'HAZ': ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds',
     'MON': ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds',
     **{
@@ -217,6 +219,13 @@ def bindings():
                 source,
                 count=1,
             )
+            if tag == 'EFL':
+                source = re.sub(
+                    r'animation = \{ id = "([^"]+)" type = "([^"]+)" \}',
+                    r'animation = {\n\t\t\tid = "\1"\n\t\t\ttype = "\2"\n\t\t}',
+                    source,
+                )
+                source = '\t' + source + '\n'
             if armoured_guard:
                 retinue_meshes.append('\t' + source)
             else:
@@ -229,7 +238,9 @@ def bindings():
                 fields = [f'clone = "{parent}"', f'name = "{name}"']
                 if pdxmesh:
                     fields.append(f'pdxmesh = "{pdxmesh}"')
-                if tag in ('RUS', 'SHL', 'HAZ', 'MON') or tag in RETINUE_STYLES:
+                if tag == 'EFL':
+                    return 'entity = {\n\t' + '\n\t'.join(fields) + '\n}\n'
+                if tag in ('RUS', 'SHL', 'HAZ', 'MON', 'EFL') or tag in RETINUE_STYLES:
                     return 'entity = {\n\t' + '\n\t'.join(fields) + '\n}'
                 return 'entity = { ' + ' '.join(fields) + ' }'
 
@@ -244,7 +255,10 @@ def bindings():
                     f'ADISCORD_{tag}_field_{pose}_mesh',
                 )
             )
-            for role in ('ADISCORD_militia', 'ADISCORD_territorial', 'mountaineers'):
+            roles = () if tag == 'EFL' else (
+                'ADISCORD_militia', 'ADISCORD_territorial', 'mountaineers'
+            )
+            for role in roles:
                 country_entities.append(
                     entity(
                         f'{tag}_infantry{suffix}_entity', f'{tag}_{role}{suffix}_entity'
@@ -1058,12 +1072,12 @@ def montar_guard_kit(body, mesh, cloth, canvas):
             )
 
 
-def bake_montar_surface(obj, output):
+def bake_gear_surface(obj, output, tag):
     """Bake specular strength, metalness and gloss separately from lit colour."""
     import bpy
 
     original = list(obj.data.materials)
-    image = bpy.data.images.new('MON_surface', 1024, 1024, alpha=False)
+    image = bpy.data.images.new(tag + '_surface', 1024, 1024, alpha=False)
     image.colorspace_settings.name = 'Non-Color'
     for index, source in enumerate(original):
         material = bpy.data.materials.new(source.name + ' surface bake')
@@ -1071,7 +1085,10 @@ def bake_montar_surface(obj, output):
         nodes = material.node_tree.nodes
         nodes.clear()
         emission = nodes.new('ShaderNodeEmission')
-        emission.inputs['Color'].default_value = (*source['mon_surface'], 1)
+        surface = source['mon_surface'] if tag == 'MON' else source.get(
+            'efl_surface', (48 / 255, 0, 36 / 255),
+        )
+        emission.inputs['Color'].default_value = (*surface, 1)
         target = nodes.new('ShaderNodeOutputMaterial')
         material.node_tree.links.new(emission.outputs[0], target.inputs['Surface'])
         texture = nodes.new('ShaderNodeTexImage')
@@ -1079,7 +1096,7 @@ def bake_montar_surface(obj, output):
         nodes.active = texture
         obj.data.materials[index] = material
     bpy.ops.object.bake(type='EMIT')
-    image.filepath_raw = str(output / 'MON_surface.png')
+    image.filepath_raw = str(output / f'{tag}_surface.png')
     image.file_format = 'PNG'
     image.save()
     for index, material in enumerate(original):
@@ -1384,6 +1401,170 @@ def build_hazard_sentinel(output, pdx):
     bpy.ops.wm.save_as_mainfile(filepath=str(output / f'{tag}.blend'))
 
 
+def eflor_field_kit(body, mesh, cloth, canvas, webbing):
+    """Fit the helmet shell and continuous pack harness to the native rig."""
+    from infantry_polish import cloth_bag
+    from mathutils import Vector
+    from mathutils.bvhtree import BVHTree
+    from mathutils.interpolate import poly_3d_calc
+    from io_pdx_mesh import pdx_data
+    from io_pdx_mesh.pdx_blender import blender_import_export as pdx
+
+    steel = cloth('Eflor painted steel', (0.065, 0.078, 0.060))
+    steel['efl_surface'] = (0.34, 0.0, 0.48)
+    for node in steel.node_tree.nodes:
+        if node.type == 'VALTORGB':
+            for element, factor in zip(node.color_ramp.elements, (0.94, 1.04)):
+                element.color = (0.065 * factor, 0.078 * factor, 0.060 * factor, 1)
+    white = cloth('Eflor white cloth', (0.62, 0.60, 0.52))
+    black = cloth('Eflor black cloth', (0.012, 0.015, 0.014))
+    helmet_source = GAME / 'gfx/models/units/GER_infantry.mesh'
+    native = pdx_data.read_meshfile(str(helmet_source))
+    shells = []
+    for shape in native.find('object'):
+        for element in shape.findall('mesh'):
+            positions = element.attrib['p']
+            points = [tuple(round(v, 5) for v in positions[i:i + 3])
+                      for i in range(0, len(positions), 3)]
+            triangles = element.attrib['tri']
+            adjacency = {point: set() for point in points}
+            for i in range(0, len(triangles), 3):
+                face = [points[index] for index in triangles[i:i + 3]]
+                for point in face:
+                    adjacency[point].update(face)
+            remaining = set(points)
+            while remaining:
+                seed = remaining.pop()
+                component = {seed}
+                pending = [seed]
+                while pending:
+                    for point in adjacency[pending.pop()]:
+                        if point in remaining:
+                            remaining.remove(point)
+                            component.add(point)
+                            pending.append(point)
+                # The headwear island excludes the face and all clothing.
+                if min(point[1] for point in component) < 6.7:
+                    continue
+                selected = [index for index, point in enumerate(points) if point in component]
+                ordered = [points[index] for index in selected]
+                indices = {original: index for index, original in enumerate(selected)}
+                faces = [
+                    tuple(indices[index] for index in reversed(triangles[i:i + 3]))
+                    for i in range(0, len(triangles), 3)
+                    if all(points[index] in component for index in triangles[i:i + 3])
+                ]
+                normals = [element.attrib['n'][index * 3:index * 3 + 3] for index in selected]
+                shells.append((ordered, faces, normals))
+    assert len(shells) == 1, 'Expected one helmet island'
+    points, faces, normals = shells[0]
+    vertices = []
+    for point in points:
+        vertex = pdx.swap_coord_space(Vector(point))
+        vertices.append((vertex.x * 1.04, vertex.y * 1.04,
+                         6.85 + (vertex.z - 6.72) * 0.76))
+    helmet = mesh('Eflor steel helmet shell', vertices, faces, steel, 'head')
+    helmet['native_shell'] = True
+    converted_normals = []
+    for normal in normals:
+        normal = pdx.swap_coord_space(Vector(normal))
+        converted_normals.append(Vector((normal.x / 1.04, normal.y / 1.04, normal.z / 0.76)).normalized())
+    for face in helmet.data.polygons:
+        face.use_smooth = True
+    helmet.data.normals_split_custom_set_from_vertices(converted_normals)
+
+    surface = BVHTree.FromPolygons(
+        [vertex.co for vertex in body.data.vertices],
+        [list(face.vertices) for face in body.data.polygons],
+    )
+
+    head_surface = BVHTree.FromPolygons(
+        [vertex.co for vertex in body.data.vertices],
+        [list(face.vertices) for face in body.data.polygons
+         if face.center.z > 6.15 and abs(face.center.x) < 0.50],
+    )
+    anchors = [
+        (-0.40, -0.02, 6.82), (-0.34, -0.12, 6.57),
+        (-0.27, -0.25, 6.38), (-0.14, -0.36, 6.27),
+        (0, -0.38, 6.25), (0.14, -0.36, 6.27),
+        (0.27, -0.25, 6.38), (0.34, -0.12, 6.57), (0.40, -0.02, 6.82),
+    ]
+    strap_vertices = []
+    for start, end in zip(anchors, anchors[1:]):
+        for step in range(4):
+            center = Vector(start).lerp(Vector(end), step / 4)
+            for edge in (-0.022, 0.022):
+                point, normal, _, _ = head_surface.find_nearest(center + Vector((0, edge, 0)))
+                assert point is not None
+                strap_vertices.append(tuple(point + normal * 0.016))
+    for edge in (-0.022, 0.022):
+        point, normal, _, _ = head_surface.find_nearest(Vector(anchors[-1]) + Vector((0, edge, 0)))
+        strap_vertices.append(tuple(point + normal * 0.016))
+    leather = cloth('Eflor chin strap leather', (0.045, 0.033, 0.021))
+    mesh('Eflor secured chin strap', strap_vertices, [
+        (2 * i, 2 * i + 1, 2 * i + 3, 2 * i + 2)
+        for i in range(len(strap_vertices) // 2 - 1)
+    ], leather, 'head')
+
+    def harness(side):
+        vertices = []
+        weights = []
+        samples = []
+        for index in range(12):
+            t = index / 11
+            samples.append((side * 0.52, -3, 4.48 + 0.87 * t, (0, 1, 0)))
+        # A single radial sweep avoids overlapping front and shoulder projections.
+        for index in range(1, 33):
+            angle = math.pi * index / 32
+            x = side * (0.52 - 0.18 * max(0, -math.cos(angle)))
+            samples.append((x, -3 * math.cos(angle), 5.35 + 3 * math.sin(angle),
+                            (0, math.cos(angle), -math.sin(angle))))
+        for index in range(1, 12):
+            t = index / 11
+            samples.append((side * 0.34, 3, 5.35 - 0.50 * t, (0, -1, 0)))
+        for x, y, z, direction in samples:
+            for edge in (-0.052, 0.052):
+                point, normal, face_index, _ = surface.ray_cast(
+                    Vector((x + edge, y, z)), Vector(direction), 8,
+                )
+                assert point is not None, ('Eflor harness', x + edge, y, z)
+                face = body.data.polygons[face_index]
+                factors = poly_3d_calc([body.data.vertices[i].co for i in face.vertices], point)
+                normal = sum(
+                    (body.data.vertices[i].normal * factor for i, factor in zip(face.vertices, factors)),
+                    Vector(),
+                ).normalized()
+                vertices.append(tuple(point + normal * 0.028))
+                influence = {}
+                for i, factor in zip(face.vertices, factors):
+                    for group in body.data.vertices[i].groups:
+                        bone = body.vertex_groups[group.group].name
+                        influence[bone] = influence.get(bone, 0) + max(0, factor) * group.weight
+                strongest = sorted(influence.items(), key=lambda item: item[1], reverse=True)[:4]
+                total = sum(weight for _, weight in strongest)
+                weights.append([(bone, weight / total) for bone, weight in strongest])
+        strap = mesh('Eflor continuous shoulder brace', vertices, [
+            (2 * i, 2 * i + 1, 2 * i + 3, 2 * i + 2) for i in range(len(samples) - 1)
+        ], webbing)
+        strap.vertex_groups.clear()
+        for index, influence in enumerate(weights):
+            for bone, weight in influence:
+                group = strap.vertex_groups.get(bone) or strap.vertex_groups.new(name=bone)
+                group.add([index], weight, 'REPLACE')
+
+    panel = fitted_panel_factory(body, mesh, smooth=True)
+    for side in (-1, 1):
+        harness(side)
+    # The field badge uses the flag's stripes without its ceremonial coat of arms.
+    for index in range(5):
+        panel('Eflor field badge stripe', -0.22, 5.63 + index * 0.020,
+              0.13, 0.020, white if index % 2 == 0 else black, offset=0.014)
+    for part, kind, points, faces in cloth_bag(0.86, 0.36, 0.85, (-0.24, 0.24)):
+        mesh('Eflor marching pack ' + part,
+             [(x, y + 0.58, z + 5.11) for x, y, z in points],
+             faces, canvas if kind == 'canvas' else webbing)
+
+
 def build_field(tag, output):
     """Keep the donor garment topology and skin while replacing its field kit."""
     import bpy
@@ -1436,7 +1617,7 @@ def build_field(tag, output):
     # Whole islands keep native leather pouches separate from cloth tinting.
     small_kit = set()
     native_head = set()
-    if tag in ('TFF', 'YPR', 'RUS', 'HAZ', 'MON') or tag in RETINUE_STYLES:
+    if tag in ('TFF', 'YPR', 'RUS', 'HAZ', 'MON', 'EFL') or tag in RETINUE_STYLES:
         keys = [tuple(round(x, 4) for x in v.co) for v in body.data.vertices]
         adjacent = {k: set() for k in keys}
         for face in body.data.polygons:
@@ -1455,7 +1636,7 @@ def build_field(tag, output):
                         stack.append(k)
             if min(k[2] for k in component) > 6.9:
                 cap.update(component)
-            if tag == 'MON' and min(k[2] for k in component) > 5.8 and max(abs(k[0]) for k in component) < 0.5:
+            if tag in ('MON', 'EFL') and min(k[2] for k in component) > 5.8 and max(abs(k[0]) for k in component) < 0.5:
                 native_head.update(component)
             if (
                 min(k[2] for k in component) > 3.8
@@ -1463,7 +1644,7 @@ def build_field(tag, output):
                 and len(component) < 100
             ):
                 small_kit.update(component)
-        if tag in ('TFF', 'RUS', 'HAZ', 'MON') or tag in RETINUE_STYLES:
+        if tag in ('TFF', 'RUS', 'HAZ', 'MON', 'EFL') or tag in RETINUE_STYLES:
             assert cap
             bm = bmesh.new()
             bm.from_mesh(body.data)
@@ -1557,6 +1738,12 @@ def build_field(tag, output):
         canvas_color = (0.48, 0.33, 0.16)
         wool_color = (0.08, 0.055, 0.035)
         scarf_color = (0.68, 0.53, 0.30)
+    elif tag == 'EFL':
+        jacket_color = (0.11, 0.135, 0.105)
+        trouser_color = (0.040, 0.052, 0.048)
+        canvas_color = (0.24, 0.21, 0.13)
+        wool_color = (0.10, 0.075, 0.045)
+        scarf_color = (0.17, 0.14, 0.09)
     elif tag == 'MON':
         jacket_color = (0.040, 0.115, 0.053)
         trouser_color = (0.024, 0.042, 0.030)
@@ -1594,7 +1781,7 @@ def build_field(tag, output):
         x, y, z = face.center
         # Bare head, hands and original boot leather keep their authored atlas.
         skin = (z > 6.13 and abs(x) < 0.44) or (abs(x) > 2.30 and 3.9 < z < 4.85)
-        if tag == 'MON':
+        if tag in ('MON', 'EFL'):
             uv = sum(
                 (body.data.uv_layers.active.data[i].uv for i in face.loop_indices),
                 Vector((0, 0)),
@@ -1621,7 +1808,7 @@ def build_field(tag, output):
             ) / len(face.loop_indices)
             pants = (
                 uv.x < 0.44 and uv.y < 0.45
-                if tag in ('TFF', 'RUS', 'HAZ', 'MON') or tag in RETINUE_STYLES
+                if tag in ('TFF', 'RUS', 'HAZ', 'MON', 'EFL') or tag in RETINUE_STYLES
                 else z < 3.55
             )
             face.material_index = 2 if pants else 1
@@ -1640,7 +1827,9 @@ def build_field(tag, output):
         gear.append(obj)
         return obj
 
-    if tag == 'MON':
+    if tag == 'EFL':
+        eflor_field_kit(body, mesh, cloth, canvas, scarf)
+    elif tag == 'MON':
         montar_guard_kit(body, mesh, cloth, canvas)
     elif tag == 'HAZ':
         hazard_kit(body, mesh, cloth, jacket, canvas, wool)
@@ -1790,6 +1979,16 @@ def build_field(tag, output):
             # follows the imported head weights instead of floating in poses.
             fitted_head_cloth(body, mesh, scarf, 'Wrapped Arab head cloth', loose=True)
     bpy.ops.object.select_all(action='DESELECT')
+    if tag == 'EFL':
+        for obj in gear:
+            if obj.get('native_shell'):
+                continue
+            obj.select_set(True)
+            bpy.context.view_layer.objects.active = obj
+            solid = obj.modifiers.new('Fabric thickness', 'SOLIDIFY')
+            solid.thickness = 0.008
+            bpy.ops.object.modifier_apply(modifier=solid.name)
+            obj.select_set(False)
     for obj in gear:
         obj.select_set(True)
         for face in obj.data.polygons:
@@ -1799,7 +1998,7 @@ def build_field(tag, output):
     equipment = bpy.context.object
     equipment.name = tag + '_gear'
     # The respirator and canisters already have closed shells.
-    if tag != 'HAZ':
+    if tag not in ('HAZ', 'EFL'):
         solid = equipment.modifiers.new('Fabric thickness', 'SOLIDIFY')
         solid.thickness = 0.008
         bpy.ops.object.modifier_apply(modifier=solid.name)
@@ -1808,8 +2007,8 @@ def build_field(tag, output):
     bpy.ops.uv.smart_project(island_margin=0.015)
     bpy.ops.object.mode_set(mode='OBJECT')
     bake_diffuse(equipment, output / f'{tag}_gear.png', tag + '_gear')
-    if tag == 'MON':
-        bake_montar_surface(equipment, output)
+    if tag in ('MON', 'EFL'):
+        bake_gear_surface(equipment, output, tag)
     for obj, part in ((body, 'body'), (equipment, 'gear')):
         (output / f'{tag}_field_{part}_diffuse.dds').write_bytes(
             (output / f'{tag}_{part}.png').read_bytes()
@@ -1972,12 +2171,12 @@ def verify(output, tags, walk=False):
         bpy.ops.wm.read_factory_settings(use_empty=True)
         pdx.import_meshfile(str(path), imp_locs=False)
         scene = bpy.context.scene
-        if tag in ('MON', 'NAM'):
+        if tag in ('MON', 'NAM', 'EFL'):
             # The importer supplies native custom normals but leaves faces flat.
             for obj in (o for o in scene.objects if o.type == 'MESH'):
                 for face in obj.data.polygons:
                     face.use_smooth = True
-                if tag == 'NAM':
+                if tag in ('NAM', 'EFL'):
                     # Changing smoothing after import invalidates Blender's encoded normal basis.
                     element = next(
                         element for shape in tree.find('object') for element in shape.findall('mesh')
@@ -2005,7 +2204,7 @@ def verify(output, tags, walk=False):
             0.23,
             1,
         )
-        for mat in bpy.data.materials if tag != 'MON' else ():
+        for mat in bpy.data.materials if tag not in ('MON', 'EFL') else ():
             if mat.use_nodes:
                 shader = mat.node_tree.nodes.get('Principled BSDF')
                 if shader:
@@ -2013,10 +2212,11 @@ def verify(output, tags, walk=False):
                     if roughness.is_linked:
                         mat.node_tree.links.remove(roughness.links[0])
                     roughness.default_value = 0.85
-        if tag == 'MON':
+        if tag in ('MON', 'EFL'):
             from build_crimson_sentinel import configure_preview_materials
 
             configure_preview_materials()
+        if tag == 'MON':
             bpy.ops.file.pack_all()
             bpy.ops.wm.save_as_mainfile(filepath=str(output / 'MON_native.blend'))
         for location, power, size in (
@@ -2040,7 +2240,7 @@ def verify(output, tags, walk=False):
         rigs = [obj for obj in scene.objects if obj.type == 'ARMATURE']
         weapons = []
         props = []
-        if tag in ('MON', 'HAZ', 'NAM'):
+        if tag in ('MON', 'HAZ', 'NAM', 'EFL'):
             for level in (0, 1):
                 before = set(scene.objects)
                 pdx.import_meshfile(
@@ -2116,6 +2316,16 @@ def verify(output, tags, walk=False):
                 )
                 scene.render.filepath = str(output / f'{tag}_{pose}_grip.png')
                 bpy.ops.render.render(write_still=True)
+            if tag == 'EFL':
+                camera.data.ortho_scale = 8.7
+                scene.render.resolution_x, scene.render.resolution_y = 650, 800
+                for name, position in (('profile', (20, 0, 7)), ('rear', (0, 20, 7))):
+                    camera.location = position
+                    camera.rotation_euler = (
+                        (Vector((0, 0, 3.7)) - camera.location).to_track_quat('-Z', 'Y').to_euler()
+                    )
+                    scene.render.filepath = str(output / f'{tag}_{pose}_{name}.png')
+                    bpy.ops.render.render(write_still=True)
             camera.location, camera.rotation_euler = location, rotation
             camera.data.ortho_scale = scale
             scene.render.resolution_x, scene.render.resolution_y = width, height
@@ -2153,7 +2363,7 @@ def verify(output, tags, walk=False):
                     )
             poses[pose] = frames
             render_pose = tag == 'NAM' or pose in ('idle_rifle', 'moving_rifle') or (
-                (tag in RETINUE_STYLES or tag in ('MON', 'HAZ'))
+                (tag in RETINUE_STYLES or tag in ('MON', 'HAZ', 'EFL'))
                 and pose in ('idle_mg', 'attack_stand_mg')
             )
             if render_pose:
@@ -2161,7 +2371,7 @@ def verify(output, tags, walk=False):
                 place_weapons(pose)
                 scene.render.filepath = str(output / f'{tag}_{pose}.png')
                 bpy.ops.render.render(write_still=True)
-                if (tag == 'MON' and pose in ('idle_rifle', 'attack_stand_mg')) or (
+                if (tag in ('MON', 'EFL') and pose in ('idle_rifle', 'attack_stand_mg')) or (
                     tag == 'NAM' and pose in ('idle_rifle', 'attack_stand_rifle', 'attack_stand_mg')
                 ):
                     render_details(pose)
@@ -2228,6 +2438,12 @@ def verify(output, tags, walk=False):
             'shapes': shapes,
             'poses': poses,
         }
+        if tag == 'EFL':
+            report[tag]['bones'] = [bone.tag for bone in donor_bones]
+            report[tag]['bindings'] = {
+                'tags': ['EFL'], 'roles': ['infantry'], 'weapon_levels': 8,
+            }
+            report[tag]['runtime'] = 'Offline native re-import only; HOI4 cold-load pending.'
         if tag == 'NAM':
             report[tag]['source'] = {
                 'file': str(CONFIG[tag].relative_to(ROOT)).replace('\\', '/'),
@@ -2323,14 +2539,19 @@ def package(output, apply=False, check=False, tags=None, assets_only=False):
                 ))
             files[dest / f'{tag}_field_{part}_normal.dds'] = dds(normal, True)
             specular = Image.new('RGBA', (512, 512), (0, 48, 0, 36))
-            if tag == 'MON' and part == 'gear':
-                surface = Image.open(output / 'MON_surface.png').convert('RGB')
+            if tag in ('MON', 'EFL') and part == 'gear':
+                surface = Image.open(output / f'{tag}_surface.png').convert('RGB')
                 strength, metalness, gloss = surface.split()
                 specular = Image.merge('RGBA', (
                     Image.new('L', surface.size, 0), strength, metalness, gloss,
                 ))
             files[dest / f'{tag}_field_{part}_specular.dds'] = dds(specular, True)
     verification = output / 'verification.json'
+    if 'EFL' in tags and verification.is_file():
+        report = json.loads(verification.read_text())['EFL']
+        files[ROOT / 'docs/development/model-verification/EFL_verification.json'] = (
+            json.dumps({'EFL': report}, indent=2) + '\n'
+        ).encode()
     if 'NAM' in tags and verification.is_file():
         report = json.loads(verification.read_text())['NAM']
         report['bindings'] = {

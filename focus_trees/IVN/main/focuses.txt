@@ -455,7 +455,7 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			add_manpower = 10000
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 2000 producer = IVN }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 18000 producer = IVN }
 		}
 		ai_will_do = {
 			base = 25
@@ -744,7 +744,7 @@ focus_tree = {
 					}
 				}
 			}
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = IVN }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 27000 producer = IVN }
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = IVN_order_dummy_idea
@@ -1344,7 +1344,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = IVN }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 27000 producer = IVN }
 			add_equipment_to_stockpile = { type = artillery_equipment amount = 100 producer = IVN }
 			effect_tooltip = {
 				swap_ideas = {
@@ -1530,7 +1530,7 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			add_manpower = 5000
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 2000 producer = IVN }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 18000 producer = IVN }
 		}
 		ai_will_do = {
 			base = 30
@@ -1556,13 +1556,13 @@ focus_tree = {
 			IBA = {
 				if = {
 					limit = { exists = yes }
-					add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = IVN }
+					add_equipment_to_stockpile = { type = infantry_equipment amount = 9000 producer = IVN }
 				}
 			}
 			IBL = {
 				if = {
 					limit = { exists = yes }
-					add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = IVN }
+					add_equipment_to_stockpile = { type = infantry_equipment amount = 9000 producer = IVN }
 				}
 			}
 			custom_effect_tooltip = IVN_norvane_mandate_tt

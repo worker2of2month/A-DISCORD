@@ -33,11 +33,37 @@ STARTING_TEMPLATE_COUNTERS = {
     "infiltration": 17,
     "bunker": 6,
     "cbrn": 2,
+    "marine": 34,
+    "airship": 37,
+    "shield": 89,
+    "deception": 22,
 }
 
 
 def starting_template_role(name: str) -> str:
     lowered = name.lower()
+    if lowered == "conclave line brigade":
+        return "line"
+    if lowered == "khazar guard":
+        return "security"
+    if "fake intel" in lowered:
+        return "deception"
+    if "airship" in lowered or "zeppelin" in lowered:
+        return "airship"
+    if "taran" in lowered:
+        return "armor"
+    if "shield" in lowered or "urban breacher" in lowered:
+        return "shield"
+    if "marine" in lowered or "морск" in lowered:
+        return "marine"
+    if "coastal battalion" in lowered or "abandoned columns" in lowered:
+        return "bunker"
+    if "underground cell" in lowered:
+        return "infiltration"
+    if "party exile" in lowered:
+        return "territorial"
+    if "punitive brigade" in lowered:
+        return "guard"
     if "bunker" in lowered:
         return "bunker"
     if "cbrn" in lowered:
@@ -48,11 +74,14 @@ def starting_template_role(name: str) -> str:
         return "assault"
     if "territorial" in lowered:
         return "territorial"
-    if "mountain" in lowered:
+    if "mountain" in lowered or "горно" in lowered:
         return "mountain"
     if "armored" in lowered or "armoured" in lowered:
         return "armor"
-    if "mechanized" in lowered or "mobile" in lowered:
+    if any(
+        token in lowered
+        for token in ("mechanized", "mobile", "motor column", "механизирован")
+    ):
         return "mobile"
     if "infiltration" in lowered:
         return "infiltration"

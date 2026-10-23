@@ -242,7 +242,7 @@ class NewWorldAccountingTests(unittest.TestCase):
 
     def test_expanded_orders_preserve_quotes_and_reject_other_tier_callbacks(self):
         for kind, base_price, expanded_price, expected_rifles, expected_manpower in (
-            ("arsenals", 150, 250, 6800, 0),
+            ("arsenals", 150, 250, 21200, 0),
             ("reserve", 200, 300, 5000, 5000),
         ):
             with self.subTest(kind=kind):
@@ -443,6 +443,7 @@ class NewWorldAccountingTests(unittest.TestCase):
 
     def test_recognition_updates_open_offer_but_keeps_player_refusal_and_cooldown(self):
         world = ContractWorld()
+        world.data["VAL"]["rifles"] = {"VAL": 5400}
         world.target = "SLA"
         world.data["RUS"]["vars"]["RUS_crisis_phase"] = 5
         world.data["VAL"]["focuses"].add("VAL_nw_charters")
@@ -496,7 +497,7 @@ class NewWorldAccountingTests(unittest.TestCase):
             world.run(f"VAL_nw_{name}_finish")
             world.run(f"VAL_nw_{name}_finish")
             self.assertNotIn(f"VAL_nw_{name}_deposit", world.data["VAL"]["vars"])
-            expected = (5600, 0) if name == "emergency_arsenals" else (5000, 2000)
+            expected = (10400, 0) if name == "emergency_arsenals" else (5000, 2000)
             self.assertEqual((sum(world.data["VAL"]["rifles"].values()), world.data["VAL"]["manpower"]), expected)
             ended = ContractWorld()
             ended.data["VAL"]["flags"].add("RUS_crisis_warned")
@@ -564,15 +565,21 @@ class NewWorldAccountingTests(unittest.TestCase):
 
     def test_foreign_stock_is_debited_only_after_consent_and_cannot_be_paid_twice(self):
         world = ContractWorld()
-        world.data["VAL"]["rifles"] = {"STS": 600, "VAL": 0}
+        world.data["VAL"]["rifles"] = {"STS": 5400, "VAL": 0}
         world.data["SLA"]["rifles"] = {}
         world.run("VAL_nw_accept_concession", "SLA")
-        self.assertEqual(sum(world.data["VAL"]["rifles"].values()), 600)
+        self.assertEqual(sum(world.data["VAL"]["rifles"].values()), 5400)
         world.data["SLA"]["flags"].add("VAL_nw_offer_pending")
+        world.data["VAL"]["rifles"]["STS"] = 5399.99
+        world.run("VAL_nw_accept_concession", "SLA")
+        self.assertEqual(sum(world.data["VAL"]["rifles"].values()), 5399.99)
+        self.assertEqual(sum(world.data["SLA"]["rifles"].values()), 0)
+        self.assertEqual(world.data["VAL"]["vars"]["ADISCORD_economy_treasury"], 2000)
+        world.data["VAL"]["rifles"]["STS"] = 5400
         world.run("VAL_nw_accept_concession", "SLA")
         world.run("VAL_nw_accept_concession", "SLA")
         self.assertEqual(sum(world.data["VAL"]["rifles"].values()), 0)
-        self.assertEqual(sum(world.data["SLA"]["rifles"].values()), 600)
+        self.assertEqual(sum(world.data["SLA"]["rifles"].values()), 5400)
         self.assertEqual(world.data["VAL"]["vars"]["ADISCORD_economy_treasury"], 1800)
 
     def test_ownership_reconciles_rights_between_clients_then_cleans_lost_access(self):
@@ -592,6 +599,7 @@ class NewWorldAccountingTests(unittest.TestCase):
 
     def test_new_concession_in_existing_war_starts_protection_without_monthly_wait(self):
         world = ContractWorld()
+        world.data["VAL"]["rifles"] = {"VAL": 5400}
         world.data["SLA"]["flags"].add("VAL_nw_offer_pending")
         world.data["SLA"]["wars"].add("RUS")
         world.run("VAL_nw_accept_concession", "SLA")

@@ -3335,7 +3335,7 @@ country_event = {
 		}
 		add_equipment_to_stockpile = {
 			type = infantry_equipment
-			amount = 600
+			amount = 5400
 			producer = VAL
 		}
 	}

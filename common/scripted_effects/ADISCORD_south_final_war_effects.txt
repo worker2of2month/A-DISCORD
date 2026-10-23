@@ -1259,7 +1259,7 @@ ADISCORD_south_raise_oil_uprising = {
 		if = {
 			limit = { NAM = { has_country_flag = NAM_district_compact } }
 			SHL = {
-				add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = SHL }
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 13500 producer = SHL }
 				country_event = { id = ADISCORD_south.44 hours = 2 }
 			}
 		}
@@ -1274,7 +1274,7 @@ ADISCORD_south_raise_oil_uprising = {
 				add_ideas = ADISCORD_nam_insurgent_columns
 				add_war_support = 0.20
 				load_oob = "SLF_nam_resource_war"
-				add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = SHL }
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 27000 producer = SHL }
 				add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = SLF }
 				set_variable = { var = ADISCORD_south_side value = 1 }
 				add_to_war = {

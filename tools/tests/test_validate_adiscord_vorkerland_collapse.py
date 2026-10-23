@@ -2747,9 +2747,9 @@ class FrontAndSupplyTests(unittest.TestCase):
         tva_oob = read("history/units/TVA_vorkerland_collapse.txt")
         self.assertEqual(tva_oob.count("division = {"), 19)
         self.assertEqual(
-            tva_oob.count('division_template = "TVA Mobile Test Group"'), 1
+            tva_oob.count('division_template = "Mobile Test Group"'), 1
         )
-        self.assertIn("TVA Infiltration Cell", tva_oob)
+        self.assertIn("Infiltration Cell", tva_oob)
 
     def test_eba_receives_the_approved_finite_reserve(self) -> None:
         effects = source_section(

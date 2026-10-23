@@ -670,13 +670,13 @@ ADISCORD_vorkerland_collapse_category = {
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 3000 producer = TVA }
 			ADISCORD_vorkerland_ensure_tva_collapse_militia_template = yes
 			36 = {
-				create_unit = { division = "name = \"Technical Reserve Battalion\" division_template = \"TVA Collapse Militia\" start_experience_factor = 0.10 start_equipment_factor = 0.75" owner = TVA }
-				create_unit = { division = "name = \"Technical Security Battalion\" division_template = \"TVA Collapse Militia\" start_experience_factor = 0.10 start_equipment_factor = 0.75" owner = TVA }
+				create_unit = { division = "name = \"Technical Reserve Battalion\" division_template = \"Collapse Militia\" start_experience_factor = 0.10 start_equipment_factor = 0.75" owner = TVA }
+				create_unit = { division = "name = \"Technical Security Battalion\" division_template = \"Collapse Militia\" start_experience_factor = 0.10 start_equipment_factor = 0.75" owner = TVA }
 			}
 			if = {
 				limit = { WPS = { exists = yes has_war = yes NOT = { has_capitulated = yes } controls_state = 196 } }
 				WPS = { ADISCORD_vorkerland_ensure_wps_collapse_militia_template = yes add_manpower = 600 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1200 producer = TVA } }
-				196 = { create_unit = { division = "name = \"Holden Technical Battalion\" division_template = \"WPS Collapse Militia\" start_experience_factor = 0.10 start_equipment_factor = 0.70" owner = WPS } }
+				196 = { create_unit = { division = "name = \"Holden Technical Battalion\" division_template = \"Collapse Militia\" start_experience_factor = 0.10 start_equipment_factor = 0.70" owner = WPS } }
 			}
 			if = {
 				limit = {
@@ -694,7 +694,7 @@ ADISCORD_vorkerland_collapse_category = {
 					add_manpower = 600
 					add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1200 producer = TVA }
 				}
-				105 = { create_unit = { division = "name = \"Tehlar Technical Battalion\" division_template = \"TGD Urban Guard\" start_experience_factor = 0.10 start_equipment_factor = 0.70" owner = TGD } }
+				105 = { create_unit = { division = "name = \"Tehlar Technical Battalion\" division_template = \"Urban Guard\" start_experience_factor = 0.10 start_equipment_factor = 0.70" owner = TGD } }
 			}
 		}
 		ai_will_do = { factor = 450 }
@@ -744,7 +744,7 @@ ADISCORD_vorkerland_collapse_category = {
 				if = {
 					limit = { is_controlled_by = WKR }
 					create_unit = {
-						division = "name = \"Southeastern Cell\" division_template = \"TVA Infiltration Cell\" start_experience_factor = 0.25 start_equipment_factor = 0.75"
+						division = "name = \"Southeastern Cell\" division_template = \"Infiltration Cell\" start_experience_factor = 0.25 start_equipment_factor = 0.75"
 						owner = TVA
 						allow_spawning_on_enemy_provs = yes
 					}
@@ -754,7 +754,7 @@ ADISCORD_vorkerland_collapse_category = {
 				if = {
 					limit = { is_controlled_by = WKR }
 					create_unit = {
-						division = "name = \"Oil District Cell\" division_template = \"TVA Infiltration Cell\" start_experience_factor = 0.25 start_equipment_factor = 0.75"
+						division = "name = \"Oil District Cell\" division_template = \"Infiltration Cell\" start_experience_factor = 0.25 start_equipment_factor = 0.75"
 						owner = TVA
 						allow_spawning_on_enemy_provs = yes
 					}
@@ -782,7 +782,7 @@ ADISCORD_vorkerland_collapse_category = {
 				if = {
 					limit = { is_controlled_by = VAD }
 					create_unit = {
-						division = "name = \"Isaiah Cell\" division_template = \"TVA Infiltration Cell\" start_experience_factor = 0.25 start_equipment_factor = 0.75"
+						division = "name = \"Isaiah Cell\" division_template = \"Infiltration Cell\" start_experience_factor = 0.25 start_equipment_factor = 0.75"
 						owner = TVA
 						allow_spawning_on_enemy_provs = yes
 					}
@@ -792,7 +792,7 @@ ADISCORD_vorkerland_collapse_category = {
 				if = {
 					limit = { is_controlled_by = VAD }
 					create_unit = {
-						division = "name = \"Sutrtsyi Cell\" division_template = \"TVA Infiltration Cell\" start_experience_factor = 0.25 start_equipment_factor = 0.75"
+						division = "name = \"Sutrtsyi Cell\" division_template = \"Infiltration Cell\" start_experience_factor = 0.25 start_equipment_factor = 0.75"
 						owner = TVA
 						allow_spawning_on_enemy_provs = yes
 					}

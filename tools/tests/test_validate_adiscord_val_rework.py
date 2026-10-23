@@ -9229,7 +9229,7 @@ class ValFocusRewardBalanceTests(unittest.TestCase):
             "VAL_Reserve_Battalions",
             "VAL_raise_reserve_battalions",
             "VAL_reserve_battalions_raised",
-            "Kefreyt Reserve Infantry",
+            "Kefreyt Contract Infantry",
             "infantry",
         ),
     )
@@ -9439,11 +9439,15 @@ class ValFocusRewardBalanceTests(unittest.TestCase):
                     template, "the reward must provide its fixed formation template"
                 )
                 self.assertEqual(scalar(template, "name"), name)
-                self.assertEqual(
-                    scalar(template, "is_locked"),
-                    "no" if battalion == "mountaineers" else "yes",
-                )
-                self.assertEqual(scalar(template, "force_allow_recruiting"), "yes")
+                if battalion == "mountaineers":
+                    self.assertEqual(scalar(template, "is_locked"), "no")
+                    self.assertEqual(scalar(template, "force_allow_recruiting"), "yes")
+                else:
+                    self.assertFalse(any(e.key == "is_locked" for e in template))
+                    self.assertFalse(any(e.key == "force_allow_recruiting" for e in template))
+                    self.assertIn('has_template = "Kefreyt Contract Infantry"', only_named_block(
+                        self, EFFECTS_PATH.read_text(encoding="utf-8"), effect
+                    ))
                 regiments, support = block(template, "regiments"), block(
                     template, "support"
                 )
@@ -9571,17 +9575,19 @@ class ValFocusRewardBalanceTests(unittest.TestCase):
         import json
 
         audit = json.loads(
-            (ROOT / "tools/data/division_template_audit.json").read_text()
+            (ROOT / "tools/data/division_template_audit.json").read_text(encoding="utf-8")
         )
         for _, _, _, name, _ in self.PACKAGES:
-            rows = [row for row in audit["templates"] if row["technical_name"] == name]
+            rows = [row for row in audit["templates"] if row["technical_name"] == name
+                    and row["source"]["path"] == "common/scripted_effects/ADISCORD_VAL_effects.txt"]
             self.assertEqual(len(rows), 1, name)
             self.assertEqual(rows[0]["computed"]["manpower"], 6300)
             self.assertEqual(
                 rows[0]["source"]["path"],
                 "common/scripted_effects/ADISCORD_VAL_effects.txt",
             )
-            refs = [row for row in audit["references"] if row["technical_name"] == name]
+            refs = [row for row in audit["references"] if row["technical_name"] == name
+                    and row["path"] == "common/scripted_effects/ADISCORD_VAL_effects.txt"]
             self.assertEqual(len(refs), 1, name)
             self.assertEqual(refs[0]["kind"], "create_unit")
             self.assertEqual(refs[0]["count"], 1)

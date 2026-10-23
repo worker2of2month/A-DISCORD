@@ -3332,7 +3332,7 @@ class PoliticalChapterContracts(unittest.TestCase):
         decision = self.decisions["STP_ch_trade_delay"]
         facts = {
             ("STP", "STP_ch_pressure_current", "yes"): True,
-            ("STP", "equipment", "infantry_equipment"): 1000,
+            ("STP", "equipment", "infantry_equipment"): 9000,
         }
         gate = one(decision, "available")
         self.assertTrue(matches_conditions(gate, facts))
@@ -3344,14 +3344,22 @@ class PoliticalChapterContracts(unittest.TestCase):
         )
         self.assertFalse(
             matches_conditions(
-                gate, {**facts, ("STP", "equipment", "infantry_equipment"): 999.999}
+                gate, {**facts, ("STP", "equipment", "infantry_equipment"): 8999.999}
             )
         )
+        cost = one(decision, "custom_cost_trigger")
+        facts[("STP", "numeric", "has_political_power")] = 25
+        self.assertTrue(matches_conditions(cost, facts))
+        for key, value in (
+            (("STP", "equipment", "infantry_equipment"), 8999.999),
+            (("STP", "numeric", "has_political_power"), 24.999),
+        ):
+            self.assertFalse(matches_conditions(cost, {**facts, key: value}))
         payload = list(walk(one(decision, "complete_effect")))
         self.assertEqual(
             sum(
                 e.key == "add_equipment_to_stockpile"
-                and one(e.value, "amount") == "-1000"
+                and one(e.value, "amount") == "-9000"
                 for e in payload
             ),
             1,

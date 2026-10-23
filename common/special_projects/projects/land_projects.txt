@@ -48,7 +48,7 @@ ADISCORD_sp_power_shields = {
 						limit = { NOT = { has_template = "Shield Assault Division" } }
 						division_template = {
 							name = "Shield Assault Division"
-							template_counter = 3
+							template_counter = 89
 							is_locked = no
 							regiments = {
 								ADISCORD_urban_breacher = { x = 0 y = 0 }

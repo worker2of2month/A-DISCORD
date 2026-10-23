@@ -1015,7 +1015,7 @@ VAL_military_operations = {
 		custom_cost_text = VAL_ardent_uprising_cost
 		custom_cost_trigger = {
 			NOT = { has_political_power < 25 }
-			NOT = { has_equipment = { infantry_equipment < 2000 } }
+			NOT = { has_equipment = { infantry_equipment < 18000 } }
 		}
 		complete_effect = {
 			custom_effect_tooltip = VAL_ardent_uprising_tt
@@ -3295,7 +3295,7 @@ VAL_command_balance_category = {
 		days_re_enable = 90
 		complete_effect = {
 			add_power_balance_value = { id = VAL_command_balance value = -0.15 }
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = VAL }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 13500 producer = VAL }
 			army_experience = 10
 		}
 		ai_will_do = { base = 1 }
@@ -3896,7 +3896,7 @@ VAL_new_world_category = {
 		custom_cost_text = VAL_nw_supply_partner_cost
 		custom_cost_trigger = {
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
-			NOT = { has_equipment = { infantry_equipment < 600 } }
+			NOT = { has_equipment = { infantry_equipment < 5400 } }
 		}
 		days_re_enable = 30
 		complete_effect = {
@@ -3906,7 +3906,7 @@ VAL_new_world_category = {
 					limit = {
 						VAL_nw_operational = yes
 						check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
-						NOT = { has_equipment = { infantry_equipment < 600 } }
+						NOT = { has_equipment = { infantry_equipment < 5400 } }
 						FROM = {
 							VAL_nw_concession_valid = yes
 							has_war = yes
@@ -3914,12 +3914,12 @@ VAL_new_world_category = {
 					}
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
-					add_equipment_to_stockpile = { type = infantry_equipment amount = -600 }
+					add_equipment_to_stockpile = { type = infantry_equipment amount = -5400 }
 					ADISCORD_economy_mark_dirty = yes
 					FROM = {
 						add_to_variable = { var = ADISCORD_economy_treasury value = 100 }
 						add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 100 }
-						add_equipment_to_stockpile = { type = infantry_equipment amount = 600 producer = VAL }
+						add_equipment_to_stockpile = { type = infantry_equipment amount = 5400 producer = VAL }
 						ADISCORD_economy_mark_dirty = yes
 					}
 				}

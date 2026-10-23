@@ -410,6 +410,7 @@ operation_fake_intel = { ### 2 1/40
 					}
 					division_template = {
 						name = "Fake Intel Division"
+						template_counter = 22
 
 						is_fake_intel_division = yes
 						is_locked = yes

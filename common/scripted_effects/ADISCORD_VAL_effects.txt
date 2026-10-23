@@ -260,7 +260,7 @@ VAL_nw_emergency_arsenals_finish = {
 			clear_variable = VAL_nw_emergency_arsenals_deposit
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 600
+				amount = 5400
 				producer = VAL
 			}
 			ADISCORD_economy_mark_dirty = yes
@@ -708,14 +708,14 @@ VAL_nw_accept_concession = {
 		clr_country_flag = VAL_nw_offer_pending
 		set_country_flag = VAL_nw_concession
 		ADISCORD_release_non_participating_minor_optimization = yes
-		add_equipment_to_stockpile = { type = infantry_equipment amount = 600 producer = VAL }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 5400 producer = VAL }
 		add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
 		VAL = {
 			add_political_power = -50
 			subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
 			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
-			add_equipment_to_stockpile = { type = infantry_equipment amount = -600 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -5400 }
 			ADISCORD_economy_mark_dirty = yes
 			country_event = { id = val_rework.126 }
 		}
@@ -916,7 +916,7 @@ VAL_nw_expanded_arsenals_finish = {
 			clear_variable = VAL_nw_emergency_arsenals_deposit
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 1200
+				amount = 10800
 				producer = VAL
 			}
 			ADISCORD_economy_mark_dirty = yes
@@ -3632,7 +3632,7 @@ VAL_raise_shield_special_forces = {
 				division_template = {
 					name = "Kefreyt Shield Special Forces"
 					override_model = ADISCORD_urban_breacher_entity
-					template_counter = 3
+					template_counter = 89
 					division_names_group = VAL_INF_01
 					is_locked = no
 					force_allow_recruiting = yes
@@ -3723,6 +3723,21 @@ VAL_zeppelin_refund = {
 	}
 }
 
+VAL_ensure_airship_template = {
+	if = {
+		limit = { NOT = { has_template = "Kefreyt Airship" } }
+		division_template = {
+			name = "Kefreyt Airship"
+			template_counter = 37
+			override_model = ADISCORD_zeppelin_entity
+			is_locked = yes
+			regiments = {
+				ADISCORD_zeppelin = { x = 0 y = 0 }
+			}
+		}
+	}
+}
+
 VAL_zeppelin_finish = {
 	if = {
 		limit = { has_variable = VAL_zeppelin_deposit }
@@ -3733,17 +3748,7 @@ VAL_zeppelin_finish = {
 			}
 			clear_variable = VAL_zeppelin_deposit
 			set_country_flag = VAL_zeppelin_delivered
-			if = {
-				limit = { NOT = { has_template = "Kefreyt Airship" } }
-				division_template = {
-					name = "Kefreyt Airship"
-					override_model = ADISCORD_zeppelin_entity
-					is_locked = yes
-					regiments = {
-						ADISCORD_zeppelin = { x = 0 y = 0 }
-					}
-				}
-			}
+			VAL_ensure_airship_template = yes
 			# The paid crew is already outside the national recruit pool.
 			capital_scope = {
 				create_unit = {
@@ -3769,22 +3774,11 @@ VAL_spawn_zeppelin_trial = {
 				is_controlled_by = VAL
 			}
 		}
-		if = {
-			limit = { NOT = { has_template = "Kefreyt Zeppelin Trial" } }
-			division_template = {
-				name = "Kefreyt Zeppelin Trial"
-				override_model = ADISCORD_zeppelin_entity
-				template_counter = 86
-				is_locked = yes
-				regiments = {
-					ADISCORD_zeppelin = { x = 0 y = 0 }
-				}
-			}
-		}
+		VAL_ensure_airship_template = yes
 		# Debug staffing and hull supply are independent of national reserves.
 		capital_scope = {
 			create_unit = {
-				division = "name = \"Воздушный линкор «Цепелин»\" division_template = \"Kefreyt Zeppelin Trial\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				division = "name = \"Воздушный линкор «Цепелин»\" division_template = \"Kefreyt Airship\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 				owner = VAL
 				allow_spawning_on_enemy_provs = no
 			}
@@ -3814,7 +3808,7 @@ VAL_spawn_crimson_trial = {
 			limit = { NOT = { has_template = "Kefreyt Assault Trial" } }
 			division_template = {
 				name = "Kefreyt Assault Trial"
-				template_counter = 3
+				template_counter = 4
 				is_locked = yes
 				regiments = {
 					ADISCORD_combat_robots = { x = 0 y = 0 }
@@ -3852,7 +3846,7 @@ VAL_spawn_urban_breacher_trial = {
 			limit = { NOT = { has_template = "Kefreyt Urban Breacher Trial" } }
 			division_template = {
 				name = "Kefreyt Urban Breacher Trial"
-				template_counter = 3
+				template_counter = 89
 				is_locked = yes
 				regiments = {
 					ADISCORD_urban_breacher = { x = 0 y = 0 }
@@ -3929,13 +3923,11 @@ VAL_raise_reserve_battalions = {
 				any_owned_state = { is_controlled_by = PREV }
 			}
 			if = {
-				limit = { NOT = { has_template = "Kefreyt Reserve Infantry" } }
+				limit = { NOT = { has_template = "Kefreyt Contract Infantry" } }
 				division_template = {
-					name = "Kefreyt Reserve Infantry"
+					name = "Kefreyt Contract Infantry"
 					template_counter = 3
 					division_names_group = VAL_INF_01
-					is_locked = yes
-					force_allow_recruiting = yes
 					regiments = {
 						infantry = { x = 0 y = 0 }
 						infantry = { x = 0 y = 1 }
@@ -3950,7 +3942,7 @@ VAL_raise_reserve_battalions = {
 			# Explicit staffing avoids taking recruits from the free replacement pool.
 			random_owned_controlled_state = {
 				create_unit = {
-					division = "division_template = \"Kefreyt Reserve Infantry\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					division = "division_template = \"Kefreyt Contract Infantry\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 					owner = PREV
 					count = 2
 					allow_spawning_on_enemy_provs = no
@@ -3980,7 +3972,7 @@ VAL_raise_marine_contract_corps = {
 				division_template = {
 					name = "Kefreyt Marine Contract Group"
 					override_model = ADISCORD_VAL_marine_entity
-					template_counter = 68
+					template_counter = 34
 					division_names_group = VAL_INF_01
 					is_locked = yes
 					force_allow_recruiting = yes
@@ -8241,7 +8233,7 @@ VAL_ardent_start_uprising = {
 					}
 					add_equipment_to_stockpile = {
 						type = infantry_equipment
-						amount = 2000
+						amount = 18000
 						producer = VAL
 					}
 					ADISCORD_economy_initialize_country = yes
@@ -8269,7 +8261,7 @@ VAL_ardent_start_uprising = {
 					add_political_power = -25
 					add_equipment_to_stockpile = {
 						type = infantry_equipment
-						amount = -2000
+						amount = -18000
 					}
 					set_variable = { var = VAL_ardent_stage value = 1 }
 					clr_country_flag = VAL_ardent_mandate_secured

@@ -1056,7 +1056,7 @@ NAM_national_programmes = {
 				hidden_effect = { ADISCORD_economy_spend_500 = yes }
 				add_equipment_to_stockpile = {
 					type = infantry_equipment
-					amount = 2000
+					amount = 18000
 					producer = NAM
 				}
 				add_equipment_to_stockpile = {
@@ -1120,7 +1120,7 @@ NAM_national_programmes = {
 				}
 				add_equipment_to_stockpile = {
 					type = infantry_equipment
-					amount = 1000
+					amount = 9000
 					producer = NAM
 				}
 			}
@@ -1168,7 +1168,7 @@ NAM_national_programmes = {
 				add_fuel = -3000
 				add_equipment_to_stockpile = {
 					type = infantry_equipment
-					amount = 800
+					amount = 7200
 					producer = NAM
 				}
 				add_equipment_to_stockpile = {
@@ -1272,7 +1272,7 @@ NAM_national_programmes = {
 				hidden_effect = { ADISCORD_economy_spend_500 = yes }
 				add_equipment_to_stockpile = {
 					type = infantry_equipment
-					amount = 2000
+					amount = 18000
 					producer = NAM
 				}
 				add_equipment_to_stockpile = {
@@ -3355,7 +3355,6 @@ NAM_underground = {
 			has_completed_focus = NAM_veter_channel
 			NAM_underground_open = yes
 			NOT = { has_country_flag = NAM_veter_talks_1_done }
-			NAM_veter_talks_possible = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -3398,7 +3397,6 @@ NAM_underground = {
 			has_country_flag = NAM_veter_talks_1_done
 			NAM_underground_open = yes
 			NOT = { has_country_flag = NAM_veter_talks_2_done }
-			NAM_veter_talks_possible = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -3462,7 +3460,6 @@ NAM_underground = {
 		visible = {
 			has_country_flag = NAM_veter_talks_2_done
 			NAM_underground_open = yes
-			NAM_veter_talks_possible = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -3531,11 +3528,9 @@ NAM_underground = {
 		visible = {
 			has_completed_focus = NAM_cache_hunters
 			NAM_underground_open = yes
-			check_variable = { NAM_underground > 0 }
 			FROM = {
 				is_owned_by = ROOT
 				is_controlled_by = ROOT
-				NOT = { has_state_flag = NAM_caches_searched }
 			}
 		}
 		available = {
@@ -3558,7 +3553,7 @@ NAM_underground = {
 		complete_effect = {
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 500
+				amount = 4500
 				producer = NAM
 			}
 			custom_effect_tooltip = NAM_hunt_caches_tt
@@ -3993,7 +3988,7 @@ NAM_piracy = {
 				}
 				add_equipment_to_stockpile = {
 					type = infantry_equipment
-					amount = 1500
+					amount = 13500
 					producer = NAM
 				}
 				add_equipment_to_stockpile = {

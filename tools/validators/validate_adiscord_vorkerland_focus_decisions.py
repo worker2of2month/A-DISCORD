@@ -81,13 +81,13 @@ LEVY_DECISIONS = {
     "ADISCORD_vorkerland_tva_retreat_levy_1": (
         "TVA",
         "0.20",
-        "TVA Collapse Militia",
+        "Collapse Militia",
         "0.55",
     ),
     "ADISCORD_vorkerland_tva_retreat_levy_2": (
         "TVA",
         "0.45",
-        "TVA Collapse Militia",
+        "Collapse Militia",
         "0.45",
     ),
 }

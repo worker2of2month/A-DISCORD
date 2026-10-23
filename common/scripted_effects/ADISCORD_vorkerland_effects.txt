@@ -6602,23 +6602,23 @@ ADISCORD_vorkerland_ensure_armi_mobile_group_template = {
 	}
 }
 ADISCORD_vorkerland_ensure_tva_collapse_militia_template = {
-	if = { limit = { NOT = { has_template = "TVA Collapse Militia" } }
-		division_template = { name = "TVA Collapse Militia" template_counter = 7 division_names_group = TVA_COLLAPSE_INF_01 regiments = { ADISCORD_militia = { x = 0 y = 0 } ADISCORD_militia = { x = 0 y = 1 } ADISCORD_militia = { x = 0 y = 2 } } }
+	if = { limit = { NOT = { has_template = "Collapse Militia" } }
+		division_template = { name = "Collapse Militia" template_counter = 7 division_names_group = TVA_COLLAPSE_INF_01 regiments = { ADISCORD_militia = { x = 0 y = 0 } ADISCORD_militia = { x = 0 y = 1 } ADISCORD_militia = { x = 0 y = 2 } } }
 	}
 }
 ADISCORD_vorkerland_ensure_tva_infiltration_cell_template = {
-	if = { limit = { NOT = { has_template = "TVA Infiltration Cell" } }
-		division_template = { name = "TVA Infiltration Cell" template_counter = 17 division_names_group = TVA_COLLAPSE_INF_01 regiments = { ADISCORD_militia = { x = 0 y = 0 } ADISCORD_militia = { x = 0 y = 1 } } }
+	if = { limit = { NOT = { has_template = "Infiltration Cell" } }
+		division_template = { name = "Infiltration Cell" template_counter = 17 division_names_group = TVA_COLLAPSE_INF_01 regiments = { ADISCORD_militia = { x = 0 y = 0 } ADISCORD_militia = { x = 0 y = 1 } } }
 	}
 }
 ADISCORD_vorkerland_ensure_wps_collapse_militia_template = {
-	if = { limit = { NOT = { has_template = "WPS Collapse Militia" } }
-		division_template = { name = "WPS Collapse Militia" template_counter = 7 division_names_group = WPS_COLLAPSE_INF_01 regiments = { ADISCORD_militia = { x = 0 y = 0 } ADISCORD_militia = { x = 0 y = 1 } ADISCORD_militia = { x = 0 y = 2 } } }
+	if = { limit = { NOT = { has_template = "Collapse Militia" } }
+		division_template = { name = "Collapse Militia" template_counter = 7 division_names_group = WPS_COLLAPSE_INF_01 regiments = { ADISCORD_militia = { x = 0 y = 0 } ADISCORD_militia = { x = 0 y = 1 } ADISCORD_militia = { x = 0 y = 2 } } }
 	}
 }
 ADISCORD_vorkerland_ensure_tgd_urban_guard_template = {
-	if = { limit = { NOT = { has_template = "TGD Urban Guard" } }
-		division_template = { name = "TGD Urban Guard" template_counter = 78 division_names_group = TGD_COLLAPSE_INF_01 regiments = { ADISCORD_militia = { x = 0 y = 0 } ADISCORD_militia = { x = 0 y = 1 } ADISCORD_militia = { x = 0 y = 2 } } }
+	if = { limit = { NOT = { has_template = "Urban Guard" } }
+		division_template = { name = "Urban Guard" template_counter = 78 division_names_group = TGD_COLLAPSE_INF_01 regiments = { ADISCORD_militia = { x = 0 y = 0 } ADISCORD_militia = { x = 0 y = 1 } ADISCORD_militia = { x = 0 y = 2 } } }
 	}
 }
 ADISCORD_vorkerland_ensure_line_infantry_brigade_template = {
@@ -6921,7 +6921,7 @@ ADISCORD_vorkerland_raise_tva_retreat_levy_1 = {
 		PREV = { ADISCORD_vorkerland_ensure_tva_collapse_militia_template = yes }
 		capital_scope = {
 			create_unit = {
-				division = "name = \"First Technical Levy\" division_template = \"TVA Collapse Militia\" start_experience_factor = 0.05 start_equipment_factor = 0.55"
+				division = "name = \"First Technical Levy\" division_template = \"Collapse Militia\" start_experience_factor = 0.05 start_equipment_factor = 0.55"
 				owner = PREV
 			}
 		}
@@ -6945,7 +6945,7 @@ ADISCORD_vorkerland_raise_tva_retreat_levy_2 = {
 		PREV = { ADISCORD_vorkerland_ensure_tva_collapse_militia_template = yes }
 		capital_scope = {
 			create_unit = {
-				division = "name = \"Last Technical Reserve\" division_template = \"TVA Collapse Militia\" start_experience_factor = 0.02 start_equipment_factor = 0.45"
+				division = "name = \"Last Technical Reserve\" division_template = \"Collapse Militia\" start_experience_factor = 0.02 start_equipment_factor = 0.45"
 				owner = PREV
 			}
 		}
@@ -11126,7 +11126,7 @@ ADISCORD_vorkerland_tva_add_iteration = {
 
 ADISCORD_vorkerland_tva_begin_field_trial = {
 	add_political_power = -30
-	add_equipment_to_stockpile = { type = infantry_equipment amount = -1000 }
+	add_equipment_to_stockpile = { type = infantry_equipment amount = -9000 }
 }
 
 # The bonus follows the trial protocol the directorate committed to.
@@ -12634,12 +12634,12 @@ ADISCORD_vorkerland_prep_accept_offer = {
 				add_political_power = -35
 				add_equipment_to_stockpile = {
 					type = infantry_equipment
-					amount = -1500
+					amount = -13500
 				}
 			}
 			add_equipment_to_stockpile = {
 				type = infantry_equipment_0
-				amount = 1500
+				amount = 13500
 			}
 		}
 		if = {
@@ -12676,12 +12676,12 @@ ADISCORD_vorkerland_prep_accept_offer = {
 				add_political_power = -35
 				add_equipment_to_stockpile = {
 					type = infantry_equipment
-					amount = -2000
+					amount = -18000
 				}
 			}
 			add_equipment_to_stockpile = {
 				type = infantry_equipment_0
-				amount = 2000
+				amount = 18000
 			}
 		}
 		if = {

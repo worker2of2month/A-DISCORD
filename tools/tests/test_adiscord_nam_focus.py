@@ -1,6 +1,7 @@
 """Parsed NAM campaign scenarios; native loading and UI need a fresh game."""
 
 from dataclasses import replace
+from collections import Counter
 from contextlib import redirect_stdout
 from io import StringIO
 from itertools import product
@@ -183,15 +184,20 @@ class NamCampaignTests(unittest.TestCase):
         self.assertEqual(scalar(self.tree, "id"), "NAM_focus")
         country = block(self.tree, "country")
         self.assertEqual(scalar(block(country, "modifier"), "tag"), "NAM")
-        selection = {
-            "postwar": (self.postwar_tree, "ADISCORD_nam_resource_war_nam_victory"),
-            "defeated": (self.defeated_tree, "ADISCORD_nam_resource_war_compromise"),
-        }
-        for kind, (tree, flag) in selection.items():
+        selection = {"postwar": self.postwar_tree, "defeated": self.defeated_tree}
+        for kind, tree in selection.items():
             self.assertEqual(scalar(tree, "id"), TREES[kind][1])
             modifier = block(block(tree, "country"), "modifier")
             self.assertEqual(scalar(modifier, "original_tag"), "NAM")
-            self.assertEqual(scalar(modifier, "has_global_flag"), flag)
+            conditions = [entry for entry in modifier if entry.key != "add"]
+            for outcome in (None, "nam_victory", "compromise", "island_exile", "standoff"):
+                facts = {("NAM", "original_tag", "NAM"): True}
+                if outcome is not None:
+                    facts[("NAM", "has_global_flag", BASE + "_" + outcome)] = True
+                expected = outcome in (
+                    ("nam_victory",) if kind == "postwar" else ("compromise", "island_exile")
+                )
+                self.assertEqual(self.matches(conditions, facts), expected, (kind, outcome))
         owners = json.loads(read("tools/data/generated_output_owners.json"))
         for kind, (_, _, filename) in TREES.items():
             output = ROOT / "common/national_focus" / filename
@@ -251,7 +257,7 @@ class NamCampaignTests(unittest.TestCase):
     def test_normal_preparation_fits_external_clock(self):
         path = ("inventory", "open_ledgers", "districts", "public_payroll", "district_guarantees")
         days = sum(int(scalar(self.focuses["NAM_" + key], "cost")) * 7 for key in path)
-        self.assertEqual(days, 175)
+        self.assertEqual(days, 112)
         self.assertLess(days + 60, 850)
         self.assertNotIn("prerequisite", [e.key for e in self.focuses["NAM_alarm"]])
         self.assertNotIn("prerequisite", [e.key for e in self.postwar["NAM_recognition"]])
@@ -284,7 +290,7 @@ class NamCampaignTests(unittest.TestCase):
             facts = self.facts()
             facts[("NAM", "has_completed_focus", "NAM_emergency_writ")] = emergency_first
             self.apply(block(self.focuses["NAM_quartermaster"], "completion_reward"), facts)
-            self.assertEqual(facts[("NAM", "equipment", "infantry_equipment")], 1500)
+            self.assertEqual(facts[("NAM", "equipment", "infantry_equipment")], 13500)
             self.assertEqual(facts[("NAM", "equipment", "support_equipment")], 60)
 
     def test_fractional_affordability_and_actual_debits(self):
@@ -323,6 +329,13 @@ class NamCampaignTests(unittest.TestCase):
             expected_treasury = 250 if name == "NAM_export_fuel" else 0
             self.assertEqual(facts[("NAM", "variable", "ADISCORD_economy_treasury")], expected_treasury, name)
             self.assertEqual(facts.get(("NAM", "variable", "ADISCORD_economy_current_month_action_costs"), 0), treasury, name)
+            rifles = {
+                "NAM_supply_order": 13500, "NAM_emergency_arsenal": 18000,
+                "NAM_counterinsurgency": 9000, "NAM_relief_batch": 7200,
+                "NAM_postwar_rearmament": 18000,
+            }
+            if name in rifles:
+                self.assertEqual(facts[("NAM", "equipment", "infantry_equipment")], rifles[name], name)
 
     def test_compact_age_loss_repayment_and_delayed_rebellion(self):
         facts = self.facts(pp=150, treasury=1000)
@@ -385,7 +398,7 @@ class NamCampaignTests(unittest.TestCase):
         self.assertFalse(self.matches(block(mission, "available"), self.facts()))
         self.assertEqual(scalar(mission, "days_mission_timeout"), "420")
         self.assertFalse(block(mission, "timeout_effect"))
-        for outcome in ("resolve_nam_victory", "resolve_coalition_victory", "resolve_peaceful_withdrawal"):
+        for outcome in ("resolve_nam_victory", "resolve_coalition_victory", "resolve_compromise", "resolve_standoff"):
             self.assertIn(BASE + "_clear_temporary_support", [e.key for e in walk(self.effects[BASE + "_" + outcome])])
         self.assertIn("NAM_close_war_programmes", [e.key for e in walk(self.effects[BASE + "_clear_temporary_support"])])
         cleanup = self.effects["NAM_close_war_programmes"]
@@ -393,27 +406,39 @@ class NamCampaignTests(unittest.TestCase):
         self.assertEqual({e.value for e in cleanup if e.key == "remove_ideas"}, {"NAM_wartime_entrenchment", "NAM_counterstroke_staff", "NAM_rebel_depot_maps"})
 
     def test_open_payroll_event_cannot_spend_after_money_or_route_changes(self):
-        options = [e.value for e in self.events[BASE + ".10"] if e.key == "option"]
+        options = {
+            scalar(e.value, "name"): e.value
+            for e in self.events[BASE + ".10"] if e.key == "option"
+        }
         facts = self.facts(treasury=249.99)
-        self.apply(options[0], facts)
+        self.apply(options[BASE + ".10.a"], facts)
         self.assertEqual(facts[("NAM", "variable", "ADISCORD_economy_treasury")], 249.99)
+        facts[("NAM", "variable", "ADISCORD_economy_treasury")] = 99.99
+        self.apply(options[BASE + ".10.c"], facts)
+        self.assertEqual(facts[("NAM", "variable", "ADISCORD_economy_treasury")], 99.99)
         facts[("NAM", "has_completed_focus", "NAM_recognition")] = True
         facts[("NAM", "variable", "ADISCORD_economy_treasury")] = 1000
-        self.apply(options[0], facts)
-        self.apply(options[1], facts)
+        for suffix in ("a", "b", "c"):
+            option = options[BASE + ".10." + suffix]
+            self.assertFalse(self.matches(block(option, "trigger"), facts))
+            self.apply(option, facts)
         self.assertEqual(facts[("NAM", "variable", "ADISCORD_economy_treasury")], 1000)
         self.assertNotIn(("NAM", "has_idea", "NAM_wage_arrears"), facts)
-        self.assertTrue(self.matches(block(options[2], "trigger"), facts))
+        close = options[BASE + ".close"]
+        self.assertTrue(self.matches(block(close, "trigger"), facts))
+        before = facts.copy()
+        self.apply(close, facts)
+        self.assertEqual(facts, before)
 
     def test_bilingual_costs_story_limits_and_encoding(self):
         for language in ("russian", "english"):
             path = ROOT / f"localisation/{language}/{BASE}_l_{language}.yml"
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             text = path.read_text(encoding="utf-8-sig")
-            values = dict(re.findall(r'^\s*([^ #:\s]+):\s*"(.*)"\s*$', text, re.M))
+            values = dict(re.findall(r'^[ \t]*([^ #:\s]+):\d*[ \t]*"(.*)"[ \t]*$', text, re.M))
             for name in (*self.focuses, *self.postwar, *self.defeated):
-                self.assertIn(name, values)
-                self.assertIn(name + "_desc", values)
+                self.assertIn(name, values.keys())
+                self.assertIn(name + "_desc", values.keys())
             for name, decision in self.decisions.items():
                 self.assertIn(name, values)
                 self.assertIn(name + "_desc", values)
@@ -438,7 +463,9 @@ class NamCampaignTests(unittest.TestCase):
             if not name.startswith("NAM_"):
                 continue
             # Display-only aggregate deltas are never installed; their refresh owns invalidation.
-            if [(e.key, e.value) for e in block(idea, "allowed")] == [("always", "no")]:
+            allowed = [entry.value for entry in idea if entry.key == "allowed"]
+            self.assertLessEqual(len(allowed), 1, name)
+            if allowed and [(e.key, e.value) for e in allowed[0]] == [("always", "no")]:
                 continue
             for hook in ("on_add", "on_remove"):
                 self.assertIn("ADISCORD_economy_mark_dirty", [e.key for e in block(idea, hook)], name)
@@ -536,6 +563,219 @@ class NamPillarsTests(unittest.TestCase):
         hooks = read("common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt")
         self.assertIn("on_monthly_NAM", hooks)
         self.assertIn("NAM = {\n\t\t\t\t\tNAM_groups_initialize = yes", read("common/on_actions/00_ADISCORD_on_actions.txt"))
+
+
+class NamOptimizationTests(unittest.TestCase):
+    """Parsed state transitions and work counts; native timing remains unmodelled."""
+
+    GROUPS = NamPillarsTests.GROUPS
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = {
+            entry.key: entry.value
+            for entry in parsed(f"common/scripted_effects/{BASE}_effects.txt")
+        }
+
+    def normalize(self, entries):
+        result = []
+        comparisons = {">": "greater_than", "<": "less_than"}
+        for entry in entries:
+            if entry.key == "check_variable" and not any(e.key == "var" for e in entry.value):
+                name, operator, value = (e.value for e in entry.value)
+                entry = replace(entry, value=parse_clausewitz(
+                    f"var = {name} value = {value} compare = {comparisons[operator]}"
+                ))
+            elif isinstance(entry.value, list):
+                entry = replace(entry, value=self.normalize(entry.value))
+            result.append(entry)
+        return result
+
+    def execute(self, name, facts, calls):
+        arithmetic = {
+            "set_variable": lambda old, value: value,
+            "add_to_variable": lambda old, value: old + value,
+            "subtract_from_variable": lambda old, value: old - value,
+            "multiply_variable": lambda old, value: old * value,
+            "divide_variable": lambda old, value: old / value,
+        }
+        for scope, entry in selected_effects(self.normalize(self.effects[name]), facts, "NAM"):
+            operation = entry.key.replace("_temp_variable", "_variable")
+            if operation in arithmetic:
+                variable = scalar(entry.value, "var")
+                reference = scalar(entry.value, "value")
+                try:
+                    value = float(reference)
+                except ValueError:
+                    value = facts.get((scope, "variable", reference), 0)
+                key = (scope, "variable", variable)
+                facts[key] = arithmetic[operation](facts.get(key, 0), value)
+                if "_temp_variable" not in entry.key:
+                    facts[(scope, "has_variable", variable)] = True
+            elif operation == "clamp_variable":
+                key = (scope, "variable", scalar(entry.value, "var"))
+                facts[key] = min(float(scalar(entry.value, "max")), max(
+                    float(scalar(entry.value, "min")), facts.get(key, 0)
+                ))
+            elif entry.key in ("NAM_groups_refresh", "NAM_seal_discipline_clamp"):
+                calls[entry.key] += 1
+                self.execute(entry.key, facts, calls)
+            elif entry.key == "add_dynamic_modifier":
+                facts[(scope, "has_dynamic_modifier", scalar(entry.value, "modifier"))] = True
+            elif entry.key == "set_country_flag":
+                self.assertIsInstance(entry.value, str)
+                facts[(scope, "has_country_flag", entry.value)] = True
+            elif entry.key == "country_event":
+                calls[scalar(entry.value, "id")] += 1
+            elif entry.key in (
+                "force_update_dynamic_modifier", "ADISCORD_economy_mark_dirty",
+                "NAM_groups_check_events",
+            ):
+                calls[entry.key] += 1
+            else:
+                self.fail(f"Unsupported optimization fixture effect: {entry.key}")
+
+    def test_monthly_drift_preserves_values_and_only_refreshes_changed_inputs(self):
+        for group, support in product(self.GROUPS, (0, 20, 49.49, 49.5, 49.99, 50, 50.01, 50.5, 85, 100)):
+            with self.subTest(group=group, support=support):
+                facts = {
+                    ("NAM", "has_country_flag", "NAM_groups_initialized"): True,
+                    ("NAM", "has_dynamic_modifier", "NAM_loyalty_dynamic"): True,
+                }
+                for current in self.GROUPS:
+                    facts[("NAM", "variable", f"NAM_grp_{current}_support")] = 50
+                    facts[("NAM", "variable", f"NAM_grp_{current}_influence")] = 20
+                key = ("NAM", "variable", f"NAM_grp_{group}_support")
+                facts[key] = support
+                calls = Counter()
+                self.execute("NAM_groups_monthly", facts, calls)
+                expected = max(50, support - 0.5) if support >= 50 else min(50, support + 0.5)
+                self.assertAlmostEqual(facts[key], expected)
+                for current in self.GROUPS:
+                    if current != group:
+                        self.assertEqual(facts[("NAM", "variable", f"NAM_grp_{current}_support")], 50)
+                self.assertEqual(calls["NAM_groups_check_events"], 1)
+                self.assertEqual(calls["ADISCORD_economy_mark_dirty"], int(support != 50))
+                self.assertEqual(calls["force_update_dynamic_modifier"], int(support != 50))
+
+    def test_monthly_drift_keeps_initialization_guard_and_missing_modifier_refresh(self):
+        for initialized, modifier in product((False, True), repeat=2):
+            facts = {
+                ("NAM", "has_country_flag", "NAM_groups_initialized"): initialized,
+                ("NAM", "has_dynamic_modifier", "NAM_loyalty_dynamic"): modifier,
+            }
+            for group in self.GROUPS:
+                facts[("NAM", "variable", f"NAM_grp_{group}_support")] = 50
+            calls = Counter()
+            self.execute("NAM_groups_monthly", facts, calls)
+            self.assertEqual(calls["NAM_groups_check_events"], int(initialized))
+            self.assertEqual(calls["NAM_groups_refresh"], int(initialized and not modifier))
+
+    def test_discipline_recovers_and_stops_refreshing_at_cap(self):
+        facts = {
+            ("NAM", "has_dynamic_modifier", "NAM_seal_discipline_dynamic"): True,
+            ("NAM", "has_variable", "NAM_seal_org_factor"): True,
+            ("NAM", "has_war", "no"): True,
+            ("NAM", "variable", "NAM_seal_discipline"): 96,
+            ("NAM", "variable", "NAM_seal_org_factor"): 0.046,
+        }
+        for expected, updates in ((99, 1), (100, 1), (100, 0), (100, 0)):
+            calls = Counter()
+            self.execute("NAM_seal_discipline_monthly", facts, calls)
+            self.assertEqual(facts[("NAM", "variable", "NAM_seal_discipline")], expected)
+            self.assertAlmostEqual(facts[("NAM", "variable", "NAM_seal_org_factor")], (expected - 50) / 1000)
+            self.assertEqual(calls["force_update_dynamic_modifier"], updates)
+
+    def test_discipline_unchanged_modifier_still_checks_event_thresholds(self):
+        for value, event in ((0, 32), (24, 31), (49, 30), (50, None), (100, None)):
+            facts = {
+                ("NAM", "has_dynamic_modifier", "NAM_seal_discipline_dynamic"): True,
+                ("NAM", "has_variable", "NAM_seal_org_factor"): True,
+                ("NAM", "ADISCORD_nam_resource_war_active", "yes"): True,
+                ("NAM", "variable", "NAM_seal_discipline"): value,
+                ("NAM", "variable", "NAM_seal_org_factor"): (value - 50) / 1000,
+            }
+            calls = Counter()
+            self.execute("NAM_seal_discipline_clamp", facts, calls)
+            self.assertEqual(calls["force_update_dynamic_modifier"], 0)
+            expected = Counter({f"{BASE}.{event}": 1}) if event else Counter()
+            self.assertEqual(calls, expected)
+            self.execute("NAM_seal_discipline_clamp", facts, calls)
+            if value == 0:
+                expected[f"{BASE}.31"] = 1
+            self.assertEqual(calls, expected)
+
+    def test_discipline_initial_zero_factor_and_casualty_accounting(self):
+        facts = {
+            ("NAM", "has_dynamic_modifier", "NAM_seal_discipline_dynamic"): True,
+            ("NAM", "ADISCORD_nam_resource_war_active", "yes"): True,
+            ("NAM", "variable", "NAM_seal_discipline"): 50,
+            ("NAM", "variable", "NAM_seal_casualties_seen_k"): 10,
+        }
+        calls = Counter()
+        self.execute("NAM_seal_discipline_clamp", facts, calls)
+        self.assertEqual(calls["force_update_dynamic_modifier"], 1)
+        self.assertEqual(facts[("NAM", "variable", "NAM_seal_org_factor")], 0)
+        for casualties, expected in ((20, 48), (20, 48), (5, 48), (10, 47)):
+            facts[("NAM", "variable", "casualties_k")] = casualties
+            self.execute("NAM_seal_discipline_monthly", facts, calls)
+            self.assertEqual(facts[("NAM", "variable", "NAM_seal_discipline")], expected)
+            self.assertEqual(facts[("NAM", "variable", "NAM_seal_casualties_seen_k")], casualties)
+
+    def test_exile_zero_quota_skips_divisions_and_positive_quota_preserves_order(self):
+        body = self.normalize(self.effects["NAM_rw_exile_abandon_state"])
+        owners = ("EFL", "NAM", "NAM", "AZH", "NAM")
+        for quota in (0, 1, 2, 3, 5):
+            facts = {("NAM", "variable", "NAM_exile_to_cut"): quota}
+            loops = list(selected_effects(body, facts, "NAM"))
+            self.assertEqual(len(loops), int(quota > 0))
+            abandoned = []
+            for _, loop in loops:
+                self.assertEqual(loop.key, "every_state_division")
+                owner_filter = block(block(loop.value, "limit"), "OWNER")
+                for index, owner in enumerate(owners):
+                    if not matches_conditions(owner_filter, facts, owner):
+                        continue
+                    payload = [e for e in loop.value if e.key != "limit"]
+                    for _, entry in selected_effects(payload, facts, "NAM"):
+                        if entry.key == "change_division_template":
+                            self.assertEqual(scalar(entry.value, "division_template"), "Abandoned Columns")
+                            abandoned.append(index)
+                        elif entry.key == "subtract_from_temp_variable":
+                            facts[("NAM", "variable", scalar(entry.value, "var"))] -= float(scalar(entry.value, "value"))
+                        else:
+                            self.fail(f"Unsupported evacuation effect: {entry.key}")
+            self.assertEqual(abandoned, [1, 2, 4][:quota])
+            self.assertEqual(facts[("NAM", "variable", "NAM_exile_to_cut")], max(0, quota - 3))
+
+    def test_exile_fallback_and_diagnostic_scans_have_separate_guards(self):
+        body = self.normalize(self.effects["NAM_rw_exile_evacuate"])
+        fallback = [
+            entry.value for entry in walk(body)
+            if entry.key == "if"
+            and any(
+                scan.key == "every_state" and any(
+                    condition.key == "state" and condition.value == "700"
+                    for condition in walk(block(scan.value, "limit"))
+                )
+                for scan in entry.value
+            )
+        ]
+        self.assertEqual(len(fallback), 1)
+        for quota in (0, 1):
+            facts = {("NAM", "variable", "NAM_exile_to_cut"): quota}
+            self.assertEqual(matches_conditions(block(fallback[0], "limit"), facts, "NAM"), quota > 0)
+        diagnostic = [
+            entry.value for entry in body if entry.key == "if"
+            and any(e.key == "log" for e in entry.value)
+        ]
+        self.assertEqual(len(diagnostic), 1)
+        for debug in (False, True):
+            facts = {("NAM", "is_debug", "yes"): debug}
+            self.assertEqual(matches_conditions(block(diagnostic[0], "limit"), facts, "NAM"), debug)
+        # Transport and attrition remain unconditional after the abandonment phase.
+        self.assertEqual(len([e for e in body if e.key == "every_state"]), 1)
+        self.assertIn("NAM_rw_exile_damage_army", [e.key for e in body])
 
 
 class NamValidatorTests(unittest.TestCase):
@@ -752,6 +992,71 @@ class NamBasinGuiTests(unittest.TestCase):
                 for key in (f"NAM_concede_{group}_tt", f"NAM_bribe_{group}_tt", f"NAM_favour_{group}_tt"):
                     self.assertRegex(values[key], rf'§[GRY][+-]\d+§! £NAM_support_{group}_texticon')
                 self.assertIn(f"£NAM_support_{group}_texticon", values["NAM_grp_independence_day_tt"])
+
+
+class NamQolTests(unittest.TestCase):
+    def test_petitions_share_a_pause_without_blocking_an_existing_coup(self):
+        effects = parsed(f"common/scripted_effects/{BASE}_effects.txt")
+        groups = block(effects, "NAM_groups_check_events")
+        guard = block(block(groups, "if"), "limit")
+        self.assertTrue(matches_conditions(guard, {}, "NAM"))
+        for key, value in (
+            ("has_country_flag", "NAM_grp_event_pending"),
+            ("has_country_flag", "NAM_rival_event_pending"),
+            ("has_country_flag", "NAM_political_petition_cooldown"),
+            ("has_active_mission", "NAM_rival_demand"),
+        ):
+            self.assertFalse(matches_conditions(guard, {("NAM", key, value): True}, "NAM"))
+        close = block(effects, "NAM_groups_close_event")
+        self.assertEqual(close[0].key, "set_country_flag")
+        self.assertEqual(scalar(close[0].value, "flag"), "NAM_political_petition_cooldown")
+        self.assertEqual(scalar(close[0].value, "days"), "90")
+        self.assertEqual(close[-1].key, "NAM_groups_refresh")
+        for entry in walk(groups):
+            if entry.key == "set_country_flag" and isinstance(entry.value, list):
+                flag = scalar(entry.value, "flag")
+                expected = "90" if flag == "NAM_political_petition_cooldown" else "360"
+                self.assertEqual(scalar(entry.value, "days"), expected)
+        rivals = block(effects, "NAM_rivals_monthly")
+        coup = block(block(rivals, "if"), "limit")
+        self.assertNotIn("NAM_political_petition_cooldown", repr(coup))
+        triggers = parsed(f"common/scripted_triggers/{BASE}_triggers.txt")
+        cycle = block(triggers, "NAM_rival_cycle_open")
+        self.assertIn("NAM_political_petition_cooldown", repr(cycle))
+        self.assertIn("NAM_grp_event_pending", repr(cycle))
+
+    def test_underground_actions_explain_temporary_blockers(self):
+        categories = parsed(f"common/decisions/categories/{BASE}_categories.txt")
+        underground = block(categories, "NAM_underground")
+        self.assertEqual(scalar(block(underground, "visible"), "has_variable"), "NAM_underground")
+        for name in ("NAM_underground", "NAM_national_programmes", "NAM_treasury", "NAM_overseas_districts"):
+            self.assertEqual(scalar(block(categories, name), "visible_when_empty"), "yes")
+        decisions = block(parsed(f"common/decisions/{BASE}_decisions.txt"), "NAM_underground")
+        for number in (1, 2, 3):
+            decision = block(decisions, f"NAM_veter_talks_{number}")
+            self.assertNotIn("NAM_veter_talks_possible", repr(block(decision, "visible")))
+            self.assertIn("NAM_veter_talks_possible", repr(block(decision, "available")))
+        searches = block(decisions, "NAM_hunt_caches")
+        self.assertNotIn("NAM_caches_searched", repr(block(searches, "visible")))
+        self.assertIn("NAM_caches_searched", repr(block(searches, "available")))
+
+    def test_support_colours_respect_fractional_thresholds(self):
+        definitions = parsed(f"common/scripted_localisation/{BASE}_scripted_loc.txt")
+        cases = ((25, "penalty"), (25.5, "neutral"), (69.5, "neutral"),
+                 (70, "bonus"), (84.5, "bonus"), (85, "demand"))
+        for group, name in (("nam", "Nam"), ("oil", "Oil"), ("dist", "Dist"), ("garr", "Garr"), ("trade", "Trade")):
+            definition = next(e.value for e in definitions if scalar(e.value, "name") == f"NAMSupport{name}Colour")
+            for support, colour in cases:
+                facts = {("NAM", "variable", f"NAM_grp_{group}_support"): support}
+                for entry in definition:
+                    if entry.key != "text":
+                        continue
+                    triggers = [e.value for e in entry.value if e.key == "trigger"]
+                    if not triggers or matches_conditions(triggers[0], facts, "NAM"):
+                        self.assertEqual(scalar(entry.value, "localization_key"), f"NAM_bw_colour_{colour}")
+                        break
+                else:
+                    self.fail("Missing support colour fallback")
 
 
 if __name__ == "__main__":
