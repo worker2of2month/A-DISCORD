@@ -74,11 +74,11 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_portrait_STS_Elena_Vetrova"
-		texturefile = "gfx/leaders/STP/portrait_STS_Elena_Vetrova.png"
+		texturefile = "gfx/leaders/STP/portrait_STS_Evgeny_Vetrov.png"
 	}
 	corneredTileSpriteType = {
 		name = "GFX_portrait_STS_Elena_Vetrova_small"
-		texturefile = "gfx/leaders/STP/portrait_STS_Elena_Vetrova.png"
+		texturefile = "gfx/leaders/STP/portrait_STS_Evgeny_Vetrov.png"
 		size = { x = 50 y = 67 }
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = no

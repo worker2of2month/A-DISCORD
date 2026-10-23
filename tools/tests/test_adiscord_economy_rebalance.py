@@ -16,9 +16,85 @@ from tools.tests.test_adiscord_economy_weekly_contracts import (
 )
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 from tools.lib.focus_sources import read_focus_source
+from tools.tests.test_adiscord_stp_preparation import matches_conditions, scalar
 
 ROOT = Path(__file__).resolve().parents[2]
 P = "ADISCORD_economy_"
+
+
+class EconomyPlanningSummaryTests(unittest.TestCase):
+    def select(self, name, values):
+        source = (
+            ROOT / "common/scripted_localisation/ADISCORD_economy_scripted_loc.txt"
+        ).read_text(encoding="utf-8-sig")
+        definition = next(
+            entry.value for entry in parse_clausewitz(source)
+            if entry.key == "defined_text" and scalar(entry.value, "name") == name
+        )
+        facts = {("A", "variable", key): value for key, value in values.items()}
+        for entry in definition:
+            if entry.key != "text":
+                continue
+            trigger = next((e.value for e in entry.value if e.key == "trigger"), [])
+            if matches_conditions(trigger, facts, "A"):
+                return scalar(entry.value, "localization_key")
+        self.fail(f"No text for {name}")
+
+    def test_runway_text_distinguishes_balance_empty_and_rounding_boundaries(self):
+        for cash, balance, suffix in (
+            (100, 10, "balanced"), (0, 0, "balanced"), (0, -10, "empty"),
+            (100, -0.001, "tiny"), (100, -0.01, "long"),
+            (100, -25, "weeks"), (25, -25, "weeks"), (24.9, -25, "short"),
+        ):
+            with self.subTest(cash=cash, balance=balance):
+                fixture = EconomyScriptFixture()
+                values = fixture.scopes["A"]
+                values.update({P + "treasury": cash, P + "weekly_balance": balance})
+                fixture.run(P + "refresh_deficit_runway")
+                self.assertEqual(
+                    self.select("GetADISCORDEconomyRunwayLoc", values),
+                    P + "runway_" + suffix,
+                )
+                self.assertEqual(values[P + "treasury"], cash)
+
+    def test_cash_purchase_refreshes_runway_without_settling_the_budget(self):
+        fixture = EconomyScriptFixture(stubs=(P + "cache_weekly_factory_sources",))
+        values = fixture.scopes["A"]
+        values.update({P + "treasury": 100, P + "weekly_balance": -25})
+        fixture.run(P + "refresh_deficit_runway")
+        self.assertEqual(values[P + "deficit_runway"], 4)
+        values[P + "treasury"] -= 75
+        fixture.run(P + "mark_dirty")
+        self.assertEqual(values[P + "deficit_runway"], 1)
+        self.assertEqual(values[P + "treasury"], 25)
+        self.assertNotIn(P + "apply_weekly_balance", fixture.calls)
+
+    def test_largest_expense_reads_all_priced_components_with_stable_ties(self):
+        categories = (
+            "army_expenses", "airforce_expenses", "navy_expenses",
+            "military_factory_expenses", "social_expenses", "research_expenses",
+            "construction_expenses", "admin_expenses", "repair_expenses", "debt_service",
+        )
+        values = {P + name: 0 for name in categories}
+        self.assertEqual(
+            self.select("GetADISCORDEconomyLargestExpenseLoc", values),
+            P + "largest_expense_none",
+        )
+        for category in categories:
+            with self.subTest(category=category):
+                values = {P + name: 1 for name in categories}
+                values[P + category] = 10
+                values[P + "weekly_expenses"] = 19 * 3 / 13
+                self.assertEqual(
+                    self.select("GetADISCORDEconomyLargestExpenseLoc", values),
+                    P + "largest_" + category,
+                )
+        values = {P + name: 1 for name in categories}
+        values[P + "weekly_expenses"] = 10 * 3 / 13
+        self.assertEqual(
+            self.select("GetADISCORDEconomyLargestExpenseLoc", values),
+            P + "largest_army_expenses",
+        )
 
 
 def read(path):

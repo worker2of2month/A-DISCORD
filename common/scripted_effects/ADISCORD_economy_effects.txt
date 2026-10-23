@@ -3691,6 +3691,8 @@ ADISCORD_economy_mark_dirty = {
 	# scope; do not clear the weekly readiness watermark.
 	ADISCORD_economy_cache_weekly_factory_sources = yes
 	set_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }
+	# Cash transactions immediately update the runway against the current forecast.
+	ADISCORD_economy_refresh_deficit_runway = yes
 	ADISCORD_economy_update_gui = yes
 }
 

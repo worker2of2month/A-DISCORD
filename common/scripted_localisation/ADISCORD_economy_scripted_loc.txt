@@ -485,3 +485,182 @@ defined_text = {
 	}
 	text = { localization_key = ADISCORD_economy_project_refund_tt }
 }
+
+# Planning summary reads the current forecast without changing economic state.
+
+defined_text = {
+	name = GetADISCORDEconomyRunwayLoc
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_weekly_balance value = 0 compare = greater_than_or_equals }
+		}
+		localization_key = ADISCORD_economy_runway_balanced
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 0 compare = less_than_or_equals }
+		}
+		localization_key = ADISCORD_economy_runway_empty
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_weekly_balance value = -0.01 compare = greater_than }
+		}
+		localization_key = ADISCORD_economy_runway_tiny
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_deficit_runway value = 260 compare = greater_than_or_equals }
+		}
+		localization_key = ADISCORD_economy_runway_long
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_deficit_runway value = 1 compare = less_than }
+		}
+		localization_key = ADISCORD_economy_runway_short
+	}
+	text = { localization_key = ADISCORD_economy_runway_weeks }
+}
+
+defined_text = {
+	name = GetADISCORDEconomyLargestExpenseLoc
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_weekly_expenses value = 0 compare = less_than_or_equals }
+		}
+		localization_key = ADISCORD_economy_largest_expense_none
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_airforce_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_navy_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_military_factory_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_social_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_research_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_construction_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_admin_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_repair_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_debt_service compare = greater_than_or_equals }
+		}
+		localization_key = ADISCORD_economy_largest_army_expenses
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_airforce_expenses value = ADISCORD_economy_army_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_airforce_expenses value = ADISCORD_economy_navy_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_airforce_expenses value = ADISCORD_economy_military_factory_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_airforce_expenses value = ADISCORD_economy_social_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_airforce_expenses value = ADISCORD_economy_research_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_airforce_expenses value = ADISCORD_economy_construction_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_airforce_expenses value = ADISCORD_economy_admin_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_airforce_expenses value = ADISCORD_economy_repair_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_airforce_expenses value = ADISCORD_economy_debt_service compare = greater_than_or_equals }
+		}
+		localization_key = ADISCORD_economy_largest_airforce_expenses
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_navy_expenses value = ADISCORD_economy_army_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_navy_expenses value = ADISCORD_economy_airforce_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_navy_expenses value = ADISCORD_economy_military_factory_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_navy_expenses value = ADISCORD_economy_social_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_navy_expenses value = ADISCORD_economy_research_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_navy_expenses value = ADISCORD_economy_construction_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_navy_expenses value = ADISCORD_economy_admin_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_navy_expenses value = ADISCORD_economy_repair_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_navy_expenses value = ADISCORD_economy_debt_service compare = greater_than_or_equals }
+		}
+		localization_key = ADISCORD_economy_largest_navy_expenses
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_military_factory_expenses value = ADISCORD_economy_army_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_military_factory_expenses value = ADISCORD_economy_airforce_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_military_factory_expenses value = ADISCORD_economy_navy_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_military_factory_expenses value = ADISCORD_economy_social_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_military_factory_expenses value = ADISCORD_economy_research_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_military_factory_expenses value = ADISCORD_economy_construction_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_military_factory_expenses value = ADISCORD_economy_admin_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_military_factory_expenses value = ADISCORD_economy_repair_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_military_factory_expenses value = ADISCORD_economy_debt_service compare = greater_than_or_equals }
+		}
+		localization_key = ADISCORD_economy_largest_military_factory_expenses
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_social_expenses value = ADISCORD_economy_army_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_social_expenses value = ADISCORD_economy_airforce_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_social_expenses value = ADISCORD_economy_navy_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_social_expenses value = ADISCORD_economy_military_factory_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_social_expenses value = ADISCORD_economy_research_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_social_expenses value = ADISCORD_economy_construction_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_social_expenses value = ADISCORD_economy_admin_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_social_expenses value = ADISCORD_economy_repair_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_social_expenses value = ADISCORD_economy_debt_service compare = greater_than_or_equals }
+		}
+		localization_key = ADISCORD_economy_largest_social_expenses
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_army_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_airforce_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_navy_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_military_factory_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_social_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_construction_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_admin_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_repair_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_debt_service compare = greater_than_or_equals }
+		}
+		localization_key = ADISCORD_economy_largest_research_expenses
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_construction_expenses value = ADISCORD_economy_army_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_construction_expenses value = ADISCORD_economy_airforce_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_construction_expenses value = ADISCORD_economy_navy_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_construction_expenses value = ADISCORD_economy_military_factory_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_construction_expenses value = ADISCORD_economy_social_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_construction_expenses value = ADISCORD_economy_research_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_construction_expenses value = ADISCORD_economy_admin_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_construction_expenses value = ADISCORD_economy_repair_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_construction_expenses value = ADISCORD_economy_debt_service compare = greater_than_or_equals }
+		}
+		localization_key = ADISCORD_economy_largest_construction_expenses
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_admin_expenses value = ADISCORD_economy_army_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_admin_expenses value = ADISCORD_economy_airforce_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_admin_expenses value = ADISCORD_economy_navy_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_admin_expenses value = ADISCORD_economy_military_factory_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_admin_expenses value = ADISCORD_economy_social_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_admin_expenses value = ADISCORD_economy_research_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_admin_expenses value = ADISCORD_economy_construction_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_admin_expenses value = ADISCORD_economy_repair_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_admin_expenses value = ADISCORD_economy_debt_service compare = greater_than_or_equals }
+		}
+		localization_key = ADISCORD_economy_largest_admin_expenses
+	}
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_repair_expenses value = ADISCORD_economy_army_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_repair_expenses value = ADISCORD_economy_airforce_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_repair_expenses value = ADISCORD_economy_navy_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_repair_expenses value = ADISCORD_economy_military_factory_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_repair_expenses value = ADISCORD_economy_social_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_repair_expenses value = ADISCORD_economy_research_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_repair_expenses value = ADISCORD_economy_construction_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_repair_expenses value = ADISCORD_economy_admin_expenses compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_repair_expenses value = ADISCORD_economy_debt_service compare = greater_than_or_equals }
+		}
+		localization_key = ADISCORD_economy_largest_repair_expenses
+	}
+	text = { localization_key = ADISCORD_economy_largest_debt_service }
+}
+
+defined_text = {
+	name = GetADISCORDEconomyPlanningSummary
+	text = { localization_key = ADISCORD_economy_planning_summary }
+}

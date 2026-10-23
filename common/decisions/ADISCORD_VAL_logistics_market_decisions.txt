@@ -10,7 +10,6 @@ VAL_population_markets = {
 				value = 70
 				compare = less_than_or_equals
 			}
-			ADISCORD_economy_can_spend_100 = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -64,7 +63,6 @@ VAL_population_markets = {
 				value = 80
 				compare = less_than_or_equals
 			}
-			ADISCORD_economy_can_spend_100 = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -118,7 +116,6 @@ VAL_population_markets = {
 				value = 90
 				compare = less_than_or_equals
 			}
-			ADISCORD_economy_can_spend_100 = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -172,7 +169,6 @@ VAL_population_markets = {
 				value = 90
 				compare = less_than_or_equals
 			}
-			ADISCORD_economy_can_spend_100 = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -226,7 +222,6 @@ VAL_population_markets = {
 				value = 90
 				compare = less_than_or_equals
 			}
-			ADISCORD_economy_can_spend_100 = yes
 		}
 		available = {
 			custom_trigger_tooltip = {

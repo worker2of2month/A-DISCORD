@@ -712,6 +712,35 @@ class RefugeeAdmissionTests(unittest.TestCase):
             ).read_text(encoding="utf-8-sig")
             self.assertIn(" VAL_refugee_window_open_tt:", loc)
 
+    def test_current_admission_stays_visible_when_only_cash_is_missing(self):
+        for region in (*REGIONS, "perimeter"):
+            with self.subTest(region=region):
+                predicate = (
+                    "VAL_refugee_perimeter_open"
+                    if region == "perimeter"
+                    else f"VAL_refugee_{region}_war"
+                )
+                self.facts = {
+                    ("VAL", predicate, "yes"): True,
+                    ("VAL", "ADISCORD_economy_can_spend_100", "yes"): False,
+                }
+                decision = self.decisions[f"VAL_accept_{region}_refugees"]
+                self.assertTrue(self.visible(region))
+                for section in ("available", "custom_cost_trigger"):
+                    conditions = next(e.value for e in decision if e.key == section)
+                    self.assertFalse(matches_conditions(conditions, self.facts, "VAL"))
+                self.facts[("VAL", "ADISCORD_economy_can_spend_100", "yes")] = True
+                available = next(e.value for e in decision if e.key == "available")
+                self.assertTrue(matches_conditions(available, self.facts, "VAL"))
+                self.facts[("VAL", "has_country_flag", "VAL_refugee_border_closed")] = True
+                self.assertFalse(self.visible(region))
+                self.facts[("VAL", "has_country_flag", "VAL_refugee_border_closed")] = False
+                self.facts[("VAL", "variable", "VAL_population_present")] = 100
+                self.assertFalse(self.visible(region))
+                self.facts[("VAL", "variable", "VAL_population_present")] = 0
+                self.facts[("VAL", predicate, "yes")] = False
+                self.assertFalse(self.visible(region))
+
 
 class KefreytDecisionVisibilityTests(unittest.TestCase):
     def test_viceroy_offer_is_visible_from_foreign_broker_licences(self):

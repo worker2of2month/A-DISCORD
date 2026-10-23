@@ -640,6 +640,7 @@ def task7_cache_invalidation_issues(
     if dirty_sequence != [
         ("ADISCORD_economy_cache_weekly_factory_sources", "yes"),
         ("set_variable", "ADISCORD_economy_needs_full_refresh", "1"),
+        ("ADISCORD_economy_refresh_deficit_runway", "yes"),
         ("ADISCORD_economy_update_gui", "yes"),
     ]:
         issues.append(
@@ -2442,6 +2443,30 @@ def task10_material_numeric_surface_issues(russian_text, english_text):
 
 
 def task10_balance_surface_issues(gui_text, russian_text, english_text):
+    selector_outputs = {
+        _entry_scalar(definition.value, "name"): [
+            entry.value for _, entry in _walk_parsed(definition.value)
+            if entry.key == "localization_key"
+        ]
+        for definition in parse_clausewitz(SCRIPTED_LOC)
+        if definition.key == "defined_text"
+    }
+
+    def expanded_branches(value, localisation, visited=frozenset()):
+        # Inventory every displayed alternative without guessing the current country.
+        def expand(match):
+            name = match.group(1)
+            if name not in selector_outputs:
+                return match.group(0)
+            if name in visited:
+                raise AssertionError(f"Recursive scripted localisation: {name}")
+            return " ".join(
+                expanded_branches(localisation_value(localisation, key), localisation, visited | {name})
+                for key in selector_outputs[name]
+            )
+
+        return re.sub(r"\[(GetADISCORD\w+)\]", expand, value)
+
     issues = []
     nodes = re.findall(
         r'(?m)^\s*instantTextboxType\s*=.*name\s*=\s*"ADISCORD_economy_kpi_balance".*$',
@@ -2504,8 +2529,9 @@ def task10_balance_surface_issues(gui_text, russian_text, english_text):
         ):
             if token not in short:
                 issues.append(f"{language} balance short tooltip omits {token}")
+        expanded_delayed = expanded_branches(delayed, text)
         for token in delayed_references + ("3/13", "260"):
-            if token not in delayed:
+            if token not in expanded_delayed:
                 issues.append(f"{language} balance delayed tooltip omits {token}")
     if set(values) == {"Russian", "English"}:
         for surface, index in (("short", 0), ("delayed", 1)):
@@ -2789,6 +2815,18 @@ def task10_gameplay_cache_reference_issues(overrides=None):
                 if not isinstance(entry.value, str):
                     continue
                 if entry.value not in TASK10_DISPLAY_CACHE_NAMES:
+                    continue
+                # Runway thresholds select text only; they cannot affect settlement.
+                if (
+                    relative == "common/scripted_localisation/ADISCORD_economy_scripted_loc.txt"
+                    and definition.key == "defined_text"
+                    and _entry_scalar(definition.value, "name")
+                    == "GetADISCORDEconomyRunwayLoc"
+                    and entry.key == "var"
+                    and entry.value == "ADISCORD_economy_deficit_runway"
+                    and tuple(parent.key for parent in ancestors)
+                    == ("text", "trigger", "check_variable")
+                ):
                     continue
                 if not (
                     path == TASK10_EFFECTS_PATH.resolve()
@@ -7164,6 +7202,16 @@ ADISCORD_bad_assistance_owner = {
         self.assertTrue(
             task10_balance_surface_issues(binding_mutation, ECONOMY_LOC, ECONOMY_LOC_EN)
         )
+        for missing in (
+            "[GetADISCORDEconomyPlanningSummary]",
+            "[?ADISCORD_economy_deficit_runway|1]",
+        ):
+            with self.subTest(missing=missing):
+                mutated = ECONOMY_LOC.replace(missing, "")
+                self.assertNotEqual(mutated, ECONOMY_LOC)
+                self.assertTrue(
+                    task10_balance_surface_issues(ECONOMY_GUI, mutated, ECONOMY_LOC_EN)
+                )
 
     def test_task10_short_and_delayed_tooltips_have_distinct_bilingual_semantics(self):
         language_files = {

@@ -1129,6 +1129,8 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
                 self.controllers[current] = self.resolve(value, stack)
             elif key == "add_core_of":
                 self.cores.setdefault(current, set()).add(self.resolve(value, stack))
+            elif key == "hidden_effect":
+                self.execute(value, stack)
             elif key == "country_event":
                 self.pending_events.append((current, scalar(value, "id")))
             elif key in ("declare_war_on", "add_to_war") and not self.apply_diplomacy:
@@ -1234,6 +1236,56 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
 
 
 class NorthernAdministrationTests(unittest.TestCase):
+    def test_queued_entry_preserves_all_members_through_reentrant_cleanup(self):
+        for course, leader in (("hegemony", "STS"), ("charter", "STS"), ("party", "STP")):
+            with self.subTest(course=course, leader=leader):
+                f = NorthernAdministrationFixture()
+                f.independent_tribes()
+                if course == "hegemony":
+                    f.form()
+                else:
+                    f.use_course(course, leader)
+                f.launch(complete_entry=False)
+                self.assertFalse(f.wars)
+                f.execute(f.effects["STP_heg_reconcile_cannibal_campaign"], [leader])
+                self.assertTrue(all("STP_heg_cannibal_campaign_active" in f.flags[t] for t in (leader, "CIN", "OSF", "APH")))
+                f.tick()
+                self.assertEqual(f.wars, {frozenset((leader, "CIN"))})
+                f.execute(f.effects["STP_heg_reconcile_cannibal_campaign"], [leader])
+                f.defeat("CIN")
+                self.assertFalse(f.annexed)
+                f.tick()
+                self.assertNotIn("STP_heg_cannibal_entry_pending", f.flags[leader])
+                for tag in ("CIN", "OSF", "APH"):
+                    self.assertIn(frozenset((leader, tag)), f.wars)
+                    self.assertIn("STP_heg_cannibal_campaign_active", f.flags[tag])
+                f.defeat("OSF")
+                self.assertFalse(f.annexed)
+                f.defeat("APH")
+                self.assertFalse(f.wars)
+                self.assertTrue(all(not flags.intersection({"STP_heg_cannibal_campaign_active", "STP_heg_cannibal_entry_pending"}) for flags in f.flags.values()))
+
+    def test_failed_invitation_cancels_without_awards_or_reopening(self):
+        for rejected in ("OSF", "APH", "NKA"):
+            with self.subTest(rejected=rejected):
+                f = NorthernAdministrationFixture()
+                f.independent_tribes()
+                f.form()
+                f.majors.add("CIN")
+                before = dict(f.owners)
+                f.rejected_entries.add(rejected)
+                f.launch()
+                self.assertFalse(f.wars)
+                self.assertFalse(f.annexed)
+                self.assertEqual(f.owners, before)
+                self.assertEqual(f.majors, {"CIN"})
+                self.assertTrue(all("STP_heg_cannibal_campaign_active" not in flags for flags in f.flags.values()))
+                declarations = list(f.declarations)
+                f.execute(f.effects["STP_heg_invite_cannibal_campaign"], ["STS"])
+                f.execute(f.effects["STP_heg_confirm_cannibal_entry"], ["STS"])
+                self.assertEqual(f.declarations, declarations)
+                self.assertFalse(f.pending_diplomacy)
+
     def test_arsenal_extensions_stay_with_val_and_reorganization_respects_foreign_land(self):
         for state in ("54", "57"):
             for owner, controller in (("VAL", "VAL"), ("VAL", "STS"), ("VAL", "ALLY"), ("VAL", "ZZZ"), ("STS", "STS"), ("STS", "ZZZ"), ("ZZZ", "STS")):

@@ -21,7 +21,7 @@ DEST = ROOT / "gfx/models/units/ADISCORD_country_vehicles"
 STAGE = Path(tempfile.gettempdir()) / "adiscord-vehicle-idle"
 REPORT = ROOT / "docs/development/model-verification/vehicle_idle.json"
 NAMES = ("VAL_apc", "STP_apc", "STS_apc", "NAM_apc",
-         "VAL_tank", "NOD_tank", "STP_tank", "STS_taran")
+         "VAL_tank", "NOD_tank", "STP_tank", "STS_taran", "NOD_apc")
 
 
 def digest(path):
@@ -137,17 +137,20 @@ def build():
         report["outputs"][str((DEST / filename).relative_to(ROOT))] = filename
         if name.endswith("_apc"):
             # Preserve the existing editable geometry, materials and other actions.
-            bpy.ops.wm.open_mainfile(filepath=str(SOURCE / f"{name}.blend"))
-            rig = next(o for o in bpy.context.scene.objects if o.type == "ARMATURE")
-            old_idle = bpy.data.actions.get(f"{name}_idle")
-            if old_idle is not None:
-                bpy.data.actions.remove(old_idle)
-            pdx.import_animfile(str(STAGE / filename))
-            rig.animation_data.action.name = f"{name}_idle"
-            rig.animation_data.action.use_fake_user = True
-            bpy.context.preferences.filepaths.save_version = 0
-            bpy.context.scene.frame_set(1)
-            bpy.ops.wm.save_as_mainfile(filepath=str(STAGE / f"{name}.blend"))
+            if digest(STAGE / filename) == digest(DEST / filename):
+                write_changed(STAGE / f"{name}.blend", (SOURCE / f"{name}.blend").read_bytes())
+            else:
+                bpy.ops.wm.open_mainfile(filepath=str(SOURCE / f"{name}.blend"))
+                rig = next(o for o in bpy.context.scene.objects if o.type == "ARMATURE")
+                old_idle = bpy.data.actions.get(f"{name}_idle")
+                if old_idle is not None:
+                    bpy.data.actions.remove(old_idle)
+                pdx.import_animfile(str(STAGE / filename))
+                rig.animation_data.action.name = f"{name}_idle"
+                rig.animation_data.action.use_fake_user = True
+                bpy.context.preferences.filepaths.save_version = 0
+                bpy.context.scene.frame_set(1)
+                bpy.ops.wm.save_as_mainfile(filepath=str(STAGE / f"{name}.blend"))
             row = apc_report["models"][name]
             row["animations"]["idle"] = metrics
             row["files"][filename] = digest(STAGE / filename)

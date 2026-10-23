@@ -1,0 +1,91 @@
+{
+  "method": "Offline disassembly of the installed executable, source inspection and reduced selection replay. No process memory access or running-game interaction.",
+  "engine_version": "1.19.3.0.c01a",
+  "executable_sha256": "7dc947be34970da1e1c787bcddbe7f62b610ff258aebf8f06aa8b348f3a031d5",
+  "address_kind": "RVA, image base 0x140000000",
+  "runtime_verified": false,
+  "native_evidence": [
+    {
+      "rva": "0x176efb0",
+      "behavior": "The division designer obtains its selectable models through the template method at 0xb9f560, which calls 0x192c7b0."
+    },
+    {
+      "rva": "0x176ea60",
+      "behavior": "With multiple candidates and no matching explicit override, the preview uses option index 1, after USE_DEFAULT_MODEL. With no selectable models it instead calls 0x192c4c0."
+    },
+    {
+      "rva": "0xe67b80",
+      "behavior": "Collects both domestic available equipment and the foreign equipment collection from the country production object."
+    },
+    {
+      "rva": "0xbd2430",
+      "behavior": "Equipment comparison groups by archetype registration index, then descending parent depth and variant version; otherwise matching the player country precedes foreign origin."
+    },
+    {
+      "rva": "0xf88330",
+      "behavior": "Type conversion maps infantry to 0x20 and mechanized to 0x10."
+    },
+    {
+      "rva": "0x192ccf3-0x192cd41",
+      "behavior": "Starts with template country. If equipment does not have the infantry bit and its type mask equals the sub-unit type mask, substitutes equipment origin (or creator if origin is absent)."
+    },
+    {
+      "rva": "0x192d740",
+      "behavior": "Queries graphic_db using the country selected by the caller. Ideology and culture filter data come from the equipment creator."
+    },
+    {
+      "rva": "0xc94043",
+      "behavior": "Default visual_tech_level_addition is 1."
+    },
+    {
+      "rva": "0xc949d0-0xc94a22",
+      "behavior": "Visual technology level sums visual_tech_level_addition through the parent chain and is clamped to at least 1; it is distinct from visual_level and production priority."
+    },
+    {
+      "rva": "0x192ce46-0x192ce8b",
+      "behavior": "Without a sub-unit priority override, ordinary candidate priority is (battalion_count * 100 + 10 + equipment_visual_technology_level) * 10. Explicit equipment model overrides have separate priority."
+    },
+    {
+      "rva": "0x192cf93-0x192cffa",
+      "behavior": "Already encountered model entity names are skipped before priority insertion; a later query cannot upgrade their priority."
+    },
+    {
+      "rva": "0x192d009-0x192d163",
+      "behavior": "The outer queue uses the computed candidate priority multiplied by 100000. Graphic pool weight is not added to that queue key. Equal keys are inserted before existing keys."
+    }
+  ],
+  "source_contract": {
+    "battalion": "ADISCORD_mechanized_infantry",
+    "carrier": "ADISCORD_armored_carrier_2163",
+    "carrier_visual_technology_level": 1,
+    "rifles": {
+      "ADISCORD_infantry_equipment_2156": 2,
+      "ADISCORD_infantry_equipment_2163": 3
+    },
+    "carrier_aliases": "Country/cosmetic mechanized aliases resolve to their own national APC root.",
+    "designer_pool": "The national APC root entity is introduced only by the infantry_equipment query, restricted to the mechanized battalion.",
+    "nod": "NOD has its own six-wheel APC mesh, national infantry escort, country/cosmetic motorized and mechanized aliases, and a rifle-only designer pool. The routes do not depend on human or AI control."
+  },
+  "reduced_replay": {
+    "scope": "Automatic preview of one mechanized battalion with domestic and foreign carrier-2163 designs, followed by rifle-2156 or rifle-2163 queries. No excluded equipment or explicit model override.",
+    "without_pools": "The foreign carrier model can precede the domestic model on equal priority; later rifle queries deduplicate the same legacy entity names.",
+    "same_root_in_rifle_and_carrier_pools": "The root entity is already consumed by the carrier query and cannot acquire the later rifle priority.",
+    "rifle_only_pool": "The national root is a new candidate with priority 1120 or 1130, exceeding the carrier aliases at 1110.",
+    "unit_test": "tools.tests.test_adiscord_country_vehicles.ArmoredPersonnelCarrierTests.test_designer_rifle_candidate_survives_foreign_carrier_deduplication"
+  },
+  "limitations": [
+    "The replay isolates the relevant ordering and deduplication branch; it does not execute the complete native loader or renderer.",
+    "These priorities establish selection for the stated equipment combination, not every combination of later imported IFVs and early rifles.",
+    "A manually selected division model is intentionally not overridden.",
+    "A cold start and fresh division-designer observation are still required for rendered-game confirmation."
+  ],
+  "source_sha256": {
+    "common/units/ADISCORD_land_units.txt": "1c3033e272381b3de8f7430cbb38e9fe8751fbe5d2bcfbe86f8fb2aebb28e557",
+    "common/units/equipment/ADISCORD_armor_equipment.txt": "b01abc361e530278755b3f21356de6961461ad338a86e59da311c1114aae3a89",
+    "common/units/equipment/ADISCORD_infantry_equipment.txt": "bdce0f932434dcc6baff177ac1fc9af78cd64dd5597087ff01eeeb88d8054e98",
+    "gfx/entities/zz_ADISCORD_country_vehicles.asset": "495b786c4821e3859d154e32fb8d29e35ed4259af06e673cce97559c7f1c7c3c",
+    "gfx/interface/equipmentdesigner/graphic_db/ADISCORD_country_vehicles.txt": "1c5dd8d0b93db589f66a29516534cf71cb221dd7426770ffee9160d009f1a930",
+    "tools/assets/source/country_vehicles/package_vehicles.py": "278ac07a5c59c2cd6faf1cacda4924f0e321d51d65bd1831f8ff30231164314a",
+    "tools/tests/test_adiscord_country_vehicles.py": "37acb7520833a4d4bfee75d36de45ad92f3065bc0068f90e99ac06872f638b43"
+  }
+}

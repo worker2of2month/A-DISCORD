@@ -329,6 +329,14 @@ tribes join one war against STS and NKA. An existing war, foreign subject,
 allied target or lost NKA blocks entry. The campaign temporarily owns mandatory
 major status and releases it through the shared major-ownership contract.
 
+Declaration, coalition invitation and confirmation span two one-hour callbacks
+(`ADISCORD_STP_pc.110` and `.111`). The leader's pending-entry guard preserves all
+enrolled members and their major status across both diplomatic ticks. Each
+invitation rebuilds its local leader and anchor targets from the current war.
+Confirmation requires every enrolled tribe, plus NKA for the northern
+administration route, to share that war. A rejected declaration or invitation
+closes the partial campaign without awarding land or re-opening it later.
+
 Native capitulation records a defeat without ending the shared war. Every
 active member must be defeated; liberation clears that country's receipt.
 Final settlement snapshots all participants and their owned states before

@@ -16977,6 +16977,9 @@ STP_heg_enroll_cannibal_member = {
 STP_heg_join_cannibal_war = {
 	if = {
 		limit = {
+			exists = yes
+			is_subject = no
+			has_capitulated = no
 			has_country_flag = STP_heg_cannibal_campaign_active
 			NOT = { has_war_with = event_target:STP_heg_cannibal_leader }
 			event_target:STP_heg_cannibal_war_anchor = {
@@ -17021,7 +17024,7 @@ STP_heg_start_cannibal_campaign = {
 				type = annex_everything
 			}
 		}
-		hidden_effect = { country_event = { id = ADISCORD_STP_pc.110 hours = 1 } }
+		country_event = { id = ADISCORD_STP_pc.110 hours = 1 }
 	}
 }
 
@@ -17153,6 +17156,8 @@ STP_heg_confirm_cannibal_entry = {
 					OR = {
 						NOT = { has_country_flag = STP_heg_cannibal_campaign_active }
 						AND = {
+							exists = yes
+							is_subject = no
 							has_war_with = PREV
 							OR = {
 								PREV = { NOT = { has_completed_focus = STP_pc_heg_northern_administration } }
@@ -17165,6 +17170,8 @@ STP_heg_confirm_cannibal_entry = {
 					OR = {
 						NOT = { has_country_flag = STP_heg_cannibal_campaign_active }
 						AND = {
+							exists = yes
+							is_subject = no
 							has_war_with = PREV
 							OR = {
 								PREV = { NOT = { has_completed_focus = STP_pc_heg_northern_administration } }
@@ -17177,6 +17184,8 @@ STP_heg_confirm_cannibal_entry = {
 					OR = {
 						NOT = { has_country_flag = STP_heg_cannibal_campaign_active }
 						AND = {
+							exists = yes
+							is_subject = no
 							has_war_with = PREV
 							OR = {
 								PREV = { NOT = { has_completed_focus = STP_pc_heg_northern_administration } }
@@ -17395,8 +17404,18 @@ STP_heg_reconcile_cannibal_member = {
 STP_heg_reconcile_cannibal_campaign = {
 	if = {
 		limit = {
-			STP = { NOT = { has_country_flag = STP_heg_cannibal_entry_pending } }
-			STS = { NOT = { has_country_flag = STP_heg_cannibal_entry_pending } }
+			STP = {
+				OR = {
+					NOT = { has_country_flag = STP_heg_cannibal_entry_pending }
+					STP_heg_cannibal_leader_current = no
+				}
+			}
+			STS = {
+				OR = {
+					NOT = { has_country_flag = STP_heg_cannibal_entry_pending }
+					STP_heg_cannibal_leader_current = no
+				}
+			}
 			STS = { NOT = { has_country_flag = STP_heg_cannibal_settlement_in_progress } }
 			STP = { NOT = { has_country_flag = STP_heg_cannibal_settlement_in_progress } }
 		}

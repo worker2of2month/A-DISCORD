@@ -374,6 +374,132 @@ defined_text = {
 	text = { localization_key = STP_REGION_STATUS_CONTESTED }
 }
 
+# Flag age is authoritative; reading it needs no daily counter or mirrored date.
+defined_text = {
+	name = STPGetAdministrationDaysRemaining
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 19 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_1
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 18 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_2
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 17 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_3
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 16 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_4
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 15 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_5
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 14 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_6
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 13 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_7
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 12 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_8
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 11 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_9
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 10 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_10
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 9 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_11
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 8 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_12
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 7 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_13
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 6 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_14
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 5 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_15
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 4 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_16
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 3 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_17
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 2 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_18
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 1 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_19
+	}
+	text = {
+		trigger = {
+			has_state_flag = { flag = STP_resistance_administration_asset days > 0 }
+		}
+		localization_key = STP_REGION_ADMIN_DAYS_20
+	}
+	text = { localization_key = STP_REGION_ADMIN_DAYS_21 }
+}
+
 defined_text = {
 	name = STPGetAdministrationAsset
 	text = {
@@ -644,8 +770,44 @@ defined_text = {
 defined_text = {
 	name = STPGetCivilWarForecastReason
 	text = {
-		trigger = { STP_cw_region_goes_to_republics = yes }
-		localization_key = STP_REGION_EMPTY_LINE
+		trigger = {
+			state = 1
+		}
+		localization_key = STP_CW_FORECAST_REASON_FIXED_RESISTANCE
+	}
+	text = {
+		trigger = {
+			state = 28
+		}
+		localization_key = STP_CW_FORECAST_REASON_FIXED_PARTY
+	}
+	text = {
+		trigger = {
+			STP_cw_region_goes_to_republics = yes
+		}
+		localization_key = STP_CW_FORECAST_REASON_REPUBLICS
+	}
+	text = {
+		trigger = {
+			state = 45
+			has_state_flag = STP_local_deal_asset
+		}
+		localization_key = STP_CW_FORECAST_REASON_COUNCIL
+	}
+	text = {
+		trigger = {
+			STP_cw_region_goes_to_resistance = yes
+			STP = { has_country_flag = STP_cw_limited_party_revolt }
+		}
+		localization_key = STP_CW_FORECAST_REASON_LIMITED
+	}
+	text = {
+		trigger = {
+			STP_cw_region_goes_to_resistance = yes
+			STP = { STP_cw_high_shabrat_legitimacy = yes }
+			STP_region_resistance_leaning = yes
+		}
+		localization_key = STP_CW_FORECAST_REASON_MANDATE
 	}
 	text = {
 		trigger = {
@@ -663,12 +825,30 @@ defined_text = {
 		localization_key = STP_CW_FORECAST_REASON_NIANSAS_SECURED
 	}
 	text = {
-		trigger = { STP_cw_region_goes_to_resistance = yes }
+		trigger = {
+			STP_cw_region_goes_to_resistance = yes
+		}
 		localization_key = STP_CW_FORECAST_REASON_SECURED
 	}
 	text = {
-		trigger = { has_state_flag = STP_party_counterintelligence_asset }
+		trigger = {
+			has_state_flag = STP_inspection_concession_prepared
+		}
+		localization_key = STP_CW_FORECAST_REASON_CONCESSION
+	}
+	text = {
+		trigger = {
+			has_state_flag = STP_party_counterintelligence_asset
+		}
 		localization_key = STP_CW_FORECAST_REASON_COUNTERINTELLIGENCE
+	}
+	text = {
+		trigger = {
+			STP_region_resistance_entrenched = yes
+			has_state_flag = STP_resistance_administration_asset
+			NOT = { has_state_flag = { flag = STP_resistance_administration_asset days > 20 } }
+		}
+		localization_key = STP_CW_FORECAST_REASON_ADMINISTRATION_RECENT
 	}
 	text = {
 		trigger = {
@@ -681,13 +861,7 @@ defined_text = {
 	text = {
 		trigger = {
 			STP_region_resistance_entrenched = yes
-			has_state_flag = STP_resistance_administration_asset
-			NOT = { has_state_flag = { flag = STP_resistance_administration_asset days > 20 } }
 		}
-		localization_key = STP_CW_FORECAST_REASON_ADMINISTRATION_RECENT
-	}
-	text = {
-		trigger = { STP_region_resistance_entrenched = yes }
 		localization_key = STP_CW_FORECAST_REASON_ADMINISTRATION
 	}
 	text = { localization_key = STP_CW_FORECAST_REASON_INFLUENCE }
@@ -696,11 +870,22 @@ defined_text = {
 defined_text = {
 	name = STPGetRifleCache
 	text = {
-		trigger = { has_variable = STP_cw_cached_rifles }
+		trigger = { check_variable = { var = STP_cw_cached_rifles value = 0 compare = greater_than } }
 		localization_key = STP_CW_CACHE_READY
 	}
 	text = {
-		trigger = { has_variable = STP_cw_pending_rifles }
+		trigger = { check_variable = { var = STP_cw_pending_rifles value = 0 compare = greater_than } }
+		localization_key = STP_CW_CACHE_PENDING
+	}
+	text = { localization_key = STP_REGION_EMPTY_LINE }
+}
+
+defined_text = {
+	name = STPGetPendingRifleCache
+	text = {
+		trigger = {
+			check_variable = { var = STP_cw_pending_rifles value = 0 compare = greater_than }
+		}
 		localization_key = STP_CW_CACHE_PENDING
 	}
 	text = { localization_key = STP_REGION_EMPTY_LINE }

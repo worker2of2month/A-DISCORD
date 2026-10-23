@@ -8,24 +8,10 @@ VAL = {
 			models = { ADISCORD_VAL_apc_entity }
 		}
 	}
-	ADISCORD_armored_carrier_archetype = {
-		pool = {
-			sub_units = { ADISCORD_mechanized_infantry }
-			weight = 3000
-			models = { ADISCORD_VAL_apc_entity }
-		}
-	}
 }
 
 STP = {
 	infantry_equipment = {
-		pool = {
-			sub_units = { ADISCORD_mechanized_infantry }
-			weight = 3000
-			models = { ADISCORD_STP_apc_entity }
-		}
-	}
-	ADISCORD_armored_carrier_archetype = {
 		pool = {
 			sub_units = { ADISCORD_mechanized_infantry }
 			weight = 3000
@@ -42,13 +28,6 @@ STS = {
 			models = { ADISCORD_STS_apc_entity }
 		}
 	}
-	ADISCORD_armored_carrier_archetype = {
-		pool = {
-			sub_units = { ADISCORD_mechanized_infantry }
-			weight = 3000
-			models = { ADISCORD_STS_apc_entity }
-		}
-	}
 }
 
 NAM = {
@@ -59,11 +38,14 @@ NAM = {
 			models = { ADISCORD_NAM_apc_entity }
 		}
 	}
-	ADISCORD_armored_carrier_archetype = {
+}
+
+NOD = {
+	infantry_equipment = {
 		pool = {
 			sub_units = { ADISCORD_mechanized_infantry }
 			weight = 3000
-			models = { ADISCORD_NAM_apc_entity }
+			models = { ADISCORD_NOD_apc_entity }
 		}
 	}
 }

@@ -27,13 +27,14 @@ STAGE = Path(tempfile.gettempdir()) / "adiscord-country-apc"
 DEST = ROOT / "gfx/models/units/ADISCORD_country_vehicles"
 PREVIEWS = ROOT / "docs/development/previews/country-apc"
 REPORT = ROOT / "docs/development/model-verification/country_apc.json"
-TAGS = ("VAL", "STP", "STS", "NAM")
+TAGS = ("VAL", "STP", "STS", "NAM", "NOD")
 CLIPS = ("idle", "move", "attack")
 PAINTS = {
     "VAL": ((77, 94, 112), (39, 49, 61), (185, 194, 199)),
     "STP": ((91, 43, 49), (44, 32, 35), (161, 132, 76)),
     "STS": ((88, 96, 64), (44, 52, 37), (188, 184, 150)),
     "NAM": ((53, 102, 111), (29, 56, 63), (216, 164, 66)),
+    "NOD": ((67, 88, 99), (34, 47, 58), (167, 196, 197)),
 }
 
 
@@ -52,11 +53,12 @@ def native_files(name):
             *[f"{name}_{channel}.dds" for channel in ("diffuse", "normal", "specular")]]
 
 
-def prepare():
+def prepare(tags=TAGS):
     from PIL import Image, ImageDraw
     from tools.assets.source.build_shl_palace import dds_bytes
 
-    for tag, (base, dark, accent) in PAINTS.items():
+    for tag in tags:
+        base, dark, accent = PAINTS[tag]
         palette = [base, dark, (23, 25, 25), (105, 113, 113), accent,
                    (34, 63, 75), accent, (15, 20, 21), base,
                    tuple(min(255, c + 18) for c in base), (140, 35, 27),
@@ -98,6 +100,10 @@ def prepare():
                 elif tag == "NAM":
                     draw.polygon(((64, 21), (107, 64), (64, 107), (21, 64)), fill=accent)
                     draw.polygon(((64, 43), (85, 64), (64, 85), (43, 64)), fill=base)
+                elif tag == "NOD":
+                    # Recognition bands keep small side panels readable.
+                    for x in (24, 66):
+                        draw.polygon(((x, 108), (x + 24, 20), (x + 41, 20), (x + 17, 108)), fill=accent)
                 else:
                     draw.line((30, 30, 30, 96, 97, 96), fill=accent, width=12)
                     draw.line((97, 30, 58, 69), fill=accent, width=12)
@@ -335,11 +341,64 @@ def nam_vehicle(model, body):
     model.rod((.73, 2.30, 2.01), (.73, 2.30, 2.87), .018, 3, body)
 
 
+def nod_vehicle(model, body):
+    # Three evenly spaced axles support a continuous hull and a narrow roof.
+    hull(model, [(.62, 1.86, -2.75, 2.82, .24),
+                 (1.30, 2.88, -3.43, 3.28, .48),
+                 (1.94, 2.68, -2.94, 3.12, .35),
+                 (2.30, 2.18, -1.75, 2.86, .23)], 0, body)
+    chassis(model, body, (-2.16, 0, 2.16), .78, 1.47, -3.43, 3.28)
+    for side in (-1, 1):
+        # Separate angled mudguards leave the large wheels exposed.
+        x = side * 1.48
+        for y in (-2.16, 0, 2.16):
+            model.plate([(x, y - 1.02, 1.32), (x, y - .74, 1.76),
+                         (x, y + .74, 1.76), (x, y + 1.02, 1.32),
+                         (x, y + .89, 1.31), (x, y + .66, 1.63),
+                         (x, y - .66, 1.63), (x, y - .89, 1.31)], .54, 1, body, axis=0)
+        model.box((side * .54, -1.84, 2.30), (.55, .16, .13), 1, body)
+        model.box((side * .54, -1.93, 2.31), (.43, .035, .075), 5, body)
+        headlamp(model, body, side * 1.08, -3.13, 1.65)
+        model.box((side * 1.08, -3.05, 1.84), (.45, .37, .07), 1, body)
+        model.rod((side * .84, -3.38, 1.11), (side * .84, -3.59, 1.11), .07, 3, body)
+        model.box((side * 1.29, 1.96, 2.06), (.24, 1.48, .37), 1, body)
+        model.box((side * 1.42, 1.96, 2.06), (.035, 1.23, .26), 8, body)
+        model.box((side * .98, 3.17, 1.64), (.20, .075, .14), 10, body)
+        hatch(model, body, (side * .51, 1.89, 2.35), .72, 1.04)
+    # A deep rear ramp and roof hatches mark the troop compartment.
+    model.box((0, 3.18, 1.52), (1.59, .14, 1.12), 1, body)
+    model.box((0, 3.26, 1.55), (1.38, .055, .90), 9, body)
+    for x in (-.58, .58):
+        model.box((x, 3.30, 1.13), (.17, .07, .24), 12, body)
+    model.rod((-.23, 3.31, 1.90), (.23, 3.31, 1.90), .03, 3, body)
+    hatch(model, body, (-.52, -1.17, 2.35), .65, .71)
+    for y in (-1.40, -1.21, -1.02, -.83):
+        model.box((.55, y, 2.35), (.61, .09, .045), 7, body)
+    model.box((1.22, 2.47, 2.28), (.19, .65, .21), 12, body)
+    model.rod((1.23, 2.73, 2.33), (1.23, 3.11, 2.43), .09, 12, body)
+    turret = model.bone("turret", (0, .12, 2.30), body)
+    gun = model.bone("gun", (0, -.67, 2.80), turret)
+    model.rod((0, .12, 2.31), (0, .12, 2.47), .69, 1, turret, sides=16)
+    hull(model, [(2.46, 1.77, -.77, 1.02, .24),
+                 (3.03, 1.11, -.38, .79, .19)], 9, turret)
+    for side in (-1, 1):
+        model.box((side * .71, .19, 2.66), (.29, 1.13, .31), 0, turret)
+        for y in (.08, .30, .52):
+            model.rod((side * .82, y, 2.82), (side * 1.0, y - .11, 3.02), .073, 12, turret, sides=8)
+    model.box((0, -.69, 2.80), (.51, .41, .33), 1, gun)
+    gun_barrel(model, gun, 0, -.88, -2.64, 2.80, .067)
+    model.box((0, -1.10, 2.80), (.22, .48, .19), 0, gun)
+    model.box((-.41, -.14, 3.10), (.30, .45, .24), 1, turret)
+    model.box((-.41, -.38, 3.12), (.21, .035, .12), 5, turret)
+    model.box((.24, .39, 3.05), (.44, .47, .07), 1, turret)
+    model.rod((-.89, 2.62, 2.30), (-.89, 2.62, 3.36), .020, 3, body)
+
+
 def vehicle(tag):
     model = native.Model(f"{tag}_apc")
     body = model.bone("hull", (0, 0, 1.5))
     builders = {"VAL": val_vehicle, "STP": stp_vehicle,
-                "STS": sts_vehicle, "NAM": nam_vehicle}
+                "STS": sts_vehicle, "NAM": nam_vehicle, "NOD": nod_vehicle}
     builders[tag](model, body)
     return model
 
@@ -547,14 +606,40 @@ def package(apply=False):
     return changed
 
 
+def stage_preserved_models(tags):
+    """Keep unselected exports byte-identical and validate their installed report."""
+    if set(tags) == set(TAGS):
+        return {}
+    installed = json.loads(REPORT.read_text())["models"]
+    preserved = {}
+    for tag in TAGS:
+        if tag in tags:
+            continue
+        name = f"{tag}_apc"
+        row = installed[name]
+        for filename, expected in row["files"].items():
+            assert digest(DEST / filename) == expected, f"Installed export changed: {filename}"
+            write_changed(STAGE / filename, (DEST / filename).read_bytes())
+        blend = SOURCE / f"{name}.blend"
+        assert digest(blend) == row["blend_sha256"], f"Installed scene changed: {blend.name}"
+        write_changed(STAGE / blend.name, blend.read_bytes())
+        preserved[name] = row
+    return preserved
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group(required=True)
     for action in ("prepare", "build", "check", "apply"):
         actions.add_argument("--" + action, action="store_true")
+    parser.add_argument("--tag", choices=TAGS, action="append",
+                        help="Prepare/build selected models; preserve other verified exports")
     args = parser.parse_args(sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else None)
+    tags = args.tag or TAGS
+    if args.tag and not (args.prepare or args.build):
+        parser.error("--tag is only valid with --prepare or --build")
     if args.prepare:
-        prepare()
+        prepare(tags)
     elif args.build:
         global bpy, bmesh, Matrix, Vector, pdx, pdx_data, native, hull
         import bpy
@@ -567,8 +652,9 @@ def main():
         from io_pdx_mesh import pdx_data
         native.bpy, native.bmesh, native.Matrix, native.Vector = bpy, bmesh, Matrix, Vector
         report = {"generator_sha256": digest(Path(__file__)),
-                  "idle_generator_sha256": digest(SOURCE / "build_idle.py"), "models": {}}
-        for tag in TAGS:
+                  "idle_generator_sha256": digest(SOURCE / "build_idle.py"),
+                  "models": stage_preserved_models(tags)}
+        for tag in tags:
             export(tag)
             report["models"][f"{tag}_apc"] = verify(tag)
             render(tag)

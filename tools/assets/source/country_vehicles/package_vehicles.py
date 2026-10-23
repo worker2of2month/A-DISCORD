@@ -28,7 +28,7 @@ NAMES += tuple(f"{tag}_{prefix}{role}" for tag in TAGS for prefix in ("early_", 
 SHARED_NAMES = tuple(f"{family}_{prefix}{role}" for family in FAMILIES
                      for prefix in PREFIXES for role in ("fighter", "cas"))
 SPECIAL_NAMES = ("STS_taran",)
-APC_TAGS = ("VAL", "STP", "STS", "NAM")
+APC_TAGS = ("VAL", "STP", "STS", "NAM", "NOD")
 APC_ROUTES = (
     "mechanized", *[f"mechanized_{level}" for level in range(4)],
     "motorized", "motorized_0", "motorized_1", "motorized_equipment", "motorized_equipment_1",
@@ -96,21 +96,23 @@ def apc_registry():
 
 
 def apc_model_pools():
-    """Register scoped model pools for both required equipment archetypes."""
+    """Add a national candidate through the battalion's rifle equipment."""
     text = HEADER
     for tag in APC_TAGS:
-        text += f"\n{tag} = {{\n"
-        for archetype in ("infantry_equipment", "ADISCORD_armored_carrier_archetype"):
-            text += (
-                f"\t{archetype} = {{\n"
-                "\t\tpool = {\n"
-                "\t\t\tsub_units = { ADISCORD_mechanized_infantry }\n"
-                "\t\t\tweight = 3000\n"
-                f"\t\t\tmodels = {{ ADISCORD_{tag}_apc_entity }}\n"
-                "\t\t}\n"
-                "\t}\n"
-            )
-        text += "}\n"
+        # Carrier queries use the equipment origin, including foreign designs.
+        # Reusing this entity there also deduplicates the later rifle candidate
+        # before the designer can assign its higher visual technology priority.
+        text += (
+            f"\n{tag} = {{\n"
+            "\tinfantry_equipment = {\n"
+            "\t\tpool = {\n"
+            "\t\t\tsub_units = { ADISCORD_mechanized_infantry }\n"
+            "\t\t\tweight = 3000\n"
+            f"\t\t\tmodels = {{ ADISCORD_{tag}_apc_entity }}\n"
+            "\t\t}\n"
+            "\t}\n"
+            "}\n"
+        )
     return text
 
 

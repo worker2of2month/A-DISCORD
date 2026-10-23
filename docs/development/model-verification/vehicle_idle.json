@@ -1,5 +1,5 @@
 {
-  "generator_sha256": "15eb9c3dc285c9798e85e381d2b0145207d49afb15975aa979eff00d718a9f80",
+  "generator_sha256": "f3ebe8d7293ef043f74ebe447f64010107f5c8dc1fafe6b2901060ed49a1d58f",
   "models": {
     "VAL_apc": {
       "animation": {
@@ -637,6 +637,48 @@
         "STS_taran_normal.dds": "0a3002221566e16183160343f428771d87ea78ae77710d2782b5706eed71ed7f",
         "STS_taran_specular.dds": "2ab5c156b5adfcc2c6ce207de20776eebe13d5d57d9e67e47e314f958aeb6b39"
       }
+    },
+    "NOD_apc": {
+      "animation": {
+        "samples": 35,
+        "frames": 361,
+        "fps": 30,
+        "max_vertex_motion": 0.3046723463123534,
+        "loop_error": 7.245825659299207e-17,
+        "velocity_loop_error": 4.591345695765911e-05,
+        "bone_motion": {
+          "vehicle_root": 0.0,
+          "hull": 0.0022051334381103516,
+          "turret": 0.10452844947576523,
+          "gun": 0.10452844947576523,
+          "wheel_-1_0": 0.0,
+          "wheel_-1_1": 0.0,
+          "wheel_-1_2": 0.0,
+          "wheel_1_0": 0.0,
+          "wheel_1_1": 0.0,
+          "wheel_1_2": 0.0
+        },
+        "stationary_bones": [
+          "vehicle_root",
+          "wheel_-1_0",
+          "wheel_-1_1",
+          "wheel_-1_2",
+          "wheel_1_0",
+          "wheel_1_1",
+          "wheel_1_2"
+        ],
+        "native_reimport": true,
+        "hoi4_runtime_verified": false
+      },
+      "sha256": "4211f940b90a9173d71f2d8ee87abbecfa86a2eda6620d9ae16518ebe2da35e6",
+      "inputs": {
+        "NOD_apc.mesh": "06922e637b2241c54a73c16be66655680eb41fcab1fb5caebfd9aaf8a86a54bf",
+        "NOD_apc_move.anim": "c82e1f3eb3a127bbfc5097bbe0137b6f172ee2073acacbc89ad7557bd0f78aa8",
+        "NOD_apc_attack.anim": "c434dd2186e96e77c4c3c3285cfefe407d9f601853a9209c52d1d3dd0d7264db",
+        "NOD_apc_diffuse.dds": "279aebad3c9e2f7987c3e2a188f59ee0adee78a2ff9bcc6834e68a8459459bab",
+        "NOD_apc_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+        "NOD_apc_specular.dds": "de6b3d63df3966977c4280d8684aaed1bd08d0acf515bfaf448126a20991b066"
+      }
     }
   },
   "outputs": {
@@ -652,6 +694,8 @@
     "gfx\\models\\units\\ADISCORD_country_vehicles\\NOD_tank_idle.anim": "NOD_tank_idle.anim",
     "gfx\\models\\units\\ADISCORD_country_vehicles\\STP_tank_idle.anim": "STP_tank_idle.anim",
     "gfx\\models\\units\\ADISCORD_country_vehicles\\STS_taran_idle.anim": "STS_taran_idle.anim",
+    "gfx\\models\\units\\ADISCORD_country_vehicles\\NOD_apc_idle.anim": "NOD_apc_idle.anim",
+    "tools\\assets\\source\\country_vehicles\\NOD_apc.blend": "NOD_apc.blend",
     "docs\\development\\model-verification\\country_apc.json": "country_apc.json",
     "docs\\development\\model-verification\\STS_taran_verification.json": "STS_taran_verification.json"
   },
@@ -668,7 +712,9 @@
     "gfx\\models\\units\\ADISCORD_country_vehicles\\NOD_tank_idle.anim": "0948ae8f18b37a34e3415b152aaeeb48e593ba2a9a2a95145e7911304e67bda1",
     "gfx\\models\\units\\ADISCORD_country_vehicles\\STP_tank_idle.anim": "cff9b038ddf529fc19e9c2bd0551744aa47ec744f9a1b1763df7fe5f005868f0",
     "gfx\\models\\units\\ADISCORD_country_vehicles\\STS_taran_idle.anim": "b370572b7882a9be3d2de08138d42f48901968a1dae8779e8826394cb755fbf1",
-    "docs\\development\\model-verification\\country_apc.json": "f0ff5d4a0915c8f83d3dc13e79692754859d6c0b97aa34d7daa60bd5184aef34",
-    "docs\\development\\model-verification\\STS_taran_verification.json": "e73b6e8f47743dd7c746ede918e988c15a769797bfd3338908533444b2e3f7aa"
+    "gfx\\models\\units\\ADISCORD_country_vehicles\\NOD_apc_idle.anim": "4211f940b90a9173d71f2d8ee87abbecfa86a2eda6620d9ae16518ebe2da35e6",
+    "tools\\assets\\source\\country_vehicles\\NOD_apc.blend": "b5a406d1f1f71c8a37799039ea2bdb61e3c0d23bba3530afdb6020caaeef624b",
+    "docs\\development\\model-verification\\country_apc.json": "99b42b63408b2e2663a149dabf25725cffa778bf06b2418bd740f1761a528806",
+    "docs\\development\\model-verification\\STS_taran_verification.json": "8b1ffc7aefd107d383f08a829dec048231d005650cd1fc209648fd866cac56bb"
   }
 }

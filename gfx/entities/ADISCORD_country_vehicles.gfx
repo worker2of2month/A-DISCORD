@@ -352,4 +352,12 @@ objectTypes = {
 		animation = { id = "move" type = "ADISCORD_NAM_apc_move_animation" }
 		animation = { id = "attack" type = "ADISCORD_NAM_apc_attack_animation" }
 	}
+	pdxmesh = {
+		name = "ADISCORD_NOD_apc_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/NOD_apc.mesh"
+		scale = 0.95
+		animation = { id = "idle" type = "ADISCORD_NOD_apc_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_NOD_apc_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_NOD_apc_attack_animation" }
+	}
 }

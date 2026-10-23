@@ -393,7 +393,7 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
 
         report = json.loads(builder.REPORT.read_text())
         self.assertEqual(report["generator_sha256"], builder.digest(Path(builder.__file__)))
-        self.assertEqual(set(report["models"]), {"VAL_apc", "STP_apc", "STS_apc", "NAM_apc"})
+        self.assertEqual(set(report["models"]), {"VAL_apc", "STP_apc", "STS_apc", "NAM_apc", "NOD_apc"})
         hashes = set()
         for name, row in report["models"].items():
             with self.subTest(name=name):
@@ -414,10 +414,10 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
                     self.assertLess(metrics["loop_error"], .001)
                     self.assertGreater(metrics["max_vertex_motion"], .05 if clip == "idle" else .10)
                 wheels = row["animations"]["move"]["moving_bones"]
-                expected_wheels = {"VAL_apc": 8, "STP_apc": 4, "STS_apc": 6, "NAM_apc": 8}
+                expected_wheels = {"VAL_apc": 8, "STP_apc": 4, "STS_apc": 6, "NAM_apc": 8, "NOD_apc": 6}
                 self.assertEqual(len(wheels), expected_wheels[name])
                 self.assertEqual(row["animations"]["attack"]["moving_bones"], ["gun"])
-        self.assertEqual(len(hashes), 4)
+        self.assertEqual(len(hashes), 5)
 
     def test_carriers_resolve_for_equipment_levels_and_country_identities(self):
         from tools.assets.source.country_vehicles import package_vehicles as registry
@@ -433,7 +433,7 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
         )
         for identity in registry.country_families():
             tag = identity.split("_", 1)[0]
-            if tag not in ("VAL", "STP", "STS", "NAM"):
+            if tag not in ("VAL", "STP", "STS", "NAM", "NOD"):
                 continue
             for suffix in expected_routes:
                 with self.subTest(identity=identity, suffix=suffix):
@@ -450,7 +450,7 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
         entities = {re.search(r'\bname = "([^"]+)"', block)[1]: block
                     for block in blocks(assets, "entity")}
         infantry = (ROOT / "gfx/entities/zz_ADISCORD_country_infantry.asset").read_text()
-        for tag in ("VAL", "STP", "STS", "NAM"):
+        for tag in ("VAL", "STP", "STS", "NAM", "NOD"):
             wrapper = entities[f"ADISCORD_{tag}_apc_entity"]
             vehicle = entities[f"ADISCORD_{tag}_apc_vehicle_entity"]
             escort = entities[f"ADISCORD_{tag}_apc_escort_entity"]
@@ -469,7 +469,7 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
         self.assertNotIn("mechanized_entity", entities)
         self.assertNotIn("motorized_entity", entities)
 
-    def test_designer_pools_select_only_the_national_mechanized_model(self):
+    def test_designer_pools_add_national_models_only_through_rifles(self):
         from tools.assets.source.country_vehicles import package_vehicles as registry
 
         def one(rows, key):
@@ -482,12 +482,12 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
         self.assertFalse(raw.startswith(b"\xef\xbb\xbf"))
         self.assertEqual(raw.decode("utf-8"), registry.apc_model_pools())
         countries = parse_clausewitz(raw.decode("utf-8"))
-        self.assertEqual({row.key for row in countries}, {"VAL", "STP", "STS", "NAM"})
-        for tag in ("VAL", "STP", "STS", "NAM"):
+        self.assertEqual({row.key for row in countries}, {"VAL", "STP", "STS", "NAM", "NOD"})
+        for tag in ("VAL", "STP", "STS", "NAM", "NOD"):
             country = one(countries, tag)
             self.assertEqual(
                 {row.key for row in country},
-                {"infantry_equipment", "ADISCORD_armored_carrier_archetype"},
+                {"infantry_equipment"},
             )
             for equipment in country:
                 with self.subTest(tag=tag, equipment=equipment.key):
@@ -501,6 +501,78 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
                         {f"ADISCORD_{tag}_apc_entity"},
                     )
                     self.assertEqual(one(pool, "weight"), "3000")
+
+    def test_designer_rifle_candidate_survives_foreign_carrier_deduplication(self):
+        from bisect import bisect_left
+        from tools.assets.source.country_vehicles import package_vehicles as registry
+
+        equipment = {}
+        for filename in ("ADISCORD_armor_equipment.txt", "ADISCORD_infantry_equipment.txt"):
+            rows = parse_clausewitz((ROOT / "common/units/equipment" / filename).read_text())
+            for row in next(row.value for row in rows if row.key == "equipments"):
+                if isinstance(row.value, list):
+                    equipment[row.key] = {field.key: field.value for field in row.value}
+
+        def visual_technology_level(key):
+            fields = equipment[key]
+            level = int(fields.get("visual_tech_level_addition", "1"))
+            if "parent" in fields:
+                level += visual_technology_level(fields["parent"])
+            return max(1, level)
+
+        pools = parse_clausewitz(registry.apc_model_pools())
+        pool_models = {}
+        for country in pools:
+            for archetype in country.value:
+                pool = next(row.value for row in archetype.value if row.key == "pool")
+                models = next(row.value for row in pool if row.key == "models")
+                pool_models[country.key, archetype.key] = [row.value for row in models]
+
+        def first_candidate(owner, foreign, rifle, registered_pools):
+            # Native 1.19.3: origin for mechanized, owner for rifles; first-name
+            # deduplication precedes descending priority insertion. Equal
+            # priorities insert before existing entries. This reduced replay
+            # covers the automatic one-battalion preview, without overrides.
+            queries = (
+                ("ADISCORD_armored_carrier_2163", owner),
+                ("ADISCORD_armored_carrier_2163", foreign),
+                (rifle, owner),
+                (rifle, foreign),
+            )
+            seen = set()
+            priorities = []
+            candidates = []
+            for key, creator in queries:
+                archetype = equipment[key]["archetype"]
+                country = owner if archetype == "infantry_equipment" else creator
+                models = [f"{country}_mechanized_entity"]
+                models += registered_pools.get((country, archetype), [])
+                priority = (100 + 10 + visual_technology_level(key)) * 10
+                for model in models:
+                    if model in seen:
+                        continue
+                    seen.add(model)
+                    index = bisect_left(priorities, -priority)
+                    priorities.insert(index, -priority)
+                    candidates.insert(index, model)
+            return candidates[0]
+
+        self.assertEqual(visual_technology_level("ADISCORD_armored_carrier_2163"), 1)
+        for owner in registry.APC_TAGS:
+            foreign = "STP" if owner != "STP" else "STS"
+            for rifle in ("ADISCORD_infantry_equipment_2156", "ADISCORD_infantry_equipment_2163"):
+                with self.subTest(owner=owner, rifle=rifle):
+                    self.assertEqual(first_candidate(owner, foreign, rifle, {}),
+                                     f"{foreign}_mechanized_entity")
+                    self.assertEqual(first_candidate(owner, foreign, rifle, pool_models),
+                                     f"ADISCORD_{owner}_apc_entity")
+                    carrier_pools = dict(pool_models)
+                    for tag in registry.APC_TAGS:
+                        carrier_pools[tag, "ADISCORD_armored_carrier_archetype"] = [
+                            f"ADISCORD_{tag}_apc_entity"
+                        ]
+                    self.assertEqual(first_candidate(owner, foreign, rifle, carrier_pools),
+                                     f"ADISCORD_{foreign}_apc_entity")
 
 
 class CarrierFocusTests(unittest.TestCase):

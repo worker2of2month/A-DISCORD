@@ -71,3 +71,6 @@ animation = { name = "ADISCORD_STS_apc_attack_animation" file = "STS_apc_attack.
 animation = { name = "ADISCORD_NAM_apc_idle_animation" file = "NAM_apc_idle.anim" }
 animation = { name = "ADISCORD_NAM_apc_move_animation" file = "NAM_apc_move.anim" }
 animation = { name = "ADISCORD_NAM_apc_attack_animation" file = "NAM_apc_attack.anim" }
+animation = { name = "ADISCORD_NOD_apc_idle_animation" file = "NOD_apc_idle.anim" }
+animation = { name = "ADISCORD_NOD_apc_move_animation" file = "NOD_apc_move.anim" }
+animation = { name = "ADISCORD_NOD_apc_attack_animation" file = "NOD_apc_attack.anim" }
