@@ -205,22 +205,22 @@ CENTRAL_BRACKET_TAGS = frozenset(CENTRAL_MINOR_TARGETS)
 CLOSED_ZONE_BRACKET_TAGS = frozenset({"RZA", "MLR", "IRT", "ERT", "SCA"})
 MAIN_CLAIMANTS = frozenset({"WKR", "VAD", "TVA"})
 EMERGENCY_TEMPLATE_EFFECTS = {
-    "ADISCORD_vorkerland_ensure_emergency_militia_template": "Emergency Militia",
-    "ADISCORD_vorkerland_ensure_worker_home_guard_template": "Worker Home Guard",
-    "ADISCORD_vorkerland_ensure_workerland_militia_template": "Workerland Militia",
-    "ADISCORD_vorkerland_ensure_workerland_mobile_group_template": "Workerland Mobile Group",
-    "ADISCORD_vorkerland_ensure_armi_security_detachment_template": "Armi Security Detachment",
-    "ADISCORD_vorkerland_ensure_armi_mobile_group_template": "Armi Mobile Group",
-    "ADISCORD_vorkerland_ensure_tva_collapse_militia_template": "Collapse Militia",
-    "ADISCORD_vorkerland_ensure_tva_infiltration_cell_template": "Infiltration Cell",
-    "ADISCORD_vorkerland_ensure_wps_collapse_militia_template": "Collapse Militia",
-    "ADISCORD_vorkerland_ensure_tgd_urban_guard_template": "Urban Guard",
-    "ADISCORD_vorkerland_ensure_line_infantry_brigade_template": "Line Infantry Brigade",
+    "ADISCORD_vorkerland_ensure_emergency_militia_template": "Экстренное ополчение",
+    "ADISCORD_vorkerland_ensure_worker_home_guard_template": "Рабочая самооборона",
+    "ADISCORD_vorkerland_ensure_workerland_militia_template": "Ополчение Воркерленда",
+    "ADISCORD_vorkerland_ensure_workerland_mobile_group_template": "Мобильная группа Воркерленда",
+    "ADISCORD_vorkerland_ensure_armi_security_detachment_template": "Охранный отряд Арми",
+    "ADISCORD_vorkerland_ensure_armi_mobile_group_template": "Мобильная группа Арми",
+    "ADISCORD_vorkerland_ensure_tva_collapse_militia_template": "Ополчение распада",
+    "ADISCORD_vorkerland_ensure_tva_infiltration_cell_template": "Диверсионная ячейка",
+    "ADISCORD_vorkerland_ensure_wps_collapse_militia_template": "Ополчение распада",
+    "ADISCORD_vorkerland_ensure_tgd_urban_guard_template": "Городская гвардия",
+    "ADISCORD_vorkerland_ensure_line_infantry_brigade_template": "Линейная пехотная бригада",
 }
 EMERGENCY_TEMPLATE_REQUIRED_METADATA = {
-    "Emergency Militia": ("is_locked = yes", "force_allow_recruiting = yes"),
-    "Worker Home Guard": ("is_locked = yes", "force_allow_recruiting = yes"),
-    "Workerland Mobile Group": (
+    "Экстренное ополчение": ("is_locked = yes", "force_allow_recruiting = yes"),
+    "Рабочая самооборона": ("is_locked = yes", "force_allow_recruiting = yes"),
+    "Мобильная группа Воркерленда": (
         "is_locked = no",
         "force_allow_recruiting = yes",
     ),
@@ -3318,7 +3318,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
                 issues.append(
                     f"Doctor Worx {target.upper()} infiltration is missing state {state}"
                 )
-        for token in ("Infiltration Cell", "fire_only_once = yes"):
+        for token in ("Диверсионная ячейка", "fire_only_once = yes"):
             if token not in partisan:
                 issues.append(
                     f"Doctor Worx {target.upper()} infiltration is missing {token}"
@@ -4007,8 +4007,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "tag = WKR",
         "NOT = { has_country_flag = ADISCORD_vorkerland_wkr_force_templates_v2_applied }",
         "set_country_flag = ADISCORD_vorkerland_wkr_force_templates_v2_applied",
-        'name = "Worker Rifle Division"',
-        'name = "Workerland Mobile Group"',
+        'name = "Рабочая стрелковая дивизия"',
+        'name = "Мобильная группа Воркерленда"',
         "force_allow_recruiting = yes",
         "ADISCORD_line_artillery = {",
         "ADISCORD_mechanized_infantry = {",
@@ -4045,7 +4045,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         emergency_templates,
         "ADISCORD_vorkerland_ensure_worker_home_guard_template",
     )
-    for token in ('name = "Worker Home Guard"', "is_locked = yes"):
+    for token in ('name = "Рабочая самооборона"', "is_locked = yes"):
         if token not in worker_home_guard_template:
             issues.append(f"shared WKR home-guard template is missing {token}")
     if worker_home_guard_template.count("ADISCORD_militia =") != 3:
@@ -4133,8 +4133,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
     tva_oob = read(root, "history/units/TVA_vorkerland_collapse.txt", issues)
     if (
         tva_oob.count("division = {") != 19
-        or tva_oob.count('division_template = "Mobile Test Group"') != 1
-        or "Infiltration Cell" not in tva_oob
+        or tva_oob.count('division_template = "Опытная мобильная группа"') != 1
+        or "Диверсионная ячейка" not in tva_oob
     ):
         issues.append(
             "TVA must start with eighteen militia formations, one mobile group and an infiltration template"
@@ -4209,7 +4209,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
     for token in (
         "add_manpower = 1800",
         "amount = 360 producer = ROOT",
-        'division_template = \\"Emergency Militia\\"',
+        'division_template = \\"Экстренное ополчение\\"',
         "count = 2",
     ):
         if token not in levies:
@@ -4244,9 +4244,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if ivn_units.count("division = {") != 16:
         issues.append("IVN must start with exactly sixteen field formations")
     for template, count in (
-        ("Capital Guard", 2),
-        ("Line Infantry Brigade", 10),
-        ("Local Security Detachment", 4),
+        ("Столичная гвардия", 2),
+        ("Линейная пехотная бригада", 10),
+        ("Местный охранный отряд", 4),
     ):
         if ivn_units.count(f'division_template = "{template}"') != count:
             issues.append(f"IVN must field exactly {count} {template} formations")

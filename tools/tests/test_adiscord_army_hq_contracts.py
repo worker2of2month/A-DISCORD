@@ -205,7 +205,7 @@ class ArmyHeadquartersContractTests(unittest.TestCase):
         self.assertNotIn("country_lock_all_division_template", history)
 
         oob = read("history/units/STP.txt")
-        for template_name in ("Police division", "Regular army", "Capital Guard"):
+        for template_name in ("Полицейская дивизия", "Регулярная армия", "Столичная гвардия"):
             with self.subTest(template=template_name):
                 template = division_template_block(oob, template_name)
                 self.assertIn("is_locked = yes", template)
@@ -246,9 +246,9 @@ class ArmyHeadquartersContractTests(unittest.TestCase):
     ) -> None:
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         unlock = named_block(effects, "ADISCORD_STP_unlock_regular_army_templates")
-        self.assertIn('division_template = "Police division"', unlock)
-        self.assertIn('division_template = "Regular army"', unlock)
-        self.assertNotIn('division_template = "Capital Guard"', unlock)
+        self.assertIn('division_template = "Полицейская дивизия"', unlock)
+        self.assertIn('division_template = "Регулярная армия"', unlock)
+        self.assertNotIn('division_template = "Столичная гвардия"', unlock)
         self.assertNotIn("ADISCORD_STP_migrate_army_template_lock", effects)
 
         idea = named_block(

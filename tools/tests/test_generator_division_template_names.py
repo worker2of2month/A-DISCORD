@@ -9,7 +9,6 @@ from tools.builders import build_adiscord_northern_countries as northern
 from tools.lib import adiscord_remainder_countries as remainder
 
 
-PRINTABLE_ASCII = re.compile(r"^[\x20-\x7e]+$")
 CYRILLIC = re.compile(r"[\u0400-\u04ff]")
 TEMPLATE_DEFINITION = re.compile(
     r'division_template\s*=\s*\{\s*name\s*=\s*"([^"]+)"',
@@ -23,13 +22,14 @@ class GeneratorDivisionTemplateNameTests(unittest.TestCase):
         for tag, row in remainder.COUNTRIES.items():
             with self.subTest(tag=tag):
                 oob = remainder.country_oob(tag, row)
-                self.assertEqual(TEMPLATE_DEFINITION.findall(oob), ["Territorial Brigade"])
-                self.assertEqual(set(TEMPLATE_REFERENCE.findall(oob)), {"Territorial Brigade"})
+                self.assertEqual(TEMPLATE_DEFINITION.findall(oob), ["Территориальная бригада"])
+                self.assertEqual(set(TEMPLATE_REFERENCE.findall(oob)), {"Территориальная бригада"})
                 self.assertIn("template_counter = 12", oob)
 
-    def assert_printable_ascii(self, name: str) -> None:
-        self.assertRegex(name, PRINTABLE_ASCII)
-        self.assertNotRegex(name, CYRILLIC)
+    def assert_russian_name(self, name: str) -> None:
+        self.assertTrue(name.isprintable())
+        self.assertRegex(name, CYRILLIC)
+        self.assertNotRegex(name, r"[A-Za-z]")
 
     def rendered_oobs(self) -> tuple[str, ...]:
         principal_provinces = {1: 101, 2: 102}
@@ -58,7 +58,7 @@ class GeneratorDivisionTemplateNameTests(unittest.TestCase):
             northern.render_oob("VRA", militia, principal_provinces),
         )
 
-    def test_generator_template_constants_are_printable_ascii(self) -> None:
+    def test_generator_template_constants_are_russian(self) -> None:
         constants = (
             getattr(ainholm, "DIVISION_TEMPLATE_NAMES", ()),
             getattr(inner, "DIVISION_TEMPLATE_NAMES", ()),
@@ -66,28 +66,28 @@ class GeneratorDivisionTemplateNameTests(unittest.TestCase):
         )
         self.assertTrue(
             all(constants),
-            "each OOB generator must expose its technical template names",
+            "each OOB generator must expose its player-visible template names",
         )
         names = tuple(name for group in constants for name in group)
         self.assertEqual(
             set(names),
             {
-                "Licensed Security Battalion",
-                "Palatine Line Division",
-                "Filtration Battalion",
-                "Frontier Brigade",
-                "Settler Militia",
-                "Imperial Line Division",
-                "Imperial Frontier Brigade",
-                "Northern Line Brigade",
-                "Northern Militia",
+                "Лицензированный охранный батальон",
+                "Палатинская линейная дивизия",
+                "Фильтрационный батальон",
+                "Пограничная бригада",
+                "Ополчение поселенцев",
+                "Имперская линейная дивизия",
+                "Имперская пограничная бригада",
+                "Северная линейная бригада",
+                "Северное ополчение",
             },
         )
         for name in names:
             with self.subTest(name=name):
-                self.assert_printable_ascii(name)
+                self.assert_russian_name(name)
 
-    def test_rendered_template_definitions_and_references_are_printable_ascii(
+    def test_rendered_template_definitions_and_references_are_russian(
         self,
     ) -> None:
         observed: set[str] = set()
@@ -96,20 +96,20 @@ class GeneratorDivisionTemplateNameTests(unittest.TestCase):
             self.assertTrue(names)
             for name in names:
                 with self.subTest(name=name):
-                    self.assert_printable_ascii(name)
+                    self.assert_russian_name(name)
                     observed.add(name)
         self.assertEqual(
             observed,
             {
-                "Licensed Security Battalion",
-                "Palatine Line Division",
-                "Filtration Battalion",
-                "Frontier Brigade",
-                "Settler Militia",
-                "Imperial Line Division",
-                "Imperial Frontier Brigade",
-                "Northern Line Brigade",
-                "Northern Militia",
+                "Лицензированный охранный батальон",
+                "Палатинская линейная дивизия",
+                "Фильтрационный батальон",
+                "Пограничная бригада",
+                "Ополчение поселенцев",
+                "Имперская линейная дивизия",
+                "Имперская пограничная бригада",
+                "Северная линейная бригада",
+                "Северное ополчение",
             },
         )
 

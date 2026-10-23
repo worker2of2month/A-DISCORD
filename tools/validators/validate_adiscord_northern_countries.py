@@ -392,7 +392,7 @@ def validate() -> list[str]:
         issues.append("MON must retain a smaller population than united WRK")
     mon_history = named_history("MON")
     mon_oob = read("history/units/MON.txt")
-    for template, expected in (("Imperial Line Division", 28), ("Imperial Frontier Brigade", 8)):
+    for template, expected in (("Имперская линейная дивизия", 28), ("Имперская пограничная бригада", 8)):
         deployed = mon_oob.count(f'division_template = "{template}"')
         if deployed != expected:
             issues.append(f"MON must deploy {expected} formations of {template}, found {deployed}")

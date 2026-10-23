@@ -1,5 +1,5 @@
 division_template = {
-	name = "Dry River Patrol"
+	name = "Патруль Сухой реки"
 	template_counter = 80
 	regiments = {
 		ADISCORD_militia = { x = 0 y = 0 }
@@ -8,5 +8,5 @@ division_template = {
 	}
 }
 units = {
-	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 197 division_template = "Dry River Patrol" start_experience_factor = 0.20 start_equipment_factor = 0.50 }
+	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 197 division_template = "Патруль Сухой реки" start_experience_factor = 0.20 start_equipment_factor = 0.50 }
 }

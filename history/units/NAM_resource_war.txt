@@ -6,21 +6,21 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 20 }
 		location = 4912
-		division_template = "Capital Guard"
+		division_template = "Столичная гвардия"
 		start_experience_factor = 0.45
 		start_equipment_factor = 0.90
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 22 }
 		location = 8058
-		division_template = "Line Infantry Brigade"
+		division_template = "Линейная пехотная бригада"
 		start_experience_factor = 0.35
 		start_equipment_factor = 0.95
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 23 }
 		location = 2299
-		division_template = "Line Infantry Brigade"
+		division_template = "Линейная пехотная бригада"
 		start_experience_factor = 0.35
 		start_equipment_factor = 0.95
 	}

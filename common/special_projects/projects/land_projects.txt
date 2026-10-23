@@ -45,9 +45,9 @@ ADISCORD_sp_power_shields = {
 				custom_effect_tooltip = ADISCORD_power_shields_template_tt
 				hidden_effect = {
 					if = {
-						limit = { NOT = { has_template = "Shield Assault Division" } }
+						limit = { NOT = { has_template = "Щитовая штурмовая дивизия" } }
 						division_template = {
-							name = "Shield Assault Division"
+							name = "Щитовая штурмовая дивизия"
 							template_counter = 89
 							is_locked = no
 							regiments = {

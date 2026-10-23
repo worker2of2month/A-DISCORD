@@ -6,7 +6,7 @@ ADISCORD_vorkerland_delete_external_gate_formations = {
 	# same cleanup can repair saves where WCG is already landless and can no
 	# longer be reached by annex_country.
 	delete_unit_template_and_units = {
-		division_template = "Filtration Battalion"
+		division_template = "Фильтрационный батальон"
 		disband = no
 	}
 }

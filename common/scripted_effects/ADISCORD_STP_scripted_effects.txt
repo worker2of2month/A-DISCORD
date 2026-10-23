@@ -405,38 +405,38 @@ STP_set_leader_health_stage = {
 
 ADISCORD_STP_lock_regular_army_templates = {
 	if = {
-		limit = { has_template = "Police division" }
+		limit = { has_template = "Полицейская дивизия" }
 		set_division_template_lock = {
-			division_template = "Police division"
+			division_template = "Полицейская дивизия"
 			is_locked = yes
 		}
 		set_division_force_allow_recruiting = {
-			division_template = "Police division"
+			division_template = "Полицейская дивизия"
 			force_allow_recruiting = no
 		}
 	}
 
 	if = {
-		limit = { has_template = "Regular army" }
+		limit = { has_template = "Регулярная армия" }
 		set_division_template_lock = {
-			division_template = "Regular army"
+			division_template = "Регулярная армия"
 			is_locked = yes
 		}
 		set_division_force_allow_recruiting = {
-			division_template = "Regular army"
+			division_template = "Регулярная армия"
 			force_allow_recruiting = no
 		}
 	}
 
-	# Capital Guard remains unique.
+	# Столичная гвардия remains unique.
 	if = {
-		limit = { has_template = "Capital Guard" }
+		limit = { has_template = "Столичная гвардия" }
 		set_division_template_lock = {
-			division_template = "Capital Guard"
+			division_template = "Столичная гвардия"
 			is_locked = yes
 		}
 		set_division_force_allow_recruiting = {
-			division_template = "Capital Guard"
+			division_template = "Столичная гвардия"
 			force_allow_recruiting = no
 		}
 	}
@@ -444,25 +444,25 @@ ADISCORD_STP_lock_regular_army_templates = {
 
 ADISCORD_STP_unlock_regular_army_templates = {
 	if = {
-		limit = { has_template = "Police division" }
+		limit = { has_template = "Полицейская дивизия" }
 		set_division_template_lock = {
-			division_template = "Police division"
+			division_template = "Полицейская дивизия"
 			is_locked = no
 		}
 		set_division_force_allow_recruiting = {
-			division_template = "Police division"
+			division_template = "Полицейская дивизия"
 			force_allow_recruiting = yes
 		}
 	}
 
 	if = {
-		limit = { has_template = "Regular army" }
+		limit = { has_template = "Регулярная армия" }
 		set_division_template_lock = {
-			division_template = "Regular army"
+			division_template = "Регулярная армия"
 			is_locked = no
 		}
 		set_division_force_allow_recruiting = {
-			division_template = "Regular army"
+			division_template = "Регулярная армия"
 			force_allow_recruiting = yes
 		}
 	}
@@ -472,27 +472,27 @@ ADISCORD_STP_unlock_regular_army_templates = {
 STP_cw_apply_wartime_template_locks = {
 	if = { limit = { tag = STP } ADISCORD_STP_unlock_regular_army_templates = yes }
 	if = {
-		limit = { has_template = "Capital Guard" }
-		set_division_template_lock = { division_template = "Capital Guard" is_locked = no }
+		limit = { has_template = "Столичная гвардия" }
+		set_division_template_lock = { division_template = "Столичная гвардия" is_locked = no }
 	}
-	set_division_template_lock = { division_template = "Stelander Territorial Brigade" is_locked = no }
-	set_division_force_allow_recruiting = { division_template = "Stelander Territorial Brigade" force_allow_recruiting = yes }
+	set_division_template_lock = { division_template = "Территориальная бригада Стеландера" is_locked = no }
+	set_division_force_allow_recruiting = { division_template = "Территориальная бригада Стеландера" force_allow_recruiting = yes }
 	# STP has a repeatable fixed-price order; ordinary recruitment remains available.
 	if = {
 		limit = { tag = STP }
-		set_division_template_lock = { division_template = "Stelander Assault Division" is_locked = yes }
+		set_division_template_lock = { division_template = "Штурмовая дивизия Стеландера" is_locked = yes }
 	}
-	else = { set_division_template_lock = { division_template = "Stelander Assault Division" is_locked = no } }
-	set_division_force_allow_recruiting = { division_template = "Stelander Assault Division" force_allow_recruiting = yes }
+	else = { set_division_template_lock = { division_template = "Штурмовая дивизия Стеландера" is_locked = no } }
+	set_division_force_allow_recruiting = { division_template = "Штурмовая дивизия Стеландера" force_allow_recruiting = yes }
 	if = {
-		limit = { has_template = "Kefreyt Volunteer Division" }
-		set_division_template_lock = { division_template = "Kefreyt Volunteer Division" is_locked = yes }
-		set_division_force_allow_recruiting = { division_template = "Kefreyt Volunteer Division" force_allow_recruiting = no }
+		limit = { has_template = "Добровольческая дивизия Кефрейта" }
+		set_division_template_lock = { division_template = "Добровольческая дивизия Кефрейта" is_locked = yes }
+		set_division_force_allow_recruiting = { division_template = "Добровольческая дивизия Кефрейта" force_allow_recruiting = no }
 	}
 	if = {
-		limit = { has_template = "Kefreyt Contract Infantry" }
-		set_division_template_lock = { division_template = "Kefreyt Contract Infantry" is_locked = yes }
-		set_division_force_allow_recruiting = { division_template = "Kefreyt Contract Infantry" force_allow_recruiting = no }
+		limit = { has_template = "Контрактная пехота Кефрейта" }
+		set_division_template_lock = { division_template = "Контрактная пехота Кефрейта" is_locked = yes }
+		set_division_force_allow_recruiting = { division_template = "Контрактная пехота Кефрейта" force_allow_recruiting = no }
 	}
 }
 
@@ -2291,9 +2291,9 @@ STP_cw_refund_nod_sabotage_rifles = {
 # create_unit supplies its own contents: debit the real pools first.
 STP_cw_ensure_rear_cell_template = {
 	if = {
-		limit = { NOT = { has_template = "Stelander Underground Cell" } }
+		limit = { NOT = { has_template = "Подпольная ячейка Стеландера" } }
 		division_template = {
-			name = "Stelander Underground Cell"
+			name = "Подпольная ячейка Стеландера"
 			template_counter = 17
 			is_locked = yes
 			force_allow_recruiting = no
@@ -2326,7 +2326,7 @@ STP_cw_raise_rear_cell = {
 			FROM = {
 				set_state_flag = STP_cw_rear_cell_raised
 				create_unit = {
-					division = "division_template = \"Stelander Underground Cell\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					division = "division_template = \"Подпольная ячейка Стеландера\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 					owner = STS
 					allow_spawning_on_enemy_provs = yes
 				}
@@ -2365,10 +2365,10 @@ STP_cw_raise_congress_guard = {
 			tag = STP
 			owns_state = 28
 			controls_province = 145
-			NOT = { has_template = "Congress Infantry Guard" }
+			NOT = { has_template = "Пехотная гвардия Конгресса" }
 		}
 		division_template = {
-			name = "Congress Infantry Guard"
+			name = "Пехотная гвардия Конгресса"
 			template_counter = 78
 			priority = 2
 			is_locked = yes
@@ -2390,7 +2390,7 @@ STP_cw_raise_congress_guard = {
 				end = 2
 				value = STP_cw_formation_index
 				create_unit = {
-					division = "division_template = \"Congress Infantry Guard\" location = 145 start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					division = "division_template = \"Пехотная гвардия Конгресса\" location = 145 start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 					owner = STP
 					allow_spawning_on_enemy_provs = no
 				}
@@ -2435,7 +2435,7 @@ STP_cw_mobilize_brigade = {
 # STATE: owner is PREV. Used only after the brigade has been paid.
 STP_cw_create_territorial_brigade = {
 	create_unit = {
-		division = "division_template = \"Stelander Territorial Brigade\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		division = "division_template = \"Территориальная бригада Стеландера\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 		owner = PREV
 		allow_spawning_on_enemy_provs = no
 	}
@@ -2633,7 +2633,7 @@ STP_cw_deploy_kefreyt_volunteers = {
 			end = 3
 			value = STP_cw_formation_index
 			create_unit = {
-				division = "division_template = \"Kefreyt Volunteer Division\" start_experience_factor = 0.5 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				division = "division_template = \"Добровольческая дивизия Кефрейта\" start_experience_factor = 0.5 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 				owner = STS
 				allow_spawning_on_enemy_provs = no
 			}
@@ -2644,47 +2644,47 @@ STP_cw_deploy_kefreyt_volunteers = {
 # COUNTRY: unlock first. A locked Kefreyt template can ignore template deletion.
 STP_cw_purge_kefreyt_host_templates = {
 	if = {
-		limit = { has_template = "Kefreyt Volunteer Division" }
-		set_division_template_lock = { division_template = "Kefreyt Volunteer Division" is_locked = no }
-		delete_unit = { division_template = "Kefreyt Volunteer Division" disband = no }
-		delete_unit_template_and_units = { division_template = "Kefreyt Volunteer Division" disband = no }
+		limit = { has_template = "Добровольческая дивизия Кефрейта" }
+		set_division_template_lock = { division_template = "Добровольческая дивизия Кефрейта" is_locked = no }
+		delete_unit = { division_template = "Добровольческая дивизия Кефрейта" disband = no }
+		delete_unit_template_and_units = { division_template = "Добровольческая дивизия Кефрейта" disband = no }
 	}
 	if = {
-		limit = { has_template = "Kefreyt Contract Infantry" }
-		set_division_template_lock = { division_template = "Kefreyt Contract Infantry" is_locked = no }
-		delete_unit = { division_template = "Kefreyt Contract Infantry" disband = no }
-		delete_unit_template_and_units = { division_template = "Kefreyt Contract Infantry" disband = no }
+		limit = { has_template = "Контрактная пехота Кефрейта" }
+		set_division_template_lock = { division_template = "Контрактная пехота Кефрейта" is_locked = no }
+		delete_unit = { division_template = "Контрактная пехота Кефрейта" disband = no }
+		delete_unit_template_and_units = { division_template = "Контрактная пехота Кефрейта" disband = no }
 	}
 }
 
 # COUNTRY: drop the union peacetime roster. Field templates stay with the owner.
 STP_cw_strip_peacetime_union_templates = {
 	if = {
-		limit = { has_template = "Police division" }
-		set_division_template_lock = { division_template = "Police division" is_locked = no }
-		delete_unit = { division_template = "Police division" disband = no }
-		delete_unit_template_and_units = { division_template = "Police division" disband = no }
+		limit = { has_template = "Полицейская дивизия" }
+		set_division_template_lock = { division_template = "Полицейская дивизия" is_locked = no }
+		delete_unit = { division_template = "Полицейская дивизия" disband = no }
+		delete_unit_template_and_units = { division_template = "Полицейская дивизия" disband = no }
 	}
 	if = {
-		limit = { has_template = "Regular army" }
-		set_division_template_lock = { division_template = "Regular army" is_locked = no }
-		delete_unit = { division_template = "Regular army" disband = no }
-		delete_unit_template_and_units = { division_template = "Regular army" disband = no }
+		limit = { has_template = "Регулярная армия" }
+		set_division_template_lock = { division_template = "Регулярная армия" is_locked = no }
+		delete_unit = { division_template = "Регулярная армия" disband = no }
+		delete_unit_template_and_units = { division_template = "Регулярная армия" disband = no }
 	}
 	if = {
-		limit = { has_template = "Capital Guard" }
-		set_division_template_lock = { division_template = "Capital Guard" is_locked = no }
-		delete_unit = { division_template = "Capital Guard" disband = no }
-		delete_unit_template_and_units = { division_template = "Capital Guard" disband = no }
+		limit = { has_template = "Столичная гвардия" }
+		set_division_template_lock = { division_template = "Столичная гвардия" is_locked = no }
+		delete_unit = { division_template = "Столичная гвардия" disband = no }
+		delete_unit_template_and_units = { division_template = "Столичная гвардия" disband = no }
 	}
 }
 
 # COUNTRY: the shared wartime OOB also carries the STS-only volunteer template.
 STP_cw_strip_kefreyt_volunteer_template = {
 	if = {
-		limit = { has_template = "Kefreyt Volunteer Division" }
-		set_division_template_lock = { division_template = "Kefreyt Volunteer Division" is_locked = no }
-		delete_unit_template_and_units = { division_template = "Kefreyt Volunteer Division" disband = no }
+		limit = { has_template = "Добровольческая дивизия Кефрейта" }
+		set_division_template_lock = { division_template = "Добровольческая дивизия Кефрейта" is_locked = no }
+		delete_unit_template_and_units = { division_template = "Добровольческая дивизия Кефрейта" disband = no }
 	}
 }
 
@@ -2730,7 +2730,7 @@ STP_cw_deploy_assault_division = {
 # STATE: owner is PREV.
 STP_cw_create_assault_division = {
 	create_unit = {
-		division = "division_template = \"Stelander Assault Division\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		division = "division_template = \"Штурмовая дивизия Стеландера\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 		owner = PREV
 		allow_spawning_on_enemy_provs = no
 	}
@@ -2773,7 +2773,7 @@ STP_cw_finish_reserve_training = {
 				random_owned_controlled_state = {
 					limit = { STP_cw_state_faces_rival = yes }
 					create_unit = {
-						division = "division_template = \"Stelander Territorial Brigade\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						division = "division_template = \"Территориальная бригада Стеландера\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 						owner = PREV
 						allow_spawning_on_enemy_provs = no
 					}
@@ -2782,7 +2782,7 @@ STP_cw_finish_reserve_training = {
 			else = {
 				random_owned_controlled_state = {
 					create_unit = {
-						division = "division_template = \"Stelander Territorial Brigade\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						division = "division_template = \"Территориальная бригада Стеландера\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 						owner = PREV
 						allow_spawning_on_enemy_provs = no
 					}
@@ -2834,13 +2834,13 @@ STP_cw_finish_mobilization = {
 	STP_cw_refund_reserve_training = yes
 	if = {
 		limit = { has_country_flag = STP_cw_templates_loaded }
-		set_division_template_lock = { division_template = "Stelander Territorial Brigade" is_locked = no }
-		set_division_template_lock = { division_template = "Stelander Assault Division" is_locked = no }
+		set_division_template_lock = { division_template = "Территориальная бригада Стеландера" is_locked = no }
+		set_division_template_lock = { division_template = "Штурмовая дивизия Стеландера" is_locked = no }
 	}
 	if = {
-		limit = { has_template = "Congress Infantry Guard" }
-		set_division_template_lock = { division_template = "Congress Infantry Guard" is_locked = no }
-		set_division_force_allow_recruiting = { division_template = "Congress Infantry Guard" force_allow_recruiting = yes }
+		limit = { has_template = "Пехотная гвардия Конгресса" }
+		set_division_template_lock = { division_template = "Пехотная гвардия Конгресса" is_locked = no }
+		set_division_force_allow_recruiting = { division_template = "Пехотная гвардия Конгресса" force_allow_recruiting = yes }
 	}
 }
 
@@ -3992,9 +3992,9 @@ STP_cw_start = {
 		}
 		if = { limit = { is_in_faction = yes } faction_leader = { remove_from_faction = STP } }
 		set_rule = { can_join_factions = no can_create_factions = no }
-		# Demobilisation refunds the actual surviving contents; Capital Guard is untouched.
-		delete_unit = { division_template = "Regular army" disband = yes }
-		delete_unit = { division_template = "Police division" disband = yes }
+		# Demobilisation refunds the actual surviving contents; Столичная гвардия is untouched.
+		delete_unit = { division_template = "Регулярная армия" disband = yes }
+		delete_unit = { division_template = "Полицейская дивизия" disband = yes }
 		clear_variable = STP_cw_completed_public_campaigns
 		STP_cw_cancel_assault_training = yes
 		# An undelivered northern shipment returns to the shared reserve before
@@ -9405,7 +9405,7 @@ STP_ps_create_fada_militia = {
 		limit = { controls_province = 16374 }
 		28 = {
 			create_unit = {
-				division = "division_template = \"Stelander Territorial Brigade\" location = 16374 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				division = "division_template = \"Территориальная бригада Стеландера\" location = 16374 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 				owner = STP
 				allow_spawning_on_enemy_provs = no
 			}
@@ -9415,7 +9415,7 @@ STP_ps_create_fada_militia = {
 		limit = { controls_province = 16386 }
 		28 = {
 			create_unit = {
-				division = "division_template = \"Stelander Territorial Brigade\" location = 16386 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				division = "division_template = \"Территориальная бригада Стеландера\" location = 16386 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 				owner = STP
 				allow_spawning_on_enemy_provs = no
 			}
@@ -9425,7 +9425,7 @@ STP_ps_create_fada_militia = {
 		limit = { controls_province = 16377 }
 		28 = {
 			create_unit = {
-				division = "division_template = \"Stelander Territorial Brigade\" location = 16377 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				division = "division_template = \"Территориальная бригада Стеландера\" location = 16377 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 				owner = STP
 				allow_spawning_on_enemy_provs = no
 			}
@@ -9435,7 +9435,7 @@ STP_ps_create_fada_militia = {
 		limit = { controls_province = 16366 }
 		28 = {
 			create_unit = {
-				division = "division_template = \"Stelander Territorial Brigade\" location = 16366 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				division = "division_template = \"Территориальная бригада Стеландера\" location = 16366 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 				owner = STP
 				allow_spawning_on_enemy_provs = no
 			}
@@ -9445,7 +9445,7 @@ STP_ps_create_fada_militia = {
 		limit = { controls_province = 16351 }
 		28 = {
 			create_unit = {
-				division = "division_template = \"Stelander Territorial Brigade\" location = 16351 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				division = "division_template = \"Территориальная бригада Стеландера\" location = 16351 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 				owner = STP
 				allow_spawning_on_enemy_provs = no
 			}
@@ -9454,7 +9454,7 @@ STP_ps_create_fada_militia = {
 	else = {
 		28 = {
 			create_unit = {
-				division = "division_template = \"Stelander Territorial Brigade\" location = 16368 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				division = "division_template = \"Территориальная бригада Стеландера\" location = 16368 start_experience_factor = 0.05 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 				owner = STP
 				allow_spawning_on_enemy_provs = no
 			}
@@ -10449,7 +10449,7 @@ STP_ps_deliver_val_contract = {
 		if = {
 			limit = { VAL = { check_variable = { var = STP_ps_contract_type value = 2 compare = equals } } }
 			division_template = {
-				name = "Kefreyt Contract Infantry"
+				name = "Контрактная пехота Кефрейта"
 				template_counter = 3
 				is_locked = yes
 				force_allow_recruiting = no
@@ -10467,7 +10467,7 @@ STP_ps_deliver_val_contract = {
 			}
 			random_owned_controlled_state = {
 				create_unit = {
-					division = "division_template = \"Kefreyt Contract Infantry\" start_experience_factor = 0.5 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					division = "division_template = \"Контрактная пехота Кефрейта\" start_experience_factor = 0.5 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 					owner = PREV
 					count = 2
 					allow_spawning_on_enemy_provs = no
@@ -10629,9 +10629,9 @@ STP_ps_exile_formation_finish = {
 }
 
 STP_ps_deliver_exile_formation = {
-	if = { limit = { NOT = { has_template = "Party Exile Brigade" } }
+	if = { limit = { NOT = { has_template = "Бригада партийных изгнанников" } }
 		division_template = {
-			name = "Party Exile Brigade"
+			name = "Бригада партийных изгнанников"
 			template_counter = 12
 			is_locked = yes
 			force_allow_recruiting = no
@@ -10647,7 +10647,7 @@ STP_ps_deliver_exile_formation = {
 	}
 	random_owned_controlled_state = {
 		create_unit = {
-			division = "division_template = \"Party Exile Brigade\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			division = "division_template = \"Бригада партийных изгнанников\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 			owner = PREV
 			allow_spawning_on_enemy_provs = no
 		}
@@ -10752,8 +10752,8 @@ STP_ps_close_exile = {
 	clr_country_flag = STP_ps_exile_received
 	clr_country_flag = STP_ps_return_campaign
 	set_country_flag = STP_ps_return_closed
-	if = { limit = { has_template = "Party Exile Brigade" }
-		set_division_template_lock = { division_template = "Party Exile Brigade" is_locked = no }
+	if = { limit = { has_template = "Бригада партийных изгнанников" }
+		set_division_template_lock = { division_template = "Бригада партийных изгнанников" is_locked = no }
 	}
 	mark_focus_tree_layout_dirty = yes
 }
@@ -16671,9 +16671,9 @@ STP_pw_open_shield_corps = {
 		custom_effect_tooltip = STP_pw_shield_corps_template_tt
 		hidden_effect = {
 			if = {
-				limit = { NOT = { has_template = "Stelander Shield Brigade" } }
+				limit = { NOT = { has_template = "Щитовая бригада Стеландера" } }
 				division_template = {
-					name = "Stelander Shield Brigade"
+					name = "Щитовая бригада Стеландера"
 					template_counter = 89
 					is_locked = no
 					regiments = {
@@ -16735,9 +16735,9 @@ STP_taran_complete_project = {
 	custom_effect_tooltip = STP_taran_template_tt
 	hidden_effect = {
 		if = {
-			limit = { NOT = { has_template = "Taran Assault Group" } }
+			limit = { NOT = { has_template = "Штурмовая группа «Таран»" } }
 			division_template = {
-				name = "Taran Assault Group"
+				name = "Штурмовая группа «Таран»"
 				template_counter = 86
 				is_locked = no
 				regiments = {
@@ -18352,9 +18352,9 @@ STP_bezhaysk_prepare_member = {
 			add_equipment_to_stockpile = { type = support_equipment_1 amount = 60 producer = THIS }
 		}
 		if = {
-			limit = { NOT = { has_template = "Bezhaysk Muster" } }
+			limit = { NOT = { has_template = "Бежайский сборный отряд" } }
 			division_template = {
-				name = "Bezhaysk Muster"
+				name = "Бежайский сборный отряд"
 				template_counter = 3
 				division_names_group = ADISCORD_INF_01
 				is_locked = yes
@@ -18382,7 +18382,7 @@ STP_bezhaysk_prepare_member = {
 				add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = -32 producer = THIS }
 				capital_scope = {
 					create_unit = {
-						division = "division_template = \"Bezhaysk Muster\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						division = "division_template = \"Бежайский сборный отряд\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 						owner = PREV
 					}
 				}

@@ -11,6 +11,7 @@ import argparse
 import json
 from collections import defaultdict
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 from typing import Iterator
 
@@ -40,8 +41,19 @@ STARTING_TEMPLATE_COUNTERS = {
 }
 
 
+@lru_cache(maxsize=1)
+def _template_audit_names() -> dict[str, str]:
+    audit = json.loads(AUDIT_PATH.read_text(encoding="utf-8"))
+    return {
+        row["display_name"]: row["technical_name"]
+        for row in audit["templates"]
+        if row.get("literal_display_name") is True
+    }
+
+
 def starting_template_role(name: str) -> str:
-    lowered = name.lower()
+    # Roles follow stable audit identifiers even when the displayed name changes.
+    lowered = _template_audit_names().get(name, name).lower()
     if lowered == "conclave line brigade":
         return "line"
     if lowered == "khazar guard":
@@ -941,9 +953,13 @@ def _validate_schema(audit: dict[str, object]) -> list[str]:
             elif key in seen:
                 issues.append(f"duplicate {collection} row key {key}")
             seen.add(key)
+            if "literal_display_name" in row and not isinstance(
+                row["literal_display_name"], bool
+            ):
+                issues.append(f"{key}: literal_display_name must be boolean")
             for field in (
                 ("technical_name", "display_name")
-                if collection == "templates"
+                if collection == "templates" or row.get("literal_display_name") is True
                 else ("technical_name",)
             ):
                 value = row.get(field)
@@ -959,10 +975,6 @@ def _validate_schema(audit: dict[str, object]) -> list[str]:
             keys = seen
     for row in audit.get("templates", []):
         key = row.get("key")
-        if "literal_display_name" in row and not isinstance(
-            row["literal_display_name"], bool
-        ):
-            issues.append(f"{key}: literal_display_name must be boolean")
         definition_metadata = row.get("definition_metadata")
         if definition_metadata is not None:
             if not isinstance(definition_metadata, dict):
@@ -1205,7 +1217,14 @@ def validate(root: Path = ROOT, audit_path: Path | None = None) -> list[str]:
                 f"{template.path}:{template.line}: non-ASCII technical template name {template.name}"
             )
     for reference in references:
-        if not reference.name.isascii():
+        literal_display = any(
+            row.get("literal_display_name") is True
+            and reference.name == row.get("display_name")
+            and reference.path == row.get("path")
+            and reference.kind == row.get("kind")
+            for row in audit.get("references", [])
+        )
+        if not reference.name.isascii() and not literal_display:
             issues.append(
                 f"{reference.path}:{reference.line}: non-ASCII {reference.kind} reference {reference.name}"
             )

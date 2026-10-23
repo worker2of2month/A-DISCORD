@@ -1376,7 +1376,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
             shared_templates,
             "ADISCORD_vorkerland_ensure_worker_home_guard_template",
         )
-        self.assertIn('name = "Worker Home Guard"', worker_home_guard)
+        self.assertIn('name = "Рабочая самооборона"', worker_home_guard)
         self.assertIn("is_locked = yes", worker_home_guard)
         self.assertEqual(worker_home_guard.count("ADISCORD_militia ="), 3)
         self.assertEqual(home_guard.count("create_unit ="), 2)
@@ -1448,7 +1448,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         templates = named_blocks(package, "division_template")
 
         line = next(
-            (block for block in templates if 'name = "Worker Rifle Division"' in block),
+            (block for block in templates if 'name = "Рабочая стрелковая дивизия"' in block),
             None,
         )
         self.assertIsNotNone(line, "WKR must receive a recruitable line template")
@@ -1461,7 +1461,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
             (
                 block
                 for block in templates
-                if 'name = "Workerland Mobile Group"' in block
+                if 'name = "Мобильная группа Воркерленда"' in block
             ),
             None,
         )
@@ -1518,7 +1518,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         for token in (
             "add_manpower = 1800",
             "amount = 360 producer = ROOT",
-            'division_template = \\"Emergency Militia\\"',
+            'division_template = \\"Экстренное ополчение\\"',
             "count = 2",
         ):
             self.assertIn(token, levies)
@@ -1553,10 +1553,10 @@ class BorderWarArchitectureTests(unittest.TestCase):
         oob = read("history/units/IVN.txt")
         units = named_block(oob, "units")
         self.assertEqual(units.count("division = {"), 16)
-        self.assertEqual(units.count('division_template = "Capital Guard"'), 2)
-        self.assertEqual(units.count('division_template = "Line Infantry Brigade"'), 10)
+        self.assertEqual(units.count('division_template = "Столичная гвардия"'), 2)
+        self.assertEqual(units.count('division_template = "Линейная пехотная бригада"'), 10)
         self.assertEqual(
-            units.count('division_template = "Local Security Detachment"'), 4
+            units.count('division_template = "Местный охранный отряд"'), 4
         )
         self.assertEqual(
             [int(value) for value in re.findall(r"location\s*=\s*(\d+)", units)],
@@ -2747,9 +2747,9 @@ class FrontAndSupplyTests(unittest.TestCase):
         tva_oob = read("history/units/TVA_vorkerland_collapse.txt")
         self.assertEqual(tva_oob.count("division = {"), 19)
         self.assertEqual(
-            tva_oob.count('division_template = "Mobile Test Group"'), 1
+            tva_oob.count('division_template = "Опытная мобильная группа"'), 1
         )
-        self.assertIn("Infiltration Cell", tva_oob)
+        self.assertIn("Диверсионная ячейка", tva_oob)
 
     def test_eba_receives_the_approved_finite_reserve(self) -> None:
         effects = source_section(
@@ -2770,9 +2770,9 @@ class FrontAndSupplyTests(unittest.TestCase):
     def test_vla_can_cover_both_local_fronts_without_an_auto_win_stack(self) -> None:
         oob = read("history/units/VLA.txt")
         self.assertEqual(oob.count("division = {"), 4)
-        self.assertEqual(oob.count('division_template = "Line Infantry Brigade"'), 2)
+        self.assertEqual(oob.count('division_template = "Линейная пехотная бригада"'), 2)
         self.assertEqual(
-            oob.count('division_template = "Local Security Detachment"'), 2
+            oob.count('division_template = "Местный охранный отряд"'), 2
         )
         self.assertGreaterEqual(oob.count("start_equipment_factor = 0.55"), 2)
 

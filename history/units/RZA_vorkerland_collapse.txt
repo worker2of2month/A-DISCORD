@@ -1,5 +1,5 @@
 division_template = {
-	name = "Collapse Militia"
+	name = "Ополчение распада"
 	template_counter = 7
 	division_names_group = RZA_COLLAPSE_INF_01
 	regiments = {
@@ -9,7 +9,7 @@ division_template = {
 	}
 }
 division_template = {
-	name = "CBRN Protection Detachment"
+	name = "Отряд РХБ защиты"
 	template_counter = 2
 	regiments = {
 		ADISCORD_hazard_infantry = { x = 0 y = 0 }
@@ -22,84 +22,84 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 2952
-		division_template = "Collapse Militia"
+		division_template = "Ополчение распада"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
 		location = 10415
-		division_template = "Collapse Militia"
+		division_template = "Ополчение распада"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 3 }
 		location = 9032
-		division_template = "Collapse Militia"
+		division_template = "Ополчение распада"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 4 }
 		location = 7593
-		division_template = "Collapse Militia"
+		division_template = "Ополчение распада"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 5 }
 		location = 10533
-		division_template = "Collapse Militia"
+		division_template = "Ополчение распада"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 6 }
 		location = 4871
-		division_template = "Collapse Militia"
+		division_template = "Ополчение распада"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 7 }
 		location = 10571
-		division_template = "Collapse Militia"
+		division_template = "Ополчение распада"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 8 }
 		location = 2952
-		division_template = "Collapse Militia"
+		division_template = "Ополчение распада"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 9 }
 		location = 10415
-		division_template = "Collapse Militia"
+		division_template = "Ополчение распада"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 10 }
 		location = 9032
-		division_template = "Collapse Militia"
+		division_template = "Ополчение распада"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 11 }
 		location = 7593
-		division_template = "Collapse Militia"
+		division_template = "Ополчение распада"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 12 }
 		location = 10533
-		division_template = "Collapse Militia"
+		division_template = "Ополчение распада"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.85
 	}

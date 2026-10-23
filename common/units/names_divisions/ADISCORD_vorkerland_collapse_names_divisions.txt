@@ -7,7 +7,7 @@ VORKERLAND_EMERGENCY_INF_01 = {
 	for_countries = { CSL DVA EBA EGC ERT EYR IBA IBL IRT MLR NDN OSV PSD REV RIV RZA SCA SLA SRA SWB TGD TVA VHV WPA WPS WTD YOR ZTA }
 	can_use = { always = yes }
 	division_types = { infantry }
-	fallback_name = "%d. Emergency Militia Brigade"
+	fallback_name = "%d. Экстренное ополчение Brigade"
 }
 
 CSL_COLLAPSE_INF_01 = {
@@ -63,7 +63,7 @@ IBA_COLLAPSE_INF_01 = {
 	for_countries = { IBA }
 	can_use = { always = yes }
 	division_types = { infantry }
-	fallback_name = "%d. Itoran Border Rifles"
+	fallback_name = "%d. Itoran Пограничные стрелки"
 }
 
 IBL_COLLAPSE_INF_01 = {
@@ -71,7 +71,7 @@ IBL_COLLAPSE_INF_01 = {
 	for_countries = { IBL }
 	can_use = { always = yes }
 	division_types = { infantry }
-	fallback_name = "%d. Krait Frontier Brigade"
+	fallback_name = "%d. Krait Пограничная бригада"
 }
 
 IRT_COLLAPSE_INF_01 = {
@@ -95,7 +95,7 @@ NDN_COLLAPSE_INF_01 = {
 	for_countries = { NDN }
 	can_use = { always = yes }
 	division_types = { infantry }
-	fallback_name = "%d. Norden Territorial Brigade"
+	fallback_name = "%d. Norden Территориальная бригада"
 }
 
 OSV_COLLAPSE_INF_01 = {
@@ -191,7 +191,7 @@ VHV_COLLAPSE_INF_01 = {
 	for_countries = { VHV }
 	can_use = { always = yes }
 	division_types = { infantry }
-	fallback_name = "%d. Verkhovye Territorial Brigade"
+	fallback_name = "%d. Verkhovye Территориальная бригада"
 }
 
 WPA_COLLAPSE_INF_01 = {
@@ -215,7 +215,7 @@ WTD_COLLAPSE_INF_01 = {
 	for_countries = { WTD }
 	can_use = { always = yes }
 	division_types = { infantry }
-	fallback_name = "%d. Central Technical Guard"
+	fallback_name = "%d. Central Техническая гвардия"
 }
 
 YOR_COLLAPSE_INF_01 = {

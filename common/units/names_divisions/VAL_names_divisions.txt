@@ -10,10 +10,10 @@ VAL_INF_01 = {
 	fallback_name = "%d Kefreyt Division"
 
 	ordered = {
-		1 = { "1st Kefreyt Line Brigade" }
-		2 = { "2nd Kefreyt Contract Infantry" }
-		3 = { "3rd Kefreyt Security Detachment" }
-		4 = { "4th Kefreyt Contract Infantry" }
-		5 = { "5th Kefreyt Security Detachment" }
+		1 = { "1st Линейная бригада Кефрейта" }
+		2 = { "2nd Контрактная пехота Кефрейта" }
+		3 = { "3rd Охранный отряд Кефрейта" }
+		4 = { "4th Контрактная пехота Кефрейта" }
+		5 = { "5th Охранный отряд Кефрейта" }
 	}
 }

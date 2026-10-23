@@ -17,7 +17,7 @@
     "supply": "Sum of subunit supply_consumption for every occupied slot.",
     "starting_factors": "Each semantic OOB/create_unit occurrence records explicit start factors; omitted factors use the Clausewitz default 1.0.",
     "duplicate_scope": "Divergent same-name definitions fail within an OOB/script source namespace; cross-owner ambiguity is recorded separately.",
-    "template_names": "technical_name is the ASCII audit identifier. Explicit literal_display_name rows match the exact player-visible display_name at their audited source; other templates and technical references retain the ASCII contract."
+    "template_names": "technical_name is the stable ASCII audit identifier. Explicit literal_display_name rows match the exact player-visible Russian display_name in definitions and references at their audited sources."
   },
   "role_floors": {
     "line": 30,
@@ -54,7 +54,7 @@
   ],
   "global_name_ambiguities": [
     {
-      "observed_name": "Capital Guard",
+      "observed_name": "Столичная гвардия",
       "composition_count": 6,
       "sources": [
         "history/units/BTL.txt",
@@ -86,7 +86,7 @@
         "owner": "script"
       },
       "technical_name": "Bezhaysk Muster",
-      "display_name": "Bezhaysk Muster",
+      "display_name": "Бежайский сборный отряд",
       "legacy_names": [],
       "regiments": [
         {
@@ -132,7 +132,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_bezhaysk_muster"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "script_stp_congress_guard",
@@ -142,7 +143,7 @@
         "owner": "script"
       },
       "technical_name": "Congress Infantry Guard",
-      "display_name": "Congress Infantry Guard",
+      "display_name": "Пехотная гвардия Конгресса",
       "legacy_names": [],
       "regiments": [
         {
@@ -206,7 +207,8 @@
       "definition_metadata": {
         "is_locked": true,
         "force_allow_recruiting": false
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "script_stp_underground_cell",
@@ -216,7 +218,7 @@
         "owner": "script"
       },
       "technical_name": "Stelander Underground Cell",
-      "display_name": "Stelander Underground Cell",
+      "display_name": "Подпольная ячейка Стеландера",
       "legacy_names": [],
       "regiments": [
         {
@@ -246,7 +248,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_stp_underground_cell"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "script_stp_postwar_mountain_brigade",
@@ -556,7 +559,7 @@
         "owner": "ADISCORD"
       },
       "technical_name": "Stelander Territorial Brigade",
-      "display_name": "Stelander Territorial Brigade",
+      "display_name": "Территориальная бригада Стеландера",
       "legacy_names": [],
       "regiments": [
         {
@@ -606,7 +609,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_adiscord_stp_civil_war_territorial_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_ain_licensed_security_battalion",
@@ -616,7 +620,7 @@
         "owner": "AIN"
       },
       "technical_name": "Licensed Security Battalion",
-      "display_name": "Licensed Security Battalion",
+      "display_name": "Лицензированный охранный батальон",
       "legacy_names": [
         "Лицензионная охрана"
       ],
@@ -660,7 +664,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_ain_licensed_security_battalion"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_aph_blood_kin_warband",
@@ -670,7 +675,7 @@
         "owner": "APH"
       },
       "technical_name": "Blood Kin Warband",
-      "display_name": "Blood Kin Warband",
+      "display_name": "Дружина кровного рода",
       "legacy_names": [],
       "regiments": [
         {
@@ -700,7 +705,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_aph_blood_kin_warband"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_aph_anthropophagic_raiders",
@@ -710,7 +716,7 @@
         "owner": "APH"
       },
       "technical_name": "Anthropophagic Raiders",
-      "display_name": "Anthropophagic Raiders",
+      "display_name": "Налётчики-людоеды",
       "legacy_names": [],
       "regiments": [
         {
@@ -745,7 +751,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_aph_anthropophagic_raiders"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_aph_red_maw_guard",
@@ -755,7 +762,7 @@
         "owner": "APH"
       },
       "technical_name": "Red Maw Guard",
-      "display_name": "Red Maw Guard",
+      "display_name": "Гвардия Красной пасти",
       "legacy_names": [],
       "regiments": [
         {
@@ -797,7 +804,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_aph_red_maw_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_aph_devourer_chosen",
@@ -807,7 +815,7 @@
         "owner": "APH"
       },
       "technical_name": "Devourer Chosen",
-      "display_name": "Devourer Chosen",
+      "display_name": "Избранные Пожирателя",
       "legacy_names": [],
       "regiments": [
         {
@@ -896,7 +904,8 @@
           "x": 0,
           "y": 0
         }
-      ]
+      ],
+      "literal_display_name": true
     },
     {
       "key": "oob_aur_northern_line_brigade",
@@ -906,7 +915,7 @@
         "owner": "AUR"
       },
       "technical_name": "Northern Line Brigade",
-      "display_name": "Northern Line Brigade",
+      "display_name": "Северная линейная бригада",
       "legacy_names": [
         "Северная линейная бригада"
       ],
@@ -950,7 +959,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_aur_northern_line_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_azh_basin_levy",
@@ -960,7 +970,7 @@
         "owner": "AZH"
       },
       "technical_name": "Basin Levy",
-      "display_name": "Basin Levy",
+      "display_name": "Ополчение бассейна",
       "legacy_names": [],
       "regiments": [
         {
@@ -995,7 +1005,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_azh_basin_levy"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_azh_nam_resource_war_azh_basin_levy",
@@ -1005,7 +1016,7 @@
         "owner": "script"
       },
       "technical_name": "Basin Levy",
-      "display_name": "Basin Levy",
+      "display_name": "Ополчение бассейна",
       "legacy_names": [],
       "regiments": [
         {
@@ -1040,7 +1051,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_azh_nam_resource_war_azh_basin_levy"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bbv_border_levy",
@@ -1050,7 +1062,7 @@
         "owner": "BBV"
       },
       "technical_name": "Border Levy",
-      "display_name": "Border Levy",
+      "display_name": "Пограничное ополчение",
       "legacy_names": [],
       "regiments": [
         {
@@ -1080,7 +1092,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bbv_border_levy"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bbv_feudal_retinue",
@@ -1090,7 +1103,7 @@
         "owner": "BBV"
       },
       "technical_name": "Feudal Retinue",
-      "display_name": "Feudal Retinue",
+      "display_name": "Феодальная дружина",
       "legacy_names": [],
       "regiments": [
         {
@@ -1132,7 +1145,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bbv_feudal_retinue"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bbv_noble_guard",
@@ -1142,7 +1156,7 @@
         "owner": "BBV"
       },
       "technical_name": "Noble Guard",
-      "display_name": "Noble Guard",
+      "display_name": "Дворянская гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -1202,7 +1216,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bbv_noble_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bcm_border_levy",
@@ -1212,7 +1227,7 @@
         "owner": "BCM"
       },
       "technical_name": "Border Levy",
-      "display_name": "Border Levy",
+      "display_name": "Пограничное ополчение",
       "legacy_names": [],
       "regiments": [
         {
@@ -1242,7 +1257,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bcm_border_levy"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bcm_feudal_retinue",
@@ -1252,7 +1268,7 @@
         "owner": "BCM"
       },
       "technical_name": "Feudal Retinue",
-      "display_name": "Feudal Retinue",
+      "display_name": "Феодальная дружина",
       "legacy_names": [],
       "regiments": [
         {
@@ -1294,7 +1310,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bcm_feudal_retinue"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bcm_noble_guard",
@@ -1304,7 +1321,7 @@
         "owner": "BCM"
       },
       "technical_name": "Noble Guard",
-      "display_name": "Noble Guard",
+      "display_name": "Дворянская гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -1364,7 +1381,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bcm_noble_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bgt_border_levy",
@@ -1374,7 +1392,7 @@
         "owner": "BGT"
       },
       "technical_name": "Border Levy",
-      "display_name": "Border Levy",
+      "display_name": "Пограничное ополчение",
       "legacy_names": [],
       "regiments": [
         {
@@ -1404,7 +1422,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bgt_border_levy"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bgt_feudal_retinue",
@@ -1414,7 +1433,7 @@
         "owner": "BGT"
       },
       "technical_name": "Feudal Retinue",
-      "display_name": "Feudal Retinue",
+      "display_name": "Феодальная дружина",
       "legacy_names": [],
       "regiments": [
         {
@@ -1456,7 +1475,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bgt_feudal_retinue"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bgt_noble_guard",
@@ -1466,7 +1486,7 @@
         "owner": "BGT"
       },
       "technical_name": "Noble Guard",
-      "display_name": "Noble Guard",
+      "display_name": "Дворянская гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -1526,7 +1546,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bgt_noble_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bhg_border_levy",
@@ -1536,7 +1557,7 @@
         "owner": "BHG"
       },
       "technical_name": "Border Levy",
-      "display_name": "Border Levy",
+      "display_name": "Пограничное ополчение",
       "legacy_names": [],
       "regiments": [
         {
@@ -1566,7 +1587,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bhg_border_levy"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bhg_feudal_retinue",
@@ -1576,7 +1598,7 @@
         "owner": "BHG"
       },
       "technical_name": "Feudal Retinue",
-      "display_name": "Feudal Retinue",
+      "display_name": "Феодальная дружина",
       "legacy_names": [],
       "regiments": [
         {
@@ -1618,7 +1640,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bhg_feudal_retinue"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bhg_noble_guard",
@@ -1628,7 +1651,7 @@
         "owner": "BHG"
       },
       "technical_name": "Noble Guard",
-      "display_name": "Noble Guard",
+      "display_name": "Дворянская гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -1688,7 +1711,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bhg_noble_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bjk_border_levy",
@@ -1698,7 +1722,7 @@
         "owner": "BJK"
       },
       "technical_name": "Border Levy",
-      "display_name": "Border Levy",
+      "display_name": "Пограничное ополчение",
       "legacy_names": [],
       "regiments": [
         {
@@ -1728,7 +1752,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bjk_border_levy"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bjk_feudal_retinue",
@@ -1738,7 +1763,7 @@
         "owner": "BJK"
       },
       "technical_name": "Feudal Retinue",
-      "display_name": "Feudal Retinue",
+      "display_name": "Феодальная дружина",
       "legacy_names": [],
       "regiments": [
         {
@@ -1780,7 +1805,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bjk_feudal_retinue"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bjk_noble_guard",
@@ -1790,7 +1816,7 @@
         "owner": "BJK"
       },
       "technical_name": "Noble Guard",
-      "display_name": "Noble Guard",
+      "display_name": "Дворянская гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -1850,7 +1876,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bjk_noble_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bld_border_levy",
@@ -1860,7 +1887,7 @@
         "owner": "BLD"
       },
       "technical_name": "Border Levy",
-      "display_name": "Border Levy",
+      "display_name": "Пограничное ополчение",
       "legacy_names": [],
       "regiments": [
         {
@@ -1890,7 +1917,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bld_border_levy"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bld_feudal_retinue",
@@ -1900,7 +1928,7 @@
         "owner": "BLD"
       },
       "technical_name": "Feudal Retinue",
-      "display_name": "Feudal Retinue",
+      "display_name": "Феодальная дружина",
       "legacy_names": [],
       "regiments": [
         {
@@ -1942,7 +1970,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bld_feudal_retinue"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bld_noble_guard",
@@ -1952,7 +1981,7 @@
         "owner": "BLD"
       },
       "technical_name": "Noble Guard",
-      "display_name": "Noble Guard",
+      "display_name": "Дворянская гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -2012,7 +2041,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bld_noble_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_bor_frontier_brigade",
@@ -2022,7 +2052,7 @@
         "owner": "BOR"
       },
       "technical_name": "Frontier Brigade",
-      "display_name": "Frontier Brigade",
+      "display_name": "Пограничная бригада",
       "legacy_names": [
         "Пограничная бригада"
       ],
@@ -2066,7 +2096,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_bor_frontier_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_brn_northern_line_brigade",
@@ -2076,7 +2107,7 @@
         "owner": "BRN"
       },
       "technical_name": "Northern Line Brigade",
-      "display_name": "Northern Line Brigade",
+      "display_name": "Северная линейная бригада",
       "legacy_names": [
         "Северная линейная бригада"
       ],
@@ -2120,7 +2151,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_brn_northern_line_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_btl_local_security_detachment",
@@ -2130,7 +2162,7 @@
         "owner": "BTL"
       },
       "technical_name": "Local Security Detachment",
-      "display_name": "Local Security Detachment",
+      "display_name": "Местный охранный отряд",
       "legacy_names": [],
       "regiments": [
         {
@@ -2165,7 +2197,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_btl_local_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_btl_line_infantry_brigade",
@@ -2175,7 +2208,7 @@
         "owner": "BTL"
       },
       "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
+      "display_name": "Линейная пехотная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -2235,7 +2268,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_btl_line_infantry_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_btl_capital_guard",
@@ -2245,7 +2279,7 @@
         "owner": "BTL"
       },
       "technical_name": "Capital Guard",
-      "display_name": "Capital Guard",
+      "display_name": "Столичная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -2341,7 +2375,8 @@
           "x": 1,
           "y": 0
         }
-      ]
+      ],
+      "literal_display_name": true
     },
     {
       "key": "oob_cin_ash_clan_militia",
@@ -2351,7 +2386,7 @@
         "owner": "CIN"
       },
       "technical_name": "Ash Clan Militia",
-      "display_name": "Ash Clan Militia",
+      "display_name": "Ополчение Пепельного клана",
       "legacy_names": [],
       "regiments": [
         {
@@ -2381,7 +2416,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_cin_ash_clan_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_cof_forest_watch",
@@ -2391,7 +2427,7 @@
         "owner": "COF"
       },
       "technical_name": "Forest Watch",
-      "display_name": "Forest Watch",
+      "display_name": "Лесной дозор",
       "legacy_names": [],
       "regiments": [
         {
@@ -2426,7 +2462,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_cof_forest_watch"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_cof_forest_commune_infantry",
@@ -2436,7 +2473,7 @@
         "owner": "COF"
       },
       "technical_name": "Forest Commune Infantry",
-      "display_name": "Forest Commune Infantry",
+      "display_name": "Пехота лесных коммун",
       "legacy_names": [],
       "regiments": [
         {
@@ -2503,7 +2540,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_cof_forest_commune_infantry"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_cof_old_grove_guard",
@@ -2513,7 +2551,7 @@
         "owner": "COF"
       },
       "technical_name": "Old Grove Guard",
-      "display_name": "Old Grove Guard",
+      "display_name": "Стража Старой рощи",
       "legacy_names": [],
       "regiments": [
         {
@@ -2614,7 +2652,8 @@
           "x": 1,
           "y": 0
         }
-      ]
+      ],
+      "literal_display_name": true
     },
     {
       "key": "oob_csl_vorkerland_collapse_csl_municipal_militia",
@@ -2624,7 +2663,7 @@
         "owner": "CSL"
       },
       "technical_name": "Municipal Militia",
-      "display_name": "Municipal Militia",
+      "display_name": "Муниципальное ополчение",
       "legacy_names": [],
       "regiments": [
         {
@@ -2654,7 +2693,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_csl_vorkerland_collapse_csl_municipal_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_dan_local_security_detachment",
@@ -2664,7 +2704,7 @@
         "owner": "DAN"
       },
       "technical_name": "Local Security Detachment",
-      "display_name": "Local Security Detachment",
+      "display_name": "Местный охранный отряд",
       "legacy_names": [],
       "regiments": [
         {
@@ -2699,7 +2739,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_dan_local_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_dan_line_infantry_brigade",
@@ -2709,7 +2750,7 @@
         "owner": "DAN"
       },
       "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
+      "display_name": "Линейная пехотная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -2769,7 +2810,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_dan_line_infantry_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_dan_capital_guard",
@@ -2779,7 +2821,7 @@
         "owner": "DAN"
       },
       "technical_name": "Capital Guard",
-      "display_name": "Capital Guard",
+      "display_name": "Столичная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -2861,7 +2903,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_dan_capital_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_dol_settler_militia",
@@ -2871,7 +2914,7 @@
         "owner": "DOL"
       },
       "technical_name": "Settler Militia",
-      "display_name": "Settler Militia",
+      "display_name": "Ополчение поселенцев",
       "legacy_names": [
         "Поселенческая дружина"
       ],
@@ -2908,7 +2951,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_dol_settler_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_drv_northern_militia",
@@ -2918,7 +2962,7 @@
         "owner": "DRV"
       },
       "technical_name": "Northern Militia",
-      "display_name": "Northern Militia",
+      "display_name": "Северное ополчение",
       "legacy_names": [
         "Северная дружина"
       ],
@@ -2955,7 +2999,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_drv_northern_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_dva_vorkerland_collapse_dva_collapse_militia",
@@ -2965,7 +3010,7 @@
         "owner": "DVA"
       },
       "technical_name": "Collapse Militia",
-      "display_name": "Collapse Militia",
+      "display_name": "Ополчение распада",
       "legacy_names": [],
       "regiments": [
         {
@@ -3000,7 +3045,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_dva_vorkerland_collapse_dva_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_eba_vorkerland_collapse_eba_collapse_militia",
@@ -3010,7 +3056,7 @@
         "owner": "EBA"
       },
       "technical_name": "Collapse Militia",
-      "display_name": "Collapse Militia",
+      "display_name": "Ополчение распада",
       "legacy_names": [],
       "regiments": [
         {
@@ -3045,7 +3091,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_eba_vorkerland_collapse_eba_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_efl_local_security_detachment",
@@ -3055,7 +3102,7 @@
         "owner": "EFL"
       },
       "technical_name": "Local Security Detachment",
-      "display_name": "Local Security Detachment",
+      "display_name": "Местный охранный отряд",
       "legacy_names": [],
       "regiments": [
         {
@@ -3090,7 +3137,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_efl_local_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_efl_line_infantry_brigade",
@@ -3100,7 +3148,7 @@
         "owner": "EFL"
       },
       "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
+      "display_name": "Линейная пехотная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -3160,7 +3208,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_efl_line_infantry_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_efl_capital_guard",
@@ -3170,7 +3219,7 @@
         "owner": "EFL"
       },
       "technical_name": "Capital Guard",
-      "display_name": "Capital Guard",
+      "display_name": "Столичная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -3252,7 +3301,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_efl_capital_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_efl_nam_resource_war_efl_restoration_brigade",
@@ -3262,7 +3312,7 @@
         "owner": "script"
       },
       "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
+      "display_name": "Линейная пехотная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -3322,7 +3372,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_efl_nam_resource_war_efl_restoration_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_egc_vorkerland_collapse_egc_collapse_militia",
@@ -3332,7 +3383,7 @@
         "owner": "EGC"
       },
       "technical_name": "Collapse Militia",
-      "display_name": "Collapse Militia",
+      "display_name": "Ополчение распада",
       "legacy_names": [],
       "regiments": [
         {
@@ -3367,7 +3418,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_egc_vorkerland_collapse_egc_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_eln_northern_line_brigade",
@@ -3377,7 +3429,7 @@
         "owner": "ELN"
       },
       "technical_name": "Northern Line Brigade",
-      "display_name": "Northern Line Brigade",
+      "display_name": "Северная линейная бригада",
       "legacy_names": [
         "Северная линейная бригада"
       ],
@@ -3421,7 +3473,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_eln_northern_line_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_ert_vorkerland_collapse_ert_collapse_militia",
@@ -3431,7 +3484,7 @@
         "owner": "ERT"
       },
       "technical_name": "Collapse Militia",
-      "display_name": "Collapse Militia",
+      "display_name": "Ополчение распада",
       "legacy_names": [],
       "regiments": [
         {
@@ -3470,7 +3523,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_ert_vorkerland_collapse_ert_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_ert_hazard_detachment",
@@ -3480,7 +3534,7 @@
         "owner": "ERT"
       },
       "technical_name": "CBRN Protection Detachment",
-      "display_name": "CBRN Protection Detachment",
+      "display_name": "Отряд РХБ защиты",
       "legacy_names": [],
       "regiments": [
         {
@@ -3519,7 +3573,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_ert_hazard_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_eyr_vorkerland_collapse_eyr_collapse_militia",
@@ -3529,7 +3584,7 @@
         "owner": "EYR"
       },
       "technical_name": "Collapse Militia",
-      "display_name": "Collapse Militia",
+      "display_name": "Ополчение распада",
       "legacy_names": [],
       "regiments": [
         {
@@ -3564,7 +3619,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_eyr_vorkerland_collapse_eyr_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_frs_northern_militia",
@@ -3574,7 +3630,7 @@
         "owner": "FRS"
       },
       "technical_name": "Northern Militia",
-      "display_name": "Northern Militia",
+      "display_name": "Северное ополчение",
       "legacy_names": [
         "Северная дружина"
       ],
@@ -3611,7 +3667,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_frs_northern_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_glp_prismatic_guard",
@@ -3621,7 +3678,7 @@
         "owner": "GLP"
       },
       "technical_name": "Prismatic Guard",
-      "display_name": "Prismatic Guard",
+      "display_name": "Призматическая гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -3653,7 +3710,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_glp_prismatic_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_hon_northern_line_brigade",
@@ -3663,7 +3721,7 @@
         "owner": "HON"
       },
       "technical_name": "Northern Line Brigade",
-      "display_name": "Northern Line Brigade",
+      "display_name": "Северная линейная бригада",
       "legacy_names": [
         "Северная линейная бригада"
       ],
@@ -3707,7 +3765,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_hon_northern_line_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_iba_vorkerland_collapse_iba_border_rifles",
@@ -3717,7 +3776,7 @@
         "owner": "IBA"
       },
       "technical_name": "Border Rifles",
-      "display_name": "Border Rifles",
+      "display_name": "Пограничные стрелки",
       "legacy_names": [],
       "regiments": [
         {
@@ -3752,7 +3811,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_iba_vorkerland_collapse_iba_border_rifles"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_ibl_vorkerland_collapse_ibl_frontier_brigade",
@@ -3762,7 +3822,7 @@
         "owner": "IBL"
       },
       "technical_name": "Frontier Brigade",
-      "display_name": "Frontier Brigade",
+      "display_name": "Пограничная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -3797,7 +3857,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_ibl_vorkerland_collapse_ibl_frontier_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_irt_vorkerland_collapse_irt_collapse_militia",
@@ -3807,7 +3868,7 @@
         "owner": "IRT"
       },
       "technical_name": "Collapse Militia",
-      "display_name": "Collapse Militia",
+      "display_name": "Ополчение распада",
       "legacy_names": [],
       "regiments": [
         {
@@ -3846,7 +3907,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_irt_vorkerland_collapse_irt_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_irt_hazard_detachment",
@@ -3856,7 +3918,7 @@
         "owner": "IRT"
       },
       "technical_name": "CBRN Protection Detachment",
-      "display_name": "CBRN Protection Detachment",
+      "display_name": "Отряд РХБ защиты",
       "legacy_names": [],
       "regiments": [
         {
@@ -3895,7 +3957,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_irt_hazard_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_iia_island_garrison",
@@ -3905,7 +3968,7 @@
         "owner": "IIA"
       },
       "technical_name": "Island Garrison",
-      "display_name": "Island Garrison",
+      "display_name": "Островной гарнизон",
       "legacy_names": [],
       "regiments": [
         {
@@ -3940,7 +4003,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_iia_island_garrison"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_ivn_local_security_detachment",
@@ -3950,7 +4014,7 @@
         "owner": "IVN"
       },
       "technical_name": "Local Security Detachment",
-      "display_name": "Local Security Detachment",
+      "display_name": "Местный охранный отряд",
       "legacy_names": [],
       "regiments": [
         {
@@ -3985,7 +4049,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_ivn_local_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_ivn_line_infantry_brigade",
@@ -3995,7 +4060,7 @@
         "owner": "IVN"
       },
       "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
+      "display_name": "Линейная пехотная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -4055,7 +4120,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_ivn_line_infantry_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_ivn_capital_guard",
@@ -4065,7 +4131,7 @@
         "owner": "IVN"
       },
       "technical_name": "Capital Guard",
-      "display_name": "Capital Guard",
+      "display_name": "Столичная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -4166,7 +4232,8 @@
           "x": 2,
           "y": 0
         }
-      ]
+      ],
+      "literal_display_name": true
     },
     {
       "key": "oob_kdr_caravan_guard",
@@ -4176,7 +4243,7 @@
         "owner": "KDR"
       },
       "technical_name": "Caravan Guard",
-      "display_name": "Caravan Guard",
+      "display_name": "Караванная стража",
       "legacy_names": [],
       "regiments": [
         {
@@ -4211,7 +4278,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_kdr_caravan_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_khv_northern_line_brigade",
@@ -4221,7 +4289,7 @@
         "owner": "KHV"
       },
       "technical_name": "Northern Line Brigade",
-      "display_name": "Northern Line Brigade",
+      "display_name": "Северная линейная бригада",
       "legacy_names": [
         "Северная линейная бригада"
       ],
@@ -4265,7 +4333,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_khv_northern_line_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_krl_northern_line_brigade",
@@ -4275,7 +4344,7 @@
         "owner": "KRL"
       },
       "technical_name": "Northern Line Brigade",
-      "display_name": "Northern Line Brigade",
+      "display_name": "Северная линейная бригада",
       "legacy_names": [
         "Северная линейная бригада"
       ],
@@ -4319,7 +4388,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_krl_northern_line_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_krm_frontier_brigade",
@@ -4329,7 +4399,7 @@
         "owner": "KRM"
       },
       "technical_name": "Frontier Brigade",
-      "display_name": "Frontier Brigade",
+      "display_name": "Пограничная бригада",
       "legacy_names": [
         "Пограничная бригада"
       ],
@@ -4373,7 +4443,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_krm_frontier_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_kyz_qanat_guard",
@@ -4383,7 +4454,7 @@
         "owner": "KYZ"
       },
       "technical_name": "Qanat Guard",
-      "display_name": "Qanat Guard",
+      "display_name": "Стража арыков",
       "legacy_names": [],
       "regiments": [
         {
@@ -4415,7 +4486,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_kyz_qanat_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_lmn_frontier_brigade",
@@ -4425,7 +4497,7 @@
         "owner": "LMN"
       },
       "technical_name": "Frontier Brigade",
-      "display_name": "Frontier Brigade",
+      "display_name": "Пограничная бригада",
       "legacy_names": [
         "Пограничная бригада"
       ],
@@ -4469,7 +4541,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_lmn_frontier_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_lys_northern_line_brigade",
@@ -4479,7 +4552,7 @@
         "owner": "LYS"
       },
       "technical_name": "Northern Line Brigade",
-      "display_name": "Northern Line Brigade",
+      "display_name": "Северная линейная бригада",
       "legacy_names": [
         "Северная линейная бригада"
       ],
@@ -4523,7 +4596,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_lys_northern_line_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_mlr_vorkerland_collapse_mlr_collapse_militia",
@@ -4533,7 +4607,7 @@
         "owner": "MLR"
       },
       "technical_name": "Collapse Militia",
-      "display_name": "Collapse Militia",
+      "display_name": "Ополчение распада",
       "legacy_names": [],
       "regiments": [
         {
@@ -4572,7 +4646,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_mlr_vorkerland_collapse_mlr_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_mlr_hazard_detachment",
@@ -4582,7 +4657,7 @@
         "owner": "MLR"
       },
       "technical_name": "CBRN Protection Detachment",
-      "display_name": "CBRN Protection Detachment",
+      "display_name": "Отряд РХБ защиты",
       "legacy_names": [],
       "regiments": [
         {
@@ -4621,7 +4696,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_mlr_hazard_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_mon_imperial_line_division",
@@ -4631,7 +4707,7 @@
         "owner": "MON"
       },
       "technical_name": "Imperial Line Division",
-      "display_name": "Imperial Line Division",
+      "display_name": "Имперская линейная дивизия",
       "legacy_names": [
         "Имперская линейная дивизия"
       ],
@@ -4692,7 +4768,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_mon_imperial_line_division"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_mon_imperial_frontier_brigade",
@@ -4702,7 +4779,7 @@
         "owner": "MON"
       },
       "technical_name": "Imperial Frontier Brigade",
-      "display_name": "Imperial Frontier Brigade",
+      "display_name": "Имперская пограничная бригада",
       "legacy_names": [
         "Имперская пограничная бригада"
       ],
@@ -4746,7 +4823,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_mon_imperial_frontier_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_mzr_cistern_watch",
@@ -4756,7 +4834,7 @@
         "owner": "MZR"
       },
       "technical_name": "Cistern Watch",
-      "display_name": "Cistern Watch",
+      "display_name": "Охрана водохранилищ",
       "legacy_names": [],
       "regiments": [
         {
@@ -4793,7 +4871,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_mzr_cistern_watch"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_nam_local_security_detachment",
@@ -4803,7 +4882,7 @@
         "owner": "NAM"
       },
       "technical_name": "Local Security Detachment",
-      "display_name": "Local Security Detachment",
+      "display_name": "Местный охранный отряд",
       "legacy_names": [],
       "regiments": [
         {
@@ -4838,7 +4917,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_nam_local_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_nam_line_infantry_brigade",
@@ -4848,7 +4928,7 @@
         "owner": "NAM"
       },
       "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
+      "display_name": "Линейная пехотная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -4912,7 +4992,8 @@
       "definition_metadata": {
         "is_locked": true,
         "force_allow_recruiting": true
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_nam_capital_guard",
@@ -4922,7 +5003,7 @@
         "owner": "NAM"
       },
       "technical_name": "Capital Guard",
-      "display_name": "Capital Guard",
+      "display_name": "Столичная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -5008,7 +5089,8 @@
       "definition_metadata": {
         "is_locked": true,
         "force_allow_recruiting": true
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "script_adiscord_nam_resource_war_effects_coastal_battalion",
@@ -5021,7 +5103,7 @@
       "definition_metadata": {
         "is_locked": true
       },
-      "display_name": "Coastal Battalion",
+      "display_name": "Батальон береговой обороны",
       "legacy_names": [],
       "regiments": [
         {
@@ -5066,7 +5148,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_adiscord_nam_resource_war_effects_coastal_battalion"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "script_adiscord_nam_resource_war_effects_motor_column",
@@ -5079,7 +5162,7 @@
       "definition_metadata": {
         "is_locked": true
       },
-      "display_name": "Motor Column",
+      "display_name": "Моторизованная колонна",
       "legacy_names": [],
       "regiments": [
         {
@@ -5138,7 +5221,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_adiscord_nam_resource_war_effects_motor_column"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "script_adiscord_nam_resource_war_effects_island_marines",
@@ -5151,7 +5235,7 @@
       "definition_metadata": {
         "is_locked": true
       },
-      "display_name": "Island Marines",
+      "display_name": "Островная морская пехота",
       "legacy_names": [],
       "regiments": [
         {
@@ -5201,7 +5285,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_adiscord_nam_resource_war_effects_island_marines"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "script_adiscord_nam_resource_war_effects_abandoned_columns",
@@ -5211,7 +5296,7 @@
         "owner": "script"
       },
       "technical_name": "Abandoned Columns",
-      "display_name": "Abandoned Columns",
+      "display_name": "Брошенные колонны",
       "legacy_names": [],
       "regiments": [
         {
@@ -5256,7 +5341,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_adiscord_nam_resource_war_effects_abandoned_columns"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_ndn_vorkerland_collapse_ndn_collapse_militia",
@@ -5266,7 +5352,7 @@
         "owner": "NDN"
       },
       "technical_name": "Norden Militia",
-      "display_name": "Norden Militia",
+      "display_name": "Ополчение Нордена",
       "legacy_names": [
         "Норденское ополчение"
       ],
@@ -5303,7 +5389,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_ndn_vorkerland_collapse_ndn_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_nod_cussington_security",
@@ -5313,7 +5400,7 @@
         "owner": "NOD"
       },
       "technical_name": "Cussington Security",
-      "display_name": "Cussington Security",
+      "display_name": "Куссингтонская охрана",
       "legacy_names": [],
       "regiments": [
         {
@@ -5348,7 +5435,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_nod_cussington_security"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_nod_nodral_line_infantry",
@@ -5358,7 +5446,7 @@
         "owner": "NOD"
       },
       "technical_name": "Nodral Line Infantry",
-      "display_name": "Nodral Line Infantry",
+      "display_name": "Линейная пехота Нодрула",
       "legacy_names": [],
       "regiments": [
         {
@@ -5418,7 +5506,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_nod_nodral_line_infantry"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_nod_cussington_guard",
@@ -5428,7 +5517,7 @@
         "owner": "NOD"
       },
       "technical_name": "Cussington Guard",
-      "display_name": "Cussington Guard",
+      "display_name": "Куссингтонская гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -5534,7 +5623,8 @@
           "x": 2,
           "y": 0
         }
-      ]
+      ],
+      "literal_display_name": true
     },
     {
       "key": "oob_nod_nodral_armored_group",
@@ -5544,7 +5634,7 @@
         "owner": "NOD"
       },
       "technical_name": "Nodral Armored Group",
-      "display_name": "Nodral Armored Group",
+      "display_name": "Бронегруппа Нодрула",
       "legacy_names": [],
       "regiments": [
         {
@@ -5647,7 +5737,8 @@
           "x": 1,
           "y": 0
         }
-      ]
+      ],
+      "literal_display_name": true
     },
     {
       "key": "oob_nod_nodral_mountain_infantry",
@@ -5657,7 +5748,7 @@
         "owner": "NOD"
       },
       "technical_name": "Nodral Mountain Infantry",
-      "display_name": "Nodral Mountain Infantry",
+      "display_name": "Горная пехота Нодрула",
       "legacy_names": [],
       "regiments": [
         {
@@ -5751,7 +5842,8 @@
           "x": 1,
           "y": 0
         }
-      ]
+      ],
+      "literal_display_name": true
     },
     {
       "key": "oob_nvr_northern_line_brigade",
@@ -5761,7 +5853,7 @@
         "owner": "NVR"
       },
       "technical_name": "Northern Line Brigade",
-      "display_name": "Northern Line Brigade",
+      "display_name": "Северная линейная бригада",
       "legacy_names": [
         "Северная линейная бригада"
       ],
@@ -5805,7 +5897,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_nvr_northern_line_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_orv_northern_line_brigade",
@@ -5815,7 +5908,7 @@
         "owner": "ORV"
       },
       "technical_name": "Northern Line Brigade",
-      "display_name": "Northern Line Brigade",
+      "display_name": "Северная линейная бригада",
       "legacy_names": [
         "Северная линейная бригада"
       ],
@@ -5859,7 +5952,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_orv_northern_line_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_osf_ossifractian_boneband",
@@ -5869,7 +5963,7 @@
         "owner": "OSF"
       },
       "technical_name": "Ossifractian Boneband",
-      "display_name": "Ossifractian Boneband",
+      "display_name": "Дружина костоломов",
       "legacy_names": [],
       "regiments": [
         {
@@ -5899,7 +5993,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_osf_ossifractian_boneband"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_osf_marrow_guard",
@@ -5909,7 +6004,7 @@
         "owner": "OSF"
       },
       "technical_name": "Marrow Guard",
-      "display_name": "Marrow Guard",
+      "display_name": "Костяная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -5944,7 +6039,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_osf_marrow_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_osv_vorkerland_collapse_osv_collapse_militia",
@@ -5954,7 +6050,7 @@
         "owner": "OSV"
       },
       "technical_name": "Ostvin Militia",
-      "display_name": "Ostvin Militia",
+      "display_name": "Ополчение Оствина",
       "legacy_names": [
         "Оствинское ополчение"
       ],
@@ -5991,7 +6087,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_osv_vorkerland_collapse_osv_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_piv_local_security_detachment",
@@ -6001,7 +6098,7 @@
         "owner": "PIV"
       },
       "technical_name": "Local Security Detachment",
-      "display_name": "Local Security Detachment",
+      "display_name": "Местный охранный отряд",
       "legacy_names": [],
       "regiments": [
         {
@@ -6036,7 +6133,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_piv_local_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_piv_line_infantry_brigade",
@@ -6046,7 +6144,7 @@
         "owner": "PIV"
       },
       "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
+      "display_name": "Линейная пехотная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -6106,7 +6204,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_piv_line_infantry_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_piv_capital_guard",
@@ -6116,7 +6215,7 @@
         "owner": "PIV"
       },
       "technical_name": "Capital Guard",
-      "display_name": "Capital Guard",
+      "display_name": "Столичная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -6198,7 +6297,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_piv_capital_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_psd_vorkerland_collapse_psd_collapse_militia",
@@ -6208,7 +6308,7 @@
         "owner": "PSD"
       },
       "technical_name": "Collapse Militia",
-      "display_name": "Collapse Militia",
+      "display_name": "Ополчение распада",
       "legacy_names": [],
       "regiments": [
         {
@@ -6243,7 +6343,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_psd_vorkerland_collapse_psd_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_pwr_local_security_detachment",
@@ -6253,7 +6354,7 @@
         "owner": "PWR"
       },
       "technical_name": "Local Security Detachment",
-      "display_name": "Local Security Detachment",
+      "display_name": "Местный охранный отряд",
       "legacy_names": [],
       "regiments": [
         {
@@ -6288,7 +6389,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_pwr_local_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_pwr_line_infantry_brigade",
@@ -6298,7 +6400,7 @@
         "owner": "PWR"
       },
       "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
+      "display_name": "Линейная пехотная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -6358,7 +6460,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_pwr_line_infantry_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_pwr_capital_guard",
@@ -6368,7 +6471,7 @@
         "owner": "PWR"
       },
       "technical_name": "Capital Guard",
-      "display_name": "Capital Guard",
+      "display_name": "Столичная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -6457,7 +6560,8 @@
           "x": 0,
           "y": 0
         }
-      ]
+      ],
+      "literal_display_name": true
     },
     {
       "key": "oob_rev_vorkerland_collapse_rev_collapse_militia",
@@ -6467,7 +6571,7 @@
         "owner": "REV"
       },
       "technical_name": "Revel Militia",
-      "display_name": "Revel Militia",
+      "display_name": "Ополчение Ревеля",
       "legacy_names": [
         "Ревельское ополчение"
       ],
@@ -6504,7 +6608,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_rev_vorkerland_collapse_rev_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_rhm_well_wardens",
@@ -6514,7 +6619,7 @@
         "owner": "RHM"
       },
       "technical_name": "Well Wardens",
-      "display_name": "Well Wardens",
+      "display_name": "Смотрители колодцев",
       "legacy_names": [],
       "regiments": [
         {
@@ -6544,7 +6649,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_rhm_well_wardens"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_rin_palatine_line_division",
@@ -6554,7 +6660,7 @@
         "owner": "RIN"
       },
       "technical_name": "Palatine Line Division",
-      "display_name": "Palatine Line Division",
+      "display_name": "Палатинская линейная дивизия",
       "legacy_names": [
         "Палатинская линейная дивизия"
       ],
@@ -6610,7 +6716,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_rin_palatine_line_division"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_riv_vorkerland_collapse_riv_collapse_militia",
@@ -6620,7 +6727,7 @@
         "owner": "RIV"
       },
       "technical_name": "Riven Militia",
-      "display_name": "Riven Militia",
+      "display_name": "Ополчение Ривена",
       "legacy_names": [
         "Ополчение Ривена"
       ],
@@ -6657,7 +6764,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_riv_vorkerland_collapse_riv_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_rly_settler_militia",
@@ -6667,7 +6775,7 @@
         "owner": "RLY"
       },
       "technical_name": "Settler Militia",
-      "display_name": "Settler Militia",
+      "display_name": "Ополчение поселенцев",
       "legacy_names": [
         "Поселенческая дружина"
       ],
@@ -6704,7 +6812,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_rly_settler_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_rom_local_security_detachment",
@@ -6714,7 +6823,7 @@
         "owner": "ROM"
       },
       "technical_name": "Local Security Detachment",
-      "display_name": "Local Security Detachment",
+      "display_name": "Местный охранный отряд",
       "legacy_names": [],
       "regiments": [
         {
@@ -6749,7 +6858,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_rom_local_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_rom_line_infantry_brigade",
@@ -6766,7 +6876,7 @@
         }
       ],
       "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
+      "display_name": "Линейная пехотная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -6826,7 +6936,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_rom_line_infantry_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_rom_capital_guard",
@@ -6836,7 +6947,7 @@
         "owner": "ROM"
       },
       "technical_name": "Capital Guard",
-      "display_name": "Capital Guard",
+      "display_name": "Столичная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -6918,7 +7029,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_rom_capital_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_rus_bunker_guard",
@@ -6928,7 +7040,7 @@
         "owner": "RUS"
       },
       "technical_name": "Bunker Guard",
-      "display_name": "Bunker Guard",
+      "display_name": "Бункерная стража",
       "legacy_names": [],
       "regiments": [
         {
@@ -6963,7 +7075,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_rus_bunker_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_rus_rusnian_rifle_brigade",
@@ -6973,7 +7086,7 @@
         "owner": "RUS"
       },
       "technical_name": "Khanate Rifle Brigade",
-      "display_name": "Khanate Rifle Brigade",
+      "display_name": "Стрелковая бригада ханства",
       "legacy_names": [],
       "regiments": [
         {
@@ -7054,7 +7167,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_rus_rusnian_rifle_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_rus_khan_guard",
@@ -7064,7 +7178,7 @@
         "owner": "RUS"
       },
       "technical_name": "Khan Guard",
-      "display_name": "Khan Guard",
+      "display_name": "Ханская гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -7146,7 +7260,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_rus_khan_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_rza_vorkerland_collapse_rza_collapse_militia",
@@ -7156,7 +7271,7 @@
         "owner": "RZA"
       },
       "technical_name": "Collapse Militia",
-      "display_name": "Collapse Militia",
+      "display_name": "Ополчение распада",
       "legacy_names": [],
       "regiments": [
         {
@@ -7195,7 +7310,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_rza_vorkerland_collapse_rza_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_rza_hazard_detachment",
@@ -7205,7 +7321,7 @@
         "owner": "RZA"
       },
       "technical_name": "CBRN Protection Detachment",
-      "display_name": "CBRN Protection Detachment",
+      "display_name": "Отряд РХБ защиты",
       "legacy_names": [],
       "regiments": [
         {
@@ -7244,7 +7360,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_rza_hazard_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_sca_vorkerland_collapse_sca_collapse_militia",
@@ -7254,7 +7371,7 @@
         "owner": "SCA"
       },
       "technical_name": "Collapse Militia",
-      "display_name": "Collapse Militia",
+      "display_name": "Ополчение распада",
       "legacy_names": [],
       "regiments": [
         {
@@ -7293,7 +7410,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_sca_vorkerland_collapse_sca_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_sca_hazard_detachment",
@@ -7303,7 +7421,7 @@
         "owner": "SCA"
       },
       "technical_name": "CBRN Protection Detachment",
-      "display_name": "CBRN Protection Detachment",
+      "display_name": "Отряд РХБ защиты",
       "legacy_names": [],
       "regiments": [
         {
@@ -7342,7 +7460,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_sca_hazard_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_sdr_dry_river_patrol",
@@ -7352,7 +7471,7 @@
         "owner": "SDR"
       },
       "technical_name": "Dry River Patrol",
-      "display_name": "Dry River Patrol",
+      "display_name": "Патруль Сухой реки",
       "legacy_names": [],
       "regiments": [
         {
@@ -7387,7 +7506,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_sdr_dry_river_patrol"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_shl_furnace_guard",
@@ -7397,7 +7517,7 @@
         "owner": "SHL"
       },
       "technical_name": "Furnace Guard",
-      "display_name": "Furnace Guard",
+      "display_name": "Гвардия Горнила",
       "legacy_names": [],
       "regiments": [
         {
@@ -7434,7 +7554,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_shl_furnace_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_shl_conclave_line_brigade",
@@ -7444,7 +7565,7 @@
         "owner": "SHL"
       },
       "technical_name": "Conclave Line Brigade",
-      "display_name": "Conclave Line Brigade",
+      "display_name": "Линейная бригада Конклава",
       "legacy_names": [],
       "regiments": [
         {
@@ -7504,7 +7625,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_shl_conclave_line_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_shl_khazar_guard",
@@ -7514,7 +7636,7 @@
         "owner": "SHL"
       },
       "technical_name": "Khazar Guard",
-      "display_name": "Khazar Guard",
+      "display_name": "Хазарская стража",
       "legacy_names": [],
       "regiments": [
         {
@@ -7596,7 +7718,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_shl_khazar_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_skn_northern_line_brigade",
@@ -7606,7 +7729,7 @@
         "owner": "SKN"
       },
       "technical_name": "Northern Line Brigade",
-      "display_name": "Northern Line Brigade",
+      "display_name": "Северная линейная бригада",
       "legacy_names": [
         "Северная линейная бригада"
       ],
@@ -7650,7 +7773,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_skn_northern_line_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_sla_vorkerland_collapse_sla_collapse_militia",
@@ -7660,7 +7784,7 @@
         "owner": "SLA"
       },
       "technical_name": "Collapse Militia",
-      "display_name": "Collapse Militia",
+      "display_name": "Ополчение распада",
       "legacy_names": [],
       "regiments": [
         {
@@ -7699,7 +7823,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_sla_vorkerland_collapse_sla_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_sla_hazard_detachment",
@@ -7709,7 +7834,7 @@
         "owner": "SLA"
       },
       "technical_name": "CBRN Protection Detachment",
-      "display_name": "CBRN Protection Detachment",
+      "display_name": "Отряд РХБ защиты",
       "legacy_names": [],
       "regiments": [
         {
@@ -7748,7 +7873,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_sla_hazard_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_slf_nam_resource_war_svetlogorsk_insurgent_corps",
@@ -7758,7 +7884,7 @@
         "owner": "SLF"
       },
       "technical_name": "Svetlogorsk Insurgent Corps",
-      "display_name": "Svetlogorsk Insurgent Corps",
+      "display_name": "Светлогорский повстанческий корпус",
       "legacy_names": [],
       "regiments": [
         {
@@ -7818,7 +7944,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_slf_nam_resource_war_svetlogorsk_insurgent_corps"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_sol_local_security_detachment",
@@ -7828,7 +7955,7 @@
         "owner": "SOL"
       },
       "technical_name": "Local Security Detachment",
-      "display_name": "Local Security Detachment",
+      "display_name": "Местный охранный отряд",
       "legacy_names": [],
       "regiments": [
         {
@@ -7863,7 +7990,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_sol_local_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_sol_line_infantry_brigade",
@@ -7873,7 +8001,7 @@
         "owner": "SOL"
       },
       "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
+      "display_name": "Линейная пехотная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -7933,7 +8061,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_sol_line_infantry_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_sol_capital_guard",
@@ -7943,7 +8072,7 @@
         "owner": "SOL"
       },
       "technical_name": "Capital Guard",
-      "display_name": "Capital Guard",
+      "display_name": "Столичная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -8025,7 +8154,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_sol_capital_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_sra_vorkerland_collapse_sra_collapse_militia",
@@ -8035,7 +8165,7 @@
         "owner": "SRA"
       },
       "technical_name": "Collapse Militia",
-      "display_name": "Collapse Militia",
+      "display_name": "Ополчение распада",
       "legacy_names": [],
       "regiments": [
         {
@@ -8070,7 +8200,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_sra_vorkerland_collapse_sra_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_stp_police_division",
@@ -8080,7 +8211,7 @@
         "owner": "STP"
       },
       "technical_name": "Police division",
-      "display_name": "Police division",
+      "display_name": "Полицейская дивизия",
       "legacy_names": [],
       "regiments": [
         {
@@ -8115,7 +8246,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_stp_police_division"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_stp_regular_army",
@@ -8125,7 +8257,7 @@
         "owner": "STP"
       },
       "technical_name": "Regular army",
-      "display_name": "Regular army",
+      "display_name": "Регулярная армия",
       "legacy_names": [],
       "regiments": [
         {
@@ -8185,7 +8317,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_stp_regular_army"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_stp_capital_guard",
@@ -8195,7 +8328,7 @@
         "owner": "STP"
       },
       "technical_name": "Capital Guard",
-      "display_name": "Capital Guard",
+      "display_name": "Столичная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -8313,7 +8446,8 @@
           "x": 2,
           "y": 0
         }
-      ]
+      ],
+      "literal_display_name": true
     },
     {
       "key": "oob_swb_vorkerland_collapse_swb_collapse_militia",
@@ -8323,7 +8457,7 @@
         "owner": "SWB"
       },
       "technical_name": "Old Vorkensberg Militia",
-      "display_name": "Old Vorkensberg Militia",
+      "display_name": "Ополчение Старого Воркенсберга",
       "legacy_names": [
         "Ополчение Старого Воркенсберга"
       ],
@@ -8360,7 +8494,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_swb_vorkerland_collapse_swb_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_tff_local_security_detachment",
@@ -8370,7 +8505,7 @@
         "owner": "TFF"
       },
       "technical_name": "Local Security Detachment",
-      "display_name": "Local Security Detachment",
+      "display_name": "Местный охранный отряд",
       "legacy_names": [],
       "regiments": [
         {
@@ -8405,7 +8540,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_tff_local_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_tff_line_infantry_brigade",
@@ -8415,7 +8551,7 @@
         "owner": "TFF"
       },
       "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
+      "display_name": "Линейная пехотная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -8482,7 +8618,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_tff_line_infantry_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_tff_capital_guard",
@@ -8492,7 +8629,7 @@
         "owner": "TFF"
       },
       "technical_name": "Capital Guard",
-      "display_name": "Capital Guard",
+      "display_name": "Столичная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -8593,7 +8730,8 @@
           "x": 1,
           "y": 0
         }
-      ]
+      ],
+      "literal_display_name": true
     },
     {
       "key": "oob_tgd_vorkerland_collapse_tgd_urban_guard",
@@ -8610,7 +8748,7 @@
         }
       ],
       "technical_name": "Urban Guard",
-      "display_name": "Urban Guard",
+      "display_name": "Городская гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -8645,7 +8783,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_tgd_vorkerland_collapse_tgd_urban_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_tmr_northern_militia",
@@ -8655,7 +8794,7 @@
         "owner": "TMR"
       },
       "technical_name": "Northern Militia",
-      "display_name": "Northern Militia",
+      "display_name": "Северное ополчение",
       "legacy_names": [
         "Северная дружина"
       ],
@@ -8692,7 +8831,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_tmr_northern_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_tru_local_security_detachment",
@@ -8702,7 +8842,7 @@
         "owner": "TRU"
       },
       "technical_name": "Local Security Detachment",
-      "display_name": "Local Security Detachment",
+      "display_name": "Местный охранный отряд",
       "legacy_names": [],
       "regiments": [
         {
@@ -8737,7 +8877,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_tru_local_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_tru_line_infantry_brigade",
@@ -8747,7 +8888,7 @@
         "owner": "TRU"
       },
       "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
+      "display_name": "Линейная пехотная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -8807,7 +8948,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_tru_line_infantry_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_tru_capital_guard",
@@ -8817,7 +8959,7 @@
         "owner": "TRU"
       },
       "technical_name": "Capital Guard",
-      "display_name": "Capital Guard",
+      "display_name": "Столичная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -8899,7 +9041,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_tru_capital_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_tva_vorkerland_collapse_tva_collapse_militia",
@@ -8916,7 +9059,7 @@
         }
       ],
       "technical_name": "Collapse Militia",
-      "display_name": "Collapse Militia",
+      "display_name": "Ополчение распада",
       "legacy_names": [],
       "regiments": [
         {
@@ -8951,7 +9094,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_tva_vorkerland_collapse_tva_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_tva_vorkerland_collapse_tva_infiltration_cell",
@@ -8968,7 +9112,7 @@
         }
       ],
       "technical_name": "Infiltration Cell",
-      "display_name": "Infiltration Cell",
+      "display_name": "Диверсионная ячейка",
       "legacy_names": [],
       "regiments": [
         {
@@ -8998,7 +9142,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_tva_vorkerland_collapse_tva_infiltration_cell"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_tva_vorkerland_collapse_tva_mobile_test_group",
@@ -9008,7 +9153,7 @@
         "owner": "TVA"
       },
       "technical_name": "Mobile Test Group",
-      "display_name": "Mobile Test Group",
+      "display_name": "Опытная мобильная группа",
       "legacy_names": [],
       "regiments": [
         {
@@ -9109,7 +9254,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_tva_vorkerland_collapse_tva_mobile_test_group"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_vad_armi_security_detachment",
@@ -9126,7 +9272,7 @@
         }
       ],
       "technical_name": "Armi Security Detachment",
-      "display_name": "Armi Security Detachment",
+      "display_name": "Охранный отряд Арми",
       "legacy_names": [],
       "regiments": [
         {
@@ -9161,7 +9307,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_vad_armi_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_vad_vadl_mechanized_infantry",
@@ -9171,7 +9318,7 @@
         "owner": "VAD"
       },
       "technical_name": "Vadl Mechanized Infantry",
-      "display_name": "Vadl Mechanized Infantry",
+      "display_name": "Механизированная пехота Вадла",
       "legacy_names": [],
       "regiments": [
         {
@@ -9231,7 +9378,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_vad_vadl_mechanized_infantry"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_vad_armi_guard",
@@ -9241,7 +9389,7 @@
         "owner": "VAD"
       },
       "technical_name": "Armi Guard",
-      "display_name": "Armi Guard",
+      "display_name": "Гвардия Арми",
       "legacy_names": [],
       "regiments": [
         {
@@ -9323,7 +9471,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_vad_armi_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_vad_armi_mobile_group",
@@ -9340,7 +9489,7 @@
         }
       ],
       "technical_name": "Armi Mobile Group",
-      "display_name": "Armi Mobile Group",
+      "display_name": "Мобильная группа Арми",
       "legacy_names": [],
       "regiments": [
         {
@@ -9441,7 +9590,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_vad_armi_mobile_group"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_val_kefreyt_security_detachment",
@@ -9451,7 +9601,7 @@
         "owner": "VAL"
       },
       "technical_name": "Kefreyt Security Detachment",
-      "display_name": "Kefreyt Security Detachment",
+      "display_name": "Охранный отряд Кефрейта",
       "legacy_names": [],
       "regiments": [
         {
@@ -9486,7 +9636,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_val_kefreyt_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_val_kefreyt_contract_infantry",
@@ -9496,7 +9647,7 @@
         "owner": "VAL"
       },
       "technical_name": "Kefreyt Contract Infantry",
-      "display_name": "Kefreyt Contract Infantry",
+      "display_name": "Контрактная пехота Кефрейта",
       "legacy_names": [],
       "regiments": [
         {
@@ -9556,7 +9707,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_val_kefreyt_contract_infantry"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_val_kefreyt_line_brigade",
@@ -9566,7 +9718,7 @@
         "owner": "VAL"
       },
       "technical_name": "Kefreyt Line Brigade",
-      "display_name": "Kefreyt Line Brigade",
+      "display_name": "Линейная бригада Кефрейта",
       "legacy_names": [],
       "regiments": [
         {
@@ -9667,7 +9819,8 @@
           "x": 2,
           "y": 0
         }
-      ]
+      ],
+      "literal_display_name": true
     },
     {
       "key": "oob_ves_northern_line_brigade",
@@ -9677,7 +9830,7 @@
         "owner": "VES"
       },
       "technical_name": "Northern Line Brigade",
-      "display_name": "Northern Line Brigade",
+      "display_name": "Северная линейная бригада",
       "legacy_names": [
         "Северная линейная бригада"
       ],
@@ -9721,7 +9874,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_ves_northern_line_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_vhv_vorkerland_collapse_vhv_collapse_militia",
@@ -9731,7 +9885,7 @@
         "owner": "VHV"
       },
       "technical_name": "Upper Reaches Militia",
-      "display_name": "Upper Reaches Militia",
+      "display_name": "Ополчение верховьев",
       "legacy_names": [
         "Ополчение Верховья"
       ],
@@ -9768,7 +9922,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_vhv_vorkerland_collapse_vhv_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_vla_local_security_detachment",
@@ -9778,7 +9933,7 @@
         "owner": "VLA"
       },
       "technical_name": "Local Security Detachment",
-      "display_name": "Local Security Detachment",
+      "display_name": "Местный охранный отряд",
       "legacy_names": [],
       "regiments": [
         {
@@ -9813,7 +9968,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_vla_local_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_vla_line_infantry_brigade",
@@ -9823,7 +9979,7 @@
         "owner": "VLA"
       },
       "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
+      "display_name": "Линейная пехотная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -9883,7 +10039,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_vla_line_infantry_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_vla_capital_guard",
@@ -9893,7 +10050,7 @@
         "owner": "VLA"
       },
       "technical_name": "Capital Guard",
-      "display_name": "Capital Guard",
+      "display_name": "Столичная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -9975,7 +10132,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_vla_capital_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_wcg_filtration_battalion",
@@ -9985,7 +10143,7 @@
         "owner": "WCG"
       },
       "technical_name": "Filtration Battalion",
-      "display_name": "Filtration Battalion",
+      "display_name": "Фильтрационный батальон",
       "legacy_names": [
         "Фильтрационный батальон"
       ],
@@ -10029,7 +10187,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_wcg_filtration_battalion"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_wef_frontier_watch",
@@ -10039,7 +10198,7 @@
         "owner": "WEF"
       },
       "technical_name": "Frontier Watch",
-      "display_name": "Frontier Watch",
+      "display_name": "Пограничный дозор",
       "legacy_names": [],
       "regiments": [
         {
@@ -10071,7 +10230,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_wef_frontier_watch"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_wit_local_security_detachment",
@@ -10081,7 +10241,7 @@
         "owner": "WIT"
       },
       "technical_name": "Local Security Detachment",
-      "display_name": "Local Security Detachment",
+      "display_name": "Местный охранный отряд",
       "legacy_names": [],
       "regiments": [
         {
@@ -10116,7 +10276,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_wit_local_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_wit_line_infantry_brigade",
@@ -10126,7 +10287,7 @@
         "owner": "WIT"
       },
       "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
+      "display_name": "Линейная пехотная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -10186,7 +10347,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_wit_line_infantry_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_wit_capital_guard",
@@ -10196,7 +10358,7 @@
         "owner": "WIT"
       },
       "technical_name": "Capital Guard",
-      "display_name": "Capital Guard",
+      "display_name": "Столичная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -10292,7 +10454,8 @@
           "x": 1,
           "y": 0
         }
-      ]
+      ],
+      "literal_display_name": true
     },
     {
       "key": "oob_wpa_vorkerland_collapse_wpa_collapse_militia",
@@ -10302,7 +10465,7 @@
         "owner": "WPA"
       },
       "technical_name": "Collapse Militia",
-      "display_name": "Collapse Militia",
+      "display_name": "Ополчение распада",
       "legacy_names": [],
       "regiments": [
         {
@@ -10337,7 +10500,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_wpa_vorkerland_collapse_wpa_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_wps_vorkerland_collapse_wps_collapse_militia",
@@ -10354,7 +10518,7 @@
         }
       ],
       "technical_name": "Collapse Militia",
-      "display_name": "Collapse Militia",
+      "display_name": "Ополчение распада",
       "legacy_names": [],
       "regiments": [
         {
@@ -10389,7 +10553,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_wps_vorkerland_collapse_wps_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_wrk_workerland_militia",
@@ -10406,7 +10571,7 @@
         }
       ],
       "technical_name": "Workerland Militia",
-      "display_name": "Workerland Militia",
+      "display_name": "Ополчение Воркерленда",
       "legacy_names": [],
       "regiments": [
         {
@@ -10441,7 +10606,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_wrk_workerland_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_wrk_division_de_infanteria",
@@ -10451,7 +10617,7 @@
         "owner": "WRK"
       },
       "technical_name": "Division de Infanteria",
-      "display_name": "Division de Infanteria",
+      "display_name": "Пехотная дивизия",
       "legacy_names": [],
       "regiments": [
         {
@@ -10511,7 +10677,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_wrk_division_de_infanteria"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_wrk_industrial_guard",
@@ -10521,7 +10688,7 @@
         "owner": "WRK"
       },
       "technical_name": "Industrial Guard",
-      "display_name": "Industrial Guard",
+      "display_name": "Промышленная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -10622,7 +10789,8 @@
           "x": 2,
           "y": 0
         }
-      ]
+      ],
+      "literal_display_name": true
     },
     {
       "key": "oob_wrk_workerland_mobile_group",
@@ -10632,7 +10800,7 @@
         "owner": "WRK"
       },
       "technical_name": "Workerland Mobile Group",
-      "display_name": "Workerland Mobile Group",
+      "display_name": "Мобильная группа Воркерленда",
       "legacy_names": [],
       "regiments": [
         {
@@ -10733,7 +10901,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_wrk_workerland_mobile_group"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_wtd_vorkerland_collapse_wtd_technical_guard",
@@ -10743,7 +10912,7 @@
         "owner": "WTD"
       },
       "technical_name": "Technical Guard",
-      "display_name": "Technical Guard",
+      "display_name": "Техническая гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -10778,7 +10947,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_wtd_vorkerland_collapse_wtd_technical_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_yor_vorkerland_collapse_yor_collapse_militia",
@@ -10788,7 +10958,7 @@
         "owner": "YOR"
       },
       "technical_name": "Yor Militia",
-      "display_name": "Yor Militia",
+      "display_name": "Ополчение Йора",
       "legacy_names": [
         "Йорское ополчение"
       ],
@@ -10825,7 +10995,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_yor_vorkerland_collapse_yor_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_ypr_local_security_detachment",
@@ -10835,7 +11006,7 @@
         "owner": "YPR"
       },
       "technical_name": "Local Security Detachment",
-      "display_name": "Local Security Detachment",
+      "display_name": "Местный охранный отряд",
       "legacy_names": [],
       "regiments": [
         {
@@ -10870,7 +11041,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_ypr_local_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_ypr_line_infantry_brigade",
@@ -10880,7 +11052,7 @@
         "owner": "YPR"
       },
       "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
+      "display_name": "Линейная пехотная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -10947,7 +11119,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_ypr_line_infantry_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_ypr_capital_guard",
@@ -10957,7 +11130,7 @@
         "owner": "YPR"
       },
       "technical_name": "Capital Guard",
-      "display_name": "Capital Guard",
+      "display_name": "Столичная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -11058,7 +11231,8 @@
           "x": 1,
           "y": 0
         }
-      ]
+      ],
+      "literal_display_name": true
     },
     {
       "key": "oob_zao_local_security_detachment",
@@ -11068,7 +11242,7 @@
         "owner": "ZAO"
       },
       "technical_name": "Local Security Detachment",
-      "display_name": "Local Security Detachment",
+      "display_name": "Местный охранный отряд",
       "legacy_names": [],
       "regiments": [
         {
@@ -11103,7 +11277,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_zao_local_security_detachment"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_zao_line_infantry_brigade",
@@ -11113,7 +11288,7 @@
         "owner": "ZAO"
       },
       "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
+      "display_name": "Линейная пехотная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -11173,7 +11348,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_zao_line_infantry_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_zao_capital_guard",
@@ -11183,7 +11359,7 @@
         "owner": "ZAO"
       },
       "technical_name": "Capital Guard",
-      "display_name": "Capital Guard",
+      "display_name": "Столичная гвардия",
       "legacy_names": [],
       "regiments": [
         {
@@ -11265,7 +11441,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_zao_capital_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_zta_vorkerland_collapse_zta_collapse_militia",
@@ -11275,7 +11452,7 @@
         "owner": "ZTA"
       },
       "technical_name": "Zlatarech Militia",
-      "display_name": "Zlatarech Militia",
+      "display_name": "Ополчение Златоречья",
       "legacy_names": [
         "Златореченское ополчение"
       ],
@@ -11312,7 +11489,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_zta_vorkerland_collapse_zta_collapse_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "script_00_operations_fake_intel_division",
@@ -11322,7 +11500,7 @@
         "owner": "script"
       },
       "technical_name": "Fake Intel Division",
-      "display_name": "Fake Intel Division",
+      "display_name": "Ложная дивизия",
       "legacy_names": [],
       "regiments": [
         {
@@ -11347,7 +11525,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_00_operations_fake_intel_division"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "script_00_scripted_effects_anti_exploit_punitive_brigade",
@@ -11357,7 +11536,7 @@
         "owner": "script"
       },
       "technical_name": "Anti-Exploit Punitive Brigade",
-      "display_name": "Anti-Exploit Punitive Brigade",
+      "display_name": "Карательная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -11439,7 +11618,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_00_scripted_effects_anti_exploit_punitive_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "script_adiscord_vorkerland_collapse_effects_emergency_militia",
@@ -11453,7 +11633,7 @@
         "is_locked": true,
         "force_allow_recruiting": true
       },
-      "display_name": "Emergency Militia",
+      "display_name": "Экстренное ополчение",
       "legacy_names": [
         "Чрезвычайное ополчение"
       ],
@@ -11490,7 +11670,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_adiscord_vorkerland_collapse_effects_emergency_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "script_adiscord_vorkerland_collapse_effects_worker_home_guard",
@@ -11504,7 +11685,7 @@
         "is_locked": true,
         "force_allow_recruiting": true
       },
-      "display_name": "Worker Home Guard",
+      "display_name": "Рабочая самооборона",
       "legacy_names": [],
       "regiments": [
         {
@@ -11539,7 +11720,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_adiscord_vorkerland_collapse_effects_worker_home_guard"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "script_adiscord_vorkerland_collapse_effects_worker_rifle_division",
@@ -11549,7 +11731,7 @@
         "owner": "script"
       },
       "technical_name": "Worker Rifle Division",
-      "display_name": "Worker Rifle Division",
+      "display_name": "Рабочая стрелковая дивизия",
       "legacy_names": [],
       "regiments": [
         {
@@ -11618,7 +11800,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_adiscord_vorkerland_collapse_effects_worker_rifle_division"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "script_adiscord_vorkerland_collapse_effects_workerland_mobile_group",
@@ -11639,7 +11822,7 @@
         "is_locked": false,
         "force_allow_recruiting": true
       },
-      "display_name": "Workerland Mobile Group",
+      "display_name": "Мобильная группа Воркерленда",
       "legacy_names": [],
       "regiments": [
         {
@@ -11740,7 +11923,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_adiscord_vorkerland_collapse_effects_workerland_mobile_group"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_ars_northern_militia",
@@ -11750,7 +11934,7 @@
         "owner": "ARS"
       },
       "technical_name": "Northern Militia",
-      "display_name": "Northern Militia",
+      "display_name": "Северное ополчение",
       "legacy_names": [
         "Северная дружина"
       ],
@@ -11787,7 +11971,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_ars_northern_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_kdl_northern_militia",
@@ -11797,7 +11982,7 @@
         "owner": "KDL"
       },
       "technical_name": "Northern Militia",
-      "display_name": "Northern Militia",
+      "display_name": "Северное ополчение",
       "legacy_names": [
         "Северная дружина"
       ],
@@ -11834,7 +12019,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_kdl_northern_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_srv_northern_line_brigade",
@@ -11844,7 +12030,7 @@
         "owner": "SRV"
       },
       "technical_name": "Northern Line Brigade",
-      "display_name": "Northern Line Brigade",
+      "display_name": "Северная линейная бригада",
       "legacy_names": [
         "Северная линейная бригада"
       ],
@@ -11888,7 +12074,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_srv_northern_line_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_svl_northern_militia",
@@ -11898,7 +12085,7 @@
         "owner": "SVL"
       },
       "technical_name": "Northern Militia",
-      "display_name": "Northern Militia",
+      "display_name": "Северное ополчение",
       "legacy_names": [
         "Северная дружина"
       ],
@@ -11935,7 +12122,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_svl_northern_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_vld_northern_militia",
@@ -11945,7 +12133,7 @@
         "owner": "VLD"
       },
       "technical_name": "Northern Militia",
-      "display_name": "Northern Militia",
+      "display_name": "Северное ополчение",
       "legacy_names": [
         "Северная дружина"
       ],
@@ -11982,7 +12170,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_vld_northern_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_vra_northern_militia",
@@ -11992,7 +12181,7 @@
         "owner": "VRA"
       },
       "technical_name": "Northern Militia",
-      "display_name": "Northern Militia",
+      "display_name": "Северное ополчение",
       "legacy_names": [
         "Северная дружина"
       ],
@@ -12029,7 +12218,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_vra_northern_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "script_val_contract_infantry_for_sts",
@@ -12039,7 +12229,7 @@
         "owner": "script"
       },
       "technical_name": "Kefreyt Contract Infantry",
-      "display_name": "Kefreyt Contract Infantry",
+      "display_name": "Контрактная пехота Кефрейта",
       "legacy_names": [],
       "regiments": [
         {
@@ -12099,7 +12289,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_val_contract_infantry_for_sts"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "stp_cw_assault_division",
@@ -12109,7 +12300,7 @@
         "owner": "ADISCORD"
       },
       "technical_name": "Stelander Assault Division",
-      "display_name": "Stelander Assault Division",
+      "display_name": "Штурмовая дивизия Стеландера",
       "legacy_names": [],
       "ai_role": "line",
       "replacement_path": {
@@ -12193,7 +12384,8 @@
         "artillery_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "stp_cw_kefreyt_volunteer_division",
@@ -12203,7 +12395,7 @@
         "owner": "ADISCORD"
       },
       "technical_name": "Kefreyt Volunteer Division",
-      "display_name": "Kefreyt Volunteer Division",
+      "display_name": "Добровольческая дивизия Кефрейта",
       "legacy_names": [],
       "ai_role": "line",
       "replacement_path": {
@@ -12287,7 +12479,8 @@
         "artillery_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "script_party_exile_brigade",
@@ -12297,7 +12490,7 @@
         "owner": "script"
       },
       "technical_name": "Party Exile Brigade",
-      "display_name": "Party Exile Brigade",
+      "display_name": "Бригада партийных изгнанников",
       "legacy_names": [],
       "regiments": [
         {
@@ -12347,7 +12540,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_party_exile_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "val_focus_mountain_contractors",
@@ -12357,7 +12551,7 @@
         "owner": "script"
       },
       "technical_name": "Kefreyt Mountain Contractors",
-      "display_name": "Kefreyt Mountain Contractors",
+      "display_name": "Горнострелки-контрактники Кефрейта",
       "legacy_names": [],
       "regiments": [
         {
@@ -12421,7 +12615,8 @@
       "definition_metadata": {
         "is_locked": false,
         "force_allow_recruiting": true
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "val_focus_reserve_infantry",
@@ -12431,7 +12626,7 @@
         "owner": "script"
       },
       "technical_name": "Kefreyt Contract Infantry",
-      "display_name": "Kefreyt Contract Infantry",
+      "display_name": "Контрактная пехота Кефрейта",
       "legacy_names": [],
       "regiments": [
         {
@@ -12491,7 +12686,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "val_focus_reserve_infantry"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "val_focus_marine_contract_group",
@@ -12501,7 +12697,7 @@
         "owner": "script"
       },
       "technical_name": "Kefreyt Marine Contract Group",
-      "display_name": "Kefreyt Marine Contract Group",
+      "display_name": "Контрактная группа морской пехоты Кефрейта",
       "legacy_names": [],
       "regiments": [
         {
@@ -12565,7 +12761,8 @@
       "definition_metadata": {
         "is_locked": true,
         "force_allow_recruiting": true
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "val_focus_shield_special_forces",
@@ -12575,7 +12772,7 @@
         "owner": "script"
       },
       "technical_name": "Kefreyt Shield Special Forces",
-      "display_name": "Kefreyt Shield Special Forces",
+      "display_name": "Щитовой спецназ Кефрейта",
       "legacy_names": [],
       "regiments": [
         {
@@ -12677,7 +12874,8 @@
       },
       "definition_metadata": {
         "is_locked": false
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "val_urban_breacher_trial",
@@ -12687,7 +12885,7 @@
         "owner": "script"
       },
       "technical_name": "Kefreyt Urban Breacher Trial",
-      "display_name": "Kefreyt Urban Breacher Trial",
+      "display_name": "Опытный отряд городского прорыва Кефрейта",
       "legacy_names": [],
       "regiments": [
         {
@@ -12721,7 +12919,8 @@
       },
       "definition_metadata": {
         "is_locked": true
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "val_crimson_trial",
@@ -12731,7 +12930,7 @@
         "owner": "script"
       },
       "technical_name": "Kefreyt Assault Trial",
-      "display_name": "Kefreyt Assault Trial",
+      "display_name": "Опытный штурмовой отряд Кефрейта",
       "legacy_names": [],
       "regiments": [
         {
@@ -12783,7 +12982,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "val_crimson_trial"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_vel_northern_militia",
@@ -12793,7 +12993,7 @@
         "owner": "VEL"
       },
       "technical_name": "Northern Militia",
-      "display_name": "Northern Militia",
+      "display_name": "Северное ополчение",
       "legacy_names": [],
       "regiments": [
         {
@@ -12828,7 +13028,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_vel_northern_militia"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "script_shl_furnace_levy",
@@ -12838,7 +13039,7 @@
         "owner": "script"
       },
       "technical_name": "Furnace Levy",
-      "display_name": "Furnace Levy",
+      "display_name": "Ополчение Горнила",
       "legacy_names": [],
       "regiments": [
         {
@@ -12875,7 +13076,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_shl_furnace_levy"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "stp_taran_assault_group",
@@ -12885,7 +13087,7 @@
         "owner": "script"
       },
       "technical_name": "Taran Assault Group",
-      "display_name": "Taran Assault Group",
+      "display_name": "Штурмовая группа «Таран»",
       "legacy_names": [],
       "regiments": [
         {
@@ -12947,7 +13149,8 @@
       },
       "definition_metadata": {
         "is_locked": false
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "stp_postwar_shield_brigade",
@@ -12957,7 +13160,7 @@
         "owner": "script"
       },
       "technical_name": "Stelander Shield Brigade",
-      "display_name": "Stelander Shield Brigade",
+      "display_name": "Щитовая бригада Стеландера",
       "legacy_names": [],
       "regiments": [
         {
@@ -13049,7 +13252,8 @@
       },
       "definition_metadata": {
         "is_locked": false
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "power_shields_project_assault_division",
@@ -13059,7 +13263,7 @@
         "owner": "script"
       },
       "technical_name": "Shield Assault Division",
-      "display_name": "Shield Assault Division",
+      "display_name": "Щитовая штурмовая дивизия",
       "legacy_names": [],
       "regiments": [
         {
@@ -13151,7 +13355,8 @@
       },
       "definition_metadata": {
         "is_locked": false
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_pio_territorial_brigade",
@@ -13161,7 +13366,7 @@
         "owner": "PIO"
       },
       "technical_name": "Territorial Brigade",
-      "display_name": "Territorial Brigade",
+      "display_name": "Территориальная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -13198,7 +13403,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_pio_territorial_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_mrv_territorial_brigade",
@@ -13208,7 +13414,7 @@
         "owner": "MRV"
       },
       "technical_name": "Territorial Brigade",
-      "display_name": "Territorial Brigade",
+      "display_name": "Территориальная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -13245,7 +13451,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_mrv_territorial_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_rvn_territorial_brigade",
@@ -13255,7 +13462,7 @@
         "owner": "RVN"
       },
       "technical_name": "Territorial Brigade",
-      "display_name": "Territorial Brigade",
+      "display_name": "Территориальная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -13292,7 +13499,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_rvn_territorial_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_sfr_territorial_brigade",
@@ -13302,7 +13510,7 @@
         "owner": "SFR"
       },
       "technical_name": "Territorial Brigade",
-      "display_name": "Territorial Brigade",
+      "display_name": "Территориальная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -13339,7 +13547,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_sfr_territorial_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_flr_territorial_brigade",
@@ -13349,7 +13558,7 @@
         "owner": "FLR"
       },
       "technical_name": "Territorial Brigade",
-      "display_name": "Territorial Brigade",
+      "display_name": "Территориальная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -13386,7 +13595,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_flr_territorial_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_prr_territorial_brigade",
@@ -13396,7 +13606,7 @@
         "owner": "PRR"
       },
       "technical_name": "Territorial Brigade",
-      "display_name": "Territorial Brigade",
+      "display_name": "Территориальная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -13433,7 +13643,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_prr_territorial_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_ulv_territorial_brigade",
@@ -13443,7 +13654,7 @@
         "owner": "ULV"
       },
       "technical_name": "Territorial Brigade",
-      "display_name": "Territorial Brigade",
+      "display_name": "Территориальная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -13480,7 +13691,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_ulv_territorial_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_lur_territorial_brigade",
@@ -13490,7 +13702,7 @@
         "owner": "LUR"
       },
       "technical_name": "Territorial Brigade",
-      "display_name": "Territorial Brigade",
+      "display_name": "Территориальная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -13527,7 +13739,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_lur_territorial_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_chd_territorial_brigade",
@@ -13537,7 +13750,7 @@
         "owner": "CHD"
       },
       "technical_name": "Territorial Brigade",
-      "display_name": "Territorial Brigade",
+      "display_name": "Территориальная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -13574,7 +13787,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_chd_territorial_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_evr_territorial_brigade",
@@ -13584,7 +13798,7 @@
         "owner": "EVR"
       },
       "technical_name": "Territorial Brigade",
-      "display_name": "Territorial Brigade",
+      "display_name": "Территориальная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -13621,7 +13835,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_evr_territorial_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "oob_olr_territorial_brigade",
@@ -13631,7 +13846,7 @@
         "owner": "OLR"
       },
       "technical_name": "Territorial Brigade",
-      "display_name": "Territorial Brigade",
+      "display_name": "Территориальная бригада",
       "legacy_names": [],
       "regiments": [
         {
@@ -13668,7 +13883,8 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_olr_territorial_brigade"
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "val_airship",
@@ -13678,7 +13894,7 @@
         "owner": "script"
       },
       "technical_name": "Kefreyt Airship",
-      "display_name": "Kefreyt Airship",
+      "display_name": "Дирижабль Кефрейта",
       "legacy_names": [],
       "regiments": [
         {
@@ -13706,7 +13922,8 @@
       },
       "definition_metadata": {
         "is_locked": true
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "rus_lab_airship",
@@ -13716,7 +13933,7 @@
         "owner": "script"
       },
       "technical_name": "Khanate Airship",
-      "display_name": "Khanate Airship",
+      "display_name": "Дирижабль ханства",
       "legacy_names": [],
       "regiments": [
         {
@@ -13744,7 +13961,8 @@
       },
       "definition_metadata": {
         "is_locked": true
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "rus_aimaq_levy",
@@ -13754,7 +13972,7 @@
         "owner": "script"
       },
       "technical_name": "Aimaq Levy",
-      "display_name": "Aimaq Levy",
+      "display_name": "Аймачное ополчение",
       "legacy_names": [],
       "regiments": [
         {
@@ -13792,7 +14010,8 @@
       },
       "definition_metadata": {
         "is_locked": true
-      }
+      },
+      "literal_display_name": true
     },
     {
       "key": "rus_hazard_brigade",
@@ -13802,7 +14021,7 @@
         "owner": "script"
       },
       "technical_name": "Khanate CBRN Brigade",
-      "display_name": "Khanate CBRN Brigade",
+      "display_name": "Бригада РХБ защиты ханства",
       "legacy_names": [],
       "regiments": [
         {
@@ -13844,7 +14063,8 @@
       },
       "definition_metadata": {
         "is_locked": true
-      }
+      },
+      "literal_display_name": true
     }
   ],
   "references": [
@@ -13856,7 +14076,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 1.0,
-      "count": 1
+      "count": 1,
+      "display_name": "Бежайский сборный отряд",
+      "literal_display_name": true
     },
     {
       "key": "stp_congress_guard_deployment",
@@ -13867,7 +14089,9 @@
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
       "start_manpower_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Пехотная гвардия Конгресса",
+      "literal_display_name": true
     },
     {
       "key": "stp_congress_guard_postwar_unlock",
@@ -13875,7 +14099,9 @@
       "kind": "technical_reference",
       "technical_name": "Congress Infantry Guard",
       "legacy_names": [],
-      "count": 2
+      "count": 2,
+      "display_name": "Пехотная гвардия Конгресса",
+      "literal_display_name": true
     },
     {
       "key": "stp_rear_cell_paid_deployment",
@@ -13885,7 +14111,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Подпольная ячейка Стеландера",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_stp_old_fada_guard_reposition",
@@ -13895,7 +14123,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Территориальная бригада Стеландера",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_stp_postwar_territorial_template_unlock",
@@ -13903,7 +14133,9 @@
       "kind": "technical_reference",
       "technical_name": "Stelander Territorial Brigade",
       "legacy_names": [],
-      "count": 3
+      "count": 3,
+      "display_name": "Территориальная бригада Стеландера",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_stp_postwar_assault_template_unlock",
@@ -13911,7 +14143,9 @@
       "kind": "technical_reference",
       "technical_name": "Stelander Assault Division",
       "legacy_names": [],
-      "count": 4
+      "count": 4,
+      "display_name": "Штурмовая дивизия Стеландера",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_stp_assault_division_create_unit",
@@ -13921,7 +14155,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Штурмовая дивизия Стеландера",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_stp_trained_territorial_brigades",
@@ -13931,7 +14167,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
-      "count": 2
+      "count": 2,
+      "display_name": "Территориальная бригада Стеландера",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_stp_civil_war_create_unit_territorial_brigade",
@@ -13941,7 +14179,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Территориальная бригада Стеландера",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_stp_fada_militia_territorial_brigade",
@@ -13951,7 +14191,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.05,
       "start_equipment_factor": 1,
-      "count": 6
+      "count": 6,
+      "display_name": "Территориальная бригада Стеландера",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_stp_scripted_effects_technical_reference_regular_army",
@@ -13959,7 +14201,9 @@
       "kind": "technical_reference",
       "technical_name": "Regular army",
       "legacy_names": [],
-      "count": 8
+      "count": 8,
+      "display_name": "Регулярная армия",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_stp_scripted_effects_technical_reference_police_division",
@@ -13967,7 +14211,9 @@
       "kind": "technical_reference",
       "technical_name": "Police division",
       "legacy_names": [],
-      "count": 8
+      "count": 8,
+      "display_name": "Полицейская дивизия",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_collapse_decisions_create_unit_tgd_urban_guard_xp_0_1_eq_0_7",
@@ -13977,7 +14223,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 1
+      "count": 1,
+      "display_name": "Городская гвардия",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_collapse_decisions_create_unit_tva_collapse_militia_xp_0_1_eq_0_75",
@@ -13987,7 +14235,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_collapse_decisions_create_unit_tva_infiltration_cell_xp_0_25_eq_0_75",
@@ -13997,7 +14247,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 0.75,
-      "count": 4
+      "count": 4,
+      "display_name": "Диверсионная ячейка",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_collapse_decisions_create_unit_wps_collapse_militia_xp_0_1_eq_0_7",
@@ -14007,7 +14259,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 1
+      "count": 1,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "00_operations_create_unit_fake_intel_division_xp_0_5_eq_1_0",
@@ -14017,7 +14271,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.5,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Ложная дивизия",
+      "literal_display_name": true
     },
     {
       "key": "00_scripted_effects_create_unit_anti_exploit_punitive_brigade_xp_1_0_eq_1_0",
@@ -14027,7 +14283,9 @@
       "legacy_names": [],
       "start_experience_factor": 1,
       "start_equipment_factor": 1,
-      "count": 20
+      "count": 20,
+      "display_name": "Карательная бригада",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_stp_scripted_effects_technical_reference_capital_guard",
@@ -14035,7 +14293,9 @@
       "kind": "technical_reference",
       "technical_name": "Capital Guard",
       "legacy_names": [],
-      "count": 6
+      "count": 6,
+      "display_name": "Столичная гвардия",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_nam_resource_war_effects_create_unit_capital_guard_xp_0_2_eq_1_0",
@@ -14045,7 +14305,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Столичная гвардия",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_nam_resource_war_effects_create_unit_line_infantry_brigade_xp_0_15_eq_1_0",
@@ -14055,7 +14317,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_nam_resource_war_effects_create_unit_capital_guard_xp_0_25_eq_1_0",
@@ -14065,7 +14329,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Столичная гвардия",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_nam_resource_war_effects_create_unit_line_infantry_brigade_xp_0_2_eq_1_0",
@@ -14075,7 +14341,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_nam_resource_war_effects_create_unit_motor_column_xp_0_2_eq_1_0",
@@ -14085,7 +14353,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Моторизованная колонна",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_nam_resource_war_effects_create_unit_coastal_battalion_xp_0_15_eq_1_0",
@@ -14095,7 +14365,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Батальон береговой обороны",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_nam_resource_war_effects_technical_reference_capital_guard",
@@ -14103,7 +14375,9 @@
       "kind": "technical_reference",
       "technical_name": "Capital Guard",
       "legacy_names": [],
-      "count": 1
+      "count": 1,
+      "display_name": "Столичная гвардия",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_nam_resource_war_effects_technical_reference_line_infantry_brigade",
@@ -14111,7 +14385,9 @@
       "kind": "technical_reference",
       "technical_name": "Line Infantry Brigade",
       "legacy_names": [],
-      "count": 1
+      "count": 1,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_nam_resource_war_effects_technical_reference_coastal_battalion",
@@ -14119,7 +14395,9 @@
       "kind": "technical_reference",
       "technical_name": "Coastal Battalion",
       "legacy_names": [],
-      "count": 2
+      "count": 2,
+      "display_name": "Батальон береговой обороны",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_nam_resource_war_effects_technical_reference_motor_column",
@@ -14127,7 +14405,9 @@
       "kind": "technical_reference",
       "technical_name": "Motor Column",
       "legacy_names": [],
-      "count": 2
+      "count": 2,
+      "display_name": "Моторизованная колонна",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_nam_resource_war_effects_create_unit_island_marines_xp_0_3_eq_1_0",
@@ -14137,7 +14417,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
-      "count": 2
+      "count": 2,
+      "display_name": "Островная морская пехота",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_nam_resource_war_effects_technical_reference_island_marines",
@@ -14145,7 +14427,9 @@
       "kind": "technical_reference",
       "technical_name": "Island Marines",
       "legacy_names": [],
-      "count": 2
+      "count": 2,
+      "display_name": "Островная морская пехота",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_nam_resource_war_effects_technical_reference_abandoned_columns",
@@ -14153,7 +14437,9 @@
       "kind": "technical_reference",
       "technical_name": "Abandoned Columns",
       "legacy_names": [],
-      "count": 3
+      "count": 3,
+      "display_name": "Брошенные колонны",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_collapse_effects_create_unit_armi_mobile_group_xp_0_35_eq_0_9",
@@ -14163,7 +14449,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.35,
       "start_equipment_factor": 0.9,
-      "count": 1
+      "count": 1,
+      "display_name": "Мобильная группа Арми",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_collapse_effects_create_unit_workerland_mobile_group_xp_0_35_eq_0_9",
@@ -14173,7 +14461,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.35,
       "start_equipment_factor": 0.9,
-      "count": 1
+      "count": 1,
+      "display_name": "Мобильная группа Воркерленда",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_collapse_effects_create_unit_emergency_militia_xp_0_05_eq_0_75",
@@ -14185,7 +14475,9 @@
       ],
       "start_experience_factor": 0.05,
       "start_equipment_factor": 0.75,
-      "count": 1
+      "count": 1,
+      "display_name": "Экстренное ополчение",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_collapse_effects_create_unit_worker_home_guard_xp_0_1_eq_0_85",
@@ -14195,7 +14487,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.85,
-      "count": 2
+      "count": 2,
+      "display_name": "Рабочая самооборона",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_focus_decision_effects_create_unit_workerland_militia_xp_0_05_eq_0_55",
@@ -14205,7 +14499,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.05,
       "start_equipment_factor": 0.55,
-      "count": 1
+      "count": 1,
+      "display_name": "Ополчение Воркерленда",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_focus_decision_effects_create_unit_workerland_militia_xp_0_02_eq_0_45",
@@ -14215,7 +14511,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.02,
       "start_equipment_factor": 0.45,
-      "count": 1
+      "count": 1,
+      "display_name": "Ополчение Воркерленда",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_focus_decision_effects_create_unit_armi_security_detachment_xp_0_05_eq_0_55",
@@ -14225,7 +14523,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.05,
       "start_equipment_factor": 0.55,
-      "count": 1
+      "count": 1,
+      "display_name": "Охранный отряд Арми",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_focus_decision_effects_create_unit_armi_security_detachment_xp_0_02_eq_0_45",
@@ -14235,7 +14535,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.02,
       "start_equipment_factor": 0.45,
-      "count": 1
+      "count": 1,
+      "display_name": "Охранный отряд Арми",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_focus_decision_effects_create_unit_tva_collapse_militia_xp_0_05_eq_0_55",
@@ -14245,7 +14547,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.05,
       "start_equipment_factor": 0.55,
-      "count": 1
+      "count": 1,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_focus_decision_effects_create_unit_tva_collapse_militia_xp_0_02_eq_0_45",
@@ -14255,7 +14559,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.02,
       "start_equipment_factor": 0.45,
-      "count": 1
+      "count": 1,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "ain_oob_licensed_security_battalion_xp_0_1_eq_0_68",
@@ -14267,7 +14573,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.68,
-      "count": 1
+      "count": 1,
+      "display_name": "Лицензированный охранный батальон",
+      "literal_display_name": true
     },
     {
       "key": "ain_oob_licensed_security_battalion_xp_0_1_eq_0_72",
@@ -14279,7 +14587,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.72,
-      "count": 1
+      "count": 1,
+      "display_name": "Лицензированный охранный батальон",
+      "literal_display_name": true
     },
     {
       "key": "aph_oob_anthropophagic_raiders_xp_0_15_eq_0_42",
@@ -14289,7 +14599,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.42,
-      "count": 1
+      "count": 1,
+      "display_name": "Налётчики-людоеды",
+      "literal_display_name": true
     },
     {
       "key": "aph_oob_blood_kin_warband_xp_0_1_eq_0_35",
@@ -14299,7 +14611,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.35,
-      "count": 2
+      "count": 2,
+      "display_name": "Дружина кровного рода",
+      "literal_display_name": true
     },
     {
       "key": "aph_oob_devourer_chosen_xp_1_0_eq_1_0",
@@ -14309,7 +14623,9 @@
       "legacy_names": [],
       "start_experience_factor": 1,
       "start_equipment_factor": 1,
-      "count": 2
+      "count": 2,
+      "display_name": "Избранные Пожирателя",
+      "literal_display_name": true
     },
     {
       "key": "aph_oob_red_maw_guard_xp_0_2_eq_0_5",
@@ -14319,7 +14635,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.5,
-      "count": 1
+      "count": 1,
+      "display_name": "Гвардия Красной пасти",
+      "literal_display_name": true
     },
     {
       "key": "aur_oob_northern_line_brigade_xp_0_15_eq_0_72",
@@ -14331,7 +14649,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 3
+      "count": 3,
+      "display_name": "Северная линейная бригада",
+      "literal_display_name": true
     },
     {
       "key": "azh_oob_basin_levy_xp_0_2_eq_0_45",
@@ -14341,7 +14661,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.45,
-      "count": 1
+      "count": 1,
+      "display_name": "Ополчение бассейна",
+      "literal_display_name": true
     },
     {
       "key": "azh_oob_basin_levy_xp_0_1_eq_0_4",
@@ -14351,7 +14673,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.4,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение бассейна",
+      "literal_display_name": true
     },
     {
       "key": "azh_nam_resource_war_oob_azh_basin_levy_xp_0_25_eq_0_85",
@@ -14361,7 +14685,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 0.85,
-      "count": 1
+      "count": 1,
+      "display_name": "Ополчение бассейна",
+      "literal_display_name": true
     },
     {
       "key": "azh_nam_resource_war_oob_azh_basin_levy_xp_0_3_eq_0_9",
@@ -14371,7 +14697,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 0.9,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение бассейна",
+      "literal_display_name": true
     },
     {
       "key": "bbv_oob_feudal_retinue_xp_0_21_eq_0_28",
@@ -14381,7 +14709,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.21,
       "start_equipment_factor": 0.28,
-      "count": 1
+      "count": 1,
+      "display_name": "Феодальная дружина",
+      "literal_display_name": true
     },
     {
       "key": "bcm_oob_feudal_retinue_xp_0_21_eq_0_29",
@@ -14391,7 +14721,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.21,
       "start_equipment_factor": 0.29,
-      "count": 1
+      "count": 1,
+      "display_name": "Феодальная дружина",
+      "literal_display_name": true
     },
     {
       "key": "bgt_oob_feudal_retinue_xp_0_21_eq_0_28",
@@ -14401,7 +14733,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.21,
       "start_equipment_factor": 0.28,
-      "count": 1
+      "count": 1,
+      "display_name": "Феодальная дружина",
+      "literal_display_name": true
     },
     {
       "key": "bhg_oob_feudal_retinue_xp_0_21_eq_0_29",
@@ -14411,7 +14745,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.21,
       "start_equipment_factor": 0.29,
-      "count": 1
+      "count": 1,
+      "display_name": "Феодальная дружина",
+      "literal_display_name": true
     },
     {
       "key": "bjk_oob_feudal_retinue_xp_0_25_eq_0_55",
@@ -14421,7 +14757,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 0.55,
-      "count": 1
+      "count": 1,
+      "display_name": "Феодальная дружина",
+      "literal_display_name": true
     },
     {
       "key": "bld_oob_feudal_retinue_xp_0_3_eq_0_65",
@@ -14431,7 +14769,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 0.65,
-      "count": 2
+      "count": 2,
+      "display_name": "Феодальная дружина",
+      "literal_display_name": true
     },
     {
       "key": "bor_oob_frontier_brigade_xp_0_15_eq_0_72",
@@ -14443,7 +14783,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 4
+      "count": 4,
+      "display_name": "Пограничная бригада",
+      "literal_display_name": true
     },
     {
       "key": "brn_oob_northern_line_brigade_xp_0_15_eq_0_72",
@@ -14455,7 +14797,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 3
+      "count": 3,
+      "display_name": "Северная линейная бригада",
+      "literal_display_name": true
     },
     {
       "key": "btl_oob_capital_guard_xp_0_23_eq_0_37",
@@ -14465,7 +14809,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.23,
       "start_equipment_factor": 0.37,
-      "count": 1
+      "count": 1,
+      "display_name": "Столичная гвардия",
+      "literal_display_name": true
     },
     {
       "key": "btl_oob_line_infantry_brigade_xp_0_15_eq_0_29",
@@ -14475,7 +14821,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.29,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "cin_oob_ash_clan_militia_xp_0_1_eq_0_22",
@@ -14485,7 +14833,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.22,
-      "count": 1
+      "count": 1,
+      "display_name": "Ополчение Пепельного клана",
+      "literal_display_name": true
     },
     {
       "key": "cin_oob_ash_clan_militia_xp_0_1_eq_0_25",
@@ -14495,7 +14845,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.25,
-      "count": 1
+      "count": 1,
+      "display_name": "Ополчение Пепельного клана",
+      "literal_display_name": true
     },
     {
       "key": "cof_oob_forest_commune_infantry_xp_0_22_eq_0_75",
@@ -14505,7 +14857,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.22,
       "start_equipment_factor": 0.75,
-      "count": 1
+      "count": 1,
+      "display_name": "Пехота лесных коммун",
+      "literal_display_name": true
     },
     {
       "key": "cof_oob_forest_watch_xp_0_16_eq_0_65",
@@ -14515,7 +14869,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.16,
       "start_equipment_factor": 0.65,
-      "count": 6
+      "count": 6,
+      "display_name": "Лесной дозор",
+      "literal_display_name": true
     },
     {
       "key": "csl_vorkerland_collapse_oob_csl_municipal_militia_xp_0_05_eq_0_55",
@@ -14525,7 +14881,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.05,
       "start_equipment_factor": 0.55,
-      "count": 1
+      "count": 1,
+      "display_name": "Муниципальное ополчение",
+      "literal_display_name": true
     },
     {
       "key": "csl_vorkerland_collapse_oob_csl_municipal_militia_xp_0_05_eq_0_6",
@@ -14535,7 +14893,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.05,
       "start_equipment_factor": 0.6,
-      "count": 2
+      "count": 2,
+      "display_name": "Муниципальное ополчение",
+      "literal_display_name": true
     },
     {
       "key": "dan_oob_line_infantry_brigade_xp_0_17_eq_0_32",
@@ -14545,7 +14905,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.17,
       "start_equipment_factor": 0.32,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "dol_oob_settler_militia_xp_0_15_eq_0_72",
@@ -14557,7 +14919,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 3
+      "count": 3,
+      "display_name": "Ополчение поселенцев",
+      "literal_display_name": true
     },
     {
       "key": "drv_oob_northern_militia_xp_0_15_eq_0_72",
@@ -14569,7 +14933,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 2
+      "count": 2,
+      "display_name": "Северное ополчение",
+      "literal_display_name": true
     },
     {
       "key": "dva_vorkerland_collapse_oob_dva_collapse_militia_xp_0_1_eq_0_75",
@@ -14579,7 +14945,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
-      "count": 3
+      "count": 3,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "eba_vorkerland_collapse_oob_eba_collapse_militia_xp_0_1_eq_0_7",
@@ -14589,7 +14957,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 4
+      "count": 4,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "efl_oob_line_infantry_brigade_xp_0_17_eq_0_32",
@@ -14599,7 +14969,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.17,
       "start_equipment_factor": 0.32,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "efl_oob_local_security_detachment_xp_0_1_eq_0_4",
@@ -14609,7 +14981,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.4,
-      "count": 2
+      "count": 2,
+      "display_name": "Местный охранный отряд",
+      "literal_display_name": true
     },
     {
       "key": "efl_nam_resource_war_oob_efl_restoration_brigade_xp_0_2_eq_0_8",
@@ -14619,7 +14993,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.8,
-      "count": 1
+      "count": 1,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "efl_nam_resource_war_oob_efl_restoration_brigade_xp_0_25_eq_0_85",
@@ -14629,7 +15005,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 0.85,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "egc_vorkerland_collapse_oob_egc_collapse_militia_xp_0_1_eq_0_7",
@@ -14639,7 +15017,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 3
+      "count": 3,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "egc_vorkerland_collapse_oob_egc_collapse_militia_xp_0_1_eq_0_75",
@@ -14649,7 +15029,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "eln_oob_northern_line_brigade_xp_0_15_eq_0_72",
@@ -14661,7 +15043,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 4
+      "count": 4,
+      "display_name": "Северная линейная бригада",
+      "literal_display_name": true
     },
     {
       "key": "ert_vorkerland_collapse_oob_ert_collapse_militia_xp_0_1_eq_0_85",
@@ -14671,7 +15055,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.85,
-      "count": 10
+      "count": 10,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "eyr_vorkerland_collapse_oob_eyr_collapse_militia_xp_0_1_eq_0_7",
@@ -14681,7 +15067,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 3
+      "count": 3,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "eyr_vorkerland_collapse_oob_eyr_collapse_militia_xp_0_1_eq_0_75",
@@ -14691,7 +15079,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
-      "count": 3
+      "count": 3,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "frs_oob_northern_militia_xp_0_15_eq_0_72",
@@ -14703,7 +15093,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 2
+      "count": 2,
+      "display_name": "Северное ополчение",
+      "literal_display_name": true
     },
     {
       "key": "glp_oob_prismatic_guard_xp_0_15_eq_0_5",
@@ -14713,7 +15105,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.5,
-      "count": 1
+      "count": 1,
+      "display_name": "Призматическая гвардия",
+      "literal_display_name": true
     },
     {
       "key": "hon_oob_northern_line_brigade_xp_0_15_eq_0_72",
@@ -14725,7 +15119,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 4
+      "count": 4,
+      "display_name": "Северная линейная бригада",
+      "literal_display_name": true
     },
     {
       "key": "iba_vorkerland_collapse_oob_iba_border_rifles_xp_0_15_eq_0_8",
@@ -14735,7 +15131,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.8,
-      "count": 1
+      "count": 1,
+      "display_name": "Пограничные стрелки",
+      "literal_display_name": true
     },
     {
       "key": "iba_vorkerland_collapse_oob_iba_border_rifles_xp_0_2_eq_0_85",
@@ -14745,7 +15143,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.85,
-      "count": 2
+      "count": 2,
+      "display_name": "Пограничные стрелки",
+      "literal_display_name": true
     },
     {
       "key": "ibl_vorkerland_collapse_oob_ibl_frontier_brigade_xp_0_15_eq_0_8",
@@ -14755,7 +15155,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.8,
-      "count": 2
+      "count": 2,
+      "display_name": "Пограничная бригада",
+      "literal_display_name": true
     },
     {
       "key": "ibl_vorkerland_collapse_oob_ibl_frontier_brigade_xp_0_2_eq_0_85",
@@ -14765,7 +15167,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.85,
-      "count": 2
+      "count": 2,
+      "display_name": "Пограничная бригада",
+      "literal_display_name": true
     },
     {
       "key": "irt_vorkerland_collapse_oob_irt_collapse_militia_xp_0_1_eq_0_85",
@@ -14775,7 +15179,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.85,
-      "count": 11
+      "count": 11,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "iia_oob_island_garrison_xp_0_12_eq_0_72",
@@ -14785,7 +15191,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.12,
       "start_equipment_factor": 0.72,
-      "count": 1
+      "count": 1,
+      "display_name": "Островной гарнизон",
+      "literal_display_name": true
     },
     {
       "key": "ivn_oob_capital_guard_xp_0_3_eq_0_85",
@@ -14795,7 +15203,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 0.85,
-      "count": 1
+      "count": 1,
+      "display_name": "Столичная гвардия",
+      "literal_display_name": true
     },
     {
       "key": "ivn_oob_capital_guard_xp_0_35_eq_0_9",
@@ -14805,7 +15215,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.35,
       "start_equipment_factor": 0.9,
-      "count": 1
+      "count": 1,
+      "display_name": "Столичная гвардия",
+      "literal_display_name": true
     },
     {
       "key": "ivn_oob_line_infantry_brigade_xp_0_18_eq_0_78",
@@ -14815,7 +15227,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.18,
       "start_equipment_factor": 0.78,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "ivn_oob_line_infantry_brigade_xp_0_2_eq_0_78",
@@ -14825,7 +15239,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.78,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "ivn_oob_line_infantry_brigade_xp_0_2_eq_0_8",
@@ -14835,7 +15251,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.8,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "ivn_oob_line_infantry_brigade_xp_0_22_eq_0_8",
@@ -14845,7 +15263,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.22,
       "start_equipment_factor": 0.8,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "ivn_oob_line_infantry_brigade_xp_0_22_eq_0_82",
@@ -14855,7 +15275,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.22,
       "start_equipment_factor": 0.82,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "ivn_oob_local_security_detachment_xp_0_12_eq_0_7",
@@ -14865,7 +15287,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.12,
       "start_equipment_factor": 0.7,
-      "count": 2
+      "count": 2,
+      "display_name": "Местный охранный отряд",
+      "literal_display_name": true
     },
     {
       "key": "ivn_oob_local_security_detachment_xp_0_12_eq_0_72",
@@ -14875,7 +15299,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.12,
       "start_equipment_factor": 0.72,
-      "count": 2
+      "count": 2,
+      "display_name": "Местный охранный отряд",
+      "literal_display_name": true
     },
     {
       "key": "kdr_oob_caravan_guard_xp_0_1_eq_0_45",
@@ -14885,7 +15311,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.45,
-      "count": 1
+      "count": 1,
+      "display_name": "Караванная стража",
+      "literal_display_name": true
     },
     {
       "key": "kdr_oob_caravan_guard_xp_0_15_eq_0_55",
@@ -14895,7 +15323,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.55,
-      "count": 1
+      "count": 1,
+      "display_name": "Караванная стража",
+      "literal_display_name": true
     },
     {
       "key": "khv_oob_northern_line_brigade_xp_0_15_eq_0_72",
@@ -14907,7 +15337,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 1
+      "count": 1,
+      "display_name": "Северная линейная бригада",
+      "literal_display_name": true
     },
     {
       "key": "krl_oob_northern_line_brigade_xp_0_15_eq_0_72",
@@ -14919,7 +15351,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 3
+      "count": 3,
+      "display_name": "Северная линейная бригада",
+      "literal_display_name": true
     },
     {
       "key": "krm_oob_frontier_brigade_xp_0_15_eq_0_72",
@@ -14931,7 +15365,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 4
+      "count": 4,
+      "display_name": "Пограничная бригада",
+      "literal_display_name": true
     },
     {
       "key": "kyz_oob_qanat_guard_xp_0_15_eq_0_5",
@@ -14941,7 +15377,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.5,
-      "count": 1
+      "count": 1,
+      "display_name": "Стража арыков",
+      "literal_display_name": true
     },
     {
       "key": "lmn_oob_frontier_brigade_xp_0_15_eq_0_72",
@@ -14953,7 +15391,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 3
+      "count": 3,
+      "display_name": "Пограничная бригада",
+      "literal_display_name": true
     },
     {
       "key": "lys_oob_northern_line_brigade_xp_0_15_eq_0_72",
@@ -14965,7 +15405,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 3
+      "count": 3,
+      "display_name": "Северная линейная бригада",
+      "literal_display_name": true
     },
     {
       "key": "mlr_vorkerland_collapse_oob_mlr_collapse_militia_xp_0_1_eq_0_85",
@@ -14975,7 +15417,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.85,
-      "count": 11
+      "count": 11,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "mon_oob_imperial_frontier_brigade_xp_0_2_eq_1",
@@ -14987,7 +15431,9 @@
       ],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 1.0,
-      "count": 8
+      "count": 8,
+      "display_name": "Имперская пограничная бригада",
+      "literal_display_name": true
     },
     {
       "key": "mon_oob_imperial_line_division_xp_0_3_eq_1",
@@ -14999,7 +15445,9 @@
       ],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1.0,
-      "count": 28
+      "count": 28,
+      "display_name": "Имперская линейная дивизия",
+      "literal_display_name": true
     },
     {
       "key": "mzr_oob_cistern_watch_xp_0_1_eq_0_45",
@@ -15009,7 +15457,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.45,
-      "count": 1
+      "count": 1,
+      "display_name": "Охрана водохранилищ",
+      "literal_display_name": true
     },
     {
       "key": "mzr_oob_cistern_watch_xp_0_2_eq_0_55",
@@ -15019,7 +15469,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.55,
-      "count": 1
+      "count": 1,
+      "display_name": "Охрана водохранилищ",
+      "literal_display_name": true
     },
     {
       "key": "nam_oob_line_infantry_brigade_xp_0_15_eq_0_29",
@@ -15029,7 +15481,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.29,
-      "count": 1
+      "count": 1,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "nam_oob_local_security_detachment_xp_0_1_eq_0_38",
@@ -15039,7 +15493,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.38,
-      "count": 2
+      "count": 2,
+      "display_name": "Местный охранный отряд",
+      "literal_display_name": true
     },
     {
       "key": "nam_resource_war_oob_capital_guard_xp_0_45_eq_0_9",
@@ -15049,7 +15505,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.45,
       "start_equipment_factor": 0.9,
-      "count": 1
+      "count": 1,
+      "display_name": "Столичная гвардия",
+      "literal_display_name": true
     },
     {
       "key": "nam_resource_war_oob_line_infantry_brigade_xp_0_35_eq_0_95",
@@ -15059,7 +15517,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.35,
       "start_equipment_factor": 0.95,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "ndn_vorkerland_collapse_oob_ndn_collapse_militia_xp_0_1_eq_0_7",
@@ -15071,7 +15531,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение Нордена",
+      "literal_display_name": true
     },
     {
       "key": "ndn_vorkerland_collapse_oob_ndn_collapse_militia_xp_0_1_eq_0_75",
@@ -15083,7 +15545,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение Нордена",
+      "literal_display_name": true
     },
     {
       "key": "nod_oob_cussington_guard_xp_0_28_eq_0_8",
@@ -15093,7 +15557,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.28,
       "start_equipment_factor": 0.8,
-      "count": 6
+      "count": 6,
+      "display_name": "Куссингтонская гвардия",
+      "literal_display_name": true
     },
     {
       "key": "nod_oob_cussington_security_xp_0_15_eq_0_6",
@@ -15103,7 +15569,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.6,
-      "count": 14
+      "count": 14,
+      "display_name": "Куссингтонская охрана",
+      "literal_display_name": true
     },
     {
       "key": "nod_oob_nodral_line_infantry_xp_0_2_eq_0_7",
@@ -15113,7 +15581,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.7,
-      "count": 14
+      "count": 14,
+      "display_name": "Линейная пехота Нодрула",
+      "literal_display_name": true
     },
     {
       "key": "nod_oob_nodral_armored_group_xp_0_3_eq_0_8",
@@ -15123,7 +15593,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 0.8,
-      "count": 2
+      "count": 2,
+      "display_name": "Бронегруппа Нодрула",
+      "literal_display_name": true
     },
     {
       "key": "nod_oob_nodral_mountain_infantry_xp_0_32_eq_0_8",
@@ -15133,7 +15605,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.32,
       "start_equipment_factor": 0.8,
-      "count": 2
+      "count": 2,
+      "display_name": "Горная пехота Нодрула",
+      "literal_display_name": true
     },
     {
       "key": "nvr_oob_northern_line_brigade_xp_0_15_eq_0_72",
@@ -15145,7 +15619,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 3
+      "count": 3,
+      "display_name": "Северная линейная бригада",
+      "literal_display_name": true
     },
     {
       "key": "orv_oob_northern_line_brigade_xp_0_15_eq_0_72",
@@ -15157,7 +15633,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 1
+      "count": 1,
+      "display_name": "Северная линейная бригада",
+      "literal_display_name": true
     },
     {
       "key": "osf_oob_marrow_guard_xp_0_18_eq_0_32",
@@ -15167,7 +15645,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.18,
       "start_equipment_factor": 0.32,
-      "count": 1
+      "count": 1,
+      "display_name": "Костяная гвардия",
+      "literal_display_name": true
     },
     {
       "key": "osf_oob_ossifractian_boneband_xp_0_1_eq_0_22",
@@ -15177,7 +15657,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.22,
-      "count": 1
+      "count": 1,
+      "display_name": "Дружина костоломов",
+      "literal_display_name": true
     },
     {
       "key": "osf_oob_ossifractian_boneband_xp_0_12_eq_0_25",
@@ -15187,7 +15669,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.12,
       "start_equipment_factor": 0.25,
-      "count": 1
+      "count": 1,
+      "display_name": "Дружина костоломов",
+      "literal_display_name": true
     },
     {
       "key": "osv_vorkerland_collapse_oob_osv_collapse_militia_xp_0_1_eq_0_7",
@@ -15199,7 +15683,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение Оствина",
+      "literal_display_name": true
     },
     {
       "key": "osv_vorkerland_collapse_oob_osv_collapse_militia_xp_0_1_eq_0_75",
@@ -15211,7 +15697,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение Оствина",
+      "literal_display_name": true
     },
     {
       "key": "piv_oob_line_infantry_brigade_xp_0_15_eq_0_29",
@@ -15221,7 +15709,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.29,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "psd_vorkerland_collapse_oob_psd_collapse_militia_xp_0_1_eq_0_75",
@@ -15231,7 +15721,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
-      "count": 3
+      "count": 3,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "psd_vorkerland_collapse_oob_psd_collapse_militia_xp_0_1_eq_0_8",
@@ -15241,7 +15733,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.8,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "pwr_oob_capital_guard_xp_0_26_eq_0_55",
@@ -15251,7 +15745,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.26,
       "start_equipment_factor": 0.55,
-      "count": 1
+      "count": 1,
+      "display_name": "Столичная гвардия",
+      "literal_display_name": true
     },
     {
       "key": "pwr_oob_line_infantry_brigade_xp_0_17_eq_0_55",
@@ -15261,7 +15757,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.17,
       "start_equipment_factor": 0.55,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "pwr_oob_local_security_detachment_xp_0_1_eq_0_7",
@@ -15271,7 +15769,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 2
+      "count": 2,
+      "display_name": "Местный охранный отряд",
+      "literal_display_name": true
     },
     {
       "key": "rev_vorkerland_collapse_oob_rev_collapse_militia_xp_0_1_eq_0_7",
@@ -15283,7 +15783,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 3
+      "count": 3,
+      "display_name": "Ополчение Ревеля",
+      "literal_display_name": true
     },
     {
       "key": "rev_vorkerland_collapse_oob_rev_collapse_militia_xp_0_1_eq_0_75",
@@ -15295,7 +15797,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение Ревеля",
+      "literal_display_name": true
     },
     {
       "key": "rhm_oob_well_wardens_xp_0_1_eq_0_45",
@@ -15305,7 +15809,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.45,
-      "count": 1
+      "count": 1,
+      "display_name": "Смотрители колодцев",
+      "literal_display_name": true
     },
     {
       "key": "rin_oob_palatine_line_division_xp_0_25_eq_0_86",
@@ -15317,7 +15823,9 @@
       ],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 0.86,
-      "count": 5
+      "count": 5,
+      "display_name": "Палатинская линейная дивизия",
+      "literal_display_name": true
     },
     {
       "key": "riv_vorkerland_collapse_oob_riv_collapse_militia_xp_0_1_eq_0_7",
@@ -15329,7 +15837,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 3
+      "count": 3,
+      "display_name": "Ополчение Ривена",
+      "literal_display_name": true
     },
     {
       "key": "riv_vorkerland_collapse_oob_riv_collapse_militia_xp_0_1_eq_0_75",
@@ -15341,7 +15851,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
-      "count": 3
+      "count": 3,
+      "display_name": "Ополчение Ривена",
+      "literal_display_name": true
     },
     {
       "key": "rly_oob_settler_militia_xp_0_15_eq_0_72",
@@ -15353,7 +15865,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 1
+      "count": 1,
+      "display_name": "Ополчение поселенцев",
+      "literal_display_name": true
     },
     {
       "key": "rom_oob_line_infantry_brigade_xp_0_15_eq_0_55",
@@ -15363,7 +15877,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.55,
-      "count": 1
+      "count": 1,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "rom_oob_local_security_detachment_xp_0_12_eq_0_65",
@@ -15373,7 +15889,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.12,
       "start_equipment_factor": 0.65,
-      "count": 2
+      "count": 2,
+      "display_name": "Местный охранный отряд",
+      "literal_display_name": true
     },
     {
       "key": "rus_oob_rusnian_rifle_brigade_xp_0_17_eq_0_32",
@@ -15383,7 +15901,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.17,
       "start_equipment_factor": 0.32,
-      "count": 2
+      "count": 2,
+      "display_name": "Стрелковая бригада ханства",
+      "literal_display_name": true
     },
     {
       "key": "rza_vorkerland_collapse_oob_rza_collapse_militia_xp_0_1_eq_0_85",
@@ -15393,7 +15913,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.85,
-      "count": 12
+      "count": 12,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "sca_vorkerland_collapse_oob_sca_collapse_militia_xp_0_1_eq_0_85",
@@ -15403,7 +15925,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.85,
-      "count": 11
+      "count": 11,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "sdr_oob_dry_river_patrol_xp_0_2_eq_0_5",
@@ -15413,7 +15937,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.5,
-      "count": 1
+      "count": 1,
+      "display_name": "Патруль Сухой реки",
+      "literal_display_name": true
     },
     {
       "key": "shl_oob_furnace_guard_xp_0_1_eq_0_45",
@@ -15423,7 +15949,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.45,
-      "count": 1
+      "count": 1,
+      "display_name": "Гвардия Горнила",
+      "literal_display_name": true
     },
     {
       "key": "shl_oob_furnace_guard_xp_0_2_eq_0_55",
@@ -15433,7 +15961,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.55,
-      "count": 1
+      "count": 1,
+      "display_name": "Гвардия Горнила",
+      "literal_display_name": true
     },
     {
       "key": "shl_oob_khazar_guard_xp_0_25_eq_0_7",
@@ -15443,7 +15973,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 0.7,
-      "count": 1
+      "count": 1,
+      "display_name": "Хазарская стража",
+      "literal_display_name": true
     },
     {
       "key": "shl_oob_conclave_line_brigade_xp_0_15_eq_0_6",
@@ -15453,7 +15985,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.6,
-      "count": 1
+      "count": 1,
+      "display_name": "Линейная бригада Конклава",
+      "literal_display_name": true
     },
     {
       "key": "shl_oob_conclave_line_brigade_xp_0_1_eq_0_55",
@@ -15463,7 +15997,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.55,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная бригада Конклава",
+      "literal_display_name": true
     },
     {
       "key": "skn_oob_northern_line_brigade_xp_0_15_eq_0_72",
@@ -15475,7 +16011,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 5
+      "count": 5,
+      "display_name": "Северная линейная бригада",
+      "literal_display_name": true
     },
     {
       "key": "sla_vorkerland_collapse_oob_sla_collapse_militia_xp_0_1_eq_0_85",
@@ -15485,7 +16023,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.85,
-      "count": 7
+      "count": 7,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "slf_nam_resource_war_oob_svetlogorsk_insurgent_corps_xp_0_3_eq_0_9",
@@ -15495,7 +16035,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 0.9,
-      "count": 1
+      "count": 1,
+      "display_name": "Светлогорский повстанческий корпус",
+      "literal_display_name": true
     },
     {
       "key": "slf_nam_resource_war_oob_svetlogorsk_insurgent_corps_xp_0_35_eq_0_95",
@@ -15505,7 +16047,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.35,
       "start_equipment_factor": 0.95,
-      "count": 1
+      "count": 1,
+      "display_name": "Светлогорский повстанческий корпус",
+      "literal_display_name": true
     },
     {
       "key": "slf_nam_resource_war_oob_svetlogorsk_insurgent_corps_xp_0_4_eq_0_95",
@@ -15515,7 +16059,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.4,
       "start_equipment_factor": 0.95,
-      "count": 1
+      "count": 1,
+      "display_name": "Светлогорский повстанческий корпус",
+      "literal_display_name": true
     },
     {
       "key": "sol_oob_line_infantry_brigade_xp_0_15_eq_0_6",
@@ -15525,7 +16071,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.6,
-      "count": 1
+      "count": 1,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "sol_oob_local_security_detachment_xp_0_1_eq_0_7",
@@ -15535,7 +16083,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 2
+      "count": 2,
+      "display_name": "Местный охранный отряд",
+      "literal_display_name": true
     },
     {
       "key": "sra_vorkerland_collapse_oob_sra_collapse_militia_xp_0_1_eq_0_7",
@@ -15545,7 +16095,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "sra_vorkerland_collapse_oob_sra_collapse_militia_xp_0_1_eq_0_75",
@@ -15555,7 +16107,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
-      "count": 1
+      "count": 1,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "stp_oob_capital_guard_xp_0_41_eq_0_75",
@@ -15565,7 +16119,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.41,
       "start_equipment_factor": 0.75,
-      "count": 1
+      "count": 1,
+      "display_name": "Столичная гвардия",
+      "literal_display_name": true
     },
     {
       "key": "stp_oob_police_division_xp_0_28_eq_0_61",
@@ -15575,7 +16131,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.28,
       "start_equipment_factor": 0.61,
-      "count": 10
+      "count": 10,
+      "display_name": "Полицейская дивизия",
+      "literal_display_name": true
     },
     {
       "key": "stp_oob_regular_army_xp_0_33_eq_0_69",
@@ -15585,7 +16143,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.33,
       "start_equipment_factor": 0.69,
-      "count": 19
+      "count": 19,
+      "display_name": "Регулярная армия",
+      "literal_display_name": true
     },
     {
       "key": "swb_vorkerland_collapse_oob_swb_collapse_militia_xp_0_1_eq_0_7",
@@ -15597,7 +16157,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 3
+      "count": 3,
+      "display_name": "Ополчение Старого Воркенсберга",
+      "literal_display_name": true
     },
     {
       "key": "swb_vorkerland_collapse_oob_swb_collapse_militia_xp_0_1_eq_0_75",
@@ -15609,7 +16171,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
-      "count": 1
+      "count": 1,
+      "display_name": "Ополчение Старого Воркенсберга",
+      "literal_display_name": true
     },
     {
       "key": "tff_oob_capital_guard_xp_0_28_eq_0_8",
@@ -15619,7 +16183,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.28,
       "start_equipment_factor": 0.8,
-      "count": 2
+      "count": 2,
+      "display_name": "Столичная гвардия",
+      "literal_display_name": true
     },
     {
       "key": "tff_oob_line_infantry_brigade_xp_0_22_eq_0_75",
@@ -15629,7 +16195,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.22,
       "start_equipment_factor": 0.75,
-      "count": 4
+      "count": 4,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "tff_oob_local_security_detachment_xp_0_16_eq_0_65",
@@ -15639,7 +16207,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.16,
       "start_equipment_factor": 0.65,
-      "count": 10
+      "count": 10,
+      "display_name": "Местный охранный отряд",
+      "literal_display_name": true
     },
     {
       "key": "tgd_vorkerland_collapse_oob_tgd_urban_guard_xp_0_15_eq_0_8",
@@ -15649,7 +16219,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.8,
-      "count": 3
+      "count": 3,
+      "display_name": "Городская гвардия",
+      "literal_display_name": true
     },
     {
       "key": "tmr_oob_northern_militia_xp_0_15_eq_0_72",
@@ -15661,7 +16233,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 4
+      "count": 4,
+      "display_name": "Северное ополчение",
+      "literal_display_name": true
     },
     {
       "key": "tru_oob_line_infantry_brigade_xp_0_17_eq_0_55",
@@ -15671,7 +16245,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.17,
       "start_equipment_factor": 0.55,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "tru_oob_local_security_detachment_xp_0_12_eq_0_65",
@@ -15681,7 +16257,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.12,
       "start_equipment_factor": 0.65,
-      "count": 1
+      "count": 1,
+      "display_name": "Местный охранный отряд",
+      "literal_display_name": true
     },
     {
       "key": "tva_vorkerland_collapse_oob_tva_collapse_militia_xp_0_18_eq_0_85",
@@ -15691,7 +16269,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.18,
       "start_equipment_factor": 0.85,
-      "count": 10
+      "count": 10,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "tva_vorkerland_collapse_oob_tva_collapse_militia_xp_0_2_eq_0_88",
@@ -15701,7 +16281,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.88,
-      "count": 3
+      "count": 3,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "tva_vorkerland_collapse_oob_tva_mobile_test_group_xp_0_45_eq_0_95",
@@ -15711,7 +16293,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.45,
       "start_equipment_factor": 0.95,
-      "count": 1
+      "count": 1,
+      "display_name": "Опытная мобильная группа",
+      "literal_display_name": true
     },
     {
       "key": "tva_vorkerland_collapse_oob_tva_collapse_militia_xp_0_2_eq_0_85",
@@ -15721,7 +16305,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.85,
-      "count": 1
+      "count": 1,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "tva_vorkerland_collapse_oob_tva_collapse_militia_xp_0_1_eq_0_85",
@@ -15731,7 +16317,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.85,
-      "count": 4
+      "count": 4,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "vad_oob_armi_guard_xp_0_35_eq_0_85",
@@ -15741,7 +16329,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.35,
       "start_equipment_factor": 0.85,
-      "count": 1
+      "count": 1,
+      "display_name": "Гвардия Арми",
+      "literal_display_name": true
     },
     {
       "key": "vad_oob_armi_security_detachment_xp_0_2_eq_0_75",
@@ -15751,7 +16341,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.75,
-      "count": 3
+      "count": 3,
+      "display_name": "Охранный отряд Арми",
+      "literal_display_name": true
     },
     {
       "key": "vad_oob_armi_security_detachment_xp_0_25_eq_0_75",
@@ -15761,7 +16353,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 0.75,
-      "count": 2
+      "count": 2,
+      "display_name": "Охранный отряд Арми",
+      "literal_display_name": true
     },
     {
       "key": "vad_oob_vadl_mechanized_infantry_xp_0_28_eq_0_85",
@@ -15771,7 +16365,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.28,
       "start_equipment_factor": 0.85,
-      "count": 6
+      "count": 6,
+      "display_name": "Механизированная пехота Вадла",
+      "literal_display_name": true
     },
     {
       "key": "val_oob_kefreyt_contract_infantry_xp_0_53_eq_0_7",
@@ -15781,7 +16377,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.53,
       "start_equipment_factor": 0.7,
-      "count": 10
+      "count": 10,
+      "display_name": "Контрактная пехота Кефрейта",
+      "literal_display_name": true
     },
     {
       "key": "val_oob_kefreyt_line_brigade_xp_0_61_eq_0_75",
@@ -15791,7 +16389,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.61,
       "start_equipment_factor": 0.75,
-      "count": 1
+      "count": 1,
+      "display_name": "Линейная бригада Кефрейта",
+      "literal_display_name": true
     },
     {
       "key": "val_oob_kefreyt_security_detachment_xp_0_48_eq_0_63",
@@ -15801,7 +16401,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.48,
       "start_equipment_factor": 0.63,
-      "count": 3
+      "count": 3,
+      "display_name": "Охранный отряд Кефрейта",
+      "literal_display_name": true
     },
     {
       "key": "ves_oob_northern_line_brigade_xp_0_15_eq_0_72",
@@ -15813,7 +16415,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 4
+      "count": 4,
+      "display_name": "Северная линейная бригада",
+      "literal_display_name": true
     },
     {
       "key": "vhv_vorkerland_collapse_oob_vhv_collapse_militia_xp_0_1_eq_0_7",
@@ -15825,7 +16429,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 3
+      "count": 3,
+      "display_name": "Ополчение верховьев",
+      "literal_display_name": true
     },
     {
       "key": "vhv_vorkerland_collapse_oob_vhv_collapse_militia_xp_0_1_eq_0_75",
@@ -15837,7 +16443,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение верховьев",
+      "literal_display_name": true
     },
     {
       "key": "vla_oob_line_infantry_brigade_xp_0_17_eq_0_55",
@@ -15847,7 +16455,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.17,
       "start_equipment_factor": 0.55,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "vla_oob_local_security_detachment_xp_0_12_eq_0_7",
@@ -15857,7 +16467,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.12,
       "start_equipment_factor": 0.7,
-      "count": 2
+      "count": 2,
+      "display_name": "Местный охранный отряд",
+      "literal_display_name": true
     },
     {
       "key": "wcg_oob_filtration_battalion_xp_0_15_eq_0_72",
@@ -15869,7 +16481,9 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 5
+      "count": 5,
+      "display_name": "Фильтрационный батальон",
+      "literal_display_name": true
     },
     {
       "key": "wef_oob_frontier_watch_xp_0_15_eq_0_5",
@@ -15879,7 +16493,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.5,
-      "count": 1
+      "count": 1,
+      "display_name": "Пограничный дозор",
+      "literal_display_name": true
     },
     {
       "key": "wit_oob_capital_guard_xp_0_26_eq_0_4",
@@ -15889,7 +16505,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.26,
       "start_equipment_factor": 0.4,
-      "count": 1
+      "count": 1,
+      "display_name": "Столичная гвардия",
+      "literal_display_name": true
     },
     {
       "key": "wit_oob_line_infantry_brigade_xp_0_17_eq_0_32",
@@ -15899,7 +16517,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.17,
       "start_equipment_factor": 0.32,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "wpa_vorkerland_collapse_oob_wpa_collapse_militia_xp_0_1_eq_0_7",
@@ -15909,7 +16529,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "wpa_vorkerland_collapse_oob_wpa_collapse_militia_xp_0_1_eq_0_75",
@@ -15919,7 +16541,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "wps_vorkerland_collapse_oob_wps_collapse_militia_xp_0_1_eq_0_7",
@@ -15929,7 +16553,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "wps_vorkerland_collapse_oob_wps_collapse_militia_xp_0_1_eq_0_75",
@@ -15939,7 +16565,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение распада",
+      "literal_display_name": true
     },
     {
       "key": "wrk_oob_division_de_infanteria_xp_0_47_eq_0_85",
@@ -15949,7 +16577,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.47,
       "start_equipment_factor": 0.85,
-      "count": 6
+      "count": 6,
+      "display_name": "Пехотная дивизия",
+      "literal_display_name": true
     },
     {
       "key": "wrk_oob_industrial_guard_xp_0_55_eq_0_75",
@@ -15959,7 +16589,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.55,
       "start_equipment_factor": 0.75,
-      "count": 1
+      "count": 1,
+      "display_name": "Промышленная гвардия",
+      "literal_display_name": true
     },
     {
       "key": "wrk_oob_workerland_militia_xp_0_2_eq_0_75",
@@ -15969,7 +16601,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.75,
-      "count": 3
+      "count": 3,
+      "display_name": "Ополчение Воркерленда",
+      "literal_display_name": true
     },
     {
       "key": "wrk_oob_workerland_militia_xp_0_42_eq_0_75",
@@ -15979,7 +16613,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.42,
       "start_equipment_factor": 0.75,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение Воркерленда",
+      "literal_display_name": true
     },
     {
       "key": "wtd_vorkerland_collapse_oob_wtd_technical_guard_xp_0_15_eq_0_8",
@@ -15989,7 +16625,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.8,
-      "count": 2
+      "count": 2,
+      "display_name": "Техническая гвардия",
+      "literal_display_name": true
     },
     {
       "key": "wtd_vorkerland_collapse_oob_wtd_technical_guard_xp_0_2_eq_0_85",
@@ -15999,7 +16637,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.85,
-      "count": 2
+      "count": 2,
+      "display_name": "Техническая гвардия",
+      "literal_display_name": true
     },
     {
       "key": "yor_vorkerland_collapse_oob_yor_collapse_militia_xp_0_1_eq_0_7",
@@ -16011,7 +16651,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 3
+      "count": 3,
+      "display_name": "Ополчение Йора",
+      "literal_display_name": true
     },
     {
       "key": "yor_vorkerland_collapse_oob_yor_collapse_militia_xp_0_1_eq_0_75",
@@ -16023,7 +16665,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
-      "count": 2
+      "count": 2,
+      "display_name": "Ополчение Йора",
+      "literal_display_name": true
     },
     {
       "key": "ypr_oob_capital_guard_xp_0_28_eq_0_8",
@@ -16033,7 +16677,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.28,
       "start_equipment_factor": 0.8,
-      "count": 2
+      "count": 2,
+      "display_name": "Столичная гвардия",
+      "literal_display_name": true
     },
     {
       "key": "ypr_oob_line_infantry_brigade_xp_0_22_eq_0_75",
@@ -16043,7 +16689,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.22,
       "start_equipment_factor": 0.75,
-      "count": 6
+      "count": 6,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "ypr_oob_local_security_detachment_xp_0_16_eq_0_65",
@@ -16053,7 +16701,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.16,
       "start_equipment_factor": 0.65,
-      "count": 10
+      "count": 10,
+      "display_name": "Местный охранный отряд",
+      "literal_display_name": true
     },
     {
       "key": "zao_oob_line_infantry_brigade_xp_0_17_eq_0_65",
@@ -16063,7 +16713,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.17,
       "start_equipment_factor": 0.65,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "zao_oob_local_security_detachment_xp_0_1_eq_0_7",
@@ -16073,7 +16725,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 5
+      "count": 5,
+      "display_name": "Местный охранный отряд",
+      "literal_display_name": true
     },
     {
       "key": "zta_vorkerland_collapse_oob_zta_collapse_militia_xp_0_1_eq_0_75",
@@ -16085,7 +16739,9 @@
       ],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
-      "count": 3
+      "count": 3,
+      "display_name": "Ополчение Златоречья",
+      "literal_display_name": true
     },
     {
       "key": "ars_oob_northern_militia_xp_0_15_eq_0_72",
@@ -16095,7 +16751,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 1
+      "count": 1,
+      "display_name": "Северное ополчение",
+      "literal_display_name": true
     },
     {
       "key": "kdl_oob_northern_militia_xp_0_15_eq_0_72",
@@ -16105,7 +16763,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 1
+      "count": 1,
+      "display_name": "Северное ополчение",
+      "literal_display_name": true
     },
     {
       "key": "srv_oob_northern_line_brigade_xp_0_15_eq_0_72",
@@ -16115,7 +16775,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 2
+      "count": 2,
+      "display_name": "Северная линейная бригада",
+      "literal_display_name": true
     },
     {
       "key": "svl_oob_northern_militia_xp_0_15_eq_0_72",
@@ -16125,7 +16787,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 1
+      "count": 1,
+      "display_name": "Северное ополчение",
+      "literal_display_name": true
     },
     {
       "key": "vra_oob_northern_militia_xp_0_15_eq_0_72",
@@ -16135,7 +16799,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 1
+      "count": 1,
+      "display_name": "Северное ополчение",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_inner_frontier_effects_technical_reference_filtration_battalion",
@@ -16143,7 +16809,9 @@
       "kind": "technical_reference",
       "technical_name": "Filtration Battalion",
       "legacy_names": [],
-      "count": 1
+      "count": 1,
+      "display_name": "Фильтрационный батальон",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_rom_tru_effects_create_unit_line_infantry_brigade_xp_0_15_eq_0_7",
@@ -16153,7 +16821,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.7,
-      "count": 2
+      "count": 2,
+      "display_name": "Линейная пехотная бригада",
+      "literal_display_name": true
     },
     {
       "key": "val_cw_contract_formations_create_unit",
@@ -16163,7 +16833,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.5,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Контрактная пехота Кефрейта",
+      "literal_display_name": true
     },
     {
       "key": "cof_oob_old_grove_guard_xp_0_28_eq_0_8",
@@ -16173,7 +16845,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.28,
       "start_equipment_factor": 0.8,
-      "count": 1
+      "count": 1,
+      "display_name": "Стража Старой рощи",
+      "literal_display_name": true
     },
     {
       "key": "stp_cw_kefreyt_volunteer_division_create_unit",
@@ -16183,7 +16857,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.5,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Добровольческая дивизия Кефрейта",
+      "literal_display_name": true
     },
     {
       "key": "stp_cw_kefreyt_volunteer_division_cleanup",
@@ -16191,7 +16867,9 @@
       "kind": "technical_reference",
       "technical_name": "Kefreyt Volunteer Division",
       "legacy_names": [],
-      "count": 7
+      "count": 7,
+      "display_name": "Добровольческая дивизия Кефрейта",
+      "literal_display_name": true
     },
     {
       "key": "stp_cw_kefreyt_contract_infantry_cleanup",
@@ -16199,7 +16877,9 @@
       "kind": "technical_reference",
       "technical_name": "Kefreyt Contract Infantry",
       "legacy_names": [],
-      "count": 5
+      "count": 5,
+      "display_name": "Контрактная пехота Кефрейта",
+      "literal_display_name": true
     },
     {
       "key": "party_exile_brigade_create_unit",
@@ -16209,7 +16889,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Бригада партийных изгнанников",
+      "literal_display_name": true
     },
     {
       "key": "party_exile_brigade_unlock",
@@ -16217,7 +16899,9 @@
       "kind": "technical_reference",
       "technical_name": "Party Exile Brigade",
       "legacy_names": [],
-      "count": 1
+      "count": 1,
+      "display_name": "Бригада партийных изгнанников",
+      "literal_display_name": true
     },
     {
       "key": "val_focus_mountain_contractors_spawn",
@@ -16227,7 +16911,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Горнострелки-контрактники Кефрейта",
+      "literal_display_name": true
     },
     {
       "key": "val_focus_reserve_infantry_spawn",
@@ -16237,7 +16923,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Контрактная пехота Кефрейта",
+      "literal_display_name": true
     },
     {
       "key": "val_focus_marine_contract_group_spawn",
@@ -16247,7 +16935,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Контрактная группа морской пехоты Кефрейта",
+      "literal_display_name": true
     },
     {
       "key": "val_focus_shield_special_forces_spawn",
@@ -16257,7 +16947,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.5,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Щитовой спецназ Кефрейта",
+      "literal_display_name": true
     },
     {
       "key": "val_urban_breacher_trial_spawn",
@@ -16267,7 +16959,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Опытный отряд городского прорыва Кефрейта",
+      "literal_display_name": true
     },
     {
       "key": "val_crimson_trial_spawn",
@@ -16277,7 +16971,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Опытный штурмовой отряд Кефрейта",
+      "literal_display_name": true
     },
     {
       "key": "vel_oob_northern_militia_xp_0_15_eq_0_72",
@@ -16287,7 +16983,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 1
+      "count": 1,
+      "display_name": "Северное ополчение",
+      "literal_display_name": true
     },
     {
       "key": "shl_furnace_levy_paid_deployment",
@@ -16297,7 +16995,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Ополчение Горнила",
+      "literal_display_name": true
     },
     {
       "key": "shl_kyz_qanat_war_guard",
@@ -16307,7 +17007,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Стража арыков",
+      "literal_display_name": true
     },
     {
       "key": "shl_glp_port_war_guard",
@@ -16317,7 +17019,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Призматическая гвардия",
+      "literal_display_name": true
     },
     {
       "key": "shl_mzr_invasion_veterans",
@@ -16327,7 +17031,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Охрана водохранилищ",
+      "literal_display_name": true
     },
     {
       "key": "shl_mzr_invasion_watch",
@@ -16337,7 +17043,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Охрана водохранилищ",
+      "literal_display_name": true
     },
     {
       "key": "shl_mzr_invasion_capital_reserve",
@@ -16347,7 +17055,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Охрана водохранилищ",
+      "literal_display_name": true
     },
     {
       "key": "pio_oob_territorial_brigade",
@@ -16357,7 +17067,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 2
+      "count": 2,
+      "display_name": "Территориальная бригада",
+      "literal_display_name": true
     },
     {
       "key": "mrv_oob_territorial_brigade",
@@ -16367,7 +17079,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 2
+      "count": 2,
+      "display_name": "Территориальная бригада",
+      "literal_display_name": true
     },
     {
       "key": "rvn_oob_territorial_brigade",
@@ -16377,7 +17091,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 5
+      "count": 5,
+      "display_name": "Территориальная бригада",
+      "literal_display_name": true
     },
     {
       "key": "sfr_oob_territorial_brigade",
@@ -16387,7 +17103,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 3
+      "count": 3,
+      "display_name": "Территориальная бригада",
+      "literal_display_name": true
     },
     {
       "key": "flr_oob_territorial_brigade",
@@ -16397,7 +17115,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 4
+      "count": 4,
+      "display_name": "Территориальная бригада",
+      "literal_display_name": true
     },
     {
       "key": "prr_oob_territorial_brigade",
@@ -16407,7 +17127,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 1
+      "count": 1,
+      "display_name": "Территориальная бригада",
+      "literal_display_name": true
     },
     {
       "key": "ulv_oob_territorial_brigade",
@@ -16417,7 +17139,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 2
+      "count": 2,
+      "display_name": "Территориальная бригада",
+      "literal_display_name": true
     },
     {
       "key": "lur_oob_territorial_brigade",
@@ -16427,7 +17151,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 2
+      "count": 2,
+      "display_name": "Территориальная бригада",
+      "literal_display_name": true
     },
     {
       "key": "chd_oob_territorial_brigade",
@@ -16437,7 +17163,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 3
+      "count": 3,
+      "display_name": "Территориальная бригада",
+      "literal_display_name": true
     },
     {
       "key": "evr_oob_territorial_brigade",
@@ -16447,7 +17175,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 2
+      "count": 2,
+      "display_name": "Территориальная бригада",
+      "literal_display_name": true
     },
     {
       "key": "olr_oob_territorial_brigade",
@@ -16457,7 +17187,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 1
+      "count": 1,
+      "display_name": "Территориальная бригада",
+      "literal_display_name": true
     },
     {
       "key": "val_airship_spawn",
@@ -16467,7 +17199,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
-      "count": 2
+      "count": 2,
+      "display_name": "Дирижабль Кефрейта",
+      "literal_display_name": true
     },
     {
       "key": "rus_lab_airship_spawn",
@@ -16477,7 +17211,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 1,
+      "display_name": "Дирижабль ханства",
+      "literal_display_name": true
     },
     {
       "key": "rus_aimaq_levy_spawn",
@@ -16487,7 +17223,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.5,
-      "count": 2
+      "count": 2,
+      "display_name": "Аймачное ополчение",
+      "literal_display_name": true
     },
     {
       "key": "rus_aimaq_levy_disband",
@@ -16495,7 +17233,9 @@
       "kind": "technical_reference",
       "technical_name": "Aimaq Levy",
       "legacy_names": [],
-      "count": 1
+      "count": 1,
+      "display_name": "Аймачное ополчение",
+      "literal_display_name": true
     },
     {
       "key": "rus_hazard_brigade_recruitment",
@@ -16503,7 +17243,9 @@
       "kind": "technical_reference",
       "technical_name": "Khanate CBRN Brigade",
       "legacy_names": [],
-      "count": 1
+      "count": 1,
+      "display_name": "Бригада РХБ защиты ханства",
+      "literal_display_name": true
     },
     {
       "key": "bjk_oob_noble_guard_xp_0_25_eq_0_55",
@@ -16513,7 +17255,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 0.55,
-      "count": 1
+      "count": 1,
+      "display_name": "Дворянская гвардия",
+      "literal_display_name": true
     },
     {
       "key": "bld_oob_noble_guard_xp_0_3_eq_0_65",
@@ -16523,7 +17267,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 0.65,
-      "count": 1
+      "count": 1,
+      "display_name": "Дворянская гвардия",
+      "literal_display_name": true
     },
     {
       "key": "vad_oob_armi_security_detachment_xp_0_2_eq_0_8",
@@ -16533,7 +17279,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.8,
-      "count": 4
+      "count": 4,
+      "display_name": "Охранный отряд Арми",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_preparation_guard",
@@ -16543,7 +17291,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 1.0,
-      "count": 1
+      "count": 1,
+      "display_name": "Экстренное ополчение",
+      "literal_display_name": true
     },
     {
       "key": "adiscord_vorkerland_preparation_trained_guard",
@@ -16553,7 +17303,9 @@
       "legacy_names": [],
       "start_experience_factor": 0.5,
       "start_equipment_factor": 1.0,
-      "count": 1
+      "count": 1,
+      "display_name": "Экстренное ополчение",
+      "literal_display_name": true
     }
   ]
 }

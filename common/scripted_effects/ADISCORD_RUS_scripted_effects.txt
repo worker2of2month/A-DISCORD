@@ -1716,9 +1716,9 @@ RUS_levy_raise = {
 		RUS_bunker_refresh = yes
 		add_equipment_to_stockpile = { type = infantry_equipment amount = -2700 }
 		if = {
-			limit = { NOT = { has_template = "Aimaq Levy" } }
+			limit = { NOT = { has_template = "Аймачное ополчение" } }
 			division_template = {
-				name = "Aimaq Levy"
+				name = "Аймачное ополчение"
 				template_counter = 7
 				division_names_group = ADISCORD_INF_01
 				is_locked = yes
@@ -1731,12 +1731,12 @@ RUS_levy_raise = {
 		}
 		capital_scope = {
 			create_unit = {
-				division = "division_template = \"Aimaq Levy\" start_experience_factor = 0.1 start_equipment_factor = 0.5"
+				division = "division_template = \"Аймачное ополчение\" start_experience_factor = 0.1 start_equipment_factor = 0.5"
 				owner = RUS
 				allow_spawning_on_enemy_provs = no
 			}
 			create_unit = {
-				division = "division_template = \"Aimaq Levy\" start_experience_factor = 0.1 start_equipment_factor = 0.5"
+				division = "division_template = \"Аймачное ополчение\" start_experience_factor = 0.1 start_equipment_factor = 0.5"
 				owner = RUS
 				allow_spawning_on_enemy_provs = no
 			}
@@ -1752,7 +1752,7 @@ RUS_levies_monthly = {
 			check_variable = { var = RUS_levy_raised value = 0 compare = greater_than }
 			has_war = no
 		}
-		delete_unit = { division_template = "Aimaq Levy" disband = no }
+		delete_unit = { division_template = "Аймачное ополчение" disband = no }
 		set_variable = { var = RUS_levy_raised value = 0 }
 	}
 }
@@ -4532,9 +4532,9 @@ RUS_campaign_shutdown = {
 # Fixed formations share a locked template; ordinary recruitment stays available.
 RUS_prepare_hazard_template = {
 	if = {
-		limit = { NOT = { has_template = "Khanate CBRN Brigade" } }
+		limit = { NOT = { has_template = "Бригада РХБ защиты ханства" } }
 		division_template = {
-			name = "Khanate CBRN Brigade"
+			name = "Бригада РХБ защиты ханства"
 			is_locked = yes
 			template_counter = 2
 			division_names_group = ADISCORD_INF_01
@@ -4555,7 +4555,7 @@ RUS_prepare_hazard_template = {
 		}
 	}
 	set_division_force_allow_recruiting = {
-		division_template = "Khanate CBRN Brigade"
+		division_template = "Бригада РХБ защиты ханства"
 		force_allow_recruiting = yes
 	}
 }
@@ -4945,9 +4945,9 @@ RUS_lab_zeppelin_finish = {
 # The crew was taken from the recruit pool when the project was paid.
 RUS_lab_spawn_zeppelin = {
 	if = {
-		limit = { NOT = { has_template = "Khanate Airship" } }
+		limit = { NOT = { has_template = "Дирижабль ханства" } }
 		division_template = {
-			name = "Khanate Airship"
+			name = "Дирижабль ханства"
 			template_counter = 37
 			override_model = ADISCORD_zeppelin_entity
 			is_locked = yes
@@ -4958,7 +4958,7 @@ RUS_lab_spawn_zeppelin = {
 	}
 	capital_scope = {
 		create_unit = {
-			division = "name = \"Воздушный линкор «Цепелин»\" division_template = \"Khanate Airship\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			division = "name = \"Воздушный линкор «Цепелин»\" division_template = \"Дирижабль ханства\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 			owner = RUS
 			allow_spawning_on_enemy_provs = no
 		}

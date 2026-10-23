@@ -1,5 +1,5 @@
 division_template = {
-	name = "Collapse Militia"
+	name = "Ополчение распада"
 	template_counter = 7
 	division_names_group = DVA_COLLAPSE_INF_01
 	regiments = {
@@ -12,21 +12,21 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 6729
-		division_template = "Collapse Militia"
+		division_template = "Ополчение распада"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.75
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
 		location = 6729
-		division_template = "Collapse Militia"
+		division_template = "Ополчение распада"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.75
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 3 }
 		location = 5912
-		division_template = "Collapse Militia"
+		division_template = "Ополчение распада"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.75
 	}

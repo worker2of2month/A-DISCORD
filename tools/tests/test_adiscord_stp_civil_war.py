@@ -402,9 +402,9 @@ class CivilWarContracts(unittest.TestCase):
         templates = entries("history/units/ADISCORD_STP_civil_war_templates.txt")
         for template in templates:
             name = scalar(template.value, "name").strip('"')
-            if name in {"Stelander Assault Division", "Kefreyt Volunteer Division"}:
+            if name in {"Штурмовая дивизия Стеландера", "Добровольческая дивизия Кефрейта"}:
                 self.assertEqual(scalar(template.value, "priority"), "2")
-            elif name == "Stelander Territorial Brigade":
+            elif name == "Территориальная бригада Стеландера":
                 self.assertFalse(
                     any(e.key == "priority" and e.value == "2" for e in template.value)
                 )
@@ -1316,7 +1316,7 @@ class CivilWarContracts(unittest.TestCase):
             effect.index("add_manpower = -6000"),
         )
         self.assertIn("limit = { has_country_flag = STP_cw_rifles_paid }", effect)
-        self.assertIn('division_template = \\"Stelander Territorial Brigade\\"', spawn)
+        self.assertIn('division_template = \\"Территориальная бригада Стеландера\\"', spawn)
         template = read("history/units/ADISCORD_STP_civil_war_templates.txt")
         territorial = block(template, "division_template")
         battalions = len(re.findall(r"\bADISCORD_territorial\s*=", territorial))
@@ -1339,7 +1339,7 @@ class CivilWarContracts(unittest.TestCase):
             for e in entries("history/units/ADISCORD_STP_civil_war_templates.txt")
             if e.key == "division_template"
         }
-        for name in ("Stelander Territorial Brigade", "Stelander Assault Division"):
+        for name in ("Территориальная бригада Стеландера", "Штурмовая дивизия Стеландера"):
             self.assertIn(name, templates)
             settings = {
                 e.key: e.value for e in templates[name] if isinstance(e.value, str)
@@ -1348,32 +1348,32 @@ class CivilWarContracts(unittest.TestCase):
             self.assertEqual(settings.get("force_allow_recruiting", "no"), "yes", name)
         volunteer = {
             e.key: e.value
-            for e in templates["Kefreyt Volunteer Division"]
+            for e in templates["Добровольческая дивизия Кефрейта"]
             if isinstance(e.value, str)
         }
         self.assertEqual(volunteer.get("is_locked"), "yes")
         self.assertEqual(volunteer.get("force_allow_recruiting"), "no")
         apply = block(self.effects, "STP_cw_apply_wartime_template_locks")
         self.assertIn(
-            'division_template = "Stelander Territorial Brigade" is_locked = no', apply
+            'division_template = "Территориальная бригада Стеландера" is_locked = no', apply
         )
         self.assertIn(
-            'division_template = "Stelander Assault Division" is_locked = no', apply
+            'division_template = "Штурмовая дивизия Стеландера" is_locked = no', apply
         )
         self.assertIn(
-            'division_template = "Kefreyt Volunteer Division" is_locked = yes', apply
+            'division_template = "Добровольческая дивизия Кефрейта" is_locked = yes', apply
         )
         self.assertIn(
-            'division_template = "Kefreyt Contract Infantry" is_locked = yes', apply
+            'division_template = "Контрактная пехота Кефрейта" is_locked = yes', apply
         )
         self.assertIn("ADISCORD_STP_unlock_regular_army_templates = yes", apply)
         self.assertIn("limit = { tag = STP }", apply)
-        self.assertIn('has_template = "Kefreyt Volunteer Division"', apply)
+        self.assertIn('has_template = "Добровольческая дивизия Кефрейта"', apply)
         lock = block(self.effects, "ADISCORD_STP_lock_regular_army_templates")
         unlock = block(self.effects, "ADISCORD_STP_unlock_regular_army_templates")
-        for name in ("Police division", "Regular army", "Capital Guard"):
+        for name in ("Полицейская дивизия", "Регулярная армия", "Столичная гвардия"):
             self.assertIn('has_template = "' + name + '"', lock)
-        for name in ("Police division", "Regular army"):
+        for name in ("Полицейская дивизия", "Регулярная армия"):
             self.assertIn('has_template = "' + name + '"', unlock)
         apply_parsed = ast_block(
             entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
@@ -1414,9 +1414,9 @@ class CivilWarContracts(unittest.TestCase):
             for e in entries("history/units/ADISCORD_STP_civil_war_templates.txt")
             if e.key == "division_template"
         }
-        territorial = templates["Stelander Territorial Brigade"]
-        assault = templates["Stelander Assault Division"]
-        volunteer = templates["Kefreyt Volunteer Division"]
+        territorial = templates["Территориальная бригада Стеландера"]
+        assault = templates["Штурмовая дивизия Стеландера"]
+        volunteer = templates["Добровольческая дивизия Кефрейта"]
         self.assertFalse(any(e.key == "override_model" for e in territorial))
         self.assertFalse(any(e.key == "override_model" for e in assault))
         self.assertEqual(
@@ -1565,11 +1565,11 @@ class CivilWarContracts(unittest.TestCase):
 
     def test_stockpile_and_free_manpower_shares_are_conservative(self):
         start = block(self.effects, "STP_cw_start")
-        self.assertIn('division_template = "Regular army" disband = yes', start)
-        self.assertIn('division_template = "Police division" disband = yes', start)
+        self.assertIn('division_template = "Регулярная армия" disband = yes', start)
+        self.assertIn('division_template = "Полицейская дивизия" disband = yes', start)
         self.assertEqual(start.count("delete_unit = {"), 2)
         self.assertNotIn("delete_units =", start)
-        self.assertNotIn('division_template = "Capital Guard"', start)
+        self.assertNotIn('division_template = "Столичная гвардия"', start)
         self.assertNotIn("0.333333", start)
         self.assertIn("value = manpower", start)
         self.assertIn("value = -1", start)
@@ -7499,8 +7499,8 @@ class WartimeProgramContracts(unittest.TestCase):
                             if e.key == "set_division_template_lock"
                         ]
                         expected_locks = [
-                            (tag, "Stelander Territorial Brigade", "no"),
-                            (tag, "Stelander Assault Division", "no"),
+                            (tag, "Территориальная бригада Стеландера", "no"),
+                            (tag, "Штурмовая дивизия Стеландера", "no"),
                         ]
                         self.assertEqual(
                             set(locks), set(expected_locks) if loaded else set()
@@ -7936,7 +7936,7 @@ class WartimeProgramContracts(unittest.TestCase):
 
 
 class KefreytVolunteerContracts(unittest.TestCase):
-    template = "Kefreyt Volunteer Division"
+    template = "Добровольческая дивизия Кефрейта"
     price = {
         "infantry_equipment": 21330,
         "ADISCORD_squad_weapons_equipment": 144,
@@ -8175,7 +8175,7 @@ class KefreytVolunteerContracts(unittest.TestCase):
             ]
             expected = [
                 (e.key, tuple((c.key, c.value) for c in e.value))
-                for e in ast_block(templates["Stelander Assault Division"], section)
+                for e in ast_block(templates["Штурмовая дивизия Стеландера"], section)
             ]
             self.assertEqual(actual, expected)
         contract = ast_block(
@@ -8190,7 +8190,7 @@ class KefreytVolunteerContracts(unittest.TestCase):
         temporary = next(
             e.value for e in walk(delivery) if e.key == "division_template"
         )
-        self.assertEqual(scalar(temporary, "name"), "Kefreyt Contract Infantry")
+        self.assertEqual(scalar(temporary, "name"), "Контрактная пехота Кефрейта")
         self.assertEqual(scalar(temporary, "is_locked"), "yes")
         self.assertEqual(scalar(temporary, "force_allow_recruiting"), "no")
         self.assertEqual(
@@ -8243,14 +8243,14 @@ class KefreytVolunteerContracts(unittest.TestCase):
                 scalar(body, "STP_cw_strip_peacetime_union_templates"), "yes"
             )
         peacetime = block(effects, "STP_cw_strip_peacetime_union_templates")
-        for name in ("Police division", "Regular army", "Capital Guard"):
+        for name in ("Полицейская дивизия", "Регулярная армия", "Столичная гвардия"):
             self.assertIn('division_template = "' + name + '"', peacetime)
         self.assertEqual(peacetime.count("delete_unit_template_and_units"), 3)
         parsed_peacetime = ast_block(
             entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
             "STP_cw_strip_peacetime_union_templates",
         )
-        union = ("Police division", "Regular army", "Capital Guard")
+        union = ("Полицейская дивизия", "Регулярная армия", "Столичная гвардия")
         for present in (False, True):
             facts = {("STS", "has_template", name): present for name in union}
             removed = [
@@ -8264,7 +8264,7 @@ class KefreytVolunteerContracts(unittest.TestCase):
             "STP_cw_strip_kefreyt_volunteer_template",
         )
         for present in (False, True):
-            facts = {("SRP", "has_template", "Kefreyt Volunteer Division"): present}
+            facts = {("SRP", "has_template", "Добровольческая дивизия Кефрейта"): present}
             removed = [
                 e
                 for _, e in selected_effects(volunteer_strip, facts, "SRP")
@@ -8272,8 +8272,8 @@ class KefreytVolunteerContracts(unittest.TestCase):
             ]
             self.assertEqual(len(removed), 1 if present else 0)
         purge = block(effects, "STP_cw_purge_kefreyt_host_templates")
-        self.assertIn('division_template = "Kefreyt Volunteer Division"', purge)
-        self.assertIn('division_template = "Kefreyt Contract Infantry"', purge)
+        self.assertIn('division_template = "Добровольческая дивизия Кефрейта"', purge)
+        self.assertIn('division_template = "Контрактная пехота Кефрейта"', purge)
         self.assertIn("is_locked = no", purge)
         self.assertGreaterEqual(purge.count("delete_unit ="), 2)
         self.assertEqual(purge.count("delete_unit_template_and_units"), 2)
@@ -8287,7 +8287,7 @@ class KefreytVolunteerContracts(unittest.TestCase):
         for present in (False, True):
             facts = {
                 ("STS", "has_template", name): present
-                for name in ("Kefreyt Volunteer Division", "Kefreyt Contract Infantry")
+                for name in ("Добровольческая дивизия Кефрейта", "Контрактная пехота Кефрейта")
             }
             removed = [
                 e
@@ -10237,7 +10237,7 @@ class CivilWarAirProgrammeTests(unittest.TestCase):
         self.assertEqual(self.value("ADISCORD_economy_treasury"), 3800)
         self.assertEqual(self.value("STP_cw_aa_batches_delivered"), 2)
         templates = read("history/units/ADISCORD_STP_civil_war_templates.txt")
-        self.assertIn('name = "Stelander Assault Division"', templates)
+        self.assertIn('name = "Штурмовая дивизия Стеландера"', templates)
         self.assertIn("anti_air = { x = 0 y = 2 }", templates)
 
     def test_affordability_boundaries_and_operation_duration(self):

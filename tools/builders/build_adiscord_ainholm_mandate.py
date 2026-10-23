@@ -31,7 +31,7 @@ VP_LOCALISATION_PATH = (
     ROOT / "localisation" / "russian" / "victory_points_l_russian.yml"
 )
 FLAG_DIR = ROOT / "gfx" / "flags"
-DIVISION_TEMPLATE_NAMES = ("Licensed Security Battalion",)
+DIVISION_TEMPLATE_NAMES = ("Лицензированный охранный батальон",)
 
 AIN_LOCALISATION = {
     COUNTRY_LOCALISATION_PATH: {

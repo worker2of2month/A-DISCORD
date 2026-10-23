@@ -1,5 +1,5 @@
 division_template = {
-	name = "Island Garrison"
+	name = "Островной гарнизон"
 	template_counter = 80
 	division_names_group = ADISCORD_INF_01
 	regiments = {
@@ -13,7 +13,7 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 579
-		division_template = "Island Garrison"
+		division_template = "Островной гарнизон"
 		start_experience_factor = 0.12
 		start_equipment_factor = 0.72
 	}

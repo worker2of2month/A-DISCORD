@@ -125,7 +125,7 @@ def validate_external_gate_cleanup(
         )
     cleanup_tokens = (
         "ADISCORD_vorkerland_delete_external_gate_formations = {",
-        'division_template = "Filtration Battalion"',
+        'division_template = "Фильтрационный батальон"',
         "disband = no",
     )
     if any(token not in split_effect for token in cleanup_tokens):

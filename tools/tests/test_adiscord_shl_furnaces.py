@@ -1389,7 +1389,7 @@ class CrisisLayerTests(unittest.TestCase):
         self.m.run("SHL_finish_guard_order")
         self.m.run("SHL_finish_guard_order")
         self.assertEqual(self.m.divisions, 3)
-        self.assertIn("Furnace Levy", self.m.calls)
+        self.assertIn("Ополчение Горнила", self.m.calls)
         self.assertEqual(self.m.unit_owners, [("699", "SHL")])
         self.assertEqual(self.m.scheduled.count("ADISCORD_SHL.122"), 1)
 

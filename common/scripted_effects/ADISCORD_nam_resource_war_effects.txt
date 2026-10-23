@@ -134,9 +134,9 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 		add_ideas = ADISCORD_nam_restitution_coalition
 		add_war_support = 0.18
 		if = {
-			limit = { NOT = { has_template = "Line Infantry Brigade" } }
+			limit = { NOT = { has_template = "Линейная пехотная бригада" } }
 			division_template = {
-				name = "Line Infantry Brigade"
+				name = "Линейная пехотная бригада"
 				template_counter = 3
 				division_names_group = ADISCORD_INF_01
 				regiments = {
@@ -165,9 +165,9 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 		add_ideas = ADISCORD_nam_restitution_coalition
 		add_war_support = 0.22
 		if = {
-			limit = { NOT = { has_template = "Basin Levy" } }
+			limit = { NOT = { has_template = "Ополчение бассейна" } }
 			division_template = {
-				name = "Basin Levy"
+				name = "Ополчение бассейна"
 				template_counter = 7
 				division_names_group = ADISCORD_INF_01
 				regiments = {
@@ -473,11 +473,11 @@ ADISCORD_nam_refresh_emergency_defence = {
 		add_equipment_to_stockpile = { type = artillery_equipment amount = 150 producer = NAM }
 		capital_scope = {
 			create_unit = {
-				division = "name = \"Last Line Guard\" division_template = \"Capital Guard\" start_experience_factor = 0.20 start_equipment_factor = 1.00"
+				division = "name = \"Last Line Guard\" division_template = \"Столичная гвардия\" start_experience_factor = 0.20 start_equipment_factor = 1.00"
 				owner = NAM
 			}
 			create_unit = {
-				division = "name = \"Last Line Infantry\" division_template = \"Line Infantry Brigade\" start_experience_factor = 0.15 start_equipment_factor = 1.00"
+				division = "name = \"Last Line Infantry\" division_template = \"Линейная пехотная бригада\" start_experience_factor = 0.15 start_equipment_factor = 1.00"
 				owner = NAM
 			}
 		}
@@ -702,9 +702,9 @@ NAM_rw_exile_evacuate = {
 	if = {
 		limit = { check_variable = { NAM_exile_to_cut > 0 } }
 		if = {
-			limit = { NOT = { has_template = "Abandoned Columns" } }
+			limit = { NOT = { has_template = "Брошенные колонны" } }
 			division_template = {
-				name = "Abandoned Columns"
+				name = "Брошенные колонны"
 				template_counter = 6
 				division_names_group = ADISCORD_INF_01
 				regiments = {
@@ -754,13 +754,13 @@ NAM_rw_exile_evacuate = {
 		}
 		700 = { NAM_rw_exile_abandon_state = yes }
 		if = {
-			limit = { has_template = "Abandoned Columns" }
+			limit = { has_template = "Брошенные колонны" }
 			delete_unit = {
-				division_template = "Abandoned Columns"
+				division_template = "Брошенные колонны"
 				disband = no
 			}
 			delete_unit_template_and_units = {
-				division_template = "Abandoned Columns"
+				division_template = "Брошенные колонны"
 				disband = no
 			}
 		}
@@ -856,7 +856,7 @@ NAM_rw_exile_abandon_state = {
 			limit = { OWNER = { tag = NAM } }
 			if = {
 				limit = { check_variable = { NAM_exile_to_cut > 0 } }
-				change_division_template = { division_template = "Abandoned Columns" }
+				change_division_template = { division_template = "Брошенные колонны" }
 				subtract_from_temp_variable = { var = NAM_exile_to_cut value = 1 }
 			}
 		}
@@ -2539,11 +2539,11 @@ NAM_order_grant_motor_technology = {
 NAM_order_ensure_templates = {
 	if = {
 		limit = {
-			NOT = { has_template = "Coastal Battalion" }
+			NOT = { has_template = "Батальон береговой обороны" }
 			check_variable = { NAM_order_coastal_paid > 0 }
 		}
 		division_template = {
-			name = "Coastal Battalion"
+			name = "Батальон береговой обороны"
 			template_counter = 6
 			division_names_group = ADISCORD_INF_01
 			is_locked = yes
@@ -2557,18 +2557,18 @@ NAM_order_ensure_templates = {
 			}
 		}
 		set_division_force_allow_recruiting = {
-			division_template = "Coastal Battalion"
+			division_template = "Батальон береговой обороны"
 			force_allow_recruiting = yes
 		}
 	}
 	if = {
 		limit = {
-			NOT = { has_template = "Motor Column" }
+			NOT = { has_template = "Моторизованная колонна" }
 			check_variable = { NAM_order_motor_paid > 0 }
 			has_tech = ADISCORD_tech_armored_carrier_program
 		}
 		division_template = {
-			name = "Motor Column"
+			name = "Моторизованная колонна"
 			template_counter = 5
 			division_names_group = ADISCORD_INF_01
 			is_locked = yes
@@ -2584,7 +2584,7 @@ NAM_order_ensure_templates = {
 			}
 		}
 		set_division_force_allow_recruiting = {
-			division_template = "Motor Column"
+			division_template = "Моторизованная колонна"
 			force_allow_recruiting = yes
 		}
 	}
@@ -2594,30 +2594,30 @@ NAM_order_ensure_templates = {
 # entry. The templates stay as ordinary, editable templates.
 NAM_order_unlock_templates = {
 	if = {
-		limit = { has_template = "Capital Guard" }
+		limit = { has_template = "Столичная гвардия" }
 		set_division_template_lock = {
-			division_template = "Capital Guard"
+			division_template = "Столичная гвардия"
 			is_locked = no
 		}
 	}
 	if = {
-		limit = { has_template = "Line Infantry Brigade" }
+		limit = { has_template = "Линейная пехотная бригада" }
 		set_division_template_lock = {
-			division_template = "Line Infantry Brigade"
+			division_template = "Линейная пехотная бригада"
 			is_locked = no
 		}
 	}
 	if = {
-		limit = { has_template = "Coastal Battalion" }
+		limit = { has_template = "Батальон береговой обороны" }
 		set_division_template_lock = {
-			division_template = "Coastal Battalion"
+			division_template = "Батальон береговой обороны"
 			is_locked = no
 		}
 	}
 	if = {
-		limit = { has_template = "Motor Column" }
+		limit = { has_template = "Моторизованная колонна" }
 		set_division_template_lock = {
-			division_template = "Motor Column"
+			division_template = "Моторизованная колонна"
 			is_locked = no
 		}
 	}
@@ -2632,7 +2632,7 @@ NAM_deliver_mobilisation_orders = {
 	if = {
 		limit = {
 			check_variable = { var = NAM_order_motor_paid value = 0 compare = greater_than }
-			NOT = { has_template = "Motor Column" }
+			NOT = { has_template = "Моторизованная колонна" }
 		}
 		NAM_order_grant_motor_technology = yes
 		NAM_order_ensure_templates = yes
@@ -2799,7 +2799,7 @@ NAM_create_order_by_kind = {
 # STATE. Spawn one paid formation for NAM at full strength.
 NAM_create_order_guard = {
 	create_unit = {
-		division = "division_template = \"Capital Guard\" start_experience_factor = 0.25 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		division = "division_template = \"Столичная гвардия\" start_experience_factor = 0.25 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 		owner = NAM
 		allow_spawning_on_enemy_provs = no
 	}
@@ -2807,7 +2807,7 @@ NAM_create_order_guard = {
 
 NAM_create_order_infantry = {
 	create_unit = {
-		division = "division_template = \"Line Infantry Brigade\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		division = "division_template = \"Линейная пехотная бригада\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 		owner = NAM
 		allow_spawning_on_enemy_provs = no
 	}
@@ -2815,7 +2815,7 @@ NAM_create_order_infantry = {
 
 NAM_create_order_motor = {
 	create_unit = {
-		division = "division_template = \"Motor Column\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		division = "division_template = \"Моторизованная колонна\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 		owner = NAM
 		allow_spawning_on_enemy_provs = no
 	}
@@ -2823,7 +2823,7 @@ NAM_create_order_motor = {
 
 NAM_create_order_coastal = {
 	create_unit = {
-		division = "division_template = \"Coastal Battalion\" start_experience_factor = 0.15 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		division = "division_template = \"Батальон береговой обороны\" start_experience_factor = 0.15 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 		owner = NAM
 		allow_spawning_on_enemy_provs = no
 	}
@@ -5556,9 +5556,9 @@ NAM_marine_ensure_template = {
 		}
 	}
 	if = {
-		limit = { NOT = { has_template = "Island Marines" } }
+		limit = { NOT = { has_template = "Островная морская пехота" } }
 		division_template = {
-			name = "Island Marines"
+			name = "Островная морская пехота"
 			template_counter = 34
 			division_names_group = ADISCORD_INF_01
 			is_locked = yes
@@ -5573,7 +5573,7 @@ NAM_marine_ensure_template = {
 			}
 		}
 		set_division_force_allow_recruiting = {
-			division_template = "Island Marines"
+			division_template = "Островная морская пехота"
 			force_allow_recruiting = yes
 		}
 	}
@@ -5582,9 +5582,9 @@ NAM_marine_ensure_template = {
 # COUNTRY NAM. No marine order remains open.
 NAM_marine_unlock_template = {
 	if = {
-		limit = { has_template = "Island Marines" }
+		limit = { has_template = "Островная морская пехота" }
 		set_division_template_lock = {
-			division_template = "Island Marines"
+			division_template = "Островная морская пехота"
 			is_locked = no
 		}
 	}
@@ -5675,7 +5675,7 @@ NAM_wor_revenge_landing = {
 			add_to_temp_variable = { var = NAM_landing_index value = 1 }
 			700 = {
 				create_unit = {
-					division = "division_template = \"Island Marines\" start_experience_factor = 0.30 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					division = "division_template = \"Островная морская пехота\" start_experience_factor = 0.30 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 					owner = NAM
 					prioritize_location = 16716
 					allow_spawning_on_enemy_provs = no
@@ -5688,7 +5688,7 @@ NAM_wor_revenge_landing = {
 			add_to_temp_variable = { var = NAM_landing_index value = 1 }
 			capital_scope = {
 				create_unit = {
-					division = "division_template = \"Island Marines\" start_experience_factor = 0.30 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					division = "division_template = \"Островная морская пехота\" start_experience_factor = 0.30 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 					owner = NAM
 					allow_spawning_on_enemy_provs = no
 				}

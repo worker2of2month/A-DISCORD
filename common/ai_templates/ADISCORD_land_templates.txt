@@ -13,7 +13,7 @@ ADISCORD_garrison_templates = {
 			factor = 0
 			tag = STP
 			STP_ps_war_active = yes
-			has_template = "Congress Infantry Guard"
+			has_template = "Пехотная гвардия Конгресса"
 		}
 		modifier = {
 			factor = 15
@@ -28,7 +28,7 @@ ADISCORD_garrison_templates = {
 			tag = STP
 			STP_ps_war_active = yes
 			controls_province = 145
-			has_template = "Congress Infantry Guard"
+			has_template = "Пехотная гвардия Конгресса"
 		}
 		reinforce_prio = 2
 		custom_icon = 78

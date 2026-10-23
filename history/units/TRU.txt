@@ -1,5 +1,5 @@
 division_template = {
-	name = "Local Security Detachment"
+	name = "Местный охранный отряд"
 	template_counter = 80
 	division_names_group = ADISCORD_INF_01
 	regiments = {
@@ -10,7 +10,7 @@ division_template = {
 }
 
 division_template = {
-	name = "Line Infantry Brigade"
+	name = "Линейная пехотная бригада"
 	template_counter = 3
 	division_names_group = ADISCORD_INF_01
 	regiments = {
@@ -27,7 +27,7 @@ division_template = {
 }
 
 division_template = {
-	name = "Capital Guard"
+	name = "Столичная гвардия"
 	template_counter = 78
 	division_names_group = ADISCORD_INF_01
 	regiments = {
@@ -51,21 +51,21 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 16619
-		division_template = "Line Infantry Brigade"
+		division_template = "Линейная пехотная бригада"
 		start_experience_factor = 0.17
 		start_equipment_factor = 0.55
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
 		location = 16619
-		division_template = "Line Infantry Brigade"
+		division_template = "Линейная пехотная бригада"
 		start_experience_factor = 0.17
 		start_equipment_factor = 0.55
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 3 }
 		location = 11472
-		division_template = "Local Security Detachment"
+		division_template = "Местный охранный отряд"
 		start_experience_factor = 0.12
 		start_equipment_factor = 0.65
 	}

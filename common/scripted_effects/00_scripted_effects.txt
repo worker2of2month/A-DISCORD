@@ -140,7 +140,7 @@ civil_war_anti_exploiter_punitive_action = {
 			}
 		}
 		division_template = {
-			name = "Anti-Exploit Punitive Brigade"
+			name = "Карательная бригада"
 			template_counter = 78
 			priority = 1
 			division_names_group = ADISCORD_INF_01
@@ -169,41 +169,19 @@ civil_war_anti_exploiter_punitive_action = {
 				is_fully_controlled_by = PREV
 			}
 			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
 				owner = PREV
 			}
 			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
 				owner = PREV
 			}
 			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
 				owner = PREV
 			}
 			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
-				owner = PREV
-			}
-		}
-		random_state = {
-			limit = {
-				is_in_home_area = yes
-				is_fully_controlled_by = PREV
-			}
-			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
-				owner = PREV
-			}
-			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
-				owner = PREV
-			}
-			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
-				owner = PREV
-			}
-			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
 				owner = PREV
 			}
 		}
@@ -213,41 +191,19 @@ civil_war_anti_exploiter_punitive_action = {
 				is_fully_controlled_by = PREV
 			}
 			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
 				owner = PREV
 			}
 			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
 				owner = PREV
 			}
 			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
 				owner = PREV
 			}
 			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
-				owner = PREV
-			}
-		}
-		random_state = {
-			limit = {
-				is_in_home_area = yes
-				is_fully_controlled_by = PREV
-			}
-			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
-				owner = PREV
-			}
-			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
-				owner = PREV
-			}
-			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
-				owner = PREV
-			}
-			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
 				owner = PREV
 			}
 		}
@@ -257,19 +213,63 @@ civil_war_anti_exploiter_punitive_action = {
 				is_fully_controlled_by = PREV
 			}
 			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
 				owner = PREV
 			}
 			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
 				owner = PREV
 			}
 			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
 				owner = PREV
 			}
 			create_unit = {
-				division = "division_template = \"Anti-Exploit Punitive Brigade\" start_experience_factor = 1 start_equipment_factor = 1"
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
+				owner = PREV
+			}
+		}
+		random_state = {
+			limit = {
+				is_in_home_area = yes
+				is_fully_controlled_by = PREV
+			}
+			create_unit = {
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
+				owner = PREV
+			}
+			create_unit = {
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
+				owner = PREV
+			}
+			create_unit = {
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
+				owner = PREV
+			}
+			create_unit = {
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
+				owner = PREV
+			}
+		}
+		random_state = {
+			limit = {
+				is_in_home_area = yes
+				is_fully_controlled_by = PREV
+			}
+			create_unit = {
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
+				owner = PREV
+			}
+			create_unit = {
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
+				owner = PREV
+			}
+			create_unit = {
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
+				owner = PREV
+			}
+			create_unit = {
+				division = "division_template = \"Карательная бригада\" start_experience_factor = 1 start_equipment_factor = 1"
 				owner = PREV
 			}
 		}

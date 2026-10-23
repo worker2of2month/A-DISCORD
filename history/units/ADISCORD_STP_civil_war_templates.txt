@@ -3,7 +3,7 @@
 # Assault stays TAG infantry (regulars). Kefreyt keeps the donor VAL model.
 # Starting pictures: territorial 12, assault 4, volunteer 68.
 division_template = {
-	name = "Stelander Territorial Brigade"
+	name = "Территориальная бригада Стеландера"
 	template_counter = 12
 	is_locked = no
 	force_allow_recruiting = yes
@@ -18,7 +18,7 @@ division_template = {
 }
 
 division_template = {
-	name = "Stelander Assault Division"
+	name = "Штурмовая дивизия Стеландера"
 	template_counter = 4
 	priority = 2
 	is_locked = no
@@ -41,7 +41,7 @@ division_template = {
 }
 
 division_template = {
-	name = "Kefreyt Volunteer Division"
+	name = "Добровольческая дивизия Кефрейта"
 	template_counter = 68
 	priority = 2
 	override_model = ADISCORD_VAL_regular_entity
