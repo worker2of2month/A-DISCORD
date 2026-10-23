@@ -822,13 +822,83 @@ NAM_pirate_slot_free = {
 	check_variable = { var = NAM_pirate_raids_active value = 3 compare = less_than }
 }
 
-# COUNTRY target of NAM_pirate_raid. No flotilla is already at sea against it.
-NAM_pirate_target_valid = {
+# COUNTRY. An owner of a shipping lane whose convoys the flotillas may take:
+# present, neither Svetlogorye nor its ally or subject.
+NAM_pirate_victim_valid = {
 	exists = yes
 	NOT = { tag = NAM }
 	NOT = { is_in_faction_with = NAM }
 	NOT = { is_subject_of = NAM }
-	NOT = { has_country_flag = NAM_pirate_raid_target }
+}
+
+# COUNTRY NAM. A shipping lane stays open to raids while one of its owners may
+# still be raided; the owners match NAM_pirate_save_lane_victims.
+NAM_pirate_lane_oil_open = {
+	OR = {
+		EFL = { NAM_pirate_victim_valid = yes }
+		AZH = { NAM_pirate_victim_valid = yes }
+	}
+}
+
+NAM_pirate_lane_coast_open = {
+	OR = {
+		RIV = { NAM_pirate_victim_valid = yes }
+		EFL = { NAM_pirate_victim_valid = yes }
+	}
+}
+
+NAM_pirate_lane_strait_open = {
+	OR = {
+		ULV = { NAM_pirate_victim_valid = yes }
+		LUR = { NAM_pirate_victim_valid = yes }
+	}
+}
+
+NAM_pirate_lane_crossing_open = {
+	OR = {
+		CHD = { NAM_pirate_victim_valid = yes }
+		RIV = { NAM_pirate_victim_valid = yes }
+	}
+}
+
+# COUNTRY NAM. An owner of the lane is still on guard after an earlier raid.
+NAM_pirate_lane_oil_alert = {
+	OR = {
+		EFL = { has_country_flag = NAM_pirate_alert }
+		AZH = { has_country_flag = NAM_pirate_alert }
+	}
+}
+
+NAM_pirate_lane_coast_alert = {
+	OR = {
+		RIV = { has_country_flag = NAM_pirate_alert }
+		EFL = { has_country_flag = NAM_pirate_alert }
+	}
+}
+
+NAM_pirate_lane_strait_alert = {
+	OR = {
+		ULV = { has_country_flag = NAM_pirate_alert }
+		LUR = { has_country_flag = NAM_pirate_alert }
+	}
+}
+
+NAM_pirate_lane_crossing_alert = {
+	OR = {
+		CHD = { has_country_flag = NAM_pirate_alert }
+		RIV = { has_country_flag = NAM_pirate_alert }
+	}
+}
+
+# COUNTRY NAM. A flotilla may put to sea now; the lane, price and cooldown are
+# checked by each caller.
+NAM_pirate_raid_ready = {
+	NAM_piracy_open = yes
+	has_completed_focus = NAM_exile_sea_raiders
+	NAM_country_operable = yes
+	NAM_pirate_slot_free = yes
+	has_navy_size = { size > 0 }
+	NOT = { has_country_flag = NAM_pirate_lying_low }
 }
 
 # COUNTRY NAM. Another marine formation fits under NAM_marine_order_cap and

@@ -654,13 +654,15 @@ scripted_gui = {
 	# Piracy window. Like the basin window it has no dirty variable: its inputs
 	# include political power, fuel, manpower, ships and foreign flags without a
 	# shared invalidation, so it keeps the native refresh while the NAM_piracy
-	# category is open. Checks read fixed tags only.
-	# activate_decision and activate_targeted_decision skip visible, available,
-	# cost and cooldown. Every enabled trigger below repeats those blocks of its
-	# decision and must change together with them; each complete_effect still
-	# rechecks the price before its single debit. Triggers cannot read a native
-	# cooldown, so a window purchase marks <decision>_cd for the decision's
-	# days_re_enable; NAM_exile_drill adds its 30 days at sea to the 15 of rest.
+	# category is open. Checks read fixed tags only; a lane raid is a plain
+	# decision, so has_decision marks it at sea.
+	# activate_decision skips visible, available, cost and cooldown and would
+	# start a running decision again. Every enabled trigger below repeats those
+	# blocks of its decision and must change together with them; each
+	# complete_effect still rechecks the price before its single debit.
+	# Triggers cannot read a native cooldown, so a window purchase marks
+	# <decision>_cd for the decision's days_re_enable; NAM_exile_drill adds its
+	# 30 days at sea to the 15 of rest.
 	ADISCORD_NAM_piracy_panel = {
 		context_type = decision_category
 		window_name = "ADISCORD_NAM_piracy_window"
@@ -670,100 +672,52 @@ scripted_gui = {
 		}
 		ai_enabled = { always = no }
 		effects = {
-			NAM_pw_raid_EFL_click = {
+			NAM_pw_raid_oil_click = {
 				if = {
 					limit = {
-						NAM_piracy_open = yes
-						has_completed_focus = NAM_exile_sea_raiders
-						NAM_country_operable = yes
-						NAM_pirate_slot_free = yes
-						has_navy_size = { size > 0 }
-						NOT = { has_country_flag = NAM_pirate_lying_low }
+						NAM_pirate_raid_ready = yes
 						NOT = { has_political_power < 10 }
 						NOT = { has_fuel < 1000 }
-						EFL = { NAM_pirate_target_valid = yes }
+						NAM_pirate_lane_oil_open = yes
+						NOT = { has_decision = NAM_pirate_raid_lane_oil }
 					}
-					activate_targeted_decision = { target = EFL decision = NAM_pirate_raid }
+					activate_decision = NAM_pirate_raid_lane_oil
 				}
 			}
-			NAM_pw_raid_AZH_click = {
+			NAM_pw_raid_coast_click = {
 				if = {
 					limit = {
-						NAM_piracy_open = yes
-						has_completed_focus = NAM_exile_sea_raiders
-						NAM_country_operable = yes
-						NAM_pirate_slot_free = yes
-						has_navy_size = { size > 0 }
-						NOT = { has_country_flag = NAM_pirate_lying_low }
+						NAM_pirate_raid_ready = yes
 						NOT = { has_political_power < 10 }
 						NOT = { has_fuel < 1000 }
-						AZH = { NAM_pirate_target_valid = yes }
+						NAM_pirate_lane_coast_open = yes
+						NOT = { has_decision = NAM_pirate_raid_lane_coast }
 					}
-					activate_targeted_decision = { target = AZH decision = NAM_pirate_raid }
+					activate_decision = NAM_pirate_raid_lane_coast
 				}
 			}
-			NAM_pw_raid_ULV_click = {
+			NAM_pw_raid_strait_click = {
 				if = {
 					limit = {
-						NAM_piracy_open = yes
-						has_completed_focus = NAM_exile_sea_raiders
-						NAM_country_operable = yes
-						NAM_pirate_slot_free = yes
-						has_navy_size = { size > 0 }
-						NOT = { has_country_flag = NAM_pirate_lying_low }
+						NAM_pirate_raid_ready = yes
 						NOT = { has_political_power < 10 }
 						NOT = { has_fuel < 1000 }
-						ULV = { NAM_pirate_target_valid = yes }
+						NAM_pirate_lane_strait_open = yes
+						NOT = { has_decision = NAM_pirate_raid_lane_strait }
 					}
-					activate_targeted_decision = { target = ULV decision = NAM_pirate_raid }
+					activate_decision = NAM_pirate_raid_lane_strait
 				}
 			}
-			NAM_pw_raid_RIV_click = {
+			NAM_pw_raid_crossing_click = {
 				if = {
 					limit = {
-						NAM_piracy_open = yes
-						has_completed_focus = NAM_exile_sea_raiders
-						NAM_country_operable = yes
-						NAM_pirate_slot_free = yes
-						has_navy_size = { size > 0 }
-						NOT = { has_country_flag = NAM_pirate_lying_low }
+						NAM_pirate_raid_ready = yes
 						NOT = { has_political_power < 10 }
 						NOT = { has_fuel < 1000 }
-						RIV = { NAM_pirate_target_valid = yes }
+						NAM_pirate_lane_crossing_open = yes
+						NOT = { has_decision = NAM_pirate_raid_lane_crossing }
 					}
-					activate_targeted_decision = { target = RIV decision = NAM_pirate_raid }
-				}
-			}
-			NAM_pw_raid_LUR_click = {
-				if = {
-					limit = {
-						NAM_piracy_open = yes
-						has_completed_focus = NAM_exile_sea_raiders
-						NAM_country_operable = yes
-						NAM_pirate_slot_free = yes
-						has_navy_size = { size > 0 }
-						NOT = { has_country_flag = NAM_pirate_lying_low }
-						NOT = { has_political_power < 10 }
-						NOT = { has_fuel < 1000 }
-						LUR = { NAM_pirate_target_valid = yes }
-					}
-					activate_targeted_decision = { target = LUR decision = NAM_pirate_raid }
-				}
-			}
-			NAM_pw_raid_CHD_click = {
-				if = {
-					limit = {
-						NAM_piracy_open = yes
-						has_completed_focus = NAM_exile_sea_raiders
-						NAM_country_operable = yes
-						NAM_pirate_slot_free = yes
-						has_navy_size = { size > 0 }
-						NOT = { has_country_flag = NAM_pirate_lying_low }
-						NOT = { has_political_power < 10 }
-						NOT = { has_fuel < 1000 }
-						CHD = { NAM_pirate_target_valid = yes }
-					}
-					activate_targeted_decision = { target = CHD decision = NAM_pirate_raid }
+					activate_decision = NAM_pirate_raid_lane_crossing
 				}
 			}
 			NAM_pw_buy_arms_click = {
@@ -875,307 +829,135 @@ scripted_gui = {
 			}
 		}
 		triggers = {
-			# Lanes: a raid at sea, a lane closed to raids, escorted convoys under a
-			# blockade or after a recent raid, or an open lane. A missing target hides
-			# its lane, marker and label.
-			NAM_pw_lane_EFL_raid_visible = { EFL = { has_country_flag = NAM_pirate_raid_target } }
-			NAM_pw_lane_EFL_closed_visible = {
-				EFL = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-				}
+			# Lanes: a raid at sea, a lane closed to raids (before the raiders' focus
+			# or without an owner left to rob), escorted convoys under a blockade or
+			# after a recent raid on an owner, or an open lane.
+			NAM_pw_lane_oil_raid_visible = { has_decision = NAM_pirate_raid_lane_oil }
+			NAM_pw_lane_oil_closed_visible = {
+				NOT = { has_decision = NAM_pirate_raid_lane_oil }
 				OR = {
 					NOT = { has_completed_focus = NAM_exile_sea_raiders }
-					EFL = { is_in_faction_with = NAM }
-					EFL = { is_subject_of = NAM }
+					NAM_pirate_lane_oil_open = no
 				}
 			}
-			NAM_pw_lane_EFL_guarded_visible = {
+			NAM_pw_lane_oil_guarded_visible = {
+				NOT = { has_decision = NAM_pirate_raid_lane_oil }
 				has_completed_focus = NAM_exile_sea_raiders
-				EFL = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-					NOT = { is_in_faction_with = NAM }
-					NOT = { is_subject_of = NAM }
-				}
+				NAM_pirate_lane_oil_open = yes
 				OR = {
 					has_dynamic_modifier = { modifier = NAM_pirate_blockade }
-					EFL = { has_country_flag = NAM_pirate_alert }
+					NAM_pirate_lane_oil_alert = yes
 				}
 			}
-			NAM_pw_lane_EFL_idle_visible = {
+			NAM_pw_lane_oil_idle_visible = {
+				NOT = { has_decision = NAM_pirate_raid_lane_oil }
 				has_completed_focus = NAM_exile_sea_raiders
-				EFL = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-					NOT = { is_in_faction_with = NAM }
-					NOT = { is_subject_of = NAM }
-				}
+				NAM_pirate_lane_oil_open = yes
 				NOT = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
-				NOT = { EFL = { has_country_flag = NAM_pirate_alert } }
+				NAM_pirate_lane_oil_alert = no
 			}
-			NAM_pw_label_EFL_visible = { EFL = { exists = yes } }
-			NAM_pw_raid_EFL_visible = { EFL = { exists = yes } }
-			NAM_pw_raid_EFL_click_enabled = {
-				NAM_piracy_open = yes
-				has_completed_focus = NAM_exile_sea_raiders
-				NAM_country_operable = yes
-				NAM_pirate_slot_free = yes
-				has_navy_size = { size > 0 }
-				NOT = { has_country_flag = NAM_pirate_lying_low }
+			NAM_pw_raid_oil_click_enabled = {
+				NAM_pirate_raid_ready = yes
 				NOT = { has_political_power < 10 }
 				NOT = { has_fuel < 1000 }
-				EFL = { NAM_pirate_target_valid = yes }
+				NAM_pirate_lane_oil_open = yes
+				NOT = { has_decision = NAM_pirate_raid_lane_oil }
 			}
 
-			NAM_pw_lane_AZH_raid_visible = { AZH = { has_country_flag = NAM_pirate_raid_target } }
-			NAM_pw_lane_AZH_closed_visible = {
-				AZH = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-				}
+			NAM_pw_lane_coast_raid_visible = { has_decision = NAM_pirate_raid_lane_coast }
+			NAM_pw_lane_coast_closed_visible = {
+				NOT = { has_decision = NAM_pirate_raid_lane_coast }
 				OR = {
 					NOT = { has_completed_focus = NAM_exile_sea_raiders }
-					AZH = { is_in_faction_with = NAM }
-					AZH = { is_subject_of = NAM }
+					NAM_pirate_lane_coast_open = no
 				}
 			}
-			NAM_pw_lane_AZH_guarded_visible = {
+			NAM_pw_lane_coast_guarded_visible = {
+				NOT = { has_decision = NAM_pirate_raid_lane_coast }
 				has_completed_focus = NAM_exile_sea_raiders
-				AZH = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-					NOT = { is_in_faction_with = NAM }
-					NOT = { is_subject_of = NAM }
-				}
+				NAM_pirate_lane_coast_open = yes
 				OR = {
 					has_dynamic_modifier = { modifier = NAM_pirate_blockade }
-					AZH = { has_country_flag = NAM_pirate_alert }
+					NAM_pirate_lane_coast_alert = yes
 				}
 			}
-			NAM_pw_lane_AZH_idle_visible = {
+			NAM_pw_lane_coast_idle_visible = {
+				NOT = { has_decision = NAM_pirate_raid_lane_coast }
 				has_completed_focus = NAM_exile_sea_raiders
-				AZH = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-					NOT = { is_in_faction_with = NAM }
-					NOT = { is_subject_of = NAM }
-				}
+				NAM_pirate_lane_coast_open = yes
 				NOT = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
-				NOT = { AZH = { has_country_flag = NAM_pirate_alert } }
+				NAM_pirate_lane_coast_alert = no
 			}
-			NAM_pw_label_AZH_visible = { AZH = { exists = yes } }
-			NAM_pw_raid_AZH_visible = { AZH = { exists = yes } }
-			NAM_pw_raid_AZH_click_enabled = {
-				NAM_piracy_open = yes
-				has_completed_focus = NAM_exile_sea_raiders
-				NAM_country_operable = yes
-				NAM_pirate_slot_free = yes
-				has_navy_size = { size > 0 }
-				NOT = { has_country_flag = NAM_pirate_lying_low }
+			NAM_pw_raid_coast_click_enabled = {
+				NAM_pirate_raid_ready = yes
 				NOT = { has_political_power < 10 }
 				NOT = { has_fuel < 1000 }
-				AZH = { NAM_pirate_target_valid = yes }
+				NAM_pirate_lane_coast_open = yes
+				NOT = { has_decision = NAM_pirate_raid_lane_coast }
 			}
 
-			NAM_pw_lane_ULV_raid_visible = { ULV = { has_country_flag = NAM_pirate_raid_target } }
-			NAM_pw_lane_ULV_closed_visible = {
-				ULV = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-				}
+			NAM_pw_lane_strait_raid_visible = { has_decision = NAM_pirate_raid_lane_strait }
+			NAM_pw_lane_strait_closed_visible = {
+				NOT = { has_decision = NAM_pirate_raid_lane_strait }
 				OR = {
 					NOT = { has_completed_focus = NAM_exile_sea_raiders }
-					ULV = { is_in_faction_with = NAM }
-					ULV = { is_subject_of = NAM }
+					NAM_pirate_lane_strait_open = no
 				}
 			}
-			NAM_pw_lane_ULV_guarded_visible = {
+			NAM_pw_lane_strait_guarded_visible = {
+				NOT = { has_decision = NAM_pirate_raid_lane_strait }
 				has_completed_focus = NAM_exile_sea_raiders
-				ULV = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-					NOT = { is_in_faction_with = NAM }
-					NOT = { is_subject_of = NAM }
-				}
+				NAM_pirate_lane_strait_open = yes
 				OR = {
 					has_dynamic_modifier = { modifier = NAM_pirate_blockade }
-					ULV = { has_country_flag = NAM_pirate_alert }
+					NAM_pirate_lane_strait_alert = yes
 				}
 			}
-			NAM_pw_lane_ULV_idle_visible = {
+			NAM_pw_lane_strait_idle_visible = {
+				NOT = { has_decision = NAM_pirate_raid_lane_strait }
 				has_completed_focus = NAM_exile_sea_raiders
-				ULV = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-					NOT = { is_in_faction_with = NAM }
-					NOT = { is_subject_of = NAM }
-				}
+				NAM_pirate_lane_strait_open = yes
 				NOT = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
-				NOT = { ULV = { has_country_flag = NAM_pirate_alert } }
+				NAM_pirate_lane_strait_alert = no
 			}
-			NAM_pw_label_ULV_visible = { ULV = { exists = yes } }
-			NAM_pw_raid_ULV_visible = { ULV = { exists = yes } }
-			NAM_pw_raid_ULV_click_enabled = {
-				NAM_piracy_open = yes
-				has_completed_focus = NAM_exile_sea_raiders
-				NAM_country_operable = yes
-				NAM_pirate_slot_free = yes
-				has_navy_size = { size > 0 }
-				NOT = { has_country_flag = NAM_pirate_lying_low }
+			NAM_pw_raid_strait_click_enabled = {
+				NAM_pirate_raid_ready = yes
 				NOT = { has_political_power < 10 }
 				NOT = { has_fuel < 1000 }
-				ULV = { NAM_pirate_target_valid = yes }
+				NAM_pirate_lane_strait_open = yes
+				NOT = { has_decision = NAM_pirate_raid_lane_strait }
 			}
 
-			NAM_pw_lane_RIV_raid_visible = { RIV = { has_country_flag = NAM_pirate_raid_target } }
-			NAM_pw_lane_RIV_closed_visible = {
-				RIV = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-				}
+			NAM_pw_lane_crossing_raid_visible = { has_decision = NAM_pirate_raid_lane_crossing }
+			NAM_pw_lane_crossing_closed_visible = {
+				NOT = { has_decision = NAM_pirate_raid_lane_crossing }
 				OR = {
 					NOT = { has_completed_focus = NAM_exile_sea_raiders }
-					RIV = { is_in_faction_with = NAM }
-					RIV = { is_subject_of = NAM }
+					NAM_pirate_lane_crossing_open = no
 				}
 			}
-			NAM_pw_lane_RIV_guarded_visible = {
+			NAM_pw_lane_crossing_guarded_visible = {
+				NOT = { has_decision = NAM_pirate_raid_lane_crossing }
 				has_completed_focus = NAM_exile_sea_raiders
-				RIV = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-					NOT = { is_in_faction_with = NAM }
-					NOT = { is_subject_of = NAM }
-				}
+				NAM_pirate_lane_crossing_open = yes
 				OR = {
 					has_dynamic_modifier = { modifier = NAM_pirate_blockade }
-					RIV = { has_country_flag = NAM_pirate_alert }
+					NAM_pirate_lane_crossing_alert = yes
 				}
 			}
-			NAM_pw_lane_RIV_idle_visible = {
+			NAM_pw_lane_crossing_idle_visible = {
+				NOT = { has_decision = NAM_pirate_raid_lane_crossing }
 				has_completed_focus = NAM_exile_sea_raiders
-				RIV = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-					NOT = { is_in_faction_with = NAM }
-					NOT = { is_subject_of = NAM }
-				}
+				NAM_pirate_lane_crossing_open = yes
 				NOT = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
-				NOT = { RIV = { has_country_flag = NAM_pirate_alert } }
+				NAM_pirate_lane_crossing_alert = no
 			}
-			NAM_pw_label_RIV_visible = { RIV = { exists = yes } }
-			NAM_pw_raid_RIV_visible = { RIV = { exists = yes } }
-			NAM_pw_raid_RIV_click_enabled = {
-				NAM_piracy_open = yes
-				has_completed_focus = NAM_exile_sea_raiders
-				NAM_country_operable = yes
-				NAM_pirate_slot_free = yes
-				has_navy_size = { size > 0 }
-				NOT = { has_country_flag = NAM_pirate_lying_low }
+			NAM_pw_raid_crossing_click_enabled = {
+				NAM_pirate_raid_ready = yes
 				NOT = { has_political_power < 10 }
 				NOT = { has_fuel < 1000 }
-				RIV = { NAM_pirate_target_valid = yes }
-			}
-
-			NAM_pw_lane_LUR_raid_visible = { LUR = { has_country_flag = NAM_pirate_raid_target } }
-			NAM_pw_lane_LUR_closed_visible = {
-				LUR = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-				}
-				OR = {
-					NOT = { has_completed_focus = NAM_exile_sea_raiders }
-					LUR = { is_in_faction_with = NAM }
-					LUR = { is_subject_of = NAM }
-				}
-			}
-			NAM_pw_lane_LUR_guarded_visible = {
-				has_completed_focus = NAM_exile_sea_raiders
-				LUR = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-					NOT = { is_in_faction_with = NAM }
-					NOT = { is_subject_of = NAM }
-				}
-				OR = {
-					has_dynamic_modifier = { modifier = NAM_pirate_blockade }
-					LUR = { has_country_flag = NAM_pirate_alert }
-				}
-			}
-			NAM_pw_lane_LUR_idle_visible = {
-				has_completed_focus = NAM_exile_sea_raiders
-				LUR = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-					NOT = { is_in_faction_with = NAM }
-					NOT = { is_subject_of = NAM }
-				}
-				NOT = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
-				NOT = { LUR = { has_country_flag = NAM_pirate_alert } }
-			}
-			NAM_pw_label_LUR_visible = { LUR = { exists = yes } }
-			NAM_pw_raid_LUR_visible = { LUR = { exists = yes } }
-			NAM_pw_raid_LUR_click_enabled = {
-				NAM_piracy_open = yes
-				has_completed_focus = NAM_exile_sea_raiders
-				NAM_country_operable = yes
-				NAM_pirate_slot_free = yes
-				has_navy_size = { size > 0 }
-				NOT = { has_country_flag = NAM_pirate_lying_low }
-				NOT = { has_political_power < 10 }
-				NOT = { has_fuel < 1000 }
-				LUR = { NAM_pirate_target_valid = yes }
-			}
-
-			NAM_pw_lane_CHD_raid_visible = { CHD = { has_country_flag = NAM_pirate_raid_target } }
-			NAM_pw_lane_CHD_closed_visible = {
-				CHD = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-				}
-				OR = {
-					NOT = { has_completed_focus = NAM_exile_sea_raiders }
-					CHD = { is_in_faction_with = NAM }
-					CHD = { is_subject_of = NAM }
-				}
-			}
-			NAM_pw_lane_CHD_guarded_visible = {
-				has_completed_focus = NAM_exile_sea_raiders
-				CHD = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-					NOT = { is_in_faction_with = NAM }
-					NOT = { is_subject_of = NAM }
-				}
-				OR = {
-					has_dynamic_modifier = { modifier = NAM_pirate_blockade }
-					CHD = { has_country_flag = NAM_pirate_alert }
-				}
-			}
-			NAM_pw_lane_CHD_idle_visible = {
-				has_completed_focus = NAM_exile_sea_raiders
-				CHD = {
-					exists = yes
-					NOT = { has_country_flag = NAM_pirate_raid_target }
-					NOT = { is_in_faction_with = NAM }
-					NOT = { is_subject_of = NAM }
-				}
-				NOT = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
-				NOT = { CHD = { has_country_flag = NAM_pirate_alert } }
-			}
-			NAM_pw_label_CHD_visible = { CHD = { exists = yes } }
-			NAM_pw_raid_CHD_visible = { CHD = { exists = yes } }
-			NAM_pw_raid_CHD_click_enabled = {
-				NAM_piracy_open = yes
-				has_completed_focus = NAM_exile_sea_raiders
-				NAM_country_operable = yes
-				NAM_pirate_slot_free = yes
-				has_navy_size = { size > 0 }
-				NOT = { has_country_flag = NAM_pirate_lying_low }
-				NOT = { has_political_power < 10 }
-				NOT = { has_fuel < 1000 }
-				CHD = { NAM_pirate_target_valid = yes }
+				NAM_pirate_lane_crossing_open = yes
+				NOT = { has_decision = NAM_pirate_raid_lane_crossing }
 			}
 
 			# Gauges: one cell per 5 points, lit from half a cell.

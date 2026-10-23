@@ -409,12 +409,16 @@ Owner: core phase 4 (third playtest batch).
   `NAM_scorched_wells_modifier` 180 days, building damage), forms
   under-strength remnants on the island capital up to the carried share, seeds
   the piracy variables and fires .81 "Flight to the Islands".
-- Piracy (category `NAM_piracy`, `NAM_piracy_open`): `NAM_pirate_raid`
-  (targets within half the mainland's width by sea from the island harbours:
-  EFL AZH ULV RIV LUR CHD, rich prize for LUR/CHD; 10 PP + 1000 fuel, 15 days, slot from
-  `NAM_pirate_raid_slots`, max 3; haul 50 / prize 15 / failure 35 weighted by
-  `num_ships`, target alert, blockade and notoriety; report .90, human target
-  .91), `NAM_pirate_buy_arms`, `NAM_pirate_buy_heavy_arms`,
+- Piracy (category `NAM_piracy`, `NAM_piracy_open`): one decision per foreign
+  shipping lane past the islands, `NAM_pirate_raid_lane_<id>`: oil run AZH-EFL
+  (coalition, rich prize x1.5), northern coast RIV-EFL (coalition while EFL
+  sails it), Luren strait ULV-LUR, Charden crossing CHD-RIV. Every lane stays
+  within half the mainland's width by sea from the island harbours and passes
+  an island coast (map builder check). 10 PP + 1000 fuel, 15 days, receipt
+  `NAM_pirate_at_sea_<id>`, slot from `NAM_pirate_raid_slots`, max 3; haul 50 /
+  prize 15 / failure 35 weighted by `num_ships`, owner alert, blockade and
+  notoriety; the owners split the fuel loss and become alert; report .90 names
+  the lane and owners, human owners get .91), `NAM_pirate_buy_arms`, `NAM_pirate_buy_heavy_arms`,
   `NAM_pirate_buy_convoys`, `NAM_pirate_fence_loot` (50 loot -> 100 treasury),
   `NAM_exile_drill` (20 PP + 30 loot in escrow, 30 days, readiness +10, army
   XP 15). Notoriety falls 3 a month; from 50 a 40% monthly retaliation chance

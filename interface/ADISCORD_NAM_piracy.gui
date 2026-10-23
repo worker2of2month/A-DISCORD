@@ -121,179 +121,123 @@ guiTypes = {
 		}
 		# BEGIN GENERATED NAM PIRACY MAP
 		iconType = {
-			name = "NAM_pw_lane_EFL_idle"
+			name = "NAM_pw_lane_oil_idle"
 			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_EFL"
+			quadTextureSprite = "GFX_NAM_pw_lane_oil"
 			frame = 1
 		}
 
 		iconType = {
-			name = "NAM_pw_lane_EFL_raid"
+			name = "NAM_pw_lane_oil_raid"
 			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_EFL"
+			quadTextureSprite = "GFX_NAM_pw_lane_oil"
 			frame = 2
 		}
 
 		iconType = {
-			name = "NAM_pw_lane_EFL_guarded"
+			name = "NAM_pw_lane_oil_guarded"
 			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_EFL"
+			quadTextureSprite = "GFX_NAM_pw_lane_oil"
 			frame = 3
 		}
 
 		iconType = {
-			name = "NAM_pw_lane_EFL_closed"
+			name = "NAM_pw_lane_oil_closed"
 			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_EFL"
+			quadTextureSprite = "GFX_NAM_pw_lane_oil"
 			frame = 4
 		}
 
 		iconType = {
-			name = "NAM_pw_lane_AZH_idle"
+			name = "NAM_pw_lane_coast_idle"
 			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_AZH"
+			quadTextureSprite = "GFX_NAM_pw_lane_coast"
 			frame = 1
 		}
 
 		iconType = {
-			name = "NAM_pw_lane_AZH_raid"
+			name = "NAM_pw_lane_coast_raid"
 			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_AZH"
+			quadTextureSprite = "GFX_NAM_pw_lane_coast"
 			frame = 2
 		}
 
 		iconType = {
-			name = "NAM_pw_lane_AZH_guarded"
+			name = "NAM_pw_lane_coast_guarded"
 			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_AZH"
+			quadTextureSprite = "GFX_NAM_pw_lane_coast"
 			frame = 3
 		}
 
 		iconType = {
-			name = "NAM_pw_lane_AZH_closed"
+			name = "NAM_pw_lane_coast_closed"
 			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_AZH"
+			quadTextureSprite = "GFX_NAM_pw_lane_coast"
 			frame = 4
 		}
 
 		iconType = {
-			name = "NAM_pw_lane_ULV_idle"
+			name = "NAM_pw_lane_strait_idle"
 			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_ULV"
+			quadTextureSprite = "GFX_NAM_pw_lane_strait"
 			frame = 1
 		}
 
 		iconType = {
-			name = "NAM_pw_lane_ULV_raid"
+			name = "NAM_pw_lane_strait_raid"
 			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_ULV"
+			quadTextureSprite = "GFX_NAM_pw_lane_strait"
 			frame = 2
 		}
 
 		iconType = {
-			name = "NAM_pw_lane_ULV_guarded"
+			name = "NAM_pw_lane_strait_guarded"
 			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_ULV"
+			quadTextureSprite = "GFX_NAM_pw_lane_strait"
 			frame = 3
 		}
 
 		iconType = {
-			name = "NAM_pw_lane_ULV_closed"
+			name = "NAM_pw_lane_strait_closed"
 			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_ULV"
+			quadTextureSprite = "GFX_NAM_pw_lane_strait"
 			frame = 4
 		}
 
 		iconType = {
-			name = "NAM_pw_lane_RIV_idle"
+			name = "NAM_pw_lane_crossing_idle"
 			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_RIV"
+			quadTextureSprite = "GFX_NAM_pw_lane_crossing"
 			frame = 1
 		}
 
 		iconType = {
-			name = "NAM_pw_lane_RIV_raid"
+			name = "NAM_pw_lane_crossing_raid"
 			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_RIV"
+			quadTextureSprite = "GFX_NAM_pw_lane_crossing"
 			frame = 2
 		}
 
 		iconType = {
-			name = "NAM_pw_lane_RIV_guarded"
+			name = "NAM_pw_lane_crossing_guarded"
 			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_RIV"
+			quadTextureSprite = "GFX_NAM_pw_lane_crossing"
 			frame = 3
 		}
 
 		iconType = {
-			name = "NAM_pw_lane_RIV_closed"
+			name = "NAM_pw_lane_crossing_closed"
 			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_RIV"
-			frame = 4
-		}
-
-		iconType = {
-			name = "NAM_pw_lane_LUR_idle"
-			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_LUR"
-			frame = 1
-		}
-
-		iconType = {
-			name = "NAM_pw_lane_LUR_raid"
-			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_LUR"
-			frame = 2
-		}
-
-		iconType = {
-			name = "NAM_pw_lane_LUR_guarded"
-			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_LUR"
-			frame = 3
-		}
-
-		iconType = {
-			name = "NAM_pw_lane_LUR_closed"
-			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_LUR"
-			frame = 4
-		}
-
-		iconType = {
-			name = "NAM_pw_lane_CHD_idle"
-			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_CHD"
-			frame = 1
-		}
-
-		iconType = {
-			name = "NAM_pw_lane_CHD_raid"
-			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_CHD"
-			frame = 2
-		}
-
-		iconType = {
-			name = "NAM_pw_lane_CHD_guarded"
-			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_CHD"
-			frame = 3
-		}
-
-		iconType = {
-			name = "NAM_pw_lane_CHD_closed"
-			position = { x = 12 y = 66 }
-			quadTextureSprite = "GFX_NAM_pw_lane_CHD"
+			quadTextureSprite = "GFX_NAM_pw_lane_crossing"
 			frame = 4
 		}
 
 		instantTextBoxType = {
 			name = "NAM_pw_islands_label"
-			position = { x = 118 y = 224 }
+			position = { x = 142 y = 192 }
 			text = "NAM_pw_islands_label"
 			font = "hoi_16mbs"
-			maxWidth = 140
+			maxWidth = 116
 			maxHeight = 18
 			format = centre
 			fixedsize = yes
@@ -301,11 +245,11 @@ guiTypes = {
 		}
 
 		instantTextBoxType = {
-			name = "NAM_pw_label_EFL"
-			position = { x = 266 y = 132 }
-			text = "NAM_pw_lane_EFL_name"
+			name = "NAM_pw_label_oil"
+			position = { x = 295 y = 190 }
+			text = "NAM_pw_lane_oil_name"
 			font = "hoi_16mbs"
-			maxWidth = 80
+			maxWidth = 124
 			maxHeight = 18
 			format = left
 			fixedsize = yes
@@ -313,79 +257,19 @@ guiTypes = {
 		}
 
 		buttonType = {
-			name = "NAM_pw_raid_EFL"
-			position = { x = 240 y = 129 }
+			name = "NAM_pw_raid_oil"
+			position = { x = 269 y = 187 }
 			quadTextureSprite = "GFX_NAM_pw_marker"
 			clicksound = click_default
-			pdx_tooltip = "NAM_pw_route_EFL_tt"
+			pdx_tooltip = "NAM_pw_route_oil_tt"
 		}
 
 		instantTextBoxType = {
-			name = "NAM_pw_label_AZH"
-			position = { x = 360 y = 193 }
-			text = "NAM_pw_lane_AZH_name"
+			name = "NAM_pw_label_coast"
+			position = { x = 101 y = 147 }
+			text = "NAM_pw_lane_coast_name"
 			font = "hoi_16mbs"
-			maxWidth = 80
-			maxHeight = 18
-			format = left
-			fixedsize = yes
-			alwaystransparent = yes
-		}
-
-		buttonType = {
-			name = "NAM_pw_raid_AZH"
-			position = { x = 334 y = 190 }
-			quadTextureSprite = "GFX_NAM_pw_marker"
-			clicksound = click_default
-			pdx_tooltip = "NAM_pw_route_AZH_tt"
-		}
-
-		instantTextBoxType = {
-			name = "NAM_pw_label_ULV"
-			position = { x = 122 y = 176 }
-			text = "NAM_pw_lane_ULV_name"
-			font = "hoi_16mbs"
-			maxWidth = 80
-			maxHeight = 18
-			format = left
-			fixedsize = yes
-			alwaystransparent = yes
-		}
-
-		buttonType = {
-			name = "NAM_pw_raid_ULV"
-			position = { x = 96 y = 173 }
-			quadTextureSprite = "GFX_NAM_pw_marker"
-			clicksound = click_default
-			pdx_tooltip = "NAM_pw_route_ULV_tt"
-		}
-
-		instantTextBoxType = {
-			name = "NAM_pw_label_RIV"
-			position = { x = 128 y = 127 }
-			text = "NAM_pw_lane_RIV_name"
-			font = "hoi_16mbs"
-			maxWidth = 80
-			maxHeight = 18
-			format = left
-			fixedsize = yes
-			alwaystransparent = yes
-		}
-
-		buttonType = {
-			name = "NAM_pw_raid_RIV"
-			position = { x = 102 y = 124 }
-			quadTextureSprite = "GFX_NAM_pw_marker"
-			clicksound = click_default
-			pdx_tooltip = "NAM_pw_route_RIV_tt"
-		}
-
-		instantTextBoxType = {
-			name = "NAM_pw_label_LUR"
-			position = { x = 209 y = 204 }
-			text = "NAM_pw_lane_LUR_name"
-			font = "hoi_16mbs"
-			maxWidth = 80
+			maxWidth = 124
 			maxHeight = 18
 			format = right
 			fixedsize = yes
@@ -393,19 +277,39 @@ guiTypes = {
 		}
 
 		buttonType = {
-			name = "NAM_pw_raid_LUR"
-			position = { x = 291 y = 201 }
+			name = "NAM_pw_raid_coast"
+			position = { x = 227 y = 144 }
 			quadTextureSprite = "GFX_NAM_pw_marker"
 			clicksound = click_default
-			pdx_tooltip = "NAM_pw_route_LUR_tt"
+			pdx_tooltip = "NAM_pw_route_coast_tt"
 		}
 
 		instantTextBoxType = {
-			name = "NAM_pw_label_CHD"
-			position = { x = 282 y = 245 }
-			text = "NAM_pw_lane_CHD_name"
+			name = "NAM_pw_label_strait"
+			position = { x = 46 y = 210 }
+			text = "NAM_pw_lane_strait_name"
 			font = "hoi_16mbs"
-			maxWidth = 80
+			maxWidth = 124
+			maxHeight = 18
+			format = centre
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_pw_raid_strait"
+			position = { x = 96 y = 184 }
+			quadTextureSprite = "GFX_NAM_pw_marker"
+			clicksound = click_default
+			pdx_tooltip = "NAM_pw_route_strait_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_pw_label_crossing"
+			position = { x = 234 y = 226 }
+			text = "NAM_pw_lane_crossing_name"
+			font = "hoi_16mbs"
+			maxWidth = 124
 			maxHeight = 18
 			format = left
 			fixedsize = yes
@@ -413,11 +317,11 @@ guiTypes = {
 		}
 
 		buttonType = {
-			name = "NAM_pw_raid_CHD"
-			position = { x = 256 y = 242 }
+			name = "NAM_pw_raid_crossing"
+			position = { x = 208 y = 223 }
 			quadTextureSprite = "GFX_NAM_pw_marker"
 			clicksound = click_default
-			pdx_tooltip = "NAM_pw_route_CHD_tt"
+			pdx_tooltip = "NAM_pw_route_crossing_tt"
 		}
 
 		iconType = {
