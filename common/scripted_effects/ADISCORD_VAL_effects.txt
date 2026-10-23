@@ -3625,12 +3625,12 @@ VAL_raise_shield_special_forces = {
 			if = {
 				limit = {
 					NOT = {
-						has_template = "Щитовой спецназ Кефрейта"
+						has_template = "Kefreyt Shield Special Forces"
 					}
 				}
 
 				division_template = {
-					name = "Щитовой спецназ Кефрейта"
+					name = "Kefreyt Shield Special Forces"
 					override_model = ADISCORD_urban_breacher_entity
 					template_counter = 89
 					division_names_group = VAL_INF_01
@@ -3670,7 +3670,7 @@ VAL_raise_shield_special_forces = {
 
 				random_owned_controlled_state = {
 					create_unit = {
-						division = "name = \"1-я дивизия специального назначения\" division_template = \"Щитовой спецназ Кефрейта\" start_experience_factor = 0.5 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						division = "name = \"1-я дивизия специального назначения\" division_template = \"Kefreyt Shield Special Forces\" start_experience_factor = 0.5 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 						owner = VAL
 						count = 1
 						allow_spawning_on_enemy_provs = no
@@ -3725,9 +3725,9 @@ VAL_zeppelin_refund = {
 
 VAL_ensure_airship_template = {
 	if = {
-		limit = { NOT = { has_template = "Дирижабль Кефрейта" } }
+		limit = { NOT = { has_template = "Kefreyt Airship" } }
 		division_template = {
-			name = "Дирижабль Кефрейта"
+			name = "Kefreyt Airship"
 			template_counter = 37
 			override_model = ADISCORD_zeppelin_entity
 			is_locked = yes
@@ -3752,7 +3752,7 @@ VAL_zeppelin_finish = {
 			# The paid crew is already outside the national recruit pool.
 			capital_scope = {
 				create_unit = {
-					division = "name = \"Воздушный линкор «Кефрейт»\" division_template = \"Дирижабль Кефрейта\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					division = "name = \"Воздушный линкор «Кефрейт»\" division_template = \"Kefreyt Airship\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 					owner = VAL
 					allow_spawning_on_enemy_provs = no
 				}
@@ -3778,7 +3778,7 @@ VAL_spawn_zeppelin_trial = {
 		# Debug staffing and hull supply are independent of national reserves.
 		capital_scope = {
 			create_unit = {
-				division = "name = \"Воздушный линкор «Цепелин»\" division_template = \"Дирижабль Кефрейта\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				division = "name = \"Воздушный линкор «Цепелин»\" division_template = \"Kefreyt Airship\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 				owner = VAL
 				allow_spawning_on_enemy_provs = no
 			}
@@ -3805,9 +3805,9 @@ VAL_spawn_crimson_trial = {
 			complete_special_project = sp:ADISCORD_sp_combat_robots
 		}
 		if = {
-			limit = { NOT = { has_template = "Опытный штурмовой отряд Кефрейта" } }
+			limit = { NOT = { has_template = "Kefreyt Assault Trial" } }
 			division_template = {
-				name = "Опытный штурмовой отряд Кефрейта"
+				name = "Kefreyt Assault Trial"
 				template_counter = 4
 				is_locked = yes
 				regiments = {
@@ -3823,7 +3823,7 @@ VAL_spawn_crimson_trial = {
 		# Explicit staffing keeps the visual trial independent of reserve shortages.
 		capital_scope = {
 			create_unit = {
-				division = "name = \"Испытательная дивизия роботов\" division_template = \"Опытный штурмовой отряд Кефрейта\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				division = "name = \"Испытательная дивизия роботов\" division_template = \"Kefreyt Assault Trial\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 				owner = VAL
 				allow_spawning_on_enemy_provs = no
 			}
@@ -3843,9 +3843,9 @@ VAL_spawn_urban_breacher_trial = {
 			}
 		}
 		if = {
-			limit = { NOT = { has_template = "Опытный отряд городского прорыва Кефрейта" } }
+			limit = { NOT = { has_template = "Kefreyt Urban Breacher Trial" } }
 			division_template = {
-				name = "Опытный отряд городского прорыва Кефрейта"
+				name = "Kefreyt Urban Breacher Trial"
 				template_counter = 89
 				is_locked = yes
 				regiments = {
@@ -3856,7 +3856,7 @@ VAL_spawn_urban_breacher_trial = {
 		# Explicit staffing keeps the visual trial independent of reserve shortages.
 		48 = {
 			create_unit = {
-				division = "name = \"Испытательный щитовой отряд\" division_template = \"Опытный отряд городского прорыва Кефрейта\" location = 16521 start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				division = "name = \"Испытательный щитовой отряд\" division_template = \"Kefreyt Urban Breacher Trial\" location = 16521 start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 				owner = VAL
 				allow_spawning_on_enemy_provs = no
 			}
@@ -3877,9 +3877,9 @@ VAL_raise_mountain_contractors = {
 				any_owned_state = { is_controlled_by = PREV }
 			}
 			if = {
-				limit = { NOT = { has_template = "Горнострелки-контрактники Кефрейта" } }
+				limit = { NOT = { has_template = "Kefreyt Mountain Contractors" } }
 				division_template = {
-					name = "Горнострелки-контрактники Кефрейта"
+					name = "Kefreyt Mountain Contractors"
 					override_model = ADISCORD_VAL_mountaineer_entity
 					template_counter = 110
 					division_names_group = VAL_INF_01
@@ -3899,7 +3899,7 @@ VAL_raise_mountain_contractors = {
 			# Explicit staffing avoids taking recruits from the free replacement pool.
 			random_owned_controlled_state = {
 				create_unit = {
-					division = "division_template = \"Горнострелки-контрактники Кефрейта\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					division = "division_template = \"Kefreyt Mountain Contractors\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 					owner = PREV
 					count = 2
 					allow_spawning_on_enemy_provs = no
@@ -3923,9 +3923,9 @@ VAL_raise_reserve_battalions = {
 				any_owned_state = { is_controlled_by = PREV }
 			}
 			if = {
-				limit = { NOT = { has_template = "Контрактная пехота Кефрейта" } }
+				limit = { NOT = { has_template = "Kefreyt Contract Infantry" } }
 				division_template = {
-					name = "Контрактная пехота Кефрейта"
+					name = "Kefreyt Contract Infantry"
 					template_counter = 3
 					division_names_group = VAL_INF_01
 					regiments = {
@@ -3942,7 +3942,7 @@ VAL_raise_reserve_battalions = {
 			# Explicit staffing avoids taking recruits from the free replacement pool.
 			random_owned_controlled_state = {
 				create_unit = {
-					division = "division_template = \"Контрактная пехота Кефрейта\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					division = "division_template = \"Kefreyt Contract Infantry\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 					owner = PREV
 					count = 2
 					allow_spawning_on_enemy_provs = no
@@ -3968,9 +3968,9 @@ VAL_raise_marine_contract_corps = {
 			}
 			set_technology = { ADISCORD_tech_kefreyt_marine_corps = 1 popup = no }
 			if = {
-				limit = { NOT = { has_template = "Контрактная группа морской пехоты Кефрейта" } }
+				limit = { NOT = { has_template = "Kefreyt Marine Contract Group" } }
 				division_template = {
-					name = "Контрактная группа морской пехоты Кефрейта"
+					name = "Kefreyt Marine Contract Group"
 					override_model = ADISCORD_VAL_marine_entity
 					template_counter = 34
 					division_names_group = VAL_INF_01
@@ -3989,7 +3989,7 @@ VAL_raise_marine_contract_corps = {
 			}
 			random_owned_controlled_state = {
 				create_unit = {
-					division = "division_template = \"Контрактная группа морской пехоты Кефрейта\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					division = "division_template = \"Kefreyt Marine Contract Group\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 					owner = PREV
 					count = 1
 					allow_spawning_on_enemy_provs = no

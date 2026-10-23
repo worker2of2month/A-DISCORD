@@ -1355,7 +1355,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             builder.ROOT / "history" / "units" / "EBA_vorkerland_collapse.txt"
         ).read_text(encoding="utf-8-sig")
         self.assertEqual(eba_oob.count("division = {"), 4)
-        self.assertEqual(eba_oob.count('division_template = "Ополчение распада"'), 4)
+        self.assertEqual(eba_oob.count('division_template = "Collapse Militia"'), 4)
 
         effects = source_section(
             (

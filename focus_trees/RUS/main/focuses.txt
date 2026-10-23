@@ -69,7 +69,7 @@ focus_tree = {
 			custom_effect_tooltip = RUS_arm_the_border_hosts_tt
 			capital_scope = {
 				create_unit = {
-					division = "division_template = \"Стрелковая бригада ханства\" start_experience_factor = 0.12 start_equipment_factor = 0.75"
+					division = "division_template = \"Khanate Rifle Brigade\" start_experience_factor = 0.12 start_equipment_factor = 0.75"
 					owner = RUS
 					count = 3
 				}
@@ -113,7 +113,7 @@ focus_tree = {
 				RUS_prepare_hazard_template = yes
 				capital_scope = {
 					create_unit = {
-						division = "division_template = \"Бригада РХБ защиты ханства\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						division = "division_template = \"Khanate CBRN Brigade\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 						owner = RUS
 						count = 2
 						allow_spawning_on_enemy_provs = no
@@ -397,7 +397,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = ADISCORD_anti_tank_equipment_2163 amount = 260 producer = RUS }
 			capital_scope = {
 				create_unit = {
-					division = "division_template = \"Стрелковая бригада ханства\" start_experience_factor = 0.16 start_equipment_factor = 0.75"
+					division = "division_template = \"Khanate Rifle Brigade\" start_experience_factor = 0.16 start_equipment_factor = 0.75"
 					owner = RUS
 					count = 5
 				}
@@ -450,7 +450,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = ADISCORD_anti_tank_equipment_2163 amount = 420 producer = RUS }
 			capital_scope = {
 				create_unit = {
-					division = "division_template = \"Стрелковая бригада ханства\" start_experience_factor = 0.18 start_equipment_factor = 0.75"
+					division = "division_template = \"Khanate Rifle Brigade\" start_experience_factor = 0.18 start_equipment_factor = 0.75"
 					owner = RUS
 					count = 6
 				}
@@ -636,7 +636,7 @@ focus_tree = {
 			add_manpower = 15000
 			capital_scope = {
 				create_unit = {
-					division = "division_template = \"Стрелковая бригада ханства\" start_experience_factor = 0.15 start_equipment_factor = 0.75"
+					division = "division_template = \"Khanate Rifle Brigade\" start_experience_factor = 0.15 start_equipment_factor = 0.75"
 					owner = RUS
 					count = 4
 				}
@@ -1596,7 +1596,7 @@ focus_tree = {
 				RUS_prepare_hazard_template = yes
 				capital_scope = {
 					create_unit = {
-						division = "division_template = \"Бригада РХБ защиты ханства\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						division = "division_template = \"Khanate CBRN Brigade\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 						owner = RUS
 						count = 1
 						allow_spawning_on_enemy_provs = no
@@ -2290,7 +2290,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = ADISCORD_anti_tank_equipment_2163 amount = 260 producer = RUS }
 			capital_scope = {
 				create_unit = {
-					division = "division_template = \"Стрелковая бригада ханства\" start_experience_factor = 0.16 start_equipment_factor = 0.75"
+					division = "division_template = \"Khanate Rifle Brigade\" start_experience_factor = 0.16 start_equipment_factor = 0.75"
 					owner = RUS
 					count = 5
 				}

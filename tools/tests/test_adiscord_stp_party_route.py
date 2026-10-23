@@ -841,7 +841,7 @@ class PartyRouteContracts(unittest.TestCase):
                 e
                 for _, e in selected_effects(locks, facts, tag)
                 if e.key == "set_division_template_lock"
-                and one(e.value, "division_template") == "Штурмовая дивизия Стеландера"
+                and one(e.value, "division_template") == "Stelander Assault Division"
             ]
             self.assertEqual(len(chosen), 1)
             self.assertEqual(
@@ -852,7 +852,7 @@ class PartyRouteContracts(unittest.TestCase):
             (
                 "set_division_template_lock",
                 [
-                    ("division_template", "Штурмовая дивизия Стеландера"),
+                    ("division_template", "Stelander Assault Division"),
                     ("is_locked", "no"),
                 ],
             ),

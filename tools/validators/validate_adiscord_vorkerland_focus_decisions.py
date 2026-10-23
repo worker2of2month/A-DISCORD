@@ -57,37 +57,37 @@ LEVY_DECISIONS = {
     "ADISCORD_vorkerland_wkr_retreat_levy_1": (
         "WKR",
         "0.20",
-        "Ополчение Воркерленда",
+        "Workerland Militia",
         "0.55",
     ),
     "ADISCORD_vorkerland_wkr_retreat_levy_2": (
         "WKR",
         "0.45",
-        "Ополчение Воркерленда",
+        "Workerland Militia",
         "0.45",
     ),
     "ADISCORD_vorkerland_vad_retreat_levy_1": (
         "VAD",
         "0.20",
-        "Охранный отряд Арми",
+        "Armi Security Detachment",
         "0.55",
     ),
     "ADISCORD_vorkerland_vad_retreat_levy_2": (
         "VAD",
         "0.45",
-        "Охранный отряд Арми",
+        "Armi Security Detachment",
         "0.45",
     ),
     "ADISCORD_vorkerland_tva_retreat_levy_1": (
         "TVA",
         "0.20",
-        "Ополчение распада",
+        "Collapse Militia",
         "0.55",
     ),
     "ADISCORD_vorkerland_tva_retreat_levy_2": (
         "TVA",
         "0.45",
-        "Ополчение распада",
+        "Collapse Militia",
         "0.45",
     ),
 }

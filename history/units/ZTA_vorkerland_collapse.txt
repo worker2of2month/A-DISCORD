@@ -1,5 +1,5 @@
 division_template = {
-	name = "Ополчение Златоречья"
+	name = "Zlatarech Militia"
 	template_counter = 7
 	division_names_group = ZTA_COLLAPSE_INF_01
 	regiments = {
@@ -12,21 +12,21 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 12930
-		division_template = "Ополчение Златоречья"
+		division_template = "Zlatarech Militia"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.75
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
 		location = 12930
-		division_template = "Ополчение Златоречья"
+		division_template = "Zlatarech Militia"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.75
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 3 }
 		location = 4501
-		division_template = "Ополчение Златоречья"
+		division_template = "Zlatarech Militia"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.75
 	}

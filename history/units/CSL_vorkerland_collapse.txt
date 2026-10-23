@@ -1,5 +1,5 @@
 division_template = {
-	name = "Муниципальное ополчение"
+	name = "Municipal Militia"
 	template_counter = 7
 	division_names_group = CSL_COLLAPSE_INF_01
 	regiments = {
@@ -11,10 +11,10 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 7778
-		division_template = "Муниципальное ополчение"
+		division_template = "Municipal Militia"
 		start_experience_factor = 0.05
 		start_equipment_factor = 0.55
 	}
-	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 7778 division_template = "Муниципальное ополчение" start_experience_factor = 0.05 start_equipment_factor = 0.60 }
-	division = { division_name = { is_name_ordered = yes name_order = 3 } location = 7778 division_template = "Муниципальное ополчение" start_experience_factor = 0.05 start_equipment_factor = 0.60 }
+	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 7778 division_template = "Municipal Militia" start_experience_factor = 0.05 start_equipment_factor = 0.60 }
+	division = { division_name = { is_name_ordered = yes name_order = 3 } location = 7778 division_template = "Municipal Militia" start_experience_factor = 0.05 start_equipment_factor = 0.60 }
 }

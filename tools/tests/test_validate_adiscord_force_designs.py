@@ -460,9 +460,9 @@ class VorkerlandForceDesignTests(unittest.TestCase):
 
     def test_all_claimants_start_with_the_same_full_armored_group(self) -> None:
         expected = {
-            "history/units/WRK.txt": "Мобильная группа Воркерленда",
-            "history/units/VAD.txt": "Мобильная группа Арми",
-            "history/units/TVA_vorkerland_collapse.txt": "Опытная мобильная группа",
+            "history/units/WRK.txt": "Workerland Mobile Group",
+            "history/units/VAD.txt": "Armi Mobile Group",
+            "history/units/TVA_vorkerland_collapse.txt": "Mobile Test Group",
         }
         for relative, template_name in expected.items():
             templates = named_blocks(read(relative), "division_template")
@@ -1284,11 +1284,11 @@ class NorthernStartingForceTests(unittest.TestCase):
 
         issued_rifles = {}
         nod_readiness = {
-            "Куссингтонская гвардия": 0.80,
-            "Линейная пехота Нодрула": 0.70,
-            "Куссингтонская охрана": 0.60,
-            "Бронегруппа Нодрула": 0.80,
-            "Горная пехота Нодрула": 0.80,
+            "Cussington Guard": 0.80,
+            "Nodral Line Infantry": 0.70,
+            "Cussington Security": 0.60,
+            "Nodral Armored Group": 0.80,
+            "Nodral Mountain Infantry": 0.80,
         }
         for tag, count in {"NOD": 38, "YPR": 18, "COF": 8, "TFF": 16}.items():
             entries = parse_clausewitz(read(f"history/units/{tag}.txt"))

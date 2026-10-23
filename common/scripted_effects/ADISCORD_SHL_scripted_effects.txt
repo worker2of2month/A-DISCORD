@@ -1962,9 +1962,9 @@ SHL_resolve_accident = {
 
 SHL_ensure_levy_template = {
 	if = {
-		limit = { NOT = { has_template = "Ополчение Горнила" } }
+		limit = { NOT = { has_template = "Furnace Levy" } }
 		division_template = {
-			name = "Ополчение Горнила"
+			name = "Furnace Levy"
 			template_counter = 7
 			is_locked = yes
 			force_allow_recruiting = no
@@ -1990,7 +1990,7 @@ SHL_ensure_levy_template = {
 # debits its manpower and equipment price before this helper runs.
 SHL_create_levy = {
 	create_unit = {
-		division = "division_template = \"Ополчение Горнила\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		division = "division_template = \"Furnace Levy\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 		owner = PREV
 		allow_spawning_on_enemy_provs = no
 	}
@@ -2201,7 +2201,7 @@ SHL_kyz_raise_qanat_guard = {
 			is_controlled_by = KYZ
 		}
 		create_unit = {
-			division = "division_template = \"Стража арыков\" start_experience_factor = 0.15 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			division = "division_template = \"Qanat Guard\" start_experience_factor = 0.15 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 			owner = KYZ
 			allow_spawning_on_enemy_provs = no
 		}
@@ -2411,7 +2411,7 @@ SHL_glp_raise_prismatic_guard = {
 			is_controlled_by = GLP
 		}
 		create_unit = {
-			division = "division_template = \"Призматическая гвардия\" start_experience_factor = 0.15 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			division = "division_template = \"Prismatic Guard\" start_experience_factor = 0.15 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 			owner = GLP
 			allow_spawning_on_enemy_provs = no
 		}
@@ -2747,12 +2747,12 @@ SHL_mzr_raise_cistern_watch = {
 			is_controlled_by = MZR
 		}
 		create_unit = {
-			division = "division_template = \"Охрана водохранилищ\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			division = "division_template = \"Cistern Watch\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 			owner = MZR
 			allow_spawning_on_enemy_provs = no
 		}
 		create_unit = {
-			division = "division_template = \"Охрана водохранилищ\" start_experience_factor = 0.15 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			division = "division_template = \"Cistern Watch\" start_experience_factor = 0.15 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 			owner = MZR
 			allow_spawning_on_enemy_provs = no
 		}
@@ -2792,7 +2792,7 @@ SHL_start_mzr_war = {
 					is_controlled_by = MZR
 				}
 				create_unit = {
-					division = "division_template = \"Охрана водохранилищ\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					division = "division_template = \"Cistern Watch\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 					owner = MZR
 					allow_spawning_on_enemy_provs = no
 				}

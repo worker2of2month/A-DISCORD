@@ -785,7 +785,7 @@ def check_colony_and_exile(
     )
     check(
         "check_variable = { NAM_exile_to_cut > 0 }" in named_block(abandon, "if")
-        and 'change_division_template = { division_template = "Брошенные колонны" }' in abandon
+        and 'change_division_template = { division_template = "Abandoned Columns" }' in abandon
         and "OWNER = { tag = NAM }" in abandon
         and embark.count("teleport_armies = {") == 7
         and embark.count("limit = { tag = NAM }") == 7
@@ -2503,10 +2503,10 @@ def main() -> int:
     order_templates = named_block(effects, "NAM_order_ensure_templates")
     unlock_templates = named_block(effects, "NAM_order_unlock_templates")
     template_sources = (
-        ("Столичная гвардия", starting_templates, 78, 9, ("engineer", "artillery")),
-        ("Линейная пехотная бригада", starting_templates, 3, 6, ("engineer",)),
-        ("Моторизованная колонна", order_templates, 5, 4, ("engineer", "artillery")),
-        ("Батальон береговой обороны", order_templates, 6, 3, ("artillery",)),
+        ("Capital Guard", starting_templates, 78, 9, ("engineer", "artillery")),
+        ("Line Infantry Brigade", starting_templates, 3, 6, ("engineer",)),
+        ("Motor Column", order_templates, 5, 4, ("engineer", "artillery")),
+        ("Coastal Battalion", order_templates, 6, 3, ("artillery",)),
     )
     for template, owner, counter, battalions, support in template_sources:
         definitions = [
@@ -2523,7 +2523,7 @@ def main() -> int:
             and f'name = "{template}"' not in nam_war_oob,
             f"{template} must keep its distinct icon, fixed order composition and settlement unlock",
         )
-        unit = "ADISCORD_mechanized_infantry" if template == "Моторизованная колонна" else "infantry"
+        unit = "ADISCORD_mechanized_infantry" if template == "Motor Column" else "infantry"
         regiments = named_block(definition, "regiments")
         companies = named_block(definition, "support")
         check(

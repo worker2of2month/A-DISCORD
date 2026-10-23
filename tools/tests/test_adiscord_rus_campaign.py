@@ -2834,7 +2834,7 @@ class RusCampaignTests(unittest.TestCase):
         divisions = world.divisions
         world.begin("RUS_aimaq_levy")
         self.assertEqual(world.divisions - divisions, 2)
-        self.assertIn("Аймачное ополчение", world.templates)
+        self.assertIn("Aimaq Levy", world.templates)
         self.assertEqual(world.value("RUS_bunker_food"), 50)
         self.assertEqual(world.equipment["infantry_equipment"], 3300)
         self.assertEqual(world.manpower, 1000)
@@ -2853,7 +2853,7 @@ class RusCampaignTests(unittest.TestCase):
         short.equipment["infantry_equipment"] = 2699.99
         self.assertFalse(short.matches(block(rows, "custom_cost_trigger")))
         disband = next(row.value for row in walk(self.effects["RUS_levies_monthly"]) if row.key == "delete_unit")
-        self.assertEqual((scalar(disband, "division_template"), scalar(disband, "disband")), ("Аймачное ополчение", "no"))
+        self.assertEqual((scalar(disband, "division_template"), scalar(disband, "disband")), ("Aimaq Levy", "no"))
         hooks = block(parse("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), "on_actions")
         self.assertIn("RUS_levies_monthly", [row.key for row in walk(block(hooks, "on_monthly_RUS"))])
 
@@ -4859,7 +4859,7 @@ class RusCampaignTests(unittest.TestCase):
         self.assertEqual((world.pp, world.value("ADISCORD_economy_treasury"), world.manpower), (pp - 100, cash - 335, 0))
         world.finish("RUS_lab_zeppelin")
         self.assertEqual(world.divisions, divisions + 1)
-        self.assertEqual(world.templates, {"Дирижабль ханства"})
+        self.assertEqual(world.templates, {"Khanate Airship"})
         self.assertIn("RUS_lab_zeppelin_delivered", world.flags)
         self.assertFalse(world.matches(block(zeppelin, "visible")))
         self.assertAlmostEqual(world.value("RUS_scientists_support"), 0.70)
@@ -4966,13 +4966,13 @@ class RusCampaignTests(unittest.TestCase):
             self.assertEqual(world.divisions, before + count)
             division, actual_count = world.created_units[-1]
             self.assertEqual(actual_count, count)
-            self.assertIn('division_template = "Бригада РХБ защиты ханства"', division)
+            self.assertIn('division_template = "Khanate CBRN Brigade"', division)
             self.assertIn("start_manpower_factor = 1.0", division)
             self.assertIn("start_equipment_factor = 1.0", division)
             self.assertIn("ADISCORD_tech_radiation_patrols", world.technologies)
-            self.assertIn("Бригада РХБ защиты ханства", world.recruitable_templates)
+            self.assertIn("Khanate CBRN Brigade", world.recruitable_templates)
         self.assertEqual(world.equipment, stock)
-        self.assertEqual(world.templates, {"Бригада РХБ защиты ханства"})
+        self.assertEqual(world.templates, {"Khanate CBRN Brigade"})
         self.assertEqual(sum(count for _, count in world.created_units) * len(regiments), 9)
         self.assertEqual(world.value("RUS_army_special_forces_min"), 9)
         self.assertFalse(any(name.startswith("RUS_hazard_capacity_") for name in world.ideas))

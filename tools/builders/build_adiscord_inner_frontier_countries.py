@@ -53,10 +53,10 @@ PROTECTORATE_TAG = "WCG"
 PROTECTORATE_SUCCESSORS = {"KRM", "LMN"}
 PROTECTORATE_COLORS = ((40, 43, 39), (190, 145, 48), (112, 44, 38))
 DIVISION_TEMPLATE_NAMES = (
-    "Палатинская линейная дивизия",
-    "Фильтрационный батальон",
-    "Пограничная бригада",
-    "Ополчение поселенцев",
+    "Palatine Line Division",
+    "Filtration Battalion",
+    "Frontier Brigade",
+    "Settler Militia",
 )
 (
     PALATINE_LINE_TEMPLATE,

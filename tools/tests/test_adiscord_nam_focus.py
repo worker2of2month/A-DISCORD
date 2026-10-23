@@ -739,7 +739,7 @@ class NamOptimizationTests(unittest.TestCase):
                     payload = [e for e in loop.value if e.key != "limit"]
                     for _, entry in selected_effects(payload, facts, "NAM"):
                         if entry.key == "change_division_template":
-                            self.assertEqual(scalar(entry.value, "division_template"), "Брошенные колонны")
+                            self.assertEqual(scalar(entry.value, "division_template"), "Abandoned Columns")
                             abandoned.append(index)
                         elif entry.key == "subtract_from_temp_variable":
                             facts[("NAM", "variable", scalar(entry.value, "var"))] -= float(scalar(entry.value, "value"))

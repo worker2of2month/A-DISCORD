@@ -1,5 +1,5 @@
 division_template = {
-	name = "Ополчение верховьев"
+	name = "Upper Reaches Militia"
 	template_counter = 7
 	division_names_group = VHV_COLLAPSE_INF_01
 	regiments = {
@@ -12,24 +12,24 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 8803
-		division_template = "Ополчение верховьев"
+		division_template = "Upper Reaches Militia"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
 		location = 4080
-		division_template = "Ополчение верховьев"
+		division_template = "Upper Reaches Militia"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 3 }
 		location = 2883
-		division_template = "Ополчение верховьев"
+		division_template = "Upper Reaches Militia"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.70
 	}
-	division = { division_name = { is_name_ordered = yes name_order = 4 } location = 8803 division_template = "Ополчение верховьев" start_experience_factor = 0.10 start_equipment_factor = 0.75 }
-	division = { division_name = { is_name_ordered = yes name_order = 5 } location = 4080 division_template = "Ополчение верховьев" start_experience_factor = 0.10 start_equipment_factor = 0.75 }
+	division = { division_name = { is_name_ordered = yes name_order = 4 } location = 8803 division_template = "Upper Reaches Militia" start_experience_factor = 0.10 start_equipment_factor = 0.75 }
+	division = { division_name = { is_name_ordered = yes name_order = 5 } location = 4080 division_template = "Upper Reaches Militia" start_experience_factor = 0.10 start_equipment_factor = 0.75 }
 }

@@ -1,5 +1,5 @@
 division_template = {
-	name = "Охранный отряд Арми"
+	name = "Armi Security Detachment"
 	template_counter = 80
 	division_names_group = ADISCORD_INF_01
 	regiments = {
@@ -10,7 +10,7 @@ division_template = {
 }
 
 division_template = {
-	name = "Механизированная пехота Вадла"
+	name = "Vadl Mechanized Infantry"
 	template_counter = 5
 	division_names_group = ADISCORD_INF_01
 	regiments = {
@@ -27,7 +27,7 @@ division_template = {
 }
 
 division_template = {
-	name = "Гвардия Арми"
+	name = "Armi Guard"
 	template_counter = 78
 	division_names_group = ADISCORD_INF_01
 	regiments = {
@@ -48,7 +48,7 @@ division_template = {
 }
 
 division_template = {
-	name = "Мобильная группа Арми"
+	name = "Armi Mobile Group"
 	template_counter = 5
 	division_names_group = ADISCORD_INF_01
 	regiments = {
@@ -75,75 +75,75 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 6192
-		division_template = "Гвардия Арми"
+		division_template = "Armi Guard"
 		start_experience_factor = 0.35
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
 		location = 11944
-		division_template = "Механизированная пехота Вадла"
+		division_template = "Vadl Mechanized Infantry"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 3 }
 		location = 2539
-		division_template = "Механизированная пехота Вадла"
+		division_template = "Vadl Mechanized Infantry"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 4 }
 		location = 16560
-		division_template = "Охранный отряд Арми"
+		division_template = "Armi Security Detachment"
 		start_experience_factor = 0.25
 		start_equipment_factor = 0.75
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 5 }
 		location = 6192
-		division_template = "Механизированная пехота Вадла"
+		division_template = "Vadl Mechanized Infantry"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 6 }
 		location = 11944
-		division_template = "Механизированная пехота Вадла"
+		division_template = "Vadl Mechanized Infantry"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 7 }
 		location = 2539
-		division_template = "Механизированная пехота Вадла"
+		division_template = "Vadl Mechanized Infantry"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 8 }
 		location = 16560
-		division_template = "Охранный отряд Арми"
+		division_template = "Armi Security Detachment"
 		start_experience_factor = 0.25
 		start_equipment_factor = 0.75
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 9 }
 		location = 6192
-		division_template = "Механизированная пехота Вадла"
+		division_template = "Vadl Mechanized Infantry"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.85
 	}
-	division = { division_name = { is_name_ordered = yes name_order = 10 } location = 11944 division_template = "Охранный отряд Арми" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
-	division = { division_name = { is_name_ordered = yes name_order = 11 } location = 2539 division_template = "Охранный отряд Арми" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
-	division = { division_name = { is_name_ordered = yes name_order = 12 } location = 16560 division_template = "Охранный отряд Арми" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
+	division = { division_name = { is_name_ordered = yes name_order = 10 } location = 11944 division_template = "Armi Security Detachment" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
+	division = { division_name = { is_name_ordered = yes name_order = 11 } location = 2539 division_template = "Armi Security Detachment" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
+	division = { division_name = { is_name_ordered = yes name_order = 12 } location = 16560 division_template = "Armi Security Detachment" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
 	# Frontage reserve: VAD fights WKR, TVA and the central districts at once;
 	# twelve formations could not cover its lines against TVA's nineteen.
-	division = { division_name = { is_name_ordered = yes name_order = 13 } location = 6192 division_template = "Охранный отряд Арми" start_experience_factor = 0.20 start_equipment_factor = 0.80 }
-	division = { division_name = { is_name_ordered = yes name_order = 14 } location = 11944 division_template = "Охранный отряд Арми" start_experience_factor = 0.20 start_equipment_factor = 0.80 }
-	division = { division_name = { is_name_ordered = yes name_order = 15 } location = 2539 division_template = "Охранный отряд Арми" start_experience_factor = 0.20 start_equipment_factor = 0.80 }
-	division = { division_name = { is_name_ordered = yes name_order = 16 } location = 16560 division_template = "Охранный отряд Арми" start_experience_factor = 0.20 start_equipment_factor = 0.80 }
+	division = { division_name = { is_name_ordered = yes name_order = 13 } location = 6192 division_template = "Armi Security Detachment" start_experience_factor = 0.20 start_equipment_factor = 0.80 }
+	division = { division_name = { is_name_ordered = yes name_order = 14 } location = 11944 division_template = "Armi Security Detachment" start_experience_factor = 0.20 start_equipment_factor = 0.80 }
+	division = { division_name = { is_name_ordered = yes name_order = 15 } location = 2539 division_template = "Armi Security Detachment" start_experience_factor = 0.20 start_equipment_factor = 0.80 }
+	division = { division_name = { is_name_ordered = yes name_order = 16 } location = 16560 division_template = "Armi Security Detachment" start_experience_factor = 0.20 start_equipment_factor = 0.80 }
 }
 
 instant_effect = {

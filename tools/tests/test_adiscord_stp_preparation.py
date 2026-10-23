@@ -6215,7 +6215,7 @@ class StelanderPreparationTests(unittest.TestCase):
             e.value
             for e in entries("history/units/ADISCORD_STP_civil_war_templates.txt")
             if e.key == "division_template"
-            and scalar(e.value, "name") == "Штурмовая дивизия Стеландера"
+            and scalar(e.value, "name") == "Stelander Assault Division"
         )
         units = block(entries("common/units/ADISCORD_land_units.txt"), "sub_units")
         manpower, equipment = 0, {}
@@ -7748,7 +7748,7 @@ class StelanderPreparationTests(unittest.TestCase):
             e.value
             for e in oob
             if e.key == "division_template"
-            and scalar(e.value, "name") == "Территориальная бригада Стеландера"
+            and scalar(e.value, "name") == "Stelander Territorial Brigade"
         )
         units = block(entries("common/units/ADISCORD_land_units.txt"), "sub_units")
         manpower = 0

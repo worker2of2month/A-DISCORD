@@ -139,7 +139,7 @@ def country_history(tag: str, row: dict) -> str:
 
 
 def country_oob(tag: str, row: dict) -> str:
-    template = "Территориальная бригада"
+    template = "Territorial Brigade"
     lines = [
         HEADER.rstrip(), "division_template = {", f'\tname = "{template}"',
         "\ttemplate_counter = 12",
@@ -151,7 +151,7 @@ def country_oob(tag: str, row: dict) -> str:
     for index in range(row["divisions"]):
         location = profiles()[states[index % len(states)]]["anchor"]
         lines += [
-            "\tdivision = {", f'\t\tname = "{index + 1}. Территориальная бригада"',
+            "\tdivision = {", f'\t\tname = "{index + 1}. Territorial Brigade"',
             f"\t\tlocation = {location}", f'\t\tdivision_template = "{template}"',
             "\t\tstart_experience_factor = 0.1", "\t\tstart_equipment_factor = 0.7",
             "\t}",

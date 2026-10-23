@@ -1,5 +1,5 @@
 division_template = {
-	name = "Техническая гвардия"
+	name = "Technical Guard"
 	template_counter = 78
 	division_names_group = WTD_COLLAPSE_INF_01
 	regiments = {
@@ -10,8 +10,8 @@ division_template = {
 }
 
 units = {
-	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 16426 division_template = "Техническая гвардия" start_experience_factor = 0.20 start_equipment_factor = 0.85 }
-	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 16426 division_template = "Техническая гвардия" start_experience_factor = 0.20 start_equipment_factor = 0.85 }
-	division = { division_name = { is_name_ordered = yes name_order = 3 } location = 16426 division_template = "Техническая гвардия" start_experience_factor = 0.15 start_equipment_factor = 0.80 }
-	division = { division_name = { is_name_ordered = yes name_order = 4 } location = 16426 division_template = "Техническая гвардия" start_experience_factor = 0.15 start_equipment_factor = 0.80 }
+	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 16426 division_template = "Technical Guard" start_experience_factor = 0.20 start_equipment_factor = 0.85 }
+	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 16426 division_template = "Technical Guard" start_experience_factor = 0.20 start_equipment_factor = 0.85 }
+	division = { division_name = { is_name_ordered = yes name_order = 3 } location = 16426 division_template = "Technical Guard" start_experience_factor = 0.15 start_equipment_factor = 0.80 }
+	division = { division_name = { is_name_ordered = yes name_order = 4 } location = 16426 division_template = "Technical Guard" start_experience_factor = 0.15 start_equipment_factor = 0.80 }
 }

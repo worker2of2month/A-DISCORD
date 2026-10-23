@@ -91,9 +91,9 @@ class KefreytMarineBranchTests(unittest.TestCase):
 
         effect = block(self.effects, "VAL_raise_marine_contract_corps = {")
         self.assertIn("ADISCORD_tech_kefreyt_marine_corps = 1", effect)
-        self.assertIn('name = "Контрактная группа морской пехоты Кефрейта"', effect)
+        self.assertIn('name = "Kefreyt Marine Contract Group"', effect)
         self.assertEqual(effect.count("ADISCORD_marine_infantry = {"), 6)
-        self.assertIn('division_template = \\"Контрактная группа морской пехоты Кефрейта\\"', effect)
+        self.assertIn('division_template = \\"Kefreyt Marine Contract Group\\"', effect)
         self.assertIn("count = 1", effect)
         self.assertIn("force_allow_recruiting = yes", effect)
 
@@ -148,14 +148,14 @@ class KefreytMarineBranchTests(unittest.TestCase):
             for row in audit["templates"]
             if row["key"] == "val_focus_marine_contract_group"
         )
-        self.assertEqual(template["display_name"], "Контрактная группа морской пехоты Кефрейта")
+        self.assertEqual(template["technical_name"], "Kefreyt Marine Contract Group")
         self.assertEqual(len(template["regiments"]), 6)
         ref = next(
             row
             for row in audit["references"]
             if row["key"] == "val_focus_marine_contract_group_spawn"
         )
-        self.assertEqual(ref["display_name"], "Контрактная группа морской пехоты Кефрейта")
+        self.assertEqual(ref["technical_name"], "Kefreyt Marine Contract Group")
         self.assertEqual(ref["start_experience_factor"], 0.3)
 
     def test_russian_and_english_localisation_cover_branch_and_unit(self) -> None:

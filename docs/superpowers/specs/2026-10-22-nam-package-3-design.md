@@ -120,18 +120,18 @@ Owner: core phase 1.
   Each order reserves its price in escrow variables, can be cancelled with a
   refund before the war, and is delivered by `NAM_deliver_mobilisation_orders`
   at hostilities: prepared formations claim manpower and equipment first.
-  Maximum six paid orders. Guard and infantry reuse `Столичная гвардия` and
-  `Линейная пехотная бригада` from `NAM.txt`, locked from campaign start with
+  Maximum six paid orders. Guard and infantry reuse `Capital Guard` and
+  `Line Infantry Brigade` from `NAM.txt`, locked from campaign start with
   recruiting allowed. `NAM_order_ensure_templates` creates only the distinct
   coastal and motorised templates when their orders have been paid. Settlement unlocks all
-  four roles. The motorised division (`Моторизованная колонна`: four
+  four roles. The motorised division (`Motor Column`: four
   `ADISCORD_mechanized_infantry`, engineers, artillery; 25 PP, 250 treasury,
   4600 manpower, 3000 fuel) needs `ADISCORD_tech_armored_carrier_program`,
   which its order grants. `NAM_order_spawn_one` places every paid formation
   in its own field when fully held, else in a fully held mainland state, else
   in any held state, and logs the route. Per-type delivery counters
   (`NAM_orders_delivered_*`) feed event `.11` and the category text
-  (`NAMGetOrdersSummary`). Template names are Russian without technical
+  (`NAMGetOrdersSummary`). Template names stay English without technical
   country prefixes; each role has a distinct template counter icon.
 - Defence lines: state-targeted decision `NAM_prepare_line` on NAM-owned
   states 67, 688, 689, 690, 700 (three parallel slots, 30 PP and 100 treasury,
@@ -428,7 +428,7 @@ Owner: core phase 4 (third playtest batch).
 - Marines: `NAM_order_marines` (50 loot + 4300 manpower, escrow
   `NAM_marine_orders_paid`, cap `NAM_marine_order_cap` base 1 max 3,
   `NAM_order_marines_release` refunds before the war of return). Template
-  `Островная морская пехота` (4 `ADISCORD_marine_infantry`, engineer) through the
+  `Island Marines` (4 `ADISCORD_marine_infantry`, engineer) through the
   script-only tech `ADISCORD_tech_svetlogorsk_marine_corps`.
 - Revenge landing: `NAM_war_of_return_start` from exile calls
   `NAM_wor_revenge_landing` after the declaration: 2 marine divisions plus a

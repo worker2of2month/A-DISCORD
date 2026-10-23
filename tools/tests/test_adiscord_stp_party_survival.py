@@ -140,7 +140,7 @@ class CongressDefenceContracts(unittest.TestCase):
                 (scope, 'controls_province', '145'): controller,
                 (scope, 'numeric', 'has_manpower'): 0,
                 (scope, 'equipment', 'infantry_equipment'): 0,
-                (scope, 'has_template', 'Пехотная гвардия Конгресса'): template,
+                (scope, 'has_template', 'Congress Infantry Guard'): template,
             }
             valid = party and owner and controller and not template
             self.assertEqual(matches_conditions(gate, facts, scope), valid)
@@ -264,7 +264,7 @@ class CivilWarAIReadinessContracts(unittest.TestCase):
                 (scope, 'is_ai', 'yes'): True,
                 (scope, 'STP_ps_war_active', 'yes'): war,
                 (scope, 'controls_province', '145'): congress,
-                (scope, 'has_template', 'Пехотная гвардия Конгресса'): True,
+                (scope, 'has_template', 'Congress Infantry Guard'): True,
             }
             self.assertEqual(
                 matches_conditions(one(target, 'enable'), facts, scope),

@@ -106,7 +106,7 @@ class StsSuccessorBootstrapTests(unittest.TestCase):
         )
         self.assertRegex(
             oob,
-            r"location\s*=\s*70[\s\S]{0,180}?division_template\s*=\s*\"Полицейская дивизия\"",
+            r"location\s*=\s*70[\s\S]{0,180}?division_template\s*=\s*\"Police division\"",
             "Old Fada starts with a local police formation before the split",
         )
 
@@ -138,7 +138,7 @@ class StsSuccessorBootstrapTests(unittest.TestCase):
         self.assertEqual(event.count("destroy_unit = yes"), 1)
         self.assertEqual(event.count("create_unit ="), 1)
         self.assertIn(
-            'division = "division_template = \\"Территориальная бригада Стеландера\\" '
+            'division = "division_template = \\"Stelander Territorial Brigade\\" '
             'start_experience_factor = 0.1 start_equipment_factor = 1.0 '
             'start_manpower_factor = 1.0"',
             event,

@@ -2609,7 +2609,7 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
         self.assertEqual(issues, [])
         archetypes, issues = templates._collect_equipment_archetypes(ROOT)
         self.assertEqual(issues, [])
-        for name in ("Щитовая штурмовая дивизия", "Щитовая бригада Стеландера", "Щитовой спецназ Кефрейта"):
+        for name in ("Shield Assault Division", "Stelander Shield Brigade", "Kefreyt Shield Special Forces"):
             matches = [item for item in actual if item.name == name]
             self.assertEqual(len(matches), 1, name)
             template = matches[0]
@@ -2624,7 +2624,7 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
             self.assertEqual(issues, [], name)
             self.assertEqual(computed.equipment["ADISCORD_power_shield_equipment"], 200, name)
             self.assertGreater(computed.organization, 45, name)
-            if name != "Щитовой спецназ Кефрейта":
+            if name != "Kefreyt Shield Special Forces":
                 self.assertEqual(computed.manpower, 10600, name)
 
     def test_balance_validator_counts_distributed_training_without_hiding_bad_payloads(self):
@@ -2807,7 +2807,7 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
         self.assertNotIn("create_unit", effect)
         self.assertNotIn("override_model", effect)
         actual, _, _ = templates.collect_templates_and_references(ROOT)
-        template = next(item for item in actual if item.name == "Щитовая бригада Стеландера")
+        template = next(item for item in actual if item.name == "Stelander Shield Brigade")
         units, _ = templates._collect_subunits(ROOT)
         archetypes, _ = templates._collect_equipment_archetypes(ROOT)
         computed, issues = templates._compute_template(template, units, archetypes, {})
@@ -3058,7 +3058,7 @@ class HazardInfantryTests(unittest.TestCase):
                 self.assertEqual(battalions.count(self.UNIT), 2)
                 self.assertEqual(battalions.count("ADISCORD_militia"), 1)
                 self.assertEqual(sum(units[u].manpower for u in battalions), 3000)
-                available = [t for t in definitions if t.path == filename and t.name == "Отряд РХБ защиты"]
+                available = [t for t in definitions if t.path == filename and t.name == "CBRN Protection Detachment"]
                 self.assertEqual(len(available), 1)
                 self.assertEqual([s.unit for s in available[0].slots], [self.UNIT] * 3)
                 # Issued reserves cover the new 30% equipment shortfall and leave spares.

@@ -12,22 +12,22 @@ from tools.validators.validate_adiscord_division_templates import (
 
 ROOT = Path(__file__).resolve().parents[2]
 MAPPING = {
-    "ADISCORD_vorkerland_ensure_emergency_militia_template": "Экстренное ополчение",
-    "ADISCORD_vorkerland_ensure_worker_home_guard_template": "Рабочая самооборона",
-    "ADISCORD_vorkerland_ensure_workerland_militia_template": "Ополчение Воркерленда",
-    "ADISCORD_vorkerland_ensure_workerland_mobile_group_template": "Мобильная группа Воркерленда",
-    "ADISCORD_vorkerland_ensure_armi_security_detachment_template": "Охранный отряд Арми",
-    "ADISCORD_vorkerland_ensure_armi_mobile_group_template": "Мобильная группа Арми",
-    "ADISCORD_vorkerland_ensure_tva_collapse_militia_template": "Ополчение распада",
-    "ADISCORD_vorkerland_ensure_tva_infiltration_cell_template": "Диверсионная ячейка",
-    "ADISCORD_vorkerland_ensure_wps_collapse_militia_template": "Ополчение распада",
-    "ADISCORD_vorkerland_ensure_tgd_urban_guard_template": "Городская гвардия",
-    "ADISCORD_vorkerland_ensure_line_infantry_brigade_template": "Линейная пехотная бригада",
+    "ADISCORD_vorkerland_ensure_emergency_militia_template": "Emergency Militia",
+    "ADISCORD_vorkerland_ensure_worker_home_guard_template": "Worker Home Guard",
+    "ADISCORD_vorkerland_ensure_workerland_militia_template": "Workerland Militia",
+    "ADISCORD_vorkerland_ensure_workerland_mobile_group_template": "Workerland Mobile Group",
+    "ADISCORD_vorkerland_ensure_armi_security_detachment_template": "Armi Security Detachment",
+    "ADISCORD_vorkerland_ensure_armi_mobile_group_template": "Armi Mobile Group",
+    "ADISCORD_vorkerland_ensure_tva_collapse_militia_template": "Collapse Militia",
+    "ADISCORD_vorkerland_ensure_tva_infiltration_cell_template": "Infiltration Cell",
+    "ADISCORD_vorkerland_ensure_wps_collapse_militia_template": "Collapse Militia",
+    "ADISCORD_vorkerland_ensure_tgd_urban_guard_template": "Urban Guard",
+    "ADISCORD_vorkerland_ensure_line_infantry_brigade_template": "Line Infantry Brigade",
 }
 REQUIRED_METADATA = {
-    "Экстренное ополчение": ("is_locked = yes", "force_allow_recruiting = yes"),
-    "Рабочая самооборона": ("is_locked = yes", "force_allow_recruiting = yes"),
-    "Мобильная группа Воркерленда": (
+    "Emergency Militia": ("is_locked = yes", "force_allow_recruiting = yes"),
+    "Worker Home Guard": ("is_locked = yes", "force_allow_recruiting = yes"),
+    "Workerland Mobile Group": (
         "is_locked = no",
         "force_allow_recruiting = yes",
     ),
@@ -149,11 +149,11 @@ class EmergencyTemplateTests(unittest.TestCase):
         covered_names = []
         for row in audit["templates"]:
             sources = [row["source"], *row.get("source_aliases", [])]
-            if row["display_name"] in MAPPING.values() and any(
+            if row["technical_name"] in MAPPING.values() and any(
                 source.get("path") == owner_path for source in sources
             ):
                 # One audit row can cover several definitions in the same file.
-                covered_names.append(row["display_name"])
+                covered_names.append(row["technical_name"])
         self.assertCountEqual(covered_names, MAPPING.values())
 
     def test_shared_owners_replace_redundant_emergency_and_home_guard_blocks(self):
@@ -163,8 +163,8 @@ class EmergencyTemplateTests(unittest.TestCase):
             ).read_text(encoding="utf-8-sig"),
             'collapse_effects',
         )
-        self.assertNotIn('name = "Экстренное ополчение"', collapse)
-        self.assertNotIn('name = "Рабочая самооборона"', collapse)
+        self.assertNotIn('name = "Emergency Militia"', collapse)
+        self.assertNotIn('name = "Worker Home Guard"', collapse)
 
 
 if __name__ == "__main__":

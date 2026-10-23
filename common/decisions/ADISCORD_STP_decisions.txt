@@ -3846,7 +3846,7 @@ STP_military_operations = {
 		available = {
 			custom_trigger_tooltip = { tooltip = STP_party_war_available_tt tag = STP has_war_with = STS STP_ps_can_counterattack = yes STP_cw_can_rearm = yes NOT = { has_country_flag = STP_cw_postwar } }
 			custom_trigger_tooltip = { tooltip = STP_party_assault_ready_tt STP_cw_can_pay_assault_division = yes }
-			has_template = "Штурмовая дивизия Стеландера"
+			has_template = "Stelander Assault Division"
 			any_owned_state = { is_controlled_by = PREV }
 		}
 		cost = 0
@@ -3861,7 +3861,7 @@ STP_military_operations = {
 					limit = {
 						tag = STP
 						has_completed_focus = STP_cw_assault_columns
-						has_template = "Штурмовая дивизия Стеландера"
+						has_template = "Stelander Assault Division"
 						has_war_with = STS
 						STP_ps_can_counterattack = yes
 						STP_cw_can_rearm = yes

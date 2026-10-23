@@ -18,24 +18,24 @@ from tools.validators.validate_adiscord_division_templates import (
 
 class StartingTemplateCounterTests(unittest.TestCase):
     def test_role_pictures_stay_distinct(self) -> None:
-        self.assertEqual(starting_template_counter("Полицейская дивизия"), 80)
-        self.assertEqual(starting_template_counter("Регулярная армия"), 3)
-        self.assertEqual(starting_template_counter("Столичная гвардия"), 78)
-        self.assertEqual(starting_template_counter("Линейная бригада Кефрейта"), 78)
-        self.assertEqual(starting_template_counter("Линейная пехотная бригада"), 3)
-        self.assertEqual(starting_template_counter("Территориальная бригада Стеландера"), 12)
-        self.assertEqual(starting_template_counter("Штурмовая дивизия Стеландера"), 4)
-        self.assertEqual(starting_template_counter("Добровольческая дивизия Кефрейта"), 68)
-        self.assertEqual(starting_template_counter("Бронегруппа Нодрула"), 86)
-        self.assertEqual(starting_template_counter("Горная пехота Нодрула"), 110)
-        self.assertEqual(starting_template_counter("Мобильная группа Арми"), 5)
+        self.assertEqual(starting_template_counter("Police division"), 80)
+        self.assertEqual(starting_template_counter("Regular army"), 3)
+        self.assertEqual(starting_template_counter("Capital Guard"), 78)
+        self.assertEqual(starting_template_counter("Kefreyt Line Brigade"), 78)
+        self.assertEqual(starting_template_counter("Line Infantry Brigade"), 3)
+        self.assertEqual(starting_template_counter("Stelander Territorial Brigade"), 12)
+        self.assertEqual(starting_template_counter("Stelander Assault Division"), 4)
+        self.assertEqual(starting_template_counter("Kefreyt Volunteer Division"), 68)
+        self.assertEqual(starting_template_counter("Nodral Armored Group"), 86)
+        self.assertEqual(starting_template_counter("Nodral Mountain Infantry"), 110)
+        self.assertEqual(starting_template_counter("Armi Mobile Group"), 5)
         self.assertEqual(
             len(set(STARTING_TEMPLATE_COUNTERS.values())),
             len(STARTING_TEMPLATE_COUNTERS),
         )
 
 
-class RepositoryDivisionTemplateNameTests(unittest.TestCase):
+class RepositoryDivisionTemplateAsciiTests(unittest.TestCase):
     def test_ai_designs_keep_explicit_role_icons(self) -> None:
         root = Path(__file__).resolve().parents[2]
         source = (root / "common/ai_templates/ADISCORD_land_templates.txt").read_text(
@@ -86,8 +86,6 @@ class RepositoryDivisionTemplateNameTests(unittest.TestCase):
                         name = values["name"]
                         with self.subTest(path=path, template=name):
                             self.assertNotIn(re.split(r"[ _-]", name)[0], tags)
-                            self.assertRegex(name, r"[А-Яа-яЁё]")
-                            self.assertNotRegex(name, r"[A-Za-z]")
                             self.assertEqual(
                                 values.get("template_counter"),
                                 str(starting_template_counter(name)),
@@ -99,7 +97,7 @@ class RepositoryDivisionTemplateNameTests(unittest.TestCase):
 
     def test_reinforcements_reuse_national_templates(self) -> None:
         root = Path(__file__).resolve().parents[2]
-        for tag, name in (("EFL", "Линейная пехотная бригада"), ("AZH", "Ополчение бассейна")):
+        for tag, name in (("EFL", "Line Infantry Brigade"), ("AZH", "Basin Levy")):
             starting = parse_clausewitz(
                 (root / f"history/units/{tag}.txt").read_text(encoding="utf-8")
             )
@@ -120,7 +118,7 @@ class RepositoryDivisionTemplateNameTests(unittest.TestCase):
         effects = (root / "common/scripted_effects/ADISCORD_VAL_effects.txt").read_text(
             encoding="utf-8"
         )
-        self.assertEqual(effects.count('name = "Дирижабль Кефрейта"'), 1)
+        self.assertEqual(effects.count('name = "Kefreyt Airship"'), 1)
         self.assertEqual(effects.count("VAL_ensure_airship_template = yes"), 2)
         self.assertNotIn("Kefreyt Reserve Infantry", effects)
         self.assertNotIn("Kefreyt Zeppelin Trial", effects)
@@ -165,9 +163,9 @@ class RepositoryDivisionTemplateNameTests(unittest.TestCase):
                 observed.setdefault(name, set()).add(counter)
         self.assertGreaterEqual(len(observed), 40)
         self.assertTrue(all(len(values) == 1 for values in observed.values()))
-        self.assertEqual(observed["Полицейская дивизия"], {"80"})
-        self.assertEqual(observed["Регулярная армия"], {"3"})
-        self.assertEqual(observed["Столичная гвардия"], {"78"})
+        self.assertEqual(observed["Police division"], {"80"})
+        self.assertEqual(observed["Regular army"], {"3"})
+        self.assertEqual(observed["Capital Guard"], {"78"})
 
 
 class DivisionTemplateAuditTests(unittest.TestCase):
@@ -403,25 +401,6 @@ ADISCORD_grant_starting_technology_profile = {
         self.assertTrue(
             any("canonical technical_name must be ASCII" in issue for issue in self._issues())
         )
-
-    def test_russian_references_require_exact_audited_name_and_source(self) -> None:
-        audit = self._valid_audit()
-        for row in audit["templates"] + audit["references"]:
-            row["display_name"] = "Аудитная линия"
-            row["literal_display_name"] = True
-            row["legacy_names"] = []
-        self._write_audit(audit)
-        self.assertEqual(self._issues(), [])
-
-        reference = audit["references"][0]
-        reference["display_name"] = "Другое название"
-        self._write_audit(audit)
-        self.assertTrue(any("reference coverage" in issue for issue in self._issues()))
-
-        reference["display_name"] = "Аудитная линия"
-        reference["path"] = "history/units/BBB.txt"
-        self._write_audit(audit)
-        self.assertTrue(any("reference coverage" in issue for issue in self._issues()))
 
     def test_regimental_support_is_included_in_slots_cost_and_organization(
         self,

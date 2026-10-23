@@ -1,5 +1,5 @@
 division_template = {
-	name = "Куссингтонская охрана"
+	name = "Cussington Security"
 	template_counter = 80
 	division_names_group = ADISCORD_INF_01
 	regiments = {
@@ -10,7 +10,7 @@ division_template = {
 }
 
 division_template = {
-	name = "Линейная пехота Нодрула"
+	name = "Nodral Line Infantry"
 	template_counter = 3
 	division_names_group = ADISCORD_INF_01
 	regiments = {
@@ -27,7 +27,7 @@ division_template = {
 }
 
 division_template = {
-	name = "Куссингтонская гвардия"
+	name = "Cussington Guard"
 	template_counter = 78
 	division_names_group = ADISCORD_INF_01
 	regiments = {
@@ -54,7 +54,7 @@ division_template = {
 }
 
 division_template = {
-	name = "Бронегруппа Нодрула"
+	name = "Nodral Armored Group"
 	template_counter = 86
 	division_names_group = ADISCORD_INF_01
 	priority = 2
@@ -81,7 +81,7 @@ division_template = {
 }
 
 division_template = {
-	name = "Горная пехота Нодрула"
+	name = "Nodral Mountain Infantry"
 	template_counter = 110
 	division_names_group = ADISCORD_INF_01
 	priority = 2
@@ -350,266 +350,266 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 16441
-		division_template = "Куссингтонская гвардия"
+		division_template = "Cussington Guard"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.80
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
 		location = 42
-		division_template = "Куссингтонская гвардия"
+		division_template = "Cussington Guard"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.80
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 3 }
 		location = 16356
-		division_template = "Куссингтонская гвардия"
+		division_template = "Cussington Guard"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.80
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 4 }
 		location = 14
-		division_template = "Куссингтонская гвардия"
+		division_template = "Cussington Guard"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.80
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 5 }
 		location = 85
-		division_template = "Куссингтонская гвардия"
+		division_template = "Cussington Guard"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.80
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 6 }
 		location = 9395
-		division_template = "Куссингтонская гвардия"
+		division_template = "Cussington Guard"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.80
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 7 }
 		location = 12434
-		division_template = "Линейная пехота Нодрула"
+		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 8 }
 		location = 16369
-		division_template = "Линейная пехота Нодрула"
+		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 9 }
 		location = 16363
-		division_template = "Линейная пехота Нодрула"
+		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 12 }
 		location = 15
-		division_template = "Линейная пехота Нодрула"
+		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 13 }
 		location = 32
-		division_template = "Линейная пехота Нодрула"
+		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 14 }
 		location = 54
-		division_template = "Линейная пехота Нодрула"
+		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 15 }
 		location = 36
-		division_template = "Линейная пехота Нодрула"
+		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 16 }
 		location = 47
-		division_template = "Линейная пехота Нодрула"
+		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 17 }
 		location = 7986
-		division_template = "Линейная пехота Нодрула"
+		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 18 }
 		location = 8357
-		division_template = "Линейная пехота Нодрула"
+		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 19 }
 		location = 74
-		division_template = "Линейная пехота Нодрула"
+		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 20 }
 		location = 13029
-		division_template = "Линейная пехота Нодрула"
+		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 21 }
 		location = 80
-		division_template = "Линейная пехота Нодрула"
+		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 22 }
 		location = 16644
-		division_template = "Линейная пехота Нодрула"
+		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 23 }
 		location = 16444
-		division_template = "Куссингтонская охрана"
+		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 25 }
 		location = 121
-		division_template = "Куссингтонская охрана"
+		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 30 }
 		location = 8
-		division_template = "Куссингтонская охрана"
+		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 31 }
 		location = 26
-		division_template = "Куссингтонская охрана"
+		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 33 }
 		location = 113
-		division_template = "Куссингтонская охрана"
+		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 34 }
 		location = 122
-		division_template = "Куссингтонская охрана"
+		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 35 }
 		location = 141
-		division_template = "Куссингтонская охрана"
+		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 36 }
 		location = 11467
-		division_template = "Куссингтонская охрана"
+		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 37 }
 		location = 16343
-		division_template = "Куссингтонская охрана"
+		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 38 }
 		location = 16346
-		division_template = "Куссингтонская охрана"
+		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 39 }
 		location = 16353
-		division_template = "Куссингтонская охрана"
+		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 40 }
 		location = 16357
-		division_template = "Куссингтонская охрана"
+		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 41 }
 		location = 16362
-		division_template = "Куссингтонская охрана"
+		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 42 }
 		location = 16375
-		division_template = "Куссингтонская охрана"
+		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 43 }
 		location = 16356
-		division_template = "Бронегруппа Нодрула"
+		division_template = "Nodral Armored Group"
 		start_experience_factor = 0.30
 		start_equipment_factor = 0.80
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 44 }
 		location = 14
-		division_template = "Бронегруппа Нодрула"
+		division_template = "Nodral Armored Group"
 		start_experience_factor = 0.30
 		start_equipment_factor = 0.80
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 45 }
 		location = 22
-		division_template = "Горная пехота Нодрула"
+		division_template = "Nodral Mountain Infantry"
 		start_experience_factor = 0.32
 		start_equipment_factor = 0.80
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 46 }
 		location = 34
-		division_template = "Горная пехота Нодрула"
+		division_template = "Nodral Mountain Infantry"
 		start_experience_factor = 0.32
 		start_equipment_factor = 0.80
 	}

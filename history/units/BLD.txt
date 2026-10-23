@@ -1,5 +1,5 @@
 division_template = {
-	name = "Пограничное ополчение"
+	name = "Border Levy"
 	template_counter = 7
 	division_names_group = ADISCORD_INF_01
 	regiments = {
@@ -9,7 +9,7 @@ division_template = {
 }
 
 division_template = {
-	name = "Феодальная дружина"
+	name = "Feudal Retinue"
 	template_counter = 3
 	division_names_group = ADISCORD_INF_01
 	regiments = {
@@ -21,7 +21,7 @@ division_template = {
 }
 
 division_template = {
-	name = "Дворянская гвардия"
+	name = "Noble Guard"
 	template_counter = 78
 	division_names_group = ADISCORD_INF_01
 	regiments = {
@@ -41,21 +41,21 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 16452
-		division_template = "Дворянская гвардия"
+		division_template = "Noble Guard"
 		start_experience_factor = 0.3
 		start_equipment_factor = 0.65
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
 		location = 16452
-		division_template = "Феодальная дружина"
+		division_template = "Feudal Retinue"
 		start_experience_factor = 0.3
 		start_equipment_factor = 0.65
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 3 }
 		location = 16452
-		division_template = "Феодальная дружина"
+		division_template = "Feudal Retinue"
 		start_experience_factor = 0.3
 		start_equipment_factor = 0.65
 	}
