@@ -849,7 +849,7 @@ country_event = {
 				STS = {
 					change_tag_from = STP
 					log = "STP_CW_OPENING default_handoff_end country=[THIS.GetTag]"
-					STP = { country_event = { id = ADISCORD_STP_cw.95 hours = 1 } }
+					STP = { country_event = { id = ADISCORD_STP_cw.95 days = 1 } }
 					log = "STP_CW_OPENING default_opening_queued country=[THIS.GetTag]"
 				}
 			}
@@ -874,7 +874,7 @@ country_event = {
 			change_tag_from = STP
 			hidden_effect = {
 				log = "STP_CW_OPENING choice_handoff_end country=[THIS.GetTag]"
-				STP = { country_event = { id = ADISCORD_STP_cw.95 hours = 1 } }
+				STP = { country_event = { id = ADISCORD_STP_cw.95 days = 1 } }
 				log = "STP_CW_OPENING choice_opening_queued country=[THIS.GetTag]"
 			}
 		}
@@ -2418,6 +2418,7 @@ country_event = {
 }
 
 # Queue without a player-country check; resolve both recipients after the handoff.
+# Callers defer by one day so control checks cannot run in the handoff tick.
 country_event = {
 	id = ADISCORD_STP_cw.95
 	hidden = yes

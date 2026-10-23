@@ -1022,7 +1022,7 @@ class CivilWarContracts(unittest.TestCase):
                 handoff = next(i for i, (_, e) in enumerate(selected)
                                if e.key == "change_tag_from")
                 callbacks = [
-                    (i, scope, scalar(e.value, "hours"))
+                    (i, scope, scalar(e.value, "days"))
                     for i, (scope, e) in enumerate(selected)
                     if e.key == "country_event"
                     and scalar(e.value, "id") == "ADISCORD_STP_cw.95"
@@ -1076,7 +1076,7 @@ class CivilWarContracts(unittest.TestCase):
         audio = ast_block(first_time.value, "hidden_effect")
         self.assertFalse(any(e.key == "scoped_play_song" for e in walk(audio)))
         callbacks = [
-            (scope, scalar(e.value, "hours"))
+            (scope, scalar(e.value, "days"))
             for scope, e in selected_effects(audio, {}, "STP")
             if e.key == "country_event"
             and scalar(e.value, "id") == "ADISCORD_STP_cw.95"

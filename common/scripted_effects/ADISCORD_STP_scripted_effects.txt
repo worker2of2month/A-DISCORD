@@ -3394,7 +3394,7 @@ STP_cw_begin_hostilities = {
 							}
 						}
 					}
-					country_event = { id = ADISCORD_STP_cw.95 hours = 1 }
+					country_event = { id = ADISCORD_STP_cw.95 days = 1 }
 					log = "STP_CW_OPENING queued_without_handoff country=[THIS.GetTag]"
 				}
 				else = { log = "STP_CW_OPENING waiting_for_handoff country=[THIS.GetTag]" }
@@ -4278,7 +4278,7 @@ STP_cw_start = {
 			STS = {
 				change_tag_from = STP
 				log = "STP_CW_OPENING predetermined_handoff_end country=[THIS.GetTag]"
-				STP = { country_event = { id = ADISCORD_STP_cw.95 hours = 1 } }
+				STP = { country_event = { id = ADISCORD_STP_cw.95 days = 1 } }
 				log = "STP_CW_OPENING predetermined_opening_queued country=[THIS.GetTag]"
 			}
 		}
