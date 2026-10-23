@@ -447,8 +447,18 @@ def check_ladder(
         and "value = -0.25" in declare
         and "value = 0.25" in declare
         and "NOT = { has_variable = NAM_underground }" in declare
-        and "id = ADISCORD_nam_groups.12" in declare,
-        "the declaration must create the ladder once, apply the course shift and open .12",
+        and "id = ADISCORD_nam_resource_war.80" in declare,
+        "the declaration must create the ladder once, apply the course shift and open .80",
+    )
+    centre = event_block(events, "ADISCORD_nam_resource_war.80")
+    colony_close = named_block(effects, "NAM_colony_close")
+    check(
+        "NAM_colony_close = yes" in named_block(centre, "immediate")
+        and "id = ADISCORD_nam_groups.12" in named_block(centre, "option")
+        and "set_country_flag = NAM_center_vanished" in colony_close
+        and "mark_focus_tree_layout_dirty = yes" in colony_close
+        and "fire_only_once = yes" in centre,
+        "the vanished-centre event must close the colony, reveal the tree and open the declaration .12",
     )
     runtime = "\n".join((effects, events, decisions))
     check(
@@ -661,6 +671,160 @@ def check_ladder(
         "NAM_rw_clear_punishment = yes" in on_actions,
         "annexation must clear the punitive spirits",
     )
+
+
+CUSTOM_COST_DECISIONS = {
+    "NAM_wrk_fuel_shipment": "NAM_cost_wrk_fuel_shipment",
+    "NAM_wrk_trade_concession": "NAM_cost_wrk_trade_concession",
+    "NAM_counterinsurgency_sweep": "NAM_cost_counterinsurgency_sweep",
+    "NAM_pirate_raid": "NAM_cost_pirate_raid",
+    "NAM_pirate_buy_arms": "NAM_cost_pirate_arms",
+    "NAM_pirate_buy_heavy_arms": "NAM_cost_pirate_heavy_arms",
+    "NAM_pirate_buy_convoys": "NAM_cost_pirate_convoys",
+    "NAM_pirate_fence_loot": "NAM_cost_pirate_fence",
+    "NAM_exile_drill": "NAM_cost_exile_drill",
+    "NAM_order_marines": "NAM_cost_order_marines",
+}
+
+
+def check_colony_and_exile(
+    effects: str,
+    triggers: str,
+    on_actions: str,
+    decisions: str,
+    categories: str,
+    events: str,
+    loc: str,
+) -> None:
+    """Colony phase, the active underground, the flight to the islands and piracy."""
+    check(
+        "visible = { NAM_colony_phase = yes }" in named_block(categories, "NAM_colony")
+        and "visible = { NAM_piracy_open = yes }" in named_block(categories, "NAM_piracy")
+        and "NOT = { has_country_flag = NAM_center_vanished }" in named_block(triggers, "NAM_colony_phase"),
+        "the colony category must close with the centre and the piracy category open in exile",
+    )
+    monthly = named_block(on_actions, "on_monthly_NAM")
+    check(
+        all(
+            f"{call} = yes" in monthly
+            for call in ("NAM_colony_monthly", "NAM_underground_monthly", "NAM_pirate_monthly")
+        )
+        and "NAM_underground_monthly" not in named_block(effects, "NAM_ladder_monthly")
+        and all(
+            "every_country" not in named_block(effects, name)
+            for name in (
+                "NAM_colony_monthly",
+                "NAM_underground_monthly",
+                "NAM_underground_sabotage_roll",
+                "NAM_pirate_monthly",
+            )
+        ),
+        "colony income, the underground and piracy must run in on_monthly_NAM without world scans",
+    )
+    groups_init = named_block(effects, "NAM_groups_initialize")
+    check(
+        "NOT = { has_variable = NAM_underground }" in groups_init
+        and "var = NAM_underground value = 25" in groups_init
+        and "NAM_wrk_trade_refresh = yes" in groups_init,
+        "the startup must seed the underground and the trade level without overwriting focus deltas",
+    )
+    clamp = named_block(effects, "NAM_underground_clamp")
+    thresholds = named_block(effects, "NAM_underground_check_thresholds")
+    check(
+        "NAM_underground_check_thresholds = yes" in clamp
+        and all(
+            f"id = ADISCORD_nam_resource_war.{number}" in thresholds for number in (82, 83, 84)
+        )
+        and "NAM_underground_active = yes" in thresholds,
+        "the underground clamp must open the 40/60/80 events only while the network is active",
+    )
+    sabotage = named_block(effects, "NAM_underground_sabotage_roll")
+    check(
+        all(f"id = ADISCORD_nam_resource_war.{number}" in sabotage for number in (85, 86, 87))
+        and "flag = NAM_ug_sabotage_cooldown" in sabotage,
+        "sabotage must draw one of its three events under a cooldown",
+    )
+    for event_id in ("82", "83", "84", "85", "86", "87"):
+        block = event_block(events, f"ADISCORD_nam_resource_war.{event_id}")
+        check(
+            block.count("option = {") == 3
+            and block.count("NAM_underground_close_event = yes") == 3,
+            f"underground event .{event_id} needs three answers that each close the event",
+        )
+    coalition = named_block(effects, "ADISCORD_nam_resource_war_resolve_coalition_victory")
+    check(
+        -1
+        < coalition.find("NAM_rw_exile_evacuate = yes")
+        < coalition.find("ADISCORD_nam_resource_war_end_all_wars = yes"),
+        "the evacuation must run while the divisions still stand on the mainland",
+    )
+    evacuate = named_block(effects, "NAM_rw_exile_evacuate")
+    check(
+        "value = 0.35" in evacuate
+        and evacuate.count("delete_unit = {") >= 6
+        and evacuate.rfind("state = 700") > evacuate.find("state = 719")
+        and "value = -0.65" in evacuate
+        and "log = " in evacuate,
+        "the evacuation must carry at most 35%, leave the harbour last, dump 65% and log the counts",
+    )
+    exile = named_block(effects, "NAM_rw_settle_island_exile")
+    check(
+        all(f"{state} = {{ NAM_rw_exile_scorch_state = yes }}" in exile for state in (67, 688, 689, 690, 719, 700))
+        and "NAM_rw_exile_land_remnants = yes" in exile
+        and "NAM_pirate_initialize = yes" in exile
+        and "id = ADISCORD_nam_resource_war.81" in exile,
+        "the exile must burn the ceded mainland, land the remnants, open piracy and report the flight",
+    )
+    remnants = named_block(effects, "NAM_rw_exile_land_remnants")
+    check(
+        "num_divisions" not in named_block(remnants, "while_loop_effect"),
+        "the remnant loop must run on a fixed count",
+    )
+    start = named_block(effects, "NAM_war_of_return_start")
+    landing = named_block(effects, "NAM_wor_revenge_landing")
+    check(
+        -1 < start.find("declare_war_on") < start.find("NAM_wor_revenge_landing = yes")
+        and "has_global_flag = ADISCORD_nam_resource_war_island_exile" in landing
+        and "prioritize_location = 16716" in landing
+        and "allow_spawning_on_enemy_provs = yes" in landing
+        and "var = NAM_marines_landed value = 2" in landing
+        and "NAM_landing_third_division = yes" in landing
+        and "var = NAM_marine_orders_paid value = 0" in landing
+        and "id = ADISCORD_nam_resource_war.94" in landing,
+        "the war of return from exile must open with a landing of two or three marine divisions",
+    )
+    check(
+        "var = NAM_marine_orders_paid value = 3 compare = less_than" in named_block(triggers, "NAM_marine_order_can_place")
+        and "var = NAM_pirate_raids_active value = 3 compare = less_than" in named_block(triggers, "NAM_pirate_slot_free")
+        and "add_manpower = 4300" in named_block(effects, "NAM_marine_orders_refund"),
+        "marine orders and raids must respect their caps and refund at the order price",
+    )
+    for decision_name, cost_key in CUSTOM_COST_DECISIONS.items():
+        decision = named_block(decisions, decision_name)
+        check(
+            "cost = 0" in decision
+            and f"custom_cost_text = {cost_key}" in decision
+            and "hidden_trigger" in named_block(decision, "complete_effect"),
+            f"{decision_name} must recheck its custom price before the single debit",
+        )
+        for suffix in ("", "_blocked", "_tooltip"):
+            check(
+                re.search(rf"(?m)^\s*{re.escape(cost_key + suffix)}:", loc) is not None,
+                f"missing localisation key {cost_key + suffix}",
+            )
+    for key in (
+        "NAM_colony",
+        "NAM_colony_desc",
+        "NAM_piracy",
+        "NAM_piracy_desc",
+        "ADISCORD_nam_resource_war.80.d",
+        "ADISCORD_nam_resource_war.81.d",
+        "ADISCORD_tech_svetlogorsk_marine_corps",
+    ):
+        check(
+            re.search(rf"(?m)^\s*{re.escape(key)}:", loc) is not None,
+            f"missing localisation key {key}",
+        )
 
 
 BORDER_BELT_STATES = (720, 721, 722, 701)
@@ -2477,6 +2641,15 @@ def main() -> int:
     check_settlement(
         effects,
         triggers,
+        prewar_decisions,
+        prewar_categories,
+        news,
+        loc,
+    )
+    check_colony_and_exile(
+        effects,
+        triggers,
+        on_actions,
         prewar_decisions,
         prewar_categories,
         news,

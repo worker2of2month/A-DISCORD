@@ -18,19 +18,26 @@ NAM_prewar_plan = {
 	ai_national_focuses = {
 		NAM_inventory
 		NAM_metropolitan_quota
+		NAM_colonial_watch
 		NAM_deliver_the_quota
+		NAM_oilfield_militia
+		NAM_wrk_trade_house
+		NAM_pipeline_patrols
+		NAM_wrk_return_cargo
+		NAM_print_shop_raid
 		NAM_metropolitan_depots
+		NAM_colony_order
+		NAM_letters_to_the_centre
+		NAM_independence_day
 		NAM_open_ledgers
 		NAM_districts
 		NAM_count_garrisons
 		NAM_field_guards
 		NAM_well_register
 		NAM_domestic_refining
-		NAM_letters_to_the_centre
 		NAM_public_payroll
 		NAM_district_guarantees
 		NAM_one_budget
-		NAM_independence_day
 		NAM_neutral_basin
 		NAM_restitution_desk
 		NAM_court_azhar
@@ -193,8 +200,9 @@ NAM_defeated_plan = {
 	weight = { factor = 20 }
 }
 
-# In island exile only the course of return remains: the islands are rebuilt
-# first, then the army and shipping for the war of return.
+# In island exile the AI holds the war port, the barracks, the letters of
+# marque, the submarines, the levy, the strike from the sea and the armed
+# underground, then lands for the war of return.
 NAM_defeated_exile_plan = {
 	name = "NAM island exile"
 	desc = ""
@@ -212,21 +220,41 @@ NAM_defeated_exile_plan = {
 		}
 	}
 	ai_national_focuses = {
-		NAM_defeat_count_losses
-		NAM_defeat_island_refuge
-		NAM_defeat_harbour_economy
-		NAM_defeat_revenge
-		NAM_defeat_island_foundries
-		NAM_defeat_rebuild_arsenal
-		NAM_defeat_hidden_reserve
-		NAM_defeat_rump_cabinet
-		NAM_defeat_underground_return
-		NAM_defeat_officer_cadres
-		NAM_defeat_new_levies
-		NAM_defeat_war_chest
-		NAM_defeat_refugee_quarters
+		NAM_exile_island_government
+		NAM_exile_island_chancellery
+		NAM_exile_general_staff
+		NAM_exile_mainland_contacts
+		NAM_exile_sea_raiders
+		NAM_exile_naval_port
+		NAM_exile_refugee_census
+		NAM_exile_refugee_barracks
+		NAM_exile_levy_of_exiles
+		NAM_exile_armed_underground
+		NAM_exile_letters_of_marque
+		NAM_exile_landing_craft
+		NAM_exile_arms_purchases
+		NAM_exile_marine_orders
+		NAM_exile_harbour_pilots
+		NAM_exile_privateer_captains
+		NAM_exile_strike_from_the_sea
+		NAM_exile_island_lines
+		NAM_exile_island_steel
+		NAM_exile_voice_of_svetlogorye
+		NAM_exile_klyuchevsk_strike
+		NAM_exile_landing_school
+		NAM_exile_fences
+		NAM_exile_tanker_raids
+		NAM_exile_wolfpacks
+		NAM_exile_army_of_return
+		NAM_exile_return_council
 		NAM_defeat_war_of_return
-		NAM_defeat_purge_of_seals
+		NAM_exile_black_market
+		NAM_exile_hidden_anchorages
+		NAM_exile_corsair_admiralty
+		NAM_exile_coastal_batteries
+		NAM_exile_island_foundry
+		NAM_exile_overseas_districts
+		NAM_exile_home_harbour
 		NAM_defeat_second_chapter
 	}
 	weight = { factor = 20 }

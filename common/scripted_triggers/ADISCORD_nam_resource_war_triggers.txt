@@ -614,6 +614,41 @@ NAM_underground_open = {
 	NOT = { has_country_flag = NAM_veter_amnesty }
 }
 
+# COUNTRY NAM. Veter's network grows and strikes on the mainland until the
+# resource war opens: hostilities turn it into the uprising or end it.
+NAM_underground_active = {
+	NAM_underground_open = yes
+	has_variable = NAM_underground
+	NOT = { has_global_flag = ADISCORD_nam_resource_war_started }
+	NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+	owns_state = 688
+}
+
+# STATE. One of the five oil fields of the basin.
+NAM_field_state = {
+	OR = {
+		state = 67
+		state = 688
+		state = 689
+		state = 690
+		state = 719
+	}
+}
+
+# ----- Colony phase -----
+# COUNTRY NAM. Svetlogorye is still Vorkerland's colony: the metropole exists
+# and its collapse has not yet begun.
+NAM_colony_phase = {
+	tag = NAM
+	NOT = { has_country_flag = NAM_center_vanished }
+	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
+}
+
+# COUNTRY NAM. Only one counterinsurgency sweep runs at a time.
+NAM_sweep_slot_free = {
+	NOT = { has_country_flag = NAM_sweep_running }
+}
+
 # COUNTRY NAM. Talks need a living network and no open uprising.
 NAM_veter_talks_possible = {
 	NAM_country_operable = yes
@@ -769,5 +804,47 @@ NAM_bw_line_startable = {
 		NAM_country_operable = yes
 		NAM_line_slot_free = yes
 		NAM_bw_can_pay_line = yes
+	}
+}
+
+# ----- Island exile: piracy and the revenge landing -----
+# COUNTRY NAM. The exiled government lives from the sea until it returns home.
+NAM_piracy_open = {
+	tag = NAM
+	has_global_flag = ADISCORD_nam_resource_war_island_exile
+	NOT = { has_global_flag = NAM_war_of_return_won }
+}
+
+# COUNTRY NAM. A free flotilla for a new raid: NAM_pirate_raid_slots, never
+# more than three at sea at once.
+NAM_pirate_slot_free = {
+	check_variable = { var = NAM_pirate_raid_slots value = NAM_pirate_raids_active compare = greater_than }
+	check_variable = { var = NAM_pirate_raids_active value = 3 compare = less_than }
+}
+
+# COUNTRY target of NAM_pirate_raid. No flotilla is already at sea against it.
+NAM_pirate_target_valid = {
+	exists = yes
+	NOT = { tag = NAM }
+	NOT = { is_in_faction_with = NAM }
+	NOT = { is_subject_of = NAM }
+	NOT = { has_country_flag = NAM_pirate_raid_target }
+}
+
+# COUNTRY NAM. Another marine formation fits under NAM_marine_order_cap and
+# the absolute ceiling of three; orders close once the war of return begins.
+NAM_marine_order_can_place = {
+	NAM_piracy_open = yes
+	NOT = { has_global_flag = NAM_war_of_return_started }
+	check_variable = { var = NAM_marine_order_cap value = NAM_marine_orders_paid compare = greater_than }
+	check_variable = { var = NAM_marine_orders_paid value = 3 compare = less_than }
+}
+
+# COUNTRY NAM. The landing at the South Harbour takes a third division: a paid
+# marine order or a revenge readiness of 70.
+NAM_landing_third_division = {
+	OR = {
+		check_variable = { var = NAM_marine_orders_paid value = 1 compare = greater_than_or_equals }
+		check_variable = { var = NAM_revenge_readiness value = 70 compare = greater_than_or_equals }
 	}
 }

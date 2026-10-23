@@ -1837,6 +1837,110 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_nam_resource_war.80",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 80,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_resource_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.81",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 81,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_resource_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.82",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 82,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_underground",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.83",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 83,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_underground",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.84",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 84,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_underground",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.85",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 85,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_underground",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.86",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 86,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_underground",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.87",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 87,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_underground",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.90",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 90,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_island_exile",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.91",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 91,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_island_exile",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.92",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 92,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_island_exile",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.93",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 93,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_island_exile",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.94",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 94,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_island_exile",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_nam_groups.12",
       "namespace": "ADISCORD_nam_groups",
       "number": 12,

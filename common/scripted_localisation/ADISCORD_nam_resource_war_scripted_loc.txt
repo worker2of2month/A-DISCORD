@@ -298,6 +298,80 @@ defined_text = {
 	}
 }
 
+# ----- Colony phase -----
+# The metropole's trade concession in the NAM_colony category.
+defined_text = {
+	name = NAMGetWrkConcession
+	text = {
+		trigger = { has_country_flag = NAM_wrk_concession_active }
+		localization_key = NAM_wrk_concession_status_active
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_wrk_concession_deposit value = 0 compare = greater_than } }
+		localization_key = NAM_wrk_concession_status_talks
+	}
+	text = {
+		localization_key = NAM_wrk_concession_status_none
+	}
+}
+
+# The next underground threshold that will open its event.
+defined_text = {
+	name = NAMGetUndergroundNext
+	text = {
+		trigger = { NOT = { NAM_underground_active = yes } }
+		localization_key = NAM_underground_next_idle
+	}
+	text = {
+		trigger = { NOT = { has_country_flag = NAM_ug_alarm_40 } }
+		localization_key = NAM_underground_next_40
+	}
+	text = {
+		trigger = { NOT = { has_country_flag = NAM_ug_alarm_60 } }
+		localization_key = NAM_underground_next_60
+	}
+	text = {
+		trigger = { NOT = { has_country_flag = NAM_ug_alarm_80 } }
+		localization_key = NAM_underground_next_80
+	}
+	text = {
+		localization_key = NAM_underground_next_none
+	}
+}
+
+# ----- Island exile -----
+# The coalition's attention in the NAM_piracy category.
+defined_text = {
+	name = NAMGetPirateNotoriety
+	text = {
+		trigger = { check_variable = { NAM_pirate_notoriety > 74 } }
+		localization_key = NAM_pirate_notoriety_hunted
+	}
+	text = {
+		trigger = { check_variable = { NAM_pirate_notoriety > 49 } }
+		localization_key = NAM_pirate_notoriety_wanted
+	}
+	text = {
+		trigger = { check_variable = { NAM_pirate_notoriety > 24 } }
+		localization_key = NAM_pirate_notoriety_known
+	}
+	text = {
+		localization_key = NAM_pirate_notoriety_quiet
+	}
+}
+
+# The size of the landing at the South Harbour if the return began today.
+defined_text = {
+	name = NAMGetLandingForecast
+	text = {
+		trigger = { NAM_landing_third_division = yes }
+		localization_key = NAM_landing_forecast_three
+	}
+	text = {
+		localization_key = NAM_landing_forecast_two
+	}
+}
+
 defined_text = {
 	name = NAMGetUndergroundStatus
 	text = {
