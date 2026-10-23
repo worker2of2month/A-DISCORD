@@ -677,7 +677,10 @@ CUSTOM_COST_DECISIONS = {
     "NAM_wrk_fuel_shipment": "NAM_cost_wrk_fuel_shipment",
     "NAM_wrk_trade_concession": "NAM_cost_wrk_trade_concession",
     "NAM_counterinsurgency_sweep": "NAM_cost_counterinsurgency_sweep",
-    "NAM_pirate_raid": "NAM_cost_pirate_raid",
+    "NAM_pirate_raid_lane_oil": "NAM_cost_pirate_raid",
+    "NAM_pirate_raid_lane_coast": "NAM_cost_pirate_raid",
+    "NAM_pirate_raid_lane_strait": "NAM_cost_pirate_raid",
+    "NAM_pirate_raid_lane_crossing": "NAM_cost_pirate_raid",
     "NAM_pirate_buy_arms": "NAM_cost_pirate_arms",
     "NAM_pirate_buy_heavy_arms": "NAM_cost_pirate_heavy_arms",
     "NAM_pirate_buy_convoys": "NAM_cost_pirate_convoys",
@@ -685,6 +688,9 @@ CUSTOM_COST_DECISIONS = {
     "NAM_exile_drill": "NAM_cost_exile_drill",
     "NAM_order_marines": "NAM_cost_order_marines",
 }
+# Shipping lanes of NAM_pirate_raid_lane_<id> in their lane-input order; the
+# piracy map builder draws the same lanes.
+PIRATE_LANES = ("oil", "coast", "strait", "crossing")
 
 
 def check_colony_and_exile(
@@ -833,6 +839,24 @@ def check_colony_and_exile(
                 re.search(rf"(?m)^\s*{re.escape(cost_key + suffix)}:", loc) is not None,
                 f"missing localisation key {cost_key + suffix}",
             )
+    # Lane raids: the paid receipt settles at the end or refunds on cancel, and
+    # the lane closes once no owner may be raided.
+    settle_lanes = named_block(effects, "NAM_pirate_save_lane_victims")
+    for number, lane in enumerate(PIRATE_LANES, 1):
+        decision = named_block(decisions, f"NAM_pirate_raid_lane_{lane}")
+        receipt = f"has_country_flag = NAM_pirate_at_sea_{lane}"
+        check(
+            f"NAM_pirate_lane_{lane}_open = no" in named_block(decision, "cancel_trigger")
+            and receipt in named_block(decision, "remove_effect")
+            and f"NAM_pirate_lane_input = {number}" in named_block(decision, "remove_effect")
+            and receipt in named_block(decision, "cancel_effect")
+            and "NAM_pirate_raid_release = yes" in named_block(decision, "cancel_effect")
+            and f"set_country_flag = NAM_pirate_at_sea_{lane}" in named_block(decision, "complete_effect")
+            and named_block(triggers, f"NAM_pirate_lane_{lane}_open")
+            and named_block(triggers, f"NAM_pirate_lane_{lane}_alert")
+            and f"NAM_pirate_lane_input = {number}" in settle_lanes,
+            f"the {lane} lane raid must settle or refund its paid receipt against its own owners",
+        )
     for key in (
         "NAM_colony",
         "NAM_colony_desc",

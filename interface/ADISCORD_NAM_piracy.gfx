@@ -9,38 +9,26 @@ spriteTypes = {
 	}
 
 	spriteType = {
-		name = "GFX_NAM_pw_lane_EFL"
-		texturefile = "gfx/interface/NAM_piracy/lane_EFL.png"
+		name = "GFX_NAM_pw_lane_oil"
+		texturefile = "gfx/interface/NAM_piracy/lane_oil.png"
 		noOfFrames = 4
 	}
 
 	spriteType = {
-		name = "GFX_NAM_pw_lane_AZH"
-		texturefile = "gfx/interface/NAM_piracy/lane_AZH.png"
+		name = "GFX_NAM_pw_lane_coast"
+		texturefile = "gfx/interface/NAM_piracy/lane_coast.png"
 		noOfFrames = 4
 	}
 
 	spriteType = {
-		name = "GFX_NAM_pw_lane_ULV"
-		texturefile = "gfx/interface/NAM_piracy/lane_ULV.png"
+		name = "GFX_NAM_pw_lane_strait"
+		texturefile = "gfx/interface/NAM_piracy/lane_strait.png"
 		noOfFrames = 4
 	}
 
 	spriteType = {
-		name = "GFX_NAM_pw_lane_RIV"
-		texturefile = "gfx/interface/NAM_piracy/lane_RIV.png"
-		noOfFrames = 4
-	}
-
-	spriteType = {
-		name = "GFX_NAM_pw_lane_LUR"
-		texturefile = "gfx/interface/NAM_piracy/lane_LUR.png"
-		noOfFrames = 4
-	}
-
-	spriteType = {
-		name = "GFX_NAM_pw_lane_CHD"
-		texturefile = "gfx/interface/NAM_piracy/lane_CHD.png"
+		name = "GFX_NAM_pw_lane_crossing"
+		texturefile = "gfx/interface/NAM_piracy/lane_crossing.png"
 		noOfFrames = 4
 	}
 

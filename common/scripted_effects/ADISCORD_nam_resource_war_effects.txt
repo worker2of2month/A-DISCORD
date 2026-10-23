@@ -5147,29 +5147,143 @@ NAM_pirate_loot_add = {
 	}
 }
 
-# COUNTRY NAM. Input: temp NAM_pirate_notoriety_change; raids on Eflor and
-# Azhar count double through the callers.
+# COUNTRY NAM. Input: temp NAM_pirate_notoriety_change; raids on lanes of
+# Eflor and Azhar count more through the callers.
 NAM_pirate_notoriety_add = {
 	add_to_variable = { var = NAM_pirate_notoriety value = NAM_pirate_notoriety_change }
 	NAM_pirate_notoriety_clamp = yes
 }
 
-# COUNTRY NAM, the end of NAM_pirate_raid. event_target:NAM_pirate_target is
-# the raided country; only a paid raid still holds its target marker. The
-# outcome is rolled once: a haul (50), a rich prize (15) or a failure (35).
-# More ships, a quiet target and low notoriety favour the flotilla. The
-# settlement only changes the target's fuel, flags and opinion and sends an
-# event to a human target alone, so a suppressed minor needs no waking.
-NAM_pirate_raid_settle = {
+# COUNTRY NAM. Input: temp NAM_pirate_lane_input, the lane of the settling
+# raid (1 oil run, 2 northern coast, 3 Luren strait, 4 Charden crossing).
+# Saves the lane's owners that may still be raided as NAM_pirate_victim_a and
+# NAM_pirate_victim_b and sets the temps NAM_pirate_victims (their number),
+# NAM_pirate_coalition_hit (Eflor or Azhar among them) and
+# NAM_pirate_lane_alerted (an owner still on guard). The owners match the
+# NAM_pirate_lane_<id>_open triggers.
+NAM_pirate_save_lane_victims = {
+	set_temp_variable = { NAM_pirate_victims = 0 }
+	set_temp_variable = { NAM_pirate_coalition_hit = 0 }
+	set_temp_variable = { NAM_pirate_lane_alerted = 0 }
 	if = {
-		limit = { event_target:NAM_pirate_target = { has_country_flag = NAM_pirate_raid_target } }
-		event_target:NAM_pirate_target = { clr_country_flag = NAM_pirate_raid_target }
-		subtract_from_variable = { var = NAM_pirate_raids_active value = 1 }
-		clamp_variable = {
-			var = NAM_pirate_raids_active
-			min = 0
-			max = 3
+		limit = { check_variable = { NAM_pirate_lane_input = 1 } }
+		if = {
+			limit = { EFL = { NAM_pirate_victim_valid = yes } }
+			EFL = { save_event_target_as = NAM_pirate_victim_a }
+			set_temp_variable = { NAM_pirate_victims = 1 }
+			set_temp_variable = { NAM_pirate_coalition_hit = 1 }
 		}
+		if = {
+			limit = { AZH = { NAM_pirate_victim_valid = yes } }
+			if = {
+				limit = { check_variable = { NAM_pirate_victims = 0 } }
+				AZH = { save_event_target_as = NAM_pirate_victim_a }
+			}
+			else = {
+				AZH = { save_event_target_as = NAM_pirate_victim_b }
+			}
+			add_to_temp_variable = { NAM_pirate_victims = 1 }
+			set_temp_variable = { NAM_pirate_coalition_hit = 1 }
+		}
+		if = {
+			limit = { NAM_pirate_lane_oil_alert = yes }
+			set_temp_variable = { NAM_pirate_lane_alerted = 1 }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { NAM_pirate_lane_input = 2 } }
+		if = {
+			limit = { RIV = { NAM_pirate_victim_valid = yes } }
+			RIV = { save_event_target_as = NAM_pirate_victim_a }
+			set_temp_variable = { NAM_pirate_victims = 1 }
+		}
+		if = {
+			limit = { EFL = { NAM_pirate_victim_valid = yes } }
+			if = {
+				limit = { check_variable = { NAM_pirate_victims = 0 } }
+				EFL = { save_event_target_as = NAM_pirate_victim_a }
+			}
+			else = {
+				EFL = { save_event_target_as = NAM_pirate_victim_b }
+			}
+			add_to_temp_variable = { NAM_pirate_victims = 1 }
+			set_temp_variable = { NAM_pirate_coalition_hit = 1 }
+		}
+		if = {
+			limit = { NAM_pirate_lane_coast_alert = yes }
+			set_temp_variable = { NAM_pirate_lane_alerted = 1 }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { NAM_pirate_lane_input = 3 } }
+		if = {
+			limit = { ULV = { NAM_pirate_victim_valid = yes } }
+			ULV = { save_event_target_as = NAM_pirate_victim_a }
+			set_temp_variable = { NAM_pirate_victims = 1 }
+		}
+		if = {
+			limit = { LUR = { NAM_pirate_victim_valid = yes } }
+			if = {
+				limit = { check_variable = { NAM_pirate_victims = 0 } }
+				LUR = { save_event_target_as = NAM_pirate_victim_a }
+			}
+			else = {
+				LUR = { save_event_target_as = NAM_pirate_victim_b }
+			}
+			add_to_temp_variable = { NAM_pirate_victims = 1 }
+		}
+		if = {
+			limit = { NAM_pirate_lane_strait_alert = yes }
+			set_temp_variable = { NAM_pirate_lane_alerted = 1 }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { NAM_pirate_lane_input = 4 } }
+		if = {
+			limit = { CHD = { NAM_pirate_victim_valid = yes } }
+			CHD = { save_event_target_as = NAM_pirate_victim_a }
+			set_temp_variable = { NAM_pirate_victims = 1 }
+		}
+		if = {
+			limit = { RIV = { NAM_pirate_victim_valid = yes } }
+			if = {
+				limit = { check_variable = { NAM_pirate_victims = 0 } }
+				RIV = { save_event_target_as = NAM_pirate_victim_a }
+			}
+			else = {
+				RIV = { save_event_target_as = NAM_pirate_victim_b }
+			}
+			add_to_temp_variable = { NAM_pirate_victims = 1 }
+		}
+		if = {
+			limit = { NAM_pirate_lane_crossing_alert = yes }
+			set_temp_variable = { NAM_pirate_lane_alerted = 1 }
+		}
+	}
+}
+
+# COUNTRY NAM, the end of a paid lane raid; the decision has cleared its
+# receipt. Input: temp NAM_pirate_lane_input. The outcome is rolled once: a
+# haul (50), a rich prize (15) or a failure (35). More ships, owners off guard
+# and low notoriety favour the flotilla; the oil run's tankers make the richest
+# prizes. A lane whose owners have all gone or become friends returns the fuel.
+# The settlement only changes the owners' fuel, flags and opinion and sends an
+# event to human owners alone, so a suppressed minor needs no waking.
+NAM_pirate_raid_settle = {
+	subtract_from_variable = { var = NAM_pirate_raids_active value = 1 }
+	clamp_variable = {
+		var = NAM_pirate_raids_active
+		min = 0
+		max = 3
+	}
+	NAM_pirate_save_lane_victims = yes
+	if = {
+		limit = { check_variable = { NAM_pirate_victims = 0 } }
+		add_fuel = 1000
+	}
+	else = {
+		set_variable = { var = NAM_pirate_last_lane value = NAM_pirate_lane_input }
+		set_variable = { var = NAM_pirate_last_victims value = NAM_pirate_victims }
 		set_variable = { var = NAM_pirate_last_loot value = 0 }
 		set_variable = { var = NAM_pirate_last_loss value = 0 }
 		random_list = {
@@ -5184,7 +5298,7 @@ NAM_pirate_raid_settle = {
 				}
 				modifier = {
 					factor = 0.6
-					event_target:NAM_pirate_target = { has_country_flag = NAM_pirate_alert }
+					check_variable = { NAM_pirate_lane_alerted = 1 }
 				}
 				modifier = {
 					factor = 0.7
@@ -5198,20 +5312,13 @@ NAM_pirate_raid_settle = {
 				NAM_pirate_raid_success = yes
 			}
 			15 = {
-				# The Luren ports and the Charden island carry the strait's
-				# richest cargo.
 				modifier = {
 					factor = 1.5
-					event_target:NAM_pirate_target = {
-						OR = {
-							tag = LUR
-							tag = CHD
-						}
-					}
+					check_variable = { NAM_pirate_lane_input = 1 }
 				}
 				modifier = {
 					factor = 0.6
-					event_target:NAM_pirate_target = { has_country_flag = NAM_pirate_alert }
+					check_variable = { NAM_pirate_lane_alerted = 1 }
 				}
 				set_variable = { var = NAM_pirate_last_result value = 2 }
 				NAM_pirate_raid_prize = yes
@@ -5229,60 +5336,53 @@ NAM_pirate_raid_settle = {
 				NAM_pirate_raid_failure = yes
 			}
 		}
-		event_target:NAM_pirate_target = {
-			set_country_flag = {
-				flag = NAM_pirate_alert
-				value = 1
-				days = 90
-			}
-			add_opinion_modifier = {
-				target = NAM
-				modifier = protest_action
-			}
+		event_target:NAM_pirate_victim_a = { NAM_pirate_mark_victim = yes }
+		if = {
+			limit = { check_variable = { NAM_pirate_victims > 1 } }
+			event_target:NAM_pirate_victim_b = { NAM_pirate_mark_victim = yes }
 		}
-		log = "[ADISCORD][NAM][PIRACY] Raid on [NAM_pirate_target.GetTag]: result [?NAM_pirate_last_result], loot [?NAM_pirate_last_loot], notoriety [?NAM_pirate_notoriety]."
+		log = "[ADISCORD][NAM][PIRACY] Raid on lane [?NAM_pirate_last_lane] against [NAM_pirate_victim_a.GetTag] and [?NAM_pirate_last_victims|0] owner(s): result [?NAM_pirate_last_result], loot [?NAM_pirate_last_loot], notoriety [?NAM_pirate_notoriety]."
 		country_event = { id = ADISCORD_nam_resource_war.90 hours = 1 }
-		event_target:NAM_pirate_target = {
-			if = {
-				limit = { is_ai = no }
-				country_event = { id = ADISCORD_nam_resource_war.91 hours = 1 }
-			}
-		}
 	}
 }
 
-# COUNTRY target of an interrupted NAM_pirate_raid. A paid raid returns its
-# fuel and frees the flotilla; political power stays spent.
-NAM_pirate_raid_release = {
+# COUNTRY owner of a raided lane: on guard for 90 days, protests to
+# Svetlogorye and, when human, learns who took its convoy.
+NAM_pirate_mark_victim = {
+	set_country_flag = {
+		flag = NAM_pirate_alert
+		value = 1
+		days = 90
+	}
+	add_opinion_modifier = {
+		target = NAM
+		modifier = protest_action
+	}
 	if = {
-		limit = { has_country_flag = NAM_pirate_raid_target }
-		clr_country_flag = NAM_pirate_raid_target
-		NAM = {
-			subtract_from_variable = { var = NAM_pirate_raids_active value = 1 }
-			clamp_variable = {
-				var = NAM_pirate_raids_active
-				min = 0
-				max = 3
-			}
-			add_fuel = 1000
-		}
+		limit = { is_ai = no }
+		country_event = { id = ADISCORD_nam_resource_war.91 hours = 1 }
 	}
 }
 
-# COUNTRY NAM. A haul from the convoys: 50 loot (60 from the coalition's fuel
-# convoys) and 1000 fuel; the victim loses 2000 fuel.
+# COUNTRY NAM. An interrupted paid raid returns its fuel and frees the
+# flotilla; political power stays spent. The decision clears its receipt.
+NAM_pirate_raid_release = {
+	subtract_from_variable = { var = NAM_pirate_raids_active value = 1 }
+	clamp_variable = {
+		var = NAM_pirate_raids_active
+		min = 0
+		max = 3
+	}
+	add_fuel = 1000
+}
+
+# A haul from the convoys: 50 loot (60 when Eflor's or Azhar's convoys sail the
+# lane) and 1000 fuel; the owners lose 2000 fuel between them.
 NAM_pirate_raid_success = {
 	set_temp_variable = { var = NAM_pirate_loot_change value = 50 }
 	set_temp_variable = { var = NAM_pirate_notoriety_change value = 6 }
 	if = {
-		limit = {
-			event_target:NAM_pirate_target = {
-				OR = {
-					tag = EFL
-					tag = AZH
-				}
-			}
-		}
+		limit = { check_variable = { NAM_pirate_coalition_hit = 1 } }
 		set_temp_variable = { var = NAM_pirate_loot_change value = 60 }
 		set_temp_variable = { var = NAM_pirate_notoriety_change value = 10 }
 	}
@@ -5290,23 +5390,23 @@ NAM_pirate_raid_success = {
 	NAM_pirate_loot_add = yes
 	NAM_pirate_notoriety_add = yes
 	add_fuel = 1000
-	event_target:NAM_pirate_target = { add_fuel = -2000 }
+	if = {
+		limit = { check_variable = { NAM_pirate_victims > 1 } }
+		event_target:NAM_pirate_victim_a = { add_fuel = -1000 }
+		event_target:NAM_pirate_victim_b = { add_fuel = -1000 }
+	}
+	else = {
+		event_target:NAM_pirate_victim_a = { add_fuel = -2000 }
+	}
 }
 
 # COUNTRY NAM. A rich prize: 100 loot, 2000 fuel, 1000 rifles and 3 convoys
-# taken with the ship; the victim loses 3000 fuel.
+# taken with the ship; the owners lose 3000 fuel between them.
 NAM_pirate_raid_prize = {
 	set_temp_variable = { var = NAM_pirate_loot_change value = 100 }
 	set_temp_variable = { var = NAM_pirate_notoriety_change value = 8 }
 	if = {
-		limit = {
-			event_target:NAM_pirate_target = {
-				OR = {
-					tag = EFL
-					tag = AZH
-				}
-			}
-		}
+		limit = { check_variable = { NAM_pirate_coalition_hit = 1 } }
 		set_temp_variable = { var = NAM_pirate_notoriety_change value = 12 }
 	}
 	set_variable = { var = NAM_pirate_last_loot value = NAM_pirate_loot_change }
@@ -5315,7 +5415,14 @@ NAM_pirate_raid_prize = {
 	add_fuel = 2000
 	add_equipment_to_stockpile = { type = infantry_equipment amount = 9000 producer = NAM }
 	add_equipment_to_stockpile = { type = convoy_1 amount = 3 producer = NAM }
-	event_target:NAM_pirate_target = { add_fuel = -3000 }
+	if = {
+		limit = { check_variable = { NAM_pirate_victims > 1 } }
+		event_target:NAM_pirate_victim_a = { add_fuel = -1500 }
+		event_target:NAM_pirate_victim_b = { add_fuel = -1500 }
+	}
+	else = {
+		event_target:NAM_pirate_victim_a = { add_fuel = -3000 }
+	}
 }
 
 # COUNTRY NAM. The convoy was escorted: a patrol ship is sunk or, without
@@ -5323,14 +5430,7 @@ NAM_pirate_raid_prize = {
 NAM_pirate_raid_failure = {
 	set_temp_variable = { var = NAM_pirate_notoriety_change value = 3 }
 	if = {
-		limit = {
-			event_target:NAM_pirate_target = {
-				OR = {
-					tag = EFL
-					tag = AZH
-				}
-			}
-		}
+		limit = { check_variable = { NAM_pirate_coalition_hit = 1 } }
 		set_temp_variable = { var = NAM_pirate_notoriety_change value = 5 }
 	}
 	NAM_pirate_notoriety_add = yes

@@ -1398,53 +1398,36 @@ defined_text = {
 	}
 }
 
-# COUNTRY raid target. The first condition that keeps NAM_pirate_raid from
-# starting against this country, in the order of the window's enabled trigger.
+# COUNTRY NAM. The first condition shared by every lane raid that keeps it
+# from starting, in the order of the window's enabled triggers.
 defined_text = {
 	name = NAMPwRaidStatus
 	text = {
-		trigger = { exists = no }
-		localization_key = NAM_pw_reason_absent
-	}
-	text = {
-		trigger = { has_country_flag = NAM_pirate_raid_target }
-		localization_key = NAM_pw_reason_at_sea
-	}
-	text = {
-		trigger = {
-			OR = {
-				is_in_faction_with = NAM
-				is_subject_of = NAM
-			}
-		}
-		localization_key = NAM_pw_reason_friend
-	}
-	text = {
-		trigger = { NAM = { NOT = { has_completed_focus = NAM_exile_sea_raiders } } }
+		trigger = { NOT = { has_completed_focus = NAM_exile_sea_raiders } }
 		localization_key = NAM_pw_reason_raiders_focus
 	}
 	text = {
-		trigger = { NAM = { NAM_country_operable = no } }
+		trigger = { NAM_country_operable = no }
 		localization_key = NAM_pw_reason_inoperable
 	}
 	text = {
-		trigger = { NAM = { has_country_flag = NAM_pirate_lying_low } }
+		trigger = { has_country_flag = NAM_pirate_lying_low }
 		localization_key = NAM_pw_reason_lying_low
 	}
 	text = {
-		trigger = { NAM = { NAM_pirate_slot_free = no } }
+		trigger = { NAM_pirate_slot_free = no }
 		localization_key = NAM_pw_reason_slots
 	}
 	text = {
-		trigger = { NAM = { NOT = { has_navy_size = { size > 0 } } } }
+		trigger = { NOT = { has_navy_size = { size > 0 } } }
 		localization_key = NAM_pw_reason_fleet
 	}
 	text = {
-		trigger = { NAM = { has_political_power < 10 } }
+		trigger = { has_political_power < 10 }
 		localization_key = NAM_pw_reason_pp
 	}
 	text = {
-		trigger = { NAM = { has_fuel < 1000 } }
+		trigger = { has_fuel < 1000 }
 		localization_key = NAM_pw_reason_fuel
 	}
 	text = {
@@ -1452,15 +1435,141 @@ defined_text = {
 	}
 }
 
-# COUNTRY raid target. A raid leaves the target alert for 90 days.
+# COUNTRY NAM. Each lane: its own raid at sea or no owner left to rob, then the
+# shared conditions; and whether an owner is still on guard after a raid.
 defined_text = {
-	name = NAMPwAlertFactor
+	name = NAMPwLaneOilStatus
 	text = {
-		trigger = { has_country_flag = NAM_pirate_alert }
+		trigger = { has_decision = NAM_pirate_raid_lane_oil }
+		localization_key = NAM_pw_reason_at_sea
+	}
+	text = {
+		trigger = { NAM_pirate_lane_oil_open = no }
+		localization_key = NAM_pw_reason_no_owner
+	}
+	text = {
+		localization_key = NAM_pw_reason_common
+	}
+}
+
+defined_text = {
+	name = NAMPwLaneOilAlert
+	text = {
+		trigger = { NAM_pirate_lane_oil_alert = yes }
 		localization_key = NAM_pw_factor_alert
 	}
 	text = {
 		localization_key = NAM_pw_factor_calm
+	}
+}
+
+defined_text = {
+	name = NAMPwLaneCoastStatus
+	text = {
+		trigger = { has_decision = NAM_pirate_raid_lane_coast }
+		localization_key = NAM_pw_reason_at_sea
+	}
+	text = {
+		trigger = { NAM_pirate_lane_coast_open = no }
+		localization_key = NAM_pw_reason_no_owner
+	}
+	text = {
+		localization_key = NAM_pw_reason_common
+	}
+}
+
+defined_text = {
+	name = NAMPwLaneCoastAlert
+	text = {
+		trigger = { NAM_pirate_lane_coast_alert = yes }
+		localization_key = NAM_pw_factor_alert
+	}
+	text = {
+		localization_key = NAM_pw_factor_calm
+	}
+}
+
+defined_text = {
+	name = NAMPwLaneStraitStatus
+	text = {
+		trigger = { has_decision = NAM_pirate_raid_lane_strait }
+		localization_key = NAM_pw_reason_at_sea
+	}
+	text = {
+		trigger = { NAM_pirate_lane_strait_open = no }
+		localization_key = NAM_pw_reason_no_owner
+	}
+	text = {
+		localization_key = NAM_pw_reason_common
+	}
+}
+
+defined_text = {
+	name = NAMPwLaneStraitAlert
+	text = {
+		trigger = { NAM_pirate_lane_strait_alert = yes }
+		localization_key = NAM_pw_factor_alert
+	}
+	text = {
+		localization_key = NAM_pw_factor_calm
+	}
+}
+
+defined_text = {
+	name = NAMPwLaneCrossingStatus
+	text = {
+		trigger = { has_decision = NAM_pirate_raid_lane_crossing }
+		localization_key = NAM_pw_reason_at_sea
+	}
+	text = {
+		trigger = { NAM_pirate_lane_crossing_open = no }
+		localization_key = NAM_pw_reason_no_owner
+	}
+	text = {
+		localization_key = NAM_pw_reason_common
+	}
+}
+
+defined_text = {
+	name = NAMPwLaneCrossingAlert
+	text = {
+		trigger = { NAM_pirate_lane_crossing_alert = yes }
+		localization_key = NAM_pw_factor_alert
+	}
+	text = {
+		localization_key = NAM_pw_factor_calm
+	}
+}
+
+# Any scope. The lane and owners of the last settled raid for events .90 and
+# .91; the owners are the event targets saved by NAM_pirate_save_lane_victims.
+defined_text = {
+	name = NAMPwLastLane
+	text = {
+		trigger = { NAM = { check_variable = { NAM_pirate_last_lane = 1 } } }
+		localization_key = NAM_pw_lane_oil_name
+	}
+	text = {
+		trigger = { NAM = { check_variable = { NAM_pirate_last_lane = 2 } } }
+		localization_key = NAM_pw_lane_coast_name
+	}
+	text = {
+		trigger = { NAM = { check_variable = { NAM_pirate_last_lane = 3 } } }
+		localization_key = NAM_pw_lane_strait_name
+	}
+	text = {
+		localization_key = NAM_pw_lane_crossing_name
+	}
+}
+
+defined_text = {
+	name = NAMPwLastVictims
+	text = {
+		trigger = { NAM = { check_variable = { NAM_pirate_last_victims > 1 } } }
+		localization_key = NAM_pw_victims_two
+	}
+	text = {
+		localization_key = NAM_pw_victims_one
 	}
 }
 

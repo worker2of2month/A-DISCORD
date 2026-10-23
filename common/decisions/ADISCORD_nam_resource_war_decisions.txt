@@ -3564,26 +3564,21 @@ NAM_underground = {
 # Island exile: the flotillas live from the sea, the black market turns the
 # loot into arms and the exiles drill for the return.
 NAM_piracy = {
-	# A flotilla raids one country's local shipping for 15 days. The targets
-	# are the coastal countries whose harbours lie within reach of the islands;
-	# tools/builders/build_adiscord_nam_piracy_map.py keeps their lanes shorter
-	# by sea than half the width of the lost mainland. The fuel is burnt at sea;
-	# an interrupted raid returns it and frees the flotilla. The target marker
-	# NAM_pirate_raid_target is the receipt of a paid raid.
-	NAM_pirate_raid = {
+	# A flotilla raids a foreign shipping lane that passes the islands for 15
+	# days; tools/builders/build_adiscord_nam_piracy_map.py keeps every lane
+	# within reach. The lane's owners are its victims (NAM_pirate_lane_<id>_open
+	# and NAM_pirate_save_lane_victims). The fuel is burnt at sea; an
+	# interrupted raid returns it and frees the flotilla. The country flag
+	# NAM_pirate_at_sea_<id> is the receipt of a paid raid.
+	# Azhar's tankers carry oil to Eflor's bay past the eastern cape of
+	# the main island.
+	NAM_pirate_raid_lane_oil = {
 		icon = generic_naval
 		allowed = { tag = NAM }
-		targets = { EFL AZH ULV RIV LUR CHD }
-		target_trigger = {
-			FROM = { exists = yes }
-		}
 		visible = {
 			NAM_piracy_open = yes
 			has_completed_focus = NAM_exile_sea_raiders
-			FROM = {
-				NOT = { is_in_faction_with = ROOT }
-				NOT = { is_subject_of = ROOT }
-			}
+			NAM_pirate_lane_oil_open = yes
 		}
 		available = {
 			NAM_country_operable = yes
@@ -3599,11 +3594,97 @@ NAM_piracy = {
 				tooltip = NAM_pirate_not_lying_low_tt
 				NOT = { has_country_flag = NAM_pirate_lying_low }
 			}
-			FROM = {
-				custom_trigger_tooltip = {
-					tooltip = NAM_pirate_target_valid_tt
-					NAM_pirate_target_valid = yes
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_pirate_raid
+		custom_cost_trigger = {
+			NOT = { has_political_power < 10 }
+			NOT = { has_fuel < 1000 }
+		}
+		fire_only_once = no
+		days_remove = 15
+		cancel_trigger = {
+			OR = {
+				NAM_country_operable = no
+				NAM_pirate_lane_oil_open = no
+			}
+		}
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_pirate_slot_free = yes
+						NOT = { has_political_power < 10 }
+						NOT = { has_fuel < 1000 }
+						NAM_pirate_lane_oil_open = yes
+					}
 				}
+				add_political_power = -10
+				add_fuel = -1000
+				custom_effect_tooltip = NAM_pirate_raid_started_tt
+				hidden_effect = {
+					add_to_variable = { var = NAM_pirate_raids_active value = 1 }
+					set_country_flag = NAM_pirate_at_sea_oil
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_pirate_lane_oil_result_tt
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = NAM_pirate_at_sea_oil }
+					clr_country_flag = NAM_pirate_at_sea_oil
+					set_temp_variable = { NAM_pirate_lane_input = 1 }
+					NAM_pirate_raid_settle = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pirate_raid_refund_tt
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = NAM_pirate_at_sea_oil }
+					clr_country_flag = NAM_pirate_at_sea_oil
+					NAM_pirate_raid_release = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 30
+			modifier = {
+				factor = 0
+				check_variable = { NAM_pirate_notoriety > 69 }
+			}
+			modifier = {
+				factor = 0
+				has_fuel < 4000
+			}
+		}
+	}
+
+	# Riven's and Eflor's coasters follow the mainland shore north of the
+	# islands.
+	NAM_pirate_raid_lane_coast = {
+		icon = generic_naval
+		allowed = { tag = NAM }
+		visible = {
+			NAM_piracy_open = yes
+			has_completed_focus = NAM_exile_sea_raiders
+			NAM_pirate_lane_coast_open = yes
+		}
+		available = {
+			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_slot_free_tt
+				NAM_pirate_slot_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_fleet_tt
+				has_navy_size = { size > 0 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_not_lying_low_tt
+				NOT = { has_country_flag = NAM_pirate_lying_low }
 			}
 		}
 		cost = 0
@@ -3617,8 +3698,7 @@ NAM_piracy = {
 		cancel_trigger = {
 			OR = {
 				NAM_country_operable = no
-				FROM = { exists = no }
-				FROM = { is_in_faction_with = ROOT }
+				NAM_pirate_lane_coast_open = no
 			}
 		}
 		complete_effect = {
@@ -3628,7 +3708,7 @@ NAM_piracy = {
 						NAM_pirate_slot_free = yes
 						NOT = { has_political_power < 10 }
 						NOT = { has_fuel < 1000 }
-						FROM = { NAM_pirate_target_valid = yes }
+						NAM_pirate_lane_coast_open = yes
 					}
 				}
 				add_political_power = -10
@@ -3636,34 +3716,216 @@ NAM_piracy = {
 				custom_effect_tooltip = NAM_pirate_raid_started_tt
 				hidden_effect = {
 					add_to_variable = { var = NAM_pirate_raids_active value = 1 }
-					FROM = { set_country_flag = NAM_pirate_raid_target }
+					set_country_flag = NAM_pirate_at_sea_coast
 				}
 			}
 		}
 		remove_effect = {
-			custom_effect_tooltip = NAM_pirate_raid_result_tt
+			custom_effect_tooltip = NAM_pirate_lane_coast_result_tt
 			hidden_effect = {
-				FROM = { save_event_target_as = NAM_pirate_target }
-				NAM_pirate_raid_settle = yes
+				if = {
+					limit = { has_country_flag = NAM_pirate_at_sea_coast }
+					clr_country_flag = NAM_pirate_at_sea_coast
+					set_temp_variable = { NAM_pirate_lane_input = 2 }
+					NAM_pirate_raid_settle = yes
+				}
 			}
 		}
 		cancel_effect = {
 			custom_effect_tooltip = NAM_pirate_raid_refund_tt
 			hidden_effect = {
-				FROM = { NAM_pirate_raid_release = yes }
+				if = {
+					limit = { has_country_flag = NAM_pirate_at_sea_coast }
+					clr_country_flag = NAM_pirate_at_sea_coast
+					NAM_pirate_raid_release = yes
+				}
 			}
 		}
 		ai_will_do = {
 			base = 15
 			modifier = {
-				factor = 2
-				FROM = {
-					OR = {
-						tag = EFL
-						tag = AZH
+				factor = 0
+				check_variable = { NAM_pirate_notoriety > 69 }
+			}
+			modifier = {
+				factor = 0
+				has_fuel < 4000
+			}
+		}
+	}
+
+	# Ulven's repair yards and the Luren ports trade along the strait south
+	# of the islands.
+	NAM_pirate_raid_lane_strait = {
+		icon = generic_naval
+		allowed = { tag = NAM }
+		visible = {
+			NAM_piracy_open = yes
+			has_completed_focus = NAM_exile_sea_raiders
+			NAM_pirate_lane_strait_open = yes
+		}
+		available = {
+			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_slot_free_tt
+				NAM_pirate_slot_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_fleet_tt
+				has_navy_size = { size > 0 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_not_lying_low_tt
+				NOT = { has_country_flag = NAM_pirate_lying_low }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_pirate_raid
+		custom_cost_trigger = {
+			NOT = { has_political_power < 10 }
+			NOT = { has_fuel < 1000 }
+		}
+		fire_only_once = no
+		days_remove = 15
+		cancel_trigger = {
+			OR = {
+				NAM_country_operable = no
+				NAM_pirate_lane_strait_open = no
+			}
+		}
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_pirate_slot_free = yes
+						NOT = { has_political_power < 10 }
+						NOT = { has_fuel < 1000 }
+						NAM_pirate_lane_strait_open = yes
 					}
 				}
+				add_political_power = -10
+				add_fuel = -1000
+				custom_effect_tooltip = NAM_pirate_raid_started_tt
+				hidden_effect = {
+					add_to_variable = { var = NAM_pirate_raids_active value = 1 }
+					set_country_flag = NAM_pirate_at_sea_strait
+				}
 			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_pirate_lane_strait_result_tt
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = NAM_pirate_at_sea_strait }
+					clr_country_flag = NAM_pirate_at_sea_strait
+					set_temp_variable = { NAM_pirate_lane_input = 3 }
+					NAM_pirate_raid_settle = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pirate_raid_refund_tt
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = NAM_pirate_at_sea_strait }
+					clr_country_flag = NAM_pirate_at_sea_strait
+					NAM_pirate_raid_release = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 15
+			modifier = {
+				factor = 0
+				check_variable = { NAM_pirate_notoriety > 69 }
+			}
+			modifier = {
+				factor = 0
+				has_fuel < 4000
+			}
+		}
+	}
+
+	# Charden's ferries cross between the island groups to the Riven bay.
+	NAM_pirate_raid_lane_crossing = {
+		icon = generic_naval
+		allowed = { tag = NAM }
+		visible = {
+			NAM_piracy_open = yes
+			has_completed_focus = NAM_exile_sea_raiders
+			NAM_pirate_lane_crossing_open = yes
+		}
+		available = {
+			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_slot_free_tt
+				NAM_pirate_slot_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_fleet_tt
+				has_navy_size = { size > 0 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_not_lying_low_tt
+				NOT = { has_country_flag = NAM_pirate_lying_low }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_pirate_raid
+		custom_cost_trigger = {
+			NOT = { has_political_power < 10 }
+			NOT = { has_fuel < 1000 }
+		}
+		fire_only_once = no
+		days_remove = 15
+		cancel_trigger = {
+			OR = {
+				NAM_country_operable = no
+				NAM_pirate_lane_crossing_open = no
+			}
+		}
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_pirate_slot_free = yes
+						NOT = { has_political_power < 10 }
+						NOT = { has_fuel < 1000 }
+						NAM_pirate_lane_crossing_open = yes
+					}
+				}
+				add_political_power = -10
+				add_fuel = -1000
+				custom_effect_tooltip = NAM_pirate_raid_started_tt
+				hidden_effect = {
+					add_to_variable = { var = NAM_pirate_raids_active value = 1 }
+					set_country_flag = NAM_pirate_at_sea_crossing
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_pirate_lane_crossing_result_tt
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = NAM_pirate_at_sea_crossing }
+					clr_country_flag = NAM_pirate_at_sea_crossing
+					set_temp_variable = { NAM_pirate_lane_input = 4 }
+					NAM_pirate_raid_settle = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pirate_raid_refund_tt
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = NAM_pirate_at_sea_crossing }
+					clr_country_flag = NAM_pirate_at_sea_crossing
+					NAM_pirate_raid_release = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 15
 			modifier = {
 				factor = 0
 				check_variable = { NAM_pirate_notoriety > 69 }

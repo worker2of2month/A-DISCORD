@@ -2,15 +2,17 @@
 
 The chart is drawn from native geography: land, sea and lakes from
 map/definition.csv and map/provinces.bmp, relief from map/heightmap.bmp, the
-island exile from the state histories of 225-231. Each raid lane starts at the
-naval base of its target, from the state histories, that lies closest to the
-islands by sea and follows the cheapest sea passage to the nearest island
-harbour; canals listed in map/adjacencies.csv are passable. Shared stretches of
-several lanes are drawn as parallel lanes.
+island exile from the state histories of 225-231. The flotillas raid foreign
+shipping lanes that pass the islands. Each lane sails between its stops: the
+naval base of an owner country, from the state histories, that lies closest to
+the islands by sea, or a fixed open-sea point. Every leg follows the cheapest
+sea passage; canals listed in map/adjacencies.csv are passable. Shared
+stretches of several lanes are drawn as parallel lanes.
 
-The flotillas raid local shipping only: no lane may be longer by sea than half
-the width of the mainland the exiles left (the land connected to state 67).
-The chart is cropped around the islands and these lanes.
+The flotillas raid local shipping only: every point of a lane lies within half
+the width of the mainland the exiles left (the land connected to state 67) by
+sea from an island harbour, and every lane passes close to an island coast. The
+chart is cropped around the islands and these lanes.
 
 The builder needs numpy only and writes PNG through zlib, so the output bytes
 do not depend on an installed imaging library. --check is the default; --apply
@@ -45,9 +47,17 @@ MAP_X, MAP_Y = 12, 66
 ISLANDS = (225, 226, 227, 228, 229, 230, 231)
 # A state of the mainland the exiles left; its landmass sets the raid radius.
 MAINLAND_STATE = 67
-# NAM_pirate_raid targets in decision order: the coalition, then the nearest
-# coastal countries with harbours of their own.
-TARGETS = ("EFL", "AZH", "ULV", "RIV", "LUR", "CHD")
+# Shipping lanes in the order of their decisions NAM_pirate_raid_lane_<id>.
+# A stop is an owner tag, sailing from its port, or an open-sea point (x, y)
+# in map pixels that the lane passes.
+LANES = {
+    "oil": ("AZH", (3645, 1640), "EFL"),
+    "coast": ("RIV", "EFL"),
+    "strait": ("ULV", (3500, 1765), "LUR"),
+    "crossing": ("CHD", (3370, 1665), (3350, 1570), "RIV"),
+}
+# Every lane comes this close to an island coast, in map pixels.
+PASS_DISTANCE = 64
 FRAMES = ("idle", "raid", "guarded", "closed")
 # Route search cell in map pixels; the map size is a multiple of it.
 GRID = 4
@@ -57,8 +67,11 @@ SCALE_STEPS = 2
 LANE_SPACING = 3.0
 MARKER = 24
 MARKER_GAP = 44
-LABEL_WIDTH, LABEL_HEIGHT = 80, 18
-ISLAND_LABEL_WIDTH = 140
+# Preferred distance of a raid marker from the island coast in chart pixels.
+MARKER_OFFSHORE = 20
+# Lane and island names in hoi_16mbs are at most 118 and 108 px wide.
+LABEL_WIDTH, LABEL_HEIGHT = 124, 18
+ISLAND_LABEL_WIDTH = 116
 
 # Levels panel geometry, shared with the authored labels of the window.
 LEVELS_TOP = 356
@@ -279,10 +292,10 @@ def strongest_base(states: dict, numbers: list[int]) -> int:
     return -max(bases)[1]
 
 
-def target_bases(states: dict) -> dict[str, list[int]]:
-    """Every naval base of each target in the state histories."""
+def owner_bases(states: dict) -> dict[str, list[int]]:
+    """Every naval base of each lane owner in the state histories."""
     bases = {}
-    for tag in TARGETS:
+    for tag in sorted({stop for stops in LANES.values() for stop in stops if isinstance(stop, str)}):
         bases[tag] = sorted(province for state in states.values() if state["owner"] == tag
                             for province, _ in state["naval_bases"])
         if not bases[tag]:
@@ -344,59 +357,115 @@ def entry_cells(provinces: np.ndarray, passable: np.ndarray, province: int) -> l
     raise ValueError(f"Province {province} has no sea access")
 
 
-def sea_routes(geography: dict, bases: dict[str, list[int]],
-               harbours: list[int]) -> tuple[dict[str, int], dict[str, list[int]]]:
-    """Each target's naval base nearest to the islands and its cheapest passage
-    to the nearest island harbour."""
-    provinces = geography["provinces"]
+STEPS = [(dx, dy, math.hypot(dx, dy)) for dy in (-1, 0, 1) for dx in (-1, 0, 1) if dx or dy]
+
+
+def sea_grid(geography: dict) -> dict:
     passable, coast = route_grid(geography)
     rows, columns = passable.shape
-    open_cells = passable.ravel().tolist()
-    weights = (1 + 3 * np.exp(-(coast.ravel() - 1) / 2.0)).tolist()
-    cost = [math.inf] * (rows * columns)
-    previous = [-1] * (rows * columns)
-    heap = []
-    for harbour in harbours:
-        for cell in entry_cells(provinces, passable, harbour)[:3]:
-            if cost[cell] > 0:
-                cost[cell] = 0.0
-                heap.append((0.0, cell))
+    return {
+        "passable": passable,
+        "rows": rows,
+        "columns": columns,
+        "open": passable.ravel().tolist(),
+        # Open water is cheaper than the coast, so lanes keep off the shore.
+        "weights": (1 + 3 * np.exp(-(coast.ravel() - 1) / 2.0)).tolist(),
+    }
+
+
+def sea_steps(grid: dict, cell: int):
+    """Neighbouring sea cells and step lengths; a diagonal may not cut a corner of land."""
+    rows, columns, open_cells = grid["rows"], grid["columns"], grid["open"]
+    y, x = divmod(cell, columns)
+    for dx, dy, length in STEPS:
+        nx, ny = x + dx, y + dy
+        if not (0 <= nx < columns and 0 <= ny < rows):
+            continue
+        target = ny * columns + nx
+        if not open_cells[target]:
+            continue
+        if dx and dy and not (open_cells[y * columns + nx] or open_cells[ny * columns + x]):
+            continue
+        yield target, length
+
+
+def harbour_distances(grid: dict, sources: list[int], wanted: set[int]) -> dict[int, float]:
+    """Sailing distance in map pixels from the nearest source cell to each wanted cell."""
+    distance = {cell: 0.0 for cell in sources}
+    heap = [(0.0, cell) for cell in sorted(set(sources))]
     heapq.heapify(heap)
-    starts = {port: entry_cells(provinces, passable, port)[0] for members in bases.values() for port in members}
-    pending = set(starts.values())
-    steps = [(dx, dy, math.hypot(dx, dy)) for dy in (-1, 0, 1) for dx in (-1, 0, 1) if dx or dy]
+    pending = set(wanted)
+    found = {}
     while heap and pending:
         here, cell = heapq.heappop(heap)
-        if here > cost[cell]:
+        if here > distance[cell]:
             continue
-        pending.discard(cell)
+        if cell in pending:
+            pending.discard(cell)
+            found[cell] = here * GRID
+        for target, length in sea_steps(grid, cell):
+            candidate = here + length
+            if candidate < distance.get(target, math.inf):
+                distance[target] = candidate
+                heapq.heappush(heap, (candidate, target))
+    if pending:
+        raise ValueError(f"{len(pending)} lane cells have no sea passage to the islands")
+    return found
+
+
+def passage(grid: dict, start: int, goal: int) -> list[int]:
+    """Cheapest sea cells from start to goal, both included."""
+    columns, weights = grid["columns"], grid["weights"]
+    gy, gx = divmod(goal, columns)
+
+    def estimate(cell: int) -> float:
         y, x = divmod(cell, columns)
-        for dx, dy, length in steps:
-            nx, ny = x + dx, y + dy
-            if not (0 <= nx < columns and 0 <= ny < rows):
-                continue
-            target = ny * columns + nx
-            if not open_cells[target]:
-                continue
-            if dx and dy and not (open_cells[y * columns + nx] or open_cells[ny * columns + x]):
-                continue
-            candidate = here + length * (weights[cell] + weights[target]) / 2
-            if candidate < cost[target]:
+        return math.hypot(x - gx, y - gy)
+
+    cost = {start: 0.0}
+    previous = {}
+    heap = [(estimate(start), start)]
+    while heap:
+        _, cell = heapq.heappop(heap)
+        if cell == goal:
+            break
+        for target, length in sea_steps(grid, cell):
+            candidate = cost[cell] + length * (weights[cell] + weights[target]) / 2
+            if candidate < cost.get(target, math.inf):
                 cost[target] = candidate
                 previous[target] = cell
-                heapq.heappush(heap, (candidate, target))
-    ports = {}
+                heapq.heappush(heap, (candidate + estimate(target), target))
+    if goal not in cost:
+        raise ValueError(f"No sea passage between cells {start} and {goal}")
+    path = [goal]
+    while path[-1] != start:
+        path.append(previous[path[-1]])
+    return path[::-1]
+
+
+def nearest_sea_cell(grid: dict, point: tuple[float, float]) -> int:
+    ys, xs = np.nonzero(grid["passable"])
+    index = int(np.argmin(np.hypot(xs * GRID + GRID / 2 - point[0], ys * GRID + GRID / 2 - point[1])))
+    return int(ys[index]) * grid["columns"] + int(xs[index])
+
+
+def sea_lanes(geography: dict, grid: dict, harbours: list[int]) -> tuple[dict[str, int], dict[str, list[int]]]:
+    """The port of every owner, its naval base nearest to the islands by sea, and
+    the cells of every lane through its stops."""
+    provinces = geography["provinces"]
+    passable = grid["passable"]
+    harbour_cells = [cell for harbour in harbours for cell in entry_cells(provinces, passable, harbour)[:3]]
+    bases = owner_bases(geography["states"])
+    base_cells = {port: entry_cells(provinces, passable, port)[0] for members in bases.values() for port in members}
+    distance = harbour_distances(grid, harbour_cells, set(base_cells.values()))
+    ports = {tag: min(members, key=lambda port: (distance[base_cells[port]], port)) for tag, members in bases.items()}
     routes = {}
-    for tag, members in bases.items():
-        port = min(members, key=lambda province: (cost[starts[province]], province))
-        start = starts[port]
-        if math.isinf(cost[start]):
-            raise ValueError(f"No sea passage from a {tag} naval base to the islands")
-        path = [start]
-        while previous[path[-1]] >= 0:
-            path.append(previous[path[-1]])
-        ports[tag] = port
-        routes[tag] = path
+    for lane, stops in LANES.items():
+        cells = [base_cells[ports[stop]] if isinstance(stop, str) else nearest_sea_cell(grid, stop) for stop in stops]
+        path = [cells[0]]
+        for start, goal in zip(cells[:-1], cells[1:]):
+            path.extend(passage(grid, start, goal)[1:])
+        routes[lane] = path
     return ports, routes
 
 
@@ -433,41 +502,47 @@ def smooth(values: np.ndarray, window: int) -> np.ndarray:
     return result
 
 
-def lane_geometry(routes: dict[str, list[int]], ports: dict[str, int], columns: int,
-                  port_points: dict[str, tuple[float, float]], harbour_points: dict[int, tuple[float, float]],
+def lane_ends(lane: str, port_points: dict[str, tuple[float, float]]) -> list[tuple[float, float]]:
+    """Port positions in map pixels where the lane starts and ends; an open-sea
+    end has none."""
+    stops = LANES[lane]
+    return [port_points[stop] for stop in (stops[0], stops[-1]) if isinstance(stop, str)]
+
+
+def lane_geometry(routes: dict[str, list[int]], columns: int, port_points: dict[str, tuple[float, float]],
                   view: tuple[float, float, float]) -> dict[str, dict]:
     """Smoothed lanes in chart pixels with parallel offsets on shared stretches."""
     left, top, scale = view
-    groups = {}
-    for tag in TARGETS:
-        groups.setdefault(ports[tag], []).append(tag)
+    order = list(LANES)
     users = {}
-    for port, members in groups.items():
-        for cell in routes[members[0]]:
-            users.setdefault(cell, []).append(port)
+    for lane, path in routes.items():
+        for cell in path:
+            if lane not in users.setdefault(cell, []):
+                users[cell].append(lane)
     lanes = {}
-    for tag in TARGETS:
-        path = routes[tag]
-        cells = [cell_centre(cell, columns) for cell in path]
-        end = min(harbour_points.values(), key=lambda p: math.dist(p, cells[-1]))
-        raw = np.array([port_points[tag], *cells, end])
+    for lane in order:
+        path = routes[lane]
+        stops = LANES[lane]
+        head = [port_points[stops[0]]] if isinstance(stops[0], str) else []
+        tail = [port_points[stops[-1]]] if isinstance(stops[-1], str) else []
+        raw = np.array([*head, *(cell_centre(cell, columns) for cell in path), *tail])
         raw = (raw - (left, top)) / scale
         points, source = resample(raw, 1.0)
         centre = smooth(points, 9)
         lane_offsets = []
         exclusive = []
         for vertex in source:
-            # raw starts with the port point, so vertex n lies on path cell n - 1.
-            cell = path[min(max(vertex - 1, 0), len(path) - 1)]
-            sharing = sorted({member for port in users[cell] for member in groups[port]}, key=TARGETS.index)
-            lane_offsets.append((sharing.index(tag) - (len(sharing) - 1) / 2) * LANE_SPACING)
-            exclusive.append(users[cell] == [ports[tag]])
+            cell = path[min(max(vertex - len(head), 0), len(path) - 1)]
+            sharing = sorted(users[cell], key=order.index)
+            lane_offsets.append((sharing.index(lane) - (len(sharing) - 1) / 2) * LANE_SPACING)
+            exclusive.append(len(sharing) == 1)
         offsets = smooth(np.array(lane_offsets), 15)
         tangent = np.gradient(centre, axis=0)
         norm = np.hypot(tangent[:, 0], tangent[:, 1])
         norm[norm == 0] = 1
         normal = np.stack([-tangent[:, 1] / norm, tangent[:, 0] / norm], 1)
-        lanes[tag] = {"points": centre + normal * offsets[:, None], "exclusive": np.array(exclusive)}
+        ends = [((x - left) / scale, (y - top) / scale) for x, y in lane_ends(lane, port_points)]
+        lanes[lane] = {"points": centre + normal * offsets[:, None], "exclusive": np.array(exclusive), "ends": ends}
     return lanes
 
 
@@ -482,64 +557,115 @@ def marker_box(point: tuple[float, float], margin: float = 0.0) -> tuple[float, 
     return point[0] - half, point[1] - half, point[0] + half, point[1] + half
 
 
-def place_markers(lanes: dict[str, dict], land: np.ndarray,
+def place_markers(lanes: dict[str, dict], land: np.ndarray, island_shape: np.ndarray,
                   blocked: list[tuple[float, ...]]) -> dict[str, tuple[float, float]]:
-    """One raid marker per lane, on its own stretch where possible, never stacked
-    and clear of the blocked chart areas."""
+    """One raid marker per lane in open water just off the islands, on its own
+    stretch where possible, never stacked, clear of the blocked chart areas and
+    with room for its name beside it."""
+    island_ys, island_xs = np.nonzero(island_shape)
     placed = {}
-    order = sorted(TARGETS, key=lambda tag: (int(lanes[tag]["exclusive"].sum()), TARGETS.index(tag)))
+    order = sorted(LANES, key=lambda lane: (int(lanes[lane]["exclusive"].sum()), list(LANES).index(lane)))
     margin = MARKER / 2 + 3
-    for tag in order:
-        points = lanes[tag]["points"]
-        own = np.nonzero(lanes[tag]["exclusive"])[0]
-        stretch = int(own.max()) if len(own) else len(points) - 1
-        preferred = min(max(stretch * 0.5, 16), 70)
-        candidates = sorted(range(len(points)), key=lambda i: (abs(i - preferred) + (0 if i <= stretch else 40), i))
-        for index in candidates:
+
+    def has_room(point: tuple[float, float]) -> bool:
+        """Every marker, the new one included, keeps a free box for its name."""
+        markers = (*placed.values(), point)
+        taken = blocked + [marker_box((round(x), round(y)), 2) for x, y in markers]
+        for marker in markers:
+            for left, top, _ in label_candidates(marker):
+                box = (left, top, left + LABEL_WIDTH, top + LABEL_HEIGHT)
+                if left >= 4 and top >= 4 and box[2] <= WIDTH - 4 and box[3] <= HEIGHT - 4 and not overlaps(box, taken):
+                    break
+            else:
+                return False
+        return True
+
+    for lane in order:
+        points = lanes[lane]["points"]
+        near = np.array([np.hypot(island_xs - x, island_ys - y).min() for x, y in points])
+        score = np.abs(near - MARKER_OFFSHORE) + np.where(lanes[lane]["exclusive"], 0, 12)
+        for index in sorted(range(len(points)), key=lambda i: (score[i], i)):
             x, y = points[index]
             if not (margin <= x <= WIDTH - margin and margin <= y <= HEIGHT - margin):
                 continue
-            if land[int(y), int(x)] > 0.35:
+            if land[int(y), int(x)] > 0.35 or near[index] < MARKER / 2:
                 continue
             if any(math.dist((x, y), other) < MARKER_GAP for other in placed.values()):
                 continue
-            if overlaps(marker_box((x, y)), blocked):
+            if overlaps(marker_box((x, y)), blocked) or not has_room((float(x), float(y))):
                 continue
-            placed[tag] = (float(x), float(y))
+            placed[lane] = (float(x), float(y))
             break
         else:
-            raise ValueError(f"No free marker position on the {tag} lane")
+            raise ValueError(f"No free marker position on the {lane} lane")
     return placed
 
 
-def place_labels(markers: dict[str, tuple[float, float]],
+def label_candidates(marker: tuple[float, float]) -> list[tuple[int, int, str]]:
+    """Name boxes beside a marker: right, left, above or below, then the same
+    sides shifted along, as (left, top, text alignment)."""
+    x, y = (int(round(value)) for value in marker)
+    gap = MARKER // 2 + 2
+    candidates = []
+    for shift in (0, 1, -1, 2, -2):
+        dy = shift * (LABEL_HEIGHT - 4)
+        dx = shift * LABEL_WIDTH // 4
+        candidates += [
+            (x + gap, y - LABEL_HEIGHT // 2 + dy, "left"),
+            (x - gap - LABEL_WIDTH, y - LABEL_HEIGHT // 2 + dy, "right"),
+            (x - LABEL_WIDTH // 2 + dx, y - gap - LABEL_HEIGHT, "centre"),
+            (x - LABEL_WIDTH // 2 + dx, y + gap, "centre"),
+        ]
+    return candidates
+
+
+def place_labels(markers: dict[str, tuple[float, float]], land: np.ndarray,
                  blocked: list[tuple[float, ...]]) -> dict[str, tuple[int, int, str]]:
-    """Name boxes beside each marker: right, left, above or below, whichever
-    first stays on the chart and clear of markers and earlier labels."""
+    """A name box beside every marker, on the chart and clear of markers and
+    other names. The lane with the fewest free boxes is named first; of its
+    boxes the one over the least land wins, so names stay at sea."""
     # The window places markers at rounded positions.
     taken = blocked + [marker_box((round(x), round(y)), 2) for x, y in markers.values()]
     labels = {}
-    gap = MARKER // 2 + 2
-    for tag in TARGETS:
-        x, y = (int(round(value)) for value in markers[tag])
-        candidates = (
-            (x + gap, y - LABEL_HEIGHT // 2, "left"),
-            (x - gap - LABEL_WIDTH, y - LABEL_HEIGHT // 2, "right"),
-            (x - LABEL_WIDTH // 2, y - gap - LABEL_HEIGHT, "centre"),
-            (x - LABEL_WIDTH // 2, y + gap, "centre"),
-        )
-        for left, top, align in candidates:
-            box = (left, top, left + LABEL_WIDTH, top + LABEL_HEIGHT)
-            if left < 4 or top < 4 or box[2] > WIDTH - 4 or box[3] > HEIGHT - 4:
+    while len(labels) < len(LANES):
+        options = {}
+        for lane in LANES:
+            if lane in labels:
                 continue
-            if overlaps(box, taken):
-                continue
-            labels[tag] = (left, top, align)
-            taken.append(box)
-            break
-        else:
-            raise ValueError(f"No free label position beside the {tag} marker")
+            free = []
+            for order, (left, top, align) in enumerate(label_candidates(markers[lane])):
+                box = (left, top, left + LABEL_WIDTH, top + LABEL_HEIGHT)
+                if left < 4 or top < 4 or box[2] > WIDTH - 4 or box[3] > HEIGHT - 4:
+                    continue
+                if overlaps(box, taken):
+                    continue
+                covered = float(land[top:top + LABEL_HEIGHT, left:left + LABEL_WIDTH].mean())
+                free.append((round(covered * 10), order, (left, top, align), box))
+            if not free:
+                raise ValueError(f"No free label position beside the {lane} marker")
+            options[lane] = free
+        lane = min(options, key=lambda name: (len(options[name]), list(LANES).index(name)))
+        _, _, labels[lane], box = min(options[lane])
+        taken.append(box)
     return labels
+
+
+def place_island_label(island_shape: np.ndarray) -> tuple[int, int]:
+    """The islands' name on their land, near the middle of the archipelago."""
+    ys, xs = np.nonzero(island_shape)
+    centre_x = int(round(xs.mean())) - ISLAND_LABEL_WIDTH // 2
+    centre_y = int(round(ys.mean())) - LABEL_HEIGHT // 2
+    best = None
+    for dy in range(-40, 41, 4):
+        for dx in range(-40, 41, 4):
+            left, top = centre_x + dx, centre_y + dy
+            if left < 4 or top < 4 or left + ISLAND_LABEL_WIDTH > WIDTH - 4 or top + LABEL_HEIGHT > HEIGHT - 4:
+                continue
+            covered = float(island_shape[top:top + LABEL_HEIGHT, left:left + ISLAND_LABEL_WIDTH].mean())
+            key = (-round(covered * 20), abs(dx) + abs(dy), dy, dx)
+            if best is None or key < best[0]:
+                best = (key, (left, top))
+    return best[1]
 
 
 # ----- Chart -----
@@ -549,22 +675,38 @@ def chart(geography: dict) -> tuple[dict[str, np.ndarray], dict]:
     states = geography["states"]
     kinds = geography["kinds"]
     harbours = [strongest_base(states, [number]) for number in ISLANDS]
-    ports, routes = sea_routes(geography, target_bases(states), harbours)
-    columns = provinces.shape[1] // GRID
+    waters = sea_grid(geography)
+    ports, routes = sea_lanes(geography, waters, harbours)
+    columns = waters["columns"]
     port_points = {tag: province_centre(provinces, port) for tag, port in ports.items()}
     harbour_points = {harbour: province_centre(provinces, harbour) for harbour in harbours}
-    west, east = mainland_span(geography)
-    radius = (east - west) / 2
-    lengths = {}
-    for tag in TARGETS:
-        cells = [cell_centre(cell, columns) for cell in routes[tag]]
-        end = min(harbour_points.values(), key=lambda p: math.dist(p, cells[-1]))
-        lengths[tag] = sailing_length([port_points[tag], *cells, end])
-        if lengths[tag] > radius:
-            raise ValueError(f"The {tag} lane is {lengths[tag]:.0f} px by sea, beyond the raid radius {radius:.0f} px")
-
     island_ids = [p for number in ISLANDS for p in states[number]["provinces"]]
     island_mask = np.isin(provinces, island_ids)
+
+    # Local raids only: every lane cell lies within the radius by sea from an
+    # island harbour, and every lane comes close to an island coast.
+    west, east = mainland_span(geography)
+    radius = (east - west) / 2
+    harbour_cells = [cell for harbour in harbours for cell in entry_cells(provinces, waters["passable"], harbour)[:3]]
+    reach = harbour_distances(waters, harbour_cells, {cell for path in routes.values() for cell in path})
+    rows = waters["rows"]
+    island_cells = island_mask[:rows * GRID, :columns * GRID].reshape(rows, GRID, columns, GRID).any(axis=(1, 3))
+    island_ys, island_xs = np.nonzero(island_cells)
+    lengths = {}
+    for lane, path in routes.items():
+        farthest = max(reach[cell] for cell in path)
+        if farthest > radius:
+            raise ValueError(f"The {lane} lane reaches {farthest:.0f} px by sea from the islands, beyond the raid radius {radius:.0f} px")
+        centres = np.array([cell_centre(cell, columns) for cell in path])
+        closest = min(float(np.hypot(island_xs * GRID + GRID / 2 - x, island_ys * GRID + GRID / 2 - y).min())
+                      for x, y in centres)
+        if closest > PASS_DISTANCE:
+            raise ValueError(f"The {lane} lane keeps {closest:.0f} px from the islands, farther than {PASS_DISTANCE} px")
+        stops = LANES[lane]
+        head = [port_points[stops[0]]] if isinstance(stops[0], str) else []
+        tail = [port_points[stops[-1]]] if isinstance(stops[-1], str) else []
+        lengths[lane] = sailing_length([*head, *map(tuple, centres), *tail])
+
     ys, xs = np.nonzero(island_mask)
     xs_all = [float(xs.min()), float(xs.max())] + [p[0] for p in port_points.values()]
     ys_all = [float(ys.min()), float(ys.max())] + [p[1] for p in port_points.values()]
@@ -634,27 +776,24 @@ def chart(geography: dict) -> tuple[dict[str, np.ndarray], dict]:
         over(base, (203, 186, 139), disc(shape, (x, y), 1.6))
     over(base, (128, 119, 90), outline(shape, (0, 0, WIDTH - 1, HEIGHT - 1)))
     over(base, (56, 72, 72), outline(shape, (3, 3, WIDTH - 4, HEIGHT - 4)))
-    compass_x, compass_y = 24, HEIGHT - 64
+    compass_x, compass_y = 24, HEIGHT - 50
     over(base, (203, 186, 139), stroke(shape, np.array([[compass_x, compass_y], [compass_x, compass_y + 40]]), 1))
     over(base, (203, 186, 139), stroke(shape, np.array([[compass_x - 11, compass_y + 20], [compass_x + 11, compass_y + 20]]), 1))
     over(base, (203, 186, 139), polygon(shape, [(compass_x, compass_y), (compass_x - 4, compass_y + 12), (compass_x + 4, compass_y + 12)]))
 
     view = (float(left), float(top), float(scale))
-    lanes = lane_geometry(routes, ports, columns, port_points, harbour_points, view)
-    # The islands' name sits under their southern shore; it and the compass
-    # stay clear of markers and lane names.
-    islands_y, islands_x = np.nonzero(island_shape)
-    island_label = (int(round(islands_x.mean())) - ISLAND_LABEL_WIDTH // 2,
-                    min(int(islands_y.max()) + 1, HEIGHT - 20))
+    lanes = lane_geometry(routes, columns, port_points, view)
+    # The islands' name and the compass stay clear of markers and lane names.
+    island_label = place_island_label(island_shape)
     blocked = [
         (island_label[0], island_label[1], island_label[0] + ISLAND_LABEL_WIDTH, island_label[1] + LABEL_HEIGHT),
         (compass_x - 12, compass_y - 2, compass_x + 12, compass_y + 42),
     ]
-    markers = place_markers(lanes, land, blocked)
-    labels = place_labels(markers, blocked)
+    markers = place_markers(lanes, land, island_shape, blocked)
+    labels = place_labels(markers, land, blocked)
     images = {"map.png": base}
-    for tag in TARGETS:
-        images[f"lane_{tag}.png"] = lane_strip(lanes[tag]["points"])
+    for lane in LANES:
+        images[f"lane_{lane}.png"] = lane_strip(lanes[lane]["points"], lanes[lane]["ends"])
     geometry = {
         "view": view,
         "ports": ports,
@@ -690,29 +829,36 @@ def dashed(shape: tuple[int, int], points: np.ndarray, width: float, on: float, 
     return coverage
 
 
-def lane_strip(points: np.ndarray) -> np.ndarray:
-    """Four frames of one lane: idle, raid at sea, escorted convoys, closed."""
+def lane_strip(points: np.ndarray, ends: list[tuple[float, float]]) -> np.ndarray:
+    """Four frames of one lane with rings at its ports: idle, raid at sea,
+    escorted convoys, closed."""
     shape = (HEIGHT, WIDTH)
-    port = tuple(points[0])
+
+    def ports(radius: float, inner: float) -> np.ndarray:
+        coverage = np.zeros(shape)
+        for end in ends:
+            coverage = np.maximum(coverage, disc(shape, end, radius, inner))
+        return coverage
+
     frames = []
     idle = canvas(WIDTH, HEIGHT)
     over(idle, SEA, stroke(shape, points, 4.2), 0.55)
     over(idle, SAND, dashed(shape, points, 1.7, 6, 4), 0.95)
-    over(idle, SAND, disc(shape, port, 3.2, 1.6))
+    over(idle, SAND, ports(3.2, 1.6))
     frames.append(idle)
     raid = canvas(WIDTH, HEIGHT)
     over(raid, RAID, stroke(shape, points, 6.5), 0.28)
     over(raid, RAID, stroke(shape, points, 2.3))
-    over(raid, RAID, disc(shape, port, 3.6))
+    over(raid, RAID, ports(3.6, 0))
     frames.append(raid)
     escort = canvas(WIDTH, HEIGHT)
     over(escort, SEA, stroke(shape, points, 4.2), 0.55)
     over(escort, ESCORT, dashed(shape, points, 1.7, 3, 3), 0.95)
-    over(escort, ESCORT, disc(shape, port, 3.2, 1.6))
+    over(escort, ESCORT, ports(3.2, 1.6))
     frames.append(escort)
     closed = canvas(WIDTH, HEIGHT)
     over(closed, CLOSED, dashed(shape, points, 1.2, 2, 4), 0.6)
-    over(closed, CLOSED, disc(shape, port, 2.8, 1.4), 0.6)
+    over(closed, CLOSED, ports(2.8, 1.4), 0.6)
     frames.append(closed)
     return np.concatenate(frames, axis=1)
 
@@ -820,29 +966,29 @@ def revenge_frame(segment: int) -> int:
 
 def gui_block(geometry: dict) -> str:
     lines = []
-    for tag in TARGETS:
+    for lane in LANES:
         for frame, state in enumerate(FRAMES, 1):
-            lines.extend(icon(f"NAM_pw_lane_{tag}_{state}", MAP_X, MAP_Y, f"GFX_NAM_pw_lane_{tag}", frame))
+            lines.extend(icon(f"NAM_pw_lane_{lane}_{state}", MAP_X, MAP_Y, f"GFX_NAM_pw_lane_{lane}", frame))
     island_x, island_y = geometry["island_label"]
     lines.extend(("\t\tinstantTextBoxType = {", '\t\t\tname = "NAM_pw_islands_label"',
                   f"\t\t\tposition = {{ x = {MAP_X + island_x} y = {MAP_Y + island_y} }}",
                   '\t\t\ttext = "NAM_pw_islands_label"', '\t\t\tfont = "hoi_16mbs"', f"\t\t\tmaxWidth = {ISLAND_LABEL_WIDTH}",
                   f"\t\t\tmaxHeight = {LABEL_HEIGHT}", "\t\t\tformat = centre", "\t\t\tfixedsize = yes",
                   "\t\t\talwaystransparent = yes", "\t\t}", ""))
-    for tag in TARGETS:
-        x, y = geometry["markers"][tag]
+    for lane in LANES:
+        x, y = geometry["markers"][lane]
         left = MAP_X + int(round(x)) - MARKER // 2
         top = MAP_Y + int(round(y)) - MARKER // 2
-        label_x, label_y, align = geometry["labels"][tag]
-        lines.extend(("\t\tinstantTextBoxType = {", f'\t\t\tname = "NAM_pw_label_{tag}"',
+        label_x, label_y, align = geometry["labels"][lane]
+        lines.extend(("\t\tinstantTextBoxType = {", f'\t\t\tname = "NAM_pw_label_{lane}"',
                       f"\t\t\tposition = {{ x = {MAP_X + label_x} y = {MAP_Y + label_y} }}",
-                      f'\t\t\ttext = "NAM_pw_lane_{tag}_name"', '\t\t\tfont = "hoi_16mbs"', f"\t\t\tmaxWidth = {LABEL_WIDTH}",
+                      f'\t\t\ttext = "NAM_pw_lane_{lane}_name"', '\t\t\tfont = "hoi_16mbs"', f"\t\t\tmaxWidth = {LABEL_WIDTH}",
                       f"\t\t\tmaxHeight = {LABEL_HEIGHT}", f"\t\t\tformat = {align}",
                       "\t\t\tfixedsize = yes", "\t\t\talwaystransparent = yes", "\t\t}", ""))
-        lines.extend(("\t\tbuttonType = {", f'\t\t\tname = "NAM_pw_raid_{tag}"',
+        lines.extend(("\t\tbuttonType = {", f'\t\t\tname = "NAM_pw_raid_{lane}"',
                       f"\t\t\tposition = {{ x = {left} y = {top} }}",
                       '\t\t\tquadTextureSprite = "GFX_NAM_pw_marker"', "\t\t\tclicksound = click_default",
-                      f'\t\t\tpdx_tooltip = "NAM_pw_route_{tag}_tt"', "\t\t}", ""))
+                      f'\t\t\tpdx_tooltip = "NAM_pw_route_{lane}_tt"', "\t\t}", ""))
     for gauge, row, colour in (("notoriety", NOTORIETY_ROW, notoriety_frame), ("revenge", REVENGE_ROW, revenge_frame)):
         lines.extend(icon(f"NAM_pw_{gauge}_track", BAR_X, row, f"GFX_NAM_pw_gauge_{gauge}"))
         for segment in range(1, SEGMENTS + 1):
@@ -899,10 +1045,10 @@ def check_outputs(outputs: dict[Path, bytes]) -> list[str]:
 def preview(images: dict[str, np.ndarray], geometry: dict) -> np.ndarray:
     """The chart with every lane in a different state and its raid markers, doubled."""
     image = images["map.png"].copy()
-    states = {"EFL": 1, "AZH": 0, "ULV": 2, "RIV": 0, "LUR": 3, "CHD": 0}
-    for tag in TARGETS:
-        strip = images[f"lane_{tag}.png"]
-        frame = strip[:, states[tag] * WIDTH:(states[tag] + 1) * WIDTH]
+    states = {"oil": 1, "coast": 0, "strait": 2, "crossing": 0}
+    for lane in LANES:
+        strip = images[f"lane_{lane}.png"]
+        frame = strip[:, states[lane] * WIDTH:(states[lane] + 1) * WIDTH]
         alpha = frame[..., 3:4]
         image[..., :3] = frame[..., :3] * alpha + image[..., :3] * (1 - alpha)
     marker = images["marker.png"]
@@ -945,9 +1091,11 @@ def main() -> int:
         print(f"Preview written: {args.preview}")
     left, top, scale = geometry["view"]
     print(f"Raid radius: {geometry['radius']:.0f} px by sea; chart origin ({left:.0f}, {top:.0f}), scale {scale}")
-    for tag in TARGETS:
-        x, y = geometry["markers"][tag]
-        print(f"{tag}: port {geometry['ports'][tag]}, lane {geometry['lengths'][tag]:.0f} px, marker ({x:.0f}, {y:.0f})")
+    for tag, port in geometry["ports"].items():
+        print(f"{tag}: port {port}")
+    for lane, stops in LANES.items():
+        x, y = geometry["markers"][lane]
+        print(f"{lane}: {stops}, lane {geometry['lengths'][lane]:.0f} px, marker ({x:.0f}, {y:.0f})")
     remaining = check_outputs(outputs)
     print(f"NAM piracy assets checked: {len(outputs)}; differences: {len(remaining)}")
     return int(bool(remaining))
