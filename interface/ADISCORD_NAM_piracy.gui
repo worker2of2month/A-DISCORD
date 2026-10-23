@@ -1,0 +1,1081 @@
+guiTypes = {
+
+	# The exile's sea chart in the NAM_piracy category. Lane markers and action
+	# buttons start the original decisions; the window never pays or settles.
+	# Scripted visibility and click handlers bind direct children of this window.
+	containerWindowType = {
+		name = "ADISCORD_NAM_piracy_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 628 }
+		clipping = no
+		containerWindowType = {
+			name = "NAM_pw_loot"
+			position = { x = 12 y = 4 }
+			size = { width = 140 height = 54 }
+			background = {
+				name = "NAM_pw_loot_background"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+			instantTextBoxType = {
+				name = "NAM_pw_loot_label"
+				position = { x = 8 y = 6 }
+				text = "NAM_pw_loot_label"
+				font = "hoi_16mbs"
+				maxWidth = 124
+				maxHeight = 18
+				fixedsize = yes
+				pdx_tooltip = "NAM_pw_loot_tt"
+			}
+			instantTextBoxType = {
+				name = "NAM_pw_loot_value"
+				position = { x = 8 y = 29 }
+				text = "NAM_pw_loot_value"
+				font = "hoi_16mbs"
+				maxWidth = 124
+				maxHeight = 22
+				fixedsize = yes
+				pdx_tooltip = "NAM_pw_loot_tt"
+			}
+		}
+		containerWindowType = {
+			name = "NAM_pw_coalition"
+			position = { x = 160 y = 4 }
+			size = { width = 140 height = 54 }
+			background = {
+				name = "NAM_pw_coalition_background"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+			instantTextBoxType = {
+				name = "NAM_pw_coalition_label"
+				position = { x = 8 y = 6 }
+				text = "NAM_pw_coalition_label"
+				font = "hoi_16mbs"
+				maxWidth = 124
+				maxHeight = 18
+				fixedsize = yes
+				pdx_tooltip = "NAM_pw_coalition_tt"
+			}
+			instantTextBoxType = {
+				name = "NAM_pw_coalition_value"
+				position = { x = 8 y = 29 }
+				text = "NAM_pw_coalition_value"
+				font = "hoi_16mbs"
+				maxWidth = 124
+				maxHeight = 22
+				fixedsize = yes
+				pdx_tooltip = "NAM_pw_coalition_tt"
+			}
+		}
+		containerWindowType = {
+			name = "NAM_pw_landing"
+			position = { x = 308 y = 4 }
+			size = { width = 140 height = 54 }
+			background = {
+				name = "NAM_pw_landing_background"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+			instantTextBoxType = {
+				name = "NAM_pw_landing_label"
+				position = { x = 8 y = 6 }
+				text = "NAM_pw_landing_label"
+				font = "hoi_16mbs"
+				maxWidth = 124
+				maxHeight = 18
+				fixedsize = yes
+				pdx_tooltip = "NAM_pw_landing_tt"
+			}
+			instantTextBoxType = {
+				name = "NAM_pw_landing_value"
+				position = { x = 8 y = 29 }
+				text = "NAM_pw_landing_value"
+				font = "hoi_16mbs"
+				maxWidth = 124
+				maxHeight = 22
+				fixedsize = yes
+				pdx_tooltip = "NAM_pw_landing_tt"
+			}
+		}
+		iconType = {
+			name = "NAM_pw_map"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_map"
+		}
+		# The level panel and the action panel lie under the generated gauges.
+		containerWindowType = {
+			name = "NAM_pw_levels_background"
+			position = { x = 12 y = 356 }
+			size = { width = 436 height = 144 }
+			background = {
+				name = "NAM_pw_levels_background_texture"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+		}
+		containerWindowType = {
+			name = "NAM_pw_actions_background"
+			position = { x = 12 y = 508 }
+			size = { width = 436 height = 112 }
+			background = {
+				name = "NAM_pw_actions_background_texture"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+		}
+		# BEGIN GENERATED NAM PIRACY MAP
+		iconType = {
+			name = "NAM_pw_lane_EFL_idle"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_EFL"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_EFL_raid"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_EFL"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_EFL_guarded"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_EFL"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_EFL_closed"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_EFL"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_AZH_idle"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_AZH"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_AZH_raid"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_AZH"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_AZH_guarded"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_AZH"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_AZH_closed"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_AZH"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_ULV_idle"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_ULV"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_ULV_raid"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_ULV"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_ULV_guarded"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_ULV"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_ULV_closed"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_ULV"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_RIV_idle"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_RIV"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_RIV_raid"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_RIV"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_RIV_guarded"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_RIV"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_RIV_closed"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_RIV"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_LUR_idle"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_LUR"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_LUR_raid"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_LUR"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_LUR_guarded"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_LUR"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_LUR_closed"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_LUR"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_CHD_idle"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_CHD"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_CHD_raid"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_CHD"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_CHD_guarded"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_CHD"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_lane_CHD_closed"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_pw_lane_CHD"
+			frame = 4
+		}
+
+		instantTextBoxType = {
+			name = "NAM_pw_islands_label"
+			position = { x = 118 y = 224 }
+			text = "NAM_pw_islands_label"
+			font = "hoi_16mbs"
+			maxWidth = 140
+			maxHeight = 18
+			format = centre
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+
+		instantTextBoxType = {
+			name = "NAM_pw_label_EFL"
+			position = { x = 266 y = 132 }
+			text = "NAM_pw_lane_EFL_name"
+			font = "hoi_16mbs"
+			maxWidth = 80
+			maxHeight = 18
+			format = left
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_pw_raid_EFL"
+			position = { x = 240 y = 129 }
+			quadTextureSprite = "GFX_NAM_pw_marker"
+			clicksound = click_default
+			pdx_tooltip = "NAM_pw_route_EFL_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_pw_label_AZH"
+			position = { x = 360 y = 193 }
+			text = "NAM_pw_lane_AZH_name"
+			font = "hoi_16mbs"
+			maxWidth = 80
+			maxHeight = 18
+			format = left
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_pw_raid_AZH"
+			position = { x = 334 y = 190 }
+			quadTextureSprite = "GFX_NAM_pw_marker"
+			clicksound = click_default
+			pdx_tooltip = "NAM_pw_route_AZH_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_pw_label_ULV"
+			position = { x = 122 y = 176 }
+			text = "NAM_pw_lane_ULV_name"
+			font = "hoi_16mbs"
+			maxWidth = 80
+			maxHeight = 18
+			format = left
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_pw_raid_ULV"
+			position = { x = 96 y = 173 }
+			quadTextureSprite = "GFX_NAM_pw_marker"
+			clicksound = click_default
+			pdx_tooltip = "NAM_pw_route_ULV_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_pw_label_RIV"
+			position = { x = 128 y = 127 }
+			text = "NAM_pw_lane_RIV_name"
+			font = "hoi_16mbs"
+			maxWidth = 80
+			maxHeight = 18
+			format = left
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_pw_raid_RIV"
+			position = { x = 102 y = 124 }
+			quadTextureSprite = "GFX_NAM_pw_marker"
+			clicksound = click_default
+			pdx_tooltip = "NAM_pw_route_RIV_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_pw_label_LUR"
+			position = { x = 209 y = 204 }
+			text = "NAM_pw_lane_LUR_name"
+			font = "hoi_16mbs"
+			maxWidth = 80
+			maxHeight = 18
+			format = right
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_pw_raid_LUR"
+			position = { x = 291 y = 201 }
+			quadTextureSprite = "GFX_NAM_pw_marker"
+			clicksound = click_default
+			pdx_tooltip = "NAM_pw_route_LUR_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_pw_label_CHD"
+			position = { x = 282 y = 245 }
+			text = "NAM_pw_lane_CHD_name"
+			font = "hoi_16mbs"
+			maxWidth = 80
+			maxHeight = 18
+			format = left
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_pw_raid_CHD"
+			position = { x = 256 y = 242 }
+			quadTextureSprite = "GFX_NAM_pw_marker"
+			clicksound = click_default
+			pdx_tooltip = "NAM_pw_route_CHD_tt"
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_track"
+			position = { x = 150 y = 362 }
+			quadTextureSprite = "GFX_NAM_pw_gauge_notoriety"
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_1"
+			position = { x = 152 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_2"
+			position = { x = 162 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_3"
+			position = { x = 172 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_4"
+			position = { x = 182 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_5"
+			position = { x = 192 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_6"
+			position = { x = 202 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_7"
+			position = { x = 212 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_8"
+			position = { x = 222 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_9"
+			position = { x = 232 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_10"
+			position = { x = 242 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_11"
+			position = { x = 252 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_12"
+			position = { x = 262 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_13"
+			position = { x = 272 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_14"
+			position = { x = 282 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_15"
+			position = { x = 292 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_16"
+			position = { x = 302 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_17"
+			position = { x = 312 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_18"
+			position = { x = 322 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_19"
+			position = { x = 332 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_notoriety_20"
+			position = { x = 342 y = 366 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_track"
+			position = { x = 150 y = 406 }
+			quadTextureSprite = "GFX_NAM_pw_gauge_revenge"
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_1"
+			position = { x = 152 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_2"
+			position = { x = 162 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_3"
+			position = { x = 172 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_4"
+			position = { x = 182 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_5"
+			position = { x = 192 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_6"
+			position = { x = 202 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_7"
+			position = { x = 212 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_8"
+			position = { x = 222 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_9"
+			position = { x = 232 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_10"
+			position = { x = 242 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_11"
+			position = { x = 252 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_12"
+			position = { x = 262 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_13"
+			position = { x = 272 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_14"
+			position = { x = 282 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_15"
+			position = { x = 292 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 5
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_16"
+			position = { x = 302 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 5
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_17"
+			position = { x = 312 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 5
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_18"
+			position = { x = 322 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 5
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_19"
+			position = { x = 332 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 5
+		}
+
+		iconType = {
+			name = "NAM_pw_revenge_20"
+			position = { x = 342 y = 410 }
+			quadTextureSprite = "GFX_NAM_pw_segment"
+			frame = 5
+		}
+
+		iconType = {
+			name = "NAM_pw_fleet_1_sea"
+			position = { x = 152 y = 451 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_fleet_1_free"
+			position = { x = 152 y = 451 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_fleet_1_locked"
+			position = { x = 152 y = 451 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_fleet_2_sea"
+			position = { x = 172 y = 451 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_fleet_2_free"
+			position = { x = 172 y = 451 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_fleet_2_locked"
+			position = { x = 172 y = 451 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_fleet_3_sea"
+			position = { x = 192 y = 451 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_pw_fleet_3_free"
+			position = { x = 192 y = 451 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_fleet_3_locked"
+			position = { x = 192 y = 451 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_marine_1_ready"
+			position = { x = 152 y = 475 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_pw_marine_1_open"
+			position = { x = 152 y = 475 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_marine_1_locked"
+			position = { x = 152 y = 475 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_marine_2_ready"
+			position = { x = 172 y = 475 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_pw_marine_2_open"
+			position = { x = 172 y = 475 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_marine_2_locked"
+			position = { x = 172 y = 475 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_pw_marine_3_ready"
+			position = { x = 192 y = 475 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_pw_marine_3_open"
+			position = { x = 192 y = 475 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_pw_marine_3_locked"
+			position = { x = 192 y = 475 }
+			quadTextureSprite = "GFX_NAM_pw_pip"
+			frame = 4
+		}
+		# END GENERATED NAM PIRACY MAP
+		instantTextBoxType = {
+			name = "NAM_pw_map_legend"
+			position = { x = 12 y = 316 }
+			text = "NAM_pw_map_legend"
+			font = "hoi_16mbs"
+			maxWidth = 436
+			maxHeight = 34
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_coalition_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_notoriety_label"
+			position = { x = 24 y = 362 }
+			text = "NAM_pw_notoriety_label"
+			font = "hoi_16mbs"
+			maxWidth = 120
+			maxHeight = 18
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_notoriety_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_notoriety_value"
+			position = { x = 362 y = 362 }
+			text = "NAM_pw_notoriety_value"
+			font = "hoi_16mbs"
+			maxWidth = 78
+			maxHeight = 18
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_notoriety_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_notoriety_status"
+			position = { x = 24 y = 382 }
+			text = "NAM_pw_notoriety_status"
+			font = "hoi_16mbs"
+			maxWidth = 416
+			maxHeight = 18
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_notoriety_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_revenge_label"
+			position = { x = 24 y = 406 }
+			text = "NAM_pw_revenge_label"
+			font = "hoi_16mbs"
+			maxWidth = 120
+			maxHeight = 18
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_revenge_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_revenge_value"
+			position = { x = 362 y = 406 }
+			text = "NAM_pw_revenge_value"
+			font = "hoi_16mbs"
+			maxWidth = 78
+			maxHeight = 18
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_revenge_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_revenge_status"
+			position = { x = 24 y = 426 }
+			text = "NAM_pw_revenge_status"
+			font = "hoi_16mbs"
+			maxWidth = 416
+			maxHeight = 18
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_revenge_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_fleet_label"
+			position = { x = 24 y = 450 }
+			text = "NAM_pw_fleet_label"
+			font = "hoi_16mbs"
+			maxWidth = 120
+			maxHeight = 18
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_fleet_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_fleet_value"
+			position = { x = 220 y = 450 }
+			text = "NAM_pw_fleet_value"
+			font = "hoi_16mbs"
+			maxWidth = 220
+			maxHeight = 18
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_fleet_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_marine_label"
+			position = { x = 24 y = 474 }
+			text = "NAM_pw_marine_label"
+			font = "hoi_16mbs"
+			maxWidth = 120
+			maxHeight = 18
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_marine_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_marine_value"
+			position = { x = 220 y = 474 }
+			text = "NAM_pw_marine_value"
+			font = "hoi_16mbs"
+			maxWidth = 220
+			maxHeight = 18
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_marine_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_actions_locked"
+			position = { x = 24 y = 520 }
+			text = "NAM_pw_actions_locked"
+			font = "hoi_16mbs"
+			maxWidth = 412
+			maxHeight = 40
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "NAM_pw_buy_arms"
+			position = { x = 24 y = 516 }
+			size = { x = 132 y = 26 }
+			quadTextureSprite = "GFX_NAM_bw_button"
+			buttonText = "NAM_pw_buy_arms_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_pw_buy_arms_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_buy_arms_price"
+			position = { x = 26 y = 544 }
+			text = "NAM_pw_buy_arms_price"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_buy_arms_tt"
+		}
+		buttonType = {
+			name = "NAM_pw_buy_heavy_arms"
+			position = { x = 164 y = 516 }
+			size = { x = 132 y = 26 }
+			quadTextureSprite = "GFX_NAM_bw_button"
+			buttonText = "NAM_pw_buy_heavy_arms_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_pw_buy_heavy_arms_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_buy_heavy_arms_price"
+			position = { x = 166 y = 544 }
+			text = "NAM_pw_buy_heavy_arms_price"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_buy_heavy_arms_tt"
+		}
+		buttonType = {
+			name = "NAM_pw_buy_convoys"
+			position = { x = 304 y = 516 }
+			size = { x = 132 y = 26 }
+			quadTextureSprite = "GFX_NAM_bw_button"
+			buttonText = "NAM_pw_buy_convoys_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_pw_buy_convoys_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_buy_convoys_price"
+			position = { x = 306 y = 544 }
+			text = "NAM_pw_buy_convoys_price"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_buy_convoys_tt"
+		}
+		buttonType = {
+			name = "NAM_pw_fence_loot"
+			position = { x = 24 y = 566 }
+			size = { x = 132 y = 26 }
+			quadTextureSprite = "GFX_NAM_bw_button"
+			buttonText = "NAM_pw_fence_loot_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_pw_fence_loot_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_fence_loot_price"
+			position = { x = 26 y = 594 }
+			text = "NAM_pw_fence_loot_price"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_fence_loot_tt"
+		}
+		buttonType = {
+			name = "NAM_pw_exile_drill"
+			position = { x = 164 y = 566 }
+			size = { x = 132 y = 26 }
+			quadTextureSprite = "GFX_NAM_bw_button"
+			buttonText = "NAM_pw_exile_drill_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_pw_exile_drill_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_exile_drill_price"
+			position = { x = 166 y = 594 }
+			text = "NAM_pw_exile_drill_price"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_exile_drill_tt"
+		}
+		buttonType = {
+			name = "NAM_pw_order_marines"
+			position = { x = 304 y = 566 }
+			size = { x = 132 y = 26 }
+			quadTextureSprite = "GFX_NAM_bw_button"
+			buttonText = "NAM_pw_order_marines_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_pw_order_marines_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_pw_order_marines_price"
+			position = { x = 306 y = 594 }
+			text = "NAM_pw_order_marines_price"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_pw_order_marines_tt"
+		}
+	}
+}

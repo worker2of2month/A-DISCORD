@@ -5364,6 +5364,61 @@
       }
     },
     {
+      "key": "script_adiscord_nam_resource_war_effects_nam_abandoned_columns",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "NAM Abandoned Columns",
+      "display_name": "NAM Abandoned Columns",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "artillery",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 41.8125,
+        "manpower": 3300,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 24,
+          "artillery_equipment": 12,
+          "infantry_equipment": 2970
+        },
+        "supply": 0.34
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_adiscord_nam_resource_war_effects_nam_abandoned_columns"
+      }
+    },
+    {
       "key": "oob_ndn_vorkerland_collapse_ndn_collapse_militia",
       "source": {
         "kind": "oob",
@@ -14277,16 +14332,6 @@
       "count": 2
     },
     {
-      "key": "adiscord_nam_resource_war_effects_create_unit_nam_resource_infantry_xp_0_1_eq_0_5",
-      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
-      "kind": "create_unit",
-      "technical_name": "NAM Resource Infantry",
-      "legacy_names": [],
-      "start_experience_factor": 0.1,
-      "start_equipment_factor": 0.5,
-      "count": 1
-    },
-    {
       "key": "adiscord_nam_resource_war_effects_create_unit_nam_island_marines_xp_0_3_eq_1_0",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "create_unit",
@@ -14303,6 +14348,14 @@
       "technical_name": "NAM Island Marines",
       "legacy_names": [],
       "count": 2
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_technical_reference_nam_abandoned_columns",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "NAM Abandoned Columns",
+      "legacy_names": [],
+      "count": 3
     },
     {
       "key": "adiscord_vorkerland_collapse_effects_create_unit_armi_mobile_group_xp_0_35_eq_0_9",

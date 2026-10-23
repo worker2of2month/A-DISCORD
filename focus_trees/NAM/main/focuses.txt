@@ -19,7 +19,7 @@ focus_tree = {
 	focus = {
 		id = NAM_inventory
 		icon = GFX_focus_generic_commission
-		x = 33
+		x = 38
 		y = 0
 		cost = 1
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -42,18 +42,19 @@ focus_tree = {
 
 	# ----- Colony: trade with the metropole and the underground -----
 	# The only course visible before the collapse of Vorkerland. One route takes
-	# 25 weeks with the inventory, inside the 175-196 days before the centre
-	# vanishes. The colony decisions close with the collapse wars, so the same
-	# moment bypasses whatever is left of the colony; NAM_center_vanished (event
+	# 37 weeks with the inventory, longer than the 175-196 days before the centre
+	# vanishes, so the player chooses which colony focuses to finish. The colony
+	# decisions close with the collapse wars, so the same moment bypasses
+	# whatever is left of the colony; NAM_center_vanished (event
 	# ADISCORD_nam_resource_war.80) reveals the other branches, which carry
 	# allow_branch on their roots.
 
 	focus = {
 		id = NAM_metropolitan_quota
 		icon = GFX_focus_generic_resource_extraction
-		x = 30
+		x = 35
 		y = 1
-		cost = 2
+		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_inventory }
 		bypass = {
@@ -81,9 +82,9 @@ focus_tree = {
 	focus = {
 		id = NAM_deliver_the_quota
 		icon = GFX_focus_generic_railroad
-		x = 29
+		x = 34
 		y = 2
-		cost = 2
+		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_metropolitan_quota }
 		mutually_exclusive = { focus = NAM_concealed_reserve }
@@ -128,9 +129,9 @@ focus_tree = {
 	focus = {
 		id = NAM_concealed_reserve
 		icon = GFX_focus_generic_turning_a_blind_eye
-		x = 31
+		x = 36
 		y = 2
-		cost = 2
+		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_metropolitan_quota }
 		mutually_exclusive = { focus = NAM_deliver_the_quota }
@@ -164,9 +165,9 @@ focus_tree = {
 	focus = {
 		id = NAM_wrk_trade_house
 		icon = GFX_focus_generic_british_trade
-		x = 30
+		x = 35
 		y = 3
-		cost = 3
+		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = NAM_deliver_the_quota
@@ -206,9 +207,9 @@ focus_tree = {
 	focus = {
 		id = NAM_wrk_return_cargo
 		icon = GFX_goal_generic_construct_civ_factory
-		x = 30
+		x = 35
 		y = 4
-		cost = 2
+		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_wrk_trade_house }
 		bypass = {
@@ -243,9 +244,9 @@ focus_tree = {
 	focus = {
 		id = NAM_metropolitan_depots
 		icon = GFX_focus_generic_reinforcing_the_supply_network
-		x = 30
+		x = 35
 		y = 5
-		cost = 2
+		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_wrk_return_cargo }
 		bypass = {
@@ -285,9 +286,9 @@ focus_tree = {
 	focus = {
 		id = NAM_colonial_watch
 		icon = GFX_focus_generic_secret_service_agency
-		x = 36
+		x = 41
 		y = 1
-		cost = 2
+		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_inventory }
 		bypass = {
@@ -318,9 +319,9 @@ focus_tree = {
 	focus = {
 		id = NAM_imperial_gendarmes
 		icon = GFX_focus_generic_national_security
-		x = 35
+		x = 40
 		y = 2
-		cost = 3
+		cost = 4
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_colonial_watch }
 		mutually_exclusive = { focus = NAM_oilfield_militia }
@@ -359,9 +360,9 @@ focus_tree = {
 	focus = {
 		id = NAM_oilfield_militia
 		icon = GFX_focus_generic_workers
-		x = 37
+		x = 42
 		y = 2
-		cost = 3
+		cost = 4
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_colonial_watch }
 		mutually_exclusive = { focus = NAM_imperial_gendarmes }
@@ -401,9 +402,9 @@ focus_tree = {
 	focus = {
 		id = NAM_pipeline_patrols
 		icon = GFX_focus_generic_road_investment
-		x = 36
+		x = 41
 		y = 3
-		cost = 2
+		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
 		prerequisite = {
 			focus = NAM_imperial_gendarmes
@@ -450,9 +451,9 @@ focus_tree = {
 	focus = {
 		id = NAM_print_shop_raid
 		icon = GFX_focus_generic_printing_press
-		x = 36
+		x = 41
 		y = 4
-		cost = 2
+		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_pipeline_patrols }
 		bypass = {
@@ -483,9 +484,9 @@ focus_tree = {
 	focus = {
 		id = NAM_colony_order
 		icon = GFX_focus_generic_world_peace
-		x = 36
+		x = 41
 		y = 5
-		cost = 2
+		cost = 3
 		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_print_shop_raid }
 		bypass = {
@@ -516,9 +517,9 @@ focus_tree = {
 	focus = {
 		id = NAM_letters_to_the_centre
 		icon = GFX_focus_generic_whispers
-		x = 33
+		x = 38
 		y = 6
-		cost = 2
+		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_metropolitan_depots }
 		prerequisite = { focus = NAM_colony_order }
@@ -553,9 +554,9 @@ focus_tree = {
 	focus = {
 		id = NAM_independence_day
 		icon = GFX_focus_generic_happy_cheer
-		x = 33
+		x = 38
 		y = 7
-		cost = 1
+		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_letters_to_the_centre }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -594,9 +595,9 @@ focus_tree = {
 	focus = {
 		id = NAM_neutral_basin
 		icon = GFX_goal_generic_neutrality_focus
-		x = 32
+		x = 37
 		y = 8
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_independence_day }
 		mutually_exclusive = { focus = NAM_basin_is_ours }
@@ -642,9 +643,9 @@ focus_tree = {
 	focus = {
 		id = NAM_basin_is_ours
 		icon = GFX_focus_generic_provoke_border_clashes
-		x = 34
+		x = 39
 		y = 8
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_independence_day }
 		mutually_exclusive = { focus = NAM_neutral_basin }
@@ -690,9 +691,9 @@ focus_tree = {
 	focus = {
 		id = NAM_provisional_statute
 		icon = GFX_focus_generic_social_democracy
-		x = 33
+		x = 38
 		y = 9
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = {
 			focus = NAM_neutral_basin
@@ -716,9 +717,9 @@ focus_tree = {
 	focus = {
 		id = NAM_rom_address
 		icon = GFX_focus_generic_public_meetings
-		x = 33
+		x = 38
 		y = 10
-		cost = 1
+		cost = 4
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_provisional_statute }
 		available = {
@@ -745,9 +746,9 @@ focus_tree = {
 	focus = {
 		id = NAM_open_ledgers
 		icon = GFX_focus_generic_reduce_unneccessary_expenditure
-		x = 2
+		x = 1
 		y = 1
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_inventory }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -780,9 +781,9 @@ focus_tree = {
 	focus = {
 		id = NAM_vertical
 		icon = GFX_focus_generic_improve_the_administration
-		x = 1
+		x = 0
 		y = 2
-		cost = 3
+		cost = 8
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_open_ledgers }
 		mutually_exclusive = { focus = NAM_districts }
@@ -833,9 +834,9 @@ focus_tree = {
 	focus = {
 		id = NAM_districts
 		icon = GFX_focus_generic_freedom_council
-		x = 3
+		x = 2
 		y = 2
-		cost = 3
+		cost = 8
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_open_ledgers }
 		mutually_exclusive = { focus = NAM_vertical }
@@ -883,9 +884,9 @@ focus_tree = {
 	focus = {
 		id = NAM_inspectors
 		icon = GFX_focus_generic_secret_service_agency
-		x = 1
+		x = 0
 		y = 3
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_vertical }
 		available = {
@@ -915,9 +916,9 @@ focus_tree = {
 	focus = {
 		id = NAM_tax_rolls
 		icon = GFX_focus_generic_stockpile_currency
-		x = 5
+		x = 4
 		y = 2
-		cost = 2
+		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_open_ledgers }
 		available = {
@@ -938,9 +939,9 @@ focus_tree = {
 	focus = {
 		id = NAM_public_payroll
 		icon = GFX_focus_generic_welfare
-		x = 3
+		x = 2
 		y = 3
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_districts }
 		available = {
@@ -975,9 +976,9 @@ focus_tree = {
 	focus = {
 		id = NAM_emergency_writ
 		icon = GFX_focus_generic_national_security
-		x = 1
+		x = 0
 		y = 4
-		cost = 3
+		cost = 6
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_inspectors }
 		available = {
@@ -1006,9 +1007,9 @@ focus_tree = {
 	focus = {
 		id = NAM_district_guarantees
 		icon = GFX_focus_generic_diplomatic_treaty
-		x = 3
+		x = 2
 		y = 4
-		cost = 3
+		cost = 6
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_public_payroll }
 		available = {
@@ -1041,9 +1042,9 @@ focus_tree = {
 	focus = {
 		id = NAM_one_budget
 		icon = GFX_focus_generic_currency_reforms
-		x = 2
+		x = 1
 		y = 5
-		cost = 1
+		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_emergency_writ
@@ -1079,9 +1080,9 @@ focus_tree = {
 	focus = {
 		id = NAM_namestnik_circuits
 		icon = GFX_focus_generic_advisors
-		x = 1
+		x = 0
 		y = 6
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_one_budget }
 		mutually_exclusive = { focus = NAM_district_assemblies }
@@ -1115,9 +1116,9 @@ focus_tree = {
 	focus = {
 		id = NAM_district_assemblies
 		icon = GFX_focus_generic_worker_administration
-		x = 3
+		x = 2
 		y = 6
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_one_budget }
 		mutually_exclusive = { focus = NAM_namestnik_circuits }
@@ -1151,9 +1152,9 @@ focus_tree = {
 	focus = {
 		id = NAM_seal_courts
 		icon = GFX_focus_generic_court
-		x = 2
+		x = 1
 		y = 7
-		cost = 2
+		cost = 10
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = {
 			focus = NAM_namestnik_circuits
@@ -1186,7 +1187,7 @@ focus_tree = {
 		icon = GFX_focus_generic_conference
 		x = 10
 		y = 1
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_inventory }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -1227,7 +1228,7 @@ focus_tree = {
 		icon = GFX_focus_generic_stockpile_fuel
 		x = 9
 		y = 2
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_supports_council }
 		mutually_exclusive = { focus = NAM_supports_export_houses }
@@ -1257,7 +1258,7 @@ focus_tree = {
 		icon = GFX_goal_generic_trade
 		x = 11
 		y = 2
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_supports_council }
 		mutually_exclusive = { focus = NAM_supports_oil_compact }
@@ -1288,7 +1289,7 @@ focus_tree = {
 		icon = GFX_goal_generic_major_alliance
 		x = 10
 		y = 3
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = NAM_supports_oil_compact
@@ -1329,9 +1330,9 @@ focus_tree = {
 	focus = {
 		id = NAM_garrison_assembly
 		icon = GFX_focus_generic_soldier_salute
-		x = 8
+		x = 7
 		y = 4
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_supports_balance }
 		available = {
@@ -1357,9 +1358,9 @@ focus_tree = {
 	focus = {
 		id = NAM_rivals_ledger
 		icon = GFX_focus_generic_conspiracy
-		x = 12
+		x = 13
 		y = 4
-		cost = 2
+		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_supports_balance }
 		available = {
@@ -1404,9 +1405,9 @@ focus_tree = {
 	focus = {
 		id = NAM_hear_klyuchevsk
 		icon = GFX_focus_generic_industrialists
-		x = 9
+		x = 10
 		y = 5
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_rivals_ledger }
 		mutually_exclusive = { focus = NAM_hear_the_harbour }
@@ -1433,9 +1434,9 @@ focus_tree = {
 	focus = {
 		id = NAM_hear_the_harbour
 		icon = GFX_focus_generic_british_trade
-		x = 11
+		x = 12
 		y = 5
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_NAVY_XP }
 		prerequisite = { focus = NAM_rivals_ledger }
 		mutually_exclusive = { focus = NAM_hear_klyuchevsk }
@@ -1466,9 +1467,9 @@ focus_tree = {
 	focus = {
 		id = NAM_hear_the_commandant
 		icon = GFX_focus_generic_military_academy
-		x = 13
+		x = 14
 		y = 5
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_rivals_ledger }
 		mutually_exclusive = { focus = NAM_hear_the_registrar }
@@ -1499,9 +1500,9 @@ focus_tree = {
 	focus = {
 		id = NAM_hear_the_registrar
 		icon = GFX_focus_generic_printing_press
-		x = 15
+		x = 16
 		y = 5
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_rivals_ledger }
 		mutually_exclusive = { focus = NAM_hear_the_commandant }
@@ -1528,9 +1529,9 @@ focus_tree = {
 	focus = {
 		id = NAM_pillar_arbitration
 		icon = GFX_focus_generic_league_of_nations
-		x = 12
+		x = 13
 		y = 6
-		cost = 2
+		cost = 10
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_garrison_assembly }
 		prerequisite = {
@@ -1565,9 +1566,9 @@ focus_tree = {
 	focus = {
 		id = NAM_crisis_office
 		icon = GFX_focus_generic_phone
-		x = 19
+		x = 25
 		y = 1
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_inventory }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -1600,9 +1601,9 @@ focus_tree = {
 	focus = {
 		id = NAM_field_firefighters
 		icon = GFX_focus_generic_field_hostpital
-		x = 18
+		x = 24
 		y = 2
-		cost = 2
+		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_crisis_office }
 		available = {
@@ -1627,9 +1628,9 @@ focus_tree = {
 	focus = {
 		id = NAM_chancellery_purge
 		icon = GFX_focus_generic_sympathetic_judges
-		x = 20
+		x = 26
 		y = 2
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_crisis_office }
 		available = {
@@ -1658,9 +1659,9 @@ focus_tree = {
 	focus = {
 		id = NAM_underground_reports
 		icon = GFX_focus_generic_secret_agent_operative
-		x = 24
+		x = 30
 		y = 1
-		cost = 2
+		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_inventory }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -1691,9 +1692,9 @@ focus_tree = {
 	focus = {
 		id = NAM_veter_channel
 		icon = GFX_focus_generic_treaty
-		x = 23
+		x = 29
 		y = 2
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_underground_reports }
 		mutually_exclusive = { focus = NAM_cache_hunters }
@@ -1725,9 +1726,9 @@ focus_tree = {
 	focus = {
 		id = NAM_cache_hunters
 		icon = GFX_focus_generic_infiltration
-		x = 25
+		x = 31
 		y = 2
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_underground_reports }
 		mutually_exclusive = { focus = NAM_veter_channel }
@@ -1755,9 +1756,9 @@ focus_tree = {
 	focus = {
 		id = NAM_amnesty_lists
 		icon = GFX_focus_generic_immigration
-		x = 23
+		x = 29
 		y = 3
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_veter_channel }
 		available = {
@@ -1787,9 +1788,9 @@ focus_tree = {
 	focus = {
 		id = NAM_mine_councils
 		icon = GFX_focus_generic_workers
-		x = 23
+		x = 29
 		y = 4
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_amnesty_lists }
 		available = {
@@ -1814,9 +1815,9 @@ focus_tree = {
 	focus = {
 		id = NAM_informers
 		icon = GFX_focus_generic_radio_communication
-		x = 25
+		x = 31
 		y = 3
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_cache_hunters }
 		available = {
@@ -1846,9 +1847,9 @@ focus_tree = {
 	focus = {
 		id = NAM_field_gendarmes
 		icon = GFX_goal_generic_special_forces
-		x = 25
+		x = 31
 		y = 4
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_informers }
 		available = {
@@ -1877,9 +1878,9 @@ focus_tree = {
 	focus = {
 		id = NAM_quiet_wells
 		icon = GFX_focus_generic_world_peace
-		x = 24
+		x = 30
 		y = 5
-		cost = 2
+		cost = 9
 		search_filters = { FOCUS_FILTER_STABILITY }
 		prerequisite = {
 			focus = NAM_mine_councils
@@ -1914,9 +1915,9 @@ focus_tree = {
 	focus = {
 		id = NAM_well_register
 		icon = GFX_focus_generic_offshore_oil_rig
-		x = 43
+		x = 48
 		y = 1
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_inventory }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -1949,9 +1950,9 @@ focus_tree = {
 	focus = {
 		id = NAM_export_quays
 		icon = GFX_focus_generic_merchant_fleet
-		x = 42
+		x = 47
 		y = 2
-		cost = 3
+		cost = 8
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_well_register }
 		mutually_exclusive = { focus = NAM_domestic_refining }
@@ -1989,9 +1990,9 @@ focus_tree = {
 	focus = {
 		id = NAM_contract_bureau
 		icon = GFX_focus_generic_concessions
-		x = 49
+		x = 54
 		y = 2
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_well_register }
 		available = {
@@ -2016,9 +2017,9 @@ focus_tree = {
 	focus = {
 		id = NAM_domestic_refining
 		icon = GFX_goal_generic_oil_refinery
-		x = 44
+		x = 49
 		y = 2
-		cost = 3
+		cost = 8
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_well_register }
 		mutually_exclusive = { focus = NAM_export_quays }
@@ -2055,9 +2056,9 @@ focus_tree = {
 	focus = {
 		id = NAM_insured_cargoes
 		icon = GFX_goal_generic_positive_trade_relations
-		x = 42
+		x = 47
 		y = 3
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_export_quays }
 		available = {
@@ -2087,9 +2088,9 @@ focus_tree = {
 	focus = {
 		id = NAM_overseas_buyers
 		icon = GFX_focus_generic_the_suez
-		x = 40
+		x = 45
 		y = 3
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_NAVY_XP }
 		prerequisite = { focus = NAM_export_quays }
 		available = {
@@ -2115,9 +2116,9 @@ focus_tree = {
 	focus = {
 		id = NAM_field_repair_crews
 		icon = GFX_goal_generic_construction2
-		x = 49
+		x = 54
 		y = 3
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_contract_bureau }
 		available = {
@@ -2142,9 +2143,9 @@ focus_tree = {
 	focus = {
 		id = NAM_refinery_programme
 		icon = GFX_focus_generic_industry_2
-		x = 46
+		x = 51
 		y = 3
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_domestic_refining }
 		available = {
@@ -2168,9 +2169,9 @@ focus_tree = {
 	focus = {
 		id = NAM_machine_shops
 		icon = GFX_focus_generic_modernize_industry
-		x = 44
+		x = 49
 		y = 3
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_domestic_refining }
 		available = {
@@ -2210,9 +2211,9 @@ focus_tree = {
 	focus = {
 		id = NAM_klyuchevsk_pipeline
 		icon = GFX_focus_generic_road_investment
-		x = 49
+		x = 54
 		y = 4
-		cost = 2
+		cost = 7
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_field_repair_crews }
 		available = {
@@ -2237,9 +2238,9 @@ focus_tree = {
 	focus = {
 		id = NAM_deep_wells
 		icon = GFX_focus_generic_mineral_prospecting
-		x = 47
+		x = 52
 		y = 5
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_klyuchevsk_pipeline }
 		available = {
@@ -2265,9 +2266,9 @@ focus_tree = {
 	focus = {
 		id = NAM_fuel_depots
 		icon = GFX_focus_generic_energy
-		x = 49
+		x = 54
 		y = 5
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_klyuchevsk_pipeline }
 		available = {
@@ -2296,9 +2297,9 @@ focus_tree = {
 	focus = {
 		id = NAM_second_drilling_crew
 		icon = GFX_focus_generic_mining_industry
-		x = 51
+		x = 56
 		y = 5
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_klyuchevsk_pipeline }
 		available = {
@@ -2325,9 +2326,9 @@ focus_tree = {
 	focus = {
 		id = NAM_civilian_combine
 		icon = GFX_goal_generic_construct_civ_factory
-		x = 43
+		x = 48
 		y = 4
-		cost = 3
+		cost = 10
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_insured_cargoes
@@ -2364,9 +2365,9 @@ focus_tree = {
 	focus = {
 		id = NAM_basin_roads
 		icon = GFX_goal_generic_construct_infrastructure
-		x = 42
+		x = 47
 		y = 5
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_civilian_combine }
 		available = {
@@ -2410,9 +2411,9 @@ focus_tree = {
 	focus = {
 		id = NAM_technical_college
 		icon = GFX_focus_generic_university_1
-		x = 44
+		x = 49
 		y = 5
-		cost = 3
+		cost = 7
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		prerequisite = { focus = NAM_civilian_combine }
 		available = {
@@ -2434,9 +2435,9 @@ focus_tree = {
 	focus = {
 		id = NAM_count_garrisons
 		icon = GFX_goal_generic_allies_build_infantry
-		x = 57
+		x = 60
 		y = 1
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_inventory }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -2467,9 +2468,9 @@ focus_tree = {
 	focus = {
 		id = NAM_field_guards
 		icon = GFX_goal_generic_defence
-		x = 54
+		x = 59
 		y = 2
-		cost = 3
+		cost = 7
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_count_garrisons }
 		mutually_exclusive = { focus = NAM_mobile_columns }
@@ -2507,9 +2508,9 @@ focus_tree = {
 	focus = {
 		id = NAM_mobilisation_office
 		icon = GFX_focus_generic_manpower
-		x = 60
+		x = 65
 		y = 2
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_count_garrisons }
 		bypass = {
@@ -2545,9 +2546,9 @@ focus_tree = {
 	focus = {
 		id = NAM_mobile_columns
 		icon = GFX_goal_generic_army_motorized
-		x = 56
+		x = 61
 		y = 2
-		cost = 3
+		cost = 7
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_count_garrisons }
 		mutually_exclusive = { focus = NAM_field_guards }
@@ -2585,9 +2586,9 @@ focus_tree = {
 	focus = {
 		id = NAM_engineer_depots
 		icon = GFX_goal_generic_construction
-		x = 55
+		x = 60
 		y = 3
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_field_guards }
 		available = {
@@ -2611,9 +2612,9 @@ focus_tree = {
 	focus = {
 		id = NAM_line_survey
 		icon = GFX_focus_generic_defensive_reorganization
-		x = 62
+		x = 66
 		y = 3
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_mobilisation_office }
 		bypass = {
@@ -2652,9 +2653,9 @@ focus_tree = {
 	focus = {
 		id = NAM_motor_pool
 		icon = GFX_focus_generic_truck
-		x = 57
+		x = 62
 		y = 3
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_mobile_columns }
 		available = {
@@ -2678,9 +2679,9 @@ focus_tree = {
 	focus = {
 		id = NAM_line_engineers
 		icon = GFX_focus_generic_mountain_fortification
-		x = 58
+		x = 63
 		y = 6
-		cost = 2
+		cost = 7
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_field_guards }
 		prerequisite = { focus = NAM_line_survey }
@@ -2722,9 +2723,9 @@ focus_tree = {
 	focus = {
 		id = NAM_reserve_rolls
 		icon = GFX_goal_generic_axis_build_infantry
-		x = 63
+		x = 67
 		y = 4
-		cost = 2
+		cost = 4
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_line_survey }
 		bypass = {
@@ -2761,9 +2762,9 @@ focus_tree = {
 	focus = {
 		id = NAM_motor_column_orders
 		icon = GFX_focus_generic_mechanized
-		x = 59
+		x = 64
 		y = 3
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_mobile_columns }
 		prerequisite = { focus = NAM_mobilisation_office }
@@ -2803,9 +2804,9 @@ focus_tree = {
 	focus = {
 		id = NAM_quartermaster
 		icon = GFX_focus_generic_supply_line
-		x = 56
+		x = 61
 		y = 4
-		cost = 2
+		cost = 7
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = {
 			focus = NAM_engineer_depots
@@ -2845,9 +2846,9 @@ focus_tree = {
 	focus = {
 		id = NAM_port_arsenal
 		icon = GFX_focus_RUS_industrial_belt
-		x = 55
+		x = 60
 		y = 5
-		cost = 3
+		cost = 8
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_quartermaster }
 		available = {
@@ -2875,9 +2876,9 @@ focus_tree = {
 	focus = {
 		id = NAM_officer_courses
 		icon = GFX_focus_generic_advanced_military_studies
-		x = 57
+		x = 62
 		y = 5
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_quartermaster }
 		available = {
@@ -2899,9 +2900,9 @@ focus_tree = {
 	focus = {
 		id = NAM_harbour_service
 		icon = GFX_goal_generic_construct_naval_dockyard
-		x = 68
+		x = 72
 		y = 1
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_inventory }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -2928,9 +2929,9 @@ focus_tree = {
 	focus = {
 		id = NAM_repair_yard
 		icon = GFX_focus_generic_refit_civilian_ships
-		x = 68
+		x = 72
 		y = 2
-		cost = 3
+		cost = 7
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_harbour_service }
 		available = {
@@ -2958,9 +2959,9 @@ focus_tree = {
 	focus = {
 		id = NAM_escort_school
 		icon = GFX_goal_generic_navy_anti_submarine
-		x = 68
+		x = 72
 		y = 3
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_repair_yard }
 		available = {
@@ -2994,9 +2995,9 @@ focus_tree = {
 	focus = {
 		id = NAM_coastal_battalions
 		icon = GFX_goal_generic_amphibious_assault
-		x = 66
+		x = 70
 		y = 4
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_escort_school }
 		bypass = {
@@ -3043,9 +3044,9 @@ focus_tree = {
 	focus = {
 		id = NAM_island_accounts
 		icon = GFX_focus_generic_smugglers
-		x = 70
+		x = 74
 		y = 4
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_escort_school }
 		available = {
@@ -3075,9 +3076,9 @@ focus_tree = {
 	focus = {
 		id = NAM_coastal_watch
 		icon = GFX_goal_generic_radar
-		x = 66
+		x = 70
 		y = 5
-		cost = 2
+		cost = 4
 		search_filters = { FOCUS_FILTER_NAVY_XP }
 		prerequisite = { focus = NAM_coastal_battalions }
 		available = {
@@ -3105,9 +3106,9 @@ focus_tree = {
 	focus = {
 		id = NAM_island_levy_office
 		icon = GFX_focus_generic_steel
-		x = 69
+		x = 73
 		y = 5
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_island_accounts }
 		mutually_exclusive = { focus = NAM_island_concession }
@@ -3133,9 +3134,9 @@ focus_tree = {
 	focus = {
 		id = NAM_island_concession
 		icon = GFX_focus_generic_license_production
-		x = 71
+		x = 75
 		y = 5
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_island_accounts }
 		mutually_exclusive = { focus = NAM_island_levy_office }
@@ -3165,9 +3166,9 @@ focus_tree = {
 	focus = {
 		id = NAM_island_convoys
 		icon = GFX_focus_generic_escort_efficiency
-		x = 70
+		x = 74
 		y = 6
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_NAVY_XP }
 		prerequisite = {
 			focus = NAM_island_levy_office
@@ -3194,9 +3195,9 @@ focus_tree = {
 	focus = {
 		id = NAM_island_governors
 		icon = GFX_focus_generic_public_works
-		x = 70
+		x = 74
 		y = 7
-		cost = 2
+		cost = 10
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_island_convoys }
 		available = {
@@ -3244,9 +3245,9 @@ focus_tree = {
 	focus = {
 		id = NAM_restitution_desk
 		icon = GFX_goal_generic_improve_relations
-		x = 75
+		x = 20
 		y = 1
-		cost = 2
+		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_inventory }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -3285,9 +3286,9 @@ focus_tree = {
 	focus = {
 		id = NAM_court_azhar
 		icon = GFX_focus_generic_influence_middle_east
-		x = 74
+		x = 19
 		y = 2
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_restitution_desk }
 		mutually_exclusive = { focus = NAM_fuel_leverage }
@@ -3338,9 +3339,9 @@ focus_tree = {
 	focus = {
 		id = NAM_fuel_leverage
 		icon = GFX_focus_generic_trade_interdiction
-		x = 76
+		x = 21
 		y = 2
-		cost = 2
+		cost = 6
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_restitution_desk }
 		mutually_exclusive = { focus = NAM_court_azhar }
@@ -3380,9 +3381,9 @@ focus_tree = {
 	focus = {
 		id = NAM_basin_talks
 		icon = GFX_goal_generic_intelligence_exchange
-		x = 74
+		x = 19
 		y = 3
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_court_azhar }
 		bypass = {
@@ -3420,9 +3421,9 @@ focus_tree = {
 	focus = {
 		id = NAM_eflor_fuel_prices
 		icon = GFX_focus_generic_price_controls
-		x = 76
+		x = 21
 		y = 3
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_fuel_leverage }
 		bypass = {
@@ -3466,9 +3467,9 @@ focus_tree = {
 	focus = {
 		id = NAM_general_staff_plan
 		icon = GFX_goal_generic_army_doctrines
-		x = 75
+		x = 20
 		y = 4
-		cost = 2
+		cost = 8
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = {
 			focus = NAM_basin_talks
@@ -3515,7 +3516,7 @@ focus_tree = {
 	focus = {
 		id = NAM_alarm
 		icon = GFX_goal_generic_occupy_start_war
-		x = 81
+		x = 82
 		y = 0
 		cost = 1
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -3542,9 +3543,9 @@ focus_tree = {
 	focus = {
 		id = NAM_hold_basin
 		icon = GFX_focus_generic_coastal_fort
-		x = 80
+		x = 81
 		y = 1
-		cost = 2
+		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		allow_branch = { has_global_flag = ADISCORD_nam_resource_war_started }
 		prerequisite = { focus = NAM_alarm }
@@ -3584,9 +3585,9 @@ focus_tree = {
 	focus = {
 		id = NAM_relief_columns
 		icon = GFX_goal_generic_production2
-		x = 82
+		x = 83
 		y = 1
-		cost = 2
+		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		allow_branch = { has_global_flag = ADISCORD_nam_resource_war_started }
 		prerequisite = { focus = NAM_alarm }
@@ -3616,9 +3617,9 @@ focus_tree = {
 	focus = {
 		id = NAM_discipline_of_seals
 		icon = GFX_goal_generic_propaganda
-		x = 79
+		x = 80
 		y = 2
-		cost = 1
+		cost = 2
 		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_WAR_SUPPORT }
 		allow_branch = { has_global_flag = ADISCORD_nam_resource_war_started }
 		prerequisite = { focus = NAM_hold_basin }
@@ -3648,9 +3649,9 @@ focus_tree = {
 	focus = {
 		id = NAM_counterstroke
 		icon = GFX_focus_generic_army_attack
-		x = 81
+		x = 82
 		y = 2
-		cost = 3
+		cost = 4
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		allow_branch = { has_global_flag = ADISCORD_nam_resource_war_started }
 		prerequisite = {
@@ -3682,9 +3683,9 @@ focus_tree = {
 	focus = {
 		id = NAM_volunteer_levies
 		icon = GFX_focus_generic_limited_social_mobilization
-		x = 83
+		x = 84
 		y = 2
-		cost = 2
+		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		allow_branch = { has_global_flag = ADISCORD_nam_resource_war_started }
 		prerequisite = { focus = NAM_relief_columns }
@@ -3714,9 +3715,9 @@ focus_tree = {
 	focus = {
 		id = NAM_scorched_wells
 		icon = GFX_focus_generic_sabotage
-		x = 80
+		x = 81
 		y = 3
-		cost = 2
+		cost = 3
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ARMY_XP }
 		allow_branch = { has_global_flag = ADISCORD_nam_resource_war_started }
 		prerequisite = { focus = NAM_counterstroke }
@@ -3749,9 +3750,9 @@ focus_tree = {
 	focus = {
 		id = NAM_wells_under_guard
 		icon = GFX_goal_generic_fortify_city
-		x = 82
+		x = 83
 		y = 3
-		cost = 2
+		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
 		allow_branch = { has_global_flag = ADISCORD_nam_resource_war_started }
 		prerequisite = { focus = NAM_counterstroke }
@@ -3804,9 +3805,9 @@ focus_tree = {
 	focus = {
 		id = NAM_last_reserve
 		icon = GFX_goal_generic_army_artillery
-		x = 81
+		x = 82
 		y = 4
-		cost = 2
+		cost = 4
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		allow_branch = { has_global_flag = ADISCORD_nam_resource_war_started }
 		prerequisite = {
@@ -3844,9 +3845,9 @@ focus_tree = {
 	focus = {
 		id = NAM_district_volunteers
 		icon = GFX_focus_generic_forest_brothers
-		x = 80
+		x = 81
 		y = 5
-		cost = 2
+		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
 		allow_branch = { has_global_flag = ADISCORD_nam_resource_war_started }
 		prerequisite = { focus = NAM_last_reserve }
@@ -3883,9 +3884,9 @@ focus_tree = {
 	focus = {
 		id = NAM_martial_seals
 		icon = GFX_focus_generic_total_war
-		x = 82
+		x = 83
 		y = 5
-		cost = 2
+		cost = 3
 		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_WAR_SUPPORT }
 		allow_branch = { has_global_flag = ADISCORD_nam_resource_war_started }
 		prerequisite = { focus = NAM_last_reserve }
@@ -3923,9 +3924,9 @@ focus_tree = {
 	focus = {
 		id = NAM_oil_score
 		icon = GFX_goal_generic_occupy_states_ongoing_war
-		x = 81
+		x = 82
 		y = 6
-		cost = 2
+		cost = 5
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_INDUSTRY }
 		allow_branch = { has_global_flag = ADISCORD_nam_resource_war_started }
 		prerequisite = {

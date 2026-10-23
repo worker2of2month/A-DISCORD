@@ -211,7 +211,7 @@ class NamCampaignTests(unittest.TestCase):
                 self.assertNotIn(coordinate, coordinates, name)
                 coordinates.add(coordinate)
                 self.assertTrue(block(focus, "completion_reward"), name)
-                self.assertIn(int(scalar(focus, "cost")), range(1, 6))
+                self.assertIn(int(scalar(focus, "cost")), range(1, 13))
                 filters.add(tuple(e.value for e in block(focus, "search_filters")))
                 self.assertEqual(scalar(block(focus, "available"), "has_capitulated"), "no")
                 for group in (e.value for e in focus if e.key == "prerequisite"):
@@ -251,7 +251,7 @@ class NamCampaignTests(unittest.TestCase):
     def test_normal_preparation_fits_external_clock(self):
         path = ("inventory", "open_ledgers", "districts", "public_payroll", "district_guarantees")
         days = sum(int(scalar(self.focuses["NAM_" + key], "cost")) * 7 for key in path)
-        self.assertEqual(days, 77)
+        self.assertEqual(days, 175)
         self.assertLess(days + 60, 850)
         self.assertNotIn("prerequisite", [e.key for e in self.focuses["NAM_alarm"]])
         self.assertNotIn("prerequisite", [e.key for e in self.postwar["NAM_recognition"]])

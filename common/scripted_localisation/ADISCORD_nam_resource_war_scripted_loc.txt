@@ -1035,3 +1035,371 @@ defined_text = {
 		localization_key = NAM_bw_phase_tension_short
 	}
 }
+
+# ----- Piracy window -----
+# COUNTRY NAM unless noted. The header shows the coalition's current answer
+# and the landing the return would open with today.
+defined_text = {
+	name = NAMPwCoalition
+	text = {
+		trigger = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
+		localization_key = NAM_pw_coalition_blockade
+	}
+	text = {
+		trigger = { has_country_flag = NAM_pirate_lying_low }
+		localization_key = NAM_pw_coalition_lying_low
+	}
+	text = {
+		trigger = { check_variable = { NAM_pirate_notoriety > 74 } }
+		localization_key = NAM_pw_coalition_hunted
+	}
+	text = {
+		trigger = { check_variable = { NAM_pirate_notoriety > 49 } }
+		localization_key = NAM_pw_coalition_wanted
+	}
+	text = {
+		localization_key = NAM_pw_coalition_calm
+	}
+}
+
+defined_text = {
+	name = NAMPwLandingShort
+	text = {
+		trigger = { NAM_landing_third_division = yes }
+		localization_key = NAM_pw_landing_three
+	}
+	text = {
+		localization_key = NAM_pw_landing_two
+	}
+}
+
+# Prices of the reused decisions in their own cost texts.
+defined_text = {
+	name = NAMPwRaidCost
+	text = {
+		trigger = {
+			NOT = { has_political_power < 10 }
+			NOT = { has_fuel < 1000 }
+		}
+		localization_key = NAM_cost_pirate_raid
+	}
+	text = {
+		localization_key = NAM_cost_pirate_raid_blocked
+	}
+}
+
+defined_text = {
+	name = NAMPwCostArms
+	text = {
+		trigger = { check_variable = { var = NAM_pirate_loot value = 40 compare = greater_than_or_equals } }
+		localization_key = NAM_cost_pirate_arms
+	}
+	text = {
+		localization_key = NAM_cost_pirate_arms_blocked
+	}
+}
+
+defined_text = {
+	name = NAMPwCostHeavyArms
+	text = {
+		trigger = { check_variable = { var = NAM_pirate_loot value = 70 compare = greater_than_or_equals } }
+		localization_key = NAM_cost_pirate_heavy_arms
+	}
+	text = {
+		localization_key = NAM_cost_pirate_heavy_arms_blocked
+	}
+}
+
+defined_text = {
+	name = NAMPwCostConvoys
+	text = {
+		trigger = { check_variable = { var = NAM_pirate_loot value = 60 compare = greater_than_or_equals } }
+		localization_key = NAM_cost_pirate_convoys
+	}
+	text = {
+		localization_key = NAM_cost_pirate_convoys_blocked
+	}
+}
+
+defined_text = {
+	name = NAMPwCostFence
+	text = {
+		trigger = { check_variable = { var = NAM_pirate_loot value = 50 compare = greater_than_or_equals } }
+		localization_key = NAM_cost_pirate_fence
+	}
+	text = {
+		localization_key = NAM_cost_pirate_fence_blocked
+	}
+}
+
+defined_text = {
+	name = NAMPwCostDrill
+	text = {
+		trigger = {
+			NOT = { has_political_power < 20 }
+			check_variable = { var = NAM_pirate_loot value = 30 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_cost_exile_drill
+	}
+	text = {
+		localization_key = NAM_cost_exile_drill_blocked
+	}
+}
+
+defined_text = {
+	name = NAMPwCostMarines
+	text = {
+		trigger = {
+			check_variable = { var = NAM_pirate_loot value = 50 compare = greater_than_or_equals }
+			NOT = { has_manpower < 4300 }
+		}
+		localization_key = NAM_cost_order_marines
+	}
+	text = {
+		localization_key = NAM_cost_order_marines_blocked
+	}
+}
+
+# COUNTRY raid target. The first condition that keeps NAM_pirate_raid from
+# starting against this country, in the order of the window's enabled trigger.
+defined_text = {
+	name = NAMPwRaidStatus
+	text = {
+		trigger = { exists = no }
+		localization_key = NAM_pw_reason_absent
+	}
+	text = {
+		trigger = { has_country_flag = NAM_pirate_raid_target }
+		localization_key = NAM_pw_reason_at_sea
+	}
+	text = {
+		trigger = {
+			OR = {
+				is_in_faction_with = NAM
+				is_subject_of = NAM
+			}
+		}
+		localization_key = NAM_pw_reason_friend
+	}
+	text = {
+		trigger = { NAM = { NOT = { has_completed_focus = NAM_exile_sea_raiders } } }
+		localization_key = NAM_pw_reason_raiders_focus
+	}
+	text = {
+		trigger = { NAM = { NAM_country_operable = no } }
+		localization_key = NAM_pw_reason_inoperable
+	}
+	text = {
+		trigger = { NAM = { has_country_flag = NAM_pirate_lying_low } }
+		localization_key = NAM_pw_reason_lying_low
+	}
+	text = {
+		trigger = { NAM = { NAM_pirate_slot_free = no } }
+		localization_key = NAM_pw_reason_slots
+	}
+	text = {
+		trigger = { NAM = { NOT = { has_navy_size = { size > 0 } } } }
+		localization_key = NAM_pw_reason_fleet
+	}
+	text = {
+		trigger = { NAM = { has_political_power < 10 } }
+		localization_key = NAM_pw_reason_pp
+	}
+	text = {
+		trigger = { NAM = { has_fuel < 1000 } }
+		localization_key = NAM_pw_reason_fuel
+	}
+	text = {
+		localization_key = NAM_bw_reason_ready
+	}
+}
+
+# COUNTRY raid target. A raid leaves the target alert for 90 days.
+defined_text = {
+	name = NAMPwAlertFactor
+	text = {
+		trigger = { has_country_flag = NAM_pirate_alert }
+		localization_key = NAM_pw_factor_alert
+	}
+	text = {
+		localization_key = NAM_pw_factor_calm
+	}
+}
+
+# The modifiers of NAM_pirate_raid_settle that depend on Svetlogorye.
+defined_text = {
+	name = NAMPwShipsFactor
+	text = {
+		trigger = { check_variable = { var = num_ships value = 5 compare = greater_than } }
+		localization_key = NAM_pw_factor_ships_many
+	}
+	text = {
+		trigger = { check_variable = { var = num_ships value = 2 compare = greater_than } }
+		localization_key = NAM_pw_factor_ships_some
+	}
+	text = {
+		localization_key = NAM_pw_factor_ships_few
+	}
+}
+
+defined_text = {
+	name = NAMPwBlockadeFactor
+	text = {
+		trigger = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
+		localization_key = NAM_pw_factor_blockade
+	}
+	text = {
+		localization_key = NAM_pw_factor_no_blockade
+	}
+}
+
+defined_text = {
+	name = NAMPwNotorietyFactor
+	text = {
+		trigger = { check_variable = { NAM_pirate_notoriety > 59 } }
+		localization_key = NAM_pw_factor_notoriety_high
+	}
+	text = {
+		localization_key = NAM_pw_factor_notoriety_low
+	}
+}
+
+# Action buttons: the first condition that blocks each reused decision. A
+# window purchase also waits for its <decision>_cd mark.
+defined_text = {
+	name = NAMPwArmsStatus
+	text = {
+		trigger = { NAM_country_operable = no }
+		localization_key = NAM_pw_reason_inoperable
+	}
+	text = {
+		trigger = { has_country_flag = NAM_pirate_buy_arms_cd }
+		localization_key = NAM_pw_reason_deal_rest
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_pirate_loot value = 40 compare = less_than } }
+		localization_key = NAM_pw_reason_loot
+	}
+	text = {
+		localization_key = NAM_bw_reason_ready
+	}
+}
+
+defined_text = {
+	name = NAMPwHeavyArmsStatus
+	text = {
+		trigger = { NAM_country_operable = no }
+		localization_key = NAM_pw_reason_inoperable
+	}
+	text = {
+		trigger = { has_country_flag = NAM_pirate_buy_heavy_arms_cd }
+		localization_key = NAM_pw_reason_deal_rest
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_pirate_loot value = 70 compare = less_than } }
+		localization_key = NAM_pw_reason_loot
+	}
+	text = {
+		localization_key = NAM_bw_reason_ready
+	}
+}
+
+defined_text = {
+	name = NAMPwConvoysStatus
+	text = {
+		trigger = { NAM_country_operable = no }
+		localization_key = NAM_pw_reason_inoperable
+	}
+	text = {
+		trigger = { has_country_flag = NAM_pirate_buy_convoys_cd }
+		localization_key = NAM_pw_reason_deal_rest
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_pirate_loot value = 60 compare = less_than } }
+		localization_key = NAM_pw_reason_loot
+	}
+	text = {
+		localization_key = NAM_bw_reason_ready
+	}
+}
+
+defined_text = {
+	name = NAMPwFenceStatus
+	text = {
+		trigger = { NAM_country_operable = no }
+		localization_key = NAM_pw_reason_inoperable
+	}
+	text = {
+		trigger = { has_country_flag = NAM_pirate_fence_loot_cd }
+		localization_key = NAM_pw_reason_deal_rest
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_pirate_loot value = 50 compare = less_than } }
+		localization_key = NAM_pw_reason_loot
+	}
+	text = {
+		localization_key = NAM_bw_reason_ready
+	}
+}
+
+defined_text = {
+	name = NAMPwDrillStatus
+	text = {
+		trigger = { NAM_country_operable = no }
+		localization_key = NAM_pw_reason_inoperable
+	}
+	text = {
+		trigger = { has_decision = NAM_exile_drill }
+		localization_key = NAM_pw_reason_drill_running
+	}
+	text = {
+		trigger = { has_country_flag = NAM_exile_drill_cd }
+		localization_key = NAM_pw_reason_drill_rest
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_revenge_readiness value = 100 compare = greater_than_or_equals } }
+		localization_key = NAM_pw_reason_revenge_full
+	}
+	text = {
+		trigger = { has_political_power < 20 }
+		localization_key = NAM_pw_reason_pp
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_pirate_loot value = 30 compare = less_than } }
+		localization_key = NAM_pw_reason_loot
+	}
+	text = {
+		localization_key = NAM_bw_reason_ready
+	}
+}
+
+defined_text = {
+	name = NAMPwMarinesStatus
+	text = {
+		trigger = { NAM_country_operable = no }
+		localization_key = NAM_pw_reason_inoperable
+	}
+	text = {
+		trigger = { has_global_flag = NAM_war_of_return_started }
+		localization_key = NAM_pw_reason_war_started
+	}
+	text = {
+		trigger = { NAM_marine_order_can_place = no }
+		localization_key = NAM_pw_reason_marine_cap
+	}
+	text = {
+		trigger = { has_country_flag = NAM_order_marines_cd }
+		localization_key = NAM_pw_reason_order_rest
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_pirate_loot value = 50 compare = less_than } }
+		localization_key = NAM_pw_reason_loot
+	}
+	text = {
+		trigger = { has_manpower < 4300 }
+		localization_key = NAM_pw_reason_manpower
+	}
+	text = {
+		localization_key = NAM_bw_reason_ready
+	}
+}

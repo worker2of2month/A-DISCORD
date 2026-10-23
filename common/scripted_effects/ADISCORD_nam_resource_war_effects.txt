@@ -594,39 +594,12 @@ NAM_rw_cede_mainland_state = {
 }
 
 # GLOBAL. The coalition holds the whole mainland; Svetlogorye survives on its
-# overseas districts. The capital moves to the largest island still owned,
-# the islands return to Svetlogorsk control and the defeat tree opens with the
-# exile marker that selects its revanchist branch.
+# overseas districts. NAM_rw_exile_evacuate has already moved the capital and
+# the army to the islands; the islands return to Svetlogorsk control and the
+# defeat tree opens with the exile marker that selects its revanchist branch.
 NAM_rw_settle_island_exile = {
 	set_global_flag = ADISCORD_nam_resource_war_island_exile
 	NAM = {
-		if = {
-			limit = { owns_state = 228 }
-			set_capital = { state = 228 }
-		}
-		else_if = {
-			limit = { owns_state = 225 }
-			set_capital = { state = 225 }
-		}
-		else_if = {
-			limit = { owns_state = 227 }
-			set_capital = { state = 227 }
-		}
-		else_if = {
-			limit = { owns_state = 231 }
-			set_capital = { state = 231 }
-		}
-		else_if = {
-			limit = { owns_state = 226 }
-			set_capital = { state = 226 }
-		}
-		else_if = {
-			limit = { owns_state = 229 }
-			set_capital = { state = 229 }
-		}
-		else = {
-			set_capital = { state = 230 }
-		}
 		every_owned_state = {
 			limit = { NOT = { is_controlled_by = NAM } }
 			set_state_controller_to = NAM
@@ -644,7 +617,6 @@ NAM_rw_settle_island_exile = {
 	719 = { NAM_rw_exile_scorch_state = yes }
 	700 = { NAM_rw_exile_scorch_state = yes }
 	NAM = {
-		NAM_rw_exile_land_remnants = yes
 		NAM_pirate_initialize = yes
 		NAM_oil_refresh = yes
 		if = {
@@ -662,89 +634,111 @@ NAM_rw_settle_island_exile = {
 }
 
 # ----- Flight to the islands -----
-# COUNTRY NAM, before the coalition treaty moves any state. The transports
-# carry at most 35% of the army that stood at the end of the war, rounded
-# down. Divisions are left behind state by state, the front first and the
-# South Harbour, where the transports load, last, until the count fits;
-# delete_unit removes a whole state's garrison, so the last step may leave
-# fewer than the transports could carry. NAM_rw_exile_land_remnants tops the
-# army up to the carried share on the island capital. Divisions on the islands
-# or at sea are never removed. The stocks of Svetlogorsk make lose 65%.
+# COUNTRY NAM, inside the coalition treaty before any state changes hands.
+# The transports carry the real divisions, with their own templates: 35% of
+# the army that stood at the end of the war, rounded, and at least one. The
+# rest is left behind division by division in a fixed order: columns cut off
+# in mainland states Svetlogorye no longer controls, the front (719, 690, 688,
+# 67, 689), the principals' ground (720, 721, 722, 701, 68, 70, 691, 69, 692),
+# any other mainland state and the South Harbour, where the transports load,
+# last. Divisions already on the islands or at sea are never left behind.
+# The survivors move to the island capital, and the whole army in exile loses
+# 45% strength and half its organisation for want of weapons; the stocks lose
+# 65% over the side.
 NAM_rw_exile_evacuate = {
 	set_variable = { var = NAM_exile_divisions_before value = num_divisions }
 	set_variable = { var = NAM_exile_divisions_keep value = num_divisions }
 	multiply_variable = { var = NAM_exile_divisions_keep value = 0.35 }
-	subtract_from_variable = { var = NAM_exile_divisions_keep value = 0.499 }
 	round_variable = NAM_exile_divisions_keep
 	clamp_variable = {
 		var = NAM_exile_divisions_keep
-		min = 0
+		min = 1
 		max = 1000
 	}
-	if = {
-		limit = { check_variable = { var = num_divisions value = NAM_exile_divisions_keep compare = greater_than } }
-		delete_unit = { state = 719 disband = no }
+	set_temp_variable = { var = NAM_exile_to_cut value = NAM_exile_divisions_before }
+	subtract_from_temp_variable = { var = NAM_exile_to_cut value = NAM_exile_divisions_keep }
+	NAM_rw_exile_move_capital = yes
+	every_owned_state = {
+		limit = {
+			NAM_rw_island_state = yes
+			NOT = { is_controlled_by = NAM }
+		}
+		set_state_controller_to = NAM
 	}
+	# No division-scope delete exists: the abandoned divisions switch to a
+	# temporary template, and deleting that template removes exactly them.
 	if = {
-		limit = { check_variable = { var = num_divisions value = NAM_exile_divisions_keep compare = greater_than } }
-		delete_unit = { state = 690 disband = no }
-	}
-	if = {
-		limit = { check_variable = { var = num_divisions value = NAM_exile_divisions_keep compare = greater_than } }
-		delete_unit = { state = 688 disband = no }
-	}
-	if = {
-		limit = { check_variable = { var = num_divisions value = NAM_exile_divisions_keep compare = greater_than } }
-		delete_unit = { state = 67 disband = no }
-	}
-	if = {
-		limit = { check_variable = { var = num_divisions value = NAM_exile_divisions_keep compare = greater_than } }
-		delete_unit = { state = 689 disband = no }
-	}
-	# Columns still standing on the principals' ground are cut off as well.
-	if = {
-		limit = { check_variable = { var = num_divisions value = NAM_exile_divisions_keep compare = greater_than } }
-		delete_unit = { state = 720 disband = no }
-	}
-	if = {
-		limit = { check_variable = { var = num_divisions value = NAM_exile_divisions_keep compare = greater_than } }
-		delete_unit = { state = 721 disband = no }
-	}
-	if = {
-		limit = { check_variable = { var = num_divisions value = NAM_exile_divisions_keep compare = greater_than } }
-		delete_unit = { state = 722 disband = no }
-	}
-	if = {
-		limit = { check_variable = { var = num_divisions value = NAM_exile_divisions_keep compare = greater_than } }
-		delete_unit = { state = 701 disband = no }
-	}
-	if = {
-		limit = { check_variable = { var = num_divisions value = NAM_exile_divisions_keep compare = greater_than } }
-		delete_unit = { state = 68 disband = no }
-	}
-	if = {
-		limit = { check_variable = { var = num_divisions value = NAM_exile_divisions_keep compare = greater_than } }
-		delete_unit = { state = 70 disband = no }
-	}
-	if = {
-		limit = { check_variable = { var = num_divisions value = NAM_exile_divisions_keep compare = greater_than } }
-		delete_unit = { state = 691 disband = no }
-	}
-	if = {
-		limit = { check_variable = { var = num_divisions value = NAM_exile_divisions_keep compare = greater_than } }
-		delete_unit = { state = 69 disband = no }
-	}
-	if = {
-		limit = { check_variable = { var = num_divisions value = NAM_exile_divisions_keep compare = greater_than } }
-		delete_unit = { state = 692 disband = no }
-	}
-	if = {
-		limit = { check_variable = { var = num_divisions value = NAM_exile_divisions_keep compare = greater_than } }
-		delete_unit = { state = 700 disband = no }
+		limit = { check_variable = { NAM_exile_to_cut > 0 } }
+		if = {
+			limit = { NOT = { has_template = "NAM Abandoned Columns" } }
+			division_template = {
+				name = "NAM Abandoned Columns"
+				division_names_group = ADISCORD_INF_01
+				regiments = {
+					infantry = { x = 0 y = 0 }
+					infantry = { x = 0 y = 1 }
+					infantry = { x = 0 y = 2 }
+				}
+				support = {
+					artillery = { x = 0 y = 0 }
+				}
+			}
+		}
+		every_state = {
+			limit = {
+				NOT = { NAM_rw_island_state = yes }
+				NOT = { is_controlled_by = NAM }
+				any_state_division = { OWNER = { tag = NAM } }
+			}
+			NAM_rw_exile_abandon_state = yes
+		}
+		719 = { NAM_rw_exile_abandon_state = yes }
+		690 = { NAM_rw_exile_abandon_state = yes }
+		688 = { NAM_rw_exile_abandon_state = yes }
+		67 = { NAM_rw_exile_abandon_state = yes }
+		689 = { NAM_rw_exile_abandon_state = yes }
+		720 = { NAM_rw_exile_abandon_state = yes }
+		721 = { NAM_rw_exile_abandon_state = yes }
+		722 = { NAM_rw_exile_abandon_state = yes }
+		701 = { NAM_rw_exile_abandon_state = yes }
+		68 = { NAM_rw_exile_abandon_state = yes }
+		70 = { NAM_rw_exile_abandon_state = yes }
+		691 = { NAM_rw_exile_abandon_state = yes }
+		69 = { NAM_rw_exile_abandon_state = yes }
+		692 = { NAM_rw_exile_abandon_state = yes }
+		every_state = {
+			limit = {
+				NOT = { NAM_rw_island_state = yes }
+				NOT = { state = 700 }
+				any_state_division = { OWNER = { tag = NAM } }
+			}
+			NAM_rw_exile_abandon_state = yes
+		}
+		700 = { NAM_rw_exile_abandon_state = yes }
+		if = {
+			limit = { has_template = "NAM Abandoned Columns" }
+			delete_unit = {
+				division_template = "NAM Abandoned Columns"
+				disband = no
+			}
+			delete_unit_template_and_units = {
+				division_template = "NAM Abandoned Columns"
+				disband = no
+			}
+		}
 	}
 	set_variable = { var = NAM_exile_divisions_after value = num_divisions }
 	set_variable = { var = NAM_exile_divisions_lost value = NAM_exile_divisions_before }
 	subtract_from_variable = { var = NAM_exile_divisions_lost value = NAM_exile_divisions_after }
+	# The survivors embark before the peace moves any unit or state.
+	every_state = {
+		limit = {
+			NOT = { NAM_rw_island_state = yes }
+			any_state_division = { OWNER = { tag = NAM } }
+		}
+		NAM_rw_exile_embark_state = yes
+	}
+	NAM_rw_exile_damage_army = yes
 	# Equipment that the transports cannot take goes over the side.
 	set_variable = { var = NAM_exile_rifles_dumped value = num_equipment@infantry_equipment }
 	set_temp_variable = { var = NAM_exile_dump value = num_equipment@infantry_equipment }
@@ -768,40 +762,182 @@ NAM_rw_exile_evacuate = {
 	multiply_temp_variable = { var = NAM_exile_dump value = -0.65 }
 	round_temp_variable = NAM_exile_dump
 	add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = NAM_exile_dump producer = NAM }
-	log = "[ADISCORD][NAM][EXILE] Evacuation: divisions [?NAM_exile_divisions_before] before, [?NAM_exile_divisions_keep] carried at most, [?NAM_exile_divisions_after] left, [?NAM_exile_divisions_lost] abandoned; rifles dumped [?NAM_exile_rifles_dumped], heavy equipment dumped [?NAM_exile_heavy_dumped]."
+	set_temp_variable = { var = NAM_exile_mainland_left value = 0 }
+	every_state = {
+		limit = {
+			NOT = { NAM_rw_island_state = yes }
+			any_state_division = { OWNER = { tag = NAM } }
+		}
+		add_to_temp_variable = { var = NAM_exile_mainland_left value = 1 }
+	}
+	log = "[ADISCORD][NAM][EXILE] Evacuation: divisions [?NAM_exile_divisions_before] before, [?NAM_exile_divisions_keep] carried by plan, [?NAM_exile_divisions_after] left, [?NAM_exile_divisions_lost] abandoned, [?NAM_exile_to_cut] still to abandon; mainland states still holding NAM divisions [?NAM_exile_mainland_left]; capital [NAM.Capital.GetName]; rifles dumped [?NAM_exile_rifles_dumped], heavy equipment dumped [?NAM_exile_heavy_dumped]."
 }
 
-# COUNTRY NAM, on the island capital. A garrison left behind whole may leave
-# fewer divisions than the transports carried: the soldiers who boarded
-# without their formation form under-strength infantry up to the carried share.
-NAM_rw_exile_land_remnants = {
-	set_variable = { var = NAM_exile_remnants value = 0 }
+# COUNTRY NAM. The government in exile sits on the largest island still owned.
+NAM_rw_exile_move_capital = {
 	if = {
-		limit = {
-			has_variable = NAM_exile_divisions_keep
-			check_variable = { var = NAM_exile_divisions_after value = NAM_exile_divisions_keep compare = less_than }
-		}
-		set_variable = { var = NAM_exile_remnants value = NAM_exile_divisions_keep }
-		subtract_from_variable = { var = NAM_exile_remnants value = NAM_exile_divisions_after }
-		NAM_order_ensure_templates = yes
-		NAM_order_unlock_templates = yes
-		# The count is fixed before the loop; it never reads num_divisions,
-		# so a unit that fails to spawn cannot keep the loop alive.
-		set_temp_variable = { var = NAM_exile_remnant_index value = 0 }
-		while_loop_effect = {
-			limit = { check_variable = { var = NAM_exile_remnant_index value = NAM_exile_remnants compare = less_than } }
-			add_to_temp_variable = { var = NAM_exile_remnant_index value = 1 }
-			capital_scope = {
-				create_unit = {
-					division = "division_template = \"NAM Resource Infantry\" start_experience_factor = 0.10 start_equipment_factor = 0.5 start_manpower_factor = 0.6"
-					owner = NAM
-					allow_spawning_on_enemy_provs = no
-				}
-			}
-		}
-		add_to_variable = { var = NAM_exile_divisions_after value = NAM_exile_remnants }
+		limit = { owns_state = 228 }
+		set_capital = { state = 228 }
 	}
-	log = "[ADISCORD][NAM][EXILE] Island landing: [?NAM_exile_remnants] remnant divisions formed, [?NAM_exile_divisions_after] divisions in exile."
+	else_if = {
+		limit = { owns_state = 225 }
+		set_capital = { state = 225 }
+	}
+	else_if = {
+		limit = { owns_state = 227 }
+		set_capital = { state = 227 }
+	}
+	else_if = {
+		limit = { owns_state = 231 }
+		set_capital = { state = 231 }
+	}
+	else_if = {
+		limit = { owns_state = 226 }
+		set_capital = { state = 226 }
+	}
+	else_if = {
+		limit = { owns_state = 229 }
+		set_capital = { state = 229 }
+	}
+	else = {
+		set_capital = { state = 230 }
+	}
+}
+
+# STATE on the mainland. While the temp NAM_exile_to_cut count lasts, NAM
+# divisions here are left behind under the temporary template. The count is
+# read inside the loop body, so it falls with every division it marks.
+NAM_rw_exile_abandon_state = {
+	every_state_division = {
+		limit = { OWNER = { tag = NAM } }
+		if = {
+			limit = { check_variable = { NAM_exile_to_cut > 0 } }
+			change_division_template = { division_template = "NAM Abandoned Columns" }
+			subtract_from_temp_variable = { var = NAM_exile_to_cut value = 1 }
+		}
+	}
+}
+
+# STATE on the mainland. NAM armies here move to the island capital chosen by
+# NAM_rw_exile_move_capital; other countries' armies stay.
+NAM_rw_exile_embark_state = {
+	if = {
+		limit = { NAM = { capital_scope = { state = 228 } } }
+		teleport_armies = {
+			to_state = 228
+			limit = { tag = NAM }
+		}
+	}
+	else_if = {
+		limit = { NAM = { capital_scope = { state = 225 } } }
+		teleport_armies = {
+			to_state = 225
+			limit = { tag = NAM }
+		}
+	}
+	else_if = {
+		limit = { NAM = { capital_scope = { state = 227 } } }
+		teleport_armies = {
+			to_state = 227
+			limit = { tag = NAM }
+		}
+	}
+	else_if = {
+		limit = { NAM = { capital_scope = { state = 231 } } }
+		teleport_armies = {
+			to_state = 231
+			limit = { tag = NAM }
+		}
+	}
+	else_if = {
+		limit = { NAM = { capital_scope = { state = 226 } } }
+		teleport_armies = {
+			to_state = 226
+			limit = { tag = NAM }
+		}
+	}
+	else_if = {
+		limit = { NAM = { capital_scope = { state = 229 } } }
+		teleport_armies = {
+			to_state = 229
+			limit = { tag = NAM }
+		}
+	}
+	else = {
+		teleport_armies = {
+			to_state = 230
+			limit = { tag = NAM }
+		}
+	}
+}
+
+# COUNTRY NAM. The evacuated men outnumber the weapons that crossed the
+# strait: every NAM division on the islands loses 45% of its strength and half
+# its organisation, then refills from the reduced stockpile. Ships keep theirs.
+NAM_rw_exile_damage_army = {
+	damage_units = {
+		state = 225
+		limit = { tag = NAM }
+		str_damage = 0.45
+		org_damage = 0.5
+		ratio = yes
+		army = yes
+		navy = no
+	}
+	damage_units = {
+		state = 226
+		limit = { tag = NAM }
+		str_damage = 0.45
+		org_damage = 0.5
+		ratio = yes
+		army = yes
+		navy = no
+	}
+	damage_units = {
+		state = 227
+		limit = { tag = NAM }
+		str_damage = 0.45
+		org_damage = 0.5
+		ratio = yes
+		army = yes
+		navy = no
+	}
+	damage_units = {
+		state = 228
+		limit = { tag = NAM }
+		str_damage = 0.45
+		org_damage = 0.5
+		ratio = yes
+		army = yes
+		navy = no
+	}
+	damage_units = {
+		state = 229
+		limit = { tag = NAM }
+		str_damage = 0.45
+		org_damage = 0.5
+		ratio = yes
+		army = yes
+		navy = no
+	}
+	damage_units = {
+		state = 230
+		limit = { tag = NAM }
+		str_damage = 0.45
+		org_damage = 0.5
+		ratio = yes
+		army = yes
+		navy = no
+	}
+	damage_units = {
+		state = 231
+		limit = { tag = NAM }
+		str_damage = 0.45
+		org_damage = 0.5
+		ratio = yes
+		army = yes
+		navy = no
+	}
 }
 
 # STATE of the ceded mainland. Svetlogorye burns what it cannot keep: a field
@@ -4945,7 +5081,9 @@ NAM_pirate_notoriety_add = {
 # COUNTRY NAM, the end of NAM_pirate_raid. event_target:NAM_pirate_target is
 # the raided country; only a paid raid still holds its target marker. The
 # outcome is rolled once: a haul (50), a rich prize (15) or a failure (35).
-# More ships, a quiet target and low notoriety favour the flotilla.
+# More ships, a quiet target and low notoriety favour the flotilla. The
+# settlement only changes the target's fuel, flags and opinion and sends an
+# event to a human target alone, so a suppressed minor needs no waking.
 NAM_pirate_raid_settle = {
 	if = {
 		limit = { event_target:NAM_pirate_target = { has_country_flag = NAM_pirate_raid_target } }
@@ -4984,13 +5122,14 @@ NAM_pirate_raid_settle = {
 				NAM_pirate_raid_success = yes
 			}
 			15 = {
+				# The Luren ports and the Charden island carry the strait's
+				# richest cargo.
 				modifier = {
 					factor = 1.5
 					event_target:NAM_pirate_target = {
 						OR = {
-							tag = VAL
-							tag = STP
-							tag = STS
+							tag = LUR
+							tag = CHD
 						}
 					}
 				}
@@ -5289,10 +5428,16 @@ NAM_marine_orders_refund = {
 }
 
 # COUNTRY NAM, NAM_war_of_return_start after the declaration, from the island
-# exile only. Two marine divisions land at the South Harbour, a third with a
-# paid order or a revenge readiness of 70. The landing never exceeds three
-# divisions: further paid orders are delivered on the island capital and
-# reported. Every paid order is delivered here.
+# exile only. create_unit refuses a province held by the enemy, so the landing
+# first takes a beachhead: hostile armies in the South Harbour (province 16716
+# is the whole of state 700) fall back to their capitals and Svetlogorye
+# becomes its controller. Two marine divisions land there, a third with a
+# trained order or a revenge readiness of 70. The landing never exceeds three
+# divisions: further trained orders form on the island capital, and so does
+# the whole landing when the harbour's controller is not at war with
+# Svetlogorye. The beachhead is ordinary control: the deadline settlement
+# awards the harbour only if it is still held. Every trained order is
+# delivered here.
 NAM_wor_revenge_landing = {
 	if = {
 		limit = {
@@ -5311,6 +5456,42 @@ NAM_wor_revenge_landing = {
 			}
 		}
 		set_variable = { var = NAM_marines_island value = NAM_marine_orders_paid }
+		set_temp_variable = { var = NAM_landing_at_harbour value = 0 }
+		# A participant invited by add_to_war in the same effect may not show the
+		# war relation yet; its membership flag marks it as the enemy already.
+		if = {
+			limit = {
+				700 = {
+					controller = {
+						OR = {
+							has_war_with = NAM
+							has_country_flag = NAM_wor_participant
+						}
+					}
+				}
+			}
+			700 = {
+				teleport_armies = {
+					limit = {
+						OR = {
+							has_war_with = NAM
+							has_country_flag = NAM_wor_participant
+						}
+					}
+				}
+			}
+			set_province_controller = 16716
+			set_temp_variable = { var = NAM_landing_at_harbour value = 1 }
+		}
+		else_if = {
+			limit = { 700 = { is_controlled_by = NAM } }
+			set_temp_variable = { var = NAM_landing_at_harbour value = 1 }
+		}
+		if = {
+			limit = { check_variable = { NAM_landing_at_harbour = 0 } }
+			add_to_variable = { var = NAM_marines_island value = NAM_marines_landed }
+			set_variable = { var = NAM_marines_landed value = 0 }
+		}
 		set_temp_variable = { var = NAM_landing_index value = 0 }
 		while_loop_effect = {
 			limit = { check_variable = { var = NAM_landing_index value = NAM_marines_landed compare = less_than } }
@@ -5320,13 +5501,14 @@ NAM_wor_revenge_landing = {
 					division = "division_template = \"NAM Island Marines\" start_experience_factor = 0.30 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 					owner = NAM
 					prioritize_location = 16716
-					allow_spawning_on_enemy_provs = yes
+					allow_spawning_on_enemy_provs = no
 				}
 			}
 		}
+		set_temp_variable = { var = NAM_landing_index value = 0 }
 		while_loop_effect = {
-			limit = { check_variable = { NAM_marine_orders_paid > 0 } }
-			subtract_from_variable = { var = NAM_marine_orders_paid value = 1 }
+			limit = { check_variable = { var = NAM_landing_index value = NAM_marines_island compare = less_than } }
+			add_to_temp_variable = { var = NAM_landing_index value = 1 }
 			capital_scope = {
 				create_unit = {
 					division = "division_template = \"NAM Island Marines\" start_experience_factor = 0.30 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
@@ -5337,7 +5519,15 @@ NAM_wor_revenge_landing = {
 		}
 		set_variable = { var = NAM_marine_orders_paid value = 0 }
 		NAM_marine_unlock_template = yes
-		log = "[ADISCORD][NAM][MARINES] Revenge landing: [?NAM_marines_landed] divisions at the South Harbour, [?NAM_marines_island] paid divisions on the island capital, [?NAM_marines_orders_delivered] paid orders delivered."
-		country_event = { id = ADISCORD_nam_resource_war.94 hours = 2 }
+		set_temp_variable = { var = NAM_landing_harbour_held value = 0 }
+		if = {
+			limit = { controls_state = 700 }
+			set_temp_variable = { var = NAM_landing_harbour_held value = 1 }
+		}
+		log = "[ADISCORD][NAM][MARINES] Revenge landing: beachhead [?NAM_landing_at_harbour], harbour held [?NAM_landing_harbour_held]; [?NAM_marines_landed] divisions at the South Harbour, [?NAM_marines_island] on the island capital, [?NAM_marines_orders_delivered] trained orders delivered."
+		if = {
+			limit = { check_variable = { NAM_marines_landed > 0 } }
+			country_event = { id = ADISCORD_nam_resource_war.94 hours = 2 }
+		}
 	}
 }

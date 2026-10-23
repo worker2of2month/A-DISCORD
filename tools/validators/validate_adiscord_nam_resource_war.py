@@ -759,34 +759,55 @@ def check_colony_and_exile(
         "the evacuation must run while the divisions still stand on the mainland",
     )
     evacuate = named_block(effects, "NAM_rw_exile_evacuate")
+    abandon = named_block(effects, "NAM_rw_exile_abandon_state")
+    embark = named_block(effects, "NAM_rw_exile_embark_state")
+    damage = named_block(effects, "NAM_rw_exile_damage_army")
     check(
         "value = 0.35" in evacuate
-        and evacuate.count("delete_unit = {") >= 6
-        and evacuate.rfind("state = 700") > evacuate.find("state = 719")
+        and "min = 1" in evacuate
+        and -1
+        < evacuate.find("NAM_rw_exile_move_capital = yes")
+        < evacuate.find("719 = { NAM_rw_exile_abandon_state = yes }")
+        < evacuate.find("700 = { NAM_rw_exile_abandon_state = yes }")
+        < evacuate.find("delete_unit_template_and_units")
+        < evacuate.find("NAM_rw_exile_embark_state = yes")
+        < evacuate.find("NAM_rw_exile_damage_army = yes")
         and "value = -0.65" in evacuate
         and "log = " in evacuate,
-        "the evacuation must carry at most 35%, leave the harbour last, dump 65% and log the counts",
+        "the evacuation must keep 35% of the real divisions, leave the harbour last, embark the survivors, "
+        "damage them, dump 65% and log the counts",
+    )
+    check(
+        "check_variable = { NAM_exile_to_cut > 0 }" in named_block(abandon, "if")
+        and 'change_division_template = { division_template = "NAM Abandoned Columns" }' in abandon
+        and "OWNER = { tag = NAM }" in abandon
+        and embark.count("teleport_armies = {") == 7
+        and embark.count("limit = { tag = NAM }") == 7
+        and damage.count("str_damage = 0.45") == 7
+        and damage.count("army = yes") == 7
+        and damage.count("navy = no") == 7
+        and all(f"state = {state}" in damage for state in range(225, 232)),
+        "abandoned divisions must be counted inside the loop body, survivors must move to the island "
+        "capital and every island garrison must lose 45% strength",
     )
     exile = named_block(effects, "NAM_rw_settle_island_exile")
     check(
         all(f"{state} = {{ NAM_rw_exile_scorch_state = yes }}" in exile for state in (67, 688, 689, 690, 719, 700))
-        and "NAM_rw_exile_land_remnants = yes" in exile
+        and "NAM_rw_exile_land_remnants" not in effects
         and "NAM_pirate_initialize = yes" in exile
         and "id = ADISCORD_nam_resource_war.81" in exile,
-        "the exile must burn the ceded mainland, land the remnants, open piracy and report the flight",
-    )
-    remnants = named_block(effects, "NAM_rw_exile_land_remnants")
-    check(
-        "num_divisions" not in named_block(remnants, "while_loop_effect"),
-        "the remnant loop must run on a fixed count",
+        "the exile must burn the ceded mainland, open piracy and report the flight without spawning remnants",
     )
     start = named_block(effects, "NAM_war_of_return_start")
     landing = named_block(effects, "NAM_wor_revenge_landing")
     check(
         -1 < start.find("declare_war_on") < start.find("NAM_wor_revenge_landing = yes")
         and "has_global_flag = ADISCORD_nam_resource_war_island_exile" in landing
-        and "prioritize_location = 16716" in landing
-        and "allow_spawning_on_enemy_provs = yes" in landing
+        and -1
+        < landing.find("teleport_armies")
+        < landing.find("set_province_controller = 16716")
+        < landing.find("prioritize_location = 16716")
+        and "allow_spawning_on_enemy_provs = yes" not in landing
         and "var = NAM_marines_landed value = 2" in landing
         and "NAM_landing_third_division = yes" in landing
         and "var = NAM_marine_orders_paid value = 0" in landing
@@ -1522,6 +1543,7 @@ def main() -> int:
     )
     coalition_treaty = named_block(effects, "ADISCORD_nam_resource_war_resolve_coalition_victory")
     exile = named_block(effects, "NAM_rw_settle_island_exile")
+    move_capital = named_block(effects, "NAM_rw_exile_move_capital")
     check(
         all(f"transfer_state = {state}" not in coalition_treaty for state in range(225, 232))
         and "NAM_rw_can_go_into_exile = yes" in coalition_treaty
@@ -1535,7 +1557,9 @@ def main() -> int:
         < exile.find("load_focus_tree")
         and "tree = NAM_defeated_focus" in exile
         and "keep_completed = no" in exile
-        and "set_capital = { state = 228 }" in exile,
+        and -1
+        < move_capital.find("set_capital = { state = 228 }")
+        < move_capital.find("set_capital = { state = 230 }"),
         "the island exile must set its flag before the defeat tree and move the capital to 228 first",
     )
     check(

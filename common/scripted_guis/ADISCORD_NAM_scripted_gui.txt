@@ -650,4 +650,700 @@ scripted_gui = {
 		}
 		ai_enabled = { always = no }
 	}
+
+	# Piracy window. Like the basin window it has no dirty variable: its inputs
+	# include political power, fuel, manpower, ships and foreign flags without a
+	# shared invalidation, so it keeps the native refresh while the NAM_piracy
+	# category is open. Checks read fixed tags only.
+	# activate_decision and activate_targeted_decision skip visible, available,
+	# cost and cooldown. Every enabled trigger below repeats those blocks of its
+	# decision and must change together with them; each complete_effect still
+	# rechecks the price before its single debit. Triggers cannot read a native
+	# cooldown, so a window purchase marks <decision>_cd for the decision's
+	# days_re_enable; NAM_exile_drill adds its 30 days at sea to the 15 of rest.
+	ADISCORD_NAM_piracy_panel = {
+		context_type = decision_category
+		window_name = "ADISCORD_NAM_piracy_window"
+		visible = {
+			tag = NAM
+			NAM_piracy_open = yes
+		}
+		ai_enabled = { always = no }
+		effects = {
+			NAM_pw_raid_EFL_click = {
+				if = {
+					limit = {
+						NAM_piracy_open = yes
+						has_completed_focus = NAM_exile_sea_raiders
+						NAM_country_operable = yes
+						NAM_pirate_slot_free = yes
+						has_navy_size = { size > 0 }
+						NOT = { has_country_flag = NAM_pirate_lying_low }
+						NOT = { has_political_power < 10 }
+						NOT = { has_fuel < 1000 }
+						EFL = { NAM_pirate_target_valid = yes }
+					}
+					activate_targeted_decision = { target = EFL decision = NAM_pirate_raid }
+				}
+			}
+			NAM_pw_raid_AZH_click = {
+				if = {
+					limit = {
+						NAM_piracy_open = yes
+						has_completed_focus = NAM_exile_sea_raiders
+						NAM_country_operable = yes
+						NAM_pirate_slot_free = yes
+						has_navy_size = { size > 0 }
+						NOT = { has_country_flag = NAM_pirate_lying_low }
+						NOT = { has_political_power < 10 }
+						NOT = { has_fuel < 1000 }
+						AZH = { NAM_pirate_target_valid = yes }
+					}
+					activate_targeted_decision = { target = AZH decision = NAM_pirate_raid }
+				}
+			}
+			NAM_pw_raid_ULV_click = {
+				if = {
+					limit = {
+						NAM_piracy_open = yes
+						has_completed_focus = NAM_exile_sea_raiders
+						NAM_country_operable = yes
+						NAM_pirate_slot_free = yes
+						has_navy_size = { size > 0 }
+						NOT = { has_country_flag = NAM_pirate_lying_low }
+						NOT = { has_political_power < 10 }
+						NOT = { has_fuel < 1000 }
+						ULV = { NAM_pirate_target_valid = yes }
+					}
+					activate_targeted_decision = { target = ULV decision = NAM_pirate_raid }
+				}
+			}
+			NAM_pw_raid_RIV_click = {
+				if = {
+					limit = {
+						NAM_piracy_open = yes
+						has_completed_focus = NAM_exile_sea_raiders
+						NAM_country_operable = yes
+						NAM_pirate_slot_free = yes
+						has_navy_size = { size > 0 }
+						NOT = { has_country_flag = NAM_pirate_lying_low }
+						NOT = { has_political_power < 10 }
+						NOT = { has_fuel < 1000 }
+						RIV = { NAM_pirate_target_valid = yes }
+					}
+					activate_targeted_decision = { target = RIV decision = NAM_pirate_raid }
+				}
+			}
+			NAM_pw_raid_LUR_click = {
+				if = {
+					limit = {
+						NAM_piracy_open = yes
+						has_completed_focus = NAM_exile_sea_raiders
+						NAM_country_operable = yes
+						NAM_pirate_slot_free = yes
+						has_navy_size = { size > 0 }
+						NOT = { has_country_flag = NAM_pirate_lying_low }
+						NOT = { has_political_power < 10 }
+						NOT = { has_fuel < 1000 }
+						LUR = { NAM_pirate_target_valid = yes }
+					}
+					activate_targeted_decision = { target = LUR decision = NAM_pirate_raid }
+				}
+			}
+			NAM_pw_raid_CHD_click = {
+				if = {
+					limit = {
+						NAM_piracy_open = yes
+						has_completed_focus = NAM_exile_sea_raiders
+						NAM_country_operable = yes
+						NAM_pirate_slot_free = yes
+						has_navy_size = { size > 0 }
+						NOT = { has_country_flag = NAM_pirate_lying_low }
+						NOT = { has_political_power < 10 }
+						NOT = { has_fuel < 1000 }
+						CHD = { NAM_pirate_target_valid = yes }
+					}
+					activate_targeted_decision = { target = CHD decision = NAM_pirate_raid }
+				}
+			}
+			NAM_pw_buy_arms_click = {
+				if = {
+					limit = {
+						NAM_piracy_open = yes
+						has_completed_focus = NAM_exile_black_market
+						NAM_country_operable = yes
+						check_variable = { var = NAM_pirate_loot value = 40 compare = greater_than_or_equals }
+						NOT = { has_country_flag = NAM_pirate_buy_arms_cd }
+					}
+					activate_decision = NAM_pirate_buy_arms
+					set_country_flag = {
+						flag = NAM_pirate_buy_arms_cd
+						value = 1
+						days = 30
+					}
+				}
+			}
+			NAM_pw_buy_heavy_arms_click = {
+				if = {
+					limit = {
+						NAM_piracy_open = yes
+						has_completed_focus = NAM_exile_black_market
+						NAM_country_operable = yes
+						check_variable = { var = NAM_pirate_loot value = 70 compare = greater_than_or_equals }
+						NOT = { has_country_flag = NAM_pirate_buy_heavy_arms_cd }
+					}
+					activate_decision = NAM_pirate_buy_heavy_arms
+					set_country_flag = {
+						flag = NAM_pirate_buy_heavy_arms_cd
+						value = 1
+						days = 30
+					}
+				}
+			}
+			NAM_pw_buy_convoys_click = {
+				if = {
+					limit = {
+						NAM_piracy_open = yes
+						has_completed_focus = NAM_exile_black_market
+						NAM_country_operable = yes
+						check_variable = { var = NAM_pirate_loot value = 60 compare = greater_than_or_equals }
+						NOT = { has_country_flag = NAM_pirate_buy_convoys_cd }
+					}
+					activate_decision = NAM_pirate_buy_convoys
+					set_country_flag = {
+						flag = NAM_pirate_buy_convoys_cd
+						value = 1
+						days = 30
+					}
+				}
+			}
+			NAM_pw_fence_loot_click = {
+				if = {
+					limit = {
+						NAM_piracy_open = yes
+						has_completed_focus = NAM_exile_fences
+						NAM_country_operable = yes
+						check_variable = { var = NAM_pirate_loot value = 50 compare = greater_than_or_equals }
+						NOT = { has_country_flag = NAM_pirate_fence_loot_cd }
+					}
+					activate_decision = NAM_pirate_fence_loot
+					set_country_flag = {
+						flag = NAM_pirate_fence_loot_cd
+						value = 1
+						days = 30
+					}
+				}
+			}
+			NAM_pw_exile_drill_click = {
+				if = {
+					limit = {
+						NAM_piracy_open = yes
+						has_completed_focus = NAM_exile_general_staff
+						NAM_country_operable = yes
+						check_variable = { var = NAM_revenge_readiness value = 100 compare = less_than }
+						NOT = { has_political_power < 20 }
+						check_variable = { var = NAM_pirate_loot value = 30 compare = greater_than_or_equals }
+						NOT = { has_decision = NAM_exile_drill }
+						NOT = { has_country_flag = NAM_exile_drill_cd }
+					}
+					activate_decision = NAM_exile_drill
+					set_country_flag = {
+						flag = NAM_exile_drill_cd
+						value = 1
+						days = 45
+					}
+				}
+			}
+			NAM_pw_order_marines_click = {
+				if = {
+					limit = {
+						NAM_piracy_open = yes
+						has_completed_focus = NAM_exile_marine_orders
+						NAM_country_operable = yes
+						NAM_marine_order_can_place = yes
+						check_variable = { var = NAM_pirate_loot value = 50 compare = greater_than_or_equals }
+						NOT = { has_manpower < 4300 }
+						NOT = { has_country_flag = NAM_order_marines_cd }
+					}
+					activate_decision = NAM_order_marines
+					set_country_flag = {
+						flag = NAM_order_marines_cd
+						value = 1
+						days = 14
+					}
+				}
+			}
+		}
+		triggers = {
+			# Lanes: a raid at sea, a lane closed to raids, escorted convoys under a
+			# blockade or after a recent raid, or an open lane. A missing target hides
+			# its lane, marker and label.
+			NAM_pw_lane_EFL_raid_visible = { EFL = { has_country_flag = NAM_pirate_raid_target } }
+			NAM_pw_lane_EFL_closed_visible = {
+				EFL = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+				}
+				OR = {
+					NOT = { has_completed_focus = NAM_exile_sea_raiders }
+					EFL = { is_in_faction_with = NAM }
+					EFL = { is_subject_of = NAM }
+				}
+			}
+			NAM_pw_lane_EFL_guarded_visible = {
+				has_completed_focus = NAM_exile_sea_raiders
+				EFL = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+					NOT = { is_in_faction_with = NAM }
+					NOT = { is_subject_of = NAM }
+				}
+				OR = {
+					has_dynamic_modifier = { modifier = NAM_pirate_blockade }
+					EFL = { has_country_flag = NAM_pirate_alert }
+				}
+			}
+			NAM_pw_lane_EFL_idle_visible = {
+				has_completed_focus = NAM_exile_sea_raiders
+				EFL = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+					NOT = { is_in_faction_with = NAM }
+					NOT = { is_subject_of = NAM }
+				}
+				NOT = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
+				NOT = { EFL = { has_country_flag = NAM_pirate_alert } }
+			}
+			NAM_pw_label_EFL_visible = { EFL = { exists = yes } }
+			NAM_pw_raid_EFL_visible = { EFL = { exists = yes } }
+			NAM_pw_raid_EFL_click_enabled = {
+				NAM_piracy_open = yes
+				has_completed_focus = NAM_exile_sea_raiders
+				NAM_country_operable = yes
+				NAM_pirate_slot_free = yes
+				has_navy_size = { size > 0 }
+				NOT = { has_country_flag = NAM_pirate_lying_low }
+				NOT = { has_political_power < 10 }
+				NOT = { has_fuel < 1000 }
+				EFL = { NAM_pirate_target_valid = yes }
+			}
+
+			NAM_pw_lane_AZH_raid_visible = { AZH = { has_country_flag = NAM_pirate_raid_target } }
+			NAM_pw_lane_AZH_closed_visible = {
+				AZH = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+				}
+				OR = {
+					NOT = { has_completed_focus = NAM_exile_sea_raiders }
+					AZH = { is_in_faction_with = NAM }
+					AZH = { is_subject_of = NAM }
+				}
+			}
+			NAM_pw_lane_AZH_guarded_visible = {
+				has_completed_focus = NAM_exile_sea_raiders
+				AZH = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+					NOT = { is_in_faction_with = NAM }
+					NOT = { is_subject_of = NAM }
+				}
+				OR = {
+					has_dynamic_modifier = { modifier = NAM_pirate_blockade }
+					AZH = { has_country_flag = NAM_pirate_alert }
+				}
+			}
+			NAM_pw_lane_AZH_idle_visible = {
+				has_completed_focus = NAM_exile_sea_raiders
+				AZH = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+					NOT = { is_in_faction_with = NAM }
+					NOT = { is_subject_of = NAM }
+				}
+				NOT = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
+				NOT = { AZH = { has_country_flag = NAM_pirate_alert } }
+			}
+			NAM_pw_label_AZH_visible = { AZH = { exists = yes } }
+			NAM_pw_raid_AZH_visible = { AZH = { exists = yes } }
+			NAM_pw_raid_AZH_click_enabled = {
+				NAM_piracy_open = yes
+				has_completed_focus = NAM_exile_sea_raiders
+				NAM_country_operable = yes
+				NAM_pirate_slot_free = yes
+				has_navy_size = { size > 0 }
+				NOT = { has_country_flag = NAM_pirate_lying_low }
+				NOT = { has_political_power < 10 }
+				NOT = { has_fuel < 1000 }
+				AZH = { NAM_pirate_target_valid = yes }
+			}
+
+			NAM_pw_lane_ULV_raid_visible = { ULV = { has_country_flag = NAM_pirate_raid_target } }
+			NAM_pw_lane_ULV_closed_visible = {
+				ULV = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+				}
+				OR = {
+					NOT = { has_completed_focus = NAM_exile_sea_raiders }
+					ULV = { is_in_faction_with = NAM }
+					ULV = { is_subject_of = NAM }
+				}
+			}
+			NAM_pw_lane_ULV_guarded_visible = {
+				has_completed_focus = NAM_exile_sea_raiders
+				ULV = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+					NOT = { is_in_faction_with = NAM }
+					NOT = { is_subject_of = NAM }
+				}
+				OR = {
+					has_dynamic_modifier = { modifier = NAM_pirate_blockade }
+					ULV = { has_country_flag = NAM_pirate_alert }
+				}
+			}
+			NAM_pw_lane_ULV_idle_visible = {
+				has_completed_focus = NAM_exile_sea_raiders
+				ULV = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+					NOT = { is_in_faction_with = NAM }
+					NOT = { is_subject_of = NAM }
+				}
+				NOT = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
+				NOT = { ULV = { has_country_flag = NAM_pirate_alert } }
+			}
+			NAM_pw_label_ULV_visible = { ULV = { exists = yes } }
+			NAM_pw_raid_ULV_visible = { ULV = { exists = yes } }
+			NAM_pw_raid_ULV_click_enabled = {
+				NAM_piracy_open = yes
+				has_completed_focus = NAM_exile_sea_raiders
+				NAM_country_operable = yes
+				NAM_pirate_slot_free = yes
+				has_navy_size = { size > 0 }
+				NOT = { has_country_flag = NAM_pirate_lying_low }
+				NOT = { has_political_power < 10 }
+				NOT = { has_fuel < 1000 }
+				ULV = { NAM_pirate_target_valid = yes }
+			}
+
+			NAM_pw_lane_RIV_raid_visible = { RIV = { has_country_flag = NAM_pirate_raid_target } }
+			NAM_pw_lane_RIV_closed_visible = {
+				RIV = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+				}
+				OR = {
+					NOT = { has_completed_focus = NAM_exile_sea_raiders }
+					RIV = { is_in_faction_with = NAM }
+					RIV = { is_subject_of = NAM }
+				}
+			}
+			NAM_pw_lane_RIV_guarded_visible = {
+				has_completed_focus = NAM_exile_sea_raiders
+				RIV = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+					NOT = { is_in_faction_with = NAM }
+					NOT = { is_subject_of = NAM }
+				}
+				OR = {
+					has_dynamic_modifier = { modifier = NAM_pirate_blockade }
+					RIV = { has_country_flag = NAM_pirate_alert }
+				}
+			}
+			NAM_pw_lane_RIV_idle_visible = {
+				has_completed_focus = NAM_exile_sea_raiders
+				RIV = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+					NOT = { is_in_faction_with = NAM }
+					NOT = { is_subject_of = NAM }
+				}
+				NOT = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
+				NOT = { RIV = { has_country_flag = NAM_pirate_alert } }
+			}
+			NAM_pw_label_RIV_visible = { RIV = { exists = yes } }
+			NAM_pw_raid_RIV_visible = { RIV = { exists = yes } }
+			NAM_pw_raid_RIV_click_enabled = {
+				NAM_piracy_open = yes
+				has_completed_focus = NAM_exile_sea_raiders
+				NAM_country_operable = yes
+				NAM_pirate_slot_free = yes
+				has_navy_size = { size > 0 }
+				NOT = { has_country_flag = NAM_pirate_lying_low }
+				NOT = { has_political_power < 10 }
+				NOT = { has_fuel < 1000 }
+				RIV = { NAM_pirate_target_valid = yes }
+			}
+
+			NAM_pw_lane_LUR_raid_visible = { LUR = { has_country_flag = NAM_pirate_raid_target } }
+			NAM_pw_lane_LUR_closed_visible = {
+				LUR = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+				}
+				OR = {
+					NOT = { has_completed_focus = NAM_exile_sea_raiders }
+					LUR = { is_in_faction_with = NAM }
+					LUR = { is_subject_of = NAM }
+				}
+			}
+			NAM_pw_lane_LUR_guarded_visible = {
+				has_completed_focus = NAM_exile_sea_raiders
+				LUR = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+					NOT = { is_in_faction_with = NAM }
+					NOT = { is_subject_of = NAM }
+				}
+				OR = {
+					has_dynamic_modifier = { modifier = NAM_pirate_blockade }
+					LUR = { has_country_flag = NAM_pirate_alert }
+				}
+			}
+			NAM_pw_lane_LUR_idle_visible = {
+				has_completed_focus = NAM_exile_sea_raiders
+				LUR = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+					NOT = { is_in_faction_with = NAM }
+					NOT = { is_subject_of = NAM }
+				}
+				NOT = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
+				NOT = { LUR = { has_country_flag = NAM_pirate_alert } }
+			}
+			NAM_pw_label_LUR_visible = { LUR = { exists = yes } }
+			NAM_pw_raid_LUR_visible = { LUR = { exists = yes } }
+			NAM_pw_raid_LUR_click_enabled = {
+				NAM_piracy_open = yes
+				has_completed_focus = NAM_exile_sea_raiders
+				NAM_country_operable = yes
+				NAM_pirate_slot_free = yes
+				has_navy_size = { size > 0 }
+				NOT = { has_country_flag = NAM_pirate_lying_low }
+				NOT = { has_political_power < 10 }
+				NOT = { has_fuel < 1000 }
+				LUR = { NAM_pirate_target_valid = yes }
+			}
+
+			NAM_pw_lane_CHD_raid_visible = { CHD = { has_country_flag = NAM_pirate_raid_target } }
+			NAM_pw_lane_CHD_closed_visible = {
+				CHD = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+				}
+				OR = {
+					NOT = { has_completed_focus = NAM_exile_sea_raiders }
+					CHD = { is_in_faction_with = NAM }
+					CHD = { is_subject_of = NAM }
+				}
+			}
+			NAM_pw_lane_CHD_guarded_visible = {
+				has_completed_focus = NAM_exile_sea_raiders
+				CHD = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+					NOT = { is_in_faction_with = NAM }
+					NOT = { is_subject_of = NAM }
+				}
+				OR = {
+					has_dynamic_modifier = { modifier = NAM_pirate_blockade }
+					CHD = { has_country_flag = NAM_pirate_alert }
+				}
+			}
+			NAM_pw_lane_CHD_idle_visible = {
+				has_completed_focus = NAM_exile_sea_raiders
+				CHD = {
+					exists = yes
+					NOT = { has_country_flag = NAM_pirate_raid_target }
+					NOT = { is_in_faction_with = NAM }
+					NOT = { is_subject_of = NAM }
+				}
+				NOT = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
+				NOT = { CHD = { has_country_flag = NAM_pirate_alert } }
+			}
+			NAM_pw_label_CHD_visible = { CHD = { exists = yes } }
+			NAM_pw_raid_CHD_visible = { CHD = { exists = yes } }
+			NAM_pw_raid_CHD_click_enabled = {
+				NAM_piracy_open = yes
+				has_completed_focus = NAM_exile_sea_raiders
+				NAM_country_operable = yes
+				NAM_pirate_slot_free = yes
+				has_navy_size = { size > 0 }
+				NOT = { has_country_flag = NAM_pirate_lying_low }
+				NOT = { has_political_power < 10 }
+				NOT = { has_fuel < 1000 }
+				CHD = { NAM_pirate_target_valid = yes }
+			}
+
+			# Gauges: one cell per 5 points, lit from half a cell.
+			NAM_pw_notoriety_1_visible = { check_variable = { var = NAM_pirate_notoriety value = 2.5 compare = greater_than } }
+			NAM_pw_notoriety_2_visible = { check_variable = { var = NAM_pirate_notoriety value = 7.5 compare = greater_than } }
+			NAM_pw_notoriety_3_visible = { check_variable = { var = NAM_pirate_notoriety value = 12.5 compare = greater_than } }
+			NAM_pw_notoriety_4_visible = { check_variable = { var = NAM_pirate_notoriety value = 17.5 compare = greater_than } }
+			NAM_pw_notoriety_5_visible = { check_variable = { var = NAM_pirate_notoriety value = 22.5 compare = greater_than } }
+			NAM_pw_notoriety_6_visible = { check_variable = { var = NAM_pirate_notoriety value = 27.5 compare = greater_than } }
+			NAM_pw_notoriety_7_visible = { check_variable = { var = NAM_pirate_notoriety value = 32.5 compare = greater_than } }
+			NAM_pw_notoriety_8_visible = { check_variable = { var = NAM_pirate_notoriety value = 37.5 compare = greater_than } }
+			NAM_pw_notoriety_9_visible = { check_variable = { var = NAM_pirate_notoriety value = 42.5 compare = greater_than } }
+			NAM_pw_notoriety_10_visible = { check_variable = { var = NAM_pirate_notoriety value = 47.5 compare = greater_than } }
+			NAM_pw_notoriety_11_visible = { check_variable = { var = NAM_pirate_notoriety value = 52.5 compare = greater_than } }
+			NAM_pw_notoriety_12_visible = { check_variable = { var = NAM_pirate_notoriety value = 57.5 compare = greater_than } }
+			NAM_pw_notoriety_13_visible = { check_variable = { var = NAM_pirate_notoriety value = 62.5 compare = greater_than } }
+			NAM_pw_notoriety_14_visible = { check_variable = { var = NAM_pirate_notoriety value = 67.5 compare = greater_than } }
+			NAM_pw_notoriety_15_visible = { check_variable = { var = NAM_pirate_notoriety value = 72.5 compare = greater_than } }
+			NAM_pw_notoriety_16_visible = { check_variable = { var = NAM_pirate_notoriety value = 77.5 compare = greater_than } }
+			NAM_pw_notoriety_17_visible = { check_variable = { var = NAM_pirate_notoriety value = 82.5 compare = greater_than } }
+			NAM_pw_notoriety_18_visible = { check_variable = { var = NAM_pirate_notoriety value = 87.5 compare = greater_than } }
+			NAM_pw_notoriety_19_visible = { check_variable = { var = NAM_pirate_notoriety value = 92.5 compare = greater_than } }
+			NAM_pw_notoriety_20_visible = { check_variable = { var = NAM_pirate_notoriety value = 97.5 compare = greater_than } }
+
+			NAM_pw_revenge_1_visible = { check_variable = { var = NAM_revenge_readiness value = 2.5 compare = greater_than } }
+			NAM_pw_revenge_2_visible = { check_variable = { var = NAM_revenge_readiness value = 7.5 compare = greater_than } }
+			NAM_pw_revenge_3_visible = { check_variable = { var = NAM_revenge_readiness value = 12.5 compare = greater_than } }
+			NAM_pw_revenge_4_visible = { check_variable = { var = NAM_revenge_readiness value = 17.5 compare = greater_than } }
+			NAM_pw_revenge_5_visible = { check_variable = { var = NAM_revenge_readiness value = 22.5 compare = greater_than } }
+			NAM_pw_revenge_6_visible = { check_variable = { var = NAM_revenge_readiness value = 27.5 compare = greater_than } }
+			NAM_pw_revenge_7_visible = { check_variable = { var = NAM_revenge_readiness value = 32.5 compare = greater_than } }
+			NAM_pw_revenge_8_visible = { check_variable = { var = NAM_revenge_readiness value = 37.5 compare = greater_than } }
+			NAM_pw_revenge_9_visible = { check_variable = { var = NAM_revenge_readiness value = 42.5 compare = greater_than } }
+			NAM_pw_revenge_10_visible = { check_variable = { var = NAM_revenge_readiness value = 47.5 compare = greater_than } }
+			NAM_pw_revenge_11_visible = { check_variable = { var = NAM_revenge_readiness value = 52.5 compare = greater_than } }
+			NAM_pw_revenge_12_visible = { check_variable = { var = NAM_revenge_readiness value = 57.5 compare = greater_than } }
+			NAM_pw_revenge_13_visible = { check_variable = { var = NAM_revenge_readiness value = 62.5 compare = greater_than } }
+			NAM_pw_revenge_14_visible = { check_variable = { var = NAM_revenge_readiness value = 67.5 compare = greater_than } }
+			NAM_pw_revenge_15_visible = { check_variable = { var = NAM_revenge_readiness value = 72.5 compare = greater_than } }
+			NAM_pw_revenge_16_visible = { check_variable = { var = NAM_revenge_readiness value = 77.5 compare = greater_than } }
+			NAM_pw_revenge_17_visible = { check_variable = { var = NAM_revenge_readiness value = 82.5 compare = greater_than } }
+			NAM_pw_revenge_18_visible = { check_variable = { var = NAM_revenge_readiness value = 87.5 compare = greater_than } }
+			NAM_pw_revenge_19_visible = { check_variable = { var = NAM_revenge_readiness value = 92.5 compare = greater_than } }
+			NAM_pw_revenge_20_visible = { check_variable = { var = NAM_revenge_readiness value = 97.5 compare = greater_than } }
+
+			# Slots: flotillas at sea, free and still closed; marine divisions prepared,
+			# open and still closed.
+			NAM_pw_fleet_1_sea_visible = { check_variable = { var = NAM_pirate_raids_active value = 1 compare = greater_than_or_equals } }
+			NAM_pw_fleet_1_free_visible = {
+				check_variable = { var = NAM_pirate_raids_active value = 1 compare = less_than }
+				check_variable = { var = NAM_pirate_raid_slots value = 1 compare = greater_than_or_equals }
+			}
+			NAM_pw_fleet_1_locked_visible = {
+				check_variable = { var = NAM_pirate_raids_active value = 1 compare = less_than }
+				check_variable = { var = NAM_pirate_raid_slots value = 1 compare = less_than }
+			}
+			NAM_pw_marine_1_ready_visible = { check_variable = { var = NAM_marine_orders_paid value = 1 compare = greater_than_or_equals } }
+			NAM_pw_marine_1_open_visible = {
+				check_variable = { var = NAM_marine_orders_paid value = 1 compare = less_than }
+				check_variable = { var = NAM_marine_order_cap value = 1 compare = greater_than_or_equals }
+			}
+			NAM_pw_marine_1_locked_visible = {
+				check_variable = { var = NAM_marine_orders_paid value = 1 compare = less_than }
+				check_variable = { var = NAM_marine_order_cap value = 1 compare = less_than }
+			}
+			NAM_pw_fleet_2_sea_visible = { check_variable = { var = NAM_pirate_raids_active value = 2 compare = greater_than_or_equals } }
+			NAM_pw_fleet_2_free_visible = {
+				check_variable = { var = NAM_pirate_raids_active value = 2 compare = less_than }
+				check_variable = { var = NAM_pirate_raid_slots value = 2 compare = greater_than_or_equals }
+			}
+			NAM_pw_fleet_2_locked_visible = {
+				check_variable = { var = NAM_pirate_raids_active value = 2 compare = less_than }
+				check_variable = { var = NAM_pirate_raid_slots value = 2 compare = less_than }
+			}
+			NAM_pw_marine_2_ready_visible = { check_variable = { var = NAM_marine_orders_paid value = 2 compare = greater_than_or_equals } }
+			NAM_pw_marine_2_open_visible = {
+				check_variable = { var = NAM_marine_orders_paid value = 2 compare = less_than }
+				check_variable = { var = NAM_marine_order_cap value = 2 compare = greater_than_or_equals }
+			}
+			NAM_pw_marine_2_locked_visible = {
+				check_variable = { var = NAM_marine_orders_paid value = 2 compare = less_than }
+				check_variable = { var = NAM_marine_order_cap value = 2 compare = less_than }
+			}
+			NAM_pw_fleet_3_sea_visible = { check_variable = { var = NAM_pirate_raids_active value = 3 compare = greater_than_or_equals } }
+			NAM_pw_fleet_3_free_visible = {
+				check_variable = { var = NAM_pirate_raids_active value = 3 compare = less_than }
+				check_variable = { var = NAM_pirate_raid_slots value = 3 compare = greater_than_or_equals }
+			}
+			NAM_pw_fleet_3_locked_visible = {
+				check_variable = { var = NAM_pirate_raids_active value = 3 compare = less_than }
+				check_variable = { var = NAM_pirate_raid_slots value = 3 compare = less_than }
+			}
+			NAM_pw_marine_3_ready_visible = { check_variable = { var = NAM_marine_orders_paid value = 3 compare = greater_than_or_equals } }
+			NAM_pw_marine_3_open_visible = {
+				check_variable = { var = NAM_marine_orders_paid value = 3 compare = less_than }
+				check_variable = { var = NAM_marine_order_cap value = 3 compare = greater_than_or_equals }
+			}
+			NAM_pw_marine_3_locked_visible = {
+				check_variable = { var = NAM_marine_orders_paid value = 3 compare = less_than }
+				check_variable = { var = NAM_marine_order_cap value = 3 compare = less_than }
+			}
+
+			# Actions: shown where the decision is visible, enabled where it may start.
+			NAM_pw_actions_locked_visible = {
+				NOT = { has_completed_focus = NAM_exile_black_market }
+				NOT = { has_completed_focus = NAM_exile_fences }
+				NOT = { has_completed_focus = NAM_exile_general_staff }
+				NOT = { has_completed_focus = NAM_exile_marine_orders }
+			}
+			NAM_pw_buy_arms_visible = { has_completed_focus = NAM_exile_black_market }
+			NAM_pw_buy_arms_price_visible = { has_completed_focus = NAM_exile_black_market }
+			NAM_pw_buy_arms_click_enabled = {
+				NAM_piracy_open = yes
+				has_completed_focus = NAM_exile_black_market
+				NAM_country_operable = yes
+				check_variable = { var = NAM_pirate_loot value = 40 compare = greater_than_or_equals }
+				NOT = { has_country_flag = NAM_pirate_buy_arms_cd }
+			}
+			NAM_pw_buy_heavy_arms_visible = { has_completed_focus = NAM_exile_black_market }
+			NAM_pw_buy_heavy_arms_price_visible = { has_completed_focus = NAM_exile_black_market }
+			NAM_pw_buy_heavy_arms_click_enabled = {
+				NAM_piracy_open = yes
+				has_completed_focus = NAM_exile_black_market
+				NAM_country_operable = yes
+				check_variable = { var = NAM_pirate_loot value = 70 compare = greater_than_or_equals }
+				NOT = { has_country_flag = NAM_pirate_buy_heavy_arms_cd }
+			}
+			NAM_pw_buy_convoys_visible = { has_completed_focus = NAM_exile_black_market }
+			NAM_pw_buy_convoys_price_visible = { has_completed_focus = NAM_exile_black_market }
+			NAM_pw_buy_convoys_click_enabled = {
+				NAM_piracy_open = yes
+				has_completed_focus = NAM_exile_black_market
+				NAM_country_operable = yes
+				check_variable = { var = NAM_pirate_loot value = 60 compare = greater_than_or_equals }
+				NOT = { has_country_flag = NAM_pirate_buy_convoys_cd }
+			}
+			NAM_pw_fence_loot_visible = { has_completed_focus = NAM_exile_fences }
+			NAM_pw_fence_loot_price_visible = { has_completed_focus = NAM_exile_fences }
+			NAM_pw_fence_loot_click_enabled = {
+				NAM_piracy_open = yes
+				has_completed_focus = NAM_exile_fences
+				NAM_country_operable = yes
+				check_variable = { var = NAM_pirate_loot value = 50 compare = greater_than_or_equals }
+				NOT = { has_country_flag = NAM_pirate_fence_loot_cd }
+			}
+			NAM_pw_exile_drill_visible = { has_completed_focus = NAM_exile_general_staff }
+			NAM_pw_exile_drill_price_visible = { has_completed_focus = NAM_exile_general_staff }
+			NAM_pw_exile_drill_click_enabled = {
+				NAM_piracy_open = yes
+				has_completed_focus = NAM_exile_general_staff
+				NAM_country_operable = yes
+				check_variable = { var = NAM_revenge_readiness value = 100 compare = less_than }
+				NOT = { has_political_power < 20 }
+				check_variable = { var = NAM_pirate_loot value = 30 compare = greater_than_or_equals }
+				NOT = { has_decision = NAM_exile_drill }
+				NOT = { has_country_flag = NAM_exile_drill_cd }
+			}
+			NAM_pw_order_marines_visible = { has_completed_focus = NAM_exile_marine_orders }
+			NAM_pw_order_marines_price_visible = { has_completed_focus = NAM_exile_marine_orders }
+			NAM_pw_order_marines_click_enabled = {
+				NAM_piracy_open = yes
+				has_completed_focus = NAM_exile_marine_orders
+				NAM_country_operable = yes
+				NAM_marine_order_can_place = yes
+				check_variable = { var = NAM_pirate_loot value = 50 compare = greater_than_or_equals }
+				NOT = { has_manpower < 4300 }
+				NOT = { has_country_flag = NAM_order_marines_cd }
+			}
+		}
+	}
 }

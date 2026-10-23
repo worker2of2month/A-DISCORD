@@ -39,6 +39,7 @@
     "val_operations_map",
     "stp_regions_map",
     "nam_basin_map",
+    "nam_piracy_map",
     "island_administration_icon",
     "party_texticons",
     "vorkerland_flags",
@@ -1530,6 +1531,27 @@
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_nam_basin_map"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_nam_basin_map", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "nam_piracy_map",
+      "owner_module": "tools.builders.build_adiscord_nam_piracy_map",
+      "output_globs": [
+        "gfx/interface/NAM_piracy/*.png",
+        "interface/ADISCORD_NAM_piracy.gui",
+        "interface/ADISCORD_NAM_piracy.gfx"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_nam_piracy_map.py",
+        "history/states/*.txt",
+        "map/adjacencies.csv",
+        "map/definition.csv",
+        "map/provinces.bmp",
+        "map/heightmap.bmp"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_nam_piracy_map"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_nam_piracy_map", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },

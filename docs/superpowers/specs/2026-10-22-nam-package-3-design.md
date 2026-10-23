@@ -410,7 +410,8 @@ Owner: core phase 4 (third playtest batch).
   under-strength remnants on the island capital up to the carried share, seeds
   the piracy variables and fires .81 "Flight to the Islands".
 - Piracy (category `NAM_piracy`, `NAM_piracy_open`): `NAM_pirate_raid`
-  (targets EFL AZH VAL STP STS IIA, 10 PP + 1000 fuel, 25 days, slot from
+  (targets within half the mainland's width by sea from the island harbours:
+  EFL AZH ULV RIV LUR CHD, rich prize for LUR/CHD; 10 PP + 1000 fuel, 15 days, slot from
   `NAM_pirate_raid_slots`, max 3; haul 50 / prize 15 / failure 35 weighted by
   `num_ships`, target alert, blockade and notoriety; report .90, human target
   .91), `NAM_pirate_buy_arms`, `NAM_pirate_buy_heavy_arms`,

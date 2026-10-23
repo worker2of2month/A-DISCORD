@@ -3569,13 +3569,16 @@ NAM_underground = {
 # Island exile: the flotillas live from the sea, the black market turns the
 # loot into arms and the exiles drill for the return.
 NAM_piracy = {
-	# A flotilla raids one country's shipping for 25 days. The fuel is burnt
-	# at sea; an interrupted raid returns it and frees the flotilla. The target
-	# marker NAM_pirate_raid_target is the receipt of a paid raid.
+	# A flotilla raids one country's local shipping for 15 days. The targets
+	# are the coastal countries whose harbours lie within reach of the islands;
+	# tools/builders/build_adiscord_nam_piracy_map.py keeps their lanes shorter
+	# by sea than half the width of the lost mainland. The fuel is burnt at sea;
+	# an interrupted raid returns it and frees the flotilla. The target marker
+	# NAM_pirate_raid_target is the receipt of a paid raid.
 	NAM_pirate_raid = {
 		icon = generic_naval
 		allowed = { tag = NAM }
-		targets = { EFL AZH VAL STP STS IIA }
+		targets = { EFL AZH ULV RIV LUR CHD }
 		target_trigger = {
 			FROM = { exists = yes }
 		}
@@ -3615,7 +3618,7 @@ NAM_piracy = {
 			NOT = { has_fuel < 1000 }
 		}
 		fire_only_once = no
-		days_remove = 25
+		days_remove = 15
 		cancel_trigger = {
 			OR = {
 				NAM_country_operable = no
@@ -3704,6 +3707,7 @@ NAM_piracy = {
 				hidden_effect = {
 					set_temp_variable = { var = NAM_pirate_loot_change value = -40 }
 					NAM_pirate_loot_add = yes
+					set_country_flag = { flag = NAM_pirate_buy_arms_cd value = 1 days = 30 }
 				}
 				add_equipment_to_stockpile = {
 					type = infantry_equipment
@@ -3752,6 +3756,7 @@ NAM_piracy = {
 				hidden_effect = {
 					set_temp_variable = { var = NAM_pirate_loot_change value = -70 }
 					NAM_pirate_loot_add = yes
+					set_country_flag = { flag = NAM_pirate_buy_heavy_arms_cd value = 1 days = 30 }
 				}
 				add_equipment_to_stockpile = {
 					type = support_equipment
@@ -3796,6 +3801,7 @@ NAM_piracy = {
 				hidden_effect = {
 					set_temp_variable = { var = NAM_pirate_loot_change value = -60 }
 					NAM_pirate_loot_add = yes
+					set_country_flag = { flag = NAM_pirate_buy_convoys_cd value = 1 days = 30 }
 				}
 				add_equipment_to_stockpile = {
 					type = convoy_1
@@ -3839,6 +3845,7 @@ NAM_piracy = {
 					NAM_pirate_loot_add = yes
 					set_temp_variable = { var = NAM_treasury_amount value = 100 }
 					NAM_add_treasury = yes
+					set_country_flag = { flag = NAM_pirate_fence_loot_cd value = 1 days = 30 }
 				}
 			}
 		}
@@ -3893,6 +3900,7 @@ NAM_piracy = {
 					set_temp_variable = { var = NAM_pirate_loot_change value = -30 }
 					NAM_pirate_loot_add = yes
 					set_variable = { var = NAM_exile_drill_deposit value = 30 }
+					set_country_flag = { flag = NAM_exile_drill_cd value = 1 days = 45 }
 				}
 			}
 		}
@@ -3961,6 +3969,7 @@ NAM_piracy = {
 					NAM_pirate_loot_add = yes
 					add_to_variable = { var = NAM_marine_orders_paid value = 1 }
 					NAM_marine_ensure_template = yes
+					set_country_flag = { flag = NAM_order_marines_cd value = 1 days = 14 }
 				}
 			}
 		}

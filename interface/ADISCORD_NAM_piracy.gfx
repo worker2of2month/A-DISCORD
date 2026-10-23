@@ -1,0 +1,78 @@
+spriteTypes = {
+	# The chart, lane frames, markers, gauges and slot pips of the piracy window.
+	# Buttons reuse GFX_NAM_bw_button of the basin window.
+	# BEGIN GENERATED NAM PIRACY MAP
+	spriteType = {
+		name = "GFX_NAM_pw_map"
+		texturefile = "gfx/interface/NAM_piracy/map.png"
+		noOfFrames = 1
+	}
+
+	spriteType = {
+		name = "GFX_NAM_pw_lane_EFL"
+		texturefile = "gfx/interface/NAM_piracy/lane_EFL.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_pw_lane_AZH"
+		texturefile = "gfx/interface/NAM_piracy/lane_AZH.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_pw_lane_ULV"
+		texturefile = "gfx/interface/NAM_piracy/lane_ULV.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_pw_lane_RIV"
+		texturefile = "gfx/interface/NAM_piracy/lane_RIV.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_pw_lane_LUR"
+		texturefile = "gfx/interface/NAM_piracy/lane_LUR.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_pw_lane_CHD"
+		texturefile = "gfx/interface/NAM_piracy/lane_CHD.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_pw_marker"
+		texturefile = "gfx/interface/NAM_piracy/marker.png"
+		noOfFrames = 1
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
+
+	spriteType = {
+		name = "GFX_NAM_pw_gauge_notoriety"
+		texturefile = "gfx/interface/NAM_piracy/gauge_notoriety.png"
+		noOfFrames = 1
+	}
+
+	spriteType = {
+		name = "GFX_NAM_pw_gauge_revenge"
+		texturefile = "gfx/interface/NAM_piracy/gauge_revenge.png"
+		noOfFrames = 1
+	}
+
+	spriteType = {
+		name = "GFX_NAM_pw_segment"
+		texturefile = "gfx/interface/NAM_piracy/segment.png"
+		noOfFrames = 5
+	}
+
+	spriteType = {
+		name = "GFX_NAM_pw_pip"
+		texturefile = "gfx/interface/NAM_piracy/pip.png"
+		noOfFrames = 4
+	}
+	# END GENERATED NAM PIRACY MAP
+}
