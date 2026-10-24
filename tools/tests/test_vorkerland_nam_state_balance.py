@@ -24,12 +24,19 @@ from tools.lib.adiscord_vorkerland_theatre_manifest import (
 
 VORKERLAND_GENERATED_STATES = set(range(306, 329)) - {326}
 NAM_SVETLOGORSK_STATE_ID = 688
-NAM_SVETLOGORSK_PROVINCES = {689, 1710, 3127, 4025, 8635, 9211, 10967, 16721}
+NAM_SVETLOGORSK_PROVINCES = {
+    689, 1710, 3127, 4025, 8635, 9211, 10967, 16721,
+    16864, 16865, 16866, 16867, 16869, 16870, 16875,
+}
 NAM_RESIDUAL_CITY_STATE_ID = 689
-NAM_RESIDUAL_CITY_PROVINCES = {176, 2038, 2231, 2299, 7618, 7639, 8358}
+NAM_RESIDUAL_CITY_PROVINCES = {176, 2038, 2231, 2299, 7618, 7639, 8358, 16873, 16874, 16878, 16881, 16884}
 NAM_DRYRIVER_STATE_ID = 690
 NAM_EAST_DRYRIVER_STATE_ID = 719
 NAM_EAST_DRYRIVER_PROVINCES = {461, 6961}
+NAM_SOUTHERN_SPLIT_PROVINCES = {
+    16864, 16865, 16866, 16867, 16869, 16870, 16873, 16874, 16875, 16878,
+    16879, 16880, 16881, 16884, 16885, 16887, 16890,
+}
 EFL_MIDDLE_LOREN_STATE_ID = 691
 AZH_BLACK_COAST_STATE_ID = 692
 EFL_MOREN_STATE_ID = 720
@@ -313,7 +320,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             | self.states[dryriver]
             | self.states[east_dryriver]
             | self.states[700],
-            NAM_ORIGINAL_MAINLAND_PROVINCES | {16716, 16721},
+            NAM_ORIGINAL_MAINLAND_PROVINCES | NAM_SOUTHERN_SPLIT_PROVINCES | {16716, 16721, 16892},
         )
         nam_parts = (
             self.states[67],
@@ -786,7 +793,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             69: {367: 5, 8234: 2},
             70: {2986: 2, 6495: 4},
             688: {16721: 3, 1710: 2},
-            689: {},
+            689: {16884: 1},
             690: {8058: 2, 9016: 2},
             691: {},
             692: {493: 3, 5039: 2},
@@ -816,7 +823,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
 
         self.assertEqual(
             sum(sum(expected[state].values()) for state in (67, 688, 689, 690, 700, 719)),
-            17,
+            18,
         )
         self.assertEqual(
             sum(sum(expected[state].values()) for state in (68, 70, 691, 701, 720, 721)),

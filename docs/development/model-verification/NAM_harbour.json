@@ -1,0 +1,38 @@
+{
+  "files": {
+    "ADISCORD_NAM_harbour.mesh": "a74dc287fea5b6fb7fa3c1e847202f8fca0bfc4fa7d8d03f2bc8c64ebe84629e",
+    "ADISCORD_NAM_harbour_diffuse.dds": "718b4283332944bb1cdd55d981dc3d4b3fb6cdc383be9ac7e20f721d3778b915",
+    "ADISCORD_NAM_harbour_normal.dds": "3b25e94c213442f565fa668b25cd1c590cc10b6ef6a27375cc5c42d38265d3f4",
+    "ADISCORD_NAM_harbour_specular.dds": "f5cc177f339b9635431aa5fd3bffb612f89e0410ae476dbb0105db8cedd461ea"
+  },
+  "source_sha256": "26ad8cb8aa28cd803f145b0db74cd698576eb9ac7885b4cdd4930f80f9599794",
+  "heightmap_sha256": "1bbe97fd8c2ea40b6351eb85d24b4e6f782d97663d8a1ade4bedf5ca8054d1d9",
+  "vertices": 18716,
+  "triangles": 8004,
+  "materials": 1,
+  "bounds_blender_xyz": [
+    [
+      -19.0,
+      15.175
+    ],
+    [
+      -14.0,
+      11.0
+    ],
+    [
+      -9.2,
+      22.0
+    ]
+  ],
+  "native_reimport": true,
+  "hoi4_runtime_verified": false,
+  "placement": {
+    "position": [
+      3640.0,
+      10.35,
+      541.45
+    ],
+    "scale": 0.14,
+    "province": 16716
+  }
+}

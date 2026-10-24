@@ -120,7 +120,7 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 		add_equipment_to_stockpile = { type = support_equipment amount = 300 producer = NAM }
 		add_equipment_to_stockpile = { type = artillery_equipment amount = 250 producer = NAM }
 		# The templates exist before any unit refers to them: the baseline OOB
-		# carries units only and every paid order spawns from the same templates.
+		# carries units only and shares the fixed mobilisation templates with orders.
 		NAM_order_ensure_templates = yes
 		load_oob = "NAM_resource_war"
 		NAM_deliver_mobilisation_orders = yes
@@ -392,8 +392,8 @@ ADISCORD_nam_resource_war_start_mainland_rebellion = {
 			688 = { is_owned_by = NAM }
 			NAM = {
 				NOT = { has_country_flag = NAM_compact_ratified }
-				# Yaroslav Veter accepted the amnesty: there is no uprising to lead.
-				NOT = { has_country_flag = NAM_veter_amnesty }
+				# Yaroslav Weber accepted the amnesty: there is no uprising to lead.
+				NOT = { has_country_flag = NAM_weber_amnesty }
 			}
 		}
 		SLF = {
@@ -1711,7 +1711,7 @@ NAM_groups_initialize = {
 		set_variable = { var = NAM_line_slots value = 2 }
 		set_variable = { var = NAM_project_slots value = 1 }
 		NAM_oil_initialize = yes
-		# Veter's network works from the first day of the colony; focuses may
+		# Weber's network works from the first day of the colony; focuses may
 		# already have changed it, so only a missing value is seeded.
 		if = {
 			limit = { NOT = { has_variable = NAM_underground } }
@@ -2533,10 +2533,56 @@ NAM_order_grant_motor_technology = {
 	}
 }
 
-# COUNTRY NAM. Guard and line infantry use the locked starting templates.
+# COUNTRY NAM. Fixed mobilisation templates are independent of editable starting templates.
 # Only paid coastal and mechanised orders create their distinct templates.
 # The motorised template needs the carrier programme first.
 NAM_order_ensure_templates = {
+	if = {
+		limit = { NOT = { has_template = "Mobilisation Guard" } }
+		division_template = {
+			name = "Mobilisation Guard"
+			is_locked = yes
+			force_allow_recruiting = yes
+			template_counter = 78
+			division_names_group = ADISCORD_INF_01
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 0 y = 2 }
+				infantry = { x = 1 y = 0 }
+				infantry = { x = 1 y = 1 }
+				infantry = { x = 1 y = 2 }
+				infantry = { x = 2 y = 0 }
+				infantry = { x = 2 y = 1 }
+				infantry = { x = 2 y = 2 }
+			}
+			support = {
+				engineer = { x = 0 y = 0 }
+				artillery = { x = 0 y = 1 }
+			}
+		}
+	}
+	if = {
+		limit = { NOT = { has_template = "Mobilisation Infantry Brigade" } }
+		division_template = {
+			name = "Mobilisation Infantry Brigade"
+			is_locked = yes
+			force_allow_recruiting = yes
+			template_counter = 3
+			division_names_group = ADISCORD_INF_01
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 0 y = 2 }
+				infantry = { x = 1 y = 0 }
+				infantry = { x = 1 y = 1 }
+				infantry = { x = 1 y = 2 }
+			}
+			support = {
+				engineer = { x = 0 y = 0 }
+			}
+		}
+	}
 	if = {
 		limit = {
 			NOT = { has_template = "Coastal Battalion" }
@@ -2594,16 +2640,16 @@ NAM_order_ensure_templates = {
 # entry. The templates stay as ordinary, editable templates.
 NAM_order_unlock_templates = {
 	if = {
-		limit = { has_template = "Capital Guard" }
+		limit = { has_template = "Mobilisation Guard" }
 		set_division_template_lock = {
-			division_template = "Capital Guard"
+			division_template = "Mobilisation Guard"
 			is_locked = no
 		}
 	}
 	if = {
-		limit = { has_template = "Line Infantry Brigade" }
+		limit = { has_template = "Mobilisation Infantry Brigade" }
 		set_division_template_lock = {
-			division_template = "Line Infantry Brigade"
+			division_template = "Mobilisation Infantry Brigade"
 			is_locked = no
 		}
 	}
@@ -2799,7 +2845,7 @@ NAM_create_order_by_kind = {
 # STATE. Spawn one paid formation for NAM at full strength.
 NAM_create_order_guard = {
 	create_unit = {
-		division = "division_template = \"Capital Guard\" start_experience_factor = 0.25 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		division = "division_template = \"Mobilisation Guard\" start_experience_factor = 0.25 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 		owner = NAM
 		allow_spawning_on_enemy_provs = no
 	}
@@ -2807,7 +2853,7 @@ NAM_create_order_guard = {
 
 NAM_create_order_infantry = {
 	create_unit = {
-		division = "division_template = \"Line Infantry Brigade\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		division = "division_template = \"Mobilisation Infantry Brigade\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 		owner = NAM
 		allow_spawning_on_enemy_provs = no
 	}
@@ -4280,7 +4326,7 @@ NAM_coup_install = {
 }
 
 # ----- Underground -----
-# NAM_underground (0-100) is Yaroslav Veter's network. It works from the first
+# NAM_underground (0-100) is Yaroslav Weber's network. It works from the first
 # day of the colony, strikes at the fields, the depots and the namestniks, and
 # at hostilities decides the Svetlogorsk uprising; the amnesty ends it for good.
 # Growth, thresholds and sabotage stop once the resource war has opened.
@@ -4288,7 +4334,7 @@ NAM_coup_install = {
 # COUNTRY NAM. Every writer calls this clamp; it also opens the threshold events.
 NAM_underground_clamp = {
 	if = {
-		limit = { has_country_flag = NAM_veter_amnesty }
+		limit = { has_country_flag = NAM_weber_amnesty }
 		set_variable = { var = NAM_underground value = 0 }
 	}
 	clamp_variable = {
@@ -4502,21 +4548,21 @@ NAM_underground_steal_rifles = {
 
 # COUNTRY NAM. Broken-off talks return the treasury deposit of the paid round;
 # political power, like a released mobilisation order's, stays spent.
-NAM_veter_talks_refund = {
+NAM_weber_talks_refund = {
 	if = {
-		limit = { check_variable = { var = NAM_veter_talks_deposit value = 0 compare = greater_than } }
-		set_temp_variable = { var = NAM_treasury_amount value = NAM_veter_talks_deposit }
+		limit = { check_variable = { var = NAM_weber_talks_deposit value = 0 compare = greater_than } }
+		set_temp_variable = { var = NAM_treasury_amount value = NAM_weber_talks_deposit }
 		NAM_add_treasury = yes
 	}
-	clear_variable = NAM_veter_talks_deposit
+	clear_variable = NAM_weber_talks_deposit
 }
 
 # COUNTRY NAM. The third round of talks ends in the amnesty: the underground
-# dissolves, Veter serves Svetlogorye and the uprising can no longer happen.
-NAM_veter_amnesty = {
-	set_country_flag = NAM_veter_amnesty
+# dissolves, Weber serves Svetlogorye and the uprising can no longer happen.
+NAM_weber_amnesty = {
+	set_country_flag = NAM_weber_amnesty
 	NAM_underground_clamp = yes
-	recruit_character = NAM_Yaroslav_Veter
+	recruit_character = NAM_Yaroslav_Weber
 	add_to_variable = { var = NAM_grp_dist_support value = 10 }
 	add_to_variable = { var = NAM_grp_nam_support value = -5 }
 	NAM_groups_refresh = yes

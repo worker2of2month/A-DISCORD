@@ -41,6 +41,7 @@ from tools.lib.generated_outputs import (
 ROOT = Path(__file__).resolve().parents[2]
 REQUIRED_FAMILIES = {
     "ambient_audio",
+    "azhar_palace",
     "coastal_geography",
     "ainholm_mandate",
     "decision_ui_assets",

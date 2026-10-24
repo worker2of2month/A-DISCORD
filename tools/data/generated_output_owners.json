@@ -18,6 +18,7 @@
     "terrain_snow",
     "vorkerland_cities",
     "ambient_audio",
+    "azhar_palace",
     "minimap",
     "startup_ui_assets",
     "decision_ui_assets",
@@ -52,6 +53,32 @@
     "superevent_music"
   ],
   "families": [
+    {
+      "id": "azhar_palace",
+      "owner_module": "tools.builders.build_adiscord_azhar_palace",
+      "source_inputs": [
+        "tools/builders/build_adiscord_azhar_palace.py",
+        "tools/assets/source/build_shl_palace.py",
+        "map/definition.csv",
+        "map/provinces.bmp",
+        "map/heightmap.bmp"
+      ],
+      "output_globs": [
+        "gfx/models/buildings/AZH_palace/*.mesh",
+        "gfx/models/buildings/AZH_palace/*.dds",
+        "gfx/entities/mapitems_custom.gfx",
+        "gfx/entities/mapitems_custom.asset",
+        "map/ambient_object.txt",
+        "tools/assets/source/buildings/AZH/black_harbor_palace.blend",
+        "docs/development/model-verification/AZH_palace.json",
+        "docs/development/previews/AZH_palace/*.png"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_azhar_palace"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_azhar_palace", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "Owns only the marked Azhar Black Harbor palace sections in shared registries. Other ambient actors and entity sections remain unchanged. Blender and io_pdx_mesh are required only to rebuild stale native outputs; previews are opt-in."
+    },
     {
       "id": "ideology_icons",
       "owner_module": "tools.builders.build_adiscord_ideology_icons",
@@ -1865,7 +1892,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_coastal_geography", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "Owns lowland rasters in provinces 16709, 16710, 16712 and 16802-16808, urban terrain and city/tree masks in provinces 16713-16721 and the compact southern settlement manifest, plus the explicit city and surrounding rural-sector province pixels and necessary local railway crossings, intersecting normal and DXT5 color cells, and unit anchors for the additions and displaced parent anchors. Owns the mainland Svetlogorye mountain relief, graphical and combat terrain, trees, normals and unit heights in the explicit 27-province mainland Svetlogorye relief mask, with province-clipped foothill and mountain textures and elevation-based rock and snow detail. Preserves IVN terrain and compatible snow output."
+      "overlap_explanation": "Owns lowland rasters in provinces 16709, 16710, 16712 and 16802-16808, urban terrain and city/tree masks in provinces 16713-16721 and the compact southern settlement manifest, plus the explicit city and surrounding rural-sector province pixels and necessary local railway crossings, intersecting normal and DXT5 color cells, and unit anchors for the additions and displaced parent anchors. Owns the mainland Svetlogorye mountain relief, graphical and combat terrain, trees, normals and unit heights in the explicit 27-province mainland Svetlogorye relief mask, with province-clipped foothill and mountain textures and elevation-based rock and snow detail; Nudge splits inside that mask keep its surface while their terrain stays authored. Owns city rasters for the explicit southern urban-growth provinces, unit anchors for the southern Nudge splits 16864-16894 and their donors, and railway reroutes through those splits. Preserves IVN terrain and compatible snow output."
     },
     {
       "id": "ivn_geography",

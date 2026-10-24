@@ -1,15 +1,15 @@
 From;To;Type;Through;start_x;start_y;stop_x;stop_y;adjacency_rule_name;Comment
 16803;16804;sea;15477;3738;926;3741;920;;central island bridge
 16709;16710;sea;14089;3804;933;3814;935;;misstana island bridge
-8537;3350;sea;14130;3626;347;3626;354;;nam chayechy islet bridge
+3350;8537;sea;14130;3626;347;3626;354;;nam chayechy islet bridge
 5482;10840;sea;13990;3575;416;3568;416;;nam kamenny islet bridge
-2478;6322;sea;13920;3528;433;3532;435;;nam vostochnaya islet bridge
+1559;8682;sea;13366;3514;473;3508;472;;nam maly reid islet bridge
+6145;11606;sea;14359;3534;397;3531;391;;nam southern islands big island bridge
+1559;9192;sea;13920;3539;446;3536;450;;nam southern islands fisher bridge
+4396;7784;sea;14145;3572;369;3569;363;;nam southern islands north bridge
+6322;11606;sea;13920;3540;426;3540;432;;nam southern islands west bridge
 6322;9192;sea;13920;3542;435;3547;437;;nam tikhaya islet bridge
-8682;1559;sea;13366;3514;473;3508;472;;nam maly reid islet bridge
-7784;4396;sea;14145;3572;369;3569;363;;nam southern islands north bridge
-11606;6322;sea;13920;3540;426;3540;432;;nam southern islands west bridge
-11606;6145;sea;14359;3534;397;3531;391;;nam southern islands big island bridge
-9192;1559;sea;13920;3539;446;3536;450;;nam southern islands fisher bridge
+2478;6322;sea;13920;3528;433;3532;435;;nam vostochnaya islet bridge
 2742;4004;sea;14075;3238;474;3241;471;;nam western islands bridge
 16351;16806;sea;15477;3745;933;3748;928;;northeastern island bridge
 16368;16433;sea;15477;3730;938;3739;937;;northern strait bridge

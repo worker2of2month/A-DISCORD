@@ -539,17 +539,17 @@ def check_ladder(
         "ladder upkeep must run in on_monthly_NAM without world scans",
     )
     check(
-        "NOT = { has_country_flag = NAM_veter_amnesty }"
+        "NOT = { has_country_flag = NAM_weber_amnesty }"
         in named_block(effects, "ADISCORD_nam_resource_war_start_mainland_rebellion")
-        and "NOT = { has_country_flag = NAM_veter_amnesty }"
+        and "NOT = { has_country_flag = NAM_weber_amnesty }"
         in named_block(event_block(events, "ADISCORD_nam_resource_war.2"), "trigger")
-        and "set_country_flag = NAM_veter_amnesty" in named_block(effects, "NAM_veter_amnesty")
-        and "recruit_character = NAM_Yaroslav_Veter" in named_block(effects, "NAM_veter_amnesty"),
-        "the amnesty must recruit Veter for NAM and prevent SLF for good",
+        and "set_country_flag = NAM_weber_amnesty" in named_block(effects, "NAM_weber_amnesty")
+        and "recruit_character = NAM_Yaroslav_Weber" in named_block(effects, "NAM_weber_amnesty"),
+        "the amnesty must recruit Weber for NAM and prevent SLF for good",
     )
     clamp = named_block(effects, "NAM_underground_clamp")
     check(
-        "min = 0" in clamp and "max = 100" in clamp and "has_country_flag = NAM_veter_amnesty" in clamp,
+        "min = 0" in clamp and "max = 100" in clamp and "has_country_flag = NAM_weber_amnesty" in clamp,
         "the underground clamp must hold 0-100 and keep an amnestied network at 0",
     )
     for ending, tag, spirit in (
@@ -887,7 +887,7 @@ def check_settlement(
     events: str,
     loc: str,
 ) -> None:
-    """Standoff at the deadline, Azhar treaty term, Veter refunds and route gates."""
+    """Standoff at the deadline, Azhar treaty term, Weber refunds and route gates."""
     belt = named_block(triggers, "NAM_rw_holds_border_belt")
     check(
         all(f"controls_state = {state_id}" in belt for state_id in BORDER_BELT_STATES),
@@ -1020,25 +1020,25 @@ def check_settlement(
         "the ultimatum must offer Azhar's paid delay once and only with the fuel in stock",
     )
 
-    refund = named_block(effects, "NAM_veter_talks_refund")
+    refund = named_block(effects, "NAM_weber_talks_refund")
     check(
         "NAM_add_treasury = yes" in refund
-        and "clear_variable = NAM_veter_talks_deposit" in refund
+        and "clear_variable = NAM_weber_talks_deposit" in refund
         and "add_political_power" not in refund,
         "broken-off talks must return only the treasury deposit",
     )
     check(
-        "custom_effect_tooltip = NAM_veter_talks_1_cancel_tt"
-        in named_block(named_block(decisions, "NAM_veter_talks_1"), "cancel_effect"),
+        "custom_effect_tooltip = NAM_weber_talks_1_cancel_tt"
+        in named_block(named_block(decisions, "NAM_weber_talks_1"), "cancel_effect"),
         "the first round must explain that its political power is not refunded",
     )
     for number, amount in ((2, 100), (3, 200)):
-        talks = named_block(decisions, f"NAM_veter_talks_{number}")
+        talks = named_block(decisions, f"NAM_weber_talks_{number}")
         check(
-            f"var = NAM_veter_talks_deposit value = {amount}" in named_block(talks, "complete_effect")
-            and "NAM_veter_talks_refund = yes" in named_block(talks, "cancel_effect")
-            and "clear_variable = NAM_veter_talks_deposit" in named_block(talks, "remove_effect"),
-            f"NAM_veter_talks_{number} must hold its {amount} treasury in escrow until it ends",
+            f"var = NAM_weber_talks_deposit value = {amount}" in named_block(talks, "complete_effect")
+            and "NAM_weber_talks_refund = yes" in named_block(talks, "cancel_effect")
+            and "clear_variable = NAM_weber_talks_deposit" in named_block(talks, "remove_effect"),
+            f"NAM_weber_talks_{number} must hold its {amount} treasury in escrow until it ends",
         )
 
     for decision_name in ("NAM_south_allied_fuel", "NAM_south_convoy_interdiction"):
@@ -1075,9 +1075,9 @@ def check_settlement(
         "ADISCORD_nam_resource_news.2.a_exile",
         "ADISCORD_nam_resource_war.70.d",
         "NAM_orders_summary_delivered",
-        "NAM_veter_talks_1_cancel_tt",
-        "NAM_veter_talks_2_cancel_tt",
-        "NAM_veter_talks_3_cancel_tt",
+        "NAM_weber_talks_1_cancel_tt",
+        "NAM_weber_talks_2_cancel_tt",
+        "NAM_weber_talks_3_cancel_tt",
     ):
         check(
             re.search(rf"(?m)^\s*{re.escape(key)}:", loc) is not None,
@@ -1145,9 +1145,17 @@ def main() -> int:
                 re.DOTALL,
             )
         )
-        # The three national armies reuse their campaign-start templates.
+        # NAM prepares fixed mobilisation templates before its baseline OOB.
         tag = Path(relative).stem.split("_", 1)[0]
-        if tag in {"NAM", "EFL", "AZH"}:
+        if tag == "NAM":
+            templates = named_block(
+                sources["common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"],
+                "NAM_order_ensure_templates",
+            )
+            defined_templates |= set(
+                re.findall(r'division_template\s*=\s*\{\s*name\s*=\s*"([^"]+)"', templates)
+            )
+        elif tag in {"EFL", "AZH"}:
             defined_templates |= set(
                 re.findall(
                     r'division_template\s*=\s*\{\s*name\s*=\s*"([^"]+)"',
@@ -2503,8 +2511,8 @@ def main() -> int:
     order_templates = named_block(effects, "NAM_order_ensure_templates")
     unlock_templates = named_block(effects, "NAM_order_unlock_templates")
     template_sources = (
-        ("Capital Guard", starting_templates, 78, 9, ("engineer", "artillery")),
-        ("Line Infantry Brigade", starting_templates, 3, 6, ("engineer",)),
+        ("Mobilisation Guard", order_templates, 78, 9, ("engineer", "artillery")),
+        ("Mobilisation Infantry Brigade", order_templates, 3, 6, ("engineer",)),
         ("Motor Column", order_templates, 5, 4, ("engineer", "artillery")),
         ("Coastal Battalion", order_templates, 6, 3, ("artillery",)),
     )
@@ -2533,12 +2541,35 @@ def main() -> int:
             and companies.count("x =") == len(support),
             f"{template} must retain the composition covered by its fixed order price",
         )
-        if owner == starting_templates:
+        if template in ("Mobilisation Guard", "Mobilisation Infantry Brigade"):
             check(
                 "force_allow_recruiting = yes" in definition
-                and f'name = "{template}"' not in order_templates,
-                f"{template} must remain recruitable and be reused without a mobilisation duplicate",
+                and f'division_template = "{template}"' in nam_war_oob,
+                f"{template} must remain recruitable and supply the fixed wartime baseline",
             )
+    for template in ("Capital Guard", "Line Infantry Brigade"):
+        definitions = [
+            block for block in typed_blocks(starting_templates, "division_template")
+            if f'name = "{template}"' in block
+        ]
+        definition = definitions[0] if len(definitions) == 1 else ""
+        check(
+            bool(definition)
+            and "is_locked = yes" not in definition
+            and "force_allow_recruiting = no" not in definition
+            and f'name = "{template}"' not in order_templates
+            and f'division_template = "{template}"' not in unlock_templates
+            and f'division_template = "{template}"' not in nam_war_oob,
+            f"ordinary {template} must stay editable and independent of mobilisation orders",
+        )
+    for role, template in (
+        ("guard", "Mobilisation Guard"),
+        ("infantry", "Mobilisation Infantry Brigade"),
+    ):
+        check(
+            f'\\"{template}\\"' in named_block(effects, f"NAM_create_order_{role}"),
+            f"paid {role} must use its fixed mobilisation template",
+        )
     check(
         "check_variable = { NAM_order_coastal_paid > 0 }" in order_templates
         and "check_variable = { NAM_order_motor_paid > 0 }" in order_templates
@@ -2630,7 +2661,7 @@ def main() -> int:
             f"obsolete island-union localisation remains: {obsolete}",
         )
     for key in (
-        "SLF_Yaroslav_Veter",
+        "SLF_Yaroslav_Weber",
         "ADISCORD_coastal_patrol_vessel",
         "ADISCORD_coastal_patrol_ship",
         "ADISCORD_coastal_patrol_ship_1",
@@ -2692,15 +2723,15 @@ def main() -> int:
         loc.count("§RDEBUG:§!") == 9,
         "all nine debug entry points need the red DEBUG prefix",
     )
-    for veter_key in (
+    for weber_key in (
         "ADISCORD_nam_resource_war.2.d",
         "ADISCORD_nam_resource_news.5.d",
         "ADISCORD_nam_resource_news.6.d",
     ):
-        value = re.search(rf'(?m)^\s*{re.escape(veter_key)}:\d*\s*"(.*)"\s*$', loc)
+        value = re.search(rf'(?m)^\s*{re.escape(weber_key)}:\d*\s*"(.*)"\s*$', loc)
         check(
             value is not None and "Ярослав Вебер" in value.group(1),
-            f"{veter_key} must name Yaroslav Weber",
+            f"{weber_key} must name Yaroslav Weber",
         )
 
     check_oil_monopoly(

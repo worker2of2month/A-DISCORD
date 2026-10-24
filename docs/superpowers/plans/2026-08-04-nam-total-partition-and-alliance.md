@@ -294,7 +294,7 @@ Replace the localisation-key tuple and debug-prefix check with:
 
 ```python
     for key in (
-        "SLF_Yaroslav_Veter",
+        "SLF_Yaroslav_Weber",
         "ADISCORD_coastal_patrol_vessel",
         "ADISCORD_coastal_patrol_ship",
         "ADISCORD_coastal_patrol_ship_1",

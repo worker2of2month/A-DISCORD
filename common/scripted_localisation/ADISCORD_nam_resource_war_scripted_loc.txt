@@ -605,7 +605,7 @@ defined_text = {
 defined_text = {
 	name = NAMGetUndergroundStatus
 	text = {
-		trigger = { has_country_flag = NAM_veter_amnesty }
+		trigger = { has_country_flag = NAM_weber_amnesty }
 		localization_key = NAM_underground_amnestied
 	}
 	text = {

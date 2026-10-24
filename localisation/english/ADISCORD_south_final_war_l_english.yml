@@ -7,7 +7,7 @@
  autonomy_NAM_oil_charter: "Oil Charter Member"
 
  ADISCORD_south_final_war_category: "War for the South"
- ADISCORD_south_final_war_category_desc: "Southern crisis: §Y[?global.ADISCORD_south_crisis|0]§! / 100.\nShahrabad's rival: [ADISCORDSouthNorthSide].\n\n[ADISCORDSouthStatus]"
+ ADISCORD_south_final_war_category_desc: "§YSOUTHERN CRISIS§!\nTension: §Y[?global.ADISCORD_south_crisis|0] / 100§! £world_tension_texticon\nShahrabad's rival: [ADISCORDSouthNorthSide].\n\n[ADISCORDSouthStatus]"
  ADISCORD_south_north_side_nam: "§YSvetlogorye§!"
  ADISCORD_south_north_side_efl: "§YEflor's Restitution Alliance§!"
  ADISCORD_south_north_side_azh: "§YAzhar§!"
@@ -16,8 +16,8 @@
  ADISCORD_south_north_side_efl_plain: "Eflor's Restitution Alliance"
  ADISCORD_south_north_side_azh_plain: "Azhar"
  ADISCORD_south_north_side_unknown_plain: "no one"
- ADISCORD_south_status_crisis: "Every 28-day Shahrabad furnace cycle adds §Y4§!, every limited war Shahrabad wins adds §Y15§!, and every neighbour subdued or brought into an alliance by a consolidation campaign adds §Y10§!. At §Y100§! Shahrabad starts the War for the South. Either claimant's final focus can start it earlier.\n\nNo one may stay out: every independent desert state will take a side."
- ADISCORD_south_status_war: "The War for the South is under way. A peace without a victor is impossible. The war ends with a claimant's capitulation or, after §Y900§! days, with a settlement by control of the capitals, the oil belt (Northern Deposits, Svetlogorsk District) and the furnace district (Khazar, Shahrabad District)."
+ ADISCORD_south_status_crisis: "§YCRISIS GROWTH§!\n- §R+4§! £world_tension_texticon per Shahrabad furnace cycle: §Y28§! £time_texticon days.\n- §R+15§! per limited war won by Shahrabad.\n- §R+10§! per neighbour subdued or brought into an alliance through consolidation campaigns.\n\n§YWAR OUTBREAK§!\nAt §R100§!, Shahrabad starts the War for the South. Either claimant's final focus can start it earlier.\nNo one may stay out: every independent desert state will take a side."
+ ADISCORD_south_status_war: "§YWAR FOR THE SOUTH§!\nA peace without a victor is impossible.\n\n§YSETTLEMENT CONDITIONS§!\n- A claimant capitulates.\n- After §Y900§! £time_texticon days, control of key districts decides the outcome.\n\n§YKEY DISTRICTS§!\n- The claimants' capitals.\n- Oil belt: Northern Deposits and Svetlogorsk District.\n- Furnace district: Khazar and Shahrabad District."
  ADISCORD_south_status_no_rival: "Shahrabad has no northern rival left. At the end of the next furnace cycle it will be recognised as suzerain of the south."
  ADISCORD_south_status_closed: "The crisis opens once Svetlogorye's resource war has an outcome."
 

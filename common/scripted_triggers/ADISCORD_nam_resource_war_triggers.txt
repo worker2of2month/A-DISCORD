@@ -613,10 +613,10 @@ NAM_rival_can_rally_districts = {
 
 # ----- Underground -----
 NAM_underground_open = {
-	NOT = { has_country_flag = NAM_veter_amnesty }
+	NOT = { has_country_flag = NAM_weber_amnesty }
 }
 
-# COUNTRY NAM. Veter's network grows and strikes on the mainland until the
+# COUNTRY NAM. Weber's network grows and strikes on the mainland until the
 # resource war opens: hostilities turn it into the uprising or end it.
 NAM_underground_active = {
 	NAM_underground_open = yes
@@ -652,7 +652,7 @@ NAM_sweep_slot_free = {
 }
 
 # COUNTRY NAM. Talks need a living network and no open uprising.
-NAM_veter_talks_possible = {
+NAM_weber_talks_possible = {
 	NAM_country_operable = yes
 	NAM_underground_open = yes
 	NOT = { country_exists = SLF }
@@ -790,16 +790,15 @@ NAM_bw_refinery_startable = {
 NAM_bw_line_offered = {
 	is_owned_by = NAM
 	NOT = { has_state_flag = NAM_line_prepared }
-	any_neighbor_state = { NOT = { is_owned_by = NAM } }
 	NAM = {
-		NAM_line_programme_open = yes
 		has_completed_focus = NAM_line_survey
+		NAM_line_programme_open = yes
 	}
+	any_neighbor_state = { NOT = { is_owned_by = NAM } }
 }
 
 # STATE node. NAM_prepare_line may start here now.
 NAM_bw_line_startable = {
-	NAM_bw_line_offered = yes
 	is_controlled_by = NAM
 	NOT = { has_state_flag = NAM_line_in_progress }
 	NAM = {
@@ -807,6 +806,7 @@ NAM_bw_line_startable = {
 		NAM_line_slot_free = yes
 		NAM_bw_can_pay_line = yes
 	}
+	NAM_bw_line_offered = yes
 }
 
 # ----- Island exile: piracy and the revenge landing -----

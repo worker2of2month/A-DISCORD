@@ -1,6 +1,6 @@
 capital = 688
 
-recruit_character = SLF_Yaroslav_Veter
+recruit_character = SLF_Yaroslav_Weber
 
 set_politics = {
 	ruling_party = humanism

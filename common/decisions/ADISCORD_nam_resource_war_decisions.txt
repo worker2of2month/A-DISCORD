@@ -1,5 +1,5 @@
 # Colony phase: fuel for the metropole, the trade concession and the
-# gendarmerie's sweeps against Veter's network. The category closes at the
+# gendarmerie's sweeps against Weber's network. The category closes at the
 # Vorkerland collapse; running work settles through its cancel trigger.
 NAM_colony = {
 	NAM_wrk_fuel_shipment = {
@@ -136,7 +136,7 @@ NAM_colony = {
 		}
 	}
 
-	# The gendarmerie combs one district for Veter's cells. One sweep at a
+	# The gendarmerie combs one district for Weber's cells. One sweep at a
 	# time; a district can be swept again after 120 days.
 	NAM_counterinsurgency_sweep = {
 		icon = generic_operation
@@ -3324,22 +3324,22 @@ ADISCORD_south_final_war_category = {
 	}
 }
 
-# Yaroslav Veter's underground: the districts talk, the vertical hunts.
+# Yaroslav Weber's underground: the districts talk, the vertical hunts.
 NAM_underground = {
 	# Three rounds of talks end in the amnesty. Each round must finish while
 	# the network still exists and no uprising is open.
-	NAM_veter_talks_1 = {
+	NAM_weber_talks_1 = {
 		icon = generic_political_discourse
 		allowed = { tag = NAM }
 		visible = {
-			has_completed_focus = NAM_veter_channel
+			has_completed_focus = NAM_weber_channel
 			NAM_underground_open = yes
-			NOT = { has_country_flag = NAM_veter_talks_1_done }
+			NOT = { has_country_flag = NAM_weber_talks_1_done }
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = NAM_veter_talks_possible_tt
-				NAM_veter_talks_possible = yes
+				tooltip = NAM_weber_talks_possible_tt
+				NAM_weber_talks_possible = yes
 			}
 		}
 		cost = 25
@@ -3347,18 +3347,18 @@ NAM_underground = {
 		days_remove = 30
 		days_re_enable = 30
 		complete_effect = {
-			custom_effect_tooltip = NAM_veter_talks_started_tt
+			custom_effect_tooltip = NAM_weber_talks_started_tt
 		}
 		cancel_trigger = {
-			NOT = { NAM_veter_talks_possible = yes }
+			NOT = { NAM_weber_talks_possible = yes }
 		}
 		cancel_effect = {
-			custom_effect_tooltip = NAM_veter_talks_1_cancel_tt
+			custom_effect_tooltip = NAM_weber_talks_1_cancel_tt
 		}
 		remove_effect = {
-			custom_effect_tooltip = NAM_veter_talks_1_tt
+			custom_effect_tooltip = NAM_weber_talks_1_tt
 			hidden_effect = {
-				set_country_flag = NAM_veter_talks_1_done
+				set_country_flag = NAM_weber_talks_1_done
 				add_to_variable = { var = NAM_underground value = -10 }
 				NAM_underground_clamp = yes
 				add_to_variable = { var = NAM_grp_dist_support value = 3 }
@@ -3370,22 +3370,22 @@ NAM_underground = {
 		}
 	}
 
-	NAM_veter_talks_2 = {
+	NAM_weber_talks_2 = {
 		icon = generic_political_discourse
 		allowed = { tag = NAM }
 		visible = {
-			has_country_flag = NAM_veter_talks_1_done
+			has_country_flag = NAM_weber_talks_1_done
 			NAM_underground_open = yes
-			NOT = { has_country_flag = NAM_veter_talks_2_done }
+			NOT = { has_country_flag = NAM_weber_talks_2_done }
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = NAM_veter_talks_possible_tt
-				NAM_veter_talks_possible = yes
+				tooltip = NAM_weber_talks_possible_tt
+				NAM_weber_talks_possible = yes
 			}
 		}
 		cost = 0
-		custom_cost_text = NAM_cost_veter_talks_2
+		custom_cost_text = NAM_cost_weber_talks_2
 		custom_cost_trigger = {
 			NOT = { has_political_power < 50 }
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
@@ -3402,26 +3402,26 @@ NAM_underground = {
 					}
 				}
 				add_political_power = -50
-				custom_effect_tooltip = NAM_veter_talks_2_started_tt
+				custom_effect_tooltip = NAM_weber_talks_2_started_tt
 				hidden_effect = {
 					set_temp_variable = { var = NAM_treasury_amount value = 100 }
 					NAM_spend_treasury = yes
-					set_variable = { var = NAM_veter_talks_deposit value = 100 }
+					set_variable = { var = NAM_weber_talks_deposit value = 100 }
 				}
 			}
 		}
 		cancel_trigger = {
-			NOT = { NAM_veter_talks_possible = yes }
+			NOT = { NAM_weber_talks_possible = yes }
 		}
 		cancel_effect = {
-			custom_effect_tooltip = NAM_veter_talks_2_cancel_tt
-			hidden_effect = { NAM_veter_talks_refund = yes }
+			custom_effect_tooltip = NAM_weber_talks_2_cancel_tt
+			hidden_effect = { NAM_weber_talks_refund = yes }
 		}
 		remove_effect = {
-			custom_effect_tooltip = NAM_veter_talks_2_tt
+			custom_effect_tooltip = NAM_weber_talks_2_tt
 			hidden_effect = {
-				clear_variable = NAM_veter_talks_deposit
-				set_country_flag = NAM_veter_talks_2_done
+				clear_variable = NAM_weber_talks_deposit
+				set_country_flag = NAM_weber_talks_2_done
 				add_to_variable = { var = NAM_underground value = -10 }
 				NAM_underground_clamp = yes
 				add_to_variable = { var = NAM_grp_dist_support value = 5 }
@@ -3434,25 +3434,25 @@ NAM_underground = {
 		}
 	}
 
-	NAM_veter_talks_3 = {
+	NAM_weber_talks_3 = {
 		icon = generic_political_discourse
 		allowed = { tag = NAM }
 		visible = {
-			has_country_flag = NAM_veter_talks_2_done
+			has_country_flag = NAM_weber_talks_2_done
 			NAM_underground_open = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = NAM_veter_talks_possible_tt
-				NAM_veter_talks_possible = yes
+				tooltip = NAM_weber_talks_possible_tt
+				NAM_weber_talks_possible = yes
 			}
 			custom_trigger_tooltip = {
-				tooltip = NAM_veter_amnesty_backing_tt
+				tooltip = NAM_weber_amnesty_backing_tt
 				check_variable = { var = NAM_grp_dist_support value = 50 compare = greater_than_or_equals }
 			}
 		}
 		cost = 0
-		custom_cost_text = NAM_cost_veter_talks_3
+		custom_cost_text = NAM_cost_weber_talks_3
 		custom_cost_trigger = {
 			NOT = { has_political_power < 75 }
 			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
@@ -3469,26 +3469,26 @@ NAM_underground = {
 					}
 				}
 				add_political_power = -75
-				custom_effect_tooltip = NAM_veter_talks_3_started_tt
+				custom_effect_tooltip = NAM_weber_talks_3_started_tt
 				hidden_effect = {
 					set_temp_variable = { var = NAM_treasury_amount value = 200 }
 					NAM_spend_treasury = yes
-					set_variable = { var = NAM_veter_talks_deposit value = 200 }
+					set_variable = { var = NAM_weber_talks_deposit value = 200 }
 				}
 			}
 		}
 		cancel_trigger = {
-			NOT = { NAM_veter_talks_possible = yes }
+			NOT = { NAM_weber_talks_possible = yes }
 		}
 		cancel_effect = {
-			custom_effect_tooltip = NAM_veter_talks_3_cancel_tt
-			hidden_effect = { NAM_veter_talks_refund = yes }
+			custom_effect_tooltip = NAM_weber_talks_3_cancel_tt
+			hidden_effect = { NAM_weber_talks_refund = yes }
 		}
 		remove_effect = {
-			custom_effect_tooltip = NAM_veter_amnesty_tt
+			custom_effect_tooltip = NAM_weber_amnesty_tt
 			hidden_effect = {
-				clear_variable = NAM_veter_talks_deposit
-				NAM_veter_amnesty = yes
+				clear_variable = NAM_weber_talks_deposit
+				NAM_weber_amnesty = yes
 			}
 		}
 		ai_will_do = {

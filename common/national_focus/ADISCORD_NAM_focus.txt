@@ -42,7 +42,7 @@ focus_tree = {
 	# ----- Incident office -----
 
 	# ----- Underground of the oil belt -----
-	# The districts negotiate with Veter's network; the vertical hunts its caches.
+	# The districts negotiate with Weber's network; the vertical hunts its caches.
 
 	# ----- Oil economy -----
 	# The export and refining courses open different field projects; contracts
@@ -1713,7 +1713,7 @@ shared_focus = {
 	}
 
 shared_focus = {
-		id = NAM_veter_channel
+		id = NAM_weber_channel
 		icon = GFX_focus_generic_treaty
 		x = 29
 		y = 2
@@ -1728,13 +1728,13 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			unlock_decision_tooltip = NAM_veter_talks_1
-			custom_effect_tooltip = NAM_veter_channel_tt
+			unlock_decision_tooltip = NAM_weber_talks_1
+			custom_effect_tooltip = NAM_weber_channel_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_underground value = -5 }
 				NAM_underground_clamp = yes
 			}
-			custom_effect_tooltip = NAM_grp_veter_channel_tt
+			custom_effect_tooltip = NAM_grp_weber_channel_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_grp_dist_support value = 4 }
 				add_to_variable = { var = NAM_grp_garr_support value = -3 }
@@ -1754,7 +1754,7 @@ shared_focus = {
 		cost = 4
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_underground_reports }
-		mutually_exclusive = { focus = NAM_veter_channel }
+		mutually_exclusive = { focus = NAM_weber_channel }
 		available = {
 			has_capitulated = no
 			has_completed_focus = NAM_vertical
@@ -1783,7 +1783,7 @@ shared_focus = {
 		y = 3
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_veter_channel }
+		prerequisite = { focus = NAM_weber_channel }
 		available = {
 			has_capitulated = no
 		}

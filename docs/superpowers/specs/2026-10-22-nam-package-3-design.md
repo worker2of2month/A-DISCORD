@@ -18,7 +18,7 @@ oil must matter to other countries.
 - 34 of 70 focuses feed one aggregate; 30 of 37 decisions are instant currency
   converters; there are no targeted decisions.
 - The five pillars move PP by about 1% and monthly drift erases every shift.
-- No characters beyond Egor Rom; Yaroslav Veter is never named in war text;
+- No characters beyond Egor Rom; Yaroslav Weber is never named in war text;
   endings change neither leader, ideology nor name.
 - Oil is sold into the void; the islands 225-231 have one focus.
 
@@ -120,10 +120,11 @@ Owner: core phase 1.
   Each order reserves its price in escrow variables, can be cancelled with a
   refund before the war, and is delivered by `NAM_deliver_mobilisation_orders`
   at hostilities: prepared formations claim manpower and equipment first.
-  Maximum six paid orders. Guard and infantry reuse `Capital Guard` and
-  `Line Infantry Brigade` from `NAM.txt`, locked from campaign start with
-  recruiting allowed. `NAM_order_ensure_templates` creates only the distinct
-  coastal and motorised templates when their orders have been paid. Settlement unlocks all
+  Maximum six paid orders. `Capital Guard` and `Line Infantry Brigade` in
+  `NAM.txt` remain editable. `NAM_order_ensure_templates` creates separate
+  locked `Mobilisation Guard` and `Mobilisation Infantry Brigade` templates
+  for orders and wartime baseline reinforcements, with recruiting allowed.
+  Coastal and motorised templates are created when their orders have been paid. Settlement unlocks all
   four roles. The motorised division (`Motor Column`: four
   `ADISCORD_mechanized_infantry`, engineers, artillery; 25 PP, 250 treasury,
   4600 manpower, 3000 fuel) needs `ADISCORD_tech_armored_carrier_program`,
@@ -152,7 +153,7 @@ Owner: core phase 1.
   weakest-support rival demands the leadership (M4 coup path).
 - Underground hook: at hostilities the SLF uprising is decided by
   `NAM_underground` (M4) instead of the 50/50 roll: >= 60 always, 30-59 50%,
-  < 30 never; an effective compact or the Veter amnesty sets it to 0.
+  < 30 never; an effective compact or the Weber amnesty sets it to 0.
 - Settlement by oil score at timeout (event `.50`, 420 days after
   hostilities): sum of the oil of the fields NAM controls among 67 (80),
   688 (12), 689 (36), 690 (24), 719 (12).
@@ -285,12 +286,12 @@ Owner: core phase 3.
 - Underground: `NAM_underground` 0..100, 25 from the fresh-campaign startup
   (M9); monthly base +3, +2 while district support < 40, +1 more below 25,
   +2 while the balance is vertical-dominant, -1 at district support >= 60,
-  -3 with an active compact. Districts route: talks chain `NAM_veter_talks_1..3` ending in
-  amnesty (underground 0, `NAM_Yaroslav_Veter` joins NAM as a general; SLF is
+  -3 with an active compact. Districts route: talks chain `NAM_weber_talks_1..3` ending in
+  amnesty (underground 0, `NAM_Yaroslav_Weber` joins NAM as a general; SLF is
   never created). Talks broken off by an uprising return the treasury deposit
-  of rounds 2 and 3 (100 and 200, escrow `NAM_veter_talks_deposit`); political
+  of rounds 2 and 3 (100 and 200, escrow `NAM_weber_talks_deposit`); political
   power stays spent, as with released mobilisation orders. Vertical route: `NAM_hunt_caches` (state-targeted, -10
-  underground, -5 district support). Veter is named in events `.2`, news `.5`
+  underground, -5 district support). Weber is named in events `.2`, news `.5`
   and `.6`.
 - Endings: the four ending focuses each set leader, ideology, cosmetic tag and
   a unique spirit: iron ladder (Rom or the coup leader, etatism, `NAM_iron_ladder`),
@@ -451,7 +452,7 @@ refresh effect inside `hidden_effect`, with a visible tooltip of the delta.
 | `NAM_rw_tribute` country flag with days | core 1 | Tribute deliveries to EFL and AZH; core 2 counts it as two committed units |
 | `NAM_oil_bonus_units` + `NAM_oil_refresh = yes` | core 2 | Extra throughput units |
 | `NAM_project_slots` (base 1, max 2) | core 2 | Parallel field projects |
-| `NAM_underground` + `NAM_underground_clamp = yes` | core 3 | Veter underground 0..100 |
+| `NAM_underground` + `NAM_underground_clamp = yes` | core 3 | Weber underground 0..100 |
 | `add_power_balance_value = { id = NAM_ladder_bop value = <x> }` | core 3 | Ladder balance, negative toward vertical |
 | `NAM_apply_ending_iron`, `NAM_apply_ending_service`, `NAM_apply_ending_federation`, `NAM_apply_ending_oil_union` | core 3 | Ending effects called by the ending focuses |
 | `NAM_wrk_trade_level` + `NAM_wrk_trade_refresh = yes` | core 4 | Trade houses in the metropole 0..3 |
@@ -471,7 +472,7 @@ core 2 - `NAM_oil_contract_offer`, `NAM_fuel_embargo`, `NAM_project_repair_wells
 `NAM_island_steel_levy`, `NAM_island_convoy_service`, `NAM_island_concession_231`,
 `NAM_renegotiate_val_concession`, `NAM_south_allied_fuel`, `NAM_south_convoy_interdiction`;
 core 3 - `NAM_favour_nam`, `NAM_favour_oil`, `NAM_favour_dist`, `NAM_favour_garr`,
-`NAM_favour_trade`, `NAM_veter_talks_1`, `NAM_hunt_caches`.
+`NAM_favour_trade`, `NAM_weber_talks_1`, `NAM_hunt_caches`.
 A focus that needs anything else lists the request in its author's report; the
 lead assigns it to the next core phase instead of inventing a call.
 

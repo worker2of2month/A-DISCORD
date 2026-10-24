@@ -7,7 +7,7 @@ state={
 		chromium = 5
 	}
 	provinces={
-		176 2038 2231 2299 7618 7639 8358
+		176 2038 2231 2299 7618 7639 8358 16873 16874 16878 16881 16884
 	}
 	manpower = 300000
 	buildings_max_level_factor = 1.000
@@ -16,6 +16,7 @@ state={
 	history = {
 		owner = NAM
 		add_core_of = NAM
+		victory_points = { 16884 1 }
 		buildings = {
 			infrastructure = 3
 		}

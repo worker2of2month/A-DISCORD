@@ -711,6 +711,28 @@ guiTypes = {
 			scrollbarType = standardtext_slider
 		}
 		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_path_2"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_path_2"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_path_2_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_path_2_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
 			name = "ADISCORD_startup_text_STP_startup_region"
 			position = { x = 34 y = 112 }
 			font = "hoi_18mbs"

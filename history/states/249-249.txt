@@ -14,7 +14,7 @@ state = {
 	}
 	provinces = {
 		488 1178 2286 3706 4937 5967 8629 8812 11240 16725 16751 16752
-		16753
+		16753 16876
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 1.5

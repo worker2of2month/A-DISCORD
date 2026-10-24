@@ -293,14 +293,14 @@ def audit_buildings(root: Path = ROOT) -> tuple[list[str], list[BuildingMismatch
 def mountain_building_heights(
     root: Path, lines: list[str]
 ) -> tuple[list[str], list[int]]:
-    from tools.builders.build_adiscord_coastal_geography import RELIEF_PROVINCES
+    from tools.builders.build_adiscord_coastal_geography import RELIEF_SURFACE_PROVINCES
     from tools.builders.build_adiscord_ivn_geography import (
         RELIEF_STATE_IDS,
         relief_province_ids,
     )
 
     # Both generated reliefs rewrite heights, so their models follow the surface.
-    surface_provinces = RELIEF_PROVINCES | relief_province_ids(RELIEF_STATE_IDS)
+    surface_provinces = RELIEF_SURFACE_PROVINCES | relief_province_ids(RELIEF_STATE_IDS)
     province_by_color = load_province_by_color(root)
     result = list(lines)
     changed = []
@@ -575,9 +575,11 @@ def required_spawn_issues(lines: list[str], state_ids: set[int]) -> list[str]:
 
 
 def coastal_port_plan(root: Path = ROOT) -> tuple[list[str], list[int]]:
-    """Give coastal split provinces the native port anchors required by the map.
+    """Give every coastal land province the native port anchor required by the map.
 
-    These anchors permit navigation and construction; they do not grant a
+    Province splits move existing anchors into one child, so the check covers
+    all coastal provinces rather than only the explicit additions. These
+    anchors permit navigation and construction; they do not grant a
     built naval base or alter the state's starting economy.
     """
     lines = (root / "map/buildings.txt").read_text(encoding="utf-8-sig").splitlines()
@@ -609,7 +611,7 @@ def coastal_port_plan(root: Path = ROOT) -> tuple[list[str], list[int]]:
                     - _pixel_coordinate(fields[4], provinces.height)
                 )
                 present.add(colors.get(pixels[x, y]))
-        missing = sorted((COASTAL_ADDITION_PROVINCES & coastal_ids) - present)
+        missing = sorted(coastal_ids - present)
         if not missing:
             return lines, []
         positions = load_unitstack_positions(root)

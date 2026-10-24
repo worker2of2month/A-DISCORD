@@ -150,10 +150,10 @@ characters = {
 		}
 	}
 
-	# Yaroslav Veter on Svetlogorye's side after the amnesty. The uprising keeps
+	# Yaroslav Weber on Svetlogorye's side after the amnesty. The uprising keeps
 	# its own SLF character; this one is recruited only by the amnesty.
-	NAM_Yaroslav_Veter = {
-		name = NAM_Yaroslav_Veter
+	NAM_Yaroslav_Weber = {
+		name = NAM_Yaroslav_Weber
 		portraits = {
 			army = {
 				large = GFX_Portrait_Forul_Generic_9

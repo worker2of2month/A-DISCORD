@@ -1,0 +1,44 @@
+{
+  "files": {
+    "ADISCORD_AZH_black_harbor_palace.mesh": "ad5597b3b82fed14a927698fb1b6b806d63cb2ac385d7dc9df951f395612a611",
+    "ADISCORD_AZH_black_harbor_palace_diffuse.dds": "0dd818c777ff29347f7d28efdce70e10113bd9a911c9baafcb4262cd8e585bd8",
+    "ADISCORD_AZH_black_harbor_palace_normal.dds": "350457866edd0c51aca35542c67d15f5224db3160b4696f6dc9df01befef86bc",
+    "ADISCORD_AZH_black_harbor_palace_specular.dds": "960ed11ba0125ba52c0e26d80b2267ac61420418cde7daaee2d3ef8af61da671"
+  },
+  "vertices": 14768,
+  "triangles": 6482,
+  "materials": 1,
+  "bounds_blender_xyz": [
+    [
+      -21.7,
+      21.7
+    ],
+    [
+      -18.8,
+      15.6
+    ],
+    [
+      -1.61427,
+      23.0
+    ]
+  ],
+  "native_reimport": true,
+  "placement": {
+    "province": 493,
+    "position": [
+      3876.0,
+      10.45,
+      484.2
+    ],
+    "scale": 0.12
+  },
+  "hoi4_runtime_verified": false,
+  "source_blend_sha256": "93d14e7bfbc1a6993244507e05ad3aa0a0b550b4e16437aaece8e021ad93fd09",
+  "input_sha256": {
+    "tools/builders/build_adiscord_azhar_palace.py": "7127785ce1fdfd8ea91027c093d8948346451d91b23aab3551819c1af88291f3",
+    "tools/assets/source/build_shl_palace.py": "e0e0aa58c2bb43a8a1eb36a4ccb4ce4d4b8966e763fa015190f1540a64c65d3a",
+    "map/heightmap.bmp": "1bbe97fd8c2ea40b6351eb85d24b4e6f782d97663d8a1ade4bedf5ca8054d1d9",
+    "map/provinces.bmp": "17f6141550a9322be17426bd999b83980b51ed0ab30e4d798cb4e14e3b578bb8",
+    "map/definition.csv": "114f105bdaa0e461f88e57bfc065a010ab67a1c97db14bdbe18bc7cfca883e17"
+  }
+}

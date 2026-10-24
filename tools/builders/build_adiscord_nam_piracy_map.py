@@ -931,14 +931,14 @@ def pip_image() -> np.ndarray:
 def ui_images() -> dict[str, np.ndarray]:
     return {
         "marker.png": marker_image(),
-        "gauge_notoriety.png": gauge_image(NOTORIETY_TICKS),
-        "gauge_revenge.png": gauge_image(REVENGE_TICKS),
+        "gauge_notoriety.png": gauge_strip_image(NOTORIETY_TICKS, notoriety_frame),
+        "gauge_revenge.png": gauge_strip_image(REVENGE_TICKS, revenge_frame),
         "segment.png": segment_image(),
         "pip.png": pip_image(),
     }
 
 
-FRAME_COUNTS = {"segment": 5, "pip": 4}
+FRAME_COUNTS = {"segment": 5, "pip": 4, "gauge_notoriety": SEGMENTS + 1, "gauge_revenge": SEGMENTS + 1}
 
 
 # ----- GUI and GFX bindings -----
@@ -962,6 +962,20 @@ def notoriety_frame(segment: int) -> int:
 
 def revenge_frame(segment: int) -> int:
     return 5 if segment * 5 > 70 else 4
+
+
+def gauge_strip_image(ticks: tuple[int, ...], colour_for_segment) -> np.ndarray:
+    """Twenty-one fills, preserving the track and opaque cell pixels and offsets."""
+    track = gauge_image(ticks)
+    cells = segment_image()
+    frames = [track.copy()]
+    for segment in range(1, SEGMENTS + 1):
+        frame = frames[-1].copy()
+        colour = colour_for_segment(segment) - 1
+        x = 2 + (segment - 1) * 10
+        frame[4:14, x:x + 9] = cells[:, colour * 9:(colour + 1) * 9]
+        frames.append(frame)
+    return np.concatenate(frames, axis=1)
 
 
 def gui_block(geometry: dict) -> str:
@@ -989,11 +1003,8 @@ def gui_block(geometry: dict) -> str:
                       f"\t\t\tposition = {{ x = {left} y = {top} }}",
                       '\t\t\tquadTextureSprite = "GFX_NAM_pw_marker"', "\t\t\tclicksound = click_default",
                       f'\t\t\tpdx_tooltip = "NAM_pw_route_{lane}_tt"', "\t\t}", ""))
-    for gauge, row, colour in (("notoriety", NOTORIETY_ROW, notoriety_frame), ("revenge", REVENGE_ROW, revenge_frame)):
-        lines.extend(icon(f"NAM_pw_{gauge}_track", BAR_X, row, f"GFX_NAM_pw_gauge_{gauge}"))
-        for segment in range(1, SEGMENTS + 1):
-            lines.extend(icon(f"NAM_pw_{gauge}_{segment}", BAR_X + 2 + (segment - 1) * 10, row + 4,
-                              "GFX_NAM_pw_segment", colour(segment)))
+    for gauge, row in (("notoriety", NOTORIETY_ROW), ("revenge", REVENGE_ROW)):
+        lines.extend(icon(f"NAM_pw_{gauge}_track", BAR_X, row, f"GFX_NAM_pw_gauge_{gauge}", 1))
     for group, row, states in (("fleet", FLEET_ROW, (("sea", 1), ("free", 3), ("locked", 4))),
                                ("marine", MARINE_ROW, (("ready", 2), ("open", 3), ("locked", 4)))):
         for slot, x in enumerate(PIP_X, 1):

@@ -1,26 +1,26 @@
 # Baseline of the resource war: one guard on the Northern Deposits and two
 # infantry divisions on the eastern approaches. Everything else comes from
-# paid orders. Units only: guard and infantry reuse the starting templates
-# from NAM.txt, whose composition stays locked until order settlement.
+# paid orders. Units only: fixed mobilisation templates are created before
+# this OOB loads and stay locked until order settlement.
 units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 20 }
 		location = 4912
-		division_template = "Capital Guard"
+		division_template = "Mobilisation Guard"
 		start_experience_factor = 0.45
 		start_equipment_factor = 0.90
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 22 }
 		location = 8058
-		division_template = "Line Infantry Brigade"
+		division_template = "Mobilisation Infantry Brigade"
 		start_experience_factor = 0.35
 		start_equipment_factor = 0.95
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 23 }
 		location = 2299
-		division_template = "Line Infantry Brigade"
+		division_template = "Mobilisation Infantry Brigade"
 		start_experience_factor = 0.35
 		start_equipment_factor = 0.95
 	}

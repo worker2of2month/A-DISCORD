@@ -1,6 +1,6 @@
 characters = {
-	SLF_Yaroslav_Veter = {
-		name = SLF_Yaroslav_Veter
+	SLF_Yaroslav_Weber = {
+		name = SLF_Yaroslav_Weber
 		portraits = {
 			civilian = {
 				large = GFX_Portrait_Forul_Generic_9

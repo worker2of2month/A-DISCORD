@@ -42,13 +42,13 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_NAM_pw_gauge_notoriety"
 		texturefile = "gfx/interface/NAM_piracy/gauge_notoriety.png"
-		noOfFrames = 1
+		noOfFrames = 21
 	}
 
 	spriteType = {
 		name = "GFX_NAM_pw_gauge_revenge"
 		texturefile = "gfx/interface/NAM_piracy/gauge_revenge.png"
-		noOfFrames = 1
+		noOfFrames = 21
 	}
 
 	spriteType = {

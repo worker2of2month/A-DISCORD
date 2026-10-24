@@ -1,6 +1,7 @@
 """Parsed NAM campaign scenarios; native loading and UI need a fresh game."""
 
 from dataclasses import replace
+from decimal import Decimal
 from collections import Counter
 from contextlib import redirect_stdout
 from io import StringIO
@@ -231,7 +232,7 @@ class NamCampaignTests(unittest.TestCase):
                  ("court_azhar", "fuel_leverage"), ("island_levy_office", "island_concession"))
         # Course-gated alternatives follow the ladder course chosen in the first pair.
         course = {
-            "vertical": {"NAM_district_assemblies", "NAM_veter_channel", "NAM_district_volunteers"},
+            "vertical": {"NAM_district_assemblies", "NAM_weber_channel", "NAM_district_volunteers"},
             "districts": {"NAM_namestnik_circuits", "NAM_cache_hunters", "NAM_martial_seals"},
         }
         finals = ("NAM_seal_courts", "NAM_quiet_wells", "NAM_civilian_combine", "NAM_quartermaster",
@@ -266,7 +267,7 @@ class NamCampaignTests(unittest.TestCase):
         # One full pre-war route (vertical, refining, field guards) fits before the backstop war.
         blocked = {"NAM_districts", "NAM_export_quays", "NAM_mobile_columns", "NAM_supports_export_houses",
                    "NAM_fuel_leverage", "NAM_island_concession", "NAM_hear_the_harbour", "NAM_hear_the_registrar",
-                   "NAM_concealed_reserve", "NAM_basin_is_ours", "NAM_district_assemblies", "NAM_veter_channel"}
+                   "NAM_concealed_reserve", "NAM_basin_is_ours", "NAM_district_assemblies", "NAM_weber_channel"}
         war = {name for name, focus in self.focuses.items() if "allow_branch" in [e.key for e in focus]}
         route = reachable(self.focuses, blocked | war)
         self.assertLessEqual(sum(int(scalar(self.focuses[name], "cost")) * 7 for name in route), 1000)
@@ -810,6 +811,30 @@ class NamValidatorTests(unittest.TestCase):
         result, issues = self.validate()
         self.assertEqual((result, issues), (0, []))
 
+    def test_orders_cannot_reuse_or_lock_ordinary_templates(self):
+        units_path = "history/units/NAM.txt"
+        units = read(units_path)
+        effects_path = f"common/scripted_effects/{BASE}_effects.txt"
+        effects = read(effects_path)
+        for role, ordinary, mobilisation in (
+            ("guard", "Capital Guard", "Mobilisation Guard"),
+            ("infantry", "Line Infantry Brigade", "Mobilisation Infantry Brigade"),
+        ):
+            with self.subTest(role=role):
+                locked = units.replace(
+                    f'name = "{ordinary}"',
+                    f'name = "{ordinary}"\n\tis_locked = yes',
+                )
+                self.assert_rejected(
+                    f"ordinary {ordinary} must stay editable",
+                    sources={units_path: locked},
+                )
+                rerouted = effects.replace(f'\\"{mobilisation}\\"', f'\\"{ordinary}\\"')
+                self.assert_rejected(
+                    f"paid {role} must use its fixed mobilisation template",
+                    sources={effects_path: rerouted},
+                )
+
     def test_wrong_stockpiles_still_fail(self):
         path = f"common/scripted_effects/{BASE}_effects.txt"
         source = read(path)
@@ -994,6 +1019,155 @@ class NamBasinGuiTests(unittest.TestCase):
                 self.assertIn(f"£NAM_support_{group}_texticon", values["NAM_grp_independence_day_tt"])
 
 
+class NamPanelOptimizationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        root = block(parsed("common/scripted_guis/ADISCORD_NAM_scripted_gui.txt"), "scripted_gui")
+        cls.basin = block(root, "ADISCORD_NAM_basin_panel")
+        cls.piracy = block(root, "ADISCORD_NAM_piracy_panel")
+
+    def test_hidden_card_buttons_skip_availability_and_selected_cards_keep_it(self):
+        class ReadFacts(dict):
+            def get(self, key, default=None):
+                if key[1].endswith("_startable"):
+                    self.reads.append(key)
+                return super().get(key, default)
+
+        states = (67, 688, 689, 690, 719, 700)
+        triggers = block(self.basin, "triggers")
+        for selection, available in product((None, *states, 0), (False, True)):
+            for state in states:
+                for operation in (("line",) if state == 700 else ("repair", "refinery", "line")):
+                    facts = ReadFacts({
+                        ("NAM", "has_variable", "NAM_bw_selected_state"): selection is not None,
+                        ("NAM", "variable", "NAM_bw_selected_state"): selection or 0,
+                        (str(state), f"NAM_bw_{operation}_startable", "yes"): available,
+                    })
+                    facts.reads = []
+                    selected = state == (67 if selection is None else selection)
+                    with self.subTest(selection=selection, state=state, operation=operation, available=available):
+                        result = matches_conditions(block(triggers, f"NAM_bw_{state}_{operation}_click_enabled"), facts, "NAM")
+                        self.assertEqual(result, selected and available)
+                        self.assertEqual(len(facts.reads), int(selected))
+
+    def test_line_offer_preserves_conditions_and_skips_neighbours_before_unlock(self):
+        source = parsed(f"common/scripted_triggers/{BASE}_triggers.txt")
+        offered = block(source, "NAM_bw_line_offered")
+        neighbours = block(offered, "any_neighbor_state")
+        self.assertEqual(scalar(block(neighbours, "NOT"), "is_owned_by"), "NAM")
+        self.assertEqual(offered[-1].key, "any_neighbor_state")
+        # Supply the result of the native neighbour predicate independently.
+        fixture = [replace(e, value="yes") if e.key == "any_neighbor_state" else e for e in offered]
+        for owned, prepared, focus, programme, foreign_neighbour in product((False, True), repeat=5):
+            facts = {
+                ("67", "is_owned_by", "NAM"): owned,
+                ("67", "has_state_flag", "NAM_line_prepared"): prepared,
+                ("NAM", "has_completed_focus", "NAM_line_survey"): focus,
+                ("NAM", "NAM_line_programme_open", "yes"): programme,
+                ("67", "any_neighbor_state", "yes"): foreign_neighbour,
+            }
+            self.assertEqual(matches_conditions(fixture, facts, "67"),
+                             owned and not prepared and focus and programme and foreign_neighbour)
+            if not focus or not programme:
+                # An unsupported native iterator would fail this fixture if reached.
+                self.assertFalse(matches_conditions(offered, facts, "67"))
+        startable = block(source, "NAM_bw_line_startable")
+        self.assertEqual(startable[-1].key, "NAM_bw_line_offered")
+        for controlled, busy, operable, slot, price, offer in product((False, True), repeat=6):
+            facts = {
+                ("67", "is_controlled_by", "NAM"): controlled,
+                ("67", "has_state_flag", "NAM_line_in_progress"): busy,
+                ("NAM", "NAM_country_operable", "yes"): operable,
+                ("NAM", "NAM_line_slot_free", "yes"): slot,
+                ("NAM", "NAM_bw_can_pay_line", "yes"): price,
+                ("67", "NAM_bw_line_offered", "yes"): offer,
+            }
+            self.assertEqual(matches_conditions(startable, facts, "67"),
+                             controlled and not busy and operable and slot and price and offer)
+
+    def gauge_frame(self, gauge, facts):
+        """Evaluate only the documented temporary arithmetic used by GUI properties."""
+        arithmetic = {
+            "set_temp_variable": lambda old, value: value,
+            "subtract_from_temp_variable": lambda old, value: old - value,
+            "divide_temp_variable": lambda old, value: old / value,
+            "modulo_temp_variable": lambda old, value: old % value,
+            "add_to_temp_variable": lambda old, value: old + value,
+        }
+        trigger = block(block(self.piracy, "triggers"), f"NAM_pw_{gauge}_track_visible")
+        for scope, entry in selected_effects(trigger, facts, "NAM"):
+            if entry.key in arithmetic:
+                name = scalar(entry.value, "var")
+                reference = scalar(entry.value, "value")
+                value = facts.get((scope, "variable", reference))
+                if value is None:
+                    value = Decimal(0) if reference.startswith("NAM_") else Decimal(reference)
+                key = (scope, "variable", name)
+                facts[key] = arithmetic[entry.key](facts.get(key, Decimal(0)), value)
+            elif entry.key == "clamp_temp_variable":
+                key = (scope, "variable", scalar(entry.value, "var"))
+                facts[key] = min(Decimal(scalar(entry.value, "max")),
+                                 max(Decimal(scalar(entry.value, "min")), facts[key]))
+            elif entry.key == "always":
+                self.assertEqual(entry.value, "yes")
+            else:
+                self.fail(f"Unexpected GUI arithmetic or persistent write: {entry.key}")
+        return facts[("NAM", "variable", f"NAM_pw_{gauge}_frame")]
+
+    def test_gauge_frames_match_strict_thresholds_and_refresh_in_both_directions(self):
+        thresholds = [Decimal("2.5") + 5 * i for i in range(20)]
+        values = {Decimal(v) / 1000 for v in range(0, 100001, 137)}
+        values.update(t + offset for t in thresholds for offset in (Decimal("-0.001"), Decimal(0), Decimal("0.001")))
+        values.update(map(Decimal, (-20, 0, 100, 120)))
+        for gauge, variable in (("notoriety", "NAM_pirate_notoriety"), ("revenge", "NAM_revenge_readiness")):
+            facts = {}
+            for value in [*sorted(values), *sorted(values, reverse=True), None]:
+                key = ("NAM", "variable", variable)
+                if value is None:
+                    facts.pop(key, None)
+                else:
+                    facts[key] = value
+                expected = 1 + sum((value or 0) > threshold for threshold in thresholds)
+                with self.subTest(gauge=gauge, value=value):
+                    self.assertEqual(self.gauge_frame(gauge, facts), expected)
+                    self.assertEqual(facts.get(key), value)
+
+    def test_gauge_atlas_pixels_match_the_track_and_twenty_individual_cells(self):
+        from PIL import Image
+        from tools.builders.build_adiscord_nam_piracy_map import gauge_image, png_bytes
+        from io import BytesIO
+
+        with Image.open(ROOT / "gfx/interface/NAM_piracy/segment.png") as source:
+            cells = source.copy()
+        for gauge, ticks in (("notoriety", (50, 75)), ("revenge", (70,))):
+            with Image.open(ROOT / f"gfx/interface/NAM_piracy/gauge_{gauge}.png") as source:
+                atlas = source.copy()
+            self.assertEqual(atlas.size, (204 * 21, 18))
+            with Image.open(BytesIO(png_bytes(gauge_image(ticks)))) as source:
+                expected = source.copy()
+            for lit in range(21):
+                if lit:
+                    colour = (1 if lit <= 10 else 2 if lit <= 15 else 3) if gauge == "notoriety" else (4 if lit <= 14 else 5)
+                    cell = cells.crop(((colour - 1) * 9, 0, colour * 9, 10))
+                    expected.alpha_composite(cell, (2 + (lit - 1) * 10, 4))
+                self.assertEqual(atlas.crop((lit * 204, 0, (lit + 1) * 204, 18)).tobytes(), expected.tobytes(), (gauge, lit))
+
+    def test_two_direct_gauge_controls_have_live_frame_bindings_and_no_dirty(self):
+        roots = block(parsed("interface/ADISCORD_NAM_piracy.gui"), "guiTypes")
+        window = next(e.value for e in roots if scalar(e.value, "name") == "ADISCORD_NAM_piracy_window")
+        controls = {scalar(e.value, "name"): e.value for e in window if e.key.endswith("Type")}
+        self.assertFalse(any(re.fullmatch(r"NAM_pw_(notoriety|revenge)_\d+", name) for name in controls))
+        sprites = {scalar(e.value, "name"): e.value for e in block(parsed("interface/ADISCORD_NAM_piracy.gfx"), "spriteTypes")}
+        for gauge, row in (("notoriety", 362), ("revenge", 406)):
+            name = f"NAM_pw_{gauge}_track"
+            position = block(controls[name], "position")
+            self.assertEqual((scalar(position, "x"), scalar(position, "y")), ("150", str(row)))
+            self.assertEqual(scalar(block(block(self.piracy, "properties"), name), "frame"), f"NAM_pw_{gauge}_frame")
+            self.assertEqual(scalar(sprites[f"GFX_NAM_pw_gauge_{gauge}"], "noOfFrames"), "21")
+        for panel in (self.basin, self.piracy):
+            self.assertNotIn("dirty", [e.key for e in panel])
+
+
 class NamQolTests(unittest.TestCase):
     def test_petitions_share_a_pause_without_blocking_an_existing_coup(self):
         effects = parsed(f"common/scripted_effects/{BASE}_effects.txt")
@@ -1033,9 +1207,9 @@ class NamQolTests(unittest.TestCase):
             self.assertEqual(scalar(block(categories, name), "visible_when_empty"), "yes")
         decisions = block(parsed(f"common/decisions/{BASE}_decisions.txt"), "NAM_underground")
         for number in (1, 2, 3):
-            decision = block(decisions, f"NAM_veter_talks_{number}")
-            self.assertNotIn("NAM_veter_talks_possible", repr(block(decision, "visible")))
-            self.assertIn("NAM_veter_talks_possible", repr(block(decision, "available")))
+            decision = block(decisions, f"NAM_weber_talks_{number}")
+            self.assertNotIn("NAM_weber_talks_possible", repr(block(decision, "visible")))
+            self.assertIn("NAM_weber_talks_possible", repr(block(decision, "available")))
         searches = block(decisions, "NAM_hunt_caches")
         self.assertNotIn("NAM_caches_searched", repr(block(searches, "visible")))
         self.assertIn("NAM_caches_searched", repr(block(searches, "available")))

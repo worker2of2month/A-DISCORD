@@ -47,7 +47,7 @@ NAM_prewar_plan = {
 		NAM_reserve_rolls
 		NAM_contract_bureau
 		NAM_underground_reports
-		NAM_veter_channel
+		NAM_weber_channel
 		NAM_amnesty_lists
 		NAM_mine_councils
 		NAM_quiet_wells

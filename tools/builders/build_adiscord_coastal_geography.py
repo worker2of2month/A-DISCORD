@@ -9,7 +9,7 @@ from __future__ import annotations
 import argparse
 from collections import defaultdict, deque
 from io import BytesIO
-from math import cos, sin
+from math import atan2
 from pathlib import Path
 
 import numpy as np
@@ -41,12 +41,22 @@ RELIEF_TERRAIN = {
     **{province: "hills" for province in (1015, 2935, 4287, 9016, 11696, 12480, 12982)},
     **{province: "mountain" for province in (6099, 8351, 8888, 10909, 11942)},
 }
+# Provinces later split out of the massif keep its generated surface, while
+# their combat and graphical terrain remain authored in definition.csv.
+RELIEF_SURFACE_PROVINCES = RELIEF_PROVINCES | frozenset({16874, 16878, 16879, 16880, 16885, 16887, 16890})
 SPLIT_PARENTS = {16707: 6008, 16708: 6008, 16711: 11627}
 ANCHOR_REFERENCES = {**SPLIT_PARENTS, 16709: 65, 16710: 65, 16712: 6261}
 ANCHOR_REFERENCES.update({province: 65 for province in MANDATE_ISLANDS})
 DISPLACED_PROVINCES = frozenset({6008, 7739, 11627})
 CITIES = frozenset(range(16713, 16722)) | frozenset(province for province, _value in SOUTHERN_CITY_POINTS.values())
 ARAB_CITIES = frozenset({16713, 16714, 16715, 16718, 16719, 16720}) | frozenset(entry["province"] for entry in SOUTHERN_CITIES)
+# Urban growth authored in Nudge: expanded southern cities and their new
+# districts receive city rasters without becoming manifest cities.
+ARAB_URBAN_GROWTH = frozenset({
+    488, 971, 1349, 4089, 16745, 16746, 16751, 16753, 16784, 16785, 16786,
+    16882, 16883, 16886, 16888, 16889, 16891, 16893, 16894,
+})
+URBAN_GROWTH = ARAB_URBAN_GROWTH | frozenset({16881, 16884, 16885, 16887, 16890, 16892})
 RURAL_SECTORS = tuple(
     {**sector, "parent": city["parent"], "parent_terrain": city["parent_terrain"], "terrain": city["parent_terrain"]}
     for city in SOUTHERN_CITIES for sector in city.get("sectors", ())
@@ -68,6 +78,27 @@ ANCHOR_REFERENCES.update({
     16717: 8904, 16718: 12876, 16719: 2625, 16720: 9101, 16721: 689,
 })
 DISPLACED_PROVINCES |= frozenset({9659, 7968, 12876, 2625, 2056, 2038, 7618, 8904, 8194, 9101, 10931, 9630, 689, 8635})
+# Southern Nudge splits copy unit anchors from the province that gave most of
+# their pixels; every donor keeps its own anchors inside the remaining shape.
+# Railways that crossed a donor are rerouted through these splits.
+NUDGE_SPLIT_PARENTS = {
+    16864: 8635, 16865: 689, 16866: 10967, 16867: 689, 16868: 5305,
+    16869: 4025, 16870: 9211, 16871: 7079, 16872: 9633, 16873: 7618,
+    16874: 2231, 16875: 8635, 16876: 3706, 16877: 5156, 16878: 2231,
+    16879: 6099, 16880: 8888, 16881: 2038, 16882: 13019, 16883: 7413,
+    16884: 2038, 16885: 4321, 16886: 7737, 16887: 9016, 16888: 729,
+    16889: 6184, 16890: 4287, 16891: 9119, 16892: 2038, 16893: 4380,
+    16894: 4380,
+}
+ANCHOR_REFERENCES.update(NUDGE_SPLIT_PARENTS)
+# Every province whose pixels the southern Nudge pass moved, splits excluded.
+NUDGE_SPLIT_DONORS = frozenset({
+    461, 729, 971, 1015, 2231, 2374, 2411, 3127, 3584, 3706, 4025, 4089,
+    4287, 4321, 4380, 5156, 5305, 5348, 5594, 6099, 6184, 7079, 7413, 7737,
+    8452, 8888, 9016, 9119, 9211, 9633, 10967, 11069, 12458, 12668, 13019,
+    13248, 13382, 13882, 16745, 16746, 16747, 16752, 16753,
+})
+DISPLACED_PROVINCES |= NUDGE_SPLIT_DONORS
 COLOURMAP = Path("map/terrain/colormap_rgb_cityemissivemask_a.dds")
 
 
@@ -182,51 +213,147 @@ def closest_pixel(points: np.ndarray, x: float, y: float) -> tuple[int, int]:
     return int(column), int(row)
 
 
+def province_grid(provinces: np.ndarray, definitions: dict[int, tuple[int, int, int]]) -> np.ndarray:
+    lookup = np.zeros(1 << 24, dtype=np.uint16)
+    for province, (red, green, blue) in definitions.items():
+        lookup[(red << 16) | (green << 8) | blue] = province
+    rgb = provinces.astype(np.uint32)
+    return lookup[(rgb[:, :, 0] << 16) | (rgb[:, :, 1] << 8) | rgb[:, :, 2]]
+
+
+def province_neighbours(grid: np.ndarray) -> dict[int, set[int]]:
+    neighbours = defaultdict(set)
+    for first, second in ((grid[:-1], grid[1:]), (grid[:, :-1], grid[:, 1:])):
+        mask = first != second
+        pairs = np.unique(np.stack((first[mask], second[mask]), axis=1), axis=0)
+        for first_id, second_id in pairs:
+            neighbours[int(first_id)].add(int(second_id))
+            neighbours[int(second_id)].add(int(first_id))
+    return neighbours
+
+
+def native_slots(kind: str, neighbour_count: int) -> set[int]:
+    """Native slot ids: fixed 0, 9, 10, 21, 38 and up to eight per border row."""
+    count = min(neighbour_count, 8)
+    rows = (1, 22, 11, 30) if kind == "sea" else (1, 22)
+    return {0, 9, 10, 21, 38} | {base + index for base in rows for index in range(count)}
+
+
+def complete_native_anchors(
+    province: int,
+    kind: str,
+    existing: dict[int, list[str]],
+    grid: np.ndarray,
+    heights: np.ndarray,
+    neighbours: list[int],
+) -> dict[int, list[str]]:
+    """Keep valid rows of a native slot set and add the slots its borders now need."""
+    top, bottom = np.nonzero((grid == province).any(axis=1))[0][[0, -1]]
+    left, right = np.nonzero((grid == province).any(axis=0))[0][[0, -1]]
+    origin_y, origin_x = max(top - 1, 0), max(left - 1, 0)
+    window = grid[origin_y:bottom + 2, origin_x:right + 2]
+    inside = window == province
+    points = np.argwhere(inside) + (origin_y, origin_x)
+    map_height = heights.shape[0]
+    centre = None
+    if 0 in existing:
+        x = round(float(existing[0][2]))
+        y = map_height - 1 - round(float(existing[0][4]))
+        if grid[y, x] == province:
+            centre = (x, y)
+    if centre is None:
+        centre = closest_pixel(points, points[:, 1].mean(), points[:, 0].mean())
+    cx, cy = centre
+    offset = existing[0][6] if 0 in existing else ("0.12" if kind == "sea" else "0.24")
+
+    def row(slot: int, x: float, y: float, rotation: float) -> list[str]:
+        x, y = closest_pixel(points, x, y)
+        return [str(province), str(slot), f"{x:.2f}", f"{heights[y, x] / 10:.2f}",
+                f"{map_height - 1 - y:.2f}", f"{rotation:.2f}", offset]
+
+    generated = {0: row(0, cx, cy, 0.0), 9: row(9, cx - 3, cy, 1.57), 10: row(10, cx + 3, cy, -1.57),
+                 21: row(21, cx - 3, cy, 0.0)}
+    generated[38] = list(generated[10])
+    generated[38][1] = "38"
+    padded = np.pad(window, 1)
+    for index, neighbour in enumerate(neighbours[:8], 1):
+        touching = inside & (
+            (padded[:-2, 1:-1] == neighbour) | (padded[2:, 1:-1] == neighbour)
+            | (padded[1:-1, :-2] == neighbour) | (padded[1:-1, 2:] == neighbour)
+        )
+        ys, xs = np.nonzero(touching)
+        dx = xs.mean() + origin_x - cx
+        dy = ys.mean() + origin_y - cy
+        length = max(float(np.hypot(dx, dy)), 1.0)
+        generated[index] = row(index, cx + 3 * dx / length, cy + 3 * dy / length, atan2(dx, -dy))
+        for base in (22, 11, 30):
+            copy = list(generated[index])
+            copy[1] = str(base + index - 1)
+            generated[base + index - 1] = copy
+    return {
+        slot: existing[slot] if slot in existing else generated[slot]
+        for slot in sorted(native_slots(kind, len(neighbours)))
+    }
+
+
 def unit_anchors(
     original: bytes,
     masks: dict[int, np.ndarray],
     heights: np.ndarray,
+    grid: np.ndarray,
+    kinds: dict[int, str],
 ) -> bytes:
+    """Keep native unit anchors inside their provinces.
+
+    A province has slots 0, 9, 10, 21 and 38 plus up to eight slots per border
+    row (two rows on land, four at sea), sized by its neighbour count. A slot
+    set copied from another province or left over from an older border is
+    unsafe at game start, so every province around the southern Nudge pass
+    keeps its valid rows, loses slots for borders it no longer has and gains
+    the slots its new borders need. Rows stay grouped by slot type in the
+    native order.
+    """
     rows = [line.split(";") for line in original.decode("utf-8").splitlines()]
-    references = {
-        province: [row for row in rows if int(row[0]) == reference]
-        for province, reference in ANCHOR_REFERENCES.items()
-    }
-    points = {province: np.argwhere(mask) for province, mask in masks.items()}
-    map_height = heights.shape[0]
-    result = []
+    neighbours = province_neighbours(grid)
+    slots = defaultdict(dict)
     for row in rows:
-        province = int(row[0])
-        if province in ANCHOR_REFERENCES:
+        slots[int(row[0])][int(row[1])] = row
+    touched = set(NUDGE_SPLIT_PARENTS) | NUDGE_SPLIT_DONORS
+    scope = touched | {neighbour for province in touched for neighbour in neighbours[province]}
+    map_height = heights.shape[0]
+    rebuilt = {}
+    for province in sorted(scope):
+        kind = kinds.get(province)
+        if kind not in ("land", "sea") or set(slots[province]) == native_slots(kind, len(neighbours[province])):
             continue
-        if province in DISPLACED_PROVINCES:
+        rebuilt[province] = complete_native_anchors(
+            province, kind, slots[province], grid, heights, sorted(neighbours[province])
+        )
+    points = {province: np.argwhere(mask) for province, mask in masks.items()}
+
+    def normalise(row: list[str]) -> list[str]:
+        province = int(row[0])
+        if province in DISPLACED_PROVINCES or province in ANCHOR_REFERENCES:
             x = float(row[2])
             y = map_height - 1 - float(row[4])
-            if not masks[province][round(y), round(x)]:
+            # Half-pixel anchors must resolve to the province under both
+            # truncation and rounding.
+            if not (masks[province][round(y), round(x)] and masks[province][int(y), int(x)]):
                 x, y = closest_pixel(points[province], x, y)
                 row[2:5] = [f"{x:.2f}", f"{heights[y, x] / 10:.2f}", f"{map_height - 1 - y:.2f}"]
         if province in RELIEF_PROVINCES:
             x = round(float(row[2]))
             y = map_height - 1 - round(float(row[4]))
             row[3] = f"{heights[y, x] / 10:.2f}"
-        result.append(";".join(row))
-    for province, template in sorted(references.items()):
-        if not template or not len(points[province]):
-            raise ValueError(f"province {province}: missing unit anchor reference or pixels")
-        center_y, center_x = points[province].mean(axis=0)
-        for source in template:
-            slot = int(source[1])
-            radius = 0.0 if slot == 0 else 1.0
-            x = center_x + radius * cos(slot * 2.4)
-            y = center_y + radius * sin(slot * 2.4)
-            x, y = closest_pixel(points[province], x, y)
-            row = source.copy()
-            row[0] = str(province)
-            row[2:5] = [f"{x:.2f}", f"{heights[y, x] / 10:.2f}", f"{map_height - 1 - y:.2f}"]
-            row[6] = "0.12" if province in ISLANDS else "0.24"
-            result.append(";".join(row))
+        blocks[int(row[1])].append(row)
+    for province, anchors in rebuilt.items():
+        for slot, row in anchors.items():
+            block = blocks[slot]
+            index = next((i for i, other in enumerate(block) if int(other[0]) > province), len(block))
+            block.insert(index, row)
     newline = "\r\n" if b"\r\n" in original else "\n"
-    return (newline.join(result) + newline).encode("utf-8")
+    ordered = [";".join(row) for slot in sorted(blocks) for row in blocks[slot]]
+    return (newline.join(ordered) + newline).encode("utf-8")
 
 
 def railway_plan(original: bytes, provinces: np.ndarray, definitions: dict[int, tuple[int, int, int]]) -> bytes:
@@ -235,6 +362,8 @@ def railway_plan(original: bytes, provinces: np.ndarray, definitions: dict[int, 
     for city in SOUTHERN_CITIES:
         members = {city["parent"], city["province"], *(sector["province"] for sector in city.get("sectors", ()))}
         groups.update({province: members for province in members})
+    split_members = set(NUDGE_SPLIT_PARENTS) | set(NUDGE_SPLIT_PARENTS.values()) | DISPLACED_PROVINCES
+    groups.update({province: groups.get(province, set()) | split_members for province in split_members})
     lookup = np.zeros(1 << 24, dtype=np.uint16)
     for province, (red, green, blue) in definitions.items():
         lookup[(red << 16) | (green << 8) | blue] = province
@@ -330,7 +459,7 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
         if tuple(provinces[y, x]) not in (definitions[original], definitions[replacement]):
             raise ValueError(f"province corner changed at {x}, {y}")
         provinces[y, x] = definitions[replacement]
-    selected = set(ANCHOR_REFERENCES) | DISPLACED_PROVINCES | CITIES | RELIEF_PROVINCES
+    selected = set(ANCHOR_REFERENCES) | DISPLACED_PROVINCES | CITIES | URBAN_GROWTH | RELIEF_SURFACE_PROVINCES
     masks = {
         province: np.all(provinces == definitions[province], axis=2)
         for province in selected
@@ -339,9 +468,9 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
         if not mask.any():
             raise ValueError(f"province {province}: empty coastal geometry")
     islands = np.logical_or.reduce([masks[province] for province in ISLANDS])
-    cities = np.logical_or.reduce([masks[province] for province in CITIES])
-    arab_cities = np.logical_or.reduce([masks[province] for province in ARAB_CITIES])
-    mountains = np.logical_or.reduce([masks[province] for province in RELIEF_PROVINCES])
+    cities = np.logical_or.reduce([masks[province] for province in CITIES | URBAN_GROWTH])
+    arab_cities = np.logical_or.reduce([masks[province] for province in ARAB_CITIES | ARAB_URBAN_GROWTH])
+    mountains = np.logical_or.reduce([masks[province] for province in RELIEF_SURFACE_PROVINCES])
     with Image.open(root / "map/heightmap.bmp") as source:
         mountain_heightmap = mountain_heights(mountains, np.array(source))
     outputs = {}
@@ -445,7 +574,10 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
         pixels[tree_cells_blocked(water, source.width, source.height)] = 0
         outputs[tree_path] = bmp_bytes(source, pixels, original)
     stack_path = Path("map/unitstacks.txt")
-    outputs[stack_path] = unit_anchors((root / stack_path).read_bytes(), masks, heights)
+    kinds = {int(line.split(";")[0]): line.split(";")[4] for line in definition_lines}
+    outputs[stack_path] = unit_anchors(
+        (root / stack_path).read_bytes(), masks, heights, province_grid(provinces, definitions), kinds
+    )
     railways = Path("map/railways.txt")
     outputs[railways] = railway_plan((root / railways).read_bytes(), provinces, definitions)
     return outputs

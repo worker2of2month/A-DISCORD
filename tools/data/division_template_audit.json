@@ -4908,10 +4908,6 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_nam_line_infantry_brigade"
-      },
-      "definition_metadata": {
-        "is_locked": true,
-        "force_allow_recruiting": true
       }
     },
     {
@@ -5004,10 +5000,6 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_nam_capital_guard"
-      },
-      "definition_metadata": {
-        "is_locked": true,
-        "force_allow_recruiting": true
       }
     },
     {
@@ -13845,6 +13837,176 @@
       "definition_metadata": {
         "is_locked": true
       }
+    },
+    {
+      "key": "script_adiscord_nam_resource_war_effects_mobilisation_infantry_brigade",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Mobilisation Infantry Brigade",
+      "display_name": "Mobilisation Infantry Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 50.642857,
+        "manpower": 6300,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48,
+          "infantry_equipment": 5670,
+          "support_equipment": 30
+        },
+        "supply": 0.38
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_adiscord_nam_resource_war_effects_mobilisation_infantry_brigade"
+      },
+      "definition_metadata": {
+        "is_locked": true,
+        "force_allow_recruiting": true
+      }
+    },
+    {
+      "key": "script_adiscord_nam_resource_war_effects_mobilisation_guard",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Mobilisation Guard",
+      "display_name": "Mobilisation Guard",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "artillery",
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "computed": {
+        "organization": 47.431818,
+        "manpower": 9600,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
+          "infantry_equipment": 8640,
+          "support_equipment": 30
+        },
+        "supply": 0.72
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_adiscord_nam_resource_war_effects_mobilisation_guard"
+      },
+      "definition_metadata": {
+        "is_locked": true,
+        "force_allow_recruiting": true
+      }
     }
   ],
   "references": [
@@ -14058,20 +14220,20 @@
       "count": 1
     },
     {
-      "key": "adiscord_nam_resource_war_effects_create_unit_capital_guard_xp_0_25_eq_1_0",
+      "key": "adiscord_nam_resource_war_effects_create_unit_mobilisation_guard_xp_0_25_eq_1_0",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "create_unit",
-      "technical_name": "Capital Guard",
+      "technical_name": "Mobilisation Guard",
       "legacy_names": [],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 1,
       "count": 1
     },
     {
-      "key": "adiscord_nam_resource_war_effects_create_unit_line_infantry_brigade_xp_0_2_eq_1_0",
+      "key": "adiscord_nam_resource_war_effects_create_unit_mobilisation_infantry_brigade_xp_0_2_eq_1_0",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "create_unit",
-      "technical_name": "Line Infantry Brigade",
+      "technical_name": "Mobilisation Infantry Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 1,
@@ -14098,18 +14260,18 @@
       "count": 1
     },
     {
-      "key": "adiscord_nam_resource_war_effects_technical_reference_capital_guard",
+      "key": "adiscord_nam_resource_war_effects_technical_reference_mobilisation_guard",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "technical_reference",
-      "technical_name": "Capital Guard",
+      "technical_name": "Mobilisation Guard",
       "legacy_names": [],
       "count": 1
     },
     {
-      "key": "adiscord_nam_resource_war_effects_technical_reference_line_infantry_brigade",
+      "key": "adiscord_nam_resource_war_effects_technical_reference_mobilisation_infantry_brigade",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "technical_reference",
-      "technical_name": "Line Infantry Brigade",
+      "technical_name": "Mobilisation Infantry Brigade",
       "legacy_names": [],
       "count": 1
     },
@@ -15042,20 +15204,20 @@
       "count": 2
     },
     {
-      "key": "nam_resource_war_oob_capital_guard_xp_0_45_eq_0_9",
+      "key": "nam_resource_war_oob_mobilisation_guard_xp_0_45_eq_0_9",
       "path": "history/units/NAM_resource_war.txt",
       "kind": "oob",
-      "technical_name": "Capital Guard",
+      "technical_name": "Mobilisation Guard",
       "legacy_names": [],
       "start_experience_factor": 0.45,
       "start_equipment_factor": 0.9,
       "count": 1
     },
     {
-      "key": "nam_resource_war_oob_line_infantry_brigade_xp_0_35_eq_0_95",
+      "key": "nam_resource_war_oob_mobilisation_infantry_brigade_xp_0_35_eq_0_95",
       "path": "history/units/NAM_resource_war.txt",
       "kind": "oob",
-      "technical_name": "Line Infantry Brigade",
+      "technical_name": "Mobilisation Infantry Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.35,
       "start_equipment_factor": 0.95,
