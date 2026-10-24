@@ -15,12 +15,12 @@ focus_tree = {
 		y = 1900
 	}
 
-	# Loaded by event ADISCORD_nam_resource_war.100 when Yaroslav Veter's
+	# Loaded by event ADISCORD_nam_resource_war.100 when Yaroslav Weber's
 	# humanists overthrow the namestnik on the islands. Foreign capital pays
 	# for the return; the reconquered south becomes federal districts.
 
 	# ----- Free zones and corporate charters -----
-	# Veter pays for the return with foreign corporate capital instead of
+	# Weber pays for the return with foreign corporate capital instead of
 	# piracy. The free zones choose between open doors and a regulated
 	# partnership; the corporate influence they bring is curbed or courted
 	# through the NAM_free_zones decisions. A corporate takeover loads the
@@ -354,7 +354,7 @@ focus_tree = {
 		}
 	}
 
-	# ----- Veter's government: the island administration -----
+	# ----- Weber's government: the island administration -----
 	# The chancellery opens the islands to trade or settles the refugees; the
 	# island steel and the overseas districts serve both.
 
@@ -576,7 +576,7 @@ focus_tree = {
 	}
 
 	# ----- The federal programme and the civic underground -----
-	# Veter appeals to the neighbours or works to split the coalition; on the
+	# Weber appeals to the neighbours or works to split the coalition; on the
 	# mainland his contacts build civic committees or a free radio. Both lines
 	# meet in the mainland committees that call the districts to the return.
 

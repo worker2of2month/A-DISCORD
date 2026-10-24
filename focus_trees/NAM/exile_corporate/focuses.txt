@@ -21,7 +21,7 @@ focus_tree = {
 	# ----- The boards take the seals -----
 	# Loaded with keep_completed = yes by the corporate takeover. The humanist
 	# tree is shared history, so its completed focuses and their decisions
-	# remain. The board keeps Veter's ministers as a facade or purges them; its
+	# remain. The board keeps Weber's ministers as a facade or purges them; its
 	# constitution, shareholders and courts govern the corporate state.
 
 	focus = {
