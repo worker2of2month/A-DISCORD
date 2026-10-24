@@ -1300,40 +1300,6 @@ NAM_national_programmes = {
 		cancel_trigger = { ADISCORD_nam_resource_war_active = no }
 	}
 
-	# The deadline of the war of return; event .61 owns the treaty.
-	NAM_war_of_return_deadline = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = NAM }
-		is_good = no
-		activation = { always = no }
-		available = { hidden_trigger = { always = no } }
-		visible = { NAM_war_of_return_active = yes }
-		days_mission_timeout = 365
-		selectable_mission = no
-		fire_only_once = no
-		timeout_effect = {
-			custom_effect_tooltip = NAM_war_of_return_deadline_tt
-		}
-		cancel_trigger = { NOT = { NAM_war_of_return_active = yes } }
-	}
-
-	# Displays the great war's deadline; event .106 owns the settlement.
-	NAM_great_war_deadline = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = NAM }
-		is_good = no
-		activation = { always = no }
-		available = { hidden_trigger = { always = no } }
-		visible = { NAM_great_war_active = yes }
-		days_mission_timeout = 365
-		selectable_mission = no
-		fire_only_once = no
-		timeout_effect = {
-			custom_effect_tooltip = NAM_great_war_deadline_tt
-		}
-		cancel_trigger = { NOT = { NAM_great_war_active = yes } }
-	}
-
 	NAM_district_audit = {
 		icon = ADISCORD_inspection
 		visible = {
@@ -4286,9 +4252,12 @@ NAM_exile_politics = {
 		}
 	}
 
-	# An exile war that ended without the South Harbour or a field leaves the
-	# exile on the islands. The course's war focus is spent, so after 180 days
-	# of recovery this decision declares the next exile war on Eflor and Azhar.
+	# The exile war ends only in full victory or in the annexation of
+	# Svetlogorye, except when NAM_war_of_return_close_external closes it
+	# outside the treaty: its principals were removed or made peace by another
+	# hand. The course's war focus is spent, so this decision declares the next
+	# exile war on Eflor and Azhar; visible only in that case, because a won
+	# war closes the return programme.
 	NAM_exile_renew_war_of_return = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = NAM }
@@ -4297,10 +4266,6 @@ NAM_exile_politics = {
 			NAM_exile_return_programme_open = yes
 		}
 		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_wor_recovery_tt
-				NOT = { has_global_flag = NAM_wor_recovery }
-			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_war_of_return_ready_tt
 				NAM_war_of_return_can_start = yes
@@ -5015,9 +4980,11 @@ NAM_southern_lands = {
 # south before the great war. The junta rules by garrisons and terror, the
 # humanists by federal treaties and reconstruction.
 NAM_consolidation = {
-	# A great war that ended without moving the front south leaves the
-	# consolidated south as it was. The course's great war focus is spent, so
-	# after 180 days of recovery this decision declares the next one.
+	# The great war ends only in full victory or in the annexation of
+	# Svetlogorye, except when NAM_great_war_close_external closes it outside
+	# the treaty and leaves Svetlogorye independent. The course's great war
+	# focus is spent, so this decision declares the next one; it is visible
+	# only in that case, because a won war sets NAM_great_war_won.
 	NAM_renew_great_war = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = NAM }
@@ -5028,10 +4995,6 @@ NAM_consolidation = {
 			NOT = { has_global_flag = NAM_great_war_won }
 		}
 		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_great_war_recovery_tt
-				NOT = { has_global_flag = NAM_great_war_recovery }
-			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_great_war_consolidated_tt
 				check_variable = { var = NAM_consolidation value = 70 compare = greater_than_or_equals }

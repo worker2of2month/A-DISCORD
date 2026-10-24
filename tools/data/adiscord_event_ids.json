@@ -1834,7 +1834,7 @@
       "number": 61,
       "owner": "events/ADISCORD_nam_resource_war_events.txt",
       "subsystem": "nam_resource_war",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_nam_resource_war.62",
@@ -1978,7 +1978,7 @@
       "number": 106,
       "owner": "events/ADISCORD_nam_resource_war_events.txt",
       "subsystem": "nam_island_exile",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_nam_resource_war.107",

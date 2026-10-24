@@ -532,19 +532,18 @@ returned south and the great war against the rest of the south.
   applies to both; global flag `NAM_war_of_return_won`; the consolidation
   begins. NAM capitulation: Svetlogorye with its islands is annexed by the
   participant holding its capital or the coalition's first independent member
-  (news `.8`). Deadline (event `.61`): the side holding every capital of the
-  other wins outright, otherwise ownership follows the front. A front
-  settlement, or a native peace that leaves an independent NAM, that gives
-  NAM the South Harbour 700 or any of the fields 67/688/689/690/719
-  (`NAM_wor_front_return_held`) also sets `NAM_war_of_return_won` and begins
-  the consolidation; Eflor and Azhar stay independent and remain great-war
-  targets (`.62.d_held_exile`). Otherwise the exile stays on the islands, the
-  return programme reopens, and after the 180-day `NAM_wor_recovery` the
-  decision `NAM_exile_renew_war_of_return` (category `NAM_exile_politics`,
-  50 PP) declares the next exile war; `NAM_wor_exile_war_ready` blocks only a
-  won or running war. `NAM_wor_deadline_armed` (360 days) makes a deadline
-  event left from an earlier war ignore the renewed one. The war of return
-  after the compromise keeps its original field-owner form.
+  (news `.8`). The war has no deadline: it ends only when every participant
+  or Svetlogorye has capitulated (the compromise war of return likewise ends
+  only with the capitulation of every owner or the coalition treaty). A
+  native peace, annexation or subjugation outside the treaty
+  (`NAM_war_of_return_close_external`) closes it without awards; that is the
+  only ending that can leave an independent exile without a win, so it is the
+  only retry path: the return programme reopens and the decision
+  `NAM_exile_renew_war_of_return` (category `NAM_exile_politics`, 50 PP,
+  behind `NAM_war_of_return_can_start`) declares the next exile war while
+  Eflor or Azhar still stands. `NAM_wor_exile_war_ready` blocks only a won or
+  running war. The war of return after the compromise keeps its original
+  field-owner form.
 - Consolidation (`NAM_consolidation` 0..100 with `NAM_consolidation_clamp`;
   `NAM_consolidation_begin` at the exile war's victory sets 10 and the country
   flag `NAM_consolidation_started`): +2 a month, -2 below 40% stability, the
@@ -562,27 +561,23 @@ returned south and the great war against the rest of the south.
   independent. Suppressed minors are woken first; the targets fight in one
   temporary coalition; every participant holds mandatory major status only for
   this war. Global flags `NAM_great_war_started`, `NAM_great_war_resolved`,
-  `NAM_great_war_won`; mission `NAM_great_war_deadline`; events `.105`
-  (declaration), `.106` (hidden deadline), `.107` (result). The dispatcher
-  sections of `09_ADISCORD_scripted_peace_on_actions.txt` route NAM
-  capitulation to `NAM_great_war_resolve_defeat` (annexation), the fall of every
-  participant to `NAM_great_war_resolve_victory` (the course's policy for all)
-  and native peace, annexation or subjugation to `NAM_great_war_close_external`.
-  A deadline front with more states gained than lost (temp
-  `NAM_wor_front_net` > 0) sets `NAM_great_war_won` without settling the
-  survivors (`.107.d_front_won`). Otherwise, after the 180-day
-  `NAM_great_war_recovery`, the decision `NAM_renew_great_war` (category
-  `NAM_consolidation`, 50 PP) restarts it; `NAM_great_war_can_start` blocks
-  only a running or won great war, and `NAM_great_war_deadline_armed` guards
-  `.106` like `.61`.
+  `NAM_great_war_won`; events `.105` (declaration) and `.107` (victory). The
+  war has no deadline. The dispatcher sections of
+  `09_ADISCORD_scripted_peace_on_actions.txt` route NAM capitulation to
+  `NAM_great_war_resolve_defeat` (annexation), the fall of every participant to
+  `NAM_great_war_resolve_victory` (the course's policy for all) and native
+  peace, annexation or subjugation to `NAM_great_war_close_external` (no
+  award). After that external closure alone, the decision `NAM_renew_great_war`
+  (category `NAM_consolidation`, 50 PP) restarts the war;
+  `NAM_great_war_can_start` blocks only a running or won great war.
 - Drill and marines per tree: `NAM_exile_drill` and its category open with
   `NAM_exile_drill_unlocked` (`NAM_exile_general_staff`,
   `NAM_hum_citizen_army` or `NAM_hum_company_guard`); `NAM_order_marines_corp`
   with `NAM_hum_marine_contracts` or `NAM_board_landing_contracts`.
-- Symmetry: in both wars each side wins outright by forcing the other's
-  capitulation or by holding all of the other's capitals at the 365-day
-  deadline; otherwise ownership follows control for every state between the
-  sides. Svetlogorye declares, but no neutral state counts for either side.
+- Symmetry: in both wars each side wins only by forcing the full
+  capitulation of the other; there is no deadline, front settlement or capital
+  rule, and no neutral state counts for either side. Events `.61` and `.106`
+  (the former deadlines) are retired and kept reserved in the event registry.
 
 ## Shared contract for focus rewards
 

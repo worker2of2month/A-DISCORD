@@ -4771,17 +4771,17 @@ NAM_rw_clear_punishment = {
 # ----- War of return -----
 # The defeat tree's revenge. After the compromise peace it is one war against
 # the current owners of the lost fields and the South Harbour (67, 688, 689,
-# 690, 719, 700): NAM capitulation is the coalition treaty, capitulation of
-# every owner returns the states, and the 365-day deadline (event .61) settles
-# the contested states at the current front.
+# 690, 719, 700): NAM capitulation is the coalition treaty and capitulation of
+# every owner returns the states.
 # From the island exile, once the namestnik has fallen, the same entry opens
 # the exile war (global flag NAM_wor_exile_war) against Eflor and Azhar: the
 # two fight in one temporary coalition and the marines land at the South
 # Harbour. Their capitulation returns the homeland, applies the course's
 # settlement to both (annexation and exploitation under the junta, federal
 # districts under the humanists) and opens the consolidation; NAM
-# capitulation annexes Svetlogorye with its islands; at the deadline the side
-# holding the other's capitals wins, otherwise ownership follows the front.
+# capitulation annexes Svetlogorye with its islands.
+# These wars have no deadline: they end only when one side has capitulated
+# completely, or outside the treaty through NAM_war_of_return_close_external.
 # The later great war (NAM_great_war_*) reuses the participant array, the
 # coalition, the capitulation receipts and the settlements of this section.
 # Every terminal path runs NAM_war_of_return_close or NAM_great_war_close.
@@ -4884,10 +4884,8 @@ NAM_wor_call_participants = {
 
 # COUNTRY NAM. Called by the focuses NAM_defeat_war_of_return (compromise),
 # NAM_rad_war_of_return, NAM_hum_war_of_return and NAM_board_war_of_return
-# (exile) and by the renewal decision NAM_exile_renew_war_of_return. The
-# global flag NAM_wor_deadline_armed lasts 360 days, just short of the
-# 365-day deadline: a .61 left over from an earlier, shorter exile war fires
-# while the new war's flag is still set and is ignored.
+# (exile) and by the renewal decision NAM_exile_renew_war_of_return after an
+# exile war closed outside the treaty.
 NAM_war_of_return_start = {
 	if = {
 		limit = { NAM_war_of_return_can_start = yes }
@@ -4958,13 +4956,7 @@ NAM_war_of_return_start = {
 		# From the islands the return begins with a landing at the old capital.
 		NAM_wor_revenge_landing = yes
 		add_war_support = 0.10
-		activate_mission = NAM_war_of_return_deadline
-		set_global_flag = {
-			flag = NAM_wor_deadline_armed
-			days = 360
-		}
 		country_event = { id = ADISCORD_nam_resource_war.60 hours = 1 }
-		country_event = { id = ADISCORD_nam_resource_war.61 days = 365 }
 	}
 }
 
@@ -5002,18 +4994,11 @@ NAM_wor_release_participants = {
 # GLOBAL. Shared terminal cleanup of the war of return. The resolved flag
 # comes first, so the peace callbacks this causes find no open campaign.
 # Two-day capitulation receipts stay until the late callback consumes them.
-# NAM_wor_recovery is the 180 days the exile needs before the renewal
-# decision may open another exile war; a won war never reads it.
 NAM_war_of_return_close = {
 	set_global_flag = NAM_war_of_return_resolved
-	set_global_flag = {
-		flag = NAM_wor_recovery
-		days = 180
-	}
 	NAM_wor_release_participants = yes
 	NAM = {
 		ADISCORD_nam_resource_war_release_major = yes
-		remove_mission = NAM_war_of_return_deadline
 		mark_focus_tree_layout_dirty = yes
 	}
 }
@@ -5030,34 +5015,6 @@ NAM_wor_return_field = {
 		remove_core_of = event_target:NAM_wor_old_owner
 		add_core_of = NAM
 		set_state_controller_to = NAM
-	}
-}
-
-# STATE field. Timeout: the contested field goes to the side holding it.
-NAM_wor_settle_field_at_front = {
-	if = {
-		limit = {
-			NOT = { is_owned_by = NAM }
-			owner = { has_country_flag = NAM_wor_participant }
-			is_controlled_by = NAM
-		}
-		owner = { save_event_target_as = NAM_wor_old_owner }
-		NAM = { transfer_state = PREV }
-		remove_core_of = event_target:NAM_wor_old_owner
-		add_core_of = NAM
-	}
-	else_if = {
-		limit = {
-			is_owned_by = NAM
-			controller = { has_country_flag = NAM_wor_participant }
-		}
-		controller = {
-			save_event_target_as = NAM_wor_new_owner
-			transfer_state = PREV
-		}
-		remove_core_of = NAM
-		add_core_of = event_target:NAM_wor_new_owner
-		add_claim_by = NAM
 	}
 }
 
@@ -5114,62 +5071,6 @@ NAM_war_of_return_resolve_defeat = {
 	}
 }
 
-# GLOBAL. Deadline: white peace at the current front of the contested fields.
-# The exile war first gives the victory to a side holding the other's
-# capitals, then settles every state between the sides at the front.
-NAM_war_of_return_resolve_front = {
-	if = {
-		limit = {
-			NAM_war_of_return_active = yes
-			has_global_flag = NAM_wor_exile_war
-		}
-		if = {
-			limit = { NAM_wor_capitals_taken = yes }
-			log = "[ADISCORD][NAM][PEACE] Exile war deadline: Svetlogorye holds every remaining capital."
-			NAM_war_of_return_resolve_victory = yes
-		}
-		else_if = {
-			limit = { NAM_wor_capital_lost = yes }
-			log = "[ADISCORD][NAM][PEACE] Exile war deadline: the coalition holds the island capital."
-			NAM_war_of_return_resolve_defeat = yes
-		}
-		else = {
-			NAM_wor_settle_front_states = yes
-			NAM_war_of_return_close = yes
-			# The front decides the return: an exile that now owns the
-			# South Harbour or one of its fields has come home and begins the
-			# consolidation; otherwise it stays on the islands and may try
-			# again through NAM_exile_renew_war_of_return.
-			if = {
-				limit = { NAM = { NAM_wor_front_return_held = yes } }
-				set_global_flag = NAM_war_of_return_won
-				NAM = { NAM_consolidation_begin = yes }
-				log = "[ADISCORD][NAM][PEACE] Exile war deadline: the front leaves Svetlogorye part of its homeland; the consolidation begins."
-			}
-			NAM_wor_after_front = yes
-		}
-	}
-	else_if = {
-		limit = { NAM_war_of_return_active = yes }
-		67 = { NAM_wor_settle_field_at_front = yes }
-		688 = { NAM_wor_settle_field_at_front = yes }
-		689 = { NAM_wor_settle_field_at_front = yes }
-		690 = { NAM_wor_settle_field_at_front = yes }
-		719 = { NAM_wor_settle_field_at_front = yes }
-		700 = { NAM_wor_settle_field_at_front = yes }
-		NAM_war_of_return_close = yes
-		NAM = {
-			every_owned_state = {
-				limit = { NOT = { is_controlled_by = NAM } }
-				set_state_controller_to = NAM
-			}
-			NAM_wor_restore_mainland_capital = yes
-			NAM_oil_refresh = yes
-			country_event = { id = ADISCORD_nam_resource_war.62 hours = 1 }
-		}
-	}
-}
-
 # COUNTRY NAM. A government in exile returns to the South Harbour once the war
 # of return has brought it back under Svetlogorsk ownership.
 NAM_wor_restore_mainland_capital = {
@@ -5184,9 +5085,10 @@ NAM_wor_restore_mainland_capital = {
 }
 
 # GLOBAL. Native peace, annexation or subjugation outside the treaty closes
-# the campaign without awards. An independent exile that the native peace
-# left with the South Harbour or a field has still come home, as at the
-# deadline front; otherwise the renewal decision stays open.
+# the campaign without awards. This is the only ending that can leave an
+# independent exile without a won war: when its principals were removed or
+# made peace by another hand. NAM_exile_renew_war_of_return then reopens the
+# exile war while Eflor or Azhar still stands.
 NAM_war_of_return_close_external = {
 	if = {
 		limit = {
@@ -5194,23 +5096,6 @@ NAM_war_of_return_close_external = {
 			NAM_wor_campaign_lost_outside_treaty = yes
 		}
 		NAM_war_of_return_close = yes
-		if = {
-			limit = {
-				has_global_flag = NAM_wor_exile_war
-				NAM = {
-					exists = yes
-					is_subject = no
-					NAM_wor_front_return_held = yes
-				}
-			}
-			set_global_flag = NAM_war_of_return_won
-			NAM = {
-				NAM_consolidation_begin = yes
-				NAM_wor_restore_mainland_capital = yes
-				NAM_oil_refresh = yes
-				country_event = { id = ADISCORD_nam_resource_war.62 hours = 1 }
-			}
-		}
 	}
 }
 
@@ -5441,83 +5326,6 @@ NAM_wor_annex_svetlogorye = {
 	}
 }
 
-# GLOBAL, before the cleanup. Without a decision at the deadline ownership
-# follows control between Svetlogorye and the participants. Taken states are
-# recorded first and transferred afterwards, so no state list changes while
-# it is read. Output: temp NAM_wor_front_net, states gained minus states lost.
-NAM_wor_settle_front_states = {
-	clear_temp_array = NAM_wor_front_gain
-	clear_temp_array = NAM_wor_front_loss
-	set_temp_variable = { var = NAM_wor_front_net value = 0 }
-	for_each_scope_loop = {
-		array = global.NAM_wor_participants
-		if = {
-			limit = { exists = yes }
-			every_owned_state = {
-				limit = { is_controlled_by = NAM }
-				add_to_temp_array = { NAM_wor_front_gain = THIS }
-			}
-		}
-	}
-	NAM = {
-		every_owned_state = {
-			limit = {
-				controller = {
-					OR = {
-						has_country_flag = NAM_wor_participant
-						AND = {
-							is_subject = yes
-							overlord = { has_country_flag = NAM_wor_participant }
-						}
-					}
-				}
-			}
-			add_to_temp_array = { NAM_wor_front_loss = THIS }
-		}
-	}
-	for_each_scope_loop = {
-		array = NAM_wor_front_gain
-		owner = { save_event_target_as = NAM_wor_old_owner }
-		NAM = { transfer_state = PREV }
-		if = {
-			limit = { NAM_wor_homeland_state = yes }
-			remove_core_of = event_target:NAM_wor_old_owner
-		}
-		NAM_wor_take_state = yes
-		add_to_temp_variable = { var = NAM_wor_front_net value = 1 }
-	}
-	for_each_scope_loop = {
-		array = NAM_wor_front_loss
-		controller = {
-			save_event_target_as = NAM_wor_new_owner
-			transfer_state = PREV
-		}
-		add_claim_by = NAM
-		subtract_from_temp_variable = { var = NAM_wor_front_net value = 1 }
-	}
-	log = "[ADISCORD][NAM][PEACE] Deadline without a decision: ownership follows the front."
-}
-
-# GLOBAL, after a front settlement and its cleanup.
-NAM_wor_after_front = {
-	NAM = {
-		every_owned_state = {
-			limit = { NOT = { is_controlled_by = NAM } }
-			set_state_controller_to = NAM
-		}
-		NAM_wor_restore_mainland_capital = yes
-		NAM_oil_refresh = yes
-		NAM_corp_count_zones = yes
-		if = {
-			limit = { has_global_flag = NAM_great_war_started }
-			country_event = { id = ADISCORD_nam_resource_war.107 hours = 1 }
-		}
-		else = {
-			country_event = { id = ADISCORD_nam_resource_war.62 hours = 1 }
-		}
-	}
-}
-
 # ----- Consolidation of the returned south -----
 # NAM_consolidation (0-100) is Svetlogorye's hold on the regions taken back in
 # the exile war. It starts at 10 with the victory and grows by 2 a month; the
@@ -5694,23 +5502,17 @@ NAM_hum_reconstruction_refund = {
 # the targets fight in one temporary coalition, every participant holds
 # mandatory major status only for this war. Capitulation of all of them
 # applies the course's settlement to the new conquests; NAM capitulation
-# annexes Svetlogorye; at the 365-day deadline (event .106) the side holding
-# the other's capitals wins, otherwise ownership follows the front. Every
-# terminal path runs NAM_great_war_close.
+# annexes Svetlogorye. The war has no deadline. Every terminal path runs
+# NAM_great_war_close.
 
 # COUNTRY NAM. Called by the focuses NAM_rad_great_war, NAM_hum_great_war and
-# NAM_board_great_war and by the renewal decision NAM_renew_great_war. A
-# renewed war reopens the resolved flag; NAM_great_war_deadline_armed (360
-# days) makes a .106 left over from the earlier war ignore the new one.
+# NAM_board_great_war and by the renewal decision NAM_renew_great_war after a
+# great war closed outside the treaty; a renewed war reopens the resolved flag.
 NAM_great_war_start = {
 	if = {
 		limit = { NAM_great_war_can_start = yes }
 		set_global_flag = NAM_great_war_started
 		clr_global_flag = NAM_great_war_resolved
-		set_global_flag = {
-			flag = NAM_great_war_deadline_armed
-			days = 360
-		}
 		clear_array = global.NAM_wor_participants
 		clr_global_flag = NAM_wor_primary_saved
 		clear_global_event_target = NAM_wor_primary
@@ -5739,25 +5541,18 @@ NAM_great_war_start = {
 			country_event = { id = ADISCORD_nam_resource_war.105 hours = 1 }
 		}
 		add_war_support = 0.10
-		activate_mission = NAM_great_war_deadline
 		country_event = { id = ADISCORD_nam_resource_war.105 hours = 1 }
-		country_event = { id = ADISCORD_nam_resource_war.106 days = 365 }
 		log = "[ADISCORD][NAM][GREAT_WAR] Svetlogorye opens the great war against the south."
 	}
 }
 
 # GLOBAL. Shared terminal cleanup of the great war; the resolved flag comes
-# first. NAM_great_war_recovery holds the renewal decision for 180 days.
+# first.
 NAM_great_war_close = {
 	set_global_flag = NAM_great_war_resolved
-	set_global_flag = {
-		flag = NAM_great_war_recovery
-		days = 180
-	}
 	NAM_wor_release_participants = yes
 	NAM = {
 		ADISCORD_nam_resource_war_release_major = yes
-		remove_mission = NAM_great_war_deadline
 		mark_focus_tree_layout_dirty = yes
 	}
 }
@@ -5790,38 +5585,9 @@ NAM_great_war_resolve_defeat = {
 	}
 }
 
-# GLOBAL. Event .106 at the deadline.
-NAM_great_war_resolve_front = {
-	if = {
-		limit = { NAM_great_war_active = yes }
-		if = {
-			limit = { NAM_wor_capitals_taken = yes }
-			log = "[ADISCORD][NAM][GREAT_WAR] Deadline: Svetlogorye holds every remaining capital."
-			NAM_great_war_resolve_victory = yes
-		}
-		else_if = {
-			limit = { NAM_wor_capital_lost = yes }
-			log = "[ADISCORD][NAM][GREAT_WAR] Deadline: the coalition holds Svetlogorye's capital."
-			NAM_great_war_resolve_defeat = yes
-		}
-		else = {
-			NAM_wor_settle_front_states = yes
-			NAM_great_war_close = yes
-			# A front that moved south is a victory without the course's
-			# settlement of the survivors; a front that did not leaves the
-			# renewal decision NAM_renew_great_war open.
-			if = {
-				limit = { check_variable = { NAM_wor_front_net > 0 } }
-				set_global_flag = NAM_great_war_won
-				log = "[ADISCORD][NAM][GREAT_WAR] Deadline: the front moves south; the great war counts as won."
-			}
-			NAM_wor_after_front = yes
-		}
-	}
-}
-
 # GLOBAL. Native peace, annexation or subjugation outside the treaty closes
-# the great war without awards.
+# the great war without awards. An independent Svetlogorye left without a
+# won war may open it again through NAM_renew_great_war.
 NAM_great_war_close_external = {
 	if = {
 		limit = {
@@ -7410,9 +7176,9 @@ NAM_marine_orders_refund = {
 # trained order or a revenge readiness of 70. The landing never exceeds three
 # divisions: further trained orders form on the island capital, and so does
 # the whole landing when the harbour's controller is not at war with
-# Svetlogorye. The beachhead is ordinary control: the deadline settlement
-# awards the harbour only if it is still held. Every trained order is
-# delivered here.
+# Svetlogorye. The beachhead is ordinary control and awards nothing by itself:
+# the harbour returns only with the capitulation of its owner. Every trained
+# order is delivered here.
 NAM_wor_revenge_landing = {
 	if = {
 		limit = {

@@ -685,26 +685,13 @@ NAM_exile_revolution_done = {
 
 # COUNTRY NAM. The exile still prepares its return: marine orders and the
 # landing drill. The programme pauses while an exile war is fought and
-# reopens after one that brought no homeland back, for the next attempt.
+# reopens only if that war closed outside the treaty, for the next attempt.
 NAM_exile_return_programme_open = {
 	tag = NAM
 	has_global_flag = ADISCORD_nam_resource_war_island_exile
 	NAM_exile_revolution_done = yes
 	NOT = { NAM_war_of_return_active = yes }
 	NOT = { has_global_flag = NAM_war_of_return_won }
-}
-
-# COUNTRY NAM. After a deadline settled at the front, the exile counts as
-# returned once it owns the South Harbour or any of its five fields.
-NAM_wor_front_return_held = {
-	OR = {
-		owns_state = 700
-		owns_state = 67
-		owns_state = 688
-		owns_state = 689
-		owns_state = 690
-		owns_state = 719
-	}
 }
 
 # COUNTRY NAM. The landing drill is open in the course's own tree: the junta's
@@ -780,8 +767,9 @@ NAM_great_war_target_left = {
 
 # COUNTRY NAM. The exile war against Eflor and Azhar may begin: the namestnik
 # has fallen, one of the two principals that hold the homeland still stands,
-# and the War for the South does not hold the region's alliances. An exile war
-# that brought no homeland back may be fought again; one that did is won.
+# and the War for the South does not hold the region's alliances. The war
+# ends in full victory or in the annexation of Svetlogorye; only an exile war
+# closed outside the treaty may be fought again.
 NAM_wor_exile_war_ready = {
 	has_global_flag = ADISCORD_nam_resource_war_island_exile
 	NAM_exile_revolution_done = yes
@@ -807,7 +795,7 @@ NAM_wor_campaign_active = {
 }
 
 # COUNTRY NAM. The preparation focus, or the renewal decision after a great
-# war that ended without a gain, calls NAM_great_war_start behind this
+# war closed outside the treaty, calls NAM_great_war_start behind this
 # trigger: the exile war is won, the great war is neither fought nor won, the
 # returned south is consolidated to 70 and one southern state is left.
 NAM_great_war_can_start = {
@@ -841,36 +829,6 @@ NAM_wor_homeland_state = {
 		state = 719
 		state = 700
 		is_core_of = NAM
-	}
-}
-
-# Any scope. At the deadline Svetlogorye holds the capital of every remaining
-# participant.
-NAM_wor_capitals_taken = {
-	all_of_scopes = {
-		array = global.NAM_wor_participants
-		OR = {
-			exists = no
-			has_capitulated = yes
-			capital_scope = { is_controlled_by = NAM }
-		}
-	}
-}
-
-# Any scope. At the deadline a participant holds Svetlogorye's capital.
-NAM_wor_capital_lost = {
-	NAM = {
-		capital_scope = {
-			controller = {
-				OR = {
-					has_country_flag = NAM_wor_participant
-					AND = {
-						is_subject = yes
-						overlord = { has_country_flag = NAM_wor_participant }
-					}
-				}
-			}
-		}
 	}
 }
 

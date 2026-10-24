@@ -591,8 +591,8 @@ defined_text = {
 }
 
 # ----- Exile revolution and the great war of return -----
-# COUNTRY NAM. The war of return's entry, terms and deadline name the war the
-# current route would open: the compromise route's fields or the great war.
+# COUNTRY NAM. The war of return's entry and terms name the war the current
+# route would open: the compromise route's fields or the exile war.
 defined_text = {
 	name = NAMGetWarOfReturnReady
 	text = {

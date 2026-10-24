@@ -863,73 +863,28 @@ country_event = {
 	}
 }
 
-# The deadline of the war of return: white peace at the current front. A
-# deadline left over from an earlier exile war fires while the current war's
-# NAM_wor_deadline_armed is still set and does nothing.
-country_event = {
-	id = ADISCORD_nam_resource_war.61
-	hidden = yes
-	is_triggered_only = yes
-
-	trigger = {
-		NAM_war_of_return_active = yes
-		NOT = { has_global_flag = NAM_wor_deadline_armed }
-	}
-	immediate = { NAM_war_of_return_resolve_front = yes }
-}
-
-# Svetlogorye learns how the war of return ended.
+# Svetlogorye learns that the war of return is won: the war has no deadline,
+# so the full capitulation of every owner is its only announced ending.
 country_event = {
 	id = ADISCORD_nam_resource_war.62
 	title = ADISCORD_nam_resource_war.62.t
 	desc = {
-		trigger = {
-			has_global_flag = NAM_war_of_return_won
-			NOT = { has_global_flag = NAM_wor_exile_war }
-		}
+		trigger = { NOT = { has_global_flag = NAM_wor_exile_war } }
 		text = ADISCORD_nam_resource_war.62.d_won
 	}
 	desc = {
 		trigger = {
-			NOT = { has_global_flag = NAM_war_of_return_won }
-			NOT = { has_global_flag = NAM_wor_exile_war }
-		}
-		text = ADISCORD_nam_resource_war.62.d_front
-	}
-	desc = {
-		trigger = {
-			has_global_flag = NAM_war_of_return_won
 			has_global_flag = NAM_wor_exile_war
-			NAM_wor_principal_standing = no
 			has_country_flag = NAM_exile_radical
 		}
 		text = ADISCORD_nam_resource_war.62.d_won_radical
 	}
 	desc = {
 		trigger = {
-			has_global_flag = NAM_war_of_return_won
 			has_global_flag = NAM_wor_exile_war
-			NAM_wor_principal_standing = no
 			NOT = { has_country_flag = NAM_exile_radical }
 		}
 		text = ADISCORD_nam_resource_war.62.d_won_federal
-	}
-	# The deadline front or a native peace left the exile part of its homeland
-	# while Eflor or Azhar still stands.
-	desc = {
-		trigger = {
-			has_global_flag = NAM_war_of_return_won
-			has_global_flag = NAM_wor_exile_war
-			NAM_wor_principal_standing = yes
-		}
-		text = ADISCORD_nam_resource_war.62.d_held_exile
-	}
-	desc = {
-		trigger = {
-			NOT = { has_global_flag = NAM_war_of_return_won }
-			has_global_flag = NAM_wor_exile_war
-		}
-		text = ADISCORD_nam_resource_war.62.d_front_exile
 	}
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
@@ -1888,52 +1843,18 @@ country_event = {
 	}
 }
 
-# The deadline of the great war: the capitals decide, otherwise the front. A
-# deadline left over from an earlier great war is ignored while the current
-# war's NAM_great_war_deadline_armed is set.
-country_event = {
-	id = ADISCORD_nam_resource_war.106
-	hidden = yes
-	is_triggered_only = yes
-
-	trigger = {
-		NAM_great_war_active = yes
-		NOT = { has_global_flag = NAM_great_war_deadline_armed }
-	}
-	immediate = { NAM_great_war_resolve_front = yes }
-}
-
-# Svetlogorye learns how the great war ended.
+# Svetlogorye learns that the great war is won: the war has no deadline, so
+# the full capitulation of every participant is its only announced ending.
 country_event = {
 	id = ADISCORD_nam_resource_war.107
 	title = ADISCORD_nam_resource_war.107.t
 	desc = {
-		trigger = {
-			has_global_flag = NAM_great_war_won
-			NAM_great_war_target_left = no
-			has_country_flag = NAM_exile_radical
-		}
+		trigger = { has_country_flag = NAM_exile_radical }
 		text = ADISCORD_nam_resource_war.107.d_won_radical
 	}
 	desc = {
-		trigger = {
-			has_global_flag = NAM_great_war_won
-			NAM_great_war_target_left = no
-			NOT = { has_country_flag = NAM_exile_radical }
-		}
+		trigger = { NOT = { has_country_flag = NAM_exile_radical } }
 		text = ADISCORD_nam_resource_war.107.d_won_federal
-	}
-	# The deadline front moved south while part of the coalition still stands.
-	desc = {
-		trigger = {
-			has_global_flag = NAM_great_war_won
-			NAM_great_war_target_left = yes
-		}
-		text = ADISCORD_nam_resource_war.107.d_front_won
-	}
-	desc = {
-		trigger = { NOT = { has_global_flag = NAM_great_war_won } }
-		text = ADISCORD_nam_resource_war.107.d_front
 	}
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes

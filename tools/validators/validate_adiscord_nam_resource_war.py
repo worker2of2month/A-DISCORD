@@ -487,11 +487,10 @@ def check_ladder(
             f"NAM_favour_{group} lacks its focus gate, 70-support price or 120-day favour",
         )
     tokens = read("common/synchronized_dynamic_tokens/ADISCORD_tokens.txt")
-    for mission in ("NAM_rival_demand", "NAM_war_of_return_deadline"):
-        check(
-            re.search(rf"(?m)^{mission}\s*$", tokens) is not None,
-            f"{mission} is not registered in the synchronized token file",
-        )
+    check(
+        re.search(r"(?m)^NAM_rival_demand\s*$", tokens) is not None,
+        "NAM_rival_demand is not registered in the synchronized token file",
+    )
     rival_mission = named_block(decisions, "NAM_rival_demand")
     check(
         "NAM_rival_demand_met = yes" in named_block(rival_mission, "available")
@@ -499,12 +498,6 @@ def check_ladder(
         and "NAM_rival_demand_paid = yes" in rival_mission
         and "NAM_rival_refuse = yes" in named_block(rival_mission, "timeout_effect"),
         "the rival demand must succeed on its term and count its deadline as a refusal",
-    )
-    deadline = named_block(decisions, "NAM_war_of_return_deadline")
-    check(
-        "available = { hidden_trigger = { always = no } }" in deadline
-        and "days_mission_timeout = 365" in deadline,
-        "the war-of-return deadline must be a 365-day timeout-only mission",
     )
     refuse = named_block(effects, "NAM_rival_refuse")
     check(
@@ -606,9 +599,9 @@ def check_ladder(
         and "NAM_wor_call_participants = yes" in start
         and "add_to_war" in named_block(effects, "NAM_wor_call_participants")
         and "ADISCORD_nam_resource_war_reserve_major = yes" in start
-        and "activate_mission = NAM_war_of_return_deadline" in start
-        and "id = ADISCORD_nam_resource_war.61 days = 365" in start,
-        "the war of return must declare one coalition war with its temporary majors and deadline",
+        and "activate_mission" not in start
+        and "days = 365" not in start,
+        "the war of return must declare one coalition war with its temporary majors and no deadline",
     )
     check(
         -1
@@ -616,13 +609,11 @@ def check_ladder(
         < close.find("NAM_wor_release_participants = yes")
         and "white_peace" in release
         and "ADISCORD_nam_resource_war_release_major = yes" in release
-        and "ADISCORD_nam_resource_war_release_major = yes" in close
-        and "remove_mission = NAM_war_of_return_deadline" in close,
+        and "ADISCORD_nam_resource_war_release_major = yes" in close,
         "every war-of-return exit must resolve first, then end the war and release majors",
     )
     for resolver in (
         "NAM_war_of_return_resolve_victory",
-        "NAM_war_of_return_resolve_front",
         "NAM_war_of_return_close_external",
     ):
         check(
@@ -719,6 +710,29 @@ CORP_DECISION_FOCUSES = {
     "NAM_corp_auction_district": "NAM_board_district_auction",
 }
 GREAT_WAR_TARGETS = ("EFL", "AZH", "RHM", "SDR", "KDR")
+# The war of return and the great war end only by full capitulation; none of
+# the former deadline, front-settlement or recovery machinery may return.
+NO_DEADLINE_TOKENS = (
+    "NAM_war_of_return_deadline",
+    "NAM_great_war_deadline",
+    "NAM_wor_deadline_armed",
+    "NAM_war_of_return_resolve_front",
+    "NAM_great_war_resolve_front",
+    "NAM_wor_settle_front_states",
+    "NAM_wor_settle_field_at_front",
+    "NAM_wor_front_return_held",
+    "NAM_wor_front_net",
+    "NAM_wor_after_front",
+    "NAM_wor_capitals_taken",
+    "NAM_wor_capital_lost",
+    "NAM_wor_recovery",
+    "NAM_great_war_recovery",
+    "ADISCORD_nam_resource_war.61",
+    "ADISCORD_nam_resource_war.106",
+    "62.d_front",
+    "62.d_held_exile",
+    "107.d_front",
+)
 
 
 def check_exile_revolution(
@@ -857,61 +871,50 @@ def check_exile_revolution(
         in named_block(named_block(decisions, "NAM_order_marines_corp"), "visible"),
         "the drill and the humanist marines must open in the junta's, the humanists' and the boards' trees",
     )
-    # A deadline front settles the return by the homeland it leaves; a failed
-    # war may be renewed after its recovery, and a stale deadline is ignored.
-    front = named_block(effects, "NAM_war_of_return_resolve_front")
+    # Both wars end only by full capitulation. A closure outside the treaty is
+    # the only ending that can leave Svetlogorye independent without a win, so
+    # the renewal decisions are its only retry path.
+    for token in NO_DEADLINE_TOKENS:
+        for name, text in (
+            ("effects", effects),
+            ("triggers", triggers),
+            ("decisions", decisions),
+            ("events", events),
+            ("localisation", loc),
+            ("tokens", read("common/synchronized_dynamic_tokens/ADISCORD_tokens.txt")),
+        ):
+            check(token not in text, f"the removed deadline machinery {token} is still referenced in {name}")
     external = named_block(effects, "NAM_war_of_return_close_external")
-    great_front = named_block(effects, "NAM_great_war_resolve_front")
+    great_external = named_block(effects, "NAM_great_war_close_external")
     renew = named_block(decisions, "NAM_exile_renew_war_of_return")
     renew_great = named_block(decisions, "NAM_renew_great_war")
     check(
-        all(f"owns_state = {state}" in named_block(triggers, "NAM_wor_front_return_held") for state in (67, 688, 689, 690, 719, 700))
-        and -1
-        < front.find("NAM_wor_settle_front_states = yes")
-        < front.find("NAM_wor_front_return_held = yes")
-        < front.find("set_global_flag = NAM_war_of_return_won")
-        < front.find("NAM_consolidation_begin = yes")
-        and "NAM_wor_front_return_held = yes" in external
-        and "set_global_flag = NAM_war_of_return_won" in external
-        and re.search(r"has_global_flag = NAM_wor_exile_war\b", named_block(triggers, "NAM_wor_exile_war_ready")) is None
-        and "has_global_flag = NAM_war_of_return_won" in named_block(triggers, "NAM_wor_exile_war_ready")
-        and re.search(r"has_global_flag = NAM_wor_exile_war\b", named_block(triggers, "NAM_exile_return_programme_open")) is None
-        and "flag = NAM_wor_recovery" in named_block(effects, "NAM_war_of_return_close")
-        and "NAM_war_of_return_start = yes" in renew
-        and "has_global_flag = NAM_wor_recovery" in renew
-        and "flag = NAM_wor_deadline_armed" in named_block(effects, "NAM_war_of_return_start")
-        and "has_global_flag = NAM_wor_deadline_armed"
-        in named_block(event_block(events, "ADISCORD_nam_resource_war.61"), "trigger"),
-        "the exile war must count a homeland front as won and let a failed war be renewed after recovery",
+        "set_global_flag = NAM_war_of_return_won" not in external
+        and "set_global_flag = NAM_great_war_won" not in great_external
+        and "activate_mission" not in named_block(effects, "NAM_great_war_start")
+        and "days = 365" not in named_block(effects, "NAM_great_war_start")
+        and "set_global_flag = NAM_war_of_return_won" in named_block(effects, "NAM_war_of_return_resolve_victory")
+        and "set_global_flag = NAM_great_war_won" in named_block(effects, "NAM_great_war_resolve_victory"),
+        "only the capitulation of every participant may win the war of return or the great war",
     )
     check(
-        "add_to_temp_variable = { var = NAM_wor_front_net value = 1 }" in named_block(effects, "NAM_wor_settle_front_states")
-        and "subtract_from_temp_variable = { var = NAM_wor_front_net value = 1 }"
-        in named_block(effects, "NAM_wor_settle_front_states")
-        and -1
-        < great_front.find("NAM_wor_settle_front_states = yes")
-        < great_front.find("NAM_wor_front_net > 0")
-        < great_front.find("set_global_flag = NAM_great_war_won")
+        re.search(r"has_global_flag = NAM_wor_exile_war\b", named_block(triggers, "NAM_wor_exile_war_ready")) is None
+        and "has_global_flag = NAM_war_of_return_won" in named_block(triggers, "NAM_wor_exile_war_ready")
+        and re.search(r"has_global_flag = NAM_wor_exile_war\b", named_block(triggers, "NAM_exile_return_programme_open")) is None
+        and "NAM_war_of_return_start = yes" in renew
+        and "NAM_war_of_return_can_start = yes" in renew
         and "NAM_great_war_started" not in named_block(triggers, "NAM_great_war_can_start")
         and "has_global_flag = NAM_great_war_won" in named_block(triggers, "NAM_great_war_can_start")
-        and "flag = NAM_great_war_recovery" in named_block(effects, "NAM_great_war_close")
         and "clr_global_flag = NAM_great_war_resolved" in named_block(effects, "NAM_great_war_start")
-        and "flag = NAM_great_war_deadline_armed" in named_block(effects, "NAM_great_war_start")
-        and "has_global_flag = NAM_great_war_deadline_armed"
-        in named_block(event_block(events, "ADISCORD_nam_resource_war.106"), "trigger")
         and "NAM_great_war_start = yes" in renew_great
-        and "has_global_flag = NAM_great_war_recovery" in renew_great,
-        "the great war must count a southward front as won and let a fruitless war be renewed after recovery",
+        and "NOT = { has_global_flag = NAM_great_war_won }" in named_block(renew_great, "visible"),
+        "a war closed outside the treaty must be renewable once its target still stands",
     )
     for key in (
         "NAM_exile_renew_war_of_return",
         "NAM_exile_renew_war_of_return_desc",
         "NAM_renew_great_war",
         "NAM_renew_great_war_desc",
-        "NAM_wor_recovery_tt",
-        "NAM_great_war_recovery_tt",
-        "ADISCORD_nam_resource_war.62.d_held_exile",
-        "ADISCORD_nam_resource_war.107.d_front_won",
     ):
         check(
             re.search(rf"(?m)^\s*{re.escape(key)}:", loc) is not None,
@@ -940,8 +943,6 @@ def check_exile_revolution(
         and all(f"{tag} = {{ NAM_wor_register_target = yes }}" in great for tag in GREAT_WAR_TARGETS)
         and great.find("NAM_wor_form_coalition = yes") < great.find("declare_war_on")
         and "ADISCORD_nam_resource_war_reserve_major = yes" in great
-        and "activate_mission = NAM_great_war_deadline" in great
-        and "id = ADISCORD_nam_resource_war.106 days = 365" in great
         and -1
         < great_close.find("set_global_flag = NAM_great_war_resolved")
         < great_close.find("NAM_wor_release_participants = yes")
@@ -951,15 +952,13 @@ def check_exile_revolution(
             for name in (
                 "NAM_great_war_resolve_victory",
                 "NAM_great_war_resolve_defeat",
-                "NAM_great_war_resolve_front",
                 "NAM_great_war_close_external",
             )
         )
         and "set_global_flag = NAM_great_war_won" in named_block(effects, "NAM_great_war_resolve_victory")
         and "NAM_great_war_resolve_victory = yes" in read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
         and "NAM_great_war_resolve_defeat = yes" in read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
-        and read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").count("NAM_great_war_close_external = yes") >= 3
-        and re.search(r"(?m)^NAM_great_war_deadline\s*$", read("common/synchronized_dynamic_tokens/ADISCORD_tokens.txt")) is not None,
+        and read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").count("NAM_great_war_close_external = yes") >= 3,
         "the great war must wake its targets, unite them, close on every path and settle through the dispatcher",
     )
     # The corporate state's districts.
