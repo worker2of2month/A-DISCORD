@@ -20,21 +20,20 @@ state={
 	history = {
 		owner = AZH
 		add_core_of = AZH
-		victory_points = { 367 5 }
-		victory_points = { 8234 2 }
+		victory_points = { 16893 5 }
+		victory_points = { 16883 5 }
+		victory_points = { 16886 5 }
+		victory_points = { 16889 5 }
+		victory_points = { 16894 5 }
+		victory_points = { 8234 1 }
+		victory_points = { 16882 5 }
+		victory_points = { 16888 5 }
+		victory_points = { 16891 5 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 2
 			arms_factory = 1
 			air_base = 1
 		}
-		victory_points = { 16882 1 }
-		victory_points = { 16883 1 }
-		victory_points = { 16886 1 }
-		victory_points = { 16888 1 }
-		victory_points = { 16889 1 }
-		victory_points = { 16891 1 }
-		victory_points = { 16893 1 }
-		victory_points = { 16894 1 }
 	}
 }

@@ -1,4 +1,4 @@
-capital = 68
+capital = 701
 
 oob = "EFL"
 ####### Characters

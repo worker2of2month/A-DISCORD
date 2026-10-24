@@ -952,8 +952,8 @@ class NamValidatorTests(unittest.TestCase):
         path = "history/countries/NAM - NamestnikLand.txt"
         self.assert_rejected("history capital", sources={path: read(path).replace("capital = 700", "capital = 689")})
         for state, before, after in (
-            (67, "victory_points = { 6099 3 }", "victory_points = { 6099 3 }\n victory_points = { 1710 2 }"),
-            (688, "victory_points = { 16721 3 }", "victory_points = { 689 3 }"),
+            (67, "victory_points = { 6099 1 }", "victory_points = { 6099 1 }\n victory_points = { 1710 1 }"),
+            (688, "victory_points = { 16721 5 }", "victory_points = { 689 5 }"),
             (689, "history = {", "history = {\n victory_points = { 2038 5 }"),
             (700, "victory_points = { 16716 5 }", "victory_points = { 16716 4 }"),
         ):

@@ -2926,19 +2926,22 @@ def main() -> int:
     )
 
     expected_victory_points = {
-        67: {6099: 3},
-        68: {259: 5, 6150: 2},
-        69: {367: 5, 8234: 2},
-        70: {2986: 2, 6495: 4},
-        688: {16721: 3, 1710: 2},
+        67: {6099: 1, 16890: 5},
+        68: {6150: 1},
+        69: {
+            16893: 5, 16883: 5, 16886: 5, 16889: 5, 16894: 5,
+            8234: 1, 16882: 5, 16888: 5, 16891: 5,
+        },
+        70: {2986: 1, 6495: 1},
+        688: {16721: 5, 1710: 1},
         689: {},
-        690: {8058: 2, 9016: 2},
+        690: {8058: 1, 9016: 1, 16885: 5, 16887: 5},
         691: {},
-        692: {493: 3, 5039: 2},
-        700: {16716: 5},
+        692: {493: 1, 5039: 1},
+        700: {16716: 5, 16881: 5, 16884: 5, 16892: 5},
         701: {16717: 5},
         719: {},
-        720: {8057: 3},
+        720: {8057: 1},
         721: {},
         722: {},
     }
@@ -2956,17 +2959,17 @@ def main() -> int:
         )
     check(
         sum(sum(expected_victory_points[state].values()) for state in (67, 688, 689, 690, 700, 719))
-        == 17,
-        "NAM mainland VP total must be 17",
+        == 44,
+        "NAM mainland VP total must be 44",
     )
     check(
         sum(sum(expected_victory_points[state].values()) for state in (68, 70, 691, 701, 720, 721))
-        == 21,
-        "EFL mainland VP total must be 21",
+        == 9,
+        "EFL mainland VP total must be 9",
     )
     check(
-        sum(sum(expected_victory_points[state].values()) for state in (69, 692, 722)) == 12,
-        "AZH mainland VP total must be 12",
+        sum(sum(expected_victory_points[state].values()) for state in (69, 692, 722)) == 43,
+        "AZH mainland VP total must be 43",
     )
 
     localisation = (

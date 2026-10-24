@@ -154,7 +154,7 @@ class AzharPalaceTests(unittest.TestCase):
         scale = float(re.search(r"scale\s*=\s*([\d.]+)", block)[1])
         state = (ROOT / "history/states/692-Black-Coast.txt").read_text()
         self.assertRegex(state, r"owner\s*=\s*AZH\b")
-        self.assertRegex(state, r"victory_points\s*=\s*\{\s*493\s+3\s*\}")
+        self.assertRegex(state, r"victory_points\s*=\s*\{\s*493\s+1\s*\}")
         report = json.loads((ROOT / azhar.REPORT).read_text())
         self.assertEqual(report["placement"]["province"], 493)
         self.assertEqual(report["placement"]["position"], [x, y, z])
