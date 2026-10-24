@@ -7,7 +7,7 @@ NAM_colony = {
 	priority = 25
 }
 
-# The island exile's flotillas, black market, drill and marines.
+# The junta's flotillas, black market, drill and marines.
 NAM_piracy = {
 	icon = generic_naval
 	allowed = { tag = NAM }
@@ -15,6 +15,47 @@ NAM_piracy = {
 	visible_when_empty = yes
 	priority = 25
 	scripted_gui = ADISCORD_NAM_piracy_panel
+}
+
+# After the island council of event .100 the exiles drill for the return,
+# whichever course took the seals, and renew an exile war that failed.
+NAM_exile_politics = {
+	icon = generic_political_pressure
+	allowed = { tag = NAM }
+	visible = {
+		NAM_exile_return_programme_open = yes
+		OR = {
+			NAM_exile_drill_unlocked = yes
+			has_global_flag = NAM_wor_exile_war
+		}
+	}
+	priority = 26
+}
+
+# Veter's humanists: foreign capital, free zones and corporate influence.
+NAM_free_zones = {
+	icon = generic_industry
+	allowed = { tag = NAM }
+	visible = { NAM_corp_open = yes }
+	visible_when_empty = yes
+	priority = 25
+}
+
+# The hold on the returned south between the exile war and the great war.
+NAM_consolidation = {
+	icon = generic_prepare_civil_war
+	allowed = { tag = NAM }
+	visible = { NAM_consolidation_open = yes }
+	visible_when_empty = yes
+	priority = 24
+}
+
+# The conquered south after the wars of the exile.
+NAM_southern_lands = {
+	icon = generic_political_discourse
+	allowed = { tag = NAM }
+	visible = { has_country_flag = NAM_southern_lands_open }
+	priority = 22
 }
 
 NAM_restitution = {
@@ -33,9 +74,9 @@ NAM_mobilisation = {
 	priority = 23
 }
 
-# The compromise peace and the island exile load the defeat tree; the category
-# stays open on those routes and after a standoff through the settlement flags
-# as well as through the shared main tree.
+# The compromise peace loads the defeat tree and the island exile its course
+# tree; the category stays open on those routes and after a standoff through
+# the settlement flags as well as through the shared main tree.
 NAM_national_programmes = {
 	icon = generic_industry
 	allowed = { tag = NAM }

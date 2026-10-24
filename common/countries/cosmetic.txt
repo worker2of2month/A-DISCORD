@@ -227,3 +227,186 @@ NAM_oil_union = {
 	color = rgb { 65 94 112 }
 	color_ui = rgb { 105 139 158 }
 }
+
+# Svetlogorye after the corporate takeover of the humanist exile.
+NAM_corporate_state = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+# Federal districts of Svetlogorye after the humanist return, in its colour.
+EFL_NAM_federal_district = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+AZH_NAM_federal_district = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+RHM_NAM_federal_district = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+SDR_NAM_federal_district = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+KDR_NAM_federal_district = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+# Districts of the corporate state: corporation 1-6 owning each southern district.
+EFL_NAM_corp_1 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+EFL_NAM_corp_2 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+EFL_NAM_corp_3 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+EFL_NAM_corp_4 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+EFL_NAM_corp_5 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+EFL_NAM_corp_6 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+AZH_NAM_corp_1 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+AZH_NAM_corp_2 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+AZH_NAM_corp_3 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+AZH_NAM_corp_4 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+AZH_NAM_corp_5 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+AZH_NAM_corp_6 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+RHM_NAM_corp_1 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+RHM_NAM_corp_2 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+RHM_NAM_corp_3 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+RHM_NAM_corp_4 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+RHM_NAM_corp_5 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+RHM_NAM_corp_6 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+SDR_NAM_corp_1 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+SDR_NAM_corp_2 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+SDR_NAM_corp_3 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+SDR_NAM_corp_4 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+SDR_NAM_corp_5 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+SDR_NAM_corp_6 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+KDR_NAM_corp_1 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+KDR_NAM_corp_2 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+KDR_NAM_corp_3 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+KDR_NAM_corp_4 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+KDR_NAM_corp_5 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+KDR_NAM_corp_6 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}

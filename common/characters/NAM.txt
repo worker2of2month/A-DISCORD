@@ -150,12 +150,41 @@ characters = {
 		}
 	}
 
-	# Yaroslav Weber on Svetlogorye's side after the amnesty. The uprising keeps
-	# its own SLF character; this one is recruited only by the amnesty.
+	# Leaders of the island exile. The pillars' junta chief and the chairman
+	# of the corporate boards receive their leader roles from
+	# NAM_exile_choose_radical and NAM_corp_takeover.
+	NAM_Rostislav_Karamyshev = {
+		name = NAM_Rostislav_Karamyshev
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_4
+				small = GFX_Portrait_Forul_Generic_4_small
+			}
+		}
+	}
+
+	NAM_Mark_Olshansky = {
+		name = NAM_Mark_Olshansky
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_5
+				small = GFX_Portrait_Forul_Generic_5_small
+			}
+		}
+	}
+
+	# Yaroslav Weber on Svetlogorye's side after the amnesty or as the humanist
+	# leader of the island exile. The uprising keeps its own SLF character; this
+	# one is recruited by the amnesty or by the humanists' overthrow of the
+	# namestnik, which also adds his leader role.
 	NAM_Yaroslav_Weber = {
 		name = NAM_Yaroslav_Weber
 		portraits = {
 			army = {
+				large = GFX_Portrait_Forul_Generic_9
+				small = GFX_Portrait_Forul_Generic_9_small
+			}
+			civilian = {
 				large = GFX_Portrait_Forul_Generic_9
 				small = GFX_Portrait_Forul_Generic_9_small
 			}

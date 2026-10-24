@@ -47,7 +47,7 @@ oil must matter to other countries.
 | Victory | after war | Border belts and punishment, then `NAM_postwar_focus`: recognition, course, endings, South, EFL/AZH aftermath, RUS crisis |
 | Standoff | after war | Pre-war border, no treaty or punishment, then the same `NAM_postwar_focus` |
 | Compromise | after war | `NAM_defeated_focus`: revenge or accommodation |
-| Island exile | after war | Mainland lost, capital on the islands, `NAM_defeated_focus` with the revanchist branch |
+| Island exile | after war | Mainland lost, capital on the islands; event .100 loads `NAM_exile_radical_focus` or `NAM_exile_humanist_focus`, the takeover `NAM_exile_corporate_focus` |
 | Total partition | after war | Only when NAM owns no island: NAM is annexed |
 
 ## Map split for the war
@@ -185,9 +185,9 @@ Owner: core phase 1.
   (`NAM_rw_can_go_into_exile`), `NAM_rw_settle_island_exile` sets
   `ADISCORD_nam_resource_war_island_exile`, moves the capital to the first
   owned of 228, 225, 227, 231, 226, 229, 230, restores control of the
-  islands, ends oil contracts (the 231 steel concession continues) and loads
-  `NAM_defeated_focus` with `keep_completed = no` unless it is already
-  loaded. Islands are never transferred. Without an island NAM is annexed by
+  islands and ends oil contracts (the 231 steel concession continues); it
+  loads no tree: the island council of event .100 right after the flight
+  loads the course's exile tree (M10). Islands are never transferred. Without an island NAM is annexed by
   EFL as before. News `.2` has exile and partition texts. The war of return
   is open after the compromise or the exile and also targets 700; winning it
   back returns an exiled capital to 700.
@@ -410,7 +410,8 @@ Owner: core phase 4 (third playtest batch).
   fields and the harbour (`NAM_rw_exile_scorch_state`: condition -70,
   `NAM_scorched_wells_modifier` 180 days, building damage), forms
   under-strength remnants on the island capital up to the carried share, seeds
-  the piracy variables and fires .81 "Flight to the Islands".
+  the piracy variables and fires .81 "Flight to the Islands" (7-day timeout);
+  each of its answers convenes the island council .100 six hours later.
 - Piracy (category `NAM_piracy`, `NAM_piracy_open`): one decision per foreign
   shipping lane past the islands, `NAM_pirate_raid_lane_<id>`: oil run AZH-EFL
   (coalition, rich prize x1.5), northern coast RIV-EFL (coalition while EFL
@@ -437,6 +438,148 @@ Owner: core phase 4 (third playtest batch).
   (`prioritize_location = 16716`, enemy provinces allowed); further paid
   orders form on the island capital; report .94.
 
+## M10. Exile revolution: radicals or humanists
+
+Both routes overthrow the namestnik (the current NAM leader, Egor Rom or a coup
+leader) in exile and keep the revenge goal; they differ in how they pay for it
+and in what they do with the conquered south. The exile's road has three
+stages: the war of return against Eflor and Azhar, the consolidation of the
+returned south and the great war against the rest of the south.
+
+- Trigger: no decision. Every answer of the flight event .81 fires the island
+  council `ADISCORD_nam_resource_war.100` six hours later, for the human and
+  the AI alike (trigger `NAM_exile_revolution_open`: NAM, exile flag, no course
+  yet; 7-day timeout, the first answer is the unattended one). Its two answers
+  set the NAM country flag `NAM_exile_radical` (the pillars of Svetlogorye
+  overthrow him) or `NAM_exile_humanist` (the humanists of Yaroslav Veter
+  overthrow him) and then load `NAM_exile_radical_focus` or
+  `NAM_exile_humanist_focus` with `keep_completed = yes`. Until then NAM keeps
+  the tree it lost the war with. The choice is final.
+  `NAM_exile_choose_radical`: leader `NAM_Rostislav_Karamyshev` (Rostislav
+  Karamyshev, etatism, traits `NAM_trait_pillar_junta_chief` and
+  `NAM_trait_corsair_patron`), ruling etatism 75 / humanism 25, spirit
+  `NAM_exile_pillar_junta`, readiness +5. `NAM_exile_choose_humanist`:
+  `NAM_Yaroslav_Veter` recruited if needed and promoted (humanism, trait
+  `NAM_trait_voice_of_the_districts`), ruling humanism 60 / etatism 40, spirit
+  `NAM_exile_free_islands`, `NAM_corp_initialize` (the exile's loot becomes
+  capital). Both call `NAM_rom_step_down`.
+- Shared return programme (`NAM_exile_return_programme_open`: exile, course
+  chosen, the exile war not yet started): `NAM_exile_drill` (category
+  `NAM_exile_politics`, after `NAM_exile_general_staff`, 20 PP plus 30 loot under
+  the junta or 30 capital under the humanists, refunded in the paid currency)
+  and marine orders: `NAM_order_marines` (junta, 50 loot, focus
+  `NAM_exile_marine_orders`) or `NAM_order_marines_corp` (humanists, 60
+  capital, focus `NAM_hum_marine_contracts`); both use `NAM_marine_orders_paid`
+  under `NAM_marine_order_cap`, released by `NAM_order_marines_release` /
+  `NAM_order_marines_corp_release` with the paid currency.
+- Radicals: piracy (`NAM_piracy_open` requires `NAM_exile_radical`). Policy on
+  every conquest: annexation; non-homeland states get the state flag
+  `NAM_conquered_state`, NAM's array `NAM_conquered_states` and the modifier
+  `NAM_conquered_state_modifier` (no development). Category
+  `NAM_southern_lands`: `NAM_radical_labour_camp` (focus `NAM_rad_labour_camps`,
+  25 PP, 30 days, `NAM_labour_camp_state`: resources +50%, recruits -50%, no
+  building, compliance and resistance penalties) and `NAM_radical_strip_state`
+  (focus `NAM_rad_spoils_of_return`, 10 PP, once per state: one civilian and
+  one military factory dismantled into treasury and arms, 1000 fuel,
+  `NAM_stripped_state` for 365 days).
+- Humanists: corporate economy modelled on The Fire Rises' corporate
+  influence bands. Currency `NAM_corp_capital` (`NAM_corp_capital_add` with temp
+  `NAM_corp_capital_change`), influence `NAM_corp_influence` 0..100
+  (`NAM_corp_influence_clamp` recalculates the single aggregate
+  `NAM_corp_dynamic` and opens the threshold events), free-zone slots
+  `NAM_free_zone_slots` (1..3). Category `NAM_free_zones`:
+  `NAM_corp_charter_free_zone` (focus `NAM_hum_free_zones`, islands 225-231, 30
+  PP, 30 days; state modifier `NAM_free_zone_state`, -3% tax collection per
+  zone, +20 capital, +5 influence), `NAM_corp_sell_steel`
+  (`NAM_hum_steel_exchange`), `NAM_corp_labour_contract`
+  (`NAM_hum_labour_bureau`, 3000 recruits leased for 90 days),
+  `NAM_corp_innovation_park` (`NAM_hum_innovation_parks`, two industry
+  breakthroughs), `NAM_corp_buy_arms` (`NAM_hum_credit_arms`),
+  `NAM_corp_curb_influence` (`NAM_hum_regulated_partnership` or
+  `NAM_hum_charter_commission`), `NAM_corp_court_investors`
+  (`NAM_hum_open_doors`). Monthly in `on_monthly_NAM`: income per zone 20 +
+  0.3 x influence; drift +1 per zone, +1 while workers are leased, -1. Bands:
+  below 30 nothing, 30-69 research/efficiency/trade, 70-89 plus stability and
+  PP penalties and event `.101`, from 90 event `.102`; three months at 90 or
+  100 at once queue the takeover `.103`.
+- Corporate takeover (`NAM_corp_takeover`, country flag `NAM_corp_takeover`):
+  chairman `NAM_Mark_Olshansky` (commercial hedonism, trait
+  `NAM_trait_chairman_of_the_boards`), cosmetic tag `NAM_corporate_state`,
+  island boards `NAM_corporate_board_state`, influence fixed at 100, and
+  `load_focus_tree = { tree = NAM_exile_corporate_focus keep_completed = yes }`
+  after the flag. The humanist course continues: every federal
+  district belongs to one of six corporations - 1 Yuzhneft oil concern, 2
+  Island Steel trust, 3 Sea Line shipping company, 4 Coastal Arsenal arms
+  company, 5 Artel labour agency, 6 Island Credit bank - recorded in the
+  district's variable `NAM_corp_district_owner`. The owner gives the district
+  the profile modifier `NAM_corp_owner_<n>_district`, the cosmetic tag
+  `<TAG>_NAM_corp_<n>` ("Corporation: District") and pays the board a monthly
+  dividend (capital, fuel or rifles). Rival corporations dispute districts
+  (event `.108`, country flag `NAM_corp_dispute_open`, district flag
+  `NAM_corp_disputed`); decisions `NAM_corp_auction_district`,
+  `NAM_corp_board_arbitration` and `NAM_corp_charter_renewal`.
+- Humanist policy on every conquest: the defeated country becomes a puppet with
+  autonomy `autonomy_NAM_federal_district` (all manpower and trade, 90% of
+  resources, 75% of civilian and 90% of military factories to NAM), country
+  flag `NAM_federal_district`, NAM's array `NAM_federal_districts` and the
+  cosmetic tag `<TAG>_NAM_federal_district` (or its corporation's tag after the
+  takeover). Category `NAM_southern_lands`: `NAM_federal_council_session`
+  (focus `NAM_hum_union_council`).
+- War of return from exile (`NAM_war_of_return_start` behind
+  `NAM_war_of_return_can_start`; global flag `NAM_wor_exile_war`): against
+  Eflor and Azhar only, in one temporary coalition from the shared faction
+  template (dismantled on every terminal path), with the marine landing on
+  South Harbour. Both capitulated: the homeland returns and the course's policy
+  applies to both; global flag `NAM_war_of_return_won`; the consolidation
+  begins. NAM capitulation: Svetlogorye with its islands is annexed by the
+  participant holding its capital or the coalition's first independent member
+  (news `.8`). The war has no deadline: it ends only when every participant
+  or Svetlogorye has capitulated (the compromise war of return likewise ends
+  only with the capitulation of every owner or the coalition treaty). A
+  native peace, annexation or subjugation outside the treaty
+  (`NAM_war_of_return_close_external`) closes it without awards; that is the
+  only ending that can leave an independent exile without a win, so it is the
+  only retry path: the return programme reopens and the decision
+  `NAM_exile_renew_war_of_return` (category `NAM_exile_politics`, 50 PP,
+  behind `NAM_war_of_return_can_start`) declares the next exile war while
+  Eflor or Azhar still stands. `NAM_wor_exile_war_ready` blocks only a won or
+  running war. The war of return after the compromise keeps its original
+  field-owner form.
+- Consolidation (`NAM_consolidation` 0..100 with `NAM_consolidation_clamp`;
+  `NAM_consolidation_begin` at the exile war's victory sets 10 and the country
+  flag `NAM_consolidation_started`): +2 a month, -2 below 40% stability, the
+  aggregate `NAM_consolidation_dynamic` (stability, compliance). The junta pays
+  3 treasury a month per conquered state until 100 and uses
+  `NAM_rad_garrison_order` (+3 a month for 90 days, 20 treasury a month) and
+  `NAM_rad_terror_campaign` (+8); the humanists use `NAM_hum_federal_treaty`
+  (+6, per district) and `NAM_hum_reconstruction_fund` (+10 after 60 days, 60
+  capital in escrow). Below 70 a 30% monthly roll (60-day cooldown) opens
+  incident `.104` in a conquered state or a federal district with three costed
+  answers per course. Category `NAM_consolidation`.
+- Great war (`NAM_great_war_start` behind `NAM_great_war_can_start`: exile war
+  won, consolidation >= 70, no War for the South, a target left): one war
+  against Rahma, Sardan and Kadir plus Eflor or Azhar while still
+  independent. Suppressed minors are woken first; the targets fight in one
+  temporary coalition; every participant holds mandatory major status only for
+  this war. Global flags `NAM_great_war_started`, `NAM_great_war_resolved`,
+  `NAM_great_war_won`; events `.105` (declaration) and `.107` (victory). The
+  war has no deadline. The dispatcher sections of
+  `09_ADISCORD_scripted_peace_on_actions.txt` route NAM capitulation to
+  `NAM_great_war_resolve_defeat` (annexation), the fall of every participant to
+  `NAM_great_war_resolve_victory` (the course's policy for all) and native
+  peace, annexation or subjugation to `NAM_great_war_close_external` (no
+  award). After that external closure alone, the decision `NAM_renew_great_war`
+  (category `NAM_consolidation`, 50 PP) restarts the war;
+  `NAM_great_war_can_start` blocks only a running or won great war.
+- Drill and marines per tree: `NAM_exile_drill` and its category open with
+  `NAM_exile_drill_unlocked` (`NAM_exile_general_staff`,
+  `NAM_hum_citizen_army` or `NAM_hum_company_guard`); `NAM_order_marines_corp`
+  with `NAM_hum_marine_contracts` or `NAM_board_landing_contracts`.
+- Symmetry: in both wars each side wins only by forcing the full
+  capitulation of the other; there is no deadline, front settlement or capital
+  rule, and no neutral state counts for either side. Events `.61` and `.106`
+  (the former deadlines) are retired and kept reserved in the event registry.
+
 ## Shared contract for focus rewards
 
 Focus rewards may only use native effects and the identifiers below. A focus
@@ -462,6 +605,13 @@ refresh effect inside `hidden_effect`, with a visible tooltip of the delta.
 | `NAM_pirate_raid_slots` (base 1, max 3) | core 4 | Parallel raids |
 | `NAM_revenge_readiness` + `NAM_revenge_readiness_clamp = yes` | core 4 | Preparation for the return 0..100; 70 adds a landing division |
 | `NAM_marine_order_cap` (base 1, max 3) | core 4 | Marine orders allowed |
+| `NAM_exile_radical` / `NAM_exile_humanist` country flags | M10 | Course chosen by event .100 |
+| `NAM_corp_capital` via temp `NAM_corp_capital_change` + `NAM_corp_capital_add = yes` | M10 | Foreign capital of the humanists |
+| `NAM_corp_influence` + `NAM_corp_influence_clamp = yes` | M10 | Corporate influence 0..100 |
+| `NAM_free_zone_slots` (base 1, max 3) | M10 | Free zones chartered at once |
+| `NAM_consolidation` via temp `NAM_cons_change` + `NAM_consolidation_add = yes` | M10 | Hold on the returned south 0..100; 70 opens the great war |
+| `NAM_great_war_start = yes` behind `NAM_great_war_can_start = yes` | M10 | The great war against the rest of the south |
+| Global flags `NAM_wor_exile_war`, `NAM_war_of_return_won`, `NAM_great_war_started`, `NAM_great_war_won`; country flags `NAM_consolidation_started`, `NAM_corp_takeover`, `NAM_federal_district`; state flag `NAM_conquered_state`; district variable `NAM_corp_district_owner` (1-6) | M10 | Read-only markers for focus conditions |
 | `ADISCORD_nam_memoir.1..5`, `ADISCORD_nam_archive.1..6` | core 3 | Memoir and archive events |
 
 Decision IDs available to `unlock_decision_tooltip`:

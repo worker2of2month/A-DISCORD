@@ -200,62 +200,202 @@ NAM_defeated_plan = {
 	weight = { factor = 20 }
 }
 
-# In island exile the AI holds the war port, the barracks, the letters of
-# marque, the submarines, the levy, the strike from the sea and the armed
-# underground, then lands for the war of return.
-NAM_defeated_exile_plan = {
-	name = "NAM island exile"
+# The radical pillars: tribunals, the levy, letters of marque, submarines,
+# the war port and the strike from the sea; after the return, hostages;
+# after the great war, garrison rule over the conquered. The island council
+# of event .100 loads their tree right after the flight.
+NAM_exile_radical_plan = {
+	name = "NAM exile radicals"
 	desc = ""
 	allowed = { original_tag = NAM }
 	enable = {
 		tag = NAM
 		is_ai = yes
-		has_focus_tree = NAM_defeated_focus
-		has_global_flag = ADISCORD_nam_resource_war_island_exile
+		has_focus_tree = NAM_exile_radical_focus
+		has_country_flag = NAM_exile_radical
 	}
 	abort = {
 		OR = {
 			NOT = { tag = NAM }
-			NOT = { has_focus_tree = NAM_defeated_focus }
+			NOT = { has_focus_tree = NAM_exile_radical_focus }
+			NOT = { has_country_flag = NAM_exile_radical }
 		}
 	}
 	ai_national_focuses = {
-		NAM_exile_island_government
-		NAM_exile_island_chancellery
+		NAM_rad_pillar_junta
 		NAM_exile_general_staff
-		NAM_exile_mainland_contacts
 		NAM_exile_sea_raiders
-		NAM_exile_naval_port
-		NAM_exile_refugee_census
-		NAM_exile_refugee_barracks
+		NAM_rad_tribunals
+		NAM_rad_war_council
 		NAM_exile_levy_of_exiles
-		NAM_exile_armed_underground
 		NAM_exile_letters_of_marque
-		NAM_exile_landing_craft
-		NAM_exile_arms_purchases
 		NAM_exile_marine_orders
-		NAM_exile_harbour_pilots
-		NAM_exile_privateer_captains
-		NAM_exile_strike_from_the_sea
-		NAM_exile_island_lines
-		NAM_exile_island_steel
-		NAM_exile_voice_of_svetlogorye
-		NAM_exile_klyuchevsk_strike
-		NAM_exile_landing_school
+		NAM_exile_landing_craft
 		NAM_exile_fences
-		NAM_exile_tanker_raids
-		NAM_exile_wolfpacks
+		NAM_rad_enemy_lists
+		NAM_exile_armed_underground
+		NAM_exile_strike_from_the_sea
+		NAM_exile_landing_school
+		NAM_exile_harbour_pilots
 		NAM_exile_army_of_return
-		NAM_exile_return_council
-		NAM_defeat_war_of_return
+		NAM_rad_return_plan
+		NAM_rad_war_of_return
+		NAM_exile_tanker_raids
+		NAM_exile_privateer_captains
+		NAM_exile_wolfpacks
+		NAM_exile_arms_purchases
+		NAM_rad_island_requisitions
+		NAM_exile_naval_port
+		NAM_exile_coastal_batteries
+		NAM_exile_island_foundry
 		NAM_exile_black_market
 		NAM_exile_hidden_anchorages
 		NAM_exile_corsair_admiralty
-		NAM_exile_coastal_batteries
-		NAM_exile_island_foundry
+		NAM_rad_spoils_of_return
+		NAM_rad_martial_law
+		NAM_rad_labour_camps
+		NAM_rad_oil_seizure
+		NAM_rad_hostage_system
+		NAM_rad_garrison_belt
+		NAM_rad_field_tribunals
+		NAM_rad_pacification
+		NAM_rad_three_capitals
+		NAM_rad_penal_legions
+		NAM_rad_plunder_economy
+		NAM_rad_great_war_plan
+		NAM_rad_great_war
+		NAM_rad_southern_tribute
+		NAM_rad_garrison_rule
+		NAM_rad_sardan_levies
+		NAM_rad_kadir_tolls
+		NAM_rad_machines_to_islands
+		NAM_rad_army_of_dominion
+		NAM_rad_rakhma_wells
+		NAM_rad_pillar_estates
+		NAM_rad_dominion_of_pillars
+	}
+	weight = { factor = 20 }
+}
+
+# Veter's humanists: the regulated partnership, union agreements, the district
+# militia, the split coalition, the civic underground and the free port; after
+# the return, the charter of equal districts; after the great war, a union
+# currency.
+NAM_exile_humanist_plan = {
+	name = "NAM exile humanists"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_exile_humanist_focus
+		has_country_flag = NAM_exile_humanist
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_exile_humanist_focus }
+			NOT = { has_country_flag = NAM_exile_humanist }
+		}
+	}
+	ai_national_focuses = {
+		NAM_hum_veter_government
+		NAM_hum_free_zones
+		NAM_hum_citizen_army
+		NAM_hum_regulated_partnership
+		NAM_hum_steel_exchange
+		NAM_hum_credit_arms
+		NAM_hum_district_militia
+		NAM_hum_marine_contracts
+		NAM_exile_mainland_contacts
+		NAM_exile_civic_underground
+		NAM_hum_federal_programme
+		NAM_hum_split_coalition
+		NAM_hum_mainland_committees
+		NAM_hum_landing_rehearsals
+		NAM_hum_army_of_citizens
+		NAM_hum_return_manifesto
+		NAM_hum_war_of_return
+		NAM_hum_labour_bureau
+		NAM_hum_union_contracts
+		NAM_hum_innovation_parks
+		NAM_hum_charter_harbours
+		NAM_hum_charter_commission
+		NAM_exile_island_chancellery
+		NAM_exile_free_port
+		NAM_exile_island_steel
 		NAM_exile_overseas_districts
-		NAM_exile_home_harbour
-		NAM_defeat_second_chapter
+		NAM_hum_federal_districts
+		NAM_hum_federal_treaties
+		NAM_hum_union_council
+		NAM_hum_harbour_rebuilding
+		NAM_hum_districts_charter
+		NAM_hum_district_police
+		NAM_hum_union_roads
+		NAM_hum_truth_commission
+		NAM_hum_union_accepted
+		NAM_hum_southern_offer
+		NAM_hum_federal_army
+		NAM_hum_union_war_bonds
+		NAM_hum_union_call
+		NAM_hum_great_war
+		NAM_hum_southern_districts
+		NAM_hum_union_parliament
+		NAM_hum_water_compact
+		NAM_hum_dry_river_works
+		NAM_hum_caravan_charter
+		NAM_hum_union_currency
+		NAM_hum_union_university
+		NAM_hum_common_market
+		NAM_hum_union_constitution
+	}
+	weight = { factor = 20 }
+}
+
+# The corporate boards after the takeover: Veter's ministers stay as a facade,
+# the company guard lands if the return is still ahead, the oil concern takes
+# Eflor and Rakhma, the bank Azhar and Kadir, the arms company Sardan.
+NAM_exile_corporate_plan = {
+	name = "NAM corporate boards"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_exile_corporate_focus
+		has_country_flag = NAM_exile_humanist
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_exile_corporate_focus }
+			NOT = { has_country_flag = NAM_exile_humanist }
+		}
+	}
+	ai_national_focuses = {
+		NAM_hum_board_of_governors
+		NAM_hum_company_guard
+		NAM_board_humanist_facade
+		NAM_board_landing_contracts
+		NAM_board_constitution
+		NAM_board_war_of_return
+		NAM_board_shareholders
+		NAM_board_private_navy
+		NAM_board_corporate_courts
+		NAM_board_island_concessions
+		NAM_board_security_contracts
+		NAM_board_reconstruction_tenders
+		NAM_board_homeland_concession
+		NAM_board_district_auction
+		NAM_board_stock_mobilisation
+		NAM_board_eflor_oil
+		NAM_board_azhar_bank
+		NAM_board_great_war
+		NAM_hum_board_districts
+		NAM_board_sardan_arsenal
+		NAM_board_rakhma_oil
+		NAM_board_kadir_bank
+		NAM_board_union_of_boards
 	}
 	weight = { factor = 20 }
 }

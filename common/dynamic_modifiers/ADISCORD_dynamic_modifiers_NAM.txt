@@ -92,6 +92,130 @@ NAM_pirate_blockade = {
 	convoy_raiding_efficiency_factor = -0.15
 }
 
+# COUNTRY NAM under Veter's humanists. Corporate influence bands and the tax
+# holidays of the free zones; NAM_corp_refresh writes every field.
+NAM_corp_dynamic = {
+	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	enable = { tag = NAM }
+	research_speed_factor = NAM_corp_mod_research
+	production_factory_efficiency_gain_factor = NAM_corp_mod_efficiency
+	ADISCORD_economy_trade_income_factor = NAM_corp_mod_trade
+	ADISCORD_economy_tax_collection_factor = NAM_corp_mod_tax
+	stability_factor = NAM_corp_mod_stability
+	political_power_gain = NAM_corp_mod_pp
+}
+
+# STATE island. A chartered free zone: no taxes, fast construction for the
+# investors and a richer output.
+NAM_free_zone_state = {
+	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	enable = { always = yes }
+	remove_trigger = { NOT = { is_owned_by = NAM } }
+	state_production_speed_buildings_factor = 0.25
+	local_resources_factor = 0.10
+	local_building_slots = 1
+}
+
+# STATE island. The island steel sold abroad for 60 days.
+NAM_corp_steel_export_state = {
+	icon = GFX_idea_ADISCORD_trade_policy_limited_exports
+	enable = { always = yes }
+	state_resources_factor = -0.50
+}
+
+# STATE island after the corporate takeover. A corporate board governs it.
+NAM_corporate_board_state = {
+	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	enable = { always = yes }
+	remove_trigger = { NOT = { is_owned_by = NAM } }
+	state_resources_factor = 0.15
+	state_production_speed_buildings_factor = 0.15
+	recruitable_population_factor = -0.20
+}
+
+# COUNTRY NAM after the exile war. NAM_consolidation_clamp derives both fields
+# from the 0-100 hold on the returned south.
+NAM_consolidation_dynamic = {
+	icon = GFX_idea_generic_fortify_the_borders
+	enable = { tag = NAM }
+	stability_factor = NAM_cons_mod_stability
+	compliance_gain = NAM_cons_mod_compliance
+}
+
+# COUNTRY federal district under the corporate state: the owning
+# corporation's profile (NAM_corp_district_owner 1-6).
+NAM_corp_owner_1_district = {
+	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	enable = { always = yes }
+	fuel_gain_factor = 0.25
+	stability_factor = -0.05
+}
+
+NAM_corp_owner_2_district = {
+	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	enable = { always = yes }
+	local_resources_factor = 0.15
+	stability_factor = -0.03
+}
+
+NAM_corp_owner_3_district = {
+	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	enable = { always = yes }
+	ADISCORD_economy_trade_income_factor = 0.15
+	consumer_goods_factor = 0.03
+}
+
+NAM_corp_owner_4_district = {
+	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	enable = { always = yes }
+	production_factory_efficiency_gain_factor = 0.10
+	war_support_factor = -0.05
+}
+
+NAM_corp_owner_5_district = {
+	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	enable = { always = yes }
+	recruitable_population_factor = 0.05
+	stability_factor = -0.08
+}
+
+NAM_corp_owner_6_district = {
+	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	enable = { always = yes }
+	industrial_capacity_factory = 0.05
+	ADISCORD_economy_tax_collection_factor = -0.10
+}
+
+# STATE conquered by the pillars' junta. Nothing is developed for its people.
+NAM_conquered_state_modifier = {
+	icon = GFX_modifiers_sabotaged_resource
+	enable = { always = yes }
+	remove_trigger = { NOT = { is_owned_by = NAM } }
+	state_production_speed_buildings_factor = -0.75
+	local_building_slots_factor = -0.50
+	compliance_growth = -0.05
+}
+
+# STATE conquered. Forced labour extracts its resources for Svetlogorye.
+NAM_labour_camp_state = {
+	icon = GFX_modifiers_sabotaged_resource
+	enable = { always = yes }
+	remove_trigger = { NOT = { is_owned_by = NAM } }
+	state_resources_factor = 0.50
+	recruitable_population_factor = -0.50
+	state_production_speed_buildings_factor = -1.0
+	compliance_growth = -0.10
+	resistance_target = 0.15
+}
+
+# STATE conquered and requisitioned: its depots and workshops were emptied.
+NAM_stripped_state = {
+	icon = GFX_modifiers_sabotaged_resource
+	enable = { always = yes }
+	state_resources_factor = -0.25
+	compliance_growth = -0.05
+}
+
 # COUNTRY SHL. Svetlogorsk convoy hunters cut the furnaces' fuel routes.
 NAM_south_convoy_blockade = {
 	icon = GFX_idea_ADISCORD_trade_policy_limited_exports

@@ -159,4 +159,3 @@ NAM_hold_field_67
 NAM_hold_field_689
 NAM_hold_field_690
 NAM_rival_demand
-NAM_war_of_return_deadline

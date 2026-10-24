@@ -18,6 +18,9 @@ SOURCES = {
     "NAM/main/focuses.txt": "ADISCORD_NAM_focus.txt",
     "NAM/postwar/focuses.txt": "ADISCORD_NAM_postwar.txt",
     "NAM/defeated/focuses.txt": "ADISCORD_NAM_defeated.txt",
+    "NAM/exile_radical/focuses.txt": "ADISCORD_NAM_exile_radical.txt",
+    "NAM/exile_humanist/focuses.txt": "ADISCORD_NAM_exile_humanist.txt",
+    "NAM/exile_corporate/focuses.txt": "ADISCORD_NAM_exile_corporate.txt",
     "SHL/main/focuses.txt": "ADISCORD_SHL_focus.txt",
     "IVN/main/focuses.txt": "ADISCORD_IVN_focus.txt",
     "RUS/main/focuses.txt": "ADISCORD_national_focus_RUS.txt",
@@ -39,7 +42,13 @@ SOURCES = {
 }
 INCLUDE = re.compile(r"(?m)^# @include ([\w/.-]+)#(\w+)\n")
 SECTION = re.compile(r"(?m)^# @section (\w+)\n")
-SHARED_HISTORY_SOURCES = frozenset({"VAL/main/focuses.txt", "NAM/main/focuses.txt"})
+# The humanist exile tree is replaced by the corporate tree at the takeover;
+# its completed focuses still open the free-zone and federation decisions.
+SHARED_HISTORY_SOURCES = frozenset({
+    "VAL/main/focuses.txt",
+    "NAM/main/focuses.txt",
+    "NAM/exile_humanist/focuses.txt",
+})
 
 
 def block_end(source: str, opening: int) -> int:

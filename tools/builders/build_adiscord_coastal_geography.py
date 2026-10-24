@@ -345,12 +345,17 @@ def unit_anchors(
             x = round(float(row[2]))
             y = map_height - 1 - round(float(row[4]))
             row[3] = f"{heights[y, x] / 10:.2f}"
-        blocks[int(row[1])].append(row)
+        return row
+
+    blocks = defaultdict(list)
+    for row in rows:
+        if int(row[0]) not in rebuilt:
+            blocks[int(row[1])].append(normalise(row))
     for province, anchors in rebuilt.items():
         for slot, row in anchors.items():
             block = blocks[slot]
             index = next((i for i, other in enumerate(block) if int(other[0]) > province), len(block))
-            block.insert(index, row)
+            block.insert(index, normalise(list(row)))
     newline = "\r\n" if b"\r\n" in original else "\n"
     ordered = [";".join(row) for slot in sorted(blocks) for row in blocks[slot]]
     return (newline.join(ordered) + newline).encode("utf-8")
