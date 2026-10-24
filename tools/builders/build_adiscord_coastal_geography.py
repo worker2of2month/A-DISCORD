@@ -100,6 +100,7 @@ NUDGE_SPLIT_DONORS = frozenset({
 })
 DISPLACED_PROVINCES |= NUDGE_SPLIT_DONORS
 COLOURMAP = Path("map/terrain/colormap_rgb_cityemissivemask_a.dds")
+SEA_FLOOR_HEIGHT = 89
 
 
 def lowland_heights(mask: np.ndarray) -> np.ndarray:
@@ -489,6 +490,9 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
             outputs[Path("map/provinces.bmp")] = encoded.getvalue()
     packed = provinces.astype(np.uint32)
     sea = np.isin((packed[:, :, 0] << 16) | (packed[:, :, 1] << 8) | packed[:, :, 2], sea_colors)
+    # Coast the Nudge pass gave to the sea keeps no land relief above the
+    # local sea floor.
+    flooded = sea & np.logical_or.reduce([masks[province] for province in NUDGE_SPLIT_DONORS])
     # Shared shoreline clearance: no city meshes or trees at the waterline.
     definition_text = "\n".join(definition_lines).encode("utf-8")
     water = water_mask(provinces, water_colours(definition_text))
@@ -538,6 +542,8 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
             if name == "heightmap":
                 pixels[mountains] = mountain_heightmap[mountains]
                 pixels[islands] = lowland_heights(islands)[islands]
+                flooded &= pixels > SEA_FLOOR_HEIGHT
+                pixels[flooded] = SEA_FLOOR_HEIGHT
                 heights = pixels
             elif name == "cities":
                 pixels[cities] = 15
@@ -557,7 +563,7 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
     normal_path = Path("map/world_normal.bmp")
     original = (root / normal_path).read_bytes()
     with Image.open(BytesIO(original)) as source:
-        normal = normal_from_height(Image.fromarray(heights), source, bytearray((islands | mountains).tobytes()))
+        normal = normal_from_height(Image.fromarray(heights), source, bytearray((islands | mountains | flooded).tobytes()))
         if normal.tobytes() == source.tobytes():
             outputs[normal_path] = original
         else:

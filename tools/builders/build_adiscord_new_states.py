@@ -39,7 +39,7 @@ NAM_SVETLOGORSK_PROVINCES = (
     16864, 16865, 16866, 16867, 16869, 16870, 16875,
 )
 NAM_RESIDUAL_CITY_STATE_ID = 689
-NAM_RESIDUAL_CITY_PROVINCES = (176, 2038, 2231, 2299, 7618, 7639, 8358, 16873, 16874, 16878, 16881, 16884)
+NAM_RESIDUAL_CITY_PROVINCES = (176, 2038, 2231, 2299, 7618, 7639, 8358, 16873, 16874, 16878)
 NAM_DRYRIVER_STATE_ID = 690
 EFL_MIDDLE_LOREN_STATE_ID = 691
 AZH_BLACK_COAST_STATE_ID = 692
@@ -957,20 +957,23 @@ AFRELA_LEGACY_VICTORY_POINTS = {
 }
 
 NAM_LEGACY_VICTORY_POINTS = {
-    67: ((6099, 3),),
+    67: ((6099, 3), (16890, 1)),
     68: ((259, 5), (6150, 2)),
-    69: ((367, 5), (8234, 2)),
+    69: (
+        (367, 5), (8234, 2), (16882, 1), (16883, 1), (16886, 1), (16888, 1),
+        (16889, 1), (16891, 1), (16893, 1), (16894, 1),
+    ),
     70: ((2986, 2), (6495, 4)),
     NAM_SVETLOGORSK_STATE_ID: ((16721, 3), (1710, 2)),
-    NAM_RESIDUAL_CITY_STATE_ID: ((16884, 1),),
-    NAM_DRYRIVER_STATE_ID: ((8058, 2), (9016, 2)),
+    NAM_RESIDUAL_CITY_STATE_ID: (),
+    NAM_DRYRIVER_STATE_ID: ((8058, 2), (9016, 2), (16885, 1), (16887, 1)),
     NAM_EAST_DRYRIVER_STATE_ID: (),
     EFL_MIDDLE_LOREN_STATE_ID: (),
     EFL_MOREN_STATE_ID: ((8057, 3),),
     EFL_LOREN_BORDERLAND_STATE_ID: (),
     AZH_BLACK_COAST_STATE_ID: ((493, 3), (5039, 2)),
     AZH_SEABOARD_STATE_ID: (),
-    700: ((16716, 5),),
+    700: ((16716, 5), (16881, 1), (16884, 1), (16892, 1)),
     701: ((16717, 5),),
 }
 
@@ -998,7 +1001,17 @@ NAM_VICTORY_POINT_NAMES = {
     5039: "Сайр",
     689: "Светлогорск",
     2038: "Южная гавань",
-    16884: "Причальный",
+    16882: "Эль-Мина",
+    16883: "Дар-Салим",
+    16885: "Каменка",
+    16886: "Хадира",
+    16887: "Сухой Лог",
+    16888: "Бир-Касим",
+    16889: "Зарифа",
+    16890: "Нефтегорск",
+    16891: "Рас-Нур",
+    16893: "Умм-Сафа",
+    16894: "Тель-Баран",
 }
 
 # Every playable dirty-zone state is a war objective of its republic. Capitals
@@ -1226,7 +1239,7 @@ GENERATED_STATE_NAMES = {
 
 COASTAL_CITY_POINTS = {
     699: ((16713, 5), (16714, 1), (16715, 1), (16718, 1), (16719, 1)),
-    700: ((16716, 5),),
+    700: ((16716, 5), (16881, 1), (16884, 1), (16892, 1)),
     701: ((16717, 5),),
     284: ((16720, 3),),
     688: ((16721, 3), (1710, 2)),
@@ -1236,6 +1249,9 @@ COASTAL_CITY_NAMES = {
     16714: "Западный Хазар",
     16715: "Старый Хазар",
     16716: "Южная гавань",
+    16881: "Маячный",
+    16884: "Причальный",
+    16892: "Портовый",
     16717: "Средний Лорен",
     16718: "Восточный Хазар",
     16719: "Северный Хазар",
@@ -2453,7 +2469,11 @@ def coastal_city_state_plan() -> dict[Path, bytes]:
             province = 16720 if state_id == 284 else 16721
             match = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
             provinces = sorted(set(map(int, re.findall(r"\d+", match.group(1)))) | {province})
-            source = source[:match.start(1)] + "\n\t\t" + " ".join(map(str, provinces)) + "\n\t" + source[match.end(1):]
+            if state_id == NAM_SVETLOGORSK_STATE_ID:
+                # The NAM metadata pass also renders this state and wraps long lists.
+                source = replace_state_provinces(source, tuple(provinces))
+            else:
+                source = source[:match.start(1)] + "\n\t\t" + " ".join(map(str, provinces)) + "\n\t" + source[match.end(1):]
             source = replace_history_victory_points(source, COASTAL_CITY_POINTS[state_id])
         if state_id in residuals:
             original, population, supplies = residuals[state_id]

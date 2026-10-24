@@ -434,7 +434,7 @@ guiTypes = {
 
 		buttonType = {
 			name = "NAM_bw_select_689"
-			position = { x = 205 y = 224 }
+			position = { x = 206 y = 224 }
 			quadTextureSprite = "GFX_NAM_bw_marker"
 			buttonText = "03"
 			buttonFont = "hoi_16mbs"
@@ -464,7 +464,7 @@ guiTypes = {
 
 		buttonType = {
 			name = "NAM_bw_select_700"
-			position = { x = 167 y = 228 }
+			position = { x = 179 y = 228 }
 			quadTextureSprite = "GFX_NAM_bw_marker"
 			buttonText = "06"
 			buttonFont = "hoi_16mbs"

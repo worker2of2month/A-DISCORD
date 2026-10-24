@@ -18,6 +18,7 @@ state={
 		owner = NAM
 		add_core_of = NAM
 		victory_points = { 6099 3 }
+		victory_points = { 16890 1 }
 		buildings = {
 			infrastructure = 4
 			industrial_complex = 2
