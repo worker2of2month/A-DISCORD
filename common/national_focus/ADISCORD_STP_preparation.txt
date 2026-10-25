@@ -1478,7 +1478,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_defense_budget
-		icon = GFX_focus_STP_pw_party_defence_combine
+		icon = GFX_focus_STP_defense_budget
 		relative_position_id = STP_Govern_In_His_Name
 		x = -6
 		y = 2
@@ -2263,7 +2263,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ph_six_chairs
-		icon = GFX_focus_STP_Prepare_For_The_Upcoming_BOP
+		icon = GFX_focus_STP_ph_six_chairs
 		relative_position_id = STP_Govern_In_His_Name
 		x = -7
 		y = 4
@@ -2840,7 +2840,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_expedition_logistics
-		icon = GFX_focus_STP_party_war_transport
+		icon = GFX_focus_STP_ps_expedition_logistics
 		x = 16
 		y = 4
 		relative_position_id = STP_Govern_In_His_Name

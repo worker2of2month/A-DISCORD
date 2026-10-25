@@ -230,6 +230,11 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_STP_ph_six_chairs"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ph_six_chairs.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_STP_cw_capital_oath"
 		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_cw_capital_oath.png"
 	}
@@ -515,6 +520,11 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_focus_STP_ps_asylum_protocol"
 		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ps_asylum_protocol.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_ps_expedition_logistics"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ps_expedition_logistics.png"
 	}
 
 	spriteType = {
