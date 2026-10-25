@@ -503,33 +503,39 @@ STP_party_preparation_plan = {
 	name = "STP party preparation"
 	desc = ""
 	allowed = { original_tag = STP }
-	enable = { tag = STP is_ai = yes STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag }
-	abort = { OR = { NOT = { tag = STP } NOT = { STP_cw_preparation_open = yes } } }
+	enable = {
+		tag = STP
+		is_ai = yes
+		STP_cw_preparation_open = yes
+		has_country_flag = STP_sided_with_the_party_flag
+	}
+	abort = {
+		OR = {
+			NOT = { tag = STP }
+			STP_cw_preparation_open = no
+		}
+	}
 	ai_national_focuses = {
 		STP_cw_security_collegium
 		STP_PRESIDENT_REMAINS_IN_OFFICE
 		STP_PARTY_DISCIPLINE
+		STP_ps_northern_partner
+		STP_ps_northern_credit
+		STP_ps_foreign_supply_desk
 		STP_party_district_compact
-		STP_ROTATE_DISTRICT_COMMAND
 		STP_GUARANTEE_MINISTERS
-		STP_defense_budget
 		STP_cw_capital_reserve
 		STP_cw_protect_congress
-		STP_cw_capital_oath
 		STP_DISTRICT_GOVERNMENT
 		STP_party_supply_directorate
 		STP_EMERGENCY_PRESIDIUM
 		STP_THE_PARTY_CLOSES_RANKS
 		STP_cw_party_mandate
-		STP_ps_foreign_supply_desk
 		STP_ps_radio_network
 		STP_ps_reserve_hq
-		STP_ps_northern_partner
-		STP_ps_northern_credit
 		STP_party_civil_register
 		STP_cw_press_office
 		STP_party_budget_reserve
-		STP_party_guard_workshops
 		STP_cw_protocol_office
 		STP_cw_quiet_registers
 		STP_party_succession_protocol
@@ -538,7 +544,6 @@ STP_party_preparation_plan = {
 		STP_ps_asylum_protocol
 		STP_ps_evacuation_plan
 		STP_ps_northern_engineers
-		STP_ps_expedition_logistics
 	}
 	weight = { factor = 20 }
 }
@@ -547,12 +552,25 @@ STP_party_civil_war_plan = {
 	name = "STP party civil war"
 	desc = ""
 	allowed = { original_tag = STP }
-	enable = { tag = STP is_ai = yes has_war_with = STS NOT = { has_country_flag = STP_cw_postwar } }
-	abort = { OR = { NOT = { tag = STP } NOT = { has_war_with = STS } has_country_flag = STP_cw_postwar } }
+	enable = {
+		tag = STP
+		is_ai = yes
+		has_war_with = STS
+		NOT = { has_country_flag = STP_cw_postwar }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = STP }
+			NOT = { has_war_with = STS }
+			has_country_flag = STP_cw_postwar
+		}
+	}
 
 	ai_national_focuses = {
 		STP_ps_temporary_presidium
 		STP_ps_restore_couriers
+		STP_party_northern_lesson
+		STP_party_without_patrons
 		STP_cw_unified_headquarters
 		STP_cw_guard_the_pier
 		STP_party_war_transport
@@ -564,7 +582,6 @@ STP_party_civil_war_plan = {
 		STP_cw_mobilization_register
 		STP_party_war_directorate
 		STP_cw_wartime_arsenals
-		STP_ps_route_security
 		STP_cw_inner_ring
 		STP_cw_harbour_batteries
 		STP_cw_supply_routes
@@ -581,56 +598,65 @@ STP_party_reconstruction_plan = {
 	name = "STP party reconstruction"
 	desc = ""
 	allowed = { original_tag = STP }
-	enable = { tag = STP is_ai = yes STP_pw_can_reconstruct = yes }
-	abort = { OR = { NOT = { tag = STP } NOT = { STP_pw_can_reconstruct = yes } } }
+	enable = {
+		tag = STP
+		is_ai = yes
+		STP_pw_can_reconstruct = yes
+	}
+	abort = {
+		OR = {
+			NOT = { tag = STP }
+			STP_pw_can_reconstruct = no
+		}
+	}
 	ai_national_focuses = {
 		STP_cw_first_postwar_budget
 		STP_cw_restore_civil_authority
 		STP_pw_party_new_republic
 
+		# The northern pressure clock also runs during reconstruction.
+		STP_pw_party_northern_protocol
+		STP_pw_party_sovereignty
+		STP_pw_party_revolution_capital
+		STP_pw_party_northern_contacts
+		STP_pw_party_nod_congress
+		STP_pw_party_northern_campaign
+		STP_pw_party_former_patron
+		STP_ch_model_ally
+		STP_ch_local_apparatus
+		STP_ch_congress
+		STP_ch_cabinet
+		STP_ch_first_promises
+		STP_ch_rules
+		STP_ch_program_settlement
+		STP_ch_institutional_review
+
 		STP_pw_party_district_authority
 		STP_pw_party_civil_records
 		STP_pw_party_open_settlement
-		STP_pw_party_firm_settlement
 		STP_party_district_charters
-		STP_party_personnel_commissions
 		STP_party_local_cadres
-		STP_party_chain_of_command
 		STP_ps_district_fund
-		STP_ps_permanent_security
 		STP_ps_cells_agreement
-		STP_ps_presidium_authority
 		STP_pw_party_district_congress
-		STP_pw_party_executive_secretariat
 		STP_pw_party_civil_charter
 
 		STP_pw_party_restore_roads
 		STP_pw_party_homes_for_returnees
 		STP_party_revenue_service
 		STP_pw_party_civil_workshops
-		STP_pw_party_accountable_arsenals
 		STP_party_port_contracts
-		STP_party_industrial_board
 		STP_pw_party_commercial_recovery
-		STP_pw_party_defence_combine
 		STP_pw_party_industrial_settlement
 
 		STP_pw_party_army_register
 		STP_pw_party_officer_school
 		STP_pw_party_supply_service
-		STP_pw_party_professional_service
 		STP_pw_party_fortress_corps
-		STP_pw_party_field_staff
 		STP_pw_party_border_staff
 		STP_pw_party_southern_defence
 		STP_pw_party_mechanized_guard
 
-		STP_pw_party_northern_protocol
-		STP_pw_party_sovereignty
-		STP_pw_party_revolution_capital
-		STP_pw_party_high_houses
-		STP_pw_party_unbound_revolution
-		STP_pw_party_protectorate
 		STP_pw_party_domestic_pattern
 		STP_pw_party_nod_military_mission
 		STP_pw_party_armed_neutrality
@@ -639,6 +665,12 @@ STP_party_reconstruction_plan = {
 
 		STP_party_research_council
 		STP_party_technical_institutes
+		STP_party_factory_laboratories
+		STP_party_captured_archives
+		STP_pw_party_veterans_congress
+		STP_pw_party_family_pensions
+		STP_pw_party_civilian_retraining
+		STP_pw_party_social_guarantees
 		STP_pw_party_settled_state
 		STP_pw_party_external_mandate
 		STP_pw_party_bezhaysk_campaign
@@ -648,6 +680,252 @@ STP_party_reconstruction_plan = {
 		STP_pw_party_great_stelander
 	}
 	weight = { factor = 20 }
+}
+
+# Each government follows one policy at every exclusive fork.
+STP_party_houses_programme_plan = {
+	name = "STP party houses programme"
+	desc = ""
+	allowed = { original_tag = STP }
+	enable = {
+		is_ai = yes
+		STP_pw_can_reconstruct = yes
+		STP_party_leader_1 = yes
+		has_completed_focus = STP_pw_party_new_republic
+		has_completed_focus = STP_ch_rules
+		NOT = { has_completed_focus = STP_pe_houses_ending_a }
+	}
+	abort = {
+		OR = {
+			STP_party_leader_1 = no
+			has_completed_focus = STP_pe_houses_ending_a
+		}
+	}
+	ai_national_focuses = {
+		STP_pw_party_high_houses
+		STP_party_houses_privileges
+		STP_party_houses_estates
+		STP_ch_property_charter
+		STP_party_houses_closed_lists
+		STP_party_houses_clients
+		STP_ch_houses_black_book
+		STP_party_houses_compact
+		STP_ch_program_settlement
+		STP_ch_institutional_review
+		STP_pe_houses_opening
+		STP_pe_houses_policy_a
+		STP_pe_houses_work_a
+		STP_pe_houses_settlement
+		STP_pe_houses_next_day
+		STP_pe_houses_commission
+		STP_pe_houses_course_a
+		STP_pe_houses_ending_a
+	}
+	weight = { factor = 24 }
+}
+
+STP_party_festival_programme_plan = {
+	name = "STP party festival programme"
+	desc = ""
+	allowed = { original_tag = STP }
+	enable = {
+		is_ai = yes
+		STP_pw_can_reconstruct = yes
+		STP_party_leader_2 = yes
+		has_completed_focus = STP_pw_party_new_republic
+		has_completed_focus = STP_ch_rules
+		NOT = { has_completed_focus = STP_pe_festival_ending_a }
+	}
+	abort = {
+		OR = {
+			STP_party_leader_2 = no
+			has_completed_focus = STP_pe_festival_ending_a
+		}
+	}
+	ai_national_focuses = {
+		STP_pw_party_unbound_revolution
+		STP_party_festival_levy
+		STP_party_public_orgies
+		STP_party_hard_drugs
+		STP_ch_free_labour
+		STP_party_festival_accounts
+		STP_party_festival_clinics
+		STP_ch_eternal_festival
+		STP_party_festival_charter
+		STP_ch_program_settlement
+		STP_ch_institutional_review
+		STP_pe_festival_opening
+		STP_pe_festival_policy_a
+		STP_pe_festival_work_a
+		STP_pe_festival_settlement
+		STP_pe_festival_next_day
+		STP_pe_festival_commission
+		STP_pe_festival_course_a
+		STP_pe_festival_ending_a
+	}
+	weight = { factor = 24 }
+}
+
+STP_party_staff_programme_plan = {
+	name = "STP party staff programme"
+	desc = ""
+	allowed = { original_tag = STP }
+	enable = {
+		is_ai = yes
+		STP_pw_can_reconstruct = yes
+		STP_party_leader_3 = yes
+		has_completed_focus = STP_pw_party_new_republic
+		has_completed_focus = STP_ch_rules
+		NOT = { has_completed_focus = STP_pe_staff_ending_a }
+	}
+	abort = {
+		OR = {
+			STP_party_leader_3 = no
+			has_completed_focus = STP_pe_staff_ending_a
+		}
+	}
+	ai_national_focuses = {
+		STP_ch_service_act
+		STP_party_staff_commandants
+		STP_party_staff_districts
+		STP_ch_regular_service
+		STP_party_staff_veto
+		STP_party_staff_priority_orders
+		STP_ch_staff_state
+		STP_party_service_constitution
+		STP_ch_program_settlement
+		STP_ch_institutional_review
+		STP_pe_staff_opening
+		STP_pe_staff_policy_a
+		STP_pe_staff_work_a
+		STP_pe_staff_settlement
+		STP_pe_staff_next_day
+		STP_pe_staff_commission
+		STP_pe_staff_course_a
+		STP_pe_staff_ending_a
+	}
+	weight = { factor = 24 }
+}
+
+STP_party_trade_programme_plan = {
+	name = "STP party trade programme"
+	desc = ""
+	allowed = { original_tag = STP }
+	enable = {
+		is_ai = yes
+		STP_pw_can_reconstruct = yes
+		STP_party_leader_4 = yes
+		has_completed_focus = STP_pw_party_new_republic
+		has_completed_focus = STP_ch_rules
+		NOT = { has_completed_focus = STP_pe_trade_ending_a }
+	}
+	abort = {
+		OR = {
+			STP_party_leader_4 = no
+			has_completed_focus = STP_pe_trade_ending_a
+		}
+	}
+	ai_national_focuses = {
+		STP_ch_production_agreements
+		STP_party_trade_tenders
+		STP_party_trade_credit
+		STP_ch_market_charter
+		STP_party_trade_industry
+		STP_party_trade_suppliers
+		STP_ch_season_open
+		STP_party_trade_republic
+		STP_ch_program_settlement
+		STP_ch_institutional_review
+		STP_pe_trade_opening
+		STP_pe_trade_policy_a
+		STP_pe_trade_work_a
+		STP_pe_trade_settlement
+		STP_pe_trade_next_day
+		STP_pe_trade_commission
+		STP_pe_trade_course_a
+		STP_pe_trade_ending_a
+	}
+	weight = { factor = 24 }
+}
+
+STP_party_security_programme_plan = {
+	name = "STP party security programme"
+	desc = ""
+	allowed = { original_tag = STP }
+	enable = {
+		is_ai = yes
+		STP_pw_can_reconstruct = yes
+		STP_party_leader_5 = yes
+		has_completed_focus = STP_pw_party_new_republic
+		has_completed_focus = STP_ch_rules
+		NOT = { has_completed_focus = STP_pe_security_ending_a }
+	}
+	abort = {
+		OR = {
+			STP_party_leader_5 = no
+			has_completed_focus = STP_pe_security_ending_a
+		}
+	}
+	ai_national_focuses = {
+		STP_ch_security_directorate
+		STP_party_security_register
+		STP_party_security_courts
+		STP_ch_register_of_powers
+		STP_party_security_judicial_control
+		STP_party_security_restitution
+		STP_ch_quiet_order
+		STP_party_security_settlement
+		STP_ch_program_settlement
+		STP_ch_institutional_review
+		STP_pe_security_opening
+		STP_pe_security_policy_a
+		STP_pe_security_work_a
+		STP_pe_security_settlement
+		STP_pe_security_next_day
+		STP_pe_security_commission
+		STP_pe_security_course_a
+		STP_pe_security_ending_a
+	}
+	weight = { factor = 24 }
+}
+
+STP_party_regent_programme_plan = {
+	name = "STP party regent programme"
+	desc = ""
+	allowed = { original_tag = STP }
+	enable = {
+		is_ai = yes
+		STP_pw_can_reconstruct = yes
+		STP_party_leader_6 = yes
+		has_completed_focus = STP_pw_party_new_republic
+		STP_ch_protectorate = yes
+		NOT = { has_completed_focus = STP_pe_regent_ending_a }
+	}
+	abort = {
+		OR = {
+			STP_party_leader_6 = no
+			has_completed_focus = STP_pe_regent_ending_a
+		}
+	}
+	ai_national_focuses = {
+		STP_party_regent_mandate
+		STP_party_regent_advisers
+		STP_party_regent_joint_offices
+		STP_party_regent_accounts
+		STP_party_regent_concessions
+		STP_party_regent_customs
+		STP_party_regent_guarantees
+		STP_party_regent_settlement
+		STP_pe_regent_opening
+		STP_pe_regent_policy_a
+		STP_pe_regent_work_a
+		STP_pe_regent_settlement
+		STP_pe_regent_next_day
+		STP_pe_regent_commission
+		STP_pe_regent_course_a
+		STP_pe_regent_ending_a
+	}
+	weight = { factor = 24 }
 }
 
 STP_ps_exile_plan = {

@@ -1551,6 +1551,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_northern_lesson
+		bypass = { has_idea = STP_cw_nodrul_collapse_eased }
 		icon = GFX_focus_STP_cw_northern_desk
 		x = -12
 		y = 0
@@ -2076,7 +2077,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_presidium_authority
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_presidium_authority
 		x = -20
 		y = 9
 

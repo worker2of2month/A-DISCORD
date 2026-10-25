@@ -661,6 +661,12 @@ STP_cw_clear_wartime_modifiers = {
 	if = {
 		limit = { OR = { tag = STP tag = STS } }
 		STP_cw_close_ground_logistics = yes
+		clr_country_flag = STP_ps_credit_program
+		clr_country_flag = STP_ps_arms_program
+		clr_country_flag = STP_ps_engineers_program
+		clr_country_flag = STP_ps_expedition_program
+		clr_country_flag = STP_ps_supply_program
+		clr_country_flag = STP_ps_northern_contingency
 		STP_cw_close_air_programmes = yes
 		STP_cw_clear_political_modifiers = yes
 		if = {
@@ -3457,6 +3463,12 @@ STP_cw_begin_hostilities = {
 		SRP = { every_owned_state = { set_state_controller_to = PREV } }
 		VAL_operations_map_refresh_cache = yes
 		STS = { STP_hw_stall_begin = yes }
+		if = {
+			limit = {
+				NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals } }
+			}
+			STP_cw_party_loses_nodrul_support = yes
+		}
 		STP_cw_ai_fortify_congress = yes
 		if = {
 			limit = { has_war_with = STS NOT = { has_idea = STP_cw_party_battle_spirit } }
@@ -3489,6 +3501,12 @@ STP_cw_begin_hostilities = {
 		if = {
 			limit = { NOT = { has_war_with = STP } }
 			declare_war_on = { target = STP type = annex_everything }
+			if = {
+				limit = {
+					NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals } }
+				}
+				STP_cw_party_loses_nodrul_support = yes
+			}
 			every_owned_state = { set_state_controller_to = PREV }
 			STP = { every_owned_state = { set_state_controller_to = PREV } }
 			SRP = { every_owned_state = { set_state_controller_to = PREV } }
@@ -4149,6 +4167,7 @@ STP_cw_start = {
 		}
 		STP_cw_divide_air_reserves = yes
 		STP_cw_secure_party_assault_equipment = yes
+		STP_ps_preserve_preparation_programs = yes
 		log = "[STP_CW] STP proportional allocation: manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]"
 		STS = { log = "[STP_CW] STS proportional allocation: manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]" }
 		SRP = { log = "[STP_CW] SRP proportional allocation: manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]" }
@@ -4724,7 +4743,11 @@ STP_cw_party_loses_nodrul_support = {
 				NOT = { has_idea = STP_cw_nodrul_collapse_eased }
 				NOT = { has_completed_focus = STP_party_northern_lesson }
 			}
-			add_ideas = STP_cw_nodrul_collapse
+			if = {
+				limit = { has_country_flag = STP_ps_northern_contingency }
+				add_ideas = STP_cw_nodrul_collapse_eased
+			}
+			else = { add_ideas = STP_cw_nodrul_collapse }
 			mark_focus_tree_layout_dirty = yes
 			country_event = { id = ADISCORD_STP_cw.44 }
 			log = "[STP_CW] Party lost Nodrul support during the civil war"
@@ -7672,27 +7695,10 @@ STP_pw_party_finish_project = {
 						value = 4
 						compare = equals
 					}
-					OR = {
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 540
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 250
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 60
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 72
-							compare = equals
-						}
+					check_variable = {
+						var = STP_pw_project_deposit
+						value = 540
+						compare = equals
 					}
 					NOT = {
 						check_variable = {
@@ -7708,27 +7714,10 @@ STP_pw_party_finish_project = {
 						value = 5
 						compare = equals
 					}
-					OR = {
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 1080
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 1000
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 120
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 144
-							compare = equals
-						}
+					check_variable = {
+						var = STP_pw_project_deposit
+						value = 1080
+						compare = equals
 					}
 					NOT = {
 						check_variable = {
@@ -7745,27 +7734,10 @@ STP_pw_party_finish_project = {
 						value = 6
 						compare = equals
 					}
-					OR = {
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 900
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 250
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 100
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 120
-							compare = equals
-						}
+					check_variable = {
+						var = STP_pw_project_deposit
+						value = 900
+						compare = equals
 					}
 					NOT = {
 						check_variable = {
@@ -9656,6 +9628,34 @@ STP_ps_reserve_training_finish = {
 	}
 }
 
+# COUNTRY STP: preserve programme access before the preparation tree is discarded.
+STP_ps_preserve_preparation_programs = {
+	if = {
+		limit = { has_completed_focus = STP_ps_northern_credit }
+		set_country_flag = STP_ps_credit_program
+	}
+	if = {
+		limit = { has_completed_focus = STP_ps_northern_arms }
+		set_country_flag = STP_ps_arms_program
+	}
+	if = {
+		limit = { has_completed_focus = STP_ps_northern_engineers }
+		set_country_flag = STP_ps_engineers_program
+	}
+	if = {
+		limit = { has_completed_focus = STP_ps_expedition_logistics }
+		set_country_flag = STP_ps_expedition_program
+	}
+	if = {
+		limit = { has_completed_focus = STP_ps_foreign_supply_desk }
+		set_country_flag = STP_ps_supply_program
+	}
+	if = {
+		limit = { has_completed_focus = STP_ps_asylum_protocol }
+		set_country_flag = STP_ps_northern_contingency
+	}
+}
+
 STP_ps_clear_nod_receipt = {
 	clear_variable = STP_ps_nod_receipt_type
 	clear_variable = STP_ps_nod_receipt_money
@@ -9707,8 +9707,8 @@ STP_ps_deliver_nod = {
 				if = { limit = { check_variable = { var = STP_ps_receipt_type value = 1 compare = equals } }
 					NOD = {
 						ADISCORD_economy_initialize_country = yes
-						add_to_variable = { var = ADISCORD_economy_treasury value = 1500 }
-						add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1500 }
+						add_to_variable = { var = ADISCORD_economy_treasury value = 750 }
+						add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 750 }
 						set_country_flag = STP_ps_nod_procurement_credit
 						ADISCORD_economy_mark_dirty = yes
 					}
@@ -9759,7 +9759,8 @@ STP_ps_nod_rifle_purchase_finish = {
 		if = { limit = { tag = NOD STP_ps_northern_front_active = yes has_country_flag = STP_ps_nod_procurement_credit }
 			clear_variable = STP_ps_nod_rifle_purchase_deposit
 
-			clr_country_flag = STP_ps_nod_procurement_credit add_equipment_to_stockpile = { type = infantry_equipment amount = 20000 }
+			clr_country_flag = STP_ps_nod_procurement_credit
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 }
 			ADISCORD_economy_mark_dirty = yes
 		}
 		else = { STP_ps_nod_rifle_purchase_refund = yes }
@@ -10360,7 +10361,7 @@ STP_ps_val_intelligence_finish = {
 					compare = equals
 				}
 				OR = {
-					has_completed_focus = STP_ps_foreign_supply_desk
+					STP_ps_supply_program_unlocked = yes
 					has_completed_focus = STP_ps_counter_supply
 				}
 			}
@@ -10393,7 +10394,7 @@ STP_ps_val_intercept_finish = {
 					compare = equals
 				}
 				OR = {
-					has_completed_focus = STP_ps_foreign_supply_desk
+					STP_ps_supply_program_unlocked = yes
 					has_completed_focus = STP_ps_counter_supply
 				}
 				VAL = {
@@ -10425,7 +10426,7 @@ STP_ps_val_pressure_refund = {
 }
 STP_ps_val_pressure_finish = {
 	if = { limit = { has_variable = STP_ps_val_pressure_deposit }
-		if = { limit = { tag = STP OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes } OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { exists = yes } }
+		if = { limit = { tag = STP OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes } OR = { STP_ps_supply_program_unlocked = yes has_completed_focus = STP_ps_counter_supply } VAL = { exists = yes } }
 			clear_variable = STP_ps_val_pressure_deposit
 
 			set_country_flag = { flag = STP_ps_val_pressure_cooldown value = 1 days = 60 }

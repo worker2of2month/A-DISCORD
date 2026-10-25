@@ -332,7 +332,7 @@ class PartySecondActTests(unittest.TestCase):
         for language in ("russian", "english"):
             raw = (ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml").read_bytes()
             self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
-            loc = dict(re.findall(r'^\s+([\w.]+):\d*\s+"(.*)"$', raw.decode("utf-8-sig"), re.M))
+            loc = dict(re.findall(r'^[ \t]+([\w.]+):\d*[ \t]+"((?:[^"\\\r\n]|\\.)*)"[ \t]*\r?$', raw.decode("utf-8-sig"), re.M))
             for name in self.focuses:
                 if name.startswith("STP_pe_"):
                     self.assertIn(name, loc)

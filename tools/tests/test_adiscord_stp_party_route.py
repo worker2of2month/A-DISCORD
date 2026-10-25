@@ -13,6 +13,7 @@ from tools.tests.test_adiscord_stp_preparation import (
     selected_effects,
 )
 from tools.lib.focus_sources import read_focus_source
+from tools.lib.on_actions import read_scripted_peace
 
 ROOT = Path(__file__).resolve().parents[2]
 FOCUS = "common/national_focus/ADISCORD_STP_preparation.txt"
@@ -595,7 +596,7 @@ class PartyRouteContracts(unittest.TestCase):
             "declare_war_on = { target = STP type = annex_everything }", launch
         )
         self.assertIn(
-            "add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 365 }", launch
+            "add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 182 }", launch
         )
         ideas = read(IDEAS)
         mandate = ideas[ideas.index("STP_pw_nod_invasion_mandate = {") :]
@@ -1164,6 +1165,7 @@ class PartyFactionContracts(unittest.TestCase):
                     "add_dynamic_modifier",
                     "remove_dynamic_modifier",
                     "ADISCORD_economy_mark_dirty",
+                    "STP_ch_schedule_refresh",
                 ):
                     pass
                 elif e.key == "STP_pw_party_clear_constitution":
@@ -2099,7 +2101,7 @@ class PartyNorthernRevolutionContracts(unittest.TestCase):
         from dataclasses import replace
 
         hook = one(
-            one(parse_clausewitz(read(SCRIPTED_PEACE)), 'on_actions'), 'on_capitulation'
+            one(parse_clausewitz(read_scripted_peace(ROOT / SCRIPTED_PEACE, 'stelander')), 'on_actions'), 'on_capitulation'
         )
         dispatch = next(
             e.value
@@ -2136,6 +2138,7 @@ class PartyNorthernRevolutionContracts(unittest.TestCase):
                 ('BJK', 'is_subject_of', 'STP'): True,
                 ('STP', 'STP_pw_party_revolution_current', 'yes'): True,
                 ('STP', 'has_completed_focus', 'STP_pw_party_nod_congress'): completed,
+                ('STP', 'has_war_with', 'NOD'): True,
             }
             self.assertEqual(
                 matches_conditions(scopes(one(dispatch, 'limit'), winner), facts),
@@ -2550,19 +2553,18 @@ class PartyConstitutionContracts(unittest.TestCase):
             self.assertIn(name, cosmetic)
 
     def test_military_advisors_do_not_use_political_idea_cancellation_field(self):
-        ideas = one(
-            parse_clausewitz(read("common/ideas/ADISCORD_ministers_all_countries.txt")),
-            "ideas",
+        characters = one(
+            parse_clausewitz(read("common/characters/STP.txt")), "characters"
         )
         count = 0
-        for group in ideas:
-            if group.key in ("army_chief", "navy_chief", "air_chief", "high_command"):
-                for advisor in group.value:
+        for character in characters:
+            for advisor in children(character.value, "advisor"):
+                if one(advisor, "slot") in ("army_chief", "navy_chief", "air_chief", "high_command"):
                     count += 1
                     self.assertNotIn(
-                        "cancel_if_invalid", [e.key for e in advisor.value], advisor.key
+                        "cancel_if_invalid", [e.key for e in advisor], character.key
                     )
-        self.assertGreater(count, 200)
+        self.assertGreater(count, 0)
 
     def constitution_value(self, current, conservatives, radicals, laws, active=True):
         """Execute the arithmetic projection, not native UI or law callback timing."""
@@ -2680,7 +2682,7 @@ class PartyPeaceContracts(unittest.TestCase):
         from dataclasses import replace
 
         immediate = one(
-            one(one(parse_clausewitz(self.peace), "on_actions"), "on_capitulation_immediate"),
+            one(one(parse_clausewitz(read_scripted_peace(ROOT / SCRIPTED_PEACE, 'frontier')), "on_actions"), "on_capitulation_immediate"),
             "effect",
         )
         route = next(
@@ -2805,18 +2807,15 @@ class PartyPeaceContracts(unittest.TestCase):
         self.assertEqual(one(puppet, "end_civil_wars"), "no")
 
     def test_kefreyt_late_receipt_survives_white_peace_and_is_consumed(self):
-        late = self.peace.split("# BEGIN frontier:on_capitulation\n", 1)[1].split(
-            "# END frontier:on_capitulation", 1
-        )[0]
-        self.assertIn(
-            "has_country_flag = STP_pw_party_kefreyt_capitulation_reserved", late
-        )
-        self.assertIn(
-            "clr_country_flag = STP_pw_party_kefreyt_capitulation_reserved", late
-        )
-        self.assertIn("set_global_flag = skip_default_capitulation", late)
-        self.assertNotIn("has_war_with", late)
-        self.assertNotIn("kefreyt_campaign_active", late)
+        actions = parse_clausewitz(read_scripted_peace(ROOT / SCRIPTED_PEACE, 'frontier'))
+        late = one(one(one(actions, 'on_actions'), 'on_capitulation'), 'effect')
+        receipt = 'STP_pw_party_kefreyt_capitulation_reserved'
+        route = next(e.value for e in late if e.key == 'if'
+                     and any(v.key == 'clr_country_flag' and v.value == receipt for v in walk(e.value)))
+        self.assertEqual(one(one(one(route, 'limit'), 'ROOT'), 'has_country_flag'), receipt)
+        self.assertEqual(one(route, 'set_global_flag'), 'skip_default_capitulation')
+        self.assertNotIn('has_war_with', {e.key for e in walk(route)})
+        self.assertNotIn('STP_pw_party_kefreyt_campaign_active', str(signature(route)))
 
     def test_nod_subject_creation_preserves_other_wars(self):
         finish = self.effects["STP_pw_party_finalize_nod_subject"]
@@ -2826,7 +2825,7 @@ class PartyPeaceContracts(unittest.TestCase):
         self.assertEqual(one(puppet, "end_civil_wars"), "no")
 
     def test_foreign_nod_victory_cannot_reserve_capitulation_or_award_stp(self):
-        roots = parse_clausewitz(self.peace)
+        roots = parse_clausewitz(read_scripted_peace(ROOT / SCRIPTED_PEACE, 'stelander'))
         late = one(one(one(roots, "on_actions"), "on_capitulation"), "effect")
         route = next(
             e.value

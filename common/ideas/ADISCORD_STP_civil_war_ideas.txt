@@ -980,6 +980,12 @@ ideas = {
 				army_org_regain = 0.05
 			}
 		}
+		STP_ps_foreign_supply_preparation_delta = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { supply_consumption_factor = -0.05 }
+		}
+
 		STP_ps_northern_arms_preparation_delta = {
 			name = STP_cw_military_staff_dynamic
 			allowed = { always = no }
@@ -2581,7 +2587,15 @@ ideas = {
 
 		STP_ps_engineers_idea = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { supply_consumption_factor = -0.10 army_org_regain = 0.05 } }
 
-		STP_ps_expedition_idea = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { supply_consumption_factor = -0.10 } }
+		STP_ps_expedition_idea = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = -0.10
+				planning_speed = 0.15
+			}
+		}
 
 		STP_cw_assault_air_cover_idea = { picture = generic_war_preparation allowed = { always = no } removal_cost = -1 modifier = { air_cas_efficiency = 0.10 air_cas_present_factor = 0.08 } }
 

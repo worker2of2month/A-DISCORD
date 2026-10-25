@@ -301,5 +301,193 @@ class PartyQualityOfLifeTests(unittest.TestCase):
             self.assertIn('STP_ps_val_' + action, desk)
 
 
+    def test_foreign_programmes_survive_tree_replacement_and_close_at_peace(self):
+        programmes = {
+            'credit': 'northern_credit',
+            'arms': 'northern_arms',
+            'engineers': 'northern_engineers',
+            'expedition': 'expedition_logistics',
+            'supply': 'foreign_supply_desk',
+        }
+        preserve = self.effects['STP_ps_preserve_preparation_programs']
+        for kind, focus in programmes.items():
+            flag = 'STP_ps_' + kind + '_program'
+            trigger = self.triggers['STP_ps_' + kind + '_program_unlocked']
+            for completed, retained, expected in ((False, False, False), (True, False, True),
+                                                  (False, True, True), (True, True, True)):
+                facts = {('STP', 'has_completed_focus', 'STP_ps_' + focus): completed,
+                         ('STP', 'has_country_flag', flag): retained}
+                self.assertEqual(matches_conditions(trigger, facts), expected)
+                writes = [e.value for _, e in selected_effects(preserve, facts)
+                          if e.key == 'set_country_flag' and e.value == flag]
+                self.assertEqual(writes, [flag] if completed else [])
+            self.assertIn(flag, str(self.effects['STP_cw_clear_wartime_modifiers']))
+        source = read(EFFECTS)
+        split = source[source.index('STP_cw_secure_party_assault_equipment = yes'):]
+        self.assertLess(split.index('STP_ps_preserve_preparation_programs = yes'),
+                        split.index('load_focus_tree = { tree = STP_cw_focus'))
+
+    def test_northern_finales_offer_expedition_or_a_working_contingency(self):
+        for chosen, other in (('STP_ps_expedition_logistics', 'STP_ps_asylum_protocol'),
+                              ('STP_ps_asylum_protocol', 'STP_ps_expedition_logistics')):
+            self.assertIn(other, [e.value for e in block(self.focuses[chosen], 'mutually_exclusive')])
+            self.assertEqual(scalar(block(self.focuses[chosen], 'prerequisite'), 'focus'),
+                             'STP_ps_joint_staff')
+        self.assertNotIn('STP_ps_nod_can_host_exiles',
+                         str(block(self.focuses['STP_ps_asylum_protocol'], 'available')))
+        bypass = block(self.focuses['STP_party_northern_lesson'], 'bypass')
+        self.assertTrue(matches_conditions(bypass, {('STP', 'has_idea', 'STP_cw_nodrul_collapse_eased'): True}))
+        self.assertIn('STP_party_northern_lesson', str(block(self.focuses['STP_party_without_patrons'], 'prerequisite')))
+
+    def test_northern_shock_is_once_per_war_and_contingency_changes_actual_spirit(self):
+        for prepared in (False, True):
+            for full, eased, overcome in ((False, False, False), (True, False, False),
+                                          (False, True, False), (False, False, True)):
+                facts = {('STP', 'STP_ps_war_active', 'yes'): True,
+                         ('STP', 'has_country_flag', 'STP_ps_northern_contingency'): prepared,
+                         ('STP', 'has_idea', 'STP_cw_nodrul_collapse'): full,
+                         ('STP', 'has_idea', 'STP_cw_nodrul_collapse_eased'): eased,
+                         ('STP', 'has_completed_focus', 'STP_party_northern_lesson'): overcome}
+                ideas = [e.value for _, e in selected_effects(self.effects['STP_cw_party_loses_nodrul_support'], facts)
+                         if e.key == 'add_ideas']
+                expected = [] if full or eased or overcome else [
+                    'STP_cw_nodrul_collapse_eased' if prepared else 'STP_cw_nodrul_collapse']
+                self.assertEqual(ideas, expected)
+        self.assertFalse([e for _, e in selected_effects(self.effects['STP_cw_party_loses_nodrul_support'], {})
+                          if e.key == 'add_ideas'])
+        hostilities = str(self.effects['STP_cw_begin_hostilities'])
+        self.assertIn('STP_cw_northern_campaign_status', hostilities)
+        self.assertIn('STP_cw_party_loses_nodrul_support', hostilities)
+
+    def test_northern_loan_purchase_and_refund_keep_money_and_rifles_consistent(self):
+        for decision, price in (('STP_ps_fund_nod', 750), ('STP_ps_nod_rifle_purchase', 750),
+                                ('STP_ps_engineers_nod', 600), ('STP_ps_expedition_nod', 600),
+                                ('STP_ps_val_intelligence', 150), ('STP_ps_val_intercept', 600),
+                                ('STP_ps_val_pressure', 500)):
+            body = self.decisions[decision]
+            self.assertEqual(scalar(body, 'cost'), '0')
+            for balance, affordable in ((price - 0.001, False), (price, True), (price + 0.001, True)):
+                self.assertEqual(matches_conditions(block(body, 'custom_cost_trigger'),
+                                 {('STP', 'variable', 'ADISCORD_economy_treasury'): balance}), affordable)
+            for effect in ('subtract_from_variable', 'add_to_variable'):
+                amounts = [scalar(e.value, 'value') for e in walk(block(body, 'complete_effect'))
+                           if e.key == effect and scalar(e.value, 'var') in
+                           ('ADISCORD_economy_treasury', 'ADISCORD_economy_current_month_action_costs')]
+                self.assertEqual(amounts, [str(price)], decision)
+            for language in ('russian', 'english'):
+                loc = localization(language)
+                for suffix in ('', '_blocked', '_tooltip'):
+                    self.assertIn(str(price), loc[scalar(body, 'custom_cost_text') + suffix])
+        delivery = self.effects['STP_ps_deliver_nod']
+        money = [scalar(e.value, 'value') for e in walk(delivery)
+                 if e.key == 'add_to_variable' and scalar(e.value, 'var') == 'ADISCORD_economy_treasury']
+        self.assertEqual(money, ['750'])
+        rifles = [scalar(e.value, 'amount') for e in walk(self.effects['STP_ps_nod_rifle_purchase_finish'])
+                  if e.key == 'add_equipment_to_stockpile']
+        self.assertEqual(rifles, ['10000'])
+        for name in ('STP_ps_engineers_nod', 'STP_ps_expedition_nod'):
+            extra = [scalar(e.value, 'days') for e in walk(self.decisions[name])
+                     if e.key == 'add_days_mission_timeout']
+            self.assertEqual(extra, ['6'])
+        self.assertEqual(scalar(self.decisions['STP_ps_nod_dispatch'], 'days_mission_timeout'), '1')
+        self.assertEqual(scalar(self.decisions['STP_ps_nod_delivery'], 'days_mission_timeout'), '7')
+
+    def test_supply_desk_reward_preview_matches_party_staff_and_warning_is_conditional(self):
+        reward = block(self.focuses['STP_ps_foreign_supply_desk'], 'completion_reward')
+        values = [scalar(e.value, 'value') for e in walk(reward) if e.key == 'add_to_variable'
+                  and scalar(e.value, 'var') == 'STP_cw_army_supply_consumption_factor']
+        self.assertEqual(values, ['-0.05'])
+        ideas = list(walk(parse_clausewitz(read('common/ideas/ADISCORD_STP_civil_war_ideas.txt'))))
+        dummy = next(e.value for e in ideas if e.key == 'STP_ps_foreign_supply_preparation_delta')
+        self.assertEqual(scalar(block(dummy, 'modifier'), 'supply_consumption_factor'), values[0])
+        warning = block(self.focuses['STP_ps_northern_partner'], 'completion_reward')
+        self.assertIn('STP_ps_northern_defeat_warning_tt', str(warning))
+        self.assertIn('STP_cw_nodrul_collapse', str(block(warning, 'effect_tooltip')))
+        self.assertFalse([e for e in warning if e.key == 'add_ideas'])
+
+    def party_plans(self):
+        return {
+            entry.key: entry.value
+            for entry in parse_clausewitz(read('common/ai_strategy_plans/ADISCORD_STP_plans.txt'))
+            if entry.key.startswith('STP_party_')
+        }
+
+    def test_party_ai_plans_choose_one_side_and_reach_every_listed_focus(self):
+        external = {
+            'STP_party_preparation_plan': {'STP_Govern_In_His_Name'},
+            'STP_party_reconstruction_plan': {'STP_cw_last_banquet'},
+        }
+        for name, plan in self.party_plans().items():
+            queue = [entry.value for entry in block(plan, 'ai_national_focuses')]
+            self.assertEqual(len(queue), len(set(queue)), name)
+            completed = set(external.get(name, ()))
+            if name.endswith('_programme_plan'):
+                completed.add('STP_pw_party_new_republic')
+            for focus_id in queue:
+                with self.subTest(plan=name, focus=focus_id):
+                    self.assertIn(focus_id, self.focuses)
+                    focus = self.focuses[focus_id]
+                    excluded = {
+                        entry.value
+                        for group in focus if group.key == 'mutually_exclusive'
+                        for entry in group.value
+                    }
+                    self.assertFalse(excluded & set(queue))
+                    for group in focus:
+                        if group.key == 'prerequisite':
+                            self.assertTrue(
+                                completed & {entry.value for entry in group.value},
+                                (focus_id, [entry.value for entry in group.value]),
+                            )
+                    completed.add(focus_id)
+
+    def test_party_ai_covers_the_current_government_and_its_second_act(self):
+        plans = self.party_plans()
+        endings = (
+            ('houses', 'STP_party_houses_compact'),
+            ('festival', 'STP_party_festival_charter'),
+            ('staff', 'STP_party_service_constitution'),
+            ('trade', 'STP_party_trade_republic'),
+            ('security', 'STP_party_security_settlement'),
+            ('regent', 'STP_party_regent_settlement'),
+        )
+        for leader, (route, terminal) in enumerate(endings, 1):
+            plan = plans[f'STP_party_{route}_programme_plan']
+            enabled = block(plan, 'enable')
+            self.assertEqual(scalar(enabled, f'STP_party_leader_{leader}'), 'yes')
+            queue = [entry.value for entry in block(plan, 'ai_national_focuses')]
+            self.assertIn(terminal, queue)
+            self.assertEqual(queue[-1], f'STP_pe_{route}_ending_a')
+            if leader != 6:
+                self.assertIn('STP_ch_rules', [entry.value for entry in enabled
+                                             if entry.key == 'has_completed_focus'])
+                self.assertLess(queue.index(terminal), queue.index('STP_ch_program_settlement'))
+                self.assertLess(queue.index('STP_ch_institutional_review'),
+                                queue.index(f'STP_pe_{route}_opening'))
+            else:
+                self.assertEqual(scalar(enabled, 'STP_ch_protectorate'), 'yes')
+            abort = block(plan, 'abort')
+            for current, finished, expected in ((True, False, False), (False, False, True),
+                                                 (True, True, True)):
+                facts = {('STP', f'STP_party_leader_{leader}', 'no'): not current,
+                         ('STP', 'has_completed_focus', queue[-1]): finished}
+                self.assertEqual(matches_conditions(abort, facts), expected)
+
+    def test_party_ai_prioritizes_northern_response_and_chapter_progress(self):
+        plans = self.party_plans()
+        queue = [entry.value for entry in block(plans['STP_party_reconstruction_plan'],
+                                                'ai_national_focuses')]
+        for focus in ('STP_ch_congress', 'STP_ch_cabinet', 'STP_ch_first_promises',
+                      'STP_ch_rules', 'STP_ch_program_settlement', 'STP_ch_institutional_review'):
+            self.assertIn(focus, queue)
+        response = queue[:queue.index('STP_pw_party_sovereignty') + 1]
+        days = sum(float(scalar(self.focuses[focus], 'cost')) * 7 for focus in response)
+        self.assertLess(days, float(scalar(self.decisions['STP_ch_pressure_1'],
+                                          'days_mission_timeout')))
+        war = [entry.value for entry in block(plans['STP_party_civil_war_plan'],
+                                              'ai_national_focuses')]
+        self.assertLess(war.index('STP_party_northern_lesson'), war.index('STP_party_without_patrons'))
+
+
 if __name__ == '__main__':
     unittest.main()

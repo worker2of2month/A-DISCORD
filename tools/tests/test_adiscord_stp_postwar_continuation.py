@@ -244,13 +244,13 @@ def execute_package_effects(items, facts, dispatched, scope="STS", definitions=N
                 facts[fact] = True
             else:
                 facts.pop(fact, None)
-        elif key in {"set_variable", "add_to_variable", "subtract_from_variable"}:
+        elif key in {"set_variable", "set_temp_variable", "add_to_variable", "subtract_from_variable"}:
             name, amount = scalar(value, "var"), scalar(value, "value")
             try:
                 amount = float(amount)
             except ValueError:
                 amount = facts.get((scope, "variable", amount), 0)
-            if key != "set_variable":
+            if key not in {"set_variable", "set_temp_variable"}:
                 amount = facts.get((scope, "variable", name), 0) + amount * (
                     -1 if key == "subtract_from_variable" else 1
                 )
@@ -295,6 +295,7 @@ def execute_package_effects(items, facts, dispatched, scope="STS", definitions=N
             "ADISCORD_economy_mark_dirty",
             "mark_focus_tree_layout_dirty",
             "ADISCORD_economy_initialize_country",
+            "STP_pf_shift",
         }:
             continue
         elif key == "set_cosmetic_tag":
@@ -2092,12 +2093,12 @@ class PartyRecoveryTransactions(unittest.TestCase):
             "STP_military_operations",
         )
         self.projects = (
-            ("restore_ministries", "services", 60, "new_republic"),
-            ("reopen_port", "industry", 120, "homes_for_returnees"),
-            ("refit_guard", "army", 100, "army_register"),
+            ("restore_ministries", "services", 540, "new_republic"),
+            ("reopen_port", "industry", 1080, "homes_for_returnees"),
+            ("refit_guard", "army", 900, "army_register"),
         )
 
-    def facts(self, treasury=300):
+    def facts(self, treasury=2700):
         return {
             ("STP", "STP_pw_can_reconstruct", "yes"): True,
             ("STP", "capital_secure", "yes"): True,
@@ -2137,7 +2138,7 @@ class PartyRecoveryTransactions(unittest.TestCase):
                         block(candidate, "complete_effect"), facts, rewards, "STP"
                     )
                 self.assertEqual(
-                    facts[("STP", "variable", "ADISCORD_economy_treasury")], 300 - price
+                    facts[("STP", "variable", "ADISCORD_economy_treasury")], 2700 - price
                 )
                 if outcome == "capital_lost":
                     facts[("STP", "capital_secure", "yes")] = False
@@ -2147,7 +2148,7 @@ class PartyRecoveryTransactions(unittest.TestCase):
                     "cancel_effect" if outcome == "cancelled" else "remove_effect"
                 )
                 execute_recovery(block(decision, callback), facts, rewards, "STP")
-                expected = 300 - price if outcome == "delivered" else 300
+                expected = 2700 - price if outcome == "delivered" else 2700
                 self.assertEqual(
                     facts[("STP", "variable", "ADISCORD_economy_treasury")], expected
                 )
@@ -2180,12 +2181,29 @@ class PartyRecoveryTransactions(unittest.TestCase):
             [e.value for e in walk(final) if e.key == "focus"],
         )
 
+    def test_mismatched_receipt_refunds_exactly_without_awarding_recovery(self):
+        finish = block(entries(EFFECTS), "STP_pw_party_finish_project")
+        for kind, (_, pillar, price, _) in enumerate(self.projects, 4):
+            for deposit in (price - 0.01, price + 0.01, 60, 72, 100, 120, 144, 250, 1000):
+                facts, rewards = self.facts(0), []
+                facts[("STP", "has_variable", "STP_pw_project_deposit")] = True
+                facts[("STP", "variable", "STP_pw_project_deposit")] = deposit
+                facts[("STP", "variable", "STP_pw_project_kind")] = kind
+                execute_recovery(finish, facts, rewards, "STP")
+                with self.subTest(kind=kind, deposit=deposit):
+                    self.assertEqual(facts[("STP", "variable", "ADISCORD_economy_treasury")], deposit)
+                    self.assertNotIn(("STP", "variable", "STP_pw_recovery_" + pillar), facts)
+                    self.assertNotIn(("STP", "has_variable", "STP_pw_project_deposit"), facts)
+                    settled = (dict(facts), list(rewards))
+                    execute_recovery(finish, facts, rewards, "STP")
+                    self.assertEqual((facts, rewards), settled)
+
     def test_nod_contract_requires_consent_resources_and_current_protectorate(self):
         base = {
             ("NOD", "exists", "yes"): True,
             ("NOD", "has_capitulated", "no"): True,
             ("NOD", "is_subject", "no"): True,
-            ("NOD", "equipment", "infantry_equipment"): 1000,
+            ("NOD", "equipment", "infantry_equipment"): 10000,
             ("NOD", "equipment", "support_equipment"): 100,
             ("STP", "exists", "yes"): True,
             ("STP", "has_capitulated", "no"): True,
@@ -2194,14 +2212,13 @@ class PartyRecoveryTransactions(unittest.TestCase):
             ("STP", "has_global_flag", "STP_cw_union_wars_finished"): True,
             ("STP", "is_subject_of", "NOD"): True,
             ("STP", "has_country_flag", "STP_pw_party_nod_arms_pending"): True,
-            ("STP", "ADISCORD_economy_can_spend_50", "yes"): True,
-            ("STP", "variable", "ADISCORD_economy_treasury"): 50,
+            ("STP", "variable", "ADISCORD_economy_treasury"): 450,
         }
         for change in (
             None,
-            (("NOD", "equipment", "infantry_equipment"), 999.99),
+            (("NOD", "equipment", "infantry_equipment"), 9999.99),
             (("NOD", "equipment", "support_equipment"), 99.99),
-            (("STP", "ADISCORD_economy_can_spend_50", "yes"), False),
+            (("STP", "variable", "ADISCORD_economy_treasury"), 449.99),
             (("STP", "is_subject_of", "NOD"), False),
             (("STP", "has_war_with", "NOD"), True),
             (("STP", "has_country_flag", "STP_pw_party_nod_arms_pending"), False),
@@ -2209,20 +2226,21 @@ class PartyRecoveryTransactions(unittest.TestCase):
             facts, events = dict(base), []
             if change:
                 facts[change[0]] = change[1]
+            starting_treasury = facts[("STP", "variable", "ADISCORD_economy_treasury")]
             effect = block(entries(EFFECTS), "STP_pw_party_settle_nod_arms")
             execute_package_effects(effect, facts, events, "NOD")
             paid = change is None
             self.assertEqual(
                 facts[("STP", "variable", "ADISCORD_economy_treasury")],
-                0 if paid else 50,
+                0 if paid else starting_treasury,
             )
             self.assertEqual(
                 facts.get(("STP", "equipment", "infantry_equipment"), 0),
-                1000 if paid else 0,
+                10000 if paid else 0,
             )
             self.assertEqual(
                 facts.get(("NOD", "variable", "ADISCORD_economy_treasury"), 0),
-                50 if paid else 0,
+                450 if paid else 0,
             )
             prior = (dict(facts), list(events))
             execute_package_effects(effect, facts, events, "NOD")
@@ -2234,8 +2252,8 @@ class PartyRecoveryTransactions(unittest.TestCase):
             events,
             "NOD",
         )
-        self.assertEqual(facts[("STP", "variable", "ADISCORD_economy_treasury")], 50)
-        self.assertEqual(facts[("NOD", "equipment", "infantry_equipment")], 1000)
+        self.assertEqual(facts[("STP", "variable", "ADISCORD_economy_treasury")], 450)
+        self.assertEqual(facts[("NOD", "equipment", "infantry_equipment")], 10000)
         self.assertNotIn(
             ("STP", "has_country_flag", "STP_pw_party_nod_arms_pending"), facts
         )
@@ -2665,6 +2683,7 @@ class KefreytEmergencyContracts(unittest.TestCase):
     def test_emergency_branch_moves_with_campaign_phase(self):
         root = self.focuses["STP_kc_emergency_staff"]
         offsets = [item.value for item in root if item.key == "offset"]
+        triggers = {entry.key: entry.value for entry in entries(TRIGGERS)}
 
         def position(focus_id):
             focus = self.focuses[focus_id]
@@ -2672,15 +2691,17 @@ class KefreytEmergencyContracts(unittest.TestCase):
             base = position(anchors[0]) if anchors else (0, 0)
             return base[0] + int(scalar(focus, "x")), base[1] + int(scalar(focus, "y"))
 
-        other_positions = {
-            position(focus_id) for focus_id in self.focuses
-            if not focus_id.startswith("STP_kc_")
-        }
         for tag, postwar, expected in (
             ("STP", False, (-8, 0)), ("STS", False, (-8, 0)),
             ("STP", True, (13, 13)), ("STS", True, (5, 16)),
         ):
             facts = {(tag, "has_country_flag", "STP_cw_postwar"): postwar}
+            other_positions = {
+                position(focus_id) for focus_id, focus in self.focuses.items()
+                if not focus_id.startswith("STP_kc_")
+                and all(matches_conditions(expand(entry.value, definitions=triggers), facts, tag)
+                        for entry in focus if entry.key == "allow_branch")
+            }
             x, y = int(scalar(root, "x")), int(scalar(root, "y"))
             for offset in offsets:
                 if matches_conditions(expand(block(offset, "trigger")), facts, tag):

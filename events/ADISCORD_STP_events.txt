@@ -806,7 +806,11 @@ country_event = {
 	trigger = { tag = STP }
 	option = {
 		name = ADISCORD_STP_cw.44.a
-		effect_tooltip = { add_ideas = STP_cw_nodrul_collapse }
+		if = {
+			limit = { has_idea = STP_cw_nodrul_collapse_eased }
+			effect_tooltip = { add_ideas = STP_cw_nodrul_collapse_eased }
+		}
+		else = { effect_tooltip = { add_ideas = STP_cw_nodrul_collapse } }
 		custom_effect_tooltip = STP_cw_nodrul_collapse_focus_tt
 	}
 }

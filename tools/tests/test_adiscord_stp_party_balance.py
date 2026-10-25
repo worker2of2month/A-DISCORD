@@ -121,7 +121,7 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
         self.assertIn("NOT = { has_variable = STP_ps_stage }", begin)
         recovery = named_block(self.effects, "STP_ps_refresh_defence")
         for value in ("-0.45", "-0.3", "-0.15"):
-            self.assertIn("var = STP_ps_breakthrough value = " + value, recovery)
+            self.assertRegex(recovery, r"var\s*=\s*STP_ps_breakthrough\s+value\s*=\s*" + re.escape(value))
         self.assertNotIn("army_defence_factor = -", recovery)
         self.assertNotIn("STP_cw_party_initial_disarray", self.effects)
         for stage in (1, 2, 3):

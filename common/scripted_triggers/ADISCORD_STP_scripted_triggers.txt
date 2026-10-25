@@ -2650,6 +2650,42 @@ STP_ps_can_start_stage = {
 	NOT = { has_active_mission = STP_ps_reorg_3 }
 }
 
+# COUNTRY STP: the focus owns prewar access; its snapshot survives the civil-war tree.
+STP_ps_credit_program_unlocked = {
+	OR = {
+		has_completed_focus = STP_ps_northern_credit
+		has_country_flag = STP_ps_credit_program
+	}
+}
+
+STP_ps_arms_program_unlocked = {
+	OR = {
+		has_completed_focus = STP_ps_northern_arms
+		has_country_flag = STP_ps_arms_program
+	}
+}
+
+STP_ps_engineers_program_unlocked = {
+	OR = {
+		has_completed_focus = STP_ps_northern_engineers
+		has_country_flag = STP_ps_engineers_program
+	}
+}
+
+STP_ps_expedition_program_unlocked = {
+	OR = {
+		has_completed_focus = STP_ps_expedition_logistics
+		has_country_flag = STP_ps_expedition_program
+	}
+}
+
+STP_ps_supply_program_unlocked = {
+	OR = {
+		has_completed_focus = STP_ps_foreign_supply_desk
+		has_country_flag = STP_ps_supply_program
+	}
+}
+
 STP_ps_nod_can_host_exiles = {
 	tag = NOD exists = yes has_capitulated = no is_subject = no
 	NOT = { has_war_with = STP }

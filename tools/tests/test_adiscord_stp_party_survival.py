@@ -417,7 +417,7 @@ class PartySurvivalContracts(unittest.TestCase):
 
     def test_credit_affordability_includes_fractional_boundary(self):
         gate = one(self.decisions['STP_ps_fund_nod'], 'custom_cost_trigger')
-        for money, expected in ((1499.9, False), (1500, True), (1500.1, True)):
+        for money, expected in ((749.9, False), (750, True), (750.1, True)):
             self.assertEqual(
                 matches_conditions(
                     gate, {('STP', 'variable', 'ADISCORD_economy_treasury'): money}
@@ -753,7 +753,7 @@ class PartySurvivalContracts(unittest.TestCase):
             if e.key in ('focus', 'shared_focus') and isinstance(e.value, list)
         }
         new = {key for key in focuses if key.startswith('STP_ps_')}
-        self.assertEqual(len(new), 28)
+        self.assertEqual(len(new), 29)
         for key in new:
             for block in children(focuses[key], 'prerequisite'):
                 for entry in block:
@@ -916,7 +916,7 @@ class PartySurvivalContracts(unittest.TestCase):
         keys = []
         for line in raw.decode('utf-8-sig').splitlines():
             if line.lstrip().startswith('STP_ps_'):
-                self.assertRegex(line, r'^ STP_ps_\w+: ".*"$')
+                self.assertRegex(line, r'^ STP_ps_\w+:\d* "(?:[^"\\]|\\.)*"$')
                 keys.append(line.split(':', 1)[0])
         self.assertEqual(len(keys), len(set(keys)))
         for path in (EFFECTS, DECISIONS):
@@ -1425,7 +1425,7 @@ class PartyUsabilityContracts(unittest.TestCase):
                     ('STP', 'has_variable', 'STP_ps_val_pressure_deposit'): True,
                     ('STP', 'tag', 'STP'): True,
                     ('STP', 'STP_cw_preparation_open', 'yes'): True,
-                    ('STP', 'has_completed_focus', 'STP_ps_foreign_supply_desk'): True,
+                    ('STP', 'STP_ps_supply_program_unlocked', 'yes'): True,
                     ('VAL', 'exists', 'yes'): True,
                     ('VAL', 'has_active_mission', 'STP_ps_val_departure'): True,
                 },

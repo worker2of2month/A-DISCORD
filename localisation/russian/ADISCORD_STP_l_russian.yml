@@ -2604,45 +2604,45 @@
 
  STP_ps_expedition_idea: "Экспедиционное снабжение"
 
- STP_ps_fund_nod_cost: "§Y1500§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_fund_nod_cost: "§Y750§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_fund_nod_cost_blocked: "§R1500§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_fund_nod_cost_blocked: "§R750§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_fund_nod_cost_tooltip: "§Y1500§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_fund_nod_cost_tooltip: "§Y750§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_fund_nod: "Кредит Нодрулу"
 
- STP_ps_fund_nod_desc: "Подготовка 14 дней и доставка 7 дней после открытия маршрута. Нодрул получает §Y1500§! £ADISCORD_economy_treasury_texticon и доступ к закупке оружия. Это помощь его армии, а не гарантированное вступление. Если соглашение утратит силу до доставки, резерв возвращается."
+ STP_ps_fund_nod_desc: "Подготовка 14 дней и доставка 7 дней после открытия маршрута. Нодрул получает §Y750§! £ADISCORD_economy_treasury_texticon и доступ к отдельной 14-дневной закупке §Y10000§! £infantry_equipment_texticon за полученную сумму. Это помощь его армии; вступление в нашу войну определяется отдельными условиями. Если соглашение утратит силу до доставки, резерв возвращается."
 
  STP_ps_arm_nod_cost: "§Y300§! £ADISCORD_economy_treasury_texticon §Y12000§! £infantry_equipment_texticon\n§Y100§! £artillery_texticon §Y60§! £support_equipment_texticon"
 
  STP_ps_arm_nod_cost_blocked: "§R300§! £ADISCORD_economy_treasury_texticon §R12000§! £infantry_equipment_texticon\n§R100§! £artillery_texticon §R60§! £support_equipment_texticon"
 
- STP_ps_arm_nod_cost_tooltip: "§Y300§! £ADISCORD_economy_treasury_texticon; §Y12000§! £infantry_equipment_texticon; §Y100§! £artillery_texticon; §Y60§! $support_equipment_short$"
+ STP_ps_arm_nod_cost_tooltip: "§Y300§! £ADISCORD_economy_treasury_texticon; §Y12000§! £infantry_equipment_texticon; §Y100§! £artillery_texticon; §Y60§! £support_equipment_texticon"
 
  STP_ps_arm_nod: "Оружие северному фронту"
 
  STP_ps_arm_nod_desc: "Передать Нодрулу §Y12000§! £infantry_equipment_texticon, §Y100§! орудий и §Y60§! оснащения для северного фронта. Цена включает перевозку. Если северная война закончится до доставки или соглашение утратит силу, оплаченный резерв возвращается."
 
- STP_ps_engineers_nod_cost: "§Y3000§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_engineers_nod_cost: "§Y600§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_engineers_nod_cost_blocked: "§R3000§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_engineers_nod_cost_blocked: "§R600§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_engineers_nod_cost_tooltip: "§Y3000§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_engineers_nod_cost_tooltip: "§Y600§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_engineers_nod: "Инженерная миссия"
 
- STP_ps_engineers_nod_desc: "Подготовить инженерную помощь действующему северному фронту Нодрула. После доставки инженерный эффект действует §Y60 дней§!. Если северная война закончится до доставки, денежный резерв возвращается."
+ STP_ps_engineers_nod_desc: "Подготовка §Y7 дней§! и доставка §Y7 дней§! после открытия маршрута. На §Y60 дней§! армия Нодрула получит §G-10%§! расхода снабжения и §G+5%§! скорости восстановления организации. Если северная война закончится до доставки, денежный резерв возвращается."
 
- STP_ps_expedition_nod_cost: "§Y1800§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_expedition_nod_cost: "§Y600§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_expedition_nod_cost_blocked: "§R1800§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_expedition_nod_cost_blocked: "§R600§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_expedition_nod_cost_tooltip: "§Y1800§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_expedition_nod_cost_tooltip: "§Y600§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_expedition_nod: "Подготовить экспедиционное снабжение"
 
- STP_ps_expedition_nod_desc: "Подготовить усиление нодрульской экспедиции. Эффект на §Y42 дня§! включится только после её реального вступления против Шабрата. Оплата не объявляет войну. Если маршрут вмешательства закроется до доставки, резерв возвращается."
+ STP_ps_expedition_nod_desc: "Подготовка §Y7 дней§! и доставка §Y7 дней§! после открытия маршрута. На §Y42 дня§! армия Нодрула получит §G-10%§! расхода снабжения и §G+15%§! скорости планирования. Эффект начнётся только при реальном вступлении против Шабрата. Если маршрут вмешательства закроется до доставки, резерв возвращается."
 
 
 
@@ -2660,19 +2660,19 @@
 
  STP_ps_agreement_decline: "Не брать этих обязательств."
 
- STP_ps_nod_rifle_purchase_cost: "§Y1500§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_nod_rifle_purchase_cost: "§Y750§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_nod_rifle_purchase_cost_blocked: "§R1500§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_nod_rifle_purchase_cost_blocked: "§R750§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_nod_rifle_purchase_cost_tooltip: "§Y1500§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_nod_rifle_purchase_cost_tooltip: "§Y750§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_nod_rifle_purchase: "Закупить винтовки для северного фронта"
 
  STP_ps_nod_rifle_purchase_work: "Винтовки северному фронту - исполнение"
 
- STP_ps_nod_rifle_purchase_desc: "Цена: §Y1500§! £ADISCORD_economy_treasury_texticon. Срок: 14 дней. При утрате условий незавершённый депозит возвращается."
+ STP_ps_nod_rifle_purchase_desc: "За §Y750§! £ADISCORD_economy_treasury_texticon закупим §G10000§! £infantry_equipment_texticon для северного фронта. Срок: §Y14 дней§!. Завершение северной войны отменяет заказ с возвратом оплаты."
 
- STP_ps_nod_rifle_purchase_work_desc: "Зарезервировано §Y1500§! £ADISCORD_economy_treasury_texticon. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
+ STP_ps_nod_rifle_purchase_work_desc: "Зарезервировано §Y750§! £ADISCORD_economy_treasury_texticon. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
 
  STP_ps_exile_offer_title: "Просьба уцелевшего руководства"
 
@@ -2737,11 +2737,11 @@
  STP_ps_evacuation_plan_desc: "Резервному штабу нужны не только линии связи, но и служба, способная возвращать раненых в строй. Закрепим санитарные команды за частями, наладим сортировку раненых и работу перевязочных пунктов. Подготовленные медики останутся с партийной армией после раскола."
 
  STP_ps_northern_partner: "Северный союзник"
- STP_ps_northern_partner_desc: "Нодрул ведёт собственную войну. Предложим ему помощь и установим постоянную связь ведомств. Вопрос убежища поставим при подготовке эвакуации через резервный штаб."
+ STP_ps_northern_partner_desc: "Нодрул ведёт собственную войну, исход которой определит, сможет ли он поддержать партию. Постоянная связь ведомств откроет оплаченные программы помощи северному фронту. Поддерживая союзника сейчас, мы сохраняем возможность его будущего вмешательства. Но штаб должен понимать и цену его поражения."
 
  STP_ps_northern_credit: "Кредит военному ведомству"
 
- STP_ps_northern_credit_desc: "Кредит оплачивается нашей казной и поступает в бюджет Нодрула. Поддержка союзника конкурирует с восстановлением собственной армии."
+ STP_ps_northern_credit_desc: "Учредим закупочную комиссию для военного ведомства Нодрула. Кредит позволит северному союзнику оплатить оружие для действующей армии. Каждую следующую ссуду правительство будет утверждать отдельно, соотнося её с потребностями собственных частей."
 
  STP_ps_northern_arms: "Оружие северному фронту"
 
@@ -2749,22 +2749,22 @@
 
  STP_ps_northern_engineers: "Инженерная миссия"
 
- STP_ps_northern_engineers_desc: "Инженеры подготовятся к временной службе на действующем северном фронте и обучат собственные службы тыла."
+ STP_ps_northern_engineers_desc: "Инженерная миссия поможет северной армии наладить снабжение и быстрее возвращать подразделения в строй. Наши специалисты получат доступ к её техническим разработкам, а собственный тыл освоит более экономное распределение имущества. Отправка миссии остаётся отдельной оплачиваемой операцией."
 
  STP_ps_joint_staff: "Совместный штаб"
 
  STP_ps_joint_staff_desc: "Нодрульские офицеры и партийный штаб впервые сядут за один стол не как советники и подопечные, а как две армии, которым может понадобиться одна дорога. Общие заявки на горючее, маршруты эшелонов и таблицы связи будут согласованы заранее.\n\nНодрул сохранит собственное командование. Партия сохранит своё. Совместным станет только то, что должно сработать в тот день, когда обеим сторонам окажется недостаточно хороших намерений."
  STP_ps_expedition_logistics: "Обеспечить переброску"
 
- STP_ps_expedition_logistics_desc: "Подготовим резерв снабжения и маршруты для вступления Нодрула в войну."
+ STP_ps_expedition_logistics_desc: "Сделаем ставку на совместную войну. Собственные службы тыла подготовят маршруты и сократят расход снабжения; отдельным заказом можно будет оплатить запасы и штабное обеспечение нодрульской экспедиции. Они начнут действовать при её реальном вступлении против Шабрата. Этот курс исключает подготовку самостоятельного плана на случай утраты союзника."
 
  STP_ps_asylum_protocol: "Опыт северной войны"
 
- STP_ps_asylum_protocol_desc: "Донесения с северного фронта показывают, как быстро привычные планы рассыпаются при потере связи и смене обстановки. Совместный штаб сведёт этот опыт в курс для партийных командиров: постановка задач, подготовка резервов и согласование действий соседних частей. Эти навыки понадобятся нашей армии ещё до первого отступления."
+ STP_ps_asylum_protocol_desc: "Донесения с северного фронта показывают, как быстро привычные планы рассыпаются при потере связи и смене обстановки. Совместный штаб сведёт этот опыт в курс для партийных командиров: постановка задач, подготовка резервов и согласование действий соседних частей. Эти навыки понадобятся нашей армии ещё до первого отступления.\n\nПодготовим самостоятельный план на случай поражения Нодрула. Армия сохранит собственные таблицы снабжения и порядок командования, а правительство заранее объяснит округам, как продолжать войну без внешней опоры. Это ослабит последствия утраты союзника, но исключит программу обеспечения его экспедиции."
 
  STP_ps_foreign_supply_desk: "Бюро внешних поставок"
 
- STP_ps_foreign_supply_desk_desc: "Организуем разведку поставок Кефрейта, их перехват и давление на поставщиков. Бюро займётся захватом грузов и задержкой снабжения."
+ STP_ps_foreign_supply_desk_desc: "Бюро сведёт зарубежные закупки и армейские заявки в общий план снабжения, сократив расход имущества собственной армии. Сеть торговых представителей даст сведения о войсках Кефрейта и откроет разведку, перехват и задержку его поставок сопротивлению. Подготовленные программы сохранятся после начала гражданской войны."
 
  STP_ps_ammunition_board: "Резерв боеприпасов"
  STP_ps_ammunition_board_desc: "Согласуем заказ смешанного боекомплекта для армейских складов."
@@ -2853,11 +2853,11 @@
 
  STP_ps_val_send_supply_desc: "12000 настоящих винтовок. Подготовка 28 дней, первая отправка 35 дней. Без связанного сухопутного пути груз ожидает и не появляется у получателя. До раскола винтовки остаются в окружном тайнике Ниансанса, затем доставляются сопротивлению. Перехват передаёт их партии."
 
- STP_ps_val_intelligence_cost: "§Y450§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_val_intelligence_cost: "§Y150§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_val_intelligence_cost_blocked: "§R450§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_val_intelligence_cost_blocked: "§R150§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_val_intelligence_cost_tooltip: "§Y450§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_val_intelligence_cost_tooltip: "§Y150§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_val_intelligence: "Разведать заявку Кефрейта"
 
@@ -2865,13 +2865,13 @@
 
  STP_ps_val_intelligence_desc: "За 7 дней установим маршрут текущей поставки. Это открывает её перехват, который потребует ещё 14 дней и отдельной оплаты. Для начала разведки нужно не менее 22 дней до отправки. Если поставка исчезнет или сменится, незавершённый заказ возвращает оплату."
 
- STP_ps_val_intelligence_work_desc: "Зарезервировано 450 £ADISCORD_economy_treasury_texticon. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
+ STP_ps_val_intelligence_work_desc: "Зарезервировано 150 £ADISCORD_economy_treasury_texticon. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
 
- STP_ps_val_intercept_cost: "§Y1200§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_val_intercept_cost: "§Y600§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_val_intercept_cost_blocked: "§R1200§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_val_intercept_cost_blocked: "§R600§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_val_intercept_cost_tooltip: "§Y1200§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_val_intercept_cost_tooltip: "§Y600§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_val_intercept: "Перехватить известный сухопутный маршрут"
 
@@ -2879,13 +2879,13 @@
 
  STP_ps_val_intercept_desc: "За 14 дней подготовим перехват разведанной поставки по действующему сухопутному маршруту. Захваченный груз поступит на наши склады вместо складов сопротивления. Начать можно, пока до отправки осталось не менее 15 дней. При срыве условий незавершённый заказ возвращает оплату."
 
- STP_ps_val_intercept_work_desc: "Зарезервировано 1200 £ADISCORD_economy_treasury_texticon. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
+ STP_ps_val_intercept_work_desc: "Зарезервировано 600 £ADISCORD_economy_treasury_texticon. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
 
- STP_ps_val_pressure_cost: "§Y1500§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_val_pressure_cost: "§Y500§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_val_pressure_cost_blocked: "§R1500§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_val_pressure_cost_blocked: "§R500§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_val_pressure_cost_tooltip: "§Y1500§! £ADISCORD_economy_treasury_texticon"
+ STP_ps_val_pressure_cost_tooltip: "§Y500§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_val_pressure: "Давление на посредников"
 
@@ -2893,7 +2893,7 @@
 
  STP_ps_val_pressure_desc: "§YДействует сразу.§! Текущая подготовка отправки продлится на §Y14 дней§!. В течение 60 дней следующие грузы также готовятся на 14 дней дольше. Без активного таймера эффект касается только будущих отправок. Повторная оплата через 60 дней."
 
- STP_ps_val_pressure_work_desc: "Зарезервировано 1500 £ADISCORD_economy_treasury_texticon. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
+ STP_ps_val_pressure_work_desc: "Зарезервировано 500 £ADISCORD_economy_treasury_texticon. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
 
 
  STP_ps_val_departure: "Подготовка поставки Кефрейта"
@@ -4109,7 +4109,7 @@
  STP_ps_fund_nod_unlock_summary_tt:0 "Передаёт Нодрулу средства на закупку оружия."
  STP_ps_arm_nod_unlock_summary_tt:0 "Передаёт Нодрулу оружие для северного фронта."
  STP_ps_engineers_nod_unlock_summary_tt:0 "На 60 дней улучшает снабжение и восстановление организации армии Нодрула."
- STP_ps_expedition_nod_unlock_summary_tt:0 "Снижает расход снабжения Нодрула после его вступления в войну."
+ STP_ps_expedition_nod_unlock_summary_tt: "Снижает расход снабжения и ускоряет планирование Нодрула после его вступления в войну."
  STP_ps_val_intelligence_unlock_summary_tt:0 "Разведывает поставку Кефрейта для последующего перехвата."
  STP_ps_val_intercept_unlock_summary_tt:0 "Перенаправляет разведанный груз сопротивления на наши склады."
  STP_ps_val_pressure_unlock_summary_tt:0 "Задерживает поставки Кефрейта на 14 дней."
@@ -6678,3 +6678,5 @@
  STP_REGION_ADMIN_DAYS_19: "19"
  STP_REGION_ADMIN_DAYS_20: "20"
  STP_REGION_ADMIN_DAYS_21: "21"
+ STP_ps_northern_defeat_warning_tt: "§RПоражение Нодрула в северной войне лишит партию внешней опоры.§! С началом гражданской войны или сразу, если она уже идёт, мы получим следующий национальный дух. Риск существует независимо от прохождения этой ветки:"
+ STP_ps_northern_contingency_tt: "При поражении Нодрула партия сразу получит ослабленный дух §Y«Без северного гаранта»§!: §R-5%§! стабильности, §R-5%§! поддержки войны и §R-5%§! скорости восстановления организации. Фокус §Y«Урок севера»§! будет пропущен; §Y«Без покровителей»§! снимет оставшийся штраф."

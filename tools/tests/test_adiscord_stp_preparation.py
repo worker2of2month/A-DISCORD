@@ -4068,9 +4068,10 @@ class StelanderPreparationTests(unittest.TestCase):
                     checked.add(scalar(focus, "id"))
         self.assertEqual(
             len(checked),
-            41,
+            42,
             "every persistent focus reward needs a checked delta preview",
         )
+        self.assertIn("STP_ps_foreign_supply_desk", checked)
         self.assertNotIn("STP_party_war_transport", checked)
         self.assertIn(
             "STP_ps_transport",
