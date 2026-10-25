@@ -90,6 +90,41 @@ class PartyQualityOfLifeTests(unittest.TestCase):
         self.assertIn('STP_cw_started', str(visible))
         self.assertIn('STP_cw_elections_finished', str(visible))
 
+    def test_military_operations_prewar_requires_an_unlocked_programme(self):
+        visible = block(self.categories['STP_military_operations'], 'visible')
+        prewar = {
+            ('STP', 'has_country_flag', 'STP_sided_with_the_party_flag'): True,
+            ('STP', 'STP_cw_preparation_open', 'yes'): True,
+            ('VAL', 'exists', 'yes'): True,
+        }
+        self.assertFalse(matches_conditions(visible, prewar))
+        programme = {
+            **prewar,
+            ('STP', 'STP_ps_supply_program_unlocked', 'yes'): True,
+        }
+        self.assertTrue(matches_conditions(visible, programme))
+        self.assertTrue(matches_conditions(
+            block(self.decisions['STP_ps_val_pressure'], 'visible'), programme
+        ))
+        self.assertFalse(matches_conditions(
+            visible, {**programme, ('VAL', 'exists', 'yes'): False}
+        ))
+        for receipt in (
+            'STP_ps_nod_receipt_type',
+            'STP_ps_val_intelligence_deposit',
+            'STP_ps_val_intercept_deposit',
+            'STP_ps_val_pressure_deposit',
+        ):
+            with self.subTest(receipt=receipt):
+                self.assertTrue(matches_conditions(
+                    visible, {('STP', 'has_variable', receipt): True}
+                ))
+        for phase in ('STP_cw_participant', 'STP_cw_postwar'):
+            with self.subTest(phase=phase):
+                self.assertTrue(matches_conditions(
+                    visible, {('STP', 'has_country_flag', phase): True}
+                ))
+
     def test_chapter_nominee_selection_closes_all_other_choices_and_stale_callbacks(self):
         for selected in range(6):
             facts = {('STP', 'STP_ch_campaigning', 'yes'): True,

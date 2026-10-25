@@ -86,6 +86,8 @@ STP_military_operations = {
 				tag = STP
 				has_country_flag = STP_sided_with_the_party_flag
 				STP_cw_preparation_open = yes
+				STP_ps_supply_program_unlocked = yes
+				VAL = { exists = yes }
 			}
 			has_variable = STP_ps_nod_receipt_type
 			has_variable = STP_ps_val_intelligence_deposit
