@@ -171,7 +171,10 @@ class CentralShowdownRecoveryTests(unittest.TestCase):
             in block
         ]
         self.assertEqual(len(request_branches), 1)
-        self.assertIn(cooldown_guard, named_block(request_branches[0], "limit"))
+        self.assertIn(
+            "ADISCORD_vorkerland_can_commit_to_showdown = yes",
+            named_block(request_branches[0], "limit"),
+        )
 
     def test_queued_reunification_rechecks_the_integrated_central_map(self) -> None:
         events = read("events/ADISCORD_vorkerland_events.txt")
@@ -191,10 +194,15 @@ class CentralShowdownRecoveryTests(unittest.TestCase):
                 "ADISCORD_vorkerland_central_districts_owned_and_controlled = yes",
                 named_block(victory, tag),
             )
-            self.assertIn(f"{tag} = {{ clr_country_flag = ADISCORD_vorkerland_central_unifier }}", rejection)
+            self.assertIn(
+                f"{tag} = {{ clr_country_flag = ADISCORD_vorkerland_central_unifier }}",
+                rejection,
+            )
             self.assertIn(f"ADISCORD_vorkerland_form_wrk_from_{tag.lower()} = yes", phase_six)
-        self.assertLess(immediate.index("ADISCORD_vorkerland_coalition_victory_ready"),
-                        immediate.index("ADISCORD_vorkerland_form_wrk_from_"))
+        self.assertLess(
+            immediate.index("ADISCORD_vorkerland_coalition_victory_ready"),
+            immediate.index("ADISCORD_vorkerland_form_wrk_from_"),
+        )
 
     def test_startup_does_not_requeue_old_showdown_controller_events(self) -> None:
         on_actions = read_country_on_actions(

@@ -942,7 +942,7 @@ class WestReconstructionScenarios(unittest.TestCase):
                 continue
             yield from self.route_paths(names, completed | {name})
 
-    def test_each_route_adds_two_reachable_140_day_paths_before_the_west(self):
+    def test_each_route_adds_two_reachable_paths_within_the_postwar_pause(self):
         for route, names in self.routes.items():
             self.assertEqual(len(names), 6)
             tower = "WRK_" + route.removeprefix("ADISCORD_vorkerland_route_") + "_restore_unity_tower"
@@ -950,9 +950,12 @@ class WestReconstructionScenarios(unittest.TestCase):
             paths = list(self.route_paths(names, {tower}))
             self.assertEqual(len(paths), 2)
             self.assertEqual(set().union(*(set(path) for path in paths)), set(names))
+            durations = []
             for path in paths:
                 self.assertEqual(len(path), 5)
-                self.assertEqual(sum(int(scalar(self.focuses[name], "cost")) * 7 for name in path), 140)
+                durations.append(sum(int(scalar(self.focuses[name], "cost")) * 7 for name in path))
+            self.assertEqual(sorted(durations), [98, 105])
+            self.assertLessEqual(max(durations), 180)
             west_entry = self.focuses[self.west[route][0]]
             self.assertEqual(scalar(block(west_entry, "prerequisite"), "focus"), names[-1])
 
@@ -963,7 +966,7 @@ class WestReconstructionScenarios(unittest.TestCase):
             reward = block(self.focuses[name], "completion_reward")
             for scope, entry in selected_effects(reward, facts, "WRK"):
                 self.assertEqual(scope, "WRK")
-                if entry.key in ("add_political_power", "add_stability", "army_experience"):
+                if entry.key in ("add_political_power", "add_stability", "army_experience", "add_command_power"):
                     totals[entry.key] += float(entry.value)
                 elif entry.key == "add_equipment_to_stockpile":
                     self.assertEqual(scalar(entry.value, "producer"), "WRK")
@@ -981,17 +984,24 @@ class WestReconstructionScenarios(unittest.TestCase):
             facts[("WRK", "has_completed_focus", name)] = True
         return totals
 
-    def test_both_choices_pay_the_exact_agreed_totals_without_double_awards(self):
+    def test_choices_pay_distinct_exact_totals_without_double_awards(self):
         expected = {
-            "joint": Counter(industrial_complex=1, army_experience=20, infantry_equipment=1000),
+            "WRK_joint_transfer_garrisons_to_civil_order": Counter(
+                industrial_complex=1, army_experience=60, infantry_equipment=18000,
+                support_equipment=100, add_command_power=15,
+            ),
+            "WRK_joint_inspect_remaining_arsenals": Counter(
+                industrial_complex=1, army_experience=70, infantry_equipment=18000,
+                support_equipment=200, add_command_power=15,
+            ),
         }
         for route, names in self.routes.items():
             short = route.removeprefix("ADISCORD_vorkerland_route_")
             paths = list(self.route_paths(names, {f"WRK_{short}_restore_unity_tower"}))
             for path in paths:
-                self.assertEqual(self.rewards(path), expected[short], path)
-            # The choice changes when resources arrive, even though the final budget is equal.
-            self.assertNotEqual(self.rewards(paths[0][:-1]), self.rewards(paths[1][:-1]))
+                choice = next(name for name in path if name in expected)
+                self.assertEqual(self.rewards(path), expected[choice], path)
+            self.assertNotEqual(self.rewards(paths[0]), self.rewards(paths[1]))
 
     def test_factories_recheck_control_cores_and_slots_at_delivery(self):
         for names in self.routes.values():

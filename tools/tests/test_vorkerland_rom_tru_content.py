@@ -240,7 +240,8 @@ class RomTruContentTests(unittest.TestCase):
             self.assertIn("value = 100", block)
             self.assertIn("priority = 1400", block)
             self.assertIn("execution_type = balanced", block)
-            self.assertIn("manual_attack = yes", block)
+            self.assertIn("manual_attack = no", block)
+            self.assertIn("execute_order = yes", block)
             self.assertIn(f"type = conquer id = {target} value = 200", block)
 
     def test_owned_scripts_do_not_touch_ivanland_or_use_global_polling(self) -> None:

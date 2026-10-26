@@ -1024,7 +1024,7 @@ class WorldEmpireTests(unittest.TestCase):
             self.assertLessEqual(len(expanded), 3000)
             self.assertLessEqual(len(expanded.encode("utf-8")), 5500)
         outputs = expected_outputs({"WRK_vorkerland_world_empire"})
-        self.assertEqual(len(outputs), 4)
+        self.assertEqual(len(outputs), 3)
         self.assertEqual(validate_outputs(outputs), [])
 
 

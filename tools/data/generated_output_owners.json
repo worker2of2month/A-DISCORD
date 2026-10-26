@@ -1758,25 +1758,6 @@
         "gfx/flags/**/EGC.tga",
         "gfx/flags/**/RIV.tga",
         "gfx/flags/**/YOR.tga",
-        "tools/assets/source/vorkerland_flags/EGC.png",
-        "tools/assets/source/vorkerland_flags/RIV.png",
-        "tools/assets/source/vorkerland_flags/YOR.png",
-        "tools/assets/source/vorkerland_flags/CSL.png",
-        "tools/assets/source/vorkerland_flags/EBA.png",
-        "tools/assets/source/vorkerland_flags/IBA.png",
-        "tools/assets/source/vorkerland_flags/IBL.png",
-        "tools/assets/source/vorkerland_flags/PWR_rimat_republic.png",
-        "tools/assets/source/vorkerland_flags/ROM.png",
-        "tools/assets/source/vorkerland_flags/ROM_frealor_republic.png",
-        "tools/assets/source/vorkerland_flags/SLF.png",
-        "tools/assets/source/vorkerland_flags/SLF_svetlogorsk_republic.png",
-        "tools/assets/source/vorkerland_flags/TGD.png",
-        "tools/assets/source/vorkerland_flags/TRU.png",
-        "tools/assets/source/vorkerland_flags/TRU_zolotorevsk_republic.png",
-        "tools/assets/source/vorkerland_flags/VLA_volnograd_republic.png",
-        "tools/assets/source/vorkerland_flags/WRK_vorkerland_utilitarian_republic.png",
-        "tools/assets/source/vorkerland_flags/WTD.png",
-        "tools/assets/source/vorkerland_flags/ZAO_zaozersk_republic.png",
         "gfx/flags/**/CSL.tga",
         "gfx/flags/**/EBA.tga",
         "gfx/flags/**/IBA.tga",
@@ -1797,7 +1778,8 @@
         "gfx/flags/**/WRK_technocracy.tga",
         "gfx/flags/**/WRK_vorkerland_utilitarian_republic.tga",
         "gfx/flags/**/WTD.tga",
-        "gfx/flags/**/ZAO_zaozersk_republic.tga"
+        "gfx/flags/**/ZAO_zaozersk_republic.tga",
+        "gfx/flags/**/WRK_vorkerland_world_empire.tga"
       ],
       "source_inputs": [
         "gfx/flags/VAD.tga",
@@ -1818,10 +1800,22 @@
         "tools/assets/source/vorkerland_flags/SOL_vorkerland_worker_protectorate_small.png",
         "gfx/flags/WRK.tga",
         "gfx/flags/medium/WRK.tga",
-        "gfx/flags/small/WRK.tga"
+        "gfx/flags/small/WRK.tga",
+        "tools/assets/source/vorkerland_flags/WRK_vorkerland_world_empire.png"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_original_flags"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_original_flags", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_vorkerland_original_flags"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_vorkerland_original_flags",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "The successor flag pass shares the flat HOI4 flag directories with AIN and regional-country builders; exact generated identifiers are defined in its source manifest."

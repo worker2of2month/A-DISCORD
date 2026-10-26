@@ -1744,13 +1744,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if token not in delayed_dirty_reveal:
             issues.append(f"three-year dirty-zone reveal lacks {token}")
-    if 'news.0.t: "Начало боёв в Воркерланде"' not in news_loc:
+    if 'news.0.t: "В Воркерланде началась гражданская война"' not in news_loc:
         issues.append(
-            "collapse opening world-news title is not 'Начало боёв в Воркерланде'"
+            "collapse opening world-news title does not announce the civil war"
         )
-    if 'news.0.a: "Приблизиться к Башне Единства."' not in news_loc:
+    if 'news.0.a: "Гражданская война началась."' not in news_loc:
         issues.append(
-            "collapse opening news option A no longer names the Tower approach"
+            "collapse opening news option A does not acknowledge the civil war"
         )
     teardown = named_block(effects, "ADISCORD_vorkerland_teardown_confederation")
     if "is_subject_of = WRK" in teardown:
@@ -2976,6 +2976,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"{news_id}: expected exactly one world-news definition")
             continue
         body = definition.group(1)
+        if not re.search(rf"\b(?:desc|text)\s*=\s*{re.escape(news_id)}\.d\b", body):
+            issues.append(f"{news_id}: outcome description is missing")
         if (
             "picture = GFX_news_event_adiscord_vorkerland_northern_settlement"
             not in body
@@ -2992,7 +2994,6 @@ def validate_events(root: Path, issues: list[str]) -> None:
             "is_triggered_only = yes",
             "fire_only_once = no",
             f"title = {news_id}.t",
-            f"desc = {news_id}.d",
             f"option = {{ name = {news_id}.a }}",
         ):
             if token not in body:
@@ -3813,10 +3814,10 @@ def validate_events(root: Path, issues: list[str]) -> None:
 
     if (
         effects.count("add_ideas = ADISCORD_vorkerland_erased_nations") != 2
-        or not re.search(
-            r"WKR\s*=\s*\{[^{}]*add_ideas\s*=\s*ADISCORD_vorkerland_erased_nations",
-            initial,
-            re.DOTALL,
+        or "add_ideas = ADISCORD_vorkerland_erased_nations" not in named_block(initial, "WKR")
+        or any(
+            "add_ideas = ADISCORD_vorkerland_erased_nations" in named_block(initial, tag)
+            for tag in ("VAD", "TVA")
         )
         or "tag = WKR" not in finalizer
     ):
@@ -3943,11 +3944,11 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if sorted(eba_locations) != sorted([16623, 16623, 16617, 16637]):
         issues.append("EBA: militia deployment is not distributed across the republic")
     for tag in ("VAD",):
-        country = re.search(rf"{tag}\s*=\s*\{{(.*?)\n\s*\}}", initial, re.DOTALL)
+        country = named_block(initial, tag)
         if (
             not country
-            or "add_manpower = 8000" not in country.group(1)
-            or "amount = 600" not in country.group(1)
+            or "add_manpower = 32000" not in country
+            or "amount = 15000 producer = VAD" not in country
         ):
             issues.append(f"{tag}: central claimant reserve is missing")
     wkr_initial = named_block(initial, "WKR")
@@ -4057,10 +4058,10 @@ def validate_events(root: Path, issues: list[str]) -> None:
         )
     if (
         wkr_home_guard.count("create_unit =") != 2
-        or wkr_home_guard.count("count = 2") != 2
+        or wkr_home_guard.count("count = 3") != 2
     ):
         issues.append(
-            "WKR home guard must deploy exactly two formations in state 33 and two in state 32"
+            "WKR home guard must deploy exactly three formations in state 33 and three in state 32"
         )
     for forbidden in ("annex_country", "every_country", "every_state"):
         if forbidden in wkr_home_guard:
@@ -4145,9 +4146,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
     for tag in ("VAD",):
         oob = read(root, f"history/units/{tag}.txt", issues)
         initial_country = named_block(initial, tag)
-        if oob.count("division = {") != 12 or "ADISCORD_combat_platform" not in oob:
+        if oob.count("division = {") != 16 or "ADISCORD_combat_platform" not in oob:
             issues.append(
-                f"{tag} must retain twelve pre-collapse formations and a mobile template"
+                f"{tag} must retain sixteen pre-collapse formations and a mobile template"
             )
         for token in (
             f"owner = {tag}",
@@ -4267,20 +4268,20 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if ivn_locations != [
         16568,
         9327,
-        3462,
+        16823,
         3318,
-        888,
+        16818,
         838,
         2448,
         882,
-        702,
-        595,
+        16817,
+        16816,
         1971,
-        3447,
-        595,
-        2262,
-        423,
-        4217,
+        16822,
+        16816,
+        16821,
+        16815,
+        16824,
     ]:
         issues.append(
             "IVN field formations do not match the post-island-administration deployment"
@@ -4610,10 +4611,10 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "tag = ZAO",
         "has_global_flag = ADISCORD_vorkerland_collapse_started",
         "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
-        "add_political_power = 20",
-        "amount = 240",
-        "add_manpower = 1200",
-        "add_war_support = 0.04",
+        "add_political_power = 50",
+        "amount = 9000",
+        "add_manpower = 4000",
+        "add_war_support = 0.05",
     ):
         if token not in zao_focus:
             issues.append(

@@ -10,7 +10,6 @@ VANILLA_ROOT = Path("Z:/SteamLibrary/steamapps/common/Hearts of Iron IV")
 ADDITIVE_SHINES = ROOT / "interface/ADISCORD_focus_shines.gfx"
 NATIONAL_FOCUS_GFX = ROOT / "interface/ADISCORD_national_focus.gfx"
 VANILLA_SHINES = VANILLA_ROOT / "interface/goals_shine.gfx"
-EXPECTED_CUSTOM_ONLY_SPRITES = 266
 CONTINUOUS_FOCUS_PALETTE = ROOT / "common/continuous_focus/generic.txt"
 
 
@@ -20,7 +19,7 @@ def read(path: Path) -> str:
 
 def sprite_blocks(source: str) -> list[str]:
     blocks: list[str] = []
-    for match in re.finditer(r"(?m)^[ \t]*SpriteType\s*=\s*\{", source):
+    for match in re.finditer(r"(?mi)^[ \t]*SpriteType\s*=\s*\{", source):
         depth = 0
         for index in range(match.start(), len(source)):
             char = source[index]
@@ -77,7 +76,12 @@ class VorkerlandFocusInterfaceInheritanceTests(unittest.TestCase):
             {path.relative_to(ROOT).as_posix() for path in outputs},
         )
         for path, data in outputs.items():
-            self.assertEqual(path.read_bytes(), data, str(path))
+            if path.suffix in (".gui", ".gfx"):
+                self.assertEqual(
+                    path.read_text(encoding="utf-8"), data.decode("utf-8"), str(path)
+                )
+            else:
+                self.assertEqual(path.read_bytes(), data, str(path))
 
     def test_backgrounds_keep_input_without_pressed_or_hover_tint(self) -> None:
         gfx = read(ROOT / 'interface/ADISCORD_focus_ui.gfx')
@@ -112,7 +116,12 @@ class VorkerlandFocusInterfaceInheritanceTests(unittest.TestCase):
         self.assertTrue(VANILLA_SHINES.is_file())
         custom_names = sprite_names(read(ADDITIVE_SHINES))
         vanilla_names = set(sprite_names(read(VANILLA_SHINES)))
-        self.assertEqual(len(custom_names), EXPECTED_CUSTOM_ONLY_SPRITES)
+        base_names = set(sprite_names(read(NATIONAL_FOCUS_GFX)))
+        self.assertTrue(base_names)
+        focus_names = {
+            name for name in base_names if name.startswith(("GFX_focus_", "GFX_goal_"))
+        }
+        self.assertEqual(set(custom_names), {name + "_shine" for name in focus_names})
         self.assertEqual(len(custom_names), len(set(custom_names)))
         self.assertEqual(set(custom_names) & vanilla_names, set())
 

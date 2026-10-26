@@ -1861,8 +1861,8 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertNotIn("every_country", opening_definition.group(1))
         self.assertNotIn("scoped_sound_effect", opening_definition.group(1))
         news_loc = read("localisation/russian/events_l_russian.yml")
-        self.assertIn('news.0.t: "Начало боёв в Воркерланде"', news_loc)
-        self.assertIn('news.0.a: "Приблизиться к Башне Единства."', news_loc)
+        self.assertIn('news.0.t: "В Воркерланде началась гражданская война"', news_loc)
+        self.assertIn('news.0.a: "Гражданская война началась."', news_loc)
         superevent_loc = read("localisation/russian/ADISCORD_superevents_l_russian.yml")
         self.assertNotIn(
             'superevent_vorkerland_fragmented_title: "Конец единого Воркерланда"',
@@ -2397,6 +2397,13 @@ class FrontAndSupplyTests(unittest.TestCase):
             "NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT",
         ):
             self.assertNotRegex(defines, rf"(?m)^\s*{re.escape(key)}\s*=")
+        for kind in ("ORG", "STRENGTH"):
+            values = []
+            for level in ("LOW", "MED", "HIGH"):
+                match = re.search(rf"PLAN_ATTACK_MIN_{kind}_FACTOR_{level} = ([\d.]+)", defines)
+                self.assertIsNotNone(match)
+                values.append(float(match[1]))
+            self.assertEqual(values, [0.85, 0.65, 0.5])
 
     def test_technograd_is_a_supplied_megalopolis(self) -> None:
         state_paths = list((ROOT / "history" / "states").glob("105-*.txt"))
@@ -3692,10 +3699,11 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             effects.count("add_ideas = ADISCORD_vorkerland_erased_nations"), 2
         )
         initial = named_block(effects, "ADISCORD_vorkerland_prepare_initial_combatants")
-        self.assertRegex(
-            initial,
-            r"WKR\s*=\s*\{[^{}]*add_ideas\s*=\s*ADISCORD_vorkerland_erased_nations",
+        self.assertIn(
+            "add_ideas = ADISCORD_vorkerland_erased_nations", named_block(initial, "WKR")
         )
+        for tag in ("VAD", "TVA"):
+            self.assertNotIn("add_ideas = ADISCORD_vorkerland_erased_nations", named_block(initial, tag))
 
     def test_initial_partition_grants_owned_state_cores_once(self) -> None:
         effects = source_section(
@@ -3899,7 +3907,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
                 self.assertIn(f"amount = {rifles}", block, decision_id)
                 if patron == "val":
                     self.assertIn(
-                        "type = support_equipment amount = 60 producer = VAL", block
+                        "type = support_equipment amount = 60 producer = VAL", " ".join(block.split())
                     )
                 else:
                     self.assertIn(
@@ -4433,6 +4441,9 @@ class InterventionAndVisualTests(unittest.TestCase):
         cleanup = named_block(
             effects, "ADISCORD_vorkerland_end_ivanland_intervention_wars"
         )
+        helper_id = "ADISCORD_vorkerland_cleanup_ivanland_intervention_front"
+        self.assertIn(f"{helper_id} = yes", cleanup)
+        cleanup = named_block(effects, helper_id)
         cleanup_ivn = named_block(cleanup, "IVN")
         for flag in (
             "ADISCORD_vorkerland_ivanland_front_launch_pending",

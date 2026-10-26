@@ -11,7 +11,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
 FLAG_ROOT = ROOT / "gfx" / "flags"
-GENERATOR = ROOT / "tools" / "build_adiscord_vorkerland_original_flags.py"
+GENERATOR = "tools.builders.build_adiscord_vorkerland_original_flags"
 
 EXPECTED = {
     "ROM": {
@@ -117,7 +117,7 @@ class SuppliedSuccessorFlagTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.result = subprocess.run(
-            [sys.executable, "-B", str(GENERATOR)],
+            [sys.executable, "-B", "-m", GENERATOR, "--check"],
             cwd=ROOT,
             capture_output=True,
             text=True,
@@ -128,6 +128,15 @@ class SuppliedSuccessorFlagTests(unittest.TestCase):
         self.assertEqual(
             self.result.returncode, 0, self.result.stdout + self.result.stderr
         )
+
+    def test_generator_owns_runtime_triplets_only(self) -> None:
+        from tools.builders.build_adiscord_vorkerland_original_flags import expected_outputs
+
+        outputs = expected_outputs()
+        self.assertTrue(outputs)
+        for path in outputs:
+            self.assertTrue(path.is_relative_to(FLAG_ROOT), path)
+            self.assertEqual(path.suffix, ".tga")
 
     def test_supplied_artwork_survives_generation(self) -> None:
         directories = {

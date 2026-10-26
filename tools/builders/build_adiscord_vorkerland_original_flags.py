@@ -352,11 +352,9 @@ def add_triplet(
     outputs: dict[Path, Image.Image],
     flag_id: str,
     image: Image.Image,
-    *,
-    write_source: bool = True,
 ) -> None:
-    if write_source:
-        outputs[SOURCE_ROOT / f"{flag_id}.png"] = image.copy()
+    # Source artwork is an input. Procedural flags are reproducible from code;
+    # neither route needs an additional generated source PNG.
     for directory, size in (("", (82, 52)), ("medium", (41, 26)), ("small", (10, 7))):
         resized = image.resize(size, Image.Resampling.LANCZOS).convert("RGBA")
         outputs[FLAG_ROOT / directory / f"{flag_id}.tga"] = resized
@@ -411,7 +409,7 @@ def expected_outputs(tags: set[str] | None = None) -> dict[Path, Image.Image]:
             prepared = ImageOps.fit(
                 source.convert("RGB"), CANVAS, method=Image.Resampling.LANCZOS
             )
-        add_triplet(outputs, flag_id, prepared, write_source=flag_id not in ARTWORK_FLAGS)
+        add_triplet(outputs, flag_id, prepared)
 
     for flag_id, supplied in SUPPLIED_RUNTIME_FLAGS.items():
         if tags is not None and flag_id not in tags:
@@ -485,7 +483,7 @@ def main() -> int:
         help="compare current flags with deterministic renders (default)",
     )
     actions.add_argument(
-        "--apply", action="store_true", help="write source PNGs and TGA triplets"
+        "--apply", action="store_true", help="write runtime TGA triplets"
     )
     parser.add_argument(
         "--tags", nargs="+", help="limit checks and writes to these flag IDs"

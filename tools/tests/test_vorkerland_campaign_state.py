@@ -177,31 +177,24 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
             'vorkerland_collapse',
         )
         state_hook = named_block(on_actions, "on_state_control_changed")
-        for state in (
-            32,
-            33,
-            35,
-            36,
-            37,
-            38,
-            39,
-            40,
-            75,
-            81,
-            102,
-            104,
-            106,
-            121,
-            122,
-            123,
-            124,
-        ):
-            self.assertIn(f"state = {state}", state_hook)
+        self.assertIn(
+            "FROM.FROM = { has_state_flag = ADISCORD_vorkerland_central_theatre }",
+            state_hook,
+        )
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        marked = set(re.findall(
+            r"(\d+)\s*=\s*\{\s*set_state_flag = ADISCORD_vorkerland_central_theatre",
+            effects,
+        ))
+        expected_states = {
+            "32", "33", "35", "36", "37", "38", "39", "75", "81",
+            "102", "106", "121", "122", "123", "124",
+        }
+        self.assertTrue(expected_states <= marked)
         self.assertIn("ADISCORD_vorkerland_recount_central_control = yes", state_hook)
         self.assertIn("ADISCORD_vorkerland_refresh_legitimacy_leader = yes", state_hook)
         self.assertEqual(
-            state_hook.count("ADISCORD_vorkerland_refresh_claimant_coalition = yes"),
-            3,
+            state_hook.count("ADISCORD_vorkerland_refresh_claimant_coalition = yes"), 3
         )
 
 

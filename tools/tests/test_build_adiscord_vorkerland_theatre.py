@@ -197,10 +197,26 @@ class VorkerlandTheatreBuilderTests(unittest.TestCase):
                 issues,
             )
 
-    def test_cut_kalten_connection_disconnects_captured_corridor_hubs(self) -> None:
+    def test_missing_kalten_connection_is_reported(self) -> None:
         source = normalized_rail_source()
         line = theatre.render_rail_line(*theatre.MON_KALTEN_RAIL)
         broken = source.replace(line + "\n", "")
+        self.assertNotEqual(broken, source)
+        with tempfile.TemporaryDirectory() as directory:
+            rails = Path(directory) / "railways.txt"
+            rails.write_text(broken, encoding="utf-8")
+            with patch.object(theatre, "RAILWAYS_PATH", rails):
+                issues = theatre.validate()
+        self.assertIn("MON Kalten connection must occur exactly once at level 1", issues)
+
+    def test_isolated_captured_corridor_hubs_are_reported(self) -> None:
+        source = normalized_rail_source()
+        hubs = {str(hub) for hub in theatre.MON_KALTEN_CORRIDOR_HUBS}
+        # Nudge rails can provide an alternate route around the managed spur.
+        # Isolate the depots themselves to exercise connectivity validation.
+        broken = "\n".join(
+            line for line in source.splitlines() if hubs.isdisjoint(line.split()[2:])
+        ) + "\n"
         self.assertNotEqual(broken, source)
         with tempfile.TemporaryDirectory() as directory:
             rails = Path(directory) / "railways.txt"
