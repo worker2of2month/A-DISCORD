@@ -4185,6 +4185,10 @@ defined_text = {
 defined_text = {
 	name = GetRUSFavourShockFistStatus
 	text = {
+		trigger = { has_war = no }
+		localization_key = RUS_favours_status_requires_war
+	}
+	text = {
 		trigger = {
 			has_country_flag = RUS_favour_shock_fist_ui_cooldown
 		}

@@ -315,6 +315,14 @@ ADISCORD_vorkerland_initialize_legitimacy = {
 		}
 		add_to_variable = { var = ADISCORD_vorkerland_legitimacy value = 0.05 }
 	}
+	# A district-leaning prewar balance carries the districts' consent to the heir.
+	if = {
+		limit = {
+			check_variable = { var = global.ADISCORD_vorkerland_prewar_balance_lean value = 1 compare = equals }
+			ADISCORD_vorkerland_is_preparation_heir = yes
+		}
+		add_to_variable = { var = ADISCORD_vorkerland_legitimacy value = 0.05 }
+	}
 	if = {
 		limit = {
 			check_variable = { var = ADISCORD_vorkerland_legitimacy value = 0 compare = greater_than }
@@ -5322,7 +5330,7 @@ ADISCORD_vorkerland_arm_wkr_solar_counter_intervention = {
 		}
 		set_global_flag = ADISCORD_vorkerland_wkr_solar_counter_intervention_ready
 		set_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested
-		add_timed_idea = { idea = ADISCORD_vorkerland_solar_counter_preparation days = 35 }
+		unlock_decision_tooltip = WKR_solar_counter_activate_plan
 		create_wargoal = { type = annex_everything target = VAD expire = 30 }
 		country_event = { id = ADISCORD_vorkerland_phase.4 days = 21 }
 	}
@@ -7540,11 +7548,11 @@ ADISCORD_vorkerland_set_phase_prewar = {
 	ADISCORD_vorkerland_clear_phase_flags = yes
 	set_global_flag = ADISCORD_vorkerland_phase_prewar
 	ADISCORD_vorkerland_refresh_focus_lifecycle = yes
-	WRK = { load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes } }
-	EYR = { load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes } }
-	EGC = { load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes } }
-	RIV = { load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes } }
-	YOR = { load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes } }
+	WRK = { load_focus_tree = { tree = ADISCORD_vorkerland_prewar_focus keep_completed = yes } }
+	EYR = { load_focus_tree = { tree = ADISCORD_vorkerland_prewar_focus keep_completed = yes } }
+	EGC = { load_focus_tree = { tree = ADISCORD_vorkerland_prewar_focus keep_completed = yes } }
+	RIV = { load_focus_tree = { tree = ADISCORD_vorkerland_prewar_focus keep_completed = yes } }
+	YOR = { load_focus_tree = { tree = ADISCORD_vorkerland_prewar_focus keep_completed = yes } }
 }
 
 ADISCORD_vorkerland_set_phase_collapse = {
@@ -7953,6 +7961,14 @@ ADISCORD_vorkerland_inherit_wrk_prewar_preparations = {
 				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5000 producer = WKR }
 			}
 		}
+		if = {
+			limit = { check_variable = { var = global.ADISCORD_vorkerland_prewar_balance_lean value = -1 compare = equals } }
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_political_power = 40
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 9000 producer = WKR }
+			}
+		}
+		ADISCORD_vorkerland_grant_camp_packages = yes
 		set_country_flag = ADISCORD_vorkerland_wrk_prewar_preparations_inherited_v1
 	}
 }
@@ -8100,17 +8116,17 @@ ADISCORD_vorkerland_repair_collapse_materialization = {
 	}
 	ADISCORD_vorkerland_ensure_claimant_home_cores = yes
 	WKR = {
-		load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes }
+		load_focus_tree = { tree = ADISCORD_vorkerland_wkr_focus keep_completed = yes }
 		focus_unlock = yes
 		mark_focus_tree_layout_dirty = yes
 	}
 	VAD = {
-		load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes }
+		load_focus_tree = { tree = ADISCORD_vorkerland_vad_focus keep_completed = yes }
 		focus_unlock = yes
 		mark_focus_tree_layout_dirty = yes
 	}
 	TVA = {
-		load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes }
+		load_focus_tree = { tree = ADISCORD_vorkerland_tva_focus keep_completed = yes }
 		focus_unlock = yes
 		mark_focus_tree_layout_dirty = yes
 	}
@@ -8232,17 +8248,17 @@ ADISCORD_vorkerland_verify_collapse_materialized = {
 		clr_global_flag = ADISCORD_vorkerland_collapse_materialization_final_retry
 		set_global_flag = ADISCORD_vorkerland_collapse_materialized_verified
 		# Dynamic/materialized claimants do not reliably run the country selector.
-		# Install the shared tree only after the daily tag cache and all claimant
+		# Install each claimant's tree only after the daily tag cache and all claimant
 		# postconditions have verified; keep_completed preserves prewar progress.
 		WKR = {
-			load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes }
+			load_focus_tree = { tree = ADISCORD_vorkerland_wkr_focus keep_completed = yes }
 			ADISCORD_vorkerland_inherit_wrk_prewar_preparations = yes
 		}
 		VAD = {
-			load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes }
+			load_focus_tree = { tree = ADISCORD_vorkerland_vad_focus keep_completed = yes }
 		}
 		TVA = {
-			load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes }
+			load_focus_tree = { tree = ADISCORD_vorkerland_tva_focus keep_completed = yes }
 		}
 		if = {
 			limit = {
@@ -9455,7 +9471,7 @@ ADISCORD_vorkerland_form_wrk_from_wkr = {
 		PREV = { ADISCORD_copy_development_from_prev = yes }
 	}
 	load_focus_tree = {
-		tree = ADISCORD_vorkerland_civil_war_focus
+		tree = ADISCORD_vorkerland_settlement_focus
 		keep_completed = yes
 		copy_completed_from = WKR
 	}
@@ -9602,7 +9618,7 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 		PREV = { ADISCORD_copy_development_from_prev = yes }
 	}
 	load_focus_tree = {
-		tree = ADISCORD_vorkerland_civil_war_focus
+		tree = ADISCORD_vorkerland_settlement_focus
 		keep_completed = yes
 		copy_completed_from = VAD
 	}
@@ -9743,7 +9759,7 @@ ADISCORD_vorkerland_form_wrk_from_tva = {
 		PREV = { ADISCORD_copy_development_from_prev = yes }
 	}
 	load_focus_tree = {
-		tree = ADISCORD_vorkerland_civil_war_focus
+		tree = ADISCORD_vorkerland_settlement_focus
 		keep_completed = yes
 		copy_completed_from = TVA
 	}
@@ -11807,13 +11823,27 @@ ADISCORD_vorkerland_pw_apply_subject_government = {
 		}
 		else_if = {
 			limit = { WRK = { has_country_flag = ADISCORD_vorkerland_route_utilitarian } }
-			WRK = {
-				set_autonomy = {
-					target = PREV
-					autonomy_state = autonomy_WRK_technical_trusteeship
-					freedom_level = 0.10
-					end_wars = no
-					end_civil_wars = no
+			if = {
+				limit = { WRK = { WRK_worx_civil_terms = yes } }
+				WRK = {
+					set_autonomy = {
+						target = PREV
+						autonomy_state = autonomy_WRK_civil_directorate
+						freedom_level = 0.10
+						end_wars = no
+						end_civil_wars = no
+					}
+				}
+			}
+			else = {
+				WRK = {
+					set_autonomy = {
+						target = PREV
+						autonomy_state = autonomy_WRK_technical_trusteeship
+						freedom_level = 0.10
+						end_wars = no
+						end_civil_wars = no
+					}
 				}
 			}
 		}
@@ -11979,6 +12009,228 @@ ADISCORD_vorkerland_pw_finish_rebuild = {
 
 # --- preparation_effects ---
 
+# Prewar crisis. The balance between the centre and the districts lives on
+# WRK; camp influence is global, so the packages survive WRK's annexation.
+ADISCORD_vorkerland_prewar_crisis_initialize = {
+	if = {
+		limit = {
+			tag = WRK
+			NOT = { has_global_flag = ADISCORD_vorkerland_prewar_crisis_initialized }
+		}
+		set_global_flag = ADISCORD_vorkerland_prewar_crisis_initialized
+		set_power_balance = { id = ADISCORD_vorkerland_prewar_bop set_value = 0 }
+		set_variable = { var = global.ADISCORD_vorkerland_camp_committees value = 30 }
+		set_variable = { var = global.ADISCORD_vorkerland_camp_staff value = 30 }
+		set_variable = { var = global.ADISCORD_vorkerland_camp_engineers value = 30 }
+		country_event = { id = ADISCORD_vorkerland_preparation.40 days = 35 random_days = 14 }
+	}
+}
+
+ADISCORD_vorkerland_camp_clamp = {
+	clamp_variable = { var = global.ADISCORD_vorkerland_camp_committees min = 0 max = 100 }
+	clamp_variable = { var = global.ADISCORD_vorkerland_camp_staff min = 0 max = 100 }
+	clamp_variable = { var = global.ADISCORD_vorkerland_camp_engineers min = 0 max = 100 }
+}
+
+ADISCORD_vorkerland_camp_committees_add_5 = {
+	custom_effect_tooltip = ADISCORD_vorkerland_camp_committees_add_5_tt
+	hidden_effect = {
+		add_to_variable = { var = global.ADISCORD_vorkerland_camp_committees value = 5 }
+		ADISCORD_vorkerland_camp_clamp = yes
+	}
+}
+
+ADISCORD_vorkerland_camp_committees_add_10 = {
+	custom_effect_tooltip = ADISCORD_vorkerland_camp_committees_add_10_tt
+	hidden_effect = {
+		add_to_variable = { var = global.ADISCORD_vorkerland_camp_committees value = 10 }
+		ADISCORD_vorkerland_camp_clamp = yes
+	}
+}
+
+ADISCORD_vorkerland_camp_committees_add_20 = {
+	custom_effect_tooltip = ADISCORD_vorkerland_camp_committees_add_20_tt
+	hidden_effect = {
+		add_to_variable = { var = global.ADISCORD_vorkerland_camp_committees value = 20 }
+		ADISCORD_vorkerland_camp_clamp = yes
+	}
+}
+
+ADISCORD_vorkerland_camp_committees_sub_10 = {
+	custom_effect_tooltip = ADISCORD_vorkerland_camp_committees_sub_10_tt
+	hidden_effect = {
+		add_to_variable = { var = global.ADISCORD_vorkerland_camp_committees value = -10 }
+		ADISCORD_vorkerland_camp_clamp = yes
+	}
+}
+
+ADISCORD_vorkerland_camp_staff_add_5 = {
+	custom_effect_tooltip = ADISCORD_vorkerland_camp_staff_add_5_tt
+	hidden_effect = {
+		add_to_variable = { var = global.ADISCORD_vorkerland_camp_staff value = 5 }
+		ADISCORD_vorkerland_camp_clamp = yes
+	}
+}
+
+ADISCORD_vorkerland_camp_staff_add_10 = {
+	custom_effect_tooltip = ADISCORD_vorkerland_camp_staff_add_10_tt
+	hidden_effect = {
+		add_to_variable = { var = global.ADISCORD_vorkerland_camp_staff value = 10 }
+		ADISCORD_vorkerland_camp_clamp = yes
+	}
+}
+
+ADISCORD_vorkerland_camp_staff_add_20 = {
+	custom_effect_tooltip = ADISCORD_vorkerland_camp_staff_add_20_tt
+	hidden_effect = {
+		add_to_variable = { var = global.ADISCORD_vorkerland_camp_staff value = 20 }
+		ADISCORD_vorkerland_camp_clamp = yes
+	}
+}
+
+ADISCORD_vorkerland_camp_staff_sub_10 = {
+	custom_effect_tooltip = ADISCORD_vorkerland_camp_staff_sub_10_tt
+	hidden_effect = {
+		add_to_variable = { var = global.ADISCORD_vorkerland_camp_staff value = -10 }
+		ADISCORD_vorkerland_camp_clamp = yes
+	}
+}
+
+ADISCORD_vorkerland_camp_engineers_add_5 = {
+	custom_effect_tooltip = ADISCORD_vorkerland_camp_engineers_add_5_tt
+	hidden_effect = {
+		add_to_variable = { var = global.ADISCORD_vorkerland_camp_engineers value = 5 }
+		ADISCORD_vorkerland_camp_clamp = yes
+	}
+}
+
+ADISCORD_vorkerland_camp_engineers_add_10 = {
+	custom_effect_tooltip = ADISCORD_vorkerland_camp_engineers_add_10_tt
+	hidden_effect = {
+		add_to_variable = { var = global.ADISCORD_vorkerland_camp_engineers value = 10 }
+		ADISCORD_vorkerland_camp_clamp = yes
+	}
+}
+
+ADISCORD_vorkerland_camp_engineers_add_20 = {
+	custom_effect_tooltip = ADISCORD_vorkerland_camp_engineers_add_20_tt
+	hidden_effect = {
+		add_to_variable = { var = global.ADISCORD_vorkerland_camp_engineers value = 20 }
+		ADISCORD_vorkerland_camp_clamp = yes
+	}
+}
+
+ADISCORD_vorkerland_camp_engineers_sub_5 = {
+	custom_effect_tooltip = ADISCORD_vorkerland_camp_engineers_sub_5_tt
+	hidden_effect = {
+		add_to_variable = { var = global.ADISCORD_vorkerland_camp_engineers value = -5 }
+		ADISCORD_vorkerland_camp_clamp = yes
+	}
+}
+
+ADISCORD_vorkerland_camp_engineers_sub_10 = {
+	custom_effect_tooltip = ADISCORD_vorkerland_camp_engineers_sub_10_tt
+	hidden_effect = {
+		add_to_variable = { var = global.ADISCORD_vorkerland_camp_engineers value = -10 }
+		ADISCORD_vorkerland_camp_clamp = yes
+	}
+}
+
+# COUNTRY WRK. The patron's camp gains what the other two lose.
+ADISCORD_vorkerland_camp_stake_on_patron = {
+	if = {
+		limit = { 40 = { check_variable = { var = ADISCORD_vorkerland_prep_patron value = 2 compare = equals } } }
+		ADISCORD_vorkerland_camp_staff_add_20 = yes
+		ADISCORD_vorkerland_camp_committees_sub_10 = yes
+		ADISCORD_vorkerland_camp_engineers_sub_10 = yes
+	}
+	else_if = {
+		limit = { 40 = { check_variable = { var = ADISCORD_vorkerland_prep_patron value = 3 compare = equals } } }
+		ADISCORD_vorkerland_camp_engineers_add_20 = yes
+		ADISCORD_vorkerland_camp_committees_sub_10 = yes
+		ADISCORD_vorkerland_camp_staff_sub_10 = yes
+	}
+	else = {
+		ADISCORD_vorkerland_camp_committees_add_20 = yes
+		ADISCORD_vorkerland_camp_staff_sub_10 = yes
+		ADISCORD_vorkerland_camp_engineers_sub_10 = yes
+	}
+}
+
+# COUNTRY WRK. collapse.1 records the lean before WRK is annexed; the heir's
+# package and opening legitimacy read it. -1 centre, 0 even, 1 districts.
+ADISCORD_vorkerland_prewar_balance_snapshot = {
+	if = {
+		limit = { has_power_balance = { id = ADISCORD_vorkerland_prewar_bop } }
+		if = {
+			limit = { power_balance_value = { id = ADISCORD_vorkerland_prewar_bop value < -0.29 } }
+			set_variable = { var = global.ADISCORD_vorkerland_prewar_balance_lean value = -1 }
+		}
+		else_if = {
+			limit = { power_balance_value = { id = ADISCORD_vorkerland_prewar_bop value > 0.29 } }
+			set_variable = { var = global.ADISCORD_vorkerland_prewar_balance_lean value = 1 }
+		}
+		else = {
+			set_variable = { var = global.ADISCORD_vorkerland_prewar_balance_lean value = 0 }
+		}
+		remove_power_balance = { id = ADISCORD_vorkerland_prewar_bop }
+	}
+}
+
+# Each claimant receives its own camp's package once, after the verified
+# split. Influence spent on a rival camp arms that rival.
+ADISCORD_vorkerland_grant_camp_packages = {
+	if = {
+		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_camp_packages_granted } }
+		set_global_flag = ADISCORD_vorkerland_camp_packages_granted
+		if = {
+			limit = {
+				country_exists = WKR
+				check_variable = { var = global.ADISCORD_vorkerland_camp_committees value = 50 compare = greater_than_or_equals }
+			}
+			WKR = {
+				add_political_power = 50
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 6000 producer = WKR }
+				if = {
+					limit = { check_variable = { var = global.ADISCORD_vorkerland_camp_committees value = 75 compare = greater_than_or_equals } }
+					add_manpower = 5000
+					add_equipment_to_stockpile = { type = support_equipment_1 amount = 40 producer = WKR }
+				}
+			}
+		}
+		if = {
+			limit = {
+				country_exists = VAD
+				check_variable = { var = global.ADISCORD_vorkerland_camp_staff value = 50 compare = greater_than_or_equals }
+			}
+			VAD = {
+				add_political_power = 50
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 6000 producer = VAD }
+				if = {
+					limit = { check_variable = { var = global.ADISCORD_vorkerland_camp_staff value = 75 compare = greater_than_or_equals } }
+					add_manpower = 5000
+					add_equipment_to_stockpile = { type = support_equipment_1 amount = 40 producer = VAD }
+				}
+			}
+		}
+		if = {
+			limit = {
+				country_exists = TVA
+				check_variable = { var = global.ADISCORD_vorkerland_camp_engineers value = 50 compare = greater_than_or_equals }
+			}
+			TVA = {
+				add_political_power = 50
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 6000 producer = TVA }
+				if = {
+					limit = { check_variable = { var = global.ADISCORD_vorkerland_camp_engineers value = 75 compare = greater_than_or_equals } }
+					add_manpower = 5000
+					add_equipment_to_stockpile = { type = support_equipment_1 amount = 40 producer = TVA }
+				}
+			}
+		}
+	}
+}
+
 ADISCORD_vorkerland_prep_release_slot = {
 	WRK = {
 		subtract_from_variable = {
@@ -11988,7 +12240,7 @@ ADISCORD_vorkerland_prep_release_slot = {
 		clamp_variable = {
 			var = ADISCORD_vorkerland_prep_active
 			min = 0
-			max = 2
+			max = 3
 		}
 	}
 }
@@ -12240,11 +12492,24 @@ ADISCORD_vorkerland_prep_resolve_fate = {
 		set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
 	}
 	else = {
+		# The tower guard keeps Worker with the loyalists; a dispersed government
+		# hides him in the districts but cannot lose him in the blast.
 		random_list = {
-			60 = { set_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			60 = {
+				modifier = { factor = 1.25 has_completed_focus = WRK_reinforce_the_tower_guard }
+				set_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+			}
 			25 = { set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad }
-			10 = { set_global_flag = ADISCORD_vorkerland_worker_missing }
-			5 = { set_global_flag = ADISCORD_vorkerland_worker_killed }
+			10 = {
+				modifier = { factor = 0.5 has_completed_focus = WRK_reinforce_the_tower_guard }
+				modifier = { factor = 2 has_completed_focus = WRK_disperse_the_government }
+				set_global_flag = ADISCORD_vorkerland_worker_missing
+			}
+			5 = {
+				modifier = { factor = 0.4 has_completed_focus = WRK_reinforce_the_tower_guard }
+				modifier = { factor = 0 has_completed_focus = WRK_disperse_the_government }
+				set_global_flag = ADISCORD_vorkerland_worker_killed
+			}
 		}
 	}
 }
@@ -12865,5 +13130,457 @@ ADISCORD_vorkerland_prep_dispatch_treaties = {
 			limit = { ADISCORD_vorkerland_prep_diplomacy_open = yes }
 			country_event = { id = ADISCORD_vorkerland_preparation.21 }
 		}
+	}
+}
+
+# --- Worx postwar research and personal rule ---
+# Called only by the postwar tree handover; reopening never resets this mandate.
+WRK_worx_initialize = {
+	if = {
+		limit = {
+			tag = WRK
+			has_country_flag = ADISCORD_vorkerland_route_utilitarian
+			NOT = { has_country_flag = WRK_worx_initialized }
+		}
+		set_country_flag = WRK_worx_initialized
+		set_variable = { var = WRK_worx_madness value = 20 }
+		set_variable = { var = WRK_worx_demand value = 1 }
+		set_variable = { var = WRK_worx_results value = 0 }
+		set_variable = { var = WRK_worx_growth value = 1 }
+		set_variable = { var = WRK_worx_result_threshold value = 3 }
+		set_variable = { var = WRK_worx_basic_relief value = 20 }
+		set_variable = { var = WRK_worx_expanded_relief value = 40 }
+		WRK_worx_refresh = yes
+		country_event = { id = ADISCORD_vorkerland_postwar.20 hours = 1 }
+	}
+}
+
+# The gauge and prices are derived from authoritative country variables.
+# Economy invalidation is needed only when the modifier's band changes.
+WRK_worx_refresh = {
+	clamp_variable = { var = WRK_worx_madness min = 0 max = 100 }
+	clamp_variable = { var = WRK_worx_demand min = 1 max = 4 }
+	set_variable = { var = WRK_worx_basic_cost value = WRK_worx_demand }
+	multiply_variable = { var = WRK_worx_basic_cost value = 25 }
+	add_to_variable = { var = WRK_worx_basic_cost value = 50 }
+	set_variable = { var = WRK_worx_expanded_cost value = WRK_worx_basic_cost }
+	multiply_variable = { var = WRK_worx_expanded_cost value = 2 }
+	set_variable = { var = WRK_worx_needle_x value = WRK_worx_madness }
+	multiply_variable = { var = WRK_worx_needle_x value = 4.1 }
+	add_to_variable = { var = WRK_worx_needle_x value = 20 }
+	set_temp_variable = { var = WRK_worx_next_band value = 0 }
+	if = {
+		limit = { WRK_worx_active = yes }
+		if = {
+			limit = { check_variable = { var = WRK_worx_madness value = 75 compare = greater_than_or_equals } }
+			set_temp_variable = { var = WRK_worx_next_band value = 3 }
+		}
+		else_if = {
+			limit = { check_variable = { var = WRK_worx_madness value = 50 compare = greater_than_or_equals } }
+			set_temp_variable = { var = WRK_worx_next_band value = 2 }
+		}
+		else_if = {
+			limit = { check_variable = { var = WRK_worx_madness value = 25 compare = greater_than_or_equals } }
+			set_temp_variable = { var = WRK_worx_next_band value = 1 }
+		}
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = WRK_worx_personal_rule } } }
+			add_dynamic_modifier = { modifier = WRK_worx_personal_rule }
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+	else = {
+		if = {
+			limit = { has_dynamic_modifier = { modifier = WRK_worx_personal_rule } }
+			remove_dynamic_modifier = { modifier = WRK_worx_personal_rule }
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+	if = {
+		limit = { NOT = { check_variable = { var = WRK_worx_band value = WRK_worx_next_band compare = equals } } }
+		set_variable = { var = WRK_worx_band value = WRK_worx_next_band }
+		set_variable = { var = WRK_worx_stability value = WRK_worx_band }
+		multiply_variable = { var = WRK_worx_stability value = -0.03 }
+		set_variable = { var = WRK_worx_output value = WRK_worx_band }
+		multiply_variable = { var = WRK_worx_output value = -0.02 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# Tag-specific daily hook: no country or state scans, no startup recovery.
+WRK_worx_daily = {
+	if = {
+		limit = { WRK_worx_active = yes }
+		add_to_variable = { var = WRK_worx_madness value = WRK_worx_growth }
+		if = {
+			limit = { check_variable = { var = WRK_worx_madness value = 100 compare = greater_than_or_equals } }
+			WRK_worx_crisis = yes
+		}
+		if = {
+			limit = { has_variable = WRK_worx_emergency_days }
+			subtract_from_variable = { var = WRK_worx_emergency_days value = 1 }
+			if = {
+				limit = { check_variable = { var = WRK_worx_emergency_days value = 0 compare = less_than_or_equals } }
+				WRK_worx_emergency_failure = yes
+			}
+		}
+	}
+	WRK_worx_refresh = yes
+}
+
+# Crisis settlement precedes its optional reading event, including an unattended window.
+WRK_worx_crisis = {
+	add_to_variable = { var = WRK_worx_crises value = 1 }
+	add_to_variable = { var = WRK_worx_demand value = 1 }
+	if = {
+		limit = { has_completed_focus = WRK_worx_dissenting_protocol }
+		add_stability = -0.05
+		add_political_power = -50
+		set_variable = { var = WRK_worx_madness value = 60 }
+		country_event = { id = ADISCORD_vorkerland_postwar.21 hours = 1 }
+	}
+	else = {
+		add_stability = -0.10
+		add_political_power = -100
+		set_variable = { var = WRK_worx_madness value = 70 }
+		country_event = { id = ADISCORD_vorkerland_postwar.22 hours = 1 }
+	}
+}
+
+# The receipt stores the price at payment; changing demands cannot change a refund.
+WRK_worx_refund = {
+	if = {
+		limit = { has_variable = WRK_worx_receipt }
+		add_political_power = WRK_worx_receipt
+		if = {
+			limit = { has_variable = WRK_worx_support_deposit }
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = WRK_worx_support_deposit
+				producer = WRK
+			}
+			clear_variable = WRK_worx_support_deposit
+		}
+		if = {
+			limit = { has_variable = WRK_worx_manpower_deposit }
+			add_manpower = WRK_worx_manpower_deposit
+			clear_variable = WRK_worx_manpower_deposit
+		}
+		clear_variable = WRK_worx_receipt
+		clear_variable = WRK_worx_operation
+	}
+}
+
+WRK_worx_record_result = {
+	add_to_variable = { var = WRK_worx_results value = 1 }
+	if = {
+		limit = { check_variable = { var = WRK_worx_results value = WRK_worx_result_threshold compare = greater_than_or_equals } }
+		set_variable = { var = WRK_worx_results value = 0 }
+		add_to_variable = { var = WRK_worx_demand value = 1 }
+	}
+	clear_variable = WRK_worx_receipt
+	clear_variable = WRK_worx_operation
+	WRK_worx_refresh = yes
+}
+
+WRK_worx_finish_basic = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = { var = WRK_worx_operation value = 1 compare = equals }
+		}
+		if = {
+			limit = { WRK_worx_active = yes }
+			subtract_from_variable = { var = WRK_worx_madness value = WRK_worx_basic_relief }
+			add_stability = -0.01
+			army_experience = 5
+			WRK_worx_record_result = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_expanded = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = { var = WRK_worx_operation value = 2 compare = equals }
+		}
+		if = {
+			limit = { WRK_worx_active = yes }
+			subtract_from_variable = { var = WRK_worx_madness value = WRK_worx_expanded_relief }
+			add_stability = -0.025
+			add_tech_bonus = { name = WRK_worx_expanded_bonus bonus = 0.25 uses = 1 category = industry }
+			WRK_worx_record_result = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_oversight = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = { var = WRK_worx_operation value = 3 compare = equals }
+		}
+		if = {
+			limit = {
+				WRK_worx_active = yes
+				WRK_worx_oversight_ready = yes
+			}
+			clear_variable = WRK_worx_receipt
+			clear_variable = WRK_worx_operation
+			set_country_flag = WRK_worx_supervised
+			set_variable = { var = WRK_worx_madness value = 0 }
+			add_stability = 0.05
+			WRK_worx_refresh = yes
+			country_event = { id = ADISCORD_vorkerland_postwar.23 hours = 1 }
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+# Focus rewards write deltas before refreshing; their completion marker is not needed.
+WRK_worx_refresh_directorate = {
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = WRK_worx_directorate } } }
+		add_dynamic_modifier = { modifier = WRK_worx_directorate }
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+WRK_worx_clear_receipt = {
+	clear_variable = WRK_worx_receipt
+	clear_variable = WRK_worx_operation
+	clear_variable = WRK_worx_support_deposit
+	clear_variable = WRK_worx_manpower_deposit
+}
+
+WRK_worx_begin_emergency = {
+	if = {
+		limit = {
+			WRK_worx_active = yes
+			WRK_worx_slot_free = yes
+			NOT = { has_variable = WRK_worx_emergency_days }
+		}
+		set_variable = { var = WRK_worx_emergency_days value = 35 }
+		country_event = { id = ADISCORD_vorkerland_postwar.26 hours = 1 }
+	}
+}
+
+# The failed ultimatum is settled by the clock, never by closing its event.
+WRK_worx_emergency_failure = {
+	if = {
+		limit = { has_variable = WRK_worx_emergency_days }
+		WRK_worx_refund = yes
+		clear_variable = WRK_worx_emergency_days
+		set_country_flag = WRK_worx_supervised
+		set_variable = { var = WRK_worx_madness value = 0 }
+		set_variable = { var = WRK_worx_constitution value = 4 }
+		add_to_variable = { var = WRK_worx_production value = -0.15 }
+		add_to_variable = { var = WRK_worx_authority value = -0.5 }
+		add_stability = -0.15
+		WRK_worx_refresh_directorate = yes
+		WRK_worx_refresh = yes
+		country_event = { id = ADISCORD_vorkerland_postwar.28 hours = 1 }
+	}
+}
+
+# Changes apply once to current subjects and at the existing settlement dispatcher.
+WRK_worx_update_subject_terms = {
+	every_subject_country = {
+		limit = { has_autonomy_state = autonomy_WRK_technical_trusteeship }
+		ADISCORD_vorkerland_pw_apply_subject_government = yes
+	}
+}
+
+WRK_worx_finish_review = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = { var = WRK_worx_operation value = 4 compare = equals }
+		}
+		if = {
+			limit = {
+				WRK_worx_review_valid = yes
+			}
+			subtract_from_variable = { var = WRK_worx_madness value = 15 }
+			WRK_worx_clear_receipt = yes
+			WRK_worx_refresh = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_accelerated = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = { var = WRK_worx_operation value = 5 compare = equals }
+		}
+		if = {
+			limit = {
+				WRK_worx_accelerated_valid = yes
+			}
+			subtract_from_variable = { var = WRK_worx_madness value = 25 }
+			add_stability = -0.02
+			army_experience = 10
+			WRK_worx_record_result = yes
+			WRK_worx_clear_receipt = yes
+			WRK_worx_refresh = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_field_trials = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = { var = WRK_worx_operation value = 6 compare = equals }
+		}
+		if = {
+			limit = {
+				WRK_worx_field_trials_valid = yes
+			}
+			army_experience = 25
+			add_to_variable = { var = WRK_worx_field_results value = 1 }
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = land_doctrine
+			}
+			WRK_worx_clear_receipt = yes
+			WRK_worx_refresh = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_mass_trials = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = { var = WRK_worx_operation value = 7 compare = equals }
+		}
+		if = {
+			limit = {
+				WRK_worx_mass_trials_valid = yes
+			}
+			army_experience = 15
+			add_to_variable = { var = WRK_worx_field_results value = 1 }
+			add_stability = -0.01
+			WRK_worx_clear_receipt = yes
+			WRK_worx_refresh = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_industrial = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = { var = WRK_worx_operation value = 8 compare = equals }
+		}
+		if = {
+			limit = {
+				WRK_worx_industrial_valid = yes
+			}
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+			if = {
+				limit = {
+					WRK_worx_active = yes
+					has_completed_focus = WRK_worx_human_variable
+				}
+				subtract_from_variable = { var = WRK_worx_madness value = 35 }
+				add_stability = -0.02
+				WRK_worx_record_result = yes
+			}
+			WRK_worx_clear_receipt = yes
+			WRK_worx_refresh = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_civil_science = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = { var = WRK_worx_operation value = 9 compare = equals }
+		}
+		if = {
+			limit = {
+				WRK_worx_civil_science_valid = yes
+			}
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = electronics
+			}
+			WRK_worx_clear_receipt = yes
+			WRK_worx_refresh = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_grand_programme = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = { var = WRK_worx_operation value = 10 compare = equals }
+		}
+		if = {
+			limit = {
+				WRK_worx_grand_programme_valid = yes
+			}
+			subtract_from_variable = { var = WRK_worx_madness value = 50 }
+			add_stability = -0.03
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.75
+				uses = 1
+				category = industry
+			}
+			WRK_worx_record_result = yes
+			WRK_worx_clear_receipt = yes
+			WRK_worx_refresh = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_restore_obedience = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = { var = WRK_worx_operation value = 11 compare = equals }
+		}
+		if = {
+			limit = {
+				WRK_worx_active = yes
+				has_variable = WRK_worx_emergency_days
+			}
+			clear_variable = WRK_worx_emergency_days
+			set_variable = { var = WRK_worx_constitution value = 3 }
+			set_variable = { var = WRK_worx_madness value = 30 }
+			add_stability = -0.10
+			add_to_variable = { var = WRK_worx_research value = 0.10 }
+			add_to_variable = { var = WRK_worx_production value = 0.05 }
+			WRK_worx_refresh_directorate = yes
+			country_event = { id = ADISCORD_vorkerland_postwar.27 hours = 1 }
+			WRK_worx_clear_receipt = yes
+			WRK_worx_refresh = yes
+		}
+		else = { WRK_worx_refund = yes }
 	}
 }

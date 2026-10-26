@@ -2366,6 +2366,78 @@ NAM_colony_monthly = {
 		set_temp_variable = { var = NAM_treasury_amount value = NAM_wrk_trade_income }
 		NAM_add_treasury = yes
 	}
+	# The second ledger hides the metropole's share, not the colony's own income.
+	if = {
+		limit = {
+			has_variable = NAM_hidden_reserve
+			NAM_colony_phase = yes
+			WRK = { exists = yes }
+		}
+		add_to_variable = { var = NAM_hidden_reserve value = 30 }
+	}
+}
+
+# COUNTRY NAM. The commissioner's echelon arrives: the escrowed fuel goes to
+# the metropole and its depots send rifles back.
+NAM_wrk_echelon_deliver = {
+	if = {
+		limit = {
+			check_variable = { NAM_wrk_echelon_deposit > 0 }
+			NAM_colony_phase = yes
+			WRK = { exists = yes }
+		}
+		clear_variable = NAM_wrk_echelon_deposit
+		add_to_variable = { var = NAM_wrk_echelons_delivered value = 1 }
+		WRK = { add_fuel = 3000 }
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 4500
+			producer = NAM
+		}
+		add_equipment_to_stockpile = {
+			type = support_equipment
+			amount = 40
+			producer = NAM
+		}
+		add_to_variable = { var = NAM_grp_nam_support value = 2 }
+		NAM_groups_refresh = yes
+	}
+	else = {
+		NAM_wrk_echelon_refund = yes
+	}
+}
+
+# COUNTRY NAM. An echelon that never left returns its fuel; political power stays spent.
+NAM_wrk_echelon_refund = {
+	if = {
+		limit = { check_variable = { NAM_wrk_echelon_deposit > 0 } }
+		add_fuel = 3000
+	}
+	clear_variable = NAM_wrk_echelon_deposit
+}
+
+# COUNTRY NAM. Option of event .80: the hourglass rewards prepared before the
+# collapse reach the independent country once. Visible through native output.
+NAM_colony_hourglass_payout = {
+	if = {
+		limit = { check_variable = { NAM_hidden_reserve > 0 } }
+		custom_effect_tooltip = NAM_hidden_reserve_paid_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = NAM_hidden_reserve }
+			NAM_add_treasury = yes
+		}
+	}
+	clear_variable = NAM_hidden_reserve
+	if = {
+		limit = { has_country_flag = NAM_officer_lists_ready }
+		clr_country_flag = NAM_officer_lists_ready
+		add_manpower = 3000
+		custom_effect_tooltip = NAM_grp_quiet_officer_lists_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+	}
 }
 
 # COUNTRY NAM. NAM_wrk_trade_concession was interrupted before its signature:
@@ -4036,6 +4108,12 @@ NAM_ladder_declare_independence = {
 			else_if = {
 				limit = { has_completed_focus = NAM_districts }
 				add_power_balance_value = { id = NAM_ladder_bop value = 0.25 }
+			}
+			if = {
+				limit = { has_variable = NAM_colony_ladder_lean }
+				set_temp_variable = { var = NAM_ladder_shift value = NAM_colony_ladder_lean }
+				NAM_ladder_shift = yes
+				clear_variable = NAM_colony_ladder_lean
 			}
 		}
 		if = {

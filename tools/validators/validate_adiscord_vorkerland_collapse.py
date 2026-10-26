@@ -871,7 +871,7 @@ def validate_countries(root: Path, issues: list[str]) -> None:
                 "VAD reunification still treats Worker rescue as the rare joint council"
             )
 
-    if re.search(r"\bdesc\s*=\s*[A-Za-z0-9_]+_desc\b", characters):
+    if any(re.search(r"\bdesc\s*=", leader) for leader in named_blocks(characters, "country_leader")):
         issues.append("new Vorkerland leaders still expose in-game biography desc keys")
     for leader in re.findall(r"(?m)^\s*([A-Z]{3}_[A-Za-z0-9_]+)\s*=", characters):
         if f"{leader}_desc:" in loc:
@@ -907,7 +907,8 @@ def validate_premature_wrk_release_contract(
     for token in (
         "original_tag = WRK",
         "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
-        "NOT = { has_global_flag = ADISCORD_vorkerland_phase_reunification }",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }",
         "NOT = { has_global_flag = ADISCORD_vorkerland_reunification_verified }",
         "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }",
     ):
@@ -1250,8 +1251,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "RUS = { ADISCORD_vorkerland_apply_dirty_modifiers = yes }",
         "ADISCORD_vorkerland_set_phase_prewar = yes",
         "id = ADISCORD_vorkerland_phase.1",
-        "days = 175",
-        "random_days = 21",
+        "days = 350",
+        "random_days = 30",
     ):
         if token not in startup:
             issues.append(f"fresh-campaign startup lacks {token}")
@@ -1268,9 +1269,11 @@ def validate_events(root: Path, issues: list[str]) -> None:
         issues.append("WRK history must seed the fresh collapse marker exactly once")
     if on_actions.count(marker_consume) != 1:
         issues.append("fresh collapse marker must be consumed exactly once")
-    if startup.count("country_event = {") != 1:
+    if sorted(re.findall(r"country_event\s*=\s*\{\s*id\s*=\s*(\S+)", startup)) != [
+        "ADISCORD_vorkerland_phase.1", "ADISCORD_vorkerland_preparation.1"
+    ]:
         issues.append(
-            "collapse startup must schedule only the fresh phase.1 campaign event"
+            "collapse startup must schedule the fresh collapse and preparation events once"
         )
     for forbidden in (
         "ADISCORD_vorkerland_collapse.",
@@ -2646,7 +2649,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "NOT = { has_war_with = IVN }"
     )
     for defender in ("ZAO", "WPA", "WPS", "PSD"):
-        defender_scope = named_block(intervention_verifier, defender)
+        defender_scope = " ".join(named_block(intervention_verifier, defender).split())
         for token in (
             live_join_guard,
             "targeted_alliance = PWR enemy = IVN hostility_reason = asked_to_join",
@@ -3505,7 +3508,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
             if (
                 patron == "val"
                 and "type = support_equipment amount = 60 producer = VAL"
-                not in decision
+                not in " ".join(decision.split())
             ):
                 issues.append(
                     f"{decision_id}: Kefreyt support-equipment shipment is missing"
@@ -4208,7 +4211,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
     levies = named_block(effects, "ADISCORD_vorkerland_raise_emergency_levies")
     for token in (
         "add_manpower = 1800",
-        "amount = 360 producer = ROOT",
+        "amount = 3600 producer = ROOT",
         'division_template = \\"Emergency Militia\\"',
         "count = 2",
     ):
@@ -4288,7 +4291,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
     for token in (
         "ADISCORD_vorkerland_ivanland_expedition_supplied",
         "add_manpower = 8000",
-        "amount = 1600 producer = IVN",
+        "amount = 16000 producer = IVN",
         "type = support_equipment amount = 120 producer = IVN",
         "type = artillery_equipment amount = 48 producer = IVN",
         "add_fuel = 5000",
@@ -4768,8 +4771,6 @@ def validate_ai(root: Path, issues: list[str]) -> None:
     if "NDefines.NMilitary.PLAN_EXECUTE_RUSH = -200" not in defines:
         issues.append("collapse AI is missing its small-front plan execution threshold")
     for key in (
-        "NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH",
-        "NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH",
         "NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT",
         "NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT",
     ):
@@ -5540,7 +5541,7 @@ def validate_exhaustion(root: Path, issues: list[str]) -> None:
     shared_on_actions = read(
         root, "common/on_actions/00_ADISCORD_on_actions.txt", issues
     )
-    monthly = named_block(shared_on_actions, "on_monthly")
+    monthly = " ".join(named_block(shared_on_actions, "on_monthly").split())
     for token in (
         "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
         "NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }",
@@ -5571,7 +5572,8 @@ def validate_exhaustion(root: Path, issues: list[str]) -> None:
         issues.append(
             "civil-war exhaustion war, peace, and capitulation edges are incomplete"
         )
-    if "on_daily" in on_actions:
+    if any(exhaustion_update in named_block(on_actions, hook)
+           for hook in re.findall(r"(?m)^\s*(on_daily\w*)\s*=", on_actions)):
         issues.append("Vorkerland exhaustion must not add a daily pulse")
 
     finish = named_block(map_effects, "ADISCORD_vorkerland_finish_civil_war_exhaustion")

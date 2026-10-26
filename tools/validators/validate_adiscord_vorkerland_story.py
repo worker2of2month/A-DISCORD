@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 
 
+from tools.lib.focus_sources import read_focus_source
 from tools.lib.paths import source_section
 
 
@@ -681,8 +682,9 @@ def upstream_contract_issues(root: Path, campaign_state_effects: str) -> list[st
             "collapse.6 no longer publishes Worker fate after the Tower detonation"
         )
 
+    # The former monolith path is a tooling view over the Vorkerland trees.
     focus_path = root / CIVIL_WAR_FOCUS
-    focus = focus_path.read_text(encoding="utf-8-sig") if focus_path.is_file() else ""
+    focus = read_focus_source(focus_path) if focus_path.is_file() or root == ROOT else ""
     for flag, _ in VARIANT_DISPATCH:
         if f"set_country_flag = {flag}" not in focus:
             issues.append(

@@ -531,6 +531,8 @@ STP_cw_open_preparation = {
 		if = {
 			limit = { NOT = { has_country_flag = STP_battle_for_stelander_active } }
 			STP_initialize_battle_for_stelander = yes
+			# Northern operations are available before the civil-war split.
+			VAL_operations_map_refresh_cache = yes
 		}
 		STP_cw_init_apparatus_loyalty = yes
 	}
@@ -637,7 +639,21 @@ STP_cw_clear_resistance_modifiers = {
 	force_update_dynamic_modifier = yes
 }
 
+# COUNTRY: subtract only the temporary mandate, preserving other administration rewards.
+STP_cw_end_party_preparation_mandate = {
+	if = {
+		limit = { has_variable = STP_cw_party_preparation_political_power_gain }
+		subtract_from_variable = {
+			var = STP_cw_party_political_power_gain
+			value = STP_cw_party_preparation_political_power_gain
+		}
+		clear_variable = STP_cw_party_preparation_political_power_gain
+		force_update_dynamic_modifier = yes
+	}
+}
+
 STP_cw_clear_political_modifiers = {
+	STP_cw_end_party_preparation_mandate = yes
 	STP_cw_clear_resistance_modifiers = yes
 	if = {
 		limit = { has_dynamic_modifier = { modifier = STP_cw_party_administration_dynamic } }
@@ -762,6 +778,7 @@ STP_cw_finish_elections = {
 	if = {
 		limit = { has_country_flag = STP_cw_elections_started NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } }
 		set_country_flag = STP_cw_elections_finished
+		STP_cw_end_party_preparation_mandate = yes
 		# Freeze the mandate before closing the BOP or distributing army reserves.
 		# A disputed result favours the incumbent apparatus. Exceptional support
 		# requires surviving civil and military commitments, not only the BOP threshold.
@@ -3987,6 +4004,7 @@ STP_cw_ai_shabrat_clear_offensive = {
 STP_cw_start = {
 	if = {
 		limit = { STP_cw_can_start = yes }
+		STP_cw_end_party_preparation_mandate = yes
 		set_country_flag = STP_cw_participant
 		clr_country_flag = STP_cw_uprising_prepared
 		clr_country_flag = STP_intro_story_active
@@ -6739,6 +6757,40 @@ STP_pc_open_liberation_contacts = {
 		}
 		set_country_flag = STP_pc_nod_crisis
 		country_event = { id = ADISCORD_STP_pc.15 hours = 1 }
+	}
+}
+
+# COUNTRY STS: consuming readiness prevents duplicate war callbacks from refreshing the plan.
+STP_pc_apply_prepared_campaigns = {
+	if = {
+		limit = {
+			has_war_with = VAL
+			has_idea = STP_pc_val_campaign_ready
+		}
+		remove_ideas = STP_pc_val_campaign_ready
+		add_timed_idea = { idea = STP_pc_val_campaign_plan days = 90 }
+		add_timed_idea = { idea = STP_cw_deliberate_offensive days = 35 }
+	}
+	if = {
+		limit = {
+			has_war_with = NOD
+			has_idea = STP_pc_nod_campaign_ready
+		}
+		remove_ideas = STP_pc_nod_campaign_ready
+		add_timed_idea = { idea = STP_pc_nod_campaign_plan days = 90 }
+		add_timed_idea = { idea = STP_cw_deliberate_offensive days = 35 }
+	}
+}
+
+# COUNTRY VAL/NOD: the warning reserves its defence bonus until the opposing army enters the war.
+STP_pc_apply_campaign_defence = {
+	if = {
+		limit = {
+			has_war_with = STS
+			has_idea = STP_pc_campaign_defence_ready
+		}
+		remove_ideas = STP_pc_campaign_defence_ready
+		add_timed_idea = { idea = STP_pc_campaign_defence days = 70 }
 	}
 }
 
@@ -9698,9 +9750,9 @@ STP_ps_refund_nod = {
 		add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
 		if = { limit = { check_variable = { var = STP_ps_receipt_type value = 2 compare = equals } }
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 }
-			add_equipment_to_stockpile = { type = artillery_equipment amount = 100 }
-			add_equipment_to_stockpile = { type = support_equipment amount = 60 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 }
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 25 }
+			add_equipment_to_stockpile = { type = support_equipment amount = 15 }
 		}
 		ADISCORD_economy_mark_dirty = yes
 	}
@@ -9736,9 +9788,9 @@ STP_ps_deliver_nod = {
 				}
 				if = { limit = { check_variable = { var = STP_ps_receipt_type value = 2 compare = equals } }
 					NOD = {
-						add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 }
-						add_equipment_to_stockpile = { type = artillery_equipment amount = 100 }
-						add_equipment_to_stockpile = { type = support_equipment amount = 60 }
+						add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 }
+						add_equipment_to_stockpile = { type = artillery_equipment amount = 25 }
+						add_equipment_to_stockpile = { type = support_equipment amount = 15 }
 					}
 				}
 				if = { limit = { check_variable = { var = STP_ps_receipt_type value = 3 compare = equals } NOD = { STP_ps_northern_front_active = yes } }
@@ -10677,13 +10729,13 @@ STP_ps_deliver_exile_formation = {
 }
 
 STP_ps_pay_nod_arms = {
-	set_temp_variable = { var = STP_cw_rifle_cost value = 12000 }
+	set_temp_variable = { var = STP_cw_rifle_cost value = 3000 }
 	set_temp_variable = { var = STP_ps_rifle_before value = num_equipment@infantry_equipment }
 	set_temp_variable = { var = STP_ps_artillery_before value = num_equipment@artillery_equipment }
 	set_temp_variable = { var = STP_ps_support_before value = num_equipment@support_equipment }
 	STP_cw_pay_rifles = yes
-	set_temp_variable = { var = STP_ps_artillery_remaining value = 100 }
-	set_temp_variable = { var = STP_ps_support_remaining value = 60 }
+	set_temp_variable = { var = STP_ps_artillery_remaining value = 25 }
+	set_temp_variable = { var = STP_ps_support_remaining value = 15 }
 	every_possible_country = {
 		limit = { PREV = { OR = { check_variable = { var = STP_ps_artillery_remaining value = 0 compare = greater_than } check_variable = { var = STP_ps_support_remaining value = 0 compare = greater_than } } } }
 		PREV = {
@@ -10707,11 +10759,11 @@ STP_ps_pay_nod_arms = {
 	}
 	if = { limit = { has_country_flag = STP_cw_rifles_paid check_variable = { var = STP_ps_artillery_remaining value = 0 compare = equals } check_variable = { var = STP_ps_support_remaining value = 0 compare = equals } }
 		clr_country_flag = STP_cw_rifles_paid
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 		ADISCORD_economy_mark_dirty = yes
 		set_variable = { var = STP_ps_nod_receipt_type value = 2 }
-		set_variable = { var = STP_ps_nod_receipt_money value = 300 }
+		set_variable = { var = STP_ps_nod_receipt_money value = 100 }
 		set_variable = { var = STP_ps_nod_receipt_stage value = 1 }
 		activate_mission = STP_ps_nod_dispatch
 		add_days_mission_timeout = { mission = STP_ps_nod_dispatch days = 13 }

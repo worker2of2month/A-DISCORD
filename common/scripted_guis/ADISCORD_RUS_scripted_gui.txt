@@ -1182,6 +1182,7 @@ scripted_gui = {
 				NOT = { has_country_flag = RUS_favour_reactor_current_ui_cooldown }
 			}
 			RUS_favour_shock_fist_button_click_enabled = {
+				has_war = yes
 				RUS_favour_army_20_affordable = yes
 				NOT = { has_country_flag = RUS_favour_shock_fist_ui_cooldown }
 			}

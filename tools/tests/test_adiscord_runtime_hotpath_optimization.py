@@ -149,22 +149,24 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
             ),
             "STP_operations_map_available",
         )
-        for tag, party, started, participant, postwar in product(
-            ("STP", "STS", "SRP"), *([(False, True)] * 4)
+        for tag, party, started, participant, postwar, preparation in product(
+            ("STP", "STS", "SRP"), *([(False, True)] * 5)
         ):
             facts = {
                 (tag, "has_country_flag", "STP_sided_with_the_party_flag"): party,
                 (tag, "has_global_flag", "STP_cw_started"): started,
                 (tag, "has_country_flag", "STP_cw_participant"): participant,
                 (tag, "has_country_flag", "STP_cw_postwar"): postwar,
+                (tag, "STP_cw_preparation_open", "yes"): preparation,
             }
             expected = (tag == "STS" and postwar) or (
-                tag == "STP" and party and (postwar or (started and participant))
+                tag == "STP"
+                and (preparation or (party and (postwar or (started and participant))))
             )
             self.assertEqual(
                 matches_conditions(gate, facts, tag),
                 expected,
-                (tag, party, started, participant, postwar),
+                (tag, party, started, participant, postwar, preparation),
             )
 
         category = named_block(
@@ -191,6 +193,11 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
         )
 
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        preparation = named_block(effects, "STP_cw_open_preparation")
+        self.assertGreater(
+            preparation.index("VAL_operations_map_refresh_cache = yes"),
+            preparation.index("STP_initialize_battle_for_stelander = yes"),
+        )
         start = named_block(effects, "STP_cw_begin_hostilities")
         self.assertGreater(
             start.index("VAL_operations_map_refresh_cache = yes"),

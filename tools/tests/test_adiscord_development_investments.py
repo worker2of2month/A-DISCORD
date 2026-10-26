@@ -334,7 +334,7 @@ class CountryDevelopmentReformTests(unittest.TestCase):
             body = focus_block(text, focus)
             self.assertIn(f"mutually_exclusive = {{ focus = {alternative} }}", body)
             self.assertIn("ADISCORD_reform_social_system_development = yes", body)
-        text = (ROOT / "focus_trees/Vorkerland/civil_war/focuses.txt").read_text(encoding="utf-8")
+        text = (ROOT / "focus_trees/Vorkerland/settlement/focuses.txt").read_text(encoding="utf-8")
         pairs = {
             "pw_census": "society", "pw_municipal_network": "social_system",
             "pw_officer_school": "army", "restore_unity_tower": "cultural",

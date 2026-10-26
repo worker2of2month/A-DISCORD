@@ -4025,6 +4025,7 @@ RUS_state_balance_measures_category = {
 		icon = ADISCORD_operations
 		visible = { RUS_state_balance_operational = yes }
 		available = {
+			has_war = yes
 			custom_trigger_tooltip = {
 				tooltip = RUS_state_balance_government_tt
 				RUS_state_balance_operational = yes
@@ -4042,7 +4043,10 @@ RUS_state_balance_measures_category = {
 			}
 			hidden_effect = {
 				if = {
-					limit = { RUS_favour_army_20_affordable = yes }
+					limit = {
+						has_war = yes
+						RUS_favour_army_20_affordable = yes
+					}
 					set_country_flag = {
 						flag = RUS_favour_shock_fist_ui_cooldown
 						days = 120

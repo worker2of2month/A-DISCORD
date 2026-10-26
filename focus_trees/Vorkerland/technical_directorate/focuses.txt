@@ -1,501 +1,810 @@
-# The utilitarian route's directorate after the Unity Tower: measured
-# reconstruction, standardized industry, a calculated army and technical aid
-# that courts the West.
+# Postwar directorate: institutions, personal research and the western settlement.
 focus_tree = {
 	id = ADISCORD_vorkerland_technical_directorate_focus
-	country = {
-		factor = 0
-	}
+	country = { factor = 0 }
 	default = no
-	continuous_focus_position = { x = 850 y = 1200 }
+	continuous_focus_position = { x = 1300 y = 1500 }
 
-	# ----- Directorate plan -----
 	focus = {
 		id = WRK_tech_directorate_plan
-		icon = GFX_goal_generic_production
-		x = 8
+		icon = GFX_focus_TVA
+		x = 12
 		y = 0
 		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		available = {
-			is_subject = no
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 100
+			custom_effect_tooltip = WRK_worx_opening_tt
+			hidden_effect = {
+				subtract_from_variable = { var = WRK_worx_madness value = 15 }
+				WRK_worx_refresh = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_last_provisional
+		icon = GFX_focus_TVA
+		x = 12
+		y = 1
+		cost = 1
+		prerequisite = {
+			focus = WRK_tech_directorate_plan
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			ADISCORD_reform_state_development = yes
-			add_political_power = 50
-			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_tech_directorate_plan }
+			custom_effect_tooltip = WRK_worx_cabinet_tt
 			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = { var = ADISCORD_vorkerland_pw_efficiency value = 0.05 }
-				ADISCORD_economy_mark_dirty = yes
+				set_variable = { var = WRK_worx_growth value = 0.35 }
 			}
 		}
-		ai_will_do = { base = 30 }
+		ai_will_do = { base = 10 }
 	}
 
-	# ----- Measured reconstruction -----
 	focus = {
-		id = WRK_tech_grid_repair_crews
-		icon = GFX_focus_generic_electrification
-		x = 1
-		y = 1
-		cost = 3
-		prerequisite = { focus = WRK_tech_directorate_plan }
-		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESEARCH }
+		id = WRK_worx_operating_table
+		icon = GFX_focus_TVA
+		x = 12
+		y = 2
+		cost = 1
+		prerequisite = {
+			focus = WRK_worx_last_provisional
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		available = {
-			is_subject = no
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_tech_bonus = {
-				name = WRK_tech_grid_repair_crews
-				bonus = 0.5
-				uses = 1
-				category = electronics
+			unlock_decision_tooltip = WRK_worx_expanded
+			add_political_power = 50
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_right_to_error
+		icon = GFX_focus_TVA
+		x = 10
+		y = 3
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_operating_table
+		}
+		mutually_exclusive = {
+			focus = WRK_worx_genius_permission
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
 			}
-			add_equipment_to_stockpile = { type = support_equipment amount = 300 producer = WRK }
-			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_tech_grid_repair_crews }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = WRK_worx_review
+			custom_effect_tooltip = WRK_worx_council_course_tt
+			hidden_effect = {
+				set_variable = { var = WRK_worx_growth value = 0.25 }
+				set_variable = { var = WRK_worx_result_threshold value = 5 }
+				country_event = { id = ADISCORD_vorkerland_postwar.24 hours = 1 }
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_genius_permission
+		icon = GFX_focus_TVA
+		x = 14
+		y = 3
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_operating_table
+		}
+		mutually_exclusive = {
+			focus = WRK_worx_right_to_error
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = WRK_worx_accelerated
+			custom_effect_tooltip = WRK_worx_personal_course_tt
+			hidden_effect = {
+				set_variable = { var = WRK_worx_growth value = 0.5 }
+				set_variable = { var = WRK_worx_result_threshold value = 2 }
+				country_event = { id = ADISCORD_vorkerland_postwar.25 hours = 1 }
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_dissenting_protocol
+		icon = GFX_focus_TVA
+		x = 10
+		y = 4
+		cost = 1
+		prerequisite = {
+			focus = WRK_worx_right_to_error
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 50
+			custom_effect_tooltip = WRK_worx_safeguards_tt
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_second_signature
+		icon = GFX_focus_TVA
+		x = 10
+		y = 5
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_dissenting_protocol
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_second_signature }
+			hidden_effect = {
+				add_to_variable = { var = WRK_worx_research value = 0.05 }
+				WRK_worx_refresh_directorate = yes
+			}
+			add_stability = 0.03
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_time_is_up
+		icon = GFX_focus_TVA
+		x = 10
+		y = 6
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_second_signature
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = WRK_worx_oversight
+			add_political_power = 75
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_ethics_lags
+		icon = GFX_focus_TVA
+		x = 14
+		y = 4
+		cost = 1
+		prerequisite = {
+			focus = WRK_worx_genius_permission
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = WRK_worx_relief_tt
+			hidden_effect = {
+				set_variable = { var = WRK_worx_basic_relief value = 30 }
+				set_variable = { var = WRK_worx_expanded_relief value = 60 }
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_consent_not_required
+		icon = GFX_focus_TVA
+		x = 14
+		y = 5
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_ethics_lags
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_stability = -0.05
+			effect_tooltip = { add_ideas = WRK_worx_delta_consent }
+			hidden_effect = {
+				add_to_variable = { var = WRK_worx_authority value = 1.0 }
+				WRK_worx_refresh_directorate = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_human_variable
+		icon = GFX_focus_TVA
+		x = 14
+		y = 6
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_consent_not_required
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = WRK_worx_industrial
+			effect_tooltip = { add_ideas = WRK_worx_delta_human_variable }
+			hidden_effect = {
+				add_to_variable = { var = WRK_worx_research value = 0.05 }
+				WRK_worx_refresh_directorate = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_correct_humanity
+		icon = GFX_focus_TVA
+		x = 14
+		y = 8
+		cost = 3
+		prerequisite = {
+			focus = WRK_worx_human_variable
+		}
+		mutually_exclusive = {
+			focus = WRK_worx_foresaw_everything
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_operational_tt
+				WRK_worx_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = WRK_worx_grand_programme
+			effect_tooltip = { add_ideas = WRK_worx_delta_humanity }
+			hidden_effect = {
+				add_to_variable = { var = WRK_worx_research value = 0.1 }
+				add_to_variable = { var = WRK_worx_production value = 0.1 }
+				add_to_variable = { var = WRK_worx_order value = -0.05 }
+				WRK_worx_refresh_directorate = yes
+			}
+			hidden_effect = {
+				set_variable = { var = WRK_worx_constitution value = 1 }
+				country_event = { id = ADISCORD_vorkerland_postwar.29 hours = 1 }
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_even_genius
+		icon = GFX_focus_TVA
+		x = 10
+		y = 8
+		cost = 3
+		prerequisite = {
+			focus = WRK_worx_time_is_up
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_supervised_tt
+				has_country_flag = WRK_worx_supervised
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = WRK_worx_civil_science
+			effect_tooltip = { add_ideas = WRK_worx_delta_protocol }
+			hidden_effect = {
+				add_to_variable = { var = WRK_worx_research value = 0.05 }
+				add_to_variable = { var = WRK_worx_order value = 0.05 }
+				WRK_worx_refresh_directorate = yes
+			}
+			hidden_effect = {
+				set_variable = { var = WRK_worx_constitution value = 2 }
+				WRK_worx_update_subject_terms = yes
+				country_event = { id = ADISCORD_vorkerland_postwar.30 hours = 1 }
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_foresaw_everything
+		icon = GFX_focus_TVA
+		x = 17
+		y = 8
+		cost = 1
+		prerequisite = {
+			focus = WRK_worx_human_variable
+		}
+		mutually_exclusive = {
+			focus = WRK_worx_correct_humanity
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_operational_tt
+				WRK_worx_active = yes
+			}
+			WRK_worx_slot_free = yes
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_two_crises_tt
+				check_variable = { var = WRK_worx_crises value = 2 compare = greater_than_or_equals }
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = WRK_worx_emergency_tt
+			unlock_decision_tooltip = WRK_worx_restore_obedience
+			hidden_effect = {
+				WRK_worx_begin_emergency = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_tech_district_metrics
+		icon = GFX_focus_TVA
+		x = 3
+		y = 3
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_operating_table
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			ADISCORD_reform_society_development = yes
+			unlock_decision_tooltip = ADISCORD_vorkerland_pw_rebuild_district
+			effect_tooltip = { add_ideas = WRK_worx_delta_reconstruction }
 			hidden_effect = {
 				ADISCORD_vorkerland_pw_ensure_institutions = yes
 				add_to_variable = { var = ADISCORD_vorkerland_pw_repair value = 0.15 }
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
-		ai_will_do = { base = 20 }
-	}
-
-	focus = {
-		id = WRK_tech_district_metrics
-		icon = GFX_goal_generic_construction
-		x = 1
-		y = 2
-		cost = 3
-		prerequisite = { focus = WRK_tech_grid_repair_crews }
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		available = {
-			is_subject = no
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			ADISCORD_reform_society_development = yes
-			unlock_decision_tooltip = ADISCORD_vorkerland_pw_rebuild_district
-			custom_effect_tooltip = WRK_pw_reconstruction_unlock_tt
-			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_tech_district_metrics }
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = { var = ADISCORD_vorkerland_pw_construction value = 0.10 }
-				ADISCORD_economy_mark_dirty = yes
-			}
-		}
-		ai_will_do = { base = 20 }
-	}
-
-	# New automated workshops or restored municipal utilities.
-	focus = {
-		id = WRK_tech_automated_workshops
-		icon = GFX_goal_generic_construct_civ_factory
-		x = 0
-		y = 3
-		cost = 4
-		prerequisite = { focus = WRK_tech_district_metrics }
-		mutually_exclusive = { focus = WRK_tech_municipal_utilities }
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		available = {
-			is_subject = no
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = WRK_reconstruction_factory_site_tt
-				any_owned_state = {
-					is_core_of = ROOT
-					is_controlled_by = ROOT
-					free_building_slots = {
-						building = industrial_complex
-						size > 1
-						include_locked = yes
-					}
-				}
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			random_owned_controlled_state = {
-				limit = {
-					is_core_of = ROOT
-					free_building_slots = {
-						building = industrial_complex
-						size > 1
-						include_locked = yes
-					}
-				}
-				add_extra_state_shared_building_slots = 2
-				add_building_construction = {
-					type = industrial_complex
-					level = 2
-					instant_build = yes
-				}
-			}
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
-			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_tech_automated_workshops }
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = { var = ADISCORD_vorkerland_pw_efficiency_gain value = 0.05 }
-				ADISCORD_economy_mark_dirty = yes
-			}
-		}
-		ai_will_do = { base = 20 }
+		ai_will_do = { base = 10 }
 	}
 
 	focus = {
 		id = WRK_tech_municipal_utilities
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_TVA
 		x = 2
-		y = 3
-		cost = 3
-		prerequisite = { focus = WRK_tech_district_metrics }
-		mutually_exclusive = { focus = WRK_tech_automated_workshops }
-		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_INDUSTRY }
+		y = 4
+		cost = 2
+		prerequisite = {
+			focus = WRK_tech_district_metrics
+		}
+		mutually_exclusive = {
+			focus = WRK_tech_automated_workshops
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		available = {
-			is_subject = no
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_stability = 0.05
 			custom_effect_tooltip = WRK_route_rebuild_slot_tt
-			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_tech_municipal_utilities }
+			effect_tooltip = { add_ideas = WRK_worx_delta_utilities }
 			hidden_effect = {
 				ADISCORD_vorkerland_pw_ensure_institutions = yes
 				add_to_variable = { var = ADISCORD_vorkerland_pw_construction value = 0.05 }
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
-		ai_will_do = { base = 20 }
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_tech_automated_workshops
+		icon = GFX_focus_TVA
+		x = 4
+		y = 4
+		cost = 2
+		prerequisite = {
+			focus = WRK_tech_district_metrics
+		}
+		mutually_exclusive = {
+			focus = WRK_tech_municipal_utilities
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_stability = -0.03
+			effect_tooltip = { add_ideas = WRK_worx_delta_workshops }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = { var = ADISCORD_vorkerland_pw_efficiency value = 0.1 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_tech_machine_tool_pool
+		icon = GFX_focus_TVA
+		x = 3
+		y = 5
+		cost = 2
+		prerequisite = {
+			focus = WRK_tech_municipal_utilities
+			focus = WRK_tech_automated_workshops
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			ADISCORD_reform_economic_development = yes
+			unlock_decision_tooltip = WRK_worx_industrial
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { base = 10 }
 	}
 
 	focus = {
 		id = WRK_tech_measured_economy
-		icon = GFX_goal_generic_production2
-		x = 1
-		y = 4
+		icon = GFX_focus_TVA
+		x = 3
+		y = 6
 		cost = 3
 		prerequisite = {
-			focus = WRK_tech_automated_workshops
-			focus = WRK_tech_municipal_utilities
+			focus = WRK_tech_machine_tool_pool
 		}
-		search_filters = { FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		available = {
-			is_subject = no
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			ADISCORD_reform_social_system_development = yes
 			custom_effect_tooltip = WRK_route_rebuild_slot_tt
-			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_tech_measured_economy }
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = { var = ADISCORD_vorkerland_pw_output value = 0.10 }
-				ADISCORD_economy_mark_dirty = yes
+			if = {
+				limit = { has_completed_focus = WRK_tech_municipal_utilities }
+				effect_tooltip = { add_ideas = WRK_worx_delta_shifts }
+				hidden_effect = {
+					ADISCORD_vorkerland_pw_ensure_institutions = yes
+					add_to_variable = { var = ADISCORD_vorkerland_pw_repair value = 0.15 }
+					add_to_variable = { var = ADISCORD_vorkerland_pw_construction value = 0.05 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+				add_stability = 0.03
 			}
-		}
-		ai_will_do = { base = 20 }
-	}
-
-	# ----- Standardized industry -----
-	focus = {
-		id = WRK_tech_machine_tool_pool
-		icon = GFX_goal_generic_production
-		x = 5
-		y = 1
-		cost = 3
-		prerequisite = { focus = WRK_tech_directorate_plan }
-		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESEARCH }
-		available = {
-			is_subject = no
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			ADISCORD_reform_economic_development = yes
-			add_tech_bonus = {
-				name = WRK_tech_machine_tool_pool
-				bonus = 0.5
-				uses = 1
-				category = industry
-			}
-			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_tech_machine_tool_pool }
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = { var = ADISCORD_vorkerland_pw_efficiency value = 0.05 }
-				ADISCORD_economy_mark_dirty = yes
-			}
-		}
-		ai_will_do = { base = 20 }
-	}
-
-	focus = {
-		id = WRK_tech_standardized_arsenals
-		icon = GFX_goal_generic_construct_mil_factory
-		x = 5
-		y = 2
-		cost = 3
-		prerequisite = { focus = WRK_tech_machine_tool_pool }
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		available = {
-			is_subject = no
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = WRK_empire_arsenal_site_tt
-				any_owned_state = {
-					is_core_of = ROOT
-					is_controlled_by = ROOT
-					free_building_slots = {
-						building = arms_factory
-						size > 2
-						include_locked = yes
-					}
+			else = {
+				effect_tooltip = { add_ideas = WRK_worx_delta_continuous }
+				hidden_effect = {
+					add_to_variable = { var = WRK_worx_production value = 0.1 }
+					add_to_variable = { var = WRK_worx_order value = -0.03 }
+					WRK_worx_refresh_directorate = yes
 				}
 			}
 		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			random_owned_controlled_state = {
-				limit = {
-					is_core_of = ROOT
-					free_building_slots = {
-						building = arms_factory
-						size > 2
-						include_locked = yes
-					}
-				}
-				add_extra_state_shared_building_slots = 3
-				add_building_construction = {
-					type = arms_factory
-					level = 3
-					instant_build = yes
-				}
-			}
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
-		}
-		ai_will_do = { base = 20 }
+		ai_will_do = { base = 10 }
 	}
 
-	focus = {
-		id = WRK_tech_national_laboratories
-		icon = GFX_focus_research
-		x = 5
-		y = 3
-		cost = 4
-		prerequisite = { focus = WRK_tech_standardized_arsenals }
-		search_filters = { FOCUS_FILTER_RESEARCH }
-		available = {
-			is_subject = no
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_research_slot = 1
-		}
-		ai_will_do = { base = 20 }
-	}
-
-	focus = {
-		id = WRK_tech_specialist_schools
-		icon = GFX_goal_generic_scientific_exchange
-		x = 5
-		y = 4
-		cost = 3
-		prerequisite = { focus = WRK_tech_national_laboratories }
-		search_filters = { FOCUS_FILTER_RESEARCH }
-		available = {
-			is_subject = no
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_tech_bonus = {
-				name = WRK_tech_specialist_schools
-				bonus = 0.5
-				uses = 1
-				category = electronics
-			}
-		}
-		ai_will_do = { base = 20 }
-	}
-
-	# ----- Calculated army -----
 	focus = {
 		id = WRK_tech_engineering_corps
-		icon = GFX_goal_generic_special_forces
-		x = 8
-		y = 1
-		cost = 3
-		prerequisite = { focus = WRK_tech_directorate_plan }
-		search_filters = { FOCUS_FILTER_ARMY_XP }
+		icon = GFX_focus_TVA
+		x = 21
+		y = 3
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_operating_table
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		available = {
-			is_subject = no
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_equipment_to_stockpile = { type = support_equipment amount = 600 producer = WRK }
-			add_equipment_to_stockpile = { type = artillery_equipment amount = 300 producer = WRK }
-			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_tech_engineering_corps }
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = { var = ADISCORD_vorkerland_pw_supply value = -0.10 }
+			unlock_decision_tooltip = WRK_worx_field_trials
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 400
+				producer = WRK
 			}
 		}
-		ai_will_do = { base = 20 }
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_tech_measured_front
+		icon = GFX_focus_TVA
+		x = 20
+		y = 4
+		cost = 2
+		prerequisite = {
+			focus = WRK_tech_engineering_corps
+		}
+		mutually_exclusive = {
+			focus = WRK_tech_fire_superiority
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = 500
+				producer = WRK
+			}
+			effect_tooltip = { add_ideas = WRK_worx_delta_shield }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = { var = ADISCORD_vorkerland_pw_defence value = 0.05 }
+				add_to_variable = { var = ADISCORD_vorkerland_pw_supply value = -0.05 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_tech_fire_superiority
+		icon = GFX_focus_TVA
+		x = 22
+		y = 4
+		cost = 2
+		prerequisite = {
+			focus = WRK_tech_engineering_corps
+		}
+		mutually_exclusive = {
+			focus = WRK_tech_measured_front
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 25
+			effect_tooltip = { add_ideas = WRK_worx_delta_losses }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = { var = ADISCORD_vorkerland_pw_attack value = 0.08 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			unlock_decision_tooltip = WRK_worx_mass_trials
+		}
+		ai_will_do = { base = 10 }
 	}
 
 	focus = {
 		id = WRK_tech_mechanized_staff
-		icon = GFX_goal_generic_army_motorized
-		x = 8
-		y = 2
-		cost = 3
-		prerequisite = { focus = WRK_tech_engineering_corps }
-		search_filters = { FOCUS_FILTER_ARMY_XP }
+		icon = GFX_focus_TVA
+		x = 21
+		y = 5
+		cost = 2
+		prerequisite = {
+			focus = WRK_tech_measured_front
+			focus = WRK_tech_fire_superiority
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		available = {
-			is_subject = no
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			activate_advisor = ADISCORD_staff_WRK_Viktor_Hess
 			ADISCORD_reform_army_development = yes
-			army_experience = 75
-			add_equipment_to_stockpile = { type = motorized_equipment_1 amount = 1000 producer = WRK }
+			army_experience = 35
 		}
-		ai_will_do = { base = 20 }
-	}
-
-	# A measured defensive front or calculated fire superiority.
-	focus = {
-		id = WRK_tech_measured_front
-		icon = GFX_goal_generic_defence
-		x = 7
-		y = 3
-		cost = 4
-		prerequisite = { focus = WRK_tech_mechanized_staff }
-		mutually_exclusive = { focus = WRK_tech_fire_superiority }
-		search_filters = { FOCUS_FILTER_ARMY_XP }
-		available = {
-			is_subject = no
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_manpower = 20000
-			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_tech_measured_front }
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = { var = ADISCORD_vorkerland_pw_defence value = 0.15 }
-				add_to_variable = { var = ADISCORD_vorkerland_pw_org value = 0.05 }
-			}
-		}
-		ai_will_do = { base = 20 }
-	}
-
-	focus = {
-		id = WRK_tech_fire_superiority
-		icon = GFX_goal_generic_army_artillery
-		x = 9
-		y = 3
-		cost = 4
-		prerequisite = { focus = WRK_tech_mechanized_staff }
-		mutually_exclusive = { focus = WRK_tech_measured_front }
-		search_filters = { FOCUS_FILTER_ARMY_XP }
-		available = {
-			is_subject = no
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_equipment_to_stockpile = { type = artillery_equipment amount = 1500 producer = WRK }
-			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_tech_fire_superiority }
-			hidden_effect = {
-				ADISCORD_vorkerland_pw_ensure_institutions = yes
-				add_to_variable = { var = ADISCORD_vorkerland_pw_attack value = 0.15 }
-			}
-		}
-		ai_will_do = { base = 15 }
+		ai_will_do = { base = 10 }
 	}
 
 	focus = {
 		id = WRK_tech_command_calculus
-		icon = GFX_focus_generic_military_academy
-		x = 8
-		y = 4
-		cost = 3
+		icon = GFX_focus_TVA
+		x = 21
+		y = 6
+		cost = 2
 		prerequisite = {
-			focus = WRK_tech_measured_front
-			focus = WRK_tech_fire_superiority
+			focus = WRK_tech_mechanized_staff
 		}
-		search_filters = { FOCUS_FILTER_ARMY_XP }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		available = {
-			is_subject = no
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_field_proven_tt
+				check_variable = { var = WRK_worx_field_results value = 1 compare = greater_than_or_equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_command_power = 25
-			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_tech_command_calculus }
+			effect_tooltip = { add_ideas = WRK_worx_delta_proven }
 			hidden_effect = {
 				ADISCORD_vorkerland_pw_ensure_institutions = yes
 				add_to_variable = { var = ADISCORD_vorkerland_pw_org value = 0.05 }
-				add_to_variable = { var = ADISCORD_vorkerland_pw_attack value = 0.05 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = land_doctrine
 			}
 		}
-		ai_will_do = { base = 20 }
+		ai_will_do = { base = 10 }
 	}
 
-	# ----- Technical aid and the West -----
 	focus = {
 		id = WRK_utilitarian_west_corridor_survey
-		icon = GFX_focus_WRK_utilitarian_west_corridor_survey
-		x = 13
-		y = 1
-		cost = 3
-		prerequisite = { focus = WRK_tech_directorate_plan }
-		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_WAR_SUPPORT }
+		icon = GFX_focus_TVA
+		x = 29
+		y = 3
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_operating_table
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		available = {
-			is_subject = no
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 25
 			unlock_decision_tooltip = ADISCORD_west_wrk_offer_front_treaty
-			capital_scope = {
-				add_building_construction = {
-					type = infrastructure
-					level = 1
-					instant_build = yes
-				}
-			}
+			add_political_power = 50
 			custom_effect_tooltip = WRK_west_crisis_add_tt
-			hidden_effect = { ADISCORD_west_crisis_add = yes }
+			hidden_effect = {
+				ADISCORD_west_crisis_add = yes
+			}
 		}
-		ai_will_do = { base = 25 }
+		ai_will_do = { base = 10 }
 	}
 
 	focus = {
 		id = WRK_tech_supply_contracts
-		icon = GFX_goal_generic_trade
-		x = 12
-		y = 2
-		cost = 3
-		prerequisite = { focus = WRK_utilitarian_west_corridor_survey }
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INTERNATIONAL_TRADE }
+		icon = GFX_focus_TVA
+		x = 28
+		y = 4
+		cost = 2
+		prerequisite = {
+			focus = WRK_utilitarian_west_corridor_survey
+		}
+		mutually_exclusive = {
+			focus = WRK_tech_technical_assistance
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		available = {
-			is_subject = no
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -504,98 +813,108 @@ focus_tree = {
 				set_temp_variable = { var = ADISCORD_west_push value = 20 }
 				WPS = { ADISCORD_west_push_lean = yes }
 				PWR = { ADISCORD_west_push_lean = yes }
-			}
-			hidden_effect = {
 				set_temp_variable = { var = ADISCORD_west_push value = 10 }
 				PSD = { ADISCORD_west_push_lean = yes }
 				ZAO = { ADISCORD_west_push_lean = yes }
 			}
 			custom_effect_tooltip = WRK_route_influence_power_5_tt
-			hidden_effect = { add_to_variable = { var = ADISCORD_west_influence_power value = 5 } }
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_west_influence_power value = 5 }
+			}
 		}
-		ai_will_do = { base = 25 }
+		ai_will_do = { base = 10 }
 	}
 
 	focus = {
 		id = WRK_tech_technical_assistance
-		icon = GFX_goal_generic_scientific_exchange
-		x = 14
-		y = 2
-		cost = 3
-		prerequisite = { focus = WRK_utilitarian_west_corridor_survey }
-		search_filters = { FOCUS_FILTER_POLITICAL }
+		icon = GFX_focus_TVA
+		x = 30
+		y = 4
+		cost = 2
+		prerequisite = {
+			focus = WRK_utilitarian_west_corridor_survey
+		}
+		mutually_exclusive = {
+			focus = WRK_tech_supply_contracts
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		available = {
-			is_subject = no
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			custom_effect_tooltip = WRK_route_all_west_5_tt
-			hidden_effect = {
-				set_temp_variable = { var = ADISCORD_west_push value = 5 }
-				ADISCORD_west_push_all_leans = yes
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 600
+				producer = WRK
 			}
-			custom_effect_tooltip = WRK_route_influence_power_5_tt
-			hidden_effect = { add_to_variable = { var = ADISCORD_west_influence_power value = 5 } }
+			effect_tooltip = { add_ideas = WRK_worx_delta_corridor }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = { var = ADISCORD_vorkerland_pw_supply value = -0.05 }
+				ADISCORD_economy_mark_dirty = yes
+			}
 		}
-		ai_will_do = { base = 25 }
+		ai_will_do = { base = 10 }
 	}
 
 	focus = {
 		id = WRK_utilitarian_west_engineer_battalions
-		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
-		x = 13
-		y = 3
-		cost = 3
+		icon = GFX_focus_TVA
+		x = 29
+		y = 5
+		cost = 2
 		prerequisite = {
 			focus = WRK_tech_supply_contracts
 			focus = WRK_tech_technical_assistance
 		}
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		available = {
-			is_subject = no
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_equipment_to_stockpile = { type = support_equipment amount = 500 producer = WRK }
-			add_equipment_to_stockpile = { type = artillery_equipment amount = 300 producer = WRK }
-		}
-		ai_will_do = { base = 20 }
-	}
-
-	focus = {
-		id = WRK_tech_southern_programme
-		icon = GFX_goal_generic_occupy_start_war
-		x = 15
-		y = 3
-		cost = 4
-		prerequisite = { focus = WRK_tech_technical_assistance }
-		search_filters = { FOCUS_FILTER_ANNEXATION }
-		available = {
-			is_subject = no
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			unlock_decision_tooltip = ADISCORD_vorkerland_pw_ebern_campaign
-			unlock_decision_tooltip = ADISCORD_vorkerland_pw_afrela_campaign
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 500
+				producer = WRK
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = 300
+				producer = WRK
+			}
 		}
 		ai_will_do = { base = 10 }
 	}
 
 	focus = {
 		id = WRK_utilitarian_west_engineering_border
-		icon = GFX_focus_WRK_utilitarian_west_engineering_border
-		x = 12
-		y = 5
-		cost = 5
-		prerequisite = { focus = WRK_utilitarian_west_engineer_battalions }
-		prerequisite = { focus = WRK_tech_command_calculus }
-		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
+		icon = GFX_focus_TVA
+		x = 30
+		y = 6
+		cost = 3
+		prerequisite = {
+			focus = WRK_utilitarian_west_engineer_battalions
+		}
+		prerequisite = {
+			focus = WRK_tech_mechanized_staff
+		}
+		prerequisite = {
+			focus = WRK_tech_technical_assistance
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		available = {
-			is_subject = no
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
 			has_war = no
 			custom_trigger_tooltip = {
 				tooltip = WRK_west_reconstruction_ready_tt
@@ -607,32 +926,108 @@ focus_tree = {
 			}
 		}
 		cancel_if_invalid = yes
+		bypass = {
+			OR = {
+				has_global_flag = ADISCORD_west_final_started
+				has_global_flag = ADISCORD_west_final_resolved
+			}
+		}
 		completion_reward = {
 			effect_tooltip = { add_ideas = ADISCORD_west_wrk_engineer_battalions }
 			custom_effect_tooltip = WRK_utilitarian_west_war_tt
-			hidden_effect = { ADISCORD_west_final_war_start = yes }
+			hidden_effect = {
+				ADISCORD_west_final_war_start = yes
+			}
 		}
-		ai_will_do = { base = 8 }
+		ai_will_do = { base = 10 }
 	}
 
 	focus = {
 		id = WRK_utilitarian_west_technical_trusteeship
-		icon = GFX_focus_WRK_utilitarian_west_technical_trusteeship
-		x = 14
-		y = 5
+		icon = GFX_focus_TVA
+		x = 31
+		y = 8
 		cost = 3
-		prerequisite = { focus = WRK_utilitarian_west_engineer_battalions }
+		prerequisite = {
+			focus = WRK_utilitarian_west_engineer_battalions
+		}
+		prerequisite = {
+			focus = WRK_tech_technical_assistance
+		}
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		available = {
-			is_subject = no
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
 			has_global_flag = ADISCORD_west_hegemon_WRK
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 40
-			add_stability = 0.03
+			effect_tooltip = { add_ideas = WRK_worx_delta_trusteeship }
+			hidden_effect = {
+				add_to_variable = { var = WRK_worx_production value = 0.05 }
+				WRK_worx_refresh_directorate = yes
+			}
+			add_political_power = 100
 		}
-		ai_will_do = { base = 30 }
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_accepted_order
+		icon = GFX_focus_TVA
+		x = 27
+		y = 8
+		cost = 3
+		prerequisite = {
+			focus = WRK_utilitarian_west_engineer_battalions
+		}
+		prerequisite = {
+			focus = WRK_tech_supply_contracts
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+			has_global_flag = ADISCORD_west_hegemon_WRK
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = WRK_worx_subject_terms_tt
+			add_stability = 0.05
+			add_political_power = 75
+			hidden_effect = {
+				set_country_flag = WRK_worx_civil_charters
+				WRK_worx_update_subject_terms = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_tech_southern_programme
+		icon = GFX_focus_TVA
+		x = 34
+		y = 5
+		cost = 2
+		prerequisite = {
+			focus = WRK_utilitarian_west_corridor_survey
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_vorkerland_pw_ebern_campaign
+			unlock_decision_tooltip = ADISCORD_vorkerland_pw_afrela_campaign
+		}
+		ai_will_do = { base = 10 }
 	}
 }

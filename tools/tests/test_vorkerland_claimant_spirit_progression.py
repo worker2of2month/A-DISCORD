@@ -181,7 +181,7 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
 
     def test_vad_government_upgrades_preserve_chancery_combat_bonuses(self) -> None:
         ideas = read("common/ideas/ADISCORD_vorkerland_ideas.txt")
-        focuses = read("common/national_focus/ADISCORD_Vorkerland_civil_war.txt")
+        focuses = read("common/national_focus/ADISCORD_Vorkerland_vad.txt")
         prefix = "ADISCORD_vorkerland_vad_"
         transitions = (
             (

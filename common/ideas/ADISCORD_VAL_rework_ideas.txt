@@ -311,7 +311,8 @@ ideas = {
 			picture = VAL_contract_state
 			allowed = { tag = VAL }
 			removal_cost = -1
-			cancel = { VAL_frontier_idle = yes }
+
+			cancel = { VAL_frontier_has_campaign_war = no }
 			modifier = { supply_consumption_factor = -0.10 }
 		}
 # --- contract_ideas ---

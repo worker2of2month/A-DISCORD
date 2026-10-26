@@ -1,0 +1,71 @@
+# Prewar balance between the centre (negative) and the districts (positive).
+# ADISCORD_vorkerland_prewar_crisis_initialize creates it once at the fresh
+# start; collapse.1 records the lean and removes it before WRK is annexed.
+ADISCORD_vorkerland_prewar_bop = {
+	initial_value = 0
+	left_side = ADISCORD_vorkerland_bop_centre
+	right_side = ADISCORD_vorkerland_bop_districts
+	decision_category = ADISCORD_vorkerland_prewar_category
+	range = {
+		id = ADISCORD_vorkerland_prewar_balance_even
+		min = -0.10
+		max = 0.10
+		modifier = {
+			stability_factor = 0.02
+		}
+		on_activate = { ADISCORD_economy_mark_dirty = yes }
+		on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+	}
+	side = {
+		id = ADISCORD_vorkerland_bop_centre
+		icon = GFX_bop_ETH_centralisation_side
+		range = {
+			id = ADISCORD_vorkerland_prewar_centre_influence
+			min = -0.50
+			max = -0.10
+			modifier = {
+				political_power_gain = 0.10
+				stability_factor = -0.03
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = ADISCORD_vorkerland_prewar_centre_dominance
+			min = -1.00
+			max = -0.50
+			modifier = {
+				political_power_gain = 0.20
+				stability_factor = -0.07
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+	side = {
+		id = ADISCORD_vorkerland_bop_districts
+		icon = GFX_bop_ETH_decentralisation_side
+		range = {
+			id = ADISCORD_vorkerland_prewar_districts_influence
+			min = 0.10
+			max = 0.50
+			modifier = {
+				stability_factor = 0.04
+				political_power_gain = -0.05
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = ADISCORD_vorkerland_prewar_districts_dominance
+			min = 0.50
+			max = 1.00
+			modifier = {
+				stability_factor = 0.08
+				political_power_gain = -0.12
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+}

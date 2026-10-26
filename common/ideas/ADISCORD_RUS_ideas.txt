@@ -558,6 +558,7 @@ ideas = {
 		RUS_defensive_preparation_spirit = {
 			picture = RUS_defensive_preparation_spirit
 			allowed = { always = no }
+			cancel = { has_war = no }
 			removal_cost = -1
 			modifier = {
 				max_dig_in_factor = 0.10
@@ -577,6 +578,7 @@ ideas = {
 		RUS_mobile_preparation_spirit = {
 			picture = RUS_mobile_preparation_spirit
 			allowed = { always = no }
+			cancel = { has_war = no }
 			removal_cost = -1
 			modifier = {
 				supply_consumption_factor = -0.05

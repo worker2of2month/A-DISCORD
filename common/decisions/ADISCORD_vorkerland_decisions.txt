@@ -1478,9 +1478,919 @@ ADISCORD_vorkerland_collapse_category = {
 		}
 		ai_will_do = { factor = 300 }
 	}
+
+	# Prepared plans begin their duration only when applied in their campaign.
+
+	VAD_form_field_commandantures_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = VAD }
+		visible = { has_completed_focus = VAD_form_field_commandantures }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_vad_field_commandantures }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = VAD_form_field_commandantures
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_vad_field_commandantures }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_vad_field_commandantures days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	VAD_standardize_district_logistics_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = VAD }
+		visible = { has_completed_focus = VAD_standardize_district_logistics }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_vad_standardized_logistics }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = VAD_standardize_district_logistics
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_vad_standardized_logistics }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_vad_standardized_logistics days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	VAD_map_the_solar_corridors_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = VAD }
+		visible = { has_completed_focus = VAD_map_the_solar_corridors }
+		available = {
+			OR = { has_war_with = SRA has_war_with = CSL }
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_vad_solar_corridor_intelligence }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = VAD_map_the_solar_corridors
+						OR = { has_war_with = SRA has_war_with = CSL }
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_vad_solar_corridor_intelligence }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_vad_solar_corridor_intelligence days = 84 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	VAD_preposition_restoration_columns_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = VAD }
+		visible = { has_completed_focus = VAD_preposition_restoration_columns }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_vad_restoration_columns }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = VAD_preposition_restoration_columns
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_vad_restoration_columns }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_vad_restoration_columns days = 84 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	VAD_recall_the_officer_estates_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = VAD }
+		visible = { has_completed_focus = VAD_recall_the_officer_estates }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_vad_officer_estates }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = VAD_recall_the_officer_estates
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_vad_officer_estates }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_vad_officer_estates days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	VAD_restore_eastern_supply_corridors_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = VAD }
+		visible = { has_completed_focus = VAD_restore_eastern_supply_corridors }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_vad_restoration_columns }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = VAD_restore_eastern_supply_corridors
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_vad_restoration_columns }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_vad_restoration_columns days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	VAD_march_on_the_old_capital_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = VAD }
+		visible = { has_completed_focus = VAD_march_on_the_old_capital }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_vad_march_on_the_capital }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = VAD_march_on_the_old_capital
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_vad_march_on_the_capital }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_vad_march_on_the_capital days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	VAD_fortify_the_restoration_line_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = VAD }
+		visible = { has_completed_focus = VAD_fortify_the_restoration_line }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_vad_restoration_line }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = VAD_fortify_the_restoration_line
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_vad_restoration_line }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_vad_restoration_line days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	VAD_task_the_guards_for_close_support_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = VAD }
+		visible = { has_completed_focus = VAD_task_the_guards_for_close_support }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_vad_guards_close_support }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = VAD_task_the_guards_for_close_support
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_vad_guards_close_support }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_vad_guards_close_support days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	VAD_cover_the_district_capitals_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = VAD }
+		visible = { has_completed_focus = VAD_cover_the_district_capitals }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_vad_district_air_cover }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = VAD_cover_the_district_capitals
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_vad_district_air_cover }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_vad_district_air_cover days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	TVA_deploy_field_laboratories_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = TVA }
+		visible = { has_completed_focus = TVA_deploy_field_laboratories }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_tva_field_laboratories }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = TVA_deploy_field_laboratories
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_tva_field_laboratories }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_tva_field_laboratories days = 35 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	TVA_build_mobile_repair_trains_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = TVA }
+		visible = { has_completed_focus = TVA_build_mobile_repair_trains }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_tva_mobile_repair_trains }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = TVA_build_mobile_repair_trains
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_tva_mobile_repair_trains }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_tva_mobile_repair_trains days = 35 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	TVA_publish_operational_metrics_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = TVA }
+		visible = { has_completed_focus = TVA_publish_operational_metrics }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_tva_operational_audit }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = TVA_publish_operational_metrics
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_tva_operational_audit }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_tva_operational_audit days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	TVA_test_adaptive_logistics_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = TVA }
+		visible = { has_completed_focus = TVA_test_adaptive_logistics }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_worx_adaptive_logistics_trial }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = TVA_test_adaptive_logistics
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_worx_adaptive_logistics_trial }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_worx_adaptive_logistics_trial days = 90 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	TVA_seal_the_approaches_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = TVA }
+		visible = { has_completed_focus = TVA_seal_the_approaches }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_tva_prepared_defense }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = TVA_seal_the_approaches
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_tva_prepared_defense }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_tva_prepared_defense days = 35 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	TVA_delegate_fire_plans_to_board_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = TVA }
+		visible = { has_completed_focus = TVA_delegate_fire_plans_to_board }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_tva_algorithmic_fire_plans }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = TVA_delegate_fire_plans_to_board
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_tva_algorithmic_fire_plans }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_tva_algorithmic_fire_plans days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	TVA_bunker_specialist_cadres_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = TVA }
+		visible = { has_completed_focus = TVA_bunker_specialist_cadres }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_tva_bunker_specialist_cadres }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = TVA_bunker_specialist_cadres
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_tva_bunker_specialist_cadres }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_tva_bunker_specialist_cadres days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	TVA_standardize_assault_teams_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = TVA }
+		visible = { has_completed_focus = TVA_standardize_assault_teams }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_tva_standardized_assault_teams }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = TVA_standardize_assault_teams
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_tva_standardized_assault_teams }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_tva_standardized_assault_teams days = 56 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	TVA_network_observation_posts_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = TVA }
+		visible = { has_completed_focus = TVA_network_observation_posts }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_tva_networked_observation_posts }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = TVA_network_observation_posts
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_tva_networked_observation_posts }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_tva_networked_observation_posts days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	TVA_mandate_modular_repair_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = TVA }
+		visible = { has_completed_focus = TVA_mandate_modular_repair }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_tva_modular_repair_mandate }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = TVA_mandate_modular_repair
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_tva_modular_repair_mandate }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_tva_modular_repair_mandate days = 56 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	TVA_preposition_switching_crews_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = TVA }
+		visible = { has_completed_focus = TVA_preposition_switching_crews }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_tva_prepositioned_switching_crews }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = TVA_preposition_switching_crews
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_tva_prepositioned_switching_crews }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_tva_prepositioned_switching_crews days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	TVA_authorize_iteration_two_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = TVA }
+		visible = { has_completed_focus = TVA_authorize_iteration_two }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_worx_second_protocol }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = TVA_authorize_iteration_two
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_worx_second_protocol }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_worx_second_protocol days = 120 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	TVA_spend_the_reserve_cadre_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = TVA }
+		visible = { has_completed_focus = TVA_spend_the_reserve_cadre }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_tva_reserve_cadre_spent }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = TVA_spend_the_reserve_cadre
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_tva_reserve_cadre_spent }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_tva_reserve_cadre_spent days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	TVA_seal_the_technical_core_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = TVA }
+		visible = { has_completed_focus = TVA_seal_the_technical_core }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_tva_technical_core_sealed }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = TVA_seal_the_technical_core
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_tva_technical_core_sealed }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_tva_technical_core_sealed days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	TVA_print_unattended_strike_packages_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = TVA }
+		visible = { has_completed_focus = TVA_print_unattended_strike_packages }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_tva_unattended_strike }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = TVA_print_unattended_strike_packages
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_tva_unattended_strike }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_tva_unattended_strike days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	TVA_keep_the_interdictors_on_station_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = TVA }
+		visible = { has_completed_focus = TVA_keep_the_interdictors_on_station }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_tva_interdictor_station }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = TVA_keep_the_interdictors_on_station
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_tva_interdictor_station }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_tva_interdictor_station days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	WKR_rehearse_operation_southbound_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = WKR }
+		visible = { has_completed_focus = WKR_rehearse_operation_southbound }
+		available = {
+			OR = { has_war_with = SOL has_war_with = SRA has_war_with = CSL has_war_with = VAD }
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_solar_counter_preparation }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = WKR_rehearse_operation_southbound
+						OR = { has_war_with = SOL has_war_with = SRA has_war_with = CSL has_war_with = VAD }
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_solar_counter_preparation }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_solar_counter_preparation days = 42 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	WKR_throw_the_reserves_forward_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = WKR }
+		visible = { has_completed_focus = WKR_throw_the_reserves_forward }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_wkr_reserves_forward }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = WKR_throw_the_reserves_forward
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_wkr_reserves_forward }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_wkr_reserves_forward days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	WKR_dig_in_along_the_interchange_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = WKR }
+		visible = { has_completed_focus = WKR_dig_in_along_the_interchange }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_wkr_interchange_line }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = WKR_dig_in_along_the_interchange
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_wkr_interchange_line }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_wkr_interchange_line days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	WKR_commit_shopfloor_squadrons_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = WKR }
+		visible = { has_completed_focus = WKR_commit_shopfloor_squadrons }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_wkr_shopfloor_squadrons }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = WKR_commit_shopfloor_squadrons
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_wkr_shopfloor_squadrons }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_wkr_shopfloor_squadrons days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	WKR_screen_the_interchange_sky_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = WKR }
+		visible = { has_completed_focus = WKR_screen_the_interchange_sky }
+		available = {
+			ADISCORD_vorkerland_plan_war_active = yes
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_wkr_interchange_sky_screen }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = WKR_screen_the_interchange_sky
+						ADISCORD_vorkerland_plan_war_active = yes
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_wkr_interchange_sky_screen }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_wkr_interchange_sky_screen days = 70 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	WKR_solar_counter_activate_plan = {
+		icon = generic_army_support
+		allowed = { tag = WKR }
+		visible = { has_global_flag = ADISCORD_vorkerland_wkr_solar_counter_intervention_ready }
+		available = {
+			has_war_with = VAD
+			has_capitulated = no
+			NOT = { has_idea = ADISCORD_vorkerland_solar_counter_preparation }
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_global_flag = ADISCORD_vorkerland_wkr_solar_counter_intervention_ready
+						has_war_with = VAD
+						has_capitulated = no
+						NOT = { has_idea = ADISCORD_vorkerland_solar_counter_preparation }
+					}
+				}
+				add_timed_idea = { idea = ADISCORD_vorkerland_solar_counter_preparation days = 35 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
 }
 
 ADISCORD_vorkerland_prewar_category = {
+	# The centre's emergency levy and the districts' mandates move the prewar
+	# balance; each can be repeated after sixty days.
+	ADISCORD_vorkerland_prewar_central_levy = {
+		icon = generic_political_pressure
+		allowed = { tag = WRK }
+		visible = {
+			has_completed_focus = WRK_face_the_hourglass
+			has_global_flag = ADISCORD_vorkerland_phase_prewar
+		}
+		cost = 50
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			add_stability = -0.02
+			add_power_balance_value = {
+				id = ADISCORD_vorkerland_prewar_bop
+				value = -0.10
+			}
+			ADISCORD_vorkerland_camp_committees_add_5 = yes
+		}
+		ai_will_do = { base = 3 }
+	}
+
+	ADISCORD_vorkerland_prewar_district_mandates = {
+		icon = generic_diplomatic_treaty
+		allowed = { tag = WRK }
+		visible = {
+			has_completed_focus = WRK_face_the_hourglass
+			has_global_flag = ADISCORD_vorkerland_phase_prewar
+		}
+		cost = 50
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			add_stability = 0.02
+			add_power_balance_value = {
+				id = ADISCORD_vorkerland_prewar_bop
+				value = 0.10
+			}
+			ADISCORD_vorkerland_camp_staff_add_5 = yes
+		}
+		ai_will_do = { base = 2 }
+	}
+
 	ADISCORD_vorkerland_prewar_hide_reserves = {
 		icon = generic_prepare_civil_war
 		allowed = {
@@ -5238,5 +6148,654 @@ ADISCORD_vorkerland_rom_tru_category = {
 		fire_only_once = yes
 		remove_effect = { ADISCORD_vorkerland_tru_convene_river_congress = yes }
 		ai_will_do = { base = 200 }
+	}
+}
+
+# --- Worx postwar research ---
+
+WRK_worx_research_category = {
+	WRK_worx_basic = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			NOT = { has_country_flag = WRK_worx_supervised }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_operational_tt
+				WRK_worx_active = yes
+			}
+			WRK_worx_slot_free = yes
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_no_emergency_tt
+				NOT = { has_variable = WRK_worx_emergency_days }
+			}
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_basic_price
+		custom_cost_trigger = { WRK_worx_basic_affordable = yes }
+		days_remove = 14
+		fire_only_once = no
+		cancel_trigger = { hidden_trigger = { WRK_worx_active = no } }
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_basic_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_active = yes
+						WRK_worx_slot_free = yes
+						NOT = { has_variable = WRK_worx_emergency_days }
+						WRK_worx_basic_affordable = yes
+					}
+					set_variable = { var = WRK_worx_receipt value = WRK_worx_basic_cost }
+					set_temp_variable = { var = WRK_worx_payment value = WRK_worx_receipt }
+					multiply_temp_variable = { var = WRK_worx_payment value = -1 }
+					add_political_power = WRK_worx_payment
+					set_variable = { var = WRK_worx_operation value = 1 }
+				}
+			}
+		}
+		remove_effect = { hidden_effect = { WRK_worx_finish_basic = yes } }
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = WRK_worx_operation value = 1 compare = equals } }
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 20
+			modifier = {
+				factor = 0
+				check_variable = { var = WRK_worx_madness value = 35 compare = less_than }
+			}
+		}
+	}
+
+	WRK_worx_expanded = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			NOT = { has_country_flag = WRK_worx_supervised }
+			has_completed_focus = WRK_worx_operating_table
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_operational_tt
+				WRK_worx_active = yes
+			}
+			WRK_worx_slot_free = yes
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_no_emergency_tt
+				NOT = { has_variable = WRK_worx_emergency_days }
+			}
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_expanded_price
+		custom_cost_trigger = { WRK_worx_expanded_affordable = yes }
+		days_remove = 28
+		fire_only_once = no
+		cancel_trigger = { hidden_trigger = { WRK_worx_active = no } }
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_expanded_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_active = yes
+						WRK_worx_slot_free = yes
+						NOT = { has_variable = WRK_worx_emergency_days }
+						WRK_worx_expanded_affordable = yes
+					}
+					set_variable = { var = WRK_worx_receipt value = WRK_worx_expanded_cost }
+					set_temp_variable = { var = WRK_worx_payment value = WRK_worx_receipt }
+					multiply_temp_variable = { var = WRK_worx_payment value = -1 }
+					add_political_power = WRK_worx_payment
+					set_variable = { var = WRK_worx_operation value = 2 }
+				}
+			}
+		}
+		remove_effect = { hidden_effect = { WRK_worx_finish_expanded = yes } }
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = WRK_worx_operation value = 2 compare = equals } }
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 20
+			modifier = {
+				factor = 0
+				check_variable = { var = WRK_worx_madness value = 35 compare = less_than }
+			}
+		}
+	}
+
+	WRK_worx_oversight = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			NOT = { has_country_flag = WRK_worx_supervised }
+			WRK_worx_oversight_ready = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_operational_tt
+				WRK_worx_active = yes
+			}
+			WRK_worx_slot_free = yes
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_no_emergency_tt
+				NOT = { has_variable = WRK_worx_emergency_days }
+			}
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_oversight_price
+		custom_cost_trigger = { NOT = { has_political_power < 150 } }
+		days_remove = 35
+		fire_only_once = no
+		cancel_trigger = { hidden_trigger = { WRK_worx_active = no } }
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_oversight_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_active = yes
+						WRK_worx_slot_free = yes
+						NOT = { has_variable = WRK_worx_emergency_days }
+						NOT = { has_political_power < 150 }
+					}
+					set_variable = { var = WRK_worx_receipt value = 150 }
+					set_temp_variable = { var = WRK_worx_payment value = WRK_worx_receipt }
+					multiply_temp_variable = { var = WRK_worx_payment value = -1 }
+					add_political_power = WRK_worx_payment
+					set_variable = { var = WRK_worx_operation value = 3 }
+				}
+			}
+		}
+		remove_effect = { hidden_effect = { WRK_worx_finish_oversight = yes } }
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = WRK_worx_operation value = 3 compare = equals } }
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 100
+			modifier = {
+				factor = 0
+				check_variable = { var = WRK_worx_madness value = 35 compare = less_than }
+			}
+		}
+	}
+
+
+	WRK_worx_review = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			has_completed_focus = WRK_worx_right_to_error
+			NOT = { has_country_flag = WRK_worx_supervised }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_review_available_tt
+				WRK_worx_review_valid = yes
+			}
+			WRK_worx_slot_free = yes
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_review_price
+		custom_cost_trigger = {
+			NOT = { has_political_power < 50 }
+		}
+		days_remove = 21
+		days_re_enable = 7
+		fire_only_once = no
+		cancel_trigger = { hidden_trigger = { WRK_worx_review_valid = no } }
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_review_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_active = yes
+						NOT = { has_variable = WRK_worx_emergency_days }
+						WRK_worx_slot_free = yes
+						NOT = { has_political_power < 50 }
+					}
+					set_variable = { var = WRK_worx_receipt value = 50 }
+					add_political_power = -50
+					set_variable = { var = WRK_worx_operation value = 4 }
+				}
+			}
+		}
+		remove_effect = { hidden_effect = { WRK_worx_finish_review = yes } }
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = WRK_worx_operation value = 4 compare = equals } }
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 20
+			modifier = {
+				factor = 0
+				check_variable = { var = WRK_worx_madness value = 20 compare = less_than }
+			}
+		}
+	}
+
+	WRK_worx_accelerated = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			has_completed_focus = WRK_worx_genius_permission
+			NOT = { has_country_flag = WRK_worx_supervised }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_accelerated_available_tt
+				WRK_worx_accelerated_valid = yes
+			}
+			WRK_worx_slot_free = yes
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_accelerated_price
+		custom_cost_trigger = {
+			NOT = { has_political_power < 125 }
+		}
+		days_remove = 7
+		days_re_enable = 7
+		fire_only_once = no
+		cancel_trigger = { hidden_trigger = { WRK_worx_accelerated_valid = no } }
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_accelerated_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_active = yes
+						NOT = { has_variable = WRK_worx_emergency_days }
+						WRK_worx_slot_free = yes
+						NOT = { has_political_power < 125 }
+					}
+					set_variable = { var = WRK_worx_receipt value = 125 }
+					add_political_power = -125
+					set_variable = { var = WRK_worx_operation value = 5 }
+				}
+			}
+		}
+		remove_effect = { hidden_effect = { WRK_worx_finish_accelerated = yes } }
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = WRK_worx_operation value = 5 compare = equals } }
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 20
+			modifier = {
+				factor = 0
+				check_variable = { var = WRK_worx_madness value = 75 compare = less_than }
+			}
+		}
+	}
+
+	WRK_worx_field_trials = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			has_completed_focus = WRK_tech_engineering_corps
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_field_trials_available_tt
+				WRK_worx_field_trials_valid = yes
+			}
+			WRK_worx_slot_free = yes
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_field_trials_price
+		custom_cost_trigger = {
+			NOT = { has_political_power < 75 }
+			NOT = { has_equipment = { support_equipment < 100 } }
+		}
+		days_remove = 21
+		days_re_enable = 7
+		fire_only_once = no
+		cancel_trigger = { hidden_trigger = { WRK_worx_field_trials_valid = no } }
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_field_trials_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_government = yes
+						NOT = { has_variable = WRK_worx_emergency_days }
+						has_war = yes
+						WRK_worx_slot_free = yes
+						NOT = { has_political_power < 75 }
+						NOT = { has_equipment = { support_equipment < 100 } }
+					}
+					set_variable = { var = WRK_worx_receipt value = 75 }
+					add_political_power = -75
+					set_variable = { var = WRK_worx_operation value = 6 }
+					set_variable = { var = WRK_worx_support_deposit value = 100 }
+					add_equipment_to_stockpile = {
+						type = support_equipment
+						amount = -100
+					}
+				}
+			}
+		}
+		remove_effect = { hidden_effect = { WRK_worx_finish_field_trials = yes } }
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = WRK_worx_operation value = 6 compare = equals } }
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	WRK_worx_mass_trials = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			has_completed_focus = WRK_tech_fire_superiority
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_mass_trials_available_tt
+				WRK_worx_mass_trials_valid = yes
+			}
+			WRK_worx_slot_free = yes
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_mass_trials_price
+		custom_cost_trigger = {
+			NOT = { has_political_power < 50 }
+			NOT = { has_manpower < 1000 }
+		}
+		days_remove = 7
+		days_re_enable = 7
+		fire_only_once = no
+		cancel_trigger = { hidden_trigger = { WRK_worx_mass_trials_valid = no } }
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_mass_trials_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_government = yes
+						NOT = { has_variable = WRK_worx_emergency_days }
+						has_war = yes
+						WRK_worx_slot_free = yes
+						NOT = { has_political_power < 50 }
+						NOT = { has_manpower < 1000 }
+					}
+					set_variable = { var = WRK_worx_receipt value = 50 }
+					add_political_power = -50
+					set_variable = { var = WRK_worx_operation value = 7 }
+					set_variable = { var = WRK_worx_manpower_deposit value = 1000 }
+					add_manpower = -1000
+				}
+			}
+		}
+		remove_effect = { hidden_effect = { WRK_worx_finish_mass_trials = yes } }
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = WRK_worx_operation value = 7 compare = equals } }
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	WRK_worx_industrial = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			OR = {
+				has_completed_focus = WRK_tech_machine_tool_pool
+				has_completed_focus = WRK_worx_human_variable
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_industrial_available_tt
+				WRK_worx_industrial_valid = yes
+			}
+			WRK_worx_slot_free = yes
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_industrial_price
+		custom_cost_trigger = {
+			NOT = { has_political_power < 100 }
+		}
+		days_remove = 28
+		days_re_enable = 7
+		fire_only_once = no
+		cancel_trigger = { hidden_trigger = { WRK_worx_industrial_valid = no } }
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_industrial_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_government = yes
+						NOT = { has_variable = WRK_worx_emergency_days }
+						WRK_worx_slot_free = yes
+						NOT = { has_political_power < 100 }
+					}
+					set_variable = { var = WRK_worx_receipt value = 100 }
+					add_political_power = -100
+					set_variable = { var = WRK_worx_operation value = 8 }
+				}
+			}
+		}
+		remove_effect = { hidden_effect = { WRK_worx_finish_industrial = yes } }
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = WRK_worx_operation value = 8 compare = equals } }
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	WRK_worx_civil_science = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			has_completed_focus = WRK_worx_even_genius
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_civil_science_available_tt
+				WRK_worx_civil_science_valid = yes
+			}
+			WRK_worx_slot_free = yes
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_civil_science_price
+		custom_cost_trigger = {
+			NOT = { has_political_power < 75 }
+		}
+		days_remove = 35
+		days_re_enable = 7
+		fire_only_once = no
+		cancel_trigger = { hidden_trigger = { WRK_worx_civil_science_valid = no } }
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_civil_science_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_government = yes
+						NOT = { has_variable = WRK_worx_emergency_days }
+						has_country_flag = WRK_worx_supervised
+						WRK_worx_slot_free = yes
+						NOT = { has_political_power < 75 }
+					}
+					set_variable = { var = WRK_worx_receipt value = 75 }
+					add_political_power = -75
+					set_variable = { var = WRK_worx_operation value = 9 }
+				}
+			}
+		}
+		remove_effect = { hidden_effect = { WRK_worx_finish_civil_science = yes } }
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = WRK_worx_operation value = 9 compare = equals } }
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	WRK_worx_grand_programme = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			has_completed_focus = WRK_worx_correct_humanity
+			NOT = { has_country_flag = WRK_worx_supervised }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_grand_programme_available_tt
+				WRK_worx_grand_programme_valid = yes
+			}
+			WRK_worx_slot_free = yes
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_grand_programme_price
+		custom_cost_trigger = {
+			NOT = { has_political_power < 75 }
+		}
+		days_remove = 28
+		days_re_enable = 7
+		fire_only_once = no
+		cancel_trigger = { hidden_trigger = { WRK_worx_grand_programme_valid = no } }
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_grand_programme_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_active = yes
+						NOT = { has_variable = WRK_worx_emergency_days }
+						WRK_worx_slot_free = yes
+						NOT = { has_political_power < 75 }
+					}
+					set_variable = { var = WRK_worx_receipt value = 75 }
+					add_political_power = -75
+					set_variable = { var = WRK_worx_operation value = 10 }
+				}
+			}
+		}
+		remove_effect = { hidden_effect = { WRK_worx_finish_grand_programme = yes } }
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = WRK_worx_operation value = 10 compare = equals } }
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 100
+			modifier = {
+				factor = 0
+				check_variable = { var = WRK_worx_madness value = 40 compare = less_than }
+			}
+		}
+	}
+
+	WRK_worx_restore_obedience = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			has_variable = WRK_worx_emergency_days
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_restore_obedience_available_tt
+				WRK_worx_restore_obedience_valid = yes
+			}
+			WRK_worx_slot_free = yes
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_response_time_tt
+				check_variable = { var = WRK_worx_emergency_days value = 14 compare = greater_than }
+			}
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_restore_obedience_price
+		custom_cost_trigger = {
+			NOT = { has_political_power < 200 }
+		}
+		days_remove = 14
+		days_re_enable = 7
+		fire_only_once = no
+		cancel_trigger = { hidden_trigger = { WRK_worx_restore_obedience_valid = no } }
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_restore_obedience_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_active = yes
+						has_variable = WRK_worx_emergency_days
+						WRK_worx_slot_free = yes
+					check_variable = { var = WRK_worx_emergency_days value = 14 compare = greater_than }
+						NOT = { has_political_power < 200 }
+					}
+					set_variable = { var = WRK_worx_receipt value = 200 }
+					add_political_power = -200
+					set_variable = { var = WRK_worx_operation value = 11 }
+				}
+			}
+		}
+		remove_effect = { hidden_effect = { WRK_worx_finish_restore_obedience = yes } }
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = WRK_worx_operation value = 11 compare = equals } }
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = { base = 100 }
 	}
 }

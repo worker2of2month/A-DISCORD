@@ -2191,6 +2191,27 @@ ADISCORD_vorkerland_world_empire_active = {
 
 # --- preparation_triggers ---
 
+# COUNTRY. The claimant named as WRK's preparation heir; WKR without a patron.
+ADISCORD_vorkerland_is_preparation_heir = {
+	OR = {
+		AND = {
+			tag = VAD
+			40 = { check_variable = { var = ADISCORD_vorkerland_prep_patron value = 2 compare = equals } }
+		}
+		AND = {
+			tag = TVA
+			40 = { check_variable = { var = ADISCORD_vorkerland_prep_patron value = 3 compare = equals } }
+		}
+		AND = {
+			tag = WKR
+			40 = {
+				NOT = { check_variable = { var = ADISCORD_vorkerland_prep_patron value = 2 compare = equals } }
+				NOT = { check_variable = { var = ADISCORD_vorkerland_prep_patron value = 3 compare = equals } }
+			}
+		}
+	}
+}
+
 ADISCORD_vorkerland_prep_open = {
 	tag = WRK
 	has_global_flag = ADISCORD_vorkerland_phase_prewar
@@ -2199,12 +2220,25 @@ ADISCORD_vorkerland_prep_open = {
 	has_variable = ADISCORD_vorkerland_prep_patron
 }
 
+# The last common budget opens a third slot.
 ADISCORD_vorkerland_prep_slot_free = {
-	NOT = {
-		check_variable = {
-			var = ADISCORD_vorkerland_prep_active
-			value = 2
-			compare = greater_than_or_equals
+	OR = {
+		NOT = {
+			check_variable = {
+				var = ADISCORD_vorkerland_prep_active
+				value = 2
+				compare = greater_than_or_equals
+			}
+		}
+		AND = {
+			has_completed_focus = WRK_last_common_budget
+			NOT = {
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_active
+					value = 3
+					compare = greater_than_or_equals
+				}
+			}
 		}
 	}
 }
@@ -2350,4 +2384,149 @@ ADISCORD_vorkerland_prep_offer_valid = {
 			}
 		}
 	}
+}
+
+# WRK: the postwar mandate survives temporary occupation and subjugation.
+WRK_worx_mandate = {
+	tag = WRK
+	has_country_flag = WRK_worx_initialized
+	has_country_flag = ADISCORD_vorkerland_route_utilitarian
+	has_country_leader = {
+		character = TVA_Dorian_Worx
+		ruling_only = yes
+	}
+}
+
+WRK_worx_active = {
+	WRK_worx_mandate = yes
+	is_subject = no
+	has_capitulated = no
+	NOT = { has_country_flag = WRK_worx_supervised }
+}
+
+WRK_worx_slot_free = {
+	custom_trigger_tooltip = {
+		tooltip = WRK_worx_slot_free_tt
+		NOT = { has_variable = WRK_worx_receipt }
+	}
+}
+
+WRK_worx_oversight_ready = {
+	has_completed_focus = WRK_worx_time_is_up
+}
+
+WRK_worx_basic_affordable = {
+	OR = {
+		AND = {
+			check_variable = { var = WRK_worx_demand value = 1 compare = equals }
+			NOT = { has_political_power < 75 }
+		}
+		AND = {
+			check_variable = { var = WRK_worx_demand value = 2 compare = equals }
+			NOT = { has_political_power < 100 }
+		}
+		AND = {
+			check_variable = { var = WRK_worx_demand value = 3 compare = equals }
+			NOT = { has_political_power < 125 }
+		}
+		AND = {
+			check_variable = { var = WRK_worx_demand value = 4 compare = equals }
+			NOT = { has_political_power < 150 }
+		}
+	}
+}
+
+WRK_worx_expanded_affordable = {
+	OR = {
+		AND = {
+			check_variable = { var = WRK_worx_demand value = 1 compare = equals }
+			NOT = { has_political_power < 150 }
+		}
+		AND = {
+			check_variable = { var = WRK_worx_demand value = 2 compare = equals }
+			NOT = { has_political_power < 200 }
+		}
+		AND = {
+			check_variable = { var = WRK_worx_demand value = 3 compare = equals }
+			NOT = { has_political_power < 250 }
+		}
+		AND = {
+			check_variable = { var = WRK_worx_demand value = 4 compare = equals }
+			NOT = { has_political_power < 300 }
+		}
+	}
+}
+
+# COUNTRY: only an actual enemy in the collapse campaign activates its plans.
+ADISCORD_vorkerland_plan_war_active = {
+	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+	NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+	any_enemy_country = {
+		OR = {
+			ADISCORD_vorkerland_is_main_claimant = yes
+			ADISCORD_vorkerland_is_central_minor = yes
+			ADISCORD_vorkerland_is_regional_combatant = yes
+		}
+	}
+}
+
+WRK_worx_government = {
+	WRK_worx_mandate = yes
+	is_subject = no
+	has_capitulated = no
+}
+
+WRK_worx_normal_programmes = {
+	WRK_worx_government = yes
+	NOT = { has_variable = WRK_worx_emergency_days }
+}
+
+WRK_worx_civil_terms = {
+	OR = {
+		has_country_flag = WRK_worx_civil_charters
+		check_variable = { var = WRK_worx_constitution value = 2 compare = equals }
+	}
+}
+
+WRK_worx_review_valid = {
+	WRK_worx_active = yes
+	NOT = { has_variable = WRK_worx_emergency_days }
+}
+
+WRK_worx_accelerated_valid = {
+	WRK_worx_active = yes
+	NOT = { has_variable = WRK_worx_emergency_days }
+}
+
+WRK_worx_field_trials_valid = {
+	WRK_worx_government = yes
+	NOT = { has_variable = WRK_worx_emergency_days }
+	has_war = yes
+}
+
+WRK_worx_mass_trials_valid = {
+	WRK_worx_government = yes
+	NOT = { has_variable = WRK_worx_emergency_days }
+	has_war = yes
+}
+
+WRK_worx_industrial_valid = {
+	WRK_worx_government = yes
+	NOT = { has_variable = WRK_worx_emergency_days }
+}
+
+WRK_worx_civil_science_valid = {
+	WRK_worx_government = yes
+	NOT = { has_variable = WRK_worx_emergency_days }
+	has_country_flag = WRK_worx_supervised
+}
+
+WRK_worx_grand_programme_valid = {
+	WRK_worx_active = yes
+	NOT = { has_variable = WRK_worx_emergency_days }
+}
+
+WRK_worx_restore_obedience_valid = {
+	WRK_worx_active = yes
+	has_variable = WRK_worx_emergency_days
 }

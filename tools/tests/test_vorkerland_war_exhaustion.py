@@ -2,6 +2,7 @@ from __future__ import annotations
 from tools.lib.on_actions import read_country_on_actions
 
 import re
+import re
 import unittest
 from pathlib import Path
 
@@ -50,7 +51,8 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
             capitulation,
         )
         self.assertEqual(on_actions.count(update), 3)
-        self.assertNotIn("on_daily", on_actions)
+        for hook in re.findall(r"(?m)^\s*(on_daily\w*)\s*=", on_actions):
+            self.assertNotIn(update, named_block(on_actions, hook))
         shared = named_block(
             read("common/on_actions/00_ADISCORD_on_actions.txt"), "on_monthly"
         )
@@ -61,7 +63,7 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
             "has_war = yes",
             update,
         ):
-            self.assertIn(token, shared)
+            self.assertIn(token, " ".join(shared.split()))
         self.assertNotIn("every_country", shared)
 
     def test_each_update_uses_new_casualties_and_one_bounded_increment(self) -> None:

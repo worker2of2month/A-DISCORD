@@ -33,7 +33,11 @@ SOURCES = {
     "STP/postwar/focuses.txt": "ADISCORD_STP_exile_return.txt",
     "VAL/defeated/focuses.txt": "ADISCORD_VAL_defeated.txt",
     "VAL/administration/focuses.txt": "ADISCORD_VAL_administration.txt",
-    "Vorkerland/civil_war/focuses.txt": "ADISCORD_Vorkerland_civil_war.txt",
+    "Vorkerland/prewar/focuses.txt": "ADISCORD_Vorkerland_prewar.txt",
+    "Vorkerland/wkr/focuses.txt": "ADISCORD_Vorkerland_wkr.txt",
+    "Vorkerland/vad/focuses.txt": "ADISCORD_Vorkerland_vad.txt",
+    "Vorkerland/tva/focuses.txt": "ADISCORD_Vorkerland_tva.txt",
+    "Vorkerland/settlement/focuses.txt": "ADISCORD_Vorkerland_settlement.txt",
     "Vorkerland/world_empire/focuses.txt": "ADISCORD_Vorkerland_world_empire.txt",
     "Vorkerland/worker_confederation/focuses.txt": "ADISCORD_Vorkerland_worker_confederation.txt",
     "Vorkerland/technical_directorate/focuses.txt": "ADISCORD_Vorkerland_technical_directorate.txt",
@@ -44,10 +48,13 @@ INCLUDE = re.compile(r"(?m)^# @include ([\w/.-]+)#(\w+)\n")
 SECTION = re.compile(r"(?m)^# @section (\w+)\n")
 # The humanist exile tree is replaced by the corporate tree at the takeover;
 # its completed focuses still open the free-zone and federation decisions.
+# WKR's tree includes the WRK prewar root, so copy_completed_from = WRK keeps
+# the prewar completion that seeds WKR legitimacy and the preparation package.
 SHARED_HISTORY_SOURCES = frozenset({
     "VAL/main/focuses.txt",
     "NAM/main/focuses.txt",
     "NAM/exile_humanist/focuses.txt",
+    "Vorkerland/prewar/focuses.txt",
 })
 
 

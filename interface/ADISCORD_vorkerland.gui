@@ -1,0 +1,121 @@
+guiTypes = {
+	containerWindowType = {
+		name = "ADISCORD_vorkerland_worx_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 328 }
+		iconType = {
+			name = "WRK_worx_emblem"
+			position = { x = 140 y = 0 }
+			spriteType = "GFX_WRK_worx_madness"
+			scale = 0.14354066985645933
+			pdx_tooltip = "WRK_worx_rules_tt"
+		}
+		iconType = {
+			name = "WRK_worx_scale"
+			position = { x = 24 y = 210 }
+			spriteType = "GFX_WRK_worx_scale"
+			scale = 0.82
+			pdx_tooltip = "WRK_worx_rules_tt"
+		}
+		instantTextBoxType = {
+			name = "WRK_worx_value"
+			position = { x = 8 y = 182 }
+			text = "WRK_worx_value"
+			font = "hoi_20b"
+			maxWidth = 444
+			maxHeight = 24
+			format = center
+			pdx_tooltip = "WRK_worx_rules_tt"
+		}
+		instantTextBoxType = {
+			name = "WRK_worx_needle"
+			position = { x = 20 y = 199 }
+			text = "WRK_worx_needle"
+			font = "hoi_20b"
+			maxWidth = 12
+			maxHeight = 26
+			format = center
+			pdx_tooltip = "WRK_worx_rules_tt"
+		}
+		instantTextBoxType = {
+			name = "WRK_worx_status"
+			position = { x = 8 y = 247 }
+			text = "WRK_worx_status"
+			font = "hoi_16mbs"
+			maxWidth = 444
+			maxHeight = 22
+			format = center
+			pdx_tooltip = "WRK_worx_rules_tt"
+		}
+		instantTextBoxType = {
+			name = "WRK_worx_growth"
+			position = { x = 8 y = 271 }
+			text = "WRK_worx_growth"
+			font = "hoi_16mbs"
+			maxWidth = 444
+			maxHeight = 22
+			format = center
+			pdx_tooltip = "WRK_worx_rules_tt"
+		}
+		instantTextBoxType = {
+			name = "WRK_worx_operation_report"
+			position = { x = 8 y = 295 }
+			text = "WRK_worx_operation_report"
+			font = "hoi_16mbs"
+			maxWidth = 444
+			maxHeight = 30
+			format = center
+			pdx_tooltip = "WRK_worx_rules_tt"
+		}
+		instantTextBoxType = {
+			name = "WRK_worx_tick_0"
+			position = { x = 14 y = 222 }
+			text = "WRK_worx_tick_0"
+			font = "hoi_16mbs"
+			maxWidth = 28
+			maxHeight = 20
+			format = center
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "WRK_worx_tick_25"
+			position = { x = 116 y = 222 }
+			text = "WRK_worx_tick_25"
+			font = "hoi_16mbs"
+			maxWidth = 28
+			maxHeight = 20
+			format = center
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "WRK_worx_tick_50"
+			position = { x = 219 y = 222 }
+			text = "WRK_worx_tick_50"
+			font = "hoi_16mbs"
+			maxWidth = 28
+			maxHeight = 20
+			format = center
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "WRK_worx_tick_75"
+			position = { x = 321 y = 222 }
+			text = "WRK_worx_tick_75"
+			font = "hoi_16mbs"
+			maxWidth = 28
+			maxHeight = 20
+			format = center
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "WRK_worx_tick_100"
+			position = { x = 420 y = 222 }
+			text = "WRK_worx_tick_100"
+			font = "hoi_16mbs"
+			maxWidth = 28
+			maxHeight = 20
+			format = center
+			alwaystransparent = yes
+		}
+	}
+}

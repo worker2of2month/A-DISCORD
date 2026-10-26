@@ -9,6 +9,7 @@ from unittest.mock import patch
 from tools.lib.paths import source_section
 from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     _can_share_view,
+    _plan_reward_contract,
     ACTIVE_PHASE_FLAGS,
     CLAIMANT_EVENTS_FILE,
     CLAIMANT_FOCUS_EVENT_IDS,
@@ -62,6 +63,7 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     PREWAR_EXPANSION_COSTS,
     LAYOUT_ANCHORS,
     LAYOUT_BANDS,
+    LIFECYCLE_TREES,
     PREWAR_EXPANSION_POSITIONS,
     SUPPORTED_SEARCH_FILTERS,
     _layout_band,
@@ -199,22 +201,25 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
                     collect_issues(),
                 )
 
-    def test_one_tree_follows_all_four_lifecycle_tags(self) -> None:
-        selector = self.source.split("default = no", maxsplit=1)[0]
-        for tag in ("WRK", "WKR", "VAD", "TVA"):
-            self.assertEqual(selector.count(f"tag = {tag}"), 1)
-        self.assertNotIn("original_tag", selector)
+    def test_each_lifecycle_tree_selects_only_its_own_tags(self) -> None:
+        trees = _blocks(self.source, "focus_tree")
+        self.assertEqual(len(trees), len(LIFECYCLE_TREES))
+        for tree, (tree_id, (_, tags)) in zip(trees, LIFECYCLE_TREES.items()):
+            self.assertIn(f"\tid = {tree_id}\n", tree)
+            selector = tree.split("default = no", maxsplit=1)[0]
+            self.assertEqual(set(re.findall(r"\btag = ([A-Z]{3})\b", selector)), tags, tree_id)
+            self.assertNotIn("original_tag", selector)
 
     def test_manifest_has_all_bounded_lifecycle_definitions(self) -> None:
         self.assertEqual(tuple(self.blocks), lifecycle_order())
         # The worker and technocratic routes continue in their own trees after the Unity Tower.
-        self.assertEqual(len(self.blocks), 286)
+        self.assertEqual(len(self.blocks), 308)
         self.assertEqual(len(DEPTH_FOCUSES), 63)
         self.assertEqual(len(WKR_VARIANT_FOCUSES), 6)
         self.assertEqual(len(VAD_VARIANT_FOCUSES), 6)
         self.assertEqual(len(TVA_VARIANT_FOCUSES), 6)
-        self.assertEqual(len(PREWAR_WRK_FOCUSES), 18)
-        self.assertEqual(len(PREWAR_VAD_FOCUSES), 10)
+        self.assertEqual(len(PREWAR_WRK_FOCUSES), 35)
+        self.assertEqual(len(PREWAR_VAD_FOCUSES), 15)
         self.assertEqual(len(PREWAR_WRK_EXPANSION_FOCUSES), 4)
         self.assertEqual(len(PREWAR_VAD_EXPANSION_FOCUSES), 4)
         self.assertEqual(len(RETIRED_WARTIME_FOCUSES), 3)
@@ -428,7 +433,7 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
                 rewards = _blocks(block, "completion_reward")
                 self.assertEqual(len(rewards), 1)
                 for token in VAD_LATE_WAR_BRIDGE_REWARDS[focus_id]:
-                    self.assertEqual(rewards[0].count(token), 1)
+                    self.assertEqual(_plan_reward_contract(rewards[0]).count(token), 1)
                 self.assertNotIn("ADISCORD_vorkerland_solar_terminal_", block)
                 self.assertNotIn("declare_war_on", block)
 
@@ -474,7 +479,7 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
         for focus_id, (idea_id, days) in VAD_WARTIME_TIMED_IDEAS.items():
             with self.subTest(focus_id=focus_id):
                 self.assertEqual(
-                    self.blocks[focus_id].count(
+                    _plan_reward_contract(self.blocks[focus_id]).count(
                         f"add_timed_idea = {{ idea = {idea_id} days = {days} }}"
                     ),
                     1,
@@ -512,7 +517,7 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
         for focus_id, tokens in strengthened.items():
             for token in tokens:
                 self.assertIn(
-                    token, re.sub(r"\s+", " ", self.blocks[focus_id])
+                    token, re.sub(r"\s+", " ", _plan_reward_contract(self.blocks[focus_id]))
                 )
 
     def test_tva_optional_depth_is_six_focus_outcome_specific_and_capstone_neutral(
@@ -562,7 +567,7 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
         for focus_id, (idea_id, days) in TVA_OPTIONAL_TIMED_IDEAS.items():
             with self.subTest(focus_id=focus_id):
                 self.assertEqual(
-                    self.blocks[focus_id].count(
+                    _plan_reward_contract(self.blocks[focus_id]).count(
                         f"add_timed_idea = {{ idea = {idea_id} days = {days} }}"
                     ),
                     1,
@@ -581,7 +586,7 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
         )
         iteration = self.blocks["TVA_authorize_iteration_two"]
         self.assertEqual(
-            iteration.count(
+            _plan_reward_contract(iteration).count(
                 "add_timed_idea = { idea = ADISCORD_vorkerland_worx_second_protocol days = 120 }"
             ),
             1,
@@ -1121,7 +1126,7 @@ focus = {
                 self.assertIn("allowed_civil_war = { always = yes }", definitions[0])
                 self.assertIn("removal_cost = -1", definitions[0])
                 self.assertIn("ai_will_do = { factor = 0 }", definitions[0])
-                self.assertIn(idea_id, expansion_focuses)
+                self.assertIn(idea_id, _plan_reward_contract(expansion_focuses))
         for forbidden in (
             "activate_mission",
             "declare_war_on",
@@ -1319,8 +1324,8 @@ focus = {
             first, last = branch["permanent_ideas"]
             with self.subTest(variant=f"{branch['tag']}_{branch['key']}"):
                 self.assertIn(f"add_ideas = {first}", self.blocks[root])
-                self.assertIn(f"idea = {branch['timed_idea']}", self.blocks[program])
-                self.assertIn("add_timed_idea", self.blocks[program])
+                self.assertIn(f"idea = {branch['timed_idea']}", _plan_reward_contract(self.blocks[program]))
+                self.assertIn("add_timed_idea", _plan_reward_contract(self.blocks[program]))
                 self.assertIn(f"add_ideas = {last}", self.blocks[settlement])
         for idea_id in VARIANT_IDEAS:
             definitions = _blocks(self.focus_expansion_ideas, idea_id)
@@ -1752,7 +1757,7 @@ focus = {
             with self.subTest(focus_id=focus_id):
                 self.assertIn(
                     f"add_timed_idea = {{ idea = {idea_id} days = {days} }}",
-                    self.blocks[focus_id],
+                    _plan_reward_contract(self.blocks[focus_id]),
                 )
                 self.assertEqual(len(_blocks(self.collapse_ideas, idea_id)), 1)
 
@@ -1761,7 +1766,7 @@ focus = {
         reward = (
             f"add_timed_idea = {{ idea = {WORX_ADAPTIVE_LOGISTICS_IDEA} days = 90 }}"
         )
-        self.assertEqual(focus.count(reward), 1)
+        self.assertEqual(_plan_reward_contract(focus).count(reward), 1)
         self.assertEqual(
             len(_blocks(self.collapse_ideas, WORX_ADAPTIVE_LOGISTICS_IDEA)), 1
         )
@@ -1834,7 +1839,7 @@ focus = {
     def test_mobile_repair_train_focus_grants_a_concrete_timed_spirit(self) -> None:
         focus = self.blocks["TVA_build_mobile_repair_trains"]
         reward = f"add_timed_idea = {{ idea = {MOBILE_REPAIR_IDEA} days = 35 }}"
-        self.assertEqual(focus.count(reward), 1)
+        self.assertEqual(_plan_reward_contract(focus).count(reward), 1)
         self.assertEqual(len(_blocks(self.collapse_ideas, MOBILE_REPAIR_IDEA)), 1)
 
     def test_focus_land_repair_spirits_do_not_use_ship_repair_modifier(self) -> None:

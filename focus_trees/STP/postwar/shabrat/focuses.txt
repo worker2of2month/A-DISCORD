@@ -48,7 +48,7 @@
 
 	focus = {
 		id = STP_pw_republic_civil_records
-		icon = GFX_focus_VAL_Reclamation_Land_Register
+		icon = GFX_focus_STP_pw_republic_civil_records
 		x = 0
 		y = 6
 		cost = 4
@@ -75,7 +75,7 @@
 
 	focus = {
 		id = STP_pw_republic_open_settlement
-		icon = GFX_focus_VAL_Company_Mandates
+		icon = GFX_focus_STP_pw_republic_open_settlement
 		x = -1
 		y = 7
 		cost = 5
@@ -2905,7 +2905,7 @@
 		prerequisite = { focus = STP_pc_sot_two_threats }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			add_timed_idea = { idea = STP_pc_border_watch days = 120 }
+			unlock_decision_tooltip = STP_pc_sot_val_defense_activate_plan
 		}
 	}
 
@@ -2927,7 +2927,7 @@
 		prerequisite = { focus = STP_pc_sot_two_threats }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			add_timed_idea = { idea = STP_pc_nod_watch days = 120 }
+			unlock_decision_tooltip = STP_pc_sot_nod_watch_activate_plan
 		}
 	}
 

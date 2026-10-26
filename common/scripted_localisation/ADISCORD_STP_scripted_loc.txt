@@ -77,6 +77,22 @@ defined_text = {
 }
 
 defined_text = {
+	name = STPGetApparatusFactionEffects
+
+	text = {
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_pf_initialized
+			has_capitulated = no
+		}
+		localization_key = STP_apparatus_faction_effects
+	}
+	text = {
+		localization_key = STP_apparatus_faction_effects_inactive
+	}
+}
+
+defined_text = {
 	name = STPGetLoyaltyValue
 
 	text = {

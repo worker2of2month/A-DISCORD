@@ -150,7 +150,12 @@ class CentralShowdownRecoveryTests(unittest.TestCase):
         cooldown_guard = (
             "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_retry_cooldown }"
         )
-        self.assertIn(cooldown_guard, available)
+        self.assertIn("ADISCORD_vorkerland_can_commit_to_showdown = yes", available)
+        trigger = named_block(
+            read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+            "ADISCORD_vorkerland_can_commit_to_showdown",
+        )
+        self.assertIn(cooldown_guard, trigger)
 
         effects = source_section(
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
@@ -169,55 +174,27 @@ class CentralShowdownRecoveryTests(unittest.TestCase):
         self.assertIn(cooldown_guard, named_block(request_branches[0], "limit"))
 
     def test_queued_reunification_rechecks_the_integrated_central_map(self) -> None:
-        events = source_section(
-            read("events/ADISCORD_vorkerland_events.txt"), 'phase_events'
-        )
+        events = read("events/ADISCORD_vorkerland_events.txt")
         phase_six = event_block(events, "ADISCORD_vorkerland_phase.6")
-        self.assertIn("id = ADISCORD_vorkerland_phase.6", phase_six)
-        self.assertEqual(
-            phase_six.count(
-                "ADISCORD_vorkerland_central_districts_owned_and_controlled = yes"
-            ),
-            3,
+        immediate = named_block(phase_six, "immediate")
+        rejection = named_block(immediate, "if")
+        self.assertIn(
+            "NOT = { ADISCORD_vorkerland_coalition_victory_ready = yes }",
+            named_block(rejection, "limit"),
         )
-
-        for target in ("EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"):
-            self.assertIn(f"NOT = {{ country_exists = {target} }}", phase_six)
-        for flag in (
-            "ADISCORD_vorkerland_focus_central_minor_launch_pending",
-            "ADISCORD_vorkerland_focus_central_minor_deadline_active",
-        ):
-            self.assertEqual(phase_six.count(flag), 3)
-        for state in (
-            102,
-            109,
-            111,
-            325,
-            81,
-            110,
-            124,
-            79,
-            306,
-            308,
-            309,
-            327,
-            82,
-            323,
-            108,
-            122,
-            123,
-            27,
-            35,
-            315,
-            316,
-            317,
-            318,
-            320,
-        ):
+        self.assertIn("ADISCORD_vorkerland_set_phase_central_showdown = yes", rejection)
+        triggers = read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")
+        victory = named_block(triggers, "ADISCORD_vorkerland_coalition_victory_ready")
+        self.assertIn("ADISCORD_vorkerland_has_single_surviving_claimant = yes", victory)
+        for tag in ("WKR", "VAD", "TVA"):
             self.assertIn(
-                f"{state} = {{ OR = {{ is_core_of = WKR is_core_of = VAD is_core_of = TVA }} }}",
-                phase_six,
+                "ADISCORD_vorkerland_central_districts_owned_and_controlled = yes",
+                named_block(victory, tag),
             )
+            self.assertIn(f"{tag} = {{ clr_country_flag = ADISCORD_vorkerland_central_unifier }}", rejection)
+            self.assertIn(f"ADISCORD_vorkerland_form_wrk_from_{tag.lower()} = yes", phase_six)
+        self.assertLess(immediate.index("ADISCORD_vorkerland_coalition_victory_ready"),
+                        immediate.index("ADISCORD_vorkerland_form_wrk_from_"))
 
     def test_startup_does_not_requeue_old_showdown_controller_events(self) -> None:
         on_actions = read_country_on_actions(

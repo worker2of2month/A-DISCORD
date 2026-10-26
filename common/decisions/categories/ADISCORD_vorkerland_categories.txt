@@ -162,3 +162,12 @@ ADISCORD_vorkerland_rom_tru_category = {
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 	}
 }
+
+WRK_worx_research_category = {
+	icon = ADISCORD_science
+	allowed = { tag = WRK }
+	visible = { WRK_worx_mandate = yes }
+	visible_when_empty = yes
+	priority = 90
+	scripted_gui = ADISCORD_vorkerland_worx_panel
+}

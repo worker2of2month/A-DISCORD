@@ -2137,25 +2137,27 @@ ADISCORD_vorkerland_wrk_postwar_utilitarian_plan = {
 		WRK_utilitarian_build_measurable_republic
 		WRK_utilitarian_restore_unity_tower
 		WRK_tech_directorate_plan
-		WRK_utilitarian_west_corridor_survey
-		WRK_tech_engineering_corps
-		WRK_tech_supply_contracts
-		WRK_tech_machine_tool_pool
-		WRK_tech_technical_assistance
-		WRK_tech_mechanized_staff
-		WRK_tech_standardized_arsenals
-		WRK_tech_grid_repair_crews
+		WRK_worx_last_provisional
+		WRK_worx_operating_table
+		WRK_worx_genius_permission
+		WRK_worx_ethics_lags
+		WRK_worx_consent_not_required
+		WRK_worx_human_variable
+		WRK_worx_correct_humanity
 		WRK_tech_district_metrics
-		WRK_tech_fire_superiority
-		WRK_utilitarian_west_engineer_battalions
-		WRK_tech_command_calculus
-		WRK_utilitarian_west_engineering_border
-		WRK_tech_national_laboratories
 		WRK_tech_automated_workshops
+		WRK_tech_machine_tool_pool
 		WRK_tech_measured_economy
-		WRK_tech_specialist_schools
-		WRK_tech_southern_programme
+		WRK_tech_engineering_corps
+		WRK_tech_fire_superiority
+		WRK_tech_mechanized_staff
+		WRK_utilitarian_west_corridor_survey
+		WRK_tech_technical_assistance
+		WRK_utilitarian_west_engineer_battalions
+		WRK_utilitarian_west_engineering_border
+		WRK_tech_command_calculus
 		WRK_utilitarian_west_technical_trusteeship
+		WRK_tech_southern_programme
 	}
 
 	weight = { factor = 4 }

@@ -16,6 +16,7 @@ from pathlib import Path
 from PIL import Image
 
 
+from tools.lib.focus_sources import FOCUS_SOURCE_GROUPS, read_focus_source
 from tools.lib.paths import source_section
 
 
@@ -345,14 +346,14 @@ def _load(
     if isinstance(relative, tuple):
         return "\n".join(_load(path, issues) for path in relative)
     path = ROOT / relative
-    if not path.is_file():
+    if not path.is_file() and relative.name not in FOCUS_SOURCE_GROUPS:
         issues.append(f"missing required file {relative.as_posix()}")
         return ""
     try:
         source = (
             read_country_on_actions(path, peace_section)
             if peace_section
-            else path.read_text(encoding="utf-8-sig")
+            else read_focus_source(path)
         )
     except UnicodeError as exc:
         issues.append(f"cannot decode {relative.as_posix()} as UTF-8: {exc}")

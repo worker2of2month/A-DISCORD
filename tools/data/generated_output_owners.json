@@ -994,6 +994,12 @@
     {
       "id": "focus_ui_assets",
       "owner_module": "tools.builders.build_adiscord_focus_ui_assets",
+      "authored_asset_exclusions": [
+        "gfx/interface/goals/STP/party/*.png",
+        "gfx/interface/goals/STP/party_postcivilwar/*.png",
+        "gfx/interface/goals/STP/shabrat/*.png",
+        "gfx/interface/goals/STP/shabrat_postcivilwar/*.png"
+      ],
       "output_globs": [
         "interface/nationalfocusview.gui",
         "interface/ADISCORD_focus_ui.gfx",
@@ -1956,7 +1962,11 @@
         "common/national_focus/ADISCORD_STP_exile_return.txt",
         "common/national_focus/ADISCORD_VAL_defeated.txt",
         "common/national_focus/ADISCORD_VAL_administration.txt",
-        "common/national_focus/ADISCORD_Vorkerland_civil_war.txt",
+        "common/national_focus/ADISCORD_Vorkerland_prewar.txt",
+        "common/national_focus/ADISCORD_Vorkerland_wkr.txt",
+        "common/national_focus/ADISCORD_Vorkerland_vad.txt",
+        "common/national_focus/ADISCORD_Vorkerland_tva.txt",
+        "common/national_focus/ADISCORD_Vorkerland_settlement.txt",
         "common/national_focus/ADISCORD_Vorkerland_world_empire.txt",
         "common/national_focus/ADISCORD_Vorkerland_worker_confederation.txt",
         "common/national_focus/ADISCORD_Vorkerland_technical_directorate.txt",

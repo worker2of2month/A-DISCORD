@@ -1448,6 +1448,60 @@ class PartyUsabilityContracts(unittest.TestCase):
         self.assertEqual(one(dynamic, 'breakthrough_factor'), 'STP_ps_breakthrough')
         self.assertNotIn('army_defence_factor', {e.key for e in dynamic})
 
+    def test_command_card_adds_stage_and_node_penalties_in_either_refresh_order(self):
+        dynamic = parse_clausewitz(read(
+            'common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt'
+        ))
+        self.assertNotIn('STP_ps_nodes_dynamic', {entry.key for entry in dynamic})
+        command = one(dynamic, 'STP_ps_defence_dynamic')
+        self.assertEqual(one(command, 'planning_speed'), 'STP_ps_command_planning')
+        self.assertEqual(one(command, 'army_speed_factor'), 'STP_ps_node_redeployment')
+        for stage, penalty in ((1, -0.5), (2, -0.3), (3, -0.15), (4, 0)):
+            for congress, niansas, reverse in product((False, True), repeat=3):
+                facts = {
+                    ('STP', 'STP_ps_war_active', 'yes'): True,
+                    ('STP', 'variable', 'STP_ps_stage'): stage,
+                    ('STP', 'has_country_flag', 'STP_ps_node_lost_145'): congress,
+                    ('STP', 'has_country_flag', 'STP_ps_node_lost_45'): niansas,
+                }
+                values = {}
+
+                def run(name):
+                    for _, entry in selected_effects(self.effects[name], facts):
+                        if entry.key in ('set_variable', 'add_to_variable'):
+                            key = one(entry.value, 'var')
+                            raw = one(entry.value, 'value')
+                            try:
+                                value = float(raw)
+                            except ValueError:
+                                value = values.get(raw, 0)
+                            if entry.key == 'set_variable':
+                                values[key] = value
+                            else:
+                                values[key] = values.get(key, 0) + value
+                        elif entry.key == 'STP_ps_refresh_command_modifier':
+                            run(entry.key)
+
+                order = ['STP_ps_refresh_defence', 'STP_ps_refresh_nodes']
+                if reverse:
+                    order.reverse()
+                for name in order:
+                    run(name)
+                self.assertAlmostEqual(
+                    values['STP_ps_command_planning'], penalty - (0.15 if congress else 0)
+                )
+                self.assertAlmostEqual(
+                    values['STP_ps_node_redeployment'], -0.2 if niansas else 0
+                )
+                # Retaking both nodes removes only their contribution.
+                facts[('STP', 'has_country_flag', 'STP_ps_node_lost_145')] = False
+                facts[('STP', 'has_country_flag', 'STP_ps_node_lost_45')] = False
+                run('STP_ps_refresh_nodes')
+                self.assertAlmostEqual(values['STP_ps_command_planning'], penalty)
+                self.assertEqual(values['STP_ps_node_redeployment'], 0)
+        cleanup = self.effects['STP_ps_close_defence']
+        self.assertIn('STP_ps_command_planning', children(cleanup, 'clear_variable'))
+
     def test_foreign_operations_share_the_military_category(self):
         names = [
             'STP_ps_fund_nod',

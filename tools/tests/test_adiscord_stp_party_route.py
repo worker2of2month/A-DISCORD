@@ -761,7 +761,7 @@ class PartyRouteContracts(unittest.TestCase):
     def test_new_focus_dummies_exactly_match_live_aggregate_deltas(self):
         found = 0
         for fid, f in self.focus.items():
-            if not fid.startswith("STP_party_"):
+            if not fid.startswith(("STP_party_", "STP_pw_party_")):
                 continue
             found += 1
             reward = one(f, "completion_reward")

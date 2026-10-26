@@ -788,9 +788,12 @@ NOD_cw_can_accept_northern_defeat = {
 	has_country_flag = { flag = NOD_cw_northern_war_started days > 89 }
 	OR = {
 		NOT = { surrender_progress < 0.7 }
-		# Cussington alone carries ~60 of NOD's ~100 VP, so 70% is otherwise
-		# reachable only after the capital falls. A breach into the core counts.
-		NOD_cw_northern_core_breached = yes
+		# A local breakthrough does not settle a war while NOD still holds
+		# enough coalition territory to sustain its northern offensive.
+		AND = {
+			NOD_cw_northern_core_breached = yes
+			NOD_cw_northern_push_succeeded = no
+		}
 	}
 }
 
@@ -2611,6 +2614,10 @@ STP_ps_can_relocate_government = {
 STP_operations_map_available = {
 	OR = {
 		AND = {
+			tag = STP
+			STP_cw_preparation_open = yes
+		}
+		AND = {
 			tag = STS
 			has_country_flag = STP_cw_postwar
 		}
@@ -3934,6 +3941,30 @@ STP_ps_plot_current = {
 # ============================================================
 # PARTY WAR: INHERITANCE OF THE FESTIVAL
 # ============================================================
+
+# COUNTRY: display filters leave both payment methods available to the AI.
+STP_pm_rear_programs_visible = {
+	OR = {
+		is_ai = yes
+		has_country_flag = STP_pm_rear_programs_expanded
+	}
+}
+
+STP_pm_faction_funding_visible = {
+	OR = {
+		is_ai = yes
+		STP_ps_war_active = no
+		has_country_flag = STP_pm_faction_funding_selected
+	}
+}
+
+STP_pm_faction_negotiations_visible = {
+	OR = {
+		is_ai = yes
+		STP_ps_war_active = no
+		NOT = { has_country_flag = STP_pm_faction_funding_selected }
+	}
+}
 
 # COUNTRY STP: the wartime gauge exists only while the party fights its own civil war.
 STP_pv_war_current = {

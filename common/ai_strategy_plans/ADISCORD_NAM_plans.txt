@@ -28,6 +28,11 @@ NAM_prewar_plan = {
 		NAM_metropolitan_depots
 		NAM_colony_order
 		NAM_letters_to_the_centre
+		NAM_centre_hourglass
+		NAM_second_ledger
+		NAM_quiet_officer_lists
+		NAM_sand_runs_out
+		NAM_last_centre_register
 		NAM_independence_day
 		NAM_open_ledgers
 		NAM_districts

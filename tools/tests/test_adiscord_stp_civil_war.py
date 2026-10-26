@@ -324,7 +324,8 @@ class CivilWarContracts(unittest.TestCase):
         self.assertRegex(
             trigger,
             r"OR = \{\s*NOT = \{ surrender_progress < 0\.7 \}[^}]*?"
-            r"NOD_cw_northern_core_breached = yes\s*\}",
+            r"AND = \{\s*NOD_cw_northern_core_breached = yes\s*"
+            r"NOD_cw_northern_push_succeeded = no\s*\}",
         )
         breach = block(self.triggers, "NOD_cw_northern_core_breached")
         self.assertIn("17 = { controller = { OR = { tag = YPR tag = COF tag = TFF } } }", breach)
@@ -334,6 +335,49 @@ class CivilWarContracts(unittest.TestCase):
                 breach,
             )
         self.assertNotIn("30 =", breach)
+
+    def test_northern_local_breach_cannot_surrender_a_successful_offensive(self):
+        triggers = entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+        defeat = ast_block(triggers, "NOD_cw_can_accept_northern_defeat")
+        breach = ast_block(triggers, "NOD_cw_northern_core_breached")
+        offensive = ast_block(
+            ast_block(triggers, "NOD_cw_northern_push_succeeded"), "count_triggers"
+        )
+        threshold = int(scalar(offensive, "amount"))
+        self.assertEqual(threshold, 2)
+        for held, core_breach, surrender, days in product(
+            ((), ("20",), ("8", "20"), ("8", "15", "16", "19", "20")),
+            (False, True),
+            (0.0, 0.699, 0.7),
+            (89, 90),
+        ):
+            facts = {
+                ("NOD", "variable", "STP_cw_northern_campaign_status"): 1,
+                ("NOD", "has_capitulated", "no"): True,
+                ("NOD", "has_country_flag", "NOD_cw_northern_war_started"): True,
+                ("NOD", "flag_days", "NOD_cw_northern_war_started"): days,
+                ("NOD", "numeric", "surrender_progress"): surrender,
+                ("17", "controller"): "YPR" if core_breach else "NOD",
+                ("13", "controller"): "COF" if core_breach else "NOD",
+                ("12", "controller"): "NOD",
+            }
+            for tag in ("YPR", "COF", "TFF"):
+                facts["NOD", "has_war_with", tag] = True
+            for state in held:
+                facts[state, "is_controlled_by", "NOD"] = True
+            successful = sum(
+                matches_conditions([entry], facts, "NOD")
+                for entry in offensive if entry.key != "amount"
+            ) >= threshold
+            facts["NOD", "NOD_cw_northern_push_succeeded", "no"] = not successful
+            facts["NOD", "NOD_cw_northern_core_breached", "yes"] = matches_conditions(
+                breach, facts, "NOD"
+            )
+            with self.subTest(held=held, breach=core_breach, surrender=surrender, days=days):
+                expected = days >= 90 and (
+                    surrender >= 0.7 or (core_breach and len(held) < 2)
+                )
+                self.assertEqual(matches_conditions(defeat, facts, "NOD"), expected)
 
     def test_arsenal_batch_checks_cash_boundary_and_pays_only_once(self):
         council = ast_block(

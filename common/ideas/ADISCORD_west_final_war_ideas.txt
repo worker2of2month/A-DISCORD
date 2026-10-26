@@ -91,6 +91,7 @@ ideas = {
 			picture = generic_war_preparation
 			allowed = { original_tag = WRK }
 			allowed_civil_war = { always = yes }
+			cancel = { NOT = { has_war_with = IVN } }
 			removal_cost = -1
 			modifier = {
 				army_attack_factor = 0.10
@@ -102,6 +103,7 @@ ideas = {
 			picture = generic_fortify_the_borders
 			allowed = { original_tag = IVN }
 			allowed_civil_war = { always = yes }
+			cancel = { NOT = { has_war_with = WRK } }
 			removal_cost = -1
 			modifier = {
 				army_core_defence_factor = 0.10

@@ -563,16 +563,32 @@ VAL_military_operations = {
 		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = { has_completed_focus = VAL_frontier_logistics check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
-		available = { has_capitulated = no NOT = { has_idea = VAL_frontier_transport_columns } }
+		available = {
+			VAL_frontier_has_campaign_war = yes
+			has_capitulated = no
+			NOT = { has_idea = VAL_frontier_transport_columns }
+		}
 		cost = 0
 		custom_cost_text = VAL_frontier_transport_cost
 		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes NOT = { has_equipment = { motorized_equipment < 100 } } }
 		fire_only_once = no
+
 		complete_effect = {
-			add_timed_idea = { idea = VAL_frontier_transport_columns days = 180 }
-			hidden_effect = {
-				ADISCORD_economy_spend_50 = yes
-				add_equipment_to_stockpile = { type = motorized_equipment amount = -100 }
+			if = {
+				limit = {
+					hidden_trigger = {
+						VAL_frontier_has_campaign_war = yes
+						has_capitulated = no
+						NOT = { has_idea = VAL_frontier_transport_columns }
+						ADISCORD_economy_can_spend_50 = yes
+						NOT = { has_equipment = { motorized_equipment < 100 } }
+					}
+				}
+				add_timed_idea = { idea = VAL_frontier_transport_columns days = 180 }
+				hidden_effect = {
+					ADISCORD_economy_spend_50 = yes
+					add_equipment_to_stockpile = { type = motorized_equipment amount = -100 }
+				}
 			}
 		}
 		ai_will_do = { base = 5 modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
@@ -8096,6 +8112,68 @@ VAL_council_government_category = {
 }
 
 VAL_council_balance_category = {
+
+	VAL_council_front_execute = {
+		icon = ADISCORD_operations
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_council_front_plan_ready }
+		available = {
+			VAL_council_operational = yes
+			has_war = yes
+			has_capitulated = no
+			NOT = { has_dynamic_modifier = VAL_council_favour_front }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_country_flag = VAL_council_front_plan_ready
+						VAL_council_operational = yes
+						has_war = yes
+						has_capitulated = no
+						NOT = { has_dynamic_modifier = VAL_council_favour_front }
+					}
+				}
+				add_dynamic_modifier = { modifier = VAL_council_favour_front days = 90 }
+				hidden_effect = { clr_country_flag = VAL_council_front_plan_ready }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+
+	VAL_council_garrison_execute = {
+		icon = ADISCORD_operations
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_council_garrison_plan_ready }
+		available = {
+			VAL_council_operational = yes
+			has_war = yes
+			has_capitulated = no
+			NOT = { has_dynamic_modifier = VAL_council_favour_garrison }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_country_flag = VAL_council_garrison_plan_ready
+						VAL_council_operational = yes
+						has_war = yes
+						has_capitulated = no
+						NOT = { has_dynamic_modifier = VAL_council_favour_garrison }
+					}
+				}
+				add_dynamic_modifier = { modifier = VAL_council_favour_garrison days = 90 }
+				hidden_effect = { clr_country_flag = VAL_council_garrison_plan_ready }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
 	VAL_council_favour_garrison = {
 		icon = generic_fortify_the_borders
 		allowed = {

@@ -157,6 +157,20 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             {"map_buildings", "outer_states", "remainder_states", "state_history"},
         )
 
+    def test_stp_focus_art_stays_outside_generated_outputs(self) -> None:
+        patterns = self.entries["focus_ui_assets"]["authored_asset_exclusions"]
+        for pattern in patterns:
+            paths = list(ROOT.glob(pattern))
+            self.assertTrue(paths, pattern)
+            for path in paths:
+                relative = path.relative_to(ROOT).as_posix()
+                owners = [
+                    entry["id"]
+                    for entry in self.entries.values()
+                    if any(fnmatchcase(relative, glob) for glob in entry["output_globs"])
+                ]
+                self.assertEqual(owners, [], relative)
+
     def test_focus_registry_covers_every_current_authored_output(self) -> None:
         from tools.builders.build_adiscord_focus_trees import SOURCES
 

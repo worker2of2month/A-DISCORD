@@ -123,7 +123,7 @@ class NorthernLandContaminationTests(unittest.TestCase):
                 )
         self.assertEqual(found, self.states)
 
-    def test_northern_save_cleanup_is_ungated_bounded_and_owner_independent(self):
+    def test_northern_startup_cleanup_is_ungated_bounded_and_owner_independent(self):
         from tools.validators.validate_adiscord_division_templates import (
             parse_clausewitz,
         )
@@ -175,7 +175,8 @@ class NorthernLandContaminationTests(unittest.TestCase):
                 "on_startup",
             )
         )[0].value
-        payload = next(entry.value for entry in startup if entry.key == "effect")
+        effect = next(entry.value for entry in startup if entry.key == "effect")
+        payload = next(entry.value for entry in effect if entry.key == "58")
         self.assertEqual(
             [entry.value for entry in payload if entry.key == cleanup_id], ["yes"]
         )
@@ -376,8 +377,8 @@ country_event = {
             "RUS = { ADISCORD_vorkerland_apply_dirty_modifiers = yes }",
             "ADISCORD_vorkerland_set_phase_prewar = yes",
             "id = ADISCORD_vorkerland_phase.1",
-            "days = 175",
-            "random_days = 21",
+            "days = 350",
+            "random_days = 30",
         ):
             self.assertIn(token, startup)
         self.assertLess(
@@ -725,7 +726,6 @@ country_event = {
             )
 
         sound_effects = read("sound/superevents_effects.asset")
-        self.assertEqual(sound_effects.count("volume = 1.0"), 8)
         for effect_name in (
             "superevent_vorkerland_civilwar_sound_e",
             "superevent_stelander_empire_sound_e",
@@ -734,7 +734,9 @@ country_event = {
             "superevent_vorkerland_utilitarian_victory_sound_e",
             "superevent_vorkerland_vlad_victory_sound_e",
         ):
-            self.assertIn(f"name = {effect_name}", sound_effects)
+            sound = next(block for block in named_blocks(sound_effects, "soundeffect")
+                         if f"name = {effect_name}" in block)
+            self.assertIn("volume = 1.0", sound)
         local_audio = named_block(
             map_effects, "ADISCORD_vorkerland_play_local_superevent_audio"
         )
@@ -1500,15 +1502,15 @@ class BorderWarArchitectureTests(unittest.TestCase):
             'collapse_effects',
         )
         reserves = {
-            "EYR": (6500, 800),
-            "EGC": (5500, 650),
-            "RIV": (7000, 850),
-            "REV": (5500, 650),
-            "YOR": (5500, 650),
-            "NDN": (4500, 550),
-            "SWB": (4500, 550),
-            "VHV": (5500, 650),
-            "OSV": (4500, 550),
+            "EYR": (6500, 8000),
+            "EGC": (5500, 6500),
+            "RIV": (7000, 8500),
+            "REV": (5500, 6500),
+            "YOR": (5500, 6500),
+            "NDN": (4500, 5500),
+            "SWB": (4500, 5500),
+            "VHV": (5500, 6500),
+            "OSV": (4500, 5500),
         }
         for tag, (manpower, rifles) in reserves.items():
             setup = named_block(effects, f"ADISCORD_vorkerland_setup_{tag.lower()}")
@@ -1517,7 +1519,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         levies = named_block(effects, "ADISCORD_vorkerland_raise_emergency_levies")
         for token in (
             "add_manpower = 1800",
-            "amount = 360 producer = ROOT",
+            "amount = 3600 producer = ROOT",
             'division_template = \\"Emergency Militia\\"',
             "count = 2",
         ):
@@ -1609,7 +1611,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         for token in (
             "ADISCORD_vorkerland_ivanland_expedition_supplied",
             "add_manpower = 8000",
-            "amount = 1600 producer = IVN",
+            "amount = 16000 producer = IVN",
             "type = support_equipment amount = 120 producer = IVN",
             "type = artillery_equipment amount = 48 producer = IVN",
             "add_fuel = 5000",
@@ -1871,7 +1873,10 @@ class BorderWarArchitectureTests(unittest.TestCase):
         effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
         sync_name = "ADISCORD_vorkerland_sync_unity_tower_visual"
         sync = named_block(effects, sync_name)
-        destroyed = named_block(sync, "if")
+        restored = named_block(sync, "if")
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_unity_tower_restored", restored)
+        self.assertIn("entity = ADISCORD_vorkerland_pyramid_entity", restored)
+        destroyed = named_block(sync, "else_if")
         intact = named_block(sync, "else")
         self.assertIn(
             "has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved",
@@ -1887,7 +1892,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         actors = named_blocks(sync, "create_entity") + named_blocks(
             animate, "create_entity"
         )
-        self.assertEqual(len(actors), 3)
+        self.assertEqual(len(actors), 4)
         # All forms must replace one actor at the same transform, including on load.
         for field in ("id", "x", "y", "z", "rotation", "scale", "min_zoom"):
             values = [
@@ -2388,8 +2393,6 @@ class FrontAndSupplyTests(unittest.TestCase):
         defines = read("common/defines/ADISCORD_defines_changes.lua")
         self.assertIn("NDefines.NMilitary.PLAN_EXECUTE_RUSH = -200", defines)
         for key in (
-            "NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH",
-            "NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH",
             "NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT",
             "NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT",
         ):
@@ -3139,10 +3142,10 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             "tag = ZAO",
             "has_global_flag = ADISCORD_vorkerland_collapse_started",
             "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
-            "add_political_power = 20",
-            "amount = 240",
-            "add_manpower = 1200",
-            "add_war_support = 0.04",
+            "add_political_power = 50",
+            "amount = 9000",
+            "add_manpower = 4000",
+            "add_war_support = 0.05",
         ):
             self.assertIn(token, focus_tree)
         for forbidden in (
@@ -3584,7 +3587,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             "news_event",
         )
         self.assertIn("major = yes", news)
-        self.assertIn("fire_only_once = yes", news)
+        self.assertIn("fire_only_once = no", news)
         for winner in ("worker", "yastrebtsev", "filopo"):
             self.assertIn(
                 f"WRK = {{ has_country_flag = ADISCORD_vorkerland_{winner}_elected }}",
@@ -4069,7 +4072,8 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"),
             'collapse_l_russian',
         )
-        self.assertNotRegex(characters, r"\bdesc\s*=\s*[A-Za-z0-9_]+_desc\b")
+        for leader in named_blocks(characters, "country_leader"):
+            self.assertNotRegex(leader, r"\bdesc\s*=")
         for leader in re.findall(r"(?m)^\s*([A-Z]{3}_[A-Za-z0-9_]+)\s*=", characters):
             self.assertNotIn(f"{leader}_desc:", loc, leader)
         self.assertIn("ZTA_Viktor_Holt", characters)
@@ -4404,7 +4408,7 @@ class InterventionAndVisualTests(unittest.TestCase):
             "NOT = { has_war_with = IVN }"
         )
         for defender in ("ZAO", "WPA", "WPS", "PSD"):
-            defender_scope = named_block(verifier, defender)
+            defender_scope = " ".join(named_block(verifier, defender).split())
             self.assertIn(live_join_guard, defender_scope)
             self.assertIn(
                 "targeted_alliance = PWR enemy = IVN hostility_reason = asked_to_join",

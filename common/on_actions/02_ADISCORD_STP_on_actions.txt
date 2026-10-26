@@ -348,6 +348,16 @@ on_actions = {
 	on_war_relation_added = {
 		effect = {
 			if = {
+				limit = { tag = STS }
+				STP_pc_apply_prepared_campaigns = yes
+				FROM = { STP_pc_apply_campaign_defence = yes }
+			}
+			if = {
+				limit = { FROM = { tag = STS } }
+				FROM = { STP_pc_apply_prepared_campaigns = yes }
+				STP_pc_apply_campaign_defence = yes
+			}
+			if = {
 				limit = {
 					OR = {
 						AND = {

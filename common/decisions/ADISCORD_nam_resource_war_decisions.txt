@@ -136,6 +136,73 @@ NAM_colony = {
 		}
 	}
 
+	# The commissioner's echelon trades fuel for metropolitan rifles, three times
+	# at most. The fuel waits in escrow and returns if the metropole vanishes
+	# before the train leaves.
+	NAM_wrk_emergency_echelon = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = NAM }
+		visible = {
+			NAM_colony_phase = yes
+			has_completed_focus = NAM_commissioner_plan
+			NOT = { check_variable = { NAM_wrk_echelons_delivered > 2 } }
+		}
+		available = {
+			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_wrk_metropole_present_tt
+				WRK = { exists = yes }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_wrk_emergency_echelon
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			NOT = { has_fuel < 3000 }
+		}
+		fire_only_once = no
+		days_remove = 30
+		cancel_trigger = {
+			OR = {
+				NAM_country_operable = no
+				NAM_colony_phase = no
+				WRK = { exists = no }
+			}
+		}
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_colony_phase = yes
+						NOT = { has_political_power < 25 }
+						NOT = { has_fuel < 3000 }
+					}
+				}
+				add_political_power = -25
+				add_fuel = -3000
+				custom_effect_tooltip = NAM_wrk_echelon_loaded_tt
+				hidden_effect = {
+					set_variable = { var = NAM_wrk_echelon_deposit value = 3000 }
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_wrk_echelon_delivered_tt
+			hidden_effect = { NAM_wrk_echelon_deliver = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_wrk_echelon_refund_tt
+			hidden_effect = { NAM_wrk_echelon_refund = yes }
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				has_fuel < 9000
+			}
+		}
+	}
+
 	# The gendarmerie combs one district for Weber's cells. One sweep at a
 	# time; a district can be swept again after 120 days.
 	NAM_counterinsurgency_sweep = {

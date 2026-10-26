@@ -2755,4 +2755,63 @@ focus_tree = {
 		ai_will_do = { base = 10 }
 	}
 
+
+
+	focus = {
+		id = STP_cw_seize_vorkerland_stores
+		search_filters = { FOCUS_FILTER_ARMY }
+		allow_branch = {
+			tag = SRP
+			NOT = { has_country_flag = STP_cw_postwar }
+		}
+		available = {
+			has_war = yes
+			NOT = { has_country_flag = STP_cw_postwar }
+			tag = SRP
+			custom_trigger_tooltip = {
+				tooltip = STP_cw_vorkerland_collapsed_tt
+				has_global_flag = ADISCORD_vorkerland_collapse_started
+			}
+		}
+		icon = GFX_focus_STP_cw_seize_vorkerland_stores
+		x = 18
+		y = 3
+		cost = 2
+		prerequisite = { focus = STP_cw_mountain_staff }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 }
+			add_political_power = 35
+		}
+	}
+
+	focus = {
+		id = STP_cw_seize_vorkerland_accounts
+		allow_branch = {
+			tag = SRP
+			NOT = { has_country_flag = STP_cw_postwar }
+		}
+		available = {
+			has_war = yes
+			NOT = { has_country_flag = STP_cw_postwar }
+			tag = SRP
+			custom_trigger_tooltip = {
+				tooltip = STP_cw_vorkerland_collapsed_tt
+				has_global_flag = ADISCORD_vorkerland_collapse_started
+			}
+		}
+		icon = GFX_focus_STP_cw_seize_vorkerland_accounts
+		x = 18
+		y = 4
+		cost = 2
+		prerequisite = { focus = STP_cw_seize_vorkerland_stores }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			custom_effect_tooltip = STP_cw_treasury_3000_tt
+			STP_receive_3000 = yes
+			add_political_power = 75
+		}
+	}
 }

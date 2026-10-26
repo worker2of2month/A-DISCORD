@@ -466,7 +466,7 @@ class PreparationAccounting(unittest.TestCase):
     def test_all_programmes_have_real_focus_gates_and_fit_the_prewar_window(self):
         focus_blocks = {
             fields(value)["id"]: fields(value)
-            for key, _, value in walk(parse(read("focus_trees/Vorkerland/civil_war/focuses.txt")))
+            for key, _, value in walk(parse(read("focus_trees/Vorkerland/prewar/focuses.txt")))
             if key == "focus" and isinstance(value, list)
         }
 
@@ -479,12 +479,12 @@ class PreparationAccounting(unittest.TestCase):
             gate = fields(fields(block)["visible"])["has_completed_focus"]
             self.assertIn(("unlock_decision_tooltip", "=", name), focus_blocks[gate]["completion_reward"])
             self.assertLessEqual(finish_day(gate), 77)
-            self.assertLess(finish_day(gate) + int(fields(block)["days_remove"]) + 21, 175)
+            self.assertLess(finish_day(gate) + int(fields(block)["days_remove"]) + 21, 350)
 
     def test_complete_preparation_routes_fit_with_paid_work_and_contests(self):
         focuses = {
             fields(value)["id"]: fields(value)
-            for key, _, value in walk(parse(read("focus_trees/Vorkerland/civil_war/focuses.txt")))
+            for key, _, value in walk(parse(read("focus_trees/Vorkerland/prewar/focuses.txt")))
             if key == "focus" and isinstance(value, list)
         }
         branches = (
@@ -532,7 +532,7 @@ class PreparationAccounting(unittest.TestCase):
     def test_prewar_ai_plans_select_reachable_nonconflicting_programmes(self):
         focuses = {
             fields(value)["id"]: fields(value)
-            for key, _, value in walk(parse(read("focus_trees/Vorkerland/civil_war/focuses.txt")))
+            for key, _, value in walk(parse(read("focus_trees/Vorkerland/prewar/focuses.txt")))
             if key == "focus" and isinstance(value, list)
         }
         plans = fields(parse(read("common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt")))

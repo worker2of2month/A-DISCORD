@@ -12,7 +12,13 @@
 - `STP/postwar/focuses.txt` - изгнание и возвращение через Нодрул.
 - `VAL/main`, `VAL/defeated`, `VAL/administration` - деревья Кефрейта.
 - `RUS/main` - дерево Руси.
-- `Vorkerland/civil_war`, `Vorkerland/iba_norvane`, `Vorkerland/zao` - деревья Воркерланда.
+- `Vorkerland/prewar` - довоенный WRK и автономии; собирается как общая история фокусов,
+  дерево WKR подключает её корень WRK.
+- `Vorkerland/wkr`, `Vorkerland/vad`, `Vorkerland/tva` - претенденты гражданской войны.
+- `Vorkerland/settlement` - объединённый WRK: рабочее, совместное и техническое урегулирование.
+- `Vorkerland/worker_confederation`, `Vorkerland/technical_directorate`,
+  `Vorkerland/world_empire` - послевоенные деревья маршрутов.
+- `Vorkerland/iba_norvane`, `Vorkerland/zao` - региональные деревья Воркерланда.
 - `shared/generic`, `shared/bookmark` - общие деревья.
 
 После правок соберите игровые файлы из корня мода:

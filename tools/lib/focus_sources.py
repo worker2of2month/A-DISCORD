@@ -17,6 +17,13 @@ FOCUS_SOURCE_GROUPS = {
         "VAL/administration/",
     ),
     "ADISCORD_vorkerland_focus.txt": ("Vorkerland/",),
+    "ADISCORD_Vorkerland_civil_war.txt": (
+        "Vorkerland/prewar/",
+        "Vorkerland/wkr/",
+        "Vorkerland/vad/",
+        "Vorkerland/tva/",
+        "Vorkerland/settlement/",
+    ),
 }
 
 

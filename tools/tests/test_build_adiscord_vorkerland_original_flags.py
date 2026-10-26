@@ -131,7 +131,7 @@ class SuppliedSuccessorFlagTests(unittest.TestCase):
 
     def test_supplied_artwork_survives_generation(self) -> None:
         directories = {
-            "source": (FLAG_ROOT / "source", "RGB"),
+            "source": (ROOT / "tools/assets/source/vorkerland_flags", "RGB"),
             "regular": (FLAG_ROOT, "RGBA"),
             "medium": (FLAG_ROOT / "medium", "RGBA"),
             "small": (FLAG_ROOT / "small", "RGBA"),

@@ -1,0 +1,10 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_WRK_worx_madness"
+		texturefile = "gfx/interface/decisions/WRK_worx_madness.png"
+	}
+	spriteType = {
+		name = "GFX_WRK_worx_scale"
+		texturefile = "gfx/interface/decisions/ui/ADISCORD_decisions_progress_bg.dds"
+	}
+}

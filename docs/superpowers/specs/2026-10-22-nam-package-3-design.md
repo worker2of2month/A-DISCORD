@@ -40,7 +40,7 @@ oil must matter to other countries.
 
 | Phase | Days (approx.) | Content |
 | --- | --- | --- |
-| Colony | 0 - 175..196 | Metropolitan oil quotas, concealed reserve, first pillar demands, memoir 1 |
+| Colony | 0 - 350..380 | Metropolitan oil quotas, concealed reserve, first pillar demands, memoir 1 |
 | Independence | collapse event | Declaration event sets the starting ladder balance and opens the tension clock |
 | Restitution pressure | collapse - war | Tension clock, notes, ultimatum, oil contracts, mobilisation orders, defence lines, underground, rivals |
 | Resource war | up to 420 | Front missions, scorched wells, seal discipline, oil-score settlement |

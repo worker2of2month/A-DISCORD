@@ -234,7 +234,7 @@ class NamCampaignTests(unittest.TestCase):
 
     def test_unique_layout_and_real_rewards(self):
         expected = {
-            "main": (self.focuses, 110), "postwar": (self.postwar, 54), "defeated": (self.defeated, 24),
+            "main": (self.focuses, 117), "postwar": (self.postwar, 54), "defeated": (self.defeated, 24),
             "exile_radical": (self.exile_trees["exile_radical"][1], 74),
             "exile_humanist": (self.exile_trees["exile_humanist"][1], 73),
             "exile_corporate": (self.exile_trees["exile_corporate"][1], 34),

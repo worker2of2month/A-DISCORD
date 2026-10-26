@@ -1,4 +1,16 @@
 on_actions = {
+	on_daily_WRK = {
+		effect = {
+			if = {
+				limit = {
+					has_country_flag = WRK_worx_initialized
+					NOT = { has_country_flag = WRK_worx_supervised }
+				}
+				WRK_worx_daily = yes
+			}
+		}
+	}
+
 	on_startup = {
 		effect = {
 			58 = { ADISCORD_vorkerland_clear_northern_dirty_modifiers = yes }
@@ -22,11 +34,12 @@ on_actions = {
 						RUS = { ADISCORD_vorkerland_apply_dirty_modifiers = yes }
 					}
 					ADISCORD_vorkerland_set_phase_prewar = yes
+					ADISCORD_vorkerland_prewar_crisis_initialize = yes
 					country_event = { id = ADISCORD_vorkerland_preparation.1 days = 14 }
 					country_event = {
 						id = ADISCORD_vorkerland_phase.1
-						days = 175
-						random_days = 21
+						days = 350
+						random_days = 30
 					}
 				}
 			}

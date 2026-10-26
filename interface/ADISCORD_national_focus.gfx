@@ -1,5 +1,105 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_STP_pe_festival_work_b"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_pe_festival_work_b.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pe_festival_opening"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_pe_festival_opening.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pe_festival_next_day"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_pe_festival_next_day.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pe_festival_policy_b"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_pe_festival_policy_b.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pe_festival_work_a"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_pe_festival_work_a.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pe_festival_policy_a"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_pe_festival_policy_a.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_festival_charter"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_festival_charter.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_festival_clinics"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_festival_clinics.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_festival_immunity"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_festival_immunity.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_ch_eternal_festival"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_ch_eternal_festival.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_ch_free_labour"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_ch_free_labour.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_slave_market"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_slave_market.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_public_orgies"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_public_orgies.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_hard_drugs"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_hard_drugs.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_republic_open_settlement"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_republic_open_settlement.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_republic_civil_records"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_republic_civil_records.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_party_unbound_revolution"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_pw_party_unbound_revolution.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_festival_accounts"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_festival_accounts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_festival_levy"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_festival_levy.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_festival_patrons"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_festival_patrons.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_STP_party_regimental_organizers"
 		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_regimental_organizers.png"
 	}
@@ -11,7 +111,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_pe_festival_ending_a"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_pe_festival_ending_a.png"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_pe_festival_ending_a.png"
 	}
 
 	spriteType = {
@@ -21,17 +121,17 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_party_industrial_board"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_industrial_board.png"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_industrial_board.png"
 	}
 
 	spriteType = {
 		name = "GFX_focus_STP_party_research_council"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_research_council.png"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_research_council.png"
 	}
 
 	spriteType = {
 		name = "GFX_focus_STP_party_technical_institutes"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_technical_institutes.png"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_technical_institutes.png"
 	}
 
 	spriteType = {
@@ -41,7 +141,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_ch_service_act"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ch_service_act.png"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_ch_service_act.png"
 	}
 
 	spriteType = {
@@ -59,7 +159,7 @@ spriteTypes = {
 	}
 	spriteType = { name = "GFX_focus_WRK_worker_restore_unity_tower" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
 	spriteType = { name = "GFX_focus_WRK_joint_restore_unity_tower" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
-	spriteType = { name = "GFX_focus_WRK_utilitarian_restore_unity_tower" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_restore_unity_tower" texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png" }
 	spriteType = { name = "GFX_focus_WRK_worker_west_mandate_offices" texturefile = "gfx/interface/goals/focus_generic_advisors.dds" }
 	spriteType = { name = "GFX_focus_WRK_worker_west_solidarity_committees" texturefile = "gfx/interface/goals/focus_generic_military_mission.dds" }
 	spriteType = { name = "GFX_focus_WRK_worker_west_mandate_for_itora" texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds" }
@@ -68,10 +168,10 @@ spriteTypes = {
 	spriteType = { name = "GFX_focus_WRK_joint_west_imperial_columns" texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds" }
 	spriteType = { name = "GFX_focus_WRK_joint_west_return_of_the_marches" texturefile = "gfx/interface/goals/focus_generic_military_mission.dds" }
 	spriteType = { name = "GFX_focus_WRK_joint_west_imperial_settlement" texturefile = "gfx/interface/goals/focus_generic_advisors.dds" }
-	spriteType = { name = "GFX_focus_WRK_utilitarian_west_corridor_survey" texturefile = "gfx/interface/goals/goal_generic_construct_civ_factory.dds" }
-	spriteType = { name = "GFX_focus_WRK_utilitarian_west_engineer_battalions" texturefile = "gfx/interface/goals/focus_generic_military_industry.dds" }
-	spriteType = { name = "GFX_focus_WRK_utilitarian_west_engineering_border" texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds" }
-	spriteType = { name = "GFX_focus_WRK_utilitarian_west_technical_trusteeship" texturefile = "gfx/interface/goals/goal_generic_construct_civ_factory.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_west_corridor_survey" texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_west_engineer_battalions" texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_west_engineering_border" texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_west_technical_trusteeship" texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png" }
 
 	###STP
 	spriteType = {
@@ -100,11 +200,11 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_focus_STP_pc_shabrat_politics"
-		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_shabrat_politics.png"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_shabrat_politics.png"
 	}
 	spriteType = {
 		name = "GFX_focus_STP_End_Kefreit"
-		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_End_Kefreit.png"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_End_Kefreit.png"
 	}
 	spriteType = {
 		name = "GFX_focus_STP_Nectar_of_the_Gods"
@@ -202,7 +302,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_Steland_Hegemony"
-		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_Steland_Hegemony.png"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_Steland_Hegemony.png"
 	}
 
 	spriteType = {
@@ -415,17 +515,17 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_cw_first_postwar_budget"
-		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_cw_first_postwar_budget.png"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_cw_first_postwar_budget.png"
 	}
 
 	spriteType = {
 		name = "GFX_focus_STP_cw_restore_civil_authority"
-		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_cw_restore_civil_authority.png"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_cw_restore_civil_authority.png"
 	}
 
 	spriteType = {
 		name = "GFX_focus_STP_pc_after_victory"
-		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_after_victory.png"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_after_victory.png"
 	}
 
 	spriteType = {
@@ -630,22 +730,22 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_pw_republic_district_authority"
-		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pw_republic_district_authority.png"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_republic_district_authority.png"
 	}
 
 	spriteType = {
 		name = "GFX_focus_STP_pw_republic_new_republic"
-		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pw_republic_new_republic.png"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_republic_new_republic.png"
 	}
 
 	spriteType = {
 		name = "GFX_focus_STP_pc_lib_assembly"
-		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_lib_assembly.png"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_lib_assembly.png"
 	}
 
 	spriteType = {
 		name = "GFX_focus_STP_pc_freedom_open"
-		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_freedom_open.png"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_freedom_open.png"
 	}
 	spriteType = {
 		name = "GFX_focus_STP_ps_asylum_protocol"
@@ -659,7 +759,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_goal_generic_elections"
-		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_shabrat_politics.png"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_shabrat_politics.png"
 	}
 
 	spriteType = {
@@ -1302,43 +1402,43 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_utilitarian_form_reconstruction_directorate"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_utilitarian_standardize_power_grid"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_utilitarian_rebuild_machine_tool_pool"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_utilitarian_expand_national_laboratories"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_utilitarian_publish_integration_metrics"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_utilitarian_rationalize_districts"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_utilitarian_prioritize_public_utilities"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_utilitarian_prioritize_industrial_recovery"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_utilitarian_publish_reconstruction_ledger"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_utilitarian_build_measurable_republic"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 
 	###WKR
@@ -1620,6 +1720,26 @@ spriteTypes = {
 		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
+		name = "GFX_focus_VAD_assess_central_demands"
+		texturefile = "gfx/interface/goals/focus_generic_advisors.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_VAD_loyalty_to_the_centre"
+		texturefile = "gfx/interface/goals/focus_generic_military_mission.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_VAD_own_emergency_rule"
+		texturefile = "gfx/interface/goals/focus_generic_home_defense.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_VAD_central_garrison_compact"
+		texturefile = "gfx/interface/goals/goal_generic_defence.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_VAD_district_emergency_council"
+		texturefile = "gfx/interface/goals/focus_generic_concessions.dds"
+	}
+	spriteType = {
 		name = "GFX_focus_VAD_proclaim_joint_charter"
 		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
@@ -1877,248 +1997,248 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_TVA_codify_utilitarian_directorate"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_reroute_city_grid"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_deploy_field_laboratories"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_raise_technical_battalions"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_seal_the_approaches"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_issue_emergency_output_norms"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_build_mobile_repair_trains"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_publish_operational_metrics"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_optimize_for_throughput"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_protect_irreplaceable_specialists"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_standardize_emergency_administration"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_delegate_to_algorithmic_board"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_select_trial_protocol"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_test_remote_fire_control"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_test_adaptive_logistics"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_integrate_field_results"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_harden_switching_stations"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_close_operational_loop"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_unattended_shifts"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_delegate_fire_plans_to_board"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_bunker_specialist_cadres"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_standardize_assault_teams"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_network_observation_posts"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_mandate_modular_repair"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_print_interchangeable_repair_modules"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_preposition_switching_crews"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_cross_validate_trial_logs"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_authorize_iteration_two"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_open_the_remaining_fronts"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_declare_continuous_mobilization"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_convert_the_civil_grid"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_run_the_republic_as_one_process"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_enact_the_preservation_protocol"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_evacuate_the_design_bureaus"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_certify_the_surviving_cadre"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_merge_iteration_with_field_command"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_mass_produce_assault_modules"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_link_observers_to_fire_control"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_turn_repair_trains_into_supply_web"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_run_live_front_validation"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_convene_the_load_board"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_run_the_grid_at_war_load"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_hold_back_civil_power"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_doctrine_of_continuous_assault"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_replace_losses_from_the_line"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_doctrine_of_the_measured_front"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_hold_with_fewer_better_crews"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_declare_the_final_iteration"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_spend_the_reserve_cadre"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_seal_the_technical_core"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_certify_the_completed_programmes"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_publish_the_reconstruction_index"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_divert_the_research_budget"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_open_the_technical_exchange"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_hire_the_bracket_victors"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 
 	spriteType = {
 		name = "GFX_focus_TVA_stand_up_the_grid_air_staff"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_print_unattended_strike_packages"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_keep_the_interdictors_on_station"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_open_the_exchange_window"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_export_surplus_output"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_import_surviving_specialists"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 
 	###ADISCORD
@@ -2148,7 +2268,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_pw_party_defence_combine"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_pw_party_defence_combine.png"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_pw_party_defence_combine.png"
 	}
 
 	spriteType = {
@@ -2163,7 +2283,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_party_personnel_commissions"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_personnel_commissions.png"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_personnel_commissions.png"
 	}
 
 	spriteType = {
@@ -2577,5 +2697,78 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_focus_WRK_prepare_military_evacuation"
 		texturefile = "gfx/interface/goals/focus_generic_arms_trade.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_face_the_hourglass"
+		texturefile = "gfx/interface/goals/goal_generic_political_pressure.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_emergency_central_budget"
+		texturefile = "gfx/interface/goals/focus_generic_central_planning.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_district_emergency_powers"
+		texturefile = "gfx/interface/goals/focus_generic_self_management.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_requisition_commissions"
+		texturefile = "gfx/interface/goals/focus_generic_price_controls.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_district_treasuries"
+		texturefile = "gfx/interface/goals/focus_generic_monetary_union.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_last_common_budget"
+		texturefile = "gfx/interface/goals/focus_generic_reduce_unneccessary_expenditure.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_party_cell_rolls"
+		texturefile = "gfx/interface/goals/focus_generic_workers.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_factory_committee_councils"
+		texturefile = "gfx/interface/goals/focus_generic_freedom_council.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_district_staff_exercises"
+		texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_petrichev_depots"
+		texturefile = "gfx/interface/goals/focus_generic_supply_line.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_worx_network_register"
+		texturefile = "gfx/interface/goals/focus_generic_phone.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_machine_tool_fund"
+		texturefile = "gfx/interface/goals/focus_generic_industry_investment.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_stake_on_one_pillar"
+		texturefile = "gfx/interface/goals/focus_generic_national_security.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_balance_the_pillars"
+		texturefile = "gfx/interface/goals/focus_generic_the_council_of_europe.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_inspect_the_unity_tower"
+		texturefile = "gfx/interface/goals/focus_generic_secret_service_agency.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_reinforce_the_tower_guard"
+		texturefile = "gfx/interface/goals/goal_generic_fortify_city.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_disperse_the_government"
+		texturefile = "gfx/interface/goals/focus_generic_improve_the_administration.dds"
+	}
+
+	spriteType = {
+		name = "GFX_focus_TVA"
+		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 }

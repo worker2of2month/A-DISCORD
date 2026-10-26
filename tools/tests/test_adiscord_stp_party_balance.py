@@ -48,6 +48,51 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
         cls.decisions = read(DECISIONS)
         cls.loc = read(LOC)
 
+    def test_apparatus_card_discloses_only_enabled_faction_effects(self):
+        dynamic = parse_clausewitz(read(
+            ROOT / 'common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt'
+        ))
+        faction = one(dynamic, 'STP_pf_balance_dynamic')
+        loyalty = one(dynamic, 'STP_apparatus_loyalty_dynamic_modifier')
+        self.assertNotIn('icon', {entry.key for entry in faction})
+        self.assertIn('icon', {entry.key for entry in loyalty})
+        self.assertEqual(one(loyalty, 'stability_factor'), 'STP_loy_stability_factor')
+        self.assertEqual(one(faction, 'stability_factor'), 'STP_pf_security_effect')
+        texts = parse_clausewitz(read(
+            ROOT / 'common/scripted_localisation/ADISCORD_STP_scripted_loc.txt'
+        ))
+        display = next(
+            entry.value for entry in texts
+            if one(entry.value, 'name') == 'STPGetApparatusFactionEffects'
+        )
+        variants = [entry.value for entry in display if entry.key == 'text']
+        enabled = one(faction, 'enable')
+        shown = one(variants[0], 'trigger')
+        for active in (False, True):
+            for initialized in (False, True):
+                for capitulated in (False, True):
+                    facts = {
+                        ('STP', 'STP_pf_active', 'yes'): active,
+                        ('STP', 'has_country_flag', 'STP_pf_initialized'): initialized,
+                        ('STP', 'has_capitulated', 'no'): not capitulated,
+                    }
+                    expected = active and initialized and not capitulated
+                    self.assertEqual(matches_conditions(enabled, facts), expected)
+                    self.assertEqual(matches_conditions(shown, facts), expected)
+        for language in ('russian', 'english'):
+            loc = dict(re.findall(
+                r'^\s*([^#\s:]+):(?:\d+)?\s*"(.*)"\s*$',
+                read(ROOT / f'localisation/{language}/ADISCORD_STP_l_{language}.yml'),
+                re.M,
+            ))
+            for entry in faction:
+                if entry.key != 'enable':
+                    self.assertIn('[?' + entry.value + '|', loc['STP_apparatus_faction_effects'])
+            self.assertIn(
+                '[STPGetApparatusFactionEffects]',
+                loc['STP_apparatus_loyalty_dynamic_modifier_desc'],
+            )
+
     def test_faction_negotiations_remain_bounded_and_expensive(self) -> None:
         for faction in (
             "conservatives",
@@ -163,10 +208,53 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
             self.assertIn(f"has_political_power < {pp}", price)
             self.assertIn(f"value = {cash}", price)
             self.assertEqual(reward.count(f"add_political_power = -{pp}"), 1)
-            self.assertIn("STP_pw_party_nod_threat_current = yes", reward)
+            if action == "staff_readiness":
+                self.assertIn("has_war_with = NOD", reward)
+                self.assertNotIn("STP_pw_party_nod_threat_current", reward)
+            else:
+                self.assertIn("STP_pw_party_nod_threat_current = yes", reward)
             key = f"STP_pw_party_nod_{action}_cost"
             for suffix in ("", "_blocked", "_tooltip"):
                 self.assertIn(key + suffix + ":", self.loc)
+
+    def test_northern_staff_plan_requires_its_war_and_ends_at_peace(self) -> None:
+        decision_id = "STP_pw_party_nod_staff_readiness"
+        decision = one(parse_clausewitz(named_block(self.decisions, decision_id)), decision_id)
+        idea_id = decision_id + "_idea"
+        idea = one(parse_clausewitz(named_block(self.ideas, idea_id)), idea_id)
+        self.assertEqual(one(decision, "fire_only_once"), "yes")
+        self.assertNotIn("STP_pw_party_nod_staff_ready", str(decision))
+        reward = one(one(decision, "complete_effect"), "hidden_effect")
+        for war_with_nod, war_with_val in ((False, False), (False, True), (True, False), (True, True)):
+            for pp, cash in ((35, 720), (34.99, 720), (35, 719.99)):
+                facts = {
+                    ("STP", "tag", "STP"): True,
+                    ("STP", "has_country_flag", "STP_cw_postwar"): True,
+                    ("STP", "has_country_flag", "STP_pw_party_nod_threat_active"): not war_with_nod,
+                    ("STP", "has_war_with", "NOD"): war_with_nod,
+                    ("STP", "has_war_with", "VAL"): war_with_val,
+                    ("STP", "is_subject", "no"): True,
+                    ("STP", "has_capitulated", "no"): True,
+                    ("STP", "numeric", "has_political_power"): pp,
+                    ("STP", "variable", "ADISCORD_economy_treasury"): cash,
+                }
+                with self.subTest(war=war_with_nod, other_war=war_with_val, pp=pp, cash=cash):
+                    self.assertTrue(matches_conditions(one(decision, "visible"), facts))
+                    self.assertEqual(matches_conditions(one(decision, "available"), facts), war_with_nod)
+                    self.assertEqual(matches_conditions(one(idea, "cancel"), facts), not war_with_nod)
+                    effects = [effect for _, effect in selected_effects(reward, facts)]
+                    paid = war_with_nod and pp >= 35 and cash >= 720
+                    self.assertEqual(sum(effect.key == "add_timed_idea" for effect in effects), int(paid))
+                    self.assertEqual(sum(effect.key == "add_political_power" for effect in effects), int(paid))
+                    self.assertEqual(sum(effect.key == "subtract_from_variable" for effect in effects), int(paid))
+                    if paid:
+                        timed = next(effect.value for effect in effects if effect.key == "add_timed_idea")
+                        self.assertEqual(one(timed, "idea"), idea_id)
+                        self.assertEqual(one(timed, "days"), "180")
+        for language in ("russian", "english"):
+            loc = ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml"
+            self.assertTrue(loc.read_bytes().startswith(b"\xef\xbb\xbf"))
+            self.assertRegex(read(loc), r'(?m)^ STP_pw_party_nod_staff_readiness_peace_tt: "[^"\n]+"$')
 
     def test_sovereignty_dispatch_does_not_read_its_own_completion(self) -> None:
         start = named_block(self.effects, "STP_pw_party_start_nod_invasion_threat")

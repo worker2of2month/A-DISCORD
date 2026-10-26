@@ -49,6 +49,7 @@ ADISCORD_vorkerland_macri_volunteer_corps = {
 ADISCORD_vorkerland_civil_war_attrition = {
 	icon = GFX_modifiers_generic_military_plans
 	attacker_modifier = yes
+	enable = { always = yes }
 	remove_trigger = { always = no }
 
 	air_cas_present_factor = -0.20
@@ -225,4 +226,20 @@ ADISCORD_vorkerland_prep_rail_crews = {
 	icon = GFX_modifiers_generic_military_plans
 	local_supplies = 0.20
 	remove_trigger = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+}
+
+WRK_worx_personal_rule = {
+	icon = GFX_idea_generic_central_management
+	enable = { WRK_worx_active = yes }
+	stability_factor = WRK_worx_stability
+	industrial_capacity_factory = WRK_worx_output
+}
+
+WRK_worx_directorate = {
+	icon = GFX_idea_generic_central_management
+	enable = { WRK_worx_government = yes }
+	research_speed_factor = WRK_worx_research
+	industrial_capacity_factory = WRK_worx_production
+	political_power_gain = WRK_worx_authority
+	stability_factor = WRK_worx_order
 }

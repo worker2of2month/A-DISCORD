@@ -62,7 +62,7 @@
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_district_authority_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_political_power_gain value = 0.05 }
+				add_to_variable = { var = STP_pw_political_power_gain value = 0.15 }
 				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.035 }
 				STP_pw_refresh_modifier = yes
 				set_temp_variable = { var = STP_pf_selected value = 2 }
@@ -466,8 +466,8 @@
 
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_industrial_settlement_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_production_factory_max_efficiency_factor value = 0.035 }
-				add_to_variable = { var = STP_pw_production_speed_buildings_factor value = 0.025 }
+				add_to_variable = { var = STP_pw_production_factory_max_efficiency_factor value = 0.05 }
+				add_to_variable = { var = STP_pw_production_speed_buildings_factor value = 0.05 }
 				STP_pw_refresh_modifier = yes
 				set_temp_variable = { var = STP_pf_selected value = 6 }
 				STP_pf_shift = yes
@@ -502,10 +502,10 @@
 			country_event = { id = ADISCORD_STP_pc.34 days = 1 }
 			unlock_decision_tooltip = STP_pw_party_refit_guard
 			custom_effect_tooltip = STP_pw_party_refit_guard_unlock_summary_tt
-			army_experience = 20
+			army_experience = 35
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_army_register_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_army_org_factor value = 0.01 }
+				add_to_variable = { var = STP_pw_army_org_factor value = 0.025 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -570,6 +570,16 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 150
+				producer = ROOT
+			}
+			add_equipment_to_stockpile = {
+				type = train_equipment
+				amount = 10
+				producer = ROOT
+			}
 			activate_advisor = ADISCORD_staff_STP_Viktor_Korneev
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_supply_service_delta } }
 			hidden_effect = {
@@ -1286,8 +1296,8 @@
 			add_stability = 0.02
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_district_congress_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_stability_factor value = 0.01 }
-				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.025 }
+				add_to_variable = { var = STP_pw_stability_factor value = 0.02 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.05 }
 				add_to_variable = { var = STP_pw_political_power_gain value = -0.02 }
 				STP_pw_refresh_modifier = yes
 			}
@@ -1337,8 +1347,8 @@
 			add_political_power = 75
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_executive_secretariat_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_political_power_gain value = 0.05 }
-				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.015 }
+				add_to_variable = { var = STP_pw_political_power_gain value = 0.12 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.03 }
 				add_to_variable = { var = STP_pw_stability_factor value = -0.01 }
 				STP_pw_refresh_modifier = yes
 			}
@@ -1448,6 +1458,11 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 200
+				producer = ROOT
+			}
 			if = {
 				limit = { NOT = { STP_pf_settled = yes } }
 				custom_effect_tooltip = STP_pf_army_program_2_tt
@@ -1494,8 +1509,8 @@
 			army_experience = 20
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_field_staff_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_planning_speed value = 0.055 }
-				add_to_variable = { var = STP_pw_army_org_factor value = 0.02 }
+				add_to_variable = { var = STP_pw_planning_speed value = 0.10 }
+				add_to_variable = { var = STP_pw_army_org_factor value = 0.035 }
 				STP_pw_refresh_modifier = yes
 			}
 			hidden_effect = { STP_pf_apply_focus_program = yes }
@@ -3422,7 +3437,7 @@
 
 	focus = {
 		id = STP_pw_party_unbound_revolution
-		icon = GFX_focus_STP_party_rear_administration
+		icon = GFX_focus_STP_pw_party_unbound_revolution
 		x = -3
 		y = 3
 		cost = 2
@@ -3460,7 +3475,7 @@
 
 	focus = {
 		id = STP_party_festival_patrons
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_party_festival_patrons
 		x = -5
 		y = 4
 		cost = 2
@@ -3527,7 +3542,7 @@
 
 	focus = {
 		id = STP_party_festival_levy
-		icon = GFX_focus_STP_ministry_funding
+		icon = GFX_focus_STP_party_festival_levy
 		x = -1
 		y = 4
 		cost = 2
@@ -3590,7 +3605,7 @@
 
 	focus = {
 		id = STP_party_public_orgies
-		icon = GFX_focus_STP_pe_festival_ending_a
+		icon = GFX_focus_STP_party_public_orgies
 		x = -5
 		y = 5
 		cost = 2
@@ -3640,7 +3655,7 @@
 
 	focus = {
 		id = STP_party_hard_drugs
-		icon = GFX_focus_STP_pe_festival_ending_a
+		icon = GFX_focus_STP_party_hard_drugs
 		x = -1
 		y = 5
 		cost = 2
@@ -3696,7 +3711,7 @@
 
 	focus = {
 		id = STP_party_slave_market
-		icon = GFX_focus_STP_cw_public_lists
+		icon = GFX_focus_STP_party_slave_market
 		x = -5
 		y = 6
 		cost = 2
@@ -3763,7 +3778,7 @@
 
 	focus = {
 		id = STP_ch_free_labour
-		icon = GFX_focus_STP_party_personnel_commissions
+		icon = GFX_focus_STP_ch_free_labour
 		x = -1
 		y = 6
 		cost = 2
@@ -3804,7 +3819,7 @@
 
 	focus = {
 		id = STP_party_festival_accounts
-		icon = GFX_focus_STP_cw_protocol_office
+		icon = GFX_focus_STP_party_festival_accounts
 		x = -3
 		y = 7
 		cost = 2
@@ -3845,7 +3860,7 @@
 
 	focus = {
 		id = STP_party_festival_clinics
-		icon = GFX_focus_STP_ps_evacuation_plan
+		icon = GFX_focus_STP_party_festival_clinics
 		x = -5
 		y = 8
 		cost = 1
@@ -3904,7 +3919,7 @@
 
 	focus = {
 		id = STP_party_festival_immunity
-		icon = GFX_focus_STP_ph_last_signature
+		icon = GFX_focus_STP_party_festival_immunity
 		x = -1
 		y = 8
 		cost = 1
@@ -3961,7 +3976,7 @@
 
 	focus = {
 		id = STP_ch_eternal_festival
-		icon = GFX_focus_STP_party_presidium_broadcast
+		icon = GFX_focus_STP_ch_eternal_festival
 		x = -3
 		y = 9
 		cost = 3
@@ -4016,7 +4031,7 @@
 
 	focus = {
 		id = STP_party_festival_charter
-		icon = GFX_focus_STP_pv_glory_festival
+		icon = GFX_focus_STP_party_festival_charter
 		x = -3
 		y = 10
 		cost = 2
@@ -5337,7 +5352,7 @@
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_political_power_gain
-					value = 0.03
+					value = 0.08
 				}
 				add_to_variable = {
 					var = STP_pw_stability_factor
@@ -5435,7 +5450,7 @@
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_political_power_gain
-					value = 0.03
+					value = 0.07
 				}
 				add_to_variable = {
 					var = STP_pw_ADISCORD_economy_admin_expense_factor
@@ -5864,7 +5879,7 @@
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pw_production_speed_buildings_factor
-					value = 0.025
+					value = 0.05
 				}
 				add_to_variable = {
 					var = STP_pw_political_power_gain
@@ -5929,7 +5944,7 @@
 				}
 				add_to_variable = {
 					var = STP_pw_political_power_gain
-					value = 0.02
+					value = 0.08
 				}
 				add_to_variable = {
 					var = STP_pf_advisers_support
@@ -6842,7 +6857,7 @@
 
 	focus = {
 		id = STP_pe_festival_opening
-		icon = GFX_focus_STP_party_presidium_broadcast
+		icon = GFX_focus_STP_pe_festival_opening
 		x = 3
 		y = 3
 		cost = 1
@@ -6883,7 +6898,7 @@
 
 	focus = {
 		id = STP_pe_festival_policy_a
-		icon = GFX_focus_STP_ps_expedition_logistics
+		icon = GFX_focus_STP_pe_festival_policy_a
 		x = 1
 		y = 4
 		cost = 2
@@ -6917,7 +6932,7 @@
 
 	focus = {
 		id = STP_pe_festival_policy_b
-		icon = GFX_focus_STP_pe_festival_ending_a
+		icon = GFX_focus_STP_pe_festival_policy_b
 		x = 5
 		y = 4
 		cost = 2
@@ -6951,7 +6966,7 @@
 
 	focus = {
 		id = STP_pe_festival_work_a
-		icon = GFX_focus_STP_ps_foreign_supply_desk
+		icon = GFX_focus_STP_pe_festival_work_a
 		x = 1
 		y = 5
 		cost = 2
@@ -7025,7 +7040,7 @@
 
 	focus = {
 		id = STP_pe_festival_work_b
-		icon = GFX_focus_STP_ps_northern_credit
+		icon = GFX_focus_STP_pe_festival_work_b
 		x = 5
 		y = 5
 		cost = 2
@@ -7114,7 +7129,7 @@
 
 	focus = {
 		id = STP_pe_festival_next_day
-		icon = GFX_focus_STP_ps_evacuation_plan
+		icon = GFX_focus_STP_pe_festival_next_day
 		x = 3
 		y = 7
 		cost = 1

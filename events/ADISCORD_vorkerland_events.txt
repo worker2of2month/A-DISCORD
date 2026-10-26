@@ -602,6 +602,7 @@ country_event = {
 
 	immediate = {
 		ADISCORD_vorkerland_prep_close_prewar = yes
+		ADISCORD_vorkerland_prewar_balance_snapshot = yes
 		ADISCORD_vorkerland_begin_collapse = yes
 		set_global_flag = ADISCORD_vorkerland_collapse_started
 		# begin_collapse refreshes Vorkerland trees before this flag exists.
@@ -663,7 +664,7 @@ country_event = {
 		WKR = {
 			inherit_technology = WRK
 			load_focus_tree = {
-				tree = ADISCORD_vorkerland_civil_war_focus
+				tree = ADISCORD_vorkerland_wkr_focus
 				keep_completed = yes
 				copy_completed_from = WRK
 			}
@@ -2395,29 +2396,41 @@ country_event = {
 
 	option = {
 		name = ADISCORD_vorkerland_phase.1.a
-		clr_global_flag = ADISCORD_vorkerland_preference_worker
-		clr_global_flag = ADISCORD_vorkerland_preference_joint
-		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
-		set_global_flag = ADISCORD_vorkerland_preference_worker
-		country_event = { id = ADISCORD_vorkerland_collapse.1 }
+		custom_effect_tooltip = ADISCORD_vorkerland_phase_side_committees_tt
+		custom_effect_tooltip = ADISCORD_vorkerland_phase_worker_fate_tt
+		hidden_effect = {
+			clr_global_flag = ADISCORD_vorkerland_preference_worker
+			clr_global_flag = ADISCORD_vorkerland_preference_joint
+			clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
+			set_global_flag = ADISCORD_vorkerland_preference_worker
+			country_event = { id = ADISCORD_vorkerland_collapse.1 }
+		}
 		ai_chance = { factor = 45 }
 	}
 	option = {
 		name = ADISCORD_vorkerland_phase.1.b
-		clr_global_flag = ADISCORD_vorkerland_preference_worker
-		clr_global_flag = ADISCORD_vorkerland_preference_joint
-		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
-		set_global_flag = ADISCORD_vorkerland_preference_joint
-		country_event = { id = ADISCORD_vorkerland_collapse.1 }
+		custom_effect_tooltip = ADISCORD_vorkerland_phase_side_staff_tt
+		custom_effect_tooltip = ADISCORD_vorkerland_phase_worker_fate_tt
+		hidden_effect = {
+			clr_global_flag = ADISCORD_vorkerland_preference_worker
+			clr_global_flag = ADISCORD_vorkerland_preference_joint
+			clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
+			set_global_flag = ADISCORD_vorkerland_preference_joint
+			country_event = { id = ADISCORD_vorkerland_collapse.1 }
+		}
 		ai_chance = { factor = 30 }
 	}
 	option = {
 		name = ADISCORD_vorkerland_phase.1.c
-		clr_global_flag = ADISCORD_vorkerland_preference_worker
-		clr_global_flag = ADISCORD_vorkerland_preference_joint
-		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
-		set_global_flag = ADISCORD_vorkerland_preference_utilitarian
-		country_event = { id = ADISCORD_vorkerland_collapse.1 }
+		custom_effect_tooltip = ADISCORD_vorkerland_phase_side_engineers_tt
+		custom_effect_tooltip = ADISCORD_vorkerland_phase_worker_fate_tt
+		hidden_effect = {
+			clr_global_flag = ADISCORD_vorkerland_preference_worker
+			clr_global_flag = ADISCORD_vorkerland_preference_joint
+			clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
+			set_global_flag = ADISCORD_vorkerland_preference_utilitarian
+			country_event = { id = ADISCORD_vorkerland_collapse.1 }
+		}
 		ai_chance = { factor = 25 }
 	}
 }
@@ -3176,7 +3189,7 @@ news_event = {
 }
 
 # The worker and technocratic settlements end at the Unity Tower; the route's
-# own postwar tree replaces the civil-war graph in a fresh event scope.
+# own postwar tree replaces the settlement tree in a fresh event scope.
 country_event = {
 	id = ADISCORD_vorkerland_postwar.6
 	hidden = yes
@@ -3199,6 +3212,7 @@ country_event = {
 				tree = ADISCORD_vorkerland_technical_directorate_focus
 				keep_completed = no
 			}
+			WRK_worx_initialize = yes
 		}
 		mark_focus_tree_layout_dirty = yes
 	}
@@ -3522,4 +3536,462 @@ country_event = {
 			}
 		}
 	}
+}
+
+# Prewar crisis dispatcher: one unseen crisis every 21-42 days while the
+# confederation still stands. Each crisis records itself when it opens; the
+# chain ends with the prewar phase or once every crisis has been seen.
+country_event = {
+	id = ADISCORD_vorkerland_preparation.40
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = WRK
+		has_global_flag = ADISCORD_vorkerland_phase_prewar
+	}
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = ADISCORD_vorkerland_prewar_crisis_41
+					has_global_flag = ADISCORD_vorkerland_prewar_crisis_42
+					has_global_flag = ADISCORD_vorkerland_prewar_crisis_43
+					has_global_flag = ADISCORD_vorkerland_prewar_crisis_44
+					has_global_flag = ADISCORD_vorkerland_prewar_crisis_45
+					has_global_flag = ADISCORD_vorkerland_prewar_crisis_46
+					has_global_flag = ADISCORD_vorkerland_prewar_crisis_47
+					has_global_flag = ADISCORD_vorkerland_prewar_crisis_48
+				}
+			}
+			random_list = {
+				10 = {
+					modifier = { factor = 0 has_global_flag = ADISCORD_vorkerland_prewar_crisis_41 }
+					country_event = { id = ADISCORD_vorkerland_preparation.41 }
+				}
+				10 = {
+					modifier = { factor = 0 has_global_flag = ADISCORD_vorkerland_prewar_crisis_42 }
+					country_event = { id = ADISCORD_vorkerland_preparation.42 }
+				}
+				10 = {
+					modifier = { factor = 0 has_global_flag = ADISCORD_vorkerland_prewar_crisis_43 }
+					country_event = { id = ADISCORD_vorkerland_preparation.43 }
+				}
+				10 = {
+					modifier = { factor = 0 has_global_flag = ADISCORD_vorkerland_prewar_crisis_44 }
+					country_event = { id = ADISCORD_vorkerland_preparation.44 }
+				}
+				10 = {
+					modifier = { factor = 0 has_global_flag = ADISCORD_vorkerland_prewar_crisis_45 }
+					country_event = { id = ADISCORD_vorkerland_preparation.45 }
+				}
+				10 = {
+					modifier = { factor = 0 has_global_flag = ADISCORD_vorkerland_prewar_crisis_46 }
+					country_event = { id = ADISCORD_vorkerland_preparation.46 }
+				}
+				10 = {
+					modifier = { factor = 0 has_global_flag = ADISCORD_vorkerland_prewar_crisis_47 }
+					country_event = { id = ADISCORD_vorkerland_preparation.47 }
+				}
+				10 = {
+					modifier = { factor = 0 has_global_flag = ADISCORD_vorkerland_prewar_crisis_48 }
+					country_event = { id = ADISCORD_vorkerland_preparation.48 }
+				}
+			}
+			country_event = { id = ADISCORD_vorkerland_preparation.40 days = 21 random_days = 21 }
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_preparation.41
+	title = ADISCORD_vorkerland_preparation.41.t
+	desc = ADISCORD_vorkerland_preparation.41.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = WRK
+		has_global_flag = ADISCORD_vorkerland_phase_prewar
+	}
+	immediate = {
+		hidden_effect = { set_global_flag = ADISCORD_vorkerland_prewar_crisis_41 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.41.a
+		add_stability = -0.03
+		add_power_balance_value = {
+			id = ADISCORD_vorkerland_prewar_bop
+			value = -0.10
+		}
+		ADISCORD_vorkerland_camp_committees_add_5 = yes
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.41.b
+		trigger = { NOT = { has_political_power < 25 } }
+		add_political_power = -25
+		add_power_balance_value = {
+			id = ADISCORD_vorkerland_prewar_bop
+			value = 0.10
+		}
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_preparation.42
+	title = ADISCORD_vorkerland_preparation.42.t
+	desc = ADISCORD_vorkerland_preparation.42.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = WRK
+		has_global_flag = ADISCORD_vorkerland_phase_prewar
+	}
+	immediate = {
+		hidden_effect = { set_global_flag = ADISCORD_vorkerland_prewar_crisis_42 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.42.a
+		add_stability = -0.02
+		add_power_balance_value = {
+			id = ADISCORD_vorkerland_prewar_bop
+			value = -0.05
+		}
+		ADISCORD_vorkerland_camp_staff_add_5 = yes
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.42.b
+		trigger = { NOT = { has_political_power < 20 } }
+		add_political_power = -20
+		add_power_balance_value = {
+			id = ADISCORD_vorkerland_prewar_bop
+			value = 0.05
+		}
+		ADISCORD_vorkerland_camp_committees_add_5 = yes
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.42.c
+		trigger = { NOT = { has_political_power < 40 } }
+		add_political_power = -40
+		ADISCORD_vorkerland_camp_engineers_add_5 = yes
+		ai_chance = { base = 30 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_preparation.43
+	title = ADISCORD_vorkerland_preparation.43.t
+	desc = ADISCORD_vorkerland_preparation.43.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = WRK
+		has_global_flag = ADISCORD_vorkerland_phase_prewar
+	}
+	immediate = {
+		hidden_effect = { set_global_flag = ADISCORD_vorkerland_prewar_crisis_43 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.43.a
+		ADISCORD_economy_receive_100 = yes
+		add_power_balance_value = {
+			id = ADISCORD_vorkerland_prewar_bop
+			value = -0.05
+		}
+		ADISCORD_vorkerland_camp_engineers_sub_5 = yes
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.43.b
+		add_power_balance_value = {
+			id = ADISCORD_vorkerland_prewar_bop
+			value = 0.10
+		}
+		ai_chance = { base = 40 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_preparation.44
+	title = ADISCORD_vorkerland_preparation.44.t
+	desc = ADISCORD_vorkerland_preparation.44.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = WRK
+		has_global_flag = ADISCORD_vorkerland_phase_prewar
+	}
+	immediate = {
+		hidden_effect = { set_global_flag = ADISCORD_vorkerland_prewar_crisis_44 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.44.a
+		add_stability = -0.02
+		add_power_balance_value = {
+			id = ADISCORD_vorkerland_prewar_bop
+			value = 0.05
+		}
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.44.b
+		trigger = { NOT = { has_political_power < 25 } }
+		add_political_power = -25
+		ADISCORD_vorkerland_camp_staff_add_5 = yes
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_preparation.45
+	title = ADISCORD_vorkerland_preparation.45.t
+	desc = ADISCORD_vorkerland_preparation.45.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = WRK
+		has_global_flag = ADISCORD_vorkerland_phase_prewar
+	}
+	immediate = {
+		hidden_effect = { set_global_flag = ADISCORD_vorkerland_prewar_crisis_45 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.45.a
+		add_stability = -0.02
+		ADISCORD_vorkerland_camp_committees_add_5 = yes
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.45.b
+		trigger = { NOT = { has_political_power < 20 } }
+		add_political_power = -20
+		add_power_balance_value = {
+			id = ADISCORD_vorkerland_prewar_bop
+			value = 0.05
+		}
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_preparation.46
+	title = ADISCORD_vorkerland_preparation.46.t
+	desc = ADISCORD_vorkerland_preparation.46.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = WRK
+		has_global_flag = ADISCORD_vorkerland_phase_prewar
+	}
+	immediate = {
+		hidden_effect = { set_global_flag = ADISCORD_vorkerland_prewar_crisis_46 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.46.a
+		ADISCORD_vorkerland_camp_committees_add_5 = yes
+		ADISCORD_vorkerland_camp_engineers_sub_10 = yes
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.46.b
+		trigger = { NOT = { has_political_power < 30 } }
+		add_political_power = -30
+		add_power_balance_value = {
+			id = ADISCORD_vorkerland_prewar_bop
+			value = 0.05
+		}
+		ADISCORD_vorkerland_camp_engineers_add_10 = yes
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_preparation.47
+	title = ADISCORD_vorkerland_preparation.47.t
+	desc = ADISCORD_vorkerland_preparation.47.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = WRK
+		has_global_flag = ADISCORD_vorkerland_phase_prewar
+	}
+	immediate = {
+		hidden_effect = { set_global_flag = ADISCORD_vorkerland_prewar_crisis_47 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.47.a
+		add_stability = -0.03
+		ADISCORD_vorkerland_camp_committees_add_5 = yes
+		ADISCORD_vorkerland_camp_staff_sub_10 = yes
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.47.b
+		trigger = { NOT = { has_political_power < 40 } }
+		add_political_power = -40
+		ADISCORD_vorkerland_camp_staff_add_10 = yes
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.47.c
+		add_power_balance_value = {
+			id = ADISCORD_vorkerland_prewar_bop
+			value = 0.10
+		}
+		ADISCORD_vorkerland_camp_staff_add_5 = yes
+		ai_chance = { base = 30 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_preparation.48
+	title = ADISCORD_vorkerland_preparation.48.t
+	desc = ADISCORD_vorkerland_preparation.48.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = WRK
+		has_global_flag = ADISCORD_vorkerland_phase_prewar
+	}
+	immediate = {
+		hidden_effect = { set_global_flag = ADISCORD_vorkerland_prewar_crisis_48 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.48.a
+		add_stability = -0.02
+		add_power_balance_value = {
+			id = ADISCORD_vorkerland_prewar_bop
+			value = -0.10
+		}
+		ADISCORD_vorkerland_camp_committees_add_5 = yes
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.48.b
+		trigger = { NOT = { has_political_power < 15 } }
+		add_political_power = -15
+		add_stability = 0.02
+		add_power_balance_value = {
+			id = ADISCORD_vorkerland_prewar_bop
+			value = 0.10
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_preparation.48.c
+		trigger = { NOT = { has_political_power < 30 } }
+		add_political_power = -30
+		add_stability = 0.03
+		ADISCORD_vorkerland_camp_engineers_add_5 = yes
+		ai_chance = { base = 30 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.20
+	title = ADISCORD_vorkerland_postwar.20.t
+	desc = ADISCORD_vorkerland_postwar.20.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	option = { name = ADISCORD_vorkerland_postwar.20.a }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.21
+	title = ADISCORD_vorkerland_postwar.21.t
+	desc = ADISCORD_vorkerland_postwar.21.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	option = { name = ADISCORD_vorkerland_postwar.21.a }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.22
+	title = ADISCORD_vorkerland_postwar.22.t
+	desc = ADISCORD_vorkerland_postwar.22.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	option = { name = ADISCORD_vorkerland_postwar.22.a }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.23
+	title = ADISCORD_vorkerland_postwar.23.t
+	desc = ADISCORD_vorkerland_postwar.23.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	option = { name = ADISCORD_vorkerland_postwar.23.a }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.24
+	title = ADISCORD_vorkerland_postwar.24.t
+	desc = ADISCORD_vorkerland_postwar.24.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	option = { name = ADISCORD_vorkerland_postwar.24.a }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.25
+	title = ADISCORD_vorkerland_postwar.25.t
+	desc = ADISCORD_vorkerland_postwar.25.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	option = { name = ADISCORD_vorkerland_postwar.25.a }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.26
+	title = ADISCORD_vorkerland_postwar.26.t
+	desc = ADISCORD_vorkerland_postwar.26.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	option = { name = ADISCORD_vorkerland_postwar.26.a }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.27
+	title = ADISCORD_vorkerland_postwar.27.t
+	desc = ADISCORD_vorkerland_postwar.27.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	option = { name = ADISCORD_vorkerland_postwar.27.a }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.28
+	title = ADISCORD_vorkerland_postwar.28.t
+	desc = ADISCORD_vorkerland_postwar.28.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	option = { name = ADISCORD_vorkerland_postwar.28.a }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.29
+	title = ADISCORD_vorkerland_postwar.29.t
+	desc = ADISCORD_vorkerland_postwar.29.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	option = { name = ADISCORD_vorkerland_postwar.29.a }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.30
+	title = ADISCORD_vorkerland_postwar.30.t
+	desc = ADISCORD_vorkerland_postwar.30.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	option = { name = ADISCORD_vorkerland_postwar.30.a }
 }

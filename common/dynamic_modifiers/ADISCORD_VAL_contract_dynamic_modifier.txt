@@ -145,12 +145,14 @@ VAL_final_war_preparation = {
 # --- commanders_council ---
 # VAL for a limited period after a delegation favour or an accepted demand.
 VAL_council_favour_garrison = {
+	remove_trigger = { has_war = no }
 	icon = GFX_idea_generic_fortify_the_borders
 	army_defence_factor = 0.10
 	army_org_regain = 0.05
 }
 
 VAL_council_favour_front = {
+	remove_trigger = { has_war = no }
 	icon = GFX_idea_ADISCORD_law_military_general_staff
 	army_attack_factor = 0.10
 	breakthrough_factor = 0.10

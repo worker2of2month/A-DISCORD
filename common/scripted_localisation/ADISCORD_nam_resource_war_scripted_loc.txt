@@ -545,6 +545,18 @@ defined_text = {
 	}
 }
 
+# The second ledger's reserve; an empty line on the commissioner's route.
+defined_text = {
+	name = NAMGetHiddenReserve
+	text = {
+		trigger = { has_variable = NAM_hidden_reserve }
+		localization_key = NAM_hidden_reserve_status_active
+	}
+	text = {
+		localization_key = NAM_hidden_reserve_status_none
+	}
+}
+
 # The next underground threshold that will open its event.
 defined_text = {
 	name = NAMGetUndergroundNext

@@ -22,7 +22,7 @@ TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_west_final_war_triggers.txt
 EVENTS = ROOT / "events/ADISCORD_west_final_war_events.txt"
 PEACE = ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"
 IVN_TREE = ROOT / "focus_trees/IVN/main/focuses.txt"
-WRK_TREE = ROOT / "focus_trees/Vorkerland/civil_war/focuses.txt"
+WRK_TREE = ROOT / "focus_trees/Vorkerland/settlement/focuses.txt"
 WORKER_TREE = ROOT / "focus_trees/Vorkerland/worker_confederation/focuses.txt"
 TECHNICAL_TREE = ROOT / "focus_trees/Vorkerland/technical_directorate/focuses.txt"
 EMPIRE_TREE = ROOT / "focus_trees/Vorkerland/world_empire/focuses.txt"
@@ -913,6 +913,8 @@ class WestReconstructionScenarios(unittest.TestCase):
                 drilled = name.startswith("WRK_joint_")
                 for age, expected in ((179, False), (180, True)):
                     facts = self.crisis_facts(age)
+                    if name == "WRK_utilitarian_west_engineering_border":
+                        facts[("WRK", "WRK_worx_government", "yes")] = True
                     if drilled:
                         facts[("WRK", "has_completed_focus", "WRK_joint_pw_field_exercises")] = True
                     self.assertEqual(

@@ -280,7 +280,10 @@ class PeacefulAllianceTests(unittest.TestCase):
         )
         war_hook = named_block(hooks, "on_war_relation_added")
         for host, enemy in (("ROOT", "FROM"), ("FROM", "ROOT")):
-            host_scope = named_block(war_hook, host)
+            host_scope = next(
+                scope for scope in named_blocks(war_hook, host)
+                if "every_allied_country" in scope
+            )
             self.assertIn(
                 "ADISCORD_vorkerland_is_main_claimant = yes",
                 named_block(host_scope, "limit"),

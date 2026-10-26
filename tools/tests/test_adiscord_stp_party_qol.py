@@ -83,6 +83,176 @@ class PartyQualityOfLifeTests(unittest.TestCase):
             if e.key == 'focus' and isinstance(e.value, list)
         }
 
+    def test_wartime_faction_selector_shows_one_payment_method_without_filtering_ai(self):
+        factions = ('conservatives', 'borons', 'security', 'army',
+                    'advisers', 'merchants', 'radicals')
+        for war in (False, True):
+            for ai in (False, True):
+                for funding in (False, True):
+                    facts = {
+                        ('STP', 'is_ai', 'yes'): ai,
+                        ('STP', 'is_ai', 'no'): not ai,
+                        ('STP', 'STP_ps_war_active', 'yes'): war,
+                        ('STP', 'STP_ps_war_active', 'no'): not war,
+                        ('STP', 'STP_pv_war_current', 'yes'): war,
+                        ('STP', 'STP_cw_preparation_open', 'yes'): not war,
+                        ('STP', 'STP_pf_active', 'yes'): True,
+                        ('STP', 'has_country_flag', 'STP_pf_initialized'): True,
+                        ('STP', 'has_country_flag', 'STP_pm_faction_funding_selected'): funding,
+                    }
+                    for kind in ('funding', 'negotiations'):
+                        trigger = 'STP_pm_faction_' + kind + '_visible'
+                        facts[('STP', trigger, 'yes')] = matches_conditions(self.triggers[trigger], facts)
+                    counts = []
+                    for prefix in ('STP_pm_fund_', 'STP_pf_negotiate_'):
+                        counts.append(sum(matches_conditions(
+                            block(self.decisions[prefix + faction], 'visible'), facts
+                        ) for faction in factions))
+                    expected = [7, 7] if ai or not war else ([7, 0] if funding else [0, 7])
+                    self.assertEqual(counts, expected, (war, ai, funding))
+
+    def test_rear_programs_fold_without_changing_purchases_or_ai_access(self):
+        names = ('wavering_officials', 'commissar_pay', 'front_gala', 'front_bonuses',
+                 'paid_recruiters', 'smuggler_rifles', 'hired_instructors', 'widow_pensions')
+        for ai in (False, True):
+            for expanded in (False, True):
+                facts = {
+                    ('STP', 'is_ai', 'yes'): ai,
+                    ('STP', 'is_ai', 'no'): not ai,
+                    ('STP', 'has_country_flag', 'STP_pm_rear_programs_expanded'): expanded,
+                    ('STP', 'STP_pv_war_current', 'yes'): True,
+                    ('STP', 'variable', 'STP_pv_strain'): 10,
+                }
+                facts[('STP', 'STP_pm_rear_programs_visible', 'yes')] = matches_conditions(
+                    self.triggers['STP_pm_rear_programs_visible'], facts
+                )
+                count = sum(matches_conditions(block(self.decisions['STP_pm_' + name], 'visible'), facts)
+                            for name in names)
+                self.assertEqual(count, 8 if ai or expanded else 0)
+                controls = sum(matches_conditions(block(self.decisions[name], 'visible'), facts)
+                               for name in ('STP_pm_show_rear_programs', 'STP_pm_hide_rear_programs'))
+                self.assertEqual(controls, 0 if ai else 1)
+        for name in ('STP_pm_show_rear_programs', 'STP_pm_hide_rear_programs',
+                     'STP_pm_show_faction_funding', 'STP_pm_show_faction_negotiations'):
+            decision = self.decisions[name]
+            self.assertEqual(scalar(decision, 'cost'), '0')
+            effects = [e for e in walk(block(decision, 'complete_effect')) if e.key != 'hidden_effect']
+            self.assertEqual(len(effects), 1)
+            self.assertIn(effects[0].key, ('set_country_flag', 'clr_country_flag'))
+            self.assertIn(effects[0].value, ('STP_pm_rear_programs_expanded', 'STP_pm_faction_funding_selected'))
+            for language in ('russian', 'english'):
+                self.assertIn(name, localization(language))
+                self.assertIn(name + '_desc', localization(language))
+
+    def test_northern_context_hides_new_orders_but_preserves_pending_delivery(self):
+        for name, program, context in (
+            ('STP_ps_fund_nod', 'credit', ('STP', 'STP_ps_nod_credit_useful', 'yes')),
+            ('STP_ps_arm_nod', 'arms', ('NOD', 'STP_ps_northern_front_active', 'yes')),
+            ('STP_ps_engineers_nod', 'engineers', ('NOD', 'STP_ps_northern_front_active', 'yes')),
+            ('STP_ps_expedition_nod', 'expedition', ('NOD', 'NOD_cw_intervention_possible', 'yes')),
+        ):
+            facts = {('STP', 'STP_ps_' + program + '_program_unlocked', 'yes'): True,
+                     ('STP', 'STP_ps_can_aid_nod', 'yes'): True, context: True}
+            visible = block(self.decisions[name], 'visible')
+            self.assertTrue(matches_conditions(visible, facts))
+            self.assertFalse(matches_conditions(visible, facts | {context: False}))
+            self.assertFalse(matches_conditions(visible, facts | {('STP', 'STP_ps_can_aid_nod', 'yes'): False}))
+        for name in ('STP_ps_nod_dispatch', 'STP_ps_nod_route_wait', 'STP_ps_nod_delivery'):
+            self.assertTrue(matches_conditions(block(self.decisions[name], 'visible'),
+                                              {('STP', 'has_active_mission', name): True}))
+
+    def test_air_and_port_orders_follow_local_assets_without_hiding_prices(self):
+        for name, focus, context in (
+            ('STP_pm_order_fighters', 'STP_pm_factory_air_cover', 'STP_pm_air_program_available'),
+            ('STP_pm_order_attack_aircraft', 'STP_pm_front_air_support', 'STP_pm_air_program_available'),
+            ('STP_pm_air_sortie_order', 'STP_pm_airfield_shifts', 'STP_pm_air_program_available'),
+            ('STP_pm_charter_convoys', 'STP_pm_port_workshops', 'STP_pm_port_program_available'),
+            ('STP_pm_land_freight', 'STP_pm_army_freight', 'STP_pm_port_program_available'),
+        ):
+            facts = {('STP', 'has_completed_focus', focus): True,
+                     ('STP', 'STP_ps_war_active', 'yes'): True, ('STP', context, 'yes'): True}
+            visible = block(self.decisions[name], 'visible')
+            self.assertTrue(matches_conditions(visible, facts))
+            self.assertFalse(matches_conditions(visible, facts | {('STP', context, 'yes'): False}))
+            self.assertNotIn('custom_cost_trigger', [e.key for e in walk(visible)])
+
+    def test_northern_arms_small_package_conserves_payment_delivery_and_refund(self):
+        price = block(self.decisions['STP_ps_arm_nod'], 'custom_cost_trigger')
+        stocks = {'infantry_equipment': 3000, 'artillery_equipment': 25,
+                  'support_equipment': 15}
+        facts = {('STP', 'equipment', name): value for name, value in stocks.items()}
+        facts[('STP', 'variable', 'ADISCORD_economy_treasury')] = 100
+        self.assertTrue(matches_conditions(price, facts))
+        for resource, balance in facts.items():
+            with self.subTest(resource=resource):
+                self.assertFalse(matches_conditions(price, facts | {resource: balance - 0.001}))
+        for effect in ('STP_ps_refund_nod', 'STP_ps_deliver_nod'):
+            equipment = {
+                scalar(e.value, 'type'): int(scalar(e.value, 'amount'))
+                for e in walk(self.effects[effect]) if e.key == 'add_equipment_to_stockpile'
+            }
+            self.assertEqual(equipment, stocks)
+        payment = self.effects['STP_ps_pay_nod_arms']
+        inputs = {
+            scalar(e.value, 'var'): scalar(e.value, 'value')
+            for e in payment if e.key == 'set_temp_variable'
+        }
+        self.assertEqual(inputs['STP_cw_rifle_cost'], '3000')
+        self.assertEqual(inputs['STP_ps_artillery_remaining'], '25')
+        self.assertEqual(inputs['STP_ps_support_remaining'], '15')
+        for key, variable in (
+            ('subtract_from_variable', 'ADISCORD_economy_treasury'),
+            ('add_to_variable', 'ADISCORD_economy_current_month_action_costs'),
+            ('set_variable', 'STP_ps_nod_receipt_money'),
+        ):
+            values = [scalar(e.value, 'value') for e in walk(payment)
+                      if e.key == key and scalar(e.value, 'var') == variable]
+            self.assertEqual(values, ['100'])
+
+    def test_party_entry_funds_actions_and_matches_the_daily_gain_preview(self):
+        reward = block(self.focuses['STP_Govern_In_His_Name'], 'completion_reward')
+        self.assertEqual(scalar(reward, 'add_political_power'), '100')
+        gain = [scalar(e.value, 'value') for e in walk(reward)
+                if e.key == 'add_to_variable'
+                and scalar(e.value, 'var') == 'STP_cw_party_political_power_gain']
+        ideas = list(walk(parse_clausewitz(read('common/ideas/ADISCORD_STP_civil_war_ideas.txt'))))
+        preview = next(e.value for e in ideas if e.key == 'STP_cw_presidium_mandate_delta')
+        self.assertEqual(gain, [scalar(block(preview, 'modifier'), 'political_power_gain')])
+        self.assertEqual(gain, ['0.50'])
+        temporary = [scalar(e.value, 'value') for e in walk(reward)
+                     if e.key == 'set_variable'
+                     and scalar(e.value, 'var') == 'STP_cw_party_preparation_political_power_gain']
+        self.assertEqual(temporary, gain)
+        credit = block(self.focuses['STP_ps_northern_credit'], 'completion_reward')
+        funding = [scalar(e.value, 'value') for e in walk(credit)
+                   if e.key == 'add_to_variable' and scalar(e.value, 'var')
+                   in ('ADISCORD_economy_treasury', 'ADISCORD_economy_current_month_action_income')]
+        self.assertEqual(funding, ['300', '300'])
+        self.assertIn('ADISCORD_economy_mark_dirty', [e.key for e in walk(credit)])
+
+    def test_preparation_mandate_expires_once_without_removing_other_rewards(self):
+        from tools.tests.test_adiscord_stp_party_route import PartyFactionContracts
+
+        effect = 'STP_cw_end_party_preparation_mandate'
+        aggregate = 'STP_cw_party_political_power_gain'
+        temporary = 'STP_cw_party_preparation_political_power_gain'
+        for permanent in (-0.05, 0, 0.15, 0.40):
+            with self.subTest(permanent=permanent):
+                values = {aggregate: permanent + 0.5, temporary: 0.5}
+                PartyFactionContracts.simulate(self, effect, values)
+                self.assertAlmostEqual(float(values[aggregate]), permanent)
+                self.assertNotIn(temporary, values)
+                PartyFactionContracts.simulate(self, effect, values)
+                self.assertAlmostEqual(float(values[aggregate]), permanent)
+        values = {}
+        PartyFactionContracts.simulate(self, effect, values)
+        self.assertEqual(values, {})
+        for terminal in ('STP_cw_finish_elections', 'STP_cw_start',
+                         'STP_cw_clear_political_modifiers'):
+            self.assertIn(effect, [e.key for e in walk(self.effects[terminal])])
+        for language in ('russian', 'english'):
+            self.assertIn('STP_cw_presidium_mandate_duration_tt', localization(language))
+
     def test_election_category_stays_visible_until_the_election_is_resolved(self):
         category = self.categories['STP_elections_in_the_party']
         self.assertEqual(scalar(category, 'visible_when_empty'), 'yes')
@@ -396,7 +566,7 @@ class PartyQualityOfLifeTests(unittest.TestCase):
 
     def test_northern_loan_purchase_and_refund_keep_money_and_rifles_consistent(self):
         for decision, price in (('STP_ps_fund_nod', 750), ('STP_ps_nod_rifle_purchase', 750),
-                                ('STP_ps_engineers_nod', 600), ('STP_ps_expedition_nod', 600),
+                                ('STP_ps_engineers_nod', 300), ('STP_ps_expedition_nod', 600),
                                 ('STP_ps_val_intelligence', 150), ('STP_ps_val_intercept', 600),
                                 ('STP_ps_val_pressure', 500)):
             body = self.decisions[decision]

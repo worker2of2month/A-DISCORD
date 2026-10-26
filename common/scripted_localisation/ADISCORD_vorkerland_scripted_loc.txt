@@ -457,6 +457,41 @@ defined_text = {
 	text = { localization_key = ADISCORD_vorkerland_prep_district_summary }
 }
 
+# Worker's fate as the prewar preparation stands. An evacuation project at the
+# Unity Tower decides it; otherwise the tower branch weighs the roll.
+defined_text = {
+	name = GetVorkerlandWorkerFateForecast
+	text = {
+		trigger = {
+			40 = {
+				check_variable = { var = ADISCORD_vorkerland_prep_project value = 1 compare = equals }
+				NOT = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+			}
+		}
+		localization_key = ADISCORD_vorkerland_fate_forecast_loyalists
+	}
+	text = {
+		trigger = {
+			40 = {
+				check_variable = { var = ADISCORD_vorkerland_prep_project value = 2 compare = equals }
+				NOT = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+			}
+		}
+		localization_key = ADISCORD_vorkerland_fate_forecast_vlad
+	}
+	text = {
+		trigger = { has_completed_focus = WRK_reinforce_the_tower_guard }
+		localization_key = ADISCORD_vorkerland_fate_forecast_guarded
+	}
+	text = {
+		trigger = { has_completed_focus = WRK_disperse_the_government }
+		localization_key = ADISCORD_vorkerland_fate_forecast_dispersed
+	}
+	text = {
+		localization_key = ADISCORD_vorkerland_fate_forecast_roll
+	}
+}
+
 defined_text = {
 	name = GetVorkerlandTreatyTiming
 	text = {
@@ -475,4 +510,112 @@ defined_text = {
 		localization_key = ADISCORD_vorkerland_egc_settlement_tt
 	}
 	text = { localization_key = ADISCORD_vorkerland_district_settlement_tt }
+}
+
+defined_text = {
+	name = GetWorxMadnessStatus
+	text = {
+		trigger = { has_variable = WRK_worx_emergency_days }
+		localization_key = WRK_worx_emergency_status
+	}
+	text = {
+		trigger = { has_country_flag = WRK_worx_supervised }
+		localization_key = WRK_worx_status_supervised
+	}
+	text = {
+		trigger = { WRK_worx_active = no }
+		localization_key = WRK_worx_status_suspended
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_worx_madness value = 75 compare = greater_than_or_equals } }
+		localization_key = WRK_worx_status_3
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_worx_madness value = 50 compare = greater_than_or_equals } }
+		localization_key = WRK_worx_status_2
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_worx_madness value = 25 compare = greater_than_or_equals } }
+		localization_key = WRK_worx_status_1
+	}
+	text = { localization_key = WRK_worx_status_0 }
+}
+
+defined_text = {
+	name = GetWorxMadnessGrowth
+	text = {
+		trigger = { WRK_worx_active = yes }
+		localization_key = WRK_worx_growth_active
+	}
+	text = { localization_key = WRK_worx_growth_stopped }
+}
+
+defined_text = {
+	name = GetWorxResearchOperation
+	text = {
+		trigger = { check_variable = { var = WRK_worx_operation value = 11 compare = equals } }
+		localization_key = WRK_worx_operation_restore_obedience
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_worx_operation value = 10 compare = equals } }
+		localization_key = WRK_worx_operation_grand_programme
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_worx_operation value = 9 compare = equals } }
+		localization_key = WRK_worx_operation_civil_science
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_worx_operation value = 8 compare = equals } }
+		localization_key = WRK_worx_operation_industrial
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_worx_operation value = 7 compare = equals } }
+		localization_key = WRK_worx_operation_mass_trials
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_worx_operation value = 6 compare = equals } }
+		localization_key = WRK_worx_operation_field_trials
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_worx_operation value = 5 compare = equals } }
+		localization_key = WRK_worx_operation_accelerated
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_worx_operation value = 4 compare = equals } }
+		localization_key = WRK_worx_operation_review
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_worx_operation value = 1 compare = equals } }
+		localization_key = WRK_worx_operation_basic
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_worx_operation value = 2 compare = equals } }
+		localization_key = WRK_worx_operation_expanded
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_worx_operation value = 3 compare = equals } }
+		localization_key = WRK_worx_operation_oversight
+	}
+	text = { localization_key = WRK_worx_operation_none }
+}
+
+defined_text = {
+	name = GetWorxDirectorateTitle
+	text = {
+		trigger = { check_variable = { var = WRK_worx_constitution value = 1 compare = equals } }
+		localization_key = WRK_worx_title_personal
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_worx_constitution value = 2 compare = equals } }
+		localization_key = WRK_worx_title_council
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_worx_constitution value = 3 compare = equals } }
+		localization_key = WRK_worx_title_emergency
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_worx_constitution value = 4 compare = equals } }
+		localization_key = WRK_worx_title_failure
+	}
+	text = { localization_key = WRK_worx_title_ordinary }
 }

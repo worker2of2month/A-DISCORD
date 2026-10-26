@@ -16,7 +16,7 @@ STP_party_suspicion_dynamic_modifier = {
 
 # Party-side briefing. High loyalty is the useful pole; suspicion stays on Shabrat's path.
 STP_apparatus_loyalty_dynamic_modifier = {
-	icon = GFX_idea_STP_party_apparatus_loyalty
+	icon = GFX_idea_STP_party_faction_balance
 	enable = {
 		tag = STP
 	}
@@ -46,7 +46,7 @@ STP_cw_party_administration_dynamic = {
 }
 
 STP_cw_military_staff_dynamic = {
-	icon = GFX_idea_ADISCORD_law_military_cadre_army
+	icon = GFX_idea_STP_military_administration
 	enable = {
 		OR = {
 			tag = STP
@@ -131,8 +131,8 @@ STP_pw_party_dynamic = {
 	training_time_factor = STP_pw_training_time_factor
 }
 
+# No icon: faction effects share the apparatus card but retain their own enable condition.
 STP_pf_balance_dynamic = {
-	icon = GFX_idea_STP_party_faction_balance
 	enable = { STP_pf_active = yes has_country_flag = STP_pf_initialized has_capitulated = no }
 	ADISCORD_economy_admin_expense_factor = STP_pf_conservatives_effect
 	production_speed_buildings_factor = STP_pf_borons_effect
@@ -144,7 +144,7 @@ STP_pf_balance_dynamic = {
 }
 
 STP_ps_defence_dynamic = {
-	icon = GFX_idea_ADISCORD_law_military_cadre_army
+	icon = GFX_idea_STP_military_administration
 	enable = { STP_ps_war_active = yes }
 	breakthrough_factor = STP_ps_breakthrough
 	planning_speed = STP_ps_command_planning
@@ -160,7 +160,7 @@ STP_ps_capital_defence_dynamic = {
 
 # Party war strain: the resort economy pays for the war until it breaks.
 STP_pv_strain_dynamic = {
-	icon = GFX_idea_STP_worldwide_famous_tourist_destination
+	icon = GFX_idea_STP_wartime_strain
 	enable = { STP_ps_war_active = yes }
 	political_power_factor = STP_pv_strain_political_power
 	stability_factor = STP_pv_strain_stability
@@ -168,7 +168,7 @@ STP_pv_strain_dynamic = {
 }
 
 STP_ch_institutions = {
-	icon = GFX_idea_STP_apparatus_loyalty
+	icon = GFX_idea_STP_institutions_obligations
 	enable = {
 		STP_ch_current = yes
 	}

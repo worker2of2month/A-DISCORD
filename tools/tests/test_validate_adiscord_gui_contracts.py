@@ -640,7 +640,12 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
         scale = re.search(r'\bscale\s*=\s*([\d.]+)', icon_body)
         scale = float(scale[1]) if scale else 1.0
         icons = [ROOT / 'gfx/interface/goals/goal_unknown.dds']
-        for folder in ('party', 'shabrat'):
+        for folder in (
+            'party',
+            'party_postcivilwar',
+            'shabrat',
+            'shabrat_postcivilwar',
+        ):
             icons.extend((ROOT / 'gfx/interface/goals/STP' / folder).glob('*.png'))
         self.assertGreater(len(icons), 1)
         for path in icons:

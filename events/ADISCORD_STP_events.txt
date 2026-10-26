@@ -2135,7 +2135,7 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	trigger = { OR = { tag = VAL tag = NOD } STS = { exists = yes } }
-	immediate = { add_timed_idea = { idea = STP_cw_defensive_preparation days = 70 } }
+	immediate = { add_ideas = STP_pc_campaign_defence_ready }
 	option = { name = ADISCORD_STP_pc.20.a }
 }
 country_event = {

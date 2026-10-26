@@ -582,7 +582,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				political_power_gain = 0.03
+				political_power_gain = 0.08
 				stability_factor = -0.01
 			}
 		}
@@ -600,7 +600,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				political_power_gain = 0.03
+				political_power_gain = 0.07
 				ADISCORD_economy_admin_expense_factor = 0.025
 			}
 		}
@@ -634,7 +634,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				production_speed_buildings_factor = 0.025
+				production_speed_buildings_factor = 0.05
 				political_power_gain = -0.02
 			}
 		}
@@ -644,7 +644,7 @@ ideas = {
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = 0.025
-				political_power_gain = 0.02
+				political_power_gain = 0.08
 			}
 		}
 
@@ -1144,9 +1144,19 @@ ideas = {
 			picture = ADISCORD_law_military_cadre_army
 			allowed = { always = no }
 			removal_cost = -1
-			cancel = { OR = { STP_pc_can_confront_val = no has_war_with = VAL } }
+			cancel = { STP_pc_can_confront_val = no }
 			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			modifier = { planning_speed = 0.10 supply_consumption_factor = -0.05 }
+			modifier = { }
+		}
+		STP_pc_val_campaign_plan = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { NOT = { has_war_with = VAL } }
+			modifier = {
+				planning_speed = 0.10
+				supply_consumption_factor = -0.05
+			}
 		}
 
 		STP_pc_nod_compact = {
@@ -1161,11 +1171,48 @@ ideas = {
 			picture = ADISCORD_law_military_cadre_army
 			allowed = { always = no }
 			removal_cost = -1
-			cancel = { OR = { STP_pc_can_confront_nod = no has_war_with = NOD } }
+			cancel = { STP_pc_can_confront_nod = no }
 			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			modifier = { planning_speed = 0.10 supply_consumption_factor = -0.05 }
+			modifier = { }
+		}
+		STP_pc_nod_campaign_plan = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { NOT = { has_war_with = NOD } }
+			modifier = {
+				planning_speed = 0.10
+				supply_consumption_factor = -0.05
+			}
 		}
 
+		STP_pc_campaign_defence_ready = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = {
+				OR = {
+					STS = { exists = no }
+					AND = {
+						tag = VAL
+						STS = { STP_pc_can_confront_val = no }
+					}
+					AND = {
+						tag = NOD
+						STS = { STP_pc_can_confront_nod = no }
+					}
+				}
+			}
+			modifier = { }
+		}
+
+		STP_pc_campaign_defence = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { NOT = { has_war_with = STS } }
+			modifier = { army_defence_factor = 0.08 }
+		}
 
 		STP_cw_party_command_disruption = {
 			picture = ADISCORD_law_military_cadre_army
@@ -1268,6 +1315,11 @@ ideas = {
 			name = STP_cw_party_administration_dynamic
 			allowed = { always = no }
 			modifier = {  }
+		}
+		STP_cw_presidium_mandate_delta = {
+			name = STP_cw_party_administration_dynamic
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.50 }
 		}
 		STP_cw_minister_guarantees_idea = {
 			name = STP_cw_party_administration_dynamic
@@ -1686,7 +1738,10 @@ ideas = {
 		STP_pw_party_district_authority_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { political_power_gain = 0.05 ADISCORD_economy_admin_expense_factor = -0.035 }
+			modifier = {
+				political_power_gain = 0.15
+				ADISCORD_economy_admin_expense_factor = -0.035
+			}
 		}
 		STP_pw_party_civil_records_delta = {
 			name = STP_pw_party_dynamic
@@ -1797,12 +1852,17 @@ ideas = {
 		STP_pw_party_industrial_settlement_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { production_factory_max_efficiency_factor = 0.035 production_speed_buildings_factor = 0.025 }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.05
+				production_speed_buildings_factor = 0.05
+			}
 		}
 		STP_pw_party_army_register_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { army_org_factor = 0.01 }
+			modifier = {
+				army_org_factor = 0.025
+			}
 		}
 		STP_pw_party_officer_school_delta = {
 			name = STP_pw_party_dynamic
@@ -2049,8 +2109,22 @@ ideas = {
 		STP_pc_occupation_admin = { picture = ADISCORD_law_civic_emergency_committees allowed = { always = no } removal_cost = -1 modifier = { ADISCORD_economy_admin_expense_factor = 0.08 } }
 		STP_pc_directory_term = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_org_factor = 0.06 political_power_gain = -0.05 } }
 		STP_sdir_loyalist_purge = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_org_factor = -0.05 political_power_gain = 0.10 } }
-		STP_pc_border_watch = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_core_defence_factor = 0.05 } }
-		STP_pc_nod_watch = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_core_defence_factor = 0.05 } }
+
+		STP_pc_border_watch = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			cancel = { NOT = { has_war_with = VAL } }
+			removal_cost = -1
+			modifier = { army_core_defence_factor = 0.05 }
+		}
+
+		STP_pc_nod_watch = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			cancel = { NOT = { has_war_with = NOD } }
+			removal_cost = -1
+			modifier = { army_core_defence_factor = 0.05 }
+		}
 		STP_pc_val_client = { picture = ADISCORD_law_civic_emergency_committees allowed = { always = no } removal_cost = -1 modifier = { political_power_gain = -0.05 } }
 		STP_pc_nod_client = { picture = ADISCORD_law_civic_emergency_committees allowed = { always = no } removal_cost = -1 modifier = { political_power_gain = -0.05 } }
 		VAL_liberated_settlement = { picture = ADISCORD_law_civic_local_councils allowed = { always = no } removal_cost = -1 modifier = { stability_factor = 0.03 } }
@@ -2357,6 +2431,7 @@ ideas = {
 		STP_pw_party_frontier_drill = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
+			cancel = { NOT = { has_war_with = VAL } }
 			removal_cost = -1
 			picture = STP_legalize
 			modifier = { army_core_defence_factor = 0.10 dig_in_speed_factor = 0.20 }
@@ -2372,6 +2447,7 @@ ideas = {
 		STP_pw_party_nod_staff_readiness_idea = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
+			cancel = { NOT = { has_war_with = NOD } }
 			removal_cost = -1
 			picture = ADISCORD_law_military_cadre_army
 			modifier = { army_core_defence_factor = 0.08 planning_speed = 0.10 supply_consumption_factor = -0.05 }
@@ -2568,12 +2644,20 @@ ideas = {
 		STP_pw_party_district_congress_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { stability_factor = 0.01 ADISCORD_economy_overall_income_factor = 0.025 political_power_gain = -0.02 }
+			modifier = {
+				stability_factor = 0.02
+				ADISCORD_economy_overall_income_factor = 0.05
+				political_power_gain = -0.02
+			}
 		}
 		STP_pw_party_executive_secretariat_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { political_power_gain = 0.05 ADISCORD_economy_admin_expense_factor = -0.015 stability_factor = -0.01 }
+			modifier = {
+				political_power_gain = 0.12
+				ADISCORD_economy_admin_expense_factor = -0.03
+				stability_factor = -0.01
+			}
 		}
 		STP_pw_party_commercial_recovery_delta = {
 			name = STP_pw_party_dynamic
@@ -2593,7 +2677,10 @@ ideas = {
 		STP_pw_party_field_staff_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { planning_speed = 0.055 army_org_factor = 0.02 }
+			modifier = {
+				planning_speed = 0.10
+				army_org_factor = 0.035
+			}
 		}
 		STP_pw_party_joint_defence_board_delta = {
 			name = STP_pw_party_dynamic

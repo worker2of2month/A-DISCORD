@@ -8,12 +8,37 @@ import re
 from pathlib import Path
 
 
+from tools.lib.focus_sources import read_focus_source
 from tools.lib.paths import source_section
 
 
 ROOT = Path(__file__).resolve().parents[2]
 
+# The former monolith path is a tooling view over the five native trees below.
 FOCUS_FILE = Path("common/national_focus/ADISCORD_Vorkerland_civil_war.txt")
+LIFECYCLE_TREES = {
+    "ADISCORD_vorkerland_prewar_focus": (
+        Path("common/national_focus/ADISCORD_Vorkerland_prewar.txt"),
+        frozenset({"WRK", "EYR", "EGC", "RIV", "YOR"}),
+    ),
+    "ADISCORD_vorkerland_wkr_focus": (
+        Path("common/national_focus/ADISCORD_Vorkerland_wkr.txt"),
+        frozenset({"WKR"}),
+    ),
+    "ADISCORD_vorkerland_vad_focus": (
+        Path("common/national_focus/ADISCORD_Vorkerland_vad.txt"),
+        frozenset({"VAD"}),
+    ),
+    "ADISCORD_vorkerland_tva_focus": (
+        Path("common/national_focus/ADISCORD_Vorkerland_tva.txt"),
+        frozenset({"TVA"}),
+    ),
+    "ADISCORD_vorkerland_settlement_focus": (
+        Path("common/national_focus/ADISCORD_Vorkerland_settlement.txt"),
+        frozenset({"WRK"}),
+    ),
+}
+WRK_PREWAR_ROOT = "WRK_measure_confederation_fault_lines"
 CONTINUOUS_FOCUS_FILE = Path("common/continuous_focus/generic.txt")
 ENGLISH_LOCALISATION = Path("localisation/english/ADISCORD_vorkerland_l_english.yml")
 RUSSIAN_LOCALISATION = Path("localisation/russian/ADISCORD_vorkerland_l_russian.yml")
@@ -74,10 +99,32 @@ PREWAR_WRK_PROGRAMME_FOCUSES = (
     "WRK_prepare_military_evacuation",
 )
 
+# The hourglass branch: the centre-district balance, the camps and the tower.
+PREWAR_WRK_HOURGLASS_FOCUSES = (
+    "WRK_face_the_hourglass",
+    "WRK_emergency_central_budget",
+    "WRK_district_emergency_powers",
+    "WRK_requisition_commissions",
+    "WRK_district_treasuries",
+    "WRK_last_common_budget",
+    "WRK_party_cell_rolls",
+    "WRK_factory_committee_councils",
+    "WRK_district_staff_exercises",
+    "WRK_petrichev_depots",
+    "WRK_worx_network_register",
+    "WRK_machine_tool_fund",
+    "WRK_stake_on_one_pillar",
+    "WRK_balance_the_pillars",
+    "WRK_inspect_the_unity_tower",
+    "WRK_reinforce_the_tower_guard",
+    "WRK_disperse_the_government",
+)
+
 PREWAR_WRK_FOCUSES = (
     *PREWAR_WRK_BASE_FOCUSES,
     *PREWAR_WRK_EXPANSION_FOCUSES,
     *PREWAR_WRK_PROGRAMME_FOCUSES,
+    *PREWAR_WRK_HOURGLASS_FOCUSES,
 )
 
 PREWAR_VAD_BASE_FOCUSES = (
@@ -102,7 +149,19 @@ PREWAR_VAD_EXPANSION_FOCUSES = (
     "VAD_seal_district_arsenals",
 )
 
-PREWAR_VAD_FOCUSES = (*PREWAR_VAD_BASE_FOCUSES, *PREWAR_VAD_EXPANSION_FOCUSES)
+PREWAR_VAD_HOURGLASS_FOCUSES = (
+    "VAD_assess_central_demands",
+    "VAD_loyalty_to_the_centre",
+    "VAD_own_emergency_rule",
+    "VAD_central_garrison_compact",
+    "VAD_district_emergency_council",
+)
+
+PREWAR_VAD_FOCUSES = (
+    *PREWAR_VAD_BASE_FOCUSES,
+    *PREWAR_VAD_EXPANSION_FOCUSES,
+    *PREWAR_VAD_HOURGLASS_FOCUSES,
+)
 
 WARTIME_ROUTE_FOCUSES = {
     "WKR": (
@@ -865,8 +924,8 @@ def wrk_focus_texture_path(focus_id: str) -> str:
 
 def _check_focus_gfx(focus_gfx: str, shine_source: str) -> list[str]:
     issues: list[str] = []
-    if len(WRK_TREE_FOCUSES) != 51 or len(set(WRK_TREE_FOCUSES)) != 51:
-        issues.append("WRK drop-in focus icon manifest must contain 51 unique ids")
+    if len(WRK_TREE_FOCUSES) != 68 or len(set(WRK_TREE_FOCUSES)) != 68:
+        issues.append("WRK drop-in focus icon manifest must contain 68 unique ids")
     for focus_id in FOCUS_IDS:
         sprite = focus_icon_name(focus_id)
         texture = focus_texture_path(focus_id)
@@ -891,6 +950,7 @@ FOCUS_IDS = (
     *PREWAR_WRK_FOCUSES,
     *PREWAR_VAD_BASE_FOCUSES,
     *PREWAR_VAD_EXPANSION_FOCUSES,
+    *PREWAR_VAD_HOURGLASS_FOCUSES,
     RETIRED_WARTIME_FOCUSES[0],
     RETIRED_WARTIME_FOCUSES[1],
     RETIRED_WARTIME_FOCUSES[2],
@@ -1103,15 +1163,27 @@ POSTWAR_EXPANSION_CHOICES = (
     ("local_charters", "procurement_audit", "treasury"),
 )
 
+def lifecycle_tree(focus_id: str) -> str:
+    """Native tree that defines a lifecycle focus."""
+    if focus_id in PREWAR_VAD_FOCUSES or focus_id in RETIRED_WARTIME_FOCUSES:
+        return "ADISCORD_vorkerland_prewar_focus"
+    if focus_id.startswith(("WRK_worker_", "WRK_joint_", "WRK_utilitarian_")):
+        return "ADISCORD_vorkerland_settlement_focus"
+    if focus_id.startswith("WRK_"):
+        return "ADISCORD_vorkerland_prewar_focus"
+    return f"ADISCORD_vorkerland_{focus_id[:3].lower()}_focus"
+
+
 def lifecycle_order() -> tuple[str, ...]:
-    """Reconstruction and the western chain follow each Unity Tower."""
+    """Manifest order grouped by tree; reconstruction and the west follow each tower."""
     order = list(FOCUS_IDS)
     for route_flag, focus_ids in WEST_ROUTE_FOCUSES.items():
         index = order.index(POSTWAR_ROUTE_TERMINALS[route_flag]) + 1
         order[index:index] = (*RECONSTRUCTION_ROUTE_FOCUSES[route_flag], *focus_ids)
     extension_index = order.index("WKR_convene_the_production_soviet")
     order[extension_index:extension_index] = POSTWAR_EXPANSION_IDS
-    return tuple(order)
+    trees = tuple(LIFECYCLE_TREES)
+    return tuple(sorted(order, key=lambda focus_id: trees.index(lifecycle_tree(focus_id))))
 
 
 POSTWAR_POLICY_CHOICE_PAIRS = (
@@ -2596,8 +2668,8 @@ DEPTH_AI_PLANS = {
 
 LAYOUT_BANDS = {
     "postwar_expansion": ((0, 60), (22, 45)),
-    "prewar_WRK": ((0, 14), (0, 6)),
-    "prewar_VAD": ((24, 32), (0, 6)),
+    "prewar_WRK": ((0, 14), (0, 10)),
+    "prewar_VAD": ((24, 32), (0, 8)),
     "retired": ((20, 24), (0, 6)),
     "war_WKR": ((0, 24), (7, 20)),
     "war_VAD": ((26, 54), (7, 20)),
@@ -2621,6 +2693,7 @@ POSTWAR_BAND_BY_ROUTE = {
 
 LAYOUT_ANCHORS = {
     "WRK_measure_confederation_fault_lines": (7, 0),
+    "WRK_face_the_hourglass": (7, 7),
     "VAD_review_district_obligations": (25, 0),
     "ADISCORD_vorkerland_stabilize_claimant_regime": (21, 0),
     "WKR_affirm_worker_mandate": (8, 7),
@@ -2783,7 +2856,7 @@ SIGNATURE_ICONS = {
 
 
 def read(relative: Path) -> str:
-    return (ROOT / relative).read_text(encoding="utf-8-sig")
+    return read_focus_source(ROOT / relative)
 
 
 def _blocks(text: str, assignment: str) -> list[str]:
@@ -2906,6 +2979,9 @@ def expected_localisation_keys() -> set[str]:
         "ADISCORD_vorkerland_prewar_wrk_hardline_course_tt",
         "ADISCORD_vorkerland_prewar_district_compact_course_tt",
         "ADISCORD_vorkerland_prewar_district_hardline_course_tt",
+        "WRK_last_common_budget_slot_tt",
+        "WRK_reinforce_the_tower_guard_tt",
+        "WRK_disperse_the_government_tt",
         "ADISCORD_vorkerland_prewar_category",
         "ADISCORD_vorkerland_prewar_category_desc",
         "ADISCORD_vorkerland_prewar_hide_reserves",
@@ -3075,9 +3151,25 @@ def _postwar_completion_paths(
     return tuple(sorted(minimal, key=lambda path: tuple(sorted(path))))
 
 
+def _plan_reward_contract(text: str) -> str:
+    """Include real decision payloads when auditing rewards unlocked by focuses."""
+    plan_ids = set(re.findall(
+        r"\bunlock_decision_tooltip\s*=\s*([A-Za-z0-9_]+_activate_plan)\b", text
+    ))
+    if not plan_ids:
+        return text
+    decisions = read(DIPLOMACY_DECISIONS_FILE)
+    payloads = []
+    for decision_id in sorted(plan_ids):
+        definitions = _blocks(decisions, decision_id)
+        if len(definitions) == 1:
+            payloads.extend(_blocks(definitions[0], "complete_effect"))
+    return text + "\n" + "\n".join(payloads)
+
+
 def _postwar_reward_categories(block: str) -> set[str]:
     rewards = _blocks(block, "completion_reward")
-    reward = rewards[0] if len(rewards) == 1 else ""
+    reward = _plan_reward_contract(rewards[0]) if len(rewards) == 1 else ""
     token_groups = {
         "political": ("add_political_power",),
         "legitimacy": ("add_stability", "add_war_support"),
@@ -3269,7 +3361,7 @@ def collect_issues() -> list[str]:
                 f"native focus sprite library must be inherited; remove {shadow_path.as_posix()}"
             )
     required_paths = (
-        FOCUS_FILE,
+        *(path for path, _ in LIFECYCLE_TREES.values()),
         CONTINUOUS_FOCUS_FILE,
         ENGLISH_LOCALISATION,
         RUSSIAN_LOCALISATION,
@@ -3346,46 +3438,63 @@ def collect_issues() -> list[str]:
     issues.extend(_check_war_economy_dynamic(blocks, source))
     issues.extend(_check_focus_gfx(focus_gfx, shine_source))
 
-    if len(trees) != 1:
+    tree_ids = [
+        match[1]
+        for tree in trees
+        if (match := re.search(r"(?m)^\tid\s*=\s*([A-Za-z0-9_]+)\s*$", tree))
+    ]
+    if tree_ids != list(LIFECYCLE_TREES):
         issues.append(
-            f"lifecycle focus source must define one tree, found {len(trees)}"
+            f"lifecycle focus trees must be {list(LIFECYCLE_TREES)}, found {tree_ids}"
         )
-        tree = source
-    else:
-        tree = trees[0]
-    if "id = ADISCORD_vorkerland_civil_war_focus" not in tree:
-        issues.append("lifecycle focus tree id is missing")
-    if not re.search(r"(?m)^\s*default\s*=\s*no\s*$", tree):
-        issues.append("lifecycle focus tree must be non-default")
-
-    country_blocks = _blocks(tree, "country")
-    if len(country_blocks) != 1:
-        issues.append(
-            f"lifecycle focus tree must have one country selector, found {len(country_blocks)}"
-        )
-    else:
+    for tree in trees:
+        match = re.search(r"(?m)^\tid\s*=\s*([A-Za-z0-9_]+)\s*$", tree)
+        tree_id = match[1] if match else "<missing id>"
+        if tree_id not in LIFECYCLE_TREES:
+            continue
+        expected_tags = LIFECYCLE_TREES[tree_id][1]
+        if not re.search(r"(?m)^\s*default\s*=\s*no\s*$", tree):
+            issues.append(f"{tree_id} must be non-default")
+        country_blocks = _blocks(tree, "country")
+        if len(country_blocks) != 1:
+            issues.append(
+                f"{tree_id} must have one country selector, found {len(country_blocks)}"
+            )
+            continue
         country = country_blocks[0]
         tags = set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", country))
-        if tags != {"WRK", "WKR", "VAD", "TVA", "EYR", "EGC", "RIV", "YOR"}:
+        if tags != expected_tags:
             issues.append(
-                f"country selector must cover the claimants and four prewar autonomies, found {sorted(tags)}"
+                f"{tree_id} selector must cover {sorted(expected_tags)}, found {sorted(tags)}"
             )
         if "original_tag" in country:
             issues.append(
-                "country selector must use current lifecycle tags, not original_tag"
+                f"{tree_id} selector must use current lifecycle tags, not original_tag"
             )
         if not re.search(r"\bfactor\s*=\s*0\b", country):
-            issues.append("country selector must start from factor 0")
+            issues.append(f"{tree_id} selector must start from factor 0")
         if not re.search(r"\badd\s*=\s*100\b", country):
-            issues.append("country selector must add weight 100 for lifecycle tags")
+            issues.append(f"{tree_id} selector must add weight 100 for its tags")
+        collapse_gate = "has_global_flag = ADISCORD_vorkerland_collapse_started"
+        if tree_id == "ADISCORD_vorkerland_prewar_focus" and f"NOT = {{ {collapse_gate} }}" not in country:
+            issues.append("the prewar tree selector must end at the collapse")
+        if tree_id == "ADISCORD_vorkerland_settlement_focus" and (
+            collapse_gate not in country or f"NOT = {{ {collapse_gate} }}" in country
+        ):
+            issues.append("the settlement tree selector must start at the collapse")
+        # copy_completed_from = WRK only carries focuses defined in WKR's tree.
+        if tree_id == "ADISCORD_vorkerland_wkr_focus" and not re.search(
+            rf"(?m)^\tshared_focus\s*=\s*{WRK_PREWAR_ROOT}\s*$", tree
+        ):
+            issues.append(f"the WKR tree must include the shared WRK prewar root {WRK_PREWAR_ROOT}")
 
     if tuple(blocks) != lifecycle_order():
         issues.append(
             f"focus IDs/order differ from the lifecycle manifest: {tuple(blocks)}"
         )
-    if len(FOCUS_IDS) != 246:
+    if len(FOCUS_IDS) != 268:
         issues.append(
-            f"validator manifest must contain 246 definitions, found {len(FOCUS_IDS)}"
+            f"validator manifest must contain 268 definitions, found {len(FOCUS_IDS)}"
         )
     issues.extend(_check_graph(blocks))
 
@@ -4050,7 +4159,7 @@ def collect_issues() -> list[str]:
                 issues.append(
                     f"focus expansion idea {idea_id} must contain {token} exactly once"
                 )
-        if expansion_source.count(idea_id) < 1:
+        if _plan_reward_contract(expansion_source).count(idea_id) < 1:
             issues.append(
                 f"focus expansion idea {idea_id} is not earned by an expansion focus"
             )
@@ -4255,7 +4364,7 @@ def collect_issues() -> list[str]:
         "ADISCORD_vorkerland_attempt_wkr_solyarino_intervention = yes",
         "ADISCORD_vorkerland_attempt_remaining_central_fronts = yes",
     ):
-        if token not in optional_source:
+        if token not in _plan_reward_contract(optional_source):
             issues.append(f"WKR optional southern branch lacks payload {token}")
     terminal = blocks.get("WKR_intervene_in_solyarino", "")
     for token in (
@@ -4575,7 +4684,7 @@ def collect_issues() -> list[str]:
         if len(completion_rewards) != 1:
             issues.append(f"{focus_id} bridge must define one completion reward")
         else:
-            reward = completion_rewards[0]
+            reward = _plan_reward_contract(completion_rewards[0])
             for token in VAD_LATE_WAR_BRIDGE_REWARDS[focus_id]:
                 if reward.count(token) != 1:
                     issues.append(
@@ -4801,7 +4910,7 @@ def collect_issues() -> list[str]:
 
     for focus_id, (idea_id, days) in VAD_WARTIME_TIMED_IDEAS.items():
         reward = f"add_timed_idea = {{ idea = {idea_id} days = {days} }}"
-        if blocks.get(focus_id, "").count(reward) != 1:
+        if _plan_reward_contract(blocks.get(focus_id, "")).count(reward) != 1:
             issues.append(
                 f"{focus_id} must grant the bounded {days}-day spirit {idea_id}"
             )
@@ -4841,7 +4950,7 @@ def collect_issues() -> list[str]:
         ),
     }.items():
         for token in tokens:
-            if token not in re.sub(r"\s+", " ", blocks.get(focus_id, "")):
+            if token not in re.sub(r"\s+", " ", _plan_reward_contract(blocks.get(focus_id, ""))):
                 issues.append(f"{focus_id} lacks strengthened VAD payload {token}")
 
     armament_depots = blocks.get("VAD_reopen_armament_depots", "")
@@ -5135,7 +5244,7 @@ def collect_issues() -> list[str]:
             issues.append(f"TVA optional depth contains forbidden payload {token}")
     for focus_id, (idea_id, days) in TVA_OPTIONAL_TIMED_IDEAS.items():
         reward = f"add_timed_idea = {{ idea = {idea_id} days = {days} }}"
-        if blocks.get(focus_id, "").count(reward) != 1:
+        if _plan_reward_contract(blocks.get(focus_id, "")).count(reward) != 1:
             issues.append(
                 f"{focus_id} must grant the bounded {days}-day spirit {idea_id}"
             )
@@ -5157,7 +5266,7 @@ def collect_issues() -> list[str]:
         "add_timed_idea = { idea = "
         f"{RETIRED_WORX_SECOND_PROTOCOL_IDEA} days = 120 }}"
     )
-    if iteration.count(second_protocol_reward) != 1:
+    if _plan_reward_contract(iteration).count(second_protocol_reward) != 1:
         issues.append(
             "TVA iteration two must grant exactly one 120-day second protocol"
         )
@@ -5450,14 +5559,14 @@ def collect_issues() -> list[str]:
     mobile_repair_reward = (
         f"add_timed_idea = {{ idea = {MOBILE_REPAIR_IDEA} days = 35 }}"
     )
-    if mobile_repair.count(mobile_repair_reward) != 1:
+    if _plan_reward_contract(mobile_repair).count(mobile_repair_reward) != 1:
         issues.append(
             "TVA mobile repair trains must grant its concrete 35-day repair spirit"
         )
 
     for focus_id, (idea_id, days) in WORX_WARTIME_TIMED_IDEAS.items():
         reward = f"add_timed_idea = {{ idea = {idea_id} days = {days} }}"
-        if blocks.get(focus_id, "").count(reward) != 1:
+        if _plan_reward_contract(blocks.get(focus_id, "")).count(reward) != 1:
             issues.append(
                 f"{focus_id} must grant the bounded {days}-day spirit {idea_id}"
             )
@@ -5468,7 +5577,7 @@ def collect_issues() -> list[str]:
     adaptive_reward = (
         f"add_timed_idea = {{ idea = {WORX_ADAPTIVE_LOGISTICS_IDEA} days = 90 }}"
     )
-    if blocks.get("TVA_test_adaptive_logistics", "").count(adaptive_reward) != 1:
+    if _plan_reward_contract(blocks.get("TVA_test_adaptive_logistics", "")).count(adaptive_reward) != 1:
         issues.append(
             "TVA adaptive-logistics trial must grant its bounded 90-day spirit"
         )
@@ -6094,7 +6203,7 @@ def collect_issues() -> list[str]:
     }
     for idea_id, raw in re.findall(
         r"\badd_timed_idea\s*=\s*\{\s*idea\s*=\s*([A-Za-z0-9_]+)\s+days\s*=\s*(\d+)\s*\}",
-        source,
+        _plan_reward_contract(source),
     ):
         maximum = timed_idea_limits.get(idea_id, 70)
         if int(raw) > maximum:
@@ -6500,7 +6609,7 @@ def _check_depth_branches(
                 )
     for idea_id, (focus_id, days) in DEPTH_TIMED_IDEAS.items():
         token = f"add_timed_idea = {{ idea = {idea_id} days = {days} }}"
-        if source.count(token) != 1:
+        if _plan_reward_contract(source).count(token) != 1:
             issues.append(
                 f"depth spirit {idea_id} must be granted once as a {days}-day idea"
             )
@@ -6757,6 +6866,9 @@ def _postwar_route_of(focus_id: str) -> str | None:
 
 
 def _can_share_view(left: str, right: str) -> bool:
+    # Focuses of different native trees are never drawn on one canvas.
+    if lifecycle_tree(left) != lifecycle_tree(right):
+        return False
     left_route = _postwar_route_of(left)
     right_route = _postwar_route_of(right)
     return not (left_route and right_route and left_route != right_route)
@@ -7041,7 +7153,7 @@ def _check_variant_branches(
                 if idea_id == branch["timed_idea"]
                 else f"add_ideas = {idea_id}"
             )
-            if block.count(grant) != 1:
+            if _plan_reward_contract(block).count(grant) != 1:
                 issues.append(
                     f"{focus_id} must grant its variant spirit exactly once: {grant}"
                 )

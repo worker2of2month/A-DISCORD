@@ -1,0 +1,11 @@
+scripted_gui = {
+	ADISCORD_vorkerland_worx_panel = {
+		context_type = decision_category
+		window_name = "ADISCORD_vorkerland_worx_window"
+		visible = { WRK_worx_mandate = yes }
+		ai_enabled = { always = no }
+		properties = {
+			WRK_worx_needle = { x = WRK_worx_needle_x }
+		}
+	}
+}

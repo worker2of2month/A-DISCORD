@@ -46,6 +46,21 @@ spriteTypes = {
 
 	###STP
 	spriteType = {
+		name = "GFX_idea_STP_military_administration"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_military_administration.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_STP_institutions_obligations"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_institutions_obligations.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_STP_wartime_strain"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_wartime_strain.png"
+	}
+
+	spriteType = {
 		name = "GFX_idea_STP_party_administration"
 		texturefile = "gfx/interface/ideas/STP/idea_STP_party_administration.png"
 	}

@@ -8000,54 +8000,53 @@ class StelanderPreparationTests(unittest.TestCase):
             )
             self.assertNotIn(verbose_price_copy, hover)
 
-    def test_vorkerland_collapse_opens_dynamic_shabrat_asset_focuses(self):
+    def test_vorkerland_collapse_opens_wartime_shabrat_asset_focuses(self):
         tree = next(
             e.value
-            for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
-            if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus"
+            for e in entries("common/national_focus/ADISCORD_STP_civil_war.txt")
+            if e.key == "focus_tree" and scalar(e.value, "id") == "STP_cw_focus"
         )
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
         for name, position, stock, treasury in (
-            ("STP_cw_seize_vorkerland_stores", ("14", "3"), "12000", None),
-            ("STP_cw_seize_vorkerland_accounts", ("14", "4"), None, "100"),
+            ("STP_cw_seize_vorkerland_stores", ("18", "3"), "12000", None),
+            ("STP_cw_seize_vorkerland_accounts", ("18", "4"), None, "100"),
         ):
             with self.subTest(focus=name):
                 focus = focuses[name]
-                self.assertEqual(scalar(focus, "dynamic"), "yes")
                 self.assertEqual((scalar(focus, "x"), scalar(focus, "y")), position)
                 allow = block(focus, "allow_branch")
                 self.assertIn(
-                    ("has_country_flag", "STP_sided_with_Maksim_flag"),
+                    ("tag", "SRP"),
                     [(e.key, e.value) for e in walk(allow)],
                 )
                 self.assertIn(
                     ("has_global_flag", "ADISCORD_vorkerland_collapse_started"),
-                    [(e.key, e.value) for e in walk(allow)],
+                    [(e.key, e.value) for e in walk(block(focus, "available"))],
                 )
                 available = block(focus, "available")
                 base = {
-                    ("STP", "STP_cw_preparation_open", "yes"): True,
-                    ("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True,
+                    ("SRP", "has_war", "yes"): True,
                 }
-                self.assertFalse(matches_conditions(available, base))
+                self.assertFalse(matches_conditions(available, base, "SRP"))
                 self.assertTrue(
                     matches_conditions(
                         available,
                         {
                             **base,
                             (
-                                "STP",
+                                "SRP",
                                 "has_global_flag",
                                 "ADISCORD_vorkerland_collapse_started",
                             ): True,
                         },
+                        "SRP",
                     )
                 )
                 reward = block(focus, "completion_reward")
                 if stock:
                     self.assertEqual(
                         scalar(block(focus, "prerequisite"), "focus"),
-                        "STP_cw_northern_dossier",
+                        "STP_cw_mountain_staff",
                     )
                     self.assertEqual(
                         scalar(block(reward, "add_equipment_to_stockpile"), "amount"),

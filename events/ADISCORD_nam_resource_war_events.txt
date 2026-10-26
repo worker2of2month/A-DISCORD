@@ -914,6 +914,7 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_resource_war.80.a
 		custom_effect_tooltip = NAM_center_vanished_tt
+		NAM_colony_hourglass_payout = yes
 		hidden_effect = { country_event = { id = ADISCORD_nam_groups.12 hours = 6 } }
 	}
 }

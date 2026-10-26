@@ -41,8 +41,8 @@ focus_tree = {
 	}
 
 	# ----- Colony: trade with the metropole and the underground -----
-	# The only course visible before the collapse of Vorkerland. One route takes
-	# 37 weeks with the inventory, longer than the 175-196 days before the centre
+	# The only course visible before the collapse of Vorkerland. The trade, watch
+	# and hourglass routes together take longer than the window before the centre
 	# vanishes, so the player chooses which colony focuses to finish. The colony
 	# decisions close with the collapse wars, so the same moment bypasses
 	# whatever is left of the colony; NAM_center_vanished (event
@@ -52,7 +52,7 @@ focus_tree = {
 	focus = {
 		id = NAM_metropolitan_quota
 		icon = GFX_focus_generic_resource_extraction
-		x = 35
+		x = 34
 		y = 1
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
@@ -82,7 +82,7 @@ focus_tree = {
 	focus = {
 		id = NAM_deliver_the_quota
 		icon = GFX_focus_generic_railroad
-		x = 34
+		x = 33
 		y = 2
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -129,7 +129,7 @@ focus_tree = {
 	focus = {
 		id = NAM_concealed_reserve
 		icon = GFX_focus_generic_turning_a_blind_eye
-		x = 36
+		x = 35
 		y = 2
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -165,7 +165,7 @@ focus_tree = {
 	focus = {
 		id = NAM_wrk_trade_house
 		icon = GFX_focus_generic_british_trade
-		x = 35
+		x = 34
 		y = 3
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
@@ -207,7 +207,7 @@ focus_tree = {
 	focus = {
 		id = NAM_wrk_return_cargo
 		icon = GFX_goal_generic_construct_civ_factory
-		x = 35
+		x = 34
 		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -244,7 +244,7 @@ focus_tree = {
 	focus = {
 		id = NAM_metropolitan_depots
 		icon = GFX_focus_generic_reinforcing_the_supply_network
-		x = 35
+		x = 34
 		y = 5
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -286,7 +286,7 @@ focus_tree = {
 	focus = {
 		id = NAM_colonial_watch
 		icon = GFX_focus_generic_secret_service_agency
-		x = 41
+		x = 42
 		y = 1
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -319,7 +319,7 @@ focus_tree = {
 	focus = {
 		id = NAM_imperial_gendarmes
 		icon = GFX_focus_generic_national_security
-		x = 40
+		x = 41
 		y = 2
 		cost = 4
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
@@ -360,7 +360,7 @@ focus_tree = {
 	focus = {
 		id = NAM_oilfield_militia
 		icon = GFX_focus_generic_workers
-		x = 42
+		x = 43
 		y = 2
 		cost = 4
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
@@ -402,7 +402,7 @@ focus_tree = {
 	focus = {
 		id = NAM_pipeline_patrols
 		icon = GFX_focus_generic_road_investment
-		x = 41
+		x = 42
 		y = 3
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
@@ -451,7 +451,7 @@ focus_tree = {
 	focus = {
 		id = NAM_print_shop_raid
 		icon = GFX_focus_generic_printing_press
-		x = 41
+		x = 42
 		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -484,7 +484,7 @@ focus_tree = {
 	focus = {
 		id = NAM_colony_order
 		icon = GFX_focus_generic_world_peace
-		x = 41
+		x = 42
 		y = 5
 		cost = 3
 		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_INDUSTRY }
@@ -544,6 +544,282 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 10
+		}
+	}
+
+	# ----- Colony: the metropole's hourglass -----
+	# The centre's emergency commissioner demands deliveries now. Serving the plan
+	# trades fuel for metropolitan arms; the second ledger hides the centre's
+	# share for independence. Bypass completes a focus without its reward, so the
+	# delayed rewards read variables and flags written by the rewards themselves,
+	# never has_completed_focus.
+
+	focus = {
+		id = NAM_centre_hourglass
+		icon = GFX_goal_generic_political_pressure
+		x = 38
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_inventory }
+		bypass = {
+			OR = {
+				has_country_flag = NAM_center_vanished
+				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			}
+		}
+		available = {
+			has_capitulated = no
+			is_subject = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 45
+			add_stability = 0.03
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_commissioner_plan
+		icon = GFX_focus_generic_commission
+		x = 37
+		y = 2
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_centre_hourglass }
+		mutually_exclusive = { focus = NAM_second_ledger }
+		bypass = {
+			OR = {
+				has_country_flag = NAM_center_vanished
+				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			}
+		}
+		available = {
+			has_capitulated = no
+			is_subject = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_wrk_emergency_echelon
+			custom_effect_tooltip = NAM_commissioner_plan_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_underground value = 4 }
+				NAM_underground_clamp = yes
+			}
+			custom_effect_tooltip = NAM_grp_commissioner_plan_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 6 }
+				add_to_variable = { var = NAM_grp_oil_support value = -4 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_second_ledger
+		icon = GFX_focus_generic_stockpile_currency
+		x = 39
+		y = 2
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_centre_hourglass }
+		mutually_exclusive = { focus = NAM_commissioner_plan }
+		bypass = {
+			OR = {
+				has_country_flag = NAM_center_vanished
+				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			}
+		}
+		available = {
+			has_capitulated = no
+			is_subject = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_second_ledger_tt
+			hidden_effect = {
+				set_variable = { var = NAM_hidden_reserve value = 0 }
+			}
+			custom_effect_tooltip = NAM_grp_second_ledger_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_trade_support value = 3 }
+				add_to_variable = { var = NAM_grp_oil_support value = 3 }
+				add_to_variable = { var = NAM_grp_nam_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_metropolitan_instructors
+		icon = GFX_focus_generic_military_mission
+		x = 37
+		y = 3
+		cost = 4
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_commissioner_plan }
+		bypass = {
+			OR = {
+				has_country_flag = NAM_center_vanished
+				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			}
+		}
+		available = {
+			has_capitulated = no
+			is_subject = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 15
+			custom_effect_tooltip = NAM_metropolitan_instructors_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_underground value = -10 }
+				NAM_underground_clamp = yes
+			}
+			custom_effect_tooltip = NAM_grp_metropolitan_instructors_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 4 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_quiet_officer_lists
+		icon = GFX_focus_generic_conspiracy
+		x = 39
+		y = 3
+		cost = 4
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_second_ledger }
+		bypass = {
+			OR = {
+				has_country_flag = NAM_center_vanished
+				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			}
+		}
+		available = {
+			has_capitulated = no
+			is_subject = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_quiet_officer_lists_tt
+			hidden_effect = {
+				set_country_flag = NAM_officer_lists_ready
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_sand_runs_out
+		icon = GFX_focus_generic_radio_communication
+		x = 38
+		y = 4
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = NAM_metropolitan_instructors
+			focus = NAM_quiet_officer_lists
+		}
+		bypass = {
+			OR = {
+				has_country_flag = NAM_center_vanished
+				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			}
+		}
+		available = {
+			has_capitulated = no
+			is_subject = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 25
+			# NAM_ladder_declare_independence applies the lean when it creates the ladder.
+			if = {
+				limit = { has_completed_focus = NAM_commissioner_plan }
+				custom_effect_tooltip = NAM_sand_runs_out_vertical_tt
+				hidden_effect = {
+					set_variable = { var = NAM_colony_ladder_lean value = -0.10 }
+				}
+			}
+			else = {
+				custom_effect_tooltip = NAM_sand_runs_out_districts_tt
+				hidden_effect = {
+					set_variable = { var = NAM_colony_ladder_lean value = 0.10 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_last_centre_register
+		icon = GFX_focus_generic_improve_the_administration
+		x = 38
+		y = 5
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_sand_runs_out }
+		bypass = {
+			OR = {
+				has_country_flag = NAM_center_vanished
+				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			}
+		}
+		available = {
+			has_capitulated = no
+			is_subject = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 20
+			if = {
+				limit = { has_completed_focus = NAM_commissioner_plan }
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 3000
+					producer = NAM
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 20
+					producer = NAM
+				}
+			}
+			else = {
+				custom_effect_tooltip = NAM_last_centre_register_reserve_tt
+				hidden_effect = {
+					add_to_variable = { var = NAM_hidden_reserve value = 150 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 15
 		}
 	}
 

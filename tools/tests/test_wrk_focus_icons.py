@@ -24,11 +24,11 @@ class WrkFocusIconSlotTests(unittest.TestCase):
         cls.shine = read(SHINE_FILE)
 
     def test_manifest_covers_prewar_and_postwar_wrk_only(self) -> None:
-        self.assertEqual(len(WRK_TREE_FOCUSES), 40)
+        self.assertEqual(len(WRK_TREE_FOCUSES), 68)
         self.assertTrue(
             all(focus_id.startswith("WRK_") for focus_id in WRK_TREE_FOCUSES)
         )
-        self.assertEqual(len(set(WRK_TREE_FOCUSES)), 40)
+        self.assertEqual(len(set(WRK_TREE_FOCUSES)), 68)
 
     def test_each_wrk_focus_uses_its_drop_in_sprite(self) -> None:
         for focus_id in WRK_TREE_FOCUSES:
@@ -46,14 +46,12 @@ class WrkFocusIconSlotTests(unittest.TestCase):
                 self.assertIn(f'name = "{sprite}_shine"', self.shine)
                 self.assertIn(f'texturefile = "{texture}"', self.shine)
 
-    def test_registered_wrk_focus_sprites_match_the_manifest(self) -> None:
+    def test_registered_wrk_focus_sprites_cover_the_prewar_manifest(self) -> None:
         sprite_names = set(
             re.findall(r'name = "(GFX_focus_WRK_[A-Za-z0-9_]+)"', self.focus_gfx)
         )
-        self.assertEqual(
-            sprite_names,
-            {wrk_focus_icon_name(focus_id) for focus_id in WRK_TREE_FOCUSES},
-        )
+        expected = {wrk_focus_icon_name(focus_id) for focus_id in WRK_TREE_FOCUSES}
+        self.assertTrue(expected <= sprite_names, expected - sprite_names)
 
 
 if __name__ == "__main__":

@@ -128,8 +128,8 @@ class NewSaveMaterializationTests(unittest.TestCase):
             if "id = ADISCORD_vorkerland_phase.1" in block
         ]
         self.assertEqual(len(delayed_choices), 1)
-        self.assertIn("days = 175", delayed_choices[0])
-        self.assertIn("random_days = 21", delayed_choices[0])
+        self.assertIn("days = 350", delayed_choices[0])
+        self.assertIn("random_days = 30", delayed_choices[0])
         direct_collapses = [
             block
             for block in named_blocks(startup, "country_event")
@@ -494,7 +494,9 @@ class PhaseControllerTests(unittest.TestCase):
             "ADISCORD_vorkerland_materialization_bridge_v2_scheduled",
             "ADISCORD_vorkerland_materialization_prewar_failed_bridge_v1_scheduled",
             "ADISCORD_vorkerland_materialized_outbreak_bridge_v1_scheduled",
-            "load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus",
+            "load_focus_tree = { tree = ADISCORD_vorkerland_wkr_focus",
+            "load_focus_tree = { tree = ADISCORD_vorkerland_vad_focus",
+            "load_focus_tree = { tree = ADISCORD_vorkerland_tva_focus",
         ):
             self.assertNotIn(token, startup)
 

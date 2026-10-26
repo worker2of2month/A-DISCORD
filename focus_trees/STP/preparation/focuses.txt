@@ -103,6 +103,16 @@ focus_tree = {
 		}
 		ai_will_do = { base = 0 }
 		completion_reward = {
+			add_political_power = 100
+			effect_tooltip = {
+				swap_ideas = { remove_idea = STP_cw_party_dummy_idea add_idea = STP_cw_presidium_mandate_delta }
+			}
+			custom_effect_tooltip = STP_cw_presidium_mandate_duration_tt
+			hidden_effect = {
+				set_variable = { var = STP_cw_party_preparation_political_power_gain value = 0.50 }
+				add_to_variable = { var = STP_cw_party_political_power_gain value = 0.50 }
+				STP_cw_refresh_party_modifier = yes
+			}
 			custom_effect_tooltip = STP_cw_branch_choice_tt
 			hidden_effect = { scoped_play_song = "ADISCORD_stp_party_preparation" }
 		}
@@ -654,64 +664,6 @@ focus_tree = {
 			add_command_power = 15
 			custom_effect_tooltip = STP_cw_northern_desk_tt
 			hidden_effect = { set_country_flag = STP_cw_northern_aid_open }
-		}
-	}
-
-	focus = {
-		id = STP_cw_seize_vorkerland_stores
-		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION }
-		relative_position_id = STP_Show_Him_The_Truth
-		dynamic = yes
-		allow_branch = {
-			has_country_flag = STP_sided_with_Maksim_flag
-			has_global_flag = ADISCORD_vorkerland_collapse_started
-		}
-		available = {
-			STP_cw_preparation_open = yes
-			has_country_flag = STP_sided_with_Maksim_flag
-			custom_trigger_tooltip = {
-				tooltip = STP_cw_vorkerland_collapsed_tt
-				has_global_flag = ADISCORD_vorkerland_collapse_started
-			}
-		}
-		icon = GFX_focus_STP_cw_seize_vorkerland_stores
-		x = 14
-		y = 3
-		cost = 2
-		prerequisite = { focus = STP_cw_northern_dossier }
-		ai_will_do = { base = 5 }
-		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 }
-			add_political_power = 35
-		}
-	}
-
-	focus = {
-		id = STP_cw_seize_vorkerland_accounts
-		relative_position_id = STP_Show_Him_The_Truth
-		dynamic = yes
-		allow_branch = {
-			has_country_flag = STP_sided_with_Maksim_flag
-			has_global_flag = ADISCORD_vorkerland_collapse_started
-		}
-		available = {
-			STP_cw_preparation_open = yes
-			has_country_flag = STP_sided_with_Maksim_flag
-			custom_trigger_tooltip = {
-				tooltip = STP_cw_vorkerland_collapsed_tt
-				has_global_flag = ADISCORD_vorkerland_collapse_started
-			}
-		}
-		icon = GFX_focus_STP_cw_seize_vorkerland_accounts
-		x = 14
-		y = 4
-		cost = 2
-		prerequisite = { focus = STP_cw_seize_vorkerland_stores }
-		ai_will_do = { base = 5 }
-		completion_reward = {
-			custom_effect_tooltip = STP_cw_treasury_3000_tt
-			STP_receive_3000 = yes
-			add_political_power = 75
 		}
 	}
 
@@ -1389,7 +1341,7 @@ focus_tree = {
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			add_stability = 0.05
-			add_political_power = 35
+			add_political_power = 75
 			custom_effect_tooltip = STP_PRESIDENT_REMAINS_IN_OFFICE_strategy_tt
 			hidden_effect = {
 				add_to_variable = { var = STP_pf_conservatives_support value = 8 }
@@ -1464,7 +1416,7 @@ focus_tree = {
 				}
 			}
 			custom_effect_tooltip = STP_party_district_survey_tt
-			add_political_power = 25
+			add_political_power = 50
 			custom_effect_tooltip = STP_PARTY_DISCIPLINE_strategy_tt
 			hidden_effect = {
 				add_to_variable = { var = STP_pf_security_support value = 10 }
@@ -1775,6 +1727,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 3 }
 		completion_reward = {
+			add_political_power = 50
 			unlock_decision_tooltip = STP_cw_interrupt_opposition
 			custom_effect_tooltip = STP_cw_interrupt_opposition_unlock_summary_tt
 
@@ -2711,6 +2664,12 @@ focus_tree = {
 		ai_will_do = { base = 4 }
 		completion_reward = {
 			add_political_power = 50
+			custom_effect_tooltip = STP_cw_treasury_300_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+				ADISCORD_economy_mark_dirty = yes
+			}
 
 			unlock_decision_tooltip = STP_ps_fund_nod
 			custom_effect_tooltip = STP_ps_fund_nod_unlock_summary_tt

@@ -1315,7 +1315,8 @@ class StelanderPurchasingPowerTests(unittest.TestCase):
             self.assertEqual(f.calls.count("STP_political_action_slot_release"), 1)
 
     def test_large_focus_grants_survive_capacity_and_ledger_reconciliation(self):
-        source = read("common/national_focus/ADISCORD_national_focus_STP.txt")
+        source = (read("common/national_focus/ADISCORD_national_focus_STP.txt")
+                  + read("common/national_focus/ADISCORD_STP_civil_war.txt"))
         for identifier, amount in (
             ("STP_cw_military_committee_fund", 18000),
             ("STP_cw_seize_vorkerland_accounts", 3000),

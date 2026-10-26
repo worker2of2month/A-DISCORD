@@ -25,6 +25,7 @@ except ModuleNotFoundError:
     )
 
 
+from tools.lib.focus_sources import FOCUS_SOURCE_GROUPS, read_focus_source
 from tools.lib.paths import source_section
 
 
@@ -243,11 +244,11 @@ def _load(
     if isinstance(relative, tuple):
         return "\n".join(_load(path, issues) for path in relative)
     path = ROOT / relative
-    if not path.is_file():
+    if not path.is_file() and relative.name not in FOCUS_SOURCE_GROUPS:
         issues.append(f"missing required file {relative.as_posix()}")
         return ""
     try:
-        source = path.read_text(encoding="utf-8-sig")
+        source = read_focus_source(path)
     except UnicodeError as exc:
         issues.append(f"cannot decode {relative.as_posix()} as UTF-8: {exc}")
         return ""
@@ -577,7 +578,7 @@ def validate_new_save_materialization() -> list[str]:
         )
     else:
         startup_choice = startup_choice_dispatches[0]
-        for token in ("days = 175", "random_days = 21"):
+        for token in ("days = 350", "random_days = 30"):
             if startup_choice.count(token) != 1:
                 issues.append(f"startup phase.1 claimant choice must retain {token}")
         wrk_producers = [
@@ -817,8 +818,8 @@ def validate_new_save_materialization() -> list[str]:
         focus_tree = named_block(materialization, "load_focus_tree")
         for token, diagnostic in (
             (
-                "tree = ADISCORD_vorkerland_civil_war_focus",
-                "WKR materialization must select the lifecycle focus tree",
+                "tree = ADISCORD_vorkerland_wkr_focus",
+                "WKR materialization must select the WKR focus tree",
             ),
             (
                 "keep_completed = yes",
@@ -1053,14 +1054,15 @@ def validate_new_save_materialization() -> list[str]:
             issues.append(
                 "collapse verifier must set materialized_verified only after all postconditions"
             )
-        focus_tree_load = (
-            "load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus "
-            "keep_completed = yes }"
-        )
-        if success.count(focus_tree_load) != 3:
-            issues.append(
-                "verified materialization must load the lifecycle tree for WKR, VAD, and TVA"
+        for tag in ("WKR", "VAD", "TVA"):
+            focus_tree_load = (
+                f"load_focus_tree = {{ tree = ADISCORD_vorkerland_{tag.lower()}_focus "
+                "keep_completed = yes }"
             )
+            if success.count(focus_tree_load) != 1:
+                issues.append(
+                    f"verified materialization must load the {tag} focus tree once"
+                )
         if (
             success.count("ADISCORD_vorkerland_set_phase_regional_consolidation = yes")
             != 1
@@ -1336,7 +1338,10 @@ def validate_phase_controller() -> list[str]:
 
     known_phase_flags = set(PHASE_FLAGS)
     for relative, source in _gameplay_phase_token_sources():
-        found = set(re.findall(r"\bADISCORD_vorkerland_phase_[a-z0-9_]+\b", source))
+        found = set(re.findall(
+            r"\b(?:has_global_flag|set_global_flag|clr_global_flag|flag)\s*=\s*"
+            r"(ADISCORD_vorkerland_phase_[a-z0-9_]+)\b", source
+        ))
         unknown = sorted(found - known_phase_flags)
         if unknown:
             issues.append(f"{relative.as_posix()} uses unknown phase flags {unknown}")
@@ -1511,7 +1516,9 @@ def validate_phase_controller() -> list[str]:
         "ADISCORD_vorkerland_materialization_bridge_v2_scheduled",
         "ADISCORD_vorkerland_materialization_prewar_failed_bridge_v1_scheduled",
         "ADISCORD_vorkerland_materialized_outbreak_bridge_v1_scheduled",
-        "load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus",
+        "load_focus_tree = { tree = ADISCORD_vorkerland_wkr_focus",
+        "load_focus_tree = { tree = ADISCORD_vorkerland_vad_focus",
+        "load_focus_tree = { tree = ADISCORD_vorkerland_tva_focus",
         "ADISCORD_vorkerland_phase.2",
         "clr_global_flag = ADISCORD_vorkerland_collapse_materialization_failed",
         "clr_global_flag = ADISCORD_vorkerland_collapse_materialization_retry",
@@ -2600,9 +2607,8 @@ def validate_campaign_state() -> list[str]:
         PHASE_TRIGGERS,
         COLLAPSE_ON_ACTIONS,
         COLLAPSE_EVENTS,
-        FOCUS_TREE,
     )
-    if any(not (ROOT / path).is_file() for path in required):
+    if any(not (ROOT / path).is_file() for path in required) or not focus:
         return issues
 
     legacy_dynamic = (

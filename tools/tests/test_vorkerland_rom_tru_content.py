@@ -147,7 +147,7 @@ class RomTruContentTests(unittest.TestCase):
             (tru, "TRU", 24, "ADISCORD_vorkerland_tru_emergency_river_council"),
         ):
             self.assertIn("add_manpower = 3000", block)
-            self.assertIn(f"amount = 400 producer = {tag}", block)
+            self.assertIn(f"amount = 4000 producer = {tag}", block)
             self.assertIn(f"amount = {support} producer = {tag}", block)
             self.assertIn(f"amount = 48 producer = {tag}", block)
             self.assertIn(f"add_ideas = {idea}", block)
@@ -239,7 +239,7 @@ class RomTruContentTests(unittest.TestCase):
             self.assertIn(f"has_war_with = {target}", block)
             self.assertIn("value = 100", block)
             self.assertIn("priority = 1400", block)
-            self.assertIn("execution_type = rush", block)
+            self.assertIn("execution_type = balanced", block)
             self.assertIn("manual_attack = yes", block)
             self.assertIn(f"type = conquer id = {target} value = 200", block)
 

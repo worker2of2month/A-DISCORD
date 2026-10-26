@@ -84,6 +84,7 @@ RUS_faction_support = {
 # --- rus_faction_favours ---
 # RUS for 120 days after the matching favour is paid with faction support.
 RUS_favour_shock_fist = {
+	remove_trigger = { has_war = no }
 	icon = GFX_idea_ADISCORD_law_military_general_staff
 	army_attack_factor = 0.15
 	breakthrough_factor = 0.10

@@ -74,7 +74,7 @@ A-Discord начинается 1 января 2160 года. Это не мир,
 
 Конфедерацию связывают личный авторитет Уоркера, связь между учреждениями и распределение ресурсов. Вместе с тем округа обладают собственными чиновниками и вооружёнными силами, а преемственность зависит от главы государства. Центр и территории способны предъявлять друг другу несовместимые требования.
 
-Опоры: `vorkerism_desc` в [описаниях идеологий](../../localisation/russian/parties_l_russian.yml), `WRK_constitution_of_the_republic_desc`, `ADISCORD_vorkerland_erased_nations_desc`. Стартовые фокусы `WRK_measure_confederation_fault_lines`, `WRK_convene_council_of_republics`, `WRK_inventory_emergency_stores` и `WRK_bind_districts_to_charter` находятся в [исходнике дерева Воркерланда](../../focus_trees/Vorkerland/civil_war/focuses.txt), их описания - в [локализации Воркерланда](../../localisation/russian/ADISCORD_vorkerland_l_russian.yml). Они предлагают ещё не выполненные меры и показывают исходные проблемы учёта, обязательств и запасов.
+Опоры: `vorkerism_desc` в [описаниях идеологий](../../localisation/russian/parties_l_russian.yml), `WRK_constitution_of_the_republic_desc`, `ADISCORD_vorkerland_erased_nations_desc`. Стартовые фокусы `WRK_measure_confederation_fault_lines`, `WRK_convene_council_of_republics`, `WRK_inventory_emergency_stores` и `WRK_bind_districts_to_charter` находятся в [исходнике дерева Воркерланда](../../focus_trees/Vorkerland/prewar/focuses.txt), их описания - в [локализации Воркерланда](../../localisation/russian/ADISCORD_vorkerland_l_russian.yml). Они предлагают ещё не выполненные меры и показывают исходные проблемы учёта, обязательств и запасов.
 
 ### Обстановка на 1 января 2160 года
 

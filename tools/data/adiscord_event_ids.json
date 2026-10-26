@@ -7293,6 +7293,78 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_vorkerland_preparation.40",
+      "namespace": "ADISCORD_vorkerland_preparation",
+      "number": 40,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_preparation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_preparation.41",
+      "namespace": "ADISCORD_vorkerland_preparation",
+      "number": 41,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_preparation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_preparation.42",
+      "namespace": "ADISCORD_vorkerland_preparation",
+      "number": 42,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_preparation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_preparation.43",
+      "namespace": "ADISCORD_vorkerland_preparation",
+      "number": 43,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_preparation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_preparation.44",
+      "namespace": "ADISCORD_vorkerland_preparation",
+      "number": 44,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_preparation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_preparation.45",
+      "namespace": "ADISCORD_vorkerland_preparation",
+      "number": 45,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_preparation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_preparation.46",
+      "namespace": "ADISCORD_vorkerland_preparation",
+      "number": 46,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_preparation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_preparation.47",
+      "namespace": "ADISCORD_vorkerland_preparation",
+      "number": 47,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_preparation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_preparation.48",
+      "namespace": "ADISCORD_vorkerland_preparation",
+      "number": 48,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_preparation",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_pc.100",
       "namespace": "ADISCORD_STP_pc",
       "number": 100,
@@ -7386,6 +7458,94 @@
       "number": 111,
       "owner": "events/ADISCORD_STP_events.txt",
       "subsystem": "ADISCORD_STP_pc",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_postwar.20",
+      "namespace": "ADISCORD_vorkerland_postwar",
+      "number": 20,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_postwar.21",
+      "namespace": "ADISCORD_vorkerland_postwar",
+      "number": 21,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_postwar.22",
+      "namespace": "ADISCORD_vorkerland_postwar",
+      "number": 22,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_postwar.23",
+      "namespace": "ADISCORD_vorkerland_postwar",
+      "number": 23,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_postwar.24",
+      "namespace": "ADISCORD_vorkerland_postwar",
+      "number": 24,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_postwar.25",
+      "namespace": "ADISCORD_vorkerland_postwar",
+      "number": 25,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_postwar.26",
+      "namespace": "ADISCORD_vorkerland_postwar",
+      "number": 26,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_postwar.27",
+      "namespace": "ADISCORD_vorkerland_postwar",
+      "number": 27,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_postwar.28",
+      "namespace": "ADISCORD_vorkerland_postwar",
+      "number": 28,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_postwar.29",
+      "namespace": "ADISCORD_vorkerland_postwar",
+      "number": 29,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_postwar.30",
+      "namespace": "ADISCORD_vorkerland_postwar",
+      "number": 30,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_postwar",
       "status": "active"
     }
   ]

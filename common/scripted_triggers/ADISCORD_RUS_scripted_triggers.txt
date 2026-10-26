@@ -1378,12 +1378,14 @@ RUS_bunker_upgrade_5_ui_available = {
 
 RUS_defensive_preparation_available = {
 	RUS_bunker_operational = yes
+	has_war = yes
 	has_completed_focus = RUS_entrenched_reserves
 	NOT = { has_idea = RUS_defensive_preparation_spirit }
 }
 
 RUS_mobile_preparation_available = {
 	RUS_bunker_operational = yes
+	has_war = yes
 	has_completed_focus = RUS_mobile_supply_columns
 	NOT = { has_idea = RUS_mobile_preparation_spirit }
 }
