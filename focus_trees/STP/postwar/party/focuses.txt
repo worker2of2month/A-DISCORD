@@ -1,7 +1,7 @@
 # @section institutions
 	focus = {
 		id = STP_pw_party_new_republic
-		icon = GFX_focus_ADISCORD_Wall_Of_Screens
+		icon = GFX_focus_STP_ph_six_chairs
 		x = 0
 		y = 2
 		cost = 3
@@ -80,7 +80,7 @@
 
 	focus = {
 		id = STP_pw_party_civil_records
-		icon = GFX_focus_STP_pw_party_veteran_reserve
+		icon = GFX_focus_STP_cw_protocol_office
 		x = -16
 		y = 4
 		cost = 4
@@ -117,7 +117,7 @@
 
 	focus = {
 		id = STP_pw_party_open_settlement
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_party_district_compact
 		x = -18
 		y = 5
 		cost = 3
@@ -203,7 +203,7 @@
 
 	focus = {
 		id = STP_pw_party_civil_charter
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_ph_last_signature
 		x = -16
 		y = 9
 		cost = 5
@@ -247,7 +247,7 @@
 
 	focus = {
 		id = STP_pw_party_restore_roads
-		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		icon = GFX_focus_STP_ps_expedition_logistics
 		x = -10
 		y = 3
 		cost = 3
@@ -285,7 +285,7 @@
 
 	focus = {
 		id = STP_pw_party_homes_for_returnees
-		icon = GFX_focus_VAL_Reclamation_Return_Home
+		icon = GFX_focus_STP_ps_evacuation_plan
 		x = -10
 		y = 4
 		cost = 4
@@ -317,7 +317,7 @@
 
 	focus = {
 		id = STP_pw_party_civil_workshops
-		icon = GFX_focus_VAL_Factories_Like_Cathedrals
+		icon = GFX_focus_STP_party_technical_institutes
 		x = -12
 		y = 6
 		cost = 5
@@ -375,7 +375,7 @@
 
 	focus = {
 		id = STP_pw_party_accountable_arsenals
-		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
+		icon = GFX_focus_STP_pw_party_defence_combine
 		x = -8
 		y = 6
 		cost = 5
@@ -481,7 +481,7 @@
 
 	focus = {
 		id = STP_pw_party_army_register
-		icon = GFX_focus_VAL_Army_Of_The_Ledger
+		icon = GFX_focus_STP_ph_pen_of_staff
 		x = 10
 		y = 3
 		cost = 3
@@ -551,7 +551,7 @@
 
 	focus = {
 		id = STP_pw_party_supply_service
-		icon = GFX_focus_STP_party_war_transport
+		icon = GFX_focus_STP_party_supply_directorate
 		x = 8
 		y = 5
 		cost = 4
@@ -582,7 +582,7 @@
 
 	focus = {
 		id = STP_pw_party_professional_service
-		icon = GFX_focus_STP_pw_party_veteran_reserve
+		icon = GFX_focus_STP_ch_service_act
 		x = 12
 		y = 5
 		cost = 5
@@ -624,7 +624,7 @@
 
 	focus = {
 		id = STP_pw_party_settled_state
-		icon = GFX_focus_STP_Triumph_Of_Common_Sense
+		icon = GFX_focus_STP_party_district_compact
 		x = 0
 		y = 13
 		cost = 4
@@ -677,7 +677,7 @@
 
 	focus = {
 		id = STP_pw_party_external_mandate
-		icon = GFX_focus_STP_cw_northern_dossier
+		icon = GFX_focus_STP_ps_asylum_protocol
 		x = 0
 		y = 14
 		cost = 3
@@ -747,7 +747,7 @@
 
 	focus = {
 		id = STP_pw_party_kefreyt_campaign
-		icon = GFX_focus_STP_End_Kefreit
+		icon = GFX_focus_STP_party_war_directorate
 		x = 2
 		y = 15
 		cost = 4
@@ -782,7 +782,7 @@
 
 	focus = {
 		id = STP_pw_party_regional_order
-		icon = GFX_focus_STP_Steland_Hegemony
+		icon = GFX_focus_STP_cw_party_mandate
 		x = 0
 		y = 16
 		cost = 4
@@ -814,7 +814,7 @@
 	# Final Party campaign: every remaining northern government becomes a subject.
 	focus = {
 		id = STP_pw_party_northern_march
-		icon = GFX_focus_STP_Break_The_Northern_Ring
+		icon = GFX_focus_STP_cw_capital_counteroffensive
 		x = 0
 		y = 17
 		cost = 4
@@ -844,7 +844,7 @@
 
 	focus = {
 		id = STP_pw_party_great_stelander
-		icon = GFX_focus_STP_Steland_Hegemony
+		icon = GFX_focus_STP_cw_party_mandate
 		x = 0
 		y = 18
 		cost = 5
@@ -1051,7 +1051,7 @@
 
 	focus = {
 		id = STP_party_port_contracts
-		icon = GFX_focus_STP_party_port_contracts
+		icon = GFX_focus_STP_ps_foreign_supply_desk
 		x = -12
 		y = 7
 		cost = 4
@@ -1211,7 +1211,7 @@
 	focus = {
 		id = STP_party_captured_archives
 		icon = GFX_focus_STP_cw_protocol_office
-		x = -26
+		x = -24
 		y = 6
 		cost = 5
 		prerequisite = { focus = STP_party_factory_laboratories }
@@ -1349,7 +1349,7 @@
 
 	focus = {
 		id = STP_pw_party_commercial_recovery
-		icon = GFX_focus_VAL_Market_Roads_North
+		icon = GFX_focus_STP_ps_foreign_supply_desk
 		x = -12
 		y = 8
 		cost = 4
@@ -1467,7 +1467,7 @@
 
 	focus = {
 		id = STP_pw_party_field_staff
-		icon = GFX_focus_STP_Turn_The_Young_Officers
+		icon = GFX_focus_STP_ph_pen_of_staff
 		x = 12
 		y = 6
 		cost = 4
@@ -1548,7 +1548,7 @@
 	focus = {
 		id = STP_pw_party_armed_neutrality
 		icon = GFX_focus_STP_ps_asylum_protocol
-		x = 30
+		x = 28
 		y = 4
 		cost = 4
 		allow_branch = {
@@ -1580,8 +1580,8 @@
 	focus = {
 		id = STP_pw_party_foreign_settlement
 		icon = GFX_focus_STP_cw_quiet_registers
-		x = 16
-		y = 11
+		x = 27
+		y = 5
 		cost = 3
 		allow_branch = {
 			has_country_flag = STP_cw_postwar
@@ -1658,7 +1658,7 @@
 
 	focus = {
 		id = STP_pw_party_family_pensions
-		icon = GFX_focus_STP_pw_party_family_pensions
+		icon = GFX_focus_STP_ps_evacuation_plan
 		x = -24
 		y = 7
 		cost = 3
@@ -1700,7 +1700,7 @@
 
 	focus = {
 		id = STP_pw_party_civilian_retraining
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_STP_party_personnel_commissions
 		x = -22
 		y = 7
 		cost = 3
@@ -1745,7 +1745,7 @@
 
 	focus = {
 		id = STP_pw_party_veteran_reserve
-		icon = GFX_focus_STP_pw_party_veteran_reserve
+		icon = GFX_focus_STP_ch_service_act
 		x = -20
 		y = 7
 		cost = 3
@@ -1785,7 +1785,7 @@
 
 	focus = {
 		id = STP_pw_party_social_guarantees
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_party_district_compact
 		x = -22
 		y = 8
 		cost = 3
@@ -1895,7 +1895,7 @@
 
 	focus = {
 		id = STP_pw_party_protectorate
-		icon = GFX_focus_STP_cw_northern_desk
+		icon = GFX_focus_STP_ps_northern_partner
 		x = 14
 		y = 4
 		cost = 4
@@ -1942,7 +1942,7 @@
 
 	focus = {
 		id = STP_pw_party_sovereignty
-		icon = GFX_focus_STP_Break_The_Northern_Ring
+		icon = GFX_focus_STP_cw_capital_counteroffensive
 		x = 18
 		y = 4
 		cost = 4
@@ -1999,7 +1999,7 @@
 
 	focus = {
 		id = STP_pw_party_nod_military_mission
-		icon = GFX_focus_STP_cw_arm_the_north
+		icon = GFX_focus_STP_ps_northern_arms
 		x = 26
 		y = 3
 		cost = 4
@@ -2038,8 +2038,8 @@
 
 	focus = {
 		id = STP_pw_party_domestic_pattern
-		icon = GFX_focus_STP_pw_party_domestic_pattern
-		x = 30
+		icon = GFX_focus_STP_party_technical_institutes
+		x = 28
 		y = 3
 		cost = 4
 		allow_branch = {
@@ -2095,7 +2095,7 @@
 
 	focus = {
 		id = STP_pw_party_northern_contacts
-		icon = GFX_focus_STP_cw_northern_dossier
+		icon = GFX_focus_STP_ps_asylum_protocol
 		x = 18
 		y = 6
 		cost = 3
@@ -2164,7 +2164,7 @@
 
 	focus = {
 		id = STP_pw_party_northern_campaign
-		icon = GFX_focus_STP_Break_The_Northern_Ring
+		icon = GFX_focus_STP_cw_capital_counteroffensive
 		x = 18
 		y = 8
 		cost = 4
@@ -2199,8 +2199,8 @@
 
 	focus = {
 		id = STP_pw_party_former_patron
-		icon = GFX_focus_STP_cw_northern_desk
-		x = 34
+		icon = GFX_focus_STP_ps_northern_partner
+		x = 30
 		y = 3
 		cost = 4
 		allow_branch = {
@@ -2345,7 +2345,7 @@
 
 	focus = {
 		id = STP_pw_party_mechanized_guard
-		icon = GFX_focus_generic_mechanized
+		icon = GFX_focus_STP_cw_capital_reserve_armored
 		x = 8
 		y = 10
 		cost = 5
@@ -2455,7 +2455,7 @@
 
 	focus = {
 		id = STP_ch_model_ally
-		icon = GFX_focus_STP_cw_northern_desk
+		icon = GFX_focus_STP_ps_northern_partner
 		x = 16
 		y = 3
 		cost = 3
@@ -2523,7 +2523,7 @@
 
 	focus = {
 		id = STP_ch_congress
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_ph_last_signature
 		x = 16
 		y = 3
 		cost = 5
@@ -2615,7 +2615,7 @@
 
 	focus = {
 		id = STP_ch_first_promises
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_party_district_compact
 		x = 16
 		y = 4
 		cost = 3
@@ -2735,7 +2735,7 @@
 
 	focus = {
 		id = STP_ch_program_settlement
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_STP_ministry_funding
 		x = 4
 		y = 19
 		cost = 4
@@ -2834,7 +2834,7 @@
 
 	focus = {
 		id = STP_pw_party_high_houses
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_ph_last_signature
 		x = -3
 		y = 3
 		cost = 2
@@ -2932,7 +2932,7 @@
 
 	focus = {
 		id = STP_party_houses_centralise
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_STP_ministry_funding
 		x = -1
 		y = 4
 		cost = 2
@@ -3381,7 +3381,7 @@
 
 	focus = {
 		id = STP_party_houses_compact
-		icon = GFX_focus_VAL_Contracts_Outlive_Kings
+		icon = GFX_focus_STP_party_district_compact
 		x = -3
 		y = 10
 		cost = 2
@@ -3527,7 +3527,7 @@
 
 	focus = {
 		id = STP_party_festival_levy
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_STP_ministry_funding
 		x = -1
 		y = 4
 		cost = 2
@@ -3590,7 +3590,7 @@
 
 	focus = {
 		id = STP_party_public_orgies
-		icon = GFX_focus_STP_Nectar_of_the_Gods
+		icon = GFX_focus_STP_pe_festival_ending_a
 		x = -5
 		y = 5
 		cost = 2
@@ -3640,7 +3640,7 @@
 
 	focus = {
 		id = STP_party_hard_drugs
-		icon = GFX_focus_ADISCORD_All_In
+		icon = GFX_focus_STP_pe_festival_ending_a
 		x = -1
 		y = 5
 		cost = 2
@@ -3763,7 +3763,7 @@
 
 	focus = {
 		id = STP_ch_free_labour
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_STP_party_personnel_commissions
 		x = -1
 		y = 6
 		cost = 2
@@ -3845,7 +3845,7 @@
 
 	focus = {
 		id = STP_party_festival_clinics
-		icon = GFX_focus_VAL_Field_Surgeons
+		icon = GFX_focus_STP_ps_evacuation_plan
 		x = -5
 		y = 8
 		cost = 1
@@ -3904,7 +3904,7 @@
 
 	focus = {
 		id = STP_party_festival_immunity
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_ph_last_signature
 		x = -1
 		y = 8
 		cost = 1
@@ -4016,7 +4016,7 @@
 
 	focus = {
 		id = STP_party_festival_charter
-		icon = GFX_focus_STP_Triumph_Of_Common_Sense
+		icon = GFX_focus_STP_pv_glory_festival
 		x = -3
 		y = 10
 		cost = 2
@@ -4091,7 +4091,7 @@
 
 	focus = {
 		id = STP_party_staff_demobilisation
-		icon = GFX_focus_VAL_Reclamation_Return_Home
+		icon = GFX_focus_STP_ps_evacuation_plan
 		x = -5
 		y = 4
 		cost = 2
@@ -4202,7 +4202,7 @@
 
 	focus = {
 		id = STP_party_staff_reserve_jobs
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_STP_party_personnel_commissions
 		x = -5
 		y = 5
 		cost = 2
@@ -4624,7 +4624,7 @@
 
 	focus = {
 		id = STP_ch_production_agreements
-		icon = GFX_focus_VAL_Contracts_Outlive_Kings
+		icon = GFX_focus_STP_party_district_compact
 		x = -3
 		y = 3
 		cost = 2
@@ -4659,7 +4659,7 @@
 
 	focus = {
 		id = STP_party_trade_monopolies
-		icon = GFX_focus_VAL_Count_The_Captains
+		icon = GFX_focus_STP_ph_pen_of_houses
 		x = -5
 		y = 4
 		cost = 2
@@ -4825,7 +4825,7 @@
 
 	focus = {
 		id = STP_party_trade_credit
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_STP_ministry_funding
 		x = -1
 		y = 5
 		cost = 2
@@ -4876,7 +4876,7 @@
 
 	focus = {
 		id = STP_ch_market_charter
-		icon = GFX_focus_STP_party_port_contracts
+		icon = GFX_focus_STP_ps_foreign_supply_desk
 		x = -3
 		y = 6
 		cost = 2
@@ -4972,7 +4972,7 @@
 
 	focus = {
 		id = STP_party_trade_industry
-		icon = GFX_focus_VAL_Factories_Like_Cathedrals
+		icon = GFX_focus_STP_party_industrial_board
 		x = -1
 		y = 7
 		cost = 2
@@ -5029,7 +5029,7 @@
 
 	focus = {
 		id = STP_party_trade_warehouses
-		icon = GFX_focus_STP_cw_port_budget
+		icon = GFX_focus_STP_ps_foreign_supply_desk
 		x = -5
 		y = 8
 		cost = 1
@@ -5072,7 +5072,7 @@
 
 	focus = {
 		id = STP_party_trade_suppliers
-		icon = GFX_focus_VAL_Market_Roads_North
+		icon = GFX_focus_STP_ps_foreign_supply_desk
 		x = -1
 		y = 8
 		cost = 1
@@ -5111,7 +5111,7 @@
 
 	focus = {
 		id = STP_ch_season_open
-		icon = GFX_focus_VAL_Bread_From_Barracks
+		icon = GFX_focus_STP_ps_expedition_logistics
 		x = -3
 		y = 9
 		cost = 3
@@ -5401,7 +5401,7 @@
 
 	focus = {
 		id = STP_party_security_network
-		icon = GFX_focus_ADISCORD_Wall_Of_Screens
+		icon = GFX_focus_STP_cw_counter_network
 		x = -1
 		y = 5
 		cost = 2
@@ -5491,7 +5491,7 @@
 
 	focus = {
 		id = STP_party_security_judicial_control
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_party_district_compact
 		x = -5
 		y = 7
 		cost = 2
@@ -5592,7 +5592,7 @@
 
 	focus = {
 		id = STP_party_security_restitution
-		icon = GFX_focus_VAL_Reclamation_Return_Home
+		icon = GFX_focus_STP_ps_evacuation_plan
 		x = -5
 		y = 8
 		cost = 1
@@ -5696,7 +5696,7 @@
 
 	focus = {
 		id = STP_ch_quiet_order
-		icon = GFX_focus_STP_ps_permanent_security
+		icon = GFX_focus_STP_ph_pen_of_silence
 		x = -3
 		y = 9
 		cost = 3
@@ -5788,7 +5788,7 @@
 
 	focus = {
 		id = STP_party_regent_mandate
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_ph_last_signature
 		x = -3
 		y = 3
 		cost = 2
@@ -5828,7 +5828,7 @@
 
 	focus = {
 		id = STP_party_regent_advisers
-		icon = GFX_focus_STP_cw_northern_desk
+		icon = GFX_focus_STP_ps_northern_partner
 		x = -5
 		y = 4
 		cost = 2
@@ -5889,7 +5889,7 @@
 
 	focus = {
 		id = STP_party_regent_local_cadres
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_STP_party_personnel_commissions
 		x = -1
 		y = 4
 		cost = 2
@@ -5993,7 +5993,7 @@
 
 	focus = {
 		id = STP_party_regent_local_budget
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_STP_ministry_funding
 		x = -1
 		y = 5
 		cost = 2
@@ -6141,7 +6141,7 @@
 
 	focus = {
 		id = STP_party_regent_industry
-		icon = GFX_focus_RUS_industrial_belt
+		icon = GFX_focus_STP_party_industrial_board
 		x = -1
 		y = 7
 		cost = 2
@@ -6198,7 +6198,7 @@
 
 	focus = {
 		id = STP_party_regent_customs
-		icon = GFX_focus_STP_cw_port_budget
+		icon = GFX_focus_STP_ps_foreign_supply_desk
 		x = -5
 		y = 8
 		cost = 1
@@ -6294,7 +6294,7 @@
 
 	focus = {
 		id = STP_party_regent_guarantees
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_party_district_compact
 		x = -3
 		y = 9
 		cost = 3
@@ -6414,7 +6414,7 @@
 
 	focus = {
 		id = STP_pe_houses_policy_a
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_STP_ministry_funding
 		x = 1
 		y = 4
 		cost = 2
@@ -6682,7 +6682,7 @@
 
 	focus = {
 		id = STP_pe_houses_course_a
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_party_district_compact
 		x = 1
 		y = 9
 		cost = 2
@@ -6750,7 +6750,7 @@
 
 	focus = {
 		id = STP_pe_houses_ending_a
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_ph_last_signature
 		x = 1
 		y = 11
 		cost = 3
@@ -6883,7 +6883,7 @@
 
 	focus = {
 		id = STP_pe_festival_policy_a
-		icon = GFX_focus_VAL_Bread_From_Barracks
+		icon = GFX_focus_STP_ps_expedition_logistics
 		x = 1
 		y = 4
 		cost = 2
@@ -6917,7 +6917,7 @@
 
 	focus = {
 		id = STP_pe_festival_policy_b
-		icon = GFX_focus_STP_Nectar_of_the_Gods
+		icon = GFX_focus_STP_pe_festival_ending_a
 		x = 5
 		y = 4
 		cost = 2
@@ -6951,7 +6951,7 @@
 
 	focus = {
 		id = STP_pe_festival_work_a
-		icon = GFX_focus_VAL_Market_Roads_North
+		icon = GFX_focus_STP_ps_foreign_supply_desk
 		x = 1
 		y = 5
 		cost = 2
@@ -7068,7 +7068,7 @@
 
 	focus = {
 		id = STP_pe_festival_settlement
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_STP_ministry_funding
 		x = 3
 		y = 6
 		cost = 1
@@ -7114,7 +7114,7 @@
 
 	focus = {
 		id = STP_pe_festival_next_day
-		icon = GFX_focus_STP_pw_party_family_pensions
+		icon = GFX_focus_STP_ps_evacuation_plan
 		x = 3
 		y = 7
 		cost = 1
@@ -7158,7 +7158,7 @@
 
 	focus = {
 		id = STP_pe_festival_commission
-		icon = GFX_focus_VAL_Field_Surgeons
+		icon = GFX_focus_STP_ps_evacuation_plan
 		x = 3
 		y = 8
 		cost = 2
@@ -7194,7 +7194,7 @@
 
 	focus = {
 		id = STP_pe_festival_course_a
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_party_district_compact
 		x = 1
 		y = 9
 		cost = 2
@@ -7269,7 +7269,7 @@
 
 	focus = {
 		id = STP_pe_festival_ending_a
-		icon = GFX_focus_STP_party_rear_administration
+		icon = GFX_focus_STP_pe_festival_ending_a
 		x = 1
 		y = 11
 		cost = 3
@@ -7361,7 +7361,7 @@
 
 	focus = {
 		id = STP_pe_staff_opening
-		icon = GFX_focus_STP_pw_party_veteran_reserve
+		icon = GFX_focus_STP_ch_service_act
 		x = 3
 		y = 3
 		cost = 1
@@ -7402,7 +7402,7 @@
 
 	focus = {
 		id = STP_pe_staff_policy_a
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_STP_party_personnel_commissions
 		x = 1
 		y = 4
 		cost = 2
@@ -7564,7 +7564,7 @@
 
 	focus = {
 		id = STP_pe_staff_settlement
-		icon = GFX_focus_VAL_Army_Of_The_Ledger
+		icon = GFX_focus_STP_ph_pen_of_staff
 		x = 3
 		y = 6
 		cost = 1
@@ -7724,7 +7724,7 @@
 
 	focus = {
 		id = STP_pe_staff_course_b
-		icon = GFX_focus_STP_Turn_The_Young_Officers
+		icon = GFX_focus_STP_ph_pen_of_staff
 		x = 5
 		y = 9
 		cost = 2
@@ -7758,7 +7758,7 @@
 
 	focus = {
 		id = STP_pe_staff_ending_a
-		icon = GFX_focus_STP_pw_party_family_pensions
+		icon = GFX_focus_STP_ps_evacuation_plan
 		x = 1
 		y = 11
 		cost = 3
@@ -7850,7 +7850,7 @@
 
 	focus = {
 		id = STP_pe_trade_opening
-		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
+		icon = GFX_focus_STP_ps_northern_arms
 		x = 3
 		y = 3
 		cost = 1
@@ -7891,7 +7891,7 @@
 
 	focus = {
 		id = STP_pe_trade_policy_a
-		icon = GFX_focus_VAL_Bread_From_Barracks
+		icon = GFX_focus_STP_ps_expedition_logistics
 		x = 1
 		y = 4
 		cost = 2
@@ -7925,7 +7925,7 @@
 
 	focus = {
 		id = STP_pe_trade_policy_b
-		icon = GFX_focus_VAL_Contracts_Outlive_Kings
+		icon = GFX_focus_STP_party_district_compact
 		x = 5
 		y = 4
 		cost = 2
@@ -8099,7 +8099,7 @@
 
 	focus = {
 		id = STP_pe_trade_next_day
-		icon = GFX_focus_STP_cw_port_budget
+		icon = GFX_focus_STP_ps_foreign_supply_desk
 		x = 3
 		y = 7
 		cost = 1
@@ -8179,7 +8179,7 @@
 
 	focus = {
 		id = STP_pe_trade_course_a
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_STP_party_personnel_commissions
 		x = 1
 		y = 9
 		cost = 2
@@ -8213,7 +8213,7 @@
 
 	focus = {
 		id = STP_pe_trade_course_b
-		icon = GFX_focus_VAL_Army_Of_The_Ledger
+		icon = GFX_focus_STP_ph_pen_of_staff
 		x = 5
 		y = 9
 		cost = 2
@@ -8247,7 +8247,7 @@
 
 	focus = {
 		id = STP_pe_trade_ending_a
-		icon = GFX_focus_VAL_Market_Roads_North
+		icon = GFX_focus_STP_ps_foreign_supply_desk
 		x = 1
 		y = 11
 		cost = 3
@@ -8293,7 +8293,7 @@
 
 	focus = {
 		id = STP_pe_trade_ending_b
-		icon = GFX_focus_VAL_Count_The_Captains
+		icon = GFX_focus_STP_ph_pen_of_houses
 		x = 5
 		y = 11
 		cost = 3
@@ -8448,7 +8448,7 @@
 
 	focus = {
 		id = STP_pe_security_work_a
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_party_district_compact
 		x = 1
 		y = 5
 		cost = 2
@@ -8557,7 +8557,7 @@
 
 	focus = {
 		id = STP_pe_security_next_day
-		icon = GFX_focus_STP_Open_Wounds_Of_The_System
+		icon = GFX_focus_STP_cw_public_lists
 		x = 3
 		y = 7
 		cost = 1
@@ -8751,7 +8751,7 @@
 
 	focus = {
 		id = STP_pe_security_ending_b
-		icon = GFX_focus_ADISCORD_Wall_Of_Screens
+		icon = GFX_focus_STP_cw_counter_network
 		x = 5
 		y = 11
 		cost = 3
@@ -8797,7 +8797,7 @@
 
 	focus = {
 		id = STP_pe_regent_opening
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_STP_ministry_funding
 		x = 3
 		y = 3
 		cost = 1
@@ -8998,7 +8998,7 @@
 
 	focus = {
 		id = STP_pe_regent_settlement
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_ph_last_signature
 		x = 3
 		y = 6
 		cost = 1
@@ -9044,7 +9044,7 @@
 
 	focus = {
 		id = STP_pe_regent_next_day
-		icon = GFX_focus_STP_cw_northern_dossier
+		icon = GFX_focus_STP_ps_asylum_protocol
 		x = 3
 		y = 7
 		cost = 1
@@ -9124,7 +9124,7 @@
 
 	focus = {
 		id = STP_pe_regent_course_a
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_party_district_compact
 		x = 1
 		y = 9
 		cost = 2
@@ -9200,7 +9200,7 @@
 
 	focus = {
 		id = STP_pe_regent_ending_a
-		icon = GFX_focus_STP_pw_party_family_pensions
+		icon = GFX_focus_STP_ps_evacuation_plan
 		x = 1
 		y = 11
 		cost = 3
@@ -9246,7 +9246,7 @@
 
 	focus = {
 		id = STP_pe_regent_ending_b
-		icon = GFX_focus_STP_cw_northern_desk
+		icon = GFX_focus_STP_ps_northern_partner
 		x = 5
 		y = 11
 		cost = 3
@@ -9292,11 +9292,11 @@
 
 	focus = {
 		id = STP_pw_party_naval_staff
-		icon = GFX_goal_generic_navy_cruiser
-		x = -30
+		icon = GFX_focus_STP_ps_joint_staff
+		x = -28
 		y = 3
 		cost = 2
-		prerequisite = { focus = STP_cw_restore_civil_authority }
+		prerequisite = { focus = STP_pw_party_new_republic }
 		allow_branch = {
 			tag = STP
 			has_country_flag = STP_cw_postwar
@@ -9329,8 +9329,8 @@
 
 	focus = {
 		id = STP_pw_party_naval_yards
-		icon = GFX_goal_generic_construct_naval_dockyard
-		x = -30
+		icon = GFX_focus_STP_party_industrial_board
+		x = -28
 		y = 4
 		cost = 5
 		prerequisite = { focus = STP_pw_party_naval_staff }
@@ -9364,8 +9364,8 @@
 
 	focus = {
 		id = STP_pw_party_naval_escorts
-		icon = GFX_goal_generic_navy_cruiser
-		x = -30
+		icon = GFX_focus_STP_ps_foreign_supply_desk
+		x = -28
 		y = 5
 		cost = 4
 		prerequisite = { focus = STP_pw_party_naval_yards }
@@ -9408,8 +9408,8 @@
 
 	focus = {
 		id = STP_pw_party_battle_squadron
-		icon = GFX_goal_generic_navy_battleship
-		x = -31
+		icon = GFX_focus_STP_defense_budget
+		x = -29
 		y = 6
 		cost = 10
 		prerequisite = { focus = STP_pw_party_naval_escorts }
@@ -9451,8 +9451,8 @@
 
 	focus = {
 		id = STP_pw_party_naval_fire_support
-		icon = GFX_goal_generic_navy_cruiser
-		x = -29
+		icon = GFX_focus_STP_defense_budget
+		x = -27
 		y = 6
 		cost = 5
 		prerequisite = { focus = STP_pw_party_naval_escorts }

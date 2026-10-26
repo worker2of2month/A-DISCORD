@@ -562,7 +562,7 @@ class PostwarLeaderProgrammeTests(unittest.TestCase):
         from itertools import product
         from tools.tests.test_adiscord_stp_preparation import matches_conditions
 
-        tree = self.one(parse_clausewitz(text(CIVIL_WAR)), "focus_tree")
+        tree = self.one(parse_clausewitz(text("common/national_focus/ADISCORD_STP_civil_war.txt")), "focus_tree")
         focuses = {self.one(e.value, "id"): e.value for e in tree if e.key == "focus"}
         for route, phase, subject in product(range(1, 7), range(1, 8), (False, True)):
             facts = self.facts(route, route if route < 6 else None, subject)

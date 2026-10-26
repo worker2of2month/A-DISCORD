@@ -1105,6 +1105,7 @@ class PartyWartimeFocusContracts(unittest.TestCase):
             ('STP', 'STP_ps_war_active', 'yes'): True,
             ('STP', 'STP_ps_government_operational', 'yes'): government,
             ('STP', 'STP_ps_can_counterattack', 'yes'): stage == 4 and government,
+            ('STP', 'STP_pm_port_program_available', 'yes'): port,
             ('STP', 'has_country_flag', 'STP_ps_congress_fell'): fell,
             ('STP', 'variable', 'STP_ps_stage'): stage,
             ('STP', 'owns_state', '28'): True,
@@ -1272,6 +1273,132 @@ class PartyWartimeFocusContracts(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+
+class PartyMilitaryProgrammeContracts(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.foci = {
+            one(e.value, 'id'): e.value
+            for e in walk(parse_clausewitz(read('common/national_focus/ADISCORD_STP_civil_war.txt')))
+            if e.key == 'focus' and isinstance(e.value, list)
+        }
+        cls.decisions = {
+            e.key: e.value for e in walk(parse_clausewitz(read(DECISIONS)))
+            if isinstance(e.value, list)
+        }
+        cls.ideas = {
+            e.key: e.value for e in walk(parse_clausewitz(read('common/ideas/ADISCORD_STP_civil_war_ideas.txt')))
+            if isinstance(e.value, list)
+        }
+
+    def test_ready_batches_debit_once_only_at_exact_price_with_current_base(self):
+        cases = (
+            ('STP_pm_order_fighters', 'STP_pm_factory_air_cover', 'STP_pm_air_program_available', 900, {'ADISCORD_fighter_airframe_2163': 24}),
+            ('STP_pm_order_attack_aircraft', 'STP_pm_front_air_support', 'STP_pm_air_program_available', 900, {'ADISCORD_cas_airframe_2170': 24}),
+            ('STP_pm_charter_convoys', 'STP_pm_port_workshops', 'STP_pm_port_program_available', 600, {'convoy_1': 20}),
+            ('STP_pm_land_freight', 'STP_pm_army_freight', 'STP_pm_port_program_available', 1200, {'artillery_equipment': 120, 'anti_air_equipment': 60, 'motorized_equipment': 150}),
+        )
+        for name, focus, gate, price, equipment in cases:
+            decision = self.decisions[name]
+            self.assertEqual(one(decision, 'cost'), '0')
+            self.assertEqual(one(decision, 'days_re_enable'), '42')
+            for cash, base, unlocked in product((price - 0.01, price, price + 100), (False, True), (False, True)):
+                facts = {
+                    ('STP', 'variable', 'ADISCORD_economy_treasury'): cash,
+                    ('STP', gate, 'yes'): base,
+                    ('STP', 'has_completed_focus', focus): unlocked,
+                }
+                actual = [e for _, e in selected_effects(one(decision, 'complete_effect'), facts)]
+                paid = cash >= price and base and unlocked
+                debits = [float(one(e.value, 'value')) for e in actual if e.key == 'subtract_from_variable' and one(e.value, 'var') == 'ADISCORD_economy_treasury']
+                expenses = [float(one(e.value, 'value')) for e in actual if e.key == 'add_to_variable' and one(e.value, 'var') == 'ADISCORD_economy_current_month_action_costs']
+                deliveries = {one(e.value, 'type'): int(one(e.value, 'amount')) for e in actual if e.key == 'add_equipment_to_stockpile'}
+                with self.subTest(decision=name, cash=cash, base=base, unlocked=unlocked):
+                    self.assertEqual(debits, [price] if paid else [])
+                    self.assertEqual(expenses, debits)
+                    self.assertEqual(deliveries, equipment if paid else {})
+                    self.assertEqual(sum(e.key == 'ADISCORD_economy_mark_dirty' for e in actual), int(paid))
+
+    def test_air_order_uses_chosen_course_and_cannot_charge_during_active_order(self):
+        decision = self.decisions['STP_pm_air_sortie_order']
+        for intercept, cash, active, base in product((False, True), (24.99, 25), (False, True), (False, True)):
+            facts = {
+                ('STP', 'has_completed_focus', 'STP_pm_airfield_shifts'): True,
+                ('STP', 'has_completed_focus', 'STP_pm_factory_air_cover'): intercept,
+                ('STP', 'numeric', 'command_power'): cash,
+                ('STP', 'has_idea', 'STP_pm_interception_order' if intercept else 'STP_pm_ground_support_order'): active,
+                ('STP', 'STP_pm_air_program_available', 'yes'): base,
+            }
+            actual = [e for _, e in selected_effects(one(decision, 'complete_effect'), facts)]
+            should_deliver = cash >= 25 and not active and base
+            with self.subTest(intercept=intercept, cash=cash, active=active, base=base):
+                self.assertEqual([e.value for e in actual if e.key == 'add_command_power'], ['-25'] if should_deliver else [])
+                orders = [e.value for e in actual if e.key == 'add_timed_idea']
+                self.assertEqual(len(orders), int(should_deliver))
+                if should_deliver:
+                    expected = 'STP_pm_interception_order' if intercept else 'STP_pm_ground_support_order'
+                    self.assertEqual(one(orders[0], 'idea'), expected)
+                    self.assertEqual(one(orders[0], 'days'), '21')
+                    self.assertIn(('STP_pm_air_program_available', 'no'), signature(one(self.ideas[expected], 'cancel')))
+
+    def test_new_courses_rejoin_and_ai_chooses_only_one_of_each(self):
+        plans = parse_clausewitz(read('common/ai_strategy_plans/ADISCORD_STP_plans.txt'))
+        plan = one(one(plans, 'STP_party_civil_war_plan'), 'ai_national_focuses')
+        chosen = {e.key or e.value for e in plan}
+        self.assertTrue(chosen <= self.foci.keys())
+        for left, right, final in (
+            ('STP_pm_factory_air_cover', 'STP_pm_front_air_support', 'STP_pm_airfield_shifts'),
+            ('STP_pm_guard_roadstead', 'STP_pm_army_freight', 'STP_pm_port_staff'),
+        ):
+            self.assertEqual(one(one(self.foci[left], 'mutually_exclusive'), 'focus'), right)
+            self.assertEqual(one(one(self.foci[right], 'mutually_exclusive'), 'focus'), left)
+            groups = children(self.foci[final], 'prerequisite')
+            self.assertEqual([{e.value for e in group} for group in groups], [{left, right}])
+            self.assertEqual(len(chosen & {left, right}), 1)
+
+    def test_port_preview_matches_wartime_aggregate_and_is_never_installed(self):
+        reward = one(self.foci['STP_pm_port_staff'], 'completion_reward')
+        actual = [e for _, e in selected_effects(reward, {})]
+        applied = {one(e.value, 'var'): float(one(e.value, 'value')) for e in actual if e.key == 'add_to_variable'}
+        preview = dict(signature(one(self.ideas['STP_pm_port_staff_delta'], 'modifier')))
+        self.assertEqual(applied['STP_cw_army_supply_consumption_factor'], float(preview['supply_consumption_factor']))
+        self.assertEqual(applied['STP_cw_army_org_regain'], float(preview['army_org_regain']))
+        self.assertTrue(any(e.key == 'STP_cw_refresh_army_modifier' for e in actual))
+        self.assertFalse(any(e.key in {'add_ideas', 'swap_ideas'} for e in actual))
+
+    def test_air_and_port_access_close_on_war_or_local_base_loss(self):
+        triggers = {e.key: e.value for e in parse_clausewitz(read(TRIGGERS))}
+        for war, owned, controlled, base in product((False, True), repeat=4):
+            facts = {
+                ('STP', 'STP_ps_war_active', 'yes'): war,
+                ('STP', 'owns_state', '28'): owned,
+                ('STP', 'controls_state', '28'): controlled,
+                ('STP', 'numeric', 'air_base'): int(base),
+                ('STP', 'controls_province', '16366'): controlled,
+                ('28', 'is_owned_by', 'ROOT'): owned,
+                ('28', 'numeric', 'naval_base'): int(base),
+            }
+            for name in ('STP_pm_air_program_available', 'STP_pm_port_program_available'):
+                self.assertEqual(
+                    matches_conditions(triggers[name], facts),
+                    war and owned and controlled and base,
+                    (name, facts),
+                )
+        port = triggers['STP_pm_port_program_available']
+        self.assertNotIn(('is_controlled_by', 'ROOT'), signature(one(port, '28')))
+        cleanup = one(parse_clausewitz(read(EFFECTS)), 'STP_cw_close_air_programmes')
+        removed = {e.value for e in cleanup if e.key == 'remove_ideas'}
+        self.assertTrue({'STP_pm_interception_order', 'STP_pm_ground_support_order'} <= removed)
+
+    def test_air_and_port_routes_fit_first_eleven_weeks(self):
+        def duration(names):
+            return sum(float(one(self.foci[name], 'cost')) * 7 for name in names)
+        for choice in ('STP_pm_factory_air_cover', 'STP_pm_front_air_support'):
+            self.assertEqual(duration(('STP_cw_unified_headquarters', 'STP_pm_air_dispatch', choice, 'STP_pm_airfield_shifts')), 49)
+        for choice in ('STP_pm_guard_roadstead', 'STP_pm_army_freight'):
+            self.assertEqual(duration(('STP_cw_unified_headquarters', 'STP_cw_guard_the_pier', 'STP_pm_port_workshops', 'STP_cw_harbour_batteries', choice, 'STP_pm_port_staff')), 77)
 
 
 class PartyUsabilityContracts(unittest.TestCase):

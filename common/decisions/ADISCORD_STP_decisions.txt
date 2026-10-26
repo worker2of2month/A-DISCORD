@@ -4311,6 +4311,238 @@ STP_military_operations = {
 		ai_will_do = { base = 8 }
 	}
 
+	# Ready batches are paid and delivered atomically; no unfinished purchase crosses peace.
+
+	STP_pm_order_fighters = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = STP }
+		visible = {
+			has_completed_focus = STP_pm_factory_air_cover
+			STP_ps_war_active = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pm_air_program_available_tt
+				STP_pm_air_program_available = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pm_cost_900
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+		}
+		days_re_enable = 42
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = STP_pm_factory_air_cover
+						STP_pm_air_program_available = yes
+						check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+					}
+				}
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+				add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 24 }
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3400 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_order_attack_aircraft = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = STP }
+		visible = {
+			has_completed_focus = STP_pm_front_air_support
+			STP_ps_war_active = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pm_air_program_available_tt
+				STP_pm_air_program_available = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pm_cost_900
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+		}
+		days_re_enable = 42
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = STP_pm_front_air_support
+						STP_pm_air_program_available = yes
+						check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+					}
+				}
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+				add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 24 }
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3400 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_charter_convoys = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = STP }
+		visible = {
+			has_completed_focus = STP_pm_port_workshops
+			STP_ps_war_active = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pm_port_program_available_tt
+				STP_pm_port_program_available = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pm_cost_600
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
+		}
+		days_re_enable = 42
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = STP_pm_port_workshops
+						STP_pm_port_program_available = yes
+						check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
+					}
+				}
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 600 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 600 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+				add_equipment_to_stockpile = { type = convoy_1 amount = 20 }
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3100 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_land_freight = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = STP }
+		visible = {
+			has_completed_focus = STP_pm_army_freight
+			STP_ps_war_active = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pm_port_program_available_tt
+				STP_pm_port_program_available = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pm_cost_1200
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals }
+		}
+		days_re_enable = 42
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = STP_pm_army_freight
+						STP_pm_port_program_available = yes
+						check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals }
+					}
+				}
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 1200 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1200 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+				add_equipment_to_stockpile = { type = artillery_equipment amount = 120 }
+				add_equipment_to_stockpile = { type = anti_air_equipment amount = 60 }
+				add_equipment_to_stockpile = { type = motorized_equipment amount = 150 }
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3700 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_air_sortie_order = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = {
+			has_completed_focus = STP_pm_airfield_shifts
+			STP_ps_war_active = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pm_air_program_available_tt
+				STP_pm_air_program_available = yes
+			}
+			NOT = { has_idea = STP_pm_interception_order }
+			NOT = { has_idea = STP_pm_ground_support_order }
+		}
+		cost = 0
+		custom_cost_text = STP_cw_command_power_25_cost
+		custom_cost_trigger = { NOT = { command_power < 25 } }
+		days_re_enable = 42
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = STP_pm_airfield_shifts
+						STP_pm_air_program_available = yes
+						NOT = { command_power < 25 }
+						NOT = { has_idea = STP_pm_interception_order }
+						NOT = { has_idea = STP_pm_ground_support_order }
+					}
+				}
+				hidden_effect = { add_command_power = -25 }
+				if = {
+					limit = { has_completed_focus = STP_pm_factory_air_cover }
+					add_timed_idea = { idea = STP_pm_interception_order days = 21 }
+				}
+				else = {
+					add_timed_idea = { idea = STP_pm_ground_support_order days = 21 }
+				}
+			}
+		}
+		ai_will_do = { base = 4 }
+	}
+
 	STP_cw_order_divisional_aa = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
@@ -9107,6 +9339,162 @@ STP_scenario_debug = {
 		complete_effect = {
 			custom_effect_tooltip = STP_debug_resolve_party_victory_desc
 			hidden_effect = { STP_debug_resolve_party_victory = yes }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	STP_debug_resolve_party_houses = {
+		icon = generic_prepare_civil_war
+		allowed = {
+			OR = {
+				tag = STP
+				tag = STS
+			}
+		}
+		visible = {
+			is_debug = yes
+			is_ai = no
+			NOT = { has_global_flag = STP_cw_union_wars_finished }
+		}
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_debug_resolve_party_houses_desc
+			hidden_effect = {
+				STP_debug_resolve_party_victory = yes
+				STP = { set_variable = { var = STP_debug_party_victory_choice value = 1 } }
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	STP_debug_resolve_party_festival = {
+		icon = generic_prepare_civil_war
+		allowed = {
+			OR = {
+				tag = STP
+				tag = STS
+			}
+		}
+		visible = {
+			is_debug = yes
+			is_ai = no
+			NOT = { has_global_flag = STP_cw_union_wars_finished }
+		}
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_debug_resolve_party_festival_desc
+			hidden_effect = {
+				STP_debug_resolve_party_victory = yes
+				STP = { set_variable = { var = STP_debug_party_victory_choice value = 2 } }
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	STP_debug_resolve_party_staff = {
+		icon = generic_prepare_civil_war
+		allowed = {
+			OR = {
+				tag = STP
+				tag = STS
+			}
+		}
+		visible = {
+			is_debug = yes
+			is_ai = no
+			NOT = { has_global_flag = STP_cw_union_wars_finished }
+		}
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_debug_resolve_party_staff_desc
+			hidden_effect = {
+				STP_debug_resolve_party_victory = yes
+				STP = { set_variable = { var = STP_debug_party_victory_choice value = 3 } }
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	STP_debug_resolve_party_wallets = {
+		icon = generic_prepare_civil_war
+		allowed = {
+			OR = {
+				tag = STP
+				tag = STS
+			}
+		}
+		visible = {
+			is_debug = yes
+			is_ai = no
+			NOT = { has_global_flag = STP_cw_union_wars_finished }
+		}
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_debug_resolve_party_wallets_desc
+			hidden_effect = {
+				STP_debug_resolve_party_victory = yes
+				STP = { set_variable = { var = STP_debug_party_victory_choice value = 4 } }
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	STP_debug_resolve_party_silence = {
+		icon = generic_prepare_civil_war
+		allowed = {
+			OR = {
+				tag = STP
+				tag = STS
+			}
+		}
+		visible = {
+			is_debug = yes
+			is_ai = no
+			NOT = { has_global_flag = STP_cw_union_wars_finished }
+		}
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_debug_resolve_party_silence_desc
+			hidden_effect = {
+				STP_debug_resolve_party_victory = yes
+				STP = { set_variable = { var = STP_debug_party_victory_choice value = 5 } }
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	STP_debug_resolve_party_regent = {
+		icon = generic_prepare_civil_war
+		allowed = {
+			OR = {
+				tag = STP
+				tag = STS
+			}
+		}
+		visible = {
+			is_debug = yes
+			is_ai = no
+			NOT = { has_global_flag = STP_cw_union_wars_finished }
+		}
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_debug_resolve_party_regent_desc
+			hidden_effect = {
+				STP_debug_resolve_party_victory = yes
+				STP = { set_variable = { var = STP_debug_party_victory_choice value = 6 } }
+			}
 		}
 		ai_will_do = { factor = 0 }
 	}

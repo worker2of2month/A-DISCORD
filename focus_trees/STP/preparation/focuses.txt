@@ -64,13 +64,13 @@ focus_tree = {
 		id = STP_Show_Him_The_Truth
 		icon = GFX_focus_STP_Side_With_Maksim
 		x = 30
-		y = 2
+		y = 3
 		cost = 1
 		prerequisite = { focus = STP_STATE_OF_THE_REPUBLIC }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		offset = {
 			x = -18
-			y = 0
+			y = -1
 			trigger = { has_country_flag = STP_sided_with_Maksim_flag }
 		}
 		available = {
@@ -88,13 +88,13 @@ focus_tree = {
 		id = STP_Govern_In_His_Name
 		icon = GFX_focus_STP_Govern_In_His_Name
 		x = -8
-		y = 2
+		y = 3
 		cost = 1
 		prerequisite = { focus = STP_STATE_OF_THE_REPUBLIC }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
 		offset = {
 			x = 20
-			y = 0
+			y = -1
 			trigger = { has_country_flag = STP_sided_with_the_party_flag }
 		}
 		available = {
@@ -1438,7 +1438,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_PARTY_DISCIPLINE
-		icon = GFX_focus_STP_party_personnel_commissions
+		icon = GFX_focus_STP_PARTY_DISCIPLINE
 		relative_position_id = STP_Govern_In_His_Name
 		x = 4
 		y = 2
@@ -1567,7 +1567,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_DISTRICT_GOVERNMENT
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
+		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
 		relative_position_id = STP_Govern_In_His_Name
 		x = -3
 		y = 2
@@ -1589,7 +1589,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_capital_reserve
-		icon = GFX_focus_STP_pw_party_veteran_reserve
+		icon = GFX_focus_STP_cw_capital_reserve
 		relative_position_id = STP_Govern_In_His_Name
 		x = 0
 		y = 2
@@ -1788,7 +1788,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_counter_network
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_cw_counter_network
 		relative_position_id = STP_Govern_In_His_Name
 		x = 7
 		y = 5
@@ -1975,7 +1975,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_party_mandate
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_cw_party_mandate
 		relative_position_id = STP_Govern_In_His_Name
 		x = 4
 		y = 6
@@ -2009,7 +2009,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_district_compact
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_party_district_compact
 		relative_position_id = STP_Govern_In_His_Name
 		x = 2
 		y = 3
@@ -2138,7 +2138,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_supply_directorate
-		icon = GFX_focus_STP_party_war_transport
+		icon = GFX_focus_STP_party_supply_directorate
 		relative_position_id = STP_Govern_In_His_Name
 		x = 0
 		y = 5
@@ -2229,7 +2229,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_succession_protocol
-		icon = GFX_focus_STP_cw_protocol_office
+		icon = GFX_focus_STP_party_succession_protocol
 		relative_position_id = STP_Govern_In_His_Name
 		x = 4
 		y = 7
@@ -2293,7 +2293,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ph_pen_of_staff
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_STP_ph_pen_of_staff
 		relative_position_id = STP_Govern_In_His_Name
 		x = -9
 		y = 5
@@ -2328,7 +2328,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ph_pen_of_silence
-		icon = GFX_focus_STP_cw_security_collegium
+		icon = GFX_focus_STP_ph_pen_of_silence
 		relative_position_id = STP_Govern_In_His_Name
 		x = -5
 		y = 5
@@ -2362,7 +2362,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ph_pen_of_houses
-		icon = GFX_focus_STP_Nectar_of_the_Gods
+		icon = GFX_focus_STP_ph_pen_of_houses
 		relative_position_id = STP_Govern_In_His_Name
 		x = -7
 		y = 6
@@ -2402,7 +2402,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ph_last_signature
-		icon = GFX_focus_STP_cw_protocol_office
+		icon = GFX_focus_STP_ph_last_signature
 		relative_position_id = STP_Govern_In_His_Name
 		x = -7
 		y = 7
@@ -2443,7 +2443,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ph_heirs_pact
-		icon = GFX_focus_STP_Triumph_Of_Common_Sense
+		icon = GFX_focus_STP_ph_heirs_pact
 		relative_position_id = STP_Govern_In_His_Name
 		x = -8
 		y = 8
@@ -2474,7 +2474,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ph_empty_chair
-		icon = GFX_focus_STP_Open_Wounds_Of_The_System
+		icon = GFX_focus_STP_ph_empty_chair
 		relative_position_id = STP_Govern_In_His_Name
 		x = -6
 		y = 8
@@ -2516,7 +2516,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_radio_network
-		icon = GFX_focus_ADISCORD_Wall_Of_Screens
+		icon = GFX_focus_STP_ps_radio_network
 		x = 12
 		y = 1
 		relative_position_id = STP_Govern_In_His_Name
@@ -2552,7 +2552,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_loyal_aircrews
-		icon = GFX_goal_generic_air_fighter2
+		icon = GFX_focus_STP_ps_loyal_aircrews
 		x = 12
 		y = 2
 		relative_position_id = STP_Govern_In_His_Name

@@ -840,7 +840,14 @@
 		icon = GFX_focus_RUS_quiet_perimeter
 		x = -6
 		y = 6
+		# Coastal logistics follow the wartime supply branch; reconstruction keeps its own layout.
+		offset = {
+			x = 13
+			y = -2
+			trigger = { NOT = { has_country_flag = STP_cw_postwar } }
+		}
 		prerequisite = {
+			focus = STP_cw_supply_routes
 			focus = STP_pw_republic_restore_roads
 			focus = STP_kc_emergency_staff
 		}
@@ -864,14 +871,14 @@
 			}
 			hidden_effect = {
 				create_equipment_variant = {
-					name = "ADISCORD_escort_ship_2155"
+					name = "Эсминец обр. 2155"
 					type = ADISCORD_escort_ship_2155
 					allow_without_tech = yes
 				}
 			}
 			create_ship = {
 				type = ADISCORD_escort_ship_2155
-				equipment_variant = "ADISCORD_escort_ship_2155"
+				equipment_variant = "Эсминец обр. 2155"
 				amount = 2
 			}
 			add_equipment_to_stockpile = { type = convoy_1 amount = 20 }
@@ -882,8 +889,9 @@
 	focus = {
 		id = STP_pc_navy_ports
 		icon = GFX_focus_STP_cw_port_budget
-		x = -6
-		y = 7
+		x = 0
+		y = 1
+		relative_position_id = STP_pc_navy_coast
 		cost = 2
 		allow_branch = { tag = STS }
 		available = {
@@ -904,8 +912,9 @@
 	focus = {
 		id = STP_pw_republic_marine_school
 		icon = GFX_focus_VAL_Marine_Contract_Corps
-		x = -4
-		y = 8
+		x = 2
+		y = 2
+		relative_position_id = STP_pc_navy_coast
 		cost = 2
 		allow_branch = { tag = STS }
 		prerequisite = { focus = STP_pc_navy_ports }
@@ -923,8 +932,9 @@
 	focus = {
 		id = STP_pc_navy_yards
 		icon = GFX_focus_STP_cw_port_budget
-		x = -8
-		y = 8
+		x = -2
+		y = 2
+		relative_position_id = STP_pc_navy_coast
 		prerequisite = { focus = STP_pc_navy_ports }
 		cost = 5
 		allow_branch = { tag = STS }
@@ -948,8 +958,9 @@
 	focus = {
 		id = STP_pc_navy_escorts
 		icon = GFX_focus_VAL_Marine_Contract_Corps
-		x = -8
-		y = 9
+		x = -2
+		y = 3
+		relative_position_id = STP_pc_navy_coast
 		cost = 4
 		allow_branch = { tag = STS }
 		available = {
@@ -972,26 +983,26 @@
 			}
 			hidden_effect = {
 				create_equipment_variant = {
-					name = "ADISCORD_light_cruiser_2155"
+					name = "Лёгкий крейсер обр. 2155"
 					type = ADISCORD_light_cruiser_2155
 					allow_without_tech = yes
 				}
 			}
 			create_ship = {
 				type = ADISCORD_light_cruiser_2155
-				equipment_variant = "ADISCORD_light_cruiser_2155"
+				equipment_variant = "Лёгкий крейсер обр. 2155"
 				amount = 2
 			}
 			hidden_effect = {
 				create_equipment_variant = {
-					name = "ADISCORD_escort_ship_2155"
+					name = "Эсминец обр. 2155"
 					type = ADISCORD_escort_ship_2155
 					allow_without_tech = yes
 				}
 			}
 			create_ship = {
 				type = ADISCORD_escort_ship_2155
-				equipment_variant = "ADISCORD_escort_ship_2155"
+				equipment_variant = "Эсминец обр. 2155"
 				amount = 2
 			}
 			add_equipment_to_stockpile = { type = convoy_1 amount = 20 }

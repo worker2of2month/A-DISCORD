@@ -1115,6 +1115,7 @@ STP_kc_naval_program_available = {
 	tag = STS
 	has_capitulated = no
 	OR = {
+		STP_cw_mountain_war_active = yes
 		STP_pc_focus_available = yes
 		STP_kc_support_active = yes
 	}
@@ -2631,6 +2632,24 @@ STP_ps_war_active = {
 	tag = STP has_war_with = STS has_capitulated = no
 	NOT = { has_global_flag = STP_cw_union_wars_finished }
 }
+# COUNTRY: wartime programmes use a current local base, including after its recapture.
+STP_pm_air_program_available = {
+	STP_ps_war_active = yes
+	any_owned_state = {
+		is_controlled_by = PREV
+		air_base > 0
+	}
+}
+
+STP_pm_port_program_available = {
+	STP_ps_war_active = yes
+	controls_province = 16366
+	28 = {
+		is_owned_by = ROOT
+		naval_base > 0
+	}
+}
+
 STP_ps_can_counterattack = {
 	STP_ps_war_active = yes
 	STP_ps_government_operational = yes

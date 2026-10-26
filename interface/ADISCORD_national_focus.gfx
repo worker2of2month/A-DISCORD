@@ -1,5 +1,25 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_STP_party_regimental_organizers"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_regimental_organizers.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_capital_counteroffensive"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_cw_capital_counteroffensive.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pe_festival_ending_a"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_pe_festival_ending_a.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pv_glory_festival"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_pv_glory_festival.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_STP_party_industrial_board"
 		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_industrial_board.png"
 	}
@@ -230,6 +250,61 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_STP_ph_empty_chair"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ph_empty_chair.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_ps_loyal_aircrews"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ps_loyal_aircrews.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_ps_radio_network"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ps_radio_network.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_supply_directorate"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_supply_directorate.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_party_mandate"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_cw_party_mandate.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_ph_last_signature"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ph_last_signature.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_succession_protocol"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_succession_protocol.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_ph_heirs_pact"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ph_heirs_pact.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_ph_pen_of_houses"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ph_pen_of_houses.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_ph_pen_of_staff"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ph_pen_of_staff.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_ph_pen_of_silence"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ph_pen_of_silence.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_STP_ph_six_chairs"
 		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ph_six_chairs.png"
 	}
@@ -381,6 +456,61 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_focus_STP_Call_For_Shabrat"
 		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Call_For_Shabrat.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_mobilization_register"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_wartime_arsenals"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_wartime_arsenals.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_wartime_laboratories"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_wartime_laboratories.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_strike_squadrons"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_strike_squadrons.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_hw_council_of_passes"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_hw_council_of_passes.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_hw_unified_district_command"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_hw_unified_district_command.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_hw_course_truth"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_hw_course_truth.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_hw_kefreyt_contract"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_hw_kefreyt_contract.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_hw_leaflets_over_fada"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_hw_leaflets_over_fada.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_hw_mountain_mandate"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_hw_mountain_mandate.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_hw_open_black_book"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_hw_open_black_book.png"
 	}
 
 	spriteType = {
@@ -2073,7 +2203,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_ps_evacuation_plan"
-		texturefile = "gfx/interface/ideas/laws/culture_healthcare/ADISCORD_law_healthcare_military_medical_service.png"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ps_evacuation_plan.png"
 	}
 
 	spriteType = {

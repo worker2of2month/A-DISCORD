@@ -1,3 +1,15 @@
+defined_text = {
+	name = STPGetPostwarVictoryTitle
+
+	text = {
+		trigger = { tag = STP }
+		localization_key = STP_pw_party_victory_title
+	}
+	text = {
+		localization_key = STP_pw_shabrat_victory_title
+	}
+}
+
 # Party suspicion
 
 defined_text = {

@@ -88,7 +88,7 @@
  EFFECT_MANPOWER_ADD_STATE:1 "£population_texticon  Местное население: $VAL|+=0$."
 
 #focus_l_russian
- anschluss_mefo_bills_double_reduction:0 "Изменить §Yвекселя «МЕФО»§! на £political_power_texticon  §G+0,10§! ежедневного прироста политической власти\n"
+ anschluss_mefo_bills_double_reduction:0 "Изменить §Yвекселя «МЕФО»§! на §G+0,10§! £political_power_texticon ежедневного прироста политической власти\n"
 
 #ideas_l_russian
  modifier_tactic_elastic_defense_preferred_weight_factor:1 "£tactics_texticon  Дополнительный шанс тактики §Y«Гибкая оборона»§!, если эта тактика - предпочитаемая"
@@ -1408,8 +1408,8 @@
  modifier_trait_winter_expert_xp_gain_factor:0 "£experience_neutral_texticon  Прирост опыта от черты «Эксперт по зиме»"
  modifier_trait_winter_specialist_xp_gain_factor:0 "£experience_neutral_texticon  Прирост опыта от черты «Мастер зимней войны»"
  modifier_trait_wounded_xp_gain_factor:0 "£experience_neutral_texticon  Прирост опыта от черты «Ранение»"
- MODIFIER_ASSIGN_ARMY_LEADER_CP_COST:0 "Стоимость назначения командующего армией (£command_power): $VALUE|Y0$"
- MODIFIER_ASSIGN_NAVY_LEADER_CP_COST:0 "Стоимость назначения командующего флотом (£command_power): $VALUE|Y0$"
+ MODIFIER_ASSIGN_ARMY_LEADER_CP_COST:0 "Стоимость назначения командующего армией: $VALUE|Y0$ £command_power"
+ MODIFIER_ASSIGN_NAVY_LEADER_CP_COST:0 "Стоимость назначения командующего флотом: $VALUE|Y0$ £command_power"
  MODIFIER_EXILED_GOVERNMENT_WEEKLY_MANPOWER:0 "£manpower_exiles_texticon  Еженедельные людские ресурсы правительства в изгнании"
  MODIFIER_NAVY_WEATHER_PENALTY:0 "£weather_texticon  Штраф от плохой погоды"
  MODIFIER_AIR_MANPOWER_REQUIREMENT_FACTOR:0 "£manpower_cost_texticon  Требование к людским ресурсам авиации "

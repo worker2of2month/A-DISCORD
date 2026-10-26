@@ -329,6 +329,62 @@ class STPCoreContractTests(unittest.TestCase):
         ):
             self.assertRegex(localisation, rf"(?m)^\s*{key}:\s+\"§RDEBUG:§!")
 
+    def test_debug_faction_victories_use_delayed_native_settlement(self) -> None:
+        debug = named_block(read(DECISIONS), "STP_scenario_debug")
+        effects = read(EFFECTS)
+        for value, suffix in enumerate(
+            ("houses", "festival", "staff", "wallets", "silence", "regent"), 1
+        ):
+            key = f"STP_debug_resolve_party_{suffix}"
+            decision = named_block(debug, key)
+            payload = named_block(decision, "hidden_effect")
+            self.assertLess(
+                payload.index("STP_debug_resolve_party_victory = yes"),
+                payload.index("STP_debug_party_victory_choice"),
+            )
+            self.assertIn(
+                f"var = STP_debug_party_victory_choice value = {value}",
+                named_block(payload, "STP"),
+            )
+            self.assertIn("is_debug = yes", named_block(decision, "visible"))
+            for language in ("russian", "english"):
+                loc = read(ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml")
+                for loc_key in (key, key + "_desc"):
+                    self.assertRegex(loc, rf'(?m)^ {loc_key}:0 "[^"\n]+"$')
+        resolver = named_block(effects, "STP_pv_resolve_victory")
+        self.assertLess(
+            resolver.index("value = STP_debug_party_victory_choice"),
+            resolver.index("STP_pv_install_victor = yes"),
+        )
+        self.assertIn("clear_variable = STP_debug_party_victory_choice", resolver)
+        self.assertIn(
+            "clear_variable = STP_debug_party_victory_choice",
+            named_block(effects, "STP_pf_clear"),
+        )
+        start = named_block(effects, "STP_debug_resolve_party_victory")
+        self.assertIn("STP_pv_begin_war = yes", start)
+
+    def test_debug_victory_override_is_bounded_and_keeps_normal_settlement(self) -> None:
+        effects = {entry.key: entry.value for entry in parse_clausewitz(read(EFFECTS))}
+        for debug in (True, False):
+            for choice in range(8):
+                facts = {
+                    ("STP", "has_variable", "STP_pv_strain"): True,
+                    ("STP", "has_country_flag", "STP_pf_initialized"): True,
+                    ("STP", "is_debug", "yes"): debug,
+                    ("STP", "variable", "STP_debug_party_victory_choice"): choice,
+                }
+                selected = [entry for _, entry in selected_effects(
+                    effects["STP_pv_resolve_victory"], facts, "STP"
+                )]
+                outcomes = [scalar(entry.value, "value") for entry in selected
+                            if entry.key == "set_variable"
+                            and scalar(entry.value, "var") == "STP_pv_outcome"]
+                expected = "STP_debug_party_victory_choice" if debug and 1 <= choice <= 6 else "STP_pv_claim_lead"
+                self.assertEqual(outcomes[-1], expected)
+                self.assertEqual(sum(entry.key == "STP_pv_apply_victory_terms" for entry in selected), 1)
+                self.assertTrue(any(entry.key == "clear_variable" and entry.value == "STP_debug_party_victory_choice" for entry in selected))
+
     def test_sotnikov_debug_victory_uses_resistance_settlement(self) -> None:
         debug = named_block(read(DECISIONS), "STP_scenario_debug")
         decision = named_block(debug, "STP_debug_resolve_sotnikov_victory")

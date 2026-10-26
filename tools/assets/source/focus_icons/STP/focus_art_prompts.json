@@ -3024,6 +3024,32 @@
         "composition_preview_width": 150,
         "notes": "12 assets and four compositions accepted by critic after cable cutter framing repair. True alpha checked on contrasting background. Complete source silhouettes, natural grip and paper perspective. Three subjects readable at 150 px."
       }
+    },
+    {
+      "focus_id": "STP_cw_port_budget",
+      "title": "Портовые ассигнования",
+      "tool": "built-in image_gen",
+      "assets": [
+        {
+          "file": "port_budget_dockside_crane.png",
+          "source": "exec-0c9827a2-aab5-4eea-8b7e-06ac624ca451.png",
+          "prompt": "One separate transparent cutout asset for a realistic HOI4 focus photomontage: old dockside cargo crane, three-quarter front view. Squat riveted dark blue-grey steel pedestal and operator cabin on the left; long lattice boom extends diagonally gently up toward right, a hanging cable and heavy hook near right end. Wide low silhouette suitable behind foreground objects in a 1.8:1 icon. Complete crane including base and hook with margin. Weathered metal, restrained cool silver edge illumination, deep dark shadows, subtle rust only. No quay, water, sky, cargo, people, words, flags, badges, ground plane, outer glow or background. True transparent alpha."
+        },
+        {
+          "file": "port_budget_freight_crates.png",
+          "source": "exec-28573a5e-79ae-48fe-83ec-bf63e2fd38e8.png",
+          "prompt": "One separate transparent game art cutout: compact group of three dockside freight crates, two broad low wooden shipping crates below and one smaller crate offset behind at right, heavy dark iron straps and sturdy corner brackets, thick coiled hemp cargo rope lying across one lid. Three-quarter front view slightly above, low wide composition. Aged dark brown wood, blue-black metal, restrained cold silver edges, photorealistic tactile detail for dark strategy focus collage. Entire object with margins. No labels or text, stamps, flags, people, money, machinery, ground or outer halo. True transparency."
+        },
+        {
+          "file": "military_committee_banknote_bundles.png",
+          "reused_from": "STP_cw_military_committee_fund"
+        }
+      ],
+      "composition": {
+        "delivery": "chat_only",
+        "source": "exec-1df98cc4-fd94-44ea-bbd6-6bf94f6d6cab.png",
+        "prompt": "Compose a wide 1.85:1 transparent HOI4 national focus icon called Port Appropriations, a photoreal dark collage of exactly three provided assets. Image1 dock crane behind with its cabin at upper left and lattice boom spanning top width to upper right. Image2 cargo crates form compact lower right group, reduce their size enough to remain secondary. Image3 three bundles of banknotes large in lower left foreground, foremost and clearly recognizable, emphasizing port funding. Strong tight overlaps, low wide silhouette, all crane hook and boom inside margins. Cold steel-blue silver highlights and subdued brown wood, ivory paper straps. Preserve detailed individual designs. No harbor scene, water, floor, sky, text, additional objects, symbols or broad background glow. True transparent outside assembled silhouettes including negative spaces in lattice boom."
+      }
     }
   ],
   "shared_assets": [

@@ -46,6 +46,21 @@ spriteTypes = {
 
 	###STP
 	spriteType = {
+		name = "GFX_idea_STP_party_administration"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_party_administration.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_STP_party_faction_balance"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_party_faction_balance.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_STP_party_apparatus_loyalty"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_party_apparatus_loyalty.png"
+	}
+
+	spriteType = {
 		name = "GFX_idea_STP_resistance_battle"
 		texturefile = "gfx/interface/ideas/STP/idea_STP_resistance_battle.png"
 	}

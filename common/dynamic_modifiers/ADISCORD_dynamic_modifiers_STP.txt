@@ -16,7 +16,7 @@ STP_party_suspicion_dynamic_modifier = {
 
 # Party-side briefing. High loyalty is the useful pole; suspicion stays on Shabrat's path.
 STP_apparatus_loyalty_dynamic_modifier = {
-	icon = GFX_idea_STP_apparatus_loyalty
+	icon = GFX_idea_STP_party_apparatus_loyalty
 	enable = {
 		tag = STP
 	}
@@ -38,7 +38,7 @@ STP_cw_resistance_network_dynamic = {
 }
 
 STP_cw_party_administration_dynamic = {
-	icon = GFX_idea_ADISCORD_law_civic_emergency_committees
+	icon = GFX_idea_STP_party_administration
 	enable = { tag = STP }
 	political_power_gain = STP_cw_party_political_power_gain
 	stability_factor = STP_cw_party_stability_factor
@@ -111,7 +111,7 @@ STP_pw_republic_dynamic = {
 }
 
 STP_pw_party_dynamic = {
-	icon = GFX_idea_ADISCORD_law_civic_emergency_committees
+	icon = GFX_idea_STP_party_administration
 	enable = { tag = STP }
 	ADISCORD_economy_admin_expense_factor = STP_pw_ADISCORD_economy_admin_expense_factor
 	ADISCORD_economy_overall_income_factor = STP_pw_ADISCORD_economy_overall_income_factor
@@ -132,7 +132,7 @@ STP_pw_party_dynamic = {
 }
 
 STP_pf_balance_dynamic = {
-	icon = GFX_idea_ADISCORD_law_civic_local_councils
+	icon = GFX_idea_STP_party_faction_balance
 	enable = { STP_pf_active = yes has_country_flag = STP_pf_initialized has_capitulated = no }
 	ADISCORD_economy_admin_expense_factor = STP_pf_conservatives_effect
 	production_speed_buildings_factor = STP_pf_borons_effect
@@ -147,19 +147,13 @@ STP_ps_defence_dynamic = {
 	icon = GFX_idea_ADISCORD_law_military_cadre_army
 	enable = { STP_ps_war_active = yes }
 	breakthrough_factor = STP_ps_breakthrough
-	planning_speed = STP_ps_planning
-}
-
-STP_ps_nodes_dynamic = {
-	icon = GFX_idea_ADISCORD_law_military_cadre_army
-	enable = { STP_ps_war_active = yes }
-	planning_speed = STP_ps_node_planning
+	planning_speed = STP_ps_command_planning
 	army_speed_factor = STP_ps_node_redeployment
 }
 
 # Value from STP_ps_refresh_capital_defence; zero once the Congress has fallen.
 STP_ps_capital_defence_dynamic = {
-	icon = GFX_idea_ADISCORD_law_military_cadre_army
+	icon = GFX_idea_STP_party_administration
 	enable = { STP_ps_war_active = yes }
 	army_defence_factor = STP_ps_capital_defence
 }

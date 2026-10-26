@@ -573,20 +573,26 @@ STP_party_civil_war_plan = {
 		STP_party_without_patrons
 		STP_cw_unified_headquarters
 		STP_cw_guard_the_pier
-		STP_party_war_transport
-		STP_ps_operational_reserve
 		STP_cw_congress_in_session
-		STP_party_rear_administration
+		STP_party_war_transport
 		STP_ps_ammunition_board
+		STP_ps_operational_reserve
+		STP_party_rear_administration
+		STP_pm_air_dispatch
+		STP_pm_factory_air_cover
+		STP_pm_port_workshops
 		STP_ps_counter_supply
 		STP_cw_mobilization_register
 		STP_party_war_directorate
 		STP_cw_wartime_arsenals
 		STP_cw_inner_ring
 		STP_cw_harbour_batteries
+		STP_pm_army_freight
+		STP_pm_airfield_shifts
 		STP_cw_supply_routes
 		STP_cw_capital_counteroffensive
 		STP_cw_assault_columns
+		STP_pm_port_staff
 		STP_ps_retake_congress
 		STP_cw_line_formations
 		STP_cw_wartime_laboratories

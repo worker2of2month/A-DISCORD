@@ -3932,6 +3932,8 @@ STP_cw_close_air_programmes = {
 	STP_cw_refund_air_work = yes
 	STP_cw_refund_aa_work = yes
 	remove_ideas = STP_cw_assault_air_cover_idea
+	remove_ideas = STP_pm_interception_order
+	remove_ideas = STP_pm_ground_support_order
 }
 
 # When the party is played, the AI resistance opens the war with a ground-attack
@@ -7910,6 +7912,7 @@ STP_debug_start_civil_war = {
 }
 
 STP_debug_resolve_party_victory = {
+	STP = { clear_variable = STP_debug_party_victory_choice }
 	if = {
 		limit = { NOT = { has_global_flag = STP_cw_started } }
 		STP = {
@@ -7924,6 +7927,8 @@ STP_debug_resolve_party_victory = {
 		STP = {
 			clr_country_flag = STP_sided_with_Maksim_flag
 			set_country_flag = STP_sided_with_the_party_flag
+			STP_pf_initialize = yes
+			STP_pv_begin_war = yes
 		}
 		if = { limit = { is_ai = no tag = STS } STP = { change_tag_from = STS } }
 		STS = { country_event = { id = ADISCORD_STP_cw.93 hours = 1 } }
@@ -8661,6 +8666,7 @@ STP_pf_shift = {
 }
 
 STP_pf_clear = {
+	clear_variable = STP_debug_party_victory_choice
 	STP_pe_clear = yes
 	clr_country_flag = STP_party_drug_health_fund
 	if = { limit = { has_variable = STP_ch_phase } STP_ch_clear = yes }
@@ -9033,9 +9039,24 @@ STP_ps_refresh_defence = {
 			value = -0.15
 		}
 	}
-	if = { limit = { STP_ps_war_active = yes NOT = { has_dynamic_modifier = { modifier = STP_ps_defence_dynamic } } } add_dynamic_modifier = { modifier = STP_ps_defence_dynamic } }
+	STP_ps_refresh_command_modifier = yes
 	STP_ps_refresh_capital_defence = yes
 }
+
+# Reorganisation and lost nodes contribute independently to the same planning stat.
+STP_ps_refresh_command_modifier = {
+	set_variable = { var = STP_ps_command_planning value = STP_ps_planning }
+	add_to_variable = { var = STP_ps_command_planning value = STP_ps_node_planning }
+	if = {
+		limit = {
+			STP_ps_war_active = yes
+			NOT = { has_dynamic_modifier = { modifier = STP_ps_defence_dynamic } }
+		}
+		add_dynamic_modifier = { modifier = STP_ps_defence_dynamic }
+	}
+	force_update_dynamic_modifier = yes
+}
+
 STP_ps_finish_stage = {
 	if = {
 		limit = { STP_ps_war_active = yes has_variable = STP_ps_reorg_deposit }
@@ -9122,7 +9143,7 @@ STP_ps_close_defence = {
 	clear_variable = STP_ps_congress_days_left
 	clear_global_event_target = STP_ps_cabinet_seat
 	if = { limit = { has_dynamic_modifier = { modifier = STP_ps_defence_dynamic } } remove_dynamic_modifier = { modifier = STP_ps_defence_dynamic } }
-	if = { limit = { has_dynamic_modifier = { modifier = STP_ps_nodes_dynamic } } remove_dynamic_modifier = { modifier = STP_ps_nodes_dynamic } }
+	clear_variable = STP_ps_command_planning
 	if = { limit = { has_dynamic_modifier = { modifier = STP_ps_capital_defence_dynamic } } remove_dynamic_modifier = { modifier = STP_ps_capital_defence_dynamic } }
 	clear_variable = STP_ps_capital_defence
 	clear_variable = STP_ps_reorg_1_specialization_days
@@ -9243,7 +9264,7 @@ STP_ps_refresh_nodes = {
 	set_variable = { var = STP_ps_node_redeployment value = 0 }
 	if = { limit = { has_country_flag = STP_ps_node_lost_145 } set_variable = { var = STP_ps_node_planning value = -0.15 } }
 	if = { limit = { has_country_flag = STP_ps_node_lost_45 } set_variable = { var = STP_ps_node_redeployment value = -0.20 } }
-	if = { limit = { STP_ps_war_active = yes NOT = { has_dynamic_modifier = { modifier = STP_ps_nodes_dynamic } } } add_dynamic_modifier = { modifier = STP_ps_nodes_dynamic } }
+	STP_ps_refresh_command_modifier = yes
 	STP_ps_refresh_capital_defence = yes
 }
 
@@ -15720,6 +15741,16 @@ STP_pv_resolve_victory = {
 			limit = { NOT = { has_country_flag = STP_pf_initialized } }
 			set_variable = { var = STP_pv_outcome value = 2 }
 		}
+		# The debug choice survives the delayed settlement and is consumed before rewards.
+		if = {
+			limit = {
+				is_debug = yes
+				check_variable = { var = STP_debug_party_victory_choice value = 1 compare = greater_than_or_equals }
+				check_variable = { var = STP_debug_party_victory_choice value = 6 compare = less_than_or_equals }
+			}
+			set_variable = { var = STP_pv_outcome value = STP_debug_party_victory_choice }
+		}
+		clear_variable = STP_debug_party_victory_choice
 		STP_pv_install_victor = yes
 		STP_pv_apply_victory_terms = yes
 		STP_pv_close_war = yes

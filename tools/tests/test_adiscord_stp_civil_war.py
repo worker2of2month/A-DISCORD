@@ -2632,17 +2632,22 @@ class CivilWarContracts(unittest.TestCase):
             ]
             points = [position(f, tag) for f in visible]
             self.assertEqual(len(points), len(set(points)), tag)
-            # The air-service choice extends STS to x=16, clear of the ground branch.
+            for index, (x, y) in enumerate(points):
+                for other_x, other_y in points[index + 1:]:
+                    if y == other_y:
+                        self.assertGreaterEqual(abs(x - other_x), 2, (tag, (x, y), (other_x, other_y)))
+            # Wartime bounds include the separate party air, port and budget branches.
             self.assertLessEqual(
                 max(x for x, _ in points) - min(x for x, _ in points),
-                {"STS": 20, "STP": 28, "SRP": 7}[tag],
+                {"STS": 20, "STP": 30, "SRP": 7}[tag],
                 tag,
             )
             for x in {x for x, _ in points}:
                 rows = sorted(y for px, y in points if px == x)
                 self.assertTrue(all(b - a >= 1 for a, b in zip(rows, rows[1:])), tag)
             self.assertLessEqual(
-                max(y for _, y in points) - min(y for _, y in points), 5, tag
+                max(y for _, y in points) - min(y for _, y in points),
+                6 if tag == "STP" else 5, tag
             )
         for focus in focuses:
             name = scalar(focus, "id")
@@ -8859,7 +8864,7 @@ class PostwarFocusContracts(unittest.TestCase):
                     self.assertEqual(reconstruction, shared_naval if tag == "STS" else set())
                     self.assertEqual(
                         {e.value for e in ast_block(self.focuses["STP_pc_navy_coast"], "prerequisite")},
-                        {"STP_pw_republic_restore_roads", "STP_kc_emergency_staff"},
+                        {"STP_cw_supply_routes", "STP_pw_republic_restore_roads", "STP_kc_emergency_staff"},
                     )
                 elif tag != "SRP":
                     self.assertTrue(reconstruction, tag)
@@ -8877,6 +8882,67 @@ class PostwarFocusContracts(unittest.TestCase):
                         point, positions, (tag, postwar, name, positions.get(point))
                     )
                     positions[point] = name
+
+    def test_party_victory_choices_form_one_centered_row(self):
+        facts = {("STP", "has_country_flag", "STP_cw_postwar"): False}
+        root_x, root_y = self.focus_position("STP_pv_victory_committee", facts, "STP")
+        names = (
+            "STP_pv_glory_staff", "STP_pv_glory_silence",
+            "STP_pv_glory_festival", "STP_pv_glory_wallets",
+        )
+        positions = [self.focus_position(name, facts, "STP") for name in names]
+        self.assertEqual(positions, [(root_x + x, root_y + 1) for x in (-3, -1, 1, 3)])
+        for name in names:
+            alternatives = {e.value for e in ast_block(self.focuses[name], "mutually_exclusive")}
+            self.assertEqual(alternatives, set(names) - {name})
+
+    def test_naval_branch_follows_supply_without_moving_postwar_cards(self):
+        naval_positions = {
+            "STP_pc_navy_coast": ((7, 4), (-6, 6)),
+            "STP_pc_navy_ports": ((7, 5), (-6, 7)),
+            "STP_pc_navy_yards": ((5, 6), (-8, 8)),
+            "STP_pw_republic_marine_school": ((9, 6), (-4, 8)),
+            "STP_pc_navy_escorts": ((5, 7), (-8, 9)),
+        }
+        for postwar in (False, True):
+            facts = {("STS", "has_country_flag", "STP_cw_postwar"): postwar}
+            visible = {
+                name: self.focus_position(name, facts, "STS")
+                for name, focus in self.focuses.items()
+                if matches_conditions(ast_block(focus, "allow_branch"), facts, "STS")
+            }
+            for name, phases in naval_positions.items():
+                x, y = visible[name]
+                self.assertEqual((x, y), phases[int(postwar)], name)
+                for other, (ox, oy) in visible.items():
+                    if name != other and y == oy:
+                        self.assertGreaterEqual(abs(x - ox), 2, (postwar, name, other))
+        facts = {("STS", "has_country_flag", "STP_cw_postwar"): False}
+        supply = self.focus_position("STP_cw_supply_routes", facts, "STS")
+        coast = self.focus_position("STP_pc_navy_coast", facts, "STS")
+        self.assertEqual(coast[1], supply[1] + 1)
+        relief = self.focus_position("STP_cw_frontline_relief", facts, "STS")
+        columns = self.focus_position("STP_cw_route_columns", facts, "STS")
+        self.assertEqual(columns, (relief[0], relief[1] + 1))
+
+    def test_naval_program_needs_port_and_current_campaign_context(self):
+        trigger = ast_block(
+            entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
+            "STP_kc_naval_program_available",
+        )
+        for war, reconstruction, emergency, port, capitulated in product((False, True), repeat=5):
+            facts = {
+                ("STS", "STP_cw_mountain_war_active", "yes"): war,
+                ("STS", "STP_pc_focus_available", "yes"): reconstruction,
+                ("STS", "STP_kc_support_active", "yes"): emergency,
+                ("STS", "STP_pc_has_naval_base", "yes"): port,
+                ("STS", "has_capitulated", "no"): not capitulated,
+            }
+            self.assertEqual(
+                matches_conditions(trigger, facts, "STS"),
+                port and not capitulated and (war or reconstruction or emergency),
+                facts,
+            )
 
     def test_each_side_has_a_reachable_three_pillar_postwar_program(self):
         republic = {

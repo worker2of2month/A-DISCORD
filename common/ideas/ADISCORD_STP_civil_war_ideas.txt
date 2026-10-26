@@ -1487,6 +1487,39 @@ ideas = {
 			cancel = { has_war = no }
 			modifier = { army_defence_factor = 0.15 army_attack_factor = -0.15 army_speed_factor = -0.10 }
 		}
+
+		STP_pm_port_staff_delta = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = -0.03
+				army_org_regain = 0.03
+			}
+		}
+
+		STP_pm_interception_order = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { STP_pm_air_program_available = no }
+			modifier = {
+				air_intercept_efficiency = 0.12
+				air_superiority_efficiency = 0.08
+			}
+		}
+
+		STP_pm_ground_support_order = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { STP_pm_air_program_available = no }
+			modifier = {
+				air_cas_efficiency = 0.10
+				air_cas_present_factor = 0.08
+			}
+		}
+
 		STP_cw_front_reorganization = {
 			picture = ADISCORD_law_military_cadre_army
 			allowed = { always = no }
