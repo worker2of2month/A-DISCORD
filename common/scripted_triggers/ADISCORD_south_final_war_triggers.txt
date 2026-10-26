@@ -13,8 +13,17 @@ ADISCORD_south_resource_question_closed = {
 	}
 }
 
+# GLOBAL. Switch for the Shahrabad-Svetlogorye final war. It is off while the
+# Svetlogorye exile campaign is rebalanced: with it on, Shahrabad's coalition
+# declares on the exiled Svetlogorye as soon as its war of return begins.
+# Turning it back on restores the crisis clock, the final war and its focuses.
+ADISCORD_south_final_war_enabled = {
+	always = no
+}
+
 # GLOBAL. The crisis clock runs between the resource war and the final campaign.
 ADISCORD_south_crisis_open = {
+	ADISCORD_south_final_war_enabled = yes
 	NOT = { has_global_flag = RUS_crisis_world_ended }
 
 	has_global_flag = ADISCORD_fresh_campaign_contract_v1

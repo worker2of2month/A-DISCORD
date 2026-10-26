@@ -200,8 +200,10 @@ NAM_defeated_plan = {
 	weight = { factor = 20 }
 }
 
-# The radical pillars: tribunals, the levy, letters of marque, submarines,
-# the war port and the strike from the sea; after the return, hostages;
+# The radical pillars: tribunals, the purge of the namestnik's officers, the
+# levy, letters of marque, submarines, the war port, the strike from the sea
+# and the convict power plant of the fortress capital, built before the
+# return plan; after the return, hostages;
 # after the great war, garrison rule over the conquered. The island council
 # of event .100 loads their tree right after the flight.
 NAM_exile_radical_plan = {
@@ -225,32 +227,44 @@ NAM_exile_radical_plan = {
 		NAM_rad_pillar_junta
 		NAM_exile_general_staff
 		NAM_exile_sea_raiders
+		NAM_rad_island_requisitions
+		NAM_rad_labour_battalions
 		NAM_rad_tribunals
+		NAM_rad_neo_svetlogorsk
 		NAM_rad_war_council
 		NAM_exile_levy_of_exiles
 		NAM_exile_letters_of_marque
+		NAM_rad_purge_of_loyalists
+		NAM_rad_convict_power_plant
 		NAM_exile_marine_orders
 		NAM_exile_landing_craft
 		NAM_exile_fences
 		NAM_rad_enemy_lists
+		NAM_rad_military_roads
 		NAM_exile_armed_underground
 		NAM_exile_strike_from_the_sea
 		NAM_exile_landing_school
+		NAM_rad_cadet_corps
+		NAM_rad_penal_mines
+		NAM_rad_island_airfields
 		NAM_exile_harbour_pilots
 		NAM_exile_army_of_return
-		NAM_rad_return_plan
-		NAM_rad_war_of_return
+		NAM_rad_fortress_capital
 		NAM_exile_tanker_raids
 		NAM_exile_privateer_captains
 		NAM_exile_wolfpacks
 		NAM_exile_arms_purchases
-		NAM_rad_island_requisitions
 		NAM_exile_naval_port
 		NAM_exile_coastal_batteries
 		NAM_exile_island_foundry
+		NAM_rad_prison_shipyards
+		NAM_rad_island_fuel_dumps
+		NAM_rad_barrack_towns
 		NAM_exile_black_market
 		NAM_exile_hidden_anchorages
 		NAM_exile_corsair_admiralty
+		NAM_rad_return_plan
+		NAM_rad_war_of_return
 		NAM_rad_spoils_of_return
 		NAM_rad_martial_law
 		NAM_rad_labour_camps
@@ -277,10 +291,11 @@ NAM_exile_radical_plan = {
 	weight = { factor = 20 }
 }
 
-# Veter's humanists: the regulated partnership, union agreements, the district
-# militia, the split coalition, the civic underground and the free port; after
-# the return, the charter of equal districts; after the great war, a union
-# currency.
+# Weber's humanists: the parliament in exile, the regulated partnership, union
+# agreements, the district militia, the split coalition, the civic
+# underground, the municipal harbour, the people's university and the free
+# port; after the return, the charter of equal districts; after the great
+# war, a union currency.
 NAM_exile_humanist_plan = {
 	name = "NAM exile humanists"
 	desc = ""
@@ -302,29 +317,42 @@ NAM_exile_humanist_plan = {
 		NAM_hum_veter_government
 		NAM_hum_free_zones
 		NAM_hum_citizen_army
+		NAM_exile_island_chancellery
+		NAM_hum_neo_svetlogorsk
+		NAM_hum_exile_parliament
 		NAM_hum_regulated_partnership
 		NAM_hum_steel_exchange
 		NAM_hum_credit_arms
 		NAM_hum_district_militia
 		NAM_hum_marine_contracts
+		NAM_hum_loan_roads
+		NAM_hum_refugee_housing
 		NAM_exile_mainland_contacts
 		NAM_exile_civic_underground
 		NAM_hum_federal_programme
 		NAM_hum_split_coalition
 		NAM_hum_mainland_committees
+		NAM_hum_municipal_harbour
+		NAM_hum_island_power_grid
 		NAM_hum_landing_rehearsals
+		NAM_hum_officer_college
 		NAM_hum_army_of_citizens
-		NAM_hum_return_manifesto
-		NAM_hum_war_of_return
+		NAM_hum_free_port_shipyards
+		NAM_hum_water_works
+		NAM_hum_people_university
+		NAM_hum_free_city_charter
 		NAM_hum_labour_bureau
 		NAM_hum_union_contracts
 		NAM_hum_innovation_parks
 		NAM_hum_charter_harbours
 		NAM_hum_charter_commission
-		NAM_exile_island_chancellery
 		NAM_exile_free_port
 		NAM_exile_island_steel
 		NAM_exile_overseas_districts
+		NAM_hum_coast_guard
+		NAM_hum_civil_airport
+		NAM_hum_return_manifesto
+		NAM_hum_war_of_return
 		NAM_hum_federal_districts
 		NAM_hum_federal_treaties
 		NAM_hum_union_council
@@ -352,8 +380,9 @@ NAM_exile_humanist_plan = {
 	weight = { factor = 20 }
 }
 
-# The corporate boards after the takeover: Veter's ministers stay as a facade,
-# the company guard lands if the return is still ahead, the oil concern takes
+# The corporate boards after the takeover: Weber's ministers stay as a facade,
+# the boards build their capital of the concerns, the company guard lands if
+# the return is still ahead, the oil concern takes
 # Eflor and Rakhma, the bank Azhar and Kadir, the arms company Sardan.
 NAM_exile_corporate_plan = {
 	name = "NAM corporate boards"
@@ -378,9 +407,14 @@ NAM_exile_corporate_plan = {
 		NAM_board_humanist_facade
 		NAM_board_landing_contracts
 		NAM_board_constitution
+		NAM_board_private_navy
+		NAM_board_mercenary_battalions
 		NAM_board_war_of_return
 		NAM_board_shareholders
-		NAM_board_private_navy
+		NAM_board_company_capital
+		NAM_board_company_housing
+		NAM_board_company_docks
+		NAM_board_company_airport
 		NAM_board_corporate_courts
 		NAM_board_island_concessions
 		NAM_board_security_contracts

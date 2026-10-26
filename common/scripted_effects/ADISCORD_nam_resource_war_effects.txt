@@ -841,6 +841,146 @@ NAM_rw_exile_move_capital = {
 	}
 }
 
+# COUNTRY NAM. Founding of the exile capital, called by the exile focuses.
+# The Great Island (228) becomes Neo-Svetlogorye and its harbour city (6893)
+# Neo-Svetlogorsk. If 228 is lost, the island that holds the capital takes
+# the same names, given to its principal victory point. The city gains 2
+# victory points, the island one infrastructure level and one building slot.
+# Once per campaign (NAM_new_capital_founded); the names stay when a won war
+# of return moves the capital back to the mainland. Without 228 or an island
+# capital nothing happens and the founding stays available.
+NAM_exile_found_new_capital = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = NAM_new_capital_founded }
+			OR = {
+				owns_state = 228
+				capital_scope = {
+					NAM_rw_island_state = yes
+					is_owned_by = NAM
+				}
+			}
+		}
+		custom_effect_tooltip = NAM_exile_found_new_capital_tt
+		hidden_effect = { set_country_flag = NAM_new_capital_founded }
+		if = {
+			limit = { owns_state = 228 }
+			hidden_effect = {
+				set_province_name = {
+					id = 6893
+					name = NAM_neo_svetlogorsk
+				}
+			}
+			add_victory_points = {
+				province = 6893
+				value = 2
+			}
+			228 = { NAM_exile_new_capital_state_reward = yes }
+		}
+		else = {
+			NAM_exile_name_island_capital_city = yes
+			capital_scope = { NAM_exile_new_capital_state_reward = yes }
+		}
+	}
+}
+
+# STATE island of the new exile capital: its name, infrastructure and slot.
+NAM_exile_new_capital_state_reward = {
+	hidden_effect = { set_state_name = NAM_neo_svetlogorye }
+	if = {
+		limit = { infrastructure < 5 }
+		add_building_construction = {
+			type = infrastructure
+			level = 1
+			instant_build = yes
+		}
+	}
+	add_extra_state_shared_building_slots = 1
+}
+
+# COUNTRY NAM with its capital on an island other than 228. The city name and
+# the victory points go to the island's principal victory point.
+NAM_exile_name_island_capital_city = {
+	if = {
+		limit = { capital_scope = { state = 225 } }
+		hidden_effect = {
+			set_province_name = {
+				id = 11393
+				name = NAM_neo_svetlogorsk
+			}
+		}
+		add_victory_points = {
+			province = 11393
+			value = 2
+		}
+	}
+	else_if = {
+		limit = { capital_scope = { state = 227 } }
+		hidden_effect = {
+			set_province_name = {
+				id = 2478
+				name = NAM_neo_svetlogorsk
+			}
+		}
+		add_victory_points = {
+			province = 2478
+			value = 2
+		}
+	}
+	else_if = {
+		limit = { capital_scope = { state = 231 } }
+		hidden_effect = {
+			set_province_name = {
+				id = 13018
+				name = NAM_neo_svetlogorsk
+			}
+		}
+		add_victory_points = {
+			province = 13018
+			value = 2
+		}
+	}
+	else_if = {
+		limit = { capital_scope = { state = 226 } }
+		hidden_effect = {
+			set_province_name = {
+				id = 4396
+				name = NAM_neo_svetlogorsk
+			}
+		}
+		add_victory_points = {
+			province = 4396
+			value = 2
+		}
+	}
+	else_if = {
+		limit = { capital_scope = { state = 229 } }
+		hidden_effect = {
+			set_province_name = {
+				id = 3731
+				name = NAM_neo_svetlogorsk
+			}
+		}
+		add_victory_points = {
+			province = 3731
+			value = 2
+		}
+	}
+	else_if = {
+		limit = { capital_scope = { state = 230 } }
+		hidden_effect = {
+			set_province_name = {
+				id = 2742
+				name = NAM_neo_svetlogorsk
+			}
+		}
+		add_victory_points = {
+			province = 2742
+			value = 2
+		}
+	}
+}
+
 # STATE on the mainland. While the temp NAM_exile_to_cut count lasts, NAM
 # divisions here are left behind under the temporary template. The count is
 # read inside the loop body, so it falls with every division it marks.

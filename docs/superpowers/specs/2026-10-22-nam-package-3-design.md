@@ -525,6 +525,17 @@ returned south and the great war against the rest of the south.
   cosmetic tag `<TAG>_NAM_federal_district` (or its corporation's tag after the
   takeover). Category `NAM_southern_lands`: `NAM_federal_council_session`
   (focus `NAM_hum_union_council`).
+- New capital: `NAM_exile_found_new_capital` (COUNTRY NAM, called visibly by
+  the exile focuses, once per campaign through the country flag
+  `NAM_new_capital_founded`) renames the Great Island 228 to "Neo-Svetlogorye"
+  (`NAM_neo_svetlogorye`) and its city 6893 to "Neo-Svetlogorsk"
+  (`NAM_neo_svetlogorsk`), adds 2 victory points to the city and one
+  infrastructure level and one shared building slot to the island; tooltip
+  `NAM_exile_found_new_capital_tt`. Without 228 the island capital that
+  replaced it takes the same names on its principal victory point
+  (225: 11393, 227: 2478, 231: 13018, 226: 4396, 229: 3731, 230: 2742);
+  without either nothing happens and the founding stays open. The names stay
+  when a won war of return moves the capital back to 700.
 - War of return from exile (`NAM_war_of_return_start` behind
   `NAM_war_of_return_can_start`; global flag `NAM_wor_exile_war`): against
   Eflor and Azhar only, in one temporary coalition from the shared faction
@@ -611,6 +622,7 @@ refresh effect inside `hidden_effect`, with a visible tooltip of the delta.
 | `NAM_free_zone_slots` (base 1, max 3) | M10 | Free zones chartered at once |
 | `NAM_consolidation` via temp `NAM_cons_change` + `NAM_consolidation_add = yes` | M10 | Hold on the returned south 0..100; 70 opens the great war |
 | `NAM_great_war_start = yes` behind `NAM_great_war_can_start = yes` | M10 | The great war against the rest of the south |
+| `NAM_exile_found_new_capital = yes`, country flag `NAM_new_capital_founded` | M10 | Founds Neo-Svetlogorsk on the island capital once; call visibly, not inside `hidden_effect` |
 | Global flags `NAM_wor_exile_war`, `NAM_war_of_return_won`, `NAM_great_war_started`, `NAM_great_war_won`; country flags `NAM_consolidation_started`, `NAM_corp_takeover`, `NAM_federal_district`; state flag `NAM_conquered_state`; district variable `NAM_corp_district_owner` (1-6) | M10 | Read-only markers for focus conditions |
 | `ADISCORD_nam_memoir.1..5`, `ADISCORD_nam_archive.1..6` | core 3 | Memoir and archive events |
 

@@ -235,9 +235,9 @@ class NamCampaignTests(unittest.TestCase):
     def test_unique_layout_and_real_rewards(self):
         expected = {
             "main": (self.focuses, 110), "postwar": (self.postwar, 54), "defeated": (self.defeated, 24),
-            "exile_radical": (self.exile_trees["exile_radical"][1], 60),
-            "exile_humanist": (self.exile_trees["exile_humanist"][1], 57),
-            "exile_corporate": (self.exile_trees["exile_corporate"][1], 29),
+            "exile_radical": (self.exile_trees["exile_radical"][1], 74),
+            "exile_humanist": (self.exile_trees["exile_humanist"][1], 73),
+            "exile_corporate": (self.exile_trees["exile_corporate"][1], 34),
         }
         names = [name for focuses, _ in expected.values() for name in focuses]
         self.assertEqual(len(names), len(set(names)))
@@ -316,6 +316,22 @@ class NamCampaignTests(unittest.TestCase):
                     if effect in [e.key for e in walk(block(focus, "completion_reward"))]
                 ]
                 self.assertEqual(len(callers), 1, (kind, effect))
+        # The return operation requires the final focus of every exile branch.
+        capstones = {
+            "NAM_rad_war_of_return": ("exile_radical", {
+                "NAM_rad_return_plan", "NAM_rad_fortress_capital", "NAM_rad_island_fuel_dumps",
+                "NAM_exile_army_of_return", "NAM_exile_corsair_admiralty"}),
+            "NAM_hum_war_of_return": ("exile_humanist", {
+                "NAM_hum_return_manifesto", "NAM_exile_overseas_districts", "NAM_hum_free_city_charter",
+                "NAM_hum_army_of_citizens", "NAM_hum_charter_commission"}),
+            "NAM_board_war_of_return": ("exile_corporate", {
+                "NAM_board_landing_contracts", "NAM_board_private_navy", "NAM_board_mercenary_battalions"}),
+        }
+        for name, (kind, expected) in capstones.items():
+            groups = [[e.value for e in g] for g in (e.value for e in self.exile_trees[kind][1][name]
+                                                      if e.key == "prerequisite")]
+            self.assertTrue(all(len(group) == 1 for group in groups), name)
+            self.assertEqual({group[0] for group in groups}, expected, name)
         self.assertNotIn("allow_branch", read(TREES["defeated"][0]))
         # Decisions, categories and the piracy window read these completions.
         gates = {

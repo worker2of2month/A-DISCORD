@@ -24,15 +24,16 @@ focus_tree = {
 
 	# ----- The pillar junta -----
 	# The pillars that overthrew the namestnik rule by tribunal or by a shared
-	# purse; their war council sends agents to Eflor and Azhar, and the agents
-	# lead the mainland underground that guides the landing.
+	# purse; their war council purges or pardons the namestnik's officers,
+	# sends agents to Eflor and Azhar, and the agents lead the mainland
+	# underground that guides the landing.
 
 	focus = {
 		id = NAM_rad_pillar_junta
 		icon = GFX_focus_generic_military_dictatorship
-		x = 4
+		x = 8
 		y = 0
-		cost = 3
+		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
 		available = {
 			has_capitulated = no
@@ -58,9 +59,9 @@ focus_tree = {
 	focus = {
 		id = NAM_rad_island_requisitions
 		icon = GFX_focus_generic_expropriate_industrialist
-		x = 1
+		x = 3
 		y = 1
-		cost = 3
+		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_rad_pillar_junta }
 		available = {
@@ -91,9 +92,9 @@ focus_tree = {
 	focus = {
 		id = NAM_rad_tribunals
 		icon = GFX_focus_generic_court
-		x = 5
+		x = 9
 		y = 1
-		cost = 4
+		cost = 5
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_rad_pillar_junta }
 		mutually_exclusive = { focus = NAM_rad_pact_of_pillars }
@@ -125,9 +126,9 @@ focus_tree = {
 	focus = {
 		id = NAM_rad_pact_of_pillars
 		icon = GFX_goal_generic_dangerous_deal
-		x = 7
+		x = 11
 		y = 1
-		cost = 4
+		cost = 5
 		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_rad_pillar_junta }
 		mutually_exclusive = { focus = NAM_rad_tribunals }
@@ -158,9 +159,9 @@ focus_tree = {
 	focus = {
 		id = NAM_rad_war_council
 		icon = GFX_goal_generic_position_armies
-		x = 6
+		x = 10
 		y = 2
-		cost = 4
+		cost = 5
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = {
 			focus = NAM_rad_tribunals
@@ -186,13 +187,74 @@ focus_tree = {
 	}
 
 	focus = {
+		id = NAM_rad_purge_of_loyalists
+		icon = GFX_focus_generic_secret_service_agency
+		x = 9
+		y = 3
+		cost = 6
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_rad_war_council }
+		mutually_exclusive = { focus = NAM_rad_officer_amnesty }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 80
+			add_stability = -0.03
+			custom_effect_tooltip = NAM_grp_rad_purge_of_loyalists_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = -8 }
+				add_to_variable = { var = NAM_grp_garr_support value = 3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 12
+		}
+	}
+
+	focus = {
+		id = NAM_rad_officer_amnesty
+		icon = GFX_focus_generic_advisors
+		x = 11
+		y = 3
+		cost = 6
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_rad_war_council }
+		mutually_exclusive = { focus = NAM_rad_purge_of_loyalists }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 20
+			add_command_power = 20
+			custom_effect_tooltip = NAM_grp_rad_officer_amnesty_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 6 }
+				add_to_variable = { var = NAM_grp_garr_support value = -3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 8
+		}
+	}
+
+	focus = {
 		id = NAM_rad_enemy_lists
 		icon = GFX_focus_generic_conspiracy
-		x = 6
-		y = 3
-		cost = 4
+		x = 10
+		y = 4
+		cost = 5
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_POLITICAL }
-		prerequisite = { focus = NAM_rad_war_council }
+		prerequisite = {
+			focus = NAM_rad_purge_of_loyalists
+			focus = NAM_rad_officer_amnesty
+		}
 		available = {
 			has_capitulated = no
 		}
@@ -228,9 +290,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_armed_underground
 		icon = GFX_focus_generic_forest_brothers
-		x = 5
-		y = 4
-		cost = 4
+		x = 9
+		y = 5
+		cost = 6
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
 		prerequisite = { focus = NAM_rad_enemy_lists }
 		mutually_exclusive = { focus = NAM_exile_klyuchevsk_strike }
@@ -269,9 +331,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_klyuchevsk_strike
 		icon = GFX_focus_generic_sabotage
-		x = 7
-		y = 4
-		cost = 4
+		x = 11
+		y = 5
+		cost = 6
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_rad_enemy_lists }
 		mutually_exclusive = { focus = NAM_exile_armed_underground }
@@ -301,9 +363,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_harbour_pilots
 		icon = GFX_goal_generic_occupy_states_coastal
-		x = 6
-		y = 5
-		cost = 3
+		x = 10
+		y = 6
+		cost = 5
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = {
 			focus = NAM_exile_armed_underground
@@ -329,14 +391,15 @@ focus_tree = {
 
 	# ----- Fortress islands -----
 	# Requisitioned islands become a war port or a barracks for the refugees;
-	# both are covered by the coastal batteries and the island arsenal.
+	# both are covered by the coastal batteries, the foundry and the convict
+	# shipyards, which together stock the island arsenal.
 
 	focus = {
 		id = NAM_exile_naval_port
 		icon = GFX_goal_generic_construct_naval_dockyard
 		x = 0
 		y = 2
-		cost = 4
+		cost = 6
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_rad_island_requisitions }
 		mutually_exclusive = { focus = NAM_exile_refugee_barracks }
@@ -376,7 +439,7 @@ focus_tree = {
 		icon = GFX_focus_generic_limited_social_mobilization
 		x = 2
 		y = 2
-		cost = 3
+		cost = 6
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_rad_island_requisitions }
 		mutually_exclusive = { focus = NAM_exile_naval_port }
@@ -405,7 +468,7 @@ focus_tree = {
 		icon = GFX_focus_generic_atlantic_coast
 		x = 1
 		y = 3
-		cost = 3
+		cost = 5
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_NAVY_XP }
 		prerequisite = {
 			focus = NAM_exile_naval_port
@@ -464,9 +527,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_island_foundry
 		icon = GFX_focus_generic_steel_mill
-		x = 1
+		x = 0
 		y = 4
-		cost = 5
+		cost = 6
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_exile_coastal_batteries }
 		available = {
@@ -515,6 +578,557 @@ focus_tree = {
 		}
 	}
 
+	focus = {
+		id = NAM_rad_prison_shipyards
+		icon = GFX_goal_generic_construct_naval_dockyard
+		x = 2
+		y = 4
+		cost = 6
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_exile_coastal_batteries }
+		available = {
+			has_capitulated = no
+			OR = {
+				225 = {
+					is_owned_by = NAM
+					is_controlled_by = NAM
+				}
+				capital_scope = {
+					is_owned_by = NAM
+					is_controlled_by = NAM
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			# Convicts build the slipways at Yuzhnoostrovsk while the Southern
+			# Islands are ours; otherwise beside the capital's harbour.
+			if = {
+				limit = {
+					225 = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+				}
+				225 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = dockyard
+						level = 1
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = naval_base
+						level = 1
+						province = 11393
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				capital_scope = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = dockyard
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			navy_experience = 10
+			add_stability = -0.02
+		}
+		ai_will_do = {
+			base = 12
+		}
+	}
+
+	focus = {
+		id = NAM_rad_island_fuel_dumps
+		icon = GFX_focus_generic_stockpile_fuel
+		x = 1
+		y = 5
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_exile_island_foundry }
+		prerequisite = { focus = NAM_rad_prison_shipyards }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_fuel = 4000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 3000
+				producer = NAM
+			}
+			capital_scope = {
+				if = {
+					limit = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = fuel_silo
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# ----- Neo-Svetlogorsk, the fortress capital -----
+	# Labour battalions of refugees and convicts found the island capital,
+	# power its factories or feed its mines, and ring it with roads, airfields
+	# and air defence. The fortress is part of the return plan.
+
+	focus = {
+		id = NAM_rad_labour_battalions
+		icon = GFX_goal_generic_construction2
+		x = 6
+		y = 2
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_MANPOWER }
+		prerequisite = { focus = NAM_rad_island_requisitions }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			225 = {
+				if = {
+					limit = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			231 = {
+				if = {
+					limit = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			add_stability = -0.02
+			custom_effect_tooltip = NAM_grp_rad_labour_battalions_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = -4 }
+				add_to_variable = { var = NAM_grp_garr_support value = 2 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_rad_neo_svetlogorsk
+		icon = GFX_focus_generic_phoenix
+		x = 5
+		y = 3
+		cost = 7
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_rad_labour_battalions }
+		available = {
+			has_capitulated = no
+			capital_scope = {
+				is_owned_by = NAM
+				is_controlled_by = NAM
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_exile_found_new_capital = yes
+			add_political_power = 50
+			add_war_support = 0.03
+			capital_scope = {
+				add_building_construction = {
+					type = anti_air_building
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = NAM_rad_barrack_towns
+		icon = GFX_focus_generic_low_cost_housing
+		x = 7
+		y = 3
+		cost = 6
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_rad_labour_battalions }
+		available = {
+			has_capitulated = no
+			OR = {
+				231 = {
+					is_owned_by = NAM
+					is_controlled_by = NAM
+				}
+				capital_scope = {
+					is_owned_by = NAM
+					is_controlled_by = NAM
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 3000
+			# The barrack towns stand beside the mines of the Middle Island while
+			# it is ours; otherwise on the capital's outskirts.
+			if = {
+				limit = {
+					231 = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+				}
+				231 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				capital_scope = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			custom_effect_tooltip = NAM_grp_rad_barrack_towns_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = -3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 12
+		}
+	}
+
+	focus = {
+		id = NAM_rad_convict_power_plant
+		icon = GFX_focus_generic_electrification
+		x = 4
+		y = 4
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_rad_neo_svetlogorsk }
+		mutually_exclusive = { focus = NAM_rad_ore_conveyors }
+		available = {
+			has_capitulated = no
+			capital_scope = {
+				is_owned_by = NAM
+				is_controlled_by = NAM
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			capital_scope = {
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {
+					type = energy_infrastructure
+					level = 1
+					instant_build = yes
+				}
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			add_stability = -0.02
+		}
+		ai_will_do = {
+			base = 12
+		}
+	}
+
+	focus = {
+		id = NAM_rad_ore_conveyors
+		icon = GFX_focus_generic_mining_industry
+		x = 6
+		y = 4
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_rad_neo_svetlogorsk }
+		mutually_exclusive = { focus = NAM_rad_convict_power_plant }
+		available = {
+			has_capitulated = no
+			OR = {
+				230 = {
+					is_owned_by = NAM
+					is_controlled_by = NAM
+				}
+				231 = {
+					is_owned_by = NAM
+					is_controlled_by = NAM
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			# The conveyors serve the richer steel of the Middle Island while it
+			# is ours; otherwise the Western Island District.
+			if = {
+				limit = {
+					231 = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+				}
+				231 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+				add_resource = {
+					type = steel
+					amount = 4
+					state = 231
+				}
+			}
+			else = {
+				230 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+				add_resource = {
+					type = steel
+					amount = 4
+					state = 230
+				}
+			}
+			add_stability = -0.02
+		}
+		ai_will_do = {
+			base = 8
+		}
+	}
+
+	focus = {
+		id = NAM_rad_military_roads
+		icon = GFX_focus_generic_road_investment
+		x = 5
+		y = 5
+		cost = 6
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = NAM_rad_convict_power_plant
+			focus = NAM_rad_ore_conveyors
+		}
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			every_owned_state = {
+				limit = {
+					NAM_rw_island_state = yes
+					is_controlled_by = NAM
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			army_experience = 10
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_rad_penal_mines
+		icon = GFX_focus_generic_mineral_prospecting
+		x = 4
+		y = 6
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_rad_military_roads }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = { 227 = { is_owned_by = NAM } }
+				add_resource = {
+					type = tungsten
+					amount = 2
+					state = 227
+				}
+			}
+			if = {
+				limit = { 229 = { is_owned_by = NAM } }
+				add_resource = {
+					type = chromium
+					amount = 2
+					state = 229
+				}
+			}
+			add_stability = -0.02
+			custom_effect_tooltip = NAM_grp_rad_penal_mines_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = -3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_rad_island_airfields
+		icon = GFX_goal_generic_air_fighter
+		x = 6
+		y = 6
+		cost = 5
+		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_rad_military_roads }
+		available = {
+			has_capitulated = no
+			capital_scope = {
+				is_owned_by = NAM
+				is_controlled_by = NAM
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			capital_scope = {
+				add_building_construction = {
+					type = air_base
+					level = 2
+					instant_build = yes
+				}
+			}
+			231 = {
+				if = {
+					limit = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+					add_building_construction = {
+						type = air_base
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			air_experience = 15
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	focus = {
+		id = NAM_rad_fortress_capital
+		icon = GFX_focus_generic_mountain_fortification
+		x = 5
+		y = 7
+		cost = 7
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = { focus = NAM_rad_penal_mines }
+		prerequisite = { focus = NAM_rad_island_airfields }
+		available = {
+			has_capitulated = no
+			capital_scope = {
+				is_owned_by = NAM
+				is_controlled_by = NAM
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			capital_scope = {
+				add_building_construction = {
+					type = anti_air_building
+					level = 1
+					instant_build = yes
+				}
+				add_building_construction = {
+					type = radar_station
+					level = 1
+					instant_build = yes
+				}
+			}
+			# Land forts ring the old harbour of the Big Island while it is ours.
+			228 = {
+				if = {
+					limit = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+					add_building_construction = {
+						type = bunker
+						level = 2
+						province = 6893
+						instant_build = yes
+					}
+				}
+			}
+			custom_effect_tooltip = NAM_rad_fortress_capital_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 10 }
+				NAM_revenge_readiness_clamp = yes
+			}
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
 	# ----- The army of return -----
 	# The staff opens the landing drill; the army is paid with loot and its
 	# marines through NAM_order_marines.
@@ -522,9 +1136,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_general_staff
 		icon = GFX_goal_generic_army_doctrines
-		x = 13
+		x = 16
 		y = 0
-		cost = 3
+		cost = 4
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		available = {
 			has_capitulated = no
@@ -548,9 +1162,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_landing_craft
 		icon = GFX_focus_generic_naval_invasion
-		x = 10
+		x = 13
 		y = 1
-		cost = 3
+		cost = 4
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_exile_general_staff }
 		available = {
@@ -578,9 +1192,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_cadre_army
 		icon = GFX_focus_generic_soldier_salute
-		x = 12
+		x = 15
 		y = 1
-		cost = 4
+		cost = 6
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_exile_general_staff }
 		mutually_exclusive = { focus = NAM_exile_levy_of_exiles }
@@ -611,9 +1225,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_levy_of_exiles
 		icon = GFX_goal_generic_allies_build_infantry
-		x = 14
+		x = 17
 		y = 1
-		cost = 4
+		cost = 6
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_exile_general_staff }
 		mutually_exclusive = { focus = NAM_exile_cadre_army }
@@ -644,9 +1258,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_arms_purchases
 		icon = GFX_focus_generic_money_for_equipment
-		x = 16
+		x = 19
 		y = 1
-		cost = 3
+		cost = 4
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_exile_general_staff }
 		available = {
@@ -679,9 +1293,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_marine_orders
 		icon = GFX_goal_generic_amphibious_assault
-		x = 13
+		x = 16
 		y = 2
-		cost = 4
+		cost = 5
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = {
 			focus = NAM_exile_cadre_army
@@ -704,9 +1318,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_strike_from_the_sea
 		icon = GFX_focus_generic_north_atlantic_fleet
-		x = 12
+		x = 15
 		y = 3
-		cost = 4
+		cost = 6
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_exile_marine_orders }
 		mutually_exclusive = { focus = NAM_exile_strike_from_within }
@@ -740,9 +1354,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_strike_from_within
 		icon = GFX_focus_generic_infiltration
-		x = 14
+		x = 17
 		y = 3
-		cost = 4
+		cost = 6
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_exile_marine_orders }
 		mutually_exclusive = { focus = NAM_exile_strike_from_the_sea }
@@ -773,9 +1387,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_landing_school
 		icon = GFX_focus_generic_advanced_military_studies
-		x = 13
+		x = 16
 		y = 4
-		cost = 3
+		cost = 5
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
 			focus = NAM_exile_strike_from_the_sea
@@ -806,13 +1420,41 @@ focus_tree = {
 	}
 
 	focus = {
-		id = NAM_exile_army_of_return
-		icon = GFX_focus_generic_army_attack
-		x = 13
+		id = NAM_rad_cadet_corps
+		icon = GFX_focus_generic_military_academy
+		x = 16
 		y = 5
 		cost = 6
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
+		search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_exile_landing_school }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_rad_cadet_corps
+				bonus = 0.5
+				uses = 2
+				category = infantry_weapons
+				category = support_tech
+			}
+			army_experience = 10
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_exile_army_of_return
+		icon = GFX_focus_generic_army_attack
+		x = 16
+		y = 6
+		cost = 7
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = { focus = NAM_rad_cadet_corps }
 		prerequisite = { focus = NAM_exile_landing_craft }
 		available = {
 			has_capitulated = no
@@ -840,9 +1482,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_sea_raiders
 		icon = GFX_focus_generic_piracy
-		x = 22
+		x = 24
 		y = 0
-		cost = 3
+		cost = 4
 		search_filters = { FOCUS_FILTER_NAVY_XP }
 		available = {
 			has_capitulated = no
@@ -873,9 +1515,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_fences
 		icon = GFX_focus_generic_smugglers
-		x = 19
+		x = 21
 		y = 1
-		cost = 3
+		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_exile_sea_raiders }
 		available = {
@@ -896,9 +1538,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_letters_of_marque
 		icon = GFX_focus_generic_treaty
-		x = 21
+		x = 23
 		y = 1
-		cost = 4
+		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_NAVY_XP }
 		prerequisite = { focus = NAM_exile_sea_raiders }
 		mutually_exclusive = { focus = NAM_exile_free_brotherhood }
@@ -929,9 +1571,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_free_brotherhood
 		icon = GFX_focus_generic_turning_a_blind_eye
-		x = 23
+		x = 25
 		y = 1
-		cost = 4
+		cost = 5
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_exile_sea_raiders }
 		mutually_exclusive = { focus = NAM_exile_letters_of_marque }
@@ -964,9 +1606,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_tanker_raids
 		icon = GFX_focus_generic_trade_interdiction
-		x = 25
+		x = 27
 		y = 1
-		cost = 3
+		cost = 4
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_exile_sea_raiders }
 		available = {
@@ -998,9 +1640,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_black_market
 		icon = GFX_focus_generic_arms_trade
-		x = 19
+		x = 21
 		y = 2
-		cost = 3
+		cost = 4
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_exile_fences }
 		available = {
@@ -1024,9 +1666,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_privateer_captains
 		icon = GFX_focus_generic_destroyer
-		x = 22
+		x = 24
 		y = 2
-		cost = 4
+		cost = 5
 		search_filters = { FOCUS_FILTER_NAVY_XP }
 		prerequisite = {
 			focus = NAM_exile_letters_of_marque
@@ -1064,9 +1706,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_hidden_anchorages
 		icon = GFX_focus_generic_coastal_fort
-		x = 25
+		x = 27
 		y = 2
-		cost = 3
+		cost = 4
 		search_filters = { FOCUS_FILTER_NAVY_XP }
 		prerequisite = { focus = NAM_exile_tanker_raids }
 		available = {
@@ -1127,9 +1769,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_raider_squadron
 		icon = GFX_goal_generic_navy_cruiser
-		x = 21
+		x = 23
 		y = 3
-		cost = 4
+		cost = 5
 		search_filters = { FOCUS_FILTER_NAVY_XP }
 		prerequisite = { focus = NAM_exile_privateer_captains }
 		mutually_exclusive = { focus = NAM_exile_wolfpacks }
@@ -1175,9 +1817,9 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_wolfpacks
 		icon = GFX_goal_generic_wolf_pack
-		x = 23
+		x = 25
 		y = 3
-		cost = 4
+		cost = 5
 		search_filters = { FOCUS_FILTER_NAVY_XP }
 		prerequisite = { focus = NAM_exile_privateer_captains }
 		mutually_exclusive = { focus = NAM_exile_raider_squadron }
@@ -1223,7 +1865,7 @@ focus_tree = {
 	focus = {
 		id = NAM_exile_corsair_admiralty
 		icon = GFX_focus_generic_naval_discipline
-		x = 22
+		x = 24
 		y = 4
 		cost = 6
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_WAR_SUPPORT }
@@ -1260,17 +1902,18 @@ focus_tree = {
 	}
 
 	# ----- The war of return -----
-	# The plan joins the army with the underground's pilots; the war against
-	# Eflor and Azhar lands the marines at South Harbour.
+	# The operation needs the final focus of every exile branch: the return
+	# plan of the underground, the fortress capital, the island arsenal, the
+	# army of return and the corsair admiralty. The war against Eflor and
+	# Azhar lands the marines at South Harbour.
 
 	focus = {
 		id = NAM_rad_return_plan
 		icon = GFX_goal_generic_occupy_start_war
-		x = 13
-		y = 6
-		cost = 5
+		x = 10
+		y = 7
+		cost = 6
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ARMY_XP }
-		prerequisite = { focus = NAM_exile_army_of_return }
 		prerequisite = { focus = NAM_exile_harbour_pilots }
 		available = {
 			has_capitulated = no
@@ -1295,10 +1938,14 @@ focus_tree = {
 		id = NAM_rad_war_of_return
 		icon = GFX_goal_generic_occupy_start_coast
 		x = 13
-		y = 7
+		y = 8
 		cost = 5
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
 		prerequisite = { focus = NAM_rad_return_plan }
+		prerequisite = { focus = NAM_rad_fortress_capital }
+		prerequisite = { focus = NAM_rad_island_fuel_dumps }
+		prerequisite = { focus = NAM_exile_army_of_return }
+		prerequisite = { focus = NAM_exile_corsair_admiralty }
 		available = {
 			has_capitulated = no
 			is_subject = no
@@ -1331,7 +1978,7 @@ focus_tree = {
 		id = NAM_rad_spoils_of_return
 		icon = GFX_goal_generic_occupy_states_ongoing_war
 		x = 13
-		y = 8
+		y = 9
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ANNEXATION }
 		prerequisite = { focus = NAM_rad_war_of_return }
@@ -1363,7 +2010,7 @@ focus_tree = {
 		id = NAM_rad_labour_camps
 		icon = GFX_focus_generic_workers
 		x = 10
-		y = 9
+		y = 10
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_rad_spoils_of_return }
@@ -1397,7 +2044,7 @@ focus_tree = {
 		id = NAM_rad_martial_law
 		icon = GFX_goal_generic_fortify_city
 		x = 13
-		y = 9
+		y = 10
 		cost = 3
 		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_rad_spoils_of_return }
@@ -1425,7 +2072,7 @@ focus_tree = {
 		id = NAM_rad_oil_seizure
 		icon = GFX_goal_generic_oil_refinery
 		x = 16
-		y = 9
+		y = 10
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_rad_spoils_of_return }
@@ -1451,7 +2098,7 @@ focus_tree = {
 		id = NAM_rad_garrison_belt
 		icon = GFX_goal_generic_defence
 		x = 10
-		y = 10
+		y = 11
 		cost = 4
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_rad_labour_camps }
@@ -1483,7 +2130,7 @@ focus_tree = {
 		id = NAM_rad_hostage_system
 		icon = GFX_goal_generic_political_pressure
 		x = 12
-		y = 10
+		y = 11
 		cost = 4
 		search_filters = { FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_rad_martial_law }
@@ -1515,7 +2162,7 @@ focus_tree = {
 		id = NAM_rad_collaborator_councils
 		icon = GFX_focus_generic_improve_the_administration
 		x = 14
-		y = 10
+		y = 11
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_rad_martial_law }
@@ -1548,7 +2195,7 @@ focus_tree = {
 		id = NAM_rad_field_tribunals
 		icon = GFX_focus_generic_sympathetic_judges
 		x = 16
-		y = 10
+		y = 11
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_rad_oil_seizure }
@@ -1575,7 +2222,7 @@ focus_tree = {
 		id = NAM_rad_pacification
 		icon = GFX_goal_generic_territory_or_war
 		x = 13
-		y = 11
+		y = 12
 		cost = 5
 		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -1610,7 +2257,7 @@ focus_tree = {
 		id = NAM_rad_three_capitals
 		icon = GFX_focus_generic_secret_service_agency
 		x = 11
-		y = 12
+		y = 13
 		cost = 4
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_rad_pacification }
@@ -1650,7 +2297,7 @@ focus_tree = {
 		id = NAM_rad_penal_legions
 		icon = GFX_goal_generic_axis_build_infantry
 		x = 13
-		y = 12
+		y = 13
 		cost = 4
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_rad_pacification }
@@ -1677,7 +2324,7 @@ focus_tree = {
 		id = NAM_rad_plunder_economy
 		icon = GFX_goal_generic_production
 		x = 15
-		y = 12
+		y = 13
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_rad_pacification }
@@ -1710,7 +2357,7 @@ focus_tree = {
 		id = NAM_rad_great_war_plan
 		icon = GFX_focus_generic_total_war
 		x = 13
-		y = 13
+		y = 14
 		cost = 5
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_rad_three_capitals }
@@ -1735,7 +2382,7 @@ focus_tree = {
 		id = NAM_rad_great_war
 		icon = GFX_goal_generic_major_war
 		x = 13
-		y = 14
+		y = 15
 		cost = 5
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
 		prerequisite = { focus = NAM_rad_great_war_plan }
@@ -1767,7 +2414,7 @@ focus_tree = {
 		id = NAM_rad_southern_tribute
 		icon = GFX_goal_generic_demand_territory
 		x = 13
-		y = 15
+		y = 16
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ANNEXATION }
 		prerequisite = { focus = NAM_rad_great_war }
@@ -1795,7 +2442,7 @@ focus_tree = {
 		id = NAM_rad_sardan_levies
 		icon = GFX_focus_generic_full_social_mobilization
 		x = 10
-		y = 16
+		y = 17
 		cost = 4
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_rad_southern_tribute }
@@ -1822,7 +2469,7 @@ focus_tree = {
 		id = NAM_rad_garrison_rule
 		icon = GFX_focus_generic_national_security
 		x = 12
-		y = 16
+		y = 17
 		cost = 4
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_rad_southern_tribute }
@@ -1851,7 +2498,7 @@ focus_tree = {
 		id = NAM_rad_extraction_trusts
 		icon = GFX_focus_generic_resource_extraction
 		x = 14
-		y = 16
+		y = 17
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_rad_southern_tribute }
@@ -1901,7 +2548,7 @@ focus_tree = {
 		id = NAM_rad_kadir_tolls
 		icon = GFX_focus_generic_camel_corps
 		x = 16
-		y = 16
+		y = 17
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_rad_southern_tribute }
@@ -1929,7 +2576,7 @@ focus_tree = {
 		id = NAM_rad_army_of_dominion
 		icon = GFX_focus_generic_army_doctrines_2
 		x = 10
-		y = 17
+		y = 18
 		cost = 4
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_rad_sardan_levies }
@@ -1951,7 +2598,7 @@ focus_tree = {
 		id = NAM_rad_machines_to_islands
 		icon = GFX_goal_generic_construct_mil_factory
 		x = 13
-		y = 17
+		y = 18
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2031,7 +2678,7 @@ focus_tree = {
 		id = NAM_rad_rakhma_wells
 		icon = GFX_focus_generic_stockpile_fuel
 		x = 16
-		y = 17
+		y = 18
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_rad_kadir_tolls }
@@ -2062,7 +2709,7 @@ focus_tree = {
 		id = NAM_rad_pillar_estates
 		icon = GFX_focus_generic_land_redistribution
 		x = 13
-		y = 18
+		y = 19
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_rad_machines_to_islands }
@@ -2092,7 +2739,7 @@ focus_tree = {
 		id = NAM_rad_dominion_of_pillars
 		icon = GFX_goal_generic_military_sphere
 		x = 13
-		y = 19
+		y = 20
 		cost = 6
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_rad_pillar_estates }

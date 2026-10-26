@@ -920,6 +920,27 @@ def check_exile_revolution(
             re.search(rf"(?m)^\s*{re.escape(key)}:", loc) is not None,
             f"missing localisation key {key}",
         )
+    # The exile capital is founded once; it renames the Great Island or the
+    # island capital that replaced it.
+    founding = named_block(effects, "NAM_exile_found_new_capital")
+    check(
+        "NOT = { has_country_flag = NAM_new_capital_founded }" in founding
+        and "set_country_flag = NAM_new_capital_founded" in founding
+        and "id = 6893" in founding
+        and "owns_state = 228" in founding
+        and "NAM_exile_name_island_capital_city = yes" in founding
+        and "set_state_name = NAM_neo_svetlogorye" in named_block(effects, "NAM_exile_new_capital_state_reward"),
+        "the exile capital founding must rename 228 and 6893 once, or the island capital that replaced it",
+    )
+    for key in (
+        "NAM_exile_found_new_capital_tt",
+        "NAM_neo_svetlogorsk",
+        "NAM_neo_svetlogorye",
+    ):
+        check(
+            re.search(rf"(?m)^\s*{re.escape(key)}:", loc) is not None,
+            f"missing localisation key {key}",
+        )
     # Consolidation between the exile war and the great war.
     consolidation = named_block(effects, "NAM_consolidation_monthly")
     check(
