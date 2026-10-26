@@ -2755,29 +2755,31 @@ focus_tree = {
 		ai_will_do = { base = 10 }
 	}
 
-
-
+	# Shabrat's side seizes the stores of the collapsed confederation once
+	# Vorkerland falls, during the civil war or after it. The root has no wartime
+	# prerequisite, so the postwar layout keeps it visible.
 	focus = {
 		id = STP_cw_seize_vorkerland_stores
 		search_filters = { FOCUS_FILTER_ARMY }
-		allow_branch = {
-			tag = SRP
-			NOT = { has_country_flag = STP_cw_postwar }
-		}
+		allow_branch = { tag = STS }
 		available = {
-			has_war = yes
-			NOT = { has_country_flag = STP_cw_postwar }
-			tag = SRP
 			custom_trigger_tooltip = {
 				tooltip = STP_cw_vorkerland_collapsed_tt
 				has_global_flag = ADISCORD_vorkerland_collapse_started
 			}
 		}
 		icon = GFX_focus_STP_cw_seize_vorkerland_stores
-		x = 18
-		y = 3
+		x = 13
+		y = 0
+		offset = {
+			x = 9
+			y = 4
+			trigger = {
+				tag = STS
+				has_country_flag = STP_cw_postwar
+			}
+		}
 		cost = 2
-		prerequisite = { focus = STP_cw_mountain_staff }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
@@ -2788,22 +2790,17 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_seize_vorkerland_accounts
-		allow_branch = {
-			tag = SRP
-			NOT = { has_country_flag = STP_cw_postwar }
-		}
+		allow_branch = { tag = STS }
 		available = {
-			has_war = yes
-			NOT = { has_country_flag = STP_cw_postwar }
-			tag = SRP
 			custom_trigger_tooltip = {
 				tooltip = STP_cw_vorkerland_collapsed_tt
 				has_global_flag = ADISCORD_vorkerland_collapse_started
 			}
 		}
 		icon = GFX_focus_STP_cw_seize_vorkerland_accounts
-		x = 18
-		y = 4
+		x = 0
+		y = 1
+		relative_position_id = STP_cw_seize_vorkerland_stores
 		cost = 2
 		prerequisite = { focus = STP_cw_seize_vorkerland_stores }
 		cancel_if_invalid = yes

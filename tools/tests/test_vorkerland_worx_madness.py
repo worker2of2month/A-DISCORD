@@ -2,6 +2,7 @@
 
 from copy import deepcopy
 from dataclasses import replace
+from functools import lru_cache
 import json
 from pathlib import Path
 import re
@@ -53,6 +54,7 @@ class Scenario:
         self.war = False
         self.manpower = 5000.0
         self.support = 500.0
+        self.stockpiles = {}
         self.run(EFFECTS["WRK_worx_initialize"])
 
     def number(self, value):
@@ -149,9 +151,12 @@ class Scenario:
             elif key == "add_manpower":
                 self.manpower += self.number(value)
             elif key == "add_equipment_to_stockpile":
-                if scalar(value, "type") != "support_equipment":
-                    raise AssertionError("Only support deposits are modelled")
-                self.support += self.number(scalar(value, "amount"))
+                equipment = scalar(value, "type")
+                amount = self.number(scalar(value, "amount"))
+                if equipment == "support_equipment":
+                    self.support += amount
+                else:
+                    self.stockpiles[equipment] = self.stockpiles.get(equipment, 0) + amount
             elif key == "add_tech_bonus":
                 self.bonuses += 1
             elif key == "add_dynamic_modifier":
@@ -190,6 +195,125 @@ class Scenario:
 
 
 class WorxMadnessTests(unittest.TestCase):
+    def test_story_thresholds_follow_madness_once_and_pause_under_oversight(self):
+        s = Scenario()
+        for level, event in ((25, 32), (50, 33), (75, 34)):
+            s.values["WRK_worx_madness"] = level
+            s.run(EFFECTS["WRK_worx_story_progress"])
+            self.assertEqual(s.events.count(f"ADISCORD_vorkerland_postwar.{event}"), 1)
+            s.run(EFFECTS["WRK_worx_story_progress"])
+            self.assertEqual(s.events.count(f"ADISCORD_vorkerland_postwar.{event}"), 1)
+        self.assertEqual(s.values["WRK_worx_story_stage"], 3)
+        s = Scenario()
+        s.flags.add("WRK_worx_supervised")
+        s.values["WRK_worx_madness"] = 90
+        s.run(EFFECTS["WRK_worx_story_progress"])
+        self.assertEqual(s.values["WRK_worx_story_stage"], 0)
+        s = Scenario()
+        s.values["WRK_worx_story_stage"] = 2
+        s.values["WRK_worx_madness"] = 99
+        s.day()
+        self.assertEqual(s.values["WRK_worx_story_stage"], 3)
+        self.assertIn("ADISCORD_vorkerland_postwar.34", s.events)
+        self.assertEqual(s.values["WRK_worx_madness"], 70)
+
+    def test_experiment_story_counts_deliveries_not_paid_or_cancelled_work(self):
+        s = Scenario()
+        self.assertTrue(s.start("basic"))
+        self.assertEqual(s.values["WRK_worx_total_results"], 0)
+        s.subject = True
+        s.day()
+        self.assertEqual(s.values["WRK_worx_total_results"], 0)
+        s.subject = False
+        for result in range(1, 7):
+            self.assertTrue(s.start("basic"))
+            for _ in range(14):
+                s.day()
+            self.assertEqual(s.values["WRK_worx_total_results"], result)
+        for event in (35, 36, 37):
+            self.assertEqual(s.events.count(f"ADISCORD_vorkerland_postwar.{event}"), 1)
+
+    def test_research_choice_keeps_several_distinct_following_focuses(self):
+        tree = block(parse_clausewitz(read(
+            "focus_trees/Vorkerland/technical_directorate/focuses.txt"
+        )), "focus_tree")
+        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        for child, parent in (
+            ("glass_walls", "control_group"),
+            ("returned_reports", "glass_walls"),
+            ("honest_failure", "glass_walls"),
+            ("black_boxes", "names_obstruct"),
+            ("night_shift", "black_boxes"),
+            ("new_material", "black_boxes"),
+            ("ambulance_columns", "soldier_returns"),
+            ("calibrated_fire", "return_unplanned"),
+            ("school_of_answers", "compulsory_welfare"),
+            ("normal_range", "complaints_deviations"),
+        ):
+            groups = [[e.value for e in g.value] for g in focuses["WRK_worx_" + child]
+                      if g.key == "prerequisite"]
+            self.assertEqual(groups, [["WRK_worx_" + parent]], child)
+
+    def test_story_pages_fit_and_choices_cannot_restore_personal_rule(self):
+        entries = parse_clausewitz(read("events/ADISCORD_vorkerland_events.txt"))
+        scenes = {scalar(e.value, "id"): e.value for e in entries
+                  if e.key == "country_event" and scalar(e.value, "id") in
+                  {f"ADISCORD_vorkerland_postwar.{n}" for n in range(31, 51)}}
+        self.assertEqual(len(scenes), 20)
+        for key, scene in scenes.items():
+            self.assertEqual(scalar(scene, "fire_only_once"), "yes", key)
+            options = [e.value for e in scene if e.key == "option"]
+            self.assertNotIn("trigger", {e.key for e in options[0]}, key)
+            self.assertTrue({e.key for e in options[0]} <= {"name", "ai_chance"}, key)
+            for option in options[1:]:
+                s = Scenario()
+                s.flags.add("WRK_worx_supervised")
+                before = deepcopy(s.__dict__)
+                s.run([e for e in option if e.key not in ("name", "trigger", "ai_chance")])
+                self.assertEqual(s.__dict__, before, key)
+            texts = [e.value if isinstance(e.value, str) else scalar(e.value, "text")
+                     for e in scene if e.key == "desc"]
+            for language in ("russian", "english"):
+                localisation = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+                for text_key in texts:
+                    match = re.search(rf'^ {re.escape(text_key)}:\d* "([^"\n]+)"$', localisation, re.M)
+                    self.assertIsNotNone(match, text_key)
+                    expanded = match[1].replace(r"\n", "\n")
+                    self.assertLessEqual(len(expanded), 3000, text_key)
+                    self.assertLessEqual(len(expanded.encode("utf-8")), 5500, text_key)
+                    self.assertNotRegex(match[1], r"\\(?!n)", text_key)
+
+    def test_story_variants_match_the_actual_course_and_madness_boundary(self):
+        entries = parse_clausewitz(read("events/ADISCORD_vorkerland_events.txt"))
+        scenes = {scalar(e.value, "id"): e.value for e in entries if e.key == "country_event"}
+
+        def selected(number, scenario):
+            descriptions = [e.value for e in scenes[f"ADISCORD_vorkerland_postwar.{number}"]
+                            if e.key == "desc"]
+            return [scalar(value, "text") for value in descriptions
+                    if scenario.matches(block(value, "trigger"))]
+
+        for supervised, madness, suffix in (
+            (False, 0, "quiet"), (False, 74.99, "quiet"),
+            (False, 75, "crisis"), (False, 100, "crisis"), (True, 100, "council"),
+        ):
+            s = Scenario()
+            s.values["WRK_worx_madness"] = madness
+            if supervised:
+                s.flags.add("WRK_worx_supervised")
+            self.assertEqual(selected(50, s), ["ADISCORD_vorkerland_postwar.50." + suffix])
+            for number in (32, 33, 34):
+                expected = "after" if supervised else "d"
+                self.assertEqual(selected(number, s), [f"ADISCORD_vorkerland_postwar.{number}.{expected}"])
+        s = Scenario()
+        self.assertEqual(selected(49, s), ["ADISCORD_vorkerland_postwar.49.administrative"])
+        s.flags.add("WRK_worx_civil_charters")
+        self.assertEqual(selected(49, s), ["ADISCORD_vorkerland_postwar.49.civil"])
+        s.focuses.add("WRK_worx_black_boxes")
+        self.assertEqual(selected(44, s), ["ADISCORD_vorkerland_postwar.44.boxes"])
+        s.focuses = {"WRK_worx_glass_walls"}
+        self.assertEqual(selected(44, s), ["ADISCORD_vorkerland_postwar.44.glass"])
+
     def test_initializer_does_not_reset_paid_work_or_progress(self):
         s = Scenario()
         self.assertTrue(s.start("basic"))
@@ -450,9 +574,12 @@ class WorxMadnessTests(unittest.TestCase):
             "focus_trees/Vorkerland/technical_directorate/focuses.txt"
         )), "focus_tree")
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
-        self.assertEqual(len(focuses), 32)
+        self.assertEqual(len(focuses), 120)
         positions = [(scalar(f, "x"), scalar(f, "y")) for f in focuses.values()]
         self.assertEqual(len(set(positions)), len(positions))
+        for row in {y for x, y in positions}:
+            columns = sorted(int(x) for x, y in positions if y == row)
+            self.assertTrue(all(right - left >= 2 for left, right in zip(columns, columns[1:])), row)
 
         def walk(entries):
             for entry in entries:
@@ -478,6 +605,9 @@ class WorxMadnessTests(unittest.TestCase):
         self.assertTrue(route <= all_focus_ids)
         for key, focus in focuses.items():
             ancestors(key)
+            if key in route:
+                for group in (e.value for e in focus if e.key == "prerequisite"):
+                    self.assertTrue(any(parent.value in route for parent in group), key)
             for group in (e.value for e in focus if e.key == "mutually_exclusive"):
                 for other in group:
                     self.assertIn(other.value, focuses)
@@ -509,9 +639,173 @@ class WorxMadnessTests(unittest.TestCase):
             actual = {e.key: float(e.value) for e in block(displays["WRK_worx_delta_" + name], "modifier")}
             self.assertEqual(actual, expected)
 
+    def test_extended_programmes_share_escrow_and_refund_every_currency(self):
+        programmes = (
+            ("archive_audit", "control_group", 75, 0, 0),
+            ("clinical_series", "names_obstruct", 125, 100, 50),
+            ("tooling_order", "serial_numbers", 150, 0, 100),
+            ("rehabilitation", "soldier_returns", 75, 0, 60),
+            ("conditioning", "return_unplanned", 100, 150, 60),
+            ("district_clinics", "compulsory_welfare", 100, 0, 100),
+            ("population_registry", "complaints_deviations", 75, 100, 0),
+            ("corridor_depots", "maps_have_weight", 125, 0, 80),
+        )
+        for kind, unlock, price, manpower, support in programmes:
+            with self.subTest(kind=kind):
+                s = Scenario()
+                s.focuses.add("WRK_worx_" + unlock)
+                s.pp = price - .01
+                self.assertFalse(s.start(kind))
+                s.pp = price
+                s.manpower = manpower
+                s.support = support
+                for currency, amount in (("manpower", manpower), ("support", support)):
+                    if amount:
+                        setattr(s, currency, amount - .01)
+                        self.assertFalse(s.start(kind))
+                        setattr(s, currency, amount)
+                self.assertTrue(s.start(kind))
+                self.assertEqual((s.pp, s.manpower, s.support), (0, 0, 0))
+                s.pp = 500
+                self.assertFalse(s.start("basic"))
+                s.pp = 0
+                # The paid receipt survives an ordinary save/load of this version.
+                s.__dict__ = deepcopy(s.__dict__)
+                s.subject = True
+                s.day()
+                self.assertEqual((s.pp, s.manpower, s.support), (price, manpower, support))
+                self.assertNotIn("WRK_worx_operation", s.values)
+                s.run(EFFECTS["WRK_worx_finish_" + kind])
+                self.assertEqual((s.pp, s.manpower, s.support), (price, manpower, support))
+
+    def test_archive_audit_relief_does_not_feed_demands(self):
+        s = Scenario()
+        s.focuses.add("WRK_worx_control_group")
+        s.values["WRK_worx_growth"] = .25
+        s.values["WRK_worx_madness"] = 50
+        self.assertTrue(s.start("archive_audit"))
+        for _ in range(20):
+            s.day()
+        self.assertEqual(s.values["WRK_worx_madness"], 55)
+        s.day()
+        self.assertEqual(s.values["WRK_worx_madness"], 43.25)
+        self.assertEqual(s.values["WRK_worx_results"], 0)
+        before = deepcopy(s.__dict__)
+        s.run(EFFECTS["WRK_worx_finish_archive_audit"])
+        self.assertEqual(s.__dict__, before)
+
+    def test_new_material_deliveries_are_once_only_and_use_current_upgrade(self):
+        for kind, unlock, upgrade, days, trucks, support in (
+            ("tooling_order", "serial_numbers", "conveyor_memory", 35, 300, 700),
+            ("corridor_depots", "maps_have_weight", "corridor_dispatch", 28, 500, 520),
+        ):
+            with self.subTest(kind=kind):
+                s = Scenario()
+                s.focuses.add("WRK_worx_" + unlock)
+                self.assertTrue(s.start(kind))
+                for _ in range(days - 1):
+                    s.day()
+                self.assertEqual(s.stockpiles, {})
+                s.focuses.add("WRK_worx_" + upgrade)
+                s.day()
+                self.assertEqual(s.stockpiles["motorized_equipment_1"], trucks)
+                self.assertEqual(s.support, support)
+                self.assertNotIn("WRK_worx_receipt", s.values)
+                before = deepcopy(s.__dict__)
+                s.run(EFFECTS["WRK_worx_finish_" + kind])
+                self.assertEqual(s.__dict__, before)
+
+    def test_paid_experimental_result_consumes_deposits_and_increases_demands(self):
+        for kind, unlock, manpower, support, relief, xp in (
+            ("clinical_series", "names_obstruct", 100, 50, 35, 0),
+            ("conditioning", "return_unplanned", 150, 60, 20, 30),
+            ("population_registry", "complaints_deviations", 100, 0, 15, 15),
+        ):
+            with self.subTest(kind=kind):
+                s = Scenario()
+                s.focuses.add("WRK_worx_" + unlock)
+                s.values["WRK_worx_results"] = 2
+                s.values["WRK_worx_madness"] = 50
+                s.values["WRK_worx_growth"] = .25
+                self.assertTrue(s.start(kind))
+                for _ in range(21):
+                    s.day()
+                self.assertEqual(s.values["WRK_worx_madness"], 55.25 - relief)
+                self.assertEqual(s.values["WRK_worx_demand"], 2)
+                self.assertEqual((s.manpower, s.support, s.xp), (5000 - manpower, 500 - support, xp))
+                self.assertNotIn("WRK_worx_manpower_deposit", s.values)
+                self.assertNotIn("WRK_worx_support_deposit", s.values)
+
+    def test_civil_programmes_work_under_oversight_without_restarting_madness(self):
+        for kind, unlock, days, manpower, stability in (
+            ("rehabilitation", "soldier_returns", 28, 5800, .51),
+            ("district_clinics", "compulsory_welfare", 28, 5400, .54),
+        ):
+            with self.subTest(kind=kind):
+                s = Scenario()
+                s.focuses.update(("WRK_worx_" + unlock, "WRK_worx_safety_confirmed"))
+                s.flags.add("WRK_worx_supervised")
+                s.values["WRK_worx_madness"] = 0
+                self.assertTrue(s.start(kind))
+                for _ in range(days):
+                    s.day()
+                self.assertEqual(s.manpower, manpower)
+                self.assertAlmostEqual(s.stability, stability)
+                self.assertEqual(s.values["WRK_worx_madness"], 0)
+                self.assertEqual(s.values["WRK_worx_growth_total"], 0)
+
+    def test_scientific_pressure_survives_selecting_a_political_course(self):
+        tree = block(parse_clausewitz(read(
+            "focus_trees/Vorkerland/technical_directorate/focuses.txt"
+        )), "focus_tree")
+        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        s = Scenario()
+        s.run(block(focuses["WRK_worx_black_boxes"], "completion_reward"))
+        self.assertAlmostEqual(s.values["WRK_worx_growth_total"], 1.05)
+        s.run(block(focuses["WRK_worx_genius_permission"], "completion_reward"))
+        before = s.values["WRK_worx_madness"]
+        s.day()
+        self.assertAlmostEqual(s.values["WRK_worx_growth_total"], .55)
+        self.assertAlmostEqual(s.values["WRK_worx_madness"] - before, .55)
+
+    def test_every_focus_has_a_route_without_exclusive_ancestors(self):
+        tree = block(parse_clausewitz(read(
+            "focus_trees/Vorkerland/technical_directorate/focuses.txt"
+        )), "focus_tree")
+        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        exclusions = {key: {e.value for group in value if group.key == "mutually_exclusive"
+                            for e in group.value}
+                      for key, value in focuses.items()}
+
+        @lru_cache(None)
+        def routes(key):
+            paths = {frozenset((key,))}
+            for group in (e.value for e in focuses[key] if e.key == "prerequisite"):
+                alternatives = {path for parent in group for path in routes(parent.value)}
+                paths = {left | right for left in paths for right in alternatives
+                         if not any(exclusions[node] & (left | right) for node in left | right)}
+            return paths
+
+        for key in focuses:
+            self.assertTrue(routes(key), key)
+        war_routes = routes("WRK_utilitarian_west_engineering_border")
+        shortest = min(sum(float(scalar(focuses[key], "cost")) * 7 for key in route)
+                       for route in war_routes)
+        self.assertLessEqual(shortest, 180)
+
+    def test_clinical_series_is_cancelled_when_council_ends_experiments(self):
+        s = Scenario()
+        s.focuses.add("WRK_worx_names_obstruct")
+        before = (s.pp, s.manpower, s.support)
+        self.assertTrue(s.start("clinical_series"))
+        s.flags.add("WRK_worx_supervised")
+        s.day()
+        self.assertEqual((s.pp, s.manpower, s.support), before)
+        self.assertEqual(s.values["WRK_worx_results"], 0)
+
     def test_event_registration_localisation_and_source_encoding(self):
         ids = {e["id"] for e in json.loads(read("tools/data/adiscord_event_ids.json"))["events"]}
-        for num in range(20, 31):
+        for num in range(20, 51):
             self.assertIn(f"ADISCORD_vorkerland_postwar.{num}", ids)
         for language in ("russian", "english"):
             path = ROOT / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml"

@@ -52,6 +52,7 @@ focus_tree = {
 			custom_effect_tooltip = WRK_worx_cabinet_tt
 			hidden_effect = {
 				set_variable = { var = WRK_worx_growth value = 0.35 }
+				WRK_worx_refresh = yes
 			}
 		}
 		ai_will_do = { base = 10 }
@@ -75,6 +76,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_vorkerland_postwar.31 hours = 1 } }
 			unlock_decision_tooltip = WRK_worx_expanded
 			add_political_power = 50
 		}
@@ -106,6 +108,7 @@ focus_tree = {
 			custom_effect_tooltip = WRK_worx_council_course_tt
 			hidden_effect = {
 				set_variable = { var = WRK_worx_growth value = 0.25 }
+				WRK_worx_refresh = yes
 				set_variable = { var = WRK_worx_result_threshold value = 5 }
 				country_event = { id = ADISCORD_vorkerland_postwar.24 hours = 1 }
 			}
@@ -138,6 +141,7 @@ focus_tree = {
 			custom_effect_tooltip = WRK_worx_personal_course_tt
 			hidden_effect = {
 				set_variable = { var = WRK_worx_growth value = 0.5 }
+				WRK_worx_refresh = yes
 				set_variable = { var = WRK_worx_result_threshold value = 2 }
 				country_event = { id = ADISCORD_vorkerland_postwar.25 hours = 1 }
 			}
@@ -1029,5 +1033,2740 @@ focus_tree = {
 			unlock_decision_tooltip = ADISCORD_vorkerland_pw_afrela_campaign
 		}
 		ai_will_do = { base = 10 }
+	}
+
+	# Institutional, scientific and regional continuations.
+	focus = {
+		id = WRK_worx_missing_signatures
+		icon = GFX_focus_TVA
+		x = 10
+		y = 10
+		cost = 2
+		prerequisite = { focus = WRK_worx_even_genius }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 75
+			custom_effect_tooltip = WRK_worx_focus_relief_10_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					subtract_from_variable = {
+						var = WRK_worx_madness
+						value = 10
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_open_minutes
+		icon = GFX_focus_TVA
+		x = 8
+		y = 11
+		cost = 2
+		prerequisite = { focus = WRK_worx_missing_signatures }
+		mutually_exclusive = { focus = WRK_worx_sealed_minutes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_stability = 0.05
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = electronics
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_sealed_minutes
+		icon = GFX_focus_TVA
+		x = 12
+		y = 11
+		cost = 2
+		prerequisite = { focus = WRK_worx_missing_signatures }
+		mutually_exclusive = { focus = WRK_worx_open_minutes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_sealed_minutes }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_authority
+					value = 0.15
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			add_political_power = 50
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_public_hearing
+		icon = GFX_focus_TVA
+		x = 10
+		y = 12
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_open_minutes
+			focus = WRK_worx_sealed_minutes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_vorkerland_postwar.46 hours = 1 } }
+			add_stability = 0.04
+			add_political_power = 50
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_right_of_appeal
+		icon = GFX_focus_TVA
+		x = 10
+		y = 13
+		cost = 2
+		prerequisite = { focus = WRK_worx_public_hearing }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_right_of_appeal }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_order
+					value = 0.03
+				}
+				add_to_variable = {
+					var = WRK_worx_authority
+					value = -0.05
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			add_stability = 0.02
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_constitution_lives
+		icon = GFX_focus_TVA
+		x = 10
+		y = 14
+		cost = 3
+		prerequisite = { focus = WRK_worx_right_of_appeal }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_vorkerland_postwar.47 hours = 1 } }
+			effect_tooltip = { add_ideas = WRK_worx_delta_constitution_lives }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_research
+					value = 0.03
+				}
+				add_to_variable = {
+					var = WRK_worx_order
+					value = 0.02
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = electronics
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_temporary_forever
+		icon = GFX_focus_TVA
+		x = 16
+		y = 10
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_correct_humanity
+			focus = WRK_worx_foresaw_everything
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_operational_tt
+				WRK_worx_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_extended_normal_tt
+				WRK_worx_normal_programmes = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_temporary_forever }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_authority
+					value = 0.1
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			custom_effect_tooltip = WRK_worx_focus_pressure_0_05_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					add_to_variable = {
+						var = WRK_worx_growth_bonus
+						value = 0.05
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_signed_absence
+		icon = GFX_focus_TVA
+		x = 14
+		y = 11
+		cost = 2
+		prerequisite = { focus = WRK_worx_temporary_forever }
+		mutually_exclusive = { focus = WRK_worx_one_signature }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_signed_absence }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_authority
+					value = 0.2
+				}
+				add_to_variable = {
+					var = WRK_worx_order
+					value = -0.02
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_one_signature
+		icon = GFX_focus_TVA
+		x = 17
+		y = 11
+		cost = 2
+		prerequisite = { focus = WRK_worx_temporary_forever }
+		mutually_exclusive = { focus = WRK_worx_signed_absence }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_one_signature }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_research
+					value = 0.04
+				}
+				add_to_variable = {
+					var = WRK_worx_authority
+					value = -0.1
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			custom_effect_tooltip = WRK_worx_focus_relief_5_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					subtract_from_variable = {
+						var = WRK_worx_madness
+						value = 5
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_no_exceptions
+		icon = GFX_focus_TVA
+		x = 16
+		y = 12
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_signed_absence
+			focus = WRK_worx_one_signature
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_vorkerland_postwar.45 hours = 1 } }
+			add_political_power = 75
+			custom_effect_tooltip = WRK_worx_focus_relief_10_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					subtract_from_variable = {
+						var = WRK_worx_madness
+						value = 10
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_doctor_remembers
+		icon = GFX_focus_TVA
+		x = 16
+		y = 13
+		cost = 2
+		prerequisite = { focus = WRK_worx_no_exceptions }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.75
+				uses = 1
+				category = electronics
+			}
+			custom_effect_tooltip = WRK_worx_focus_pressure_0_05_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					add_to_variable = {
+						var = WRK_worx_growth_bonus
+						value = 0.05
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_world_not_ready
+		icon = GFX_focus_TVA
+		x = 16
+		y = 14
+		cost = 3
+		prerequisite = { focus = WRK_worx_doctor_remembers }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_vorkerland_postwar.48 hours = 1 } }
+			effect_tooltip = { add_ideas = WRK_worx_delta_world_not_ready }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_production
+					value = 0.04
+				}
+				add_to_variable = {
+					var = WRK_worx_order
+					value = -0.02
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			unlock_decision_tooltip = WRK_worx_grand_programme
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_laboratory_inventory
+		icon = GFX_focus_TVA
+		x = 43
+		y = 3
+		cost = 2
+		prerequisite = { focus = WRK_worx_operating_table }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 300
+				producer = WRK
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_measuring_silence
+		icon = GFX_focus_TVA
+		x = 43
+		y = 4
+		cost = 2
+		prerequisite = { focus = WRK_worx_laboratory_inventory }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = electronics
+			}
+			custom_effect_tooltip = WRK_worx_focus_relief_5_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					subtract_from_variable = {
+						var = WRK_worx_madness
+						value = 5
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_control_group
+		icon = GFX_focus_TVA
+		x = 41
+		y = 5
+		cost = 2
+		prerequisite = { focus = WRK_worx_measuring_silence }
+		mutually_exclusive = { focus = WRK_worx_names_obstruct }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = { unlock_decision_tooltip = WRK_worx_archive_audit }
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_names_obstruct
+		icon = GFX_focus_TVA
+		x = 45
+		y = 5
+		cost = 2
+		prerequisite = { focus = WRK_worx_measuring_silence }
+		mutually_exclusive = { focus = WRK_worx_control_group }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_operational_tt
+				WRK_worx_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = { unlock_decision_tooltip = WRK_worx_clinical_series }
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_duplicate_records
+		icon = GFX_focus_TVA
+		x = 43
+		y = 10
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_no_final_version
+			focus = WRK_worx_perfect_specimen
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_duplicate_records }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_research
+					value = 0.02
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			add_political_power = 25
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_night_shift
+		icon = GFX_focus_TVA
+		x = 45
+		y = 7
+		cost = 2
+		prerequisite = { focus = WRK_worx_black_boxes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_vorkerland_postwar.39 hours = 1 } }
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 200
+				producer = WRK
+			}
+			custom_effect_tooltip = WRK_worx_focus_relief_10_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					subtract_from_variable = {
+						var = WRK_worx_madness
+						value = 10
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_glass_walls
+		icon = GFX_focus_TVA
+		x = 41
+		y = 6
+		cost = 2
+		prerequisite = { focus = WRK_worx_control_group }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_vorkerland_postwar.44 hours = 1 } }
+			effect_tooltip = { add_ideas = WRK_worx_delta_glass_walls }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_research
+					value = 0.03
+				}
+				add_to_variable = {
+					var = WRK_worx_order
+					value = 0.01
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_black_boxes
+		icon = GFX_focus_TVA
+		x = 45
+		y = 6
+		cost = 2
+		prerequisite = { focus = WRK_worx_names_obstruct }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_vorkerland_postwar.44 hours = 1 } }
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.75
+				uses = 1
+				category = electronics
+			}
+			custom_effect_tooltip = WRK_worx_focus_pressure_0_05_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					add_to_variable = {
+						var = WRK_worx_growth_bonus
+						value = 0.05
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_comparable_results
+		icon = GFX_focus_TVA
+		x = 43
+		y = 11
+		cost = 2
+		prerequisite = { focus = WRK_worx_duplicate_records }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+			add_political_power = 50
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_returned_reports
+		icon = GFX_focus_TVA
+		x = 41
+		y = 7
+		cost = 2
+		prerequisite = { focus = WRK_worx_glass_walls }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_vorkerland_postwar.38 hours = 1 } }
+			custom_effect_tooltip = WRK_worx_focus_relief_15_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					subtract_from_variable = {
+						var = WRK_worx_madness
+						value = 15
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+			add_political_power = 50
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_new_material
+		icon = GFX_focus_TVA
+		x = 47
+		y = 7
+		cost = 2
+		prerequisite = { focus = WRK_worx_black_boxes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.75
+				uses = 1
+				category = industry
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 150
+				producer = WRK
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_honest_failure
+		icon = GFX_focus_TVA
+		x = 39
+		y = 7
+		cost = 2
+		prerequisite = { focus = WRK_worx_glass_walls }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_honest_failure }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_research
+					value = 0.02
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			custom_effect_tooltip = WRK_worx_focus_relief_5_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					subtract_from_variable = {
+						var = WRK_worx_madness
+						value = 5
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_no_final_version
+		icon = GFX_focus_TVA
+		x = 41
+		y = 9
+		cost = 2
+		prerequisite = { focus = WRK_worx_returned_reports }
+		prerequisite = { focus = WRK_worx_honest_failure }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_no_final_version }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_research
+					value = 0.03
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = electronics
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_perfect_specimen
+		icon = GFX_focus_TVA
+		x = 45
+		y = 9
+		cost = 2
+		prerequisite = { focus = WRK_worx_night_shift }
+		prerequisite = { focus = WRK_worx_new_material }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_perfect_specimen }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_production
+					value = 0.04
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			custom_effect_tooltip = WRK_worx_focus_pressure_0_05_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					add_to_variable = {
+						var = WRK_worx_growth_bonus
+						value = 0.05
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_tomorrow_test
+		icon = GFX_focus_TVA
+		x = 43
+		y = 12
+		cost = 2
+		prerequisite = { focus = WRK_worx_comparable_results }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 75
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_mind_without_sleep
+		icon = GFX_focus_TVA
+		x = 43
+		y = 13
+		cost = 3
+		prerequisite = { focus = WRK_worx_tomorrow_test }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_mind_without_sleep }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_research
+					value = 0.03
+				}
+				add_to_variable = {
+					var = WRK_worx_authority
+					value = -0.1
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			custom_effect_tooltip = WRK_worx_focus_relief_20_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					subtract_from_variable = {
+						var = WRK_worx_madness
+						value = 20
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_grid_ledger
+		icon = GFX_focus_TVA
+		x = 3
+		y = 8
+		cost = 2
+		prerequisite = { focus = WRK_tech_measured_economy }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_grid_ledger }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_repair
+					value = 0.05
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			add_political_power = 50
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_light_for_machines
+		icon = GFX_focus_TVA
+		x = 1
+		y = 9
+		cost = 2
+		prerequisite = { focus = WRK_worx_grid_ledger }
+		mutually_exclusive = { focus = WRK_worx_city_serves_complex }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_light_for_machines }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_production
+					value = 0.04
+				}
+				add_to_variable = {
+					var = WRK_worx_order
+					value = -0.02
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			custom_effect_tooltip = WRK_worx_focus_pressure_0_05_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					add_to_variable = {
+						var = WRK_worx_growth_bonus
+						value = 0.05
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_city_serves_complex
+		icon = GFX_focus_TVA
+		x = 5
+		y = 9
+		cost = 2
+		prerequisite = { focus = WRK_worx_grid_ledger }
+		mutually_exclusive = { focus = WRK_worx_light_for_machines }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_city_serves_complex }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_construction
+					value = 0.04
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			add_stability = 0.03
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_serial_numbers
+		icon = GFX_focus_TVA
+		x = 3
+		y = 10
+		cost = 2
+		prerequisite = { focus = WRK_worx_grid_ledger }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = { unlock_decision_tooltip = WRK_worx_tooling_order }
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_standard_parts
+		icon = GFX_focus_TVA
+		x = 5
+		y = 10
+		cost = 2
+		prerequisite = { focus = WRK_worx_city_serves_complex }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.75
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_counted_reserves
+		icon = GFX_focus_TVA
+		x = 3
+		y = 11
+		cost = 2
+		prerequisite = { focus = WRK_worx_serial_numbers }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 250
+				producer = WRK
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = 150
+				producer = WRK
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_waste_has_value
+		icon = GFX_focus_TVA
+		x = 1
+		y = 10
+		cost = 2
+		prerequisite = { focus = WRK_worx_light_for_machines }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_waste_has_value }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_efficiency_gain
+					value = 0.05
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			custom_effect_tooltip = WRK_worx_focus_relief_5_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					subtract_from_variable = {
+						var = WRK_worx_madness
+						value = 5
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_conveyor_memory
+		icon = GFX_focus_TVA
+		x = 3
+		y = 12
+		cost = 2
+		prerequisite = { focus = WRK_worx_counted_reserves }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = WRK_worx_tooling_upgrade_tt
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_civilian_batch
+		icon = GFX_focus_TVA
+		x = 5
+		y = 11
+		cost = 3
+		prerequisite = { focus = WRK_worx_standard_parts }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+			any_owned_state = {
+				is_controlled_by = ROOT
+				free_building_slots = {
+					building = industrial_complex
+					size > 0
+					include_locked = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					is_controlled_by = ROOT
+					free_building_slots = {
+						building = industrial_complex
+						size > 0
+						include_locked = yes
+					}
+				}
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_arsenal_batch
+		icon = GFX_focus_TVA
+		x = 1
+		y = 11
+		cost = 3
+		prerequisite = { focus = WRK_worx_waste_has_value }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+			any_owned_state = {
+				is_controlled_by = ROOT
+				free_building_slots = {
+					building = arms_factory
+					size > 0
+					include_locked = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					is_controlled_by = ROOT
+					free_building_slots = {
+						building = arms_factory
+						size > 0
+						include_locked = yes
+					}
+				}
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_delivery_schedule
+		icon = GFX_focus_TVA
+		x = 3
+		y = 13
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_reserve_capacity
+			focus = WRK_worx_repair_before_replace
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = 300
+				producer = WRK
+			}
+			add_political_power = 25
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_repair_before_replace
+		icon = GFX_focus_TVA
+		x = 5
+		y = 12
+		cost = 2
+		prerequisite = { focus = WRK_worx_civilian_batch }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_repair_before_replace }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_repair
+					value = 0.1
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_reserve_capacity
+		icon = GFX_focus_TVA
+		x = 1
+		y = 12
+		cost = 2
+		prerequisite = { focus = WRK_worx_arsenal_batch }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_reserve_capacity }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_efficiency
+					value = 0.04
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = WRK
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_no_idle_state
+		icon = GFX_focus_TVA
+		x = 3
+		y = 14
+		cost = 3
+		prerequisite = { focus = WRK_worx_delivery_schedule }
+		prerequisite = { focus = WRK_worx_conveyor_memory }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_no_idle_state }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_production
+					value = 0.03
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			custom_effect_tooltip = WRK_worx_focus_relief_10_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					subtract_from_variable = {
+						var = WRK_worx_madness
+						value = 10
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_staff_after_battle
+		icon = GFX_focus_TVA
+		x = 21
+		y = 8
+		cost = 2
+		prerequisite = { focus = WRK_tech_mechanized_staff }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 25
+			custom_effect_tooltip = WRK_worx_focus_relief_5_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					subtract_from_variable = {
+						var = WRK_worx_madness
+						value = 5
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_soldier_returns
+		icon = GFX_focus_TVA
+		x = 19
+		y = 9
+		cost = 2
+		prerequisite = { focus = WRK_worx_staff_after_battle }
+		mutually_exclusive = { focus = WRK_worx_return_unplanned }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = { unlock_decision_tooltip = WRK_worx_rehabilitation }
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_return_unplanned
+		icon = GFX_focus_TVA
+		x = 23
+		y = 9
+		cost = 2
+		prerequisite = { focus = WRK_worx_staff_after_battle }
+		mutually_exclusive = { focus = WRK_worx_soldier_returns }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_operational_tt
+				WRK_worx_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = { unlock_decision_tooltip = WRK_worx_conditioning }
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_lesson_paid
+		icon = GFX_focus_TVA
+		x = 23
+		y = 11
+		cost = 2
+		prerequisite = { focus = WRK_worx_calibrated_fire }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.75
+				uses = 1
+				category = land_doctrine
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_ambulance_columns
+		icon = GFX_focus_TVA
+		x = 19
+		y = 10
+		cost = 2
+		prerequisite = { focus = WRK_worx_soldier_returns }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = 250
+				producer = WRK
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = WRK
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_calibrated_fire
+		icon = GFX_focus_TVA
+		x = 23
+		y = 10
+		cost = 2
+		prerequisite = { focus = WRK_worx_return_unplanned }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 120
+				producer = WRK
+			}
+			army_experience = 15
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_orders_arrive
+		icon = GFX_focus_TVA
+		x = 19
+		y = 11
+		cost = 2
+		prerequisite = { focus = WRK_worx_ambulance_columns }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_orders_arrive }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_org
+					value = 0.03
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = WRK
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_break_model
+		icon = GFX_focus_TVA
+		x = 23
+		y = 12
+		cost = 2
+		prerequisite = { focus = WRK_worx_lesson_paid }
+		prerequisite = { focus = WRK_worx_enough_shells }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_break_model }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_attack
+					value = 0.04
+				}
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_supply
+					value = 0.02
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_patient_front
+		icon = GFX_focus_TVA
+		x = 19
+		y = 12
+		cost = 2
+		prerequisite = { focus = WRK_worx_orders_arrive }
+		prerequisite = { focus = WRK_worx_radio_discipline }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_patient_front }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_defence
+					value = 0.04
+				}
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_recovery
+					value = 0.03
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_map_survives
+		icon = GFX_focus_TVA
+		x = 21
+		y = 15
+		cost = 2
+		prerequisite = { focus = WRK_worx_proof_in_service }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 40
+			add_command_power = 10
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_enough_shells
+		icon = GFX_focus_TVA
+		x = 25
+		y = 11
+		cost = 2
+		prerequisite = { focus = WRK_worx_calibrated_fire }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 150
+				producer = WRK
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 1500
+				producer = WRK
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_radio_discipline
+		icon = GFX_focus_TVA
+		x = 21
+		y = 11
+		cost = 2
+		prerequisite = { focus = WRK_worx_ambulance_columns }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.75
+				uses = 1
+				category = electronics
+			}
+			custom_effect_tooltip = WRK_worx_focus_relief_5_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					subtract_from_variable = {
+						var = WRK_worx_madness
+						value = 5
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_proof_in_service
+		icon = GFX_focus_TVA
+		x = 21
+		y = 14
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_patient_front
+			focus = WRK_worx_break_model
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_proof_in_service }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_training
+					value = -0.05
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			army_experience = 15
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_war_has_end
+		icon = GFX_focus_TVA
+		x = 21
+		y = 16
+		cost = 3
+		prerequisite = { focus = WRK_worx_map_survives }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_war_has_end }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_supply
+					value = -0.03
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			add_war_support = 0.05
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_population_is_here
+		icon = GFX_focus_TVA
+		x = 53
+		y = 3
+		cost = 2
+		prerequisite = { focus = WRK_worx_operating_table }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_stability = 0.04
+			add_political_power = 25
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_census_without_names
+		icon = GFX_focus_TVA
+		x = 53
+		y = 4
+		cost = 2
+		prerequisite = { focus = WRK_worx_population_is_here }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 75
+			custom_effect_tooltip = WRK_worx_focus_relief_5_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					subtract_from_variable = {
+						var = WRK_worx_madness
+						value = 5
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_compulsory_welfare
+		icon = GFX_focus_TVA
+		x = 51
+		y = 5
+		cost = 2
+		prerequisite = { focus = WRK_worx_census_without_names }
+		mutually_exclusive = { focus = WRK_worx_complaints_deviations }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = { unlock_decision_tooltip = WRK_worx_district_clinics }
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_complaints_deviations
+		icon = GFX_focus_TVA
+		x = 55
+		y = 5
+		cost = 2
+		prerequisite = { focus = WRK_worx_census_without_names }
+		mutually_exclusive = { focus = WRK_worx_compulsory_welfare }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_operational_tt
+				WRK_worx_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = { unlock_decision_tooltip = WRK_worx_population_registry }
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_normal_range
+		icon = GFX_focus_TVA
+		x = 55
+		y = 6
+		cost = 2
+		prerequisite = { focus = WRK_worx_complaints_deviations }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_normal_range }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_order
+					value = 0.02
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = electronics
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_school_of_answers
+		icon = GFX_focus_TVA
+		x = 49
+		y = 6
+		cost = 2
+		prerequisite = { focus = WRK_worx_compulsory_welfare }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.75
+				uses = 1
+				category = electronics
+			}
+			add_stability = 0.02
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_housing_grid
+		icon = GFX_focus_TVA
+		x = 53
+		y = 6
+		cost = 2
+		prerequisite = { focus = WRK_worx_compulsory_welfare }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_vorkerland_postwar.43 hours = 1 } }
+			effect_tooltip = { add_ideas = WRK_worx_delta_housing_grid }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_construction
+					value = 0.03
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			add_stability = 0.03
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_ordinary_day
+		icon = GFX_focus_TVA
+		x = 53
+		y = 11
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_permission_to_live
+			focus = WRK_worx_citizen_by_schedule
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_stability = 0.05
+			custom_effect_tooltip = WRK_worx_focus_relief_5_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					subtract_from_variable = {
+						var = WRK_worx_madness
+						value = 5
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_human_face
+		icon = GFX_focus_TVA
+		x = 51
+		y = 8
+		cost = 2
+		prerequisite = { focus = WRK_worx_school_of_answers }
+		prerequisite = { focus = WRK_worx_housing_grid }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_human_face }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_order
+					value = 0.03
+				}
+				add_to_variable = {
+					var = WRK_worx_authority
+					value = -0.05
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_no_individual
+		icon = GFX_focus_TVA
+		x = 55
+		y = 7
+		cost = 2
+		prerequisite = { focus = WRK_worx_normal_range }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_no_individual }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_authority
+					value = 0.15
+				}
+				add_to_variable = {
+					var = WRK_worx_order
+					value = -0.01
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			custom_effect_tooltip = WRK_worx_focus_pressure_0_05_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					add_to_variable = {
+						var = WRK_worx_growth_bonus
+						value = 0.05
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_paper_citizens
+		icon = GFX_focus_TVA
+		x = 55
+		y = 8
+		cost = 2
+		prerequisite = { focus = WRK_worx_no_individual }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 75
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = electronics
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_family_leave
+		icon = GFX_focus_TVA
+		x = 49
+		y = 9
+		cost = 2
+		prerequisite = { focus = WRK_worx_human_face }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_stability = 0.06
+			effect_tooltip = { add_ideas = WRK_worx_delta_family_leave }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_recovery
+					value = 0.02
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_institutional_childhood
+		icon = GFX_focus_TVA
+		x = 55
+		y = 9
+		cost = 2
+		prerequisite = { focus = WRK_worx_paper_citizens }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_institutional_childhood }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_training
+					value = -0.05
+				}
+				add_to_variable = {
+					var = WRK_worx_order
+					value = -0.02
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			add_war_support = 0.03
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_citizen_by_schedule
+		icon = GFX_focus_TVA
+		x = 55
+		y = 10
+		cost = 2
+		prerequisite = { focus = WRK_worx_institutional_childhood }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = 300
+				producer = WRK
+			}
+			add_stability = 0.02
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_permission_to_live
+		icon = GFX_focus_TVA
+		x = 53
+		y = 9
+		cost = 2
+		prerequisite = { focus = WRK_worx_human_face }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_permission_to_live }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_order
+					value = 0.02
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			custom_effect_tooltip = WRK_worx_focus_relief_10_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					subtract_from_variable = {
+						var = WRK_worx_madness
+						value = 10
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_safety_confirmed
+		icon = GFX_focus_TVA
+		x = 53
+		y = 12
+		cost = 3
+		prerequisite = { focus = WRK_worx_ordinary_day }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = WRK_worx_clinic_upgrade_tt
+			add_stability = 0.03
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_maps_have_weight
+		icon = GFX_focus_TVA
+		x = 35
+		y = 6
+		cost = 2
+		prerequisite = { focus = WRK_utilitarian_west_corridor_survey }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = { unlock_decision_tooltip = WRK_worx_corridor_depots }
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_help_has_terms
+		icon = GFX_focus_TVA
+		x = 35
+		y = 7
+		cost = 2
+		prerequisite = { focus = WRK_worx_maps_have_weight }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 75
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_border_means_customs
+		icon = GFX_focus_TVA
+		x = 33
+		y = 8
+		cost = 2
+		prerequisite = { focus = WRK_worx_help_has_terms }
+		mutually_exclusive = { focus = WRK_worx_border_means_range }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_border_means_customs }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_authority
+					value = 0.1
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			add_political_power = 25
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_border_means_range
+		icon = GFX_focus_TVA
+		x = 37
+		y = 8
+		cost = 2
+		prerequisite = { focus = WRK_worx_help_has_terms }
+		mutually_exclusive = { focus = WRK_worx_border_means_customs }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 120
+				producer = WRK
+			}
+			army_experience = 15
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_corridor_dispatch
+		icon = GFX_focus_TVA
+		x = 33
+		y = 9
+		cost = 2
+		prerequisite = { focus = WRK_worx_border_means_customs }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = WRK_worx_corridor_upgrade_tt
+			effect_tooltip = { add_ideas = WRK_worx_delta_corridor_dispatch }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_supply
+					value = -0.02
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_after_final_account
+		icon = GFX_focus_TVA
+		x = 29
+		y = 10
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_accepted_order
+			focus = WRK_utilitarian_west_technical_trusteeship
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_vorkerland_postwar.49 hours = 1 } }
+			add_stability = 0.04
+			add_political_power = 50
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_local_signatures
+		icon = GFX_focus_TVA
+		x = 27
+		y = 11
+		cost = 2
+		prerequisite = { focus = WRK_worx_after_final_account }
+		mutually_exclusive = { focus = WRK_worx_appointed_custodians }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = WRK_worx_subject_terms_tt
+			hidden_effect = {
+				set_country_flag = WRK_worx_civil_charters
+				WRK_worx_update_subject_terms = yes
+			}
+			effect_tooltip = { add_ideas = WRK_worx_delta_local_signatures }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_order
+					value = 0.03
+				}
+				add_to_variable = {
+					var = WRK_worx_authority
+					value = 0.05
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_appointed_custodians
+		icon = GFX_focus_TVA
+		x = 31
+		y = 11
+		cost = 2
+		prerequisite = { focus = WRK_worx_after_final_account }
+		mutually_exclusive = { focus = WRK_worx_local_signatures }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_appointed_custodians }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_production
+					value = 0.03
+				}
+				add_to_variable = {
+					var = WRK_worx_order
+					value = -0.02
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 200
+				producer = WRK
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_common_gauge
+		icon = GFX_focus_TVA
+		x = 33
+		y = 10
+		cost = 2
+		prerequisite = { focus = WRK_worx_corridor_dispatch }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = 300
+				producer = WRK
+			}
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_southern_estimates
+		icon = GFX_focus_TVA
+		x = 37
+		y = 9
+		cost = 2
+		prerequisite = { focus = WRK_worx_border_means_range }
+		prerequisite = { focus = WRK_tech_southern_programme }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 200
+				producer = WRK
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = 200
+				producer = WRK
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_distant_service
+		icon = GFX_focus_TVA
+		x = 37
+		y = 10
+		cost = 2
+		prerequisite = { focus = WRK_worx_southern_estimates }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_distant_service }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = ADISCORD_vorkerland_pw_supply
+					value = -0.03
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			army_experience = 15
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_world_preselected
+		icon = GFX_focus_TVA
+		x = 29
+		y = 13
+		cost = 2
+		prerequisite = {
+			focus = WRK_worx_export_method
+			focus = WRK_worx_export_model
+		}
+		prerequisite = {
+			focus = WRK_worx_common_gauge
+			focus = WRK_worx_distant_service
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.75
+				uses = 1
+				category = electronics
+			}
+			add_political_power = 50
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_export_method
+		icon = GFX_focus_TVA
+		x = 27
+		y = 12
+		cost = 2
+		prerequisite = { focus = WRK_worx_local_signatures }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_export_method }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_research
+					value = 0.03
+				}
+				add_to_variable = {
+					var = WRK_worx_authority
+					value = 0.1
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = WRK_worx_export_model
+		icon = GFX_focus_TVA
+		x = 31
+		y = 12
+		cost = 2
+		prerequisite = { focus = WRK_worx_appointed_custodians }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_worx_delta_export_model }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_production
+					value = 0.04
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			custom_effect_tooltip = WRK_worx_focus_pressure_0_05_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					add_to_variable = {
+						var = WRK_worx_growth_bonus
+						value = 0.05
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_terms_accepted
+		icon = GFX_focus_TVA
+		x = 29
+		y = 14
+		cost = 2
+		prerequisite = { focus = WRK_worx_world_preselected }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 100
+			add_war_support = 0.03
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = WRK_worx_end_of_observation
+		icon = GFX_focus_TVA
+		x = 29
+		y = 15
+		cost = 3
+		prerequisite = { focus = WRK_worx_terms_accepted }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_government_tt
+				WRK_worx_government = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_vorkerland_postwar.50 hours = 1 } }
+			effect_tooltip = { add_ideas = WRK_worx_delta_end_of_observation }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = {
+					var = WRK_worx_order
+					value = 0.02
+				}
+				add_to_variable = {
+					var = WRK_worx_research
+					value = 0.02
+				}
+				WRK_worx_refresh_directorate = yes
+			}
+			custom_effect_tooltip = WRK_worx_focus_relief_15_tt
+			hidden_effect = {
+				if = {
+					limit = { WRK_worx_active = yes }
+					subtract_from_variable = {
+						var = WRK_worx_madness
+						value = 15
+					}
+					WRK_worx_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { factor = 10 }
 	}
 }

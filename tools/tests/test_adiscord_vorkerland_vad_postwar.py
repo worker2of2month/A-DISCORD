@@ -1080,7 +1080,7 @@ class RouteTreeTests(unittest.TestCase):
         for route, (source, focuses) in self.trees.items():
             for key, focus in focuses.items():
                 applied = Counter()
-                for variable, value in re.findall(r"add_to_variable = \{ var = ((?:ADISCORD_vorkerland_pw_|WRK_worx_)\w+) value = (-?[\d.]+) \}", focus):
+                for variable, value in re.findall(r"add_to_variable\s*=\s*\{\s*var\s*=\s*((?:ADISCORD_vorkerland_pw_|WRK_worx_)\w+)\s+value\s*=\s*(-?[\d.]+)\s*\}", focus):
                     if variable in self.fields:
                         applied[self.fields[variable]] += float(value)
                 previews = re.findall(r"effect_tooltip = \{ add_ideas = ((?:ADISCORD_vorkerland_pw_delta_|WRK_worx_delta_)\w+) \}", focus)
@@ -1104,12 +1104,22 @@ class RouteTreeTests(unittest.TestCase):
                 for other in re.findall(r"mutually_exclusive = \{\s*focus = (\w+)\s*\}", focus):
                     self.assertRegex(focuses[other], rf"mutually_exclusive = \{{\s*focus = {key}\s*\}}")
                     pairs.add(frozenset({key, other}))
-            self.assertEqual(len(pairs), 5 if folder == "technical_directorate" else 2, route)
-            merges = [
-                set(re.findall(r"focus = (\w+)", group))
-                for focus in focuses.values()
-                for group in re.findall(r"prerequisite = \{([^}]*)\}", focus)
-            ]
+            self.assertEqual(len(pairs), 13 if folder == "technical_directorate" else 2, route)
+            children = {key: set() for key in focuses}
+            for child, focus in focuses.items():
+                for group in re.findall(r"prerequisite = \{([^}]*)\}", focus):
+                    for parent in re.findall(r"focus = (\w+)", group):
+                        children[parent].add(child)
+
+            def descendants(key):
+                found = set()
+                pending = list(children[key])
+                while pending:
+                    current = pending.pop()
+                    if current not in found:
+                        found.add(current)
+                        pending.extend(children[current])
+                return found
             for pair in pairs:
                 endings = (
                     frozenset({"WRK_worx_right_to_error", "WRK_worx_genius_permission"}),
@@ -1120,7 +1130,8 @@ class RouteTreeTests(unittest.TestCase):
                     self.assertIn("WRK_worx_correct_humanity", focuses)
                     self.assertIn("WRK_worx_foresaw_everything", focuses)
                 else:
-                    self.assertIn(set(pair), merges, pair)
+                    left, right = pair
+                    self.assertTrue(descendants(left) & descendants(right), pair)
             self.assertIn("ADISCORD_west_final_war_start = yes", focuses[final])
             self.assertIn("ADISCORD_west_final_can_start = yes", focuses[final])
             self.assertIn("WRK_west_reconstruction_ready_tt", focuses[final])

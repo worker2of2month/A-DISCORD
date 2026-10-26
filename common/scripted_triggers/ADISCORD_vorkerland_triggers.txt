@@ -2530,3 +2530,46 @@ WRK_worx_restore_obedience_valid = {
 	WRK_worx_active = yes
 	has_variable = WRK_worx_emergency_days
 }
+
+WRK_worx_archive_audit_valid = {
+	WRK_worx_normal_programmes = yes
+	has_completed_focus = WRK_worx_control_group
+}
+
+WRK_worx_clinical_series_valid = {
+	WRK_worx_normal_programmes = yes
+	WRK_worx_active = yes
+	has_completed_focus = WRK_worx_names_obstruct
+}
+
+WRK_worx_tooling_order_valid = {
+	WRK_worx_normal_programmes = yes
+	has_completed_focus = WRK_worx_serial_numbers
+}
+
+WRK_worx_rehabilitation_valid = {
+	WRK_worx_normal_programmes = yes
+	has_completed_focus = WRK_worx_soldier_returns
+}
+
+WRK_worx_conditioning_valid = {
+	WRK_worx_normal_programmes = yes
+	WRK_worx_active = yes
+	has_completed_focus = WRK_worx_return_unplanned
+}
+
+WRK_worx_district_clinics_valid = {
+	WRK_worx_normal_programmes = yes
+	has_completed_focus = WRK_worx_compulsory_welfare
+}
+
+WRK_worx_population_registry_valid = {
+	WRK_worx_normal_programmes = yes
+	WRK_worx_active = yes
+	has_completed_focus = WRK_worx_complaints_deviations
+}
+
+WRK_worx_corridor_depots_valid = {
+	WRK_worx_normal_programmes = yes
+	has_completed_focus = WRK_worx_maps_have_weight
+}

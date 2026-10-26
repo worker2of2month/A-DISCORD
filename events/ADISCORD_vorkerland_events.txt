@@ -3995,3 +3995,560 @@ country_event = {
 	is_triggered_only = yes
 	option = { name = ADISCORD_vorkerland_postwar.30.a }
 }
+
+# Directorate records, experimental milestones and personal scenes.
+country_event = {
+	id = ADISCORD_vorkerland_postwar.31
+	title = ADISCORD_vorkerland_postwar.31.t
+	desc = ADISCORD_vorkerland_postwar.31.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.31.a
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_postwar.31.b
+		trigger = { WRK_worx_active = yes }
+		ai_chance = { base = 25 }
+		if = {
+			limit = { WRK_worx_active = yes }
+			add_stability = 0.02
+			custom_effect_tooltip = WRK_worx_story_madness_plus_5_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = WRK_worx_madness
+					value = 5
+				}
+				WRK_worx_refresh = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_vorkerland_postwar.31.c
+		trigger = { WRK_worx_active = yes }
+		ai_chance = { base = 25 }
+		if = {
+			limit = { WRK_worx_active = yes }
+			add_stability = -0.01
+			custom_effect_tooltip = WRK_worx_story_madness_minus_5_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = WRK_worx_madness
+					value = -5
+				}
+				WRK_worx_refresh = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.32
+	title = ADISCORD_vorkerland_postwar.32.t
+	desc = {
+		text = ADISCORD_vorkerland_postwar.32.d
+		trigger = { WRK_worx_active = yes }
+	}
+	desc = {
+		text = ADISCORD_vorkerland_postwar.32.after
+		trigger = { WRK_worx_active = no }
+	}
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.32.a
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_postwar.32.b
+		trigger = { WRK_worx_active = yes }
+		ai_chance = { base = 25 }
+		if = {
+			limit = { WRK_worx_active = yes }
+			add_stability = 0.02
+			custom_effect_tooltip = WRK_worx_story_madness_plus_3_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = WRK_worx_madness
+					value = 3
+				}
+				WRK_worx_refresh = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_vorkerland_postwar.32.c
+		trigger = { WRK_worx_active = yes }
+		ai_chance = { base = 25 }
+		if = {
+			limit = { WRK_worx_active = yes }
+			add_stability = -0.01
+			custom_effect_tooltip = WRK_worx_story_madness_minus_8_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = WRK_worx_madness
+					value = -8
+				}
+				WRK_worx_refresh = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.33
+	title = ADISCORD_vorkerland_postwar.33.t
+	desc = {
+		text = ADISCORD_vorkerland_postwar.33.d
+		trigger = { WRK_worx_active = yes }
+	}
+	desc = {
+		text = ADISCORD_vorkerland_postwar.33.after
+		trigger = { WRK_worx_active = no }
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.33.a
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_postwar.33.b
+		trigger = { WRK_worx_active = yes }
+		ai_chance = { base = 25 }
+		if = {
+			limit = { WRK_worx_active = yes }
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.25
+				uses = 1
+				category = electronics
+			}
+			custom_effect_tooltip = WRK_worx_story_madness_plus_5_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = WRK_worx_madness
+					value = 5
+				}
+				WRK_worx_refresh = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_vorkerland_postwar.33.c
+		trigger = { WRK_worx_active = yes }
+		ai_chance = { base = 25 }
+		if = {
+			limit = { WRK_worx_active = yes }
+			add_stability = -0.02
+			custom_effect_tooltip = WRK_worx_story_madness_minus_8_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = WRK_worx_madness
+					value = -8
+				}
+				WRK_worx_refresh = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.34
+	title = ADISCORD_vorkerland_postwar.34.t
+	desc = {
+		text = ADISCORD_vorkerland_postwar.34.d
+		trigger = { WRK_worx_active = yes }
+	}
+	desc = {
+		text = ADISCORD_vorkerland_postwar.34.after
+		trigger = { WRK_worx_active = no }
+	}
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.34.a
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_postwar.34.b
+		trigger = { WRK_worx_active = yes }
+		ai_chance = { base = 25 }
+		if = {
+			limit = { WRK_worx_active = yes }
+			add_stability = 0.03
+			custom_effect_tooltip = WRK_worx_story_madness_plus_8_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = WRK_worx_madness
+					value = 8
+				}
+				WRK_worx_refresh = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_vorkerland_postwar.34.c
+		trigger = { WRK_worx_active = yes }
+		ai_chance = { base = 25 }
+		if = {
+			limit = { WRK_worx_active = yes }
+			add_stability = -0.03
+			custom_effect_tooltip = WRK_worx_story_madness_minus_10_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = WRK_worx_madness
+					value = -10
+				}
+				WRK_worx_refresh = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.35
+	title = ADISCORD_vorkerland_postwar.35.t
+	desc = ADISCORD_vorkerland_postwar.35.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.35.a
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.36
+	title = ADISCORD_vorkerland_postwar.36.t
+	desc = ADISCORD_vorkerland_postwar.36.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.36.a
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.37
+	title = ADISCORD_vorkerland_postwar.37.t
+	desc = ADISCORD_vorkerland_postwar.37.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.37.a
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.38
+	title = ADISCORD_vorkerland_postwar.38.t
+	desc = ADISCORD_vorkerland_postwar.38.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.38.a
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_postwar.38.b
+		trigger = { WRK_worx_active = yes }
+		ai_chance = { base = 25 }
+		if = {
+			limit = { WRK_worx_active = yes }
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.25
+				uses = 1
+				category = electronics
+			}
+			custom_effect_tooltip = WRK_worx_story_madness_plus_5_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = WRK_worx_madness
+					value = 5
+				}
+				WRK_worx_refresh = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_vorkerland_postwar.38.c
+		trigger = { WRK_worx_active = yes }
+		ai_chance = { base = 25 }
+		if = {
+			limit = { WRK_worx_active = yes }
+			add_stability = -0.01
+			custom_effect_tooltip = WRK_worx_story_madness_minus_5_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = WRK_worx_madness
+					value = -5
+				}
+				WRK_worx_refresh = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.39
+	title = ADISCORD_vorkerland_postwar.39.t
+	desc = ADISCORD_vorkerland_postwar.39.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.39.a
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.40
+	title = ADISCORD_vorkerland_postwar.40.t
+	desc = ADISCORD_vorkerland_postwar.40.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.40.a
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_postwar.40.b
+		trigger = { WRK_worx_active = yes }
+		ai_chance = { base = 25 }
+		if = {
+			limit = { WRK_worx_active = yes }
+			add_stability = 0.02
+			custom_effect_tooltip = WRK_worx_story_madness_plus_5_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = WRK_worx_madness
+					value = 5
+				}
+				WRK_worx_refresh = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_vorkerland_postwar.40.c
+		trigger = { WRK_worx_active = yes }
+		ai_chance = { base = 25 }
+		if = {
+			limit = { WRK_worx_active = yes }
+			add_political_power = -25
+			custom_effect_tooltip = WRK_worx_story_madness_minus_5_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = WRK_worx_madness
+					value = -5
+				}
+				WRK_worx_refresh = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.41
+	title = ADISCORD_vorkerland_postwar.41.t
+	desc = ADISCORD_vorkerland_postwar.41.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.41.a
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.42
+	title = ADISCORD_vorkerland_postwar.42.t
+	desc = ADISCORD_vorkerland_postwar.42.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.42.a
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.43
+	title = ADISCORD_vorkerland_postwar.43.t
+	desc = ADISCORD_vorkerland_postwar.43.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.43.a
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.44
+	title = ADISCORD_vorkerland_postwar.44.t
+	desc = {
+		text = ADISCORD_vorkerland_postwar.44.glass
+		trigger = { has_completed_focus = WRK_worx_glass_walls }
+	}
+	desc = {
+		text = ADISCORD_vorkerland_postwar.44.boxes
+		trigger = {
+			NOT = { has_completed_focus = WRK_worx_glass_walls }
+		}
+	}
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.44.a
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.45
+	title = ADISCORD_vorkerland_postwar.45.t
+	desc = ADISCORD_vorkerland_postwar.45.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.45.a
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.46
+	title = ADISCORD_vorkerland_postwar.46.t
+	desc = ADISCORD_vorkerland_postwar.46.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.46.a
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.47
+	title = ADISCORD_vorkerland_postwar.47.t
+	desc = ADISCORD_vorkerland_postwar.47.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.47.a
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.48
+	title = ADISCORD_vorkerland_postwar.48.t
+	desc = ADISCORD_vorkerland_postwar.48.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.48.a
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.49
+	title = ADISCORD_vorkerland_postwar.49.t
+	desc = {
+		text = ADISCORD_vorkerland_postwar.49.civil
+		trigger = { WRK_worx_civil_terms = yes }
+	}
+	desc = {
+		text = ADISCORD_vorkerland_postwar.49.administrative
+		trigger = { WRK_worx_civil_terms = no }
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.49.a
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.50
+	title = ADISCORD_vorkerland_postwar.50.t
+	desc = {
+		text = ADISCORD_vorkerland_postwar.50.council
+		trigger = { has_country_flag = WRK_worx_supervised }
+	}
+	desc = {
+		text = ADISCORD_vorkerland_postwar.50.quiet
+		trigger = {
+			NOT = { has_country_flag = WRK_worx_supervised }
+			check_variable = {
+				var = WRK_worx_madness
+				value = 75
+				compare = less_than
+			}
+		}
+	}
+	desc = {
+		text = ADISCORD_vorkerland_postwar.50.crisis
+		trigger = {
+			NOT = { has_country_flag = WRK_worx_supervised }
+			check_variable = {
+				var = WRK_worx_madness
+				value = 75
+				compare = greater_than_or_equals
+			}
+		}
+	}
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { WRK_worx_government = yes }
+	option = {
+		name = ADISCORD_vorkerland_postwar.50.a
+		ai_chance = { base = 50 }
+	}
+}

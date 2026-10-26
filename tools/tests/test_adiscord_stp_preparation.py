@@ -8000,68 +8000,53 @@ class StelanderPreparationTests(unittest.TestCase):
             )
             self.assertNotIn(verbose_price_copy, hover)
 
-    def test_vorkerland_collapse_opens_wartime_shabrat_asset_focuses(self):
+    def test_vorkerland_collapse_opens_shabrat_asset_focuses_in_war_and_peace(self):
         tree = next(
             e.value
             for e in entries("common/national_focus/ADISCORD_STP_civil_war.txt")
             if e.key == "focus_tree" and scalar(e.value, "id") == "STP_cw_focus"
         )
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
-        for name, position, stock, treasury in (
-            ("STP_cw_seize_vorkerland_stores", ("18", "3"), "12000", None),
-            ("STP_cw_seize_vorkerland_accounts", ("18", "4"), None, "100"),
-        ):
+        stores = focuses["STP_cw_seize_vorkerland_stores"]
+        accounts = focuses["STP_cw_seize_vorkerland_accounts"]
+        self.assertEqual((scalar(stores, "x"), scalar(stores, "y")), ("13", "0"))
+        self.assertNotIn("prerequisite", [e.key for e in stores])
+        offset = block(stores, "offset")
+        self.assertEqual((scalar(offset, "x"), scalar(offset, "y")), ("9", "4"))
+        self.assertTrue(
+            matches_conditions(
+                block(offset, "trigger"),
+                {("STS", "tag", "STS"): True, ("STS", "has_country_flag", "STP_cw_postwar"): True},
+                "STS",
+            )
+        )
+        self.assertEqual(scalar(accounts, "relative_position_id"), "STP_cw_seize_vorkerland_stores")
+        self.assertEqual(scalar(block(accounts, "prerequisite"), "focus"), "STP_cw_seize_vorkerland_stores")
+        for name, focus in (("stores", stores), ("accounts", accounts)):
             with self.subTest(focus=name):
-                focus = focuses[name]
-                self.assertEqual((scalar(focus, "x"), scalar(focus, "y")), position)
                 allow = block(focus, "allow_branch")
-                self.assertIn(
-                    ("tag", "SRP"),
-                    [(e.key, e.value) for e in walk(allow)],
-                )
-                self.assertIn(
-                    ("has_global_flag", "ADISCORD_vorkerland_collapse_started"),
-                    [(e.key, e.value) for e in walk(block(focus, "available"))],
-                )
                 available = block(focus, "available")
-                base = {
-                    ("SRP", "has_war", "yes"): True,
-                }
-                self.assertFalse(matches_conditions(available, base, "SRP"))
-                self.assertTrue(
-                    matches_conditions(
-                        available,
-                        {
-                            **base,
-                            (
-                                "SRP",
-                                "has_global_flag",
-                                "ADISCORD_vorkerland_collapse_started",
-                            ): True,
-                        },
-                        "SRP",
-                    )
-                )
-                reward = block(focus, "completion_reward")
-                if stock:
-                    self.assertEqual(
-                        scalar(block(focus, "prerequisite"), "focus"),
-                        "STP_cw_mountain_staff",
-                    )
-                    self.assertEqual(
-                        scalar(block(reward, "add_equipment_to_stockpile"), "amount"),
-                        stock,
-                    )
-                if treasury:
-                    self.assertEqual(
-                        scalar(block(focus, "prerequisite"), "focus"),
-                        "STP_cw_seize_vorkerland_stores",
-                    )
-                    self.assertEqual(scalar(reward, "STP_receive_3000"), "yes")
-                    self.assertIn(
-                        "STP_cw_treasury_3000_tt",
-                        [e.value for e in reward if e.key == "custom_effect_tooltip"],
-                    )
+                # Shabrat's side owns both focuses during the war and after it.
+                for postwar in (False, True):
+                    facts = {("STS", "has_country_flag", "STP_cw_postwar"): postwar}
+                    self.assertTrue(matches_conditions(allow, facts, "STS"))
+                    self.assertFalse(matches_conditions(available, facts, "STS"))
+                    collapsed = {**facts, ("STS", "has_global_flag", "ADISCORD_vorkerland_collapse_started"): True}
+                    self.assertTrue(matches_conditions(available, collapsed, "STS"))
+                for other in ("STP", "SRP"):
+                    self.assertFalse(matches_conditions(allow, {}, other))
+        self.assertEqual(
+            scalar(block(block(stores, "completion_reward"), "add_equipment_to_stockpile"), "amount"),
+            "12000",
+        )
+        reward = block(accounts, "completion_reward")
+        self.assertEqual(scalar(reward, "STP_receive_3000"), "yes")
+        self.assertIn(
+            "STP_cw_treasury_3000_tt",
+            [e.value for e in reward if e.key == "custom_effect_tooltip"],
+        )
+
+    def test_vorkerland_collapse_refreshes_the_stelander_tree(self):
         outbreak = next(
             e.value
             for e in entries("events/ADISCORD_vorkerland_events.txt")

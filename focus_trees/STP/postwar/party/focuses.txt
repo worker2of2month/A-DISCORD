@@ -6522,16 +6522,16 @@
 			base = 12
 		}
 		completion_reward = {
-			custom_effect_tooltip = STP_pe_treasury_900_tt
+			custom_effect_tooltip = STP_pe_treasury_1800_tt
 			hidden_effect = {
 				ADISCORD_economy_initialize_country = yes
 				add_to_variable = {
 					var = ADISCORD_economy_treasury
-					value = 900
+					value = 1800
 				}
 				add_to_variable = {
 					var = ADISCORD_economy_current_month_action_income
-					value = 900
+					value = 1800
 				}
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -6960,7 +6960,21 @@
 			base = 12
 		}
 		completion_reward = {
+			custom_effect_tooltip = STP_pe_club_social_cost_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						ADISCORD_social_system_development_at_least_2 = yes
+					}
+					ADISCORD_decrease_social_system_development = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
 			add_ideas = STP_pe_festival_policy_b_idea
+			add_timed_idea = {
+				idea = STP_pe_festival_social_retrenchment
+				days = 730
+			}
 		}
 	}
 
@@ -6991,6 +7005,17 @@
 			base = 12
 		}
 		completion_reward = {
+			add_stability = 0.03
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 200
+				producer = ROOT
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment_1
+				amount = 120
+				producer = ROOT
+			}
 			if = {
 				limit = {
 					any_owned_state = {
@@ -7065,16 +7090,17 @@
 			base = 12
 		}
 		completion_reward = {
-			custom_effect_tooltip = STP_pe_treasury_750_tt
+			add_political_power = 50
+			custom_effect_tooltip = STP_pe_treasury_1500_tt
 			hidden_effect = {
 				ADISCORD_economy_initialize_country = yes
 				add_to_variable = {
 					var = ADISCORD_economy_treasury
-					value = 750
+					value = 1500
 				}
 				add_to_variable = {
 					var = ADISCORD_economy_current_month_action_income
-					value = 750
+					value = 1500
 				}
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -7083,7 +7109,7 @@
 
 	focus = {
 		id = STP_pe_festival_settlement
-		icon = GFX_focus_STP_ministry_funding
+		icon = GFX_focus_STP_pe_festival_settlement
 		x = 3
 		y = 6
 		cost = 1
@@ -7173,7 +7199,7 @@
 
 	focus = {
 		id = STP_pe_festival_commission
-		icon = GFX_focus_STP_ps_evacuation_plan
+		icon = GFX_focus_STP_pe_festival_commission
 		x = 3
 		y = 8
 		cost = 2
@@ -7209,9 +7235,9 @@
 
 	focus = {
 		id = STP_pe_festival_course_a
-		icon = GFX_focus_STP_party_district_compact
+		icon = GFX_focus_STP_pe_festival_course_a
 		x = 1
-		y = 9
+		y = 10
 		cost = 2
 		allow_branch = {
 			STP_party_leader_2 = yes
@@ -7219,25 +7245,8 @@
 		prerequisite = {
 			focus = STP_pe_festival_commission
 		}
-		mutually_exclusive = {
-			focus = STP_pe_festival_course_b
-		}
 		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pw_can_reconstruct = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_party_current_leader_tt
-				STP_party_leader_2 = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_pe_free_participation_tt
-				has_completed_focus = STP_ch_free_labour
-				NOT = {
-					has_idea = STP_law_slavery
-				}
-			}
+			has_completed_focus = STP_pe_festival_work_a
 		}
 		cancel_if_invalid = yes
 		ai_will_do = {
@@ -7250,9 +7259,9 @@
 
 	focus = {
 		id = STP_pe_festival_course_b
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_pe_festival_course_b
 		x = 5
-		y = 9
+		y = 10
 		cost = 2
 		allow_branch = {
 			STP_party_leader_2 = yes
@@ -7260,18 +7269,8 @@
 		prerequisite = {
 			focus = STP_pe_festival_commission
 		}
-		mutually_exclusive = {
-			focus = STP_pe_festival_course_a
-		}
 		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pw_can_reconstruct = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_party_current_leader_tt
-				STP_party_leader_2 = yes
-			}
+			has_completed_focus = STP_pe_festival_work_b
 		}
 		cancel_if_invalid = yes
 		ai_will_do = {
@@ -7294,22 +7293,6 @@
 		prerequisite = {
 			focus = STP_pe_festival_course_a
 		}
-		prerequisite = {
-			focus = STP_party_festival_charter
-		}
-		mutually_exclusive = {
-			focus = STP_pe_festival_ending_b
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pw_can_reconstruct = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_party_current_leader_tt
-				STP_party_leader_2 = yes
-			}
-		}
 		cancel_if_invalid = yes
 		ai_will_do = {
 			base = 12
@@ -7330,7 +7313,7 @@
 
 	focus = {
 		id = STP_pe_festival_ending_b
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_pe_festival_ending_b
 		x = 5
 		y = 11
 		cost = 3
@@ -7339,22 +7322,6 @@
 		}
 		prerequisite = {
 			focus = STP_pe_festival_course_b
-		}
-		prerequisite = {
-			focus = STP_party_festival_charter
-		}
-		mutually_exclusive = {
-			focus = STP_pe_festival_ending_a
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pw_can_reconstruct = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_party_current_leader_tt
-				STP_party_leader_2 = yes
-			}
 		}
 		cancel_if_invalid = yes
 		ai_will_do = {
@@ -7527,7 +7494,7 @@
 			hidden_effect = {
 				ADISCORD_economy_mark_dirty = yes
 			}
-			add_manpower = 1500
+			add_manpower = 6000
 		}
 	}
 
@@ -7999,6 +7966,12 @@
 			base = 12
 		}
 		completion_reward = {
+			add_tech_bonus = {
+				name = STP_pe_trade_work_a
+				bonus = 0.75
+				uses = 2
+				category = industry
+			}
 			random_owned_controlled_state = {
 				limit = {
 					OR = {
@@ -8046,6 +8019,11 @@
 			base = 12
 		}
 		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = ADISCORD_infantry_equipment_2156
+				amount = 5400
+				producer = ROOT
+			}
 			random_owned_controlled_state = {
 				limit = {
 					OR = {
@@ -8488,8 +8466,8 @@
 			base = 12
 		}
 		completion_reward = {
-			add_manpower = 1500
-			add_stability = 0.02
+			add_manpower = 6000
+			add_stability = 0.05
 		}
 	}
 
@@ -8521,6 +8499,19 @@
 		}
 		completion_reward = {
 			add_ideas = STP_pe_security_inspectors_idea
+			custom_effect_tooltip = STP_pe_treasury_750_tt
+			hidden_effect = {
+				ADISCORD_economy_initialize_country = yes
+				add_to_variable = {
+					var = ADISCORD_economy_treasury
+					value = 750
+				}
+				add_to_variable = {
+					var = ADISCORD_economy_current_month_action_income
+					value = 750
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
 		}
 	}
 
@@ -8960,7 +8951,18 @@
 					instant_build = yes
 				}
 			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = STP_pw_party_dummy
+					add_idea = STP_pe_regent_work_a_delta
+				}
+			}
 			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_ADISCORD_economy_admin_expense_factor
+					value = -0.10
+				}
+				STP_pw_refresh_modifier = yes
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}

@@ -1735,6 +1735,12 @@ ideas = {
 			allowed = { always = no }
 			modifier = { stability_factor = 0.01 }
 		}
+		STP_pe_regent_work_a_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { ADISCORD_economy_admin_expense_factor = -0.10 }
+		}
+
 		STP_pw_party_district_authority_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
@@ -2832,8 +2838,9 @@ ideas = {
 				STP_pe_current = no
 			}
 			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.04
-				political_power_gain = -0.05
+				ADISCORD_economy_admin_expense_factor = -0.06
+				ADISCORD_economy_overall_income_factor = 0.04
+				political_power_gain = 0.10
 			}
 			on_add = {
 				ADISCORD_economy_mark_dirty = yes
@@ -2853,8 +2860,8 @@ ideas = {
 				STP_pe_current = no
 			}
 			modifier = {
-				political_power_gain = 0.15
-				ADISCORD_economy_overall_income_factor = -0.025
+				political_power_gain = 0.25
+				ADISCORD_economy_overall_income_factor = 0.025
 			}
 			on_add = {
 				ADISCORD_economy_mark_dirty = yes
@@ -2874,7 +2881,8 @@ ideas = {
 				STP_pe_current = no
 			}
 			modifier = {
-				stability_factor = 0.02
+				stability_factor = 0.08
+				production_speed_buildings_factor = 0.10
 				ADISCORD_economy_admin_expense_factor = 0.025
 			}
 			on_add = {
@@ -2895,8 +2903,27 @@ ideas = {
 				STP_pe_current = no
 			}
 			modifier = {
-				ADISCORD_economy_overall_income_factor = 0.03
+				ADISCORD_economy_overall_income_factor = 0.20
+				production_speed_buildings_factor = 0.10
+				political_power_gain = 0.20
 				stability_factor = -0.015
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pe_festival_social_retrenchment = {
+			picture = STP_law_public_orgies
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			modifier = {
+				ADISCORD_country_development_social_system_growth_factor = -0.75
 			}
 			on_add = {
 				ADISCORD_economy_mark_dirty = yes
@@ -2957,7 +2984,8 @@ ideas = {
 				STP_pe_current = no
 			}
 			modifier = {
-				stability_factor = 0.035
+				stability_factor = 0.12
+				production_speed_buildings_factor = 0.15
 				ADISCORD_economy_admin_expense_factor = 0.03
 			}
 			on_add = {
@@ -2978,7 +3006,9 @@ ideas = {
 				STP_pe_current = no
 			}
 			modifier = {
-				ADISCORD_economy_overall_income_factor = 0.04
+				ADISCORD_economy_overall_income_factor = 0.30
+				production_speed_buildings_factor = 0.15
+				political_power_gain = 0.30
 				stability_factor = -0.02
 			}
 			on_add = {
@@ -3082,7 +3112,8 @@ ideas = {
 				STP_pe_current = no
 			}
 			modifier = {
-				production_speed_buildings_factor = 0.04
+				production_speed_buildings_factor = 0.06
+				army_org_regain = 0.03
 				mobilization_speed = -0.05
 			}
 			on_add = {
@@ -3103,8 +3134,10 @@ ideas = {
 				STP_pe_current = no
 			}
 			modifier = {
-				planning_speed = 0.05
-				ADISCORD_economy_army_expense_factor = 0.035
+				planning_speed = 0.20
+				army_org_regain = 0.10
+				production_speed_buildings_factor = 0.03
+				ADISCORD_economy_army_expense_factor = 0.10
 			}
 			on_add = {
 				ADISCORD_economy_mark_dirty = yes
@@ -3207,7 +3240,9 @@ ideas = {
 				STP_pe_current = no
 			}
 			modifier = {
-				production_factory_max_efficiency_factor = 0.04
+				production_factory_max_efficiency_factor = 0.15
+				production_factory_efficiency_gain_factor = 0.10
+				industrial_capacity_factory = 0.025
 				ADISCORD_economy_admin_expense_factor = 0.025
 			}
 			on_add = {
@@ -3228,8 +3263,10 @@ ideas = {
 				STP_pe_current = no
 			}
 			modifier = {
-				industrial_capacity_factory = 0.04
-				ADISCORD_economy_overall_income_factor = -0.03
+				industrial_capacity_factory = 0.15
+				production_speed_arms_factory_factor = 0.10
+				production_factory_max_efficiency_factor = 0.025
+				ADISCORD_economy_overall_income_factor = -0.10
 			}
 			on_add = {
 				ADISCORD_economy_mark_dirty = yes
@@ -3332,8 +3369,8 @@ ideas = {
 				STP_pe_current = no
 			}
 			modifier = {
-				stability_factor = 0.035
-				political_power_gain = -0.05
+				stability_factor = 0.06
+				political_power_gain = 0.10
 			}
 			on_add = {
 				ADISCORD_economy_mark_dirty = yes
@@ -3353,8 +3390,8 @@ ideas = {
 				STP_pe_current = no
 			}
 			modifier = {
-				political_power_gain = 0.15
-				stability_factor = -0.025
+				political_power_gain = 0.25
+				stability_factor = 0.02
 			}
 			on_add = {
 				ADISCORD_economy_mark_dirty = yes
@@ -3457,8 +3494,8 @@ ideas = {
 				STP_pe_current = no
 			}
 			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.04
-				production_speed_buildings_factor = -0.015
+				ADISCORD_economy_admin_expense_factor = -0.06
+				production_speed_buildings_factor = 0.03
 			}
 			on_add = {
 				ADISCORD_economy_mark_dirty = yes
@@ -3478,7 +3515,8 @@ ideas = {
 				STP_pe_current = no
 			}
 			modifier = {
-				production_speed_buildings_factor = 0.04
+				production_speed_buildings_factor = 0.06
+				ADISCORD_economy_admin_expense_factor = -0.025
 				ADISCORD_economy_overall_income_factor = -0.035
 			}
 			on_add = {
@@ -3499,7 +3537,8 @@ ideas = {
 				STP_pe_current = no
 			}
 			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.025
+				ADISCORD_economy_admin_expense_factor = -0.10
+				ADISCORD_economy_creditworthiness_factor = 0.15
 			}
 			on_add = {
 				ADISCORD_economy_mark_dirty = yes
@@ -3519,7 +3558,7 @@ ideas = {
 				STP_pe_current = no
 			}
 			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.025
+				ADISCORD_economy_admin_expense_factor = -0.15
 			}
 			on_add = {
 				ADISCORD_economy_mark_dirty = yes

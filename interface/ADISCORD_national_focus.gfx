@@ -1,5 +1,30 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_STP_pe_festival_commission"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_pe_festival_commission.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pe_festival_course_a"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_pe_festival_course_a.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pe_festival_course_b"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_pe_festival_course_b.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pe_festival_settlement"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_pe_festival_settlement.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pe_festival_ending_b"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_pe_festival_ending_b.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_STP_pe_festival_work_b"
 		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_pe_festival_work_b.png"
 	}

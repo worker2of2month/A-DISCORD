@@ -1,5 +1,296 @@
 ideas = {
 	country = {
+		WRK_worx_delta_local_signatures = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = 0.05
+			}
+		}
+
+		WRK_worx_delta_sealed_minutes = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.15 }
+		}
+
+		WRK_worx_delta_right_of_appeal = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = -0.05
+			}
+		}
+
+		WRK_worx_delta_constitution_lives = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+				stability_factor = 0.02
+			}
+		}
+
+		WRK_worx_delta_temporary_forever = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.1 }
+		}
+
+		WRK_worx_delta_signed_absence = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.2
+				stability_factor = -0.02
+			}
+		}
+
+		WRK_worx_delta_one_signature = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.04
+				political_power_gain = -0.1
+			}
+		}
+
+		WRK_worx_delta_world_not_ready = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.04
+				stability_factor = -0.02
+			}
+		}
+
+		WRK_worx_delta_duplicate_records = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { research_speed_factor = 0.02 }
+		}
+
+		WRK_worx_delta_glass_walls = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+				stability_factor = 0.01
+			}
+		}
+
+		WRK_worx_delta_honest_failure = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { research_speed_factor = 0.02 }
+		}
+
+		WRK_worx_delta_no_final_version = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { research_speed_factor = 0.03 }
+		}
+
+		WRK_worx_delta_perfect_specimen = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { industrial_capacity_factory = 0.04 }
+		}
+
+		WRK_worx_delta_mind_without_sleep = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+				political_power_gain = -0.1
+			}
+		}
+
+		WRK_worx_delta_grid_ledger = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { industry_repair_factor = 0.05 }
+		}
+
+		WRK_worx_delta_light_for_machines = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.04
+				stability_factor = -0.02
+			}
+		}
+
+		WRK_worx_delta_city_serves_complex = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { production_speed_buildings_factor = 0.04 }
+		}
+
+		WRK_worx_delta_waste_has_value = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { production_factory_efficiency_gain_factor = 0.05 }
+		}
+
+		WRK_worx_delta_repair_before_replace = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { industry_repair_factor = 0.1 }
+		}
+
+		WRK_worx_delta_reserve_capacity = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { production_factory_max_efficiency_factor = 0.04 }
+		}
+
+		WRK_worx_delta_no_idle_state = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { industrial_capacity_factory = 0.03 }
+		}
+
+		WRK_worx_delta_orders_arrive = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.03 }
+		}
+
+		WRK_worx_delta_break_model = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.04
+				supply_consumption_factor = 0.02
+			}
+		}
+
+		WRK_worx_delta_patient_front = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.04
+				army_morale_factor = 0.03
+			}
+		}
+
+		WRK_worx_delta_proof_in_service = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { training_time_army_factor = -0.05 }
+		}
+
+		WRK_worx_delta_war_has_end = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { supply_consumption_factor = -0.03 }
+		}
+
+		WRK_worx_delta_normal_range = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { stability_factor = 0.02 }
+		}
+
+		WRK_worx_delta_housing_grid = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { production_speed_buildings_factor = 0.03 }
+		}
+
+		WRK_worx_delta_human_face = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = -0.05
+			}
+		}
+
+		WRK_worx_delta_no_individual = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.15
+				stability_factor = -0.01
+			}
+		}
+
+		WRK_worx_delta_family_leave = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { army_morale_factor = 0.02 }
+		}
+
+		WRK_worx_delta_institutional_childhood = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+				stability_factor = -0.02
+			}
+		}
+
+		WRK_worx_delta_permission_to_live = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { stability_factor = 0.02 }
+		}
+
+		WRK_worx_delta_border_means_customs = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.1 }
+		}
+
+		WRK_worx_delta_corridor_dispatch = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { supply_consumption_factor = -0.02 }
+		}
+
+		WRK_worx_delta_appointed_custodians = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				stability_factor = -0.02
+			}
+		}
+
+		WRK_worx_delta_distant_service = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { supply_consumption_factor = -0.03 }
+		}
+
+		WRK_worx_delta_export_method = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+				political_power_gain = 0.1
+			}
+		}
+
+		WRK_worx_delta_export_model = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { industrial_capacity_factory = 0.04 }
+		}
+
+		WRK_worx_delta_end_of_observation = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				research_speed_factor = 0.02
+			}
+		}
+
 		WRK_worx_delta_second_signature = {
 			picture = generic_central_management
 			allowed = { always = no }

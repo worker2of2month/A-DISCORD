@@ -8912,11 +8912,14 @@ class PostwarFocusContracts(unittest.TestCase):
                     )
                 elif tag != "SRP":
                     self.assertTrue(reconstruction, tag)
+                    # Shabrat's Vorkerland seizures follow the collapse into peacetime.
                     self.assertFalse(
                         {name for name in visible if name.startswith("STP_cw_")}
                         - {
                             "STP_cw_first_postwar_budget",
                             "STP_cw_restore_civil_authority",
+                            "STP_cw_seize_vorkerland_stores",
+                            "STP_cw_seize_vorkerland_accounts",
                         }
                     )
                 positions = {}

@@ -111,6 +111,140 @@ class PartySecondActTests(unittest.TestCase):
                         reached.add(name)
             self.assertFalse(set(shown) - reached)
 
+    def test_club_social_cost_is_paid_only_at_policy_adoption_above_the_floor(self):
+        reward = block(self.focuses["STP_pe_festival_policy_b"], "completion_reward")
+        for level in range(1, 6):
+            facts = {
+                ("STP", "ADISCORD_social_system_development_at_least_2", "yes"): level >= 2,
+            }
+            selected = self.selected(reward, facts)
+            payments = [e for e in selected
+                        if e.key == "ADISCORD_decrease_social_system_development"]
+            self.assertEqual(len(payments), int(level >= 2), level)
+            self.assertTrue(any(e.key == "add_ideas"
+                                and e.value == "STP_pe_festival_policy_b_idea"
+                                for e in selected))
+        ideas = parse_clausewitz(read("common/ideas/ADISCORD_STP_civil_war_ideas.txt"))
+        self.assertFalse(any(e.key == "ADISCORD_decrease_social_system_development"
+                             for e in walk(ideas)))
+        for focus_id, focus in self.focuses.items():
+            if focus_id != "STP_pe_festival_policy_b":
+                self.assertFalse(any(e.key == "ADISCORD_decrease_social_system_development"
+                                     for e in walk(block(focus, "completion_reward"))), focus_id)
+
+    def test_all_endings_preserve_benefits_on_every_reachable_policy_and_course(self):
+        ideas = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/ideas/ADISCORD_STP_civil_war_ideas.txt")))
+            if e.key.startswith("STP_pe_") and isinstance(e.value, list)}
+
+        def total(active):
+            result = {}
+            for name in active:
+                for modifier in block(ideas[name], "modifier"):
+                    result[modifier.key] = result.get(modifier.key, 0) + float(modifier.value)
+            return result
+
+        for route in ROUTES:
+            for policy_side in ("a", "b"):
+                for course_side in ("a", "b"):
+                    if route == "festival" and policy_side != course_side:
+                        continue
+                    prefix = f"STP_pe_{route}_"
+                    active = {prefix + f"policy_{policy_side}_idea",
+                              prefix + f"course_{course_side}_idea"}
+                    if policy_side == "b" and route in ("houses", "security"):
+                        active.add(prefix + ("guarantors_idea" if route == "houses"
+                                             else "inspectors_idea"))
+                    reward = block(self.focuses[prefix + f"ending_{course_side}"],
+                                   "completion_reward")
+                    removed = {e.value for e in reward if e.key == "remove_ideas"}
+                    added = {e.value for e in reward if e.key == "add_ideas"}
+                    before = total(active)
+                    after = total((active - removed) | added)
+                    improved = False
+                    for modifier in before.keys() | after.keys():
+                        direction = -1 if modifier.endswith("_expense_factor") else 1
+                        previous = before.get(modifier, 0) * direction
+                        current = after.get(modifier, 0) * direction
+                        with self.subTest(route=route, policy=policy_side,
+                                          course=course_side, modifier=modifier):
+                            if previous > 0:
+                                self.assertGreaterEqual(current + 1e-9, previous)
+                        improved |= current > max(0, previous) + 1e-9
+                    with self.subTest(route=route, policy=policy_side, course=course_side):
+                        self.assertTrue(improved)
+
+    def test_inspector_recovery_books_the_full_treasury_receipt(self):
+        facts = self.facts("security")
+        facts[("STP", "variable", "ADISCORD_economy_treasury")] = 100
+        facts[("STP", "variable", "ADISCORD_economy_current_month_action_income")] = 20
+        self.apply_transaction(block(self.focuses["STP_pe_security_work_b"],
+                                     "completion_reward"), facts)
+        self.assertEqual(facts[("STP", "variable", "ADISCORD_economy_treasury")], 850)
+        self.assertEqual(facts[("STP", "variable", "ADISCORD_economy_current_month_action_income")], 770)
+
+    def test_accounting_offices_preview_matches_the_persistent_aggregate(self):
+        reward = block(self.focuses["STP_pe_regent_work_a"], "completion_reward")
+        applied = [e.value for e in walk(reward) if e.key == "add_to_variable"
+                   and scalar(e.value, "var") == "STP_pw_ADISCORD_economy_admin_expense_factor"]
+        self.assertEqual(len(applied), 1)
+        ideas = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/ideas/ADISCORD_STP_civil_war_ideas.txt"))) if isinstance(e.value, list)}
+        preview = block(ideas["STP_pe_regent_work_a_delta"], "modifier")
+        self.assertEqual(scalar(preview, "ADISCORD_economy_admin_expense_factor"),
+                         scalar(applied[0], "value"))
+        self.assertFalse(any(e.key == "add_ideas" and e.value == "STP_pe_regent_work_a_delta"
+                             for e in walk(reward)))
+        dynamic = {e.key: e.value for e in parse_clausewitz(read(
+            "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt"))}
+        self.assertEqual(scalar(dynamic["STP_pw_party_dynamic"], "ADISCORD_economy_admin_expense_factor"),
+                         "STP_pw_ADISCORD_economy_admin_expense_factor")
+
+    def test_club_growth_penalty_runs_for_two_years_without_a_finale_reset(self):
+        penalty = "STP_pe_festival_social_retrenchment"
+        issued = []
+        for focus_id, focus in self.focuses.items():
+            for entry in walk(block(focus, "completion_reward")):
+                if entry.key == "add_timed_idea" and scalar(entry.value, "idea") == penalty:
+                    issued.append((focus_id, scalar(entry.value, "days")))
+        self.assertEqual(issued, [("STP_pe_festival_policy_b", "730")])
+        ideas = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/ideas/ADISCORD_STP_civil_war_ideas.txt")))
+            if isinstance(e.value, list)}
+        spirit = self.require(ideas, penalty)
+        self.assertEqual(scalar(block(spirit, "modifier"),
+                               "ADISCORD_country_development_social_system_growth_factor"), "-0.75")
+        self.assertNotIn("cancel", {e.key for e in spirit})
+        for hook in ("on_add", "on_remove"):
+            self.assertEqual(scalar(block(spirit, hook), "ADISCORD_economy_mark_dirty"), "yes")
+        for effects in self.effects.values():
+            if isinstance(effects, list):
+                self.assertFalse(any(e.key == "remove_ideas" and e.value == penalty
+                                     for e in walk(effects)))
+
+    def test_festival_field_equipment_is_delivered_even_without_a_road_site(self):
+        reward = block(self.focuses["STP_pe_festival_work_a"], "completion_reward")
+        equipment = {scalar(e.value, "type"): int(scalar(e.value, "amount"))
+                     for e in reward if e.key == "add_equipment_to_stockpile"}
+        self.assertGreaterEqual(equipment.get("motorized_equipment", 0), 200)
+        self.assertGreaterEqual(equipment.get("support_equipment_1", 0), 120)
+        self.assertGreaterEqual(float(scalar(reward, "add_stability") or 0), 0.03)
+
+    def test_festival_lower_routes_follow_the_completed_practical_focus(self):
+        for side in ("a", "b"):
+            course = self.focuses[f"STP_pe_festival_course_{side}"]
+            ending = self.focuses[f"STP_pe_festival_ending_{side}"]
+            for focus in (course, ending):
+                self.assertNotIn("mutually_exclusive", {e.key for e in focus})
+            for selected_side in (None, "a", "b"):
+                facts = {
+                    ("STP", "has_completed_focus", f"STP_pe_festival_work_{candidate}"):
+                    selected_side == candidate
+                    for candidate in ("a", "b")
+                }
+                self.assertEqual(matches_conditions(block(course, "available"), facts),
+                                 selected_side == side, (side, selected_side))
+
     def test_each_exclusive_choice_has_a_route_to_a_terminal_focus(self):
         for route in ROUTES:
             ids = {k for k in self.focuses if k.startswith(f"STP_pe_{route}_")}
@@ -190,6 +324,11 @@ class PartySecondActTests(unittest.TestCase):
                                  prefix + "policy_" + side + "_idea")
                 ending = self.focuses[prefix + "ending_" + side]
                 groups = [e.value for e in ending if e.key == "prerequisite"]
+                if route == "festival":
+                    self.assertEqual([e.value for group in groups for e in group],
+                                     [prefix + "course_" + side])
+                    self.assertNotIn("available", {e.key for e in ending})
+                    continue
                 self.assertEqual(len(groups), 2)
                 old_final = [e.value for group in groups for e in group
                              if not e.value.startswith("STP_pe_")][0]

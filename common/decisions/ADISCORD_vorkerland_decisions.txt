@@ -6688,7 +6688,10 @@ WRK_worx_research_category = {
 		allowed = { tag = WRK }
 		visible = {
 			WRK_worx_mandate = yes
-			has_completed_focus = WRK_worx_correct_humanity
+			OR = {
+				has_completed_focus = WRK_worx_correct_humanity
+				has_completed_focus = WRK_worx_world_not_ready
+			}
 			NOT = { has_country_flag = WRK_worx_supervised }
 		}
 		available = {
@@ -6797,5 +6800,653 @@ WRK_worx_research_category = {
 			}
 		}
 		ai_will_do = { base = 100 }
+	}
+
+	# Extended directorate programmes share the existing receipt and slot.
+	WRK_worx_archive_audit = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			has_completed_focus = WRK_worx_control_group
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_archive_audit_available_tt
+				WRK_worx_archive_audit_valid = yes
+			}
+			WRK_worx_slot_free = yes
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_archive_audit_price
+		custom_cost_trigger = {
+			NOT = { has_political_power < 75 }
+		}
+		days_remove = 21
+		days_re_enable = 14
+		fire_only_once = no
+		cancel_trigger = {
+			hidden_trigger = { WRK_worx_archive_audit_valid = no }
+		}
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_archive_audit_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_archive_audit_valid = yes
+						WRK_worx_slot_free = yes
+						NOT = { has_political_power < 75 }
+					}
+					set_variable = {
+						var = WRK_worx_receipt
+						value = 75
+					}
+					add_political_power = -75
+					set_variable = {
+						var = WRK_worx_operation
+						value = 12
+					}
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = { WRK_worx_finish_archive_audit = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = WRK_worx_operation
+							value = 12
+							compare = equals
+						}
+					}
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	WRK_worx_clinical_series = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			has_completed_focus = WRK_worx_names_obstruct
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_clinical_series_available_tt
+				WRK_worx_clinical_series_valid = yes
+			}
+			WRK_worx_slot_free = yes
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_clinical_series_price
+		custom_cost_trigger = {
+			NOT = { has_political_power < 125 }
+			NOT = { has_manpower < 100 }
+			NOT = {
+				has_equipment = { support_equipment < 50 }
+			}
+		}
+		days_remove = 21
+		days_re_enable = 14
+		fire_only_once = no
+		cancel_trigger = {
+			hidden_trigger = { WRK_worx_clinical_series_valid = no }
+		}
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_clinical_series_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_clinical_series_valid = yes
+						WRK_worx_slot_free = yes
+						NOT = { has_political_power < 125 }
+						NOT = { has_manpower < 100 }
+						NOT = {
+							has_equipment = { support_equipment < 50 }
+						}
+					}
+					set_variable = {
+						var = WRK_worx_receipt
+						value = 125
+					}
+					add_political_power = -125
+					set_variable = {
+						var = WRK_worx_operation
+						value = 13
+					}
+					set_variable = {
+						var = WRK_worx_manpower_deposit
+						value = 100
+					}
+					add_manpower = -100
+					set_variable = {
+						var = WRK_worx_support_deposit
+						value = 50
+					}
+					add_equipment_to_stockpile = {
+						type = support_equipment
+						amount = -50
+						producer = WRK
+					}
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = { WRK_worx_finish_clinical_series = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = WRK_worx_operation
+							value = 13
+							compare = equals
+						}
+					}
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	WRK_worx_tooling_order = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			has_completed_focus = WRK_worx_serial_numbers
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_tooling_order_available_tt
+				WRK_worx_tooling_order_valid = yes
+			}
+			WRK_worx_slot_free = yes
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_tooling_order_price
+		custom_cost_trigger = {
+			NOT = { has_political_power < 150 }
+			NOT = {
+				has_equipment = { support_equipment < 100 }
+			}
+		}
+		days_remove = 35
+		days_re_enable = 14
+		fire_only_once = no
+		cancel_trigger = {
+			hidden_trigger = { WRK_worx_tooling_order_valid = no }
+		}
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_tooling_order_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_tooling_order_valid = yes
+						WRK_worx_slot_free = yes
+						NOT = { has_political_power < 150 }
+						NOT = {
+							has_equipment = { support_equipment < 100 }
+						}
+					}
+					set_variable = {
+						var = WRK_worx_receipt
+						value = 150
+					}
+					add_political_power = -150
+					set_variable = {
+						var = WRK_worx_operation
+						value = 14
+					}
+					set_variable = {
+						var = WRK_worx_support_deposit
+						value = 100
+					}
+					add_equipment_to_stockpile = {
+						type = support_equipment
+						amount = -100
+						producer = WRK
+					}
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = { WRK_worx_finish_tooling_order = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = WRK_worx_operation
+							value = 14
+							compare = equals
+						}
+					}
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	WRK_worx_rehabilitation = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			has_completed_focus = WRK_worx_soldier_returns
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_rehabilitation_available_tt
+				WRK_worx_rehabilitation_valid = yes
+			}
+			WRK_worx_slot_free = yes
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_rehabilitation_price
+		custom_cost_trigger = {
+			NOT = { has_political_power < 75 }
+			NOT = {
+				has_equipment = { support_equipment < 60 }
+			}
+		}
+		days_remove = 28
+		days_re_enable = 14
+		fire_only_once = no
+		cancel_trigger = {
+			hidden_trigger = { WRK_worx_rehabilitation_valid = no }
+		}
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_rehabilitation_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_rehabilitation_valid = yes
+						WRK_worx_slot_free = yes
+						NOT = { has_political_power < 75 }
+						NOT = {
+							has_equipment = { support_equipment < 60 }
+						}
+					}
+					set_variable = {
+						var = WRK_worx_receipt
+						value = 75
+					}
+					add_political_power = -75
+					set_variable = {
+						var = WRK_worx_operation
+						value = 15
+					}
+					set_variable = {
+						var = WRK_worx_support_deposit
+						value = 60
+					}
+					add_equipment_to_stockpile = {
+						type = support_equipment
+						amount = -60
+						producer = WRK
+					}
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = { WRK_worx_finish_rehabilitation = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = WRK_worx_operation
+							value = 15
+							compare = equals
+						}
+					}
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	WRK_worx_conditioning = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			has_completed_focus = WRK_worx_return_unplanned
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_conditioning_available_tt
+				WRK_worx_conditioning_valid = yes
+			}
+			WRK_worx_slot_free = yes
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_conditioning_price
+		custom_cost_trigger = {
+			NOT = { has_political_power < 100 }
+			NOT = { has_manpower < 150 }
+			NOT = {
+				has_equipment = { support_equipment < 60 }
+			}
+		}
+		days_remove = 21
+		days_re_enable = 14
+		fire_only_once = no
+		cancel_trigger = {
+			hidden_trigger = { WRK_worx_conditioning_valid = no }
+		}
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_conditioning_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_conditioning_valid = yes
+						WRK_worx_slot_free = yes
+						NOT = { has_political_power < 100 }
+						NOT = { has_manpower < 150 }
+						NOT = {
+							has_equipment = { support_equipment < 60 }
+						}
+					}
+					set_variable = {
+						var = WRK_worx_receipt
+						value = 100
+					}
+					add_political_power = -100
+					set_variable = {
+						var = WRK_worx_operation
+						value = 16
+					}
+					set_variable = {
+						var = WRK_worx_manpower_deposit
+						value = 150
+					}
+					add_manpower = -150
+					set_variable = {
+						var = WRK_worx_support_deposit
+						value = 60
+					}
+					add_equipment_to_stockpile = {
+						type = support_equipment
+						amount = -60
+						producer = WRK
+					}
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = { WRK_worx_finish_conditioning = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = WRK_worx_operation
+							value = 16
+							compare = equals
+						}
+					}
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	WRK_worx_district_clinics = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			has_completed_focus = WRK_worx_compulsory_welfare
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_district_clinics_available_tt
+				WRK_worx_district_clinics_valid = yes
+			}
+			WRK_worx_slot_free = yes
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_district_clinics_price
+		custom_cost_trigger = {
+			NOT = { has_political_power < 100 }
+			NOT = {
+				has_equipment = { support_equipment < 100 }
+			}
+		}
+		days_remove = 28
+		days_re_enable = 14
+		fire_only_once = no
+		cancel_trigger = {
+			hidden_trigger = { WRK_worx_district_clinics_valid = no }
+		}
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_district_clinics_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_district_clinics_valid = yes
+						WRK_worx_slot_free = yes
+						NOT = { has_political_power < 100 }
+						NOT = {
+							has_equipment = { support_equipment < 100 }
+						}
+					}
+					set_variable = {
+						var = WRK_worx_receipt
+						value = 100
+					}
+					add_political_power = -100
+					set_variable = {
+						var = WRK_worx_operation
+						value = 17
+					}
+					set_variable = {
+						var = WRK_worx_support_deposit
+						value = 100
+					}
+					add_equipment_to_stockpile = {
+						type = support_equipment
+						amount = -100
+						producer = WRK
+					}
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = { WRK_worx_finish_district_clinics = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = WRK_worx_operation
+							value = 17
+							compare = equals
+						}
+					}
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	WRK_worx_population_registry = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			has_completed_focus = WRK_worx_complaints_deviations
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_population_registry_available_tt
+				WRK_worx_population_registry_valid = yes
+			}
+			WRK_worx_slot_free = yes
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_population_registry_price
+		custom_cost_trigger = {
+			NOT = { has_political_power < 75 }
+			NOT = { has_manpower < 100 }
+		}
+		days_remove = 21
+		days_re_enable = 14
+		fire_only_once = no
+		cancel_trigger = {
+			hidden_trigger = { WRK_worx_population_registry_valid = no }
+		}
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_population_registry_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_population_registry_valid = yes
+						WRK_worx_slot_free = yes
+						NOT = { has_political_power < 75 }
+						NOT = { has_manpower < 100 }
+					}
+					set_variable = {
+						var = WRK_worx_receipt
+						value = 75
+					}
+					add_political_power = -75
+					set_variable = {
+						var = WRK_worx_operation
+						value = 18
+					}
+					set_variable = {
+						var = WRK_worx_manpower_deposit
+						value = 100
+					}
+					add_manpower = -100
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = { WRK_worx_finish_population_registry = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = WRK_worx_operation
+							value = 18
+							compare = equals
+						}
+					}
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	WRK_worx_corridor_depots = {
+		icon = ADISCORD_science
+		allowed = { tag = WRK }
+		visible = {
+			WRK_worx_mandate = yes
+			has_completed_focus = WRK_worx_maps_have_weight
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_worx_corridor_depots_available_tt
+				WRK_worx_corridor_depots_valid = yes
+			}
+			WRK_worx_slot_free = yes
+		}
+		cost = 0
+		custom_cost_text = WRK_worx_corridor_depots_price
+		custom_cost_trigger = {
+			NOT = { has_political_power < 125 }
+			NOT = {
+				has_equipment = { support_equipment < 80 }
+			}
+		}
+		days_remove = 28
+		days_re_enable = 14
+		fire_only_once = no
+		cancel_trigger = {
+			hidden_trigger = { WRK_worx_corridor_depots_valid = no }
+		}
+		complete_effect = {
+			custom_effect_tooltip = WRK_worx_corridor_depots_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						WRK_worx_corridor_depots_valid = yes
+						WRK_worx_slot_free = yes
+						NOT = { has_political_power < 125 }
+						NOT = {
+							has_equipment = { support_equipment < 80 }
+						}
+					}
+					set_variable = {
+						var = WRK_worx_receipt
+						value = 125
+					}
+					add_political_power = -125
+					set_variable = {
+						var = WRK_worx_operation
+						value = 19
+					}
+					set_variable = {
+						var = WRK_worx_support_deposit
+						value = 80
+					}
+					add_equipment_to_stockpile = {
+						type = support_equipment
+						amount = -80
+						producer = WRK
+					}
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = { WRK_worx_finish_corridor_depots = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = WRK_worx_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = WRK_worx_operation
+							value = 19
+							compare = equals
+						}
+					}
+					WRK_worx_refund = yes
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
 	}
 }

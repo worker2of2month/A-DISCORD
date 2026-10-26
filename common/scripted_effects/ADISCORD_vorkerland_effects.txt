@@ -13146,7 +13146,19 @@ WRK_worx_initialize = {
 		set_variable = { var = WRK_worx_madness value = 20 }
 		set_variable = { var = WRK_worx_demand value = 1 }
 		set_variable = { var = WRK_worx_results value = 0 }
+		set_variable = {
+			var = WRK_worx_total_results
+			value = 0
+		}
+		set_variable = {
+			var = WRK_worx_story_stage
+			value = 0
+		}
 		set_variable = { var = WRK_worx_growth value = 1 }
+		set_variable = {
+			var = WRK_worx_growth_bonus
+			value = 0
+		}
 		set_variable = { var = WRK_worx_result_threshold value = 3 }
 		set_variable = { var = WRK_worx_basic_relief value = 20 }
 		set_variable = { var = WRK_worx_expanded_relief value = 40 }
@@ -13158,6 +13170,10 @@ WRK_worx_initialize = {
 # The gauge and prices are derived from authoritative country variables.
 # Economy invalidation is needed only when the modifier's band changes.
 WRK_worx_refresh = {
+	set_variable = {
+		var = WRK_worx_growth_total
+		value = 0
+	}
 	clamp_variable = { var = WRK_worx_madness min = 0 max = 100 }
 	clamp_variable = { var = WRK_worx_demand min = 1 max = 4 }
 	set_variable = { var = WRK_worx_basic_cost value = WRK_worx_demand }
@@ -13171,6 +13187,14 @@ WRK_worx_refresh = {
 	set_temp_variable = { var = WRK_worx_next_band value = 0 }
 	if = {
 		limit = { WRK_worx_active = yes }
+		set_variable = {
+			var = WRK_worx_growth_total
+			value = WRK_worx_growth
+		}
+		add_to_variable = {
+			var = WRK_worx_growth_total
+			value = WRK_worx_growth_bonus
+		}
 		if = {
 			limit = { check_variable = { var = WRK_worx_madness value = 75 compare = greater_than_or_equals } }
 			set_temp_variable = { var = WRK_worx_next_band value = 3 }
@@ -13212,6 +13236,11 @@ WRK_worx_daily = {
 	if = {
 		limit = { WRK_worx_active = yes }
 		add_to_variable = { var = WRK_worx_madness value = WRK_worx_growth }
+		add_to_variable = {
+			var = WRK_worx_madness
+			value = WRK_worx_growth_bonus
+		}
+		WRK_worx_story_progress = yes
 		if = {
 			limit = { check_variable = { var = WRK_worx_madness value = 100 compare = greater_than_or_equals } }
 			WRK_worx_crisis = yes
@@ -13272,6 +13301,22 @@ WRK_worx_refund = {
 }
 
 WRK_worx_record_result = {
+	add_to_variable = {
+		var = WRK_worx_total_results
+		value = 1
+	}
+	if = {
+		limit = { check_variable = { var = WRK_worx_total_results value = 1 compare = equals } }
+		country_event = { id = ADISCORD_vorkerland_postwar.35 days = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { var = WRK_worx_total_results value = 3 compare = equals } }
+		country_event = { id = ADISCORD_vorkerland_postwar.36 days = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { var = WRK_worx_total_results value = 6 compare = equals } }
+		country_event = { id = ADISCORD_vorkerland_postwar.37 days = 1 }
+	}
 	add_to_variable = { var = WRK_worx_results value = 1 }
 	if = {
 		limit = { check_variable = { var = WRK_worx_results value = WRK_worx_result_threshold compare = greater_than_or_equals } }
@@ -13337,6 +13382,47 @@ WRK_worx_finish_oversight = {
 			country_event = { id = ADISCORD_vorkerland_postwar.23 hours = 1 }
 		}
 		else = { WRK_worx_refund = yes }
+	}
+}
+
+# The country pulse dispatches at most one new stage before crisis settlement.
+# Reading and dismissing its event never advances or stops the madness clock.
+WRK_worx_story_progress = {
+	if = {
+		limit = { WRK_worx_active = yes }
+		if = {
+			limit = {
+				check_variable = { var = WRK_worx_story_stage value = 0 compare = equals }
+				check_variable = { var = WRK_worx_madness value = 25 compare = greater_than_or_equals }
+			}
+			set_variable = {
+				var = WRK_worx_story_stage
+				value = 1
+			}
+			country_event = { id = ADISCORD_vorkerland_postwar.32 hours = 1 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = WRK_worx_story_stage value = 1 compare = equals }
+				check_variable = { var = WRK_worx_madness value = 50 compare = greater_than_or_equals }
+			}
+			set_variable = {
+				var = WRK_worx_story_stage
+				value = 2
+			}
+			country_event = { id = ADISCORD_vorkerland_postwar.33 hours = 1 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = WRK_worx_story_stage value = 2 compare = equals }
+				check_variable = { var = WRK_worx_madness value = 75 compare = greater_than_or_equals }
+			}
+			set_variable = {
+				var = WRK_worx_story_stage
+				value = 3
+			}
+			country_event = { id = ADISCORD_vorkerland_postwar.34 hours = 1 }
+		}
 	}
 }
 
@@ -13578,6 +13664,275 @@ WRK_worx_finish_restore_obedience = {
 			add_to_variable = { var = WRK_worx_production value = 0.05 }
 			WRK_worx_refresh_directorate = yes
 			country_event = { id = ADISCORD_vorkerland_postwar.27 hours = 1 }
+			WRK_worx_clear_receipt = yes
+			WRK_worx_refresh = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_archive_audit = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = {
+				var = WRK_worx_operation
+				value = 12
+				compare = equals
+			}
+		}
+		if = {
+			limit = { WRK_worx_archive_audit_valid = yes }
+			if = {
+				limit = { WRK_worx_active = yes }
+				subtract_from_variable = {
+					var = WRK_worx_madness
+					value = 12
+				}
+			}
+			WRK_worx_clear_receipt = yes
+			WRK_worx_refresh = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_clinical_series = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = {
+				var = WRK_worx_operation
+				value = 13
+				compare = equals
+			}
+		}
+		if = {
+			limit = { WRK_worx_clinical_series_valid = yes }
+			add_stability = -0.02
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.25
+				uses = 1
+				category = electronics
+			}
+			if = {
+				limit = { WRK_worx_active = yes }
+				subtract_from_variable = {
+					var = WRK_worx_madness
+					value = 35
+				}
+				WRK_worx_record_result = yes
+			}
+			WRK_worx_clear_receipt = yes
+			WRK_worx_refresh = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_tooling_order = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = {
+				var = WRK_worx_operation
+				value = 14
+				compare = equals
+			}
+		}
+		if = {
+			limit = { WRK_worx_tooling_order_valid = yes }
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 1000
+				producer = WRK
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = 300
+				producer = WRK
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = WRK
+			}
+			if = {
+				limit = { has_completed_focus = WRK_worx_conveyor_memory }
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 200
+					producer = WRK
+				}
+			}
+			WRK_worx_clear_receipt = yes
+			WRK_worx_refresh = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_rehabilitation = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = {
+				var = WRK_worx_operation
+				value = 15
+				compare = equals
+			}
+		}
+		if = {
+			limit = { WRK_worx_rehabilitation_valid = yes }
+			add_manpower = 800
+			add_stability = 0.01
+			if = {
+				limit = { WRK_worx_active = yes }
+				add_to_variable = {
+					var = WRK_worx_madness
+					value = 5
+				}
+			}
+			country_event = { id = ADISCORD_vorkerland_postwar.41 days = 4 }
+			WRK_worx_clear_receipt = yes
+			WRK_worx_refresh = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_conditioning = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = {
+				var = WRK_worx_operation
+				value = 16
+				compare = equals
+			}
+		}
+		if = {
+			limit = { WRK_worx_conditioning_valid = yes }
+			army_experience = 30
+			add_stability = -0.02
+			add_tech_bonus = {
+				name = WRK_worx_scientific_materials
+				bonus = 0.5
+				uses = 1
+				category = land_doctrine
+			}
+			if = {
+				limit = { WRK_worx_active = yes }
+				subtract_from_variable = {
+					var = WRK_worx_madness
+					value = 20
+				}
+				WRK_worx_record_result = yes
+			}
+			country_event = { id = ADISCORD_vorkerland_postwar.42 days = 4 }
+			WRK_worx_clear_receipt = yes
+			WRK_worx_refresh = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_district_clinics = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = {
+				var = WRK_worx_operation
+				value = 17
+				compare = equals
+			}
+		}
+		if = {
+			limit = { WRK_worx_district_clinics_valid = yes }
+			add_stability = 0.04
+			if = {
+				limit = { WRK_worx_active = yes }
+				add_to_variable = {
+					var = WRK_worx_madness
+					value = 10
+				}
+			}
+			if = {
+				limit = { has_completed_focus = WRK_worx_safety_confirmed }
+				add_manpower = 400
+			}
+			country_event = { id = ADISCORD_vorkerland_postwar.40 days = 4 }
+			WRK_worx_clear_receipt = yes
+			WRK_worx_refresh = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_population_registry = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = {
+				var = WRK_worx_operation
+				value = 18
+				compare = equals
+			}
+		}
+		if = {
+			limit = { WRK_worx_population_registry_valid = yes }
+			army_experience = 15
+			add_stability = -0.01
+			if = {
+				limit = { WRK_worx_active = yes }
+				subtract_from_variable = {
+					var = WRK_worx_madness
+					value = 15
+				}
+				WRK_worx_record_result = yes
+			}
+			if = {
+				limit = { has_completed_focus = WRK_worx_safety_confirmed }
+				army_experience = 10
+			}
+			WRK_worx_clear_receipt = yes
+			WRK_worx_refresh = yes
+		}
+		else = { WRK_worx_refund = yes }
+	}
+}
+
+WRK_worx_finish_corridor_depots = {
+	if = {
+		limit = {
+			has_variable = WRK_worx_receipt
+			check_variable = {
+				var = WRK_worx_operation
+				value = 19
+				compare = equals
+			}
+		}
+		if = {
+			limit = { WRK_worx_corridor_depots_valid = yes }
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = 300
+				producer = WRK
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = WRK
+			}
+			if = {
+				limit = { has_completed_focus = WRK_worx_corridor_dispatch }
+				add_equipment_to_stockpile = {
+					type = motorized_equipment_1
+					amount = 200
+					producer = WRK
+				}
+			}
 			WRK_worx_clear_receipt = yes
 			WRK_worx_refresh = yes
 		}

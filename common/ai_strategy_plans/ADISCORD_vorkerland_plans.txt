@@ -2140,24 +2140,80 @@ ADISCORD_vorkerland_wrk_postwar_utilitarian_plan = {
 		WRK_worx_last_provisional
 		WRK_worx_operating_table
 		WRK_worx_genius_permission
-		WRK_worx_ethics_lags
-		WRK_worx_consent_not_required
-		WRK_worx_human_variable
-		WRK_worx_correct_humanity
 		WRK_tech_district_metrics
-		WRK_tech_automated_workshops
-		WRK_tech_machine_tool_pool
-		WRK_tech_measured_economy
 		WRK_tech_engineering_corps
-		WRK_tech_fire_superiority
-		WRK_tech_mechanized_staff
 		WRK_utilitarian_west_corridor_survey
+		WRK_worx_laboratory_inventory
+		WRK_worx_population_is_here
+		WRK_worx_ethics_lags
+		WRK_tech_automated_workshops
+		WRK_tech_fire_superiority
 		WRK_tech_technical_assistance
+		WRK_tech_southern_programme
+		WRK_worx_measuring_silence
+		WRK_worx_census_without_names
+		WRK_worx_maps_have_weight
+		WRK_worx_consent_not_required
+		WRK_tech_machine_tool_pool
+		WRK_tech_mechanized_staff
 		WRK_utilitarian_west_engineer_battalions
+		WRK_worx_names_obstruct
+		WRK_worx_complaints_deviations
+		WRK_worx_help_has_terms
+		WRK_worx_human_variable
+		WRK_tech_measured_economy
 		WRK_utilitarian_west_engineering_border
 		WRK_tech_command_calculus
 		WRK_utilitarian_west_technical_trusteeship
-		WRK_tech_southern_programme
+		WRK_worx_black_boxes
+		WRK_worx_staff_after_battle
+		WRK_worx_normal_range
+		WRK_worx_border_means_range
+		WRK_worx_correct_humanity
+		WRK_worx_night_shift
+		WRK_worx_grid_ledger
+		WRK_worx_return_unplanned
+		WRK_worx_no_individual
+		WRK_worx_after_final_account
+		WRK_worx_southern_estimates
+		WRK_worx_new_material
+		WRK_worx_temporary_forever
+		WRK_worx_light_for_machines
+		WRK_worx_serial_numbers
+		WRK_worx_calibrated_fire
+		WRK_worx_paper_citizens
+		WRK_worx_appointed_custodians
+		WRK_worx_distant_service
+		WRK_worx_perfect_specimen
+		WRK_worx_one_signature
+		WRK_worx_counted_reserves
+		WRK_worx_waste_has_value
+		WRK_worx_lesson_paid
+		WRK_worx_institutional_childhood
+		WRK_worx_export_model
+		WRK_worx_duplicate_records
+		WRK_worx_enough_shells
+		WRK_worx_no_exceptions
+		WRK_worx_conveyor_memory
+		WRK_worx_arsenal_batch
+		WRK_worx_break_model
+		WRK_worx_citizen_by_schedule
+		WRK_worx_world_preselected
+		WRK_worx_comparable_results
+		WRK_worx_doctor_remembers
+		WRK_worx_reserve_capacity
+		WRK_worx_ordinary_day
+		WRK_worx_terms_accepted
+		WRK_worx_tomorrow_test
+		WRK_worx_proof_in_service
+		WRK_worx_world_not_ready
+		WRK_worx_delivery_schedule
+		WRK_worx_safety_confirmed
+		WRK_worx_end_of_observation
+		WRK_worx_mind_without_sleep
+		WRK_worx_map_survives
+		WRK_worx_no_idle_state
+		WRK_worx_war_has_end
 	}
 
 	weight = { factor = 4 }
