@@ -744,8 +744,11 @@ class InstitutionScenario:
                     self.put(name, self.get(name, scope) + self.number(scalar(entry.value, "amount"), scope), scope)
             elif key in ("add_stability", "add_political_power"):
                 self.put(key, self.get(key, scope) + self.number(entry.value, scope), scope)
-            elif key == "remove_decision":
+            elif key in ("remove_decision", "remove_mission"):
                 self.facts[(scope, "has_decision", entry.value)] = False
+                self.events.append((scope, key, entry.value))
+            elif key == "activate_mission":
+                self.facts[(scope, "has_decision", entry.value)] = True
                 self.events.append((scope, key, entry.value))
             elif key in ("add_timed_idea", "remove_ideas"):
                 name = scalar(entry.value, "idea") if key == "add_timed_idea" else entry.value
@@ -754,7 +757,7 @@ class InstitutionScenario:
                 self.run([e for e in entry.value if e.key != "limit"], "FROM")
             elif key == "country_event":
                 self.events.append((scope, scalar(entry.value, "id")))
-            elif key in ("custom_effect_tooltip", "activate_mission", "STP_pw_refresh_modifier",
+            elif key in ("custom_effect_tooltip", "STP_pw_refresh_modifier",
                          "ADISCORD_economy_mark_dirty"):
                 pass
             else:
@@ -920,6 +923,39 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
         self.assertAlmostEqual(m.get("STP_pw_research_speed_factor"), 0.15)
         self.assertAlmostEqual(m.get("STP_pw_planning_speed"), 0.05)
 
+    def test_northern_settlement_removes_old_timers_before_another_offer(self):
+        m = self.model()
+        self.action(m, "STP_pi_north_training")
+        self.assertTrue(m.facts[("STP", "has_decision", "STP_pi_north_reply")])
+        m.run(self.effects["STP_pi_north_decline"])
+        self.assertFalse(m.facts[("STP", "has_decision", "STP_pi_north_reply")])
+        self.action(m, "STP_pi_north_equipment")
+        m.run(self.effects["STP_pi_north_accept"])
+        self.assertFalse(m.facts[("STP", "has_decision", "STP_pi_north_reply")])
+        self.assertTrue(m.facts[("STP", "has_decision", "STP_pi_north_delivery")])
+        m.run(self.effects["STP_pi_north_refund"])
+        self.assertFalse(m.facts[("STP", "has_decision", "STP_pi_north_delivery")])
+        self.action(m, "STP_pi_north_training")
+        m.run(self.effects["STP_pi_north_accept"])
+        m.run(self.effects["STP_pi_north_finish"])
+        self.assertFalse(m.facts[("STP", "has_decision", "STP_pi_north_delivery")])
+
+    def test_both_northern_finales_enable_specialist_replacement_without_schools(self):
+        for side in ("a", "b"):
+            with self.subTest(side=side):
+                m = self.model()
+                m.facts[("STP", "has_completed_focus", f"STP_pe_regent_ending_{side}")] = True
+                m.facts[("STP", "has_completed_focus", "STP_party_regent_guarantees")] = True
+                m.put("STP_pi_north_obligations", 3)
+                m.put("STP_pi_north_specialists", 0)
+                self.assertTrue(m.condition(block(self.decisions["STP_pi_north_local_staff"], "visible")))
+                for _ in range(3):
+                    self.action(m, "STP_pi_north_local_staff")
+                    self.action(m, "STP_pi_north_local_staff", "remove_effect")
+                    self.action(m, "STP_pi_north_buyout")
+                self.assertEqual(m.get("STP_pi_north_obligations"), 0)
+                self.assertEqual(m.get("STP_pi_north_specialists"), 0)
+
     def test_mobilisation_unlock_and_final_buyout_are_reachable(self):
         normal = block(self.decisions["STP_pi_cadre_mobilise"], "visible")
         self.assertTrue(any(e.key == "has_completed_focus" and e.value == "STP_ch_regular_service"
@@ -959,6 +995,39 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
                 self.assertAlmostEqual(m.get(consumers[modifier.key]), float(modifier.value))
             self.assertEqual(m.get("STP_pi_cadre_free"), 0)
 
+    def test_district_building_previews_match_delivered_buildings_and_slots(self):
+        for name in ("STP_pi_house_road", "STP_pi_house_workshop",
+                     "STP_pi_artel_road", "STP_pi_artel_workshop"):
+            with self.subTest(decision=name):
+                m = self.model()
+                m.put("STP_pi_cadre_free", 2000)
+                shown = block(block(self.decisions[name], "complete_effect"), "effect_tooltip")
+                preview = [(e.key, tuple((x.key, x.value) for x in e.value)
+                            if isinstance(e.value, list) else e.value)
+                           for e in walk(shown)
+                           if e.key in ("add_building_construction", "add_extra_state_shared_building_slots")]
+                self.action(m, name)
+                self.assertFalse(m.deliveries)
+                self.action(m, name, "remove_effect")
+                delivered = [(key, tuple((x.key, x.value) for x in value)
+                              if isinstance(value, list) else value)
+                             for _, key, value in m.deliveries]
+                self.assertEqual(preview, delivered)
+                self.assertTrue(preview)
+
+    def test_supplier_expansion_preview_matches_delayed_permanent_delta(self):
+        m = self.model()
+        reward = block(self.decisions["STP_pi_trade_expand"], "complete_effect")
+        preview = block(reward, "effect_tooltip")
+        idea = scalar(preview, "add_ideas")
+        ideas = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/ideas/ADISCORD_STP_civil_war_ideas.txt"))) if e.key == idea}
+        self.action(m, "STP_pi_trade_expand")
+        self.assertEqual(m.get("STP_pw_production_factory_max_efficiency_factor"), 0)
+        self.action(m, "STP_pi_trade_expand", "remove_effect")
+        for modifier in block(ideas[idea], "modifier"):
+            self.assertAlmostEqual(m.get("STP_pw_" + modifier.key), float(modifier.value))
+
     def test_enrolment_cancel_restores_real_people_and_exact_money_once(self):
         m = self.model()
         self.action(m, "STP_pi_cadre_enrol")
@@ -983,7 +1052,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
         m.run(self.effects["STP_pi_north_finish"])
         equipment = {scalar(body, "type"): int(scalar(body, "amount"))
                      for _, key, body in m.deliveries if key == "add_equipment_to_stockpile"}
-        self.assertEqual(equipment, {"ADISCORD_infantry_equipment_2156": 4500, "support_equipment_1": 120})
+        self.assertEqual(equipment, {"ADISCORD_infantry_equipment_2156": 9000, "support_equipment_1": 180})
         self.assertEqual(len(m.deliveries), 2)
         self.assertEqual(m.get("STP_pi_north_obligations"), 1)
 

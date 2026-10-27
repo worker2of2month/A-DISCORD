@@ -19442,6 +19442,7 @@ STP_pi_north_decline = {
 		clear_variable = STP_pi_north_offer
 		clear_variable = STP_pi_north_quote
 		clear_variable = STP_pi_north_donor_quote
+		remove_mission = STP_pi_north_reply
 		country_event = {
 			id = ADISCORD_STP_pi.3
 		}
@@ -19488,6 +19489,7 @@ STP_pi_north_accept = {
 		clear_variable = STP_pi_north_offer
 		clear_variable = STP_pi_north_quote
 		clear_variable = STP_pi_north_donor_quote
+		remove_mission = STP_pi_north_reply
 		activate_mission = STP_pi_north_delivery
 		country_event = {
 			id = ADISCORD_STP_pi.2
@@ -19507,6 +19509,7 @@ STP_pi_north_refund = {
 		}
 		clear_variable = STP_pi_north_deposit
 		clear_variable = STP_pi_north_kind
+		remove_mission = STP_pi_north_delivery
 		add_to_variable = {
 			var = ADISCORD_economy_treasury
 			value = STP_pi_refund
@@ -19588,12 +19591,12 @@ STP_pi_north_finish = {
 				}
 				add_equipment_to_stockpile = {
 					type = ADISCORD_infantry_equipment_2156
-					amount = 4500
+					amount = 9000
 					producer = NOD
 				}
 				add_equipment_to_stockpile = {
 					type = support_equipment_1
-					amount = 120
+					amount = 180
 					producer = NOD
 				}
 				set_country_flag = STP_pi_north_equipment_delivered
@@ -19634,6 +19637,7 @@ STP_pi_north_finish = {
 			clear_variable = STP_pi_north_deposit
 			clear_variable = STP_pi_north_donor_deposit
 			clear_variable = STP_pi_north_kind
+			remove_mission = STP_pi_north_delivery
 			STP_pi_refresh = yes
 		}
 		else = {

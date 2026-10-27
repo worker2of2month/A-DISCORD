@@ -15233,6 +15233,10 @@ STP_ch_chapters = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = STP_pi_delivery_after_60_tt
+			effect_tooltip = {
+				add_ideas = STP_pi_trade_expand_delta
+			}
 			hidden_effect = {
 				if = {
 					limit = {
@@ -16804,7 +16808,11 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			has_completed_focus = STP_party_regent_schools
+			OR = {
+				has_completed_focus = STP_party_regent_schools
+				has_completed_focus = STP_pe_regent_ending_a
+				has_completed_focus = STP_pe_regent_ending_b
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -17530,6 +17538,16 @@ STP_ch_chapters = {
 		days_remove = 30
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = STP_pi_delivery_after_30_tt
+			effect_tooltip = {
+				FROM = {
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
 			custom_effect_tooltip = STP_pi_artel_reserve_tt
 			hidden_effect = {
 				if = {
@@ -17656,6 +17674,17 @@ STP_ch_chapters = {
 		days_remove = 60
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = STP_pi_delivery_after_60_tt
+			effect_tooltip = {
+				FROM = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
 			custom_effect_tooltip = STP_pi_artel_reserve_tt
 			hidden_effect = {
 				if = {
@@ -17782,6 +17811,16 @@ STP_ch_chapters = {
 		days_remove = 35
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = STP_pi_delivery_after_35_tt
+			effect_tooltip = {
+				FROM = {
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
 			hidden_effect = {
 				if = {
 					limit = {
@@ -17896,6 +17935,17 @@ STP_ch_chapters = {
 		days_remove = 35
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = STP_pi_delivery_after_35_tt
+			effect_tooltip = {
+				FROM = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
 			hidden_effect = {
 				if = {
 					limit = {

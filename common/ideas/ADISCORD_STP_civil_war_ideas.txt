@@ -1,5 +1,13 @@
 ideas = {
 	country = {
+		STP_pi_trade_expand_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.025
+			}
+		}
+
 		STP_pi_case_orders_delta = {
 			name = STP_pw_party_dynamic
 			allowed = {

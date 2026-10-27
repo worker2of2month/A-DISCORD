@@ -58,7 +58,7 @@ class ProvinceCornerTests(unittest.TestCase):
         with Image.open(ROOT / "map/provinces.bmp") as image:
             rgb = np.asarray(image)
         provinces = {
-            6, 28, 33, 51, 81, 83, 85, 88, 92, 103, 108, 118, 124, 127, 131,
+            6, 28, 33, 48, 51, 81, 83, 85, 88, 92, 103, 108, 118, 124, 127, 129, 131,
             729, 971, 7283, 9633, 10926, 11496, 16597, 16616, 16646, 16649,
             16746, 16872, 16877,
         }

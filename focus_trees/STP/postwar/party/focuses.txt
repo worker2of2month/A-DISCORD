@@ -9453,6 +9453,7 @@
 			base = 12
 		}
 		completion_reward = {
+			unlock_decision_tooltip = STP_pi_north_local_staff
 			unlock_decision_tooltip = STP_pi_north_buyout
 			custom_effect_tooltip = STP_pi_north_independent_tt
 			remove_ideas = STP_pe_regent_course_a_idea
@@ -9501,6 +9502,7 @@
 			base = 12
 		}
 		completion_reward = {
+			unlock_decision_tooltip = STP_pi_north_local_staff
 			custom_effect_tooltip = STP_pi_north_settled_tt
 			hidden_effect = {
 				STP_pi_north_improve_terms = yes
