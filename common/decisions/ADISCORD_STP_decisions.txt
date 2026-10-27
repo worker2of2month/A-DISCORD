@@ -15,37 +15,12 @@ STP_elections_in_the_party = {
 		timeout_effect = { STP_cw_advance_health = yes }
 	}
 
-
-	# Government preparation and foreign supply.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	# Party-route temporary development programmes.
 	STP_party_staff_drills_program = {
 		icon = generic_army_support
 		allowed = { tag = STP }
 		visible = {
+			STP_cw_preparation_open = yes
 			has_country_flag = STP_sided_with_the_party_flag
 			has_completed_focus = STP_defense_budget
 			NOT = { ADISCORD_army_development_at_least_5 = yes }
@@ -75,6 +50,7 @@ STP_elections_in_the_party = {
 		icon = generic_political_pressure
 		allowed = { tag = STP }
 		visible = {
+			STP_cw_preparation_open = yes
 			has_country_flag = STP_sided_with_the_party_flag
 			has_completed_focus = STP_party_civil_register
 			NOT = { ADISCORD_state_development_at_least_5 = yes }
@@ -98,212 +74,6 @@ STP_elections_in_the_party = {
 		}
 		cancel_trigger = { OR = { has_global_flag = STP_cw_started NOT = { has_active_mission = STP_cw_election_window } } }
 		ai_will_do = { base = 2 }
-	}
-
-
-	# Party path, before the civil war: treasury decisions.
-	STP_pm_secretary_envelopes = {
-		icon = generic_political_pressure
-		allowed = { tag = STP }
-		visible = {
-			has_country_flag = STP_sided_with_the_party_flag
-			STP_cw_preparation_open = yes
-		}
-		available = { STP_cw_preparation_open = yes }
-		cost = 0
-		custom_cost_text = STP_pm_cost_600
-		custom_cost_trigger = { STP_cw_can_spend_600 = yes }
-		fire_only_once = no
-		days_re_enable = 21
-		complete_effect = {
-			add_political_power = 15
-			hidden_effect = { STP_cw_spend_600 = yes }
-		}
-		ai_will_do = {
-			base = 1
-			modifier = {
-				factor = 0
-				has_political_power > 150
-			}
-			modifier = {
-				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = less_than }
-			}
-		}
-	}
-
-	STP_pm_delegates_banquet = {
-		icon = generic_political_discourse
-		allowed = { tag = STP }
-		visible = {
-			has_country_flag = STP_sided_with_the_party_flag
-			STP_cw_preparation_open = yes
-		}
-		available = { STP_cw_preparation_open = yes }
-		cost = 0
-		custom_cost_text = STP_pm_cost_1200
-		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
-		fire_only_once = no
-		days_re_enable = 35
-		complete_effect = {
-			add_political_power = 30
-			hidden_effect = { STP_cw_spend_1200 = yes }
-		}
-		ai_will_do = {
-			base = 1
-			modifier = {
-				factor = 0
-				has_political_power > 150
-			}
-			modifier = {
-				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
-			}
-		}
-	}
-
-	STP_pm_buy_newspaper_columns = {
-		icon = ADISCORD_propaganda
-		allowed = { tag = STP }
-		visible = {
-			has_country_flag = STP_sided_with_the_party_flag
-			STP_cw_preparation_open = yes
-		}
-		available = { STP_cw_preparation_open = yes }
-		cost = 0
-		custom_cost_text = STP_pm_cost_2400
-		custom_cost_trigger = { STP_cw_can_spend_2400 = yes }
-		fire_only_once = no
-		days_re_enable = 60
-		complete_effect = {
-			add_political_power = 65
-			hidden_effect = { STP_cw_spend_2400 = yes }
-		}
-		ai_will_do = {
-			base = 1
-			modifier = {
-				factor = 0
-				has_political_power > 150
-			}
-			modifier = {
-				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 7200 compare = less_than }
-			}
-		}
-	}
-
-	STP_pm_district_clubs = {
-		icon = generic_national_unity
-		allowed = { tag = STP }
-		visible = {
-			has_country_flag = STP_sided_with_the_party_flag
-			STP_cw_preparation_open = yes
-			has_stability < 0.9
-		}
-		available = { STP_cw_preparation_open = yes }
-		cost = 0
-		custom_cost_text = STP_pm_cost_1200
-		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
-		fire_only_once = no
-		days_re_enable = 45
-		complete_effect = {
-			add_stability = 0.03
-			hidden_effect = { STP_cw_spend_1200 = yes }
-		}
-		ai_will_do = {
-			base = 1
-			modifier = {
-				factor = 0
-				has_stability > 0.8
-			}
-			modifier = {
-				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
-			}
-		}
-	}
-
-	STP_pm_guard_bonuses = {
-		icon = generic_nationalism
-		allowed = { tag = STP }
-		visible = {
-			has_country_flag = STP_sided_with_the_party_flag
-			STP_cw_preparation_open = yes
-			has_war_support < 0.9
-		}
-		available = { STP_cw_preparation_open = yes }
-		cost = 0
-		custom_cost_text = STP_pm_cost_1200
-		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
-		fire_only_once = no
-		days_re_enable = 45
-		complete_effect = {
-			add_war_support = 0.03
-			hidden_effect = { STP_cw_spend_1200 = yes }
-		}
-		ai_will_do = {
-			base = 1
-			modifier = {
-				factor = 0
-				has_war_support > 0.8
-			}
-			modifier = {
-				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
-			}
-		}
-	}
-
-	STP_pm_buy_draft_lists = {
-		icon = ADISCORD_mobilization
-		allowed = { tag = STP }
-		visible = {
-			has_country_flag = STP_sided_with_the_party_flag
-			STP_cw_preparation_open = yes
-		}
-		available = { STP_cw_preparation_open = yes }
-		cost = 0
-		custom_cost_text = STP_pm_cost_1200
-		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
-		fire_only_once = no
-		days_re_enable = 45
-		complete_effect = {
-			add_manpower = 3000
-			hidden_effect = { STP_cw_spend_1200 = yes }
-		}
-		ai_will_do = {
-			base = 1
-			modifier = {
-				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
-			}
-		}
-	}
-
-	STP_pm_retired_officers = {
-		icon = generic_army_support
-		allowed = { tag = STP }
-		visible = {
-			has_country_flag = STP_sided_with_the_party_flag
-			STP_cw_preparation_open = yes
-		}
-		available = { STP_cw_preparation_open = yes }
-		cost = 0
-		custom_cost_text = STP_pm_cost_2400
-		custom_cost_trigger = { STP_cw_can_spend_2400 = yes }
-		fire_only_once = no
-		days_re_enable = 60
-		complete_effect = {
-			army_experience = 10
-			hidden_effect = { STP_cw_spend_2400 = yes }
-		}
-		ai_will_do = {
-			base = 1
-			modifier = {
-				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 7200 compare = less_than }
-			}
-		}
 	}
 }
 
@@ -3102,162 +2872,12 @@ STP_military_operations = {
 	}
 
 
-	# Party path, civil war: treasury decisions.
-	STP_pm_show_rear_programs = {
-		icon = generic_political_discourse
-		allowed = { tag = STP }
-		visible = {
-			is_ai = no
-			STP_pv_war_current = yes
-			NOT = { has_country_flag = STP_pm_rear_programs_expanded }
-		}
-		cost = 0
-		fire_only_once = no
-		complete_effect = { hidden_effect = { set_country_flag = STP_pm_rear_programs_expanded } }
-		ai_will_do = { base = 0 }
-	}
-
-	STP_pm_hide_rear_programs = {
-		icon = generic_political_discourse
-		allowed = { tag = STP }
-		visible = {
-			is_ai = no
-			STP_pv_war_current = yes
-			has_country_flag = STP_pm_rear_programs_expanded
-		}
-		cost = 0
-		fire_only_once = no
-		complete_effect = { hidden_effect = { clr_country_flag = STP_pm_rear_programs_expanded } }
-		ai_will_do = { base = 0 }
-	}
-
-	STP_pm_wavering_officials = {
-		icon = generic_political_pressure
-		allowed = { tag = STP }
-		visible = {
-			STP_pv_war_current = yes
-			STP_pm_rear_programs_visible = yes
-		}
-		available = { STP_pv_war_current = yes }
-		cost = 0
-		custom_cost_text = STP_pm_cost_600
-		custom_cost_trigger = { STP_cw_can_spend_600 = yes }
-		fire_only_once = no
-		days_re_enable = 21
-		complete_effect = {
-			add_political_power = 15
-			hidden_effect = { STP_cw_spend_600 = yes }
-		}
-		ai_will_do = {
-			base = 1
-			modifier = {
-				factor = 0
-				has_political_power > 120
-			}
-			modifier = {
-				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = less_than }
-			}
-		}
-	}
-
-	STP_pm_commissar_pay = {
-		icon = generic_political_discourse
-		allowed = { tag = STP }
-		visible = {
-			STP_pv_war_current = yes
-			STP_pm_rear_programs_visible = yes
-		}
-		available = { STP_pv_war_current = yes }
-		cost = 0
-		custom_cost_text = STP_pm_cost_1200
-		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
-		fire_only_once = no
-		days_re_enable = 30
-		complete_effect = {
-			add_political_power = 30
-			hidden_effect = { STP_cw_spend_1200 = yes }
-		}
-		ai_will_do = {
-			base = 1
-			modifier = {
-				factor = 0
-				has_political_power > 120
-			}
-			modifier = {
-				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
-			}
-		}
-	}
-
-	STP_pm_front_gala = {
-		icon = ADISCORD_propaganda
-		allowed = { tag = STP }
-		visible = {
-			STP_pv_war_current = yes
-			STP_pm_rear_programs_visible = yes
-		}
-		available = { STP_pv_war_current = yes }
-		cost = 0
-		custom_cost_text = STP_pm_cost_2400
-		custom_cost_trigger = { STP_cw_can_spend_2400 = yes }
-		fire_only_once = no
-		days_re_enable = 60
-		complete_effect = {
-			add_political_power = 60
-			hidden_effect = { STP_cw_spend_2400 = yes }
-		}
-		ai_will_do = {
-			base = 1
-			modifier = {
-				factor = 0
-				has_political_power > 120
-			}
-			modifier = {
-				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 7200 compare = less_than }
-			}
-		}
-	}
-
-	STP_pm_front_bonuses = {
-		icon = generic_nationalism
-		allowed = { tag = STP }
-		visible = {
-			STP_pv_war_current = yes
-			has_war_support < 0.9
-			STP_pm_rear_programs_visible = yes
-		}
-		available = { STP_pv_war_current = yes }
-		cost = 0
-		custom_cost_text = STP_pm_cost_1200
-		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
-		fire_only_once = no
-		days_re_enable = 45
-		complete_effect = {
-			add_war_support = 0.04
-			hidden_effect = { STP_cw_spend_1200 = yes }
-		}
-		ai_will_do = {
-			base = 1
-			modifier = {
-				factor = 0
-				has_war_support > 0.8
-			}
-			modifier = {
-				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
-			}
-		}
-	}
-
+	# Пополнение армии, снабжение и поддержка семей во время гражданской войны.
 	STP_pm_paid_recruiters = {
 		icon = ADISCORD_recruitment
 		allowed = { tag = STP }
 		visible = {
 			STP_pv_war_current = yes
-			STP_pm_rear_programs_visible = yes
 		}
 		available = { STP_pv_war_current = yes }
 		cost = 0
@@ -3266,8 +2886,17 @@ STP_military_operations = {
 		fire_only_once = no
 		days_re_enable = 45
 		complete_effect = {
-			add_manpower = 5000
-			hidden_effect = { STP_cw_spend_1200 = yes }
+			if = {
+				limit = {
+					hidden_trigger = {
+						STP_pv_war_current = yes
+						STP_cw_can_spend_1200 = yes
+					}
+				}
+				hidden_effect = { STP_cw_spend_1200 = yes }
+				add_manpower = 5000
+				army_experience = 15
+			}
 		}
 		ai_will_do = {
 			base = 1
@@ -3283,7 +2912,6 @@ STP_military_operations = {
 		allowed = { tag = STP }
 		visible = {
 			STP_pv_war_current = yes
-			STP_pm_rear_programs_visible = yes
 		}
 		available = { STP_pv_war_current = yes }
 		cost = 0
@@ -3292,8 +2920,16 @@ STP_military_operations = {
 		fire_only_once = no
 		days_re_enable = 30
 		complete_effect = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 producer = STP }
-			hidden_effect = { STP_cw_spend_1200 = yes }
+			if = {
+				limit = {
+					hidden_trigger = {
+						STP_pv_war_current = yes
+						STP_cw_can_spend_1200 = yes
+					}
+				}
+				hidden_effect = { STP_cw_spend_1200 = yes }
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 producer = STP }
+			}
 		}
 		ai_will_do = {
 			base = 1
@@ -3304,39 +2940,12 @@ STP_military_operations = {
 		}
 	}
 
-	STP_pm_hired_instructors = {
-		icon = generic_army_support
-		allowed = { tag = STP }
-		visible = {
-			STP_pv_war_current = yes
-			STP_pm_rear_programs_visible = yes
-		}
-		available = { STP_pv_war_current = yes }
-		cost = 0
-		custom_cost_text = STP_pm_cost_2400
-		custom_cost_trigger = { STP_cw_can_spend_2400 = yes }
-		fire_only_once = no
-		days_re_enable = 60
-		complete_effect = {
-			army_experience = 15
-			hidden_effect = { STP_cw_spend_2400 = yes }
-		}
-		ai_will_do = {
-			base = 1
-			modifier = {
-				factor = 0
-				check_variable = { var = ADISCORD_economy_treasury value = 7200 compare = less_than }
-			}
-		}
-	}
-
 	STP_pm_widow_pensions = {
 		icon = generic_national_unity
 		allowed = { tag = STP }
 		visible = {
 			STP_pv_war_current = yes
 			check_variable = { var = STP_pv_strain value = 0 compare = greater_than }
-			STP_pm_rear_programs_visible = yes
 		}
 		available = { STP_pv_war_current = yes }
 		cost = 0
@@ -3345,13 +2954,22 @@ STP_military_operations = {
 		fire_only_once = no
 		days_re_enable = 60
 		complete_effect = {
-			add_stability = 0.02
-			custom_effect_tooltip = STP_pv_strain_minus_6_tt
-			hidden_effect = {
-				set_temp_variable = { var = STP_pv_strain_change value = -6 }
-				STP_pv_change_strain = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						STP_pv_war_current = yes
+						STP_cw_can_spend_2400 = yes
+					}
+				}
+				hidden_effect = { STP_cw_spend_2400 = yes }
+				add_stability = 0.02
+				add_war_support = 0.04
+				custom_effect_tooltip = STP_pv_strain_minus_6_tt
+				hidden_effect = {
+					set_temp_variable = { var = STP_pv_strain_change value = -6 }
+					STP_pv_change_strain = yes
+				}
 			}
-			hidden_effect = { STP_cw_spend_2400 = yes }
 		}
 		ai_will_do = {
 			base = 1
@@ -5322,17 +4940,35 @@ STP_military_operations = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_pw_party_firm_settlement }
-		available = { STP_pw_can_reconstruct = yes  }
+		available = {
+			STP_pw_can_reconstruct = yes
+			NOT = { has_idea = STP_pw_party_security_prepared }
+			NOT = { has_idea = STP_pw_party_security_cordon }
+		}
 		cost = 0
 		custom_cost_text = STP_pw_price_540
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
 		fire_only_once = yes
-
 		complete_effect = {
-			if = {
-				limit = { hidden_trigger = { STP_pw_can_reconstruct = yes has_completed_focus = STP_pw_party_firm_settlement  check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } } }
-				hidden_effect = { subtract_from_variable = { var = ADISCORD_economy_treasury value = 540 } add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 540 } ADISCORD_economy_mark_dirty = yes }
-				add_timed_idea = { idea = STP_pw_party_security_cordon days = 180 }
+			effect_tooltip = {
+				add_ideas = STP_pw_party_security_prepared
+				custom_effect_tooltip = STP_pw_party_security_reserve_duration_tt
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pw_can_reconstruct = yes
+						has_completed_focus = STP_pw_party_firm_settlement
+						NOT = { has_idea = STP_pw_party_security_prepared }
+						NOT = { has_idea = STP_pw_party_security_cordon }
+						check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals }
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 540 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 540 }
+					ADISCORD_economy_mark_dirty = yes
+					add_ideas = STP_pw_party_security_prepared
+					STP_pw_party_activate_security_reserve = yes
+				}
 			}
 		}
 		ai_will_do = { base = 8 }
@@ -5374,11 +5010,13 @@ STP_military_operations = {
 	STP_pw_party_frontier_exercise = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { has_completed_focus = STP_pw_party_southern_defence }
+		visible = {
+			has_completed_focus = STP_pw_party_southern_defence
+		}
 		available = {
 			STP_pw_can_reconstruct = yes
-			has_war_with = VAL
 			NOT = { has_idea = STP_pw_party_frontier_drill }
+			NOT = { has_idea = STP_pw_party_frontier_prepared }
 		}
 		cost = 0
 		custom_cost_text = STP_pw_price_540
@@ -5386,15 +5024,19 @@ STP_military_operations = {
 		fire_only_once = no
 		days_re_enable = 180
 		complete_effect = {
+			effect_tooltip = {
+				add_timed_idea = { idea = STP_pw_party_frontier_drill days = 180 }
+				custom_effect_tooltip = STP_pw_party_frontier_preparation_tt
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
 						STP_pw_can_reconstruct = yes
-						has_war_with = VAL
 						has_completed_focus = STP_pw_party_southern_defence
 						NOT = {
 							has_idea = STP_pw_party_frontier_drill
 						}
+						NOT = { has_idea = STP_pw_party_frontier_prepared }
 						check_variable = {
 							var = ADISCORD_economy_treasury
 							value = 540
@@ -5402,8 +5044,13 @@ STP_military_operations = {
 						}
 					}
 				}
-				hidden_effect = { subtract_from_variable = { var = ADISCORD_economy_treasury value = 540 } add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 540 } ADISCORD_economy_mark_dirty = yes }
-				add_timed_idea = { idea = STP_pw_party_frontier_drill days = 180 }
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 540 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 540 }
+					ADISCORD_economy_mark_dirty = yes
+					add_ideas = STP_pw_party_frontier_prepared
+					STP_pw_party_activate_frontier_drill = yes
+				}
 			}
 		}
 		ai_will_do = { base = 8 }
@@ -8077,31 +7724,33 @@ STP_military_operations = {
 				add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 producer = ROOT }
 				add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = ROOT }
 				add_equipment_to_stockpile = { type = artillery_equipment amount = 60 producer = ROOT }
-				add_timed_idea = { idea = STP_pw_party_nod_emergency_mobilization_idea days = 180 }
+				add_ideas = STP_pw_party_nod_mobilization_prepared
+				custom_effect_tooltip = STP_pw_party_nod_mobilization_duration_tt
 				add_war_support = 0.05
 			}
+
 			hidden_effect = {
-			if = {
-				limit = { STP_pw_party_nod_threat_current = yes
-					NOT = { has_country_flag = STP_pw_party_nod_emergency_mobilized }
-					check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } NOT = { has_political_power < 50 } }
-				add_political_power = -50
-				if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_security_deal_tt }
-				hidden_effect = {
+				if = {
+					limit = {
+						STP_pw_party_nod_threat_current = yes
+						NOT = { has_country_flag = STP_pw_party_nod_emergency_mobilized }
+						check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+						NOT = { has_political_power < 50 }
+					}
+					add_political_power = -50
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
 					ADISCORD_economy_mark_dirty = yes
 					set_temp_variable = { var = STP_pf_selected value = 3 }
 					STP_pf_shift = yes
 					set_country_flag = STP_pw_party_nod_emergency_mobilized
+					add_manpower = 10000
+					add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 producer = ROOT }
+					add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = ROOT }
+					add_equipment_to_stockpile = { type = artillery_equipment amount = 60 producer = ROOT }
+					add_ideas = STP_pw_party_nod_mobilization_prepared
+					add_war_support = 0.05
 				}
-				add_manpower = 10000
-				add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 producer = ROOT }
-				add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = ROOT }
-				add_equipment_to_stockpile = { type = artillery_equipment amount = 60 producer = ROOT }
-				add_timed_idea = { idea = STP_pw_party_nod_emergency_mobilization_idea days = 180 }
-				add_war_support = 0.05
-			}
 			}
 		}
 		ai_will_do = { base = 20 }
@@ -8192,12 +7841,15 @@ STP_military_operations = {
 			tag = STP
 			has_country_flag = STP_cw_postwar
 			OR = {
-				has_country_flag = STP_pw_party_nod_threat_active
+				STP_pw_party_nod_threat_current = yes
 				has_war_with = NOD
 			}
 		}
 		available = {
-			has_war_with = NOD
+			OR = {
+				STP_pw_party_nod_threat_current = yes
+				has_war_with = NOD
+			}
 			is_subject = no
 			has_capitulated = no
 		}
@@ -8223,7 +7875,10 @@ STP_military_operations = {
 					limit = {
 						tag = STP
 						has_country_flag = STP_cw_postwar
-						has_war_with = NOD
+						OR = {
+							STP_pw_party_nod_threat_current = yes
+							has_war_with = NOD
+						}
 						is_subject = no
 						has_capitulated = no
 						check_variable = { var = ADISCORD_economy_treasury value = 720 compare = greater_than_or_equals }
@@ -8236,7 +7891,8 @@ STP_military_operations = {
 					set_temp_variable = { var = STP_pf_selected value = 4 }
 					STP_pf_shift = yes
 					add_command_power = 20
-					add_timed_idea = { idea = STP_pw_party_nod_staff_readiness_idea days = 180 }
+					add_ideas = STP_pw_party_nod_staff_prepared
+					STP_pw_party_activate_nod_staff_plan = yes
 				}
 			}
 		}
@@ -10064,29 +9720,6 @@ STP_party_factions = {
 			}
 		}
 		ai_will_do = { base = 0.4 modifier = { factor = 0 check_variable = { var = STP_pf_borons_support value = 65 compare = greater_than_or_equals } }
-			modifier = {
-				factor = 50
-				STP_pw_can_reconstruct = yes
-				has_completed_focus = STP_party_local_cadres
-				NOT = { has_completed_focus = STP_pw_party_district_congress }
-				NOT = {
-					OR = {
-						check_variable = {
-							var = STP_pf_borons_support
-							value = 50
-							compare = greater_than_or_equals
-						}
-						AND = {
-							has_completed_focus = STP_party_district_compact
-							check_variable = {
-								var = STP_pf_borons_support
-								value = 35
-								compare = greater_than_or_equals
-							}
-						}
-					}
-				}
-			}
 		}
 	}
 	STP_pf_negotiate_security = {
@@ -10128,29 +9761,6 @@ STP_party_factions = {
 			}
 		}
 		ai_will_do = { base = 0.4 modifier = { factor = 0 check_variable = { var = STP_pf_security_support value = 65 compare = greater_than_or_equals } }
-			modifier = {
-				factor = 50
-				STP_pw_can_reconstruct = yes
-				has_completed_focus = STP_party_chain_of_command
-				NOT = { has_completed_focus = STP_pw_party_executive_secretariat }
-				NOT = {
-					OR = {
-						check_variable = {
-							var = STP_pf_security_support
-							value = 50
-							compare = greater_than_or_equals
-						}
-						AND = {
-							has_completed_focus = STP_ROTATE_DISTRICT_COMMAND
-							check_variable = {
-								var = STP_pf_security_support
-								value = 35
-								compare = greater_than_or_equals
-							}
-						}
-					}
-				}
-			}
 		}
 	}
 	STP_pf_negotiate_army = {
@@ -13552,6 +13162,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_2 = yes
 			has_completed_focus = STP_pw_party_unbound_revolution
 		}
 		state_target = yes
@@ -13572,7 +13183,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_festival_public_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_festival_current = yes
 				STP_pi_festival_capacity = yes
 				FROM = {
 					STP_pi_state_controlled = yes
@@ -13601,7 +13212,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_festival_current = no
 				FROM = {
 					STP_pi_state_controlled = no
 				}
@@ -13617,7 +13228,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_festival_current = yes
 						STP_pi_festival_capacity = yes
 						FROM = {
 							STP_pi_state_controlled = yes
@@ -13701,6 +13312,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_2 = yes
 			has_completed_focus = STP_pw_party_unbound_revolution
 		}
 		state_target = yes
@@ -13721,7 +13333,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_festival_club_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_festival_current = yes
 				STP_pi_festival_capacity = yes
 				FROM = {
 					STP_pi_state_controlled = yes
@@ -13751,7 +13363,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_festival_current = no
 				FROM = {
 					STP_pi_state_controlled = no
 				}
@@ -13767,7 +13379,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_festival_current = yes
 						STP_pi_festival_capacity = yes
 						FROM = {
 							STP_pi_state_controlled = yes
@@ -13871,12 +13483,13 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_2 = yes
 			has_completed_focus = STP_party_festival_clinics
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_festival_medical_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_festival_current = yes
 				check_variable = {
 					var = STP_pi_festival_load
 					value = 1
@@ -13905,7 +13518,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_festival_current = no
 			}
 		}
 		cancel_effect = {
@@ -13918,7 +13531,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_festival_current = yes
 						check_variable = {
 							var = STP_pi_festival_load
 							value = 1
@@ -13965,7 +13578,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_trade_rifles_cancel_order_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 				has_variable = STP_pi_trade_rifles_deposit
 			}
 		}
@@ -13976,7 +13589,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_trade_current = yes
 						has_variable = STP_pi_trade_rifles_deposit
 					}
 					STP_pi_trade_rifles_cancel = yes
@@ -13994,12 +13607,13 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_4 = yes
 			has_completed_focus = STP_ch_production_agreements
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_trade_rifles_standard_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 				STP_pi_trade_capacity = yes
 				NOT = {
 					has_variable = STP_pi_trade_rifles_deposit
@@ -14024,7 +13638,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_trade_current = no
 			}
 		}
 		cancel_effect = {
@@ -14046,7 +13660,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_trade_current = yes
 						STP_pi_trade_capacity = yes
 						NOT = {
 							has_variable = STP_pi_trade_rifles_deposit
@@ -14108,13 +13722,14 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_4 = yes
 			has_completed_focus = STP_ch_production_agreements
 			STP_pi_trade_rush_open = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_trade_rifles_rush_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 				STP_pi_trade_capacity = yes
 				NOT = {
 					has_variable = STP_pi_trade_rifles_deposit
@@ -14140,7 +13755,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_trade_current = no
 			}
 		}
 		cancel_effect = {
@@ -14162,7 +13777,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_trade_current = yes
 						STP_pi_trade_capacity = yes
 						NOT = {
 							has_variable = STP_pi_trade_rifles_deposit
@@ -14225,13 +13840,14 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_4 = yes
 			has_completed_focus = STP_ch_production_agreements
 			STP_pi_trade_series_open = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_trade_rifles_series_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 				STP_pi_trade_capacity = yes
 				NOT = {
 					has_variable = STP_pi_trade_rifles_deposit
@@ -14257,7 +13873,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_trade_current = no
 			}
 		}
 		cancel_effect = {
@@ -14279,7 +13895,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_trade_current = yes
 						STP_pi_trade_capacity = yes
 						NOT = {
 							has_variable = STP_pi_trade_rifles_deposit
@@ -14375,7 +13991,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_trade_support_cancel_order_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 				has_variable = STP_pi_trade_support_deposit
 			}
 		}
@@ -14386,7 +14002,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_trade_current = yes
 						has_variable = STP_pi_trade_support_deposit
 					}
 					STP_pi_trade_support_cancel = yes
@@ -14404,12 +14020,13 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_4 = yes
 			has_completed_focus = STP_ch_production_agreements
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_trade_support_standard_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 				STP_pi_trade_capacity = yes
 				NOT = {
 					has_variable = STP_pi_trade_support_deposit
@@ -14434,7 +14051,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_trade_current = no
 			}
 		}
 		cancel_effect = {
@@ -14456,7 +14073,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_trade_current = yes
 						STP_pi_trade_capacity = yes
 						NOT = {
 							has_variable = STP_pi_trade_support_deposit
@@ -14518,13 +14135,14 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_4 = yes
 			has_completed_focus = STP_ch_production_agreements
 			STP_pi_trade_rush_open = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_trade_support_rush_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 				STP_pi_trade_capacity = yes
 				NOT = {
 					has_variable = STP_pi_trade_support_deposit
@@ -14550,7 +14168,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_trade_current = no
 			}
 		}
 		cancel_effect = {
@@ -14572,7 +14190,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_trade_current = yes
 						STP_pi_trade_capacity = yes
 						NOT = {
 							has_variable = STP_pi_trade_support_deposit
@@ -14635,13 +14253,14 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_4 = yes
 			has_completed_focus = STP_ch_production_agreements
 			STP_pi_trade_series_open = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_trade_support_series_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 				STP_pi_trade_capacity = yes
 				NOT = {
 					has_variable = STP_pi_trade_support_deposit
@@ -14667,7 +14286,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_trade_current = no
 			}
 		}
 		cancel_effect = {
@@ -14689,7 +14308,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_trade_current = yes
 						STP_pi_trade_capacity = yes
 						NOT = {
 							has_variable = STP_pi_trade_support_deposit
@@ -14785,7 +14404,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_trade_trucks_cancel_order_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 				has_variable = STP_pi_trade_trucks_deposit
 			}
 		}
@@ -14796,7 +14415,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_trade_current = yes
 						has_variable = STP_pi_trade_trucks_deposit
 					}
 					STP_pi_trade_trucks_cancel = yes
@@ -14814,12 +14433,13 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_4 = yes
 			has_completed_focus = STP_ch_production_agreements
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_trade_trucks_standard_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 				STP_pi_trade_capacity = yes
 				NOT = {
 					has_variable = STP_pi_trade_trucks_deposit
@@ -14844,7 +14464,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_trade_current = no
 			}
 		}
 		cancel_effect = {
@@ -14866,7 +14486,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_trade_current = yes
 						STP_pi_trade_capacity = yes
 						NOT = {
 							has_variable = STP_pi_trade_trucks_deposit
@@ -14928,13 +14548,14 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_4 = yes
 			has_completed_focus = STP_ch_production_agreements
 			STP_pi_trade_rush_open = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_trade_trucks_rush_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 				STP_pi_trade_capacity = yes
 				NOT = {
 					has_variable = STP_pi_trade_trucks_deposit
@@ -14960,7 +14581,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_trade_current = no
 			}
 		}
 		cancel_effect = {
@@ -14982,7 +14603,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_trade_current = yes
 						STP_pi_trade_capacity = yes
 						NOT = {
 							has_variable = STP_pi_trade_trucks_deposit
@@ -15045,13 +14666,14 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_4 = yes
 			has_completed_focus = STP_ch_production_agreements
 			STP_pi_trade_series_open = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_trade_trucks_series_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 				STP_pi_trade_capacity = yes
 				NOT = {
 					has_variable = STP_pi_trade_trucks_deposit
@@ -15077,7 +14699,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_trade_current = no
 			}
 		}
 		cancel_effect = {
@@ -15099,7 +14721,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_trade_current = yes
 						STP_pi_trade_capacity = yes
 						NOT = {
 							has_variable = STP_pi_trade_trucks_deposit
@@ -15190,15 +14812,20 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_4 = yes
 			OR = {
 				has_completed_focus = STP_party_trade_advance
 				has_completed_focus = STP_party_trade_credit
+			}
+			OR = {
+				has_variable = STP_pi_trade_expand_deposit
+				check_variable = { var = STP_pi_trade_level value = 3 compare = less_than }
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_trade_expand_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 				STP_pi_trade_capacity = yes
 				NOT = {
 					has_variable = STP_pi_trade_expand_deposit
@@ -15228,7 +14855,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_trade_current = no
 			}
 		}
 		cancel_effect = {
@@ -15245,7 +14872,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_trade_current = yes
 						STP_pi_trade_capacity = yes
 						NOT = {
 							has_variable = STP_pi_trade_expand_deposit
@@ -15292,15 +14919,20 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_5 = yes
 			OR = {
 				has_completed_focus = STP_party_security_register
 				has_completed_focus = STP_party_security_personal_files
+			}
+			OR = {
+				has_variable = STP_pi_case_orders_deposit
+				check_variable = { var = STP_pi_case_orders_stage value = 0 compare = equals }
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_case_orders_quick_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 				NOT = {
 					has_variable = STP_pi_case_orders_deposit
 				}
@@ -15330,7 +14962,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_case_current = no
 			}
 		}
 		cancel_effect = {
@@ -15343,7 +14975,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_case_current = yes
 						NOT = {
 							has_variable = STP_pi_case_orders_deposit
 						}
@@ -15394,15 +15026,24 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_5 = yes
 			OR = {
 				has_completed_focus = STP_party_security_register
 				has_completed_focus = STP_party_security_personal_files
+			}
+			OR = {
+				has_variable = STP_pi_case_orders_deposit
+				check_variable = { var = STP_pi_case_orders_stage value = 0 compare = equals }
+				AND = {
+					check_variable = { var = STP_pi_case_orders_stage value = 4 compare = equals }
+					has_completed_focus = STP_pe_security_commission
+				}
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_case_orders_full_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 				NOT = {
 					has_variable = STP_pi_case_orders_deposit
 				}
@@ -15442,7 +15083,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_case_current = no
 			}
 		}
 		cancel_effect = {
@@ -15455,7 +15096,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_case_current = yes
 						NOT = {
 							has_variable = STP_pi_case_orders_deposit
 						}
@@ -15516,6 +15157,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_5 = yes
 			check_variable = {
 				var = STP_pi_case_orders_stage
 				value = 1
@@ -15528,7 +15170,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_case_orders_public_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 				check_variable = {
 					var = STP_pi_case_orders_stage
 					value = 1
@@ -15549,7 +15191,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_case_current = yes
 						check_variable = {
 							var = STP_pi_case_orders_stage
 							value = 1
@@ -15586,6 +15228,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_5 = yes
 			check_variable = {
 				var = STP_pi_case_orders_stage
 				value = 1
@@ -15598,7 +15241,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_case_orders_seal_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 				check_variable = {
 					var = STP_pi_case_orders_stage
 					value = 1
@@ -15616,7 +15259,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_case_current = yes
 						check_variable = {
 							var = STP_pi_case_orders_stage
 							value = 1
@@ -15649,15 +15292,20 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_5 = yes
 			OR = {
 				has_completed_focus = STP_party_security_courts
 				has_completed_focus = STP_party_security_network
+			}
+			OR = {
+				has_variable = STP_pi_case_supply_deposit
+				check_variable = { var = STP_pi_case_supply_stage value = 0 compare = equals }
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_case_supply_quick_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 				NOT = {
 					has_variable = STP_pi_case_supply_deposit
 				}
@@ -15687,7 +15335,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_case_current = no
 			}
 		}
 		cancel_effect = {
@@ -15700,7 +15348,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_case_current = yes
 						NOT = {
 							has_variable = STP_pi_case_supply_deposit
 						}
@@ -15751,15 +15399,24 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_5 = yes
 			OR = {
 				has_completed_focus = STP_party_security_courts
 				has_completed_focus = STP_party_security_network
+			}
+			OR = {
+				has_variable = STP_pi_case_supply_deposit
+				check_variable = { var = STP_pi_case_supply_stage value = 0 compare = equals }
+				AND = {
+					check_variable = { var = STP_pi_case_supply_stage value = 4 compare = equals }
+					has_completed_focus = STP_pe_security_commission
+				}
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_case_supply_full_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 				NOT = {
 					has_variable = STP_pi_case_supply_deposit
 				}
@@ -15799,7 +15456,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_case_current = no
 			}
 		}
 		cancel_effect = {
@@ -15812,7 +15469,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_case_current = yes
 						NOT = {
 							has_variable = STP_pi_case_supply_deposit
 						}
@@ -15873,6 +15530,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_5 = yes
 			check_variable = {
 				var = STP_pi_case_supply_stage
 				value = 1
@@ -15885,7 +15543,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_case_supply_public_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 				check_variable = {
 					var = STP_pi_case_supply_stage
 					value = 1
@@ -15906,7 +15564,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_case_current = yes
 						check_variable = {
 							var = STP_pi_case_supply_stage
 							value = 1
@@ -15943,6 +15601,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_5 = yes
 			check_variable = {
 				var = STP_pi_case_supply_stage
 				value = 1
@@ -15955,7 +15614,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_case_supply_seal_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 				check_variable = {
 					var = STP_pi_case_supply_stage
 					value = 1
@@ -15973,7 +15632,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_case_current = yes
 						check_variable = {
 							var = STP_pi_case_supply_stage
 							value = 1
@@ -16006,15 +15665,20 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_5 = yes
 			OR = {
 				has_completed_focus = STP_party_security_restitution
 				has_completed_focus = STP_party_security_cadres
+			}
+			OR = {
+				has_variable = STP_pi_case_property_deposit
+				check_variable = { var = STP_pi_case_property_stage value = 0 compare = equals }
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_case_property_quick_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 				NOT = {
 					has_variable = STP_pi_case_property_deposit
 				}
@@ -16044,7 +15708,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_case_current = no
 			}
 		}
 		cancel_effect = {
@@ -16057,7 +15721,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_case_current = yes
 						NOT = {
 							has_variable = STP_pi_case_property_deposit
 						}
@@ -16108,15 +15772,24 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_5 = yes
 			OR = {
 				has_completed_focus = STP_party_security_restitution
 				has_completed_focus = STP_party_security_cadres
+			}
+			OR = {
+				has_variable = STP_pi_case_property_deposit
+				check_variable = { var = STP_pi_case_property_stage value = 0 compare = equals }
+				AND = {
+					check_variable = { var = STP_pi_case_property_stage value = 4 compare = equals }
+					has_completed_focus = STP_pe_security_commission
+				}
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_case_property_full_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 				NOT = {
 					has_variable = STP_pi_case_property_deposit
 				}
@@ -16156,7 +15829,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_case_current = no
 			}
 		}
 		cancel_effect = {
@@ -16169,7 +15842,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_case_current = yes
 						NOT = {
 							has_variable = STP_pi_case_property_deposit
 						}
@@ -16230,6 +15903,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_5 = yes
 			check_variable = {
 				var = STP_pi_case_property_stage
 				value = 1
@@ -16242,7 +15916,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_case_property_public_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 				check_variable = {
 					var = STP_pi_case_property_stage
 					value = 1
@@ -16263,7 +15937,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_case_current = yes
 						check_variable = {
 							var = STP_pi_case_property_stage
 							value = 1
@@ -16300,6 +15974,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_5 = yes
 			check_variable = {
 				var = STP_pi_case_property_stage
 				value = 1
@@ -16312,7 +15987,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_case_property_seal_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 				check_variable = {
 					var = STP_pi_case_property_stage
 					value = 1
@@ -16330,7 +16005,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_case_current = yes
 						check_variable = {
 							var = STP_pi_case_property_stage
 							value = 1
@@ -16363,6 +16038,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_5 = yes
 			check_variable = {
 				var = STP_pi_case_credits
 				value = 1
@@ -16372,7 +16048,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_case_leverage_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 				check_variable = {
 					var = STP_pi_case_credits
 					value = 1
@@ -16390,7 +16066,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_case_current = yes
 						check_variable = {
 							var = STP_pi_case_credits
 							value = 1
@@ -16416,6 +16092,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_5 = yes
 			check_variable = {
 				var = STP_pi_case_credits
 				value = 1
@@ -16425,7 +16102,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_case_apparatus_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 				check_variable = {
 					var = STP_pi_case_credits
 					value = 1
@@ -16449,7 +16126,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_case_current = yes
 						check_variable = {
 							var = STP_pi_case_credits
 							value = 1
@@ -16482,7 +16159,9 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_6 = yes
 			has_completed_focus = STP_party_regent_mandate
+			NOT = { has_country_flag = STP_pi_north_training_delivered }
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -16567,9 +16246,14 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_6 = yes
 			OR = {
 				has_completed_focus = STP_party_regent_joint_offices
 				has_completed_focus = STP_party_regent_accounts
+			}
+			OR = {
+				NOT = { has_country_flag = STP_pi_north_equipment_delivered }
+				has_completed_focus = STP_pe_regent_ending_b
 			}
 		}
 		available = {
@@ -16661,10 +16345,12 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_6 = yes
 			OR = {
 				has_completed_focus = STP_party_regent_concessions
 				has_completed_focus = STP_party_regent_industry
 			}
+			NOT = { has_country_flag = STP_pi_north_industry_delivered }
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -16765,9 +16451,13 @@ STP_ch_chapters = {
 		selectable_mission = no
 		days_mission_timeout = 21
 		cancel_trigger = {
-			NOT = {
-				has_variable = STP_pi_north_offer
+			OR = {
+				STP_pi_north_current = no
+				NOT = { has_variable = STP_pi_north_offer }
 			}
+		}
+		cancel_effect = {
+			hidden_effect = { STP_pi_north_decline = yes }
 		}
 		timeout_effect = {
 			hidden_effect = {
@@ -16819,16 +16509,21 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_6 = yes
 			OR = {
 				has_completed_focus = STP_party_regent_schools
 				has_completed_focus = STP_pe_regent_ending_a
 				has_completed_focus = STP_pe_regent_ending_b
 			}
+			OR = {
+				has_variable = STP_pi_specialist_deposit
+				check_variable = { var = STP_pi_north_specialists value = 3 compare = less_than }
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_north_local_staff_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_north_current = yes
 				check_variable = {
 					var = STP_pi_north_specialists
 					value = 3
@@ -16855,7 +16550,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_north_current = yes
 						check_variable = {
 							var = STP_pi_north_specialists
 							value = 3
@@ -16887,7 +16582,7 @@ STP_ch_chapters = {
 			}
 		}
 		cancel_trigger = {
-			STP_pi_country_valid = no
+			STP_pi_north_current = no
 		}
 		cancel_effect = {
 			custom_effect_tooltip = STP_pi_specialist_refund_tt
@@ -16912,6 +16607,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_6 = yes
 			OR = {
 				has_completed_focus = STP_party_regent_guarantees
 				has_completed_focus = STP_pe_regent_ending_a
@@ -16920,7 +16616,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_north_buyout_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_north_current = yes
 				check_variable = {
 					var = STP_pi_north_obligations
 					value = 1
@@ -16962,7 +16658,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_north_current = yes
 						check_variable = {
 							var = STP_pi_north_obligations
 							value = 1
@@ -17039,6 +16735,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_3 = yes
 			has_completed_focus = STP_ch_service_act
 			NOT = {
 				has_country_flag = STP_pi_cadre_trained
@@ -17047,7 +16744,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_cadre_enrol_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_cadre_current = yes
 				NOT = {
 					has_country_flag = STP_pi_cadre_trained
 					has_variable = STP_pi_cadre_deposit
@@ -17073,7 +16770,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_cadre_current = yes
 						NOT = {
 							has_country_flag = STP_pi_cadre_trained
 							has_variable = STP_pi_cadre_deposit
@@ -17109,7 +16806,7 @@ STP_ch_chapters = {
 			}
 		}
 		cancel_trigger = {
-			STP_pi_country_valid = no
+			STP_pi_cadre_current = no
 		}
 		cancel_effect = {
 			custom_effect_tooltip = STP_pi_cadre_enrol_refund_tt
@@ -17134,13 +16831,14 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_3 = yes
 			has_completed_focus = STP_ch_regular_service
 			has_country_flag = STP_pi_cadre_trained
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_cadre_instructors_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_cadre_current = yes
 				check_variable = {
 					var = STP_pi_cadre_free
 					value = 2000
@@ -17165,7 +16863,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_cadre_current = yes
 						check_variable = {
 							var = STP_pi_cadre_free
 							value = 2000
@@ -17200,12 +16898,13 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_3 = yes
 			has_country_flag = STP_pi_cadre_trained
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_cadre_recall_instructors_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_cadre_current = yes
 				check_variable = {
 					var = STP_pi_cadre_instructors
 					value = 2000
@@ -17219,7 +16918,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_cadre_current = yes
 						check_variable = {
 							var = STP_pi_cadre_instructors
 							value = 2000
@@ -17249,13 +16948,14 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_3 = yes
 			has_completed_focus = STP_ch_regular_service
 			has_country_flag = STP_pi_cadre_trained
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_cadre_reserve_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_cadre_current = yes
 				check_variable = {
 					var = STP_pi_cadre_free
 					value = 2000
@@ -17275,7 +16975,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_cadre_current = yes
 						check_variable = {
 							var = STP_pi_cadre_free
 							value = 2000
@@ -17305,12 +17005,13 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_3 = yes
 			has_country_flag = STP_pi_cadre_trained
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_cadre_recall_reserve_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_cadre_current = yes
 				check_variable = {
 					var = STP_pi_cadre_reserve
 					value = 2000
@@ -17324,7 +17025,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_cadre_current = yes
 						check_variable = {
 							var = STP_pi_cadre_reserve
 							value = 2000
@@ -17354,6 +17055,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_3 = yes
 			has_completed_focus = STP_ch_regular_service
 			has_country_flag = STP_pi_cadre_trained
 			NOT = {
@@ -17363,7 +17065,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_cadre_mobilise_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_cadre_current = yes
 				check_variable = {
 					var = STP_pi_cadre_reserve
 					value = 2000
@@ -17387,7 +17089,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_cadre_current = yes
 						check_variable = {
 							var = STP_pi_cadre_reserve
 							value = 2000
@@ -17410,7 +17112,7 @@ STP_ch_chapters = {
 			}
 		}
 		cancel_trigger = {
-			STP_pi_country_valid = no
+			STP_pi_cadre_current = no
 		}
 		cancel_effect = {
 			custom_effect_tooltip = STP_pi_cadre_mobilisation_cancel_tt
@@ -17439,13 +17141,14 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_3 = yes
 			has_country_flag = STP_pi_cadre_trained
 			has_completed_focus = STP_pe_staff_ending_b
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_cadre_rapid_mobilise_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_cadre_current = yes
 				check_variable = {
 					var = STP_pi_cadre_reserve
 					value = 2000
@@ -17469,7 +17172,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_cadre_current = yes
 						check_variable = {
 							var = STP_pi_cadre_reserve
 							value = 2000
@@ -17492,7 +17195,7 @@ STP_ch_chapters = {
 			}
 		}
 		cancel_trigger = {
-			STP_pi_country_valid = no
+			STP_pi_cadre_current = no
 		}
 		cancel_effect = {
 			custom_effect_tooltip = STP_pi_cadre_mobilisation_cancel_tt
@@ -17521,6 +17224,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_3 = yes
 			has_completed_focus = STP_party_staff_reserve_jobs
 		}
 		state_target = yes
@@ -17537,7 +17241,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_artel_road_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_cadre_current = yes
 				check_variable = {
 					var = STP_pi_cadre_free
 					value = 2000
@@ -17577,7 +17281,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_cadre_current = yes
 						check_variable = {
 							var = STP_pi_cadre_free
 							value = 2000
@@ -17628,7 +17332,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_cadre_current = no
 				FROM = {
 					STP_pi_state_controlled = no
 				}
@@ -17657,6 +17361,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_3 = yes
 			has_completed_focus = STP_pe_staff_ending_a
 		}
 		state_target = yes
@@ -17673,7 +17378,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_artel_workshop_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_cadre_current = yes
 				check_variable = {
 					var = STP_pi_cadre_free
 					value = 2000
@@ -17714,7 +17419,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_cadre_current = yes
 						check_variable = {
 							var = STP_pi_cadre_free
 							value = 2000
@@ -17765,7 +17470,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_cadre_current = no
 				FROM = {
 					STP_pi_state_controlled = no
 				}
@@ -17794,6 +17499,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_1 = yes
 			OR = {
 				has_completed_focus = STP_party_houses_estates
 				has_completed_focus = STP_party_houses_audit
@@ -17813,7 +17519,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_house_road_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_house_current = yes
 				custom_trigger_tooltip = {
 					tooltip = STP_pi_house_capacity_tt
 					STP_pi_house_capacity = yes
@@ -17850,7 +17556,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_house_current = yes
 						custom_trigger_tooltip = {
 							tooltip = STP_pi_house_capacity_tt
 							STP_pi_house_capacity = yes
@@ -17893,7 +17599,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_house_current = no
 				FROM = {
 					STP_pi_state_controlled = no
 				}
@@ -17922,6 +17628,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_1 = yes
 			has_completed_focus = STP_ch_property_charter
 		}
 		state_target = yes
@@ -17938,7 +17645,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_house_workshop_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_house_current = yes
 				custom_trigger_tooltip = {
 					tooltip = STP_pi_house_capacity_tt
 					STP_pi_house_capacity = yes
@@ -17976,7 +17683,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_house_current = yes
 						custom_trigger_tooltip = {
 							tooltip = STP_pi_house_capacity_tt
 							STP_pi_house_capacity = yes
@@ -18019,7 +17726,7 @@ STP_ch_chapters = {
 		}
 		cancel_trigger = {
 			OR = {
-				STP_pi_country_valid = no
+				STP_pi_house_current = no
 				FROM = {
 					STP_pi_state_controlled = no
 				}
@@ -18048,6 +17755,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_1 = yes
 			STP_pi_house_buyout_open = yes
 			FROM = {
 				has_state_flag = STP_pi_house_contract
@@ -18067,7 +17775,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_house_buyout_available_tt
-				STP_pi_country_valid = yes
+				STP_pi_house_current = yes
 				FROM = {
 					STP_pi_state_controlled = yes
 					has_state_flag = STP_pi_house_contract
@@ -18103,7 +17811,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pi_country_valid = yes
+						STP_pi_house_current = yes
 						FROM = {
 							STP_pi_state_controlled = yes
 							has_state_flag = STP_pi_house_contract
@@ -18166,6 +17874,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
+			STP_party_leader_1 = yes
 			FROM = {
 				has_state_flag = STP_pi_house_contract
 				STP_pi_state_controlled = no
@@ -18185,6 +17894,7 @@ STP_ch_chapters = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pi_house_abandon_available_tt
+				STP_pi_house_current = yes
 				FROM = {
 					has_state_flag = STP_pi_house_contract
 					STP_pi_state_controlled = no
@@ -18197,6 +17907,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
+						STP_pi_house_current = yes
 						FROM = {
 							has_state_flag = STP_pi_house_contract
 							STP_pi_state_controlled = no
@@ -18387,7 +18098,7 @@ STP_ch_chapters = {
 			has_capitulated = no
 			has_idea = STP_law_hard_drugs
 		}
-		cost = 50
+		cost = 60
 		days_re_enable = 60
 		ai_will_do = { factor = 5 }
 		complete_effect = {
@@ -18396,9 +18107,13 @@ STP_ch_chapters = {
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pf_borons_support
-					value = 4
+					value = 6
 				}
-				STP_party_refresh_policies = yes
+				add_to_variable = {
+				var = STP_pf_merchants_support
+				value = -4
+			}
+			STP_party_refresh_policies = yes
 			}
 		}
 	}
@@ -18419,7 +18134,7 @@ STP_ch_chapters = {
 			has_capitulated = no
 			has_idea = STP_law_slavery
 		}
-		cost = 50
+		cost = 60
 		days_re_enable = 60
 		ai_will_do = { factor = 5 }
 		complete_effect = {
@@ -18428,11 +18143,11 @@ STP_ch_chapters = {
 			hidden_effect = {
 				add_to_variable = {
 					var = STP_pf_merchants_support
-					value = -4
+					value = -8
 				}
 				add_to_variable = {
 					var = STP_pf_borons_support
-					value = 4
+					value = 6
 				}
 				STP_party_refresh_policies = yes
 			}
@@ -19016,7 +18731,7 @@ STP_ch_chapters = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
-			custom_effect_tooltip = STP_ch_accept_protection_effect_tt
+			custom_effect_tooltip = STP_ch_review_protection_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -19025,7 +18740,7 @@ STP_ch_chapters = {
 							has_country_flag = STP_ch_subject_pending
 						}
 					}
-					STP_ch_prepare_protectorate = yes
+					country_event = { id = ADISCORD_STP_ch.66 }
 				}
 			}
 		}
@@ -21886,7 +21601,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_pe_current = yes
+			STP_party_leader_1 = yes
 			has_completed_focus = STP_pe_houses_opening
 			NOT = {
 				has_country_flag = STP_pe_houses_prepared
@@ -21905,7 +21620,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_pe_programme_cost
 		custom_cost_trigger = {
 			hidden_trigger = {
-				STP_pe_current = yes
+				STP_party_leader_1 = yes
 				has_capitulated = no
 				has_completed_focus = STP_pe_houses_opening
 				NOT = {
@@ -21928,7 +21643,7 @@ STP_ch_chapters = {
 		days_remove = 35
 		cancel_trigger = {
 			OR = {
-				STP_pe_current = no
+				STP_party_leader_1 = no
 				has_capitulated = yes
 				has_country_flag = STP_pe_houses_prepared
 			}
@@ -21938,7 +21653,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pe_current = yes
+						STP_party_leader_1 = yes
 						has_capitulated = no
 						has_completed_focus = STP_pe_houses_opening
 						NOT = {
@@ -21999,7 +21714,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_pe_current = yes
+			STP_party_leader_2 = yes
 			has_completed_focus = STP_pe_festival_opening
 			NOT = {
 				has_country_flag = STP_pe_festival_prepared
@@ -22018,7 +21733,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_pe_programme_cost
 		custom_cost_trigger = {
 			hidden_trigger = {
-				STP_pe_current = yes
+				STP_party_leader_2 = yes
 				has_capitulated = no
 				has_completed_focus = STP_pe_festival_opening
 				NOT = {
@@ -22041,7 +21756,7 @@ STP_ch_chapters = {
 		days_remove = 35
 		cancel_trigger = {
 			OR = {
-				STP_pe_current = no
+				STP_party_leader_2 = no
 				has_capitulated = yes
 				has_country_flag = STP_pe_festival_prepared
 			}
@@ -22051,7 +21766,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pe_current = yes
+						STP_party_leader_2 = yes
 						has_capitulated = no
 						has_completed_focus = STP_pe_festival_opening
 						NOT = {
@@ -22112,7 +21827,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_pe_current = yes
+			STP_party_leader_3 = yes
 			has_completed_focus = STP_pe_staff_opening
 			NOT = {
 				has_country_flag = STP_pe_staff_prepared
@@ -22131,7 +21846,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_pe_programme_cost
 		custom_cost_trigger = {
 			hidden_trigger = {
-				STP_pe_current = yes
+				STP_party_leader_3 = yes
 				has_capitulated = no
 				has_completed_focus = STP_pe_staff_opening
 				NOT = {
@@ -22154,7 +21869,7 @@ STP_ch_chapters = {
 		days_remove = 35
 		cancel_trigger = {
 			OR = {
-				STP_pe_current = no
+				STP_party_leader_3 = no
 				has_capitulated = yes
 				has_country_flag = STP_pe_staff_prepared
 			}
@@ -22164,7 +21879,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pe_current = yes
+						STP_party_leader_3 = yes
 						has_capitulated = no
 						has_completed_focus = STP_pe_staff_opening
 						NOT = {
@@ -22225,7 +21940,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_pe_current = yes
+			STP_party_leader_4 = yes
 			has_completed_focus = STP_pe_trade_opening
 			NOT = {
 				has_country_flag = STP_pe_trade_prepared
@@ -22244,7 +21959,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_pe_programme_cost
 		custom_cost_trigger = {
 			hidden_trigger = {
-				STP_pe_current = yes
+				STP_party_leader_4 = yes
 				has_capitulated = no
 				has_completed_focus = STP_pe_trade_opening
 				NOT = {
@@ -22267,7 +21982,7 @@ STP_ch_chapters = {
 		days_remove = 35
 		cancel_trigger = {
 			OR = {
-				STP_pe_current = no
+				STP_party_leader_4 = no
 				has_capitulated = yes
 				has_country_flag = STP_pe_trade_prepared
 			}
@@ -22277,7 +21992,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pe_current = yes
+						STP_party_leader_4 = yes
 						has_capitulated = no
 						has_completed_focus = STP_pe_trade_opening
 						NOT = {
@@ -22342,7 +22057,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_pe_current = yes
+			STP_party_leader_5 = yes
 			has_completed_focus = STP_pe_security_opening
 			NOT = {
 				has_country_flag = STP_pe_security_prepared
@@ -22361,7 +22076,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_pe_programme_cost
 		custom_cost_trigger = {
 			hidden_trigger = {
-				STP_pe_current = yes
+				STP_party_leader_5 = yes
 				has_capitulated = no
 				has_completed_focus = STP_pe_security_opening
 				NOT = {
@@ -22384,7 +22099,7 @@ STP_ch_chapters = {
 		days_remove = 35
 		cancel_trigger = {
 			OR = {
-				STP_pe_current = no
+				STP_party_leader_5 = no
 				has_capitulated = yes
 				has_country_flag = STP_pe_security_prepared
 			}
@@ -22394,7 +22109,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pe_current = yes
+						STP_party_leader_5 = yes
 						has_capitulated = no
 						has_completed_focus = STP_pe_security_opening
 						NOT = {
@@ -22455,7 +22170,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_pe_current = yes
+			STP_party_leader_6 = yes
 			has_completed_focus = STP_pe_regent_opening
 			NOT = {
 				has_country_flag = STP_pe_regent_prepared
@@ -22474,7 +22189,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_pe_programme_cost
 		custom_cost_trigger = {
 			hidden_trigger = {
-				STP_pe_current = yes
+				STP_party_leader_6 = yes
 				has_capitulated = no
 				has_completed_focus = STP_pe_regent_opening
 				NOT = {
@@ -22497,7 +22212,7 @@ STP_ch_chapters = {
 		days_remove = 35
 		cancel_trigger = {
 			OR = {
-				STP_pe_current = no
+				STP_party_leader_6 = no
 				has_capitulated = yes
 				has_country_flag = STP_pe_regent_prepared
 			}
@@ -22507,7 +22222,7 @@ STP_ch_chapters = {
 			hidden_effect = {
 				if = {
 					limit = {
-						STP_pe_current = yes
+						STP_party_leader_6 = yes
 						has_capitulated = no
 						has_completed_focus = STP_pe_regent_opening
 						NOT = {
@@ -22568,7 +22283,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_pe_current = yes
+			STP_party_leader_1 = yes
 			has_completed_focus = STP_pe_houses_next_day
 		}
 		available = {
@@ -22578,7 +22293,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_pe_programme_cost
 		custom_cost_trigger = {
 			hidden_trigger = {
-				STP_pe_current = yes
+				STP_party_leader_1 = yes
 				has_capitulated = no
 				has_completed_focus = STP_pe_houses_next_day
 				NOT = {
@@ -22597,7 +22312,7 @@ STP_ch_chapters = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						STP_pe_current = yes
+						STP_party_leader_1 = yes
 						has_capitulated = no
 						has_completed_focus = STP_pe_houses_next_day
 						NOT = {
@@ -22668,7 +22383,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_pe_current = yes
+			STP_party_leader_2 = yes
 			has_completed_focus = STP_pe_festival_next_day
 		}
 		available = {
@@ -22678,7 +22393,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_pe_programme_cost
 		custom_cost_trigger = {
 			hidden_trigger = {
-				STP_pe_current = yes
+				STP_party_leader_2 = yes
 				has_capitulated = no
 				has_completed_focus = STP_pe_festival_next_day
 				NOT = {
@@ -22697,7 +22412,7 @@ STP_ch_chapters = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						STP_pe_current = yes
+						STP_party_leader_2 = yes
 						has_capitulated = no
 						has_completed_focus = STP_pe_festival_next_day
 						NOT = {
@@ -22750,7 +22465,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_pe_current = yes
+			STP_party_leader_3 = yes
 			has_completed_focus = STP_pe_staff_next_day
 		}
 		available = {
@@ -22760,7 +22475,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_pe_programme_cost
 		custom_cost_trigger = {
 			hidden_trigger = {
-				STP_pe_current = yes
+				STP_party_leader_3 = yes
 				has_capitulated = no
 				has_completed_focus = STP_pe_staff_next_day
 				NOT = {
@@ -22779,7 +22494,7 @@ STP_ch_chapters = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						STP_pe_current = yes
+						STP_party_leader_3 = yes
 						has_capitulated = no
 						has_completed_focus = STP_pe_staff_next_day
 						NOT = {
@@ -22846,7 +22561,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_pe_current = yes
+			STP_party_leader_4 = yes
 			has_completed_focus = STP_pe_trade_next_day
 		}
 		available = {
@@ -22856,7 +22571,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_pe_programme_cost
 		custom_cost_trigger = {
 			hidden_trigger = {
-				STP_pe_current = yes
+				STP_party_leader_4 = yes
 				has_capitulated = no
 				has_completed_focus = STP_pe_trade_next_day
 				NOT = {
@@ -22875,7 +22590,7 @@ STP_ch_chapters = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						STP_pe_current = yes
+						STP_party_leader_4 = yes
 						has_capitulated = no
 						has_completed_focus = STP_pe_trade_next_day
 						NOT = {
@@ -22940,7 +22655,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_pe_current = yes
+			STP_party_leader_5 = yes
 			has_completed_focus = STP_pe_security_next_day
 		}
 		available = {
@@ -22950,7 +22665,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_pe_programme_cost
 		custom_cost_trigger = {
 			hidden_trigger = {
-				STP_pe_current = yes
+				STP_party_leader_5 = yes
 				has_capitulated = no
 				has_completed_focus = STP_pe_security_next_day
 				NOT = {
@@ -22969,7 +22684,7 @@ STP_ch_chapters = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						STP_pe_current = yes
+						STP_party_leader_5 = yes
 						has_capitulated = no
 						has_completed_focus = STP_pe_security_next_day
 						NOT = {
@@ -23018,7 +22733,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_pe_current = yes
+			STP_party_leader_6 = yes
 			has_completed_focus = STP_pe_regent_next_day
 		}
 		available = {
@@ -23028,7 +22743,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_pe_programme_cost
 		custom_cost_trigger = {
 			hidden_trigger = {
-				STP_pe_current = yes
+				STP_party_leader_6 = yes
 				has_capitulated = no
 				has_completed_focus = STP_pe_regent_next_day
 				NOT = {
@@ -23047,7 +22762,7 @@ STP_ch_chapters = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						STP_pe_current = yes
+						STP_party_leader_6 = yes
 						has_capitulated = no
 						has_completed_focus = STP_pe_regent_next_day
 						NOT = {
@@ -23846,48 +23561,6 @@ STP_pw_programme = {
 		}
 		ai_will_do = { base = 5 }
 	}
-	STP_pw_prog_house_reception = {
-		icon = generic_political_discourse
-		allowed = { tag = STP }
-		visible = {
-			STP_pw_can_reconstruct = yes
-			has_completed_focus = STP_pw_party_high_houses
-			STP_party_leader_1 = yes
-		}
-		available = { STP_pw_can_reconstruct = yes }
-		cost = 0
-		custom_cost_text = STP_pm_cost_1200
-		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
-		fire_only_once = no
-		days_re_enable = 60
-		complete_effect = {
-			add_political_power = 75
-			hidden_effect = { STP_cw_spend_1200 = yes }
-		}
-		ai_will_do = { base = 5 }
-	}
-	STP_pw_prog_peoples_festival = {
-		icon = generic_political_discourse
-		allowed = { tag = STP }
-		visible = {
-			STP_pw_can_reconstruct = yes
-			has_completed_focus = STP_pw_party_unbound_revolution
-			STP_party_leader_2 = yes
-			has_stability < 0.9
-		}
-		available = { STP_pw_can_reconstruct = yes }
-		cost = 0
-		custom_cost_text = STP_pm_cost_600
-		custom_cost_trigger = { STP_cw_can_spend_600 = yes }
-		fire_only_once = no
-		days_re_enable = 90
-		complete_effect = {
-			add_stability = 0.03
-			add_war_support = 0.03
-			hidden_effect = { STP_cw_spend_600 = yes }
-		}
-		ai_will_do = { base = 5 }
-	}
 	STP_pw_prog_grand_manoeuvres = {
 		icon = generic_political_discourse
 		allowed = { tag = STP }
@@ -23906,6 +23579,7 @@ STP_pw_programme = {
 		}
 		ai_will_do = { base = 5 }
 	}
+
 	STP_pw_prog_export_quota = {
 		icon = generic_political_discourse
 		allowed = { tag = STP }
@@ -23929,24 +23603,7 @@ STP_pw_programme = {
 		}
 		ai_will_do = { base = 5 }
 	}
-	STP_pw_prog_targeted_purge = {
-		icon = generic_political_discourse
-		allowed = { tag = STP }
-		visible = {
-			STP_pw_can_reconstruct = yes
-			has_completed_focus = STP_ch_security_directorate
-			STP_party_leader_5 = yes
-			has_stability < 0.9
-		}
-		available = { STP_pw_can_reconstruct = yes }
-		cost = 40
-		fire_only_once = no
-		days_re_enable = 90
-		complete_effect = {
-			add_stability = 0.04
-		}
-		ai_will_do = { base = 5 }
-	}
+
 	STP_pw_prog_northern_credit = {
 		icon = ADISCORD_treasury
 		allowed = { tag = STP }
@@ -23970,34 +23627,7 @@ STP_pw_programme = {
 		}
 		ai_will_do = { base = 5 }
 	}
-	STP_pw_prog_district_grants = {
-		icon = generic_political_pressure
-		allowed = { tag = STP }
-		visible = {
-			STP_pw_can_reconstruct = yes
-			has_completed_focus = STP_party_local_cadres
-		}
-		available = { STP_pw_can_reconstruct = yes }
-		cost = 0
-		custom_cost_text = STP_pw_price_540
-		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
-		fire_only_once = no
-		days_re_enable = 60
-		complete_effect = {
-			if = {
-				limit = { STP_pw_can_reconstruct = yes check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
-				custom_effect_tooltip = STP_pw_prog_district_grants_tt
-				add_stability = 0.02
-				add_political_power = 15
-				hidden_effect = {
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 540 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 540 }
-					ADISCORD_economy_mark_dirty = yes
-				}
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
+
 	STP_pw_prog_trade_credit = {
 		icon = ADISCORD_treasury
 		allowed = { tag = STP }

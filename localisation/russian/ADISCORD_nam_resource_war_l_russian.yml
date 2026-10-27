@@ -404,7 +404,7 @@
  NAM_administration_dynamic: "Канцелярия Светлогорья"
  NAM_administration_dynamic_desc: "Наместническая лестница превратилась в правительство. Каждая реформа меняет одну и ту же канцелярию: её подписи, сметы, промыслы и отношения с округами.\n\n\n\n\n\n £GFX_RUS_chancery_mandate_banner \n\n\n"
  NAM_garrison_dynamic: "Гарнизоны Светлогорья"
- NAM_garrison_dynamic_desc: "Охрана промыслов, колонны перекрёстков и морской конвой складываются в единую военную традицию Светлогорья.\n\n\n\n\n\n £GFX_RUS_black_army_banner \n\n\n"
+ NAM_garrison_dynamic_desc: "Охрана промыслов, колонны перекрёстков и морской конвой складываются в единую военную традицию Светлогорья.\n\n\n\n\n\n £GFX_texticon_RUS_black_army_banner \n\n\n"
  NAM_seal_registry: "Учёт полномочий"
  NAM_seal_registry_desc: "Каждая печать получает номер, каждый наместник - срок отчёта. Лестница, которую строила империя, теперь служит Светлогорью и считает его деньги."
  NAM_namestnik_garrisons: "Гарнизоны наместников"

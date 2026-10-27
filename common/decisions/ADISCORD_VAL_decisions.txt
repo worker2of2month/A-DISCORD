@@ -2572,7 +2572,10 @@ VAL_foreign_sales = {
 		}
 		ai_will_do = {
 			base = 3
-			modifier = { factor = 0 has_war = yes }
+			modifier = {
+				factor = 0
+				VAL_ai_surplus_export_ready = no
+			}
 			modifier = { factor = 2 NOT = { has_equipment = { infantry_equipment < 100000 } } }
 		}
 	}

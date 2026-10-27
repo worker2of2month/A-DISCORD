@@ -86,4 +86,33 @@ sub_units = {
 		carrier_air_wing_size = 10
 		land_air_wing_size = 100
 	}
+
+	ADISCORD_interceptor = {
+		sprite = ADISCORD_fighter
+		priority = 1
+		active = yes
+		type = fighter
+		need = { ADISCORD_interceptor_archetype = 1 }
+		categories = { category_fighter }
+		land_air_wing_size = 100
+	}
+
+	ADISCORD_strike_drone = {
+		sprite = ADISCORD_cas
+		priority = 1
+		active = yes
+		type = cas
+		need = { ADISCORD_strike_drone_archetype = 1 }
+		categories = { category_cas }
+		land_air_wing_size = 100
+	}
+
+	transport_plane = {
+		sprite = heavy_plane
+		priority = 1
+		active = yes
+		type = air_transport
+		need = { transport_plane_equipment = 1 }
+		land_air_wing_size = 100
+	}
 }

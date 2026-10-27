@@ -952,8 +952,26 @@ class NamValidatorTests(unittest.TestCase):
         for event in typed_blocks(source, "news_event"):
             event_id = re.search(r"\bid\s*=\s*(\S+)", event)[1]
             with self.subTest(event=event_id):
+                self.assertEqual(event.count("fire_only_once = no"), 1)
                 changed = source.replace(event, event.replace("fire_only_once = no", "fire_only_once = yes"))
                 self.assert_rejected(event_id, sources={path: changed})
+
+    def test_return_war_news_require_each_terminal_dispatch(self):
+        from tools.validators.validate_adiscord_nam_resource_war import named_block
+
+        path = f"common/scripted_effects/{BASE}_effects.txt"
+        source = read(path)
+        for effect, event_id in (
+            ("NAM_wor_annex_svetlogorye", "ADISCORD_nam_resource_news.8"),
+            ("NAM_war_of_return_resolve_victory", "ADISCORD_nam_resource_news.9"),
+            ("NAM_great_war_resolve_victory", "ADISCORD_nam_resource_news.9"),
+        ):
+            with self.subTest(effect=effect):
+                body = named_block(source, effect)
+                call = f"news_event = {{ id = {event_id} hours = 1 }}"
+                self.assertEqual(body.count(call), 1)
+                changed = source.replace(body, body.replace(call, ""))
+                self.assert_rejected(effect, sources={path: changed})
 
     def test_debug_category_remains_debug_only_and_country_independent(self):
         path = "common/decisions/categories/ADISCORD_scenario_debug_categories.txt"

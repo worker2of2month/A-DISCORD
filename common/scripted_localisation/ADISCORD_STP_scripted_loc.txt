@@ -2869,6 +2869,7 @@ defined_text = {
 	name = STPGetPiHousesSummary
 	text = {
 		trigger = {
+			STP_party_leader_1 = yes
 			has_completed_focus = STP_pw_party_high_houses
 		}
 		localization_key = STP_pi_houses_summary
@@ -2882,6 +2883,7 @@ defined_text = {
 	name = STPGetPiCadresSummary
 	text = {
 		trigger = {
+			STP_party_leader_3 = yes
 			has_completed_focus = STP_ch_service_act
 		}
 		localization_key = STP_pi_cadres_summary
@@ -2895,6 +2897,7 @@ defined_text = {
 	name = STPGetPiNorthSummary
 	text = {
 		trigger = {
+			STP_party_leader_6 = yes
 			has_completed_focus = STP_party_regent_mandate
 		}
 		localization_key = STP_pi_north_summary
@@ -2934,6 +2937,7 @@ defined_text = {
 	name = STPGetPiFestivalSummary
 	text = {
 		trigger = {
+			STP_party_leader_2 = yes
 			has_completed_focus = STP_pw_party_unbound_revolution
 		}
 		localization_key = STP_pi_festival_summary
@@ -2947,6 +2951,7 @@ defined_text = {
 	name = STPGetPiTradeSummary
 	text = {
 		trigger = {
+			STP_party_leader_4 = yes
 			has_completed_focus = STP_ch_production_agreements
 		}
 		localization_key = STP_pi_trade_summary
@@ -2960,6 +2965,7 @@ defined_text = {
 	name = STPGetPiCasesSummary
 	text = {
 		trigger = {
+			STP_party_leader_5 = yes
 			has_completed_focus = STP_ch_security_directorate
 		}
 		localization_key = STP_pi_cases_summary

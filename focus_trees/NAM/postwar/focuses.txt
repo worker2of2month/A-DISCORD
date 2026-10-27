@@ -1698,7 +1698,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_south_oil_tap
-		icon = GFX_focus_generic_sabotage
+		icon = GFX_focus_ADISCORD_sabotage
 		x = 44
 		y = 1
 		cost = 2

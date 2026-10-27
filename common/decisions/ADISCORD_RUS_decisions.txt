@@ -243,6 +243,10 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			modifier = { factor = 0 num_divisions < 2 }
 			modifier = {
 				factor = 0
+				ADISCORD_ai_army_needs_replacements = yes
+			}
+			modifier = {
+				factor = 0
 				RUS_ai_proclamation_pending = yes
 			}
 		}
@@ -281,6 +285,10 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			base = 180
 			modifier = { factor = 0 ADISCORD_vorkerland_rus_can_open_free_front = no }
 			modifier = { factor = 0 num_divisions < 2 }
+			modifier = {
+				factor = 0
+				ADISCORD_ai_army_needs_replacements = yes
+			}
 			modifier = {
 				factor = 0
 				RUS_ai_proclamation_pending = yes
@@ -323,6 +331,10 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			modifier = { factor = 0 num_divisions < 2 }
 			modifier = {
 				factor = 0
+				ADISCORD_ai_army_needs_replacements = yes
+			}
+			modifier = {
+				factor = 0
 				RUS_ai_proclamation_pending = yes
 			}
 		}
@@ -361,6 +373,10 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			base = 160
 			modifier = { factor = 0 ADISCORD_vorkerland_rus_can_open_free_front = no }
 			modifier = { factor = 0 num_divisions < 2 }
+			modifier = {
+				factor = 0
+				ADISCORD_ai_army_needs_replacements = yes
+			}
 			modifier = {
 				factor = 0
 				RUS_ai_proclamation_pending = yes
@@ -403,6 +419,10 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			modifier = { factor = 0 num_divisions < 2 }
 			modifier = {
 				factor = 0
+				ADISCORD_ai_army_needs_replacements = yes
+			}
+			modifier = {
+				factor = 0
 				RUS_ai_proclamation_pending = yes
 			}
 		}
@@ -441,6 +461,10 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			base = 160
 			modifier = { factor = 0 ADISCORD_vorkerland_rus_can_open_free_front = no }
 			modifier = { factor = 0 num_divisions < 2 }
+			modifier = {
+				factor = 0
+				ADISCORD_ai_army_needs_replacements = yes
+			}
 			modifier = {
 				factor = 0
 				RUS_ai_proclamation_pending = yes

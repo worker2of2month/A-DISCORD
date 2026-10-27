@@ -155,20 +155,26 @@ class PartyInheritanceFocusTests(unittest.TestCase):
                     self.assertIn(other, exclusion)
 
     def test_war_branch_keeps_the_two_column_grid_of_the_party_war_tree(self):
+        from tools.tests.test_adiscord_stp_preparation import (
+            focus_exclusion_crossings, focus_positions,
+        )
+
         # Neighbouring focuses in this tree sit two columns apart; one column overlaps.
         civil_war = focus_blocks(CIVIL_WAR)
-        positions = {}
-        for focus_id, body in civil_war.items():
-            if not (focus_id.startswith(("STP_pv_", "STP_ps_", "STP_party_"))):
-                continue
-            x = int(re.search(r"\n\t\tx = (-?\d+)", body).group(1))
-            y = int(re.search(r"\n\t\ty = (-?\d+)", body).group(1))
-            positions[focus_id] = (x, y)
+        focuses = {name: parse_clausewitz(body)[0].value for name, body in civil_war.items()}
+        positions = focus_positions(focuses, {}, "STP")
+        # Anchors may lie outside these branches; compare resolved tree coordinates.
+        peers = {
+            focus_id: positions[focus_id]
+            for focus_id in civil_war
+            if focus_id.startswith(("STP_pv_", "STP_ps_", "STP_party_"))
+        }
         for focus_id in WAR_FOCUSES:
-            x, y = positions[focus_id]
-            for other, (other_x, other_y) in positions.items():
+            x, y = peers[focus_id]
+            for other, (other_x, other_y) in peers.items():
                 if other != focus_id and other_y == y:
                     self.assertGreaterEqual(abs(other_x - x), 2, f"{focus_id} overlaps {other}")
+        self.assertFalse(focus_exclusion_crossings(focuses, peers))
 
     def test_promised_decisions_exist_and_are_localised(self):
         decisions = text(DECISIONS)

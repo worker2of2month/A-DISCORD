@@ -1,6 +1,10 @@
 technologies = {
 	ADISCORD_tech_restored_armored_chassis = {
-		category_all_armor = {
+		ADISCORD_light_tank = {
+			maximum_speed = 0.024
+			reliability = 0.024
+		}
+		ADISCORD_recon_platform = {
 			maximum_speed = 0.024
 			reliability = 0.024
 		}
@@ -8,6 +12,8 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_light_suspension
 			research_cost_coeff = 1
 		}
+		enable_equipments = { ADISCORD_light_combat_platform_2163 }
+		enable_subunits = { ADISCORD_light_tank ADISCORD_recon_platform hq_light_armor }
 		research_cost = 0.55
 		start_year = 2150
 		folder = {
@@ -19,7 +25,7 @@ technologies = {
 			position = { x = 0 y = 0 }
 		}
 		ai_will_do = {
-			factor = 15
+			factor = 20.25
 			modifier = {
 				factor = 1.25
 				has_war = yes
@@ -41,7 +47,11 @@ technologies = {
 	}
 
 	ADISCORD_tech_light_suspension = {
-		category_all_armor = {
+		ADISCORD_light_tank = {
+			maximum_speed = 0.025
+			reliability = 0.025
+		}
+		ADISCORD_recon_platform = {
 			maximum_speed = 0.025
 			reliability = 0.025
 		}
@@ -82,7 +92,11 @@ technologies = {
 	}
 
 	ADISCORD_tech_modular_recon_chassis = {
-		category_all_armor = {
+		ADISCORD_light_tank = {
+			maximum_speed = 0.025
+			reliability = 0.025
+		}
+		ADISCORD_recon_platform = {
 			maximum_speed = 0.025
 			reliability = 0.025
 		}
@@ -127,7 +141,11 @@ technologies = {
 	}
 
 	ADISCORD_tech_sealed_electric_scout_drives = {
-		category_all_armor = {
+		ADISCORD_light_tank = {
+			maximum_speed = 0.026
+			reliability = 0.026
+		}
+		ADISCORD_recon_platform = {
 			maximum_speed = 0.026
 			reliability = 0.026
 		}
@@ -168,7 +186,11 @@ technologies = {
 	}
 
 	ADISCORD_tech_drone_recon_swarms = {
-		category_all_armor = {
+		ADISCORD_light_tank = {
+			maximum_speed = 0.027
+			reliability = 0.027
+		}
+		ADISCORD_recon_platform = {
 			maximum_speed = 0.027
 			reliability = 0.027
 		}
@@ -176,9 +198,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_multispectral_recon_suites
 			research_cost_coeff = 1
 		}
-		enable_equipments = { ADISCORD_light_combat_platform_2163 }
-		enable_subunits = { ADISCORD_recon_platform hq_light_armor }
-		research_cost = 2.05
+		research_cost = 1.427
 		start_year = 2161
 		folder = {
 			name = armour_folder
@@ -189,7 +209,7 @@ technologies = {
 			position = { x = 2 y = 12 }
 		}
 		ai_will_do = {
-			factor = 16.2
+			factor = 12
 			modifier = {
 				factor = 1.25
 				has_war = yes
@@ -211,7 +231,11 @@ technologies = {
 	}
 
 	ADISCORD_tech_multispectral_recon_suites = {
-		category_all_armor = {
+		ADISCORD_light_tank = {
+			reliability = 0.028
+			defense = 0.049
+		}
+		ADISCORD_recon_platform = {
 			reliability = 0.028
 			defense = 0.049
 		}
@@ -255,7 +279,11 @@ technologies = {
 	}
 
 	ADISCORD_tech_signature_management_skins = {
-		category_all_armor = {
+		ADISCORD_light_tank = {
+			defense = 0.055
+			breakthrough = 0.032
+		}
+		ADISCORD_recon_platform = {
 			defense = 0.055
 			breakthrough = 0.032
 		}
@@ -297,7 +325,11 @@ technologies = {
 	}
 
 	ADISCORD_tech_unmanned_recon_vehicles = {
-		category_all_armor = {
+		ADISCORD_light_tank = {
+			maximum_speed = 0.032
+			breakthrough = 0.056
+		}
+		ADISCORD_recon_platform = {
 			maximum_speed = 0.032
 			breakthrough = 0.056
 		}
@@ -339,7 +371,12 @@ technologies = {
 	}
 
 	ADISCORD_tech_autonomous_recon_screen = {
-		category_all_armor = {
+		ADISCORD_light_tank = {
+			maximum_speed = 0.052
+			reliability = 0.093
+			defense = 0.093
+		}
+		ADISCORD_recon_platform = {
 			maximum_speed = 0.052
 			reliability = 0.093
 			defense = 0.093
@@ -428,7 +465,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_protected_transport_standards = {
-		category_all_armor = {
+		ADISCORD_mechanized_infantry = {
 			maximum_speed = 0.025
 			reliability = 0.025
 		}
@@ -469,7 +506,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_sealed_dismount_compartments = {
-		category_all_armor = {
+		ADISCORD_mechanized_infantry = {
 			maximum_speed = 0.026
 			reliability = 0.026
 		}
@@ -514,7 +551,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_escort_protection_arrays = {
-		category_all_armor = {
+		ADISCORD_mechanized_infantry = {
 			maximum_speed = 0.027
 			reliability = 0.027
 		}
@@ -602,7 +639,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_unmanned_weapon_stations = {
-		category_all_armor = {
+		ADISCORD_mechanized_infantry = {
 			maximum_speed = 0.031
 			reliability = 0.031
 		}
@@ -643,7 +680,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_cooperative_dismount_control = {
-		category_all_armor = {
+		ADISCORD_mechanized_infantry = {
 			maximum_speed = 0.034
 			reliability = 0.034
 		}
@@ -727,7 +764,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_recovered_medium_chassis = {
-		category_all_armor = {
+		ADISCORD_combat_platform = {
 			breakthrough = 0.04
 			hard_attack = 0.024
 		}
@@ -735,6 +772,8 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_remote_weapon_stations
 			research_cost_coeff = 1
 		}
+		enable_equipments = { ADISCORD_combat_platform_2150 }
+		enable_subunits = { ADISCORD_combat_platform hq_medium_armor }
 		research_cost = 0.55
 		start_year = 2150
 		folder = {
@@ -746,7 +785,7 @@ technologies = {
 			position = { x = 0 y = 0 }
 		}
 		ai_will_do = {
-			factor = 15
+			factor = 20.25
 			modifier = {
 				factor = 1.25
 				has_war = yes
@@ -768,7 +807,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_remote_weapon_stations = {
-		category_all_armor = {
+		ADISCORD_combat_platform = {
 			breakthrough = 0.041
 			hard_attack = 0.025
 		}
@@ -813,7 +852,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_composite_armor_arrays = {
-		category_all_armor = {
+		ADISCORD_combat_platform = {
 			breakthrough = 0.043
 			hard_attack = 0.025
 		}
@@ -854,7 +893,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_electric_turret_drives = {
-		category_all_armor = {
+		ADISCORD_combat_platform = {
 			breakthrough = 0.045
 			hard_attack = 0.027
 		}
@@ -895,7 +934,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_semi_autonomous_combat_modules = {
-		category_all_armor = {
+		ADISCORD_combat_platform = {
 			breakthrough = 0.046
 			hard_attack = 0.046
 		}
@@ -912,7 +951,6 @@ technologies = {
 			research_cost_coeff = 1
 		}
 		enable_equipments = { ADISCORD_combat_platform_2170 }
-		enable_subunits = { ADISCORD_combat_platform hq_medium_armor }
 		research_cost = 2.05
 		start_year = 2162
 		folder = {
@@ -946,7 +984,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_hard_kill_protection_arrays = {
-		category_all_armor = {
+		ADISCORD_combat_platform = {
 			soft_attack = 0.049
 			maximum_speed = 0.028
 		}
@@ -987,7 +1025,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_adaptive_fire_control = {
-		category_all_armor = {
+		ADISCORD_combat_platform = {
 			hard_attack = 0.051
 			reliability = 0.03
 		}
@@ -1028,7 +1066,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_multispectral_gunner_sights = {
-		category_all_armor = {
+		ADISCORD_combat_platform = {
 			armor_value = 0.053
 			default_morale = 0.03
 		}
@@ -1069,7 +1107,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_limited_battle_ai = {
-		category_all_armor = {
+		ADISCORD_combat_platform = {
 			hard_attack = 0.059
 			reliability = 0.033
 		}
@@ -1119,7 +1157,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_electromagnetic_main_guns = {
-		category_all_armor = {
+		ADISCORD_combat_platform = {
 			hard_attack = 0.06
 			breakthrough = 0.05
 		}
@@ -1160,7 +1198,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_adaptive_suspension_control = {
-		category_all_armor = {
+		ADISCORD_combat_platform = {
 			maximum_speed = 0.05
 			reliability = 0.05
 		}
@@ -1202,7 +1240,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_distributed_battlegroup = {
-		category_all_armor = {
+		ADISCORD_combat_platform = {
 			hard_attack = 0.09
 			breakthrough = 0.08
 		}
@@ -1340,6 +1378,8 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_heavy_platform_cores
 			research_cost_coeff = 1
 		}
+		enable_equipments = { ADISCORD_heavy_combat_platform_2158 }
+		enable_subunits = { ADISCORD_heavy_platform hq_heavy_armor }
 		research_cost = 0.55
 		start_year = 2158
 		folder = {
@@ -1351,7 +1391,7 @@ technologies = {
 			position = { x = -2 y = 6 }
 		}
 		ai_will_do = {
-			factor = 10
+			factor = 13.5
 			modifier = {
 				factor = 1.25
 				has_war = yes

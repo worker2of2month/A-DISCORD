@@ -168,20 +168,177 @@ class WartimeRewardsTests(unittest.TestCase):
                 facts[(tag, "has_war_with", "RUS")] = True
                 self.assertTrue(matches_conditions(one(self.ideas[active], "cancel"), facts, tag))
 
-    def test_paid_border_operation_rechecks_war_and_exact_payment(self):
+    def test_paid_border_exercises_store_preparation_and_block_duplicate_payment(self):
         decision = self.decisions["STP_pw_party_frontier_exercise"]
+        ready = "STP_pw_party_frontier_prepared"
+        active = "STP_pw_party_frontier_drill"
+        activation = "STP_pw_party_activate_frontier_drill"
+        self.assertEqual(one(self.ideas[ready], "modifier"), [])
+        self.assertFalse(any(node.key == "cancel" for node in self.ideas[ready]))
         for war in (False, True):
-            for cash in (539.99, 540):
+            for existing in (None, ready, active):
+                for cash in (539.99, 540):
+                    facts = {
+                        ("STP", "STP_pw_can_reconstruct", "yes"): True,
+                        ("STP", "has_completed_focus", "STP_pw_party_southern_defence"): True,
+                        ("STP", "has_war_with", "VAL"): war,
+                        ("STP", "variable", "ADISCORD_economy_treasury"): cash,
+                        ("STP", "has_idea", existing): True,
+                    }
+                    with self.subTest(war=war, existing=existing, cash=cash):
+                        effects = [node for _, node in selected_effects(one(decision, "complete_effect"), facts)]
+                        self.assertTrue(matches_conditions(one(decision, "visible"), facts))
+                        self.assertEqual(matches_conditions(one(decision, "available"), facts), existing is None)
+                        expected = int(cash >= 540 and existing is None)
+                        for key in ("subtract_from_variable", "add_ideas", activation):
+                            self.assertEqual(sum(node.key == key for node in effects), expected)
+                        self.assertFalse(any(node.key == "add_timed_idea" for node in effects))
+                        if expected:
+                            self.assertEqual(next(node.value for node in effects if node.key == "add_ideas"), ready)
+                            debit = next(node.value for node in effects if node.key == "subtract_from_variable")
+                            self.assertEqual(one(debit, "value"), "540")
+                            facts[("STP", "has_idea", ready)] = True
+                            grants = [node for _, node in selected_effects(one(self.effects, activation), facts)]
+                            self.assertEqual(sum(node.key == "add_timed_idea" for node in grants), int(war))
+
+    def test_frontier_preparation_activates_once_for_kefreyt_in_either_war_direction(self):
+        ready = "STP_pw_party_frontier_prepared"
+        active = "STP_pw_party_frontier_drill"
+        activation = "STP_pw_party_activate_frontier_drill"
+        effect = one(self.effects, activation)
+        hooks = one(definitions("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions")
+        hook = one(one(hooks, "on_war_relation_added"), "effect")
+        for root, other in (("STP", "VAL"), ("VAL", "STP"), ("STP", "NOD")):
+            def bind_scopes(nodes):
+                bound = []
+                for node in nodes:
+                    key = {"ROOT": root, "FROM": other}.get(node.key, node.key)
+                    value = bind_scopes(node.value) if isinstance(node.value, list) else node.value
+                    bound.append(replace(node, key=key, value=value))
+                return bound
+
+            calls = [(scope, node) for scope, node in selected_effects(bind_scopes(hook), {}, root)
+                     if node.key == activation]
+            self.assertEqual(len(calls), int(other != "NOD"))
+            if calls:
+                self.assertEqual(calls[0][0], "STP")
+        facts = {("STP", "has_idea", ready): True, ("STP", "has_war_with", "NOD"): True}
+        self.assertEqual(list(selected_effects(effect, facts)), [])
+        facts[("STP", "has_war_with", "VAL")] = True
+        grants = [node for _, node in selected_effects(effect, facts)]
+        timed = next(node.value for node in grants if node.key == "add_timed_idea")
+        self.assertEqual(one(timed, "idea"), active)
+        self.assertEqual(one(timed, "days"), "180")
+        self.assertIn(ready, [node.value for node in grants if node.key == "remove_ideas"])
+        self.assertFalse(any(node.key == "subtract_from_variable" for node in grants))
+        facts[("STP", "has_idea", ready)] = False
+        facts[("STP", "has_idea", active)] = True
+        self.assertEqual(list(selected_effects(effect, facts)), [])
+        self.assertFalse(matches_conditions(one(self.ideas[active], "cancel"), facts))
+        facts[("STP", "has_war_with", "VAL")] = False
+        self.assertTrue(matches_conditions(one(self.ideas[active], "cancel"), facts))
+
+    def test_party_mobilization_preparation_keeps_recruitment_and_starts_timer_once(self):
+        cases = (
+            ("STP_pw_party_security_prepared", "STP_pw_party_security_cordon",
+             "STP_pw_party_activate_security_reserve", None),
+            ("STP_pw_party_nod_mobilization_prepared", "STP_pw_party_nod_emergency_mobilization_idea",
+             "STP_pw_party_activate_nod_mobilization", "NOD"),
+        )
+        hooks = one(definitions("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions")
+        hook = one(one(hooks, "on_war_relation_added"), "effect")
+        for ready, active, activation, enemy in cases:
+            effect = one(self.effects, activation)
+            self.assertEqual(
+                {node.key: node.value for node in one(self.ideas[ready], "modifier")},
+                {node.key: node.value for node in one(self.ideas[active], "modifier")},
+            )
+            self.assertGreater(float(one(one(self.ideas[ready], "modifier"), "mobilization_speed")), 0)
+            for other in ("NOD", "VAL"):
+                for root, from_country in (("STP", other), (other, "STP")):
+                    def bind_scopes(nodes):
+                        bound = []
+                        for node in nodes:
+                            key = {"ROOT": root, "FROM": from_country}.get(node.key, node.key)
+                            value = bind_scopes(node.value) if isinstance(node.value, list) else node.value
+                            bound.append(replace(node, key=key, value=value))
+                        return bound
+
+                    calls = [(scope, node) for scope, node in selected_effects(bind_scopes(hook), {}, root)
+                             if node.key == activation]
+                    self.assertEqual(len(calls), int(enemy is None or other == enemy))
+                    if calls:
+                        self.assertEqual(calls[0][0], "STP")
+            for actual_enemy in (None, "VAL", "NOD"):
                 facts = {
-                    ("STP", "STP_pw_can_reconstruct", "yes"): True,
-                    ("STP", "has_completed_focus", "STP_pw_party_southern_defence"): True,
-                    ("STP", "has_war_with", "VAL"): war,
-                    ("STP", "variable", "ADISCORD_economy_treasury"): cash,
+                    ("STP", "has_idea", ready): True,
+                    ("STP", "has_war", "yes"): actual_enemy is not None,
+                    ("STP", "has_war_with", actual_enemy): True,
                 }
-                effects = [node for _, node in selected_effects(one(decision, "complete_effect"), facts)]
-                expected = int(war and cash >= 540)
-                self.assertEqual(sum(node.key == "subtract_from_variable" for node in effects), expected)
-                self.assertEqual(sum(node.key == "add_timed_idea" for node in effects), expected)
+                effects = [node for _, node in selected_effects(effect, facts)]
+                expected = actual_enemy is not None and (enemy is None or actual_enemy == enemy)
+                self.assertEqual(sum(node.key == "add_timed_idea" for node in effects), int(expected))
+                self.assertFalse(any(node.key in ("add_manpower", "add_equipment_to_stockpile", "subtract_from_variable") for node in effects))
+                if expected:
+                    self.assertIn(ready, [node.value for node in effects if node.key == "remove_ideas"])
+                    timed = next(node.value for node in effects if node.key == "add_timed_idea")
+                    self.assertEqual(one(timed, "idea"), active)
+                    self.assertEqual(one(timed, "days"), "180")
+                    facts[("STP", "has_idea", ready)] = False
+                    facts[("STP", "has_idea", active)] = True
+                    self.assertEqual(list(selected_effects(effect, facts)), [])
+            if enemy:
+                cancel = one(self.ideas[ready], "cancel")
+                threat = {("STP", "STP_pw_party_nod_threat_current", "yes"): True}
+                dispatch = {("STP", "has_country_flag", "STP_pw_party_nod_invasion_active"): True}
+                self.assertFalse(matches_conditions(cancel, threat))
+                self.assertFalse(matches_conditions(cancel, dispatch))
+                self.assertTrue(matches_conditions(cancel, {}))
+                for end in (("STP", "is_subject", "yes"), ("STP", "has_capitulated", "yes"), ("NOD", "exists", "no")):
+                    self.assertTrue(matches_conditions(cancel, threat | {end: True}))
+                self.assertTrue(matches_conditions(one(self.ideas[active], "cancel"), {}))
+            else:
+                self.assertFalse(any(node.key == "cancel" for node in self.ideas[ready]))
+
+    def test_party_mobilization_delivers_materials_before_war_without_starting_timer(self):
+        decision = self.decisions["STP_pw_party_nod_emergency_mobilization"]
+        for pp, cash, threat, paid_before in (
+            (50, 900, True, False), (49.99, 900, True, False),
+            (50, 899.99, True, False), (50, 900, False, False), (50, 900, True, True),
+        ):
+            facts = {
+                ("STP", "STP_pw_party_nod_threat_current", "yes"): threat,
+                ("STP", "numeric", "has_political_power"): pp,
+                ("STP", "variable", "ADISCORD_economy_treasury"): cash,
+                ("STP", "has_country_flag", "STP_pw_party_nod_emergency_mobilized"): paid_before,
+            }
+            effects = [node for _, node in selected_effects(one(decision, "complete_effect"), facts)]
+            paid = pp >= 50 and cash >= 900 and threat and not paid_before
+            for key in ("add_political_power", "subtract_from_variable", "add_manpower", "add_ideas", "add_war_support"):
+                self.assertEqual(sum(node.key == key for node in effects), int(paid))
+            self.assertFalse(any(node.key == "add_timed_idea" for node in effects))
+            if paid:
+                self.assertEqual(next(node.value for node in effects if node.key == "add_manpower"), "10000")
+                self.assertEqual(next(node.value for node in effects if node.key == "add_ideas"), "STP_pw_party_nod_mobilization_prepared")
+                self.assertEqual(next(node.value for node in effects if node.key == "add_political_power"), "-50")
+                debit = next(node.value for node in effects if node.key == "subtract_from_variable")
+                self.assertEqual(one(debit, "value"), "900")
+                equipment = {one(node.value, "type"): one(node.value, "amount")
+                             for node in effects if node.key == "add_equipment_to_stockpile"}
+                self.assertEqual(equipment, {"infantry_equipment": "12000", "support_equipment": "100", "artillery_equipment": "60"})
+        reserve = self.decisions["STP_pw_party_security_reserve"]
+        for cash, existing in ((539.99, None), (540, None), (540, "STP_pw_party_security_prepared"), (540, "STP_pw_party_security_cordon")):
+            facts = {
+                ("STP", "STP_pw_can_reconstruct", "yes"): True,
+                ("STP", "has_completed_focus", "STP_pw_party_firm_settlement"): True,
+                ("STP", "variable", "ADISCORD_economy_treasury"): cash,
+                ("STP", "has_idea", existing): True,
+            }
+            effects = [node for _, node in selected_effects(one(reserve, "complete_effect"), facts)]
+            paid = cash >= 540 and existing is None
+            for key in ("add_ideas", "subtract_from_variable", "STP_pw_party_activate_security_reserve"):
+                self.assertEqual(sum(node.key == key for node in effects), int(paid))
+            self.assertFalse(any(node.key == "add_timed_idea" for node in effects))
 
     def test_rus_programmes_require_war_before_payment(self):
         triggers = definitions("common/scripted_triggers/ADISCORD_RUS_scripted_triggers.txt")

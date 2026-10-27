@@ -2732,5 +2732,103 @@ class StartupGuideContractTests(unittest.TestCase):
         self.assertIn('not a current national bonus', bop)
 
 
+class CampaignSetupSkinTests(unittest.TestCase):
+    def test_header_preserves_native_controls_and_responsive_groups(self):
+        from PIL import Image
+
+        gui = (ROOT / 'interface/frontendgamesetupview.gui').read_text(encoding='utf-8')
+        top = gui_node_body(gui, 'top')
+        nodes = {name: parents[-1] for _, name, parents in named_gui_nodes(top) if parents}
+        for number in (1, 2):
+            normal = gui_node_body(top, f'mapmode_button_{number}')
+            selected = gui_node_body(top, f'mapmode_button_{number}_s')
+            self.assertEqual(_gui_position(normal), _gui_position(selected))
+            for suffix, body in (('', normal), ('_s', selected)):
+                self.assertEqual(nodes[f'mapmode_button_{number}{suffix}'], 'scenario_window')
+                self.assertIn(f'frame = {number}', body)
+                self.assertIn(f'shortcut = "F{number}"', body)
+                self.assertIn('centerPosition = yes', body)
+        for name, shortcut in (('interesting_countries_button', 'i'),
+                               ('randomize_country_button', 'r'), ('scenario_button', 'c')):
+            self.assertIn(f'shortcut = "{shortcut}"', gui_node_body(top, name))
+        self.assertIn('GFX_player_flag', gui_node_body(top, 'player_shield'))
+        self.assertEqual(_gui_position(gui_node_body(top, 'observer_button')),
+                         _gui_position(gui_node_body(top, 'observer_button_overlay')))
+        for name, size in (('flag_frame', (92, 58)), ('observer', (64, 64)),
+                           ('observer_overlay', (128, 64)), ('country_details', (82, 57)),
+                           ('mapmode', (100, 50)), ('mapmode_selected', (100, 50))):
+            with Image.open(ROOT / f'gfx/interface/startup/setup_{name}.png') as image:
+                self.assertEqual(image.size, size)
+                if name == 'flag_frame':
+                    self.assertEqual(image.getpixel((5, 3))[3], 0)
+                    self.assertEqual(image.getpixel((86, 54))[3], 0)
+        for width in (1280, 1920, 2560):
+            left_edge, _ = _gui_position(gui_node_body(top, 'observer_button'))
+            center_edge, _ = _gui_position(gui_node_body(top, 'menu_top_date_bg'))
+            right_edge, _ = _gui_position(gui_node_body(top, 'large_flag_frame'))
+            self.assertLess(left_edge + 64 * 0.8, width / 2 + center_edge)
+            self.assertLess(width / 2 + center_edge + 388, width + right_edge)
+        panel = gui_node_body(gui, 'gamesetup_gameplay_settings_window')
+        panel_offset = re.search(r'show_position\s*=\s*\{\s*x\s*=\s*(-?\d+)\s+y\s*=\s*(-?\d+)', panel)
+        bottom = gui_node_body(gui, 'bottom')
+        bottom_offset = re.search(r'show_position\s*=\s*\{\s*x\s*=\s*(-?\d+)\s+y\s*=\s*(-?\d+)', bottom)
+        self.assertLess(int(panel_offset.group(2)), int(bottom_offset.group(2)))
+        self.assertLessEqual(int(panel_offset.group(1)), 0)
+
+    def test_native_controls_keep_their_parent_and_separate_hitboxes(self):
+        gui = (ROOT / 'interface/frontendgamesetupview.gui').read_text(encoding='utf-8')
+        panel = gui_node_body(gui, 'gamesetup_gameplay_settings_window')
+        nodes = {name: (kind, parents) for kind, name, parents in named_gui_nodes(gui)
+                 if parents and parents[-1] == 'gamesetup_gameplay_settings_window'}
+        names = ('very_easy_cb', 'easy_cb', 'normal_cb', 'hard_cb', 'very_hard_cb')
+        previous_bottom = 0
+        for level, name in enumerate(names):
+            self.assertEqual(nodes[name][0], 'checkboxType')
+            body = gui_node_body(panel, name)
+            x, y = _gui_position(body)
+            self.assertGreaterEqual(y, previous_bottom + 4)
+            self.assertLessEqual(x + 566, 598)
+            previous_bottom = y + 34
+            self.assertIn(f'GFX_ADISCORD_setup_level_{level}', body)
+            self.assertIn('buttonText = ""', body)
+            summary = gui_node_body(panel, f'ADISCORD_setup_level_{level}_summary')
+            self.assertIn('alwaystransparent = yes', summary)
+        self.assertLess(previous_bottom, 248)
+        for name in ('ironman_cb', 'historical_cb', 'custom_settings_btn'):
+            self.assertIn(name, nodes)
+        footer = gui_node_body(gui, 'bottom')
+        for name in ('back_button', 'load_button', 'options_button', 'play_button', 'play_button_ready'):
+            self.assertTrue(gui_node_body(footer, name))
+        self.assertIn('shortcut = "RETURN"', gui_node_body(footer, 'play_button'))
+        self.assertIn('shortcut = "ESCAPE"', gui_node_body(footer, 'back_button'))
+
+    def test_setup_skin_is_reproducible_and_has_real_selected_frames(self):
+        from io import BytesIO
+        from PIL import Image, ImageChops
+        from tools.builders.build_adiscord_startup_ui_assets import setup_outputs
+
+        outputs, definitions = setup_outputs()
+        for path, data in outputs.items():
+            self.assertEqual(path.read_bytes(), data, str(path))
+        for level in range(5):
+            path = ROOT / f'gfx/interface/startup/setup_level_{level}.png'
+            with Image.open(BytesIO(outputs[path])) as image:
+                self.assertEqual(image.size, (1132, 34))
+                normal = image.crop((0, 0, 566, 34)).convert('RGB')
+                selected = image.crop((566, 0, 1132, 34)).convert('RGB')
+                self.assertIsNotNone(ImageChops.difference(normal, selected).getbbox())
+        self.assertIn('\t\tnoOfFrames = 3', definitions)
+
+    def test_summary_localisation_is_loadable_in_both_languages(self):
+        for language in ('russian', 'english'):
+            data = (ROOT / f'localisation/{language}/frontend_l_{language}.yml').read_bytes()
+            self.assertTrue(data.startswith(b'\xef\xbb\xbf'))
+            text = data.decode('utf-8-sig')
+            for key in [f'ADISCORD_SETUP_LEVEL_{i}_SUMMARY' for i in range(5)] + ['ADISCORD_SETUP_RULES']:
+                value = localisation_value(text, key)
+                self.assertTrue(value)
+                self.assertNotIn('\n', value)
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -327,7 +327,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_klyuchevsk_strike
-		icon = GFX_focus_generic_sabotage
+		icon = GFX_focus_ADISCORD_sabotage
 		x = 11
 		y = 5
 		cost = 6

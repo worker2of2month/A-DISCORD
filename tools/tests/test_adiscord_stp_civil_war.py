@@ -10,6 +10,7 @@ import unittest
 from tools.tests.test_adiscord_stp_preparation import (
     block as ast_block,
     entries,
+    focus_exclusion_crossings,
     matches_conditions,
     scalar,
     selected_effects,
@@ -2691,7 +2692,7 @@ class CivilWarContracts(unittest.TestCase):
                 self.assertTrue(all(b - a >= 1 for a, b in zip(rows, rows[1:])), tag)
             self.assertLessEqual(
                 max(y for _, y in points) - min(y for _, y in points),
-                6 if tag == "STP" else 5, tag
+                6 if tag in ("STP", "STS") else 5, tag
             )
         for focus in focuses:
             name = scalar(focus, "id")
@@ -8756,6 +8757,8 @@ class PostwarFocusContracts(unittest.TestCase):
                             tag=tag, leader=leader, left=name, right=other
                         ):
                             self.assertGreaterEqual(abs(x - other_x), 2)
+            with self.subTest(tag=tag, leader=leader):
+                self.assertFalse(focus_exclusion_crossings(self.focuses, visible))
 
     def test_arrested_founder_swaps_sotnikov_to_the_sword_directory(self):
         for arrested in (True, False):

@@ -516,11 +516,8 @@ VAL_volunteers_to_STP = {
 VAL_final_campaign_NOD = {
 	allowed = { tag = VAL }
 	enable = {
-		has_country_flag = VAL_campaign_mobilizing
-		NOD = {
-			has_country_flag = VAL_campaign_target
-			exists = yes
-		}
+		is_ai = yes
+		NOD = { VAL_ai_final_campaign_defender = yes }
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = {
@@ -533,11 +530,8 @@ VAL_final_campaign_NOD = {
 VAL_final_campaign_STP = {
 	allowed = { tag = VAL }
 	enable = {
-		has_country_flag = VAL_campaign_mobilizing
-		STP = {
-			has_country_flag = VAL_campaign_target
-			exists = yes
-		}
+		is_ai = yes
+		STP = { VAL_ai_final_campaign_defender = yes }
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = {
@@ -550,16 +544,55 @@ VAL_final_campaign_STP = {
 VAL_final_campaign_STS = {
 	allowed = { tag = VAL }
 	enable = {
-		has_country_flag = VAL_campaign_mobilizing
-		STS = {
-			has_country_flag = VAL_campaign_target
-			exists = yes
-		}
+		is_ai = yes
+		STS = { VAL_ai_final_campaign_defender = yes }
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = {
 		type = prepare_for_war
 		id = STS
+		value = 150
+	}
+}
+
+NOD_final_campaign_prepare_VAL = {
+	allowed = { tag = NOD }
+	enable = {
+		is_ai = yes
+		VAL_ai_final_campaign_defender = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = prepare_for_war
+		id = VAL
+		value = 150
+	}
+}
+
+STP_final_campaign_prepare_VAL = {
+	allowed = { tag = STP }
+	enable = {
+		is_ai = yes
+		VAL_ai_final_campaign_defender = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = prepare_for_war
+		id = VAL
+		value = 150
+	}
+}
+
+STS_final_campaign_prepare_VAL = {
+	allowed = { tag = STS }
+	enable = {
+		is_ai = yes
+		VAL_ai_final_campaign_defender = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = prepare_for_war
+		id = VAL
 		value = 150
 	}
 }
@@ -585,4 +618,28 @@ VAL_preserve_replacement_reserve = {
 	enable = { is_ai = yes has_capitulated = no has_manpower < 15000 }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = ai_wanted_divisions_factor value = -1000 }
+}
+
+# Air defence supports the republics and Stelander campaigns without adding a factory floor.
+ADISCORD_difficulty_val_air_defence = {
+	allowed = { tag = VAL }
+	enable = {
+		ADISCORD_difficulty_ai_advanced = yes
+		ADISCORD_ai_rifle_replacement_emergency = no
+		num_of_military_factories > 7
+		has_tech = ADISCORD_tech_improvised_air_defense
+		OR = {
+			VAL_ai_republics_preparation = yes
+			has_war_with = SRP
+			has_war_with = STS
+			has_war_with = STP
+			has_war_with = RUS
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = anti_air_equipment
+		value = 25
+	}
 }

@@ -222,6 +222,7 @@
         "gfx/interface/startup/page.png",
         "gfx/interface/startup/launcher.png",
         "gfx/interface/startup/close.png",
+        "gfx/interface/startup/setup_*.png",
         "gfx/interface/startup/shl.png",
         "gfx/interface/startup/nam.png"
       ],

@@ -1,4 +1,111 @@
 # --- rus_country_content ---
+RUS_prepare_dirty_campaign_SLA = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		SLA = { RUS_ai_dirty_campaign_target = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = prepare_for_war
+		id = SLA
+		value = 100
+	}
+}
+
+RUS_prepare_dirty_campaign_RZA = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		RZA = { RUS_ai_dirty_campaign_target = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = prepare_for_war
+		id = RZA
+		value = 100
+	}
+}
+
+RUS_prepare_dirty_campaign_MLR = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		MLR = { RUS_ai_dirty_campaign_target = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = prepare_for_war
+		id = MLR
+		value = 100
+	}
+}
+
+RUS_prepare_dirty_campaign_ERT = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		ERT = { RUS_ai_dirty_campaign_target = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = prepare_for_war
+		id = ERT
+		value = 100
+	}
+}
+
+RUS_prepare_dirty_campaign_IRT = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		IRT = { RUS_ai_dirty_campaign_target = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = prepare_for_war
+		id = IRT
+		value = 100
+	}
+}
+
+RUS_prepare_dirty_campaign_SCA = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		SCA = { RUS_ai_dirty_campaign_target = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = prepare_for_war
+		id = SCA
+		value = 100
+	}
+}
+
+RUS_dirty_campaign_prepare_defence = {
+	allowed = {
+		OR = {
+			tag = SLA
+			tag = RZA
+			tag = MLR
+			tag = ERT
+			tag = IRT
+			tag = SCA
+		}
+	}
+	enable = {
+		is_ai = yes
+		RUS_ai_dirty_campaign_target = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = prepare_for_war
+		id = RUS
+		value = 100
+	}
+}
+
 # Preserve the separate Khan-border intervention, which is not part of the
 # claimant decision chain but still needs an executable battle plan.
 ADISCORD_vorkerland_khan_border_offensive = {
@@ -18,6 +125,32 @@ ADISCORD_vorkerland_khan_border_offensive = {
 		execution_type = balanced
 		execute_order = yes
 		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SLA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SLA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
 	}
 	ai_strategy = { type = consider_weak id = SLA value = 100 }
 	ai_strategy = { type = conquer id = SLA value = 150 }
@@ -40,6 +173,32 @@ ADISCORD_vorkerland_rus_dirty_sla_offensive = {
 		execute_order = yes
 		manual_attack = no
 	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SLA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SLA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = consider_weak id = SLA value = 120 }
 	ai_strategy = { type = conquer id = SLA value = 200 }
 }
@@ -60,6 +219,32 @@ ADISCORD_vorkerland_rus_dirty_rza_offensive = {
 		execution_type = balanced
 		execute_order = yes
 		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RZA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RZA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
 	}
 	ai_strategy = { type = consider_weak id = RZA value = 120 }
 	ai_strategy = { type = conquer id = RZA value = 200 }
@@ -82,6 +267,32 @@ ADISCORD_vorkerland_rus_dirty_mlr_offensive = {
 		execute_order = yes
 		manual_attack = no
 	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = MLR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = MLR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = consider_weak id = MLR value = 120 }
 	ai_strategy = { type = conquer id = MLR value = 200 }
 }
@@ -102,6 +313,32 @@ ADISCORD_vorkerland_rus_dirty_ert_offensive = {
 		execution_type = balanced
 		execute_order = yes
 		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ERT
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ERT
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
 	}
 	ai_strategy = { type = consider_weak id = ERT value = 120 }
 	ai_strategy = { type = conquer id = ERT value = 200 }
@@ -124,6 +361,32 @@ ADISCORD_vorkerland_rus_dirty_irt_offensive = {
 		execute_order = yes
 		manual_attack = no
 	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = IRT
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = IRT
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = consider_weak id = IRT value = 120 }
 	ai_strategy = { type = conquer id = IRT value = 200 }
 }
@@ -144,6 +407,32 @@ ADISCORD_vorkerland_rus_dirty_sca_offensive = {
 		execution_type = balanced
 		execute_order = yes
 		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SCA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SCA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
 	}
 	ai_strategy = { type = consider_weak id = SCA value = 120 }
 	ai_strategy = { type = conquer id = SCA value = 200 }
@@ -363,6 +652,32 @@ MON_crisis_offensive_RUS = {
 		priority = 1500
 		ordertype = front
 		execution_type = balanced
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RUS
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RUS
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
 		execute_order = yes
 		manual_attack = yes
 	}
@@ -680,4 +995,55 @@ RUS_crisis_volunteers_BTL = {
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = send_volunteers_desire id = BTL value = 400 }
+}
+
+# Difficulty changes procurement inside the existing campaign, never the crisis clock.
+ADISCORD_difficulty_rus_armored_campaign = {
+	allowed = { tag = RUS }
+	enable = {
+		ADISCORD_difficulty_ai_advanced = yes
+		ADISCORD_economy_ai_can_fund_advanced_forces = yes
+		ADISCORD_ai_rifle_replacement_emergency = no
+		num_of_military_factories > 7
+		has_tech = ADISCORD_tech_semi_autonomous_combat_modules
+		OR = {
+			has_war = yes
+			check_variable = {
+				var = RUS_crisis_phase
+				value = 1
+				compare = equals
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_production_factor
+		id = armor
+		value = 15
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = support
+		value = 10
+	}
+}
+
+ADISCORD_difficulty_rus_coalition_logistics = {
+	enable = {
+		ADISCORD_difficulty_ai_advanced = yes
+		has_country_flag = RUS_crisis_defender
+		has_war_with = RUS
+		has_tech = ADISCORD_tech_restored_truck_fleets
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = motorized_equipment
+		value = 15
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = artillery
+		value = 10
+	}
 }

@@ -349,10 +349,14 @@ class KefreytFocusStagingTests(unittest.TestCase):
             ).group(1)
             for dependency in dependencies:
                 self.assertNotIn(f"${dependency}$", description)
-            guide = re.search(
-                r'(?m)^\s*VAL_startup_guide:\d*\s+"([^\"]+)"', source
+            progression = re.search(
+                r'(?m)^\s*VAL_focus_progression_VAL_Contracts_Outlive_Kings_tt:\d*\s+"([^\"]+)"', source
             ).group(1)
-            self.assertIn("$VAL_Contracts_Outlive_Kings$", guide)
+            self.assertIn("$VAL_frontier_conference$", progression)
+        self.assertIn(
+            "VAL_focus_progression_VAL_Contracts_Outlive_Kings_tt",
+            focus_block(self.focuses, "VAL_Contracts_Outlive_Kings"),
+        )
 
     def test_unmasked_focus_condition_flags_have_localised_names(self) -> None:
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz

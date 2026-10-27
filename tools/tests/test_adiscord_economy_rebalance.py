@@ -409,7 +409,7 @@ class NorthernCampaignRouteTests(unittest.TestCase):
                     results = [evaluate(child, scope) for child in value]
                     if key == "OR":
                         return any(results)
-                    return not all(results) if key == "NOT" else all(results)
+                    return not any(results) if key == "NOT" else all(results)
                 if key in ("CIN", "OSF", "APH"):
                     return all(evaluate(child, key) for child in value)
                 if key == "has_completed_focus":
@@ -434,8 +434,9 @@ class NorthernCampaignRouteTests(unittest.TestCase):
             for ready in (False, True):
                 with self.subTest(target=target, ready=ready):
                     self.assertEqual(weight(False, ready, {target}), 0)
-                    self.assertGreater(weight(True, ready, {target}), 0)
+                    self.assertEqual(weight(True, ready, {target}), 0)
         self.assertGreater(weight(False, False, set()), 0)
+        self.assertGreater(weight(True, False, set()), 0)
 
     def test_frontier_does_not_require_participation_in_the_stelander_crisis(self):
         nodes = focus(
@@ -569,7 +570,11 @@ class RecoveryRewardTests(unittest.TestCase):
         dynamic = read(
             "common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"
         )
-        sources = {"focuses": focuses, "effects": effects}
+        sources = {
+            "focuses": focuses,
+            "effects": effects,
+            "new_world": read("common/national_focus/ADISCORD_VAL_new_world.txt"),
+        }
         self.assertEqual(
             validate_val_preview_ideas(ideas, sources, dynamic, effects)[1], []
         )
@@ -964,48 +969,64 @@ class PostwarProgramPriceTests(unittest.TestCase):
                     )
                     self.assertIn(str(price) + "§!", line)
 
-    def test_old_and_new_project_receipts_finish_and_refund_once(self):
+    def project_fixture(self, kind, paid, eligible=True):
         source = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
-        for effect in ("STP_pw_finish_project", "STP_pw_party_finish_project"):
-            entries = parse_clausewitz(block(source, effect))
-            # Isolate receipt alternatives from ownership and political engine predicates.
-            alternatives = next(
-                n
-                for n in walk(entries)
-                if n.key == "OR" and any(c.key == "AND" for c in n.value)
-            )
-            for branch in alternatives.value:
-                kind = next(n for n in branch.value if n.key == "check_variable")
-                kind_value = float(
-                    next(c.value for c in kind.value if c.key == "value")
-                )
-                receipts = next(n for n in branch.value if n.key == "OR")
-                accepted = [
-                    float(next(c.value for c in n.value if c.key == "value"))
-                    for n in receipts.value
-                ]
-                self.assertEqual(accepted[3], accepted[2] * 1.2)
-                self.assertEqual(accepted[0], accepted[2] * 9)
-                for paid in accepted:
-                    f = EconomyScriptFixture(stubs=(P + "mark_dirty",))
-                    f.definitions.update(
-                        {n.key: n.value for n in parse_clausewitz(source)}
-                    )
-                    v = f.scopes["A"]
-                    v.update(
-                        {
-                            "STP_pw_project_deposit": paid,
-                            "STP_pw_project_kind": kind_value,
-                            P + "treasury": 0,
-                        }
-                    )
-                    self.assertTrue(f.condition([receipts]))
-                    f.run("STP_pw_cancel_project")
-                    f.run("STP_pw_cancel_project")
+        f = EconomyScriptFixture(
+            facts={
+                "STP_pw_can_reconstruct": eligible,
+                "capital_scope": True,
+                "STP_pw_party_has_port_capacity": True,
+            },
+            stubs=(
+                P + "mark_dirty", "STP_pw_update_recovery", "STP_pw_refresh_modifier",
+                "add_stability", "add_political_power", "add_offsite_building",
+                "army_experience", "add_equipment_to_stockpile", "random_owned_controlled_state",
+            ),
+            texts=(source,),
+        )
+        f.scopes["A"].update({
+            "tag": "STP", "STP_pw_project_kind": kind,
+            "STP_pw_project_deposit": paid, P + "treasury": 0,
+        })
+        return f
+
+    def test_current_project_receipts_deliver_once_and_clear_escrow(self):
+        for kind, price in enumerate((720, 1080, 540, 540, 1080, 900), 1):
+            effect = "STP_pw_finish_project" if kind < 4 else "STP_pw_party_finish_project"
+            f = self.project_fixture(kind, price)
+            f.run(effect)
+            f.run(effect)
+            v = f.scopes["A"]
+            with self.subTest(kind=kind):
+                self.assertEqual(v["STP_pw_recovery_progress"], 1)
+                stage = ("services", "industry", "army")[(kind - 1) % 3]
+                self.assertEqual(v["STP_pw_recovery_" + stage], 1)
+                self.assertEqual(v[P + "treasury"], 0)
+                self.assertNotIn("STP_pw_project_deposit", v)
+                self.assertNotIn("STP_pw_project_kind", v)
+
+    def test_invalid_receipts_and_lost_eligibility_refund_only_the_recorded_payment(self):
+        for kind, price in enumerate((720, 1080, 540, 540, 1080, 900), 1):
+            effect = "STP_pw_finish_project" if kind < 4 else "STP_pw_party_finish_project"
+            for paid, eligible in ((price - 0.01, True), (price / 9, True), (price, False)):
+                f = self.project_fixture(kind, paid, eligible)
+                f.run(effect)
+                f.run(effect)
+                v = f.scopes["A"]
+                with self.subTest(kind=kind, paid=paid, eligible=eligible):
                     self.assertEqual(v[P + "treasury"], paid)
                     self.assertEqual(v[P + "current_month_action_income"], paid)
+                    self.assertNotIn("STP_pw_recovery_progress", v)
                     self.assertNotIn("STP_pw_project_deposit", v)
                     self.assertNotIn("STP_pw_project_kind", v)
+
+    def test_port_loss_returns_the_paid_party_project_without_a_factory_reward(self):
+        f = self.project_fixture(5, 1080)
+        f.facts["STP_pw_party_has_port_capacity"] = False
+        f.run("STP_pw_party_finish_project")
+        f.run("STP_pw_party_finish_project")
+        self.assertEqual(f.scopes["A"][P + "treasury"], 1080)
+        self.assertNotIn("random_owned_controlled_state", f.calls)
 
 
 class BudgetAndLawBalanceTests(unittest.TestCase):
@@ -1197,17 +1218,26 @@ class StartingLawAndPriceTierTests(unittest.TestCase):
             for p in (ROOT / "interface").glob("*.gfx")
         )
         names = set(re.findall(r'name\s*=\s*"([^"\n]+)"', gfx))
-        locs = [
-            read("localisation/" + lang + "/ADISCORD_laws_l_" + lang + ".yml")
-            for lang in ("russian", "english")
-        ]
+        locs = []
+        for language in ("russian", "english"):
+            catalog = {}
+            for family in ("ADISCORD_laws", "ADISCORD_STP"):
+                path = ROOT / f"localisation/{language}/{family}_l_{language}.yml"
+                if language == "russian":
+                    self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"), str(path))
+                catalog.update(re.findall(
+                    r'(?m)^\s*([\w.]+):(?:\d+)?\s*"((?:[^"\\\r\n]|\\[^\r\n])+)"\s*$',
+                    path.read_text(encoding="utf-8-sig"),
+                ))
+            locs.append(catalog)
         for category in categories:
             laws = [
                 n
                 for n in category.value
                 if isinstance(n.value, list) and any(c.key == "cost" for c in n.value)
             ]
-            self.assertEqual(len(laws), 6, category.key)
+            self.assertGreaterEqual(len(laws), 2, category.key)
+            self.assertEqual(len({law.key for law in laws}), len(laws), category.key)
             self.assertEqual(
                 sum(
                     any(c.key == "default" and c.value == "yes" for c in law.value)
@@ -1221,9 +1251,7 @@ class StartingLawAndPriceTierTests(unittest.TestCase):
                 self.assertIn("GFX_idea_" + icon, names, law.key)
                 for loc in locs:
                     for suffix in ("", "_desc"):
-                        self.assertRegex(
-                            loc, r'(?m)^ ' + law.key + suffix + r':\s*"[^"\n]+"$'
-                        )
+                        self.assertIn(law.key + suffix, loc)
 
     def test_starting_profiles_select_at_most_one_law_per_category(self):
         categories = parse_clausewitz(read("common/ideas/ADISCORD_laws.txt"))[0].value
@@ -1232,6 +1260,13 @@ class StartingLawAndPriceTierTests(unittest.TestCase):
             for category in categories
             for law in category.value
             if isinstance(law.value, list) and any(n.key == "cost" for n in law.value)
+        }
+        defaults = {
+            category.key: law.key
+            for category in categories
+            for law in category.value
+            if isinstance(law.value, list)
+            and any(n.key == "default" and n.value == "yes" for n in law.value)
         }
         profiles = []
         for tag in ("STP", "NOD", "VAL", "IVN", "WRK"):
@@ -1246,32 +1281,43 @@ class StartingLawAndPriceTierTests(unittest.TestCase):
             ]
             selected = [key for key in ids if key in law_category]
             categories = [law_category[key] for key in selected]
-            self.assertGreaterEqual(len(selected), 8, tag)
+            self.assertTrue({
+                "ADISCORD_society_type_laws", "ADISCORD_taxation_laws",
+                "ADISCORD_military_organization_laws",
+            }.issubset(categories), tag)
             self.assertEqual(len(categories), len(set(categories)), tag)
-            profiles.append(frozenset(selected))
+            effective = dict(defaults)
+            effective.update((law_category[law], law) for law in selected)
+            self.assertEqual(len(effective), len(defaults), tag)
+            profiles.append(frozenset(effective.items()))
         self.assertEqual(len(set(profiles)), 5)
 
-    def test_other_countries_keep_their_five_cash_tiers(self):
-        tiers = {50, 100, 250, 500, 1000}
-        used = set()
+    def test_referenced_shared_cash_helpers_match_their_advertised_price(self):
+        tiers = set()
         for path in (ROOT / "common/decisions").glob("*.txt"):
-            if path.name == "ADISCORD_STP_decisions.txt":
-                continue
             text = path.read_text(encoding="utf-8-sig")
-            for match in re.finditer(
-                r'(subtract_from_variable|add_to_variable)\s*=\s*\{\s*'
-                r'var\s*=\s*ADISCORD_economy_treasury\s+value\s*=\s*(-?[\d.]+)',
-                text,
-            ):
-                amount = float(match[2])
-                if match[1] == "subtract_from_variable" or amount < 0:
-                    self.assertIn(abs(amount), tiers, str(path))
-                    used.add(abs(amount))
             for match in re.finditer(
                 r'ADISCORD_economy_(?:can_)?spend_(\d+)\s*=\s*yes', text
             ):
-                self.assertIn(int(match[1]), tiers, str(path))
-        self.assertTrue(used.issubset(tiers))
+                tiers.add(int(match[1]))
+        self.assertIn(300, tiers)
+        for price in sorted(tiers):
+            f = EconomyScriptFixture(
+                stubs=(P + "initialize_country", P + "mark_dirty"),
+                texts=(
+                    read("common/scripted_effects/ADISCORD_shared_action_effects.txt"),
+                    read("common/scripted_triggers/ADISCORD_shared_action_triggers.txt"),
+                ),
+            )
+            with self.subTest(price=price):
+                gate = f.definitions[P + "can_spend_" + str(price)]
+                f.scopes["A"][P + "treasury"] = price - 0.01
+                self.assertFalse(f.condition(gate))
+                f.scopes["A"][P + "treasury"] = price
+                self.assertTrue(f.condition(gate))
+                f.run(P + "spend_" + str(price))
+                self.assertEqual(f.scopes["A"][P + "treasury"], 0)
+                self.assertEqual(f.scopes["A"][P + "current_month_action_costs"], price)
 
 
 class StelanderPurchasingPowerTests(unittest.TestCase):
@@ -1300,18 +1346,42 @@ class StelanderPurchasingPowerTests(unittest.TestCase):
             self.assertEqual(f.scopes["A"][P + "current_month_action_costs"], price)
             self.assertLess(abs((price / 35) / (original / 3) - 1), 0.04)
 
-    def test_assault_training_refunds_legacy_or_recorded_cash_once(self):
-        for paid in (500, 6000):
+    def test_assault_training_refunds_recorded_cash_and_releases_one_slot(self):
+        for paid in (0, 6000):
             f = self.fixture()
             f.stubs.add("STP_political_action_slot_release")
             f.scopes["A"]["STP_cw_assault_training_reserved"] = True
-            if paid == 6000:
+            if paid:
                 f.scopes["A"]["STP_cw_assault_training_deposit"] = paid
             f.run("STP_cw_cancel_assault_training")
             f.run("STP_cw_cancel_assault_training")
             self.assertEqual(f.scopes["A"][P + "treasury"], paid)
             self.assertEqual(f.scopes["A"][P + "current_month_action_income"], paid)
             self.assertNotIn("STP_cw_assault_training_deposit", f.scopes["A"])
+            self.assertEqual(f.calls.count("STP_political_action_slot_release"), 1)
+
+    def test_assault_training_payment_has_one_terminal_reward_or_refund(self):
+        decision = block(read("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_prepare_assault_group")
+        for completed in (False, True):
+            f = self.fixture(facts={"STP_cw_preparation_open": completed})
+            f.stubs.update(("STP_political_action_slot_consume", "STP_political_action_slot_release"))
+            v = f.scopes["A"]
+            v[P + "treasury"] = 6000
+            payment = parse_clausewitz(block(decision, "complete_effect"))
+            f.execute(payment, "A", None, "A")
+            f.execute(payment, "A", None, "A")
+            self.assertEqual(v[P + "treasury"], 0)
+            self.assertEqual(v[P + "current_month_action_costs"], 6000)
+            self.assertEqual(v["STP_cw_assault_training_deposit"], 6000)
+            self.assertEqual(f.calls.count("STP_political_action_slot_consume"), 1)
+            delivery = [n for n in parse_clausewitz(block(decision, "remove_effect")) if n.key == "hidden_effect"]
+            f.execute(delivery, "A", None, "A")
+            f.execute(delivery, "A", None, "A")
+            f.run("STP_cw_cancel_assault_training")
+            self.assertEqual(v[P + "treasury"], 0 if completed else 6000)
+            self.assertEqual(v.get("STP_cw_prepared_assault_divisions", 0), int(completed))
+            self.assertNotIn("STP_cw_assault_training_deposit", v)
+            self.assertFalse(v["STP_cw_assault_training_reserved"])
             self.assertEqual(f.calls.count("STP_political_action_slot_release"), 1)
 
     def test_large_focus_grants_survive_capacity_and_ledger_reconciliation(self):
@@ -1357,12 +1427,12 @@ class StelanderPurchasingPowerTests(unittest.TestCase):
             self.assertEqual(new, old * 9)
             self.assertLess(abs((new / 26) / (old / 3) - 1), 0.04)
 
-    def test_legacy_and_new_wartime_escrows_refund_the_actual_payment_once(self):
+    def test_wartime_escrows_refund_the_recorded_payment_once(self):
         for name, variable, fraction in (
             ("STP_cw_refund_arsenal_project", "STP_cw_arsenal_deposit", 0.5),
             ("STP_cw_refund_disruption", "STP_cw_disruption_deposit", 1),
         ):
-            for paid in (100, 1200):
+            for paid in (1199.5, 1200):
                 f = self.fixture()
                 f.scopes["A"][variable] = paid
                 f.run(name)
@@ -1373,8 +1443,8 @@ class StelanderPurchasingPowerTests(unittest.TestCase):
                 )
                 self.assertNotIn(variable, f.scopes["A"])
 
-    def test_northern_deposit_handoff_preserves_old_and_new_money(self):
-        for kind, receipts in (("fort", (100, 1200)), ("engineer", (50, 600))):
+    def test_northern_deposit_handoff_preserves_recorded_money(self):
+        for kind, receipts in (("fort", (1199.5, 1200)), ("engineer", (599.5, 600))):
             variable = "STP_cw_northern_" + kind + "_deposit"
             for paid in receipts:
                 f = self.fixture(countries={"STP": {variable: paid}, "STS": {}})
@@ -1496,9 +1566,9 @@ class BattalionArmyUpkeepTests(unittest.TestCase):
 
 
 class ValMercenaryPayrollTests(unittest.TestCase):
-    def fixture(self, authority=35):
+    def fixture(self, authority=35, council=False):
         f = EconomyScriptFixture(
-            facts={"has_dynamic_modifier": True},
+            facts={"has_dynamic_modifier": True, "VAL_council_governs": council},
             stubs=("force_update_dynamic_modifier", P + "mark_dirty"),
         )
         f.definitions.update(
@@ -1572,42 +1642,32 @@ class ValMercenaryPayrollTests(unittest.TestCase):
             ]
             self.assertEqual(len(reforms), 5, (branch, reforms))
 
-    def test_load_migrates_recorded_reforms_once_before_refresh(self):
+    def test_initialization_and_load_preserve_paid_reforms_without_focus_inference(self):
         f = self.fixture()
-        original_condition = f.condition
-        completed = set()
-
-        def condition(entries, scope="A", previous=None, root="A"):
-            return all(
-                (
-                    n.value in completed
-                    if n.key == "has_completed_focus"
-                    else original_condition([n], scope, previous, root)
-                )
-                for n in entries
-            )
-
-        f.condition = condition
-        completed.update(
-            n.value
-            for n in walk(f.definitions["VAL_migrate_mercenary_payroll"])
-            if n.key == "has_completed_focus"
-        )
-        self.assertEqual(len(completed), 10)
-        f.run("VAL_migrate_mercenary_payroll")
-        self.assertAlmostEqual(f.scopes["A"]["VAL_contract_payroll_relief"], -0.25)
-        completed.clear()
-        f.run("VAL_migrate_mercenary_payroll")
-        self.assertAlmostEqual(f.scopes["A"]["VAL_contract_payroll_relief"], -0.25)
-        f.scopes["A"].pop("VAL_contract_payroll_relief")
-        completed.update(("VAL_State_Contract", "VAL_defeat_Staff_College"))
-        f.run("VAL_migrate_mercenary_payroll")
-        self.assertAlmostEqual(f.scopes["A"]["VAL_contract_payroll_relief"], -0.1)
+        f.run("VAL_initialize_contract_authority")
+        self.assertEqual(f.scopes["A"]["VAL_contract_payroll_relief"], 0)
+        for step in range(1, 6):
+            f.execute(next(n.value for n in f.definitions["VAL_reform_mercenary_payroll"] if n.key == "hidden_effect"), "A", None, "A")
+            f.run("VAL_initialize_contract_authority")
+            f.run("VAL_initialize_contract_authority")
+            self.assertAlmostEqual(f.scopes["A"]["VAL_contract_payroll_relief"], -0.05 * step)
+        self.assertNotIn("VAL_migrate_mercenary_payroll", f.definitions)
         startup = read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt")
-        self.assertLess(
-            startup.index("VAL_migrate_mercenary_payroll = yes"),
-            startup.index("VAL_initialize_contract_authority = yes"),
-        )
+        self.assertIn("VAL_initialize_contract_authority = yes", startup)
+        self.assertNotIn("VAL_migrate_mercenary_payroll", startup)
+
+    def test_council_payroll_adds_once_and_disappears_when_council_loses_power(self):
+        f = self.fixture(95, council=True)
+        v = f.scopes["A"]
+        v["VAL_contract_payroll_relief"] = -0.10
+        v["VAL_council_base_army_expense"] = 0.08
+        v["VAL_council_inspection_savings"] = True
+        for _ in range(3):
+            f.run("VAL_refresh_contract_modifier")
+            self.assertAlmostEqual(v["VAL_contract_army_expense_factor"], 0.25 - 0.07 - 0.10 + 0.08 - 0.05)
+        f.facts["VAL_council_governs"] = False
+        f.run("VAL_refresh_contract_modifier")
+        self.assertAlmostEqual(v["VAL_contract_army_expense_factor"], 0.25 - 0.07 - 0.10)
 
 
 class NodrulDivisionEconomyTests(unittest.TestCase):

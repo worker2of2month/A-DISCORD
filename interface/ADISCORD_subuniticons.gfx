@@ -189,6 +189,18 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_unit_ADISCORD_light_tank_icon_medium"
+		texturefile = "gfx/interface/counters/divisions_large/unit_light_tank_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_light_tank_icon_medium_white"
+		texturefile = "gfx/interface/counters/divisions_small/onmap_unit_light_tank_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
 		name = "GFX_unit_ADISCORD_combat_platform_icon_medium"
 		texturefile = "gfx/interface/counters/divisions_large/unit_medium_tank_icon.dds"
 		noOfFrames = 2
@@ -315,6 +327,54 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_unit_ADISCORD_regimental_drone_observers_icon_small"
 		texturefile = "gfx/texticons/unit_recon_icon_small.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_line_anti_tank_icon_medium"
+		texturefile = "gfx/interface/counters/divisions_large/unit_at_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_line_anti_tank_icon_medium_white"
+		texturefile = "gfx/interface/counters/divisions_small/onmap_unit_at_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_line_anti_tank_icon_small"
+		texturefile = "gfx/texticons/unit_anti_tank_icon_small.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_line_anti_air_icon_medium"
+		texturefile = "gfx/interface/counters/divisions_large/unit_anti_air_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_line_anti_air_icon_medium_white"
+		texturefile = "gfx/interface/counters/divisions_small/onmap_unit_anti_air_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_line_anti_air_icon_small"
+		texturefile = "gfx/texticons/unit_anti_air_icon_small.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_interceptor_icon_small"
+		texturefile = "gfx/texticons/unit_air_fighter_icon_small.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_strike_drone_icon_small"
+		texturefile = "gfx/texticons/unit_air_cas_icon_small.dds"
 		noOfFrames = 2
 	}
 }

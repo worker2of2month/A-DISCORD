@@ -48,6 +48,44 @@ ADISCORD_garrison_templates = {
 						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 						NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 						has_war = yes
+						OR = {
+							tag = WKR
+							tag = VAD
+							tag = TVA
+							tag = TGD
+							tag = WTD
+							tag = EYR
+							tag = EGC
+							tag = RIV
+							tag = REV
+							tag = YOR
+							tag = NDN
+							tag = SWB
+							tag = VHV
+							tag = OSV
+							tag = ZAO
+							tag = WPA
+							tag = WPS
+							tag = PWR
+							tag = PSD
+							tag = VLA
+							tag = EBA
+							tag = ROM
+							tag = DVA
+							tag = SOL
+							tag = SRA
+							tag = TRU
+							tag = ZTA
+							tag = IBA
+							tag = IBL
+							tag = CSL
+							tag = SLA
+							tag = RZA
+							tag = MLR
+							tag = ERT
+							tag = IRT
+							tag = SCA
+						}
 					}
 					AND = {
 						has_global_flag = STP_cw_started
@@ -244,9 +282,19 @@ ADISCORD_assault_templates = {
 		base = 0
 		modifier = {
 			add = 9
-			has_tech = ADISCORD_tech_assault_infantry_formations
-			num_of_military_factories > 9
 			ADISCORD_economy_ai_can_fund_advanced_forces = yes
+			OR = {
+				AND = {
+					has_tech = ADISCORD_tech_assault_infantry_formations
+					num_of_military_factories > 9
+				}
+				AND = {
+					has_tech = ADISCORD_tech_armored_carrier_program
+					has_tech = ADISCORD_tech_standardized_field_tool_chests
+					has_tech = ADISCORD_tech_frequency_hopping_field_sets
+					num_of_military_factories > 6
+				}
+			}
 		}
 	}
 
@@ -562,18 +610,16 @@ ADISCORD_marine_templates = {
 	upgrade_prio = { base = 3 }
 	ADISCORD_marine_brigade = {
 		custom_icon = 34
+		# Recognition survives shortages; recruitment affordability is separate.
 		enable = {
 			ADISCORD_has_marine_training = yes
-			ADISCORD_has_operational_naval_base = yes
-			NOT = { has_manpower < 6000 }
-			NOT = { has_equipment = { infantry_equipment < 5400 } }
-			NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 288 } }
 		}
 		reinforce_prio = 2
 		upgrade_prio = { base = 3 }
 		can_upgrade_in_field = { always = no }
 		target_template = {
 			regiments = { ADISCORD_marine_infantry = 6 }
+			support = { engineer = 1 }
 		}
 	}
 }

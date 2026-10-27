@@ -2265,12 +2265,12 @@ class PostwarRecoveryTransactions(unittest.TestCase):
         decisions = relative_entries("common/decisions/ADISCORD_STP_decisions.txt")
         self.decisions = block(decisions, "STP_military_operations")
         self.projects = (
-            ("STP_pw_restore_services", "services", 80),
-            ("STP_pw_restart_workshops", "industry", 120),
-            ("STP_pw_integrate_veterans", "army", 60),
+            ("STP_pw_restore_services", "services", 720),
+            ("STP_pw_restart_workshops", "industry", 1080),
+            ("STP_pw_integrate_veterans", "army", 540),
         )
 
-    def facts(self, treasury=300):
+    def facts(self, treasury=3000):
         return {
             ("STS", "STP_pw_can_reconstruct", "yes"): True,
             ("STS", "capital_secure", "yes"): True,
@@ -2289,7 +2289,7 @@ class PostwarRecoveryTransactions(unittest.TestCase):
             facts, rewards = self.facts(), []
             execute_recovery(block(decision, "complete_effect"), facts, rewards)
             self.assertEqual(
-                facts[("STS", "variable", "ADISCORD_economy_treasury")], 300 - price
+                facts[("STS", "variable", "ADISCORD_economy_treasury")], 3000 - price
             )
             for other, _, _ in self.projects:
                 self.assertFalse(
@@ -2303,7 +2303,7 @@ class PostwarRecoveryTransactions(unittest.TestCase):
                     rewards,
                 )
             self.assertEqual(
-                facts[("STS", "variable", "ADISCORD_economy_treasury")], 300 - price
+                facts[("STS", "variable", "ADISCORD_economy_treasury")], 3000 - price
             )
             self.assertEqual(
                 facts[("STS", "variable", "STP_pw_project_deposit")], price
@@ -2321,7 +2321,7 @@ class PostwarRecoveryTransactions(unittest.TestCase):
             execute_recovery(block(decision, "remove_effect"), facts, rewards)
             execute_recovery(block(decision, "cancel_effect"), facts, rewards)
             self.assertEqual(
-                facts[("STS", "variable", "ADISCORD_economy_treasury")], 300
+                facts[("STS", "variable", "ADISCORD_economy_treasury")], 3000
             )
             self.assertEqual(
                 facts[
@@ -2341,7 +2341,7 @@ class PostwarRecoveryTransactions(unittest.TestCase):
             )
 
     def test_completion_replay_and_wrong_project_callback(self):
-        facts, rewards = self.facts(1000), []
+        facts, rewards = self.facts(3000), []
         for index, (name, field, _) in enumerate(self.projects, 1):
             decision = block(self.decisions, name)
             execute_recovery(block(decision, "complete_effect"), facts, rewards)
@@ -2359,7 +2359,7 @@ class PostwarRecoveryTransactions(unittest.TestCase):
             self.assertEqual(
                 facts[("STS", "variable", "STP_pw_recovery_progress")], index
             )
-        self.assertEqual(facts[("STS", "variable", "ADISCORD_economy_treasury")], 740)
+        self.assertEqual(facts[("STS", "variable", "ADISCORD_economy_treasury")], 660)
 
     def test_illegal_targets_cannot_start_native_campaign_wars(self):
         for tag in ("VAL", "NOD"):
@@ -2421,10 +2421,15 @@ class PostwarRecoveryTransactions(unittest.TestCase):
                 facts[("VAL", "has_capitulated", "no")] = False
             else:
                 facts[("STS", "variable", "STP_pc_course")] = 1
-            before = dict(facts)
+            facts[("VAL", "variable", "ADISCORD_economy_treasury")] = 2000
             execute_package_effects(accept, facts, dispatched, "VAL")
-            self.assertEqual(facts, before, invalid)
+            self.assertEqual(facts[("VAL", "variable", "ADISCORD_economy_treasury")], 2000, invalid)
+            self.assertNotIn(("VAL", "has_idea", "VAL_liberated_settlement"), facts)
+            # A stale acceptance closes its own receipt. Its later close callback
+            # must not consume the next country's offer.
+            settled = dict(facts), list(dispatched)
             execute_package_effects(close, facts, dispatched, "VAL")
+            self.assertEqual((facts, dispatched), settled, invalid)
             self.assertNotIn(("VAL", "has_idea", "VAL_liberated_settlement"), facts)
             self.assertEqual(
                 dispatched,
@@ -2434,7 +2439,7 @@ class PostwarRecoveryTransactions(unittest.TestCase):
             self.assertLessEqual(
                 len(dispatched),
                 1,
-                "the periodic recovery must not repeat an open offer",
+                "a repeated dispatcher call must not repeat an open offer",
             )
 
     def test_withdrawn_kefreyt_terms_only_allow_closing(self):
@@ -2761,8 +2766,8 @@ class KefreytEmergencyContracts(unittest.TestCase):
                         )
 
     def test_prewar_relief_needs_live_preparation_and_closes_when_terms_are_accepted(self):
-        self.assertTrue(any(item.key == "STP_kc_defence" for item in self.ideas))
-        cancel = expand(block(block(self.ideas, "STP_kc_defence"), "cancel"))
+        self.assertTrue(any(item.key == "STP_kc_defence_prepared" for item in self.ideas))
+        cancel = expand(block(block(self.ideas, "STP_kc_defence_prepared"), "cancel"))
         facts = self.facts("STS")
         facts[("STS", "has_country_flag", "STP_cw_postwar")] = True
         facts[("STS", "has_country_flag", "STP_kc_preparing")] = True
@@ -2770,6 +2775,69 @@ class KefreytEmergencyContracts(unittest.TestCase):
         self.assertFalse(matches_conditions(cancel, facts, "STS"))
         facts[("STS", "has_country_flag", "STP_pc_val_terms_accepted")] = True
         self.assertTrue(matches_conditions(cancel, facts, "STS"))
+
+    def test_prepared_focus_bonuses_wait_for_kefreyt_and_activate_once(self):
+        activation = block(entries(EFFECTS), "STP_kc_activate_prepared_support")
+        for tag in ("STP", "STS"):
+            for kind, focus_id in (("defence", "STP_kc_emergency_staff"), ("production", "STP_kc_war_production")):
+                ready = "STP_kc_" + kind + "_prepared"
+                active = "STP_kc_" + kind
+                reward = block(self.focuses[focus_id], "completion_reward")
+                before = list(selected_effects(reward, {}, tag))
+                self.assertFalse(any(entry.key == "add_timed_idea" for _, entry in before))
+                self.assertIn(ready, [entry.value for _, entry in before if entry.key == "add_ideas"])
+                self.assertIn("STP_kc_activate_prepared_support", [entry.key for _, entry in before])
+                if kind == "defence":
+                    self.assertIn("STP_kc_preparing", [entry.value for _, entry in before if entry.key == "set_country_flag"])
+                    self.assertEqual(block(block(self.ideas, ready), "modifier"), [])
+                else:
+                    self.assertEqual(
+                        {entry.key: entry.value for entry in block(block(self.ideas, ready), "modifier")},
+                        {entry.key: entry.value for entry in block(block(self.ideas, active), "modifier")},
+                    )
+                    for hook in ("on_add", "on_remove"):
+                        self.assertEqual(scalar(block(block(self.ideas, ready), hook), "ADISCORD_economy_mark_dirty"), "yes")
+                facts = {(tag, "has_idea", ready): True, (tag, "has_war_with", "NOD"): True}
+                self.assertEqual(list(selected_effects(activation, facts, tag)), [])
+                facts[(tag, "has_war_with", "VAL")] = True
+                effects = [entry for _, entry in selected_effects(activation, facts, tag)]
+                self.assertEqual([entry.value for entry in effects if entry.key == "remove_ideas"], [ready])
+                timed = next(entry.value for entry in effects if entry.key == "add_timed_idea")
+                self.assertEqual((scalar(timed, "idea"), scalar(timed, "days")), (active, "180"))
+                facts[(tag, "has_idea", ready)] = False
+                facts[(tag, "has_idea", active)] = True
+                self.assertEqual(list(selected_effects(activation, facts, tag)), [])
+        hooks = block(entries(ON_ACTIONS), "on_actions")
+        hook = block(block(hooks, "on_war_relation_added"), "effect")
+        for root, other, expected in (("STP", "VAL", "STP"), ("STS", "VAL", "STS"),
+                                      ("VAL", "STP", "STP"), ("VAL", "STS", "STS"),
+                                      ("STP", "NOD", None)):
+            actions = list(selected_effects(expand(hook, {"ROOT": root, "FROM": other}), {}, root))
+            calls = [scope for scope, entry in actions if entry.key == "STP_kc_activate_prepared_support"]
+            self.assertEqual(calls, [expected] if expected else [])
+            if expected:
+                keys = [entry.key for scope, entry in actions if scope == expected]
+                self.assertLess(keys.index("STP_kc_activate_prepared_support"), keys.index("clr_country_flag"))
+
+    def test_party_civil_war_focus_plans_are_awarded_only_at_hostilities(self):
+        tree = block(relative_entries("focus_trees/STP/preparation/focuses.txt"), "focus_tree")
+        focuses = {scalar(entry.value, "id"): entry.value for entry in tree if entry.key == "focus"}
+        start = block(entries(EFFECTS), "STP_cw_begin_hostilities")
+        for focus_id, flag, idea in (
+            ("STP_cw_protect_congress", "STP_cw_party_defence_ready", "STP_cw_defensive_preparation"),
+            ("STP_cw_capital_oath", "STP_party_mobile_reserve_ready", "STP_cw_offensive_preparation"),
+        ):
+            reward = block(focuses[focus_id], "completion_reward")
+            prewar = [entry for _, entry in selected_effects(reward, {})]
+            self.assertFalse(any(entry.key == "add_timed_idea" for entry in prewar))
+            self.assertIn(flag, [entry.value for entry in prewar if entry.key == "set_country_flag"])
+            branch = next(entry.value for entry in walk(start) if entry.key == "if"
+                          and any(node.key == "has_country_flag" and node.value == flag
+                                  for node in walk(block(entry.value, "limit"))))
+            body = [entry for entry in branch if entry.key != "limit"]
+            effects = [entry for scope, entry in selected_effects(body, {}) if scope == "STP"]
+            timed = next(entry.value for entry in effects if entry.key == "add_timed_idea")
+            self.assertEqual((scalar(timed, "idea"), scalar(timed, "days")), (idea, "35"))
 
     def test_navy_focuses_supply_six_compatible_ships_and_invasion_capacity(self):
         rewards = []
@@ -2826,7 +2894,7 @@ class KefreytEmergencyContracts(unittest.TestCase):
                 self.assertEqual(refreshed, [recipient] if recipient else [])
 
     def test_defeat_and_target_removal_cancel_unused_prewar_bonuses(self):
-        cancel = expand(block(block(self.ideas, "STP_kc_defence"), "cancel"))
+        cancel = expand(block(block(self.ideas, "STP_kc_defence_prepared"), "cancel"))
         for invalid in (("STS", "has_capitulated", "no"), ("VAL", "exists", "yes")):
             facts = self.facts("STS")
             facts[("STS", "has_country_flag", "STP_cw_postwar")] = True
@@ -2836,7 +2904,7 @@ class KefreytEmergencyContracts(unittest.TestCase):
             with self.subTest(invalid=invalid):
                 self.assertTrue(matches_conditions(cancel, facts, "STS"))
         removed = list(selected_effects(
-            block(block(self.ideas, "STP_kc_defence"), "on_remove"), {}, "STS"
+            block(block(self.ideas, "STP_kc_defence_prepared"), "on_remove"), {}, "STS"
         ))
         self.assertIn(
             ("STS", "clr_country_flag", "STP_kc_preparing"),

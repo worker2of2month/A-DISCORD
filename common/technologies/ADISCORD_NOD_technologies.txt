@@ -1,6 +1,8 @@
 technologies = {
 	ADISCORD_tech_nodrul_marine_corps = {
 		enable_subunits = { ADISCORD_marine_infantry }
+		# Existing mountain troops retain their allowance when the school opens.
+		special_forces_cap_flat = 18
 		research_cost = 999
 		start_year = 2300
 		ai_will_do = { factor = 0 }

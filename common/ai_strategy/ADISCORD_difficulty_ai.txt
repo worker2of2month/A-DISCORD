@@ -1,0 +1,207 @@
+# Native additive priorities. Difficulty 2 retains the campaign's baseline policies.
+# Country-specific front orders retain precedence over the tactical fallback.
+ADISCORD_difficulty_respite_recruitment = {
+	enable = {
+		difficulty < 1
+		ADISCORD_difficulty_ai_military_context = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = ai_wanted_divisions_factor
+		value = -20
+	}
+}
+
+ADISCORD_difficulty_spark_recruitment = {
+	enable = {
+		difficulty > 0
+		difficulty < 2
+		ADISCORD_difficulty_ai_military_context = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = ai_wanted_divisions_factor
+		value = -10
+	}
+}
+
+ADISCORD_difficulty_rift_recruitment = {
+	enable = {
+		difficulty > 2
+		difficulty < 4
+		ADISCORD_difficulty_ai_military_context = yes
+		ADISCORD_difficulty_ai_can_expand = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = ai_wanted_divisions_factor
+		value = 15
+	}
+}
+
+ADISCORD_difficulty_abyss_recruitment = {
+	enable = {
+		difficulty > 3
+		ADISCORD_difficulty_ai_military_context = yes
+		ADISCORD_difficulty_ai_can_expand = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = ai_wanted_divisions_factor
+		value = 30
+	}
+}
+
+# Reserve production can continue while additional recruitment is suspended.
+# Surplus weights apply after ordinary needs; no fixed factory minimum is added.
+ADISCORD_difficulty_rift_preparation = {
+	enable = {
+		difficulty > 2
+		difficulty < 4
+		ADISCORD_difficulty_ai_military_context = yes
+		ADISCORD_economy_ai_is_healthy = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_stockpile_surplus_ratio
+		value = 10
+	}
+	ai_strategy = {
+		type = equipment_production_surplus_management
+		id = infantry_equipment
+		value = 3
+	}
+	ai_strategy = {
+		type = equipment_production_surplus_management
+		id = support_equipment
+		value = 2
+	}
+	ai_strategy = {
+		type = added_military_to_civilian_factory_ratio
+		value = 10
+	}
+}
+
+ADISCORD_difficulty_abyss_preparation = {
+	enable = {
+		difficulty > 3
+		ADISCORD_difficulty_ai_military_context = yes
+		ADISCORD_economy_ai_is_healthy = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_stockpile_surplus_ratio
+		value = 20
+	}
+	ai_strategy = {
+		type = equipment_production_surplus_management
+		id = infantry_equipment
+		value = 6
+	}
+	ai_strategy = {
+		type = equipment_production_surplus_management
+		id = support_equipment
+		value = 4
+	}
+	ai_strategy = {
+		type = added_military_to_civilian_factory_ratio
+		value = 20
+	}
+}
+
+# Country strength is a theatre-level signal, not local combat odds. Keep the
+# native attack checks and every authored campaign order (priority >= 1000).
+ADISCORD_difficulty_abyss_front_opportunities = {
+	enable = {
+		ADISCORD_difficulty_ai_abyss_front = yes
+		ADISCORD_difficulty_ai_offensive_ready = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = force_concentration_front_factor
+		country_trigger = {
+			has_war_with = FROM
+			fighting_army_strength_ratio = { tag = FROM ratio < 0.8 }
+		}
+		ratio = 0.01
+		value = 30
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			has_war_with = FROM
+			fighting_army_strength_ratio = { tag = FROM ratio < 0.8 }
+		}
+		ratio = 0.01
+		priority = 950
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
+# Careful execution still allows recovery and counterattacks; it never imposes
+# a permanent halt. No extra front-unit demand is added to crowded theatres.
+ADISCORD_difficulty_abyss_front_deliberate = {
+	enable = { ADISCORD_difficulty_ai_abyss_front = yes }
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			has_war_with = FROM
+			OR = {
+				FROM = { ADISCORD_difficulty_ai_offensive_ready = no }
+				fighting_army_strength_ratio = { tag = FROM ratio > 1.25 }
+			}
+		}
+		ratio = 0.01
+		priority = 950
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = force_concentration_front_factor
+		country_trigger = {
+			has_war_with = FROM
+			fighting_army_strength_ratio = { tag = FROM ratio > 1.25 }
+		}
+		ratio = 0.01
+		value = -25
+	}
+}
+
+# State targets are evaluated in state scope: FROM is the enemy and FROM.FROM
+# is the allocating country. Ownership is insufficient after occupation.
+# These modest weights complement explicit objectives such as the congress.
+ADISCORD_difficulty_abyss_front_objectives = {
+	enable = {
+		ADISCORD_difficulty_ai_abyss_front = yes
+		ADISCORD_difficulty_ai_offensive_ready = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = force_concentration_target_weight
+		state_trigger = {
+			FROM = { has_war_with = FROM.FROM }
+			is_controlled_by = FROM
+			is_capital = yes
+		}
+		value = 35
+	}
+	ai_strategy = {
+		type = force_concentration_target_weight
+		state_trigger = {
+			FROM = { has_war_with = FROM.FROM }
+			is_controlled_by = FROM
+			any_province_building_level = {
+				province = { all_provinces = yes }
+				building = bunker
+				level > 3
+			}
+		}
+		value = -40
+	}
+}

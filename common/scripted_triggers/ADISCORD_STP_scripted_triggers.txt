@@ -1445,6 +1445,29 @@ NOD_ai_stelander_preparation = {
 	STS = { exists = yes has_capitulated = no is_subject = no has_war_with = STP }
 }
 
+# COUNTRY NOD. Land allocation and fleet support share the same live landing gate.
+NOD_ai_stelander_landing_ready = {
+	is_ai = yes
+	has_capitulated = no
+	has_war_with = STS
+	has_tech = ADISCORD_tech_nodrul_marine_corps
+	has_tech = ADISCORD_tech_restored_dockyards
+	ADISCORD_has_operational_naval_base = yes
+	has_navy_size = {
+		size > 19
+		type = convoy
+	}
+	num_divisions > 7
+	STS = {
+		exists = yes
+		has_capitulated = no
+		any_controlled_state = {
+			is_coastal = yes
+			naval_base > 0
+		}
+	}
+}
+
 # COUNTRY VAL: a live ultimatum, not a historical choice of foreign policy.
 VAL_ai_republics_preparation = {
 	exists = yes
@@ -3943,13 +3966,6 @@ STP_ps_plot_current = {
 # ============================================================
 
 # COUNTRY: display filters leave both payment methods available to the AI.
-STP_pm_rear_programs_visible = {
-	OR = {
-		is_ai = yes
-		has_country_flag = STP_pm_rear_programs_expanded
-	}
-}
-
 STP_pm_faction_funding_visible = {
 	OR = {
 		is_ai = yes
@@ -4968,6 +4984,36 @@ STP_pi_country_valid = {
 	STP_pw_can_reconstruct = yes
 }
 
+STP_pi_house_current = {
+	STP_pi_country_valid = yes
+	STP_party_leader_1 = yes
+}
+
+STP_pi_festival_current = {
+	STP_pi_country_valid = yes
+	STP_party_leader_2 = yes
+}
+
+STP_pi_cadre_current = {
+	STP_pi_country_valid = yes
+	STP_party_leader_3 = yes
+}
+
+STP_pi_trade_current = {
+	STP_pi_country_valid = yes
+	STP_party_leader_4 = yes
+}
+
+STP_pi_case_current = {
+	STP_pi_country_valid = yes
+	STP_party_leader_5 = yes
+}
+
+STP_pi_north_current = {
+	STP_pi_country_valid = yes
+	STP_party_leader_6 = yes
+}
+
 STP_pi_house_capacity = {
 	OR = {
 		check_variable = {
@@ -5024,7 +5070,7 @@ STP_pi_house_buyout_open = {
 }
 
 STP_pi_north_relations = {
-	STP_pi_country_valid = yes
+	STP_pi_north_current = yes
 	NOT = {
 		has_war_with = NOD
 	}

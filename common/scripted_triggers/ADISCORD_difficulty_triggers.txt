@@ -1,0 +1,109 @@
+# Difficulty overlays follow the current controller and never wake suppressed countries.
+ADISCORD_difficulty_ai_eligible = {
+	is_ai = yes
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	NOT = { tag = EXZ }
+	NOT = { has_country_flag = ADISCORD_non_participating_minor_optimized }
+	NOT = { has_global_flag = RUS_crisis_world_ended }
+}
+
+# Reuse the bounded neighbor check that consumes live scripted preparation priorities.
+ADISCORD_difficulty_ai_military_context = {
+	ADISCORD_difficulty_ai_eligible = yes
+	OR = {
+		has_war = yes
+		ADISCORD_ai_has_adjacent_war_preparation = yes
+	}
+}
+
+ADISCORD_difficulty_ai_advanced = {
+	ADISCORD_difficulty_ai_eligible = yes
+	difficulty > 2
+	ADISCORD_economy_ai_is_healthy = yes
+}
+
+ADISCORD_difficulty_ai_abyss_front = {
+	ADISCORD_difficulty_ai_eligible = yes
+	difficulty > 3
+	has_war = yes
+}
+
+# Field equipment and funding gate opportunistic attacks, not total army size.
+ADISCORD_difficulty_ai_offensive_ready = {
+	ADISCORD_economy_ai_is_healthy = yes
+	ADISCORD_ai_army_replacement_pressure_cleared = yes
+}
+
+# Enemy scope in a front country_trigger; FROM is the allocating country.
+# Campaign variants stay inside the original allowed/enable block just above
+# its base priority. Mandatory holds and phase-specific caution retain precedence.
+ADISCORD_difficulty_enemy_allows_push = {
+	has_war_with = FROM
+	FROM = {
+		ADISCORD_difficulty_ai_abyss_front = yes
+		ADISCORD_difficulty_ai_offensive_ready = yes
+	}
+	fighting_army_strength_ratio = { tag = FROM ratio < 0.8 }
+}
+
+ADISCORD_difficulty_enemy_requires_caution = {
+	has_war_with = FROM
+	FROM = { ADISCORD_difficulty_ai_abyss_front = yes }
+	OR = {
+		FROM = { ADISCORD_difficulty_ai_offensive_ready = no }
+		fighting_army_strength_ratio = { tag = FROM ratio > 1.25 }
+	}
+}
+
+# State-targeted orders have an extra FROM level; do not reuse the country
+# predicates here because their allocating-country scope would be wrong.
+ADISCORD_difficulty_state_allows_push = {
+	FROM.FROM = {
+		ADISCORD_difficulty_ai_abyss_front = yes
+		ADISCORD_difficulty_ai_offensive_ready = yes
+	}
+	FROM = {
+		has_war_with = FROM.FROM
+		fighting_army_strength_ratio = { tag = FROM.FROM ratio < 0.8 }
+	}
+}
+
+ADISCORD_difficulty_state_requires_caution = {
+	FROM.FROM = { ADISCORD_difficulty_ai_abyss_front = yes }
+	FROM = { has_war_with = FROM.FROM }
+	OR = {
+		FROM.FROM = { ADISCORD_difficulty_ai_offensive_ready = no }
+		FROM = { fighting_army_strength_ratio = { tag = FROM.FROM ratio > 1.25 } }
+	}
+}
+
+# These reserves gate additional demand only. Existing recruitment and replacement
+# policies still control the army, including NOD's budget-derived capacity brake.
+ADISCORD_difficulty_ai_can_expand = {
+	ADISCORD_economy_ai_is_healthy = yes
+	ADISCORD_ai_army_replacement_pressure_cleared = yes
+	NOT = { has_manpower < 12000 }
+	NOT = { has_equipment = { infantry_equipment < 6000 } }
+	amount_manpower_in_deployment_queue < 12000
+	OR = {
+		NOT = { has_tech = ADISCORD_tech_restored_truck_fleets }
+		num_of_supply_nodes < 1
+		NOT = { has_equipment = { motorized_equipment < 60 } }
+	}
+	OR = {
+		NOT = { tag = NOD }
+		AND = {
+			ADISCORD_economy_nod_army_at_capacity = no
+			OR = {
+				NOT = { has_variable = ADISCORD_economy_nod_recruitment_brake }
+				check_variable = {
+					var = num_divisions
+					value = ADISCORD_economy_nod_recruitment_brake
+					compare = less_than
+				}
+			}
+		}
+	}
+}

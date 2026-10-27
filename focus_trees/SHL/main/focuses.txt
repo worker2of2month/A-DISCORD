@@ -1648,7 +1648,7 @@ focus_tree = {
 
 	focus = {
 		id = SHL_conclave_of_ten
-		icon = GFX_focus_generic_industral_devlopment_bucket
+		icon = GFX_focus_ADISCORD_industrial_development
 		x = 11
 		y = 16
 		cost = 5
@@ -3466,7 +3466,7 @@ focus_tree = {
 
 	focus = {
 		id = SHL_south_oil_underground
-		icon = GFX_focus_generic_sabotage
+		icon = GFX_focus_ADISCORD_sabotage
 		x = 26
 		y = 19
 		cost = 4

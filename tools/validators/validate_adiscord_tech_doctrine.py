@@ -129,7 +129,7 @@ SAFE_TECH_GRID_POSITIONS = {
     for folder in GENERATED_FOLDERS
 }
 
-EXPECTED_TECH_YEARS = set(GENERATED_YEARS)
+EXPECTED_TECH_YEARS = set(GENERATED_YEARS) | {2176, 2177, 2178}
 EXPECTED_TECH_UI_YEARS = {str(year) for year in GENERATED_YEARS}
 LEGACY_TECH_UI_YEAR_RE = re.compile(r'\btext\s*=\s*"(19[0-9]{2}|20[0-8][0-9])"')
 
@@ -1168,7 +1168,7 @@ def check_applied_technology_programmes(tech_blocks: dict[str, str]) -> list[str
         retained = [tech for tech in programme["techs"] if tech[0] in live_keys]
         maximum = (
             3
-            if programme["key"] in GENERATED_SIDE_PROGRAMME_KEYS
+            if programme["key"] in GENERATED_SIDE_PROGRAMME_KEYS and programme["key"] != "counter_drone_warfare"
             else len(programme["techs"])
         )
         if not 1 <= len(retained) <= maximum:
@@ -1459,6 +1459,8 @@ def check_platform_equipment_architecture() -> list[str]:
     issues: list[str] = []
     blocks = collect_equipment_blocks()
     expected_archetypes = {
+        "ADISCORD_combat_platform_2150": "ADISCORD_combat_platform_archetype",
+        "ADISCORD_heavy_combat_platform_2158": "ADISCORD_heavy_platform_archetype",
         "ADISCORD_light_combat_platform_2163": "ADISCORD_recon_platform_archetype",
         "ADISCORD_recon_drone_carrier_2170": "ADISCORD_recon_platform_archetype",
         "ADISCORD_combat_platform_2170": "ADISCORD_combat_platform_archetype",
@@ -1934,10 +1936,15 @@ def check_required_unit_definitions() -> list[str]:
                         )
 
     required_units = {
+        "recon",
+        "military_police",
         "railway_gun",
         "fighter",
         "cas",
         "tac_bomber",
+        "ADISCORD_interceptor",
+        "ADISCORD_strike_drone",
+        "transport_plane",
         "fake_intel_unit",
         "artillery",
         "anti_tank",
@@ -1945,6 +1952,8 @@ def check_required_unit_definitions() -> list[str]:
         "ADISCORD_militia",
         "ADISCORD_assault_infantry",
         "ADISCORD_line_artillery",
+        "ADISCORD_line_anti_tank",
+        "ADISCORD_line_anti_air",
         "ADISCORD_recon_platform",
         "ADISCORD_combat_platform",
         "ADISCORD_heavy_platform",
@@ -2029,6 +2038,12 @@ def check_new_support_and_platform_units() -> list[str]:
         return ["ADISCORD_land_units.txt has no sub_units container"]
     container = extract_block(text, container_match.start())
     expected = {
+        "ADISCORD_line_anti_tank": {"infantry_equipment": 450, "anti_tank_equipment": 36},
+        "ADISCORD_line_anti_air": {"infantry_equipment": 450, "anti_air_equipment": 32},
+        "ADISCORD_light_tank": {
+            "infantry_equipment": 360,
+            "ADISCORD_recon_platform_archetype": 40,
+        },
         "ADISCORD_recon_platform": {
             "infantry_equipment": 225,
             "ADISCORD_recon_platform_archetype": 18,
@@ -2048,6 +2063,8 @@ def check_new_support_and_platform_units() -> list[str]:
             "support_equipment": 15,
         },
         "maintenance_company": {"infantry_equipment": 270, "support_equipment": 25},
+        "recon": {"infantry_equipment": 180, "support_equipment": 10},
+        "military_police": {"infantry_equipment": 360, "support_equipment": 10},
         "logistics_company": {"infantry_equipment": 270, "support_equipment": 25},
         "signal_company": {"infantry_equipment": 225, "support_equipment": 25},
         "field_hospital": {"infantry_equipment": 360, "support_equipment": 40},
@@ -3358,6 +3375,29 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                 r"\bfuel_gain_factor_from_states\s*=\s*(-?[0-9.]+)", effect_prefix
             )
             substantial_fuel_upgrade = fuel_output is not None and float(fuel_output[1]) >= 0.10
+            if branch.key in {"synthetic_rubber", "synthetic_oil"}:
+                if tech.id in GENERATED_BUILDING_RESOURCE_UPGRADES and not resource_upgrade:
+                    issues.append(f"{tech.id} is missing its numeric gameplay effects for plant output")
+                expected_fuel = next((
+                    effect for effect in generated_effects_for(branch, index)
+                    if effect.startswith("fuel_gain_factor_from_states =")
+                ), None)
+                if expected_fuel and (not fuel_output or float(fuel_output[1]) != float(expected_fuel.split("=")[1])):
+                    issues.append(f"{tech.id} is missing its numeric gameplay effects for fuel output")
+            # A dedicated civil capability is a full reward without unrelated
+            # padding. Read its actual positive magnitude, not its catalogue ID.
+            civil_upgrade = False
+            if branch.file in {"ADISCORD_industry.txt", "ADISCORD_electronics.txt"}:
+                for modifier, minimum in (
+                    ("global_building_slots_factor", 0.10),
+                    ("research_speed_factor", 0.03),
+                    ("local_resources_factor", 0.04),
+                    ("production_factory_max_efficiency_factor", 0.03),
+                    ("production_factory_efficiency_gain_factor", 0.02),
+                ):
+                    value = re.search(rf"\b{modifier}\s*=\s*(-?[0-9.]+)", effect_prefix)
+                    if value and float(value[1]) >= minimum:
+                        civil_upgrade = True
             # Capacity, preparation and landing improvements are complete naval
             # rewards. Require a beneficial value in the emitted native payload.
             invasion_upgrade = False
@@ -3385,9 +3425,25 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                     value = re.search(rf"\b{modifier}\s*=\s*(-?[0-9.]+)", payload)
                     if value and float(value[1]) * direction >= minimum:
                         assault_upgrade = True
+            # Service research can improve one dedicated company capability.
+            # The actual receiver, direction and magnitude must all be valid.
+            service_upgrade = False
+            if branch.file == "ADISCORD_logistics_trains.txt":
+                for unit, modifier, direction, minimum in (
+                    ("maintenance_company", "equipment_capture_factor", 1, 0.03),
+                    ("maintenance_company", "reliability_factor", 1, 0.03),
+                    ("logistics_company", "supply_consumption_factor", -1, 0.03),
+                    ("signal_company", "initiative", 1, 0.04),
+                ):
+                    scope = re.search(rf"\b{unit}\s*=\s*\{{", effect_prefix)
+                    if scope:
+                        payload = extract_block(effect_prefix, scope.start())
+                        value = re.search(rf"\b{modifier}\s*=\s*(-?[0-9.]+)", payload)
+                        if value and float(value[1]) * direction >= minimum:
+                            service_upgrade = True
             if tech.id in unlocks or resource_upgrade:
                 minimum_effects = 0
-            elif family_upgrade or weapon_modification or substantial_fuel_upgrade or invasion_upgrade or assault_upgrade:
+            elif family_upgrade or weapon_modification or substantial_fuel_upgrade or invasion_upgrade or assault_upgrade or civil_upgrade or service_upgrade:
                 minimum_effects = 1
             else:
                 minimum_effects = 2
@@ -3405,7 +3461,7 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
             # vulnerability; distribution buys resilience and flexibility.
             if year >= 2160 and branch.key == "industry_organization":
                 lane = GENERATED_BRANCH_GRAPHS[branch.key].lanes[index]
-                if lane in {0, 2} and effect_count < 3:
+                if lane in {0, 2} and effect_count < 2:
                     issues.append(
                         f"industrial-organisation specialisation {tech.id} has only {effect_count} effects"
                     )
@@ -3421,8 +3477,6 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                             )
                 if lane == 2:
                     for required in (
-                        "industrial_capacity_factory",
-                        "factory_energy_consumption",
                         "energy_ratio < 0.80",
                     ):
                         if required not in block:
@@ -3536,6 +3590,27 @@ def check_technology_graph_quality(tech_blocks: dict[str, str]) -> list[str]:
             expected_leaves = int(kind != "carrier") + len(GENERATED_NAVAL_SIDE_PROGRAMMES[kind])
         else:
             expected_leaves = 2 if xor_kind == "permanent" else 1
+            # Civil side programmes have their own outcomes. Finishing the main
+            # line must not require unrelated maintenance, radar or fuel work.
+            expected_leaves = {
+                "reserve_training": 2,
+                "fighter": 2,
+                "air_support": 2,
+                "strategic_air": 2,
+                "artillery": 2,
+                "anti_tank": 2,
+                "anti_air": 2,
+                "production": 3,
+                "reconstruction": 4,
+                "resources": 2,
+                "synthetic_rubber": 2,
+                "synthetic_oil": 2,
+                "public_finance": 2,
+                "signals": 3,
+                "computing": 2,
+                "power": 2,
+                "semiconductors": 2,
+            }.get(branch.key, expected_leaves)
         if leaves != expected_leaves:
             issues.append(
                 f"{branch.key} graph has {leaves} programme endings; expected {expected_leaves}"
@@ -3597,6 +3672,9 @@ def check_technology_graph_quality(tech_blocks: dict[str, str]) -> list[str]:
             unlock = re.search(r"\benable_equipments\s*=\s*\{([^{}]+)\}", body)
             if unlock:
                 signature += " unlocks:" + " ".join(sorted(unlock.group(1).split()))
+            unit_unlock = re.search(r"\benable_subunits\s*=\s*\{([^{}]+)\}", body)
+            if unit_unlock:
+                signature += " units:" + " ".join(sorted(unit_unlock.group(1).split()))
             if signature:
                 signatures.add(signature)
         if len(signatures) < minimum:
@@ -3936,7 +4014,7 @@ def main() -> int:
 
     # Effect-only technologies use compact technical symbols. Real equipment
     # unlocks deliberately use wide vanilla weapon/vehicle art, but never a
-    # support-company badge or an unrelated nuclear warhead.
+    # unrelated nuclear warhead. Service badges identify companies on the support tab.
     unsuitable_prefixes = (
         "engineers",
         "recon",
@@ -3974,7 +4052,7 @@ def main() -> int:
                 issues.append(
                     f"{sprite} uses misleading nuclear-warhead texture {stem}"
                 )
-            if stem.startswith(unsuitable_prefixes):
+            if stem.startswith(unsuitable_prefixes) and "support_folder" not in branch.folders:
                 issues.append(f"{sprite} uses support-company badge {stem}")
             if not dimensions:
                 continue

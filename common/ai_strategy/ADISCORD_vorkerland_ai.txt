@@ -101,6 +101,32 @@ ADISCORD_vorkerland_front_central_against_wrk = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = WKR value = 100 }
 	ai_strategy = { type = front_control tag = WKR ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WKR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WKR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = WKR value = 200 }
 }
 
@@ -113,6 +139,32 @@ ADISCORD_vorkerland_front_central_against_vad = {
 	# and manual_attack stay off so supply still gates individual attacks.
 	ai_strategy = { type = front_unit_request tag = VAD value = 100 }
 	ai_strategy = { type = front_control tag = VAD ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = VAD value = 200 }
 }
 
@@ -122,6 +174,32 @@ ADISCORD_vorkerland_front_central_against_tva = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = TVA value = 100 }
 	ai_strategy = { type = front_control tag = TVA ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TVA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TVA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = TVA value = 200 }
 }
 
@@ -135,6 +213,19 @@ ADISCORD_vorkerland_central_minor_defense_against_wkr = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = WKR value = 100 }
 	ai_strategy = { type = front_control tag = WKR ratio = 0.01 priority = 1250 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WKR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_vorkerland_central_minor_defense_against_vad = {
@@ -143,6 +234,19 @@ ADISCORD_vorkerland_central_minor_defense_against_vad = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VAD value = 100 }
 	ai_strategy = { type = front_control tag = VAD ratio = 0.01 priority = 1250 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_vorkerland_central_minor_defense_against_tva = {
@@ -151,6 +255,19 @@ ADISCORD_vorkerland_central_minor_defense_against_tva = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = TVA value = 100 }
 	ai_strategy = { type = front_control tag = TVA ratio = 0.01 priority = 1250 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TVA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 # The first Ivanland operation now has explicit operational ownership. The
@@ -161,6 +278,32 @@ ADISCORD_vorkerland_ivanland_front_against_pwr = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PWR value = 100 }
 	ai_strategy = { type = front_control tag = PWR ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PWR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PWR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = PWR value = 250 }
 }
 
@@ -170,6 +313,19 @@ ADISCORD_vorkerland_northern_defense_against_ivanland = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = IVN value = 100 }
 	ai_strategy = { type = front_control tag = IVN ratio = 0.01 priority = 1250 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = IVN
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_vorkerland_front_central_against_eyr = {
@@ -178,6 +334,32 @@ ADISCORD_vorkerland_front_central_against_eyr = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = EYR value = 100 }
 	ai_strategy = { type = front_control tag = EYR ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EYR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EYR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = EYR value = 250 }
 }
 
@@ -187,6 +369,32 @@ ADISCORD_vorkerland_front_central_against_egc = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = EGC value = 100 }
 	ai_strategy = { type = front_control tag = EGC ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EGC
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EGC
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = EGC value = 250 }
 }
 
@@ -196,6 +404,32 @@ ADISCORD_vorkerland_front_central_against_riv = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = RIV value = 100 }
 	ai_strategy = { type = front_control tag = RIV ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RIV
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RIV
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = RIV value = 250 }
 }
 
@@ -205,6 +439,32 @@ ADISCORD_vorkerland_front_central_against_rev = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = REV value = 100 }
 	ai_strategy = { type = front_control tag = REV ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = REV
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = REV
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = REV value = 250 }
 }
 
@@ -214,6 +474,32 @@ ADISCORD_vorkerland_front_central_against_yor = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = YOR value = 100 }
 	ai_strategy = { type = front_control tag = YOR ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = YOR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = YOR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = YOR value = 250 }
 }
 
@@ -223,6 +509,32 @@ ADISCORD_vorkerland_front_central_against_ndn = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = NDN value = 100 }
 	ai_strategy = { type = front_control tag = NDN ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NDN
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NDN
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = NDN value = 250 }
 }
 
@@ -232,6 +544,32 @@ ADISCORD_vorkerland_front_central_against_swb = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SWB value = 100 }
 	ai_strategy = { type = front_control tag = SWB ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SWB
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SWB
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = SWB value = 250 }
 }
 
@@ -241,6 +579,32 @@ ADISCORD_vorkerland_front_central_against_vhv = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VHV value = 100 }
 	ai_strategy = { type = front_control tag = VHV ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VHV
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VHV
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = VHV value = 250 }
 }
 
@@ -250,6 +614,32 @@ ADISCORD_vorkerland_front_central_against_osv = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = OSV value = 100 }
 	ai_strategy = { type = front_control tag = OSV ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = OSV
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = OSV
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = OSV value = 250 }
 }
 
@@ -272,6 +662,32 @@ ADISCORD_vorkerland_front_zao_wpa = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = WPA value = 25 }
 	ai_strategy = { type = front_control tag = WPA ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WPA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WPA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_wpa_zao = {
 	allowed = { tag = WPA }
@@ -279,6 +695,32 @@ ADISCORD_vorkerland_front_wpa_zao = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = ZAO value = 33 }
 	ai_strategy = { type = front_control tag = ZAO ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZAO
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZAO
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_wps_zao = {
 	allowed = { tag = WPS }
@@ -296,6 +738,32 @@ ADISCORD_vorkerland_front_wps_zao = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = ZAO value = 33 }
 	ai_strategy = { type = front_control tag = ZAO ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZAO
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZAO
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_zao_wps = {
 	allowed = { tag = ZAO }
@@ -303,6 +771,32 @@ ADISCORD_vorkerland_front_zao_wps = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = WPS value = 25 }
 	ai_strategy = { type = front_control tag = WPS ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WPS
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WPS
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_zao_psd = {
 	allowed = { tag = ZAO }
@@ -320,6 +814,32 @@ ADISCORD_vorkerland_front_zao_psd = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PSD value = 25 }
 	ai_strategy = { type = front_control tag = PSD ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_psd_zao = {
 	allowed = { tag = PSD }
@@ -327,6 +847,32 @@ ADISCORD_vorkerland_front_psd_zao = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = ZAO value = 25 }
 	ai_strategy = { type = front_control tag = ZAO ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZAO
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZAO
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_zao_pwr = {
 	allowed = { tag = ZAO }
@@ -334,6 +880,32 @@ ADISCORD_vorkerland_front_zao_pwr = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PWR value = 25 }
 	ai_strategy = { type = front_control tag = PWR ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PWR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PWR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_pwr_zao = {
 	allowed = { tag = PWR }
@@ -351,6 +923,32 @@ ADISCORD_vorkerland_front_pwr_zao = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = ZAO value = 25 }
 	ai_strategy = { type = front_control tag = ZAO ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZAO
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZAO
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_wpa_psd = {
 	allowed = { tag = WPA }
@@ -368,6 +966,32 @@ ADISCORD_vorkerland_front_wpa_psd = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PSD value = 33 }
 	ai_strategy = { type = front_control tag = PSD ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_psd_wpa = {
 	allowed = { tag = PSD }
@@ -375,6 +999,32 @@ ADISCORD_vorkerland_front_psd_wpa = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = WPA value = 25 }
 	ai_strategy = { type = front_control tag = WPA ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WPA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WPA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_wpa_pwr = {
 	allowed = { tag = WPA }
@@ -392,6 +1042,32 @@ ADISCORD_vorkerland_front_wpa_pwr = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PWR value = 33 }
 	ai_strategy = { type = front_control tag = PWR ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PWR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PWR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_pwr_wpa = {
 	allowed = { tag = PWR }
@@ -399,6 +1075,32 @@ ADISCORD_vorkerland_front_pwr_wpa = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = WPA value = 25 }
 	ai_strategy = { type = front_control tag = WPA ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WPA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WPA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_wps_psd = {
 	allowed = { tag = WPS }
@@ -416,6 +1118,32 @@ ADISCORD_vorkerland_front_wps_psd = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PSD value = 33 }
 	ai_strategy = { type = front_control tag = PSD ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_psd_wps = {
 	allowed = { tag = PSD }
@@ -423,6 +1151,32 @@ ADISCORD_vorkerland_front_psd_wps = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = WPS value = 25 }
 	ai_strategy = { type = front_control tag = WPS ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WPS
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WPS
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_wps_pwr = {
 	allowed = { tag = WPS }
@@ -440,6 +1194,32 @@ ADISCORD_vorkerland_front_wps_pwr = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PWR value = 33 }
 	ai_strategy = { type = front_control tag = PWR ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PWR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PWR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_pwr_wps = {
 	allowed = { tag = PWR }
@@ -447,6 +1227,32 @@ ADISCORD_vorkerland_front_pwr_wps = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = WPS value = 25 }
 	ai_strategy = { type = front_control tag = WPS ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WPS
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WPS
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_pwr_psd = {
 	allowed = { tag = PWR }
@@ -464,6 +1270,32 @@ ADISCORD_vorkerland_front_pwr_psd = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PSD value = 25 }
 	ai_strategy = { type = front_control tag = PSD ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_psd_pwr = {
 	allowed = { tag = PSD }
@@ -471,6 +1303,32 @@ ADISCORD_vorkerland_front_psd_pwr = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PWR value = 25 }
 	ai_strategy = { type = front_control tag = PWR ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PWR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PWR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 # Day-730 selects one verified canonical front and renews the operational-
@@ -494,6 +1352,32 @@ ADISCORD_vorkerland_escalation_zao_wpa = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = WPA value = 25 }
 	ai_strategy = { type = front_control tag = WPA ratio = 0.01 priority = 1600 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WPA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WPA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = WPA value = 200 }
 }
 ADISCORD_vorkerland_escalation_wps_zao = {
@@ -513,6 +1397,32 @@ ADISCORD_vorkerland_escalation_wps_zao = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = ZAO value = 33 }
 	ai_strategy = { type = front_control tag = ZAO ratio = 0.01 priority = 1600 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZAO
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZAO
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = ZAO value = 200 }
 }
 ADISCORD_vorkerland_escalation_zao_psd = {
@@ -532,6 +1442,32 @@ ADISCORD_vorkerland_escalation_zao_psd = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PSD value = 25 }
 	ai_strategy = { type = front_control tag = PSD ratio = 0.01 priority = 1600 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = PSD value = 200 }
 }
 ADISCORD_vorkerland_escalation_pwr_zao = {
@@ -551,6 +1487,32 @@ ADISCORD_vorkerland_escalation_pwr_zao = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = ZAO value = 25 }
 	ai_strategy = { type = front_control tag = ZAO ratio = 0.01 priority = 1600 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZAO
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZAO
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = ZAO value = 200 }
 }
 ADISCORD_vorkerland_escalation_wpa_psd = {
@@ -570,6 +1532,32 @@ ADISCORD_vorkerland_escalation_wpa_psd = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PSD value = 33 }
 	ai_strategy = { type = front_control tag = PSD ratio = 0.01 priority = 1600 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = PSD value = 200 }
 }
 ADISCORD_vorkerland_escalation_wpa_pwr = {
@@ -589,6 +1577,32 @@ ADISCORD_vorkerland_escalation_wpa_pwr = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PWR value = 33 }
 	ai_strategy = { type = front_control tag = PWR ratio = 0.01 priority = 1600 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PWR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PWR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = PWR value = 200 }
 }
 ADISCORD_vorkerland_escalation_wps_psd = {
@@ -608,6 +1622,32 @@ ADISCORD_vorkerland_escalation_wps_psd = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PSD value = 33 }
 	ai_strategy = { type = front_control tag = PSD ratio = 0.01 priority = 1600 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = PSD value = 200 }
 }
 ADISCORD_vorkerland_escalation_wps_pwr = {
@@ -627,6 +1667,32 @@ ADISCORD_vorkerland_escalation_wps_pwr = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PWR value = 33 }
 	ai_strategy = { type = front_control tag = PWR ratio = 0.01 priority = 1600 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PWR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PWR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = PWR value = 200 }
 }
 ADISCORD_vorkerland_escalation_pwr_psd = {
@@ -646,6 +1712,32 @@ ADISCORD_vorkerland_escalation_pwr_psd = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PSD value = 25 }
 	ai_strategy = { type = front_control tag = PSD ratio = 0.01 priority = 1600 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = PSD value = 200 }
 }
 ADISCORD_vorkerland_front_vla_eba = {
@@ -654,6 +1746,32 @@ ADISCORD_vorkerland_front_vla_eba = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = EBA value = 100 }
 	ai_strategy = { type = front_control tag = EBA ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EBA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EBA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_eba_vla = {
 	allowed = { tag = EBA }
@@ -661,6 +1779,32 @@ ADISCORD_vorkerland_front_eba_vla = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VLA value = 100 }
 	ai_strategy = { type = front_control tag = VLA ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VLA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VLA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_vla_tgd = {
 	allowed = { tag = VLA }
@@ -668,6 +1812,32 @@ ADISCORD_vorkerland_front_vla_tgd = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = TGD value = 100 }
 	ai_strategy = { type = front_control tag = TGD ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TGD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TGD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_tgd_vla = {
 	allowed = { tag = TGD }
@@ -675,6 +1845,32 @@ ADISCORD_vorkerland_front_tgd_vla = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VLA value = 100 }
 	ai_strategy = { type = front_control tag = VLA ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VLA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VLA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_eba_tgd = {
 	allowed = { tag = EBA }
@@ -682,6 +1878,32 @@ ADISCORD_vorkerland_front_eba_tgd = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = TGD value = 100 }
 	ai_strategy = { type = front_control tag = TGD ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TGD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TGD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_tgd_eba = {
 	allowed = { tag = TGD }
@@ -689,6 +1911,32 @@ ADISCORD_vorkerland_front_tgd_eba = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = EBA value = 100 }
 	ai_strategy = { type = front_control tag = EBA ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EBA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EBA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_rom_dva = {
 	allowed = { tag = ROM }
@@ -696,6 +1944,32 @@ ADISCORD_vorkerland_front_rom_dva = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = DVA value = 75 }
 	ai_strategy = { type = front_control tag = DVA ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = DVA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = DVA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_dva_rom = {
 	allowed = { tag = DVA }
@@ -703,6 +1977,32 @@ ADISCORD_vorkerland_front_dva_rom = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = ROM value = 75 }
 	ai_strategy = { type = front_control tag = ROM ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ROM
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ROM
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_vorkerland_rom_intervention_front_zao = {
@@ -711,6 +2011,32 @@ ADISCORD_vorkerland_rom_intervention_front_zao = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = ZAO value = 100 }
 	ai_strategy = { type = front_control tag = ZAO ratio = 0.01 priority = 1400 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZAO
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZAO
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_zao_defend_rom_intervention = {
 	allowed = { tag = ZAO }
@@ -718,6 +2044,19 @@ ADISCORD_vorkerland_zao_defend_rom_intervention = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = ROM value = 80 }
 	ai_strategy = { type = front_control tag = ROM ratio = 0.01 priority = 1250 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ROM
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_rom_intervention_front_wps = {
 	allowed = { tag = ROM }
@@ -725,6 +2064,32 @@ ADISCORD_vorkerland_rom_intervention_front_wps = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = WPS value = 100 }
 	ai_strategy = { type = front_control tag = WPS ratio = 0.01 priority = 1400 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WPS
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WPS
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_wps_defend_rom_intervention = {
 	allowed = { tag = WPS }
@@ -732,6 +2097,19 @@ ADISCORD_vorkerland_wps_defend_rom_intervention = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = ROM value = 80 }
 	ai_strategy = { type = front_control tag = ROM ratio = 0.01 priority = 1250 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ROM
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 # VAD commits its mobile command only to the one Solar restoration target that
@@ -748,6 +2126,32 @@ ADISCORD_vorkerland_vad_solar_intervention_front_sra = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SRA value = 100 }
 	ai_strategy = { type = front_control tag = SRA ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SRA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SRA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = SRA value = 250 }
 }
 
@@ -762,6 +2166,19 @@ ADISCORD_vorkerland_sra_defend_vad_intervention = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VAD value = 100 }
 	ai_strategy = { type = front_control tag = VAD ratio = 0.01 priority = 1400 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_vorkerland_vad_solar_intervention_front_csl = {
@@ -775,6 +2192,32 @@ ADISCORD_vorkerland_vad_solar_intervention_front_csl = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = CSL value = 100 }
 	ai_strategy = { type = front_control tag = CSL ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = CSL
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = CSL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = CSL value = 250 }
 }
 
@@ -789,6 +2232,19 @@ ADISCORD_vorkerland_csl_defend_vad_intervention = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VAD value = 100 }
 	ai_strategy = { type = front_control tag = VAD ratio = 0.01 priority = 1400 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_vorkerland_front_sol_sra = {
@@ -797,6 +2253,32 @@ ADISCORD_vorkerland_front_sol_sra = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SRA value = 100 }
 	ai_strategy = { type = front_control tag = SRA ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SRA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SRA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_sra_sol = {
 	allowed = { tag = SRA }
@@ -804,6 +2286,32 @@ ADISCORD_vorkerland_front_sra_sol = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SOL value = 100 }
 	ai_strategy = { type = front_control tag = SOL ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SOL
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SOL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_sol_csl = {
 	allowed = { tag = SOL }
@@ -811,6 +2319,32 @@ ADISCORD_vorkerland_front_sol_csl = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = CSL value = 100 }
 	ai_strategy = { type = front_control tag = CSL ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = CSL
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = CSL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_csl_sol = {
 	allowed = { tag = CSL }
@@ -818,6 +2352,32 @@ ADISCORD_vorkerland_front_csl_sol = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SOL value = 100 }
 	ai_strategy = { type = front_control tag = SOL ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SOL
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SOL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_sra_csl = {
 	allowed = { tag = SRA }
@@ -825,6 +2385,32 @@ ADISCORD_vorkerland_front_sra_csl = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = CSL value = 100 }
 	ai_strategy = { type = front_control tag = CSL ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = CSL
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = CSL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_csl_sra = {
 	allowed = { tag = CSL }
@@ -832,6 +2418,32 @@ ADISCORD_vorkerland_front_csl_sra = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SRA value = 100 }
 	ai_strategy = { type = front_control tag = SRA ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SRA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SRA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_tru_zta = {
 	allowed = { tag = TRU }
@@ -839,6 +2451,32 @@ ADISCORD_vorkerland_front_tru_zta = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = ZTA value = 75 }
 	ai_strategy = { type = front_control tag = ZTA ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZTA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZTA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_zta_tru = {
 	allowed = { tag = ZTA }
@@ -846,6 +2484,32 @@ ADISCORD_vorkerland_front_zta_tru = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = TRU value = 75 }
 	ai_strategy = { type = front_control tag = TRU ratio = 0.01 priority = 1000 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TRU
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TRU
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 # A sovereign Volnograd ally follows WKR into the verified shared showdown.
@@ -855,6 +2519,32 @@ ADISCORD_vorkerland_vla_auxiliary_front_vad = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VAD value = 100 }
 	ai_strategy = { type = front_control tag = VAD ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_vla_auxiliary_front_tva = {
 	allowed = { tag = VLA }
@@ -862,6 +2552,32 @@ ADISCORD_vorkerland_vla_auxiliary_front_tva = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = TVA value = 100 }
 	ai_strategy = { type = front_control tag = TVA ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TVA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TVA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 # Victorious or restored SOL fights only inside VAD's verified shared wars.
@@ -878,6 +2594,32 @@ ADISCORD_vorkerland_sol_allied_front_wrk = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = WKR value = 100 }
 	ai_strategy = { type = front_control tag = WKR ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WKR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WKR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_vorkerland_sol_allied_front_tva = {
@@ -893,6 +2635,32 @@ ADISCORD_vorkerland_sol_allied_front_tva = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = TVA value = 100 }
 	ai_strategy = { type = front_control tag = TVA ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TVA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TVA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1251
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 # Ivanland's second intervention uses separate wars against the two northern
@@ -907,6 +2675,32 @@ ADISCORD_vorkerland_ivn_second_front_psd = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PSD value = 100 }
 	ai_strategy = { type = front_control tag = PSD ratio = 0.01 priority = 1400 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PSD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = PSD value = 150 }
 }
 
@@ -920,6 +2714,32 @@ ADISCORD_vorkerland_ivn_second_front_pwr = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = PWR value = 100 }
 	ai_strategy = { type = front_control tag = PWR ratio = 0.01 priority = 1400 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PWR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = PWR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = PWR value = 150 }
 }
 
@@ -994,6 +2814,32 @@ ADISCORD_vorkerland_wkr_solyarino_front_sol = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SOL value = 40 }
 	ai_strategy = { type = front_control tag = SOL ratio = 0.01 priority = 1550 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SOL
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1551
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SOL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1551
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = SOL value = 250 }
 }
 
@@ -1008,6 +2854,32 @@ ADISCORD_vorkerland_wkr_solyarino_front_sra = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SRA value = 40 }
 	ai_strategy = { type = front_control tag = SRA ratio = 0.01 priority = 1550 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SRA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1551
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SRA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1551
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = SRA value = 250 }
 }
 
@@ -1022,6 +2894,32 @@ ADISCORD_vorkerland_wkr_solyarino_front_csl = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = CSL value = 40 }
 	ai_strategy = { type = front_control tag = CSL ratio = 0.01 priority = 1550 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = CSL
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1551
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = CSL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1551
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = CSL value = 250 }
 }
 
@@ -1039,6 +2937,32 @@ ADISCORD_vorkerland_vad_solyarino_counter_front_sol = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SOL value = 40 }
 	ai_strategy = { type = front_control tag = SOL ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SOL
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SOL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = SOL value = 250 }
 }
 
@@ -1053,6 +2977,32 @@ ADISCORD_vorkerland_vad_solyarino_counter_front_sra = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SRA value = 40 }
 	ai_strategy = { type = front_control tag = SRA ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SRA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SRA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = SRA value = 250 }
 }
 
@@ -1067,6 +3017,32 @@ ADISCORD_vorkerland_vad_solyarino_counter_front_csl = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = CSL value = 40 }
 	ai_strategy = { type = front_control tag = CSL ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = CSL
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = CSL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = CSL value = 250 }
 }
 
@@ -1135,6 +3111,32 @@ ADISCORD_vorkerland_front_egc_eyr = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = EYR value = 60 }
 	ai_strategy = { type = front_control tag = EYR ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EYR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EYR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_eyr_egc = {
 	allowed = { tag = EYR }
@@ -1142,6 +3144,32 @@ ADISCORD_vorkerland_front_eyr_egc = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = EGC value = 60 }
 	ai_strategy = { type = front_control tag = EGC ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EGC
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EGC
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_eyr_yor = {
 	allowed = { tag = EYR }
@@ -1149,6 +3177,32 @@ ADISCORD_vorkerland_front_eyr_yor = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = YOR value = 40 }
 	ai_strategy = { type = front_control tag = YOR ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = YOR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = YOR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_yor_eyr = {
 	allowed = { tag = YOR }
@@ -1156,6 +3210,32 @@ ADISCORD_vorkerland_front_yor_eyr = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = EYR value = 100 }
 	ai_strategy = { type = front_control tag = EYR ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EYR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EYR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_swb_ndn = {
 	allowed = { tag = SWB }
@@ -1163,6 +3243,32 @@ ADISCORD_vorkerland_front_swb_ndn = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = NDN value = 50 }
 	ai_strategy = { type = front_control tag = NDN ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NDN
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NDN
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_ndn_swb = {
 	allowed = { tag = NDN }
@@ -1170,6 +3276,32 @@ ADISCORD_vorkerland_front_ndn_swb = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SWB value = 100 }
 	ai_strategy = { type = front_control tag = SWB ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SWB
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SWB
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_swb_osv = {
 	allowed = { tag = SWB }
@@ -1177,6 +3309,32 @@ ADISCORD_vorkerland_front_swb_osv = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = OSV value = 50 }
 	ai_strategy = { type = front_control tag = OSV ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = OSV
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = OSV
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_osv_swb = {
 	allowed = { tag = OSV }
@@ -1184,6 +3342,32 @@ ADISCORD_vorkerland_front_osv_swb = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SWB value = 60 }
 	ai_strategy = { type = front_control tag = SWB ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SWB
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SWB
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_rev_osv = {
 	allowed = { tag = REV }
@@ -1191,6 +3375,32 @@ ADISCORD_vorkerland_front_rev_osv = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = OSV value = 60 }
 	ai_strategy = { type = front_control tag = OSV ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = OSV
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = OSV
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_osv_rev = {
 	allowed = { tag = OSV }
@@ -1198,6 +3408,32 @@ ADISCORD_vorkerland_front_osv_rev = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = REV value = 60 }
 	ai_strategy = { type = front_control tag = REV ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = REV
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = REV
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_riv_vhv = {
 	allowed = { tag = RIV }
@@ -1205,6 +3441,32 @@ ADISCORD_vorkerland_front_riv_vhv = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VHV value = 50 }
 	ai_strategy = { type = front_control tag = VHV ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VHV
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VHV
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_vhv_riv = {
 	allowed = { tag = VHV }
@@ -1212,6 +3474,32 @@ ADISCORD_vorkerland_front_vhv_riv = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = RIV value = 100 }
 	ai_strategy = { type = front_control tag = RIV ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RIV
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RIV
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1151
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 # Closed-zone rivalries have no claimant competing for the same divisions, so
@@ -1222,6 +3510,32 @@ ADISCORD_vorkerland_front_rza_mlr = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = MLR value = 50 }
 	ai_strategy = { type = front_control tag = MLR ratio = 0.01 priority = 1200 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = MLR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = MLR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_mlr_rza = {
 	allowed = { tag = MLR }
@@ -1229,6 +3543,32 @@ ADISCORD_vorkerland_front_mlr_rza = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = RZA value = 100 }
 	ai_strategy = { type = front_control tag = RZA ratio = 0.01 priority = 1200 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RZA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RZA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_rza_irt = {
 	allowed = { tag = RZA }
@@ -1236,6 +3576,32 @@ ADISCORD_vorkerland_front_rza_irt = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = IRT value = 50 }
 	ai_strategy = { type = front_control tag = IRT ratio = 0.01 priority = 1200 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = IRT
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = IRT
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_irt_rza = {
 	allowed = { tag = IRT }
@@ -1243,6 +3609,32 @@ ADISCORD_vorkerland_front_irt_rza = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = RZA value = 50 }
 	ai_strategy = { type = front_control tag = RZA ratio = 0.01 priority = 1200 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RZA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RZA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_irt_ert = {
 	allowed = { tag = IRT }
@@ -1250,6 +3642,32 @@ ADISCORD_vorkerland_front_irt_ert = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = ERT value = 50 }
 	ai_strategy = { type = front_control tag = ERT ratio = 0.01 priority = 1200 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ERT
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ERT
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_ert_irt = {
 	allowed = { tag = ERT }
@@ -1257,6 +3675,32 @@ ADISCORD_vorkerland_front_ert_irt = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = IRT value = 60 }
 	ai_strategy = { type = front_control tag = IRT ratio = 0.01 priority = 1200 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = IRT
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = IRT
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_ert_sca = {
 	allowed = { tag = ERT }
@@ -1264,6 +3708,32 @@ ADISCORD_vorkerland_front_ert_sca = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SCA value = 40 }
 	ai_strategy = { type = front_control tag = SCA ratio = 0.01 priority = 1200 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SCA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SCA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_front_sca_ert = {
 	allowed = { tag = SCA }
@@ -1271,6 +3741,32 @@ ADISCORD_vorkerland_front_sca_ert = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = ERT value = 100 }
 	ai_strategy = { type = front_control tag = ERT ratio = 0.01 priority = 1200 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ERT
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ERT
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 # A bracket winner that folded into a claimant coalition fights that claimant's
@@ -1282,6 +3778,32 @@ ADISCORD_vorkerland_auxiliary_of_wkr_against_vad = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VAD value = 100 }
 	ai_strategy = { type = front_control tag = VAD ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1252
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1252
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_auxiliary_of_wkr_against_tva = {
 	allowed = { ADISCORD_vorkerland_is_local_bracket_member = yes }
@@ -1289,6 +3811,32 @@ ADISCORD_vorkerland_auxiliary_of_wkr_against_tva = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = TVA value = 100 }
 	ai_strategy = { type = front_control tag = TVA ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TVA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1252
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TVA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1252
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_auxiliary_of_vad_against_wkr = {
 	allowed = { ADISCORD_vorkerland_is_local_bracket_member = yes }
@@ -1296,6 +3844,32 @@ ADISCORD_vorkerland_auxiliary_of_vad_against_wkr = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = WKR value = 100 }
 	ai_strategy = { type = front_control tag = WKR ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WKR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1252
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WKR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1252
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_auxiliary_of_vad_against_tva = {
 	allowed = { ADISCORD_vorkerland_is_local_bracket_member = yes }
@@ -1303,6 +3877,32 @@ ADISCORD_vorkerland_auxiliary_of_vad_against_tva = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = TVA value = 100 }
 	ai_strategy = { type = front_control tag = TVA ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TVA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1252
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TVA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1252
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_auxiliary_of_tva_against_wkr = {
 	allowed = { ADISCORD_vorkerland_is_local_bracket_member = yes }
@@ -1310,6 +3910,32 @@ ADISCORD_vorkerland_auxiliary_of_tva_against_wkr = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = WKR value = 100 }
 	ai_strategy = { type = front_control tag = WKR ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WKR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1252
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WKR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1252
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 ADISCORD_vorkerland_auxiliary_of_tva_against_vad = {
 	allowed = { ADISCORD_vorkerland_is_local_bracket_member = yes }
@@ -1317,6 +3943,32 @@ ADISCORD_vorkerland_auxiliary_of_tva_against_vad = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VAD value = 100 }
 	ai_strategy = { type = front_control tag = VAD ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1252
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1252
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 # Afrela commits its volunteer corps only to Macri's own survival war and keeps
@@ -1427,6 +4079,32 @@ ADISCORD_vorkerland_rom_tru_rom_offensive = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = DVA value = 100 }
 	ai_strategy = { type = front_control tag = DVA ratio = 0.01 priority = 1400 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = DVA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = DVA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = DVA value = 200 }
 }
 
@@ -1441,6 +4119,32 @@ ADISCORD_vorkerland_rom_tru_tru_offensive = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = ZTA value = 100 }
 	ai_strategy = { type = front_control tag = ZTA ratio = 0.01 priority = 1400 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZTA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = ZTA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = ZTA value = 200 }
 }
 
@@ -1462,6 +4166,32 @@ ADISCORD_vorkerland_central_breakthrough_eyr = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = EYR value = 100 }
 	ai_strategy = { type = front_control tag = EYR ratio = 0.01 priority = 2000 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EYR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EYR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = consider_weak id = EYR value = 100 }
 	ai_strategy = { type = conquer id = EYR value = 300 }
 }
@@ -1481,6 +4211,32 @@ ADISCORD_vorkerland_central_breakthrough_egc = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = EGC value = 100 }
 	ai_strategy = { type = front_control tag = EGC ratio = 0.01 priority = 2000 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EGC
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EGC
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = consider_weak id = EGC value = 100 }
 	ai_strategy = { type = conquer id = EGC value = 300 }
 }
@@ -1500,6 +4256,32 @@ ADISCORD_vorkerland_central_breakthrough_riv = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = RIV value = 100 }
 	ai_strategy = { type = front_control tag = RIV ratio = 0.01 priority = 2000 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RIV
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RIV
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = consider_weak id = RIV value = 100 }
 	ai_strategy = { type = conquer id = RIV value = 300 }
 }
@@ -1519,6 +4301,32 @@ ADISCORD_vorkerland_central_breakthrough_rev = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = REV value = 100 }
 	ai_strategy = { type = front_control tag = REV ratio = 0.01 priority = 2000 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = REV
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = REV
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = consider_weak id = REV value = 100 }
 	ai_strategy = { type = conquer id = REV value = 300 }
 }
@@ -1538,6 +4346,32 @@ ADISCORD_vorkerland_central_breakthrough_yor = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = YOR value = 100 }
 	ai_strategy = { type = front_control tag = YOR ratio = 0.01 priority = 2000 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = YOR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = YOR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = consider_weak id = YOR value = 100 }
 	ai_strategy = { type = conquer id = YOR value = 300 }
 }
@@ -1557,6 +4391,32 @@ ADISCORD_vorkerland_central_breakthrough_ndn = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = NDN value = 100 }
 	ai_strategy = { type = front_control tag = NDN ratio = 0.01 priority = 2000 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NDN
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NDN
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = consider_weak id = NDN value = 100 }
 	ai_strategy = { type = conquer id = NDN value = 300 }
 }
@@ -1576,6 +4436,32 @@ ADISCORD_vorkerland_central_breakthrough_swb = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SWB value = 100 }
 	ai_strategy = { type = front_control tag = SWB ratio = 0.01 priority = 2000 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SWB
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SWB
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = consider_weak id = SWB value = 100 }
 	ai_strategy = { type = conquer id = SWB value = 300 }
 }
@@ -1595,6 +4481,32 @@ ADISCORD_vorkerland_central_breakthrough_vhv = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VHV value = 100 }
 	ai_strategy = { type = front_control tag = VHV ratio = 0.01 priority = 2000 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VHV
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VHV
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = consider_weak id = VHV value = 100 }
 	ai_strategy = { type = conquer id = VHV value = 300 }
 }
@@ -1614,6 +4526,32 @@ ADISCORD_vorkerland_central_breakthrough_osv = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = OSV value = 100 }
 	ai_strategy = { type = front_control tag = OSV ratio = 0.01 priority = 2000 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = OSV
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = OSV
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = consider_weak id = OSV value = 100 }
 	ai_strategy = { type = conquer id = OSV value = 300 }
 }
@@ -1633,6 +4571,32 @@ ADISCORD_vorkerland_solarino_breakthrough_sra = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SRA value = 50 }
 	ai_strategy = { type = front_control tag = SRA ratio = 0.01 priority = 2000 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SRA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SRA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = consider_weak id = SRA value = 100 }
 	ai_strategy = { type = conquer id = SRA value = 300 }
 }
@@ -1652,6 +4616,32 @@ ADISCORD_vorkerland_solarino_breakthrough_csl = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = CSL value = 50 }
 	ai_strategy = { type = front_control tag = CSL ratio = 0.01 priority = 2000 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = CSL
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = CSL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = consider_weak id = CSL value = 100 }
 	ai_strategy = { type = conquer id = CSL value = 300 }
 }
@@ -2584,4 +5574,65 @@ ADISCORD_prepare_CSL_VAD = {
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = VAD value = 100 }
+}
+
+# Difficulty prioritizes field equipment within each active successor campaign.
+ADISCORD_difficulty_vorkerland_field_supply = {
+	allowed = {
+		OR = {
+			tag = WKR
+			tag = VAD
+			tag = TVA
+			tag = TGD
+			tag = WTD
+			tag = EYR
+			tag = EGC
+			tag = RIV
+			tag = REV
+			tag = YOR
+			tag = NDN
+			tag = SWB
+			tag = VHV
+			tag = OSV
+			tag = ZAO
+			tag = WPA
+			tag = WPS
+			tag = PWR
+			tag = PSD
+			tag = VLA
+			tag = EBA
+			tag = ROM
+			tag = DVA
+			tag = SOL
+			tag = SRA
+			tag = TRU
+			tag = ZTA
+			tag = IBA
+			tag = IBL
+			tag = CSL
+			tag = SLA
+			tag = RZA
+			tag = MLR
+			tag = ERT
+			tag = IRT
+			tag = SCA
+		}
+	}
+	enable = {
+		ADISCORD_difficulty_ai_advanced = yes
+		ADISCORD_difficulty_ai_military_context = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = ADISCORD_squad_weapons_equipment
+		value = 20
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = support
+		value = 15
+	}
 }

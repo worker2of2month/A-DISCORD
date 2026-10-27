@@ -659,6 +659,49 @@ NAM_weber_talks_possible = {
 }
 
 # ----- War of return -----
+NAM_ai_war_of_return_preparing = {
+	NAM_war_of_return_can_start = yes
+	OR = {
+		focus_progress = { focus = NAM_defeat_war_of_return progress > 0 }
+		focus_progress = { focus = NAM_rad_war_of_return progress > 0 }
+		focus_progress = { focus = NAM_hum_war_of_return progress > 0 }
+		focus_progress = { focus = NAM_board_war_of_return progress > 0 }
+	}
+}
+
+# COUNTRY target. Compromise peace follows current field owners; exile follows
+# the two initial targets registered by NAM_war_of_return_start.
+NAM_ai_war_of_return_target = {
+	exists = yes
+	has_capitulated = no
+	NOT = { tag = NAM }
+	NOT = { has_war_with = NAM }
+	NOT = { is_in_faction_with = NAM }
+	NAM = { NAM_ai_war_of_return_preparing = yes }
+	OR = {
+		AND = {
+			NAM = { NAM_wor_exile_war_ready = yes }
+			NAM_wor_target_valid = yes
+			OR = {
+				tag = EFL
+				tag = AZH
+			}
+		}
+		AND = {
+			NAM = { NAM_wor_exile_war_ready = no }
+			is_subject = no
+			OR = {
+				owns_state = 67
+				owns_state = 688
+				owns_state = 689
+				owns_state = 690
+				owns_state = 719
+				owns_state = 700
+			}
+		}
+	}
+}
+
 NAM_war_of_return_active = {
 	has_global_flag = NAM_war_of_return_started
 	NOT = { has_global_flag = NAM_war_of_return_resolved }

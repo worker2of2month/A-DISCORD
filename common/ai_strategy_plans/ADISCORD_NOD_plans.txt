@@ -1,0 +1,30 @@
+# Open the school before industrial expansion so training overlaps shipbuilding.
+NOD_naval_preparation_plan = {
+	name = "Nodrul naval preparation"
+	desc = ""
+	allowed = { original_tag = NOD }
+	enable = {
+		tag = NOD
+		is_ai = yes
+		has_focus_tree = NOD_focus
+		has_capitulated = no
+		NOT = { has_country_flag = STP_ps_exile_received }
+		NOT = { has_completed_focus = NOD_Submarine_Blockade }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NOD }
+			NOT = { has_focus_tree = NOD_focus }
+			has_capitulated = yes
+			has_country_flag = STP_ps_exile_received
+			has_completed_focus = NOD_Submarine_Blockade
+		}
+	}
+	ai_national_focuses = {
+		NOD_Naval_Command
+		NOD_Landing_Staff
+		NOD_Cussington_Naval_Yards
+		NOD_Sea_Lane_Escorts
+	}
+	weight = { factor = 20 }
+}

@@ -388,6 +388,95 @@ ADISCORD_vorkerland_rus_can_open_sla_front = {
 	}
 }
 
+# COUNTRY target. Preparation follows an unlocked border campaign, including
+# its focus construction; resource shortages delay entry, not deployment.
+RUS_ai_dirty_campaign_target = {
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	NOT = { has_war_with = RUS }
+	NOT = { is_in_faction_with = RUS }
+	RUS = {
+		exists = yes
+		ADISCORD_vorkerland_rus_dirty_campaign_idle = yes
+		RUS_ai_proclamation_pending = no
+	}
+	OR = {
+		AND = {
+			tag = SLA
+			RUS = {
+				ADISCORD_vorkerland_rus_can_open_sla_front = yes
+				ADISCORD_vorkerland_rus_borders_dirty_sla = yes
+				NOT = { has_country_flag = ADISCORD_vorkerland_rus_sla_absorbed }
+				OR = {
+					has_completed_focus = RUS_drive_starolesye_back
+					focus_progress = { focus = RUS_drive_starolesye_back progress > 0 }
+				}
+			}
+		}
+		AND = {
+			tag = RZA
+			RUS = {
+				ADISCORD_vorkerland_rus_can_open_free_front = yes
+				ADISCORD_vorkerland_rus_borders_dirty_rza = yes
+				NOT = { has_country_flag = ADISCORD_vorkerland_rus_rza_absorbed }
+				OR = {
+					has_completed_focus = RUS_press_the_closed_zone
+					focus_progress = { focus = RUS_press_the_closed_zone progress > 0 }
+				}
+			}
+		}
+		AND = {
+			tag = MLR
+			RUS = {
+				ADISCORD_vorkerland_rus_can_open_free_front = yes
+				ADISCORD_vorkerland_rus_borders_dirty_mlr = yes
+				NOT = { has_country_flag = ADISCORD_vorkerland_rus_mlr_absorbed }
+				OR = {
+					has_completed_focus = RUS_press_the_closed_zone
+					focus_progress = { focus = RUS_press_the_closed_zone progress > 0 }
+				}
+			}
+		}
+		AND = {
+			tag = ERT
+			RUS = {
+				ADISCORD_vorkerland_rus_can_open_free_front = yes
+				ADISCORD_vorkerland_rus_borders_dirty_ert = yes
+				NOT = { has_country_flag = ADISCORD_vorkerland_rus_ert_absorbed }
+				OR = {
+					has_completed_focus = RUS_press_the_closed_zone
+					focus_progress = { focus = RUS_press_the_closed_zone progress > 0 }
+				}
+			}
+		}
+		AND = {
+			tag = IRT
+			RUS = {
+				ADISCORD_vorkerland_rus_can_open_free_front = yes
+				ADISCORD_vorkerland_rus_borders_dirty_irt = yes
+				NOT = { has_country_flag = ADISCORD_vorkerland_rus_irt_absorbed }
+				OR = {
+					has_completed_focus = RUS_press_the_closed_zone
+					focus_progress = { focus = RUS_press_the_closed_zone progress > 0 }
+				}
+			}
+		}
+		AND = {
+			tag = SCA
+			RUS = {
+				ADISCORD_vorkerland_rus_can_open_free_front = yes
+				ADISCORD_vorkerland_rus_borders_dirty_sca = yes
+				NOT = { has_country_flag = ADISCORD_vorkerland_rus_sca_absorbed }
+				OR = {
+					has_completed_focus = RUS_press_the_closed_zone
+					focus_progress = { focus = RUS_press_the_closed_zone progress > 0 }
+				}
+			}
+		}
+	}
+}
+
 ADISCORD_vorkerland_rus_holds_current_target = {
 	OR = {
 		AND = {

@@ -149,7 +149,7 @@ equipments = {
 	}
 
 	ADISCORD_light_combat_platform_2163 = {
-		year = 2163
+		year = 2150
 		archetype = ADISCORD_recon_platform_archetype
 		picture = archetype_light_tank_equipment
 		priority = 20
@@ -164,9 +164,40 @@ equipments = {
 		visual_level = 0
 	}
 
+	ADISCORD_combat_platform_2150 = {
+		year = 2150
+		archetype = ADISCORD_combat_platform_archetype
+		picture = archetype_medium_tank_equipment
+		active = no
+		priority = 20
+		visual_level = 0
+	}
+
+	ADISCORD_heavy_combat_platform_2158 = {
+		year = 2158
+		archetype = ADISCORD_heavy_platform_archetype
+		picture = archetype_heavy_tank_equipment
+		active = no
+		priority = 30
+		visual_level = 0
+		maximum_speed = 5
+		armor_value = 64
+		breakthrough = 44
+		soft_attack = 26
+		hard_attack = 17
+		ap_attack = 65
+		build_cost_ic = 18
+		resources = {
+			steel = 5
+			tungsten = 2
+			chromium = 2
+		}
+	}
+
 	ADISCORD_combat_platform_2170 = {
 		year = 2160
 		archetype = ADISCORD_combat_platform_archetype
+		parent = ADISCORD_combat_platform_2150
 		picture = archetype_medium_tank_equipment
 		priority = 30
 		visual_level = 1
@@ -277,6 +308,7 @@ equipments = {
 	ADISCORD_heavy_combat_platform_2183 = {
 		year = 2170
 		archetype = ADISCORD_heavy_platform_archetype
+		parent = ADISCORD_heavy_combat_platform_2158
 		picture = archetype_heavy_tank_equipment
 		priority = 45
 		visual_level = 0

@@ -651,10 +651,12 @@ class PartyRouteContracts(unittest.TestCase):
                     for e in walk(one(decision, "complete_effect"))
                 )
             )
-            self.assertIn(
-                "STP_pw_party_nod_threat_active",
-                str(signature(one(decision, "visible"))),
+            threat_condition = (
+                "STP_pw_party_nod_threat_current"
+                if decision_id == "STP_pw_party_nod_staff_readiness"
+                else "STP_pw_party_nod_threat_active"
             )
+            self.assertIn(threat_condition, str(signature(one(decision, "visible"))))
             reward = one(decision, "complete_effect")
             self.assertTrue(
                 any(
@@ -3327,6 +3329,37 @@ class PoliticalChapterContracts(unittest.TestCase):
                 payload,
             )
 
+    def test_protectorate_requires_current_explicit_event_consent(self):
+        facts = {("STP", "STP_ch_pressure_current", "yes"): True}
+        decision = self.decisions["STP_ch_accept_protection"]
+        payload = list(selected_effects(one(decision, "complete_effect"), facts))
+        self.assertNotIn("STP_ch_prepare_protectorate", [e.key for _, e in payload])
+        offers = [one(e.value, "id") for _, e in payload if e.key == "country_event"]
+        self.assertEqual(len(offers), 1)
+        event = self.events[offers[0]]
+        self.assertFalse(children(event, "immediate"))
+        options = children(event, "option")
+        refusal, acceptance = options
+        self.assertFalse(children(refusal, "trigger"))
+        for current, pending, expected in (
+            (True, False, True),
+            (False, False, False),
+            (True, True, False),
+        ):
+            state = {
+                ("STP", "STP_ch_pressure_current", "yes"): current,
+                ("STP", "has_country_flag", "STP_ch_subject_pending"): pending,
+            }
+            with self.subTest(current=current, pending=pending):
+                refused = list(selected_effects(refusal, state))
+                self.assertEqual({e.key for _, e in refused}, {"name", "ai_chance", "custom_effect_tooltip"})
+                self.assertEqual(matches_conditions(one(acceptance, "trigger"), state), expected)
+                accepted = list(selected_effects(acceptance, state))
+                self.assertEqual(
+                    sum(e.key == "STP_ch_prepare_protectorate" for _, e in accepted),
+                    int(expected),
+                )
+
     def test_only_one_trade_extension_can_be_purchased(self):
         decision = self.decisions["STP_ch_trade_delay"]
         facts = {
@@ -3531,6 +3564,107 @@ class PoliticalChapterContracts(unittest.TestCase):
         )
         removal = next(i for i, e in enumerate(effects) if e.key == "remove_mission")
         self.assertLess(clear, removal)
+
+    def test_excise_reserve_protects_the_entire_hospital_report(self):
+        excise = self.events["ADISCORD_STP_ch.27"]
+        report = self.events["ADISCORD_STP_ch.28"]
+        base = {
+            ("STP", "STP_pf_active", "yes"): True,
+            ("STP", "has_country_flag", "STP_cw_postwar"): True,
+            ("STP", "has_idea", "STP_law_hard_drugs"): True,
+        }
+        for suffix, expected_income, funded in (("a", 600, True), ("b", 1200, False)):
+            option = next(
+                o for o in children(excise, "option")
+                if one(o, "name") == f"ADISCORD_STP_ch.27.{suffix}"
+            )
+            payload = [e for _, e in selected_effects(option, base)]
+            amounts = {
+                one(e.value, "var"): float(one(e.value, "value"))
+                for e in payload if e.key == "add_to_variable"
+            }
+            self.assertEqual(amounts["ADISCORD_economy_treasury"], expected_income)
+            self.assertEqual(
+                amounts["ADISCORD_economy_current_month_action_income"], expected_income
+            )
+            self.assertEqual(
+                any(e.key == "set_country_flag" and e.value == "STP_party_drug_health_fund"
+                    for e in payload),
+                funded,
+            )
+            facts = {
+                **base,
+                ("STP", "has_country_flag", "STP_party_drug_health_fund"): funded,
+                ("STP", "has_idea", "STP_party_hospital_overload"): not funded,
+            }
+            immediate = [e.key for _, e in selected_effects(one(report, "immediate"), facts)]
+            self.assertEqual("add_timed_idea" in immediate, not funded)
+            for clinics, overload in ((False, False), (False, True), (True, False), (True, True)):
+                current = {
+                    **facts,
+                    ("STP", "has_completed_focus", "STP_party_festival_clinics"): clinics,
+                    ("STP", "has_idea", "STP_party_hospital_overload"): overload,
+                }
+                offered = [
+                    o for o in children(report, "option")
+                    if matches_conditions(one(o, "trigger"), current)
+                ]
+                self.assertEqual(
+                    [one(o, "name") for o in offered],
+                    ["ADISCORD_STP_ch.28.funded"] if funded or clinics or not overload else
+                    ["ADISCORD_STP_ch.28.a", "ADISCORD_STP_ch.28.b"],
+                )
+                if funded or clinics or not overload:
+                    # The timeout must also have only the free response available.
+                    effects = [e.key for _, e in selected_effects(offered[0], current)]
+                    for penalty in ("add_political_power", "add_stability", "add_timed_idea"):
+                        self.assertNotIn(penalty, effects)
+            closed_market = {**facts, ("STP", "has_idea", "STP_law_hard_drugs"): False}
+            self.assertEqual(
+                [one(o, "name") for o in children(report, "option")
+                 if matches_conditions(one(o, "trigger"), closed_market)],
+                ["ADISCORD_STP_ch.28.obsolete"],
+            )
+
+    def test_excise_reserve_keeps_value_when_clinics_prevent_the_crisis(self):
+        options = {
+            one(o, "name"): o
+            for o in children(self.events["ADISCORD_STP_ch.27"], "option")
+        }
+        funded = options["ADISCORD_STP_ch.27.a"]
+        unfunded = options["ADISCORD_STP_ch.27.b"]
+        decisions = {
+            d.key: d.value
+            for category in parse_clausewitz(read(DECISIONS))
+            for d in category.value
+            if isinstance(d.value, list)
+        }
+        public = decisions["STP_pi_festival_public"]
+        reference_price = float(one(one(one(public, "custom_cost_trigger"), "check_variable"), "value"))
+        reference_stability = next(
+            float(one(e.value, "value")) for e in walk(one(public, "complete_effect"))
+            if e.key == "set_variable" and one(e.value, "var") == "STP_pi_festival_quote"
+        )
+        for clinics in (False, True):
+            for settled in (False, True):
+                facts = {
+                    ("STP", "has_completed_focus", "STP_party_festival_clinics"): clinics,
+                    ("STP", "STP_pf_settled", "yes"): settled,
+                }
+                packages = []
+                for option in (funded, unfunded):
+                    payload = [e for _, e in selected_effects(option, facts)]
+                    cash = sum(
+                        float(one(e.value, "value")) for e in payload
+                        if e.key == "add_to_variable"
+                        and one(e.value, "var") == "ADISCORD_economy_treasury"
+                    )
+                    stability = sum(float(e.value) for e in payload if e.key == "add_stability")
+                    packages.append((cash, stability))
+                # The reserve buys an immediate civic benefit at the existing
+                # programme's price even when later healthcare is already covered.
+                self.assertEqual(packages[1][0] - packages[0][0], reference_price)
+                self.assertEqual(packages[0][1] - packages[1][1], reference_stability)
 
     def test_new_events_have_safe_close_options_and_native_gates(self):
         for number in (6, 7, 13):

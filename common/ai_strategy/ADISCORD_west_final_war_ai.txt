@@ -36,6 +36,34 @@ ADISCORD_west_wrk_front_ivn = {
 		execute_order = yes
 		manual_attack = yes
 	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			ADISCORD_west_on_ivn_side = yes
+			has_war_with = FROM
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			ADISCORD_west_on_ivn_side = yes
+			has_war_with = FROM
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 # A depleted army keeps native readiness checks while replenishing its front.
@@ -66,6 +94,22 @@ ADISCORD_west_wrk_hold_ivn = {
 		}
 		ratio = 0.01
 		priority = 1500
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+
+	# The western defensive phase also bounds an overlapping expedition front.
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			ADISCORD_west_on_ivn_side = yes
+			has_war_with = FROM
+			FROM = { ADISCORD_difficulty_ai_abyss_front = yes }
+		}
+		ratio = 0.01
+		priority = 1502
 		ordertype = front
 		execution_type = careful
 		execute_order = yes
@@ -127,6 +171,34 @@ ADISCORD_wrk_postwar_expedition_front = {
 		execute_order = yes
 		manual_attack = no
 	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			has_country_flag = ADISCORD_vorkerland_pw_campaign_member
+			has_war_with = FROM
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			has_country_flag = ADISCORD_vorkerland_pw_campaign_member
+			has_war_with = FROM
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_west_ivn_front_wrk = {
@@ -156,5 +228,86 @@ ADISCORD_west_ivn_front_wrk = {
 		execution_type = balanced
 		execute_order = yes
 		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			ADISCORD_west_on_wrk_side = yes
+			has_war_with = FROM
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			ADISCORD_west_on_wrk_side = yes
+			has_war_with = FROM
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
+# The announced western crisis gives both sovereign champions the same preparation policy.
+ADISCORD_difficulty_west_campaign_supply = {
+	allowed = {
+		OR = {
+			tag = WRK
+			tag = IVN
+		}
+	}
+	enable = {
+		ADISCORD_difficulty_ai_advanced = yes
+		OR = {
+			AND = {
+				ADISCORD_west_crisis_open = yes
+				has_global_flag = ADISCORD_west_crisis_warned
+				WRK = {
+					exists = yes
+					has_capitulated = no
+					is_subject = no
+				}
+				IVN = {
+					exists = yes
+					has_capitulated = no
+					is_subject = no
+					NOT = { is_in_faction_with = WRK }
+				}
+			}
+			AND = {
+				ADISCORD_west_final_active = yes
+				OR = {
+					has_war_with = WRK
+					has_war_with = IVN
+				}
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_production_factor
+		id = infantry
+		value = 15
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = artillery
+		value = 15
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = support
+		value = 10
 	}
 }

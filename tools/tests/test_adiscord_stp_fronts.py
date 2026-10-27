@@ -341,31 +341,10 @@ class ShabratAssaultWaveAndAirTests(unittest.TestCase):
         return re.sub(r"(?m)#.*$", "", path.read_text(encoding="utf-8-sig"))
 
     def test_shortages_allow_careful_attacks_and_only_temporary_recovery_stops_them(self):
-        from tools.tests.test_adiscord_stp_preparation import block, entries, scalar
+        from tools.tests.test_adiscord_difficulty_ai import DifficultyAIBehaviorTests
 
-        profiles = entries("common/ai_strategy/ADISCORD_STP_civil_war.txt")
-
-        def enabled(conditions, reserve, strength, regroup, disorganized):
-            def matches(condition):
-                key, value = condition.key, condition.value
-                if key == "OR":
-                    return any(matches(child) for child in value)
-                if key in ("stockpile_ratio", "fighting_army_strength_ratio"):
-                    comparison = [child.value for child in value if not child.key]
-                    self.assertEqual(comparison[1], "<")
-                    actual = reserve if key == "stockpile_ratio" else strength
-                    return actual < float(comparison[2])
-                facts = {
-                    ("is_ai", "yes"): True,
-                    ("has_war_with", "STP"): True,
-                    ("has_global_flag", "STP_cw_started"): True,
-                    ("has_country_flag", "STS_ai_regroup"): regroup,
-                    ("has_idea", "STP_cw_operation_disorganization"): disorganized,
-                }
-                return facts[(key, value)]
-
-            return all(matches(condition) for condition in conditions)
-
+        harness = DifficultyAIBehaviorTests()
+        harness.setUpClass()
         names = {
             "STS_cw_front_against_stp",
             "STS_shabrat_civil_war_army",
@@ -380,20 +359,20 @@ class ShabratAssaultWaveAndAirTests(unittest.TestCase):
             (0.0, 0.7, False, False, "careful", "yes"),
             (0.05, 0.8, False, False, "rush_weak", "yes"),
         ):
-            with self.subTest(reserve=reserve, strength=strength, regroup=regroup,
-                              disorganized=disorganized):
-                controls = [
-                    strategy.value
-                    for profile in profiles if profile.key in names
-                    if enabled(block(profile.value, "enable"), reserve, strength,
-                               regroup, disorganized)
-                    for strategy in profile.value
-                    if strategy.key == "ai_strategy"
-                    and scalar(strategy.value, "type") == "front_control"
-                ]
-                control = max(controls, key=lambda c: int(scalar(c, "priority")))
-                self.assertEqual(scalar(control, "execution_type"), mode)
-                self.assertEqual(scalar(control, "execute_order"), execute)
+            for difficulty in (3, 4):
+                with self.subTest(reserve=reserve, strength=strength, regroup=regroup,
+                                  disorganized=disorganized, difficulty=difficulty):
+                    actor = harness.context(
+                        "STS", difficulty, wars={"STP"},
+                        has_global_flag={"STP_cw_started"},
+                        has_country_flag={"STS_ai_regroup"} if regroup else set(),
+                        has_idea={"STP_cw_operation_disorganization"} if disorganized else set(),
+                        stockpile={"infantry_equipment": reserve}, army_ratios={"STP": strength},
+                    )
+                    enemy = harness.context("STP", wars={"STS"}, army_ratios={"STS": 1 / strength})
+                    control = harness.campaign_orders(names, actor, enemy)[-1]
+                    self.assertEqual(control["execution_type"], mode)
+                    self.assertEqual(control["execute_order"], execute)
 
     def test_waves_alternate_with_regroups_unless_ground_was_taken(self) -> None:
         tick = compact(named_block(self.text(self.EFFECTS), "STP_cw_ai_shabrat_offensive_tick"))

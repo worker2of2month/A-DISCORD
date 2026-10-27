@@ -965,7 +965,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_board_stock_mobilisation
-		icon = GFX_focus_generic_industral_devlopment_bucket
+		icon = GFX_focus_ADISCORD_industrial_development
 		x = 10
 		y = 4
 		cost = 5

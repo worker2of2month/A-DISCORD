@@ -8,6 +8,7 @@ ADISCORD_ai_fiscal_crisis = {
 	ai_strategy = { type = role_ratio id = armor value = -80 }
 	ai_strategy = { type = equipment_production_factor id = fighter value = -35 }
 	ai_strategy = { type = equipment_production_factor id = cas value = -50 }
+	ai_strategy = { type = equipment_production_factor id = naval_bomber value = -35 }
 	ai_strategy = { type = equipment_production_factor id = infantry value = 30 }
 	ai_strategy = { type = equipment_production_factor id = support value = 10 }
 	ai_strategy = { type = added_military_to_civilian_factory_ratio value = -40 }
@@ -24,6 +25,7 @@ ADISCORD_ai_fiscal_stress = {
 	ai_strategy = { type = role_ratio id = armor value = -30 }
 	ai_strategy = { type = equipment_production_factor id = fighter value = -15 }
 	ai_strategy = { type = equipment_production_factor id = cas value = -25 }
+	ai_strategy = { type = equipment_production_factor id = naval_bomber value = -15 }
 	ai_strategy = { type = equipment_production_factor id = infantry value = 20 }
 	ai_strategy = { type = added_military_to_civilian_factory_ratio value = -20 }
 	ai_strategy = { type = building_target id = ADISCORD_business_center value = 0 }
@@ -58,6 +60,7 @@ ADISCORD_ai_healthy_civilian_growth = {
 	enable = {
 		ADISCORD_economy_ai_is_healthy = yes
 		has_war = no
+		ADISCORD_ai_has_war_preparation = no
 		check_variable = { var = ADISCORD_economy_surplus_streak value = 2 compare = greater_than_or_equals }
 	}
 	abort_when_not_enabled = yes
@@ -66,6 +69,23 @@ ADISCORD_ai_healthy_civilian_growth = {
 	ai_strategy = { type = building_target id = ADISCORD_business_center value = 8 }
 	ai_strategy = { type = building_target id = ADISCORD_science_center value = 2 }
 	ai_strategy = { type = building_target id = ADISCORD_industrial_cluster value = 4 }
+}
+
+# Preparation changes construction before hostilities without adding factory
+# guarantees or expanding recruitment. Fiscal recovery keeps its own priority.
+ADISCORD_ai_healthy_prewar_industry = {
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_war = no
+		ADISCORD_economy_ai_is_healthy = yes
+		ADISCORD_ai_has_war_preparation = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = added_military_to_civilian_factory_ratio
+		value = 25
+	}
 }
 
 ADISCORD_ai_healthy_war_industry = {
@@ -103,6 +123,7 @@ ADISCORD_ai_healthy_peace_infrastructure = {
 	enable = {
 		ADISCORD_economy_ai_is_healthy = yes
 		has_war = no
+		ADISCORD_ai_has_war_preparation = no
 		check_variable = { var = ADISCORD_economy_surplus_streak value = 3 compare = greater_than_or_equals }
 	}
 	abort_when_not_enabled = yes

@@ -26,6 +26,70 @@ VAL_final_crisis_preparing = {
 	check_variable = { var = VAL_final_crisis_phase value = 1 compare = equals }
 }
 
+# COUNTRY defender. Coalition membership follows the scripted war entry.
+# NOD can leave VAL's faction at launch when released from STP's dependency.
+VAL_ai_final_campaign_defender = {
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = VAL }
+	NOT = { is_subject_of = VAL }
+	VAL = {
+		exists = yes
+		has_capitulated = no
+	}
+	OR = {
+		AND = {
+			has_country_flag = VAL_campaign_target
+			VAL = { has_country_flag = VAL_campaign_mobilizing }
+		}
+		AND = {
+			VAL = { VAL_final_crisis_preparing = yes }
+			OR = {
+				tag = NOD
+				AND = {
+					OR = {
+						tag = STP
+						tag = STS
+					}
+					NOT = { is_in_faction_with = VAL }
+					OR = {
+						is_in_faction_with = NOD
+						is_subject_of = NOD
+						AND = {
+							tag = STP
+							NOD = { is_subject_of = STP }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY VAL. The sale picks the largest unlocked batch covered by stock.
+# Every eligible tier must leave the same rifle reserve, including fallbacks.
+VAL_ai_surplus_export_ready = {
+	has_war = no
+	ADISCORD_economy_demobilization_threat = no
+	NOT = { has_country_flag = VAL_campaign_mobilizing }
+	NOT = { has_equipment = { infantry_equipment < 40000 } }
+	OR = {
+		NOT = { has_completed_focus = VAL_Bulk_Arms_Contracts }
+		has_equipment = { infantry_equipment < 50000 }
+		NOT = { has_equipment = { infantry_equipment < 65000 } }
+	}
+	OR = {
+		NOT = { has_completed_focus = VAL_Army_Arsenal_Orders }
+		has_equipment = { infantry_equipment < 100000 }
+		NOT = { has_equipment = { infantry_equipment < 115000 } }
+	}
+	OR = {
+		NOT = { has_completed_focus = VAL_Strategic_Arms_Exports }
+		has_equipment = { infantry_equipment < 200000 }
+		NOT = { has_equipment = { infantry_equipment < 215000 } }
+	}
+}
+
 VAL_final_crisis_coalition = {
 	OR = {
 		STP = { exists = yes NOT = { is_subject_of = VAL } OR = { has_country_flag = VAL_final_war_member is_in_faction_with = NOD is_subject_of = NOD NOD = { is_subject_of = STP } } }

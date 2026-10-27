@@ -363,27 +363,24 @@ attache_sent = {
 }
 
 # Difficulty modifiers
+# Native difficulty applies to the current human/AI controller, including tag handoffs.
 
 diff_very_easy_player = {
-	production_factory_max_efficiency_factor = 0.3
+	industrial_capacity_factory = 0.25
+	industrial_capacity_dockyard = 0.25
+	production_speed_buildings_factor = 0.20
 	research_speed_factor = 0.15
-	political_power_factor = 0.5
-	production_lack_of_resource_penalty_factor = -0.8
-	army_fuel_consumption_factor = -0.5
-	air_fuel_consumption_factor = -0.5
-	navy_fuel_consumption_factor = -0.5
-	supply_consumption_factor = -0.1
+	political_power_factor = 0.25
+	supply_consumption_factor = -0.15
 	no_supply_grace = 72
 }
 
 diff_easy_player = {
-	production_factory_max_efficiency_factor = 0.2
-	research_speed_factor = 0.07
-	political_power_factor = 0.25
-	production_lack_of_resource_penalty_factor = -0.3
-	army_fuel_consumption_factor = -0.25
-	air_fuel_consumption_factor = -0.25
-	navy_fuel_consumption_factor = -0.25
+	industrial_capacity_factory = 0.10
+	industrial_capacity_dockyard = 0.10
+	production_speed_buildings_factor = 0.10
+	research_speed_factor = 0.10
+	political_power_factor = 0.10
 	supply_consumption_factor = -0.05
 	no_supply_grace = 48
 }
@@ -393,28 +390,19 @@ diff_normal_player = {
 }
 
 diff_hard_player = {
-	production_factory_max_efficiency_factor = -0.2
-	research_speed_factor = -0.15
-	political_power_factor = -0.1
-	supply_consumption_factor = 0.05
-	no_supply_grace = 24
+	no_supply_grace = 36
 }
 
 diff_very_hard_player = {
-	production_factory_max_efficiency_factor = -0.3
-	research_speed_factor = -0.30
-	political_power_factor = -0.15
-	supply_consumption_factor = 0.1
+	no_supply_grace = 36
 }
 
-
 diff_very_easy_ai = {
-	peace_score_ratio_transferred_to_players = 0.25
+	no_supply_grace = 36
 }
 
 diff_easy_ai = {
-	no_supply_grace = 24
-	peace_score_ratio_transferred_to_players = 0.1
+	no_supply_grace = 36
 }
 
 diff_normal_ai = {
@@ -422,19 +410,30 @@ diff_normal_ai = {
 }
 
 diff_hard_ai = {
-	army_fuel_consumption_factor = -0.25
-	air_fuel_consumption_factor = -0.25
-	navy_fuel_consumption_factor = -0.25
+	industrial_capacity_factory = 0.20
+	industrial_capacity_dockyard = 0.20
+	production_speed_buildings_factor = 0.15
+	production_factory_efficiency_gain_factor = 0.25
+	research_speed_factor = 0.10
+	supply_consumption_factor = -0.10
+	army_fuel_consumption_factor = -0.15
+	air_fuel_consumption_factor = -0.15
+	navy_fuel_consumption_factor = -0.15
 	no_supply_grace = 48
 }
 
 diff_very_hard_ai = {
-	army_fuel_consumption_factor = -0.5
-	air_fuel_consumption_factor = -0.5
-	navy_fuel_consumption_factor = -0.5
+	industrial_capacity_factory = 0.40
+	industrial_capacity_dockyard = 0.40
+	production_speed_buildings_factor = 0.30
+	production_factory_efficiency_gain_factor = 0.50
+	research_speed_factor = 0.20
+	supply_consumption_factor = -0.20
+	army_fuel_consumption_factor = -0.30
+	air_fuel_consumption_factor = -0.30
+	navy_fuel_consumption_factor = -0.30
 	no_supply_grace = 72
 }
-
 
 diff_strong_ai_generic = {
 	# fightyness

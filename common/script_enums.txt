@@ -255,6 +255,15 @@ script_enum_equipment_bonus_type = {
 	ADISCORD_coastal_patrol_ship
 	ADISCORD_coastal_patrol_ship_1
 
+	ADISCORD_interceptor_archetype
+	ADISCORD_interceptor_airframe_2158
+	ADISCORD_interceptor_airframe_2173
+	ADISCORD_strike_drone_archetype
+	ADISCORD_strike_airframe_2158
+	transport_plane_equipment
+	ADISCORD_transport_airframe_2162
+	ADISCORD_transport_airframe_2169
+	ADISCORD_transport_airframe_2175
 	ADISCORD_fighter_archetype
 	ADISCORD_fighter_airframe_2163
 	ADISCORD_interceptor_airframe_2183
@@ -274,23 +283,30 @@ script_enum_equipment_bonus_type = {
 	ADISCORD_light_combat_platform_2163
 	ADISCORD_armored_carrier_2163
 	ADISCORD_combat_platform_2170
+	ADISCORD_combat_platform_2150
 	ADISCORD_recon_drone_carrier_2170
 	ADISCORD_ifv_2170
 	ADISCORD_combat_platform_2183
 	ADISCORD_repair_platform_2183
 	ADISCORD_networked_ifv_2183
 	ADISCORD_heavy_combat_platform_2183
+	ADISCORD_heavy_combat_platform_2158
 	ADISCORD_combat_platform_2200
 	ADISCORD_heavy_combat_platform_2200
 	artillery_equipment
 	artillery_equipment_1
+	ADISCORD_artillery_equipment_2160
 	ADISCORD_artillery_equipment_2170
 	ADISCORD_artillery_equipment_2183
 	anti_tank_equipment
 	ADISCORD_anti_tank_equipment_2163
+	ADISCORD_anti_tank_equipment_2161
+	ADISCORD_anti_tank_equipment_2166
 	ADISCORD_anti_tank_equipment_2183
 	anti_air_equipment
 	ADISCORD_anti_air_equipment_2163
+	ADISCORD_anti_air_equipment_2160
+	ADISCORD_anti_air_equipment_2165
 	ADISCORD_anti_air_equipment_2183
 	infantry_equipment
 	infantry_equipment_0

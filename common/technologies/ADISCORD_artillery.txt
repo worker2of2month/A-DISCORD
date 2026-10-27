@@ -1,8 +1,8 @@
 technologies = {
 	ADISCORD_tech_restored_field_artillery = {
-		artillery = {
-			soft_attack = 0.04
-			reliability = 0.012
+		category_artillery = {
+			soft_attack = 0.03
+			reliability = 0.02
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_recoil_recovery
@@ -30,9 +30,9 @@ technologies = {
 	}
 
 	ADISCORD_tech_recoil_recovery = {
-		artillery = {
-			soft_attack = 0.041
-			reliability = 0.012
+		category_artillery = {
+			reliability = 0.04
+			breakthrough = 0.03
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_modular_gun_carriages
@@ -59,9 +59,9 @@ technologies = {
 	}
 
 	ADISCORD_tech_modular_gun_carriages = {
-		artillery = {
-			soft_attack = 0.043
-			reliability = 0.013
+		category_artillery = {
+			maximum_speed = 0.05
+			reliability = 0.02
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_electrohydraulic_gun_laying
@@ -92,22 +92,23 @@ technologies = {
 	}
 
 	ADISCORD_tech_electrohydraulic_gun_laying = {
-		artillery = {
-			soft_attack = 0.044
-			reliability = 0.013
+		category_artillery = {
+			soft_attack = 0.05
+			breakthrough = 0.03
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_assisted_projectiles
 			research_cost_coeff = 1
 		}
-		research_cost = 1.35
+		enable_equipments = { ADISCORD_artillery_equipment_2160 }
+		research_cost = 2.05
 		start_year = 2160
 		folder = {
 			name = artillery_folder
 			position = { x = -3 y = 6 }
 		}
 		ai_will_do = {
-			factor = 32.5
+			factor = 43.875
 			modifier = {
 				factor = 1.25
 				has_war = yes
@@ -121,9 +122,9 @@ technologies = {
 	}
 
 	ADISCORD_tech_smart_fire_control = {
-		artillery = {
-			soft_attack = 0.045
-			reliability = 0.013
+		category_artillery = {
+			soft_attack = 0.08
+			defense = 0.03
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_counterbattery_radar_links
@@ -150,9 +151,9 @@ technologies = {
 	}
 
 	ADISCORD_tech_counterbattery_radar_links = {
-		artillery = {
-			hard_attack = 0.048
-			ap_attack = 0.048
+		category_artillery = {
+			defense = 0.08
+			reliability = 0.04
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_drone_spotted_batteries
@@ -179,8 +180,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_assisted_projectiles = {
-		artillery = {
-			soft_attack = 0.051
+		category_artillery = {
+			soft_attack = 0.06
 			reliability = 0.03
 		}
 		path = {
@@ -209,49 +210,15 @@ technologies = {
 	}
 
 	ADISCORD_tech_drone_spotted_batteries = {
-		artillery = {
-			hard_attack = 0.056
-			reliability = 0.032
+		category_artillery = {
+			soft_attack = 0.08
+			reliability = 0.04
 		}
-		path = {
-			leads_to_tech = ADISCORD_tech_autonomous_battery_network
-			research_cost_coeff = 1
-		}
-		enable_equipments = { ADISCORD_artillery_equipment_2183 }
-		research_cost = 2.05
+		research_cost = 1.625
 		start_year = 2170
 		folder = {
 			name = artillery_folder
 			position = { x = 3 y = 14 }
-		}
-		ai_will_do = {
-			factor = 35.1
-			modifier = {
-				factor = 1.25
-				has_war = yes
-			}
-			modifier = {
-				factor = 0.30
-				ADISCORD_economy_ai_is_crisis = yes
-			}
-		}
-		categories = { artillery }
-	}
-
-	ADISCORD_tech_uncrewed_howitzer_sections = {
-		artillery = {
-			soft_attack = 0.063
-			reliability = 0.018
-		}
-		path = {
-			leads_to_tech = ADISCORD_tech_autonomous_battery_network
-			research_cost_coeff = 1
-		}
-		research_cost = 1.763
-		start_year = 2175
-		folder = {
-			name = artillery_folder
-			position = { x = -3 y = 16 }
 		}
 		ai_will_do = {
 			factor = 26
@@ -267,21 +234,46 @@ technologies = {
 		categories = { artillery }
 	}
 
-	ADISCORD_tech_autonomous_battery_network = {
-		artillery = {
-			reliability = 0.08
-			defense = 0.06
+	ADISCORD_tech_uncrewed_howitzer_sections = {
+		category_artillery = {
+			reliability = 0.05
+			supply_consumption = -0.05
 		}
-		coordination_bonus = 0.02
-		dependencies = {
-			ADISCORD_tech_drone_spotted_batteries = 1
-			ADISCORD_tech_uncrewed_howitzer_sections = 1
+		path = {
+			leads_to_tech = ADISCORD_tech_autonomous_battery_network
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_artillery_equipment_2183 }
+		research_cost = 2.05
+		start_year = 2175
+		folder = {
+			name = artillery_folder
+			position = { x = -3 y = 16 }
+		}
+		ai_will_do = {
+			factor = 35.1
+			modifier = {
+				factor = 1.25
+				has_war = yes
+			}
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_autonomous_battery_network = {
+		category_artillery = {
+			soft_attack = 0.10
+			defense = 0.06
 		}
 		research_cost = 2.55
 		start_year = 2180
 		folder = {
 			name = artillery_folder
-			position = { x = 0 y = 18 }
+			position = { x = -3 y = 18 }
 		}
 		ai_will_do = {
 			factor = 26
@@ -465,13 +457,14 @@ technologies = {
 
 	ADISCORD_tech_shaped_charges = {
 		category_anti_tank = {
-			hard_attack = 0.041
-			ap_attack = 0.041
+			hard_attack = 0.06
+			ap_attack = 0.05
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_tandem_warheads
 			research_cost_coeff = 1
 		}
+		enable_subunits = { ADISCORD_line_anti_tank }
 		research_cost = 0.55
 		start_year = 2155
 		folder = {
@@ -479,7 +472,7 @@ technologies = {
 			position = { x = 0 y = 2 }
 		}
 		ai_will_do = {
-			factor = 25
+			factor = 33.75
 			modifier = {
 				factor = 1.25
 				has_war = yes
@@ -494,8 +487,8 @@ technologies = {
 
 	ADISCORD_tech_tandem_warheads = {
 		category_anti_tank = {
-			hard_attack = 0.043
-			ap_attack = 0.043
+			ap_attack = 0.08
+			reliability = 0.02
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_scrap_at_launchers
@@ -527,21 +520,22 @@ technologies = {
 
 	ADISCORD_tech_scrap_at_launchers = {
 		category_anti_tank = {
-			hard_attack = 0.045
-			ap_attack = 0.045
+			hard_attack = 0.05
+			defense = 0.03
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_coil_at_systems
 			research_cost_coeff = 1
 		}
-		research_cost = 1.378
+		enable_equipments = { ADISCORD_anti_tank_equipment_2161 }
+		research_cost = 2.05
 		start_year = 2161
 		folder = {
 			name = artillery_folder
 			position = { x = -3 y = 6 }
 		}
 		ai_will_do = {
-			factor = 20
+			factor = 27
 			modifier = {
 				factor = 1.25
 				has_war = yes
@@ -556,8 +550,8 @@ technologies = {
 
 	ADISCORD_tech_imaging_infrared_seekers = {
 		category_anti_tank = {
-			reliability = 0.048
-			defense = 0.028
+			hard_attack = 0.06
+			reliability = 0.04
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_top_attack_munitions
@@ -585,21 +579,18 @@ technologies = {
 
 	ADISCORD_tech_top_attack_munitions = {
 		category_anti_tank = {
-			hard_attack = 0.051
-			ap_attack = 0.051
+			hard_attack = 0.06
+			ap_attack = 0.08
 		}
-		path = {
-			leads_to_tech = ADISCORD_tech_hypervelocity_at_networks
-			research_cost_coeff = 1
-		}
-		research_cost = 1.515
+		enable_equipments = { ADISCORD_anti_tank_equipment_2166 }
+		research_cost = 2.05
 		start_year = 2166
 		folder = {
 			name = artillery_folder
 			position = { x = 3 y = 10 }
 		}
 		ai_will_do = {
-			factor = 20
+			factor = 27
 			modifier = {
 				factor = 1.25
 				has_war = yes
@@ -614,8 +605,8 @@ technologies = {
 
 	ADISCORD_tech_coil_at_systems = {
 		category_anti_tank = {
-			ap_attack = 0.056
-			breakthrough = 0.032
+			ap_attack = 0.08
+			reliability = 0.03
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_superconducting_coil_barrels
@@ -643,8 +634,8 @@ technologies = {
 
 	ADISCORD_tech_superconducting_coil_barrels = {
 		category_anti_tank = {
-			hard_attack = 0.058
-			defense = 0.033
+			hard_attack = 0.06
+			defense = 0.04
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_hypervelocity_at_networks
@@ -677,15 +668,11 @@ technologies = {
 			ap_attack = 0.093
 			reliability = 0.052
 		}
-		dependencies = {
-			ADISCORD_tech_top_attack_munitions = 1
-			ADISCORD_tech_superconducting_coil_barrels = 1
-		}
 		research_cost = 2.55
 		start_year = 2180
 		folder = {
 			name = artillery_folder
-			position = { x = 0 y = 16 }
+			position = { x = -3 y = 16 }
 		}
 		ai_will_do = {
 			factor = 20
@@ -733,14 +720,14 @@ technologies = {
 
 	ADISCORD_tech_radar_laying = {
 		category_anti_air = {
-			air_attack = 0.041
-			reliability = 0.012
+			air_attack = 0.06
+			defense = 0.03
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_proximity_fuzes
 			research_cost_coeff = 1
 		}
-		enable_subunits = { ADISCORD_regimental_anti_air }
+		enable_subunits = { ADISCORD_regimental_anti_air ADISCORD_line_anti_air }
 		enable_building = {
 			building = anti_air_building
 			level = 1
@@ -767,8 +754,8 @@ technologies = {
 
 	ADISCORD_tech_proximity_fuzes = {
 		category_anti_air = {
-			air_attack = 0.043
-			reliability = 0.013
+			air_attack = 0.08
+			reliability = 0.02
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_stabilized_autocannon_mounts
@@ -800,21 +787,22 @@ technologies = {
 
 	ADISCORD_tech_stabilized_autocannon_mounts = {
 		category_anti_air = {
-			air_attack = 0.044
-			reliability = 0.013
+			air_attack = 0.05
+			reliability = 0.03
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_point_defense_aa
 			research_cost_coeff = 1
 		}
-		research_cost = 1.35
+		enable_equipments = { ADISCORD_anti_air_equipment_2160 }
+		research_cost = 2.05
 		start_year = 2160
 		folder = {
 			name = artillery_folder
 			position = { x = -3 y = 6 }
 		}
 		ai_will_do = {
-			factor = 25
+			factor = 33.75
 			modifier = {
 				factor = 1.25
 				has_war = yes
@@ -829,8 +817,8 @@ technologies = {
 
 	ADISCORD_tech_point_defense_aa = {
 		category_anti_air = {
-			air_attack = 0.045
-			reliability = 0.013
+			defense = 0.06
+			reliability = 0.04
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_high_energy_laser_turrets
@@ -862,22 +850,22 @@ technologies = {
 
 	ADISCORD_tech_integrated_short_range_missile_cells = {
 		category_anti_air = {
-			air_attack = 0.05
-			reliability = 0.029
+			air_attack = 0.06
+			reliability = 0.02
 		}
-		air_intercept_efficiency = 0.029
 		path = {
 			leads_to_tech = ADISCORD_tech_networked_air_defense
 			research_cost_coeff = 1
 		}
-		research_cost = 1.488
+		enable_equipments = { ADISCORD_anti_air_equipment_2165 }
+		research_cost = 2.05
 		start_year = 2165
 		folder = {
 			name = artillery_folder
 			position = { x = 3 y = 10 }
 		}
 		ai_will_do = {
-			factor = 20
+			factor = 27
 			modifier = {
 				factor = 1.25
 				has_war = yes
@@ -892,10 +880,9 @@ technologies = {
 
 	ADISCORD_tech_networked_air_defense = {
 		category_anti_air = {
-			air_attack = 0.03
-			reliability = 0.051
+			air_attack = 0.08
+			defense = 0.04
 		}
-		coordination_bonus = 0.015
 		path = {
 			leads_to_tech = ADISCORD_tech_predictive_airspace_denial_grid
 			research_cost_coeff = 1
@@ -927,9 +914,8 @@ technologies = {
 	ADISCORD_tech_high_energy_laser_turrets = {
 		category_anti_air = {
 			air_attack = 0.06
-			reliability = 0.034
+			reliability = 0.04
 		}
-		air_intercept_efficiency = 0.034
 		path = {
 			leads_to_tech = ADISCORD_tech_directed_energy_air_defense
 			research_cost_coeff = 1
@@ -961,12 +947,8 @@ technologies = {
 
 	ADISCORD_tech_predictive_airspace_denial_grid = {
 		category_anti_air = {
-			air_attack = 0.063
-			reliability = 0.018
-		}
-		path = {
-			leads_to_tech = ADISCORD_tech_directed_energy_air_defense
-			research_cost_coeff = 1
+			air_attack = 0.10
+			supply_consumption = -0.05
 		}
 		research_cost = 1.763
 		start_year = 2175
@@ -993,11 +975,6 @@ technologies = {
 			air_attack = 0.093
 			reliability = 0.093
 		}
-		air_intercept_efficiency = 0.052
-		dependencies = {
-			ADISCORD_tech_high_energy_laser_turrets = 1
-			ADISCORD_tech_predictive_airspace_denial_grid = 1
-		}
 		enable_building = {
 			building = anti_air_building
 			level = 5
@@ -1006,7 +983,7 @@ technologies = {
 		start_year = 2180
 		folder = {
 			name = artillery_folder
-			position = { x = 0 y = 18 }
+			position = { x = -3 y = 18 }
 		}
 		ai_will_do = {
 			factor = 24

@@ -8690,6 +8690,58 @@ ADISCORD_task10_forbidden_cache_consumer = {
         self.assertNotEqual(fiscal, ECONOMY_AI)
         self.assertTrue(air_production_contract_issues(source, fiscal))
 
+    def test_air_validator_checks_maritime_unlock_port_and_policy_cleanup(self):
+        source = (ROOT / "common/ai_strategy/default.txt").read_text(
+            encoding="utf-8-sig"
+        )
+        strategy = block(source, "ADISCORD_default_maritime_air_demand")
+        self.assertEqual(air_production_contract_issues(source, ECONOMY_AI), [])
+        mutations = (
+            strategy.replace(
+                "has_tech = ADISCORD_tech_twin_engine_aircraft", "always = yes"
+            ),
+            strategy.replace(
+                "ADISCORD_has_operational_naval_base = yes", "always = yes"
+            ),
+            strategy.replace(
+                "ADISCORD_has_operational_naval_base = yes",
+                "ADISCORD_has_operational_naval_base = no",
+            ),
+            strategy.replace(
+                "abort_when_not_enabled = yes", "abort_when_not_enabled = no"
+            ),
+            strategy.replace("value = 15", "value = 0"),
+        )
+        for mutation in mutations:
+            with self.subTest(strategy=mutation):
+                self.assertNotEqual(mutation, strategy)
+                self.assertTrue(
+                    air_production_contract_issues(
+                        source.replace(strategy, mutation), ECONOMY_AI
+                    )
+                )
+
+    def test_air_validator_rejects_maritime_budget_shutdowns(self):
+        source = (ROOT / "common/ai_strategy/default.txt").read_text(
+            encoding="utf-8-sig"
+        )
+        for phase in ("crisis", "stress"):
+            fiscal = block(ECONOMY_AI, f"ADISCORD_ai_fiscal_{phase}")
+            for mutation in (
+                fiscal.replace(
+                    "equipment_production_factor id = naval_bomber",
+                    "unit_ratio id = naval_bomber",
+                ),
+                re.sub(r"(id = naval_bomber value = )-\d+", r"\g<1>-100", fiscal),
+            ):
+                with self.subTest(phase=phase, fiscal=mutation):
+                    self.assertNotEqual(mutation, fiscal)
+                    self.assertTrue(
+                        air_production_contract_issues(
+                            source, ECONOMY_AI.replace(fiscal, mutation)
+                        )
+                    )
+
     def test_truck_production_uses_real_stock_and_releases_its_factory(self):
         source = (ROOT / "common/ai_strategy/default.txt").read_text(
             encoding="utf-8-sig"

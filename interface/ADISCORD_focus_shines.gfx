@@ -1,4 +1,42 @@
 spriteTypes = {
+
+	SpriteType = {
+		name = "GFX_focus_ADISCORD_sabotage_shine"
+		texturefile = "gfx/interface/goals/focus_generic_sabotage.dds"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/focus_generic_sabotage.dds"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+	SpriteType = {
+		name = "GFX_focus_ADISCORD_industrial_development_shine"
+		texturefile = "gfx/interface/goals/focus_generic_industral_devlopment_bucket.dds"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/focus_generic_industral_devlopment_bucket.dds"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
 	SpriteType = {
 		name = "GFX_focus_STP_ch_market_charter_shine"
 		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_ch_market_charter.png"
@@ -761,10 +799,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_STP_pw_party_domestic_pattern_shine"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_pw_party_domestic_pattern.png"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Armored_Design_Bureau.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/party/GFX_focus_STP_pw_party_domestic_pattern.png"
+			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_VAL_Armored_Design_Bureau.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -869,10 +907,10 @@ spriteTypes = {
 	spriteType = { name = "GFX_focus_WRK_utilitarian_west_technical_trusteeship_shine" texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png" }
 	SpriteType = {
 		name = "GFX_focus_STP_GUARANTEE_MINISTERS_shine"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_GUARANTEE_MINISTERS.png"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_GUARANTEE_MINISTERS_cabinet.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/party/GFX_focus_STP_GUARANTEE_MINISTERS.png"
+			animationmaskfile = "gfx/interface/goals/STP/party/GFX_focus_STP_GUARANTEE_MINISTERS_cabinet.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -9530,10 +9568,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_STP_ps_permanent_security_shine"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ps_permanent_security.png"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_cw_security_collegium.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/party/GFX_focus_STP_ps_permanent_security.png"
+			animationmaskfile = "gfx/interface/goals/STP/party/GFX_focus_STP_cw_security_collegium.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -9606,10 +9644,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_STP_pw_party_open_settlement_shine"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_pw_party_open_settlement.png"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_district_compact.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/party/GFX_focus_STP_pw_party_open_settlement.png"
+			animationmaskfile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_district_compact.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -9644,10 +9682,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_STP_pw_party_civilian_retraining_shine"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_pw_party_civilian_retraining.png"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_technical_institutes.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/party/GFX_focus_STP_pw_party_civilian_retraining.png"
+			animationmaskfile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_technical_institutes.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -9663,10 +9701,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_STP_pw_party_family_pensions_shine"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_pw_party_family_pensions.png"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Reclamation_Return_Home.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/party/GFX_focus_STP_pw_party_family_pensions.png"
+			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_VAL_Reclamation_Return_Home.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -9682,10 +9720,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_STP_pw_party_veteran_reserve_shine"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_pw_party_veteran_reserve.png"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_regimental_organizers.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/party/GFX_focus_STP_pw_party_veteran_reserve.png"
+			animationmaskfile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_regimental_organizers.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no

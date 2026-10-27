@@ -348,6 +348,46 @@ on_actions = {
 	on_war_relation_added = {
 		effect = {
 			if = {
+				limit = { tag = STP }
+				STP_pw_party_activate_security_reserve = yes
+			}
+			if = {
+				limit = { FROM = { tag = STP } }
+				FROM = { STP_pw_party_activate_security_reserve = yes }
+			}
+			if = {
+				limit = {
+					tag = STP
+					FROM = { tag = VAL }
+				}
+				STP_pw_party_activate_frontier_drill = yes
+			}
+			if = {
+				limit = {
+					tag = VAL
+					FROM = { tag = STP }
+				}
+				FROM = { STP_pw_party_activate_frontier_drill = yes }
+			}
+			if = {
+				limit = {
+					tag = STP
+					FROM = { tag = NOD }
+				}
+				STP_pw_party_activate_nod_staff_plan = yes
+				STP_pw_party_activate_nod_mobilization = yes
+			}
+			if = {
+				limit = {
+					tag = NOD
+					FROM = { tag = STP }
+				}
+				FROM = {
+					STP_pw_party_activate_nod_staff_plan = yes
+					STP_pw_party_activate_nod_mobilization = yes
+				}
+			}
+			if = {
 				limit = { tag = STS }
 				STP_pc_apply_prepared_campaigns = yes
 				FROM = { STP_pc_apply_campaign_defence = yes }
@@ -383,6 +423,7 @@ on_actions = {
 					}
 					FROM = { tag = VAL }
 				}
+				STP_kc_activate_prepared_support = yes
 				clr_country_flag = STP_kc_preparing
 				country_event = { id = ADISCORD_STP_cw.208 hours = 1 }
 			}
@@ -397,6 +438,7 @@ on_actions = {
 					}
 				}
 				FROM = {
+					STP_kc_activate_prepared_support = yes
 					clr_country_flag = STP_kc_preparing
 					country_event = { id = ADISCORD_STP_cw.208 hours = 1 }
 				}

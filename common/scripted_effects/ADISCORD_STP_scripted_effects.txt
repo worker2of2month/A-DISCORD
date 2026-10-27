@@ -5373,27 +5373,10 @@ STP_pw_finish_project = {
 						value = 1
 						compare = equals
 					}
-					OR = {
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 720
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 250
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 80
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 96
-							compare = equals
-						}
+					check_variable = {
+						var = STP_pw_project_deposit
+						value = 720
+						compare = equals
 					}
 					NOT = {
 						check_variable = {
@@ -5409,27 +5392,10 @@ STP_pw_finish_project = {
 						value = 2
 						compare = equals
 					}
-					OR = {
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 1080
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 500
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 120
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 144
-							compare = equals
-						}
+					check_variable = {
+						var = STP_pw_project_deposit
+						value = 1080
+						compare = equals
 					}
 					NOT = {
 						check_variable = {
@@ -5445,27 +5411,10 @@ STP_pw_finish_project = {
 						value = 3
 						compare = equals
 					}
-					OR = {
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 540
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 100
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 60
-							compare = equals
-						}
-						check_variable = {
-							var = STP_pw_project_deposit
-							value = 72
-							compare = equals
-						}
+					check_variable = {
+						var = STP_pw_project_deposit
+						value = 540
+						compare = equals
 					}
 					NOT = {
 						check_variable = {
@@ -8742,6 +8691,7 @@ STP_pf_clear = {
 	clear_variable = STP_debug_party_victory_choice
 	STP_pe_clear = yes
 	clr_country_flag = STP_party_drug_health_fund
+	clr_country_flag = STP_party_labour_registry
 	if = { limit = { has_variable = STP_ch_phase } STP_ch_clear = yes }
 	if = { limit = { has_country_flag = STP_pf_initialized }
 		STP_pw_party_clear_constitution = yes
@@ -8881,6 +8831,102 @@ STP_pw_party_start_nod_invasion_threat = {
 		else = {
 			set_country_flag = STP_pw_party_nod_invasion_defeated
 			mark_focus_tree_layout_dirty = yes
+		}
+	}
+}
+
+STP_kc_activate_prepared_support = {
+	if = {
+		limit = {
+			OR = { tag = STP tag = STS }
+			has_war_with = VAL
+		}
+		if = {
+			limit = {
+				has_idea = STP_kc_defence_prepared
+				NOT = { has_idea = STP_kc_defence }
+			}
+			remove_ideas = STP_kc_defence_prepared
+			add_timed_idea = {
+				idea = STP_kc_defence
+				days = 180
+			}
+		}
+		if = {
+			limit = {
+				has_idea = STP_kc_production_prepared
+				NOT = { has_idea = STP_kc_production }
+			}
+			remove_ideas = STP_kc_production_prepared
+			add_timed_idea = {
+				idea = STP_kc_production
+				days = 180
+			}
+		}
+	}
+}
+
+STP_pw_party_activate_security_reserve = {
+	if = {
+		limit = {
+			tag = STP
+			has_war = yes
+			has_idea = STP_pw_party_security_prepared
+			NOT = { has_idea = STP_pw_party_security_cordon }
+		}
+		remove_ideas = STP_pw_party_security_prepared
+		add_timed_idea = {
+			idea = STP_pw_party_security_cordon
+			days = 180
+		}
+	}
+}
+
+STP_pw_party_activate_nod_mobilization = {
+	if = {
+		limit = {
+			tag = STP
+			has_war_with = NOD
+			has_idea = STP_pw_party_nod_mobilization_prepared
+			NOT = { has_idea = STP_pw_party_nod_emergency_mobilization_idea }
+		}
+		remove_ideas = STP_pw_party_nod_mobilization_prepared
+		add_timed_idea = {
+			idea = STP_pw_party_nod_emergency_mobilization_idea
+			days = 180
+		}
+	}
+}
+
+STP_pw_party_activate_frontier_drill = {
+	if = {
+		limit = {
+			tag = STP
+			has_war_with = VAL
+			has_idea = STP_pw_party_frontier_prepared
+			NOT = { has_idea = STP_pw_party_frontier_drill }
+		}
+		remove_ideas = STP_pw_party_frontier_prepared
+		add_timed_idea = {
+			idea = STP_pw_party_frontier_drill
+			days = 180
+		}
+	}
+}
+
+STP_pw_party_activate_nod_staff_plan = {
+	if = {
+		limit = {
+			tag = STP
+			has_war_with = NOD
+			has_idea = STP_pw_party_nod_staff_prepared
+			is_subject = no
+			has_capitulated = no
+		}
+		remove_ideas = STP_pw_party_nod_staff_prepared
+		add_timed_idea = {
+			idea = STP_pw_party_nod_staff_readiness_idea
+			days = 180
 		}
 	}
 }
@@ -14848,6 +14894,10 @@ STP_ch_leader_1 = {
 		}
 	}
 	ADISCORD_economy_mark_dirty = yes
+	if = {
+		limit = { has_country_flag = STP_pi_initialized }
+		STP_pi_refresh = yes
+	}
 }
 
 STP_ch_leader_2 = {
@@ -14913,6 +14963,10 @@ STP_ch_leader_2 = {
 		}
 	}
 	ADISCORD_economy_mark_dirty = yes
+	if = {
+		limit = { has_country_flag = STP_pi_initialized }
+		STP_pi_refresh = yes
+	}
 }
 
 # Veil as head of state: leader portrait, and he leaves the generals list.
@@ -14986,6 +15040,10 @@ STP_ch_leader_3 = {
 		}
 	}
 	ADISCORD_economy_mark_dirty = yes
+	if = {
+		limit = { has_country_flag = STP_pi_initialized }
+		STP_pi_refresh = yes
+	}
 }
 
 STP_ch_leader_4 = {
@@ -15008,6 +15066,10 @@ STP_ch_leader_4 = {
 		ideology = commercial_hedonism
 	}
 	ADISCORD_economy_mark_dirty = yes
+	if = {
+		limit = { has_country_flag = STP_pi_initialized }
+		STP_pi_refresh = yes
+	}
 }
 
 STP_ch_elect_4 = {
@@ -15061,6 +15123,10 @@ STP_ch_leader_5 = {
 		ideology = steland_security_etatism
 	}
 	ADISCORD_economy_mark_dirty = yes
+	if = {
+		limit = { has_country_flag = STP_pi_initialized }
+		STP_pi_refresh = yes
+	}
 }
 
 STP_ch_elect_5 = {
@@ -15109,6 +15175,10 @@ STP_ch_leader_6 = {
 		ideology = patronal_hedonism
 	}
 	ADISCORD_economy_mark_dirty = yes
+	if = {
+		limit = { has_country_flag = STP_pi_initialized }
+		STP_pi_refresh = yes
+	}
 }
 
 STP_ch_restore_independent_leader = {
@@ -15176,8 +15246,8 @@ STP_ch_restore_independent_leader = {
 }
 
 STP_ch_install_protectorate_leader = {
-	STP_ch_leader_6 = yes
 	set_country_flag = STP_ch_protectorate_leader
+	STP_ch_leader_6 = yes
 }
 
 # COUNTRY STP: one announced plot at a time; the opening delay belongs to this war.
@@ -16390,7 +16460,7 @@ STP_pe_houses_settle = {
 		}
 		if = {
 			limit = {
-				STP_pe_current = yes
+				STP_party_leader_1 = yes
 				has_capitulated = no
 				NOT = {
 					has_country_flag = STP_pe_houses_prepared
@@ -16439,7 +16509,7 @@ STP_pe_festival_settle = {
 		}
 		if = {
 			limit = {
-				STP_pe_current = yes
+				STP_party_leader_2 = yes
 				has_capitulated = no
 				NOT = {
 					has_country_flag = STP_pe_festival_prepared
@@ -16488,7 +16558,7 @@ STP_pe_staff_settle = {
 		}
 		if = {
 			limit = {
-				STP_pe_current = yes
+				STP_party_leader_3 = yes
 				has_capitulated = no
 				NOT = {
 					has_country_flag = STP_pe_staff_prepared
@@ -16537,7 +16607,7 @@ STP_pe_trade_settle = {
 		}
 		if = {
 			limit = {
-				STP_pe_current = yes
+				STP_party_leader_4 = yes
 				has_capitulated = no
 				NOT = {
 					has_country_flag = STP_pe_trade_prepared
@@ -16590,7 +16660,7 @@ STP_pe_security_settle = {
 		}
 		if = {
 			limit = {
-				STP_pe_current = yes
+				STP_party_leader_5 = yes
 				has_capitulated = no
 				NOT = {
 					has_country_flag = STP_pe_security_prepared
@@ -16639,7 +16709,7 @@ STP_pe_regent_settle = {
 		}
 		if = {
 			limit = {
-				STP_pe_current = yes
+				STP_party_leader_6 = yes
 				has_capitulated = no
 				NOT = {
 					has_country_flag = STP_pe_regent_prepared
@@ -17079,7 +17149,8 @@ STP_heg_enroll_cannibal_member = {
 	}
 }
 
-# Country scope. The anchor and leader are local targets established by the launch.
+# Resolve the anchor as a scope: native war arguments require tags or PREV.
+# Returning through PREV keeps the entrant in THIS and the anchor in PREV.
 STP_heg_join_cannibal_war = {
 	if = {
 		limit = {
@@ -17092,11 +17163,26 @@ STP_heg_join_cannibal_war = {
 				has_war_with = event_target:STP_heg_cannibal_leader
 			}
 		}
-		add_to_war = {
-			targeted_alliance = event_target:STP_heg_cannibal_war_anchor
-			enemy = event_target:STP_heg_cannibal_leader
-			hostility_reason = asked_to_join
-			single_target_only = yes
+		event_target:STP_heg_cannibal_war_anchor = {
+			PREV = {
+				if = {
+					limit = { event_target:STP_heg_cannibal_leader = { tag = STP } }
+					add_to_war = {
+						targeted_alliance = PREV
+						enemy = STP
+						hostility_reason = asked_to_join
+						single_target_only = yes
+					}
+				}
+				else = {
+					add_to_war = {
+						targeted_alliance = PREV
+						enemy = STS
+						hostility_reason = asked_to_join
+						single_target_only = yes
+					}
+				}
+			}
 		}
 	}
 }
@@ -17130,7 +17216,7 @@ STP_heg_start_cannibal_campaign = {
 				type = annex_everything
 			}
 		}
-		country_event = { id = ADISCORD_STP_pc.110 hours = 1 }
+		country_event = { id = ADISCORD_STP_pc.110 days = 1 }
 	}
 }
 
@@ -17181,11 +17267,13 @@ STP_heg_invite_cannibal_campaign = {
 						has_war_with = event_target:STP_heg_cannibal_leader
 					}
 				}
-				NKA = {
-					add_to_war = {
-						targeted_alliance = event_target:STP_heg_cannibal_leader
-						enemy = event_target:STP_heg_cannibal_war_anchor
-						hostility_reason = asked_to_join
+				event_target:STP_heg_cannibal_war_anchor = {
+					NKA = {
+						add_to_war = {
+							targeted_alliance = STS
+							enemy = PREV
+							hostility_reason = asked_to_join
+						}
 					}
 				}
 			}
@@ -19003,13 +19091,25 @@ STP_pi_refresh = {
 		var = STP_pw_ADISCORD_economy_overall_income_factor
 		value = STP_pi_income_delta
 	}
+	if = {
+		limit = { STP_party_leader_3 = no }
+		set_variable = { var = STP_pi_training_delta value = 0 }
+	}
 	add_to_variable = {
 		var = STP_pw_training_time_factor
 		value = STP_pi_training_delta
 	}
+	if = {
+		limit = { STP_party_leader_3 = no }
+		set_variable = { var = STP_pi_org_delta value = 0 }
+	}
 	add_to_variable = {
 		var = STP_pw_army_org_factor
 		value = STP_pi_org_delta
+	}
+	if = {
+		limit = { STP_party_leader_3 = no }
+		set_variable = { var = STP_pi_regain_delta value = 0 }
 	}
 	add_to_variable = {
 		var = STP_pw_army_org_regain
@@ -19029,6 +19129,10 @@ STP_pi_refresh = {
 		value = STP_pi_festival_rate
 	}
 
+	if = {
+		limit = { STP_party_leader_2 = no }
+		set_variable = { var = STP_pi_social_delta value = 0 }
+	}
 	add_to_variable = {
 		var = STP_pw_ADISCORD_country_development_social_system_growth_factor
 		value = STP_pi_social_delta
@@ -19044,6 +19148,10 @@ STP_pi_refresh = {
 		value = STP_pi_public_rate
 	}
 
+	if = {
+		limit = { STP_party_leader_5 = no }
+		set_variable = { var = STP_pi_public_delta value = 0 }
+	}
 	add_to_variable = {
 		var = STP_pw_stability_factor
 		value = STP_pi_public_delta
@@ -19103,7 +19211,7 @@ STP_pi_house_road_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_house_current = yes
 				FROM = {
 					STP_pi_road_site = yes
 				}
@@ -19144,7 +19252,7 @@ STP_pi_house_workshop_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_house_current = yes
 				FROM = {
 					STP_pi_workshop_site = yes
 				}
@@ -19260,7 +19368,7 @@ STP_pi_cadre_enrol_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_cadre_current = yes
 			}
 			add_to_variable = {
 				var = STP_pi_cadre_free
@@ -19297,7 +19405,7 @@ STP_pi_cadre_mobilisation_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_cadre_current = yes
 			}
 			set_temp_variable = {
 				var = STP_pi_people
@@ -19328,7 +19436,7 @@ STP_pi_artel_road_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_cadre_current = yes
 				FROM = {
 					STP_pi_road_site = yes
 				}
@@ -19371,7 +19479,7 @@ STP_pi_artel_workshop_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_cadre_current = yes
 				FROM = {
 					STP_pi_workshop_site = yes
 				}
@@ -19675,7 +19783,7 @@ STP_pi_specialist_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_north_current = yes
 				check_variable = {
 					var = STP_pi_north_specialists
 					value = 3
@@ -19811,7 +19919,7 @@ STP_pi_festival_public_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_festival_current = yes
 				FROM = {
 					STP_pi_state_controlled = yes
 				}
@@ -19873,7 +19981,7 @@ STP_pi_festival_club_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_festival_current = yes
 				FROM = {
 					STP_pi_state_controlled = yes
 				}
@@ -19944,7 +20052,7 @@ STP_pi_festival_medical_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_festival_current = yes
 				check_variable = {
 					var = STP_pi_festival_load
 					value = 1
@@ -20019,6 +20127,7 @@ STP_pi_trade_rifles_cancel = {
 		}
 		if = {
 			limit = {
+				STP_pi_trade_current = yes
 				STP_pi_trade_insured = no
 			}
 			if = {
@@ -20090,7 +20199,7 @@ STP_pi_trade_rifles_standard_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 			}
 			add_equipment_to_stockpile = {
 				type = ADISCORD_infantry_equipment_2156
@@ -20123,7 +20232,7 @@ STP_pi_trade_rifles_rush_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 			}
 			add_equipment_to_stockpile = {
 				type = ADISCORD_infantry_equipment_2156
@@ -20156,7 +20265,7 @@ STP_pi_trade_rifles_series_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 			}
 			add_equipment_to_stockpile = {
 				type = ADISCORD_infantry_equipment_2156
@@ -20238,6 +20347,7 @@ STP_pi_trade_support_cancel = {
 		}
 		if = {
 			limit = {
+				STP_pi_trade_current = yes
 				STP_pi_trade_insured = no
 			}
 			if = {
@@ -20309,7 +20419,7 @@ STP_pi_trade_support_standard_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 			}
 			add_equipment_to_stockpile = {
 				type = support_equipment_1
@@ -20342,7 +20452,7 @@ STP_pi_trade_support_rush_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 			}
 			add_equipment_to_stockpile = {
 				type = support_equipment_1
@@ -20375,7 +20485,7 @@ STP_pi_trade_support_series_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 			}
 			add_equipment_to_stockpile = {
 				type = support_equipment_1
@@ -20457,6 +20567,7 @@ STP_pi_trade_trucks_cancel = {
 		}
 		if = {
 			limit = {
+				STP_pi_trade_current = yes
 				STP_pi_trade_insured = no
 			}
 			if = {
@@ -20528,7 +20639,7 @@ STP_pi_trade_trucks_standard_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 			}
 			add_equipment_to_stockpile = {
 				type = motorized_equipment_1
@@ -20561,7 +20672,7 @@ STP_pi_trade_trucks_rush_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 			}
 			add_equipment_to_stockpile = {
 				type = motorized_equipment_1
@@ -20594,7 +20705,7 @@ STP_pi_trade_trucks_series_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 			}
 			add_equipment_to_stockpile = {
 				type = motorized_equipment_1
@@ -20652,7 +20763,7 @@ STP_pi_trade_expand_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_trade_current = yes
 				check_variable = {
 					var = STP_pi_trade_level
 					value = 3
@@ -20752,7 +20863,7 @@ STP_pi_case_orders_quick_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 			}
 			clear_variable = STP_pi_case_orders_deposit
 			clear_variable = STP_pi_case_orders_mode
@@ -20786,7 +20897,7 @@ STP_pi_case_orders_full_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 			}
 			clear_variable = STP_pi_case_orders_deposit
 			clear_variable = STP_pi_case_orders_mode
@@ -20846,7 +20957,7 @@ STP_pi_case_supply_quick_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 			}
 			clear_variable = STP_pi_case_supply_deposit
 			clear_variable = STP_pi_case_supply_mode
@@ -20880,7 +20991,7 @@ STP_pi_case_supply_full_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 			}
 			clear_variable = STP_pi_case_supply_deposit
 			clear_variable = STP_pi_case_supply_mode
@@ -20940,7 +21051,7 @@ STP_pi_case_property_quick_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 			}
 			clear_variable = STP_pi_case_property_deposit
 			clear_variable = STP_pi_case_property_mode
@@ -20974,7 +21085,7 @@ STP_pi_case_property_full_finish = {
 		}
 		if = {
 			limit = {
-				STP_pi_country_valid = yes
+				STP_pi_case_current = yes
 			}
 			clear_variable = STP_pi_case_property_deposit
 			clear_variable = STP_pi_case_property_mode

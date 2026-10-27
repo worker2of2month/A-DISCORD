@@ -111,38 +111,161 @@ class PartyQualityOfLifeTests(unittest.TestCase):
                     expected = [7, 7] if ai or not war else ([7, 0] if funding else [0, 7])
                     self.assertEqual(counts, expected, (war, ai, funding))
 
-    def test_rear_programs_fold_without_changing_purchases_or_ai_access(self):
-        names = ('wavering_officials', 'commissar_pay', 'front_gala', 'front_bonuses',
-                 'paid_recruiters', 'smuggler_rifles', 'hired_instructors', 'widow_pensions')
+    def test_rear_support_has_three_direct_actions_for_players_and_ai(self):
+        names = ('paid_recruiters', 'smuggler_rifles', 'widow_pensions')
         for ai in (False, True):
-            for expanded in (False, True):
+            for war in (False, True):
                 facts = {
                     ('STP', 'is_ai', 'yes'): ai,
                     ('STP', 'is_ai', 'no'): not ai,
-                    ('STP', 'has_country_flag', 'STP_pm_rear_programs_expanded'): expanded,
-                    ('STP', 'STP_pv_war_current', 'yes'): True,
+                    ('STP', 'STP_pv_war_current', 'yes'): war,
                     ('STP', 'variable', 'STP_pv_strain'): 10,
                 }
-                facts[('STP', 'STP_pm_rear_programs_visible', 'yes')] = matches_conditions(
-                    self.triggers['STP_pm_rear_programs_visible'], facts
-                )
-                count = sum(matches_conditions(block(self.decisions['STP_pm_' + name], 'visible'), facts)
-                            for name in names)
-                self.assertEqual(count, 8 if ai or expanded else 0)
-                controls = sum(matches_conditions(block(self.decisions[name], 'visible'), facts)
-                               for name in ('STP_pm_show_rear_programs', 'STP_pm_hide_rear_programs'))
-                self.assertEqual(controls, 0 if ai else 1)
-        for name in ('STP_pm_show_rear_programs', 'STP_pm_hide_rear_programs',
-                     'STP_pm_show_faction_funding', 'STP_pm_show_faction_negotiations'):
-            decision = self.decisions[name]
-            self.assertEqual(scalar(decision, 'cost'), '0')
-            effects = [e for e in walk(block(decision, 'complete_effect')) if e.key != 'hidden_effect']
-            self.assertEqual(len(effects), 1)
-            self.assertIn(effects[0].key, ('set_country_flag', 'clr_country_flag'))
-            self.assertIn(effects[0].value, ('STP_pm_rear_programs_expanded', 'STP_pm_faction_funding_selected'))
+                count = sum(matches_conditions(
+                    block(self.decisions['STP_pm_' + name], 'visible'), facts
+                ) for name in names)
+                self.assertEqual(count, 3 if war else 0)
+        self.assertNotIn('STP_pm_rear_programs_visible', self.triggers)
+        for name in ('STP_pm_show_faction_funding', 'STP_pm_show_faction_negotiations'):
+            self.assertEqual(scalar(self.decisions[name], 'cost'), '0')
             for language in ('russian', 'english'):
                 self.assertIn(name, localization(language))
                 self.assertIn(name + '_desc', localization(language))
+
+    def test_merged_rear_support_rechecks_payment_and_delivers_once(self):
+        for name, price, rewards in (
+            ('paid_recruiters', 1200, {'add_manpower': '5000', 'army_experience': '15'}),
+            ('smuggler_rifles', 1200, {}),
+            ('widow_pensions', 2400, {'add_stability': '0.02', 'add_war_support': '0.04'}),
+        ):
+            decision = self.decisions['STP_pm_' + name]
+            self.assertEqual(scalar(decision, 'cost'), '0')
+            for war in (False, True):
+                for balance in (price - 0.001, price, price + 1):
+                    facts = {
+                        ('STP', 'STP_pv_war_current', 'yes'): war,
+                        ('STP', 'STP_cw_can_spend_' + str(price), 'yes'): balance >= price,
+                    }
+                    effects = [e for _, e in selected_effects(block(decision, 'complete_effect'), facts)]
+                    if not war or balance < price:
+                        self.assertEqual(effects, [])
+                        continue
+                    self.assertEqual(sum(e.key == 'STP_cw_spend_' + str(price) for e in effects), 1)
+                    for key, value in rewards.items():
+                        self.assertEqual([e.value for e in effects if e.key == key], [value])
+                    if name == 'smuggler_rifles':
+                        delivery = next(e.value for e in effects if e.key == 'add_equipment_to_stockpile')
+                        self.assertEqual(scalar(delivery, 'amount'), '12000')
+                    if name == 'widow_pensions':
+                        self.assertEqual(sum(e.key == 'STP_pv_change_strain' for e in effects), 1)
+            for language in ('russian', 'english'):
+                loc = localization(language)
+                cost = scalar(decision, 'custom_cost_text')
+                for suffix in ('', '_blocked', '_tooltip'):
+                    self.assertIn(cost + suffix, loc)
+
+    def test_prewar_development_programmes_disappear_after_preparation(self):
+        for name, focus in (
+            ('STP_party_staff_drills_program', 'STP_defense_budget'),
+            ('STP_party_civil_service_program', 'STP_party_civil_register'),
+        ):
+            for preparation in (False, True):
+                facts = {
+                    ('STP', 'has_country_flag', 'STP_sided_with_the_party_flag'): True,
+                    ('STP', 'has_completed_focus', focus): True,
+                    ('STP', 'STP_cw_preparation_open', 'yes'): preparation,
+                }
+                self.assertEqual(matches_conditions(block(self.decisions[name], 'visible'), facts), preparation)
+
+    def test_removed_exchanges_leave_no_focus_unlocks_or_localisation(self):
+        removed = {
+            'STP_pm_' + name for name in (
+                'secretary_envelopes', 'delegates_banquet', 'buy_newspaper_columns',
+                'district_clubs', 'guard_bonuses', 'buy_draft_lists', 'retired_officers',
+                'show_rear_programs', 'hide_rear_programs', 'wavering_officials',
+                'commissar_pay', 'front_gala', 'front_bonuses', 'hired_instructors',
+            )
+        } | {
+            'STP_pw_prog_' + name for name in (
+                'house_reception', 'peoples_festival', 'targeted_purge', 'district_grants',
+            )
+        }
+        self.assertFalse(removed.intersection(self.decisions))
+        for path in (ROOT / 'common/national_focus').glob('*.txt'):
+            unlocks = re.findall(r'unlock_decision_tooltip\s*=\s*(\w+)', path.read_text(encoding='utf-8-sig'))
+            self.assertFalse(removed.intersection(unlocks), path.name)
+        for language in ('russian', 'english'):
+            self.assertFalse(removed.intersection(localization(language)))
+
+    def test_preparation_actions_are_visible_before_the_relevant_war(self):
+        for name, enemy, focus in (
+            ('STP_pw_party_frontier_exercise', 'VAL', 'STP_pw_party_southern_defence'),
+            ('STP_pw_party_nod_staff_readiness', 'NOD', None),
+        ):
+            for war in (False, True):
+                facts = {
+                    ('STP', 'tag', 'STP'): True,
+                    ('STP', 'has_country_flag', 'STP_cw_postwar'): True,
+                    ('STP', 'STP_pw_party_nod_threat_current', 'yes'): True,
+                    ('STP', 'has_completed_focus', focus): True,
+                    ('STP', 'has_war_with', enemy): war,
+                }
+                self.assertTrue(matches_conditions(block(self.decisions[name], 'visible'), facts))
+
+    def test_completed_case_work_hides_but_paid_work_and_full_reopening_remain(self):
+        for case in ('orders', 'supply', 'property'):
+            for method in ('quick', 'full'):
+                visible = block(self.decisions[f'STP_pi_case_{case}_{method}'], 'visible')
+                # Focus availability is separate from the stage and payment contract.
+                focus_keys = [e.value for e in walk(visible) if e.key == 'has_completed_focus'
+                              and e.value != 'STP_pe_security_commission']
+                for stage in range(5):
+                    for paid in (False, True):
+                        for commission in (False, True):
+                            facts = {
+                                ('STP', 'STP_party_leader_5', 'yes'): True,
+                                ('STP', 'variable', f'STP_pi_case_{case}_stage'): stage,
+                                ('STP', 'has_variable', f'STP_pi_case_{case}_deposit'): paid,
+                                ('STP', 'has_completed_focus', 'STP_pe_security_commission'): commission,
+                            }
+                            facts.update({('STP', 'has_completed_focus', key): True for key in focus_keys})
+                            expected = paid or stage == 0 or (method == 'full' and stage == 4 and commission)
+                            self.assertEqual(matches_conditions(visible, facts), expected,
+                                             (case, method, stage, paid, commission))
+
+    def test_programme_limits_hide_finished_work_without_hiding_shortages(self):
+        for name, variable, deposit, leader, focus in (
+            ('STP_pi_trade_expand', 'STP_pi_trade_level', 'STP_pi_trade_expand_deposit',
+             'STP_party_leader_4', 'STP_party_trade_advance'),
+            ('STP_pi_north_local_staff', 'STP_pi_north_specialists', 'STP_pi_specialist_deposit',
+             'STP_party_leader_6', 'STP_party_regent_schools'),
+        ):
+            for level in (0, 2, 3):
+                for paid in (False, True):
+                    facts = {
+                        ('STP', leader, 'yes'): True,
+                        ('STP', 'has_completed_focus', focus): True,
+                        ('STP', 'variable', variable): level,
+                        ('STP', 'has_variable', deposit): paid,
+                        ('STP', 'variable', 'ADISCORD_economy_treasury'): 0,
+                    }
+                    self.assertEqual(matches_conditions(block(self.decisions[name], 'visible'), facts),
+                                     level < 3 or paid)
+        for kind, focus in (('training', 'STP_party_regent_mandate'),
+                            ('industry', 'STP_party_regent_industry'),
+                            ('equipment', 'STP_party_regent_joint_offices')):
+            for delivered in (False, True):
+                for repeatable in (False, True):
+                    facts = {
+                        ('STP', 'STP_party_leader_6', 'yes'): True,
+                        ('STP', 'has_completed_focus', focus): True,
+                        ('STP', 'has_country_flag', f'STP_pi_north_{kind}_delivered'): delivered,
+                        ('STP', 'has_completed_focus', 'STP_pe_regent_ending_b'): repeatable,
+                    }
+                    expected = not delivered or (kind == 'equipment' and repeatable)
+                    self.assertEqual(matches_conditions(
+                        block(self.decisions['STP_pi_north_' + kind], 'visible'), facts
+                    ), expected)
 
     def test_northern_context_hides_new_orders_but_preserves_pending_delivery(self):
         for name, program, context in (

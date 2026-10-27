@@ -64,6 +64,95 @@ def resolve_border_neighbors(items, neighbors, scope="VAL"):
 
 
 class ValCampaignContractsTests(unittest.TestCase):
+    def test_final_crisis_prepares_actual_participants_without_paid_order_flags(self):
+        triggers = entries(TRIGGERS)
+        profiles = entries("common/ai_strategy/VAL.txt")
+        gate = block(triggers, "VAL_ai_final_campaign_defender")
+        self.assertTrue(gate, "Automatic escalation needs an AI preparation signal")
+        facts = {
+            ("VAL", "VAL_final_crisis_preparing", "yes"): True,
+        }
+        for tag in ("VAL", "NOD", "STP", "STS"):
+            facts[tag, "exists", "yes"] = True
+            facts[tag, "has_capitulated", "no"] = True
+            facts[tag, "is_ai", "yes"] = True
+        facts["STP", "is_subject_of", "NOD"] = True
+
+        def active(name, actor):
+            current = dict(facts)
+            for tag in ("NOD", "STP", "STS"):
+                current[tag, "VAL_ai_final_campaign_defender", "yes"] = matches_conditions(
+                    gate, facts, tag
+                )
+            profile = block(profiles, name)
+            self.assertTrue(profile, name)
+            return matches_conditions(block(profile, "enable"), current, actor)
+
+        for tag, expected in (("NOD", True), ("STP", True), ("STS", False)):
+            self.assertEqual(active(f"VAL_final_campaign_{tag}", "VAL"), expected)
+            self.assertEqual(active(f"{tag}_final_campaign_prepare_VAL", tag), expected)
+        facts["STS", "is_in_faction_with", "NOD"] = True
+        self.assertTrue(active("STS_final_campaign_prepare_VAL", "STS"))
+        facts["STS", "is_subject_of", "VAL"] = True
+        self.assertFalse(active("STS_final_campaign_prepare_VAL", "STS"))
+        facts["VAL", "VAL_final_crisis_preparing", "yes"] = False
+        self.assertFalse(active("VAL_final_campaign_NOD", "VAL"))
+        self.assertFalse(active("NOD_final_campaign_prepare_VAL", "NOD"))
+        facts["VAL", "VAL_final_crisis_preparing", "yes"] = True
+        facts["NOD", "has_war_with", "VAL"] = True
+        self.assertFalse(active("NOD_final_campaign_prepare_VAL", "NOD"))
+
+    def test_surplus_export_ai_preserves_the_selected_batch_and_rifle_reserve(self):
+        gate = block(entries(TRIGGERS), "VAL_ai_surplus_export_ready")
+        self.assertTrue(gate, "AI exports need a reserve after the actual selected batch")
+        decision = block(
+            block(entries("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_foreign_sales"),
+            "VAL_sell_surplus_arms_market",
+        )
+        veto = next(
+            item.value for item in block(decision, "ai_will_do")
+            if item.key == "modifier"
+            and scalar(item.value, "factor") == "0"
+            and scalar(item.value, "VAL_ai_surplus_export_ready") == "no"
+        )
+        self.assertTrue(veto)
+        for focus, batch in ((None, 25000), ("VAL_Bulk_Arms_Contracts", 50000),
+                             ("VAL_Army_Arsenal_Orders", 100000),
+                             ("VAL_Strategic_Arms_Exports", 200000)):
+            facts = {("VAL", "has_war", "no"): True,
+                     ("VAL", "ADISCORD_economy_demobilization_threat", "no"): True}
+            if focus:
+                facts["VAL", "has_completed_focus", focus] = True
+            for stock, expected in ((batch, False), (batch + 14999.99, False),
+                                    (batch + 15000, True)):
+                with self.subTest(focus=focus, stock=stock):
+                    facts["VAL", "equipment", "infantry_equipment"] = stock
+                    self.assertEqual(matches_conditions(gate, facts, "VAL"), expected)
+            facts["VAL", "ADISCORD_economy_demobilization_threat", "no"] = False
+            self.assertFalse(matches_conditions(gate, facts, "VAL"))
+
+        facts = {
+            ("VAL", "has_war", "no"): True,
+            ("VAL", "ADISCORD_economy_demobilization_threat", "no"): True,
+        }
+        for focus in ("VAL_Bulk_Arms_Contracts", "VAL_Army_Arsenal_Orders",
+                      "VAL_Strategic_Arms_Exports"):
+            facts["VAL", "has_completed_focus", focus] = True
+        for stock in (39999.99, 40000, 49999.99, 50000, 64999.99, 65000,
+                      99999.99, 100000, 114999.99, 115000, 199999.99,
+                      200000, 214999.99, 215000):
+            with self.subTest(fallback_stock=stock):
+                facts["VAL", "equipment", "infantry_equipment"] = stock
+                # hidden_effect is transparent for settlement selection.
+                hidden = block(block(decision, "complete_effect"), "hidden_effect")
+                sent = [
+                    int(scalar(item.value, "amount"))
+                    for _, item in selected_effects(hidden, facts)
+                    if item.key == "send_equipment"
+                ]
+                self.assertEqual(len(sent), 1)
+                self.assertEqual(matches_conditions(gate, facts, "VAL"), stock - sent[0] >= 15000)
+
     def test_frontier_protectorate_leaves_the_two_independent_northern_enemies_reachable(self):
         gate = block(entries(TRIGGERS), "VAL_can_attack_northern_coalition")
         facts = {("VAL", "has_completed_focus", "VAL_Northern_Settlement"): True}

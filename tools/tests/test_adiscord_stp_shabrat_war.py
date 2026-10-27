@@ -7,6 +7,11 @@ import json
 import re
 import unittest
 
+from tools.tests.test_adiscord_stp_preparation import (
+    focus_exclusion_crossings, focus_positions,
+)
+from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
 from tools.tests.test_adiscord_stp_party_inheritance import (
     CIVIL_WAR,
     DECISIONS,
@@ -66,12 +71,6 @@ def compact(source):
     return " ".join(re.sub(r"(?m)#.*$", "", source).split())
 
 
-def position(body):
-    x = int(re.search(r"\n\t\tx = (-?\d+)", body).group(1))
-    y = int(re.search(r"\n\t\ty = (-?\d+)", body).group(1))
-    return x, y
-
-
 class ResistanceFocusTests(unittest.TestCase):
     def test_focuses_are_resistance_only_and_localised(self):
         focuses = focus_blocks(CIVIL_WAR)
@@ -100,6 +99,8 @@ class ResistanceFocusTests(unittest.TestCase):
 
     def test_branch_keeps_two_columns_from_every_visible_resistance_focus(self):
         focuses = focus_blocks(CIVIL_WAR)
+        parsed = {name: parse_clausewitz(body)[0].value for name, body in focuses.items()}
+        positions = focus_positions(parsed, {}, "STS")
         visible = {}
         for focus_id, body in focuses.items():
             branch = re.search(r"allow_branch = \{([^\n]*)\}", body)
@@ -107,12 +108,13 @@ class ResistanceFocusTests(unittest.TestCase):
                 continue
             if "tag = STP" in branch.group(1) or "tag = SRP" in branch.group(1):
                 continue
-            visible[focus_id] = position(body)
+            visible[focus_id] = positions[focus_id]
         for focus_id in HW_FOCUSES:
             x, y = visible[focus_id]
             for other, (other_x, other_y) in visible.items():
                 if other != focus_id and other_y == y:
                     self.assertGreaterEqual(abs(other_x - x), 2, f"{focus_id} overlaps {other}")
+        self.assertFalse(focus_exclusion_crossings(parsed, visible))
 
     def test_ai_plan_takes_the_branch_after_the_last_banquet(self):
         plan = definition(PLANS, "STS_shabrat_civil_war_plan")

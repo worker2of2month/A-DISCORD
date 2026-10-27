@@ -92,6 +92,19 @@ def evaluate(nodes: list, context: dict) -> bool:
                 "check_variable",
             ):
                 variables = context["variables"]
+                if key == "check_variable" and value[0][0] == "var":
+                    fields = {name: val for name, _, val in value}
+                    comparisons = {
+                        "greater_than": ">",
+                        "greater_than_or_equals": ">=",
+                        "less_than": "<",
+                        "less_than_or_equals": "<=",
+                        "equals": "=",
+                    }
+                    values.append(OPS[comparisons[fields["compare"]]](
+                        variables[fields["var"]], float(fields["value"])
+                    ))
+                    continue
                 name, op, operand = value[0]
                 number = variables[operand] if operand in variables else float(operand)
                 if key == "set_temp_variable":
@@ -105,8 +118,10 @@ def evaluate(nodes: list, context: dict) -> bool:
             elif key in context.get("triggers", {}):
                 result = evaluate(context["triggers"][key], context)
                 values.append(result if value == "yes" else not result)
-            elif key in ("has_tech", "has_country_flag"):
+            elif key in ("has_tech", "has_doctrine", "has_country_flag", "has_global_flag"):
                 values.append(value in context[key])
+            elif key == "tag":
+                values.append(context["tag"] == value)
             elif key in context:
                 expected = {"yes": True, "no": False}.get(value)
                 if expected is None:
@@ -129,6 +144,49 @@ def active(policy: list, context: dict, previously_active: bool = False) -> bool
     return enable
 
 
+class CampaignRoleAvailabilityTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        source = (ROOT / "common/ai_templates/ADISCORD_land_templates.txt").read_text(encoding="utf-8")
+        cls.templates = parse(re.sub(r"(?:available_for|blocked_for)\s*=\s*\{[^}]*\}", "", source))
+
+    def test_mechanized_role_can_spend_experience_without_assault_technology(self):
+        priority = child(child(self.templates, "ADISCORD_assault_templates"), "upgrade_prio")
+        modifiers = [value for key, _, value in priority if key == "modifier"]
+        for factories, funded, expected in ((6, True, False), (7, True, True), (9, True, True), (10, True, True), (9, False, False)):
+            context = {
+                "has_tech": {CARRIER_TECH, "ADISCORD_tech_standardized_field_tool_chests", "ADISCORD_tech_frequency_hopping_field_sets"},
+                "num_of_military_factories": factories,
+                FUNDING: funded,
+            }
+            enabled = any(evaluate([row for row in modifier if row[0] not in ("add", "factor")], context) for modifier in modifiers)
+            with self.subTest(factories=factories, funded=funded):
+                self.assertEqual(enabled, expected)
+
+    def test_collapse_does_not_remove_unrelated_countries_garrison_target(self):
+        gate = child(child(child(self.templates, "ADISCORD_garrison_templates"), "ADISCORD_garrison_levy"), "enable")
+        exclusion = child(child(gate, "NOT"), "OR")[0][2]
+        for tag, ended, expected in (("WKR", False, True), ("VAD", False, True), ("RUS", False, False), ("NOD", False, False), ("WKR", True, False)):
+            flags = {"ADISCORD_vorkerland_collapse_wars_started"}
+            if ended:
+                flags.add("ADISCORD_vorkerland_collapse_finished")
+            with self.subTest(tag=tag, ended=ended):
+                self.assertEqual(evaluate(exclusion, {"tag": tag, "has_global_flag": flags, "has_war": True}), expected)
+
+    def test_doctrine_cannot_reopen_nod_mountain_demand_after_marine_school(self):
+        source = parse((AI / "ADISCORD_technology_doctrine_ai.txt").read_text(encoding="utf-8"))
+        policy = child(source, "ADISCORD_ai_special_forces_school_mix")
+        for tag, school, expected in (("NOD", False, True), ("NOD", True, False), ("VAL", True, True)):
+            context = {
+                "tag": tag,
+                "has_tech": {"ADISCORD_tech_nodrul_marine_corps"} if school else set(),
+                "has_doctrine": {"ADISCORD_special_forces_mountain_companies"},
+                "ADISCORD_economy_ai_is_crisis": False,
+            }
+            with self.subTest(tag=tag, school=school):
+                self.assertEqual(active(policy, context), expected)
+
+
 class AIProductionLifecycleTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -139,6 +197,24 @@ class AIProductionLifecycleTests(unittest.TestCase):
         cls.carriers = child(technology, "ADISCORD_produce_armored_carriers")
         cls.generic_aa = child(technology, "ADISCORD_ai_anti_air_buffer")
         cls.volunteer_aa = child(val, "ADISCORD_VAL_volunteer_air_defence")
+
+    def test_heavy_platform_reserve_stops_and_restarts_without_an_endless_floor(self):
+        source = parse((AI / "ADISCORD_technology_doctrine_ai.txt").read_text(encoding="utf-8"))
+        policy = child(source, "ADISCORD_ai_heavy_platforms")
+        for stock, old, expected in ((0, False, True), (179.9, False, True), (180, False, False), (220, True, True), (260, True, False), (10000, True, False)):
+            context = {
+                "ADISCORD_ai_rifle_replacement_emergency": False,
+                "has_tech": {"ADISCORD_tech_heavy_platform_cores"},
+                "num_of_military_factories": 15,
+                "ADISCORD_economy_ai_is_healthy": True,
+                "equipment": {"ADISCORD_heavy_platform_archetype": stock},
+            }
+            with self.subTest(stock=stock, old=old):
+                self.assertEqual(active(policy, context, old), expected)
+        for key, value in (("num_of_military_factories", 14), ("has_tech", set()), ("ADISCORD_economy_ai_is_healthy", False), ("ADISCORD_ai_rifle_replacement_emergency", True)):
+            context["equipment"]["ADISCORD_heavy_platform_archetype"] = 0
+            altered = dict(context, **{key: value})
+            self.assertFalse(active(policy, altered, True), key)
 
     def context(
         self,
@@ -219,6 +295,34 @@ class AIProductionLifecycleTests(unittest.TestCase):
                     active(self.carriers, self.context(funded=False, stock=stock), True)
                 )
 
+    def test_mechanized_demand_survives_a_completed_carrier_reserve(self):
+        source = parse((AI / "ADISCORD_technology_doctrine_ai.txt").read_text(encoding="utf-8"))
+        recruitment = child(source, "ADISCORD_ai_mechanized_force_mix")
+        for stock in (0, 899, 900, 1500, 1501, 10000):
+            context = self.context(stock=stock)
+            context["has_tech"].update({
+                "ADISCORD_tech_standardized_field_tool_chests",
+                "ADISCORD_tech_frequency_hopping_field_sets",
+            })
+            with self.subTest(stock=stock):
+                self.assertTrue(active(recruitment, context))
+                if stock > 1500:
+                    self.assertFalse(active(self.carriers, context, True))
+        request = child(recruitment, "ai_strategy")
+        self.assertIn(("type", "=", "role_ratio"), request)
+        self.assertIn(("id", "=", "mobile"), request)
+        self.assertFalse(any(
+            ("type", "=", "role_ratio") in value
+            for key, _, value in self.carriers if key == "ai_strategy"
+        ))
+        for key, value in (
+            ("num_of_military_factories", 6),
+            (FUNDING, False),
+            ("ADISCORD_ai_rifle_replacement_emergency", True),
+            ("has_tech", {CARRIER_TECH}),
+        ):
+            self.assertFalse(active(recruitment, dict(context, **{key: value})), key)
+
     def test_carrier_funding_recovery_respects_restart_stock(self) -> None:
         self.assertFalse(active(self.carriers, self.context(funded=False)))
         self.assertTrue(active(self.carriers, self.context(stock=899)))
@@ -250,6 +354,205 @@ class AIProductionLifecycleTests(unittest.TestCase):
                     }
                 ],
             )
+
+
+class LogisticsAndMaritimeAirTests(unittest.TestCase):
+    def setUp(self):
+        self.policies = parse((AI / "default.txt").read_text(encoding="utf-8"))
+
+    def test_rail_replacement_does_not_require_truck_technology(self):
+        rail = child(self.policies, "ADISCORD_supply_rail_replacement")
+        trucks = child(self.policies, "ADISCORD_supply_transport_replacement")
+        for researched, rail_ready, trucks_ready in (
+            ({"ADISCORD_tech_restored_rail_stock"}, True, False),
+            ({"ADISCORD_tech_restored_truck_fleets"}, False, True),
+            (set(), False, False),
+        ):
+            context = {"has_tech": researched, "num_of_supply_nodes": 2}
+            self.assertEqual(active(rail, context), rail_ready)
+            self.assertEqual(active(trucks, context), trucks_ready)
+        self.assertNotIn("train_equipment", str(trucks))
+
+    def test_train_reserve_stops_and_restarts_without_losing_replacement_weight(self):
+        floor = child(self.policies, "ADISCORD_produce_supply_trains_low_stock")
+        rail = child(self.policies, "ADISCORD_supply_rail_replacement")
+        context = {
+            "has_tech": {"ADISCORD_tech_restored_rail_stock"},
+            "num_of_supply_nodes": 2,
+            "num_of_military_factories": 12,
+            "ADISCORD_ai_rifle_replacement_emergency": False,
+            "equipment": {"train_equipment": 0},
+        }
+        for stock, before, expected in (
+            (19.99, False, True), (20, False, False),
+            (20, True, True), (39.99, True, True), (40, True, False),
+            (19, False, True),
+        ):
+            context["equipment"]["train_equipment"] = stock
+            self.assertEqual(active(floor, context, before), expected)
+            self.assertTrue(active(rail, context))
+        context["equipment"]["train_equipment"] = 0
+        for key, value in (
+            ("num_of_military_factories", 11), ("num_of_supply_nodes", 1),
+            ("has_tech", set()), ("ADISCORD_ai_rifle_replacement_emergency", True),
+        ):
+            self.assertFalse(active(floor, {**context, key: value}, True), key)
+
+    def test_maritime_air_demand_uses_unlocked_aircraft_and_survives_budget_cuts(self):
+        policy = child(self.policies, "ADISCORD_default_maritime_air_demand")
+        context = {
+            "has_tech": {"ADISCORD_tech_twin_engine_aircraft"},
+            "ADISCORD_has_operational_naval_base": True,
+        }
+        self.assertTrue(active(policy, context))
+        for key, value in (("has_tech", set()), ("ADISCORD_has_operational_naval_base", False)):
+            self.assertFalse(active(policy, {**context, key: value}))
+        requests = [dict((k, v) for k, _, v in row) for key, _, row in policy if key == "ai_strategy"]
+        self.assertIn({"type": "unit_ratio", "id": "naval_bomber", "value": "15"}, requests)
+        self.assertFalse(any("min_factories" in row["type"] for row in requests))
+        economy = parse((AI / "ADISCORD_economy_ai.txt").read_text(encoding="utf-8"))
+        for name in ("ADISCORD_ai_fiscal_crisis", "ADISCORD_ai_fiscal_stress"):
+            factors = [dict((k, v) for k, _, v in row) for key, _, row in child(economy, name) if key == "ai_strategy"]
+            naval = [row for row in factors if row.get("id") == "naval_bomber"]
+            self.assertEqual(len(naval), 1)
+            self.assertEqual(naval[0]["type"], "equipment_production_factor")
+            self.assertLess(float(naval[0]["value"]), 0)
+
+
+class ResearchAndConstructionTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.technology = parse((AI / "ADISCORD_technology_doctrine_ai.txt").read_text(encoding="utf-8"))
+        cls.economy = parse((AI / "ADISCORD_economy_ai.txt").read_text(encoding="utf-8"))
+        cls.generic = parse((AI / "default.txt").read_text(encoding="utf-8"))
+
+    def context(self, **changes):
+        context = {
+            "is_ai": True,
+            "has_capitulated": False,
+            "has_war": False,
+            "ADISCORD_ai_has_war_preparation": False,
+            "ADISCORD_economy_ai_is_healthy": True,
+            "ADISCORD_economy_ai_is_crisis": False,
+            "ADISCORD_ai_rifle_replacement_emergency": False,
+            "ADISCORD_is_regional_naval_power": True,
+            "ADISCORD_has_operational_naval_base": True,
+            FUNDING: True,
+            "num_of_military_factories": 12,
+            "num_of_naval_factories": 1,
+            "num_of_supply_nodes": 3,
+            "variables": {"ADISCORD_economy_surplus_streak": 3},
+            "has_tech": {"ADISCORD_tech_semi_autonomous_combat_modules"},
+            "equipment": {"ADISCORD_combat_platform_archetype": 0},
+        }
+        return dict(context, **changes)
+
+    def test_construction_switches_on_preparation_and_returns_after_cancellation(self):
+        names = (
+            "healthy_civilian_growth", "healthy_peace_infrastructure",
+            "healthy_prewar_industry", "healthy_war_industry",
+        )
+        policies = [child(self.economy, f"ADISCORD_ai_{name}") for name in names]
+        for war, preparation, healthy, expected in (
+            (False, False, True, [True, True, False, False]),
+            (False, True, True, [False, False, True, False]),
+            (True, True, True, [False, False, False, True]),
+            (False, True, False, [False, False, False, False]),
+        ):
+            context = self.context(**{
+                "has_war": war,
+                "ADISCORD_ai_has_war_preparation": preparation,
+                "ADISCORD_economy_ai_is_healthy": healthy,
+            })
+            with self.subTest(war=war, preparation=preparation, healthy=healthy):
+                self.assertEqual([active(policy, context, True) for policy in policies], expected)
+        prewar = policies[2]
+        request = child(prewar, "ai_strategy")
+        self.assertIn(("type", "=", "added_military_to_civilian_factory_ratio"), request)
+        self.assertGreater(float(dict((key, val) for key, _, val in request)["value"]), 0)
+
+    def test_preparation_includes_overseas_routes_without_leaking_country_flags(self):
+        source = parse((ROOT / "common/scripted_triggers/ADISCORD_scripted_triggers_generic.txt").read_text(encoding="utf-8"))
+        gate = child(source, "ADISCORD_ai_has_war_preparation")
+        predicates = {
+            "STP_cw_preparation_open": "STP",
+            "NOD_ai_northern_preparation": "NOD",
+            "NOD_ai_stelander_preparation": "NOD",
+            "NAM_ai_war_of_return_preparing": "NAM",
+        }
+        for predicate, tag in predicates.items():
+            facts = dict.fromkeys(predicates, False)
+            facts.update(tag=tag, ADISCORD_ai_has_adjacent_war_preparation=False)
+            self.assertFalse(evaluate(gate, facts))
+            facts[predicate] = True
+            self.assertTrue(evaluate(gate, facts), predicate)
+            self.assertFalse(evaluate(gate, dict(facts, tag="RUS")), predicate)
+        for tag in ("RUS", "VAL", "WRK", "STS", "NOD", "NAM"):
+            facts = dict.fromkeys(predicates, False)
+            facts.update(tag=tag, ADISCORD_ai_has_adjacent_war_preparation=True)
+            self.assertTrue(evaluate(gate, facts), tag)
+
+    def test_supply_research_tracks_real_transport_demand(self):
+        policy = child(self.technology, "ADISCORD_ai_supply_research_priorities")
+        self.assertTrue(active(policy, self.context()))
+        for changes in ({"num_of_supply_nodes": 0}, {"num_of_military_factories": 5}):
+            self.assertFalse(active(policy, self.context(**changes), True))
+        # Budget trouble must not block unlocking the truck used by supply nodes.
+        self.assertTrue(active(policy, self.context(ADISCORD_economy_ai_is_crisis=True)))
+        from tools.tests.test_adiscord_naval_programmes import entries, block
+        technologies = block(entries("common/technologies/ADISCORD_logistics_trains.txt"), "technologies")
+        truck = block(technologies, "ADISCORD_tech_restored_truck_fleets")
+        self.assertIn("motorized_equipment_1", [row.value for row in block(truck, "enable_equipments")])
+        transport = block(technologies, "ADISCORD_tech_standardized_transport_columns")
+        self.assertIn("logistics_company", [row.value for row in block(transport, "enable_subunits")])
+
+    def test_production_research_follows_preparation_war_and_industry(self):
+        policy = child(self.technology, "ADISCORD_ai_production_research_priorities")
+        for war, preparation, factories, expected in (
+            (False, False, 12, False), (False, True, 12, True),
+            (True, False, 12, True), (True, True, 4, False),
+        ):
+            self.assertEqual(active(policy, self.context(**{
+                "has_war": war, "ADISCORD_ai_has_war_preparation": preparation,
+                "num_of_military_factories": factories,
+            }), True), expected)
+
+    def test_maritime_research_and_dockyard_construction_require_current_port(self):
+        research = child(self.technology, "ADISCORD_ai_maritime_air_research")
+        yards = child(self.generic, "ADISCORD_coastal_dockyard_capacity")
+        self.assertTrue(active(research, self.context()))
+        self.assertTrue(active(yards, self.context()))
+        for policy in (research, yards):
+            self.assertFalse(active(policy, self.context(ADISCORD_has_operational_naval_base=False), True))
+        for changes in (
+            {"num_of_military_factories": 7}, {FUNDING: False},
+            {"ADISCORD_is_regional_naval_power": False},
+        ):
+            self.assertFalse(active(research, self.context(**changes), True))
+        for changes in ({"num_of_naval_factories": 2}, {"ADISCORD_economy_ai_is_crisis": True}):
+            self.assertFalse(active(yards, self.context(**changes), True))
+
+    def test_platform_floor_releases_full_stock_without_removing_force_mix(self):
+        reserve = child(self.technology, "ADISCORD_ai_platform_reserve")
+        mix = child(self.technology, "ADISCORD_ai_platform_battlegroups")
+        for stock, old, expected in (
+            (439.99, False, True), (440, False, False),
+            (440, True, True), (599.99, True, True), (600, True, False),
+            (10000, True, False), (439, False, True),
+        ):
+            context = self.context(equipment={"ADISCORD_combat_platform_archetype": stock})
+            with self.subTest(stock=stock, old=old):
+                self.assertEqual(active(reserve, context, old), expected)
+                self.assertTrue(active(mix, context))
+        self.assertFalse(any(
+            ("type", "=", "equipment_production_min_factories_archetype") in value
+            for key, _, value in mix if key == "ai_strategy"
+        ))
+        for changes in (
+            {"num_of_military_factories": 9}, {FUNDING: False},
+            {"ADISCORD_ai_rifle_replacement_emergency": True}, {"has_tech": set()},
+        ):
+            self.assertFalse(active(reserve, self.context(**changes), True))
 
 
 class ArmyQualityTests(unittest.TestCase):
@@ -415,10 +718,12 @@ class ArmyQualityTests(unittest.TestCase):
             "produce_support_equipment_low_stock",
             "produce_artillery_low_stock",
             "produce_supply_trucks_low_stock",
+            "produce_supply_trains_low_stock",
             "limited_air_program",
             "ai_anti_tank_buffer",
             "ai_anti_air_buffer",
             "ai_platform_battlegroups",
+            "ai_platform_reserve",
             "produce_armored_carriers",
             "ai_heavy_platforms",
         )
@@ -443,7 +748,7 @@ class ArmyQualityTests(unittest.TestCase):
                 ctx.update(
                     {
                         "num_of_military_factories": factories,
-                        "num_of_supply_nodes": 1,
+                        "num_of_supply_nodes": 3,
                         "has_tech": techs,
                         "has_war": True,
                         FUNDING: True,

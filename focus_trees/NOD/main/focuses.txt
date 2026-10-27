@@ -47,7 +47,7 @@ focus_tree = {
 		id = NOD_Cussington_Naval_Yards
 		icon = GFX_goal_generic_construct_naval_dockyard
 		x = 10
-		y = 1
+		y = 2
 		cost = 5
 		prerequisite = { focus = NOD_Naval_Command }
 		available = {
@@ -78,7 +78,7 @@ focus_tree = {
 		id = NOD_Sea_Lane_Escorts
 		icon = GFX_goal_generic_navy_cruiser
 		x = 10
-		y = 2
+		y = 3
 		cost = 4
 		prerequisite = { focus = NOD_Cussington_Naval_Yards }
 		available = {
@@ -118,9 +118,10 @@ focus_tree = {
 		id = NOD_Submarine_Blockade
 		icon = GFX_goal_generic_navy_submarine
 		x = 9
-		y = 3
+		y = 1
 		cost = 5
-		prerequisite = { focus = NOD_Sea_Lane_Escorts }
+		prerequisite = { focus = NOD_Naval_Command }
+		mutually_exclusive = { focus = NOD_Landing_Staff }
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -158,9 +159,10 @@ focus_tree = {
 		id = NOD_Landing_Staff
 		icon = GFX_goal_generic_amphibious_assault
 		x = 11
-		y = 3
-		cost = 4
-		prerequisite = { focus = NOD_Sea_Lane_Escorts }
+		y = 1
+		cost = 2
+		prerequisite = { focus = NOD_Naval_Command }
+		mutually_exclusive = { focus = NOD_Submarine_Blockade }
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -211,6 +213,7 @@ focus_tree = {
 		y = 4
 		cost = 10
 		prerequisite = { focus = NOD_Submarine_Blockade }
+		prerequisite = { focus = NOD_Sea_Lane_Escorts }
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {

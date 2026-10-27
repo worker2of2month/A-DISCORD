@@ -51,6 +51,62 @@ ADISCORD_ai_ground_research_priorities = {
 	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_point_defense_aa value = 35 }
 }
 
+# These prerequisites make existing production and logistics policies usable.
+# Native research scoring retains prerequisite and ahead-of-time checks.
+ADISCORD_ai_supply_research_priorities = {
+	enable = {
+		num_of_military_factories > 5
+		num_of_supply_nodes > 0
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_restored_truck_fleets
+		value = 60
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_standardized_transport_columns
+		value = 45
+	}
+}
+
+ADISCORD_ai_production_research_priorities = {
+	enable = {
+		num_of_military_factories > 4
+		OR = {
+			has_war = yes
+			ADISCORD_ai_has_war_preparation = yes
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_interchangeable_components
+		value = 40
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_precision_metrology_recovery
+		value = 40
+	}
+}
+
+ADISCORD_ai_maritime_air_research = {
+	enable = {
+		ADISCORD_is_regional_naval_power = yes
+		ADISCORD_has_operational_naval_base = yes
+		num_of_military_factories > 7
+		ADISCORD_economy_ai_can_fund_advanced_forces = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_twin_engine_aircraft
+		value = 35
+	}
+}
+
 # Applied programmes are optional side branches.  These weights make the AI
 # choose them for an actual force structure or wartime problem instead of
 # blindly researching every programme in chronological order.
@@ -269,11 +325,6 @@ ADISCORD_ai_platform_battlegroups = {
 		value = 14
 	}
 	ai_strategy = {
-		type = equipment_production_min_factories_archetype
-		id = ADISCORD_combat_platform_archetype
-		value = 1
-	}
-	ai_strategy = {
 		type = equipment_variant_production_factor
 		id = ADISCORD_recon_platform_archetype
 		value = 4
@@ -282,6 +333,50 @@ ADISCORD_ai_platform_battlegroups = {
 		type = equipment_variant_production_factor
 		id = ADISCORD_recovery_platform_archetype
 		value = 3
+	}
+}
+
+# The reserve covers the 440-platform field-refit gate. Filling it releases
+# the guaranteed factory while the force mix and replacement weights remain.
+ADISCORD_ai_platform_reserve = {
+	enable = {
+		ADISCORD_ai_rifle_replacement_emergency = no
+		has_tech = ADISCORD_tech_semi_autonomous_combat_modules
+		num_of_military_factories > 9
+		ADISCORD_economy_ai_can_fund_advanced_forces = yes
+		has_equipment = { ADISCORD_combat_platform_archetype < 440 }
+	}
+	abort = {
+		OR = {
+			ADISCORD_ai_rifle_replacement_emergency = yes
+			NOT = { has_tech = ADISCORD_tech_semi_autonomous_combat_modules }
+			num_of_military_factories < 10
+			ADISCORD_economy_ai_can_fund_advanced_forces = no
+			NOT = { has_equipment = { ADISCORD_combat_platform_archetype < 600 } }
+		}
+	}
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = ADISCORD_combat_platform_archetype
+		value = 1
+	}
+}
+
+# Recruitment remains useful when the transport reserve is already full.
+ADISCORD_ai_mechanized_force_mix = {
+	enable = {
+		ADISCORD_ai_rifle_replacement_emergency = no
+		has_tech = ADISCORD_tech_armored_carrier_program
+		has_tech = ADISCORD_tech_standardized_field_tool_chests
+		has_tech = ADISCORD_tech_frequency_hopping_field_sets
+		num_of_military_factories > 6
+		ADISCORD_economy_ai_can_fund_advanced_forces = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = role_ratio
+		id = mobile
+		value = 8
 	}
 }
 
@@ -301,7 +396,6 @@ ADISCORD_produce_armored_carriers = {
 			has_equipment = { ADISCORD_armored_carrier_archetype > 1500 }
 		}
 	}
-	ai_strategy = { type = role_ratio id = mobile value = 8 }
 	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_armored_carrier_archetype value = 24 }
 	ai_strategy = { type = equipment_production_min_factories_archetype id = ADISCORD_armored_carrier_archetype value = 1 }
 }
@@ -312,8 +406,19 @@ ADISCORD_ai_heavy_platforms = {
 		has_tech = ADISCORD_tech_heavy_platform_cores
 		num_of_military_factories > 14
 		ADISCORD_economy_ai_is_healthy = yes
+		has_equipment = { ADISCORD_heavy_platform_archetype < 180 }
 	}
-	abort_when_not_enabled = yes
+	# A bounded reserve can seed the heavy target without permanently taking
+	# a factory from the selected medium-armour programme.
+	abort = {
+		OR = {
+			ADISCORD_ai_rifle_replacement_emergency = yes
+			NOT = { has_tech = ADISCORD_tech_heavy_platform_cores }
+			num_of_military_factories < 15
+			ADISCORD_economy_ai_is_healthy = no
+			NOT = { has_equipment = { ADISCORD_heavy_platform_archetype < 260 } }
+		}
+	}
 
 	ai_strategy = {
 		type = equipment_variant_production_factor
@@ -456,6 +561,12 @@ ADISCORD_ai_tank_school_force_mix = {
 
 ADISCORD_ai_special_forces_school_mix = {
 	enable = {
+		NOT = {
+			AND = {
+				tag = NOD
+				has_tech = ADISCORD_tech_nodrul_marine_corps
+			}
+		}
 		OR = {
 			has_doctrine = ADISCORD_special_forces_mountain_companies
 			has_doctrine = ADISCORD_special_forces_contaminated_zone_teams

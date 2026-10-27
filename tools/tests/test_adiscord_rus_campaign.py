@@ -54,7 +54,9 @@ class BunkerWorld:
         self.missions = set()
         self.events = []
         self.ruler = "RUS_Mark_Rustan"
-        self.characters = {self.ruler, "RUS_Varlam_Oskol"}
+        self.characters = set(campaign.initial_characters)
+        self.advisor_roles = campaign.advisor_roles
+        self.advisors = {}
         self.held_states = set()
         self.val_held_states = set()
         self.state_controllers = {}
@@ -172,6 +174,8 @@ class BunkerWorld:
         assert scalar(rows, "instant_build") == "yes", rows
 
     def value(self, token):
+        if token == "amount_research_slots":
+            return self.research_slots
         try:
             return float(token)
         except ValueError:
@@ -409,6 +413,10 @@ class BunkerWorld:
                 self.research_slots += int(value)
             elif key == "recruit_character":
                 self.characters.add(value)
+            elif key == "activate_advisor":
+                character, role = self.advisor_roles[value]
+                assert character in self.characters, character
+                self.advisors[scalar(role, "slot")] = value
             elif key == "set_politics":
                 self.ideology = scalar(value, "ruling_party")
             elif key == "set_power_balance":
@@ -517,6 +525,7 @@ class RusCampaignTests(unittest.TestCase):
             cls.effects.update({e.key: e.value for e in parse(f"common/scripted_effects/{source}.txt")})
         cls.effects.update({e.key: e.value for e in parse("common/scripted_effects/ADISCORD_society_development_effects.txt")})
         development_effects = {
+            "ADISCORD_calculate_science_development_gain",
             "ADISCORD_economy_calculate_other_development_gains",
             "ADISCORD_economy_calculate_social_development_gain",
             "ADISCORD_economy_check_economic_development_upgrade",
@@ -550,6 +559,15 @@ class RusCampaignTests(unittest.TestCase):
                     cls.law_groups.append({row.key for row in group.value if isinstance(row.value, list)})
         cls.projects = [name for name, rows in cls.decisions.items() if name != "RUS_bunker_energy_sale" and any(e.key == "days_remove" for e in rows)]
         cls.loc = dict(re.findall(r'^\s+([A-Za-z0-9_.]+):(?:\d+)?\s+"(.*)"\s*$', read(f"localisation/russian/{BASE}_l_russian.yml"), re.M))
+        cls.initial_characters = {
+            row.value for row in parse("history/countries/RUS - RusniaLand.txt")
+            if row.key == "recruit_character"
+        }
+        cls.advisor_roles = {
+            scalar(role.value, "idea_token"): (character.key, role.value)
+            for character in block(parse("common/characters/RUS.txt"), "characters")
+            for role in character.value if role.key == "advisor"
+        }
 
     def world(self):
         return BunkerWorld(self)
@@ -616,6 +634,40 @@ class RusCampaignTests(unittest.TestCase):
                 source = read(f"localisation/{language}/ADISCORD_society_development_l_{language}.yml")
                 self.assertIn(f"[?ADISCORD_{axis}_development_monthly_gain|=+1]", source)
                 self.assertNotIn(f"[?ADISCORD_{axis}_development_monthly_growth|", source)
+
+    def test_science_display_and_tick_use_research_slots_and_current_budget(self):
+        world = self.world()
+        world.run("ADISCORD_initialize_society_development_variables")
+        world.research_slots = 2
+        world.variables.update({
+            "ADISCORD_science_development_monthly_growth": 2,
+            "ADISCORD_country_development_final_global_growth_factor_bp": 120,
+        })
+        for budget, expected in ((2, 3.12), (4, 9.6), (2, 3.12)):
+            with self.subTest(budget=budget):
+                world.variables["ADISCORD_economy_research_spending_mode"] = budget
+                before = world.value("ADISCORD_science_development_progress")
+                world.run("ADISCORD_economy_calculate_other_development_gains")
+                self.assertAlmostEqual(world.value("ADISCORD_science_development_monthly_gain"), expected)
+                world.run("ADISCORD_tick_science_development_monthly")
+                self.assertAlmostEqual(world.value("ADISCORD_science_development_progress") - before, expected)
+
+    def test_focus_advisors_use_recruited_characters_and_registered_slots(self):
+        for focus, token, slot in (
+            ("RUS_staff_college", "RUS_Vyazemsky_theorist", "theorist"),
+            ("RUS_imperial_general_staff", "RUS_Rakitin_army_chief", "army_chief"),
+        ):
+            with self.subTest(focus=focus):
+                world = self.world()
+                character, role = self.advisor_roles[token]
+                self.assertIn(character, self.initial_characters)
+                self.assertEqual(scalar(block(role, "available"), "has_completed_focus"), focus)
+                reward = block(self.focuses[focus], "completion_reward")
+                world.execute(reward)
+                self.assertEqual(world.advisors[slot], token)
+                world.characters.remove(character)
+                with self.assertRaises(AssertionError):
+                    world.execute(reward)
 
     def test_development_caps_discard_only_progress_beyond_the_terminal_level(self):
         for axis in ("society", "social_system", "army", "cultural", "state", "economic"):
@@ -2475,24 +2527,30 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_gui_tooltips_are_leaf_strings_and_buttons_use_scalable_sprites(self):
         gui = parse("interface/ADISCORD_RUS.gui")
-        keys = {entry.value.strip('"') for entry in walk(gui) if entry.key == "pdx_tooltip"}
+        tooltip_keys = {entry.value.strip('"') for entry in walk(gui) if entry.key == "pdx_tooltip"}
         functions = {
             scalar(row.value, "name"): row.value
             for row in parse("common/scripted_localisation/ADISCORD_RUS_scripted_loc.txt")
             if row.key == "defined_text"
         }
-        seen = set()
-        while keys:
-            key = keys.pop()
-            if key in seen:
-                continue
-            seen.add(key)
-            self.assertTrue(key in self.loc, key)
-            text = self.loc[key]
-            self.assertNotIn("$", text, key)
-            for name in re.findall(r"\[(GetRUS\w+)\]", text):
-                self.assertTrue(name in functions, name)
-                keys.update(entry.value for entry in walk(functions[name]) if entry.key == "localization_key")
+        for language in ("russian", "english"):
+            source = read(f"localisation/{language}/{BASE}_l_{language}.yml")
+            loc = dict(re.findall(r'^\s+([A-Za-z0-9_.]+):(?:\d+)?\s+"(.*)"\s*$', source, re.M))
+            keys = set(tooltip_keys)
+            seen = set()
+            while keys:
+                key = keys.pop()
+                if key in seen:
+                    continue
+                seen.add(key)
+                self.assertIn(key, loc, (language, key))
+                text = loc[key]
+                self.assertNotIn("$", text, (language, key))
+                for name in re.findall(r"\[(GetRUS\w+)\]", text):
+                    self.assertIn(name, functions)
+                    keys.update(entry.value for entry in walk(functions[name]) if entry.key == "localization_key")
+            for faction in ("scientists", "black_army"):
+                self.assertIn(loc["RUS_faction_support_effects"], loc[f"RUS_favours_{faction}_support_tt"])
         sprites = block(parse("interface/ADISCORD_RUS.gfx"), "spriteTypes")
         buttons = [row for row in sprites if isinstance(row.value, list) and scalar(row.value, "name").strip('"') == "GFX_RUS_bunker_button"]
         self.assertEqual(len(buttons), 1)
@@ -4694,9 +4752,10 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_empire_defeat_retires_actual_ruler_and_keeps_narrative_receipt(self):
         world = self.world()
+        retained = world.characters - {world.ruler}
         world.run("RUS_retire_current_ruler")
         self.assertIsNone(world.ruler)
-        self.assertEqual(world.characters, {"RUS_Varlam_Oskol"})
+        self.assertEqual(world.characters, retained)
         defeat = self.effects["RUS_crisis_dissolve_empire"]
         self.assertTrue(any(entry.key == "RUS_retire_current_ruler" for entry in defeat))
         winner = next(entry.value for entry in defeat if entry.key == "event_target:RUS_crisis_hegemon")

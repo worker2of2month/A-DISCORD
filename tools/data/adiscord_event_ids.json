@@ -6477,6 +6477,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_STP_ch.66",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 66,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_pc.60",
       "namespace": "ADISCORD_STP_pc",
       "number": 60,

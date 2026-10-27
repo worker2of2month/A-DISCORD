@@ -2257,6 +2257,8 @@ def main() -> int:
         "ADISCORD_nam_resource_news.5",
         "ADISCORD_nam_resource_news.6",
         "ADISCORD_nam_resource_news.7",
+        "ADISCORD_nam_resource_news.8",
+        "ADISCORD_nam_resource_news.9",
     ):
         definitions = [
             block
@@ -2283,14 +2285,19 @@ def main() -> int:
         for path in (ROOT / root_name).rglob("*.txt")
     }
     expected_news_calls = {
-        "ADISCORD_nam_resource_news.1": "ADISCORD_nam_resource_war_begin_hostilities",
-        "ADISCORD_nam_resource_news.2": "ADISCORD_nam_resource_war_resolve_coalition_victory",
-        "ADISCORD_nam_resource_news.3": "ADISCORD_nam_resource_war_resolve_nam_victory",
-        "ADISCORD_nam_resource_news.5": "ADISCORD_nam_resource_war_start_mainland_rebellion",
-        "ADISCORD_nam_resource_news.6": "ADISCORD_nam_resource_war_mark_rebels_defeated",
-        "ADISCORD_nam_resource_news.7": "ADISCORD_nam_resource_war_resolve_compromise",
+        "ADISCORD_nam_resource_news.1": ("ADISCORD_nam_resource_war_begin_hostilities",),
+        "ADISCORD_nam_resource_news.2": ("ADISCORD_nam_resource_war_resolve_coalition_victory",),
+        "ADISCORD_nam_resource_news.3": ("ADISCORD_nam_resource_war_resolve_nam_victory",),
+        "ADISCORD_nam_resource_news.5": ("ADISCORD_nam_resource_war_start_mainland_rebellion",),
+        "ADISCORD_nam_resource_news.6": ("ADISCORD_nam_resource_war_mark_rebels_defeated",),
+        "ADISCORD_nam_resource_news.7": ("ADISCORD_nam_resource_war_resolve_compromise",),
+        "ADISCORD_nam_resource_news.8": ("NAM_wor_annex_svetlogorye",),
+        "ADISCORD_nam_resource_news.9": (
+            "NAM_war_of_return_resolve_victory",
+            "NAM_great_war_resolve_victory",
+        ),
     }
-    for event_id, effect_name in expected_news_calls.items():
+    for event_id, effect_names in expected_news_calls.items():
         call_pattern = re.compile(
             rf"news_event\s*=\s*\{{\s*id\s*=\s*{re.escape(event_id)}(?:\s|\}})",
             re.DOTALL,
@@ -2318,11 +2325,12 @@ def main() -> int:
             == ["common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"],
             f"{event_id} has missing or duplicate/delayed call sites: {call_sites}",
         )
-        effect_block = named_block(effects, effect_name)
-        check(
-            call_pattern.search(effect_block) is not None,
-            f"{event_id} is not called by its production outcome {effect_name}",
-        )
+        for effect_name in effect_names:
+            effect_block = named_block(effects, effect_name)
+            check(
+                call_pattern.search(effect_block) is not None,
+                f"{event_id} is not called by its production outcome {effect_name}",
+            )
     for effect_name in (
         "ADISCORD_nam_resource_war_resolve_coalition_victory",
         "ADISCORD_nam_resource_war_resolve_nam_victory",

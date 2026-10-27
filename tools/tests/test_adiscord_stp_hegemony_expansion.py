@@ -1057,6 +1057,9 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
         self.pending_events = []
         self.rejected_entries = set()
         self.apply_diplomacy = False
+        self.hour = 0
+        self.native_delay = 1
+        self.unbound_war_entries = []
 
     def resolve(self, token, stack):
         if token.startswith("event_target:"):
@@ -1132,9 +1135,13 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
             elif key == "hidden_effect":
                 self.execute(value, stack)
             elif key == "country_event":
-                self.pending_events.append((current, scalar(value, "id")))
+                delay = sum(
+                    int(part.value) * {"hours": 1, "days": 24}[part.key]
+                    for part in value if part.key in ("hours", "days")
+                )
+                self.pending_events.append((self.hour + delay, current, scalar(value, "id")))
             elif key in ("declare_war_on", "add_to_war") and not self.apply_diplomacy:
-                self.pending_diplomacy.append((entry, list(stack), dict(self.targets)))
+                self.pending_diplomacy.append((self.hour + self.native_delay, entry, list(stack), dict(self.targets)))
             elif key == "declare_war_on":
                 target = scalar(value, "target")
                 self.declarations.append(target)
@@ -1142,6 +1149,9 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
                     self.wars.add(frozenset((current, target)))
                     self.war_sides = [{current}, {target}]
             elif key == "add_to_war":
+                if any(scalar(value, field).startswith("event_target:") for field in ("targeted_alliance", "enemy")):
+                    self.unbound_war_entries.append(current)
+                    continue
                 if current in self.rejected_entries:
                     continue
                 leader = self.resolve(scalar(value, "targeted_alliance"), stack)
@@ -1206,22 +1216,26 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
             self.variables[leader, "STP_pc_course"] = 3
             self.completed.add((leader, "STP_pc_sdir_oath"))
 
-    def tick(self):
-        diplomacy, self.pending_diplomacy = self.pending_diplomacy, []
-        events, self.pending_events = self.pending_events, []
-        self.apply_diplomacy = True
-        for entry, stack, targets in diplomacy:
-            self.targets = targets
-            self.execute([entry], stack)
-        self.apply_diplomacy = False
-        for country, event_id in events:
-            # Every callback reconstructs local targets instead of relying on launch scope.
-            self.targets = {}
-            event = next(
-                e.value for e in entries("events/ADISCORD_STP_events.txt")
-                if e.key == "country_event" and scalar(e.value, "id") == event_id
-            )
-            self.execute(block(event, "immediate"), [country])
+    def tick(self, hours=24):
+        for _ in range(hours):
+            self.hour += 1
+            diplomacy = [item for item in self.pending_diplomacy if item[0] <= self.hour]
+            self.pending_diplomacy = [item for item in self.pending_diplomacy if item[0] > self.hour]
+            events = [item for item in self.pending_events if item[0] <= self.hour]
+            self.pending_events = [item for item in self.pending_events if item[0] > self.hour]
+            self.apply_diplomacy = True
+            for _, entry, stack, targets in diplomacy:
+                self.targets = targets
+                self.execute([entry], stack)
+            self.apply_diplomacy = False
+            for _, country, event_id in events:
+                # Every callback reconstructs local targets instead of relying on launch scope.
+                self.targets = {}
+                event = next(
+                    e.value for e in entries("events/ADISCORD_STP_events.txt")
+                    if e.key == "country_event" and scalar(e.value, "id") == event_id
+                )
+                self.execute(block(event, "immediate"), [country])
 
     def launch(self, complete_entry=True):
         self.execute(self.effects["STP_heg_start_cannibal_campaign"], [self.leader])
@@ -1236,6 +1250,33 @@ class NorthernAdministrationFixture(ShabratTreatyFixture):
 
 
 class NorthernAdministrationTests(unittest.TestCase):
+    def test_delayed_native_entry_keeps_all_members_in_one_war(self):
+        for course, leader in (("hegemony", "STS"), ("charter", "STS"), ("party", "STP")):
+            for delay in (1, 12, 24):
+                with self.subTest(course=course, delay=delay):
+                    f = NorthernAdministrationFixture()
+                    f.independent_tribes()
+                    if course == "hegemony":
+                        f.form()
+                    else:
+                        f.use_course(course, leader)
+                    f.native_delay = delay
+                    owners = dict(f.owners)
+                    f.launch(complete_entry=False)
+                    for _ in range(72):
+                        f.tick(hours=1)
+                        f.execute(f.effects["STP_heg_reconcile_cannibal_campaign"], [leader])
+                    allies = {leader, "NKA"} if course == "hegemony" else {leader}
+                    self.assertEqual(f.war_sides, [allies, {"CIN", "OSF", "APH"}])
+                    self.assertEqual(f.wars, {
+                        frozenset((ally, enemy))
+                        for ally in allies for enemy in ("CIN", "OSF", "APH")
+                    })
+                    self.assertEqual(f.owners, owners)
+                    self.assertFalse(f.unbound_war_entries)
+                    self.assertFalse(f.pending_events)
+                    self.assertNotIn("STP_heg_cannibal_entry_pending", f.flags[leader])
+
     def test_queued_entry_preserves_all_members_through_reentrant_cleanup(self):
         for course, leader in (("hegemony", "STS"), ("charter", "STS"), ("party", "STP")):
             with self.subTest(course=course, leader=leader):

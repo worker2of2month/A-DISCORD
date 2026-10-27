@@ -25,7 +25,6 @@ on_actions = {
 					VAL_restore_fulfilled_northern_aid = yes
 					# Rebuild contract income from authoritative annual-contract flags.
 					VAL_recalculate_market_contract_income = yes
-					VAL_migrate_mercenary_payroll = yes
 					VAL_initialize_contract_authority = yes
 					VAL_initialize_command_balance = yes
 					VAL_initialize_arsenal_recovery = yes

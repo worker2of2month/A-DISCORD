@@ -15,7 +15,10 @@ equipments = {
 		ap_attack = 8
 		lend_lease_cost = 4
 		build_cost_ic = 3.5
-		resources = { tungsten = 1 steel = 2 }
+		resources = {
+			tungsten = 1
+			steel = 2
+		}
 	}
 
 	artillery_equipment_1 = {
@@ -26,10 +29,29 @@ equipments = {
 		visual_level = 0
 	}
 
-	ADISCORD_artillery_equipment_2170 = {
-		year = 2170
+	ADISCORD_artillery_equipment_2160 = {
+		year = 2160
 		archetype = artillery_equipment
 		parent = artillery_equipment_1
+		priority = 55
+		visual_level = 1
+		reliability = 0.8
+		defense = 12
+		breakthrough = 7
+		soft_attack = 28
+		hard_attack = 2
+		ap_attack = 10
+		build_cost_ic = 4
+		resources = {
+			steel = 3
+			tungsten = 1
+		}
+	}
+
+	ADISCORD_artillery_equipment_2170 = {
+		year = 2166
+		archetype = artillery_equipment
+		parent = ADISCORD_artillery_equipment_2160
 		priority = 60
 		visual_level = 1
 		defense = 14
@@ -38,11 +60,14 @@ equipments = {
 		hard_attack = 3
 		ap_attack = 14
 		build_cost_ic = 4.4
-		resources = { tungsten = 1 steel = 3 }
+		resources = {
+			tungsten = 1
+			steel = 3
+		}
 	}
 
 	ADISCORD_artillery_equipment_2183 = {
-		year = 2183
+		year = 2175
 		archetype = artillery_equipment
 		parent = ADISCORD_artillery_equipment_2170
 		priority = 70
@@ -63,7 +88,7 @@ equipments = {
 	}
 
 	anti_tank_equipment = {
-		year = 2163
+		year = 2150
 		is_archetype = yes
 		picture = archetype_anti_tank_equipment
 		type = { anti_tank infantry }
@@ -77,25 +102,61 @@ equipments = {
 		ap_attack = 70
 		lend_lease_cost = 3
 		build_cost_ic = 4
-		resources = { tungsten = 2 steel = 2 }
+		resources = {
+			tungsten = 2
+			steel = 2
+		}
 	}
 
 	ADISCORD_anti_tank_equipment_2163 = {
-		year = 2163
+		year = 2150
 		archetype = anti_tank_equipment
 		priority = 90
 		visual_level = 0
 	}
 
-	ADISCORD_anti_tank_equipment_2183 = {
-		year = 2183
+	ADISCORD_anti_tank_equipment_2161 = {
+		year = 2161
 		archetype = anti_tank_equipment
 		parent = ADISCORD_anti_tank_equipment_2163
+		priority = 95
+		visual_level = 1
+		hard_attack = 26
+		ap_attack = 90
+		build_cost_ic = 5
+		resources = {
+			steel = 3
+			tungsten = 2
+		}
+	}
+
+	ADISCORD_anti_tank_equipment_2166 = {
+		year = 2166
+		archetype = anti_tank_equipment
+		parent = ADISCORD_anti_tank_equipment_2163
+		priority = 97
+		visual_level = 1
+		reliability = 0.72
+		soft_attack = 2
+		hard_attack = 32
+		ap_attack = 110
+		build_cost_ic = 5.8
+		resources = {
+			steel = 3
+			tungsten = 2
+			rare_components = 1
+		}
+	}
+
+	ADISCORD_anti_tank_equipment_2183 = {
+		year = 2171
+		archetype = anti_tank_equipment
+		parent = ADISCORD_anti_tank_equipment_2161
 		priority = 100
 		visual_level = 1
-		hard_attack = 30
-		ap_attack = 120
-		build_cost_ic = 6
+		hard_attack = 40
+		ap_attack = 140
+		build_cost_ic = 7
 		resources = {
 			tungsten = 2
 			steel = 3
@@ -106,7 +167,7 @@ equipments = {
 	}
 
 	anti_air_equipment = {
-		year = 2163
+		year = 2150
 		is_archetype = yes
 		picture = archetype_anti_air_equipment
 		type = { anti_air infantry }
@@ -122,27 +183,60 @@ equipments = {
 		air_attack = 22
 		lend_lease_cost = 3
 		build_cost_ic = 4
-		resources = { steel = 2 }
+		resources = {
+			steel = 2
+		}
 	}
 
 	ADISCORD_anti_air_equipment_2163 = {
-		year = 2163
+		year = 2150
 		archetype = anti_air_equipment
 		priority = 80
 		visual_level = 0
 	}
 
-	ADISCORD_anti_air_equipment_2183 = {
-		year = 2183
+	ADISCORD_anti_air_equipment_2160 = {
+		year = 2160
 		archetype = anti_air_equipment
 		parent = ADISCORD_anti_air_equipment_2163
+		priority = 85
+		visual_level = 1
+		air_attack = 28
+		build_cost_ic = 4.8
+		resources = {
+			steel = 3
+		}
+	}
+
+	ADISCORD_anti_air_equipment_2165 = {
+		year = 2165
+		archetype = anti_air_equipment
+		parent = ADISCORD_anti_air_equipment_2163
+		priority = 87
+		visual_level = 1
+		soft_attack = 2
+		hard_attack = 2
+		ap_attack = 10
+		air_attack = 38
+		build_cost_ic = 6
+		resources = {
+			steel = 3
+			aluminium = 1
+			rare_components = 1
+		}
+	}
+
+	ADISCORD_anti_air_equipment_2183 = {
+		year = 2173
+		archetype = anti_air_equipment
+		parent = ADISCORD_anti_air_equipment_2160
 		priority = 90
 		visual_level = 1
 		soft_attack = 5
-		hard_attack = 15
-		ap_attack = 80
-		air_attack = 34
-		build_cost_ic = 6
+		hard_attack = 6
+		ap_attack = 30
+		air_attack = 46
+		build_cost_ic = 7.5
 		resources = {
 			steel = 3
 			aluminium = 1

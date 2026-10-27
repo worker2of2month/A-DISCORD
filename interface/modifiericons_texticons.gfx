@@ -596,6 +596,13 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_unit_ADISCORD_light_tank_icon_small"
+		texturefile = "gfx/texticons/unit_light_armor_icon_small.dds"
+		legacy_lazy_load = no
+		noOfFrames = 2
+	}
+
+	spriteType = {
 		name = "GFX_unit_ADISCORD_combat_platform_icon_small"
 		texturefile = "gfx/texticons/unit_medium_armor_icon_small.dds"
 		legacy_lazy_load = no

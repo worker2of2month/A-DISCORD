@@ -3015,23 +3015,71 @@ def policy_selector_issues(
     return issues
 
 
+def generic_role_contract_issues(default_ai: str) -> list[str]:
+    """Naval categories need a usable port; absent air and division roles remain invalid."""
+    issues: list[str] = []
+    unsupported_roles = {"strategic_bomber", "heavy_fighter", "paratroopers"}
+    naval_categories = {"capital_ship", "screen_ship", "submarine"}
+    production_types = {
+        "unit_ratio", "equipment_production_factor", "equipment_production_min_factories"
+    }
+    for policy in parse_clausewitz(default_ai):
+        if not isinstance(policy.value, list):
+            continue
+        for entry in policy.value:
+            if entry.key != "ai_strategy" or not isinstance(entry.value, list):
+                continue
+            role = _direct_scalar(entry.value, "id")
+            if role in unsupported_roles:
+                issues.append(f"{policy.key} desires unsupported role {role}")
+            if role not in naval_categories:
+                continue
+            if _direct_scalar(entry.value, "type") not in production_types:
+                issues.append(f"{policy.key} uses naval category {role} outside production")
+                continue
+            try:
+                value = float(_direct_scalar(entry.value, "value") or "")
+            except ValueError:
+                issues.append(f"{policy.key} has a nonnumeric {role} production value")
+                continue
+            if value <= 0:
+                continue
+            enable = next(
+                (child.value for child in policy.value if child.key == "enable"), []
+            )
+            if not isinstance(enable, list) or not _condition_requires_entry(
+                enable,
+                lambda guard: guard.key == "ADISCORD_has_operational_naval_base"
+                and guard.value == "yes",
+            ):
+                issues.append(f"{policy.key} requests {role} without an operational naval base")
+            if _direct_scalar(policy.value, "abort_when_not_enabled") != "yes":
+                issues.append(f"{policy.key} can retain {role} demand after losing its naval base")
+    return issues
+
+
 def air_production_contract_issues(default_ai: str, economy_ai: str) -> list[str]:
     """Air weights must survive the loss of expansion funding or factories."""
     issues: list[str] = []
     for plane, technology in (
         ("fighter", "ADISCORD_tech_reclaimed_jet_platforms"),
         ("cas", "ADISCORD_tech_battlefield_attack_aircraft"),
+        ("naval_bomber", "ADISCORD_tech_twin_engine_aircraft"),
     ):
-        strategy = block(default_ai, f"ADISCORD_default_{plane}_demand")
+        policy = "maritime_air" if plane == "naval_bomber" else plane
+        strategy = block(default_ai, f"ADISCORD_default_{policy}_demand")
         enable = parse_clausewitz(block(strategy, "enable"))
         entries = (
             enable[0].value if enable and isinstance(enable[0].value, list) else []
         )
-        if [(entry.key, entry.value) for entry in entries] != [
-            ("has_tech", technology)
-        ]:
+        required_gate = [("has_tech", technology)]
+        gate_description = "technology-only gate"
+        if plane == "naval_bomber":
+            required_gate.append(("ADISCORD_has_operational_naval_base", "yes"))
+            gate_description = "technology and operational naval base gates"
+        if [(entry.key, entry.value) for entry in entries] != required_gate:
             issues.append(
-                f"{plane} replacement demand needs an independent technology-only gate"
+                f"{plane} replacement demand needs independent {gate_description}"
             )
         if not re.search(
             rf"type\s*=\s*unit_ratio\s+id\s*=\s*{plane}\s+value\s*=\s*[1-9]\d*",
@@ -3102,7 +3150,7 @@ def marine_recruitment_contract_issues(default_ai: str, templates: str) -> list[
         for guard in ("ADISCORD_has_marine_training", "ADISCORD_has_operational_naval_base"):
             if _direct_scalar(enable, guard) != "yes":
                 issues.append(f"{row.key} lacks {guard}")
-        for stock in ("infantry_equipment", "ADISCORD_squad_weapons_equipment", "has_manpower"):
+        for stock in ("infantry_equipment", "ADISCORD_squad_weapons_equipment", "support_equipment", "has_manpower"):
             if stock not in _tokens_in(enable):
                 issues.append(f"{row.key} lacks marine resource gate {stock}")
     if not request_count:
@@ -4473,20 +4521,7 @@ def validate(root: Path = ROOT) -> list[str]:
         "on_weekly contains a country or state scan",
     )
 
-    unsupported_generic_roles = (
-        "strategic_bomber",
-        "naval_bomber",
-        "heavy_fighter",
-        "capital_ship",
-        "screen_ship",
-        "submarine",
-        "paratroopers",
-    )
-    for role in unsupported_generic_roles:
-        require(
-            not re.search(rf"\bid\s*=\s*{role}\b", default_ai),
-            f"generic AI still desires unsupported role {role}",
-        )
+    issues.extend(generic_role_contract_issues(default_ai))
 
     issues.extend(marine_recruitment_contract_issues(
         default_ai, read_at_root("common/ai_templates/ADISCORD_land_templates.txt")

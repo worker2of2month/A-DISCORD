@@ -170,7 +170,7 @@ class DoctrineContractTests(unittest.TestCase):
             with self.subTest(source=source_name):
                 self.assertFalse(missing, missing)
 
-    def test_every_actual_aircraft_type_can_earn_mastery(self) -> None:
+    def test_every_combat_aircraft_type_can_earn_mastery(self) -> None:
         air_types = set()
         source = (validator.ROOT / "common/units/ADISCORD_air_units.txt").read_text(encoding="utf-8")
         for container in parse_clausewitz(source):
@@ -185,6 +185,8 @@ class DoctrineContractTests(unittest.TestCase):
             value for track in doctrines.TRACKS
             if track.key.startswith("ADISCORD_air_") for value in track.mastery_values
         }
+        # Unarmed transports perform supply and paradrop missions, not combat mastery.
+        air_types.discard("air_transport")
         self.assertEqual(air_types - mastery_types, set())
 
     def test_special_force_unlocks_and_dlc_are_explicit(self) -> None:
@@ -199,9 +201,17 @@ class DoctrineContractTests(unittest.TestCase):
             ("recon_raiding", "ADISCORD_recon_platform"),
         ):
             tech = re.search(r"has_tech = (\w+)", schools[profile].gate)[1]
-            unlock = re.search(r"\benable_subunits\s*=\s*\{", tech_blocks[tech])
-            self.assertIsNotNone(unlock, tech)
-            self.assertIn(unit, validator.extract_block(tech_blocks[tech], unlock.start()))
+            unlocked = set()
+            prerequisites = (
+                technologies.technology_prerequisite_closure((tech,))
+                if tech in technologies.TECH_POSITION_BY_ID else (tech,)
+            )
+            for prerequisite in prerequisites:
+                block = tech_blocks[prerequisite]
+                unlock = re.search(r"\benable_subunits\s*=\s*\{", block)
+                if unlock:
+                    unlocked.update(re.findall(r"\w+", validator.extract_block(block, unlock.start())))
+            self.assertIn(unit, unlocked, tech)
         self.assertIn('has_dlc = "Thunder at Our Gates"', schools["sf_vertical"].gate)
 
     def test_role_schools_pay_the_intended_units_only(self) -> None:

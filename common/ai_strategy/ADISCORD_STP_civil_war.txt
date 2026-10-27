@@ -99,6 +99,32 @@ STP_cw_front_against_sts = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = STS value = 100 }
 	ai_strategy = { type = front_control tag = STS ratio = 0.01 priority = 1400 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = STS
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = STS
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = STS value = 200 }
 }
 
@@ -108,6 +134,32 @@ STS_cw_front_against_stp = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = STP value = 100 }
 	ai_strategy = { type = front_control tag = STP ratio = 0.01 priority = 1400 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = STP
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = STP
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = STP value = 200 }
 }
 
@@ -133,6 +185,32 @@ STS_shabrat_civil_war_army = {
 	# Base front demand belongs to STS_cw_front_against_stp. Operations add
 	# their local requests separately instead of duplicating the entire front.
 	ai_strategy = { type = front_control tag = STP ratio = 0.01 priority = 1500 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = STP
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = STP
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = STP value = 250 }
 	ai_strategy = { type = dont_defend_ally_borders value = 1 }
 }
@@ -180,6 +258,38 @@ STS_shabrat_take_congress = {
 		ratio = 0.01
 		# Recovery at priority 1700 still stops exhausted formations.
 		priority = 1650
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			state = 28
+			FROM = {
+				tag = STP
+			}
+			ADISCORD_difficulty_state_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1651
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			state = 28
+			FROM = {
+				tag = STP
+			}
+			ADISCORD_difficulty_state_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1651
 		ordertype = front
 		execution_type = rush_weak
 		execute_order = yes
@@ -256,6 +366,19 @@ STS_shabrat_val_front = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VAL value = 60 }
 	ai_strategy = { type = front_control tag = VAL ratio = 0.01 priority = 1200 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 SRP_cw_front_against_val = {
@@ -264,6 +387,32 @@ SRP_cw_front_against_val = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VAL value = 100 }
 	ai_strategy = { type = front_control tag = VAL ratio = 0.01 priority = 1400 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAL
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1401
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = VAL value = 200 }
 }
 
@@ -273,6 +422,32 @@ VAL_cw_front_against_srp = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SRP value = 80 }
 	ai_strategy = { type = front_control tag = SRP ratio = 0.01 priority = 1200 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SRP
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SRP
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 STP_cw_front_against_nod = {
@@ -281,6 +456,19 @@ STP_cw_front_against_nod = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = NOD value = 35 }
 	ai_strategy = { type = front_control tag = NOD ratio = 0.01 priority = 1100 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NOD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1101
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 # Shabrat must treat a live NOD intervention as a decisive external front.
@@ -292,6 +480,32 @@ STS_shabrat_nod_front = {
 	ai_strategy = { type = consider_weak id = NOD value = 120 }
 	ai_strategy = { type = front_unit_request tag = NOD value = 220 }
 	ai_strategy = { type = front_control tag = NOD ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NOD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1801
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NOD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1801
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = NOD value = 250 }
 	ai_strategy = { type = force_concentration_factor value = 80 }
 }
@@ -332,6 +546,32 @@ NOD_pw_party_invasion_front = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = STP value = 140 }
 	ai_strategy = { type = front_control tag = STP ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = STP
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1801
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = STP
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1801
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = STP value = 300 }
 	ai_strategy = { type = consider_weak id = STP value = 100 }
 	ai_strategy = { type = force_concentration_factor value = 80 }
@@ -382,6 +622,32 @@ STP_cw_northern_coalition_counteroffensive = {
 	ai_strategy = { type = consider_weak id = NOD value = 100 }
 	ai_strategy = { type = front_unit_request tag = NOD value = 180 }
 	ai_strategy = { type = front_control tag = NOD ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NOD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NOD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = NOD value = 200 }
 }
 
@@ -396,8 +662,65 @@ NOD_cw_northern_offensive_army = {
 	# Keep AIN's colonial reserve separate from the field-army fronts.
 	ai_strategy = { type = dont_defend_ally_borders id = AIN value = 100 }
 	ai_strategy = { type = role_ratio id = armor value = 15 }
-	ai_strategy = { type = role_ratio id = mountaineers value = 12 }
 	ai_strategy = { type = force_concentration_factor value = 80 }
+}
+
+# The existing mountain divisions keep fighting; new specialist capacity goes
+# to the marine programme once its school is established.
+NOD_cw_northern_mountain_recruitment = {
+	allowed = { original_tag = NOD }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		OR = {
+			has_war_with = YPR
+			has_war_with = COF
+			has_war_with = TFF
+		}
+		NOT = { has_tech = ADISCORD_tech_nodrul_marine_corps }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = role_ratio id = mountaineers value = 12 }
+}
+
+NOD_marine_specialist_priority = {
+	allowed = { original_tag = NOD }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_tech = ADISCORD_tech_nodrul_marine_corps
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = role_ratio id = mountaineers value = -5 }
+}
+
+NOD_cw_stelander_landing = {
+	allowed = { original_tag = NOD }
+	enable = { NOD_ai_stelander_landing_ready = yes }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = invade id = STS value = 100 }
+	ai_strategy = {
+		type = invasion_unit_request
+		tag = STS
+		value = 75
+	}
+}
+
+# The direct sea crossing between these ports lies in Eastern Antolla.
+# Native support objectives still require an actual invasion order on that route.
+NOD_cw_antolla_invasion_support = {
+	allowed = { original_tag = NOD }
+	enable = {
+		NOD_ai_stelander_landing_ready = yes
+		controls_province = 12434
+		STS = { controls_province = 16344 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = naval_invasion_support_priority
+		id = 229
+		value = 200
+	}
 }
 
 # The party front must become available when NOD joins the war against STS,
@@ -482,6 +805,32 @@ NOD_cw_northern_front_ypr = {
 	ai_strategy = { type = consider_weak id = YPR value = 120 }
 	ai_strategy = { type = front_unit_request tag = YPR value = 220 }
 	ai_strategy = { type = front_control tag = YPR ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = YPR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1801
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = YPR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1801
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = YPR value = 250 }
 }
 
@@ -492,6 +841,32 @@ NOD_cw_northern_front_cof = {
 	ai_strategy = { type = consider_weak id = COF value = 120 }
 	ai_strategy = { type = front_unit_request tag = COF value = 220 }
 	ai_strategy = { type = front_control tag = COF ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = COF
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1801
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = COF
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1801
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = COF value = 250 }
 }
 
@@ -502,6 +877,32 @@ NOD_cw_northern_front_tff = {
 	ai_strategy = { type = consider_weak id = TFF value = 120 }
 	ai_strategy = { type = front_unit_request tag = TFF value = 220 }
 	ai_strategy = { type = front_control tag = TFF ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TFF
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1801
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TFF
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1801
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = TFF value = 250 }
 }
 
@@ -517,6 +918,32 @@ NOD_cw_stelander_intervention_army = {
 	ai_strategy = { type = consider_weak id = STS value = 120 }
 	ai_strategy = { type = front_unit_request tag = STS value = 220 }
 	ai_strategy = { type = front_control tag = STS ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = STS
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1801
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = STS
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1801
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 	ai_strategy = { type = conquer id = STS value = 250 }
 }
 
@@ -804,4 +1231,99 @@ STS_cw_ai_force_saturation = {
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = ai_wanted_divisions_factor value = -1000 }
+}
+
+# Difficulty-dependent preparation preserves each participant's own conflict.
+ADISCORD_difficulty_stelander_arms = {
+	allowed = {
+		OR = {
+			tag = STP
+			tag = STS
+			tag = SRP
+		}
+	}
+	enable = {
+		ADISCORD_difficulty_ai_advanced = yes
+		OR = {
+			has_war = yes
+			STP_pc_ai_preparing_val_war = yes
+			STP_pc_ai_preparing_nod_war = yes
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_production_factor
+		id = infantry
+		value = 20
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = support
+		value = 10
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = artillery
+		value = 10
+	}
+}
+
+ADISCORD_difficulty_nod_northern_logistics = {
+	allowed = { tag = NOD }
+	enable = {
+		ADISCORD_difficulty_ai_advanced = yes
+		has_tech = ADISCORD_tech_restored_truck_fleets
+		OR = {
+			NOD_ai_northern_preparation = yes
+			has_war_with = YPR
+			has_war_with = COF
+			has_war_with = TFF
+			has_war_with = VAL
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = motorized_equipment
+		value = 20
+	}
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = train_equipment
+		value = 15
+	}
+}
+
+# Naval preparation complements the existing landing policy without reserving
+# additional divisions or changing its front-control and special-forces limits.
+ADISCORD_difficulty_nod_landing_preparation = {
+	allowed = { tag = NOD }
+	enable = {
+		ADISCORD_difficulty_ai_advanced = yes
+		ADISCORD_has_operational_naval_base = yes
+		ADISCORD_has_marine_training = yes
+		has_navy_size = {
+			size > 19
+			type = convoy
+		}
+		OR = {
+			NOD_ai_stelander_preparation = yes
+			has_war_with = STS
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = naval_invasion_focus
+		value = 15
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = infantry
+		value = 15
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = support
+		value = 10
+	}
 }

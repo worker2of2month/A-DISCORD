@@ -3990,7 +3990,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_scorched_wells
-		icon = GFX_focus_generic_sabotage
+		icon = GFX_focus_ADISCORD_sabotage
 		x = 81
 		y = 3
 		cost = 2

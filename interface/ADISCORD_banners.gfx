@@ -105,7 +105,7 @@ spriteTypes = {
 	}
 
 	spriteType = {
-		name = "GFX_RUS_black_army_banner"
+		name = "GFX_texticon_RUS_black_army_banner"
 		texturefile = "gfx/texticons/adiscord/banners/RUS_black_army_banner.png"
 		legacy_lazy_load = no
 	}

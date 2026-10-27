@@ -9,7 +9,10 @@ from tools.builders.build_adiscord_focus_trees import render_source
 from tools.tests.test_build_adiscord_focus_trees import semantic
 from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
-from tools.validators.validate_adiscord_economy_ai import marine_recruitment_contract_issues
+from tools.validators.validate_adiscord_economy_ai import (
+    generic_role_contract_issues,
+    marine_recruitment_contract_issues,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -39,6 +42,53 @@ def formation_requirements(composition):
 
 
 class NavalProgrammeTests(unittest.TestCase):
+    def test_generic_naval_categories_require_port_and_cleanup(self):
+        for category in ("capital_ship", "screen_ship", "submarine"):
+            for strategy_type in (
+                "unit_ratio", "equipment_production_factor",
+                "equipment_production_min_factories",
+            ):
+                source = f"""
+                naval_programme = {{
+                    enable = {{ ADISCORD_has_operational_naval_base = yes }}
+                    abort_when_not_enabled = yes
+                    ai_strategy = {{ type = {strategy_type} id = {category} value = 10 }}
+                }}
+                """
+                with self.subTest(category=category, strategy=strategy_type):
+                    self.assertEqual(generic_role_contract_issues(source), [])
+                    for replacement in (
+                        "always = yes",
+                        "ADISCORD_has_operational_naval_base = no",
+                        "OR = { ADISCORD_has_operational_naval_base = yes always = yes }",
+                    ):
+                        self.assertTrue(generic_role_contract_issues(source.replace(
+                            "ADISCORD_has_operational_naval_base = yes", replacement
+                        )))
+                    self.assertTrue(generic_role_contract_issues(source.replace(
+                        "abort_when_not_enabled = yes", "abort_when_not_enabled = no"
+                    )))
+                    self.assertTrue(generic_role_contract_issues(source.replace(
+                        f"type = {strategy_type}", "type = role_ratio"
+                    )))
+                    reduction = source.replace(
+                        "ADISCORD_has_operational_naval_base = yes", "always = yes"
+                    ).replace("value = 10", "value = -25")
+                    self.assertEqual(generic_role_contract_issues(reduction), [])
+
+    def test_generic_role_validator_retains_absent_role_checks(self):
+        for role in ("strategic_bomber", "heavy_fighter", "paratroopers"):
+            with self.subTest(role=role):
+                self.assertTrue(generic_role_contract_issues(f"""
+                    unsupported = {{
+                        enable = {{ always = yes }}
+                        ai_strategy = {{ type = unit_ratio id = {role} value = 10 }}
+                    }}
+                """))
+        self.assertEqual(generic_role_contract_issues(
+            (ROOT / "common/ai_strategy/default.txt").read_text(encoding="utf-8-sig")
+        ), [])
+
     def test_ship_rewards_create_matching_variants_before_delivery(self):
         deliveries = 0
         for source in (
@@ -60,7 +110,7 @@ class NavalProgrammeTests(unittest.TestCase):
                         self.assertTrue(name, "create_ship requires an equipment variant")
                         self.assertEqual(variants.get(name), scalar(row.value, "type"))
                         self.assertNotIn("creator", [field.key for field in row.value])
-        self.assertEqual(deliveries, 13)
+        self.assertEqual(deliveries, 14)
 
     def test_starting_fleet_composition_and_technology_before_oob(self):
         grants = entries("common/scripted_effects/ADISCORD_technology_baseline_effects.txt")
@@ -273,7 +323,7 @@ class NavalProgrammeTests(unittest.TestCase):
         self.assertTrue(marine_recruitment_contract_issues(
             source.replace("id = marines", "id = infantry"), templates
         ))
-        for token in ("ADISCORD_has_marine_training", "ADISCORD_has_operational_naval_base", "has_manpower", "ADISCORD_squad_weapons_equipment"):
+        for token in ("ADISCORD_has_marine_training", "ADISCORD_has_operational_naval_base", "has_manpower", "ADISCORD_squad_weapons_equipment", "support_equipment"):
             with self.subTest(token=token):
                 self.assertTrue(marine_recruitment_contract_issues(source.replace(token, "missing_guard"), templates))
 
@@ -311,20 +361,149 @@ class NavalProgrammeTests(unittest.TestCase):
         brigade = block(roles, "ADISCORD_marine_brigade")
         composition = {
             row.key: int(row.value)
-            for row in block(block(brigade, "target_template"), "regiments")
+            for section in ("regiments", "support")
+            for row in block(block(brigade, "target_template"), section)
         }
         manpower, equipment = formation_requirements(composition)
-        self.assertEqual(manpower, 6000)
-        self.assertEqual(equipment, {"infantry_equipment": 5400, "ADISCORD_squad_weapons_equipment": 288})
+        self.assertEqual(manpower, 6300)
+        self.assertEqual(equipment, {
+            "infantry_equipment": 5670,
+            "ADISCORD_squad_weapons_equipment": 288,
+            "support_equipment": 30,
+        })
         strategy = block(entries("common/ai_strategy/default.txt"), "ADISCORD_marine_recruitment")
-        for policy in (brigade, strategy):
-            guards = [row.value for row in block(policy, "enable") if row.key == "NOT"]
-            self.assertIn(semantic(parse_clausewitz(f"has_manpower < {manpower}")), [semantic(guard) for guard in guards])
-            for archetype, amount in equipment.items():
-                self.assertIn(
-                    semantic(parse_clausewitz(f"has_equipment = {{ {archetype} < {amount} }}")),
-                    [semantic(guard) for guard in guards],
-                )
+        guards = [row.value for row in block(strategy, "enable") if row.key == "NOT"]
+        self.assertIn(semantic(parse_clausewitz(f"has_manpower < {manpower}")), [semantic(guard) for guard in guards])
+        for archetype, amount in equipment.items():
+            self.assertIn(
+                semantic(parse_clausewitz(f"has_equipment = {{ {archetype} < {amount} }}")),
+                [semantic(guard) for guard in guards],
+            )
+
+    def test_marine_template_survives_stock_shortages_and_loss_of_port(self):
+        role = block(entries("common/ai_templates/ADISCORD_land_templates.txt"), "ADISCORD_marine_templates")
+        gate = block(block(role, "ADISCORD_marine_brigade"), "enable")
+        self.assertEqual(scalar(gate, "ADISCORD_has_marine_training"), "yes")
+        self.assertFalse({"has_equipment", "has_manpower", "ADISCORD_has_operational_naval_base"} & {row.key for row in walk(gate)})
+
+    def test_nod_school_is_early_and_reserves_capacity_for_two_brigades(self):
+        focuses = focus_map("NOD/main/focuses.txt")
+        school = focuses["NOD_Landing_Staff"]
+        self.assertEqual(scalar(block(school, "prerequisite"), "focus"), "NOD_Naval_Command")
+        days = 7 * sum(float(scalar(focuses[key], "cost")) for key in ("NOD_Naval_Command", "NOD_Landing_Staff"))
+        self.assertLessEqual(days, 28)
+        tech = block(block(entries("common/technologies/ADISCORD_NOD_technologies.txt"), "technologies"), "ADISCORD_tech_nodrul_marine_corps")
+        capacity = float(scalar(tech, "special_forces_cap_flat"))
+        roster = entries("history/units/NOD.txt")
+        templates = {
+            scalar(row.value, "name"): block(row.value, "regiments")
+            for row in roster if row.key == "division_template"
+        }
+        definitions = block(entries("common/units/ADISCORD_land_units.txt"), "sub_units")
+        specialists = {
+            row.key for row in definitions
+            if any(field.key == "special_forces" and field.value == "yes" for field in row.value)
+        }
+        battalions = Counter()
+        for division in block(roster, "units"):
+            if division.key == "division":
+                for unit in templates[scalar(division.value, "division_template")]:
+                    battalions["special" if unit.key in specialists else "regular"] += 1
+        defines = (ROOT / "common/defines/ADISCORD_defines_changes.lua").read_text(encoding="utf-8-sig")
+        ratio = float(re.search(r"SPECIAL_FORCES_CAP_BASE\s*=\s*([\d.]+)", defines)[1])
+        minimum = float(re.search(r"SPECIAL_FORCES_CAP_MIN\s*=\s*([\d.]+)", defines)[1])
+        base = max(int(battalions["regular"] * ratio), minimum)
+        self.assertGreaterEqual(base + capacity, battalions["special"] + 2 * 6)
+
+    def test_nod_ai_prioritizes_school_and_preserves_exile_plan(self):
+        plans = entries("common/ai_strategy_plans/ADISCORD_NOD_plans.txt")
+        plan = block(plans, "NOD_naval_preparation_plan")
+        order = [row.value for row in block(plan, "ai_national_focuses")]
+        self.assertEqual(order[:2], ["NOD_Naval_Command", "NOD_Landing_Staff"])
+        self.assertTrue(set(order) <= set(focus_map("NOD/main/focuses.txt")))
+        self.assertIn("STP_ps_exile_received", [row.value for row in walk(block(plan, "abort")) if row.key == "has_country_flag"])
+
+    def test_nod_mountain_expansion_leaves_the_marine_allowance_available(self):
+        policies = entries("common/ai_strategy/ADISCORD_STP_civil_war.txt")
+        northern = block(policies, "NOD_cw_northern_offensive_army")
+        self.assertFalse(any(
+            scalar(row.value, "id") == "mountaineers"
+            for row in northern
+            if row.key == "ai_strategy" and scalar(row.value, "type") == "role_ratio"
+        ))
+        mountains = block(policies, "NOD_cw_northern_mountain_recruitment")
+        self.assertEqual(scalar(block(block(mountains, "enable"), "NOT"), "has_tech"), "ADISCORD_tech_nodrul_marine_corps")
+        marines = block(policies, "NOD_marine_specialist_priority")
+        self.assertEqual(scalar(block(marines, "enable"), "has_tech"), "ADISCORD_tech_nodrul_marine_corps")
+        request = block(marines, "ai_strategy")
+        self.assertEqual((scalar(request, "type"), scalar(request, "id"), scalar(request, "value")), ("role_ratio", "mountaineers", "-5"))
+
+    def test_nod_landing_preference_requires_current_enemy_and_port(self):
+        policy = block(entries("common/ai_strategy/ADISCORD_STP_civil_war.txt"), "NOD_cw_stelander_landing")
+        self.assertEqual(scalar(block(policy, "allowed"), "original_tag"), "NOD")
+        self.assertEqual(scalar(block(policy, "enable"), "NOD_ai_stelander_landing_ready"), "yes")
+        gate = block(entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"), "NOD_ai_stelander_landing_ready")
+        self.assertEqual(scalar(gate, "has_war_with"), "STS")
+        self.assertEqual(scalar(gate, "has_capitulated"), "no")
+        self.assertEqual(scalar(gate, "ADISCORD_has_operational_naval_base"), "yes")
+        self.assertEqual(scalar(block(gate, "STS"), "has_capitulated"), "no")
+        self.assertTrue(block(block(gate, "STS"), "any_controlled_state"))
+        self.assertEqual(scalar(policy, "abort_when_not_enabled"), "yes")
+        for row in policy:
+            if row.key != "ai_strategy":
+                continue
+            if scalar(row.value, "type") == "invade":
+                self.assertEqual(scalar(row.value, "id"), "STS")
+            elif scalar(row.value, "type") == "invasion_unit_request":
+                self.assertEqual(scalar(row.value, "tag"), "STS")
+            else:
+                self.fail("Landing policy must not change unrelated front or production demand")
+
+    def test_nod_naval_choices_are_exclusive_and_ai_follows_one(self):
+        focuses = focus_map("NOD/main/focuses.txt")
+        for first, second in (("NOD_Landing_Staff", "NOD_Submarine_Blockade"), ("NOD_Submarine_Blockade", "NOD_Landing_Staff")):
+            self.assertEqual(scalar(block(focuses[first], "mutually_exclusive"), "focus"), second)
+        self.assertEqual(len({(scalar(focus, "x"), scalar(focus, "y")) for focus in focuses.values()}), len(focuses))
+
+    def test_nod_fleet_support_follows_the_live_crossing_and_current_ports(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
+        policies = entries("common/ai_strategy/ADISCORD_STP_civil_war.txt")
+        policy = block(policies, "NOD_cw_antolla_invasion_support")
+        gate = block(policy, "enable")
+        facts = {
+            ("NOD", "NOD_ai_stelander_landing_ready", "yes"): True,
+            ("NOD", "controls_province", "12434"): True,
+            ("STS", "controls_province", "16344"): True,
+        }
+        self.assertTrue(matches_conditions(gate, facts, "NOD"))
+        for key in facts:
+            self.assertFalse(matches_conditions(gate, {**facts, key: False}, "NOD"), key)
+        self.assertEqual(scalar(policy, "abort_when_not_enabled"), "yes")
+        strategy = block(policy, "ai_strategy")
+        self.assertEqual(scalar(strategy, "type"), "naval_invasion_support_priority")
+        self.assertEqual(scalar(strategy, "id"), "229")
+        self.assertEqual(scalar(strategy, "value"), "200")
+        region = block(entries("map/strategicregions/229-eastern-antolla-sea.txt"), "strategic_region")
+        self.assertIn("16268", [row.value for row in block(region, "provinces")])
+        # Read physical borders independently of the authored region priority.
+        from tools.builders import build_adiscord_strategic_regions as map_regions
+        types, colors = map_regions.load_province_definitions()
+        adjacency = map_regions.load_province_adjacency(types, colors, include_special_adjacencies=False)
+        self.assertEqual(types[16268], "sea")
+        for port in (12434, 16344):
+            self.assertIn(16268, adjacency[port])
+
+    def test_maritime_air_request_has_a_buildable_model_with_sea_missions(self):
+        techs = block(entries("common/technologies/ADISCORD_air.txt"), "technologies")
+        tech = block(techs, "ADISCORD_tech_twin_engine_aircraft")
+        self.assertIn("ADISCORD_naval_aircraft_2160", [row.value for row in block(tech, "enable_equipments")])
+        equipment = block(entries("common/units/equipment/ADISCORD_air_equipment.txt"), "equipments")
+        archetype = block(equipment, "ADISCORD_naval_aircraft_archetype")
+        self.assertEqual(scalar(archetype, "type"), "naval_bomber")
+        model = block(equipment, "ADISCORD_naval_aircraft_2160")
+        missions = {row.value for row in block(model, "allow_mission_type")}
+        self.assertTrue({"naval_bomber", "naval_patrol"} <= missions)
 
 
 if __name__ == "__main__":

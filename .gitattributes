@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Generated NAM focus trees are compared with the builder's exact LF output.
+/common/national_focus/ADISCORD_NAM*.txt text eol=lf

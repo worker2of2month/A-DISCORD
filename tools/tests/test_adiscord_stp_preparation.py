@@ -41,6 +41,57 @@ def walk(items):
             yield from walk(entry.value)
 
 
+def focus_positions(focuses, facts, scope="STP"):
+    """Resolve the complete anchor chain, including active ancestor offsets."""
+    positions = {}
+    resolving = set()
+
+    def resolve(name):
+        if name in positions:
+            return positions[name]
+        if name in resolving:
+            raise AssertionError(f"Cyclic focus position: {name}")
+        resolving.add(name)
+        focus = focuses[name]
+        x, y = int(scalar(focus, "x")), int(scalar(focus, "y"))
+        for entry in focus:
+            if entry.key == "relative_position_id":
+                parent_x, parent_y = resolve(entry.value)
+                x += parent_x
+                y += parent_y
+            elif entry.key == "offset" and matches_conditions(
+                block(entry.value, "trigger"), facts, scope
+            ):
+                x += sum(int(child.value) for child in entry.value if child.key == "x")
+                y += sum(int(child.value) for child in entry.value if child.key == "y")
+        resolving.remove(name)
+        positions[name] = (x, y)
+        return positions[name]
+
+    return {name: resolve(name) for name in focuses}
+
+
+def focus_exclusion_crossings(focuses, visible_positions):
+    """Find visible cards between the endpoints of a horizontal exclusion link."""
+    crossings = set()
+    for name, (x, y) in visible_positions.items():
+        excluded = {
+            child.value
+            for entry in focuses[name] if entry.key == "mutually_exclusive"
+            for child in entry.value if child.key == "focus"
+        }
+        for other in excluded & visible_positions.keys():
+            other_x, other_y = visible_positions[other]
+            if other_y != y:
+                continue
+            left, right = sorted((x, other_x))
+            for crossed, (crossed_x, crossed_y) in visible_positions.items():
+                if crossed_y == y and left < crossed_x < right:
+                    start, end = sorted((name, other))
+                    crossings.add((start, end, crossed))
+    return sorted(crossings)
+
+
 def matches_conditions(items, facts, scope="STP"):
     """Select parsed branches from explicit scenario facts, not a game simulation."""
 
@@ -7297,6 +7348,27 @@ class StelanderPreparationTests(unittest.TestCase):
                     focus_id,
                 )
 
+    def test_relative_focus_positions_include_nested_active_offsets(self):
+        source = """
+        focus = {
+            id = root
+            x = 10
+            y = 2
+            offset = { x = 2 y = 3 trigger = { tag = STS } }
+        }
+        focus = { id = branch x = -2 y = 1 relative_position_id = root }
+        focus = { id = leaf x = 1 y = 1 relative_position_id = branch }
+        """
+        focuses = {scalar(entry.value, "id"): entry.value for entry in parse_clausewitz(source)}
+        self.assertEqual(
+            focus_positions(focuses, {}, "STP"),
+            {"root": (10, 2), "branch": (8, 3), "leaf": (9, 4)},
+        )
+        self.assertEqual(
+            focus_positions(focuses, {}, "STS"),
+            {"root": (12, 5), "branch": (10, 6), "leaf": (11, 7)},
+        )
+
     def test_selected_focus_layout_stays_centered_without_overlapping_nodes(self):
         trees = entries("common/national_focus/ADISCORD_national_focus_STP.txt")
         tree = next(
@@ -7343,30 +7415,7 @@ class StelanderPreparationTests(unittest.TestCase):
                 )
                 occupied[position] = focus_id
             positions = {focus_id: position for position, focus_id in occupied.items()}
-            for focus_id, (focus_x, focus_y) in positions.items():
-                exclusions = [
-                    child.value
-                    for group in focuses[focus_id]
-                    if group.key == "mutually_exclusive"
-                    for child in group.value
-                    if child.key == "focus"
-                ]
-                for other_id in exclusions:
-                    if other_id not in positions or focus_id >= other_id:
-                        continue
-                    other_x, other_y = positions[other_id]
-                    if focus_y != other_y:
-                        continue
-                    left, right = sorted((focus_x, other_x))
-                    crossed = [
-                        name
-                        for name, (x, y) in positions.items()
-                        if y == focus_y and left < x < right
-                    ]
-                    self.assertFalse(
-                        crossed,
-                        f"{focus_id} / {other_id} mutual-exclusion line crosses {crossed}",
-                    )
+            self.assertFalse(focus_exclusion_crossings(focuses, positions))
 
     def test_party_preparation_keeps_shared_map_but_owns_separate_actions(self):
         categories = entries(

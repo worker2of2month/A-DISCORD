@@ -41,6 +41,7 @@ class PartySecondActTests(unittest.TestCase):
     def facts(self, route, receipt=False, current=True, completed=False):
         return {
             ("STP", "STP_pe_current", "yes"): current,
+            ("STP", f"STP_party_leader_{ROUTES.index(route) + 1}", "yes"): current,
             ("STP", "has_capitulated", "no"): True,
             ("STP", "has_variable", f"STP_pe_{route}_deposit"): receipt,
             ("STP", "variable", f"STP_pe_{route}_deposit"): 450 if receipt else 0,
@@ -89,9 +90,10 @@ class PartySecondActTests(unittest.TestCase):
             elif entry.key == "add_equipment_to_stockpile":
                 key = ("STP", "equipment", scalar(entry.value, "type"))
                 facts[key] = facts.get(key, 0) + float(scalar(entry.value, "amount"))
-            # The fixture starts with an initialized treasury; native cache work is unmodelled.
+            # The fixture starts with an initialized treasury; policy refreshes
+            # and native cache work are outside these transaction scenarios.
             elif entry.key not in ("custom_effect_tooltip", "unlock_decision_tooltip", "ADISCORD_economy_mark_dirty",
-                                   "ADISCORD_economy_initialize_country"):
+                                   "ADISCORD_economy_initialize_country", "STP_party_refresh_policies"):
                 raise AssertionError(f"Unhandled transaction effect: {entry.key}")
 
     def test_six_routes_each_have_twelve_new_focuses_with_reachable_endings(self):
@@ -110,6 +112,441 @@ class PartySecondActTests(unittest.TestCase):
                     if all(any(e.value in reached for e in group) for group in groups):
                         reached.add(name)
             self.assertFalse(set(shown) - reached)
+
+    def hedersett_facts(self):
+        return {
+            ("STP", "STP_pf_active", "yes"): True,
+            ("STP", "STP_pf_settled", "yes"): True,
+            ("STP", "STP_party_leader_2", "yes"): True,
+            ("STP", "has_country_flag", "STP_cw_postwar"): True,
+            ("STP", "has_idea", "STP_law_slavery"): True,
+            ("STP", "has_idea", "STP_law_hard_drugs"): True,
+            ("STP", "numeric", "has_political_power"): 200,
+            ("STP", "variable", "ADISCORD_economy_treasury"): 1000,
+        }
+
+    def event_option(self, event, suffix):
+        option = next(e.value for e in self.events[event]
+                      if e.key == "option" and scalar(e.value, "name") == event + "." + suffix)
+        return [e for e in option if e.key not in ("name", "trigger", "ai_chance")]
+
+    def offered_options(self, event, facts):
+        return [scalar(e.value, "name") for e in self.events[event]
+                if e.key == "option" and matches_conditions(
+                    next((child.value for child in e.value if child.key == "trigger"), []), facts)]
+
+    def test_leader_crises_keep_material_choices_after_congress_and_decision_detours(self):
+        decisions = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/decisions/ADISCORD_STP_decisions.txt"))) if isinstance(e.value, list)}
+        cases = (
+            (20, "property_disputes", "property_hearings", "b", "a", -50, -25,
+             ("reward", "add_stability"), 0.03),
+            (21, "officer_petitions", "officer_commission", "a", "b", -60, -20,
+             ("variable", "STP_pw_army_org_regain"), 0.03),
+            (22, "contract_disputes", "contract_arbitration", "b", "a", -60, -50,
+             ("variable", "STP_pw_industrial_capacity_factory"), 0.03),
+            (23, "archive_backlog", "detention_review", "a", "b", -50, -10,
+             ("reward", "add_manpower"), 1500),
+        )
+        pp = ("STP", "numeric", "has_political_power")
+        for number, crisis, decision, direct, detour, direct_cost, detour_cost, reward, amount in cases:
+            with self.subTest(event=number):
+                event = f"ADISCORD_STP_ch.{number}"
+                idea = ("STP", "has_idea", "STP_party_" + crisis)
+                start = self.hedersett_facts()
+                start[idea] = True
+                paid = dict(start)
+                cheap = dict(start)
+                self.apply_transaction(self.event_option(event, direct), paid)
+                self.apply_transaction(self.event_option(event, detour), cheap)
+                self.assertTrue(cheap[idea])
+                cure = decisions["STP_party_" + decision]
+                cheap[pp] -= float(scalar(cure, "cost"))
+                self.apply_transaction(block(cure, "complete_effect"), cheap)
+                self.assertEqual(paid[pp] - start[pp], direct_cost)
+                self.assertEqual(cheap[pp] - start[pp], detour_cost)
+                self.assertAlmostEqual(paid[("STP",) + reward], amount)
+                self.assertEqual(cheap.get(("STP",) + reward, 0), 0)
+                for outcome in (paid, cheap):
+                    self.assertFalse(outcome[idea])
+                    self.assertEqual(self.offered_options(event, outcome), [event + ".z"])
+                    settled = dict(outcome)
+                    self.apply_transaction(self.event_option(event, "z"), outcome)
+                    self.assertEqual(outcome, settled)
+                if number == 21:
+                    self.assertAlmostEqual(paid[("STP", "variable", "STP_pw_ADISCORD_economy_admin_expense_factor")], 0.02)
+                if number == 22:
+                    self.assertEqual(cheap[("STP", "variable", "ADISCORD_economy_treasury")], 2000)
+                    self.assertAlmostEqual(cheap[("STP", "variable", "STP_pw_ADISCORD_economy_overall_income_factor")], -0.02)
+
+    def test_regent_local_offices_trade_cooperation_for_a_lasting_budget_result(self):
+        event = "ADISCORD_STP_ch.24"
+        joint = self.hedersett_facts()
+        idea = ("STP", "has_idea", "STP_party_mandate_disputes")
+        joint[idea] = True
+        local = dict(joint)
+        self.apply_transaction(self.event_option(event, "a"), joint)
+        self.apply_transaction(self.event_option(event, "b"), local)
+        self.assertEqual(joint[("STP", "variable", "STP_ch_cooperation")], 1)
+        self.assertFalse(joint[idea])
+        self.assertTrue(local[idea])
+        self.assertEqual(local[("STP", "numeric", "has_political_power")], 165)
+        self.assertAlmostEqual(local[("STP", "reward", "add_stability")], 0.03)
+        admin = ("STP", "variable", "STP_pw_ADISCORD_economy_admin_expense_factor")
+        self.assertAlmostEqual(local[admin], -0.04)
+        decisions = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/decisions/ADISCORD_STP_decisions.txt"))) if isinstance(e.value, list)}
+        audit = decisions["STP_party_mandate_audit"]
+        local[("STP", "numeric", "has_political_power")] -= float(scalar(audit, "cost"))
+        self.apply_transaction(block(audit, "complete_effect"), local)
+        self.assertAlmostEqual(local[admin], -0.04)
+        self.assertEqual(self.offered_options(event, local), [event + ".z"])
+
+    def test_late_compromise_checks_both_prices_and_never_refunds_them(self):
+        pp = ("STP", "numeric", "has_political_power")
+        cash = ("STP", "variable", "ADISCORD_economy_treasury")
+        costs = ("STP", "variable", "ADISCORD_economy_current_month_action_costs")
+        for index, route in enumerate(ROUTES):
+            if route == "festival":
+                continue
+            event = f"ADISCORD_STP_ch.{46 + index}"
+            for balance, treasury, receipt in (
+                (34.999, 300, False), (35, 299.999, False),
+                (35, 300, False), (35, 0, True), (35, 450, True),
+            ):
+                facts = self.facts(route, receipt=receipt)
+                facts[pp] = balance
+                facts[cash] = treasury
+                facts[("STP", "has_idea", f"STP_pe_{route}_crisis")] = True
+                allowed = balance >= 35 and (treasury >= 300 or receipt)
+                self.assertEqual(event + ".b" in self.offered_options(event, facts), allowed)
+                before = dict(facts)
+                self.apply_transaction(self.event_option(event, "b"), facts)
+                if not allowed:
+                    self.assertEqual(facts, before)
+                    continue
+                self.assertEqual(facts[pp], 0)
+                self.assertEqual(facts[cash], treasury + (450 if receipt else 0) - 300)
+                self.assertEqual(facts[costs], 300)
+                settled = dict(facts)
+                self.apply_transaction(self.event_option(event, "b"), facts)
+                self.apply_transaction(self.effects[f"STP_pe_{route}_settle"], facts)
+                self.assertEqual(facts, settled)
+                # Both paid answers bypass settlement and receive the same next-day grant.
+                next_day = self.focuses[f"STP_pe_{route}_next_day"]
+                review = self.focuses[f"STP_pe_{route}_commission"]
+                self.assertEqual(float(scalar(next_day, "cost")) + float(scalar(review, "cost")), 3)
+                self.apply_transaction(block(next_day, "completion_reward"), facts)
+                self.apply_transaction(block(review, "completion_reward"), facts)
+                self.assertEqual(facts[pp], 0)
+                self.assertEqual(facts[cash], settled[cash] + 450)
+                self.assertEqual(facts[costs], 300)
+                self.assertFalse(facts[("STP", "has_idea", f"STP_pe_{route}_backlash")])
+
+    def test_shared_settlements_buy_institutions_after_support_freezes(self):
+        for number, variable, amount in (
+            (26, "STP_pw_production_speed_buildings_factor", 0.03),
+            (27, "STP_pw_political_power_gain", 0.05),
+        ):
+            event = f"ADISCORD_STP_pc.{number}"
+            for balance, charter in ((539.999, False), (540, False), (540, True)):
+                facts = self.hedersett_facts()
+                facts[("STP", "STP_pw_can_reconstruct", "yes")] = True
+                facts[("STP", "has_completed_focus", "STP_pw_party_civil_charter")] = charter
+                cash = ("STP", "variable", "ADISCORD_economy_treasury")
+                facts[cash] = balance
+                allowed = balance >= 540 and not charter
+                self.assertEqual(event + ".b" in self.offered_options(event, facts), allowed)
+                payload = self.event_option(event, "b")
+                shown = self.selected(payload, facts)
+                self.assertFalse(any(e.key == "custom_effect_tooltip" and e.value.endswith("_factions_tt")
+                                     for e in shown))
+                self.apply_transaction(payload, facts)
+                self.assertEqual(facts[cash], balance - 540 if allowed else balance)
+                self.assertAlmostEqual(facts.get(("STP", "variable", variable), 0), amount if allowed else 0)
+
+    def test_late_penalties_use_weekly_cash_and_each_routes_own_expense_base(self):
+        from tools.tests.test_adiscord_economy_weekly_contracts import (
+            EconomyScriptFixture, MODIFIER_EFFECTS,
+        )
+
+        ideas = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/ideas/ADISCORD_STP_civil_war_ideas.txt"))) if isinstance(e.value, list)}
+        prefix = "ADISCORD_economy_"
+
+        def budget(income, army, modifiers):
+            fixture = EconomyScriptFixture(texts=(MODIFIER_EFFECTS,))
+            values = fixture.scopes["A"]
+            for name in re.findall(r"\bADISCORD_\w+_factor_bp\b", MODIFIER_EFFECTS):
+                values[name] = 100
+            values[prefix + "monthly_income"] = income
+            values[prefix + "army_expenses"] = army
+            for name, delta in modifiers.items():
+                if name.startswith(prefix):
+                    suffix = name.removeprefix(prefix)
+                    values[prefix + "final_" + suffix + "_bp"] += delta * 100
+            fixture.run(prefix + "apply_overall_income_modifier_factor")
+            fixture.run(prefix + "apply_expense_modifier_factors")
+            fixture.run(prefix + "sum_expenses")
+            fixture.run(prefix + "calculate_weekly_budget")
+            return values[prefix + "weekly_balance"]
+
+        for route in ("houses", "staff", "trade", "security", "regent"):
+            backlash = {e.key: float(e.value) for e in block(ideas[f"STP_pe_{route}_backlash"], "modifier")}
+            for side in ("a", "b"):
+                policy = {e.key: float(e.value) for e in block(ideas[f"STP_pe_{route}_policy_{side}_idea"], "modifier")}
+                combined = dict(policy)
+                for name, delta in backlash.items():
+                    combined[name] = combined.get(name, 0) + delta
+                for income, army in ((50, 10), (150, 21.5), (500, 150)):
+                    baseline = budget(income, army, policy)
+                    weekly_loss = baseline - budget(income, army, combined)
+                    expected = (income * -backlash.get(prefix + "overall_income_factor", 0)
+                                + army * backlash.get(prefix + "army_expense_factor", 0)) * 3 / 13
+                    self.assertAlmostEqual(weekly_loss, expected)
+                    # Even three weekly ticks at the large benchmark do not price a 450-cash settlement.
+                    self.assertLess(weekly_loss * 3, 450 * 0.05)
+                    self.assertGreaterEqual(weekly_loss, 0)
+            if route == "security":
+                self.assertAlmostEqual(-backlash["political_power_gain"] * 21, 3.15)
+
+    def test_ready_financing_is_displaced_only_when_political_power_is_binding(self):
+        programmes = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/decisions/ADISCORD_STP_decisions.txt")))
+            if e.key.startswith("STP_pw_prog_") and isinstance(e.value, list)}
+        pp = ("STP", "numeric", "has_political_power")
+        cash = ("STP", "variable", "ADISCORD_economy_treasury")
+        for route, name, payout in (
+            ("houses", "reconstruction_bonds", 1200),
+            ("staff", "reconstruction_bonds", 1200),
+            ("security", "reconstruction_bonds", 1200),
+            ("trade", "export_quota", 1500),
+            ("regent", "northern_credit", 1000),
+        ):
+            programme = programmes["STP_pw_prog_" + name]
+            price = float(scalar(programme, "cost"))
+            event = f"ADISCORD_STP_ch.{46 + ROUTES.index(route)}"
+            for initial_pp in (35, 200):
+                outcomes = {}
+                for choice in ("a", "b"):
+                    facts = self.facts(route)
+                    facts[pp] = initial_pp
+                    facts[cash] = 900
+                    facts[("STP", "has_idea", f"STP_pe_{route}_crisis")] = True
+                    self.apply_transaction(self.event_option(event, choice), facts)
+                    if facts[pp] >= price:
+                        facts[pp] -= price
+                        self.apply_transaction(block(programme, "complete_effect"), facts)
+                    outcomes[choice] = facts
+                if initial_pp == 35:
+                    self.assertEqual(outcomes["a"][cash] - outcomes["b"][cash], payout - 150)
+                    self.assertGreaterEqual(outcomes["a"][pp], outcomes["b"][pp])
+                else:
+                    self.assertEqual(outcomes["b"][cash] - outcomes["a"][cash], 150)
+                    self.assertEqual(outcomes["a"][pp] - outcomes["b"][pp], 35)
+
+    def test_houses_followup_can_outweigh_concession_savings_with_bonds_on_cooldown(self):
+        pp = ("STP", "numeric", "has_political_power")
+        cash = ("STP", "variable", "ADISCORD_economy_treasury")
+        outcomes = {}
+        for choice in ("a", "b"):
+            facts = self.facts("houses")
+            facts[cash] = 900
+            facts[("STP", "has_idea", "STP_pe_houses_crisis")] = True
+            self.apply_transaction(self.event_option("ADISCORD_STP_ch.46", choice), facts)
+            for suffix in ("next_day", "commission"):
+                self.apply_transaction(block(self.focuses["STP_pe_houses_" + suffix], "completion_reward"), facts)
+                facts[("STP", "has_completed_focus", "STP_pe_houses_" + suffix)] = True
+            # External net gain of 0.5/day for a nominal 21-day focus route.
+            facts[pp] += 10.5
+            self.apply_transaction(block(self.decisions["STP_pe_houses_followup"], "complete_effect"), facts)
+            outcomes[choice] = facts
+        self.assertEqual(outcomes["a"][pp], outcomes["b"][pp])
+        self.assertEqual(outcomes["a"][cash] - outcomes["b"][cash], 400)
+
+    def test_cooldown_requires_reserving_power_at_every_programme_deadline(self):
+        programmes = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/decisions/ADISCORD_STP_decisions.txt")))
+            if e.key.startswith("STP_pw_prog_") and isinstance(e.value, list)}
+        bond = programmes["STP_pw_prog_reconstruction_bonds"]
+        price = float(scalar(bond, "cost"))
+        cooldown = int(scalar(bond, "days_re_enable"))
+        # A completed earlier issue leaves either 30 or 60 days of its native cooldown.
+        for elapsed, expected_delay in ((60, 20), (30, 0)):
+            remaining = cooldown - elapsed
+            after_concession = 45 - 35 + remaining * 0.5
+            delay = max(0, (price - after_concession) / 0.5)
+            self.assertEqual(delay, expected_delay)
+            self.assertGreaterEqual(45 + remaining * 0.5, price)
+        # Reserve three monthly followups plus each leader's financing and staff training.
+        for route in ("houses", "staff", "trade", "security", "regent"):
+            schedule = [(21, 35), (51, 35), (81, 35), (60, price)]
+            if route in ("trade", "regent", "staff"):
+                name = {"trade": "export_quota", "regent": "northern_credit", "staff": "grand_manoeuvres"}[route]
+                programme = programmes["STP_pw_prog_" + name]
+                self.assertEqual(int(scalar(programme, "days_re_enable")), 120)
+                schedule.append((90, float(scalar(programme, "cost"))))
+            for choice_cost in (0, 35):
+                reserve = 200 - choice_cost
+                previous = 0
+                for day, cost in sorted(schedule):
+                    reserve += (day - previous) * 0.5
+                    if route == "security" and choice_cost and previous == 0:
+                        reserve -= 3.15
+                    self.assertGreaterEqual(reserve, cost, (route, day, choice_cost))
+                    reserve -= cost
+                    previous = day
+
+    def test_concessions_cross_real_project_cash_thresholds_when_financing_is_busy(self):
+        decisions = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/decisions/ADISCORD_STP_decisions.txt"))) if isinstance(e.value, list)}
+        for route, project, treasury in (
+            ("houses", "STP_pi_house_road", 700),
+            ("staff", "STP_pi_cadre_enrol", 750),
+            ("trade", "STP_pi_trade_rifles_standard", 900),
+            ("security", "STP_pi_case_orders_full", 750),
+            ("regent", "STP_pi_north_local_staff", 750),
+        ):
+            event = f"ADISCORD_STP_ch.{46 + ROUTES.index(route)}"
+            for choice in ("a", "b"):
+                facts = self.facts(route)
+                facts[("STP", "numeric", "has_political_power")] = 200
+                facts[("STP", "numeric", "has_manpower")] = 6000
+                facts[("STP", "variable", "ADISCORD_economy_treasury")] = treasury
+                facts[("STP", "has_idea", f"STP_pe_{route}_crisis")] = True
+                self.apply_transaction(self.event_option(event, choice), facts)
+                # This isolates affordability; unlocks, free slots and local assets are separate requirements.
+                gate = block(decisions[project], "custom_cost_trigger")
+                self.assertEqual(matches_conditions(gate, facts), choice == "b", project)
+
+    def test_ready_settlement_focus_preserves_both_currencies_without_concessions(self):
+        for route in ("houses", "staff", "trade", "security", "regent"):
+            facts = self.facts(route)
+            facts[("STP", "has_idea", f"STP_pe_{route}_crisis")] = True
+            event = f"ADISCORD_STP_ch.{46 + ROUTES.index(route)}"
+            self.apply_transaction(self.event_option(event, "c"), facts)
+            self.apply_transaction(block(self.focuses[f"STP_pe_{route}_settlement"], "completion_reward"), facts)
+            self.assertEqual(facts[("STP", "numeric", "has_political_power")], 35)
+            self.assertEqual(facts[("STP", "variable", "ADISCORD_economy_treasury")], 450)
+            self.assertFalse(facts[("STP", "has_idea", f"STP_pe_{route}_crisis")])
+            self.assertFalse(facts.get(("STP", "has_idea", f"STP_pe_{route}_backlash"), False))
+
+    def test_leader_institution_previews_match_applied_aggregate_modifiers(self):
+        ideas = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/ideas/ADISCORD_STP_civil_war_ideas.txt"))) if isinstance(e.value, list)}
+        for namespace, number, choice in (("ch", 21, "a"), ("ch", 22, "b"),
+                                          ("ch", 24, "b"), ("pc", 26, "b"), ("pc", 27, "b")):
+            event = f"ADISCORD_STP_{namespace}.{number}"
+            dummy = f"ADISCORD_STP_{namespace}_{number}_{choice}_delta"
+            facts = self.hedersett_facts()
+            facts[("STP", "STP_pw_can_reconstruct", "yes")] = True
+            payload = self.event_option(event, choice)
+            selected = self.selected(payload, facts)
+            self.assertFalse(any(e.key in ("add_ideas", "swap_ideas") and
+                                 (e.value == dummy or isinstance(e.value, list)) for e in selected))
+            self.assertTrue(any(e.key == "STP_party_refresh_policies" for e in selected))
+            applied = {scalar(e.value, "var"): float(scalar(e.value, "value"))
+                       for e in selected if e.key == "add_to_variable"
+                       and scalar(e.value, "var").startswith("STP_pw_")}
+            preview = {"STP_pw_" + e.key: float(e.value) for e in block(ideas[dummy], "modifier")}
+            self.assertEqual(preview, applied, dummy)
+
+    def test_labour_registry_pays_off_in_the_delayed_report_after_elections(self):
+        outcomes = {}
+        for choice in ("a", "b"):
+            facts = self.hedersett_facts()
+            self.apply_transaction(self.event_option("ADISCORD_STP_ch.26", choice), facts)
+            self.apply_transaction(block(self.events["ADISCORD_STP_ch.29"], "immediate"), facts)
+            crisis = facts.get(("STP", "has_idea", "STP_party_forced_labour_resistance"), False)
+            self.assertEqual(crisis, choice == "b")
+            if choice == "a":
+                self.assertEqual(self.offered_options("ADISCORD_STP_ch.29", facts),
+                                 ["ADISCORD_STP_ch.29.resolved"])
+                self.apply_transaction(self.event_option("ADISCORD_STP_ch.29", "resolved"), facts)
+            else:
+                self.apply_transaction(self.event_option("ADISCORD_STP_ch.29", "a"), facts)
+            outcomes[choice] = facts
+        cash = ("STP", "variable", "ADISCORD_economy_treasury")
+        pp = ("STP", "numeric", "has_political_power")
+        stability = ("STP", "reward", "add_stability")
+        self.assertGreater(outcomes["b"][cash], outcomes["a"][cash])
+        self.assertGreater(outcomes["a"][pp], outcomes["b"][pp])
+        self.assertGreater(outcomes["a"][stability], outcomes["b"][stability])
+        cleanup = self.effects["STP_pf_clear"]
+        self.assertTrue(any(e.key == "clr_country_flag" and e.value == "STP_party_labour_registry"
+                            for e in walk(cleanup)))
+
+    def test_public_festival_choices_remain_distinct_after_faction_support_freezes(self):
+        local = self.hedersett_facts()
+        central = dict(local)
+        self.apply_transaction(self.event_option("ADISCORD_STP_ch.25", "a"), local)
+        self.apply_transaction(self.event_option("ADISCORD_STP_ch.25", "b"), central)
+        self.assertGreater(local.get(("STP", "reward", "add_stability"), 0),
+                           central.get(("STP", "reward", "add_stability"), 0))
+        self.assertGreater(central[("STP", "numeric", "has_political_power")],
+                           local[("STP", "numeric", "has_political_power")])
+        admin = ("STP", "variable", "STP_pw_ADISCORD_economy_admin_expense_factor")
+        self.assertGreater(central.get(admin, 0), local.get(admin, 0))
+
+    def test_crisis_decisions_match_event_payments_and_make_open_reports_safe(self):
+        decisions = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/decisions/ADISCORD_STP_decisions.txt")))
+            if e.key in ("STP_party_health_commission", "STP_party_labour_inspections")}
+        for number, decision, idea, law, close in (
+            (28, "STP_party_health_commission", "STP_party_hospital_overload", "STP_law_hard_drugs", "funded"),
+            (29, "STP_party_labour_inspections", "STP_party_forced_labour_resistance", "STP_law_slavery", "resolved"),
+        ):
+            event = f"ADISCORD_STP_ch.{number}"
+            via_event = self.hedersett_facts()
+            via_event[("STP", "has_idea", idea)] = True
+            via_decision = dict(via_event)
+            self.apply_transaction(self.event_option(event, "a"), via_event)
+            via_decision[("STP", "numeric", "has_political_power")] -= float(scalar(decisions[decision], "cost"))
+            self.apply_transaction(block(decisions[decision], "complete_effect"), via_decision)
+            self.assertEqual(via_decision, via_event)
+            self.assertEqual(self.offered_options(event, via_decision), [event + "." + close])
+            before = dict(via_decision)
+            self.apply_transaction(self.event_option(event, close), via_decision)
+            self.assertEqual(via_decision, before)
+            via_decision[("STP", "has_idea", law)] = False
+            self.assertEqual(self.offered_options(event, via_decision), [event + ".obsolete"])
+
+    def test_festival_accounts_preserve_a_material_choice_on_both_financing_routes(self):
+        income = ("STP", "variable", "STP_pw_ADISCORD_economy_overall_income_factor")
+        stability = ("STP", "reward", "add_stability")
+        for route, concession in (("patrons", "a"), ("levy", "c")):
+            start = self.hedersett_facts()
+            start[("STP", "has_completed_focus", "STP_party_festival_" + route)] = True
+            self.apply_transaction(block(self.focuses["STP_party_festival_" + route], "completion_reward"), start)
+            self.apply_transaction(block(self.events["ADISCORD_STP_ch.30"], "immediate"), start)
+            outcomes = {}
+            for choice in (concession, "b"):
+                facts = dict(start)
+                self.apply_transaction(self.event_option("ADISCORD_STP_ch.30", choice), facts)
+                outcomes[choice] = facts
+            self.assertGreater(outcomes[concession].get(stability, 0), outcomes["b"].get(stability, 0))
+            self.assertGreater(outcomes["b"][income], outcomes[concession][income])
+            self.assertEqual(outcomes["b"][("STP", "numeric", "has_political_power")],
+                             start[("STP", "numeric", "has_political_power")])
+            self.assertEqual(outcomes["b"].get(("STP", "has_idea", "STP_party_festival_creditors"), False),
+                             route == "patrons")
+
+    def test_club_concessions_keep_their_price_after_the_commission_focus(self):
+        for receipt in (False, True):
+            facts = self.facts("festival", receipt=receipt)
+            facts[("STP", "has_idea", "STP_pe_festival_crisis")] = True
+            self.apply_transaction(self.event_option("ADISCORD_STP_ch.47", "b"), facts)
+            cash_after = facts[("STP", "variable", "ADISCORD_economy_treasury")]
+            self.assertEqual(cash_after, 900 if receipt else 450)
+            self.assertFalse(facts[("STP", "has_variable", "STP_pe_festival_deposit")])
+            self.assertTrue(facts[("STP", "has_country_flag", "STP_pe_festival_prepared")])
+            self.assertLess(facts[("STP", "reward", "add_stability")], 0)
+            penalty = facts[("STP", "reward", "add_stability")]
+            self.apply_transaction(block(self.focuses["STP_pe_festival_commission"], "completion_reward"), facts)
+            self.assertFalse(facts[("STP", "has_idea", "STP_pe_festival_backlash")])
+            self.assertEqual(facts[("STP", "reward", "add_stability")], penalty)
+            self.apply_transaction(self.effects["STP_pe_festival_settle"], facts)
+            self.assertEqual(facts[("STP", "variable", "ADISCORD_economy_treasury")], cash_after)
 
     def test_club_social_cost_is_paid_only_at_policy_adoption_above_the_floor(self):
         reward = block(self.focuses["STP_pe_festival_policy_b"], "completion_reward")
@@ -482,7 +919,7 @@ class PartySecondActTests(unittest.TestCase):
                     self.assertEqual(scalar(debits[0].value, "value"), "450")
                     self.assertEqual([e.value for e in selected if e.key == "add_political_power"], ["-35"])
 
-    def test_paid_work_survives_leader_change_but_lost_regime_only_refunds(self):
+    def test_paid_work_refunds_after_government_change_or_loss_of_regime(self):
         for route in ROUTES:
             helper = self.require(self.effects, f"STP_pe_{route}_settle")
             for current, receipt in ((True, True), (False, True), (True, False), (False, False)):
@@ -551,12 +988,13 @@ class PartySecondActTests(unittest.TestCase):
             decision = self.require(self.decisions, f"STP_pe_{route}_programme")
             event = self.require(self.events, f"ADISCORD_STP_ch.{46 + index}")
             facts = self.facts(route)
+            facts[("STP", "numeric", "has_political_power")] = 70
             self.apply_transaction(block(decision, "complete_effect"), facts)
             facts[("STP", "has_idea", f"STP_pe_{route}_crisis")] = True
             option = next(e.value for e in event if e.key == "option"
                           and scalar(e.value, "name").endswith(".b"))
             self.apply_transaction([e for e in option if e.key not in ("name", "trigger", "ai_chance")], facts)
-            self.assertEqual(facts[("STP", "variable", "ADISCORD_economy_treasury")], 450)
+            self.assertEqual(facts[("STP", "variable", "ADISCORD_economy_treasury")], 450 if route == "festival" else 150)
             self.assertTrue(matches_conditions(block(decision, "cancel_trigger"), facts))
             settled = dict(facts)
             self.apply_transaction(block(decision, "remove_effect"), facts)
@@ -620,7 +1058,7 @@ class PartyInstitutionContractTests(unittest.TestCase):
 
 class InstitutionScenario:
     """Execute bounded accounting branches; engine scheduling and UI are not simulated."""
-    def __init__(self, effects, triggers):
+    def __init__(self, effects, triggers, government=1):
         self.effects = effects
         self.triggers = triggers
         self.facts = {
@@ -635,12 +1073,18 @@ class InstitutionScenario:
             ("FROM", "numeric", "infrastructure"): 2,
             ("STP", "numeric", "has_manpower"): 6000,
         }
+        self.set_government(government)
         self.deliveries = []
         self.events = []
         self.temporary = {}
         self.put("ADISCORD_economy_treasury", 10000)
         self.put("ADISCORD_economy_treasury", 20000, "NOD")
         self.run(effects["STP_pi_initialize"])
+
+    def set_government(self, government):
+        for index in range(1, 7):
+            self.facts[("STP", f"STP_party_leader_{index}", "yes")] = index == government
+            self.facts[("STP", f"STP_party_leader_{index}", "no")] = index != government
 
     def put(self, name, value, scope="STP"):
         self.facts[(scope, "variable", name)] = value
@@ -670,8 +1114,9 @@ class InstitutionScenario:
                 ):
                     if item.value not in ("yes", "no"):
                         raise AssertionError("Scripted triggers require boolean calls")
-                    expanded.append(replace(item, key="AND" if item.value == "yes" else "NOT",
-                                            value=expand(self.triggers[item.key])))
+                    conjunction = replace(item, key="AND", value=expand(self.triggers[item.key]))
+                    expanded.append(conjunction if item.value == "yes" else
+                                    replace(item, key="NOT", value=[conjunction]))
                 elif item.key == "free_building_slots":
                     expanded.append(replace(item, key="fixture_workshop_site", value="yes"))
                 elif isinstance(item.value, list):
@@ -776,14 +1221,90 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
             "common/decisions/ADISCORD_STP_decisions.txt")))
             if e.key.startswith("STP_pi_") and isinstance(e.value, list)}
 
-    def model(self):
-        return InstitutionScenario(self.effects, self.triggers)
+    def model(self, government=1):
+        return InstitutionScenario(self.effects, self.triggers, government)
 
     def action(self, model, name, phase="complete_effect"):
         model.run(block(self.decisions[name], phase))
 
+    def test_every_government_change_cancels_paid_work_without_double_refund(self):
+        projects = (
+            (1, "STP_pi_house_road", 400, "STP_pi_house_slots"),
+            (2, "STP_pi_festival_public", 600, "STP_pi_festival_busy"),
+            (3, "STP_pi_cadre_enrol", 450, None),
+            (4, "STP_pi_trade_rifles_standard", 600, "STP_pi_trade_busy"),
+            (5, "STP_pi_case_orders_full", 450, "STP_pi_case_busy"),
+            (6, "STP_pi_north_local_staff", 450, None),
+        )
+        for previous, name, cost, slots in projects:
+            for current in range(1, 7):
+                if previous == current:
+                    continue
+                with self.subTest(previous=previous, current=current, project=name):
+                    m = self.model(previous)
+                    self.action(m, name)
+                    self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000 - cost)
+                    m.set_government(current)
+                    decision = self.decisions[name]
+                    self.assertTrue(m.condition(block(decision, "cancel_trigger")))
+                    self.assertFalse(m.condition(block(decision, "visible")))
+                    # Completion may race native cancellation, but neither may deliver twice.
+                    self.action(m, name, "remove_effect")
+                    self.action(m, name, "cancel_effect")
+                    self.action(m, name, "remove_effect")
+                    self.action(m, name)
+                    self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000)
+                    self.assertEqual(m.get("ADISCORD_economy_current_month_action_income"), cost)
+                    self.assertEqual(m.deliveries, [])
+                    self.assertEqual(m.facts[("STP", "numeric", "has_manpower")], 6000)
+                    if slots:
+                        self.assertEqual(m.get(slots), 0)
+
+    def test_government_change_invalidates_northern_offer_and_refunds_both_payers(self):
+        for successor in range(1, 6):
+            for paid in (False, True):
+                m = self.model(6)
+                self.action(m, "STP_pi_north_training")
+                if paid:
+                    m.run(self.effects["STP_pi_north_accept"])
+                    self.assertEqual(m.get("ADISCORD_economy_treasury"), 9700)
+                    self.assertEqual(m.get("ADISCORD_economy_treasury", "NOD"), 19400)
+                m.set_government(successor)
+                self.assertFalse(m.condition(self.triggers["STP_pi_north_offer_valid"]))
+                mission = "STP_pi_north_delivery" if paid else "STP_pi_north_reply"
+                self.assertTrue(m.condition(block(self.decisions[mission], "cancel_trigger")))
+                self.action(m, mission, "cancel_effect")
+                m.run(self.effects["STP_pi_north_finish"])
+                m.run(self.effects["STP_pi_north_accept"])
+                self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000)
+                self.assertEqual(m.get("ADISCORD_economy_treasury", "NOD"), 20000)
+                self.assertEqual(m.get("STP_pi_north_obligations"), 0)
+                self.assertEqual(m.deliveries, [])
+
+    def test_institution_bonuses_follow_current_government_without_erasing_ledgers(self):
+        m = self.model(3)
+        m.put("STP_pi_cadre_instructors", 4000)
+        m.put("STP_pi_cadre_reserve", 2000)
+        m.put("STP_pi_festival_districts", 2)
+        m.put("STP_pi_festival_rate", 0.05)
+        m.put("STP_pi_case_public", 2)
+        m.put("STP_pi_public_rate", 0.01)
+        m.put("STP_pw_army_org_factor", 0.15)
+        for current in (3, 2, 5, 1, 6, 4, 3):
+            m.set_government(current)
+            for _ in range(2):
+                m.run(self.effects["STP_pi_refresh"])
+            self.assertAlmostEqual(m.get("STP_pw_army_org_factor"), 0.17 if current == 3 else 0.15)
+            self.assertAlmostEqual(m.get("STP_pi_training_delta"), -0.1 if current == 3 else 0)
+            self.assertAlmostEqual(m.get("STP_pi_social_delta"), 0.1 if current == 2 else 0)
+            self.assertAlmostEqual(m.get("STP_pi_public_delta"), 0.02 if current == 5 else 0)
+            self.assertEqual(m.get("STP_pi_cadre_instructors"), 4000)
+            self.assertEqual(m.get("STP_pi_cadre_reserve"), 2000)
+            self.assertEqual(m.get("STP_pi_festival_districts"), 2)
+            self.assertEqual(m.get("STP_pi_case_public"), 2)
+
     def test_house_deposit_blocks_second_project_and_refunds_once(self):
-        m = self.model()
+        m = self.model(1)
         self.action(m, "STP_pi_house_road")
         self.assertEqual(m.get("ADISCORD_economy_treasury"), 9600)
         self.assertEqual(m.get("STP_pi_house_slots"), 1)
@@ -797,7 +1318,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
         self.assertEqual(m.deliveries, [])
 
     def test_house_delivery_rechecks_site_and_retains_material_after_buyout(self):
-        m = self.model()
+        m = self.model(1)
         self.action(m, "STP_pi_house_workshop")
         m.facts[("FROM", "fixture_workshop_site", "yes")] = False
         self.action(m, "STP_pi_house_workshop", "remove_effect")
@@ -817,7 +1338,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
         self.assertEqual(len(m.deliveries), 2)
 
     def test_house_final_expands_capacity_without_resetting_existing_compacts(self):
-        m = self.model()
+        m = self.model(1)
         m.put("STP_pi_house_slots", 3)
         self.assertFalse(m.condition(self.triggers["STP_pi_house_capacity"]))
         m.facts[("STP", "has_completed_focus", "STP_pe_houses_ending_b")] = True
@@ -827,7 +1348,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
 
     def test_cadres_are_paid_once_with_exact_fractional_manpower_boundary(self):
         for manpower, paid in ((5999.9, False), (6000, True)):
-            m = self.model()
+            m = self.model(3)
             m.facts[("STP", "numeric", "has_manpower")] = manpower
             self.action(m, "STP_pi_cadre_enrol")
             self.assertEqual(m.get("STP_pi_cadre_deposit"), 450 if paid else 0)
@@ -841,7 +1362,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
                 self.assertEqual(m.get("ADISCORD_economy_treasury"), 9550)
 
     def test_cadre_assignments_and_mobilisation_conserve_people(self):
-        m = self.model()
+        m = self.model(3)
         self.action(m, "STP_pi_cadre_enrol")
         self.action(m, "STP_pi_cadre_enrol", "remove_effect")
         self.action(m, "STP_pi_cadre_instructors")
@@ -856,7 +1377,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
         self.assertEqual(len(m.deliveries), 1)
 
     def test_artel_escrow_blocks_other_targets_and_refunds_people_and_money(self):
-        m = self.model()
+        m = self.model(3)
         m.put("STP_pi_cadre_free", 6000)
         self.action(m, "STP_pi_artel_road")
         self.assertEqual(m.get("STP_pi_cadre_free"), 4000)
@@ -872,7 +1393,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
         self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000)
 
     def test_northern_request_never_charges_before_consent(self):
-        m = self.model()
+        m = self.model(6)
         self.action(m, "STP_pi_north_training")
         self.action(m, "STP_pi_north_equipment")
         self.assertEqual(m.get("STP_pi_north_offer"), 1)
@@ -886,12 +1407,12 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
 
     def test_northern_consent_rechecks_both_prices_and_refunds_exact_receipts(self):
         for scope, amount in (("STP", 299.9), ("NOD", 599.9)):
-            m = self.model()
+            m = self.model(6)
             self.action(m, "STP_pi_north_training")
             m.put("ADISCORD_economy_treasury", amount, scope)
             m.run(self.effects["STP_pi_north_accept"])
             self.assertFalse(m.get("STP_pi_north_deposit"))
-        m = self.model()
+        m = self.model(6)
         self.action(m, "STP_pi_north_equipment")
         m.run(self.effects["STP_pi_north_accept"])
         m.run(self.effects["STP_pi_north_accept"])
@@ -906,7 +1427,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
         self.assertFalse(m.deliveries)
 
     def test_northern_final_and_buyout_keep_delivered_research(self):
-        m = self.model()
+        m = self.model(6)
         m.put("STP_pw_research_speed_factor", 0.12)
         self.action(m, "STP_pi_north_training")
         m.run(self.effects["STP_pi_north_accept"])
@@ -924,7 +1445,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
         self.assertAlmostEqual(m.get("STP_pw_planning_speed"), 0.05)
 
     def test_northern_settlement_removes_old_timers_before_another_offer(self):
-        m = self.model()
+        m = self.model(6)
         self.action(m, "STP_pi_north_training")
         self.assertTrue(m.facts[("STP", "has_decision", "STP_pi_north_reply")])
         m.run(self.effects["STP_pi_north_decline"])
@@ -943,7 +1464,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
     def test_both_northern_finales_enable_specialist_replacement_without_schools(self):
         for side in ("a", "b"):
             with self.subTest(side=side):
-                m = self.model()
+                m = self.model(6)
                 m.facts[("STP", "has_completed_focus", f"STP_pe_regent_ending_{side}")] = True
                 m.facts[("STP", "has_completed_focus", "STP_party_regent_guarantees")] = True
                 m.put("STP_pi_north_obligations", 3)
@@ -987,7 +1508,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
             "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt"))}
         consumers = {e.key: e.value for e in dynamics["STP_pw_party_dynamic"]}
         for role in ("instructors", "reserve"):
-            m = self.model()
+            m = self.model(3)
             m.put("STP_pi_cadre_free", 2000)
             self.action(m, "STP_pi_cadre_" + role)
             preview = block(ideas["STP_pi_cadre_" + role + "_delta"], "modifier")
@@ -999,7 +1520,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
         for name in ("STP_pi_house_road", "STP_pi_house_workshop",
                      "STP_pi_artel_road", "STP_pi_artel_workshop"):
             with self.subTest(decision=name):
-                m = self.model()
+                m = self.model(1 if name.startswith("STP_pi_house_") else 3)
                 m.put("STP_pi_cadre_free", 2000)
                 shown = block(block(self.decisions[name], "complete_effect"), "effect_tooltip")
                 preview = [(e.key, tuple((x.key, x.value) for x in e.value)
@@ -1016,7 +1537,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
                 self.assertTrue(preview)
 
     def test_supplier_expansion_preview_matches_delayed_permanent_delta(self):
-        m = self.model()
+        m = self.model(4)
         reward = block(self.decisions["STP_pi_trade_expand"], "complete_effect")
         preview = block(reward, "effect_tooltip")
         idea = scalar(preview, "add_ideas")
@@ -1029,7 +1550,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
             self.assertAlmostEqual(m.get("STP_pw_" + modifier.key), float(modifier.value))
 
     def test_enrolment_cancel_restores_real_people_and_exact_money_once(self):
-        m = self.model()
+        m = self.model(3)
         self.action(m, "STP_pi_cadre_enrol")
         self.action(m, "STP_pi_cadre_enrol", "cancel_effect")
         self.action(m, "STP_pi_cadre_enrol", "remove_effect")
@@ -1038,7 +1559,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
         self.assertEqual(m.get("STP_pi_cadre_free"), 0)
 
     def test_northern_factory_rechecks_site_and_equipment_delivers_only_once(self):
-        m = self.model()
+        m = self.model(6)
         self.action(m, "STP_pi_north_industry")
         m.run(self.effects["STP_pi_north_accept"])
         m.facts[("STP", "STP_pi_has_workshop_site", "yes")] = False
@@ -1066,7 +1587,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
         self.assertFalse(any(e.key == "trigger" for e in options[0]))
         self.assertTrue(any(e.key == "STP_pi_north_decline" for e in walk(options[0])))
         for name in ("STP_pi_north_reply", "STP_pi_north_delivery"):
-            self.assertFalse(self.model().condition(block(self.decisions[name], "available")))
+            self.assertFalse(self.model(6).condition(block(self.decisions[name], "available")))
         self.assertGreater(int(scalar(self.decisions["STP_pi_north_reply"], "days_mission_timeout")), 15)
 
     def test_all_new_costs_and_visible_text_have_complete_bilingual_values(self):
@@ -1086,7 +1607,7 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
             self.assertFalse(keys - values.keys(), sorted(keys - values.keys()))
 
     def test_refresh_is_idempotent_and_preserves_other_focus_rewards(self):
-        m = self.model()
+        m = self.model(3)
         m.put("STP_pw_ADISCORD_economy_overall_income_factor", 0.4)
         m.put("STP_pw_army_org_factor", 0.15)
         m.put("STP_pw_training_time_factor", -0.1)
@@ -1175,7 +1696,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         for route in ROUTES:
             for side in ("a", "b"):
                 with self.subTest(route=route, finale=side):
-                    m = self.model()
+                    m = self.model(ROUTES.index(route) + 1)
                     for key, value in retained.items():
                         m.put("STP_pi_" + key, value)
                     for key in aggregates:
@@ -1210,7 +1731,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
                         self.assertAlmostEqual(m.get("STP_pw_ADISCORD_economy_overall_income_factor"), 0.02)
 
     def test_northern_equipment_offer_and_summary_match_delivery(self):
-        m = self.model()
+        m = self.model(6)
         self.action(m, "STP_pi_north_equipment")
         m.run(self.effects["STP_pi_north_accept"])
         m.run(self.effects["STP_pi_north_finish"])
@@ -1231,7 +1752,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         model.facts[("FROM", "has_state_flag", "STP_pi_festival_rest")] = False
 
     def test_public_visits_diminish_without_regranting_coverage(self):
-        m = self.model()
+        m = self.model(2)
         for expected in (0.03, 0.05, 0.06, 0.07):
             self.rest_district(m)
             self.action(m, "STP_pi_festival_public")
@@ -1246,7 +1767,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         self.assertAlmostEqual(m.get("STP_pw_ADISCORD_country_development_social_system_growth_factor"), 0.075)
 
     def test_lost_district_refunds_once_and_frees_booking_and_load(self):
-        m = self.model()
+        m = self.model(2)
         self.action(m, "STP_pi_festival_club")
         self.assertEqual(m.get("ADISCORD_economy_treasury"), 9400)
         self.assertEqual(m.get("STP_pi_festival_reserved"), 1)
@@ -1258,7 +1779,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
             self.assertEqual(m.get("STP_pi_festival_" + name), 0)
 
     def test_club_load_costs_and_clinics_leave_cadre_and_focus_bonuses(self):
-        m = self.model()
+        m = self.model(2)
         m.put("STP_pw_ADISCORD_economy_admin_expense_factor", -0.1)
         m.put("STP_pi_cadre_instructors", 2000)
         for _ in range(4):
@@ -1278,7 +1799,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         self.assertEqual(m.get("STP_pi_festival_reserved"), 2)
 
     def test_club_final_keeps_paid_quote_and_increases_next_quote(self):
-        m = self.model()
+        m = self.model(2)
         self.action(m, "STP_pi_festival_club")
         self.complete_focus(m, "STP_pe_festival_ending_b")
         self.action(m, "STP_pi_festival_club", "remove_effect")
@@ -1288,7 +1809,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         self.assertEqual(m.get("STP_pi_festival_quote", "FROM"), 1800)
 
     def test_paid_club_reserves_last_load_slot(self):
-        m = self.model()
+        m = self.model(2)
         m.put("STP_pi_festival_reserved", 5)
         m.put("STP_pi_festival_load", 5)
         self.action(m, "STP_pi_festival_club")
@@ -1298,7 +1819,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         self.assertEqual(m.get("STP_pi_festival_reserved"), 5)
 
     def test_medical_project_refunds_if_public_visits_already_cleared_load(self):
-        m = self.model()
+        m = self.model(2)
         m.put("STP_pi_festival_load", 1)
         self.action(m, "STP_pi_festival_medical")
         m.put("STP_pi_festival_load", 0)
@@ -1307,7 +1828,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000)
 
     def test_portfolio_capacity_and_product_receipt_prevent_second_debit(self):
-        m = self.model()
+        m = self.model(4)
         self.action(m, "STP_pi_trade_rifles_standard")
         self.action(m, "STP_pi_trade_rifles_standard")
         self.action(m, "STP_pi_trade_support_standard")
@@ -1320,7 +1841,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         self.assertEqual(m.get("STP_pi_trade_busy"), 3)
 
     def test_supplier_and_final_upgrades_do_not_reprice_paid_series(self):
-        m = self.model()
+        m = self.model(4)
         self.complete_focus(m, "STP_party_trade_tenders")
         self.action(m, "STP_pi_trade_rifles_series")
         self.assertEqual(m.get("STP_pi_trade_rifles_quote"), 27000)
@@ -1336,7 +1857,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         for mode, cost, refund in (("standard", 600, 540), ("rush", 900, 675), ("series", 1200, 900)):
             for insured in (False, True):
                 with self.subTest(mode=mode, insured=insured):
-                    m = self.model()
+                    m = self.model(4)
                     self.complete_focus(m, "STP_party_trade_tenders")
                     self.complete_focus(m, "STP_party_trade_imports")
                     name = "STP_pi_trade_support_" + mode
@@ -1352,7 +1873,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
                     self.assertFalse(m.deliveries)
 
     def test_forced_cancel_returns_full_price_and_wrong_mode_cannot_deliver(self):
-        m = self.model()
+        m = self.model(4)
         self.action(m, "STP_pi_trade_trucks_standard")
         self.action(m, "STP_pi_trade_trucks_rush", "remove_effect")
         self.assertFalse(m.deliveries)
@@ -1362,7 +1883,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         self.assertEqual(m.get("STP_pi_trade_busy"), 0)
 
     def test_supplier_expansion_shares_capacity_and_caps_at_three(self):
-        m = self.model()
+        m = self.model(4)
         m.put("STP_pw_production_factory_max_efficiency_factor", 0.15)
         for _ in range(4):
             self.action(m, "STP_pi_trade_expand")
@@ -1373,7 +1894,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         self.assertEqual(m.get("STP_pi_trade_busy"), 0)
 
     def test_quick_case_requires_commission_to_reopen_and_is_finite(self):
-        m = self.model()
+        m = self.model(5)
         self.action(m, "STP_pi_case_orders_quick")
         self.action(m, "STP_pi_case_orders_quick", "remove_effect")
         self.action(m, "STP_pi_case_orders_quick")
@@ -1391,7 +1912,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         self.assertEqual(m.get("STP_pi_case_credits"), 0)
 
     def test_network_capacity_and_case_cancellation_release_team_once(self):
-        m = self.model()
+        m = self.model(5)
         self.action(m, "STP_pi_case_orders_full")
         self.action(m, "STP_pi_case_supply_full")
         self.assertEqual(m.get("STP_pi_case_busy"), 1)
@@ -1405,7 +1926,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         self.assertEqual(m.get("ADISCORD_economy_treasury"), 9550)
 
     def test_public_final_is_retroactive_and_refresh_keeps_case_bonuses(self):
-        m = self.model()
+        m = self.model(5)
         m.put("STP_pw_stability_factor", 0.1)
         for case in ("orders", "supply", "property"):
             self.action(m, f"STP_pi_case_{case}_full")
@@ -1419,7 +1940,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         self.assertAlmostEqual(m.get("STP_pw_production_speed_industrial_complex_factor"), 0.05)
 
     def test_archive_final_grants_second_use_even_after_first_was_spent(self):
-        m = self.model()
+        m = self.model(5)
         for case in ("orders", "supply", "property"):
             self.action(m, f"STP_pi_case_{case}_full")
             self.action(m, f"STP_pi_case_{case}_full", "remove_effect")
@@ -1440,7 +1961,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
     def test_exact_affordability_and_receipt_survive_new_campaign_initializer(self):
         for balance, paid in ((599.99, False), (600, True)):
             with self.subTest(balance=balance):
-                m = self.model()
+                m = self.model(4)
                 m.put("ADISCORD_economy_treasury", balance)
                 self.action(m, "STP_pi_trade_rifles_standard")
                 m.run(self.effects["STP_pi_initialize"])
@@ -1453,7 +1974,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
             if e.key.startswith("STP_pi_case_") and isinstance(e.value, list)}
         for case in ("orders", "supply", "property"):
             with self.subTest(case=case):
-                m = self.model()
+                m = self.model(5)
                 m.put(f"STP_pi_case_{case}_stage", 1)
                 self.action(m, f"STP_pi_case_{case}_public")
                 for modifier in block(ideas[f"STP_pi_case_{case}_delta"], "modifier"):

@@ -435,16 +435,14 @@ APPLIED_PROGRAMMES = (
 
 APPLIED_EFFECTS = {
     "trauma_registry_networks": (
-        "field_hospital = { casualty_trickleback = 0.03 experience_loss_factor = -0.02 }",
-        "category_all_infantry = { default_morale = 0.02 }",
+        'field_hospital = { casualty_trickleback = 0.03 experience_loss_factor = -0.02 }',
     ),
     "rapid_casualty_corridors": (
         "field_hospital = { casualty_trickleback = 0.05 supply_consumption = -0.02 }",
         "land_reinforce_rate = 0.005",
     ),
     "forward_surgical_cells": (
-        "field_hospital = { experience_loss_factor = -0.04 casualty_trickleback = 0.03 }",
-        "category_all_infantry = { max_organisation = 1 }",
+        'field_hospital = { experience_loss_factor = -0.04 casualty_trickleback = 0.03 }',
     ),
     "predictive_blood_logistics": (
         "field_hospital = { supply_consumption = -0.04 casualty_trickleback = 0.04 }",
@@ -463,12 +461,11 @@ APPLIED_EFFECTS = {
         "attrition = -0.01",
     ),
     "distributed_combat_medicine": (
-        "field_hospital = { casualty_trickleback = 0.08 experience_loss_factor = -0.05 supply_consumption = -0.04 }",
-        "category_all_infantry = { default_morale = 0.04 }",
+        'field_hospital = { casualty_trickleback = 0.08 experience_loss_factor = -0.05 supply_consumption = -0.04 }',
     ),
     "battle_damage_survey_teams": (
-        "industry_repair_factor = 0.03",
-        "category_support_battalions = { defense = 0.02 }",
+        'engineer = { entrenchment = 0.5 defense = 0.03 }',
+        'ADISCORD_regimental_pioneers = { entrenchment = 0.15 defense = 0.02 }',
     ),
     "assault_breaching_packages": (
         "engineer = { breakthrough = 0.05 soft_attack = 0.03 }",
@@ -498,9 +495,8 @@ APPLIED_EFFECTS = {
         "industry_repair_factor = 0.05",
     ),
     "integrated_engineer_command": (
-        "engineer = { breakthrough = 0.10 defense = 0.08 }",
-        "category_support_battalions = { max_organisation = 2 }",
-        "planning_speed = 0.04",
+        'engineer = { breakthrough = 0.10 defense = 0.08 }',
+        'ADISCORD_regimental_pioneers = { breakthrough = 0.05 defense = 0.04 }',
     ),
     "spectrum_threat_libraries": (
         "encryption_factor = 0.02",
@@ -544,9 +540,7 @@ APPLIED_EFFECTS = {
         "air_mission_efficiency = 0.03",
     ),
     "restored_airlift_planning": (
-        "air_mission_efficiency = 0.02",
-        "air_mission_xp_gain_factor = 0.03",
-        "supply_consumption_factor = -0.005",
+        'transport_plane = { reliability = 0.04 }',
     ),
     "forward_tiltrotor_basing": (
         "air_cas_present_factor = 0.03",
@@ -559,14 +553,10 @@ APPLIED_EFFECTS = {
         "supply_consumption_factor = -0.01",
     ),
     "vertical_envelopment_control": (
-        "air_cas_efficiency = 0.04",
-        "planning_speed = 0.03",
-        "land_reinforce_rate = 0.005",
+        'transport_plane = { air_defence = 0.08 air_range = 0.05 }',
     ),
     "precision_aerial_resupply": (
-        "air_mission_efficiency = 0.04",
-        "supply_consumption_factor = -0.02",
-        "air_accidents_factor = -0.015",
+        'transport_plane = { air_range = 0.10 reliability = 0.06 }',
     ),
     "distributed_assault_landing_zones": (
         "air_cas_present_factor = 0.05",

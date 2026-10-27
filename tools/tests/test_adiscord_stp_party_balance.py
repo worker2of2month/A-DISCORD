@@ -1,3 +1,4 @@
+from dataclasses import replace
 from pathlib import Path
 from tools.lib.focus_sources import read_focus_source
 import re
@@ -208,53 +209,86 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
             self.assertIn(f"has_political_power < {pp}", price)
             self.assertIn(f"value = {cash}", price)
             self.assertEqual(reward.count(f"add_political_power = -{pp}"), 1)
-            if action == "staff_readiness":
-                self.assertIn("has_war_with = NOD", reward)
-                self.assertNotIn("STP_pw_party_nod_threat_current", reward)
-            else:
-                self.assertIn("STP_pw_party_nod_threat_current = yes", reward)
+            self.assertIn("STP_pw_party_nod_threat_current = yes", reward)
             key = f"STP_pw_party_nod_{action}_cost"
             for suffix in ("", "_blocked", "_tooltip"):
                 self.assertIn(key + suffix + ":", self.loc)
 
-    def test_northern_staff_plan_requires_its_war_and_ends_at_peace(self) -> None:
+    def test_northern_staff_plan_can_be_prepared_before_war(self) -> None:
         decision_id = "STP_pw_party_nod_staff_readiness"
         decision = one(parse_clausewitz(named_block(self.decisions, decision_id)), decision_id)
-        idea_id = decision_id + "_idea"
-        idea = one(parse_clausewitz(named_block(self.ideas, idea_id)), idea_id)
+        ready_id = "STP_pw_party_nod_staff_prepared"
+        active_id = decision_id + "_idea"
+        ready = one(parse_clausewitz(named_block(self.ideas, ready_id)), ready_id)
+        active = one(parse_clausewitz(named_block(self.ideas, active_id)), active_id)
         self.assertEqual(one(decision, "fire_only_once"), "yes")
-        self.assertNotIn("STP_pw_party_nod_staff_ready", str(decision))
+        self.assertEqual(one(ready, "modifier"), [])
         reward = one(one(decision, "complete_effect"), "hidden_effect")
-        for war_with_nod, war_with_val in ((False, False), (False, True), (True, False), (True, True)):
+        activation = one(parse_clausewitz(self.effects), "STP_pw_party_activate_nod_staff_plan")
+        for threat, war, other_war in (
+            (False, False, False), (False, False, True),
+            (True, False, False), (True, False, True), (False, True, False),
+        ):
             for pp, cash in ((35, 720), (34.99, 720), (35, 719.99)):
                 facts = {
                     ("STP", "tag", "STP"): True,
                     ("STP", "has_country_flag", "STP_cw_postwar"): True,
-                    ("STP", "has_country_flag", "STP_pw_party_nod_threat_active"): not war_with_nod,
-                    ("STP", "has_war_with", "NOD"): war_with_nod,
-                    ("STP", "has_war_with", "VAL"): war_with_val,
+                    ("STP", "STP_pw_party_nod_threat_current", "yes"): threat,
+                    ("STP", "has_war_with", "NOD"): war,
+                    ("STP", "has_war_with", "VAL"): other_war,
                     ("STP", "is_subject", "no"): True,
                     ("STP", "has_capitulated", "no"): True,
                     ("STP", "numeric", "has_political_power"): pp,
                     ("STP", "variable", "ADISCORD_economy_treasury"): cash,
                 }
-                with self.subTest(war=war_with_nod, other_war=war_with_val, pp=pp, cash=cash):
-                    self.assertTrue(matches_conditions(one(decision, "visible"), facts))
-                    self.assertEqual(matches_conditions(one(decision, "available"), facts), war_with_nod)
-                    self.assertEqual(matches_conditions(one(idea, "cancel"), facts), not war_with_nod)
+                with self.subTest(threat=threat, war=war, other_war=other_war, pp=pp, cash=cash):
+                    self.assertEqual(matches_conditions(one(decision, "visible"), facts), threat or war)
+                    self.assertEqual(matches_conditions(one(decision, "available"), facts), threat or war)
+                    self.assertEqual(matches_conditions(one(ready, "cancel"), facts), not (threat or war))
+                    self.assertEqual(matches_conditions(one(active, "cancel"), facts), not war)
                     effects = [effect for _, effect in selected_effects(reward, facts)]
-                    paid = war_with_nod and pp >= 35 and cash >= 720
-                    self.assertEqual(sum(effect.key == "add_timed_idea" for effect in effects), int(paid))
-                    self.assertEqual(sum(effect.key == "add_political_power" for effect in effects), int(paid))
-                    self.assertEqual(sum(effect.key == "subtract_from_variable" for effect in effects), int(paid))
-                    if paid:
-                        timed = next(effect.value for effect in effects if effect.key == "add_timed_idea")
-                        self.assertEqual(one(timed, "idea"), idea_id)
+                    paid = (threat or war) and pp >= 35 and cash >= 720
+                    for key in ("add_ideas", "add_political_power", "subtract_from_variable", "STP_pw_party_activate_nod_staff_plan"):
+                        self.assertEqual(sum(effect.key == key for effect in effects), int(paid))
+                    self.assertFalse(any(effect.key == "add_timed_idea" for effect in effects))
+                    facts[("STP", "has_idea", ready_id)] = paid
+                    grants = [effect for _, effect in selected_effects(activation, facts)]
+                    self.assertEqual(sum(effect.key == "add_timed_idea" for effect in grants), int(paid and war))
+                    if paid and war:
+                        timed = next(effect.value for effect in grants if effect.key == "add_timed_idea")
+                        self.assertEqual(one(timed, "idea"), active_id)
                         self.assertEqual(one(timed, "days"), "180")
+                        self.assertIn(ready_id, [effect.value for effect in grants if effect.key == "remove_ideas"])
+                        facts[("STP", "has_idea", ready_id)] = False
+                        self.assertEqual(list(selected_effects(activation, facts)), [])
         for language in ("russian", "english"):
             loc = ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml"
             self.assertTrue(loc.read_bytes().startswith(b"\xef\xbb\xbf"))
-            self.assertRegex(read(loc), r'(?m)^ STP_pw_party_nod_staff_readiness_peace_tt: "[^"\n]+"$')
+            for key in (ready_id, ready_id + "_desc", decision_id + "_peace_tt"):
+                self.assertRegex(read(loc), r'(?m)^ ' + key + r': "[^"\n]+"$')
+
+    def test_prepared_northern_plan_survives_dispatch_and_closes_with_threat(self) -> None:
+        ready_id = "STP_pw_party_nod_staff_prepared"
+        ready = one(parse_clausewitz(named_block(self.ideas, ready_id)), ready_id)
+        cancel = one(ready, "cancel")
+        transition = {("STP", "has_country_flag", "STP_pw_party_nod_invasion_active"): True}
+        self.assertFalse(matches_conditions(cancel, transition))
+        self.assertTrue(matches_conditions(cancel, {}))
+        for terminal in (("STP", "is_subject", "yes"), ("STP", "has_capitulated", "yes"), ("NOD", "exists", "no")):
+            self.assertTrue(matches_conditions(cancel, transition | {terminal: True}))
+        hooks = one(parse_clausewitz(read(ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt")), "on_actions")
+        hook = one(one(hooks, "on_war_relation_added"), "effect")
+        for root, other in (("STP", "NOD"), ("NOD", "STP"), ("STP", "VAL")):
+            def bind_scopes(nodes):
+                return [replace(node, key={"ROOT": root, "FROM": other}.get(node.key, node.key),
+                                value=bind_scopes(node.value) if isinstance(node.value, list) else node.value)
+                        for node in nodes]
+
+            calls = [(scope, effect) for scope, effect in selected_effects(bind_scopes(hook), {}, root)
+                     if effect.key == "STP_pw_party_activate_nod_staff_plan"]
+            self.assertEqual(len(calls), int(other != "VAL"))
+            if calls:
+                self.assertEqual(calls[0][0], "STP")
 
     def test_sovereignty_dispatch_does_not_read_its_own_completion(self) -> None:
         start = named_block(self.effects, "STP_pw_party_start_nod_invasion_threat")
@@ -349,7 +383,7 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
                 }
                 self.assertEqual(matches_conditions(price, facts), expected)
 
-    def test_prewar_settlement_eases_but_does_not_lock_postwar_course(self) -> None:
+    def test_postwar_institutions_do_not_require_faction_consent(self) -> None:
         parsed = parse_clausewitz(
             read(ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt")
         )
@@ -369,9 +403,9 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
             ),
         ):
             for prepared, support, expected in (
-                (False, 49.99, False),
+                (False, 0, True),
                 (False, 50, True),
-                (True, 34.99, False),
+                (True, 0, True),
                 (True, 35, True),
             ):
                 facts = {
@@ -382,6 +416,12 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
                 self.assertEqual(
                     matches_conditions(one(focuses[fid], "available"), facts), expected
                 )
+            self.assertFalse(
+                matches_conditions(
+                    one(focuses[fid], "available"),
+                    facts | {("STP", "STP_pw_can_reconstruct", "yes"): False},
+                )
+            )
         for fid in ("STP_pw_party_northern_protocol", "STP_pw_party_protectorate"):
             self.assertTrue(
                 matches_conditions(
@@ -391,13 +431,6 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
 
     def test_ai_negotiates_for_the_pending_reform_only_until_consent(self) -> None:
         for faction, prerequisite, capstone, threshold in (
-            ("borons", "STP_party_local_cadres", "STP_pw_party_district_congress", 50),
-            (
-                "security",
-                "STP_party_chain_of_command",
-                "STP_pw_party_executive_secretariat",
-                50,
-            ),
             (
                 "merchants",
                 "STP_party_port_contracts",

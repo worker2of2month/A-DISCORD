@@ -142,6 +142,7 @@ class FrontAllocationLifecycleTests(unittest.TestCase):
         self.goals = set()
         self.justifying = set()
         self.preparation = {}
+        self.return_targets = set()
         self.neighbors = {tag: set(self.countries) - {tag} for tag in self.countries}
 
     def evaluate(self, entries, scope, actor, previous=None):
@@ -150,6 +151,10 @@ class FrontAllocationLifecycleTests(unittest.TestCase):
 
         def matches(entry):
             key, value = entry.key, entry.value
+            if key == "tag":
+                return scope == value
+            if key == "NAM_ai_war_of_return_target":
+                return (scope in self.return_targets) == (value == "yes")
             if key in ("AND", "OR", "NOT"):
                 results = [
                     self.evaluate([child], scope, actor, previous) for child in value
@@ -234,6 +239,22 @@ class FrontAllocationLifecycleTests(unittest.TestCase):
         self.assertEqual(self.request("STS", "STP"), 50)
         self.assertEqual(self.request("STS", "NOD"), 50)
         self.assertEqual(self.request("STS", "VAL"), -100)
+
+    def test_return_war_allocates_against_a_human_field_owner_without_ai_score(self):
+        self.countries["NAM"] = {"ai": True, "capitulated": False, "faction": None}
+        self.neighbors["NAM"] = {"VAL"}
+        self.neighbors["VAL"].add("NAM")
+        self.countries["VAL"]["ai"] = False
+        self.wars.clear()
+        self.return_targets.add("VAL")
+        self.assertEqual(self.request("NAM", "VAL"), 50)
+        self.assertEqual(self.request("NAM", "STP"), -100)
+        self.assertEqual(self.request("VAL", "NAM"), 0)
+        self.countries["VAL"]["ai"] = True
+        self.countries["NAM"]["ai"] = False
+        self.assertEqual(self.request("VAL", "NAM"), 50)
+        self.return_targets.clear()
+        self.assertEqual(self.request("VAL", "NAM"), 0)
 
     def test_capitulated_enemy_retains_front_and_liberation_needs_no_reset(self):
         self.countries["STP"]["capitulated"] = True
@@ -359,6 +380,7 @@ class PreparationLifecycleTests(unittest.TestCase):
         self.decisions = set()
         self.focuses = {}
         self.completed = set()
+        self.ideas = set()
         self.variables = {}
         self.stats = {
             "num_divisions": 20,
@@ -385,6 +407,8 @@ class PreparationLifecycleTests(unittest.TestCase):
                 }[key]
             if key in self.tags and isinstance(value, list):
                 return self.evaluate(value, key, root)
+            if key == "custom_trigger_tooltip":
+                return self.evaluate([child for child in value if child.key != "tooltip"], scope, root)
             if key in self.facts:
                 return self.facts[key] == (value == "yes")
             if key in self.triggers:
@@ -412,6 +436,12 @@ class PreparationLifecycleTests(unittest.TestCase):
                 return (scope, value) in self.decisions
             if key == "has_completed_focus":
                 return (scope, value) in self.completed
+            if key == "has_variable":
+                return (scope, value) in self.variables
+            if key == "has_idea":
+                return (scope, value) in self.ideas
+            if key == "owns_state":
+                return self.facts.get((scope, "owns_state", value), False)
             if key == "focus_progress":
                 focus = next(child.value for child in value if child.key == "focus")
                 tokens = [child.value for child in value if not child.key]
@@ -536,6 +566,7 @@ class PreparationLifecycleTests(unittest.TestCase):
 
     def test_postwar_focus_cancel_and_completion_release_threat(self):
         self.facts["STP_pc_focus_available"] = True
+        self.facts["STP_pc_can_launch_val_liberation"] = False
         self.humans.add("STS")
         self.focuses["STS"] = "STP_pc_heg_val_force"
         self.assertTrue(self.active("STP_pc_prepare_VAL_STS", "VAL"))
@@ -544,9 +575,17 @@ class PreparationLifecycleTests(unittest.TestCase):
         self.focuses["STS"] = "STP_pc_heg_val_force"
         self.completed.add(("STS", "STP_pc_heg_val_force"))
         self.assertFalse(self.active("STP_pc_prepare_VAL_STS", "VAL"))
+        self.variables["STS", "STP_pc_val_campaign_deposit"] = 100
+        self.assertTrue(self.active("STP_pc_prepare_VAL_STS", "VAL"))
+        self.variables.clear()
+        self.ideas.add(("STS", "STP_pc_val_campaign_ready"))
+        self.assertTrue(self.active("STP_pc_prepare_VAL_STS", "VAL"))
+        self.ideas.clear()
+        self.assertFalse(self.active("STP_pc_prepare_VAL_STS", "VAL"))
 
     def test_frontier_guarantees_follow_target_and_allow_only_named_subjects(self):
         self.facts["VAL_frontier_prewar_eligible"] = True
+        self.facts["VAL_stelander_dominated"] = True
         self.variables[("VAL", "VAL_frontier_stage")] = 1
         self.variables[("VAL", "VAL_frontier_target")] = 1
         self.subjects["NOD"] = "STP"
@@ -560,6 +599,96 @@ class PreparationLifecycleTests(unittest.TestCase):
         self.variables[("VAL", "VAL_frontier_target")] = 1
         self.flags["STS"].add("STP_cw_won_union_battle")
         self.assertTrue(self.active("VAL_frontier_prepare_NOD_VAL", "NOD"))
+        self.facts["VAL_stelander_dominated"] = False
+        self.assertFalse(self.active("VAL_frontier_prepare_NOD_VAL", "NOD"))
+
+    def test_return_war_focus_warns_current_owners_and_releases_on_cancel(self):
+        self.facts["NAM_war_of_return_can_start"] = True
+        self.facts["NAM_wor_exile_war_ready"] = False
+        self.facts["NAM_wor_target_valid"] = True
+        self.facts["ADISCORD_nam_resource_war_preparation"] = False
+        self.facts["EFL", "owns_state", "67"] = True
+        self.facts["VAL", "owns_state", "688"] = True
+        for focus in ("NAM_defeat_war_of_return", "NAM_rad_war_of_return",
+                      "NAM_hum_war_of_return", "NAM_board_war_of_return"):
+            with self.subTest(focus=focus):
+                self.focuses["NAM"] = focus
+                for owner, expected in (("EFL", True), ("VAL", True), ("AZH", False)):
+                    self.assertEqual(self.active("ADISCORD_nam_war_of_return_prepare_defence", owner), expected)
+                self.assertTrue(self.active("ADISCORD_NAM_prepare_against_EFL", "NAM"))
+                self.assertFalse(self.active("ADISCORD_NAM_prepare_against_AZH", "NAM"))
+        self.humans.add("NAM")
+        self.assertTrue(self.active("ADISCORD_nam_war_of_return_prepare_defence", "VAL"))
+        self.focuses.clear()
+        self.assertFalse(self.active("ADISCORD_nam_war_of_return_prepare_defence", "VAL"))
+        self.focuses["NAM"] = "NAM_defeat_war_of_return"
+        self.facts["EFL", "owns_state", "67"] = False
+        self.assertFalse(self.active("ADISCORD_nam_war_of_return_prepare_defence", "EFL"))
+        self.facts["NAM_wor_exile_war_ready"] = True
+        self.assertTrue(self.active("ADISCORD_nam_war_of_return_prepare_defence", "EFL"))
+        self.assertTrue(self.active("ADISCORD_nam_war_of_return_prepare_defence", "AZH"))
+        self.assertFalse(self.active("ADISCORD_nam_war_of_return_prepare_defence", "VAL"))
+        self.facts["NAM_war_of_return_can_start"] = False
+        self.assertFalse(self.active("ADISCORD_nam_war_of_return_prepare_defence", "EFL"))
+
+    def test_rus_border_campaign_preparation_survives_shortages_but_not_settlement(self):
+        for folder, name, definitions in (
+            ("ai_strategy", "ADISCORD_RUS_ai", self.profiles),
+            ("scripted_triggers", "ADISCORD_RUS_scripted_triggers", self.triggers),
+        ):
+            definitions.update({
+                e.key: e.value for e in parse_clausewitz(
+                    (ROOT / f"common/{folder}/{name}.txt").read_text(encoding="utf-8")
+                )
+            })
+        targets = ("SLA", "RZA", "MLR", "ERT", "IRT", "SCA")
+        for tag in ("RUS", *targets):
+            self.tags.add(tag)
+            self.flags[tag] = set()
+        self.facts["RUS_ai_proclamation_pending"] = False
+        for target in targets:
+            self.facts[f"ADISCORD_vorkerland_rus_borders_dirty_{target.lower()}"] = True
+        self.facts["ADISCORD_ai_army_needs_replacements"] = True
+        for target in targets:
+            with self.subTest(target=target):
+                focus = "RUS_drive_starolesye_back" if target == "SLA" else "RUS_press_the_closed_zone"
+                self.focuses["RUS"] = focus
+                name = f"RUS_prepare_dirty_campaign_{target}"
+                self.assertTrue(self.active(name, "RUS"))
+                self.assertTrue(self.active("RUS_dirty_campaign_prepare_defence", target))
+                self.focuses.clear()
+                self.assertFalse(self.active(name, "RUS"))
+                self.completed.add(("RUS", focus))
+                self.assertTrue(self.active(name, "RUS"))
+                self.wars.add(frozenset(("RUS", target)))
+                self.assertFalse(self.active(name, "RUS"))
+                self.wars.clear()
+                self.flags["RUS"].add(f"ADISCORD_vorkerland_rus_{target.lower()}_absorbed")
+                self.assertFalse(self.active(name, "RUS"))
+                self.flags["RUS"].clear()
+                self.completed.clear()
+
+    def test_rus_new_campaigns_wait_for_replacements_without_blocking_players(self):
+        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, scalar
+
+        source = parse_clausewitz(
+            (ROOT / "common/decisions/ADISCORD_RUS_decisions.txt").read_text(encoding="utf-8")
+        )
+        category = block(source, "ADISCORD_vorkerland_rus_dirty_campaign_category")
+        for target in ("sla", "rza", "mlr", "ert", "irt", "sca"):
+            decision = block(category, "RUS_campaign_" + target)
+            modifiers = [
+                e.value for e in block(decision, "ai_will_do")
+                if e.key == "modifier"
+                and any(c.key == "ADISCORD_ai_army_needs_replacements" for c in e.value)
+            ]
+            self.assertEqual(len(modifiers), 1)
+            self.assertEqual(scalar(modifiers[0], "factor"), "0")
+            gate = [e for e in modifiers[0] if e.key != "factor"]
+            for shortage in (True, False):
+                facts = {("RUS", "ADISCORD_ai_army_needs_replacements", "yes"): shortage}
+                self.assertEqual(matches_conditions(gate, facts, "RUS"), shortage)
+            self.assertNotIn("ADISCORD_ai_army_needs_replacements", str(block(decision, "available")))
 
     def test_preparation_producers_cannot_read_their_own_native_score(self):
         def visit(entries, seen):

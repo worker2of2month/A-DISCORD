@@ -950,7 +950,6 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
-			unlock_decision_tooltip = STP_pw_prog_district_grants
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_party_local_cadres_post_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_research_speed_factor value = 0.025 }
@@ -1269,16 +1268,6 @@
 				tooltip = STP_pw_reconstruction_available_tt
 				STP_pw_can_reconstruct = yes
 			}
-			custom_trigger_tooltip = {
-				tooltip = STP_party_district_consent_tt
-				OR = {
-					check_variable = { var = STP_pf_borons_support value = 50 compare = greater_than_or_equals }
-					AND = {
-						has_completed_focus = STP_party_district_compact
-						check_variable = { var = STP_pf_borons_support value = 35 compare = greater_than_or_equals }
-					}
-				}
-			}
 		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
@@ -1321,16 +1310,6 @@
 			custom_trigger_tooltip = {
 				tooltip = STP_pw_reconstruction_available_tt
 				STP_pw_can_reconstruct = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_party_central_consent_tt
-				OR = {
-					check_variable = { var = STP_pf_security_support value = 50 compare = greater_than_or_equals }
-					AND = {
-						has_completed_focus = STP_ROTATE_DISTRICT_COMMAND
-						check_variable = { var = STP_pf_security_support value = 35 compare = greater_than_or_equals }
-					}
-				}
 			}
 		}
 		cancel_if_invalid = yes
@@ -2869,8 +2848,11 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pw_prog_houses_cadastre
-			unlock_decision_tooltip = STP_pw_prog_house_reception
 			custom_effect_tooltip = STP_party_policy_persistence_hint_tt
 			add_ideas = STP_pw_party_high_houses_government
 			hidden_effect = {
@@ -3131,6 +3113,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pi_house_workshop
 			add_stability = 0.03
 			country_event = {
@@ -3379,6 +3365,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			add_political_power = 100
 			add_stability = 0.05
 			custom_effect_tooltip = STP_ch_houses_black_book_tt
@@ -3425,6 +3415,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			add_stability = 0.04
 			if = {
 				limit = { NOT = { STP_pf_settled = yes } }
@@ -3466,11 +3460,14 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pi_festival_public
 
 			unlock_decision_tooltip = STP_pi_festival_club
 			unlock_decision_tooltip = STP_pw_prog_festival_brigades
-			unlock_decision_tooltip = STP_pw_prog_peoples_festival
 			custom_effect_tooltip = STP_party_policy_persistence_hint_tt
 			add_ideas = STP_pw_party_unbound_government
 			hidden_effect = {
@@ -3816,6 +3813,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.02
+			}
 			custom_effect_tooltip = STP_party_law_choice_hint_tt
 			add_ideas = ADISCORD_labor_policy_collective_bargaining
 			add_stability = 0.03
@@ -4020,6 +4021,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			add_war_support = 0.08
 			custom_effect_tooltip = STP_ph_treasury_2000_tt
 			if = {
@@ -4074,6 +4079,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			add_political_power = 75
 			if = {
 				limit = { NOT = { STP_pf_settled = yes } }
@@ -4111,6 +4120,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pi_cadre_enrol
 			unlock_decision_tooltip = STP_pw_prog_cadet_corps
 			unlock_decision_tooltip = STP_pw_prog_grand_manoeuvres
@@ -4373,6 +4386,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pi_cadre_instructors
 			unlock_decision_tooltip = STP_pi_cadre_reserve
 			unlock_decision_tooltip = STP_pi_cadre_mobilise
@@ -4604,6 +4621,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.03
+			}
 			army_experience = 40
 			add_command_power = 40
 			if = {
@@ -4653,6 +4674,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.03
+			}
 			army_experience = 25
 			add_stability = 0.03
 			if = {
@@ -4691,6 +4716,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pi_trade_rifles_standard
 
 			unlock_decision_tooltip = STP_pi_trade_support_standard
@@ -4965,6 +4994,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.02
+			}
 			custom_effect_tooltip = STP_ch_market_charter_tt
 			hidden_effect = {
 				set_country_flag = STP_ch_supply_strain
@@ -5230,6 +5263,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			custom_effect_tooltip = STP_pv_season_treasury_tt
 			custom_effect_tooltip = STP_pw_civil_factory_or_reserve_tt
 			if = {
@@ -5300,6 +5337,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			add_stability = 0.04
 			if = {
 				limit = { NOT = { STP_pf_settled = yes } }
@@ -5337,8 +5378,11 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pw_prog_apparatus_audit
-			unlock_decision_tooltip = STP_pw_prog_targeted_purge
 			custom_effect_tooltip = STP_party_policy_persistence_hint_tt
 			custom_effect_tooltip = STP_ch_security_directorate_tt
 			hidden_effect = {
@@ -5585,6 +5629,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.02
+			}
 			custom_effect_tooltip = STP_ch_register_of_powers_tt
 			unlock_decision_tooltip = STP_ch_security_review
 			custom_effect_tooltip = STP_ch_security_review_unlock_summary_tt
@@ -5839,6 +5887,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.03
+			}
 			add_stability = 0.08
 			add_political_power = 50
 			if = {
@@ -5893,6 +5945,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.03
+			}
 			add_stability = 0.03
 			if = {
 				limit = { NOT = { STP_pf_settled = yes } }
@@ -5930,6 +5986,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pi_north_training
 			unlock_decision_tooltip = STP_pw_prog_joint_courses
 			unlock_decision_tooltip = STP_pw_prog_northern_credit
@@ -6189,6 +6249,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pi_north_equipment
 			add_political_power = 25
 			country_event = {
@@ -6496,6 +6560,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			unlock_decision_tooltip = STP_pi_north_buyout
 			add_stability = 0.04
 			if = {
@@ -6538,6 +6606,10 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			add_political_power = 75
 			if = {
 				limit = { NOT = { STP_pf_settled = yes } }
@@ -6963,6 +7035,10 @@
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			unlock_decision_tooltip = STP_pi_house_buyout
 			custom_effect_tooltip = STP_pi_house_equal_tt
 			remove_ideas = STP_pe_houses_course_a_idea
@@ -7011,6 +7087,10 @@
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			custom_effect_tooltip = STP_pi_house_hereditary_tt
 			remove_ideas = STP_pe_houses_course_b_idea
 			remove_ideas = STP_pe_houses_policy_a_idea
@@ -7470,6 +7550,10 @@
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			hidden_effect = {
 				set_variable = {
 					var = STP_pi_festival_rate
@@ -7509,6 +7593,10 @@
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			custom_effect_tooltip = STP_pe_festival_ending_b_mechanic_tt
 			remove_ideas = STP_pe_festival_course_b_idea
 			remove_ideas = STP_pe_festival_policy_a_idea
@@ -7953,6 +8041,10 @@
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.03
+			}
 			unlock_decision_tooltip = STP_pi_artel_workshop
 			remove_ideas = STP_pe_staff_course_a_idea
 			remove_ideas = STP_pe_staff_policy_a_idea
@@ -8000,6 +8092,10 @@
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.03
+			}
 			unlock_decision_tooltip = STP_pi_cadre_rapid_mobilise
 			remove_ideas = STP_pe_staff_course_b_idea
 			remove_ideas = STP_pe_staff_policy_a_idea
@@ -8455,6 +8551,10 @@
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			custom_effect_tooltip = STP_pe_trade_ending_a_mechanic_tt
 			remove_ideas = STP_pe_trade_course_a_idea
 			remove_ideas = STP_pe_trade_policy_a_idea
@@ -8502,6 +8602,10 @@
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			custom_effect_tooltip = STP_pe_trade_ending_b_mechanic_tt
 			remove_ideas = STP_pe_trade_course_b_idea
 			remove_ideas = STP_pe_trade_policy_a_idea
@@ -8929,6 +9033,10 @@
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.03
+			}
 			hidden_effect = {
 				set_variable = {
 					var = STP_pi_public_rate
@@ -8984,6 +9092,10 @@
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.03
+			}
 			hidden_effect = {
 				set_variable = {
 					var = STP_pi_case_rate
@@ -9453,6 +9565,10 @@
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			unlock_decision_tooltip = STP_pi_north_local_staff
 			unlock_decision_tooltip = STP_pi_north_buyout
 			custom_effect_tooltip = STP_pi_north_independent_tt
@@ -9502,6 +9618,10 @@
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			unlock_decision_tooltip = STP_pi_north_local_staff
 			custom_effect_tooltip = STP_pi_north_settled_tt
 			hidden_effect = {

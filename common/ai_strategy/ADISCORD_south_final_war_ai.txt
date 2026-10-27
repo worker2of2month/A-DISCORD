@@ -19,6 +19,32 @@ ADISCORD_south_shl_front_nam = {
 		execute_order = yes
 		manual_attack = yes
 	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NAM
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NAM
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_south_nam_front_shl = {
@@ -37,6 +63,32 @@ ADISCORD_south_nam_front_shl = {
 		priority = 1500
 		ordertype = front
 		execution_type = balanced
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SHL
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SHL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
 		execute_order = yes
 		manual_attack = yes
 	}
@@ -61,6 +113,32 @@ ADISCORD_south_shl_front_efl = {
 		execute_order = yes
 		manual_attack = yes
 	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EFL
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EFL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_south_efl_front_shl = {
@@ -82,6 +160,19 @@ ADISCORD_south_efl_front_shl = {
 		execute_order = yes
 		manual_attack = no
 	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SHL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_south_shl_front_azh = {
@@ -100,6 +191,32 @@ ADISCORD_south_shl_front_azh = {
 		priority = 1500
 		ordertype = front
 		execution_type = rush
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = AZH
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = AZH
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
 		execute_order = yes
 		manual_attack = yes
 	}
@@ -124,6 +241,19 @@ ADISCORD_south_azh_front_shl = {
 		execute_order = yes
 		manual_attack = no
 	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SHL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 # The Svetlogorsk uprising pushes from the inside of the oil belt.
@@ -144,5 +274,83 @@ ADISCORD_south_uprising_front = {
 		execution_type = rush
 		execute_order = yes
 		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NAM
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NAM
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
+# Respect the campaign switch while the southern final war is disabled.
+ADISCORD_difficulty_south_campaign_supply = {
+	allowed = {
+		OR = {
+			tag = SHL
+			tag = NAM
+			tag = EFL
+			tag = AZH
+		}
+	}
+	enable = {
+		ADISCORD_difficulty_ai_advanced = yes
+		ADISCORD_south_final_war_enabled = yes
+		OR = {
+			tag = SHL
+			has_country_flag = ADISCORD_south_north_leader
+		}
+		OR = {
+			AND = {
+				ADISCORD_south_crisis_open = yes
+				ADISCORD_south_final_can_start = yes
+				has_global_flag = ADISCORD_south_crisis_warned
+			}
+			AND = {
+				ADISCORD_south_final_active = yes
+				OR = {
+					has_war_with = SHL
+					has_war_with = NAM
+					has_war_with = EFL
+					has_war_with = AZH
+				}
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_production_factor
+		id = infantry
+		value = 15
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = artillery
+		value = 15
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = support
+		value = 10
 	}
 }

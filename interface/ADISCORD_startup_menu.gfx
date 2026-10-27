@@ -30,6 +30,137 @@ spriteTypes = {
 		effectFile = "gfx/FX/buttonstate.lua"
 	}
 	spriteType = {
+		name = "GFX_ADISCORD_setup_panel"
+		texturefile = "gfx/interface/startup/setup_panel.png"
+		noOfFrames = 1
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_level_0"
+		texturefile = "gfx/interface/startup/setup_level_0.png"
+		noOfFrames = 2
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_level_1"
+		texturefile = "gfx/interface/startup/setup_level_1.png"
+		noOfFrames = 2
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_level_2"
+		texturefile = "gfx/interface/startup/setup_level_2.png"
+		noOfFrames = 2
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_level_3"
+		texturefile = "gfx/interface/startup/setup_level_3.png"
+		noOfFrames = 2
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_level_4"
+		texturefile = "gfx/interface/startup/setup_level_4.png"
+		noOfFrames = 2
+	}
+	textSpriteType = {
+		name = "GFX_ADISCORD_setup_button"
+		texturefile = "gfx/interface/startup/setup_button.png"
+		noOfFrames = 1
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
+	textSpriteType = {
+		name = "GFX_ADISCORD_setup_rules"
+		texturefile = "gfx/interface/startup/setup_rules.png"
+		noOfFrames = 1
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
+	textSpriteType = {
+		name = "GFX_ADISCORD_setup_header_button"
+		texturefile = "gfx/interface/startup/setup_header_button.png"
+		noOfFrames = 1
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_ADISCORD_setup_footer"
+		texturefile = "gfx/interface/startup/setup_footer.png"
+		size = { x = 484 y = 128 }
+		borderSize = { x = 14 y = 14 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_ADISCORD_setup_header"
+		texturefile = "gfx/interface/startup/setup_header.png"
+		size = { x = 484 y = 128 }
+		borderSize = { x = 14 y = 14 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_scenario"
+		texturefile = "gfx/interface/startup/setup_scenario.png"
+		noOfFrames = 1
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_nation"
+		texturefile = "gfx/interface/startup/setup_nation.png"
+		noOfFrames = 1
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_flag_frame"
+		texturefile = "gfx/interface/startup/setup_flag_frame.png"
+		noOfFrames = 1
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_observer"
+		texturefile = "gfx/interface/startup/setup_observer.png"
+		noOfFrames = 1
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
+	frameAnimatedSpriteType = {
+		name = "GFX_ADISCORD_setup_observer_overlay"
+		texturefile = "gfx/interface/startup/setup_observer_overlay.png"
+		noOfFrames = 2
+		animation_rate_fps = 1.5
+		looping = yes
+		play_on_show = yes
+		pause_on_loop = 0.0
+		alwaystransparent = yes
+		effectFile = "gfx/FX/buttonstate_blendframes.lua"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_mapmode"
+		texturefile = "gfx/interface/startup/setup_mapmode.png"
+		noOfFrames = 2
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_mapmode_selected"
+		texturefile = "gfx/interface/startup/setup_mapmode_selected.png"
+		noOfFrames = 2
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_country_details"
+		texturefile = "gfx/interface/startup/setup_country_details.png"
+		noOfFrames = 2
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_play"
+		texturefile = "gfx/interface/startup/setup_play.png"
+		noOfFrames = 3
+		effectFile = "gfx/FX/buttonstate_onlydisable.lua"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_ready"
+		texturefile = "gfx/interface/startup/setup_ready.png"
+		noOfFrames = 1
+		effectFile = "gfx/FX/buttonstate_onlydisable.lua"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_checkbox"
+		texturefile = "gfx/interface/startup/setup_checkbox.png"
+		noOfFrames = 2
+	}
+	spriteType = {
 		name = "GFX_ADISCORD_startup_stp"
 		texturefile = "gfx/interface/startup/stp.png"
 	}

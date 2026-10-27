@@ -749,7 +749,7 @@
 	focus = {
 		id = STP_pc_army_hegemony_cadres
 		icon = GFX_focus_STP_Turn_The_Young_Officers
-		x = 34
+		x = 40
 		y = 13
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -773,8 +773,8 @@
 	focus = {
 		id = STP_pc_army_republic_control
 		icon = GFX_focus_RUS_district_courts
-		x = 40
-		y = 13
+		x = 44
+		y = 14
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
@@ -803,7 +803,7 @@
 	focus = {
 		id = STP_pc_army_staff_doctrine
 		icon = GFX_focus_VAL_Contract_General_Staff
-		x = 44
+		x = 48
 		y = 13
 		cost = 5
 		allow_branch = { NOT = { has_variable = STP_pc_charter_cabinet } has_country_flag = STP_cw_postwar tag = STS }

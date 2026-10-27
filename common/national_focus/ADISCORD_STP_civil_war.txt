@@ -46,10 +46,14 @@ focus_tree = {
 			hidden_effect = {
 				if = {
 					limit = { NOT = { has_war_with = VAL } }
-					set_country_flag = { flag = STP_kc_preparing days = 180 }
+					set_country_flag = STP_kc_preparing
 				}
+				add_ideas = STP_kc_defence_prepared
+				STP_kc_activate_prepared_support = yes
 			}
-			add_timed_idea = { idea = STP_kc_defence days = 180 }
+			effect_tooltip = {
+				add_timed_idea = { idea = STP_kc_defence days = 180 }
+			}
 			custom_effect_tooltip = STP_kc_temporary_support_tt
 		}
 		ai_will_do = { base = 30 }
@@ -73,7 +77,13 @@ focus_tree = {
 		cancel_if_invalid = yes
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY }
 		completion_reward = {
-			add_timed_idea = { idea = STP_kc_production days = 180 }
+			effect_tooltip = {
+				add_timed_idea = { idea = STP_kc_production days = 180 }
+			}
+			hidden_effect = {
+				add_ideas = STP_kc_production_prepared
+				STP_kc_activate_prepared_support = yes
+			}
 			custom_effect_tooltip = STP_kc_temporary_support_tt
 		}
 		ai_will_do = { base = 25 }
@@ -1219,7 +1229,7 @@ focus_tree = {
 		id = STP_hw_course_councils
 		icon = GFX_focus_STP_cw_local_council_envoys
 		x = -2
-		y = 5
+		y = 6
 		cost = 3
 		prerequisite = { focus = STP_hw_coalition_congress }
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
@@ -2145,7 +2155,7 @@ focus_tree = {
 		id = STP_pv_glory_silence
 		icon = GFX_focus_STP_ph_pen_of_silence
 		x = -1
-		y = 1
+		y = 2
 		relative_position_id = STP_pv_victory_committee
 		cost = 3
 		allow_branch = {
@@ -2210,7 +2220,7 @@ focus_tree = {
 		id = STP_pv_glory_wallets
 		icon = GFX_focus_STP_ps_northern_credit
 		x = 3
-		y = 1
+		y = 2
 		relative_position_id = STP_pv_victory_committee
 		cost = 3
 		allow_branch = {
@@ -3653,7 +3663,6 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
-			unlock_decision_tooltip = STP_pw_prog_district_grants
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_party_local_cadres_post_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_research_speed_factor value = 0.025 }
@@ -3972,16 +3981,6 @@ focus_tree = {
 				tooltip = STP_pw_reconstruction_available_tt
 				STP_pw_can_reconstruct = yes
 			}
-			custom_trigger_tooltip = {
-				tooltip = STP_party_district_consent_tt
-				OR = {
-					check_variable = { var = STP_pf_borons_support value = 50 compare = greater_than_or_equals }
-					AND = {
-						has_completed_focus = STP_party_district_compact
-						check_variable = { var = STP_pf_borons_support value = 35 compare = greater_than_or_equals }
-					}
-				}
-			}
 		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
@@ -4024,16 +4023,6 @@ focus_tree = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pw_reconstruction_available_tt
 				STP_pw_can_reconstruct = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = STP_party_central_consent_tt
-				OR = {
-					check_variable = { var = STP_pf_security_support value = 50 compare = greater_than_or_equals }
-					AND = {
-						has_completed_focus = STP_ROTATE_DISTRICT_COMMAND
-						check_variable = { var = STP_pf_security_support value = 35 compare = greater_than_or_equals }
-					}
-				}
 			}
 		}
 		cancel_if_invalid = yes
@@ -4863,7 +4852,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_army_hegemony_cadres
 		icon = GFX_focus_STP_Turn_The_Young_Officers
-		x = 34
+		x = 40
 		y = 13
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -4887,8 +4876,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_army_republic_control
 		icon = GFX_focus_RUS_district_courts
-		x = 40
-		y = 13
+		x = 44
+		y = 14
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
@@ -4917,7 +4906,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_army_staff_doctrine
 		icon = GFX_focus_VAL_Contract_General_Staff
-		x = 44
+		x = 48
 		y = 13
 		cost = 5
 		allow_branch = { NOT = { has_variable = STP_pc_charter_cabinet } has_country_flag = STP_cw_postwar tag = STS }
@@ -9494,8 +9483,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pw_prog_houses_cadastre
-			unlock_decision_tooltip = STP_pw_prog_house_reception
 			custom_effect_tooltip = STP_party_policy_persistence_hint_tt
 			add_ideas = STP_pw_party_high_houses_government
 			hidden_effect = {
@@ -9756,6 +9748,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pi_house_workshop
 			add_stability = 0.03
 			country_event = {
@@ -10004,6 +10000,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			add_political_power = 100
 			add_stability = 0.05
 			custom_effect_tooltip = STP_ch_houses_black_book_tt
@@ -10050,6 +10050,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			add_stability = 0.04
 			if = {
 				limit = { NOT = { STP_pf_settled = yes } }
@@ -10091,11 +10095,14 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pi_festival_public
 
 			unlock_decision_tooltip = STP_pi_festival_club
 			unlock_decision_tooltip = STP_pw_prog_festival_brigades
-			unlock_decision_tooltip = STP_pw_prog_peoples_festival
 			custom_effect_tooltip = STP_party_policy_persistence_hint_tt
 			add_ideas = STP_pw_party_unbound_government
 			hidden_effect = {
@@ -10441,6 +10448,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.02
+			}
 			custom_effect_tooltip = STP_party_law_choice_hint_tt
 			add_ideas = ADISCORD_labor_policy_collective_bargaining
 			add_stability = 0.03
@@ -10645,6 +10656,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			add_war_support = 0.08
 			custom_effect_tooltip = STP_ph_treasury_2000_tt
 			if = {
@@ -10699,6 +10714,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			add_political_power = 75
 			if = {
 				limit = { NOT = { STP_pf_settled = yes } }
@@ -10736,6 +10755,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pi_cadre_enrol
 			unlock_decision_tooltip = STP_pw_prog_cadet_corps
 			unlock_decision_tooltip = STP_pw_prog_grand_manoeuvres
@@ -10998,6 +11021,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pi_cadre_instructors
 			unlock_decision_tooltip = STP_pi_cadre_reserve
 			unlock_decision_tooltip = STP_pi_cadre_mobilise
@@ -11229,6 +11256,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.03
+			}
 			army_experience = 40
 			add_command_power = 40
 			if = {
@@ -11278,6 +11309,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.03
+			}
 			army_experience = 25
 			add_stability = 0.03
 			if = {
@@ -11316,6 +11351,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pi_trade_rifles_standard
 
 			unlock_decision_tooltip = STP_pi_trade_support_standard
@@ -11590,6 +11629,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.02
+			}
 			custom_effect_tooltip = STP_ch_market_charter_tt
 			hidden_effect = {
 				set_country_flag = STP_ch_supply_strain
@@ -11855,6 +11898,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			custom_effect_tooltip = STP_pv_season_treasury_tt
 			custom_effect_tooltip = STP_pw_civil_factory_or_reserve_tt
 			if = {
@@ -11925,6 +11972,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			add_stability = 0.04
 			if = {
 				limit = { NOT = { STP_pf_settled = yes } }
@@ -11962,8 +12013,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pw_prog_apparatus_audit
-			unlock_decision_tooltip = STP_pw_prog_targeted_purge
 			custom_effect_tooltip = STP_party_policy_persistence_hint_tt
 			custom_effect_tooltip = STP_ch_security_directorate_tt
 			hidden_effect = {
@@ -12210,6 +12264,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.02
+			}
 			custom_effect_tooltip = STP_ch_register_of_powers_tt
 			unlock_decision_tooltip = STP_ch_security_review
 			custom_effect_tooltip = STP_ch_security_review_unlock_summary_tt
@@ -12464,6 +12522,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.03
+			}
 			add_stability = 0.08
 			add_political_power = 50
 			if = {
@@ -12518,6 +12580,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.03
+			}
 			add_stability = 0.03
 			if = {
 				limit = { NOT = { STP_pf_settled = yes } }
@@ -12555,6 +12621,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pi_north_training
 			unlock_decision_tooltip = STP_pw_prog_joint_courses
 			unlock_decision_tooltip = STP_pw_prog_northern_credit
@@ -12814,6 +12884,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.02
+			}
 			unlock_decision_tooltip = STP_pi_north_equipment
 			add_political_power = 25
 			country_event = {
@@ -13121,6 +13195,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			unlock_decision_tooltip = STP_pi_north_buyout
 			add_stability = 0.04
 			if = {
@@ -13163,6 +13241,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			add_political_power = 75
 			if = {
 				limit = { NOT = { STP_pf_settled = yes } }
@@ -13588,6 +13670,10 @@ focus_tree = {
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			unlock_decision_tooltip = STP_pi_house_buyout
 			custom_effect_tooltip = STP_pi_house_equal_tt
 			remove_ideas = STP_pe_houses_course_a_idea
@@ -13636,6 +13722,10 @@ focus_tree = {
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			custom_effect_tooltip = STP_pi_house_hereditary_tt
 			remove_ideas = STP_pe_houses_course_b_idea
 			remove_ideas = STP_pe_houses_policy_a_idea
@@ -14095,6 +14185,10 @@ focus_tree = {
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			hidden_effect = {
 				set_variable = {
 					var = STP_pi_festival_rate
@@ -14134,6 +14228,10 @@ focus_tree = {
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			custom_effect_tooltip = STP_pe_festival_ending_b_mechanic_tt
 			remove_ideas = STP_pe_festival_course_b_idea
 			remove_ideas = STP_pe_festival_policy_a_idea
@@ -14578,6 +14676,10 @@ focus_tree = {
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.03
+			}
 			unlock_decision_tooltip = STP_pi_artel_workshop
 			remove_ideas = STP_pe_staff_course_a_idea
 			remove_ideas = STP_pe_staff_policy_a_idea
@@ -14625,6 +14727,10 @@ focus_tree = {
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.03
+			}
 			unlock_decision_tooltip = STP_pi_cadre_rapid_mobilise
 			remove_ideas = STP_pe_staff_course_b_idea
 			remove_ideas = STP_pe_staff_policy_a_idea
@@ -15080,6 +15186,10 @@ focus_tree = {
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			custom_effect_tooltip = STP_pe_trade_ending_a_mechanic_tt
 			remove_ideas = STP_pe_trade_course_a_idea
 			remove_ideas = STP_pe_trade_policy_a_idea
@@ -15127,6 +15237,10 @@ focus_tree = {
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			custom_effect_tooltip = STP_pe_trade_ending_b_mechanic_tt
 			remove_ideas = STP_pe_trade_course_b_idea
 			remove_ideas = STP_pe_trade_policy_a_idea
@@ -15554,6 +15668,10 @@ focus_tree = {
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.03
+			}
 			hidden_effect = {
 				set_variable = {
 					var = STP_pi_public_rate
@@ -15609,6 +15727,10 @@ focus_tree = {
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = etatism
+				popularity = 0.03
+			}
 			hidden_effect = {
 				set_variable = {
 					var = STP_pi_case_rate
@@ -16078,6 +16200,10 @@ focus_tree = {
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			unlock_decision_tooltip = STP_pi_north_local_staff
 			unlock_decision_tooltip = STP_pi_north_buyout
 			custom_effect_tooltip = STP_pi_north_independent_tt
@@ -16127,6 +16253,10 @@ focus_tree = {
 			base = 12
 		}
 		completion_reward = {
+			add_popularity = {
+				ideology = hedonism
+				popularity = 0.03
+			}
 			unlock_decision_tooltip = STP_pi_north_local_staff
 			custom_effect_tooltip = STP_pi_north_settled_tt
 			hidden_effect = {
@@ -20413,7 +20543,7 @@ focus_tree = {
 		x = 13
 		y = 0
 		offset = {
-			x = 9
+			x = 15
 			y = 4
 			trigger = {
 				tag = STS

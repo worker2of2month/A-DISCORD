@@ -400,7 +400,7 @@
  NAM_administration_dynamic: "Svetlogorye Chancellery"
  NAM_administration_dynamic_desc: "The namestnik ladder has become a government. Every reform changes the same chancellery: its signatures, budgets, oil fields and relations with the districts.\n\n\n\n\n\n £GFX_RUS_chancery_mandate_banner \n\n\n"
  NAM_garrison_dynamic: "Svetlogorye Garrisons"
- NAM_garrison_dynamic_desc: "Oilfield guards, crossroads columns and sea escorts add up to a single military tradition of Svetlogorye.\n\n\n\n\n\n £GFX_RUS_black_army_banner \n\n\n"
+ NAM_garrison_dynamic_desc: "Oilfield guards, crossroads columns and sea escorts add up to a single military tradition of Svetlogorye.\n\n\n\n\n\n £GFX_texticon_RUS_black_army_banner \n\n\n"
  NAM_seal_registry: "Register of Powers"
  NAM_seal_registry_desc: "Every seal receives a number, every namestnik a reporting deadline. The ladder the empire built now serves Svetlogorye and counts its money."
  NAM_namestnik_garrisons: "Namestnik Garrisons"
