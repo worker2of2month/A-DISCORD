@@ -34,16 +34,18 @@ PAINTS = {
     "ARB": ((185, 151, 94), (89, 65, 41), (47, 94, 82)),
     "WRK": ((79, 98, 76), (40, 51, 47), (193, 77, 41)),
     "RUS": ((57, 66, 78), (29, 34, 43), (147, 44, 54)),
-    "NAM": ((53, 102, 111), (29, 56, 63), (216, 164, 66)),
+    "NAM": ((91, 103, 91), (34, 44, 38), (184, 156, 88)),
 }
 
 
-def prepare(output):
+def prepare(output, names=None):
     from PIL import Image, ImageDraw
     from tools.assets.source.build_shl_palace import dds_bytes
 
     output.mkdir(parents=True, exist_ok=True)
     for family, (base, dark, accent) in PAINTS.items():
+        if names and not any(name.startswith(family + "_") for name in names):
+            continue
         palette = [base, dark, (22, 28, 31), (126, 134, 139), (184, 194, 190),
                    (44, 116, 146), accent, (19, 26, 30), base,
                    tuple(min(255, c + 20) for c in base), (177, 43, 31),
@@ -85,8 +87,14 @@ def prepare(output):
                     draw.polygon(((21, 52), (43, 69), (64, 28), (85, 69), (107, 52),
                                   (93, 99), (35, 99)), fill=accent)
                 elif family == "NAM":
-                    draw.polygon(((64, 23), (104, 64), (64, 105), (24, 64)), fill=accent)
-                    draw.polygon(((64, 45), (83, 64), (64, 83), (45, 64)), fill=base)
+                    draw.polygon(((64, 12), (116, 64), (64, 116), (12, 64)), fill=(213, 222, 219))
+                    draw.polygon(((64, 22), (106, 64), (64, 106), (22, 64)), fill=dark)
+                    draw.ellipse((56, 32, 72, 48), outline=accent, width=5)
+                    draw.line((64, 46, 64, 91), fill=accent, width=7)
+                    draw.line((43, 58, 85, 58), fill=accent, width=5)
+                    draw.arc((34, 54, 94, 98), 0, 180, fill=accent, width=7)
+                    draw.polygon(((32, 74), (46, 80), (36, 88)), fill=accent)
+                    draw.polygon(((96, 74), (82, 80), (92, 88)), fill=accent)
                 else:
                     draw.line((24, 84, 64, 35, 104, 84), fill=accent, width=11)
             atlas.paste(tile, ((index % 4) * 128, (index // 4) * 128))
@@ -99,6 +107,18 @@ def prepare(output):
         for role in ("fighter", "cas"):
             for channel, image in maps.items():
                 (output / f"{family}_{role}_{channel}.dds").write_bytes(dds_bytes(image))
+
+
+def naval_fin(model, x, y, z, height, chord, cant=0):
+    model.plate([(x, y - chord * .50, z),
+                 (x + cant, y + chord * .20, z + height),
+                 (x + cant, y + chord * .52, z + height * .93),
+                 (x, y + chord * .60, z)], .065, 0, axis=0)
+
+
+def naval_stabilizer(model, side, z):
+    model.plate([(side * .12, 3.12, z), (side * 2.30, 4.05, z + .08),
+                 (side * 2.30, 4.53, z + .08), (side * .12, 4.43, z)], .075, 0)
 
 
 def airframe(family, role, tier):
@@ -133,12 +153,21 @@ def airframe(family, role, tier):
     for side in (-1, 1):
         native.wing(model, side, span, sweep, root_y, chord, tip_chord, z=.05)
         # Keep each marking on the local wing surface as sweep and span change.
-        for inset, size, tile in ((1.1, (.56, .45, .016), 8), (2.0, (.24, .70, .016), 6)):
+        markings = ((1.1, (.56, .45, .016), 8),) if family == "NAM" else (
+            (1.1, (.56, .45, .016), 8), (2.0, (.24, .70, .016), 6))
+        for inset, size, tile in markings:
             x = span - inset
             fraction = (x - .55) / (span - .55)
             local_chord = chord * (1 - fraction) + tip_chord * fraction
             y = root_y + sweep * fraction + local_chord * .5
-            model.box((side * x, y, .05 + .15 * fraction + .1), size, tile)
+            if family == "NAM":
+                z = .05 + .15 * fraction + .087
+                model.plate([(side * x - size[0] / 2, y - size[1] / 2, z),
+                             (side * x + size[0] / 2, y - size[1] / 2, z),
+                             (side * x + size[0] / 2, y + size[1] / 2, z),
+                             (side * x - size[0] / 2, y + size[1] / 2, z)], .002, tile)
+            else:
+                model.box((side * x, y, .05 + .15 * fraction + .1), size, tile)
         model.box((side * span, root_y + sweep + tip_chord * .5, .22),
                   (.15, .25, .13), 10 if side < 0 else 5)
         twin = attack or family in ("WRK", "RUS", "NAM")
@@ -155,18 +184,25 @@ def airframe(family, role, tier):
         if boom:
             model.loft([(-2.1, .28, .31, .06), (1.0, .30, .32, .1),
                         (5.65, .14, .17, .25)], 0, x=side * 2.0)
-            native.fin(model, side * 2.0, 4.7, .35, 1.7, 1.9, side * tier * .17)
+            naval_fin(model, side * 2.0, 4.65, .25, 1.35, 2.05, side * tier * .12)
             if side == 1:
                 model.plate([(-2.05, 4.55, .37), (2.05, 4.55, .37),
                              (2.05, 5.8, .37), (-2.05, 5.8, .37)], .12, 1)
         else:
-            native.wing(model, side, 2.8 if family == "ARB" else 2.4,
-                        .45 + tier * .24, 3.35, 1.4, .65, z=.28, tile=1)
-            if family in ("WRK", "RUS") or (family == "NAM" and tier > 0):
+            if family == "NAM":
+                naval_stabilizer(model, side, .15)
+                if tier > 0:
+                    naval_fin(model, side * 1.12, 3.85, .06, 1.45, 2.15, side * .20)
+                elif side == 1:
+                    naval_fin(model, 0, 3.98, .18, 1.65, 2.2)
+            else:
+                native.wing(model, side, 2.8 if family == "ARB" else 2.4,
+                            .45 + tier * .24, 3.35, 1.4, .65, z=.28, tile=1)
+            if family in ("WRK", "RUS"):
                 native.fin(model, side * 1.45, 4.35, .34, 1.85, 1.9, side * .26 * tier)
-            elif side == 1:
+            elif family != "NAM" and side == 1:
                 native.fin(model, 0, 4.45, .3, 2.2, 2.0)
-        if tier == 2 and family in ("RUS", "NAM"):
+        if tier == 2 and family == "RUS":
             native.wing(model, side, 2.1, .65, -4.15, 1.3, .40, z=.22, tile=1)
         if attack:
             for x in (3.2, 4.6, 5.65) if family == "WRK" else (3.3, 4.85):
@@ -175,7 +211,19 @@ def airframe(family, role, tier):
         else:
             model.rod((side * 2.9, -1.35, -.30), (side * 2.9, .45, -.30), .11, 4)
         model.rod((side * .35, nose + .9, -.34), (side * .35, nose - .18, -.34), .075, 3)
-    model.box((0, 1.3, .65), (.15, .8, .22), 6)
+    model.box((0, 1.3, .65), (.10, .55, .13) if family == "NAM" else (.15, .8, .22),
+              1 if family == "NAM" else 6)
+    if family == "NAM":
+        # The stowed arrestor hook stays within the airframe's flying envelope.
+        model.rod((0, 1.4, -.54), (0, 3.5, -.67), .065, 3)
+        model.rod((0, 3.5, -.67), (0, 3.7, -.51), .075, 3)
+        for side in (-1, 1):
+            fold_x = span * .63
+            fraction = (fold_x - .55) / (span - .55)
+            fold_y = root_y + sweep * fraction
+            fold_chord = chord * (1 - fraction) + tip_chord * fraction
+            model.box((side * fold_x, fold_y + fold_chord * .5, .18),
+                      (.055, fold_chord * .84, .035), 3)
     if tier > 0:
         model.loft([(-4.95, .12, .16, -.49), (-4.6, .24, .22, -.52),
                     (-4.2, .13, .12, -.46)], 7, sides=8)
@@ -193,12 +241,17 @@ def source_hashes():
     return {str(path.relative_to(ROOT)).replace("\\", "/"): native.digest(path) for path in paths}
 
 
-def package(output, apply=False):
+def package(output, apply=False, names=None):
+    selected = set(names or NAMES)
+    families = {name.split("_")[0] for name in selected}
+    if selected != {name for name in NAMES if name.split("_")[0] in families}:
+        raise ValueError("Package complete families: all tiers share their role textures")
     report = json.loads((output / "verification.json").read_text())
-    if set(report) != set(NAMES):
+    if not selected.issubset(report):
         raise ValueError("Build and verify every aircraft before packaging")
     files = {}
-    for name, row in report.items():
+    for name in sorted(selected):
+        row = report[name]
         if row["source_hashes"] != source_hashes():
             raise ValueError(f"Rebuild {name}: authoring code changed")
         if native.digest(output / f"{name}.blend") != row["blend_sha256"]:
@@ -208,8 +261,14 @@ def package(output, apply=False):
             if hashlib.sha256(data).hexdigest() != expected:
                 raise ValueError(f"Unverified export: {filename}")
             files[registry.DEST / filename] = data
+        if name.startswith("NAM_"):
+            files[ROOT / "tools/assets/source/country_vehicles" / f"{name}.blend"] = (
+                output / f"{name}.blend"
+            ).read_bytes()
     report_path = ROOT / "docs/development/model-verification/aircraft_verification.json"
-    files[report_path] = (json.dumps(report, indent=2) + "\n").encode()
+    installed = json.loads(report_path.read_text()) if report_path.is_file() else {}
+    installed.update({name: report[name] for name in sorted(selected)})
+    files[report_path] = (json.dumps(installed, indent=2) + "\n").encode()
     changed = [str(path.relative_to(ROOT)) for path, data in files.items()
                if not path.is_file() or path.read_bytes() != data]
     registry_changes = registry.package(False)
@@ -232,7 +291,7 @@ def main():
     args = parser.parse_args(sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else None)
     output = args.output.resolve()
     if args.prepare:
-        prepare(output)
+        prepare(output, args.names)
     elif args.build or args.render:
         import bpy
         import bmesh
@@ -260,9 +319,11 @@ def main():
                 report_path.write_text(json.dumps(report, indent=2) + "\n")
                 print("VERIFIED", name, report[name]["triangles"], flush=True)
             if args.render:
-                native.render_preview(name)
+                preview = ROOT / "docs/development/previews/NAM_naval"
+                preview.mkdir(parents=True, exist_ok=True)
+                native.render_preview(name, preview)
     else:
-        changed = package(output, args.apply)
+        changed = package(output, args.apply, args.names)
         print(json.dumps({"changed": changed, "applied": args.apply}, indent=2))
         if args.check and changed:
             raise SystemExit(1)

@@ -1,0 +1,84 @@
+{
+  "generator_sha256": "8b40d2e95f21b4370735d61ec48e9dda2c5674ac1b27964563b800cec60b7487",
+  "donor_sha256": "0d1078fb0f59d78995105083ca2997a4c46a8615644b5fb9a51179fd06536e8a",
+  "files": {
+    "NAM_marine.mesh": "1d145a222316fb26592d14dedd221ad50d32928d3c23b287f0dc1e14a91edd35",
+    "NAM_marine_body_diffuse.dds": "3c8b71a6a3a6307978a5bbddb103fb7b8bb993dd5ac8b887d32def4382809c3f",
+    "NAM_marine_body_normal.dds": "0e1da3351cd0e20fae33216ee833d6fbeca2eb495fc96cf6e3ea9d6fef43f1d1",
+    "NAM_marine_body_specular.dds": "f6f3c85a6fc207fa61bb787711e1edea7dc38e757774384be3a3dd8dd054c5b8",
+    "NAM_marine_gear_diffuse.dds": "97e5c5b03cbf49ca50f45efb310ea30e103311bd977341058c9abf134156829c",
+    "NAM_marine_gear_normal.dds": "13172a7842a2a910ba1f3bc7b39055a3f82ea4bdf7744efc27811fe963909ee4",
+    "NAM_marine_gear_specular.dds": "21cd30f78432e957606769d64a92ebd87e822c907abb38bcab7d42a5ebb7e22a"
+  },
+  "native_reimport": true,
+  "native_locators_unchanged": true,
+  "body_triangles": 2367,
+  "body_normal_max_delta": 0.00016328133642673492,
+  "hoi4_runtime_verified": false,
+  "triangles": 14250,
+  "poses": {
+    "idle": {
+      "frames": [
+        1,
+        90,
+        180
+      ]
+    },
+    "move": {
+      "frames": [
+        1,
+        21,
+        41
+      ]
+    },
+    "attack": {
+      "frames": [
+        1,
+        49,
+        97
+      ]
+    },
+    "retreat": {
+      "frames": [
+        1,
+        26,
+        51
+      ]
+    },
+    "death": {
+      "frames": [
+        1,
+        46,
+        92
+      ]
+    },
+    "rest": {
+      "frames": [
+        1,
+        49,
+        97
+      ]
+    },
+    "inspect": {
+      "frames": [
+        1,
+        73,
+        145
+      ]
+    },
+    "gear": {
+      "frames": [
+        1,
+        61,
+        121
+      ]
+    },
+    "observe": {
+      "frames": [
+        1,
+        73,
+        145
+      ]
+    }
+  }
+}

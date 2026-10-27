@@ -1,0 +1,157 @@
+{
+  "hashes": {
+    "NAM_hq.mesh": "0a548393d3d19a438fe80eff97767c1130482a895be32b15909876a28dc79312",
+    "NAM_hq_body_diffuse.dds": "ee4d0b3ff97b139a7c1f3b804e6ba8b1c39b093182860e2af7bdd7d33e0c1688",
+    "NAM_hq_body_normal.dds": "2ad8fc9f98b9a604f9e86dc28ac61fa81230ee60f01f58c343f5c86463cbaa35",
+    "NAM_hq_body_specular.dds": "85af700afe2aefdcafc96dd339898bdb15aa1ba29076993f68bdabc4aba421a8",
+    "NAM_hq_gear_diffuse.dds": "5fbc46495cab9b9e7c4531cef065c861bf890bd6a0140ef89ab14f8e8acca973",
+    "NAM_hq_gear_normal.dds": "edfef093ad7908e2fa1783190c6bb7366fa647859157746e1979a278e3896453",
+    "NAM_hq_gear_specular.dds": "199af671ba6f050b6d7caa9f3274cbdd4a2c9398e165a99564d6ca0c640e0413"
+  },
+  "shapes": [
+    {
+      "vertices": 6102,
+      "triangles": 2034
+    },
+    {
+      "vertices": 3239,
+      "triangles": 4010
+    }
+  ],
+  "poses": {
+    "idle": {
+      "sampled_frames": [
+        1,
+        90,
+        180
+      ],
+      "render_attachments": [
+        "rifle1"
+      ]
+    },
+    "notes": {
+      "sampled_frames": [
+        1,
+        313,
+        625
+      ],
+      "render_attachments": [
+        "rifle2",
+        "pencil",
+        "clipboard"
+      ]
+    },
+    "scout": {
+      "sampled_frames": [
+        1,
+        211,
+        421
+      ],
+      "render_attachments": [
+        "binoculars"
+      ]
+    },
+    "stance": {
+      "sampled_frames": [
+        1,
+        151,
+        301
+      ]
+    },
+    "brush": {
+      "sampled_frames": [
+        1,
+        51,
+        101
+      ]
+    },
+    "attack01": {
+      "sampled_frames": [
+        1,
+        49,
+        97
+      ]
+    },
+    "attack02": {
+      "sampled_frames": [
+        1,
+        131,
+        261
+      ],
+      "render_attachments": [
+        "rifle1"
+      ]
+    },
+    "support_attack": {
+      "sampled_frames": [
+        1,
+        56,
+        111
+      ]
+    },
+    "charge_pistol": {
+      "sampled_frames": [
+        1,
+        16,
+        31
+      ]
+    },
+    "charge_pistol_shoot": {
+      "sampled_frames": [
+        1,
+        41,
+        81
+      ]
+    },
+    "move": {
+      "sampled_frames": [
+        1,
+        21,
+        41
+      ],
+      "render_attachments": [
+        "rifle1"
+      ]
+    },
+    "retreat": {
+      "sampled_frames": [
+        1,
+        26,
+        51
+      ]
+    },
+    "training": {
+      "sampled_frames": [
+        1,
+        44,
+        88
+      ]
+    },
+    "jumping_jacks": {
+      "sampled_frames": [
+        1,
+        86,
+        171
+      ]
+    },
+    "pushup": {
+      "sampled_frames": [
+        1,
+        248,
+        496
+      ]
+    },
+    "death": {
+      "sampled_frames": [
+        1,
+        46,
+        92
+      ]
+    }
+  },
+  "native_locators_unchanged": true,
+  "bones": 33,
+  "native_reimport": true,
+  "hoi4_runtime_verified": false,
+  "generator_sha256": "e780d06f38b36abd1b4ed644da87c4ad16e147d46f1006d85fa8d7a33b75af4a"
+}

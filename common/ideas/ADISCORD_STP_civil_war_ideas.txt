@@ -1,5 +1,74 @@
 ideas = {
 	country = {
+		STP_pi_case_orders_delta = {
+			name = STP_pw_party_dynamic
+			allowed = {
+				always = no
+			}
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		STP_pi_case_supply_delta = {
+			name = STP_pw_party_dynamic
+			allowed = {
+				always = no
+			}
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.03
+			}
+		}
+
+		STP_pi_case_property_delta = {
+			name = STP_pw_party_dynamic
+			allowed = {
+				always = no
+			}
+			modifier = {
+				production_speed_industrial_complex_factor = 0.05
+			}
+		}
+
+		STP_pi_case_apparatus_idea = {
+			picture = STP_party_administration
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pi_country_valid = no
+			}
+			modifier = {
+				political_power_gain = 0.2
+				ADISCORD_economy_admin_expense_factor = -0.1
+			}
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+		}
+
+		STP_pi_cadre_instructors_delta = {
+			name = STP_pw_party_dynamic
+			allowed = {
+				always = no
+			}
+			modifier = {
+				training_time_factor = -0.05
+				ADISCORD_economy_admin_expense_factor = 0.01
+			}
+		}
+		STP_pi_cadre_reserve_delta = {
+			name = STP_pw_party_dynamic
+			allowed = {
+				always = no
+			}
+			modifier = {
+				army_org_factor = 0.02
+				army_org_regain = 0.02
+				ADISCORD_economy_admin_expense_factor = 0.01
+			}
+		}
+
 		STP_heg_pensions_delta = {
 			name = STP_pw_republic_dynamic
 			allowed = { always = no }
@@ -369,7 +438,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_overall_income_factor = 0.025
+				ADISCORD_economy_overall_income_factor = 0.10
+				ADISCORD_economy_creditworthiness_factor = 0.10
 			}
 		}
 
@@ -470,7 +540,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				army_org_factor = 0.02
+				army_org_factor = 0.075
+				army_org_regain = 0.05
 				ADISCORD_economy_admin_expense_factor = 0.025
 			}
 		}
@@ -531,7 +602,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				production_factory_max_efficiency_factor = 0.03
+				production_factory_max_efficiency_factor = 0.10
+				production_factory_efficiency_gain_factor = 0.05
 			}
 		}
 
@@ -556,7 +628,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				industrial_capacity_factory = 0.025
+				industrial_capacity_factory = 0.075
 				ADISCORD_economy_admin_expense_factor = 0.015
 			}
 		}
@@ -625,7 +697,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				political_power_gain = 0.03
+				political_power_gain = 0.20
+				ADISCORD_economy_admin_expense_factor = -0.10
 				research_speed_factor = -0.015
 			}
 		}
@@ -660,7 +733,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				stability_factor = 0.01
+				stability_factor = 0.04
+				ADISCORD_economy_overall_income_factor = 0.05
 			}
 		}
 

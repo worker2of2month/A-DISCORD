@@ -2812,3 +2812,199 @@ defined_text = {
 		localization_key = STP_pw_programme_party_desc
 	}
 }
+
+defined_text = {
+	name = STPGetHouseBuyoutCost
+	text = {
+		trigger = {
+			has_completed_focus = STP_pe_houses_ending_a
+		}
+		localization_key = STP_pi_price_450
+	}
+	text = {
+		localization_key = STP_pi_price_900
+	}
+}
+
+defined_text = {
+	name = STPGetNorthBuyoutCost
+	text = {
+		trigger = {
+			has_completed_focus = STP_pe_regent_ending_a
+		}
+		localization_key = STP_pi_price_450
+	}
+	text = {
+		localization_key = STP_pi_price_900
+	}
+}
+defined_text = {
+	name = STPGetNorthPackage
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_pi_north_kind
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = STP_pi_package_training
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_pi_north_kind
+				value = 2
+				compare = equals
+			}
+		}
+		localization_key = STP_pi_package_equipment
+	}
+	text = {
+		localization_key = STP_pi_package_industry
+	}
+}
+
+defined_text = {
+	name = STPGetPiHousesSummary
+	text = {
+		trigger = {
+			has_completed_focus = STP_pw_party_high_houses
+		}
+		localization_key = STP_pi_houses_summary
+	}
+	text = {
+		localization_key = STP_pi_empty
+	}
+}
+
+defined_text = {
+	name = STPGetPiCadresSummary
+	text = {
+		trigger = {
+			has_completed_focus = STP_ch_service_act
+		}
+		localization_key = STP_pi_cadres_summary
+	}
+	text = {
+		localization_key = STP_pi_empty
+	}
+}
+
+defined_text = {
+	name = STPGetPiNorthSummary
+	text = {
+		trigger = {
+			has_completed_focus = STP_party_regent_mandate
+		}
+		localization_key = STP_pi_north_summary
+	}
+	text = {
+		localization_key = STP_pi_empty
+	}
+}
+
+defined_text = {
+	name = STPGetHouseBuyoutCostBlocked
+	text = {
+		trigger = {
+			has_completed_focus = STP_pe_houses_ending_a
+		}
+		localization_key = STP_pi_price_450_blocked
+	}
+	text = {
+		localization_key = STP_pi_price_900_blocked
+	}
+}
+
+defined_text = {
+	name = STPGetNorthBuyoutCostBlocked
+	text = {
+		trigger = {
+			has_completed_focus = STP_pe_regent_ending_a
+		}
+		localization_key = STP_pi_price_450_blocked
+	}
+	text = {
+		localization_key = STP_pi_price_900_blocked
+	}
+}
+
+defined_text = {
+	name = STPGetPiFestivalSummary
+	text = {
+		trigger = {
+			has_completed_focus = STP_pw_party_unbound_revolution
+		}
+		localization_key = STP_pi_festival_summary
+	}
+	text = {
+		localization_key = STP_pi_empty
+	}
+}
+
+defined_text = {
+	name = STPGetPiTradeSummary
+	text = {
+		trigger = {
+			has_completed_focus = STP_ch_production_agreements
+		}
+		localization_key = STP_pi_trade_summary
+	}
+	text = {
+		localization_key = STP_pi_empty
+	}
+}
+
+defined_text = {
+	name = STPGetPiCasesSummary
+	text = {
+		trigger = {
+			has_completed_focus = STP_ch_security_directorate
+		}
+		localization_key = STP_pi_cases_summary
+	}
+	text = {
+		localization_key = STP_pi_empty
+	}
+}
+
+defined_text = {
+	name = STPGetPiPublicQuote
+	text = {
+		trigger = {
+			FROM = {
+				has_variable = STP_pi_festival_deposit
+				check_variable = {
+					var = STP_pi_festival_kind
+					value = 1
+					compare = equals
+				}
+			}
+		}
+		localization_key = STP_pi_festival_public_quote
+	}
+	text = {
+		localization_key = STP_pi_empty
+	}
+}
+
+defined_text = {
+	name = STPGetPiClubQuote
+	text = {
+		trigger = {
+			FROM = {
+				has_variable = STP_pi_festival_deposit
+				check_variable = {
+					var = STP_pi_festival_kind
+					value = 2
+					compare = equals
+				}
+			}
+		}
+		localization_key = STP_pi_festival_club_quote
+	}
+	text = {
+		localization_key = STP_pi_empty
+	}
+}

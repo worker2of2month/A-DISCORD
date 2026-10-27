@@ -5276,6 +5276,7 @@ STP_pw_execute_party_defendants = {
 
 # COUNTRY: keep accumulated values when a later focus refreshes the institution.
 STP_pw_begin_recovery = {
+	STP_pi_initialize = yes
 	if = {
 		limit = { OR = { tag = STP tag = STS } NOT = { has_variable = STP_pw_recovery_progress } }
 		set_variable = { var = STP_pw_recovery_progress value = 0 }
@@ -5505,6 +5506,17 @@ STP_pw_finish_project = {
 STP_pw_refresh_modifier = {
 	if = {
 		limit = { STP_pw_can_reconstruct = yes }
+		if = {
+			limit = {
+				NOT = {
+					has_variable = STP_pw_ADISCORD_country_development_social_system_growth_factor
+				}
+			}
+			set_variable = {
+				var = STP_pw_ADISCORD_country_development_social_system_growth_factor
+				value = 0
+			}
+		}
 		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_economy_admin_expense_factor } } set_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0 } }
 		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_economy_overall_income_factor } } set_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0 } }
 		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_economy_treasury_capacity_factor } } set_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0 } }
@@ -5519,6 +5531,15 @@ STP_pw_refresh_modifier = {
 		if = { limit = { NOT = { has_variable = STP_pw_planning_speed } } set_variable = { var = STP_pw_planning_speed value = 0 } }
 		if = { limit = { NOT = { has_variable = STP_pw_political_power_gain } } set_variable = { var = STP_pw_political_power_gain value = 0 } }
 		if = { limit = { NOT = { has_variable = STP_pw_production_factory_max_efficiency_factor } } set_variable = { var = STP_pw_production_factory_max_efficiency_factor value = 0 } }
+		if = {
+			limit = {
+				NOT = { has_variable = STP_pw_production_factory_efficiency_gain_factor }
+			}
+			set_variable = {
+				var = STP_pw_production_factory_efficiency_gain_factor
+				value = 0
+			}
+		}
 		if = { limit = { NOT = { has_variable = STP_pw_production_speed_buildings_factor } } set_variable = { var = STP_pw_production_speed_buildings_factor value = 0 } }
 		if = { limit = { NOT = { has_variable = STP_pw_production_speed_industrial_complex_factor } } set_variable = { var = STP_pw_production_speed_industrial_complex_factor value = 0 } }
 		if = { limit = { NOT = { has_variable = STP_pw_research_speed_factor } } set_variable = { var = STP_pw_research_speed_factor value = 0 } }
@@ -18698,5 +18719,2274 @@ STP_bezhaysk_reconcile_campaign = {
 			}
 		}
 		STP_bezhaysk_close_campaign = yes
+	}
+}
+
+STP_pi_initialize = {
+	if = {
+		limit = {
+			tag = STP
+			NOT = {
+				has_country_flag = STP_pi_initialized
+			}
+		}
+		set_country_flag = STP_pi_initialized
+		set_variable = {
+			var = STP_pi_festival_reserved
+			value = 0
+		}
+		set_variable = {
+			var = STP_pi_festival_busy
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_festival_pending_clubs
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_festival_load
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_festival_districts
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_festival_rate
+			value = 0.05
+		}
+
+		set_variable = {
+			var = STP_pi_festival_safe
+			value = 2
+		}
+
+		set_variable = {
+			var = STP_pi_social_delta
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_public_delta
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_public_rate
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_trade_busy
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_trade_level
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_case_busy
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_case_public
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_case_sealed
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_case_credits
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_case_credited
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_case_rate
+			value = 1
+		}
+
+		set_variable = {
+			var = STP_pi_case_orders_stage
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_case_supply_stage
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_case_property_stage
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_trade_rifles_series_done
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_trade_support_series_done
+			value = 0
+		}
+
+		set_variable = {
+			var = STP_pi_trade_trucks_series_done
+			value = 0
+		}
+		set_variable = {
+			var = STP_pi_house_slots
+			value = 0
+		}
+		set_variable = {
+			var = STP_pi_house_privileges
+			value = 0
+		}
+		set_variable = {
+			var = STP_pi_cadre_free
+			value = 0
+		}
+		set_variable = {
+			var = STP_pi_cadre_instructors
+			value = 0
+		}
+		set_variable = {
+			var = STP_pi_cadre_reserve
+			value = 0
+		}
+		set_variable = {
+			var = STP_pi_north_obligations
+			value = 0
+		}
+		set_variable = {
+			var = STP_pi_north_specialists
+			value = 0
+		}
+		set_variable = {
+			var = STP_pi_north_rate
+			value = -0.02
+		}
+		set_variable = {
+			var = STP_pi_income_delta
+			value = 0
+		}
+		set_variable = {
+			var = STP_pi_training_delta
+			value = 0
+		}
+		set_variable = {
+			var = STP_pi_org_delta
+			value = 0
+		}
+		set_variable = {
+			var = STP_pi_regain_delta
+			value = 0
+		}
+		set_variable = {
+			var = STP_pi_admin_delta
+			value = 0
+		}
+	}
+}
+
+# Replace only the institution contribution; other focus rewards share the same aggregate.
+STP_pi_refresh = {
+	subtract_from_variable = {
+		var = STP_pw_ADISCORD_country_development_social_system_growth_factor
+		value = STP_pi_social_delta
+	}
+
+	subtract_from_variable = {
+		var = STP_pw_stability_factor
+		value = STP_pi_public_delta
+	}
+	subtract_from_variable = {
+		var = STP_pw_ADISCORD_economy_overall_income_factor
+		value = STP_pi_income_delta
+	}
+	subtract_from_variable = {
+		var = STP_pw_training_time_factor
+		value = STP_pi_training_delta
+	}
+	subtract_from_variable = {
+		var = STP_pw_army_org_factor
+		value = STP_pi_org_delta
+	}
+	subtract_from_variable = {
+		var = STP_pw_army_org_regain
+		value = STP_pi_regain_delta
+	}
+	subtract_from_variable = {
+		var = STP_pw_ADISCORD_economy_admin_expense_factor
+		value = STP_pi_admin_delta
+	}
+	set_variable = {
+		var = STP_pi_income_delta
+		value = STP_pi_house_privileges
+	}
+	multiply_variable = {
+		var = STP_pi_income_delta
+		value = -0.02
+	}
+	set_temp_variable = {
+		var = STP_pi_north_income
+		value = STP_pi_north_obligations
+	}
+	multiply_temp_variable = {
+		var = STP_pi_north_income
+		value = STP_pi_north_rate
+	}
+	add_to_variable = {
+		var = STP_pi_income_delta
+		value = STP_pi_north_income
+	}
+	set_variable = {
+		var = STP_pi_training_delta
+		value = STP_pi_cadre_instructors
+	}
+	divide_variable = {
+		var = STP_pi_training_delta
+		value = 2000
+	}
+	multiply_variable = {
+		var = STP_pi_training_delta
+		value = -0.05
+	}
+	set_variable = {
+		var = STP_pi_org_delta
+		value = STP_pi_cadre_reserve
+	}
+	divide_variable = {
+		var = STP_pi_org_delta
+		value = 2000
+	}
+	multiply_variable = {
+		var = STP_pi_org_delta
+		value = 0.02
+	}
+	set_variable = {
+		var = STP_pi_regain_delta
+		value = STP_pi_org_delta
+	}
+	set_variable = {
+		var = STP_pi_admin_delta
+		value = STP_pi_cadre_instructors
+	}
+	add_to_variable = {
+		var = STP_pi_admin_delta
+		value = STP_pi_cadre_reserve
+	}
+	divide_variable = {
+		var = STP_pi_admin_delta
+		value = 2000
+	}
+	multiply_variable = {
+		var = STP_pi_admin_delta
+		value = 0.01
+	}
+	add_to_variable = {
+		var = STP_pw_ADISCORD_economy_overall_income_factor
+		value = STP_pi_income_delta
+	}
+	add_to_variable = {
+		var = STP_pw_training_time_factor
+		value = STP_pi_training_delta
+	}
+	add_to_variable = {
+		var = STP_pw_army_org_factor
+		value = STP_pi_org_delta
+	}
+	add_to_variable = {
+		var = STP_pw_army_org_regain
+		value = STP_pi_regain_delta
+	}
+	add_to_variable = {
+		var = STP_pw_ADISCORD_economy_admin_expense_factor
+		value = STP_pi_admin_delta
+	}
+	set_variable = {
+		var = STP_pi_social_delta
+		value = STP_pi_festival_districts
+	}
+
+	multiply_variable = {
+		var = STP_pi_social_delta
+		value = STP_pi_festival_rate
+	}
+
+	add_to_variable = {
+		var = STP_pw_ADISCORD_country_development_social_system_growth_factor
+		value = STP_pi_social_delta
+	}
+
+	set_variable = {
+		var = STP_pi_public_delta
+		value = STP_pi_case_public
+	}
+
+	multiply_variable = {
+		var = STP_pi_public_delta
+		value = STP_pi_public_rate
+	}
+
+	add_to_variable = {
+		var = STP_pw_stability_factor
+		value = STP_pi_public_delta
+	}
+
+	if = {
+		limit = {
+			check_variable = {
+				var = STP_pi_festival_load
+				value = STP_pi_festival_safe
+				compare = greater_than
+			}
+		}
+		set_temp_variable = {
+			var = STP_pi_load_cost
+			value = STP_pi_festival_load
+		}
+		subtract_from_temp_variable = {
+			var = STP_pi_load_cost
+			value = STP_pi_festival_safe
+		}
+		multiply_temp_variable = {
+			var = STP_pi_load_cost
+			value = 0.02
+		}
+		add_to_variable = {
+			var = STP_pi_admin_delta
+			value = STP_pi_load_cost
+		}
+		add_to_variable = {
+			var = STP_pw_ADISCORD_economy_admin_expense_factor
+			value = STP_pi_load_cost
+		}
+	}
+	STP_pw_refresh_modifier = yes
+}
+
+STP_pi_north_improve_terms = {
+	set_variable = {
+		var = STP_pi_north_rate
+		value = -0.01
+	}
+	STP_pi_refresh = yes
+}
+
+STP_pi_house_road_finish = {
+	if = {
+		limit = {
+			FROM = {
+				has_variable = STP_pi_house_deposit
+				check_variable = {
+					var = STP_pi_house_kind
+					value = 1
+					compare = equals
+				}
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+				FROM = {
+					STP_pi_road_site = yes
+				}
+			}
+			FROM = {
+				clear_variable = STP_pi_house_deposit
+				clear_variable = STP_pi_house_kind
+				set_state_flag = STP_pi_house_contract
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			add_to_variable = {
+				var = STP_pi_house_privileges
+				value = 1
+			}
+			STP_pi_refresh = yes
+		}
+		else = {
+			STP_pi_house_refund = yes
+		}
+	}
+}
+
+STP_pi_house_workshop_finish = {
+	if = {
+		limit = {
+			FROM = {
+				has_variable = STP_pi_house_deposit
+				check_variable = {
+					var = STP_pi_house_kind
+					value = 2
+					compare = equals
+				}
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+				FROM = {
+					STP_pi_workshop_site = yes
+				}
+			}
+			FROM = {
+				clear_variable = STP_pi_house_deposit
+				clear_variable = STP_pi_house_kind
+				set_state_flag = STP_pi_house_contract
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			add_to_variable = {
+				var = STP_pi_house_privileges
+				value = 1
+			}
+			STP_pi_refresh = yes
+		}
+		else = {
+			STP_pi_house_refund = yes
+		}
+	}
+}
+
+STP_pi_house_refund = {
+	if = {
+		limit = {
+			FROM = {
+				has_variable = STP_pi_house_deposit
+			}
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = FROM.STP_pi_house_deposit
+		}
+		FROM = {
+			clear_variable = STP_pi_house_deposit
+			clear_variable = STP_pi_house_kind
+		}
+		subtract_from_variable = {
+			var = STP_pi_house_slots
+			value = 1
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pi_house_close = {
+	if = {
+		limit = {
+			FROM = {
+				has_state_flag = STP_pi_house_contract
+			}
+		}
+		FROM = {
+			clr_state_flag = STP_pi_house_contract
+		}
+		subtract_from_variable = {
+			var = STP_pi_house_slots
+			value = 1
+		}
+		subtract_from_variable = {
+			var = STP_pi_house_privileges
+			value = 1
+		}
+		STP_pi_refresh = yes
+	}
+}
+
+STP_pi_cadre_enrol_refund = {
+	if = {
+		limit = {
+			has_variable = STP_pi_cadre_deposit
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = STP_pi_cadre_deposit
+		}
+		set_temp_variable = {
+			var = STP_pi_people
+			value = STP_pi_cadre_recruits
+		}
+		clear_variable = STP_pi_cadre_deposit
+		clear_variable = STP_pi_cadre_recruits
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+		add_manpower = var:STP_pi_people
+	}
+}
+
+STP_pi_cadre_enrol_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_cadre_deposit
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			add_to_variable = {
+				var = STP_pi_cadre_free
+				value = STP_pi_cadre_recruits
+			}
+			clear_variable = STP_pi_cadre_deposit
+			clear_variable = STP_pi_cadre_recruits
+			set_country_flag = STP_pi_cadre_trained
+		}
+		else = {
+			STP_pi_cadre_enrol_refund = yes
+		}
+	}
+}
+
+STP_pi_cadre_mobilisation_cancel = {
+	if = {
+		limit = {
+			has_variable = STP_pi_mobilisation_people
+		}
+		add_to_variable = {
+			var = STP_pi_cadre_reserve
+			value = STP_pi_mobilisation_people
+		}
+		clear_variable = STP_pi_mobilisation_people
+		STP_pi_refresh = yes
+	}
+}
+
+STP_pi_cadre_mobilisation_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_mobilisation_people
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			set_temp_variable = {
+				var = STP_pi_people
+				value = STP_pi_mobilisation_people
+			}
+			clear_variable = STP_pi_mobilisation_people
+			add_manpower = var:STP_pi_people
+			army_experience = 10
+		}
+		else = {
+			STP_pi_cadre_mobilisation_cancel = yes
+		}
+	}
+}
+
+STP_pi_artel_road_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_artel_deposit
+			FROM = {
+				has_state_flag = STP_pi_artel_pending
+			}
+			check_variable = {
+				var = STP_pi_artel_kind
+				value = 1
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+				FROM = {
+					STP_pi_road_site = yes
+				}
+			}
+			FROM = {
+				clr_state_flag = STP_pi_artel_pending
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			add_to_variable = {
+				var = STP_pi_cadre_free
+				value = STP_pi_artel_people
+			}
+			clear_variable = STP_pi_artel_deposit
+			clear_variable = STP_pi_artel_people
+			clear_variable = STP_pi_artel_kind
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = {
+			STP_pi_artel_refund = yes
+		}
+	}
+}
+
+STP_pi_artel_workshop_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_artel_deposit
+			FROM = {
+				has_state_flag = STP_pi_artel_pending
+			}
+			check_variable = {
+				var = STP_pi_artel_kind
+				value = 2
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+				FROM = {
+					STP_pi_workshop_site = yes
+				}
+			}
+			FROM = {
+				clr_state_flag = STP_pi_artel_pending
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			add_to_variable = {
+				var = STP_pi_cadre_free
+				value = STP_pi_artel_people
+			}
+			clear_variable = STP_pi_artel_deposit
+			clear_variable = STP_pi_artel_people
+			clear_variable = STP_pi_artel_kind
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = {
+			STP_pi_artel_refund = yes
+		}
+	}
+}
+
+STP_pi_artel_refund = {
+	if = {
+		limit = {
+			has_variable = STP_pi_artel_deposit
+			FROM = {
+				has_state_flag = STP_pi_artel_pending
+			}
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = STP_pi_artel_deposit
+		}
+		add_to_variable = {
+			var = STP_pi_cadre_free
+			value = STP_pi_artel_people
+		}
+		clear_variable = STP_pi_artel_deposit
+		clear_variable = STP_pi_artel_people
+		clear_variable = STP_pi_artel_kind
+		FROM = {
+			clr_state_flag = STP_pi_artel_pending
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pi_north_decline = {
+	if = {
+		limit = {
+			has_variable = STP_pi_north_offer
+		}
+		clear_variable = STP_pi_north_offer
+		clear_variable = STP_pi_north_quote
+		clear_variable = STP_pi_north_donor_quote
+		country_event = {
+			id = ADISCORD_STP_pi.3
+		}
+	}
+}
+
+STP_pi_north_accept = {
+	if = {
+		limit = {
+			STP_pi_north_offer_valid = yes
+		}
+		set_variable = {
+			var = STP_pi_north_deposit
+			value = STP_pi_north_quote
+		}
+		set_variable = {
+			var = STP_pi_north_donor_deposit
+			value = STP_pi_north_donor_quote
+		}
+		set_variable = {
+			var = STP_pi_north_kind
+			value = STP_pi_north_offer
+		}
+		subtract_from_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_north_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_costs
+			value = STP_pi_north_deposit
+		}
+		ADISCORD_economy_mark_dirty = yes
+		NOD = {
+			subtract_from_variable = {
+				var = ADISCORD_economy_treasury
+				value = STP.STP_pi_north_donor_deposit
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_costs
+				value = STP.STP_pi_north_donor_deposit
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+		clear_variable = STP_pi_north_offer
+		clear_variable = STP_pi_north_quote
+		clear_variable = STP_pi_north_donor_quote
+		activate_mission = STP_pi_north_delivery
+		country_event = {
+			id = ADISCORD_STP_pi.2
+		}
+	}
+}
+
+# Read the donor receipt in its own scope before clearing the persistent amount.
+STP_pi_north_refund = {
+	if = {
+		limit = {
+			has_variable = STP_pi_north_deposit
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = STP_pi_north_deposit
+		}
+		clear_variable = STP_pi_north_deposit
+		clear_variable = STP_pi_north_kind
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+		NOD = {
+			set_temp_variable = {
+				var = STP_pi_donor_refund
+				value = STP.STP_pi_north_donor_deposit
+			}
+			STP = {
+				clear_variable = STP_pi_north_donor_deposit
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = STP_pi_donor_refund
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = STP_pi_donor_refund
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+STP_pi_north_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_north_deposit
+		}
+		if = {
+			limit = {
+				STP_pi_north_relations = yes
+				OR = {
+					NOT = {
+						check_variable = {
+							var = STP_pi_north_kind
+							value = 3
+							compare = equals
+						}
+					}
+					STP_pi_has_workshop_site = yes
+				}
+			}
+			if = {
+				limit = {
+					check_variable = {
+						var = STP_pi_north_kind
+						value = 1
+						compare = equals
+					}
+				}
+				add_to_variable = {
+					var = STP_pw_research_speed_factor
+					value = 0.03
+				}
+				add_to_variable = {
+					var = STP_pw_planning_speed
+					value = 0.05
+				}
+				add_to_variable = {
+					var = STP_pi_north_specialists
+					value = 1
+				}
+				set_country_flag = STP_pi_north_training_delivered
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						var = STP_pi_north_kind
+						value = 2
+						compare = equals
+					}
+				}
+				add_equipment_to_stockpile = {
+					type = ADISCORD_infantry_equipment_2156
+					amount = 4500
+					producer = NOD
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment_1
+					amount = 120
+					producer = NOD
+				}
+				set_country_flag = STP_pi_north_equipment_delivered
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						var = STP_pi_north_kind
+						value = 3
+						compare = equals
+					}
+				}
+				random_owned_controlled_state = {
+					limit = {
+						OR = {
+							is_core_of = STP
+							is_core_of = STS
+						}
+						free_building_slots = {
+							building = industrial_complex
+							size > 0
+							include_locked = yes
+						}
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+				set_country_flag = STP_pi_north_industry_delivered
+			}
+			add_to_variable = {
+				var = STP_pi_north_obligations
+				value = 1
+			}
+			clear_variable = STP_pi_north_deposit
+			clear_variable = STP_pi_north_donor_deposit
+			clear_variable = STP_pi_north_kind
+			STP_pi_refresh = yes
+		}
+		else = {
+			STP_pi_north_refund = yes
+		}
+	}
+}
+
+STP_pi_specialist_refund = {
+	if = {
+		limit = {
+			has_variable = STP_pi_specialist_deposit
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = STP_pi_specialist_deposit
+		}
+		clear_variable = STP_pi_specialist_deposit
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pi_specialist_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_specialist_deposit
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_north_specialists
+					value = 3
+					compare = less_than
+				}
+			}
+			clear_variable = STP_pi_specialist_deposit
+			add_to_variable = {
+				var = STP_pi_north_specialists
+				value = 1
+			}
+		}
+		else = {
+			STP_pi_specialist_refund = yes
+		}
+	}
+}
+
+STP_pi_north_dispatch_offer = {
+	activate_mission = STP_pi_north_reply
+	NOD = {
+		country_event = {
+			id = ADISCORD_STP_pi.1
+			days = 1
+		}
+	}
+}
+
+STP_pi_festival_ease_load = {
+	if = {
+		limit = {
+			check_variable = {
+				var = STP_pi_festival_load
+				value = 1
+				compare = greater_than_or_equals
+			}
+		}
+		subtract_from_variable = {
+			var = STP_pi_festival_load
+			value = 1
+		}
+		subtract_from_variable = {
+			var = STP_pi_festival_reserved
+			value = 1
+		}
+	}
+}
+
+STP_pi_festival_release = {
+	if = {
+		limit = {
+			FROM = {
+				has_variable = STP_pi_festival_deposit
+			}
+		}
+		subtract_from_variable = {
+			var = STP_pi_festival_busy
+			value = 1
+		}
+		if = {
+			limit = {
+				FROM = {
+					check_variable = {
+						var = STP_pi_festival_kind
+						value = 2
+						compare = equals
+					}
+				}
+			}
+			subtract_from_variable = {
+				var = STP_pi_festival_pending_clubs
+				value = 1
+			}
+		}
+		FROM = {
+			clear_variable = STP_pi_festival_deposit
+			clear_variable = STP_pi_festival_kind
+			clear_variable = STP_pi_festival_quote
+		}
+	}
+}
+
+STP_pi_festival_refund = {
+	if = {
+		limit = {
+			FROM = {
+				has_variable = STP_pi_festival_deposit
+			}
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = FROM.STP_pi_festival_deposit
+		}
+		if = {
+			limit = {
+				FROM = {
+					check_variable = {
+						var = STP_pi_festival_kind
+						value = 2
+						compare = equals
+					}
+				}
+			}
+			subtract_from_variable = {
+				var = STP_pi_festival_reserved
+				value = 1
+			}
+		}
+		STP_pi_festival_release = yes
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pi_festival_public_finish = {
+	if = {
+		limit = {
+			FROM = {
+				has_variable = STP_pi_festival_deposit
+				check_variable = {
+					var = STP_pi_festival_kind
+					value = 1
+					compare = equals
+				}
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+				FROM = {
+					STP_pi_state_controlled = yes
+				}
+			}
+			set_temp_variable = {
+				var = STP_pi_festival_reward
+				value = FROM.STP_pi_festival_quote
+			}
+			add_stability = var:STP_pi_festival_reward
+			if = {
+				limit = {
+					FROM = {
+						NOT = {
+							check_variable = {
+								var = STP_pi_festival_public_visits
+								value = 1
+								compare = greater_than_or_equals
+							}
+						}
+					}
+				}
+				add_to_variable = {
+					var = STP_pi_festival_districts
+					value = 1
+				}
+			}
+			STP_pi_festival_ease_load = yes
+			FROM = {
+				add_to_variable = {
+					var = STP_pi_festival_public_visits
+					value = 1
+				}
+				set_state_flag = {
+					flag = STP_pi_festival_rest
+					value = 1
+					days = 90
+				}
+			}
+			STP_pi_festival_release = yes
+			STP_pi_refresh = yes
+		}
+		else = {
+			STP_pi_festival_refund = yes
+		}
+	}
+}
+
+STP_pi_festival_club_finish = {
+	if = {
+		limit = {
+			FROM = {
+				has_variable = STP_pi_festival_deposit
+				check_variable = {
+					var = STP_pi_festival_kind
+					value = 2
+					compare = equals
+				}
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+				FROM = {
+					STP_pi_state_controlled = yes
+				}
+			}
+			set_temp_variable = {
+				var = STP_pi_festival_reward
+				value = FROM.STP_pi_festival_quote
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = STP_pi_festival_reward
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = STP_pi_festival_reward
+			}
+			ADISCORD_economy_mark_dirty = yes
+			add_to_variable = {
+				var = STP_pi_festival_load
+				value = 1
+			}
+			FROM = {
+				add_to_variable = {
+					var = STP_pi_festival_club_visits
+					value = 1
+				}
+				set_state_flag = {
+					flag = STP_pi_festival_rest
+					value = 1
+					days = 90
+				}
+			}
+			STP_pi_festival_release = yes
+			STP_pi_refresh = yes
+		}
+		else = {
+			STP_pi_festival_refund = yes
+		}
+	}
+}
+
+STP_pi_festival_medical_refund = {
+	if = {
+		limit = {
+			has_variable = STP_pi_festival_medical_deposit
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = STP_pi_festival_medical_deposit
+		}
+		clear_variable = STP_pi_festival_medical_deposit
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pi_festival_medical_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_festival_medical_deposit
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_festival_load
+					value = 1
+					compare = greater_than_or_equals
+				}
+			}
+			clear_variable = STP_pi_festival_medical_deposit
+			STP_pi_festival_ease_load = yes
+			STP_pi_festival_ease_load = yes
+			STP_pi_refresh = yes
+		}
+		else = {
+			STP_pi_festival_medical_refund = yes
+		}
+	}
+}
+
+STP_pi_trade_rifles_refund = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_rifles_deposit
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = STP_pi_trade_rifles_deposit
+		}
+		clear_variable = STP_pi_trade_rifles_deposit
+		clear_variable = STP_pi_trade_rifles_mode
+		clear_variable = STP_pi_trade_rifles_quote
+		subtract_from_variable = {
+			var = STP_pi_trade_busy
+			value = 1
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_rifles_standard
+			}
+			remove_decision = STP_pi_trade_rifles_standard
+		}
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_rifles_rush
+			}
+			remove_decision = STP_pi_trade_rifles_rush
+		}
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_rifles_series
+			}
+			remove_decision = STP_pi_trade_rifles_series
+		}
+	}
+}
+
+STP_pi_trade_rifles_cancel = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_rifles_deposit
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = STP_pi_trade_rifles_deposit
+		}
+		if = {
+			limit = {
+				STP_pi_trade_insured = no
+			}
+			if = {
+				limit = {
+					check_variable = {
+						var = STP_pi_trade_rifles_mode
+						value = 1
+						compare = equals
+					}
+				}
+				multiply_temp_variable = {
+					var = STP_pi_refund
+					value = 0.9
+				}
+			}
+			else = {
+				multiply_temp_variable = {
+					var = STP_pi_refund
+					value = 0.75
+				}
+			}
+		}
+		clear_variable = STP_pi_trade_rifles_deposit
+		clear_variable = STP_pi_trade_rifles_mode
+		clear_variable = STP_pi_trade_rifles_quote
+		subtract_from_variable = {
+			var = STP_pi_trade_busy
+			value = 1
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_rifles_standard
+			}
+			remove_decision = STP_pi_trade_rifles_standard
+		}
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_rifles_rush
+			}
+			remove_decision = STP_pi_trade_rifles_rush
+		}
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_rifles_series
+			}
+			remove_decision = STP_pi_trade_rifles_series
+		}
+	}
+}
+
+STP_pi_trade_rifles_standard_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_rifles_deposit
+			check_variable = {
+				var = STP_pi_trade_rifles_mode
+				value = 1
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_infantry_equipment_2156
+				amount = STP_pi_trade_rifles_quote
+				producer = STP
+			}
+			clear_variable = STP_pi_trade_rifles_deposit
+			clear_variable = STP_pi_trade_rifles_mode
+			clear_variable = STP_pi_trade_rifles_quote
+			subtract_from_variable = {
+				var = STP_pi_trade_busy
+				value = 1
+			}
+		}
+		else = {
+			STP_pi_trade_rifles_refund = yes
+		}
+	}
+}
+
+STP_pi_trade_rifles_rush_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_rifles_deposit
+			check_variable = {
+				var = STP_pi_trade_rifles_mode
+				value = 2
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_infantry_equipment_2156
+				amount = STP_pi_trade_rifles_quote
+				producer = STP
+			}
+			clear_variable = STP_pi_trade_rifles_deposit
+			clear_variable = STP_pi_trade_rifles_mode
+			clear_variable = STP_pi_trade_rifles_quote
+			subtract_from_variable = {
+				var = STP_pi_trade_busy
+				value = 1
+			}
+		}
+		else = {
+			STP_pi_trade_rifles_refund = yes
+		}
+	}
+}
+
+STP_pi_trade_rifles_series_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_rifles_deposit
+			check_variable = {
+				var = STP_pi_trade_rifles_mode
+				value = 3
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_infantry_equipment_2156
+				amount = STP_pi_trade_rifles_quote
+				producer = STP
+			}
+			set_variable = {
+				var = STP_pi_trade_rifles_series_done
+				value = 1
+			}
+			clear_variable = STP_pi_trade_rifles_deposit
+			clear_variable = STP_pi_trade_rifles_mode
+			clear_variable = STP_pi_trade_rifles_quote
+			subtract_from_variable = {
+				var = STP_pi_trade_busy
+				value = 1
+			}
+		}
+		else = {
+			STP_pi_trade_rifles_refund = yes
+		}
+	}
+}
+
+STP_pi_trade_support_refund = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_support_deposit
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = STP_pi_trade_support_deposit
+		}
+		clear_variable = STP_pi_trade_support_deposit
+		clear_variable = STP_pi_trade_support_mode
+		clear_variable = STP_pi_trade_support_quote
+		subtract_from_variable = {
+			var = STP_pi_trade_busy
+			value = 1
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_support_standard
+			}
+			remove_decision = STP_pi_trade_support_standard
+		}
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_support_rush
+			}
+			remove_decision = STP_pi_trade_support_rush
+		}
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_support_series
+			}
+			remove_decision = STP_pi_trade_support_series
+		}
+	}
+}
+
+STP_pi_trade_support_cancel = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_support_deposit
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = STP_pi_trade_support_deposit
+		}
+		if = {
+			limit = {
+				STP_pi_trade_insured = no
+			}
+			if = {
+				limit = {
+					check_variable = {
+						var = STP_pi_trade_support_mode
+						value = 1
+						compare = equals
+					}
+				}
+				multiply_temp_variable = {
+					var = STP_pi_refund
+					value = 0.9
+				}
+			}
+			else = {
+				multiply_temp_variable = {
+					var = STP_pi_refund
+					value = 0.75
+				}
+			}
+		}
+		clear_variable = STP_pi_trade_support_deposit
+		clear_variable = STP_pi_trade_support_mode
+		clear_variable = STP_pi_trade_support_quote
+		subtract_from_variable = {
+			var = STP_pi_trade_busy
+			value = 1
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_support_standard
+			}
+			remove_decision = STP_pi_trade_support_standard
+		}
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_support_rush
+			}
+			remove_decision = STP_pi_trade_support_rush
+		}
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_support_series
+			}
+			remove_decision = STP_pi_trade_support_series
+		}
+	}
+}
+
+STP_pi_trade_support_standard_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_support_deposit
+			check_variable = {
+				var = STP_pi_trade_support_mode
+				value = 1
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment_1
+				amount = STP_pi_trade_support_quote
+				producer = STP
+			}
+			clear_variable = STP_pi_trade_support_deposit
+			clear_variable = STP_pi_trade_support_mode
+			clear_variable = STP_pi_trade_support_quote
+			subtract_from_variable = {
+				var = STP_pi_trade_busy
+				value = 1
+			}
+		}
+		else = {
+			STP_pi_trade_support_refund = yes
+		}
+	}
+}
+
+STP_pi_trade_support_rush_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_support_deposit
+			check_variable = {
+				var = STP_pi_trade_support_mode
+				value = 2
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment_1
+				amount = STP_pi_trade_support_quote
+				producer = STP
+			}
+			clear_variable = STP_pi_trade_support_deposit
+			clear_variable = STP_pi_trade_support_mode
+			clear_variable = STP_pi_trade_support_quote
+			subtract_from_variable = {
+				var = STP_pi_trade_busy
+				value = 1
+			}
+		}
+		else = {
+			STP_pi_trade_support_refund = yes
+		}
+	}
+}
+
+STP_pi_trade_support_series_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_support_deposit
+			check_variable = {
+				var = STP_pi_trade_support_mode
+				value = 3
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment_1
+				amount = STP_pi_trade_support_quote
+				producer = STP
+			}
+			set_variable = {
+				var = STP_pi_trade_support_series_done
+				value = 1
+			}
+			clear_variable = STP_pi_trade_support_deposit
+			clear_variable = STP_pi_trade_support_mode
+			clear_variable = STP_pi_trade_support_quote
+			subtract_from_variable = {
+				var = STP_pi_trade_busy
+				value = 1
+			}
+		}
+		else = {
+			STP_pi_trade_support_refund = yes
+		}
+	}
+}
+
+STP_pi_trade_trucks_refund = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_trucks_deposit
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = STP_pi_trade_trucks_deposit
+		}
+		clear_variable = STP_pi_trade_trucks_deposit
+		clear_variable = STP_pi_trade_trucks_mode
+		clear_variable = STP_pi_trade_trucks_quote
+		subtract_from_variable = {
+			var = STP_pi_trade_busy
+			value = 1
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_trucks_standard
+			}
+			remove_decision = STP_pi_trade_trucks_standard
+		}
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_trucks_rush
+			}
+			remove_decision = STP_pi_trade_trucks_rush
+		}
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_trucks_series
+			}
+			remove_decision = STP_pi_trade_trucks_series
+		}
+	}
+}
+
+STP_pi_trade_trucks_cancel = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_trucks_deposit
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = STP_pi_trade_trucks_deposit
+		}
+		if = {
+			limit = {
+				STP_pi_trade_insured = no
+			}
+			if = {
+				limit = {
+					check_variable = {
+						var = STP_pi_trade_trucks_mode
+						value = 1
+						compare = equals
+					}
+				}
+				multiply_temp_variable = {
+					var = STP_pi_refund
+					value = 0.9
+				}
+			}
+			else = {
+				multiply_temp_variable = {
+					var = STP_pi_refund
+					value = 0.75
+				}
+			}
+		}
+		clear_variable = STP_pi_trade_trucks_deposit
+		clear_variable = STP_pi_trade_trucks_mode
+		clear_variable = STP_pi_trade_trucks_quote
+		subtract_from_variable = {
+			var = STP_pi_trade_busy
+			value = 1
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_trucks_standard
+			}
+			remove_decision = STP_pi_trade_trucks_standard
+		}
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_trucks_rush
+			}
+			remove_decision = STP_pi_trade_trucks_rush
+		}
+		if = {
+			limit = {
+				has_decision = STP_pi_trade_trucks_series
+			}
+			remove_decision = STP_pi_trade_trucks_series
+		}
+	}
+}
+
+STP_pi_trade_trucks_standard_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_trucks_deposit
+			check_variable = {
+				var = STP_pi_trade_trucks_mode
+				value = 1
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = STP_pi_trade_trucks_quote
+				producer = STP
+			}
+			clear_variable = STP_pi_trade_trucks_deposit
+			clear_variable = STP_pi_trade_trucks_mode
+			clear_variable = STP_pi_trade_trucks_quote
+			subtract_from_variable = {
+				var = STP_pi_trade_busy
+				value = 1
+			}
+		}
+		else = {
+			STP_pi_trade_trucks_refund = yes
+		}
+	}
+}
+
+STP_pi_trade_trucks_rush_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_trucks_deposit
+			check_variable = {
+				var = STP_pi_trade_trucks_mode
+				value = 2
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = STP_pi_trade_trucks_quote
+				producer = STP
+			}
+			clear_variable = STP_pi_trade_trucks_deposit
+			clear_variable = STP_pi_trade_trucks_mode
+			clear_variable = STP_pi_trade_trucks_quote
+			subtract_from_variable = {
+				var = STP_pi_trade_busy
+				value = 1
+			}
+		}
+		else = {
+			STP_pi_trade_trucks_refund = yes
+		}
+	}
+}
+
+STP_pi_trade_trucks_series_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_trucks_deposit
+			check_variable = {
+				var = STP_pi_trade_trucks_mode
+				value = 3
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = STP_pi_trade_trucks_quote
+				producer = STP
+			}
+			set_variable = {
+				var = STP_pi_trade_trucks_series_done
+				value = 1
+			}
+			clear_variable = STP_pi_trade_trucks_deposit
+			clear_variable = STP_pi_trade_trucks_mode
+			clear_variable = STP_pi_trade_trucks_quote
+			subtract_from_variable = {
+				var = STP_pi_trade_busy
+				value = 1
+			}
+		}
+		else = {
+			STP_pi_trade_trucks_refund = yes
+		}
+	}
+}
+
+STP_pi_trade_expand_refund = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_expand_deposit
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = STP_pi_trade_expand_deposit
+		}
+		clear_variable = STP_pi_trade_expand_deposit
+		subtract_from_variable = {
+			var = STP_pi_trade_busy
+			value = 1
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pi_trade_expand_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_trade_expand_deposit
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_trade_level
+					value = 3
+					compare = less_than
+				}
+			}
+			clear_variable = STP_pi_trade_expand_deposit
+			subtract_from_variable = {
+				var = STP_pi_trade_busy
+				value = 1
+			}
+			add_to_variable = {
+				var = STP_pi_trade_level
+				value = 1
+			}
+			add_to_variable = {
+				var = STP_pw_production_factory_max_efficiency_factor
+				value = 0.025
+			}
+			STP_pw_refresh_modifier = yes
+		}
+		else = {
+			STP_pi_trade_expand_refund = yes
+		}
+	}
+}
+
+STP_pi_case_credit = {
+	set_variable = {
+		var = STP_pi_case_entitlement
+		value = STP_pi_case_sealed
+	}
+	multiply_variable = {
+		var = STP_pi_case_entitlement
+		value = STP_pi_case_rate
+	}
+	subtract_from_variable = {
+		var = STP_pi_case_entitlement
+		value = STP_pi_case_credited
+	}
+	if = {
+		limit = {
+			check_variable = {
+				var = STP_pi_case_entitlement
+				value = 0
+				compare = greater_than
+			}
+		}
+		add_to_variable = {
+			var = STP_pi_case_credits
+			value = STP_pi_case_entitlement
+		}
+		add_to_variable = {
+			var = STP_pi_case_credited
+			value = STP_pi_case_entitlement
+		}
+	}
+	clear_variable = STP_pi_case_entitlement
+}
+
+STP_pi_case_orders_refund = {
+	if = {
+		limit = {
+			has_variable = STP_pi_case_orders_deposit
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = STP_pi_case_orders_deposit
+		}
+		clear_variable = STP_pi_case_orders_deposit
+		clear_variable = STP_pi_case_orders_mode
+		subtract_from_variable = {
+			var = STP_pi_case_busy
+			value = 1
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pi_case_orders_quick_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_case_orders_deposit
+			check_variable = {
+				var = STP_pi_case_orders_mode
+				value = 1
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			clear_variable = STP_pi_case_orders_deposit
+			clear_variable = STP_pi_case_orders_mode
+			subtract_from_variable = {
+				var = STP_pi_case_busy
+				value = 1
+			}
+			set_variable = {
+				var = STP_pi_case_orders_stage
+				value = 4
+			}
+			remove_ideas = STP_party_archive_backlog
+			add_stability = 0.01
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = {
+			STP_pi_case_orders_refund = yes
+		}
+	}
+}
+
+STP_pi_case_orders_full_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_case_orders_deposit
+			check_variable = {
+				var = STP_pi_case_orders_mode
+				value = 2
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			clear_variable = STP_pi_case_orders_deposit
+			clear_variable = STP_pi_case_orders_mode
+			subtract_from_variable = {
+				var = STP_pi_case_busy
+				value = 1
+			}
+			set_variable = {
+				var = STP_pi_case_orders_stage
+				value = 1
+			}
+			remove_ideas = STP_party_archive_backlog
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = {
+			STP_pi_case_orders_refund = yes
+		}
+	}
+}
+
+STP_pi_case_supply_refund = {
+	if = {
+		limit = {
+			has_variable = STP_pi_case_supply_deposit
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = STP_pi_case_supply_deposit
+		}
+		clear_variable = STP_pi_case_supply_deposit
+		clear_variable = STP_pi_case_supply_mode
+		subtract_from_variable = {
+			var = STP_pi_case_busy
+			value = 1
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pi_case_supply_quick_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_case_supply_deposit
+			check_variable = {
+				var = STP_pi_case_supply_mode
+				value = 1
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			clear_variable = STP_pi_case_supply_deposit
+			clear_variable = STP_pi_case_supply_mode
+			subtract_from_variable = {
+				var = STP_pi_case_busy
+				value = 1
+			}
+			set_variable = {
+				var = STP_pi_case_supply_stage
+				value = 4
+			}
+			remove_ideas = STP_party_contract_disputes
+			add_stability = 0.01
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = {
+			STP_pi_case_supply_refund = yes
+		}
+	}
+}
+
+STP_pi_case_supply_full_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_case_supply_deposit
+			check_variable = {
+				var = STP_pi_case_supply_mode
+				value = 2
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			clear_variable = STP_pi_case_supply_deposit
+			clear_variable = STP_pi_case_supply_mode
+			subtract_from_variable = {
+				var = STP_pi_case_busy
+				value = 1
+			}
+			set_variable = {
+				var = STP_pi_case_supply_stage
+				value = 1
+			}
+			remove_ideas = STP_party_contract_disputes
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = {
+			STP_pi_case_supply_refund = yes
+		}
+	}
+}
+
+STP_pi_case_property_refund = {
+	if = {
+		limit = {
+			has_variable = STP_pi_case_property_deposit
+		}
+		set_temp_variable = {
+			var = STP_pi_refund
+			value = STP_pi_case_property_deposit
+		}
+		clear_variable = STP_pi_case_property_deposit
+		clear_variable = STP_pi_case_property_mode
+		subtract_from_variable = {
+			var = STP_pi_case_busy
+			value = 1
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pi_refund
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pi_refund
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pi_case_property_quick_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_case_property_deposit
+			check_variable = {
+				var = STP_pi_case_property_mode
+				value = 1
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			clear_variable = STP_pi_case_property_deposit
+			clear_variable = STP_pi_case_property_mode
+			subtract_from_variable = {
+				var = STP_pi_case_busy
+				value = 1
+			}
+			set_variable = {
+				var = STP_pi_case_property_stage
+				value = 4
+			}
+			remove_ideas = STP_party_property_disputes
+			add_stability = 0.01
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = {
+			STP_pi_case_property_refund = yes
+		}
+	}
+}
+
+STP_pi_case_property_full_finish = {
+	if = {
+		limit = {
+			has_variable = STP_pi_case_property_deposit
+			check_variable = {
+				var = STP_pi_case_property_mode
+				value = 2
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				STP_pi_country_valid = yes
+			}
+			clear_variable = STP_pi_case_property_deposit
+			clear_variable = STP_pi_case_property_mode
+			subtract_from_variable = {
+				var = STP_pi_case_busy
+				value = 1
+			}
+			set_variable = {
+				var = STP_pi_case_property_stage
+				value = 1
+			}
+			remove_ideas = STP_party_property_disputes
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = {
+			STP_pi_case_property_refund = yes
+		}
 	}
 }

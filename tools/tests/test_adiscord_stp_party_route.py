@@ -3486,6 +3486,8 @@ class PoliticalChapterContracts(unittest.TestCase):
                 "STP_ch_pressure_3",
                 "STP_ch_pressure_4",
                 "STP_ch_crisis_deadline",
+                "STP_pi_north_reply",
+                "STP_pi_north_delivery",
             },
         )
         activated = {

@@ -4962,3 +4962,212 @@ STP_pw_civic_civil_enterprises_ready = {
 		}
 	}
 }
+
+STP_pi_country_valid = {
+	tag = STP
+	STP_pw_can_reconstruct = yes
+}
+
+STP_pi_house_capacity = {
+	OR = {
+		check_variable = {
+			var = STP_pi_house_slots
+			value = 3
+			compare = less_than
+		}
+		AND = {
+			has_completed_focus = STP_pe_houses_ending_b
+			check_variable = {
+				var = STP_pi_house_slots
+				value = 4
+				compare = less_than
+			}
+		}
+	}
+}
+
+STP_pi_state_controlled = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+}
+
+STP_pi_house_site_free = {
+	STP_pi_state_controlled = yes
+	NOT = {
+		has_state_flag = STP_pi_house_contract
+		has_variable = STP_pi_house_deposit
+	}
+}
+
+STP_pi_road_site = {
+	STP_pi_state_controlled = yes
+	NOT = {
+		infrastructure > 4
+	}
+}
+
+STP_pi_workshop_site = {
+	STP_pi_state_controlled = yes
+	free_building_slots = {
+		building = industrial_complex
+		size > 0
+		include_locked = yes
+	}
+}
+
+STP_pi_house_buyout_open = {
+	OR = {
+		has_completed_focus = STP_party_houses_centralise
+		has_completed_focus = STP_party_houses_hearings
+		has_completed_focus = STP_pe_houses_ending_a
+	}
+}
+
+STP_pi_north_relations = {
+	STP_pi_country_valid = yes
+	NOT = {
+		has_war_with = NOD
+	}
+	NOD = {
+		exists = yes
+		has_capitulated = no
+	}
+}
+
+STP_pi_north_capacity = {
+	check_variable = {
+		var = STP_pi_north_obligations
+		value = 3
+		compare = less_than
+	}
+}
+
+STP_pi_north_offer_valid = {
+	STP_pi_north_relations = yes
+	STP_pi_north_capacity = yes
+	has_variable = STP_pi_north_offer
+	NOT = {
+		has_variable = STP_pi_north_deposit
+	}
+	check_variable = {
+		var = ADISCORD_economy_treasury
+		value = STP_pi_north_quote
+		compare = greater_than_or_equals
+	}
+	NOD = {
+		check_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP.STP_pi_north_donor_quote
+			compare = greater_than_or_equals
+		}
+	}
+}
+
+STP_pi_has_workshop_site = {
+	any_owned_state = {
+		is_controlled_by = ROOT
+		OR = {
+			is_core_of = STP
+			is_core_of = STS
+		}
+		free_building_slots = {
+			building = industrial_complex
+			size > 0
+			include_locked = yes
+		}
+	}
+}
+
+STP_pi_festival_capacity = {
+	OR = {
+		check_variable = {
+			var = STP_pi_festival_busy
+			value = 1
+			compare = less_than
+		}
+		AND = {
+			OR = {
+				has_completed_focus = STP_pe_festival_work_a
+				has_completed_focus = STP_pe_festival_work_b
+			}
+			check_variable = {
+				var = STP_pi_festival_busy
+				value = 2
+				compare = less_than
+			}
+		}
+		AND = {
+			has_completed_focus = STP_pe_festival_ending_a
+			check_variable = {
+				var = STP_pi_festival_busy
+				value = 3
+				compare = less_than
+			}
+		}
+	}
+}
+
+STP_pi_festival_club_capacity = {
+	check_variable = {
+		var = STP_pi_festival_reserved
+		value = 6
+		compare = less_than
+	}
+}
+
+STP_pi_trade_capacity = {
+	OR = {
+		check_variable = {
+			var = STP_pi_trade_busy
+			value = 2
+			compare = less_than
+		}
+		AND = {
+			has_completed_focus = STP_pe_trade_ending_a
+			check_variable = {
+				var = STP_pi_trade_busy
+				value = 3
+				compare = less_than
+			}
+		}
+	}
+}
+
+STP_pi_trade_insured = {
+	OR = {
+		has_completed_focus = STP_party_trade_warehouses
+		has_completed_focus = STP_pe_trade_ending_a
+	}
+}
+
+STP_pi_trade_rush_open = {
+	OR = {
+		has_completed_focus = STP_party_trade_imports
+		has_completed_focus = STP_party_trade_industry
+	}
+}
+
+STP_pi_trade_series_open = {
+	OR = {
+		has_completed_focus = STP_party_trade_monopolies
+		has_completed_focus = STP_party_trade_tenders
+	}
+}
+
+STP_pi_case_capacity = {
+	OR = {
+		check_variable = {
+			var = STP_pi_case_busy
+			value = 1
+			compare = less_than
+		}
+		AND = {
+			has_completed_focus = STP_party_security_network
+			check_variable = {
+				var = STP_pi_case_busy
+				value = 2
+				compare = less_than
+			}
+		}
+	}
+}

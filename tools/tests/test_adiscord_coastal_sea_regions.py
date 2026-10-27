@@ -24,6 +24,89 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class ProvinceCornerTests(unittest.TestCase):
+    def test_yubor_contacts_have_broad_borders(self):
+        definitions = {
+            int(fields[0]): tuple(map(int, fields[1:4]))
+            for line in (ROOT / "map/definition.csv").read_text().splitlines()
+            if len(fields := line.split(";")) >= 8
+        }
+        with Image.open(ROOT / "map/provinces.bmp") as image:
+            rgb = np.asarray(image)
+        for first_id, second_id in (
+            (6, 85), (118, 129), (28, 127), (51, 108),
+            (88, 11496), (33, 16649), (81, 16646), (83, 92),
+        ):
+            with self.subTest(border=(first_id, second_id)):
+                first = np.all(rgb == definitions[first_id], axis=2)
+                second = np.all(rgb == definitions[second_id], axis=2)
+                shared_edges = sum(int(edges.sum()) for edges in (
+                    first[:, :-1] & second[:, 1:],
+                    second[:, :-1] & first[:, 1:],
+                    first[:-1, :] & second[1:, :],
+                    second[:-1, :] & first[1:, :],
+                ))
+                self.assertGreaterEqual(shared_edges, 7)
+
+    def test_repaired_provinces_and_their_donors_remain_connected(self):
+        from scipy.ndimage import label
+
+        definitions = {
+            int(fields[0]): tuple(map(int, fields[1:4]))
+            for line in (ROOT / "map/definition.csv").read_text().splitlines()
+            if len(fields := line.split(";")) >= 8
+        }
+        with Image.open(ROOT / "map/provinces.bmp") as image:
+            rgb = np.asarray(image)
+        provinces = {
+            6, 28, 33, 51, 81, 83, 85, 88, 92, 103, 108, 118, 124, 127, 131,
+            729, 971, 7283, 9633, 10926, 11496, 16597, 16616, 16646, 16649,
+            16746, 16872, 16877,
+        }
+        for province in sorted(provinces):
+            with self.subTest(province=province):
+                self.assertEqual(label(np.all(rgb == definitions[province], axis=2))[1], 1)
+
+    def test_repaired_unit_anchors_stay_in_their_provinces(self):
+        definitions = {
+            int(fields[0]): tuple(map(int, fields[1:4]))
+            for line in (ROOT / "map/definition.csv").read_text().splitlines()
+            if len(fields := line.split(";")) >= 8
+        }
+        with Image.open(ROOT / "map/provinces.bmp") as image:
+            for line in (ROOT / "map/unitstacks.txt").read_text().splitlines():
+                fields = line.split(";")
+                province = int(fields[0])
+                if province not in geography.PROVINCE_REPAIR_PROVINCES:
+                    continue
+                x = float(fields[2])
+                y = image.height - 1 - float(fields[4])
+                with self.subTest(province=province, slot=fields[1]):
+                    self.assertEqual(image.getpixel((round(x), round(y))), definitions[province])
+                    self.assertEqual(image.getpixel((int(x), int(y))), definitions[province])
+
+    def test_neftegorsk_southern_contact_has_a_broad_connected_border(self):
+        from scipy.ndimage import label
+
+        definitions = {
+            int(fields[0]): tuple(map(int, fields[1:4]))
+            for line in (ROOT / "map/definition.csv").read_text().splitlines()
+            if len(fields := line.split(";")) >= 8
+        }
+        with Image.open(ROOT / "map/provinces.bmp") as image:
+            rgb = np.asarray(image)
+        first = np.all(rgb == definitions[4287], axis=2)
+        second = np.all(rgb == definitions[6099], axis=2)
+        for mask in (first, second):
+            self.assertEqual(label(mask)[1], 1)
+        shared_edges = sum(int(edges.sum()) for edges in (
+            first[:, :-1] & second[:, 1:],
+            second[:, :-1] & first[:, 1:],
+            first[:-1, :] & second[1:, :],
+            second[:-1, :] & first[1:, :],
+        ))
+        # This is an authored border width, not a native pathfinding threshold.
+        self.assertGreaterEqual(shared_edges, 7)
+
     def test_mandate_islands_have_dry_lowland_rasters(self):
         definitions = {
             int(fields[0]): tuple(map(int, fields[1:4]))

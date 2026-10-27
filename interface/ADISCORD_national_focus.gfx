@@ -1,5 +1,45 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_STP_ch_market_charter"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_ch_market_charter.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_trade_imports"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_trade_imports.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_trade_credit"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_trade_credit.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_trade_industry"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_trade_industry.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_trade_advance"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_trade_advance.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_trade_tenders"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_trade_tenders.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_trade_monopolies"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_party_trade_monopolies.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_ch_production_agreements"
+		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_ch_production_agreements.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_STP_pe_festival_commission"
 		texturefile = "gfx/interface/goals/STP/party_postcivilwar/GFX_focus_STP_pe_festival_commission.png"
 	}

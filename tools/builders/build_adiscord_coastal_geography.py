@@ -1,4 +1,4 @@
-"""Build bounded coastal, settlement and Svetlogorye mountain geography.
+"""Build bounded coastal, settlement, province-border and mountain geography.
 
 Province geometry and state membership remain authored inputs. Only the explicit
 island masks acquire new land; mainland edits use explicit province masks.
@@ -62,14 +62,89 @@ RURAL_SECTORS = tuple(
     for city in SOUTHERN_CITIES for sector in city.get("sectors", ())
 )
 SOUTHERN_GEOMETRY = (*SOUTHERN_CITIES, *RURAL_SECTORS)
-# Break four-province corners without changing state membership or splitting a province.
+# Resolve four-province corners and widen short contacts without changing state membership.
 # Coordinates use the top-left raster origin.
-PROVINCE_CORNER_REPAIRS = {
+PROVINCE_PIXEL_REPAIRS = {
     (3971, 1447): (971, 16746),
     (3805, 1171): (10375, 16777),
     (3957, 1149): (16788, 16787),
     (3959, 1034): (834, 16738),
+    # Keep a three-pixel-wide approach from 6099 to the southern edge of 4287.
+    (3674, 1433): (4287, 6099),
+    (3675, 1433): (4287, 6099),
+    (3676, 1433): (4287, 6099),
+    (3674, 1434): (4287, 6099),
+    (3675, 1434): (4287, 6099),
+    (3676, 1434): (4287, 6099),
+    (3674, 1435): (4287, 6099),
+    (3675, 1435): (4287, 6099),
+    # Yubor: widen the authored contacts without changing the neighbour graph.
+    (3839, 989): (6, 85),
+    (3840, 989): (6, 85),
+    (3841, 989): (6, 85),
+    (3842, 989): (6, 85),
+    (3839, 990): (6, 85),
+    (3840, 990): (6, 85),
+    (3841, 990): (6, 85),
+    (3842, 990): (6, 85),
+    (3814, 1027): (131, 118),
+    (3815, 1027): (131, 118),
+    (3816, 1027): (131, 118),
+    (3817, 1027): (131, 118),
+    (3814, 1028): (131, 118),
+    (3815, 1028): (131, 118),
+    (3816, 1028): (131, 118),
+    (3817, 1028): (131, 118),
+    (3847, 1017): (28, 127),
+    (3848, 1017): (28, 127),
+    (3849, 1017): (124, 127),
+    (3847, 1018): (28, 127),
+    (3848, 1018): (124, 127),
+    (3849, 1018): (124, 127),
+    (3851, 969): (103, 51),
+    (3852, 969): (103, 51),
+    (3851, 970): (108, 51),
+    (3852, 970): (103, 51),
+    (3851, 971): (108, 51),
+    (3852, 971): (103, 51),
+    (3851, 972): (108, 51),
+    (3852, 972): (103, 51),
+    (3851, 973): (108, 51),
+    (3852, 973): (103, 51),
+    (3852, 997): (6, 11496),
+    (3853, 997): (88, 11496),
+    (3852, 998): (88, 11496),
+    (3853, 998): (88, 11496),
+    (3835, 1008): (33, 16649),
+    (3836, 1008): (7283, 16649),
+    (3835, 1009): (33, 16649),
+    (3836, 1009): (7283, 16649),
+    (3856, 989): (81, 16646),
+    (3857, 989): (81, 16646),
+    (3856, 990): (81, 16646),
+    (3857, 990): (81, 16646),
+    (3843, 957): (92, 83),
+    (3844, 957): (92, 83),
+    (3845, 957): (92, 83),
+    (3843, 958): (92, 83),
+    (3844, 958): (92, 83),
+    (3845, 958): (92, 83),
+    # Assign isolated southern pixels to their adjoining provinces.
+    (3791, 1502): (729, 16877),
+    (3809, 1496): (9633, 16872),
+    (3970, 1446): (971, 16746),
+    # Connect Zshat across the western edge of Old Zshat with a two-pixel corridor.
+    (3122, 1360): (16597, 10926),
+    (3122, 1361): (16616, 10926),
+    (3123, 1361): (16616, 10926),
+    (3122, 1362): (16616, 10926),
+    (3123, 1362): (16616, 10926),
+    (3123, 1363): (16616, 10926),
 }
+PROVINCE_REPAIR_PROVINCES = frozenset(
+    province for pair in PROVINCE_PIXEL_REPAIRS.values() for province in pair
+)
+DISPLACED_PROVINCES |= PROVINCE_REPAIR_PROVINCES
 ANCHOR_REFERENCES.update({entry["province"]: entry["parent"] for entry in SOUTHERN_CITIES})
 ANCHOR_REFERENCES.update({entry["province"]: entry["parent"] for entry in RURAL_SECTORS})
 DISPLACED_PROVINCES |= frozenset(entry["parent"] for entry in SOUTHERN_CITIES)
@@ -319,7 +394,7 @@ def unit_anchors(
     slots = defaultdict(dict)
     for row in rows:
         slots[int(row[0])][int(row[1])] = row
-    touched = set(NUDGE_SPLIT_PARENTS) | NUDGE_SPLIT_DONORS
+    touched = set(NUDGE_SPLIT_PARENTS) | NUDGE_SPLIT_DONORS | PROVINCE_REPAIR_PROVINCES
     scope = touched | {neighbour for province in touched for neighbour in neighbours[province]}
     map_height = heights.shape[0]
     rebuilt = {}
@@ -415,6 +490,23 @@ def railway_plan(original: bytes, provinces: np.ndarray, definitions: dict[int, 
     return "".join(result).encode("utf-8")
 
 
+def repair_surface_references(masks: dict[int, np.ndarray]) -> dict[tuple[int, int], tuple[int, int]]:
+    """Sample unchanged recipient pixels so border repairs preserve local surface styles."""
+    references = {}
+    recipients = {replacement for _original, replacement in PROVINCE_PIXEL_REPAIRS.values()}
+    for province in sorted(recipients - RELIEF_SURFACE_PROVINCES):
+        mask = masks[province].copy()
+        for x, y in PROVINCE_PIXEL_REPAIRS:
+            mask[y, x] = False
+        points = np.argwhere(mask)
+        if not len(points):
+            raise ValueError(f"province {province}: no unchanged surface reference")
+        for (x, y), (_original, replacement) in PROVINCE_PIXEL_REPAIRS.items():
+            if replacement == province:
+                references[x, y] = closest_pixel(points, x, y)
+    return references
+
+
 def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = None) -> dict[Path, bytes]:
     def read(path: Path) -> bytes:
         if source_overrides and path in source_overrides:
@@ -456,14 +548,14 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
                 if selected_pixel != "1":
                     continue
                 permitted = {definitions[entry["parent"]], tuple(entry["rgb"])}
-                if (x, y) in PROVINCE_CORNER_REPAIRS:
-                    permitted.add(definitions[PROVINCE_CORNER_REPAIRS[x, y][1]])
+                if (x, y) in PROVINCE_PIXEL_REPAIRS:
+                    permitted.add(definitions[PROVINCE_PIXEL_REPAIRS[x, y][1]])
                 if tuple(provinces[y, x]) not in permitted:
                     raise ValueError(f"southern city {entry['province']}: geometry changed at {x}, {y}")
                 provinces[y, x] = entry["rgb"]
-    for (x, y), (original, replacement) in PROVINCE_CORNER_REPAIRS.items():
+    for (x, y), (original, replacement) in PROVINCE_PIXEL_REPAIRS.items():
         if tuple(provinces[y, x]) not in (definitions[original], definitions[replacement]):
-            raise ValueError(f"province corner changed at {x}, {y}")
+            raise ValueError(f"province repair source changed at {x}, {y}")
         provinces[y, x] = definitions[replacement]
     selected = set(ANCHOR_REFERENCES) | DISPLACED_PROVINCES | CITIES | URBAN_GROWTH | RELIEF_SURFACE_PROVINCES
     masks = {
@@ -473,6 +565,7 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
     for province, mask in masks.items():
         if not mask.any():
             raise ValueError(f"province {province}: empty coastal geometry")
+    surface_references = repair_surface_references(masks)
     islands = np.logical_or.reduce([masks[province] for province in ISLANDS])
     cities = np.logical_or.reduce([masks[province] for province in CITIES | URBAN_GROWTH])
     arab_cities = np.logical_or.reduce([masks[province] for province in ARAB_CITIES | ARAB_URBAN_GROWTH])
@@ -539,6 +632,10 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
             if source.mode != mode or source.size != (provinces.shape[1], provinces.shape[0]):
                 raise ValueError(f"{path}: unexpected format or dimensions")
             pixels = np.array(source)
+            if name in ("terrain", "cities"):
+                source_pixels = np.asarray(source)
+                for (x, y), (reference_x, reference_y) in surface_references.items():
+                    pixels[y, x] = source_pixels[reference_y, reference_x]
             if name == "heightmap":
                 pixels[mountains] = mountain_heightmap[mountains]
                 pixels[islands] = lowland_heights(islands)[islands]
@@ -578,7 +675,15 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
         pixels = np.array(source)
         # Remove trees from every cell intersecting the new urban footprint.
         # The tree map uses a different grid, so point sampling misses narrow cities.
-        ys, xs = np.where(cities | (mountains & (mountain_heightmap >= 165)))
+        tree_clearance = cities | (mountains & (mountain_heightmap >= 165))
+        urban = {
+            int(fields[0]) for line in definition_lines
+            if (fields := line.split(";"))[6] == "urban"
+        }
+        for (x, y), (_original, replacement) in PROVINCE_PIXEL_REPAIRS.items():
+            if replacement in urban:
+                tree_clearance[y, x] = True
+        ys, xs = np.where(tree_clearance)
         tx = xs * source.width // provinces.shape[1]
         ty = ys * source.height // provinces.shape[0]
         pixels[ty, tx] = 0

@@ -74,6 +74,7 @@ REQUIRED_FAMILIES = {
     "stp_regions_map",
     "nam_basin_map",
     "nam_piracy_map",
+    "nam_naval_models",
     "stp_flags",
     "stp_portraits",
     "stp_party_ideologies",

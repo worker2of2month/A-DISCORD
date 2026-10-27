@@ -200,6 +200,101 @@ class PartySecondActTests(unittest.TestCase):
         self.assertEqual(scalar(dynamic["STP_pw_party_dynamic"], "ADISCORD_economy_admin_expense_factor"),
                          "STP_pw_ADISCORD_economy_admin_expense_factor")
 
+    def test_early_programme_previews_match_applied_variables_and_native_readers(self):
+        ideas = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/ideas/ADISCORD_STP_civil_war_ideas.txt"))) if isinstance(e.value, list)}
+        dynamic = {e.key: e.value for e in parse_clausewitz(read(
+            "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt"))}
+        added_fields = {
+            "houses_centralise": "ADISCORD_economy_creditworthiness_factor",
+            "staff_commandants": "army_org_regain",
+            "trade_tenders": "production_factory_efficiency_gain_factor",
+            "trade_industry": "industrial_capacity_factory",
+            "security_cadres": "ADISCORD_economy_admin_expense_factor",
+            "regent_local_budget": "ADISCORD_economy_overall_income_factor",
+            "regent_industry": "production_speed_industrial_complex_factor",
+        }
+        for suffix, new_field in added_fields.items():
+            name = "STP_party_" + suffix
+            reward = block(self.focuses[name], "completion_reward")
+            applied = {}
+            for entry in walk(reward):
+                if entry.key == "add_to_variable":
+                    variable = scalar(entry.value, "var")
+                    if variable.startswith("STP_pw_"):
+                        modifier = variable.removeprefix("STP_pw_")
+                        applied[modifier] = applied.get(modifier, 0) + float(scalar(entry.value, "value"))
+            preview = {e.key: float(e.value) for e in block(ideas[name + "_delta"], "modifier")}
+            with self.subTest(focus=name):
+                self.assertIn(new_field, applied)
+                self.assertEqual(preview, applied)
+                for modifier in applied:
+                    for target in ("STP_pw_party_dynamic", "STP_pw_republic_dynamic"):
+                        self.assertEqual(scalar(dynamic[target], modifier), "STP_pw_" + modifier)
+                executable = []
+                for entry in reward:
+                    if entry.key != "effect_tooltip":
+                        executable.append(entry)
+                        if isinstance(entry.value, list):
+                            executable.extend(walk(entry.value))
+                self.assertFalse(any(e.key == "swap_ideas" for e in executable))
+
+    def test_efficiency_growth_initializes_once_and_survives_refresh(self):
+        variable = "STP_pw_production_factory_efficiency_gain_factor"
+        for initialized in (False, True):
+            facts = {
+                ("STP", "STP_pw_can_reconstruct", "yes"): True,
+                ("STP", "has_variable", variable): initialized,
+            }
+            selected = self.selected(self.effects["STP_pw_refresh_modifier"], facts)
+            writes = [e for e in selected if e.key == "set_variable"
+                      and scalar(e.value, "var") == variable]
+            self.assertEqual(len(writes), int(not initialized))
+            if writes:
+                self.assertEqual(scalar(writes[0].value, "value"), "0")
+
+    def test_finales_do_not_overwrite_early_programme_aggregate_variables(self):
+        changed = ("houses_centralise", "staff_commandants", "trade_tenders", "trade_industry",
+                   "security_cadres", "regent_local_budget", "regent_industry")
+        protected = set()
+        for suffix in changed:
+            reward = block(self.focuses["STP_party_" + suffix], "completion_reward")
+            protected.update(scalar(e.value, "var") for e in walk(reward)
+                             if e.key == "add_to_variable"
+                             and scalar(e.value, "var").startswith("STP_pw_"))
+        facts = {("STP", "STP_pw_can_reconstruct", "yes"): True}
+        facts.update({("STP", "has_variable", name): True for name in protected})
+        roots = [self.effects["STP_pw_refresh_modifier"]]
+        main_finals = ("STP_party_houses_compact", "STP_party_festival_charter",
+                       "STP_party_service_constitution", "STP_party_trade_republic",
+                       "STP_party_security_settlement", "STP_party_regent_settlement")
+        late_finals = tuple(f"STP_pe_{route}_ending_{side}" for route in ROUTES for side in ("a", "b"))
+        for name in main_finals + late_finals:
+            roots.append(block(self.focuses[name], "completion_reward"))
+        for root in roots:
+            for entry in self.selected(root, facts):
+                if entry.key in ("set_variable", "subtract_from_variable", "multiply_variable",
+                                 "divide_variable", "clamp_variable", "add_to_variable"):
+                    self.assertNotIn(scalar(entry.value, "var"), protected)
+                elif entry.key == "clear_variable":
+                    self.assertNotIn(entry.value, protected)
+                elif entry.key == "remove_dynamic_modifier":
+                    self.assertNotEqual(scalar(entry.value, "modifier"), "STP_pw_party_dynamic")
+
+    def test_early_equipment_deliveries_are_visible_once_in_native_rewards(self):
+        for name, expected in (
+            ("STP_party_trade_industry", {"ADISCORD_infantry_equipment_2156": 2700}),
+            ("STP_party_trade_imports", {"motorized_equipment": 150,
+                                         "train_equipment": 10, "support_equipment_1": 150}),
+        ):
+            reward = block(self.focuses[name], "completion_reward")
+            visible = [e for e in reward if e.key == "add_equipment_to_stockpile"]
+            all_deliveries = [e for e in walk(reward) if e.key == "add_equipment_to_stockpile"]
+            self.assertEqual(visible, all_deliveries)
+            self.assertEqual(len(visible), len(expected))
+            self.assertEqual({scalar(e.value, "type"): int(scalar(e.value, "amount"))
+                              for e in visible}, expected)
+
     def test_club_growth_penalty_runs_for_two_years_without_a_finale_reset(self):
         penalty = "STP_pe_festival_social_retrenchment"
         issued = []
@@ -481,6 +576,744 @@ class PartySecondActTests(unittest.TestCase):
                 for entry in walk(event):
                     if entry.key in ("title", "desc", "text", "name") and isinstance(entry.value, str):
                         self.assertIn(entry.value, loc)
+
+
+
+class PartyInstitutionContractTests(unittest.TestCase):
+    def test_three_institutions_have_material_actions(self):
+        decisions = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/decisions/ADISCORD_STP_decisions.txt")))
+            if isinstance(e.value, list)}
+        for name in (
+            "STP_pi_house_road", "STP_pi_house_workshop", "STP_pi_house_buyout",
+            "STP_pi_cadre_enrol", "STP_pi_cadre_instructors", "STP_pi_cadre_reserve",
+            "STP_pi_cadre_mobilise", "STP_pi_artel_road", "STP_pi_artel_workshop",
+            "STP_pi_north_training", "STP_pi_north_equipment", "STP_pi_north_industry",
+            "STP_pi_north_delivery", "STP_pi_north_local_staff", "STP_pi_north_buyout",
+        ):
+            self.assertTrue(name in decisions, name)
+
+    def test_mechanics_use_existing_focuses_without_erasing_rewards(self):
+        source = parse_clausewitz(read("focus_trees/STP/postwar/party/focuses.txt"))
+        focuses = {scalar(e.value, "id"): e.value for e in source if e.key == "focus"}
+        expected = {
+            "STP_party_houses_estates": "STP_pi_house_road",
+            "STP_party_houses_audit": "STP_pi_house_road",
+            "STP_ch_service_act": "STP_pi_cadre_enrol",
+            "STP_party_staff_reserve_jobs": "STP_pi_artel_road",
+            "STP_party_regent_mandate": "STP_pi_north_training",
+            "STP_party_regent_schools": "STP_pi_north_local_staff",
+            "STP_pe_staff_ending_a": "STP_pi_artel_workshop",
+            "STP_pe_staff_ending_b": "STP_pi_cadre_rapid_mobilise",
+        }
+        for focus_id, decision_id in expected.items():
+            self.assertTrue(any(e.key == "unlock_decision_tooltip" and e.value == decision_id
+                                for e in walk(block(focuses[focus_id], "completion_reward"))), focus_id)
+        for route in ("houses", "staff", "regent"):
+            for side in ("a", "b"):
+                reward = block(focuses[f"STP_pe_{route}_ending_{side}"], "completion_reward")
+                self.assertTrue(any(e.key == "add_ideas" and e.value == f"STP_pe_{route}_ending_{side}_idea"
+                                    for e in walk(reward)))
+                self.assertFalse(any(e.key == "clear_variable" and e.value.startswith("STP_pi_")
+                                     for e in walk(reward)))
+
+
+class InstitutionScenario:
+    """Execute bounded accounting branches; engine scheduling and UI are not simulated."""
+    def __init__(self, effects, triggers):
+        self.effects = effects
+        self.triggers = triggers
+        self.facts = {
+            ("STP", "STP_pi_country_valid", "yes"): True,
+            ("STP", "STP_pi_has_workshop_site", "yes"): True,
+            ("NOD", "exists", "yes"): True,
+            ("NOD", "has_capitulated", "no"): True,
+            ("FROM", "is_owned_by", "ROOT"): True,
+            ("FROM", "is_controlled_by", "ROOT"): True,
+            ("FROM", "is_core_of", "STP"): True,
+            ("FROM", "fixture_workshop_site", "yes"): True,
+            ("FROM", "numeric", "infrastructure"): 2,
+            ("STP", "numeric", "has_manpower"): 6000,
+        }
+        self.deliveries = []
+        self.events = []
+        self.temporary = {}
+        self.put("ADISCORD_economy_treasury", 10000)
+        self.put("ADISCORD_economy_treasury", 20000, "NOD")
+        self.run(effects["STP_pi_initialize"])
+
+    def put(self, name, value, scope="STP"):
+        self.facts[(scope, "variable", name)] = value
+        self.facts[(scope, "has_variable", name)] = True
+
+    def get(self, name, scope="STP"):
+        return self.facts.get((scope, "variable", name), 0)
+
+    def number(self, value, scope):
+        value = value.removeprefix("var:")
+        try:
+            return float(value)
+        except ValueError:
+            if "." in value:
+                scope, value = value.split(".", 1)
+                return self.get(value, scope)
+            return self.temporary.get((scope, value), self.get(value, scope))
+
+    def condition(self, entries, scope="STP"):
+        from dataclasses import replace
+
+        def expand(items):
+            expanded = []
+            for item in items:
+                if item.key in self.triggers and item.key not in (
+                    "STP_pi_country_valid", "STP_pi_has_workshop_site"
+                ):
+                    if item.value not in ("yes", "no"):
+                        raise AssertionError("Scripted triggers require boolean calls")
+                    expanded.append(replace(item, key="AND" if item.value == "yes" else "NOT",
+                                            value=expand(self.triggers[item.key])))
+                elif item.key == "free_building_slots":
+                    expanded.append(replace(item, key="fixture_workshop_site", value="yes"))
+                elif isinstance(item.value, list):
+                    expanded.append(replace(item, value=expand(item.value)))
+                else:
+                    expanded.append(item)
+            return expanded
+
+        # Explicit cross-country variable references are read in the source scope.
+        for (owner, kind, name), value in list(self.facts.items()):
+            if kind == "variable" and "." not in name:
+                for target in ("STP", "NOD", "FROM"):
+                    self.facts[(target, "variable", owner + "." + name)] = value
+        return matches_conditions(expand(entries), self.facts, scope)
+
+    def run(self, entries, scope="STP"):
+        taken = False
+        for entry in entries:
+            key = entry.key
+            if key == "effect_tooltip":
+                continue
+            if key in ("if", "else_if", "else"):
+                if key == "if":
+                    taken = False
+                if not taken and (key == "else" or self.condition(block(entry.value, "limit"), scope)):
+                    taken = True
+                    self.run([e for e in entry.value if e.key != "limit"], scope)
+            elif key == "hidden_effect":
+                self.run(entry.value, scope)
+            elif key in ("STP", "NOD", "FROM", "ROOT"):
+                self.run(entry.value, "STP" if key == "ROOT" else key)
+            elif key in self.effects and key.startswith("STP_pi_"):
+                self.run(self.effects[key], scope)
+            elif key in ("set_variable", "set_temp_variable", "add_to_variable", "subtract_from_variable",
+                         "multiply_variable", "divide_variable", "multiply_temp_variable",
+                         "subtract_from_temp_variable"):
+                name = scalar(entry.value, "var")
+                amount = self.number(scalar(entry.value, "value"), scope)
+                temporary = "temp_variable" in key
+                old = self.temporary.get((scope, name), 0) if temporary else self.get(name, scope)
+                if key in ("set_variable", "set_temp_variable"):
+                    result = amount
+                elif key == "add_to_variable":
+                    result = old + amount
+                elif key in ("subtract_from_variable", "subtract_from_temp_variable"):
+                    result = old - amount
+                elif key in ("multiply_variable", "multiply_temp_variable"):
+                    result = old * amount
+                else:
+                    result = old / amount
+                if temporary:
+                    self.temporary[(scope, name)] = result
+                else:
+                    self.put(name, result, scope)
+            elif key == "clear_variable":
+                self.facts[(scope, "has_variable", entry.value)] = False
+                self.facts.pop((scope, "variable", entry.value), None)
+            elif key in ("set_country_flag", "clr_country_flag", "set_state_flag", "clr_state_flag"):
+                kind = "has_state_flag" if "state" in key else "has_country_flag"
+                name = scalar(entry.value, "flag") if isinstance(entry.value, list) else entry.value
+                self.facts[(scope, kind, name)] = key.startswith("set_")
+            elif key == "add_manpower":
+                fact = (scope, "numeric", "has_manpower")
+                self.facts[fact] = self.facts.get(fact, 0) + self.number(entry.value, scope)
+            elif key in ("add_equipment_to_stockpile", "add_building_construction",
+                         "add_extra_state_shared_building_slots", "army_experience"):
+                self.deliveries.append((scope, key, entry.value))
+                if key == "add_equipment_to_stockpile":
+                    name = "delivered_" + scalar(entry.value, "type")
+                    self.put(name, self.get(name, scope) + self.number(scalar(entry.value, "amount"), scope), scope)
+            elif key in ("add_stability", "add_political_power"):
+                self.put(key, self.get(key, scope) + self.number(entry.value, scope), scope)
+            elif key == "remove_decision":
+                self.facts[(scope, "has_decision", entry.value)] = False
+                self.events.append((scope, key, entry.value))
+            elif key in ("add_timed_idea", "remove_ideas"):
+                name = scalar(entry.value, "idea") if key == "add_timed_idea" else entry.value
+                self.facts[(scope, "has_idea", name)] = key == "add_timed_idea"
+            elif key == "random_owned_controlled_state":
+                self.run([e for e in entry.value if e.key != "limit"], "FROM")
+            elif key == "country_event":
+                self.events.append((scope, scalar(entry.value, "id")))
+            elif key in ("custom_effect_tooltip", "activate_mission", "STP_pw_refresh_modifier",
+                         "ADISCORD_economy_mark_dirty"):
+                pass
+            else:
+                raise AssertionError(f"Unhandled institution effect: {key}")
+
+
+class PartyInstitutionAccountingTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = {e.key: e.value for e in parse_clausewitz(read(
+            "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"))}
+        cls.triggers = {e.key: e.value for e in parse_clausewitz(read(
+            "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"))
+            if e.key.startswith("STP_pi_")}
+        cls.decisions = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/decisions/ADISCORD_STP_decisions.txt")))
+            if e.key.startswith("STP_pi_") and isinstance(e.value, list)}
+
+    def model(self):
+        return InstitutionScenario(self.effects, self.triggers)
+
+    def action(self, model, name, phase="complete_effect"):
+        model.run(block(self.decisions[name], phase))
+
+    def test_house_deposit_blocks_second_project_and_refunds_once(self):
+        m = self.model()
+        self.action(m, "STP_pi_house_road")
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 9600)
+        self.assertEqual(m.get("STP_pi_house_slots"), 1)
+        self.action(m, "STP_pi_house_workshop")
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 9600)
+        m.facts[("FROM", "is_controlled_by", "ROOT")] = False
+        self.action(m, "STP_pi_house_road", "remove_effect")
+        self.action(m, "STP_pi_house_road", "cancel_effect")
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000)
+        self.assertEqual(m.get("STP_pi_house_slots"), 0)
+        self.assertEqual(m.deliveries, [])
+
+    def test_house_delivery_rechecks_site_and_retains_material_after_buyout(self):
+        m = self.model()
+        self.action(m, "STP_pi_house_workshop")
+        m.facts[("FROM", "fixture_workshop_site", "yes")] = False
+        self.action(m, "STP_pi_house_workshop", "remove_effect")
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000)
+        self.assertFalse(m.deliveries)
+        m.facts[("FROM", "fixture_workshop_site", "yes")] = True
+        self.action(m, "STP_pi_house_workshop")
+        self.action(m, "STP_pi_house_workshop", "remove_effect")
+        self.action(m, "STP_pi_house_workshop", "remove_effect")
+        self.assertEqual(len(m.deliveries), 2)
+        self.assertEqual(m.get("STP_pi_house_privileges"), 1)
+        m.facts[("STP", "has_completed_focus", "STP_pe_houses_ending_a")] = True
+        self.action(m, "STP_pi_house_buyout")
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 8650)
+        self.assertEqual(m.get("STP_pi_house_privileges"), 0)
+        self.assertEqual(m.get("STP_pi_house_slots"), 0)
+        self.assertEqual(len(m.deliveries), 2)
+
+    def test_house_final_expands_capacity_without_resetting_existing_compacts(self):
+        m = self.model()
+        m.put("STP_pi_house_slots", 3)
+        self.assertFalse(m.condition(self.triggers["STP_pi_house_capacity"]))
+        m.facts[("STP", "has_completed_focus", "STP_pe_houses_ending_b")] = True
+        self.assertTrue(m.condition(self.triggers["STP_pi_house_capacity"]))
+        m.put("STP_pi_house_slots", 4)
+        self.assertFalse(m.condition(self.triggers["STP_pi_house_capacity"]))
+
+    def test_cadres_are_paid_once_with_exact_fractional_manpower_boundary(self):
+        for manpower, paid in ((5999.9, False), (6000, True)):
+            m = self.model()
+            m.facts[("STP", "numeric", "has_manpower")] = manpower
+            self.action(m, "STP_pi_cadre_enrol")
+            self.assertEqual(m.get("STP_pi_cadre_deposit"), 450 if paid else 0)
+            self.assertAlmostEqual(m.facts[("STP", "numeric", "has_manpower")], 0 if paid else manpower)
+            if paid:
+                self.action(m, "STP_pi_cadre_enrol")
+                self.action(m, "STP_pi_cadre_enrol", "remove_effect")
+                self.action(m, "STP_pi_cadre_enrol", "remove_effect")
+                self.action(m, "STP_pi_cadre_enrol")
+                self.assertEqual(m.get("STP_pi_cadre_free"), 6000)
+                self.assertEqual(m.get("ADISCORD_economy_treasury"), 9550)
+
+    def test_cadre_assignments_and_mobilisation_conserve_people(self):
+        m = self.model()
+        self.action(m, "STP_pi_cadre_enrol")
+        self.action(m, "STP_pi_cadre_enrol", "remove_effect")
+        self.action(m, "STP_pi_cadre_instructors")
+        self.action(m, "STP_pi_cadre_reserve")
+        self.action(m, "STP_pi_cadre_mobilise")
+        self.action(m, "STP_pi_cadre_rapid_mobilise")
+        self.assertEqual(m.get("STP_pi_mobilisation_people"), 2000)
+        self.action(m, "STP_pi_cadre_mobilise", "remove_effect")
+        self.action(m, "STP_pi_cadre_mobilise", "remove_effect")
+        self.assertEqual(m.facts[("STP", "numeric", "has_manpower")], 2000)
+        self.assertEqual(m.get("STP_pi_cadre_free") + m.get("STP_pi_cadre_instructors"), 4000)
+        self.assertEqual(len(m.deliveries), 1)
+
+    def test_artel_escrow_blocks_other_targets_and_refunds_people_and_money(self):
+        m = self.model()
+        m.put("STP_pi_cadre_free", 6000)
+        self.action(m, "STP_pi_artel_road")
+        self.assertEqual(m.get("STP_pi_cadre_free"), 4000)
+        self.action(m, "STP_pi_artel_workshop")
+        self.assertEqual(m.get("STP_pi_cadre_free"), 4000)
+        m.facts[("FROM", "has_state_flag", "STP_pi_artel_pending")] = False
+        self.action(m, "STP_pi_artel_workshop", "cancel_effect")
+        self.assertEqual(m.get("STP_pi_artel_deposit"), 450)
+        m.facts[("FROM", "has_state_flag", "STP_pi_artel_pending")] = True
+        self.action(m, "STP_pi_artel_road", "cancel_effect")
+        self.action(m, "STP_pi_artel_road", "cancel_effect")
+        self.assertEqual(m.get("STP_pi_cadre_free"), 6000)
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000)
+
+    def test_northern_request_never_charges_before_consent(self):
+        m = self.model()
+        self.action(m, "STP_pi_north_training")
+        self.action(m, "STP_pi_north_equipment")
+        self.assertEqual(m.get("STP_pi_north_offer"), 1)
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000)
+        self.assertEqual(m.get("ADISCORD_economy_treasury", "NOD"), 20000)
+        self.action(m, "STP_pi_north_reply", "timeout_effect")
+        self.assertEqual(m.get("STP_pi_north_offer"), 0)
+        self.assertEqual(m.get("STP_pi_north_obligations"), 0)
+        m.run(self.effects["STP_pi_north_accept"])
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000)
+
+    def test_northern_consent_rechecks_both_prices_and_refunds_exact_receipts(self):
+        for scope, amount in (("STP", 299.9), ("NOD", 599.9)):
+            m = self.model()
+            self.action(m, "STP_pi_north_training")
+            m.put("ADISCORD_economy_treasury", amount, scope)
+            m.run(self.effects["STP_pi_north_accept"])
+            self.assertFalse(m.get("STP_pi_north_deposit"))
+        m = self.model()
+        self.action(m, "STP_pi_north_equipment")
+        m.run(self.effects["STP_pi_north_accept"])
+        m.run(self.effects["STP_pi_north_accept"])
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 9400)
+        self.assertEqual(m.get("ADISCORD_economy_treasury", "NOD"), 18800)
+        m.facts[("STP", "has_war_with", "NOD")] = True
+        m.run(self.effects["STP_pi_north_finish"])
+        m.run(self.effects["STP_pi_north_refund"])
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000)
+        self.assertEqual(m.get("ADISCORD_economy_treasury", "NOD"), 20000)
+        self.assertEqual(m.get("STP_pi_north_obligations"), 0)
+        self.assertFalse(m.deliveries)
+
+    def test_northern_final_and_buyout_keep_delivered_research(self):
+        m = self.model()
+        m.put("STP_pw_research_speed_factor", 0.12)
+        self.action(m, "STP_pi_north_training")
+        m.run(self.effects["STP_pi_north_accept"])
+        m.run(self.effects["STP_pi_north_finish"])
+        m.run(self.effects["STP_pi_north_finish"])
+        self.assertAlmostEqual(m.get("STP_pw_research_speed_factor"), 0.15)
+        self.assertEqual(m.get("STP_pi_north_obligations"), 1)
+        m.run(self.effects["STP_pi_north_improve_terms"])
+        self.assertAlmostEqual(m.get("STP_pw_ADISCORD_economy_overall_income_factor"), -0.01)
+        m.facts[("STP", "has_completed_focus", "STP_pe_regent_ending_a")] = True
+        self.action(m, "STP_pi_north_buyout")
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 9250)
+        self.assertEqual(m.get("STP_pi_north_obligations"), 0)
+        self.assertAlmostEqual(m.get("STP_pw_research_speed_factor"), 0.15)
+        self.assertAlmostEqual(m.get("STP_pw_planning_speed"), 0.05)
+
+    def test_mobilisation_unlock_and_final_buyout_are_reachable(self):
+        normal = block(self.decisions["STP_pi_cadre_mobilise"], "visible")
+        self.assertTrue(any(e.key == "has_completed_focus" and e.value == "STP_ch_regular_service"
+                            for e in walk(normal)))
+        northern = block(self.decisions["STP_pi_north_buyout"], "visible")
+        self.assertTrue(any(e.key == "has_completed_focus" and e.value == "STP_pe_regent_ending_a"
+                            for e in walk(northern)))
+
+    def test_new_decisions_explain_availability_without_technical_flags(self):
+        for name, decision in self.decisions.items():
+            if any(e.key == "days_mission_timeout" for e in decision):
+                continue
+            availability = block(decision, "available")
+            self.assertEqual([e.key for e in availability], ["custom_trigger_tooltip"], name)
+
+    def test_variable_manpower_uses_native_variable_reference(self):
+        for name, effect in self.effects.items():
+            if not name.startswith("STP_pi_"):
+                continue
+            for entry in walk(effect):
+                if entry.key == "add_manpower" and not entry.value.lstrip("-").isdigit():
+                    self.assertTrue(entry.value.startswith("var:"), (name, entry.value))
+
+    def test_assignment_previews_equal_actual_aggregate_deltas(self):
+        ideas = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/ideas/ADISCORD_STP_civil_war_ideas.txt")))
+            if e.key.startswith("STP_pi_") and isinstance(e.value, list)}
+        dynamics = {e.key: e.value for e in parse_clausewitz(read(
+            "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt"))}
+        consumers = {e.key: e.value for e in dynamics["STP_pw_party_dynamic"]}
+        for role in ("instructors", "reserve"):
+            m = self.model()
+            m.put("STP_pi_cadre_free", 2000)
+            self.action(m, "STP_pi_cadre_" + role)
+            preview = block(ideas["STP_pi_cadre_" + role + "_delta"], "modifier")
+            for modifier in preview:
+                self.assertAlmostEqual(m.get(consumers[modifier.key]), float(modifier.value))
+            self.assertEqual(m.get("STP_pi_cadre_free"), 0)
+
+    def test_enrolment_cancel_restores_real_people_and_exact_money_once(self):
+        m = self.model()
+        self.action(m, "STP_pi_cadre_enrol")
+        self.action(m, "STP_pi_cadre_enrol", "cancel_effect")
+        self.action(m, "STP_pi_cadre_enrol", "remove_effect")
+        self.assertEqual(m.facts[("STP", "numeric", "has_manpower")], 6000)
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000)
+        self.assertEqual(m.get("STP_pi_cadre_free"), 0)
+
+    def test_northern_factory_rechecks_site_and_equipment_delivers_only_once(self):
+        m = self.model()
+        self.action(m, "STP_pi_north_industry")
+        m.run(self.effects["STP_pi_north_accept"])
+        m.facts[("STP", "STP_pi_has_workshop_site", "yes")] = False
+        m.run(self.effects["STP_pi_north_finish"])
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000)
+        self.assertEqual(m.get("ADISCORD_economy_treasury", "NOD"), 20000)
+        self.assertFalse(m.deliveries)
+        self.action(m, "STP_pi_north_equipment")
+        m.run(self.effects["STP_pi_north_accept"])
+        m.run(self.effects["STP_pi_north_finish"])
+        m.run(self.effects["STP_pi_north_finish"])
+        equipment = {scalar(body, "type"): int(scalar(body, "amount"))
+                     for _, key, body in m.deliveries if key == "add_equipment_to_stockpile"}
+        self.assertEqual(equipment, {"ADISCORD_infantry_equipment_2156": 4500, "support_equipment_1": 120})
+        self.assertEqual(len(m.deliveries), 2)
+        self.assertEqual(m.get("STP_pi_north_obligations"), 1)
+
+    def test_northern_event_timeout_declines_and_missions_cannot_auto_succeed(self):
+        events = {scalar(e.value, "id"): e.value for e in parse_clausewitz(read(
+            "events/ADISCORD_STP_events.txt")) if e.key == "country_event"}
+        offer = events["ADISCORD_STP_pi.1"]
+        self.assertEqual(scalar(offer, "timeout_days"), "14")
+        options = [e.value for e in offer if e.key == "option"]
+        self.assertEqual(scalar(options[0], "name"), "ADISCORD_STP_pi.1.no")
+        self.assertFalse(any(e.key == "trigger" for e in options[0]))
+        self.assertTrue(any(e.key == "STP_pi_north_decline" for e in walk(options[0])))
+        for name in ("STP_pi_north_reply", "STP_pi_north_delivery"):
+            self.assertFalse(self.model().condition(block(self.decisions[name], "available")))
+        self.assertGreater(int(scalar(self.decisions["STP_pi_north_reply"], "days_mission_timeout")), 15)
+
+    def test_all_new_costs_and_visible_text_have_complete_bilingual_values(self):
+        keys = set()
+        for name, decision in self.decisions.items():
+            keys.update((name, name + "_desc"))
+            for entry in walk(decision):
+                if entry.key in ("tooltip", "custom_effect_tooltip"):
+                    keys.add(entry.value)
+                elif entry.key == "custom_cost_text":
+                    keys.update((entry.value, entry.value + "_blocked", entry.value + "_tooltip"))
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            values = dict(re.findall(r'^\s*([^ :]+):\d*\s*"([^"\r\n]*)"\s*$',
+                                     path.read_text(encoding="utf-8-sig"), re.MULTILINE))
+            self.assertFalse(keys - values.keys(), sorted(keys - values.keys()))
+
+    def test_refresh_is_idempotent_and_preserves_other_focus_rewards(self):
+        m = self.model()
+        m.put("STP_pw_ADISCORD_economy_overall_income_factor", 0.4)
+        m.put("STP_pw_army_org_factor", 0.15)
+        m.put("STP_pw_training_time_factor", -0.1)
+        m.put("STP_pi_house_privileges", 2)
+        m.put("STP_pi_cadre_instructors", 4000)
+        m.put("STP_pi_cadre_reserve", 2000)
+        m.put("STP_pi_north_obligations", 1)
+        for _ in range(5):
+            m.run(self.effects["STP_pi_refresh"])
+        self.assertAlmostEqual(m.get("STP_pw_ADISCORD_economy_overall_income_factor"), 0.34)
+        self.assertAlmostEqual(m.get("STP_pw_army_org_factor"), 0.17)
+        self.assertAlmostEqual(m.get("STP_pw_training_time_factor"), -0.2)
+        self.assertAlmostEqual(m.get("STP_pw_ADISCORD_economy_admin_expense_factor"), 0.03)
+        # An intervening focus adds its own reward; reconciliation must retain it.
+        m.put("STP_pw_army_org_factor", m.get("STP_pw_army_org_factor") + 0.075)
+        m.run(self.effects["STP_pi_refresh"])
+        self.assertAlmostEqual(m.get("STP_pw_army_org_factor"), 0.245)
+
+class PartyRemainingInstitutionContracts(unittest.TestCase):
+    def test_calendar_portfolio_and_cases_are_playable(self):
+        entries = {e.key for e in walk(parse_clausewitz(read(
+            "common/decisions/ADISCORD_STP_decisions.txt")))}
+        for name in ("STP_pi_festival_public", "STP_pi_festival_club", "STP_pi_festival_medical",
+                     "STP_pi_trade_rifles_standard", "STP_pi_trade_support_rush", "STP_pi_trade_trucks_series",
+                     "STP_pi_trade_expand", "STP_pi_case_orders_full", "STP_pi_case_supply_quick",
+                     "STP_pi_case_property_public", "STP_pi_case_orders_seal", "STP_pi_case_leverage"):
+            self.assertTrue(name in entries, name)
+
+    def test_new_endings_develop_mechanics_without_erasing_their_spirits(self):
+        focuses = {scalar(e.value, "id"): e.value for e in parse_clausewitz(read(
+            "focus_trees/STP/postwar/party/focuses.txt")) if e.key == "focus"}
+        for route in ("festival", "trade", "security"):
+            for side in ("a", "b"):
+                name = f"STP_pe_{route}_ending_{side}"
+                reward = block(focuses[name], "completion_reward")
+                self.assertTrue(any(e.key == "custom_effect_tooltip" and e.value == name + "_mechanic_tt"
+                                    for e in walk(reward)), name)
+                self.assertTrue(any(e.key == "add_ideas" and e.value == name + "_idea"
+                                    for e in walk(reward)), name)
+
+
+class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
+    """Finite cases, delivery quotes and cumulative results across finale upgrades."""
+
+    @classmethod
+    def setUpClass(cls):
+        PartyInstitutionAccountingTests.setUpClass.__func__(cls)
+
+    model = PartyInstitutionAccountingTests.model
+    action = PartyInstitutionAccountingTests.action
+
+    def complete_focus(self, model, name):
+        model.facts[("STP", "has_completed_focus", name)] = True
+
+    def rest_district(self, model):
+        # Advance the fixture past the native 90-day state cooldown.
+        model.facts[("FROM", "has_state_flag", "STP_pi_festival_rest")] = False
+
+    def test_public_visits_diminish_without_regranting_coverage(self):
+        m = self.model()
+        for expected in (0.03, 0.05, 0.06, 0.07):
+            self.rest_district(m)
+            self.action(m, "STP_pi_festival_public")
+            self.action(m, "STP_pi_festival_public", "remove_effect")
+            self.assertAlmostEqual(m.get("add_stability"), expected)
+            self.assertEqual(m.get("STP_pi_festival_districts"), 1)
+            self.assertEqual(m.get("STP_pi_festival_busy"), 0)
+        self.assertAlmostEqual(m.get("STP_pw_ADISCORD_country_development_social_system_growth_factor"), 0.05)
+        m.put("STP_pi_festival_rate", 0.075)
+        for _ in range(3):
+            m.run(self.effects["STP_pi_refresh"])
+        self.assertAlmostEqual(m.get("STP_pw_ADISCORD_country_development_social_system_growth_factor"), 0.075)
+
+    def test_lost_district_refunds_once_and_frees_booking_and_load(self):
+        m = self.model()
+        self.action(m, "STP_pi_festival_club")
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 9400)
+        self.assertEqual(m.get("STP_pi_festival_reserved"), 1)
+        m.facts[("FROM", "is_owned_by", "ROOT")] = False
+        self.action(m, "STP_pi_festival_club", "remove_effect")
+        self.action(m, "STP_pi_festival_club", "cancel_effect")
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000)
+        for name in ("busy", "reserved", "pending_clubs", "load"):
+            self.assertEqual(m.get("STP_pi_festival_" + name), 0)
+
+    def test_club_load_costs_and_clinics_leave_cadre_and_focus_bonuses(self):
+        m = self.model()
+        m.put("STP_pw_ADISCORD_economy_admin_expense_factor", -0.1)
+        m.put("STP_pi_cadre_instructors", 2000)
+        for _ in range(4):
+            self.rest_district(m)
+            self.action(m, "STP_pi_festival_club")
+            self.action(m, "STP_pi_festival_club", "remove_effect")
+        self.assertEqual(m.get("STP_pi_festival_load"), 4)
+        self.assertEqual(m.get("STP_pi_festival_reserved"), 4)
+        self.assertAlmostEqual(m.get("STP_pw_ADISCORD_economy_admin_expense_factor"), -0.05)
+        m.put("STP_pi_festival_safe", 4)
+        for _ in range(3):
+            m.run(self.effects["STP_pi_refresh"])
+        self.assertAlmostEqual(m.get("STP_pw_ADISCORD_economy_admin_expense_factor"), -0.09)
+        self.action(m, "STP_pi_festival_medical")
+        self.action(m, "STP_pi_festival_medical", "remove_effect")
+        self.assertEqual(m.get("STP_pi_festival_load"), 2)
+        self.assertEqual(m.get("STP_pi_festival_reserved"), 2)
+
+    def test_club_final_keeps_paid_quote_and_increases_next_quote(self):
+        m = self.model()
+        self.action(m, "STP_pi_festival_club")
+        self.complete_focus(m, "STP_pe_festival_ending_b")
+        self.action(m, "STP_pi_festival_club", "remove_effect")
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 10900)
+        self.rest_district(m)
+        self.action(m, "STP_pi_festival_club")
+        self.assertEqual(m.get("STP_pi_festival_quote", "FROM"), 1800)
+
+    def test_paid_club_reserves_last_load_slot(self):
+        m = self.model()
+        m.put("STP_pi_festival_reserved", 5)
+        m.put("STP_pi_festival_load", 5)
+        self.action(m, "STP_pi_festival_club")
+        self.assertEqual(m.get("STP_pi_festival_reserved"), 6)
+        self.assertFalse(m.condition(self.triggers["STP_pi_festival_club_capacity"]))
+        self.action(m, "STP_pi_festival_club", "cancel_effect")
+        self.assertEqual(m.get("STP_pi_festival_reserved"), 5)
+
+    def test_medical_project_refunds_if_public_visits_already_cleared_load(self):
+        m = self.model()
+        m.put("STP_pi_festival_load", 1)
+        self.action(m, "STP_pi_festival_medical")
+        m.put("STP_pi_festival_load", 0)
+        self.action(m, "STP_pi_festival_medical", "remove_effect")
+        self.action(m, "STP_pi_festival_medical", "cancel_effect")
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000)
+
+    def test_portfolio_capacity_and_product_receipt_prevent_second_debit(self):
+        m = self.model()
+        self.action(m, "STP_pi_trade_rifles_standard")
+        self.action(m, "STP_pi_trade_rifles_standard")
+        self.action(m, "STP_pi_trade_support_standard")
+        self.action(m, "STP_pi_trade_trucks_standard")
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 8800)
+        self.assertEqual(m.get("STP_pi_trade_busy"), 2)
+        self.complete_focus(m, "STP_pe_trade_ending_a")
+        self.action(m, "STP_pi_trade_trucks_standard")
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 8200)
+        self.assertEqual(m.get("STP_pi_trade_busy"), 3)
+
+    def test_supplier_and_final_upgrades_do_not_reprice_paid_series(self):
+        m = self.model()
+        self.complete_focus(m, "STP_party_trade_tenders")
+        self.action(m, "STP_pi_trade_rifles_series")
+        self.assertEqual(m.get("STP_pi_trade_rifles_quote"), 27000)
+        m.put("STP_pi_trade_level", 3)
+        self.complete_focus(m, "STP_pe_trade_ending_b")
+        self.action(m, "STP_pi_trade_rifles_series", "remove_effect")
+        self.action(m, "STP_pi_trade_rifles_series", "remove_effect")
+        self.assertEqual(m.get("delivered_ADISCORD_infantry_equipment_2156"), 27000)
+        self.action(m, "STP_pi_trade_rifles_series")
+        self.assertEqual(m.get("STP_pi_trade_rifles_quote"), 72900)
+
+    def test_voluntary_refund_fractions_and_final_insurance(self):
+        for mode, cost, refund in (("standard", 600, 540), ("rush", 900, 675), ("series", 1200, 900)):
+            for insured in (False, True):
+                with self.subTest(mode=mode, insured=insured):
+                    m = self.model()
+                    self.complete_focus(m, "STP_party_trade_tenders")
+                    self.complete_focus(m, "STP_party_trade_imports")
+                    name = "STP_pi_trade_support_" + mode
+                    self.action(m, name)
+                    m.facts[("STP", "has_decision", name)] = True
+                    if insured:
+                        self.complete_focus(m, "STP_pe_trade_ending_a")
+                    self.action(m, "STP_pi_trade_support_cancel_order")
+                    self.action(m, name, "cancel_effect")
+                    self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000 if insured else 10000 - cost + refund)
+                    self.assertEqual(m.get("STP_pi_trade_busy"), 0)
+                    self.assertFalse(m.facts[("STP", "has_decision", name)])
+                    self.assertFalse(m.deliveries)
+
+    def test_forced_cancel_returns_full_price_and_wrong_mode_cannot_deliver(self):
+        m = self.model()
+        self.action(m, "STP_pi_trade_trucks_standard")
+        self.action(m, "STP_pi_trade_trucks_rush", "remove_effect")
+        self.assertFalse(m.deliveries)
+        m.facts[("STP", "STP_pi_country_valid", "yes")] = False
+        self.action(m, "STP_pi_trade_trucks_standard", "remove_effect")
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 10000)
+        self.assertEqual(m.get("STP_pi_trade_busy"), 0)
+
+    def test_supplier_expansion_shares_capacity_and_caps_at_three(self):
+        m = self.model()
+        m.put("STP_pw_production_factory_max_efficiency_factor", 0.15)
+        for _ in range(4):
+            self.action(m, "STP_pi_trade_expand")
+            self.action(m, "STP_pi_trade_expand", "remove_effect")
+        self.assertEqual(m.get("STP_pi_trade_level"), 3)
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 7300)
+        self.assertAlmostEqual(m.get("STP_pw_production_factory_max_efficiency_factor"), 0.225)
+        self.assertEqual(m.get("STP_pi_trade_busy"), 0)
+
+    def test_quick_case_requires_commission_to_reopen_and_is_finite(self):
+        m = self.model()
+        self.action(m, "STP_pi_case_orders_quick")
+        self.action(m, "STP_pi_case_orders_quick", "remove_effect")
+        self.action(m, "STP_pi_case_orders_quick")
+        self.action(m, "STP_pi_case_orders_full")
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 9850)
+        self.assertEqual(m.get("STP_pi_case_orders_stage"), 4)
+        self.complete_focus(m, "STP_pe_security_commission")
+        self.action(m, "STP_pi_case_orders_full")
+        self.action(m, "STP_pi_case_orders_full", "remove_effect")
+        self.action(m, "STP_pi_case_orders_public")
+        self.action(m, "STP_pi_case_orders_seal")
+        self.action(m, "STP_pi_case_orders_full")
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 9400)
+        self.assertEqual(m.get("STP_pi_case_orders_stage"), 2)
+        self.assertEqual(m.get("STP_pi_case_credits"), 0)
+
+    def test_network_capacity_and_case_cancellation_release_team_once(self):
+        m = self.model()
+        self.action(m, "STP_pi_case_orders_full")
+        self.action(m, "STP_pi_case_supply_full")
+        self.assertEqual(m.get("STP_pi_case_busy"), 1)
+        self.complete_focus(m, "STP_party_security_network")
+        self.action(m, "STP_pi_case_supply_full")
+        self.action(m, "STP_pi_case_property_full")
+        self.assertEqual(m.get("STP_pi_case_busy"), 2)
+        self.action(m, "STP_pi_case_orders_full", "cancel_effect")
+        self.action(m, "STP_pi_case_orders_full", "cancel_effect")
+        self.assertEqual(m.get("STP_pi_case_busy"), 1)
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 9550)
+
+    def test_public_final_is_retroactive_and_refresh_keeps_case_bonuses(self):
+        m = self.model()
+        m.put("STP_pw_stability_factor", 0.1)
+        for case in ("orders", "supply", "property"):
+            self.action(m, f"STP_pi_case_{case}_full")
+            self.action(m, f"STP_pi_case_{case}_full", "remove_effect")
+            self.action(m, f"STP_pi_case_{case}_public")
+        m.put("STP_pi_public_rate", 0.01)
+        for _ in range(4):
+            m.run(self.effects["STP_pi_refresh"])
+        self.assertAlmostEqual(m.get("STP_pw_stability_factor"), 0.15)
+        self.assertAlmostEqual(m.get("STP_pw_ADISCORD_economy_admin_expense_factor"), -0.03)
+        self.assertAlmostEqual(m.get("STP_pw_production_speed_industrial_complex_factor"), 0.05)
+
+    def test_archive_final_grants_second_use_even_after_first_was_spent(self):
+        m = self.model()
+        for case in ("orders", "supply", "property"):
+            self.action(m, f"STP_pi_case_{case}_full")
+            self.action(m, f"STP_pi_case_{case}_full", "remove_effect")
+            self.action(m, f"STP_pi_case_{case}_seal")
+            self.action(m, "STP_pi_case_leverage")
+        self.assertEqual(m.get("add_political_power"), 300)
+        self.assertEqual(m.get("STP_pi_case_credits"), 0)
+        m.put("STP_pi_case_rate", 2)
+        for _ in range(4):
+            m.run(self.effects["STP_pi_case_credit"])
+        self.assertEqual(m.get("STP_pi_case_credits"), 3)
+        self.action(m, "STP_pi_case_apparatus")
+        self.action(m, "STP_pi_case_apparatus")
+        self.assertEqual(m.get("STP_pi_case_credits"), 2)
+        m.run(self.effects["STP_pi_case_credit"])
+        self.assertEqual(m.get("STP_pi_case_credits"), 2)
+
+    def test_exact_affordability_and_receipt_survive_new_campaign_initializer(self):
+        for balance, paid in ((599.99, False), (600, True)):
+            with self.subTest(balance=balance):
+                m = self.model()
+                m.put("ADISCORD_economy_treasury", balance)
+                self.action(m, "STP_pi_trade_rifles_standard")
+                m.run(self.effects["STP_pi_initialize"])
+                self.assertEqual(m.get("STP_pi_trade_busy"), int(paid))
+                self.assertAlmostEqual(m.get("ADISCORD_economy_treasury"), balance - (600 if paid else 0))
+
+    def test_public_case_previews_equal_applied_aggregate_deltas(self):
+        ideas = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/ideas/ADISCORD_STP_civil_war_ideas.txt")))
+            if e.key.startswith("STP_pi_case_") and isinstance(e.value, list)}
+        for case in ("orders", "supply", "property"):
+            with self.subTest(case=case):
+                m = self.model()
+                m.put(f"STP_pi_case_{case}_stage", 1)
+                self.action(m, f"STP_pi_case_{case}_public")
+                for modifier in block(ideas[f"STP_pi_case_{case}_delta"], "modifier"):
+                    self.assertAlmostEqual(m.get("STP_pw_" + modifier.key), float(modifier.value))
+
+    def test_apparatus_expiry_invalidates_economy_without_self_activation_check(self):
+        ideas = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/ideas/ADISCORD_STP_civil_war_ideas.txt")))
+            if e.key == "STP_pi_case_apparatus_idea"}
+        self.assertEqual(scalar(block(ideas["STP_pi_case_apparatus_idea"], "on_remove"),
+                                "ADISCORD_economy_mark_dirty"), "yes")
+        reward = block(self.decisions["STP_pi_case_apparatus"], "complete_effect")
+        self.assertFalse(any(e.key == "has_decision" for e in walk(reward)))
+        self.assertFalse(any(e.key == "days_remove" for e in self.decisions["STP_pi_case_apparatus"]))
 
 
 if __name__ == "__main__":

@@ -86,6 +86,7 @@ STP_pw_reconstruction_dynamic = {
 }
 
 STP_pw_republic_dynamic = {
+	ADISCORD_country_development_social_system_growth_factor = STP_pw_ADISCORD_country_development_social_system_growth_factor
 	icon = GFX_idea_STP_district_republic
 	enable = { tag = STS }
 	ADISCORD_economy_admin_expense_factor = STP_pw_ADISCORD_economy_admin_expense_factor
@@ -102,6 +103,7 @@ STP_pw_republic_dynamic = {
 	planning_speed = STP_pw_planning_speed
 	political_power_gain = STP_pw_political_power_gain
 	production_factory_max_efficiency_factor = STP_pw_production_factory_max_efficiency_factor
+	production_factory_efficiency_gain_factor = STP_pw_production_factory_efficiency_gain_factor
 	production_speed_buildings_factor = STP_pw_production_speed_buildings_factor
 	production_speed_industrial_complex_factor = STP_pw_production_speed_industrial_complex_factor
 	research_speed_factor = STP_pw_research_speed_factor
@@ -111,6 +113,7 @@ STP_pw_republic_dynamic = {
 }
 
 STP_pw_party_dynamic = {
+	ADISCORD_country_development_social_system_growth_factor = STP_pw_ADISCORD_country_development_social_system_growth_factor
 	icon = GFX_idea_STP_party_administration
 	enable = { tag = STP }
 	ADISCORD_economy_admin_expense_factor = STP_pw_ADISCORD_economy_admin_expense_factor
@@ -123,6 +126,7 @@ STP_pw_party_dynamic = {
 	planning_speed = STP_pw_planning_speed
 	political_power_gain = STP_pw_political_power_gain
 	production_factory_max_efficiency_factor = STP_pw_production_factory_max_efficiency_factor
+	production_factory_efficiency_gain_factor = STP_pw_production_factory_efficiency_gain_factor
 	production_speed_buildings_factor = STP_pw_production_speed_buildings_factor
 	production_speed_industrial_complex_factor = STP_pw_production_speed_industrial_complex_factor
 	research_speed_factor = STP_pw_research_speed_factor

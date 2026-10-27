@@ -1,3 +1,4 @@
+add_namespace = ADISCORD_STP_pi
 add_namespace = ADISCORD_STP_preparation
 add_namespace = ADISCORD_STP_regions
 add_namespace = ADISCORD_STP_cw
@@ -8764,4 +8765,108 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	immediate = { STP_heg_confirm_cannibal_entry = yes }
+}
+
+country_event = {
+	id = ADISCORD_STP_pi.1
+	title = ADISCORD_STP_pi.1.t
+	desc = {
+		trigger = {
+			STP = {
+				check_variable = {
+					var = STP_pi_north_offer
+					value = 1
+					compare = equals
+				}
+			}
+		}
+		text = ADISCORD_STP_pi.1.d_training
+	}
+	desc = {
+		trigger = {
+			STP = {
+				check_variable = {
+					var = STP_pi_north_offer
+					value = 2
+					compare = equals
+				}
+			}
+		}
+		text = ADISCORD_STP_pi.1.d_equipment
+	}
+	desc = {
+		trigger = {
+			STP = {
+				check_variable = {
+					var = STP_pi_north_offer
+					value = 3
+					compare = equals
+				}
+			}
+		}
+		text = ADISCORD_STP_pi.1.d_industry
+	}
+	desc = {
+		trigger = {
+			STP = {
+				NOT = {
+					has_variable = STP_pi_north_offer
+				}
+			}
+		}
+		text = ADISCORD_STP_pi.1.closed
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 14
+	option = {
+		name = ADISCORD_STP_pi.1.no
+		ai_chance = {
+			base = 10
+		}
+		hidden_effect = {
+			STP = {
+				STP_pi_north_decline = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pi.1.yes
+		trigger = {
+			STP = {
+				STP_pi_north_offer_valid = yes
+			}
+		}
+		ai_chance = {
+			base = 90
+		}
+		custom_effect_tooltip = STP_pi_north_accept_tt
+		hidden_effect = {
+			STP = {
+				STP_pi_north_accept = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pi.2
+	title = ADISCORD_STP_pi.2.t
+	desc = ADISCORD_STP_pi.2.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_STP_pi.2.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pi.3
+	title = ADISCORD_STP_pi.3.t
+	desc = ADISCORD_STP_pi.3.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_STP_pi.3.a
+	}
 }

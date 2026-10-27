@@ -13546,6 +13546,4594 @@ STP_party_constitution_category = {
 }
 
 STP_ch_chapters = {
+	STP_pi_festival_public = {
+		icon = ADISCORD_propaganda
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_pw_party_unbound_revolution
+		}
+		state_target = yes
+		targets = {
+			1
+			2
+			3
+			29
+			45
+			46
+		}
+		target_trigger = {
+			FROM = {
+				is_core_of = STP
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_festival_public_available_tt
+				STP_pi_country_valid = yes
+				STP_pi_festival_capacity = yes
+				FROM = {
+					STP_pi_state_controlled = yes
+					NOT = {
+						has_variable = STP_pi_festival_deposit
+						has_state_flag = STP_pi_festival_rest
+					}
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_festival_public_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 600
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 30
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_festival_public_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+				FROM = {
+					STP_pi_state_controlled = no
+				}
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_pi_festival_refund = yes
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_festival_public_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						STP_pi_festival_capacity = yes
+						FROM = {
+							STP_pi_state_controlled = yes
+							NOT = {
+								has_variable = STP_pi_festival_deposit
+								has_state_flag = STP_pi_festival_rest
+							}
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 600
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 600
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 600
+					}
+					ADISCORD_economy_mark_dirty = yes
+					add_to_variable = {
+						var = STP_pi_festival_busy
+						value = 1
+					}
+					FROM = {
+						set_variable = {
+							var = STP_pi_festival_quote
+							value = 0.03
+						}
+						if = {
+							limit = {
+								check_variable = {
+									var = STP_pi_festival_public_visits
+									value = 2
+									compare = greater_than_or_equals
+								}
+							}
+							set_variable = {
+								var = STP_pi_festival_quote
+								value = 0.01
+							}
+						}
+						else_if = {
+							limit = {
+								check_variable = {
+									var = STP_pi_festival_public_visits
+									value = 1
+									compare = greater_than_or_equals
+								}
+							}
+							set_variable = {
+								var = STP_pi_festival_quote
+								value = 0.02
+							}
+						}
+					}
+					FROM = {
+						set_variable = {
+							var = STP_pi_festival_deposit
+							value = 600
+						}
+						set_variable = {
+							var = STP_pi_festival_kind
+							value = 1
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_festival_club = {
+		icon = ADISCORD_propaganda
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_pw_party_unbound_revolution
+		}
+		state_target = yes
+		targets = {
+			1
+			2
+			3
+			29
+			45
+			46
+		}
+		target_trigger = {
+			FROM = {
+				is_core_of = STP
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_festival_club_available_tt
+				STP_pi_country_valid = yes
+				STP_pi_festival_capacity = yes
+				FROM = {
+					STP_pi_state_controlled = yes
+					NOT = {
+						has_variable = STP_pi_festival_deposit
+						has_state_flag = STP_pi_festival_rest
+					}
+				}
+				STP_pi_festival_club_capacity = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_festival_club_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 600
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 30
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_festival_club_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+				FROM = {
+					STP_pi_state_controlled = no
+				}
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_pi_festival_refund = yes
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_festival_club_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						STP_pi_festival_capacity = yes
+						FROM = {
+							STP_pi_state_controlled = yes
+							NOT = {
+								has_variable = STP_pi_festival_deposit
+								has_state_flag = STP_pi_festival_rest
+							}
+						}
+						STP_pi_festival_club_capacity = yes
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 600
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 600
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 600
+					}
+					ADISCORD_economy_mark_dirty = yes
+					add_to_variable = {
+						var = STP_pi_festival_busy
+						value = 1
+					}
+					FROM = {
+						set_variable = {
+							var = STP_pi_festival_quote
+							value = 1500
+						}
+						if = {
+							limit = {
+								check_variable = {
+									var = STP_pi_festival_club_visits
+									value = 2
+									compare = greater_than_or_equals
+								}
+							}
+							set_variable = {
+								var = STP_pi_festival_quote
+								value = 900
+							}
+						}
+						else_if = {
+							limit = {
+								check_variable = {
+									var = STP_pi_festival_club_visits
+									value = 1
+									compare = greater_than_or_equals
+								}
+							}
+							set_variable = {
+								var = STP_pi_festival_quote
+								value = 1200
+							}
+						}
+					}
+					if = {
+						limit = {
+							has_completed_focus = STP_pe_festival_ending_b
+						}
+						FROM = {
+							multiply_variable = {
+								var = STP_pi_festival_quote
+								value = 1.5
+							}
+						}
+					}
+					FROM = {
+						set_variable = {
+							var = STP_pi_festival_deposit
+							value = 600
+						}
+						set_variable = {
+							var = STP_pi_festival_kind
+							value = 2
+						}
+					}
+					add_to_variable = {
+						var = STP_pi_festival_pending_clubs
+						value = 1
+					}
+					add_to_variable = {
+						var = STP_pi_festival_reserved
+						value = 1
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_festival_medical = {
+		icon = ADISCORD_propaganda
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_party_festival_clinics
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_festival_medical_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_festival_load
+					value = 1
+					compare = greater_than_or_equals
+				}
+				NOT = {
+					has_variable = STP_pi_festival_medical_deposit
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_festival_medical_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 300
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 14
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_festival_medical_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_pi_festival_medical_refund = yes
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_festival_load
+							value = 1
+							compare = greater_than_or_equals
+						}
+						NOT = {
+							has_variable = STP_pi_festival_medical_deposit
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 300
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 300
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 300
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_festival_medical_deposit
+						value = 300
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_trade_rifles_cancel_order = {
+		icon = ADISCORD_arms_supply
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_variable = STP_pi_trade_rifles_deposit
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_trade_rifles_cancel_order_available_tt
+				STP_pi_country_valid = yes
+				has_variable = STP_pi_trade_rifles_deposit
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						has_variable = STP_pi_trade_rifles_deposit
+					}
+					STP_pi_trade_rifles_cancel = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	STP_pi_trade_rifles_standard = {
+		icon = ADISCORD_arms_supply
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_ch_production_agreements
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_trade_rifles_standard_available_tt
+				STP_pi_country_valid = yes
+				STP_pi_trade_capacity = yes
+				NOT = {
+					has_variable = STP_pi_trade_rifles_deposit
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_trade_rifles_standard_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 600
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 35
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_trade_rifles_standard_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = STP_pi_trade_rifles_mode
+							value = 1
+							compare = equals
+						}
+					}
+					STP_pi_trade_rifles_refund = yes
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_trade_rifles_standard_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						STP_pi_trade_capacity = yes
+						NOT = {
+							has_variable = STP_pi_trade_rifles_deposit
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 600
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 600
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 600
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_trade_rifles_deposit
+						value = 600
+					}
+					set_variable = {
+						var = STP_pi_trade_rifles_mode
+						value = 1
+					}
+					add_to_variable = {
+						var = STP_pi_trade_busy
+						value = 1
+					}
+					set_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = STP_pi_trade_level
+					}
+					multiply_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = 2700.0
+					}
+					set_variable = {
+						var = STP_pi_trade_rifles_quote
+						value = 13500
+					}
+					add_to_variable = {
+						var = STP_pi_trade_rifles_quote
+						value = STP_pi_trade_bonus
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_trade_rifles_rush = {
+		icon = ADISCORD_arms_supply
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_ch_production_agreements
+			STP_pi_trade_rush_open = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_trade_rifles_rush_available_tt
+				STP_pi_country_valid = yes
+				STP_pi_trade_capacity = yes
+				NOT = {
+					has_variable = STP_pi_trade_rifles_deposit
+				}
+				STP_pi_trade_rush_open = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_trade_rifles_rush_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 900
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 14
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_trade_rifles_rush_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = STP_pi_trade_rifles_mode
+							value = 2
+							compare = equals
+						}
+					}
+					STP_pi_trade_rifles_refund = yes
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_trade_rifles_rush_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						STP_pi_trade_capacity = yes
+						NOT = {
+							has_variable = STP_pi_trade_rifles_deposit
+						}
+						STP_pi_trade_rush_open = yes
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 900
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 900
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 900
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_trade_rifles_deposit
+						value = 900
+					}
+					set_variable = {
+						var = STP_pi_trade_rifles_mode
+						value = 2
+					}
+					add_to_variable = {
+						var = STP_pi_trade_busy
+						value = 1
+					}
+					set_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = STP_pi_trade_level
+					}
+					multiply_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = 2700.0
+					}
+					set_variable = {
+						var = STP_pi_trade_rifles_quote
+						value = 13500
+					}
+					add_to_variable = {
+						var = STP_pi_trade_rifles_quote
+						value = STP_pi_trade_bonus
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_trade_rifles_series = {
+		icon = ADISCORD_arms_supply
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_ch_production_agreements
+			STP_pi_trade_series_open = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_trade_rifles_series_available_tt
+				STP_pi_country_valid = yes
+				STP_pi_trade_capacity = yes
+				NOT = {
+					has_variable = STP_pi_trade_rifles_deposit
+				}
+				STP_pi_trade_series_open = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_trade_rifles_series_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 1200
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 70
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_trade_rifles_series_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = STP_pi_trade_rifles_mode
+							value = 3
+							compare = equals
+						}
+					}
+					STP_pi_trade_rifles_refund = yes
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_trade_rifles_series_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						STP_pi_trade_capacity = yes
+						NOT = {
+							has_variable = STP_pi_trade_rifles_deposit
+						}
+						STP_pi_trade_series_open = yes
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 1200
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 1200
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 1200
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_trade_rifles_deposit
+						value = 1200
+					}
+					set_variable = {
+						var = STP_pi_trade_rifles_mode
+						value = 3
+					}
+					add_to_variable = {
+						var = STP_pi_trade_busy
+						value = 1
+					}
+					set_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = STP_pi_trade_level
+					}
+					multiply_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = 2700.0
+					}
+					set_variable = {
+						var = STP_pi_trade_rifles_quote
+						value = 13500
+					}
+					add_to_variable = {
+						var = STP_pi_trade_rifles_quote
+						value = STP_pi_trade_bonus
+					}
+					if = {
+						limit = {
+							check_variable = {
+								var = STP_pi_trade_rifles_series_done
+								value = 1
+								compare = greater_than_or_equals
+							}
+						}
+						add_to_variable = {
+							var = STP_pi_trade_rifles_quote
+							value = 2700.0
+						}
+					}
+					if = {
+						limit = {
+							has_completed_focus = STP_pe_trade_ending_b
+						}
+						multiply_variable = {
+							var = STP_pi_trade_rifles_quote
+							value = 3
+						}
+					}
+					else = {
+						multiply_variable = {
+							var = STP_pi_trade_rifles_quote
+							value = 2
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_trade_support_cancel_order = {
+		icon = ADISCORD_arms_supply
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_variable = STP_pi_trade_support_deposit
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_trade_support_cancel_order_available_tt
+				STP_pi_country_valid = yes
+				has_variable = STP_pi_trade_support_deposit
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						has_variable = STP_pi_trade_support_deposit
+					}
+					STP_pi_trade_support_cancel = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	STP_pi_trade_support_standard = {
+		icon = ADISCORD_arms_supply
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_ch_production_agreements
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_trade_support_standard_available_tt
+				STP_pi_country_valid = yes
+				STP_pi_trade_capacity = yes
+				NOT = {
+					has_variable = STP_pi_trade_support_deposit
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_trade_support_standard_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 600
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 35
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_trade_support_standard_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = STP_pi_trade_support_mode
+							value = 1
+							compare = equals
+						}
+					}
+					STP_pi_trade_support_refund = yes
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_trade_support_standard_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						STP_pi_trade_capacity = yes
+						NOT = {
+							has_variable = STP_pi_trade_support_deposit
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 600
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 600
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 600
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_trade_support_deposit
+						value = 600
+					}
+					set_variable = {
+						var = STP_pi_trade_support_mode
+						value = 1
+					}
+					add_to_variable = {
+						var = STP_pi_trade_busy
+						value = 1
+					}
+					set_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = STP_pi_trade_level
+					}
+					multiply_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = 36.0
+					}
+					set_variable = {
+						var = STP_pi_trade_support_quote
+						value = 180
+					}
+					add_to_variable = {
+						var = STP_pi_trade_support_quote
+						value = STP_pi_trade_bonus
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_trade_support_rush = {
+		icon = ADISCORD_arms_supply
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_ch_production_agreements
+			STP_pi_trade_rush_open = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_trade_support_rush_available_tt
+				STP_pi_country_valid = yes
+				STP_pi_trade_capacity = yes
+				NOT = {
+					has_variable = STP_pi_trade_support_deposit
+				}
+				STP_pi_trade_rush_open = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_trade_support_rush_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 900
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 14
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_trade_support_rush_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = STP_pi_trade_support_mode
+							value = 2
+							compare = equals
+						}
+					}
+					STP_pi_trade_support_refund = yes
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_trade_support_rush_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						STP_pi_trade_capacity = yes
+						NOT = {
+							has_variable = STP_pi_trade_support_deposit
+						}
+						STP_pi_trade_rush_open = yes
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 900
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 900
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 900
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_trade_support_deposit
+						value = 900
+					}
+					set_variable = {
+						var = STP_pi_trade_support_mode
+						value = 2
+					}
+					add_to_variable = {
+						var = STP_pi_trade_busy
+						value = 1
+					}
+					set_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = STP_pi_trade_level
+					}
+					multiply_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = 36.0
+					}
+					set_variable = {
+						var = STP_pi_trade_support_quote
+						value = 180
+					}
+					add_to_variable = {
+						var = STP_pi_trade_support_quote
+						value = STP_pi_trade_bonus
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_trade_support_series = {
+		icon = ADISCORD_arms_supply
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_ch_production_agreements
+			STP_pi_trade_series_open = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_trade_support_series_available_tt
+				STP_pi_country_valid = yes
+				STP_pi_trade_capacity = yes
+				NOT = {
+					has_variable = STP_pi_trade_support_deposit
+				}
+				STP_pi_trade_series_open = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_trade_support_series_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 1200
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 70
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_trade_support_series_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = STP_pi_trade_support_mode
+							value = 3
+							compare = equals
+						}
+					}
+					STP_pi_trade_support_refund = yes
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_trade_support_series_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						STP_pi_trade_capacity = yes
+						NOT = {
+							has_variable = STP_pi_trade_support_deposit
+						}
+						STP_pi_trade_series_open = yes
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 1200
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 1200
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 1200
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_trade_support_deposit
+						value = 1200
+					}
+					set_variable = {
+						var = STP_pi_trade_support_mode
+						value = 3
+					}
+					add_to_variable = {
+						var = STP_pi_trade_busy
+						value = 1
+					}
+					set_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = STP_pi_trade_level
+					}
+					multiply_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = 36.0
+					}
+					set_variable = {
+						var = STP_pi_trade_support_quote
+						value = 180
+					}
+					add_to_variable = {
+						var = STP_pi_trade_support_quote
+						value = STP_pi_trade_bonus
+					}
+					if = {
+						limit = {
+							check_variable = {
+								var = STP_pi_trade_support_series_done
+								value = 1
+								compare = greater_than_or_equals
+							}
+						}
+						add_to_variable = {
+							var = STP_pi_trade_support_quote
+							value = 36.0
+						}
+					}
+					if = {
+						limit = {
+							has_completed_focus = STP_pe_trade_ending_b
+						}
+						multiply_variable = {
+							var = STP_pi_trade_support_quote
+							value = 3
+						}
+					}
+					else = {
+						multiply_variable = {
+							var = STP_pi_trade_support_quote
+							value = 2
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_trade_trucks_cancel_order = {
+		icon = ADISCORD_arms_supply
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_variable = STP_pi_trade_trucks_deposit
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_trade_trucks_cancel_order_available_tt
+				STP_pi_country_valid = yes
+				has_variable = STP_pi_trade_trucks_deposit
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						has_variable = STP_pi_trade_trucks_deposit
+					}
+					STP_pi_trade_trucks_cancel = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	STP_pi_trade_trucks_standard = {
+		icon = ADISCORD_arms_supply
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_ch_production_agreements
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_trade_trucks_standard_available_tt
+				STP_pi_country_valid = yes
+				STP_pi_trade_capacity = yes
+				NOT = {
+					has_variable = STP_pi_trade_trucks_deposit
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_trade_trucks_standard_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 600
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 35
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_trade_trucks_standard_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = STP_pi_trade_trucks_mode
+							value = 1
+							compare = equals
+						}
+					}
+					STP_pi_trade_trucks_refund = yes
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_trade_trucks_standard_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						STP_pi_trade_capacity = yes
+						NOT = {
+							has_variable = STP_pi_trade_trucks_deposit
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 600
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 600
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 600
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_trade_trucks_deposit
+						value = 600
+					}
+					set_variable = {
+						var = STP_pi_trade_trucks_mode
+						value = 1
+					}
+					add_to_variable = {
+						var = STP_pi_trade_busy
+						value = 1
+					}
+					set_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = STP_pi_trade_level
+					}
+					multiply_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = 50.0
+					}
+					set_variable = {
+						var = STP_pi_trade_trucks_quote
+						value = 250
+					}
+					add_to_variable = {
+						var = STP_pi_trade_trucks_quote
+						value = STP_pi_trade_bonus
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_trade_trucks_rush = {
+		icon = ADISCORD_arms_supply
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_ch_production_agreements
+			STP_pi_trade_rush_open = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_trade_trucks_rush_available_tt
+				STP_pi_country_valid = yes
+				STP_pi_trade_capacity = yes
+				NOT = {
+					has_variable = STP_pi_trade_trucks_deposit
+				}
+				STP_pi_trade_rush_open = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_trade_trucks_rush_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 900
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 14
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_trade_trucks_rush_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = STP_pi_trade_trucks_mode
+							value = 2
+							compare = equals
+						}
+					}
+					STP_pi_trade_trucks_refund = yes
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_trade_trucks_rush_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						STP_pi_trade_capacity = yes
+						NOT = {
+							has_variable = STP_pi_trade_trucks_deposit
+						}
+						STP_pi_trade_rush_open = yes
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 900
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 900
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 900
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_trade_trucks_deposit
+						value = 900
+					}
+					set_variable = {
+						var = STP_pi_trade_trucks_mode
+						value = 2
+					}
+					add_to_variable = {
+						var = STP_pi_trade_busy
+						value = 1
+					}
+					set_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = STP_pi_trade_level
+					}
+					multiply_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = 50.0
+					}
+					set_variable = {
+						var = STP_pi_trade_trucks_quote
+						value = 250
+					}
+					add_to_variable = {
+						var = STP_pi_trade_trucks_quote
+						value = STP_pi_trade_bonus
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_trade_trucks_series = {
+		icon = ADISCORD_arms_supply
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_ch_production_agreements
+			STP_pi_trade_series_open = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_trade_trucks_series_available_tt
+				STP_pi_country_valid = yes
+				STP_pi_trade_capacity = yes
+				NOT = {
+					has_variable = STP_pi_trade_trucks_deposit
+				}
+				STP_pi_trade_series_open = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_trade_trucks_series_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 1200
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 70
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_trade_trucks_series_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = STP_pi_trade_trucks_mode
+							value = 3
+							compare = equals
+						}
+					}
+					STP_pi_trade_trucks_refund = yes
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_trade_trucks_series_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						STP_pi_trade_capacity = yes
+						NOT = {
+							has_variable = STP_pi_trade_trucks_deposit
+						}
+						STP_pi_trade_series_open = yes
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 1200
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 1200
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 1200
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_trade_trucks_deposit
+						value = 1200
+					}
+					set_variable = {
+						var = STP_pi_trade_trucks_mode
+						value = 3
+					}
+					add_to_variable = {
+						var = STP_pi_trade_busy
+						value = 1
+					}
+					set_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = STP_pi_trade_level
+					}
+					multiply_temp_variable = {
+						var = STP_pi_trade_bonus
+						value = 50.0
+					}
+					set_variable = {
+						var = STP_pi_trade_trucks_quote
+						value = 250
+					}
+					add_to_variable = {
+						var = STP_pi_trade_trucks_quote
+						value = STP_pi_trade_bonus
+					}
+					if = {
+						limit = {
+							check_variable = {
+								var = STP_pi_trade_trucks_series_done
+								value = 1
+								compare = greater_than_or_equals
+							}
+						}
+						add_to_variable = {
+							var = STP_pi_trade_trucks_quote
+							value = 50.0
+						}
+					}
+					if = {
+						limit = {
+							has_completed_focus = STP_pe_trade_ending_b
+						}
+						multiply_variable = {
+							var = STP_pi_trade_trucks_quote
+							value = 3
+						}
+					}
+					else = {
+						multiply_variable = {
+							var = STP_pi_trade_trucks_quote
+							value = 2
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_trade_expand = {
+		icon = ADISCORD_arms_supply
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			OR = {
+				has_completed_focus = STP_party_trade_advance
+				has_completed_focus = STP_party_trade_credit
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_trade_expand_available_tt
+				STP_pi_country_valid = yes
+				STP_pi_trade_capacity = yes
+				NOT = {
+					has_variable = STP_pi_trade_expand_deposit
+				}
+				check_variable = {
+					var = STP_pi_trade_level
+					value = 3
+					compare = less_than
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_trade_expand_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 900
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 60
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_trade_expand_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_pi_trade_expand_refund = yes
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						STP_pi_trade_capacity = yes
+						NOT = {
+							has_variable = STP_pi_trade_expand_deposit
+						}
+						check_variable = {
+							var = STP_pi_trade_level
+							value = 3
+							compare = less_than
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 900
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 900
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 900
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_trade_expand_deposit
+						value = 900
+					}
+					add_to_variable = {
+						var = STP_pi_trade_busy
+						value = 1
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_case_orders_quick = {
+		icon = ADISCORD_inspection
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			OR = {
+				has_completed_focus = STP_party_security_register
+				has_completed_focus = STP_party_security_personal_files
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_case_orders_quick_available_tt
+				STP_pi_country_valid = yes
+				NOT = {
+					has_variable = STP_pi_case_orders_deposit
+				}
+				STP_pi_case_capacity = yes
+				check_variable = {
+					var = STP_pi_case_orders_stage
+					value = 0
+					compare = equals
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_case_orders_quick_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 150
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 14
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_case_orders_quick_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_pi_case_orders_refund = yes
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_case_orders_quick_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						NOT = {
+							has_variable = STP_pi_case_orders_deposit
+						}
+						STP_pi_case_capacity = yes
+						check_variable = {
+							var = STP_pi_case_orders_stage
+							value = 0
+							compare = equals
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 150
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 150
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 150
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_case_orders_deposit
+						value = 150
+					}
+					set_variable = {
+						var = STP_pi_case_orders_mode
+						value = 1
+					}
+					add_to_variable = {
+						var = STP_pi_case_busy
+						value = 1
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_case_orders_full = {
+		icon = ADISCORD_inspection
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			OR = {
+				has_completed_focus = STP_party_security_register
+				has_completed_focus = STP_party_security_personal_files
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_case_orders_full_available_tt
+				STP_pi_country_valid = yes
+				NOT = {
+					has_variable = STP_pi_case_orders_deposit
+				}
+				STP_pi_case_capacity = yes
+				OR = {
+					check_variable = {
+						var = STP_pi_case_orders_stage
+						value = 0
+						compare = equals
+					}
+					AND = {
+						check_variable = {
+							var = STP_pi_case_orders_stage
+							value = 4
+							compare = equals
+						}
+						has_completed_focus = STP_pe_security_commission
+					}
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_case_orders_full_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 35
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_case_orders_full_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_pi_case_orders_refund = yes
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_case_orders_full_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						NOT = {
+							has_variable = STP_pi_case_orders_deposit
+						}
+						STP_pi_case_capacity = yes
+						OR = {
+							check_variable = {
+								var = STP_pi_case_orders_stage
+								value = 0
+								compare = equals
+							}
+							AND = {
+								check_variable = {
+									var = STP_pi_case_orders_stage
+									value = 4
+									compare = equals
+								}
+								has_completed_focus = STP_pe_security_commission
+							}
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_case_orders_deposit
+						value = 450
+					}
+					set_variable = {
+						var = STP_pi_case_orders_mode
+						value = 2
+					}
+					add_to_variable = {
+						var = STP_pi_case_busy
+						value = 1
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_case_orders_public = {
+		icon = ADISCORD_inspection
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			check_variable = {
+				var = STP_pi_case_orders_stage
+				value = 1
+				compare = equals
+			}
+			NOT = {
+				has_variable = STP_pi_case_orders_deposit
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_case_orders_public_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_case_orders_stage
+					value = 1
+					compare = equals
+				}
+				NOT = {
+					has_variable = STP_pi_case_orders_deposit
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			effect_tooltip = {
+				add_ideas = STP_pi_case_orders_delta
+			}
+			custom_effect_tooltip = STP_pi_case_public_final_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_case_orders_stage
+							value = 1
+							compare = equals
+						}
+						NOT = {
+							has_variable = STP_pi_case_orders_deposit
+						}
+					}
+					set_variable = {
+						var = STP_pi_case_orders_stage
+						value = 2
+					}
+					add_to_variable = {
+						var = STP_pi_case_public
+						value = 1
+					}
+					add_to_variable = {
+						var = STP_pw_stability_factor
+						value = 0.02
+					}
+					STP_pi_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_case_orders_seal = {
+		icon = ADISCORD_inspection
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			check_variable = {
+				var = STP_pi_case_orders_stage
+				value = 1
+				compare = equals
+			}
+			NOT = {
+				has_variable = STP_pi_case_orders_deposit
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_case_orders_seal_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_case_orders_stage
+					value = 1
+					compare = equals
+				}
+				NOT = {
+					has_variable = STP_pi_case_orders_deposit
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_case_seal_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_case_orders_stage
+							value = 1
+							compare = equals
+						}
+						NOT = {
+							has_variable = STP_pi_case_orders_deposit
+						}
+					}
+					set_variable = {
+						var = STP_pi_case_orders_stage
+						value = 3
+					}
+					add_to_variable = {
+						var = STP_pi_case_sealed
+						value = 1
+					}
+					STP_pi_case_credit = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_case_supply_quick = {
+		icon = ADISCORD_inspection
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			OR = {
+				has_completed_focus = STP_party_security_courts
+				has_completed_focus = STP_party_security_network
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_case_supply_quick_available_tt
+				STP_pi_country_valid = yes
+				NOT = {
+					has_variable = STP_pi_case_supply_deposit
+				}
+				STP_pi_case_capacity = yes
+				check_variable = {
+					var = STP_pi_case_supply_stage
+					value = 0
+					compare = equals
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_case_supply_quick_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 150
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 14
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_case_supply_quick_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_pi_case_supply_refund = yes
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_case_supply_quick_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						NOT = {
+							has_variable = STP_pi_case_supply_deposit
+						}
+						STP_pi_case_capacity = yes
+						check_variable = {
+							var = STP_pi_case_supply_stage
+							value = 0
+							compare = equals
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 150
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 150
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 150
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_case_supply_deposit
+						value = 150
+					}
+					set_variable = {
+						var = STP_pi_case_supply_mode
+						value = 1
+					}
+					add_to_variable = {
+						var = STP_pi_case_busy
+						value = 1
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_case_supply_full = {
+		icon = ADISCORD_inspection
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			OR = {
+				has_completed_focus = STP_party_security_courts
+				has_completed_focus = STP_party_security_network
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_case_supply_full_available_tt
+				STP_pi_country_valid = yes
+				NOT = {
+					has_variable = STP_pi_case_supply_deposit
+				}
+				STP_pi_case_capacity = yes
+				OR = {
+					check_variable = {
+						var = STP_pi_case_supply_stage
+						value = 0
+						compare = equals
+					}
+					AND = {
+						check_variable = {
+							var = STP_pi_case_supply_stage
+							value = 4
+							compare = equals
+						}
+						has_completed_focus = STP_pe_security_commission
+					}
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_case_supply_full_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 35
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_case_supply_full_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_pi_case_supply_refund = yes
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_case_supply_full_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						NOT = {
+							has_variable = STP_pi_case_supply_deposit
+						}
+						STP_pi_case_capacity = yes
+						OR = {
+							check_variable = {
+								var = STP_pi_case_supply_stage
+								value = 0
+								compare = equals
+							}
+							AND = {
+								check_variable = {
+									var = STP_pi_case_supply_stage
+									value = 4
+									compare = equals
+								}
+								has_completed_focus = STP_pe_security_commission
+							}
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_case_supply_deposit
+						value = 450
+					}
+					set_variable = {
+						var = STP_pi_case_supply_mode
+						value = 2
+					}
+					add_to_variable = {
+						var = STP_pi_case_busy
+						value = 1
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_case_supply_public = {
+		icon = ADISCORD_inspection
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			check_variable = {
+				var = STP_pi_case_supply_stage
+				value = 1
+				compare = equals
+			}
+			NOT = {
+				has_variable = STP_pi_case_supply_deposit
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_case_supply_public_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_case_supply_stage
+					value = 1
+					compare = equals
+				}
+				NOT = {
+					has_variable = STP_pi_case_supply_deposit
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			effect_tooltip = {
+				add_ideas = STP_pi_case_supply_delta
+			}
+			custom_effect_tooltip = STP_pi_case_public_final_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_case_supply_stage
+							value = 1
+							compare = equals
+						}
+						NOT = {
+							has_variable = STP_pi_case_supply_deposit
+						}
+					}
+					set_variable = {
+						var = STP_pi_case_supply_stage
+						value = 2
+					}
+					add_to_variable = {
+						var = STP_pi_case_public
+						value = 1
+					}
+					add_to_variable = {
+						var = STP_pw_ADISCORD_economy_admin_expense_factor
+						value = -0.03
+					}
+					STP_pi_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_case_supply_seal = {
+		icon = ADISCORD_inspection
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			check_variable = {
+				var = STP_pi_case_supply_stage
+				value = 1
+				compare = equals
+			}
+			NOT = {
+				has_variable = STP_pi_case_supply_deposit
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_case_supply_seal_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_case_supply_stage
+					value = 1
+					compare = equals
+				}
+				NOT = {
+					has_variable = STP_pi_case_supply_deposit
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_case_seal_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_case_supply_stage
+							value = 1
+							compare = equals
+						}
+						NOT = {
+							has_variable = STP_pi_case_supply_deposit
+						}
+					}
+					set_variable = {
+						var = STP_pi_case_supply_stage
+						value = 3
+					}
+					add_to_variable = {
+						var = STP_pi_case_sealed
+						value = 1
+					}
+					STP_pi_case_credit = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_case_property_quick = {
+		icon = ADISCORD_inspection
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			OR = {
+				has_completed_focus = STP_party_security_restitution
+				has_completed_focus = STP_party_security_cadres
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_case_property_quick_available_tt
+				STP_pi_country_valid = yes
+				NOT = {
+					has_variable = STP_pi_case_property_deposit
+				}
+				STP_pi_case_capacity = yes
+				check_variable = {
+					var = STP_pi_case_property_stage
+					value = 0
+					compare = equals
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_case_property_quick_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 150
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 14
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_case_property_quick_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_pi_case_property_refund = yes
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_case_property_quick_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						NOT = {
+							has_variable = STP_pi_case_property_deposit
+						}
+						STP_pi_case_capacity = yes
+						check_variable = {
+							var = STP_pi_case_property_stage
+							value = 0
+							compare = equals
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 150
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 150
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 150
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_case_property_deposit
+						value = 150
+					}
+					set_variable = {
+						var = STP_pi_case_property_mode
+						value = 1
+					}
+					add_to_variable = {
+						var = STP_pi_case_busy
+						value = 1
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_case_property_full = {
+		icon = ADISCORD_inspection
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			OR = {
+				has_completed_focus = STP_party_security_restitution
+				has_completed_focus = STP_party_security_cadres
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_case_property_full_available_tt
+				STP_pi_country_valid = yes
+				NOT = {
+					has_variable = STP_pi_case_property_deposit
+				}
+				STP_pi_case_capacity = yes
+				OR = {
+					check_variable = {
+						var = STP_pi_case_property_stage
+						value = 0
+						compare = equals
+					}
+					AND = {
+						check_variable = {
+							var = STP_pi_case_property_stage
+							value = 4
+							compare = equals
+						}
+						has_completed_focus = STP_pe_security_commission
+					}
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_case_property_full_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_remove = 35
+		remove_effect = {
+			hidden_effect = {
+				STP_pi_case_property_full_finish = yes
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_pi_case_property_refund = yes
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_case_property_full_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						NOT = {
+							has_variable = STP_pi_case_property_deposit
+						}
+						STP_pi_case_capacity = yes
+						OR = {
+							check_variable = {
+								var = STP_pi_case_property_stage
+								value = 0
+								compare = equals
+							}
+							AND = {
+								check_variable = {
+									var = STP_pi_case_property_stage
+									value = 4
+									compare = equals
+								}
+								has_completed_focus = STP_pe_security_commission
+							}
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_case_property_deposit
+						value = 450
+					}
+					set_variable = {
+						var = STP_pi_case_property_mode
+						value = 2
+					}
+					add_to_variable = {
+						var = STP_pi_case_busy
+						value = 1
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_case_property_public = {
+		icon = ADISCORD_inspection
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			check_variable = {
+				var = STP_pi_case_property_stage
+				value = 1
+				compare = equals
+			}
+			NOT = {
+				has_variable = STP_pi_case_property_deposit
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_case_property_public_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_case_property_stage
+					value = 1
+					compare = equals
+				}
+				NOT = {
+					has_variable = STP_pi_case_property_deposit
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			effect_tooltip = {
+				add_ideas = STP_pi_case_property_delta
+			}
+			custom_effect_tooltip = STP_pi_case_public_final_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_case_property_stage
+							value = 1
+							compare = equals
+						}
+						NOT = {
+							has_variable = STP_pi_case_property_deposit
+						}
+					}
+					set_variable = {
+						var = STP_pi_case_property_stage
+						value = 2
+					}
+					add_to_variable = {
+						var = STP_pi_case_public
+						value = 1
+					}
+					add_to_variable = {
+						var = STP_pw_production_speed_industrial_complex_factor
+						value = 0.05
+					}
+					STP_pi_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_case_property_seal = {
+		icon = ADISCORD_inspection
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			check_variable = {
+				var = STP_pi_case_property_stage
+				value = 1
+				compare = equals
+			}
+			NOT = {
+				has_variable = STP_pi_case_property_deposit
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_case_property_seal_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_case_property_stage
+					value = 1
+					compare = equals
+				}
+				NOT = {
+					has_variable = STP_pi_case_property_deposit
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_case_seal_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_case_property_stage
+							value = 1
+							compare = equals
+						}
+						NOT = {
+							has_variable = STP_pi_case_property_deposit
+						}
+					}
+					set_variable = {
+						var = STP_pi_case_property_stage
+						value = 3
+					}
+					add_to_variable = {
+						var = STP_pi_case_sealed
+						value = 1
+					}
+					STP_pi_case_credit = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_case_leverage = {
+		icon = ADISCORD_inspection
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			check_variable = {
+				var = STP_pi_case_credits
+				value = 1
+				compare = greater_than_or_equals
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_case_leverage_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_case_credits
+					value = 1
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			effect_tooltip = {
+				add_political_power = 100
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_case_credits
+							value = 1
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = STP_pi_case_credits
+						value = 1
+					}
+					add_political_power = 100
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_case_apparatus = {
+		icon = ADISCORD_inspection
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			check_variable = {
+				var = STP_pi_case_credits
+				value = 1
+				compare = greater_than_or_equals
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_case_apparatus_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_case_credits
+					value = 1
+					compare = greater_than_or_equals
+				}
+				NOT = {
+					has_idea = STP_pi_case_apparatus_idea
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			effect_tooltip = {
+				add_timed_idea = {
+					idea = STP_pi_case_apparatus_idea
+					days = 180
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_case_credits
+							value = 1
+							compare = greater_than_or_equals
+						}
+						NOT = {
+							has_idea = STP_pi_case_apparatus_idea
+						}
+					}
+					subtract_from_variable = {
+						var = STP_pi_case_credits
+						value = 1
+					}
+					add_timed_idea = {
+						idea = STP_pi_case_apparatus_idea
+						days = 180
+					}
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	STP_pi_north_training = {
+		icon = ADISCORD_negotiations
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_party_regent_mandate
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_north_training_available_tt
+				STP_pi_north_relations = yes
+				STP_pi_north_capacity = yes
+				NOT = {
+					has_variable = STP_pi_north_offer
+					has_variable = STP_pi_north_deposit
+				}
+				NOT = {
+					has_country_flag = STP_pi_north_training_delivered
+				}
+				check_variable = {
+					var = ADISCORD_economy_treasury
+					value = 300
+					compare = greater_than_or_equals
+				}
+				NOD = {
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 600
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
+		cost = 0
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_north_offer_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_north_relations = yes
+						STP_pi_north_capacity = yes
+						NOT = {
+							has_variable = STP_pi_north_offer
+							has_variable = STP_pi_north_deposit
+						}
+						NOT = {
+							has_country_flag = STP_pi_north_training_delivered
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 300
+							compare = greater_than_or_equals
+						}
+						NOD = {
+							check_variable = {
+								var = ADISCORD_economy_treasury
+								value = 600
+								compare = greater_than_or_equals
+							}
+						}
+					}
+					set_variable = {
+						var = STP_pi_north_offer
+						value = 1
+					}
+					set_variable = {
+						var = STP_pi_north_quote
+						value = 300
+					}
+					set_variable = {
+						var = STP_pi_north_donor_quote
+						value = 600
+					}
+					STP_pi_north_dispatch_offer = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	STP_pi_north_equipment = {
+		icon = ADISCORD_negotiations
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			OR = {
+				has_completed_focus = STP_party_regent_joint_offices
+				has_completed_focus = STP_party_regent_accounts
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_north_equipment_available_tt
+				STP_pi_north_relations = yes
+				STP_pi_north_capacity = yes
+				NOT = {
+					has_variable = STP_pi_north_offer
+					has_variable = STP_pi_north_deposit
+				}
+				OR = {
+					NOT = {
+						has_country_flag = STP_pi_north_equipment_delivered
+					}
+					has_completed_focus = STP_pe_regent_ending_b
+				}
+				check_variable = {
+					var = ADISCORD_economy_treasury
+					value = 600
+					compare = greater_than_or_equals
+				}
+				NOD = {
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 1200
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
+		cost = 0
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_north_offer_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_north_relations = yes
+						STP_pi_north_capacity = yes
+						NOT = {
+							has_variable = STP_pi_north_offer
+							has_variable = STP_pi_north_deposit
+						}
+						OR = {
+							NOT = {
+								has_country_flag = STP_pi_north_equipment_delivered
+							}
+							has_completed_focus = STP_pe_regent_ending_b
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 600
+							compare = greater_than_or_equals
+						}
+						NOD = {
+							check_variable = {
+								var = ADISCORD_economy_treasury
+								value = 1200
+								compare = greater_than_or_equals
+							}
+						}
+					}
+					set_variable = {
+						var = STP_pi_north_offer
+						value = 2
+					}
+					set_variable = {
+						var = STP_pi_north_quote
+						value = 600
+					}
+					set_variable = {
+						var = STP_pi_north_donor_quote
+						value = 1200
+					}
+					STP_pi_north_dispatch_offer = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	STP_pi_north_industry = {
+		icon = ADISCORD_negotiations
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			OR = {
+				has_completed_focus = STP_party_regent_concessions
+				has_completed_focus = STP_party_regent_industry
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_north_industry_available_tt
+				STP_pi_north_relations = yes
+				STP_pi_north_capacity = yes
+				NOT = {
+					has_variable = STP_pi_north_offer
+					has_variable = STP_pi_north_deposit
+				}
+				NOT = {
+					has_country_flag = STP_pi_north_industry_delivered
+				}
+				STP_pi_has_workshop_site = yes
+				check_variable = {
+					var = ADISCORD_economy_treasury
+					value = 900
+					compare = greater_than_or_equals
+				}
+				NOD = {
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 1800
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
+		cost = 0
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_north_offer_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_north_relations = yes
+						STP_pi_north_capacity = yes
+						NOT = {
+							has_variable = STP_pi_north_offer
+							has_variable = STP_pi_north_deposit
+						}
+						NOT = {
+							has_country_flag = STP_pi_north_industry_delivered
+						}
+						STP_pi_has_workshop_site = yes
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 900
+							compare = greater_than_or_equals
+						}
+						NOD = {
+							check_variable = {
+								var = ADISCORD_economy_treasury
+								value = 1800
+								compare = greater_than_or_equals
+							}
+						}
+					}
+					set_variable = {
+						var = STP_pi_north_offer
+						value = 3
+					}
+					set_variable = {
+						var = STP_pi_north_quote
+						value = 900
+					}
+					set_variable = {
+						var = STP_pi_north_donor_quote
+						value = 1800
+					}
+					STP_pi_north_dispatch_offer = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	STP_pi_north_reply = {
+		icon = ADISCORD_negotiations
+		allowed = {
+			tag = STP
+		}
+		activation = {
+			always = no
+		}
+		visible = {
+			has_variable = STP_pi_north_offer
+		}
+		available = {
+			hidden_trigger = {
+				always = no
+			}
+		}
+		is_good = no
+		selectable_mission = no
+		days_mission_timeout = 21
+		cancel_trigger = {
+			NOT = {
+				has_variable = STP_pi_north_offer
+			}
+		}
+		timeout_effect = {
+			hidden_effect = {
+				STP_pi_north_decline = yes
+			}
+		}
+	}
+
+	STP_pi_north_delivery = {
+		icon = generic_industry
+		allowed = {
+			tag = STP
+		}
+		activation = {
+			always = no
+		}
+		visible = {
+			has_variable = STP_pi_north_deposit
+		}
+		available = {
+			hidden_trigger = {
+				always = no
+			}
+		}
+		is_good = yes
+		selectable_mission = no
+		days_mission_timeout = 45
+		cancel_trigger = {
+			STP_pi_north_relations = no
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pi_north_refund_tt
+			hidden_effect = {
+				STP_pi_north_refund = yes
+			}
+		}
+		timeout_effect = {
+			custom_effect_tooltip = STP_pi_north_delivery_tt
+			hidden_effect = {
+				STP_pi_north_finish = yes
+			}
+		}
+	}
+
+	STP_pi_north_local_staff = {
+		icon = generic_reform
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_party_regent_schools
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_north_local_staff_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_north_specialists
+					value = 3
+					compare = less_than
+				}
+				NOT = {
+					has_variable = STP_pi_specialist_deposit
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_specialist_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		days_remove = 45
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_north_specialists
+							value = 3
+							compare = less_than
+						}
+						NOT = {
+							has_variable = STP_pi_specialist_deposit
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pi_specialist_deposit
+						value = 450
+					}
+				}
+			}
+		}
+		cancel_trigger = {
+			STP_pi_country_valid = no
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pi_specialist_refund_tt
+			hidden_effect = {
+				STP_pi_specialist_refund = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_pi_specialist_finish_tt
+			hidden_effect = {
+				STP_pi_specialist_finish = yes
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	STP_pi_north_buyout = {
+		icon = ADISCORD_negotiations
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			OR = {
+				has_completed_focus = STP_party_regent_guarantees
+				has_completed_focus = STP_pe_regent_ending_a
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_north_buyout_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_north_obligations
+					value = 1
+					compare = greater_than_or_equals
+				}
+				check_variable = {
+					var = STP_pi_north_specialists
+					value = 1
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_north_buyout_cost
+		custom_cost_trigger = {
+			OR = {
+				AND = {
+					has_completed_focus = STP_pe_regent_ending_a
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+						compare = greater_than_or_equals
+					}
+				}
+				AND = {
+					NOT = {
+						has_completed_focus = STP_pe_regent_ending_a
+					}
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 900
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_north_buyout_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_north_obligations
+							value = 1
+							compare = greater_than_or_equals
+						}
+						check_variable = {
+							var = STP_pi_north_specialists
+							value = 1
+							compare = greater_than_or_equals
+						}
+						OR = {
+							AND = {
+								has_completed_focus = STP_pe_regent_ending_a
+								check_variable = {
+									var = ADISCORD_economy_treasury
+									value = 450
+									compare = greater_than_or_equals
+								}
+							}
+							AND = {
+								NOT = {
+									has_completed_focus = STP_pe_regent_ending_a
+								}
+								check_variable = {
+									var = ADISCORD_economy_treasury
+									value = 900
+									compare = greater_than_or_equals
+								}
+							}
+						}
+					}
+					set_temp_variable = {
+						var = STP_pi_price
+						value = 900
+					}
+					if = {
+						limit = {
+							has_completed_focus = STP_pe_regent_ending_a
+						}
+						set_temp_variable = {
+							var = STP_pi_price
+							value = 450
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = STP_pi_price
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = STP_pi_price
+					}
+					ADISCORD_economy_mark_dirty = yes
+					subtract_from_variable = {
+						var = STP_pi_north_obligations
+						value = 1
+					}
+					subtract_from_variable = {
+						var = STP_pi_north_specialists
+						value = 1
+					}
+					STP_pi_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	STP_pi_cadre_enrol = {
+		icon = ADISCORD_recruitment
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_ch_service_act
+			NOT = {
+				has_country_flag = STP_pi_cadre_trained
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_cadre_enrol_available_tt
+				STP_pi_country_valid = yes
+				NOT = {
+					has_country_flag = STP_pi_cadre_trained
+					has_variable = STP_pi_cadre_deposit
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_cadre_enrol_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+			NOT = {
+				has_manpower < 6000
+			}
+		}
+		days_remove = 30
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						NOT = {
+							has_country_flag = STP_pi_cadre_trained
+							has_variable = STP_pi_cadre_deposit
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+						NOT = {
+							has_manpower < 6000
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					add_manpower = -6000
+					set_variable = {
+						var = STP_pi_cadre_deposit
+						value = 450
+					}
+					set_variable = {
+						var = STP_pi_cadre_recruits
+						value = 6000
+					}
+				}
+			}
+		}
+		cancel_trigger = {
+			STP_pi_country_valid = no
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pi_cadre_enrol_refund_tt
+			hidden_effect = {
+				STP_pi_cadre_enrol_refund = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_pi_cadre_enrol_finish_tt
+			hidden_effect = {
+				STP_pi_cadre_enrol_finish = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	STP_pi_cadre_instructors = {
+		icon = ADISCORD_recruitment
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_ch_regular_service
+			has_country_flag = STP_pi_cadre_trained
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_cadre_instructors_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_cadre_free
+					value = 2000
+					compare = greater_than_or_equals
+				}
+				check_variable = {
+					var = STP_pi_cadre_instructors
+					value = 4000
+					compare = less_than
+				}
+			}
+		}
+		cost = 0
+		complete_effect = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = STP_pw_party_dummy
+					add_idea = STP_pi_cadre_instructors_delta
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_cadre_free
+							value = 2000
+							compare = greater_than_or_equals
+						}
+						check_variable = {
+							var = STP_pi_cadre_instructors
+							value = 4000
+							compare = less_than
+						}
+					}
+					subtract_from_variable = {
+						var = STP_pi_cadre_free
+						value = 2000
+					}
+					add_to_variable = {
+						var = STP_pi_cadre_instructors
+						value = 2000
+					}
+					STP_pi_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	STP_pi_cadre_recall_instructors = {
+		icon = ADISCORD_recruitment
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_country_flag = STP_pi_cadre_trained
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_cadre_recall_instructors_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_cadre_instructors
+					value = 2000
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_cadre_recall_instructors_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_cadre_instructors
+							value = 2000
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = STP_pi_cadre_instructors
+						value = 2000
+					}
+					add_to_variable = {
+						var = STP_pi_cadre_free
+						value = 2000
+					}
+					STP_pi_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	STP_pi_cadre_reserve = {
+		icon = ADISCORD_recruitment
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_ch_regular_service
+			has_country_flag = STP_pi_cadre_trained
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_cadre_reserve_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_cadre_free
+					value = 2000
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		cost = 0
+		complete_effect = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = STP_pw_party_dummy
+					add_idea = STP_pi_cadre_reserve_delta
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_cadre_free
+							value = 2000
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = STP_pi_cadre_free
+						value = 2000
+					}
+					add_to_variable = {
+						var = STP_pi_cadre_reserve
+						value = 2000
+					}
+					STP_pi_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	STP_pi_cadre_recall_reserve = {
+		icon = ADISCORD_recruitment
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_country_flag = STP_pi_cadre_trained
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_cadre_recall_reserve_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_cadre_reserve
+					value = 2000
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_cadre_recall_reserve_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_cadre_reserve
+							value = 2000
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = STP_pi_cadre_reserve
+						value = 2000
+					}
+					add_to_variable = {
+						var = STP_pi_cadre_free
+						value = 2000
+					}
+					STP_pi_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	STP_pi_cadre_mobilise = {
+		icon = ADISCORD_recruitment
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_ch_regular_service
+			has_country_flag = STP_pi_cadre_trained
+			NOT = {
+				has_completed_focus = STP_pe_staff_ending_b
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_cadre_mobilise_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_cadre_reserve
+					value = 2000
+					compare = greater_than_or_equals
+				}
+				NOT = {
+					has_variable = STP_pi_mobilisation_people
+				}
+			}
+		}
+		cost = 0
+		days_remove = 21
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_cadre_mobilisation_start_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_cadre_reserve
+							value = 2000
+							compare = greater_than_or_equals
+						}
+						NOT = {
+							has_variable = STP_pi_mobilisation_people
+						}
+					}
+					subtract_from_variable = {
+						var = STP_pi_cadre_reserve
+						value = 2000
+					}
+					set_variable = {
+						var = STP_pi_mobilisation_people
+						value = 2000
+					}
+					STP_pi_refresh = yes
+				}
+			}
+		}
+		cancel_trigger = {
+			STP_pi_country_valid = no
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pi_cadre_mobilisation_cancel_tt
+			hidden_effect = {
+				STP_pi_cadre_mobilisation_cancel = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_pi_cadre_mobilisation_finish_tt
+			hidden_effect = {
+				STP_pi_cadre_mobilisation_finish = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 5
+				has_war = yes
+			}
+		}
+	}
+
+	STP_pi_cadre_rapid_mobilise = {
+		icon = ADISCORD_recruitment
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_country_flag = STP_pi_cadre_trained
+			has_completed_focus = STP_pe_staff_ending_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_cadre_rapid_mobilise_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_cadre_reserve
+					value = 2000
+					compare = greater_than_or_equals
+				}
+				NOT = {
+					has_variable = STP_pi_mobilisation_people
+				}
+			}
+		}
+		cost = 0
+		days_remove = 7
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_cadre_mobilisation_start_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_cadre_reserve
+							value = 2000
+							compare = greater_than_or_equals
+						}
+						NOT = {
+							has_variable = STP_pi_mobilisation_people
+						}
+					}
+					subtract_from_variable = {
+						var = STP_pi_cadre_reserve
+						value = 2000
+					}
+					set_variable = {
+						var = STP_pi_mobilisation_people
+						value = 2000
+					}
+					STP_pi_refresh = yes
+				}
+			}
+		}
+		cancel_trigger = {
+			STP_pi_country_valid = no
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pi_cadre_mobilisation_cancel_tt
+			hidden_effect = {
+				STP_pi_cadre_mobilisation_cancel = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_pi_cadre_mobilisation_finish_tt
+			hidden_effect = {
+				STP_pi_cadre_mobilisation_finish = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 5
+				has_war = yes
+			}
+		}
+	}
+
+	STP_pi_artel_road = {
+		icon = generic_industry
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_party_staff_reserve_jobs
+		}
+		state_target = yes
+		targets = {
+			1 2 3
+			29 45 46
+		}
+		target_trigger = {
+			FROM = {
+				is_core_of = STP
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_artel_road_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_cadre_free
+					value = 2000
+					compare = greater_than_or_equals
+				}
+				NOT = {
+					has_variable = STP_pi_artel_deposit
+				}
+				FROM = {
+					STP_pi_road_site = yes
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_artel_road_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		days_remove = 30
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_artel_reserve_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_cadre_free
+							value = 2000
+							compare = greater_than_or_equals
+						}
+						NOT = {
+							has_variable = STP_pi_artel_deposit
+						}
+						FROM = {
+							STP_pi_road_site = yes
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					subtract_from_variable = {
+						var = STP_pi_cadre_free
+						value = 2000
+					}
+					set_variable = {
+						var = STP_pi_artel_deposit
+						value = 450
+					}
+					set_variable = {
+						var = STP_pi_artel_people
+						value = 2000
+					}
+					set_variable = {
+						var = STP_pi_artel_kind
+						value = 1
+					}
+					FROM = {
+						set_state_flag = STP_pi_artel_pending
+					}
+				}
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+				FROM = {
+					STP_pi_state_controlled = no
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pi_artel_refund_tt
+			hidden_effect = {
+				STP_pi_artel_refund = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_pi_artel_road_finish_tt
+			hidden_effect = {
+				STP_pi_artel_road_finish = yes
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	STP_pi_artel_workshop = {
+		icon = generic_industry
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_pe_staff_ending_a
+		}
+		state_target = yes
+		targets = {
+			1 2 3
+			29 45 46
+		}
+		target_trigger = {
+			FROM = {
+				is_core_of = STP
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_artel_workshop_available_tt
+				STP_pi_country_valid = yes
+				check_variable = {
+					var = STP_pi_cadre_free
+					value = 2000
+					compare = greater_than_or_equals
+				}
+				NOT = {
+					has_variable = STP_pi_artel_deposit
+				}
+				FROM = {
+					STP_pi_workshop_site = yes
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_artel_workshop_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 900
+				compare = greater_than_or_equals
+			}
+		}
+		days_remove = 60
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_artel_reserve_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						check_variable = {
+							var = STP_pi_cadre_free
+							value = 2000
+							compare = greater_than_or_equals
+						}
+						NOT = {
+							has_variable = STP_pi_artel_deposit
+						}
+						FROM = {
+							STP_pi_workshop_site = yes
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 900
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 900
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 900
+					}
+					ADISCORD_economy_mark_dirty = yes
+					subtract_from_variable = {
+						var = STP_pi_cadre_free
+						value = 2000
+					}
+					set_variable = {
+						var = STP_pi_artel_deposit
+						value = 900
+					}
+					set_variable = {
+						var = STP_pi_artel_people
+						value = 2000
+					}
+					set_variable = {
+						var = STP_pi_artel_kind
+						value = 2
+					}
+					FROM = {
+						set_state_flag = STP_pi_artel_pending
+					}
+				}
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+				FROM = {
+					STP_pi_state_controlled = no
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pi_artel_refund_tt
+			hidden_effect = {
+				STP_pi_artel_refund = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_pi_artel_workshop_finish_tt
+			hidden_effect = {
+				STP_pi_artel_workshop_finish = yes
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	STP_pi_house_road = {
+		icon = generic_industry
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			OR = {
+				has_completed_focus = STP_party_houses_estates
+				has_completed_focus = STP_party_houses_audit
+			}
+		}
+		state_target = yes
+		targets = {
+			1 2 3
+			29 45 46
+		}
+		target_trigger = {
+			FROM = {
+				is_core_of = STP
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_house_road_available_tt
+				STP_pi_country_valid = yes
+				custom_trigger_tooltip = {
+					tooltip = STP_pi_house_capacity_tt
+					STP_pi_house_capacity = yes
+				}
+				FROM = {
+					STP_pi_house_site_free = yes
+					STP_pi_road_site = yes
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_house_road_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 400
+				compare = greater_than_or_equals
+			}
+		}
+		days_remove = 35
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						custom_trigger_tooltip = {
+							tooltip = STP_pi_house_capacity_tt
+							STP_pi_house_capacity = yes
+						}
+						FROM = {
+							STP_pi_house_site_free = yes
+							STP_pi_road_site = yes
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 400
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 400
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 400
+					}
+					ADISCORD_economy_mark_dirty = yes
+					FROM = {
+						set_variable = {
+							var = STP_pi_house_deposit
+							value = 400
+						}
+						set_variable = {
+							var = STP_pi_house_kind
+							value = 1
+						}
+					}
+					add_to_variable = {
+						var = STP_pi_house_slots
+						value = 1
+					}
+				}
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+				FROM = {
+					STP_pi_state_controlled = no
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pi_house_refund_tt
+			hidden_effect = {
+				STP_pi_house_refund = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_pi_house_road_delivery_tt
+			hidden_effect = {
+				STP_pi_house_road_finish = yes
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	STP_pi_house_workshop = {
+		icon = generic_industry
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			has_completed_focus = STP_ch_property_charter
+		}
+		state_target = yes
+		targets = {
+			1 2 3
+			29 45 46
+		}
+		target_trigger = {
+			FROM = {
+				is_core_of = STP
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_house_workshop_available_tt
+				STP_pi_country_valid = yes
+				custom_trigger_tooltip = {
+					tooltip = STP_pi_house_capacity_tt
+					STP_pi_house_capacity = yes
+				}
+				FROM = {
+					STP_pi_house_site_free = yes
+					STP_pi_workshop_site = yes
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_house_workshop_cost
+		custom_cost_trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 900
+				compare = greater_than_or_equals
+			}
+		}
+		days_remove = 35
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						custom_trigger_tooltip = {
+							tooltip = STP_pi_house_capacity_tt
+							STP_pi_house_capacity = yes
+						}
+						FROM = {
+							STP_pi_house_site_free = yes
+							STP_pi_workshop_site = yes
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 900
+							compare = greater_than_or_equals
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 900
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 900
+					}
+					ADISCORD_economy_mark_dirty = yes
+					FROM = {
+						set_variable = {
+							var = STP_pi_house_deposit
+							value = 900
+						}
+						set_variable = {
+							var = STP_pi_house_kind
+							value = 2
+						}
+					}
+					add_to_variable = {
+						var = STP_pi_house_slots
+						value = 1
+					}
+				}
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				STP_pi_country_valid = no
+				FROM = {
+					STP_pi_state_controlled = no
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pi_house_refund_tt
+			hidden_effect = {
+				STP_pi_house_refund = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_pi_house_workshop_delivery_tt
+			hidden_effect = {
+				STP_pi_house_workshop_finish = yes
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	STP_pi_house_buyout = {
+		icon = ADISCORD_negotiations
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_pi_house_buyout_open = yes
+			FROM = {
+				has_state_flag = STP_pi_house_contract
+			}
+		}
+		state_target = yes
+		targets = {
+			1 2 3
+			29 45 46
+		}
+		target_trigger = {
+			FROM = {
+				is_core_of = STP
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_house_buyout_available_tt
+				STP_pi_country_valid = yes
+				FROM = {
+					STP_pi_state_controlled = yes
+					has_state_flag = STP_pi_house_contract
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pi_house_buyout_cost
+		custom_cost_trigger = {
+			OR = {
+				AND = {
+					has_completed_focus = STP_pe_houses_ending_a
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+						compare = greater_than_or_equals
+					}
+				}
+				AND = {
+					NOT = {
+						has_completed_focus = STP_pe_houses_ending_a
+					}
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 900
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_house_buyout_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pi_country_valid = yes
+						FROM = {
+							STP_pi_state_controlled = yes
+							has_state_flag = STP_pi_house_contract
+						}
+						OR = {
+							AND = {
+								has_completed_focus = STP_pe_houses_ending_a
+								check_variable = {
+									var = ADISCORD_economy_treasury
+									value = 450
+									compare = greater_than_or_equals
+								}
+							}
+							AND = {
+								NOT = {
+									has_completed_focus = STP_pe_houses_ending_a
+								}
+								check_variable = {
+									var = ADISCORD_economy_treasury
+									value = 900
+									compare = greater_than_or_equals
+								}
+							}
+						}
+					}
+					set_temp_variable = {
+						var = STP_pi_price
+						value = 900
+					}
+					if = {
+						limit = {
+							has_completed_focus = STP_pe_houses_ending_a
+						}
+						set_temp_variable = {
+							var = STP_pi_price
+							value = 450
+						}
+					}
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = STP_pi_price
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = STP_pi_price
+					}
+					ADISCORD_economy_mark_dirty = yes
+					STP_pi_house_close = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	STP_pi_house_abandon = {
+		icon = ADISCORD_negotiations
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			FROM = {
+				has_state_flag = STP_pi_house_contract
+				STP_pi_state_controlled = no
+			}
+		}
+		state_target = yes
+		targets = {
+			1 2 3
+			29 45 46
+		}
+		target_trigger = {
+			FROM = {
+				is_core_of = STP
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pi_house_abandon_available_tt
+				FROM = {
+					has_state_flag = STP_pi_house_contract
+					STP_pi_state_controlled = no
+				}
+			}
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = STP_pi_house_abandon_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						FROM = {
+							has_state_flag = STP_pi_house_contract
+							STP_pi_state_controlled = no
+						}
+					}
+					STP_pi_house_close = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 8
+		}
+	}
+
 	STP_party_property_hearings = {
 		icon = ADISCORD_negotiations
 		allowed = { tag = STP }

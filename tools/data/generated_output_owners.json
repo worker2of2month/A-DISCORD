@@ -1,6 +1,7 @@
 {
   "schema": 1,
   "apply_sequence": [
+    "nam_naval_models",
     "state_history",
     "outer_states",
     "northern_countries",
@@ -53,6 +54,63 @@
     "superevent_music"
   ],
   "families": [
+    {
+      "id": "nam_naval_models",
+      "owner_module": "tools.builders.build_adiscord_nam_models",
+      "source_inputs": [
+        "tools/builders/build_adiscord_nam_models.py",
+        "tools/assets/source/build_headquarters.py",
+        "tools/assets/source/build_specialists.py",
+        "tools/assets/source/build_country_aircraft.py",
+        "tools/assets/source/build_country_cas.py",
+        "tools/assets/source/build_shl_palace.py",
+        "tools/assets/source/build_crimson_sentinel.py",
+        "tools/assets/source/country_vehicles/package_vehicles.py",
+        "tools/assets/source/build_northern_infantry.py",
+        "tools/assets/source/infantry_polish.py",
+        "gfx/leaders/NAM/portrait_NAM_generic_land_*.png",
+        "gfx/leaders/NAM/portrait_NAM_Grigory_Levashov.png",
+        "gfx/models/units/ADISCORD_regulars/NAM_field*"
+      ],
+      "output_globs": [
+        "gfx/models/units/ADISCORD_specialists/NAM_marine*",
+        "gfx/models/units/ADISCORD_headquarters/NAM_hq*",
+        "gfx/models/units/ADISCORD_country_vehicles/NAM_*fighter*",
+        "gfx/models/units/ADISCORD_country_vehicles/NAM_*cas*",
+        "gfx/entities/ADISCORD_specialists.gfx",
+        "gfx/entities/zzz_ADISCORD_specialists.asset",
+        "gfx/entities/ADISCORD_army_headquarters.gfx",
+        "gfx/entities/zz_ADISCORD_army_headquarters.asset",
+        "gfx/entities/zz_ADISCORD_country_vehicles.asset",
+        "gfx/interface/equipmentdesigner/graphic_db/ADISCORD_specialists.txt",
+        "gfx/interface/equipmentdesigner/graphic_db/ADISCORD_army_headquarters.txt",
+        "tools/assets/source/NAM_hq.blend",
+        "tools/assets/source/NAM_marine.blend",
+        "tools/assets/source/country_vehicles/NAM_*fighter.blend",
+        "tools/assets/source/country_vehicles/NAM_*cas.blend",
+        "docs/development/model-verification/NAM_headquarters.json",
+        "docs/development/model-verification/NAM_marines.json",
+        "docs/development/model-verification/NAM_naval_package.json",
+        "docs/development/model-verification/aircraft_verification.json",
+        "docs/development/previews/NAM_naval/*"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_nam_models"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_nam_models",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "Owns NAM marine and headquarters marked sections, their native exports, and NAM aircraft rows and exports. Other specialist and headquarters sections and other aircraft families remain unchanged. Blender and io_pdx_mesh are needed for rebuilding."
+    },
     {
       "id": "azhar_palace",
       "owner_module": "tools.builders.build_adiscord_azhar_palace",
@@ -1892,7 +1950,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_coastal_geography", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "Owns lowland rasters in provinces 16709, 16710, 16712 and 16802-16808, urban terrain and city/tree masks in provinces 16713-16721 and the compact southern settlement manifest, plus the explicit city and surrounding rural-sector province pixels and necessary local railway crossings, intersecting normal and DXT5 color cells, and unit anchors for the additions and displaced parent anchors. Owns the mainland Svetlogorye mountain relief, graphical and combat terrain, trees, normals and unit heights in the explicit 27-province mainland Svetlogorye relief mask, with province-clipped foothill and mountain textures and elevation-based rock and snow detail; Nudge splits inside that mask keep its surface while their terrain stays authored. Owns city rasters for the explicit southern urban-growth provinces, unit anchors for the southern Nudge splits 16864-16894 and their donors, and railway reroutes through those splits. Preserves IVN terrain and compatible snow output."
+      "overlap_explanation": "Owns lowland rasters in provinces 16709, 16710, 16712 and 16802-16808, urban terrain and city/tree masks in provinces 16713-16721 and the compact southern settlement manifest, plus the explicit city and surrounding rural-sector province pixels, bounded province-corner repairs, the 4287-6099 and eight Yubor contact widenings, and the Zshat 10926 connection; owns surface samples and unit-anchor reconciliation for those exact province repairs, and necessary local railway crossings, intersecting normal and DXT5 color cells, and unit anchors for the additions and displaced parent anchors. Owns the mainland Svetlogorye mountain relief, graphical and combat terrain, trees, normals and unit heights in the explicit 27-province mainland Svetlogorye relief mask, with province-clipped foothill and mountain textures and elevation-based rock and snow detail; Nudge splits inside that mask keep its surface while their terrain stays authored. Owns city rasters for the explicit southern urban-growth provinces, unit anchors for the southern Nudge splits 16864-16894 and their donors, and railway reroutes through those splits. Preserves IVN terrain and compatible snow output."
     },
     {
       "id": "ivn_geography",

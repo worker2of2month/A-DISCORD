@@ -269,6 +269,11 @@ class CasProgressionTests(unittest.TestCase):
 
 
 class SharedAircraftTests(unittest.TestCase):
+    def test_partial_family_packaging_cannot_replace_shared_textures(self):
+        from tools.assets.source import build_country_aircraft as builder
+        with self.assertRaisesRegex(ValueError, 'complete families'):
+            builder.package(ROOT, names=['NAM_fighter'])
+
     def routes(self):
         text = (ROOT / "gfx/entities/zz_ADISCORD_country_vehicles.asset").read_text()
         return {

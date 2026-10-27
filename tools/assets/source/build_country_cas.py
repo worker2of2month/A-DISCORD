@@ -478,7 +478,7 @@ def verify(name):
     return report
 
 
-def render_preview(name):
+def render_preview(name, output=None):
     bpy.ops.wm.read_factory_settings(use_empty=True)
     pdx.import_meshfile(str(SOURCE / f"{name}.mesh"), join_materials=False)
     preview_materials()
@@ -505,7 +505,7 @@ def render_preview(name):
         light.data.energy, light.data.size = power, size
         light.rotation_euler = (target - light.location).to_track_quat("-Z", "Y").to_euler()
     scene.render.film_transparent = True
-    scene.render.filepath = str(SOURCE / f"{name}_preview.png")
+    scene.render.filepath = str((output or SOURCE) / f"{name}_preview.png")
     bpy.ops.render.render(write_still=True)
 
 

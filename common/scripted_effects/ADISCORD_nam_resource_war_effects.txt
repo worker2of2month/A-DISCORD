@@ -7378,6 +7378,7 @@ NAM_marine_ensure_template = {
 		limit = { NOT = { has_template = "Island Marines" } }
 		division_template = {
 			name = "Island Marines"
+			override_model = ADISCORD_NAM_marine_entity
 			template_counter = 34
 			division_names_group = ADISCORD_INF_01
 			is_locked = yes

@@ -53,3 +53,47 @@ entity = {
 	pdxmesh = "ADISCORD_RUS_hq_mesh"
 }
 # END ADISCORD RUS headquarters
+
+# BEGIN ADISCORD NAM headquarters
+entity = {
+	clone = "ADISCORD_army_headquarters_base_entity"
+	name = "NAM_army_headquarters_entity"
+	pdxmesh = "ADISCORD_NAM_hq_mesh"
+}
+
+entity = {
+	clone = "ADISCORD_army_headquarters_base_entity"
+	name = "NAM_confederation_army_headquarters_entity"
+	pdxmesh = "ADISCORD_NAM_hq_mesh"
+}
+
+entity = {
+	clone = "ADISCORD_army_headquarters_base_entity"
+	name = "NAM_iron_ladder_army_headquarters_entity"
+	pdxmesh = "ADISCORD_NAM_hq_mesh"
+}
+
+entity = {
+	clone = "ADISCORD_army_headquarters_base_entity"
+	name = "NAM_service_republic_army_headquarters_entity"
+	pdxmesh = "ADISCORD_NAM_hq_mesh"
+}
+
+entity = {
+	clone = "ADISCORD_army_headquarters_base_entity"
+	name = "NAM_federation_army_headquarters_entity"
+	pdxmesh = "ADISCORD_NAM_hq_mesh"
+}
+
+entity = {
+	clone = "ADISCORD_army_headquarters_base_entity"
+	name = "NAM_oil_union_army_headquarters_entity"
+	pdxmesh = "ADISCORD_NAM_hq_mesh"
+}
+
+entity = {
+	clone = "ADISCORD_army_headquarters_base_entity"
+	name = "NAM_corporate_state_army_headquarters_entity"
+	pdxmesh = "ADISCORD_NAM_hq_mesh"
+}
+# END ADISCORD NAM headquarters

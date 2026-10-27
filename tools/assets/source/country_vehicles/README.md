@@ -112,3 +112,27 @@ four rigid skin slots, every wheel's movement, gun recoil and animation seams.
 It does not confirm engine loading or the appearance of the combined entity.
 Fully restart HOI4 with the final hashes and inspect a new campaign and fresh
 logs before treating the runtime result as verified.
+
+## NAM naval family
+
+`tools.builders.build_adiscord_nam_models` owns the NAM headquarters, marine
+and six aircraft exports. NAM general portraits define the olive, dark green,
+brown leather and brass palette. The marine keeps the NAM field body and kit,
+with a black beret, dark jacket and landing equipment. Native skeletons,
+attachment locators and existing animation states are retained.
+
+```powershell
+python -B -m tools.builders.build_adiscord_nam_models
+python -B -m tools.builders.build_adiscord_nam_models --apply
+python -B -m tools.builders.build_adiscord_nam_models
+```
+
+The first command checks installed source and export hashes. `--apply` rebuilds
+stale exports outside the mod, verifies native reimports, then installs them.
+Pass `--blender` for a different Blender executable or `--staging` to install
+an already verified staging directory containing `headquarters`, `marines`
+and `aircraft`. Aircraft packaging requires all six members of a country
+family because tiers share role textures. Other country families are preserved.
+Reports are stored in `docs/development/model-verification/`; generated review
+renders in `docs/development/previews/NAM_naval/` are temporary. These reports
+verify exported geometry and sampled animations, not engine presentation.

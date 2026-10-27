@@ -10,6 +10,38 @@ from tools.validators import validate_adiscord_tech_doctrine as validator
 
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+class NamMarineModelTests(unittest.TestCase):
+    def test_marine_uses_nam_body_and_verified_native_exports(self):
+        folder = ROOT / 'gfx/models/units/ADISCORD_specialists'
+        report = json.loads((ROOT / 'docs/development/model-verification/NAM_marines.json').read_text())
+        donor = ROOT / 'gfx/models/units/ADISCORD_regulars/NAM_field.mesh'
+        self.assertEqual(report['donor_sha256'], hashlib.sha256(donor.read_bytes()).hexdigest())
+        self.assertTrue(report['native_locators_unchanged'])
+        self.assertTrue(report['native_reimport'])
+        self.assertLess(report['triangles'], 17000)
+        self.assertEqual(report['body_triangles'], 2367)
+        self.assertLess(report['body_normal_max_delta'], .002)
+        for filename, expected in report['files'].items():
+            self.assertEqual(hashlib.sha256((folder / filename).read_bytes()).hexdigest(), expected)
+        for pose in ('rest', 'inspect', 'gear', 'observe', 'move', 'attack', 'retreat', 'death'):
+            self.assertEqual(len(report['poses'][pose]['frames']), 3)
+
+    def test_marine_pool_does_not_replace_line_infantry(self):
+        text = (ROOT / 'gfx/interface/equipmentdesigner/graphic_db/ADISCORD_specialists.txt').read_text()
+        self.assertIn('sub_units = { ADISCORD_marine_infantry }', text)
+        self.assertIn('models = { ADISCORD_NAM_marine_entity }', text)
+        self.assertNotRegex(text, r'sub_units\s*=\s*\{\s*infantry\b')
+        effects = (ROOT / 'common/scripted_effects/ADISCORD_nam_resource_war_effects.txt').read_text()
+        start = effects.index('NAM_marine_ensure_template = {')
+        block = validator.extract_block(effects, start)
+        self.assertIn('override_model = ADISCORD_NAM_marine_entity', block)
+
+    def test_naval_package_rebuild_inputs_and_bindings_are_current(self):
+        from tools.builders.build_adiscord_nam_models import check
+        self.assertEqual(check(), [])
+
 PROGRESSION_ASSET = ROOT / "gfx/entities/zy_ADISCORD_infantry_weapon_progression.asset"
 COUNTRY_ASSET = ROOT / "gfx/entities/zz_ADISCORD_country_infantry.asset"
 

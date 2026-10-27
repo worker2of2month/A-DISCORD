@@ -60,3 +60,15 @@ RUS = {
 	}
 }
 # END ADISCORD RUS headquarters
+
+# BEGIN ADISCORD NAM headquarters
+NAM = {
+	infantry_equipment = {
+		pool = {
+			sub_units = { hq_support_company }
+			weight = 3000
+			models = { NAM_army_headquarters_entity }
+		}
+	}
+}
+# END ADISCORD NAM headquarters
