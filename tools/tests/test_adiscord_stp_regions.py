@@ -797,7 +797,6 @@ class STPRegionalMechanicsTests(unittest.TestCase):
             self.assertIn(f"STP_cw_can_spend_{amount} = yes", block)
             pp = {
                 "STP_bargain_with_local_councils": 10,
-                "STP_prepare_false_trail": 15,
                 "STP_region_unique_operation_3": 10,
                 "STP_region_unique_operation_45": 15,
                 "STP_region_unique_operation_46": 20,
@@ -810,17 +809,18 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         shared_triggers = read(SHARED_ACTION_TRIGGERS)
         shared_effects = read(SHARED_ACTION_EFFECTS)
         politics_loc = read(POLITICS_LOCALISATION)
-        for amount in (50, 100, 200, 500):
+        for amount in (50, 100, 250, 300, 500):
             self.assertIn(f"ADISCORD_economy_can_spend_{amount} = {{", shared_triggers)
             spend = named_block(shared_effects, f"ADISCORD_economy_spend_{amount}")
             self.assertIn(f"value = -{amount}", spend)
             self.assertIn(f"value = {amount}", spend)
+        for amount in (50, 100, 200, 500):
             self.assertRegex(
                 politics_loc,
                 rf'(?m)^\s*ADISCORD_cost_t{amount}:\s*"§Y{amount}§! £ADISCORD_economy_treasury_texticon"',
             )
-        self.assertNotIn("ADISCORD_economy_can_spend_25", shared_triggers)
-        self.assertNotIn("ADISCORD_economy_spend_25", shared_effects)
+        self.assertNotRegex(shared_triggers, r"\bADISCORD_economy_can_spend_25\b")
+        self.assertNotRegex(shared_effects, r"\bADISCORD_economy_spend_25\b")
         self.assertNotRegex(politics_loc, r'(?m)^\s*ADISCORD_cost_t\d+:\s*"[^"]*казн')
 
     def test_rifle_costs_use_the_existing_compact_texticon(self) -> None:

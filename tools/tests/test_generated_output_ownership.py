@@ -417,16 +417,16 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             output_dir = Path(temporary)
             expected = Image.new("RGBA", (2, 2), (10, 20, 30, 255))
-            outputs = {"STP_regions_expected.png": expected}
-            expected.save(output_dir / "STP_regions_expected.png")
+            outputs = {"STP_regions_state_1.png": expected}
+            expected.save(output_dir / "STP_regions_state_1.png")
             Image.new("RGBA", (2, 2), (40, 50, 60, 255)).save(
-                output_dir / "STP_regions_stale.png"
+                output_dir / "STP_regions_state_999.png"
             )
 
             with patch.object(stp_regions_map, "OUT", output_dir):
                 issues = stp_regions_map.validate_outputs(outputs)
 
-            self.assertIn("STP_regions_stale.png", "\n".join(issues))
+            self.assertIn("STP_regions_state_999.png", "\n".join(issues))
 
     def test_pipeline_is_explicit_and_repeats_northern_after_exclusion(self) -> None:
         sequence = self.registry["apply_sequence"]
