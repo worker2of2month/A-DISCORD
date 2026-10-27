@@ -576,7 +576,12 @@
 			tag = STS
 		}
 		prerequisite = { focus = STP_pw_republic_professional_service }
-		available = { STP_pc_focus_available = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			STP_pw_open_mountain_school = yes
@@ -594,7 +599,10 @@
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
-			STP_pc_focus_available = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
 		}
 		ai_will_do = { base = 2 }
 		completion_reward = {
@@ -612,7 +620,10 @@
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
-			STP_pc_focus_available = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
 		}
 		ai_will_do = { base = 2 }
 		completion_reward = {
@@ -1060,7 +1071,10 @@
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
-			STP_pc_focus_available = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
 		}
 		ai_will_do = { base = 2 }
 		completion_reward = {
@@ -1304,7 +1318,10 @@
 				tooltip = STP_pw_reconstruction_available_tt
 				STP_pc_focus_available = yes
 			}
-			STP_pc_course_continues = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_political_continuity_tt
+				STP_pc_course_continues = yes
+			}
 		}
 		prerequisite = { focus = STP_pc_shabrat_politics }
 		ai_will_do = { base = 2 }
@@ -1529,7 +1546,10 @@
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		bypass = { VAL = { exists = yes OR = { is_subject_of = STS has_idea = STP_pc_val_client } } }
 		available = {
-			STP_pc_can_offer_kefreyt_terms = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_kefreyt_talks_tt
+				STP_pc_can_offer_kefreyt_terms = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_pw_reconstruction_available_tt
 				STP_pc_focus_available = yes
@@ -1561,7 +1581,10 @@
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		available = {
 			STP_pc_can_confront_val = yes
-			STP_pc_focus_available = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
 			VAL = { exists = yes is_subject = no has_capitulated = no }
 			NOT = { has_war_with = VAL is_in_faction_with = VAL has_country_flag = STP_pc_val_terms_accepted }
 			custom_trigger_tooltip = { tooltip = STP_pc_val_refused_tt has_country_flag = STP_pc_val_terms_refused }
@@ -1591,7 +1614,10 @@
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		available = {
-			STP_pc_can_offer_nod_terms = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_nod_talks_tt
+				STP_pc_can_offer_nod_terms = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_pw_reconstruction_available_tt
 				STP_pc_focus_available = yes
@@ -1745,7 +1771,10 @@
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		available = {
-			RUS_crisis_regional_wars_available = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_world_survives_tt
+				RUS_crisis_regional_wars_available = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_pw_reconstruction_available_tt
 				STP_pc_focus_available = yes
@@ -2512,8 +2541,14 @@
 			}
 		}
 		bypass = {
-			STP_pc_freedom_continues = yes
-			STP_pc_val_liberation_resolved = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_freedom_course_tt
+				STP_pc_freedom_continues = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_kefreyt_resolved_tt
+				STP_pc_val_liberation_resolved = yes
+			}
 			STP_pc_nod_liberation_resolved = yes
 		}
 		prerequisite = { focus = STP_pc_lib_local_contacts }
@@ -2549,8 +2584,14 @@
 			}
 		}
 		bypass = {
-			STP_pc_freedom_continues = yes
-			STP_pc_val_liberation_resolved = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_freedom_course_tt
+				STP_pc_freedom_continues = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_kefreyt_resolved_tt
+				STP_pc_val_liberation_resolved = yes
+			}
 			STP_pc_nod_liberation_resolved = yes
 		}
 		prerequisite = { focus = STP_pc_lib_crisis }
@@ -2593,18 +2634,36 @@
 			}
 		}
 		bypass = {
-			STP_pc_freedom_continues = yes
-			STP_pc_val_liberation_resolved = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_freedom_course_tt
+				STP_pc_freedom_continues = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_kefreyt_resolved_tt
+				STP_pc_val_liberation_resolved = yes
+			}
 			STP_pc_nod_liberation_resolved = yes
-			NOT = { has_country_flag = STP_pc_lib_package_pending }
-			STP_pc_liberation_package_available = no
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = STP_focus_liberation_offer_pending_tt
+					has_country_flag = STP_pc_lib_package_pending
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_no_liberation_recipient_tt
+				STP_pc_liberation_package_available = no
+			}
 		}
 		prerequisite = { focus = STP_pc_lib_war }
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			add_timed_idea = { idea = STP_pc_occupation_admin days = 90 }
 			if = {
-				limit = { STP_pc_charter_government_current = yes }
+				limit = {
+					hidden_trigger = {
+						STP_pc_charter_government_current = yes
+					}
+				}
 				unlock_decision_tooltip = STP_pc_charter_partner_offer
 			}
 			hidden_effect = { STP_pc_offer_liberation_package = yes }
@@ -2684,7 +2743,15 @@
 		completion_reward = {
 			army_experience = 15
 			add_command_power = 10
-			if = { limit = { has_country_flag = STP_shabrat_was_arrested } add_command_power = 5 }
+			if = {
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = STP_focus_founder_arrested_tt
+						has_country_flag = STP_shabrat_was_arrested
+					}
+				}
+				add_command_power = 5
+			}
 		}
 	}
 
@@ -3804,7 +3871,10 @@
 			}
 		}
 		bypass = {
-			has_country_flag = STP_sdir_arsenal_delivered
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_arsenal_delivered_tt
+				has_country_flag = STP_sdir_arsenal_delivered
+			}
 			48 = {
 				OR = {
 					AND = {
@@ -3847,7 +3917,11 @@
 						level = 1
 						instant_build = yes
 					}
-					owner = { ADISCORD_economy_mark_dirty = yes }
+					owner = {
+						hidden_effect = {
+							ADISCORD_economy_mark_dirty = yes
+						}
+					}
 				}
 			}
 		}
@@ -3934,7 +4008,10 @@
 			}
 		}
 		bypass = {
-			has_country_flag = STP_sdir_naval_delivered
+			custom_trigger_tooltip = {
+				tooltip = STP_sdir_naval_delivered_tt
+				has_country_flag = STP_sdir_naval_delivered
+			}
 			30 = {
 				OR = {
 					AND = {
@@ -3977,7 +4054,11 @@
 						level = 1
 						instant_build = yes
 					}
-					owner = { ADISCORD_economy_mark_dirty = yes }
+					owner = {
+						hidden_effect = {
+							ADISCORD_economy_mark_dirty = yes
+						}
+					}
 				}
 			}
 		}
@@ -4317,7 +4398,16 @@
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes has_country_flag = STP_cw_kefreyt_shipment_received }
 		prerequisite = { focus = STP_pc_heg_val_audit }
 		mutually_exclusive = { focus = STP_pc_heg_val_terms }
-		available = { STP_pc_focus_available = yes STP_pc_can_offer_kefreyt_terms = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_kefreyt_talks_tt
+				STP_pc_can_offer_kefreyt_terms = yes
+			}
+		}
 		ai_will_do = { base = 3 }
 		completion_reward = { custom_effect_tooltip = STP_pc_val_trade_offer_tt hidden_effect = { set_variable = { var = STP_pc_val_offer_kind value = 1 } VAL = { country_event = { id = ADISCORD_STP_pc.17 days = 1 } } } }
 	}
@@ -4331,7 +4421,16 @@
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes NOT = { has_country_flag = STP_cw_kefreyt_shipment_received } }
 		prerequisite = { focus = STP_pc_heg_val_audit }
 		mutually_exclusive = { focus = STP_pc_heg_val_terms }
-		available = { STP_pc_focus_available = yes STP_pc_can_offer_kefreyt_terms = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_kefreyt_talks_tt
+				STP_pc_can_offer_kefreyt_terms = yes
+			}
+		}
 		ai_will_do = { base = 3 }
 		completion_reward = { custom_effect_tooltip = STP_pc_val_trade_offer_tt hidden_effect = { set_variable = { var = STP_pc_val_offer_kind value = 1 } VAL = { country_event = { id = ADISCORD_STP_pc.17 days = 1 } } } }
 	}
@@ -4345,7 +4444,15 @@
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		prerequisite = { focus = STP_pc_heg_val_terms focus = STP_pc_val_renew_aid focus = STP_pc_val_border_compact }
 		mutually_exclusive = { focus = STP_pc_heg_val_force }
-		available = { STP_pc_focus_available = yes has_country_flag = STP_pc_val_terms_accepted VAL = { exists = yes } NOT = { has_war_with = VAL } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			has_country_flag = STP_pc_val_terms_accepted
+			VAL = { exists = yes }
+			NOT = { has_war_with = VAL }
+		}
 		ai_will_do = { base = 3 }
 		completion_reward = { add_stability = 0.05 add_tech_bonus = { name = STP_pc_joint_workshops bonus = 0.5 uses = 2 category = industry } }
 	}
@@ -4359,7 +4466,15 @@
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		prerequisite = { focus = STP_pc_heg_nod_break focus = STP_pc_nod_recognition }
 		mutually_exclusive = { focus = STP_pc_heg_nod_force }
-		available = { STP_pc_focus_available = yes has_country_flag = STP_pc_nod_terms_accepted NOD = { exists = yes } NOT = { has_war_with = NOD } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			has_country_flag = STP_pc_nod_terms_accepted
+			NOD = { exists = yes }
+			NOT = { has_war_with = NOD }
+		}
 		ai_will_do = { base = 3 }
 		completion_reward = { add_stability = 0.05 add_tech_bonus = { name = STP_pc_joint_workshops bonus = 0.5 uses = 2 category = industry } }
 	}
@@ -4373,7 +4488,16 @@
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		prerequisite = { focus = STP_pc_heg_lock }
 		mutually_exclusive = { focus = STP_pc_heg_nod_break }
-		available = { STP_pc_focus_available = yes STP_pc_can_offer_nod_terms = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_nod_talks_tt
+				STP_pc_can_offer_nod_terms = yes
+			}
+		}
 		ai_will_do = { base = 3 }
 		completion_reward = { custom_effect_tooltip = STP_pc_nod_border_offer_tt hidden_effect = { set_variable = { var = STP_pc_nod_offer_kind value = 1 } NOD = { country_event = { id = ADISCORD_STP_pc.18 days = 1 } } } }
 	}
@@ -4390,6 +4514,7 @@
 		prerequisite = { focus = STP_pc_after_victory }
 		ai_will_do = { base = 10 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pw_treasury_900_tt
 			add_political_power = 50
 			custom_effect_tooltip = STP_pc_economy_count_the_cost_tt
 			hidden_effect = {
@@ -4399,7 +4524,9 @@
 				STP_pw_refresh_modifier = yes
 			}
 			effect_tooltip = { add_ideas = STP_pw_economy_count_the_cost_delta }
-			STP_receive_900 = yes
+			hidden_effect = {
+				STP_receive_900 = yes
+			}
 		}
 	}
 
@@ -4502,7 +4629,10 @@
 		prerequisite = { focus = STP_pc_economy_stabilize_currency }
 		ai_will_do = { base = 12 }
 		completion_reward = {
-			STP_receive_900 = yes
+			custom_effect_tooltip = STP_pw_treasury_900_tt
+			hidden_effect = {
+				STP_receive_900 = yes
+			}
 			custom_effect_tooltip = STP_pc_economy_recovery_budget_tt
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.12 }

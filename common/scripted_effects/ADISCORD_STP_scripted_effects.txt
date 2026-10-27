@@ -6949,7 +6949,9 @@ STP_pc_form_hegemony_league = {
 		limit = { tag = STS }
 		if = {
 			limit = { NOT = { has_country_flag = STP_pc_hegemony_league } }
-			set_country_flag = STP_pc_hegemony_league
+			hidden_effect = {
+				set_country_flag = STP_pc_hegemony_league
+			}
 			create_faction_from_template = { template = faction_template_ADISCORD_standard name = STP_pc_hegemony_league }
 		}
 		if = {
@@ -6980,7 +6982,9 @@ STP_pc_form_liberation_coalition = {
 		limit = { tag = STS }
 		if = {
 			limit = { NOT = { has_country_flag = STP_pc_liberation_coalition } }
-			set_country_flag = STP_pc_liberation_coalition
+			hidden_effect = {
+				set_country_flag = STP_pc_liberation_coalition
+			}
 			create_faction_from_template = { template = faction_template_ADISCORD_standard name = STP_pc_liberation_coalition }
 		}
 		if = {
@@ -11358,8 +11362,16 @@ STP_qol_initialize_staff = {
 # Called directly by completion rewards; never tests its own finishing focus.
 STP_qol_grant_elite_officer = {
 	if = {
-		limit = { STP_qol_staff_available = yes NOT = { has_global_flag = STP_qol_elite_officer_delivered } }
-		set_global_flag = STP_qol_elite_officer_delivered
+		limit = {
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_elite_officer_available_tt
+				STP_qol_staff_available = yes
+				NOT = { has_global_flag = STP_qol_elite_officer_delivered }
+			}
+		}
+		hidden_effect = {
+			set_global_flag = STP_qol_elite_officer_delivered
+		}
 		if = {
 			limit = { tag = STP has_character = STP_Oleg_Vershin }
 			add_corps_commander_role = {

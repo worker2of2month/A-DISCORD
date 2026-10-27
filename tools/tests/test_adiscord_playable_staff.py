@@ -6,6 +6,7 @@ import re
 import unittest
 from functools import lru_cache
 
+from tools.lib.focus_sources import read_focus_source
 from tools.tests.test_adiscord_stp_preparation import (
     parse_clausewitz,
     block,
@@ -129,6 +130,8 @@ class World:
             k, v = e.key, e.value
             if k in ('AND', 'hidden_trigger', 'FROM', 'ROOT', 'owner'):
                 return self.condition(v, character)
+            if k == 'custom_trigger_tooltip':
+                return self.condition([item for item in v if item.key != 'tooltip'], character)
             if k == 'OR':
                 return any(one(x) for x in v)
             if k == 'NOT':
@@ -762,9 +765,9 @@ class PlayableStaffTests(unittest.TestCase):
             ),
             'VAL': ('VAL_Contract_General_Staff',),
         }.items():
-            trees = parse(
+            trees = parse_clausewitz(read_focus_source(
                 'common/national_focus/ADISCORD_national_focus_' + country + '.txt'
-            )
+            ))
             focuses = {
                 scalar(f.value, 'id'): f.value
                 for t in trees

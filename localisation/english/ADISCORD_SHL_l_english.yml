@@ -88,7 +88,7 @@
  SHL_restart_tenth_tt: "In §Y21 days§!: the tenth furnace resumes work at §Y20§! wear. Losing the site in [294.GetName] returns the deposit."
  SHL_tenth_stopped_tt: "The tenth furnace has gone out. Prepare supplies and pay for a restart."
  SHL_planned_supply: "Arrange scheduled supplies"
- SHL_planned_supply_desc: "At the beginning of each production period, the country purchases missing whole packs for operating furnaces at 25 each. The service uses no repair slots or credit and spends only available money. Manual supplies and emergency reserves remain available."
+ SHL_planned_supply_desc: "At the beginning of each production period, the country purchases missing whole packs for operating furnaces at 25 £ADISCORD_economy_treasury_texticon each. The service uses no repair slots or credit and spends only available money. Manual supplies and emergency reserves remain available."
  SHL_planned_supply_tt: "Missing supplies for operating furnaces are bought every 28 days at §Y25§! £ADISCORD_economy_treasury_texticon per pack, within the treasury balance."
  SHL_stop_planned_supply: "Suspend scheduled supplies"
  SHL_stop_supply_tt: "Future automatic purchases stop. Delivered supplies remain at their furnaces."

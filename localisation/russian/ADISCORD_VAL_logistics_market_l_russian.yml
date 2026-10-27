@@ -29,7 +29,7 @@
  VAL_contract_refugee_labor: "Предложить рабочие контракты"
  VAL_contract_refugee_labor_desc:0 "Занять §Y100 тыс.§! £population_texticon свободных переселенцев на строительстве на 90 дней за §Y75§! £political_power_texticon. Пока действует контракт, они недоступны для вербовки и переселения, но по-прежнему занимают жильё. По завершении или отмене все рабочие возвращаются в свободный пул."
  VAL_fund_resettlement_depots: "Переселить беженцев в [FROM.GetName]"
- VAL_fund_resettlement_depots_desc: "Переселить §Y100 тыс.§! £population_texticon уже принятых беженцев в [FROM.GetName] за §Y250§! из казны. Население региона навсегда увеличится на §G100 тыс.§!. Программа доступна только в выбранных малонаселённых домашних регионах Кефрейта под нашим контролем, не работает при незавершённой очистке загрязнения и проводится в каждом регионе один раз."
+ VAL_fund_resettlement_depots_desc: "Переселить §Y100 тыс.§! £population_texticon уже принятых беженцев в [FROM.GetName] за §Y250§! £ADISCORD_economy_treasury_texticon. Население региона навсегда увеличится на §G100 тыс.§!. Программа доступна только в выбранных малонаселённых домашних регионах Кефрейта под нашим контролем, не работает при незавершённой очистке загрязнения и проводится в каждом регионе один раз."
  VAL_organize_refugee_return: "Организовать возвращение"
  VAL_organize_refugee_return_desc: "После окончания региональных войн организовать безопасное возвращение §Y150 тыс.§! £population_texticon человек за §Y35§! £political_power_texticon. Снизится нагрузка на систему размещения; стабильность и политическая власть не начисляются."
  VAL_raid_grey_traders:0 "Рейды против теневых торговцев"
@@ -131,7 +131,7 @@
  VAL_local_training_start_tt:0 "§Y5 тыс.§! £population_texticon местных добровольцев начнут §Y35-дневное§! обучение. При отмене возвращаются добровольцы, §Y75§! £political_power_texticon и §Y5000§! £infantry_equipment_texticon."
 
  VAL_offer_settlement_bounties:0 "Выплатить подъёмные переселенцам"
- VAL_offer_settlement_bounties_desc:0 "Оплатить переезд и гарантировать первые контракты рабочим и семьям из-за границы Кефрейта. Программа привлекает §Y30 тыс.§! новых жителей в систему размещения, стоит §Y250§! монет и повышает давление серого рынка на §R2§!. Доступно раз в §Y90 дней§!."
+ VAL_offer_settlement_bounties_desc:0 "Оплатить переезд и гарантировать первые контракты рабочим и семьям из-за границы Кефрейта. Программа привлекает §Y30 тыс.§! новых жителей в систему размещения, стоит §Y250§! £ADISCORD_economy_treasury_texticon и повышает давление серого рынка на §R2§!. Доступно раз в §Y90 дней§!."
  VAL_settlement_bounties_tt:0 "§Y30 тыс.§! £population_texticon новых переселенцев. Давление серого рынка: §R+2§!."
 
  VAL_naturalize_refugee_households:0 "Натурализовать семьи переселенцев"
@@ -139,7 +139,7 @@
  VAL_naturalization_result_tt:0 "§Y20 тыс.§! £population_texticon переселенцев добавлены в §Y10 тыс.§! £manpower_texticon местного служебного резерва и дают §G+1 тыс.§! людских ресурсов сразу. Давление серого рынка: §G-1§!."
 
  VAL_emergency_service_contracts:0 "Экстренные контракты"
- VAL_emergency_service_contracts_desc:0 "Обойти обычный цикл подготовки и сразу мобилизовать крупную группу контрактного резерва. Потратить §Y500§! монет, §Y25§! командного ресурса, §Y10 тыс.§! £infantry_equipment_texticon и §Y10 тыс.§! £population_texticon местного резерва, чтобы немедленно получить §Y10 тыс.§! £manpower_texticon людских ресурсов. Стабильность: §R-1%§!. Доступно раз в §Y120 дней§!."
+ VAL_emergency_service_contracts_desc:0 "Обойти обычный цикл подготовки и сразу мобилизовать крупную группу контрактного резерва. Потратить §Y500§! £ADISCORD_economy_treasury_texticon, §Y25§! командного ресурса, §Y10 тыс.§! £infantry_equipment_texticon и §Y10 тыс.§! £population_texticon местного резерва, чтобы немедленно получить §Y10 тыс.§! £manpower_texticon людских ресурсов. Стабильность: §R-1%§!. Доступно раз в §Y120 дней§!."
  VAL_emergency_service_cost:0 "§Y500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power\n§Y10000§! £infantry_equipment_texticon  §Y10000§! £population_texticon"
  VAL_emergency_service_cost_tooltip:0 "§Y500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power  §Y10000§! £infantry_equipment_texticon  §Y10000§! £population_texticon"
  VAL_emergency_service_cost_blocked:0 "§R500§! £ADISCORD_economy_treasury_texticon  §R25§! £command_power\n§R10000§! £infantry_equipment_texticon  §R10000§! £population_texticon"
@@ -158,7 +158,7 @@
 
  VAL_training_cost_tooltip:0 "Нужно §Y5 000§! £population_texticon добровольцев из указанного в решении резерва, §Y75§! £political_power_texticon и §Y5000§! £infantry_equipment_texticon пехотного снаряжения."
 
- VAL_labor_program_tt:0 "§Y100 тыс.§! £population_texticon переселенцев работают 90 дней: §G+12%§! к скорости строительства, §G+8%§! к гражданским доходам, §R-1%§! к стабильности. Затем люди возвращаются в свободный резерв."
+ VAL_labor_program_tt:0 "§Y100 тыс.§! £population_texticon переселенцев работают 90 дней: §G+12%§! к скорости строительства, §G+8%§! к гражданским доходам, §R-1%§! £stability_texticon. Затем люди возвращаются в свободный резерв."
 
  VAL_expand_refugee_housing:0 "Расширить временные поселения"
 

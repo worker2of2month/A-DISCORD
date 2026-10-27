@@ -558,7 +558,9 @@
 			if = {
 				limit = {
 					has_character = STP_Leonid_Barchel
-					STP_Leonid_Barchel = { NOT = { has_character_flag = STP_cw_arrested } }
+					hidden_trigger = {
+						STP_Leonid_Barchel = { NOT = { has_character_flag = STP_cw_arrested } }
+					}
 				}
 				add_advisor_role = {
 					character = STP_Leonid_Barchel

@@ -69,7 +69,11 @@
 				STP_pf_shift = yes
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_borons_deal_tt
 			}
 			hidden_effect = {
@@ -100,11 +104,14 @@
 		completion_reward = {
 			ADISCORD_reform_state_development = yes
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_conservatives_program_1_tt
 			}
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 1 } }
-
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_civil_records_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.025 }
@@ -137,11 +144,14 @@
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_radicals_program_1_tt
 			}
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 14 } }
-
 			add_manpower = 6000
 			unlock_decision_tooltip = STP_pw_party_return_specialists
 			custom_effect_tooltip = STP_pw_party_return_specialists_unlock_summary_tt
@@ -154,7 +164,11 @@
 				STP_pf_shift = yes
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_radicals_deal_tt
 			}
 			hidden_effect = { STP_pf_apply_focus_program = yes }
@@ -185,7 +199,6 @@
 			add_stability = -0.05
 			add_timed_idea = { idea = STP_pw_party_last_purge days = 180 }
 			unlock_decision_tooltip = STP_pw_party_security_reserve
-			custom_effect_tooltip = STP_pw_party_security_reserve_unlock_summary_tt
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_firm_settlement_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_political_power_gain value = 0.07 }
@@ -195,7 +208,11 @@
 				STP_pf_shift = yes
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_conservatives_deal_tt
 			}
 		}
@@ -230,11 +247,14 @@
 		completion_reward = {
 			ADISCORD_reform_society_development = yes
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_conservatives_program_2_tt
 			}
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 2 } }
-
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_civil_charter_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_stability_factor value = 0.01 }
@@ -461,9 +481,7 @@
 		completion_reward = {
 			ADISCORD_reform_economic_development = yes
 			custom_effect_tooltip = STP_qol_industry_company_tt
-
 			custom_effect_tooltip = STP_qol_elite_industry_tt
-
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_industrial_settlement_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_production_factory_max_efficiency_factor value = 0.05 }
@@ -473,7 +491,11 @@
 				STP_pf_shift = yes
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_merchants_deal_tt
 			}
 		}
@@ -534,11 +556,14 @@
 			ADISCORD_reform_army_development = yes
 			activate_advisor = ADISCORD_staff_STP_Erhard_Kleist
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_army_program_1_tt
 			}
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 7 } }
-
 			add_tech_bonus = { name = STP_pw_infantry_lessons_bonus bonus = 0.5 uses = 1 category = infantry_weapons }
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_officer_school_delta } }
 			hidden_effect = {
@@ -914,11 +939,14 @@
 		ai_will_do = { base = 4 }
 		completion_reward = {
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_borons_program_1_tt
 			}
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 3 } }
-
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_party_district_charters_post_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_stability_factor value = 0.015 }
@@ -981,11 +1009,14 @@
 		ai_will_do = { base = 4 }
 		completion_reward = {
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_security_program_1_tt
 			}
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 5 } }
-
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_party_personnel_commissions_post_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_political_power_gain value = 0.07 }
@@ -1079,11 +1110,14 @@
 		ai_will_do = { base = 4 }
 		completion_reward = {
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_merchants_program_1_tt
 			}
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 12 } }
-
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_party_port_contracts_post_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.065 }
@@ -1273,15 +1307,22 @@
 		ai_will_do = { base = 5 }
 		completion_reward = {
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_borons_program_2_tt
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_radicals_program_2_tt
 			}
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 4 } }
-
 			add_stability = 0.02
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_district_congress_delta } }
 			hidden_effect = {
@@ -1316,13 +1357,15 @@
 		ai_will_do = { base = 5 }
 		completion_reward = {
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_security_program_2_tt
 			}
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 6 } }
-
 			custom_effect_tooltip = STP_qol_elite_administration_tt
-
 			add_political_power = 75
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_executive_secretariat_delta } }
 			hidden_effect = {
@@ -1361,13 +1404,18 @@
 		ai_will_do = { base = 5 }
 		completion_reward = {
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_merchants_program_2_tt
 			}
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 13 } }
-
 			custom_effect_tooltip = STP_cw_treasury_1200_tt
-			STP_receive_1200 = yes
+			hidden_effect = {
+				STP_receive_1200 = yes
+			}
 			unlock_decision_tooltip = STP_pw_prog_trade_credit
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_commercial_recovery_delta } }
 			hidden_effect = {
@@ -1443,11 +1491,14 @@
 				producer = ROOT
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_army_program_2_tt
 			}
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 9 } }
-
 			add_command_power = 20
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_fortress_corps_delta } }
 			hidden_effect = {
@@ -1480,11 +1531,14 @@
 		ai_will_do = { base = 5 }
 		completion_reward = {
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_army_program_2_tt
 			}
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 8 } }
-
 			army_experience = 20
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_field_staff_delta } }
 			hidden_effect = {
@@ -1507,7 +1561,12 @@
 			tag = STP
 		}
 		prerequisite = { focus = STP_pw_party_nod_military_mission }
-		bypass = { STP_pw_party_northern_patron_lost = yes }
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_northern_patron_lost_tt
+				STP_pw_party_northern_patron_lost = yes
+			}
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_pw_reconstruction_available_tt
@@ -1519,11 +1578,14 @@
 		completion_reward = {
 			country_event = { id = ADISCORD_STP_pc.38 days = 1 }
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_advisers_program_2_tt
 			}
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 11 } }
-
 			add_command_power = 15
 			add_tech_bonus = { name = STP_pw_party_joint_staff bonus = 0.5 uses = 1 category = infantry_weapons }
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_joint_defence_board_delta } }
@@ -1592,10 +1654,22 @@
 			}
 			OR = {
 				is_subject_of = NOD
-				STP_pw_party_northern_patron_lost = yes
-				has_country_flag = STP_pw_party_nod_invasion_defeated
-				has_country_flag = STP_ch_liberated
-				has_country_flag = STP_pw_party_nod_compact
+				custom_trigger_tooltip = {
+					tooltip = STP_focus_northern_patron_lost_tt
+					STP_pw_party_northern_patron_lost = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = STP_focus_nod_invasion_defeated_tt
+					has_country_flag = STP_pw_party_nod_invasion_defeated
+				}
+				custom_trigger_tooltip = {
+					tooltip = STP_focus_liberated_tt
+					has_country_flag = STP_ch_liberated
+				}
+				custom_trigger_tooltip = {
+					tooltip = STP_focus_nod_compact_tt
+					has_country_flag = STP_pw_party_nod_compact
+				}
 				NOD = { exists = no }
 				NOD = { has_capitulated = yes }
 				NOD = { is_subject = yes }
@@ -1868,7 +1942,10 @@
 			}
 		}
 		available = {
-			STP_pc_focus_available = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
 			NOD = {
 				exists = yes
 				has_capitulated = no
@@ -1901,7 +1978,10 @@
 		prerequisite = { focus = STP_pw_party_northern_protocol }
 		mutually_exclusive = { focus = STP_pw_party_sovereignty }
 		available = {
-			STP_pc_focus_available = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
 			is_subject = no
 			has_country_flag = STP_pw_party_nod_offer_accepted
 			NOD = {
@@ -1928,7 +2008,11 @@
 			add_tech_bonus = { name = STP_pw_party_staff_exchange bonus = 0.5 uses = 2 category = infantry_weapons }
 			add_stability = 0.05
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_advisers_deal_tt
 			}
 		}
@@ -1960,7 +2044,11 @@
 			add_timed_idea = { idea = STP_cw_arsenal_shifts days = 180 }
 			custom_effect_tooltip = STP_pw_arms_factory_or_reserve_tt
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_army_deal_tt
 			}
 			hidden_effect = {
@@ -2002,9 +2090,17 @@
 			tag = STP
 		}
 		prerequisite = { focus = STP_pw_party_new_republic }
-		bypass = { STP_pw_party_northern_patron_lost = yes }
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_northern_patron_lost_tt
+				STP_pw_party_northern_patron_lost = yes
+			}
+		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			is_subject_of = NOD
 			NOD = {
 				exists = yes
@@ -2015,11 +2111,14 @@
 		ai_will_do = { base = 4 }
 		completion_reward = {
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_pf_advisers_program_1_tt
 			}
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 10 } }
-
 			army_experience = 25
 			custom_effect_tooltip = STP_pw_party_nod_contract_tt
 			hidden_effect = {
@@ -2042,7 +2141,10 @@
 		}
 		prerequisite = { focus = STP_pw_party_new_republic }
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			is_subject = no
 		}
 		cancel_if_invalid = yes
@@ -2068,7 +2170,10 @@
 		}
 		prerequisite = { focus = STP_pw_party_sovereignty }
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			is_subject = no
 			custom_trigger_tooltip = {
 				tooltip = STP_pw_party_no_pending_compact_tt
@@ -2100,7 +2205,10 @@
 		}
 		prerequisite = { focus = STP_pw_party_revolution_capital }
 		available = {
-			STP_pw_party_revolution_current = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_northern_course_tt
+				STP_pw_party_revolution_current = yes
+			}
 			NOD = {
 				exists = yes
 				is_subject = no
@@ -2132,8 +2240,10 @@
 				tooltip = STP_ch_northern_alternative_tt
 				STP_ch_northern_alternative = yes
 			}
-
-			STP_pw_party_revolution_current = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_northern_course_tt
+				STP_pw_party_revolution_current = yes
+			}
 			NOD = {
 				exists = yes
 				is_subject = no
@@ -2169,7 +2279,10 @@
 		}
 		prerequisite = { focus = STP_pw_party_nod_congress }
 		available = {
-			STP_pw_party_revolution_current = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_northern_course_tt
+				STP_pw_party_revolution_current = yes
+			}
 			NOD = {
 				exists = yes
 				is_subject = no
@@ -2203,7 +2316,10 @@
 		}
 		prerequisite = { focus = STP_pw_party_new_republic }
 		available = {
-			STP_pw_party_revolution_current = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_northern_course_tt
+				STP_pw_party_revolution_current = yes
+			}
 			NOD = {
 				exists = yes
 				is_subject_of = STP
@@ -2237,7 +2353,10 @@
 			focus = STP_pw_party_field_staff
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_pw_party_guard_refitted_tt
 				check_variable = { var = STP_pw_recovery_army value = 1 compare = greater_than_or_equals }
@@ -2264,7 +2383,12 @@
 			tag = STP
 		}
 		prerequisite = { focus = STP_pw_party_border_staff }
-		available = { STP_pw_can_reconstruct = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			STP_pw_open_mountain_school = yes
@@ -2285,7 +2409,10 @@
 		}
 		prerequisite = { focus = STP_pw_party_border_staff }
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_pw_specialist_naval_base_tt
 				STP_pc_has_naval_base = yes
@@ -2310,7 +2437,12 @@
 			tag = STP
 		}
 		prerequisite = { focus = STP_pw_party_border_staff }
-		available = { STP_pw_can_reconstruct = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
@@ -2333,7 +2465,6 @@
 				}
 			}
 			unlock_decision_tooltip = STP_pw_party_frontier_exercise
-			custom_effect_tooltip = STP_pw_party_frontier_exercise_unlock_summary_tt
 		}
 	}
 
@@ -2466,8 +2597,14 @@
 			focus = STP_pw_party_new_republic
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
-			STP_ch_protectorate = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_protectorate_tt
+				STP_ch_protectorate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		ai_will_do = {
@@ -2499,8 +2636,14 @@
 			focus = STP_pw_party_new_republic
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
-			STP_ch_protectorate = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_protectorate_tt
+				STP_ch_protectorate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		ai_will_do = {
@@ -2534,18 +2677,27 @@
 			focus = STP_pw_party_new_republic
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
-			check_variable = {
-				var = STP_ch_phase
-				value = 3
-				compare = equals
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_congress_phase_tt
+				check_variable = {
+					var = STP_ch_phase
+					value = 3
+					compare = equals
+				}
 			}
 			is_subject = no
 			NOT = {
 				has_war_with = NOD
 			}
 			NOT = {
-				has_country_flag = STP_ch_ballot_closed
+				custom_trigger_tooltip = {
+					tooltip = STP_focus_ballot_closed_tt
+					has_country_flag = STP_ch_ballot_closed
+				}
 			}
 		}
 		cancel_if_invalid = yes
@@ -2769,11 +2921,17 @@
 					}
 				}
 			}
-			STP_pw_can_reconstruct = yes
-			check_variable = {
-				var = STP_ch_phase
-				value = 5
-				compare = equals
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_programme_phase_tt
+				check_variable = {
+					var = STP_ch_phase
+					value = 5
+					compare = equals
+				}
 			}
 		}
 		cancel_if_invalid = yes
@@ -2805,11 +2963,17 @@
 		# The previous chapter is hidden after the phase changes.
 		available = {
 			has_completed_focus = STP_ch_program_settlement
-			STP_pw_can_reconstruct = yes
-			check_variable = {
-				var = STP_ch_phase
-				value = 6
-				compare = equals
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_review_phase_tt
+				check_variable = {
+					var = STP_ch_phase
+					value = 6
+					compare = equals
+				}
 			}
 		}
 		cancel_if_invalid = yes
@@ -2839,7 +3003,10 @@
 			focus = STP_pw_party_new_republic
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_1 = yes
@@ -2880,7 +3047,10 @@
 			focus = STP_party_houses_centralise
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_1 = yes
@@ -2897,7 +3067,11 @@
 			}
 			custom_effect_tooltip = STP_party_houses_privileges_tt
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_houses_privileges_tt_pf
 			}
 			hidden_effect = {
@@ -2943,7 +3117,10 @@
 			focus = STP_party_houses_privileges
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_1 = yes
@@ -2961,7 +3138,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_houses_centralise_tt
 			}
 			hidden_effect = {
@@ -2999,7 +3180,10 @@
 			focus = STP_party_houses_privileges
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_1 = yes
@@ -3016,7 +3200,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_houses_estates_tt
 			}
 			unlock_decision_tooltip = STP_party_property_hearings
@@ -3047,7 +3235,10 @@
 			focus = STP_party_houses_centralise
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_1 = yes
@@ -3064,7 +3255,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_houses_audit_tt
 			}
 			unlock_decision_tooltip = STP_party_property_hearings
@@ -3104,7 +3299,10 @@
 			focus = STP_party_houses_audit
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_1 = yes
@@ -3145,7 +3343,10 @@
 			focus = STP_party_houses_hearings
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_1 = yes
@@ -3163,7 +3364,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_houses_closed_lists_tt
 			}
 			hidden_effect = {
@@ -3200,7 +3405,10 @@
 			focus = STP_party_houses_closed_lists
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_1 = yes
@@ -3217,7 +3425,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_houses_hearings_tt
 			}
 			hidden_effect = {
@@ -3259,7 +3471,10 @@
 			focus = STP_party_houses_closed_lists
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_1 = yes
@@ -3275,7 +3490,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_houses_clients_tt
 			}
 			hidden_effect = {
@@ -3305,7 +3524,10 @@
 			focus = STP_party_houses_hearings
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_1 = yes
@@ -3321,7 +3543,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_houses_public_register_tt
 			}
 			hidden_effect = {
@@ -3356,7 +3582,10 @@
 			focus = STP_party_houses_public_register
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_1 = yes
@@ -3378,10 +3607,12 @@
 			}
 			if = {
 				limit = {
-					check_variable = {
-						var = STP_pv_outcome
-						value = 1
-						compare = equals
+					hidden_trigger = {
+						check_variable = {
+							var = STP_pv_outcome
+							value = 1
+							compare = equals
+						}
 					}
 				}
 				custom_effect_tooltip = STP_ch_war_victor_continuity_tt
@@ -3406,7 +3637,10 @@
 			focus = STP_ch_houses_black_book
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_1 = yes
@@ -3421,7 +3655,11 @@
 			}
 			add_stability = 0.04
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_houses_compact_tt
 			}
 			hidden_effect = {
@@ -3451,7 +3689,10 @@
 			focus = STP_pw_party_new_republic
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_2 = yes
@@ -3498,7 +3739,10 @@
 			focus = STP_party_festival_levy
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_2 = yes
@@ -3515,7 +3759,11 @@
 			}
 			custom_effect_tooltip = STP_party_festival_patrons_tt
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_festival_patrons_tt_pf
 			}
 			hidden_effect = {
@@ -3565,7 +3813,10 @@
 			focus = STP_party_festival_patrons
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_2 = yes
@@ -3582,7 +3833,11 @@
 			}
 			custom_effect_tooltip = STP_party_festival_levy_tt
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_festival_levy_tt_pf
 			}
 			hidden_effect = {
@@ -3626,7 +3881,10 @@
 			focus = STP_party_festival_levy
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_2 = yes
@@ -3637,7 +3895,11 @@
 		completion_reward = {
 			add_ideas = STP_law_public_orgies
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_public_orgies_tt
 			}
 			country_event = {
@@ -3676,7 +3938,10 @@
 			focus = STP_party_festival_levy
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_2 = yes
@@ -3688,7 +3953,11 @@
 			custom_effect_tooltip = STP_party_drug_delay_hint_tt
 			add_ideas = STP_law_hard_drugs
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_hard_drugs_tt
 			}
 			unlock_decision_tooltip = STP_party_health_commission
@@ -3737,7 +4006,10 @@
 			focus = STP_ch_free_labour
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_2 = yes
@@ -3751,7 +4023,11 @@
 			add_ideas = STP_law_slavery
 			add_stability = -0.04
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_slave_market_tt
 			}
 			unlock_decision_tooltip = STP_party_labour_inspections
@@ -3804,7 +4080,10 @@
 			focus = STP_party_slave_market
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_2 = yes
@@ -3844,7 +4123,10 @@
 			focus = STP_ch_free_labour
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_2 = yes
@@ -3854,7 +4136,11 @@
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_festival_accounts_tt
 			}
 			country_event = {
@@ -3887,7 +4173,10 @@
 			focus = STP_party_festival_immunity
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_2 = yes
@@ -3897,7 +4186,6 @@
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_pi_festival_medical
-
 			hidden_effect = {
 				set_variable = {
 					var = STP_pi_festival_safe
@@ -3905,7 +4193,6 @@
 				}
 				STP_pi_refresh = yes
 			}
-
 			custom_effect_tooltip = STP_pi_festival_clinics_tt
 			remove_ideas = STP_party_hospital_overload
 			effect_tooltip = {
@@ -3915,7 +4202,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_festival_clinics_tt
 			}
 			unlock_decision_tooltip = STP_party_health_commission
@@ -3957,7 +4248,10 @@
 			focus = STP_party_festival_clinics
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_2 = yes
@@ -3973,7 +4267,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_festival_immunity_tt
 			}
 			hidden_effect = {
@@ -4012,7 +4310,10 @@
 			focus = STP_party_festival_immunity
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_2 = yes
@@ -4028,7 +4329,11 @@
 			add_war_support = 0.08
 			custom_effect_tooltip = STP_ph_treasury_2000_tt
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_ch_eternal_festival_tt
 			}
 			hidden_effect = {
@@ -4042,10 +4347,12 @@
 			}
 			if = {
 				limit = {
-					check_variable = {
-						var = STP_pv_outcome
-						value = 2
-						compare = equals
+					hidden_trigger = {
+						check_variable = {
+							var = STP_pv_outcome
+							value = 2
+							compare = equals
+						}
 					}
 				}
 				custom_effect_tooltip = STP_ch_war_victor_continuity_tt
@@ -4070,7 +4377,10 @@
 			focus = STP_ch_eternal_festival
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_2 = yes
@@ -4085,7 +4395,11 @@
 			}
 			add_political_power = 75
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_festival_charter_tt
 			}
 			hidden_effect = {
@@ -4111,7 +4425,10 @@
 			focus = STP_pw_party_new_republic
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_3 = yes
@@ -4157,7 +4474,10 @@
 			focus = STP_party_staff_commandants
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_3 = yes
@@ -4174,7 +4494,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_staff_demobilisation_tt
 			}
 			hidden_effect = {
@@ -4211,7 +4535,10 @@
 			focus = STP_party_staff_demobilisation
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_3 = yes
@@ -4227,7 +4554,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_staff_commandants_tt
 			}
 			hidden_effect = {
@@ -4269,7 +4600,10 @@
 			focus = STP_party_staff_demobilisation
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_3 = yes
@@ -4286,7 +4620,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_staff_reserve_jobs_tt
 			}
 			unlock_decision_tooltip = STP_party_officer_commission
@@ -4321,7 +4659,10 @@
 			focus = STP_party_staff_commandants
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_3 = yes
@@ -4337,7 +4678,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_staff_districts_tt
 			}
 			unlock_decision_tooltip = STP_party_officer_commission
@@ -4377,7 +4722,10 @@
 			focus = STP_party_staff_districts
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_3 = yes
@@ -4422,7 +4770,10 @@
 			focus = STP_party_staff_veto
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_3 = yes
@@ -4433,7 +4784,11 @@
 		completion_reward = {
 			add_stability = 0.03
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_staff_civilian_minister_tt
 			}
 			hidden_effect = {
@@ -4468,7 +4823,10 @@
 			focus = STP_party_staff_civilian_minister
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_3 = yes
@@ -4484,7 +4842,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_staff_veto_tt
 			}
 			hidden_effect = {
@@ -4523,7 +4885,10 @@
 			focus = STP_party_staff_civilian_minister
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_3 = yes
@@ -4539,7 +4904,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_staff_public_budget_tt
 			}
 			hidden_effect = {
@@ -4569,7 +4938,10 @@
 			focus = STP_party_staff_veto
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_3 = yes
@@ -4612,7 +4984,10 @@
 			focus = STP_party_staff_priority_orders
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_3 = yes
@@ -4628,7 +5003,11 @@
 			army_experience = 40
 			add_command_power = 40
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_ch_staff_state_tt
 			}
 			hidden_effect = {
@@ -4637,10 +5016,12 @@
 			}
 			if = {
 				limit = {
-					check_variable = {
-						var = STP_pv_outcome
-						value = 3
-						compare = equals
+					hidden_trigger = {
+						check_variable = {
+							var = STP_pv_outcome
+							value = 3
+							compare = equals
+						}
 					}
 				}
 				custom_effect_tooltip = STP_ch_war_victor_continuity_tt
@@ -4665,7 +5046,10 @@
 			focus = STP_ch_staff_state
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_3 = yes
@@ -4681,7 +5065,11 @@
 			army_experience = 25
 			add_stability = 0.03
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_service_constitution_tt
 			}
 			hidden_effect = {
@@ -4707,7 +5095,10 @@
 			focus = STP_pw_party_new_republic
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_4 = yes
@@ -4754,7 +5145,10 @@
 			focus = STP_party_trade_tenders
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_4 = yes
@@ -4764,9 +5158,7 @@
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_pi_trade_rifles_series
-
 			unlock_decision_tooltip = STP_pi_trade_support_series
-
 			unlock_decision_tooltip = STP_pi_trade_trucks_series
 			effect_tooltip = {
 				swap_ideas = {
@@ -4776,7 +5168,11 @@
 			}
 			custom_effect_tooltip = STP_party_trade_monopolies_tt
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_trade_monopolies_tt_pf
 			}
 			hidden_effect = {
@@ -4822,7 +5218,10 @@
 			focus = STP_party_trade_monopolies
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_4 = yes
@@ -4832,9 +5231,7 @@
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_pi_trade_rifles_series
-
 			unlock_decision_tooltip = STP_pi_trade_support_series
-
 			unlock_decision_tooltip = STP_pi_trade_trucks_series
 			add_political_power = -50
 			effect_tooltip = {
@@ -4844,7 +5241,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_trade_tenders_tt
 			}
 			hidden_effect = {
@@ -4882,7 +5283,10 @@
 			focus = STP_party_trade_monopolies
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_4 = yes
@@ -4932,7 +5336,10 @@
 			focus = STP_party_trade_tenders
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_4 = yes
@@ -4949,7 +5356,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_trade_credit_tt
 			}
 			unlock_decision_tooltip = STP_party_contract_arbitration
@@ -4985,7 +5396,10 @@
 			focus = STP_party_trade_credit
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_4 = yes
@@ -5033,7 +5447,10 @@
 			focus = STP_party_trade_industry
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_4 = yes
@@ -5043,9 +5460,7 @@
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_pi_trade_rifles_rush
-
 			unlock_decision_tooltip = STP_pi_trade_support_rush
-
 			unlock_decision_tooltip = STP_pi_trade_trucks_rush
 			add_equipment_to_stockpile = {
 				type = motorized_equipment
@@ -5064,7 +5479,11 @@
 			}
 			custom_effect_tooltip = STP_party_trade_imports_tt
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_trade_imports_tt_pf
 			}
 			hidden_effect = {
@@ -5107,7 +5526,10 @@
 			focus = STP_party_trade_imports
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_4 = yes
@@ -5117,9 +5539,7 @@
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_pi_trade_rifles_rush
-
 			unlock_decision_tooltip = STP_pi_trade_support_rush
-
 			unlock_decision_tooltip = STP_pi_trade_trucks_rush
 			add_equipment_to_stockpile = {
 				type = ADISCORD_infantry_equipment_2156
@@ -5133,7 +5553,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_trade_industry_tt
 			}
 			hidden_effect = {
@@ -5171,7 +5595,10 @@
 			focus = STP_party_trade_imports
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_4 = yes
@@ -5214,7 +5641,10 @@
 			focus = STP_party_trade_industry
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_4 = yes
@@ -5254,7 +5684,10 @@
 			focus = STP_party_trade_suppliers
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_4 = yes
@@ -5270,7 +5703,11 @@
 			custom_effect_tooltip = STP_pv_season_treasury_tt
 			custom_effect_tooltip = STP_pw_civil_factory_or_reserve_tt
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_ch_season_open_tt
 			}
 			hidden_effect = {
@@ -5300,10 +5737,12 @@
 			}
 			if = {
 				limit = {
-					check_variable = {
-						var = STP_pv_outcome
-						value = 4
-						compare = equals
+					hidden_trigger = {
+						check_variable = {
+							var = STP_pv_outcome
+							value = 4
+							compare = equals
+						}
 					}
 				}
 				custom_effect_tooltip = STP_ch_war_victor_continuity_tt
@@ -5328,7 +5767,10 @@
 			focus = STP_ch_season_open
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_4 = yes
@@ -5343,7 +5785,11 @@
 			}
 			add_stability = 0.04
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_trade_republic_tt
 			}
 			hidden_effect = {
@@ -5369,7 +5815,10 @@
 			focus = STP_pw_party_new_republic
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_5 = yes
@@ -5413,7 +5862,10 @@
 			focus = STP_party_security_personal_files
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_5 = yes
@@ -5423,11 +5875,14 @@
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_pi_case_orders_quick
-
 			unlock_decision_tooltip = STP_pi_case_orders_full
 			add_stability = 0.03
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_security_register_tt
 			}
 			hidden_effect = {
@@ -5460,7 +5915,10 @@
 			focus = STP_party_security_register
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_5 = yes
@@ -5470,7 +5928,6 @@
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_pi_case_orders_quick
-
 			unlock_decision_tooltip = STP_pi_case_orders_full
 			effect_tooltip = {
 				swap_ideas = {
@@ -5479,7 +5936,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_security_personal_files_tt
 			}
 			hidden_effect = {
@@ -5517,7 +5978,10 @@
 			focus = STP_party_security_register
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_5 = yes
@@ -5563,7 +6027,10 @@
 			focus = STP_party_security_personal_files
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_5 = yes
@@ -5573,9 +6040,7 @@
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_pi_case_supply_quick
-
 			unlock_decision_tooltip = STP_pi_case_supply_full
-
 			custom_effect_tooltip = STP_pi_case_second_team_tt
 			effect_tooltip = {
 				swap_ideas = {
@@ -5584,7 +6049,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_security_network_tt
 			}
 			unlock_decision_tooltip = STP_party_detention_review
@@ -5620,7 +6089,10 @@
 			focus = STP_party_security_network
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_5 = yes
@@ -5665,7 +6137,10 @@
 			focus = STP_party_security_immunity
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_5 = yes
@@ -5677,7 +6152,11 @@
 			add_political_power = -50
 			add_stability = 0.05
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_security_judicial_control_tt
 			}
 			hidden_effect = {
@@ -5712,7 +6191,10 @@
 			focus = STP_party_security_judicial_control
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_5 = yes
@@ -5728,7 +6210,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_security_immunity_tt
 			}
 			hidden_effect = {
@@ -5763,7 +6249,10 @@
 			focus = STP_party_security_judicial_control
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_5 = yes
@@ -5773,7 +6262,6 @@
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_pi_case_property_quick
-
 			unlock_decision_tooltip = STP_pi_case_property_full
 			effect_tooltip = {
 				swap_ideas = {
@@ -5782,7 +6270,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_security_restitution_tt
 			}
 			hidden_effect = {
@@ -5816,7 +6308,10 @@
 			focus = STP_party_security_immunity
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_5 = yes
@@ -5826,7 +6321,6 @@
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_pi_case_property_quick
-
 			unlock_decision_tooltip = STP_pi_case_property_full
 			effect_tooltip = {
 				swap_ideas = {
@@ -5835,7 +6329,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_security_cadres_tt
 			}
 			hidden_effect = {
@@ -5878,7 +6376,10 @@
 			focus = STP_party_security_cadres
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_5 = yes
@@ -5899,7 +6400,11 @@
 			}
 			custom_effect_tooltip = STP_ch_quiet_order_tt
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_ch_quiet_order_tt_pf
 			}
 			hidden_effect = {
@@ -5908,10 +6413,12 @@
 			}
 			if = {
 				limit = {
-					check_variable = {
-						var = STP_pv_outcome
-						value = 5
-						compare = equals
+					hidden_trigger = {
+						check_variable = {
+							var = STP_pv_outcome
+							value = 5
+							compare = equals
+						}
 					}
 				}
 				custom_effect_tooltip = STP_ch_war_victor_continuity_tt
@@ -5936,7 +6443,10 @@
 			focus = STP_ch_quiet_order
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_5 = yes
@@ -5951,7 +6461,11 @@
 			}
 			add_stability = 0.03
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_security_settlement_tt
 			}
 			hidden_effect = {
@@ -5977,7 +6491,10 @@
 			focus = STP_pw_party_new_republic
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_6 = yes
@@ -5996,7 +6513,11 @@
 			custom_effect_tooltip = STP_party_policy_persistence_hint_tt
 			add_political_power = 50
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_regent_mandate_tt
 			}
 			hidden_effect = {
@@ -6025,7 +6546,10 @@
 			focus = STP_party_regent_local_cadres
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_6 = yes
@@ -6041,7 +6565,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_regent_advisers_tt
 			}
 			hidden_effect = {
@@ -6086,7 +6614,10 @@
 			focus = STP_party_regent_advisers
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_6 = yes
@@ -6102,7 +6633,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_regent_local_cadres_tt
 			}
 			hidden_effect = {
@@ -6140,7 +6675,10 @@
 			focus = STP_party_regent_advisers
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_6 = yes
@@ -6157,7 +6695,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_regent_joint_offices_tt
 			}
 			unlock_decision_tooltip = STP_party_mandate_audit
@@ -6188,7 +6730,10 @@
 			focus = STP_party_regent_local_cadres
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_6 = yes
@@ -6204,7 +6749,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_regent_local_budget_tt
 			}
 			unlock_decision_tooltip = STP_party_mandate_audit
@@ -6240,7 +6789,10 @@
 			focus = STP_party_regent_local_budget
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_6 = yes
@@ -6281,7 +6833,10 @@
 			focus = STP_party_regent_industry
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_6 = yes
@@ -6299,7 +6854,11 @@
 			}
 			custom_effect_tooltip = STP_party_regent_concessions_tt
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_regent_concessions_tt_pf
 			}
 			hidden_effect = {
@@ -6349,7 +6908,10 @@
 			focus = STP_party_regent_concessions
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_6 = yes
@@ -6415,7 +6977,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_regent_industry_tt
 			}
 			hidden_effect = {
@@ -6453,7 +7019,10 @@
 			focus = STP_party_regent_concessions
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_6 = yes
@@ -6469,7 +7038,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_regent_customs_tt
 			}
 			hidden_effect = {
@@ -6499,7 +7072,10 @@
 			focus = STP_party_regent_industry
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_6 = yes
@@ -6516,7 +7092,11 @@
 				}
 			}
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_regent_schools_tt
 			}
 			hidden_effect = {
@@ -6551,7 +7131,10 @@
 			focus = STP_party_regent_schools
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_6 = yes
@@ -6567,7 +7150,11 @@
 			unlock_decision_tooltip = STP_pi_north_buyout
 			add_stability = 0.04
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_regent_guarantees_tt
 			}
 			hidden_effect = {
@@ -6597,7 +7184,10 @@
 			focus = STP_party_regent_guarantees
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_party_current_leader_tt
 				STP_party_leader_6 = yes
@@ -6612,7 +7202,11 @@
 			}
 			add_political_power = 75
 			if = {
-				limit = { NOT = { STP_pf_settled = yes } }
+				limit = {
+					hidden_trigger = {
+						NOT = { STP_pf_settled = yes }
+					}
+				}
 				custom_effect_tooltip = STP_party_regent_settlement_tt
 			}
 			hidden_effect = {
@@ -6822,7 +7416,10 @@
 			focus = STP_pe_houses_work_b
 		}
 		bypass = {
-			has_country_flag = STP_pe_houses_prepared
+			custom_trigger_tooltip = {
+				tooltip = STP_ui_STP_pe_houses_prepared_tt
+				has_country_flag = STP_pe_houses_prepared
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -7373,7 +7970,10 @@
 			focus = STP_pe_festival_work_b
 		}
 		bypass = {
-			has_country_flag = STP_pe_festival_prepared
+			custom_trigger_tooltip = {
+				tooltip = STP_ui_STP_pe_festival_prepared_tt
+				has_country_flag = STP_pe_festival_prepared
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -7828,7 +8428,10 @@
 			focus = STP_pe_staff_work_b
 		}
 		bypass = {
-			has_country_flag = STP_pe_staff_prepared
+			custom_trigger_tooltip = {
+				tooltip = STP_ui_STP_pe_staff_prepared_tt
+				has_country_flag = STP_pe_staff_prepared
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -8338,7 +8941,10 @@
 			focus = STP_pe_trade_work_b
 		}
 		bypass = {
-			has_country_flag = STP_pe_trade_prepared
+			custom_trigger_tooltip = {
+				tooltip = STP_ui_STP_pe_trade_prepared_tt
+				has_country_flag = STP_pe_trade_prepared
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -8819,7 +9425,10 @@
 			focus = STP_pe_security_work_b
 		}
 		bypass = {
-			has_country_flag = STP_pe_security_prepared
+			custom_trigger_tooltip = {
+				tooltip = STP_ui_STP_pe_security_prepared_tt
+				has_country_flag = STP_pe_security_prepared
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -9344,7 +9953,10 @@
 			focus = STP_pe_regent_work_b
 		}
 		bypass = {
-			has_country_flag = STP_pe_regent_prepared
+			custom_trigger_tooltip = {
+				tooltip = STP_ui_STP_pe_regent_prepared_tt
+				has_country_flag = STP_pe_regent_prepared
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {

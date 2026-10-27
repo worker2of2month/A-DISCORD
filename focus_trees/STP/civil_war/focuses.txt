@@ -250,7 +250,6 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 30000 }
 			unlock_decision_tooltip = STP_cw_evacuate_depot
-			custom_effect_tooltip = STP_cw_evacuate_depot_unlock_summary_tt
 			hidden_effect = { set_variable = { var = STP_cw_depot_remaining value = 50000 } }
 		}
 	}
@@ -355,7 +354,6 @@ focus_tree = {
 			unlock_decision_tooltip = STP_cw_raise_territorial_brigade
 			custom_effect_tooltip = STP_cw_raise_territorial_brigade_unlock_summary_tt
 			unlock_decision_tooltip = STP_cw_train_reserve_brigades
-			custom_effect_tooltip = STP_cw_train_reserve_brigades_unlock_summary_tt
 		}
 	}
 
@@ -376,7 +374,6 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = STP_cw_arsenal_shifts days = 140 }
 			unlock_decision_tooltip = STP_cw_expand_arsenal
-			custom_effect_tooltip = STP_cw_expand_arsenal_unlock_summary_tt
 			unlock_decision_tooltip = STP_cw_purchase_arsenal_batch
 			custom_effect_tooltip = STP_cw_purchase_arsenal_batch_unlock_summary_tt
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 20000 }
@@ -407,7 +404,6 @@ focus_tree = {
 		completion_reward = {
 			capital_scope = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
 			unlock_decision_tooltip = STP_cw_regroup_the_front
-			custom_effect_tooltip = STP_cw_regroup_the_front_unlock_summary_tt
 			effect_tooltip = {
 				swap_ideas = { remove_idea = STP_cw_army_dummy_idea add_idea = STP_cw_supply_service_idea }
 			}
@@ -648,7 +644,6 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 12 }
 			unlock_decision_tooltip = STP_pm_order_fighters
-			custom_effect_tooltip = STP_pm_order_fighters_unlock_summary_tt
 		}
 	}
 
@@ -678,7 +673,6 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 12 }
 			unlock_decision_tooltip = STP_pm_order_attack_aircraft
-			custom_effect_tooltip = STP_pm_order_attack_aircraft_unlock_summary_tt
 		}
 	}
 
@@ -708,7 +702,6 @@ focus_tree = {
 		completion_reward = {
 			add_fuel = 15000
 			unlock_decision_tooltip = STP_pm_air_sortie_order
-			custom_effect_tooltip = STP_pm_air_sortie_order_unlock_summary_tt
 		}
 	}
 
@@ -738,7 +731,6 @@ focus_tree = {
 			navy_experience = 10
 			add_equipment_to_stockpile = { type = convoy_1 amount = 10 }
 			unlock_decision_tooltip = STP_pm_charter_convoys
-			custom_effect_tooltip = STP_pm_charter_convoys_unlock_summary_tt
 		}
 	}
 
@@ -818,7 +810,6 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = motorized_equipment amount = 150 }
 			add_equipment_to_stockpile = { type = support_equipment amount = 80 }
 			unlock_decision_tooltip = STP_pm_land_freight
-			custom_effect_tooltip = STP_pm_land_freight_unlock_summary_tt
 		}
 	}
 
@@ -891,7 +882,6 @@ focus_tree = {
 				}
 			}
 			unlock_decision_tooltip = STP_cw_regroup_the_front
-			custom_effect_tooltip = STP_cw_regroup_the_front_unlock_summary_tt
 		}
 	}
 
@@ -907,7 +897,6 @@ focus_tree = {
 		ai_will_do = { base = 8 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_cw_launch_last_banquet
-			custom_effect_tooltip = STP_cw_launch_last_banquet_unlock_summary_tt
 		}
 	}
 
@@ -1003,7 +992,9 @@ focus_tree = {
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			STP_hw_begin_war = yes
+			hidden_effect = {
+				STP_hw_begin_war = yes
+			}
 			custom_effect_tooltip = STP_hw_mountain_mandate_tt
 			hidden_effect = {
 				set_temp_variable = { var = STP_hw_mandate_change value = 5 }
@@ -1280,12 +1271,16 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = STP_cw_unified_headquarters }
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
-		available = { STP_cw_mountain_war_active = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_civil_war_active_tt
+				STP_cw_mountain_war_active = yes
+			}
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 6 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_cw_restore_air_reserve
-			custom_effect_tooltip = STP_cw_restore_air_reserve_unlock_summary_tt
 			air_experience = 10
 		}
 	}
@@ -1299,7 +1294,12 @@ focus_tree = {
 		prerequisite = { focus = STP_cw_strike_squadrons }
 		mutually_exclusive = { focus = STP_cw_air_service_columns }
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
-		available = { STP_cw_mountain_war_active = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_civil_war_active_tt
+				STP_cw_mountain_war_active = yes
+			}
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
@@ -1316,7 +1316,6 @@ focus_tree = {
 				add_building_construction = { type = air_base level = 1 instant_build = yes }
 			}
 			unlock_decision_tooltip = STP_cw_launch_air_operation
-			custom_effect_tooltip = STP_cw_launch_air_operation_unlock_summary_tt
 		}
 	}
 
@@ -1330,7 +1329,10 @@ focus_tree = {
 		mutually_exclusive = { focus = STP_cw_forward_airstrips }
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
 		available = {
-			STP_cw_mountain_war_active = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_civil_war_active_tt
+				STP_cw_mountain_war_active = yes
+			}
 			1 = { is_owned_by = ROOT is_controlled_by = ROOT }
 		}
 		cancel_if_invalid = yes
@@ -1343,7 +1345,6 @@ focus_tree = {
 				}
 			}
 			unlock_decision_tooltip = STP_cw_complete_air_reserve
-			custom_effect_tooltip = STP_cw_complete_air_reserve_unlock_summary_tt
 		}
 	}
 
@@ -1358,18 +1359,21 @@ focus_tree = {
 			focus = STP_cw_air_service_columns
 		}
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
-		available = { STP_cw_mountain_war_active = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_civil_war_active_tt
+				STP_cw_mountain_war_active = yes
+			}
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
 			if = {
 				limit = { has_completed_focus = STP_cw_forward_airstrips }
 				unlock_decision_tooltip = STP_cw_complete_air_reserve
-				custom_effect_tooltip = STP_cw_complete_air_reserve_unlock_summary_tt
 			}
 			else = {
 				unlock_decision_tooltip = STP_cw_launch_air_operation
-				custom_effect_tooltip = STP_cw_launch_air_operation_unlock_summary_tt
 			}
 		}
 	}
@@ -1494,7 +1498,6 @@ focus_tree = {
 		ai_will_do = { base = 6 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_cw_repair_rifle_batch
-			custom_effect_tooltip = STP_cw_repair_rifle_batch_unlock_summary_tt
 			add_equipment_to_stockpile = {
 				type = support_equipment
 				amount = 150
@@ -1592,7 +1595,9 @@ focus_tree = {
 		ai_will_do = { base = 8 }
 		completion_reward = {
 			custom_effect_tooltip = STP_pw_treasury_900_tt
-			STP_receive_900 = yes
+			hidden_effect = {
+				STP_receive_900 = yes
+			}
 			add_stability = 0.05
 		}
 	}
@@ -1614,7 +1619,9 @@ focus_tree = {
 		ai_will_do = { base = 8 }
 		completion_reward = {
 			custom_effect_tooltip = STP_pw_treasury_900_tt
-			STP_receive_900 = yes
+			hidden_effect = {
+				STP_receive_900 = yes
+			}
 			add_stability = 0.05
 			add_stability = 0.05
 			add_political_power = 75
@@ -1648,7 +1655,6 @@ focus_tree = {
 		ai_will_do = { base = 4 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_ps_transport
-			custom_effect_tooltip = STP_ps_transport_unlock_summary_tt
 			custom_effect_tooltip = STP_pf_merchants_deal_tt
 			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 6 } STP_pf_shift = yes }
 		}
@@ -2294,7 +2300,6 @@ focus_tree = {
 		ai_will_do = { base = 4 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_ps_reserve_training
-			custom_effect_tooltip = STP_ps_reserve_training_unlock_summary_tt
 			add_timed_idea = { idea = STP_ps_reserve_idea days = 42 }
 			custom_effect_tooltip = STP_ps_policy_faction_4_tt
 			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 4 } STP_pf_shift = yes }
@@ -2318,7 +2323,6 @@ focus_tree = {
 		ai_will_do = { base = 4 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_ps_secure_routes
-			custom_effect_tooltip = STP_ps_secure_routes_unlock_summary_tt
 			add_timed_idea = { idea = STP_ps_route_guard_idea days = 42 }
 			custom_effect_tooltip = STP_ps_policy_faction_3_tt
 			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 3 } STP_pf_shift = yes }
@@ -2386,7 +2390,6 @@ focus_tree = {
 			unlock_decision_tooltip = STP_ps_val_intercept
 			custom_effect_tooltip = STP_ps_val_intercept_unlock_summary_tt
 			unlock_decision_tooltip = STP_ps_val_pressure
-			custom_effect_tooltip = STP_ps_val_pressure_unlock_summary_tt
 			if = {
 				limit = { VAL = { exists = yes } }
 				add_intel = { target = VAL army_intel = 10 }
@@ -2693,7 +2696,10 @@ focus_tree = {
 				is_subject = no
 				has_war = no
 			}
-			RUS_crisis_regional_wars_available = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_world_survives_tt
+				RUS_crisis_regional_wars_available = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_pc_cannibal_targets_available_tt
 				STP_heg_cannibal_targets_available = yes
@@ -2704,7 +2710,11 @@ focus_tree = {
 		completion_reward = {
 			custom_effect_tooltip = STP_pc_cannibal_campaign_tt
 			if = {
-				limit = { STP_pc_sword_directory_branch = yes }
+				limit = {
+					hidden_trigger = {
+						STP_pc_sword_directory_branch = yes
+					}
+				}
 				custom_effect_tooltip = STP_pc_cannibal_campaign_annex_tt
 			}
 			else = {
@@ -2818,7 +2828,9 @@ focus_tree = {
 		ai_will_do = { base = 5 }
 		completion_reward = {
 			custom_effect_tooltip = STP_cw_treasury_3000_tt
-			STP_receive_3000 = yes
+			hidden_effect = {
+				STP_receive_3000 = yes
+			}
 			add_political_power = 75
 		}
 	}

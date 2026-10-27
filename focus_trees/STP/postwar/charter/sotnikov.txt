@@ -859,7 +859,9 @@
 			if = {
 				limit = {
 					has_character = STP_Edmund_Ravel
-					STP_Edmund_Ravel = { NOT = { has_character_flag = STP_cw_arrested } }
+					hidden_trigger = {
+						STP_Edmund_Ravel = { NOT = { has_character_flag = STP_cw_arrested } }
+					}
 				}
 				add_advisor_role = {
 					character = STP_Edmund_Ravel

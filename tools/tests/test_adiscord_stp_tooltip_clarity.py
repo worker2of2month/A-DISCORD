@@ -5,6 +5,7 @@ import unittest
 from pathlib import Path
 
 from tools.tests.test_adiscord_stp_preparation import matches_conditions, scalar
+from tools.tests.test_adiscord_stp_party_qol import StelanderDecisionTooltipTests
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 
@@ -122,6 +123,148 @@ class STPTooltipClarityTests(unittest.TestCase):
         self.assertIn("[3.STPGetCivilWarForecast]", body)
         self.assertIn("[3.STPGetCivilWarForecastReason]", body)
         self.assertIn("[3.STPGetAdministrationAsset]", body)
+
+
+class STPFocusTooltipTests(StelanderDecisionTooltipTests):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.focuses = {}
+
+        def collect(entries):
+            for entry in entries:
+                if entry.key == "focus" and isinstance(entry.value, list):
+                    cls.focuses[scalar(entry.value, "id")] = entry.value
+                elif isinstance(entry.value, list):
+                    collect(entry.value)
+
+        for path in (ROOT / "focus_trees/STP").rglob("*.txt"):
+            collect(parse_clausewitz(path.read_text(encoding="utf-8")))
+
+    def test_focus_conditions_and_rewards_do_not_expand_bookkeeping(self):
+        self.assertGreater(len(self.focuses), 600)
+        for name, entries in self.focuses.items():
+            for entry in entries:
+                if entry.key in ("available", "bypass", "select_effect", "completion_reward"):
+                    with self.subTest(focus=name, field=entry.key):
+                        self.assertEqual(list(self.exposed_bookkeeping(entry.value)), [])
+
+    def test_focus_condition_labels_exist_in_both_languages(self):
+        pattern = r'^\s+([\w.]+):\d*[ \t]*"([^"\r\n]*)"'
+        for language in ("russian", "english"):
+            values = dict(re.findall(pattern, (
+                ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml"
+            ).read_text(encoding="utf-8-sig"), re.M))
+            for name in self.localisation:
+                if name.startswith("STP_focus_"):
+                    with self.subTest(language=language, key=name):
+                        self.assertTrue(values.get(name))
+
+    def test_native_research_slots_and_decision_deliveries_are_not_repeated(self):
+        for name in ("STP_pc_development_reopen_universities",
+                     "STP_pc_development_national_research_institutes"):
+            reward = next(e.value for e in self.focuses[name] if e.key == "completion_reward")
+            self.assertEqual(scalar(reward, "add_research_slot"), "1")
+            self.assertNotIn("ячейк", self.localisation[name + "_tt"])
+        removed = {
+            "STP_cw_repair_rifle_batch_unlock_summary_tt",
+            "STP_cw_train_reserve_brigades_unlock_summary_tt",
+            "STP_pm_order_attack_aircraft_unlock_summary_tt",
+            "STP_pm_order_fighters_unlock_summary_tt",
+        }
+        for name, entries in self.focuses.items():
+            reward = next((e.value for e in entries if e.key == "completion_reward"), [])
+            for entry in reward:
+                if entry.key == "custom_effect_tooltip":
+                    self.assertNotIn(entry.value, removed, name)
+
+    def test_hidden_treasury_grants_keep_their_amount_visible(self):
+        for name in ("STP_pc_economy_count_the_cost", "STP_pc_economy_recovery_budget"):
+            reward = next(e.value for e in self.focuses[name] if e.key == "completion_reward")
+            self.assertIn("STP_pw_treasury_900_tt", [
+                e.value for e in reward if e.key == "custom_effect_tooltip"
+            ])
+        self.assertIn("§G+900§! £ADISCORD_economy_treasury_texticon",
+                      self.localisation["STP_pw_treasury_900_tt"])
+        for key in ("STP_cw_officers_tt", "STP_cw_early_orders_tt", "STP_cw_young_officers_tt"):
+            self.assertIn("£army_experience", self.localisation[key])
+            self.assertNotIn("опыта армии", self.localisation[key])
+
+
+class STPEventOptionTooltipTests(StelanderDecisionTooltipTests):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        source = (ROOT / "events/ADISCORD_STP_events.txt").read_text(encoding="utf-8")
+        cls.options = {
+            (scalar(event.value, "id"), scalar(option.value, "name")): option.value
+            for event in parse_clausewitz(source)
+            if isinstance(event.value, list)
+            for option in event.value if option.key == "option"
+        }
+
+    def visible_nodes(self, entries, stack=()):
+        for entry in entries:
+            if entry.key in ("hidden_effect", "hidden_trigger", "trigger", "ai_chance"):
+                continue
+            yield entry
+            if entry.key in self.definitions and entry.key not in stack:
+                yield from self.visible_nodes(self.definitions[entry.key], stack + (entry.key,))
+            elif isinstance(entry.value, list):
+                yield from self.visible_nodes(entry.value, stack)
+
+    def test_event_options_do_not_expose_bookkeeping(self):
+        self.assertGreater(len(self.options), 400)
+        for name, entries in self.options.items():
+            payload = [entry for entry in entries if entry.key not in (
+                "name", "trigger", "ai_chance", "highlight", "default_option"
+            )]
+            with self.subTest(option=name):
+                self.assertEqual(list(self.exposed_bookkeeping(payload)), [])
+
+    def test_custom_resource_prices_and_refund_conditions_remain_visible(self):
+        nodes = list(self.visible_nodes(self.options[("ADISCORD_STP_pc.81", "ADISCORD_STP_pc.81.a")]))
+        self.assertIn("STP_event_treasury_300_cost_tt", [
+            n.value for n in nodes if n.key == "custom_effect_tooltip"
+        ])
+        self.assertEqual([n.value for n in nodes if n.key == "add_political_power"], ["-40"])
+        for event in ("ADISCORD_STP_pc.65", "ADISCORD_STP_pc.80"):
+            nodes = list(self.visible_nodes(self.options[(event, "ADISCORD_STP_pc.5.closed")]))
+            self.assertIn("STP_event_justice_payment_tt", [n.value for n in nodes if n.key == "tooltip"])
+            self.assertIn("50", [n.value for n in nodes if n.key == "add_political_power"])
+
+    def test_decision_unlocks_keep_their_details_in_the_decisions(self):
+        for name, entries in self.options.items():
+            for node in self.visible_nodes(entries):
+                if node.key == "unlock_decision_tooltip":
+                    with self.subTest(option=name):
+                        self.assertIsInstance(node.value, str)
+
+    def test_option_tooltip_numbers_and_texticons_are_valid_in_both_languages(self):
+        keys = {
+            node.value for entries in self.options.values() for node in self.visible_nodes(entries)
+            if node.key in ("custom_effect_tooltip", "tooltip") and isinstance(node.value, str)
+        }
+        sprites = set()
+        for path in (ROOT / "interface").glob("*.gfx"):
+            sprites.update(re.findall(r'name\s*=\s*"GFX_(\w+)"', path.read_text(encoding="utf-8-sig")))
+        for language in ("russian", "english"):
+            values = {}
+            for path in (ROOT / "localisation" / language).glob("*.yml"):
+                values.update(dict(re.findall(
+                    r'^ ([\w.]+):\d*[ \t]*"([^"\r\n]*)"',
+                    path.read_text(encoding="utf-8-sig"), re.M
+                )))
+            for key in keys:
+                with self.subTest(language=language, key=key):
+                    self.assertTrue(values.get(key), "Missing option tooltip")
+                    value = values[key]
+                    for icon in re.findall(r'£(\w+)', value):
+                        self.assertIn(icon, sprites)
+                    plain = re.sub(r'§[A-Za-z0-9][^§]*§!|\[[^]]*\]|\$[\w.]+\$|£\w+', '', value)
+                    self.assertNotRegex(plain, r'(?<![\w.,])\d+(?:[.,]\d+)?%?(?![\w]|[.,]\d)')
+            self.assertEqual(values["STP_event_treasury_300_cost_tt"],
+                             "§R-300§! £ADISCORD_economy_treasury_texticon")
 
 
 if __name__ == "__main__":

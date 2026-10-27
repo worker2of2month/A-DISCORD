@@ -8178,15 +8178,16 @@ class StelanderPreparationTests(unittest.TestCase):
             ),
             "STP_cw_officer_contacts",
         )
-        for name, pp, suspicion in (
-            ("STP_cw_prepare_capital_sabotage", "75", "STP_cw_suspicion_8_tt"),
-            ("STP_cw_prepare_industry_sabotage", "75", "STP_cw_suspicion_5_tt"),
+        for name, decision, suspicion in (
+            ("STP_cw_prepare_capital_sabotage", "STP_cw_sabotage_capital", "STP_cw_suspicion_8_tt"),
+            ("STP_cw_prepare_industry_sabotage", "STP_cw_sabotage_party_industry", "STP_cw_suspicion_5_tt"),
         ):
             reward = block(focuses[name], "completion_reward")
             self.assertEqual(scalar(focuses[name], "cost"), "1")
-            self.assertEqual(scalar(reward, "add_political_power"), pp)
+            self.assertEqual(scalar(reward, "add_political_power"), "75")
             self.assertEqual(scalar(reward, "add_command_power"), "10")
-            self.assertIn(
+            self.assertEqual(scalar(reward, "unlock_decision_tooltip"), decision)
+            self.assertNotIn(
                 suspicion, [e.value for e in reward if e.key == "custom_effect_tooltip"]
             )
         self.assertNotIn("STP_region_is_operable", {e.key for e in walk(capital)})

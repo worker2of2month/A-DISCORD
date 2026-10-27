@@ -3231,7 +3231,10 @@ STP_heg_northern_final_resolved = {
 }
 
 STP_heg_can_start_kefreyt_final_war = {
-	RUS_crisis_regional_wars_available = yes
+	custom_trigger_tooltip = {
+		tooltip = STP_focus_world_survives_tt
+		RUS_crisis_regional_wars_available = yes
+	}
 	custom_trigger_tooltip = {
 		tooltip = STP_pw_reconstruction_available_tt
 		STP_pc_focus_available = yes
@@ -3266,7 +3269,10 @@ STP_heg_frontier_expansion_available = {
 		STP_pc_hegemony_continues = yes
 		check_variable = { var = STP_pc_course value = 1 compare = equals }
 	}
-	RUS_crisis_regional_wars_available = yes
+	custom_trigger_tooltip = {
+		tooltip = STP_focus_world_survives_tt
+		RUS_crisis_regional_wars_available = yes
+	}
 	custom_trigger_tooltip = {
 		tooltip = STP_pw_reconstruction_available_tt
 		STP_pc_focus_available = yes
@@ -4327,7 +4333,10 @@ STP_heg_northern_state_transferable = {
 
 STP_heg_can_form_northern_administration = {
 	tag = STS
-	STP_pc_hegemony_continues = yes
+	custom_trigger_tooltip = {
+		tooltip = STP_focus_hegemony_course_tt
+		STP_pc_hegemony_continues = yes
+	}
 	has_completed_focus = STP_pc_heg_administrations
 	is_subject = no
 	has_war = no
@@ -4411,17 +4420,40 @@ STP_heg_cannibal_targets_available = {
 }
 
 STP_heg_can_start_cannibal_campaign = {
-	STP_pw_can_reconstruct = yes
-	RUS_crisis_regional_wars_available = yes
+	custom_trigger_tooltip = {
+		tooltip = STP_pw_reconstruction_available_tt
+		STP_pw_can_reconstruct = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = STP_focus_world_survives_tt
+		RUS_crisis_regional_wars_available = yes
+	}
 	is_subject = no
 	has_capitulated = no
 	has_war = no
-	STP = { NOT = { has_country_flag = STP_heg_cannibal_campaign_active } }
-	STS = { NOT = { has_country_flag = STP_heg_cannibal_campaign_active } }
+	STP = {
+		NOT = {
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_cannibal_campaign_active_tt
+				has_country_flag = STP_heg_cannibal_campaign_active
+			}
+		}
+	}
+	STS = {
+		NOT = {
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_cannibal_campaign_active_tt
+				has_country_flag = STP_heg_cannibal_campaign_active
+			}
+		}
+	}
 	OR = {
 		AND = {
 			tag = STS
-			STP_pc_hegemony_continues = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_hegemony_course_tt
+				STP_pc_hegemony_continues = yes
+			}
 			has_completed_focus = STP_pc_heg_northern_administration
 			NKA = {
 				exists = yes
@@ -4436,12 +4468,18 @@ STP_heg_can_start_cannibal_campaign = {
 				tag = STP
 				AND = {
 					tag = STS
-					STP_pc_hegemony_continues = no
+					custom_trigger_tooltip = {
+						tooltip = STP_focus_hegemony_course_tt
+						STP_pc_hegemony_continues = no
+					}
 				}
 			}
 		}
 		AND = {
-			STP_pc_sword_directory_branch = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_focus_sword_directory_tt
+				STP_pc_sword_directory_branch = yes
+			}
 			has_completed_focus = STP_pc_sdir_northern_plan
 		}
 	}
