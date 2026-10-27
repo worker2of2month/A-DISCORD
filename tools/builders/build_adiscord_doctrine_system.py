@@ -81,12 +81,7 @@ TRACKS = (
         "GFX_doctrine_decor_land",
         0.8,
         "categories",
-        (
-            "category_all_infantry",
-            "category_support_battalions",
-            "category_tanks",
-            "category_all_armor",
-        ),
+        ("category_army",),
     ),
     Track(
         "ADISCORD_land_fortress_state",

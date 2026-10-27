@@ -6143,6 +6143,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pc_heg_personal_oath_delay_tt
 			country_event = { id = ADISCORD_STP_pc.102 days = 10 }
 		}
 	}
@@ -6206,6 +6207,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pc_heg_rewrite_mandate_delay_tt
 			country_event = { id = ADISCORD_STP_pc.104 days = 21 }
 		}
 	}
@@ -6240,6 +6242,7 @@ focus_tree = {
 		completion_reward = {
 			STP_heg_betrayal_add_15 = yes
 			add_political_power = 50
+			custom_effect_tooltip = STP_pc_heg_public_trial_delay_tt
 			country_event = { id = ADISCORD_STP_pc.105 days = 14 }
 		}
 	}
@@ -6272,6 +6275,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 6 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pc_heg_closed_session_delay_tt
 			country_event = { id = ADISCORD_STP_pc.106 days = 14 }
 		}
 	}
@@ -19473,8 +19477,22 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			unlock_decision_tooltip = STP_pc_charter_tikhoreva_public_audit
-			unlock_decision_tooltip = STP_pc_charter_tikhoreva_professional_audit
+			if = {
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = STP_pc_charter_tikhoreva_audit_method value = 1 compare = equals }
+					}
+				}
+				unlock_decision_tooltip = STP_pc_charter_tikhoreva_public_audit
+			}
+			else_if = {
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = STP_pc_charter_tikhoreva_audit_method value = 2 compare = equals }
+					}
+				}
+				unlock_decision_tooltip = STP_pc_charter_tikhoreva_professional_audit
+			}
 			effect_tooltip = {
 				add_ideas = STP_pc_charter_tikhoreva_independent_audit_delta
 			}

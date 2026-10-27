@@ -304,8 +304,22 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			unlock_decision_tooltip = STP_pc_charter_tikhoreva_public_audit
-			unlock_decision_tooltip = STP_pc_charter_tikhoreva_professional_audit
+			if = {
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = STP_pc_charter_tikhoreva_audit_method value = 1 compare = equals }
+					}
+				}
+				unlock_decision_tooltip = STP_pc_charter_tikhoreva_public_audit
+			}
+			else_if = {
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = STP_pc_charter_tikhoreva_audit_method value = 2 compare = equals }
+					}
+				}
+				unlock_decision_tooltip = STP_pc_charter_tikhoreva_professional_audit
+			}
 			effect_tooltip = {
 				add_ideas = STP_pc_charter_tikhoreva_independent_audit_delta
 			}

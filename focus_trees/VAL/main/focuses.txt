@@ -1144,6 +1144,7 @@ focus_tree = {
 		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Quarterly_Contract_Norm_tt
+			custom_effect_tooltip = VAL_quarterly_contract_cycle_tt
 			unlock_decision_tooltip = VAL_pay_quarterly_contract_norm
 			unlock_decision_tooltip = VAL_subcontract_quarterly_norm
 			if = {

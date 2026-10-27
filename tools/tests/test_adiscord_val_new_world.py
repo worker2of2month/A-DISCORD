@@ -22,7 +22,11 @@ class ContractWorld:
     def __init__(self):
         self.effects = {}
         self.triggers = {}
-        for path in (EFFECTS, "common/scripted_effects/ADISCORD_vorkerland_effects.txt"):
+        for path in (
+            EFFECTS,
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "common/scripted_effects/ADISCORD_RUS_scripted_effects.txt",
+        ):
             self.effects.update({e.key: e.value for e in entries(path)})
         for path in (TRIGGERS, "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"):
             self.triggers.update({e.key: e.value for e in entries(path)})
@@ -440,6 +444,34 @@ class NewWorldAccountingTests(unittest.TestCase):
         self.assertTrue(world.matches(world.triggers["VAL_nw_connected_site"], "176"))
         world.run("VAL_nw_begin_roads")
         self.assertNotIn("VAL_nw_project_deposit", world.data["VAL"]["vars"])
+
+    def test_restoration_delivers_each_sites_actual_resource_package_once(self):
+        packages = {
+            "176": {"steel": 80, "tungsten": 40, "chromium": 25},
+            "177": {"steel": 50, "aluminium": 65, "rare_components": 5, "rare_alloys": 4},
+            "187": {"steel": 50, "aluminium": 25, "chromium": 25},
+            "188": {"steel": 65, "tungsten": 40, "chromium": 55},
+            "189": {"steel": 80, "aluminium": 40, "rare_components": 8, "rare_alloys": 4},
+            "192": {"steel": 50, "aluminium": 40, "tungsten": 25, "rare_alloys": 5},
+        }
+        for state_id, resources in packages.items():
+            with self.subTest(state=state_id):
+                world = ContractWorld()
+                world.target = state_id
+                state = world.data[state_id]
+                world.run("VAL_nw_begin_restoration")
+                world.run("VAL_nw_finish_project")
+                self.assertEqual(dict(state["resources"]), resources)
+                self.assertEqual(state["buildings"]["industrial_complex"], 1)
+                self.assertEqual(state["slots"], 1)
+                state["buildings"]["industrial_complex"] = 0
+                world.run("VAL_nw_begin_restoration")
+                world.run("VAL_nw_finish_project")
+                world.run("VAL_nw_finish_project")
+                self.assertEqual(dict(state["resources"]), resources)
+                self.assertEqual(state["slots"], 1)
+                self.assertEqual(state["buildings"]["industrial_complex"], 1)
+                self.assertEqual(world.data["VAL"]["vars"]["ADISCORD_economy_treasury"], 1200)
 
     def test_recognition_updates_open_offer_but_keeps_player_refusal_and_cooldown(self):
         world = ContractWorld()

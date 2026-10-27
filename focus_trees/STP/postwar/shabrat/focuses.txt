@@ -2029,6 +2029,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pc_heg_personal_oath_delay_tt
 			country_event = { id = ADISCORD_STP_pc.102 days = 10 }
 		}
 	}
@@ -2092,6 +2093,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pc_heg_rewrite_mandate_delay_tt
 			country_event = { id = ADISCORD_STP_pc.104 days = 21 }
 		}
 	}
@@ -2126,6 +2128,7 @@
 		completion_reward = {
 			STP_heg_betrayal_add_15 = yes
 			add_political_power = 50
+			custom_effect_tooltip = STP_pc_heg_public_trial_delay_tt
 			country_event = { id = ADISCORD_STP_pc.105 days = 14 }
 		}
 	}
@@ -2158,6 +2161,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 6 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pc_heg_closed_session_delay_tt
 			country_event = { id = ADISCORD_STP_pc.106 days = 14 }
 		}
 	}

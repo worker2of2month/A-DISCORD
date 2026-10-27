@@ -2321,7 +2321,7 @@ focus_tree = {
 		icon = GFX_focus_STP_ph_pen_of_houses
 		relative_position_id = STP_Govern_In_His_Name
 		x = -7
-		y = 6
+		y = 5
 		cost = 3
 		prerequisite = { focus = STP_ph_six_chairs }
 		mutually_exclusive = {
@@ -2361,7 +2361,7 @@ focus_tree = {
 		icon = GFX_focus_STP_ph_last_signature
 		relative_position_id = STP_Govern_In_His_Name
 		x = -7
-		y = 7
+		y = 6
 		cost = 3
 		prerequisite = {
 			focus = STP_ph_pen_of_staff
@@ -2402,7 +2402,7 @@ focus_tree = {
 		icon = GFX_focus_STP_ph_heirs_pact
 		relative_position_id = STP_Govern_In_His_Name
 		x = -8
-		y = 8
+		y = 7
 		cost = 3
 		prerequisite = { focus = STP_ph_last_signature }
 		mutually_exclusive = { focus = STP_ph_empty_chair }
@@ -2433,7 +2433,7 @@ focus_tree = {
 		icon = GFX_focus_STP_ph_empty_chair
 		relative_position_id = STP_Govern_In_His_Name
 		x = -6
-		y = 8
+		y = 7
 		cost = 3
 		prerequisite = { focus = STP_ph_last_signature }
 		mutually_exclusive = { focus = STP_ph_heirs_pact }

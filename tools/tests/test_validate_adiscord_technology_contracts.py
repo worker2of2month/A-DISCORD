@@ -130,6 +130,46 @@ class DoctrineContractTests(unittest.TestCase):
         issues = validator.check_generated_doctrine_structure(grand, tracks, sub, blocks)
         self.assertTrue(any("incorrect competing schools" in issue for issue in issues))
 
+    def test_every_army_unit_can_earn_operations_mastery(self) -> None:
+        army_categories = {}
+        for path in sorted((validator.ROOT / "common/units").glob("*.txt")):
+            for container in parse_clausewitz(path.read_text(encoding="utf-8")):
+                if container.key != "sub_units":
+                    continue
+                for unit in container.value:
+                    categories = {
+                        item.value
+                        for entry in unit.value if entry.key == "categories"
+                        for item in entry.value
+                    }
+                    if "category_army" in categories:
+                        army_categories[unit.key] = categories
+        self.assertIn("ADISCORD_combat_robots", army_categories)
+        self.assertIn("ADISCORD_mechanized_infantry", army_categories)
+        sources = {
+            "builder": doctrines.render_tracks(),
+            "runtime": (
+                validator.ROOT / "common/doctrines/tracks/ADISCORD_doctrine_tracks.txt"
+            ).read_text(encoding="utf-8"),
+        }
+        for source_name, source in sources.items():
+            track = next(
+                entry for entry in parse_clausewitz(source)
+                if entry.key == "ADISCORD_land_networked_operations"
+            )
+            mastery = next(entry for entry in track.value if entry.key == "mastery")
+            eligible = {
+                item.value
+                for entry in mastery.value if entry.key == "categories"
+                for item in entry.value
+            }
+            missing = sorted(
+                unit for unit, categories in army_categories.items()
+                if not categories.intersection(eligible)
+            )
+            with self.subTest(source=source_name):
+                self.assertFalse(missing, missing)
+
     def test_every_actual_aircraft_type_can_earn_mastery(self) -> None:
         air_types = set()
         source = (validator.ROOT / "common/units/ADISCORD_air_units.txt").read_text(encoding="utf-8")

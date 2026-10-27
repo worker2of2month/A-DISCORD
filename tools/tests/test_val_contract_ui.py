@@ -1781,9 +1781,10 @@ class TestValExpansionRoute(unittest.TestCase):
             parse_clausewitz,
         )
 
-        tree = parse_clausewitz(
-            read("common/national_focus/ADISCORD_national_focus_VAL.txt")
-        )[0].value
+        from tools.validators.validate_adiscord_val_rework import focus_layout_coordinates, named_blocks
+
+        source = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
+        tree = parse_clausewitz(source)[0].value
 
         def get(entries, key):
             return next(e.value for e in entries if e.key == key)
@@ -1844,8 +1845,6 @@ class TestValExpansionRoute(unittest.TestCase):
             "VAL_The_Steel_Contract", {item for group in groups for item in group}
         )
 
-        coords = [(get(f, "x"), get(f, "y")) for f in focuses.values()]
-        self.assertEqual(len(coords), len(set(coords)))
         done, active = set(), set()
 
         def visit(name):
@@ -1862,6 +1861,13 @@ class TestValExpansionRoute(unittest.TestCase):
 
         for name in focuses:
             visit(name)
+
+        for council_rule in (False, True):
+            positions = focus_layout_coordinates(named_blocks(source, "focus"), council_rule)
+            occupied = {}
+            for name, position in positions.items():
+                self.assertNotIn(position, occupied, (council_rule, name, occupied.get(position)))
+                occupied[position] = name
 
 
 class TestValReclamationFollowThrough(unittest.TestCase):
@@ -2220,7 +2226,7 @@ class TestValProgressionChoices(unittest.TestCase):
             read("common/decisions/ADISCORD_VAL_decisions.txt"),
             "VAL_campaign_against_stelander",
         )
-        self.assertIn("base = 30", named_block(stelander_campaign, "ai_will_do"))
+        self.assertGreaterEqual(ai_base(stelander_campaign), 60)
 
     def test_economic_route_does_not_require_bypassed_military_rewards(self):
         reopen = self.focus("VAL_Reopen_Trade_Routes")

@@ -91,6 +91,7 @@
  VAL_campaign_the_mine_was_stolen: "They Stole Our Mine Campaign"
  VAL_campaign_the_mine_was_stolen_desc: "Following the loss of Vorkerland's metal, direct public anger outward and prepare society to fight for a new source of metal."
  VAL_quarterly_contract_deadline: "Quarterly Quota Deadline"
+ VAL_quarterly_contract_cycle_tt:0 "Starts a recurring §Y90-day§! contract cycle: fulfil the quota with a weapons delivery or a cash subcontract. Failure lowers reputation by one tier."
  VAL_quarterly_contract_deadline_desc:0 "[ROOT.VALGetQuarterlyStatus]\n\nEach quarter lasts 90 days. At its start, choose one way to fulfil the quota:\n- arsenal delivery: immediately spend 40000 £infantry_equipment_texticon and §Y10§! £political_power_texticon; at the end of those 90 days, gain §G+1§! reputation tier, 15 £army_experience and 15 command power;\n- cash subcontract: immediately spend 1000 £ADISCORD_economy_treasury_texticon; the quota is closed without military rewards and reputation is preserved.\n\nChoose only one option. Early delivery does not start the next quarter. If neither option is chosen before the 90 days expire, reputation falls by one tier."
  VAL_pay_quarterly_contract_norm: "Meet the Quarterly Quota"
  VAL_pay_quarterly_contract_norm_desc:0 "Immediately spend 40000 £infantry_equipment_texticon and §Y10§! £political_power_texticon. This fulfils the current 90-day quota; when the quarter ends, gain §G+1§! reputation tier, 15 £army_experience and 15 command power. The current quarter cannot be paid twice, and the next one starts only after it ends."
