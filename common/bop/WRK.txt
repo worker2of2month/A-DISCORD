@@ -69,3 +69,98 @@ ADISCORD_vorkerland_prewar_bop = {
 		}
 	}
 }
+
+# Shadow of Petrishchev: Worcker's court (negative) against the officer corps
+# (positive). ADISCORD_vorkerland_establish_world_empire creates it once; the
+# corps starts ahead because the army still remembers the executed co-ruler.
+# Entering the conspiracy range schedules one generals' plot; the Veyran order
+# focus settles the balance and removes it.
+ADISCORD_vorkerland_empire_bop = {
+	initial_value = 0.20
+	left_side = ADISCORD_vorkerland_empire_bop_court
+	right_side = ADISCORD_vorkerland_empire_bop_corps
+	decision_category = ADISCORD_vorkerland_empire_category
+	range = {
+		id = ADISCORD_vorkerland_empire_balance_even
+		min = -0.10
+		max = 0.10
+		modifier = {
+			stability_factor = 0.03
+		}
+		on_activate = { ADISCORD_economy_mark_dirty = yes }
+		on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+	}
+	side = {
+		id = ADISCORD_vorkerland_empire_bop_court
+		icon = GFX_bop_ETH_centralisation_side
+		range = {
+			id = ADISCORD_vorkerland_empire_court_influence
+			min = -0.50
+			max = -0.10
+			modifier = {
+				political_power_gain = 0.15
+				army_org_factor = -0.03
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = ADISCORD_vorkerland_empire_court_dominance
+			min = -1.00
+			max = -0.50
+			modifier = {
+				political_power_gain = 0.25
+				stability_factor = 0.05
+				army_org_factor = -0.06
+				war_support_factor = -0.05
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+	side = {
+		id = ADISCORD_vorkerland_empire_bop_corps
+		icon = GFX_bop_ETH_decentralisation_side
+		range = {
+			id = ADISCORD_vorkerland_empire_corps_influence
+			min = 0.10
+			max = 0.50
+			modifier = {
+				army_org_factor = 0.03
+				war_support_factor = 0.05
+				political_power_gain = -0.10
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = ADISCORD_vorkerland_empire_corps_dominance
+			min = 0.50
+			max = 0.80
+			modifier = {
+				army_attack_factor = 0.05
+				war_support_factor = 0.08
+				political_power_gain = -0.20
+				stability_factor = -0.05
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = ADISCORD_vorkerland_empire_corps_conspiracy
+			min = 0.80
+			max = 1.00
+			modifier = {
+				army_attack_factor = 0.05
+				war_support_factor = 0.08
+				political_power_gain = -0.25
+				stability_factor = -0.10
+			}
+			on_activate = {
+				ADISCORD_economy_mark_dirty = yes
+				ADISCORD_vorkerland_empire_schedule_coup = yes
+			}
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+}

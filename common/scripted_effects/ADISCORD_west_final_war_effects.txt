@@ -33,6 +33,7 @@ ADISCORD_west_crisis_month = {
 		set_global_flag = ADISCORD_west_unopposed
 		set_variable = { var = global.ADISCORD_west_winner_side value = 1 }
 		news_event = { id = ADISCORD_west.31 hours = 1 }
+		ADISCORD_vorkerland_rename_after_itora = yes
 	}
 	else_if = {
 		limit = {
@@ -417,6 +418,7 @@ ADISCORD_west_final_resolve_wrk_victory = {
 		WRK = {
 			country_event = { id = ADISCORD_west.30 days = 1 }
 			news_event = { id = ADISCORD_west.31 hours = 2 }
+			ADISCORD_vorkerland_rename_after_itora = yes
 		}
 	}
 }

@@ -108,6 +108,20 @@ def setup_outputs() -> tuple[dict[Path, bytes], list[str]]:
     draw.line((16, 242, 581, 242), fill=(72, 79, 85))
     draw.rectangle((16, 248, 581, 276), fill=(15, 19, 24))
     add('panel', panel)
+    country_panel = setup_surface((492, 301))
+    draw = ImageDraw.Draw(country_panel)
+    draw.rectangle((16, 14, 475, 120), fill=(15, 19, 24))
+    draw.line((16, 130, 475, 130), fill=(177, 151, 103))
+    draw.rectangle((16, 138, 475, 277), fill=(15, 19, 24))
+    for y in (140, 188, 236):
+        draw.rectangle((20, y, 471, y + 23), fill=(22, 26, 31))
+    add('country_panel', country_panel)
+    portrait_frame = setup_surface((69, 95))
+    draw = ImageDraw.Draw(portrait_frame)
+    # The portrait keeps its native scale and offset inside the transparent opening.
+    draw.rectangle((3, 5, 65, 89), fill=(0, 0, 0, 0))
+    draw.line((4, 92, 64, 92), fill=(177, 151, 103))
+    add('portrait_frame', portrait_frame)
     colors = [(115, 153, 136), (133, 158, 146), (177, 151, 103),
               (194, 131, 75), (178, 82, 73)]
     for level, color in enumerate(colors):

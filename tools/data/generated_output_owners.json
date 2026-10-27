@@ -1838,7 +1838,10 @@
         "gfx/flags/**/WRK_vorkerland_utilitarian_republic.tga",
         "gfx/flags/**/WTD.tga",
         "gfx/flags/**/ZAO_zaozersk_republic.tga",
-        "gfx/flags/**/WRK_vorkerland_world_empire.tga"
+        "gfx/flags/**/WRK_vorkerland_world_empire.tga",
+        "gfx/flags/**/WRK_veyran_empire.tga",
+        "gfx/flags/**/WRK_western_eastern_union.tga",
+        "gfx/flags/**/WRK_forul_technical_union.tga"
       ],
       "source_inputs": [
         "gfx/flags/VAD.tga",
@@ -1860,7 +1863,10 @@
         "gfx/flags/WRK.tga",
         "gfx/flags/medium/WRK.tga",
         "gfx/flags/small/WRK.tga",
-        "tools/assets/source/vorkerland_flags/WRK_vorkerland_world_empire.png"
+        "tools/assets/source/vorkerland_flags/WRK_vorkerland_world_empire.png",
+        "gfx/flags/WRK_vorkerland_emergency.tga",
+        "gfx/flags/medium/WRK_vorkerland_emergency.tga",
+        "gfx/flags/small/WRK_vorkerland_emergency.tga"
       ],
       "check_command": [
         "{python}",

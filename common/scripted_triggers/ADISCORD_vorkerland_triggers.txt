@@ -2130,7 +2130,7 @@ ADISCORD_vorkerland_pw_reconstruction_open = {
 		has_completed_focus = WRK_conf_cooperative_workshops
 		has_completed_focus = WRK_joint_pw_census
 		has_completed_focus = WRK_tech_district_metrics
-		has_completed_focus = WRK_empire_reconstruction_trusts
+		has_completed_focus = WRK_empire_imperial_works
 	}
 }
 
@@ -2144,7 +2144,7 @@ ADISCORD_vorkerland_pw_rebuild_slot_free = {
 				has_completed_focus = WRK_conf_municipal_councils
 				has_completed_focus = WRK_joint_pw_repair_crews
 				has_completed_focus = WRK_tech_municipal_utilities
-				has_completed_focus = WRK_empire_imperial_building_offices
+				has_completed_focus = WRK_empire_building_offices
 			}
 		}
 		AND = {
@@ -2153,7 +2153,7 @@ ADISCORD_vorkerland_pw_rebuild_slot_free = {
 				has_completed_focus = WRK_conf_social_guarantees
 				has_completed_focus = WRK_joint_pw_municipal_network
 				has_completed_focus = WRK_tech_measured_economy
-				has_completed_focus = WRK_empire_imperial_building_offices
+				has_completed_focus = WRK_empire_building_offices
 			}
 		}
 	}
@@ -2184,9 +2184,20 @@ ADISCORD_vorkerland_world_empire_can_form = {
 	}
 }
 
+# The Veyran name after the western victory keeps the same empire.
 ADISCORD_vorkerland_world_empire_active = {
 	tag = WRK
-	has_cosmetic_tag = WRK_vorkerland_world_empire
+	OR = {
+		has_cosmetic_tag = WRK_vorkerland_world_empire
+		has_cosmetic_tag = WRK_veyran_empire
+	}
+}
+
+# COUNTRY WRK. The generals' plot holds while the officer corps stays in the
+# conspiracy range of the Shadow of Petrishchev.
+ADISCORD_vorkerland_empire_conspiracy = {
+	has_power_balance = { id = ADISCORD_vorkerland_empire_bop }
+	power_balance_value = { id = ADISCORD_vorkerland_empire_bop value > 0.79 }
 }
 
 # --- preparation_triggers ---

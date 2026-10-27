@@ -171,3 +171,13 @@ WRK_worx_research_category = {
 	priority = 90
 	scripted_gui = ADISCORD_vorkerland_worx_panel
 }
+
+# --- world_empire_categories ---
+# Holds the Shadow of Petrishchev balance and the imperial governors.
+ADISCORD_vorkerland_empire_category = {
+	icon = ADISCORD_deal
+	allowed = { tag = WRK }
+	visible = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+	visible_when_empty = yes
+	priority = 90
+}

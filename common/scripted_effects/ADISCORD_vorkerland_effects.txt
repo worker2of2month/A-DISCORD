@@ -11456,6 +11456,14 @@ ADISCORD_vorkerland_establish_world_empire = {
 		set_variable = { var = WRK_empire_org value = 0 }
 		set_variable = { var = WRK_empire_supply value = 0 }
 		set_variable = { var = WRK_empire_output value = 0 }
+		set_variable = { var = WRK_empire_stability value = 0 }
+		set_variable = { var = WRK_empire_politics value = 0 }
+		if = {
+			limit = {
+				NOT = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+			}
+			set_power_balance = { id = ADISCORD_vorkerland_empire_bop set_value = 0.20 }
+		}
 		load_focus_tree = {
 			tree = ADISCORD_vorkerland_world_empire_focus
 			keep_completed = no
@@ -11488,6 +11496,91 @@ ADISCORD_vorkerland_empire_refresh_army = {
 			NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_empire_army } }
 		}
 		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_empire_army }
+	}
+}
+
+ADISCORD_vorkerland_empire_refresh_court = {
+	if = {
+		limit = {
+			NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_empire_court } }
+		}
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_empire_court }
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY WRK. The conspiracy range of the Shadow of Petrishchev schedules one
+# plot at a time; the event reads the balance again when it fires.
+ADISCORD_vorkerland_empire_schedule_coup = {
+	if = {
+		limit = { NOT = { has_country_flag = WRK_empire_coup_pending } }
+		set_country_flag = WRK_empire_coup_pending
+		country_event = { id = ADISCORD_vorkerland_postwar.60 days = 14 }
+	}
+}
+
+# COUNTRY WRK at the Veyran order focus: the court and the corps are settled
+# and the balance with its pending plot ends.
+ADISCORD_vorkerland_empire_settle_shadow = {
+	if = {
+		limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+		remove_power_balance = { id = ADISCORD_vorkerland_empire_bop }
+	}
+	clr_country_flag = WRK_empire_coup_pending
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# STATE target of WRK_empire_appoint_governor; ROOT is WRK. The governor focus
+# choice selects the administration; a governor stays for the whole campaign.
+# The balance shift is skipped once the Veyran order has settled the balance.
+ADISCORD_vorkerland_empire_install_governor = {
+	hidden_effect = { set_state_flag = WRK_empire_governor_seat }
+	if = {
+		limit = { ROOT = { has_completed_focus = WRK_empire_military_governors } }
+		add_dynamic_modifier = { modifier = WRK_empire_military_governorate }
+		ROOT = { add_manpower = 4000 }
+		set_temp_variable = { var = WRK_empire_governor_shift value = 0.02 }
+	}
+	else_if = {
+		limit = { ROOT = { has_completed_focus = WRK_empire_civil_governors } }
+		add_dynamic_modifier = { modifier = WRK_empire_civil_governorate }
+		ROOT = { add_manpower = 2000 }
+		set_temp_variable = { var = WRK_empire_governor_shift value = -0.05 }
+	}
+	else = {
+		add_dynamic_modifier = { modifier = WRK_empire_crown_governorate }
+		ROOT = { add_manpower = 2000 }
+		set_temp_variable = { var = WRK_empire_governor_shift value = -0.03 }
+	}
+	ROOT = {
+		if = {
+			limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+			add_power_balance_value = {
+				id = ADISCORD_vorkerland_empire_bop
+				value = WRK_empire_governor_shift
+			}
+		}
+	}
+}
+
+# COUNTRY WRK after the western victory over Itora. Each postwar route takes
+# the name of its new order; ADISCORD_vorkerland_world_empire_active accepts
+# the Veyran name, so the empire keeps its tree, balance and modifiers.
+ADISCORD_vorkerland_rename_after_itora = {
+	if = {
+		limit = { has_cosmetic_tag = WRK_vorkerland_world_empire }
+		set_cosmetic_tag = WRK_veyran_empire
+		news_event = { id = ADISCORD_vorkerland_postwar.61 hours = 6 }
+	}
+	else_if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_route_worker }
+		set_cosmetic_tag = WRK_western_eastern_union
+		news_event = { id = ADISCORD_vorkerland_postwar.61 hours = 6 }
+	}
+	else_if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+		set_cosmetic_tag = WRK_forul_technical_union
+		news_event = { id = ADISCORD_vorkerland_postwar.61 hours = 6 }
 	}
 }
 

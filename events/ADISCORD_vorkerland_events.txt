@@ -4552,3 +4552,92 @@ country_event = {
 		ai_chance = { base = 50 }
 	}
 }
+
+# --- world_empire_events ---
+# The generals' plot of the Shadow of Petrishchev. The balance is read again
+# when the event fires: a court that recovered in the meantime meets an empty
+# conspiracy.
+country_event = {
+	id = ADISCORD_vorkerland_postwar.60
+	title = ADISCORD_vorkerland_postwar.60.t
+	desc = {
+		text = ADISCORD_vorkerland_postwar.60.d
+		trigger = { ADISCORD_vorkerland_empire_conspiracy = yes }
+	}
+	desc = {
+		text = ADISCORD_vorkerland_postwar.60.d_faded
+		trigger = { ADISCORD_vorkerland_empire_conspiracy = no }
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	immediate = {
+		hidden_effect = { clr_country_flag = WRK_empire_coup_pending }
+	}
+	option = {
+		name = ADISCORD_vorkerland_postwar.60.a
+		trigger = { ADISCORD_vorkerland_empire_conspiracy = yes }
+		add_power_balance_value = {
+			id = ADISCORD_vorkerland_empire_bop
+			value = -0.40
+		}
+		add_stability = -0.10
+		add_war_support = -0.05
+		army_experience = -25
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_postwar.60.b
+		trigger = { ADISCORD_vorkerland_empire_conspiracy = yes }
+		add_political_power = -150
+		add_stability = -0.05
+		add_power_balance_value = {
+			id = ADISCORD_vorkerland_empire_bop
+			value = -0.15
+		}
+		effect_tooltip = { add_ideas = WRK_empire_delta_generals_seats }
+		hidden_effect = {
+			add_to_variable = { var = WRK_empire_attack value = 0.05 }
+			ADISCORD_vorkerland_empire_refresh_army = yes
+		}
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_postwar.60.c
+		trigger = { ADISCORD_vorkerland_empire_conspiracy = no }
+		ai_chance = { base = 1 }
+	}
+}
+
+# The western victory renames the winner after its postwar route.
+news_event = {
+	id = ADISCORD_vorkerland_postwar.61
+	title = {
+		text = ADISCORD_vorkerland_postwar.61.t_empire
+		trigger = { WRK = { has_cosmetic_tag = WRK_veyran_empire } }
+	}
+	title = {
+		text = ADISCORD_vorkerland_postwar.61.t_worker
+		trigger = { WRK = { has_cosmetic_tag = WRK_western_eastern_union } }
+	}
+	title = {
+		text = ADISCORD_vorkerland_postwar.61.t_technical
+		trigger = { WRK = { has_cosmetic_tag = WRK_forul_technical_union } }
+	}
+	desc = {
+		text = ADISCORD_vorkerland_postwar.61.d_empire
+		trigger = { WRK = { has_cosmetic_tag = WRK_veyran_empire } }
+	}
+	desc = {
+		text = ADISCORD_vorkerland_postwar.61.d_worker
+		trigger = { WRK = { has_cosmetic_tag = WRK_western_eastern_union } }
+	}
+	desc = {
+		text = ADISCORD_vorkerland_postwar.61.d_technical
+		trigger = { WRK = { has_cosmetic_tag = WRK_forul_technical_union } }
+	}
+	picture = GFX_news_event_adiscord_imperial_proclamation
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_postwar.61.a }
+}

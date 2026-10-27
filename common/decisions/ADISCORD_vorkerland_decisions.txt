@@ -7450,3 +7450,50 @@ WRK_worx_research_category = {
 		ai_will_do = { base = 10 }
 	}
 }
+
+# --- world_empire_decisions ---
+ADISCORD_vorkerland_empire_category = {
+	# One governor per former district state. The focus choice between
+	# military and civil governors decides the installed administration.
+	WRK_empire_appoint_governor = {
+		icon = ADISCORD_deal
+		allowed = { tag = WRK }
+		state_target = yes
+		on_map_mode = map_and_decisions_view
+		targets = { 27 32 33 34 35 36 37 38 39 40 75 79 81 82 102 104 105 106 107 108 109 110 111 121 122 123 124 198 200 201 202 306 307 308 309 311 315 316 317 318 320 323 324 325 327 }
+		target_root_trigger = {
+			has_completed_focus = WRK_empire_imperial_governors
+			ADISCORD_vorkerland_world_empire_active = yes
+		}
+		target_trigger = {
+			FROM = {
+				is_core_of = ROOT
+				is_owned_and_controlled_by = ROOT
+				NOT = { has_state_flag = WRK_empire_governor_seat }
+			}
+		}
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		available = {
+			has_power_balance = { id = ADISCORD_vorkerland_empire_bop }
+		}
+		cost = 50
+		days_remove = 30
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = WRK_empire_appoint_governor_start_tt
+		}
+		remove_effect = {
+			FROM = { ADISCORD_vorkerland_empire_install_governor = yes }
+		}
+		cancel_trigger = {
+			FROM = { NOT = { is_owned_and_controlled_by = ROOT } }
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				has_political_power < 100
+			}
+		}
+	}
+}

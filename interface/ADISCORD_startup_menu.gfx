@@ -35,6 +35,16 @@ spriteTypes = {
 		noOfFrames = 1
 	}
 	spriteType = {
+		name = "GFX_ADISCORD_setup_country_panel"
+		texturefile = "gfx/interface/startup/setup_country_panel.png"
+		noOfFrames = 1
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_portrait_frame"
+		texturefile = "gfx/interface/startup/setup_portrait_frame.png"
+		noOfFrames = 1
+	}
+	spriteType = {
 		name = "GFX_ADISCORD_setup_level_0"
 		texturefile = "gfx/interface/startup/setup_level_0.png"
 		noOfFrames = 2

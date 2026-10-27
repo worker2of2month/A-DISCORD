@@ -7717,6 +7717,22 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_vorkerland_postwar.60",
+      "namespace": "ADISCORD_vorkerland_postwar",
+      "number": 60,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_postwar.61",
+      "namespace": "ADISCORD_vorkerland_postwar",
+      "number": 61,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_postwar",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_pi.1",
       "namespace": "ADISCORD_STP_pi",
       "number": 1,

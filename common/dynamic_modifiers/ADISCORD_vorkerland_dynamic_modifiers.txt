@@ -221,6 +221,32 @@ ADISCORD_vorkerland_empire_industry = {
 	industrial_capacity_factory = WRK_empire_output
 }
 
+ADISCORD_vorkerland_empire_court = {
+	icon = GFX_idea_generic_central_management
+	enable = { ADISCORD_vorkerland_world_empire_active = yes }
+	stability_factor = WRK_empire_stability
+	political_power_factor = WRK_empire_politics
+}
+
+# STATE. An installed imperial governor; the governor focus choice decides
+# which administration the decision installs.
+WRK_empire_military_governorate = {
+	icon = GFX_modifiers_generic_military_plans
+	local_manpower = 0.25
+	local_supplies = 0.20
+}
+
+WRK_empire_civil_governorate = {
+	icon = GFX_idea_generic_production_bonus
+	local_factories = 0.10
+	state_production_speed_buildings_factor = 0.15
+}
+
+WRK_empire_crown_governorate = {
+	icon = GFX_idea_generic_central_management
+	local_manpower = 0.10
+}
+
 ADISCORD_vorkerland_prep_rail_crews = {
 	enable = { always = yes }
 	icon = GFX_modifiers_generic_military_plans

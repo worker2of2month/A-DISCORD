@@ -147,6 +147,22 @@ WRK_vorkerland_technocracy = {
 	color_ui = rgb { 52 118 124 }
 }
 
+# Names taken after the western victory over Itora, one per postwar route.
+WRK_veyran_empire = {
+	color = rgb { 92 18 24 }
+	color_ui = rgb { 196 150 64 }
+}
+
+WRK_western_eastern_union = {
+	color = rgb { 150 40 32 }
+	color_ui = rgb { 214 96 72 }
+}
+
+WRK_forul_technical_union = {
+	color = rgb { 40 104 112 }
+	color_ui = rgb { 82 168 176 }
+}
+
 STP_revolution_capital = {
 	color = rgb { 84 35 112 }
 	color_ui = rgb { 84 35 112 }

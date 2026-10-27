@@ -345,6 +345,10 @@ ARTWORK_FLAGS = {
 COPIED_FLAG_TRIPLETS = {
     "EYR": "VAD",
     "WRK_vorkerland_joint_government": "WRK",
+    # Names taken after the western victory keep the banner of their route.
+    "WRK_veyran_empire": "WRK_vorkerland_world_empire",
+    "WRK_western_eastern_union": "WRK_vorkerland_emergency",
+    "WRK_forul_technical_union": "WRK_technocracy",
 }
 
 

@@ -796,7 +796,7 @@ characters = {
 			removal_cost = 0
 			allowed = { tag = WRK }
 			visible = { tag = WRK }
-			available = { has_completed_focus = WRK_empire_imperial_general_staff }
+			available = { has_completed_focus = WRK_empire_staff_without_petrishchev }
 			traits = { army_chief_offensive_2 }
 			ai_will_do = { factor = 2 }
 		}

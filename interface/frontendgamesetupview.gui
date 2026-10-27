@@ -1062,7 +1062,7 @@ guiTypes = {
 
 		background={
 			name ="background"
-			spriteType = "GFX_lobby_right_sidepanel_bg"
+			spriteType = "GFX_ADISCORD_setup_country_panel"
 		}
 
 		iconType = {
@@ -1074,7 +1074,7 @@ guiTypes = {
 
 		iconType = {
 			name = "country_leader_frame"
-			quadTextureSprite ="GFX_naval_unit_leader_frame"
+			quadTextureSprite = "GFX_ADISCORD_setup_portrait_frame"
 			position = { x = 27 y = 15 }
 		}
 

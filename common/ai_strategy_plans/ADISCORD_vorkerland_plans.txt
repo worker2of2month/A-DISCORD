@@ -2265,29 +2265,33 @@ ADISCORD_vorkerland_world_empire_plan = {
 		ADISCORD_vorkerland_world_empire_active = yes
 	}
 	abort = { ADISCORD_vorkerland_world_empire_active = no }
-	# One alternative of each exclusive pair: the AI takes the most direct war course
-	# and secures the former districts before the West chooses sides.
+	# One alternative of each exclusive pair: the AI arms quickly for the war,
+	# keeps the officer corps away from a coup and courts the former districts.
 	ai_national_focuses = {
-		WRK_empire_state_above_all
+		WRK_empire_after_the_tribunal
 		WRK_empire_military_conventions
 		WRK_empire_district_guarantees
-		WRK_empire_army_oath
-		WRK_empire_imperial_arsenals
-		WRK_empire_first_levy
-		WRK_empire_steel_directorate
-		WRK_empire_rifles_for_the_march
-		WRK_empire_war_industry
-		WRK_empire_artillery_mass
+		WRK_empire_staff_without_petrishchev
+		WRK_empire_imperial_treasury
+		WRK_empire_district_tribute
+		WRK_empire_imperial_levy
+		WRK_empire_tribute_arsenals
 		WRK_empire_garrison_compact
-		WRK_empire_mobilized_economy
-		WRK_empire_state_legions
-		WRK_empire_imperial_general_staff
-		WRK_empire_fighter_command
-		WRK_empire_close_air_support
-		WRK_empire_combined_exercises
-		WRK_empire_total_mobilization
+		WRK_empire_legions_of_the_west
+		WRK_empire_war_economy
 		WRK_empire_itora_operational_plan
 		WRK_empire_itora_must_fall
+		WRK_empire_imperial_governors
+		WRK_empire_civil_governors
+		WRK_empire_court_of_the_chairman
+		WRK_empire_erase_petrishchev
+		WRK_empire_imperial_air_command
+		WRK_empire_imperial_census
+		WRK_empire_state_union
+		WRK_empire_saved_chairman_cult
+		WRK_empire_imperial_peace
+		WRK_empire_tower_coronation
+		WRK_empire_veyran_order
 	}
 	weight = { factor = 100 }
 }
