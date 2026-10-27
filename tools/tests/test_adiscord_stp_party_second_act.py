@@ -1106,6 +1106,21 @@ class PartyInstitutionAccountingTests(unittest.TestCase):
         self.assertAlmostEqual(m.get("STP_pw_army_org_factor"), 0.245)
 
 class PartyRemainingInstitutionContracts(unittest.TestCase):
+    def test_institution_descriptions_leave_numbers_to_effect_previews(self):
+        decisions = {e.key: e.value for e in walk(parse_clausewitz(read(
+            "common/decisions/ADISCORD_STP_decisions.txt")))
+            if e.key.startswith("STP_pi_") and isinstance(e.value, list)}
+        for lang in ("russian", "english"):
+            values = dict(re.findall(r'^ ([^:]+):\d* "([^"\r\n]*)"$',
+                                     read(f"localisation/{lang}/ADISCORD_STP_l_{lang}.yml"), re.M))
+            for name, decision in decisions.items():
+                with self.subTest(language=lang, decision=name):
+                    self.assertFalse(re.search(r'\d|%|\[\?', values[name + "_desc"]))
+                    if any(e.key == "days_mission_timeout" for e in decision):
+                        continue
+                    self.assertTrue(any(e.key in ("effect_tooltip", "custom_effect_tooltip")
+                                        for e in block(decision, "complete_effect")), name)
+
     def test_calendar_portfolio_and_cases_are_playable(self):
         entries = {e.key for e in walk(parse_clausewitz(read(
             "common/decisions/ADISCORD_STP_decisions.txt")))}
@@ -1137,6 +1152,76 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
 
     model = PartyInstitutionAccountingTests.model
     action = PartyInstitutionAccountingTests.action
+
+    def test_all_twelve_finales_preserve_institution_ledgers_and_improve_only_their_share(self):
+        focuses = {scalar(e.value, "id"): e.value for e in parse_clausewitz(read(
+            "focus_trees/STP/postwar/party/focuses.txt")) if e.key == "focus"}
+        retained = {
+            "house_slots": 3, "house_privileges": 3,
+            "cadre_free": 2000, "cadre_instructors": 2000, "cadre_reserve": 2000,
+            "artel_deposit": 900, "artel_people": 2000,
+            "north_obligations": 2, "north_specialists": 1,
+            "north_deposit": 600, "north_donor_deposit": 1200, "north_kind": 2,
+            "festival_districts": 4, "festival_busy": 1,
+            "festival_load": 3, "festival_pending_clubs": 1, "festival_reserved": 4,
+            "trade_level": 3, "trade_busy": 1,
+            "trade_rifles_deposit": 1200, "trade_rifles_quote": 48600,
+            "case_public": 2, "case_sealed": 1, "case_credited": 1,
+            "case_orders_stage": 2, "case_supply_stage": 2, "case_property_stage": 3,
+        }
+        aggregates = ("ADISCORD_economy_overall_income_factor", "ADISCORD_economy_admin_expense_factor",
+                      "training_time_factor", "army_org_factor", "army_org_regain", "stability_factor",
+                      "ADISCORD_country_development_social_system_growth_factor")
+        for route in ROUTES:
+            for side in ("a", "b"):
+                with self.subTest(route=route, finale=side):
+                    m = self.model()
+                    for key, value in retained.items():
+                        m.put("STP_pi_" + key, value)
+                    for key in aggregates:
+                        m.put("STP_pw_" + key, 0.1)
+                    m.run(self.effects["STP_pi_refresh"])
+                    before = {key: m.get("STP_pw_" + key) for key in aggregates}
+                    reward = block(focuses[f"STP_pe_{route}_ending_{side}"], "completion_reward")
+                    # Execute the institution portion; native spirits are checked separately.
+                    for _, effect in selected_effects(reward, m.facts):
+                        if effect.key.startswith("STP_pi_"):
+                            m.run([effect])
+                        elif effect.key == "set_variable" and scalar(effect.value, "var").startswith("STP_pi_"):
+                            m.run([effect])
+                    for _ in range(3):
+                        m.run(self.effects["STP_pi_refresh"])
+                        m.run(self.effects["STP_pi_case_credit"])
+                    for key, value in retained.items():
+                        if key == "case_credited" and route == "security" and side == "b":
+                            self.assertEqual(m.get("STP_pi_" + key), 2)
+                        else:
+                            self.assertEqual(m.get("STP_pi_" + key), value, key)
+                    for key, value in before.items():
+                        direction = -1 if key in ("training_time_factor", "ADISCORD_economy_admin_expense_factor") else 1
+                        self.assertGreaterEqual(direction * m.get("STP_pw_" + key) + 1e-9, direction * value, key)
+                    if route == "festival" and side == "a":
+                        self.assertAlmostEqual(m.get("STP_pw_ADISCORD_country_development_social_system_growth_factor"), 0.4)
+                    if route == "security" and side == "a":
+                        self.assertAlmostEqual(m.get("STP_pw_stability_factor"), 0.12)
+                    if route == "security" and side == "b":
+                        self.assertEqual(m.get("STP_pi_case_credits"), 1)
+                    if route == "regent" and side == "b":
+                        self.assertAlmostEqual(m.get("STP_pw_ADISCORD_economy_overall_income_factor"), 0.02)
+
+    def test_northern_equipment_offer_and_summary_match_delivery(self):
+        m = self.model()
+        self.action(m, "STP_pi_north_equipment")
+        m.run(self.effects["STP_pi_north_accept"])
+        m.run(self.effects["STP_pi_north_finish"])
+        rifles = int(m.get("delivered_ADISCORD_infantry_equipment_2156"))
+        support = int(m.get("delivered_support_equipment_1"))
+        for lang in ("russian", "english"):
+            values = dict(re.findall(r'^ ([^:]+):\d* "([^"\r\n]*)"$',
+                                     read(f"localisation/{lang}/ADISCORD_STP_l_{lang}.yml"), re.M))
+            for key in ("STP_pi_north_equipment_package_tt", "STP_pi_package_equipment", "ADISCORD_STP_pi.1.d_equipment"):
+                self.assertRegex(values[key], rf'\b{rifles}\b', key)
+                self.assertRegex(values[key], rf'\b{support}\b', key)
 
     def complete_focus(self, model, name):
         model.facts[("STP", "has_completed_focus", name)] = True

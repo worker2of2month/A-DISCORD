@@ -836,6 +836,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ARMY }
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pm_wartime_reward_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = STP_cw_army_dummy_idea

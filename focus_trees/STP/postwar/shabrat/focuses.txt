@@ -399,7 +399,10 @@
 		cancel_if_invalid = yes
 		search_filters = { FOCUS_FILTER_ANNEXATION }
 		select_effect = { hidden_effect = { STP_bezhaysk_prepare_campaign = yes } }
-		completion_reward = { unlock_decision_tooltip = STP_pw_launch_bezhaysk_operation  }
+		completion_reward = {
+			custom_effect_tooltip = STP_pw_party_launch_bezhaysk_operation_unlock_summary_tt
+			unlock_decision_tooltip = STP_pw_launch_bezhaysk_operation
+		}
 		ai_will_do = { base = 20 }
 	}
 

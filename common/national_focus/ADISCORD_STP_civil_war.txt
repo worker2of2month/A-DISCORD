@@ -839,6 +839,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ARMY }
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pm_wartime_reward_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = STP_cw_army_dummy_idea
@@ -2646,7 +2647,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		search_filters = { FOCUS_FILTER_ANNEXATION }
 		select_effect = { hidden_effect = { STP_bezhaysk_prepare_campaign = yes } }
-		completion_reward = { unlock_decision_tooltip = STP_pw_launch_bezhaysk_operation  }
+		completion_reward = {
+			custom_effect_tooltip = STP_pw_party_launch_bezhaysk_operation_unlock_summary_tt
+			unlock_decision_tooltip = STP_pw_launch_bezhaysk_operation
+		}
 		ai_will_do = { base = 20 }
 	}
 
@@ -16070,6 +16074,7 @@ focus_tree = {
 			base = 12
 		}
 		completion_reward = {
+			unlock_decision_tooltip = STP_pi_north_local_staff
 			unlock_decision_tooltip = STP_pi_north_buyout
 			custom_effect_tooltip = STP_pi_north_independent_tt
 			remove_ideas = STP_pe_regent_course_a_idea
@@ -16118,6 +16123,7 @@ focus_tree = {
 			base = 12
 		}
 		completion_reward = {
+			unlock_decision_tooltip = STP_pi_north_local_staff
 			custom_effect_tooltip = STP_pi_north_settled_tt
 			hidden_effect = {
 				STP_pi_north_improve_terms = yes
