@@ -173,7 +173,7 @@ class STPRegionalMechanicsTests(unittest.TestCase):
             "\u2022", value, "unsupported bullet glyph renders as a question mark"
         )
         items = [line for line in value.split(r"\n") if line.startswith("- ")]
-        self.assertEqual(len(items), 5)
+        self.assertEqual(len(items), 6)
 
     def test_false_trail_closes_current_inspection_and_blocks_immediate_recheck(
         self,
@@ -197,7 +197,7 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         self.assertIn("STP_false_trail_clean_redirect = yes", completion)
         self.assertIn("STP_cw_abort_party_inspection = yes", completion)
         self.assertIn("STP_schedule_next_party_inspection = yes", completion)
-        self.assertIn("flag = STP_false_trail_redirected days = 28", completion)
+        self.assertIn("flag = STP_false_trail_redirected value = 1 days = 28", completion)
         self.assertIn("clr_state_flag = STP_false_trail_in_progress", completion)
         openable = named_block(read(TRIGGERS), "STP_cw_inspection_region_openable")
         self.assertIn("NOT = { has_state_flag = STP_false_trail_redirected }", openable)
@@ -274,7 +274,7 @@ class STPRegionalMechanicsTests(unittest.TestCase):
             self.assertNotIn("STP_region_unique_operation_done", operation)
             self.assertIn(
                 f"NOT = {{ has_state_flag = STP_resistance_{asset}_asset }}",
-                named_block(operation, "visible"),
+                " ".join(named_block(operation, "visible").split()),
             )
             for phase in ("available", "cancel_trigger", "remove_effect"):
                 self.assertIn(
@@ -787,15 +787,14 @@ class STPRegionalMechanicsTests(unittest.TestCase):
     def test_regional_treasury_costs_keep_standard_tiers_with_explicit_pp(self) -> None:
         decisions = read(DECISIONS)
         expected_costs = {
-            "STP_bargain_with_local_councils": 100,
-            "STP_prepare_false_trail": 50,
-            "STP_region_unique_operation_3": 100,
-            "STP_region_unique_operation_45": 200,
-            "STP_region_unique_operation_46": 100,
+            "STP_bargain_with_local_councils": 1200,
+            "STP_region_unique_operation_3": 1200,
+            "STP_region_unique_operation_45": 2400,
+            "STP_region_unique_operation_46": 1200,
         }
         for decision_id, amount in expected_costs.items():
             block = named_block(decisions, decision_id)
-            self.assertIn(f"ADISCORD_economy_can_spend_{amount} = yes", block)
+            self.assertIn(f"STP_cw_can_spend_{amount} = yes", block)
             pp = {
                 "STP_bargain_with_local_councils": 10,
                 "STP_prepare_false_trail": 15,
@@ -805,7 +804,7 @@ class STPRegionalMechanicsTests(unittest.TestCase):
             }[decision_id]
             self.assertIn(f"custom_cost_text = STP_cost_pp{pp}_t{amount}", block)
             self.assertIn(f"add_political_power = -{pp}", block)
-            self.assertIn(f"ADISCORD_economy_spend_{amount} = yes", block)
+            self.assertIn(f"STP_cw_spend_{amount} = yes", block)
             self.assertNotIn("ADISCORD_economy_can_spend_25", block)
 
         shared_triggers = read(SHARED_ACTION_TRIGGERS)
@@ -818,7 +817,7 @@ class STPRegionalMechanicsTests(unittest.TestCase):
             self.assertIn(f"value = {amount}", spend)
             self.assertRegex(
                 politics_loc,
-                rf'(?m)^\s*ADISCORD_cost_t{amount}:\s*"£ADISCORD_economy_treasury_texticon §Y{amount}§!"',
+                rf'(?m)^\s*ADISCORD_cost_t{amount}:\s*"§Y{amount}§! £ADISCORD_economy_treasury_texticon"',
             )
         self.assertNotIn("ADISCORD_economy_can_spend_25", shared_triggers)
         self.assertNotIn("ADISCORD_economy_spend_25", shared_effects)
@@ -1024,7 +1023,7 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         self.assertIn("STP_region_has_ready_administration", triggers)
         self.assertIn("STP_cw_second_inspection_unlocked", triggers)
         self.assertIn(
-            "value = 50 compare = greater_than_or_equals",
+            "value = 60 compare = greater_than_or_equals",
             named_block(triggers, "STP_cw_second_inspection_unlocked"),
         )
         for state_id in PARTICIPATING_STATES:
@@ -1073,6 +1072,29 @@ class STPRegionalMechanicsTests(unittest.TestCase):
 
 
 class STPRegionAssetValidationTests(unittest.TestCase):
+    def test_map_rebuild_preserves_faction_exports_and_rejects_bad_sizes(self):
+        from tempfile import TemporaryDirectory
+        from unittest.mock import patch
+
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            for key in regions_map_builder.FACTION_KEYS:
+                Image.new("RGBA", (56, 56), (40, 80, 120, 255)).save(
+                    root / f"STP_regions_faction_{key}.png"
+                )
+            before = {path.name: path.read_bytes() for path in root.glob("*.png")}
+            with patch.object(regions_map_builder, "OUT", root):
+                self.assertEqual(regions_map_builder.validate_faction_icons(), [])
+                regions_map_builder.apply({})
+                self.assertEqual(
+                    {path.name: path.read_bytes() for path in root.glob("*.png")}, before
+                )
+                damaged = root / "STP_regions_faction_army.png"
+                Image.new("RGBA", (55, 56)).save(damaged)
+                self.assertEqual(len(regions_map_builder.validate_faction_icons()), 1)
+                damaged.unlink()
+                self.assertEqual(len(regions_map_builder.validate_faction_icons()), 1)
+
     def test_color_changes_with_unchanged_alpha_are_detected(self):
         from tempfile import TemporaryDirectory
         from unittest.mock import patch

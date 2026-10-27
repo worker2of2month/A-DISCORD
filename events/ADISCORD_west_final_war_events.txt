@@ -358,7 +358,7 @@ country_event = {
 				limit = {
 					is_subject = no
 					is_in_faction = no
-					NOT = { has_war_with = FROM }
+					ADISCORD_west_outside_champion_wars = yes
 					NOT = { has_global_flag = ADISCORD_west_final_started }
 					FROM = {
 						exists = yes
@@ -457,7 +457,7 @@ country_event = {
 				limit = {
 					is_subject = no
 					is_in_faction = no
-					NOT = { has_war_with = FROM }
+					ADISCORD_west_outside_champion_wars = yes
 					NOT = { has_global_flag = ADISCORD_west_final_started }
 					FROM = {
 						exists = yes

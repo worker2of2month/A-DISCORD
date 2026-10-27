@@ -131,9 +131,17 @@ ADISCORD_west_league_target_valid = {
 	is_subject = no
 	has_capitulated = no
 	is_in_faction = no
-	NOT = { has_war_with = ROOT }
+	ADISCORD_west_outside_champion_wars = yes
 	NOT = { has_country_flag = ADISCORD_west_league_offer_pending }
 	NOT = { has_global_flag = ADISCORD_west_final_started }
+}
+
+# COUNTRY regional state. A treaty partner at war with either champion would
+# pull the whole bloc into that war through the native faction call. Such a
+# war has no settlement and keeps ADISCORD_west_final_can_start false.
+ADISCORD_west_outside_champion_wars = {
+	NOT = { has_war_with = WRK }
+	NOT = { has_war_with = IVN }
 }
 
 # COUNTRY WRK. A postwar political programme opens Vorkerland's own treaty

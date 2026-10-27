@@ -2774,8 +2774,13 @@ STP_cw_refund_reserve_training = {
 		hidden_effect = { clear_variable = STP_cw_training_cohorts }
 		add_manpower = 12000
 		if = {
-			limit = { has_country_flag = STP_cw_training_political_payment }
-			clr_country_flag = STP_cw_training_political_payment
+			limit = {
+				custom_trigger_tooltip = {
+					tooltip = STP_cw_training_political_payment_tt
+					has_country_flag = STP_cw_training_political_payment
+				}
+			}
+			hidden_effect = { clr_country_flag = STP_cw_training_political_payment }
 		}
 		else = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 10800 }
@@ -3700,6 +3705,60 @@ STP_cw_send_air_reserves_to_resistance = {
 		limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
 		send_equipment = { type = ADISCORD_cv_bomber_archetype amount = STP_cw_air_transfer target = STS }
 	}
+	set_temp_variable = {
+		var = STP_cw_air_transfer
+		value = num_equipment@ADISCORD_interceptor_archetype
+	}
+	if = {
+		limit = {
+			check_variable = {
+				var = STP_cw_air_transfer
+				value = 0
+				compare = greater_than
+			}
+		}
+		send_equipment = {
+			type = ADISCORD_interceptor_archetype
+			amount = STP_cw_air_transfer
+			target = STS
+		}
+	}
+	set_temp_variable = {
+		var = STP_cw_air_transfer
+		value = num_equipment@ADISCORD_strike_drone_archetype
+	}
+	if = {
+		limit = {
+			check_variable = {
+				var = STP_cw_air_transfer
+				value = 0
+				compare = greater_than
+			}
+		}
+		send_equipment = {
+			type = ADISCORD_strike_drone_archetype
+			amount = STP_cw_air_transfer
+			target = STS
+		}
+	}
+	set_temp_variable = {
+		var = STP_cw_air_transfer
+		value = num_equipment@transport_plane_equipment
+	}
+	if = {
+		limit = {
+			check_variable = {
+				var = STP_cw_air_transfer
+				value = 0
+				compare = greater_than
+			}
+		}
+		send_equipment = {
+			type = transport_plane_equipment
+			amount = STP_cw_air_transfer
+			target = STS
+		}
+	}
 	set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_zeppelin_equipment }
 	if = {
 		limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
@@ -3765,6 +3824,75 @@ STP_cw_divide_air_reserves = {
 		if = {
 			limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
 			send_equipment = { type = ADISCORD_cv_bomber_archetype amount = STP_cw_air_transfer target = STP }
+		}
+		set_temp_variable = {
+			var = STP_cw_air_transfer
+			value = num_equipment@ADISCORD_interceptor_archetype
+		}
+		multiply_temp_variable = {
+			var = STP_cw_air_transfer
+			value = STP_cw_air_party_share
+		}
+		round_temp_variable = STP_cw_air_transfer
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_cw_air_transfer
+					value = 0
+					compare = greater_than
+				}
+			}
+			send_equipment = {
+				type = ADISCORD_interceptor_archetype
+				amount = STP_cw_air_transfer
+				target = STP
+			}
+		}
+		set_temp_variable = {
+			var = STP_cw_air_transfer
+			value = num_equipment@ADISCORD_strike_drone_archetype
+		}
+		multiply_temp_variable = {
+			var = STP_cw_air_transfer
+			value = STP_cw_air_party_share
+		}
+		round_temp_variable = STP_cw_air_transfer
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_cw_air_transfer
+					value = 0
+					compare = greater_than
+				}
+			}
+			send_equipment = {
+				type = ADISCORD_strike_drone_archetype
+				amount = STP_cw_air_transfer
+				target = STP
+			}
+		}
+		set_temp_variable = {
+			var = STP_cw_air_transfer
+			value = num_equipment@transport_plane_equipment
+		}
+		multiply_temp_variable = {
+			var = STP_cw_air_transfer
+			value = STP_cw_air_party_share
+		}
+		round_temp_variable = STP_cw_air_transfer
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_cw_air_transfer
+					value = 0
+					compare = greater_than
+				}
+			}
+			send_equipment = {
+				type = transport_plane_equipment
+				amount = STP_cw_air_transfer
+				target = STP
+			}
 		}
 		set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_zeppelin_equipment }
 		multiply_temp_variable = { var = STP_cw_air_transfer value = STP_cw_air_party_share }
@@ -7489,8 +7617,8 @@ STP_pc_finish_liberation_package = {
 
 STP_proclaim_imperial_union = {
 	if = {
-		limit = { STP_imperial_union_requirements_met = yes }
-		set_country_flag = STP_imperial_union_proclaimed
+		limit = { hidden_trigger = { STP_imperial_union_requirements_met = yes } }
+		hidden_effect = { set_country_flag = STP_imperial_union_proclaimed }
 		set_cosmetic_tag = STP_empire
 
 		set_politics = {
@@ -10334,7 +10462,11 @@ STP_ps_clear_val_receipt = {
 				check_variable = { var = STP_ps_val_receipt_contract value = 5 compare = equals }
 			}
 		}
-		set_country_flag = { flag = STP_ps_val_sale_cooldown days = 90 }
+		set_country_flag = {
+			flag = STP_ps_val_sale_cooldown
+			value = 1
+			days = 90
+		}
 	}
 	clear_variable = STP_ps_val_receipt_rifles
 	clear_variable = STP_ps_val_receipt_stage
@@ -15343,22 +15475,22 @@ STP_ps_plot_counter_finish = {
 
 STP_ps_plot_timeout = {
 	if = {
-		limit = { STP_ps_plot_current = yes }
+		limit = { hidden_trigger = { STP_ps_plot_current = yes } }
 		if = {
-			limit = { check_variable = { var = STP_ps_plot_kind value = 1 compare = equals } }
+			limit = { hidden_trigger = { check_variable = { var = STP_ps_plot_kind value = 1 compare = equals } } }
 			add_timed_idea = { idea = STP_ps_supply_disrupted days = 21 }
 		}
 		if = {
-			limit = { check_variable = { var = STP_ps_plot_kind value = 2 compare = equals } }
+			limit = { hidden_trigger = { check_variable = { var = STP_ps_plot_kind value = 2 compare = equals } } }
 			add_timed_idea = { idea = STP_ps_false_orders days = 21 }
 		}
 		if = {
-			limit = { check_variable = { var = STP_ps_plot_kind value = 3 compare = equals } }
+			limit = { hidden_trigger = { check_variable = { var = STP_ps_plot_kind value = 3 compare = equals } } }
 			add_timed_idea = { idea = STP_ps_factory_strike days = 21 }
 			add_stability = -0.02
 		}
 	}
-	STP_ps_plot_close = yes
+	hidden_effect = { STP_ps_plot_close = yes }
 }
 
 # ============================================================
@@ -18468,13 +18600,21 @@ STP_heg_finish_operation = {
 		if = {
 			limit = { check_variable = { var = STP_heg_operation_kind value = 1 compare = equals } }
 			add_power_balance_value = { id = STP_heg_betrayal value = -0.20 }
-			set_country_flag = { flag = STP_heg_relief_cooldown days = 90 }
+			set_country_flag = {
+				flag = STP_heg_relief_cooldown
+				value = 1
+				days = 90
+			}
 			country_event = { id = ADISCORD_STP_pc.100 days = 2 }
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_heg_operation_kind value = 2 compare = equals } }
 			add_power_balance_value = { id = STP_heg_betrayal value = -0.30 }
-			set_country_flag = { flag = STP_heg_relief_cooldown days = 90 }
+			set_country_flag = {
+				flag = STP_heg_relief_cooldown
+				value = 1
+				days = 90
+			}
 			if = {
 				limit = { NOT = { has_country_flag = STP_heg_veterans_recalled } }
 				set_country_flag = STP_heg_veterans_recalled

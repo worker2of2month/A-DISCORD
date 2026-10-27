@@ -685,7 +685,11 @@ class CharterCabinetTests(unittest.TestCase):
         self.assertIn("STP_pc_lock_freedom", {node.key for node in walk(lock)})
         for candidate in self.CANDIDATES:
             effects = [node for _, node in selected_effects(block(self.effects, "STP_pc_lock_freedom"), self.facts(candidate), "STS")]
-            self.assertEqual([node.key for node in effects], ["set_variable", "set_country_flag"])
+            self.assertEqual(
+                [node.key for node in effects],
+                ["STP_heg_betrayal_close", "set_variable", "set_country_flag"],
+            )
+            self.assertEqual(scalar(effects, "STP_heg_betrayal_close"), "yes")
             self.assertEqual(scalar(block(effects, "set_variable"), "var"), "STP_pc_course")
             self.assertEqual(scalar(block(effects, "set_variable"), "value"), "2")
         self.assertFalse(any(node.key == "complete_national_focus" for node in walk(lock)))

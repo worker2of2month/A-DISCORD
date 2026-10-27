@@ -1741,8 +1741,9 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
             values = dict(re.findall(r'^ ([^:]+):\d* "([^"\r\n]*)"$',
                                      read(f"localisation/{lang}/ADISCORD_STP_l_{lang}.yml"), re.M))
             for key in ("STP_pi_north_equipment_package_tt", "STP_pi_package_equipment", "ADISCORD_STP_pi.1.d_equipment"):
-                self.assertRegex(values[key], rf'\b{rifles}\b', key)
-                self.assertRegex(values[key], rf'\b{support}\b', key)
+                rendered = re.sub(r'§[A-Za-z!]', '', values[key])
+                self.assertRegex(rendered, rf'\b{rifles}\b', key)
+                self.assertRegex(rendered, rf'\b{support}\b', key)
 
     def complete_focus(self, model, name):
         model.facts[("STP", "has_completed_focus", name)] = True
@@ -1751,15 +1752,69 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         # Advance the fixture past the native 90-day state cooldown.
         model.facts[("FROM", "has_state_flag", "STP_pi_festival_rest")] = False
 
-    def test_public_visits_diminish_without_regranting_coverage(self):
+    def fresh_festival_district(self, model):
+        model.facts = {key: value for key, value in model.facts.items() if key[0] != "FROM"}
+        model.facts.update({key: value for key, value in self.model(2).facts.items() if key[0] == "FROM"})
+
+    def test_festival_payment_visibility_and_slot_release(self):
+        names = ("STP_pi_festival_public", "STP_pi_festival_club")
+        for chosen in names:
+            for ending in ("remove_effect", "cancel_effect"):
+                with self.subTest(chosen=chosen, ending=ending):
+                    m = self.model(2)
+                    self.complete_focus(m, "STP_pw_party_unbound_revolution")
+                    m.put("ADISCORD_economy_treasury", 599.99)
+                    cost = block(self.decisions[chosen], "custom_cost_trigger")
+                    self.assertFalse(m.condition(cost))
+                    self.assertFalse(m.condition(block(self.decisions[chosen], "visible")))
+                    self.action(m, chosen)
+                    self.assertEqual(m.get("ADISCORD_economy_treasury"), 599.99)
+                    self.assertEqual(m.get("STP_pi_festival_busy"), 0)
+                    m.put("ADISCORD_economy_treasury", 600)
+                    self.assertTrue(m.condition(cost))
+                    self.assertTrue(m.condition(block(self.decisions[chosen], "visible")))
+                    self.action(m, chosen)
+                    self.assertEqual(m.get("ADISCORD_economy_treasury"), 0)
+                    self.assertEqual(m.get("STP_pi_festival_busy"), 1)
+                    for name in names:
+                        self.assertEqual(m.condition(block(self.decisions[name], "visible")), name == chosen)
+                    # The same country counter governs targets without a paid receipt.
+                    receipt = {key: value for key, value in m.facts.items() if key[0] == "FROM"}
+                    self.fresh_festival_district(m)
+                    for name in names:
+                        self.assertFalse(m.condition(block(self.decisions[name], "visible")))
+                    self.complete_focus(m, "STP_pe_festival_work_a")
+                    for name in names:
+                        self.assertFalse(m.condition(block(self.decisions[name], "visible")))
+                    m.put("ADISCORD_economy_treasury", 600)
+                    for name in names:
+                        self.assertTrue(m.condition(block(self.decisions[name], "visible")))
+                    m.put("ADISCORD_economy_treasury", 0)
+                    self.fresh_festival_district(m)
+                    m.facts.update(receipt)
+                    self.action(m, chosen, ending)
+                    self.assertEqual(m.get("STP_pi_festival_busy"), 0)
+                    expected = 600 if ending == "cancel_effect" else (1500 if chosen.endswith("club") else 0)
+                    self.assertEqual(m.get("ADISCORD_economy_treasury"), expected)
+                    self.action(m, chosen, ending)
+                    self.assertEqual(m.get("ADISCORD_economy_treasury"), expected)
+                    self.rest_district(m)
+                    m.put("ADISCORD_economy_treasury", 10000)
+                    for name in names:
+                        self.assertEqual(m.condition(block(self.decisions[name], "visible")),
+                                         ending == "cancel_effect" or name != chosen)
+
+    def test_public_visit_cannot_be_repeated_after_cooldown(self):
         m = self.model(2)
-        for expected in (0.03, 0.05, 0.06, 0.07):
+        for _ in range(4):
             self.rest_district(m)
             self.action(m, "STP_pi_festival_public")
             self.action(m, "STP_pi_festival_public", "remove_effect")
-            self.assertAlmostEqual(m.get("add_stability"), expected)
+            self.assertAlmostEqual(m.get("add_stability"), 0.03)
             self.assertEqual(m.get("STP_pi_festival_districts"), 1)
             self.assertEqual(m.get("STP_pi_festival_busy"), 0)
+            self.assertEqual(m.get("ADISCORD_economy_treasury"), 9400)
+            self.assertEqual(m.get("STP_pi_festival_public_visits", "FROM"), 1)
         self.assertAlmostEqual(m.get("STP_pw_ADISCORD_country_development_social_system_growth_factor"), 0.05)
         m.put("STP_pi_festival_rate", 0.075)
         for _ in range(3):
@@ -1783,7 +1838,7 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         m.put("STP_pw_ADISCORD_economy_admin_expense_factor", -0.1)
         m.put("STP_pi_cadre_instructors", 2000)
         for _ in range(4):
-            self.rest_district(m)
+            self.fresh_festival_district(m)
             self.action(m, "STP_pi_festival_club")
             self.action(m, "STP_pi_festival_club", "remove_effect")
         self.assertEqual(m.get("STP_pi_festival_load"), 4)
@@ -1806,7 +1861,11 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         self.assertEqual(m.get("ADISCORD_economy_treasury"), 10900)
         self.rest_district(m)
         self.action(m, "STP_pi_festival_club")
-        self.assertEqual(m.get("STP_pi_festival_quote", "FROM"), 1800)
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), 10900)
+        self.assertEqual(m.get("STP_pi_festival_quote", "FROM"), 0)
+        self.fresh_festival_district(m)
+        self.action(m, "STP_pi_festival_club")
+        self.assertEqual(m.get("STP_pi_festival_quote", "FROM"), 2250)
 
     def test_paid_club_reserves_last_load_slot(self):
         m = self.model(2)
@@ -1817,6 +1876,51 @@ class PartyRemainingInstitutionAccountingTests(unittest.TestCase):
         self.assertFalse(m.condition(self.triggers["STP_pi_festival_club_capacity"]))
         self.action(m, "STP_pi_festival_club", "cancel_effect")
         self.assertEqual(m.get("STP_pi_festival_reserved"), 5)
+
+    def test_festival_visibility_checks_local_access_and_load_but_keeps_paid_work(self):
+        for name in ("STP_pi_festival_public", "STP_pi_festival_club"):
+            for reason in ("ownership", "control", "rest", "brigades", "load"):
+                with self.subTest(decision=name, reason=reason):
+                    m = self.model(2)
+                    self.complete_focus(m, "STP_pw_party_unbound_revolution")
+                    visible = block(self.decisions[name], "visible")
+                    self.assertTrue(m.condition(visible))
+                    if reason == "ownership":
+                        m.facts[("FROM", "is_owned_by", "ROOT")] = False
+                    elif reason == "control":
+                        m.facts[("FROM", "is_controlled_by", "ROOT")] = False
+                    elif reason == "rest":
+                        m.facts[("FROM", "has_state_flag", "STP_pi_festival_rest")] = True
+                    elif reason == "brigades":
+                        m.put("STP_pi_festival_busy", 1)
+                    else:
+                        m.put("STP_pi_festival_reserved", 6)
+                    self.assertEqual(m.condition(visible), reason == "load" and name.endswith("public"))
+                    m.put("STP_pi_festival_deposit", 600, "FROM")
+                    m.put("STP_pi_festival_kind", 1 if name.endswith("public") else 2, "FROM")
+                    self.assertTrue(m.condition(visible))
+
+    def test_festival_completion_is_per_type_and_district_and_survives_state_restore(self):
+        m = self.model(2)
+        self.complete_focus(m, "STP_pw_party_unbound_revolution")
+        for name in ("STP_pi_festival_public", "STP_pi_festival_club"):
+            self.rest_district(m)
+            self.assertTrue(m.condition(block(self.decisions[name], "available")))
+            self.action(m, name)
+            self.action(m, name, "remove_effect")
+        completed = {key: value for key, value in m.facts.items() if key[0] == "FROM"}
+        self.fresh_festival_district(m)
+        for name in ("STP_pi_festival_public", "STP_pi_festival_club"):
+            self.assertTrue(m.condition(block(self.decisions[name], "visible")))
+        self.fresh_festival_district(m)
+        m.facts.update(completed)
+        self.rest_district(m)
+        before = m.get("ADISCORD_economy_treasury")
+        for name in ("STP_pi_festival_public", "STP_pi_festival_club"):
+            self.assertFalse(m.condition(block(self.decisions[name], "visible")))
+            self.assertFalse(m.condition(block(self.decisions[name], "available")))
+            self.action(m, name)
+        self.assertEqual(m.get("ADISCORD_economy_treasury"), before)
 
     def test_medical_project_refunds_if_public_visits_already_cleared_load(self):
         m = self.model(2)

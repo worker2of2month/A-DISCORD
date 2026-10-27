@@ -408,15 +408,16 @@ class STPCoreContractTests(unittest.TestCase):
         self.assertNotIn("STP_pc_lock_directory = yes", effect)
 
     def test_debug_controls_cannot_bypass_the_normal_election_campaign(self) -> None:
+        from tools.tests.test_adiscord_stp_postwar_continuation import expand
+        from tools.tests.test_adiscord_stp_preparation import walk
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
         decisions = read(DECISIONS)
         names = re.findall(r"^\s*(STP_debug_\w+)\s*=\s*\{", decisions, re.MULTILINE)
         self.assertTrue(names)
         for name in names:
-            self.assertIn(
-                "is_debug = yes",
-                named_block(named_block(decisions, name), "visible"),
-                name,
-            )
+            visible = parse_clausewitz(named_block(named_block(decisions, name), "visible"))[0].value
+            self.assertIn(("is_debug", "yes"), [(e.key, e.value) for e in walk(expand(visible))], name)
 
     def test_bop_debug_decisions_shift_election_legitimacy_in_debug_category(
         self,
@@ -428,12 +429,14 @@ class STPCoreContractTests(unittest.TestCase):
         category = named_block(categories, "STP_shabrat_election_bop_category")
         self.assertIn("allowed = { tag = STP }", category)
         for ordinary_category_field in (
-            "visible =",
             "visible_when_empty =",
             "picture =",
             "priority =",
         ):
             self.assertNotIn(ordinary_category_field, category)
+        visible = named_block(category, "visible")
+        self.assertIn("NOT = { has_global_flag = STP_cw_started }", visible)
+        self.assertIn("NOT = { has_country_flag = STP_cw_elections_finished }", visible)
 
         decisions = named_block(read(DECISIONS), "STP_scenario_debug")
         expected_values = {

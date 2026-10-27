@@ -23,8 +23,13 @@ FACTION_KEYS = (
     "merchants",
     "radicals",
 )
-FACTION_SOURCE = ROOT / "tools" / "assets" / "source" / "STP_party_factions"
 FACTION_ICON_SIZE = 56
+GENERATED_PATTERNS = (
+    "STP_regions_map_background.png",
+    "STP_regions_state_*.png",
+    "STP_regions_contact_sheet.png",
+    "STP_regions_faction_card.png",
+)
 
 # Frames match the status order in ADISCORD_STP_regions.gfx/gui:
 # contested, Shabrat leaning/entrenched, Party leaning/entrenched,
@@ -171,17 +176,23 @@ def faction_cards() -> Image.Image:
     return strip
 
 
-def faction_icons() -> dict[str, Image.Image]:
-    """Keep the source artwork intact; build only the native card-size textures."""
-    outputs = {}
+def validate_faction_icons() -> list[str]:
+    """Faction artwork is supplied as runtime exports, independently of the map."""
+    issues = []
     for key in FACTION_KEYS:
-        with Image.open(FACTION_SOURCE / f"{key}.png") as source:
-            if source.width != source.height:
-                raise ValueError(f"Faction emblem must be square: {key}")
-            outputs[f"STP_regions_faction_{key}.png"] = source.convert("RGBA").resize(
-                (FACTION_ICON_SIZE, FACTION_ICON_SIZE), Image.Resampling.LANCZOS
-            )
-    return outputs
+        path = OUT / f"STP_regions_faction_{key}.png"
+        try:
+            with Image.open(path) as source:
+                source.load()
+                if source.size != (FACTION_ICON_SIZE, FACTION_ICON_SIZE):
+                    issues.append(f"Faction emblem must be {FACTION_ICON_SIZE}px square: {path.name}")
+        except OSError as exc:
+            issues.append(f"cannot read faction emblem {path.name}: {exc}")
+    return issues
+
+
+def generated_paths():
+    return sorted({path for pattern in GENERATED_PATTERNS for path in OUT.glob(pattern)})
 
 
 def render_outputs() -> tuple[dict[str, Image.Image], tuple[int, int, int, int]]:
@@ -273,16 +284,14 @@ def render_outputs() -> tuple[dict[str, Image.Image], tuple[int, int, int, int]]
         for index, color in enumerate(FRAME_COLORS):
             strip.paste(state_overlay(masks[state_id], color), (WIDTH * index, 0))
         outputs[f"STP_regions_state_{state_id}.png"] = strip
-    outputs["STP_regions_contact_sheet.png"] = contact_sheet(background, masks)
     outputs["STP_regions_faction_card.png"] = faction_cards()
-    outputs.update(faction_icons())
     return outputs, box
 
 
 def validate_outputs(outputs: dict[str, Image.Image]) -> list[str]:
     issues: list[str] = []
     expected_filenames = set(outputs)
-    for path in sorted(OUT.glob("STP_regions_*.png")):
+    for path in generated_paths():
         if path.is_file() and path.name not in expected_filenames:
             issues.append(f"unexpected generated STP regions-map image: {path.name}")
     for filename, expected in outputs.items():
@@ -313,7 +322,7 @@ def validate_outputs(outputs: dict[str, Image.Image]) -> list[str]:
 def apply(outputs: dict[str, Image.Image]) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     expected_filenames = set(outputs)
-    for path in sorted(OUT.glob("STP_regions_*.png")):
+    for path in generated_paths():
         if path.is_file() and path.name not in expected_filenames:
             path.unlink()
     for filename, image in outputs.items():
@@ -339,7 +348,7 @@ def main() -> int:
     if args.apply:
         apply(outputs)
         print(f"Wrote STP regions map to {OUT.relative_to(ROOT)}; source crop={box}")
-    issues = validate_outputs(outputs)
+    issues = validate_outputs(outputs) + validate_faction_icons()
     if issues:
         for issue in issues:
             print(f"ERROR: {issue}")

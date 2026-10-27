@@ -12734,7 +12734,7 @@ def air_technology_outputs() -> dict[Path, bytes]:
     gui = gui_path.read_text(encoding="utf-8")
     for folder in ("air_techs_folder", "bba_air_techs_folder"):
         gui = replace_named_gui_block(gui, folder, render_folder(folder))
-    outputs[gui_path] = gui.encode("utf-8")
+    outputs[gui_path] = apply_tree_skin(gui).encode("utf-8")
     return outputs
 
 
@@ -12744,7 +12744,7 @@ def artillery_technology_outputs() -> dict[Path, bytes]:
     gui = replace_named_gui_block(
         gui_path.read_text(encoding="utf-8"), "artillery_folder", render_folder("artillery_folder")
     )
-    outputs[gui_path] = gui.encode("utf-8")
+    outputs[gui_path] = apply_tree_skin(gui).encode("utf-8")
     return outputs
 
 
@@ -12766,7 +12766,7 @@ def support_technology_outputs() -> dict[Path, bytes]:
     gui = replace_named_gui_block(
         gui_path.read_text(encoding="utf-8"), "support_folder", render_folder("support_folder")
     )
-    outputs[gui_path] = gui.encode("utf-8")
+    outputs[gui_path] = apply_tree_skin(gui).encode("utf-8")
     outputs[ROOT / "common/scripted_effects/ADISCORD_technology_baseline_effects.txt"] = render_starting_technology_effect().encode("utf-8")
     outputs[ROOT / "tools/data/adiscord_starting_technology_profiles.json"] = render_starting_technology_profile_manifest().encode("utf-8")
     outputs[ROOT / "tools/data/adiscord_technology_id_migrations.json"] = render_technology_migration_manifest().encode("utf-8")

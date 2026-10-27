@@ -444,6 +444,27 @@ class TechnologyUiContractTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     builder.apply_tree_skin(broken)
 
+    def test_partial_technology_builds_preserve_all_folder_surfaces(self) -> None:
+        from tools.builders import build_adiscord_technology_system as system
+
+        gui_path = ROOT / "interface/countrytechtreeview.gui"
+        for render in (
+            system.air_technology_outputs,
+            system.artillery_technology_outputs,
+            system.support_technology_outputs,
+            system.civil_technology_outputs,
+        ):
+            with self.subTest(builder=render.__name__):
+                gui = render()[gui_path].decode("utf-8")
+                self.assertNotIn('"GFX_tiled_window_2b_border"', gui)
+                self.assertNotIn('"GFX_techtree_stripes"', gui)
+                self.assertEqual(
+                    gui.count('"GFX_ADISCORD_technology_tree_window_tile"'), 13
+                )
+                self.assertEqual(
+                    gui.count('"GFX_ADISCORD_technology_tree_stripes"'), 13
+                )
+
     def test_tree_skin_uses_tree_and_detail_roles(self) -> None:
         gui = (ROOT / "interface/countrytechtreeview.gui").read_text(
             encoding="utf-8-sig"

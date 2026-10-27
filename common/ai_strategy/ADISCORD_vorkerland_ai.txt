@@ -5636,3 +5636,75 @@ ADISCORD_difficulty_vorkerland_field_supply = {
 		value = 15
 	}
 }
+
+# --- postwar_wrk_ai ---
+# Reunified WRK at war. An infantry battalion needs 900 rifles (about 90 IC)
+# and 60 squad weapons (about 100 IC), but the shared infantry weight covers
+# both archetypes and sends most factories to the cheap rifle line, so new
+# divisions wait for squad weapons. Two additive floors request 8 factories
+# from 20 military factories and 16 from 40, leaving the rest for rifles and
+# the generic minima. A rifle emergency or a healthy stock releases them.
+ADISCORD_vorkerland_wrk_squad_weapons_floor = {
+	allowed = { tag = WRK }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_finished
+		has_war = yes
+		num_of_military_factories > 19
+		has_equipment = { ADISCORD_squad_weapons_equipment < 2000 }
+		NOT = { ADISCORD_ai_rifle_replacement_emergency = yes }
+	}
+	abort = {
+		OR = {
+			has_war = no
+			num_of_military_factories < 20
+			has_equipment = { ADISCORD_squad_weapons_equipment > 4000 }
+			ADISCORD_ai_rifle_replacement_emergency = yes
+		}
+	}
+	ai_strategy = { type = equipment_production_min_factories_archetype id = ADISCORD_squad_weapons_equipment value = 8 }
+}
+
+ADISCORD_vorkerland_wrk_squad_weapons_floor_large = {
+	allowed = { tag = WRK }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_finished
+		has_war = yes
+		num_of_military_factories > 39
+		has_equipment = { ADISCORD_squad_weapons_equipment < 2000 }
+		NOT = { ADISCORD_ai_rifle_replacement_emergency = yes }
+	}
+	abort = {
+		OR = {
+			has_war = no
+			num_of_military_factories < 40
+			has_equipment = { ADISCORD_squad_weapons_equipment > 4000 }
+			ADISCORD_ai_rifle_replacement_emergency = yes
+		}
+	}
+	ai_strategy = { type = equipment_production_min_factories_archetype id = ADISCORD_squad_weapons_equipment value = 8 }
+}
+
+# Laws cost 150 PP while the generic reserve keeps 100, so a reunified WRK at
+# war never saves enough to leave its default civilian economy. Partial
+# mobilisation is kept here only while war economy is within reach.
+ADISCORD_vorkerland_wrk_wartime_economy_law = {
+	allowed = { tag = WRK }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_war = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_finished
+		OR = {
+			has_idea = ADISCORD_civilian_oriented_economy
+			has_idea = civilian_economy
+			has_idea = low_economic_mobilisation
+			AND = {
+				has_idea = partial_economic_mobilisation
+				has_war_support > 0.50
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = pp_spend_priority id = idea value = 150 }
+	ai_strategy = { type = pp_spend_amount id = idea value = 150 }
+}

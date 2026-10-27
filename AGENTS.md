@@ -420,6 +420,14 @@ lifecycle and verification contract in the performance guide.
 
 ## Verification
 
+Computer Use is prohibited in this repository. Do not use computer-use skills,
+desktop or browser UI automation, simulated clicks or keystrokes, or automated
+screen capture to inspect or control the game or other applications. Do not
+launch, restart, or close the user's game for verification. Use source inspection,
+CLI tests, validators, and existing logs. Runtime/UI checks are performed manually
+by the user; clearly report when those checks remain unverified. The runtime
+verification requirements below do not authorize Computer Use.
+
 For focus rewards, see [the focus-effects guide](docs/development/focus-effects.md):
 TFR source analysis, cumulative dynamic modifiers, dummy delta previews,
 ownership across civil wars, and lifecycle checks for human authors and agents.

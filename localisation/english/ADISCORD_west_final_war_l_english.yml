@@ -86,7 +86,7 @@
  ADISCORD_west_wrk_offer_front_treaty_desc: "Vorkerland will not wait while Itora gathers the whole West into its League. Envoys offer a neighbour a place in the Confederate Front: common defence, supplies and a voice in the future settlement. The answer remains the neighbour's own."
  ADISCORD_west_wrk_offer_front_treaty_tt: "[From.GetName] will receive an offer to join the §YConfederate Front§! and will answer itself. Acceptance binds the country to Vorkerland in the war for the West. Western pressure on acceptance: §Y+10§!."
  ADISCORD_west_wrk_front_command_tt: "Vorkerland is not a member of another faction"
- ADISCORD_west_wrk_treaty_target_tt: "The country is independent, outside any faction, not at war with us, not weighing another offer, and the war for the West has not begun"
+ ADISCORD_west_wrk_treaty_target_tt: "The country is independent, outside any faction, at war with neither Vorkerland nor Itora, not weighing another offer, and the war for the West has not begun"
  ADISCORD_west_front_accept_tt: "The country joins the §YConfederate Front§!. Western pressure: §Y+10§!."
  ADISCORD_west_front_refuse_tt: "The country stays outside the alliance. In the war for the West it will choose a side or stay out of the war by its lean."
  ADISCORD_west.43.t: "A Treaty on the West"

@@ -432,9 +432,16 @@ class CivilWarContracts(unittest.TestCase):
                 for e in decision
             )
         )
-        self.assertEqual(
-            scalar(ast_block(decision, "available"), "STP_cw_can_rearm"), "yes"
-        )
+        availability = ast_block(decision, "available")
+        for can_rearm in (False, True):
+            facts = {
+                ("STS", "STP_cw_can_rearm", "yes"): can_rearm,
+                ("STS", "owns_state", "1"): True,
+                ("STS", "controls_state", "1"): True,
+            }
+            self.assertEqual(matches_conditions(
+                availability, facts, "STS"
+            ), can_rearm)
         visible = ast_block(decision, "visible")
         for postwar in (False, True):
             facts = {
@@ -2918,10 +2925,14 @@ class CivilWarContracts(unittest.TestCase):
             (scalar(focus, "x"), scalar(focus, "y"), scalar(focus, "cost")),
             ("9", "1", "3"),
         )
-        self.assertEqual(scalar(focus, "icon"), "GFX_focus_STP_pw_party_civilian_retraining")
-        self.assertNotEqual(
-            scalar(focus, "icon"), "GFX_focus_TVA_divert_the_research_budget"
-        )
+        icons = ast_block(focus, "icon")
+        for tag in ("STP", "STS", "SRP"):
+            selected_icon = next(
+                entry.key for entry in icons
+                if entry.value == "yes" or matches_conditions(entry.value, {}, tag)
+            )
+            self.assertEqual(selected_icon, "GFX_focus_STP_party_technical_institutes"
+                             if tag == "STP" else "GFX_focus_STP_cw_wartime_laboratories")
         self.assertEqual(
             scalar(ast_block(focus, "prerequisite"), "focus"),
             "STP_cw_unified_headquarters",
@@ -8933,7 +8944,7 @@ class PostwarFocusContracts(unittest.TestCase):
                     )
                     positions[point] = name
 
-    def test_party_victory_choices_form_one_centered_row(self):
+    def test_party_victory_choices_form_two_centered_rows(self):
         facts = {("STP", "has_country_flag", "STP_cw_postwar"): False}
         root_x, root_y = self.focus_position("STP_pv_victory_committee", facts, "STP")
         names = (
@@ -8941,7 +8952,10 @@ class PostwarFocusContracts(unittest.TestCase):
             "STP_pv_glory_festival", "STP_pv_glory_wallets",
         )
         positions = [self.focus_position(name, facts, "STP") for name in names]
-        self.assertEqual(positions, [(root_x + x, root_y + 1) for x in (-3, -1, 1, 3)])
+        self.assertEqual(
+            positions,
+            [(root_x + x, root_y + y) for x, y in ((-3, 1), (-1, 2), (1, 2), (3, 1))],
+        )
         for name in names:
             alternatives = {e.value for e in ast_block(self.focuses[name], "mutually_exclusive")}
             self.assertEqual(alternatives, set(names) - {name})
@@ -10237,7 +10251,7 @@ class PartyRightPreparationRewardsTests(unittest.TestCase):
         )
         self.assertIn("air_ratio = 0.5", air)
         self.assertIn("air_ratio = 0.6", air)
-        self.assertEqual(scalar(focuses["STP_ps_loyal_aircrews"], "cost"), "3")
+        self.assertEqual(scalar(focuses["STP_ps_loyal_aircrews"], "cost"), "2")
 
 
 class CivilWarAirProgrammeTests(unittest.TestCase):

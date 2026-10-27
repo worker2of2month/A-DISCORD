@@ -585,6 +585,15 @@ class PartyQualityOfLifeTests(unittest.TestCase):
             (POLICIES[1], POLICIES[0], 'STP_ps_route_guard_idea'),
         ):
             focus = self.focuses[chosen]
+            self.assertEqual(
+                [
+                    [e.value for e in prerequisite.value]
+                    for prerequisite in focus
+                    if prerequisite.key == 'prerequisite'
+                ],
+                [['STP_ps_ammunition_board']],
+                chosen,
+            )
             self.assertIn(
                 alternative, [e.value for e in block(focus, 'mutually_exclusive')]
             )
@@ -597,10 +606,6 @@ class PartyQualityOfLifeTests(unittest.TestCase):
         ]
         self.assertTrue(
             any(set(POLICIES).issubset({e.value for e in p}) for p in prerequisites)
-        )
-        self.assertEqual(
-            scalar(block(self.focuses[POLICIES[1]], 'prerequisite'), 'focus'),
-            'STP_cw_unified_headquarters',
         )
 
     def test_four_faction_focuses_do_not_also_reward_every_faction(self):
@@ -815,6 +820,72 @@ class PartyQualityOfLifeTests(unittest.TestCase):
         war = [entry.value for entry in block(plans['STP_party_civil_war_plan'],
                                               'ai_national_focuses')]
         self.assertLess(war.index('STP_party_northern_lesson'), war.index('STP_party_without_patrons'))
+
+
+class StelanderDecisionTooltipTests(unittest.TestCase):
+    """Check exposed script paths, including nested helpers, without running the engine."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.definitions = {}
+        for directory in ('scripted_triggers', 'scripted_effects'):
+            for path in (ROOT / 'common' / directory).glob('*.txt'):
+                cls.definitions.update({entry.key: entry.value for entry in
+                                        parse_clausewitz(path.read_text(encoding='utf-8-sig'))})
+        cls.localisation = {}
+        for path in (ROOT / 'localisation' / 'russian').glob('*.yml'):
+            cls.localisation.update(dict(re.findall(
+                r'^ ([\w.]+):\d*[ \t]*"([^"\r\n]*)"',
+                path.read_text(encoding='utf-8-sig'), re.M)))
+        cls.decisions = [decision for category in parse_clausewitz(read(DECISIONS))
+                         if isinstance(category.value, list) for decision in category.value
+                         if isinstance(decision.value, list)]
+
+    def exposed_bookkeeping(self, entries, stack=()):
+        for entry in entries:
+            if entry.key in ('hidden_trigger', 'hidden_effect', 'custom_trigger_tooltip',
+                             'custom_effect_tooltip'):
+                continue
+            if entry.key in ('has_country_flag', 'has_global_flag', 'has_state_flag',
+                             'has_character_flag', 'has_variable'):
+                name = scalar(entry.value, 'flag') if isinstance(entry.value, list) else entry.value
+                if name not in self.localisation:
+                    yield entry.key + ': ' + name
+            elif entry.key in ('set_country_flag', 'clr_country_flag', 'set_global_flag',
+                               'clr_global_flag', 'set_state_flag', 'clr_state_flag',
+                               'set_variable', 'set_temp_variable', 'add_to_variable',
+                               'subtract_from_variable', 'clear_variable'):
+                yield entry.key
+            elif entry.key == 'check_variable':
+                name = scalar(entry.value, 'var')
+                if name not in self.localisation:
+                    yield entry.key + ': ' + name
+            elif entry.key in self.definitions:
+                if entry.key not in stack:
+                    yield from self.exposed_bookkeeping(self.definitions[entry.key], stack + (entry.key,))
+            elif isinstance(entry.value, list):
+                yield from self.exposed_bookkeeping(entry.value, stack)
+
+    def test_decision_conditions_and_rewards_do_not_expand_internal_bookkeeping(self):
+        fields = ('available', 'cancel_trigger', 'complete_effect', 'remove_effect',
+                  'cancel_effect', 'timeout_effect')
+        for decision in self.decisions:
+            for field in decision.value:
+                if field.key in fields:
+                    with self.subTest(decision=decision.key, field=field.key):
+                        self.assertEqual(list(self.exposed_bookkeeping(field.value)), [])
+
+    def test_condition_labels_and_price_variants_are_complete_in_both_languages(self):
+        for language in ('russian', 'english'):
+            values = localization(language)
+            for decision in self.decisions:
+                for entry in walk(decision.value):
+                    if entry.key == 'tooltip' and isinstance(entry.value, str) and entry.value.startswith('STP_ui_'):
+                        self.assertTrue(values.get(entry.value), (language, entry.value))
+                price = next((entry.value for entry in decision.value if entry.key == 'custom_cost_text'), '')
+                if price and price.startswith('STP_'):
+                    for suffix in ('', '_blocked', '_tooltip'):
+                        self.assertTrue(values.get(price + suffix), (language, price + suffix))
 
 
 if __name__ == '__main__':

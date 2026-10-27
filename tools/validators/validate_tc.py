@@ -12,6 +12,7 @@ import argparse
 import csv
 import re
 import sys
+import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -86,6 +87,34 @@ GAME_DIRS = [
 
 TEXT_EXTS = {".txt", ".gui", ".gfx", ".asset", ".yml", ".csv", ".map"}
 BRACE_EXTS = {".txt", ".gui", ".gfx", ".asset", ".map"}
+
+# Common glyph coverage of the Latin and _cryllic pairs for hoi_16mbs,
+# hoi_18, hoi_18mbs, hoi_20b, hoi_20bs, hoi_16typewriter and hoi_22typewriter.
+# Keep this portable snapshot aligned with the font bindings in interface/core.gfx.
+LOCALISATION_GLYPH_RANGES = (
+    (0x0020, 0x007E),
+    (0x00A0, 0x017F),
+    (0x0400, 0x045F),
+    (0x0462, 0x0463),
+    (0x0472, 0x0475),
+    (0x048A, 0x04F9),
+    (0x2013, 0x2015),
+    (0x2018, 0x201A),
+    (0x201C, 0x201E),
+)
+LOCALISATION_GLYPHS = frozenset(
+    chr(code)
+    for first, last in LOCALISATION_GLYPH_RANGES
+    for code in range(first, last + 1)
+)
+LOCALISATION_GLYPH_REPLACEMENTS = {
+    "\u0219": "s",
+    "\u2022": "-",
+    "\u2026": "...",
+    "\u2116": "N",
+    "\u2192": "->",
+    "\u2212": "-",
+}
 
 VANILLA_TAGS = {
     "AFG",
@@ -541,17 +570,33 @@ def check_localisation(limit):
     if not loc_dir.exists():
         return issues, 0
     header = re.compile(r"^\s*l_[A-Za-z_]+:\s*$")
-    for path in loc_dir.rglob("*.yml"):
-        text = read_text(path)
+    for path in sorted(loc_dir.rglob("*.yml")):
+        try:
+            text = path.read_bytes().decode("utf-8-sig")
+        except UnicodeDecodeError as error:
+            issues.append(f"{rel(path)}: invalid UTF-8 localisation: {error}")
+            continue
         first = next((line for line in text.splitlines() if line.strip()), "")
         if not header.match(first):
             issues.append(f"{rel(path)}: suspicious localisation header {first!r}")
-        if path.name.startswith("ADISCORD_"):
-            for number, line in enumerate(text.splitlines()[1:], 2):
-                if not line.strip() or line.lstrip().startswith("#"):
-                    continue
-                if not LOCALISATION_ENTRY.fullmatch(line):
+        for number, line in enumerate(text.split("\n"), 1):
+            line = line.removesuffix("\r")
+            if not line.strip() or line.lstrip().startswith("#") or header.match(line):
+                continue
+            entry = LOCALISATION_ENTRY.fullmatch(line)
+            if not entry:
+                if path.name.startswith("ADISCORD_"):
                     issues.append(f"{rel(path)}:{number}: malformed localisation entry")
+                continue
+            key, value = entry.groups()
+            for character in sorted(set(value) - LOCALISATION_GLYPHS):
+                name = unicodedata.name(character, "UNNAMED CHARACTER")
+                suggestion = LOCALISATION_GLYPH_REPLACEMENTS.get(character)
+                hint = f"; use {suggestion!r}" if suggestion is not None else ""
+                issues.append(
+                    f"{rel(path)}:{number}: {key}: unsupported localisation character "
+                    f"U+{ord(character):04X} {name} ({ascii(character)}){hint}"
+                )
     return issues[:limit], len(issues)
 
 
@@ -1224,7 +1269,15 @@ def print_section(title: str, issues, total: int | None = None):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=40, help="examples per section")
+    parser.add_argument(
+        "--localisation-only", action="store_true", help="check localisation only"
+    )
     args = parser.parse_args()
+
+    if args.localisation_only:
+        loc_issues, loc_total = check_localisation(args.limit)
+        print_section("Localisation", loc_issues, loc_total)
+        return int(loc_total > 0)
 
     tags, dynamic_tags = parse_country_tags()
     ideology_groups, ideology_types = parse_ideologies()
@@ -1284,7 +1337,7 @@ def main():
     )
 
     loc_issues, loc_total = check_localisation(args.limit)
-    print_section("Localisation headers", loc_issues, loc_total)
+    print_section("Localisation", loc_issues, loc_total)
 
     special_project_issues, special_project_total = check_special_project_leftovers(
         args.limit
@@ -1406,6 +1459,8 @@ def main():
             for example in examples[token]:
                 print(f"  {example}")
 
+    return int(loc_total > 0)
+
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

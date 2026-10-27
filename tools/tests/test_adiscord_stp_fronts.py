@@ -131,15 +131,19 @@ class ShabratFrontTests(unittest.TestCase):
         self.assertIn("type = force_concentration_factor value = 80", profile)
 
     def test_party_front_requests_are_not_inflated_to_mask_neutral_demand(self) -> None:
-        for name, demand in (
-            ("STS_cw_front_against_stp", 100),
-            ("STS_shabrat_civil_war_army", 120),
-        ):
+        for name in ("STS_cw_front_against_stp", "STS_shabrat_civil_war_army"):
             with self.subTest(profile=name):
                 profile = self.profile(name)
-                self.assertIn(
-                    f"type = front_unit_request tag = STP value = {demand}", profile
+                requests = [
+                    compact(strategy)
+                    for strategy in named_blocks(profile, "ai_strategy")
+                    if "type = front_unit_request" in compact(strategy)
+                ]
+                expected = (
+                    ["ai_strategy = { type = front_unit_request tag = STP value = 100 }"]
+                    if name == "STS_cw_front_against_stp" else []
                 )
+                self.assertEqual(requests, expected)
                 self.assertIn("execution_type = rush_weak", profile)
 
     def test_gameplay_source_is_utf8_without_bom_and_has_unique_profiles(self) -> None:
@@ -172,7 +176,10 @@ class CivilWarVictorFallbackTests(unittest.TestCase):
         self.assertEqual(len(candidates), 1)
         self.fallback = candidates[0]
 
-    def outcome(self, loser, victor, enemies, flags=(), snapshot=0, exists=True):
+    def outcome(
+        self, loser, victor, enemies, flags=(), snapshot=0, exists=True,
+        global_flags=(),
+    ):
         from tools.tests.test_adiscord_stp_preparation import scalar
 
         def matches(items, scope):
@@ -194,9 +201,14 @@ class CivilWarVictorFallbackTests(unittest.TestCase):
                 if e.key == "has_capitulated":
                     return e.value == "no"
                 if e.key == "has_war_with":
-                    return victor in enemies
+                    opponent = {"ROOT": loser, "FROM": victor}.get(e.value, e.value)
+                    if scope == loser:
+                        return opponent in enemies
+                    return scope in enemies and opponent == loser
                 if e.key == "has_country_flag":
                     return (scope, e.value) in flags
+                if e.key == "has_global_flag":
+                    return e.value in global_flags
                 if e.key == "check_variable":
                     self.assertEqual(
                         scalar(e.value, "var"), "STP_cw_capitulation_occupier"
@@ -250,6 +262,19 @@ class CivilWarVictorFallbackTests(unittest.TestCase):
         self.assertEqual(self.outcome("STS", "STP", ["STP"], snapshot=5), 5)
         self.assertEqual(self.outcome("STS", "STP", [], exists=True), 0)
         self.assertEqual(self.outcome("STS", "STP", ["STP"], exists=False), 0)
+
+    def test_postwar_fronts_require_finished_union_wars(self):
+        for loser, victor, credit in (
+            ("VAL", "STS", 2), ("NOD", "STS", 2),
+            ("STS", "VAL", 5), ("STS", "NOD", 4),
+        ):
+            with self.subTest(loser=loser, victor=victor):
+                self.assertEqual(self.outcome(loser, victor, [victor]), 0)
+                self.assertEqual(
+                    self.outcome(loser, victor, [victor],
+                                 global_flags={"STP_cw_union_wars_finished"}),
+                    credit,
+                )
 
 
 if __name__ == "__main__":

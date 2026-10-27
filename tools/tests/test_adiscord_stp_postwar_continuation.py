@@ -112,6 +112,36 @@ def walk(items):
             yield from walk(entry.value)
 
 
+def selected_settlement_effects(items, facts):
+    """Follow the settlement's peace dispatchers and snapshot variable writes."""
+    definitions = {e.key: e.value for e in entries(EFFECTS)}
+    state = dict(facts)
+    dispatchers = {
+        "STP_pc_settle_val_northern_conquests",
+        "STP_close_competing_ultimatum_wars_after_defeat",
+    }
+
+    def select(rows, scope):
+        for current, effect in selected_effects(rows, state, scope):
+            if effect.key in dispatchers:
+                assert effect.value == "yes"
+                yield from select(definitions[effect.key], current)
+                continue
+            if effect.key in ("set_variable", "set_temp_variable"):
+                name = scalar(effect.value, "var")
+                value = scalar(effect.value, "value")
+                try:
+                    value = float(value)
+                except ValueError:
+                    value = state.get((current, "variable", value), 0)
+                state[(current, "variable", name)] = value
+            elif effect.key == "clear_variable":
+                state.pop((current, "variable", effect.value), None)
+            yield current, effect
+
+    yield from select(items, "STS")
+
+
 def event_block(text: str, event_id: str) -> str:
     marker = f"\tid = {event_id}\n"
     start = text.index(marker)
@@ -598,23 +628,27 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertEqual(facts, before)
         self.assertEqual(dispatched, [])
 
-    def test_nod_notification_keeps_existing_crisis_focus_routes_reachable(
+    def test_liberation_focuses_track_targets_and_army_tracks_crisis_notification(
         self,
     ) -> None:
         focuses = war_focuses()
         for focus_id in (
             "STP_pc_lib_crisis",
             "STP_pc_lib_war",
-            "STP_pc_army_limited_offense",
         ):
             gate = block(focuses[focus_id], "available")
             facts = {
                 ("STS", "STP_pc_focus_available", "yes"): True,
-                ("STS", "STP_pc_can_confront_nod", "yes"): True,
             }
             self.assertFalse(matches_conditions(gate, facts, "STS"), focus_id)
-            facts[("STS", "has_country_flag", "STP_pc_nod_crisis")] = True
-            self.assertTrue(matches_conditions(gate, facts, "STS"), focus_id)
+            for target in ("val", "nod"):
+                current = {**facts, ("STS", f"STP_pc_{target}_liberation_target_current", "yes"): True}
+                self.assertTrue(matches_conditions(gate, current, "STS"), focus_id)
+        gate = block(focuses["STP_pc_army_limited_offense"], "available")
+        facts = {("STS", "STP_pc_focus_available", "yes"): True}
+        self.assertFalse(matches_conditions(gate, facts, "STS"))
+        facts[("STS", "has_country_flag", "STP_pc_nod_crisis")] = True
+        self.assertTrue(matches_conditions(gate, facts, "STS"))
 
     def test_pending_package_recovers_after_all_focus_and_settlement_callers_finished(
         self,
@@ -718,18 +752,12 @@ class PostwarContinuationContracts(unittest.TestCase):
                     all(e.value in war_ids for e in prerequisite), scalar(focus, "id")
                 )
         self.assertFalse(any(focus_id.startswith("STP_pc_") for focus_id in prep_ids))
-        self.assertEqual(
-            scalar(
-                next(
-                    entry.value
-                    for entry in war
-                    if entry.key == "focus"
-                    and scalar(entry.value, "id") == "STP_pc_after_victory"
-                ),
-                "x",
-            ),
-            "16",
-        )
+        from tools.tests.test_adiscord_stp_preparation import focus_positions
+
+        focuses = {scalar(e.value, "id"): e.value for e in war if e.key == "focus"}
+        positions = focus_positions(focuses, {("STS", "tag", "STS"): True}, "STS")
+        parent_x, parent_y = positions["STP_cw_restore_civil_authority"]
+        self.assertEqual(positions["STP_pc_after_victory"], (parent_x, parent_y + 2))
 
     def test_victory_government_names_the_union_and_installs_founder_ministers(self) -> None:
         focuses = war_focuses()
@@ -816,7 +844,10 @@ class PostwarContinuationContracts(unittest.TestCase):
             )
             self.assertIn("STP_pc_founder_rules=yes", allow, focus_id)
             self.assertNotIn("STP_pc_freedom_continues", allow, focus_id)
-            self.assertNotIn("STP_pc_hegemony_continues", allow, focus_id)
+            if focus_id == "STP_pc_heg_person":
+                self.assertIn("STP_pc_hegemony_continues=yes", allow)
+            else:
+                self.assertNotIn("STP_pc_hegemony_continues", allow, focus_id)
             self.assertNotIn("STP_grigory_sotnikov", allow, focus_id)
 
     def test_successors_keep_the_locked_course_not_the_rivals(self) -> None:
@@ -994,8 +1025,9 @@ class PostwarContinuationContracts(unittest.TestCase):
 
         event = event_block(read(EVENTS), "ADISCORD_STP_pc.16")
         self.assertIn("STP_pc_founder_rules = yes", event)
-        self.assertIn("set_capital = 1", event)
-        self.assertIn("set_capital = 28", event)
+        for suffix, state in (("a", "1"), ("b", "28")):
+            option = option_by_name("ADISCORD_STP_pc.16", f"ADISCORD_STP_pc.16.{suffix}")
+            self.assertEqual(scalar(block(option, "set_capital"), "state"), state)
         self.assertIn("STP_pc_capital_abilia", event)
         self.assertIn("STP_pc_capital_fada", event)
         self.assertIn("28 = {", event)
@@ -1151,7 +1183,7 @@ class PostwarContinuationContracts(unittest.TestCase):
                 "var = STP_cw_capitulation_occupier value = 2", fallback, opponent
             )
 
-    def test_settlement_freezes_the_snapshot_and_closes_only_that_war(self) -> None:
+    def test_settlement_keeps_victory_local_and_closes_competing_wars_on_defeat(self) -> None:
         begin = ast_block(
             relative_entries(
                 "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
@@ -1166,7 +1198,7 @@ class PostwarContinuationContracts(unittest.TestCase):
             ("STS", "has_war_with", "VAL"): True,
             ("STS", "has_war_with", "NOD"): True,
         }
-        chosen = list(selected_effects(begin, val_win, "STS"))
+        chosen = list(selected_settlement_effects(begin, val_win))
         peaces = [e.value for _, e in chosen if e.key == "white_peace"]
         self.assertEqual(peaces, ["VAL"])
         results = [
@@ -1189,7 +1221,7 @@ class PostwarContinuationContracts(unittest.TestCase):
         # the military result is final. A stale capital-controller snapshot must
         # not downgrade Shabrat's victory to an empty settlement.
         stale_val = {**val_win, ("VAL", "variable", "STP_cw_capitulation_occupier"): 5}
-        stale = list(selected_effects(begin, stale_val, "STS"))
+        stale = list(selected_settlement_effects(begin, stale_val))
         self.assertEqual([e.value for _, e in stale if e.key == "white_peace"], ["VAL"])
         stale_vars = [
             (s, prep_scalar(e.value, "var"), prep_scalar(e.value, "value"))
@@ -1206,8 +1238,8 @@ class PostwarContinuationContracts(unittest.TestCase):
             ("STS", "has_war_with", "VAL"): True,
             ("STS", "has_war_with", "NOD"): True,
         }
-        lost = list(selected_effects(begin, sts_loss, "STS"))
-        self.assertEqual([e.value for _, e in lost if e.key == "white_peace"], ["VAL"])
+        lost = list(selected_settlement_effects(begin, sts_loss))
+        self.assertEqual([e.value for _, e in lost if e.key == "white_peace"], ["VAL", "NOD"])
         lost_vars = [
             (s, prep_scalar(e.value, "var"), prep_scalar(e.value, "value"))
             for s, e in lost
@@ -1217,8 +1249,8 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertIn(("STS", "STP_pc_this_result", "2"), lost_vars)
 
         unknown = {**sts_loss, ("STS", "variable", "STP_cw_capitulation_occupier"): 7}
-        leftover = list(selected_effects(begin, unknown, "STS"))
-        self.assertFalse(any(e.key == "white_peace" for _, e in leftover))
+        leftover = list(selected_settlement_effects(begin, unknown))
+        self.assertEqual([e.value for _, e in leftover if e.key == "white_peace"], ["VAL", "NOD"])
 
         leftover = {
             ("STS", "tag", "STS"): True,
@@ -1228,7 +1260,7 @@ class PostwarContinuationContracts(unittest.TestCase):
             ("STS", "has_war_with", "NOD"): True,
             ("STS", "has_war_with", "VAL"): True,
         }
-        held = list(selected_effects(begin, leftover, "STS"))
+        held = list(selected_settlement_effects(begin, leftover))
         self.assertEqual([e.value for _, e in held if e.key == "white_peace"], ["NOD"])
         self.assertFalse(any(e.key == "country_event" for _, e in held))
         self.assertTrue(any(e.key == "STP_pc_clear_settlement" for _, e in held))
@@ -1290,8 +1322,6 @@ class PostwarContinuationContracts(unittest.TestCase):
         )
 
     def test_settlement_records_liberation_wins_without_a_terms_card(self) -> None:
-        events = read(EVENTS)
-        self.assertNotIn("id = ADISCORD_STP_pc.16", events)
         begin = ast_block(
             relative_entries(
                 "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
@@ -1305,7 +1335,7 @@ class PostwarContinuationContracts(unittest.TestCase):
             ("STS", "variable", "STP_pc_course"): 2,
             ("STS", "has_war_with", "VAL"): True,
         }
-        chosen = list(selected_effects(begin, win_val, "STS"))
+        chosen = list(selected_settlement_effects(begin, win_val))
         self.assertTrue(
             any(
                 e.key == "set_country_flag" and e.value == "STP_pc_lib_val_won"
@@ -1323,8 +1353,9 @@ class PostwarContinuationContracts(unittest.TestCase):
             ("STS", "variable", "STP_pc_cap_side"): 2,
             ("STS", "variable", "STP_pc_course"): 2,
             ("STS", "has_war_with", "NOD"): True,
+            ("STS", "has_country_flag", "STP_pc_nod_liberation_war"): True,
         }
-        nod = list(selected_effects(begin, win_nod, "STS"))
+        nod = list(selected_settlement_effects(begin, win_nod))
         self.assertTrue(
             any(
                 e.key == "set_country_flag" and e.value == "STP_pc_lib_nod_won"
@@ -1721,8 +1752,15 @@ class HumanistRouteContracts(unittest.TestCase):
             elif key == "remove_ideas":
                 facts[("STS", "has_idea", value)] = False
             elif key == "add_timed_idea":
-                self.assertEqual(scalar(value, "idea"), "STP_cw_deliberate_offensive")
-                self.assertEqual(scalar(value, "days"), "35")
+                idea = scalar(value, "idea")
+                durations = {
+                    "STP_cw_deliberate_offensive": "35",
+                    "STP_pc_val_campaign_plan": "90",
+                    "STP_pc_nod_campaign_plan": "90",
+                }
+                self.assertIn(idea, durations)
+                self.assertEqual(scalar(value, "days"), durations[idea])
+                facts[("STS", "has_idea", idea)] = True
             elif key in ("set_temp_variable", "set_variable"):
                 facts[("STS", "variable", scalar(value, "var"))] = float(scalar(value, "value"))
             elif key == "clear_variable":
@@ -1757,6 +1795,9 @@ class HumanistRouteContracts(unittest.TestCase):
                 reward = block(self.decisions[f"STP_pc_launch_{first}_liberation"], "complete_effect")
                 self.execute_launch(reward, facts, declarations)
                 self.assertEqual(declarations, [first.upper()])
+                self.assertTrue(facts[("STS", "has_idea", f"STP_pc_{first}_campaign_plan")])
+                self.assertFalse(facts.get(("STS", "has_idea", f"STP_pc_{second}_campaign_plan"), False))
+                self.assertTrue(facts[("STS", "has_idea", f"STP_pc_{second}_campaign_ready")])
                 self.assertFalse(self.eligible(first, facts))
                 self.assertTrue(self.eligible(second, facts))
                 self.execute_launch(reward, facts, declarations)
@@ -1767,6 +1808,7 @@ class HumanistRouteContracts(unittest.TestCase):
                     declarations,
                 )
                 self.assertEqual(declarations, [first.upper(), second.upper()])
+                self.assertTrue(facts[("STS", "has_idea", f"STP_pc_{second}_campaign_plan")])
 
     def test_stale_or_illegal_mandates_fail_before_declaration(self):
         for target in ("val", "nod"):
@@ -2476,7 +2518,7 @@ class PostwarRecoveryTransactions(unittest.TestCase):
 
 
 class PostwarDiplomacyTransactions(unittest.TestCase):
-    def facts(self, tag, treasury=200, paid=False):
+    def facts(self, tag, treasury=1800, paid=False):
         facts = package_facts()
         facts.update(
             {
@@ -2486,6 +2528,7 @@ class PostwarDiplomacyTransactions(unittest.TestCase):
                 ("STS", "has_global_flag", "STP_cw_union_wars_finished"): True,
                 ("STS", "variable", "ADISCORD_economy_treasury"): treasury,
                 ("STS", "has_country_flag", "STP_pw_kefreyt_accounts_settled"): paid,
+                ("STS", "has_completed_focus", f"STP_pc_heg_{tag.lower()}_force"): True,
                 ("STS", "has_variable", f"STP_pc_{tag.lower()}_offer_kind"): True,
                 ("STS", "variable", f"STP_pc_{tag.lower()}_offer_kind"): 1,
             }
@@ -2494,9 +2537,9 @@ class PostwarDiplomacyTransactions(unittest.TestCase):
 
     def test_recipient_acceptance_conserves_money_and_replay_cannot_pay_twice(self):
         for tag, number, paid, price in (
-            ("VAL", 17, False, 200),
-            ("VAL", 17, True, 100),
-            ("NOD", 18, False, 150),
+            ("VAL", 17, False, 1800),
+            ("VAL", 17, True, 900),
+            ("NOD", 18, False, 1350),
         ):
             option = option_by_name(
                 f"ADISCORD_STP_pc.{number}", "STP_pc_accept_compact"
@@ -2574,7 +2617,7 @@ class PostwarDiplomacyTransactions(unittest.TestCase):
         )
         for tag in ("VAL", "NOD"):
             decision = block(council, f"STP_pw_prepare_{tag.lower()}_campaign")
-            for balance in (99.99, 100, 240):
+            for balance in (899.99, 900, 1200):
                 facts, events = self.facts(tag, balance), []
                 execute_package_effects(
                     block(decision, "complete_effect"), facts, events
@@ -2582,10 +2625,10 @@ class PostwarDiplomacyTransactions(unittest.TestCase):
                 execute_package_effects(
                     block(decision, "complete_effect"), facts, events
                 )
-                paid = balance >= 100
+                paid = balance >= 900
                 self.assertEqual(
                     facts[("STS", "variable", "ADISCORD_economy_treasury")],
-                    balance - 100 if paid else balance,
+                    balance - 900 if paid else balance,
                 )
                 self.assertEqual(events, [(tag, "ADISCORD_STP_pc.20")] if paid else [])
                 execute_package_effects(block(decision, "cancel_effect"), facts, events)
@@ -2597,6 +2640,26 @@ class PostwarDiplomacyTransactions(unittest.TestCase):
                     ("STS", "has_variable", f"STP_pc_{tag.lower()}_campaign_deposit"),
                     facts,
                 )
+
+    def test_campaign_completion_requires_the_full_current_deposit(self):
+        council = block(
+            relative_entries("common/decisions/ADISCORD_STP_decisions.txt"),
+            "STP_military_operations",
+        )
+        for tag in ("VAL", "NOD"):
+            decision = block(council, f"STP_pw_prepare_{tag.lower()}_campaign")
+            for deposit in (0, 100, 899.99, 900, 900.01):
+                with self.subTest(target=tag, deposit=deposit):
+                    facts, events = self.facts(tag), []
+                    receipt = f"STP_pc_{tag.lower()}_campaign_deposit"
+                    facts[("STS", "has_variable", receipt)] = True
+                    facts[("STS", "variable", receipt)] = deposit
+                    execute_package_effects(block(decision, "remove_effect"), facts, events)
+                    self.assertEqual(
+                        facts.get(("STS", "has_idea", f"STP_pc_{tag.lower()}_campaign_ready"), False),
+                        deposit == 900,
+                    )
+                    self.assertNotIn(("STS", "has_variable", receipt), facts)
 
     def test_campaign_completion_consumes_receipt_and_invalid_target_cancels_readiness(
         self,
@@ -3000,7 +3063,15 @@ class NodrulBorderTreatyContracts(unittest.TestCase):
     def test_native_capitulation_reserves_late_callback_before_any_white_peace(self):
         hooks = block(relative_entries("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"), "on_actions")
         immediate = block(block(hooks, "on_capitulation_immediate"), "effect")
-        treaty = next(e.value for e in immediate if e.key == "if" and any(c.key == "STP_nod_border_war_active" for c in walk(e.value)))
+        treaties = [
+            e.value for e in walk(immediate)
+            if e.key == "if" and any(
+                c.key == "STP_nod_border_war_active"
+                for c in walk(block(e.value, "limit"))
+            )
+        ]
+        self.assertEqual(len(treaties), 1)
+        treaty = treaties[0]
         self.assertEqual(scalar(block(block(treaty, "limit"), "ROOT"), "STP_nod_border_war_active"), "yes")
         receipt = block(block(treaty, "ROOT"), "set_country_flag")
         self.assertEqual(scalar(receipt, "flag"), "STP_nod_border_capitulation_reserved")
@@ -3009,7 +3080,19 @@ class NodrulBorderTreatyContracts(unittest.TestCase):
         self.assertLess(keys.index("ROOT"), keys.index("STS"))
         self.assertEqual(scalar(block(treaty, "STS"), "STP_pc_begin_settlement"), "yes")
         late = block(block(hooks, "on_capitulation"), "effect")
-        receipt_branch = next(e.value for e in late if e.key == "if" and any(c.key == "clr_country_flag" and c.value == "STP_nod_border_capitulation_reserved" for c in walk(e.value)))
+        receipt_branches = [
+            e.value for e in walk(late)
+            if e.key in ("if", "else_if") and any(
+                c.key == "has_country_flag" and c.value == "STP_nod_border_capitulation_reserved"
+                for c in walk(block(e.value, "limit"))
+            )
+        ]
+        self.assertEqual(len(receipt_branches), 1)
+        receipt_branch = receipt_branches[0]
+        self.assertIn(
+            "STP_nod_border_capitulation_reserved",
+            [c.value for c in walk(receipt_branch) if c.key == "clr_country_flag"],
+        )
         self.assertEqual(scalar(receipt_branch, "set_global_flag"), "skip_default_capitulation")
 
     def test_failed_return_declaration_cannot_send_a_war_notice(self):
@@ -3358,7 +3441,7 @@ class SwordDirectoryProgrammeTransactions(unittest.TestCase):
 
     def test_delivery_and_refund_each_settle_paid_receipt_once(self):
         packages = (
-            ("arsenal", "VAL", "48", {"infantry_equipment": 900, "support_equipment": 100}),
+            ("arsenal", "VAL", "48", {"infantry_equipment": 8100, "support_equipment": 100}),
             ("naval", "NOD", "30", {"convoy_1": 20, "motorized_equipment": 50}),
         )
         for kind, tag, state, equipment in packages:

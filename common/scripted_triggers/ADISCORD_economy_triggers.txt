@@ -500,24 +500,6 @@ ADISCORD_economy_can_stabilize_macro = {
 	}
 }
 
-ADISCORD_economy_can_stabilize_macro_crisis = {
-	OR = {
-		ADISCORD_economy_ai_is_crisis = yes
-		ADISCORD_economy_ai_is_stressed = yes
-	}
-	check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals }
-	OR = {
-		AND = {
-			NOT = { STP_uses_campaign_currency_scale = yes }
-			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = less_than }
-		}
-		AND = {
-			STP_uses_campaign_currency_scale = yes
-			check_variable = { var = ADISCORD_economy_treasury value = 600 compare = less_than }
-		}
-	}
-}
-
 ADISCORD_economy_can_restructure_debt = {
 	ADISCORD_economy_has_debt = yes
 	check_variable = { var = ADISCORD_economy_debt value = 100 compare = greater_than_or_equals }

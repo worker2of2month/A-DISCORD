@@ -338,6 +338,20 @@ class WestFinalWarContractTests(unittest.TestCase):
         self.assertEqual(event.count("clr_country_flag = ADISCORD_west_league_offer_pending"), 2)
         self.assertIn("NOT = { has_country_flag = ADISCORD_west_league_offer_pending }", body(TRIGGERS, "ADISCORD_west_league_target_valid"))
 
+    def test_treaties_never_admit_a_state_at_war_with_a_champion(self):
+        # A member at war with the rival champion drags the bloc into an
+        # unscripted war that blocks the final campaign.
+        outside = body(TRIGGERS, "ADISCORD_west_outside_champion_wars")
+        for champion in ("WRK", "IVN"):
+            self.assertIn(f"NOT = {{ has_war_with = {champion} }}", outside)
+        self.assertIn("ADISCORD_west_outside_champion_wars = yes", body(TRIGGERS, "ADISCORD_west_league_target_valid"))
+        source = EVENTS.read_text(encoding="utf-8")
+        for start, end in (("ADISCORD_west.40", "ADISCORD_west.41"), ("ADISCORD_west.43", "ADISCORD_west.44")):
+            event = source[source.index(f"\tid = {start}\n"):source.index(f"\tid = {end}\n")]
+            accept = event[:event.index(f"name = {start}.b")]
+            self.assertLess(accept.index("ADISCORD_west_outside_champion_wars = yes"), accept.index("add_to_faction = ROOT"))
+            self.assertNotIn("has_war_with = FROM", accept)
+
     def test_vorkerland_treaties_mirror_the_league_and_let_the_target_answer(self):
         decisions = DECISIONS.read_text(encoding="utf-8")
         for name, unlock, lean in (
@@ -358,7 +372,7 @@ class WestFinalWarContractTests(unittest.TestCase):
         offer = source[source.index("\tid = ADISCORD_west.43\n"):source.index("\tid = ADISCORD_west.44\n")]
         self.assertEqual(offer.count("clr_country_flag = ADISCORD_west_league_offer_pending"), 2)
         accept = offer[:offer.index("name = ADISCORD_west.43.b")]
-        for guard in ("is_in_faction = no", "NOT = { has_war_with = FROM }", "NOT = { has_global_flag = ADISCORD_west_final_started }"):
+        for guard in ("is_in_faction = no", "ADISCORD_west_outside_champion_wars = yes", "NOT = { has_global_flag = ADISCORD_west_final_started }"):
             self.assertIn(guard, accept)
         self.assertLess(accept.index("create_faction_from_template"), accept.index("add_to_faction = ROOT"))
         partners = body(EFFECTS, "ADISCORD_west_wrk_arm_front_partners")
@@ -1034,6 +1048,94 @@ class WestReconstructionScenarios(unittest.TestCase):
                 self.assertEqual(scalar(allow, "has_global_flag"), "ADISCORD_vorkerland_phase_postwar_integration")
                 self.assertIn(name, plan)
                 self.assertEqual(plans.count("\n\t\t" + name + "\n"), 1)
+
+
+class WrkWartimeProductionTests(unittest.TestCase):
+    """AI gates only; the actual factory split needs a campaign run."""
+
+    @classmethod
+    def setUpClass(cls):
+        from tools.tests.test_adiscord_ai_production_lifecycle import child, parse
+        source = (ROOT / "common/ai_strategy/ADISCORD_vorkerland_ai.txt").read_text(encoding="utf-8")
+        section = source[source.index("# --- postwar_wrk_ai ---"):]
+        cls.policies = parse(section)
+        cls.child = staticmethod(child)
+        triggers = ROOT / "common/scripted_triggers/ADISCORD_scripted_triggers_generic.txt"
+        cls.emergency = body(triggers, "ADISCORD_ai_rifle_replacement_emergency")
+
+    def context(self, factories=56, stock=0, war=True, emergency=False, law="ADISCORD_civilian_oriented_economy", war_support=0.55):
+        return {
+            "tag": "WRK",
+            "has_war": war,
+            "is_ai": True,
+            "has_capitulated": False,
+            "has_global_flag": {"ADISCORD_vorkerland_collapse_finished"},
+            "num_of_military_factories": factories,
+            "equipment": {"ADISCORD_squad_weapons_equipment": stock},
+            "ADISCORD_ai_rifle_replacement_emergency": emergency,
+            "has_idea": law,
+            "has_war_support": war_support,
+        }
+
+    def floors(self, context, previously_active=False):
+        from tools.tests.test_adiscord_ai_production_lifecycle import active
+        total = 0
+        for name in ("ADISCORD_vorkerland_wrk_squad_weapons_floor", "ADISCORD_vorkerland_wrk_squad_weapons_floor_large"):
+            policy = self.child(self.policies, name)
+            self.assertEqual(self.child(policy, "allowed"), [("tag", "=", "WRK")])
+            if active(policy, context, previously_active):
+                for key, _, nodes in policy:
+                    if key == "ai_strategy":
+                        fields = {field: value for field, _, value in nodes}
+                        self.assertEqual(fields["id"], "ADISCORD_squad_weapons_equipment")
+                        total += int(fields["value"])
+        return total
+
+    def test_squad_weapon_floors_scale_with_factories_and_release(self):
+        self.assertIn("infantry_equipment", self.emergency)
+        for factories, expected in ((19, 0), (20, 8), (39, 8), (40, 16), (56, 16)):
+            with self.subTest(factories=factories):
+                floors = self.floors(self.context(factories=factories))
+                self.assertEqual(floors, expected)
+                # Rifles and the generic minima keep more than half the industry.
+                self.assertLessEqual(floors * 2, factories)
+        # Hysteresis: start below 2000, keep producing until 4000.
+        self.assertEqual(self.floors(self.context(stock=2000)), 0)
+        self.assertEqual(self.floors(self.context(stock=3999), previously_active=True), 16)
+        self.assertEqual(self.floors(self.context(stock=4001), previously_active=True), 0)
+        self.assertEqual(self.floors(self.context(war=False), previously_active=True), 0)
+        self.assertEqual(self.floors(self.context(emergency=True), previously_active=True), 0)
+
+    def test_wartime_law_reserve_covers_a_law_change(self):
+        from tools.tests.test_adiscord_ai_production_lifecycle import active
+
+        # The shared evaluator knows set membership only for flags, so laws
+        # are modelled as prefixed flags.
+        def as_flags(nodes):
+            return [
+                ("has_global_flag", "=", f"idea:{value}") if key == "has_idea"
+                else (key, op, as_flags(value) if isinstance(value, list) else value)
+                for key, op, value in nodes
+            ]
+
+        def enabled(context):
+            context["has_global_flag"] = context["has_global_flag"] | {f"idea:{context.pop('has_idea')}"}
+            return active(as_flags(self.child(self.policies, "ADISCORD_vorkerland_wrk_wartime_economy_law")), context)
+
+        for law in ("ADISCORD_civilian_oriented_economy", "civilian_economy", "low_economic_mobilisation"):
+            self.assertTrue(enabled(self.context(law=law)), law)
+        self.assertTrue(enabled(self.context(law="partial_economic_mobilisation")))
+        self.assertFalse(enabled(self.context(law="partial_economic_mobilisation", war_support=0.40)))
+        self.assertFalse(enabled(self.context(law="war_economy")))
+        self.assertFalse(enabled(self.context(war=False)))
+        policy = self.child(self.policies, "ADISCORD_vorkerland_wrk_wartime_economy_law")
+        spends = {fields["type"]: int(fields["value"]) for fields in (
+            {field: value for field, _, value in nodes} for key, _, nodes in policy if key == "ai_strategy"
+        )}
+        self.assertEqual(spends, {"pp_spend_priority": 150, "pp_spend_amount": 150})
+        economy = block(block(parse_clausewitz((ROOT / "common/ideas/_economic.txt").read_text(encoding="utf-8")), "ideas"), "economy")
+        for law in ("low_economic_mobilisation", "partial_economic_mobilisation", "war_economy"):
+            self.assertEqual(scalar(block(economy, law), "cost"), "150", law)
 
 
 if __name__ == "__main__":

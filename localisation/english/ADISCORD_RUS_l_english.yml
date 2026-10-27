@@ -297,7 +297,7 @@
  RUS_bunker_generator_cost:0 "[GetRUSBunker30pp]; [GetRUSBunker30cash]; [GetRUSBunker30equipment]"
  RUS_bunker_generator_cost_blocked:0 "[GetRUSBunker30pp]; [GetRUSBunker30cash]; [GetRUSBunker30equipment]"
  RUS_bunker_generator_cost_tooltip:0 "[GetRUSBunker30pp]; [GetRUSBunker30cash]; [GetRUSBunker30equipment]"
- RUS_bunker_generator_requirements_tt:0 "Adds 4 power capacity. Two expansions are available: base capacity 4 → 8 → 12. The turbine reserve focus adds another 2 power capacity."
+ RUS_bunker_generator_requirements_tt:0 "Adds 4 power capacity. Two expansions are available: base capacity 4 -> 8 -> 12. The turbine reserve focus adds another 2 power capacity."
  RUS_bunker_reinforce:0 "Reinforce the Vaults"
  RUS_bunker_reinforce_desc:0 "The crew returns to galleries already excavated. No new meters will appear in the report: their work is measured by those who return from the next shift.\n\nDuration: §Y21 days§!."
  RUS_bunker_reinforce_cost_pp_ok:0 "§Y15§! £political_power_texticon"

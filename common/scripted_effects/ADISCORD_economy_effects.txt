@@ -3327,17 +3327,6 @@ ADISCORD_economy_stabilization_package = {
 		ADISCORD_economy_calculate_macro_indicators = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
-	else_if = {
-		limit = { ADISCORD_economy_can_stabilize_macro_crisis = yes }
-		add_to_variable = { var = ADISCORD_economy_inflation value = -6 }
-		add_to_variable = { var = ADISCORD_economy_fiscal_stress value = -9 }
-		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = -12 }
-		add_to_variable = { var = ADISCORD_economy_price_shock value = -5 }
-		add_to_variable = { var = ADISCORD_economy_action_overload_residue value = -6 }
-		ADISCORD_economy_clamp_financing_pressures = yes
-		ADISCORD_economy_calculate_macro_indicators = yes
-		ADISCORD_economy_mark_dirty = yes
-	}
 }
 
 ADISCORD_economy_restructure_debt = {
@@ -3777,10 +3766,7 @@ ADISCORD_economy_gui_try_stabilization_package = {
 	ADISCORD_economy_initialize_country = yes
 	if = {
 		limit = {
-			OR = {
-				ADISCORD_economy_can_stabilize_macro = yes
-				ADISCORD_economy_can_stabilize_macro_crisis = yes
-			}
+			ADISCORD_economy_can_stabilize_macro = yes
 		}
 		ADISCORD_economy_stabilization_package = yes
 		ADISCORD_economy_light_update = yes
@@ -4900,10 +4886,7 @@ ADISCORD_economy_ai_monthly_policy = {
 						value = 15
 						compare = greater_than_or_equals
 					}
-					OR = {
-						ADISCORD_economy_can_stabilize_macro = yes
-						ADISCORD_economy_can_stabilize_macro_crisis = yes
-					}
+					ADISCORD_economy_can_stabilize_macro = yes
 				}
 				ADISCORD_economy_stabilization_package = yes
 			}
@@ -4987,10 +4970,7 @@ ADISCORD_economy_ai_monthly_policy = {
 						value = 15
 						compare = greater_than_or_equals
 					}
-					OR = {
-						ADISCORD_economy_can_stabilize_macro = yes
-						ADISCORD_economy_can_stabilize_macro_crisis = yes
-					}
+					ADISCORD_economy_can_stabilize_macro = yes
 				}
 				ADISCORD_economy_stabilization_package = yes
 			}

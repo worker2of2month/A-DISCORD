@@ -2936,7 +2936,7 @@ class StelanderPreparationTests(unittest.TestCase):
                 return values[scalar(chosen, "localization_key")]
 
             return re.sub(
-                r"\[(STPGetChapter\w+|STPGetDisperseNetworkCost\w*|STPGetFalseTrailCost\w*)\]",
+                r"\[(STPGet\w+)\]",
                 substitute,
                 value,
             )
@@ -3027,7 +3027,7 @@ class StelanderPreparationTests(unittest.TestCase):
             self.assertIn(selected_key, values)
         self.assertEqual(
             values["STP_cw_agree_with_commander"],
-            "Договориться с командиром: [FROM.GetName]",
+            "Уговорить командира: [FROM.GetName]",
         )
         self.assertEqual(scalar(commander, "state_target"), "yes")
         self.assertEqual(
@@ -3829,7 +3829,7 @@ class StelanderPreparationTests(unittest.TestCase):
             ("STP_Count_The_Loyalists", "50"),
             ("STP_Call_For_Shabrat", "75"),
             ("STP_Garrisons_Hesitate", "100"),
-            ("STP_PARTY_DISCIPLINE", "25"),
+            ("STP_PARTY_DISCIPLINE", "50"),
         ):
             self.assertEqual(scalar(rewards[name], "add_political_power"), budget)
         district_check = block(rewards["STP_PARTY_DISCIPLINE"], "3")
@@ -4086,7 +4086,17 @@ class StelanderPreparationTests(unittest.TestCase):
                                     "add a contract for this preview",
                                 )
                                 continue  # The starting health setter has its own stage-to-stage contract.
-                            self.assertEqual(scalar(ideas[new], "name"), aggregate)
+                            names = [e.value for e in ideas[new] if e.key == "name"]
+                            if names:
+                                self.assertEqual(names, [aggregate])
+                            else:
+                                self.assertTrue(new.endswith("_delta"), new)
+                                for language in ("russian", "english"):
+                                    localisation = ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml"
+                                    self.assertRegex(
+                                        localisation.read_text(encoding="utf-8-sig"),
+                                        rf"(?m)^\s*{re.escape(new)}:\d*\s+\"[^\"]+\"$",
+                                    )
                             for idea, sign in ((old, -1), (new, 1)):
                                 modifiers = next(
                                     (
@@ -4119,7 +4129,7 @@ class StelanderPreparationTests(unittest.TestCase):
                     checked.add(scalar(focus, "id"))
         self.assertEqual(
             len(checked),
-            42,
+            44,
             "every persistent focus reward needs a checked delta preview",
         )
         self.assertIn("STP_ps_foreign_supply_desk", checked)
@@ -4568,7 +4578,7 @@ class StelanderPreparationTests(unittest.TestCase):
         )
         self.assertEqual(scalar(mission, "days_mission_timeout"), "140")
         self.assertEqual(
-            scalar(block(mission, "timeout_effect"), "STP_cw_finish_elections"), "yes"
+            scalar(list(walk(block(mission, "timeout_effect"))), "STP_cw_finish_elections"), "yes"
         )
 
     def test_resistance_cleanup_clears_only_its_preparation_vector(self):
@@ -7862,9 +7872,10 @@ class StelanderPreparationTests(unittest.TestCase):
                 )
         named_scope_sources = list((ROOT / "common/technologies").glob("*.txt"))
         named_scope_sources += list((ROOT / "common/characters").glob("*.txt"))
+        named_scope_sources += list((ROOT / "common/units").glob("*.txt"))
         for path in named_scope_sources:
             for container in parse_clausewitz(path.read_text(encoding="utf-8-sig")):
-                if container.key in ("technologies", "characters"):
+                if container.key in ("technologies", "characters", "sub_units"):
                     definitions.update(e.key for e in container.value)
         trees = entries("common/national_focus/ADISCORD_national_focus_STP.txt")
         for entry in walk(trees):
@@ -7992,7 +8003,7 @@ class StelanderPreparationTests(unittest.TestCase):
         loc = (ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml").read_text(
             encoding="utf-8-sig"
         )
-        self.assertIn("Эффект применяется сразу после выбора фокуса", loc)
+        self.assertIn("§YСразу при выборе фокуса§!", loc)
         tokens = (
             ROOT / "common/synchronized_dynamic_tokens/ADISCORD_tokens.txt"
         ).read_text(encoding="utf-8")
@@ -8000,8 +8011,8 @@ class StelanderPreparationTests(unittest.TestCase):
 
     def test_stelander_preparation_copy_prioritises_actions_over_army_ledger(self):
         expectations = (
-            ("russian", "§YПЕРВЫЕ ШАГИ§!"),
-            ("english", "§YFIRST STEPS§!"),
+            ("russian", "§YХОЗЯЙСТВО И ПЕРВЫЕ ШАГИ§!"),
+            ("english", "§YECONOMY AND FIRST STEPS§!"),
         )
         for language, guide_marker in expectations:
             path = ROOT / "localisation" / language / f"ADISCORD_STP_l_{language}.yml"
@@ -8061,7 +8072,7 @@ class StelanderPreparationTests(unittest.TestCase):
         self.assertEqual((scalar(stores, "x"), scalar(stores, "y")), ("13", "0"))
         self.assertNotIn("prerequisite", [e.key for e in stores])
         offset = block(stores, "offset")
-        self.assertEqual((scalar(offset, "x"), scalar(offset, "y")), ("9", "4"))
+        self.assertEqual((scalar(offset, "x"), scalar(offset, "y")), ("15", "4"))
         self.assertTrue(
             matches_conditions(
                 block(offset, "trigger"),
@@ -8870,11 +8881,11 @@ class OccidiaLateInterventionTests(unittest.TestCase):
         self.assertEqual(scalar(decision, "days_remove"), "21")
         self.assertIn(
             "STP_occidia_invasion_available",
-            [e.key for e in block(decision, "cancel_trigger")],
+            [e.key for e in walk(block(decision, "cancel_trigger"))],
         )
         self.assertIn(
             "STP_occidia_start_campaign",
-            [e.key for e in block(decision, "remove_effect")],
+            [e.key for e in walk(block(decision, "remove_effect"))],
         )
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         start = block(effects, "STP_occidia_start_campaign")

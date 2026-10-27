@@ -27,6 +27,10 @@ and the focused checks that compare displayed rewards with real variable writes.
   discovery never opts into that write test in the live checkout.
 - Generated output belongs to the generator that emits its marker or documents
   the path. Change that generator rather than patching its output by hand.
+- `tools.builders.build_adiscord_stp_regions_map` owns the regional map layers
+  and faction card background. Faction emblems are supplied 56px runtime exports;
+  the builder validates and preserves them without requiring private artwork
+  originals. The obsolete runtime contact sheet is removed on `--apply`.
 - After a Nudge border edit, restore supported state metadata with
   `python -B -m tools.builders.build_adiscord_new_states --check-state-metadata 49`
   and its `--apply-state-metadata 49` counterpart. Province membership is preserved.
@@ -73,6 +77,25 @@ Run this command for the whole total-conversion static validation:
 ```powershell
 python -B tools/validate_tc.py --limit 300
 ```
+
+The localisation check scans quoted values in every `localisation/**/*.yml`,
+including vanilla overrides. Unsupported characters report the file, line, key,
+Unicode code and a replacement suggestion when available. Localisation errors
+produce exit code 1, even when `--limit 0` hides the examples. For a focused run:
+
+```powershell
+python -B tools/validate_tc.py --localisation-only --limit 300
+```
+
+Glyph coverage is a portable snapshot in `LOCALISATION_GLYPH_RANGES`, taken from
+the intersection of the Latin and `_cryllic` font pairs for `hoi_16mbs`, `hoi_18`,
+`hoi_18mbs`, `hoi_20b`, `hoi_20bs`, `hoi_16typewriter` and `hoi_22typewriter`.
+These are the shared text, tooltip and event fonts bound in `interface/core.gfx`.
+The check needs no game installation and never launches the game. Native colour,
+texticon, variable and substitution syntax remains valid; comments are ignored.
+When changing font bindings or adding glyphs, recheck these font pairs' `.fnt`
+`char id` tables and update the snapshot with their common coverage. This contract
+does not prove rendering in every specialised GUI font.
 
 Pair it with the focused test or validator for the changed subsystem and
 `git diff --check`. A green static gate does not replace a full game restart

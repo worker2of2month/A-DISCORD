@@ -976,7 +976,9 @@ class PartySurvivalContracts(unittest.TestCase):
         self.assertIn('STP_ps_nod_order_current', set(definitions))
         for name in ('STP_ps_nod_dispatch', 'STP_ps_nod_route_wait'):
             gate = one(self.decisions[name], 'cancel_trigger')
-            self.assertEqual(signature(gate), [('STP_ps_nod_order_current', 'no')])
+            for current in (False, True):
+                facts = {('STP', 'STP_ps_nod_order_current', 'no'): not current}
+                self.assertEqual(matches_conditions(gate, facts), not current)
         # Revocation before departure returns the original deposit, never a fixed new price.
         refund = list(walk(self.effects['STP_ps_refund_nod']))
         save = next(
@@ -1559,6 +1561,8 @@ class PartyUsabilityContracts(unittest.TestCase):
                     ('STP', 'tag', 'STP'): True,
                     ('STP', 'has_country_flag', 'STP_sided_with_the_party_flag'): True,
                     ('STP', 'STP_cw_preparation_open', 'yes'): True,
+                    ('STP', 'STP_ps_supply_program_unlocked', 'yes'): True,
+                    ('VAL', 'exists', 'yes'): True,
                 },
             )
         )

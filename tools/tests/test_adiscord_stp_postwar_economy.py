@@ -60,22 +60,41 @@ class ShabratPostwarEconomyTests(unittest.TestCase):
             body = focus_block(read("common/national_focus/ADISCORD_national_focus_STP.txt"), focus_id)
             self.assertIn("ADISCORD_increase_" + direction + "_development_monthly_growth = yes", body)
 
-    def test_central_reconstruction_space_respects_other_route_nodes(self):
+    def test_development_branch_layout_respects_other_route_nodes(self):
         from tools.tests.test_adiscord_stp_preparation import entries, scalar
 
         focuses = {scalar(e.value, "id"): e.value for e in entries(
             "focus_trees/STP/postwar/shabrat/focuses.txt") if e.key == "focus"}
-        moved = ["STP_pc_development_" + suffix for suffix in (
-            "country_must_live", "posters_on_ruins", "rebuild_as_duty",
-            "engineers_on_radio", "generation_reconstruction")]
-        for focus_id in moved:
-            x = int(scalar(focuses[focus_id], "x"))
-            y = int(scalar(focuses[focus_id], "y"))
-            self.assertTrue(20 <= x <= 24)
-            for other_id, other in focuses.items():
-                if other_id == focus_id or int(scalar(other, "y")) != y:
+
+        def position(focus_id):
+            focus = focuses[focus_id]
+            x, y = int(scalar(focus, "x")), int(scalar(focus, "y"))
+            relative_to = next((e.value for e in focus if e.key == "relative_position_id"), None)
+            if relative_to:
+                parent_x, parent_y = position(relative_to)
+                x += parent_x
+                y += parent_y
+            return x, y
+
+        positions = {focus_id: position(focus_id) for focus_id in focuses}
+        prefix = "STP_pc_development_"
+        anchor_x, anchor_y = positions[prefix + "country_must_live"]
+        for suffix, dx, dy in (
+            ("posters_on_ruins", 0, 1),
+            ("rebuild_as_duty", -2, 2),
+            ("engineers_on_radio", 2, 2),
+            ("generation_reconstruction", 0, 3),
+        ):
+            self.assertEqual(positions[prefix + suffix], (anchor_x + dx, anchor_y + dy))
+        development = {name: xy for name, xy in positions.items() if name.startswith(prefix)}
+        economy_right = max(x for name, (x, _) in positions.items()
+                            if name.startswith(("STP_pc_economy_", "STP_pc_investment_")))
+        self.assertGreaterEqual(min(x for x, _ in development.values()) - economy_right, 2)
+        for focus_id, (x, y) in development.items():
+            for other_id, (other_x, other_y) in positions.items():
+                if other_id == focus_id or other_y != y:
                     continue
-                self.assertGreaterEqual(abs(x - int(scalar(other, "x"))), 2,
+                self.assertGreaterEqual(abs(x - other_x), 2,
                                         (focus_id, other_id))
 
     def test_unification_rebuilds_economy_after_annexation(self):

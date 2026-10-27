@@ -1,11 +1,104 @@
 """Coverage checks must distinguish native fallbacks from authored overrides."""
 
 from pathlib import Path
+from contextlib import redirect_stdout
+import io
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
 
 from tools.validators.validate_adiscord_english_localisation import ENTRY, audit
+
+
+class LocalisationGlyphTests(unittest.TestCase):
+    def setUp(self):
+        from tools.validators import validate_tc
+
+        self.validator = validate_tc
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.root = Path(directory.name)
+        root_patch = patch.object(validate_tc, "ROOT", self.root)
+        root_patch.start()
+        self.addCleanup(root_patch.stop)
+
+    def write(self, entries, language="russian", filename="ADISCORD_test"):
+        path = self.root / "localisation" / language / f"{filename}_l_{language}.yml"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(f"l_{language}:\n{entries}\n", encoding="utf-8-sig")
+        return path
+
+    def test_missing_glyphs_report_key_line_code_and_replacement(self):
+        cases = {
+            "\u2212": "-",
+            "\u2022": "-",
+            "\u2192": "->",
+            "\u2026": "...",
+            "\u2116": "N",
+            "\u0219": "s",
+        }
+        for character, replacement in cases.items():
+            with self.subTest(code=ord(character)):
+                path = self.write(f' SAMPLE:0 "{character}"')
+                issues, count = self.validator.check_localisation(100)
+                self.assertEqual(count, 1)
+                self.assertIn(f"{path.name}:2: SAMPLE:", issues[0])
+                self.assertIn(f"U+{ord(character):04X}", issues[0])
+                self.assertIn(f"use {replacement!r}", issues[0])
+
+    def test_unseen_symbols_and_hidden_characters_are_rejected(self):
+        for character in ("\U0001f600", "\u200b", "\ufeff", "\ufffd", "\t", "\u2028"):
+            with self.subTest(code=ord(character)):
+                self.write(f' SAMPLE:0 "before{character}after"')
+                issues, count = self.validator.check_localisation(100)
+                self.assertEqual(count, 1)
+                self.assertIn(f"U+{ord(character):04X}", issues[0])
+
+    def test_supported_text_and_native_markup_are_accepted(self):
+        self.write(
+            ' SAMPLE:0 "Ёж, ёлка, «кавычки», à ä ç Æ, ±50, 2 × 3, ·, ’, „text“'
+            r'\n\n§G+10%§! £political_power_texticon $NAME|H$ '
+            r'''[?FROM.amount|0] [GetText] @STP 'quoted' \"quoted\""'''
+        )
+        self.assertEqual(self.validator.check_localisation(100), ([], 0))
+
+    def test_comments_are_not_checked_but_all_catalogues_are(self):
+        self.write('# \u2022 comment\n GOOD: "Valid" # \u2212 comment')
+        for language in ("russian", "english"):
+            self.write(' BAD: "\u2022"', language, "vanilla_override")
+        issues, count = self.validator.check_localisation(100)
+        self.assertEqual(count, 2)
+        self.assertTrue(all("vanilla_override" in issue for issue in issues))
+
+    def test_limit_does_not_hide_total_or_duplicate_glyphs_within_a_value(self):
+        self.write(' FIRST: "\u2022\u2022"\n SECOND: "\u2212"')
+        issues, count = self.validator.check_localisation(1)
+        self.assertEqual((len(issues), count), (1, 2))
+        self.assertIn("FIRST", issues[0])
+        self.assertEqual(self.validator.check_localisation(0), ([], 2))
+
+    def test_invalid_utf8_is_not_silently_read_as_another_encoding(self):
+        path = self.write(' BAD: "text"')
+        path.write_bytes(b'l_russian:\n BAD: "\xff"\n')
+        issues, count = self.validator.check_localisation(100)
+        self.assertEqual(count, 1)
+        self.assertIn("invalid UTF-8 localisation", issues[0])
+
+    def test_focused_cli_fails_even_when_examples_are_hidden_and_never_writes(self):
+        path = self.write(' BAD: "\u2022"')
+        before = path.read_bytes()
+        output = io.StringIO()
+        with patch.object(sys, "argv", ["validate_tc", "--localisation-only", "--limit", "0"]):
+            with redirect_stdout(output):
+                status = self.validator.main()
+        self.assertEqual(status, 1)
+        self.assertIn("Localisation: 1", output.getvalue())
+        self.assertEqual(path.read_bytes(), before)
+        self.write(' GOOD: "Correct - text"')
+        with patch.object(sys, "argv", ["validate_tc", "--localisation-only"]):
+            with redirect_stdout(io.StringIO()):
+                self.assertEqual(self.validator.main(), 0)
 
 
 class EnglishLocalisationTests(unittest.TestCase):

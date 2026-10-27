@@ -2377,36 +2377,16 @@ def task10_material_numeric_surface_issues(russian_text, english_text):
         },
         "ADISCORD_economy_buildings_tt": {
             "russian": ("+1.20", "+5%", "0.27", "1", "2", "4", "6"),
-            "english": ("+1.20", "+5%", "-0.27", "1", "2", "4", "6"),
+            "english": ("+1.20", "+5%", "0.27", "1", "2", "4", "6"),
         },
         "ADISCORD_economy_war_fatigue_tt": {
             "russian": (
-                "+2",
-                "+2",
-                "+4",
-                "1",
-                "100",
-                "15",
-                "30",
-                "4",
-                "4",
-                "50",
-                "75",
-                "8",
+                "+1", "+2", "+2", "+2", "+3", "+4", "+6", "10%", "100",
+                "15", "2", "30", "30%", "4", "4", "50", "75", "8",
             ),
             "english": (
-                "+2",
-                "+2",
-                "+4",
-                "+8",
-                "-1",
-                "-4",
-                "100",
-                "15",
-                "30",
-                "4",
-                "50",
-                "75",
+                "+1", "+2", "+2", "+2", "+3", "+4", "+6", "+8", "-2", "-4",
+                "10%", "100", "15", "30", "30%", "4", "50", "75",
             ),
         },
     }
@@ -4491,10 +4471,10 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 ECONOMY_LOC, f"ADISCORD_economy_research_effects_{level}"
             )
             for value in (level_tooltip, effect_tooltip):
-                self.assertIn(f"расходы {expense}".lower(), value.lower())
+                self.assertIn(f"{expense} £ADISCORD_economy_treasury_texticon расходы", value)
                 self.assertIn(
-                    f"скорость исследований {research_speed}".lower(),
-                    value.lower(),
+                    f"{research_speed} £research_speed_texticon",
+                    value,
                 )
                 for obsolete_claim in (
                     "скорость всех строек",
@@ -4505,9 +4485,9 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 ):
                     self.assertNotIn(obsolete_claim, value.lower())
                 if level == 5:
-                    self.assertIn("скорость строительства §G+5%§!", value)
+                    self.assertIn("§G+5%§! £construction_speed_texticon", value)
                 else:
-                    self.assertNotIn("строительств", value.lower())
+                    self.assertNotIn("£construction_speed_texticon", value)
 
             mode = localisation_value(
                 ECONOMY_LOC, f"ADISCORD_economy_research_funding_mode_{level}"
@@ -6510,6 +6490,13 @@ class WeeklyEconomyContracts(unittest.TestCase):
 
     def test_ai_policy_review_mutations_reject_live_predicate_drift(self):
         policy = unique_block(EFFECTS, "ADISCORD_economy_ai_monthly_policy")
+
+        def mutate(before, after):
+            pattern = r"\s+".join(re.escape(token) for token in before.split())
+            mutated, count = re.subn(pattern, after, policy, count=1)
+            self.assertEqual(count, 1, before)
+            return mutated
+
         unsafe_fallback = (
             "OR = { check_variable = { var = ADISCORD_economy_monthly_balance "
             "value = 0 compare = less_than_or_equals } check_variable = { var = "
@@ -6518,42 +6505,35 @@ class WeeklyEconomyContracts(unittest.TestCase):
             "value = 10 compare = greater_than_or_equals } }"
         )
         mutations = {
-            "wrong crisis state owner": policy.replace(
+            "wrong crisis state owner": mutate(
                 "ADISCORD_economy_ai_is_crisis = yes",
                 "ADISCORD_economy_ai_is_healthy = yes",
-                1,
             ),
-            "reversed crisis tax deficit": policy.replace(
+            "reversed crisis tax deficit": mutate(
                 "ADISCORD_economy_monthly_balance value = 0 compare = less_than } "
                 "ADISCORD_economy_can_increase_tax_burden = yes",
                 "ADISCORD_economy_monthly_balance value = 0 compare = greater_than } "
                 "ADISCORD_economy_can_increase_tax_burden = yes",
-                1,
             ),
-            "negated crisis state": policy.replace(
+            "negated crisis state": mutate(
                 "limit = { ADISCORD_economy_ai_is_crisis = yes }",
                 "limit = { NOT = { ADISCORD_economy_ai_is_crisis = yes } }",
-                1,
             ),
-            "dead reserve owner": policy.replace(
+            "dead reserve owner": mutate(
                 "limit = { is_ai = yes }",
                 "limit = { is_ai = yes always = no }",
-                1,
             ),
-            "unconditional unsafe fallback": policy.replace(
+            "unconditional unsafe fallback": mutate(
                 unsafe_fallback,
                 "always = yes",
-                1,
             ),
-            "level five retained": policy.replace(
+            "level five retained": mutate(
                 "ADISCORD_economy_research_spending_mode value = 4 compare = greater_than",
                 "ADISCORD_economy_research_spending_mode value = 5 compare = greater_than",
-                1,
             ),
-            "construction policy alias": policy.replace(
+            "construction policy alias": mutate(
                 "ADISCORD_economy_decrease_research_spending = yes",
                 "ADISCORD_economy_construction_spending_mode = yes",
-                1,
             ),
         }
         for name, mutated_policy in mutations.items():
@@ -9239,10 +9219,12 @@ class EconomyScriptFixture:
                 return self.scopes[scope].get("idea@" + value, False)
             if key in ("has_country_flag", "has_global_flag"):
                 return bool(self.scopes[scope].get(value, False))
-            if key == "is_controlled_by":
+            if key in ("is_controlled_by", "is_core_of"):
                 target = (
                     previous if value == "PREV" else root if value == "ROOT" else value
                 )
+                if key == "is_core_of":
+                    return target in self.scopes[scope]["cores"]
                 return self.scopes[scope]["controller"] == target
             if key in ("check_variable", "non_damaged_building_level"):
                 fields = {child.key: child.value for child in value if child.key}
@@ -10213,11 +10195,10 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
             self.assertEqual(values[p + "treasury"], 100 + min(room, 750))
             self.assertEqual(values[p + "current_month_action_income"], min(room, 750))
             self.assertEqual(values[p + "money_printing_level"], 1)
-        for full, deltas in ((True, (12, 15, 20, 10, 12)), (False, (6, 9, 12, 5, 6))):
+        for full, deltas in ((True, (12, 15, 20, 10, 12)), (False, (0, 0, 0, 0, 0))):
             fixture = EconomyScriptFixture(
                 facts={
                     p + "can_stabilize_macro": full,
-                    p + "can_stabilize_macro_crisis": not full,
                 },
                 stubs=stubs,
             )
@@ -10252,6 +10233,46 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
         fixture.run(p + "stabilization_package")
         self.assertEqual(values[p + "treasury"], 0)
         self.assertEqual(values[p + "current_month_action_costs"], 1200)
+
+    def test_stabilization_requires_full_payment_even_during_crisis(self):
+        p = self.PREFIX
+        indicators = (
+            "inflation", "fiscal_stress", "deficit_pressure", "price_shock",
+            "action_overload_residue",
+        )
+        enabled = parse_clausewitz(block(
+            SCRIPTED_GUI, p + "action_stabilization_click_enabled"
+        ))
+        for scaled, price in ((False, 500), (True, 1200)):
+            for cash in (-100, 0, price / 2 - 0.01, price - 0.01, price, price + 1):
+                for action in ("stabilization_package", "gui_try_stabilization_package"):
+                    with self.subTest(scaled=scaled, cash=cash, action=action):
+                        fixture = EconomyScriptFixture(
+                            facts={
+                                "STP_uses_campaign_currency_scale": scaled,
+                                p + "should_show_player_ui": True,
+                                p + "ai_is_crisis": True,
+                                p + "ai_is_stressed": True,
+                            },
+                            stubs=tuple(p + name for name in (
+                                "initialize_country", "calculate_macro_indicators",
+                                "mark_dirty", "light_update", "update_gui",
+                            )),
+                        )
+                        values = fixture.scopes["A"]
+                        values.update({p + field: 30 for field in indicators})
+                        values[p + "treasury"] = cash
+                        values[p + "current_month_action_costs"] = 0
+                        self.assertEqual(fixture.condition(enabled), cash >= price)
+                        fixture.run(p + action)
+                        paid = cash >= price
+                        self.assertAlmostEqual(values[p + "treasury"], cash - price if paid else cash)
+                        self.assertEqual(values[p + "current_month_action_costs"], price if paid else 0)
+                        for field, delta in zip(indicators, (12, 15, 20, 10, 12)):
+                            self.assertEqual(values[p + field], 30 - delta if paid else 30)
+                        after = dict(values)
+                        fixture.run(p + action)
+                        self.assertEqual(values, after)
 
     def test_larger_war_taxes_credit_only_room_and_keep_pressure_bounded(self):
         p = self.PREFIX
@@ -10297,7 +10318,6 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
             for cash, debt in ((3000, 5000), (150, 5000), (3000, 125)):
                 fixture = EconomyScriptFixture(
                     facts={
-                        p + "has_treasury_50": True,
                         p + "has_debt": True,
                         p + "can_early_repay_debt": True,
                     },
@@ -10315,10 +10335,10 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
                 values = fixture.scopes["A"]
                 values.update({p + "treasury": cash, p + "debt": debt})
                 fixture.run(p + effect)
-                paid = min(maximum, cash, debt)
+                paid = 0 if effect == "repay_debt" and cash < 500 else min(maximum, cash, debt)
                 self.assertEqual(values[p + "treasury"], cash - paid)
                 self.assertEqual(values[p + "debt"], debt - paid)
-                self.assertEqual(values[p + "current_month_debt_paid"], paid)
+                self.assertEqual(values.get(p + "current_month_debt_paid", 0), paid)
         fixture.facts[p + "can_restructure_debt"] = True
         values[p + "debt"] = 5000
         fixture.run(p + "restructure_debt")
@@ -10447,14 +10467,21 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
         fixture = EconomyScriptFixture(
             countries={
                 "A": {self.PREFIX + "resource_endowment": 9},
-                "B": {"states": ["state"]},
+                "B": {"states": ["state", "non_core_state"], "amount_research_slots": 3},
                 "state": {
                     "controller": "B",
+                    "cores": ["B"],
+                    "state_population_k": 1200,
                     "resource@oil": 30,
                     "building_level@arms_factory": 10,
                     "non_damaged@ADISCORD_business_center": 2,
                     "non_damaged@ADISCORD_science_center": 1,
                     "non_damaged@ADISCORD_industrial_cluster": 2,
+                },
+                "non_core_state": {
+                    "controller": "B",
+                    "cores": ["A"],
+                    "state_population_k": 7000,
                 },
             },
             facts={"has_dynamic_modifier": False},
@@ -10468,6 +10495,8 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
         owner = fixture.scopes["B"]
         self.assertEqual(fixture.scopes["A"], {self.PREFIX + "resource_endowment": 9})
         self.assertEqual(owner[self.PREFIX + "resource_endowment"], 3)
+        self.assertEqual(owner[self.PREFIX + "cached_core_population_k"], 1200)
+        self.assertEqual(owner[self.PREFIX + "cached_research_slots"], 3)
         self.assertEqual(owner["ADISCORD_business_center_count"], 2)
         self.assertEqual(owner["ADISCORD_science_center_count"], 1)
         self.assertEqual(owner[self.PREFIX + "cluster_factory_output_percent"], 20)
@@ -10477,6 +10506,7 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
         fixture.run(self.PREFIX + "recount_economic_buildings", scope="B", previous="A")
         self.assertEqual(owner["ADISCORD_business_center_count"], 0)
         self.assertEqual(owner[self.PREFIX + "cluster_factory_output_percent"], 0)
+        self.assertEqual(owner[self.PREFIX + "cached_core_population_k"], 1200)
         self.assertIn("remove_dynamic_modifier", fixture.calls)
 
     def test_cash_ledger_covers_auto_borrowing_cap_and_interweek_payment(self):
@@ -10580,13 +10610,8 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
 
     def test_financing_relief_never_creates_negative_pressures(self):
         for effect, gates, treasury in (
-            ("repay_debt", {"has_treasury_50": True, "has_debt": True}, 50),
+            ("repay_debt", {"has_debt": True}, 500),
             ("stabilization_package", {"can_stabilize_macro": True}, 500),
-            (
-                "stabilization_package",
-                {"can_stabilize_macro": False, "can_stabilize_macro_crisis": True},
-                0,
-            ),
         ):
             fixture = EconomyScriptFixture(
                 facts={self.PREFIX + key: value for key, value in gates.items()},
@@ -10606,7 +10631,7 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
             values.update(
                 {
                     self.PREFIX + "treasury": treasury,
-                    self.PREFIX + "debt": 50,
+                    self.PREFIX + "debt": 500,
                     self.PREFIX + "inflation": 15,
                 }
             )

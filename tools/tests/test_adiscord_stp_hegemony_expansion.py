@@ -125,30 +125,31 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         self.assertNotIn("GFX_portrait_STP_Maksim_Shabrat_dictator", freedom_lock)
         self.assertIn("portrait = GFX_portrait_STP_Maksim_Shabrat_dictator", effects)
 
-    def test_all_in_icon_is_shared_by_the_two_high_stakes_focuses(self) -> None:
+    def test_high_stakes_focus_icons_have_runtime_textures_and_shines(self) -> None:
         stp = read("common/national_focus/ADISCORD_national_focus_STP.txt")
         val = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
         gfx = read("interface/ADISCORD_national_focus.gfx")
         shine = read("interface/ADISCORD_focus_shines.gfx")
 
-        self.assertRegex(
-            stp,
-            r"(?s)id = STP_pc_heg_final_kefreyt\b.*?icon = GFX_focus_ADISCORD_All_In",
-        )
-        self.assertRegex(
-            val,
-            r"(?s)id = VAL_October_Of_2160\b.*?icon = GFX_focus_ADISCORD_All_In",
-        )
-        self.assertIn(
-            'texturefile = "gfx/interface/goals/_shared/GFX_focus_ADISCORD_All_In.png"',
-            gfx,
-        )
-        self.assertIn('name = "GFX_focus_ADISCORD_All_In_shine"', shine)
-        self.assertTrue(
+        for source, focus_id, icon, texture in (
             (
-                ROOT / "gfx/interface/goals/_shared/GFX_focus_ADISCORD_All_In.png"
-            ).is_file()
-        )
+                stp, "STP_pc_heg_final_kefreyt", "GFX_focus_STP_End_Kefreit",
+                "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_End_Kefreit.png",
+            ),
+            (
+                val, "VAL_October_Of_2160", "GFX_focus_ADISCORD_All_In",
+                "gfx/interface/goals/_shared/GFX_focus_ADISCORD_All_In.png",
+            ),
+        ):
+            with self.subTest(focus=focus_id):
+                self.assertRegex(source, rf"id = {focus_id}\s+icon = {icon}\b")
+                self.assertRegex(
+                    gfx, rf'name = "{icon}"\s+texturefile = "{re.escape(texture)}"'
+                )
+                self.assertRegex(
+                    shine, rf'name = "{icon}_shine"\s+texturefile = "{re.escape(texture)}"'
+                )
+                self.assertTrue((ROOT / texture).is_file())
         self.assertFalse(
             (ROOT / "gfx/interface/goals/_spare/STP/GFX_focus_STP_All_In.png").exists()
         )
@@ -2107,7 +2108,7 @@ class BetrayalFixture:
             k, v = e.key, e.value
             if not k:
                 name, operator, value = (r.value for r in rows[index:index + 3])
-                assert name == "political_power" and operator == "<"
+                assert name == "has_political_power" and operator == "<"
                 result = self.pp < float(value)
                 index += 2
             elif k in ("AND", "hidden_trigger", "custom_trigger_tooltip"):

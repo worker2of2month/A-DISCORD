@@ -154,7 +154,6 @@ guiTypes = {
 		instantTextBoxType = { name = "STP_pf_radicals_support" position = { x = 76 y = 424 } text = "STP_pf_radicals_support_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
 		iconType = { name = "STP_pf_radicals_effect_icon" position = { x = 12 y = 426 } spriteType = "GFX_ADISCORD_economy_burden_texticon" scale = 0.7 pdx_tooltip = "STP_pf_radicals_tt" }
 		instantTextBoxType = { name = "STP_pf_radicals_effect_value" position = { x = 31 y = 424 } text = "STP_pf_radicals_effect_value" font = "hoi_16mbs" maxWidth = 43 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_pf_radicals_tt" }
-		instantTextBoxType = { name = "STP_pf_help" position = { x = 244 y = 368 } text = "STP_pf_help" font = "hoi_16mbs" maxWidth = 204 maxHeight = 84 fixedsize = yes pdx_tooltip = "STP_pf_formula_tt" }
 	}
 
 }
