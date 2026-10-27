@@ -137,7 +137,13 @@ STP_pw_party_dynamic = {
 
 # No icon: faction effects share the apparatus card but retain their own enable condition.
 STP_pf_balance_dynamic = {
-	enable = { STP_pf_active = yes has_country_flag = STP_pf_initialized has_capitulated = no }
+	enable = {
+		hidden_trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_pf_initialized
+			has_capitulated = no
+		}
+	}
 	ADISCORD_economy_admin_expense_factor = STP_pf_conservatives_effect
 	production_speed_buildings_factor = STP_pf_borons_effect
 	stability_factor = STP_pf_security_effect
@@ -174,7 +180,9 @@ STP_pv_strain_dynamic = {
 STP_ch_institutions = {
 	icon = GFX_idea_STP_institutions_obligations
 	enable = {
-		STP_ch_current = yes
+		hidden_trigger = {
+			STP_ch_current = yes
+		}
 	}
 	army_org_factor = STP_ch_organization
 	industrial_capacity_factory = STP_ch_output
@@ -186,7 +194,11 @@ STP_ch_institutions = {
 
 STP_hw_stall_dynamic = {
 	icon = GFX_idea_STP_stalled_offensive
-	enable = { STP_hw_stall_active = yes }
+	enable = {
+		hidden_trigger = {
+			STP_hw_stall_active = yes
+		}
+	}
 	war_support_factor = STP_hw_stall_support
 	army_org_regain = STP_hw_stall_recovery
 	mobilization_speed = STP_hw_stall_mobilization
@@ -195,7 +207,11 @@ STP_hw_stall_dynamic = {
 # Shabrat's popular mandate: 50 is neutral, the refresh effect scales the values.
 STP_hw_mandate_dynamic = {
 	icon = GFX_idea_STP_mountain_mandate
-	enable = { STP_hw_war_current = yes }
+	enable = {
+		hidden_trigger = {
+			STP_hw_war_current = yes
+		}
+	}
 	stability_factor = STP_hw_mandate_stability
 	war_support_factor = STP_hw_mandate_war_support
 	conscription_factor = STP_hw_mandate_conscription

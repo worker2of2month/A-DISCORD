@@ -267,5 +267,59 @@ class STPEventOptionTooltipTests(StelanderDecisionTooltipTests):
                              "§R-300§! £ADISCORD_economy_treasury_texticon")
 
 
+class STPSpiritTooltipTests(StelanderDecisionTooltipTests):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        source = (ROOT / "common/ideas/ADISCORD_STP_civil_war_ideas.txt").read_text(encoding="utf-8")
+        cls.spirits = {
+            idea.key: idea.value for outer in parse_clausewitz(source)
+            for group in outer.value if group.key == "country" for idea in group.value
+        }
+        cls.spirits.update({entry.key: entry.value for entry in parse_clausewitz(
+            (ROOT / "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt").read_text(encoding="utf-8")
+        )})
+
+    def test_spirit_conditions_and_lifecycle_effects_hide_bookkeeping(self):
+        self.assertGreater(len(self.spirits), 400)
+        for name, entries in self.spirits.items():
+            for entry in entries:
+                if entry.key in ("allowed", "available", "cancel", "enable", "on_add", "on_remove"):
+                    with self.subTest(spirit=name, field=entry.key):
+                        self.assertEqual(list(self.exposed_bookkeeping(entry.value)), [])
+
+    def test_spirit_names_and_cancellation_labels_are_localised(self):
+        for language in ("russian", "english"):
+            values = {}
+            for path in (ROOT / "localisation" / language).glob("*.yml"):
+                values.update(dict(re.findall(
+                    r'^ ([\w.]+):\d*[ \t]*"([^"\r\n]*)"',
+                    path.read_text(encoding="utf-8-sig"), re.M
+                )))
+            for name, entries in self.spirits.items():
+                key = next((e.value for e in entries if e.key == "name"), name)
+                with self.subTest(language=language, spirit=name):
+                    self.assertTrue(values.get(key))
+                    self.assertNotRegex(values[key], r'\b(?:STP|STS|SRP)_[A-Za-z0-9_]+')
+            for key in self.localisation:
+                if key.startswith("STP_spirit_"):
+                    self.assertTrue(values.get(key), (language, key))
+
+    def test_native_effects_are_not_repeated_but_future_timers_remain(self):
+        for language in ("russian", "english"):
+            values = dict(re.findall(r'^ ([\w.]+):\d*[ \t]*"([^"\r\n]*)"', (
+                ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml"
+            ).read_text(encoding="utf-8-sig"), re.M))
+            for key in ("SRP_council_supply_desc", "STP_cw_central_authority_desc",
+                        "STP_cw_arsenal_shifts_desc", "STP_cw_prepared_supply_lines_desc"):
+                self.assertNotRegex(values[key], r'\d', (language, key))
+            self.assertNotIn("[?STP_ps_", values["STP_ps_defence_dynamic_desc"])
+            for key in ("STP_kc_defence_prepared_desc", "STP_pw_party_nod_staff_prepared_desc"):
+                self.assertIn("§Y180§!", values[key])
+            self.assertIn("£stability_texticon", values["STP_apparatus_faction_effects"])
+            for variable in ("conservatives", "borons", "security", "army", "advisers", "merchants", "radicals"):
+                self.assertIn("[?STP_pf_" + variable + "_effect|", values["STP_apparatus_faction_effects"])
+
+
 if __name__ == "__main__":
     unittest.main()

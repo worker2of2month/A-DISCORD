@@ -45,14 +45,25 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pi_country_valid = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_reconstruction_ended_tt
+					STP_pi_country_valid = no
+				}
 			}
 			modifier = {
 				political_power_gain = 0.2
 				ADISCORD_economy_admin_expense_factor = -0.1
 			}
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		STP_pi_cadre_instructors_delta = {
@@ -872,8 +883,16 @@ ideas = {
 			modifier = {
 				production_speed_buildings_factor = -0.03
 			}
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		STP_party_officer_petitions = {
@@ -889,8 +908,16 @@ ideas = {
 				army_org_regain = -0.04
 				political_power_gain = -0.05
 			}
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		STP_party_contract_disputes = {
@@ -906,8 +933,16 @@ ideas = {
 				industrial_capacity_factory = -0.03
 				ADISCORD_economy_trade_income_factor = -0.05
 			}
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		STP_party_archive_backlog = {
@@ -922,8 +957,16 @@ ideas = {
 			modifier = {
 				stability_factor = -0.03
 			}
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		STP_party_mandate_disputes = {
@@ -938,8 +981,16 @@ ideas = {
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = 0.04
 			}
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		STP_party_hospital_overload = {
@@ -956,8 +1007,16 @@ ideas = {
 				industrial_capacity_factory = -0.03
 				ADISCORD_economy_social_expense_factor = 0.05
 			}
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		STP_party_forced_labour_resistance = {
@@ -974,8 +1033,16 @@ ideas = {
 				industrial_capacity_factory = -0.04
 				stability_factor = -0.03
 			}
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		STP_party_festival_creditors = {
@@ -990,15 +1057,28 @@ ideas = {
 			modifier = {
 				political_power_gain = -0.08
 			}
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		STP_cw_mountain_training = {
 			picture = ADISCORD_law_military_cadre_army
 			allowed = { always = no }
 			removal_cost = -1
-			cancel = { STP_cw_mountain_war_active = no }
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_civil_war_ended_tt
+					STP_cw_mountain_war_active = no
+				}
+			}
 			modifier = {
 				special_forces_min = 12
 				special_forces_training_time_factor = -0.50
@@ -1009,7 +1089,12 @@ ideas = {
 			picture = ADISCORD_law_military_cadre_army
 			allowed = { always = no }
 			removal_cost = -1
-			cancel = { STP_cw_mountain_war_active = no }
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_civil_war_ended_tt
+					STP_cw_mountain_war_active = no
+				}
+			}
 			modifier = {
 				modifier_army_sub_unit_mountaineers_attack_factor = 0.30
 				modifier_army_sub_unit_mountaineers_max_org_factor = 0.15
@@ -1040,8 +1125,17 @@ ideas = {
 			picture = ADISCORD_law_military_cadre_army
 			allowed = { always = no }
 			removal_cost = -1
-			cancel = { STP_kc_support_active = no }
-			on_remove = { clr_country_flag = STP_kc_preparing }
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_kefreyt_support_ended_tt
+					STP_kc_support_active = no
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					clr_country_flag = STP_kc_preparing
+				}
+			}
 			modifier = { }
 		}
 
@@ -1049,9 +1143,22 @@ ideas = {
 			picture = ADISCORD_economic_system_industrializing
 			allowed = { always = no }
 			removal_cost = -1
-			cancel = { STP_kc_support_active = no }
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_kefreyt_support_ended_tt
+					STP_kc_support_active = no
+				}
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				industrial_capacity_factory = 0.20
 				training_time_factor = -0.20
@@ -1062,8 +1169,17 @@ ideas = {
 			picture = ADISCORD_law_military_cadre_army
 			allowed = { always = no }
 			removal_cost = -1
-			cancel = { STP_kc_support_active = no }
-			on_remove = { clr_country_flag = STP_kc_preparing }
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_kefreyt_support_ended_tt
+					STP_kc_support_active = no
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					clr_country_flag = STP_kc_preparing
+				}
+			}
 			modifier = {
 				army_defence_factor = 0.15
 				army_org_regain = 0.15
@@ -1075,9 +1191,22 @@ ideas = {
 			picture = ADISCORD_economic_system_industrializing
 			allowed = { always = no }
 			removal_cost = -1
-			cancel = { STP_kc_support_active = no }
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_kefreyt_support_ended_tt
+					STP_kc_support_active = no
+				}
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				industrial_capacity_factory = 0.20
 				training_time_factor = -0.20
@@ -1088,7 +1217,12 @@ ideas = {
 			picture = ADISCORD_law_military_cadre_army
 			allowed = { always = no }
 			removal_cost = -1
-			cancel = { STP_kc_support_active = no }
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_kefreyt_support_ended_tt
+					STP_kc_support_active = no
+				}
+			}
 			modifier = {
 				army_attack_factor = 0.10
 				planning_speed = 0.20
@@ -1199,10 +1333,14 @@ ideas = {
 				ADISCORD_economy_trade_income_factor = -0.2
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -1274,7 +1412,11 @@ ideas = {
 			allowed = { always = no }
 			removal_cost = -1
 			cancel = { OR = { STS = { exists = no } STS = { is_subject = yes } VAL = { exists = no } VAL = { is_subject = yes } STS = { has_war_with = VAL } } }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = { industrial_capacity_factory = 0.03 supply_consumption_factor = -0.03 }
 		}
 		STP_pc_val_campaign_ready = {
@@ -1282,7 +1424,11 @@ ideas = {
 			allowed = { always = no }
 			removal_cost = -1
 			cancel = { STP_pc_can_confront_val = no }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = { }
 		}
 		STP_pc_val_campaign_plan = {
@@ -1301,7 +1447,11 @@ ideas = {
 			allowed = { always = no }
 			removal_cost = -1
 			cancel = { OR = { STS = { exists = no } STS = { is_subject = yes } NOD = { exists = no } NOD = { is_subject = yes } STS = { has_war_with = NOD } } }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = { ADISCORD_economy_army_expense_factor = -0.08 }
 		}
 		STP_pc_nod_campaign_ready = {
@@ -1309,7 +1459,11 @@ ideas = {
 			allowed = { always = no }
 			removal_cost = -1
 			cancel = { STP_pc_can_confront_nod = no }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = { }
 		}
 		STP_pc_nod_campaign_plan = {
@@ -1413,8 +1567,16 @@ ideas = {
 			allowed = { tag = STS }
 			removal_cost = -1
 			modifier = { industrial_capacity_factory = 0.10 ADISCORD_economy_admin_expense_factor = -0.05 }
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 		SRP_distrust_stelander = {
 			picture = ADISCORD_law_military_cadre_army
@@ -1626,8 +1788,16 @@ ideas = {
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = { ADISCORD_economy_admin_expense_factor = 0.10 }
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 		STP_cw_arsenal_shifts = {
 			picture = ADISCORD_industrial_policy_military_prioritization
@@ -2230,10 +2400,14 @@ ideas = {
 				ADISCORD_economy_admin_expense_factor = -0.05
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -2603,16 +2777,19 @@ ideas = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			cancel = {
-				OR = {
-					is_subject = yes
-					has_capitulated = yes
-					NOD = { exists = no }
-					NOT = {
-						OR = {
-							STP_pw_party_nod_threat_current = yes
-							# The declaration is queued after the threat flag is cleared.
-							has_country_flag = STP_pw_party_nod_invasion_active
-							has_war_with = NOD
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_northern_threat_ended_tt
+					OR = {
+						is_subject = yes
+						has_capitulated = yes
+						NOD = { exists = no }
+						NOT = {
+							OR = {
+								STP_pw_party_nod_threat_current = yes
+								# The declaration is queued after the threat flag is cleared.
+								has_country_flag = STP_pw_party_nod_invasion_active
+								has_war_with = NOD
+							}
 						}
 					}
 				}
@@ -2638,16 +2815,19 @@ ideas = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			cancel = {
-				OR = {
-					is_subject = yes
-					has_capitulated = yes
-					NOD = { exists = no }
-					NOT = {
-						OR = {
-							STP_pw_party_nod_threat_current = yes
-							# The declaration is queued after the threat flag is cleared.
-							has_country_flag = STP_pw_party_nod_invasion_active
-							has_war_with = NOD
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_northern_threat_ended_tt
+					OR = {
+						is_subject = yes
+						has_capitulated = yes
+						NOD = { exists = no }
+						NOT = {
+							OR = {
+								STP_pw_party_nod_threat_current = yes
+								# The declaration is queued after the threat flag is cleared.
+								has_country_flag = STP_pw_party_nod_invasion_active
+								has_war_with = NOD
+							}
 						}
 					}
 				}
@@ -2959,17 +3139,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_overall_income_factor = 0.025
 				political_power_gain = -0.05
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -2980,17 +3167,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				political_power_gain = 0.1
 				ADISCORD_economy_overall_income_factor = -0.02
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3001,17 +3195,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_overall_income_factor = -0.05
 				political_power_gain = -0.1
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3022,16 +3223,23 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_overall_income_factor = -0.035
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3042,7 +3250,10 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.06
@@ -3050,10 +3261,14 @@ ideas = {
 				political_power_gain = 0.10
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3064,17 +3279,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				political_power_gain = 0.25
 				ADISCORD_economy_overall_income_factor = 0.025
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3085,7 +3307,10 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				stability_factor = 0.08
@@ -3093,10 +3318,14 @@ ideas = {
 				ADISCORD_economy_admin_expense_factor = 0.025
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3107,7 +3336,10 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_overall_income_factor = 0.20
@@ -3116,10 +3348,14 @@ ideas = {
 				stability_factor = -0.015
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3133,10 +3369,14 @@ ideas = {
 				ADISCORD_country_development_social_system_growth_factor = -0.75
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3147,17 +3387,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				stability_factor = -0.03
 				ADISCORD_economy_overall_income_factor = -0.04
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3168,16 +3415,23 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = 0.04
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3188,7 +3442,10 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				stability_factor = 0.12
@@ -3196,10 +3453,14 @@ ideas = {
 				ADISCORD_economy_admin_expense_factor = 0.03
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3210,7 +3471,10 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_overall_income_factor = 0.30
@@ -3219,10 +3483,14 @@ ideas = {
 				stability_factor = -0.02
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3233,17 +3501,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				production_speed_buildings_factor = 0.03
 				mobilization_speed = -0.05
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3254,17 +3529,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				army_org_regain = 0.03
 				ADISCORD_economy_army_expense_factor = 0.03
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3275,17 +3557,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				army_org_regain = -0.04
 				political_power_gain = -0.1
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3296,16 +3585,23 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_army_expense_factor = 0.05
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3316,7 +3612,10 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				production_speed_buildings_factor = 0.06
@@ -3324,10 +3623,14 @@ ideas = {
 				mobilization_speed = -0.05
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3338,7 +3641,10 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				planning_speed = 0.20
@@ -3347,10 +3653,14 @@ ideas = {
 				ADISCORD_economy_army_expense_factor = 0.10
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3361,17 +3671,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				production_factory_max_efficiency_factor = 0.025
 				ADISCORD_economy_admin_expense_factor = 0.025
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3382,17 +3699,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				industrial_capacity_factory = 0.025
 				ADISCORD_economy_overall_income_factor = -0.02
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3403,17 +3727,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				industrial_capacity_factory = -0.05
 				ADISCORD_economy_overall_income_factor = -0.025
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3424,16 +3755,23 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_overall_income_factor = -0.04
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3444,7 +3782,10 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				production_factory_max_efficiency_factor = 0.15
@@ -3453,10 +3794,14 @@ ideas = {
 				ADISCORD_economy_admin_expense_factor = 0.025
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3467,7 +3812,10 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				industrial_capacity_factory = 0.15
@@ -3476,10 +3824,14 @@ ideas = {
 				ADISCORD_economy_overall_income_factor = -0.10
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3490,17 +3842,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				stability_factor = 0.02
 				political_power_gain = -0.05
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3511,17 +3870,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				political_power_gain = 0.1
 				stability_factor = -0.015
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3532,17 +3898,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				stability_factor = -0.035
 				political_power_gain = -0.1
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3553,16 +3926,23 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				political_power_gain = -0.15
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3573,17 +3953,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				stability_factor = 0.06
 				political_power_gain = 0.10
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3594,17 +3981,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				political_power_gain = 0.25
 				stability_factor = 0.02
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3615,17 +4009,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.025
 				production_speed_buildings_factor = -0.015
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3636,17 +4037,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				production_speed_buildings_factor = 0.03
 				ADISCORD_economy_overall_income_factor = -0.025
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3657,17 +4065,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				production_speed_buildings_factor = -0.04
 				ADISCORD_economy_overall_income_factor = -0.035
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3678,16 +4093,23 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_overall_income_factor = -0.04
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3698,17 +4120,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.06
 				production_speed_buildings_factor = 0.03
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3719,7 +4148,10 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				production_speed_buildings_factor = 0.06
@@ -3727,10 +4159,14 @@ ideas = {
 				ADISCORD_economy_overall_income_factor = -0.035
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3741,17 +4177,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.10
 				ADISCORD_economy_creditworthiness_factor = 0.15
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3762,16 +4205,23 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.15
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3782,17 +4232,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				stability_factor = 0.03
 				consumer_goods_factor = -0.02
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3803,17 +4260,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				research_speed_factor = 0.025
 				production_speed_industrial_complex_factor = 0.05
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3824,17 +4288,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.02
 				political_power_gain = -0.025
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3845,17 +4316,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				political_power_gain = 0.075
 				ADISCORD_economy_overall_income_factor = -0.0125
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3866,17 +4344,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				stability_factor = 0.0175
 				ADISCORD_economy_admin_expense_factor = 0.015
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3887,17 +4372,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_overall_income_factor = 0.02
 				stability_factor = -0.01
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3908,17 +4400,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				production_speed_buildings_factor = 0.02
 				mobilization_speed = -0.025
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3929,17 +4428,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				planning_speed = 0.025
 				ADISCORD_economy_army_expense_factor = 0.0175
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3950,17 +4456,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				production_factory_max_efficiency_factor = 0.02
 				ADISCORD_economy_admin_expense_factor = 0.0125
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3971,17 +4484,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				industrial_capacity_factory = 0.02
 				ADISCORD_economy_overall_income_factor = -0.015
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -3992,17 +4512,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				stability_factor = 0.0175
 				political_power_gain = -0.025
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -4013,17 +4540,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				political_power_gain = 0.075
 				stability_factor = -0.0125
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -4034,17 +4568,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.02
 				production_speed_buildings_factor = -0.0075
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -4055,17 +4596,24 @@ ideas = {
 			}
 			removal_cost = -1
 			cancel = {
-				STP_pe_current = no
+				custom_trigger_tooltip = {
+					tooltip = STP_spirit_party_rule_ended_tt
+					STP_pe_current = no
+				}
 			}
 			modifier = {
 				production_speed_buildings_factor = 0.02
 				ADISCORD_economy_overall_income_factor = -0.0175
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 	}
