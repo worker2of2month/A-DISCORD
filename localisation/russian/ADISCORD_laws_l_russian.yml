@@ -428,3 +428,10 @@
  ADISCORD_electronics_field_communications: "Бюро полевой связи"
 
  ADISCORD_electronics_field_communications_desc: "Надёжные средства связи ускоряют подготовку операций и восстановление управления войсками."
+
+ ADISCORD_law_emergency_extraction_available_tt: "Идёт война, либо страна имеет более §Y25%§! £war_support_modifiericons_texticon, либо экономическая система допускает чрезвычайные сборы: §Y$ADISCORD_economic_system_state_coordinated$§! или §Y$ADISCORD_economic_system_planned_bureaucratic$§!."
+ ADISCORD_law_mobilization_model_tt: "Экономическая система: §Y$ADISCORD_economic_system_state_coordinated$§! или §Y$ADISCORD_economic_system_planned_bureaucratic$§!"
+ ADISCORD_law_state_planning_model_tt: "Экономическая система: §Y$ADISCORD_economic_system_state_coordinated$§!, §Y$ADISCORD_economic_system_planned_bureaucratic$§! или §Y$ADISCORD_economic_system_technocratic$§!"
+ ADISCORD_law_state_development_3_tt: "Уровень развития государственного аппарата не ниже §Y3§!"
+ ADISCORD_law_state_development_4_tt: "Уровень развития государственного аппарата не ниже §Y4§!"
+ ADISCORD_law_economic_development_4_tt: "Уровень развития экономики не ниже §Y4§!"

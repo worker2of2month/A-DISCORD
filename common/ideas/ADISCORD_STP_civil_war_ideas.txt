@@ -4647,8 +4647,12 @@ ideas = {
 			picture = generic_political_advisor_europe_1
 			allowed = { OR = { tag = STP tag = STS } }
 			visible = { STP_qol_staff_available = yes }
-			available = { STP_qol_staff_available = yes }
-			allowed_to_remove = { STP_qol_staff_available = yes }
+			available = {
+				hidden_trigger = {
+					STP_qol_staff_available = yes
+				}
+			}
+			allowed_to_remove = { hidden_trigger = { STP_qol_staff_available = yes } }
 			cost = 75
 			traits = { ADISCORD_qol_registrar }
 			ai_will_do = { factor = 1 }
@@ -4660,7 +4664,7 @@ ideas = {
 			allowed = { OR = { tag = STP tag = STS } }
 			visible = { STP_qol_staff_available = yes }
 			available = { STP_qol_elite_administration_available = yes }
-			allowed_to_remove = { STP_qol_staff_available = yes }
+			allowed_to_remove = { hidden_trigger = { STP_qol_staff_available = yes } }
 			cost = 125
 			traits = { ADISCORD_qol_chancellor }
 			ai_will_do = { factor = 2 }
@@ -4675,8 +4679,12 @@ ideas = {
 			picture = generic_political_advisor_europe_2
 			allowed = { OR = { tag = STP tag = STS } }
 			visible = { STP_qol_staff_available = yes }
-			available = { STP_qol_staff_available = yes }
-			allowed_to_remove = { STP_qol_staff_available = yes }
+			available = {
+				hidden_trigger = {
+					STP_qol_staff_available = yes
+				}
+			}
+			allowed_to_remove = { hidden_trigger = { STP_qol_staff_available = yes } }
 			cost = 75
 			traits = { ADISCORD_qol_quartermaster }
 			ai_will_do = { factor = 1 }
@@ -4688,7 +4696,7 @@ ideas = {
 			allowed = { OR = { tag = STP tag = STS } }
 			visible = { STP_qol_staff_available = yes }
 			available = { STP_qol_elite_army_available = yes }
-			allowed_to_remove = { STP_qol_staff_available = yes }
+			allowed_to_remove = { hidden_trigger = { STP_qol_staff_available = yes } }
 			cost = 125
 			traits = { ADISCORD_qol_general_staff }
 			ai_will_do = { factor = 2 }
@@ -4703,8 +4711,12 @@ ideas = {
 			picture = generic_political_advisor_europe_3
 			allowed = { OR = { tag = STP tag = STS } }
 			visible = { STP_qol_staff_available = yes }
-			available = { STP_qol_staff_available = yes }
-			allowed_to_remove = { STP_qol_staff_available = yes }
+			available = {
+				hidden_trigger = {
+					STP_qol_staff_available = yes
+				}
+			}
+			allowed_to_remove = { hidden_trigger = { STP_qol_staff_available = yes } }
 			cost = 75
 			traits = { ADISCORD_qol_construction }
 			ai_will_do = { factor = 1 }
@@ -4716,7 +4728,7 @@ ideas = {
 			allowed = { OR = { tag = STP tag = STS } }
 			visible = { STP_qol_staff_available = yes }
 			available = { STP_qol_elite_industry_available = yes }
-			allowed_to_remove = { STP_qol_staff_available = yes }
+			allowed_to_remove = { hidden_trigger = { STP_qol_staff_available = yes } }
 			cost = 125
 			traits = { ADISCORD_qol_industrial_planner }
 			ai_will_do = { factor = 2 }
@@ -4731,8 +4743,12 @@ ideas = {
 			picture = generic_political_advisor_europe_4
 			allowed = { OR = { tag = STP tag = STS } }
 			visible = { STP_qol_staff_available = yes }
-			available = { STP_qol_staff_available = yes }
-			allowed_to_remove = { STP_qol_staff_available = yes }
+			available = {
+				hidden_trigger = {
+					STP_qol_staff_available = yes
+				}
+			}
+			allowed_to_remove = { hidden_trigger = { STP_qol_staff_available = yes } }
 			cost = 75
 			traits = { ADISCORD_qol_medical }
 			ai_will_do = { factor = 1 }
@@ -4747,8 +4763,12 @@ ideas = {
 			picture = generic_political_advisor_europe_5
 			allowed = { OR = { tag = STP tag = STS } }
 			visible = { STP_qol_staff_available = yes }
-			available = { STP_qol_staff_available = yes }
-			allowed_to_remove = { STP_qol_staff_available = yes }
+			available = {
+				hidden_trigger = {
+					STP_qol_staff_available = yes
+				}
+			}
+			allowed_to_remove = { hidden_trigger = { STP_qol_staff_available = yes } }
 			cost = 75
 			traits = { ADISCORD_qol_education }
 			ai_will_do = { factor = 1 }
@@ -4764,8 +4784,12 @@ ideas = {
 			picture = generic_political_advisor_europe_6
 			allowed = { OR = { tag = STP tag = STS } }
 			visible = { STP_qol_staff_available = yes }
-			available = { STP_qol_staff_available = yes }
-			allowed_to_remove = { STP_qol_staff_available = yes }
+			available = {
+				hidden_trigger = {
+					STP_qol_staff_available = yes
+				}
+			}
+			allowed_to_remove = { hidden_trigger = { STP_qol_staff_available = yes } }
 			cost = 75
 			traits = { ADISCORD_qol_security }
 			ai_will_do = { factor = 1 }
@@ -4778,7 +4802,11 @@ ideas = {
 			picture = ADISCORD_economic_system_mixed
 			allowed = { OR = { tag = STP tag = STS } }
 			visible = { STP_qol_staff_available = yes }
-			available = { STP_qol_staff_available = yes }
+			available = {
+				hidden_trigger = {
+					STP_qol_staff_available = yes
+				}
+			}
 			cost = 75
 			research_bonus = { industry = 0.05 }
 			modifier = { production_speed_infrastructure_factor = 0.05 }
@@ -4790,7 +4818,11 @@ ideas = {
 			picture = ADISCORD_economic_system_technocratic
 			allowed = { OR = { tag = STP tag = STS } }
 			visible = { STP_qol_staff_available = yes }
-			available = { STP_qol_staff_available = yes }
+			available = {
+				hidden_trigger = {
+					STP_qol_staff_available = yes
+				}
+			}
 			cost = 75
 			research_bonus = { electronics = 0.05 }
 			modifier = { research_speed_factor = 0.01 }
@@ -4816,7 +4848,12 @@ ideas = {
 			picture = ADISCORD_economic_system_industrializing
 			allowed = { OR = { tag = STP tag = STS } }
 			visible = { STP_qol_staff_available = yes NOT = { has_dlc = "Arms Against Tyranny" } }
-			available = { STP_qol_staff_available = yes NOT = { has_dlc = "Arms Against Tyranny" } }
+			available = {
+				hidden_trigger = {
+					STP_qol_staff_available = yes
+					NOT = { has_dlc = "Arms Against Tyranny" }
+				}
+			}
 			cost = 75
 			research_bonus = { infantry_weapons = 0.05 support_tech = 0.05 }
 			equipment_bonus = { infantry_equipment = { reliability = 0.03 } ADISCORD_squad_weapons_equipment = { reliability = 0.03 } support_equipment = { reliability = 0.03 } }
@@ -4830,7 +4867,12 @@ ideas = {
 			picture = ADISCORD_economic_system_technocratic
 			allowed = { OR = { tag = STP tag = STS } }
 			visible = { STP_qol_staff_available = yes NOT = { has_dlc = "Arms Against Tyranny" } }
-			available = { STP_qol_staff_available = yes NOT = { has_dlc = "Arms Against Tyranny" } }
+			available = {
+				hidden_trigger = {
+					STP_qol_staff_available = yes
+					NOT = { has_dlc = "Arms Against Tyranny" }
+				}
+			}
 			cost = 75
 			research_bonus = { air_equipment = 0.05 }
 			equipment_bonus = { ADISCORD_fighter_archetype = { reliability = 0.03 } ADISCORD_cas_archetype = { reliability = 0.03 } }
@@ -4844,7 +4886,12 @@ ideas = {
 			picture = ADISCORD_economic_system_state_coordinated
 			allowed = { OR = { tag = STP tag = STS } }
 			visible = { STP_qol_staff_available = yes NOT = { has_dlc = "Arms Against Tyranny" } }
-			available = { STP_qol_elite_army_available = yes NOT = { has_dlc = "Arms Against Tyranny" } }
+			available = {
+				STP_qol_elite_army_available = yes
+				hidden_trigger = {
+					NOT = { has_dlc = "Arms Against Tyranny" }
+				}
+			}
 			cost = 125
 			research_bonus = { armor = 0.08 }
 			equipment_bonus = { ADISCORD_combat_platform_archetype = { reliability = 0.03 } }

@@ -469,10 +469,13 @@ ideas = {
 			removal_cost = -1
 
 			available = {
-				OR = {
-					has_war = yes
-					has_war_support > 0.25
-					ADISCORD_economy_model_allows_emergency_extraction = yes
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_law_emergency_extraction_available_tt
+					OR = {
+						has_war = yes
+						has_war_support > 0.25
+						ADISCORD_economy_model_allows_emergency_extraction = yes
+					}
 				}
 			}
 
@@ -1427,7 +1430,10 @@ ideas = {
 				OR = {
 					has_war = yes
 					has_war_support > 0.25
-					ADISCORD_economy_model_allows_mobilization_economy = yes
+					custom_trigger_tooltip = {
+						tooltip = ADISCORD_law_mobilization_model_tt
+						ADISCORD_economy_model_allows_mobilization_economy = yes
+					}
 				}
 			}
 
@@ -1463,7 +1469,10 @@ ideas = {
 					has_government = etatism
 					has_government = technocracy
 					has_government = utilitarism
-					ADISCORD_economy_model_allows_state_planning = yes
+					custom_trigger_tooltip = {
+						tooltip = ADISCORD_law_state_planning_model_tt
+						ADISCORD_economy_model_allows_state_planning = yes
+					}
 				}
 			}
 

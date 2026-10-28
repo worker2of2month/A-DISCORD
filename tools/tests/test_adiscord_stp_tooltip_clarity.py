@@ -321,5 +321,104 @@ class STPSpiritTooltipTests(StelanderDecisionTooltipTests):
                 self.assertIn("[?STP_pf_" + variable + "_effect|", values["STP_apparatus_faction_effects"])
 
 
+class STPStaffTooltipTests(StelanderDecisionTooltipTests):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.staff = {}
+        for file in ("ADISCORD_STP_civil_war_ideas.txt", "ADISCORD_ministers_all_countries.txt"):
+            for outer in parse_clausewitz((ROOT / "common/ideas" / file).read_text(encoding="utf-8")):
+                for group in outer.value:
+                    if group.key == "country":
+                        continue
+                    for item in group.value:
+                        if file.startswith("ADISCORD_STP") or item.key.startswith(("minister_STP_", "minister_STS_")):
+                            cls.staff[item.key] = item.value
+        for outer in parse_clausewitz((ROOT / "common/characters/STP.txt").read_text(encoding="utf-8")):
+            for character in outer.value:
+                for role in character.value:
+                    if role.key == "advisor":
+                        cls.staff[character.key] = role.value
+        path = ROOT / "common/military_industrial_organization/organizations/ADISCORD_playable_organizations.txt"
+        for item in parse_clausewitz(path.read_text(encoding="utf-8")):
+            if item.key.startswith("STP_"):
+                cls.staff[item.key] = item.value
+
+    def test_staff_conditions_do_not_expose_campaign_bookkeeping(self):
+        self.assertGreaterEqual(len(self.staff), 73)
+        for name, entries in self.staff.items():
+            for entry in entries:
+                if entry.key in ("available", "allowed_to_remove", "on_add", "on_remove"):
+                    with self.subTest(staff=name, field=entry.key):
+                        self.assertEqual(list(self.exposed_bookkeeping(entry.value)), [])
+
+    def test_advanced_staff_still_displays_native_focus_requirements(self):
+        for branch in ("administration", "industry", "army"):
+            nodes = self.definitions[f"STP_qol_elite_{branch}_available"]
+            alternatives = next(e.value for e in nodes if e.key == "OR")
+            self.assertEqual(len(alternatives), 3)
+            self.assertTrue(all(e.key == "has_completed_focus" for e in alternatives))
+            for focus in alternatives:
+                self.assertTrue(self.localisation.get(focus.value), focus.value)
+
+    def test_unlock_prices_have_value_before_texticon_in_both_languages(self):
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_playable_staff_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            values = dict(re.findall(r'^ ([\w.]+):\d*[ \t]*"([^"\r\n]*)"',
+                                     path.read_text(encoding="utf-8-sig"), re.M))
+            for key in ("STP_qol_elite_administration_tt", "STP_qol_elite_industry_tt",
+                        "STP_qol_elite_army_tt", "STP_qol_industry_company_tt"):
+                self.assertIn("§Y125§! £political_power_texticon", values[key])
+            for kind in ("construction", "precision", "integrated"):
+                self.assertNotIn("political_power", values[f"STP_qol_{kind}_company_desc"])
+
+
+class STPLawTooltipTests(StelanderDecisionTooltipTests):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.laws = {}
+        for path in (ROOT / "common/ideas").glob("*.txt"):
+            for outer in parse_clausewitz(path.read_text(encoding="utf-8-sig")):
+                for group in outer.value:
+                    if not isinstance(group.value, list):
+                        continue
+                    if not any(e.key == "law" and e.value == "yes" for e in group.value):
+                        continue
+                    for item in group.value:
+                        if isinstance(item.value, list):
+                            cls.laws[item.key] = item.value
+
+    def test_laws_available_to_stp_do_not_expose_internal_variables(self):
+        self.assertGreaterEqual(len(self.laws), 164)
+        for name, entries in self.laws.items():
+            for entry in entries:
+                if entry.key in ("available", "allowed_to_remove", "on_add", "on_remove"):
+                    with self.subTest(law=name, field=entry.key):
+                        self.assertEqual(list(self.exposed_bookkeeping(entry.value)), [])
+
+    def test_law_requirement_labels_resolve_and_format_thresholds(self):
+        for language in ("russian", "english"):
+            values = {}
+            for path in (ROOT / "localisation" / language).glob("*.yml"):
+                values.update(dict(re.findall(
+                    r'^[ \t]+([\w.]+):\d*[ \t]*"([^"\r\n]*)"',
+                    path.read_text(encoding="utf-8-sig"), re.M
+                )))
+            path = ROOT / f"localisation/{language}/ADISCORD_laws_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            labels = {key: value for key, value in values.items() if key.startswith("ADISCORD_law_")}
+            self.assertGreaterEqual(len(labels), 6)
+            for key, value in labels.items():
+                with self.subTest(language=language, label=key):
+                    for reference in re.findall(r'\$([\w.]+)\$', value):
+                        self.assertTrue(values.get(reference), reference)
+                    literal = re.sub(r'\$[\w.]+\$|§Y[^§]*§!', '', value)
+                    self.assertNotRegex(literal, r'\d|ADISCORD_|STP_')
+            self.assertIn("§Y25%§! £war_support_modifiericons_texticon",
+                          labels["ADISCORD_law_emergency_extraction_available_tt"])
+
+
 if __name__ == "__main__":
     unittest.main()

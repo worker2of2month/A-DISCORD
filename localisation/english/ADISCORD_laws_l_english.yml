@@ -428,3 +428,10 @@
  ADISCORD_electronics_field_communications: "Field Communications Bureau"
 
  ADISCORD_electronics_field_communications_desc: "Reliable communications accelerate operational planning and the restoration of unit organisation."
+
+ ADISCORD_law_emergency_extraction_available_tt: "At war, or above §Y25%§! £war_support_modifiericons_texticon, or an economic system permitting emergency levies: §Y$ADISCORD_economic_system_state_coordinated$§! or §Y$ADISCORD_economic_system_planned_bureaucratic$§!."
+ ADISCORD_law_mobilization_model_tt: "Economic system: §Y$ADISCORD_economic_system_state_coordinated$§! or §Y$ADISCORD_economic_system_planned_bureaucratic$§!"
+ ADISCORD_law_state_planning_model_tt: "Economic system: §Y$ADISCORD_economic_system_state_coordinated$§!, §Y$ADISCORD_economic_system_planned_bureaucratic$§! or §Y$ADISCORD_economic_system_technocratic$§!"
+ ADISCORD_law_state_development_3_tt: "State administration development level is at least §Y3§!"
+ ADISCORD_law_state_development_4_tt: "State administration development level is at least §Y4§!"
+ ADISCORD_law_economic_development_4_tt: "Economic development level is at least §Y4§!"

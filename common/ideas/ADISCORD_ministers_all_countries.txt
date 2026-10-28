@@ -987,7 +987,7 @@ ideas = {
 			visible = { STP_pw_party_specialists_available = yes }
 			available = {
 				STP_party_minister_change_allowed = yes
-				STP_pw_party_specialists_available = yes
+				hidden_trigger = { STP_pw_party_specialists_available = yes }
 			}
 			allowed_to_remove = { STP_party_minister_change_allowed = yes }
 			traits = { minister_trait_STP_hea_private_clinics }
@@ -1296,7 +1296,7 @@ ideas = {
 			visible = { STP_pw_party_specialists_available = yes }
 			available = {
 				STP_party_minister_change_allowed = yes
-				STP_pw_party_specialists_available = yes
+				hidden_trigger = { STP_pw_party_specialists_available = yes }
 			}
 			allowed_to_remove = { STP_party_minister_change_allowed = yes }
 			traits = { minister_trait_STP_edu_salon_academies }
@@ -1889,7 +1889,7 @@ ideas = {
 			visible = { STP_pw_party_specialists_available = yes }
 			available = {
 				STP_party_minister_change_allowed = yes
-				STP_pw_party_specialists_available = yes
+				hidden_trigger = { STP_pw_party_specialists_available = yes }
 			}
 			allowed_to_remove = { STP_party_minister_change_allowed = yes }
 			traits = { minister_trait_foreign_minister }

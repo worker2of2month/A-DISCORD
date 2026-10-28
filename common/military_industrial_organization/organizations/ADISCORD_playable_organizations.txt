@@ -18,8 +18,10 @@ STP_qol_arsenal = {
 	}
 	available = {
 		FROM = {
-			STP_qol_staff_available = yes
-			has_dlc = "Arms Against Tyranny"
+			hidden_trigger = {
+				STP_qol_staff_available = yes
+				has_dlc = "Arms Against Tyranny"
+			}
 		}
 	}
 	equipment_type = { infantry_equipment ADISCORD_squad_weapons_equipment support_equipment }
@@ -84,8 +86,10 @@ STP_qol_airworks = {
 	}
 	available = {
 		FROM = {
-			STP_qol_staff_available = yes
-			has_dlc = "Arms Against Tyranny"
+			hidden_trigger = {
+				STP_qol_staff_available = yes
+				has_dlc = "Arms Against Tyranny"
+			}
 		}
 	}
 	equipment_type = { ADISCORD_fighter_archetype ADISCORD_cas_archetype }
@@ -151,7 +155,7 @@ STP_qol_armor_bureau = {
 	available = {
 		FROM = {
 			STP_qol_elite_army_available = yes
-			has_dlc = "Arms Against Tyranny"
+			hidden_trigger = { has_dlc = "Arms Against Tyranny" }
 		}
 	}
 	equipment_type = { ADISCORD_combat_platform_archetype }

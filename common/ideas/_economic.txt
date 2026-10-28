@@ -707,7 +707,10 @@ ideas = {
 					has_government = etatism
 					has_government = technocracy
 					has_government = utilitarism
-					ADISCORD_state_development_at_least_3 = yes
+					custom_trigger_tooltip = {
+						tooltip = ADISCORD_law_state_development_3_tt
+						ADISCORD_state_development_at_least_3 = yes
+					}
 				}
 			}
 
@@ -745,7 +748,10 @@ ideas = {
 					has_government = etatism
 					has_government = utilitarism
 					has_government = technocracy
-					ADISCORD_state_development_at_least_4 = yes
+					custom_trigger_tooltip = {
+						tooltip = ADISCORD_law_state_development_4_tt
+						ADISCORD_state_development_at_least_4 = yes
+					}
 				}
 			}
 
@@ -871,8 +877,14 @@ ideas = {
 			available = {
 				OR = {
 					has_government = technocracy
-					ADISCORD_economic_development_at_least_4 = yes
-					ADISCORD_state_development_at_least_4 = yes
+					custom_trigger_tooltip = {
+						tooltip = ADISCORD_law_economic_development_4_tt
+						ADISCORD_economic_development_at_least_4 = yes
+					}
+					custom_trigger_tooltip = {
+						tooltip = ADISCORD_law_state_development_4_tt
+						ADISCORD_state_development_at_least_4 = yes
+					}
 				}
 			}
 

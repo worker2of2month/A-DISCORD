@@ -28,7 +28,11 @@ characters = {
 			slot = army_chief
 			idea_token = STP_Maksim_Shabrat_army_chief
 			allowed = { original_tag = STS }
-			available = { STP_cw_shabrat_available = yes }
+			available = {
+				hidden_trigger = {
+					STP_cw_shabrat_available = yes
+				}
+			}
 			visible = { STP_cw_shabrat_available = yes }
 			traits = { army_chief_offensive_1 }
 			cost = 100
