@@ -483,6 +483,23 @@ class NamCampaignTests(unittest.TestCase):
         facts[("NAM", "has_global_flag", BASE + "_resolved")] = True
         self.assertEqual(report(facts), "NAM_compact_war_closed")
 
+    def test_completed_inventory_chains_memory_to_payroll(self):
+        focus = self.focuses["NAM_inventory"]
+        self.assertNotIn("select_effect", [entry.key for entry in focus])
+        memory = self.events[BASE + ".109"]
+        self.assertEqual(scalar(memory, "fire_only_once"), "yes")
+        self.assertGreater(float(scalar(memory, "timeout_days")), 0)
+        options = [entry.value for entry in memory if entry.key == "option"]
+        self.assertEqual(len(options), 1)
+        continuation = block(options[0], "hidden_effect")
+        self.assertEqual([entry.key for entry in continuation], ["country_event"])
+        self.assertEqual(scalar(block(continuation, "country_event"), "id"), BASE + ".10")
+        self.assertNotIn("immediate", [entry.key for entry in memory])
+        reward = block(focus, "completion_reward")
+        self.assertEqual(scalar(reward, "add_political_power"), "35")
+        self.assertEqual(scalar(block(reward, "country_event"), "id"), BASE + ".109")
+        self.assertEqual(scalar(block(reward, "country_event"), "hours"), "1")
+
     def test_intro_uses_the_actual_collapse_phase(self):
         descriptions = [e.value for e in self.events[BASE + ".10"] if e.key == "desc"]
         for collapsed in (False, True):
@@ -490,6 +507,27 @@ class NamCampaignTests(unittest.TestCase):
             facts[("NAM", "has_global_flag", "ADISCORD_vorkerland_collapse_wars_started")] = collapsed
             shown = [scalar(d, "text") for d in descriptions if self.matches(block(d, "trigger"), facts)]
             self.assertEqual(shown, [BASE + (".10.d" if collapsed else ".10.before")])
+
+    def test_rom_story_uses_current_ruler_and_actual_peace_terms(self):
+        event_ids = [f"{BASE}.{number}" for number in (11, 12, 13, 20, 21, 70, 80)]
+        event_ids.append("ADISCORD_nam_groups.12")
+        for event_id, leader, recognised in product(
+            event_ids, ("NAM_Egor_Rom", "another_leader"), (False, True)
+        ):
+            with self.subTest(event=event_id, leader=leader, recognised=recognised):
+                facts = self.facts()
+                facts[("NAM", "ruling_leader")] = leader
+                facts[("NAM", "has_country_flag", "NAM_treaty_independence_recognised")] = recognised
+                descriptions = [entry.value for entry in self.events[event_id] if entry.key == "desc"]
+                shown = [scalar(desc, "text") for desc in descriptions if self.matches(block(desc, "trigger"), facts)]
+                suffix = ".d_standoff" if event_id == BASE + ".12" and not recognised else ".d"
+                if leader != "NAM_Egor_Rom":
+                    suffix += "_successor"
+                self.assertEqual(shown, [event_id + suffix])
+                if event_id == BASE + ".70":
+                    titles = [entry.value for entry in self.events[event_id] if entry.key == "title"]
+                    shown_titles = [scalar(title, "text") for title in titles if self.matches(block(title, "trigger"), facts)]
+                    self.assertEqual(shown_titles, [event_id + (".t" if leader == "NAM_Egor_Rom" else ".t_successor")])
 
     def test_mission_never_succeeds_automatically_and_all_treaties_clean_up(self):
         mission = self.decisions["NAM_defend_fields"]
@@ -502,6 +540,32 @@ class NamCampaignTests(unittest.TestCase):
         cleanup = self.effects["NAM_close_war_programmes"]
         self.assertIn("NAM_defend_fields", [e.value for e in cleanup if e.key == "remove_mission"])
         self.assertEqual({e.value for e in cleanup if e.key == "remove_ideas"}, {"NAM_wartime_entrenchment", "NAM_counterstroke_staff", "NAM_rebel_depot_maps"})
+
+    def test_border_archive_does_not_invent_recognition_after_standoff(self):
+        event_id = "ADISCORD_nam_archive.6"
+        descriptions = [entry.value for entry in self.events[event_id] if entry.key == "desc"]
+        for recognised in (False, True):
+            facts = self.facts()
+            facts[("NAM", "has_country_flag", "NAM_treaty_independence_recognised")] = recognised
+            shown = [scalar(desc, "text") for desc in descriptions if self.matches(block(desc, "trigger"), facts)]
+            self.assertEqual(shown, [event_id + (".d" if recognised else ".d_standoff")])
+
+    def test_memoir_pages_keep_full_exit_and_no_gameplay_settlement(self):
+        for chapter in range(1, 6):
+            first = self.events[f"ADISCORD_nam_memoir.{chapter}"]
+            last = self.events[f"ADISCORD_nam_memoir.{chapter + 10}"]
+            first_options = [entry.value for entry in first if entry.key == "option"]
+            last_options = [entry.value for entry in last if entry.key == "option"]
+            exit_options = [option for option in first_options if scalar(option, "name") == "ADISCORD_nam_memoir.put_away"]
+            self.assertEqual(len(exit_options), 1)
+            self.assertEqual([entry.key for entry in exit_options[0]], ["name"])
+            self.assertEqual(len(last_options), 1)
+            self.assertEqual([entry.key for entry in last_options[0]], ["name"])
+            self.assertNotIn("immediate", [entry.key for entry in first + last])
+            continuation = next(option for option in first_options if scalar(option, "name") == "ADISCORD_nam_memoir.read_on")
+            effects = block(continuation, "hidden_effect")
+            self.assertEqual([entry.key for entry in effects], ["country_event"])
+            self.assertEqual(scalar(block(effects, "country_event"), "id"), f"ADISCORD_nam_memoir.{chapter + 10}")
 
     def test_open_payroll_event_cannot_spend_after_money_or_route_changes(self):
         options = {
@@ -544,8 +608,12 @@ class NamCampaignTests(unittest.TestCase):
                 for cost in (e.value for e in decision if e.key == "custom_cost_text"):
                     for suffix in ("", "_blocked", "_tooltip"):
                         self.assertIn(cost + suffix, values)
-            for number in range(10, 14):
-                descriptions = [e.value for e in self.events[f"{BASE}.{number}"] if e.key == "desc"]
+            story_ids = [f"{BASE}.{number}" for number in (10, 11, 12, 13, 20, 21, 70, 80, 109)]
+            story_ids.append("ADISCORD_nam_groups.12")
+            story_ids.extend(f"ADISCORD_nam_memoir.{number}" for number in (*range(1, 6), *range(11, 16)))
+            story_ids.extend(f"ADISCORD_nam_archive.{number}" for number in range(1, 7))
+            for event_id in story_ids:
+                descriptions = [e.value for e in self.events[event_id] if e.key == "desc"]
                 keys = [scalar(d, "text") if isinstance(d, list) else d for d in descriptions]
                 for key in keys:
                     prose = values[key].replace("\\n", "\n")
@@ -908,6 +976,54 @@ class NamValidatorTests(unittest.TestCase):
     def test_current_campaign_passes(self):
         result, issues = self.validate()
         self.assertEqual((result, issues), (0, []))
+
+    def front_ai_issues(self, source):
+        from tools.validators import validate_adiscord_nam_resource_war as validator
+
+        with patch.object(validator, "ISSUES", []):
+            validator.check_front_ai(source)
+            return list(validator.ISSUES)
+
+    def test_front_ai_accepts_conditional_overrides_and_multiline_baselines(self):
+        source = read("common/ai_strategy/ADISCORD_nam_resource_war_ai.txt")
+        self.assertEqual(self.front_ai_issues(source), [])
+        self.assertEqual(self.front_ai_issues(source.replace(" = ", "\n=\n")), [])
+
+    def test_front_ai_rejects_each_missing_baseline_despite_difficulty_overrides(self):
+        from tools.validators.validate_adiscord_nam_resource_war import typed_blocks
+
+        source = read("common/ai_strategy/ADISCORD_nam_resource_war_ai.txt")
+        baselines = [
+            strategy for strategy in typed_blocks(source, "ai_strategy")
+            if "type = front_control" in strategy and "country_trigger" not in strategy
+        ]
+        self.assertEqual(len(baselines), 9)
+        for baseline in baselines:
+            with self.subTest(baseline=baseline.strip()):
+                issues = self.front_ai_issues(source.replace(baseline, "", 1))
+                self.assertTrue(any("expected one baseline front_control" in issue for issue in issues), issues)
+
+    def test_front_ai_rejects_wrong_target_priority_and_attack_policy(self):
+        source = read("common/ai_strategy/ADISCORD_nam_resource_war_ai.txt")
+        for original, replacement, field in (
+            ("tag = NAM ratio", "tag = EFL ratio", "tag"),
+            ("priority = 1500", "priority = 1200", "priority"),
+            ("execution_type = rush ", "execution_type = careful ", "execution_type"),
+            ("manual_attack = yes", "manual_attack = no", "manual_attack"),
+        ):
+            with self.subTest(field=field):
+                issues = self.front_ai_issues(source.replace(original, replacement, 1))
+                expected = f"ADISCORD_nam_resource_war_eflor_offensive: baseline front_control requires {field} ="
+                self.assertTrue(any(expected in issue for issue in issues), issues)
+
+    def test_front_ai_checks_nested_difficulty_coverage_ratios(self):
+        source = read("common/ai_strategy/ADISCORD_nam_resource_war_ai.txt")
+        for replacement in ("ratio = 1", "ratio = -0.1", "ratio = invalid", ""):
+            with self.subTest(replacement=replacement):
+                changed = source.replace("\t\tratio = 0.01", f"\t\t{replacement}", 1)
+                self.assertNotEqual(changed, source)
+                issues = self.front_ai_issues(changed)
+                self.assertTrue(any("front_control needs one coverage ratio" in issue for issue in issues), issues)
 
     def test_orders_cannot_reuse_or_lock_ordinary_templates(self):
         units_path = "history/units/NAM.txt"

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 from tools.lib.on_actions import read_country_on_actions
+from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 import re
 import sys
@@ -93,6 +94,61 @@ def without_comments(source: str) -> str:
 def has_script_fragment(source: str, fragment: str) -> bool:
     pattern = r"\s+".join(re.escape(part) for part in fragment.split())
     return re.search(pattern, without_comments(source)) is not None
+
+
+def check_front_ai(source: str) -> None:
+    """Validate baseline fronts independently of conditional difficulty overrides."""
+    plans = parse_clausewitz(source)
+    expected = (
+        ("resource_war_eflor_offensive", "NAM", "1500", "rush", "yes"),
+        ("resource_war_azhar_offensive", "NAM", "1500", "rush", "yes"),
+        ("resource_war_rebel_offensive", "NAM", "1500", "rush", "yes"),
+        ("resource_war_nam_eflor_front", "EFL", "1500", "careful", "no"),
+        ("resource_war_nam_azhar_front", "AZH", "1500", "careful", "no"),
+        ("resource_war_nam_rebel_front", "SLF", "1500", "careful", "no"),
+        ("war_of_return_nam_eflor", "EFL", "1200", "balanced", "yes"),
+        ("war_of_return_nam_azhar", "AZH", "1200", "balanced", "yes"),
+        ("war_of_return_coalition_defence", "NAM", "1200", "careful", "no"),
+    )
+    for suffix, tag, priority, execution, manual_attack in expected:
+        name = f"ADISCORD_nam_{suffix}"
+        definitions = [plan for plan in plans if plan.key == name]
+        check(len(definitions) == 1, f"{name}: expected one AI plan")
+        if len(definitions) != 1:
+            continue
+        strategies = [
+            entry.value for entry in definitions[0].value
+            if entry.key == "ai_strategy" and isinstance(entry.value, list)
+        ]
+        baselines = [
+            strategy for strategy in strategies
+            if any(field.key == "type" and field.value == "front_control" for field in strategy)
+            and not any(field.key == "country_trigger" for field in strategy)
+        ]
+        check(len(baselines) == 1, f"{name}: expected one baseline front_control")
+        if len(baselines) != 1:
+            continue
+        for key, value in (
+            ("tag", tag), ("ratio", "0.01"), ("priority", priority),
+            ("ordertype", "front"), ("execution_type", execution),
+            ("execute_order", "yes"), ("manual_attack", manual_attack),
+        ):
+            values = [field.value for field in baselines[0] if field.key == key]
+            check(values == [value], f"{name}: baseline front_control requires {key} = {value}")
+
+    # Conditional fronts also need a reachable coverage threshold.
+    for plan in plans:
+        for entry in plan.value:
+            if entry.key != "ai_strategy" or not isinstance(entry.value, list):
+                continue
+            if not any(field.key == "type" and field.value == "front_control" for field in entry.value):
+                continue
+            ratios = [field.value for field in entry.value if field.key == "ratio"]
+            try:
+                reachable = len(ratios) == 1 and 0 <= float(ratios[0]) < 1
+            except (TypeError, ValueError):
+                reachable = False
+            check(reachable, f"{plan.key}: front_control needs one coverage ratio in [0, 1)")
 
 
 def state_source(state_id: int) -> str:
@@ -2001,35 +2057,7 @@ def main() -> int:
             f"type = {equipment_id} amount = {amount} producer = {producer}" in effects,
             f"incorrect resource-war stockpile for {producer}: expected {amount} {equipment_id}",
         )
-    check(
-        ai.count("manual_attack = yes") == 5 and ai.count("priority = 1500") >= 6,
-        "coalition attack or NAM three-front defence AI is incomplete",
-    )
-    for strategy in re.findall(r"ai_strategy\s*=\s*\{([^{}]*)\}", ai, re.DOTALL):
-        if "type = front_control" not in strategy:
-            continue
-        ratio_match = re.search(r"\bratio\s*=\s*([0-9.]+)", strategy)
-        check(
-            ratio_match is not None, "NAM front_control strategy lacks a coverage ratio"
-        )
-        if ratio_match is not None:
-            check(
-                float(ratio_match.group(1)) < 1.0,
-                f"NAM front_control strategy uses unreachable ratio {ratio_match.group(1)}",
-            )
-    for strategy_suffix, tag, ratio in (
-        ("eflor", "EFL", "0.01"),
-        ("azhar", "AZH", "0.01"),
-        ("rebel", "SLF", "0.01"),
-    ):
-        strategy_name = f"ADISCORD_nam_resource_war_nam_{strategy_suffix}_front"
-        strategy = named_block(ai, strategy_name)
-        check(
-            f"tag = {tag} ratio = {ratio}" in strategy
-            and "execution_type = careful" in strategy
-            and "manual_attack = no" in strategy,
-            f"{strategy_name} is not a cautious NAM defence allocation",
-        )
+    check_front_ai(ai)
 
     hidden_ideas = named_block(ideas, "hidden_ideas")
     last_line = named_block(ideas, "ADISCORD_nam_last_line_administration")

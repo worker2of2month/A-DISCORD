@@ -1,0 +1,97 @@
+{
+  "models": {
+    "civilian": {
+      "vertices": 3189,
+      "triangles": 1280,
+      "materials": 1,
+      "bounds_blender_xyz": [
+        [
+          -1.015,
+          1.015
+        ],
+        [
+          -0.805,
+          0.805
+        ],
+        [
+          -0.028,
+          1.141
+        ]
+      ],
+      "entity": "building_industrial_complex",
+      "smoke_native_xyz": [
+        [
+          -0.805,
+          1.141,
+          0.504
+        ]
+      ],
+      "damage_native_xyz": [
+        [
+          -0.49,
+          0.28,
+          0.0
+        ],
+        [
+          0.28,
+          0.21,
+          -0.56
+        ]
+      ],
+      "source_blend_sha256": "58d958f4273e35de012cafc0cd2c8e9858bb16aab3ba1929fdaf1824777441d6"
+    },
+    "military": {
+      "vertices": 1848,
+      "triangles": 808,
+      "materials": 1,
+      "bounds_blender_xyz": [
+        [
+          -1.05,
+          1.05
+        ],
+        [
+          -0.805,
+          0.805
+        ],
+        [
+          -0.028,
+          0.931
+        ]
+      ],
+      "entity": "building_arms_factory",
+      "smoke_native_xyz": [
+        [
+          0.798,
+          0.931,
+          0.546
+        ]
+      ],
+      "damage_native_xyz": [
+        [
+          -0.35,
+          0.35,
+          0.0
+        ],
+        [
+          0.56,
+          0.21,
+          0.14
+        ]
+      ],
+      "source_blend_sha256": "86bb34db2355437196d31e2e05b869033841536ae83d2619617fc888ba85f165"
+    }
+  },
+  "files": {
+    "ADISCORD_factory_diffuse.dds": "1e3f3f497141a2b057237ab65c2acb3efc5c827863a1bd6d7032df40a178853a",
+    "ADISCORD_factory_normal.dds": "a5829b2be1939d68849cfde42294e29b1ec882e8daead7c7476b6b78163dd970",
+    "ADISCORD_factory_specular.dds": "18a72eac52890e2378a2574df71ae3c27dae66e702928c86edc8a19905014f8d",
+    "ADISCORD_civilian_factory.mesh": "fac873d7bbe92b437d7c169e7e2a504e7b94fcf18b7f3e7f46bac4ab1a0020ec",
+    "ADISCORD_military_factory.mesh": "412ad32758bf8779d9297354f274cc3f45373779fd6233c211eec6b23e41f3bb"
+  },
+  "native_reimport": true,
+  "hoi4_runtime_verified": false,
+  "input_sha256": {
+    "tools/builders/build_adiscord_factory_models.py": "8b614dee7b719a7931258846233dc7a95764d553aa7f2a2887561c4166d8dc77",
+    "tools/assets/source/build_shl_palace.py": "e0e0aa58c2bb43a8a1eb36a4ccb4ce4d4b8966e763fa015190f1540a64c65d3a"
+  }
+}

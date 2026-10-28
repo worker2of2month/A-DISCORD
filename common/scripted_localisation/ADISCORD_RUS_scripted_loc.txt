@@ -2979,6 +2979,58 @@ defined_text = {
 	text = { localization_key = RUS_crisis_epilogue_8_body }
 }
 
+# Epilogue readers may control RUS or the ruined surface; outcomes belong to RUS.
+defined_text = {
+	name = GetRUSCrisisEpilogueScience
+	text = {
+		trigger = {
+			RUS = { check_variable = { var = RUS_last_sky_science value = 2 compare = equals } }
+		}
+		localization_key = RUS_crisis_epilogue_science_accepted
+	}
+	text = {
+		trigger = {
+			RUS = { check_variable = { var = RUS_last_sky_science value = 3 compare = equals } }
+		}
+		localization_key = RUS_crisis_epilogue_science_declined
+	}
+	text = { localization_key = RUS_crisis_epilogue_science_unsettled }
+}
+
+defined_text = {
+	name = GetRUSCrisisEpilogueArmy
+	text = {
+		trigger = {
+			RUS = { check_variable = { var = RUS_last_sky_army value = 2 compare = equals } }
+		}
+		localization_key = RUS_crisis_epilogue_army_accepted
+	}
+	text = {
+		trigger = {
+			RUS = { check_variable = { var = RUS_last_sky_army value = 3 compare = equals } }
+		}
+		localization_key = RUS_crisis_epilogue_army_declined
+	}
+	text = { localization_key = RUS_crisis_epilogue_army_unsettled }
+}
+
+defined_text = {
+	name = GetRUSCrisisEpilogueDistricts
+	text = {
+		trigger = {
+			RUS = { check_variable = { var = RUS_last_sky_districts value = 2 compare = equals } }
+		}
+		localization_key = RUS_crisis_epilogue_districts_accepted
+	}
+	text = {
+		trigger = {
+			RUS = { check_variable = { var = RUS_last_sky_districts value = 3 compare = equals } }
+		}
+		localization_key = RUS_crisis_epilogue_districts_declined
+	}
+	text = { localization_key = RUS_crisis_epilogue_districts_unsettled }
+}
+
 # Suspicion summary. Growth terms mirror RUS_suspicion_monthly.
 defined_text = {
 	name = GetRUSSuspicionStatus
@@ -3014,7 +3066,10 @@ defined_text = {
 defined_text = {
 	name = GetRUSSuspicionThroneRelief
 	text = {
-		trigger = { has_completed_focus = RUS_bunker_sealed_throne }
+		trigger = {
+			has_completed_focus = RUS_bunker_sealed_throne
+			has_completed_focus = RUS_bunker_commission
+		}
 		localization_key = RUS_suspicion_growth_sealed_throne
 	}
 	text = { localization_key = RUS_suspicion_growth_none }

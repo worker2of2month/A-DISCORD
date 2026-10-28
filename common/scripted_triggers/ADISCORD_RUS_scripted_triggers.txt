@@ -2002,7 +2002,7 @@ RUS_civil_factory_order_site = {
 
 RUS_artillery_order_site = {
 	RUS_bunker_operational = yes
-	has_completed_focus = RUS_battery_training
+	has_completed_focus = RUS_artillery_tables
 }
 
 RUS_civil_factory_order_available = {

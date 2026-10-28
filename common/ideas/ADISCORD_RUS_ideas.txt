@@ -96,7 +96,8 @@ ideas = {
 			picture = RUS_government_service
 			allowed = { always = no }
 			modifier = {
-				political_power_gain = 0.15
+				political_power_gain = 0.10
+				ADISCORD_economy_admin_expense_factor = -0.05
 			}
 		}
 
@@ -115,15 +116,6 @@ ideas = {
 			allowed = { always = no }
 			modifier = {
 				land_reinforce_rate = 0.02
-			}
-		}
-
-		RUS_state_budget_delta = {
-			name = RUS_government_service
-			picture = RUS_government_service
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.05
 			}
 		}
 
@@ -246,7 +238,7 @@ ideas = {
 			}
 		}
 
-		RUS_wounded_return_service_delta = {
+		RUS_field_hospitals_delta = {
 			name = RUS_black_army
 			picture = RUS_black_army
 			allowed = { always = no }

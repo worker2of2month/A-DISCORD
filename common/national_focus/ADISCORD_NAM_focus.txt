@@ -13,8 +13,8 @@ focus_tree = {
 	}
 	default = no
 	continuous_focus_position = {
-		x = 50
-		y = 1900
+		x = 5000
+		y = 5555
 	}
 
 	# The generator emits this tree as shared focuses, so the completed pre-war
@@ -70,7 +70,7 @@ focus_tree = {
 
 shared_focus = {
 		id = NAM_inventory
-		icon = GFX_focus_generic_commission
+		icon = GFX_focus_NAM_inventory
 		x = 38
 		y = 0
 		cost = 1
@@ -82,8 +82,14 @@ shared_focus = {
 		continue_if_invalid = no
 		completion_reward = {
 			add_political_power = 35
+			hidden_effect = {
+				if = {
+					limit = { is_ai = no }
+					scoped_play_song = "ADISCORD_3teeth_too_far_gone"
+				}
+			}
 			country_event = {
-				id = ADISCORD_nam_resource_war.10
+				id = ADISCORD_nam_resource_war.109
 				hours = 1
 			}
 		}
@@ -94,7 +100,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_metropolitan_quota
-		icon = GFX_focus_generic_resource_extraction
+		icon = GFX_focus_NAM_metropolitan_quota
 		x = 34
 		y = 1
 		cost = 3
@@ -124,7 +130,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_deliver_the_quota
-		icon = GFX_focus_generic_railroad
+		icon = GFX_focus_NAM_deliver_the_quota
 		x = 33
 		y = 2
 		cost = 4
@@ -171,7 +177,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_concealed_reserve
-		icon = GFX_focus_generic_turning_a_blind_eye
+		icon = GFX_focus_NAM_concealed_reserve
 		x = 35
 		y = 2
 		cost = 4
@@ -207,7 +213,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_wrk_trade_house
-		icon = GFX_focus_generic_british_trade
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 34
 		y = 3
 		cost = 4
@@ -249,7 +255,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_wrk_return_cargo
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_NAM_wrk_return_cargo
 		x = 34
 		y = 4
 		cost = 3
@@ -286,7 +292,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_metropolitan_depots
-		icon = GFX_focus_generic_reinforcing_the_supply_network
+		icon = GFX_focus_NAM_metropolitan_depots
 		x = 34
 		y = 5
 		cost = 3
@@ -328,7 +334,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_colonial_watch
-		icon = GFX_focus_generic_secret_service_agency
+		icon = GFX_focus_NAM_colonial_watch
 		x = 42
 		y = 1
 		cost = 3
@@ -361,7 +367,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_imperial_gendarmes
-		icon = GFX_focus_generic_national_security
+		icon = GFX_focus_NAM_imperial_gendarmes
 		x = 41
 		y = 2
 		cost = 4
@@ -402,7 +408,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_oilfield_militia
-		icon = GFX_focus_generic_workers
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 43
 		y = 2
 		cost = 4
@@ -444,7 +450,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_pipeline_patrols
-		icon = GFX_focus_generic_road_investment
+		icon = GFX_focus_NAM_pipeline_patrols
 		x = 42
 		y = 3
 		cost = 3
@@ -493,7 +499,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_print_shop_raid
-		icon = GFX_focus_generic_printing_press
+		icon = GFX_focus_NAM_print_shop_raid
 		x = 42
 		y = 4
 		cost = 3
@@ -526,7 +532,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_colony_order
-		icon = GFX_focus_generic_world_peace
+		icon = GFX_focus_NAM_colony_order
 		x = 42
 		y = 5
 		cost = 3
@@ -559,7 +565,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_letters_to_the_centre
-		icon = GFX_focus_generic_whispers
+		icon = GFX_focus_NAM_letters_to_the_centre
 		x = 38
 		y = 6
 		cost = 3
@@ -592,7 +598,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_centre_hourglass
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_NAM_centre_hourglass
 		x = 38
 		y = 1
 		cost = 3
@@ -621,7 +627,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_commissioner_plan
-		icon = GFX_focus_generic_commission
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 37
 		y = 2
 		cost = 5
@@ -661,7 +667,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_second_ledger
-		icon = GFX_focus_generic_stockpile_currency
+		icon = GFX_focus_NAM_second_ledger
 		x = 39
 		y = 2
 		cost = 5
@@ -700,7 +706,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_metropolitan_instructors
-		icon = GFX_focus_generic_military_mission
+		icon = GFX_focus_NAM_metropolitan_instructors
 		x = 37
 		y = 3
 		cost = 4
@@ -738,7 +744,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_quiet_officer_lists
-		icon = GFX_focus_generic_conspiracy
+		icon = GFX_focus_NAM_quiet_officer_lists
 		x = 39
 		y = 3
 		cost = 4
@@ -769,7 +775,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sand_runs_out
-		icon = GFX_focus_generic_radio_communication
+		icon = GFX_focus_NAM_sand_runs_out
 		x = 38
 		y = 4
 		cost = 3
@@ -814,7 +820,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_last_centre_register
-		icon = GFX_focus_generic_improve_the_administration
+		icon = GFX_focus_NAM_last_centre_register
 		x = 38
 		y = 5
 		cost = 3

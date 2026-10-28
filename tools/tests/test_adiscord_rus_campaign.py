@@ -771,9 +771,160 @@ class RusCampaignTests(unittest.TestCase):
                     self.assertEqual(world.value("RUS_bunker_used_power"), 0)
 
     def test_generation_and_political_development_focuses(self):
-        self.assertEqual(len(self.focuses), 155)
+        self.assertEqual(len(self.focuses), 148)
         path = ROOT / "common/national_focus/ADISCORD_national_focus_RUS.txt"
         self.assertEqual(path.read_bytes(), expected_outputs()[path])
+
+    def opening_focus_ready(self, world, name):
+        rows = self.focuses[name]
+        prerequisites = [row.value for row in rows if row.key == "prerequisite"]
+        exclusive = [row.value for group in rows if group.key == "mutually_exclusive"
+                     for row in group.value if row.key == "focus"]
+        return (
+            name not in world.focuses
+            and not set(exclusive) & world.focuses
+            and all(any(row.value in world.focuses for row in group if row.key == "focus")
+                    for group in prerequisites)
+            and world.matches(block(rows, "available"))
+        )
+
+    def test_opening_four_routes_preserve_paid_construction_and_defer_full_policy(self):
+        for purpose, room, opposite, policy, variable in (
+            ("RUS_bunker_open_city", "shelter", "RUS_bunker_sealed_throne",
+             "RUS_open_city_policy", "RUS_bunker_food_output_bonus"),
+            ("RUS_bunker_sealed_throne", "guard", "RUS_bunker_open_city",
+             "RUS_sealed_throne_policy", "RUS_bunker_power_bonus"),
+        ):
+            for course in ("RUS_scientists_council", "RUS_black_army_oath"):
+                with self.subTest(purpose=purpose, course=course):
+                    world = BunkerWorld(self, fresh=True)
+                    world.begin("RUS_bunker_excavate")
+                    receipt = {key: value for key, value in world.variables.items()
+                               if key.startswith("RUS_bunker_escrow_")
+                               or key in ("RUS_bunker_project", "RUS_bunker_project_depth")}
+                    elapsed = 0
+                    route = ("RUS_summon_the_aimaqs", "RUS_bunker_survey", purpose,
+                             "RUS_count_the_hearths", course)
+                    for name in route:
+                        self.assertTrue(self.opening_focus_ready(world, name), name)
+                        world.execute(block(self.focuses[name], "completion_reward"))
+                        world.focuses.add(name)
+                        elapsed += int(scalar(self.focuses[name], "cost")) * 7
+                        self.assertNotIn(policy, world.ideas)
+                        for key, value in receipt.items():
+                            self.assertEqual(world.variables[key], value, (name, key))
+                    self.assertEqual(elapsed, 84)
+                    self.assertEqual(world.value(variable), 1)
+                    self.assertFalse(self.opening_focus_ready(world, opposite))
+                    self.assertTrue(self.opening_focus_ready(world, "RUS_bunker_airlocks"))
+                    self.assertFalse(self.opening_focus_ready(world, "RUS_bunker_commission"))
+                    for name in ("RUS_bunker_closed_cycle", "RUS_bunker_reserve_turbine",
+                                 "RUS_bunker_surface_market", "RUS_bunker_deep_casemates"):
+                        self.assertFalse(self.opening_focus_ready(world, name), name)
+                    # Callbacks model payment and completion, not the engine's calendar.
+                    world.finish("RUS_bunker_excavate")
+                    world.begin("RUS_bunker_" + room)
+                    world.finish("RUS_bunker_" + room)
+                    self.assertEqual(world.value("RUS_bunker_fitted"), 1)
+                    self.assertGreaterEqual(world.value("RUS_bunker_free_power"), 0)
+                    self.assertEqual(world.ruler, "RUS_Mark_Rustan")
+                    self.assertNotIn("RUS_crisis_phase", world.variables)
+
+    def test_commission_installs_selected_policy_and_trial_failure_keeps_programmes_open(self):
+        for purpose, policy, opposite_policy, continuation in (
+            ("RUS_bunker_open_city", "RUS_open_city_policy", "RUS_sealed_throne_policy",
+             "RUS_bunker_closed_cycle"),
+            ("RUS_bunker_sealed_throne", "RUS_sealed_throne_policy", "RUS_open_city_policy",
+             "RUS_bunker_reserve_turbine"),
+        ):
+            for hungry in (False, True):
+                with self.subTest(purpose=purpose, hungry=hungry):
+                    world = self.world()
+                    world.stability = 0.5
+                    world.focuses = {purpose, "RUS_bunker_science_wing", "RUS_bunker_memory_vault"}
+                    world.variables.update({"RUS_bunker_depth": 5, "RUS_bunker_generators": 3,
+                                            "RUS_bunker_integrity": 80, "RUS_bunker_food": 60})
+                    for layer in range(1, 6):
+                        world.variables[f"RUS_bunker_layer_{layer}"] = 1
+                    world.run("RUS_bunker_refresh")
+                    self.assertTrue(self.opening_focus_ready(world, "RUS_bunker_commission"))
+                    world.execute(block(self.focuses["RUS_bunker_commission"], "completion_reward"))
+                    world.focuses.add("RUS_bunker_commission")
+                    self.assertIn(policy, world.ideas)
+                    self.assertNotIn(opposite_policy, world.ideas)
+                    self.assertIn("RUS_bunker_silence_trial_active", world.flags)
+                    if hungry:
+                        world.variables["RUS_bunker_food"] = 0
+                        world.run("RUS_bunker_refresh")
+                        world.variables["RUS_bunker_food"] = 40
+                        world.run("RUS_bunker_refresh")
+                    before = world.stability, world.pp
+                    world.run("RUS_bunker_silence_trial_settle")
+                    self.assertAlmostEqual(world.stability - before[0], -0.05 if hungry else 0.05)
+                    self.assertEqual(world.pp - before[1], 0 if hungry else 50)
+                    self.assertTrue(self.opening_focus_ready(world, continuation))
+                    saved = deepcopy(world.variables), world.stability, world.pp
+                    world.run("RUS_bunker_silence_trial_settle")
+                    world.run("RUS_campaign_initialize")
+                    self.assertEqual((world.variables, world.stability, world.pp), saved)
+
+    def test_ordinary_civil_institutions_are_priorities_not_permanent_exclusions(self):
+        world = self.world()
+        world.focuses = {"RUS_pay_the_officials"}
+        for name in ("RUS_winter_granaries", "RUS_district_courts"):
+            self.assertTrue(self.opening_focus_ready(world, name))
+            world.execute(block(self.focuses[name], "completion_reward"))
+            world.focuses.add(name)
+        self.assertTrue(self.opening_focus_ready(world, "RUS_school_of_scribes"))
+
+    def test_merged_artillery_programme_funds_first_order_without_passive_income(self):
+        for course in ("RUS_scientists_council", "RUS_black_army_oath"):
+            for doctrine in ("RUS_patient_war", "RUS_swift_columns"):
+                with self.subTest(course=course, doctrine=doctrine):
+                    world = BunkerWorld(self, fresh=True)
+                    world.begin("RUS_bunker_excavate")
+                    route = ("RUS_summon_the_aimaqs", "RUS_count_the_hearths", course,
+                             "RUS_muster_books", "RUS_quartermaster_service", doctrine,
+                             "RUS_officer_courses", "RUS_artillery_tables")
+                    for name in route:
+                        self.assertTrue(self.opening_focus_ready(world, name), name)
+                        world.execute(block(self.focuses[name], "completion_reward"))
+                        world.focuses.add(name)
+                    self.assertEqual(sum(int(scalar(self.focuses[name], "cost")) * 7 for name in route), 161)
+                    world.finish("RUS_bunker_excavate")
+                    world.decisions.update(self.programmes)
+                    order = world.decisions["RUS_artillery_order"]
+                    self.assertTrue(world.matches(block(order, "visible")))
+                    self.assertTrue(world.matches(block(order, "available")))
+                    self.assertTrue(world.matches(block(order, "custom_cost_trigger")))
+                    self.assertEqual(world.equipment["artillery_equipment_1"], 80)
+                    before = world.balances()
+                    world.begin("RUS_artillery_order")
+                    self.assertEqual(tuple(a - b for a, b in zip(before, world.balances())), (25, 65, 50))
+                    self.assertEqual(world.equipment["artillery_equipment_1"], 80)
+                    self.assertEqual(scalar(order, "days_remove"), "30")
+                    world.finish("RUS_artillery_order")
+                    self.assertEqual(world.equipment["artillery_equipment_1"], 200)
+                    world.execute(block(order, "remove_effect"))
+                    self.assertEqual(world.equipment["artillery_equipment_1"], 200)
+
+    def test_merged_medical_and_artillery_route_has_bounded_total_focus_time(self):
+        for doctrine in ("RUS_patient_war", "RUS_swift_columns"):
+            done = set()
+
+            def include(name):
+                if name in done:
+                    return
+                for row in self.focuses[name]:
+                    if row.key == "prerequisite":
+                        choices = [child.value for child in row.value if child.key == "focus"]
+                        include(doctrine if doctrine in choices else choices[0])
+                done.add(name)
+
+            include("RUS_staff_field_exercise")
+            self.assertTrue({"RUS_field_hospitals", "RUS_artillery_tables", doctrine} <= done)
+            self.assertEqual(sum(int(scalar(self.focuses[name], "cost")) * 7 for name in done), 280)
+            self.assertFalse({"RUS_battery_training", "RUS_artillery_observers", "RUS_wounded_return_service", "RUS_field_evacuation_service"} & self.focuses.keys())
 
     def test_engineering_and_transport_focuses_fund_work_and_keep_reforms(self):
         world = self.world()
@@ -1443,7 +1594,7 @@ class RusCampaignTests(unittest.TestCase):
         cases = (
             (("school_of_scribes", "roadside_clinics"), "a_country_of_names", 2, 77),
             (("district_ledger", "courier_stations", "district_paramedics"), "covenant_of_service", 3, 84),
-            (("field_evacuation_service", "rifle_inspection_board", "artillery_observers"), "staff_field_exercise", 6, 77),
+            (("field_hospitals", "rifle_inspection_board"), "staff_field_exercise", 2, 70),
             (("recovery_depots", "interchangeable_parts", "second_arsenal_shift"), "strategic_freight_reserve", 3, 105),
             (("register_conquered_lands", "empire_without_rivals", "postwar_roads", "imperial_academy"), "tomorrow_above_ground", 6, 98),
         )
@@ -2251,7 +2402,7 @@ class RusCampaignTests(unittest.TestCase):
         children = {name for chain in self.BUNKER_COURSES.values() for name in chain}
         for root, chain in self.BUNKER_COURSES.items():
             with self.subTest(root=root):
-                done = {root}
+                done = {root, "RUS_bunker_commission"}
                 while True:
                     ready = {
                         name for name in children - done
@@ -2261,7 +2412,7 @@ class RusCampaignTests(unittest.TestCase):
                     if not ready:
                         break
                     done |= ready
-                self.assertEqual(done - {root}, set(chain))
+                self.assertEqual(done - {root, "RUS_bunker_commission"}, set(chain))
                 self.assertEqual(sum(int(scalar(self.focuses[name], "cost")) * 7 for name in chain), 77)
                 world = self.world()
                 world.focuses = done
@@ -2285,12 +2436,15 @@ class RusCampaignTests(unittest.TestCase):
         world.variables["RUS_bunker_generators"] = 3
         world.run("RUS_bunker_refresh")
         self.assertEqual(world.value("RUS_bunker_food_balance"), -3)
+        world.execute(block(self.focuses["RUS_bunker_open_city"], "completion_reward"))
+        self.assertEqual(world.value("RUS_bunker_food_balance"), -2)
         world.execute(block(self.focuses["RUS_bunker_closed_cycle"], "completion_reward"))
         self.assertEqual(world.value("RUS_bunker_food_balance"), 0)
         stock = world.value("RUS_bunker_food")
         world.run("RUS_bunker_weekly_supply")
         self.assertEqual(world.value("RUS_bunker_food"), stock)
         power = world.value("RUS_bunker_free_power")
+        world.execute(block(self.focuses["RUS_bunker_sealed_throne"], "completion_reward"))
         world.execute(block(self.focuses["RUS_bunker_reserve_turbine"], "completion_reward"))
         world.run("RUS_bunker_refresh")
         self.assertEqual(world.value("RUS_bunker_free_power"), power + 4)
@@ -2594,8 +2748,9 @@ class RusCampaignTests(unittest.TestCase):
             (0.3, (), 5),
             (0.7, (), 7),
             (0.7, ("RUS_parallel_public_addresses",), 6),
-            (0.0, ("RUS_parallel_public_addresses", "RUS_bunker_sealed_throne"), 1),
-            (0.0, ("RUS_parallel_public_addresses", "RUS_bunker_sealed_throne", "RUS_foreign_press_bureau"), 0),
+            (0.0, ("RUS_parallel_public_addresses", "RUS_bunker_sealed_throne"), 2),
+            (0.0, ("RUS_parallel_public_addresses", "RUS_bunker_sealed_throne", "RUS_bunker_commission"), 1),
+            (0.0, ("RUS_parallel_public_addresses", "RUS_bunker_sealed_throne", "RUS_bunker_commission", "RUS_foreign_press_bureau"), 0),
         )
         for bop, focuses, growth in cases:
             with self.subTest(bop=bop, focuses=focuses):
@@ -2718,7 +2873,7 @@ class RusCampaignTests(unittest.TestCase):
         self.assertNotIn("RUS_suspicion", world.variables)
 
     def test_suspicion_status_and_relief_focuses_are_explained(self):
-        for focus in ("RUS_parallel_public_addresses", "RUS_bunker_sealed_throne", "RUS_foreign_press_bureau"):
+        for focus in ("RUS_parallel_public_addresses", "RUS_bunker_commission", "RUS_foreign_press_bureau"):
             rewards = [row.value for row in walk(block(self.focuses[focus], "completion_reward")) if row.key == "custom_effect_tooltip"]
             self.assertIn("RUS_suspicion_focus_relief_tt", rewards)
         unlocks = {
@@ -3492,10 +3647,10 @@ class RusCampaignTests(unittest.TestCase):
             self.assertNotIn(key, positions, (focus, positions.get(key)))
             positions[key] = focus
         expected = {
-            "RUS_bunker_surface_market": [["RUS_bunker_open_city"]],
+            "RUS_bunker_surface_market": [["RUS_bunker_open_city"], ["RUS_bunker_commission"]],
             "RUS_bunker_refugee_quarters": [["RUS_bunker_surface_market"]],
             "RUS_bunker_city_charter": [["RUS_bunker_systems_college"], ["RUS_bunker_refugee_quarters"]],
-            "RUS_bunker_deep_casemates": [["RUS_bunker_sealed_throne"]],
+            "RUS_bunker_deep_casemates": [["RUS_bunker_sealed_throne"], ["RUS_bunker_commission"]],
             "RUS_bunker_mountain_garrison": [["RUS_bunker_deep_casemates"]],
             "RUS_bunker_eternal_headquarters": [["RUS_bunker_emergency_rations"], ["RUS_bunker_mountain_garrison"]],
         }
@@ -3951,7 +4106,7 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_public_story_events_have_no_mandatory_choice_settlement(self):
         events = [e.value for e in parse(f"events/{BASE}_events.txt") if e.key == "country_event" and scalar(e.value, "id").startswith("ADISCORD_rus_campaign.")]
-        self.assertEqual(len(events), 39)
+        self.assertEqual(len(events), 41)
         registry = json.loads(read("tools/data/adiscord_event_ids.json"))["events"]
         for event in events:
             name = scalar(event, "id")
@@ -4680,8 +4835,12 @@ class RusCampaignTests(unittest.TestCase):
     def test_faction_branches_and_governance_fork_have_one_route_each(self):
         self.assertEqual(scalar(block(self.focuses["RUS_scientists_council"], "prerequisite"), "focus"), "RUS_count_the_hearths")
         self.assertEqual(scalar(block(self.focuses["RUS_black_army_oath"], "prerequisite"), "focus"), "RUS_count_the_hearths")
-        self.assertEqual(scalar(block(self.focuses["RUS_aimaq_council"], "prerequisite"), "focus"), "RUS_scientists_council")
-        self.assertEqual(scalar(block(self.focuses["RUS_seal_chancery"], "prerequisite"), "focus"), "RUS_black_army_oath")
+        self.assertFalse({"RUS_aimaq_council", "RUS_seal_chancery", "RUS_state_budget"} & self.focuses.keys())
+        for child, course in (("RUS_local_service_committees", "RUS_scientists_council"),
+                              ("RUS_district_representation", "RUS_scientists_council"),
+                              ("RUS_inspection_chamber", "RUS_black_army_oath"),
+                              ("RUS_military_governors", "RUS_black_army_oath")):
+            self.assertEqual(scalar(block(self.focuses[child], "prerequisite"), "focus"), course)
         for focus, other in (("RUS_scientists_council", "RUS_black_army_oath"), ("RUS_black_army_oath", "RUS_scientists_council")):
             self.assertEqual(scalar(block(self.focuses[focus], "mutually_exclusive"), "focus"), other)
         removed = {"RUS_reaffirm_khan", "RUS_army_mandate", "RUS_reconstruction_cabinet", "RUS_political_course_chosen", "RUS_political_choice_open"}
@@ -5214,7 +5373,7 @@ class RusCampaignTests(unittest.TestCase):
             ("air_control_network", 2, 2, "air_mission_efficiency", 0.03),
             ("serial_ordnance_orders", 3, 1, "industrial_capacity_factory", 0.23),
             ("aircraft_workshops", 3, 1, "production_factory_efficiency_gain_factor", 0.03),
-            ("wounded_return_service", 4, 1, "casualty_trickleback", 0.26),
+            ("field_hospitals", 4, 1, "casualty_trickleback", 0.26),
             ("air_ground_coordination", 4, 2, "air_accidents_factor", -0.05),
             ("command_accountability", 5, 2, "planning_speed", 0.03),
         )
@@ -5267,8 +5426,8 @@ class RusCampaignTests(unittest.TestCase):
 
         cases = (
             (None, None, (0, 0, 0)),
-            ("RUS_aimaq_council", "RUS_council_mandate", (0.1, -0.05, 0.05)),
-            ("RUS_seal_chancery", "RUS_chancery_mandate", (0.2, 0.1, -0.03)),
+            ("RUS_scientists_council", "RUS_council_mandate", (0.1, -0.05, 0.05)),
+            ("RUS_black_army_oath", "RUS_chancery_mandate", (0.2, 0.1, -0.03)),
         )
         for focus, preview, mandate in cases:
             for depots in (False, True):
@@ -5318,9 +5477,9 @@ class RusCampaignTests(unittest.TestCase):
     def test_new_institution_and_army_previews_match_accumulated_variables(self):
         modifiers = parse(f"common/dynamic_modifiers/ADISCORD_dynamic_modifiers_RUS.txt")
         cases = (
-            "permanent_government", "state_budget", "civil_construction_board",
+            "permanent_government", "civil_construction_board",
             "military_governors", "military_contract_board", "staff_college",
-            "integrated_signals", "wounded_return_service", "serial_ordnance_orders",
+            "integrated_signals", "field_hospitals", "serial_ordnance_orders",
             "armoured_repair_service", "flight_school", "air_control_network",
             "air_ground_coordination",
             "single_supply_register", "railway_coverage",
@@ -5727,7 +5886,10 @@ class RusLateProgrammeTests(unittest.TestCase):
             before = world.balances(), world.value("RUS_bunker_food")
             world.execute(block(options[0], "hidden_effect"))
             self.assertEqual((world.balances(), world.value("RUS_bunker_food")), before)
-            self.assertEqual(world.value("RUS_last_sky_" + suffix), 2)
+            self.assertEqual(world.value("RUS_last_sky_" + suffix), 3)
+            refused = deepcopy(world.variables), world.balances()
+            world.execute(block(options[1], "hidden_effect"))
+            self.assertEqual((world.variables, world.balances()), refused)
             short, _ = self.late_world(suffix, event_id)
             short.variables["ADISCORD_economy_treasury"] = 34.99
             before = deepcopy(short.variables), short.balances()

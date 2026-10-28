@@ -1,4 +1,109 @@
 spriteTypes = {
+	spriteType = {
+		name = "GFX_focus_NAM_metropolitan_quota"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_metropolitan_quota.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_deliver_the_quota"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_deliver_the_quota.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_concealed_reserve"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_concealed_reserve.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_colonial_watch"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_colonial_watch.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_commissioner_plan"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_commissioner_plan.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_second_ledger"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_second_ledger.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_imperial_gendarmes"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_imperial_gendarmes.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_oilfield_militia"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_oilfield_militia.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_wrk_trade_house"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_wrk_trade_house.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_metropolitan_instructors"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_metropolitan_instructors.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_quiet_officer_lists"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_quiet_officer_lists.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pipeline_patrols"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pipeline_patrols.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_wrk_return_cargo"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_wrk_return_cargo.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_sand_runs_out"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_sand_runs_out.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_print_shop_raid"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_print_shop_raid.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_metropolitan_depots"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_metropolitan_depots.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_last_centre_register"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_last_centre_register.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_colony_order"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_colony_order.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_letters_to_the_centre"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_letters_to_the_centre.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_centre_hourglass"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_centre_hourglass.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_inventory"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_inventory.png"
+	}
+
 
 	spriteType = {
 		name = "GFX_focus_ADISCORD_sabotage"

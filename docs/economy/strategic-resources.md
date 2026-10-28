@@ -49,6 +49,29 @@ or a sufficient national supply; countries may also trade these resources.
 
 ## Interface asset sources
 
+### NAM oilfields on the map
+
+`tools.builders.build_adiscord_nam_oilfields` owns the permanent three-derrick
+clusters, their native mesh and the marked sections of `map/ambient_object.txt`
+and `gfx/entities/mapitems_custom.*`. Starting NAM states with at least 24 oil
+receive one cluster per 40 oil, rounded up: two in state 67 and one each in
+689 and 690. Placement uses clear inland footprints on level terrain outside
+city provinces and away from building spawn anchors. These are geographical
+decoration: they neither add oil nor disappear after a country handoff, and do
+not track wartime extraction modifiers.
+
+Run `python -B -m tools.builders.build_adiscord_nam_oilfields --check`, then
+`--apply` to rebuild stale outputs, then `--check` again. Native export requires
+Blender and `io_pdx_mesh`; `--blender PATH` overrides discovery. The editable
+model is `tools/assets/source/buildings/NAM/oilfield.blend`. The report under
+`docs/development/model-verification/NAM_oilfield.json` records exported file
+hashes, native reimport, mesh bounds and map placements. Optional `--preview`
+renders the installed mesh into `docs/development/previews/NAM_oilfield/`;
+remove those temporary images after review. A manual cold game load is still
+required to verify the map scale, terrain contact and visibility in HOI4.
+
+### Resource interface
+
 `tools.builders.build_adiscord_resource_assets` owns the resource strips, trade
 entry, topbar and state-view skins. Editable input sheets live in
 `tools/assets/source/trade_gui/`; the treasury sheet lives in

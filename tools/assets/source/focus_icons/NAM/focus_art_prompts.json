@@ -1,0 +1,313 @@
+{
+  "generator": "Built-in image_gen",
+  "style_reference": "SOV_eurasiaan_powerhouse.png",
+  "shared_style": "Narrative photographic cutout collage with natural distinct materials. NAM amber/ochre lighting and deep charcoal shadows unify the layers. Preserve natural paper, painted steel, skin, cloth and wood. Selective warm highlights only, no all-gold objects, thick neon contours or RPG inventory treatment. Broad readable tonal masses take priority over tiny texture. Separate transparent PNG layers; compositions are assembled separately.",
+  "assets": [
+    {
+      "file": "vorkerland_gold_map.png",
+      "prompt": "Large standalone pale-gold embossed Vorkerland map. Use native starting ownership of WRK and its subjects as geographic reference. Preserve the main landmass, lake and nearby southern and eastern islands; omit the distant overseas territory. Fill 90-95 percent of canvas width with small safe padding. Front-on, no perspective stretching. No sun, buildings or fog."
+    },
+    {
+      "file": "golden_sun.png",
+      "prompt": "Standalone complete round golden sun disk, pale yellow to amber gradient, narrow bright rim and restrained halo fading into transparent background. No rays, face, map, horizon or objects."
+    },
+    {
+      "file": "industrial_factories.png",
+      "prompt": "Standalone factory and refinery complex: two factory halls, three smokestacks of varied heights, cylindrical refinery columns, connected pipes and tanks. Compact low wide grouping, upper-left brass highlights, dark recesses. Fully visible foundations. Transparent background and gaps; no fog, smoke, ground, map or sun. Final background-extraction edit removes the backdrop and external glow while preserving the factory."
+    },
+    {
+      "file": "oil_derricks.png",
+      "prompt": "Two oil drilling derricks of different heights and one small pumpjack. Antique gold and bronze cutout, dark lattice beams with upper-left brass highlights. Taller derrick right, shorter left, pumpjack low between them. Transparent gaps within lattice frames. No land, sky, factories, map, sun, fog or text."
+    },
+    {
+      "file": "ochre_fog.png",
+      "prompt": "Independent wide low ochre-brown industrial fog overlay. Dense rolling bronze-brown middle, pale amber upper wisps and darker bottom. Natural mist dissolves into genuine alpha on every side with translucent areas. No hard rectangular edges, solid dirt, flames, buildings, sun, map or equipment."
+    },
+    {
+      "file": "empire_hourglass.png",
+      "style_reference": "gfx/interface/goals/NAM/GFX_focus_NAM_inventory.png",
+      "prompt": "Create ONE isolated transparent PNG asset for the NAM national focus 'Clocks of the Empire': a monumental antique brass HOURGLASS with almost all its golden sand already fallen into the lower bulb. The attached image is the authoritative STYLE reference: match its strong saturated yellow-gold highlights, orange rim lighting, almost black deep shadows, dark thick readable contours, warm industrial photomontage cutout look. This is a small Hearts of Iron IV icon element, not polished jewelry or a realistic product photo. Make one imposing upright hourglass with a sturdy stepped square base and cap and two thick dark brass support pillars; compact slightly three-quarter frontal view. Clear large glass bulbs with visible thin stream of falling gold sand, upper bulb nearly empty, lower bulb filled. Real transparent empty glass areas with subtle warm reflections, silhouette easy to read at small size. Subdued wear, broad modeled shapes, no filigree or tiny decorations. Entire object fully visible and fills 85-90 percent of canvas height with safe padding. Transparent background and gaps. ONLY the hourglass, no map, no sun, no fog, no papers, no clock dial, no extra objects, no letters, no text, no numbers, no heraldic eagle, no outer frame. This must be a separate movable foreground asset, not an assembled focus icon."
+    },
+    {
+      "file": "empire_supply_orders.png",
+      "style_reference": "gfx/interface/goals/NAM/GFX_focus_NAM_inventory.png",
+      "prompt": "Create ONE isolated reusable transparent PNG supporting asset for the NAM national focus 'Clocks of the Empire': a small thick stack of urgent imperial supply orders with a large official seal. Match attached authoritative NAM style reference: saturated yellow gold highlights, orange rim light, near-black deep shadows and strong readable dark contours, warm industrial cutout photomontage look for small Hearts of Iron IV focus icons. A few heavy aged ochre paper sheets, slightly fanned, held together by a broad dark ribbon and one large dark red wax seal bearing a simple embossed three-step geometric insignia. A squat brass official hand stamp rests beside the papers, large readable shape. Slight three-quarter frontal view, low wide compact composition, substantial modeling, restrained texture. Only faint abstract ruled marks on paper, absolutely NO readable letters, words or numbers. No eagle or real-world national emblems. Fully isolated on genuine transparent background, full edges visible, modest safe padding. No map, sun, clock, hourglass, fog, smoke, furniture, ground, frame or other objects. This is a single separate movable paperwork-and-seal layer, not a complete focus scene."
+    },
+    {
+      "file": "empire_cracked_clock.png",
+      "style_reference": "gfx/interface/goals/NAM/GFX_focus_NAM_inventory.png",
+      "prompt": "Create ONE standalone transparent PNG layer for a Hearts of Iron IV NAM focus called 'Clocks of the Empire': an immense ominous aged CLOCK DIAL, face-on and circular. Authoritative reference image is STYLE ONLY: strong readable dark contours, yellow-gold metal highlights and subtle orange rim light, dimensional cutout photomontage game art. This new asset must be much darker and more restrained: 75 percent charcoal-black oxidized bronze, selective old gold highlights. A broad plain dark dial with twelve thick simple gold hour indices, no numerals or lettering. Exactly TWO clearly distinguished thick golden hands showing 11:57, both near the top: long minute hand points just LEFT of 12, short hour hand nearly at 12. Clear central spindle. A single major jagged fracture crosses the dial diagonally from upper right to lower left without obscuring the hands; dark split with a thin orange glint, several small chipped metal fragments resting immediately below the broken lower rim. Thick austere antique brass rim, shallow dimensional bevel, sparse wear. The dial is the entire main object, fills about 88 percent of square canvas with safe transparent margins; small fragments included within margins. Frontal camera, no perspective ellipse. Broad readable forms suitable for a small focus icon. No sun, rays, map, fog, buildings, hourglass, papers, gear pile, ornate filigree, emblems, banners or text. NO warm rectangular backdrop or scene, genuine alpha transparency outside the dial and between detached fragments. Isolated reusable dial asset, not an assembled focus composition."
+    },
+    {
+      "file": "empire_administration_tower.png",
+      "style_reference": "gfx/interface/goals/NAM/GFX_focus_NAM_inventory.png",
+      "prompt": "Create ONE separate transparent PNG foreground asset for a Hearts of Iron IV NAM national focus 'Clocks of the Empire': an austere monumental government administration tower. Style reference image is authoritative for the dimensional cutout game collage, strong dark contours and gold-orange edge lighting, but this asset must be predominantly very dark charcoal stone and blackened bronze with restrained antique-gold lit edges, ominous and severe rather than sunny. A tall narrow interwar administrative skyscraper with a stepped central mass, strong vertical ribs and recessed dark window strips, small blocky side wings close to the base, and a broad formal entrance reached by several steps. Simple architectural three-tier cap, no needle spire. Slight three-quarter frontal view from a little below, coherent realistic architecture with broad readable masses for a tiny game icon. The main tower is tall and narrow; total silhouette about twice as tall as wide. One side lit by warm amber edge light, other side deeply shaded. Few dim amber windows, most dark. Fully visible building from top to foot of stairs with safe transparent margin. The building should work overlapping the lower-right of a separate huge clock dial, but DO NOT draw any clock, dial or hands here. No sun, map, smoke, fog, factory chimneys, oil equipment, paperwork, hourglass, gears, emblems, statues, flags, banners, text, people, city background or ground plane. No identifiable real-world landmark. Genuine alpha-transparent background, isolated building asset only, not an assembled composition."
+    },
+    {
+      "file": "empire_urgent_telephone.png",
+      "style_reference": "gfx/interface/goals/NAM/GFX_focus_NAM_inventory.png",
+      "prompt": "Create ONE isolated transparent PNG asset: an ominous black government desk TELEPHONE with its receiver OFF THE HOOK, for the NAM Hearts of Iron IV national focus 'Clocks of the Empire'. This is the third independent foreground object beside separately made cracked clock and administrative tower; do not draw those objects. The attached small NAM focus image is the authoritative STYLE reference: dimensional cutout photomontage game art, strong dark silhouettes, selective yellow-gold highlights and orange edge lighting. Predominantly deep charcoal-black bakelite telephone body with aged brass rotary dial rim and restrained worn brass fittings. Broad low horizontal composition, slightly frontal three-quarter camera. Heavy 1930s-1950s style black rotary desk telephone at left-center; the handset is clearly lifted out of its empty cradle and lies diagonally in front extending to the right, connected to the body by one short curved coiled cord, visibly intact. Chunky readable shapes suitable for reduction to a tiny game icon. Dark recessed rotary finger holes, no readable numbers or lettering. A few sharp warm metal highlights, deep near-black shadows, serious bureaucratic atmosphere, not a toy, not shiny ornamental jewelry. Entire telephone, receiver and short cord fully visible with transparent safe margins; subject fills about 85 percent of canvas width. True transparent background, no tabletop, ground, drop-shadow plate, fog, glow backdrop, sun, map, clock, tower, papers, stamps, extra objects, emblems, text or frame. One separate reusable phone cutout only."
+    },
+    {
+      "file": "metropolitan_quota_sheet.png",
+      "prompt": "Create ONE isolated transparent PNG asset for NAM Hearts of Iron IV focus 'Metropolitan Quota': a large upright official oil delivery requisition sheet, intended as the main background object of a small focus icon. Attached NAM icon is STYLE ONLY: dimensional cutout photomontage, bright warm old-gold and amber highlights, dark strong contours, deep almost black shadows, subtly orange edges. One substantial stiff aged ochre paper sheet in portrait orientation, slightly rotated counterclockwise, gently bent corners, strong graphic silhouette and broad dimensional edge; a second narrower sheet just visible behind the first to suggest an official order packet, not a book or loose messy pile. On front: a simple header bar, a bold blank rectangular title field and 4 large ruled quota rows; include a single simple black oil-drop pictogram at top so the subject reads as an oil requisition. Printed marks are abstract short horizontal lines only, no readable words, numbers or letters. Near lower corner a restrained dark red circular official ink imprint, no wax seal or stamp tool. Most paper face clear and readable at thumbnail size, not densely scribbled, no microtexture overload. Full sheets within frame, 8 percent safe transparent margin. True alpha transparency outside paper. Only the upright paperwork asset, no desk, hand, pen, barrel, factory, phone, hourglass, clock, map, sun, fog, detached symbols or background. Do not assemble a full focus icon.",
+      "style_reference": "gfx/interface/goals/NAM/GFX_focus_NAM_inventory.png"
+    },
+    {
+      "file": "metropolitan_quota_oil_drums.png",
+      "prompt": "Create ONE standalone transparent PNG asset: a compact low grouping of THREE industrial oil drums for the NAM Hearts of Iron IV focus 'Metropolitan Quota'. Attached NAM image defines the STYLE ONLY: strongly modeled game-icon cutout photomontage, golden amber highlights, orange rim light, near-black strong contours. Two upright heavy steel oil drums behind, one horizontal drum in front with its circular end toward viewer, clear distinct chunky shapes. Blackened steel bodies, weathered antique brass-gold raised rims and rolling hoops, subtle oily sheen, restrained scratches. Small dark oil-drop stencil only on the foremost visible drum end, no words, digits or other graphics. Broad readable forms designed for small icon size, three-quarter frontal view, warm upper-left lighting with deep dark recesses. Low wide silhouette, all drums fully visible with safe transparent margin, no clutter. No wooden pallet, ground, oil puddle, hose, factory, derrick, paperwork, stamps, people, sun, map, fog, fire or backdrop. Genuine alpha transparency outside drums and visible gaps. One separate reusable barrel grouping, not an assembled scene.",
+      "style_reference": "gfx/interface/goals/NAM/GFX_focus_NAM_inventory.png"
+    },
+    {
+      "file": "metropolitan_quota_stamp.png",
+      "prompt": "Create ONE standalone transparent PNG asset for NAM Hearts of Iron IV focus 'Metropolitan Quota': a heavy official hand STAMP, tilted diagonally with its broad circular brass stamping face visible toward the viewer at lower left and its thick rounded black handle extending to upper right. Attached NAM icon is STYLE ONLY: dimensional cutout photomontage, bright aged-gold highlights, orange rim lighting and deep near-black shadows, strong readable outlines at tiny game-icon size. Black lacquered wood handle, thick bronze collar and weighty old-gold brass circular die. The die has one large simple embossed geometric insignia consisting of THREE horizontal steps stacked into a stepped pyramid, no fine detail or lettering, NO real-world coat of arms or eagle. The stamp suggests imposing metropolitan authority. Bold low-detail silhouette with realistic modeled materials and restrained wear, not elaborate filigree. Complete object visible, 8 percent safe padding on every edge. Isolated hand stamp only, no hand, no papers, no ink pad, no wax puddle, no barrel, sun, map, fog, ground plane or backdrop. True alpha transparency outside the object. Do not assemble into a scene. Lighting from upper left consistent with warm NAM artwork.",
+      "style_reference": "gfx/interface/goals/NAM/GFX_focus_NAM_inventory.png"
+    },
+    {
+      "file": "metropolitan_quota_sheet_v2.png",
+      "prompt": "Generate ONE transparent cutout layer for a small Hearts of Iron IV focus photomontage: a freshly received petroleum delivery QUOTA ORDER on two ordinary office paper sheets. Style guided by attached collage examples: convincing natural materials, broad readable light/shadow shapes, warm ochre grading with restrained amber edge light, dark occlusion between sheets. Portrait orientation, slight anticlockwise tilt; full sheet visible. Paper is muted warm gray-ivory, intact, slight curl at one corner and ONE subtle fold only, NOT parchment or an archaeological relic. At top one large charcoal typographic header shape using non-readable short strokes; below it a simple table of THREE broad rows and TWO columns with sparse abstract typewriter marks. Avoid dense miniature text. A small rectangular muted burgundy office stamp near bottom, containing only three short horizontal bars; no circular heraldry, NO eagles, NO coats of arms, NO invented alphabet, no slogans. One tiny dark steel clip holds sheets at upper left. The main visual is a clean large paper plane with a few broad dark marks readable at 150px, deliberately quiet lower portion to accept other overlapping assets. No oil pictogram, no gold material, no embossed bevel, no glowing outline, no ripped edges, no stains, no heavy aging. Subdued realistic paper, not a vector infographic, not a glossy 3D inventory icon. Genuine transparency outside sheets and clip; no background, floor, desk, hands, stamp tool, barrels, smoke or other objects. All edges inside canvas with generous safe margin.",
+      "style_references": [
+        "FAF_Judge_Jury_Executioner.png",
+        "FAF_Rally_the_Imperial_Spirit.png"
+      ],
+      "palette_reference": "gfx/interface/goals/NAM/GFX_focus_NAM_inventory.png"
+    },
+    {
+      "file": "metropolitan_quota_oil_drums_v2.png",
+      "prompt": "Create ONE separate transparent PNG cutout for a Hearts of Iron IV focus collage: three petroleum storage drums, two upright behind and one horizontal in front, low compact silhouette. References 1 and 2 demonstrate the intended photographic collage treatment and natural materials, NOT their political symbols or colors. NAM palette: muted warm ochre highlights over charcoal and olive-brown shadows, selective amber color grade; NOT all-gold objects. The barrels are real painted STEEL, very dark faded olive-black enamel, worn paint at rolled hoops, dull gray exposed metal, a little brown grime; most surfaces MATTE. A restrained warm side light catches a few edges, broad photographic tonal variation, natural dark shadows. The front barrel's circular end angled toward camera is a little lighter and bears one small faded pale oil-drop stencil. NO gold/brass barrel caps or golden hoops, NO orange rim neon, no fantasy inventory-object shine, no thick cartoon outlines, no exaggerated texture, no dramatic studio halo. Keep silhouettes chunky and understandable at 150px composite size, let larger light and dark masses do the work. All three drums completely visible with margin, real transparency in every background/gap, no floor, pallet, puddle, smoke, fog, extra props, writing, people or backdrop. This is one movable asset for a narrative photomontage, not a finished icon or product advertisement.",
+      "style_references": [
+        "FAF_Judge_Jury_Executioner.png",
+        "FAF_Rally_the_Imperial_Spirit.png"
+      ],
+      "palette_reference": "gfx/interface/goals/NAM/GFX_focus_NAM_inventory.png"
+    },
+    {
+      "file": "metropolitan_stamping_hand.png",
+      "prompt": "Create ONE isolated transparent PNG narrative foreground layer for a Hearts of Iron IV focus collage about a petroleum requisition imposed by the metropole: a government clerk's HAND firmly gripping an ordinary wooden office stamp, caught in the act of bringing the stamp down. The references show the desired photographic cutout COLLAGE treatment, natural materials and strong storytelling gesture, NOT their political symbols or red palette. Use NAM warm ochre/amber light and deep charcoal shadows, selective subtle golden highlights, retain natural skin color, dark brown wood and charcoal cloth. Composition diagonal from upper right to lower left: short cropped forearm in a dark charcoal suit sleeve enters from upper right, thin ivory shirt cuff, one anatomically plausible adult hand gripping a dark walnut bulb-handled stamp, its small dull brass rectangular base aimed DOWN toward the lower left. Exactly one hand with natural five-finger anatomy, firm decisive gesture, fingers wrapped convincingly around handle. The stamping surface is pointed down, never displayed as a giant decorative emblem. No insignia, text or heraldry on stamp. Strong light/shadow masses and a readable silhouette, restrained photographic texture suitable for reduction to a small game icon. Frame includes hand, tool and short sleeve only, safely contained with margin; sleeve ends in a softly darkened short cut edge at upper right so it can overlap other layers. True alpha transparency outside hand, sleeve and stamp. NO paper, tabletop, barrel, ink pad, wax, floor, fog, glow backdrop, coins or additional items. No gilded skin, no bronze statue effect, no full gold tool, no neon edge outline, no fantasy equipment render. Isolated reusable action layer, not a finished composed icon.",
+      "style_references": [
+        "FAF_Judge_Jury_Executioner.png",
+        "FAF_Rally_the_Imperial_Spirit.png"
+      ],
+      "palette_reference": "gfx/interface/goals/NAM/GFX_focus_NAM_inventory.png"
+    }
+  ],
+  "shared_style_history": [
+    "Separate transparent PNG layers for a Hearts of Iron IV focus icon. Antique golden industrial cutout collage, pale brass highlights, bronze midtones and dark recesses. No text or frame. Do not assemble the layers into one composition."
+  ],
+  "delivery": {
+    "assets_source": "tools/assets/source/focus_icons/NAM",
+    "assets_duplicate": "C:/Users/Admin/Desktop/namestnik/assets",
+    "compositions_source": "gfx/interface/goals/NAM",
+    "compositions_duplicate": "C:/Users/Admin/Desktop/namestnik/compositions"
+  },
+  "focus_compositions": [
+    {
+      "focus_id": "NAM_metropolitan_quota",
+      "file": "nam_metropolitan_quota_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. METROPOLITAN OIL QUOTA: large intact ivory official delivery sheet angled slightly left as backdrop; three broad table rows suggested without legible writing, restrained burgundy rectangular approval mark; two black steel oil drums and one partly visible drum in lower foreground, subtle pale oil-drop stencil. A small dark steel dispatch clip secures the papers. Broad light paper contrasts dark barrels; warm side light only, natural materials. No stamping hand. This means an oil demand from the distant capital, not a gold treasure.",
+      "sprite": "GFX_focus_NAM_metropolitan_quota",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_metropolitan_quota.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_deliver_the_quota",
+      "file": "nam_deliver_the_quota_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. FULFILL THE QUOTA: a dark diesel freight locomotive advancing diagonally out of a pair of oil tanker railway cars, one enormous dark barrel/tanker silhouette behind at left; gold-lit rails and restrained steam blend at base. A decisive outgoing journey, low sweeping horizontal composition, no people, no paper, no sun disk. Matte charcoal metal, warm steel reflections, visible rounded tanker silhouette.",
+      "sprite": "GFX_focus_NAM_deliver_the_quota",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_deliver_the_quota.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_concealed_reserve",
+      "file": "nam_concealed_reserve_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. OFF-THE-BOOKS RESERVE: a large weathered olive steel oil storage tank behind, partly concealed by a dark canvas curtain drawn back by a worker's gloved hand at upper right; a small open valve and one oil drum in foreground. Directional sliver of amber light reveals the secret reserve, shadow-heavy asymmetric triangular composition. Clearly hidden fuel, no coins or documents, no gold tank.",
+      "sprite": "GFX_focus_NAM_concealed_reserve",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_concealed_reserve.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_colonial_watch",
+      "file": "nam_colonial_watch_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. COLONIAL WATCH REPORTS: stern generic male colonial watch officer in olive-grey uniform and peaked cap, brown leather strap, bust at right; at left a small stack of report sheets under a pair of large black binoculars, with a dim watchtower silhouette behind. Natural face, no specific real person, no insignia or eagle. He scans toward left, wary and observant. Muted ivory reports, dull brass details, warm side light, deep shadows.",
+      "sprite": "GFX_focus_NAM_colonial_watch",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_colonial_watch.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_commissioner_plan",
+      "file": "nam_commissioner_plan_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. THE COMMISSIONER'S APPROVAL: a large human hand in charcoal suit sleeve and ivory cuff presses an ordinary dark wooden office stamp downward onto a pale supply plan in foreground, a short diagonal silhouette of loaded railway tanker cars behind the document. Close decisive gesture, the hand and red rectangular ink mark dominate, no writing. Natural skin, wood, ivory paper, only thin brass edge on stamp, no golden heraldic die.",
+      "sprite": "GFX_focus_NAM_commissioner_plan",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_commissioner_plan.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_second_ledger",
+      "file": "nam_second_ledger_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. SECOND BOOKKEEPING: two overlapping ledgers, official pale book open upright in rear and a dark green hidden second ledger pulled from underneath it by a discreet hand. A modest bundle of muted paper banknotes partly concealed between pages, no coins, no text or legible digits. One pale official account above, secret darker account below, amber desk light, dramatic diagonal rather than symmetrical product display.",
+      "sprite": "GFX_focus_NAM_second_ledger",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_second_ledger.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_imperial_gendarmes",
+      "file": "nam_imperial_gendarmes_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. IMPERIAL GENDARMERIE: two stern human gendarmes in dark olive-grey peaked-cap uniforms, brown leather belts and subdued brass buttons, one main waist-up officer at left with folded arms, second smaller helmeted guard behind holding a slung rifle muzzle downward. Behind them a heavy barred checkpoint gate and restrained smoky amber backlight. Imposing organized authority, no skulls, no eagles, no real national insignia, no victim or violence.",
+      "sprite": "GFX_focus_NAM_imperial_gendarmes",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_imperial_gendarmes.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_oilfield_militia",
+      "file": "nam_oilfield_militia_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. OILFIELD SELF-DEFENCE: two civilian oil workers defending their own field, one main weathered man in brown work jacket and battered dark hardhat holding an old wood-stock rifle diagonally across his torso, a second worker in dark cap behind; single oil derrick rises at back right. Natural working clothes, rolled sleeves, warm skin and worn steel. Confident local solidarity, not professional uniformed police, no insignia, no flags.",
+      "sprite": "GFX_focus_NAM_oilfield_militia",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_oilfield_militia.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_wrk_trade_house",
+      "file": "nam_wrk_trade_house_composition_v2.png",
+      "prompt": "Edit this focus-icon collage with ONE specific correction. Remove the headless merchant torso, visible shoulder, neck opening, collar and tie on the left. Keep only a realistic HAND with a short dark suit sleeve entering from the LEFT edge at mid-height, offering the same rolled contract toward the viewer. The sleeve should be a clearly cropped isolated forearm, not a torso missing its head. Fill the area formerly occupied by the shoulder/torso with the existing commercial building facade and transparent outside margins as appropriate. Preserve the handsome building, illuminated entrance, cargo crate, rolled contract, warm amber photographic color grading, full free silhouette, existing dramatic lighting and true transparent background. No new people, face, lettering, flags, emblems, extra decorative objects. Keep a compact strong composition readable at 150px.",
+      "sprite": "GFX_focus_NAM_wrk_trade_house",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_wrk_trade_house.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_metropolitan_instructors",
+      "file": "nam_metropolitan_instructors_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. INSTRUCTORS FROM THE METROPOLE: experienced generic middle-aged military instructor in olive-grey closed-collar uniform and peaked cap at left, gesturing with a short pointer toward a dark field-training board showing only a few broad chalk arrows and formation blocks; two smaller trainee soldiers in plain helmets at lower right. Natural faces, restrained brass and brown leather. Clearly training and instruction, no combat, no flags, no text.",
+      "sprite": "GFX_focus_NAM_metropolitan_instructors",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_metropolitan_instructors.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_quiet_officer_lists",
+      "file": "nam_quiet_officer_lists_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. QUIET OFFICER LISTS: close-up of an olive-uniformed officer's sleeve and hand sliding a sealed thin file beneath a broad folded military cap; behind the cap a half-lit serious generic officer face turned in profile, discreet and thoughtful. A few short dark rows on file, no readable text. Muted olive, ivory and dark brown, narrow amber light. Secret planning of future loyal officers, no death imagery or assassination.",
+      "sprite": "GFX_focus_NAM_quiet_officer_lists",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_quiet_officer_lists.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_pipeline_patrols",
+      "file": "nam_pipeline_patrols_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. PIPELINE PATROLS: an alert brown shepherd dog in foreground beside a watchman in dark work coat and flat cap holding a lantern, waist-up/three-quarter figure; large oil pipeline elbows and short line of pipes lead behind them, a small roadside telephone callbox at far rear. Dog and pipe are readable main shapes, warm lantern spot, cool charcoal shadows, evening patrol. No grand sun, no weapons or flags.",
+      "sprite": "GFX_focus_NAM_pipeline_patrols",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pipeline_patrols.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_wrk_return_cargo",
+      "file": "nam_wrk_return_cargo_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. RETURN CARGO: dark cargo freighter bow at left with one crane arm lowering a large industrial machine crate at right; partially visible steel lathe and flywheel emerge from open crate. Dynamic harbor montage of a ship bringing machinery home, strong diagonal crane cable, subdued waves at base. Steel gray, brown wood and amber reflections; no oil barrels, no text, no flags, no enormous sun.",
+      "sprite": "GFX_focus_NAM_wrk_return_cargo",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_wrk_return_cargo.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_sand_runs_out",
+      "file": "nam_sand_runs_out_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. SAND RUNNING OUT: old brass-and-black telegraph apparatus with a broken curling message tape in foreground, behind it a large almost-empty hourglass tilted slightly, its last sand falling; a dim snapped cable arcs away into shadow. Two clear dominant objects, warm highlights fading toward darkness. This is failing communications and dwindling time, distinct from the circular clock and skyscraper icon. No clock dial, no telephone, no buildings, no text.",
+      "sprite": "GFX_focus_NAM_sand_runs_out",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_sand_runs_out.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_print_shop_raid",
+      "file": "nam_print_shop_raid_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. WEBER'S PRINT SHOP: heavy old black printing press seen three-quarter view, broad flywheel at left and printing platen at center; a warm lantern held by a gloved hand entering upper right illuminates a small fan of fresh ivory underground leaflets caught on the rollers. Press is large clear silhouette, no readable writing, no political emblems. A discovered clandestine press, smoky low industrial atmosphere, black ink, dull steel and paper.",
+      "sprite": "GFX_focus_NAM_print_shop_raid",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_print_shop_raid.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_metropolitan_depots",
+      "file": "nam_metropolitan_depots_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. METROPOLITAN DEPOTS: open dark wooden military supply crate filled with clearly visible wood-stock rifles pointing diagonally upward, behind it an imposing warehouse entrance with its heavy sliding door open; a single artillery wheel half-visible at base. Lawful transfer of stored weapons to local garrisons, natural brown wood and dark steel, amber light from warehouse. Not ammunition explosions, no soldiers, no text or gold weapons.",
+      "sprite": "GFX_focus_NAM_metropolitan_depots",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_metropolitan_depots.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_last_centre_register",
+      "file": "nam_last_centre_register_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. LAST REGISTER OF THE CENTRE: a closed thick worn burgundy government registry book with simple brass corner protectors, tied with dark cloth ribbon and resting over an open brown leather courier satchel; a human hand lowers the final pale sheet into it. A small fading administrative-building silhouette at rear, subdued last warm light. Heavy finality, leaving with the colony records, no seals with emblems, no lettering, no clock or weapon.",
+      "sprite": "GFX_focus_NAM_last_centre_register",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_last_centre_register.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_colony_order",
+      "file": "nam_colony_order_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. ORDER AT THE OILFIELDS: calm confident oil worker in dark cap and olive work overalls at right, arms relaxed across chest, behind him a working pumpjack and a few illuminated refinery pipes; rising pale industrial steam at base and a soft restrained amber dawn glow, no sun disk. Productive restored normality rather than martial triumph. Natural skin, dark steel, warm light, no rifle, no flags, no dove or wreath.",
+      "sprite": "GFX_focus_NAM_colony_order",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_colony_order.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_letters_to_the_centre",
+      "file": "nam_letters_to_the_centre_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. LETTERS TO THE CENTRE: a large hand with fountain pen writing a final line on an ivory letter, fan of three sealed envelopes behind and a small dark desk lamp illuminating the page; beyond them a distant faint silhouette of the capital fading into shadow. Quiet uncertain correspondence, dark brown desk objects with no actual rectangular tabletop background, amber pool of light and muted parchment. No readable text, no stamp tool, no emblems, no phone, no hourglass.",
+      "sprite": "GFX_focus_NAM_letters_to_the_centre",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_letters_to_the_centre.png",
+      "generator": "Built-in image_gen"
+    }
+  ],
+  "focus_composition_variants": [
+    {
+      "focus_id": "NAM_wrk_trade_house",
+      "file": "nam_wrk_trade_house_composition.png",
+      "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. TRADING HOUSE IN THE METROPOLE: handsome compact early twentieth-century commercial office facade with broad entrance and tall windows, a merchant's hand offering a rolled shipping contract in foreground and a single cargo crate at base. Roof silhouette strongly stepped but not tall skyscraper, brown stone, ivory document, amber lit windows. Open legitimate trade and local representation abroad, no flags, no maps, no coins, no readable signage.",
+      "sprite": "GFX_focus_NAM_wrk_trade_house",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_wrk_trade_house.png",
+      "generator": "Built-in image_gen"
+    }
+  ],
+  "native_export": {
+    "owner_module": "tools.builders.build_adiscord_nam_focus_icons",
+    "canvas": [
+      150,
+      150
+    ],
+    "content_bounds": [
+      140,
+      134
+    ]
+  },
+  "colonial_focus_scope": [
+    "NAM_inventory",
+    "NAM_centre_hourglass",
+    "NAM_metropolitan_quota",
+    "NAM_deliver_the_quota",
+    "NAM_concealed_reserve",
+    "NAM_colonial_watch",
+    "NAM_commissioner_plan",
+    "NAM_second_ledger",
+    "NAM_imperial_gendarmes",
+    "NAM_oilfield_militia",
+    "NAM_wrk_trade_house",
+    "NAM_metropolitan_instructors",
+    "NAM_quiet_officer_lists",
+    "NAM_pipeline_patrols",
+    "NAM_wrk_return_cargo",
+    "NAM_sand_runs_out",
+    "NAM_print_shop_raid",
+    "NAM_metropolitan_depots",
+    "NAM_last_centre_register",
+    "NAM_colony_order",
+    "NAM_letters_to_the_centre"
+  ],
+  "preserved_compositions": [
+    {
+      "focus_id": "NAM_inventory",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_inventory.png",
+      "sha256": "2af5eb04944b5d593e68e1c25c50fe50158af1bb634a7e91e2f7207ea7273585"
+    },
+    {
+      "focus_id": "NAM_centre_hourglass",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_centre_hourglass.png",
+      "sha256": "fe07169e1ded3af47e84a6160999ba51217beedb130a2bd4a426a12e3793156d"
+    }
+  ]
+}

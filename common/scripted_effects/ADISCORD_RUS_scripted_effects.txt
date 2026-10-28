@@ -1533,7 +1533,10 @@ RUS_suspicion_monthly = {
 			subtract_from_temp_variable = { var = RUS_suspicion_delta value = 1 }
 		}
 		if = {
-			limit = { has_completed_focus = RUS_bunker_sealed_throne }
+			limit = {
+				has_completed_focus = RUS_bunker_sealed_throne
+				has_completed_focus = RUS_bunker_commission
+			}
 			subtract_from_temp_variable = { var = RUS_suspicion_delta value = 1 }
 		}
 		if = {
@@ -5618,7 +5621,7 @@ RUS_last_sky_science_decline = {
 		limit = {
 			RUS_last_sky_science_ready = yes
 		}
-		set_variable = { var = RUS_last_sky_science value = 2 }
+		set_variable = { var = RUS_last_sky_science value = 3 }
 		set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
 		set_temp_variable = { var = RUS_scientists_support_delta value = -0.1 }
 		RUS_faction_support_change = yes
@@ -5651,7 +5654,7 @@ RUS_last_sky_army_decline = {
 		limit = {
 			RUS_last_sky_army_ready = yes
 		}
-		set_variable = { var = RUS_last_sky_army value = 2 }
+		set_variable = { var = RUS_last_sky_army value = 3 }
 		set_temp_variable = { var = RUS_black_army_support_delta value = -0.1 }
 		set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
 		RUS_faction_support_change = yes
@@ -5687,7 +5690,7 @@ RUS_last_sky_districts_decline = {
 		limit = {
 			RUS_last_sky_districts_ready = yes
 		}
-		set_variable = { var = RUS_last_sky_districts value = 2 }
+		set_variable = { var = RUS_last_sky_districts value = 3 }
 		set_temp_variable = { var = RUS_black_army_support_delta value = -0.05 }
 		set_temp_variable = { var = RUS_scientists_support_delta value = -0.05 }
 		RUS_faction_support_change = yes
@@ -5696,8 +5699,37 @@ RUS_last_sky_districts_decline = {
 	}
 }
 
+# Offer state: 1 = pending, 2 = paid, 3 = refused. The ending reads settled
+# RUS outcomes; all other shutdowns discard them and pending offers always close.
 RUS_last_sky_clear_offers = {
-	clear_variable = RUS_last_sky_science
-	clear_variable = RUS_last_sky_army
-	clear_variable = RUS_last_sky_districts
+	if = {
+		limit = {
+			OR = {
+				NOT = { tag = RUS }
+				NOT = { has_global_flag = RUS_crisis_world_ended }
+				check_variable = { var = RUS_last_sky_science value = 2 compare = less_than }
+			}
+		}
+		clear_variable = RUS_last_sky_science
+	}
+	if = {
+		limit = {
+			OR = {
+				NOT = { tag = RUS }
+				NOT = { has_global_flag = RUS_crisis_world_ended }
+				check_variable = { var = RUS_last_sky_army value = 2 compare = less_than }
+			}
+		}
+		clear_variable = RUS_last_sky_army
+	}
+	if = {
+		limit = {
+			OR = {
+				NOT = { tag = RUS }
+				NOT = { has_global_flag = RUS_crisis_world_ended }
+				check_variable = { var = RUS_last_sky_districts value = 2 compare = less_than }
+			}
+		}
+		clear_variable = RUS_last_sky_districts
+	}
 }

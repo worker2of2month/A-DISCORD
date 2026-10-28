@@ -3480,7 +3480,7 @@ RUS_development_programmes = {
 	RUS_artillery_order = {
 		icon = generic_industry
 		allowed = { tag = RUS }
-		visible = { has_completed_focus = RUS_battery_training }
+		visible = { has_completed_focus = RUS_artillery_tables }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_artillery_order_site_tt

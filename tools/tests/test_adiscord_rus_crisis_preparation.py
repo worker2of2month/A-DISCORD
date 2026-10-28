@@ -162,12 +162,30 @@ class RusCrisisPreparationTests(unittest.TestCase):
                     world.capitulated.add("MON")
                 self.assertFalse(world.matches(block(profile, "enable"), ["MON"]))
         self.assertEqual(scalar(profile, "abort_when_not_enabled"), "yes")
-        front = block(profile, "ai_strategy")
+        fronts = [row.value for row in profile if row.key == "ai_strategy"]
+        fixed = [front for front in fronts if any(row.key == "tag" for row in front)]
+        self.assertEqual(len(fixed), 1)
+        front = fixed[0]
         self.assertEqual(scalar(front, "type"), "front_control")
         self.assertEqual(scalar(front, "tag"), "RUS")
         self.assertEqual(scalar(front, "execution_type"), "balanced")
         self.assertEqual(scalar(front, "execute_order"), "yes")
         self.assertEqual(scalar(front, "manual_attack"), "yes")
+        adaptive = [order for order in fronts if any(row.key == "country_trigger" for row in order)]
+        self.assertEqual(len(adaptive), 2)
+        for order in adaptive:
+            self.assertEqual(scalar(order, "type"), "front_control")
+            target = block(order, "country_trigger")
+            self.assertEqual(scalar(target, "tag"), "RUS")
+            self.assertGreater(int(scalar(order, "priority")), int(scalar(front, "priority")))
+            if any(row.key == "ADISCORD_difficulty_enemy_requires_caution" for row in target):
+                self.assertEqual(scalar(target, "ADISCORD_difficulty_enemy_requires_caution"), "yes")
+                self.assertEqual(scalar(order, "execution_type"), "careful")
+                self.assertEqual(scalar(order, "manual_attack"), "no")
+            else:
+                self.assertEqual(scalar(target, "ADISCORD_difficulty_enemy_allows_push"), "yes")
+                self.assertEqual(scalar(order, "execution_type"), "rush_weak")
+                self.assertEqual(scalar(order, "manual_attack"), "yes")
         defaults = entries("common/ai_strategy/default.txt")
         for name in ("ADISCORD_active_enemy_front_control", "ADISCORD_hold_against_stronger_enemy"):
             generic = block(block(defaults, name), "ai_strategy")

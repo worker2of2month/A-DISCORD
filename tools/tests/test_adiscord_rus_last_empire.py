@@ -2629,6 +2629,22 @@ class RusCrisisContracts(unittest.TestCase):
             for key in ("ADISCORD_rus_crisis.17.rumours.d", "ADISCORD_rus_crisis.17.observers.d", "RUS_crisis_exposed_warning_tt"):
                 self.assertRegex(text, rf'(?m)^ {re.escape(key)}:0? "[^"\n]+"$')
 
+    def test_both_crisis_entries_present_the_order_after_the_clock_has_started(self):
+        event = next(row.value for row in self.entries("events/ADISCORD_RUS_events.txt")
+                     if row.key == "country_event" and self.scalar(row.value, "id") == "ADISCORD_rus_crisis.2")
+        for exposed in (False, True):
+            world = self.exposed_empire() if exposed else self.peaceful_empire()
+            world.run("RUS_suspicion_check" if exposed else "RUS_crisis_begin")
+            self.assertEqual(world.events.count(("RUS", "ADISCORD_rus_crisis.2")), 1)
+            self.assertIn(("RUS", "RUS_crisis_laser_countdown"), world.missions)
+            self.assertNotIn(("RUS", "RUS_seat_the_khan_chancery"), world.completed_focuses)
+            selected = [self.scalar(row.value, "text") for row in event if row.key == "desc"
+                        and world.matches(self.block(row.value, "trigger"), ["RUS"])]
+            self.assertEqual(selected, ["ADISCORD_rus_crisis.2.exposed.d" if exposed else "ADISCORD_rus_crisis.2.d"])
+            before = dict(world.variables), list(world.missions), list(world.events)
+            world.execute([row for row in self.block(event, "option") if row.key != "name"], ["RUS"])
+            self.assertEqual((world.variables, world.missions, world.events), before)
+
     def dying_empire(self):
         world = self.peaceful_empire()
         world.variables["RUS", "RUS_army_morale"] = 0
@@ -2904,16 +2920,24 @@ class RusCrisisContracts(unittest.TestCase):
             self.assertFalse(world.flags["MON"] & {"RUS_crisis_added_major", "ADISCORD_west_added_major", "ADISCORD_south_added_major"})
 
     def test_independent_regional_crises_continue_until_the_epilogue(self):
-        for region in ("west", "south"):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        for region, enabled in (("west", True), ("south", False), ("south", True)):
             world = self.peaceful_empire()
             self.load_regional_lifecycle(world, region)
+            if region == "south":
+                self.assertFalse(world.matches(world.triggers["ADISCORD_south_final_war_enabled"], ["RUS"]))
+                if enabled:
+                    # Exercise epilogue cleanup even while this regional route is disabled.
+                    world.triggers["ADISCORD_south_final_war_enabled"] = parse_clausewitz("always = yes")
             world.global_flags.update(("ADISCORD_fresh_campaign_contract_v1", "ADISCORD_vorkerland_collapse_finished", "ADISCORD_nam_resource_war_resolved"))
             world.owners["wrk_capital"] = "WRK"
             world.flags["WRK"].add("ADISCORD_vorkerland_central_unifier")
             gate = world.triggers[f"ADISCORD_{region}_crisis_open"]
             for phase in (1, 2, 4):
                 world.variables["RUS", "RUS_crisis_phase"] = phase
-                self.assertTrue(world.matches(gate, ["RUS"]))
+                with self.subTest(region=region, enabled=enabled, phase=phase):
+                    self.assertEqual(world.matches(gate, ["RUS"]), enabled)
             world.global_flags.add("RUS_crisis_world_ended")
             self.assertFalse(world.matches(gate, ["RUS"]))
 
@@ -3295,6 +3319,54 @@ class RusCrisisContracts(unittest.TestCase):
                 self.assertEqual(closed.variables["RUS", "RUS_crisis_epilogue_page"], 8)
                 self.assertEqual((closed.events, closed.visuals, closed.owners), before)
 
+    def test_paid_and_refused_promises_survive_terminal_shutdown_for_both_readers(self):
+        from copy import deepcopy
+        from itertools import product
+
+        initial = self.peaceful_empire()
+        initial.ai_countries.discard("RUS")
+        initial.run("RUS_crisis_begin")
+        selectors = {
+            self.scalar(row.value, "name"): row.value
+            for row in self.entries("common/scripted_localisation/ADISCORD_RUS_scripted_loc.txt")
+            if row.key == "defined_text"
+        }
+        names = ("science", "army", "districts")
+        for outcomes in product((0, 1, 2, 3), repeat=3):
+            with self.subTest(outcomes=outcomes):
+                world = deepcopy(initial)
+                for name, value in zip(names, outcomes):
+                    if value:
+                        world.variables["RUS", "RUS_last_sky_" + name] = value
+                cancelled = deepcopy(world)
+                cancelled.run("RUS_campaign_shutdown")
+                self.assertFalse(any(("RUS", "RUS_last_sky_" + name) in cancelled.variables for name in names))
+                world.run("RUS_crisis_end_world")
+                self.assertIn("RUS_crisis_world_ended", world.global_flags)
+                for _ in range(60):
+                    if "RUS_crisis_world_ruins_complete" in world.global_flags:
+                        break
+                    world.run("RUS_crisis_ruin_next_wave")
+                self.assertIn("RUS_crisis_world_ruins_complete", world.global_flags)
+                world = deepcopy(world)
+                world.run("RUS_campaign_shutdown")
+                for reader in ("RUS", "EXZ"):
+                    for name, value in zip(names, outcomes):
+                        key = ("RUS", "RUS_last_sky_" + name)
+                        self.assertEqual(world.variables.get(key, 0), value if value >= 2 else 0)
+                        selector = selectors["GetRUSCrisisEpilogue" + name.title()]
+                        selected = next(
+                            self.scalar(row.value, "localization_key") for row in selector
+                            if row.key == "text" and world.matches(
+                                next((child.value for child in row.value if child.key == "trigger"), []),
+                                [reader],
+                            )
+                        )
+                        outcome = {2: "accepted", 3: "declined"}.get(value, "unsettled")
+                        self.assertEqual(selected, f"RUS_crisis_epilogue_{name}_{outcome}")
+                    world.run("RUS_crisis_epilogue_finish", reader)
+                self.assertEqual(set(world.owners.values()), {"RUS", "EXZ"})
+
     def test_camera_and_particle_use_the_real_reactor_and_existing_entity(self):
         source = read_campaign_effects()
         scene = self.block(self.entries(str(EFFECT_FILE.relative_to(ROOT))), "RUS_crisis_play_strike")
@@ -3310,21 +3382,25 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertIn("5228", read(ROOT / "history/states/125-Reactor.txt"))
 
     def test_military_victory_story_distinguishes_live_and_disabled_laser(self):
-        event = next(row.value for row in self.entries("events/ADISCORD_RUS_events.txt") if row.key == "country_event" and self.scalar(row.value, "id") == "ADISCORD_rus_campaign.11")
-        world = self.peaceful_empire()
-        world.variables["RUS", "RUS_crisis_phase"] = 3
-        descriptions = [row.value for row in event if row.key == "desc"]
-        for disabled, expected in ((False, "ADISCORD_rus_campaign.11.active_project"), (True, "ADISCORD_rus_campaign.11.d")):
-            if disabled:
-                world.flags["RUS"].add("RUS_crisis_laser_disabled")
-            selected = [self.scalar(row, "text") for row in descriptions if world.matches(self.block(row, "trigger"), ["RUS"])]
-            self.assertEqual(selected, [expected])
-        world.global_flags.add("RUS_crisis_world_ended")
-        self.assertFalse(world.matches(self.block(event, "trigger"), ["RUS"]))
+        for name in ("ADISCORD_rus_campaign.11", "ADISCORD_rus_crisis.5"):
+            event = next(row.value for row in self.entries("events/ADISCORD_RUS_events.txt") if row.key == "country_event" and self.scalar(row.value, "id") == name)
+            world = self.peaceful_empire()
+            world.variables["RUS", "RUS_crisis_phase"] = 3
+            descriptions = [row.value for row in event if row.key == "desc"]
+            for disabled, suffix in ((False, ".active_project"), (True, ".d")):
+                if disabled:
+                    world.flags["RUS"].add("RUS_crisis_laser_disabled")
+                selected = [self.scalar(row, "text") for row in descriptions if world.matches(self.block(row, "trigger"), ["RUS"])]
+                self.assertEqual(selected, [name + suffix])
+            world.global_flags.add("RUS_crisis_world_ended")
+            self.assertFalse(world.matches(self.block(event, "trigger"), ["RUS"]))
 
     def test_every_epilogue_page_is_localised_bounded_and_has_no_author_credits(self):
+        from itertools import product
+
         for language in ("russian", "english"):
             source = read(ROOT / f"localisation/{language}/ADISCORD_RUS_l_{language}.yml")
+            loc = dict(re.findall(r'^ (\S+):\d* "(.*)"$', source, re.M))
             for page in range(2, 9):
                 for part in ("title", "body"):
                     key = f"RUS_crisis_epilogue_{page}_{part}"
@@ -3333,6 +3409,21 @@ class RusCrisisContracts(unittest.TestCase):
                     rendered = matches[0].replace("\\n", "\n")
                     self.assertLess(len(rendered), 900)
                     self.assertLess(len(rendered.encode("utf-8")), 1800)
+            for page, names in ((6, ("science", "army")), (7, ("districts",))):
+                for outcomes in product(("accepted", "declined", "unsettled"), repeat=len(names)):
+                    rendered = loc[f"RUS_crisis_epilogue_{page}_body"]
+                    for name, outcome in zip(names, outcomes):
+                        token = "[GetRUSCrisisEpilogue" + name.title() + "]"
+                        self.assertIn(token, rendered)
+                        paragraph = loc[f"RUS_crisis_epilogue_{name}_{outcome}"]
+                        if outcome == "unsettled":
+                            self.assertEqual(paragraph, "")
+                        rendered = rendered.replace(token, paragraph)
+                    rendered = rendered.replace("\\n", "\n")
+                    self.assertNotIn("[Get", rendered)
+                    self.assertNotIn("\n\n\n", rendered)
+                    self.assertLess(len(rendered), 900, (language, page, outcomes))
+                    self.assertLess(len(rendered.encode("utf-8")), 1800, (language, page, outcomes))
 
     def test_restoring_conquests_does_not_take_foreign_owned_land(self):
         world = RusCrisisFixture()
@@ -3480,11 +3571,10 @@ class RusCrisisContracts(unittest.TestCase):
             targets = []
             for strategy in strategies:
                 self.assertEqual(self.scalar(strategy, "abort_when_not_enabled"), "yes")
-                order = self.block(strategy, "ai_strategy")
-                if self.scalar(order, "type") != kind:
-                    continue
                 if world.matches(self.block(strategy, "allowed"), [country]) and world.matches(self.block(strategy, "enable"), [country]):
-                    targets.append(self.scalar(order, "id"))
+                    for order in (row.value for row in strategy if row.key == "ai_strategy"):
+                        if self.scalar(order, "type") == kind:
+                            targets.append(self.scalar(order, "id"))
             return targets
 
         for target in ("VAL", "STS", "STP", "NOD"):

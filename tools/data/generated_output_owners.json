@@ -20,6 +20,8 @@
     "vorkerland_cities",
     "ambient_audio",
     "azhar_palace",
+    "nam_oilfields",
+    "factory_models",
     "minimap",
     "startup_ui_assets",
     "decision_ui_assets",
@@ -49,11 +51,64 @@
     "stp_portraits",
     "stp_party_ideologies",
     "ideology_icons",
+    "nam_focus_icons",
     "focus_trees",
     "val_flags",
     "superevent_music"
   ],
   "families": [
+    {
+      "id": "factory_models",
+      "owner_module": "tools.builders.build_adiscord_factory_models",
+      "source_inputs": [
+        "tools/builders/build_adiscord_factory_models.py",
+        "tools/assets/source/build_shl_palace.py"
+      ],
+      "output_globs": [
+        "gfx/models/buildings/ADISCORD_factories/*.mesh",
+        "gfx/models/buildings/ADISCORD_factories/*.dds",
+        "gfx/entities/mapitems_custom.gfx",
+        "gfx/entities/zz_ADISCORD_building_entities.asset",
+        "tools/assets/source/buildings/factories/*.blend",
+        "docs/development/model-verification/factories.json",
+        "docs/development/previews/factories/civilian_*.png",
+        "docs/development/previews/factories/military_*.png"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_factory_models"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_factory_models", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "Owns only marked factory sections in shared registries, two native factory models and their shared textures. Other map meshes and building aliases remain unchanged. Native rebuilding requires Blender and io_pdx_mesh; previews are opt-in."
+    },
+    {
+      "id": "nam_oilfields",
+      "owner_module": "tools.builders.build_adiscord_nam_oilfields",
+      "source_inputs": [
+        "tools/builders/build_adiscord_nam_oilfields.py",
+        "tools/assets/source/build_shl_palace.py",
+        "history/states/*.txt",
+        "map/definition.csv",
+        "map/provinces.bmp",
+        "map/heightmap.bmp",
+        "map/rivers.bmp",
+        "map/buildings.txt"
+      ],
+      "output_globs": [
+        "gfx/models/buildings/NAM_oilfield/*.mesh",
+        "gfx/models/buildings/NAM_oilfield/*.dds",
+        "gfx/entities/mapitems_custom.gfx",
+        "gfx/entities/mapitems_custom.asset",
+        "map/ambient_object.txt",
+        "tools/assets/source/buildings/NAM/oilfield.blend",
+        "docs/development/model-verification/NAM_oilfield.json",
+        "docs/development/previews/NAM_oilfield/*.png"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_nam_oilfields"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_nam_oilfields", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "Owns only marked NAM oilfield sections in shared registries. Other ambient actors remain unchanged. Blender and io_pdx_mesh are required for native export; previews are opt-in."
+    },
     {
       "id": "nam_naval_models",
       "owner_module": "tools.builders.build_adiscord_nam_models",
@@ -2009,6 +2064,51 @@
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "This pass owns terrain, trees, height and normal-map layers inside the explicit IVN/IIA province set, preserves shared land city-mask pixels as urban palette 13, and owns definition.csv terrain field 6 there; trade regions own continent field 7 and terrain_snow owns compatible snow conversion. It stamps the reviewed IVN mainland province geometry into provinces.bmp, appends its new definition rows and coastal flags, owns river pixels outside the authored-river provinces, unit-anchor positions and heights of IVN provinces, and IVN railway segments rerouted through the carved cities."
+    },
+    {
+      "id": "nam_focus_icons",
+      "owner_module": "tools.builders.build_adiscord_nam_focus_icons",
+      "output_globs": [
+        "gfx/interface/goals/NAM/GFX_focus_NAM_metropolitan_quota.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_deliver_the_quota.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_concealed_reserve.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_colonial_watch.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_commissioner_plan.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_second_ledger.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_imperial_gendarmes.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_oilfield_militia.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_wrk_trade_house.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_metropolitan_instructors.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_quiet_officer_lists.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_pipeline_patrols.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_wrk_return_cargo.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_sand_runs_out.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_print_shop_raid.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_metropolitan_depots.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_last_centre_register.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_colony_order.png",
+        "gfx/interface/goals/NAM/GFX_focus_NAM_letters_to_the_centre.png"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_nam_focus_icons.py",
+        "tools/assets/source/focus_icons/NAM/focus_art_prompts.json",
+        "tools/assets/source/focus_icons/NAM/*_composition*.png"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_nam_focus_icons"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_nam_focus_icons",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
     },
     {
       "id": "focus_trees",

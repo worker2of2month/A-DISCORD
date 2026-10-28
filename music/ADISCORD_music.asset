@@ -281,3 +281,9 @@ music = {
 	file = "ADISCORD_3teeth_eradicate.ogg"
 	volume = 0.65
 }
+
+music = {
+	name = "ADISCORD_3teeth_too_far_gone"
+	file = "ADISCORD_3teeth_too_far_gone.ogg"
+	volume = 0.65
+}
