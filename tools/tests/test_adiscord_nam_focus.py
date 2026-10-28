@@ -134,6 +134,11 @@ class NamCampaignTests(unittest.TestCase):
         security = self.decisions["NAM_mil_field_security"]
         self.assertEqual(scalar(security, "cost"), "35")
         self.assertFalse(any(e.key == "custom_cost_text" for e in security))
+        depot = self.decisions["NAM_mil_forward_supply"]
+        debit = [e.value for e in walk(block(depot, "complete_effect"))
+                 if e.key == "add_equipment_to_stockpile" and scalar(e.value, "amount") == "-60"]
+        self.assertEqual(len(debit), 1)
+        self.assertFalse(any(e.key == "producer" for e in debit[0]))
 
     def test_military_procurement_delivers_once_and_refunds_interrupted_orders(self):
         rewards = {

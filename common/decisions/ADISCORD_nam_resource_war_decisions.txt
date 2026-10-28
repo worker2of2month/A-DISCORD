@@ -2527,7 +2527,6 @@ NAM_national_programmes = {
 				add_equipment_to_stockpile = {
 					type = support_equipment
 					amount = -60
-					producer = NAM
 				}
 				custom_effect_tooltip = NAM_mil_forward_supply_result_tt
 				hidden_effect = {
